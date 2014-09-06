@@ -3,10 +3,16 @@
    ========================================================================== */
 /* Layout helpers
    ========================================================================== */
+/**
+ * Hide jQuery UI elements.
+ */
 .ui-helper-hidden {
   display: none;
 }
 
+/**
+ * Hide jQuery UI  text but still allow screen reader access.
+ */
 .ui-helper-hidden-accessible {
   position: absolute;
   margin: -1px;
@@ -18,17 +24,23 @@
   clip: rect(0 0 0 0);
 }
 
+/**
+ * Normalise various rules to avoid style inheritance.
+ */
 .ui-helper-reset {
   margin: 0;
   border: 0;
   padding: 0;
   outline: 0;
   font-size: 100%;
-  line-height: 1.4;
+  line-height: 1.5384615em;
   text-decoration: none;
   list-style: none;
 }
 
+/**
+ * Clearfix jQuery UI elements.
+ */
 .ui-helper-clearfix:after {
   content: "";
   display: table;
@@ -36,95 +48,144 @@
   border-collapse: collapse;
 }
 
+/**
+ * Normalise absolute positioning of jQuery UI elements to avoid misplacement.
+ */
 .ui-helper-zfix {
-  opacity: 0;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  opacity: 0;
 }
 
+/**
+ * Make jQuery UI elements show above other elements.
+ */
 .ui-front {
   z-index: 100;
 }
 
 /* Component containers
    ========================================================================== */
+/**
+ * Normalise font size of nested jQuery UI widgets to avoid style inheritance.
+ */
 .ui-widget .ui-widget {
-  font-size: 1em;
+  font-size: 100%;
 }
 
+/**
+ * General style for jQuery widget content.
+ */
 .ui-widget-content {
   border: 1px solid #cccccc;
-  background-color: white;
+  background-color: #ffffff;
 }
 
+/**
+ * General style for jQuery widget headers.
+ */
 .ui-widget-header {
   background-color: #eeeeee;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VlZWVlZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2RkZGRkZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
   background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
-  background-image: -moz-linear-gradient(#eeeeee, #dddddd);
-  background-image: -o-linear-gradient(#eeeeee, #dddddd);
   background-image: linear-gradient(#eeeeee, #dddddd);
   font-weight: bold;
 }
 
 /* Interaction states
    ========================================================================== */
+/**
+ * Default jQuery UI widget interaction state.
+ */
 .ui-state-default {
   color: #333333;
   border: 1px solid #cccccc;
   background-color: #f2f2f2;
 }
 
+/**
+ * Override hover/focus states for anchors in certain situations.
+ */
 a.ui-state-default:hover,
 a.ui-state-default:focus {
   color: #333333;
   text-decoration: none;
 }
 
+/**
+ * Hover/focus jQuery UI widget interaction states.
+ */
 .ui-state-hover,
 .ui-state-focus {
   border-color: #aaaaaa;
   background-color: #f7f7f7;
 }
 
+/**
+ * Active jQuery UI widget interaction state.
+ */
 .ui-state-active {
   background-color: white;
 }
 
+/**
+ * Highlight colour for jQuery UI widgets currently in 'selecting' state.
+ */
 .ui-selecting {
   background-color: #c7dbfa;
 }
 
+/**
+ * Highlight colour for jQuery UI widgets currently in 'selected' state.
+ */
 .ui-selected {
   background-color: #e3edfc;
 }
 
 /* Interaction cues
    ========================================================================== */
+/**
+ * jQuery UI highlight cue colouring.
+ */
 .ui-state-highlight {
   border: 1px solid #ffe16d;
   background-color: #fff6d3;
 }
 
+/**
+ * jQuery UI error cue colouring.
+ */
 .ui-state-error {
   border: 1px solid #e1b2b2;
   color: #9d261d;
   background-color: #f2dede;
 }
 
+/**
+ * Visually prioritised jQuery UI text.
+ */
 .ui-priority-primary {
   font-weight: bold;
 }
 
+/**
+ * Visually non-prioritised jQuery UI text.
+ */
 .ui-priority-secondary {
-  opacity: 0.66;
   font-weight: normal;
+  opacity: 0.66;
 }
 
+/**
+ * Visually disabled jQuery UI text and anchors.
+ */
 .ui-state-disabled {
-  opacity: 0.33;
   background-image: none;
+  opacity: 0.33;
   cursor: default !important;
 }
 .ui-state-disabled a {
@@ -134,6 +195,13 @@ a.ui-state-default:focus {
 
 /* Overlays
    ========================================================================== */
+/**
+ * Dark, semi-transparent container overlays.
+ *
+ * Example HTML:
+ *
+ * <div class="ui-widget-overlay"></div>
+ */
 .ui-widget-overlay {
   position: absolute;
   top: 0;
@@ -146,26 +214,41 @@ a.ui-state-default:focus {
 
 /* Shadows
    ========================================================================== */
+/**
+ * Faux shadows via `background-color`.
+ *
+ * Example HTML:
+ *
+ * <div class="ui-widget-shadow"></div>
+ */
 .ui-widget-shadow {
-  -webkit-border-radius: 0.5384615em;
-  -moz-border-radius: 0.5384615em;
-  border-radius: 0.5384615em;
-  opacity: 0.33;
+  border-radius: 0.5em;
   margin: -0.5em 0 0 -0.5em;
   padding: 0.5em;
   background-color: #999999;
+  opacity: 0.33;
 }
 
 /* ==========================================================================
    Interactions
    ========================================================================== */
-/* Draggable - http://jqueryui.com/draggable/
+/* Draggable
  ========================================================================== */
+/**
+ * jQuery UI Draggable.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/draggable/
+ *
+ * Example HTML:
+ *
+ * <div class="ui-draggable">
+ *     Content
+ * </div>
+ */
 .ui-draggable {
-  -webkit-transition: box-shadow 0.2s linear;
-  -moz-transition: box-shadow 0.2s linear;
-  -o-transition: box-shadow 0.2s linear;
-  transition: box-shadow 0.2s linear;
+  -webkit-transition: box-shadow 0.1s linear;
+  transition: box-shadow 0.1s linear;
 }
 
 .ui-draggable-handle {
@@ -173,15 +256,31 @@ a.ui-state-default:focus {
   touch-action: none;
 }
 
+/**
+ * Class added when element is actively being dragged.
+ */
 .ui-draggable-dragging {
   -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   z-index: 1000;
 }
 
-/* Resizable - http://jqueryui.com/resizable/
+/* Resizable
    ========================================================================== */
+/**
+ * jQuery UI Selectable.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/resizable/
+ *
+ * Example HTML:
+ *
+ * <div class="ui-resizable">
+ *     <strong>Resize me!</strong>
+ *     <div class="ui-resizable-handle ui-resizable-e"></div>
+ *     <div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se"></div>
+ * </div>
+ */
 .ui-resizable {
   position: relative;
 }
@@ -194,11 +293,17 @@ a.ui-state-default:focus {
   font-size: 0.1px;
 }
 
+/**
+ * Disabled or auto-hidden resizables.
+ */
 .ui-resizable-disabled .ui-resizable-handle,
 .ui-resizable-autohide .ui-resizable-handle {
   display: none;
 }
 
+/**
+ * Resize handle positioning options.
+ */
 .ui-resizable-n {
   top: -5px;
   left: 0;
@@ -263,24 +368,62 @@ a.ui-state-default:focus {
   cursor: ne-resize;
 }
 
-/* Selectable - http://jqueryui.com/selectable/
+/* Selectable
    ========================================================================== */
+/**
+ * jQuery UI Selectable.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/selectable/
+ *
+ * Example HTML:
+ *
+ * <ol class="ui-selectable">
+ *     <li class="ui-selectee">Item 1</li>
+ *     <li class="ui-selectee ui-selected">Item 2 (selected)</li>
+ *     <li class="ui-selectee">Item 3</li>
+ *     <li class="ui-selectee">Item 4</li>
+ * </ol>
+ */
 .ui-selectable {
   -ms-touch-action: none;
   touch-action: none;
 }
 
+/**
+ * Drag to select.
+ */
 .ui-selectable-helper {
   position: absolute;
   z-index: 100;
   border: 1px dotted #114eb1;
 }
 
-/* Sortable - http://jqueryui.com/sortable/
+/* Sortable
  ========================================================================== */
+/**
+ * jQuery UI Sortable.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/sortable/
+ *
+ * Example HTML:
+ *
+ * <ul class="ui-sortable">
+ *     <li>
+ *         Item 1
+ *     </li>
+ *     <li class="ui-sortable-helper">
+ *         Item 2 (this item is currently being actively sorted)
+ *     </li>
+ *     <li class="ui-sortable-placeholder"></li>
+ *     <li>
+ *         Item 3
+ *     </li>
+ * </ul>
+ */
 .ui-sortable-helper {
   -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 
@@ -296,8 +439,33 @@ a.ui-state-default:focus {
 /* ==========================================================================
    Widgets
    ========================================================================== */
-/* Accordion - http://jqueryui.com/accordion/
+/* Accordion
    ========================================================================== */
+/**
+ * jQuery UI Accordion.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/accordion/
+ *
+ * Example HTML:
+ *
+ * <div class="ui-accordion">
+ *     <h3 class="ui-accordion-header">
+ *         <span class="ui-accordion-header-icon"></span>
+ *         <a>Section 1 lever</a>
+ *     </h3>
+ *     <div class="ui-accordion-content">
+ *         Section 1 content
+ *     </div>
+ *     <h3 class="ui-accordion-header">
+ *         <span class="ui-accordion-header-icon"></span>
+ *         <a>Section 2 lever</a>
+ *     </h3>
+ *     <div class="ui-accordion-content">
+ *         Section 2 content
+ *     </div>
+ * </div>
+ */
 .ui-accordion .ui-accordion-header {
   position: relative;
   display: block;
@@ -321,13 +489,32 @@ a.ui-state-default:focus {
   padding: 1px 1em;
   overflow: auto;
 }
+
+/**
+ * Allow additional icons in accordion headers.
+ */
 .ui-accordion .ui-accordion-icons,
 .ui-accordion .ui-accordion-icons .ui-accordion-icons {
   padding-left: 2em;
 }
 
-/* Autocomplete - http://jqueryui.com/autocomplete/
+/* Autocomplete
    ========================================================================== */
+/**
+ * jQuery UI Autocomplete.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/autocomplete/
+ *
+ * Example HTML:
+ *
+ * <input type="text" class="ui-autocomplete-input">
+ * <ul class="ui-autocomplete">
+ *     <li><a></a></li>
+ *     <li><a></a></li>
+ *     <li><a></a></li>
+ * </ul>
+ */
 .ui-autocomplete {
   position: absolute;
   top: 0;
@@ -335,118 +522,199 @@ a.ui-state-default:focus {
   cursor: default;
 }
 
-/* Button - http://jqueryui.com/button/
+/* Button
    ========================================================================== */
+/**
+ * jQuery UI Button.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/button/
+ *
+ * 1. Correct font size not being inherited in all browsers.
+ * 2. Remove iOS Safari default styling.
+ * 3. The `overflow` property removes extra width in IE.
+ * 4. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ *
+ * Example HTML:
+ *
+ * <a class="ui-button ui-button-text-only">
+ *     <span class="ui-button-text">Button</span>
+ * </a>
+ */
 .ui-button {
-  /* correct font size not being inherited in all browsers */
-  font-size: 100%;
-  font-size: 1em;
-  line-height: 1.2307692em;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  -webkit-background-clip: padding;
   -moz-background-clip: padding;
+  -webkit-background-clip: padding;
   background-clip: padding-box;
-  -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   background-color: #eeeeee;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VlZWVlZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2RkZGRkZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
   background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
-  background-image: -moz-linear-gradient(#eeeeee, #dddddd);
-  background-image: -o-linear-gradient(#eeeeee, #dddddd);
   background-image: linear-gradient(#eeeeee, #dddddd);
-  -webkit-transition: box-shadow 0.2s linear;
-  -moz-transition: box-shadow 0.2s linear;
-  -o-transition: box-shadow 0.2s linear;
-  transition: box-shadow 0.2s linear;
+  -webkit-transition: box-shadow 0.1s linear;
+  transition: box-shadow 0.1s linear;
+  /* 1 */
+  font-size: 100%;
+  font-size: 1em;
+  line-height: 1.3846154em;
+  /* 2 */
   -webkit-appearance: none;
   position: relative;
   display: inline-block;
+  /* 3 */
   overflow: visible;
   margin: 0 0.1em 0 0;
   border: solid 1px #cccccc;
-  padding: 0.5384615em 0.75em;
-  height: 2.4615384em;
+  padding: 0.30769231em 0.61538462em;
+  height: 2.1538462em;
   font-family: Helvetica, Arial, sans-serif;
   text-align: center;
   vertical-align: baseline;
   color: #333333;
+  /* 4 */
   cursor: pointer;
 }
 .ui-button:hover {
   background-color: #f8f8f8;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y4ZjhmOCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2U4ZThlOCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
   background-image: -webkit-linear-gradient(#f8f8f8, #e8e8e8);
-  background-image: -moz-linear-gradient(#f8f8f8, #e8e8e8);
-  background-image: -o-linear-gradient(#f8f8f8, #e8e8e8);
   background-image: linear-gradient(#f8f8f8, #e8e8e8);
   border-color: #aaaaaa;
   text-decoration: none;
 }
 .ui-button:active {
   -webkit-box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
-  -moz-box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   background-color: #e6e6e6;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2U2ZTZlNiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Q2ZDZkNiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
   background-image: -webkit-linear-gradient(#e6e6e6, #d6d6d6);
-  background-image: -moz-linear-gradient(#e6e6e6, #d6d6d6);
-  background-image: -o-linear-gradient(#e6e6e6, #d6d6d6);
   background-image: linear-gradient(#e6e6e6, #d6d6d6);
   border-color: #aaaaaa;
   color: #1a1a1a;
   text-decoration: none;
 }
+.ui-button:focus {
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #5b9dd9;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #5b9dd9;
+  border-color: #0066ff;
+  outline: 0;
+}
 
+/**
+ * Remove some styling from `a` links as buttons.
+ */
 a.ui-button {
   color: #333333;
   text-decoration: none;
 }
 
+/**
+ * Focus styling for buttons.
+ *
+ * 1. `!important` required to override specificity.
+ */
 .ui-button.ui-state-focus {
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #5b9dd9;
-  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #5b9dd9;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #5b9dd9;
-  border-color: #5b9dd9;
+  /* 1 */
+  border-color: #0066ff !important;
   outline: 0;
 }
 
+/**
+ * Single-icon-only button.
+ *
+ * To make room for the icon, a width needs to be set here.
+ *
+ * Example HTML:
+ *
+ * <a class="ui-button ui-button-icon-only">
+ *     <span class="ui-button-icon-primary ui-icon ui-icon-locked"></span>
+ *     <span class="ui-button-text">Button one icon, no text</span>
+ * </a>
+ */
 .ui-button-icon-only {
   width: 2.2em;
 }
 
+/**
+ * `button` elements seem to need a little more width.
+ *
+ * Example HTML:
+ *
+ * <button class="ui-button ui-button-icon-only">
+ *     <span class="ui-button-icon-primary ui-icon ui-icon-locked"></span>
+ *     <span class="ui-button-text">Button one icon, no text</span>
+ * </button>
+ */
 button.ui-button-icon-only {
   width: 2.4em;
 }
 
+/**
+ * Double-icon-only button.
+ *
+ * To make room for the icon, a width needs to be set here.
+ *
+ * Example HTML:
+ *
+ * <a class="ui-button ui-button-icons-only">
+ *     <span class="ui-button-icon-primary ui-icon ui-icon-locked"></span>
+ *     <span class="ui-button-text">Button two icons, no text</span>
+ *     <span class="ui-button-icon-secondary ui-icon ui-icon-disk"></span>
+ * </a>
+ */
 .ui-button-icons-only {
   width: 3.4em;
 }
 
+/**
+ * `button` elements seem to need a little more width.
+ *
+ * Example HTML:
+ *
+ * <button class="ui-button ui-button-icons-only">
+ *     <span class="ui-button-icon-primary ui-icon ui-icon-locked"></span>
+ *     <span class="ui-button-text">Button two icons, no text</span>
+ *     <span class="ui-button-icon-secondary ui-icon ui-icon-disk"></span>
+ * </button>
+ */
 button.ui-button-icons-only {
   width: 3.7em;
 }
 
-/* button rounded corners */
+/**
+ * Button rounded corners all.
+ */
 .ui-button.ui-corner-all {
-  -webkit-border-radius: 0.5384615em;
-  -moz-border-radius: 0.5384615em;
-  border-radius: 0.5384615em;
+  border-radius: 0.5em;
 }
 
+/**
+ * Button rounded corners on right only.
+ */
 .ui-button.ui-corner-right {
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0 0.5384615em 0.5384615em 0;
-  border-radius: 0 0.5384615em 0.5384615em 0;
+  border-radius: 0 0.5em 0.5em 0;
 }
 
+/**
+ * Button rounded corners on left only.
+ */
 .ui-button.ui-corner-left {
-  -webkit-border-radius: 0.5384615em;
-  -moz-border-radius: 0.5384615em 0 0 0.5384615em;
-  border-radius: 0.5384615em 0 0 0.5384615em;
+  border-radius: 0.5em 0 0 0.5em;
 }
 
-/* button text element */
+/**
+ * Button text element.
+ */
 .ui-button .ui-button-text {
   display: block;
 }
@@ -470,7 +738,9 @@ button.ui-button-icons-only {
   padding-right: 16px;
 }
 
-/* button icon element(s) */
+/**
+ * Button icon element(s).
+ */
 .ui-button-icon-only .ui-icon,
 .ui-button-text-icon-primary .ui-icon,
 .ui-button-text-icon-secondary .ui-icon,
@@ -498,7 +768,26 @@ button.ui-button-icons-only {
   right: 0.5em;
 }
 
-/* button sets */
+/**
+ * Button sets.
+ *
+ * Example HTML:
+ *
+ * <p class="ui-buttonset">
+ *     <input id="check1" type="checkbox" class="ui-helper-hidden-accessible">
+ *     <label for="check1" class="ui-button ui-button-text-only ui-corner-left">
+ *         <span class="ui-button-text">A</span>
+ *     </label>
+ *     <input id="check2" type="checkbox" class="ui-helper-hidden-accessible">
+ *     <label for="check2" class="ui-button ui-button-text-only ui-state-active" aria-pressed="true">
+ *         <span class="ui-button-text">B</span>
+ *     </label>
+ *     <input id="check3" type="checkbox" class="ui-helper-hidden-accessible">
+ *     <label for="check3" class="ui-button ui-button-text-only ui-corner-right">
+ *         <span class="ui-button-text">C</span>
+ *     </label>
+ * </p>
+ */
 .ui-buttonset {
   margin-right: 0.5em;
 }
@@ -506,36 +795,121 @@ button.ui-button-icons-only {
   margin-right: -0.35em;
 }
 
+/**
+ * Checkboxes as buttons - pressed state.
+ *
+ * Example HTML:
+ *
+ * <input class="ui-helper-hidden-accessible" id="check" type="checkbox">
+ * <label for="check" class="ui-button ui-button-text-only" aria-pressed="true">
+ *     <span class="ui-button-text">Toggle</span>
+ * </label>
+ */
 label[aria-pressed="true"].ui-button {
   background-color: #e3edfc;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2UzZWRmYyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M3ZGJmYSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
   background-image: -webkit-linear-gradient(#e3edfc, #c7dbfa);
-  background-image: -moz-linear-gradient(#e3edfc, #c7dbfa);
-  background-image: -o-linear-gradient(#e3edfc, #c7dbfa);
   background-image: linear-gradient(#e3edfc, #c7dbfa);
   border-color: #a2c2f6;
 }
 label[aria-pressed="true"].ui-button:hover {
   background-color: #f1f6fe;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2YxZjZmZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2QxZTFmYiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
   background-image: -webkit-linear-gradient(#f1f6fe, #d1e1fb);
-  background-image: -moz-linear-gradient(#f1f6fe, #d1e1fb);
-  background-image: -o-linear-gradient(#f1f6fe, #d1e1fb);
   background-image: linear-gradient(#f1f6fe, #d1e1fb);
   border-color: #5c94ef;
 }
 label[aria-pressed="true"].ui-button:active {
   background-color: #c7dbfa;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M3ZGJmYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2IwY2JmNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
   background-image: -webkit-linear-gradient(#c7dbfa, #b0cbf7);
-  background-image: -moz-linear-gradient(#c7dbfa, #b0cbf7);
-  background-image: -o-linear-gradient(#c7dbfa, #b0cbf7);
   background-image: linear-gradient(#c7dbfa, #b0cbf7);
   border-color: #5c94ef;
 }
 
-/* Datepicker - http://jqueryui.com/datepicker/
+/* Datepicker
    ========================================================================== */
+/**
+ * jQuery UI Datepicker.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/datepicker/
+ *
+ * Example HTML:
+ *
+ * <div class="ui-datepicker">
+ *     <div class="ui-datepicker-header">
+ *         <a class="ui-datepicker-prev">
+ *             <span>Prev</span>
+ *         </a>
+ *         <a class="ui-datepicker-next">
+ *             <span>Next</span>
+ *         </a>
+ *         <div class="ui-datepicker-title">
+ *             <span class="ui-datepicker-month">April</span>
+ *             <span class="ui-datepicker-year">2014</span>
+ *         </div>
+ *     </div>
+ *     <table class="ui-datepicker-calendar">
+ *         <thead>
+ *             <tr>
+ *                 <th class="ui-datepicker-week-end">
+ *                     <span>Su</span>
+ *                 </th>
+ *                 <th>
+ *                     <span>Mo</span>
+ *                 </th>
+ *                 <th>
+ *                     <span>Tu</span>
+ *                 </th>
+ *                 <th>
+ *                     <span>We</span>
+ *                 </th>
+ *                 <th>
+ *                     <span>Th</span>
+ *                 </th>
+ *                 <th>
+ *                     <span>Fr</span>
+ *                 </th>
+ *                 <th class="ui-datepicker-week-end">
+ *                     <span>Sa</span>
+ *                 </th>
+ *             </tr>
+ *         </thead>
+ *         <tbody>
+ *             <tr>
+ *                 <td class="ui-datepicker-week-end ui-datepicker-other-month ui-datepicker-unselectable">
+ *                     &nbsp;
+ *                 </td>
+ *                 <td class="ui-datepicker-other-month ui-datepicker-unselectable">
+ *                     &nbsp;
+ *                 </td>
+ *                 <td>
+ *                     <a>1</a>
+ *                 </td>
+ *                 <td>
+ *                     <a>2</a>
+ *                 </td>
+ *                 <td>
+ *                     <a>3</a>
+ *                 </td>
+ *                 <td class="ui-datepicker-days-cell-over ui-datepicker-current-day ui-datepicker-today">
+ *                     <a class="ui-state-highlight ui-state-active">4</a>
+ *                 </td>
+ *                 <td>
+ *                     <a>5</a>
+ *                 </td>
+ *             </tr>
+ *             ...etc...
+ *         </tbody>
+ *     </table>
+ * </div>
+ */
 .ui-datepicker {
   -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   display: none;
   padding: 0.2em 0.2em 0;
@@ -547,9 +921,7 @@ label[aria-pressed="true"].ui-button:active {
 }
 .ui-datepicker .ui-datepicker-prev,
 .ui-datepicker .ui-datepicker-next {
-  -webkit-border-radius: 0.5384615em;
-  -moz-border-radius: 0.5384615em;
-  border-radius: 0.5384615em;
+  border-radius: 0.5em;
   position: absolute;
   top: 0.2em;
   width: 1.8em;
@@ -581,7 +953,7 @@ label[aria-pressed="true"].ui-button:active {
 }
 .ui-datepicker select.ui-datepicker-month,
 .ui-datepicker select.ui-datepicker-year {
-  width: 49%;
+  width: 45%;
 }
 .ui-datepicker table {
   margin: 0 0 0.2em;
@@ -636,7 +1008,9 @@ label[aria-pressed="true"].ui-button:active {
   float: left;
 }
 
-/* Multiple calendars */
+/**
+ * Multiple calendars.
+ */
 .ui-datepicker.ui-datepicker-multi {
   width: auto;
 }
@@ -674,7 +1048,9 @@ label[aria-pressed="true"].ui-button:active {
   font-size: 0;
 }
 
-/* Datepicker RTL support */
+/**
+ * Datepicker RTL support.
+ */
 html[dir="rtl"] .ui-datepicker-prev {
   right: 2px;
   left: auto;
@@ -707,11 +1083,41 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   border-left-width: 1px;
 }
 
-/* Dialog - http://jqueryui.com/dialog/
+/* Dialog
    ========================================================================== */
+/**
+ * jQuery UI Dialog.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/dialog/
+ *
+ * Example HTML:
+ *
+ * <div class="ui-dialog ui-front ui-dialog-buttons ui-draggable">
+ *     <div class="ui-dialog-titlebar">
+ *         <span class="ui-dialog-title">Modal dialog example</span>
+ *         <button class="ui-button ui-button-icon-only ui-dialog-titlebar-close">
+ *             <span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>
+ *             <span class="ui-button-text">close</span>
+ *         </button>
+ *     </div>
+ *     <div class="ui-dialog-content">
+ *         Content
+ *     </div>
+ *     <div class="ui-dialog-buttonpane">
+ *         <div class="ui-dialog-buttonset">
+ *             <button class="ui-button ui-button-text-only">
+ *                 <span class="ui-button-text">Cancel</span>
+ *             </button>
+ *             <button class="ui-button ui-button-text-only">
+ *                 <span class="ui-button-text">Ok</span>
+ *             </button>
+ *         </div>
+ *     </div>
+ * </div>
+ */
 .ui-dialog {
   -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   position: absolute;
   top: 0;
@@ -771,15 +1177,74 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   background-position: 16px 16px;
 }
 
+/**
+ * Change cursor when window is being dragged.
+ */
 .ui-draggable .ui-dialog-titlebar {
   cursor: move;
 }
 
-/* Menu - http://jqueryui.com/menu/
+/* Menu
    ========================================================================== */
+/**
+ * jQuery UI Menu.
+ *
+ * Menus are vertical format only. Horizontal format menus are not provided by
+ * jQuery UI.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/menu/
+ *
+ * Example HTML:
+ *
+ * <ul class="ui-menu">
+ *     <li class="ui-state-disabled ui-menu-item">
+ *         <a>Item 1 (disabled)</a>
+ *     </li>
+ *     <li class="ui-menu-item">
+ *         <a>Item 2</a>
+ *     </li>
+ *     <li class="ui-menu-item">
+ *         <a>
+ *             <span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>
+ *             Item 3
+ *         </a>
+ *         <ul class="ui-menu">
+ *             <li class="ui-menu-item">
+ *                 <a>Item 3 subitem 1</a>
+ *             </li>
+ *             <li class="ui-menu-item">
+ *                 <a>Item 3 subitem 2</a>
+ *             </li>
+ *         </ul>
+ *     </li>
+ *     <li class="ui-menu-item">
+ *         <a>
+ *             <span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>
+ *             Item 4
+ *         </a>
+ *         <ul class="ui-menu">
+ *             <li class="ui-menu-item">
+ *                 <span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>
+ *                 <a>Item 4 subitem 1</a>
+ *                 <ul class="ui-menu">
+ *                     <li class="ui-menu-item">
+ *                         <a>Item 4 subitem 1 subsubitem 1</a>
+ *                     </li>
+ *                     <li class="ui-menu-item">
+ *                         <a>Item 4 subitem 1 subsubitem 2</a>
+ *                     </li>
+ *                 </ul>
+ *             </li>
+ *             <li class="ui-menu-item">
+ *                 <a>Item 3 subitem 2</a>
+ *             </li>
+ *         </ul>
+ *     </li>
+ * </ul>
+ */
 .ui-menu {
   -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   display: block;
   margin: 0;
@@ -791,11 +1256,11 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   position: absolute;
 }
 .ui-menu .ui-menu-item {
+  position: relative;
   margin: 0;
-  display: block;
-  padding: 3px 0.4em;
+  padding: 3px 1em 3px 0.4em;
   cursor: pointer;
-  /* support: IE10, see #8844 */
+  /* support: IE 10, see #8844 */
   list-style-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
 }
 .ui-menu .ui-menu-divider {
@@ -812,27 +1277,40 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 }
 .ui-menu .ui-icon {
   position: absolute;
-  top: 0.25em;
+  top: 0;
+  bottom: 0;
   left: 0.25em;
+  margin: auto 0;
 }
 .ui-menu .ui-menu-icon {
-  position: relative;
-  top: -0.2em;
-  float: right;
-  margin-top: 0.25em;
+  left: auto;
+  right: 0;
 }
 
-/* icon support */
+/**
+ * Allow additional icons in menu items.
+ */
 .ui-menu-icons {
   position: relative;
 }
 .ui-menu-icons .ui-menu-item {
-  position: relative;
   padding-left: 2em;
 }
 
-/* Progressbar - http://jqueryui.com/progressbar/
+/* Progressbar
    ========================================================================== */
+/**
+ * jQuery UI Progressbar.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/progressbar/
+ *
+ * Example HTML:
+ *
+ * <div class="ui-progressbar">
+ *     <div class="ui-progressbar-value" style="width: 37%;"></div>
+ * </div>
+ */
 .ui-progressbar {
   margin-bottom: 1em;
   text-align: left;
@@ -851,6 +1329,17 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   }
 }
 
+/**
+ * Progressbar with indeterminate value.
+ *
+ * Example HTML:
+ *
+ * <div class="ui-progressbar ui-progressbar-indeterminate">
+ *     <div class="ui-progressbar-value" style="width:100%;">
+ *         <div class="ui-progressbar-overlay"></div>
+ *     </div>
+ * </div>
+ */
 .ui-progressbar-indeterminate .ui-progressbar-value {
   background-image: url("images/ui-progressbar-indeterminate.gif");
   background-size: 16px 16px;
@@ -862,8 +1351,16 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   }
 }
 
-/* Selectmenu - http://jqueryui.com/selectmenu/
+/* Selectmenu
    ========================================================================== */
+/**
+ * jQuery UI Selectmenu.
+ *
+ * TODO: Amend stylesheet accordingly.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/selectmenu/
+ */
 .ui-selectmenu-menu {
   position: absolute;
   top: 0;
@@ -918,18 +1415,29 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   white-space: nowrap;
 }
 
-/* Slider - http://jqueryui.com/slider/
+/* Slider
    ========================================================================== */
+/**
+ * jQuery UI Slider.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/slider/
+ *
+ * Example HTML:
+ *
+ * <div class="ui-slider ui-slider-horizontal">
+ *     <div class="ui-slider-range" style="left: 17%; width: 50%;"></div>
+ *     <a class="ui-slider-handle" style="left: 17%;"></a>
+ *     <a class="ui-slider-handle" style="left: 67%;"></a>
+ * </div>
+ */
 .ui-slider {
   position: relative;
   text-align: left;
 }
 .ui-slider .ui-slider-handle {
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
   border-radius: 50%;
   -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   -ms-touch-action: none;
   touch-action: none;
@@ -938,7 +1446,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   width: 20px;
   height: 20px;
   cursor: default;
-  background-color: white;
+  background-color: #ffffff;
 }
 .ui-slider .ui-slider-range {
   position: absolute;
@@ -949,6 +1457,13 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   font-size: 0.7em;
 }
 
+/**
+ * Slider - horizontal format.
+ *
+ * Example HTML:
+ *
+ * <div class="ui-slider ui-slider-horizontal">
+ */
 .ui-slider-horizontal {
   margin-bottom: 1em;
   height: 12px;
@@ -968,6 +1483,13 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   right: 0;
 }
 
+/**
+ * Slider - vertical format.
+ *
+ * Example HTML:
+ *
+ * <div class="ui-slider ui-slider-vertical">
+ */
 .ui-slider-vertical {
   width: 12px;
   height: 100px;
@@ -987,8 +1509,30 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   top: 0;
 }
 
-/* Spinner - http://jqueryui.com/spinner/
+/* Spinner
    ========================================================================== */
+/**
+ * jQuery UI Spinner.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/spinner/
+ *
+ * Example HTML:
+ *
+ * <span class="ui-spinner">
+ *     <input type="text" class="ui-spinner-input">
+ *     <a class="ui-spinner-button ui-spinner-up ui-button ui-button-text-only">
+ *         <span class="ui-button-text">
+ *             <span class="ui-icon ui-icon-triangle-1-n">+</span>
+ *         </span>
+ *     </a>
+ *     <a class="ui-spinner-button ui-spinner-down ui-button ui-button-text-only">
+ *         <span class="ui-button-text">
+ *             <span class="ui-icon ui-icon-triangle-1-s">-</span>
+ *         </span>
+ *     </a>
+ * </span>
+ */
 .ui-spinner {
   position: relative;
   display: inline-block;
@@ -1007,8 +1551,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 }
 
 .ui-spinner-button {
-  font-size: 0.5384615em;
-  line-height: 1.4285714em;
   position: absolute;
   right: 0;
   display: block;
@@ -1016,6 +1558,8 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   padding: 0;
   width: 16px;
   height: 42%;
+  font-size: 0.53846154em;
+  line-height: 1.5714286em;
   overflow: hidden;
   cursor: default;
 }
@@ -1028,11 +1572,46 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   bottom: 0;
 }
 
-/* Tabs - http://jqueryui.com/tabs/
+/* Tabs
    ========================================================================== */
+/**
+ * jQuery UI Tabs.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/tabs/
+ *
+ * 1. `position: relative` prevents IE scroll bug (elements with
+ *    `position: relative` inside a parent container with `overflow: auto`
+ *    appear as "fixed")
+ *
+ * Example HTML:
+ *
+ * <div class="ui-tabs>
+ *     <ul class="ui-tabs-nav">
+ *         <li class="ui-tabs-active">
+ *             <a class="ui-tabs-anchor">Tab 1</a>
+ *         </li>
+ *         <li>
+ *             <a class="ui-tabs-anchor">Tab 2</a>
+ *         </li>
+ *         <li>
+ *             <a class="ui-tabs-anchor">Tab 3</a>
+ *         </li>
+ *     </ul>
+ *     <div class="ui-tabs-panel" aria-expanded="true">
+ *         Tab 1 content
+ *     </div>
+ *     <div class="ui-tabs-panel aria-expanded="false" aria-hidden="true">
+ *         Tab 2 content
+ *     </div>
+ *     <div class="ui-tabs-panel aria-expanded="false" aria-hidden="true">
+ *         Tab 3 content
+ *     </div>
+ * </div>
+ */
 .ui-tabs {
+  /* 1 */
   position: relative;
-  /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
   border: 0;
 }
 .ui-tabs .ui-tabs-nav {
@@ -1041,11 +1620,8 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 }
 .ui-tabs .ui-tabs-nav li {
   -webkit-box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
-  -moz-box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
   box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
-  -webkit-border-radius: 0.5384615em;
-  -moz-border-radius: 0.5384615em 0.5384615em 0 0;
-  border-radius: 0.5384615em 0.5384615em 0 0;
+  border-radius: 0.5em 0.5em 0 0;
   position: relative;
   top: 0;
   float: left;
@@ -1055,7 +1631,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 }
 .ui-tabs .ui-tabs-nav li.ui-tabs-active {
   -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
   margin-bottom: -1px;
   padding-bottom: 1px;
@@ -1077,15 +1652,32 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   background: none;
 }
 
+/**
+ * Maintain cursor style when collapsing a collapsible tab.
+ */
 .ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor {
   cursor: pointer;
 }
 
-/* Tooltip - http://jqueryui.com/tooltip/
+/* Tooltip
    ========================================================================== */
+/**
+ * jQuery UI Tooltip.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * http://jqueryui.com/tooltip/
+ *
+ * Example HTML:
+ *
+ * <a>Link with a tooltip</a>
+ * <div class="ui-tooltip">
+ *     <div class="ui-tooltip-content">
+ *         Content
+ *     </div>
+ * </div>
+ */
 .ui-tooltip {
   -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   position: absolute;
   z-index: 9999;
@@ -1098,7 +1690,15 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
    ========================================================================== */
 /* Icons
    ========================================================================== */
-/* states and images */
+/**
+ * jQuery UI icon sprites, various colourschemes depending of usage state.
+ *
+ * Example HTML:
+ *
+ * <span class="ui-icon ui-icon-carat-1-n"></span>
+ * <span class="ui-icon ui-icon-folder-collapsed"></span>
+ * <span class="ui-icon ui-icon-play"></span>
+ */
 .ui-icon {
   display: inline-block;
   width: 16px;
@@ -1106,7 +1706,8 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   text-indent: -9999px;
   overflow: hidden;
   vertical-align: text-bottom;
-  background: url("images/ui-icon-sprite-333333.svg") no-repeat;
+  background-image: url("images/ui-icon-sprite-333333.svg");
+  background-repeat: no-repeat;
   background-size: 256px 272px;
 }
 
@@ -1122,30 +1723,75 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   background-image: url("images/ui-icon-sprite-333333.svg");
 }
 
+/**
+ * 'Succes' state icons.
+ *
+ * Example HTML:
+ *
+ * <p class="success">
+ *     <span class="ui-icon ui-icon-check"></span>
+ *     Success!
+ * </p>
+ */
 .success .ui-icon {
   background-image: url("images/ui-icon-sprite-success.svg");
 }
 
+/**
+ * 'Warning' state icons.
+ *
+ * Example HTML:
+ *
+ * <p class="warning">
+ *     <span class="ui-icon ui-icon-alert"></span>
+ *     Warning!
+ * </p>
+ */
 .ui-state-highlight .ui-icon,
 .warning .ui-icon {
   background-image: url("images/ui-icon-sprite-warning.svg");
 }
 
+/**
+ * 'Error' state icons.
+ *
+ * Example HTML:
+ *
+ * <p class="error">
+ *     <span class="ui-icon ui-icon-closethick"></span>
+ *     Error!
+ * </p>
+ */
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon,
 .error .ui-icon {
   background-image: url("images/ui-icon-sprite-error.svg");
 }
 
+/**
+ * 'Information' state icons.
+ *
+ * Example HTML:
+ *
+ * <p class="information">
+ *     <span class="ui-icon ui-icon-info"></span>
+ *     Content
+ * </p>
+ */
 .information .ui-icon {
   background-image: url("images/ui-icon-sprite-info.svg");
 }
 
+/**
+ * Icons within Textpattern system message panes.
+ */
 #messagepane .ui-icon {
   background-image: url("images/ui-icon-sprite-ffffff.svg");
 }
 
-/* positioning */
+/**
+ * Icon sprite positionings.
+ */
 .ui-icon-blank {
   background-position: 16px 16px;
 }
@@ -1844,6 +2490,14 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 /* Hive extra icons
    ========================================================================== */
+/**
+ * Additional handy icons we've added to the standard jQuery UI icon sprite.
+ *
+ * Example HTML:
+ *
+ * <span class="ui-icon ui-extra-icon-code"></span>
+ * <span class="ui-icon ui-extra-icon-download"></span>
+ */
 .ui-extra-icon-code {
   background-position: 0 -256px;
 }
