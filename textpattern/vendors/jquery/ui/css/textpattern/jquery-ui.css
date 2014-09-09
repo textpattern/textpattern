@@ -1195,6 +1195,8 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
  * Some classes and HTML elements generally added via JavaScript, more info -
  * http://jqueryui.com/menu/
  *
+ * 1. Correct font size not being inherited in all browsers.
+ *
  * Example HTML:
  *
  * <ul class="ui-menu">
@@ -1244,6 +1246,10 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
  * </ul>
  */
 .ui-menu {
+  /* 1 */
+  font-size: 100%;
+  font-size: 1em;
+  line-height: 1.3846154em;
   -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   display: block;
@@ -1258,13 +1264,17 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 .ui-menu .ui-menu-item {
   position: relative;
   margin: 0;
-  padding: 3px 1em 3px 0.4em;
+  padding: 3px 1em 3px 0.30769231em;
   cursor: pointer;
   /* support: IE 10, see #8844 */
   list-style-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
 }
+.ui-menu .ui-menu-item a {
+  color: #333333;
+  text-decoration: none;
+}
 .ui-menu .ui-menu-divider {
-  margin: 5px 0;
+  margin: 0.30769231em 0;
   border-width: 1px 0 0 0;
   height: 0;
   font-size: 0;
@@ -1272,8 +1282,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 }
 .ui-menu .ui-state-focus,
 .ui-menu .ui-state-active {
-  margin: -1px;
-  background-color: #e3edfc;
+  background-color: #c7dbfa;
 }
 .ui-menu .ui-icon {
   position: absolute;
@@ -1356,10 +1365,36 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 /**
  * jQuery UI Selectmenu.
  *
- * TODO: Amend stylesheet accordingly.
- *
  * Some classes and HTML elements generally added via JavaScript, more info -
  * http://jqueryui.com/selectmenu/
+ *
+ * 1. Correct font size not being inherited in all browsers.
+ *
+ * Example HTML:
+ *
+ * <p>
+ *     <label>Select a speed</label><br>
+ *     <select class="jquery-ui-selectmenu" style="display:none;">
+ *         <option>Slower</option>
+ *         <option>Slow</option>
+ *         <option selected="selected">Medium</option>
+ *         <option>Fast</option>
+ *         <option>Faster</option>
+ *     </select>
+ *     <span class="ui-selectmenu-button ui-widget ui-state-default ui-corner-all" style="width:87px;">
+ *         <span class="ui-icon ui-icon-triangle-1-s"></span>
+ *         <span class="ui-selectmenu-text">Medium</span>
+ *     </span>
+ * </p>
+ * <div class="ui-selectmenu-menu ui-front ui-selectmenu-open">
+ *     <ul class="ui-menu ui-widget ui-widget-content ui-corner-bottom">
+ *         <li class="ui-menu-item ui-state-focus">Slower</li>
+ *         <li class="ui-menu-item">Slow</li>
+ *         <li class="ui-menu-item">Medium</li>
+ *         <li class="ui-menu-item">Fast</li>
+ *         <li class="ui-menu-item">Faster</li>
+ *     </ul>
+ * </div>
  */
 .ui-selectmenu-menu {
   position: absolute;
@@ -1369,20 +1404,21 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   padding: 0;
   display: none;
 }
-
 .ui-selectmenu-menu .ui-menu {
-  padding-bottom: 1px;
   overflow: auto;
 }
-
 .ui-selectmenu-menu .ui-menu .ui-selectmenu-optgroup {
   margin: 0.5em 0 0 0;
-  padding: 2px 0.4em;
-  border: 0;
+  border-top: 1px solid #cccccc;
+  padding: 2px 0.30769231em;
   height: auto;
   font-size: 1em;
   font-weight: bold;
   line-height: 1.5;
+}
+.ui-selectmenu-menu .ui-menu .ui-selectmenu-optgroup:first-child {
+  margin: 0;
+  border: 0;
 }
 
 .ui-selectmenu-open {
@@ -1393,26 +1429,27 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   position: relative;
   display: inline-block;
   overflow: hidden;
+  /* 1 */
+  font-size: 100%;
+  font-size: 1em;
+  line-height: 1.3846154em;
   text-decoration: none;
   cursor: pointer;
 }
-
 .ui-selectmenu-button span.ui-icon {
   position: absolute;
   top: 50%;
-  right: 0.5em;
+  right: 0.25em;
   left: auto;
   margin-top: -8px;
 }
-
 .ui-selectmenu-button span.ui-selectmenu-text {
   display: block;
+  padding: 0.30769231em 2.1em 0.30769231em 0.30769231em;
   text-align: left;
-  padding: 0.4em 2.1em 0.4em 1em;
-  line-height: 1.4;
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  overflow: hidden;
 }
 
 /* Slider
@@ -1495,7 +1532,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   height: 100px;
 }
 .ui-slider-vertical .ui-slider-handle {
-  left: -5px;
+  left: -20px;
   margin-bottom: -10px;
 }
 .ui-slider-vertical .ui-slider-range {
@@ -1541,7 +1578,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   vertical-align: baseline;
 }
 .ui-spinner .ui-spinner-input {
-  padding-right: 22px;
+  padding-right: 24px;
 }
 .ui-spinner .ui-icon {
   position: absolute;
@@ -1556,7 +1593,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   display: block;
   margin: 0;
   padding: 0;
-  width: 16px;
+  width: 18px;
   height: 42%;
   font-size: 0.53846154em;
   line-height: 1.5714286em;
