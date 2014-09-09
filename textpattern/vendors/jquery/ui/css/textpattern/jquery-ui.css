@@ -1396,6 +1396,42 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
  *     </ul>
  * </div>
  */
+.ui-selectmenu-button {
+  -webkit-transition: box-shadow 0.1s linear;
+  transition: box-shadow 0.1s linear;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  /* 1 */
+  font-size: 100%;
+  font-size: 1em;
+  line-height: 1.3846154em;
+  text-decoration: none;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+.ui-selectmenu-button:focus {
+  -webkit-box-shadow: 0 0 7px #5b9dd9;
+  box-shadow: 0 0 7px #5b9dd9;
+  border-color: #0066ff;
+  outline: 0;
+}
+.ui-selectmenu-button span.ui-icon {
+  position: absolute;
+  top: 50%;
+  right: 0.25em;
+  left: auto;
+  margin-top: -8px;
+}
+.ui-selectmenu-button span.ui-selectmenu-text {
+  display: block;
+  padding: 0.30769231em 2.1em 0.30769231em 0.30769231em;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .ui-selectmenu-menu {
   position: absolute;
   top: 0;
@@ -1423,33 +1459,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 .ui-selectmenu-open {
   display: block;
-}
-
-.ui-selectmenu-button {
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-  /* 1 */
-  font-size: 100%;
-  font-size: 1em;
-  line-height: 1.3846154em;
-  text-decoration: none;
-  cursor: pointer;
-}
-.ui-selectmenu-button span.ui-icon {
-  position: absolute;
-  top: 50%;
-  right: 0.25em;
-  left: auto;
-  margin-top: -8px;
-}
-.ui-selectmenu-button span.ui-selectmenu-text {
-  display: block;
-  padding: 0.30769231em 2.1em 0.30769231em 0.30769231em;
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 
 /* Slider
