@@ -102,9 +102,6 @@ class Textpattern_Textfilter_Textile extends Textpattern_Textfilter_Base impleme
             popHelpSubtle('bulleted', 400, 400).'</li>'.
             n.'<li>'.gTxt('definition_list').': <strong>; :</strong>'.
             popHelpSubtle('definition', 400, 400).'</li>'.
-            n.'</ul>'.
-
-            n.'<ul class="textile plain-list">'.
             n.'<li>'.'_<em>'.gTxt('emphasis').'</em>_'.
             popHelpSubtle('italic', 400, 400).'</li>'.
             n.'<li>'.'*<strong>'.gTxt('strong').'</strong>*'.
@@ -119,17 +116,11 @@ class Textpattern_Textfilter_Textile extends Textpattern_Textfilter_Base impleme
             popHelpSubtle('super', 400, 300).'</li>'.
             n.'<li>'.'~'.gTxt('subscript').'~'.
             popHelpSubtle('subscript', 400, 400).'</li>'.
+            n.'<li>'.'"'.gTxt('linktext').'"'.
+            popHelpSubtle('link', 400, 300).'</li>'.
+            n.'<li>'.'!'.gTxt('imageurl').'!'.
+            popHelpSubtle('image', 400, 400).'</li>'.
             n.'</ul>'.
-
-            graf(
-                '"'.gTxt('linktext').'":url'.popHelpSubtle('link', 400, 500),
-                ' class="textile"'
-            ).
-
-            graf(
-                '!'.gTxt('imageurl').'!'.popHelpSubtle('image', 500, 500),
-                ' class="textile"'
-            ).
 
             graf(
                 href(gTxt('More'), 'http://textpattern.com/textile-sandbox', ' id="textile-docs-link" rel="external" target="_blank"')
