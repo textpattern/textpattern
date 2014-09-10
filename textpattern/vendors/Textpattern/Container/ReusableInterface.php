@@ -44,7 +44,7 @@
  * echo Txp::get('Abc_Class')->random;
  * </code>
  *
- * All the tree calls return the same Abc_Class::$random as the
+ * All three calls return the same Abc_Class::$random as the
  * instance is kept between calls.
  *
  * @since   4.6.0
