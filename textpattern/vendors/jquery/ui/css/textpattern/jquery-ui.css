@@ -498,6 +498,22 @@ a.ui-state-default:focus {
   padding-left: 2em;
 }
 
+/**
+ * Accordion RTL support.
+ */
+html[dir="rtl"] .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+  left: auto;
+  right: 0.5em;
+}
+html[dir="rtl"] .ui-accordion .ui-accordion-header .ui-accordion-header-icon.ui-icon-triangle-1-e {
+  background-position: -96px -16px;
+}
+html[dir="rtl"] .ui-accordion .ui-accordion-icons,
+html[dir="rtl"] .ui-accordion .ui-accordion-icons .ui-accordion-icons {
+  padding-left: 0;
+  padding-right: 2em;
+}
+
 /* Autocomplete
    ========================================================================== */
 /**
@@ -828,6 +844,18 @@ label[aria-pressed="true"].ui-button:active {
   background-image: -webkit-linear-gradient(#c7dbfa, #b0cbf7);
   background-image: linear-gradient(#c7dbfa, #b0cbf7);
   border-color: #5c94ef;
+}
+
+/**
+ * Button RTL support.
+ */
+html[dir="rtl"] .ui-buttonset {
+  margin-right: 0;
+  margin-left: 0.5em;
+}
+html[dir="rtl"] .ui-buttonset .ui-button {
+  margin-right: 0;
+  margin-left: -0.35em;
 }
 
 /* Datepicker
@@ -1306,6 +1334,29 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   padding-left: 2em;
 }
 
+/**
+ * Menu RTL support (needs further improvements in upstream project).
+ */
+html[dir="rtl"] .ui-menu {
+  padding: 0;
+}
+html[dir="rtl"] .ui-menu .ui-menu-item {
+  position: relative;
+  margin: 0;
+  padding: 3px 0.30769231em 3px 1em;
+}
+html[dir="rtl"] .ui-menu .ui-icon {
+  left: auto;
+  right: 0.25em;
+}
+html[dir="rtl"] .ui-menu .ui-menu-icon {
+  right: auto;
+  left: 0;
+}
+html[dir="rtl"] .ui-menu .ui-menu-icon.ui-icon-carat-1-e {
+  background-position: -96px 0;
+}
+
 /* Progressbar
    ========================================================================== */
 /**
@@ -1459,6 +1510,18 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 .ui-selectmenu-open {
   display: block;
+}
+
+/**
+ * Selectmenu RTL support (needs further improvements in upstream project).
+ */
+html[dir="rtl"] .ui-selectmenu-button span.ui-icon {
+  right: auto;
+  left: 0.25em;
+}
+html[dir="rtl"] .ui-selectmenu-button span.ui-selectmenu-text {
+  padding: 0.30769231em 0.30769231em 0.30769231em 2.1em;
+  text-align: right;
 }
 
 /* Slider
@@ -1662,6 +1725,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 }
 .ui-tabs .ui-tabs-nav {
   margin: 0;
+  padding: 0;
   background: none;
 }
 .ui-tabs .ui-tabs-nav li {
@@ -1703,6 +1767,14 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
  */
 .ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor {
   cursor: pointer;
+}
+
+/**
+ * Tabs RTL support.
+ */
+html[dir="rtl"] .ui-tabs .ui-tabs-nav li,
+html[dir="rtl"] .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+  float: right;
 }
 
 /* Tooltip
