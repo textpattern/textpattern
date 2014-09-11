@@ -414,14 +414,13 @@ function plugin_verify()
 
         if ($plugin = @unserialize($plugin)) {
             if (is_array($plugin)) {
-                extract($plugin);
                 $source = '';
 
-                if (isset($help_raw) && empty($plugin['allow_html_help'])) {
+                if (isset($plugin['help_raw']) && empty($plugin['allow_html_help'])) {
                     $textile = new Textpattern_Textile_Parser();
-                    $help_source = $textile->TextileRestricted($help_raw, 0, 0);
+                    $help_source = $textile->TextileRestricted($plugin['help_raw'], 0, 0);
                 } else {
-                    $help_source = highlight_string($help, true);
+                    $help_source = highlight_string($plugin['help'], true);
                 }
 
                 $source.= highlight_string('<?php'.$plugin['code'].'?>', true);
