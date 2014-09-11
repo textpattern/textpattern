@@ -1341,8 +1341,6 @@ html[dir="rtl"] .ui-menu {
   padding: 0;
 }
 html[dir="rtl"] .ui-menu .ui-menu-item {
-  position: relative;
-  margin: 0;
   padding: 3px 0.30769231em 3px 1em;
 }
 html[dir="rtl"] .ui-menu .ui-icon {
