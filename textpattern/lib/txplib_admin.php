@@ -137,7 +137,7 @@ function send_reset_confirmation_request($name)
         if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message)) {
             return gTxt('password_reset_confirmation_request_sent');
         } else {
-            return gTxt('could_not_mail');
+            return array(gTxt('could_not_mail'), E_ERROR);
         }
     } else {
         // Though 'unknown_author' could be thrown, send generic 'request_sent' message
