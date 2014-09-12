@@ -1,1 +1,1 @@
-../../../textpattern/jquery.js
+../../../textpattern/vendors/jquery/jquery/jquery.js
