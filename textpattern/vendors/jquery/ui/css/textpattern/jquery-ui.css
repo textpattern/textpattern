@@ -1437,6 +1437,7 @@ html[dir="rtl"] .ui-menu .ui-menu-icon {
   position: relative;
   display: inline-block;
   overflow: hidden;
+  vertical-align: top;
   /* 1 */
   font-size: 100%;
   font-size: 1em;
@@ -1454,13 +1455,13 @@ html[dir="rtl"] .ui-menu .ui-menu-icon {
 .ui-selectmenu-button span.ui-icon {
   position: absolute;
   top: 50%;
-  right: 0.25em;
+  right: 0.2em;
   left: auto;
   margin-top: -8px;
 }
 .ui-selectmenu-button span.ui-selectmenu-text {
   display: block;
-  padding: 0.30769231em 2.1em 0.30769231em 0.30769231em;
+  padding: 0.30769231em 1.75em 0.30769231em 0.30769231em;
   text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1501,10 +1502,10 @@ html[dir="rtl"] .ui-menu .ui-menu-icon {
  */
 html[dir="rtl"] .ui-selectmenu-button span.ui-icon {
   right: auto;
-  left: 0.25em;
+  left: 0.2em;
 }
 html[dir="rtl"] .ui-selectmenu-button span.ui-selectmenu-text {
-  padding: 0.30769231em 0.30769231em 0.30769231em 2.1em;
+  padding: 0.30769231em 0.30769231em 0.30769231em 1.75em;
   text-align: right;
 }
 
@@ -1663,6 +1664,18 @@ html[dir="rtl"] .ui-selectmenu-button span.ui-selectmenu-text {
 
 .ui-spinner-down {
   bottom: 0;
+}
+
+/**
+ * Spinner RTL support.
+ */
+html[dir="rtl"] .ui-spinner .ui-spinner-input {
+  padding-right: 4px;
+  padding-left: 24px;
+}
+html[dir="rtl"] .ui-spinner-button {
+  right: auto;
+  left: 0;
 }
 
 /* Tabs
