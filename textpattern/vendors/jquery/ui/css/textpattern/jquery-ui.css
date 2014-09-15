@@ -505,9 +505,6 @@ html[dir="rtl"] .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
   left: auto;
   right: 0.5em;
 }
-html[dir="rtl"] .ui-accordion .ui-accordion-header .ui-accordion-header-icon.ui-icon-triangle-1-e {
-  background-position: -96px -16px;
-}
 html[dir="rtl"] .ui-accordion .ui-accordion-icons,
 html[dir="rtl"] .ui-accordion .ui-accordion-icons .ui-accordion-icons {
   padding-left: 0;
@@ -1080,19 +1077,11 @@ html[dir="rtl"] .ui-buttonset .ui-button {
  * Datepicker RTL support.
  */
 html[dir="rtl"] .ui-datepicker-prev {
-  right: 2px;
+  right: 0.2em;
   left: auto;
 }
 html[dir="rtl"] .ui-datepicker-next {
-  left: 2px;
-  right: auto;
-}
-html[dir="rtl"] .ui-datepicker-prev:hover {
-  right: 1px;
-  left: auto;
-}
-html[dir="rtl"] .ui-datepicker-next:hover {
-  left: 1px;
+  left: 0.2em;
   right: auto;
 }
 html[dir="rtl"] .ui-datepicker-buttonpane {
@@ -1350,9 +1339,6 @@ html[dir="rtl"] .ui-menu .ui-icon {
 html[dir="rtl"] .ui-menu .ui-menu-icon {
   right: auto;
   left: 0;
-}
-html[dir="rtl"] .ui-menu .ui-menu-icon.ui-icon-carat-1-e {
-  background-position: -96px 0;
 }
 
 /* Progressbar
