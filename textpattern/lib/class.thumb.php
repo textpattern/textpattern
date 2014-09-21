@@ -78,7 +78,7 @@ class wet_thumb {
      * @param	outfile	array of thumb file names (1...n)
      * @return	boolean, true indicates success
      */
-    function write( $infile, $outfile ) {
+    function write($infile = null, $outfile = null) {
         global $verbose;
 
         if( $verbose )echo "writing thumb nail...";
@@ -339,7 +339,7 @@ class txp_thumb extends wet_thumb {
      * create thumbnail image from source image
      * @return	boolean, true indicates success
      */
-    function write( ) {
+    function write($infile = null, $outfile = null) {
         if ( !isset($this->m_ext) ) return false;
 
         if ( parent::write ( IMPATH.$this->m_id.$this->m_ext, IMPATH.$this->m_id.'t'.$this->m_ext ) ) {

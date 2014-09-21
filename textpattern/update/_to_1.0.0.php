@@ -132,7 +132,7 @@ $LastChangedRevision$
 			extract($a);
 			if (!$nonce){
 				$nonce = md5( uniqid( rand(), true ) );
-				safe_update('txp_users',"nonce='$nonce'", "name = '$name'");
+				safe_update('txp_users',"nonce='$nonce'", "name = '".doSlash($name)."'");
 			}
 		}
 	}
@@ -188,35 +188,35 @@ eod;
 	safe_insert("txp_category", "name='root',parent='',type='image',lft=1,rgt=0");
 	rebuild_tree('root',1,'image');
 
-	if (!safe_field('val','txp_prefs',"name='article_list_pageby'")) {
+	if (safe_field('val','txp_prefs',"name='article_list_pageby'") === false) {
 		safe_insert('txp_prefs',"prefs_id=1,name='article_list_pageby',val=25");
 	}
 
-	if (!safe_field('val','txp_prefs',"name='link_list_pageby'")) {
+	if (safe_field('val','txp_prefs',"name='link_list_pageby'") === false) {
 		safe_insert('txp_prefs',"prefs_id=1,name='link_list_pageby',val=25");
 	}
 
-	if (!safe_field('val','txp_prefs',"name='image_list_pageby'")) {
+	if (safe_field('val','txp_prefs',"name='image_list_pageby'") === false) {
 		safe_insert('txp_prefs',"prefs_id=1,name='image_list_pageby',val=25");
 	}
 
-	if (!safe_field('val','txp_prefs',"name='log_list_pageby'")) {
+	if (safe_field('val','txp_prefs',"name='log_list_pageby'") === false) {
 		safe_insert('txp_prefs',"prefs_id=1,name='log_list_pageby',val=25");
 	}
 
-	if (!safe_field('val','txp_prefs',"name='comment_list_pageby'")) {
+	if (safe_field('val','txp_prefs',"name='comment_list_pageby'") === false) {
 		safe_insert('txp_prefs',"prefs_id=1,name='comment_list_pageby',val=25");
 	}
 
-	if (!safe_field('val','txp_prefs',"name='permlink_mode'")) {
+	if (safe_field('val','txp_prefs',"name='permlink_mode'") === false) {
 		safe_insert('txp_prefs',"prefs_id=1,name='permlink_mode',val='section_id_title'");
 	}
 
-	if (!safe_field('val','txp_prefs',"name='comments_are_ol'")) {
+	if (safe_field('val','txp_prefs',"name='comments_are_ol'") === false) {
 		safe_insert('txp_prefs',"prefs_id=1,name='comments_are_ol',val='1'");
 	}
 
-	if (!safe_field('name','txp_prefs',"name='path_to_site'")) {
+	if (safe_field('name','txp_prefs',"name='path_to_site'") === false) {
 		safe_insert('txp_prefs',"prefs_id=1,name='path_to_site',val=''");
 	}
 
@@ -228,6 +228,7 @@ eod;
 		while ($a = mysql_fetch_array($rs)){
 			extract($a);
 			$url_title = addslashes(stripSpace($Title,1));
+			assert_int($ID);
 			safe_update("textpattern","url_title = '$url_title'","ID=$ID");
 		}
 
@@ -287,37 +288,38 @@ eod;
 
 	// 1.0: new time zone offset
 	//If we check for a val, and the val is 0, this add another empty one
-	if (!safe_field('name','txp_prefs',"name='is_dst'")) {
+	if (safe_field('name','txp_prefs',"name='is_dst'") === false) {
 		safe_insert('txp_prefs',"prefs_id=1,name='is_dst',val=0");
 	}
 
 	// FIXME: this presupposes 'gmtoffset' won't be set at clean install (RC4+ probably will)
 
-	if (!safe_field('val','txp_prefs',"name='gmtoffset'")) {
+	if (safe_field('val','txp_prefs',"name='gmtoffset'") === false) {
 		$old_offset = safe_field('val', 'txp_prefs', "name='timeoffset'");
 		$serveroffset = gmmktime(0,0,0) - mktime(0,0,0);
 		$gmtoffset = sprintf("%+d", $serveroffset + $old_offset);
-		safe_insert('txp_prefs',"prefs_id=1,name='gmtoffset',val='$gmtoffset'");
+		safe_insert('txp_prefs',"prefs_id=1,name='gmtoffset',val='".doSlash($gmtoffset)."'");
 	}
 
+	$tempdir = doSlash(find_temp_dir());
+
 	// 1.0: locale support
-	if (!safe_field('val','txp_prefs',"name='locale'")) {
+	if (safe_field('val','txp_prefs',"name='locale'") === false) {
 		safe_insert('txp_prefs',"prefs_id=1,name='locale',val='en_GB'");
 	}
 
 	// 1.0: temp dir
-	if (!safe_field('val','txp_prefs',"name='tempdir'")) {
-		$tempdir = addslashes(find_temp_dir());
+	if (safe_field('val','txp_prefs',"name='tempdir'") === false) {
 		safe_insert('txp_prefs',"prefs_id=1,name='tempdir',val='$tempdir'");
 	}
 
 	//non image file upload tab:
-	if (!safe_field('val', 'txp_prefs',"name='file_list_pageby'")){
+	if (safe_field('val', 'txp_prefs',"name='file_list_pageby'") === false){
 		safe_insert('txp_prefs',"val=25,name='file_list_pageby',prefs_id=1");
 	}
 
 	// 1.0: max file upload size
-	if (!safe_field('val', 'txp_prefs',"name='file_max_upload_size'")){
+	if (safe_field('val', 'txp_prefs',"name='file_max_upload_size'") === false){
 		safe_insert('txp_prefs',"prefs_id=1,name='file_max_upload_size',val=2000000");
 	}
 
@@ -328,7 +330,7 @@ eod;
 	rebuild_tree('root',1,'file');
 
 	// 1.0: txp_file folder
-	if (!safe_field('val', 'txp_prefs',"name='file_base_path'")){
+	if (safe_field('val', 'txp_prefs',"name='file_base_path'") === false){
 		safe_insert('txp_prefs',"val='$tempdir',name='file_base_path',prefs_id=1");
 	}
 
@@ -347,7 +349,7 @@ eod;
 			) $tabletype PACK_KEYS=0 AUTO_INCREMENT=1 ");
 	}
 
-	if (!safe_field('name', 'txp_form', "type='file'")){
+	if (safe_field('name', 'txp_form', "type='file'") === false){
 		safe_insert('txp_form',"
 			name='files',
 			type='file',
@@ -381,24 +383,25 @@ eod;
 	$textile = new Textile();
 	while ($a = @mysql_fetch_assoc($rs)){
 		extract($a);
+		assert_int($ID);
 		$lite = ($textile_excerpt)? '' : 1;
 		$Excerpt_html = $textile->TextileThis($Excerpt,$lite);
-		safe_update("textpattern","Excerpt_html = '$Excerpt_html'","ID=$ID");
+		safe_update("textpattern","Excerpt_html = '".doSlash($Excerpt_html)."'","ID=$ID");
 	}
 
 	//1.0 feed unique ids
 	//blog unique id
-	if (!safe_field('val','txp_prefs',"name='blog_uid'"))
+	if (safe_field('val','txp_prefs',"name='blog_uid'") === false)
 	{
 		$prefs['blog_uid'] = md5(uniqid(rand(),true));
 		safe_insert('txp_prefs',"name='blog_uid', val='".$prefs['blog_uid']."', prefs_id='1'");
 	}
-	if (!safe_field('name','txp_prefs',"name='blog_mail_uid'"))
+	if (safe_field('name','txp_prefs',"name='blog_mail_uid'") === false)
 	{
 		$mail = safe_field('email', 'txp_users', "privs='1' LIMIT 1");
-		safe_insert('txp_prefs',"name='blog_mail_uid', val='$mail', prefs_id='1'");
+		safe_insert('txp_prefs',"name='blog_mail_uid', val='".doSlash($mail)."', prefs_id='1'");
 	}
-	if (!safe_field('val','txp_prefs',"name='blog_time_uid'"))
+	if (safe_field('val','txp_prefs',"name='blog_time_uid'") === false)
 	{
 		safe_insert('txp_prefs',"name='blog_time_uid', val='".date("Y")."', prefs_id='1'");
 	}
@@ -413,8 +416,9 @@ eod;
 		{
 			while ($a = nextRow($rs))
 			{
+				assert_int($a['ID']);
 				$feed_time = substr($a['Posted'],0,10);
-				safe_update('textpattern',"uid='".md5(uniqid(rand(),true))."', feed_time='$feed_time'","ID={$a['ID']}");
+				safe_update('textpattern',"uid='".md5(uniqid(rand(),true))."', feed_time='".doSlash($feed_time)."'","ID={$a['ID']}");
 			}
 		}
 	}
@@ -424,6 +428,7 @@ eod;
 		$rs = safe_rows_start('parentid, count(*) as thecount','txp_discuss','visible=1 group by parentid');
 		if ($rs) {
 			while ($a = nextRow($rs)) {
+				assert_int($a['parentid']);
 				safe_update('textpattern',"comments_count=".$a['thecount'],"ID=".$a['parentid']);
 			}
 		}
@@ -575,7 +580,7 @@ eod;
 <small><txp:permlink><txp:permlink /></txp:permlink> &middot;
 <txp:posted /></small></p>
 EOF;
-		safe_insert('txp_form', "name='search_results', type='article', Form='$form'");
+		safe_insert('txp_form', "name='search_results', type='article', Form='".doSlash($form)."'");
 	}
 
 	if (!safe_query("SELECT 1 FROM `".PFX."txp_lang` LIMIT 0")) {
@@ -598,7 +603,7 @@ EOF;
 
 			if (!$client->query('tups.getLanguage',$prefs['blog_uid'],LANG))
 			{
-				echo '<p style="color:red">Error trying to install language. Please, try it again again.<br />
+				echo '<p style="color:red">Error trying to install language. Please, try it again.<br />
 				If problem connecting to the RPC server persists, you can go to <a href="http://rpc.textpattern.com/lang/">http://rpc.textpattern.com/lang/</a>, download the
 				desired language file and place it in the /lang/ directory of your textpattern install. You can then install the language from file.</p>';
 			}else {
@@ -606,7 +611,7 @@ EOF;
 				$lang_struct = unserialize($response);
 				function install_lang_key($value, $key)
 				{
-					$q = "name='$value[name]', event='$value[event]', data='$value[data]', lastmod='".strftime('%Y%m%d%H%M%S',$value['uLastmod'])."'";
+					$q = "name='".doSlash($value[name])."', event='".doSlash($value[event])."', data='".doSlash($value[data])."', lastmod='".doSlash(strftime('%Y%m%d%H%M%S',$value['uLastmod']))."'";
 					safe_insert('txp_lang',$q.", lang='".LANG."'");
 				}
 				array_walk($lang_struct,'install_lang_key');
@@ -615,7 +620,7 @@ EOF;
 
 	$maxpos = safe_field('max(position)', 'txp_prefs', '1');
 	// 1.0: production_status setting to control error reporting
-	if (!safe_field('val','txp_prefs',"name='production_status'"))
+	if (safe_field('val','txp_prefs',"name='production_status'") === false)
 	{
 		safe_insert('txp_prefs',"name='production_status', val='testing', prefs_id='1', type='0', position='".doSlash($maxpos)."', html='prod_levels'");
 	}
@@ -626,7 +631,7 @@ EOF;
 		safe_update('txp_prefs','position = position*10','1');
 	}
 	# remove, remove
-	if (safe_field('name','txp_prefs',"name='logs_expire'"))
+	if (safe_field('name','txp_prefs',"name='logs_expire'") !== false)
 	{
 		safe_delete('txp_prefs',"name='logs_expire'");
 	}
@@ -635,7 +640,7 @@ EOF;
 	safe_update('txp_prefs',"type = '1'","name = 'file_base_path'");
 
 	// 1.0: add option to override charset for emails (ISO-8559-1 instead of UTF-8)
-	if (!safe_field('name','txp_prefs',"name='override_emailcharset'"))
+	if (safe_field('name','txp_prefs',"name='override_emailcharset'") === false)
 	{
 		safe_insert('txp_prefs',"name='override_emailcharset', val='0', prefs_id='1', type='1', event='admin', position='".doSlash($maxpos)."', html='yesnoradio'");
 	}
@@ -649,14 +654,14 @@ EOF;
 <txp:comments_form />
 </txp:if_comments_allowed>
 EOF;
-		safe_insert('txp_form', "name='comments_display', type='article', Form='$form'");
+		safe_insert('txp_form', "name='comments_display', type='article', Form='".doSlash($form)."'");
 	}
 
 	// /tmp is bad for permanent storage of files,
 	// if no files are uploaded yet, switch to the files directory in the top-txp dir.
 	if (!safe_count('txp_file',"1")){
 		$tempdir = find_temp_dir();
-		if ($tempdir == safe_field('val','txp_prefs',"name='file_base_path'"))
+		if ($tempdir === safe_field('val','txp_prefs',"name='file_base_path'"))
 			safe_update('txp_prefs',"val='".doSlash(dirname(txpath).DS.'files')."',prefs_id=1","name='file_base_path'");
 	}
 
@@ -682,7 +687,7 @@ EOF;
 	// Show gmt-selection in prefs
 	safe_update('txp_prefs',"type=0, html='gmtoffset_select', position=50","name='gmtoffset'");
 
-	if (!safe_field('name', 'txp_prefs', "prefs_id=1 and name='plugin_cache_dir'")) {
+	if (safe_field('name', 'txp_prefs', "prefs_id=1 and name='plugin_cache_dir'") === false) {
 		$maxpos = safe_field('max(position)', 'txp_prefs', '1');
 		safe_insert('txp_prefs',"name='plugin_cache_dir', val='', prefs_id='1', type='1', event='admin', position='".doSlash($maxpos)."', html='text_input'");
 	}
@@ -690,5 +695,3 @@ EOF;
 	// update version
 	safe_delete('txp_prefs',"name = 'version'");
 	safe_insert('txp_prefs', "prefs_id=1, name='version',val='4.0', type='2'");
-
-?>

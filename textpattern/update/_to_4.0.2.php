@@ -11,7 +11,7 @@ $LastChangedRevision$
 
 		safe_insert('txp_page',"
 			name='error_default',
-			user_html='".$error_default."'");
+			user_html='".doSlash($error_default)."'");
 	}
 
 	//take back use_textile

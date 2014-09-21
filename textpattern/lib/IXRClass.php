@@ -30,23 +30,22 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @package IXR
- * @since 1.5
+ * @since 1.5.0
  *
  * @copyright  Incutio Ltd 2010 (http://www.incutio.com)
- * @version    1.7.4 7th September 2010
+ * @version    1.7.4 7th September 2010 (Contains Textpatternish amendments, 2014-08-13)
  * @author     Simon Willison
  * @link       http://scripts.incutio.com/xmlrpc/ Site/manual
+ * @license    http://www.opensource.org/licenses/bsd-license.php BSD
  */
 
-/*
-Contains Textpatternish amendments.
-
-$HeadURL$
-$LastChangedRevision$
-*/
-
-class IXR_Value
-{
+/**
+ * IXR_Value
+ *
+ * @package IXR
+ * @since 1.5.0
+ */
+class IXR_Value {
     var $data;
     var $type;
 
@@ -134,6 +133,7 @@ class IXR_Value
             case 'struct':
                 $return = '<struct>'."\n";
                 foreach ($this->data as $name => $value) {
+					$name = htmlspecialchars($name);
                     $return .= "  <member><name>$name</name><value>";
                     $return .= $value->getXml()."</value></member>\n";
                 }
@@ -171,7 +171,7 @@ class IXR_Value
  * IXR_MESSAGE
  *
  * @package IXR
- * @since 1.5
+ * @since 1.5.0
  *
  */
 class IXR_Message
@@ -203,11 +203,37 @@ class IXR_Message
     {
         // first remove the XML declaration
         // merged from WP #10698 - this method avoids the RAM usage of preg_replace on very large messages
-        $header = preg_replace( '/<\?xml.*?\?'.'>/', '', substr($this->message, 0, 100), 1);
-        $this->message = substr_replace($this->message, $header, 0, 100);
-        if (trim($this->message) == '') {
+        $header = preg_replace( '/<\?xml.*?\?'.'>/s', '', substr( $this->message, 0, 100 ), 1 );
+        $this->message = trim( substr_replace( $this->message, $header, 0, 100 ) );
+        if ( '' == $this->message ) {
             return false;
         }
+
+        // Then remove the DOCTYPE
+        $header = preg_replace( '/^<!DOCTYPE[^>]*+>/i', '', substr( $this->message, 0, 200 ), 1 );
+        $this->message = trim( substr_replace( $this->message, $header, 0, 200 ) );
+        if ( '' == $this->message ) {
+            return false;
+        }
+
+        // Check that the root tag is valid
+        $root_tag = substr( $this->message, 0, strcspn( substr( $this->message, 0, 20 ), "> \t\r\n" ) );
+        if ( '<!DOCTYPE' === strtoupper( $root_tag ) ) {
+            return false;
+        }
+        if ( ! in_array( $root_tag, array( '<methodCall', '<methodResponse', '<fault' ) ) ) {
+            return false;
+        }
+
+        // Bail if there are too many elements to parse
+        $element_limit = 30000;
+        if ( function_exists( 'apply_filters' ) ) {
+            $element_limit = apply_filters( 'xmlrpc_element_limit', $element_limit );
+        }
+        if ( $element_limit && 2 * $element_limit < substr_count( $this->message, '<' ) ) {
+            return false;
+        }
+
         $this->_parser = xml_parser_create();
         // Set XML parser to take the case of tags in to account
         xml_parser_set_option($this->_parser, XML_OPTION_CASE_FOLDING, false);
@@ -216,6 +242,7 @@ class IXR_Message
         xml_set_element_handler($this->_parser, 'tag_open', 'tag_close');
         xml_set_character_data_handler($this->_parser, 'cdata');
         $chunk_size = 262144; // 256Kb, parse in chunks to avoid the RAM usage on very large messages
+        $final = false;
         do {
             if (strlen($this->message) <= $chunk_size) {
                 $final = true;
@@ -331,7 +358,7 @@ class IXR_Message
                     $this->_arraystructs[count($this->_arraystructs)-1][] = $value;
                 }
             } else {
-                // Just add as a paramater
+                // Just add as a parameter
                 $this->params[] = $value;
             }
         }
@@ -343,7 +370,7 @@ class IXR_Message
  * IXR_Server
  *
  * @package IXR
- * @since 1.5
+ * @since 1.5.0
  */
 class IXR_Server
 {
@@ -424,7 +451,7 @@ EOD;
 
         // Perform the callback and send the response
         if (count($args) == 1) {
-            // If only one paramater just send that instead of the whole array
+            // If only one parameter just send that instead of the whole array
             $args = $args[0];
         }
 
@@ -441,7 +468,7 @@ EOD;
         } else {
             // It's a function - does it exist?
             if (is_array($method)) {
-                if (!method_exists($method[0], $method[1])) {
+                if (!is_callable(array($method[0], $method[1]))) {
                     return new IXR_Error(-32601, 'server error. requested object method "'.$method[1].'" does not exist.');
                 }
             } else if (!function_exists($method)) {
@@ -466,12 +493,12 @@ EOD;
     function output($xml)
     {
         $xml = '<?xml version="1.0" encoding="utf-8"?>'."\n".$xml;
-		if ( (@strpos($_SERVER["HTTP_ACCEPT_ENCODING"],'gzip') !== false) && extension_loaded('zlib') &&
-			ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent())
-		{
-			$xml = gzencode($xml,7,FORCE_GZIP);
-			header("Content-Encoding: gzip");
-		}
+        if ( (@strpos($_SERVER["HTTP_ACCEPT_ENCODING"],'gzip') !== false) && extension_loaded('zlib') &&
+            ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent())
+        {
+            $xml = gzencode($xml,7,FORCE_GZIP);
+            header("Content-Encoding: gzip");
+        }
         $length = strlen($xml);
         header('Connection: close');
         header('Content-Length: '.$length);
@@ -553,7 +580,7 @@ EOD;
  * IXR_Request
  *
  * @package IXR
- * @since 1.5
+ * @since 1.5.0
  */
 class IXR_Request
 {
@@ -596,7 +623,7 @@ EOD;
  * IXR_Client
  *
  * @package IXR
- * @since 1.5
+ * @since 1.5.0
  *
  */
 class IXR_Client
@@ -609,6 +636,7 @@ class IXR_Client
     var $message = false;
     var $debug = false;
     var $timeout;
+    var $headers = array();
 
     // Storage place for an error message
     var $error = false;
@@ -625,6 +653,10 @@ class IXR_Client
             // Make absolutely sure we have a path
             if (!$this->path) {
                 $this->path = '/';
+            }
+
+            if ( ! empty( $bits['query'] ) ) {
+                $this->path .= '?' . $bits['query'];
             }
         } else {
             $this->server = $server;
@@ -651,9 +683,9 @@ class IXR_Client
         $this->headers['User-Agent']    = $this->useragent;
         $this->headers['Content-Length']= $length;
 
-		// Accept gzipped response if zlib and if php4.3+ (fgets turned binary safe)
-		if ( extension_loaded('zlib') && preg_match('#^(4\.[3-9])|([5-9])#',phpversion()) )
-        	$this->headers['Accept-Encoding']    = 'gzip';
+        // Accept gzipped response if zlib and if php4.3+ (fgets turned binary safe)
+        if ( extension_loaded('zlib') && preg_match('#^(4\.[3-9])|([5-9])#',phpversion()) )
+            $this->headers['Accept-Encoding']    = 'gzip';
 
         foreach( $this->headers as $header => $value ) {
             $request .= "{$header}: {$value}{$r}";
@@ -668,9 +700,9 @@ class IXR_Client
         }
 
         if ($this->timeout) {
-	        $fp = (!is_disabled('fsockopen')) ? fsockopen($this->server, $this->port, $errno, $errstr, $this->timeout) : false;
+            $fp = (!is_disabled('fsockopen')) ? fsockopen($this->server, $this->port, $errno, $errstr, $this->timeout) : false;
         } else {
-        	$fp = (!is_disabled('fsockopen')) ? fsockopen($this->server, $this->port, $errno, $errstr) : false;
+            $fp = (!is_disabled('fsockopen')) ? fsockopen($this->server, $this->port, $errno, $errstr) : false;
         }
         if (!$fp) {
             $this->error = new IXR_Error(-32300, 'transport error - could not open socket ('.$errstr.')');
@@ -681,7 +713,7 @@ class IXR_Client
         $debugContents = '';
         $gotFirstLine = false;
         $gettingHeaders = true;
-		$is_gzipped = false;
+        $is_gzipped = false;
         while (!feof($fp)) {
             $line = fgets($fp, 4096);
             if (!$gotFirstLine) {
@@ -694,27 +726,27 @@ class IXR_Client
             }
             if ($gettingHeaders && trim($line) == '') {
                 $gettingHeaders = false;
-				continue;
+                continue;
             }
             if (!$gettingHeaders) {
-		        // We do a binary comparison of the first two bytes, see
-		        // rfc1952, to check wether the content is gzipped.
-				if ( ($contents=='') && (strncmp($line,"\x1F\x8B",2)===0))
-					$is_gzipped = true;
-            	// merged from WP #12559 - remove trim
+                // We do a binary comparison of the first two bytes, see
+                // rfc1952, to check wether the content is gzipped.
+                if ( ($contents=='') && (strncmp($line,"\x1F\x8B",2)===0))
+                    $is_gzipped = true;
+                // merged from WP #12559 - remove trim
                 $contents .= $line;
             }
             if ($this->debug) {
             	$debugContents .= $line;
             }
         }
-		// if gzipped, strip the 10 byte header, and pass it to gzinflate (rfc1952)
-		if ($is_gzipped)
-		{
-			$contents = gzinflate(substr($contents, 10));
-			//simulate trim() for each line; don't know why, but it won't work otherwise
-			$contents = preg_replace('#^[\x20\x09\x0A\x0D\x00\x0B]*(.*)[\x20\x09\x0A\x0D\x00\x0B]*$#m','\\1',$contents);
-		}
+        // if gzipped, strip the 10 byte header, and pass it to gzinflate (rfc1952)
+        if ($is_gzipped)
+        {
+            $contents = gzinflate(substr($contents, 10));
+            //simulate trim() for each line; don't know why, but it won't work otherwise
+            $contents = preg_replace('#^[\x20\x09\x0A\x0D\x00\x0B]*(.*)[\x20\x09\x0A\x0D\x00\x0B]*$#m','\\1',$contents);
+        }
         if ($this->debug) {
             echo '<pre class="ixr_response">'.htmlspecialchars($debugContents)."\n</pre>\n\n";
         }
@@ -764,7 +796,7 @@ class IXR_Client
  * IXR_Error
  *
  * @package IXR
- * @since 1.5
+ * @since 1.5.0
  */
 class IXR_Error
 {
@@ -806,7 +838,7 @@ EOD;
  * IXR_Date
  *
  * @package IXR
- * @since 1.5
+ * @since 1.5.0
  */
 class IXR_Date {
     var $year;
@@ -869,7 +901,7 @@ class IXR_Date {
  * IXR_Base64
  *
  * @package IXR
- * @since 1.5
+ * @since 1.5.0
  */
 class IXR_Base64
 {
@@ -890,7 +922,7 @@ class IXR_Base64
  * IXR_IntrospectionServer
  *
  * @package IXR
- * @since 1.5
+ * @since 1.5.0
  */
 class IXR_IntrospectionServer extends IXR_Server
 {
@@ -1053,7 +1085,7 @@ class IXR_IntrospectionServer extends IXR_Server
  * IXR_ClientMulticall
  *
  * @package IXR
- * @since 1.5
+ * @since 1.5.0
  */
 class IXR_ClientMulticall extends IXR_Client
 {

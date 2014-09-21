@@ -1316,7 +1316,7 @@ function escape_js($js)
 
 	function is_valid_email($address)
 	{
-		return preg_match('/^[a-z0-9](\.?[a-z0-9_+%-])*@([a-z0-9](-*[a-z0-9])*\.)+[a-z]{2,6}$/i', $address);
+		return (bool) filter_var($address, FILTER_VALIDATE_EMAIL);
 	}
 
 // -------------------------------------------------------------
@@ -2132,7 +2132,6 @@ function escape_js($js)
 	function set_pref($name, $val, $event='publish',  $type=0, $html='text_input', $position=0, $is_private=PREF_GLOBAL)
 	{
 		global $txp_user;
-		extract(doSlash(func_get_args()));
 
 		$user_name = '';
 		if ($is_private == PREF_PRIVATE) {
@@ -2141,6 +2140,13 @@ function escape_js($js)
 
 			$user_name = 'user_name = \''.doSlash($txp_user).'\'';
 		}
+
+		$name = doSlash($name);
+		$val = doSlash($val);
+		$event = doSlash($event);
+		$type = (int) $type;
+		$html = doSlash($html);
+		$position = (int) $position;
 
 		if (!safe_row('name', 'txp_prefs', "name = '$name'" . ($user_name ? " AND $user_name" : ''))) {
 			$user_name = ($user_name ? "$user_name," : '');
@@ -2155,7 +2161,7 @@ function escape_js($js)
 				prefs_id = 1"
 			);
     	} else {
-        	return safe_update('txp_prefs', "val = '$val'","name like '$name'" . ($user_name ? " AND $user_name" : ''));
+        	return safe_update('txp_prefs', "val = '$val'","name = '$name'" . ($user_name ? " AND $user_name" : ''));
     	}
 	}
 

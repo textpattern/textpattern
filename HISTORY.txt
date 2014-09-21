@@ -1,8 +1,36 @@
+Changes in 4.5.7
+
+* Maintenance release with bug fixes.
+* Textile v2.4.3 resolves PHP 5.5 compatibility issues.
+* Updated default site theme and libraries.
+* Setup now remembers settings. No more 'form resubmission' browser warnings when going back through wizard.
+* Allow pre_publish_script in multi-site installations.
+* Email address validation uses PHP's filter_var(), which permits addresses such as @[127.0.0.1].
+* Fixed: <txp:link_to_prev>, <txp:link_to_next>, <txp:prev_title>, and <txp:next_title> tags for certain combinations with <txp:article_custom>.
+* Fixed: SQL statement escaping in set_pref().
+* Fixed: Situations where set_pref() could corrupt the preference table if the string name contained '%' or '_' characters.
+* Fixed: Save comment emails of any valid length properly.
+* Fixed: Visitor logs support IPv6.
+* Fixed: Articles can be assigned to sections with names longer than 64 characters.
+* Fixed: Setup script more robust, and compatible with MySQL 5.6.
+* Fixed: Warnings when writing image thumbnails.
+* Fixed: Files no longer trash author names, and empty files can no longer be created.
+* Fixed: Percent encoding of spaces in site URL.
+* Security: IXR fixes to prevent XML quadratic blowup attack.
+* Security: Prevent variable injection during setup and plugin preview step.
+
+Changes in 4.5.6
+
+* Skipped due to broken update path for SVN users.
+
 Changes in 4.5.5
 
-* Maintenance release with bug fixes, no security implications
-* Fix compatibility issues with PHP 5.5 in <txp:yield> and setup routines.
-* jQuery 1.8.3
+* Maintenance release with bug fixes, no security implications.
+* Fixed: Compatibility issues with PHP 5.5 in <txp:yield> and setup routines.
+* Fixed: Category table's parent-child associations break and the table malforms on name updates, if two different category types share same category name.
+* Fixed: Image caption isn't escaped.
+* Fixed: Admin-side JavaScript dies on Safari 5 (or any browser that doesn't allow re-defining keywords or constructs as variables).
+* jQuery 1.8.3.
 
 Changes in 4.5.4
 

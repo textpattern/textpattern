@@ -124,6 +124,12 @@ $LastChangedRevision$
 			$dbversion = '4.5.5';
 	}
 
+	if (version_compare($dbversion, '4.5.7', '<'))
+	{
+		if ((include txpath.DS.'update'.DS.'_to_4.5.7.php') !== false)
+			$dbversion = '4.5.7';
+	}
+
 	// Invite optional third parties to the update experience
 	// Convention: Put custom code into file(s) at textpattern/update/custom/post-update-abc-foo.php
 	// where 'abc' is the third party's reserved prefix (@see http://textpattern.net/wiki/index.php?title=Reserved_Plugin_Prefixes)

@@ -67,7 +67,7 @@ $LastChangedRevision$
 			}
 			else
 			{
-				return gTxt('could_not_mail');
+				return array(gTxt('could_not_mail'), E_ERROR);
 			}
 		}
 
