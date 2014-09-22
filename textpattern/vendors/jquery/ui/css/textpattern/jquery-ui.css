@@ -501,12 +501,12 @@ a.ui-state-default:focus {
 /**
  * Accordion RTL support.
  */
-html[dir="rtl"] .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+[dir="rtl"] .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
   left: auto;
   right: 0.5em;
 }
-html[dir="rtl"] .ui-accordion .ui-accordion-icons,
-html[dir="rtl"] .ui-accordion .ui-accordion-icons .ui-accordion-icons {
+[dir="rtl"] .ui-accordion .ui-accordion-icons,
+[dir="rtl"] .ui-accordion .ui-accordion-icons .ui-accordion-icons {
   padding-left: 0;
   padding-right: 2em;
 }
@@ -846,11 +846,11 @@ label[aria-pressed="true"].ui-button:active {
 /**
  * Button RTL support.
  */
-html[dir="rtl"] .ui-buttonset {
+[dir="rtl"] .ui-buttonset {
   margin-right: 0;
   margin-left: 0.5em;
 }
-html[dir="rtl"] .ui-buttonset .ui-button {
+[dir="rtl"] .ui-buttonset .ui-button {
   margin-right: 0;
   margin-left: -0.35em;
 }
@@ -1076,26 +1076,26 @@ html[dir="rtl"] .ui-buttonset .ui-button {
 /**
  * Datepicker RTL support.
  */
-html[dir="rtl"] .ui-datepicker-prev {
+[dir="rtl"] .ui-datepicker-prev {
   right: 0.2em;
   left: auto;
 }
-html[dir="rtl"] .ui-datepicker-next {
+[dir="rtl"] .ui-datepicker-next {
   left: 0.2em;
   right: auto;
 }
-html[dir="rtl"] .ui-datepicker-buttonpane {
+[dir="rtl"] .ui-datepicker-buttonpane {
   clear: right;
 }
-html[dir="rtl"] .ui-datepicker-buttonpane button {
+[dir="rtl"] .ui-datepicker-buttonpane button {
   float: left;
 }
-html[dir="rtl"] .ui-datepicker-buttonpane button.ui-datepicker-current,
-html[dir="rtl"] .ui-datepicker-group {
+[dir="rtl"] .ui-datepicker-buttonpane button.ui-datepicker-current,
+[dir="rtl"] .ui-datepicker-group {
   float: right;
 }
-html[dir="rtl"] .ui-datepicker-group-last .ui-datepicker-header,
-html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
+[dir="rtl"] .ui-datepicker-group-last .ui-datepicker-header,
+[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   border-right-width: 0;
   border-left-width: 1px;
 }
@@ -1326,17 +1326,17 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 /**
  * Menu RTL support (needs further improvements in upstream project).
  */
-html[dir="rtl"] .ui-menu {
+[dir="rtl"] .ui-menu {
   padding: 0;
 }
-html[dir="rtl"] .ui-menu .ui-menu-item {
+[dir="rtl"] .ui-menu .ui-menu-item {
   padding: 3px 0.30769231em 3px 1em;
 }
-html[dir="rtl"] .ui-menu .ui-icon {
+[dir="rtl"] .ui-menu .ui-icon {
   left: auto;
   right: 0.25em;
 }
-html[dir="rtl"] .ui-menu .ui-menu-icon {
+[dir="rtl"] .ui-menu .ui-menu-icon {
   right: auto;
   left: 0;
 }
@@ -1500,11 +1500,11 @@ html[dir="rtl"] .ui-menu .ui-menu-icon {
 /**
  * Selectmenu RTL support (needs further improvements in upstream project).
  */
-html[dir="rtl"] .ui-selectmenu-button span.ui-icon {
+[dir="rtl"] .ui-selectmenu-button span.ui-icon {
   right: auto;
   left: 0.2em;
 }
-html[dir="rtl"] .ui-selectmenu-button span.ui-selectmenu-text {
+[dir="rtl"] .ui-selectmenu-button span.ui-selectmenu-text {
   padding: 0.30769231em 0.30769231em 0.30769231em 1.75em;
   text-align: right;
 }
@@ -1669,11 +1669,11 @@ html[dir="rtl"] .ui-selectmenu-button span.ui-selectmenu-text {
 /**
  * Spinner RTL support.
  */
-html[dir="rtl"] .ui-spinner .ui-spinner-input {
+[dir="rtl"] .ui-spinner .ui-spinner-input {
   padding-right: 4px;
   padding-left: 24px;
 }
-html[dir="rtl"] .ui-spinner-button {
+[dir="rtl"] .ui-spinner-button {
   right: auto;
   left: 0;
 }
@@ -1769,8 +1769,8 @@ html[dir="rtl"] .ui-spinner-button {
 /**
  * Tabs RTL support.
  */
-html[dir="rtl"] .ui-tabs .ui-tabs-nav li,
-html[dir="rtl"] .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+[dir="rtl"] .ui-tabs .ui-tabs-nav li,
+[dir="rtl"] .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
   float: right;
 }
 
