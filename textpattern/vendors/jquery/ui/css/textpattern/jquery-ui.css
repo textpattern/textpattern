@@ -1281,7 +1281,7 @@ label.ui-state-active.ui-button:active {
 .ui-menu .ui-menu-item {
   position: relative;
   margin: 0;
-  padding: 3px 1em 3px 0.30769231em;
+  padding: 0.30769231em 1em 0.30769231em 0.30769231em;
   cursor: pointer;
   /* support: IE 10, see #8844 */
   list-style-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
@@ -1330,7 +1330,7 @@ label.ui-state-active.ui-button:active {
   padding: 0;
 }
 [dir="rtl"] .ui-menu .ui-menu-item {
-  padding: 3px 0.30769231em 3px 1em;
+  padding: 0.30769231em 0.30769231em 0.30769231em 1em;
 }
 [dir="rtl"] .ui-menu .ui-icon {
   left: auto;
