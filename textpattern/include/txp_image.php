@@ -92,22 +92,22 @@ function image_list($message = '')
     }
 
     switch ($sort) {
-        case 'name' :
+        case 'name':
             $sort_sql = 'name '.$dir;
             break;
-        case 'thumbnail' :
+        case 'thumbnail':
             $sort_sql = 'thumbnail '.$dir.', id asc';
             break;
-        case 'category' :
+        case 'category':
             $sort_sql = 'category '.$dir.', id asc';
             break;
-        case 'date' :
+        case 'date':
             $sort_sql = 'date '.$dir.', id asc';
             break;
-        case 'author' :
+        case 'author':
             $sort_sql = 'author '.$dir.', id asc';
             break;
-        default :
+        default:
             $sort = 'id';
             $sort_sql = 'id '.$dir;
             break;
@@ -412,22 +412,22 @@ function image_multi_edit()
     $key = '';
 
     switch ($method) {
-        case 'delete' :
+        case 'delete':
             return image_delete($selected);
             break;
-        case 'changecategory' :
+        case 'changecategory':
             $val = ps('category');
             if (in_array($val, $categories)) {
                 $key = 'category';
             }
             break;
-        case 'changeauthor' :
+        case 'changeauthor':
             $val = ps('author');
             if (in_array($val, $all_image_authors)) {
                 $key = 'author';
             }
             break;
-        default :
+        default:
             $key = '';
             $val = '';
             break;

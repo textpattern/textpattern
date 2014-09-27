@@ -41,11 +41,11 @@ if ($event == 'prefs') {
     ));
 
     switch (strtolower($step)) {
-        case "" :
-        case "prefs_list" :
+        case "":
+        case "prefs_list":
             prefs_list();
             break;
-        case "prefs_save" :
+        case "prefs_save":
             prefs_save();
             break;
     }
@@ -287,13 +287,13 @@ function text_input($name, $val, $size = 0)
 {
     $class = '';
     switch ($size) {
-        case INPUT_MEDIUM :
+        case INPUT_MEDIUM:
             $class = 'input-medium';
             break;
-        case INPUT_SMALL :
+        case INPUT_SMALL:
             $class = 'input-small';
             break;
-        case INPUT_XSMALL :
+        case INPUT_XSMALL:
             $class = 'input-xsmall';
             break;
     }
@@ -687,11 +687,11 @@ function real_max_upload_size($user_max)
         $modifier = strtolower( substr($val, -1) );
         switch ($modifier) {
             // The 'G' modifier is available since PHP 5.1.0
-            case 'g' :
+            case 'g':
                 $val *= 1024;
-            case 'm' :
+            case 'm':
                 $val *= 1024;
-            case 'k' :
+            case 'k':
                 $val *= 1024;
         }
         if ($val > 1) {

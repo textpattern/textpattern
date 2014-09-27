@@ -71,25 +71,25 @@ function link_list($message = '')
     $dir = ($dir == 'desc') ? 'desc' : 'asc';
 
     switch ($sort) {
-        case 'id' :
+        case 'id':
             $sort_sql = 'id '.$dir;
             break;
-        case 'description' :
+        case 'description':
             $sort_sql = 'description '.$dir.', id asc';
             break;
-        case 'url' :
+        case 'url':
             $sort_sql = 'url '.$dir.', id asc';
             break;
-        case 'category' :
+        case 'category':
             $sort_sql = 'category '.$dir.', id asc';
             break;
-        case 'date' :
+        case 'date':
             $sort_sql = 'date '.$dir.', id asc';
             break;
-        case 'author' :
+        case 'author':
             $sort_sql = 'author '.$dir.', id asc';
             break;
-        default :
+        default:
             $sort = 'name';
             $sort_sql = 'linksort '.$dir.', id asc';
             break;
@@ -523,7 +523,7 @@ function link_multi_edit()
     $key = '';
 
     switch ($method) {
-        case 'delete' :
+        case 'delete':
             if (!has_privs('link.delete')) {
                 if (has_privs('link.delete.own')) {
                     $selected = safe_column('id', 'txp_link', 'id IN ('.join(',', $selected).') AND author=\''.doSlash($txp_user).'\'' );
@@ -543,19 +543,19 @@ function link_multi_edit()
 
             $key = '';
             break;
-        case 'changecategory' :
+        case 'changecategory':
             $val = ps('category');
             if (in_array($val, $categories)) {
                 $key = 'category';
             }
             break;
-        case 'changeauthor' :
+        case 'changeauthor':
             $val = ps('author');
             if (in_array($val, $all_link_authors)) {
                 $key = 'author';
             }
             break;
-        default :
+        default:
             $key = '';
             $val = '';
             break;

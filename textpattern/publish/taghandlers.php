@@ -622,13 +622,13 @@ function linklist($atts, $thing = null)
     if (!$where && !$filters) {
         foreach ($context_list as $ctxt) {
             switch ($ctxt) {
-                case 'category' :
+                case 'category':
                     // ...the global category in the URL.
                     if ($context == 'link' && !empty($c)) {
                         $where[] = "category = '".doSlash($c)."'";
                     }
                     break;
-                case 'author' :
+                case 'author':
                     // ...the global author in the URL.
                     if ($context == 'link' && !empty($pretext['author'])) {
                         $where[] = "author = '".doSlash($pretext['author'])."'";
@@ -3247,7 +3247,7 @@ function images($atts, $thing = null)
     if (!$where && !$filters) {
         foreach ($context_list as $ctxt) {
             switch ($ctxt) {
-                case 'article' :
+                case 'article':
                     // ...the article image field.
                     if ($thisarticle && !empty($thisarticle['article_image'])) {
                         $items = do_list($thisarticle['article_image']);
@@ -3269,13 +3269,13 @@ function images($atts, $thing = null)
                         }
                     }
                     break;
-                case 'category' :
+                case 'category':
                     // ...the global category in the URL.
                     if ($context == 'image' && !empty($c)) {
                         $where[] = "category = '".doSlash($c)."'";
                     }
                     break;
-                case 'author' :
+                case 'author':
                     // ...the global author in the URL.
                     if ($context == 'image' && !empty($pretext['author'])) {
                         $where[] = "author = '".doSlash($pretext['author'])."'";
@@ -4111,11 +4111,11 @@ function if_custom_field($atts, $thing)
 
     if ($value !== null) {
         switch ($match) {
-            case '' :
+            case '':
             case 'exact':
                 $cond = ($thisarticle[$name] == $value);
                 break;
-            case 'any' :
+            case 'any':
                 $values = do_list($value);
                 $cond = false;
                 $cf_contents = ($separator) ? do_list($thisarticle[$name], $separator) : $thisarticle[$name];
@@ -4132,7 +4132,7 @@ function if_custom_field($atts, $thing)
                     }
                 }
                 break;
-            case 'all' :
+            case 'all':
                 $values = do_list($value);
                 $num_values = count($values);
                 $term_count = 0;
@@ -4146,7 +4146,7 @@ function if_custom_field($atts, $thing)
                 }
                 $cond = ($term_count == $num_values) ? true : false;
                 break;
-            case 'pattern' :
+            case 'pattern':
                 // Cannot guarantee that a fixed delimiter won't break preg_match (and preg_quote doesn't help) so
                 // dynamically assign the delimiter based on the first entry in $dlmPool that is NOT in the value attribute.
                 // This minimises (does not eliminate) the possibility of a TXP-initiated preg_match error, while still
@@ -4156,7 +4156,7 @@ function if_custom_field($atts, $thing)
                 $dlm = (count($dlm) > 0) ? $dlm[0].$value.$dlm[0] : $value;
                 $cond = preg_match($dlm, $thisarticle[$name]);
                 break;
-            default :
+            default:
                 trigger_error(gTxt('invalid_attribute_value', array('{name}' => 'value')), E_USER_NOTICE);
                 $cond = false;
         }
@@ -4343,13 +4343,13 @@ function file_download_list($atts, $thing = null)
     if (!$where && !$filters) {
         foreach ($context_list as $ctxt) {
             switch ($ctxt) {
-                case 'category' :
+                case 'category':
                     // ...the global category in the URL.
                     if ($context == 'file' && !empty($c)) {
                         $where[] = "category = '".doSlash($c)."'";
                     }
                     break;
-                case 'author' :
+                case 'author':
                     // ...the global author in the URL.
                     if ($context == 'file' && !empty($pretext['author'])) {
                         $where[] = "author = '".doSlash($pretext['author'])."'";

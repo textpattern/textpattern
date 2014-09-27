@@ -1597,18 +1597,18 @@ class Textpattern_Tag_BuilderTags
                 $urlinfo['path'].gTxt('file_download').'/'.$id.($filename ? '/'.urlencode($filename) : '');
 
             switch ($type) {
-                case 'textile' :
+                case 'textile':
                     $link = ($linktext) ? $linktext : $filename;
                     $desc = ($desc) ? ' ('.$desc.')' : '';
                     $out .= $this->tdb('"'.$link.$desc.'":'.$url);
                     break;
-                case 'html' :
+                case 'html':
                     $link = ($linktext) ? $linktext : $filename;
                     $desc = ($desc) ? ' title="'.$desc.'"' : '';
                     $out .= $this->tdb(href($link, $url, $desc));
                     break;
-                case 'textpattern' :
-                default :
+                case 'textpattern':
+                default:
                     $atts = array('id' => $id);
                     $link = ($linktext) ? $linktext : '<txp:file_download_name />';
                     $out .= $this->build($atts, $link);
@@ -1845,7 +1845,7 @@ class Textpattern_Tag_BuilderTags
             $url = imagesrcurl($id, $ext);
 
             switch ($type) {
-                case 'textile' :
+                case 'textile':
                     $alternate = ($alt) ? ' ('.$alt.')' : '';
                     $modifiers = '';
 
@@ -1871,7 +1871,7 @@ class Textpattern_Tag_BuilderTags
                         (($wrap) ? $wrap : '') . '!'. (($wrap) ? '' : $modifiers) .$url.$alternate.'!'
                     );
                     break;
-                case 'html' :
+                case 'html':
                     $alternate = ' alt="'.txpspecialchars($alt).'"';
                     $cap = ($caption) ? ' title="'.txpspecialchars($caption).'"' : '';
                     $cls = ($class) ? ' class="'.$class.'"' : '';
@@ -1884,7 +1884,7 @@ class Textpattern_Tag_BuilderTags
                         ($wraptag ? "</$wraptag>" : '')
                     );
                     break;
-                case 'textpattern' :
+                case 'textpattern':
                 default:
                     $atts = array(
                         'class'   => $class,

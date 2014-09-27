@@ -98,28 +98,28 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
             // Convert the built-in WordPress roles to their Textpattern equivalent.
             switch ($key) {
                 // Publisher.
-                case 'administrator' :
+                case 'administrator':
                     $user['privs'] = 1;
                     break;
 
                 // Managing editor.
-                case 'editor' :
+                case 'editor':
                     $user['privs'] = 2;
                     break;
 
                 // Staff writer.
-                case 'author' :
+                case 'author':
                     $user['privs'] = 4;
                     break;
 
                 // Freelancer.
-                case 'contributor' :
+                case 'contributor':
                     $user['privs'] = 5;
                     break;
 
                 // None.
-                case 'subscriber' :
-                default :
+                case 'subscriber':
+                default:
                     $user['privs'] = 0;
                     break;
             }
@@ -162,11 +162,11 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
         }
 
         switch ($category['type']) {
-            case 'post_tag' :
-            case 'category' :
+            case 'post_tag':
+            case 'category':
                 $category['type'] = 'article';
                 break;
-            case 'link_category' :
+            case 'link_category':
                 $category['type'] = 'link';
                 break;
         }
@@ -199,25 +199,25 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
     while ($article = mysql_fetch_array($article_query)) {
         // Convert WordPress article status to Textpattern equivalent.
         switch ($article['Status']) {
-            case 'draft' :
+            case 'draft':
                 $article['Status'] = 1;
                 break;
 
             // Hidden.
-            case 'private' :
+            case 'private':
                 $article['Status'] = 2;
                 break;
 
-            case 'pending' :
+            case 'pending':
                 $article['Status'] = 3;
                 break;
 
             // Live.
-            case 'publish' :
+            case 'publish':
                 $article['Status'] = 4;
                 break;
 
-            default :
+            default:
                 $article['Status'] = $insert_with_status;
                 break;
         }
@@ -225,13 +225,13 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
         // Convert WordPress comment status to Textpattern equivalent.
         switch ($article['Annotate']) {
             // On.
-            case 'open' :
+            case 'open':
                 $article['Annotate'] = 1;
                 break;
 
             // Off.
-            case 'closed' :
-            case 'registered_only' :
+            case 'closed':
+            case 'registered_only':
                 $article['Annotate'] = 0;
                 break;
         }

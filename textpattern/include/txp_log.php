@@ -87,25 +87,25 @@ function log_list($message = '')
     safe_delete('txp_log', "time < date_sub(now(), interval $expire_logs_after day)");
 
     switch ($sort) {
-        case 'ip' :
+        case 'ip':
             $sort_sql = 'ip '.$dir;
             break;
-        case 'host' :
+        case 'host':
             $sort_sql = 'host '.$dir;
             break;
-        case 'page' :
+        case 'page':
             $sort_sql = 'page '.$dir;
             break;
-        case 'refer' :
+        case 'refer':
             $sort_sql = 'refer '.$dir;
             break;
-        case 'method' :
+        case 'method':
             $sort_sql = 'method '.$dir;
             break;
-        case 'status' :
+        case 'status':
             $sort_sql = 'status '.$dir;
             break;
-        default :
+        default:
             $sort = 'time';
             $sort_sql = 'time '.$dir;
             break;

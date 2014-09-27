@@ -87,11 +87,11 @@ if (empty($path_to_site)) {
 
 if (!defined('PROTOCOL')) {
     switch (serverSet('HTTPS')) {
-        case '' :
+        case '':
         case 'off': // ISAPI with IIS.
             define('PROTOCOL', 'http://');
             break;
-        default :
+        default:
             define('PROTOCOL', 'https://');
             break;
     }
@@ -240,13 +240,13 @@ if (@$s == 'file_download') {
     // Deal with error.
     if (isset($file_error)) {
         switch ($file_error) {
-        case 403 :
+        case 403:
             txp_die(gTxt('403_forbidden'), '403');
             break;
-        case 404 :
+        case 404:
             txp_die(gTxt('404_not_found'), '404');
             break;
-        default :
+        default:
             txp_die(gTxt('500_internal_server_error'), '500');
             break;
         }
@@ -318,23 +318,23 @@ function preText($s, $prefs)
         // First we sniff out some of the preset URL schemes.
         if (strlen($u1)) {
             switch ($u1) {
-                case 'atom' :
+                case 'atom':
                     include txpath.'/publish/atom.php';
                     $out['feed'] = 'atom';
                     break;
 
-                case 'rss' :
+                case 'rss':
                     include txpath.'/publish/rss.php';
                     $out['feed'] = 'rss';
                     break;
 
                 // urldecode(strtolower(urlencode())) looks ugly but is the only way to
                 // make it multibyte-safe without breaking backwards-compatibility.
-                case urldecode(strtolower(urlencode(gTxt('section')))) :
+                case urldecode(strtolower(urlencode(gTxt('section')))):
                     $out['s'] = (ckEx('section', $u2)) ? $u2 : ''; $is_404 = empty($out['s']);
                     break;
 
-                case urldecode(strtolower(urlencode(gTxt('category')))) :
+                case urldecode(strtolower(urlencode(gTxt('category')))):
                     if ($u3) {
                         $out['context'] = validContext($u2);
                         $out['c'] = $u3;
@@ -346,7 +346,7 @@ function preText($s, $prefs)
                     $is_404 = empty($out['c']);
                     break;
 
-                case urldecode(strtolower(urlencode(gTxt('author')))) :
+                case urldecode(strtolower(urlencode(gTxt('author')))):
                     if ($u3) {
                         $out['context'] = validContext($u2);
                         $out['author'] = $u3;
@@ -359,13 +359,13 @@ function preText($s, $prefs)
                     break;
                     // AuthorID gets resolved from Name further down.
 
-                case urldecode(strtolower(urlencode(gTxt('file_download')))) :
+                case urldecode(strtolower(urlencode(gTxt('file_download')))):
                     $out['s'] = 'file_download';
                     $out['id'] = (!empty($u2)) ? $u2 : '';
                     $out['filename'] = (!empty($u3)) ? $u3 : '';
                     break;
 
-                default :
+                default:
                     // Then see if the prefs-defined permlink scheme is usable.
                     switch ($permlink_mode) {
 
@@ -835,13 +835,13 @@ function doArticles($atts, $iscustom, $thing = null)
     $id        = (!$id)        ? '' : " and ID IN (".join(',', $ids).")";
 
     switch ($time) {
-        case 'any' :
+        case 'any':
             $time = "";
             break;
-        case 'future' :
+        case 'future':
             $time = " and Posted > now()";
             break;
-        default :
+        default:
             $time = " and Posted <= now()";
     }
 

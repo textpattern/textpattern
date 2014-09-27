@@ -417,13 +417,13 @@ function cat_event_category_list($event)
             }
         } else {
             switch ($event) {
-                case 'link' :
+                case 'link':
                     $rs2 = safe_rows_start('category, count(*) as num', 'txp_link', "1 group by category");
                     break;
-                case 'image' :
+                case 'image':
                     $rs2 = safe_rows_start('category, count(*) as num', 'txp_image', "1 group by category");
                     break;
-                case 'file' :
+                case 'file':
                     $rs2 = safe_rows_start('category, count(*) as num', 'txp_file', "1 group by category");
                     break;
             }
@@ -443,16 +443,16 @@ function cat_event_category_list($event)
 
             // Format count.
             switch ($event) {
-                case 'article' :
+                case 'article':
                     $url = 'index.php?event=list'.a.'search_method=categories'.a.'crit='.$name;
                     break;
-                case 'link' :
+                case 'link':
                     $url = 'index.php?event=link'.a.'search_method=category'.a.'crit='.$name;
                     break;
-                case 'image' :
+                case 'image':
                     $url = 'index.php?event=image'.a.'search_method=category'.a.'crit='.$name;
                     break;
-                case 'file' :
+                case 'file':
                     $url = 'index.php?event=file'.a.'search_method=category'.a.'crit='.$name;
                     break;
             }

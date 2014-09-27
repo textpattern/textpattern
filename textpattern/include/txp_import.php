@@ -174,7 +174,7 @@ function start_import()
     @ini_set('max_execution_time', 300 + intval($ini_time));
 
     switch ($import_tool) {
-        case 'mtdb' :
+        case 'mtdb':
             $out = doImportMTDB(
                 $importdblogin,
                 $importdb,
@@ -187,7 +187,7 @@ function start_import()
             );
             rebuild_tree('root', 1, 'article');
             break;
-        case 'mt' :
+        case 'mt':
             $file = check_import_file();
             if (!empty($file)) {
                 $out = doImportMT(
@@ -202,7 +202,7 @@ function start_import()
                 $out = 'Import file not found';
             }
             break;
-        case 'b2' :
+        case 'b2':
             $out = doImportB2(
                 $importdblogin,
                 $importdb,
@@ -213,7 +213,7 @@ function start_import()
                 $default_comment_invite
             );
             break;
-        case 'wp' :
+        case 'wp':
             $out = doImportWP(
                 $importdblogin,
                 $importdb,
@@ -227,7 +227,7 @@ function start_import()
             );
             rebuild_tree('root', 1, 'article');
             break;
-        case 'blogger' :
+        case 'blogger':
             $file = check_import_file();
             if (!empty($file)) {
                 $out = doImportBLOGGER(

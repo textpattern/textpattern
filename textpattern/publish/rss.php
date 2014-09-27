@@ -202,13 +202,13 @@ function rss()
             }
         } elseif ($category) {
             switch ($area) {
-                case 'link' :
+                case 'link':
                     if (safe_field('id', 'txp_category', "name = '$category' and type = 'link'") == false) {
                         txp_die(gTxt('404_not_found'), '404');
                     }
                     break;
-                case 'article' :
-                default :
+                case 'article':
+                default:
                     if (safe_field('id', 'txp_category', "name in ('".join("','", $category)."') and type = 'article'") == false) {
                         txp_die(gTxt('404_not_found'), '404');
                     }

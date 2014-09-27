@@ -89,25 +89,25 @@ function sec_section_list($message = '')
     $dir = ($dir == 'asc') ? 'asc' : 'desc';
 
     switch ($sort) {
-        case 'title' :
+        case 'title':
             $sort_sql = 'title '.$dir;
             break;
-        case 'page' :
+        case 'page':
             $sort_sql = 'page '.$dir;
             break;
-        case 'css' :
+        case 'css':
             $sort_sql = 'css '.$dir;
             break;
-        case 'in_rss' :
+        case 'in_rss':
             $sort_sql = 'in_rss '.$dir;
             break;
-        case 'on_frontpage' :
+        case 'on_frontpage':
             $sort_sql = 'on_frontpage '.$dir;
             break;
-        case 'searchable' :
+        case 'searchable':
             $sort_sql = 'searchable '.$dir;
             break;
-        case 'article_count' :
+        case 'article_count':
             $sort_sql = 'article_count '.$dir;
             break;
         default:
@@ -791,30 +791,30 @@ function section_multi_edit()
     $key = $val = '';
 
     switch ($edit_method) {
-        case 'delete' :
+        case 'delete':
             return section_delete();
             break;
-        case 'changepage' :
+        case 'changepage':
             $val = ps('uses_page');
             if (in_array($val, $all_pages, true)) {
                 $key = 'page';
             }
             break;
-        case 'changecss' :
+        case 'changecss':
             $val = ps('css');
             if (in_array($val, $all_styles, true)) {
                 $key = 'css';
             }
             break;
-        case 'changeonfrontpage' :
+        case 'changeonfrontpage':
             $key = 'on_frontpage';
             $val = (int) ps('on_frontpage');
             break;
-        case 'changesyndicate' :
+        case 'changesyndicate':
             $key = 'in_rss';
             $val = (int) ps('in_rss');
             break;
-        case 'changesearchable' :
+        case 'changesearchable':
             $key = 'searchable';
             $val = (int) ps('searchable');
             break;

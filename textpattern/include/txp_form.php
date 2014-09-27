@@ -75,22 +75,22 @@ if ($event == 'form') {
     ));
 
     switch (strtolower($step)) {
-        case "" :
+        case "":
             form_edit();
             break;
-        case "form_edit" :
+        case "form_edit":
             form_edit();
             break;
-        case "form_create" :
+        case "form_create":
             form_create();
             break;
-        case "form_delete" :
+        case "form_delete":
             form_delete();
             break;
-        case "form_multi_edit" :
+        case "form_multi_edit":
             form_multi_edit();
             break;
-        case "form_save" :
+        case "form_save":
             form_save();
             break;
     }

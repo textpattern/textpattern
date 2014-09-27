@@ -626,7 +626,7 @@ function plugin_multi_edit()
     $where = "name IN ('".join("','", doSlash($selected))."')";
 
     switch ($method) {
-        case 'delete' :
+        case 'delete':
             foreach ($selected as $name) {
                 if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
                     load_plugin($name, true);
@@ -639,7 +639,7 @@ function plugin_multi_edit()
             // Remove plugin's l10n strings.
             safe_delete('txp_lang', "owner IN ('".join("','", doSlash($selected))."')");
             break;
-        case 'changestatus' :
+        case 'changestatus':
             foreach ($selected as $name) {
                 if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
                     $status = safe_field('status', 'txp_plugin', "name ='".doSlash($name)."'");
@@ -650,7 +650,7 @@ function plugin_multi_edit()
             }
             safe_update('txp_plugin', 'status = (1-status)', $where);
             break;
-        case 'changeorder' :
+        case 'changeorder':
             $order = min(max(intval(ps('order')), 1), 9);
             safe_update('txp_plugin', 'load_order = '.$order, $where);
             break;

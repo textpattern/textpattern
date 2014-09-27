@@ -131,31 +131,31 @@ function discuss_list($message = '')
     $dir = ($dir == 'asc') ? 'asc' : 'desc';
 
     switch ($sort) {
-        case 'id' :
+        case 'id':
             $sort_sql = 'txp_discuss.discussid '.$dir;
             break;
-        case 'ip' :
+        case 'ip':
             $sort_sql = 'txp_discuss.ip '.$dir;
             break;
-        case 'name' :
+        case 'name':
             $sort_sql = 'txp_discuss.name '.$dir;
             break;
-        case 'email' :
+        case 'email':
             $sort_sql = 'txp_discuss.email '.$dir;
             break;
-        case 'website' :
+        case 'website':
             $sort_sql = 'txp_discuss.web '.$dir;
             break;
-        case 'message' :
+        case 'message':
             $sort_sql = 'txp_discuss.message '.$dir;
             break;
-        case 'status' :
+        case 'status':
             $sort_sql = 'txp_discuss.visible '.$dir;
             break;
-        case 'parent' :
+        case 'parent':
             $sort_sql = 'txp_discuss.parentid '.$dir;
             break;
-        default :
+        default:
             $sort = 'date';
             $sort_sql = 'txp_discuss.posted '.$dir;
             break;
@@ -355,19 +355,19 @@ function discuss_list($message = '')
             $dmessage = ($visible == SPAM) ? short_preview($message) : $message;
 
             switch ($visible) {
-                case VISIBLE :
+                case VISIBLE:
                     $comment_status = gTxt('visible');
                     $row_class = 'visible';
                     break;
-                case SPAM :
+                case SPAM:
                     $comment_status = gTxt('spam');
                     $row_class = 'spam';
                     break;
-                case MODERATE :
+                case MODERATE:
                     $comment_status = gTxt('unmoderated');
                     $row_class = 'moderate';
                     break;
-                default :
+                default:
                     break;
             }
 

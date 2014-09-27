@@ -195,13 +195,13 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     $ids = array_map('intval', do_list($id));
     $id = (!$id) ? '' : " and ID IN (".join(',', $ids).")";
     switch ($time) {
-        case 'any' :
+        case 'any':
             $time = "";
             break;
-        case 'future' :
+        case 'future':
             $time = " and Posted > now()";
             break;
-        default :
+        default:
             $time = " and Posted <= now()";
     }
 
@@ -307,19 +307,19 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
 
         // Attributes with special treatment.
         switch ($atts['sortby']) {
-            case 'Posted' :
+            case 'Posted':
                 $threshold = 'from_unixtime('.doSlash($thisarticle['posted']).')';
                 $threshold_type = 'cooked';
                 break;
-            case 'Expires' :
+            case 'Expires':
                 $threshold = 'from_unixtime('.doSlash($thisarticle['expires']).')';
                 $threshold_type = 'cooked';
                 break;
-            case 'LastMod' :
+            case 'LastMod':
                 $threshold = 'from_unixtime('.doSlash($thisarticle['modified']).')';
                 $threshold_type = 'cooked';
                 break;
-            default :
+            default:
                 // Retrieve current threshold value per sort column from $thisarticle.
                 $acm = array_flip(article_column_map());
                 $key = $acm[$atts['sortby']];

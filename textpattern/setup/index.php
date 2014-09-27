@@ -98,19 +98,19 @@ print <<<eod
 eod;
 
 switch ($step) {
-    case "" :
+    case "":
         chooseLang();
         break;
-    case "getDbInfo" :
+    case "getDbInfo":
         getDbInfo();
         break;
-    case "getTxpLogin" :
+    case "getTxpLogin":
         getTxpLogin();
         break;
-    case "printConfig" :
+    case "printConfig":
         printConfig();
         break;
-    case "createTxp" :
+    case "createTxp":
         createTxp();
 }
 ?>

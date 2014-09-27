@@ -96,37 +96,37 @@ function list_list($message = '', $post = '')
     $sesutats = array_flip($statuses);
 
     switch ($sort) {
-        case 'id' :
+        case 'id':
             $sort_sql = 'textpattern.ID '.$dir;
             break;
-        case 'title' :
+        case 'title':
             $sort_sql = 'textpattern.Title '.$dir.', textpattern.Posted desc';
             break;
-        case 'expires' :
+        case 'expires':
             $sort_sql = 'textpattern.Expires '.$dir;
             break;
-        case 'section' :
+        case 'section':
             $sort_sql = 'section.title '.$dir.', textpattern.Posted desc';
             break;
-        case 'category1' :
+        case 'category1':
             $sort_sql = 'category1.title '.$dir.', textpattern.Posted desc';
             break;
-        case 'category2' :
+        case 'category2':
             $sort_sql = 'category2.title '.$dir.', textpattern.Posted desc';
             break;
-        case 'status' :
+        case 'status':
             $sort_sql = 'textpattern.Status '.$dir.', textpattern.Posted desc';
             break;
-        case 'author' :
+        case 'author':
             $sort_sql = 'user.RealName '.$dir.', textpattern.Posted desc';
             break;
-        case 'comments' :
+        case 'comments':
             $sort_sql = 'textpattern.comments_count '.$dir.', textpattern.Posted desc';
             break;
-        case 'lastmod' :
+        case 'lastmod':
             $sort_sql = 'textpattern.LastMod '.$dir.', textpattern.Posted desc';
             break;
-        default :
+        default:
             $sort = 'posted';
             $sort_sql = 'textpattern.Posted '.$dir;
             break;
@@ -566,7 +566,7 @@ function list_multi_edit()
 
     switch ($edit_method) {
         // Delete.
-        case 'delete' :
+        case 'delete':
             if (!has_privs('article.delete')) {
                 if (has_privs('article.delete.own')) {
                     $allowed = safe_column_num(
@@ -591,7 +591,7 @@ function list_multi_edit()
             return list_list();
             break;
         // Change author.
-        case 'changeauthor' :
+        case 'changeauthor':
             $value = ps('AuthorID');
             if (has_privs('article.edit') && in_array($value, $all_authors, true)) {
                 $field = 'AuthorID';
@@ -599,33 +599,33 @@ function list_multi_edit()
             break;
 
         // Change category1.
-        case 'changecategory1' :
+        case 'changecategory1':
             $value = ps('Category1');
             if (in_array($value, $categories, true)) {
                 $field = 'Category1';
             }
             break;
         // Change category2.
-        case 'changecategory2' :
+        case 'changecategory2':
             $value = ps('Category2');
             if (in_array($value, $categories, true)) {
                 $field = 'Category2';
             }
             break;
         // Change comment status.
-        case 'changecomments' :
+        case 'changecomments':
             $field = 'Annotate';
             $value = (int) ps('Annotate');
             break;
         // Change section.
-        case 'changesection' :
+        case 'changesection':
             $value = ps('Section');
             if (in_array($value, $all_sections, true)) {
                 $field = 'Section';
             }
             break;
         // Change status.
-        case 'changestatus' :
+        case 'changestatus':
             $value = (int) ps('Status');
             if (array_key_exists($value, $statuses)) {
                 $field = 'Status';

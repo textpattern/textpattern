@@ -124,25 +124,25 @@ function file_list($message = '')
     }
 
     switch ($sort) {
-        case 'id' :
+        case 'id':
             $sort_sql = 'txp_file.id '.$dir;
             break;
-        case 'description' :
+        case 'description':
             $sort_sql = 'txp_file.description '.$dir.', txp_file.filename desc';
             break;
-        case 'category' :
+        case 'category':
             $sort_sql = 'txp_category.title '.$dir.', txp_file.filename desc';
             break;
-        case 'title' :
+        case 'title':
             $sort_sql = 'txp_file.title '.$dir.', txp_file.filename desc';
             break;
-        case 'downloads' :
+        case 'downloads':
             $sort_sql = 'txp_file.downloads '.$dir.', txp_file.filename desc';
             break;
-        case 'author' :
+        case 'author':
             $sort_sql = 'txp_users.RealName '.$dir.', txp_file.id asc';
             break;
-        default :
+        default:
             $sort = 'filename';
             $sort_sql = 'txp_file.filename '.$dir;
             break;
@@ -512,26 +512,26 @@ function file_multi_edit()
     $key = '';
 
     switch ($method) {
-        case 'delete' :
+        case 'delete':
             return file_delete($selected);
             break;
-        case 'changecategory' :
+        case 'changecategory':
             $val = ps('category');
             if (in_array($val, $categories)) {
                 $key = 'category';
             }
             break;
-        case 'changeauthor' :
+        case 'changeauthor':
             $val = ps('author');
             if (in_array($val, $all_file_authors)) {
                 $key = 'author';
             }
             break;
-        case 'changecount' :
+        case 'changecount':
             $key = 'downloads';
             $val = 0;
             break;
-        case 'changestatus' :
+        case 'changestatus':
             $key = 'status';
             $val = ps('status');
 
@@ -540,7 +540,7 @@ function file_multi_edit()
                 $selected = array();
             }
             break;
-        default :
+        default:
             $key = '';
             $val = '';
             break;

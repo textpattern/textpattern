@@ -946,13 +946,13 @@ class TXP_Wrapper
     public function format_field($field, $format, $textile)
     {
         switch ($format) {
-            case LEAVE_TEXT_UNTOUCHED :
+            case LEAVE_TEXT_UNTOUCHED:
                 $html = trim($field);
                 break;
-            case CONVERT_LINEBREAKS :
+            case CONVERT_LINEBREAKS:
                 $html = nl2br(trim($field));
                 break;
-            case USE_TEXTILE :
+            case USE_TEXTILE:
                 $html = $textile->TextileThis($field);
                 break;
         }

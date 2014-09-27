@@ -124,11 +124,11 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
 
     if (!defined('PROTOCOL')) {
         switch (serverSet('HTTPS')) {
-            case '' :
-            case 'off' : // ISAPI with IIS.
+            case '':
+            case 'off': // ISAPI with IIS.
                 define('PROTOCOL', 'http://');
                 break;
-            default :
+            default:
                 define('PROTOCOL', 'https://');
                 break;
         }

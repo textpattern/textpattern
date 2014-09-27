@@ -656,7 +656,7 @@ function admin_multi_edit()
     }
 
     switch ($method) {
-        case 'delete' :
+        case 'delete':
 
             $assign_assets = ps('assign_assets');
 
@@ -672,7 +672,7 @@ function admin_multi_edit()
 
             break;
 
-        case 'changeprivilege' :
+        case 'changeprivilege':
 
             if (change_user_group($names, ps('privs'))) {
                 $changed = $names;
@@ -681,7 +681,7 @@ function admin_multi_edit()
 
             break;
 
-        case 'resetpassword' :
+        case 'resetpassword':
 
             foreach ($names as $name) {
                 $passwd = generate_password(PASSWORD_LENGTH);

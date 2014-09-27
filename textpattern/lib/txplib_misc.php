@@ -795,13 +795,13 @@ function check_gd($image_type)
     $gd_info = gd_info();
 
     switch ($image_type) {
-        case '.gif' :
+        case '.gif':
             return ($gd_info['GIF Create Support'] == true);
             break;
-        case '.png' :
+        case '.png':
             return ($gd_info['PNG Support'] == true);
             break;
-        case '.jpg' :
+        case '.jpg':
             return (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support']));
             break;
     }
@@ -2488,10 +2488,10 @@ function splat($text)
     if (preg_match_all('@(\w+)\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+))@s', $text, $match, PREG_SET_ORDER)) {
         foreach ($match as $m) {
             switch (count($m)) {
-                case 3 :
+                case 3:
                     $val = str_replace('""', '"', $m[2]);
                     break;
-                case 4 :
+                case 4:
                     $val = str_replace("''", "'", $m[3]);
 
                     if (strpos($m[3], '<txp:') !== false) {
@@ -2501,7 +2501,7 @@ function splat($text)
                     }
 
                     break;
-                case 5 :
+                case 5:
                     $val = $m[4];
                     trigger_error(gTxt('attribute_values_must_be_quoted'), E_USER_WARNING);
                     break;
@@ -3379,35 +3379,35 @@ function upload_get_errormsg($err_code)
 
     switch ($err_code) {
         // Value: 0; There is no error, the file uploaded with success.
-        case UPLOAD_ERR_OK :
+        case UPLOAD_ERR_OK:
             $msg = '';
             break;
         // Value: 1; The uploaded file exceeds the upload_max_filesize directive in php.ini.
-        case UPLOAD_ERR_INI_SIZE :
+        case UPLOAD_ERR_INI_SIZE:
             $msg = gTxt('upload_err_ini_size');
             break;
         // Value: 2; The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
-        case UPLOAD_ERR_FORM_SIZE  :
+        case UPLOAD_ERR_FORM_SIZE:
             $msg = gTxt('upload_err_form_size');
             break;
         // Value: 3; The uploaded file was only partially uploaded.
-        case UPLOAD_ERR_PARTIAL :
+        case UPLOAD_ERR_PARTIAL:
             $msg = gTxt('upload_err_partial');
             break;
         // Value: 4; No file was uploaded.
-        case UPLOAD_ERR_NO_FILE :
+        case UPLOAD_ERR_NO_FILE:
             $msg = gTxt('upload_err_no_file');
             break;
         // Value: 6; Missing a temporary folder. Introduced in PHP 4.3.10 and PHP 5.0.3.
-        case UPLOAD_ERR_NO_TMP_DIR :
+        case UPLOAD_ERR_NO_TMP_DIR:
             $msg = gTxt('upload_err_tmp_dir');
             break;
         // Value: 7; Failed to write file to disk. Introduced in PHP 5.1.0.
-        case UPLOAD_ERR_CANT_WRITE :
+        case UPLOAD_ERR_CANT_WRITE:
             $msg = gTxt('upload_err_cant_write');
             break;
         // Value: 8; File upload stopped by extension. Introduced in PHP 5.2.0.
-        case UPLOAD_ERR_EXTENSION :
+        case UPLOAD_ERR_EXTENSION:
             $msg = gTxt('upload_err_extension');
             break;
     }
@@ -5421,14 +5421,14 @@ function permlinkurl($article_array)
     $url_title = urlencode($url_title);
 
     switch ($permlink_mode) {
-        case 'section_id_title' :
+        case 'section_id_title':
             if ($prefs['attach_titles_to_permalinks']) {
                 $out = hu."$section/$thisid/$url_title";
             } else {
                 $out = hu."$section/$thisid/";
             }
             break;
-        case 'year_month_day_title' :
+        case 'year_month_day_title':
             list($y, $m, $d) = explode("-", date("Y-m-d", $posted));
             $out =  hu."$y/$m/$d/$url_title";
             break;
@@ -5439,13 +5439,13 @@ function permlinkurl($article_array)
                 $out = hu."$thisid/";
             }
             break;
-        case 'section_title' :
+        case 'section_title':
             $out = hu."$section/$url_title";
             break;
-        case 'title_only' :
+        case 'title_only':
             $out = hu."$url_title";
             break;
-        case 'messy' :
+        case 'messy':
             $out = hu."index.php?id=$thisid";
             break;
     }

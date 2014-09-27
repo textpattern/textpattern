@@ -43,19 +43,19 @@ if ($event == 'css') {
     ));
 
     switch (strtolower($step)) {
-        case '' :
+        case '':
             css_edit();
             break;
-        case 'pour' :
+        case 'pour':
             css_edit();
             break;
-        case 'css_save' :
+        case 'css_save':
             css_save();
             break;
-        case 'css_delete' :
+        case 'css_delete':
             css_delete();
             break;
-        case 'css_edit' :
+        case 'css_edit':
             css_edit();
             break;
     }
