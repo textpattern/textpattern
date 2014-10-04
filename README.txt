@@ -59,11 +59,11 @@ See LICENSE-BSD-3.txt for terms and conditions.
    Twitter:  http://textpattern.com/@textpattern
    Google+:  http://textpattern.com/+
    Facebook: http://textpattern.com/facebook
-* If you are running an Apache web server, rename the @.htaccess-dist@ file
-  in the "/files" directory to ".htaccess" to prohibit direct URL access to
-  your files. Thus the only route to these files becomes through
-  "/file_download". We recommend you consider employing this feature or
-  that you move your "/files" directory out of a web-accessible location.
+* If you are running an Apache web server, rename the .htaccess-dist file
+  in the /files directory to .htaccess to prohibit direct URL access to
+  your files. Thus the only route to these files becomes through the
+  /file_download directory. We recommend you consider employing this feature
+  or that you move your /files directory out of a web-accessible location.
   Once moved, you can tell Textpattern of your new directory location from
   the Advanced Preferences.
 * There are additional resources for the default front-side theme, such as
