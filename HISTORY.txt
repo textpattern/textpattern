@@ -1,14 +1,23 @@
 Changes in 4.5.7
 
-* Maintenance release with bug fixes, no security implications.
+* Maintenance release with bug fixes.
 * Textile v2.4.3 resolves PHP 5.5 compatibility issues.
-* Updated default site theme.
+* Updated default site theme and libraries.
+* Setup now remembers settings. No more 'form resubmission' browser warnings when going back through wizard.
+* Allow pre_publish_script in multi-site installations.
+* Email address validation uses PHP's filter_var(), which permits addresses such as @[127.0.0.1].
 * Fixed: <txp:link_to_prev>, <txp:link_to_next>, <txp:prev_title>, and <txp:next_title> tags for certain combinations with <txp:article_custom>.
 * Fixed: SQL statement escaping in set_pref().
 * Fixed: Situations where set_pref() could corrupt the preference table if the string name contained '%' or '_' characters.
 * Fixed: Save comment emails of any valid length properly.
 * Fixed: Visitor logs support IPv6.
 * Fixed: Articles can be assigned to sections with names longer than 64 characters.
+* Fixed: Setup script more robust, and compatible with MySQL 5.6.
+* Fixed: Warnings when writing image thumbnails.
+* Fixed: Files no longer trash author names, and empty files can no longer be created.
+* Fixed: Percent encoding of spaces in site URL.
+* Security: IXR fixes to prevent XML quadratic blowup attack.
+* Security: Prevent variable injection during setup and plugin preview step.
 
 Changes in 4.5.6
 
@@ -502,11 +511,11 @@ Changes in 4.0.2:
 * Fix txp:link_to_next/prev so they work at the top of a page
 * Minor speed improvements, new class and linkclass attributes for txp:breadcrumb tag
 * Added txp:comments_preview and txp:if_comments_preview tags. Example usage:
-    <txp:if_comments_preview>
-        <div id="cpreview" style="background-color:#FF0"><b>Hello, the following is your preview</b>
-            <txp:comments_preview /><txp:comments_form preview="1" />
-        </div>
-    </txp:if_comments_preview>
+	<txp:if_comments_preview>
+	 <div id="cpreview" style="background-color:#FF0"><b>Hello, the following is your preview</b>
+	   <txp:comments_preview /><txp:comments_form preview="1" />
+	 </div>
+	</txp:if_comments_preview>
 * Fixed unparsed excerpts in Feeds.
 * Textile: smarter handling of relative link and image paths
 * Textile: stop footnote links from clashing in article lists
