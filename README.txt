@@ -16,34 +16,34 @@ system. Textpattern is both free and open source.
 
 == Installation ==
 
-* Extract the files to your site (in the web root, or choose a
-  subdirectory). The top-level index.php should reside in this
-  directory, as should the /textpattern/ and the /rpc/ directories.
-* The .htaccess file, located in the root directory, is hidden by default
-  on Mac OS X systems. Make sure this file is transferred across correctly
-  to your install destination. Most FTP clients or IDEs will have an option
-  to show these hidden files. Otherwise, you can temporarily show hidden
-  files in the OS by using the Terminal.app - follow these instructions:
+* Extract the files to your site (in the web root, or choose a subdirectory).
+  The top-level index.php should reside in this directory, as should the
+  /textpattern/ and the /rpc/ directories.
+* The .htaccess file, located in the root directory, is hidden by default on
+  Mac OS X systems. Make sure this file is transferred across correctly to your
+  install destination. Most FTP clients or IDEs will have an option to show
+  these hidden files. Otherwise, you can temporarily show hidden files in the
+  OS by using the Terminal.app - follow these instructions:
   http://textpattern.com/hidden-files-osx
-* Create or establish the existence of a working MySQL database,
-  load /textpattern/setup/ (or /subpath/textpattern/setup/) in a
-  browser, and follow the directions.
+* Create or establish the existence of a working MySQL database, load
+  /textpattern/setup/ (or /subpath/textpattern/setup/) in a browser, and follow
+  the directions.
 
 == Upgrading ==
 
 * Log out of the admin-side.
 * Verify the existence of a working database and file backup.
-* Replace the three files in your main installation directory
-  (index.php, css.php and .htaccess), everything in your /js/ directory, 
-  everything in your /rpc/ directory and everything in your /textpattern/
-  directory (except config.php) with the corresponding files in this
-  distribution. css.php and /rpc/ might not yet exist in your current site.
+* Replace the three files in your main installation directory (index.php,
+  css.php and .htaccess), everything in your /js/ directory, everything in
+  your /rpc/ directory and everything in your /textpattern/ directory
+  (except config.php) with the corresponding files in this distribution.
+  css.php and /rpc/ might not yet exist in your current site.
 * It is recommended that you flush the cache of your browser, to ensure
   old cached files are not being used in preference to any newer versions
   within the upgrade.
-* When you log in to the admin-side, the relevant upgrade script is
-  run automatically. Please check the diagnostics to confirm the correct
-  version number is displayed and whether there are any errors.
+* When you log in to the admin-side, the relevant upgrade script is run
+  automatically. Please check the diagnostics to confirm the correct version
+  number is displayed and whether there are any errors.
   NOTE: Upgrades from versions prior to 4.2.0 will present this warning
   upon your very first login to the admin-side:
     Warning: Unknown column 'user_name' in 'where clause' select name,
