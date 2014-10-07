@@ -163,7 +163,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
     `name` varchar(255) NOT NULL default '',
     `email` varchar(50) NOT NULL default '',
     `web` varchar(255) NOT NULL default '',
-    `ip` varchar(100) NOT NULL default '',
+    `ip` varchar(45) NOT NULL default '',
     `posted` datetime NOT NULL default '0000-00-00 00:00:00',
     `message` text NOT NULL,
     `visible` tinyint(4) NOT NULL default '1',
@@ -174,7 +174,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
 $create_sql[] = "INSERT INTO `".PFX."txp_discuss` VALUES (000001, 1, 'Donald Swain', 'donald.swain@example.com', 'example.com', '127.0.0.1', now() + interval 1 hour, '<p>I enjoy your site very much.</p>', 1)";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_discuss_ipban` (
-    `ip` varchar(255) NOT NULL default '',
+    `ip` varchar(45) NOT NULL default '',
     `name_used` varchar(255) NOT NULL default '',
     `date_banned` datetime NOT NULL default '0000-00-00 00:00:00',
     `banned_on_message` int(8) NOT NULL default '0',
@@ -275,7 +275,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
     `refer` mediumtext NOT NULL,
     `status` int(11) NOT NULL default '200',
     `method` varchar(16) NOT NULL default 'GET',
-    `ip` varchar(16) NOT NULL default '',
+    `ip` varchar(45) NOT NULL default '',
     PRIMARY KEY  (`id`),
     KEY `time` (`time`)
 ) $tabletype AUTO_INCREMENT=77 ";

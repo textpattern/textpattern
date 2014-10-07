@@ -36,8 +36,10 @@ safe_update('txp_prefs', "position = '340'", "name = 'spam_blacklists'");
 // Updates comment email length.
 safe_alter('txp_discuss', "MODIFY email VARCHAR(254) NOT NULL default ''");
 
-// Store IPv6 properly in logs.
+// Store IPv6 properly in logs, discussions and discussion ban list.
 safe_alter('txp_log', "MODIFY ip VARCHAR(45) NOT NULL default ''");
+safe_alter('txp_discuss', "MODIFY ip VARCHAR(45) NOT NULL default ''");
+safe_alter('txp_discuss_ipban', "MODIFY ip VARCHAR(45) NOT NULL default ''");
 
 // Support for l10n string owners.
 $cols = getThings('describe `'.PFX.'txp_lang`');
