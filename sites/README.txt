@@ -22,7 +22,7 @@ In a fresh installation, the sites directory will contain a single subdirectory
 named site1. You may rename the site1 directory to whatever you like.
 For example:
 
-    mysite.mydomain.com
+    subdomain.example.com
 
 You may treat the site1 directory as a template for creating new Textpattern
 sites. Simply duplicate the entire site1 directory to a new directory (within
@@ -56,14 +56,14 @@ of these capabilities to:
 For example, you might have the following Textpattern-driven sites, all running
 off a single shared installation of the Textpattern code:
 
-    http://www.mysite1.com
-    http://admin.mysite1.com
+    http://www.example.com
+    http://admin.example.com
 
-    http://www.mysite2.com
-    https://admin.mysite2.com
+    http://www.example.net
+    https://admin.example.net
 
-    http://www.mysite3.com
-    https://admin.mysite3.com
+    http://www.example.org
+    https://admin.example.org
 
 
 ========================================
@@ -87,11 +87,11 @@ B. Allow access to the admin area through a subdirectory of your site (the
 This setup method results in separate subdomains for your Textpattern-powered
 site and its associated admin area. For example:
 
-    http://www.mysite.com     <-- URL to your site
+    http://www.example.com     <-- URL to your site
 
-    http://admin.mysite.com   <-- URL to your site's admin area login
+    http://admin.example.com   <-- URL to your site's admin area login
 
-    https://admin.mysite.com  <-- URL to your site's secure admin area login
+    https://admin.example.com  <-- URL to your site's secure admin area login
 
 ----------------------------
 Step 1: Configure Web Server
@@ -111,8 +111,8 @@ traversing symbolic links.
 Here is an example config for Apache to create our virtual hosts for site1:
 
     <VirtualHost *:80>
-        ServerName mysite.com
-        ServerAlias www.mysite.com
+        ServerName example.com
+        ServerAlias www.example.com
         DocumentRoot "/path/to/textpattern/sites/site1/public"
         <Directory "/path/to/textpattern/sites/">
             Options +FollowSymLinks
@@ -120,7 +120,7 @@ Here is an example config for Apache to create our virtual hosts for site1:
     </VirtualHost>
 
     <VirtualHost *:80>
-        ServerName admin.mysite.com
+        ServerName admin.example.com
         DocumentRoot "/path/to/textpattern/sites/site1/admin"
         <Directory "/path/to/textpattern/sites/">
             Options +FollowSymLinks
@@ -139,17 +139,17 @@ You should now be able to proceed through Textpattern's setup process.
 
 * If you set up your admin area on SSL, go to:
 
-    https://admin.mysite.com/setup
+    https://admin.example.com/setup
 
   Otherwise, go to:
 
-    http://admin.mysite.com/setup
+    http://admin.example.com/setup
 
 * On MySQL setup page, be sure to enter the correct URL to your Textpattern site
   (not the admin site) under Site URL. Textpattern will default to the URL of
   your admin site and you will need to change that here. For example:
 
-    www.mysite.com
+    www.example.com
 
 * Textpattern will tell you to place your config.php file in /textpattern/.
   This is INCORRECT. Place it in the private subdirectory of your site.
@@ -210,15 +210,15 @@ But if you want to to set up additional sites, simply repeat steps 1 through 3
 for each site. Your sites directory layout will look like the following:
 
     sites/
-        mysite1.com/
+        example.com/
             admin/
             private/
             public/
-        mysite2.com/
+        example.net/
             admin/
             private/
             public/
-        mysite3.com/
+        example.org/
             admin/
             private/
             public/
@@ -232,8 +232,8 @@ This setup method results in the more traditional Textpattern installation,
 where the admin area is located in a subdirectory of the main site's domain.
 For example:
 
-   http://www.mysite.com        <-- URL to your site
-   http://www.mysite.com/admin  <-- URL to your site's admin area login
+   http://www.example.com        <-- URL to your site
+   http://www.example.com/admin  <-- URL to your site's admin area login
 
 ----------------------------
 Step 1: Configure Web Server
@@ -249,8 +249,8 @@ your site. Also, be sure that the virtual host allows traversing symbolic links.
 Here is an example config for Apache to create our virtual host for site1:
 
     <VirtualHost *:80>
-        ServerName mysite.com
-        ServerAlias www.mysite.com
+        ServerName example.com
+        ServerAlias www.example.com
         DocumentRoot "/path/to/textpattern/sites/site1/public"
         <Directory "/path/to/textpattern/sites/">
             Options +FollowSymLinks
@@ -267,7 +267,7 @@ Step 2: Textpattern Setup
 
 You should now be able to proceed through Textpattern's setup process.
 
-* Go to: http://mysite.com and click the textpattern/setup/ link.
+* Go to: http://example.com and click the textpattern/setup/ link.
 
 * Textpattern will tell you to place your config.php file in /textpattern/.
   This is INCORRECT. Place it in the private subdirectory of your site.
@@ -285,7 +285,7 @@ You should now be able to proceed through Textpattern's setup process.
   Instead, manually enter the address of your admin area into your browser's
   address bar at this point:
 
-    http://mysite.com/admin
+    http://example.com/admin
 
 -------------------------------
 Step 3: Secure the Installation
@@ -325,15 +325,15 @@ But if you want to to set up additional sites, simply repeat steps 1 through 3
 for each site. Your sites directory layout will look like the following:
 
     sites/
-        mysite1.com/
+        example.com/
             admin/
             private/
             public/
-        mysite2.com/
+        example.net/
             admin/
             private/
             public/
-        mysite3.com/
+        example.org/
             admin/
             private/
             public/
