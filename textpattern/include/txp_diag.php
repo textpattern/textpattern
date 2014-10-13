@@ -598,7 +598,10 @@ function doDiagnostics()
     $out[] = callback_event('diag_results', $step).n;
     $out[] = '</textarea></p>';
 
-    $dets = array('low'=>gTxt('low'), 'high' => gTxt('high'));
+    $dets = array(
+        'low'  => gTxt('low'),
+        'high' => gTxt('high')
+    );
 
     $out[] =
         form(

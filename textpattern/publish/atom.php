@@ -124,11 +124,11 @@ function atom()
     $out[] = tag(htmlspecialchars($sitename), 'title', t_text);
     $out[] = tag(htmlspecialchars($site_slogan), 'subtitle', t_text);
     $out[] = '<link'.r_relself.' href="'.pagelinkurl(array(
-        'atom' => 1,
-        'area' => $area,
-        'section' => $section,
-        'category'=> $category,
-        'limit' => $limit
+        'atom'     => 1,
+        'area'     => $area,
+        'section'  => $section,
+        'category' => $category,
+        'limit'    => $limit
     )).'" />';
     $out[] = '<link'.r_relalt.t_texthtml.' href="'.hu.'" />';
 
