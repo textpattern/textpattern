@@ -42,6 +42,7 @@ update_lastmod();
 // Speed up article queries.
 $has_ss_idx = 0;
 $rs = getRows('show index from `'.PFX.'textpattern`');
+
 foreach ($rs as $row)
 
 if ($row['Key_name'] == 'section_status_idx') {

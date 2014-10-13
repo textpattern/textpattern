@@ -90,7 +90,7 @@ foreach (array('txp_file', 'txp_link') as $table) {
 
     if (!in_array('author', $cols)) {
         safe_alter($table, "ADD author varchar(255) NOT NULL default '', ADD INDEX author_idx (author)");
-        safe_update($table, "author='".doSlash($txp_user)."'",'1=1');
+        safe_update($table, "author='".doSlash($txp_user)."'", '1=1');
     }
 }
 
@@ -98,6 +98,7 @@ foreach (array('txp_file', 'txp_link') as $table) {
 foreach (array('textpattern' => 'AuthorID', 'txp_image' => 'author') as $table => $col) {
     $has_idx = 0;
     $rs = getRows('show index from `'.PFX.$table.'`');
+
     foreach ($rs as $row) {
         if ($row['Key_name'] == 'author_idx') {
             $has_idx = 1;

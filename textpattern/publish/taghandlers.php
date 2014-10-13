@@ -3142,7 +3142,12 @@ function image_index($atts)
         while ($a = nextRow($rs)) {
             extract($a);
             $dims = ($thumb_h ? " height=\"$thumb_h\"" : '') . ($thumb_w ? " width=\"$thumb_w\"" : '');
-            $url = pagelinkurl(array('c'=>$c, 'context'=>'image', 's'=>$s, 'p'=>$id));
+            $url = pagelinkurl(array(
+                'c'       => $c,
+                'context' => 'image',
+                's'       => $s,
+                'p'       => $id
+            ));
             $out[] = href(
                 '<img src="'.imagesrcurl($id, $ext, true).'"'.$dims.' alt="'.txpspecialchars($alt).'" />',
                 $url
@@ -3807,7 +3812,7 @@ function breadcrumb($atts)
         $section_title = ($title) ? fetch_section_title($s) : $s;
         $section_title_html = escape_title($section_title);
         $content[] = ($linked)
-            ? (doTag($section_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('s'=>$s)).'"'))
+            ? (doTag($section_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('s' => $s)).'"'))
             : $section_title_html;
     }
 
@@ -3817,7 +3822,7 @@ function breadcrumb($atts)
         if ($cat['name'] != 'root') {
             $category_title_html = $title ? escape_title($cat['title']) : $cat['name'];
             $content[] = ($linked)
-                ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('c'=>$cat['name'])).'"')
+                ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('c' => $cat['name'])).'"')
                 : $category_title_html;
         }
     }

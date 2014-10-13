@@ -5228,7 +5228,7 @@ function join_atts($atts, $flags = TEXTPATTERN_ATTS_STRIP_EMPTY)
  * Builds a page URL from an array of parameters.
  *
  * The $inherit can be used to add parameters to an existing url, e.g:
- * pagelinkurl(array('pg'=>2), $pretext).
+ * pagelinkurl(array('pg' => 2), $pretext).
  *
  * This function can not be used to link to an article. See permlinkurl()
  * and permlinkurl_id() instead.

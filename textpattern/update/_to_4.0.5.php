@@ -35,21 +35,18 @@ if (!safe_field('name', 'txp_prefs', "name = 'lastmod_keepalive'")) {
 $txpfile = getThings('describe `'.PFX.'txp_file`');
 
 if (!in_array('status',$txpfile)) {
-    safe_alter('txp_file',
-        "add status smallint NOT NULL DEFAULT '4'");
+    safe_alter('txp_file', "add status smallint NOT NULL DEFAULT '4'");
 }
 
 $update_files = 0;
 
 if (!in_array('modified',$txpfile)) {
-    safe_alter('txp_file',
-        "add modified datetime NOT NULL default '0000-00-00 00:00:00'");
+    safe_alter('txp_file', "add modified datetime NOT NULL default '0000-00-00 00:00:00'");
     $update_files = 1;
 }
 
 if (!in_array('created',$txpfile)) {
-    safe_alter('txp_file',
-        "add created datetime NOT NULL default '0000-00-00 00:00:00'");
+    safe_alter('txp_file', "add created datetime NOT NULL default '0000-00-00 00:00:00'");
     $update_files = 1;
 }
 
