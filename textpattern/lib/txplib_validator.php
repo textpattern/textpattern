@@ -100,8 +100,8 @@ class Validator
     /**
      * Sets new constraints.
      *
-     * This method takes an array of Constraint instances,
-     * and adds it to end of the current stack.
+     * This method takes an array of Constraint instances, and adds it to end of
+     * the current stack.
      *
      * @param obj|array $constraints Single or array-of Constraint object(s)
      */
@@ -339,7 +339,8 @@ class FormConstraint extends ChoiceConstraint
 }
 
 /**
- * Validates that a value is blank, defined as equal to a blank string or equal to null.
+ * Validates that a value is blank, defined as equal to a blank string or equal
+ * to null.
  *
  * @since   4.5.0
  * @package Validator

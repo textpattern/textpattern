@@ -30,14 +30,14 @@
 /**
  * Creates and outputs an admin-side header.
  *
- * The output contains HTML &lt;head&gt; section and the main
- * navigation. The results are echoed as opposed to returned.
+ * The output contains HTML &lt;head&gt; section and the main navigation.
+ * The results are echoed as opposed to returned.
  *
- * This function offers a way to invoke modal activity messages
- * and set the page title.
+ * This function offers a way to invoke modal activity messages and set the
+ * page title.
  *
- * Output will automatically become silent on asynchronous
- * script responses that do not want HTML headers.
+ * Output will automatically become silent on asynchronous script responses
+ * that do not want HTML headers.
  *
  * @param  string       $pagetitle The page title
  * @param  string|array $message   A message show to the user
@@ -84,7 +84,7 @@ function pagetop($pagetitle, $message = '')
     $lang_direction = gTxt('lang_dir');
 
     if (!in_array($lang_direction, array('ltr', 'rtl'))) {
-        // Apply biased default for missing translations
+        // Apply biased default for missing translations.
         $lang_direction = 'ltr';
     }
 

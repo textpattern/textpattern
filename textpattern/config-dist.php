@@ -80,7 +80,8 @@ $txpcfg['txpath'] = '/home/path/to/textpattern';
 /**
  * Database connection charset.
  *
- * Only for MySQL 4.1 and up. Must be equal to the table-charset, e.g. latin1 or utf8.
+ * Only for MySQL 4.1 and up. Must be equal to the table-charset, e.g. latin1
+ * or utf8.
  *
  * @global string $txpcfg['dbcharset']
  */

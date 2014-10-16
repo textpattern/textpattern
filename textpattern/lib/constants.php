@@ -152,8 +152,8 @@ if (!defined('REGEXP_UTF8')) {
     /**
      * TRUE if the system supports UTF-8 regex patterns.
      *
-     * This constant can be overridden from the config.php
-     * in case UTF-8 regex patterns cause issues.
+     * This constant can be overridden from the config.php in case UTF-8 regex
+     * patterns cause issues.
      *
      * @package System
      * @example
@@ -406,8 +406,7 @@ if (!defined('X_FRAME_OPTIONS')) {
     /**
      * Sets X-Frame-Options HTTP header's value.
      *
-     * This is used to prevent framing of authenticated
-     * pages.
+     * This is used to prevent framing of authenticated pages.
      *
      * This constant can be overridden from the config.php.
      *
@@ -751,8 +750,8 @@ define('TEXTPATTERN_SCRIPT_URL', 0x1);
 /**
  * Attach version number to script URL if stable.
  *
- * The install is considered as a 'stable' if the version
- * number doesn't contain a '-dev' tag.
+ * The install is considered as a 'stable' if the version number doesn't contain
+ * a '-dev' tag.
  *
  * @since   4.6.0
  * @package HTML
@@ -796,8 +795,7 @@ define('TEXTPATTERN_ATTS_STRIP_EMPTY', 0x1);
 /**
  * Sends an adaptive announcement.
  *
- * The rendered message type is based on the context
- * mode.
+ * The rendered message type is based on the context mode.
  *
  * @since   4.6.0
  * @package Announce
@@ -809,8 +807,8 @@ define('TEXTPATTERN_ANNOUNCE_ADAPTIVE', 0x1);
 /**
  * Sends a modal announcement.
  *
- * The announcement is instructed to be rendered
- * as soon as possible, as a modal alert window.
+ * The announcement is instructed to be rendered as soon as possible, as a modal
+ * alert window.
  *
  * @since   4.6.0
  * @package Announce

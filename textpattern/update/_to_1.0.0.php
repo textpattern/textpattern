@@ -392,7 +392,8 @@ if (!in_array('ip', $txplog)) {
     safe_alter('txp_log', "ADD `ip` varchar(16) NOT NULL default ''");
 }
 
-// 1.0: need to get Excerpt_html values into the textpattern table, so catch empty ones and populate them.
+// 1.0: need to get Excerpt_html values into the textpattern table, so catch
+// empty ones and populate them.
 $rs = mysql_query("select ID, Excerpt, textile_excerpt from `".PFX."textpattern` where Excerpt_html like ''");
 require_once txpath.'/lib/classTextile.php';
 $textile = new Textile();
@@ -685,8 +686,8 @@ EOF;
     safe_insert('txp_form', "name='comments_display', type='article', Form='".doSlash($form)."'");
 }
 
-// /tmp is bad for permanent storage of files,
-// if no files are uploaded yet, switch to the files directory in the top-txp dir.
+// /tmp is bad for permanent storage of files, if no files are uploaded yet,
+// switch to the files directory in the top-txp dir.
 if (!safe_count('txp_file', "1")) {
     $tempdir = find_temp_dir();
 

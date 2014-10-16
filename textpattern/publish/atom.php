@@ -73,9 +73,9 @@ define("r_relself", ' rel="self"');
 /**
  * Generates and outputs an Atom feed.
  *
- * This function can only be called once on a page. It outputs
- * an Atom feed based on the requested URL parameters. Accepts
- * HTTP GET parameters 'limit', 'area', 'section' and 'category'.
+ * This function can only be called once on a page. It outputs an Atom feed
+ * based on the requested URL parameters. Accepts HTTP GET parameters 'limit',
+ * 'area', 'section' and 'category'.
  */
 
 function atom()
@@ -92,7 +92,8 @@ function atom()
         'area',
     ))));
 
-    // Build filter criteria from a comma-separated list of sections and categories.
+    // Build filter criteria from a comma-separated list of sections
+    // and categories.
     $feed_filter_limit = get_pref('feed_filter_limit', 10);
     $section = gps('section');
     $category = gps('category');
@@ -296,7 +297,8 @@ function atom()
             ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()
         )
         {
-            // Make sure notices/warnings/errors don't fudge up the feed when compression is used.
+            // Make sure notices/warnings/errors don't fudge up the feed when
+            // compression is used.
             $buf = '';
 
             while ($b = @ob_get_clean()) {
@@ -365,7 +367,8 @@ function atom()
         if ($cutarticles) {
             // header("HTTP/1.1 226 IM Used");
             // This should be used as opposed to 200, but Apache doesn't like it.
-            // http://intertwingly.net/blog/2004/09/11/Vary-ETag/ says that the status code should be 200.
+            // http://intertwingly.net/blog/2004/09/11/Vary-ETag/ says that the
+            // status code should be 200.
             header("Cache-Control: no-store, im");
             header("IM: feed");
         }
@@ -422,8 +425,8 @@ function fixup_for_feed($toFeed, $permalink)
     // Fix relative urls.
     $txt = str_replace('href="/','href="'.hu.'/',$toFeed);
     $txt = preg_replace("/href=\\\"#(.*)\"/","href=\"".$permalink."#\\1\"",$txt);
-    // This was removed as entities shouldn't be stripped in Atom feeds when the content type is HTML.
-    // Leaving it commented out as a reminder.
+    // This was removed as entities shouldn't be stripped in Atom feeds when the
+    // content type is HTML. Leaving it commented out as a reminder.
     //$txt = safe_hed($txt);
 
     // Encode and entify.

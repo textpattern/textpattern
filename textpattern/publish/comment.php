@@ -164,7 +164,7 @@ function commentForm($id, $atts = null)
         'backpage',
     ))));
 
-    if ($message == '') {    // Second or later preview will have randomised message-field name.
+    if ($message == '') { // Second or later preview will have randomised message-field name.
         $in = getComment();
         $message = doDeEnt($in['message']);
     }
@@ -208,8 +208,8 @@ function commentForm($id, $atts = null)
         }
     }
 
-    // If the form fields are filled (anything other than blank), pages
-    // really should not be saved by a public cache (rfc2616/14.9.1).
+    // If the form fields are filled (anything other than blank), pages really
+    // should not be saved by a public cache (rfc2616/14.9.1).
     if ($name || $email || $web) {
         header('Cache-Control: private');
     }
@@ -218,8 +218,8 @@ function commentForm($id, $atts = null)
 
     $url = $GLOBALS['pretext']['request_uri'];
 
-    // Experimental clean URLs with only 404-error-document on Apache
-    // possibly requires messy URLs for POST requests.
+    // Experimental clean URLs with only 404-error-document on Apache possibly
+    // requires messy URLs for POST requests.
     if (defined('PARTLY_MESSY') and (PARTLY_MESSY)) {
         $url = hu.'?id='.intval($parentid);
     }
@@ -360,8 +360,8 @@ function destroyCookies()
 /**
  * Gets the received comment.
  *
- * Comment spam filter plugins should call this function to
- * fetch comment contents.
+ * Comment spam filter plugins should call this function to fetch
+ * comment contents.
  *
  * @return  array
  * @example
@@ -831,8 +831,8 @@ function comments_help()
 /**
  * Emails a new comment to the article's author.
  *
- * This function can only be executed directly after a comment
- * was sent, otherwise it will not run properly.
+ * This function can only be executed directly after a comment was sent,
+ * otherwise it will not run properly.
  *
  * Will not send comments flagged as spam, and follows site's
  * comment preferences.

@@ -73,8 +73,7 @@ class Textpattern_Security_Filter
     /**
      * Wipes automatically registered superglobals.
      *
-     * Protects the server from global registering
-     * and overwriting attempts.
+     * Protects the server from global registering and overwriting attempts.
      *
      * @throws Textpattern_Security_Exception
      * @return Textpattern_Security_Filter

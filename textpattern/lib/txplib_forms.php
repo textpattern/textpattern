@@ -64,8 +64,7 @@ function radioSet($values, $field, $checked = '', $tabindex = 0, $id = '')
 /**
  * Generates a Yes/No radio button toggle.
  *
- * These buttons are booleans. 'Yes' will have a value of 1 and
- * 'No' is 0.
+ * These buttons are booleans. 'Yes' will have a value of 1 and 'No' is 0.
  *
  * @param  string $field    The field name
  * @param  string $checked  The checked button, either '1', '0'
@@ -168,8 +167,8 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
 /**
  * Generates a tree structured select field.
  *
- * This field takes a NSTREE structure as an associative
- * array. This is mainly used for categories.
+ * This field takes a NSTREE structure as an associative array. This is mainly
+ * used for categories.
  *
  * @param  string $select_name The field
  * @param  array  $array       The values as an array
@@ -438,8 +437,7 @@ function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
 /**
  * Generates a form element.
  *
- * This form will contain a CSRF token if called on an authenticated
- * page.
+ * This form will contain a CSRF token if called on an authenticated page.
  *
  * @param  string $contents The form contents
  * @param  string $style    Inline styles added to the form

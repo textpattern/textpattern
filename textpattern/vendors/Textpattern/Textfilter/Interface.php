@@ -46,8 +46,8 @@ interface Textpattern_Textfilter_Interface
      * Gets filter-specific help.
      *
      * Help can be used to set and offer HTML formatted instructions,
-     * examples and formatting tips. These instructions will be
-     * presented to the user.
+     * examples and formatting tips. These instructions will be presented to
+     * the user.
      *
      * @return string HTML for filter-specific help
      */

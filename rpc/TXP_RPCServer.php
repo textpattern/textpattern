@@ -39,7 +39,8 @@ class TXP_RPCServer extends IXR_IntrospectionServer
 
         // Add API Methods as callbacks.
         if ($enable_xmlrpc_server) {
-            // Blogger API [http://www.blogger.com/developers/api/] - add as server capability.
+            // Blogger API [http://www.blogger.com/developers/api/] - add as
+            // server capability.
             $this->capabilities['bloggerAPI'] = array(
                 'specUrl'     => 'http://www.blogger.com/developers/api/',
                 'specVersion' => 2
@@ -81,8 +82,8 @@ class TXP_RPCServer extends IXR_IntrospectionServer
                 'updates section template - main=default template, archiveIndex=section template'
             );
 
-            // Non-official Blogger API methods - supported by XML-RPC clients as BloggerAPI2.
-            // Place all this info on a public URI.
+            // Non-official Blogger API methods - supported by XML-RPC clients
+            // as BloggerAPI2. Place all this info on a public URI.
             $this->addCallback(
                 'blogger.getPost',
                 'this:blogger_getPost',
@@ -102,7 +103,8 @@ class TXP_RPCServer extends IXR_IntrospectionServer
                 'retrieves a list of posts (default 10)'
             );
 
-            // metaWeblog API[http://www.xmlrpc.com/metaWeblogApi] - add as server capability.
+            // metaWeblog API[http://www.xmlrpc.com/metaWeblogApi] - add as 
+            // server capability.
             $this->capabilities['metaWeblog API'] = array(
                 'specUrl'     => 'http://www.xmlrpc.com/metaWeblogApi',
                 'specVersion' => 1
@@ -192,7 +194,8 @@ class TXP_RPCServer extends IXR_IntrospectionServer
         }
     }
 
-    // Override serve method in order to keep requests logs too while dealing with unknown clients.
+    // Override serve method in order to keep requests logs too while dealing
+    // with unknown clients.
     function serve($data = false)
     {
         if (!$data) {
@@ -983,7 +986,7 @@ EOD;
             $contents['Posted'] = date('Y-m-d H:i:s', $posted);
         }
 
-        // MovableType Implementation Add ons
+        // MovableType implementation add-ons
         if (isset($struct['mt_allow_comments'])) {
             $contents['Annotate'] = $struct['mt_allow_comments'];
         }
@@ -1013,9 +1016,9 @@ EOD;
         return $contents;
     }
 
-    // Common code to metaWeblog_getPost and metaWeblog_getRecentPosts
-    // could not be this placed on a different file from taghandlers?
-    // remove if it is the case.
+    // Common code to metaWeblog_getPost and metaWeblog_getRecentPosts could
+    // not be this placed on a different file from taghandlers?
+    // Remove if it is the case.
     function _buildMetaWeblogStruct($rs, $txp)
     {
         global $permlink_mode, $is_dst, $gmtoffset;
@@ -1070,7 +1073,7 @@ EOD;
 
         $out['dateCreated']->tz = 'Z'; // GMT.
 
-        // MovableType Implementation Add ons.
+        // MovableType Implementation add-ons.
         if (isset($rs['Annotate']) && !empty($rs['Annotate'])) {
             $out['mt_allow_comments'] = intval($rs['Annotate']);
         }

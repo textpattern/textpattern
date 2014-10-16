@@ -136,7 +136,8 @@ class Textpattern_Mail_Encode
     }
 
     /**
-     * Removes new lines and NULL bytes from header lines, preventing header injections.
+     * Removes new lines and NULL bytes from header lines, preventing
+     * header injections.
      *
      * @param  string $string The string
      * @return string Escaped header value

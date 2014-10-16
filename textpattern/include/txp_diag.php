@@ -80,8 +80,7 @@ function apache_module($m)
 /**
  * Verifies temporary directory status.
  *
- * This function verifies that the given temporary
- * directory is writeable.
+ * This function verifies that the given temporary directory is writeable.
  *
  * @param  string    $dir The directory to check
  * @return bool|null NULL on error, TRUE on success
@@ -180,7 +179,8 @@ function doDiagnostics()
     $is_apache = stristr(serverSet('SERVER_SOFTWARE'), 'Apache') || is_callable('apache_get_version');
     $real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 
-    // ini_get() returns string values passed via php_value as a string, not boolean.
+    // ini_get() returns string values passed via php_value as a string, 
+    // not boolean.
     $is_register_globals = ( (strcasecmp(ini_get('register_globals'), 'on') === 0) or (ini_get('register_globals') === '1'));
 
     // Check for Textpattern updates, at most once every 24 hours.
@@ -398,7 +398,8 @@ function doDiagnostics()
             $gd_support[] = 'GIF';
         }
 
-         // Aside: In PHP 5.3, they chose to add a previously unemployed capital "E" to the array key.
+         // Aside: In PHP 5.3, they chose to add a previously unemployed capital
+         // "E" to the array key.
         if (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support'])) {
             $gd_support[] = 'JPG';
         }
@@ -650,7 +651,8 @@ function checkUpdates()
             ksort($response);
             $version = get_pref('version');
 
-            // Go through each available branch (x.y), but only return the _highest_ version.
+            // Go through each available branch (x.y), but only return the
+            // _highest_ version.
             foreach ($response as $key => $val) {
                 if (version_compare($version, $val) < 0) {
                     $out = array('version' => $val, 'msg' => 'textpattern_update_available');

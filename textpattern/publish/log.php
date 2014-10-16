@@ -31,10 +31,9 @@
 /**
  * Adds a row to the visitor logs.
  *
- * This function follows the site's logging preferences.
- * If $logging preference is set to 'refer', only referrer
- * hits are logged. If $logging is set to 'none' or '$nolog'
- * global to TRUE, the function will ignore all hits.
+ * This function follows the site's logging preferences. If $logging preference
+ * is set to 'refer', only referrer hits are logged. If $logging is set to
+ * 'none' or '$nolog' global to TRUE, the function will ignore all hits.
  *
  * If the $status parameter is set to 404, the hit isn't logged.
  *
@@ -62,7 +61,8 @@ function log_hit($status)
  *
  * This function is used by log_hit(). See it before trying to use this one.
  *
- * The hit is ignore if $r is set to 'refer' and the HTTP REFERER header is empty.
+ * The hit is ignore if $r is set to 'refer' and the HTTP REFERER header
+ * is empty.
  *
  * @param  string   $r      Type of record to write, e.g. refer
  * @param  int      $status HTTP status code

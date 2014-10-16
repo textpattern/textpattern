@@ -33,8 +33,9 @@ if (!safe_field('name', 'txp_page', "name='error_default'")) {
 // Take back use_textile.
 safe_update('txp_prefs', "html='pref_text'", "name='use_textile'");
 
-// Ugly way to change somethign which could break BC: changed use_textile == 2 to convert breaks and
-// use_textile == 1 to use textile - the same than in textile_body or textile_excerpt.
+// Ugly way to change somethign which could break BC: changed use_textile == 2
+// to convert breaks and use_textile == 1 to use textile - the same than in
+// textile_body or textile_excerpt.
 if (safe_field('val', 'txp_prefs', "name='textile_updated'") === false) {
     $ut = safe_field('val', 'txp_prefs', "name='use_textile'");
 

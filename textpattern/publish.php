@@ -133,8 +133,8 @@ if (!defined('IMPATH')) {
     define('IMPATH', $path_to_site.DS.$img_dir.DS);
 }
 
-// 1.0: a new $here variable in the top-level index.php should let
-// us know the server path to the live site let's save it to prefs.
+// 1.0: a new $here variable in the top-level index.php should let us know the
+// server path to the live site let's save it to prefs.
 if (isset($here) and $path_to_site != $here) {
     updateSitePath($here);
 }
@@ -167,8 +167,8 @@ if ($use_plugins) {
     load_plugins();
 }
 
-// This step deprecated as of 1.0 - really only useful with old-style
-// section placeholders, which passed $s='section_name'.
+// This step deprecated as of 1.0 - really only useful with old-style section
+// placeholders, which passed $s='section_name'.
 $s = (empty($s)) ? '' : $s;
 
 $pretext = !isset($pretext) ? array() : $pretext;
@@ -328,8 +328,9 @@ function preText($s, $prefs)
                     $out['feed'] = 'rss';
                     break;
 
-                // urldecode(strtolower(urlencode())) looks ugly but is the only way to
-                // make it multibyte-safe without breaking backwards-compatibility.
+                // urldecode(strtolower(urlencode())) looks ugly but is the
+                // only way to make it multibyte-safe without breaking
+                // backwards-compatibility.
                 case urldecode(strtolower(urlencode(gTxt('section')))):
                     $out['s'] = (ckEx('section', $u2)) ? $u2 : ''; $is_404 = empty($out['s']);
                     break;
@@ -517,7 +518,8 @@ function preText($s, $prefs)
 
     if ($out['s'] == 'file_download') {
         if (is_numeric($out['id'])) {
-            // Undo the double-encoding workaround for .gz files; @see filedownloadurl().
+            // Undo the double-encoding workaround for .gz files;
+            // @see filedownloadurl().
             if (!empty($out['filename'])) {
                 $out['filename'] = preg_replace('/gz&$/i', 'gz', $out['filename']);
             }
@@ -564,7 +566,8 @@ function preText($s, $prefs)
         }
     }
 
-    // These are deprecated as of 1.0 - leaving them here for plugin compatibility.
+    // These are deprecated as of Textpattern v1.0 - leaving them here for
+    // plugin compatibility.
     $out['path_from_root'] = rhu;
     $out['pfr']            = rhu;
 
@@ -762,8 +765,8 @@ function doArticles($atts, $iscustom, $thing = null)
         $quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
         $q = doSlash($quoted ? trim(trim($q, '"')) : $q);
 
-        // Searchable article fields are limited to the columns of
-        // the textpattern table and a matching fulltext index must exist.
+        // Searchable article fields are limited to the columns of the
+        // textpattern table and a matching fulltext index must exist.
         $cols = do_list($searchable_article_fields);
 
         if (empty($cols) or $cols[0] == '') {
@@ -792,7 +795,8 @@ function doArticles($atts, $iscustom, $thing = null)
         $cols = join(' or ', $cols);
         $search = " and ($cols) $s_filter";
 
-        // searchall=0 can be used to show search results for the current section only.
+        // searchall=0 can be used to show search results for the current
+        // section only.
         if ($searchall) {
             $section = '';
         }
@@ -993,7 +997,8 @@ function doArticle($atts, $thing = null)
         return '';
     }
 
-    // If a form is specified, $thing is for doArticles() - hence ignore $thing here.
+    // If a form is specified, $thing is for doArticles() - hence ignore
+    // $thing here.
     if (!empty($atts['form'])) {
         $thing = '';
     }

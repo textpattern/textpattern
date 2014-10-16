@@ -66,7 +66,8 @@ function doImportMT($file, $section, $status, $invite)
     while (!feof($fp)) {
         $line = rtrim(fgets($fp, 8192));
 
-        // The states suggested by the spec are inconsisent, but we'll do our best to fake it.
+        // The states suggested by the spec are inconsisent, but we'll do our
+        // best to fake it.
         if ($line == '--------') {
             # End of an item, so we can process it
             $results[]=import_mt_item($item, $section, $status, $invite);
@@ -92,9 +93,10 @@ function doImportMT($file, $section, $status, $invite)
                 $multiline_data = array();
             }
         } elseif ($state == 'multiline') {
-            // Here's where things get hinky. Rather than put the multiline metadata before the
-            // field name, it goes after, with no clear separation between metadata and data.
-            // And either the metadata or data might be missing.
+            // Here's where things get hinky. Rather than put the multiline
+            // metadata before the field name, it goes after, with no clear
+            // separation between metadata and data. And either the metadata
+            // or data might be missing.
             if (empty($multiline_data['content']) and preg_match('/^([A-Z ]+):\s*(.*)$/', $line, $match)) {
                 // Metadata within the multiline field.
                 $multiline_data[$match[1]] = import_mt_utf8($match[2]);

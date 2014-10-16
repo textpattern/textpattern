@@ -69,9 +69,9 @@ class Textpattern_Type_Callable implements Textpattern_Type_TypeInterface
     /**
      * Converts a callable to a string presentation.
      *
-     * If the callable is an object, returns the class name. For a
-     * callable array of object and method, a 'class::staticMethod'
-     * or a 'class->method', and for functions the name.
+     * If the callable is an object, returns the class name. For a callable
+     * array of object and method, a 'class::staticMethod' or a 'class->method',
+     * and for functions the name.
      *
      * <code>
      * echo (string) Txp::get('Textpattern_Type_Callable', function () {return 'Hello world!';});

@@ -844,7 +844,8 @@ function setup_gTxt($var, $atts = array(), $escape = 'html')
         $compare = ($xlate == $v);
     }
 
-    // No translation string available, so grab an English string we know exists as fallback.
+    // No translation string available, so grab an English string we know exists
+    // as fallback.
     if ($compare) {
         $xlate = strtr($en_gb_strings[$v], $atts);
     }

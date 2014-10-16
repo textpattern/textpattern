@@ -53,8 +53,8 @@ class Textpattern_Debug_Memory implements Textpattern_Container_ReusableInterfac
     /**
      * Logs the current memory usage.
      *
-     * This method updates the logged peak memory usage if
-     * the current usage is greater than the last logged value.
+     * This method updates the logged peak memory usage if the current usage is
+     * greater than the last logged value.
      *
      * <code>
      * Txp::get('Textpattern_Debug_Memory')->logPeakUsage();

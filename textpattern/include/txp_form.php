@@ -99,8 +99,8 @@ if ($event == 'form') {
 /**
  * Renders a list of form templates.
  *
- * This function returns a list of form templates,
- * wrapped in a multi-edit form widget.
+ * This function returns a list of form templates, wrapped in a multi-edit
+ * form widget.
  *
  * @param  string $curname The selected form
  * @return string HTML
@@ -225,8 +225,8 @@ function form_multi_edit()
 /**
  * Creates a new form.
  *
- * Directs requests back to the main editor panel,
- * armed with a 'form_create' step.
+ * Directs requests back to the main editor panel, armed with a
+ * 'form_create' step.
  */
 
 function form_create()

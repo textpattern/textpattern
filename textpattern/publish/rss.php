@@ -50,7 +50,8 @@ function rss()
         'area',
     ))));
 
-    // Build filter criteria from a comma-separated list of sections and categories.
+    // Build filter criteria from a comma-separated list of sections
+    // and categories.
     $feed_filter_limit = get_pref('feed_filter_limit', 10);
     $section = gps('section');
     $category = gps('category');
@@ -221,7 +222,8 @@ function rss()
             ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()
         )
         {
-            // Make sure notices/warnings/errors don't fudge up the feed when compression is used.
+            // Make sure notices/warnings/errors don't fudge up the feed when
+            // compression is used.
             $buf = '';
 
             while ($b = @ob_get_clean()) {
@@ -286,7 +288,8 @@ function rss()
         if ($cutarticles) {
             // header("HTTP/1.1 226 IM Used");
             // This should be used as opposed to 200, but Apache doesn't like it.
-            // http://intertwingly.net/blog/2004/09/11/Vary-ETag/ says that the status code should be 200.
+            // http://intertwingly.net/blog/2004/09/11/Vary-ETag/ says that the
+            // status code should be 200.
             header("Cache-Control: no-store, im");
             header("IM: feed");
         }

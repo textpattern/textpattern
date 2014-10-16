@@ -225,7 +225,8 @@ class theme
     }
 
     /**
-     * Sets Textpatterns menu structure, message contents and other application states.
+     * Sets Textpatterns menu structure, message contents and other application
+     * states.
      *
      * @param  string $area      Currently active top level menu
      * @param  string $event     Currently active second level menu

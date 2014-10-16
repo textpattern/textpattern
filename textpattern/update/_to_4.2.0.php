@@ -83,8 +83,8 @@ if (!safe_field('name', 'txp_prefs', "name = 'theme_name'")) {
 safe_alter('txp_plugin', 'CHANGE code code MEDIUMTEXT NOT NULL, CHANGE code_restore code_restore MEDIUMTEXT NOT NULL');
 safe_alter('txp_prefs', 'CHANGE val val TEXT NOT NULL');
 
-// Add author column to files and links,
-// Boldy assuming that the publisher in charge of updating this site is the author of any existing content items.
+// Add author column to files and links, boldy assuming that the publisher in
+// charge of updating this site is the author of any existing content items.
 foreach (array('txp_file', 'txp_link') as $table) {
     $cols = getThings('describe `'.PFX.$table.'`');
 

@@ -70,12 +70,11 @@ define("a", "&#38;");
 /**
  * Renders the admin-side footer.
  *
- * The footer's default markup is provided by a theme. It can
- * be further customized via the "admin_side > footer" pluggable
- * UI callback event.
+ * The footer's default markup is provided by a theme. It can be further
+ * customised via the "admin_side > footer" pluggable UI callback event.
  *
- * In addition to the pluggable UI, this function also calls callback
- * events "admin_side > main_content_end" and "admin_side > body_end".
+ * In addition to the pluggable UI, this function also calls callback events
+ * "admin_side > main_content_end" and "admin_side > body_end".
  */
 
 function end_page()
@@ -214,8 +213,8 @@ function sLink($event, $step, $linktext, $class = '')
 /**
  * Renders a link with two additional URL parameters.
  *
- * Renders a link invoking an admin-side action
- * while taking up to two additional URL parameters.
+ * Renders a link invoking an admin-side action while taking up to two
+ * additional URL parameters.
  *
  * @param  string $event    Event
  * @param  string $step     Step
@@ -254,8 +253,8 @@ function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '
 /**
  * Renders a link with one additional URL parameter.
  *
- * Renders an link invoking an admin-side action while
- * taking up to one additional URL parameter.
+ * Renders an link invoking an admin-side action while taking up to one
+ * additional URL parameter.
  *
  * @param  string $event Event
  * @param  string $step  Step
@@ -277,8 +276,8 @@ function wLink($event, $step = '', $thing = '', $value = '')
 /**
  * Renders a delete link.
  *
- * Renders a link invoking an admin-side "delete" action
- * while taking up to two additional URL parameters.
+ * Renders a link invoking an admin-side "delete" action while taking up to two
+ * additional URL parameters.
  *
  * @param  string $event     Event
  * @param  string $step      Step
@@ -357,8 +356,8 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
 /**
  * Renders an add link.
  *
- * This function can be used for invoking an admin-side "add" action
- * while taking up to two additional URL parameters.
+ * This function can be used for invoking an admin-side "add" action while
+ * taking up to two additional URL parameters.
  *
  * @param  string $event  Event
  * @param  string $step   Step
@@ -776,7 +775,8 @@ function tr($content, $atts = '')
 }
 
 /**
- * Renders a &lt;td&gt; element with top/left text orientation, colspan and other attributes.
+ * Renders a &lt;td&gt; element with top/left text orientation, colspan and
+ * other attributes.
  *
  * @param  string $content Cell content
  * @param  int    $span    Cell colspan attribute
@@ -855,8 +855,8 @@ function fInputCell($name, $var = '', $tabindex = 0, $size = 0, $help = false, $
 /**
  * Renders a name-value input control with label.
  *
- * The rendered input can be customised via the '{$event}_ui > inputlabel.{$name}'
- * pluggable UI callback event.
+ * The rendered input can be customised via the
+ * '{$event}_ui > inputlabel.{$name}' pluggable UI callback event.
  *
  * @param  string       $name        Input name
  * @param  string       $input       Complete input control widget
@@ -1685,8 +1685,8 @@ function asyncHref($item, $parms, $atts = '')
 /**
  * Renders an array of items as a HTML list.
  *
- * This function is used for tag handler functions.
- * Creates a HTML list markup from an array of items.
+ * This function is used for tag handler functions. Creates a HTML list markup
+ * from an array of items.
  *
  * @param   array  $list
  * @param   string $wraptag    The HTML element
@@ -1720,7 +1720,7 @@ function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = 
         $breakatts.= ' class="'.txpspecialchars($breakclass).'"';
     }
 
-    // non-enclosing breaks
+    // Non-enclosing breaks.
     if (!preg_match('/^\w+$/', $break) or $break == 'br' or $break == 'hr') {
         if ($break == 'br' or $break == 'hr') {
             $break = "<$break $breakatts/>".n;
@@ -1739,8 +1739,7 @@ function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = 
  *
  * Used for tag handler functions.
  *
- * If $content is empty, renders a self-closing
- * tag.
+ * If $content is empty, renders a self-closing tag.
  *
  * @param   string $content The wrapped item
  * @param   string $tag     The HTML tag
@@ -1773,11 +1772,10 @@ function doTag($content, $tag, $class = '', $atts = '', $id = '')
 /**
  * Renders a label.
  *
- * This function is mostly used for rendering headings in tag
- * handler functions.
+ * This function is mostly used for rendering headings in tag handler functions.
  *
- * If no $labeltag is given, label is separated from the
- * content with a &lt;br&gt;.
+ * If no $labeltag is given, label is separated from the content with
+ * a &lt;br&gt;.
  *
  * @param   string $label    The label
  * @param   string $labeltag The HTML element

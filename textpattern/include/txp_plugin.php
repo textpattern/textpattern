@@ -377,8 +377,8 @@ function plugin_verify()
 
     // Check for pre-4.0 style plugin.
     if (strpos($plugin, '$plugin=\'') !== false) {
-        // Try to increase PCRE's backtrack limit in PHP 5.2+ to accommodate to x-large plugins.
-        // see http://bugs.php.net/bug.php?id=40846
+        // Try to increase PCRE's backtrack limit in PHP 5.2+ to accommodate to
+        // x-large plugins. See http://bugs.php.net/bug.php?id=40846.
         @ini_set('pcre.backtrack_limit', '1000000');
         $plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
         // Have we hit yet another PCRE restriction?
@@ -644,7 +644,8 @@ function plugin_multi_edit()
                 if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
                     $status = safe_field('status', 'txp_plugin', "name ='".doSlash($name)."'");
                     load_plugin($name, true);
-                    // Note: won't show returned messages anywhere due to potentially overwhelming verbiage.
+                    // Note: won't show returned messages anywhere due to
+                    // potentially overwhelming verbiage.
                     callback_event("plugin_lifecycle.$name", $status ? 'disabled' : 'enabled');
                 }
             }

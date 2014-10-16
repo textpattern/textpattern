@@ -327,13 +327,13 @@ function save_language()
 /**
  * Installs a language from the RPC server or from a file.
  *
- * This function fetches language strings for the given language code from either
- * the RPC server or a file.
+ * This function fetches language strings for the given language code from
+ * either the RPC server or a file.
  *
- * Action is taken based on three HTTP POST parameters: 'lang_code', 'force' and 'updating'.
- * The 'lang_code' is the installed langauge, e.g. 'en-gb', 'fi-fi'. The 'force' when set
- * to 'file' can be used force an installation from a local file. The 'updating' specifies
- * whether only to install (0) or to update (1).
+ * Action is taken based on three HTTP POST parameters: 'lang_code', 'force' and
+ * 'updating'. The 'lang_code' is the installed langauge, e.g. 'en-gb', 'fi-fi'.
+ * The 'force' when set to 'file' can be used force an installation from a local
+ * file. The 'updating' specifies whether only to install (0) or to update (1).
  */
 
 function get_language()

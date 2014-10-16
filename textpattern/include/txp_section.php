@@ -545,7 +545,8 @@ function section_save()
 
     if ($name != strtolower($old_name)) {
         if (safe_field('name', 'txp_section', "name='$safe_name'")) {
-            // Invalid input. Halt all further processing (e.g. plugin event handlers).
+            // Invalid input. Halt all further processing (e.g. plugin event
+            // handlers).
             $message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
 //            modal_halt($message);
             sec_section_list($message);

@@ -65,7 +65,8 @@ function install_language_from_file($lang)
             while (!feof($file)) {
                 $line = fgets($file, 4096);
 
-                // Ignore empty lines and simple comments (any line starting with #, not followed by @).
+                // Ignore empty lines and simple comments (any line starting
+                // with #, not followed by @).
                 if (trim($line) === '' || ($line[0] == '#' && $line[1] != '@' && $line[1] != '#')) {
                     continue;
                 }

@@ -1006,8 +1006,7 @@ function recent_articles($atts)
         'no_widow' => @$prefs['title_no_widow'],
     ), $atts));
 
-    // For backwards compatibility.
-    // sortby and sortdir are deprecated.
+    // For backwards compatibility. sortby and sortdir are deprecated.
     if ($sortby) {
         trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortby')), E_USER_NOTICE);
 
@@ -1338,7 +1337,8 @@ function category_list($atts, $thing = null)
         if ($children) {
             $shallow = '';
         } else {
-            // Descend only one level from either 'parent' or 'root', plus parent category.
+            // Descend only one level from either 'parent' or 'root', plus
+            // parent category.
             $shallow = ($parent) ? "and (parent in($parents) or name in($parents))" : "and parent = 'root'" ;
         }
 
@@ -2348,7 +2348,8 @@ function comments_preview($atts)
     unset($GLOBALS['thiscomment']);
     $out = doTag($comments, $wraptag, $class);
 
-    // Set a flag to tell the comments_form tag that it doesn't have to show a preview.
+    // Set a flag to tell the comments_form tag that it doesn't have to show
+    // a preview.
     $has_comments_preview = true;
 
     return $out;
@@ -3399,7 +3400,7 @@ function image_info($atts)
         'wraptag'    => '',
         'class'      => '',
         'break'      => '',
-        'breakclass' => '', // Deprecated in 4.6.0
+        'breakclass' => '', // Deprecated in 4.6.0.
     ), $atts));
 
     if (isset($atts['breakclass'])) {
@@ -4152,10 +4153,13 @@ function if_custom_field($atts, $thing)
                 $cond = ($term_count == $num_values) ? true : false;
                 break;
             case 'pattern':
-                // Cannot guarantee that a fixed delimiter won't break preg_match (and preg_quote doesn't help) so
-                // dynamically assign the delimiter based on the first entry in $dlmPool that is NOT in the value attribute.
-                // This minimises (does not eliminate) the possibility of a TXP-initiated preg_match error, while still
-                // preserving errors outside TXP's control (e.g. mangled user-submitted PCRE pattern).
+                // Cannot guarantee that a fixed delimiter won't break preg_match
+                // (and preg_quote doesn't help) so dynamically assign the delimiter
+                // based on the first entry in $dlmPool that is NOT in the value
+                // attribute. This minimises (does not eliminate) the possibility
+                // of a TXP-initiated preg_match error, while still preserving
+                // errors outside TXP's control (e.g. mangled user-submitted
+                // PCRE pattern).
                 $dlmPool = array('/', '@', '#', '~', '`', '|', '!', '%');
                 $dlm = array_merge(array_diff($dlmPool, preg_split('//', $value, -1)));
                 $dlm = (count($dlm) > 0) ? $dlm[0].$value.$dlm[0] : $value;
@@ -4468,8 +4472,8 @@ function file_download($atts, $thing = null)
     if ($thisfile) {
         $out = ($thing) ? parse($thing) : parse_form($form);
 
-        // Cleanup: this wasn't called from a form,
-        // so we don't want this value remaining.
+        // Cleanup: this wasn't called from a form, so we don't want this
+        // value remaining.
         if (!$from_form) {
             $thisfile = '';
         }
@@ -4506,8 +4510,8 @@ function file_download_link($atts, $thing = null)
 
         $out = ($thing) ? href(parse($thing), $url) : $url;
 
-        // cleanup: this wasn't called from a form,
-        // so we don't want this value remaining
+        // Cleanup: this wasn't called from a form, so we don't want this
+        // value remaining
         if (!$from_form) {
             $thisfile = '';
         }

@@ -49,8 +49,8 @@ class Textpattern_Textfilter_Registry implements ArrayAccess, IteratorAggregate,
     /**
      * Constructor.
      *
-     * Creates core Textfilters according to a preference and
-     * registers all available filters with the core.
+     * Creates core Textfilters according to a preference and registers all
+     * available filters with the core.
      *
      * This method triggers 'textfilter.register' callback
      * event.

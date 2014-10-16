@@ -206,20 +206,18 @@ $DB = new DB;
 /**
  * Prefixes a database table's name for use in a query.
  *
- * Textpattern can be installed to a shared database, this is
- * achieved by prefixing database tables. This function
- * can be used to add those prefixes to a known
- * named table when building SQL statements.
+ * Textpattern can be installed to a shared database, this is achieved by
+ * prefixing database tables. This function can be used to add those prefixes to
+ * a known named table when building SQL statements.
  *
- * Always use this function, or the safe_pfx_j(), when you
- * refer tables in raw SQL statements, including where
- * clauses, joins and sub-queries.
+ * Always use this function, or the safe_pfx_j(), when you refer tables in raw
+ * SQL statements, including where clauses, joins and sub-queries.
  *
  * This function will also quote the table name if necessary.
  *
- * You don't need to use this function in any of the dedicated
- * "table" parameters database functions offer. Any table used
- * in a table parameter is prefixed for you.
+ * You don't need to use this function in any of the dedicated "table"
+ * parameters database functions offer. Any table used in a table parameter is
+ * prefixed for you.
  *
  * @param  string $table The database table
  * @return string The $table with a prefix
@@ -246,16 +244,16 @@ function safe_pfx($table)
 /**
  * Prefixes a database table's name for use in a joined query.
  *
- * This function prefixes the given table name similarly to
- * safe_pfx(), but also creates a named, unprefixed, AS alias for it.
+ * This function prefixes the given table name similarly to safe_pfx(), but also 
+ * creates a named, unprefixed, AS alias for it.
  *
- * The created alias is same as the table name given. This function
- * is here to help to make joined queries where you need to refer to two
- * or more tables in a one query.
+ * The created alias is same as the table name given. This function is here to
+ * help to make joined queries where you need to refer to two or more tables in
+ * a one query.
  *
- * As with safe_pfx(), you don't need to use this function in any of the dedicated
- * "table" parameters database functions offer. Any table used in a table parameter
- * is prefixed for you.
+ * As with safe_pfx(), you don't need to use this function in any of the
+ * dedicated "table" parameters database functions offer. Any table used in a
+ * table parameter is prefixed for you.
  *
  * @param  string $table The database table, or comma-separated list of tables
  * @return string The $table with a prefix
@@ -494,9 +492,8 @@ function safe_alter($table, $alter, $debug = false)
 /**
  * Locks a table.
  *
- * The $table argument accepts comma-separated
- * list of table names, if you need to lock
- * multiple tables at once.
+ * The $table argument accepts comma-separated list of table names, if you need
+ * to lock multiple tables at once.
  *
  * @param  string $table The table
  * @param  string $type  The lock type
@@ -665,8 +662,8 @@ function safe_repair($table, $debug = false)
 /**
  * Truncates a table.
  *
- * Running this function empties a table completely, resets
- * indexes and the auto increment value.
+ * Running this function empties a table completely, resets indexes and the auto
+ * increment value.
  *
  * @param  string $table The table
  * @param  bool   $debug Dump query
@@ -688,8 +685,7 @@ function safe_truncate($table, $debug = false)
 /**
  * Removes a table.
  *
- * This function removes all data and
- * definitions associated with a table.
+ * This function removes all data and definitions associated with a table.
  *
  * @param  string $table The table
  * @param  bool   $debug Dump query
@@ -710,9 +706,8 @@ function safe_drop($table, $debug = false)
 /**
  * Creates a table.
  *
- * Creates a table with the given name. This table
- * will be created with identical properties to
- * core tables, ensuring the best possible compatibility.
+ * Creates a table with the given name. This table will be created with
+ * identical properties to core tables, ensuring the best possible compatibility.
  *
  * @param  string $table      The table
  * @param  string $definition The create definition
@@ -759,8 +754,7 @@ function safe_rename($table, $newname, $debug = false)
 /**
  * Gets a field from a row.
  *
- * If the query results in multiple matches, the first
- * row returned is used.
+ * If the query results in multiple matches, the first row returned is used.
  *
  * @param  string $thing The field
  * @param  string $table The table
@@ -876,10 +870,9 @@ function safe_row($things, $table, $where, $debug = false)
 /**
  * Gets a list rows from a table as an associative array.
  *
- * When working with large result sets remember that this function,
- * unlike safe_rows_start(), loads results to memory all at once.
- * To optimise performance in such situations, use safe_rows_start()
- * instead.
+ * When working with large result sets remember that this function, unlike
+ * safe_rows_start(), loads results to memory all at once. To optimise
+ * performance in such situations, use safe_rows_start() instead.
  *
  * @param  string $things The select clause
  * @param  string $table  The table
@@ -981,9 +974,8 @@ function safe_show($thing, $table, $debug = false)
 /**
  * Gets a field from a row.
  *
- * This function offers an alternative short-hand syntax to
- * safe_field(). Most notably, this internally manages
- * value escaping.
+ * This function offers an alternative short-hand syntax to safe_field().
+ * Most notably, this internally manages value escaping.
  *
  * @param  string $col   The field to get
  * @param  string $table The table
@@ -1036,9 +1028,8 @@ function getRow($query, $debug = false)
 /**
  * Gets multiple rows as an associative array.
  *
- * If you need to run simple SELECT queries
- * that select rows from a table, please see
- * safe_rows() and safe_rows_start() first.
+ * If you need to run simple SELECT queries that select rows from a table,
+ * please see safe_rows() and safe_rows_start() first.
  *
  * @param  string     $query The SQL statement to execute
  * @param  bool       $debug Dump query
@@ -1071,8 +1062,8 @@ function getRows($query, $debug = false)
 /**
  * Executes an SQL statement and returns results.
  *
- * This function is indentical to safe_query() apart
- * from the missing $unbuf argument.
+ * This function is indentical to safe_query() apart from the missing
+ * $unbuf argument.
  *
  * @param  string $query The SQL statement to execute
  * @param  bool   $debug Dump query
@@ -1089,8 +1080,8 @@ function startRows($query, $debug = false)
 /**
  * Gets a next row as an associative array from a result resource.
  *
- * The function will free up memory reserved by the result resource
- * if called after the last row.
+ * The function will free up memory reserved by the result resource if called
+ * after the last row.
  *
  * @param   resource    $r The result resource
  * @return  array|bool  The row, or FALSE if there are no more rows
@@ -1371,8 +1362,9 @@ function rebuild_tree_full($type, $tbl = 'txp_category')
 /**
  * Returns an error page.
  *
- * This function is used to return a bailout page when resolving database connections fails.
- * Sends a HTTP 503 error status and displays the last logged MySQL error message.
+ * This function is used to return a bailout page when resolving database
+ * connections fails. Sends a HTTP 503 error status and displays the last logged
+ * MySQL error message.
  *
  * @return string HTML5 document
  * @access private
@@ -1380,7 +1372,8 @@ function rebuild_tree_full($type, $tbl = 'txp_category')
 
 function db_down()
 {
-    // 503 status might discourage search engines from indexing or caching the error message.
+    // 503 status might discourage search engines from indexing or caching the
+    // error message.
     txp_status_header('503 Service Unavailable');
     $error = mysql_error();
 
