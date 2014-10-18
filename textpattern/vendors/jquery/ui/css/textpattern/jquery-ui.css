@@ -33,7 +33,7 @@
   padding: 0;
   outline: 0;
   font-size: 100%;
-  line-height: 1.5384615em;
+  line-height: 1.53846153846154em;
   text-decoration: none;
   list-style: none;
 }
@@ -584,7 +584,7 @@ a.ui-state-default:focus {
   overflow: visible;
   margin: 0 0.1em 0 0;
   border: solid 1px #cccccc;
-  padding: 0.30769231em 0.61538462em;
+  padding: 0.30769230769231em 0.61538461538462em;
   height: 2.1538462em;
   font-family: Helvetica, Arial, sans-serif;
   text-align: center;
@@ -1266,7 +1266,7 @@ label.ui-state-active.ui-button:active {
   /* 1 */
   font-size: 100%;
   font-size: 1em;
-  line-height: 1.3846154em;
+  line-height: 1.38461538461538em;
   -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   display: block;
@@ -1281,7 +1281,7 @@ label.ui-state-active.ui-button:active {
 .ui-menu .ui-menu-item {
   position: relative;
   margin: 0;
-  padding: 0.30769231em 1em 0.30769231em 0.30769231em;
+  padding: 0.30769230769231em 1em 0.30769230769231em 0.30769230769231em;
   cursor: pointer;
   /* support: IE 10, see #8844 */
   list-style-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
@@ -1291,7 +1291,7 @@ label.ui-state-active.ui-button:active {
   text-decoration: none;
 }
 .ui-menu .ui-menu-divider {
-  margin: 0.30769231em 0;
+  margin: 0.30769230769231em 0;
   border-width: 1px 0 0 0;
   height: 0;
   font-size: 0;
@@ -1330,7 +1330,7 @@ label.ui-state-active.ui-button:active {
   padding: 0;
 }
 [dir="rtl"] .ui-menu .ui-menu-item {
-  padding: 0.30769231em 0.30769231em 0.30769231em 1em;
+  padding: 0.30769230769231em 0.30769230769231em 0.30769230769231em 1em;
 }
 [dir="rtl"] .ui-menu .ui-icon {
   left: auto;
@@ -1441,7 +1441,7 @@ label.ui-state-active.ui-button:active {
   /* 1 */
   font-size: 100%;
   font-size: 1em;
-  line-height: 1.3846154em;
+  line-height: 1.38461538461538em;
   text-decoration: none;
   background-color: #ffffff;
   cursor: pointer;
@@ -1461,7 +1461,7 @@ label.ui-state-active.ui-button:active {
 }
 .ui-selectmenu-button span.ui-selectmenu-text {
   display: block;
-  padding: 0.30769231em 1.75em 0.30769231em 0.30769231em;
+  padding: 0.30769230769231em 1.75em 0.30769230769231em 0.30769230769231em;
   text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1482,7 +1482,7 @@ label.ui-state-active.ui-button:active {
 .ui-selectmenu-menu .ui-menu .ui-selectmenu-optgroup {
   margin: 0.5em 0 0 0;
   border-top: 1px solid #cccccc;
-  padding: 2px 0.30769231em;
+  padding: 2px 0.30769230769231em;
   height: auto;
   font-size: 1em;
   font-weight: bold;
@@ -1505,7 +1505,7 @@ label.ui-state-active.ui-button:active {
   left: 0.2em;
 }
 [dir="rtl"] .ui-selectmenu-button span.ui-selectmenu-text {
-  padding: 0.30769231em 0.30769231em 0.30769231em 1.75em;
+  padding: 0.30769230769231em 0.30769230769231em 0.30769230769231em 1.75em;
   text-align: right;
 }
 
@@ -1652,8 +1652,8 @@ label.ui-state-active.ui-button:active {
   padding: 0;
   width: 18px;
   height: 42%;
-  font-size: 0.53846154em;
-  line-height: 1.5714286em;
+  font-size: 0.53846153846154em;
+  line-height: 1.57142857142857em;
   overflow: hidden;
   cursor: default;
 }
