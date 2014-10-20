@@ -402,7 +402,7 @@ function cat_event_category_list($event)
         $total_count = array();
 
         if ($event == 'article') {
-            // Count distinct articles for both categories, avoid duplicates
+            // Count distinct articles for both categories, avoid duplicates.
             $rs2 = getRows(
                 'select category, count(*) as num from ('.
                     'select ID, Category1 as category from '.safe_pfx('textpattern').

@@ -24,8 +24,7 @@
 /**
  * Provides the factory its own initialisation method.
  *
- * The following will call 'getInstance()' method when
- * creating new instance:
+ * The following will call 'getInstance()' method when creating new instance:
  *
  * <code>
  * class Abc_Class implements Textpattern_Container_FactorableInterface
@@ -39,10 +38,10 @@
  * Txp::get('Abc_Class');
  * </code>
  *
- * The above echoes 'Created instance' as the method is invoked. Keep in
- * mind that implementing this interface doesn't prevent constructors from
- * running, or let you to initialise private classes. It merely adds
- * an additional method to the factory line.
+ * The above echoes 'Created instance' as the method is invoked. Keep in mind
+ * that implementing this interface doesn't prevent constructors from running,
+ * or let you to initialise private classes. It merely adds an additional method
+ * to the factory line.
  *
  * @since   4.6.0
  * @package Container

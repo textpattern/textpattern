@@ -66,7 +66,8 @@ function doImportBLOGGER($file, $section, $status, $invite)
     while (!feof($fp)) {
         $line = rtrim(fgets($fp, 8192));
 
-        // The states suggested by the spec are inconsisent, but we'll do our best to fake it.
+        // The states suggested by the spec are inconsisent, but we'll do our
+        // best to fake it.
         if ($line == '--------') {
             if ($state == 'multiline' and !empty($multiline_type)) {
                 $item[$multiline_type][] = $multiline_data;
@@ -96,9 +97,10 @@ function doImportBLOGGER($file, $section, $status, $invite)
                 $multiline_data = array();
             }
         } elseif ($state == 'multiline') {
-            // Here's where things get hinky. Rather than put the multiline metadata before the
-            // field name, it goes after, with no clear separation between metadata and data.
-            // And either the metadata or data might be missing.
+            // Here's where things get hinky. Rather than put the multiline
+            // metadata before the field name, it goes after, with no clear
+            // separation between metadata and data. And either the metadata 
+            // or data might be missing.
             if (empty($multiline_data['content']) and preg_match('/^([A-Z ]+):\s*(.*)$/', $line, $match)) {
                 // Metadata within the multiline field.
                 $multiline_data[$match[1]] = $match[2];
@@ -156,7 +158,8 @@ function import_blogger_item($item, $section, $status, $invite)
         $post_status = $status;
     }
 
-    // Blogger can use special chars on author names. Strip them and check for realname.
+    // Blogger can use special characters on author names. Strip them and check
+    // for realname.
     $authorid = safe_field('user_id', 'txp_users', "RealName = '".doSlash($item['AUTHOR'])."'");
     if (!$authorid) {
 //        $authorid = safe_field('user_id', 'txp_users', 'order by user_id asc limit 1');
@@ -198,7 +201,8 @@ function import_blogger_item($item, $section, $status, $invite)
                     if (!safe_field("discussid","txp_discuss","posted = '".doSlash($comment_date)."' AND message = '".doSlash($comment_content)."'")) {
                         safe_insert('txp_discuss',
                             "parentid='".doSlash($parentid)."',".
-                            // Blogger places the link to user profile page as comment author.
+                            // Blogger places the link to user profile page as
+                            // comment author.
                             "name='".doSlash(strip_tags(@$comment['AUTHOR']))."',".
 //                            "email='".doSlash(@$item['EMAIL'])."',".
                             "web='".doSlash(@$comment['URL'])."',".

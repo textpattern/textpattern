@@ -24,17 +24,17 @@
 /**
  * Container.
  *
- * Base container implementation for resolving and initialising
- * classes. Basic usage would happen with the getInstance() method:
+ * Base container implementation for resolving and initialising classes.
+ * Basic usage would happen with the getInstance() method:
  *
  * <code>
  * $container = new Textpattern_Container_Container();
  * $container->getInstance('Abc_class', 'argument1', 'argument2');
  * </code>
  *
- * Normally you would write a static wrapper class for the container
- * to keep the instances and configuration between calls. See the
- * 'Txp' class for Textpattern's own implementation.
+ * Normally you would write a static wrapper class for the container to keep the
+ * instances and configuration between calls. See the 'Txp' class for
+ * Textpattern's own implementation.
  *
  * @since   4.6.0
  * @package Container

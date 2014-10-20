@@ -1,11 +1,29 @@
 <?php
 
 /*
-XML-RPC Server for Textpattern 4.0.x
-http://txp.kusor.com/rpc-api
-(C)2005-2006 The Textpattern Development Team - http://textpattern.com
-@author Pedro Palazón - http://kusor.com
-*/
+ * Textpattern Content Management System
+ * http://textpattern.com
+ *
+ * XML-RPC Server for Textpattern 4.0.x
+ * http://txp.kusor.com/rpc-api
+ *
+ * Copyright (C) 2005-2006, 2014 The Textpattern Development Team
+ * Author: Pedro Palazón - http://kusor.com
+ *
+ * This file is part of Textpattern.
+ *
+ * Textpattern is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, version 2.
+ *
+ * Textpattern is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 // TODO: change error reporting to E_ALL, including E_NOTICE to detect subtle bugs?
 error_reporting(E_ALL & ~E_NOTICE);
@@ -18,7 +36,7 @@ if (@ini_get('register_globals')) {
         die('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
     }
 
-    // Collect and unset all registered variables from globals
+    // Collect and unset all registered variables from globals.
     $_txpg = array_merge(
         isset($_SESSION) ? (array) $_SESSION : array(),
         (array) $_ENV,
@@ -28,8 +46,9 @@ if (@ini_get('register_globals')) {
         (array) $_FILES,
         (array) $_SERVER);
 
-    // As the deliberately awkward-named local variable $_txpfoo MUST NOT be unset to avoid notices further down
-    // we must remove any potentially identical-named global from the list of global names here.
+    // As the deliberate awkwardly-named local variable $_txpfoo MUST NOT be
+    // unset to avoid notices further down, we must remove any potential
+    // identically-named global from the list of global names here.
     unset($_txpg['_txpfoo']);
 
     foreach ($_txpg as $_txpfoo => $value) {

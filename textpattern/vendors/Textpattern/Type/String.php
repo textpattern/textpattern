@@ -24,8 +24,8 @@
 /**
  * String object.
  *
- * Wraps around Multibyte string extension,
- * offering multi-byte safe string functions.
+ * Wraps around Multibyte string extension, offering multi-byte safe
+ * string functions.
  *
  * <code>
  * echo (string) Txp::get('Textpattern_Type_String', 'Hello World!')->trim()->replace('!', '.')->lower();

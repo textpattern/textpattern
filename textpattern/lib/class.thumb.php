@@ -60,8 +60,8 @@ class wet_thumb
 {
 
     /**
-     * The width of your thumbnail. The height (if not set) will
-     * be automatically calculated.
+     * The width of your thumbnail. The height (if not set) will be
+     * automatically calculated.
      *
      * @var int
      */
@@ -69,8 +69,8 @@ class wet_thumb
     public $width;
 
     /**
-     * The height of your thumbnail. The width (if not set) will
-     * be automatically calculated.
+     * The height of your thumbnail. The width (if not set) will be
+     * automatically calculated.
      *
      * @var int
      */
@@ -78,15 +78,15 @@ class wet_thumb
     public $height;
 
     /**
-     * Set the longest side of the image if width, height and
-     * shortside is not set.
+     * Set the longest side of the image if width, height and shortside is
+     * not set.
      */
 
     public $longside;
 
     /**
-     * Set the shortest side of the image if width, height and
-     * longside is not set.
+     * Set the shortest side of the image if width, height and longside is
+     * not set.
      */
 
     public $shortside;
@@ -223,7 +223,7 @@ class wet_thumb
         $this->_SRC['file']       = $infile;
         $this->_SRC['width']      = $temp[0];
         $this->_SRC['height']     = $temp[1];
-        $this->_SRC['type']       = $temp[2]; // 1=GIF, 2=JPG, 3=PNG, SWF=4
+        $this->_SRC['type']       = $temp[2]; // 1=GIF, 2=JPG, 3=PNG, SWF=4.
         $this->_SRC['string']     = $temp[3];
         $this->_SRC['filename']   = basename($infile);
         //$this->_SRC['modified'] = filemtime($infile);
@@ -235,7 +235,7 @@ class wet_thumb
             $this->_SRC['format'] = 'portrait';
         }
 
-        // Get destination image info
+        // Get destination image info.
         if (is_numeric($this->width) AND empty($this->height)) {
             $this->_DST['width']  = $this->width;
             $this->_DST['height'] = round($this->width/($this->_SRC['width']/$this->_SRC['height']));
@@ -619,7 +619,7 @@ class txp_thumb extends wet_thumb
             $threshold = 255;
         }
 
-        $radius = abs(round($radius));     // Only integers make sense.
+        $radius = abs(round($radius)); // Only integers make sense.
 
         if ($radius == 0) {
             return $img;
@@ -634,8 +634,10 @@ class txp_thumb extends wet_thumb
         // 1 2 1
         // 2 4 2
         // 1 2 1
-        // Move copies of the image around one pixel at the time and merge them with weight
-        // according to the matrix. The same matrix is simply repeated for higher radii.
+        // Move copies of the image around one pixel at the time and merge them
+        // with weight according to the matrix. The same matrix is simply
+        // repeated for higher radii.
+
         for ($i = 0; $i < $radius; $i++) {
             imagecopy($imgBlur, $imgCanvas, 0, 0, 1, 1, $w - 1, $h - 1); // up left
             imagecopymerge($imgBlur, $imgCanvas, 1, 1, 0, 0, $w, $h, 50); // down right
@@ -652,6 +654,7 @@ class txp_thumb extends wet_thumb
 
         // Calculate the difference between the blurred pixels and the original
         // and set the pixels.
+
         for ($x = 0; $x < $w; $x++) {
             // Each row.
             for ($y = 0; $y < $h; $y++) {
@@ -665,8 +668,8 @@ class txp_thumb extends wet_thumb
                 $gBlur = (($rgbBlur >> 8) & 0xFF);
                 $bBlur = ($rgbBlur & 0xFF);
 
-                // When the masked pixels differ less from the original
-                // than the threshold specifies, they are set to their original value.
+                // When the masked pixels differ less from the original than the
+                // threshold specifies, they are set to their original value.
 
                 $rNew = (abs($rOrig - $rBlur) >= $threshold) ? max(0, min(255, ($amount * ($rOrig - $rBlur)) + $rOrig)) : $rOrig;
                 $gNew = (abs($gOrig - $gBlur) >= $threshold) ? max(0, min(255, ($amount * ($gOrig - $gBlur)) + $gOrig)) : $gOrig;

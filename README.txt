@@ -50,7 +50,7 @@ system. Textpattern is both free and open source.
     val from txp_prefs where prefs_id=1 AND user_name='' in
     /path/to/your/site/textpattern/lib/txplib_db.php on line xx
   This is expected behaviour for the very first login after an upgrade.
-  Every further move in the admin side will not throw an error message.
+  Every further move in the admin-side will not throw an error message.
 * Verify all preference settings.
 
 == Getting Started ==

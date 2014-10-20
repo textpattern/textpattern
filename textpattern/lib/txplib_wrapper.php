@@ -28,8 +28,9 @@
  * any code which needs to have access to the textpattern articles data,
  * like XML-RPC, Atom, Moblogging or other external implementations.
  *
- * This class requires to include some Textpattern files in order to work properly.
- * See RPC Server implementation to view an example of the required files and predefined variables.
+ * This class requires including some Textpattern files in order to work
+ * properly. See RPC Server implementation to view an example of the required
+ * files and predefined variables.
  *
  * @link      http://txp.kusor.com/wrapper
  * @author    Pedro Palazon - http://kusor.net/
@@ -181,8 +182,8 @@ class TXP_Wrapper
     /**
      * Retrieves a list of articles matching the given criteria.
      *
-     * This method forms an SQL query from the given arguments
-     * and returns an array of resulting articles.
+     * This method forms an SQL query from the given arguments and returns an
+     * array of resulting articles.
      *
      * This method requires authentication and at least 'article.edit.own'
      * privileges. If the user doesn't have 'article.edit' privileges,
@@ -230,8 +231,8 @@ class TXP_Wrapper
     /**
      * Retrieves an article matching the given criteria.
      *
-     * This method forms an SQL query from the given arguments
-     * and returns an article as an assocative array.
+     * This method forms an SQL query from the given arguments and returns an
+     * article as an assocative array.
      *
      * This method requires authentication and at least 'article.edit.own'
      * privileges. If the user doesn't have 'article.edit' privileges,
@@ -262,7 +263,8 @@ class TXP_Wrapper
             if (has_privs('article.edit', $this->txp_user)) {
                 return safe_row($what, 'textpattern', $where);
             } else {
-                // While restricted users should be able to edit their own articles only.
+                // While restricted users should be able to edit their own
+                // articles only.
                 return safe_row($what, 'textpattern', $where." AND AuthorID='".doSlash($this->txp_user)."'");
             }
         }
@@ -305,9 +307,8 @@ class TXP_Wrapper
     /**
      * Updates an existing article.
      *
-     * This method takes an array of article fields, and
-     * updates an article with the given ID. Supplied values are
-     * sanitised and prepared internally.
+     * This method takes an array of article fields, and updates an article with
+     * the given ID. Supplied values are sanitised and prepared internally.
      *
      * @param  int      $article_id The article
      * @param  array    $params     The article fields to update
@@ -527,8 +528,8 @@ class TXP_Wrapper
     /**
      * Gets an array of information about the current user.
      *
-     * This method requires authentication. Resulting array
-     * contains all columns from 'txp_users' database table.
+     * This method requires authentication. Resulting array contains all columns
+     * from 'txp_users' database table.
      *
      * @return array|bool FALSE on failure
      * @example
@@ -551,8 +552,7 @@ class TXP_Wrapper
     /**
      * Retrieves a page template contents with the given name.
      *
-     * This method requires authentication and 'page'
-     * privileges.
+     * This method requires authentication and 'page' privileges.
      *
      * @param  string      $name The template
      * @return string|bool The template, or FALSE on failure
@@ -572,8 +572,7 @@ class TXP_Wrapper
     /**
      * Updates a page template with the given name.
      *
-     * This method requires authentication and 'page'
-     * privileges.
+     * This method requires authentication and 'page' privileges.
      *
      * @param  string $name The template name
      * @param  string $html The template contents
@@ -599,7 +598,8 @@ class TXP_Wrapper
     }
 
     /**
-     * Intended for updating an article's non-content fields, like categories, sections or keywords.
+     * Intended for updating an article's non-content fields, like categories,
+     * sections or keywords.
      *
      * This method requires authentication and 'article.edit' privileges.
      *
@@ -718,7 +718,8 @@ class TXP_Wrapper
                 $when = (!$article_id)? 'now()': '';
                 $incoming['Posted'] = $when;
             } else {
-                // Do not override post time for existing articles unless Posted is present.
+                // Do not override post time for existing articles unless Posted
+                // is present.
                 unset($incoming['Posted']);
             }
         } else {
@@ -728,8 +729,8 @@ class TXP_Wrapper
 
         if ($incoming['Title'] || $incoming['Body'] || $incoming['Excerpt']) {
             // Build SQL then and run query.
-            // Prevent data erase if not defined on the update action but
-            // it was on the database from a previous creation/edition time.
+            // Prevent data erase if not defined on the update action but it
+            // was on the database from a previous creation/edition time.
             if ($article_id) {
                 $old = safe_row('*', 'textpattern', "ID = $article_id");
 
@@ -892,7 +893,8 @@ class TXP_Wrapper
                 $out[$def_key] = '';
             }
 
-            // Setup the provided default value, if any, only when the incoming value is empty.
+            // Setup the provided default value, if any, only when the incoming 
+            // value is empty.
             if (array_key_exists($def_key, $default) && empty($out[$def_key])) {
                 $out[$def_key] = $default[$def_key];
             }

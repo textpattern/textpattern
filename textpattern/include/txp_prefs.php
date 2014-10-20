@@ -140,10 +140,10 @@ function prefs_save()
 /**
  * Renders the list of preferences.
  *
- * Plugins may add their own prefs, for example by using plugin lifecycle events or
- * raising a (pre) callback on event=admin / step=prefs_list so they are installed
- * or updated when accessing the Preferences panel. Access to the prefs can be
- * controlled by using add_privs() on 'prefs.your-prefs-event-name'.
+ * Plugins may add their own prefs, for example by using plugin lifecycle events
+ * or raising a (pre) callback on event=admin / step=prefs_list so they are
+ * installed or updated when accessing the Preferences panel. Access to the
+ * prefs can be controlled by using add_privs() on 'prefs.your-prefs-event-name'.
  *
  * @param  string $message The feedback / error string to display
  */
@@ -552,7 +552,8 @@ function prod_levels($name, $val)
 }
 
 /**
- * Renders a HTML &lt;select&gt; list of available panels to show immediately after login.
+ * Renders a HTML &lt;select&gt; list of available panels to show immediately
+ * after login.
  *
  * @param  string $name HTML name of the widget
  * @param  string $val  Initial (or current) selected item
@@ -648,7 +649,8 @@ function themename($name, $val)
 }
 
 /**
- * Renders a HTML &lt;select&gt; list of available public site markup schemes to adhere to.
+ * Renders a HTML &lt;select&gt; list of available public site markup schemes to
+ * adhere to.
  *
  * @param  string $name HTML name and id of the widget
  * @param  string $val  Initial (or current) selected item
@@ -668,8 +670,9 @@ function doctypes($name, $val)
 /**
  * Gets the maximum allowed file upload size.
  *
- * Computes the maximum acceptable file size to the application if the user-selected
- * value is larger than the maximum allowed by the current PHP configuration.
+ * Computes the maximum acceptable file size to the application if the
+ * user-selected value is larger than the maximum allowed by the current PHP
+ * configuration.
  *
  * @param  int $user_max Desired upload size supplied by the administrator
  * @return int Actual value; the lower of user-supplied value or system-defined value

@@ -24,8 +24,7 @@
 /**
  * Providable adapter interface.
  *
- * Any class that wants to act as an adapter,
- * should implement this.
+ * Any class that wants to act as an adapter, should implement this.
  *
  * @since   4.6.0
  * @package Adaptable

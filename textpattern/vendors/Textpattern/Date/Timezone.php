@@ -24,8 +24,8 @@
 /**
  * Handles timezones.
  *
- * This method extracts information from PHP's Timezone DB,
- * and allows configuring server's timezone information.
+ * This method extracts information from PHP's Timezone DB, and allows
+ * configuring server's timezone information.
  *
  * @package Date
  * @since   4.6.0
@@ -101,9 +101,9 @@ class Textpattern_Date_Timezone
      * )
      * </code>
      *
-     * Offset is the timezone offset from UTC excluding
-     * daylight saving time, DST is whether it's currently DST
-     * in the timezone. Identifiers are sorted alphabetically.
+     * Offset is the timezone offset from UTC excluding daylight saving time,
+     * DST is whether it's currently DST in the timezone. Identifiers are
+     * sorted alphabetically.
      *
      * @return array|bool An array of timezones, or FALSE on failure
      */
@@ -140,9 +140,8 @@ class Textpattern_Date_Timezone
     /**
      * Gets timezone identifiers for the given timezone offset.
      *
-     * More than one timezone might fit any given offset,
-     * thus the returned value is ambiguous and merely useful for
-     * presentation purposes.
+     * More than one timezone might fit any given offset, thus the returned
+     * value is ambiguous and merely useful for presentation purposes.
      *
      * <code>
      * print_r(Txp::get('Textpattern_Date_Timezone')->getOffsetIdentifiers(3600));
@@ -176,19 +175,17 @@ class Textpattern_Date_Timezone
     /**
      * Whether DST is in effect.
      *
-     * The given timestamp can either be a date format
-     * supported by DateTime, UNIX timestamp or NULL
-     * to check current status.
+     * The given timestamp can either be a date format supported by DateTime,
+     * UNIX timestamp or NULL to check current status.
      *
-     * If timezone is NULL, checks the server default
-     * timezone.
+     * If timezone is NULL, checks the server default timezone.
      *
      * <code>
      * echo Txp::get('Textpattern_Date_Timezone')->isDst('2013/06/20', 'Europe/London');
      * </code>
      *
-     * Returns TRUE, while this returns FALSE as the timezone does not
-     * use daylight saving time:
+     * Returns TRUE, while this returns FALSE as the timezone does not use
+     * daylight saving time:
      *
      * <code>
      * echo Txp::get('Textpattern_Date_Timezone')->isDst('2013/06/20', 'Africa/Accra');
@@ -308,8 +305,8 @@ class Textpattern_Date_Timezone
     /**
      * Gets timezone abbreviation.
      *
-     * If the $timezone is NULL, uses the server default. Returns FALSE
-     * if there is no abbreviation to give.
+     * If the $timezone is NULL, uses the server default. Returns FALSE if
+     * there is no abbreviation to give.
      *
      * <code>
      * echo Txp::get('Textpattern_Date_Timezone')->getTimeZoneAbbreviation('Europe/London');
@@ -321,7 +318,8 @@ class Textpattern_Date_Timezone
      * echo Txp::get('Textpattern_Date_Timezone')->getTimeZoneAbbreviation('Africa/Accra', true);
      * </code>
      *
-     * As according to the timezone database, the timezone does not currently use DST.
+     * As according to the timezone database, the timezone does not currently
+     * use DST.
      *
      * @param  string      $timezone Timezone identifier
      * @param  bool        $dst      TRUE to get the abbreviation during DST
@@ -367,8 +365,8 @@ class Textpattern_Date_Timezone
     /**
      * Gets a timezone identifier.
      *
-     * Extracts information about the given timezone. If the $timezone
-     * is NULL, uses the server's default timezone.
+     * Extracts information about the given timezone. If the $timezone is NULL,
+     * uses the server's default timezone.
      *
      * <code>
      * print_r(Txp::get('Textpattern_Date_Timezone')->getIdentifier('Europe/London'));
@@ -433,8 +431,7 @@ class Textpattern_Date_Timezone
     /**
      * Sets the server default timezone.
      *
-     * If an array of identifiers is given, the first one supported
-     * is used.
+     * If an array of identifiers is given, the first one supported is used.
      *
      * <code>
      * echo Txp::get('Textpattern_Date_Timezone')->setTimeZone('UTC');

@@ -40,8 +40,9 @@ if (@ini_get('register_globals')) {
         (array) $_FILES,
         (array) $_SERVER);
 
-    // As the deliberately awkward-named local variable $_txpfoo MUST NOT be unset to avoid notices further
-    // down, we must remove any potentially identical-named global from the list of global names here.
+    // As the deliberate awkwardly-named local variable $_txpfoo MUST NOT be
+    // unset to avoid notices further down, we must remove any potential
+    // identically-named global from the list of global names here.
     unset($_txpg['_txpfoo']);
 
     foreach ($_txpg as $_txpfoo => $value) {
@@ -72,7 +73,8 @@ if (!isset($here)) {
     $here = dirname(__FILE__);
 }
 
-// Pull in config unless configuration data has already been provided (multi-headed use).
+// Pull in config unless configuration data has already been provided
+// (multi-headed use).
 if (!isset($txpcfg['table_prefix'])) {
     // Use buffering to ensure bogus whitespace in config.php is ignored.
     ob_start(NULL, 2048);

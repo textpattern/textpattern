@@ -64,9 +64,8 @@ function filterFrontPage()
  *
  * Fills members of $thisarticle global from a database row.
  *
- * Keeps all article tag-related values in one place,
- * in order to do easy bugfixing and ease the addition of
- * new article tags.
+ * Keeps all article tag-related values in one place, in order to do easy
+ * bugfixing and ease the addition of new article tags.
  *
  * @param array $rs An article as an assocative array
  * @example
@@ -104,8 +103,8 @@ function populateArticleData($rs)
  * Fills members of $thisarticle global from a database row.
  *
  * Basically just converts an article's date values to UNIX timestamps.
- * Convenience for those who prefer doing conversion in application
- * end instead of in the SQL statement.
+ * Convenience for those who prefer doing conversion in application end instead
+ * of in the SQL statement.
  *
  * @param array $rs An article as an assocative array
  * @example
@@ -125,8 +124,7 @@ function article_format_info($rs)
 /**
  * Maps 'textpattern' table's columns to article data values.
  *
- * This function returns an array of 'data-value' => 'column'
- * pairs.
+ * This function returns an array of 'data-value' => 'column' pairs.
  *
  * @return array
  */
@@ -278,7 +276,8 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 function getNextPrev($id = 0, $threshold = null, $s = '')
 {
     if ($id !== 0) {
-        // Pivot is specific article by ID: In lack of further information, revert to default sort order 'Posted desc'.
+        // Pivot is specific article by ID: In lack of further information,
+        // revert to default sort order 'Posted desc'.
         $atts = filterAtts(array('sortby' => 'Posted', 'sortdir' => 'desc'));
     } else {
         // Pivot is $thisarticle: Use article attributes to find its neighbours.
@@ -510,7 +509,8 @@ function processTags($tag, $atts, $thing = null)
 /**
  * Protection from those who'd bomb the site by GET.
  *
- * Origin of the infamous 'Nice try' message and an even more useful '503' HTTP status.
+ * Origin of the infamous 'Nice try' message and an even more useful '503'
+ * HTTP status.
  */
 
 function bombShelter()
@@ -527,8 +527,8 @@ function bombShelter()
 /**
  * Checks a named item's existence in a database table.
  *
- * The given database table is prefixed with 'txp_'. As such
- * this function can only be used with core database tables.
+ * The given database table is prefixed with 'txp_'. As such this function can
+ * only be used with core database tables.
  *
  * @param   string      $table The database table name
  * @param   string      $val   The name to look for
@@ -571,9 +571,8 @@ function ckCat($type, $val, $debug = false)
 /**
  * Lookup an article by ID.
  *
- * This function takes an article's ID, and checks if it's
- * been published. If it has, returns the section and the ID
- * as an array. FALSE otherwise.
+ * This function takes an article's ID, and checks if it's been published. If it
+ * has, returns the section and the ID as an array. FALSE otherwise.
  *
  * @param   int        $val   The article ID
  * @param   bool       $debug Dump the query
@@ -594,9 +593,9 @@ function ckExID($val, $debug = false)
 /**
  * Lookup an article by URL title.
  *
- * This function takes an article's URL title, and checks if the article
- * has been published. If it has, returns the section and the ID
- * as an array. FALSE otherwise.
+ * This function takes an article's URL title, and checks if the article has
+ * been published. If it has, returns the section and the ID as an array.
+ * FALSE otherwise.
  *
  * @param   string     $val   The URL title
  * @param   bool       $debug Dump the query
@@ -617,9 +616,9 @@ function lookupByTitle($val, $debug = false)
 /**
  * Lookup a published article by URL title and section.
  *
- * This function takes an article's URL title, and checks if the article
- * has been published. If it has, returns the section and the ID
- * as an array. FALSE otherwise.
+ * This function takes an article's URL title, and checks if the article has
+ * been published. If it has, returns the section and the ID as an array.
+ * FALSE otherwise.
  *
  * @param   string     $val     The URL title
  * @param   string     $section The section name
@@ -715,8 +714,8 @@ function chopUrl($req)
 }
 
 /**
- * Save and retrieve the individual article's attributes
- * plus article list attributes for next/prev tags.
+ * Save and retrieve the individual article's attributes plus article list
+ * attributes for next/prev tags.
  *
  * @param   array $atts
  * @return  array

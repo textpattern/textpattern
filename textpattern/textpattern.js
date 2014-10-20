@@ -111,7 +111,8 @@ function poweredit(elm)
 }
 
 /**
- * Basic confirmation for potentially powerful choices (like deletion, for example).
+ * Basic confirmation for potentially powerful choices (like deletion,
+ * for example).
  *
  * @param  {string}  msg The message
  * @return {boolean} TRUE if user confirmed the action
@@ -1424,7 +1425,8 @@ textpattern.Route.add('import', function ()
 
 textpattern.Route.add('article', function ()
 {
-    // Assume users would not change the timestamp if they wanted to "publish now"/"reset time".
+    // Assume users would not change the timestamp if they wanted to
+    // "publish now"/"reset time".
     $(document).on('change',
         '#write-timestamp input.year,' +
         '#write-timestamp input.month,' +

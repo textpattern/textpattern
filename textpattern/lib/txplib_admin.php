@@ -30,9 +30,8 @@
 /**
  * Emails a new user with login details.
  *
- * This function can be only executed when the currently
- * authenticated user trying to send the email was
- * granted 'admin.edit' privileges.
+ * This function can be only executed when the currently authenticated user
+ * trying to send the email was granted 'admin.edit' privileges.
  *
  * @param  string $RealName The real name
  * @param  string $name     The login name
@@ -68,8 +67,8 @@ function send_password($RealName, $name, $email, $password)
 /**
  * Sends a new password to an existing user.
  *
- * If the $name is FALSE, the password is sent
- * to the currently authenticated user.
+ * If the $name is FALSE, the password is sent to the currently
+ * authenticated user.
  *
  * @param  string $password The new password
  * @param  string $email    The email address
@@ -105,10 +104,10 @@ function send_new_password($password, $email, $name)
 /**
  * Sends a password reset link to a user's email address.
  *
- * This function will return a success message even when the specified
- * user doesn't exist. Though an error message could be thrown when
- * user isn't found, this is done due to security. This prevents the function
- * from leaking existing account names.
+ * This function will return a success message even when the specified user
+ * doesn't exist. Though an error message could be thrown when user isn't found,
+ * this is done due to security. This prevents the function from leaking
+ * existing account names.
  *
  * @param  string $name The login name
  * @return string A localized message string
@@ -140,8 +139,8 @@ function send_reset_confirmation_request($name)
             return array(gTxt('could_not_mail'), E_ERROR);
         }
     } else {
-        // Though 'unknown_author' could be thrown, send generic 'request_sent' message
-        // instead so that (non-)existence of account names are not leaked.
+        // Though 'unknown_author' could be thrown, send generic 'request_sent'
+        // message instead so that (non-)existence of account names are not leaked.
         return gTxt('password_reset_confirmation_request_sent');
     }
 }
@@ -149,8 +148,8 @@ function send_reset_confirmation_request($name)
 /**
  * Generates a password.
  *
- * Generates a random password of given length
- * using the symbols set in PASSWORD_SYMBOLS constant.
+ * Generates a random password of given length using the symbols set in
+ * PASSWORD_SYMBOLS constant.
  *
  * @param  int    $length The length of the password
  * @return string Random plain-text password

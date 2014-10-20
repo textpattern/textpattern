@@ -272,9 +272,8 @@ function start_import()
 
 function check_import_file()
 {
-    // Check file size here too, and explain how to split the file if
-    // size is too long and time_limit can not be altered.
-
+    // Check file size here too, and explain how to split the file if size is
+    // too long and time_limit can not be altered.
     $import_file = txpath.'/include/import/import.txt';
 
     if (!is_file($import_file)) {

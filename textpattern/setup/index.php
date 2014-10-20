@@ -125,7 +125,7 @@ function chooseLang()
 {
     echo n.'<div id="setup_container" class="txp-container">',
         n.'<div class="txp-setup">',
-        hed('Welcome to Textpattern', 1),
+        hed('Welcome to Textpattern CMS', 1),
         n.'<form action="'.txpspecialchars($_SERVER['PHP_SELF']).'" method="post" class="prefs-form">',
         langs(),
         graf(fInput('submit', 'Submit', 'Submit', 'publish')),
@@ -240,7 +240,7 @@ function getDbInfo()
         hed(setup_gTxt('site_url'), 2).
         graf(setup_gTxt('please_enter_url')).
         graf(
-            span('<label for="setup_site_url">http://</label>'.popHelp('siteurl'), ' class="txp-label"').
+            span('<label for="setup_site_url">http(s)://</label>'.popHelp('siteurl'), ' class="txp-label"').
             n.span(fInput('text', 'siteurl', txpspecialchars($guess_siteurl), '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true), ' class="txp-value"')
         );
 
@@ -844,7 +844,8 @@ function setup_gTxt($var, $atts = array(), $escape = 'html')
         $compare = ($xlate == $v);
     }
 
-    // No translation string available, so grab an English string we know exists as fallback.
+    // No translation string available, so grab an English string we know exists
+    // as fallback.
     if ($compare) {
         $xlate = strtr($en_gb_strings[$v], $atts);
     }

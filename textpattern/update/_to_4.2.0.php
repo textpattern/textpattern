@@ -1,5 +1,26 @@
 <?php
 
+/*
+ * Textpattern Content Management System
+ * http://textpattern.com
+ *
+ * Copyright (C) 2014 The Textpattern Development Team
+ *
+ * This file is part of Textpattern.
+ *
+ * Textpattern is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, version 2.
+ *
+ * Textpattern is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
@@ -62,14 +83,14 @@ if (!safe_field('name', 'txp_prefs', "name = 'theme_name'")) {
 safe_alter('txp_plugin', 'CHANGE code code MEDIUMTEXT NOT NULL, CHANGE code_restore code_restore MEDIUMTEXT NOT NULL');
 safe_alter('txp_prefs', 'CHANGE val val TEXT NOT NULL');
 
-// Add author column to files and links,
-// Boldy assuming that the publisher in charge of updating this site is the author of any existing content items.
+// Add author column to files and links, boldy assuming that the publisher in
+// charge of updating this site is the author of any existing content items.
 foreach (array('txp_file', 'txp_link') as $table) {
     $cols = getThings('describe `'.PFX.$table.'`');
 
     if (!in_array('author', $cols)) {
         safe_alter($table, "ADD author varchar(255) NOT NULL default '', ADD INDEX author_idx (author)");
-        safe_update($table, "author='".doSlash($txp_user)."'",'1=1');
+        safe_update($table, "author='".doSlash($txp_user)."'", '1=1');
     }
 }
 
@@ -77,6 +98,7 @@ foreach (array('txp_file', 'txp_link') as $table) {
 foreach (array('textpattern' => 'AuthorID', 'txp_image' => 'author') as $table => $col) {
     $has_idx = 0;
     $rs = getRows('show index from `'.PFX.$table.'`');
+
     foreach ($rs as $row) {
         if ($row['Key_name'] == 'author_idx') {
             $has_idx = 1;

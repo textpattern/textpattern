@@ -1,5 +1,26 @@
 <?php
 
+/*
+ * Textpattern Content Management System
+ * http://textpattern.com
+ *
+ * Copyright (C) 2014 The Textpattern Development Team
+ *
+ * This file is part of Textpattern.
+ *
+ * Textpattern is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, version 2.
+ *
+ * Textpattern is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * Database credentials and site configuration.
  *
@@ -59,7 +80,8 @@ $txpcfg['txpath'] = '/home/path/to/textpattern';
 /**
  * Database connection charset.
  *
- * Only for MySQL 4.1 and up. Must be equal to the table-charset, e.g. latin1 or utf8.
+ * Only for MySQL 4.1 and up. Must be equal to the table-charset, e.g. latin1
+ * or utf8.
  *
  * @global string $txpcfg['dbcharset']
  */

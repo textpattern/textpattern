@@ -92,9 +92,8 @@ class Textpattern_L10n_Locale
     /**
      * Sets the locale.
      *
-     * This method wraps around system setlocale.
-     * It takes an IETF language code and sets
-     * the locale accordingly.
+     * This method wraps around system setlocale. It takes an IETF language code
+     * and sets the locale accordingly.
      *
      * The following would set the locale to English:
      *
@@ -112,8 +111,7 @@ class Textpattern_L10n_Locale
      * The '51.99' would be returned as '51,99 EUR' if you have up to date
      * French locale installed on your system.
      *
-     * If an array of locales is provided, the first one that works
-     * is used.
+     * If an array of locales is provided, the first one that works is used.
      *
      * @param  int          $category The localisation category to change
      * @param  string|array $locale   The language code
@@ -160,8 +158,8 @@ class Textpattern_L10n_Locale
     /**
      * Gets a locale identifier for the given language code.
      *
-     * This method takes an IETF language code and returns
-     * a locale for it that works on the current system.
+     * This method takes an IETF language code and returns a locale for it that
+     * works on the current system.
      *
      * The following returns 'en_GB.UTF-8':
      *
@@ -169,8 +167,8 @@ class Textpattern_L10n_Locale
      * echo Txp::get('Textpattern_L10n_Locale')->getLanguageLocale('en-GB');
      * </code>
      *
-     * Returns the current locale name if the system doesn't
-     * have anything more appropriate.
+     * Returns the current locale name if the system doesn't have anything
+     * more appropriate.
      *
      * @param  string      $language The language
      * @return string|bool Locale code, or FALSE on error
@@ -196,10 +194,9 @@ class Textpattern_L10n_Locale
     /**
      * Gets a language code for the given locale identifier.
      *
-     * This method supports various different formats used by
-     * different host platform. These formats include
-     * IETF language tag, POSIX locale name and language name
-     * in English.
+     * This method supports various different formats used by different host
+     * platform. These formats include IETF language tag, POSIX locale name and
+     * language name in English.
      *
      * All these will return 'en-GB':
      *
@@ -237,8 +234,8 @@ class Textpattern_L10n_Locale
     /**
      * Gets the character set from the current locale.
      *
-     * This method exports the character set from the
-     * current locale string as returned by the OS.
+     * This method exports the character set from the current locale string as
+     * returned by the OS.
      *
      * <code>
      * echo Txp::get('Textpattern_L10n_Locale')->getCharset();
@@ -288,9 +285,9 @@ class Textpattern_L10n_Locale
     /**
      * Gets locale identifiers mapped to the given language.
      *
-     * Returns all locale identifiers that match the given language or locale code.
-     * For instance providing 'en', will return both en-US and en-GB locale
-     * identifiers.
+     * Returns all locale identifiers that match the given language or locale
+     * code. For instance providing 'en', will return both en-US and en-GB
+     * locale identifiers.
      *
      * <code>
      * print_r(Txp::get('Textpattern_L10n_Locale')->getLocaleIdentifiers('english'));

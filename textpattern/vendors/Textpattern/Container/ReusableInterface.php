@@ -24,9 +24,9 @@
 /**
  * Signals to the factory that the instance can be reused.
  *
- * Instances of this interface are treated as static. Once
- * you initialise the instance, it's kept and used again
- * each time you reference the class using the factory.
+ * Instances of this interface are treated as static. Once you initialise the
+ * instance, it's kept and used again each time you reference the class using
+ * the factory.
  *
  * For instance, the following will remember the initial value:
  *
@@ -44,8 +44,8 @@
  * echo Txp::get('Abc_Class')->random;
  * </code>
  *
- * All three calls return the same Abc_Class::$random as the
- * instance is kept between calls.
+ * All three calls return the same Abc_Class::$random as the instance is kept
+ * between calls.
  *
  * @since   4.6.0
  * @package Container

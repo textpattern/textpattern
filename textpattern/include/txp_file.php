@@ -493,7 +493,7 @@ function file_multi_edit()
 {
     global $txp_user, $all_file_cats, $all_file_authors;
 
-    // Empty entry to permit clearing the category
+    // Empty entry to permit clearing the category.
     $categories = array('');
 
     foreach ($all_file_cats as $row) {
@@ -535,7 +535,7 @@ function file_multi_edit()
             $key = 'status';
             $val = ps('status');
 
-            // do not allow to be set to an empty value
+            // Do not allow to be set to an empty value.
             if (!$val) {
                 $selected = array();
             }
@@ -995,7 +995,7 @@ function file_save()
     , "id = $id");
 
     if (!$rs) {
-        // update failed, rollback name
+        // Update failed, rollback name.
         if (isset($old_path) && shift_uploaded_file($new_path, $old_path) === false) {
             file_list(array(gTxt('file_unsynchronized', array('{name}' => $filename)), E_ERROR));
 
@@ -1038,7 +1038,7 @@ function file_delete($ids = array())
 
                 $filepath = build_file_path($file_base_path, $filename);
 
-                // Notify plugins of pending deletion, pass file's id and path
+                // Notify plugins of pending deletion, pass file's id and path.
                 callback_event('file_deleted', '', false, $id, $filepath);
 
                 $rsd = safe_delete('txp_file', "id = $id");

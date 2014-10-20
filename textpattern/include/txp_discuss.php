@@ -221,7 +221,7 @@ function discuss_list($message = '')
         $count[$c['visible']] = $c['c'];
     }
 
-    // grand total comment count
+    // Grand total comment count.
     $total = $count[SPAM] + $count[MODERATE] + $count[VISIBLE];
 
     echo hed(gTxt('list_discussions'), 1, array('class' => 'txp-heading'));
@@ -581,7 +581,7 @@ function ipban_add()
         date_banned = now()
     ");
 
-    // hide all messages from that IP also
+    // Hide all messages from that IP also.
     if ($rs) {
         safe_update('txp_discuss', "visible = ".SPAM, "ip = '".doSlash($ip)."'");
 

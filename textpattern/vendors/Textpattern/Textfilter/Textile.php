@@ -82,8 +82,7 @@ class Textpattern_Textfilter_Textile extends Textpattern_Textfilter_Base impleme
     /**
      * Help for Textile syntax.
      *
-     * Gives some basic Textile syntax examples,
-     * wrapped in an &lt;ul&gt;.
+     * Gives some basic Textile syntax examples, wrapped in an &lt;ul&gt;.
      *
      * @return string HTML
      */

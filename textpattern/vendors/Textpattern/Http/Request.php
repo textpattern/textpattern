@@ -24,8 +24,8 @@
 /**
  * Inspects the current HTTP request.
  *
- * Handles content negotiations and extracting data
- * from headers safely on different web servers.
+ * Handles content negotiations and extracting data from headers safely on
+ * different web servers.
  *
  * @since   4.6.0
  * @package HTTP
@@ -128,12 +128,12 @@ class Textpattern_Http_Request
     /**
      * Checks whether the client accepts a certain response format.
      *
-     * By default discards formats with quality factors below an arbitrary threshold
-     * as jQuery adds a wildcard content-type with quality of '0.01' to the 'Accept'
-     * header for XHR requests.
+     * By default discards formats with quality factors below an arbitrary
+     * threshold as jQuery adds a wildcard content-type with quality of '0.01'
+     * to the 'Accept' header for XHR requests.
      *
-     * Supplied format of 'html', 'txt', 'js', 'css', 'json', 'xml', 'rdf', 'atom' or 'rss'
-     * is autocompleted and matched againsts multiple valid MIMEs.
+     * Supplied format of 'html', 'txt', 'js', 'css', 'json', 'xml', 'rdf',
+     * 'atom' or 'rss' is autocompleted and matched againsts multiple valid MIMEs.
      *
      * Both of the following will return MIME for JSON if 'json' format is
      * supported:
@@ -308,8 +308,8 @@ class Textpattern_Http_Request
     /**
      * Gets the port, if not default.
      *
-     * This method returns FALSE, if the port is the request protocol's
-     * default. Neither '80' or 443 for HTTPS are returned.
+     * This method returns FALSE, if the port is the request protocol's default.
+     * Neither '80' or 443 for HTTPS are returned.
      *
      * <code>
      * echo Txp::get('Textpattern_Http_Request')->getPort();
@@ -335,8 +335,8 @@ class Textpattern_Http_Request
     /**
      * Gets the client IP address.
      *
-     * This method supports proxies and uses 'X_FORWARDED_FOR'
-     * HTTP header if deemed necessary.
+     * This method supports proxies and uses 'X_FORWARDED_FOR' HTTP header if
+     * deemed necessary.
      *
      * <code>
      * echo Txp::get('Textpattern_Http_Request')->getIp();
@@ -364,8 +364,8 @@ class Textpattern_Http_Request
     /**
      * Gets client hostname.
      *
-     * This method resolves client's hostname. It uses Textpattern's
-     * visitor logs as a cache layer.
+     * This method resolves client's hostname. It uses Textpattern's visitor
+     * logs as a cache layer.
      *
      * <code>
      * echo Txp::get('Textpattern_Http_Request')->getRemoteHostname();
@@ -549,9 +549,8 @@ class Textpattern_Http_Request
      * echo Txp::get('Textpattern_Http_Request')->getHeader('User-Agent');
      * </code>
      *
-     * Will return the client's User-Agent header, if it has
-     * any. If the client didn't send User-Agent, the method
-     * returns FALSE.
+     * Will return the client's User-Agent header, if it has any. If the client
+     * didn't send User-Agent, the method returns FALSE.
      *
      * @param  string      $name The header name
      * @return string|bool The header value, or FALSE on failure
@@ -583,9 +582,8 @@ class Textpattern_Http_Request
      * )
      * </code>
      *
-     * Returned cookie values are processed properly for you,
-     * and will not contain runtime quoting slashes or be
-     * URL encoded. Just pick and choose.
+     * Returned cookie values are processed properly for you, and will not
+     * contain runtime quoting slashes or be URL encoded. Just pick and choose.
      *
      * @return array An array of cookies
      */
@@ -715,12 +713,12 @@ class Textpattern_Http_Request
     /**
      * Builds a content-negotiation accepts map from the given value.
      *
-     * Keys are the accepted type and the value are the params. If client doesn't
-     * specify quality, defaults to 1.0. Values are sorted by the quality,
-     * from the highest to the lowest.
+     * Keys are the accepted type and the value are the params. If client
+     * doesn't specify quality, defaults to 1.0. Values are sorted by the
+     * quality, from the highest to the lowest.
      *
-     * This method can be used to parse Accept, Accept-Charset, Accept-Encoding and
-     * Accept-Language header values.
+     * This method can be used to parse Accept, Accept-Charset, Accept-Encoding
+     * and Accept-Language header values.
      *
      * <code>
      * print_r(Txp::get('Textpattern_Http_Request')->getAcceptsMap('en-us;q=1.0,en;q=0.9'));

@@ -1,5 +1,26 @@
 <?php
 
+/*
+ * Textpattern Content Management System
+ * http://textpattern.com
+ *
+ * Copyright (C) 2014 The Textpattern Development Team
+ *
+ * This file is part of Textpattern.
+ *
+ * Textpattern is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, version 2.
+ *
+ * Textpattern is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
@@ -42,9 +63,10 @@ if ( isset($txpcfg['dbcharset']) && (intval($mysqlversion[0]) >= 5 || preg_match
     $tabletype .= " CHARACTER SET = ". $txpcfg['dbcharset'] ." ";
 }
 
-// Wipe out the last update check setting so the next visit to Diagnostics forces an update check,
-// which resets the message. Without this, people who upgrade in future may still see a "new
-// version available" message for some time after upgrading.
+// Wipe out the last update check setting so the next visit to Diagnostics
+// forces an update check, which resets the message. Without this, people who
+// upgrade in future may still see a "new version available" message for some
+// time after upgrading.
 safe_delete('txp_prefs', 'name="last_update_check"');
 
 // Update to 4.0.

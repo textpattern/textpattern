@@ -169,7 +169,8 @@ function article_post()
             $when = "from_unixtime($when_ts)";
         }
 
-        // Force a reasonable 'last modified' date for future articles, keep recent articles list in order.
+        // Force a reasonable 'last modified' date for future articles,
+        // keep recent articles list in order.
         $lastmod = ($when_ts > time() ? 'now()' : $when);
 
         // Set and validate expiry timestamp.
@@ -419,7 +420,8 @@ function article_save()
         $whenexpires = "Expires=".NULLDATETIME;
     }
 
-    // Auto-update custom-titles according to Title, as long as unpublished and NOT customised.
+    // Auto-update custom-titles according to Title, as long as unpublished and
+    // NOT customised.
     if (empty($url_title)
         || (($oldArticle['Status'] < STATUS_LIVE)
         && ($oldArticle['url_title'] === $url_title )
@@ -647,7 +649,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         ),
     );
 
-    // Add partials for custom fields (and their values which is redundant by design, for plugins).
+    // Add partials for custom fields (and their values which is redundant by
+    // design, for plugins).
     global $cfs;
 
     foreach ($cfs as $k => $v) {
@@ -819,10 +822,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             } else {
                 // Build response script.
                 if ($p['mode'] == PARTIAL_VOLATILE) {
-                    // Volatile partials replace *all* of the existing HTML fragment for their selector.
+                    // Volatile partials replace *all* of the existing HTML
+                    // fragment for their selector.
                     $response[] = '$("'.$p['selector'].'").replaceWith("'.escape_js($p['html']).'")';
                 } elseif ($p['mode'] == PARTIAL_VOLATILE_VALUE) {
-                    // Volatile partial values replace the *value* of elements matching their selector.
+                    // Volatile partial values replace the *value* of elements
+                    // matching their selector.
                     $response[] = '$("'.$p['selector'].'").val("'.escape_js($p['html']).'")';
                 }
             }

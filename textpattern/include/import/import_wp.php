@@ -296,7 +296,8 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
         }
 
         // Comma-separated image URLs preserve multiple attachments.
-        // Note: If more than one image is attached, <txp:article_image /> will not work out of the box.
+        // Note: If more than one image is attached, <txp:article_image /> will
+        // not work out of the box.
         $article['Image'] = join(',', $article_images);
 
         $articles[] = $article;
