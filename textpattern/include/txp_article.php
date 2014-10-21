@@ -1785,7 +1785,7 @@ function article_partial_article_nav($rs)
         ));
     }
 
-    return graf(join('', $out), ' role="navigation" class="nav-tertiary"');
+    return graf(join('', $out), ' role="navigation" class="nav-tertiary prev-next"');
 }
 
 /**
