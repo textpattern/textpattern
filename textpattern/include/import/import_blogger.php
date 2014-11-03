@@ -99,7 +99,7 @@ function doImportBLOGGER($file, $section, $status, $invite)
         } elseif ($state == 'multiline') {
             // Here's where things get hinky. Rather than put the multiline
             // metadata before the field name, it goes after, with no clear
-            // separation between metadata and data. And either the metadata 
+            // separation between metadata and data. And either the metadata
             // or data might be missing.
             if (empty($multiline_data['content']) and preg_match('/^([A-Z ]+):\s*(.*)$/', $line, $match)) {
                 // Metadata within the multiline field.

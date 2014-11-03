@@ -179,7 +179,7 @@ function doDiagnostics()
     $is_apache = stristr(serverSet('SERVER_SOFTWARE'), 'Apache') || is_callable('apache_get_version');
     $real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 
-    // ini_get() returns string values passed via php_value as a string, 
+    // ini_get() returns string values passed via php_value as a string,
     // not boolean.
     $is_register_globals = ( (strcasecmp(ini_get('register_globals'), 'on') === 0) or (ini_get('register_globals') === '1'));
 

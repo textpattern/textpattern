@@ -244,7 +244,7 @@ function safe_pfx($table)
 /**
  * Prefixes a database table's name for use in a joined query.
  *
- * This function prefixes the given table name similarly to safe_pfx(), but also 
+ * This function prefixes the given table name similarly to safe_pfx(), but also
  * creates a named, unprefixed, AS alias for it.
  *
  * The created alias is same as the table name given. This function is here to

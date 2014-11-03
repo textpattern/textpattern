@@ -893,7 +893,7 @@ class TXP_Wrapper
                 $out[$def_key] = '';
             }
 
-            // Setup the provided default value, if any, only when the incoming 
+            // Setup the provided default value, if any, only when the incoming
             // value is empty.
             if (array_key_exists($def_key, $default) && empty($out[$def_key])) {
                 $out[$def_key] = $default[$def_key];
