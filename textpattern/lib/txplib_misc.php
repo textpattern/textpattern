@@ -266,9 +266,10 @@ function escape_title($title)
 /**
  * Sanitises a string for use in a JavaScript string.
  *
- * This function escapes \, \n, \r, " and ' characters. It removes 'PARAGRAPH SEPARATOR' (U+2029)
- * and 'LINE SEPARATOR' (U+2028). When you need to pass astring from PHP to JavaScript, use this function
- * to sanitise the value to avoid XSS attempts.
+ * This function escapes \, \n, \r, " and ' characters. It removes
+ * 'PARAGRAPH SEPARATOR' (U+2029) and 'LINE SEPARATOR' (U+2028). When you need
+ * to pass a string from PHP to JavaScript, use this function to sanitise the
+ * value to avoid XSS attempts.
  *
  * @param   string $js JavaScript input
  * @return  string Escaped JavaScript
@@ -2722,7 +2723,7 @@ function event_category_popup($name, $cat = '', $id = '')
 /**
  * Creates a form template.
  *
- * On a successful run, this function will trigger a 'form.create > done' 
+ * On a successful run, this function will trigger a 'form.create > done'
  * callback event.
  *
  * @param   string $name The name
@@ -3826,7 +3827,7 @@ function create_user($name, $email, $password, $realname = '', $group = 0)
  * for selecting the updated user, and rest of the arguments new values.
  * Use NULL to omit an argument.
  *
- * On a successful run, this function will trigger a 'user.update > done' 
+ * On a successful run, this function will trigger a 'user.update > done'
  * callback event.
  *
  * @param   string      $user     The updated user
