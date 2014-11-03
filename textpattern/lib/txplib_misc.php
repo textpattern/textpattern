@@ -418,7 +418,7 @@ function gTime($timestamp = 0)
 }
 
 /**
- * Cretes a dumpfile from a backtrace and outputs given parameters.
+ * Creates a dumpfile from a backtrace and outputs given parameters.
  *
  * @package Debug
  */
