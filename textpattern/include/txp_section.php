@@ -593,7 +593,7 @@ function section_save()
     }
 
     if ($ok) {
-        sec_section_list(gTxt(($safe_old_name ? 'section_updated': 'section_created'), array('{name}' => $name)));
+        sec_section_list(gTxt(($safe_old_name ? 'section_updated' : 'section_created'), array('{name}' => $name)));
     } else {
         sec_section_list(array(gTxt('section_save_failed'), E_ERROR));
     }

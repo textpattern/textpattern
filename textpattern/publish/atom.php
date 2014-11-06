@@ -136,7 +136,7 @@ function atom()
     // Atom feeds with mail or domain name.
     $dn = explode('/', $siteurl);
     $mail_or_domain = ($use_mail_on_feeds_id) ? eE($blog_mail_uid) : $dn[0];
-    $out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section) ? '/'.join(',', $section) : '').(($category)? '/'.join(',', $category) : ''), 'id');
+    $out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section) ? '/'.join(',', $section) : '').(($category) ? '/'.join(',', $category) : ''), 'id');
 
     $out[] = tag('Textpattern', 'generator', ' uri="http://textpattern.com/" version="'.$version.'"');
     $out[] = tag(safe_strftime("w3cdtf", $last), 'updated');
@@ -155,7 +155,7 @@ function atom()
 
     if (!$area or $area == 'article') {
         $sfilter = (!empty($section)) ? "and Section in ('".join("','", $section)."')" : '';
-        $cfilter = (!empty($category))? "and (Category1 in ('".join("','", $category)."') or Category2 in ('".join("','", $category)."'))" : '';
+        $cfilter = (!empty($category)) ? "and (Category1 in ('".join("','", $category)."') or Category2 in ('".join("','", $category)."'))" : '';
         $limit = ($limit) ? $limit : $rss_how_many;
         $limit = intval(min($limit, max(100, $rss_how_many)));
 

@@ -2213,7 +2213,7 @@ function if_comments_error($atts, $thing)
 {
     $evaluator =& get_comment_evaluator();
 
-    return parse(EvalElse($thing,(count($evaluator -> get_result_message()) > 0)));
+    return parse(EvalElse($thing,(count($evaluator->get_result_message()) > 0)));
 }
 
 /**
@@ -3817,7 +3817,7 @@ function breadcrumb($atts)
             : $section_title_html;
     }
 
-    $category = empty($c)? '': $c;
+    $category = empty($c) ? '' : $c;
 
     foreach (getTreePath($category, 'article') as $cat) {
         if ($cat['name'] != 'root') {

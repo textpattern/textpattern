@@ -280,6 +280,7 @@ function escape_title($title)
 function escape_js($js)
 {
     $js = preg_replace('/[\x{2028},\x{2029}]/u', '', $js);
+
     return addcslashes($js, "\\\'\"\n\r");
 }
 

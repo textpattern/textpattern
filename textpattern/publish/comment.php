@@ -602,7 +602,7 @@ class comment_evaluation
         );
 
         $this->message = $this->status;
-        $this -> txpspamtrace[] = "Comment on $parentid by $name (".safe_strftime($prefs['archive_dateformat'],time()).")";
+        $this->txpspamtrace[] = "Comment on $parentid by $name (".safe_strftime($prefs['archive_dateformat'],time()).")";
 
         if ($prefs['comments_moderate']) {
             $this->status[MODERATE][] = 0.5;

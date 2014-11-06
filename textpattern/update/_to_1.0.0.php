@@ -401,7 +401,7 @@ $textile = new Textile();
 while ($a = @mysql_fetch_assoc($rs)) {
     extract($a);
     assert_int($ID);
-    $lite = ($textile_excerpt)? '' : 1;
+    $lite = ($textile_excerpt) ? '' : 1;
     $Excerpt_html = $textile->TextileThis($Excerpt,$lite);
     safe_update("textpattern", "Excerpt_html = '".doSlash($Excerpt_html)."'", "ID=$ID");
 }
@@ -553,16 +553,16 @@ if (!in_array('position', $txpprefs)) {
     foreach ($txpac as $key => $val) {
         if (!in_array($key, array_keys($prefs))) {
             switch ($key) {
-                case'custom_1_set':
-                case'custom_2_set':
-                case'custom_3_set':
-                case'custom_4_set':
-                case'custom_5_set':
-                case'custom_6_set':
-                case'custom_7_set':
-                case'custom_8_set':
-                case'custom_9_set':
-                case'custom_10_set':
+                case 'custom_1_set':
+                case 'custom_2_set':
+                case 'custom_3_set':
+                case 'custom_4_set':
+                case 'custom_5_set':
+                case 'custom_6_set':
+                case 'custom_7_set':
+                case 'custom_8_set':
+                case 'custom_9_set':
+                case 'custom_10_set':
                     $evt = 'custom';
                     $html = 'text_input';
                 break;

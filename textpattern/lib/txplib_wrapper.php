@@ -715,7 +715,7 @@ class TXP_Wrapper
 
         if (empty($incoming['Posted'])) {
             if ($article_id === null) {
-                $when = (!$article_id)? 'now()': '';
+                $when = (!$article_id) ? 'now()' : '';
                 $incoming['Posted'] = $when;
             } else {
                 // Do not override post time for existing articles unless Posted
@@ -794,7 +794,7 @@ class TXP_Wrapper
 
             $rs = ($article_id) ? safe_update('textpattern', $sql, "ID = $article_id") : safe_insert('textpattern', $sql);
 
-            $oldstatus = ($article_id)? $old['Status'] : '';
+            $oldstatus = ($article_id) ? $old['Status'] : '';
 
             if (!$article_id && $rs) {
                 $article_id = $rs;

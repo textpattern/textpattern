@@ -439,7 +439,7 @@ function preText($s, $prefs)
                                 $is_404 = (empty($out['s']) or empty($out['id']));
                             } else {
                                 // We don't want to miss the /section/ pages.
-                                $out['s']= ckEx('section', $u1)? $u1 : '';
+                                $out['s']= ckEx('section', $u1) ? $u1 : '';
                                 $is_404 = empty($out['s']);
                             }
 
@@ -734,11 +734,11 @@ function doArticles($atts, $iscustom, $thing = null)
     // For the txp:article tag, some attributes are taken from globals;
     // override them, then stash all filter attributes.
     if (!$iscustom) {
-        $theAtts['category'] = ($c)? $c : '';
-        $theAtts['section'] = ($s && $s != 'default')? $s : '';
-        $theAtts['author'] = (!empty($author)? $author: '');
-        $theAtts['month'] = (!empty($month)? $month: '');
-        $theAtts['frontpage'] = ($s && $s == 'default')? true: false;
+        $theAtts['category'] = ($c) ? $c : '';
+        $theAtts['section'] = ($s && $s != 'default') ? $s : '';
+        $theAtts['author'] = (!empty($author) ? $author : '');
+        $theAtts['month'] = (!empty($month) ? $month : '');
+        $theAtts['frontpage'] = ($s && $s == 'default') ? true : false;
         $theAtts['excerpted'] = '';
 
         filterAtts($theAtts);
@@ -857,8 +857,9 @@ function doArticles($atts, $iscustom, $thing = null)
 
     if ($customFields) {
         foreach ($customFields as $cField) {
-            if (isset($atts[$cField]))
+            if (isset($atts[$cField])) {
                 $customPairs[$cField] = $atts[$cField];
+            }
         }
 
         if (!empty($customPairs)) {
@@ -1058,7 +1059,7 @@ function parseArticles($atts, $iscustom = 0, $thing = null)
     $old_ial = $is_article_list;
     $is_article_list = empty($pretext['id']) || $iscustom;
     article_push();
-    $r = ($is_article_list)? doArticles($atts, $iscustom, $thing) : doArticle($atts, $thing);
+    $r = ($is_article_list) ? doArticles($atts, $iscustom, $thing) : doArticle($atts, $thing);
     article_pop();
     $is_article_list = $old_ial;
 

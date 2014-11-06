@@ -103,7 +103,7 @@ class TXP_RPCServer extends IXR_IntrospectionServer
                 'retrieves a list of posts (default 10)'
             );
 
-            // metaWeblog API[http://www.xmlrpc.com/metaWeblogApi] - add as 
+            // metaWeblog API[http://www.xmlrpc.com/metaWeblogApi] - add as
             // server capability.
             $this->capabilities['metaWeblog API'] = array(
                 'specUrl'     => 'http://www.xmlrpc.com/metaWeblogApi',
@@ -235,13 +235,17 @@ class TXP_RPCServer extends IXR_IntrospectionServer
 // TODO: if utf8 conversion fails, throw: 32701 ---> parse error. unsupported encoding?
 // see: http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
                     // This will fail on parser if utf8_encode is unavailiable.
-                    $data = (function_exists('utf8_encode') && is_callable('utf8_encode'))? utf8_encode($HTTP_RAW_POST_DATA) : $HTTP_RAW_POST_DATA;
+                    $data = (function_exists('utf8_encode') && is_callable('utf8_encode'))
+                        ? utf8_encode($HTTP_RAW_POST_DATA)
+                        : $HTTP_RAW_POST_DATA;
                     break;
 
                 default:
 // TODO: if utf8 conversion fails, throw: 32701 ---> parse error. unsupported encoding?
                     // This will fail on parser if mb_convert_encoding is unavailiable.
-                    $data = (function_exists('mb_convert_encoding') && is_callable('mb_convert_encoding'))? mb_convert_encoding($HTTP_RAW_POST_DATA, 'utf-8', $encoding) : $HTTP_RAW_POST_DATA;
+                    $data = (function_exists('mb_convert_encoding') && is_callable('mb_convert_encoding'))
+                        ? mb_convert_encoding($HTTP_RAW_POST_DATA, 'utf-8', $encoding)
+                        : $HTTP_RAW_POST_DATA;
                     break;
             }
         }

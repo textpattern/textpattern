@@ -77,7 +77,7 @@ function rss()
     $sitename .= ($section) ? ' - '.join(' - ', $st) : '';
     $sitename .= ($category) ? ' - '.join(' - ', $ct) : '';
     $dn = explode('/', $siteurl);
-    $mail_or_domain = ($use_mail_on_feeds_id)? eE($blog_mail_uid):$dn[0];
+    $mail_or_domain = ($use_mail_on_feeds_id) ? eE($blog_mail_uid) : $dn[0];
 
     // Feed header.
     $out[] = tag('http://textpattern.com/?v='.$version, 'generator');
@@ -102,7 +102,7 @@ function rss()
 
     if (!$area or $area == 'article') {
         $sfilter = (!empty($section)) ? "and Section in ('".join("','", $section)."')" : '';
-        $cfilter = (!empty($category))? "and (Category1 in ('".join("','", $category)."') or Category2 in ('".join("','", $category)."'))" : '';
+        $cfilter = (!empty($category)) ? "and (Category1 in ('".join("','", $category)."') or Category2 in ('".join("','", $category)."'))" : '';
         $limit = ($limit) ? $limit : $rss_how_many;
         $limit = intval(min($limit, max(100, $rss_how_many)));
 

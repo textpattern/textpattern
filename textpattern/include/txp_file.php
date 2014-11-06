@@ -1100,7 +1100,7 @@ function file_upload_form($label, $pophelp, $step, $id='', $label_id='')
 
     if (!$file_max_upload_size || intval($file_max_upload_size) == 0) $file_max_upload_size = 2 * (1024 * 1024);
 
-    $max_file_size = (intval($file_max_upload_size) == 0) ? '': intval($file_max_upload_size);
+    $max_file_size = (intval($file_max_upload_size) == 0) ? '' : intval($file_max_upload_size);
 
     return upload_form($label, $pophelp, $step, 'file', $id, $max_file_size, $label_id);
 }

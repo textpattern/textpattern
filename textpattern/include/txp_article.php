@@ -800,7 +800,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     foreach ($partials as $k => $p) {
         if ($p['mode'] == PARTIAL_VOLATILE || $p['mode'] == PARTIAL_VOLATILE_VALUE) {
             $cb = $p['cb'];
-            $partials[$k]['html'] = (is_array($cb) ? call_user_func($cb, $rs, $k): $cb($rs, $k));
+            $partials[$k]['html'] = (is_array($cb) ? call_user_func($cb, $rs, $k) : $cb($rs, $k));
         }
     }
 
@@ -841,7 +841,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     foreach ($partials as $k => $p) {
         if ($p['mode'] == PARTIAL_STATIC) {
             $cb = $p['cb'];
-            $partials[$k]['html'] = (is_array($cb) ? call_user_func($cb, $rs, $k): $cb($rs, $k));
+            $partials[$k]['html'] = (is_array($cb) ? call_user_func($cb, $rs, $k) : $cb($rs, $k));
         }
     }
 

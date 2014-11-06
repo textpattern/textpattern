@@ -32,7 +32,6 @@ if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
-
 header('X-Frame-Options: '.X_FRAME_OPTIONS);
 header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 
@@ -1592,9 +1591,9 @@ class Textpattern_Tag_BuilderTags
         if ($step === 'build') {
             $desc = str_replace('&', '&#38;', txpspecialchars($description));
             $urlinfo = parse_url(hu);
-            $url = ($permlink_mode === 'messy') ?
-                $urlinfo['path'].'index.php?s=file_download'.($type === 'textile' ? '&' : a).'id='.$id:
-                $urlinfo['path'].gTxt('file_download').'/'.$id.($filename ? '/'.urlencode($filename) : '');
+            $url = ($permlink_mode === 'messy')
+                ? $urlinfo['path'].'index.php?s=file_download'.($type === 'textile' ? '&' : a).'id='.$id
+                : $urlinfo['path'].gTxt('file_download').'/'.$id.($filename ? '/'.urlencode($filename) : '');
 
             switch ($type) {
                 case 'textile':
