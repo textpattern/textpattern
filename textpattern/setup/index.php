@@ -369,7 +369,7 @@ function printConfig()
     // On 4.1 or greater use UTF-8-tables.
     $version = mysql_get_server_info();
 
-    if (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version)) {
+    if (version_compare($version, 4.1) >= 0) {
         if (mysql_query("SET NAMES utf8")) {
             $_SESSION['dbcharset'] = "utf8";
         } else {

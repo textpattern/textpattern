@@ -39,13 +39,11 @@ if ($result) {
 
 $version = mysql_get_server_info();
 
-// Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2).
-$tabletype = (intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $version))
-    ? " ENGINE=MyISAM "
-    : " TYPE=MyISAM ";
+// Use "ENGINE" if version of MySQL > 4.1.2.
+$tabletype = (version_compare($version, 4.1.2) >= 0) ? ' ENGINE=MyISAM ' : ' TYPE=MyISAM ';
 
 // On 4.1 or greater use UTF-8 tables.
-if (isset($dbcharset) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version))) {
+if (isset($dbcharset)) {
     $tabletype .= " CHARACTER SET = $dbcharset ";
 
     if ($dbcharset == 'utf8') {
