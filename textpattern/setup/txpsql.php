@@ -40,7 +40,7 @@ if ($result) {
 $version = mysql_get_server_info();
 
 // Use "ENGINE" if version of MySQL > 4.1.2.
-$tabletype = (version_compare($version, 4.1.2) >= 0) ? ' ENGINE=MyISAM ' : ' TYPE=MyISAM ';
+$tabletype = (version_compare($version, '4.1.2') >= 0) ? ' ENGINE=MyISAM ' : ' TYPE=MyISAM ';
 
 // On 4.1 or greater use UTF-8 tables.
 if (isset($dbcharset)) {
