@@ -58,7 +58,6 @@ $verbose = false;
 
 class wet_thumb
 {
-
     /**
      * The width of your thumbnail. The height (if not set) will be
      * automatically calculated.
@@ -275,8 +274,7 @@ class wet_thumb
             $this->extrapolate === false &&
             $this->_DST['height'] > $this->_SRC['height'] &&
             $this->_DST['width'] > $this->_SRC['width']
-        )
-        {
+        ) {
             $this->_DST['width'] = $this->_SRC['width'];
             $this->_DST['height'] = $this->_SRC['height'];
         }
@@ -326,7 +324,7 @@ class wet_thumb
                     $cpyHeight = $this->_SRC['height'];
                     $off_w = round(($this->_SRC['width'] - $cpyWidth) / 2);
                     $off_h = 0;
-                    $this->_SRC['width']= $cpyWidth;
+                    $this->_SRC['width'] = $cpyWidth;
                 }
             } else {
                 $ratio = (double) ($this->_SRC['width'] / $this->_DST['width']);
@@ -338,7 +336,7 @@ class wet_thumb
                     $cpyWidth = round($this->_DST['width'] * $ratio);
                     $off_w = round(($this->_SRC['width'] - $cpyWidth) / 2);
                     $off_h = 0;
-                    $this->_SRC['width']= $cpyWidth;
+                    $this->_SRC['width'] = $cpyWidth;
                 } else {
                     $cpyWidth = $this->_SRC['width'];
                     $off_w = 0;
@@ -470,7 +468,7 @@ class wet_thumb
 
         if ($aslink === true) {
             return '<a href="'.((empty($this->linkurl)) ? $this->_SRC['file'] : $this->linkurl).'" '.
-                (($aspopup === true) ? 'target="_blank"' : '').'>'.$imgtag .'</a>';
+                (($aspopup === true) ? 'target="_blank"' : '').'>'.$imgtag.'</a>';
         }
 
         return $imgtag;
@@ -485,7 +483,6 @@ class wet_thumb
 
 class txp_thumb extends wet_thumb
 {
-
     /**
      * File extension.
      *
@@ -537,8 +534,7 @@ class txp_thumb extends wet_thumb
         if (parent::write(
             IMPATH.$this->m_id.$this->m_ext,
             IMPATH.$this->m_id.'t'.$this->m_ext
-        ))
-        {
+        )) {
             safe_update(
                 'txp_image',
                 "thumbnail = 1,
@@ -625,7 +621,8 @@ class txp_thumb extends wet_thumb
             return $img;
         }
 
-        $w = imagesx($img); $h = imagesy($img);
+        $w = imagesx($img);
+        $h = imagesy($img);
         $imgCanvas = $img;
         $imgCanvas2 = $img;
         $imgBlur = imagecreatetruecolor($w, $h);
@@ -645,7 +642,7 @@ class txp_thumb extends wet_thumb
             imagecopymerge($imgBlur, $imgCanvas, 1, 0, 0, 1, $w, $h - 1, 25); // up right
             imagecopymerge($imgBlur, $imgCanvas, 0, 0, 1, 0, $w - 1, $h, 33.33333); // left
             imagecopymerge($imgBlur, $imgCanvas, 1, 0, 0, 0, $w, $h, 25); // right
-            imagecopymerge($imgBlur, $imgCanvas, 0, 0, 0, 1, $w, $h - 1, 20 ); // up
+            imagecopymerge($imgBlur, $imgCanvas, 0, 0, 0, 1, $w, $h - 1, 20); // up
             imagecopymerge($imgBlur, $imgCanvas, 0, 1, 0, 0, $w, $h, 16.666667); // down
             imagecopymerge($imgBlur, $imgCanvas, 0, 0, 0, 0, $w, $h, 50); // center
         }

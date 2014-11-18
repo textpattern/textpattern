@@ -32,7 +32,7 @@ $rs = getRows('select name,css from `'.PFX.'txp_css`');
 foreach ($rs as $row) {
     if (preg_match('%^[a-zA-Z0-9/+]*={0,2}$%', $row['css'])) {
         // Data is still base64 encoded.
-        safe_update('txp_css', "css = '" . doSlash(base64_decode($row['css'])) . "'", "name = '". doSlash($row['name']) ."'");
+        safe_update('txp_css', "css = '".doSlash(base64_decode($row['css']))."'", "name = '".doSlash($row['name'])."'");
     }
 }
 

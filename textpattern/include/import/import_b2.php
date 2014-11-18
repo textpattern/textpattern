@@ -56,7 +56,7 @@ function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_sectio
     }
 
     mysql_select_db($b2db, $b2link);
-    $results[]='connected to b2 database. Importing Data';
+    $results[] = 'connected to b2 database. Importing Data';
 
     // Copy and paste your table-definitions from b2config.php.
     $tableposts = 'b2posts';
@@ -78,9 +78,9 @@ function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_sectio
         left join ".$tableusers." on
             ".$tableusers.".ID = ".$tableposts.".post_author
         ORDER BY post_date DESC
-    ",$b2link) or $results[]= mysql_error();
+    ", $b2link) or $results[] = mysql_error();
 
-    while ($b=mysql_fetch_array($a)) {
+    while ($b = mysql_fetch_array($a)) {
         $articles[] = $b;
     }
 
@@ -95,9 +95,9 @@ function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_sectio
         ".$tablecomments.".comment_content as message,
         ".$tablecomments.".comment_date as posted
         from ".$tablecomments."
-    ",$b2link) or $results[]= mysql_error();
+    ", $b2link) or $results[] = mysql_error();
 
-    while ($b=mysql_fetch_assoc($a)) {
+    while ($b = mysql_fetch_assoc($a)) {
         $comments[] = $b;
     }
 
@@ -127,7 +127,7 @@ function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_sectio
             }
 
             // b2 uses the magic word "<!--more-->" to generate excerpts.
-            if (strpos($a['Body'],'<!--more-->')) {
+            if (strpos($a['Body'], '<!--more-->')) {
                 // Everything that is before "more" can be treated as the excerpt.
                 $pos = strpos($a['Body'], '<!--more-->');
                 $a['Excerpt'] = substr($a['Body'], 0, $pos);
@@ -158,10 +158,10 @@ function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_sectio
                 uid='".md5(uniqid(rand(), true))."',
                 feed_time='".substr($Posted, 0, 10)."',
                 Status    = '$insert_with_status',
-            ",$txplink) or $results[]= mysql_error();
+            ", $txplink) or $results[] = mysql_error();
 
             if (mysql_insert_id()) {
-                $results[]= 'inserted b2 entry '.$Title.
+                $results[] = 'inserted b2 entry '.$Title.
                     ' into Textpattern as article '.$ID.'';
             }
         }
@@ -179,10 +179,10 @@ function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_sectio
 
             $q = mysql_query("insert into `".PFX."txp_discuss` values
                 ($discussid, $parentid, '$name', '$email', '$web', '$ip', '$posted', '$message', 1)",
-            $txplink) or $results[]= mysql_error($q);
+            $txplink) or $results[] = mysql_error($q);
 
             if (mysql_insert_id()) {
-                $results[]= 'inserted b2 comment '.strong($parentid).' into txp_discuss';
+                $results[] = 'inserted b2 comment '.strong($parentid).' into txp_discuss';
             }
         }
     }

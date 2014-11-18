@@ -136,7 +136,7 @@ function article_column_map()
 
     if ($custom) {
         foreach ($custom as $i => $name) {
-            $custom_map[$name] ='custom_' . $i;
+            $custom_map[$name] = 'custom_'.$i;
         }
     }
 
@@ -228,7 +228,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
             $keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
         }
 
-        $keywords = " and (" . join(' or ', $keyparts) . ")";
+        $keywords = " and (".join(' or ', $keyparts).")";
     }
 
     // Invert $type for ascending sortdir.
@@ -248,15 +248,15 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     $q = array(
         "select ID, Title, url_title, unix_timestamp(Posted) as uposted
             from ".$safe_name." where $sortby $type ".$threshold,
-        ($s!='' && $s!='default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
+        ($s != '' && $s != 'default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
         $id,
         $time,
         $custom,
         $keywords,
         'and Status=4',
         'order by '.$sortby,
-        ($type=='<') ? 'desc' : 'asc',
-        'limit 1'
+        ($type == '<') ? 'desc' : 'asc',
+        'limit 1',
     );
 
     $cache[$key] = getRow(join(n.' ', $q));
@@ -294,10 +294,9 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         if (empty($m[0])            // No explicit sort attribute
             || count($m) > 2        // Complex clause, e.g. 'foo asc, bar desc'
             || !preg_match('/^(?:[0-9a-zA-Z$_\x{0080}-\x{FFFF}]+|`[\x{0001}-\x{FFFF}]+`)$/u', $m[0])  // The clause's first verb is not a MySQL column identifier.
-        )
-        {
+        ) {
             $atts['sortby'] = 'Posted';
-            $atts['sortdir']= 'desc';
+            $atts['sortdir'] = 'desc';
         } else {
             // Sort is like 'foo asc'.
             $atts['sortby'] = $m[0];
@@ -479,7 +478,7 @@ function processTags($tag, $atts, $thing = null)
     }
 
     // Deprecated in 4.6.0.
-    else if (maybe_tag($tag)) {
+    elseif (maybe_tag($tag)) {
         $out = $tag(splat($atts), $thing);
         trigger_error(gTxt('unregistered_tag'), E_USER_NOTICE);
     }

@@ -643,7 +643,7 @@ class TXP_Wrapper
                 $sql = "Posted = $value";
             } elseif ($field == 'Status') {
                 $value = assert_int($value);
-                if (!has_privs('article.publish', $this->txp_user) && $value >=4) {
+                if (!has_privs('article.publish', $this->txp_user) && $value >= 4) {
                     $value = 3;
                 }
                 $sql = "Status = $value";
@@ -651,7 +651,7 @@ class TXP_Wrapper
                 $sql = "$field='$value'";
             }
 
-            $sql.= ", LastMod = now(), LastModID = '$this->txp_user'";
+            $sql .= ", LastMod = now(), LastModID = '$this->txp_user'";
             $article_id = assert_int($article_id);
             $rs = safe_update('textpattern', $sql, "ID = $article_id");
 
@@ -708,7 +708,7 @@ class TXP_Wrapper
         }
 
         if (empty($incoming['Excerpt_html']) && !empty($incoming['Excerpt'])) {
-                $incoming['Excerpt_html'] = $incoming_with_markup['Excerpt_html'];
+            $incoming['Excerpt_html'] = $incoming_with_markup['Excerpt_html'];
         }
 
         unset($incoming_with_markup);
@@ -739,9 +739,9 @@ class TXP_Wrapper
                 }
 
                 foreach ($old as $key => $val) {
-                     if (!isset($incoming[$key])) {
-                         $incoming[$key] = $val;
-                     }
+                    if (!isset($incoming[$key])) {
+                        $incoming[$key] = $val;
+                    }
                 }
             } else {
                 if (!has_privs('article.publish', $this->txp_user) && $incoming['Status'] == 4) {
@@ -777,16 +777,16 @@ class TXP_Wrapper
             $sql[] = "LastModID = '".doSlash($this->txp_user)."'";
 
             if (!$article_id) {
-                $sql[] = "uid = '".doSlash(md5(uniqid(rand(),true)))."'";
+                $sql[] = "uid = '".doSlash(md5(uniqid(rand(), true)))."'";
             }
 
             if (!$article_id) {
                 if (empty($incoming['Posted'])) {
-                    $sql[]= "feed_time = curdate()";
+                    $sql[] = "feed_time = curdate()";
                 } else {
                     $when = strtotime($incoming['Posted'])-tz_offset();
                     $when = strftime("%Y-%m-%d", $when);
-                    $sql[]= "feed_time ='".doSlash($when)."'";
+                    $sql[] = "feed_time ='".doSlash($when)."'";
                 }
             }
 
@@ -805,7 +805,7 @@ class TXP_Wrapper
                 //@$this->_sendPings();
             }
 
-           return $article_id;
+            return $article_id;
         }
 
         return false;
@@ -938,10 +938,10 @@ class TXP_Wrapper
     /**
      * Formats a article field according to the given options.
      *
-     * @param  string  $field   The field contents
-     * @param  int     $format  Either LEAVE_TEXT_UNTOUCHED, CONVERT_LINEBREAKS, USE_TEXTILE
+     * @param  string $field  The field contents
+     * @param  int    $format Either LEAVE_TEXT_UNTOUCHED, CONVERT_LINEBREAKS, USE_TEXTILE
      * @param  Textile An instance of Textile
-     * @return string  HTML formatted field
+     * @return string HTML formatted field
      * @access private
      */
 

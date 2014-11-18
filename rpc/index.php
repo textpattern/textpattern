@@ -29,7 +29,7 @@
 error_reporting(E_ALL & ~E_NOTICE);
 
 // TODO: if display_errors is set to 0... who will ever see errors?
-ini_set("display_errors","0");
+ini_set("display_errors", "0");
 
 if (@ini_get('register_globals')) {
     if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
@@ -69,7 +69,7 @@ if (@ini_get('register_globals')) {
 }
 
 define('txpath', dirname(dirname(__FILE__)).'/textpattern');
-define('txpinterface','xmlrpc');
+define('txpinterface', 'xmlrpc');
 
 require_once txpath.'/config.php';
 require_once txpath.'/lib/txplib_db.php';
@@ -78,9 +78,8 @@ require_once txpath.'/lib/admin_config.php';
 require_once txpath.'/lib/IXRClass.php';
 
 if ($connected && safe_query("describe `".PFX."textpattern`")) {
-
-// TODO: where is dbversion used?
-    $dbversion = safe_field('val','txp_prefs',"name = 'version'");
+    // TODO: where is dbversion used?
+    $dbversion = safe_field('val', 'txp_prefs', "name = 'version'");
 
     // Hold it globally, instead of do several calls to the function.
     $prefs = get_prefs();
@@ -144,7 +143,7 @@ function write_log()
         define('txpdmpfile', 'txpxmlrpc.txt');
     }
 
-    $fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'xmlrpclog','a');
+    $fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'xmlrpclog', 'a');
 
     if ($fp) {
         $lnsep = "\n================================\n";
@@ -153,7 +152,7 @@ function write_log()
         fwrite($fp, $lnsep);
         fwrite($fp, '[ACCEPT_ENCODING] '.$_SERVER['HTTP_ACCEPT_ENCODING']);
 
-        if (strpos(strtolower($_SERVER['SERVER_SOFTWARE']),'apache')!==false && is_callable('getallheaders')) {
+        if (strpos(strtolower($_SERVER['SERVER_SOFTWARE']), 'apache') !== false && is_callable('getallheaders')) {
             fwrite($fp, $lnsep);
             fwrite($fp, "Apache Request Headers:\n");
             fwrite($fp, $lnsep);
@@ -165,7 +164,7 @@ function write_log()
         }
 
         fwrite($fp, $lnsep);
-        fwrite($fp,"Incoming data, usually utf-8 encoded:\n");
+        fwrite($fp, "Incoming data, usually utf-8 encoded:\n");
         fwrite($fp, $lnsep);
         fwrite($fp, $HTTP_RAW_POST_DATA);
         fclose($fp);

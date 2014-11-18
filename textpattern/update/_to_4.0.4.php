@@ -28,7 +28,7 @@ if (!defined('TXP_UPDATE')) {
 if (!safe_field('name', 'txp_prefs', "name = 'allow_raw_php_scripting'")) {
     safe_insert('txp_prefs', "prefs_id = 1, name = 'allow_raw_php_scripting', val = '1', type = '1', html='yesnoradio'");
 } else {
-    safe_update( 'txp_prefs', "html='yesnoradio'", "name='allow_raw_php_scripting'");
+    safe_update('txp_prefs', "html='yesnoradio'", "name='allow_raw_php_scripting'");
 }
 
 if (!safe_field('name', 'txp_prefs', "name = 'log_list_pageby'")) {
@@ -43,10 +43,10 @@ update_lastmod();
 $has_ss_idx = 0;
 $rs = getRows('show index from `'.PFX.'textpattern`');
 
-foreach ($rs as $row)
-
-if ($row['Key_name'] == 'section_status_idx') {
-    $has_ss_idx = 1;
+foreach ($rs as $row) {
+    if ($row['Key_name'] == 'section_status_idx') {
+        $has_ss_idx = 1;
+    }
 }
 
 if (!$has_ss_idx) {

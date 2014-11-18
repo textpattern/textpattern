@@ -129,7 +129,7 @@ function atom()
         'area'     => $area,
         'section'  => $section,
         'category' => $category,
-        'limit'    => $limit
+        'limit'    => $limit,
     )).'" />';
     $out[] = '<link'.r_relalt.t_texthtml.' href="'.hu.'" />';
 
@@ -259,14 +259,13 @@ function atom()
                 $e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$url.'" />';
 
                 $e['issued'] = tag(safe_strftime('w3cdtf', strtotime($date)), 'published');
-                $e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z',strtotime($date)), 'updated');
+                $e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z', strtotime($date)), 'updated');
                 $e['id'] = tag('tag:'.$mail_or_domain.','.safe_strftime('%Y-%m-%d', strtotime($date)).':'.$blog_uid.'/'.$id, 'id');
 
                 $articles[$id] = tag(n.t.t.join(n.t.t, $e).n, 'entry');
 
                 $etags[$id] = strtoupper(dechex(crc32($articles[$id])));
                 $dates[$id] = $date;
-
             }
         }
     }
@@ -295,8 +294,7 @@ function atom()
         // Turn on compression if we aren't using it already.
         if (extension_loaded('zlib') && ini_get("zlib.output_compression") == 0 &&
             ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()
-        )
-        {
+        ) {
             // Make sure notices/warnings/errors don't fudge up the feed when
             // compression is used.
             $buf = '';
@@ -423,15 +421,15 @@ function safe_hed($toUnicode)
 function fixup_for_feed($toFeed, $permalink)
 {
     // Fix relative urls.
-    $txt = str_replace('href="/','href="'.hu.'/',$toFeed);
-    $txt = preg_replace("/href=\\\"#(.*)\"/","href=\"".$permalink."#\\1\"",$txt);
+    $txt = str_replace('href="/', 'href="'.hu.'/', $toFeed);
+    $txt = preg_replace("/href=\\\"#(.*)\"/", "href=\"".$permalink."#\\1\"", $txt);
     // This was removed as entities shouldn't be stripped in Atom feeds when the
     // content type is HTML. Leaving it commented out as a reminder.
     //$txt = safe_hed($txt);
 
     // Encode and entify.
-    $txt = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $txt);
-    $txt = preg_replace("/&(?![#0-9]+;)/i",'&amp;', $txt);
+    $txt = preg_replace(array('/</', '/>/', "/'/", '/"/'), array('&#60;', '&#62;', '&#039;', '&#34;'), $txt);
+    $txt = preg_replace("/&(?![#0-9]+;)/i", '&amp;', $txt);
 
     return $txt;
 }

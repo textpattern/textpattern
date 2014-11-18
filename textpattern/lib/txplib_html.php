@@ -349,7 +349,7 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
         ($remember) ? hInput('crit', $crit) : '',
         ($remember) ? hInput('search_method', $search_method) : '',
         tInput(),
-        n.'</form>'
+        n.'</form>',
     ));
 }
 
@@ -578,7 +578,7 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
 
     if ($anchor_id && $pane) {
         $visible = get_pref('pane_'.$pane.'_visible');
-        $heading_class = 'txp-summary' . ($visible ? ' expanded' : '');
+        $heading_class = 'txp-summary'.($visible ? ' expanded' : '');
         $display_state = array(
             'role'  => 'group',
             'id'    => $anchor_id,
@@ -588,7 +588,7 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
 
         $label = href($label, '#'.$anchor_id, array(
             'role'           => 'button',
-            'data-txp-token' => md5($pane . $event . form_token() . get_pref('blog_uid')),
+            'data-txp-token' => md5($pane.$event.form_token().get_pref('blog_uid')),
             'data-txp-pane'  => $pane,
         ));
 
@@ -596,7 +596,7 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
     } else {
         $heading_class = '';
         $display_state = array(
-            'role' => $role == 'region' ? 'group' : ''
+            'role' => $role == 'region' ? 'group' : '',
         );
     }
 
@@ -897,8 +897,7 @@ function inputLabel($name, $input, $label = '', $help = '', $atts = array(), $wr
 
     $out = graf(
         tag($label.popHelp($help), 'span', array('class' => 'txp-label')).
-        n.$input
-    , $atts);
+        n.$input, $atts);
 
     return pluggable_ui($event.'_ui', 'inputlabel.'.$name, $out, $arguments);
 }
@@ -1294,11 +1293,10 @@ function multi_edit($options, $event = null, $step = null, $page = '', $sort = '
         eInput($event).
         sInput($step).
         hInput('page', $page).
-        ($sort ? hInput('sort', $sort).hInput('dir', $dir) : '' ).
+        ($sort ? hInput('sort', $sort).hInput('dir', $dir) : '').
         ($crit !== '' ? hInput('crit', $crit).hInput('search_method', $search_method) : '').
         join('', $html).
-        fInput('submit', '', gTxt('go'))
-        , 'div', array('class' => 'multi-edit'));
+        fInput('submit', '', gTxt('go')), 'div', array('class' => 'multi-edit'));
 }
 
 /**
@@ -1397,8 +1395,7 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
             tag($label, 'label', array('for' => $label_id)).
             popHelp($pophelp).
             fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
-            fInput('submit', '', gTxt('upload'))
-        , array('class' => $p_class)).
+            fInput('submit', '', gTxt('upload')), array('class' => $p_class)).
 
         tInput().n,
 
@@ -1434,8 +1431,7 @@ function search_form($event, $step, $crit, $methods, $method, $default_method)
             eInput($event).
             sInput($step).
             fInput('submit', 'search', gTxt('go'))
-        )
-    , '', '', 'get', 'search-form');
+        ), '', '', 'get', 'search-form');
 }
 
 /**
@@ -1615,7 +1611,7 @@ EOF;
             $action = 'index.php';
         }
 
-        $out .= eInput(gps('event')) . tInput();
+        $out .= eInput(gps('event')).tInput();
 
         return tag($out, 'form', array(
             'class'  => $name,
@@ -1717,7 +1713,7 @@ function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = 
     }
 
     if ($breakclass) {
-        $breakatts.= ' class="'.txpspecialchars($breakclass).'"';
+        $breakatts .= ' class="'.txpspecialchars($breakclass).'"';
     }
 
     // Non-enclosing breaks.

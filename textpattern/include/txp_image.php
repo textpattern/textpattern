@@ -125,19 +125,19 @@ function image_list($message = '')
         $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
         $critsql = $verbatim ?
             array(
-                'id'       => "ID in ('" .join("','", do_list($crit_escaped)). "')",
+                'id'       => "ID in ('".join("','", do_list($crit_escaped))."')",
                 'name'     => "name = '$crit_escaped'",
                 'category' => "category = '$crit_escaped'",
                 'author'   => "author = '$crit_escaped'",
                 'alt'      => "alt = '$crit_escaped'",
-                'caption'  => "caption = '$crit_escaped'"
+                'caption'  => "caption = '$crit_escaped'",
             ) : array(
-                'id'       => "ID in ('" .join("','", do_list($crit_escaped)). "')",
+                'id'       => "ID in ('".join("','", do_list($crit_escaped))."')",
                 'name'     => "name like '%$crit_escaped%'",
                 'category' => "category like '%$crit_escaped%'",
                 'author'   => "author like '%$crit_escaped%'",
                 'alt'      => "alt like '%$crit_escaped%'",
-                'caption'  => "caption like '%$crit_escaped%'"
+                'caption'  => "caption like '%$crit_escaped%'",
             );
 
         if (array_key_exists($search_method, $critsql)) {
@@ -258,7 +258,7 @@ function image_list($message = '')
                 if ($ext != '.swf') {
                     $thumbnail = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
                                         "title='$id$ext ($w &#215; $h)'".
-                                        ($thumb_w ? " width='$thumb_w' height='$thumb_h'" : ''). ' />';
+                                        ($thumb_w ? " width='$thumb_w' height='$thumb_h'" : '').' />';
                 } else {
                     $thumbnail = '';
                 }
@@ -295,9 +295,7 @@ function image_list($message = '')
                     sp.span(
                         span('[', array('aria-hidden' => 'true')).
                         href(gTxt('view'), imagesrcurl($id, $ext)).
-                        span(']', array('aria-hidden' => 'true'))
-                    , array('class' => 'images_detail'))
-                , '', ' scope="row" class="txp-list-col-id"').
+                        span(']', array('aria-hidden' => 'true')), array('class' => 'images_detail')), '', ' scope="row" class="txp-list-col-id"').
 
                 td(
                     ($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name'
@@ -351,7 +349,7 @@ function image_search_form($crit, $method)
         'category' => gTxt('image_category'),
         'author'   => gTxt('author'),
         'alt'      => gTxt('alt_text'),
-        'caption'  => gTxt('caption')
+        'caption'  => gTxt('caption'),
     );
 
     return search_form('image', 'image_list', $crit, $methods, $method, 'name');
@@ -460,7 +458,7 @@ function image_multi_edit()
 
 // -------------------------------------------------------------
 
-function image_edit($message='', $id='')
+function image_edit($message = '', $id = '')
 {
     global $prefs, $file_max_upload_size, $txp_user, $event, $all_image_cats;
 
@@ -495,7 +493,7 @@ function image_edit($message='', $id='')
         if ($thumbnail and ($ext != '.swf')) {
             $thumb_info = $id.'t'.$ext.' ('.$thumb_w.' &#215; '.$thumb_h.')';
             $thumb = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="'.$thumb_info.'" '.
-                        ($thumb_w ? 'width="'.$thumb_w.'" height="'.$thumb_h.'" title="'.$thumb_info.'"' : ''). ' />';
+                        ($thumb_w ? 'width="'.$thumb_w.'" height="'.$thumb_h.'" title="'.$thumb_info.'"' : '').' />';
         } else {
             $thumb = '';
 
@@ -559,8 +557,7 @@ function image_edit($message='', $id='')
                             fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').
                             n.'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.
                             checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop').
-                            fInput('submit', '', gTxt('Create'))
-                        , ' class="edit-alter-thumbnail"').
+                            fInput('submit', '', gTxt('Create')), ' class="edit-alter-thumbnail"').
                         hInput('id', $id).
                         eInput('image').
                         sInput('thumbnail_create').
@@ -568,8 +565,7 @@ function image_edit($message='', $id='')
                         hInput('dir', $dir).
                         hInput('page', $page).
                         hInput('search_method', $search_method).
-                        hInput('crit', $crit)
-                    , '', '', 'post', 'edit-form', '', 'thumbnail_alter_form'),
+                        hInput('crit', $crit), '', '', 'post', 'edit-form', '', 'thumbnail_alter_form'),
                     'create_thumbnail',
                     'thumbnail-alter',
                     'create_thumbnail'
@@ -593,8 +589,7 @@ function image_edit($message='', $id='')
                     hInput('dir', $dir).
                     hInput('page', $page).
                     hInput('search_method', $search_method).
-                    hInput('crit', $crit)
-                , '', '', 'post', 'edit-form', '', 'image_details_form'),
+                    hInput('crit', $crit), '', '', 'post', 'edit-form', '', 'image_details_form'),
             '</div>',
         '</section>'.n.'</div>';
     }
@@ -762,7 +757,7 @@ function image_delete($ids = array())
 
     if (!has_privs('image.delete')) {
         if (has_privs('image.delete.own')) {
-            $ids = safe_column('id', 'txp_image', 'id IN ('.join(',', $ids).') AND author=\''.doSlash($txp_user).'\'' );
+            $ids = safe_column('id', 'txp_image', 'id IN ('.join(',', $ids).') AND author=\''.doSlash($txp_user).'\'');
         } else {
             $ids = array();
         }
@@ -860,7 +855,7 @@ function thumbnail_create()
         return;
     }
 
-    $t = new txp_thumb( $id );
+    $t = new txp_thumb($id);
     $t->crop = ($crop == '1');
     $t->hint = '0';
     $t->width = $width;

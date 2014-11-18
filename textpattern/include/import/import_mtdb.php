@@ -62,7 +62,7 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
     }
 
     mysql_select_db($mt_db, $mtlink);
-    $results[]= 'connected to mt database. Importing Data';
+    $results[] = 'connected to mt database. Importing Data';
 
     sleep(2);
 
@@ -95,7 +95,7 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
         where entry_blog_id = '$blog_id'
     ", $mtlink);
 
-    $results[]= mysql_error();
+    $results[] = mysql_error();
 
     while ($b = mysql_fetch_assoc($a)) {
         $cat = mysql_query("select placement_category_id as category_id from mt_placement where placement_entry_id='{$b['ID']}'");
@@ -130,7 +130,7 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
 
         $c = mysql_query($q, $mtlink);
 
-        while ($d=mysql_fetch_assoc($c)) {
+        while ($d = mysql_fetch_assoc($c)) {
             $comments[] = $d;
         }
 
@@ -146,7 +146,7 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
         select category_id,category_label from mt_category where category_blog_id='{$blog_id}'
     ", $mtlink);
 
-    while ($b=mysql_fetch_assoc($a)) {
+    while ($b = mysql_fetch_assoc($a)) {
         $categories_map[$b['category_id']] = $b['category_label'];
     }
 
@@ -169,7 +169,7 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
 
             if (!$authorid) {
                 // Add new authors.
-                $q = safe_insert("txp_users","
+                $q = safe_insert("txp_users", "
                     name     = '".doSlash($RealName)."',
                     email    = '".doSlash($email)."',
                     pass     = '".doSlash(txp_hash_password($pass))."',
@@ -178,9 +178,9 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
                 );
 
                 if ($q) {
-                    $results[]= 'inserted '.$RealName.' into txp_users';
+                    $results[] = 'inserted '.$RealName.' into txp_users';
                 } else {
-                    $results[]=mysql_error();
+                    $results[] = mysql_error();
                 }
             }
         }
@@ -192,12 +192,12 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
             $rs = safe_row('id', 'txp_category', "name='$category' and type='article'");
 
             if (!$rs) {
-                $q = safe_insert("txp_category","name='$category',type='article',parent='root'");
+                $q = safe_insert("txp_category", "name='$category',type='article',parent='root'");
 
                 if ($q) {
-                    $results[]= 'inserted '.stripslashes($category).' into txp_category';
+                    $results[] = 'inserted '.stripslashes($category).' into txp_category';
                 } else {
-                    $results[]=mysql_error();
+                    $results[] = mysql_error();
                 }
             }
         }
@@ -214,7 +214,7 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
             $Category1 = (!empty($Category1)) ? doSlash($Category1) : '';
             $AuthorID = (!empty($authors_map[$AuthorID])) ? doSlash($authors_map[$AuthorID]) : '';
 
-            $insertID = safe_insert("textpattern","
+            $insertID = safe_insert("textpattern", "
                 ID             = '$ID',
                 Posted         = '$Posted',
                 LastMod        = '$LastMod',
@@ -228,8 +228,8 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
                 Category1      = '$Category1',
                 AnnotateInvite = '".doSlash($default_comment_invite)."',
                 Section        = '".doSlash($insert_into_section)."',
-                uid            = '".md5(uniqid(rand(),true))."',
-                feed_time      = '".substr($Posted,0,10)."',
+                uid            = '".md5(uniqid(rand(), true))."',
+                feed_time      = '".substr($Posted, 0, 10)."',
                 Status         = '$insert_with_status'
             ");
 
@@ -243,7 +243,7 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
                         extract($comment);
                         $message = nl2br($message);
 
-                        $commentID = safe_insert("txp_discuss","
+                        $commentID = safe_insert("txp_discuss", "
                             discussid = $discussid,
                             parentid  = $insertID,
                             name      = '".doSlash($name)."',
@@ -259,7 +259,7 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
                             $results[] = 'inserted MT comment '.$commentID.
                                 ' for article '.$insertID.' into txp_discuss';
                         } else {
-                            $results[]=mysql_error();
+                            $results[] = mysql_error();
                         }
                     }
                 }

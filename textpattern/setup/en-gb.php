@@ -1276,6 +1276,6 @@ $en_gb_lang = array(
         'useful_tags' => 'Useful tags',
         'use_thumbnail' => 'Use thumbnail?',
         'wraptag' => 'Wrap tag',
-    )
+    ),
 );
-$lastmod = gmdate('Y-m-d H:m:s',1380023390);
+$lastmod = gmdate('Y-m-d H:m:s', 1380023390);

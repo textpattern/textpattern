@@ -148,14 +148,13 @@ function form_list($curname)
 
             if (!in_array($name, $essential_forms)) {
                 $modbox = span(
-                    checkbox('selected_forms[]', txpspecialchars($name), false)
-                , array('class' => 'switcher-action'));
+                    checkbox('selected_forms[]', txpspecialchars($name), false), array('class' => 'switcher-action'));
             } else {
                 $modbox = '';
             }
 
             $group_out[] = tag(n.$modbox.$editlink.n, 'li', array(
-                'class' => $active ? 'active' : ''
+                'class' => $active ? 'active' : '',
             ));
         }
 
@@ -216,7 +215,6 @@ function form_multi_edit()
 
             form_edit($message);
         }
-
     } else {
         form_edit();
     }
@@ -354,8 +352,7 @@ function form_edit($message = '')
 
         n.tag(
             hed(gTxt('tagbuilder'), 2).
-            $tagbuild_links.n
-        , 'div', array(
+            $tagbuild_links.n, 'div', array(
             'id'    => 'tagbuild_links',
             'class' => 'txp-layout-cell txp-layout-1-4',
         )).
@@ -373,24 +370,19 @@ function form_edit($message = '')
                     fInput('submit', 'save', gTxt('save'), 'publish').
                     eInput('form').sInput('form_save').
                     hInput('name', $name)
-                )
-            , '', '', 'post', 'edit-form', '', 'form_form').n
-        , 'div', array(
+                ), '', '', 'post', 'edit-form', '', 'form_form').n, 'div', array(
             'id'    => 'main_content',
             'class' => 'txp-layout-cell txp-layout-2-4',
         )).
 
         n.tag(
             graf(sLink('form', 'form_create', gTxt('create_new_form')), ' class="action-create"').
-            form_list($name).n
-        , 'div', array(
+            form_list($name).n, 'div', array(
             'id'    => 'content_switcher',
             'class' => 'txp-layout-cell txp-layout-1-4',
-        )).n
-
-    , 'div', array(
+        )).n, 'div', array(
         'id'    => $event.'_container',
-        'class' => 'txp-layout-grid'
+        'class' => 'txp-layout-grid',
     ));
 }
 

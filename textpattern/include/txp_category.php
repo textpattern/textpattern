@@ -71,35 +71,31 @@ function cat_category_list($message = "")
     $out = array(hed(gTxt('tab_organise'), 1, 'class="txp-heading"'),
         '<div id="category_container" class="txp-layout-grid">',
             n.tag(
-                n.tag(cat_article_list(), 'div', array('class' => 'categories'))
-                , 'div', array(
+                n.tag(cat_article_list(), 'div', array('class' => 'categories')), 'div', array(
                     'id'    => 'categories_article',
-                    'class' => 'txp-layout-cell txp-layout-1-4'
+                    'class' => 'txp-layout-cell txp-layout-1-4',
                 )
             ),
             n.tag(
-                n.tag(cat_image_list(), 'div', array('class' => 'categories'))
-                , 'div', array(
+                n.tag(cat_image_list(), 'div', array('class' => 'categories')), 'div', array(
                     'id'    => 'categories_image',
-                    'class' => 'txp-layout-cell txp-layout-1-4'
+                    'class' => 'txp-layout-cell txp-layout-1-4',
                 )
             ),
             n.tag(
-                n.tag(cat_file_list(), 'div', array('class' => 'categories'))
-                , 'div', array(
+                n.tag(cat_file_list(), 'div', array('class' => 'categories')), 'div', array(
                     'id'    => 'categories_file',
-                    'class' => 'txp-layout-cell txp-layout-1-4'
+                    'class' => 'txp-layout-cell txp-layout-1-4',
                 )
             ),
             n.tag(
-                n.tag(cat_link_list(), 'div', array('class' => 'categories'))
-                , 'div', array(
+                n.tag(cat_link_list(), 'div', array('class' => 'categories')), 'div', array(
                     'id'    => 'categories_link',
-                    'class' => 'txp-layout-cell txp-layout-1-4'
+                    'class' => 'txp-layout-cell txp-layout-1-4',
                 )
             ),
         '</div>',
-        script_js( <<<EOS
+        script_js(<<<EOS
             $(document).ready(function ()
             {
                 $('.category-tree').txpMultiEditForm({
@@ -108,7 +104,7 @@ function cat_category_list($message = "")
                 });
             });
 EOS
-        )
+        ),
     );
     echo join(n, $out);
 }
@@ -269,8 +265,7 @@ function cat_article_multiedit_form($area, $array)
             form(
                 join('', $array).
                 hInput('type', $area).
-                multi_edit($methods, 'category', 'cat_category_multiedit', '', '', '', '', '', $area)
-                , '', '', 'post', 'category-tree', '', 'category_'.$area.'_form'
+                multi_edit($methods, 'category', 'cat_category_multiedit', '', '', '', '', '', $area), '', '', 'post', 'category-tree', '', 'category_'.$area.'_form'
             );
     }
 
@@ -298,7 +293,7 @@ function cat_category_multiedit()
                 $used = 'name NOT IN(SELECT category FROM '.safe_pfx('txp_'.$type).')';
             }
 
-            $rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."'" . (($method == 'deleteforce') ? '' : " AND rgt - lft = 1 AND ".$used));
+            $rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."'".(($method == 'deleteforce') ? '' : " AND rgt - lft = 1 AND ".$used));
 
             if ($rs) {
                 foreach ($rs as $cat) {
@@ -376,7 +371,7 @@ function cat_event_category_list($event)
 
     $parent = ps('parent_cat');
 
-    $heading = 'tab_' . ($event == 'article' ? 'list' : $event);
+    $heading = 'tab_'.($event == 'article' ? 'list' : $event);
     $for = $rs ? ' for="'.$event.'_category_parent"' : '';
 
     $out = hed(gTxt($heading).popHelp($event.'_category'), 2).
@@ -387,16 +382,14 @@ function cat_event_category_list($event)
             ).
             (($rs)
                 ? graf('<label'.$for.'>'.gTxt('parent').'</label>'.br.
-                    treeSelectInput('parent_cat', $rs, $parent, $event.'_category_parent')
-                    , array('class' => 'parent'))
+                    treeSelectInput('parent_cat', $rs, $parent, $event.'_category_parent'), array('class' => 'parent'))
                 : ''
             ).
             graf(
                 fInput('submit', '', gTxt('Create')).
                 eInput('category').
                 sInput('cat_'.$event.'_create')
-            )
-        , '', '', 'post', $event);
+            ), '', '', 'post', $event);
 
     if ($rs) {
         $total_count = array();
@@ -466,8 +459,7 @@ function cat_event_category_list($event)
             }
 
             $items[] = graf(
-                checkbox('selected[]', $id, 0).sp.str_repeat(sp.sp, $level * 2).$edit_link.sp.$count
-            , ' class="level-'.$level.'"');
+                checkbox('selected[]', $id, 0).sp.str_repeat(sp.sp, $level * 2).$edit_link.sp.$count, ' class="level-'.$level.'"');
         }
 
         if ($items) {
@@ -556,7 +548,7 @@ function cat_event_category_edit($evname)
             hInput('old_name', $name).
             n.'</section>';
         echo n.'<div id="category_container" class="txp-container">'.
-            form(  $out, '', '', 'post', 'edit-form' ).
+            form($out, '', '', 'post', 'edit-form').
             n.'</div>';
     } else {
         cat_category_list(array(gTxt('category_not_found'), E_ERROR));
@@ -599,14 +591,12 @@ function cat_event_category_save($event, $table_name)
     $message = array(gTxt('category_save_failed'), E_ERROR);
 
     if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title'", "id = $id") &&
-        safe_update('txp_category', "parent = '$name'", "parent = '$old_name' and type='$event'"))
-    {
+        safe_update('txp_category', "parent = '$name'", "parent = '$old_name' and type='$event'")) {
         rebuild_tree_full($event);
 
         if ($event == 'article') {
             if (safe_update('textpattern', "Category1 = '$name'", "Category1 = '$old_name'") &&
-                safe_update('textpattern', "Category2 = '$name'", "Category2 = '$old_name'"))
-            {
+                safe_update('textpattern', "Category2 = '$name'", "Category2 = '$old_name'")) {
                 $message = gTxt($event.'_category_updated', array('{name}' => doStrip($name)));
             }
         } else {

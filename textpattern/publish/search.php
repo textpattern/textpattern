@@ -46,7 +46,7 @@ function search($q)
 
     $s_filter = filterSearch();
 
-    $form = fetch('form','txp_form','name','search_results');
+    $form = fetch('form', 'txp_form', 'name', 'search_results');
 
     // Lose this eventually - only used if search_results form is missing.
     $form = (!$form) ? legacy_form() : $form;
@@ -72,20 +72,20 @@ function search($q)
         foreach ($rs as $a) {
             extract($a);
 
-            $result_date = safe_strftime($archive_dateformat,$posted);
+            $result_date = safe_strftime($archive_dateformat, $posted);
             $uTitle = ($url_title) ? $url_title : stripSpace($Title);
             $hurl = permlinkurl($a);
             $result_url = '<a href="'.$hurl.'">'.$hurl.'</a>';
             $result_title = '<a href="'.$hurl.'">'.$Title.'</a>';
 
-            $result = preg_replace("/>\s*</","> <",$Body_html);
-            preg_match_all("/\s.{1,50}".preg_quote($q).".{1,50}\s/i",$result,$concat);
+            $result = preg_replace("/>\s*</", "> <", $Body_html);
+            preg_match_all("/\s.{1,50}".preg_quote($q).".{1,50}\s/i", $result, $concat);
 
-            $concat = join(" ... ",$concat[0]);
+            $concat = join(" ... ", $concat[0]);
 
             $concat = strip_tags($concat);
-            $concat = preg_replace('/^[^>]+>/U',"",$concat);
-            $concat = preg_replace("/($q)/i","<strong>$1</strong>",$concat);
+            $concat = preg_replace('/^[^>]+>/U', "", $concat);
+            $concat = preg_replace("/($q)/i", "<strong>$1</strong>", $concat);
             $result_excerpt = ($concat) ? "... ".$concat." ..." : '';
 
             $glob['search_result_title']   = $result_title;
@@ -101,7 +101,7 @@ function search($q)
         }
     }
 
-    return (is_array($results)) ? join('',$results) : '';
+    return (is_array($results)) ? join('', $results) : '';
 }
 
 /**

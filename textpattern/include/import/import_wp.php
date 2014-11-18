@@ -250,7 +250,7 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
             from ".$wpdbprefix."comments
             where comment_post_ID = '".$article['ID']."'
             order by comment_ID asc
-        ", $b2link) or $errors[]= mysql_error();
+        ", $b2link) or $errors[] = mysql_error();
 
         while ($comment = mysql_fetch_assoc($comment_query)) {
             $comments[] = $comment;
@@ -288,8 +288,7 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
         select
             guid
         from ".$wpdbprefix."posts
-        where post_type = 'attachment' and post_mime_type like 'image/%' and post_parent=".$article['ID']
-        , $b2link) or $errors[] = mysql_error();
+        where post_type = 'attachment' and post_mime_type like 'image/%' and post_parent=".$article['ID'], $b2link) or $errors[] = mysql_error();
 
         while ($image = mysql_fetch_array($article_image_query)) {
             $article_images[] = $image['guid'];

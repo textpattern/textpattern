@@ -89,7 +89,7 @@ class Textpattern_Mail_Encode
         if (strpos($string, '=?') === false && !preg_match('/[\x00-\x1F\x7F-\xFF]/', $string)) {
             if ($type == 'phrase') {
                 if (preg_match('/[][()<>@,;:".\x5C]/', $string)) {
-                    $string = '"'. strtr($string, array("\\" => "\\\\", '"' => '\"')) . '"';
+                    $string = '"'.strtr($string, array("\\" => "\\\\", '"' => '\"')).'"';
                 }
             } elseif ($type != 'text') {
                 throw new Textpattern_Mail_Exception(gTxt('invalid_argument', array('{name}' => 'type')));
@@ -110,7 +110,7 @@ class Textpattern_Mail_Encode
         $sep = IS_WIN ? "\r\n" : "\n";
         preg_match_all($pcre, $string, $matches);
 
-        return $start . join($end.$sep.' '.$start, array_map('base64_encode', $matches[0])) . $end;
+        return $start.join($end.$sep.' '.$start, array_map('base64_encode', $matches[0])).$end;
     }
 
     /**

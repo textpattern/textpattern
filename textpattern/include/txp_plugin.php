@@ -164,12 +164,12 @@ function plugin_list($message = '')
                 array(
                     '#&lt;br /&gt;#',
                     '#&lt;(/?(a|b|i|em|strong))&gt;#',
-                    '#&lt;a href=&quot;(https?|\.|\/|ftp)([A-Za-z0-9:/?.=_]+?)&quot;&gt;#'
+                    '#&lt;a href=&quot;(https?|\.|\/|ftp)([A-Za-z0-9:/?.=_]+?)&quot;&gt;#',
                 ),
                 array(
                     '<br />',
                     '<$1>',
-                    '<a href="$1$2">'
+                    '<a href="$1$2">',
                 ),
                 $description
             );
@@ -184,7 +184,7 @@ function plugin_list($message = '')
 
             if ($flags & PLUGIN_HAS_PREFS) {
                 $plugin_prefs = href(gTxt('plugin_prefs'), array(
-                    'event' => 'plugin_prefs.'.$name
+                    'event' => 'plugin_prefs.'.$name,
                 ), array('class' => 'plugin-prefs'));
             } else {
                 $plugin_prefs = '';
@@ -295,7 +295,7 @@ function plugin_help()
     pagetop(gTxt('plugin_help'));
     $help = ($name) ? safe_field('help', 'txp_plugin', "name = '".doSlash($name)."'") : '';
     echo '<div id="'.$event.'_container" class="txp-container txp-view">'
-        .'<div class="text-column">' . $help . '</div>'
+        .'<div class="text-column">'.$help.'</div>'
         .'</div>';
 }
 
@@ -306,7 +306,7 @@ function plugin_help()
  * @return string HTML
  */
 
-function plugin_edit_form($name='')
+function plugin_edit_form($name = '')
 {
     assert_string($name);
     $code = ($name) ? fetch('code', 'txp_plugin', 'name', $name) : '';
@@ -319,8 +319,7 @@ function plugin_edit_form($name='')
             graf(fInput('submit', '', gTxt('Save'), 'publish')).
             eInput('plugin').
             sInput('plugin_save').
-            hInput('name', $name)
-        , '', '', 'post', 'edit-form', '', 'plugin_details');
+            hInput('name', $name), '', '', 'post', 'edit-form', '', 'plugin_details');
 }
 
 /**
@@ -423,7 +422,7 @@ function plugin_verify()
                     $help_source = highlight_string($plugin['help'], true);
                 }
 
-                $source.= highlight_string('<?php'.$plugin['code'].'?>', true);
+                $source .= highlight_string('<?php'.$plugin['code'].'?>', true);
                 $sub = fInput('submit', '', gTxt('install'), 'publish');
 
                 pagetop(gTxt('verify_plugin'));
@@ -437,8 +436,7 @@ function plugin_verify()
                     $sub.
                     sInput('plugin_install').
                     eInput('plugin').
-                    hInput('plugin64', $plugin_encoded)
-                , '', '', 'post', 'plugin-info', '', 'plugin_preview').
+                    hInput('plugin64', $plugin_encoded), '', '', 'post', 'plugin-info', '', 'plugin_preview').
                 '</div>';
 
                 return;
@@ -572,8 +570,7 @@ function plugin_form()
             fInput('submit', 'install_new', gTxt('upload')).
             eInput('plugin').
             sInput('plugin_verify')
-        )
-    , '', '', 'post', 'plugin-data', '', 'plugin_install_form');
+        ), '', '', 'post', 'plugin-data', '', 'plugin_install_form');
 }
 
 /**
@@ -604,7 +601,7 @@ function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $methods = array(
         'changestatus' => gTxt('changestatus'),
         'changeorder'  => array('label' => gTxt('changeorder'), 'html' => $orders),
-        'delete'       => gTxt('delete')
+        'delete'       => gTxt('delete'),
     );
 
     return multi_edit($methods, 'plugin', 'plugin_multi_edit', $page, $sort, $dir, $crit, $search_method);

@@ -170,7 +170,6 @@ function rss()
 
                 $etags[$ID] = strtoupper(dechex(crc32($articles[$ID])));
                 $dates[$ID] = $uPosted;
-
             }
         }
     } elseif ($area == 'link') {
@@ -220,8 +219,7 @@ function rss()
         // Turn on compression if we aren't using it already.
         if (extension_loaded('zlib') && ini_get("zlib.output_compression") == 0 &&
             ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()
-        )
-        {
+        ) {
             // Make sure notices/warnings/errors don't fudge up the feed when
             // compression is used.
             $buf = '';

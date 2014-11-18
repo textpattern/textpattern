@@ -25,7 +25,9 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (!defined('txpath')) die('txpath is undefined.');
+if (!defined('txpath')) {
+    die('txpath is undefined.');
+}
 
 require_once txpath.'/lib/txplib_html.php';
 
@@ -43,7 +45,7 @@ class TXP_RPCServer extends IXR_IntrospectionServer
             // server capability.
             $this->capabilities['bloggerAPI'] = array(
                 'specUrl'     => 'http://www.blogger.com/developers/api/',
-                'specVersion' => 2
+                'specVersion' => 2,
             );
             $this->addCallback(
                 'blogger.newPost',
@@ -107,7 +109,7 @@ class TXP_RPCServer extends IXR_IntrospectionServer
             // server capability.
             $this->capabilities['metaWeblog API'] = array(
                 'specUrl'     => 'http://www.xmlrpc.com/metaWeblogApi',
-                'specVersion' => 1
+                'specVersion' => 1,
             );
             // Implements also MovableType extension of the API methods.
             $this->addCallback(
@@ -146,7 +148,7 @@ class TXP_RPCServer extends IXR_IntrospectionServer
             // MovableType API[] - add as server capability.
             $this->capabilities['MovableType API'] = array(
                 'specUrl'     => 'http://www.sixapart.com/movabletype/docs/mtmanual_programmatic.html#xmlrpc%20api',
-                'specVersion' => 1
+                'specVersion' => 1,
             );
             // Not completely implemented.
             $this->addCallback(
@@ -298,7 +300,7 @@ EOD;
             } elseif (function_exists('mb_convert_encoding') && is_callable('mb_convert_encoding')) {
                 $xml = mb_convert_encoding($xml, $enc, 'utf-8');
             } else {
-# TODO: shouldn't this throw an error instead of serving non-UTF-8 content as UTF-8?
+                // TODO: shouldn't this throw an error instead of serving non-UTF-8 content as UTF-8?
                 // If no decoding possible, serve contents as UTF-8.
                 $enc = 'utf-8';
             }
@@ -423,7 +425,7 @@ EOD;
             $sections[] = array(
                 'blogid'   => $section['name'],
                 'blogName' => $section['title'],
-                'url'      => pagelinkurl(array('s' => $section['name']))
+                'url'      => pagelinkurl(array('s' => $section['name'])),
             );
         }
 
@@ -461,7 +463,7 @@ EOD;
             'lastname'  => $lastname,
             'nickname'  => $name,
             'email'     => $email,
-            'url'       => hu
+            'url'       => hu,
         );
 
         return $uinfo;
@@ -552,7 +554,7 @@ EOD;
             'content'     => $rs['Body'],
             'userId'      => $rs['AuthorId'],
             'postId'      => $rs['ID'],
-            'dateCreated' => new IXR_Date($rs['uPosted'] + tz_offset())
+            'dateCreated' => new IXR_Date($rs['uPosted'] + tz_offset()),
         );
 
         return $out;
@@ -599,7 +601,7 @@ EOD;
                 'content'     => $rs['Body'],
                 'userId'      => $rs['AuthorId'],
                 'postId'      => $rs['ID'],
-                'dateCreated' => new IXR_Date($rs['uPosted'] + tz_offset())
+                'dateCreated' => new IXR_Date($rs['uPosted'] + tz_offset()),
             );
         }
 
@@ -648,7 +650,7 @@ EOD;
             return new IXR_Error(201, gTxt('problem_creating_article'));
         }
 
-// TODO: why "" quoted $rs?
+        // TODO: why "" quoted $rs?
         return "$rs";
     }
 
@@ -698,7 +700,7 @@ EOD;
                 'categoryName' => $c['title'],
                 'description'  => $c['title'],
                 'htmlUrl'      => pagelinkurl(array('c' => $c['name'])),
-                'rssUrl'       => hu.'?rss=1&#38;category='.$c['name']
+                'rssUrl'       => hu.'?rss=1&#38;category='.$c['name'],
             );
         }
 
@@ -832,7 +834,7 @@ EOD;
             if (!empty($category)) {
                 $rs = $txp->getCategory($category);
 
-// TODO: remove?
+                // TODO: remove?
                 // if (!$rs) return new IXR_Error(212, gTxt('problem_retrieving_category_info'));
 
                 $ct['categoryId']   = $rs['id'];
@@ -842,13 +844,15 @@ EOD;
                 $out[] = $ct;
             }
 
-            if ($isPrimary) $isPrimary = false;
+            if ($isPrimary) {
+                $isPrimary = false;
+            }
         }
 
         return $out;
     }
 
-// TODO: explain what 'expecific' is ;)
+    // TODO: explain what 'expecific' is ;)
     // Supported to avoid some client expecific behaviour.
     function mt_publishPost($params)
     {
@@ -906,10 +910,9 @@ EOD;
         }
 
         return true;
-
     }
 
-// TODO ???
+    // TODO ???
     // MediaObjects
     /*
      metaWeblog.newMediaObject
@@ -932,7 +935,7 @@ EOD;
         }
 
         $contents = array(
-            'Body' => str_replace('\n', n, $body)
+            'Body' => str_replace('\n', n, $body),
         );
 
         if (isset($title)) {
@@ -950,7 +953,7 @@ EOD;
         $contents = array(
             'Body'   => str_replace('\n', n, $struct['description']),
             'Status' => $publish ? '4' : '1',
-            'Title'  => $struct['title']
+            'Title'  => $struct['title'],
         );
 
         if (!empty($struct['categories'])) {
@@ -1000,7 +1003,7 @@ EOD;
         }
 
         if (isset($struct['mt_text_more'])) {
-            $contents['Body'] .= n.n.str_replace('\n', n ,$struct['mt_text_more']);
+            $contents['Body'] .= n.n.str_replace('\n', n, $struct['mt_text_more']);
         }
 
         if (isset($struct['mt_excerpt'])) {
@@ -1037,7 +1040,7 @@ EOD;
                     date("Y", $rs['uPosted']),
                     date("m", $rs['uPosted']),
                     date("d", $rs['uPosted']),
-                    $rs['url_title']
+                    $rs['url_title'],
                 ));
                 break;
 

@@ -228,10 +228,10 @@ class theme
      * Sets Textpatterns menu structure, message contents and other application
      * states.
      *
-     * @param  string $area      Currently active top level menu
-     * @param  string $event     Currently active second level menu
-     * @param  bool   $is_popup  Just a popup window for tag builder et cetera
-     * @param  array  $message   The contents of the notification message pane
+     * @param  string $area     Currently active top level menu
+     * @param  string $event    Currently active second level menu
+     * @param  bool   $is_popup Just a popup window for tag builder et cetera
+     * @param  array  $message  The contents of the notification message pane
      * @return obj    This theme object
      */
 
@@ -249,7 +249,7 @@ class theme
         $defaults = array(
             'content' => 'article',
             'presentation' => 'page',
-            'admin' => 'admin'
+            'admin' => 'admin',
         );
 
         if (empty($areas['start'])) {

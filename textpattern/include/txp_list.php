@@ -80,7 +80,7 @@ function list_list($message = '', $post = '')
         'sort',
         'dir',
         'crit',
-        'search_method'
+        'search_method',
     )));
 
     if ($sort === '') {
@@ -144,27 +144,27 @@ function list_list($message = '', $post = '')
         $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
         $critsql = $verbatim ?
             array(
-                'id'                 => "textpattern.ID in ('" .join("','", do_list($crit_escaped)). "')",
+                'id'                 => "textpattern.ID in ('".join("','", do_list($crit_escaped))."')",
                 'title_body_excerpt' => "textpattern.Title = '$crit_escaped' or textpattern.Body = '$crit_escaped' or textpattern.Excerpt = '$crit_escaped'",
                 'section'            => "textpattern.Section = '$crit_escaped' or section.title = '$crit_escaped'",
                 'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
                 'categories'         => "textpattern.Category1 = '$crit_escaped' or textpattern.Category2 = '$crit_escaped' or category1.title = '$crit_escaped' or category2.title = '$crit_escaped'",
                 'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
                 'author'             => "textpattern.AuthorID = '$crit_escaped' or user.RealName = '$crit_escaped'",
-                'article_image'      => "textpattern.Image in ('" .join("','", do_list($crit_escaped)). "')",
+                'article_image'      => "textpattern.Image in ('".join("','", do_list($crit_escaped))."')",
                 'posted'             => "textpattern.Posted = '$crit_escaped'",
-                'lastmod'            => "textpattern.LastMod = '$crit_escaped'"
+                'lastmod'            => "textpattern.LastMod = '$crit_escaped'",
             ) : array(
-                'id'                 => "textpattern.ID in ('" .join("','", do_list($crit_escaped)). "')",
+                'id'                 => "textpattern.ID in ('".join("','", do_list($crit_escaped))."')",
                 'title_body_excerpt' => "textpattern.Title like '%$crit_escaped%' or textpattern.Body like '%$crit_escaped%' or textpattern.Excerpt like '%$crit_escaped%'",
                 'section'            => "textpattern.Section like '%$crit_escaped%' or section.title like '%$crit_escaped%'",
                 'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
                 'categories'         => "textpattern.Category1 like '%$crit_escaped%' or textpattern.Category2 like '%$crit_escaped%' or category1.title like '%$crit_escaped%' or category2.title like '%$crit_escaped%'",
                 'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
                 'author'             => "textpattern.AuthorID like '%$crit_escaped%' or user.RealName like '%$crit_escaped%'",
-                'article_image'      => "textpattern.Image in ('" .join("','", do_list($crit_escaped)). "')",
+                'article_image'      => "textpattern.Image in ('".join("','", do_list($crit_escaped))."')",
                 'posted'             => "textpattern.Posted like '$crit_escaped%'",
-                'lastmod'            => "textpattern.LastMod like '$crit_escaped%'"
+                'lastmod'            => "textpattern.LastMod like '$crit_escaped%'",
             );
 
         if (array_key_exists($search_method, $critsql)) {
@@ -210,7 +210,7 @@ function list_list($message = '', $post = '')
 
     $limit = max($article_list_pageby, 15);
 
-    list ($page, $offset, $numPages) = pager($total, $limit, $page);
+    list($page, $offset, $numPages) = pager($total, $limit, $page);
 
     echo list_search_form($crit, $search_method).'</div>';
 
@@ -386,8 +386,7 @@ function list_list($message = '', $post = '')
                     tag(
                         sp.tag('[', 'span', array('aria-hidden' => 'true')).
                         href(gTxt('view'), $view_url).
-                        tag(']', 'span', array('aria-hidden' => 'true'))
-                    , 'span', array('class' => 'articles_detail')
+                        tag(']', 'span', array('aria-hidden' => 'true')), 'span', array('class' => 'articles_detail')
                     ), '', ' scope="row" class="txp-list-col-id"'
                 ).
                 td(
@@ -649,8 +648,7 @@ function list_multi_edit()
             ($item['Status'] >= STATUS_LIVE && $item['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
             ($item['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
             ($item['Status'] < STATUS_LIVE && $item['AuthorID'] === $txp_user && has_privs('article.edit.own'))
-        )
-        {
+        ) {
             $allowed[] = $item['ID'];
         }
     }

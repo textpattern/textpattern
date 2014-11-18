@@ -48,7 +48,7 @@ if (!safe_field('val', 'txp_prefs', "name='author_list_pageby'")) {
 // Expiry datetime for articles.
 $txp = getThings('describe `'.PFX.'textpattern`');
 
-if (!in_array('Expires',$txp)) {
+if (!in_array('Expires', $txp)) {
     safe_alter("textpattern", "add `Expires` datetime NOT NULL default '0000-00-00 00:00:00' after `Posted`");
 }
 

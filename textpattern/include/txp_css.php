@@ -100,7 +100,7 @@ function css_list($current, $default)
         }
 
         $out = tag(join(n, $out), 'ul', array(
-            'class' => 'switcher-list'
+            'class' => 'switcher-list',
         ));
 
         return wrapGroup('all_styles', $out, 'all_stylesheets');
@@ -144,7 +144,7 @@ function css_edit($message = '')
             href(gTxt('duplicate'), '#', array(
                 'id'    => 'txp_clone',
                 'class' => 'clone',
-                'title' => gTxt('css_clone')
+                'title' => gTxt('css_clone'),
             )), array('class' => 'txp-actions'));
     } else {
         $buttons .= hInput('savenew', 'savenew');
@@ -169,22 +169,17 @@ function css_edit($message = '')
                     fInput('submit', '', gTxt('save'), 'publish').
                     eInput('css').sInput('css_save').
                     hInput('name', $name)
-                )
-            , '', '', 'post', 'edit-form', '', 'style_form').n
-        , 'div', array(
+                ), '', '', 'post', 'edit-form', '', 'style_form').n, 'div', array(
             'id'    => 'main_content',
             'class' => 'txp-layout-cell txp-layout-3-4',
         )).
 
         n.tag(
             graf(sLink('css', 'pour', gTxt('create_new_css')), array('class' => 'action-create')).
-            css_list($name, $default_name).n
-        , 'div', array(
+            css_list($name, $default_name).n, 'div', array(
             'id'    => 'content_switcher',
             'class' => 'txp-layout-cell txp-layout-1-4',
-        )).n
-
-    , 'div', array(
+        )).n, 'div', array(
         'id'    => $event.'_container',
         'class' => 'txp-layout-grid',
     ));

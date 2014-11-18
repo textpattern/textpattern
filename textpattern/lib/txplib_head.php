@@ -90,8 +90,10 @@ function pagetop($pagetitle, $message = '')
         $lang_direction = 'ltr';
     }
 
-?><!DOCTYPE html>
-<html lang="<?php echo LANG; ?>" dir="<?php echo $lang_direction; ?>">
+    ?><!DOCTYPE html>
+<html lang="<?php echo LANG;
+    ?>" dir="<?php echo $lang_direction;
+    ?>">
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
@@ -101,7 +103,7 @@ function pagetop($pagetitle, $message = '')
 // TODO: Remove jQuery migrate plugin before release
     script_js('//code.jquery.com/jquery-migrate-1.2.1.js', TEXTPATTERN_SCRIPT_URL).
     script_js(
-        'var textpattern = ' . json_encode(array(
+        'var textpattern = '.json_encode(array(
             'event' => $event,
             'step' => $step,
             '_txp_token' => form_token(),
@@ -128,9 +130,11 @@ function pagetop($pagetitle, $message = '')
 <?php
 echo $theme->html_head();
     callback_event('admin_side', 'head_end');
-?>
+    ?>
 </head>
-<body id="<?php echo $body_id; ?>" class="not-ready <?php echo $area; ?>">
+<body id="<?php echo $body_id;
+    ?>" class="not-ready <?php echo $area;
+    ?>">
 <header role="banner" class="txp-header">
 <?php callback_event('admin_side', 'pagetop');
     $theme->set_state($area, $event, $bm, $message);
@@ -180,13 +184,13 @@ function admin_title($pagetitle)
  * @deprecated in 4.6.0
  */
 
-function areatab($label,$event,$tarea,$area)
+function areatab($label, $event, $tarea, $area)
 {
     $tc = ($area == $event) ? 'tabup' : 'tabdown';
-    $atts=' class="'.$tc.'"';
-    $hatts=' href="?event='.$tarea.'"';
+    $atts = ' class="'.$tc.'"';
+    $hatts = ' href="?event='.$tarea.'"';
 
-    return tda(tag($label,'a',$hatts),$atts);
+    return tda(tag($label, 'a', $hatts), $atts);
 }
 
 /**
@@ -201,9 +205,9 @@ function areatab($label,$event,$tarea,$area)
  * @deprecated in 4.6.0
  */
 
-function tabber($label,$tabevent,$event)
+function tabber($label, $tabevent, $event)
 {
-    $tc = ($event==$tabevent) ? 'tabup' : 'tabdown2';
+    $tc = ($event == $tabevent) ? 'tabup' : 'tabdown2';
     $out = '<td class="'.$tc.'"><a href="?event='.$tabevent.'">'.$label.'</a></td>';
 
     return $out;
@@ -315,7 +319,7 @@ function navPop($inline = '')
     $out = array();
 
     foreach ($areas as $a => $b) {
-        if (!has_privs( 'tab.'.$a)) {
+        if (!has_privs('tab.'.$a)) {
             continue;
         }
 
@@ -350,7 +354,7 @@ function navPop($inline = '')
  * @deprecated in 4.6.0
  */
 
-function button($label,$link)
+function button($label, $link)
 {
     return '<span style="margin-right:2em"><a href="?event='.$link.'">'.$label.'</a></span>';
 }

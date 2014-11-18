@@ -354,8 +354,8 @@ function gmtoffset_select($name, $val)
 
 function is_dst($name, $val)
 {
-    $ui = yesnoRadio ($name, $val).
-    script_js (<<<EOS
+    $ui = yesnoRadio($name, $val).
+    script_js(<<<EOS
         $(document).ready(function ()
         {
             var radio = $("#prefs-is_dst input");
@@ -392,7 +392,7 @@ function logging($name, $val)
     $vals = array(
         'all'   => gTxt('all_hits'),
         'refer' => gTxt('referrers_only'),
-        'none'  => gTxt('none')
+        'none'  => gTxt('none'),
     );
 
     return selectInput($name, $vals, $val, '', '', $name);
@@ -433,7 +433,7 @@ function commentmode($name, $val)
 {
     $vals = array(
         '0' => gTxt('nopopup'),
-        '1' => gTxt('popup')
+        '1' => gTxt('popup'),
     );
 
     return selectInput($name, $vals, $val, '', '', $name);
@@ -461,7 +461,7 @@ function weeks($name, $val)
         21  => '3 '.$weeks,
         28  => '4 '.$weeks,
         35  => '5 '.$weeks,
-        42  => '6 '.$weeks
+        42  => '6 '.$weeks,
     );
 
     return pluggable_ui('prefs_ui', 'weeks', selectInput($name, $vals, $val, '', '', $name), $name, $val);
@@ -571,7 +571,7 @@ function default_event($name, $val)
             $out[] = n.'<optgroup label="'.gTxt('tab_'.$a).'">';
 
             foreach ($b as $c => $d) {
-                $out[] = n.'<option value="'.$d.'"'.( $val == $d ? ' selected="selected"' : '' ).'>'.$c.'</option>';
+                $out[] = n.'<option value="'.$d.'"'.($val == $d ? ' selected="selected"' : '').'>'.$c.'</option>';
             }
 
             $out[] = n.'</optgroup>';
@@ -596,7 +596,7 @@ function commentsendmail($name, $val)
     $vals = array(
         '1' => gTxt('all'),
         '0' => gTxt('none'),
-        '2' => gTxt('ham')
+        '2' => gTxt('ham'),
     );
 
     return selectInput($name, $vals, $val, '', '', $name);
@@ -661,7 +661,7 @@ function doctypes($name, $val)
 {
     $vals = array(
         'xhtml' => gTxt('XHTML'),
-        'html5' => gTxt('HTML5')
+        'html5' => gTxt('HTML5'),
     );
 
     return selectInput($name, $vals, $val, '', '', $name);
@@ -683,11 +683,11 @@ function real_max_upload_size($user_max)
     // The minimum of the candidates, is the real max. possible size
     $candidates = array($user_max,
                         ini_get('post_max_size'),
-                        ini_get('upload_max_filesize'));
+                        ini_get('upload_max_filesize'), );
     $real_max = null;
     foreach ($candidates as $item) {
         $val = trim($item);
-        $modifier = strtolower( substr($val, -1) );
+        $modifier = strtolower(substr($val, -1));
         switch ($modifier) {
             // The 'G' modifier is available since PHP 5.1.0
             case 'g':

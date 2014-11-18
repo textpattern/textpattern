@@ -154,7 +154,7 @@ class Textpattern_Textpack_String_Iterator extends Textpattern_Iterator_FileIter
                 return;
             }
 
-            $buffer .= $this->current . "\n";
+            $buffer .= $this->current."\n";
 
             if ($string = $this->parser->parse($buffer)) {
                 $this->current = $string[0];

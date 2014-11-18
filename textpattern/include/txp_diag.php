@@ -42,7 +42,7 @@ define("cs", ': ');
  * @ignore
  */
 
-define("ln",str_repeat('-', 24).n);
+define("ln", str_repeat('-', 24).n);
 
 global $files;
 
@@ -130,7 +130,7 @@ function list_txp_tables()
  * );
  */
 
-function check_tables($tables, $type='FAST', $warnings = 0)
+function check_tables($tables, $type = 'FAST', $warnings = 0)
 {
     $msgs = array();
 
@@ -157,7 +157,7 @@ function check_tables($tables, $type='FAST', $warnings = 0)
  * @access private
  */
 
-function diag_msg_wrap($msg, $type='error')
+function diag_msg_wrap($msg, $type = 'error')
 {
     return span($msg, array('class' => $type));
 }
@@ -181,7 +181,7 @@ function doDiagnostics()
 
     // ini_get() returns string values passed via php_value as a string,
     // not boolean.
-    $is_register_globals = ( (strcasecmp(ini_get('register_globals'), 'on') === 0) or (ini_get('register_globals') === '1'));
+    $is_register_globals = ((strcasecmp(ini_get('register_globals'), 'on') === 0) or (ini_get('register_globals') === '1'));
 
     // Check for Textpattern updates, at most once every 24 hours.
     $now = time();
@@ -258,7 +258,7 @@ function doDiagnostics()
         $fail['file_uploads_disabled'] = diag_msg_wrap(gTxt('file_uploads_disabled'), 'information');
     }
 
-    if (@is_dir(txpath . DS. 'setup')) {
+    if (@is_dir(txpath.DS.'setup')) {
         $fail['setup_still_exists'] = diag_msg_wrap(txpath.DS."setup".DS.' '.gTxt('still_exists'), 'warning');
     }
 
@@ -332,7 +332,7 @@ function doDiagnostics()
         ));
 
         if ($disabled_funcs) {
-            $fail['some_php_functions_disabled'] = diag_msg_wrap(gTxt('some_php_functions_disabled').cs.join(', ',$disabled_funcs), 'warning');
+            $fail['some_php_functions_disabled'] = diag_msg_wrap(gTxt('some_php_functions_disabled').cs.join(', ', $disabled_funcs), 'warning');
         }
     }
 
@@ -340,7 +340,7 @@ function doDiagnostics()
 //    if (strncmp(php_sapi_name(), 'cgi', 3) == 0 and ini_get('cgi.rfc2616_headers'))
 //    $fail['cgi_header_config'] = gTxt('cgi_header_config');
 
-    $guess_site_url = $_SERVER['HTTP_HOST'] . preg_replace('#[/\\\\]$#', '', dirname(dirname($_SERVER['SCRIPT_NAME'])));
+    $guess_site_url = $_SERVER['HTTP_HOST'].preg_replace('#[/\\\\]$#', '', dirname(dirname($_SERVER['SCRIPT_NAME'])));
 
     if ($siteurl and strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.')) {
         $fail['site_url_mismatch'] = diag_msg_wrap(gTxt('site_url_mismatch').cs.$guess_site_url, 'warning');
@@ -416,13 +416,13 @@ function doDiagnostics()
 
         $gd = gTxt('gd_info', array(
             '{version}'   => $gd_info['GD Version'],
-            '{supported}' => $gd_support
+            '{supported}' => $gd_support,
         ));
     } else {
         $gd = gTxt('gd_unavailable');
     }
 
-    if ( realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir']) ) {
+    if (realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir'])) {
         $fail['tmp_plugin_paths_match'] = diag_msg_wrap(gTxt('tmp_plugin_paths_match'));
     }
 
@@ -458,7 +458,7 @@ function doDiagnostics()
 
         gTxt('last_update').cs.gmstrftime($fmt_date, $dbupdatetime).'/'.gmstrftime($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
 
-        gTxt('document_root').cs.@$_SERVER['DOCUMENT_ROOT']. (($real_doc_root != @$_SERVER['DOCUMENT_ROOT']) ? ' ('.$real_doc_root.')' : '') .n,
+        gTxt('document_root').cs.@$_SERVER['DOCUMENT_ROOT'].(($real_doc_root != @$_SERVER['DOCUMENT_ROOT']) ? ' ('.$real_doc_root.')' : '').n,
 
         '$path_to_site'.cs.$path_to_site.n,
 
@@ -514,7 +514,7 @@ function doDiagnostics()
 
         (is_readable($path_to_site.'/.htaccess'))
         ?    n.gTxt('htaccess_contents').cs.n.ln.txpspecialchars(join('', file($path_to_site.'/.htaccess'))).n.ln
-        :    ''
+        :    '',
     );
 
     if ($step == 'high') {
@@ -540,7 +540,7 @@ function doDiagnostics()
         $table_msg = array();
 
         foreach ($table_names as $table) {
-            $ctr = safe_query("SHOW CREATE TABLE ". $table."");
+            $ctr = safe_query("SHOW CREATE TABLE ".$table."");
             if (!$ctr) {
                 unset($table_names[$table]);
                 continue;
@@ -551,9 +551,9 @@ function doDiagnostics()
                 $table_msg[] = "$table is $ctcharset";
             }
 
-            $ctr = safe_query("CHECK TABLE ". $table);
+            $ctr = safe_query("CHECK TABLE ".$table);
             if (in_array(mysql_result($ctr, 0, 'Msg_type'), array('error', 'warning'))) {
-                $table_msg[] = $table .cs. mysql_result($ctr, 0, 'Msg_Text');
+                $table_msg[] = $table.cs.mysql_result($ctr, 0, 'Msg_Text');
             }
         }
 
@@ -561,7 +561,7 @@ function doDiagnostics()
             $table_msg = (count($table_names) < 17) ?  array('-') : array('OK');
         }
 
-        $out[] = count($table_names).' Tables'.cs. implode(', ',$table_msg).n;
+        $out[] = count($table_names).' Tables'.cs.implode(', ', $table_msg).n;
 
         $cf = preg_grep('/^custom_\d+/', getThings('describe `'.PFX.'textpattern`'));
         $out[] = n.get_pref('max_custom_fields', 10).sp.gTxt('custom').cs.
@@ -571,7 +571,7 @@ function doDiagnostics()
         $extv = array();
 
         foreach ($extns as $e) {
-            $extv[] = $e . (phpversion($e) ? '/' . phpversion($e) : '');
+            $extv[] = $e.(phpversion($e) ? '/'.phpversion($e) : '');
         }
 
         $out[] = n.gTxt('php_extensions').cs.join(', ', $extv).n;
@@ -593,7 +593,6 @@ function doDiagnostics()
         }
 
         $out[] = n.ln;
-
     }
 
     $out[] = callback_event('diag_results', $step).n;
@@ -601,7 +600,7 @@ function doDiagnostics()
 
     $dets = array(
         'low'  => gTxt('low'),
-        'high' => gTxt('high')
+        'high' => gTxt('high'),
     );
 
     $out[] =
@@ -613,7 +612,7 @@ function doDiagnostics()
             )
         );
 
-    echo join('',$out),
+    echo join('', $out),
         '</div>',
         '</div>';
 }

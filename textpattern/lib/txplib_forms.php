@@ -83,7 +83,7 @@ function yesnoRadio($field, $checked = '', $tabindex = 0, $id = '')
 {
     $vals = array(
         '0' => gTxt('no'),
-        '1' => gTxt('yes')
+        '1' => gTxt('yes'),
     );
 
     return radioSet($vals, $field, $checked, $tabindex, $id);
@@ -104,7 +104,7 @@ function onoffRadio($field, $checked = '', $tabindex = 0, $id = '')
 {
     $vals = array(
         '0' => gTxt('off'),
-        '1' => gTxt('on')
+        '1' => gTxt('on'),
     );
 
     return radioSet($vals, $field, $checked, $tabindex, $id);

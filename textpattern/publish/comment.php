@@ -182,7 +182,7 @@ function commentForm($id, $atts = null)
         $emailwarn = ($comments_require_email && !trim($email));
         $commentwarn = (!trim($message));
 
-        $evaluator =& get_comment_evaluator();
+        $evaluator = & get_comment_evaluator();
 
         if ($namewarn) {
             $evaluator->add_estimate(RELOAD, 1, gTxt('comment_name_required'));
@@ -274,7 +274,7 @@ function commentForm($id, $atts = null)
         'comment_message_input' => $textarea.'<!-- plugin-place-holder -->',
         'comment_remember'      => $checkbox,
         'comment_preview'       => fInput('submit', 'preview', $previewlabel, 'button', '', '', '', '', 'txpCommentPreview', false),
-        'comment_submit'        => $comment_submit_button
+        'comment_submit'        => $comment_submit_button,
     );
 
     foreach ($vals as $a => $b) {
@@ -294,7 +294,7 @@ function commentForm($id, $atts = null)
         n.hInput('backpage', $url) :
         n.hInput('backpage', $backpage);
 
-    $out = str_replace( '<!-- plugin-place-holder -->', callback_event('comment.form'), $out);
+    $out = str_replace('<!-- plugin-place-holder -->', callback_event('comment.form'), $out);
 
     $out .= n.n.'</div>'.n.'</form>';
 
@@ -413,7 +413,7 @@ function saveComment()
 
     $ref = serverset('HTTP_REFERRER');
     $in = getComment();
-    $evaluator =& get_comment_evaluator();
+    $evaluator = & get_comment_evaluator();
 
     extract($in);
 
@@ -458,13 +458,12 @@ function saveComment()
         ($prefs['comments_require_name'] && !trim($name)) ||
         ($prefs['comments_require_email'] && !trim($email)) ||
         (!trim($message))
-    )
-    {
-        $evaluator->add_estimate(RELOAD,1); // The error-messages are added in the preview-code.
+    ) {
+        $evaluator->add_estimate(RELOAD, 1); // The error-messages are added in the preview-code.
     }
 
     if ($isdup) {
-        $evaluator->add_estimate(RELOAD,1); // FIXME? Tell the user about dupe?
+        $evaluator->add_estimate(RELOAD, 1); // FIXME? Tell the user about dupe?
     }
 
     if (($evaluator->get_result() != RELOAD) && checkNonce($nonce)) {
@@ -514,7 +513,7 @@ function saveComment()
                     $backpage = permlinkurl_id($parentid);
                 }
 
-                $backpage .= ((strstr($backpage, '?')) ? '&' : '?') . 'commented='.(($visible == VISIBLE) ? '1' : '0');
+                $backpage .= ((strstr($backpage, '?')) ? '&' : '?').'commented='.(($visible == VISIBLE) ? '1' : '0');
 
                 txp_status_header('302 Found');
 
@@ -591,18 +590,18 @@ class comment_evaluation
             SPAM => array(),
             MODERATE => array(),
             VISIBLE => array(),
-            RELOAD => array()
+            RELOAD => array(),
         );
 
         $this->status_text = array(
             SPAM => gTxt('spam'),
             MODERATE => gTxt('unmoderated'),
             VISIBLE  => gTxt('visible'),
-            RELOAD => gTxt('reload')
+            RELOAD => gTxt('reload'),
         );
 
         $this->message = $this->status;
-        $this->txpspamtrace[] = "Comment on $parentid by $name (".safe_strftime($prefs['archive_dateformat'],time()).")";
+        $this->txpspamtrace[] = "Comment on $parentid by $name (".safe_strftime($prefs['archive_dateformat'], time()).")";
 
         if ($prefs['comments_moderate']) {
             $this->status[MODERATE][] = 0.5;
@@ -694,7 +693,7 @@ class comment_evaluation
 
             if ($fp) {
                 fwrite($fp, "<?php return; ?>\n".
-                    "This trace-file tracks saved comments. (created ".safe_strftime($prefs['archive_dateformat'],time()).")\n".
+                    "This trace-file tracks saved comments. (created ".safe_strftime($prefs['archive_dateformat'], time()).")\n".
                     "Format is: Type; Probability; Message (Type can be -1 => spam, 0 => moderate, 1 => visible)\n\n"
                 );
             }
@@ -853,7 +852,7 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
         return;
     }
 
-    $evaluator =& get_comment_evaluator();
+    $evaluator = & get_comment_evaluator();
 
     if ($comments_sendmail == 2 && $evaluator->get_result() == SPAM) {
         return;
@@ -880,7 +879,7 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
     $out .= gTxt('comment_web').": $cweb".n;
     $out .= gTxt('comment_comment').": $message";
 
-    $subject = strtr(gTxt('comment_received'),array('{site}' => $sitename, '{title}' => $Title));
+    $subject = strtr(gTxt('comment_received'), array('{site}' => $sitename, '{title}' => $Title));
 
     if (!is_valid_email($cemail)) {
         $cemail = null;
@@ -906,7 +905,7 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
  * @see        fInput()
  */
 
-function input($type,$name,$val,$size='',$class='',$tab='',$chkd='')
+function input($type, $name, $val, $size = '', $class = '', $tab = '', $chkd = '')
 {
     trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'fInput')), E_USER_NOTICE);
     $o = array(
@@ -915,8 +914,8 @@ function input($type,$name,$val,$size='',$class='',$tab='',$chkd='')
         ($class) ? ' class="'.$class.'"'    : '',
         ($tab)     ? ' tabindex="'.$tab.'"'    : '',
         ($chkd)    ? ' checked="checked"'    : '',
-        ' />'.n
+        ' />'.n,
     );
 
-    return join('',$o);
+    return join('', $o);
 }

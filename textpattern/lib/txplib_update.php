@@ -122,7 +122,7 @@ function install_language_from_file($lang)
             // Remember to add the last one.
             if (!empty($data)) {
                 foreach ($data as $name => $value) {
-                     mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET `lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
+                    mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET `lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
                 }
             }
 

@@ -107,19 +107,19 @@ function link_list($message = '')
         $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
         $critsql = $verbatim ?
             array(
-                'id'          => "ID in ('" .join("','", do_list($crit_escaped)). "')",
+                'id'          => "ID in ('".join("','", do_list($crit_escaped))."')",
                 'name'        => "linkname = '$crit_escaped'",
                 'description' => "description = '$crit_escaped'",
                 'url'         => "url = '$crit_escaped'",
                 'category'    => "category = '$crit_escaped'",
-                'author'      => "author = '$crit_escaped'"
+                'author'      => "author = '$crit_escaped'",
             ) : array(
-                'id'          => "ID in ('" .join("','", do_list($crit_escaped)). "')",
+                'id'          => "ID in ('".join("','", do_list($crit_escaped))."')",
                 'name'        => "linkname like '%$crit_escaped%'",
                 'description' => "description like '%$crit_escaped%'",
                 'url'         => "url like '%$crit_escaped%'",
                 'category'    => "category like '%$crit_escaped%'",
-                'author'      => "author like '%$crit_escaped%'"
+                'author'      => "author like '%$crit_escaped%'",
             );
 
         if (array_key_exists($search_method, $critsql)) {
@@ -142,8 +142,7 @@ function link_list($message = '')
 
     if (has_privs('link.edit')) {
         echo graf(
-            sLink('link', 'link_edit', gTxt('add_new_link'))
-            , ' class="txp-buttons"');
+            sLink('link', 'link_edit', gTxt('add_new_link')), ' class="txp-buttons"');
     }
 
     if ($total < 1) {
@@ -349,15 +348,14 @@ function link_edit($message = '')
             hed($caption, 2).
             inputLabel('linkname', fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'linkname'), 'title').
             inputLabel('linksort', fInput('text', 'linksort', $linksort, '', '', '', INPUT_REGULAR, '', 'linksort'), 'sort_value', 'link_sort').
-            inputLabel('url', fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'url'), 'url', 'link_url', 'edit-link-url'). /* TODO: maybe use type = 'url' once browsers are less strict */
+            inputLabel('url', fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'url'), 'url', 'link_url', 'edit-link-url')./* TODO: maybe use type = 'url' once browsers are less strict */
 
             inputLabel(
                 'link_category',
                 linkcategory_popup($category).
                 sp.span('[', array('aria-hidden' => 'true')).
                 eLink('category', 'list', '', '', gTxt('edit')).
-                span(']', array('aria-hidden' => 'true'))
-            , 'link_category', 'link_category').
+                span(']', array('aria-hidden' => 'true')), 'link_category', 'link_category').
 
             inputLabel('link_description', '<textarea id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_MEDIUM.'">'.txpspecialchars($description).'</textarea>', 'description', 'link_description', '', '').
             pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
@@ -367,8 +365,7 @@ function link_edit($message = '')
             hInput('id', $id).
             hInput('search_method', gps('search_method')).
             hInput('crit', gps('crit')).
-            n.'</section>'
-        , '', '', 'post', 'edit-form', '', 'link_details');
+            n.'</section>', '', '', 'post', 'edit-form', '', 'link_details');
     }
 
     echo '</div>';
@@ -412,7 +409,7 @@ function link_save()
     }
 
     $constraints = array(
-        'category' => new CategoryConstraint($varray['category'], array('type' => 'link'))
+        'category' => new CategoryConstraint($varray['category'], array('type' => 'link')),
     );
 
     callback_event_ref('link_ui', 'validate_save', 0, $varray, $constraints);
@@ -526,7 +523,7 @@ function link_multi_edit()
         case 'delete':
             if (!has_privs('link.delete')) {
                 if (has_privs('link.delete.own')) {
-                    $selected = safe_column('id', 'txp_link', 'id IN ('.join(',', $selected).') AND author=\''.doSlash($txp_user).'\'' );
+                    $selected = safe_column('id', 'txp_link', 'id IN ('.join(',', $selected).') AND author=\''.doSlash($txp_user).'\'');
                 } else {
                     $selected = array();
                 }

@@ -139,7 +139,6 @@ function chooseLang()
 
 function txp_setup_progress_meter($stage = 1)
 {
-
     $stages = array(
         1 => setup_gTxt('set_db_details'),
         2 => setup_gTxt('add_config_file'),
@@ -251,7 +250,7 @@ function getDbInfo()
     }
 
     echo graf(
-        fInput('submit', 'Submit',setup_gTxt('next_step', '', 'raw'), 'publish')
+        fInput('submit', 'Submit', setup_gTxt('next_step', '', 'raw'), 'publish')
     );
 
     echo sInput('printConfig').
@@ -329,7 +328,7 @@ function printConfig()
     if (!($_SESSION['dprefix'] == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $_SESSION['dprefix']))) {
         echo graf(
             span(setup_gTxt('prefix_bad_characters', array(
-                '{dbprefix}' => strong(txpspecialchars($_SESSION['dprefix']))
+                '{dbprefix}' => strong(txpspecialchars($_SESSION['dprefix'])),
             ), 'raw'), ' class="error"')
             ).
             setup_back_button(__FUNCTION__).
@@ -342,7 +341,7 @@ function printConfig()
     if (!$mydb = mysql_select_db($_SESSION['ddb'])) {
         echo graf(
             span(setup_gTxt('db_doesnt_exist', array(
-                '{dbname}' => strong(txpspecialchars($_SESSION['ddb']))
+                '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])),
             ), 'raw'), ' class="error"')
             ).
             setup_back_button(__FUNCTION__).
@@ -356,7 +355,7 @@ function printConfig()
     if ($tables_exist) {
         echo graf(
             span(setup_gTxt('tables_exist', array(
-                '{dbname}' => strong(txpspecialchars($_SESSION['ddb']))
+                '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])),
             ), 'raw'), ' class="error"')
             ).
             setup_back_button(__FUNCTION__).
@@ -381,8 +380,7 @@ function printConfig()
 
     echo graf(
         span(setup_gTxt('using_db', array(
-            '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])))
-        , 'raw').' ('.$_SESSION['dbcharset'].')', ' class="success"')
+            '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])), ), 'raw').' ('.$_SESSION['dbcharset'].')', ' class="success"')
     );
 
     echo setup_config_contents().
@@ -482,7 +480,7 @@ function getTxpLogin()
         ).
 
         graf(
-            fInput('submit', 'Submit',setup_gTxt('next_step'), 'publish')
+            fInput('submit', 'Submit', setup_gTxt('next_step'), 'publish')
         ).
 
         sInput('createTxp').
@@ -572,10 +570,10 @@ function createTxp()
     $dbcharset = $txpcfg['dbcharset'];
 
     $siteurl = str_replace("http://", '', $_SESSION['siteurl']);
-    $siteurl = str_replace(' ', '%20', rtrim($siteurl,"/"));
+    $siteurl = str_replace(' ', '%20', rtrim($siteurl, "/"));
     $urlpath = preg_replace('#^[^/]+#', '', $siteurl);
 
-    define("PFX",trim($dprefix));
+    define("PFX", trim($dprefix));
     define('TXP_INSTALL', 1);
 
     include_once txpath.'/lib/txplib_update.php';
@@ -630,14 +628,14 @@ function makeConfig()
 
     return
     $open."\n"
-    .o.'db'           .m.$_SESSION['ddb'].nl
-    .o.'user'         .m.$_SESSION['duser'].nl
-    .o.'pass'         .m.$_SESSION['dpass'].nl
-    .o.'host'         .m.$_SESSION['dhost'].nl
+    .o.'db'.m.$_SESSION['ddb'].nl
+    .o.'user'.m.$_SESSION['duser'].nl
+    .o.'pass'.m.$_SESSION['dpass'].nl
+    .o.'host'.m.$_SESSION['dhost'].nl
     .($_SESSION['dclient_flags'] ? o.'client_flags'."'] = ".$_SESSION['dclient_flags'].";\n" : '')
-    .o.'table_prefix' .m.$_SESSION['dprefix'].nl
-    .o.'txpath'       .m.txpath.nl
-    .o.'dbcharset'    .m.$_SESSION['dbcharset'].nl
+    .o.'table_prefix'.m.$_SESSION['dprefix'].nl
+    .o.'txpath'.m.txpath.nl
+    .o.'dbcharset'.m.$_SESSION['dbcharset'].nl
     .$close;
 }
 
@@ -652,7 +650,7 @@ function fbCreate()
     if ($GLOBALS['txp_install_successful'] === false) {
         return graf(
                 span(setup_gTxt('errors_during_install', array(
-                    '{num}' => $GLOBALS['txp_err_count']
+                    '{num}' => $GLOBALS['txp_err_count'],
                 )), ' class="error"')
             ).
             n.'</div>'.

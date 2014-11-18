@@ -168,7 +168,7 @@ $txpac = array(
 
     // Use encoded email on Atom feeds id, instead of domain name
     // (if you plan to move this install to another domain, you should use this).
-    'use_mail_on_feeds_id'       =>0,
+    'use_mail_on_feeds_id'       => 0,
 
     // -------------------------------------------------------------
 
@@ -262,5 +262,5 @@ $txp_groups = array(
     4 => 'staff_writer',
     5 => 'freelancer',
     6 => 'designer',
-    0 => 'privs_none'
+    0 => 'privs_none',
 );

@@ -382,7 +382,7 @@ function thumbnail($atts)
         'poplink'   => 0, // Is this used?
         'style'     => '',
         'wraptag'   => '',
-        'width'       => ''
+        'width'       => '',
     ), $atts));
 
     if ($name) {
@@ -411,11 +411,11 @@ function thumbnail($atts)
                 $caption = txpspecialchars($caption);
             }
 
-            if ($width=='' && $thumb_w) {
+            if ($width == '' && $thumb_w) {
                 $width = $thumb_w;
             }
 
-            if ($height=='' && $thumb_h) {
+            if ($height == '' && $thumb_h) {
                 $height = $thumb_h;
             }
 
@@ -511,7 +511,7 @@ function feed_link($atts, $thing = null)
         $flavor    => '1',
         'section'  => $section,
         'category' => $category,
-        'limit'    => $limit
+        'limit'    => $limit,
     ));
 
     if ($flavor == 'atom') {
@@ -550,9 +550,9 @@ function link_feed_link($atts)
     ), $atts));
 
     $url = pagelinkurl(array(
-        $flavor => '1',
-        'area'  =>'link',
-        'category' => $category
+        $flavor    => '1',
+        'area'     => 'link',
+        'category' => $category,
     ));
 
     if ($flavor == 'atom') {
@@ -599,7 +599,7 @@ function linklist($atts, $thing = null)
     $where = array();
     $filters = isset($atts['category']) || isset($atts['author']) || isset($atts['realname']);
     $context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
-    $pageby = ($pageby=='limit') ? $limit : $pageby;
+    $pageby = ($pageby == 'limit') ? $limit : $pageby;
 
     if ($category) {
         $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
@@ -614,7 +614,7 @@ function linklist($atts, $thing = null)
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode'))."')");
+        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list($realname)), 'urldecode'))."')");
         $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
     }
 
@@ -682,7 +682,7 @@ function linklist($atts, $thing = null)
     $qparts = array(
         $where,
         'order by '.doSlash($sort),
-        ($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : ''
+        ($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : '',
     );
 
     $rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_link', join(' ', $qparts));
@@ -964,7 +964,7 @@ function password_protect($atts, $thing = null)
         $ru = serverSet('REDIRECT_REMOTE_USER');
 
         if (!$au && !$ap && strpos($ru, 'Basic') === 0) {
-            list ($au, $ap) = explode(':', base64_decode(substr($ru, 6)));
+            list($au, $ap) = explode(':', base64_decode(substr($ru, 6)));
         }
 
         $access = $au === $login && $ap === $pass;
@@ -1070,7 +1070,7 @@ function recent_comments($atts, $thing = null)
 
     $rs = startRows('select d.name, d.email, d.web, d.message, d.discussid, unix_timestamp(d.Posted) as time, '.
         't.ID as thisid, unix_timestamp(t.Posted) as posted, t.Title as title, t.Section as section, t.url_title '.
-        'from '. safe_pfx('txp_discuss') .' as d inner join '. safe_pfx('textpattern') .' as t on d.parentid = t.ID '.
+        'from '.safe_pfx('txp_discuss').' as d inner join '.safe_pfx('textpattern').' as t on d.parentid = t.ID '.
         'where t.Status >= '.STATUS_LIVE.$expired.' and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit '.intval($offset).','.intval($limit));
 
     if ($rs) {
@@ -1339,7 +1339,7 @@ function category_list($atts, $thing = null)
         } else {
             // Descend only one level from either 'parent' or 'root', plus
             // parent category.
-            $shallow = ($parent) ? "and (parent in($parents) or name in($parents))" : "and parent = 'root'" ;
+            $shallow = ($parent) ? "and (parent in($parents) or name in($parents))" : "and parent = 'root'";
         }
 
         if ($exclude) {
@@ -1479,7 +1479,7 @@ function section_list($atts, $thing = null)
     }
 
     if ($include_default) {
-        $sql_sort = "name != 'default', " . $sql_sort;
+        $sql_sort = "name != 'default', ".$sql_sort;
     }
 
     $rs = safe_rows_start(
@@ -1567,9 +1567,9 @@ function search_input($atts)
     $h5 = ($doctype == 'html5');
     $sub = (!empty($button)) ? '<input type="submit" value="'.txpspecialchars($button).'" />' : '';
     $id =  (!empty($html_id)) ? ' id="'.txpspecialchars($html_id).'"' : '';
-    $out = fInput($h5 ? 'search' : 'text', 'q', $q, '', '', '', $size, '', '',false, $h5);
+    $out = fInput($h5 ? 'search' : 'text', 'q', $q, '', '', '', $size, '', '', false, $h5);
     $out = (!empty($label)) ? txpspecialchars($label).br.$out.$sub : $out.$sub;
-    $out = ($match === 'exact') ? $out : fInput('hidden', 'm', txpspecialchars($match)) . $out;
+    $out = ($match === 'exact') ? $out : fInput('hidden', 'm', txpspecialchars($match)).$out;
     $out = ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 
     if (!$section) {
@@ -1601,7 +1601,7 @@ function search_term($atts)
     }
 
     extract(lAtts(array(
-        'escape' => 'html' // Deprecated in 4.5.0.
+        'escape' => 'html', // Deprecated in 4.5.0.
     ), $atts));
 
     if (isset($atts['escape'])) {
@@ -1791,7 +1791,7 @@ function newer($atts, $thing = null)
     extract(lAtts(array(
         'showalways' => 0,
         'title'      => '',
-        'escape'     => 'html'
+        'escape'     => 'html',
     ), $atts));
 
     $numPages = $thispage['numPages'];
@@ -1815,7 +1815,7 @@ function newer($atts, $thing = null)
             'context' => @$pretext['context'],
             'q'       => @$pretext['q'],
             'm'       => @$m,
-            'author'  => $author
+            'author'  => $author,
         ));
 
         if ($thing) {
@@ -1845,7 +1845,7 @@ function older($atts, $thing = null)
     extract(lAtts(array(
         'showalways' => 0,
         'title'      => '',
-        'escape'     => 'html'
+        'escape'     => 'html',
     ), $atts));
 
     $numPages = $thispage['numPages'];
@@ -1869,7 +1869,7 @@ function older($atts, $thing = null)
             'context' => @$pretext['context'],
             'q'       => @$pretext['q'],
             'm'       => @$m,
-            'author'  => $author
+            'author'  => $author,
         ));
 
         if ($thing) {
@@ -1969,7 +1969,7 @@ function posted($atts)
         'format'  => '',
         'gmt'     => '',
         'lang'    => '',
-        'wraptag' => ''
+        'wraptag' => '',
     ), $atts));
 
     if ($format) {
@@ -2058,7 +2058,7 @@ function modified($atts)
         'format'  => '',
         'gmt'     => '',
         'lang'    => '',
-        'wraptag' => ''
+        'wraptag' => '',
     ), $atts));
 
     if ($format) {
@@ -2111,7 +2111,6 @@ function comments_invite($atts)
     $invite_return = '';
 
     if (($annotate or $comments_count) && ($showalways or $is_article_list)) {
-
         $comments_invite = txpspecialchars($comments_invite);
         $ccount = ($comments_count && $showcount) ?  ' ['.$comments_count.']' : '';
 
@@ -2119,7 +2118,7 @@ function comments_invite($atts)
             $invite_return = $comments_invite.$ccount;
         } else {
             if (!$comments_mode) {
-                $invite_return = doTag($comments_invite, 'a', $class, ' href="'.permlinkurl($thisarticle).'#'.gTxt('comment').'" '). $ccount;
+                $invite_return = doTag($comments_invite, 'a', $class, ' href="'.permlinkurl($thisarticle).'#'.gTxt('comment').'" ').$ccount;
             } else {
                 $invite_return = "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"".(($class) ? ' class="'.txpspecialchars($class).'"' : '').'>'.$comments_invite.'</a> '.$ccount;
             }
@@ -2151,7 +2150,7 @@ function comments_form($atts)
         'previewlabel'  => gTxt('preview'),
         'submitlabel'   => gTxt('submit'),
         'rememberlabel' => gTxt('remember'),
-        'forgetlabel'   => gTxt('forget')
+        'forgetlabel'   => gTxt('forget'),
     ), $atts));
 
     assert_article();
@@ -2172,7 +2171,7 @@ function comments_form($atts)
         $out = gTxt("comment_posted");
 
         if (gps('commented') === '0') {
-            $out .= " ". gTxt("comment_moderated");
+            $out .= " ".gTxt("comment_moderated");
         }
 
         $out = graf($out, ' id="txpCommentInputForm"');
@@ -2198,7 +2197,7 @@ function comments_error($atts)
         'wraptag' => 'div',
     ), $atts));
 
-    $evaluator =& get_comment_evaluator();
+    $evaluator = & get_comment_evaluator();
 
     $errors = $evaluator->get_result_message();
 
@@ -2211,9 +2210,9 @@ function comments_error($atts)
 
 function if_comments_error($atts, $thing)
 {
-    $evaluator =& get_comment_evaluator();
+    $evaluator = & get_comment_evaluator();
 
-    return parse(EvalElse($thing,(count($evaluator->get_result_message()) > 0)));
+    return parse(EvalElse($thing, (count($evaluator->get_result_message()) > 0)));
 }
 
 /**
@@ -2247,8 +2246,9 @@ function comments_annotateinvite($atts, $thing)
         )
     );
 
-    if (!$thing)
+    if (!$thing) {
         $thing = $AnnotateInvite;
+    }
 
     return (!$Annotate) ? '' : doTag($thing, $wraptag, $class, ' id="'.gTxt('comment').'"');
 }
@@ -2286,7 +2286,7 @@ function comments($atts)
     $qparts = array(
         'parentid='.intval($thisid).' and visible='.VISIBLE,
         'order by '.doSlash($sort),
-        ($limit) ? 'limit '.intval($offset).', '.intval($limit) : ''
+        ($limit) ? 'limit '.intval($offset).', '.intval($limit) : '',
     );
 
     $rs = safe_rows_start('*, unix_timestamp(posted) as time', 'txp_discuss', join(' ', $qparts));
@@ -2335,7 +2335,6 @@ function comments_preview($atts)
     if ($preview['message'] == '') {
         $in = getComment();
         $preview['message'] = $in['message'];
-
     }
 
     // It is called 'message', not 'novel'!
@@ -2906,7 +2905,7 @@ function if_keywords($atts, $thing = null)
     assert_article();
 
     extract(lAtts(array(
-        'keywords' => ''
+        'keywords' => '',
     ), $atts));
 
     $condition = empty($keywords)
@@ -2918,7 +2917,7 @@ function if_keywords($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function if_article_image($atts, $thing='')
+function if_article_image($atts, $thing = '')
 {
     global $thisarticle;
 
@@ -2956,8 +2955,8 @@ function article_image($atts)
         $rs = safe_row('*', 'txp_image', 'id = '.intval($image));
 
         if ($rs) {
-            $width = ($width=='') ? (($thumbnail) ? $rs['thumb_w'] : $rs['w']) : $width;
-            $height = ($height=='') ? (($thumbnail) ? $rs['thumb_h'] : $rs['h']) : $height;
+            $width = ($width == '') ? (($thumbnail) ? $rs['thumb_w'] : $rs['w']) : $width;
+            $height = ($height == '') ? (($thumbnail) ? $rs['thumb_h'] : $rs['h']) : $height;
 
             if ($thumbnail) {
                 if ($rs['thumbnail']) {
@@ -3098,7 +3097,7 @@ function search_result_count($atts)
         'text' => ($t == 1 ? gTxt('article_found') : gTxt('articles_found')),
     ), $atts));
 
-    return $t . ($text ? ' ' . $text : '');
+    return $t.($text ? ' '.$text : '');
 }
 
 // -------------------------------------------------------------
@@ -3132,7 +3131,7 @@ function image_index($atts)
     $qparts = array(
         "category = '".doSlash($c)."' and thumbnail = 1",
         'order by '.doSlash($sort),
-        ($limit) ? 'limit '.intval($offset).', '.intval($limit) : ''
+        ($limit) ? 'limit '.intval($offset).', '.intval($limit) : '',
     );
 
     $rs = safe_rows_start('*', 'txp_image',  join(' ', $qparts));
@@ -3142,12 +3141,12 @@ function image_index($atts)
 
         while ($a = nextRow($rs)) {
             extract($a);
-            $dims = ($thumb_h ? " height=\"$thumb_h\"" : '') . ($thumb_w ? " width=\"$thumb_w\"" : '');
+            $dims = ($thumb_h ? " height=\"$thumb_h\"" : '').($thumb_w ? " width=\"$thumb_w\"" : '');
             $url = pagelinkurl(array(
                 'c'       => $c,
                 'context' => 'image',
                 's'       => $s,
-                'p'       => $id
+                'p'       => $id,
             ));
             $out[] = href(
                 '<img src="'.imagesrcurl($id, $ext, true).'"'.$dims.' alt="'.txpspecialchars($alt).'" />',
@@ -3218,7 +3217,7 @@ function images($atts, $thing = null)
     $has_content = $thing || $form;
     $filters = isset($atts['id']) || isset($atts['name']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['extension']) || $thumbnail === '1' || $thumbnail === '0';
     $context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
-    $pageby = ($pageby=='limit') ? $limit : $pageby;
+    $pageby = ($pageby == 'limit') ? $limit : $pageby;
 
     if ($name) {
         $where[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
@@ -3237,7 +3236,7 @@ function images($atts, $thing = null)
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode')) ."')");
+        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list($realname)), 'urldecode'))."')");
         $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
     }
 
@@ -3339,7 +3338,7 @@ function images($atts, $thing = null)
     $qparts = array(
         $where,
         'order by '.$safe_sort,
-        ($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : ''
+        ($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : '',
     );
 
     $rs = safe_rows_start('*', 'txp_image', join(' ', $qparts));
@@ -3539,7 +3538,7 @@ function image_date($atts)
         // Not a typo: use fileDownloadFormatTime() since it's fit for purpose.
         $out = fileDownloadFormatTime(array(
             'ftime'  => $thisimage['date'],
-            'format' => $format
+            'format' => $format,
         ));
 
         if (!$from_form) {
@@ -3718,7 +3717,7 @@ function formatCommentsInvite($AnnotateInvite, $Section, $ID)
     $ccount = ($dc) ?  '['.$dc.']' : '';
     if (!$comments_mode) {
         return '<a href="'.permlinkurl_id($ID).'/#'.gTxt('comment').
-            '">'.$AnnotateInvite.'</a>'. $ccount;
+            '">'.$AnnotateInvite.'</a>'.$ccount;
     } else {
         return "<a href=\"".hu."?parentid=$ID\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\">".$AnnotateInvite.'</a> '.$ccount;
     }
@@ -3809,7 +3808,7 @@ function breadcrumb($atts)
     $content = array();
     extract($pretext);
 
-    if (!empty($s) && $s!= 'default') {
+    if (!empty($s) && $s != 'default') {
         $section_title = ($title) ? fetch_section_title($s) : $s;
         $section_title_html = escape_title($section_title);
         $content[] = ($linked)
@@ -4323,7 +4322,7 @@ function file_download_list($atts, $thing = null)
     $where = $statwhere = array();
     $filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['status']);
     $context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
-    $pageby = ($pageby=='limit') ? $limit : $pageby;
+    $pageby = ($pageby == 'limit') ? $limit : $pageby;
 
     if ($category) {
         $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
@@ -4344,7 +4343,7 @@ function file_download_list($atts, $thing = null)
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode')) ."')");
+        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list($realname)), 'urldecode'))."')");
         $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
     }
 
@@ -4367,7 +4366,9 @@ function file_download_list($atts, $thing = null)
             }
 
             // Only one context can be processed.
-            if ($where) break;
+            if ($where) {
+                break;
+            }
         }
     }
 
@@ -4726,7 +4727,7 @@ function variable($atts, $thing = null)
 
     extract(lAtts(array(
         'name'  => '',
-        'value' => parse($thing)
+        'value' => parse($thing),
     ), $atts));
 
     if (empty($name)) {

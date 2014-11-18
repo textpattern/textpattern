@@ -92,16 +92,14 @@ function doLoginForm($message)
 
             graf(
                 n.span(tag(gTxt('name'), 'label', array('for' => 'login_name')), array('class' => 'txp-label')).
-                n.span(fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), array('class' => 'txp-value'))
-            , ' class="login-name"').
+                n.span(fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), array('class' => 'txp-value')), ' class="login-name"').
 
             graf(
                 fInput('submit', '', gTxt('password_reset_button'), 'publish').n
             ).
 
             graf(
-                href(gTxt('back_to_login'), 'index.php')
-            , array('class' => 'login-return')).
+                href(gTxt('back_to_login'), 'index.php'), array('class' => 'login-return')).
 
             hInput('p_reset', 1);
     } else {
@@ -109,27 +107,23 @@ function doLoginForm($message)
 
             graf(
                 n.span(tag(gTxt('name'), 'label', array('for' => 'login_name')), array('class' => 'txp-label')).
-                n.span(fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), array('class' => 'txp-value'))
-            , array('class' => 'login-name')).
+                n.span(fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), array('class' => 'txp-value')), array('class' => 'login-name')).
 
             graf(
                 n.span(tag(gTxt('password'), 'label', array('for' => 'login_password')), array('class' => 'txp-label')).
-                n.span(fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password'), array('class' => 'txp-value'))
-            , array('class' => 'login-password')).
+                n.span(fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password'), array('class' => 'txp-value')), array('class' => 'login-password')).
 
             graf(
                 checkbox('stay', 1, $stay, '', 'login_stay').n.
                 tag(gTxt('stay_logged_in'), 'label', array('for' => 'login_stay')).
-                popHelp('remember_login').n
-            , array('class' => 'login-stay')).
+                popHelp('remember_login').n, array('class' => 'login-stay')).
 
             graf(
                 fInput('submit', '', gTxt('log_in_button'), 'publish').n
             ).
 
             graf(
-                href(gTxt('password_forgotten'), '?reset=1')
-            , array('class' => 'login-forgot'));
+                href(gTxt('password_forgotten'), '?reset=1'), array('class' => 'login-forgot'));
 
         if (gps('event')) {
             $out[] = eInput(gps('event'));
@@ -141,8 +135,7 @@ function doLoginForm($message)
             'role'            => 'region',
             'class'           => 'txp-login',
             'aria-labelledby' => 'txp-login-heading',
-        ))
-    , '', '', 'post', '', '', 'login_form').
+        )), '', '', 'post', '', '', 'login_form').
 
     script_js('textpattern.textarray = '.json_encode($textarray_script)).
     n.'</main><!-- /txp-body -->'.n.'</body>'.n.'</html>';
@@ -166,7 +159,7 @@ function doTxpValidate()
     $stay       = ps('stay');
     $logout     = gps('logout');
     $message    = '';
-    $pub_path   = preg_replace('|//$|','/', rhu.'/');
+    $pub_path   = preg_replace('|//$|', '/', rhu.'/');
 
     if (cs('txp_login') and strpos(cs('txp_login'), ',')) {
         $txp_login = explode(',', cs('txp_login'));
@@ -209,7 +202,6 @@ function doTxpValidate()
             setcookie('txp_login_public', '', time() - 3600, $pub_path);
             $message = array(gTxt('bad_cookie'), E_ERROR);
         }
-
     } elseif ($p_userid and $p_password) { // Incoming login vars.
         $name = txp_validate($p_userid, $p_password);
 

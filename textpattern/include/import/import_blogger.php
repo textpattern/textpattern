@@ -74,7 +74,7 @@ function doImportBLOGGER($file, $section, $status, $invite)
             }
 
             // End of an item, so we can process it.
-            $results[]=import_blogger_item($item, $section, $status, $invite);
+            $results[] = import_blogger_item($item, $section, $status, $invite);
             $item = array();
             $state = 'metadata';
         } elseif ($line == '-----' and $state == 'metadata') {
@@ -105,16 +105,16 @@ function doImportBLOGGER($file, $section, $status, $invite)
                 // Metadata within the multiline field.
                 $multiline_data[$match[1]] = $match[2];
             } elseif (empty($multiline_data['content'])) {
-                $multiline_data['content'] = ($line . "\n");
+                $multiline_data['content'] = ($line."\n");
             } else {
-                $multiline_data['content'] .= ($line . "\n");
+                $multiline_data['content'] .= ($line."\n");
             }
         }
     }
 
     // Catch the last item in the file, if it doesn't end with a separator.
     if (!empty($item)) {
-        $results[]= import_blogger_item($item, $section, $status, $invite);
+        $results[] = import_blogger_item($item, $section, $status, $invite);
     }
 
     fclose($fp);
@@ -144,7 +144,7 @@ function import_blogger_item($item, $section, $status, $invite)
     $textile = new Textpattern_Textile_Parser();
 
     $title = $textile->TextileThis($item['TITLE'], 1);
-    $url_title = stripSpace($title,1);
+    $url_title = stripSpace($title, 1);
 
     $body = $item['BODY'][0]['content'];
     $body_html = $textile->textileThis($body, 1);
@@ -198,7 +198,7 @@ function import_blogger_item($item, $section, $status, $invite)
                         @$comment['AUTHOR'] = $match[2];
                     }
 
-                    if (!safe_field("discussid","txp_discuss","posted = '".doSlash($comment_date)."' AND message = '".doSlash($comment_content)."'")) {
+                    if (!safe_field("discussid", "txp_discuss", "posted = '".doSlash($comment_date)."' AND message = '".doSlash($comment_content)."'")) {
                         safe_insert('txp_discuss',
                             "parentid='".doSlash($parentid)."',".
                             // Blogger places the link to user profile page as

@@ -70,7 +70,7 @@ function doImportMT($file, $section, $status, $invite)
         // best to fake it.
         if ($line == '--------') {
             # End of an item, so we can process it
-            $results[]=import_mt_item($item, $section, $status, $invite);
+            $results[] = import_mt_item($item, $section, $status, $invite);
             $item = array();
             $state = 'metadata';
         } elseif ($line == '-----' and $state == 'metadata') {
@@ -101,16 +101,16 @@ function doImportMT($file, $section, $status, $invite)
                 // Metadata within the multiline field.
                 $multiline_data[$match[1]] = import_mt_utf8($match[2]);
             } elseif (empty($multiline_data['content'])) {
-                $multiline_data['content'] = import_mt_utf8(($line . "\n"));
+                $multiline_data['content'] = import_mt_utf8(($line."\n"));
             } else {
-                $multiline_data['content'] .= import_mt_utf8(($line . "\n"));
+                $multiline_data['content'] .= import_mt_utf8(($line."\n"));
             }
         }
     }
 
     // Catch the last item in the file, if it doesn't end with a separator.
     if (!empty($item)) {
-        $results[]= import_mt_item($item, $section, $status, $invite, $blogid);
+        $results[] = import_mt_item($item, $section, $status, $invite, $blogid);
     }
 
     fclose($fp);
@@ -150,7 +150,7 @@ function import_mt_item($item, $section, $status, $invite)
     $body = isset($item['BODY'][0]['content']) ? $item['BODY'][0]['content'] : '';
 
     if (isset($item['EXTENDED BODY'][0]['content'])) {
-        $body .= "\n <!-- more -->\n\n" . $item['EXTENDED BODY'][0]['content'];
+        $body .= "\n <!-- more -->\n\n".$item['EXTENDED BODY'][0]['content'];
     }
 
     $body_html = $textile->textileThis($body);
@@ -169,7 +169,7 @@ function import_mt_item($item, $section, $status, $invite)
 
     $category1 = @$item['PRIMARY CATEGORY'];
 
-    if ($category1 and !safe_field("name","txp_category","name = '$category1'")) {
+    if ($category1 and !safe_field("name", "txp_category", "name = '$category1'")) {
         safe_insert('txp_category', "name='".doSlash($category1)."', type='article', parent='root'");
     }
 
@@ -179,7 +179,7 @@ function import_mt_item($item, $section, $status, $invite)
         $category2 = '';
     }
 
-    if ($category2 and !safe_field("name","txp_category","name = '$category2'")) {
+    if ($category2 and !safe_field("name", "txp_category", "name = '$category2'")) {
         safe_insert('txp_category', "name='".doSlash($category2)."', type='article', parent='root'");
     }
 
@@ -229,7 +229,7 @@ function import_mt_item($item, $section, $status, $invite)
                 $comment_date = strftime('%Y-%m-%d %H:%M:%S', safe_strtotime(@$comment['DATE']));
                 $comment_content = $textile->TextileThis(nl2br(@$comment['content']), 1);
 
-                if (!safe_field("discussid","txp_discuss","posted = '".doSlash($comment_date)."' AND message = '".doSlash($comment_content)."'")) {
+                if (!safe_field("discussid", "txp_discuss", "posted = '".doSlash($comment_date)."' AND message = '".doSlash($comment_content)."'")) {
                     safe_insert('txp_discuss',
                         "parentid='".doSlash($parentid)."',".
                         "name='".doSlash(@$comment['AUTHOR'])."',".

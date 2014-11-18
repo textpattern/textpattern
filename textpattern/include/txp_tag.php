@@ -45,7 +45,7 @@ header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 // TODO: Remove jQuery migrate plugin before release
     script_js('//code.jquery.com/jquery-migrate-1.2.1.js', TEXTPATTERN_SCRIPT_URL).
     script_js(
-        'var textpattern = ' . json_encode(array(
+        'var textpattern = '.json_encode(array(
             'event' => $event,
             'step' => $step,
             '_txp_token' => form_token(),
@@ -171,7 +171,7 @@ class Textpattern_Tag_BuilderTags
     /**
      * Renders a set of input widgets.
      *
-     * @param  array $widgets List of label => content pairs
+     * @param  array  $widgets List of label => content pairs
      * @return string HTML
      */
 
@@ -278,7 +278,7 @@ class Textpattern_Tag_BuilderTags
         $vals = array(
             'past'   => gTxt('time_past'),
             'future' => gTxt('time_future'),
-            'any'    => gTxt('time_any')
+            'any'    => gTxt('time_any'),
         );
 
         return ' '.selectInput('time', $vals, $time, true, '', 'time');
@@ -287,7 +287,7 @@ class Textpattern_Tag_BuilderTags
     /**
      * Renders HTML boolean &lt;select&gt; options.
      *
-     * @param  string $name Input name/ID
+     * @param  string $name  Input name/ID
      * @param  string $value Currently selected value
      * @return string HTML
      */
@@ -351,7 +351,7 @@ class Textpattern_Tag_BuilderTags
             'Category1 desc' => gTxt('category1').$desc,
             'Category2 asc'  => gTxt('category2').$asc,
             'Category2 desc' => gTxt('category2').$desc,
-            'rand()'         => gTxt('random')
+            'rand()'         => gTxt('random'),
         );
 
         return ' '.selectInput('sort', $vals, $value, true, '', 'sort');
@@ -450,7 +450,6 @@ class Textpattern_Tag_BuilderTags
         return gTxt('no_sections_available');
     }
 
-
     /**
      * Renders a HTML &lt;select&gt; list of Categories.
      *
@@ -482,7 +481,7 @@ class Textpattern_Tag_BuilderTags
         $vals = array(
             'Category1,Category2' => gTxt('category1').' '.gTxt('and').' '.gTxt('category2'),
             'Category1'           => gTxt('category1'),
-            'Category2'           => gTxt('category2')
+            'Category2'           => gTxt('category2'),
         );
 
         return ' '.selectInput('match', $vals, $value, true, '', 'match');
@@ -558,7 +557,7 @@ class Textpattern_Tag_BuilderTags
     /**
      * Renders a HTML &lt;select&gt; list of Stylesheets.
      *
-     * @param  string        $value Currently selected value
+     * @param  string $value Currently selected value
      * @return string | bool HTML | false on error
      */
 
@@ -592,7 +591,7 @@ class Textpattern_Tag_BuilderTags
     {
         $vals = array(
             'link' => '<link rel...',
-            'url'  => 'css.php?...'
+            'url'  => 'css.php?...',
         );
 
         return ' '.selectInput('format', $vals, $value, true, '', 'format');
@@ -626,7 +625,7 @@ class Textpattern_Tag_BuilderTags
     {
         $vals = array(
             'atom' => 'Atom 1.0',
-            'rss'  => 'RSS 2.0'
+            'rss'  => 'RSS 2.0',
         );
 
         return ' '.selectInput('flavor', $vals, $value, true, '', 'flavor');
@@ -761,7 +760,7 @@ class Textpattern_Tag_BuilderTags
                     7,
                     '',
                     'month'
-                ). ' ('.gTxt('yyyy-mm').')',
+                ).' ('.gTxt('yyyy-mm').')',
                 'keywords'      => '<textarea name="keywords" id="keywords">'.$keywords.'</textarea>',
                 'has_excerpt'   => $this->tbYesNoPop('excerpted', $excerpted),
                 'expired'       => $this->tbYesNoPop('expired', $expired),
@@ -1643,7 +1642,7 @@ class Textpattern_Tag_BuilderTags
             'filename desc'  => gTxt('file_name').$desc,
             'downloads asc'  => gTxt('downloads').$asc,
             'downloads desc' => gTxt('downloads').$desc,
-            'rand()'         => 'Random'
+            'rand()'         => 'Random',
         );
 
         extract($atts);
@@ -1864,10 +1863,10 @@ class Textpattern_Tag_BuilderTags
                         $modifiers .= '{'.$style.'}';
                     }
 
-                    $wrap = ($wraptag) ? $wraptag.$modifiers . '. ' : '';
+                    $wrap = ($wraptag) ? $wraptag.$modifiers.'. ' : '';
 
                     $out .= $this->tdb(
-                        (($wrap) ? $wrap : '') . '!'. (($wrap) ? '' : $modifiers) .$url.$alternate.'!'
+                        (($wrap) ? $wrap : '').'!'.(($wrap) ? '' : $modifiers).$url.$alternate.'!'
                     );
                     break;
                 case 'html':
@@ -1890,7 +1889,7 @@ class Textpattern_Tag_BuilderTags
                         'html_id' => $html_id,
                         'id'      => $id,
                         'style'   => $style,
-                        'wraptag' => $wraptag
+                        'wraptag' => $wraptag,
                     );
                     $out .= $this->build($atts);
                     break;
@@ -2236,7 +2235,7 @@ class Textpattern_Tag_BuilderTags
             'category desc' => gTxt('category').$desc,
             'date asc'      => gTxt('date').$asc,
             'date desc'     => gTxt('date').$desc,
-            'rand()'        => gTxt('random')
+            'rand()'        => gTxt('random'),
         );
 
         extract($atts);

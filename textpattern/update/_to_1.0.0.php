@@ -30,111 +30,111 @@ safe_delete("txp_category", "name=' '");
 
 $txpcat = getThings('describe `'.PFX.'txp_category`');
 
-if (!in_array('id',$txpcat)) {
+if (!in_array('id', $txpcat)) {
     safe_alter('txp_category',
         'add `id` int(6) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST');
 }
 
-if (!in_array('parent',$txpcat)) {
+if (!in_array('parent', $txpcat)) {
     safe_alter("txp_category", "add `parent` varchar(64) not null default ''");
 }
 
-if (!in_array('lft',$txpcat)) {
+if (!in_array('lft', $txpcat)) {
     safe_alter("txp_category", "add `lft` int(6) not null default '0'");
 }
 
-if (!in_array('rgt',$txpcat)) {
+if (!in_array('rgt', $txpcat)) {
     safe_alter("txp_category", "add `rgt` int(6) not null default '0'");
 }
 
-if (in_array('level',$txpcat)) {
+if (in_array('level', $txpcat)) {
     safe_alter("txp_category", "drop `level`");
 }
 
 $txp = getThings('describe `'.PFX.'textpattern`');
 
-if (!in_array('Keywords',$txp)) {
+if (!in_array('Keywords', $txp)) {
     safe_alter("textpattern", "add `Keywords` varchar(255) not null");
 }
 
-if (in_array('Listing1',$txp) && !in_array('textile_body',$txp)) {
+if (in_array('Listing1', $txp) && !in_array('textile_body', $txp)) {
     safe_alter("textpattern",
         "change Listing1 textile_body INT(2) DEFAULT '1' NOT NULL");
 }
 
-if (in_array('Listing2',$txp) && !in_array('textile_excerpt',$txp)) {
+if (in_array('Listing2', $txp) && !in_array('textile_excerpt', $txp)) {
     safe_alter("textpattern",
         "change Listing2 textile_excerpt INT(2) DEFAULT '1' NOT NULL");
 }
 
-if (!in_array('url_title',$txp)) {
+if (!in_array('url_title', $txp)) {
     safe_alter("textpattern", "add `url_title` varchar(255) not null");
 }
 
-if (!in_array('Excerpt',$txp)) {
+if (!in_array('Excerpt', $txp)) {
     safe_alter("textpattern", "add `Excerpt` mediumtext not null after `Body_html`");
 }
 
 // Excerpt_html added in 1.0.
-if (!in_array('Excerpt_html',$txp)) {
+if (!in_array('Excerpt_html', $txp)) {
     safe_alter("textpattern", "add `Excerpt_html` mediumtext not null after `Excerpt` ");
 }
 
 // Comments count cache field.
-if (!in_array('comments_count',$txp)) {
+if (!in_array('comments_count', $txp)) {
     safe_alter("textpattern", "add `comments_count` int(8) not null after `AnnotateInvite` ");
 }
 
 // Custom fields added for g1.19.
-if (!in_array('custom_1',$txp)) {
+if (!in_array('custom_1', $txp)) {
     safe_alter("textpattern", "add `custom_1` varchar(255) not null");
 }
 
-if (!in_array('custom_2',$txp)) {
+if (!in_array('custom_2', $txp)) {
     safe_alter("textpattern", "add `custom_2` varchar(255) not null");
 }
 
-if (!in_array('custom_3',$txp)) {
+if (!in_array('custom_3', $txp)) {
     safe_alter("textpattern", "add `custom_3` varchar(255) not null");
 }
 
-if (!in_array('custom_4',$txp)) {
+if (!in_array('custom_4', $txp)) {
     safe_alter("textpattern", "add `custom_4` varchar(255) not null");
 }
 
-if (!in_array('custom_5',$txp)) {
+if (!in_array('custom_5', $txp)) {
     safe_alter("textpattern", "add `custom_5` varchar(255) not null");
 }
 
-if (!in_array('custom_6',$txp)) {
+if (!in_array('custom_6', $txp)) {
     safe_alter("textpattern", "add `custom_6` varchar(255) not null");
 }
 
-if (!in_array('custom_7',$txp)) {
+if (!in_array('custom_7', $txp)) {
     safe_alter("textpattern", "add `custom_7` varchar(255) not null");
 }
 
-if (!in_array('custom_8',$txp)) {
+if (!in_array('custom_8', $txp)) {
     safe_alter("textpattern", "add `custom_8` varchar(255) not null");
 }
 
-if (!in_array('custom_9',$txp)) {
+if (!in_array('custom_9', $txp)) {
     safe_alter("textpattern", "add `custom_9` varchar(255) not null");
 }
 
-if (!in_array('custom_10',$txp)) {
+if (!in_array('custom_10', $txp)) {
     safe_alter("textpattern", "add `custom_10` varchar(255) not null");
 }
 
 $txpsect = getThings('describe `'.PFX.'txp_section`');
 
-if (!in_array('searchable',$txpsect)) {
+if (!in_array('searchable', $txpsect)) {
     safe_alter("txp_section", "add `searchable` int(2) not null default 1");
 }
 
 $txpuser = getThings('describe `'.PFX.'txp_users`');
 
-if (!in_array('nonce',$txpuser)) {
+if (!in_array('nonce', $txpuser)) {
     safe_alter("txp_users", "add `nonce` varchar(64) not null");
 };
 
@@ -144,8 +144,8 @@ $txpusers = safe_rows_start('name, nonce', 'txp_users', '1');
 if ($txpusers) {
     while ($a = nextRow($txpusers)) {
         extract($a);
-                if (!$nonce) {
-            $nonce = md5( uniqid( rand(), true ) );
+        if (!$nonce) {
+            $nonce = md5(uniqid(rand(), true));
             safe_update('txp_users', "nonce='$nonce'", "name = '".doSlash($name)."'");
         }
     }
@@ -236,7 +236,7 @@ $rs = mysql_query("select ID, Title from `".PFX."textpattern` where url_title li
 
 while ($a = mysql_fetch_array($rs)) {
     extract($a);
-    $url_title = addslashes(stripSpace($Title,1));
+    $url_title = addslashes(stripSpace($Title, 1));
     assert_int($ID);
     safe_update("textpattern", "url_title = '$url_title'", "ID=$ID");
 }
@@ -304,7 +304,7 @@ if (safe_field('name', 'txp_prefs', "name='is_dst'") === false) {
 // FIXME: this presupposes 'gmtoffset' won't be set at clean install (RC4+ probably will)
 if (safe_field('val', 'txp_prefs', "name='gmtoffset'") === false) {
     $old_offset = safe_field('val', 'txp_prefs', "name='timeoffset'");
-    $serveroffset = gmmktime(0,0,0) - mktime(0,0,0);
+    $serveroffset = gmmktime(0, 0, 0) - mktime(0, 0, 0);
     $gmtoffset = sprintf("%+d", $serveroffset + $old_offset);
     safe_insert('txp_prefs', "prefs_id=1,name='gmtoffset',val='".doSlash($gmtoffset)."'");
 }
@@ -402,7 +402,7 @@ while ($a = @mysql_fetch_assoc($rs)) {
     extract($a);
     assert_int($ID);
     $lite = ($textile_excerpt) ? '' : 1;
-    $Excerpt_html = $textile->TextileThis($Excerpt,$lite);
+    $Excerpt_html = $textile->TextileThis($Excerpt, $lite);
     safe_update("textpattern", "Excerpt_html = '".doSlash($Excerpt_html)."'", "ID=$ID");
 }
 
@@ -410,7 +410,7 @@ while ($a = @mysql_fetch_assoc($rs)) {
 
 // Blog unique id.
 if (safe_field('val', 'txp_prefs', "name='blog_uid'") === false) {
-    $prefs['blog_uid'] = md5(uniqid(rand(),true));
+    $prefs['blog_uid'] = md5(uniqid(rand(), true));
     safe_insert('txp_prefs', "name='blog_uid', val='".$prefs['blog_uid']."', prefs_id='1'");
 }
 
@@ -424,7 +424,7 @@ if (safe_field('val', 'txp_prefs', "name='blog_time_uid'") === false) {
 }
 
 // Articles unique id.
-if (!in_array('uid',$txp)) {
+if (!in_array('uid', $txp)) {
     safe_alter('textpattern', "add `uid` varchar(32) not null");
     safe_alter('textpattern', "add `feed_time` DATE not null DEFAULT '0000-00-00'");
 
@@ -433,8 +433,8 @@ if (!in_array('uid',$txp)) {
     if ($rs) {
         while ($a = nextRow($rs)) {
             assert_int($a['ID']);
-            $feed_time = substr($a['Posted'],0,10);
-            safe_update('textpattern', "uid='".md5(uniqid(rand(),true))."', feed_time='".doSlash($feed_time)."'", "ID={$a['ID']}");
+            $feed_time = substr($a['Posted'], 0, 10);
+            safe_update('textpattern', "uid='".md5(uniqid(rand(), true))."', feed_time='".doSlash($feed_time)."'", "ID={$a['ID']}");
         }
     }
 }
@@ -451,11 +451,11 @@ if ($rs) {
 }
 
 // 1.0: Human-friendly title for sections and categories, to solve i18n problems.
-if (!in_array('title',$txpsect)) {
+if (!in_array('title', $txpsect)) {
     safe_alter("txp_section", "add `title` varchar(255) not null default ''");
 }
 
-if (!in_array('title',$txpcat)) {
+if (!in_array('title', $txpcat)) {
     safe_alter("txp_category", "add `title` varchar(255) not null default ''");
 }
 
@@ -506,7 +506,7 @@ if (!in_array('position', $txpprefs)) {
         'attach_titles_to_permalinks' => array('html' => 'yesnoradio', 'event' => 'publish', 'type' => '1', 'position' => '1'),
         'sitename' => array('html' => 'text_input', 'event' => 'publish', 'type' => '0', 'position' => '1'),
         'siteurl' => array('html' => 'text_input', 'event' => 'publish', 'type' => '0', 'position' => '2'),
-        'site_slogan'  => array('html' =>'text_input', 'event' => 'publish', 'type' => '0', 'position' => '3'),
+        'site_slogan'  => array('html' => 'text_input', 'event' => 'publish', 'type' => '0', 'position' => '3'),
         'language' => array('html' => 'languages', 'event' => 'publish', 'type' => '0', 'position' => '4'),
         'gmtoffset' => array('html' => 'gmtoffset_select', 'event' => 'publish', 'type' =>  '0', 'position' => '5'),
         'is_dst' => array('html' => 'yesnoradio', 'event' => 'publish', 'type' => '0', 'position' => '6'),
@@ -631,7 +631,7 @@ if (!safe_query("SELECT 1 FROM `".PFX."txp_lang` LIMIT 0")) {
 
     $client = new IXR_Client('http://rpc.textpattern.com');
 
-    if (!$client->query('tups.getLanguage',$prefs['blog_uid'],LANG)) {
+    if (!$client->query('tups.getLanguage', $prefs['blog_uid'], LANG)) {
         echo '<p style="color:red">Error trying to install language. Please, try it again again.<br />
         If problem connecting to the RPC server persists, you can go to <a href="http://rpc.textpattern.com/lang/">http://rpc.textpattern.com/lang/</a>, download the
         desired language file and place it in the /lang/ directory of your textpattern install. You can then install the language from file.</p>';
@@ -641,8 +641,8 @@ if (!safe_query("SELECT 1 FROM `".PFX."txp_lang` LIMIT 0")) {
 
         function install_lang_key($value, $key)
         {
-            $q = "name='".doSlash($value[name])."', event='".doSlash($value[event])."', data='".doSlash($value[data])."', lastmod='".doSlash(strftime('%Y%m%d%H%M%S',$value['uLastmod']))."'";
-            safe_insert('txp_lang',$q.", lang='".LANG."'");
+            $q = "name='".doSlash($value[name])."', event='".doSlash($value[event])."', data='".doSlash($value[data])."', lastmod='".doSlash(strftime('%Y%m%d%H%M%S', $value['uLastmod']))."'";
+            safe_insert('txp_lang', $q.", lang='".LANG."'");
         }
 
         array_walk($lang_struct, 'install_lang_key');

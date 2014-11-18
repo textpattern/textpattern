@@ -58,8 +58,7 @@ if (@ini_get('register_globals')) {
             '_SESSION',
             '_REQUEST',
             '_ENV',
-        )))
-        {
+        ))) {
             unset($GLOBALS[$_txpfoo], $$_txpfoo);
         }
     }

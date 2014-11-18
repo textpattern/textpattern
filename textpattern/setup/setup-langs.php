@@ -2052,5 +2052,5 @@ $langs = array(
         'your_email' => '設定 Email 信箱',
         'your_full_name' => '您的姓名',
         'you_can_access' => '您可以使用帳號密碼登入 <a href="index.php">管理頁面</a>.',
-    )
+    ),
 );

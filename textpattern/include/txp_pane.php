@@ -60,7 +60,7 @@ class Textpattern_Admin_Pane
     {
         $args = func_get_args();
 
-        return ps('token') === md5(join('', $args) . ps('origin') . form_token() . get_pref('blog_uid'));
+        return ps('token') === md5(join('', $args).ps('origin').form_token().get_pref('blog_uid'));
     }
 
     /**

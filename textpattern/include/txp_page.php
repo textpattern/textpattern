@@ -94,7 +94,7 @@ function page_edit($message = '')
         $buttons .= span(href(gTxt('duplicate'), '#', array(
             'id'    => 'txp_clone',
             'class' => 'clone',
-            'title' => gTxt('page_clone')
+            'title' => gTxt('page_clone'),
         )), array('class' => 'txp-actions'));
     } else {
         $buttons .= hInput('savenew', 'savenew');
@@ -123,8 +123,7 @@ function page_edit($message = '')
 
         n.tag(
             hed(gTxt('tagbuilder'), 2).
-            $tagbuild_links
-        , 'div', array(
+            $tagbuild_links, 'div', array(
             'id'    => 'tagbuild_links',
             'class' => 'txp-layout-cell txp-layout-1-4',
         )).
@@ -140,9 +139,7 @@ function page_edit($message = '')
                     fInput('submit', '', gTxt('save'), 'publish').
                     eInput('page').sInput('page_save').
                     hInput('name', $name)
-                )
-            , '', '', 'post', 'edit-form', '', 'page_form')
-        , 'div', array(
+                ), '', '', 'post', 'edit-form', '', 'page_form'), 'div', array(
             'id'    => 'main_content',
             'class' => 'txp-layout-cell txp-layout-2-4',
         )).
@@ -153,11 +150,9 @@ function page_edit($message = '')
         n, 'div', array(
             'id'    => 'content_switcher',
             'class' => 'txp-layout-cell txp-layout-1-4',
-        )).n
-
-    , 'div', array(
+        )).n, 'div', array(
         'id'    => $event.'_container',
-        'class' => 'txp-layout-grid'
+        'class' => 'txp-layout-grid',
     ));
 }
 
@@ -194,12 +189,12 @@ function page_list($current)
             }
 
             $out[] = tag($edit, 'li', array(
-                'class' => $active ? 'active' : ''
+                'class' => $active ? 'active' : '',
             ));
         }
 
         $out = tag(join(n, $out), 'ul', array(
-            'class' => 'switcher-list'
+            'class' => 'switcher-list',
         ));
 
         return wrapGroup('all_pages', $out, 'all_pages');

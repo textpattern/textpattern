@@ -84,7 +84,7 @@ $tools = array(
 
 if (!$step or !bouncer($step, array(
     'switch_tool'  => false,
-    'start_import' => true
+    'start_import' => true,
 ))) {
     $step = 'switch_tool';
 }
@@ -108,13 +108,13 @@ function switch_tool()
     echo hed(gTxt('tab_import'), 1, array('class' => 'txp-heading'));
 
     $content = '<section class="txp-edit">';
-    $content.= hed(gTxt('txp_import'), 2);
+    $content .= hed(gTxt('txp_import'), 2);
 
     // Select tool.
-    $content.= inputLabel('import_from', tag(type_options($tools), 'select', ' id="import_from" name="import_tool"'), 'select_tool', 'import');
+    $content .= inputLabel('import_from', tag(type_options($tools), 'select', ' id="import_from" name="import_tool"'), 'select_tool', 'import');
 
     // Some data we collect.
-    $content.= inputLabel('import_section', import_section_popup(''), 'import_section', 'import_section');
+    $content .= inputLabel('import_section', import_section_popup(''), 'import_section', 'import_section');
 
     $status_options = array(
         STATUS_LIVE    => gTxt('live'),
@@ -123,8 +123,8 @@ function switch_tool()
         STATUS_PENDING => gTxt('pending'),
     );
 
-    $content.= inputLabel('import_status', tag(type_options($status_options), 'select', ' id="import_status"'), 'import_status', 'import_status');
-    $content.= inputLabel('import_comment', fInput('text', 'import_comments_invite', gTxt('comments'), '', '', '', INPUT_REGULAR, '', 'import_comment'), 'import_invite', 'import_invite');
+    $content .= inputLabel('import_status', tag(type_options($status_options), 'select', ' id="import_status"'), 'import_status', 'import_status');
+    $content .= inputLabel('import_comment', fInput('text', 'import_comments_invite', gTxt('comments'), '', '', '', INPUT_REGULAR, '', 'import_comment'), 'import_invite', 'import_invite');
 
     // Database imports only.
     $databased =
@@ -134,20 +134,20 @@ function switch_tool()
         inputLabel('import_password', fInput('text', 'importdbpass', '', '', '', '', INPUT_REGULAR, '', 'import_password'), 'import_password', 'import_password').
         inputLabel('import_host', fInput('text', 'importdbhost', '', '', '', '', INPUT_REGULAR, '', 'import_host'), 'import_host', 'import_host');
 
-    $content.= tag($databased, 'div', ' id="databased" style="display: none;"');
+    $content .= tag($databased, 'div', ' id="databased" style="display: none;"');
 
     // Movable Type (MySQL DB) specific.
     $mtblogid = inputLabel('import_blogid', fInput('text', 'import_blog_id', '', '', '', '', INPUT_REGULAR, '', 'import_blogid'), 'import_blogid', 'import_blogid');
-    $content.= tag($mtblogid, 'div', ' id="mtblogid" style="display: none;"');
+    $content .= tag($mtblogid, 'div', ' id="mtblogid" style="display: none;"');
 
     // WordPress specific.
     $wponly = inputLabel('import_wpprefix', fInput('text', 'wpdbprefix', 'wp_', '', '', '', INPUT_REGULAR, '', 'import_wpprefix'), 'import_wpprefix', 'import_wpprefix').
         inputLabel('import_wpdbcharset', selectInput('wpdbcharset', array('utf8' => gTxt('utf8'), 'latin1' => gTxt('latin1')), 'utf8', '', '', 'import_wpdbcharset'), 'import_wpdbcharset', 'import_wpdbcharset');
 
-    $content.= tag($wponly, 'div', ' id="wponly" style="display: none;"');
-    $content.= graf(fInput('submit', 'choose', gTxt('continue'), 'publish'));
-    $content.= sInput('start_import').eInput('import');
-    $content.= '</section>';
+    $content .= tag($wponly, 'div', ' id="wponly" style="display: none;"');
+    $content .= graf(fInput('submit', 'choose', gTxt('continue'), 'publish'));
+    $content .= sInput('start_import').eInput('import');
+    $content .= '</section>';
     echo '<div id="'.$event.'_container" class="txp-container">'.
         form($content, '', '', 'post', '', '', 'import').
         '</div>';
@@ -245,12 +245,12 @@ function start_import()
     $out = tag('max_execution_time = '.ini_get('max_execution_time'), 'p', ' class="highlight"').$out;
     pagetop(gTxt('txp_import'));
 
-    $content= '<div id="'.$event.'_container" class="txp-container">';
-    $content.= startTable('', '', 'txp-list');
-    $content.= tr(tdcs(hed(gTxt('txp_import'),2),2));
-    $content.= tr(td($out));
-    $content.= endTable();
-    $content.= '</div>';
+    $content = '<div id="'.$event.'_container" class="txp-container">';
+    $content .= startTable('', '', 'txp-list');
+    $content .= tr(tdcs(hed(gTxt('txp_import'), 2), 2));
+    $content .= tr(td($out));
+    $content .= endTable();
+    $content .= '</div>';
     echo $content;
 
     $rs = safe_rows_start('parentid, count(*) as thecount', 'txp_discuss', 'visible=1 group by parentid');

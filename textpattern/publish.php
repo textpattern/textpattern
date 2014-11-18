@@ -78,7 +78,7 @@ set_error_level(@$production_status == 'live' ? 'testing' : @$production_status)
 // Use the current URL path if $siteurl is unknown.
 if (empty($siteurl)) {
     $httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);
-    $prefs['siteurl'] = $siteurl = $httphost . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+    $prefs['siteurl'] = $siteurl = $httphost.rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
 }
 
 if (empty($path_to_site)) {
@@ -202,7 +202,8 @@ if (@$s == 'file_download') {
         if (is_file($fullpath)) {
             // Discard any error PHP messages.
             ob_clean();
-            $filesize = filesize($fullpath); $sent = 0;
+            $filesize = filesize($fullpath);
+            $sent = 0;
             header('Content-Description: File Download');
             header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename="'.$filename.'"; size = "'.$filesize.'"');
@@ -215,7 +216,8 @@ if (@$s == 'file_download') {
 
             if ($file = fopen($fullpath, 'rb')) {
                 while (!feof($file) and (connection_status() == 0)) {
-                    echo fread($file, 1024 * 64); $sent += (1024 * 64);
+                    echo fread($file, 1024 * 64);
+                    $sent += (1024 * 64);
                     ob_flush();
                     flush();
                 }
@@ -306,8 +308,7 @@ function preText($s, $prefs)
     $is_404 = ($out['status'] == '404');
 
     // If messy vars exist, bypass URL parsing.
-    if (!$out['id'] && !$out['s'] && !(txpinterface == 'css') &&! (txpinterface == 'admin')) {
-
+    if (!$out['id'] && !$out['s'] && !(txpinterface == 'css') && ! (txpinterface == 'admin')) {
         // Return clean URL test results for diagnostics.
         if (gps('txpcleantest')) {
             exit(show_clean_test($out));
@@ -390,7 +391,7 @@ function preText($s, $prefs)
                             } elseif (empty($u4)) {
                                 $month = "$u1-$u2";
                                 if (!empty($u3)) {
-                                    $month.= "-$u3";
+                                    $month .= "-$u3";
                                 }
 
                                 if (preg_match('/\d+-\d+(?:-\d+)?/', $month)) {
@@ -439,7 +440,7 @@ function preText($s, $prefs)
                                 $is_404 = (empty($out['s']) or empty($out['id']));
                             } else {
                                 // We don't want to miss the /section/ pages.
-                                $out['s']= ckEx('section', $u1) ? $u1 : '';
+                                $out['s'] = ckEx('section', $u1) ? $u1 : '';
                                 $is_404 = empty($out['s']);
                             }
 
@@ -496,7 +497,7 @@ function preText($s, $prefs)
 
         if (!has_privs('article.preview')) {
             txp_status_header('401 Unauthorized');
-            exit(hed('401 Unauthorized',1).graf(gTxt('restricted_area')));
+            exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
         }
 
         global $nolog;
@@ -621,10 +622,10 @@ function textpattern()
 
     if (in_array($production_status, array('debug', 'testing'))) {
         $microdiff = (getmicrotime() - $microstart);
-        echo n,comment('Runtime:    '.substr($microdiff,0,6));
+        echo n,comment('Runtime:    '.substr($microdiff, 0, 6));
         echo n,comment('Query time: '.sprintf('%02.6f', $qtime));
         echo n,comment('Queries: '.$qcount);
-        echo maxMemUsage('end of textpattern()',1);
+        echo maxMemUsage('end of textpattern()', 1);
 
         if (!empty($txptrace) and is_array($txptrace)) {
             echo n, comment('txp tag trace: '.n.join(n, $txptrace).n);
@@ -788,7 +789,7 @@ function doArticles($atts, $iscustom, $thing = null)
                 foreach ($search_terms as $search_term) {
                     $like[] = "`$cols[$i]` like '%$search_term%'";
                 }
-                $cols[$i] = '(' . join(' ' . $colJoin . ' ', $like) . ')';
+                $cols[$i] = '('.join(' '.$colJoin.' ', $like).')';
             }
         }
 
@@ -875,7 +876,7 @@ function doArticles($atts, $iscustom, $thing = null)
             $keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
         }
 
-        $keywords = " and (" . join(' or ', $keyparts) . ")";
+        $keywords = " and (".join(' or ', $keyparts).")";
     }
 
     if ($q and $searchsticky) {
@@ -886,8 +887,8 @@ function doArticles($atts, $iscustom, $thing = null)
         $statusq = ' and Status = '.intval($status);
     }
 
-    $where = "1=1" . $statusq. $time.
-        $search . $id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
+    $where = "1=1".$statusq.$time.
+        $search.$id.$category.$section.$excerpted.$month.$author.$keywords.$custom.$frontpage;
 
     // Do not paginate if we are on a custom list.
     if (!$iscustom and !$issticky) {
@@ -953,7 +954,7 @@ function doArticles($atts, $iscustom, $thing = null)
                 doAuth();
                 if (!has_privs('form')) {
                     txp_status_header('401 Unauthorized');
-                    exit(hed('401 Unauthorized',1).graf(gTxt('restricted_area')));
+                    exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
                 }
                 $articles[] = parse(gps('Form'));
             } elseif ($allowoverride and $a['override_form']) {
@@ -1090,7 +1091,7 @@ function makeOut()
 function validContext($context)
 {
     foreach (array('article', 'image', 'file', 'link') as $type) {
-        $valid[gTxt($type . '_context')] = $type;
+        $valid[gTxt($type.'_context')] = $type;
     }
 
     return isset($valid[$context]) ? $valid[$context] : 'article';

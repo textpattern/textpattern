@@ -79,7 +79,7 @@ if (!isset($txpcfg['table_prefix']) && !@include './config.php') {
 header("Content-type: text/html; charset=utf-8");
 
 error_reporting(E_ALL | E_STRICT);
-@ini_set("display_errors","1");
+@ini_set("display_errors", "1");
 
 include txpath.'/vendors/Textpattern/Loader.php';
 
@@ -110,14 +110,14 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
 
     if (empty($siteurl)) {
         $httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);
-        $prefs['siteurl'] = $siteurl = $httphost . rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
+        $prefs['siteurl'] = $siteurl = $httphost.rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
     }
 
     if (empty($path_to_site)) {
         updateSitePath(dirname(dirname(__FILE__)));
     }
 
-    define("LANG",$language);
+    define("LANG", $language);
 
     // i18n: define("LANG","en-gb");
     define('txp_version', $thisversion);
@@ -196,7 +196,7 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
 
     // Plugins may have altered privilege settings.
     if (!defined('TXP_UPDATE_DONE') && !gps('event') && !empty($default_event) && has_privs($default_event)) {
-         $event = $default_event;
+        $event = $default_event;
     }
 
     // Initialise private theme.
@@ -206,7 +206,7 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
 
     require_privs($event);
     callback_event($event, $step, 1);
-    $inc = txpath . '/include/txp_'.$event.'.php';
+    $inc = txpath.'/include/txp_'.$event.'.php';
 
     if (is_readable($inc)) {
         include($inc);

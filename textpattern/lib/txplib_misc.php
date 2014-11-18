@@ -527,8 +527,8 @@ function load_lang($lang, $events = null)
 
 function load_lang_dates($lang)
 {
-    $filename = is_file(txpath.'/lang/'.$lang.'_dates.txt')?
-        txpath.'/lang/'.$lang.'_dates.txt':
+    $filename = is_file(txpath.'/lang/'.$lang.'_dates.txt') ?
+        txpath.'/lang/'.$lang.'_dates.txt' :
         txpath.'/lang/en-gb_dates.txt';
     $file = @file(txpath.'/lang/'.$lang.'_dates.txt', 'r');
 
@@ -567,7 +567,7 @@ function load_lang_dates($lang)
 
 function load_lang_event($event, $lang = LANG)
 {
-    $installed = (false !== safe_field('name', 'txp_lang',"lang='".doSlash($lang)."' limit 1"));
+    $installed = (false !== safe_field('name', 'txp_lang', "lang='".doSlash($lang)."' limit 1"));
 
     $lang_code = ($installed) ? $lang : 'en-gb';
 
@@ -599,7 +599,7 @@ function check_privs()
     $privs = safe_field("privs", "txp_users", "name='".doSlash($txp_user)."'");
     $args = func_get_args();
 
-    if (!in_array($privs,$args)) {
+    if (!in_array($privs, $args)) {
         exit(pageTop('Restricted').'<p style="margin-top:3em;text-align:center">'.
             gTxt('restricted_area').'</p>');
     }
@@ -870,7 +870,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
     $meta = lAtts(array(
         'category' => '',
         'caption' => '',
-        'alt' => ''
+        'alt' => '',
     ), (array) $meta, false);
 
     extract(doSlash($meta));
@@ -1326,14 +1326,14 @@ function load_plugin($name, $force = false)
     }
 
     if (!empty($prefs['plugin_cache_dir'])) {
-        $dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
+        $dir = rtrim($prefs['plugin_cache_dir'], '/').'/';
 
         // In case it's a relative path.
         if (!is_dir($dir)) {
-            $dir = rtrim(realpath(txpath.'/'.$dir), '/') . '/';
+            $dir = rtrim(realpath(txpath.'/'.$dir), '/').'/';
         }
 
-        if (is_file($dir . $name . '.php')) {
+        if (is_file($dir.$name.'.php')) {
             $plugins[] = $name;
             set_error_handler("pluginErrorHandler");
 
@@ -1342,7 +1342,7 @@ function load_plugin($name, $force = false)
             }
 
             $txp_current_plugin = $name;
-            include($dir . $name . '.php');
+            include $dir.$name.'.php';
             $txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
             $plugins_ver[$name] = @$plugin['version'];
             restore_error_handler();
@@ -1351,7 +1351,7 @@ function load_plugin($name, $force = false)
         }
     }
 
-    $rs = safe_row("name, code, version", "txp_plugin", ($force ? '' : 'status = 1 AND '). "name='".doSlash($name)."'");
+    $rs = safe_row("name, code, version", "txp_plugin", ($force ? '' : 'status = 1 AND ')."name='".doSlash($name)."'");
 
     if ($rs) {
         $plugins[] = $rs['name'];
@@ -1386,7 +1386,7 @@ function load_plugin($name, $force = false)
 function require_plugin($name)
 {
     if (!load_plugin($name)) {
-        trigger_error("Unable to include required plugin \"{$name}\"",E_USER_ERROR);
+        trigger_error("Unable to include required plugin \"{$name}\"", E_USER_ERROR);
 
         return false;
     }
@@ -1407,7 +1407,7 @@ function require_plugin($name)
 function include_plugin($name)
 {
     if (!load_plugin($name)) {
-        trigger_error("Unable to include plugin \"{$name}\"",E_USER_WARNING);
+        trigger_error("Unable to include plugin \"{$name}\"", E_USER_WARNING);
 
         return false;
     }
@@ -1642,7 +1642,7 @@ function adminErrorHandler($errno, $errstr, $errfile, $errline)
         if (is_object($theme)) {
             send_script_response($theme->announce_async(array($out, E_ERROR), true));
         } else {
-            send_script_response('/* '. $out . '*/');
+            send_script_response('/* '.$out.'*/');
         }
     } elseif (http_accept_format('xml')) {
         send_xml_response(array(
@@ -1695,7 +1695,7 @@ function publicErrorHandler($errno, $errstr, $errfile, $errline)
         return;
     }
 
-    printf ("<pre dir=\"auto\">".gTxt('general_error').' <b>%s: %s on line %s</b></pre>',
+    printf("<pre dir=\"auto\">".gTxt('general_error').' <b>%s: %s on line %s</b></pre>',
         $error[$errno], $errstr, $errline);
 
     if ($production_status == 'debug') {
@@ -1718,11 +1718,11 @@ function load_plugins($type = false)
     }
 
     if (!empty($prefs['plugin_cache_dir'])) {
-        $dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
+        $dir = rtrim($prefs['plugin_cache_dir'], '/').'/';
 
         // In case it's a relative path.
         if (!is_dir($dir)) {
-            $dir = rtrim(realpath(txpath.'/'.$dir), '/') . '/';
+            $dir = rtrim(realpath(txpath.'/'.$dir), '/').'/';
         }
 
         $files = glob($dir.'*.php');
@@ -2061,7 +2061,7 @@ function pluggable_ui($event, $element, $default = '')
  * @package    TagParser
  */
 
-function getAtt($name, $default=NULL)
+function getAtt($name, $default = NULL)
 {
     trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'lAtts')), E_USER_NOTICE);
     global $theseatts;
@@ -2081,7 +2081,7 @@ function getAtt($name, $default=NULL)
  * @package    TagParser
  */
 
-function gAtt(&$atts, $name, $default=NULL)
+function gAtt(&$atts, $name, $default = NULL)
 {
     trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'lAtts')), E_USER_NOTICE);
 
@@ -2126,9 +2126,9 @@ function select_buttons()
 {
     return
     gTxt('select').
-    n.fInput('button','selall',gTxt('all'),'','select all','selectall();').
-    n.fInput('button','selnone',gTxt('none'),'','select none','deselectall();').
-    n.fInput('button','selrange',gTxt('range'),'','select range','selectrange();');
+    n.fInput('button', 'selall', gTxt('all'), '', 'select all', 'selectall();').
+    n.fInput('button', 'selnone', gTxt('none'), '', 'select none', 'deselectall();').
+    n.fInput('button', 'selrange', gTxt('range'), '', 'select range', 'selectrange();');
 }
 
 /**
@@ -2250,82 +2250,82 @@ function dumbDown($str, $lang = LANG)
 
     if (empty($array[$lang])) {
         $array[$lang] = array( // Nasty, huh?
-            '&#192;'=>'A','&Agrave;'=>'A','&#193;'=>'A','&Aacute;'=>'A','&#194;'=>'A','&Acirc;'=>'A',
-            '&#195;'=>'A','&Atilde;'=>'A','&#196;'=>'Ae','&Auml;'=>'A','&#197;'=>'A','&Aring;'=>'A',
-            '&#198;'=>'Ae','&AElig;'=>'AE',
-            '&#256;'=>'A','&#260;'=>'A','&#258;'=>'A',
-            '&#199;'=>'C','&Ccedil;'=>'C','&#262;'=>'C','&#268;'=>'C','&#264;'=>'C','&#266;'=>'C',
-            '&#270;'=>'D','&#272;'=>'D','&#208;'=>'D','&ETH;'=>'D',
-            '&#200;'=>'E','&Egrave;'=>'E','&#201;'=>'E','&Eacute;'=>'E','&#202;'=>'E','&Ecirc;'=>'E','&#203;'=>'E','&Euml;'=>'E',
-            '&#274;'=>'E','&#280;'=>'E','&#282;'=>'E','&#276;'=>'E','&#278;'=>'E',
-            '&#284;'=>'G','&#286;'=>'G','&#288;'=>'G','&#290;'=>'G',
-            '&#292;'=>'H','&#294;'=>'H',
-            '&#204;'=>'I','&Igrave;'=>'I','&#205;'=>'I','&Iacute;'=>'I','&#206;'=>'I','&Icirc;'=>'I','&#207;'=>'I','&Iuml;'=>'I',
-            '&#298;'=>'I','&#296;'=>'I','&#300;'=>'I','&#302;'=>'I','&#304;'=>'I',
-            '&#306;'=>'IJ',
-            '&#308;'=>'J',
-            '&#310;'=>'K',
-            '&#321;'=>'K','&#317;'=>'K','&#313;'=>'K','&#315;'=>'K','&#319;'=>'K',
-            '&#209;'=>'N','&Ntilde;'=>'N','&#323;'=>'N','&#327;'=>'N','&#325;'=>'N','&#330;'=>'N',
-            '&#210;'=>'O','&Ograve;'=>'O','&#211;'=>'O','&Oacute;'=>'O','&#212;'=>'O','&Ocirc;'=>'O','&#213;'=>'O','&Otilde;'=>'O',
-            '&#214;'=>'Oe','&Ouml;'=>'Oe',
-            '&#216;'=>'O','&Oslash;'=>'O','&#332;'=>'O','&#336;'=>'O','&#334;'=>'O',
-            '&#338;'=>'OE',
-            '&#340;'=>'R','&#344;'=>'R','&#342;'=>'R',
-            '&#346;'=>'S','&#352;'=>'S','&#350;'=>'S','&#348;'=>'S','&#536;'=>'S',
-            '&#356;'=>'T','&#354;'=>'T','&#358;'=>'T','&#538;'=>'T',
-            '&#217;'=>'U','&Ugrave;'=>'U','&#218;'=>'U','&Uacute;'=>'U','&#219;'=>'U','&Ucirc;'=>'U',
-            '&#220;'=>'Ue','&#362;'=>'U','&Uuml;'=>'Ue',
-            '&#366;'=>'U','&#368;'=>'U','&#364;'=>'U','&#360;'=>'U','&#370;'=>'U',
-            '&#372;'=>'W',
-            '&#221;'=>'Y','&Yacute;'=>'Y','&#374;'=>'Y','&#376;'=>'Y',
-            '&#377;'=>'Z','&#381;'=>'Z','&#379;'=>'Z',
-            '&#222;'=>'T','&THORN;'=>'T',
-            '&#224;'=>'a','&#225;'=>'a','&#226;'=>'a','&#227;'=>'a','&#228;'=>'ae',
-            '&auml;'=>'ae',
-            '&#229;'=>'a','&#257;'=>'a','&#261;'=>'a','&#259;'=>'a','&aring;'=>'a',
-            '&#230;'=>'ae',
-            '&#231;'=>'c','&#263;'=>'c','&#269;'=>'c','&#265;'=>'c','&#267;'=>'c',
-            '&#271;'=>'d','&#273;'=>'d','&#240;'=>'d',
-            '&#232;'=>'e','&#233;'=>'e','&#234;'=>'e','&#235;'=>'e','&#275;'=>'e',
-            '&#281;'=>'e','&#283;'=>'e','&#277;'=>'e','&#279;'=>'e',
-            '&#402;'=>'f',
-            '&#285;'=>'g','&#287;'=>'g','&#289;'=>'g','&#291;'=>'g',
-            '&#293;'=>'h','&#295;'=>'h',
-            '&#236;'=>'i','&#237;'=>'i','&#238;'=>'i','&#239;'=>'i','&#299;'=>'i',
-            '&#297;'=>'i','&#301;'=>'i','&#303;'=>'i','&#305;'=>'i',
-            '&#307;'=>'ij',
-            '&#309;'=>'j',
-            '&#311;'=>'k','&#312;'=>'k',
-            '&#322;'=>'l','&#318;'=>'l','&#314;'=>'l','&#316;'=>'l','&#320;'=>'l',
-            '&#241;'=>'n','&#324;'=>'n','&#328;'=>'n','&#326;'=>'n','&#329;'=>'n',
-            '&#331;'=>'n',
-            '&#242;'=>'o','&#243;'=>'o','&#244;'=>'o','&#245;'=>'o','&#246;'=>'oe',
-            '&ouml;'=>'oe',
-            '&#248;'=>'o','&#333;'=>'o','&#337;'=>'o','&#335;'=>'o',
-            '&#339;'=>'oe',
-            '&#341;'=>'r','&#345;'=>'r','&#343;'=>'r',
-            '&#353;'=>'s',
-            '&#249;'=>'u','&#250;'=>'u','&#251;'=>'u','&#252;'=>'ue','&#363;'=>'u',
-            '&uuml;'=>'ue',
-            '&#367;'=>'u','&#369;'=>'u','&#365;'=>'u','&#361;'=>'u','&#371;'=>'u',
-            '&#373;'=>'w',
-            '&#253;'=>'y','&#255;'=>'y','&#375;'=>'y',
-            '&#382;'=>'z','&#380;'=>'z','&#378;'=>'z',
-            '&#254;'=>'t',
-            '&#223;'=>'ss',
-            '&#383;'=>'ss',
-            '&agrave;'=>'a','&aacute;'=>'a','&acirc;'=>'a','&atilde;'=>'a','&auml;'=>'ae',
-            '&aring;'=>'a','&aelig;'=>'ae','&ccedil;'=>'c','&eth;'=>'d',
-            '&egrave;'=>'e','&eacute;'=>'e','&ecirc;'=>'e','&euml;'=>'e',
-            '&igrave;'=>'i','&iacute;'=>'i','&icirc;'=>'i','&iuml;'=>'i',
-            '&ntilde;'=>'n',
-            '&ograve;'=>'o','&oacute;'=>'o','&ocirc;'=>'o','&otilde;'=>'o','&ouml;'=>'oe',
-            '&oslash;'=>'o',
-            '&ugrave;'=>'u','&uacute;'=>'u','&ucirc;'=>'u','&uuml;'=>'ue',
-            '&yacute;'=>'y','&yuml;'=>'y',
-            '&thorn;'=>'t',
-            '&szlig;'=>'ss',
+            '&#192;' => 'A','&Agrave;' => 'A','&#193;' => 'A','&Aacute;' => 'A','&#194;' => 'A','&Acirc;' => 'A',
+            '&#195;' => 'A','&Atilde;' => 'A','&#196;' => 'Ae','&Auml;' => 'A','&#197;' => 'A','&Aring;' => 'A',
+            '&#198;' => 'Ae','&AElig;' => 'AE',
+            '&#256;' => 'A','&#260;' => 'A','&#258;' => 'A',
+            '&#199;' => 'C','&Ccedil;' => 'C','&#262;' => 'C','&#268;' => 'C','&#264;' => 'C','&#266;' => 'C',
+            '&#270;' => 'D','&#272;' => 'D','&#208;' => 'D','&ETH;' => 'D',
+            '&#200;' => 'E','&Egrave;' => 'E','&#201;' => 'E','&Eacute;' => 'E','&#202;' => 'E','&Ecirc;' => 'E','&#203;' => 'E','&Euml;' => 'E',
+            '&#274;' => 'E','&#280;' => 'E','&#282;' => 'E','&#276;' => 'E','&#278;' => 'E',
+            '&#284;' => 'G','&#286;' => 'G','&#288;' => 'G','&#290;' => 'G',
+            '&#292;' => 'H','&#294;' => 'H',
+            '&#204;' => 'I','&Igrave;' => 'I','&#205;' => 'I','&Iacute;' => 'I','&#206;' => 'I','&Icirc;' => 'I','&#207;' => 'I','&Iuml;' => 'I',
+            '&#298;' => 'I','&#296;' => 'I','&#300;' => 'I','&#302;' => 'I','&#304;' => 'I',
+            '&#306;' => 'IJ',
+            '&#308;' => 'J',
+            '&#310;' => 'K',
+            '&#321;' => 'K','&#317;' => 'K','&#313;' => 'K','&#315;' => 'K','&#319;' => 'K',
+            '&#209;' => 'N','&Ntilde;' => 'N','&#323;' => 'N','&#327;' => 'N','&#325;' => 'N','&#330;' => 'N',
+            '&#210;' => 'O','&Ograve;' => 'O','&#211;' => 'O','&Oacute;' => 'O','&#212;' => 'O','&Ocirc;' => 'O','&#213;' => 'O','&Otilde;' => 'O',
+            '&#214;' => 'Oe','&Ouml;' => 'Oe',
+            '&#216;' => 'O','&Oslash;' => 'O','&#332;' => 'O','&#336;' => 'O','&#334;' => 'O',
+            '&#338;' => 'OE',
+            '&#340;' => 'R','&#344;' => 'R','&#342;' => 'R',
+            '&#346;' => 'S','&#352;' => 'S','&#350;' => 'S','&#348;' => 'S','&#536;' => 'S',
+            '&#356;' => 'T','&#354;' => 'T','&#358;' => 'T','&#538;' => 'T',
+            '&#217;' => 'U','&Ugrave;' => 'U','&#218;' => 'U','&Uacute;' => 'U','&#219;' => 'U','&Ucirc;' => 'U',
+            '&#220;' => 'Ue','&#362;' => 'U','&Uuml;' => 'Ue',
+            '&#366;' => 'U','&#368;' => 'U','&#364;' => 'U','&#360;' => 'U','&#370;' => 'U',
+            '&#372;' => 'W',
+            '&#221;' => 'Y','&Yacute;' => 'Y','&#374;' => 'Y','&#376;' => 'Y',
+            '&#377;' => 'Z','&#381;' => 'Z','&#379;' => 'Z',
+            '&#222;' => 'T','&THORN;' => 'T',
+            '&#224;' => 'a','&#225;' => 'a','&#226;' => 'a','&#227;' => 'a','&#228;' => 'ae',
+            '&auml;' => 'ae',
+            '&#229;' => 'a','&#257;' => 'a','&#261;' => 'a','&#259;' => 'a','&aring;' => 'a',
+            '&#230;' => 'ae',
+            '&#231;' => 'c','&#263;' => 'c','&#269;' => 'c','&#265;' => 'c','&#267;' => 'c',
+            '&#271;' => 'd','&#273;' => 'd','&#240;' => 'd',
+            '&#232;' => 'e','&#233;' => 'e','&#234;' => 'e','&#235;' => 'e','&#275;' => 'e',
+            '&#281;' => 'e','&#283;' => 'e','&#277;' => 'e','&#279;' => 'e',
+            '&#402;' => 'f',
+            '&#285;' => 'g','&#287;' => 'g','&#289;' => 'g','&#291;' => 'g',
+            '&#293;' => 'h','&#295;' => 'h',
+            '&#236;' => 'i','&#237;' => 'i','&#238;' => 'i','&#239;' => 'i','&#299;' => 'i',
+            '&#297;' => 'i','&#301;' => 'i','&#303;' => 'i','&#305;' => 'i',
+            '&#307;' => 'ij',
+            '&#309;' => 'j',
+            '&#311;' => 'k','&#312;' => 'k',
+            '&#322;' => 'l','&#318;' => 'l','&#314;' => 'l','&#316;' => 'l','&#320;' => 'l',
+            '&#241;' => 'n','&#324;' => 'n','&#328;' => 'n','&#326;' => 'n','&#329;' => 'n',
+            '&#331;' => 'n',
+            '&#242;' => 'o','&#243;' => 'o','&#244;' => 'o','&#245;' => 'o','&#246;' => 'oe',
+            '&ouml;' => 'oe',
+            '&#248;' => 'o','&#333;' => 'o','&#337;' => 'o','&#335;' => 'o',
+            '&#339;' => 'oe',
+            '&#341;' => 'r','&#345;' => 'r','&#343;' => 'r',
+            '&#353;' => 's',
+            '&#249;' => 'u','&#250;' => 'u','&#251;' => 'u','&#252;' => 'ue','&#363;' => 'u',
+            '&uuml;' => 'ue',
+            '&#367;' => 'u','&#369;' => 'u','&#365;' => 'u','&#361;' => 'u','&#371;' => 'u',
+            '&#373;' => 'w',
+            '&#253;' => 'y','&#255;' => 'y','&#375;' => 'y',
+            '&#382;' => 'z','&#380;' => 'z','&#378;' => 'z',
+            '&#254;' => 't',
+            '&#223;' => 'ss',
+            '&#383;' => 'ss',
+            '&agrave;' => 'a','&aacute;' => 'a','&acirc;' => 'a','&atilde;' => 'a','&auml;' => 'ae',
+            '&aring;' => 'a','&aelig;' => 'ae','&ccedil;' => 'c','&eth;' => 'd',
+            '&egrave;' => 'e','&eacute;' => 'e','&ecirc;' => 'e','&euml;' => 'e',
+            '&igrave;' => 'i','&iacute;' => 'i','&icirc;' => 'i','&iuml;' => 'i',
+            '&ntilde;' => 'n',
+            '&ograve;' => 'o','&oacute;' => 'o','&ocirc;' => 'o','&otilde;' => 'o','&ouml;' => 'oe',
+            '&oslash;' => 'o',
+            '&ugrave;' => 'u','&uacute;' => 'u','&ucirc;' => 'u','&uuml;' => 'ue',
+            '&yacute;' => 'y','&yuml;' => 'y',
+            '&thorn;' => 't',
+            '&szlig;' => 'ss',
         );
 
         if (is_file(txpath.'/lib/i18n-ascii.txt')) {
@@ -2512,7 +2512,6 @@ function splat($text)
 
             $atts[strtolower($m[1])] = $val;
         }
-
     }
 
     return $atts;
@@ -2750,8 +2749,7 @@ function create_form($name, $type, $Form)
             type = '".doSlash($type)."',
             Form = '".doSlash($Form)."'"
         ) === false
-    )
-    {
+    ) {
         return false;
     }
 
@@ -2909,7 +2907,7 @@ function event_multiedit_form($name, $methods = null, $page, $sort, $dir, $crit,
 
     if ($methods === NULL) {
         $methods = array(
-            'delete' => gTxt('delete')
+            'delete' => gTxt('delete'),
         );
     }
 
@@ -2918,8 +2916,8 @@ function event_multiedit_form($name, $methods = null, $page, $sort, $dir, $crit,
         n.eInput($name).
         n.sInput($name.'_multi_edit').
         n.hInput('page', $page).
-        ( $sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
-        ( ($crit != '') ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '' ).
+        ($sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '').
+        (($crit != '') ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '').
         n.fInput('submit', '', gTxt('go'));
 }
 
@@ -2971,7 +2969,7 @@ function since($stamp)
 
     if ($diff <= 3600) {
         $mins = round($diff / 60);
-        $since = ($mins <= 1) ? ($mins==1) ? '1 '.gTxt('minute') : gTxt('a_few_seconds') : "$mins ".gTxt('minutes');
+        $since = ($mins <= 1) ? ($mins == 1) ? '1 '.gTxt('minute') : gTxt('a_few_seconds') : "$mins ".gTxt('minutes');
     } elseif (($diff <= 86400) && ($diff > 3600)) {
         $hours = round($diff / 3600);
         $since = ($hours <= 1) ? '1 '.gTxt('hour') : "$hours ".gTxt('hours');
@@ -3132,13 +3130,13 @@ function myErrorHandler($errno, $errstr, $errfile, $errline)
                 echo $ent['function'].'(';
 
                 if (isset($ent['args'])) {
-                    $args='';
+                    $args = '';
 
                     foreach ($ent['args'] as $arg) {
-                        $args.=$arg.',';
+                        $args .= $arg.',';
                     }
 
-                    echo rtrim($args,',');
+                    echo rtrim($args, ',');
                 }
 
                 echo ') ';
@@ -3180,7 +3178,7 @@ function find_temp_dir()
             getenv('TEMP'),
             getenv('SystemRoot').DS.'Temp',
             'C:'.DS.'Temp',
-            $path_to_site.DS.$img_dir
+            $path_to_site.DS.$img_dir,
         );
 
         foreach ($guess as $k => $v) {
@@ -3193,7 +3191,7 @@ function find_temp_dir()
             txpath.DS.'tmp',
             '',
             DS.'tmp',
-            $path_to_site.DS.$img_dir
+            $path_to_site.DS.$img_dir,
         );
     }
 
@@ -3338,7 +3336,7 @@ function set_error_level($level)
         // Don't show errors on screen.
         $suppress = E_NOTICE | E_USER_NOTICE | E_WARNING | E_STRICT | (defined('E_DEPRECATED') ? E_DEPRECATED : 0);
         error_reporting(E_ALL ^ $suppress);
-        @ini_set("display_errors","1");
+        @ini_set("display_errors", "1");
     } else {
         // Default is 'testing': display everything except notices.
         error_reporting((E_ALL | E_STRICT) ^ (E_NOTICE | E_USER_NOTICE));
@@ -3448,7 +3446,7 @@ function format_filesize($bytes, $decimals = 2, $format = '')
     $sep_dec = isset($separators['decimal_point']) ? $separators['decimal_point'] : '.';
     $sep_thous = isset($separators['thousands_sep']) ? $separators['thousands_sep'] : ',';
 
-    return number_format($bytes, $decimals, $sep_dec, $sep_thous) . gTxt('units_' . $units[$pow]);
+    return number_format($bytes, $decimals, $sep_dec, $sep_thous).gTxt('units_'.$units[$pow]);
 }
 
 /**
@@ -3515,7 +3513,7 @@ function fileDownloadFormatTime($params)
 {
     extract(lAtts(array(
         'ftime'  => '',
-        'format' => ''
+        'format' => '',
     ), $params));
 
     if (!empty($ftime)) {
@@ -3811,8 +3809,7 @@ function create_user($name, $email, $password, $realname = '', $group = 0)
             privs = ".intval($group).",
             RealName = '".doSlash($realname)."'"
         ) === false
-    )
-    {
+    ) {
         return false;
     }
 
@@ -3868,8 +3865,7 @@ function update_user($user, $email = null, $realname = null, $meta = array())
             join(',', $set),
             "name = '".doSlash($user)."'"
         ) === false
-    )
-    {
+    ) {
         return false;
     }
 
@@ -3910,8 +3906,7 @@ function change_user_password($user, $password)
             "pass = '".doSlash($hash)."'",
             "name = '".doSlash($user)."'"
         ) === false
-    )
-    {
+    ) {
         return false;
     }
 
@@ -3999,8 +3994,7 @@ function rename_user($user, $newname)
             "name = '".doSlash($newname)."'",
             "name = '".doSlash($user)."'"
         ) === false
-    )
-    {
+    ) {
         return false;
     }
 
@@ -4062,8 +4056,7 @@ function change_user_group($user, $group)
             'privs = '.intval($group),
             "name in ($names)"
         ) === false
-    )
-    {
+    ) {
         return false;
     }
 
@@ -4467,7 +4460,7 @@ function clean_comment_counts($parentids)
     $leftover = array_diff($parentids, $updated);
 
     if ($leftover) {
-        safe_update('textpattern', "comments_count=0","ID IN (".implode(',', $leftover).")");
+        safe_update('textpattern', "comments_count=0", "ID IN (".implode(',', $leftover).")");
     }
 }
 
@@ -4848,8 +4841,7 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
             position = ".intval($position).",
             user_name = '".doSlash((string) $user_name)."'"
         ) === false
-    )
-    {
+    ) {
         return false;
     }
 
@@ -5084,7 +5076,7 @@ function txp_die($msg, $status = '503', $url = '')
 
     if ($status) {
         if (isset($codes[strval($status)])) {
-            $status = strval($status) . ' ' . $codes[$status];
+            $status = strval($status).' '.$codes[$status];
         }
 
         txp_status_header($status);
@@ -5108,7 +5100,7 @@ function txp_die($msg, $status = '503', $url = '')
             $out = safe_field('user_html', 'txp_page', "name='error_default'");
         }
     } else {
-            $out = <<<eod
+        $out = <<<eod
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5162,7 +5154,7 @@ function join_qs($q)
         }
 
         if ($k && (string) $v !== '') {
-            $qs[$k] = urlencode($k) . '=' . urlencode($v);
+            $qs[$k] = urlencode($k).'='.urlencode($v);
         }
     }
 
@@ -5248,8 +5240,7 @@ function pagelinkurl($parts, $inherit = array())
 
     if (isset($prefs['custom_url_func'])
         and is_callable($prefs['custom_url_func'])
-        and ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== false)
-    {
+        and ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== false) {
         return $url;
     }
 
@@ -5372,8 +5363,7 @@ function permlinkurl($article_array)
 
     if (isset($prefs['custom_url_func'])
         and is_callable($prefs['custom_url_func'])
-        and ($url = call_user_func($prefs['custom_url_func'], $article_array, PERMLINKURL)) !== false)
-    {
+        and ($url = call_user_func($prefs['custom_url_func'], $article_array, PERMLINKURL)) !== false) {
         return $url;
     }
 
@@ -6173,12 +6163,12 @@ class timezone
     /**
      * Render HTML &lt;select&gt; element for choosing a timezone.
      *
-     * @param      string      $name        Element name
-     * @param      string      $value       Selected timezone
-     * @param      bool        $blank_first Add empty first option
-     * @param      bool|string $onchange
-     * @param      string      $select_id   HTML id attribute
-     * @return     string      HTML markup
+     * @param  string      $name        Element name
+     * @param  string      $value       Selected timezone
+     * @param  bool        $blank_first Add empty first option
+     * @param  bool|string $onchange
+     * @param  string      $select_id   HTML id attribute
+     * @return string      HTML markup
      * @deprecated in 4.6.0
      * @see        Textpattern_Date_Timezone::getTimeZones()
      */
@@ -6214,7 +6204,7 @@ class timezone
 
             $out[] = n.'</optgroup>';
 
-            return n.'<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'"'.
+            return n.'<select'.($select_id ? ' id="'.$select_id.'"' : '').' name="'.$name.'"'.
                 ($onchange == 1 ? ' onchange="submit(this.form);"' : $onchange).
                 '>'.
                 ($blank_first ? n.'<option value=""'.($selected == false ? ' selected="selected"' : '').'>&#160;</option>' : '').
@@ -6228,7 +6218,7 @@ class timezone
     /**
      * Build a matrix of timezone details.
      *
-     * @return     array Array of timezone details indexed by timezone key
+     * @return array Array of timezone details indexed by timezone key
      * @deprecated in 4.6.0
      * @see        Textpattern_Date_Timezone::getTimeZones()
      */
@@ -6244,8 +6234,8 @@ class timezone
      * NB: More than one key might fit any given GMT offset, thus the returned
      * value is ambiguous and merely useful for presentation purposes.
      *
-     * @param      int    $gmtoffset
-     * @return     string timezone key
+     * @param  int    $gmtoffset
+     * @return string timezone key
      * @deprecated in 4.6.0
      * @see        Textpattern_Date_Timezone::getOffsetIdentifiers()
      */
@@ -6262,9 +6252,9 @@ class timezone
     /**
      * Is DST in effect?
      *
-     * @param      int     $timestamp When?
-     * @param      string  $timezone_key Where?
-     * @return     bool
+     * @param  int    $timestamp    When?
+     * @param  string $timezone_key Where?
+     * @return bool
      * @deprecated in 4.6.0
      * @see        Textpattern_Date_Timezone::isDst()
      */
@@ -6279,7 +6269,7 @@ class timezone
      *
      * As of 4.6.0, always returns TRUE.
      *
-     * @return     bool Timezone feature is enabled
+     * @return bool Timezone feature is enabled
      * @deprecated in 4.6.0
      */
 
@@ -6372,7 +6362,7 @@ function form_token()
     // login time plus 30 days) and a pinch of salt from the blog UID.
     if (empty($token)) {
         $nonce = safe_field('nonce', 'txp_users', "name='".doSlash($txp_user)."'");
-        $token = md5($nonce . get_pref('blog_uid'));
+        $token = md5($nonce.get_pref('blog_uid'));
     }
 
     return $token;
@@ -6387,7 +6377,7 @@ function form_token()
 function assert_system_requirements()
 {
     if (version_compare(REQUIRED_PHP_VERSION, PHP_VERSION) > 0) {
-        txp_die('This server runs PHP version '.PHP_VERSION.'. Textpattern needs PHP version '. REQUIRED_PHP_VERSION. ' or better.');
+        txp_die('This server runs PHP version '.PHP_VERSION.'. Textpattern needs PHP version '.REQUIRED_PHP_VERSION.' or better.');
     }
 }
 
@@ -6586,13 +6576,13 @@ function check_file_integrity($flags = INTEGRITY_STATUS)
     static $files = null, $files_md5 = array(), $checksum_table = array();
 
     if ($files === null) {
-        if ($cs = @file(txpath . '/checksums.txt')) {
+        if ($cs = @file(txpath.'/checksums.txt')) {
             $files = array();
 
             foreach ($cs as $c) {
                 if (preg_match('@^(\S+):(?: r?(\S+) | )\(?(.{32})\)?$@', trim($c), $m)) {
-                    list (, $relative, $r, $md5) = $m;
-                    $file = realpath(txpath . $relative);
+                    list(, $relative, $r, $md5) = $m;
+                    $file = realpath(txpath.$relative);
                     $checksum_table[$relative] = $md5;
 
                     if ($file === false) {

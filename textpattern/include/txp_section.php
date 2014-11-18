@@ -334,7 +334,7 @@ function sec_section_list($message = '')
                         'search_method' => 'section',
                         'crit'          => '"'.$sec_name.'"',
                     ), array(
-                        'title' => gTxt('article_count', array('{num}' => $sec_article_count))
+                        'title' => gTxt('article_count', array('{num}' => $sec_article_count)),
                     ));
                 } else {
                     $articles = 0;
@@ -362,12 +362,10 @@ function sec_section_list($message = '')
                     sp.span(
                         span('[', array('aria-hidden' => 'true')).
                         href(gTxt('view'), pagelinkurl(array('s' => $sec_name))).
-                        span(']', array('aria-hidden' => 'true'))
-                        , array('class' => 'section_detail')
-                    )
-                    , '', array(
+                        span(']', array('aria-hidden' => 'true')), array('class' => 'section_detail')
+                    ), '', array(
                         'scope' => 'row',
-                        'class' => 'txp-list-col-name'
+                        'class' => 'txp-list-col-name',
                     )
                 ).
                 td(
@@ -748,23 +746,23 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $methods = array(
         'changepage' => array(
             'label' => gTxt('uses_page'),
-            'html'  => selectInput('uses_page', $all_pages, '', false)
+            'html'  => selectInput('uses_page', $all_pages, '', false),
         ),
         'changecss' => array(
             'label' => gTxt('uses_style'),
-            'html'  => selectInput('css', $all_styles, '', false)
+            'html'  => selectInput('css', $all_styles, '', false),
         ),
         'changeonfrontpage' => array(
             'label' => gTxt('on_front_page'),
-            'html'  => yesnoRadio('on_frontpage', 1)
+            'html'  => yesnoRadio('on_frontpage', 1),
         ),
         'changesyndicate' => array(
             'label' => gTxt('syndicate'),
-            'html'  => yesnoRadio('in_rss', 1)
+            'html'  => yesnoRadio('in_rss', 1),
         ),
         'changesearchable' => array(
             'label' => gTxt('include_in_search'),
-            'html'  => yesnoRadio('searchable', 1)
+            'html'  => yesnoRadio('searchable', 1),
         ),
         'delete' => gTxt('delete'),
     );
@@ -834,8 +832,7 @@ function section_multi_edit()
                 "{$key} = '".doSlash($val)."'",
                 "name in (".join(',', quote_list($sections)).")"
             )
-        )
-        {
+        ) {
             sec_section_list(gTxt('section_updated', array('{name}' => join(', ', $sections))));
 
             return;

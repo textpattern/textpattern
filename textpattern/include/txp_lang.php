@@ -89,7 +89,7 @@ function languages($name, $val)
  * @param string|array $message The activity message
  */
 
-function list_languages($message='')
+function list_languages($message = '')
 {
     require_once txpath.'/lib/IXRClass.php';
 
@@ -137,7 +137,7 @@ function list_languages($message='')
                 fclose($fp);
 
                 if (strpos($firstline, '#@version') !== false) {
-                    @list($fversion, $ftime) = explode(';',trim(substr($firstline,strpos($firstline, ' ', 1))));
+                    @list($fversion, $ftime) = explode(';', trim(substr($firstline, strpos($firstline, ' ', 1))));
                 } else {
                     $fversion = $ftime = null;
                 }
@@ -165,8 +165,8 @@ function list_languages($message='')
 
     // Create the language table components.
     foreach ($available_lang as $langname => $langdat) {
-        $file_updated = ( isset($langdat['db_lastmod']) && @$langdat['file_lastmod'] > $langdat['db_lastmod']);
-        $rpc_updated = ( @$langdat['rpc_lastmod'] > @$langdat['db_lastmod']);
+        $file_updated = (isset($langdat['db_lastmod']) && @$langdat['file_lastmod'] > $langdat['db_lastmod']);
+        $rpc_updated = (@$langdat['rpc_lastmod'] > @$langdat['db_lastmod']);
 
         $rpc_install = tda(
             ($rpc_updated)
@@ -185,7 +185,7 @@ function list_languages($message='')
                     ''
                 )
             ).
-            n.span(safe_strftime('%d %b %Y %X',@$langdat['rpc_lastmod']), array('class' => 'date modified'))
+            n.span(safe_strftime('%d %b %Y %X', @$langdat['rpc_lastmod']), array('class' => 'date modified'))
             : (
                 (isset($langdat['rpc_lastmod'])
                     ? gTxt('updated')
@@ -195,8 +195,7 @@ function list_languages($message='')
                     ? n.span(safe_strftime('%d %b %Y %X', $langdat['db_lastmod']), array('class' => 'date modified'))
                     : ''
                 )
-            )
-            , (isset($langdat['db_lastmod']) && $rpc_updated)
+            ), (isset($langdat['db_lastmod']) && $rpc_updated)
                 ? ' class="highlight lang-value"'
                 : ' class="lang-value"'
         );
@@ -220,24 +219,21 @@ function list_languages($message='')
                 )
             ).
             n.span(safe_strftime(get_pref('archive_dateformat'), $langdat['file_lastmod']), array(
-                'class' => 'date '.($file_updated ? 'created' : 'modified')
+                'class' => 'date '.($file_updated ? 'created' : 'modified'),
             ))
-            : '-'
-        , ' class="lang-value languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"'
+            : '-', ' class="lang-value languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"'
         );
 
         $list .= tr(
         // Lang-Name and Date.
             hCell(
-                gTxt($langname)
-                , ''
-                , (isset($langdat['db_lastmod']) && $rpc_updated)
+                gTxt($langname), '', (isset($langdat['db_lastmod']) && $rpc_updated)
                         ? ' scope="row" class="highlight lang-label"'
                         : ' scope="row" class="lang-label"'
                 ).
             n.$rpc_install.
             n.$lang_file.
-            tda( (in_array($langname, $installed_lang) ? dLink('lang', 'remove_language', 'lang_code', $langname, 1) : '-'), ' class="languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"')
+            tda((in_array($langname, $installed_lang) ? dLink('lang', 'remove_language', 'lang_code', $langname, 1) : '-'), ' class="languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"')
         ).n;
     }
 
@@ -291,8 +287,7 @@ function list_languages($message='')
                 fInput('submit', 'install_new', gTxt('upload')).
                 eInput('lang').
                 sInput('get_textpack')
-            )
-            , '', '', 'post', 'edit-form', '', 'text_uploader'
+            ), '', '', 'post', 'edit-form', '', 'text_uploader'
         ).
 
         n.tag_end('div');
@@ -347,7 +342,7 @@ function get_language()
 
     @set_time_limit(90); // TODO: 90 seconds: seriously?
     if (gps('force') == 'file' || !$client->query('tups.getLanguage', $prefs['blog_uid'], $lang_code)) {
-        if ( (gps('force') == 'file' || gps('updating') !== '1') && install_language_from_file($lang_code) ) {
+        if ((gps('force') == 'file' || gps('updating') !== '1') && install_language_from_file($lang_code)) {
             if (defined('LANG')) {
                 $textarray = load_lang(LANG);
             }
@@ -357,8 +352,7 @@ function get_language()
             return list_languages(gTxt($lang_code).sp.gTxt('updated'));
         } else {
             pagetop(gTxt('installing_language'));
-            echo tag( gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->"
-                , 'p', ' class="error lang-msg"' );
+            echo tag(gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->", 'p', ' class="error lang-msg"');
         }
     } else {
         $response = $client->getResponse();
@@ -371,8 +365,8 @@ function get_language()
             $size = count($lang_struct);
             $errors = 0;
 
-            for ($i = 0; $i < $size ; $i++) {
-                $errors += ( !$lang_struct[$i]['ok'] );
+            for ($i = 0; $i < $size; $i++) {
+                $errors += (!$lang_struct[$i]['ok']);
             }
 
             if (defined('LANG')) {

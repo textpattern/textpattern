@@ -509,7 +509,7 @@ function safe_alter($table, $alter, $debug = false)
 
 function safe_lock($table, $type = 'write', $debug = false)
 {
-    return (bool) safe_query('lock tables ' . join(' '.$type.', ', doArray(do_list($table), 'safe_pfx')).' '.$type, $debug);
+    return (bool) safe_query('lock tables '.join(' '.$type.', ', doArray(do_list($table), 'safe_pfx')).' '.$type, $debug);
 }
 
 /**
@@ -995,7 +995,7 @@ function fetch($col, $table, $key, $val, $debug = false)
     $q = "select $col from ".safe_pfx($table)." where `$key` = $val limit 1";
 
     if ($r = safe_query($q, $debug)) {
-        $thing = (mysql_num_rows($r) > 0) ? mysql_result($r,0) : '';
+        $thing = (mysql_num_rows($r) > 0) ? mysql_result($r, 0) : '';
         mysql_free_result($r);
 
         return $thing;
@@ -1200,7 +1200,6 @@ function getCount($table, $where, $debug = false)
 
 function getTree($root, $type, $where = '1=1', $tbl = 'txp_category')
 {
-
     $root = doSlash($root);
     $type = doSlash($type);
 
@@ -1239,7 +1238,7 @@ function getTree($root, $type, $where = '1=1', $tbl = 'txp_category')
                 'title' => $title,
                 'level' => count($right),
                 'children' => ($rgt - $lft - 1) / 2,
-                'parent' => $parent
+                'parent' => $parent,
             );
 
         $right[] = $rgt;
@@ -1261,7 +1260,6 @@ function getTree($root, $type, $where = '1=1', $tbl = 'txp_category')
 
 function getTreePath($target, $type, $tbl = 'txp_category')
 {
-
     $rs = safe_row(
         "lft as l, rgt as r",
         $tbl,
@@ -1296,7 +1294,7 @@ function getTreePath($target, $type, $tbl = 'txp_category')
                 'name' => $name,
                 'title' => $title,
                 'level' => count($right),
-                'children' => ($rgt - $lft - 1) / 2
+                'children' => ($rgt - $lft - 1) / 2,
             );
 
         $right[] = $rgt;
