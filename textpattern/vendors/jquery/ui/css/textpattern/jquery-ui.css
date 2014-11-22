@@ -136,14 +136,14 @@ a.ui-state-default:focus {
  * Highlight colour for jQuery UI widgets currently in 'selecting' state.
  */
 .ui-selecting {
-  background-color: #c7dbfa;
+  background-color: #cce0ff;
 }
 
 /**
  * Highlight colour for jQuery UI widgets currently in 'selected' state.
  */
 .ui-selected {
-  background-color: #e3edfc;
+  background-color: #e5efff;
 }
 
 /* Interaction cues
@@ -152,8 +152,8 @@ a.ui-state-default:focus {
  * jQuery UI highlight cue colouring.
  */
 .ui-state-highlight {
-  border: 1px solid #ffe16d;
-  background-color: #fff6d3;
+  border: 1px solid #e4c788;
+  background-color: #f7eedb;
 }
 
 /**
@@ -222,8 +222,8 @@ a.ui-state-default:focus {
  * <div class="ui-widget-shadow"></div>
  */
 .ui-widget-shadow {
-  border-radius: 0.5em;
   margin: -0.5em 0 0 -0.5em;
+  border-radius: 0.5em;
   padding: 0.5em;
   background-color: #999999;
   opacity: 0.33;
@@ -396,7 +396,7 @@ a.ui-state-default:focus {
 .ui-selectable-helper {
   position: absolute;
   z-index: 100;
-  border: 1px dotted #114eb1;
+  border: 1px dotted #004cbf;
 }
 
 /* Sortable
@@ -433,7 +433,7 @@ a.ui-state-default:focus {
 }
 
 .ui-sortable-placeholder {
-  border: 1px dotted #114eb1;
+  border: 1px dotted #004cbf;
 }
 
 /* ==========================================================================
@@ -615,8 +615,8 @@ a.ui-state-default:focus {
   text-decoration: none;
 }
 .ui-button:focus {
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #5b9dd9;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #5b9dd9;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #7fb2ff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #7fb2ff;
   border-color: #0066ff;
   outline: 0;
 }
@@ -635,8 +635,8 @@ a.ui-button {
  * 1. `!important` required to override specificity.
  */
 .ui-button.ui-state-focus {
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #5b9dd9;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #5b9dd9;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #7fb2ff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #7fb2ff;
   /* 1 */
   border-color: #0066ff !important;
   outline: 0;
@@ -802,7 +802,7 @@ button.ui-button-icons-only {
  * </p>
  */
 .ui-buttonset {
-  margin-right: 0.5em;
+  margin-right: 0.35em;
 }
 .ui-buttonset .ui-button {
   margin-right: -0.35em;
@@ -819,28 +819,28 @@ button.ui-button-icons-only {
  * </label>
  */
 label.ui-state-active.ui-button {
-  background-color: #e3edfc;
-  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2UzZWRmYyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M3ZGJmYSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-color: #e5efff;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2U1ZWZmZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2NjZTBmZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
-  background-image: -webkit-linear-gradient(#e3edfc, #c7dbfa);
-  background-image: linear-gradient(#e3edfc, #c7dbfa);
-  border-color: #a2c2f6;
+  background-image: -webkit-linear-gradient(#e5efff, #cce0ff);
+  background-image: linear-gradient(#e5efff, #cce0ff);
+  border-color: #96c0ff;
 }
 label.ui-state-active.ui-button:hover {
-  background-color: #f1f6fe;
-  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2YxZjZmZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2QxZTFmYiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-color: #f4f8ff;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y0ZjhmZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Q2ZTZmZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
-  background-image: -webkit-linear-gradient(#f1f6fe, #d1e1fb);
-  background-image: linear-gradient(#f1f6fe, #d1e1fb);
-  border-color: #5c94ef;
+  background-image: -webkit-linear-gradient(#f4f8ff, #d6e6ff);
+  background-image: linear-gradient(#f4f8ff, #d6e6ff);
+  border-color: #4a92ff;
 }
 label.ui-state-active.ui-button:active {
-  background-color: #c7dbfa;
-  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M3ZGJmYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2IwY2JmNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-color: #cce0ff;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2NjZTBmZiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2IzZDBmZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
-  background-image: -webkit-linear-gradient(#c7dbfa, #b0cbf7);
-  background-image: linear-gradient(#c7dbfa, #b0cbf7);
-  border-color: #5c94ef;
+  background-image: -webkit-linear-gradient(#cce0ff, #b3d0ff);
+  background-image: linear-gradient(#cce0ff, #b3d0ff);
+  border-color: #4a92ff;
 }
 
 /**
@@ -946,9 +946,9 @@ label.ui-state-active.ui-button:active {
 }
 .ui-datepicker .ui-datepicker-prev,
 .ui-datepicker .ui-datepicker-next {
-  border-radius: 0.5em;
   position: absolute;
   top: 0.2em;
+  border-radius: 0.5em;
   width: 1.8em;
   height: 1.8em;
   background-color: transparent;
@@ -1000,14 +1000,14 @@ label.ui-state-active.ui-button:active {
   text-align: center;
 }
 .ui-datepicker td a.ui-state-active {
-  border-color: #a2c2f6;
-  background-color: #e3edfc;
+  border-color: #96c0ff;
+  background-color: #e5efff;
 }
 .ui-datepicker td a.ui-state-highlight:hover {
-  border-color: #f3ab02;
+  border-color: #f5a800;
 }
 .ui-datepicker td a.ui-state-active:hover {
-  border-color: #5c94ef;
+  border-color: #4a92ff;
 }
 .ui-datepicker td.ui-datepicker-week-col {
   padding: 0.32em 0;
@@ -1225,7 +1225,7 @@ label.ui-state-active.ui-button:active {
  *     </li>
  *     <li class="ui-menu-item">
  *         <a>
- *             <span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>
+ *             <span class="ui-menu-icon ui-icon ui-icon-caret-1-e"></span>
  *             Item 3
  *         </a>
  *         <ul class="ui-menu">
@@ -1239,12 +1239,12 @@ label.ui-state-active.ui-button:active {
  *     </li>
  *     <li class="ui-menu-item">
  *         <a>
- *             <span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>
+ *             <span class="ui-menu-icon ui-icon ui-icon-caret-1-e"></span>
  *             Item 4
  *         </a>
  *         <ul class="ui-menu">
  *             <li class="ui-menu-item">
- *                 <span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>
+ *                 <span class="ui-menu-icon ui-icon ui-icon-caret-1-e"></span>
  *                 <a>Item 4 subitem 1</a>
  *                 <ul class="ui-menu">
  *                     <li class="ui-menu-item">
@@ -1299,7 +1299,7 @@ label.ui-state-active.ui-button:active {
 }
 .ui-menu .ui-state-focus,
 .ui-menu .ui-state-active {
-  background-color: #c7dbfa;
+  background-color: #cce0ff;
 }
 .ui-menu .ui-icon {
   position: absolute;
@@ -1365,9 +1365,9 @@ label.ui-state-active.ui-button:active {
   background-image: url("images/ui-progressbar.gif");
   background-size: 16px 16px;
   height: 16px;
-  background-color: #c7dbfa;
+  background-color: #cce0ff;
 }
-@media print, (-webkit-min-device-pixel-ratio: 2), (min--moz-device-pixel-ratio: 2), (-o-min-device-pixel-ratio: 2 / 1), (min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
+@media (-webkit-min-device-pixel-ratio: 2), (min--moz-device-pixel-ratio: 2), (-o-min-device-pixel-ratio: 2 / 1), (min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
   .ui-progressbar-value {
     background-image: url("images/ui-progressbar@2x.gif") !important;
   }
@@ -1389,7 +1389,7 @@ label.ui-state-active.ui-button:active {
   background-size: 16px 16px;
   background-color: #cccccc;
 }
-@media print, (-webkit-min-device-pixel-ratio: 2), (min--moz-device-pixel-ratio: 2), (-o-min-device-pixel-ratio: 2 / 1), (min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
+@media (-webkit-min-device-pixel-ratio: 2), (min--moz-device-pixel-ratio: 2), (-o-min-device-pixel-ratio: 2 / 1), (min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
   .ui-progressbar-indeterminate .ui-progressbar-value {
     background-image: url("images/ui-progressbar-indeterminate@2x.gif") !important;
   }
@@ -1447,8 +1447,8 @@ label.ui-state-active.ui-button:active {
   cursor: pointer;
 }
 .ui-selectmenu-button:focus {
-  -webkit-box-shadow: 0 0 7px #5b9dd9;
-  box-shadow: 0 0 7px #5b9dd9;
+  -webkit-box-shadow: 0 0 7px #7fb2ff;
+  box-shadow: 0 0 7px #7fb2ff;
   border-color: #0066ff;
   outline: 0;
 }
@@ -1478,6 +1478,7 @@ label.ui-state-active.ui-button:active {
 }
 .ui-selectmenu-menu .ui-menu {
   overflow: auto;
+  overflow-x: hidden;
 }
 .ui-selectmenu-menu .ui-menu .ui-selectmenu-optgroup {
   margin: 0.5em 0 0 0;
@@ -1530,13 +1531,13 @@ label.ui-state-active.ui-button:active {
   text-align: left;
 }
 .ui-slider .ui-slider-handle {
-  border-radius: 50%;
   -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   -ms-touch-action: none;
   touch-action: none;
   position: absolute;
   z-index: 2;
+  border-radius: 50%;
   width: 20px;
   height: 20px;
   cursor: default;
@@ -1728,10 +1729,10 @@ label.ui-state-active.ui-button:active {
 .ui-tabs .ui-tabs-nav li {
   -webkit-box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
   box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
-  border-radius: 0.5em 0.5em 0 0;
   position: relative;
   top: 0;
   float: left;
+  margin-right: 2px;
   border-bottom-width: 0;
   list-style: none;
   white-space: nowrap;
@@ -1769,7 +1770,11 @@ label.ui-state-active.ui-button:active {
 /**
  * Tabs RTL support.
  */
-[dir="rtl"] .ui-tabs .ui-tabs-nav li,
+[dir="rtl"] .ui-tabs .ui-tabs-nav li {
+  float: right;
+  margin-right: 0;
+  margin-left: 2px;
+}
 [dir="rtl"] .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
   float: right;
 }
@@ -1810,7 +1815,7 @@ label.ui-state-active.ui-button:active {
  *
  * Example HTML:
  *
- * <span class="ui-icon ui-icon-carat-1-n"></span>
+ * <span class="ui-icon ui-icon-caret-1-n"></span>
  * <span class="ui-icon ui-icon-folder-collapsed"></span>
  * <span class="ui-icon ui-icon-play"></span>
  */
@@ -1911,43 +1916,43 @@ label.ui-state-active.ui-button:active {
   background-position: 16px 16px;
 }
 
-.ui-icon-carat-1-n {
+.ui-icon-caret-1-n {
   background-position: 0 0;
 }
 
-.ui-icon-carat-1-ne {
+.ui-icon-caret-1-ne {
   background-position: -16px 0;
 }
 
-.ui-icon-carat-1-e {
+.ui-icon-caret-1-e {
   background-position: -32px 0;
 }
 
-.ui-icon-carat-1-se {
+.ui-icon-caret-1-se {
   background-position: -48px 0;
 }
 
-.ui-icon-carat-1-s {
+.ui-icon-caret-1-s {
   background-position: -64px 0;
 }
 
-.ui-icon-carat-1-sw {
+.ui-icon-caret-1-sw {
   background-position: -80px 0;
 }
 
-.ui-icon-carat-1-w {
+.ui-icon-caret-1-w {
   background-position: -96px 0;
 }
 
-.ui-icon-carat-1-nw {
+.ui-icon-caret-1-nw {
   background-position: -112px 0;
 }
 
-.ui-icon-carat-2-n-s {
+.ui-icon-caret-2-n-s {
   background-position: -128px 0;
 }
 
-.ui-icon-carat-2-e-w {
+.ui-icon-caret-2-e-w {
   background-position: -144px 0;
 }
 
@@ -2617,26 +2622,26 @@ label.ui-state-active.ui-button:active {
   background-position: 0 -256px;
 }
 
-.ui-extra-icon-time {
+.ui-extra-icon-list {
   background-position: -16px -256px;
 }
 
-.ui-extra-icon-list {
+.ui-extra-icon-grid {
   background-position: -32px -256px;
 }
 
-.ui-extra-icon-grid {
+.ui-extra-icon-download {
   background-position: -48px -256px;
 }
 
-.ui-extra-icon-download {
+.ui-extra-icon-upload {
   background-position: -64px -256px;
 }
 
-.ui-extra-icon-upload {
+.ui-extra-icon-attach {
   background-position: -80px -256px;
 }
 
-.ui-extra-icon-attach {
+.ui-extra-icon-new-document {
   background-position: -96px -256px;
 }

@@ -848,47 +848,49 @@
 	<polygon points="9,267 11,269 16,264 11,259 9,261 12,264"/>
 </g>
 
-<g id="ui-extra-icon-time">
-	<polygon points="23,264 23,260 25,260 25,265 21,266.5 20.5,265"/>
-	<path d="M17,264c0-3.875,3.125-7,7-7s7,3.125,7,7s-3.125,7-7,7S17,267.875,17,264z M24,269c2.75,0,5-2.25,5-5s-2.25-5-5-5s-5,2.25-5,5S21.25,269,24,269z"/>
-</g>
-
 <g id="ui-extra-icon-list">
-	<rect x="37" y="259" width="10" height="1"/>
-	<rect x="37" y="262" width="10" height="1"/>
-	<rect x="37" y="265" width="10" height="1"/>
-	<rect x="37" y="268" width="10" height="1"/>
-	<rect x="33" y="258" width="2" height="2"/>
-	<rect x="33" y="261" width="2" height="2"/>
-	<rect x="33" y="264" width="2" height="2"/>
-	<rect x="33" y="267" width="2" height="2"/>
+	<rect x="17" y="258" width="2" height="2"/>
+	<rect x="17" y="261" width="2" height="2"/>
+	<rect x="17" y="264" width="2" height="2"/>
+	<rect x="17" y="267" width="2" height="2"/>
+	<rect x="21" y="259" width="10" height="1"/>
+	<rect x="21" y="262" width="10" height="1"/>
+	<rect x="21" y="265" width="10" height="1"/>
+	<rect x="21" y="268" width="10" height="1"/>
 </g>
 
 <g id="ui-extra-icon-grid">
-	<rect x="48" y="259" width="16" height="1"/>
-	<rect x="48" y="262" width="16" height="1"/>
-	<rect x="48" y="265" width="16" height="1"/>
-	<rect x="48" y="268" width="16" height="1"/>
-	<rect x="48" y="259" width="1" height="10"/>
-	<rect x="51" y="259" width="1" height="10"/>
-	<rect x="54" y="259" width="1" height="10"/>
-	<rect x="57" y="259" width="1" height="10"/>
-	<rect x="60" y="259" width="1" height="10"/>
-	<rect x="63" y="259" width="1" height="10"/>
+	<rect x="32" y="259" width="16" height="1"/>
+	<rect x="32" y="262" width="16" height="1"/>
+	<rect x="32" y="265" width="16" height="1"/>
+	<rect x="32" y="268" width="16" height="1"/>
+	<rect x="32" y="259" width="1" height="10"/>
+	<rect x="35" y="259" width="1" height="10"/>
+	<rect x="38" y="259" width="1" height="10"/>
+	<rect x="41" y="259" width="1" height="10"/>
+	<rect x="44" y="259" width="1" height="10"/>
+	<rect x="47" y="259" width="1" height="10"/>
 </g>
 
 <g id="ui-extra-icon-download">
-	<polygon points="74,266 77,266 77,258 67,258 67,266 70,266 70,268 65,268 65,256 79,256 79,268 74,268"/>
-	<polygon points="72,272 75,269 73,269 73,262 71,262 71,269 69,269"/>
+	<polygon points="58,266 61,266 61,258 51,258 51,266 54,266 54,268 49,268 49,256 63,256 63,268 58,268"/>
+	<polygon points="56,272 59,269 57,269 57,262 55,262 55,269 53,269"/>
 </g>
 
 <g id="ui-extra-icon-upload">
-	<polygon points="90,266 93,266 93,258 83,258 83,266 86,266 86,268 81,268 81,256 95,256 95,268 90,268"/>
-	<polygon points="88,262 85,265 87,265 87,272 89,272 89,265 91,265"/>
+	<polygon points="74,266 77,266 77,258 67,258 67,266 70,266 70,268 65,268 65,256 79,256 79,268 74,268"/>
+	<polygon points="72,262 69,265 71,265 71,272 73,272 73,265 75,265"/>
 </g>
 
 <g id="ui-extra-icon-attach">
-	<path fill="none" stroke="#9d261d" stroke-miterlimit="10" d="M97.5,262.5c0,0,6.25,6.25,7.5,7.5c1,1,3,1.529,4.5,0c1.482-1.544,1-3.5,0-4.5l-8-7.5c-1-1-2.5-1.5-3.5-0.5s-0.5,2.5,0.5,3.5l7.5,7.5c0.5,0.5,1.5,0.5,2,0s0.5-1.5,0-2l-7.5-7"/>
+	<path fill="none" stroke="#000000" stroke-miterlimit="10" d="M81.5,262.5c0,0,6.25,6.25,7.5,7.5c1,1,3,1.529,4.5,0c1.482-1.544,1-3.5,0-4.5l-8-7.5c-1-1-2.5-1.5-3.5-0.5s-0.5,2.5,0.5,3.5l7.5,7.5c0.5,0.5,1.5,0.5,2,0s0.5-1.5,0-2l-7.5-7"/>
+</g>
+
+<g id="ui-extra-icon-new-document">
+	<polygon points="107,267 107,269 106,269 106,266 109,266 109,267"/>
+	<rect x="97" y="263" width="6" height="2"/>
+	<rect x="99" y="261" width="2" height="6"/>
+	<polygon points="100,258 100,260 101,260 101,259 109,259 109,267 107,269 101,269 101,268 100,268 100,270 107,270 110,267 110,258"/>
 </g>
 
 </svg>
