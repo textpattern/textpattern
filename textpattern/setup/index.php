@@ -682,7 +682,7 @@ function fbCreate()
             hed(setup_gTxt('thanks_for_interest'), 3).
 
             graf(
-                href(setup_gTxt('go_to_login'), $login_url, ' class="publish"')
+                href(setup_gTxt('go_to_login'), $login_url, ' class="navlink publish"')
             ).
 
             n.'</div>'.
