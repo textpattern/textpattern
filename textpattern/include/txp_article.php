@@ -1613,7 +1613,7 @@ function article_partial_recent_articles($rs)
     $ra = '';
 
     if ($recents && numRows($recents)) {
-        $ra = '<ol class="recent-list">';
+        $ra = '<ol class="recent">';
 
         while ($recent = nextRow($recents)) {
             if ($recent['Title'] === '') {
