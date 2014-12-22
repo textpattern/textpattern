@@ -1620,7 +1620,7 @@ function article_partial_recent_articles($rs)
                 $recent['Title'] = gTxt('untitled').sp.$recent['ID'];
             }
 
-            $ra .= n.'<li class="recent-list-article">'.
+            $ra .= n.'<li class="recent-article">'.
                 href(escape_title($recent['Title']), '?event=article'.a.'step=edit'.a.'ID='.$recent['ID']).
                 '</li>';
         }
