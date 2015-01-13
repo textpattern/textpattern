@@ -7,7 +7,7 @@
  * XML-RPC Server for Textpattern 4.0.x
  * http://txp.kusor.com/rpc-api
  *
- * Copyright (C) 2005-2006, 2014 The Textpattern Development Team
+ * Copyright (C) 2005-2006, 2015 The Textpattern Development Team
  * Author: Pedro Palazón - http://kusor.com
  *
  * This file is part of Textpattern.
