@@ -188,7 +188,7 @@ function list_languages($message = '')
             n.span(safe_strftime('%d %b %Y %X', @$langdat['rpc_lastmod']), array('class' => 'date modified'))
             : (
                 (isset($langdat['rpc_lastmod'])
-                    ? gTxt('updated')
+                    ? gTxt('up_to_date')
                     : '-'
                 ).
                 (isset($langdat['db_lastmod'])
