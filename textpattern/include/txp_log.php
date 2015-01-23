@@ -259,7 +259,7 @@ function log_list($message = '')
                     gTime($log_uTime), '', ' scope="row" class="txp-list-col-time"'
                 ).
                 td(
-				    '<a href="https://www.iana.org/whois?q='.txpspecialchars($log_ip).'" target="_blank">'.txpspecialchars($log_ip).'</a>', '', 'txp-list-col-ip log_detail'
+                    '<a href="https://www.iana.org/whois?q='.txpspecialchars($log_ip).'" target="_blank">'.txpspecialchars($log_ip).'</a>', '', 'txp-list-col-ip log_detail'
                 ).
                 td(
                     txpspecialchars($log_host), '', 'txp-list-col-host'
