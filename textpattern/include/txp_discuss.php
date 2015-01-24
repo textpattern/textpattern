@@ -410,7 +410,7 @@ function discuss_list($message = '')
                     txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website discuss_detail'
                 ).
                 td(
-                    '<a href="https://www.iana.org/whois?q='.txpspecialchars($log_ip).'" target="_blank">'.$ip.'</a>', '', 'txp-list-col-ip discuss_detail'
+                    '<a href="http://whois.domaintools.com/'.txpspecialchars($log_ip).'" target="_blank">'.$ip.'</a>', '', 'txp-list-col-ip discuss_detail'
                 ).
                 td(
                     $view, '', 'txp-list-col-status'
@@ -529,7 +529,7 @@ function discuss_edit()
                 hed(gTxt('edit_comment'), 2).
                 inputLabel('status', $status_list, 'status').
                 inputLabel('name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'), 'name').
-                inputLabel('IP', '<a href="https://www.iana.org/whois?q='.$ip.'" target="_blank">'.$ip.'</a>'.$ban_link, '').
+                inputLabel('IP', '<a href="http://whois.domaintools.com/'.$ip.'" target="_blank">'.$ip.'</a>'.$ban_link, '').
                 inputLabel('email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'), 'email').
                 inputLabel('website', fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'website'), 'website').
                 inputLabel('date', safe_strftime('%d %b %Y %X', $uPosted), '').
