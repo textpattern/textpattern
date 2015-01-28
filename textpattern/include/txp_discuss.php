@@ -410,7 +410,8 @@ function discuss_list($message = '')
                     txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website discuss_detail'
                 ).
                 td(
-                    '<a href="http://whois.domaintools.com/'.txpspecialchars($log_ip).'" target="_blank">'.$ip.'</a>', '', 'txp-list-col-ip discuss_detail'
+                    href($ip, 'https://whois.domaintools.com/' . txpspecialchars($ip), array('target' => '_blank')),
+                    '', 'txp-list-col-ip discuss_detail'
                 ).
                 td(
                     $view, '', 'txp-list-col-status'
