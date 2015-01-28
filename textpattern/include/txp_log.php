@@ -259,7 +259,7 @@ function log_list($message = '')
                     gTime($log_uTime), '', ' scope="row" class="txp-list-col-time"'
                 ).
                 td(
-                    href($log_ip, 'https://whois.domaintools.com/' . txpspecialchars($log_ip), array('target' => '_blank')),
+                    href(txpspecialchars($log_ip), 'https://whois.domaintools.com/' . rawurlencode($log_ip), array('target' => '_blank')),
                     '', 'txp-list-col-ip log_detail'
                 ).
                 td(
