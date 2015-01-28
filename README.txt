@@ -9,6 +9,7 @@ See LICENSE-LESSER.txt for terms and conditions.
 Includes contributions licensed under the New BSD License.
 See LICENSE-BSD-3.txt for terms and conditions.
 
+
 == About ==
 
 Textpattern CMS is a flexible, elegant and easy-to-use content management
@@ -27,7 +28,7 @@ system. Textpattern is both free and open source.
   Terminal.app - follow these instructions:
   http://textpattern.com/hidden-files-osx
 * Create or establish the existence of a working MySQL database along with valid
-  username and password credentials, then load /textpattern/setup/ 
+  username and password credentials, then load /textpattern/setup/
   (or /subdirectory/textpattern/setup/) in your browser to start the
   installation process and follow the directions.
 * When the installation is complete, remove the /textpattern/setup/ directory
@@ -82,6 +83,7 @@ system. Textpattern is both free and open source.
 * There are additional resources for the default front-side theme, such as
   Sass preprocessor files, available at:
     http://textpattern.com/default-theme/tree/master/
+
 
 == IMPORTANT ==
 
