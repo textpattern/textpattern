@@ -18,15 +18,15 @@ system. Textpattern is both free and open source.
 
 == Installation ==
 
-* Extract the Textpattern files to your site (in the web root, or choose a
+* Extract the Textpattern files to your site (in the web root, or a
   subdirectory). The top-level index.php file should reside in this directory,
   as should the /textpattern/ and /rpc/ directories.
-* Ensure the root .htaccess file is transferred across correctly to your install
-  destination. The file is hidden by default on some operating systems,
-  including OS X. Most FTP clients and IDEs have an option to show these hidden
-  files. Otherwise, you can temporarily show hidden files in OS X by using the
-  Terminal.app - follow these instructions:
-  http://textpattern.com/hidden-files-osx
+* Ensure the root .htaccess file is transferred across correctly to your site.
+  The file is hidden by default on some operating systems, including OS X. Most
+  FTP clients and IDEs have an option to show these hidden files. Otherwise, you
+  can temporarily show hidden files in OS X by using the Terminal.app - follow
+  these instructions:
+    http://textpattern.com/hidden-files-osx
 * Create or establish the existence of a working MySQL database along with valid
   username and password credentials, then load /textpattern/setup/
   (or /subdirectory/textpattern/setup/) in your browser to start the
@@ -48,9 +48,10 @@ system. Textpattern is both free and open source.
 * It is recommended that you flush the cache of your browser, to ensure
   old cached files are not being used in preference to any newer versions within
   the upgrade.
-* When you log in to the admin-side, the upgrade script(s) run automatically.
-  Please check the diagnostics (Admin -> Diagnostics) to confirm the correct
-  version number is displayed and whether there are any errors.
+* When you log in to the admin-side, the upgrade script(s) will run
+  automatically. Please check the diagnostics (Admin -> Diagnostics) to confirm
+  the correct Textpattern version number is displayed and whether there are any
+  errors.
   NOTE: Upgrades from versions prior to 4.2.0 will present this warning
   upon your very first login to the admin-side:
     Warning: Unknown column 'user_name' in 'where clause' select name,
@@ -77,7 +78,7 @@ system. Textpattern is both free and open source.
   in the /files/ directory to .htaccess to prohibit direct URL access to
   your files. Thus the only route to these files becomes through the
   /file_download/ directory. It is recommended you consider employing this
-  feature or that you move your /files/ directory out of a web-accessible
+  feature. Alternatively, move your /files/ directory out of a web-accessible
   location. Once moved, you can tell Textpattern of your new directory location
   from the Advanced Preferences.
 * There are additional resources for the default front-side theme, such as
