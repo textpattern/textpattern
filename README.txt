@@ -87,6 +87,6 @@ system. Textpattern is both free and open source.
 
 == IMPORTANT ==
 
-* Check back regularly at http://textpattern.com to see if updates are
+* Check back regularly at http://textpattern.com/ to see if updates are
   available. Updates are as painless as possible, often fixing important bugs
   and/or security-related issues.
