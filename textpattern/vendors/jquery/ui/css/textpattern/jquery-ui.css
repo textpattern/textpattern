@@ -186,6 +186,7 @@ a.ui-state-default:focus {
 .ui-state-disabled {
   background-image: none;
   opacity: 0.33;
+  pointer-events: none;
   cursor: default !important;
 }
 .ui-state-disabled a {
@@ -1141,7 +1142,6 @@ label.ui-state-active.ui-button:active {
   left: 0;
   z-index: 1002;
   padding: 0.2em;
-  overflow: hidden;
 }
 .ui-dialog .ui-dialog-titlebar {
   position: relative;
@@ -1186,12 +1186,44 @@ label.ui-state-active.ui-button:active {
   margin: 0.5em 0.4em 0.5em 0;
   cursor: pointer;
 }
+.ui-dialog .ui-resizable-n {
+  height: 2px;
+  top: 0;
+}
+.ui-dialog .ui-resizable-e {
+  width: 2px;
+  right: 0;
+}
+.ui-dialog .ui-resizable-s {
+  height: 2px;
+  bottom: 0;
+}
+.ui-dialog .ui-resizable-w {
+  width: 2px;
+  left: 0;
+}
+.ui-dialog .ui-resizable-se,
+.ui-dialog .ui-resizable-sw,
+.ui-dialog .ui-resizable-ne,
+.ui-dialog .ui-resizable-nw {
+  width: 7px;
+  height: 7px;
+}
 .ui-dialog .ui-resizable-se {
-  right: -5px;
-  bottom: -5px;
-  width: 12px;
-  height: 12px;
-  background-position: 16px 16px;
+  right: 0;
+  bottom: 0;
+}
+.ui-dialog .ui-resizable-sw {
+  left: 0;
+  bottom: 0;
+}
+.ui-dialog .ui-resizable-ne {
+  right: 0;
+  top: 0;
+}
+.ui-dialog .ui-resizable-nw {
+  left: 0;
+  top: 0;
 }
 
 /**
@@ -1813,6 +1845,8 @@ label.ui-state-active.ui-button:active {
 /**
  * jQuery UI icon sprites, various colourschemes depending of usage state.
  *
+ * Also used for 'Destroy' button.
+ *
  * Example HTML:
  *
  * <span class="ui-icon ui-icon-caret-1-n"></span>
@@ -1831,7 +1865,8 @@ label.ui-state-active.ui-button:active {
   background-size: 256px 272px;
 }
 
-.ui-state-default .ui-icon {
+.ui-state-default .ui-icon,
+.destroy .ui-icon {
   background-image: url("images/ui-icon-sprite-555555.svg");
 }
 
@@ -1839,7 +1874,10 @@ label.ui-state-active.ui-button:active {
 .ui-widget-header .ui-icon,
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon,
-.ui-state-active .ui-icon {
+.ui-state-active .ui-icon,
+.destroy:hover .ui-icon,
+.destroy:active .ui-icon,
+.destroy:focus .ui-icon {
   background-image: url("images/ui-icon-sprite-333333.svg");
 }
 
@@ -2644,4 +2682,20 @@ label.ui-state-active.ui-button:active {
 
 .ui-extra-icon-new-document {
   background-position: -96px -256px;
+}
+
+.ui-extra-icon-facebook {
+  background-position: -112px -256px;
+}
+
+.ui-extra-icon-googleplus {
+  background-position: -128px -256px;
+}
+
+.ui-extra-icon-linkedin {
+  background-position: -144px -256px;
+}
+
+.ui-extra-icon-twitter {
+  background-position: -160px -256px;
 }
