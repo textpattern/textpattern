@@ -2706,13 +2706,13 @@ function category1($atts, $thing = null)
                 pagelinkurl(array('s' => $section, 'c' => $category)),
                 (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
                 ($title ? ' title="'.$label.'"' : '').
-                ($permlink_mode != 'messy' ? ' rel="tag"' : '')
+                ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
             );
         } elseif ($link) {
             $out = href(
                 $label,
                 pagelinkurl(array('s' => $section, 'c' => $category)),
-                ($permlink_mode != 'messy' ? ' rel="tag"' : '')
+                ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
             );
         } else {
             $out = $label;
@@ -2751,13 +2751,13 @@ function category2($atts, $thing = null)
                 pagelinkurl(array('s' => $section, 'c' => $category)),
                 (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
                 ($title ? ' title="'.$label.'"' : '').
-                ($permlink_mode != 'messy' ? ' rel="tag"' : '')
+                ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
             );
         } elseif ($link) {
             $out = href(
                 $label,
                 pagelinkurl(array('s' => $section, 'c' => $category)),
-                ($permlink_mode != 'messy' ? ' rel="tag"' : '')
+                ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
             );
         } else {
             $out = $label;
