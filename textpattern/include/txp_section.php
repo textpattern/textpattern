@@ -687,7 +687,9 @@ function section_select_list()
 
 function section_delete()
 {
-    $selected = join(',', quote_list(ps('selected')));
+    $selectedList = ps('selected');
+    $selected = join(',', quote_list($selectedList));
+    $message = '';
 
     $sections = safe_column(
         'name',
@@ -695,14 +697,19 @@ function section_delete()
         "name != 'default' and name in ({$selected}) and name not in (select Section from ".safe_pfx('textpattern').")"
     );
 
+    $sectionsNotDeleted = array_diff($selectedList, $sections);
+
     if ($sections && safe_delete('txp_section', 'name in ('.join(',', quote_list($sections)).')')) {
         callback_event('sections_deleted', '', 0, $sections);
-        sec_section_list(gTxt('section_deleted', array('{name}' => join(', ', $sections))));
-
-        return;
+        $message = gTxt('section_deleted', array('{name}' => join(', ', $sections)));
     }
 
-    sec_section_list();
+    if ($sectionsNotDeleted) {
+        $severity = ($message) ? E_WARNING : E_ERROR;
+        $message = array(($message ? $message . n : '') . gTxt('section_delete_failure', array('{name}' => join(', ', $sectionsNotDeleted))), $severity);
+    }
+
+    sec_section_list($message);
 }
 
 /**
