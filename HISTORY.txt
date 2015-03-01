@@ -3,7 +3,7 @@ Changes in 4.5.7
 * Maintenance release with bug fixes.
 * Textile v2.4.3 resolves PHP 5.5 compatibility issues.
 * Updated default site theme and libraries.
-* Setup now remembers settings. No more 'form resubmission' browser warnings when going back through wizard.
+* Setup now remembers settings. No more 'form resubmission' browser warnings when going back through the wizard.
 * Allow pre_publish_script in multi-site installations.
 * Email address validation uses PHP's filter_var(), which permits addresses such as @[127.0.0.1].
 * Fixed: <txp:link_to_prev>, <txp:link_to_next>, <txp:prev_title>, and <txp:next_title> tags for certain combinations with <txp:article_custom>.
