@@ -21,14 +21,14 @@ system. Textpattern is both free and open source.
 * Extract the Textpattern files to your site (in the web root, or a
   subdirectory). The top-level index.php file should reside in this directory,
   as should the /textpattern/ and /rpc/ directories.
-* Ensure the root .htaccess file is transferred across correctly to your site.
-  The file is hidden by default on some operating systems, including OS X. Most
-  FTP clients and IDEs have an option to show these hidden files. Otherwise, you
-  can temporarily show hidden files in OS X by using the Terminal.app - follow
-  these instructions:
+* Ensure the top-level .htaccess file is transferred to your site. The file is
+  hidden by default on some operating systems, including OS X. Most FTP clients
+  and IDEs have an option to show these hidden files. Otherwise, you can
+  temporarily show hidden files in OS X by using the Terminal.app - follow these
+  instructions:
     http://textpattern.com/hidden-files-osx
-* Create or establish the existence of a working MySQL database along with valid
-  username and password credentials, then load /textpattern/setup/
+* Create or verify the existence of a working MySQL database with valid username
+  and password, then load /textpattern/setup/
   (or /subdirectory/textpattern/setup/) in your browser to start the
   installation process and follow the directions.
 * When the installation is complete, remove the /textpattern/setup/ directory
@@ -37,31 +37,28 @@ system. Textpattern is both free and open source.
 
 == Upgrading ==
 
-* Log out of the admin-side.
-* Verify the existence of a working Textpattern database and file backup.
-* Replace the three files in your Textpattern installation directory (index.php,
-  css.php and .htaccess), everything in your /js/ directory, everything in
-  your /rpc/ directory and everything in your /textpattern/ directory
-  (except /textpattern/config.php) with the corresponding files in this
-  distribution. Note that css.php and /rpc/ may not exist in your current site
-  if you are upgrading from Textpattern prior to version 4.2.0.
-* It is recommended that you flush the cache of your browser, to ensure
-  old cached files are not being used in preference to any newer versions within
-  the upgrade.
-* When you log in to the admin-side, the upgrade script(s) will run
-  automatically. Please check the diagnostics (Admin -> Diagnostics) to confirm
-  the correct Textpattern version number is displayed and whether there are any
+* Log out of the Textpattern admin-side.
+* Verify the existence of a known-good Textpattern database and file backup.
+* Replace the top-level index.php, css.php and .htaccess files, everything in
+  the /js/ directory, everything in the /rpc/ directory and everything in the
+  /textpattern/ directory (except /textpattern/config.php) with the
+  corresponding files in this distribution. Note: css.php and /rpc/ may not
+  exist if the installed version of Textpattern is prior to 4.2.0.
+* It is recommended that the browser cache is cleared to ensure the newer files
+  are used in preference to the older files.
+* Log in to the Textpattern admin-side. The upgrade script(s) will run
+  automatically. Check the diagnostics (Admin -> Diagnostics) to confirm the
+  correct Textpattern version number is displayed and whether there are any
   errors.
   NOTE: Upgrades from versions prior to 4.2.0 will present this warning
-  upon your very first login to the admin-side:
+  upon the first login to the admin-side:
     Warning: Unknown column 'user_name' in 'where clause' select name,
     val from txp_prefs where prefs_id=1 AND user_name='' in
     /path/to/your/site/textpattern/lib/txplib_db.php on line xx
-  This is expected behaviour for the very first login after an upgrade.
-  The warning will disappear with subsequent navigation in the admin-side.
-* Verify all preference settings.
-* When the upgrade is complete, remove the /textpattern/setup/ directory from
-  your site.
+  This is expected behaviour. The warning will disappear with subsequent
+  navigation in the admin-side.
+* Verify all preference settings (Admin -> Preferences).
+* Remove the /textpattern/setup/ directory from your site.
 
 
 == Getting Started ==
