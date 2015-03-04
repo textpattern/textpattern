@@ -1799,7 +1799,7 @@ function newer($atts, $thing = null)
     $pg = $thispage['pg'];
 
     if ($numPages > 1 and $pg > 1 and $pg <= $numPages) {
-        $nextpg = ($pg - 1 == 1) ? 0 : ($pg - 1);
+        $nextpg = ($pg - 1 == 1) ? '' : ($pg - 1);
 
         // Author URLs should use RealName, rather than username.
         if (!empty($pretext['author'])) {
