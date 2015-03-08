@@ -37,7 +37,7 @@ system. Textpattern is both free and open source.
 
 == Upgrading ==
 
-* Check your web server meets or exceeds the Textpattern system requirements:
+* Confirm your web server meets or exceeds the Textpattern system requirements:
     http://textpattern.com/about/119/system-requirements
 * Log out of the Textpattern admin-side.
 * Verify the existence of a known-good Textpattern database and file backup.
