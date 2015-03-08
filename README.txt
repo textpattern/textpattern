@@ -52,12 +52,16 @@ system. Textpattern is both free and open source.
   automatically. Check the diagnostics (Admin -> Diagnostics) to confirm the
   correct Textpattern version number is displayed and whether there are any
   errors.
-  NOTE: Upgrades from versions prior to 4.2.0 will present this warning
-  upon the first login to the admin-side:
-    Warning: Unknown column 'user_name' in 'where clause' select name,
+  NOTE: Upgrades from versions prior to 4.2.0 will present warnings or errors
+  upon the first login to the admin-side. These may include:
+    Unknown column 'user_name' in 'where clause' select name,
     val from txp_prefs where prefs_id=1 AND user_name='' in
     /path/to/your/site/textpattern/lib/txplib_db.php on line xx
-  This is expected behaviour. The warning will disappear with subsequent
+    Undefined variable: language in
+    /path/to/your/site/textpattern/index.php at line xx
+    Undefined variable: gmtoffset in
+    /path/to/your/site/textpattern/update/_to_4.2.0.php at line xx
+  This is expected behaviour. The messages will disappear with subsequent
   navigation in the admin-side.
 * Verify all preference settings (Admin -> Preferences).
 * Remove the /textpattern/setup/ directory from your site.
