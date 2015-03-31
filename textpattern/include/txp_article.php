@@ -1008,7 +1008,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         }
 
         if ($step != 'create') {
-            echo graf(href(gtxt('create_new'), 'index.php?event=article'), ' class="action-create"');
+            echo graf(href(gTxt('create_new'), 'index.php?event=article'), ' class="action-create"');
         }
 
         // Prev/next article links.
