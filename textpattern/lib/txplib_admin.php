@@ -54,7 +54,7 @@ function send_password($RealName, $name, $email, $password)
 
     $message = gTxt('greeting').' '.$RealName.','.
 
-        n.n.gTxt('you_have_been_registered').' '.$sitename.
+        n.n.gTxt('you_have_been_registered').' '.$sitename.'.'.
 
         n.n.gTxt('your_login_is').': '.$name.
         n.gTxt('your_password_is').': '.$password.
