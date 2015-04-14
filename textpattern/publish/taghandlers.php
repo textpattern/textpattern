@@ -2512,6 +2512,7 @@ function author($atts)
         'title'        => 1,
         'section'      => '',
         'this_section' => 0,
+        'url'          => 0,
     ), $atts));
 
     if ($thisauthor) {
@@ -2536,11 +2537,17 @@ function author($atts)
         $section = $s;
     }
 
-    if ($link) {
-        return href($display_name, pagelinkurl(array(
+    $href = pagelinkurl(array(
             's'      => $section,
             'author' => $realname,
-        )), ' rel="author"');
+        ));
+
+    if ($url) {
+        return $href;
+    }
+
+    if ($link) {
+        return href($display_name, $href, ' rel="author"');
     }
 
     return $display_name;
