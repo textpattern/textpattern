@@ -1304,6 +1304,7 @@ function category_list($atts, $thing = null)
         'class'        => __FUNCTION__,
         'exclude'      => '',
         'form'         => '',
+        'html_id'      => '',
         'label'        => '',
         'labeltag'     => '',
         'parent'       => '',
@@ -1413,7 +1414,7 @@ function category_list($atts, $thing = null)
         $thiscategory = (isset($old_category) ? $old_category : null);
 
         if ($out) {
-            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
+            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class, '', '', '', $html_id);
         }
     }
 
@@ -1434,6 +1435,7 @@ function section_list($atts, $thing = null)
         'default_title'   => $sitename,
         'exclude'         => '',
         'form'            => '',
+        'html_id'         => '',
         'include_default' => '',
         'label'           => '',
         'labeltag'        => '',
@@ -1531,7 +1533,7 @@ function section_list($atts, $thing = null)
         $thissection = isset($old_section) ? $old_section : null;
 
         if ($out) {
-            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
+            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class, '', '', '', $html_id);
         }
     }
 
