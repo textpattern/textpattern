@@ -78,7 +78,7 @@ set_error_level(@$production_status == 'live' ? 'testing' : @$production_status)
 // Use the current URL path if $siteurl is unknown.
 if (empty($siteurl)) {
     $httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);
-    $prefs['siteurl'] = $siteurl = $httphost.rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+    $prefs['siteurl'] = $siteurl = $httphost.rtrim(dirname($_SERVER['SCRIPT_NAME']), DS);
 }
 
 if (empty($path_to_site)) {

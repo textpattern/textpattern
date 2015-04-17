@@ -110,7 +110,7 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
 
     if (empty($siteurl)) {
         $httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);
-        $prefs['siteurl'] = $siteurl = $httphost.rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
+        $prefs['siteurl'] = $siteurl = $httphost.rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), DS);
     }
 
     if (empty($path_to_site)) {
