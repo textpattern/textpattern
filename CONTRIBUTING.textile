@@ -8,7 +8,7 @@ h2. How can I contribute?
 
 h3. Help with translations
 
-To make corrections to existing translations, , or to add new ones, "follow these instructions":https://github.com/textpattern/textpacks/blob/master/README.textile.
+To make corrections to existing translations, or to add new ones, "follow these instructions":https://github.com/textpattern/textpacks/blob/master/README.textile.
 
 h3. Contribute code
 
