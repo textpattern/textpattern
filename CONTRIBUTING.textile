@@ -1,6 +1,6 @@
 h1. Contributing
 
-Want to help out in the developement of Textpattern CMS? There are plenty of ways to get involved! Please take a moment to review this document in order to make the contribution process easy and effective for everyone involved.
+Want to help out in the development of Textpattern CMS? There are plenty of ways to get involved! Please take a moment to review this document in order to make the contribution process easy and effective for everyone involved.
 
 h2. Who can contribute?
 
