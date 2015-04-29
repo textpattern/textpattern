@@ -1,6 +1,8 @@
 h1. Textpattern CMS
 
-"Textpattern CMS":http://textpattern.com is a flexible, elegant and easy-to-use content management system.
+!http://textpattern.com/assets/img/branding/textpattern/textpattern.svg(Textpattern Logo)!:http://textpattern.com
+
+A flexible, elegant and easy-to-use content management system.
 
 Textpattern is free and open source software.
 
