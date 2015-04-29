@@ -1,5 +1,7 @@
 h1. Contributing
 
+Want to help out in the developement of Textpattern CMS? There are plenty of ways to get involved! Please take a moment to review this document in order to make the contribution process easy and effective for everyone involved.
+
 h2. Who can contribute?
 
 Anyone can contribute. You do not have to ask for permission.
@@ -17,7 +19,8 @@ h3. Contribute code
 # Make a new branch for your work.
 # Hack along.
 # Push your changes to your fork on GitHub.
-# Visit your repository's page on GitHub and click the "Pull Request" button.
+# Visit your repository's page on GitHub and click the 'Pull Request' button.
+# Label the pull request with a clear title and description.
 
 h3. Write documentation
 
