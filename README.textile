@@ -1,6 +1,6 @@
 h1. Textpattern CMS
 
-!http://textpattern.com/assets/img/branding/textpattern/textpattern.svg(Textpattern Logo)!:http://textpattern.com
+!http://textpattern.com/assets/img/branding/carver/carver-128px.svg(Textpattern Logo)!:http://textpattern.com
 
 A flexible, elegant and easy-to-use content management system.
 
