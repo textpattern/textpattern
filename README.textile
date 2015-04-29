@@ -12,30 +12,30 @@ Textpattern is free and open source software.
 * "Contributing":#contributing
 * "Legal":#legal
 
-h4(#system-requirements). System requirements
+h2(#system-requirements). System requirements
 
 Textpattern is installed to a web server with PHP and MySQL.
 
 Ensure the server meets or exceeds the "system requirements":http://textpattern.com/about/119/system-requirements before you continue.
 
-h4(#download). Download Textpattern
+h2(#download). Download Textpattern
 
-h5. Production release
+h3. Production release
 
 The current production release is version 4.5.7. It can be downloaded from the Textpattern website as a ".zip":http://textpattern.com/file_download/99/textpattern-4.5.7.zip or ".tar.gz":http://textpattern.com/file_download/98/textpattern-4.5.7.tar.gz archive
 
-h5. Development version
+h3. Development version
 
 The development version can be checked out from the "Textpattern repository on GitHub":https://github.com/textpattern/textpattern. Note that development versions are not recommended for use in live production servers.
 
-h4(#install). Install Textpattern
+h2(#install). Install Textpattern
 
 # Extract the Textpattern files to your site (in the web root, or a subdirectory). The top-level index.php file should reside in this directory, as should the @/textpattern/@ and @/rpc/@ directories.
 # Ensure the top-level @.htaccess@ file is transferred to your site. The file is hidden by default on some operating systems, including OS X. Most FTP clients and IDEs have an option to show these hidden files. Otherwise, you can temporarily show hidden files in OS X by using the Terminal.app - follow "these instructions":http://textpattern.com/hidden-files-osx.
 # Create or verify the existence of a working MySQL database with valid username and password, then load @/textpattern/setup/@ (or @/subdirectory/textpattern/setup/@) in your browser to start the installation process and follow the directions.
 # When the installation is complete, remove the @/textpattern/setup/@ directory from your site.
 
-h4(#upgrade). Upgrade Textpattern
+h2(#upgrade). Upgrade Textpattern
 
 # Confirm your web server meets or exceeds the "Textpattern system requirements":http://textpattern.com/about/119/system-requirements.
 # Log out of the Textpattern admin-side.
@@ -46,18 +46,18 @@ h4(#upgrade). Upgrade Textpattern
 # Verify all preference settings (Admin -> Preferences).
 # Remove the @/textpattern/setup/@ directory from your site.
 
-h4(#help-support). Help and Support
+h2(#help-support). Help and Support
 
 TODO.
 
-h4(#contributing). Contributing
+h2(#contributing). Contributing
 
-TODO.
+Please see "CONTRIBUTING.textile":https://github.com/textpattern/textpattern/blob/master/CONTRIBUTING.textile for details on how to get involved with the project.
 
-h4(#legal). Legal
+h2(#legal). Legal
 
-Released under the GNU General Public License. See @LICENSE.txt@ for terms and conditions.
+Released under the GNU General Public License. See "LICENSE.txt":https://github.com/textpattern/textpattern/blob/master/LICENSE.txt for terms and conditions.
 
-Includes contributions licensed under the GNU Lesser General Public License. See @LICENSE-LESSER.txt@ for terms and conditions.
+Includes contributions licensed under the GNU Lesser General Public License. See "LICENSE-LESSER.txt":https://github.com/textpattern/textpattern/blob/master/LICENSE-LESSER.txt for terms and conditions.
 
-Includes contributions licensed under the New BSD License. See @LICENSE-BSD-3.txt@ for terms and conditions.
+Includes contributions licensed under the New BSD License. See "LICENSE-BSD-3.txt":https://github.com/textpattern/textpattern/blob/master/LICENSE-BSD-3.txt for terms and conditions.
