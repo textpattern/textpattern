@@ -2,9 +2,9 @@ h1. Textpattern CMS
 
 !http://textpattern.com/assets/img/branding/carver/carver-128px.svg(Textpattern Logo)!:http://textpattern.com
 
-A flexible, elegant and easy-to-use content management system.
+*A flexible, elegant and easy-to-use content management system.*
 
-Textpattern is free and open source software.
+Textpattern is "free and open source":#legal software.
 
 * "System requirements":#system-requirements
 * "Download Textpattern":#download
@@ -50,7 +50,7 @@ h2(#upgrade). Upgrade Textpattern
 
 h2(#help-support). Help and Support
 
-TODO.
+The "Textpattern support forum":http://forum.textpattern.com is home to a friendly and helpful community of Textpattern users and experts. Textpattern also has social network presences on "Twitter":http://textpattern.com/@textpattern, "Facebook":http://textpattern.com/facebook and "Google Plus":http://textpattern.com/+.
 
 h2(#contributing). Contributing
 
