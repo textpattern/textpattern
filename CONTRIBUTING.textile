@@ -1,5 +1,18 @@
 h1. Contributing
 
+h2. Who can contribute?
+
+Anyone can contribute. You do not have to ask for permission.
+
+h2. How can I contribute?
+
+# Pick an "existing issue":https://github.com/textpattern/textpattern/issues you intend to work on, or "create a new issue":https://github.com/textpattern/textpattern/issues/new if no existing issue matches your topic.
+# Fork the repository on GitHub.
+# Make a new branch for your work.
+# Hack along.
+# Push your changes to your fork on GitHub.
+# Visit your repository's page on GitHub and click the "Pull Request" button.
+
 h2. License
 
 "GNU General Public License, version 2":https://github.com/textpattern/textpattern/blob/master/LICENSE.txt. By contributing code, you agree to license your additions under the GPLv2 license.
