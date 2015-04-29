@@ -1,0 +1,63 @@
+h1. Textpattern CMS
+
+"Textpattern CMS":http://textpattern.com is a flexible, elegant and easy-to-use content management system.
+
+Textpattern is free and open source software.
+
+* "System requirements":#system-requirements
+* "Download Textpattern":#download
+* "Install Textpattern":#install
+* "Upgrade Textpattern":#upgrade
+* "Help and Support":help-support
+* "Contributing":#contributing
+* "Legal":#legal
+
+h4(#system-requirements). System requirements
+
+Textpattern is installed to a web server with PHP and MySQL.
+
+Ensure the server meets or exceeds the "system requirements":http://textpattern.com/about/119/system-requirements before you continue.
+
+h4(#download). Download Textpattern
+
+h5. Production release
+
+The current production release is version 4.5.7. It can be downloaded from the Textpattern website as a ".zip":http://textpattern.com/file_download/99/textpattern-4.5.7.zip or ".tar.gz":http://textpattern.com/file_download/98/textpattern-4.5.7.tar.gz archive
+
+h5. Development version
+
+The development version can be checked out from the "Textpattern repository on GitHub":https://github.com/textpattern/textpattern. Note that development versions are not recommended for use in live production servers.
+
+h4(#install). Install Textpattern
+
+# Extract the Textpattern files to your site (in the web root, or a subdirectory). The top-level index.php file should reside in this directory, as should the @/textpattern/@ and @/rpc/@ directories.
+# Ensure the top-level @.htaccess@ file is transferred to your site. The file is hidden by default on some operating systems, including OS X. Most FTP clients and IDEs have an option to show these hidden files. Otherwise, you can temporarily show hidden files in OS X by using the Terminal.app - follow "these instructions":http://textpattern.com/hidden-files-osx.
+# Create or verify the existence of a working MySQL database with valid username and password, then load @/textpattern/setup/@ (or @/subdirectory/textpattern/setup/@) in your browser to start the installation process and follow the directions.
+# When the installation is complete, remove the @/textpattern/setup/@ directory from your site.
+
+h4(#upgrade). Upgrade Textpattern
+
+# Confirm your web server meets or exceeds the "Textpattern system requirements":http://textpattern.com/about/119/system-requirements.
+# Log out of the Textpattern admin-side.
+# Verify the existence of a known-good Textpattern database and file backup.
+# Replace the top-level @index.php@, @css.php@ and @.htaccess@ files, everything in the @/js/@ directory, everything in the @/rpc/@ directory and everything in the @/textpattern/@ directory (except @/textpattern/config.php@) with the corresponding files in this distribution. Note: @css.php@ and @/rpc/@ may not exist if the installed version of Textpattern is prior to 4.2.0.
+# It is recommended that the browser cache is cleared to ensure the newer files are used in preference to the older files.
+# Log in to the Textpattern admin-side. The upgrade script(s) will run automatically. Check the diagnostics (Admin -> Diagnostics) to confirm the correct Textpattern version number is displayed and whether there are any  errors. NOTE: Upgrades from versions prior to 4.2.0 will present warnings or errors upon the first login to the admin-side. These may include: @Unknown column 'user_name' in 'where clause' select name, val from txp_prefs where prefs_id=1 AND user_name='' in /path/to/your/site/textpattern/lib/txplib_db.php on line xx@, @Undefined variable: language in /path/to/your/site/textpattern/index.php at line xx@ and/or @Undefined variable: gmtoffset in /path/to/your/site/textpattern/update/_to_4.2.0.php at line xx@. This is expected behaviour. The messages will disappear with subsequent navigation in the admin-side.
+# Verify all preference settings (Admin -> Preferences).
+# Remove the @/textpattern/setup/@ directory from your site.
+
+h4(#help-support). Help and Support
+
+TODO.
+
+h4(#contributing). Contributing
+
+TODO.
+
+h4(#legal). Legal
+
+Released under the GNU General Public License. See @LICENSE.txt@ for terms and conditions.
+
+Includes contributions licensed under the GNU Lesser General Public License. See @LICENSE-LESSER.txt@ for terms and conditions.
+
+Includes contributions licensed under the New BSD License. See @LICENSE-BSD-3.txt@ for terms and conditions.
