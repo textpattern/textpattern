@@ -24,11 +24,11 @@ h2(#download). Download Textpattern
 
 h3. Production release
 
-The current production release is version 4.5.7. It can be downloaded from the Textpattern website as a ".zip":http://textpattern.com/file_download/99/textpattern-4.5.7.zip or ".tar.gz":http://textpattern.com/file_download/98/textpattern-4.5.7.tar.gz archive
+The current production release is version 4.5.7. It can be downloaded from the Textpattern website as a ".zip":http://textpattern.com/file_download/99/textpattern-4.5.7.zip or ".tar.gz":http://textpattern.com/file_download/98/textpattern-4.5.7.tar.gz archive.
 
 h3. Development version
 
-The development version can be checked out from the "Textpattern repository on GitHub":https://github.com/textpattern/textpattern. Note that development versions are not recommended for use in live production servers.
+The development version can be obtained from the "Textpattern repository on GitHub":https://github.com/textpattern/textpattern. Note that development versions are not recommended for use on live production servers.
 
 h2(#install). Install Textpattern
 
