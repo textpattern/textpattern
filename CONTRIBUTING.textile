@@ -6,6 +6,16 @@ Anyone can contribute. You do not have to ask for permission.
 
 h2. How can I contribute?
 
+h3. Write documentation
+
+TODO
+
+h3. Help with translations
+
+TODO
+
+h3. Contribute code
+
 # Pick an "existing issue":https://github.com/textpattern/textpattern/issues you intend to work on, or "create a new issue":https://github.com/textpattern/textpattern/issues/new if no existing issue matches your topic.
 # Fork the repository on GitHub.
 # Make a new branch for your work.
