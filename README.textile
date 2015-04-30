@@ -38,9 +38,9 @@ h2(#upgrade). Upgrade Textpattern
 
 Please see the "README.txt":https://github.com/textpattern/textpattern/blob/master/README.txt for details on upgrading Textpattern.
 
-h2(#help-support). Help and Support
+h2(#help-support). Help and support
 
-The "Textpattern support forum":http://forum.textpattern.com is home to a friendly and helpful community of Textpattern users and experts. Textpattern also has social network presences on "Twitter":http://textpattern.com/@textpattern, "Facebook":http://textpattern.com/facebook and <a href="http://textpattern.com/+">Google Plus</a>.
+The "Textpattern support forum":http://forum.textpattern.com is home to a friendly and helpful community of Textpattern users and experts. Textpattern also has social network presences on "Twitter":http://textpattern.com/@textpattern, "Facebook":http://textpattern.com/facebook and <a href="http://textpattern.com/+">Google+</a>.
 
 h2(#contributing). Contributing
 
