@@ -226,14 +226,9 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
         }
 
         $headers = join($this->separator, $headers).$this->separator;
+        $additional_headers = ($this->smtpFrom ? '-f'.$this->smtpFrom : null);
 
-        if ($this->smtpFrom) {
-            if (mail($this->encoded->to, $this->encoded->subject, $this->encoded->body, $headers, '-f'.$this->smtpFrom) === false) {
-                throw new Textpattern_Mail_Exception(gTxt('sending_failed'));
-            }
-        }
-
-        if (mail($this->encoded->to, $this->encoded->subject, $this->encoded->body, $headers) === false) {
+        if (mail($this->encoded->to, $this->encoded->subject, $this->encoded->body, $headers, $additional_headers) === false) {
             throw new Textpattern_Mail_Exception(gTxt('sending_failed'));
         }
 
