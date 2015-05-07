@@ -383,7 +383,7 @@ function parse($thing)
         $tag     = array();
         $inside  = array();
         $level   = 0;
-        $istag   = FALSE;
+        $istag   = false;
 
         $f = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
         $t = '@:(\w+)(.*?)/?.$@s';
