@@ -58,10 +58,11 @@ ob_start();
 // Start the clock for runtime.
 $microstart = getmicrotime();
 
-// Initialise parse trace globals.
+// Initialise parse globals.
 $txptrace        = array();
 $txptracelevel   = 0;
 $txp_current_tag = '';
+$txp_parsed      = array();
 
 // Get all prefs as an array.
 $prefs = get_prefs();

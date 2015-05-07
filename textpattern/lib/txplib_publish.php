@@ -368,56 +368,70 @@ function lastMod()
 
 function parse($thing)
 {
-    $f = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
-    $t = '@:(\w+)(.*?)/?.$@s';
+    global $txp_parsed;
 
-    $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $hash = sha1($thing);
 
-    $level  = 0;
-    $out    = '';
-    $inside = '';
-    $istag  = false;
+    if(isset($txp_parsed[$hash])) {
+        $tags[0] = $txp_parsed[$hash];
+    } else {
+        $tags[0] = array();
+        $tag     = array();
+        $inside  = array();
+        $level   = 0;
+        $istag   = FALSE;
 
-    foreach ($parsed as $chunk) {
-        if ($istag) {
-            if ($level === 0) {
-                preg_match($t, $chunk, $tag);
+        $f = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
+        $t = '@:(\w+)(.*?)/?.$@s';
+
+        $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+        foreach ($parsed as $chunk) {
+            if ($istag) {
+                preg_match($t, $chunk, $tag[$level]);
 
                 if (substr($chunk, -2, 1) === '/') {
-                    // Self closing.
-                    $out .= processTags($tag[1], $tag[2]);
-                } else {
-                    // Opening.
+                    // self closed tag
+                    $tags[$level][] = array($tag[$level][1], $tag[$level][2], null);
+
+                    if ($level) {
+			$inside[$level] .= $chunk;
+		    }
+                } elseif (substr($chunk, 1, 1) !== '/') {
+                    // opening tag
+                    if ($level) {
+			$inside[$level] .= $chunk;
+		    }
+
                     $level++;
-                }
-            } else {
-                if (substr($chunk, 1, 1) === '/') {
-                    // Closing.
-                    if (--$level === 0) {
-                        $out  .= processTags($tag[1], $tag[2], $inside);
-                        $inside = '';
-                    } else {
-                        $inside .= $chunk;
-                    }
-                } elseif (substr($chunk, -2, 1) !== '/') {
-                    // Opening inside open.
-                    ++$level;
-                    $inside .= $chunk;
+                    $inside[$level] = '';
+                    $tags[$level] = array();
                 } else {
-                    $inside .= $chunk;
+                    // closing tag
+                    $txp_parsed[sha1($inside[$level])] = $tags[$level];
+                    $level--;
+                    $tags[$level][] = array($tag[$level][1], $tag[$level][2], $inside[$level+1]);
+
+                    if ($level) {
+			$inside[$level] .= $inside[$level+1] . $chunk;
+		    }
                 }
-            }
-        } else {
-            if ($level) {
-                $inside .= $chunk;
             } else {
-                $out .= $chunk;
+                $tags[$level][] = $chunk;
+
+                if ($level) {
+		    $inside[$level] .= $chunk;
+		}
             }
+
+            $istag = !$istag;
         }
 
-        $istag = !$istag;
+        $txp_parsed[$hash] = $tags[0];
     }
 
+    $out = '';
+    foreach($tags[0] as $i => $tag) $out .= $i&1 ? processTags($tag[0], $tag[1], $tag[2]) : $tag;
     return $out;
 }
 
