@@ -440,6 +440,51 @@ function parse($thing)
 }
 
 /**
+ * Parse a string depending on an if/else condition
+ *
+ * @param   string  $thing     Statement in Textpattern tag markup presentation
+ * @param   bool    $condition TRUE to return if statement, FALSE to else
+ * @return  string The parsed string
+ * @package TagParser
+ * @example
+ * echo parse_else('true &lt;txp:else /&gt; false', 1 === 1);
+ */
+
+function parse_else($thing, $condition)
+{
+    global $txp_parsed;
+
+    if (!$condition and false === strpos($thing, ':else')) {
+        return '';
+    }
+
+    $tag = $txp_parsed[sha1($thing)];
+    $nr  = 1;
+    $tot = count($tag);
+
+    while ($nr < $tot and $tag[$nr][0] !== 'else') $nr += 2;
+
+    if ($condition) {
+        $out = $tag[0];
+        $i   = 1;
+        $max = $nr - 1;
+    } elseif ($nr < $tot) {
+        $out = $tag[$nr + 1];
+        $i   = $nr + 2;
+        $max = $tot;
+    } else {
+        return '';
+    }
+    
+    for (; $i < $max; $i++) {
+	$t = $tag[$i];
+        $out .= processTags($t[0], $t[1], $t[2]) . $tag[++$i];
+    }
+
+    return $out;
+} 
+
+/**
  * Guesstimate whether a given function name may be a valid tag handler.
  *
  * @param   string $tag function name

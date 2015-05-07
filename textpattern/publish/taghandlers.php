@@ -982,7 +982,7 @@ function password_protect($atts, $thing = null)
         return '';
     }
 
-    return parse(EvalElse($thing, $access));
+    return parse_else($thing, $access);
 }
 
 // -------------------------------------------------------------
@@ -1955,7 +1955,7 @@ function if_article_id($atts, $thing)
     ), $atts));
 
     if ($id) {
-        return parse(EvalElse($thing, in_list($thisarticle['thisid'], $id)));
+        return parse_else($thing, in_list($thisarticle['thisid'], $id));
     }
 }
 
@@ -2029,7 +2029,7 @@ function if_expires($atts, $thing)
 
     assert_article();
 
-    return parse(EvalElse($thing, $thisarticle['expires']));
+    return parse_else($thing, $thisarticle['expires']);
 }
 
 // -------------------------------------------------------------
@@ -2044,8 +2044,8 @@ function if_expired($atts, $thing)
         trigger_error(gTxt('publish_expired_articles_prefs_off'), E_USER_NOTICE);
     }
 
-    return parse(EvalElse($thing,
-        $thisarticle['expires'] && ($thisarticle['expires'] <= time())));
+    return parse_else($thing,
+        $thisarticle['expires'] && ($thisarticle['expires'] <= time()));
 }
 
 // -------------------------------------------------------------
@@ -2215,7 +2215,7 @@ function if_comments_error($atts, $thing)
 {
     $evaluator = & get_comment_evaluator();
 
-    return parse(EvalElse($thing, (count($evaluator->get_result_message()) > 0)));
+    return parse_else($thing, (count($evaluator->get_result_message()) > 0));
 }
 
 /**
@@ -2361,7 +2361,7 @@ function comments_preview($atts)
 
 function if_comments_preview($atts, $thing)
 {
-    return parse(EvalElse($thing, ps('preview') && checkCommentsAllowed(gps('parentid'))));
+    return parse_else($thing, ps('preview') && checkCommentsAllowed(gps('parentid')));
 }
 
 // -------------------------------------------------------------
@@ -2601,16 +2601,16 @@ function if_author($atts, $thing)
     ), $atts));
 
     if ($thisauthor) {
-        return parse(EvalElse($thing, $name === '' || in_list($thisauthor['name'], $name)));
+        return parse_else($thing, $name === '' || in_list($thisauthor['name'], $name));
     }
 
     $theType = ($type) ? $type == $context : true;
 
     if ($name) {
-        return parse(EvalElse($thing, ($theType && in_list($author, $name))));
+        return parse_else($thing, ($theType && in_list($author, $name)));
     }
 
-    return parse(EvalElse($thing, ($theType && (string) $author !== '')));
+    return parse_else($thing, ($theType && (string) $author !== ''));
 }
 
 // -------------------------------------------------------------
@@ -2628,10 +2628,10 @@ function if_article_author($atts, $thing)
     $author = $thisarticle['authorid'];
 
     if ($name) {
-        return parse(EvalElse($thing, in_list($author, $name)));
+        return parse_else($thing, in_list($author, $name));
     }
 
-    return parse(EvalElse($thing, (string) $author !== ''));
+    return parse_else($thing, (string) $author !== '');
 }
 
 // -------------------------------------------------------------
@@ -2922,7 +2922,7 @@ function if_keywords($atts, $thing = null)
         ? $thisarticle['keywords']
         : array_intersect(do_list($keywords), do_list($thisarticle['keywords']));
 
-    return parse(EvalElse($thing, !empty($condition)));
+    return parse_else($thing, !empty($condition));
 }
 
 // -------------------------------------------------------------
@@ -2933,7 +2933,7 @@ function if_article_image($atts, $thing = '')
 
     assert_article();
 
-    return parse(EvalElse($thing, $thisarticle['article_image']));
+    return parse_else($thing, $thisarticle['article_image']);
 }
 
 // -------------------------------------------------------------
@@ -3567,7 +3567,7 @@ function if_thumbnail($atts, $thing)
 
     assert_image();
 
-    return parse(EvalElse($thing, ($thisimage['thumbnail'] == 1)));
+    return parse_else($thing, ($thisimage['thumbnail'] == 1));
 }
 
 // -------------------------------------------------------------
@@ -3578,7 +3578,7 @@ function if_comments($atts, $thing)
 
     assert_article();
 
-    return parse(EvalElse($thing, ($thisarticle['comments_count'] > 0)));
+    return parse_else($thing, ($thisarticle['comments_count'] > 0));
 }
 
 // -------------------------------------------------------------
@@ -3589,7 +3589,7 @@ function if_comments_allowed($atts, $thing)
 
     assert_article();
 
-    return parse(EvalElse($thing, checkCommentsAllowed($thisarticle['thisid'])));
+    return parse_else($thing, checkCommentsAllowed($thisarticle['thisid']));
 }
 
 // -------------------------------------------------------------
@@ -3600,7 +3600,7 @@ function if_comments_disallowed($atts, $thing)
 
     assert_article();
 
-    return parse(EvalElse($thing, !checkCommentsAllowed($thisarticle['thisid'])));
+    return parse_else($thing, !checkCommentsAllowed($thisarticle['thisid']));
 }
 
 // -------------------------------------------------------------
@@ -3609,7 +3609,7 @@ function if_individual_article($atts, $thing)
 {
     global $is_article_list;
 
-    return parse(EvalElse($thing, ($is_article_list == false)));
+    return parse_else($thing, ($is_article_list == false));
 }
 
 // -------------------------------------------------------------
@@ -3618,7 +3618,7 @@ function if_article_list($atts, $thing)
 {
     global $is_article_list;
 
-    return parse(EvalElse($thing, ($is_article_list == true)));
+    return parse_else($thing, ($is_article_list == true));
 }
 
 // -------------------------------------------------------------
@@ -3853,7 +3853,7 @@ function if_excerpt($atts, $thing)
 
     assert_article();
 
-    return parse(EvalElse($thing, trim($thisarticle['excerpt']) !== ''));
+    return parse_else($thing, trim($thisarticle['excerpt']) !== '');
 }
 
 // -------------------------------------------------------------
@@ -3864,7 +3864,7 @@ function if_search($atts, $thing)
 {
     global $pretext;
 
-    return parse(EvalElse($thing, !empty($pretext['q'])));
+    return parse_else($thing, !empty($pretext['q']));
 }
 
 // -------------------------------------------------------------
@@ -3884,7 +3884,7 @@ function if_search_results($atts, $thing)
 
     $results = (int) $thispage['grand_total'];
 
-    return parse(EvalElse($thing, $results >= $min && (!$max || $results <= $max)));
+    return parse_else($thing, $results >= $min && (!$max || $results <= $max));
 }
 
 // -------------------------------------------------------------
@@ -3901,9 +3901,9 @@ function if_category($atts, $thing)
     $theType = ($type) ? $type == $context : true;
 
     if ($name === false) {
-        return parse(EvalElse($thing, ($theType && !empty($c))));
+        return parse_else($thing, ($theType && !empty($c)));
     } else {
-        return parse(EvalElse($thing, ($theType && in_list($c, $name))));
+        return parse_else($thing, ($theType && in_list($c, $name)));
     }
 }
 
@@ -3939,9 +3939,9 @@ function if_article_category($atts, $thing)
     }
 
     if ($name) {
-        return parse(EvalElse($thing, array_intersect(do_list($name), $cats)));
+        return parse_else($thing, array_intersect(do_list($name), $cats));
     } else {
-        return parse(EvalElse($thing, ($cats)));
+        return parse_else($thing, ($cats));
     }
 }
 
@@ -3953,7 +3953,7 @@ function if_first_category($atts, $thing)
 
     assert_category();
 
-    return parse(EvalElse($thing, !empty($thiscategory['is_first'])));
+    return parse_else($thing, !empty($thiscategory['is_first']));
 }
 
 // -------------------------------------------------------------
@@ -3964,7 +3964,7 @@ function if_last_category($atts, $thing)
 
     assert_category();
 
-    return parse(EvalElse($thing, !empty($thiscategory['is_last'])));
+    return parse_else($thing, !empty($thiscategory['is_last']));
 }
 
 // -------------------------------------------------------------
@@ -3981,9 +3981,9 @@ function if_section($atts, $thing)
     $section = ($s == 'default' ? '' : $s);
 
     if ($section) {
-        return parse(EvalElse($thing, $name === false or in_list($section, $name)));
+        return parse_else($thing, $name === false or in_list($section, $name));
     } else {
-        return parse(EvalElse($thing, $name !== false and (in_list('', $name) or in_list('default', $name))));
+        return parse_else($thing, $name !== false and (in_list('', $name) or in_list('default', $name)));
     }
 }
 
@@ -4001,7 +4001,7 @@ function if_article_section($atts, $thing)
 
     $section = $thisarticle['section'];
 
-    return parse(EvalElse($thing, in_list($section, $name)));
+    return parse_else($thing, in_list($section, $name));
 }
 
 // -------------------------------------------------------------
@@ -4012,7 +4012,7 @@ function if_first_section($atts, $thing)
 
     assert_section();
 
-    return parse(EvalElse($thing, !empty($thissection['is_first'])));
+    return parse_else($thing, !empty($thissection['is_first']));
 }
 
 // -------------------------------------------------------------
@@ -4023,7 +4023,7 @@ function if_last_section($atts, $thing)
 
     assert_section();
 
-    return parse(EvalElse($thing, !empty($thissection['is_last'])));
+    return parse_else($thing, !empty($thissection['is_last']));
 }
 
 // -------------------------------------------------------------
@@ -4182,7 +4182,7 @@ function if_custom_field($atts, $thing)
         $cond = ($thisarticle[$name] !== '');
     }
 
-    return parse(EvalElse($thing, $cond));
+    return parse_else($thing, $cond);
 }
 
 // -------------------------------------------------------------
@@ -4224,7 +4224,7 @@ function if_status($atts, $thing)
         ? $txp_error_code
         : $pretext['status'];
 
-    return parse(EvalElse($thing, $status == $page_status));
+    return parse_else($thing, $status == $page_status);
 }
 
 // -------------------------------------------------------------
@@ -4247,13 +4247,12 @@ function if_different($atts, $thing)
     static $last;
 
     $key = md5($thing);
-    $cond = EvalElse($thing, 1);
-    $out = parse($cond);
+    $out = parse_else($thing, 1);
 
     if (empty($last[$key]) or $out != $last[$key]) {
         return $last[$key] = $out;
     } else {
-        return parse(EvalElse($thing, 0));
+        return parse_else($thing, 0);
     }
 }
 
@@ -4265,7 +4264,7 @@ function if_first_article($atts, $thing)
 
     assert_article();
 
-    return parse(EvalElse($thing, !empty($thisarticle['is_first'])));
+    return parse_else($thing, !empty($thisarticle['is_first']));
 }
 
 // -------------------------------------------------------------
@@ -4276,7 +4275,7 @@ function if_last_article($atts, $thing)
 
     assert_article();
 
-    return parse(EvalElse($thing, !empty($thisarticle['is_last'])));
+    return parse_else($thing, !empty($thisarticle['is_last']));
 }
 
 // -------------------------------------------------------------
@@ -4296,7 +4295,7 @@ function if_plugin($atts, $thing)
         trigger_error(gTxt('deprecated_attribute', array('{name}' => 'ver')), E_USER_NOTICE);
     }
 
-    return parse(EvalElse($thing, @in_array($name, $plugins) and (!$version or version_compare($plugins_ver[$name], $version) >= 0)));
+    return parse_else($thing, @in_array($name, $plugins) and (!$version or version_compare($plugins_ver[$name], $version) >= 0));
 }
 
 // -------------------------------------------------------------
@@ -4786,5 +4785,5 @@ function if_variable($atts, $thing = null)
         $x = false;
     }
 
-    return parse(EvalElse($thing, $x));
+    return parse_else($thing, $x);
 }
