@@ -390,14 +390,14 @@ function parse($thing)
             if ($istag) {
                 preg_match($t, $chunk, $tag[$level]);
 
-                if (substr($chunk, -2, 1) === '/') {
+                if ($chunk[strlen($chunk) - 2] === '/') {
                     // self closed tag
                     $tags[$level][] = array($tag[$level][1], $tag[$level][2], null);
 
                     if ($level) {
 			$inside[$level] .= $chunk;
 		    }
-                } elseif (substr($chunk, 1, 1) !== '/') {
+                } elseif ($chunk[1] !== '/') {
                     // opening tag
                     if ($level) {
 			$inside[$level] .= $chunk;
@@ -430,8 +430,12 @@ function parse($thing)
         $txp_parsed[$hash] = $tags[0];
     }
 
-    $out = '';
-    foreach($tags[0] as $i => $tag) $out .= $i&1 ? processTags($tag[0], $tag[1], $tag[2]) : $tag;
+    for ($tag = $tags[0], $out = $tag[0], $i = 1, $max = count($tag); $i < $max; $i++)
+    {
+        $t = $tag[$i];
+        $out .= processTags($t[0], $t[1], $t[2]) . $tag[++$i];
+    }
+
     return $out;
 }
 
