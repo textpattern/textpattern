@@ -88,7 +88,7 @@ print <<<eod
 <script src="../vendors/jquery/ui/js/jquery-ui.js"></script>
 <script>var textpattern = { do_spellcheck: "", textarray: {} };</script>
 <script src="../textpattern.js"></script>
-<link rel="stylesheet" href="../theme/hive/css/textpattern.css">
+<link rel="stylesheet" href="../theme/hive/css/textpattern.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <script src="../vendors/modernizr/modernizr/modernizr.js"></script>
 <!--[if lt IE 9]><script src="../vendors/keithclark/selectivizr/selectivizr.min.js"></script><![endif]-->
