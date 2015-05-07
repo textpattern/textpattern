@@ -370,6 +370,10 @@ function parse($thing)
 {
     global $txp_parsed;
 
+    if (false === strpos($thing, 'txp:') {
+        return $thing;
+    }
+
     $hash = sha1($thing);
 
     if(isset($txp_parsed[$hash])) {
