@@ -2497,7 +2497,7 @@ function splat($text)
                 case 4:
                     $val = str_replace("''", "'", $m[3]);
 
-                    if (strpos($m[3], '<txp:') !== false) {
+                    if (strpos($m[3], ':') !== false) {
                         trace_add("[attribute '".$m[1]."']");
                         $val = parse($val);
                         trace_add("[/attribute]");

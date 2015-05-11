@@ -370,7 +370,7 @@ function parse($thing)
 {
     global $txp_parsed;
 
-    if (false === strpos($thing, '<txp:')) {
+    if (false === strpos($thing, '<txp:') and false === strpos($thing, '::')) {
         return $thing;
     }
 
@@ -385,18 +385,23 @@ function parse($thing)
         $level   = 0;
         $istag   = false;
 
-        $f = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
-        $t = '@:(\w+)(.*?)/?.$@s';
+        $f = '@(</?(?:txp|[a-z]{3}:):\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
+        $t = '@./?(txp|[a-z]{3}:):(\w+)(.*?)/?.$@s';
 
         $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
 
         foreach ($parsed as $chunk) {
             if ($istag) {
                 preg_match($t, $chunk, $tag[$level]);
+#echo strlen($tag[$level][1]);
+                if (strlen($tag[$level][1]) !== 3 and $tag[$level][1] !== 'txp:' and $tag[$level][2] !== 'else') {
+                    $tag[$level][2] = $tag[$level][1] . $tag[$level][2];
+                    $tag[$level][2][3] = '_';    
+                }
 
                 if ($chunk[strlen($chunk) - 2] === '/') {
                     // self closed tag
-                    $tags[$level][] = array($tag[$level][1], $tag[$level][2], null);
+                    $tags[$level][] = array($tag[$level][2], $tag[$level][3], null);
 
                     if ($level) {
 			$inside[$level] .= $chunk;
@@ -414,7 +419,7 @@ function parse($thing)
                     // closing tag
                     $txp_parsed[sha1($inside[$level])] = $tags[$level];
                     $level--;
-                    $tags[$level][] = array($tag[$level][1], $tag[$level][2], $inside[$level+1]);
+                    $tags[$level][] = array($tag[$level][2], $tag[$level][3], $inside[$level+1]);
 
                     if ($level) {
 			$inside[$level] .= $inside[$level+1] . $chunk;
