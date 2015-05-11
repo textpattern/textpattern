@@ -4154,6 +4154,8 @@ function txp_hash_password($password)
  * @param   string  $thing     Statement in Textpattern tag markup presentation
  * @param   bool    $condition TRUE to return if statement, FALSE to else
  * @return  string  Either if or else statement
+ * @deprecated in 4.6.0
+ * @see     parse_else
  * @package TagParser
  * @example
  * echo parse(EvalElse('true &lt;txp:else /&gt; false', 1 === 1));
@@ -4161,7 +4163,7 @@ function txp_hash_password($password)
 
 function EvalElse($thing, $condition)
 {
-    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'EvalElse')), E_USER_NOTICE);
+    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'parse_else (and remove the separate parse() call)')), E_USER_NOTICE);
     return parse_else($thing, $condition);
 }
 
