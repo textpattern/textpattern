@@ -393,7 +393,8 @@ function parse($thing)
         foreach ($parsed as $chunk) {
             if ($istag) {
                 preg_match($t, $chunk, $tag[$level]);
-#echo strlen($tag[$level][1]);
+
+                // handle short tags
                 if (strlen($tag[$level][1]) !== 3 and $tag[$level][1] !== 'txp:' and $tag[$level][2] !== 'else') {
                     $tag[$level][2] = $tag[$level][1] . $tag[$level][2];
                     $tag[$level][2][3] = '_';    
