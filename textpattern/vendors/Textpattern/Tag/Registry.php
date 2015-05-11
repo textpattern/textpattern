@@ -76,9 +76,7 @@ class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterfac
 
     public function process($tag, array $atts = null, $thing = null)
     {
-        if ($this->isRegistered($tag)) {
-            return call_user_func($this->tags[$tag], (array) $atts, $thing);
-        }
+        return call_user_func($this->tags[$tag], (array) $atts, $thing);
     }
 
     /**
