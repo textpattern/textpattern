@@ -548,12 +548,6 @@ function processTags($tag, $atts, $thing = null)
     elseif (maybe_tag($tag)) {
         $out = $tag(splat($atts), $thing);
         trigger_error(gTxt('unregistered_tag'), E_USER_NOTICE);
-    }
-
-    // Deprecated, remove in crockery.
-    elseif (isset($GLOBALS['pretext'][$tag])) {
-        $out = txpspecialchars($pretext[$tag]);
-        trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
     } else {
         $out = '';
         trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
