@@ -90,7 +90,7 @@ class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterfac
 
     public function isRegistered($tag)
     {
-        return array_key_exists($tag, $this->tags) && is_callable($this->tags[$tag]);
+        return array_key_exists($tag, $this->tags);
     }
 
     /**
