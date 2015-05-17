@@ -74,7 +74,7 @@ class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterfac
      * @return string|null The tag's results
      */
 
-    public function process($tag, array $atts = array(), $thing = null)
+    public function process($tag, array $atts, $thing = null)
     {
         return call_user_func($this->tags[$tag], $atts, $thing);
     }
