@@ -51,7 +51,7 @@ class classic_theme extends theme
 
         if (!$this->is_popup) {
             $out[] = '<nav role="navigation" aria-label="'.gTxt('navigation').'">';
-            $out[] = '<div id="nav-primary" class="nav-tabs">';
+            $out[] = '<div class="nav-tabs" id="nav-primary">';
             $out[] = '<ul>';
 
             $secondary = '';
@@ -63,7 +63,7 @@ class classic_theme extends theme
                     '</li>';
 
                 if ($tab['active'] && !empty($tab['items'])) {
-                    $secondary = '<div id="nav-secondary" class="nav-tabs">'.
+                    $secondary = '<div class="nav-tabs" id="nav-secondary">'.
                         n.'<ul>';
 
                     foreach ($tab['items'] as $item) {
@@ -151,11 +151,11 @@ class classic_theme extends theme
         } else {
             $html = span(
                 gTxt($thing[0]).
-                sp.href('&#215;', '#close', ' role="button" class="close" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"')
+                sp.href('&#215;', '#close', ' class="close" role="button" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"')
             , array(
-                'role'  => 'alert',
-                'id'    => 'message',
                 'class' => $class,
+                'id'    => 'message',
+                'role'  => 'alert',
             ));
 
             // Try to inject $html into the message pane no matter when _announce()'s output is printed.
