@@ -135,13 +135,13 @@ echo $theme->html_head();
 <body id="<?php echo $body_id;
     ?>" class="not-ready <?php echo $area;
     ?>">
-<header role="banner" class="txp-header">
+<header class="txp-header">
 <?php callback_event('admin_side', 'pagetop');
     $theme->set_state($area, $event, $bm, $message);
     echo pluggable_ui('admin_side', 'header', $theme->header());
     callback_event('admin_side', 'pagetop_end');
     echo n.'</header><!-- /txp-header -->'.
-        n.'<main role="main" class="txp-body" aria-label="'.gTxt('main_content').'">';
+        n.'<main class="txp-body" aria-label="'.gTxt('main_content').'">';
     callback_event('admin_side', 'main_content');
 }
 
@@ -337,7 +337,7 @@ function navPop($inline = '')
     }
 
     if ($out) {
-        return n.'<form method="get" action="index.php" class="navpop">'.
+        return n.'<form class="navpop" method="get" action="index.php">'.
             n.'<select name="event" data-submit-on="change">'.
             n.'<option>'.gTxt('go').'&#8230;</option>'.
             join('', $out).
