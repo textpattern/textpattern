@@ -808,7 +808,7 @@ textpattern.Relay =
      * @return {object} The Relay object
      * @example
      * textpattern.Relay.register('event',
-     *     function(event, data)
+     *     function (event, data)
      *     {
      *         alert(data);
      *     }
@@ -1140,6 +1140,7 @@ jQuery.fn.txpDialog = function (options)
 jQuery.fn.txpDatepicker = function (options)
 {
     // TODO $.datepicker.regional[ "en" ];
+    // TODO support from RTL languages
     this.datepicker(options);
 
     return this;
@@ -1263,7 +1264,7 @@ textpattern.encodeHTML = function (string)
  * textpattern.tr('hello world, and bye!', {'hello' : 'bye', 'bye' : 'hello'});
  */
 
-textpattern.tr = function(string, replacements)
+textpattern.tr = function (string, replacements)
 {
     var match, position, output = '', replacement;
 
@@ -1356,7 +1357,11 @@ jQuery.fn.gTxt = function (opts, tags, escape)
     return this;
 };
 
-// ESC button closes alert messages.
+/**
+ * ESC button closes alert messages.
+ *
+ * @since 4.5.0
+ */
 
 $(document).keyup(function (e)
 {
@@ -1426,7 +1431,7 @@ textpattern.Route.add('import', function ()
 textpattern.Route.add('article', function ()
 {
     // Assume users would not change the timestamp if they wanted to
-    // "publish now"/"reset time".
+    // 'publish now'/'reset time'.
     $(document).on('change',
         '#write-timestamp input.year,' +
         '#write-timestamp input.month,' +
@@ -1462,7 +1467,7 @@ textpattern.Route.add('article', function ()
         form.off('submit.txpAsyncForm').trigger('submit');
     });
 
-    // Switch to text/html/preview mode.
+    // Switch to Text/HTML/Preview mode.
     $(document).on('click',
         '[data-view-mode]',
         function (e)
@@ -1474,7 +1479,7 @@ textpattern.Route.add('article', function ()
     );
 });
 
-// Clone button on Pages, Forms, Styles panels.
+// 'Clone' button on Pages, Forms, Styles panels.
 
 textpattern.Route.add('css, page, form', function ()
 {
@@ -1615,7 +1620,7 @@ $(document).ready(function ()
         e.preventDefault();
     });
 
-    // Initialises panel specific JavaScript.
+    // Initialise panel specific JavaScript.
     textpattern.Route.init();
 
     // Arm UI.
