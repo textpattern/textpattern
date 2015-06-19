@@ -233,12 +233,12 @@ function commentForm($id, $atts = null)
 
     $required = ($h5) ? ' required' : '';
 
-    $msgstyle = ($msgstyle ? ' style="'.$msgstyle.'"' : '');
-    $msgrows = ($msgrows and is_numeric($msgrows)) ? ' rows="'.intval($msgrows).'"' : '';
     $msgcols = ($msgcols and is_numeric($msgcols)) ? ' cols="'.intval($msgcols).'"' : '';
+    $msgrows = ($msgrows and is_numeric($msgrows)) ? ' rows="'.intval($msgrows).'"' : '';
+    $msgstyle = ($msgstyle ? ' style="'.$msgstyle.'"' : '');
 
-    $textarea = '<textarea id="message" name="'.$n_message.'"'.$msgcols.$msgrows.$msgstyle.$required.
-        ' class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"').
+    $textarea = '<textarea class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"').
+        ' id="message" name="'.$n_message.'"'.$msgcols.$msgrows.$msgstyle.$required.
         '>'.txpspecialchars(substr(trim($message), 0, 65535)).'</textarea>';
 
     // By default, the submit button is visible but disabled.
@@ -910,10 +910,10 @@ function input($type, $name, $val, $size = '', $class = '', $tab = '', $chkd = '
     trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'fInput')), E_USER_NOTICE);
     $o = array(
         '<input type="'.$type.'" name="'.$name.'" id="'.$name.'" value="'.$val.'"',
-        ($size)    ? ' size="'.$size.'"'      : '',
-        ($class) ? ' class="'.$class.'"'    : '',
-        ($tab)     ? ' tabindex="'.$tab.'"'    : '',
-        ($chkd)    ? ' checked="checked"'    : '',
+        ($size)  ? ' size="'.$size.'"'    : '',
+        ($class) ? ' class="'.$class.'"'  : '',
+        ($tab)   ? ' tabindex="'.$tab.'"' : '',
+        ($chkd)  ? ' checked="checked"'   : '',
         ' />'.n,
     );
 
