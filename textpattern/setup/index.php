@@ -88,29 +88,34 @@ print <<<eod
 <script src="../vendors/jquery/ui/js/jquery-ui.js"></script>
 <script>var textpattern = { do_spellcheck: "", textarray: {} };</script>
 <script src="../textpattern.js"></script>
+<link rel="stylesheet" href="../vendors/jquery/ui/css/textpattern/jquery-ui.min.css">
 <link rel="stylesheet" href="../theme/hive/css/textpattern.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <script src="../vendors/modernizr/modernizr/modernizr.js"></script>
-<!--[if lt IE 9]><script src="../vendors/keithclark/selectivizr/selectivizr.min.js"></script><![endif]-->
+<!--[if lt IE 9]>
+<link rel="stylesheet" href="../vendors/jquery/ui/css/textpattern/jquery-ui-ie8.min.css">
+<link rel="stylesheet" href="../theme/hive/css/ie8.min.css">
+<script src="../vendors/keithclark/selectivizr/selectivizr.min.js"></script>
+<![endif]-->
 </head>
 <body id="page-setup"{$bodyclass}>
 <main class="txp-body">
 eod;
 
 switch ($step) {
-    case "":
+    case '':
         chooseLang();
         break;
-    case "getDbInfo":
+    case 'getDbInfo':
         getDbInfo();
         break;
-    case "getTxpLogin":
+    case 'getTxpLogin':
         getTxpLogin();
         break;
-    case "printConfig":
+    case 'printConfig':
         printConfig();
         break;
-    case "createTxp":
+    case 'createTxp':
         createTxp();
 }
 ?>
@@ -123,10 +128,10 @@ switch ($step) {
 
 function chooseLang()
 {
-    echo n.'<div id="setup_container" class="txp-container">',
+    echo n.'<div class="txp-container" id="setup_container">',
         n.'<div class="txp-setup">',
         hed('Welcome to Textpattern CMS', 1),
-        n.'<form action="'.txpspecialchars($_SERVER['PHP_SELF']).'" method="post" class="prefs-form">',
+        n.'<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">',
         langs(),
         graf(fInput('submit', 'Submit', 'Submit', 'publish')),
         sInput('getDbInfo'),
@@ -178,7 +183,7 @@ function getDbInfo()
 
     global $txpcfg;
 
-    echo n.'<div id="setup_container" class="txp-container">',
+    echo n.'<div class="txp-container" id="setup_container">',
         txp_setup_progress_meter(1),
         n.'<div class="txp-setup">';
 
@@ -206,7 +211,7 @@ function getDbInfo()
         $guess_siteurl = 'mysite.com';
     }
 
-    echo '<form action="'.txpspecialchars($_SERVER['PHP_SELF']).'" method="post" class="prefs-form">'.
+    echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         hed(setup_gTxt('need_details'), 1).
         hed('MySQL', 2).
         graf(setup_gTxt('db_must_exist')).
@@ -274,7 +279,7 @@ function printConfig()
 
     global $txpcfg;
 
-    echo n.'<div id="setup_container" class="txp-container">'.
+    echo n.'<div class="txp-container" id="setup_container">'.
         txp_setup_progress_meter(2).
         n.'<div class="txp-setup">';
 
@@ -396,7 +401,7 @@ function getTxpLogin()
 
     global $txpcfg;
 
-    echo n.'<div id="setup_container" class="txp-container">';
+    echo n.'<div class="txp-container" id="setup_container">';
 
     $problems = array();
 
@@ -448,7 +453,7 @@ function getTxpLogin()
     echo txp_setup_progress_meter(3).
         n.'<div class="txp-setup">';
 
-    echo '<form action="'.txpspecialchars($_SERVER['PHP_SELF']).'" method="post" class="prefs-form">'.
+    echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         hed(setup_gTxt('creating_db_tables'), 2).
         graf(setup_gTxt('about_to_create')).
 
@@ -502,7 +507,7 @@ function createTxp()
     $_SESSION['theme'] = ps('theme');
 
     if ($_SESSION['name'] == '') {
-        echo n.'<div id="setup_container" class="txp-container">'.
+        echo n.'<div class="txp-container" id="setup_container">'.
             txp_setup_progress_meter(3).
             n.'<div class="txp-setup">'.
             graf(
@@ -515,7 +520,7 @@ function createTxp()
     }
 
     if (!$_SESSION['pass']) {
-        echo n.'<div id="setup_container" class="txp-container">'.
+        echo n.'<div class="txp-container" id="setup_container">'.
             txp_setup_progress_meter(3).
             n.'<div class="txp-setup">'.
             graf(
@@ -528,7 +533,7 @@ function createTxp()
     }
 
     if (!is_valid_email($_SESSION['email'])) {
-        echo n.'<div id="setup_container" class="txp-container">'.
+        echo n.'<div class="txp-container" id="setup_container">'.
             txp_setup_progress_meter(3).
             n.'<div class="txp-setup">'.
             graf(
@@ -643,7 +648,7 @@ function makeConfig()
 
 function fbCreate()
 {
-    echo n.'<div id="setup_container" class="txp-container">'.
+    echo n.'<div class="txp-container" id="setup_container">'.
         txp_setup_progress_meter(4).
         n.'<div class="txp-setup">';
 
@@ -702,7 +707,7 @@ function setup_config_contents()
         n.'<textarea class="code" name="config" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'" dir="ltr" readonly>'.
             makeConfig().
         n.'</textarea>'.
-        n.'<form action="'.txpspecialchars($_SERVER['PHP_SELF']).'" method="post">'.
+        n.'<form method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
             graf(fInput('submit', 'submit', setup_gTxt('did_it'), 'publish')).
             sInput('getTxpLogin').
         n.'</form>';
@@ -726,7 +731,7 @@ function setup_back_button($current = null)
         setup_gTxt('please_go_back')
     ).
     graf(
-        '<form action="'.txpspecialchars($_SERVER['PHP_SELF']).'" method="post">'.
+        '<form method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         sInput($prev).
         fInput('submit', 'submit', setup_gTxt('back'), 'navlink').
         '</form>'
