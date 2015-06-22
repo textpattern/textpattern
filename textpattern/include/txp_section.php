@@ -488,7 +488,7 @@ function section_edit()
     }
 
     $out[] =
-        inputLabel('section_description', fInput('text', 'description', $sec_description, '', '', '', INPUT_REGULAR, '', 'section_description'), 'section_description');
+        inputLabel('section_description', text_area('description', 0, 0, $sec_description, 'section_description', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE), 'section_description');
 
     $out[] =
         inputLabel('section_page', selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').

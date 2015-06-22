@@ -540,7 +540,7 @@ function cat_event_category_edit($evname)
                 : inputLabel('category_parent', $parent_widget)
             ).
             inputLabel('category_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').
-            inputLabel('category_description', fInput('text', 'description', $description, '', '', '', INPUT_REGULAR, '', 'category_description'), $evname.'_category_description').
+            inputLabel('category_description', text_area('description', 0, 0, $description, 'category_description', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE), $evname.'_category_description').
             pluggable_ui('category_ui', 'extend_detail_form', '', $row).
             hInput('id', $id).
             graf(fInput('submit', '', gTxt('save'), 'publish')).

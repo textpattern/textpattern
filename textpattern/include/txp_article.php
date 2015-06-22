@@ -1556,7 +1556,7 @@ function article_partial_url_title_value($rs)
 function article_partial_description($rs)
 {
     $out = graf('<label for="description">'.gTxt('description').'</label>'.popHelp('description').br.
-        fInput('text', 'description', article_partial_description_value($rs), '', '', '', INPUT_REGULAR, '', 'description'), ' class="description"');
+        text_area('description', 0, 0, article_partial_description_value($rs), 'description', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE), ' class="description"');
 
     return pluggable_ui('article_ui', 'description', $out, $rs);
 }
