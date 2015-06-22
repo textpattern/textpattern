@@ -1,7 +1,7 @@
 Changes in 4.6.0 (Upcoming) TODO
 
 * Improved RTL language support.
-* New tags: <txp:description />, <txp:if_description />, <txp:meta_description />.
+* New tags: <txp:meta_description /> and <txp:if_description />.
 * Changed: <txp:author /> accepts 'url' attribute.
 * Changed: <txp:category_list /> accepts 'html_id' attribute.
 * Changed: <txp:recent_articles /> accepts 'offset' attribute.
