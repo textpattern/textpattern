@@ -5705,6 +5705,61 @@ function getlocale($lang)
 }
 
 /**
+ * Fetch meta description from the given (or automatic) context.
+ *
+ * Category context may be refined by specifying the content type as well
+ * after a dot. e.g. category.image to check image context category.
+ *
+ * @param string $type Flavour of meta content to fetch (section, category, article)
+ */
+
+function getMetaDescription($type = null)
+{
+    global $thisarticle, $thiscategory, $thissection, $c, $s, $context;
+
+    $content = '';
+
+    if ($type === null) {
+        if ($thiscategory) {
+            $content = $thiscategory['description'];
+        } elseif ($thissection) {
+            $content = $thissection['description'];
+        } elseif ($thisarticle) {
+            $content = $thisarticle['description'];
+        } elseif ($c) {
+            $content = safe_field('description', 'txp_category', "name = '".doSlash($c)."' AND type = '" . doSlash($context) . "'");
+        } elseif ($s) {
+            $content = safe_field('description', 'txp_section', "name = '".doSlash($s)."'");
+        }
+    } else {
+        if (strpos($type, 'category') === 0) {
+            // Category context.
+            if ($thiscategory) {
+                $content = $thiscategory['description'];
+            } else {
+                $thisContext = $context;
+                $catParts = do_list($type, '.');
+
+                if (isset($catParts[1])) {
+                    $thisContext = $catParts[1];
+                }
+
+                $clause = " AND type = '".$thisContext."'";
+                $content = safe_field('description', 'txp_category', "name = '".doSlash($c)."'" . $clause);
+            }
+        } elseif ($type === 'section') {
+            $theSection = ($thissection) ? $thissection : $s;
+            $content = safe_field('description', 'txp_section', "name = '".doSlash($theSection)."'");
+        } elseif ($type === 'article') {
+            assert_article();
+            $content = ($thisarticle? $thisarticle['description'] : '');
+        }
+    }
+
+    return $content;
+}
+
+/**
  * Assert article context error.
  */
 

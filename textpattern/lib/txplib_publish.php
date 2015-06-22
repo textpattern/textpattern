@@ -150,6 +150,7 @@ function article_column_map()
         'authorid' => 'AuthorID',
         'title' => 'Title',
         'url_title' => 'url_title',
+        'description' => 'description',
         'category1' => 'Category1',
         'category2' => 'Category2',
         'section' => 'Section',

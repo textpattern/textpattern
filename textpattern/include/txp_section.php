@@ -131,11 +131,13 @@ function sec_section_list($message = '')
                 'title'        => "title = '$crit_escaped'",
                 'page'         => "page = '$crit_escaped'",
                 'css'          => "css = '$crit_escaped'",
+                'description'  => "description = '$crit_escaped'",
             ) : array(
                 'name'         => "name like '%$crit_escaped%'",
                 'title'        => "title like '%$crit_escaped%'",
                 'page'         => "page like '%$crit_escaped%'",
                 'css'          => "css like '%$crit_escaped%'",
+                'description'  => "description like '%$crit_escaped%'",
             );
 
         if ($verbatim) {
@@ -486,6 +488,9 @@ function section_edit()
     }
 
     $out[] =
+            inputLabel('section_description', fInput('text', 'description', $sec_description, '', '', '', INPUT_REGULAR, '', 'section_description'), 'section_description');
+
+    $out[] =
         inputLabel('section_page', selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').
         inputLabel('section_css', selectInput('css', $all_styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css');
 
@@ -524,6 +529,7 @@ function section_save()
     $in = array_map('assert_string', psa(array(
         'name',
         'title',
+        'description',
         'old_name',
         'section_page',
         'css',
@@ -555,7 +561,7 @@ function section_save()
 
     $ok = false;
     if ($name == 'default') {
-        $ok = safe_update('txp_section', "page = '$safe_section_page', css = '$safe_css'", "name = 'default'");
+        $ok = safe_update('txp_section', "page = '$safe_section_page', css = '$safe_css', description = '$safe_description'", "name = 'default'");
     } elseif ($name) {
         extract(array_map('assert_int', psa(array('on_frontpage', 'in_rss', 'searchable'))));
 
@@ -565,6 +571,7 @@ function section_save()
                 title        = '$safe_title',
                 page         = '$safe_section_page',
                 css          = '$safe_css',
+                description  = '$safe_description',
                 on_frontpage = $on_frontpage,
                 in_rss       = $in_rss,
                 searchable   = $searchable
@@ -580,6 +587,7 @@ function section_save()
                 title        = '$safe_title',
                 page         = '$safe_section_page',
                 css          = '$safe_css',
+                description  = '$safe_description',
                 on_frontpage = $on_frontpage,
                 in_rss       = $in_rss,
                 searchable   = $searchable");
@@ -727,6 +735,7 @@ function section_search_form($crit, $method)
         'title'        => gTxt('title'),
         'page'         => gTxt('page'),
         'css'          => gTxt('css'),
+        'description'  => gTxt('description'),
         'on_frontpage' => gTxt('on_front_page'),
         'in_rss'       => gTxt('syndicate'),
         'searchable'   => gTxt('include_in_search'),

@@ -43,6 +43,7 @@ $vars = array(
     'Image',
     'textile_body',
     'Keywords',
+    'description',
     'Status',
     'Posted',
     'Expires',
@@ -220,6 +221,7 @@ function article_post()
         }
 
         $user = doSlash($txp_user);
+        $description = doSlash($description);
         $Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
         $msg = '';
 
@@ -257,6 +259,7 @@ function article_post()
                 Excerpt_html    = '$Excerpt_html',
                 Image           = '$Image',
                 Keywords        = '$Keywords',
+                description'    = '$description',
                 Status          =  $Status,
                 Posted          =  $when,
                 Expires         =  $whenexpires,
@@ -433,6 +436,7 @@ function article_save()
     $Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
 
     $user = doSlash($txp_user);
+    $description = doSlash($description);
 
     $cfq = array();
     $cfs = getCustomFields();
@@ -453,6 +457,7 @@ function article_save()
             Excerpt         = '$Excerpt',
             Excerpt_html    = '$Excerpt_html',
             Keywords        = '$Keywords',
+            description     = '$description',
             Image           = '$Image',
             Status          =  $Status,
             LastMod         =  now(),
@@ -545,6 +550,16 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'mode'     => PARTIAL_VOLATILE_VALUE,
             'selector' => '#url-title',
             'cb'       => 'article_partial_url_title_value',
+        ),
+        'description' => array(
+            'mode'     => PARTIAL_STATIC,
+            'selector' => 'p.description',
+            'cb'       => 'article_partial_description',
+        ),
+        'description_value'  => array(
+            'mode'     => PARTIAL_VOLATILE_VALUE,
+            'selector' => '#description',
+            'cb'       => 'article_partial_description_value',
         ),
         'keywords' => array(
             'mode'     => PARTIAL_STATIC,
@@ -918,10 +933,13 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // keywords.
         $html_keywords = $partials['keywords']['html'];
 
+        // description.
+        $html_description = $partials['description']['html'];
+
         // URL title.
         $html_url_title = $partials['url_title']['html'];
 
-        echo wrapRegion('meta_group', $html_url_title.$html_keywords, 'meta', 'meta', 'article_meta');
+        echo wrapRegion('meta_group', $html_url_title.$html_description.$html_keywords, 'meta', 'meta', 'article_meta');
 
         // Article image.
         echo $partials['image']['html'];
@@ -1523,6 +1541,36 @@ function article_partial_url_title($rs)
 function article_partial_url_title_value($rs)
 {
     return $rs['url_title'];
+}
+
+/**
+ * Renders description partial.
+ *
+ * The rendered widget can be customised via the 'article_ui > description'
+ * pluggable UI callback event.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
+function article_partial_description($rs)
+{
+    $out = graf('<label for="description">'.gTxt('description').'</label>'.popHelp('description').br.
+        fInput('text', 'description', article_partial_description_value($rs), '', '', '', INPUT_REGULAR, '', 'description'), ' class="description"');
+
+    return pluggable_ui('article_ui', 'description', $out, $rs);
+}
+
+/**
+ * Gets description from the given article data set.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
+function article_partial_description_value($rs)
+{
+    return $rs['description'];
 }
 
 /**

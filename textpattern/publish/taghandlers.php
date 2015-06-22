@@ -108,6 +108,7 @@ Txp::get('Textpattern_Tag_Registry')
     ->register('section')
     ->register('keywords')
     ->register('if_keywords')
+    ->register('if_description')
     ->register('if_article_image')
     ->register('article_image')
     ->register('search_result_title')
@@ -131,6 +132,7 @@ Txp::get('Textpattern_Tag_Registry')
     ->register('if_individual_article')
     ->register('if_article_list')
     ->register('meta_keywords')
+    ->register('meta_description')
     ->register('meta_author')
     ->register('permlink')
     ->register('lang')
@@ -1329,7 +1331,7 @@ function category_list($atts, $thing = null)
         $categories = do_list($categories);
         $categories = join("','", doSlash($categories));
 
-        $rs = safe_rows_start('name, title', 'txp_category',
+        $rs = safe_rows_start('name, title, description', 'txp_category',
             "type = '".doSlash($type)."' and name in ('$categories') order by ".($sort ? $sort : "field(name, '$categories')").$sql_limit);
     } else {
         if ($parent) {
@@ -1361,13 +1363,13 @@ function category_list($atts, $thing = null)
                     $between[] = "(lft between $lft and $rgt)";
                 }
 
-                $rs = safe_rows_start('name, title', 'txp_category',
+                $rs = safe_rows_start('name, title, description', 'txp_category',
                     "(".join(' or ', $between).") and type = '".doSlash($type)."' and name != 'default' $exclude $shallow order by ".($sort ? $sort : 'lft ASC').$sql_limit);
             } else {
                 $rs = array();
             }
         } else {
-            $rs = safe_rows_start('name, title', 'txp_category',
+            $rs = safe_rows_start('name, title, description', 'txp_category',
                 "type = '".doSlash($type)."' and name not in('default','root') $exclude $shallow order by ".($sort ? $sort : 'name ASC').$sql_limit);
         }
     }
@@ -1394,7 +1396,7 @@ function category_list($atts, $thing = null)
                         ' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'context' => $type)).'"'
                     );
                 } else {
-                    $thiscategory = array('name' => $name, 'title' => $title, 'type' => $type);
+                    $thiscategory = array('name' => $name, 'title' => $title, 'type' => $type, 'description' => $description);
                     $thiscategory['is_first'] = ($count == 1);
                     $thiscategory['is_last'] = ($count == $last);
 
@@ -1486,7 +1488,7 @@ function section_list($atts, $thing = null)
     }
 
     $rs = safe_rows_start(
-        'name, title',
+        'name, title, description',
         'txp_section',
         join(' and ', $sql).' order by '.$sql_sort.$sql_limit
     );
@@ -1516,10 +1518,11 @@ function section_list($atts, $thing = null)
                 );
             } else {
                 $thissection = array(
-                    'name'     => $name,
-                    'title'    => $title,
-                    'is_first' => ($count == 1),
-                    'is_last'  => ($count == $last),
+                    'name'        => $name,
+                    'title'       => $title,
+                    'description' => $description,
+                    'is_first'    => ($count == 1),
+                    'is_last'     => ($count == $last),
                 );
 
                 if ($thing === null && $form !== '') {
@@ -2563,7 +2566,7 @@ function author_email($atts)
 
     extract(lAtts(array(
         'escape' => 'html',
-        'link'      => '',
+        'link'   => '',
     ), $atts));
 
     if ($thisauthor) {
@@ -3631,6 +3634,50 @@ function meta_keywords()
         ? '<meta name="keywords" content="'.txpspecialchars($id_keywords).'" />'
         : '';
 }
+
+// -------------------------------------------------------------
+
+function meta_description($atts)
+{
+    global $thisarticle, $thiscategory, $thissection, $s, $c, $context;
+
+    extract(lAtts(array(
+        'escape'  => 'html',
+        'format'  => 'tag', // or empty for raw value
+        'type'    => null,
+    ), $atts));
+
+    $out = '';
+    $content = getMetaDescription($type);
+
+    if ($content) {
+        $content = ($escape === 'html' ? txpspecialchars($content) : $content);
+
+        if ($format === 'tag') {
+            $out = '<meta name="description" content="'.$content.'" />';
+        } else {
+            $out = $content;
+        }
+    }
+
+    return $out;
+}
+
+// -------------------------------------------------------------
+
+function if_description($atts, $thing = null)
+{
+    global $thisarticle, $thiscategory, $thissection, $s, $c, $context;
+
+    extract(lAtts(array(
+        'type' => null,
+    ), $atts));
+
+    $content = getMetaDescription($type);
+
+    return parse(EvalElse($thing, !empty($content)));
+}
+
 
 // -------------------------------------------------------------
 
