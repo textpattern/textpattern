@@ -259,7 +259,7 @@ function article_post()
                 Excerpt_html    = '$Excerpt_html',
                 Image           = '$Image',
                 Keywords        = '$Keywords',
-                description'    = '$description',
+                description     = '$description',
                 Status          =  $Status,
                 Posted          =  $when,
                 Expires         =  $whenexpires,
