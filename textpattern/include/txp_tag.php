@@ -649,6 +649,23 @@ class Textpattern_Tag_BuilderTags
     }
 
     /**
+     * Renders a HTML &lt;select&gt; list of author formats.
+     *
+     * @param  string $value Currently selected value
+     * @return string HTML
+     */
+
+    private function tbAuthorFormatPop($value)
+    {
+        $vals = array(
+            'link' => '<a href...',
+            'url'  => gTxt('url'),
+        );
+
+        return ' '.selectInput('format', $vals, $value, true, '', 'format');
+    }
+
+    /**
      * Renders a HTML &lt;input&gt; tag.
      *
      * @param  string $name  Input name
@@ -827,9 +844,12 @@ class Textpattern_Tag_BuilderTags
     function tag_author()
     {
         $atts = gpsa(array(
+            'escape',
+            'format',
             'link',
             'section',
             'this_section',
+            'title',
         ));
 
         extract($atts);
@@ -837,9 +857,12 @@ class Textpattern_Tag_BuilderTags
         $out = $this->tagbuildForm(
             $this->startblock.
             $this->widgets(array(
+                'escape'              => $this->tbEscapePop($escape),
+                'format'              => $this->tbAuthorFormatPop($format),
                 'link_to_this_author' => $this->tbYesNoPop('link', $link),
                 'section'             => $this->tbSectionPop('section', $section),
                 'this_section'        => $this->tbYesNoPop('this_section', $this_section),
+                'title'               => $this->tbYesNoPop('title', $title),
             )).
             $this->endform
         ).
