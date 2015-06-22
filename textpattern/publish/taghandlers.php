@@ -373,18 +373,18 @@ function thumbnail($atts)
     global $thisimage;
 
     extract(lAtts(array(
-        'class'     => '',
-        'escape'    => 'html',
-        'html_id'   => '',
-        'height'       => '',
-        'id'        => '',
-        'link'      => 0,
-        'link_rel'  => '',
-        'name'      => '',
-        'poplink'   => 0, // Is this used?
-        'style'     => '',
-        'wraptag'   => '',
-        'width'       => '',
+        'class'    => '',
+        'escape'   => 'html',
+        'html_id'  => '',
+        'height'   => '',
+        'id'       => '',
+        'link'     => 0,
+        'link_rel' => '',
+        'name'     => '',
+        'poplink'  => 0, // Is this used?
+        'style'    => '',
+        'wraptag'  => '',
+        'width'    => '',
     ), $atts));
 
     if ($name) {
@@ -1131,7 +1131,7 @@ function related_articles($atts, $thing = null)
     extract(lAtts(array(
         'break'    => br,
         'class'    => __FUNCTION__,
-        'form'       => '',
+        'form'     => '',
         'label'    => '',
         'labeltag' => '',
         'limit'    => 10,
@@ -2513,12 +2513,18 @@ function author($atts)
     global $thisarticle, $thisauthor, $s, $author;
 
     extract(lAtts(array(
-        'link'         => '',
+        'escape'       => 'html',
+        'link'         => 0,
         'title'        => 1,
         'section'      => '',
         'this_section' => 0,
-        'url'          => 0,
+        'format'       => '', // empty, link, or url
     ), $atts));
+
+    // Synonym.
+    if ($format === 'link') {
+        $link = 1;
+    }
 
     if ($thisauthor) {
         $realname = $thisauthor['realname'];
@@ -2533,10 +2539,12 @@ function author($atts)
     }
 
     if ($title) {
-        $display_name = txpspecialchars($realname);
+        $display_name = $realname;
     } else {
-        $display_name = txpspecialchars($name);
+        $display_name = $name;
     }
+
+    $display_name = ($escape === 'html') ? txpspecialchars($display_name) : $display_name;
 
     if ($this_section && $s != 'default') {
         $section = $s;
@@ -2547,7 +2555,7 @@ function author($atts)
             'author' => $realname,
         ));
 
-    if ($url) {
+    if ($format === 'url') {
         return $href;
     }
 
@@ -2905,6 +2913,8 @@ function keywords()
     global $thisarticle;
 
     assert_article();
+
+    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
 
     return txpspecialchars($thisarticle['keywords']);
 }
@@ -3624,27 +3634,53 @@ function if_article_list($atts, $thing)
     return parse(EvalElse($thing, ($is_article_list == true)));
 }
 
-// -------------------------------------------------------------
+/**
+ * Returns article keywords.
+ *
+ * @param  array  $atts Tag attributes
+ * @return string
+ */
 
-function meta_keywords()
+function meta_keywords($atts)
 {
     global $id_keywords;
 
-    return ($id_keywords)
-        ? '<meta name="keywords" content="'.txpspecialchars($id_keywords).'" />'
-        : '';
+    extract(lAtts(array(
+        'escape' => 'html',
+        'format' => 'meta', // or empty for raw value
+    ), $atts));
+
+    $out = '';
+
+    if ($id_keywords) {
+        $content = ($escape === 'html') ? txpspecialchars($id_keywords) : $id_keywords;
+
+        if ($format === 'meta') {
+            // Can't use tag_void() since it escapes its content.
+            $out = '<meta name="keywords" content="'.$content.'" />';
+        } else {
+            $out = $content;
+        }
+    }
+
+    return $out;
 }
 
-// -------------------------------------------------------------
+/**
+ * Returns article, section or category meta description info.
+ *
+ * @param  array  $atts Tag attributes
+ * @return string
+ */
 
 function meta_description($atts)
 {
     global $thisarticle, $thiscategory, $thissection, $s, $c, $context;
 
     extract(lAtts(array(
-        'escape'  => 'html',
-        'format'  => 'tag', // or empty for raw value
-        'type'    => null,
+        'escape' => 'html',
+        'format' => 'meta', // or empty for raw value
+        'type'   => null,
     ), $atts));
 
     $out = '';
@@ -3653,7 +3689,7 @@ function meta_description($atts)
     if ($content) {
         $content = ($escape === 'html' ? txpspecialchars($content) : $content);
 
-        if ($format === 'tag') {
+        if ($format === 'meta') {
             $out = '<meta name="description" content="'.$content.'" />';
         } else {
             $out = $content;
@@ -3663,7 +3699,13 @@ function meta_description($atts)
     return $out;
 }
 
-// -------------------------------------------------------------
+/**
+ * Determines if there is meta description content in the given context.
+ *
+ * @param  array  $atts  Tag attributes
+ * @param  string $thing Tag container content
+ * @return string
+ */
 
 function if_description($atts, $thing = null)
 {
@@ -3686,16 +3728,26 @@ function meta_author($atts)
     global $id_author;
 
     extract(lAtts(array(
+        'escape' => 'html',
+        'format' => 'meta', // or empty for raw value
         'title'  => 0,
     ), $atts));
 
+    $out = '';
+
     if ($id_author) {
         $display_name = ($title) ? get_author_name($id_author) : $id_author;
+        $display_name = ($escape === 'html') ? txpspecialchars($display_name) : $display_name;
 
-        return '<meta name="author" content="'.txpspecialchars($display_name).'" />';
+        if ($format === 'meta') {
+            // Can't use tag_void() since it escapes its content.
+            $out = '<meta name="author" content="'.$display_name.'" />';
+        } else {
+            $out = $display_name;
+        }
     }
 
-    return '';
+    return $out;
 }
 
 // -------------------------------------------------------------

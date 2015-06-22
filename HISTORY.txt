@@ -2,11 +2,14 @@ Changes in 4.6.0 (Upcoming) TODO
 
 * Improved RTL language support.
 * New tags: <txp:meta_description /> and <txp:if_description />.
-* Changed: <txp:author /> accepts 'url' attribute.
+* Changed: <txp:meta_keywords /> accepts 'escape' and 'format' attributes.
+* Changed: <txp:meta_author /> accepts 'escape' and 'format' attributes.
+* Changed: <txp:author /> accepts 'escape' and 'format' attributes.
 * Changed: <txp:category_list /> accepts 'html_id' attribute.
 * Changed: <txp:recent_articles /> accepts 'offset' attribute.
 * Changed: <txp:section_list /> accepts 'html_id' attribute.
-* Changed: Deprecated 'breakclass' attribute for <txp:comments />.
+* Changed: Deprecated 'breakclass' attribute for <txp:comments /> and <txp:image_info />.
+* Changed: Deprecated <txp:keywords> tag. Use <txp:meta_keywords format="" /> instead.
 
 Changes in 4.5.7
 
