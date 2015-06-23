@@ -10,6 +10,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Changed: <txp:section_list /> accepts 'html_id' attribute.
 * Changed: Deprecated 'breakclass' attribute for <txp:comments /> and <txp:image_info />.
 * Changed: Deprecated <txp:keywords> tag. Use <txp:meta_keywords format="" /> instead.
+* Developer: Added jQuery UI library and a jQuery UI Textpattern theme to admin side.
 
 Changes in 4.5.7
 
