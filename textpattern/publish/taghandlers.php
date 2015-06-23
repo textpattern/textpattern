@@ -3646,14 +3646,19 @@ function meta_keywords($atts)
     global $id_keywords;
 
     extract(lAtts(array(
-        'escape' => 'html',
-        'format' => 'meta', // or empty for raw value
+        'escape'    => 'html',
+        'format'    => 'meta', // or empty for raw value
+        'separator' => '',
     ), $atts));
 
     $out = '';
 
     if ($id_keywords) {
         $content = ($escape === 'html') ? txpspecialchars($id_keywords) : $id_keywords;
+
+        if ($separator !== '') {
+            $content = implode($separator, do_list($content));
+        }
 
         if ($format === 'meta') {
             // Can't use tag_void() since it escapes its content.
