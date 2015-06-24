@@ -78,8 +78,13 @@ function image_list($message = '')
     }
     $dir = ($dir == 'asc') ? 'asc' : 'desc';
 
-    echo hed(gTxt('tab_image'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
+    echo n.tag(
+        hed(gTxt('tab_image'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1')).
+        n.tag_start('div', array(
+            'class' => 'txp-layout-2col-cell-2',
+            'id' => $event.'_control',
+        ));
 
     if (!is_dir(IMPATH) or !is_writeable(IMPATH)) {
         echo graf(
@@ -118,47 +123,71 @@ function image_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $criteria = 1;
+    $search = new Textpattern_Search_Filter($event,
+        array(
+            'id' => array(
+                'column' => 'txp_image.id',
+                'label'  => gTxt('ID'),
+                'type'   => 'integer',
+            ),
+            'name' => array(
+                'column' => 'txp_image.name',
+                'label'  => gTxt('name'),
+            ),
+            'alt' => array(
+                'column' => 'txp_image.alt',
+                'label'  => gTxt('alt_text'),
+            ),
+            'caption' => array(
+                'column' => 'txp_image.caption',
+                'label'  => gTxt('caption'),
+            ),
+            'category' => array(
+                'column' => array('txp_image.category', 'txp_category.title'),
+                'label'  => gTxt('image_category'),
+            ),
+            'ext' => array(
+                'column' => 'txp_image.ext',
+                'label'  => gTxt('extension'),
+            ),
+            'author' => array(
+                'column' => array('txp_image.author', 'txp_users.RealName'),
+                'label'  => gTxt('author'),
+            ),
+            'thumbnail' => array(
+                'column' => array('txp_image.thumbnail'),
+                'label'  => gTxt('thumbnail'),
+                'type'   => 'boolean',
+            ),
+        )
+    );
 
-    if ($search_method and $crit != '') {
-        $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
-        $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
-        $critsql = $verbatim ?
-            array(
-                'id'       => "ID in ('".join("','", do_list($crit_escaped))."')",
-                'name'     => "name = '$crit_escaped'",
-                'category' => "category = '$crit_escaped'",
-                'author'   => "author = '$crit_escaped'",
-                'alt'      => "alt = '$crit_escaped'",
-                'caption'  => "caption = '$crit_escaped'",
-            ) : array(
-                'id'       => "ID in ('".join("','", do_list($crit_escaped))."')",
-                'name'     => "name like '%$crit_escaped%'",
-                'category' => "category like '%$crit_escaped%'",
-                'author'   => "author like '%$crit_escaped%'",
-                'alt'      => "alt like '%$crit_escaped%'",
-                'caption'  => "caption like '%$crit_escaped%'",
-            );
+    $alias_yes = '1, Yes';
+    $alias_no = '0, No';
+    $search->setAliases('thumbnail', array($alias_no, $alias_yes));
 
-        if (array_key_exists($search_method, $critsql)) {
-            $criteria = $critsql[$search_method];
-            $limit = 500;
-        } else {
-            $search_method = '';
-            $crit = '';
-        }
+    list($criteria, $crit, $search_method) = $search->getFilter(array(
+            'id' => array('can_list' => true),
+        ));
+
+    $search_render_options = array(
+        'placeholder' => 'search_images',
+    );
+
+    $sql_from =
+        safe_pfx_j('txp_image')."
+        left join ".safe_pfx_j('txp_category')." on txp_category.name = txp_image.category and txp_category.type = 'image'
+        left join ".safe_pfx_j('txp_users')." on txp_users.name = txp_image.author";
+
+    if ($criteria === 1) {
+        $total = safe_count('txp_image', "$criteria");
     } else {
-        $search_method = '';
-        $crit = '';
+        $total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
     }
-
-    $criteria .= callback_event('admin_criteria', 'image_list', 0, $criteria);
-
-    $total = safe_count('txp_image', "$criteria");
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo n.image_search_form($crit, $search_method).
+            echo $search->renderForm('image_list', $search_render_options).
                 graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
         } else {
             echo graf(gTxt('no_images_recorded'), ' class="indicator"').'</div>';
@@ -171,29 +200,46 @@ function image_list($message = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo image_search_form($crit, $search_method);
+    echo $search->renderForm('image_list', $search_render_options);
 
-    $rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_image',
-        "$criteria order by $sort_sql limit $offset, $limit
-    ");
+    $rs = safe_query(
+        "select
+            txp_image.id,
+            txp_image.name,
+            txp_image.category,
+            txp_image.ext,
+            txp_image.w,
+            txp_image.h,
+            txp_image.alt,
+            txp_image.caption,
+            txp_image.date,
+            txp_image.author,
+            txp_image.thumbnail,
+            txp_image.thumb_w,
+            txp_image.thumb_h,
+            txp_users.RealName as realname,
+            txp_category.Title as category_title,
+            unix_timestamp(txp_image.date) as uDate
+        from $sql_from where $criteria order by $sort_sql limit $offset, $limit"
+    );
 
     echo pluggable_ui('image_ui', 'extend_controls', '', $rs);
     echo '</div>'; // End txp-control-panel.
 
-    if ($rs) {
+    if ($rs && numRows($rs)) {
         $show_authors = !has_single_author('txp_image');
 
         echo
             n.tag_start('div', array(
-                'id'    => $event.'_container',
                 'class' => 'txp-container',
+                'id'    => $event.'_container',
             )).
             n.tag_start('form', array(
-                'action' => 'index.php',
-                'id'     => 'images_form',
                 'class'  => 'multi_edit_form',
-                'method' => 'post',
+                'id'     => 'images_form',
                 'name'   => 'longform',
+                'method' => 'post',
+                'action' => 'index.php',
             )).
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
@@ -201,7 +247,7 @@ function image_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'ID', 'id', 'image', true, $switch_dir, $crit, $search_method,
@@ -220,7 +266,7 @@ function image_list($message = '')
                         (('thumbnail' == $sort) ? "$dir " : '').'txp-list-col-thumbnail'
                 ).
                 hCell(
-                    gTxt('tags'), '', ' scope="col" class="txp-list-col-tag-build images_detail"'
+                    gTxt('tags'), '', ' class="txp-list-col-tag-build images_detail" scope="col"'
                 ).
                 column_head(
                     'image_category', 'category', 'image', true, $switch_dir, $crit, $search_method,
@@ -295,7 +341,7 @@ function image_list($message = '')
                     sp.span(
                         span('[', array('aria-hidden' => 'true')).
                         href(gTxt('view'), imagesrcurl($id, $ext)).
-                        span(']', array('aria-hidden' => 'true')), array('class' => 'images_detail')), '', ' scope="row" class="txp-list-col-id"').
+                        span(']', array('aria-hidden' => 'true')), array('class' => 'images_detail')), '', ' class="txp-list-col-id" scope="row"').
 
                 td(
                     ($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name'
@@ -329,30 +375,14 @@ function image_list($message = '')
             n.tag_end('form').
             graf(toggle_box('images_detail'), array('class' => 'detail-toggle')).
             n.tag_start('div', array(
-                'id'    => $event.'_navigation',
                 'class' => 'txp-navigation',
+                'id'    => $event.'_navigation',
             )).
             pageby_form('image', $image_list_pageby).
             nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div').
             n.tag_end('div');
     }
-}
-
-// -------------------------------------------------------------
-
-function image_search_form($crit, $method)
-{
-    $methods = array(
-        'id'       => gTxt('ID'),
-        'name'     => gTxt('name'),
-        'category' => gTxt('image_category'),
-        'author'   => gTxt('author'),
-        'alt'      => gTxt('alt_text'),
-        'caption'  => gTxt('caption'),
-    );
-
-    return search_form('image', 'image_list', $crit, $methods, $method, 'name');
 }
 
 // -------------------------------------------------------------
@@ -506,7 +536,7 @@ function image_edit($message = '', $id = '')
             }
         }
 
-        echo n.'<div id="'.$event.'_container" class="txp-container">';
+        echo n.'<div class="txp-container" id="'.$event.'_container">';
         echo
             pluggable_ui(
                 'image_ui',
