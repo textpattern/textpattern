@@ -66,7 +66,7 @@ function plugin_list($message = '')
     pagetop(gTxt('tab_plugins'), $message);
 
     echo hed(gTxt('tab_plugins'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="'.$event.'_control" class="txp-control-panel">'.
+    echo n.'<div class="txp-control-panel" id="'.$event.'_control">'.
         plugin_form().
         n.'</div>';
 
@@ -102,15 +102,15 @@ function plugin_list($message = '')
     if ($rs and numRows($rs) > 0) {
         echo
             n.tag_start('div', array(
-                'id'    => $event.'_container',
                 'class' => 'txp-container',
+                'id'    => $event.'_container',
             )).
             n.tag_start('form', array(
-                'action' => 'index.php',
-                'id'     => 'plugin_form',
                 'class'  => 'multi_edit_form',
-                'method' => 'post',
+                'id'     => 'plugin_form',
                 'name'   => 'longform',
+                'method' => 'post',
+                'action' => 'index.php',
             )).
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
@@ -118,7 +118,7 @@ function plugin_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'plugin', 'name', 'plugin', true, $switch_dir, '', '',
@@ -137,7 +137,7 @@ function plugin_list($message = '')
                         (('modified' == $sort) ? "$dir " : '').'txp-list-col-modified'
                 ).
                 hCell(gTxt(
-                    'description'), '', ' scope="col" class="txp-list-col-description"'
+                    'description'), '', ' class="txp-list-col-description" scope="col"'
                 ).
                 column_head(
                     'active', 'status', 'plugin', true, $switch_dir, '', '',
@@ -148,7 +148,7 @@ function plugin_list($message = '')
                         (('load_order' == $sort) ? "$dir " : '').'txp-list-col-load-order'
                 ).
                 hCell(
-                    gTxt('manage'), '',  ' scope="col" class="txp-list-col-manage"'
+                    gTxt('manage'), '',  ' class="txp-list-col-manage" scope="col"'
                 )
             ).
             n.tag_end('thead').
@@ -208,7 +208,7 @@ function plugin_list($message = '')
                     fInput('checkbox', 'selected[]', $name), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    $edit_url, '', ' scope="row" class="txp-list-col-name"'
+                    $edit_url, '', ' class="txp-list-col-name" scope="row"'
                 ).
                 td(
                     href($author, $a['author_uri'], array('rel' => 'external')), '', 'txp-list-col-author'
@@ -278,7 +278,7 @@ function plugin_edit()
     $name = gps('name');
     pagetop(gTxt('edit_plugins'));
 
-    echo n.'<div id="'.$event.'_container" class="txp-container">';
+    echo n.'<div class="txp-container" id="'.$event.'_container">';
     echo plugin_edit_form($name);
     echo '</div>';
 }
@@ -294,7 +294,7 @@ function plugin_help()
     $name = gps('name');
     pagetop(gTxt('plugin_help'));
     $help = ($name) ? safe_field('help', 'txp_plugin', "name = '".doSlash($name)."'") : '';
-    echo '<div id="'.$event.'_container" class="txp-container txp-view">'
+    echo '<div class="txp-container txp-view" id="'.$event.'_container">'
         .'<div class="text-column">'.$help.'</div>'
         .'</div>';
 }
@@ -427,7 +427,7 @@ function plugin_verify()
 
                 pagetop(gTxt('verify_plugin'));
                 echo
-                '<div id="'.$event.'_container" class="txp-container txp-view">'.
+                '<div class="txp-container txp-view" id="'.$event.'_container">'.
                 form(
                     hed(gTxt('previewing_plugin'), 2).
                     tag($source, 'div', ' class="code" id="preview-plugin" dir="ltr"').
