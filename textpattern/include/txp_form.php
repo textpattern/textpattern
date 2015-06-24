@@ -75,22 +75,22 @@ if ($event == 'form') {
     ));
 
     switch (strtolower($step)) {
-        case "":
+        case '':
             form_edit();
             break;
-        case "form_edit":
+        case 'form_edit':
             form_edit();
             break;
-        case "form_create":
+        case 'form_create':
             form_create();
             break;
-        case "form_delete":
+        case 'form_delete':
             form_delete();
             break;
-        case "form_multi_edit":
+        case 'form_multi_edit':
             form_multi_edit();
             break;
-        case "form_save":
+        case 'form_save':
             form_save();
             break;
     }
@@ -268,37 +268,69 @@ function form_edit($message = '')
     }
 
     if (in_array($name, $essential_forms)) {
-        $name_widgets = span(gTxt('form_name'), array('class' => 'txp-label-fixed')).br.
-            span($name, array('class' => 'txp-value-fixed'));
+        $name_widgets = graf(span(gTxt('form_name'), array('class' => 'txp-label-fixed')).br.
+            span($name, array('class' => 'txp-value-fixed')));
 
-        $type_widgets = span(gTxt('form_type'), array('class' => 'txp-label-fixed')).br.
-            span($type, array('class' => 'txp-value-fixed'));
+        $type_widgets = graf(span(gTxt('form_type'), array('class' => 'txp-label-fixed')).br.
+            span($type, array('class' => 'txp-value-fixed')));
     } else {
-        $name_widgets = tag(gTxt('form_name'), 'label', 'for="new_form"').br.
-            fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
+        $name_widgets = inputLabel(
+            'new_form',
+            fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true),
+            'form_name',
+            array('', 'instructions_form_name'),
+            array('class' => 'txp-form-field'),
+            ''
+        );
 
-        $type_widgets = tag(gTxt('form_type'), 'label', 'for="type"').br.
-            formTypes($type, false);
+        $type_widgets = inputLabel(
+            'type',
+            formTypes($type, false),
+            'form_type',
+            array('', 'instructions_form_type'),
+            array('class' => 'txp-form-field'),
+            ''
+        );
     }
 
-    $buttons = href(gTxt('duplicate'), '#', array(
-        'id'    => 'txp_clone',
-        'class' => 'clone',
-        'title' => gTxt('form_clone'),
-    ));
+    if ($name === '') {
+        $name_widgets .= hInput('savenew', 'savenew');
+    } else {
+        $name_widgets .= hInput('name', $name);
+    }
 
-    if (empty($type) || $type == 'article') {
-        $buttons .= href(gTxt('preview'), '#', array(
-            'id'    => 'form_preview',
-            'class' => 'form-preview',
+    $name_widgets .= eInput('form').sInput('form_save');
+
+    $buttonExtras = '';
+
+    if ($name) {
+        $buttonExtras .= href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
+            'class'     => 'txp-clone',
+            'data-form' => 'form_form',
         ));
     }
 
-    if ($name) {
-        $name_widgets .= n.span($buttons, array('class' => 'txp-actions'));
-    } else {
-        $name_widgets .= hInput('savenew', 'savenew');
+    if (empty($type) || $type == 'article') {
+        $buttonExtras .= href('<span class="ui-icon ui-icon-notice"></span> '.gTxt('preview'), '#', array(
+            'class' => 'txp-form-preview',
+            'id'    => 'form_preview',
+        ));
     }
+
+    $buttons = graf(
+        tag_void('input', array(
+            'class'  => 'publish',
+            'type'   => 'submit',
+            'method' => 'post',
+            'value'  =>  gTxt('save'),
+            'form'   => 'form_form',
+        )), ' class="txp-save"'
+    ).
+    graf(
+        sLink('form', 'form_create', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_form'), 'txp-new').
+        $buttonExtras,
+        array('class' => 'txp-actions')
+    );
 
     // Generate the tagbuilder links.
     // Format of each entry is popTagLink -> array ( gTxt string, class/ID ).
@@ -347,43 +379,50 @@ function form_edit($message = '')
         $tagbuild_links .= wrapRegion($item[1].'_group', popTagLinks($tb), $item[1], $item[0], $item[1]);
     }
 
-    echo hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading'));
+    // Forms code columm.
+
     echo n.tag(
-
-        n.tag(
-            hed(gTxt('tagbuilder'), 2).
-            $tagbuild_links.n, 'div', array(
-            'id'    => 'tagbuild_links',
-            'class' => 'txp-layout-cell txp-layout-1-4',
-        )).
-
-        n.tag(
-            form(
-                graf($name_widgets).
-                graf(
-                    tag(gTxt('form_code'), 'label', array('for' => 'form')).
-                    br.'<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($Form).'</textarea>'
-                ).
-                graf($type_widgets).
-                (empty($type) ? graf(gTxt('only_articles_can_be_previewed')) : '').
-                graf(
-                    fInput('submit', 'save', gTxt('save'), 'publish').
-                    eInput('form').sInput('form_save').
-                    hInput('name', $name)
-                ), '', '', 'post', 'edit-form', '', 'form_form').n, 'div', array(
+        hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading')).
+        form(
+            $name_widgets.
+            inputLabel(
+                'form',
+                '<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($Form).'</textarea>',
+                'form_code',
+                array('', 'instructions_form_code'),
+                array('class' => 'txp-form-field'),
+                ''
+            ).
+            $type_widgets.
+            (empty($type) ? graf(gTxt('only_articles_can_be_previewed')) : '')
+            , '', '', 'post', '', '', 'form_form'),
+        'div', array(
+            'class' => 'txp-layout-4col-cell-1-2-3',
             'id'    => 'main_content',
-            'class' => 'txp-layout-cell txp-layout-2-4',
-        )).
+            'role'  => 'region',
+        )
+    );
 
-        n.tag(
-            graf(sLink('form', 'form_create', gTxt('create_new_form')), ' class="action-create"').
-            form_list($name).n, 'div', array(
+    // Forms create/switcher column.
+
+    echo n.tag(
+        $buttons.
+        form_list($name).n,
+        'div', array(
+            'class' => 'txp-layout-4col-cell-4alt',
             'id'    => 'content_switcher',
-            'class' => 'txp-layout-cell txp-layout-1-4',
-        )).n, 'div', array(
-        'id'    => $event.'_container',
-        'class' => 'txp-layout-grid',
-    ));
+            'role'  => 'region',
+        )
+    );
+
+    // Forms tag builder column. TODO: make this a modal?
+//    echo n.tag(
+//        hed(gTxt('tagbuilder'), 2).
+//        $tagbuild_links.n
+//    , 'div', array(
+//        'id'    => 'tagbuild_links',
+//        'class' => '',
+//    ));
 }
 
 /**
