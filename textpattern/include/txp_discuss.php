@@ -170,43 +170,66 @@ function discuss_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $criteria = 1;
+    $search = new Textpattern_Search_Filter($event,
+        array(
+            'id' => array(
+                'column' => 'txp_discuss.discussid',
+                'label'  => gTxt('ID'),
+                'type'   => 'integer',
+            ),
+            'parent' => array(
+                'column' => array('txp_discuss.parentid', 'textpattern.Title'),
+                'label'  => gTxt('parent'),
+            ),
+            'name' => array(
+                'column' => 'txp_discuss.name',
+                'label'  => gTxt('name'),
+            ),
+            'message' => array(
+                'column' => 'txp_discuss.message',
+                'label'  => gTxt('message'),
+            ),
+            'email' => array(
+                'column' => 'txp_discuss.email',
+                'label'  => gTxt('email'),
+            ),
+            'website' => array(
+                'column' => 'txp_discuss.web',
+                'label'  => gTxt('website'),
+            ),
+            'ip' => array(
+                'column' => 'txp_discuss.ip',
+                'label'  => gTxt('IP'),
+            ),
+            'visible' => array(
+                'column' => 'txp_discuss.visible',
+                'label'  => gTxt('visible'),
+                'type'   => 'numeric',
+            ),
+        )
+    );
 
-    if ($search_method and $crit != '') {
-        $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
-        $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
-        $critsql = $verbatim ?
-            array(
-                'id'      => "txp_discuss.discussid in ('".join("','", do_list($crit_escaped))."')",
-                'parent'  => "txp_discuss.parentid = '$crit_escaped'".((string) intval($crit_escaped) === $crit_escaped ? '' : " or textpattern.Title = '$crit_escaped'"),
-                'name'    => "txp_discuss.name = '$crit_escaped'",
-                'message' => "txp_discuss.message = '$crit_escaped'",
-                'email'   => "txp_discuss.email = '$crit_escaped'",
-                'website' => "txp_discuss.web = '$crit_escaped'",
-                'ip'      => "txp_discuss.ip = '$crit_escaped'",
-            ) : array(
-                'id'      => "txp_discuss.discussid in ('".join("','", do_list($crit_escaped))."')",
-                'parent'  => "txp_discuss.parentid = '$crit_escaped'".((string) intval($crit_escaped) === $crit_escaped ? '' : " or textpattern.Title like '%$crit_escaped%'"),
-                'name'    => "txp_discuss.name like '%$crit_escaped%'",
-                'message' => "txp_discuss.message like '%$crit_escaped%'",
-                'email'   => "txp_discuss.email like '%$crit_escaped%'",
-                'website' => "txp_discuss.web like '%$crit_escaped%'",
-                'ip'      => "txp_discuss.ip like '%$crit_escaped%'",
-            );
+    $alias_yes = VISIBLE.', Yes';
+    $alias_no = MODERATE.', No, Unmoderated, Pending';
+    $alias_spam = SPAM.', Spam';
 
-        if (array_key_exists($search_method, $critsql)) {
-            $criteria = $critsql[$search_method];
-            $limit = 500;
-        } else {
-            $search_method = '';
-            $crit = '';
-        }
-    } else {
-        $search_method = '';
-        $crit = '';
-    }
+    $search->setAliases('visible', array(
+        VISIBLE => $alias_yes,
+        MODERATE => $alias_no,
+        SPAM => $alias_spam,
+        ));
 
-    $criteria .= callback_event('admin_criteria', 'discuss_list', 0, $criteria);
+    list($criteria, $crit, $search_method) = $search->getFilter(array(
+            'id' => array('can_list' => true),
+        ));
+
+    $search_render_options = array(
+        'placeholder' => 'search_comments',
+    );
+
+    $sql_from =
+        safe_pfx_j('txp_discuss')."
+        left join ".safe_pfx_j('textpattern')." on txp_discuss.parentid = textpattern.ID";
 
     $counts = getRows(
         "select txp_discuss.visible, COUNT(*) AS c
@@ -226,14 +249,14 @@ function discuss_list($message = '')
     // Grand total comment count.
     $total = $count[SPAM] + $count[MODERATE] + $count[VISIBLE];
 
-    echo hed(gTxt('list_discussions'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
-    echo graf(
-        sLink('discuss', 'ipban_list', gTxt('list_banned_ips')), ' class="txp-buttons"');
+    echo n.tag(
+        hed(gTxt('list_discussions'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1')).
+        n.tag_start('div', array('class' => 'txp-layout-2col-cell-2'));
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo discuss_search_form($crit, $search_method).
+            echo $search->renderForm('discuss_list', $search_render_options).
                 graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
         } else {
             echo graf(gTxt('no_comments_recorded'), ' class="indicator"').'</div>';
@@ -242,15 +265,24 @@ function discuss_list($message = '')
         return;
     }
 
-    echo discuss_search_form($crit, $search_method).'</div>';
-
     if (!cs('toggle_show_spam')) {
         $total = $count[MODERATE] + $count[VISIBLE];
         $criteria = 'visible != '.intval(SPAM).' and '.$criteria;
     }
 
     $limit = max($comment_list_pageby, 15);
+
     list($page, $offset, $numPages) = pager($total, $limit, $page);
+
+    echo $search->renderForm('discuss_list', $search_render_options).'</div>';
+
+    echo n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        )).
+        n.tag(
+            sLink('discuss', 'ipban_list', gTxt('list_banned_ips'), 'txp-button'),
+            'div', array('class' => 'txp-control-panel'));
 
     $rs = safe_query(
         "select
@@ -275,17 +307,16 @@ function discuss_list($message = '')
     );
 
     if ($rs) {
-        echo
-            n.tag_start('div', array(
-                'id'    => $event.'_container',
-                'class' => 'txp-container',
-            )).
+        echo n.tag(
+                cookie_box('show_spam').
+                toggle_box('discuss_detail'),
+                'div', array('class' => 'txp-list-options')).
             n.tag_start('form', array(
-                'action' => 'index.php',
-                'id'     => 'discuss_form',
                 'class'  => 'multi_edit_form',
-                'method' => 'post',
+                'id'     => 'discuss_form',
                 'name'   => 'longform',
+                'method' => 'post',
+                'action' => 'index.php',
             )).
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
@@ -293,7 +324,7 @@ function discuss_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method,
@@ -392,7 +423,7 @@ function discuss_list($message = '')
                     fInput('checkbox', 'selected[]', $discussid), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' scope="row" class="txp-list-col-id"'
+                    href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' class="txp-list-col-id" scope="row"'
                 ).
                 td(
                     gTime($uPosted), '', 'txp-list-col-created date'
@@ -428,41 +459,22 @@ function discuss_list($message = '')
             echo n.tr(tda(gTxt('just_spam_results_found'), ' colspan="10"'));
         }
 
-        echo
-            n.tag_end('tbody').
+        echo n.tag_end('tbody').
             n.tag_end('table').
             n.tag_end('div').
             discuss_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
-            graf(toggle_box('discuss_detail'), array('class' => 'detail-toggle')).
-            cookie_box('show_spam').
             n.tag_start('div', array(
-                'id'    => $event.'_navigation',
                 'class' => 'txp-navigation',
+                'id'    => $event.'_navigation',
             )).
             pageby_form('discuss', $comment_list_pageby).
             nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div').
             n.tag_end('div');
     }
-}
 
-//-------------------------------------------------------------
-
-function discuss_search_form($crit, $method)
-{
-    $methods = array(
-        'id'      => gTxt('ID'),
-        'parent'  => gTxt('parent'),
-        'name'    => gTxt('name'),
-        'message' => gTxt('message'),
-        'email'   => gTxt('email'),
-        'website' => gTxt('website'),
-        'ip'      => gTxt('IP'),
-    );
-
-    return search_form('discuss', 'list', $crit, $methods, $method, 'message');
+    echo n.tag_end('div');
 }
 
 //-------------------------------------------------------------
@@ -526,32 +538,57 @@ function discuss_edit()
             '',
             'status');
 
-        echo '<div id="'.$event.'_container" class="txp-container">'.
+        echo '<div class="txp-container" id="'.$event.'_container">'.
             form(
                 n.'<section class="txp-edit">'.
                 hed(gTxt('edit_comment'), 2).
-                inputLabel('status', $status_list, 'status').
-                inputLabel('name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'), 'name').
-                inputLabel('IP', href(txpspecialchars($ip), 'https://whois.domaintools.com/' . rawurlencode($ip), array(
-                    'rel'    => 'external',
-                    'target' => '_blank',
-                )).$ban_link, '').
-                inputLabel('email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'), 'email').
-                inputLabel('website', fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'website'), 'website').
-                inputLabel('date', safe_strftime('%d %b %Y %X', $uPosted), '').
-                inputLabel('commentmessage', '<textarea id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'">'.$message.'</textarea>', 'message', '', '', '').
+                inputLabel(
+                    'status',
+                    $status_list,
+                    'status', '', array('class' => 'txp-form-field edit-comment-status')
+                ).
+                inputLabel(
+                    'name',
+                    fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'),
+                    'name', '', array('class' => 'txp-form-field edit-comment-name')
+                ).
+                inputLabel(
+                    'IP',
+                    href(txpspecialchars($ip), 'https://whois.domaintools.com/'.rawurlencode($ip), array(
+                        'rel'    => 'external',
+                        'target' => '_blank',
+                    )).$ban_link, ''
+                ).
+                inputLabel(
+                    'email',
+                    fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'),
+                    'email', '', array('class' => 'txp-form-field edit-comment-email')
+                ).
+                inputLabel(
+                    'website',
+                    fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'website'),
+                    'website', '', array('class' => 'txp-form-field edit-comment-website')
+                ).
+                inputLabel(
+                    'date',
+                    safe_strftime('%d %b %Y %X',
+                    $uPosted),
+                    '', '', array('class' => 'txp-form-field edit-comment-date')
+                ).
+                inputLabel(
+                    'commentmessage',
+                    '<textarea class="txp-form-field-input" id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'">'.$message.'</textarea>',
+                    'message', '', array('class' => 'txp-form-field edit-comment-message'), ''
+                ).
                 graf(fInput('submit', 'step', gTxt('save'), 'publish')).
-
                 hInput('sort', $sort).
                 hInput('dir', $dir).
                 hInput('page', $page).
                 hInput('crit', $crit).
                 hInput('search_method', $search_method).
-
                 hInput('discussid', $discussid).
                 hInput('parentid', $parentid).
                 hInput('ip', $ip).
-
                 eInput('discuss').
                 sInput('discuss_save').
                 n.'</section>', '', '', 'post', 'edit-form', '', 'discuss_edit_form'), '</div>';
@@ -621,36 +658,36 @@ function ipban_list($message = '')
 
     pageTop(gTxt('list_banned_ips'), $message);
 
-    echo hed(gTxt('banned_ips'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="'.$event.'_banned_control" class="txp-control-panel">'.
-        graf(
-            sLink('discuss', 'discuss_list', gTxt('list_discussions')), ' class="txp-buttons"').
-        n.'</div>';
+    echo n.tag(
+        hed(gTxt('banned_ips'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1')).
+        n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_banned_control',
+        )).
+        n.tag(
+            sLink('discuss', 'discuss_list', gTxt('list_discussions'), 'txp-button'),
+            'div', array('class' => 'txp-control-panel'));
 
     $rs = safe_rows_start('*, unix_timestamp(date_banned) as uBanned', 'txp_discuss_ipban',
         "1 = 1 order by date_banned desc");
 
     if ($rs and numRows($rs) > 0) {
-        echo
-            n.tag_start('div', array(
-                'id'    => $event.'_ban_container',
-                'class' => 'txp-container',
-            )).
-            n.tag_start('div', array('class' => 'txp-listtables')).
+        echo n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
             n.tag_start('thead').
             tr(
                 hCell(
-                    gTxt('date_banned'), '', ' scope="col" class="txp-list-col-banned date"'
+                    gTxt('date_banned'), '', ' class="txp-list-col-banned date" scope="col"'
                 ).
                 hCell(
-                    gTxt('IP'), '', ' scope="col" class="txp-list-col-ip"'
+                    gTxt('IP'), '', ' class="txp-list-col-ip" scope="col"'
                 ).
                 hCell(
-                    gTxt('name_used'), '', ' scope="col" class="txp-list-col-name"'
+                    gTxt('name_used'), '', ' class="txp-list-col-name" scope="col"'
                 ).
                 hCell(
-                    gTxt('banned_for'), '', ' scope="col" class="txp-list-col-id"'
+                    gTxt('banned_for'), '', ' class="txp-list-col-id" scope="col"'
                 )
             ).
             n.tag_end('thead').
@@ -661,7 +698,7 @@ function ipban_list($message = '')
 
             echo tr(
                 hCell(
-                    gTime($uBanned), '', ' scope="row" class="txp-list-col-banned date"'
+                    gTime($uBanned), '', ' class="txp-list-col-banned date" scope="row"'
                 ).
                 td(
                     txpspecialchars($ip).
@@ -687,14 +724,14 @@ function ipban_list($message = '')
             );
         }
 
-        echo
-            n.tag_end('tbody').
+        echo n.tag_end('tbody').
             n.tag_end('table').
-            n.tag_end('div').
             n.tag_end('div');
     } else {
         echo graf(gTxt('no_ips_banned'), ' class="indicator"');
     }
+
+    echo n.tag_end('div');
 }
 
 // -------------------------------------------------------------
