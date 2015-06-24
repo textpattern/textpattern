@@ -41,11 +41,11 @@ if ($event == 'prefs') {
     ));
 
     switch (strtolower($step)) {
-        case "":
-        case "prefs_list":
+        case '':
+        case 'prefs_list':
             prefs_list();
             break;
-        case "prefs_save":
+        case 'prefs_save':
             prefs_save();
             break;
     }
@@ -159,8 +159,8 @@ function prefs_list($message = '')
     $locale = setlocale(LC_ALL, $locale);
 
     echo hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="prefs_container" class="txp-container">'.
-        n.'<form method="post" class="prefs-form" action="index.php">'.
+    echo n.'<div class="txp-container" id="prefs_container">'.
+        n.'<form class="prefs-form" method="post" action="index.php">'.
         n.'<div class="txp-layout-textbox">';
 
     // TODO: remove 'custom' when custom fields are refactored.
@@ -224,7 +224,10 @@ function prefs_list($message = '')
                 pref_func($a['html'], $a['name'], $a['val'], $size),
                 $label,
                 $help,
-                array('id' => 'prefs-'.$a['name'])
+                array(
+                    'class' => 'txp-form-field',
+                    'id'    => 'prefs-'.$a['name'],
+                )
             );
         }
     }
@@ -415,7 +418,7 @@ function permlinkmodes($name, $val)
         'year_month_day_title' => gTxt('year_month_day_title'),
         'section_title'        => gTxt('section_title'),
         'title_only'           => gTxt('title_only'),
-        // 'category_subcategory' => gTxt('category_subcategory')
+        //'category_subcategory' => gTxt('category_subcategory'),
     );
 
     return selectInput($name, $vals, $val, '', '', $name);
@@ -578,7 +581,7 @@ function default_event($name, $val)
         }
     }
 
-    return n.'<select id="default_event" name="'.$name.'" class="default-events">'.
+    return n.'<select class="default-events" id="default_event" name="'.$name.'">'.
         join('', $out).
         n.'</select>';
 }
