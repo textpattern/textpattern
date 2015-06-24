@@ -531,26 +531,26 @@ function cat_event_category_edit($evname)
             inputLabel(
                 'category_name',
                 fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'),
-                $evname.'_category_name', '', array('class' => 'txp-form-field category-name')
+                $evname.'_category_name', '', array('class' => 'txp-form-field edit-category-name')
             ).
             ($has_parent
                 ? inputLabel(
                     'category_parent',
                     $parent_widget,
-                    'parent', '', array('class' => 'txp-form-field category-parent'))
+                    'parent', '', array('class' => 'txp-form-field edit-category-parent'))
                 : inputLabel(
                     'category_parent',
-                    $parent_widget, '', array('class' => 'txp-form-field category-parent'))
+                    $parent_widget, '', array('class' => 'txp-form-field edit-category-parent'))
             ).
             inputLabel(
                 'category_title',
                 fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'),
-                $evname.'_category_title', '', array('class' => 'txp-form-field category-title')
+                $evname.'_category_title', '', array('class' => 'txp-form-field edit-category-title')
             ).
             inputLabel(
                 'category_description',
                 text_area('description', 0, 0, $description, 'category_description', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE),
-                $evname.'_category_description'
+                $evname.'_category_description', 'category_description', array('class' => 'txp-form-field edit-category-description')
             ).
             pluggable_ui('category_ui', 'extend_detail_form', '', $row).
             hInput('id', $id).
