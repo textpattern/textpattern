@@ -167,8 +167,8 @@ function column_multi_head($head_items, $class = '')
     }
 
     return hCell($o, '', array(
-        'scope' => 'col',
         'class' => $class,
+        'scope' => 'col',
     ));
 }
 
@@ -338,7 +338,16 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
 
     return join('', array(
         n.'<form method="post" action="index.php" data-verify="'.gTxt('confirm_delete_popup').'">',
-        fInput('submit', '', '×', 'destroy', gTxt('delete')),
+        tag(
+            span(gTxt('delete'), array('class' => 'ui-icon ui-icon-close')),
+            'button',
+            array(
+                'class'      => 'destroy',
+                'type'       => 'submit',
+                'title'      => gTxt('delete'),
+                'aria-label' => gTxt('delete'),
+            )
+        ),
         eInput($event).
         sInput($step),
         hInput($thing, $value),
@@ -571,7 +580,7 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
  * @since  4.6.0
  */
 
-function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $role = 'region', $help = '')
+function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $help = '')
 {
     global $event;
     $label = $label ? gTxt($label) : null;
@@ -580,9 +589,9 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
         $visible = get_pref('pane_'.$pane.'_visible');
         $heading_class = 'txp-summary'.($visible ? ' expanded' : '');
         $display_state = array(
-            'role'  => 'group',
-            'id'    => $anchor_id,
             'class' => 'toggle',
+            'id'    => $anchor_id,
+            'role'  => 'group',
             'style' => $visible ? 'display: block' : 'display: none',
         );
 
@@ -595,24 +604,21 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
         $help = '';
     } else {
         $heading_class = '';
-        $display_state = array(
-            'role' => $role == 'region' ? 'group' : '',
-        );
+        $display_state = array('role' => 'group');
     }
 
     if ($content) {
         $content =
             hed($label.popHelp($help), 3, array(
-                'id'             => $id.'-label',
                 'class'          => $heading_class,
+                'id'             => $id.'-label',
             )).
             n.tag($content.n, 'div', $display_state).n;
     }
 
     return n.tag($content, 'section', array(
-        'role'            => $role,
-        'id'              => $id,
         'class'           => trim('txp-details '.$class),
+        'id'              => $id,
         'aria-labelledby' => $content ? $id.'-label' : '',
     ));
 }
@@ -667,11 +673,11 @@ function startSkelTable()
 function startTable($id = '', $align = '', $class = '', $p = 0, $w = 0)
 {
     $atts = join_atts(array(
-        'id'          => $id,
-        'align'       => $align,
         'class'       => $class,
+        'id'          => $id,
         'cellpadding' => (int) $p,
         'width'       => (int) $w,
+        'align'       => $align,
     ));
 
     return n.'<table'.$atts.'>';
@@ -723,9 +729,9 @@ function stackRows()
 function td($content = '', $width = 0, $class = '', $id = '')
 {
     return tda($content, array(
-        'width' => (int) $width,
         'class' => $class,
         'id'    => $id,
+        'width' => (int) $width,
     ));
 }
 
@@ -788,9 +794,9 @@ function tr($content, $atts = '')
 function tdcs($content, $span, $width = 0, $class = '')
 {
     return tda($content, array(
+        'class'   => $class,
         'colspan' => (int) $span,
         'width'   => (int) $width,
-        'class'   => $class,
     ));
 }
 
@@ -807,9 +813,9 @@ function tdcs($content, $span, $width = 0, $class = '')
 function tdrs($content, $span, $width = 0, $class = '')
 {
     return tda($content, array(
+        'class'   => $class,
         'rowspan' => (int) $span,
         'width'   => (int) $width,
-        'class'   => $class,
     ));
 }
 
@@ -861,15 +867,15 @@ function fInputCell($name, $var = '', $tabindex = 0, $size = 0, $help = false, $
  * @param  string       $name        Input name
  * @param  string       $input       Complete input control widget
  * @param  string       $label       Label
- * @param  string       $help        Help text item
+ * @param  string|array $help        Help text item | array(help text item, inline help text)
  * @param  string|array $atts        Class name (for b/c) | attribute pairs to assign to graf()
- * @param  string       $wraptag_val Tag to wrap the value in, or empty string to omit
+ * @param  string|array $wraptag_val Tag to wrap the value / label in, or empty to omit
  * @return string HTML
  * @example
  * echo inputLabel('active', yesnoRadio('active'), 'Keep active?');
  */
 
-function inputLabel($name, $input, $label = '', $help = '', $atts = array(), $wraptag_val = 'span')
+function inputLabel($name, $input, $label = '', $help = array(), $atts = array(), $wraptag_val = array('span', 'span'))
 {
     global $event;
 
@@ -885,19 +891,39 @@ function inputLabel($name, $input, $label = '', $help = '', $atts = array(), $wr
         $atts['class'] = $fallback_class;
     }
 
+    if (!is_array($help)) {
+        $help = array($help);
+    }
+
+    $inlineHelp = (isset($help[1])) ? $help[1] : '';
+
     if ($label) {
-        $label = tag(gTxt($label), 'label', array('for' => $name));
+        $labelContent = tag(gTxt($label).popHelp($help[0]), 'label', array(
+            'class' => 'txp-form-field-label',
+            'for'   => $name,
+        ));
     } else {
-        $label = gTxt($name);
+        $labelContent = gTxt($name).popHelp($help[0]);
     }
 
-    if ($wraptag_val) {
-        $input = tag($input, $wraptag_val, array('class' => 'txp-value'));
+    if (!is_array($wraptag_val)) {
+        $wraptag_val = array($wraptag_val, $wraptag_val);
     }
 
-    $out = graf(
-        tag($label.popHelp($help), 'span', array('class' => 'txp-label')).
-        n.$input, $atts);
+    if ($wraptag_val[0]) {
+        $input = tag($input, $wraptag_val[0], array('class' => 'txp-value'));
+    }
+
+    if (isset($wraptag_val[1]) && $wraptag_val[1]) {
+        $labeltag = tag($labelContent, $wraptag_val[1], array('class' => 'txp-label'));
+    } else {
+        $labeltag = $labelContent;
+    }
+
+    $out = n.tag(
+        n.$labeltag.
+        fieldHelp($inlineHelp).
+        $input.n, 'div', $atts);
 
     return pluggable_ui($event.'_ui', 'inputlabel.'.$name, $out, $arguments);
 }
@@ -1150,17 +1176,49 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
         return '';
     }
 
-    $ui = sp.href('?', HELP_URL.'?item='.urlencode($help_var).'&language='.urlencode(LANG), array(
-        'role'       => 'button',
+    $ui = sp.href('i', HELP_URL.'?item='.urlencode($help_var).'&language='.urlencode(LANG), array(
+        'class'      => $class,
         'rel'        => 'help',
         'target'     => '_blank',
-        'onclick'    => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
-        'class'      => $class,
         'title'      => gTxt('help'),
         'aria-label' => gTxt('help'),
+        'role'       => 'button',
+        'onclick'    => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
     ));
 
     return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
+}
+
+/**
+ * Renders inline help text.
+ *
+ * The help topic is the name of a string that can be found in txp_lang.
+ *
+ * The rendered link can be customised via a 'admin_help_field > {$help_var}'
+ * pluggable UI callback event.
+ *
+ * @param  string $help_var   Help topic
+ * @return string HTML
+ */
+
+function fieldHelp($help_var)
+{
+    if (!$help_var) {
+        return '';
+    }
+
+    $help_text = gTxt($help_var);
+
+    // If rendered string is the same as the input string, either the l10n
+    // doesn't exist or the string is missing from txp_lang.
+    // Either way, no instruction text, no render.
+    if ($help_var === $help_text) {
+        return '';
+    }
+
+    $ui = n.tag($help_text, 'div', array('class' => 'txp-form-field-instructions'));
+
+    return pluggable_ui('admin_help_field', $help_var, $ui, compact('help_var', 'textile'));
 }
 
 /**
@@ -1367,6 +1425,10 @@ function pageby_form($event, $val, $step = null)
 function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = 'upload-form')
 {
     extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+
+    if (is_array($search_method)) {
+        $search_method = join(',', $search_method);
+    }
 
     if (!$label_id) {
         $p_class = 'edit-'.$event.'-upload';
