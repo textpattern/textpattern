@@ -148,7 +148,7 @@ function switch_tool()
     $content .= graf(fInput('submit', 'choose', gTxt('continue'), 'publish'));
     $content .= sInput('start_import').eInput('import');
     $content .= '</section>';
-    echo '<div id="'.$event.'_container" class="txp-container">'.
+    echo '<div class="txp-container" id="'.$event.'_container">'.
         form($content, '', '', 'post', '', '', 'import').
         '</div>';
 }
@@ -245,7 +245,7 @@ function start_import()
     $out = tag('max_execution_time = '.ini_get('max_execution_time'), 'p', ' class="highlight"').$out;
     pagetop(gTxt('txp_import'));
 
-    $content = '<div id="'.$event.'_container" class="txp-container">';
+    $content = '<div class="txp-container" id="'.$event.'_container">';
     $content .= startTable('', '', 'txp-list');
     $content .= tr(tdcs(hed(gTxt('txp_import'), 2), 2));
     $content .= tr(td($out));
