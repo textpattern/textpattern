@@ -1,0 +1,3863 @@
+/* HTML5 display definitions
+   ========================================================================== */
+/**
+ * Correct `block` display not defined for any HTML5 element in IE 8/9.
+ * Correct `block` display not defined for `details` or `summary` in IE 10/11 and Firefox.
+ * Correct `block` display not defined for `main` in IE 11.
+ */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
+
+/**
+ * 1. Correct `inline-block` display not defined in IE 8/9.
+ * 2. Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.
+ */
+audio,
+canvas,
+progress,
+video {
+  /* 1 */
+  display: inline-block;
+  /* 2 */
+  vertical-align: baseline;
+}
+
+/**
+ * Address `[hidden]` styling not present in IE 8/9/10.
+ * Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.
+ */
+[hidden],
+template {
+  display: none;
+}
+
+/**
+ * Remove tap delay in IE 10+ (and proposed for other browsers).
+ */
+a,
+input,
+button {
+  -ms-touch-action: none;
+  touch-action: none;
+}
+
+/**
+ * Correct `summary` not showing as clickable.
+ */
+summary {
+  cursor: pointer;
+}
+
+/* Float clearing
+   ========================================================================== */
+/**
+ * Clearfix using the 'A new micro cleafix hack' method.
+ *
+ * More info: http://nicolasgallagher.com/micro-clearfix-hack/
+ */
+.clearfix:after, .progress-meter ol:after, .txp-body:after, .txp-footer:after, .txp-edit p:after,
+.txp-tagbuilder p:after,
+.edit-form p:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/**
+ * Basic float clearer.
+ */
+.clear {
+  clear: both;
+}
+
+/* Singularity Grid System
+   ========================================================================== */
+/**
+ * Generate sizes all for grid column cells.
+ *
+ * Because this is desktop first, all cells span variations are defined
+ * initially (1 column full width, 2 column, 4 column). We will then
+ * adjust them at various breakpoints listed below.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-layout-1col"></div>
+ *
+ * <div class="txp-layout-2col-cell-1">
+ * <div class="txp-layout-2col-cell-2">
+ *
+ * <div class="txp-layout-4col-cell-1-2-3"></div>
+ * <div class="txp-layout-4col-cell-4alt"></div>
+ */
+.txp-layout-1col {
+  width: 100%;
+  float: right;
+  margin-left: 0;
+  margin-right: 0;
+  clear: none;
+  clear: both;
+}
+
+.txp-layout-2col-cell-1 {
+  width: 49.0196078%;
+  float: left;
+  margin-right: -100%;
+  margin-left: 0;
+  clear: none;
+  clear: both;
+}
+
+.txp-layout-2col-cell-2 {
+  width: 49.0196078%;
+  float: right;
+  margin-left: 0;
+  margin-right: 0;
+  clear: none;
+}
+
+.txp-layout-4col-cell-1 {
+  width: 23.5294118%;
+  float: left;
+  margin-right: -100%;
+  margin-left: 0;
+  clear: none;
+  clear: both;
+}
+
+.txp-layout-4col-cell-1alt {
+  width: 23.5294118%;
+  float: left;
+  margin-right: -100%;
+  margin-left: 0;
+  clear: none;
+  clear: both;
+}
+
+.txp-layout-4col-cell-2 {
+  width: 23.5294118%;
+  float: left;
+  margin-right: -100%;
+  margin-left: 25.4901961%;
+  clear: none;
+}
+
+.txp-layout-4col-cell-3 {
+  width: 23.5294118%;
+  float: left;
+  margin-right: -100%;
+  margin-left: 50.9803922%;
+  clear: none;
+}
+
+.txp-layout-4col-cell-4 {
+  width: 23.5294118%;
+  float: right;
+  margin-left: 0;
+  margin-right: 0;
+  clear: none;
+}
+
+.txp-layout-4col-cell-4alt {
+  width: 23.5294118%;
+  float: right;
+  margin-left: 0;
+  margin-right: 0;
+  clear: none;
+}
+
+.txp-layout-4col-cell-1-2 {
+  width: 49.0196078%;
+  float: left;
+  margin-right: -100%;
+  margin-left: 0;
+  clear: none;
+  clear: both;
+}
+
+.txp-layout-4col-cell-2-3 {
+  width: 49.0196078%;
+  float: left;
+  margin-right: -100%;
+  margin-left: 25.4901961%;
+  clear: none;
+}
+
+.txp-layout-4col-cell-3-4 {
+  width: 49.0196078%;
+  float: right;
+  margin-left: 0;
+  margin-right: 0;
+  clear: none;
+}
+
+.txp-layout-4col-cell-1-2-3 {
+  width: 74.5098039%;
+  float: left;
+  margin-right: -100%;
+  margin-left: 0;
+  clear: none;
+  clear: both;
+}
+
+.txp-layout-4col-cell-2-3-4 {
+  width: 74.5098039%;
+  float: right;
+  margin-left: 0;
+  margin-right: 0;
+  clear: none;
+}
+
+/**
+ * Grid column cell changes at 1st breakpoint downwards.
+ *
+ * Cells for 4 column layout become 2 column layout.
+ * Cells for 4 column span variations become 1 column layout.
+ */
+@media (max-width: 60em) {
+  .txp-layout-4col-cell-1 {
+    width: 49.0196078%;
+    float: left;
+    margin-right: -100%;
+    margin-left: 0;
+    clear: none;
+    clear: both;
+  }
+
+  .txp-layout-4col-cell-2 {
+    width: 49.0196078%;
+    float: right;
+    margin-left: 0;
+    margin-right: 0;
+    clear: none;
+  }
+
+  .txp-layout-4col-cell-3 {
+    width: 49.0196078%;
+    float: left;
+    margin-right: -100%;
+    margin-left: 0;
+    clear: none;
+    clear: both;
+  }
+
+  .txp-layout-4col-cell-4 {
+    width: 49.0196078%;
+    float: right;
+    margin-left: 0;
+    margin-right: 0;
+    clear: none;
+  }
+
+  .txp-layout-4col-cell-1-2,
+  .txp-layout-4col-cell-2-3,
+  .txp-layout-4col-cell-3-4,
+  .txp-layout-4col-cell-1alt,
+  .txp-layout-4col-cell-4alt,
+  .txp-layout-4col-cell-1-2-3,
+  .txp-layout-4col-cell-2-3-4 {
+    width: 100%;
+    float: right;
+    margin-left: 0;
+    margin-right: 0;
+    clear: none;
+    clear: both;
+  }
+}
+/**
+ * Grid column cell changes at 2nd breakpoint downwards.
+ *
+ * Cells for 2 column layout become 1 column layout.
+ * Cells for 4 column layout become 1 column layout.
+ */
+@media (max-width: 47em) {
+  .txp-layout-2col-cell-1,
+  .txp-layout-2col-cell-2,
+  .txp-layout-4col-cell-1,
+  .txp-layout-4col-cell-2,
+  .txp-layout-4col-cell-3,
+  .txp-layout-4col-cell-4 {
+    width: 100%;
+    float: right;
+    margin-left: 0;
+    margin-right: 0;
+    clear: none;
+    clear: both;
+  }
+}
+/**
+ * Text columns (fixed proportion cell)
+ *
+ * Example HTML:
+ *
+ * <div class="txp-layout-textbox">
+ */
+.txp-layout-textbox {
+  clear: both;
+  margin: 0 auto;
+  max-width: 57em;
+}
+
+/**
+ * Text columns (fixed proportion cell) - OLD.
+ *
+ * @deprecated in 4.6.0
+ * @see        .txp-layout-textbox
+ */
+.text-column {
+  clear: both;
+  margin: 0 auto;
+  max-width: 57em;
+}
+
+/* Inline grids
+   ========================================================================== */
+/**
+ * Rudimentary inline grid type layouts.
+ *
+ * As this layout uses `inline-block`, you will need to collapse the white
+ * space between each `.txp-grid-cell` to negate any unwanted margin between the
+ * cells. Once CSS3 flexbox module is more settled and has improved browser
+ * support, this layout type can be made more robust.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-grid">
+ *     <div class="txp-grid-cell" style="width:10em;">
+ *         Content
+ *     </div><div class="txp-grid-cell" style="width:10em;">
+ *         Content
+ *     </div><div class="txp-grid-cell" style="width:10em;">
+ *         Content
+ *     </div>
+ * </div>
+ */
+.txp-grid {
+  text-align: center;
+  margin-bottom: 0.6923077em;
+}
+
+.txp-grid-cell {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  margin: 0 0.1538462em 0.3076923em;
+  border: 1px solid #cccccc;
+  padding: 0 1em;
+  max-width: 22.6153846em;
+  text-align: left;
+  vertical-align: top;
+}
+
+/**
+ * Align grid cells to right in RTL languages.
+ */
+[dir="rtl"] .txp-grid-cell {
+  text-align: right;
+}
+
+/* Links
+   ========================================================================== */
+/**
+ * 1. Remove default underline style from non-hover state links.
+ * 2. Interrupt the decoration line to let the shape of the text show through
+ *    in supported browsers.
+ * 3. Specify link colour.
+ * 4. Remove the gray background color from active links in IE 10.
+ * 5. Expanded CSS level 3 `text-decoration` property in supported browsers,
+ *    older browsers will fallback to legacy `text-decoration` property.
+ */
+a {
+  /* 1 */
+  text-decoration: none;
+  /* 2 */
+  text-decoration-skip: ink edges;
+  /* 3 */
+  color: #004cbf;
+  /* 4 */
+  background: transparent;
+}
+a:hover, a:active {
+  outline: 0;
+  text-decoration: underline;
+  text-decoration: #004cbf solid underline;
+  /* 5 */
+  color: #0066ff;
+}
+a:focus {
+  outline: thin dotted #0066ff;
+}
+a.busy {
+  visibility: hidden;
+}
+
+/**
+ * Additional styling for popup help links.
+ *
+ * Example HTML:
+ *
+ * <a class="pophelp">i</a>
+ */
+.pophelp,
+.pophelpsubtle {
+  border: 1px solid #e0e0e0;
+  border-radius: 50%;
+  padding: 0 0.4em;
+  font-weight: normal;
+}
+
+/**
+ * Additional styling for popup help links in table headers.
+ */
+.txp-list thead th a.pophelp {
+  display: inline;
+  margin: 0;
+  border-color: #cccccc;
+  padding: 0 0.4em;
+  color: #004cbf;
+}
+.txp-list thead th a.pophelp:hover {
+  color: #0066ff;
+  text-decoration: underline;
+}
+
+/**
+ * Reduce risk of render glitches in links on RTL languages.
+ */
+[dir="rtl"] a {
+  unicode-bidi: embed;
+}
+
+/* Typography
+   ========================================================================== */
+html {
+  font-size: 81.25%;
+  line-height: 1.5384615em;
+}
+
+/**
+ * Global font and colour.
+ */
+body {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+/**
+ * `h1` headings.
+ *
+ * Example HTML:
+ *
+ * <h1>Heading</h1>
+ * <h1>
+ *     Heading
+ *     <a class="pophelp">i</a>
+ * </h1>
+ */
+h1 {
+  font-size: 26px;
+  line-height: 1.23076923076923;
+  margin: 0.26923076923077em 0 0.5em;
+}
+h1 .pophelp {
+  font-size: 0.5em;
+}
+
+/**
+ * `h2` headings.
+ *
+ * Example HTML:
+ *
+ * <h2>Heading</h2>
+ * <h2>
+ *     Heading
+ *     <a class="pophelp">i</a>
+ * </h2>
+ */
+h2 {
+  font-size: 18px;
+  line-height: 1.33333333333333;
+  margin: 0.5em 0 0.72222222222222em;
+}
+h2 .pophelp {
+  font-size: 0.72222222222222em;
+}
+
+/**
+ * `h3` headings.
+ */
+h3 {
+  font-size: 15px;
+  line-height: 1.4;
+  margin: 0.86666666666667em 0;
+}
+
+/**
+ * Normalise `h4`, `h5` and `h6` headings (these are effectively unused).
+ */
+h4,
+h5,
+h6 {
+  font-size: 1em;
+  margin: 1em 0;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 4+, Safari, and Chrome.
+ */
+b,
+strong {
+  font-weight: bold;
+}
+
+/**
+ * Add vertical margin to addresses.
+ */
+address {
+  margin: 1em 0;
+}
+
+/**
+ * Additional styling for blockquotes.
+ */
+blockquote {
+  margin: 1em 0;
+  border-left: 3px solid #cccccc;
+  padding: 0 0 0 1em;
+}
+
+/**
+ * Address styling not present in Safari and Chrome.
+ */
+dfn {
+  font-style: italic;
+}
+
+/**
+ * Address styling not present in IE 8/9/10/11, Safari, and Chrome.
+ */
+abbr[title],
+dfn[title] {
+  border-bottom: 1px dotted;
+  cursor: help;
+}
+
+/**
+ * Address styling not present in IE 8/9.
+ */
+mark,
+var {
+  border-radius: 0.23076923076923em;
+  padding: 1px 0.23076923076923em;
+  color: #333333;
+  background: #e6f0ff;
+}
+
+/**
+ * Harmonise size and style of computer text.
+ */
+pre,
+code,
+kbd,
+samp,
+.code {
+  font-family: Menlo, Consolas, Monaco, monospace;
+}
+
+code,
+kbd,
+samp {
+  border: 1px solid #e3e3e3;
+  border-radius: 0.23076923076923em;
+  padding: 1px 0.23076923076923em;
+  background: #f7f7f7;
+}
+
+/**
+ * Additional stylng for preformatted text/code.
+ *
+ * 1. Don't wrap long words.
+ * 2. Contain overflow in all browsers.
+ * 3. Set tab size to 4 spaces.
+ */
+pre {
+  /* 1 */
+  word-wrap: normal;
+  /* 2 */
+  overflow-x: auto;
+  margin: 1em 0;
+  border: 1px solid #e3e3e3;
+  border-radius: 0.23076923076923em;
+  padding: 0.53846153846154em 1em;
+  background: #f7f7f7;
+  /* 3 */
+  tab-size: 4;
+}
+
+/**
+ * Don't wrap lines of `textarea` code onto new lines.
+ */
+textarea.code {
+  word-wrap: normal;
+  white-space: pre;
+}
+
+/**
+ * Override `code` styling for code display within preformatted text areas and
+ * form text areas.
+ */
+pre code,
+.code code,
+code.body,
+code.excerpt {
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: none;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+sub,
+sup.footnote,
+sup {
+  font-size: 0.6923077em;
+  line-height: 0em;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.33333333333333em;
+}
+
+/**
+ * Harmonise size and style of small text.
+ */
+small,
+figcaption,
+tfoot,
+.footnote,
+.txp-form-field-instructions,
+.txp-footer {
+  font-size: 0.8461538em;
+  line-height: 1.4545455em;
+}
+
+figcaption,
+tfoot,
+.footnote,
+.txp-form-field-instructions {
+  color: #777777;
+}
+
+figcaption {
+  margin-top: 0.5em;
+  font-style: italic;
+}
+
+/* Support for non-latin languages
+   ========================================================================== */
+/**
+ * Preferred font for Japanese language.
+ */
+html[lang="ja-jp"] {
+  font-family: "Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
+}
+
+/**
+ * Preferred font for Korean language.
+ */
+html[lang="ko-kr"] {
+  font-family: GulimChe, Gulim, sans-serif;
+}
+
+/**
+ * Preferred font for Chinese (PRC) language.
+ */
+html[lang="zh-cn"] {
+  font-family: SimHei, sans-serif;
+}
+
+/**
+ * Preferred font for Chinese (Taiwan) language.
+ */
+html[lang="zh-tw"] {
+  font-family: PMingLiU, sans-serif;
+}
+
+/* Embedded content
+   ========================================================================== */
+/**
+ * Make embedded elements responsive.
+ */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/**
+ * Images.
+ *
+ * 1. Remove the gap between images and the bottom of their containers.
+ * 2. Remove border when inside `a` element in IE 8-10.
+ *
+ * Image alignment (compatible with Textile markup syntax).
+ *
+ * Example HTML:
+ *
+ * <img class="align-left">
+ * <img class="align-right">
+ * <img class="align-center">
+ */
+img {
+  /* 1 */
+  vertical-align: middle;
+  /* 2 */
+  border: 0;
+}
+img.align-left {
+  float: left;
+  margin: 1em 1em 1em 0;
+}
+img.align-right {
+  float: right;
+  margin: 1em 0 1em 1em;
+}
+img.align-center {
+  display: block;
+  margin: 1em auto;
+}
+
+/**
+ * Swap image alignment right/left positions in RTL languages.
+ */
+[dir="rtl"] img.align-left {
+  float: right;
+  margin: 1em 0 1em 1em;
+}
+[dir="rtl"] img.align-right {
+  float: left;
+  margin: 1em 1em 1em 0;
+}
+
+/**
+ * Address margin not present in IE 8/9 and Safari.
+ */
+figure {
+  margin: 0;
+}
+
+/**
+ * Correct overflow not hidden in IE 9/10/11.
+ */
+svg:not(:root) {
+  overflow: hidden;
+}
+
+/**
+ * Content images and content images with links.
+ *
+ * Example HTML:
+ *
+ * <img class="content-image">
+ * <a>
+ *     <img class="content-image">
+ * </a>
+ */
+.content-image {
+  -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+  border: solid 1px #cccccc;
+  border-radius: 0.5em;
+  padding: 4px;
+  background: #ffffff;
+}
+a:hover .content-image {
+  border-color: #0066ff;
+}
+a:focus .content-image {
+  -webkit-box-shadow: 0 0 7px #80b3ff;
+  box-shadow: 0 0 7px #80b3ff;
+  border-color: #0066ff;
+}
+
+/* Messages
+   ========================================================================== */
+/**
+ * Alert labels.
+ *
+ * Example HTML:
+ *
+ * <span class="success">
+ * <span class="error">
+ * <strong class="success">
+ * <strong class="error">
+ */
+.success,
+.warning,
+.error,
+.information {
+  border-radius: 0.23076923076923em;
+  padding: 1px 0.23076923076923em;
+}
+
+.success {
+  color: #238c23;
+  background: #dff0d8;
+}
+
+.warning {
+  color: #cc8c00;
+  background: #f7eedb;
+}
+
+.error {
+  color: #9d261d;
+  background: #f2dede;
+}
+
+.information {
+  color: #3a87ad;
+  background: #e7f6fc;
+}
+
+/**
+ * Highlight background.
+ *
+ * Example HTML:
+ *
+ * <table>
+ *     <tr>
+ *         <td class="highlight></td>
+ *         <td></td>
+ *     </tr>
+ * </table>
+ */
+.highlight {
+  background: #fff9e1;
+}
+
+/**
+ * Alert boxes.
+ *
+ * Example HTML:
+ *
+ * <p class="alert-block success">
+ * <p class="alert-block error">
+ */
+.alert-block {
+  border: 1px solid;
+  padding: 0.53846153846154em 1em;
+}
+.alert-block.success {
+  border-color: #a3d48e;
+}
+.alert-block.warning {
+  border-color: #e4c788;
+}
+.alert-block.error {
+  border-color: #e1b2b2;
+}
+.alert-block.information {
+  border-color: #b1e2f5;
+}
+
+/**
+ * System messages.
+ *
+ * Example HTML:
+ *
+ * <div id="messagepane">
+ *     <span role="alert" class="error">
+ *         Content
+ *     </span>
+ * </div>
+ */
+#messagepane {
+  position: fixed;
+  bottom: 0;
+  z-index: 1000;
+  text-align: center;
+}
+#messagepane span.success, #messagepane span.warning, #messagepane span.error {
+  -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+  display: inline-block;
+  margin: 0 auto;
+  border-radius: 0.5em 0.5em 0 0;
+  padding: 0.53846153846154em 2.84615384615385em 0.53846153846154em 1em;
+  max-width: 53.1538462em;
+  color: #ffffff;
+}
+#messagepane span.success {
+  background: #238c23;
+}
+#messagepane span.warning {
+  background: #cc8c00;
+}
+#messagepane span.error {
+  background: #9d261d;
+}
+
+/*
+ * Message close icon.
+ *
+ * Example HTML:
+ *
+ * <a role="button" class="close" aria-label="Close">&times;</a>
+ */
+.close {
+  position: absolute;
+  top: 0.27777777777778em;
+  right: 0.72222222222222em;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 18px;
+  font-weight: bold;
+}
+.close:hover {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+/*
+ * Flash the alert message using CSS animation.
+ */
+@-webkit-keyframes messageflash {
+  0% {
+    opacity: 0;
+  }
+  50%, 100% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.5;
+  }
+}
+@keyframes messageflash {
+  0% {
+    opacity: 0;
+  }
+  50%, 100% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.5;
+  }
+}
+.messageflash {
+  -webkit-animation: messageflash 1s;
+  animation: messageflash 1s;
+}
+
+/* Twisties
+   ========================================================================== */
+/**
+ * Collapsible and non-collapsible summary/details boxes.
+ *
+ * Example HTML:
+ *
+ * <section class="txp-details">
+ *     <h3 class="txp-summary expanded">
+ *         <a>Heading (lever)</a>
+ *     </h3>
+ *     <div class="toggle">
+ *         Content
+ *     </div>
+ * </section>
+ *
+ * <section class="txp-details">
+ *     <h3>Heading</h3>
+ *     <div>
+ *         Content
+ *     </div>
+ * </section>
+ */
+.txp-details {
+  margin: 1em 0;
+  border: 1px solid #e3e3e3;
+  border-top: 0;
+  background: #f7f7f7;
+}
+
+/**
+ * Styling for summary headings.
+ */
+h3.txp-summary,
+.txp-details > h3 {
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  background-color: #eeeeee;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VlZWVlZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2RkZGRkZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
+  background-image: linear-gradient(#eeeeee, #dddddd);
+  position: relative;
+  font-size: 1em;
+  font-weight: bold;
+  line-height: 2em;
+  margin: 0;
+  border-top: 1px solid #dddddd;
+  border-bottom: 1px solid #cccccc;
+  height: 2em;
+}
+
+/**
+ * Padding for non-collapsible summary headings.
+ *
+ * For collapsible summary headings the padding is done via the `a` tag.
+ */
+.txp-details > h3:not(.txp-summary) {
+  padding: 0 1em;
+}
+
+/**
+ * Additonal styling for lever summary headings.
+ */
+h3.txp-summary a {
+  display: block;
+  padding: 0 2em 0 1em;
+  color: #333333;
+}
+h3.txp-summary a:hover {
+  color: #333333;
+  text-decoration: none;
+}
+h3.txp-summary a:after {
+  text-indent: 110%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-transform: capitalize;
+  display: block;
+  width: 0;
+  height: 0;
+  border: 0 solid transparent;
+  border-left-color: #333333;
+  border-width: 0.25em 0 0.25em 0.25em;
+  font-size: 16px;
+  position: absolute;
+  content: "\2193";
+  top: 0.5625em;
+  right: 0.625em;
+  z-index: 10;
+  opacity: 0.5;
+}
+h3.txp-summary a:hover:after {
+  opacity: 1;
+}
+
+/**
+ * Additonal styling for lever summary headings - expanded state.
+ */
+h3.txp-summary.expanded a:after {
+  display: block;
+  width: 0;
+  height: 0;
+  border: 0 solid transparent;
+  border-top-color: #333333;
+  border-width: 0.25em 0.25em 0 0.25em;
+  content: "\2191";
+  top: 0.6875em;
+  right: 0.5625em;
+}
+
+/**
+ * Pad left and right of inner details content container.
+ */
+.toggle,
+.txp-details > div {
+  padding: 0 1em;
+}
+
+/* Progress meter (only used in core for setup pages)
+   ========================================================================== */
+/**
+ * Progress meter lists.
+ *
+ * Utilises CSS counters to increment the progress steps, more info -
+ * https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Counters
+ *
+ * Example HTML:
+ *
+ * <div class="progress-meter">
+ *     <ol>
+ *         <li class="active"><strong>Item 1</strong></li>
+ *         <li>Item 2</li>
+ *         <li>Item 3</li>
+ *     </ol>
+ * </div>
+ */
+.progress-meter ol {
+  margin-bottom: 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+  counter-reset: step;
+}
+.progress-meter li {
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  background-color: #eeeeee;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VlZWVlZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2RkZGRkZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
+  background-image: linear-gradient(#eeeeee, #dddddd);
+  position: relative;
+  display: inline-block;
+  margin: 0 1em 1em 0;
+  border-top: 1px solid #dddddd;
+  border-right: 1px solid #e3e3e3;
+  border-bottom: 1px solid #cccccc;
+  border-left: 1px solid #e3e3e3;
+  padding: 1em 1em 1em 4em;
+}
+.progress-meter li.active {
+  background-color: #ffda44;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZGE0NCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y2YzYwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#ffda44, #f6c600);
+  background-image: linear-gradient(#ffda44, #f6c600);
+  border: 1px solid #f6c600;
+  border-bottom-color: #d8ad00;
+}
+.progress-meter li:before {
+  position: absolute;
+  top: 0.4375em;
+  left: 0.6875em;
+  z-index: 2;
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  padding: 0.25em;
+  width: 1.375em;
+  background: #cccccc;
+  font-size: 1.23076em;
+  font-weight: bold;
+  text-align: center;
+  counter-increment: step;
+  content: counter(step);
+}
+.progress-meter li:after {
+  text-indent: 110%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-transform: capitalize;
+  display: block;
+  width: 0;
+  height: 0;
+  border: 0 solid transparent;
+  border-left-color: #cccccc;
+  border-width: 1.5em 0 1.5em 0.75em;
+  position: absolute;
+  top: -1px;
+  left: 100%;
+  z-index: 2;
+  font-size: 16px;
+  content: "\2192";
+}
+.progress-meter strong {
+  font-weight: normal;
+}
+
+/**
+ * Swap margin/padding/numerical/arrow positions in RTL languages.
+ */
+[dir="rtl"] .progress-meter ol {
+  padding: 0;
+}
+[dir="rtl"] .progress-meter li {
+  margin: 0 0 1em 1em;
+  padding: 1em 4em 1em 1em;
+}
+[dir="rtl"] .progress-meter li:before {
+  right: 0.6875em;
+  left: auto;
+}
+[dir="rtl"] .progress-meter li:after {
+  display: block;
+  width: 0;
+  height: 0;
+  border: 0 solid transparent;
+  border-right-color: #cccccc;
+  border-width: 1.5em 0.75em 1.5em 0;
+  content: "\2190";
+  right: 100%;
+  left: auto;
+}
+
+/* Forms
+   ========================================================================== */
+/**
+ * 1. Define consistent fieldset border, margin, and padding.
+ * 2. Address width being affected by wide descendants in Chrome, Firefox.
+ */
+fieldset {
+  /* 1 */
+  margin: 1em 0;
+  border: 1px solid #cccccc;
+  padding: 1px 1em;
+  /* 2 */
+  min-width: 0;
+}
+
+/**
+ * 1. Correct `color` not being inherited in IE 8/9/10/11.
+ * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+ */
+legend {
+  /* 1 */
+  border: 0;
+  /* 2 */
+  padding: 0;
+}
+
+/**
+ * 1. Correct font properties not being inherited.
+ * 2. Address margins set differently in Firefox 4+, Safari, and Chrome.
+ * 3. Prevent elements from spilling out of their parent.
+ */
+button,
+input,
+optgroup,
+select,
+textarea,
+.txp-button,
+.txp-logout a,
+.navlink,
+.navlink-active,
+.navlink-disabled {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  /* 1 */
+  font-size: 100%;
+  font-size: 1em;
+  line-height: 1.3846154em;
+  /* 2 */
+  margin: 0;
+  /* 3 */
+  max-width: 100%;
+  font-family: Helvetica, Arial, sans-serif;
+  vertical-align: baseline;
+}
+
+/**
+ * Colour for placeholder text.
+ */
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+  color: #999999;
+}
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+  color: #999999;
+}
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  color: #999999;
+}
+
+/**
+ * Remove inner padding and border in Firefox 4+.
+ */
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/**
+ * Remove inner padding in Safari and Chrome on OS X. Safari (but not Chrome)
+ * clips the cancel button when the search input has padding (and `textfield`
+ * appearance).
+ */
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/**
+ * Styling of form input fields.
+ *
+ * 1. Remove iOS Safari default styling.
+ */
+input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"],
+select,
+textarea {
+  -webkit-transition: box-shadow 0.1s linear;
+  transition: box-shadow 0.1s linear;
+  /* 1 */
+  -webkit-appearance: none;
+  border: 1px solid #cccccc;
+  border-radius: 0;
+  padding: 0.30769230769231em;
+  height: 2.15384615384615em;
+  background: #ffffff;
+}
+input[type="color"]:focus,
+input[type="date"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="email"]:focus,
+input[type="month"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="text"]:focus,
+input[type="time"]:focus,
+input[type="url"]:focus,
+input[type="week"]:focus,
+select:focus,
+textarea:focus {
+  -webkit-box-shadow: 0 0 7px #80b3ff;
+  box-shadow: 0 0 7px #80b3ff;
+  border-color: #0066ff;
+  outline: 0;
+}
+
+/**
+ * Remove padding from `color` fields.
+ */
+input[type="color"] {
+  padding: 0;
+}
+
+/**
+ * Fix the cursor style for Chrome's increment/decrement buttons. For certain
+ * `font-size` values of the `input`, it causes the cursor style of the
+ * decrement button to change from `default` to `text`.
+ */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+ * 1. Remove excess padding in IE 8/9/10.
+ * 2. Correct margins for inline checkbox/radio labels.
+ */
+input[type="checkbox"],
+input[type="radio"] {
+  /* 1 */
+  padding: 0;
+}
+input[type="checkbox"] + label,
+input[type="radio"] + label {
+  /* 2 */
+  margin: 0 0.5em 0 0;
+}
+input[type="checkbox"] + label:last-of-type,
+input[type="radio"] + label:last-of-type {
+  /* 2 */
+  margin: 0;
+}
+
+/**
+ * Swap margin positions in RTL languages.
+ */
+[dir="rtl"] input[type="checkbox"] + label,
+[dir="rtl"] input[type="radio"] + label {
+  margin: 0 0 0 0.5em;
+}
+[dir="rtl"] input[type="checkbox"] + label:last-of-type,
+[dir="rtl"] input[type="radio"] + label:last-of-type {
+  margin: 0;
+}
+
+/**
+ * Correct `select` style inheritance in Firefox.
+ */
+select {
+  text-transform: none;
+}
+
+/**
+ * Override height set in a previous rule and allow auto heght.
+ */
+select[size],
+select[multiple] {
+  height: auto;
+}
+
+/**
+ * Override height set in rule above and restrict to one line field.
+ */
+select[size="0"],
+select[size="1"] {
+  height: 2.15384615384615em;
+}
+
+@media (-webkit-min-device-pixel-ratio: 0) {
+  /**
+   * Address `select` alignment in Safari, Chrome, Opera.
+   */
+  select[size],
+  select[multiple],
+  select[multiple][size] {
+    padding-right: 0.30769230769231em;
+    background-image: none;
+  }
+
+  /**
+   * Use indicator icon to signify the downdown ability of `select` in Safari,
+   * Chrome, Opera.
+   */
+  select,
+  select[size="0"],
+  select[size="1"] {
+    padding-right: 2em;
+    background: #ffffff url("data:image/svg+xml,<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='13px' height='4px' viewBox='0 0 13 4' enable-background='new 0 0 13 4' xml:space='preserve'><polygon fill='#333333' points='3.5,4 0,0 7,0'/></svg>") right center no-repeat;
+    background-size: 1em 0.30769230769231em;
+  }
+}
+/**
+ * Normalise styling of `optgroup`.
+ */
+optgroup {
+  font-style: normal;
+  font-weight: bold;
+  color: #333333;
+}
+
+/**
+ * 1. Remove default vertical scrollbar in IE 8/9/10/11.
+ * 2. Restrict to vertical resizing to prevent layout breakage.
+ * 3. Remove unwanted space below `textarea` in Safari, Chrome, Opera.
+ */
+textarea {
+  width: 100%;
+  height: auto;
+  min-height: 3em;
+  /* 1 */
+  overflow: auto;
+  /* 2 */
+  resize: vertical;
+  /* 3 */
+  vertical-align: top;
+}
+
+/**
+ * Make sure disabled elements really are disabled and styled appropriately.
+ *
+ * 1. Override default iOS opacity setting.
+ * 2. Re-set default cursor for disabled elements.
+ */
+button[disabled],
+button[disabled],
+input[disabled],
+input[type="button"][disabled],
+input[type="reset"][disabled],
+input[type="submit"][disabled],
+select[disabled],
+select[disabled] option,
+select[disabled] optgroup,
+textarea[disabled],
+.navlink-disabled {
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  border-color: #dddddd !important;
+  color: #aaaaaa !important;
+  background: #eeeeee !important;
+  text-shadow: none !important;
+  /* 1 */
+  opacity: 1;
+  /* 2 */
+  cursor: default !important;
+}
+
+/**
+ * Width display options for `input` fields.
+ *
+ * Example HTML:
+ *
+ * <input size="32">
+ * <input class="large">
+ * <input class="medium">
+ * <input class="small">
+ * <input class="xsmall">
+ */
+input[size="32"] {
+  width: 100%;
+  max-width: 28em;
+}
+
+input.input-large {
+  width: 100%;
+}
+
+input.input-medium {
+  width: 50%;
+  max-width: 14.46153846153846em;
+}
+
+input.input-small {
+  width: 25%;
+  max-width: 7.61538461538462em;
+}
+
+input.input-xsmall {
+  width: 16%;
+  max-width: 4.23076923076923em;
+}
+
+/**
+ * Width display options for date and time `input` fields.
+ *
+ * Note: These are intentionally *not* using the HTML5 input type contexts.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-form-field date posted">
+ *     <label class="txp-form-field-label">Publish date</label>
+ *     <input class="txp-form-field-input input-year">
+ *     <span role="separator">/</span>
+ *     <input class="txp-form-field-input input-month">
+ *     <span role="separator">/</span>
+ *     <input class="txp-form-field-input input-day">
+ *     <a class="txp-datepicker-button">
+ *         <span class="ui-icon ui-icon-calendar">Datepicker</span>
+ *     </a>
+ * </div>
+ *
+ * <div class="txp-form-field time posted">
+ *     <label class="txp-form-field-label">Publish time</label>
+ *     <input class="txp-form-field-input input-hour">
+ *     <span role="separator">:</span>
+ *     <input class="txp-form-field-input input-minute">
+ *     <span role="separator">:</span>
+ *     <input class="txp-form-field-input input-second">
+ * </div>
+ */
+input.input-year {
+  text-align: center;
+  width: 4.07692307692308em;
+}
+input.input-month, input.input-day, input.input-hour, input.input-minute, input.input-second {
+  text-align: center;
+  width: 2.46153846153846em;
+}
+
+/* Buttons
+   ========================================================================== */
+/**
+ * 1. Address `overflow` set to `hidden` in IE 8/9/10/11.
+ * 2. Correct `button` style inheritance in Firefox, IE 8/9/10/11, and Opera.
+ */
+button {
+  /* 1 */
+  overflow: visible;
+  /* 2 */
+  text-transform: none;
+}
+
+/**
+ * 1. Remove iOS Safari default styling.
+ * 2. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ */
+button,
+input[type="reset"],
+input[type="submit"],
+input[type="button"],
+.txp-button,
+.txp-logout a,
+.navlink,
+.navlink-active {
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding;
+  background-clip: padding-box;
+  background-color: #eeeeee;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VlZWVlZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2RkZGRkZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
+  background-image: linear-gradient(#eeeeee, #dddddd);
+  -webkit-transition: box-shadow 0.1s linear;
+  transition: box-shadow 0.1s linear;
+  /* 1 */
+  -webkit-appearance: none;
+  display: inline-block;
+  border: solid 1px #cccccc;
+  border-radius: 0.5em;
+  padding: 0.30769230769231em 0.61538461538462em;
+  width: auto;
+  height: 2.15384615384615em;
+  font-weight: normal;
+  text-align: center;
+  color: #333333;
+  /* 2 */
+  cursor: pointer;
+}
+button:hover,
+input[type="reset"]:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.txp-button:hover,
+.txp-logout a:hover,
+.navlink:hover,
+.navlink-active:hover {
+  background-color: #f8f8f8;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y4ZjhmOCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2U4ZThlOCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#f8f8f8, #e8e8e8);
+  background-image: linear-gradient(#f8f8f8, #e8e8e8);
+  border-color: #aaaaaa;
+  color: #333333;
+  text-decoration: none;
+}
+button:active,
+input[type="reset"]:active,
+input[type="submit"]:active,
+input[type="button"]:active,
+.txp-button:active,
+.txp-logout a:active,
+.navlink:active,
+.navlink-active:active {
+  -webkit-box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+  box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+  background-color: #e6e6e6;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2U2ZTZlNiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Q2ZDZkNiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#e6e6e6, #d6d6d6);
+  background-image: linear-gradient(#e6e6e6, #d6d6d6);
+  border-color: #aaaaaa;
+  color: #1a1a1a;
+  text-decoration: none;
+}
+button:focus,
+input[type="reset"]:focus,
+input[type="submit"]:focus,
+input[type="button"]:focus,
+.txp-button:focus,
+.txp-logout a:focus,
+.navlink:focus,
+.navlink-active:focus {
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
+  border-color: #0066ff;
+  outline: 0;
+}
+
+/**
+ * Additional styling for primary buttons.
+ *
+ * Example HTML:
+ *
+ * <input type="submit" class="publish">
+ */
+input[type="submit"].publish,
+button.publish,
+a.publish {
+  background-color: #ffe168;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZTE2OCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmZDIxYiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#ffe168, #ffd21b);
+  background-image: linear-gradient(#ffe168, #ffd21b);
+  font-weight: bold;
+  border: 1px solid #f6c600;
+}
+input[type="submit"].publish:hover,
+button.publish:hover,
+a.publish:hover {
+  background-color: #ffe88b;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZTg4YiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmZDkzZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#ffe88b, #ffd93f);
+  background-image: linear-gradient(#ffe88b, #ffd93f);
+  border: 1px solid #c39d00;
+}
+input[type="submit"].publish:active,
+button.publish:active,
+a.publish:active {
+  background-color: #ffdc4e;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZGM0ZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmY2QwMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#ffdc4e, #ffcd02);
+  background-image: linear-gradient(#ffdc4e, #ffcd02);
+  border: 1px solid #c39d00;
+}
+input[type="submit"].publish:focus,
+button.publish:focus,
+a.publish:focus {
+  border-color: #0066ff;
+}
+
+/**
+ * Additional styling for delete (destroy) buttons.
+ *
+ * Example HTML:
+ *
+ * <button class="destroy" type="submit">
+ *     <span class="ui-icon ui-icon-close">Destroy</span>
+ * </button>
+ */
+button.destroy {
+  text-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0.07692307692308em 0 0;
+  height: auto;
+  background: none;
+}
+button.destroy:focus {
+  outline: thin dotted #0066ff;
+}
+
+/**
+ * Grey-out disabled navlinks (but keep them in button style).
+ *
+ * Example HTML:
+ *
+ * <p class="prev-next">
+ *     <span class="navlink-disabled">Previous</span>
+ *     <a class="navlink">Next</a>
+ * </p>
+ */
+.navlink-disabled {
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding;
+  background-clip: padding-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  border: 1px solid;
+  border-radius: 0.5em;
+  padding: 0.30769230769231em 0.61538461538462em;
+  height: 2.15384615384615em;
+}
+
+/**
+ * Button sets - either `.nav-tertiary` or `.prev-next` depending on context.
+ *
+ * Anchor elements kept to one line to prevent space between buttons.
+ *
+ * Example HTML:
+ *
+ * <p class="nav-tertiary">
+ *     <a class="navlink-active">Page 1</a><a class="navlink">Page 2</a>
+ * </p>
+ * <p class="prev-next">
+ *     <a class="navlink">Previous</a><a class="navlink">Next</a>
+ * </p>
+ */
+ul.nav-tertiary {
+  list-style: none;
+  padding: 0;
+}
+ul.nav-tertiary li {
+  display: inline;
+}
+
+[dir="rtl"] ul.nav-tertiary {
+  padding: 0;
+}
+
+.nav-tertiary a,
+.nav-tertiary .navlink-disabled,
+.prev-next a,
+.prev-next .navlink-disabled {
+  border-radius: 0;
+}
+.nav-tertiary > :first-child,
+.nav-tertiary > :first-child > a,
+.nav-tertiary > :first-child > span,
+.prev-next > :first-child,
+.prev-next > :first-child > a,
+.prev-next > :first-child > span {
+  border-radius: 0.5em 0 0 0.5em;
+}
+.nav-tertiary > :last-child,
+.nav-tertiary > :last-child > a,
+.nav-tertiary > :last-child > span,
+.prev-next > :last-child,
+.prev-next > :last-child > a,
+.prev-next > :last-child > span {
+  border-radius: 0 0.5em 0.5em 0;
+}
+
+[dir="rtl"] .nav-tertiary > :first-child,
+[dir="rtl"] .nav-tertiary > :first-child > a,
+[dir="rtl"] .nav-tertiary > :first-child > span,
+[dir="rtl"] .prev-next > :first-child,
+[dir="rtl"] .prev-next > :first-child > a,
+[dir="rtl"] .prev-next > :first-child > span {
+  border-radius: 0 0.5em 0.5em 0;
+}
+[dir="rtl"] .nav-tertiary > :last-child,
+[dir="rtl"] .nav-tertiary > :last-child > a,
+[dir="rtl"] .nav-tertiary > :last-child > span,
+[dir="rtl"] .prev-next > :last-child,
+[dir="rtl"] .prev-next > :last-child > a,
+[dir="rtl"] .prev-next > :last-child > span {
+  border-radius: 0.5em 0 0 0.5em;
+}
+
+/**
+ * Indication of the currently active `.nav-tertiary` button.
+ *
+ * Example HTML:
+ *
+ * <p class="nav-tertiary">
+ *     <a class="navlink-active">Page 1</a><a class="navlink">Page 2</a>
+ * </p>
+ */
+.nav-tertiary .navlink-active {
+  background-color: #e3edfc;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2UzZWRmYyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M3ZGJmYSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#e3edfc, #c7dbfa);
+  background-image: linear-gradient(#e3edfc, #c7dbfa);
+  border-color: #a3bef3;
+}
+.nav-tertiary .navlink-active:hover {
+  background-color: #f1f6fe;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2YxZjZmZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2NjZGVmYSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#f1f6fe, #ccdefa);
+  background-image: linear-gradient(#f1f6fe, #ccdefa);
+  border-color: #6b8fe8;
+}
+.nav-tertiary .navlink-active:active {
+  background-color: #c7dbfa;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M3ZGJmYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2IwY2JmNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#c7dbfa, #b0cbf7);
+  background-image: linear-gradient(#c7dbfa, #b0cbf7);
+  border-color: #6b8fe8;
+}
+.nav-tertiary .navlink-active:focus {
+  border-color: #0066ff;
+}
+
+/**
+ * Search widget 'search' button.
+ *
+ * Example HTML:
+ *
+ * <form class="txp-search">
+ *     <input class="txp-search-input" type="search" size="24">
+ *     <span class="txp-search-buttons">
+ *         <button class="txp-search-button">Search</button>
+ *         <button class="txp-search-options">Search criteria</button>
+ *     </span>
+ * </form>
+ */
+.txp-search button.txp-search-button {
+  margin-left: -0.35em;
+  border-radius: 0;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+}
+
+/* Lists
+   ========================================================================== */
+/**
+ * Address paddings set differently.
+ */
+menu,
+ol,
+ul {
+  padding: 0 0 0 2em;
+}
+
+/**
+ * Swap padding positions in RTL languages.
+ */
+[dir="rtl"] menu,
+[dir="rtl"] ol,
+[dir="rtl"] ul {
+  padding: 0 2em 0 0;
+}
+
+/**
+ * Remove margins from nested lists.
+ */
+li > ul,
+li > ol {
+  margin: 0;
+}
+
+/**
+ * Address margins set differently.
+ */
+dd {
+  margin: 0 0 0 2em;
+}
+
+/**
+ * Swap margin positions in RTL languages.
+ */
+[dir="rtl"] dd {
+  margin: 0 2em 0 0;
+}
+
+/**
+ * Italicise definition terms.
+ */
+dt {
+  font-style: italic;
+}
+
+/**
+ * Have a list with no bullets/numerals.
+ *
+ * Example HTML:
+ *
+ * <ul class="plain-list">
+ * <ol class="plain-list">
+ */
+.plain-list {
+  padding: 0;
+  list-style: none;
+}
+
+/**
+ * Ensure padding stays removed in RTL languages.
+ *
+ * Required for specificity.
+ */
+[dir="rtl"] .plain-list {
+  padding: 0;
+}
+
+/**
+ * Switcher lists, to swap between diffrent page templates/form templates/etc.
+ *
+ * Example HTML:
+ *
+ * <ul class="switcher-list">
+ *     <li class="active"></li>
+ *     <li><a></a></li>
+ *     <li><a></a></li>
+ * </ul>
+ */
+.switcher-list {
+  list-style: none;
+  margin: 0 -1em;
+  padding-left: 0;
+}
+.switcher-list li {
+  position: relative;
+  border-top: 1px solid #dddddd;
+  padding: 0.38461538461538em 3em 0.38461538461538em 1em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.switcher-list li:nth-child(odd) {
+  background: #ffffff;
+}
+.switcher-list li:first-child {
+  border-top: 0;
+}
+.switcher-list li.active {
+  background: #e6f0ff;
+}
+
+/**
+ * 'Destroy' buttons within switcher lists.
+ */
+.switcher-action,
+.switcher-list .destroy {
+  position: absolute;
+  right: 1em;
+  z-index: 2;
+}
+
+.switcher-action {
+  top: 0.38461538461538em;
+}
+
+.switcher-list .destroy {
+  top: 0.46153846153846em;
+}
+
+/* Tables
+   ========================================================================== */
+/**
+ * 1. Make sure list tables clear any preceeding grid cell floats.
+ * 2. Allow overflow scroll on tables.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-listtables">
+ *     <table></table>
+ * </div>
+ */
+.txp-listtables {
+  /* 1 */
+  clear: both;
+  /* 2 */
+  overflow-x: auto;
+}
+
+/**
+ * Consistent tables.
+ */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/**
+ * Styling of table captions.
+ */
+caption {
+  text-align: left;
+  margin-bottom: 0.5em;
+}
+
+/**
+ * Swap caption alignment in RTL languages.
+ */
+[dir="rtl"] caption {
+  text-align: right;
+}
+
+/**
+ * Make table cells align top and left by default.
+ */
+th,
+td {
+  vertical-align: top;
+  text-align: left;
+  padding: 0;
+}
+
+/**
+ * Swap table cell text alignments in RTL languages.
+ */
+[dir="rtl"] th,
+[dir="rtl"] td {
+  text-align: right;
+}
+
+/**
+ * Listing tables.
+ *
+ * Example HTML:
+ *
+ * <table class="txp-list">
+ *     <thead>
+ *         <tr>
+ *             <th class="multi-edit" scope="col"></th>
+ *             <th class="asc scope="col"><a></a></th>
+ *             <th scope="col"><a></a></th>
+ *         </tr>
+ *     </thead>
+ *     <tfoot>
+ *         <tr>
+ *             <td colspan="3"></td>
+ *         </tr>
+ *     </tfoot>
+ *     <tbody>
+ *         <tr>
+ *             <th class="multi-edit" scope="row"></th>
+ *             <td></td>
+ *             <td></td>
+ *         </tr>
+ *         <tr class="selected">
+ *             <th class="multi-edit" scope="row"></th>
+ *             <td></td>
+ *             <td></td>
+ *         </tr>
+ *     </tbody>
+ * </table>
+ */
+.txp-list {
+  width: 100%;
+}
+.txp-list th,
+.txp-list td {
+  padding: 0.38461538461538em 1em;
+}
+.txp-list tbody tr {
+  border: 1px solid #dddddd;
+}
+.txp-list tbody tr:nth-child(even) {
+  background: #f7f7f7;
+}
+.txp-list tbody tr.selected {
+  background: #e6f0ff;
+}
+.txp-list tbody th {
+  font-weight: normal;
+}
+.txp-list thead th {
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  background-color: #eeeeee;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VlZWVlZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2RkZGRkZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
+  background-image: linear-gradient(#eeeeee, #dddddd);
+  border-top: 1px solid #dddddd;
+  border-right: 1px solid #d1d1d1;
+  border-bottom: 1px solid #cccccc;
+}
+.txp-list thead th:first-child {
+  border-left: 1px solid #dddddd;
+}
+.txp-list thead th a {
+  position: relative;
+  display: block;
+  margin: -0.38461538461538em -1em;
+  padding: 0.38461538461538em 1em;
+  color: #333333;
+}
+.txp-list thead th a:hover {
+  color: #333333;
+  text-decoration: none;
+}
+
+/**
+ * Backgrounds and indicator icons on currently active sortable `thead th`.
+ *
+ * Example HTML:
+ *
+ * <th class="asc scope="col"><a></a></th>
+ * <th class="desc scope="col"><a></a></th>
+ */
+.txp-list thead th.asc, .txp-list thead th.desc {
+  background-color: lightgray;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2QzZDNkMyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2U0ZTRlNCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#d3d3d3, #e4e4e4);
+  background-image: linear-gradient(#d3d3d3, #e4e4e4);
+}
+.txp-list thead th.asc a:after, .txp-list thead th.desc a:after {
+  text-indent: 110%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-transform: capitalize;
+  font-size: 16px;
+  position: absolute;
+  top: 45%;
+  right: 0.3125em;
+  z-index: 10;
+  opacity: 0.5;
+}
+[dir="rtl"] .txp-list thead th.asc a:after, [dir="rtl"] .txp-list thead th.desc a:after {
+  right: auto;
+  left: 0.3125em;
+}
+.txp-list thead th.asc a:hover:after, .txp-list thead th.desc a:hover:after {
+  opacity: 1;
+}
+.txp-list thead th.desc a:after {
+  display: block;
+  width: 0;
+  height: 0;
+  border: 0 solid transparent;
+  border-top-color: #333333;
+  border-width: 0.25em 0.25em 0 0.25em;
+  content: "\2193";
+}
+.txp-list thead th.asc a:after {
+  display: block;
+  width: 0;
+  height: 0;
+  border: 0 solid transparent;
+  border-bottom-color: #333333;
+  border-width: 0 0.25em 0.25em 0.25em;
+  content: "\2191";
+}
+
+/**
+ * Consistent width for table multi-edit checkbox columns.
+ */
+.txp-list-col-multi-edit {
+  width: 13px;
+}
+
+/**
+ * Consistent width for table multi-edit checkbox columns - OLD.
+ *
+ * @deprecated in 4.6.0
+ * @see        .txp-list-col-multi-edit
+ */
+.txp-list .multi-edit {
+  width: 13px;
+}
+
+/**
+ * Avoid wrapping of content in table '#ID' columns.
+ */
+.txp-list-col-id {
+  white-space: nowrap;
+}
+
+/**
+ * Avoid wrapping of content in table '#ID' columns - OLD.
+ *
+ * @deprecated in 4.6.0
+ * @see        .txp-list-col-id
+ */
+.txp-list .id {
+  white-space: nowrap;
+}
+
+/* Container
+   ========================================================================== */
+/**
+ * 1. Make body position relative so subsequent items can be positioned
+ *    absolutely if desired.
+ * 2. Remove default margin.
+ */
+body {
+  /* 1 */
+  position: relative;
+  /* 2 */
+  margin: 0;
+  padding: 4em 2.1% 0;
+  color: #333333;
+  background: #ffffff;
+}
+
+/**
+ * Main content area.
+ *
+ * Example HTML:
+ *
+ * <body>
+ *     <header class="txp-header"></header>
+ *     <main class="txp-body">
+ *         Content
+ *     </main>
+ *     <footer class="txp-footer"></footer>
+ * </body>
+ */
+.txp-body {
+  margin: 0 auto;
+  max-width: 116em;
+}
+
+/* Header
+   ========================================================================== */
+/**
+ * Header content area.
+ *
+ * Example HTML:
+ *
+ * <body>
+ *     <header class="txp-header">
+ *         Content
+ *     </header>
+ *     <main class="txp-body"></main>
+ *     <footer class="txp-footer"></footer>
+ * </body>
+ */
+.txp-header {
+  -webkit-box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+  background-color: #ffda44;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZGE0NCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y2YzYwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(#ffda44, #f6c600);
+  background-image: linear-gradient(#ffda44, #f6c600);
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1000;
+  border-top: 1px solid #f6c600;
+  border-bottom: 1px solid #d8ad00;
+  padding: 0 2.1%;
+  height: 2.69230769230769em;
+}
+
+/**
+ * Hide header content area on login pages.
+ *
+ * Move offscreen - don't `display:none` as we need to show #messagepane content.
+ * `.txp-view-site` is OK to hide though (otherwise it affects page tabbing).
+ */
+.login-pane .txp-header {
+  position: absolute;
+  right: auto;
+  left: -1000em;
+  width: 1px;
+  height: 1px;
+}
+
+/**
+ * Textpattern logo.
+ *
+ * Example HTML:
+ *
+ * <header class="txp-header">
+ *      <h1><a>My site</a></h1>
+ */
+.txp-header h1 {
+  text-indent: 110%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-transform: capitalize;
+  float: left;
+  margin: 0.0625em 0.5em 0 0;
+  width: 8em;
+  height: 2em;
+  font-size: 16px;
+  background: url("../img/sprite.svg") no-repeat;
+  background-size: 13em 2em;
+}
+
+/**
+ * 'View site' link.
+ *
+ * Example HTML:
+ *
+ * <p class="txp-view-site">
+ *      <a>My site</a>
+ * </p>
+ */
+.txp-view-site {
+  float: left;
+  margin: 0 1em;
+  max-width: 24%;
+  line-height: 2.69230769230769em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.txp-view-site a {
+  color: #333333;
+  font-weight: bold;
+}
+
+/**
+ * Positioning of logout button.
+ *
+ * Example HTML:
+ *
+ * <p class="txp-logout">
+ */
+.txp-logout {
+  position: absolute;
+  top: -0.76923076923077em;
+  right: 2.1%;
+}
+
+/* Footer
+   ========================================================================== */
+/**
+ * Footer content area.
+ *
+ * Example HTML:
+ *
+ * <body>
+ *     <header class="txp-header"></header>
+ *     <main class="txp-body"></main>
+ *     <footer class="txp-footer">
+ *         Content
+ *     </footer>
+ * </body>
+ */
+/**
+ * Link to Textpattern official website.
+ *
+ * Example HTML:
+ *
+ * <p class="mothership">
+ */
+.mothership {
+  float: left;
+}
+
+/**
+ * Link back to top of page.
+ *
+ * Example HTML:
+ *
+ * <p class="pagejump">
+ */
+.pagejump {
+  float: right;
+}
+
+/* Navigation
+   ========================================================================== */
+/**
+ * Hide the navigation menu toggle button on desktop layout.
+ *
+ * Example HTML:
+ *
+ * <button class="txp-nav-toggle">
+ */
+button.txp-nav-toggle {
+  display: none;
+}
+
+/**
+ * Base styling for the navigation menu.
+ *
+ * Example HTML:
+ *
+ * <nav class="txp-nav">
+ */
+.txp-nav {
+  float: left;
+  list-style: none;
+  margin: 0;
+}
+.txp-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.txp-nav a {
+  color: #333333;
+}
+.txp-nav a:hover {
+  text-decoration: none;
+}
+
+/**
+ * Primary-level navigation menu items (dropdown toggles).
+ *
+ * Example HTML:
+ *
+ * <nav class="txp-nav">
+ *     <ul class="data-dropdown">
+ *         <li class="dropdown selected">
+ *             <a class="dropdown-toggle">
+ *                 Content
+ *             </a>
+ *             <ul class="dropdown-menu">
+ *                 <li><a></a></li>
+ *                 <li class="selected"><a></a></li>
+ *                 <li><a></a></li>
+ *             </ul>
+ *         </li>
+ *         <li class="dropdown">
+ *             <a class="dropdown-toggle">
+ *                 Presentation
+ *             </a>
+ *             <ul class="dropdown-menu">
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *             </ul>
+ *         </li>
+ *         <li class="dropdown open">
+ *             <a class="dropdown-toggle">
+ *                 Admin
+ *             </a>
+ *             <ul class="dropdown-menu">
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *             </ul>
+ *         </li>
+ *         <li>
+ *             <a>
+ *                 Non-dropdown link
+ *             </a>
+ *         </li>
+ *     </ul>
+ * </nav>
+ */
+.txp-nav > ul > li {
+  position: relative;
+  display: block;
+  float: left;
+  border-right: 1px solid #f6c600;
+  background: rgba(255, 255, 255, 0.2);
+}
+.txp-nav > ul > li:first-child {
+  border-left: 1px solid #f6c600;
+}
+.txp-nav > ul > li > a {
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  display: block;
+  padding: 0 1em;
+  line-height: 2.69230769230769em;
+  text-decoration: none;
+  color: black;
+}
+.txp-nav > ul > li > a:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.txp-nav > ul > li.selected > a {
+  background: rgba(255, 255, 255, 0.2);
+}
+.txp-nav > ul > li.selected > a:hover {
+  background: rgba(255, 255, 255, 0.33);
+}
+
+/**
+ * Indicator symbols on closed dropdown toggle links.
+ */
+.txp-nav > ul > li > a.dropdown-toggle {
+  position: relative;
+  padding-right: 1.61538461538462em;
+}
+.txp-nav > ul > li > a.dropdown-toggle:after {
+  text-indent: 110%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-transform: capitalize;
+  display: block;
+  width: 0;
+  height: 0;
+  border: 0 solid transparent;
+  border-top-color: #333333;
+  border-width: 0.25em 0.25em 0 0.25em;
+  font-size: 16px;
+  position: absolute;
+  content: "\2193";
+  top: 1em;
+  right: 0.5625em;
+  z-index: 10;
+  opacity: 0.5;
+}
+.txp-nav > ul > li > a.dropdown-toggle:hover:after, .txp-nav > ul > li > a.dropdown-toggle:active:after {
+  opacity: 1;
+}
+
+/**
+ * Indicator symbols on open dropdown toggle links.
+ */
+.txp-nav > ul > li.open > a.dropdown-toggle:after {
+  display: block;
+  width: 0;
+  height: 0;
+  border: 0 solid transparent;
+  border-bottom-color: #333333;
+  border-width: 0 0.25em 0.25em 0.25em;
+  content: "\2191";
+}
+
+/**
+ * Secondary-level navigation menu items (dropdown menus).
+ *
+ * Example HTML:
+ *
+ * <nav class="txp-nav">
+ *     <ul class="data-dropdown">
+ *         <li class="dropdown selected">
+ *             <a class="dropdown-toggle">
+ *                 Content
+ *             </a>
+ *             <ul class="dropdown-menu">
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *                 <li class="selected"><a></a></li>
+ *             </ul>
+ *         </li>
+ *         <li class="dropdown">
+ *             <a class="dropdown-toggle">
+ *                 Presentation
+ *             </a>
+ *             <ul class="dropdown-menu">
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *             </ul>
+ *         </li>
+ *         <li class="dropdown open">
+ *             <a class="dropdown-toggle">
+ *                 Admin
+ *             </a>
+ *             <ul class="dropdown-menu">
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *             </ul>
+ *         </li>
+ *         <li>
+ *             <a>
+ *                 Non-dropdown link
+ *             </a>
+ *         </li>
+ *     </ul>
+ * </nav>
+ */
+.dropdown-menu {
+  -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 3em;
+  left: 0;
+  z-index: 20000;
+  display: none;
+  border: 1px solid #d4d4d4;
+  border-top: 0;
+  border-radius: 0 0.5em 0.5em;
+  min-width: 12em;
+  background: #fff9e1;
+}
+.dropdown-menu li:first-child {
+  border-radius: 0 0.5em 0 0;
+}
+.dropdown-menu li:last-child {
+  border-radius: 0 0 0.5em 0.5em;
+}
+.dropdown-menu li:hover {
+  background: #ffefaf;
+}
+.dropdown-menu li.selected {
+  background: #ffe88b;
+}
+.dropdown-menu a {
+  display: block;
+  padding: 0.5em 1em;
+}
+.dropdown-menu:before {
+  font-size: 16px;
+  position: absolute;
+  content: "";
+  top: -0.5em;
+  left: 0.75em;
+  z-index: 2;
+  width: 1em;
+  height: 0.5em;
+  background: url("../img/sprite.svg") no-repeat -12em 0;
+  background-size: 13em 2em;
+}
+
+/**
+ * Show dropdown menu when downdown toggle clicked.
+ *
+ * Example HTML:
+ *
+ * <li class="dropdown open">
+ *     <a class="dropdown-toggle">
+ *         Admin
+ *     </a>
+ *     <ul class="dropdown-menu">
+ *         <li><a></a></li>
+ *         <li><a></a></li>
+ *         <li><a></a></li>
+ *     </ul>
+ * </li>
+ */
+.open > .dropdown-menu {
+  display: block;
+}
+
+/* Globally shared layout
+   ========================================================================== */
+/**
+ * 1. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ * 2. As above, for Windows Phone.
+ */
+html {
+  -webkit-tap-highlight-color: rgba(0, 102, 255, 0.5);
+  /* 1 */
+  -webkit-text-size-adjust: 100%;
+  /* 2 */
+  -ms-text-size-adjust: 100%;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ */
+hr {
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  clear: both;
+  border: 0;
+  border-bottom: 1px solid #cccccc;
+  height: 0;
+}
+
+/**
+ * Hide text but still allow screen reader access.
+ *
+ * Example HTML:
+ *
+ * <h1 class="txp-accessibility">
+ */
+.txp-accessibility {
+  position: absolute;
+  left: -1000em;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/**
+ * Swap absolute positions in RTL languages.
+ *
+ * This avoids browser scrollbar displaying incorrectly.
+ */
+[dir="rtl"] .txp-accessibility {
+  right: -1000em;
+  left: auto;
+}
+
+/**
+ * Ensure dropdowns are hidden at page load (prevents content 'jumping').
+ */
+.txp-dropdown {
+  display: none;
+}
+
+/**
+ * Search widget at top of lists.
+ *
+ * Appears on: listing pages.
+ *
+ * Example HTML:
+ *
+ * <form class="txp-search">
+ *     <input class="txp-search-input" type="search" size="24">
+ *     <span class="txp-search-buttons">
+ *         <button class="txp-search-button">Search</button>
+ *         <button class="txp-search-options">Search criteria</button>
+ *     </span>
+ * </form>
+ */
+.txp-search {
+  float: right;
+  margin: 1em 0 0;
+}
+.txp-search .ui-menu {
+  position: absolute;
+  z-index: 100;
+  width: 18em;
+}
+.txp-search .ui-menu-item {
+  padding: 0 0 0 0.75em;
+}
+.txp-search .txp-dropdown input {
+  vertical-align: -0.38461538461538em;
+}
+.txp-search .txp-dropdown label {
+  display: inline-block;
+  padding: 0.30769230769231em 0.5em;
+  width: 85%;
+  vertical-align: text-top;
+  cursor: pointer;
+}
+
+/**
+ * Swap float position in RTL languages.
+ */
+[dir="rtl"] .txp-search {
+  float: left;
+}
+
+/**
+ * Actions and upload forms at top of listings.
+ *
+ * Appears on:
+ *
+ * List pages.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-control-panel">
+ *     Content
+ * </div>
+ */
+.txp-control-panel {
+  float: left;
+  margin-bottom: 1em;
+}
+.txp-control-panel > * {
+  margin: 0 1em 0 0;
+}
+.txp-control-panel form {
+  display: inline-block;
+}
+
+/**
+ * Swap float/margin positions in RTL languages.
+ */
+[dir="rtl"] .txp-control-panel {
+  float: right;
+}
+[dir="rtl"] .txp-control-panel > * {
+  margin: 0 0 0 1em;
+}
+
+/**
+ * List display options at top of listings.
+ *
+ * Appears on:
+ *
+ * List pages.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-list-options">
+ *     <a>List view</a>
+ *     <a>Grid view</a>
+ *     <a>List options</a>
+ * </div>
+ */
+.txp-list-options {
+  float: right;
+  margin: 0.46153846153846em 0 1em;
+}
+.txp-list-options > * {
+  margin: 0 0 0 1em;
+}
+.txp-list-options form {
+  display: inline-block;
+}
+
+/**
+ * Swap float/margin positions in RTL languages.
+ */
+[dir="rtl"] .txp-list-options {
+  float: left;
+}
+[dir="rtl"] .txp-list-options > * {
+  margin: 0 1em 0 0;
+}
+
+/**
+ * Additonal action links ('Duplicate', 'View', etc.) on some pages.
+ *
+ * Appears on:
+ *
+ * Article write/edit page, pages page, forms page, styles page.
+ *
+ * Example HTML:
+ *
+ * <p class="txp-actions">
+ *     <a class="txp-article-view">View</a>
+ *     <a class="txp-clone">Duplicate</a>
+ *     <a class="txp-new">Create new</a>
+ * </p>
+ */
+.txp-actions a {
+  display: inline-block;
+  margin: 0.5em 1em 0 0;
+}
+
+/**
+ * Swap margin positions in RTL languages.
+ */
+[dir="rtl"] .txp-actions a {
+  margin: 0.5em 0 0 1em;
+}
+
+/**
+ * AJAX spinners.
+ *
+ * Example HTML:
+ *
+ * <span class="spinner"></span>
+ */
+span.spinner {
+  background-image: url("../img/spinner.gif");
+  background-size: 13px 13px;
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+}
+@media (min-resolution: 1.25dppx), (min-resolution: 120dpi) {
+  span.spinner {
+    background-image: url("../img/spinner@2x.gif") !important;
+  }
+}
+
+/**
+ * Parent container for multi-edit `select` widget at bottom of listings.
+ *
+ * Appears on:
+ *
+ * List pages.
+ *
+ * Example HTML:
+ *
+ * <div class="multi-edit">
+ *     <select>
+ *         <option selected="selected">With selected...</option>
+ *         <option>Change author</option>
+ *         <option>Duplicate</option>
+ *         <option>Delete</option>
+ *     </select>
+ * </div>
+ */
+div.multi-edit {
+  margin: 1em 0;
+}
+
+/**
+ * Hide secondary `select` element on multi-edit `select` widget.
+ *
+ * Display is controlled via JavaScript (hidden by default until an action is
+ * selected by user, then overrode by `.multi-step`).
+ *
+ * Appears on:
+ *
+ * List pages.
+ *
+ * Example HTML:
+ *
+ * <div class="multi-edit">
+ *     <select>
+ *         <option selected="selected">With selected...</option>
+ *         <option>Change author</option>
+ *         <option>Duplicate</option>
+ *         <option>Delete</option>
+ *     </select>
+ *     <div class="multi-option">
+ *         <select name="order">
+ *             <option value="1">1</option>
+ *             <option value="2">1</option>
+ *             <option value="3" selected="selected">5</option>
+ *         </select>
+ *     </div>
+ *     <input type="submit" value="Go">
+ * </div>
+ */
+.multi-option {
+  display: none;
+}
+
+/**
+ * Show secondary `select` element on multi-edit `select` widget.
+ *
+ * Display is controlled via JavaScript (class not present until an action is
+ * selected by user, then overrides `.multi-edit`).
+ *
+ * Appears on:
+ *
+ * List pages.
+ *
+ * Example HTML:
+ *
+ * <div class="multi-edit">
+ *     <select>
+ *         <option selected="selected">With selected...</option>
+ *         <option>Change author</option>
+ *         <option>Duplicate</option>
+ *         <option>Delete</option>
+ *     </select>
+ *     <div class="multi-option multi-step">
+ *         <select name="order">
+ *             <option value="1">1</option>
+ *             <option value="2">1</option>
+ *             <option value="3" selected="selected">5</option>
+ *         </select>
+ *     </div>
+ *     <input type="submit" value="Go">
+ * </div>
+ */
+.multi-option.multi-step {
+  margin-left: 0.30769230769231em;
+  display: inline-block;
+}
+
+/**
+ * When text sections are linked with anchors, make sure there is ample padding
+ * above so they don't become obscured by sticky `header` area.
+ *
+ * Appears on:
+ *
+ * Plugin help pages, miscellaneous text pages.
+ *
+ * Example HTML:
+ *
+ * <section class="text-section" id="help-section02">
+ */
+.text-section {
+  margin-top: 3em;
+  border-top: 2px solid #cccccc;
+  padding-top: 3em;
+}
+
+/**
+ * System permissions 'keep out' messages.
+ */
+.restricted-area {
+  font-size: 2em;
+  text-align: center;
+}
+
+/**
+ * Hide empty containers from view (and from screen readers).
+ *
+ * TODO: this is a dirty solution - should be improved in HTML strucure.
+ *
+ * Example HTML:
+ *
+ * <section id="comments_group" class="txp-details empty"></section>
+ */
+.empty {
+  display: none;
+}
+
+/**
+ * Visually disabled text and anchors.
+ */
+.disabled {
+  background-image: none;
+  opacity: 0.33;
+  cursor: default !important;
+}
+.disabled a {
+  text-decoration: none;
+  cursor: default;
+}
+
+/* List navigators on list pages.
+ *
+ * Anchor elements kept to one line to prevent space between buttons.
+ *
+ * @see .nav-tertiary
+ *
+ * Example HTML:
+ *
+ * <div class="txp-navigation" id="image_navigation">
+ *     <p class="nav-tertiary pageby">
+ *         <a class="navlink-active">15</a><a class="navlink">25</a><a class="navlink">50</a>
+ *     </p>
+ *     <ul class="nav-tertiary prev-next">
+ *         Content
+ *     </ul>
+ * </div>
+ */
+.txp-navigation p,
+.txp-navigation ul {
+  margin: 0 0 0.5em;
+}
+.txp-navigation .pageby {
+  float: left;
+}
+.txp-navigation .prev-next {
+  float: right;
+}
+
+/* Panes
+   ========================================================================== */
+/**
+ * Styling of edit/tagbuilder panes.
+ *
+ * 1. Maximum width of edit/tagbuilder panes.
+ * 2. Remove margin above `h2` within panes.
+ */
+.txp-edit,
+.txp-tagbuilder {
+  margin: 0 auto 1em;
+  padding: 1em 1em 1px;
+  /* 1 */
+  max-width: 55em;
+  background: #f7f7f7;
+}
+.txp-edit h2,
+.txp-tagbuilder h2 {
+  /* 2 */
+  margin-top: 0;
+}
+
+/**
+ * TODO: Clearfix form paragraphs in panes.
+ *
+ * Adds to cleafix rules in Sass '_base.scss' file via `@extend`.
+ */
+/**
+ * TODO: Label/value inline two-column layouts within panes.
+ *
+ * Note: this is collapsed to a one-column format on mobile layout.
+ *
+ * Example HTML:
+ *
+ * <p>
+ *     <span class="txp-label">
+ *         <label>Label <a class="pophelp">i</a></label>
+ *     </span>
+ *     <span class="txp-value">
+ *         <input type="text" size="32">
+ *     </span>
+ * </p>
+ */
+.txp-label,
+.txp-value {
+  float: left;
+  width: 50%;
+  max-width: 29em;
+}
+
+/**
+ * Swap label/value text alignment in RTL languages.
+ */
+[dir="rtl"] .txp-label, [dir="rtl"]
+.txp-value {
+  float: right;
+}
+
+/**
+ * Vertically inline align values with their labels.
+ */
+.txp-value input,
+.txp-value select {
+  margin-top: -0.46153846153846em;
+  margin-bottom: -0.23076923076923em;
+}
+
+/**
+ * Vertically inline align values with their labels.
+ *
+ * TODO: This is temporary until we confirm using this UI.
+ */
+.txp-value .jquery-ui-buttonset {
+  display: inline-block;
+  margin-top: -0.46153846153846em;
+  margin-bottom: -0.23076923076923em;
+}
+
+/**
+ * Keeps non-editable values on same baseline, to prevent content jumping.
+ *
+ * Appears on:
+ *
+ * Forms page.
+ *
+ * Example HTML:
+ *
+ * <p>
+ *     <span class="txp-label-fixed">Form name</span>
+ *     <span class="txp-value-fixed">default</span>
+ * </p>
+ */
+.txp-value-fixed {
+  font-size: 1em;
+  line-height: 1.3846154em;
+  display: inline-block;
+  padding: 0.38461538461538em 0;
+}
+
+/**
+ * Label columns within panes - OLD.
+ *
+ * @deprecated in 4.6.0
+ * @see        .txp-label
+ */
+.edit-label {
+  display: inline-block;
+  float: left;
+  width: 42%;
+}
+
+/**
+ * Value columns within panes - OLD.
+ *
+ * @deprecated in 4.6.0
+ * @see        .txp-value
+ */
+.edit-value {
+  display: inline-block;
+  float: right;
+  width: 58%;
+}
+.edit-value input,
+.edit-value select {
+  margin-top: -0.46153846153846em;
+  margin-bottom: -0.23076923076923em;
+}
+
+/**
+ * TODO: Modal window panes (TBC).
+ */
+.txp-edit-action {
+  margin-right: -1em;
+  margin-left: -1em;
+  margin-bottom: 0;
+  border-top: 1px solid #ffffff;
+  padding: 1em;
+  background: #efefef;
+}
+.txp-edit-action input[type="submit"] {
+  float: right;
+}
+
+/**
+ * Form fields.
+ *
+ * Textpattern form fields can have optional inline help texts applied to them.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-form-field">
+ *     <label class="txp-form-field-label"> <a class="pophelp">i</a></label>
+ *     <input class="txp-form-field-input">
+ * </div>
+ *
+ * <div class="txp-form-field">
+ *     <label class="txp-form-field-label"> <a class="pophelp">i</a></label>
+ *     <div class="txp-form-field-instructions">
+ *         <p>(Optional) intructions on how to fill out this form field.</p>
+ *     </div>
+ *     <input class="txp-form-field-input">
+ * </div>
+ */
+.txp-form-field {
+  margin: 1em 0;
+}
+.txp-form-field:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/**
+ * Make sure form field labels appear above form field inputs (and above
+ * the optional instructions `div`).
+ */
+.txp-form-field-label:after {
+  content: "\a";
+  white-space: pre;
+}
+
+/**
+ * Form field inline help texts.
+ *
+ * 1. Pull instructions closer to form fields.
+ * 2. Limit maxiumum width of instructions, for legibility.
+ */
+.txp-form-field-instructions {
+  /* 1 */
+  margin-top: -0.45454545454545em;
+  /* 2 */
+  max-width: 56em;
+}
+
+/* Setup and login pages - additional layout
+   ========================================================================== */
+/**
+ * Reduced `body` top padding of setup/login pages.
+ *
+ * Example HTML:
+ *
+ * <body id="page-setup">
+ * <body class="login-pane">
+ */
+#page-setup,
+.login-pane {
+  padding: 1em 2.1% 0;
+}
+
+/**
+ * Column width and margins of setup pages.
+ */
+.txp-setup {
+  margin: 1em auto;
+  max-width: 42em;
+}
+.welcome .txp-setup {
+  max-width: 20.30769230769231em;
+}
+
+/**
+ * Column width and margins of login pages.
+ */
+.txp-login {
+  margin: 1em auto;
+  max-width: 20.30769230769231em;
+}
+
+/**
+ * Large Textpattern logo replaces `h1`.
+ */
+.welcome h1,
+.txp-login h1 {
+  /* 2 */
+  text-indent: 110%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-transform: capitalize;
+  width: 16.5em;
+  height: 3.375em;
+  font-size: 16px;
+  background: url("../img/textpattern.svg") no-repeat;
+  background-size: 16.5em 3.375em;
+}
+
+/**
+ * Welcome page `select` spans entire column width.
+ */
+.welcome select {
+  width: 100%;
+}
+
+/* Tag builder page - additional layout
+   ========================================================================== */
+/**
+ * Remove `body` padding of tag builder popup panes.
+ *
+ * TODO: Change this from a popup window to a jQuery UI dialog window.
+ *
+ * Example HTML:
+ *
+ * <body id="tag-event">
+ */
+#tag-event {
+  padding-top: 1em;
+}
+
+/* Content -> Write page - additional layout
+   ========================================================================== */
+/**
+ * View mode tabs on write pages.
+ *
+ * Example HTML:
+ *
+ * <div id="view_modes">
+ *     <ul>
+ *         <li id="tab-text" class="active"><a>Text</a></li>
+ *         <li id="tab-html"><a>HTML</a></li>
+ *         <li id="tab-preview"><a>Preview</a></li>
+ *     </ul>
+ * </div>
+ */
+#view_modes ul {
+  font-size: 0.8461538em;
+  line-height: 1.4545455em;
+  margin: 0;
+  border-bottom: 1px solid #cccccc;
+  padding: 0;
+  background: none;
+}
+#view_modes ul:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+#view_modes ul li {
+  -webkit-box-shadow: inset 0 -0.25em 0.5em rgba(102, 102, 102, 0.15);
+  box-shadow: inset 0 -0.25em 0.5em rgba(102, 102, 102, 0.15);
+  position: relative;
+  top: 0;
+  float: left;
+  margin-right: 2px;
+  border: 1px solid #cccccc;
+  border-bottom-width: 0;
+  list-style: none;
+  white-space: nowrap;
+  background-color: #f2f2f2;
+}
+#view_modes ul li:hover, #view_modes ul li:focus {
+  border-color: #aaaaaa;
+  background-color: #f7f7f7;
+}
+#view_modes ul li.active {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  margin-bottom: -1px;
+  padding-bottom: 1px;
+  background-color: white;
+}
+#view_modes ul a {
+  float: left;
+  padding: 0.36363636363636em 1em;
+  color: #333333;
+  text-decoration: none;
+}
+
+/**
+ * View mode tabs RTL support.
+ */
+[dir="rtl"] #view_modes ul li,
+[dir="rtl"] #view_modes ul a {
+  float: right;
+}
+
+/**
+ * Write page excerpt field when in HTML preview.
+ */
+.html .excerpt {
+  margin-bottom: 1em;
+}
+
+/**
+ * Custom font size/weight/colour for elements in write -> main content area.
+ */
+#main_content .text input {
+  font-size: 16px;
+}
+#main_content .text textarea {
+  font-size: 16px;
+  line-height: 1.5em;
+}
+#main_content #title {
+  font-size: 1.25em;
+  font-weight: bold;
+}
+#main_content .author {
+  color: #777777;
+}
+
+/* Content -> Articles page - additional layout
+   ========================================================================== */
+/**
+ * Grey-out text for unpublished articles/non-modified dates in the list.
+ */
+.unpublished,
+.not-modified {
+  color: #777777;
+}
+
+/* Content -> Images page - additional layout
+   ========================================================================== */
+td.thumbnail a {
+  outline: 0;
+}
+
+.fullsize-image {
+  text-align: center;
+  margin-bottom: 1em;
+}
+.fullsize-image img {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  max-width: 100%;
+  height: auto;
+}
+
+.thumbnail-edit {
+  overflow-x: auto;
+  margin-bottom: 1em;
+}
+.thumbnail-edit form {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 5px;
+}
+
+.edit-image-replace input[type="submit"],
+.edit-upload-thumbnail input[type="submit"],
+.edit-alter-thumbnail input[type="submit"] {
+  float: right;
+}
+
+/* Content -> Files page - additional layout
+   ========================================================================== */
+.edit-file-replace input[type="submit"] {
+  float: right;
+}
+
+/* Content -> Comments page - additional layout
+   ========================================================================== */
+/**
+ * Red background highlight for spam comment rows in the list.
+ */
+#page-discuss .txp-list tr.spam {
+  background: #f5e5e5;
+}
+
+/**
+ * Yellow background highlight for unmoderated comment rows in the list.
+ */
+#page-discuss .txp-list tr.moderate {
+  background: #f9f2e3;
+}
+
+/* Admin -> Languages page - additional layout
+   ========================================================================== */
+#page-lang .txp-list .modified {
+  margin-left: 0.6em;
+}
+
+#textpack-install {
+  width: 50%;
+}
+
+/* Admin -> Plugins page - additional layout
+   ========================================================================== */
+tr .manage span,
+tr .plugin-prefs {
+  visibility: hidden;
+}
+
+tr.active .manage span,
+tr.active .plugin-prefs {
+  visibility: visible;
+}
+
+#plugin-install {
+  width: 50%;
+}
+
+#plugin-code {
+  height: 23em;
+}
+
+div.code {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-bottom: 1em;
+  border: 1px solid #cccccc;
+  padding: 0.15384615384615em 0.38461538461538em;
+  height: 21em;
+  overflow: auto;
+}
+
+/**
+ * Plugin help columns (fixed proportion cell) - OLD.
+ *
+ * @deprecated in 4.6.0
+ * @see        .txp-layout-textbox
+ */
+.plugin-column {
+  margin: 0 auto;
+  max-width: 57em;
+}
+
+/* ==========================================================================
+   Additional layout for devices < 768px
+   ========================================================================== */
+@media (max-width: 60em) {
+  /* Layout < 768px
+     ========================================================================== */
+  /**
+   * Adjust right/left padding of body.
+   */
+  body {
+    padding: 4em 1.53846153846154em 0;
+  }
+
+  #page-setup,
+  .login-pane {
+    padding: 1em 1.53846153846154em 0;
+  }
+
+  /* Header < 768px
+     ========================================================================== */
+  /**
+   * Adjust right/left padding of header area.
+   */
+  .txp-header {
+    padding: 0 1.53846153846154em;
+  }
+
+  /**
+   * Smaller version of Textpattern logo.
+   */
+  .txp-header h1 {
+    width: 1.625em;
+  }
+
+  /**
+   * 'View site' link.
+   *
+   * Example HTML:
+   *
+   * <p class="txp-view-site">
+   *      <a>My site</a>
+   * </p>
+   */
+  .txp-view-site {
+    margin: 0.0625em 0.375em 0;
+    font-size: 16px;
+  }
+  .txp-view-site a {
+    text-indent: 110%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-transform: capitalize;
+    display: block;
+    width: 2em;
+    height: 2em;
+    background: url("../img/sprite.svg") no-repeat -8em 0;
+    background-size: 13em 2em;
+  }
+
+  /**
+   * Adjust right absolute position of logout button.
+   */
+  .txp-logout {
+    right: 1.53846153846154em;
+  }
+}
+/* ==========================================================================
+   Additional layout for devices < 547px
+   ========================================================================== */
+@media (max-width: 47em) {
+  /**
+   * Non-fixed header on mobile layout (because mobile nav menu couldn't scroll otherwise).
+   */
+  .txp-header {
+    position: absolute;
+  }
+
+  /**
+   * Show the navigation menu toggle button on mobile layout.
+   *
+   * Example HTML:
+   *
+   * <button class="txp-nav-toggle">
+   */
+  button.txp-nav-toggle {
+    text-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    text-indent: 110%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-transform: capitalize;
+    display: block;
+    float: left;
+    margin: 0.0625em 0 0;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    width: 2em;
+    height: 2em;
+    background: transparent url("../img/sprite.svg") -10em 0;
+    background-size: 13em 2em;
+    font-size: 16px;
+  }
+  button.txp-nav-toggle:focus {
+    outline: thin dotted #0066ff;
+  }
+  button.txp-nav-toggle:not(.collapsed) {
+    background-color: rgba(255, 255, 255, 0.33);
+  }
+
+  /**
+   * Hide the navigation menu by default on mobile layout.
+   */
+  .txp-nav .data-dropdown {
+    display: none;
+  }
+
+  /**
+   * Show the navigation menu when toggled on mobile layout.
+   */
+  .txp-nav.in .data-dropdown {
+    -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 3em;
+    right: 0;
+    left: 0;
+    display: block;
+    background: #fff9e1;
+  }
+  .txp-nav.in .data-dropdown:before {
+    position: absolute;
+    top: -0.5em;
+    left: 3.9375em;
+    z-index: 2;
+    width: 1em;
+    height: 0.5em;
+    background: url("../img/sprite.svg") no-repeat -12em 0;
+    background-size: 13em 2em;
+    font-size: 16px;
+    content: "";
+  }
+
+  .txp-nav > ul > li {
+    float: none;
+    border: 0;
+    border-bottom: 1px solid #d4d4d4;
+  }
+  .txp-nav > ul > li:first-child {
+    border-left: 0;
+  }
+
+  /**
+   * Secondary-level navigation menu items (submenus).
+   */
+  .dropdown-menu {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    position: static;
+    border: 0;
+    border-radius: 0;
+    min-width: 0;
+  }
+  .dropdown-menu a {
+    padding: 0.5em 2em;
+  }
+  .dropdown-menu:before {
+    display: none;
+  }
+
+  /**
+   * Search widget at top of lists.
+   */
+  .txp-search,
+  [dir="rtl"] .txp-search {
+    float: none;
+  }
+
+  /**
+   * Label/value one-column layouts within panes.
+   *
+   * Collapsed from two-column format on desktop layout.
+   *
+   * Example HTML:
+   *
+   * <p>
+   *     <span class="txp-label">
+   *         <label>Label <a class="pophelp">i</a></label>
+   *     </span>
+   *     <span class="txp-value">
+   *         <input type="text" size="32">
+   *     </span>
+   * </p>
+   */
+  .txp-label,
+  .txp-value {
+    display: block;
+    float: none;
+    width: 100%;
+  }
+
+  /**
+   * Remove inline alignment margin values when collapsed.
+   */
+  .txp-value .jquery-ui-buttonset,
+  .txp-value input,
+  .txp-value select {
+    margin: 0;
+  }
+
+  /**
+   * Label/value one-column layouts within panes - OLD.
+   *
+   * @deprecated in 4.6.0
+   * @see        .txp-label
+   * @see        .txp-value
+   */
+  .edit-label,
+  .edit-value {
+    float: none;
+    width: 100%;
+  }
+
+  /**
+   * Remove inline alignment margin values when collapsed - OLD.
+   *
+   * @deprecated in 4.6.0
+   * @see        .txp-value
+   */
+  .edit-value input,
+  .edit-value select {
+    margin: 0;
+  }
+
+  /**
+   * Reduce height of write -> body text area.
+   */
+  #page-article #body {
+    max-height: 18.75em;
+  }
+
+  /**
+   * Reduce height of code text areas.
+   */
+  textarea.code {
+    max-height: 20em;
+  }
+
+  /**
+   * Remove float from `.txp-navigation` elements.
+   */
+  .txp-navigation .pageby,
+  .txp-navigation .prev-next {
+    float: none;
+  }
+
+  /**
+   * Collapse progress meters responsively.
+   */
+  .progress-meter ol {
+    display: block;
+    margin-bottom: 1em;
+    text-align: left;
+  }
+  .progress-meter li {
+    display: block;
+    float: none;
+    margin: 0;
+  }
+  .progress-meter li:after {
+    display: none;
+  }
+
+  /**
+   * Override specifity on collapsed progress meters in RTL languages.
+   */
+  [dir="rtl"] .progress-meter ol {
+    text-align: right;
+  }
+  [dir="rtl"] .progress-meter li {
+    margin: 0;
+  }
+  [dir="rtl"] .progress-meter li:after {
+    display: none;
+  }
+
+  /**
+   * Collapse jQuery UI tabs responsively.
+   */
+  .ui-tabs .ui-tabs-nav li {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    float: none;
+    margin: 0;
+    margin-top: 2px;
+    border-bottom-width: 1px;
+  }
+  .ui-tabs .ui-tabs-nav li.ui-tabs-active {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  [dir="rtl"] .ui-tabs .ui-tabs-nav li {
+    float: none;
+  }
+  .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    display: block;
+    float: none;
+  }
+  [dir="rtl"] .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    float: none;
+  }
+
+  /**
+   * Remove top border from jQuery UI tabs panel.
+   */
+  .ui-tabs .ui-tabs-panel {
+    border-top-width: 0;
+  }
+}

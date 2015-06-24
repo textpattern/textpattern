@@ -1,6 +1,10 @@
-h1. Hive admin-side theme for Textpattern CMS v4.5
+h1. Hive admin-side theme for Textpattern CMS
 
-You are free to modify this theme, reuse code herein, and distribute all its supporting files as long as licences are respected (see below) - go wild!
+*Please note 1:* You'll need to be using the "latest GitHub development of Textpattern":https://github.com/textpattern/textpattern in order to use this admin theme - we have done extensive work on improving the Textpattern admin-side code structure since v4.5 which directly relates to features used within this theme.
+
+*Please note 2:* This theme is currently under development, and as such parts of the code are probably unfinished/unformated/untested/broken - please check the "GitHub project":https://github.com/philwareham/txp-hive-admin-theme/commits/master regularly for the latest revisions.
+
+You are free to modify this theme, reuse code herein, and distribute all its supporting files as long as licences are respected (see below).
 
 h2. Installation instructions
 
@@ -25,9 +29,9 @@ Options are provided to hide certain sections/fields/features from displaying in
 
 @define('hive_theme_hide_preview_tabs_group', true);@
 
-*Hide Textile group (write/edit page):*
+*Hide text filter group (write/edit page):*
 
-@define('hive_theme_hide_textile_group', true);@
+@define('hive_theme_hide_textfilter_group', true);@
 
 *Hide advanced group (write/edit page):*
 
@@ -49,21 +53,10 @@ Options are provided to hide certain sections/fields/features from displaying in
 
 @define('hive_theme_hide_expires_field', true);@
 
-*Hide tag builder column (pages and forms pages):*
+*Hide image caption field (image edit page):*
 
-@define('hive_theme_hide_tag_builder_column', true);@
+@define('hive_theme_hide_image_caption', true);@
 
-*Hide form preview button (forms page):*
+h2. Browser support
 
-@define('hive_theme_hide_form_preview', true);@
-
-h2. License
-
-Major components:
-
-* Modernizr: MIT/BSD
-* Selectivizr: MIT
-
-Everything else:
-
-Released under the GNU General Public License, see LICENSE.txt for terms and conditions.
+Supported browsers: Google Chrome 30+, Internet Explorer 8+, Mozilla Firefox 24+, Apple Safari 5+ (other browsers/versions will probably work fine, within reason, but those are the minimum browsers I routinely test against).

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2014 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -30,61 +30,59 @@ class hive_theme extends theme
     function html_head()
     {
         $out[] = '<link rel="stylesheet" href="vendors/jquery/ui/css/textpattern/jquery-ui.min.css">';
-        $out[] = '<link rel="stylesheet" href="'.$this->url.'css/textpattern.min.css">';
+        $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.min.css">';
 
         // Start of custom CSS toggles (see README.textile for usage instructions).
         if (defined('hive_theme_hide_branding')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_branding.css">';
+            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/custom/hide_branding.css">';
         }
         if (defined('hive_theme_hide_headings')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_headings.css">';
+            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/custom/hide_headings.css">';
         }
         if (defined('hive_theme_hide_preview_tabs_group')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_preview_tabs.css">';
+            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/custom/hide_preview_tabs.css">';
         }
         if (defined('hive_theme_hide_textfilter_group')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_textfilter_group.css">';
+            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/custom/hide_textfilter_group.css">';
         }
         if (defined('hive_theme_hide_advanced_group')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_advanced_group.css">';
+            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/custom/hide_advanced_group.css">';
         }
         if (defined('hive_theme_hide_custom_field_group')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_custom_field_group.css">';
+            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/custom/hide_custom_field_group.css">';
         }
         if (defined('hive_theme_hide_image_group')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_image_group.css">';
+            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/custom/hide_image_group.css">';
         }
         if (defined('hive_theme_hide_keywords_field')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_keywords_field.css">';
+            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/custom/hide_keywords_field.css">';
         }
         if (defined('hive_theme_hide_recent_articles_group')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_recent_articles_group.css">';
+            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/custom/hide_recent_articles_group.css">';
         }
         if (defined('hive_theme_hide_comments_group')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_comments_group.css">';
+            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/custom/hide_comments_group.css">';
         }
         if (defined('hive_theme_hide_expires_field')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_expires_field.css">';
+            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/custom/hide_expires_field.css">';
         }
-        if (defined('hive_theme_hide_tag_builder_column')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_tag_builder_column.css">';
-        }
-        if (defined('hive_theme_hide_form_preview')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_form_preview.css">';
+        if (defined('hive_theme_hide_image_caption')) {
+            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/custom/hide_image_caption.css">';
         }
         // End of custom CSS toggles.
 
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
+        $out[] = '<meta name="theme-color" content="#ffda44">';
         $out[] = '<meta name="application-name" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
         $out[] = '<meta name="apple-mobile-web-app-capable" content="yes">';
         $out[] = '<meta name="apple-mobile-web-app-title" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
         $out[] = '<script src="vendors/modernizr/modernizr/modernizr.js"></script>';
-        $out[] = '<script src="'.$this->url.'js/scripts.js"></script>';
+        $out[] = '<script src="'.$this->url.'assets/js/main.js"></script>';
         $out[] = '<!--[if lt IE 9]>';
         $out[] = '<script src="vendors/keithclark/selectivizr/selectivizr.min.js"></script>';
         $out[] = '<link rel="stylesheet" href="vendors/jquery/ui/css/textpattern/jquery-ui-ie8.min.css">';
-        $out[] = '<link rel="stylesheet" href="'.$this->url.'css/ie8.min.css">';
+        $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/ie8.min.css">';
         $out[] = '<![endif]-->'.n;
 
         return join(n, $out);
@@ -93,34 +91,28 @@ class hive_theme extends theme
     function header()
     {
         global $txp_user;
-        $out[] = hed(
-            href(htmlspecialchars($GLOBALS["prefs"]["sitename"]), hu, array(
-                'rel'   => 'external',
-                'title' => gTxt('tab_view_site'),
-            ))
-            , 1);
+        $out[] = hed(htmlspecialchars($GLOBALS["prefs"]["sitename"]), 1);
 
         if ($txp_user) {
-            $out[] = graf(
-                href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"')
-                , array('class' => 'txp-logout'));
-
-            $out[] = '<nav role="navigation" aria-label="'.gTxt('navigation').'">';
-            $out[] = '<div class="txp-nav">';
+            $out[] = '<button class="txp-nav-toggle collapsed" type="button" data-toggle="collapse" data-target=".txp-nav"><span class="txp-accessibility">'.gTxt('navigation').'</span></button>';
+            $out[] = '<nav class="txp-nav" aria-label="'.gTxt('navigation').'">';
             $out[] = '<ul class="data-dropdown">';
+            $txpnavdrop = 0;
 
             foreach ($this->menu as $tab) {
-                $class = ($tab['active']) ? ' active' : '';
+                $txpnavdrop++;
+                $class = ($tab['active']) ? ' selected' : '';
                 $out[] = '<li class="dropdown'.$class.'">'.
-                    href($tab["label"], array('event' => $tab['event']), ' class="dropdown-toggle"');
+                    n.href($tab['label'], '#',
+                    ' class="dropdown-toggle" id="txp-nav-drop'.$txpnavdrop.'" role="button" aria-controls="txp-nav-drop'.$txpnavdrop.'-menu" data-toggle="dropdown"');
 
                 if (!empty($tab['items'])) {
-                    $out[] = '<ul class="dropdown-menu">';
+                    $out[] = '<ul class="dropdown-menu" id="txp-nav-drop'.$txpnavdrop.'-menu" role="menu" aria-labelledby="txp-nav-drop'.$txpnavdrop.'">';
 
                     foreach ($tab['items'] as $item) {
-                        $class = ($item['active']) ? ' class="active"' : '';
-                        $out[] = '<li'.$class.'>'.
-                            href($item["label"], array('event' => $item['event'])).
+                        $class = ($item['active']) ? ' class="selected"' : '';
+                        $out[] = '<li'.$class.' role="presentation">'.
+                            href($item["label"], array('event' => $item['event']), ' role="menuitem" tabindex="-1"').
                             '</li>';
                     }
 
@@ -129,27 +121,17 @@ class hive_theme extends theme
 
                 $out[] = '</li>';
             }
+
             $out[] = '</ul>';
-            $out[] = '</div>';
-            $out[] = '<div class="txp-nav-select">';
-            $out[] = '<select>';
-
-            foreach ($this->menu as $tab) {
-                $out[] = '<optgroup label="'.$tab['label'].'">';
-
-                if (!empty($tab['items'])) {
-                    foreach ($tab['items'] as $item) {
-                        $select = ($item['active']) ? ' selected="selected"' : '';
-                        $out[] = '<option value="?event='.$item["event"].'"'.$select.'>'.strip_tags($item["label"]).'</option>';
-                    }
-                }
-
-                $out[] = '</optgroup>';
-            }
-
-            $out[] = '</select>';
-            $out[] = '</div>';
             $out[] = '</nav>';
+            $out[] = graf(
+                href(htmlspecialchars($GLOBALS["prefs"]["sitename"]), hu, array(
+                    'rel'    => 'external',
+                    'target' => '_blank',
+                    'title'  => gTxt('tab_view_site'),
+                )), array('class' => 'txp-view-site'));
+            $out[] = graf(
+                href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"'), array('class' => 'txp-logout'));
         }
 
         $out[] = '<div id="messagepane">'.$this->announce($this->message).'</div>';
@@ -161,11 +143,11 @@ class hive_theme extends theme
     {
         $out[] = graf(
             href('Textpattern CMS', 'http://textpattern.com', array(
-                'rel'   => 'external',
-                'title' => gTxt('go_txp_com'),
+                'rel'    => 'external',
+                'target' => '_blank',
+                'title'  => gTxt('go_txp_com'),
             )).
-            ' (v'.txp_version.')'
-            , array('class' => 'mothership'));
+            ' (v'.txp_version.')', array('class' => 'mothership'));
 
         $out[] = graf(href(gTxt('back_to_top'), '#'), array('class' => 'pagejump'));
 
@@ -216,18 +198,21 @@ class hive_theme extends theme
         } else {
             $html = span(
                 span(null, array('class' => 'ui-icon '.$icon)).' '.gTxt($thing[0]).
-                sp.href('&#215;', '#close', ' role="button" class="close" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"')
-            , array(
-                'role'  => 'alert',
-                'class' => 'messageflash '.$class,
-            ));
+                sp.href('&#215;', '#close', ' class="close" role="button" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"'),
+                array(
+                    'class' => 'messageflash '.$class,
+                    'role'  => 'alert',
+                )
+            );
 
             // Try to inject $html into the message pane no matter when _announce()'s output is printed.
             $js = escape_js($html);
             $js = <<< EOS
-                $(document).ready(function () {
+                $(document).ready(function ()
+                {
                     $("#messagepane").html("{$js}");
-                    $(window).resize(function () {
+                    $(window).resize(function ()
+                    {
                         $("#messagepane").css({
                             left: ($(window).width() - $("#messagepane").outerWidth()) / 2
                         });
