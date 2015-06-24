@@ -37,13 +37,7 @@ if ($event == 'list') {
 
     require_privs('article');
 
-    $statuses = array(
-        STATUS_DRAFT   => gTxt('draft'),
-        STATUS_HIDDEN  => gTxt('hidden'),
-        STATUS_PENDING => gTxt('pending'),
-        STATUS_LIVE    => gTxt('live'),
-        STATUS_STICKY  => gTxt('sticky'),
-    );
+    $statuses = status_list();
 
     $all_cats = getTree('root', 'article');
     $all_authors = the_privileged('article.edit.own');
@@ -137,49 +131,66 @@ function list_list($message = '', $post = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $criteria = 1;
+    $search = new Textpattern_Search_Filter($event,
+        array(
+            'id' => array(
+                'column' => 'textpattern.ID',
+                'label'  => gTxt('ID'),
+                'type'   => 'integer',
+            ),
+            'title_body_excerpt' => array(
+                'column' => array('textpattern.Title', 'textpattern.Body', 'textpattern.Excerpt'),
+                'label'  => gTxt('title_body_excerpt'),
+            ),
+            'section' => array(
+                'column' => array('textpattern.Section', 'section.title'),
+                'label'  => gTxt('section'),
+            ),
+            'keywords' => array(
+                'column' => 'textpattern.Keywords',
+                'label'  => gTxt('keywords'),
+                'type'   => 'find_in_set',
+            ),
+            'categories' => array(
+                'column' => array('textpattern.Category1', 'textpattern.Category2', 'category1.title', 'category2.title'),
+                'label'  => gTxt('categories'),
+            ),
+            'status' => array(
+                'column' => array('textpattern.Status'),
+                'label'  => gTxt('status'),
+                'type'   => 'boolean',
+            ),
+            'author' => array(
+                'column' => array('textpattern.AuthorID', 'user.RealName'),
+                'label'  => gTxt('author'),
+            ),
+            'article_image' => array(
+                'column' => array('textpattern.Image'),
+                'label'  => gTxt('article_image'),
+                'type'   => 'integer',
+            ),
+            'posted' => array(
+                'column' => array('textpattern.Posted'),
+                'label'  => gTxt('posted'),
+            ),
+            'lastmod' => array(
+                'column' => array('textpattern.LastMod'),
+                'label'  => gTxt('article_modified'),
+            ),
+        )
+    );
 
-    if ($search_method and $crit != '') {
-        $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
-        $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
-        $critsql = $verbatim ?
-            array(
-                'id'                 => "textpattern.ID in ('".join("','", do_list($crit_escaped))."')",
-                'title_body_excerpt' => "textpattern.Title = '$crit_escaped' or textpattern.Body = '$crit_escaped' or textpattern.Excerpt = '$crit_escaped'",
-                'section'            => "textpattern.Section = '$crit_escaped' or section.title = '$crit_escaped'",
-                'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
-                'categories'         => "textpattern.Category1 = '$crit_escaped' or textpattern.Category2 = '$crit_escaped' or category1.title = '$crit_escaped' or category2.title = '$crit_escaped'",
-                'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
-                'author'             => "textpattern.AuthorID = '$crit_escaped' or user.RealName = '$crit_escaped'",
-                'article_image'      => "textpattern.Image in ('".join("','", do_list($crit_escaped))."')",
-                'posted'             => "textpattern.Posted = '$crit_escaped'",
-                'lastmod'            => "textpattern.LastMod = '$crit_escaped'",
-            ) : array(
-                'id'                 => "textpattern.ID in ('".join("','", do_list($crit_escaped))."')",
-                'title_body_excerpt' => "textpattern.Title like '%$crit_escaped%' or textpattern.Body like '%$crit_escaped%' or textpattern.Excerpt like '%$crit_escaped%'",
-                'section'            => "textpattern.Section like '%$crit_escaped%' or section.title like '%$crit_escaped%'",
-                'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
-                'categories'         => "textpattern.Category1 like '%$crit_escaped%' or textpattern.Category2 like '%$crit_escaped%' or category1.title like '%$crit_escaped%' or category2.title like '%$crit_escaped%'",
-                'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
-                'author'             => "textpattern.AuthorID like '%$crit_escaped%' or user.RealName like '%$crit_escaped%'",
-                'article_image'      => "textpattern.Image in ('".join("','", do_list($crit_escaped))."')",
-                'posted'             => "textpattern.Posted like '$crit_escaped%'",
-                'lastmod'            => "textpattern.LastMod like '$crit_escaped%'",
-            );
+    $search->setAliases('status', $statuses);
 
-        if (array_key_exists($search_method, $critsql)) {
-            $criteria = $critsql[$search_method];
-            $limit = 500;
-        } else {
-            $search_method = '';
-            $crit = '';
-        }
-    } else {
-        $search_method = '';
-        $crit = '';
-    }
+    list($criteria, $crit, $search_method) = $search->getFilter(array(
+            'id'                 => array('can_list' => true),
+            'article_image'      => array('can_list' => true),
+            'title_body_excerpt' => array('always_like' => true),
+        ));
 
-    $criteria .= callback_event('admin_criteria', 'list_list', 0, $criteria);
+    $search_render_options = array(
+        'placeholder' => 'search_articles',
+    );
 
     $sql_from =
         safe_pfx('textpattern')." textpattern
@@ -194,12 +205,17 @@ function list_list($message = '', $post = '')
         $total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
     }
 
-    echo hed(gTxt('tab_list'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
+    echo n.tag(
+        hed(gTxt('tab_list'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1')).
+        n.tag_start('div', array(
+            'class' => 'txp-layout-2col-cell-2',
+            'id' => $event.'_control',
+        ));
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo list_search_form($crit, $search_method).
+            echo $search->renderForm('list', $search_render_options).
                 graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
         } else {
             echo graf(gTxt('no_articles_recorded'), ' class="indicator"').'</div>';
@@ -212,7 +228,13 @@ function list_list($message = '', $post = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo list_search_form($crit, $search_method).'</div>';
+    echo $search->renderForm('list', $search_render_options).'</div>';
+
+    echo n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        )).
+        n.tag(sLink('article', '', gTxt('create_article'),'txp-button'), 'div', array('class' => 'txp-control-panel'));
 
     $rs = safe_query(
         "select
@@ -233,17 +255,14 @@ function list_list($message = '', $post = '')
     if ($rs) {
         $show_authors = !has_single_author('textpattern', 'AuthorID');
 
-        echo
-            n.tag_start('div', array(
-                'id'    => $event.'_container',
-                'class' => 'txp-container',
-            )).
+        echo n.tag(
+                toggle_box('articles_detail'), 'div', array('class' => 'txp-list-options')).
             n.tag_start('form', array(
-                'action' => 'index.php',
-                'id'     => 'articles_form',
                 'class'  => 'multi_edit_form',
-                'method' => 'post',
+                'id'     => 'articles_form',
                 'name'   => 'longform',
+                'method' => 'post',
+                'action' => 'index.php',
             )).
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
@@ -251,7 +270,7 @@ function list_list($message = '', $post = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'ID', 'id', 'list', true, $switch_dir, $crit, $search_method,
@@ -387,7 +406,7 @@ function list_list($message = '', $post = '')
                         sp.tag('[', 'span', array('aria-hidden' => 'true')).
                         href(gTxt('view'), $view_url).
                         tag(']', 'span', array('aria-hidden' => 'true')), 'span', array('class' => 'articles_detail')
-                    ), '', ' scope="row" class="txp-list-col-id"'
+                    ), '', ' class="txp-list-col-id" scope="row"'
                 ).
                 td(
                     $Title, '', 'txp-list-col-title'
@@ -426,23 +445,22 @@ function list_list($message = '', $post = '')
             );
         }
 
-        echo
-            n.tag_end('tbody').
+        echo n.tag_end('tbody').
             n.tag_end('table').
             n.tag_end('div').
             list_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
-            graf(toggle_box('articles_detail'), array('class' => 'detail-toggle')).
             n.tag_start('div', array(
-                'id'    => $event.'_navigation',
                 'class' => 'txp-navigation',
+                'id'    => $event.'_navigation',
             )).
             pageby_form('list', $article_list_pageby).
             nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div').
             n.tag_end('div');
     }
+
+    echo n.tag_end('div');
 }
 
 /**
@@ -453,32 +471,6 @@ function list_change_pageby()
 {
     event_change_pageby('article');
     list_list();
-}
-
-/**
- * Renders a search form for articles.
- *
- * @param  string $crit   The current search criteria
- * @param  string $method The selected search method
- * @return string HTML
- */
-
-function list_search_form($crit, $method)
-{
-    $methods = array(
-        'id'                 => gTxt('ID'),
-        'title_body_excerpt' => gTxt('title_body_excerpt'),
-        'section'            => gTxt('section'),
-        'categories'         => gTxt('categories'),
-        'keywords'           => gTxt('keywords'),
-        'status'             => gTxt('status'),
-        'author'             => gTxt('author'),
-        'article_image'      => gTxt('article_image'),
-        'posted'             => gTxt('posted'),
-        'lastmod'            => gTxt('article_modified'),
-    );
-
-    return search_form('list', 'list', $crit, $methods, $method, 'title_body_excerpt');
 }
 
 /**
