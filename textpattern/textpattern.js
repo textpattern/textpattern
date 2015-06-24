@@ -1371,6 +1371,64 @@ $(document).keyup(function (e)
 });
 
 /**
+ * Search tool.
+ *
+ * @since 4.6.0
+ */
+
+function txp_search()
+{
+    var $ui = $('.txp-search');
+
+    $ui.find('.txp-search-button').button({
+        text: false,
+        icons:
+        {
+            primary: 'ui-icon-search'
+        }
+
+    }).click(function ()
+    {
+        $ui.submit();
+    });
+
+    $ui.find('.txp-search-options').button({
+        text: false,
+        icons:
+        {
+            primary: 'ui-icon-triangle-1-s'
+        }
+    }).on('click', function (e)
+    {
+        var menu = $ui.find('.txp-dropdown').toggle().position(
+        {
+            my: "right top", // TODO: need to swap this to 'left top' in RTL languages.
+            at: "right bottom", // TODO: need to swap this to 'left bottom' in RTL languages.
+            of: this
+        });
+        $(document).one('click blur', function ()
+        {
+            menu.hide();
+        });
+
+        return false;
+    });
+
+    $ui.find('.txp-search-buttons').buttonset();
+    $ui.find('.txp-dropdown').hide().menu().click(function (e) {
+        e.stopPropagation();
+    });
+
+    $ui.txpMultiEditForm({
+        'checkbox'    : 'input[name="search_method[]"][type=checkbox]',
+        'row'         : '.txp-dropdown li',
+        'highlighted' : '.txp-dropdown li',
+        'confirmation': false
+    });
+}
+
+
+/**
  * Cookie status.
  *
  * @deprecated in 4.6.0
@@ -1459,7 +1517,7 @@ textpattern.Route.add('article', function ()
         }
     });
 
-    $('#txp_clone').click(function (e)
+    $('.txp-clone').click(function (e)
     {
         e.preventDefault();
         form.append('<input type="hidden" name="copy" value="1" />'+
@@ -1483,10 +1541,14 @@ textpattern.Route.add('article', function ()
 
 textpattern.Route.add('css, page, form', function ()
 {
-    $('#txp_clone').click(function (e)
+    $('.txp-clone').click(function (e)
     {
         e.preventDefault();
-        $(this).parents('form').append('<input type="hidden" name="copy" value="1" />').submit();
+        var target = $(this).data('form');
+        if (target) {
+            $('#'+target).append('<input type="hidden" name="copy" value="1" />');
+            $('.txp-save input').click();
+        }
     });
 });
 
@@ -1497,7 +1559,7 @@ textpattern.Route.add('form', function ()
     $('#form_preview').click(function (e)
     {
         e.preventDefault();
-        $(this).parents('form').append('<input type="hidden" name="form_preview" value="1" />').submit();
+        $('#form_form').append('<input type="hidden" name="form_preview" value="1" />').submit();
     });
 
     $('#allforms_form').txpMultiEditForm({
@@ -1601,17 +1663,48 @@ $(document).ready(function ()
         }
     });
 
+    // Hide popup elements.
+    $('.txp-dropdown').hide();
+
     // Event handling and automation.
     $(document).on('change.txpAutoSubmit', 'form [data-submit-on="change"]', function (e)
     {
         $(this).parents('form').submit();
     });
 
+    // Polyfills.
+    // Add support for form attribute in submit buttons.
+    if ($('html').hasClass('no-formattribute')) {
+        $('.txp-save input[form]').click(function(e) {
+            var targetForm = $(this).attr('form');
+            $('form[id='+targetForm+']').submit();
+        });
+    }
+
     // Establish UI defaults.
     $('.txp-dialog').txpDialog();
     $('.txp-dialog.modal').dialog('option', 'modal', true);
     $('.txp-datepicker').txpDatepicker();
     $('.txp-sortable').txpSortable();
+
+
+
+    // TODO: integrate jQuery UI stuff properly --------------------------------
+
+
+    // Selectmenu
+    $('.jquery-ui-selectmenu').selectmenu();
+
+    // Button
+    $('.jquery-ui-button').button();
+
+    // Button set
+    $('.jquery-ui-buttonset').buttonset();
+
+
+    // TODO: end integrate jQuery UI stuff properly ----------------------------
+
+
 
     // Find and open associated dialogs.
     $(document).on('click.txpDialog', '[data-txp-dialog]', function (e)
