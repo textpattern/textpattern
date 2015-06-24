@@ -103,7 +103,10 @@ function list_languages($message = '')
                 eInput('lang').
                 sInput('save_language')
             )
-        ), 'div', array('id' => 'language_control', 'class' => 'txp-control-panel')
+        ), 'div', array(
+            'class' => 'txp-control-panel',
+            'id'    => 'language_control',
+        )
     );
 
     $client = new IXR_Client(RPC_SERVER);
@@ -228,8 +231,8 @@ function list_languages($message = '')
         // Lang-Name and Date.
             hCell(
                 gTxt($langname), '', (isset($langdat['db_lastmod']) && $rpc_updated)
-                        ? ' scope="row" class="highlight lang-label"'
-                        : ' scope="row" class="lang-label"'
+                        ? ' class="highlight lang-label" scope="row"'
+                        : ' class="lang-label" scope="row"'
                 ).
             n.$rpc_install.
             n.$lang_file.
@@ -243,8 +246,8 @@ function list_languages($message = '')
     echo hed(gTxt('tab_languages'), 1, array('class' => 'txp-heading'));
     echo
         n.tag_start('div', array(
-            'id'    => 'language_container',
             'class' => 'txp-container',
+            'id'    => 'language_container',
         ));
 
     if (isset($msg) && $msg) {
@@ -263,10 +266,10 @@ function list_languages($message = '')
                 gTxt('from_server').popHelp('install_lang_from_server'), '', ' scope="col"'
             ).
             hCell(
-                gTxt('from_file').popHelp('install_lang_from_file'), '', ' scope="col" class="languages_detail"'
+                gTxt('from_file').popHelp('install_lang_from_file'), '', ' class="languages_detail" scope="col"'
             ).
             hCell(
-                gTxt('remove_lang').popHelp('remove_lang'), '', ' scope="col" class="languages_detail"'
+                gTxt('remove_lang').popHelp('remove_lang'), '', ' class="languages_detail" scope="col"'
             )
         ).
         n.tag_end('thead').
