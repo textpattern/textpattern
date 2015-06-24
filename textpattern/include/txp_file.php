@@ -94,9 +94,13 @@ function file_list($message = '')
         $dir = 'asc';
     }
 
-    echo
-        hed(gTxt('tab_file'), 1, array('class' => 'txp-heading')).
-        n.tag_start('div', array('id' => $event.'_control', 'class' => 'txp-control-panel'));
+    echo n.tag(
+        hed(gTxt('tab_file'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1')).
+        n.tag_start('div', array(
+            'class' => 'txp-layout-2col-cell-2',
+            'id' => $event.'_control',
+        ));
 
     if (!is_dir($file_base_path) || !is_writeable($file_base_path)) {
         echo graf(
@@ -156,41 +160,50 @@ function file_list($message = '')
         $switch_dir = 'desc';
     }
 
-    $criteria = 1;
+    $search = new Textpattern_Search_Filter($event,
+        array(
+            'id' => array(
+                'column' => 'txp_file.id',
+                'label'  => gTxt('ID'),
+                'type'   => 'integer',
+            ),
+            'filename' => array(
+                'column' => 'txp_file.filename',
+                'label'  => gTxt('file_name'),
+            ),
+            'title' => array(
+                'column' => 'txp_file.title',
+                'label'  => gTxt('title'),
+            ),
+            'description' => array(
+                'column' => 'txp_file.description',
+                'label'  => gTxt('description'),
+            ),
+            'category' => array(
+                'column' => array('txp_file.category', 'txp_category.title'),
+                'label'  => gTxt('file_category'),
+            ),
+            'status' => array(
+                'column' => array('txp_file.status'),
+                'label'  => gTxt('status'),
+                'type'   => 'boolean',
+            ),
+            'author' => array(
+                'column' => array('txp_file.author', 'txp_users.RealName'),
+                'label'  => gTxt('author'),
+            ),
+        )
+    );
 
-    if ($search_method && $crit !== '') {
-        $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
-        $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
-        $critsql = $verbatim ?
-            array(
-                'id'          => "txp_file.id in ('".join("','", do_list($crit_escaped))."')",
-                'filename'    => "txp_file.filename = '$crit_escaped'",
-                'title'       => "txp_file.title = '$crit_escaped'",
-                'description' => "txp_file.description = '$crit_escaped'",
-                'category'    => "txp_file.category = '$crit_escaped' or txp_category.title = '$crit_escaped'",
-                'author'      => "txp_file.author = '$crit_escaped' or txp_users.RealName = '$crit_escaped'",
-            ) :    array(
-                'id'          => "txp_file.id in ('".join("','", do_list($crit_escaped))."')",
-                'filename'    => "txp_file.filename like '%$crit_escaped%'",
-                'title'       => "txp_file.title like '%$crit_escaped%'",
-                'description' => "txp_file.description like '%$crit_escaped%'",
-                'category'    => "txp_file.category like '%$crit_escaped%' or txp_category.title like '%$crit_escaped%'",
-                'author'      => "txp_file.author like '%$crit_escaped%' or txp_users.RealName like '%$crit_escaped%'",
-            );
+    $search->setAliases('status', $file_statuses);
 
-        if (array_key_exists($search_method, $critsql)) {
-            $criteria = $critsql[$search_method];
-            $limit = 500;
-        } else {
-            $search_method = '';
-            $crit = '';
-        }
-    } else {
-        $search_method = '';
-        $crit = '';
-    }
+    list($criteria, $crit, $search_method) = $search->getFilter(array(
+            'id' => array('can_list' => true),
+        ));
 
-    $criteria .= callback_event('admin_criteria', 'file_list', 0, $criteria);
+    $search_render_options = array(
+        'placeholder' => 'search_files',
+    );
 
     $sql_from =
         safe_pfx_j('txp_file')."
@@ -205,7 +218,7 @@ function file_list($message = '')
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo file_search_form($crit, $search_method).
+            echo $search->renderForm('file_list', $search_render_options).
                 graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
         } else {
             echo graf(gTxt('no_files_recorded'), ' class="indicator"').'</div>';
@@ -218,7 +231,7 @@ function file_list($message = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo file_search_form($crit, $search_method).'</div>';
+    echo $search->renderForm('file_list', $search_render_options).'</div>';
 
     $rs = safe_query(
         "select
@@ -240,15 +253,15 @@ function file_list($message = '')
 
         echo
             n.tag_start('div', array(
-                'id'    => $event.'_container',
                 'class' => 'txp-container',
+                'id'    => $event.'_container',
             )).
             n.tag_start('form', array(
-                'action' => 'index.php',
-                'id'     => 'files_form',
                 'class'  => 'multi_edit_form',
-                'method' => 'post',
+                'id'     => 'files_form',
                 'name'   => 'longform',
+                'method' => 'post',
+                'action' => 'index.php',
             )).
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
@@ -256,7 +269,7 @@ function file_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'ID', 'id', 'file', true, $switch_dir, $crit, $search_method,
@@ -279,13 +292,13 @@ function file_list($message = '')
                         (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                 ).
                 hCell(gTxt(
-                    'tags'), '', ' scope="col" class="txp-list-col-tag-build files_detail"'
+                    'tags'), '', ' class="txp-list-col-tag-build files_detail" scope="col"'
                 ).
                 hCell(gTxt(
-                    'status'), '', ' scope="col" class="txp-list-col-status"'
+                    'status'), '', ' class="txp-list-col-status" scope="col"'
                 ).
                 hCell(gTxt(
-                    'condition'), '', ' scope="col" class="txp-list-col-condition"'
+                    'condition'), '', ' class="txp-list-col-condition" scope="col"'
                 ).
                 column_head(
                     'downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method,
@@ -379,7 +392,10 @@ function file_list($message = '')
                     $multi_edit, '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    $id_column, '', array('scope' => 'row', 'class' => 'txp-list-col-id')
+                    $id_column, '', array(
+                        'class' => 'txp-list-col-id',
+                        'scope' => 'row',
+                    )
                 ).
                 td(
                     $name, '', 'txp-list-col-filename'
@@ -426,30 +442,14 @@ function file_list($message = '')
             n.tag_end('form').
             graf(toggle_box('files_detail'), array('class' => 'detail-toggle')).
             n.tag_start('div', array(
-                'id'    => $event.'_navigation',
                 'class' => 'txp-navigation',
+                'id'    => $event.'_navigation',
             )).
             pageby_form('file', $file_list_pageby).
             nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div').
             n.tag_end('div');
     }
-}
-
-// -------------------------------------------------------------
-
-function file_search_form($crit, $method)
-{
-    $methods = array(
-        'id'          => gTxt('ID'),
-        'filename'    => gTxt('file_name'),
-        'title'       => gTxt('title'),
-        'description' => gTxt('description'),
-        'category'    => gTxt('file_category'),
-        'author'      => gTxt('author'),
-    );
-
-    return search_form('file', 'file_list', $crit, $methods, $method, 'filename');
 }
 
 // -------------------------------------------------------------
@@ -529,7 +529,7 @@ function file_multi_edit()
             $key = 'downloads';
             $val = 0;
             break;
-        case 'changestatus':
+        case 'changestatus' :
             $key = 'status';
             $val = ps('status');
 
@@ -629,28 +629,37 @@ function file_edit($message = '', $id = '')
         $downloadlink = ($file_exists) ? make_download_link($id, txpspecialchars($filename), $filename) : txpspecialchars($filename);
 
         $created =
-                graf(
-                    checkbox('publish_now', '1', $publish_now, '', 'publish_now').
-                    n.'<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="edit-file-publish-now"'
-                ).
+            inputLabel(
+                'year',
+                tsi('year', '%Y', $rs['created'], '', 'year').
+                ' <span role="separator">/</span> '.
+                tsi('month', '%m', $rs['created'], '', 'month').
+                ' <span role="separator">/</span> '.
+                tsi('day', '%d', $rs['created'], '', 'day'),
+                'publish_date',
+                array('', 'instructions_file_date'),
+                array('class' => 'txp-form-field date posted'),
+                ''
+            ).
+            inputLabel(
+                'hour',
+                tsi('hour', '%H', $rs['created'], '', 'hour').
+                ' <span role="separator">:</span> '.
+                tsi('minute', '%M', $rs['created'], '', 'minute').
+                ' <span role="separator">:</span> '.
+                tsi('second', '%S', $rs['created'], '', 'second'),
+                'publish_time',
+                array('', 'instructions_file_time'),
+                array('class' => 'txp-form-field time posted'),
+                ''
+            ).
+            n.tag(
+                checkbox('publish_now', '1', $publish_now, '', 'publish_now').
+                n.'<label for="publish_now">'.gTxt('set_to_now').'</label>',
+                'div', array('class' => 'txp-form-field posted-now')
+            );
 
-                graf(gTxt('or_publish_at').popHelp('timestamp'), ' class="edit-file-publish-at"').
-
-                graf(
-                    span(gTxt('date'), array('class' => 'txp-label-fixed')).br.
-                    tsi('year', '%Y', $rs['created'], '', gTxt('yyyy')).' / '.
-                    tsi('month', '%m', $rs['created'], '', gTxt('mm')).' / '.
-                    tsi('day', '%d', $rs['created'], '', gTxt('dd')), ' class="edit-file-published"'
-                ).
-
-                graf(
-                    span(gTxt('time'), array('class' => 'txp-label-fixed')).br.
-                    tsi('hour', '%H', $rs['created'], '', gTxt('hh')).' : '.
-                    tsi('minute', '%M', $rs['created'], '', gTxt('mm')).' : '.
-                    tsi('second', '%S', $rs['created'], '', gTxt('ss')), ' class="edit-file-created"'
-                );
-
-        echo n.'<div id="'.$event.'_container" class="txp-container">';
+        echo n.'<div class="txp-container" id="'.$event.'_container">';
         echo n.'<section class="txp-edit">'.
             hed(gTxt('edit_file'), 2).
             inputLabel('condition', $condition).
@@ -665,7 +674,7 @@ function file_edit($message = '', $id = '')
                     inputLabel('file_category', treeSelectInput('category', $all_file_cats, $category, 'file_category'), 'file_category').
 //                    inputLabel('perms', selectInput('perms', $levels, $permissions), 'permissions').
                     inputLabel('file_description', '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>', 'description', '', '', '').
-                    wrapRegion('file_created', $created, '', gTxt('timestamp'), '', 'file-created').
+                    $created.
                     pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
                     graf(fInput('submit', '', gTxt('Save'), 'publish')).
                     hInput('filename', $filename)
