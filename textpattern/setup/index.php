@@ -89,12 +89,12 @@ print <<<eod
 <script>var textpattern = { do_spellcheck: "", textarray: {} };</script>
 <script src="../textpattern.js"></script>
 <link rel="stylesheet" href="../vendors/jquery/ui/css/textpattern/jquery-ui.min.css">
-<link rel="stylesheet" href="../theme/hive/css/textpattern.min.css">
+<link rel="stylesheet" href="../theme/hive/assets/css/textpattern.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <script src="../vendors/modernizr/modernizr/modernizr.js"></script>
 <!--[if lt IE 9]>
 <link rel="stylesheet" href="../vendors/jquery/ui/css/textpattern/jquery-ui-ie8.min.css">
-<link rel="stylesheet" href="../theme/hive/css/ie8.min.css">
+<link rel="stylesheet" href="../theme/hive/assets/css/ie8.min.css">
 <script src="../vendors/keithclark/selectivizr/selectivizr.min.js"></script>
 <![endif]-->
 </head>
@@ -575,7 +575,7 @@ function createTxp()
     $dbcharset = $txpcfg['dbcharset'];
 
     $siteurl = str_replace("http://", '', $_SESSION['siteurl']);
-    $siteurl = str_replace(' ', '%20', rtrim($siteurl, "/"));
+    $siteurl = rtrim($siteurl, "/");
     $urlpath = preg_replace('#^[^/]+#', '', $siteurl);
 
     define("PFX", trim($dprefix));
