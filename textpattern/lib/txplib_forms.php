@@ -151,8 +151,8 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
     }
 
     $atts = join_atts(array(
-        'name' => $name,
         'id'   => $select_id,
+        'name' => $name,
     ));
 
     if ((string) $onchange === '1') {
