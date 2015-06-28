@@ -146,11 +146,6 @@ $txpac = array(
 
     // -------------------------------------------------------------
 
-    // Ping textpattern.com when an article is published.
-    'ping_textpattern_com'        => 1,
-
-    // -------------------------------------------------------------
-
     // Use DNS lookups in referrer log.
     'use_dns'        => 1,
 
