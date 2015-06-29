@@ -151,7 +151,6 @@ $txpac = array(
 
     // -------------------------------------------------------------
 
-
     // Use DNS lookups in referrer log.
     'use_dns'        => 1,
 
