@@ -108,6 +108,12 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
     $prefs = get_prefs();
     extract($prefs);
 
+    // Permit a unified "now" time to be referenced irrespective of how
+    // long it takes to load the page. This harmonises time-based
+    // content, such as custom fields, and also allows a dedicated time
+    // value to be passed to SQL queries, alleviating NOW().
+    $txpnow = time();
+
     if (empty($siteurl)) {
         $httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);
         $prefs['siteurl'] = $siteurl = $httphost.rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), DS);
