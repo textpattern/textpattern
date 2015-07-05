@@ -280,6 +280,7 @@ function areas()
         gTxt('tab_diagnostics') => 'diag',
         gTxt('tab_preferences') => 'prefs',
         gTxt('tab_languages')   => 'lang',
+        gTxt('tab_meta')        => 'meta',
         gTxt('tab_site_admin')  => 'admin',
         gTxt('tab_plugins')     => 'plugin',
         gTxt('tab_import')      => 'import',

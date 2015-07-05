@@ -229,6 +229,7 @@ $txp_permissions = array(
     'link.delete'                 => '1,2',
     'link.delete.own'             => '1,2,3',
     'log'                         => '1,2,3', // More?
+    'meta'                        => '1,2', // More?
     'page'                        => '1,2,3,    6',
     'pane'                        => '1,2,3,4,5,6',
     'plugin'                      => '1,2',

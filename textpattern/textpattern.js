@@ -1517,6 +1517,39 @@ textpattern.Route.add('plugin', function ()
     });
 });
 
+// Metastore panel.
+
+textpattern.Route.add('meta', function ()
+{
+    $('#render').change(function (e)
+    {
+        var meVal = $(this).val();
+        var edTxf = $('.edit-textfilter');
+
+        // Don't want Textfilter information to be submitted if there
+        // are no filters available for the selected type.
+        if ($.inArray(meVal, textfilter_map) > -1) {
+            edTxf.show().find('select').removeAttr('disabled');
+        } else {
+            edTxf.hide().find('select').prop('disabled', 'true');
+        }
+
+        if ($.inArray(meVal, option_map) > -1) {
+            $('.edit-options').show();
+        } else {
+            $('.edit-options').hide();
+        }
+    }).change();
+
+    $('#labelStr').change(function (e)
+    {
+        if ($('#name').val() === '') {
+            $('#name').val($(this).val());
+        }
+    });
+
+});
+
 // Initialise JavaScript.
 
 $(document).ready(function ()
