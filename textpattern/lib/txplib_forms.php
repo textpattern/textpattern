@@ -357,12 +357,13 @@ function tInput()
  * @param  bool   $checked  If TRUE the box is checked
  * @param  int    $tabindex The HTML tabindex
  * @param  string $id       The HTML id
+ * @param  bool   $multiple If the checkbox forms part of a multi-checkbox set
  * @return string HTML input
  * @example
  * echo checkbox('name', 'value', true);
  */
 
-function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
+function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '', $multiple = false)
 {
     $class = 'checkbox';
 
@@ -372,7 +373,7 @@ function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
 
     $atts = join_atts(array(
         'type'     => 'checkbox',
-        'name'     => $name,
+        'name'     => $name . ((bool)$multiple ? '[]' : ''),
         'id'       => $id,
         'checked'  => (bool) $checked,
         'tabindex' => (int) $tabindex,

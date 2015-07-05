@@ -3389,7 +3389,7 @@ function upload_get_errormsg($err_code)
             $msg = gTxt('upload_err_ini_size');
             break;
         // Value: 2; The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
-        case UPLOAD_ERR_FORM_SIZE :
+        case UPLOAD_ERR_FORM_SIZE:
             $msg = gTxt('upload_err_form_size');
             break;
         // Value: 3; The uploaded file was only partially uploaded.
@@ -3771,7 +3771,7 @@ function assign_user_assets($owner, $new_owner)
  * Creates a user account.
  *
  * On a successful run, this function will trigger a 'user.create > done'
- 8 callback event.
+ * callback event.
  *
  * @param   string $name     The login name
  * @param   string $email    The email address
@@ -4959,40 +4959,50 @@ function rename_pref($newname, $name, $user_name = null)
 }
 
 /**
- * Gets a list of custom fields.
+ * Gets a list of custom fields in force at the given time.
  *
- * @return  array
+ * @param   string $type Content type for the set of fields
+ * @param   int    $when Timestamp at which to return the custom field state
+ * @return  array         Custom fields structure
  * @package CustomField
  */
 
-function getCustomFields()
+function getCustomFields($type = 'article', $when = null)
 {
-    global $prefs;
+    global $txpnow;
     static $out = null;
 
-    // Have cache?
-    if (!is_array($out)) {
-        $cfs = preg_grep('/^custom_\d+_set/', array_keys($prefs));
-        $out = array();
-
-        foreach ($cfs as $name) {
-            preg_match('/(\d+)/', $name, $match);
-
-            if (!empty($prefs[$name])) {
-                $out[$match[1]] = strtolower($prefs[$name]);
-            }
-        }
+    if ($when === null) {
+        $when = $txpnow;
     }
 
-    return $out;
+    assert_int($when);
+
+    $cfs = new Textpattern_Meta_FieldSet($type, $when);
+
+    $out[$when] = array();
+
+    foreach ($cfs as $def) {
+        $thisId = $def->get('id');
+        $thisName = $def->get('name');
+
+        $out[$when]['by_id'][$thisId] = $thisName;
+        $out[$when]['by_cf']['custom_' . $thisId] = $thisName;
+        $out[$when]['by_name'][$thisName] = $thisId;
+        $out[$when]['by_type'][$thisId] = $def->get('data_type');
+        $out[$when]['by_callback'][$thisId] = $def->get('render');
+        $out[$when]['by_textfilter'][$thisId] = $def->get('textfilter');
+    }
+
+    return $out[$when];
 }
 
 /**
  * Build a query qualifier to filter non-matching custom fields from the
  * result set.
  *
- * @param   array       $custom An array of 'custom_field_name' => field_number tupels
- * @param   array       $pairs  Filter criteria: An array of 'name' => value tupels
+ * @param   array       $custom An array of 'custom_field_name' => field_number tuples
+ * @param   array       $pairs  Filter criteria: An array of 'name' => value tuples
  * @return  bool|string An SQL qualifier for a query's 'WHERE' part
  * @package CustomField
  */
@@ -5003,9 +5013,10 @@ function buildCustomSql($custom, $pairs)
         $pairs = doSlash($pairs);
 
         foreach ($pairs as $k => $v) {
-            if (in_array($k, $custom)) {
-                $no = array_keys($custom, $k);
-                $out[] = "and custom_".$no[0]." like '$v'";
+            if (array_key_exists($k, $custom)) {
+                $tableName = 'txp_meta_value_' . $custom[$k];
+                $out[] = "and ($tableName.meta_id = '".$k."' and
+                    $tableName.value like '$v')";
             }
         }
     }

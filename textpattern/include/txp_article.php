@@ -76,11 +76,7 @@ $vars = array(
     'sExpires',
 );
 
-$cfs = getCustomFields();
-
-foreach ($cfs as $i => $cf_name) {
-    $vars[] = "custom_$i";
-}
+$mfs = null;
 
 $statuses = status_list();
 
@@ -132,14 +128,16 @@ if (!empty($event) and $event == 'article') {
 
 function article_post()
 {
-    global $txp_user, $vars, $prefs;
+    global $txp_user, $vars, $prefs, $txpnow;
 
     extract($prefs);
 
     $incoming = doSlash(textile_main_fields(array_map('assert_string', psa($vars))));
     extract($incoming);
 
+    $sqlnow = strftime('%Y-%m-%d %T', $txpnow);
     $msg = '';
+
     if ($Title or $Body or $Excerpt) {
         $is_clone = (ps('copy'));
 
@@ -150,8 +148,8 @@ function article_post()
 
         // Set and validate article timestamp.
         if ($publish_now == 1) {
-            $when = 'now()';
-            $when_ts = time();
+            $when = $sqlnow;
+            $when_ts = $txpnow;
         } else {
             if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour) || !is_numeric($minute) || !is_numeric($second)) {
                 $ts = false;
@@ -167,12 +165,11 @@ function article_post()
             }
 
             $when_ts = $ts - tz_offset($ts);
-            $when = "from_unixtime($when_ts)";
+            $when = strftime('%Y-%m-%d %T', $when_ts);
         }
 
-        // Force a reasonable 'last modified' date for future articles,
-        // keep recent articles list in order.
-        $lastmod = ($when_ts > time() ? 'now()' : $when);
+        // Force a reasonable 'last modified' date for future articles, keep recent articles list in order.
+        $lastmod = ($when_ts > $txpnow ? $sqlnow : $when);
 
         // Set and validate expiry timestamp.
         if (empty($exp_year)) {
@@ -215,7 +212,7 @@ function article_post()
         }
 
         if ($expires) {
-            $whenexpires = "from_unixtime($expires)";
+            $whenexpires = "'".strftime('%Y-%m-%d %T', $expires)."'";
         } else {
             $whenexpires = NULLDATETIME;
         }
@@ -238,17 +235,11 @@ function article_post()
             $url_title = stripSpace($Title_plain, 1);
         }
 
-        $cfq = array();
-        $cfs = getCustomFields();
-
-        foreach ($cfs as $i => $cf_name) {
-            $custom_x = "custom_{$i}";
-            $cfq[] = "custom_$i = '".$$custom_x."'";
-        }
-
-        $cfq = join(', ', $cfq);
+        $mfs = new Textpattern_Meta_FieldSet('article', $when);
 
         $rs = compact($vars);
+
+        // @Todo: Atomic with CFs.
         if (article_validate($rs, $msg)) {
             $ok = safe_insert(
                "textpattern",
@@ -261,10 +252,10 @@ function article_post()
                 Keywords        = '$Keywords',
                 description     = '$description',
                 Status          =  $Status,
-                Posted          =  $when,
+                Posted          = '$when',
                 Expires         =  $whenexpires,
                 AuthorID        = '$user',
-                LastMod         =  $lastmod,
+                LastMod         = '$lastmod',
                 LastModID       = '$user',
                 Section         = '$Section',
                 Category1       = '$Category1',
@@ -274,10 +265,9 @@ function article_post()
                 Annotate        =  $Annotate,
                 override_form   = '$override_form',
                 url_title       = '$url_title',
-                AnnotateInvite  = '$AnnotateInvite',"
-                .(($cfs) ? $cfq.',' : '').
-                "uid            = '".md5(uniqid(rand(), true))."',
-                feed_time       = now()"
+                AnnotateInvite  = '$AnnotateInvite',
+                uid             = '".md5(uniqid(rand(), true))."',
+                feed_time       = '".$sqlnow."'"
             );
 
             if ($ok) {
@@ -291,6 +281,8 @@ function article_post()
                         "ID = {$ok}"
                     );
                 }
+
+                $mfs->store($_POST, 'article', $ok);
 
                 if ($Status >= STATUS_LIVE) {
                     do_pings();
@@ -315,11 +307,12 @@ function article_post()
 
 function article_save()
 {
-    global $txp_user, $vars, $prefs;
+    global $txp_user, $vars, $prefs, $txpnow;
 
     extract($prefs);
 
     $incoming = array_map('assert_string', psa($vars));
+    $sqlnow = strftime('%Y-%m-%d %T', $txpnow);
 
     $oldArticle = safe_row('Status, url_title, Title, '.
         'unix_timestamp(LastMod) as sLastMod, LastModID, '.
@@ -358,8 +351,8 @@ function article_save()
 
     // Set and validate article timestamp.
     if ($reset_time) {
-        $whenposted = "Posted=now()";
-        $when_ts = time();
+        $whenposted = "Posted='".$sqlnow."'";
+        $when_ts = $txpnow;
     } else {
         if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour) || !is_numeric($minute) || !is_numeric($second)) {
             $ts = false;
@@ -374,7 +367,7 @@ function article_save()
             $when = $when_ts = $ts - tz_offset($ts);
         }
 
-        $whenposted = "Posted=from_unixtime($when)";
+        $whenposted = "Posted='".strftime('%Y-%m-%d %T', $when)."'";
     }
 
     // Set and validate expiry timestamp.
@@ -417,7 +410,7 @@ function article_save()
     }
 
     if ($expires) {
-        $whenexpires = "Expires=from_unixtime($expires)";
+        $whenexpires = "Expires='".strftime('%Y-%m-%d %T', $expires)."'";
     } else {
         $whenexpires = "Expires=".NULLDATETIME;
     }
@@ -438,17 +431,12 @@ function article_save()
     $user = doSlash($txp_user);
     $description = doSlash($description);
 
-    $cfq = array();
-    $cfs = getCustomFields();
+    $mfs = new Textpattern_Meta_FieldSet('article', $when);
 
-    foreach ($cfs as $i => $cf_name) {
-        $custom_x = "custom_{$i}";
-        $cfq[] = "custom_$i = '".$$custom_x."'";
-    }
-
-    $cfq = join(', ', $cfq);
-
+    // ToDo: Run CFs through validator.
+    // ToDo: Transaction
     $rs = compact($vars);
+
     if (article_validate($rs, $msg)) {
         if (safe_update("textpattern",
            "Title           = '$Title',
@@ -460,7 +448,7 @@ function article_save()
             description     = '$description',
             Image           = '$Image',
             Status          =  $Status,
-            LastMod         =  now(),
+            LastMod         = '".$sqlnow."',
             LastModID       = '$user',
             Section         = '$Section',
             Category1       = '$Category1',
@@ -470,12 +458,15 @@ function article_save()
             textile_excerpt = '$textile_excerpt',
             override_form   = '$override_form',
             url_title       = '$url_title',
-            AnnotateInvite  = '$AnnotateInvite',"
-            .(($cfs) ? $cfq.',' : '').
-            "$whenposted,
+            AnnotateInvite  = '$AnnotateInvite',
+            $whenposted,
             $whenexpires",
             "ID = $ID"
         )) {
+            // @Todo: Return code.
+            // @Todo: Rollback if fail.
+            $mfs->store($_POST, 'article', $ID);
+
             if ($Status >= STATUS_LIVE && $oldArticle['Status'] < STATUS_LIVE) {
                 do_pings();
             }
@@ -502,12 +493,12 @@ function article_save()
  *
  * @param string|array $message          The activity message
  * @param bool         $concurrent       Treat as a concurrent save
- * @param bool         $refresh_partials Whether refresh partial contents
+ * @param bool         $refresh_partials Whether to refresh partial contents
  */
 
 function article_edit($message = '', $concurrent = false, $refresh_partials = false)
 {
-    global $vars, $txp_user, $prefs, $event, $view;
+    global $vars, $mfs, $txp_user, $prefs, $event, $view, $txpnow;
 
     extract($prefs);
 
@@ -663,23 +654,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         ),
     );
 
-    // Add partials for custom fields (and their values which is redundant by
-    // design, for plugins).
-    global $cfs;
-
-    foreach ($cfs as $k => $v) {
-        $partials["custom_field_{$k}"] = array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => "p.custom-field.custom-{$k}",
-            'cb'       => 'article_partial_custom_field',
-        );
-        $partials["custom_{$k}"] = array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => "#custom-{$k}",
-            'cb'       => 'article_partial_value',
-        );
-    }
-
     extract(gpsa(array('view', 'from_view', 'step')));
 
     // Newly-saved article.
@@ -803,6 +777,21 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $rs['next_id'] = checkIfNeighbour('next', $sPosted);
     } else {
         $rs['prev_id'] = $rs['next_id'] = 0;
+    }
+
+    $when = ($sPosted) ? strtotime($sPosted) : $txpnow;
+
+    // Add partials for custom fields (and their values which is redundant by design, for plugins).
+    $mfs = new Textpattern_Meta_FieldSet('article', $when);
+    $cfs = $mfs->getCollection('article');
+
+    foreach ($cfs as $i => $cf_info) {
+        $vars[] = "custom_$i";
+        $partials["custom_field_{$i}"] = array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => "p.custom-field.custom-{$i}",
+            'cb'       => 'article_partial_custom_field'
+        );
     }
 
     // Let plugins chime in on partials meta data.
@@ -1147,21 +1136,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 }
 
 /**
- * Renders a custom field.
- *
- * @param  int    $num     The custom field number
- * @param  string $field   The label
- * @param  string $content The field contents
- * @return string HTML form field
- */
-
-function custField($num, $field, $content)
-{
-    return graf('<label for="custom-'.$num.'">'.$field.'</label>'.br.
-        fInput('text', 'custom_'.$num, $content, '', '', '', INPUT_REGULAR, '', 'custom-'.$num), ' class="custom-field custom-'.$num.'"');
-}
-
-/**
  * Gets the ID of the next or the previous article.
  *
  * @param  string $whichway Either '&lt;' or '&gt;'
@@ -1503,14 +1477,26 @@ function article_partial_author($rs)
 
 function article_partial_custom_field($rs, $key)
 {
-    global $prefs;
-    extract($prefs);
+    global $txpnow, $mfs;
+
+    $cfs = $mfs->getCollection('article');
+    $out = '';
 
     preg_match('/custom_field_([0-9]+)/', $key, $m);
-    $custom_x_set = "custom_{$m[1]}_set";
-    $custom_x = "custom_{$m[1]}";
 
-    return ($$custom_x_set !== '' ? custField($m[1], $$custom_x_set,  $rs[$custom_x]) : '');
+    if (!empty($m[1])) {
+        $num = $m[1];
+        $info = $cfs[$num]->get('name, data_type');
+
+        if (isset($cfs[$num])) {
+            $fieldName = $info['name'];
+            $ref = ($rs['ID']) ? $rs['ID'] : null;
+            $cfs[$num]->loadContent($ref);
+            $out = $cfs[$num]->render();
+        }
+    }
+
+    return $out;
 }
 
 /**
@@ -1635,7 +1621,9 @@ function article_partial_image($rs)
 
 function article_partial_custom_fields($rs)
 {
-    global $cfs;
+    global $txpnow, $mfs;
+
+    $cfs = $mfs->getCollection('article');
     $cf = '';
 
     foreach ($cfs as $k => $v) {

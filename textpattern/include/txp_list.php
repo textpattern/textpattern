@@ -578,6 +578,8 @@ function list_multi_edit()
                 $selected = $allowed;
             }
 
+            // @Todo : delete CFs by iterating over the txp_meta_value_* tables and killing anything
+            // with this content_id
             if ($selected && safe_delete('textpattern', 'ID in ('.join(',', $selected).')')) {
                 safe_update('txp_discuss', "visible = ".MODERATE, "parentid in(".join(',', $selected).")");
                 callback_event('articles_deleted', '', 0, $selected);
