@@ -4830,6 +4830,8 @@ function rsd()
 {
     global $prefs;
 
+    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+
     return ($prefs['enable_xmlrpc_server']) ? '<link rel="EditURI" type="application/rsd+xml" title="RSD" href="'.hu.'rpc/" />' : '';
 }
 
