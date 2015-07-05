@@ -753,7 +753,6 @@ $en_gb_lang = array(
         'path_to_site_missing' => '<code>$path_to_site</code> is not set (update <code>index.php</code>)',
         'permalink_title_format' => 'Permalink title-like-this (instead of TitleLikeThis)?',
         'permlink_mode' => 'Permanent link mode',
-        'ping_textpattern_com' => 'Ping textpattern.com?',
         'ping_weblogsdotcom' => 'Ping pingomatic.com?',
         'plugin_cache_dir' => 'Plugin cache directory path',
         'preferences_saved' => 'Preferences saved',
