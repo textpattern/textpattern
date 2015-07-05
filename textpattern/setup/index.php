@@ -448,7 +448,7 @@ function getTxpLogin()
 
     asort($vals, SORT_STRING);
 
-    $theme_chooser = selectInput('theme', $vals, (isset($_SESSION['theme']) ? txpspecialchars($_SESSION['theme']) : 'hive'), '', '', '', 'setup_admin_theme');
+    $theme_chooser = selectInput('theme', $vals, (isset($_SESSION['theme']) ? txpspecialchars($_SESSION['theme']) : 'hive'), '', '', 'setup_admin_theme');
 
     echo txp_setup_progress_meter(3).
         n.'<div class="txp-setup">';
