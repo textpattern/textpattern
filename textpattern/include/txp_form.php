@@ -310,13 +310,6 @@ function form_edit($message = '')
         ));
     }
 
-    if (empty($type) || $type == 'article') {
-        $buttonExtras .= href('<span class="ui-icon ui-icon-notice"></span> '.gTxt('preview'), '#', array(
-            'class' => 'txp-form-preview',
-            'id'    => 'form_preview',
-        ));
-    }
-
     $buttons = graf(
         tag_void('input', array(
             'class'  => 'publish',

@@ -213,11 +213,11 @@ function log_list($message = '')
                 ).
                 column_head(
                     'IP', 'ip', 'log', true, $switch_dir, $crit, $search_method,
-                        (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip log_detail'
+                        (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip'
                 ).
                 column_head(
                     'host', 'host', 'log', true, $switch_dir, $crit, $search_method,
-                        (('host' == $sort) ? "$dir " : '').'txp-list-col-host'
+                        (('host' == $sort) ? "$dir " : '').'txp-list-col-host log_detail'
                 ).
                 column_head(
                     'page', 'page', 'log', true, $switch_dir, $crit, $search_method,
@@ -268,10 +268,10 @@ function log_list($message = '')
                     href(txpspecialchars($log_ip), 'https://whois.domaintools.com/'.rawurlencode($log_ip), array(
                         'rel'    => 'external',
                         'target' => '_blank',
-                    )), '', 'txp-list-col-ip log_detail'
+                    )), '', 'txp-list-col-ip'
                 ).
                 td(
-                    txpspecialchars($log_host), '', 'txp-list-col-host'
+                    txpspecialchars($log_host), '', 'txp-list-col-host log_detail'
                 ).
                 td(
                     $log_page, '', 'txp-list-col-page'

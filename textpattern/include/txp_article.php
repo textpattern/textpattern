@@ -1381,7 +1381,7 @@ function textile_main_fields($incoming)
 }
 
 /**
- * Pings home when an article is published.
+ * Pings Ping-O-Matic when an article is published.
  */
 
 function do_pings()
@@ -1396,11 +1396,6 @@ function do_pings()
     include_once txpath.'/lib/IXRClass.php';
 
     callback_event('ping');
-
-    if ($prefs['ping_textpattern_com']) {
-        $tx_client = new IXR_Client('http://textpattern.com/xmlrpc/');
-        $tx_client->query('ping.Textpattern', $prefs['sitename'], hu);
-    }
 
     if ($prefs['ping_weblogsdotcom'] == 1) {
         $wl_client = new IXR_Client('http://rpc.pingomatic.com/');

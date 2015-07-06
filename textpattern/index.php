@@ -184,7 +184,7 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
     janitor();
 
     // Article or form preview.
-    if (isset($_POST['form_preview']) || isset($_GET['txpreview'])) {
+    if (isset($_GET['txpreview'])) {
         include txpath.'/publish.php';
         textpattern();
         exit;

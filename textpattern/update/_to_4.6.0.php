@@ -116,3 +116,8 @@ if (!in_array('description', $cols)) {
     safe_alter('txp_section',
         "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER css");
 }
+
+// Remove textpattern.com ping.
+if (safe_field('name', 'txp_prefs', "name = 'ping_textpattern_com'")) {
+    safe_delete('txp_prefs', "name = 'ping_textpattern_com'");
+}
