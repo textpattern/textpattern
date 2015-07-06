@@ -117,6 +117,11 @@ if (!in_array('description', $cols)) {
         "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER css");
 }
 
+// Remove textpattern.com ping.
+if (safe_field('name', 'txp_prefs', "name = 'ping_textpattern_com'")) {
+    safe_delete('txp_prefs', "name = 'ping_textpattern_com'");
+}
+
 // Here come unlimited custom fields a.k.a. the Textpattern Meta Store
 safe_create(
     "txp_meta",
@@ -146,7 +151,7 @@ safe_create(
 
 // Only varchar fields are catered for on update, since they were
 // Txp's only official custom field type prior to this version.
-// 
+//
 // @todo Investigate whether this is necessary here. There may be
 // a way to sneakily support glz_cf by NOT creating this here, but
 // using Textpattern_Meta_Field() to instantiate one "new field"
