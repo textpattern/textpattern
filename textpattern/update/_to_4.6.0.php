@@ -121,3 +121,82 @@ if (!in_array('description', $cols)) {
 if (safe_field('name', 'txp_prefs', "name = 'ping_textpattern_com'")) {
     safe_delete('txp_prefs', "name = 'ping_textpattern_com'");
 }
+
+// Add theme (skin) support. Note that even though outwardly they're
+// referred to as Themes, internally they're known as skins because
+// "theme" has already been hijacked by admin-side themes. This
+// convention avoids potential name clashes.
+safe_create('txp_skin',
+    "`name` varchar(255) default 'default',
+    `title` varchar(255) default 'Default',
+    `version` varchar(255) default '1.0',
+    `author` varchar(255) default '',
+    `website` varchar(255) default '',
+    `lastmod` timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`name`)"
+);
+
+// Add theme support to Pages...
+$cols = getThings('describe `'.PFX.'txp_page`');
+
+if (!in_array('lastmod', $cols)) {
+    safe_alter('txp_page',
+        "ADD lastmod TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER user_html");
+}
+
+if (!in_array('skin', $cols)) {
+    safe_alter('txp_page',
+        "ADD skin VARCHAR(255) NOT NULL DEFAULT 'default' AFTER user_html");
+}
+
+safe_drop_index('txp_page', 'primary');
+safe_create_index('txp_page', 'name(15), skin(15)', 'name_skin', 'unique');
+
+// ... Forms...
+$cols = getThings('describe `'.PFX.'txp_form`');
+
+if (!in_array('lastmod', $cols)) {
+    safe_alter('txp_form',
+        "ADD lastmod TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER Form");
+}
+
+if (!in_array('skin', $cols)) {
+    safe_alter('txp_form',
+        "ADD skin VARCHAR(255) NOT NULL DEFAULT 'default' AFTER Form");
+}
+
+safe_drop_index('txp_form', 'primary');
+safe_create_index('txp_form', 'name(15), skin(15)', 'name_skin', 'unique');
+
+// ... and Stylesheets.
+$cols = getThings('describe `'.PFX.'txp_css`');
+
+if (!in_array('lastmod', $cols)) {
+    safe_alter('txp_css',
+        "ADD lastmod TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER css");
+}
+
+if (!in_array('skin', $cols)) {
+    safe_alter('txp_css',
+        "ADD skin VARCHAR(255) NOT NULL DEFAULT 'default' AFTER css");
+}
+
+safe_drop_index('txp_css', 'name');
+safe_create_index('txp_css', 'name(15), skin(15)', 'name_skin', 'unique');
+
+// Add master theme pref.
+if (!get_pref('skin_master', '')) {
+    set_pref('skin_master', 'default', 'skin', PREF_HIDDEN);
+}
+
+$exists = safe_row('name', 'txp_skin', "1=1");
+
+if (!$exists) {
+    safe_insert('txp_skin',
+        "name='default',
+        title='default',
+        version='".txp_version."',
+        author='Team Textpattern',
+        website='http://textpattern.com/'"
+    );
+}
