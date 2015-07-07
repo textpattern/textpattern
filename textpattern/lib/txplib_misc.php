@@ -3318,7 +3318,10 @@ function make_download_link($id, $label = '', $filename = '')
 
     $url = filedownloadurl($id, $filename);
 
-    return href($label, $url, array('title' => gTxt('download')));
+    // Do not use the array() form of passing $atts to href().
+    // Doing so breaks download links on the admin side due to
+    // double-encoding of the ampersands.
+    return href($label, $url, ' title = "' . gTxt('download') . '"');
 }
 
 /**
