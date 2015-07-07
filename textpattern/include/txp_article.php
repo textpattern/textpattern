@@ -1985,7 +1985,7 @@ function article_partial_comments($rs)
         } else {
             $invite = n.tag(
                     onoffRadio('Annotate', $Annotate),
-                    'div', array('class' => 'txp-form-field comment-annotate jquery-ui-buttonset')
+                    'div', array('class' => 'txp-form-field comment-annotate')
                 ).
                 inputLabel(
                     'comment-invite',
