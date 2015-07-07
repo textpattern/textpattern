@@ -263,7 +263,6 @@ $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (3, now(), 'textpattern', 
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (4, now(), 'textpattern', 'http://textpattern.com/@textpattern', '@textpattern', '40', '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (5, now(), 'textpattern', 'http://textpattern.com/+', '+Textpattern CMS', '50', '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (6, now(), 'textpattern', 'http://textpattern.com/facebook', 'Textpattern Facebook Group', '60', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (7, now(), 'textpattern', 'http://textgarden.org/', 'Textgarden', '70', '')";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
     `id` int(12) NOT NULL auto_increment,
@@ -422,7 +421,6 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_section` (
 
 $create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('articles', 'archive', 'default', 1, 1, 1, 1, 'Articles')";
 $create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('default', 'default', 'default', 0, 1, 1, 1, 'Default')";
-$create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('about', 'default', 'default', 0, 0, 0, 1, 'About')";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_users` (
     `user_id` int(4) NOT NULL auto_increment,
