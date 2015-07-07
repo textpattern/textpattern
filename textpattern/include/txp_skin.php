@@ -508,18 +508,23 @@ function skin_select_list()
 function skin_delete()
 {
     $selectedList = ps('selected');
-    $selected = join(',', quote_list($selectedList));
     $message = '';
-    $master_skin = get_pref('skin_master');
+    $skins = array();
 
-    $skins = safe_column(
-        'name',
-        'txp_skin',
-        "name != '$master_skin' and name in ({$selected})
-            and name not in (select skin from ".safe_pfx('txp_page').")
-            and name not in (select skin from ".safe_pfx('txp_form').")
-            and name not in (select skin from ".safe_pfx('txp_css').")"
-    );
+    // Cumbersome to check sections for in-use assets and also return
+    // the skins that match, so iterate instead.
+    foreach ($selectedList as $asset) {
+        $inUse = safe_column(
+            'name',
+            'txp_section',
+            "(page IN (SELECT name FROM ".PFX."txp_page WHERE skin = '{$asset}'))
+                OR (css IN (SELECT name FROM ".PFX."txp_css WHERE skin = '{$asset}'))"
+        );
+
+        if (!$inUse) {
+            $skins[] = $asset;
+        }
+    }
 
     $skinsNotDeleted = array_diff($selectedList, $skins);
 
