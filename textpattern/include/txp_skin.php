@@ -434,6 +434,30 @@ function skin_save()
                 version = '$safe_version',
                 author  = '$safe_author',
                 website = '$safe_website'");
+
+            if ($ok) {
+                // Set up blank assets for the skin.
+                // Todo: insert both Pages in one call.
+                safe_insert('txp_page',
+                    "name = 'default', skin = '$safe_name'");
+
+                safe_insert('txp_page',
+                    "name = 'error_default', skin = '$safe_name'");
+
+                safe_insert('txp_css',
+                    "name = 'default', skin = '$safe_name'");
+
+                $forms = get_essential_forms();
+
+                foreach ($forms as $form => $group) {
+                    $name = doSlash($form);
+                    $type = doSlash($group);
+
+                    safe_insert('txp_form',
+                        "name = '$name', type = '$type', skin = '$safe_name'"
+                    );
+                }
+            }
         }
     }
 

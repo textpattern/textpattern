@@ -2868,7 +2868,7 @@ function get_essential_forms()
  *
  * @return  array An array of skin names
  * @since   4.6.0
- * @package Theme
+ * @package Skin
  */
 
 function get_skin_list()
