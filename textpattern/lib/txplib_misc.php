@@ -2829,7 +2829,8 @@ function get_form_types()
 /**
  * Gets a list of essential form templates.
  *
- * These forms can not be deleted or renamed.
+ * These forms can not be deleted or renamed. The array keys hold
+ * the form names, the array values their group.
  *
  * The list forms can be extended with a 'form.essential > forms'
  * callback event. Callback functions get passed three arguments: '$event',
@@ -2847,18 +2848,42 @@ function get_essential_forms()
 
     if ($essential === null) {
         $essential = array(
-            'comments',
-            'comments_display',
-            'comment_form',
-            'default',
-            'plainlinks',
-            'files',
+            'comments'         => 'comment',
+            'comments_display' => 'comment',
+            'comment_form'     => 'comment',
+            'default'          => 'article',
+            'plainlinks'       => 'link',
+            'files'            => 'file',
         );
 
         callback_event_ref('form.essential', 'forms', 0, $essential);
     }
 
     return $essential;
+}
+
+
+/**
+ * Gets a list of skins in use.
+ *
+ * @return  array An array of skin names
+ * @since   4.6.0
+ * @package Theme
+ */
+
+function get_skin_list()
+{
+    static $skins = null;
+
+    if ($skins === null) {
+        $skinList = safe_rows('name, title', 'txp_skin', '1=1');
+
+        foreach ($skinList as $skinDef) {
+            $skins[$skinDef['name']] = $skinDef['title'];
+        }
+    }
+
+    return $skins;
 }
 
 /**
