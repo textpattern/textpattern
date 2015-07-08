@@ -1165,7 +1165,7 @@ function status_display($status)
     global $statuses;
 
     if (!$status) {
-        $status = STATUS_LIVE;
+        $status = get_pref('default_publish_status', STATUS_LIVE);
     }
 
     return graf(
