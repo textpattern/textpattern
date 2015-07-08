@@ -36,9 +36,10 @@ if ($event == 'page') {
     require_privs('page');
 
     bouncer($step, array(
-        'page_edit'   => false,
-        'page_save'   => true,
-        'page_delete' => true,
+        'page_edit'        => false,
+        'page_save'        => true,
+        'page_delete'      => true,
+        'page_skin_change' => true,
     ));
 
     switch (strtolower($step)) {
@@ -56,6 +57,10 @@ if ($event == 'page') {
             break;
         case "page_new":
             page_new();
+            break;
+        case "page_skin_change":
+            page_skin_change();
+            page_edit();
             break;
     }
 }
@@ -81,6 +86,9 @@ function page_edit($message = '')
     $name = sanitizeForPage(assert_string(gps('name')));
     $newname = sanitizeForPage(assert_string(gps('newname')));
 
+    // Use master skin as first fallback.
+    $skin = get_pref('skin_editing', get_pref('skin_master', 'default'), true);
+
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
         $name = safe_field('page', 'txp_section', "name = 'default'");
     } elseif (((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error) {
@@ -100,7 +108,11 @@ function page_edit($message = '')
         $buttons .= hInput('savenew', 'savenew');
     }
 
-    $html = (!$save_error) ? fetch('user_html', 'txp_page', 'name', $name) : gps('html');
+    if (!$save_error) {
+        $html = safe_field('user_html', 'txp_page', "name='".doSlash($name)."' AND skin='" . doSlash($skin) . "'");
+    } else {
+        $html = gps('html');
+    }
 
     // Format of each entry is popTagLink -> array ( gTxt() string, class/ID).
     $tagbuild_items = array(
@@ -117,6 +129,8 @@ function page_edit($message = '')
     foreach ($tagbuild_items as $tb => $item) {
         $tagbuild_links .= wrapRegion($item[1].'_group', taglinks($tb), $item[1], $item[0], 'page_'.$item[1]);
     }
+
+    $skin_list = get_skin_list();
 
     echo hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading'));
     echo n.tag(
@@ -138,7 +152,8 @@ function page_edit($message = '')
                 graf(
                     fInput('submit', '', gTxt('save'), 'publish').
                     eInput('page').sInput('page_save').
-                    hInput('name', $name)
+                    hInput('name', $name).
+                    hInput('skin', $skin)
                 ), '', '', 'post', 'edit-form', '', 'page_form'), 'div', array(
             'id'    => 'main_content',
             'class' => 'txp-layout-cell txp-layout-2-4',
@@ -146,7 +161,15 @@ function page_edit($message = '')
 
         n.tag(
             graf(sLink('page', 'page_new', gTxt('create_new_page')), ' class="action-create"').
-            page_list($name).
+            ((count($skin_list) > 0)
+            ? form(
+                inputLabel('skin', selectInput('skin', $skin_list, $skin, false, 1, 'skin'), 'skin').
+                eInput('page').
+                sInput('page_skin_change')
+                )
+            : ''
+            ).
+            page_list($name, $skin).
         n, 'div', array(
             'id'    => 'content_switcher',
             'class' => 'txp-layout-cell txp-layout-1-4',
@@ -160,15 +183,16 @@ function page_edit($message = '')
  * Renders a list of page templates.
  *
  * @param  string $current The selected template
+ * @param  string $skin    The selected skin
  * @return string HTML
  */
 
-function page_list($current)
+function page_list($current, $skin)
 {
     $out = array();
     $protected = safe_column('DISTINCT page', 'txp_section', '1=1') + array('error_default');
 
-    $criteria = 1;
+    $criteria = "skin = '" . doSlash($skin) . "'";
     $criteria .= callback_event('admin_criteria', 'page_list', 0, $criteria);
 
     $rs = safe_rows_start('name', 'txp_page', "$criteria order by name asc");
@@ -207,7 +231,8 @@ function page_list($current)
 
 function page_delete()
 {
-    $name  = ps('name');
+    $name = ps('name');
+    $skin = get_pref('skin_editing', get_pref('skin_master', 'default'));
     $count = safe_count('txp_section', "page = '".doSlash($name)."'");
     $message = '';
 
@@ -218,8 +243,8 @@ function page_delete()
     if ($count) {
         $message = array(gTxt('page_used_by_section', array('{name}' => $name, '{count}' => $count)), E_WARNING);
     } else {
-        if (safe_delete('txp_page', "name = '".doSlash($name)."'")) {
-            callback_event('page_deleted', '', 0, $name);
+        if (safe_delete('txp_page', "name = '".doSlash($name)."' AND skin='".doSlash($skin)."'")) {
+            callback_event('page_deleted', '', 0, compact('name', 'skin'));
             $message = gTxt('page_deleted', array('{name}' => $name));
         }
     }
@@ -237,10 +262,13 @@ function page_save()
         'savenew',
         'html',
         'copy',
+        'skin',
     )))));
 
     $name = sanitizeForPage(assert_string(ps('name')));
     $newname = sanitizeForPage(assert_string(ps('newname')));
+
+    page_set_skin($skin);
 
     $save_error = false;
     $message = '';
@@ -254,7 +282,11 @@ function page_save()
             $_POST['newname'] = $newname;
         }
 
-        $exists = safe_field('name', 'txp_page', "name = '".doSlash($newname)."'");
+        $safe_skin = doSlash($skin);
+        $safe_name = doSlash($name);
+        $safe_newname = doSlash($newname);
+
+        $exists = safe_field('name', 'txp_page', "name = '$safe_newname' AND skin = '$safe_skin'");
 
         if ($newname !== $name && $exists !== false) {
             $message = array(gTxt('page_already_exists', array('{name}' => $newname)), E_ERROR);
@@ -266,7 +298,7 @@ function page_save()
         } else {
             if ($savenew or $copy) {
                 if ($newname) {
-                    if (safe_insert('txp_page', "name = '".doSlash($newname)."', user_html = '$html'")) {
+                    if (safe_insert('txp_page', "name = '$safe_newname', user_html = '$html', skin = '$safe_skin'")) {
                         update_lastmod();
                         $message = gTxt('page_created', array('{name}' => $newname));
                     } else {
@@ -278,8 +310,10 @@ function page_save()
                     $save_error = true;
                 }
             } else {
-                if (safe_update('txp_page', "user_html = '$html', name = '".doSlash($newname)."'", "name = '".doSlash($name)."'")) {
-                    safe_update('txp_section', "page = '".doSlash($newname)."'", "page='".doSlash($name)."'");
+                if (safe_update('txp_page',
+                        "user_html = '$html', name = '$safe_newname', skin = '$safe_skin'",
+                        "name = '$safe_name' AND skin = '$safe_skin'")) {
+                    safe_update('txp_section', "page = '$safe_newname'", "page='$safe_name'");
                     update_lastmod();
                     $message = gTxt('page_updated', array('{name}' => $name));
                 } else {
@@ -308,6 +342,38 @@ function page_save()
 function page_new()
 {
     page_edit();
+}
+
+/**
+ * Changes the skin in which pages are being edited.
+ *
+ * Keeps track of which skin is being edited from panel to panel.
+ *
+ * @param  string $skin Optional skin name. Read from GET/POST otherwise
+ */
+
+function page_skin_change($skin = null)
+{
+    if ($skin === null) {
+        $skin = gps('skin');
+    }
+
+    page_set_skin($skin);
+
+    return true;
+}
+
+/**
+ * Set the current skin so it persists across panels.
+ *
+ * @param  string $skin The skin name to store
+ * @todo   Generalise this elsewhere?
+ * @return string HTML
+ */
+
+function page_set_skin($skin)
+{
+    set_pref('skin_editing', $skin, 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
 }
 
 /**
