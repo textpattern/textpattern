@@ -12,6 +12,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Changed: Deprecated <txp:keywords> tag. Use <txp:meta_keywords format="" /> instead.
 * Changed: Deprecated <txp:rsd> tag.
 * Changed: Removed Form (article) Preview facility.
+* Changed: Removed empty 'About' section from new installs.
 * Developer: Added jQuery UI library and a jQuery UI Textpattern theme to admin side.
 
 Changes in 4.5.7
