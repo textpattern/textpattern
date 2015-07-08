@@ -36,10 +36,11 @@ if ($event == 'css') {
     require_privs('css');
 
     bouncer($step, array(
-        'pour'       => false,
-        'css_save'   => true,
-        'css_delete' => true,
-        'css_edit'   => false,
+        'pour'            => false,
+        'css_save'        => true,
+        'css_delete'      => true,
+        'css_edit'        => false,
+        'css_skin_change' => true,
     ));
 
     switch (strtolower($step)) {
@@ -58,6 +59,10 @@ if ($event == 'css') {
         case 'css_edit':
             css_edit();
             break;
+        case "css_skin_change":
+            css_skin_change();
+            css_edit();
+            break;
     }
 }
 
@@ -65,16 +70,16 @@ if ($event == 'css') {
  * Renders a list of stylesheets.
  *
  * @param  string $current The active stylesheet
- * @param  string $default Not used
+ * @param  string $skin    The active skin name
  * @return string HTML
  */
 
-function css_list($current, $default)
+function css_list($current, $skin)
 {
     $out = array();
     $protected = safe_column('DISTINCT css', 'txp_section', '1=1');
 
-    $criteria = 1;
+    $criteria = "skin = '" . doSlash($skin) . "'";
     $criteria .= callback_event('admin_criteria', 'css_list', 0, $criteria);
 
     $rs = safe_rows_start('name', 'txp_css', $criteria);
@@ -130,6 +135,9 @@ function css_edit($message = '')
     $name = sanitizeForPage(assert_string(gps('name')));
     $newname = sanitizeForPage(assert_string(gps('newname')));
 
+    // Use master skin as first fallback.
+    $skin = get_pref('skin_editing', get_pref('skin_master', 'default'), true);
+
     if ($step == 'css_delete' || empty($name) && $step != 'pour' && !$savenew) {
         $name = $default_name;
     } elseif (((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error) {
@@ -153,8 +161,10 @@ function css_edit($message = '')
     $thecss = gps('css');
 
     if (!$save_error) {
-        $thecss = fetch('css', 'txp_css', 'name', $name);
+        $thecss = safe_field('css', 'txp_css', "name='".doSlash($name)."' AND skin='" . doSlash($skin) . "'");
     }
+
+    $skin_list = get_skin_list();
 
     echo hed(gTxt('tab_style'), 1, array('class' => 'txp-heading'));
     echo n.tag(
@@ -168,7 +178,8 @@ function css_edit($message = '')
                 graf(
                     fInput('submit', '', gTxt('save'), 'publish').
                     eInput('css').sInput('css_save').
-                    hInput('name', $name)
+                    hInput('name', $name).
+                    hInput('skin', $skin)
                 ), '', '', 'post', 'edit-form', '', 'style_form').n, 'div', array(
             'id'    => 'main_content',
             'class' => 'txp-layout-cell txp-layout-3-4',
@@ -176,7 +187,15 @@ function css_edit($message = '')
 
         n.tag(
             graf(sLink('css', 'pour', gTxt('create_new_css')), array('class' => 'action-create')).
-            css_list($name, $default_name).n, 'div', array(
+            ((count($skin_list) > 0)
+            ? form(
+                inputLabel('skin', selectInput('skin', $skin_list, $skin, false, 1, 'skin'), 'skin').
+                eInput('css').
+                sInput('css_skin_change')
+                )
+            : ''
+            ).
+            css_list($name, $skin).n, 'div', array(
             'id'    => 'content_switcher',
             'class' => 'txp-layout-cell txp-layout-1-4',
         )).n, 'div', array(
@@ -195,10 +214,13 @@ function css_save()
         'savenew',
         'copy',
         'css',
+        'skin',
     )))));
 
     $name = sanitizeForPage(assert_string(ps('name')));
     $newname = sanitizeForPage(assert_string(ps('newname')));
+
+    css_set_skin($skin);
 
     $save_error = false;
     $message = '';
@@ -212,7 +234,11 @@ function css_save()
             $_POST['newname'] = $newname;
         }
 
-        $exists = safe_field('name', 'txp_css', "name = '".doSlash($newname)."'");
+        $safe_skin = doSlash($skin);
+        $safe_name = doSlash($name);
+        $safe_newname = doSlash($newname);
+
+        $exists = safe_field('name', 'txp_css', "name = '$safe_newname' AND skin = '$safe_skin'");
 
         if (($newname !== $name) && $exists) {
             $message = array(gTxt('css_already_exists', array('{name}' => $newname)), E_ERROR);
@@ -224,7 +250,7 @@ function css_save()
         } else {
             if ($savenew or $copy) {
                 if ($newname) {
-                    if (safe_insert('txp_css', "name = '".doSlash($newname)."', css = '$css'")) {
+                    if (safe_insert('txp_css', "name = '$safe_newname', css = '$css', skin = '$safe_skin'")) {
                         update_lastmod();
                         $message = gTxt('css_created', array('{name}' => $newname));
                     } else {
@@ -236,8 +262,10 @@ function css_save()
                     $save_error = true;
                 }
             } else {
-                if (safe_update('txp_css', "css = '$css', name = '".doSlash($newname)."'", "name = '".doSlash($name)."'")) {
-                    safe_update('txp_section', "css = '".doSlash($newname)."'", "css='".doSlash($name)."'");
+                if (safe_update('txp_css',
+                        "css = '$css', name = '$safe_newname', skin = '$safe_skin'",
+                        "name = '$safe_name' AND skin = '$safe_skin'")) {
+                    safe_update('txp_section', "css = '$safe_newname'", "css='$safe_name'");
                     update_lastmod();
                     $message = gTxt('css_updated', array('{name}' => $name));
                 } else {
@@ -264,16 +292,49 @@ function css_save()
 function css_delete()
 {
     $name  = ps('name');
+    $skin = get_pref('skin_editing', get_pref('skin_master', 'default'));
     $count = safe_count('txp_section', "css = '".doSlash($name)."'");
     $message = '';
 
     if ($count) {
         $message = array(gTxt('css_used_by_section', array('{name}' => $name, '{count}' => $count)), E_ERROR);
     } else {
-        if (safe_delete('txp_css', "name = '".doSlash($name)."'")) {
-            callback_event('css_deleted', '', 0, $name);
+        if (safe_delete('txp_css', "name = '".doSlash($name)."' AND skin='".doSlash($skin)."'")) {
+            callback_event('css_deleted', '', 0, compact('name', 'skin'));
             $message = gTxt('css_deleted', array('{name}' => $name));
         }
     }
     css_edit($message);
+}
+
+/**
+ * Changes the skin in which styles are being edited.
+ *
+ * Keeps track of which skin is being edited from panel to panel.
+ *
+ * @param  string $skin Optional skin name. Read from GET/POST otherwise
+ */
+
+function css_skin_change($skin = null)
+{
+    if ($skin === null) {
+        $skin = gps('skin');
+    }
+
+    css_set_skin($skin);
+
+    return true;
+}
+
+/**
+ * Set the current skin so it persists across panels.
+ *
+ * @param  string $skin The skin name to store
+ * @todo   Generalise this elsewhere?
+ * @return string HTML
+ */
+
+function css_set_skin($skin)
+{
+    set_pref('skin_editing', $skin, 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
 }
