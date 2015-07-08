@@ -5587,9 +5587,17 @@ function quote_list($in)
 function trace_add($msg)
 {
     global $production_status, $txptrace, $txptracelevel;
+    static $memory_last = 0;
 
     if ($production_status === 'debug') {
-        $txptrace[] = str_repeat("\t", $txptracelevel).$msg;
+        if (is_callable('memory_get_usage')) {
+            $memory_now = ceil(memory_get_usage()/1024);
+            $memory = sprintf("%7s |%6s |", $memory_now, ($memory_now > $memory_last) ? $memory_now - $memory_last : "");
+            $memory_last = $memory_now;
+        } else {
+            $memory = "";
+        }
+        $txptrace[] = $memory . str_repeat("\t", $txptracelevel) . $msg;
     }
 }
 
