@@ -4510,6 +4510,9 @@ function markup_comment($msg)
 /**
  * Updates site's last modification date.
  *
+ * When this action is performed, it will trigger a
+ * 'site.update > done' callback event.
+ *
  * @package Pref
  * @example
  * update_lastmod();
@@ -4517,7 +4520,11 @@ function markup_comment($msg)
 
 function update_lastmod()
 {
-    safe_upsert("txp_prefs", "val = now()", "name = 'lastmod'");
+    $whenStamp = time();
+    $whenDate = strftime('%Y-%m-%d %H:%M:%S', $whenStamp);
+
+    safe_upsert("txp_prefs", "val = '$whenDate'", "name = 'lastmod'");
+    callback_event('site.update', 'done', 0, compact('whenStamp', 'whenDate'));
 }
 
 /**
