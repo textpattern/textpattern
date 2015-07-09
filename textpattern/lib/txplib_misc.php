@@ -5638,6 +5638,7 @@ function trace_log( $flags = TRACE_RESULT )
 
     if ($flags & TRACE_START) {
         $microstart = getmicrotime();
+        $production_status = 'debug';
         $txptrace = array();
         return;
     }
@@ -5653,7 +5654,7 @@ function trace_log( $flags = TRACE_RESULT )
         echo n.comment(sprintf('Memory Peak: %sKb', $memory_peak));
         echo maxMemUsage('', 1);
 
-        if (!empty($txptrace) and is_array($txptrace)) {
+        if ($production_status === 'debug') {
             echo n, comment('Trace log: '.n.'Mem(Kb)_|_+(Kb)_|_Trace___'.n.join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace)).n);
         }
     }

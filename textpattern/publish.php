@@ -42,6 +42,9 @@ $loader->register();
 include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_publish.php';
 include_once txpath.'/lib/txplib_misc.php';
+
+trace_log( TRACE_START );
+
 include_once txpath.'/lib/txplib_db.php';
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
@@ -54,8 +57,6 @@ include_once txpath.'/publish/comment.php';
 set_error_handler('publicErrorHandler', error_reporting());
 
 ob_start();
-
-trace_log( TRACE_START );
 
 $txp_current_tag = '';
 

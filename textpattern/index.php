@@ -91,6 +91,9 @@ $loader->register();
 
 include_once txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
+
+trace_log( TRACE_START );
+
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/txplib_forms.php';
 include txpath.'/lib/txplib_html.php';
@@ -99,7 +102,6 @@ include txpath.'/lib/txplib_validator.php';
 include txpath.'/lib/admin_config.php';
 
 set_error_handler('adminErrorHandler', error_reporting());
-trace_log( TRACE_START );
 
 if ($connected && safe_query("describe `".PFX."textpattern`")) {
     $dbversion = safe_field('val', 'txp_prefs', "name = 'version'");
