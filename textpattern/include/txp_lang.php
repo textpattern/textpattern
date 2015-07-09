@@ -132,7 +132,7 @@ function list_languages($message = '')
     if (is_array($files) && !empty($files)) {
         foreach ($files as $file) {
             if ($fp = @fopen(txpath.DS.'lang'.DS.$file, 'r')) {
-                $name = str_replace('.txt', '', $file);
+                $name = preg_replace('/(.txt)|(.textpack)/i', '', $file);
                 $firstline = fgets($fp, 4069);
                 fclose($fp);
 
@@ -485,7 +485,7 @@ function get_lang_files()
     }
 
     if (chdir($lang_dir)) {
-        if ($files = glob('*.txt')) {
+        if ($files = glob('*.{txt,textpack}', GLOB_BRACE)) {
             return $files;
         }
     }
