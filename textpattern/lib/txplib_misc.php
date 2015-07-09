@@ -5629,23 +5629,35 @@ function trace_add($msg, $tracelevel_diff = 0)
  * @package Debug
  */
 
-function trace_log()
+function trace_log( $flags = TRACE_RESULT )
 {
-    global $production_status, $txptrace, $microstart, $qtime, $qcount;
+    global $production_status, $txptrace, $qtime, $qcount;
+    static $microstart = 0;
 
-    if (in_array($production_status, array('debug', 'testing'))) {
-        $microdiff = (getmicrotime() - $microstart);
+    if ($flags & TRACE_START) {
+        $microstart = getmicrotime();
+        $txptrace = array();
+        return;
+    }
+
+    $microdiff = (getmicrotime() - $microstart);
+    $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
+
+    if ($production_status !== 'live' && $flags & TRACE_DISPLAY) {
         echo n,comment('Runtime:    '.substr($microdiff, 0, 6));
         echo n,comment('Query time: '.sprintf('%02.6f', $qtime));
         echo n,comment('Queries: '.$qcount);
 
-        $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
         echo n.comment(sprintf('Memory Peak: %sKb', $memory_peak));
         echo maxMemUsage('', 1);
 
         if (!empty($txptrace) and is_array($txptrace)) {
             echo n, comment('Trace log: '.n.'Mem(Kb)_|_+(Kb)_|_Trace___'.n.join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace)).n);
         }
+    }
+
+    if ($flags & TRACE_RESULT) {
+        return array('microdiff' => $microdiff, 'memory_peak' => $memory_peak);
     }
 }
 

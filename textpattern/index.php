@@ -99,12 +99,7 @@ include txpath.'/lib/txplib_validator.php';
 include txpath.'/lib/admin_config.php';
 
 set_error_handler('adminErrorHandler', error_reporting());
-
-// Start the clock for runtime.
-$microstart = getmicrotime();
-
-// Initialise parse trace globals.
-$txptrace        = array();
+trace_log( TRACE_START );
 
 if ($connected && safe_query("describe `".PFX."textpattern`")) {
     $dbversion = safe_field('val', 'txp_prefs', "name = 'version'");
@@ -222,13 +217,11 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
     end_page();
 
     if ($app_mode != 'async') {
-        trace_log();
-
+        trace_log( TRACE_DISPLAY );
     } else {
-        $microdiff = substr(getmicrotime() - $microstart, 0, 6);
-        $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
-        header("X-Textpattern-Runtime: $microdiff");
-        header("X-Textpattern-Memory: $memory_peak");
+        $trace = trace_log( TRACE_RESULT );
+        header("X-Textpattern-Runtime: " . @$trace['microdiff']);
+        header("X-Textpattern-Memory: "  . @$trace['memory_peak']);
     }
 } else {
     txp_die('DB-Connect was successful, but the textpattern-table was not found.',

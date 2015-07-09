@@ -55,11 +55,8 @@ set_error_handler('publicErrorHandler', error_reporting());
 
 ob_start();
 
-// Start the clock for runtime.
-$microstart = getmicrotime();
+trace_log( TRACE_START );
 
-// Initialise parse trace globals.
-$txptrace        = array();
 $txp_current_tag = '';
 
 // Get all prefs as an array.
@@ -619,7 +616,7 @@ function textpattern()
     header("Content-type: text/html; charset=utf-8");
     echo $html;
 
-    trace_log();
+    trace_log( TRACE_DISPLAY );
 
     callback_event('textpattern_end');
 }
