@@ -85,9 +85,7 @@ function page_edit($message = '')
 
     $name = sanitizeForPage(assert_string(gps('name')));
     $newname = sanitizeForPage(assert_string(gps('newname')));
-
-    // Use master skin as first fallback.
-    $skin = get_pref('skin_editing', get_pref('skin_master', 'default'), true);
+    $skin = get_pref('skin_editing', 'default', true);
 
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
         $name = safe_field('page', 'txp_section', "name = 'default'");
@@ -232,7 +230,7 @@ function page_list($current, $skin)
 function page_delete()
 {
     $name = ps('name');
-    $skin = get_pref('skin_editing', get_pref('skin_master', 'default'));
+    $skin = get_pref('skin_editing', 'default');
     $count = safe_count('txp_section', "page = '".doSlash($name)."'");
     $message = '';
 

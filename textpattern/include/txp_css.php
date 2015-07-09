@@ -136,7 +136,7 @@ function css_edit($message = '')
     $newname = sanitizeForPage(assert_string(gps('newname')));
 
     // Use master skin as first fallback.
-    $skin = get_pref('skin_editing', get_pref('skin_master', 'default'), true);
+    $skin = get_pref('skin_editing', 'default', true);
 
     if ($step == 'css_delete' || empty($name) && $step != 'pour' && !$savenew) {
         $name = $default_name;
@@ -292,7 +292,7 @@ function css_save()
 function css_delete()
 {
     $name  = ps('name');
-    $skin = get_pref('skin_editing', get_pref('skin_master', 'default'));
+    $skin = get_pref('skin_editing', 'default');
     $count = safe_count('txp_section', "css = '".doSlash($name)."'");
     $message = '';
 

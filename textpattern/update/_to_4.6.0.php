@@ -173,7 +173,7 @@ if (!in_array('skin', $cols)) {
 safe_drop_index('txp_form', 'primary');
 safe_create_index('txp_form', 'name(15), skin(15)', 'name_skin', 'unique');
 
-// ... and Stylesheets.
+// ... Stylesheets...
 $cols = getThings('describe `'.PFX.'txp_css`');
 
 if (!in_array('lastmod', $cols)) {
@@ -189,10 +189,17 @@ if (!in_array('skin', $cols)) {
 safe_drop_index('txp_css', 'name');
 safe_create_index('txp_css', 'name(15), skin(15)', 'name_skin', 'unique');
 
-// Add master theme pref.
-if (!get_pref('skin_master', '')) {
-    set_pref('skin_master', 'default', 'skin', PREF_HIDDEN);
+// ... and Sections...
+$cols = getThings('describe `'.PFX.'txp_section`');
+dmp($cols);
+if (!in_array('skin', $cols)) {
+    safe_alter('txp_section',
+        "ADD skin VARCHAR(255) NOT NULL DEFAULT 'default' AFTER name");
 }
+
+safe_drop_index('txp_section', 'primary');
+safe_create_index('txp_section', 'page(15), skin(15)', 'page_skin');
+safe_create_index('txp_section', 'css(15), skin(15)', 'css_skin');
 
 $exists = safe_row('name', 'txp_skin', "1=1");
 

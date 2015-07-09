@@ -265,7 +265,7 @@ function form_edit($message = '')
     $newname = sanitizeForPage(assert_string(gps('newname')));
 
     // Use master skin as first fallback.
-    $skin = get_pref('skin_editing', get_pref('skin_master', 'default'), true);
+    $skin = get_pref('skin_editing', 'default', true);
 
     if (empty($name) && $step != 'form_create' && !$savenew) {
         $name = 'default';

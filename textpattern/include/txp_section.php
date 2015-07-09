@@ -35,7 +35,8 @@ if (!defined('txpinterface')) {
 if ($event == 'section') {
     require_privs('section');
 
-    global $all_pages, $all_styles;
+    global $all_skins, $all_pages, $all_styles;
+    $all_skins = safe_column('name', 'txp_skin', "1=1");
     $all_pages = safe_column('name', 'txp_page', "1=1");
     $all_styles = safe_column('name', 'txp_css', "1=1");
 
@@ -92,6 +93,9 @@ function sec_section_list($message = '')
         case 'title':
             $sort_sql = 'title '.$dir;
             break;
+        case 'skin':
+            $sort_sql = 'skin '.$dir;
+            break;
         case 'page':
             $sort_sql = 'page '.$dir;
             break;
@@ -129,12 +133,14 @@ function sec_section_list($message = '')
             array(
                 'name'         => "name = '$crit_escaped'",
                 'title'        => "title = '$crit_escaped'",
+                'skin'         => "skin = '$crit_escaped'",
                 'page'         => "page = '$crit_escaped'",
                 'css'          => "css = '$crit_escaped'",
                 'description'  => "description = '$crit_escaped'",
             ) : array(
                 'name'         => "name like '%$crit_escaped%'",
                 'title'        => "title like '%$crit_escaped%'",
+                'skin'         => "skin like '%$crit_escaped%'",
                 'page'         => "page like '%$crit_escaped%'",
                 'css'          => "css like '%$crit_escaped%'",
                 'description'  => "description like '%$crit_escaped%'",
@@ -268,6 +274,10 @@ function sec_section_list($message = '')
                         (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
                 ).
                 column_head(
+                    'skin', 'skin', 'section', true, $switch_dir, $crit, $search_method,
+                        (('skin' == $sort) ? "$dir " : '').'txp-list-col-skin'
+                ).
+                column_head(
                     'page', 'page', 'section', true, $switch_dir, $crit, $search_method,
                         (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
                 ).
@@ -374,6 +384,9 @@ function sec_section_list($message = '')
                     txpspecialchars($sec_title), '', 'txp-list-col-title'
                 ).
                 td(
+                    $sec_skin, '', 'txp-list-col-skin'
+                ).
+                td(
                     $sec_page, '', 'txp-list-col-page'
                 ).
                 td(
@@ -420,7 +433,7 @@ function sec_section_list($message = '')
 
 function section_edit()
 {
-    global $event, $step, $all_pages, $all_styles;
+    global $event, $step, $all_skins, $all_pages, $all_styles;
 
     require_privs('section.edit');
 
@@ -490,7 +503,9 @@ function section_edit()
     $out[] =
         inputLabel('section_description', text_area('description', 0, 0, $sec_description, 'section_description', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE), 'section_description');
 
+    // Todo: jQuery interaction for altering page/css options on theme change.
     $out[] =
+        inputLabel('section_skin', selectInput('skin', $all_skins, $sec_skin, '', '', 'section_skin'), 'uses_skin', 'section_uses_skin').
         inputLabel('section_page', selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').
         inputLabel('section_css', selectInput('css', $all_styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css');
 
@@ -529,6 +544,7 @@ function section_save()
     $in = array_map('assert_string', psa(array(
         'name',
         'title',
+        'skin',
         'description',
         'old_name',
         'section_page',
@@ -561,7 +577,7 @@ function section_save()
 
     $ok = false;
     if ($name == 'default') {
-        $ok = safe_update('txp_section', "page = '$safe_section_page', css = '$safe_css', description = '$safe_description'", "name = 'default'");
+        $ok = safe_update('txp_section', "skin = '$safe_skin', page = '$safe_section_page', css = '$safe_css', description = '$safe_description'", "name = 'default'");
     } elseif ($name) {
         extract(array_map('assert_int', psa(array('on_frontpage', 'in_rss', 'searchable'))));
 
@@ -569,6 +585,7 @@ function section_save()
             $ok = safe_update('txp_section', "
                 name         = '$safe_name',
                 title        = '$safe_title',
+                skin         = '$safe_skin',
                 page         = '$safe_section_page',
                 css          = '$safe_css',
                 description  = '$safe_description',
@@ -585,6 +602,7 @@ function section_save()
             $ok = safe_insert('txp_section', "
                 name         = '$safe_name',
                 title        = '$safe_title',
+                skin         = '$safe_skin',
                 page         = '$safe_section_page',
                 css          = '$safe_css',
                 description  = '$safe_description',
@@ -733,6 +751,7 @@ function section_search_form($crit, $method)
     $methods = array(
         'name'         => gTxt('name'),
         'title'        => gTxt('title'),
+        'skin'         => gTxt('skin'),
         'page'         => gTxt('page'),
         'css'          => gTxt('css'),
         'description'  => gTxt('description'),

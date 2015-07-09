@@ -45,7 +45,6 @@ if ($event == 'skin') {
         'skin_save'          => true,
         'skin_edit'          => false,
         'skin_multi_edit'    => true,
-        'skin_set_master'    => true,
         'skin_toggle_option' => true,
     );
 
@@ -150,25 +149,7 @@ function skin_list($message = '')
         graf(
             sLink('skin', 'skin_edit', gTxt('create_skin')),
             array('class' => 'txp-buttons')
-        ).
-
-        n.tag_start('form', array(
-            'id'     => 'master_skin_form',
-            'name'   => 'master_skin_form',
-            'method' => 'post',
-            'action' => 'index.php',
-            'class'  => 'async',
-        )).
-
-        graf(
-            tag(gTxt('master_skin'), 'label', array('for' => 'master_skin')).
-            popHelp('skin_').
-            skin_select_list()
-        ).
-
-        eInput('skin').
-        sInput('skin_set_master').
-        n.tag_end('form');
+        );
 
     if ($total < 1) {
         if ($criteria != 1) {
@@ -312,8 +293,6 @@ function skin_edit()
 
     $is_edit = ($name && $step == 'skin_edit');
     $caption = gTxt('create_skin');
-    $master_skin = get_pref('skin_master');
-    $is_master_skin = ($name === $master_skin);
 
     if ($is_edit) {
         $rs = safe_row(
@@ -421,11 +400,6 @@ function skin_save()
                 safe_update('txp_page', "skin = '$safe_name'", "skin = '$safe_old_name'");
                 safe_update('txp_form', "skin = '$safe_name'", "skin = '$safe_old_name'");
                 safe_update('txp_css', "skin = '$safe_name'", "skin = '$safe_old_name'");
-                $master_skin = get_pref('skin_master');
-
-                if ($safe_old_name === $master_skin) {
-                    set_pref('skin_master', $safe_name, 'skin', PREF_HIDDEN);
-                }
             }
         } else {
             $ok = safe_insert('txp_skin', "
@@ -480,47 +454,6 @@ function skin_change_pageby()
 {
     event_change_pageby('skin');
     skin_list();
-}
-
-/**
- * Sets a skin as the master.
- */
-
-function skin_set_master()
-{
-    extract(psa(array(
-        'master_skin',
-    )));
-
-    $exists = safe_row('name', 'txp_skin', "name = '".doSlash($master_skin)."'");
-
-    if ($exists && set_pref('skin_master', $master_skin, 'skin', PREF_HIDDEN)) {
-        send_script_response(announce(gTxt('master_skin_updated')));
-
-        return;
-    }
-
-    send_script_response(announce(gTxt('skin_save_failed'), E_ERROR));
-}
-
-/**
- * Renders a &lt;select&gt; input listing all skins.
- *
- * Used for changing the master skin.
- *
- * @return string HTML
- */
-
-function skin_select_list()
-{
-    $val = get_pref('skin_master');
-    $skins = safe_rows('name, title', 'txp_skin', "1=1 ORDER BY title, name");
-    $vals = array();
-    foreach ($skins as $row) {
-        $vals[$row['name']] = $row['title'];
-    }
-
-    return selectInput('skin_master', $vals, $val, false, true, 'skin_master');
 }
 
 /**
