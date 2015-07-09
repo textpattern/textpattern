@@ -585,7 +585,7 @@ function preText($s, $prefs)
 
 function textpattern()
 {
-    global $pretext, $microstart, $prefs, $qcount, $qtime, $production_status, $txptrace, $siteurl, $has_article_tag;
+    global $pretext, $prefs, $production_status, $siteurl, $has_article_tag;
 
     $has_article_tag = false;
 
@@ -619,17 +619,7 @@ function textpattern()
     header("Content-type: text/html; charset=utf-8");
     echo $html;
 
-    if (in_array($production_status, array('debug', 'testing'))) {
-        $microdiff = (getmicrotime() - $microstart);
-        echo n,comment('Runtime:    '.substr($microdiff, 0, 6));
-        echo n,comment('Query time: '.sprintf('%02.6f', $qtime));
-        echo n,comment('Queries: '.$qcount);
-        echo maxMemUsage('end of textpattern()', 1);
-
-        if (!empty($txptrace) and is_array($txptrace)) {
-            echo n, comment('txp tag trace: '.n.'Mem(Kb)_|_+(Kb)_|_Trace___'.n.join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace)).n);
-        }
-    }
+    trace_log();
 
     callback_event('textpattern_end');
 }
