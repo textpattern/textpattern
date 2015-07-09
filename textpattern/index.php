@@ -99,7 +99,12 @@ include txpath.'/lib/txplib_validator.php';
 include txpath.'/lib/admin_config.php';
 
 set_error_handler('adminErrorHandler', error_reporting());
+
+// Start the clock for runtime.
 $microstart = getmicrotime();
+
+// Initialise parse trace globals.
+$txptrace        = array();
 
 if ($connected && safe_query("describe `".PFX."textpattern`")) {
     $dbversion = safe_field('val', 'txp_prefs', "name = 'version'");
@@ -216,13 +221,12 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
 
     end_page();
 
-    $microdiff = substr(getmicrotime() - $microstart, 0, 6);
-    $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
-
     if ($app_mode != 'async') {
-        echo n.comment(gTxt('runtime').': '.$microdiff);
-        echo n.comment(sprintf('Memory: %sKb', $memory_peak));
+        trace_log();
+
     } else {
+        $microdiff = substr(getmicrotime() - $microstart, 0, 6);
+        $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
         header("X-Textpattern-Runtime: $microdiff");
         header("X-Textpattern-Memory: $memory_peak");
     }
