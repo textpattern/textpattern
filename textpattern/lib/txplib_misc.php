@@ -5594,16 +5594,18 @@ function quote_list($in)
 /**
  * Adds a line to the tag trace.
  *
- * @param   string $msg The message
+ * @param   string $msg               The message
+ * @param   int    $tracelevel_diff   Change trace level
  * @package Debug
  */
 
-function trace_add($msg)
+function trace_add($msg, $tracelevel_diff = 0)
 {
-    global $production_status, $txptrace, $txptracelevel;
+    global $production_status, $txptrace;
     static $memory_last = 0;
+    static $txptracelevel = 0;
 
-    if ($production_status === 'debug') {
+    if ($production_status === 'debug' && !empty($msg)) {
         if (is_callable('memory_get_usage')) {
             $memory_now = ceil(memory_get_usage()/1024);
             $memory = sprintf("%7s |%6s |", $memory_now, ($memory_now > $memory_last) ? $memory_now - $memory_last : "");
@@ -5613,6 +5615,11 @@ function trace_add($msg)
         }
         $txptrace[] = $memory . str_repeat("\t", $txptracelevel) . $msg;
     }
+
+    if ((int)$tracelevel_diff) {
+        $txptracelevel += (int)$tracelevel_diff;
+    }
+
 }
 
 /**

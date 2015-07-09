@@ -60,7 +60,6 @@ $microstart = getmicrotime();
 
 // Initialise parse trace globals.
 $txptrace        = array();
-$txptracelevel   = 0;
 $txp_current_tag = '';
 
 // Get all prefs as an array.
