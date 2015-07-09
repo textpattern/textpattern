@@ -127,7 +127,7 @@ function install_language_from_file($lang)
             }
 
             mysql_query("DELETE FROM `".PFX."txp_lang` WHERE owner = '' AND `lang`='".$lang."' AND `event` IN ('".join("','", array_unique($core_events))."') AND `lastmod`>$lastmod");
-            @fclose($filename);
+            @fclose($file);
 
             // Delete empty fields if any.
             mysql_query("DELETE FROM `".PFX."txp_lang` WHERE `data`=''");
