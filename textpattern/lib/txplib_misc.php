@@ -1716,6 +1716,7 @@ function load_plugins($type = false)
     if (!is_array($plugins)) {
         $plugins = array();
     }
+    trace_add("[Loading plugins]", 1);
 
     if (!empty($prefs['plugin_cache_dir'])) {
         $dir = rtrim($prefs['plugin_cache_dir'], '/').'/';
@@ -1762,6 +1763,7 @@ function load_plugins($type = false)
         }
         restore_error_handler();
     }
+    trace_add('', -1);
 }
 
 /**
