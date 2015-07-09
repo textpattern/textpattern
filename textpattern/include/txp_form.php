@@ -436,7 +436,7 @@ function form_save()
                                 type = '$type',
                                 name = '".doSlash($newname)."'"
                         )) {
-                            update_lastmod();
+                            update_lastmod('form_created', compact('newname', 'name', 'type', 'Form'));
                             $message = gTxt('form_created', array('{name}' => $newname));
                         } else {
                             $message = array(gTxt('form_save_failed'), E_ERROR);
@@ -454,7 +454,7 @@ function form_save()
                             name = '".doSlash($newname)."'",
                             "name = '".doSlash($name)."'"
                     )) {
-                        update_lastmod();
+                        update_lastmod('form_saved', compact('newname', 'name', 'type', 'Form'));
                         $message = gTxt('form_updated', array('{name}' => $name));
                     } else {
                         $message = array(gTxt('form_save_failed'), E_ERROR);

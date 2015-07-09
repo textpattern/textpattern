@@ -561,7 +561,7 @@ function file_multi_edit()
     }
 
     if ($changed) {
-        update_lastmod();
+        update_lastmod('file_updated', $changed);
 
         return file_list(gTxt('file_updated', array('{name}' => join(', ', $changed))));
     }
@@ -757,7 +757,7 @@ function file_create()
 
         if (is_file($newpath)) {
             file_set_perm($newpath);
-            update_lastmod();
+            update_lastmod('file_created', compact('id', 'safe_filename', 'title', 'category', 'description'));
             file_list(gTxt('linked_to_file').' '.$safe_filename);
         } else {
             file_list(gTxt('file_not_found').' '.$safe_filename);
@@ -821,7 +821,7 @@ function file_insert()
                 // Clean up file.
             } else {
                 file_set_perm($newpath);
-                update_lastmod();
+                update_lastmod('file_uploaded', compact('id', 'newname', 'title', 'category', 'description'));
                 file_edit(gTxt('file_uploaded', array('{name}' => $newname)), $id);
             }
         }
@@ -884,7 +884,8 @@ function file_replace()
             unlink($file);
         } else {
             file_set_perm($newpath);
-            update_lastmod();
+            update_lastmod('file_replaced', compact('id', 'filename'));
+
             if ($size = filesize($newpath)) {
                 safe_update('txp_file', 'size = '.$size.', modified = now()', 'id = '.$id);
             }
@@ -1000,7 +1001,7 @@ function file_save()
         }
     }
 
-    update_lastmod();
+    update_lastmod('file_saved', compact('id', 'filename', 'title', 'category', 'description', 'status', 'size'));
     file_list(gTxt('file_updated', array('{name}' => $filename)));
 }
 
@@ -1050,7 +1051,7 @@ function file_delete($ids = array())
 
                 return;
             } else {
-                update_lastmod();
+                update_lastmod('file_deleted', $ids);
                 file_list(gTxt('file_deleted', array('{name}' => join(', ', $ids))));
 
                 return;
