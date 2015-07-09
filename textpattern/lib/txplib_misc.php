@@ -4485,6 +4485,9 @@ function markup_comment($msg)
 /**
  * Updates site's last modification date.
  *
+ * When this action is performed, it will trigger a
+ * 'site.update > done' callback event.
+ *
  * @package Pref
  * @example
  * update_lastmod();
@@ -4492,7 +4495,11 @@ function markup_comment($msg)
 
 function update_lastmod()
 {
-    safe_upsert("txp_prefs", "val = now()", "name = 'lastmod'");
+    $whenStamp = time();
+    $whenDate = strftime('%Y-%m-%d %H:%M:%S', $whenStamp);
+
+    safe_upsert("txp_prefs", "val = '$whenDate'", "name = 'lastmod'");
+    callback_event('site.update', 'done', 0, compact('whenStamp', 'whenDate'));
 }
 
 /**
@@ -5580,9 +5587,17 @@ function quote_list($in)
 function trace_add($msg)
 {
     global $production_status, $txptrace, $txptracelevel;
+    static $memory_last = 0;
 
     if ($production_status === 'debug') {
-        $txptrace[] = str_repeat("\t", $txptracelevel).$msg;
+        if (is_callable('memory_get_usage')) {
+            $memory_now = ceil(memory_get_usage()/1024);
+            $memory = sprintf("%7s |%6s |", $memory_now, ($memory_now > $memory_last) ? $memory_now - $memory_last : "");
+            $memory_last = $memory_now;
+        } else {
+            $memory = "";
+        }
+        $txptrace[] = $memory . str_repeat("\t", $txptracelevel) . $msg;
     }
 }
 
