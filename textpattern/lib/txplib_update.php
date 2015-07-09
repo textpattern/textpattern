@@ -44,13 +44,13 @@
 
 function install_language_from_file($lang)
 {
-    $lang_file = txpath.'/lang/'.$lang.'.txt';
+    $lang_files = glob(txpath.'/lang/'.$lang.'.{txt,textpack}', GLOB_BRACE);
 
-    if (is_file($lang_file) && is_readable($lang_file)) {
-        $lang_file = txpath.'/lang/'.$lang.'.txt';
+    if (!empty($lang_files)) {
+        $lang_file = $lang_files[0];
 
         if (!is_file($lang_file) || !is_readable($lang_file)) {
-            return;
+            return false;
         }
 
         $file = @fopen($lang_file, "r");

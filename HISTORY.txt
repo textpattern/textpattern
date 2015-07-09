@@ -1,19 +1,28 @@
 Changes in 4.6.0 (Upcoming) TODO
 
+* Textile v2.5.
 * Improved RTL language support.
-* New tags: <txp:meta_description /> and <txp:if_description />.
+* Improved admin side UI.
+* New tags: <txp:authors />, <txp:meta_description />, <txp:if_description> and <txp:if_yield>.
+* Added: Default publishing status preference.
+* Added: Support for additional text markup languages.
 * Changed: <txp:meta_keywords /> accepts 'escape', 'format' and 'separator' attributes.
 * Changed: <txp:meta_author /> accepts 'escape' and 'format' attributes.
 * Changed: <txp:author /> accepts 'escape' and 'format' attributes.
 * Changed: <txp:category_list /> accepts 'html_id' attribute.
 * Changed: <txp:recent_articles /> accepts 'offset' attribute.
 * Changed: <txp:section_list /> accepts 'html_id' attribute.
+* Changed: <txp:password_protect /> tag can now be used as a container tag.
 * Changed: Deprecated 'breakclass' attribute for <txp:comments /> and <txp:image_info />.
 * Changed: Deprecated <txp:keywords> tag. Use <txp:meta_keywords format="" /> instead.
 * Changed: Deprecated <txp:rsd> tag.
 * Changed: Removed Form (article) Preview facility.
 * Changed: Removed empty 'About' section from new installs.
+* Changed: Increase 'page' and 'css' sizes in txp_section table.
+* Changed: 'Prevent widowed words in article titles' preference defaults to 'No' in new installs.
 * Developer: Added jQuery UI library and a jQuery UI Textpattern theme to admin side.
+* Developer: Added DocBlock documentation comments throughout the source code.
+* Developer: Adherence to PSR coding standards where possible.
 
 Changes in 4.5.7
 

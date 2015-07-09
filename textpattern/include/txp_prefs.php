@@ -671,6 +671,20 @@ function doctypes($name, $val)
 }
 
 /**
+ * Renders a HTML &lt;select&gt; list of available publishing
+ * status values.
+ *
+ * @param  string $name HTML name and id of the widget
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function defaultPublishStatus($name, $val)
+{
+    return selectInput($name, status_list(), $val, '', '', $name);
+}
+
+/**
  * Gets the maximum allowed file upload size.
  *
  * Computes the maximum acceptable file size to the application if the
