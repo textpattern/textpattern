@@ -385,7 +385,7 @@ function form_edit($message = '')
 
         n.tag(
             graf(sLink('form', 'form_create', gTxt('create_new_form')), ' class="action-create"').
-            ((count($skin_list) > 0)
+            ((count($skin_list) > 1)
             ? form(
                 inputLabel('skin', selectInput('skin', $skin_list, $skin, false, 1, 'skin'), 'skin').
                 eInput('form').

@@ -187,7 +187,7 @@ function css_edit($message = '')
 
         n.tag(
             graf(sLink('css', 'pour', gTxt('create_new_css')), array('class' => 'action-create')).
-            ((count($skin_list) > 0)
+            ((count($skin_list) > 1)
             ? form(
                 inputLabel('skin', selectInput('skin', $skin_list, $skin, false, 1, 'skin'), 'skin').
                 eInput('css').

@@ -161,7 +161,7 @@ function page_edit($message = '')
 
         n.tag(
             graf(sLink('page', 'page_new', gTxt('create_new_page')), ' class="action-create"').
-            ((count($skin_list) > 0)
+            ((count($skin_list) > 1)
             ? form(
                 inputLabel('skin', selectInput('skin', $skin_list, $skin, false, 1, 'skin'), 'skin').
                 eInput('page').
