@@ -5190,7 +5190,7 @@ function join_qs($q)
  * or for 'href' and 'src' to URL encoded a query string.
  *
  * @param   array|string  $atts  HTML attributes
- * @param   int           $flags TEXTPATTERN_ATTS_STRIP_EMPTY
+ * @param   int           $flags TEXTPATTERN_STRIP_EMPTY
  * @return  string        HTML attribute list
  * @since   4.6.0
  * @package HTML
@@ -5198,7 +5198,7 @@ function join_qs($q)
  * echo join_atts(array('class' => 'myClass', 'disabled' => true));
  */
 
-function join_atts($atts, $flags = TEXTPATTERN_ATTS_STRIP_EMPTY)
+function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY)
 {
     if (!is_array($atts)) {
         return $atts ? ' '.trim($atts) : '';
@@ -5207,7 +5207,7 @@ function join_atts($atts, $flags = TEXTPATTERN_ATTS_STRIP_EMPTY)
     $list = array();
 
     foreach ($atts as $name => $value) {
-        if (($flags & TEXTPATTERN_ATTS_STRIP_EMPTY && !$value) || $value === false) {
+        if (($flags & TEXTPATTERN_STRIP_EMPTY && !$value) || $value === false) {
             continue;
         } elseif (is_array($value)) {
             if ($name == 'href' || $name == 'src') {
@@ -5553,7 +5553,7 @@ function do_list($list, $delim = ',')
  *
  * @param  string $list  The string
  * @param  string $delim The boundary
- * @param  int    $flags STRIP_NONE STRIP_EMPTY STRIP_EMPTY_STRING
+ * @param  int    $flags TEXTPATTERN_STRIP_NONE TEXTPATTERN_STRIP_EMPTY TEXTPATTERN_STRIP_EMPTY_STRING
  * @return array
  * @example
  * print_r(
@@ -5561,13 +5561,14 @@ function do_list($list, $delim = ',')
  * );
  */
 
-function do_list_unique($list, $delim = ',', $flags = STRIP_EMPTY_STRING){
+function do_list_unique($list, $delim = ',', $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
+{
     $out = array_unique(array_map('trim', explode($delim, $list)));
-    if ($flags & STRIP_EMPTY) {
-        $out = array_filter( $out );
+    if ($flags & TEXTPATTERN_STRIP_EMPTY) {
+        $out = array_filter($out);
     }
-    if ($flags & STRIP_EMPTY_STRING) {
-        $out = array_filter( $out, function($v){return ($v=='') ? false : true;} );
+    if ($flags & TEXTPATTERN_STRIP_EMPTY_STRING) {
+        $out = array_filter($out, function ($v) {return ($v=='') ? false : true;});
     }
     return $out;
 }
