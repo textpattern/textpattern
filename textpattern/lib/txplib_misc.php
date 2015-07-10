@@ -1852,6 +1852,7 @@ function callback_event($event, $step = '', $pre = 0)
     if (!is_array($plugin_callback)) {
         return '';
     }
+    trace_add("[Callback_event: '$event', step='$step', pre='$pre']");
 
     // Any payload parameters?
     $argv = func_get_args();
@@ -1860,6 +1861,13 @@ function callback_event($event, $step = '', $pre = 0)
     foreach ($plugin_callback as $c) {
         if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
             if (is_callable($c['function'])) {
+                if (is_string($c['function'])) {
+                    trace_add("\t[Call function: '{$c['function']}'" . (empty($argv) ? "" : ", argv='".serialize($argv)."'") . "]");
+                } elseif (@is_object($c['function'][0])) {
+                    $objname = @get_class($c['function'][0]);
+                    trace_add("\t[Call object: '{$objname}']");
+                }
+
                 $return_value = call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
 
                 if (isset($out)) {
