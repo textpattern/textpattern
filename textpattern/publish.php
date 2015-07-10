@@ -43,7 +43,7 @@ include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_publish.php';
 include_once txpath.'/lib/txplib_misc.php';
 
-trace_log( TRACE_START );
+trace_log(TEXTPATTERN_TRACE_START);
 
 include_once txpath.'/lib/txplib_db.php';
 include_once txpath.'/lib/txplib_html.php';
@@ -617,7 +617,7 @@ function textpattern()
     header("Content-type: text/html; charset=utf-8");
     echo $html;
 
-    trace_log( TRACE_DISPLAY );
+    trace_log(TEXTPATTERN_TRACE_DISPLAY);
 
     callback_event('textpattern_end');
 }
