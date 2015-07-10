@@ -1849,8 +1849,6 @@ function callback_event($event, $step = '', $pre = 0)
 {
     global $plugin_callback, $production_status;
 
-    trace_add("[Callback_event: '$event', step='$step', pre='$pre']");
-
     if (!is_array($plugin_callback)) {
         return '';
     }
@@ -1862,18 +1860,6 @@ function callback_event($event, $step = '', $pre = 0)
     foreach ($plugin_callback as $c) {
         if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
             if (is_callable($c['function'])) {
-
-                if ($production_status === 'debug') {
-                    if (is_array($c['function'])) {
-                        if (@is_object($c['function'][0])) {
-                            $objname = @get_class($c['function'][0]);
-                            trace_add("\t[Call object: '{$objname}']");
-                        }
-                    } else {
-                        trace_add("\t[Call function: '{$c['function']}'" . (empty($argv) ? "" : ", argv='".serialize($argv)."'") . "]");
-                    }
-                }
-
                 $return_value = call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
 
                 if (isset($out)) {
