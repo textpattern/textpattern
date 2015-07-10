@@ -251,7 +251,7 @@ function css_save()
             if ($savenew or $copy) {
                 if ($newname) {
                     if (safe_insert('txp_css', "name = '$safe_newname', css = '$css', skin = '$safe_skin'")) {
-                        update_lastmod();
+                        update_lastmod('css_created', compact('newname', 'name', 'css'));
                         $message = gTxt('css_created', array('{name}' => $newname));
                     } else {
                         $message = array(gTxt('css_save_failed'), E_ERROR);
@@ -266,7 +266,7 @@ function css_save()
                         "css = '$css', name = '$safe_newname', skin = '$safe_skin'",
                         "name = '$safe_name' AND skin = '$safe_skin'")) {
                     safe_update('txp_section', "css = '$safe_newname'", "css='$safe_name'");
-                    update_lastmod();
+                    update_lastmod('css_saved', compact('newname', 'name', 'css'));
                     $message = gTxt('css_updated', array('{name}' => $name));
                 } else {
                     $message = array(gTxt('css_save_failed'), E_ERROR);

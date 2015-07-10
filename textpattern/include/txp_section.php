@@ -613,7 +613,7 @@ function section_save()
     }
 
     if ($ok) {
-        update_lastmod();
+        update_lastmod('section_saved', compact('name', 'title', 'page', 'css', 'description', 'on_frontpage', 'in_rss', 'searchable'));
     }
 
     if ($ok) {

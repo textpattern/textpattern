@@ -297,7 +297,7 @@ function page_save()
             if ($savenew or $copy) {
                 if ($newname) {
                     if (safe_insert('txp_page', "name = '$safe_newname', user_html = '$html', skin = '$safe_skin'")) {
-                        update_lastmod();
+                        update_lastmod('page_created', compact('newname', 'name', 'html'));
                         $message = gTxt('page_created', array('{name}' => $newname));
                     } else {
                         $message = array(gTxt('page_save_failed'), E_ERROR);
@@ -312,7 +312,7 @@ function page_save()
                         "user_html = '$html', name = '$safe_newname', skin = '$safe_skin'",
                         "name = '$safe_name' AND skin = '$safe_skin'")) {
                     safe_update('txp_section', "page = '$safe_newname'", "page='$safe_name'");
-                    update_lastmod();
+                    update_lastmod('page_saved', compact('newname', 'name', 'html'));
                     $message = gTxt('page_updated', array('{name}' => $name));
                 } else {
                     $message = array(gTxt('page_save_failed'), E_ERROR);

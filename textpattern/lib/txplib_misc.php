@@ -933,7 +933,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
     }
 
     $message = gTxt('image_uploaded', array('{name}' => $name));
-    update_lastmod();
+    update_lastmod('image_uploaded', compact('id', 'name', 'ext', 'w', 'h', 'alt', 'caption', 'category', 'txpuser'));
 
     // call post-upload plugins with new image's $id
     callback_event('image_uploaded', $event, false, $id);
@@ -4511,20 +4511,24 @@ function markup_comment($msg)
  * Updates site's last modification date.
  *
  * When this action is performed, it will trigger a
- * 'site.update > done' callback event.
+ * 'site.update > {event}' callback event and pass
+ * any record set that triggered the update, along
+ * with the exact time the update was triggered.
  *
+ * @param   $trigger Textpattern event or step that triggered the update
+ * @param   $rs      Record set data at the time of update
  * @package Pref
  * @example
  * update_lastmod();
  */
 
-function update_lastmod()
+function update_lastmod($trigger = '', $rs = array())
 {
     $whenStamp = time();
     $whenDate = strftime('%Y-%m-%d %H:%M:%S', $whenStamp);
 
     safe_upsert("txp_prefs", "val = '$whenDate'", "name = 'lastmod'");
-    callback_event('site.update', 'done', 0, compact('whenStamp', 'whenDate'));
+    callback_event('site.update', $trigger, 0, $rs, compact('whenStamp', 'whenDate'));
 }
 
 /**
@@ -5612,9 +5616,17 @@ function quote_list($in)
 function trace_add($msg)
 {
     global $production_status, $txptrace, $txptracelevel;
+    static $memory_last = 0;
 
     if ($production_status === 'debug') {
-        $txptrace[] = str_repeat("\t", $txptracelevel).$msg;
+        if (is_callable('memory_get_usage')) {
+            $memory_now = ceil(memory_get_usage()/1024);
+            $memory = sprintf("%7s |%6s |", $memory_now, ($memory_now > $memory_last) ? $memory_now - $memory_last : "");
+            $memory_last = $memory_now;
+        } else {
+            $memory = "";
+        }
+        $txptrace[] = $memory . str_repeat("\t", $txptracelevel) . $msg;
     }
 }
 

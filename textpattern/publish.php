@@ -628,7 +628,7 @@ function textpattern()
         echo maxMemUsage('end of textpattern()', 1);
 
         if (!empty($txptrace) and is_array($txptrace)) {
-            echo n, comment('txp tag trace: '.n.join(n, $txptrace).n);
+            echo n, comment('txp tag trace: '.n.'Mem(Kb)_|_+(Kb)_|_Trace___'.n.join(n, $txptrace).n);
         }
     }
 

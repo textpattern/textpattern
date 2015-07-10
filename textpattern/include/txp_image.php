@@ -448,7 +448,7 @@ function image_multi_edit()
     }
 
     if ($changed) {
-        update_lastmod();
+        update_lastmod('image_updated', $changed);
 
         return image_list(gTxt('image_updated', array('{name}' => join(', ', $changed))));
     }
@@ -693,7 +693,7 @@ function thumbnail_insert()
             safe_update("txp_image", "thumbnail = 1, thumb_w = $w, thumb_h = $h, date = now()", "id = $id");
 
             $message = gTxt('image_uploaded', array('{name}' => $name));
-            update_lastmod();
+            update_lastmod('thumbnail_created', compact('id', 'w', 'h'));
 
             image_edit($message, $id);
         }
@@ -738,7 +738,7 @@ function image_save()
         "id = $id"
     )) {
         $message = gTxt('image_updated', array('{name}' => doStrip($name)));
-        update_lastmod();
+        update_lastmod('image_saved', compact('id', 'name', 'category', 'alt', 'caption'));
     } else {
         $message = array(gTxt('image_save_failed'), E_ERROR);
     }
@@ -794,7 +794,7 @@ function image_delete($ids = array())
             if ($fail) {
                 $message = array(gTxt('image_delete_failed', array('{name}' => join(', ', $fail))), E_ERROR);
             } else {
-                update_lastmod();
+                update_lastmod('image_deleted', compact('id'));
                 $message = gTxt('image_deleted', array('{name}' => join(', ', $ids)));
             }
         }
@@ -863,7 +863,7 @@ function thumbnail_create()
 
     if ($t->write()) {
         $message = gTxt('thumbnail_saved', array('{id}' => $id));
-        update_lastmod();
+        update_lastmod('thumbnail_created', compact('id', 'width', 'height', 'crop'));
 
         image_edit($message, $id);
     } else {
@@ -892,7 +892,7 @@ function thumbnail_delete()
 
     if ($t->delete()) {
         callback_event('thumbnail_deleted', '', false, $id);
-        update_lastmod();
+        update_lastmod('thumbnail_deleted', compact('id'));
         image_edit(gTxt('thumbnail_deleted'), $id);
     } else {
         image_edit(array(gTxt('thumbnail_delete_failed'), E_ERROR), $id);

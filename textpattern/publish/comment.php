@@ -488,7 +488,7 @@ function saveComment()
                 safe_update("txp_discuss_nonce", "used = 1", "nonce='".doSlash($nonce)."'");
 
                 if ($prefs['comment_means_site_updated']) {
-                    update_lastmod();
+                    update_lastmod('comment_saved', compact('commentid', 'parentid', 'name', 'email', 'web', 'message', 'visible', 'ip'));
                 }
 
                 callback_event('comment.saved', '', false, compact(
