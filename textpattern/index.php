@@ -66,7 +66,7 @@ define("txpinterface", "admin");
 $thisversion = '4.6-dev';
 $txp_using_svn = true; // Set false for releases.
 
-ob_start(NULL, 2048);
+ob_start(null, 2048);
 
 if (!isset($txpcfg['table_prefix']) && !@include './config.php') {
     ob_end_clean();
@@ -92,7 +92,7 @@ $loader->register();
 include_once txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
 
-trace_log( TEXTPATTERN_TRACE_START );
+trace_log(TEXTPATTERN_TRACE_START);
 
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/txplib_forms.php';
@@ -219,9 +219,9 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
     end_page();
 
     if ($app_mode != 'async') {
-        trace_log( TEXTPATTERN_TRACE_DISPLAY );
+        trace_log(TEXTPATTERN_TRACE_DISPLAY);
     } else {
-        $trace = trace_log( TEXTPATTERN_TRACE_RESULT );
+        $trace = trace_log(TEXTPATTERN_TRACE_RESULT);
         header("X-Textpattern-Runtime: " . @$trace['microdiff']);
         header("X-Textpattern-Memory: "  . @$trace['memory_peak']);
     }

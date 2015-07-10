@@ -5621,7 +5621,7 @@ function trace_add($msg, $tracelevel_diff = 0)
  * @package Debug
  */
 
-function trace_log( $flags = TEXTPATTERN_TRACE_RESULT )
+function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
 {
     global $production_status, $txptrace, $qtime, $qcount;
     static $microstart = 0;
