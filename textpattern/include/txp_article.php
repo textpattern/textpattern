@@ -294,7 +294,7 @@ function article_post()
 
                 if ($Status >= STATUS_LIVE) {
                     do_pings();
-                    update_lastmod();
+                    update_lastmod('article_posted', $rs);
                 }
 
                 callback_event('article_posted', '', false, $rs);
@@ -481,7 +481,7 @@ function article_save()
             }
 
             if ($Status >= STATUS_LIVE || $oldArticle['Status'] >= STATUS_LIVE) {
-                update_lastmod();
+                update_lastmod('article_saved', $rs);
             }
 
             callback_event('article_saved', '', false, $rs);

@@ -80,7 +80,7 @@ function discuss_save()
         "discussid = $discussid"
     )) {
         update_comments_count($parentid);
-        update_lastmod();
+        update_lastmod('discuss_saved', compact('discussid', 'email', 'name', 'web', 'message', 'ip', 'visible', 'parentid'));
         $message = gTxt('comment_updated', array('{id}' => $discussid));
     } else {
         $message = array(gTxt('comment_save_failed'), E_ERROR);
@@ -826,21 +826,21 @@ function discuss_multi_edit()
             }
         }
 
-        $done = join(', ', $done);
+        $doneStr = join(', ', $done);
 
-        if ($done) {
+        if ($doneStr) {
             // Might as well clean up all comment counts while we're here.
             clean_comment_counts($parentids);
 
             $messages = array(
-                'delete'      => gTxt('comments_deleted', array('{list}' => $done)),
-                'ban'         => gTxt('ips_banned', array('{list}' => $done)),
-                'spam'        => gTxt('comments_marked_spam', array('{list}' => $done)),
-                'unmoderated' => gTxt('comments_marked_unmoderated', array('{list}' => $done)),
-                'visible'     => gTxt('comments_marked_visible', array('{list}' => $done)),
+                'delete'      => gTxt('comments_deleted', array('{list}' => $doneStr)),
+                'ban'         => gTxt('ips_banned', array('{list}' => $doneStr)),
+                'spam'        => gTxt('comments_marked_spam', array('{list}' => $doneStr)),
+                'unmoderated' => gTxt('comments_marked_unmoderated', array('{list}' => $doneStr)),
+                'visible'     => gTxt('comments_marked_visible', array('{list}' => $doneStr)),
             );
 
-            update_lastmod();
+            update_lastmod('discuss_updated', $done);
 
             return discuss_list($messages[$method]);
         }

@@ -132,7 +132,7 @@ function prefs_save()
         update_pref($name, (string) $post[$name], null, null, null, null, (string) $user_name);
     }
 
-    update_lastmod();
+    update_lastmod('preferences_saved');
 
     prefs_list(gTxt('preferences_saved'));
 }
