@@ -40,7 +40,7 @@ if (!defined('TXP_DEBUG')) {
 }
 
 /**
- * Trace log constants
+ * Trace log constants.
  *
  * @since   4.6.0
  * @package Debug
@@ -795,14 +795,16 @@ define('TEXTPATTERN_LANG_OWNER_SYSTEM', '');
 define('TEXTPATTERN_LANG_OWNER_SITE', 'site');
 
 /**
- * Strip empty HTML attribute values.
+ * Strip empty values.
  *
  * @since   4.6.0
  * @package HTML
- * @see     join_atts()
+ * @see     join_atts(), do_list_unique()
  */
 
-define('TEXTPATTERN_ATTS_STRIP_EMPTY', 0x1);
+define('TEXTPATTERN_STRIP_NONE',         0);
+define('TEXTPATTERN_STRIP_EMPTY',        0x1);
+define('TEXTPATTERN_STRIP_EMPTY_STRING', 0x2);
 
 /**
  * Sends an adaptive announcement.
