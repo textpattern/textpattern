@@ -836,3 +836,14 @@ define('TEXTPATTERN_ANNOUNCE_ASYNC', 0x4);
  */
 
 define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
+
+/**
+ * Strip array/string flags
+ *
+ * @since   4.6.0
+ * @see     do_list_unique()
+ */
+
+define('STRIP_NONE',         0);
+define('STRIP_EMPTY',        0x1);
+define('STRIP_EMPTY_STRING', 0x2);
