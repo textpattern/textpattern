@@ -5547,6 +5547,32 @@ function do_list($list, $delim = ',')
 }
 
 /**
+ * Split a string by string.
+ * This function trims created unique values from whitespace.
+ * Flags allow to exclude empty strings..
+ *
+ * @param  string $list  The string
+ * @param  string $delim The boundary
+ * @param  int    $flags STRIP_NONE STRIP_EMPTY STRIP_EMPTY_STRING
+ * @return array
+ * @example
+ * print_r(
+ *     do_list_unique('value1, value2, value3')
+ * );
+ */
+
+function do_list_unique($list, $delim = ',', $flags = STRIP_EMPTY_STRING){
+    $out = array_unique(array_map('trim', explode($delim, $list)));
+    if ($flags & STRIP_EMPTY) {
+        $out = array_filter( $out );
+    }
+    if ($flags & STRIP_EMPTY_STRING) {
+        $out = array_filter( $out, function($v){return ($v=='') ? false : true;} );
+    }
+    return $out;
+}
+
+/**
  * Wraps a string in single quotes.
  *
  * @param  string $val The input string
