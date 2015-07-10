@@ -187,21 +187,21 @@ function doLike($in)
 
 function txpspecialchars($string, $flags = ENT_QUOTES, $encoding = 'UTF-8', $double_encode = true)
 {
-//    Ignore ENT_HTML5 and ENT_XHTML for now.
-//    ENT_HTML5 and ENT_XHTML are defined in PHP 5.4+ but we consistently encode single quotes as &#039; in any doctype.
-//    global $prefs;
-//    static $h5 = null;
-//
-//    if (defined(ENT_HTML5)) {
-//        if ($h5 === null) {
-//            $h5 = ($prefs['doctype'] == 'html5' && txpinterface == 'public');
-//        }
-//
-//        if ($h5) {
-//            $flags = ($flags | ENT_HTML5) & ~ENT_HTML401;
-//        }
-//    }
-//
+    //    Ignore ENT_HTML5 and ENT_XHTML for now.
+    //    ENT_HTML5 and ENT_XHTML are defined in PHP 5.4+ but we consistently encode single quotes as &#039; in any doctype.
+    //    global $prefs;
+    //    static $h5 = null;
+    //
+    //    if (defined(ENT_HTML5)) {
+    //        if ($h5 === null) {
+    //            $h5 = ($prefs['doctype'] == 'html5' && txpinterface == 'public');
+    //        }
+    //
+    //        if ($h5) {
+    //            $flags = ($flags | ENT_HTML5) & ~ENT_HTML401;
+    //        }
+    //    }
+    //
     return htmlspecialchars($string, $flags, $encoding, $double_encode);
 }
 
