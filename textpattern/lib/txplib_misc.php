@@ -2057,7 +2057,7 @@ function pluggable_ui($event, $element, $default = '')
  * @package    TagParser
  */
 
-function getAtt($name, $default = NULL)
+function getAtt($name, $default = null)
 {
     trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'lAtts')), E_USER_NOTICE);
     global $theseatts;
@@ -2077,7 +2077,7 @@ function getAtt($name, $default = NULL)
  * @package    TagParser
  */
 
-function gAtt(&$atts, $name, $default = NULL)
+function gAtt(&$atts, $name, $default = null)
 {
     trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'lAtts')), E_USER_NOTICE);
 
@@ -2899,7 +2899,7 @@ function event_multiedit_form($name, $methods = null, $page, $sort, $dir, $crit,
 {
     $method = ps('edit_method');
 
-    if ($methods === NULL) {
+    if ($methods === null) {
         $methods = array(
             'delete' => gTxt('delete'),
         );
@@ -5619,9 +5619,9 @@ function trace_add($msg, $tracelevel_diff = 0)
 }
 
 /**
- * Trace log: Start / Display / Result values
+ * Trace log: Start / Display / Result values.
  *
- * @param   int  $flags One of TEXTPATTERN_TRACE_START | TEXTPATTERN_TRACE_DISPLAY | TEXTPATTERN_TRACE_RESULT
+ * @param   int   $flags One of TEXTPATTERN_TRACE_START | TEXTPATTERN_TRACE_DISPLAY | TEXTPATTERN_TRACE_RESULT
  * @return  mixed
  * @package Debug
  */
