@@ -2063,7 +2063,7 @@ function pluggable_ui($event, $element, $default = '')
  * @package    TagParser
  */
 
-function getAtt($name, $default = NULL)
+function getAtt($name, $default = null)
 {
     trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'lAtts')), E_USER_NOTICE);
     global $theseatts;
@@ -2083,7 +2083,7 @@ function getAtt($name, $default = NULL)
  * @package    TagParser
  */
 
-function gAtt(&$atts, $name, $default = NULL)
+function gAtt(&$atts, $name, $default = null)
 {
     trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'lAtts')), E_USER_NOTICE);
 
@@ -2907,7 +2907,7 @@ function event_multiedit_form($name, $methods = null, $page, $sort, $dir, $crit,
 {
     $method = ps('edit_method');
 
-    if ($methods === NULL) {
+    if ($methods === null) {
         $methods = array(
             'delete' => gTxt('delete'),
         );
