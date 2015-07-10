@@ -5605,7 +5605,7 @@ function trace_add($msg, $tracelevel_diff = 0)
         } else {
             $memory = "";
         }
-        $txptrace[] = $memory . str_repeat("\t", $txptracelevel) . $msg;
+        $txptrace[] = $memory . @str_repeat("\t", $txptracelevel) . $msg;
     }
 
     if ((int)$tracelevel_diff) {
