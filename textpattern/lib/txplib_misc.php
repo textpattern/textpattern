@@ -1716,6 +1716,7 @@ function load_plugins($type = false)
     if (!is_array($plugins)) {
         $plugins = array();
     }
+    trace_add("[Loading plugins]", 1);
 
     if (!empty($prefs['plugin_cache_dir'])) {
         $dir = rtrim($prefs['plugin_cache_dir'], '/').'/';
@@ -1762,6 +1763,7 @@ function load_plugins($type = false)
         }
         restore_error_handler();
     }
+    trace_add('', -1);
 }
 
 /**
@@ -2061,7 +2063,7 @@ function pluggable_ui($event, $element, $default = '')
  * @package    TagParser
  */
 
-function getAtt($name, $default = NULL)
+function getAtt($name, $default = null)
 {
     trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'lAtts')), E_USER_NOTICE);
     global $theseatts;
@@ -2081,7 +2083,7 @@ function getAtt($name, $default = NULL)
  * @package    TagParser
  */
 
-function gAtt(&$atts, $name, $default = NULL)
+function gAtt(&$atts, $name, $default = null)
 {
     trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'lAtts')), E_USER_NOTICE);
 
@@ -2905,7 +2907,7 @@ function event_multiedit_form($name, $methods = null, $page, $sort, $dir, $crit,
 {
     $method = ps('edit_method');
 
-    if ($methods === NULL) {
+    if ($methods === null) {
         $methods = array(
             'delete' => gTxt('delete'),
         );
@@ -5190,7 +5192,7 @@ function join_qs($q)
  * or for 'href' and 'src' to URL encoded a query string.
  *
  * @param   array|string  $atts  HTML attributes
- * @param   int           $flags TEXTPATTERN_ATTS_STRIP_EMPTY
+ * @param   int           $flags TEXTPATTERN_STRIP_EMPTY
  * @return  string        HTML attribute list
  * @since   4.6.0
  * @package HTML
@@ -5198,7 +5200,7 @@ function join_qs($q)
  * echo join_atts(array('class' => 'myClass', 'disabled' => true));
  */
 
-function join_atts($atts, $flags = TEXTPATTERN_ATTS_STRIP_EMPTY)
+function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY)
 {
     if (!is_array($atts)) {
         return $atts ? ' '.trim($atts) : '';
@@ -5207,7 +5209,7 @@ function join_atts($atts, $flags = TEXTPATTERN_ATTS_STRIP_EMPTY)
     $list = array();
 
     foreach ($atts as $name => $value) {
-        if (($flags & TEXTPATTERN_ATTS_STRIP_EMPTY && !$value) || $value === false) {
+        if (($flags & TEXTPATTERN_STRIP_EMPTY && !$value) || $value === false) {
             continue;
         } elseif (is_array($value)) {
             if ($name == 'href' || $name == 'src') {
@@ -5547,6 +5549,34 @@ function do_list($list, $delim = ',')
 }
 
 /**
+ * Split a string by string.
+ *
+ * This function trims created unique values from whitespace.
+ * Flags allow to exclude empty strings..
+ *
+ * @param  string $list  The string
+ * @param  string $delim The boundary
+ * @param  int    $flags TEXTPATTERN_STRIP_NONE TEXTPATTERN_STRIP_EMPTY TEXTPATTERN_STRIP_EMPTY_STRING
+ * @return array
+ * @example
+ * print_r(
+ *     do_list_unique('value1, value2, value3')
+ * );
+ */
+
+function do_list_unique($list, $delim = ',', $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
+{
+    $out = array_unique(array_map('trim', explode($delim, $list)));
+    if ($flags & TEXTPATTERN_STRIP_EMPTY) {
+        $out = array_filter($out);
+    }
+    if ($flags & TEXTPATTERN_STRIP_EMPTY_STRING) {
+        $out = array_filter($out, function ($v) {return ($v=='') ? false : true;});
+    }
+    return $out;
+}
+
+/**
  * Wraps a string in single quotes.
  *
  * @param  string $val The input string
@@ -5584,16 +5614,18 @@ function quote_list($in)
 /**
  * Adds a line to the tag trace.
  *
- * @param   string $msg The message
+ * @param   string $msg               The message
+ * @param   int    $tracelevel_diff   Change trace level
  * @package Debug
  */
 
-function trace_add($msg)
+function trace_add($msg, $tracelevel_diff = 0)
 {
-    global $production_status, $txptrace, $txptracelevel;
+    global $production_status, $txptrace;
     static $memory_last = 0;
+    static $txptracelevel = 0;
 
-    if ($production_status === 'debug') {
+    if ($production_status === 'debug' && !empty($msg)) {
         if (is_callable('memory_get_usage')) {
             $memory_now = ceil(memory_get_usage()/1024);
             $memory = sprintf("%7s |%6s |", $memory_now, ($memory_now > $memory_last) ? $memory_now - $memory_last : "");
@@ -5601,7 +5633,53 @@ function trace_add($msg)
         } else {
             $memory = "";
         }
-        $txptrace[] = $memory . str_repeat("\t", $txptracelevel) . $msg;
+        $txptrace[] = $memory . @str_repeat("\t", $txptracelevel) . $msg;
+    }
+
+    if ((int)$tracelevel_diff) {
+        $txptracelevel += (int)$tracelevel_diff;
+    }
+}
+
+/**
+ * Trace log: Start / Display / Result values.
+ *
+ * @param   int  $flags   one of TEXTPATTERN_TRACE_START | TEXTPATTERN_TRACE_DISPLAY | TEXTPATTERN_TRACE_RESULT
+ * @return  mixed
+ *
+ * @package Debug
+ */
+
+function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
+{
+    global $production_status, $txptrace, $qtime, $qcount;
+    static $microstart = 0;
+
+    if ($flags & TEXTPATTERN_TRACE_START) {
+        $microstart = getmicrotime();
+        $production_status = 'debug';
+        $txptrace = array();
+        return;
+    }
+
+    $microdiff = (getmicrotime() - $microstart);
+    $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
+
+    if ($production_status !== 'live' && $flags & TEXTPATTERN_TRACE_DISPLAY) {
+        echo n,comment('Runtime:    '.substr($microdiff, 0, 6));
+        echo n,comment('Query time: '.sprintf('%02.6f', $qtime));
+        echo n,comment('Queries: '.$qcount);
+
+        echo n.comment(sprintf('Memory Peak: %sKb', $memory_peak));
+        echo maxMemUsage('', 1);
+
+        if ($production_status === 'debug') {
+            echo n, comment('Trace log: '.n.'Mem(Kb)_|_+(Kb)_|_Trace___'.n.join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace)).n);
+        }
+    }
+
+    if ($flags & TEXTPATTERN_TRACE_RESULT) {
+        return array('microdiff' => $microdiff, 'memory_peak' => $memory_peak);
     }
 }
 
