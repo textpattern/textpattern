@@ -5550,6 +5550,7 @@ function do_list($list, $delim = ',')
 
 /**
  * Split a string by string.
+ *
  * This function trims created unique values from whitespace.
  * Flags allow to exclude empty strings..
  *
@@ -5641,7 +5642,8 @@ function trace_add($msg, $tracelevel_diff = 0)
 }
 
 /**
- * Trace log: Start / Display / Result values
+ * Trace log: Start / Display / Result values.
+ *
  * @param   int  $flags   one of TEXTPATTERN_TRACE_START | TEXTPATTERN_TRACE_DISPLAY | TEXTPATTERN_TRACE_RESULT
  * @return  mixed
  *
