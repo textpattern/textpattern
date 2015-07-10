@@ -47,9 +47,9 @@ if (!defined('TXP_DEBUG')) {
  * @see     trace_log()
  */
 
-define('TRACE_START',   0x1);
-define('TRACE_DISPLAY', 0x2);
-define('TRACE_RESULT',  0x4);
+define('TEXTPATTERN_TRACE_START',   0x1);
+define('TEXTPATTERN_TRACE_DISPLAY', 0x2);
+define('TEXTPATTERN_TRACE_RESULT',  0x4);
 
 /**
  * Comment spam status.

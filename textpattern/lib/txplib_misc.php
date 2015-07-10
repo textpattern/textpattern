@@ -5615,18 +5615,18 @@ function trace_add($msg, $tracelevel_diff = 0)
 
 /**
  * Trace log: Start / Display / Result values
- * @param   int  $flags   one of TRACE_START | TRACE_DISPLAY | TRACE_RESULT
+ * @param   int  $flags   one of TEXTPATTERN_TRACE_START | TEXTPATTERN_TRACE_DISPLAY | TEXTPATTERN_TRACE_RESULT
  * @return  mixed
  *
  * @package Debug
  */
 
-function trace_log( $flags = TRACE_RESULT )
+function trace_log( $flags = TEXTPATTERN_TRACE_RESULT )
 {
     global $production_status, $txptrace, $qtime, $qcount;
     static $microstart = 0;
 
-    if ($flags & TRACE_START) {
+    if ($flags & TEXTPATTERN_TRACE_START) {
         $microstart = getmicrotime();
         $production_status = 'debug';
         $txptrace = array();
@@ -5636,7 +5636,7 @@ function trace_log( $flags = TRACE_RESULT )
     $microdiff = (getmicrotime() - $microstart);
     $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
 
-    if ($production_status !== 'live' && $flags & TRACE_DISPLAY) {
+    if ($production_status !== 'live' && $flags & TEXTPATTERN_TRACE_DISPLAY) {
         echo n,comment('Runtime:    '.substr($microdiff, 0, 6));
         echo n,comment('Query time: '.sprintf('%02.6f', $qtime));
         echo n,comment('Queries: '.$qcount);
@@ -5649,7 +5649,7 @@ function trace_log( $flags = TRACE_RESULT )
         }
     }
 
-    if ($flags & TRACE_RESULT) {
+    if ($flags & TEXTPATTERN_TRACE_RESULT) {
         return array('microdiff' => $microdiff, 'memory_peak' => $memory_peak);
     }
 }
