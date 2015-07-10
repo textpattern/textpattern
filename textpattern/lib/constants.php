@@ -40,7 +40,7 @@ if (!defined('TXP_DEBUG')) {
 }
 
 /**
- * Trace log constants
+ * Trace log constants.
  *
  * @since   4.6.0
  * @package Debug
