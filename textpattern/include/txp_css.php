@@ -225,7 +225,7 @@ function css_save()
             if ($savenew or $copy) {
                 if ($newname) {
                     if (safe_insert('txp_css', "name = '".doSlash($newname)."', css = '$css'")) {
-                        update_lastmod();
+                        update_lastmod('css_created', compact('newname', 'name', 'css'));
                         $message = gTxt('css_created', array('{name}' => $newname));
                     } else {
                         $message = array(gTxt('css_save_failed'), E_ERROR);
@@ -238,7 +238,7 @@ function css_save()
             } else {
                 if (safe_update('txp_css', "css = '$css', name = '".doSlash($newname)."'", "name = '".doSlash($name)."'")) {
                     safe_update('txp_section', "css = '".doSlash($newname)."'", "css='".doSlash($name)."'");
-                    update_lastmod();
+                    update_lastmod('css_saved', compact('newname', 'name', 'css'));
                     $message = gTxt('css_updated', array('{name}' => $name));
                 } else {
                     $message = array(gTxt('css_save_failed'), E_ERROR);

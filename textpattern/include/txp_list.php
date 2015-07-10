@@ -584,7 +584,7 @@ function list_multi_edit()
                 safe_update('txp_discuss', "visible = ".MODERATE, "parentid in(".join(',', $selected).")");
                 callback_event('articles_deleted', '', 0, $selected);
                 callback_event('multi_edited.articles', 'delete', 0, compact('selected', 'field', 'value'));
-                update_lastmod();
+                update_lastmod('articles_deleted', $selected);
 
                 return list_list(messenger('article', join(', ', $selected), 'deleted'));
             }
@@ -691,7 +691,7 @@ function list_multi_edit()
             return list_list();
         }
 
-        update_lastmod();
+        update_lastmod('articles_updated', compact('selected', 'field', 'value'));
         callback_event('multi_edited.articles', $edit_method, 0, compact('selected', 'field', 'value'));
 
         return list_list($message);
