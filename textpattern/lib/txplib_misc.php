@@ -5643,6 +5643,7 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
         $microstart = getmicrotime();
         $production_status = 'debug';
         $txptrace = array();
+        trace_add("[Trace Start]");
         return;
     }
 
@@ -5650,6 +5651,7 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
     $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
 
     if ($production_status !== 'live' && $flags & TEXTPATTERN_TRACE_DISPLAY) {
+        trace_add("[Trace End]");
         echo n,comment('Runtime:    '.substr($microdiff, 0, 6));
         echo n,comment('Query time: '.sprintf('%02.6f', $qtime));
         echo n,comment('Queries: '.$qcount);

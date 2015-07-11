@@ -42,9 +42,6 @@ $loader->register();
 include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_publish.php';
 include_once txpath.'/lib/txplib_misc.php';
-
-trace_log(TEXTPATTERN_TRACE_START);
-
 include_once txpath.'/lib/txplib_db.php';
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
@@ -53,6 +50,7 @@ include_once txpath.'/lib/admin_config.php';
 include_once txpath.'/publish/taghandlers.php';
 include_once txpath.'/publish/log.php';
 include_once txpath.'/publish/comment.php';
+trace_add("[PHP Include end]");
 
 set_error_handler('publicErrorHandler', error_reporting());
 
@@ -616,8 +614,6 @@ function textpattern()
 
     header("Content-type: text/html; charset=utf-8");
     echo $html;
-
-    trace_log(TEXTPATTERN_TRACE_DISPLAY);
 
     callback_event('textpattern_end');
 }
