@@ -2053,6 +2053,10 @@ function article_partial_value($rs, $key)
 
 function article_validate($rs, &$msg)
 {
+	if (!empty($msg)) {
+		return false;
+	}
+
     global $prefs, $step, $statuses;
 
     $constraints = array(
