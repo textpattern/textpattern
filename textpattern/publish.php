@@ -173,7 +173,9 @@ extract($pretext);
 set_error_level($production_status);
 
 if (isset($feed)) {
-    exit($feed());
+    echo $feed();
+    trace_log(TEXTPATTERN_TRACE_DISPLAY);
+    exit;
 }
 
 if (gps('parentid') && gps('submit')) {
