@@ -5617,7 +5617,7 @@ function trace_add($msg, $tracelevel_diff = 0)
             $time_now = getmicrotime();
             $diff = ($time_now - $time_last) * 1000;
 
-            $memory = sprintf("%7s |%6s |%8s |",
+            $memory = sprintf("%7s |%7s |%8s |",
                 $memory_now,
                 ($memory_now > $memory_last) ? $memory_now - $memory_last : "",
                 ($diff > 0.2 and $diff < 900) ? number_format($diff, 2, '.', '') : ""
@@ -5662,15 +5662,17 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
     if ($production_status !== 'live' && $flags & TEXTPATTERN_TRACE_DISPLAY) {
         trace_add("[Trace End]");
         echo n,comment('Runtime:    '.substr($microdiff, 0, 6));
-        echo n,comment('Query time: '.sprintf('%02.6f', $qtime));
-        echo n,comment('Queries: '.$qcount);
-
+        echo n,comment('Query time: '.sprintf('%02.6f', $qtime)."; Queries: $qcount ");
         echo n.comment(sprintf('Memory Peak: %sKb', $memory_peak));
         echo maxMemUsage('', 1);
 
         if ($production_status === 'debug') {
             $out = join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace));
-            echo n, comment('Trace log: '.n.'Mem(Kb)_|_+(Kb)_|_+(msec)_|_Trace___'.n.$out.n);
+            echo n, comment('Trace log: '.n.'Mem(Kb)_|__+(Kb)_|_+(msec)_|_Trace___'.n.$out.n);
+            if (preg_match_all('/(\[SQL.*\])/', $out, $mm)) {
+                echo n, comment("Query log:".n.join(n, $mm[1]).n.
+                    "Time: ".sprintf('%02.6f', $qtime).": Queries: $qcount ");
+            }
         }
     }
 
