@@ -2521,32 +2521,6 @@ function splat($text)
 }
 
 /**
- * Renders peak memory usage in a HTML comment.
- *
- * @param   string      $message  The message associated with the logged memory usage
- * @param   bool        $returnit Return the usage wrapped in a HTML comment
- * @return  null|string HTML
- * @package Debug
- */
-
-function maxMemUsage($message = 'none', $returnit = false)
-{
-    try {
-        Txp::get('Textpattern_Debug_Memory')->logPeakUsage($message);
-
-        if ($returnit) {
-            if (Txp::get('Textpattern_Debug_Memory')->getLoggedUsage()) {
-                return n.comment(sprintf('Memory: %sKb, %s',
-                ceil(Txp::get('Textpattern_Debug_Memory')->getLoggedUsage()/1024), Txp::get('Textpattern_Debug_Memory')->getLoggedMessage()));
-            } else {
-                return n.comment('Memory: no info available');
-            }
-        }
-    } catch (Exception $e) {
-    }
-}
-
-/**
  * Replaces CR and LF with spaces, and drops NULL bytes.
  *
  * Used for sanitising email headers.
@@ -5598,12 +5572,13 @@ function quote_list($in)
  * @package Debug
  */
 
-function trace_add($msg, $tracelevel_diff = 0)
+function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
 {
-    global $production_status, $txptrace, $microstart;
+    global $production_status, $txptrace, $microstart, $maxMemUsageMsg;
     static $time_last = 0;
     static $memory_last = 0;
     static $txptracelevel = 0;
+    static $maxMemUsage = 0;
 
     if ($production_status === 'debug' && !empty($msg)) {
         if (is_callable('memory_get_usage')) {
@@ -5616,6 +5591,10 @@ function trace_add($msg, $tracelevel_diff = 0)
                 ($memory_now > $memory_last) ? $memory_now - $memory_last : "",
                 ($diff > 0.2 and $diff < 900) ? number_format($diff, 2, '.', '') : ""
             );
+            if ( $formTag != null && $memory_now > $maxMemUsage) {
+	        $maxMemUsage = $memory_now;
+	        $maxMemUsageMsg = "{$maxMemUsage}Kb, $formTag";
+	    }
 
             $memory_last = $memory_now;
             $time_last = $time_now;
@@ -5640,7 +5619,7 @@ function trace_add($msg, $tracelevel_diff = 0)
 
 function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
 {
-    global $production_status, $txptrace, $qtime, $qcount, $microstart;
+    global $production_status, $txptrace, $qtime, $qcount, $microstart, $maxMemUsageMsg;
 
     if ($flags & TEXTPATTERN_TRACE_START) {
         $microstart = getmicrotime();
@@ -5655,10 +5634,12 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
 
     if ($production_status !== 'live' && $flags & TEXTPATTERN_TRACE_DISPLAY) {
         trace_add("[Trace End]");
-        echo n,comment('Runtime:    '.substr($microdiff, 0, 6));
-        echo n,comment('Query time: '.sprintf('%02.6f', $qtime)."; Queries: $qcount ");
+        echo n,comment('Runtime:     '.substr($microdiff, 0, 6));
+        echo n,comment('Query time:  '.sprintf('%02.6f', $qtime)."; Queries: $qcount ");
         echo n.comment(sprintf('Memory Peak: %sKb', $memory_peak));
-        echo maxMemUsage('', 1);
+        if (!empty($maxMemUsageMsg)){
+            echo n.comment("Memory:      $maxMemUsageMsg");
+        }
 
         if ($production_status === 'debug') {
             $out = join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace));

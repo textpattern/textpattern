@@ -454,20 +454,12 @@ function maybe_tag($tag)
 
 function processTags($tag, $atts, $thing = null)
 {
-    global $production_status, $txp_current_tag, $txp_current_form;
+    global $txp_current_tag, $txp_current_form;
     static $registry = null;
 
-    if ($production_status !== 'live') {
-        $old_tag = $txp_current_tag;
-
-        $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
-
-        trace_add($txp_current_tag, 1);
-
-        if ($production_status === 'debug') {
-            maxMemUsage("Form='$txp_current_form', Tag='$txp_current_tag'");
-        }
-    }
+    $old_tag = $txp_current_tag;
+    $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
+    trace_add($txp_current_tag, 1, "Form='$txp_current_form', Tag='$txp_current_tag'");
 
     if ($registry === null) {
         $registry = Txp::get('Textpattern_Tag_Registry');
@@ -492,15 +484,12 @@ function processTags($tag, $atts, $thing = null)
         trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
     }
 
-    if ($production_status !== 'live') {
-        trace_add('', -1);
+    trace_add('', -1);
 
-        if (isset($thing)) {
-            trace_add('</txp:'.$tag.'>');
-        }
-
-        $txp_current_tag = $old_tag;
+    if (isset($thing)) {
+        trace_add('</txp:'.$tag.'>');
     }
+    $txp_current_tag = $old_tag;
 
     return $out;
 }
