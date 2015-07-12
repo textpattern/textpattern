@@ -191,7 +191,7 @@ if (gps('parentid') && gps('submit')) {
 // We are dealing with a download.
 if (@$s == 'file_download' && !empty($filename)) {
     output_file_download($filename);
-    exit;
+    exit(0);
 }
 
 // Send 304 Not Modified if appropriate.
@@ -597,6 +597,7 @@ function output_css($s = '', $n = '')
 function output_file_download($filename)
 {
     global $file_error, $file_base_path, $pretext;
+
     callback_event('file_download');
 
     if (!isset($file_error)) {
@@ -630,13 +631,12 @@ function output_file_download($filename)
                 // Record download.
                 if ((connection_status() == 0) and !connection_aborted()) {
                     safe_update("txp_file", "downloads=downloads+1", 'id='.intval($pretext['id']));
-                    log_hit('200');
                 } else {
                     $pretext['request_uri'] .= ($sent >= $filesize)
                         ? '#aborted'
                         : "#aborted-at-".floor($sent * 100 / $filesize)."%";
-                    log_hit('200');
                 }
+                log_hit('200');
             }
         } else {
             $file_error = 404;
