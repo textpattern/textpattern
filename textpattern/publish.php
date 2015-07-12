@@ -172,7 +172,8 @@ extract($pretext);
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
 
-if (isset($feed)) {
+if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
+    include txpath."/publish/{$feed}.php";
     echo $feed();
     trace_log(TEXTPATTERN_TRACE_DISPLAY);
     exit;
@@ -271,12 +272,10 @@ function preText($s, $prefs)
     $out =  makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
 
     if (gps('rss')) {
-        include txpath.'/publish/rss.php';
         $out['feed'] = 'rss';
     }
 
     if (gps('atom')) {
-        include txpath.'/publish/atom.php';
         $out['feed'] = 'atom';
     }
 
@@ -315,12 +314,10 @@ function preText($s, $prefs)
         if (strlen($u1)) {
             switch ($u1) {
                 case 'atom':
-                    include txpath.'/publish/atom.php';
                     $out['feed'] = 'atom';
                     break;
 
                 case 'rss':
-                    include txpath.'/publish/rss.php';
                     $out['feed'] = 'rss';
                     break;
 
