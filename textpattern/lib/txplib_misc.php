@@ -5591,10 +5591,10 @@ function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
                 ($memory_now > $memory_last) ? $memory_now - $memory_last : "",
                 ($diff > 0.2 and $diff < 900) ? number_format($diff, 2, '.', '') : ""
             );
-            if ( $formTag != null && $memory_now > $maxMemUsage) {
-	        $maxMemUsage = $memory_now;
-	        $maxMemUsageMsg = "{$maxMemUsage}Kb, $formTag";
-	    }
+            if ($formTag != null && $memory_now > $maxMemUsage) {
+                $maxMemUsage = $memory_now;
+                $maxMemUsageMsg = "{$maxMemUsage}Kb, $formTag";
+            }
 
             $memory_last = $memory_now;
             $time_last = $time_now;
@@ -5619,7 +5619,7 @@ function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
 
 function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
 {
-    global $production_status, $txptrace, $qtime, $qcount, $microstart, $maxMemUsageMsg;
+    global $production_status, $txptrace, $qtime, $qcount, $microstart, $maxMemUsageMsg, $plugin_callback;
 
     if ($flags & TEXTPATTERN_TRACE_START) {
         $microstart = getmicrotime();
@@ -5637,17 +5637,25 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
         echo n,comment('Runtime:     '.substr($microdiff, 0, 6));
         echo n,comment('Query time:  '.sprintf('%02.6f', $qtime)."; Queries: $qcount ");
         echo n.comment(sprintf('Memory Peak: %sKb', $memory_peak));
-        if (!empty($maxMemUsageMsg)){
+        if (!empty($maxMemUsageMsg)) {
             echo n.comment("Memory:      $maxMemUsageMsg");
         }
 
         if ($production_status === 'debug') {
             $out = join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace));
-            echo n, comment('Trace log: '.n.'Mem(Kb)_|__+(Kb)_|_+(msec)_|_Trace___'.n.$out.n);
+            echo n, comment('Trace log: '.n.'Mem(Kb)_|__+(Kb)_|_+(msec)_|_Trace___'.n.$out.n).n;
             if (preg_match_all('/(\[SQL.*\])/', $out, $mm)) {
                 echo n, comment("Query log:".n.join(n, $mm[1]).n.
                     "Time: ".sprintf('%02.6f', $qtime).": Queries: $qcount ");
             }
+            if (!empty($plugin_callback)) {
+                $out = "______________________function_|___________________________________event_|________________step_|_pre___".n;
+                foreach ($plugin_callback as $p) {
+                    $out .= sprintf('%30s | %-40s| %-20s|%s', $p['function'], $p['event'], $p['step'], $p['pre']).n;
+                }
+                echo n.n.comment("plugin_callback".n.$out).n;
+            }
+
             callback_event('trace_end');
         }
     }
