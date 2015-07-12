@@ -5673,6 +5673,7 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
                 echo n, comment("Query log:".n.join(n, $mm[1]).n.
                     "Time: ".sprintf('%02.6f', $qtime).": Queries: $qcount ");
             }
+            callback_event('trace_end');
         }
     }
 
