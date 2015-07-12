@@ -360,7 +360,7 @@ function safe_query($q = '', $debug = false, $unbuf = false)
         trigger_error(mysql_error($DB->link), E_USER_ERROR);
     }
 
-    trace_add("[SQL ($time): $q]");
+    trace_add("[SQL (".number_format($time, 6, '.', '')."): $q]");
 
     if (!$result) {
         return false;

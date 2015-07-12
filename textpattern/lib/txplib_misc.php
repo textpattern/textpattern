@@ -5606,15 +5606,25 @@ function quote_list($in)
 
 function trace_add($msg, $tracelevel_diff = 0)
 {
-    global $production_status, $txptrace;
+    global $production_status, $txptrace, $microstart;
+    static $time_last = 0;
     static $memory_last = 0;
     static $txptracelevel = 0;
 
     if ($production_status === 'debug' && !empty($msg)) {
         if (is_callable('memory_get_usage')) {
             $memory_now = ceil(memory_get_usage()/1024);
-            $memory = sprintf("%7s |%6s |", $memory_now, ($memory_now > $memory_last) ? $memory_now - $memory_last : "");
+            $time_now = getmicrotime();
+            $diff = ($time_now - $time_last) * 1000;
+
+            $memory = sprintf("%7s |%6s |%8s |",
+                $memory_now,
+                ($memory_now > $memory_last) ? $memory_now - $memory_last : "",
+                ($diff > 0.2 and $diff < 900) ? number_format($diff, 2, '.', '') : ""
+            );
+
             $memory_last = $memory_now;
+            $time_last = $time_now;
         } else {
             $memory = "";
         }
@@ -5636,8 +5646,7 @@ function trace_add($msg, $tracelevel_diff = 0)
 
 function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
 {
-    global $production_status, $txptrace, $qtime, $qcount;
-    static $microstart = 0;
+    global $production_status, $txptrace, $qtime, $qcount, $microstart;
 
     if ($flags & TEXTPATTERN_TRACE_START) {
         $microstart = getmicrotime();
@@ -5660,7 +5669,8 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
         echo maxMemUsage('', 1);
 
         if ($production_status === 'debug') {
-            echo n, comment('Trace log: '.n.'Mem(Kb)_|_+(Kb)_|_Trace___'.n.join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace)).n);
+            $out = join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace));
+            echo n, comment('Trace log: '.n.'Mem(Kb)_|_+(Kb)_|_+(msec)_|_Trace___'.n.$out.n);
         }
     }
 
