@@ -2501,7 +2501,7 @@ function splat($text)
                     $val = str_replace("''", "'", $m[3]);
 
                     if (strpos($m[3], '<txp:') !== false) {
-                        trace_add("[attribute '".$m[1]."']");
+                        trace_add("[attribute '{$m[1]}']");
                         $val = parse($val);
                         trace_add("[/attribute]");
                     }
@@ -4158,14 +4158,8 @@ function txp_hash_password($password)
 function EvalElse($thing, $condition)
 {
     global $txp_current_tag;
-    static $gTxtTrue = null, $gTxtFalse;
 
-    if (empty($gTxtTrue)) {
-        $gTxtTrue = gTxt('true');
-        $gTxtFalse = gTxt('false');
-    }
-
-    trace_add("[$txp_current_tag: ".($condition ? $gTxtTrue : $gTxtFalse)."]");
+    trace_add("[$txp_current_tag: ".($condition ? "true" : "false") ."]");
 
     $els = strpos($thing, '<txp:else');
 
@@ -4249,7 +4243,7 @@ function fetch_form($name)
         $forms[$name] = $form;
     }
 
-    trace_add('['.gTxt('form').': '.$name.']');
+    trace_add("[Form: '$name']");
 
     return $forms[$name];
 }
@@ -4315,7 +4309,7 @@ function fetch_page($name)
         return false;
     }
 
-    trace_add('['.gTxt('page').': '.$name.']');
+    trace_add("[Page: '$name']");
 
     return $page;
 }
@@ -4341,7 +4335,7 @@ function parse_page($name)
         $pretext['secondpass'] = false;
         $page = parse($page);
         $pretext['secondpass'] = true;
-        trace_add('[ ~~~ '.gTxt('secondpass').' ~~~ ]');
+        trace_add("[ ~~~ secondpass ~~~ ]");
         $page = parse($page);
     }
 

@@ -90,7 +90,7 @@ function populateArticleData($rs)
 {
     global $thisarticle;
 
-    trace_add("[".gTxt('Article')." {$rs['ID']}]");
+    trace_add("[Article: '{$rs['ID']}']");
 
     foreach (article_column_map() as $key => $column) {
         $thisarticle[$key] = $rs[$column];
