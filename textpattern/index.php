@@ -80,6 +80,10 @@ header("Content-type: text/html; charset=utf-8");
 
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
+include_once txpath.'/lib/constants.php';
+include txpath.'/lib/txplib_misc.php';
+
+trace_log(TEXTPATTERN_TRACE_START);
 
 include txpath.'/vendors/Textpattern/Loader.php';
 
@@ -88,11 +92,6 @@ $loader->register();
 
 $loader = new Textpattern_Loader(txpath.'/lib');
 $loader->register();
-
-include_once txpath.'/lib/constants.php';
-include txpath.'/lib/txplib_misc.php';
-
-trace_log(TEXTPATTERN_TRACE_START);
 
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/txplib_forms.php';
