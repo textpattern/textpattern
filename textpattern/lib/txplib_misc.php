@@ -5574,7 +5574,7 @@ function quote_list($in)
 
 function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
 {
-    global $production_status, $txptrace, $microstart, $maxMemUsageMsg;
+    global $production_status, $txptrace, $txptrace_microstart, $txptrace_maxMemMsg;
     static $time_last = 0;
     static $memory_last = 0;
     static $txptracelevel = 0;
@@ -5593,7 +5593,7 @@ function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
             );
             if ($formTag != null && $memory_now > $maxMemUsage) {
                 $maxMemUsage = $memory_now;
-                $maxMemUsageMsg = "{$maxMemUsage}Kb,   $formTag";
+                $txptrace_maxMemMsg = "{$maxMemUsage}Kb,   $formTag";
             }
 
             $memory_last = $memory_now;
@@ -5621,10 +5621,11 @@ function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
 
 function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
 {
-    global $production_status, $txptrace, $txptrace_quiet, $qtime, $qcount, $microstart, $maxMemUsageMsg, $plugin_callback;
+    global $production_status, $plugin_callback, $txptrace,
+           $txptrace_quiet, $txptrace_qtime, $txptrace_qcount, $txptrace_microstart, $txptrace_maxMemMsg;
 
     if ($flags & TEXTPATTERN_TRACE_START) {
-        $microstart = getmicrotime();
+        $txptrace_microstart = getmicrotime();
         $production_status = 'debug';
         $txptrace = array();
         trace_add("[Trace Start]");
@@ -5636,15 +5637,15 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
         return;
     }
 
-    $microdiff = (getmicrotime() - $microstart);
+    $microdiff = (getmicrotime() - $txptrace_microstart);
     $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
 
     if ($production_status !== 'live' && $flags & TEXTPATTERN_TRACE_DISPLAY) {
         trace_add("[Trace End]");
         echo n,comment('Runtime:     '.substr($microdiff, 0, 8));
-        echo n,comment('Query time:  '.sprintf('%02.6f', $qtime)."; Queries: $qcount ");
-        if (!empty($maxMemUsageMsg)) {
-            echo n.comment("Memory:      $maxMemUsageMsg");
+        echo n,comment('Query time:  '.sprintf('%02.6f', $txptrace_qtime)."; Queries: $txptrace_qcount ");
+        if (!empty($txptrace_maxMemMsg)) {
+            echo n.comment("Memory:      $txptrace_maxMemMsg");
         }
         echo n.comment(sprintf('Memory Peak: %sKb', $memory_peak));
 
@@ -5662,7 +5663,7 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
 
             if (preg_match_all('/(\[SQL.*\])/', $trace_log, $mm)) {
                 trace_out("Query log:".n.join(n, $mm[1]).n.
-                    "Time: ".sprintf('%02.6f', $qtime).": Queries: $qcount ");
+                    "Time: ".sprintf('%02.6f', $txptrace_qtime).": Queries: $txptrace_qcount ");
             }
 
             callback_event('trace_end');

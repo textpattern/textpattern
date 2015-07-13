@@ -339,7 +339,7 @@ function safe_escape_like($in = '')
 
 function safe_query($q = '', $debug = false, $unbuf = false)
 {
-    global $DB, $txpcfg, $qcount, $qtime, $production_status;
+    global $DB, $txpcfg, $txptrace_qcount, $txptrace_qtime, $production_status;
     $method = (!$unbuf) ? 'mysql_query' : 'mysql_unbuffered_query';
 
     if (!$q) {
@@ -353,8 +353,8 @@ function safe_query($q = '', $debug = false, $unbuf = false)
     $start = getmicrotime();
     $result = $method($q, $DB->link);
     $time = getmicrotime() - $start;
-    @$qtime += $time;
-    @$qcount++;
+    @$txptrace_qtime += $time;
+    @$txptrace_qcount++;
 
     if ($result === false) {
         trigger_error(mysql_error($DB->link), E_USER_ERROR);
