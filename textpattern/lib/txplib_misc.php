@@ -5610,22 +5610,29 @@ function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
 }
 
 /**
- * Trace log: Start / Display / Result values.
+ * Trace log: Start / Display / Result values / Quiet mode.
  *
- * @param   int   $flags One of TEXTPATTERN_TRACE_START | TEXTPATTERN_TRACE_DISPLAY | TEXTPATTERN_TRACE_RESULT
+ * @param   int   $flags One of TEXTPATTERN_TRACE_START  | TEXTPATTERN_TRACE_DISPLAY
+ *                              TEXTPATTERN_TRACE_RESULT | TEXTPATTERN_TRACE_QUIET
  * @return  mixed
+ * @since   4.6.0
  * @package Debug
  */
 
 function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
 {
-    global $production_status, $txptrace, $qtime, $qcount, $microstart, $maxMemUsageMsg, $plugin_callback;
+    global $production_status, $txptrace, $txptrace_quiet, $qtime, $qcount, $microstart, $maxMemUsageMsg, $plugin_callback;
 
     if ($flags & TEXTPATTERN_TRACE_START) {
         $microstart = getmicrotime();
         $production_status = 'debug';
         $txptrace = array();
         trace_add("[Trace Start]");
+        return;
+    }
+
+    if ($flags & TEXTPATTERN_TRACE_QUIET) {
+        $txptrace_quiet = 1;
         return;
     }
 
@@ -5642,20 +5649,20 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
         echo n.comment(sprintf('Memory Peak: %sKb', $memory_peak));
 
         if ($production_status === 'debug') {
-            $out = join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace));
-            echo n, comment('Trace log: '.n.'Mem(Kb)_|__+(Kb)_|_+(msec)_|_Trace___'.n.$out.n).n;
+            $trace_log = join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace));
+            trace_out('Trace log: '.n.'Mem(Kb)_|__+(Kb)_|_+(msec)_|_Trace___'.n.$trace_log);
 
             if (!empty($plugin_callback)) {
-                $out2 = "______________________function_|___________________________________event_|________________step_|_pre___".n;
+                $out = "______________________function_|___________________________________event_|________________step_|_pre___".n;
                 foreach ($plugin_callback as $p) {
-                    $out2 .= sprintf('%30s | %-40s| %-20s| %s', $p['function'], $p['event'], $p['step'], $p['pre']).n;
+                    $out .= sprintf('%30s | %-40s| %-20s| %s', $p['function'], $p['event'], $p['step'], $p['pre']).n;
                 }
-                echo n.comment("Plugin callback:".n.$out2).n;
+                trace_out("Plugin callback:".n.$out);
             }
 
-            if (preg_match_all('/(\[SQL.*\])/', $out, $mm)) {
-                echo n, comment("Query log:".n.join(n, $mm[1]).n.
-                    "Time: ".sprintf('%02.6f', $qtime).": Queries: $qcount ").n;
+            if (preg_match_all('/(\[SQL.*\])/', $trace_log, $mm)) {
+                trace_out("Query log:".n.join(n, $mm[1]).n.
+                    "Time: ".sprintf('%02.6f', $qtime).": Queries: $qcount ");
             }
 
             callback_event('trace_end');
@@ -5664,6 +5671,25 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
 
     if ($flags & TEXTPATTERN_TRACE_RESULT) {
         return array('microdiff' => $microdiff, 'memory_peak' => $memory_peak);
+    }
+}
+
+/**
+ * Display Trace log unless prohibited.
+ *
+ * Prohibition log output is useful for plugins that extend the functionality of the trace log.
+ *
+ * @param   string $msg               The message
+ * @since   4.6.0
+ * @package Debug
+ * @see     trace_log()
+ */
+
+function trace_out($msg)
+{
+    global $txptrace_quiet;
+    if (empty($txptrace_quiet)) {
+        echo n.comment($msg.n).n;
     }
 }
 
