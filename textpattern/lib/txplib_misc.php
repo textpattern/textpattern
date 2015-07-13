@@ -5671,7 +5671,7 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
     }
 
     if ($flags & TEXTPATTERN_TRACE_RESULT) {
-        return array('microdiff' => $microdiff, 'memory_peak' => $memory_peak);
+        return array('microdiff' => $microdiff, 'memory_peak' => $memory_peak, 'queries' => $txptrace_qcount);
     }
 }
 

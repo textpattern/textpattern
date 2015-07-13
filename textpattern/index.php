@@ -225,6 +225,7 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
         $trace = trace_log(TEXTPATTERN_TRACE_RESULT);
         header("X-Textpattern-Runtime: " . @$trace['microdiff']);
         header("X-Textpattern-Memory: "  . @$trace['memory_peak']);
+        header("X-Textpattern-Queries: "  . @$trace['queries']);
     }
 } else {
     txp_die('DB-Connect was successful, but the textpattern-table was not found.',
