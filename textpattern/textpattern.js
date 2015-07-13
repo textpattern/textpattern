@@ -1490,6 +1490,25 @@ textpattern.Route.add('css, page, form', function ()
     });
 });
 
+// Sections panel.
+
+textpattern.Route.add('section', function ()
+{
+    $('#section_skin').change(function() {
+        var theSkin = $(this).val();
+
+        // @todo Find a way to reset the selected options, but _only_ if
+        // the control has been altered after page load (not on page load).
+        /*
+        $('#section_page option, #css option').hide()
+            .removeAttr("selected").filter('[data-skin="'+theSkin+'"]').show()
+            .filter(':first').attr('selected', 'selected');
+        */
+        $('#section_page option, #css option').hide()
+            .filter('[data-skin="'+theSkin+'"]').show();
+    }).change();
+});
+
 // Forms panel.
 
 textpattern.Route.add('form', function ()

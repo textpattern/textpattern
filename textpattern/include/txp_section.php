@@ -37,8 +37,8 @@ if ($event == 'section') {
 
     global $all_skins, $all_pages, $all_styles;
     $all_skins = safe_column('name', 'txp_skin', "1=1");
-    $all_pages = safe_column('name', 'txp_page', "1=1");
-    $all_styles = safe_column('name', 'txp_css', "1=1");
+    $all_pages = safe_rows('name, skin', 'txp_page', "1=1");
+    $all_styles = safe_rows('name, skin', 'txp_css', "1=1");
 
     $available_steps = array(
         'section_change_pageby' => true,
@@ -503,11 +503,14 @@ function section_edit()
     $out[] =
         inputLabel('section_description', text_area('description', 0, 0, $sec_description, 'section_description', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE), 'section_description');
 
-    // Todo: jQuery interaction for altering page/css options on theme change.
+    // Need to build by hand as selectInput() doesn't support data- elements.
+    $pageSelect = selectInputData('section_page', $all_pages, $sec_page);
+    $styleSelect = selectInputData('css', $all_styles, $sec_css);
+
     $out[] =
         inputLabel('section_skin', selectInput('skin', $all_skins, $sec_skin, '', '', 'section_skin'), 'uses_skin', 'section_uses_skin').
-        inputLabel('section_page', selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').
-        inputLabel('section_css', selectInput('css', $all_styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css');
+        inputLabel('section_page', $pageSelect, 'uses_page', 'section_uses_page').
+        inputLabel('section_css', $styleSelect, 'uses_style', 'section_uses_css');
 
     if (!$is_default_section) {
         $out[] =
@@ -533,6 +536,33 @@ function section_edit()
         n.tag_start('div', array('id' => $event.'_container', 'class' => 'txp-container')).
         form(join('', $out), '', '', 'post', 'edit-form', '', 'section_details').
         n.tag_end('div');
+}
+
+/**
+ * Creates a &lt;select&gt; list with data elements.
+ */
+
+function selectInputData($name = '', $array = array(), $value = '')
+{
+    $out[] = '<select name="'.$name.'" id="'.$name.'">';
+
+    foreach ($array as $row) {
+        $avalue = $alabel = $row['name'];
+        $askin = $row['skin'];
+
+        if ($value === (string) $avalue) {
+            $sel = ' selected="selected"';
+            $selected = true;
+        } else {
+            $sel = '';
+        }
+
+        $out[] = '<option data-skin="'.$askin.'" value="'.txpspecialchars($avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
+    }
+
+    $out[]= '</select>';
+
+    return implode(n, $out);
 }
 
 /**
@@ -776,17 +806,7 @@ function section_search_form($crit, $method)
 
 function section_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
-    global $all_pages, $all_styles;
-
     $methods = array(
-        'changepage' => array(
-            'label' => gTxt('uses_page'),
-            'html'  => selectInput('uses_page', $all_pages, '', false),
-        ),
-        'changecss' => array(
-            'label' => gTxt('uses_style'),
-            'html'  => selectInput('css', $all_styles, '', false),
-        ),
         'changeonfrontpage' => array(
             'label' => gTxt('on_front_page'),
             'html'  => yesnoRadio('on_frontpage', 1),
@@ -811,7 +831,7 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method)
 
 function section_multi_edit()
 {
-    global $txp_user, $all_pages, $all_styles;
+    global $txp_user;
 
     extract(psa(array(
         'edit_method',
@@ -827,18 +847,6 @@ function section_multi_edit()
     switch ($edit_method) {
         case 'delete':
             return section_delete();
-            break;
-        case 'changepage':
-            $val = ps('uses_page');
-            if (in_array($val, $all_pages, true)) {
-                $key = 'page';
-            }
-            break;
-        case 'changecss':
-            $val = ps('css');
-            if (in_array($val, $all_styles, true)) {
-                $key = 'css';
-            }
             break;
         case 'changeonfrontpage':
             $key = 'on_frontpage';
