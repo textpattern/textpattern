@@ -99,7 +99,7 @@ include txpath.'/lib/txplib_html.php';
 include txpath.'/lib/txplib_theme.php';
 include txpath.'/lib/txplib_validator.php';
 include txpath.'/lib/admin_config.php';
-trace_add("[PHP Include end]");
+trace_add('[PHP Include end]');
 
 set_error_handler('adminErrorHandler', error_reporting());
 
@@ -222,9 +222,9 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
         trace_log(TEXTPATTERN_TRACE_DISPLAY);
     } else {
         $trace = trace_log(TEXTPATTERN_TRACE_RESULT);
-        header("X-Textpattern-Runtime: " . @$trace['microdiff']);
-        header("X-Textpattern-Memory: "  . @$trace['memory_peak']);
-        header("X-Textpattern-Queries: "  . @$trace['queries']);
+        header('X-Textpattern-Runtime: ' . @$trace['microdiff']);
+        header('X-Textpattern-Memory: '  . @$trace['memory_peak']);
+        header('X-Textpattern-Queries: ' . @$trace['queries']);
     }
 } else {
     txp_die('DB-Connect was successful, but the textpattern-table was not found.',

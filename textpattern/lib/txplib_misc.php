@@ -1713,7 +1713,7 @@ function load_plugins($type = false)
     if (!is_array($plugins)) {
         $plugins = array();
     }
-    trace_add("[Loading plugins]", 1);
+    trace_add('[Loading plugins]', 1);
 
     if (!empty($prefs['plugin_cache_dir'])) {
         $dir = rtrim($prefs['plugin_cache_dir'], '/').'/';
@@ -1856,7 +1856,7 @@ function callback_event($event, $step = '', $pre = 0)
         if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
             if (is_callable($c['function'])) {
                 if (is_string($c['function'])) {
-                    trace_add("\t[Call function: '{$c['function']}'" . (empty($argv) ? "" : ", argv='".serialize($argv)."'") . "]");
+                    trace_add("\t[Call function: '{$c['function']}'".(empty($argv) ? '' : ", argv='".serialize($argv)."'") . "]");
                 } elseif (@is_object($c['function'][0])) {
                     $objname = @get_class($c['function'][0]);
                     trace_add("\t[Call object: '{$objname}']");
@@ -2503,7 +2503,7 @@ function splat($text)
                     if (strpos($m[3], '<txp:') !== false) {
                         trace_add("[attribute '{$m[1]}']");
                         $val = parse($val);
-                        trace_add("[/attribute]");
+                        trace_add('[/attribute]');
                     }
 
                     break;
@@ -4133,7 +4133,7 @@ function EvalElse($thing, $condition)
 {
     global $txp_current_tag;
 
-    trace_add("[$txp_current_tag: ".($condition ? "true" : "false") ."]");
+    trace_add("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
 
     $els = strpos($thing, '<txp:else');
 
@@ -4309,7 +4309,7 @@ function parse_page($name)
         $pretext['secondpass'] = false;
         $page = parse($page);
         $pretext['secondpass'] = true;
-        trace_add("[ ~~~ secondpass ~~~ ]");
+        trace_add('[ ~~~ secondpass ~~~ ]');
         $page = parse($page);
     }
 
@@ -5586,10 +5586,10 @@ function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
             $time_now = getmicrotime();
             $diff = ($time_now - $time_last) * 1000;
 
-            $memory = sprintf("%7s |%7s |%8s |",
+            $memory = sprintf('%7s |%7s |%8s |',
                 $memory_now,
-                ($memory_now > $memory_last) ? $memory_now - $memory_last : "",
-                ($diff > 0.2 and $diff < 900) ? number_format($diff, 2, '.', '') : ""
+                ($memory_now > $memory_last) ? $memory_now - $memory_last : '',
+                ($diff > 0.2 and $diff < 900) ? number_format($diff, 2, '.', '') : ''
             );
             if ($formTag != null && $memory_now > $maxMemUsage) {
                 $maxMemUsage = $memory_now;
@@ -5599,7 +5599,7 @@ function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
             $memory_last = $memory_now;
             $time_last = $time_now;
         } else {
-            $memory = "";
+            $memory = '';
         }
         $txptrace[] = $memory . @str_repeat("\t", $txptracelevel) . $msg;
     }
@@ -5628,7 +5628,7 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
         $txptrace_microstart = getmicrotime();
         $production_status = 'debug';
         $txptrace = array();
-        trace_add("[Trace Start]");
+        trace_add('[Trace Start]');
         return;
     }
 
@@ -5641,7 +5641,7 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
     $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
 
     if ($production_status !== 'live' && $flags & TEXTPATTERN_TRACE_DISPLAY) {
-        trace_add("[Trace End]");
+        trace_add('[Trace End]');
         echo n,comment('Runtime:     '.substr($microdiff, 0, 8));
         echo n,comment('Query time:  '.sprintf('%02.6f', $txptrace_qtime)."; Queries: $txptrace_qcount ");
         if (!empty($txptrace_maxMemMsg)) {
@@ -5654,16 +5654,16 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
             trace_out('Trace log: '.n.'Mem(Kb)_|__+(Kb)_|_+(msec)_|_Trace___'.n.$trace_log);
 
             if (!empty($plugin_callback)) {
-                $out = "______________________function_|___________________________________event_|________________step_|_pre___".n;
+                $out = '______________________function_|___________________________________event_|________________step_|_pre___'.n;
                 foreach ($plugin_callback as $p) {
                     $out .= sprintf('%30s | %-40s| %-20s| %s', $p['function'], $p['event'], $p['step'], $p['pre']).n;
                 }
-                trace_out("Plugin callback:".n.$out);
+                trace_out('Plugin callback:'.n.$out);
             }
 
             if (preg_match_all('/(\[SQL.*\])/', $trace_log, $mm)) {
-                trace_out("Query log:".n.join(n, $mm[1]).n.
-                    "Time: ".sprintf('%02.6f', $txptrace_qtime).": Queries: $txptrace_qcount ");
+                trace_out('Query log:'.n.join(n, $mm[1]).n.
+                    'Time: '.sprintf('%02.6f', $txptrace_qtime).": Queries: $txptrace_qcount ");
             }
 
             callback_event('trace_end');

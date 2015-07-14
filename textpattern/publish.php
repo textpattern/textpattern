@@ -48,7 +48,7 @@ include_once txpath.'/lib/admin_config.php';
 include_once txpath.'/publish/taghandlers.php';
 include_once txpath.'/publish/log.php';
 include_once txpath.'/publish/comment.php';
-trace_add("[PHP Include end]");
+trace_add('[PHP Include end]');
 
 set_error_handler('publicErrorHandler', error_reporting());
 

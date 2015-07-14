@@ -487,7 +487,7 @@ function processTags($tag, $atts, $thing = null)
     trace_add('', -1);
 
     if (isset($thing)) {
-        trace_add('</txp:'.$tag.'>');
+        trace_add("</txp:{$tag}>");
     }
     $txp_current_tag = $old_tag;
 
