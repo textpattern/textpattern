@@ -699,10 +699,10 @@ function doArticles($atts, $iscustom, $thing = null)
         'sortdir'       => '', // Deprecated in 4.0.4.
         'month'         => '',
         'keywords'      => '',
-        'exclude'            => '',
         'expired'       => $publish_expired_articles,
         'frontpage'     => '',
         'id'            => '',
+        'exclude'            => '',
         'time'          => 'past',
         'status'        => STATUS_LIVE,
         'pgonly'        => 0,
@@ -718,7 +718,7 @@ function doArticles($atts, $iscustom, $thing = null)
     ) +$customlAtts, $atts);
 
     // If an article ID is specified, treat it as a custom list.
-    $iscustom = (!empty($theAtts['id'])) ? true : $iscustom;
+    $iscustom = (!empty($theAtts['id']) || !empty($theAtts['exclude'])) ? true : $iscustom;
 
     // For the txp:article tag, some attributes are taken from globals;
     // override them, then stash all filter attributes.
