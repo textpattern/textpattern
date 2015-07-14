@@ -1494,19 +1494,16 @@ textpattern.Route.add('css, page, form', function ()
 
 textpattern.Route.add('section', function ()
 {
-    $('#section_skin').change(function() {
-        var theSkin = $(this).val();
+    var theSelects = $('#section_page option, #css option');
 
-        // @todo Find a way to reset the selected options, but _only_ if
-        // the control has been altered after page load (not on page load).
-        /*
-        $('#section_page option, #css option').hide()
-            .removeAttr("selected").filter('[data-skin="'+theSkin+'"]').show()
-            .filter(':first').attr('selected', 'selected');
-        */
-        $('#section_page option, #css option').hide()
-            .filter('[data-skin="'+theSkin+'"]').show();
+    $('#section_skin').change(function() {
+        theSelects.hide().filter('[data-skin="'+$(this).val()+'"]').show();
     }).change();
+
+    $('#section_skin').change(function() {
+        theSelects.removeAttr("selected").filter('[data-skin="'+$(this).val()+'"]')
+            .filter(':first').attr('selected', 'selected');
+    });
 });
 
 // Forms panel.
