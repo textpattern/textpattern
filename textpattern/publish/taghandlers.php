@@ -108,6 +108,7 @@ Txp::get('Textpattern_Tag_Registry')
     ->register('section')
     ->register('keywords')
     ->register('if_keywords')
+    ->register('if_description')
     ->register('if_article_image')
     ->register('article_image')
     ->register('search_result_title')
@@ -131,6 +132,7 @@ Txp::get('Textpattern_Tag_Registry')
     ->register('if_individual_article')
     ->register('if_article_list')
     ->register('meta_keywords')
+    ->register('meta_description')
     ->register('meta_author')
     ->register('permlink')
     ->register('lang')
@@ -371,18 +373,18 @@ function thumbnail($atts)
     global $thisimage;
 
     extract(lAtts(array(
-        'class'     => '',
-        'escape'    => 'html',
-        'html_id'   => '',
-        'height'       => '',
-        'id'        => '',
-        'link'      => 0,
-        'link_rel'  => '',
-        'name'      => '',
-        'poplink'   => 0, // Is this used?
-        'style'     => '',
-        'wraptag'   => '',
-        'width'       => '',
+        'class'    => '',
+        'escape'   => 'html',
+        'html_id'  => '',
+        'height'   => '',
+        'id'       => '',
+        'link'     => 0,
+        'link_rel' => '',
+        'name'     => '',
+        'poplink'  => 0, // Is this used?
+        'style'    => '',
+        'wraptag'  => '',
+        'width'    => '',
     ), $atts));
 
     if ($name) {
@@ -1129,7 +1131,7 @@ function related_articles($atts, $thing = null)
     extract(lAtts(array(
         'break'    => br,
         'class'    => __FUNCTION__,
-        'form'       => '',
+        'form'     => '',
         'label'    => '',
         'labeltag' => '',
         'limit'    => 10,
@@ -1329,7 +1331,7 @@ function category_list($atts, $thing = null)
         $categories = do_list($categories);
         $categories = join("','", doSlash($categories));
 
-        $rs = safe_rows_start('name, title', 'txp_category',
+        $rs = safe_rows_start('name, title, description', 'txp_category',
             "type = '".doSlash($type)."' and name in ('$categories') order by ".($sort ? $sort : "field(name, '$categories')").$sql_limit);
     } else {
         if ($parent) {
@@ -1361,13 +1363,13 @@ function category_list($atts, $thing = null)
                     $between[] = "(lft between $lft and $rgt)";
                 }
 
-                $rs = safe_rows_start('name, title', 'txp_category',
+                $rs = safe_rows_start('name, title, description', 'txp_category',
                     "(".join(' or ', $between).") and type = '".doSlash($type)."' and name != 'default' $exclude $shallow order by ".($sort ? $sort : 'lft ASC').$sql_limit);
             } else {
                 $rs = array();
             }
         } else {
-            $rs = safe_rows_start('name, title', 'txp_category',
+            $rs = safe_rows_start('name, title, description', 'txp_category',
                 "type = '".doSlash($type)."' and name not in('default','root') $exclude $shallow order by ".($sort ? $sort : 'name ASC').$sql_limit);
         }
     }
@@ -1394,7 +1396,7 @@ function category_list($atts, $thing = null)
                         ' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'context' => $type)).'"'
                     );
                 } else {
-                    $thiscategory = array('name' => $name, 'title' => $title, 'type' => $type);
+                    $thiscategory = array('name' => $name, 'title' => $title, 'type' => $type, 'description' => $description);
                     $thiscategory['is_first'] = ($count == 1);
                     $thiscategory['is_last'] = ($count == $last);
 
@@ -1486,7 +1488,7 @@ function section_list($atts, $thing = null)
     }
 
     $rs = safe_rows_start(
-        'name, title',
+        'name, title, description',
         'txp_section',
         join(' and ', $sql).' order by '.$sql_sort.$sql_limit
     );
@@ -1516,10 +1518,11 @@ function section_list($atts, $thing = null)
                 );
             } else {
                 $thissection = array(
-                    'name'     => $name,
-                    'title'    => $title,
-                    'is_first' => ($count == 1),
-                    'is_last'  => ($count == $last),
+                    'name'        => $name,
+                    'title'       => $title,
+                    'description' => $description,
+                    'is_first'    => ($count == 1),
+                    'is_last'     => ($count == $last),
                 );
 
                 if ($thing === null && $form !== '') {
@@ -2510,12 +2513,18 @@ function author($atts)
     global $thisarticle, $thisauthor, $s, $author;
 
     extract(lAtts(array(
-        'link'         => '',
+        'escape'       => 'html',
+        'link'         => 0,
         'title'        => 1,
         'section'      => '',
         'this_section' => 0,
-        'url'          => 0,
+        'format'       => '', // empty, link, or url
     ), $atts));
+
+    // Synonym.
+    if ($format === 'link') {
+        $link = 1;
+    }
 
     if ($thisauthor) {
         $realname = $thisauthor['realname'];
@@ -2530,10 +2539,12 @@ function author($atts)
     }
 
     if ($title) {
-        $display_name = txpspecialchars($realname);
+        $display_name = $realname;
     } else {
-        $display_name = txpspecialchars($name);
+        $display_name = $name;
     }
+
+    $display_name = ($escape === 'html') ? txpspecialchars($display_name) : $display_name;
 
     if ($this_section && $s != 'default') {
         $section = $s;
@@ -2544,7 +2555,7 @@ function author($atts)
             'author' => $realname,
         ));
 
-    if ($url) {
+    if ($format === 'url') {
         return $href;
     }
 
@@ -2563,7 +2574,7 @@ function author_email($atts)
 
     extract(lAtts(array(
         'escape' => 'html',
-        'link'      => '',
+        'link'   => '',
     ), $atts));
 
     if ($thisauthor) {
@@ -2902,6 +2913,8 @@ function keywords()
     global $thisarticle;
 
     assert_article();
+
+    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
 
     return txpspecialchars($thisarticle['keywords']);
 }
@@ -3621,16 +3634,97 @@ function if_article_list($atts, $thing)
     return parse(EvalElse($thing, ($is_article_list == true)));
 }
 
-// -------------------------------------------------------------
+/**
+ * Returns article keywords.
+ *
+ * @param  array  $atts Tag attributes
+ * @return string
+ */
 
-function meta_keywords()
+function meta_keywords($atts)
 {
     global $id_keywords;
 
-    return ($id_keywords)
-        ? '<meta name="keywords" content="'.txpspecialchars($id_keywords).'" />'
-        : '';
+    extract(lAtts(array(
+        'escape'    => 'html',
+        'format'    => 'meta', // or empty for raw value
+        'separator' => '',
+    ), $atts));
+
+    $out = '';
+
+    if ($id_keywords) {
+        $content = ($escape === 'html') ? txpspecialchars($id_keywords) : $id_keywords;
+
+        if ($separator !== '') {
+            $content = implode($separator, do_list($content));
+        }
+
+        if ($format === 'meta') {
+            // Can't use tag_void() since it escapes its content.
+            $out = '<meta name="keywords" content="'.$content.'" />';
+        } else {
+            $out = $content;
+        }
+    }
+
+    return $out;
 }
+
+/**
+ * Returns article, section or category meta description info.
+ *
+ * @param  array  $atts Tag attributes
+ * @return string
+ */
+
+function meta_description($atts)
+{
+    global $thisarticle, $thiscategory, $thissection, $s, $c, $context;
+
+    extract(lAtts(array(
+        'escape' => 'html',
+        'format' => 'meta', // or empty for raw value
+        'type'   => null,
+    ), $atts));
+
+    $out = '';
+    $content = getMetaDescription($type);
+
+    if ($content) {
+        $content = ($escape === 'html' ? txpspecialchars($content) : $content);
+
+        if ($format === 'meta') {
+            $out = '<meta name="description" content="'.$content.'" />';
+        } else {
+            $out = $content;
+        }
+    }
+
+    return $out;
+}
+
+/**
+ * Determines if there is meta description content in the given context.
+ *
+ * @param  array  $atts  Tag attributes
+ * @param  string $thing Tag container content
+ * @return string
+ */
+
+function if_description($atts, $thing = null)
+{
+    global $thisarticle, $thiscategory, $thissection, $s, $c, $context;
+
+    extract(lAtts(array(
+        'type' => null,
+    ), $atts));
+
+    $content = getMetaDescription($type);
+
+    return parse(EvalElse($thing, !empty($content)));
+}
+
 
 // -------------------------------------------------------------
 
@@ -3639,16 +3733,26 @@ function meta_author($atts)
     global $id_author;
 
     extract(lAtts(array(
+        'escape' => 'html',
+        'format' => 'meta', // or empty for raw value
         'title'  => 0,
     ), $atts));
 
+    $out = '';
+
     if ($id_author) {
         $display_name = ($title) ? get_author_name($id_author) : $id_author;
+        $display_name = ($escape === 'html') ? txpspecialchars($display_name) : $display_name;
 
-        return '<meta name="author" content="'.txpspecialchars($display_name).'" />';
+        if ($format === 'meta') {
+            // Can't use tag_void() since it escapes its content.
+            $out = '<meta name="author" content="'.$display_name.'" />';
+        } else {
+            $out = $display_name;
+        }
     }
 
-    return '';
+    return $out;
 }
 
 // -------------------------------------------------------------
@@ -4725,6 +4829,8 @@ function hide()
 function rsd()
 {
     global $prefs;
+
+    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
 
     return ($prefs['enable_xmlrpc_server']) ? '<link rel="EditURI" type="application/rsd+xml" title="RSD" href="'.hu.'rpc/" />' : '';
 }

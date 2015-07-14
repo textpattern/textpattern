@@ -267,7 +267,7 @@ function page_save()
             if ($savenew or $copy) {
                 if ($newname) {
                     if (safe_insert('txp_page', "name = '".doSlash($newname)."', user_html = '$html'")) {
-                        update_lastmod();
+                        update_lastmod('page_created', compact('newname', 'name', 'html'));
                         $message = gTxt('page_created', array('{name}' => $newname));
                     } else {
                         $message = array(gTxt('page_save_failed'), E_ERROR);
@@ -280,7 +280,7 @@ function page_save()
             } else {
                 if (safe_update('txp_page', "user_html = '$html', name = '".doSlash($newname)."'", "name = '".doSlash($name)."'")) {
                     safe_update('txp_section', "page = '".doSlash($newname)."'", "page='".doSlash($name)."'");
-                    update_lastmod();
+                    update_lastmod('page_saved', compact('newname', 'name', 'html'));
                     $message = gTxt('page_updated', array('{name}' => $name));
                 } else {
                     $message = array(gTxt('page_save_failed'), E_ERROR);

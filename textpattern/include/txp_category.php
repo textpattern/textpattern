@@ -540,6 +540,7 @@ function cat_event_category_edit($evname)
                 : inputLabel('category_parent', $parent_widget)
             ).
             inputLabel('category_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').
+            inputLabel('category_description', text_area('description', 0, 0, $description, 'category_description', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE), $evname.'_category_description').
             pluggable_ui('category_ui', 'extend_detail_form', '', $row).
             hInput('id', $id).
             graf(fInput('submit', '', gTxt('save'), 'publish')).
@@ -564,7 +565,7 @@ function cat_event_category_edit($evname)
 
 function cat_event_category_save($event, $table_name)
 {
-    extract(doSlash(array_map('assert_string', psa(array('id', 'name', 'old_name', 'parent', 'title')))));
+    extract(doSlash(array_map('assert_string', psa(array('id', 'name', 'description', 'old_name', 'parent', 'title')))));
     $id = assert_int($id);
 
     $name = sanitizeForUrl($name);
@@ -590,7 +591,7 @@ function cat_event_category_save($event, $table_name)
 
     $message = array(gTxt('category_save_failed'), E_ERROR);
 
-    if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title'", "id = $id") &&
+    if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title', description = '$description'", "id = $id") &&
         safe_update('txp_category', "parent = '$name'", "parent = '$old_name' and type='$event'")) {
         rebuild_tree_full($event);
 

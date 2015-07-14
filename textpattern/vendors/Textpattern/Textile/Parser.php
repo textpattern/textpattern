@@ -83,8 +83,8 @@ class Textpattern_Textile_Parser extends Textile
             $noimage = get_pref('comments_disallow_images', 1);
         }
 
-        if ($rel === null) {
-            $rel = get_pref('comment_nofollow', 'nofollow');
+        if ($rel === null && get_pref('comment_nofollow', 1)) {
+            $rel = 'nofollow';
         }
 
         return parent::textileRestricted($text, $lite, $noimage, $rel);

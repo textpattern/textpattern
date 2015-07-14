@@ -1231,15 +1231,14 @@ function getTree($root, $type, $where = '1=1', $tbl = 'txp_category')
             array_pop($right);
         }
 
-        $out[] =
-            array(
-                'id' => $id,
-                'name' => $name,
-                'title' => $title,
-                'level' => count($right),
-                'children' => ($rgt - $lft - 1) / 2,
-                'parent' => $parent,
-            );
+        $out[] = array(
+            'id' => $id,
+            'name' => $name,
+            'title' => $title,
+            'level' => count($right),
+            'children' => ($rgt - $lft - 1) / 2,
+            'parent' => $parent,
+        );
 
         $right[] = $rgt;
     }
@@ -1288,14 +1287,13 @@ function getTreePath($target, $type, $tbl = 'txp_category')
             array_pop($right);
         }
 
-        $out[] =
-            array(
-                'id' => $id,
-                'name' => $name,
-                'title' => $title,
-                'level' => count($right),
-                'children' => ($rgt - $lft - 1) / 2,
-            );
+        $out[] = array(
+            'id' => $id,
+            'name' => $name,
+            'title' => $title,
+            'level' => count($right),
+            'children' => ($rgt - $lft - 1) / 2,
+        );
 
         $right[] = $rgt;
     }
