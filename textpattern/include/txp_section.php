@@ -559,7 +559,7 @@ function selectInputData($name = '', $array = array(), $value = '', $select_id =
             $sel = '';
         }
 
-        $out[] = '<option data-skin="'.$askin.'" value="'.txpspecialchars($avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
+        $out[] = '<option data-skin="'.$askin.'" value="'.txpspecialchars($askin.'.'.$avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
     }
 
     $out[]= '</select>';
@@ -594,6 +594,9 @@ function section_save()
 
     $in = doSlash($in);
     extract($in, EXTR_PREFIX_ALL, 'safe');
+
+    $safe_section_page = implode('', array_slice(explode('.', $safe_section_page), 1));
+    $safe_css = implode('', array_slice(explode('.', $safe_css), 1));
 
     if ($name != strtolower($old_name)) {
         if (safe_field('name', 'txp_section', "name='$safe_name'")) {
@@ -861,10 +864,13 @@ function section_multi_edit()
             return section_delete();
             break;
         case 'changepagestyle':
+            $safe_page = implode('', array_slice(explode('.', ps('section_page')), 1));
+            $safe_css = implode('', array_slice(explode('.', ps('css')), 1));
+
             $nameVal = array(
                 'skin' => ps('skin'),
-                'page' => ps('section_page'),
-                'css'  => ps('css'),
+                'page' => $safe_page,
+                'css'  => $safe_css,
             );
             break;
         case 'changeonfrontpage':

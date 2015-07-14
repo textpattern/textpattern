@@ -1500,6 +1500,7 @@ textpattern.Route.add('section', function ()
     function section_theme_hide(skin) {
         $('#section_page option, #css option, #multiedit_page option, #multiedit_css option')
             .hide().filter('[data-skin="'+skin+'"]').show();
+//            .end().not('[data-skin="'+skin+'"]').removeAttr('selected');
     }
 
     function section_theme_deselect(skin) {
