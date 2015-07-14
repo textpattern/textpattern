@@ -1490,19 +1490,41 @@ textpattern.Route.add('css, page, form', function ()
     });
 });
 
-// Sections panel.
+// Sections panel. Used for edit panel and multiedit change of page+style.
+// This can probably be cleaned up / optimised.
 
 textpattern.Route.add('section', function ()
 {
-    var theSelects = $('#section_page option, #css option');
+    var theSelects = $('#section_details, .multi_edit_form');
 
-    $('#section_skin').change(function() {
-        theSelects.hide().filter('[data-skin="'+$(this).val()+'"]').show();
-    }).change();
+    function section_theme_hide(skin) {
+        $('#section_page option, #css option, #multiedit_page option, #multiedit_css option')
+            .hide().filter('[data-skin="'+skin+'"]').show();
+    }
 
-    $('#section_skin').change(function() {
-        theSelects.removeAttr("selected").filter('[data-skin="'+$(this).val()+'"]')
+    function section_theme_deselect(skin) {
+        $('#section_page option, #css option, #multiedit_page option, #multiedit_css option')
+            .removeAttr("selected").filter('[data-skin="'+skin+'"]')
             .filter(':first').attr('selected', 'selected');
+    }
+
+    theSelects.on('change', '#section_skin, #multiedit_skin', function() {
+        section_theme_hide($(this).val());
+    });
+
+    // Invoke the handler now so it only runs the hide/show.
+    $('#section_skin').change();
+
+    theSelects.on('change', '#section_skin, #multiedit_skin', function() {
+        section_theme_deselect($(this).val())
+    });
+
+    $('select[name=edit_method').change(function() {
+        if ($(this).val() === 'changepagestyle') {
+            var theSkin = $('#multiedit_skin').val();
+            section_theme_hide(theSkin);
+            section_theme_deselect(theSkin);
+        }
     });
 });
 

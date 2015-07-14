@@ -542,9 +542,11 @@ function section_edit()
  * Creates a &lt;select&gt; list with data elements.
  */
 
-function selectInputData($name = '', $array = array(), $value = '')
+function selectInputData($name = '', $array = array(), $value = '', $select_id = null)
 {
-    $out[] = '<select name="'.$name.'" id="'.$name.'">';
+    $select_id = ($select_id === null) ? $name : $select_id;
+
+    $out[] = '<select name="'.$name.'" id="'.$select_id.'">';
 
     foreach ($array as $row) {
         $avalue = $alabel = $row['name'];
@@ -806,7 +808,17 @@ function section_search_form($crit, $method)
 
 function section_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
+    global $all_skins, $all_pages, $all_styles;
+
+    $themeSelect = selectInput('skin', $all_skins, '', '', '', 'multiedit_skin');
+    $pageSelect = selectInputData('section_page', $all_pages, '', 'multiedit_page');
+    $styleSelect = selectInputData('css', $all_styles, '', 'multiedit_css');
+
     $methods = array(
+        'changepagestyle' => array(
+            'label' => gTxt('change_page_style'),
+            'html'  => $themeSelect . $pageSelect . $styleSelect,
+        ),
         'changeonfrontpage' => array(
             'label' => gTxt('on_front_page'),
             'html'  => yesnoRadio('on_frontpage', 1),
@@ -842,23 +854,27 @@ function section_multi_edit()
         return sec_section_list();
     }
 
-    $key = $val = '';
+    $nameVal = array();
 
     switch ($edit_method) {
         case 'delete':
             return section_delete();
             break;
+        case 'changepagestyle':
+            $nameVal = array(
+                'skin' => ps('skin'),
+                'page' => ps('section_page'),
+                'css'  => ps('css'),
+            );
+            break;
         case 'changeonfrontpage':
-            $key = 'on_frontpage';
-            $val = (int) ps('on_frontpage');
+            $nameVal['on_frontpage'] = (int) ps('on_frontpage');
             break;
         case 'changesyndicate':
-            $key = 'in_rss';
-            $val = (int) ps('in_rss');
+            $nameVal['in_rss'] = (int) ps('in_rss');
             break;
         case 'changesearchable':
-            $key = 'searchable';
-            $val = (int) ps('searchable');
+            $nameVal['searchable'] = (int) ps('searchable');
             break;
     }
 
@@ -868,11 +884,17 @@ function section_multi_edit()
         "name in (".join(',', quote_list($selected)).")"
     );
 
-    if ($key && $sections) {
+    if ($nameVal && $sections) {
+        $in = array();
+
+        foreach ($nameVal as $key => $val) {
+            $in[] = "{$key} = '".doSlash($val)."'";
+        }
+
         if (
             safe_update(
                 'txp_section',
-                "{$key} = '".doSlash($val)."'",
+                implode(',', $in),
                 "name in (".join(',', quote_list($sections)).")"
             )
         ) {
