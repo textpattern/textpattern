@@ -699,6 +699,7 @@ function doArticles($atts, $iscustom, $thing = null)
         'sortdir'       => '', // Deprecated in 4.0.4.
         'month'         => '',
         'keywords'      => '',
+        'exclude'            => '',
         'expired'       => $publish_expired_articles,
         'frontpage'     => '',
         'id'            => '',
@@ -823,8 +824,10 @@ function doArticles($atts, $iscustom, $thing = null)
     $excerpted = ($excerpted == 'y' || $excerpted == '1')  ? " and Excerpt !=''" : '';
     $author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list($author)))."')";
     $month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
-    $ids = array_map('intval', do_list($id));
-    $id        = (!$id)        ? '' : " and ID IN (".join(',', $ids).")";
+    $ids = $id ? array_map('intval', do_list($id)) : array();
+    $exclude = $exclude ? array_map('intval', do_list($exclude)) : array();
+    $id        = ((!$id)        ? '' : " and ID IN (".join(',', $ids).")")
+        .((!$exclude)   ? '' : " and ID NOT IN (".join(',', $exclude).")");
 
     switch ($time) {
         case 'any':
