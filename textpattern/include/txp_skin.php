@@ -91,6 +91,18 @@ function skin_list($message = '')
         case 'author':
             $sort_sql = 'author '.$dir;
             break;
+        case 'section_count':
+            $sort_sql = 'section_count '.$dir;
+            break;
+        case 'page_count':
+            $sort_sql = 'page_count '.$dir;
+            break;
+        case 'css_count':
+            $sort_sql = 'css_count '.$dir;
+            break;
+        case 'form_count':
+            $sort_sql = 'form_count '.$dir;
+            break;
         case 'name':
         default:
             $sort_sql = 'name '.$dir;
@@ -167,7 +179,11 @@ function skin_list($message = '')
     echo skin_search_form($crit, $search_method).'</div>';
 
     $rs = safe_rows_start(
-        '*',
+        '*,
+            (select count(*) from '.safe_pfx_j('txp_section').' where txp_section.skin = txp_skin.name) as section_count,
+            (select count(*) from '.safe_pfx_j('txp_page').' where txp_page.skin = txp_skin.name) as page_count,
+            (select count(*) from '.safe_pfx_j('txp_css').' where txp_css.skin = txp_skin.name) as css_count,
+            (select count(*) from '.safe_pfx_j('txp_form').' where txp_form.skin = txp_skin.name) as form_count',
         'txp_skin',
         "{$criteria} order by {$sort_sql} limit {$offset}, {$limit}"
     );
@@ -208,6 +224,22 @@ function skin_list($message = '')
                 column_head(
                     'author', 'author', 'skin', true, $switch_dir, $crit, $search_method,
                         (('author' == $sort) ? "$dir " : '').'txp-list-col-author'
+                ).
+                column_head(
+                    'sections', 'section_count', 'skin', true, $switch_dir, $crit, $search_method,
+                        (('section_count' == $sort) ? "$dir " : '').'txp-list-col-section_count skin_detail'
+                ).
+                column_head(
+                    'pages', 'page_count', 'skin', true, $switch_dir, $crit, $search_method,
+                        (('page_count' == $sort) ? "$dir " : '').'txp-list-col-page_count skin_detail'
+                ).
+                column_head(
+                    'css', 'css_count', 'skin', true, $switch_dir, $crit, $search_method,
+                        (('css_count' == $sort) ? "$dir " : '').'txp-list-col-css_count skin_detail'
+                ).
+                column_head(
+                    'forms', 'form_count', 'skin', true, $switch_dir, $crit, $search_method,
+                        (('form_count' == $sort) ? "$dir " : '').'txp-list-col-form_count skin_detail'
                 )
             ).
             n.tag_end('thead').
@@ -229,6 +261,51 @@ function skin_list($message = '')
 
             $author = ($skin_website) ? href(txpspecialchars($skin_author), $skin_website) : txpspecialchars($skin_author);
 
+            if ($skin_section_count > 0) {
+                $sectionLink = href($skin_section_count, array(
+                    'event'         => 'section',
+                    'search_method' => 'skin',
+                    'crit'          => '"'.$skin_name.'"',
+                ), array(
+                    'title' => gTxt('section_count', array('{num}' => $skin_section_count)),
+                ));
+            } else {
+                $sectionLink = 0;
+            }
+
+            if ($skin_page_count > 0) {
+                $pageLink = href($skin_page_count, array(
+                    'event' => 'page',
+                    'skin'  => $skin_name,
+                ), array(
+                    'title' => gTxt('page_count', array('{num}' => $skin_page_count)),
+                ));
+            } else {
+                $pageLink = 0;
+            }
+
+            if ($skin_css_count > 0) {
+                $cssLink = href($skin_css_count, array(
+                    'event' => 'css',
+                    'skin'  => $skin_name,
+                ), array(
+                    'title' => gTxt('css_count', array('{num}' => $skin_css_count)),
+                ));
+            } else {
+                $cssLink = 0;
+            }
+
+            if ($skin_form_count > 0) {
+                $formLink = href($skin_form_count, array(
+                    'event' => 'form',
+                    'skin'  => $skin_name,
+                ), array(
+                    'title' => gTxt('form_count', array('{num}' => $skin_form_count)),
+                ));
+            } else {
+                $formLink = 0;
+            }
+
             echo tr(
                 td(
                     fInput('checkbox', 'selected[]', $skin_name), '', 'txp-list-col-multi-edit'
@@ -249,6 +326,18 @@ function skin_list($message = '')
                 ).
                 td(
                     $author, '', 'txp-list-col-author'
+                ).
+                td(
+                    $sectionLink, '', 'txp-list-col-section_count skin_detail'
+                ).
+                td(
+                    $pageLink, '', 'txp-list-col-page_count skin_detail'
+                ).
+                td(
+                    $cssLink, '', 'txp-list-col-css_count skin_detail'
+                ).
+                td(
+                    $formLink, '', 'txp-list-col-form_count skin_detail'
                 ),
                 array('id' => 'txp_skin_'.$skin_name)
             );
@@ -261,6 +350,7 @@ function skin_list($message = '')
             skin_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
+            graf(toggle_box('skin_detail'), array('class' => 'detail-toggle')).
             n.tag_start('div', array(
                 'id'    => $event.'_navigation',
                 'class' => 'txp-navigation',
