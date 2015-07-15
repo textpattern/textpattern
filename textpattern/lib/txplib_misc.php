@@ -5654,9 +5654,17 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
             trace_out('Trace log: '.n.'Mem(Kb)_|__+(Kb)_|_+(msec)_|_Trace___'.n.$trace_log);
 
             if (!empty($plugin_callback)) {
-                $out = '______________________function_|___________________________________event_|________________step_|_pre___'.n;
+                $out = sprintf('%40s |%40s |%20s | %s   ', 'function', 'event', 'step', 'pre').n;
+                $out = str_replace(' ', '_', $out);
                 foreach ($plugin_callback as $p) {
-                    $out .= sprintf('%30s | %-40s| %-20s| %s', $p['function'], $p['event'], $p['step'], $p['pre']).n;
+                    if (is_string($p['function'])) {
+                        $name = $p['function'];
+                    } elseif (@is_object($p['function'][0])) {
+                        $name = @get_class($p['function'][0]);
+                    } else {
+                        $name = '';
+                    }
+                    $out .= sprintf('%40s | %-40s| %-20s| %s', $name, $p['event'], $p['step'], $p['pre']).n;
                 }
                 trace_out('Plugin callback:'.n.$out);
             }
