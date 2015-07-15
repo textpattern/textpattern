@@ -464,7 +464,7 @@ function skin_change_pageby()
 
 function skin_delete()
 {
-    $selectedList = ps('selected');
+    $selectedList = doSlash(ps('selected'));
     $message = '';
     $skins = array();
 
@@ -474,8 +474,8 @@ function skin_delete()
         $inUse = safe_column(
             'name',
             'txp_section',
-            "(page IN (SELECT name FROM ".PFX."txp_page WHERE skin = '{$asset}'))
-                OR (css IN (SELECT name FROM ".PFX."txp_css WHERE skin = '{$asset}'))"
+            "(page IN (SELECT name FROM ".PFX."txp_page WHERE skin = '{$asset}') AND skin = '{$asset}')
+                OR (css IN (SELECT name FROM ".PFX."txp_css WHERE skin = '{$asset}') AND skin = '{$asset}')"
         );
 
         if (!$inUse) {
@@ -484,8 +484,12 @@ function skin_delete()
     }
 
     $skinsNotDeleted = array_diff($selectedList, $skins);
+    $skinList = join(',', quote_list($skins));
 
-    if ($skins && safe_delete('txp_skin', 'name in ('.join(',', quote_list($skins)).')')) {
+    if ($skins && safe_delete('txp_skin', "name in ($skinList)")
+            && safe_delete('txp_page', "skin in ($skinList)")
+            && safe_delete('txp_css', "skin in ($skinList)")
+            && safe_delete('txp_form', "skin in ($skinList)")) {
         callback_event('skins_deleted', '', 0, $skins);
         $message = gTxt('skin_deleted', array('{name}' => join(', ', $skins)));
     }
