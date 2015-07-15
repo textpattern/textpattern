@@ -81,11 +81,13 @@ function page_edit($message = '')
         'copy',
         'save_error',
         'savenew',
+        'skin',
     ))));
 
     $name = sanitizeForPage(assert_string(gps('name')));
     $newname = sanitizeForPage(assert_string(gps('newname')));
-    $skin = get_pref('skin_editing', 'default', true);
+    $skin = ($skin !== '') ? $skin : get_pref('skin_editing', 'default', true);
+    page_set_skin($skin);
 
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
         $name = safe_field('page', 'txp_section', "name = 'default'");

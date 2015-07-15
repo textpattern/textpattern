@@ -130,13 +130,13 @@ function css_edit($message = '')
         'copy',
         'save_error',
         'savenew',
+        'skin',
     ))));
 
     $name = sanitizeForPage(assert_string(gps('name')));
     $newname = sanitizeForPage(assert_string(gps('newname')));
-
-    // Use master skin as first fallback.
-    $skin = get_pref('skin_editing', 'default', true);
+    $skin = ($skin !== '') ? $skin : get_pref('skin_editing', 'default', true);
+    css_set_skin($skin);
 
     if ($step == 'css_delete' || empty($name) && $step != 'pour' && !$savenew) {
         $name = $default_name;

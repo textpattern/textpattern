@@ -258,14 +258,14 @@ function form_edit($message = '')
         'copy',
         'save_error',
         'savenew',
+        'skin',
     ))));
 
     $name = sanitizeForPage(assert_string(gps('name')));
     $type = assert_string(gps('type'));
     $newname = sanitizeForPage(assert_string(gps('newname')));
-
-    // Use master skin as first fallback.
-    $skin = get_pref('skin_editing', 'default', true);
+    $skin = ($skin !== '') ? $skin : get_pref('skin_editing', 'default', true);
+    form_set_skin($skin);
 
     if (empty($name) && $step != 'form_create' && !$savenew) {
         $name = 'default';
