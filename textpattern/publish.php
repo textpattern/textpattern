@@ -42,6 +42,9 @@ $loader->register();
 include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_publish.php';
 include_once txpath.'/lib/txplib_misc.php';
+
+trace_log(TEXTPATTERN_TRACE_START);
+
 include_once txpath.'/lib/txplib_db.php';
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
@@ -55,12 +58,6 @@ set_error_handler('publicErrorHandler', error_reporting());
 
 ob_start();
 
-// Start the clock for runtime.
-$microstart = getmicrotime();
-
-// Initialise parse trace globals.
-$txptrace        = array();
-$txptracelevel   = 0;
 $txp_current_tag = '';
 
 // Get all prefs as an array.
@@ -586,7 +583,7 @@ function preText($s, $prefs)
 
 function textpattern()
 {
-    global $pretext, $microstart, $prefs, $qcount, $qtime, $production_status, $txptrace, $siteurl, $has_article_tag;
+    global $pretext, $prefs, $production_status, $siteurl, $has_article_tag;
 
     $has_article_tag = false;
 
@@ -620,17 +617,7 @@ function textpattern()
     header("Content-type: text/html; charset=utf-8");
     echo $html;
 
-    if (in_array($production_status, array('debug', 'testing'))) {
-        $microdiff = (getmicrotime() - $microstart);
-        echo n,comment('Runtime:    '.substr($microdiff, 0, 6));
-        echo n,comment('Query time: '.sprintf('%02.6f', $qtime));
-        echo n,comment('Queries: '.$qcount);
-        echo maxMemUsage('end of textpattern()', 1);
-
-        if (!empty($txptrace) and is_array($txptrace)) {
-            echo n, comment('txp tag trace: '.n.'Mem(Kb)_|_+(Kb)_|_Trace___'.n.join(n, $txptrace).n);
-        }
-    }
+    trace_log(TEXTPATTERN_TRACE_DISPLAY);
 
     callback_event('textpattern_end');
 }
@@ -715,6 +702,7 @@ function doArticles($atts, $iscustom, $thing = null)
         'expired'       => $publish_expired_articles,
         'frontpage'     => '',
         'id'            => '',
+        'exclude'            => '',
         'time'          => 'past',
         'status'        => STATUS_LIVE,
         'pgonly'        => 0,
@@ -730,7 +718,7 @@ function doArticles($atts, $iscustom, $thing = null)
     ) +$customlAtts, $atts);
 
     // If an article ID is specified, treat it as a custom list.
-    $iscustom = (!empty($theAtts['id'])) ? true : $iscustom;
+    $iscustom = (!empty($theAtts['id']) || !empty($theAtts['exclude'])) ? true : $iscustom;
 
     // For the txp:article tag, some attributes are taken from globals;
     // override them, then stash all filter attributes.
@@ -836,8 +824,10 @@ function doArticles($atts, $iscustom, $thing = null)
     $excerpted = ($excerpted == 'y' || $excerpted == '1')  ? " and Excerpt !=''" : '';
     $author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list($author)))."')";
     $month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
-    $ids = array_map('intval', do_list($id));
-    $id        = (!$id)        ? '' : " and ID IN (".join(',', $ids).")";
+    $ids = $id ? array_map('intval', do_list($id)) : array();
+    $exclude = $exclude ? array_map('intval', do_list($exclude)) : array();
+    $id        = ((!$id)        ? '' : " and ID IN (".join(',', $ids).")")
+        .((!$exclude)   ? '' : " and ID NOT IN (".join(',', $exclude).")");
 
     switch ($time) {
         case 'any':
