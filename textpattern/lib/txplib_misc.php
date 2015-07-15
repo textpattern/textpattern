@@ -5593,7 +5593,7 @@ function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
             );
             if ($formTag != null && $memory_now > $maxMemUsage) {
                 $maxMemUsage = $memory_now;
-                $txptrace_maxMemMsg = "{$maxMemUsage}Kb,   $formTag";
+                $txptrace_maxMemMsg = "{$maxMemUsage} kB,  $formTag";
             }
 
             $memory_last = $memory_now;
@@ -5647,11 +5647,11 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
         if (!empty($txptrace_maxMemMsg)) {
             echo n.comment("Memory:      $txptrace_maxMemMsg");
         }
-        echo n.comment(sprintf('Memory Peak: %sKb', $memory_peak));
+        echo n.comment(sprintf('Memory Peak: %s kB ', $memory_peak));
 
         if ($production_status === 'debug') {
             $trace_log = join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace));
-            trace_out('Trace log: '.n.'Mem(Kb)_|__+(Kb)_|_+(msec)_|_Trace___'.n.$trace_log);
+            trace_out('Trace log: '.n.'Mem(kB)_|__+(kB)_|___+(ms)_|_Trace___'.n.$trace_log);
 
             if (!empty($plugin_callback)) {
                 $out = sprintf('%40s |%40s |%20s | %s   ', 'function', 'event', 'step', 'pre').n;
