@@ -90,4 +90,5 @@ define("txpinterface", "css");
 include txpath.'/publish.php';
 $s = gps('s');
 $n = gps('n');
-output_css($s, $n);
+$t = gps('t');
+output_css($s, $n, $t);

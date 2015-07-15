@@ -4328,6 +4328,7 @@ function parse_form($name)
  * will be used as the template markup.
  *
  * @param   string      $name The template
+ * @param   string      $theme The public theme
  * @return  string|bool The page template, or FALSE on error
  * @package TagParser
  * @since   4.6.0
@@ -4335,19 +4336,19 @@ function parse_form($name)
  * echo fetch_page('default');
  */
 
-function fetch_page($name)
+function fetch_page($name, $theme)
 {
     if (has_handler('page.fetch')) {
-        $page = callback_event('page.fetch', '', false, compact('name'));
+        $page = callback_event('page.fetch', '', false, compact('name', 'theme'));
     } else {
-        $page = safe_field('user_html', 'txp_page', "name = '".doSlash($name)."'");
+        $page = safe_field('user_html', 'txp_page', "name = '".doSlash($name)."' AND skin = '".doSlash($theme)."'");
     }
 
     if ($page === false) {
         return false;
     }
 
-    trace_add('['.gTxt('page').': '.$name.']');
+    trace_add('['.gTxt('page').': '.$theme.'.'.$name.']');
 
     return $page;
 }
@@ -4355,7 +4356,8 @@ function fetch_page($name)
 /**
  * Parses a page template.
  *
- * @param   string      $name The template
+ * @param   string      $name  The template
+ * @param   string      $theme The public theme
  * @return  string|bool The parsed page template, or FALSE on error
  * @since   4.6.0
  * @package TagParser
@@ -4363,11 +4365,11 @@ function fetch_page($name)
  * echo parse_page('default');
  */
 
-function parse_page($name)
+function parse_page($name, $theme)
 {
     global $pretext;
 
-    $page = fetch_page($name);
+    $page = fetch_page($name, $theme);
 
     if ($page !== false) {
         $pretext['secondpass'] = false;

@@ -228,7 +228,7 @@ function page_title($atts)
 
 function css($atts)
 {
-    global $css, $doctype;
+    global $css, $doctype, $pretext;
 
     extract(lAtts(array(
         'format' => 'url',
@@ -236,6 +236,7 @@ function css($atts)
         'n'      => $css, // Deprecated in 4.3.0.
         'name'   => $css,
         'rel'    => 'stylesheet',
+        'theme'  => $pretext['skin'],
         'title'  => '',
     ), $atts));
 
@@ -249,9 +250,9 @@ function css($atts)
     }
 
     if (has_handler('css.url')) {
-        $url = callback_event('css.url', '', false, compact('name'));
+        $url = callback_event('css.url', '', false, compact('name', 'theme'));
     } else {
-        $url = hu.'css.php?n='.urlencode($name);
+        $url = hu.'css.php?n='.urlencode($name).a.'t='.urlencode($theme);
     }
 
     if ($format == 'link') {

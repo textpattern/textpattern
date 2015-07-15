@@ -546,7 +546,8 @@ function preText($s, $prefs)
 
     // By this point we should know the section, so grab its page and CSS.
     if (txpinterface != 'css') {
-        $rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' limit 1");
+        $rs = safe_row("skin, page, css", "txp_section", "name = '".doSlash($s)."' limit 1");
+        $out['skin'] = isset($rs['skin']) ? $rs['skin'] : '';
         $out['page'] = isset($rs['page']) ? $rs['page'] : '';
         $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
@@ -604,7 +605,7 @@ function textpattern()
     txp_status_header('200 OK');
 
     set_error_handler('tagErrorHandler');
-    $html = parse_page($pretext['page']);
+    $html = parse_page($pretext['page'], $pretext['skin']);
 
     if ($html === false) {
         txp_die(gTxt('unknown_section'), '404');
@@ -636,9 +637,10 @@ function textpattern()
 }
 
 // -------------------------------------------------------------
-function output_css($s = '', $n = '')
+function output_css($s = '', $n = '', $t = '')
 {
     $order = '';
+
     if ($n) {
         if (!is_scalar($n)) {
             txp_die('Not Found', 404);
@@ -655,7 +657,7 @@ function output_css($s = '', $n = '')
             txp_die('Not Found', 404);
         }
 
-        $cssname = safe_field('css', 'txp_section', "name='".doSlash($s)."'");
+        $cssname = safe_field('css', 'txp_section', "name='".doSlash($s)."' AND skin='".doSlash($t)."'");
     }
 
     if (isset($cssname)) {
