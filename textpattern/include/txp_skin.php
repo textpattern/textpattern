@@ -467,6 +467,8 @@ function skin_delete()
     $selectedList = doSlash(ps('selected'));
     $message = '';
     $skins = array();
+    $currentSkin = get_pref('skin_editing', 'default');
+    $changeCurrentSkin = false;
 
     // Cumbersome to check sections for in-use assets and also return
     // the skins that match, so iterate instead.
@@ -477,6 +479,10 @@ function skin_delete()
             "(page IN (SELECT name FROM ".PFX."txp_page WHERE skin = '{$asset}') AND skin = '{$asset}')
                 OR (css IN (SELECT name FROM ".PFX."txp_css WHERE skin = '{$asset}') AND skin = '{$asset}')"
         );
+
+        if ($currentSkin === $asset) {
+            $changeCurrentSkin = true;
+        }
 
         if (!$inUse) {
             $skins[] = $asset;
@@ -490,6 +496,10 @@ function skin_delete()
             && safe_delete('txp_page', "skin in ($skinList)")
             && safe_delete('txp_css', "skin in ($skinList)")
             && safe_delete('txp_form', "skin in ($skinList)")) {
+        if ($changeCurrentSkin) {
+            skin_set_skin(safe_field('name', 'txp_skin', '1=1 ORDER BY name ASC LIMIT 1'));
+        }
+
         callback_event('skins_deleted', '', 0, $skins);
         $message = gTxt('skin_deleted', array('{name}' => join(', ', $skins)));
     }
@@ -567,4 +577,17 @@ function skin_multi_edit()
     }
 
     skin_list();
+}
+
+/**
+ * Set the current skin so it persists across panels.
+ *
+ * @param  string $skin The skin name to store
+ * @todo   Generalise this elsewhere?
+ * @return string HTML
+ */
+
+function skin_set_skin($skin)
+{
+    set_pref('skin_editing', $skin, 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
 }
