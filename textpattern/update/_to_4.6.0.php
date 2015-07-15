@@ -126,3 +126,8 @@ if (safe_field('name', 'txp_prefs', "name = 'ping_textpattern_com'")) {
 if (!get_pref('default_publish_status')) {
     set_pref('default_publish_status', STATUS_LIVE, 'publish', PREF_CORE, 'defaultPublishStatus', 15, PREF_PRIVATE);
 }
+
+// Add default enable_preload_form pref.
+if (!get_pref('enable_preload_form')) {
+    set_pref('enable_preload_form', 0, 'publish', PREF_CORE, 'yesnoradio', 330);
+}
