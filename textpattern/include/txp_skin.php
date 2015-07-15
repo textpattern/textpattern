@@ -318,7 +318,7 @@ function skin_edit()
     $out = array();
 
     $out[] =
-        n.tag_start('skin', array('class' => 'txp-edit')).
+        n.tag_start('section', array('class' => 'txp-edit')).
         hed($caption, 2);
 
     $out[] =
