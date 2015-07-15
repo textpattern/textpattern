@@ -75,7 +75,7 @@ if (!defined("txpath")) {
 }
 
 if (!isset($txpcfg['table_prefix'])) {
-    ob_start(NULL, 2048);
+    ob_start(null, 2048);
     include txpath.'/config.php';
     ob_end_clean();
 }

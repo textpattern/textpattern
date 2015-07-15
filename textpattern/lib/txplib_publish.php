@@ -454,7 +454,7 @@ function maybe_tag($tag)
 
 function processTags($tag, $atts, $thing = null)
 {
-    global $production_status, $txptrace, $txptracelevel, $txp_current_tag, $txp_current_form;
+    global $production_status, $txp_current_tag, $txp_current_form;
     static $registry = null;
 
     if ($production_status !== 'live') {
@@ -462,8 +462,7 @@ function processTags($tag, $atts, $thing = null)
 
         $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
 
-        trace_add($txp_current_tag);
-        ++$txptracelevel;
+        trace_add($txp_current_tag, 1);
 
         if ($production_status === 'debug') {
             maxMemUsage("Form='$txp_current_form', Tag='$txp_current_tag'");
@@ -494,7 +493,7 @@ function processTags($tag, $atts, $thing = null)
     }
 
     if ($production_status !== 'live') {
-        --$txptracelevel;
+        trace_add('', -1);
 
         if (isset($thing)) {
             trace_add('</txp:'.$tag.'>');
