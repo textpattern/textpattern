@@ -5674,11 +5674,14 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
                     'Time: '.sprintf('%02.6f', $txptrace_qtime).": Queries: $txptrace_qcount ");
             }
 
-            callback_event('trace_end');
+            callback_event('trace_end', 'display');
         }
     }
 
     if ($flags & TEXTPATTERN_TRACE_RESULT) {
+        if ($production_status === 'debug') {
+            callback_event('trace_end', 'result');
+        }
         return array('microdiff' => $microdiff, 'memory_peak' => $memory_peak, 'queries' => $txptrace_qcount);
     }
 }
