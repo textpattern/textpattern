@@ -4247,14 +4247,16 @@ function EvalElse($thing, $condition)
 function fetch_form($name)
 {
     static $forms = array();
+    global $pretext;
 
     $name = (string) $name;
+    $skin = $pretext['skin'];
 
     if (!isset($forms[$name])) {
         if (has_handler('form.fetch')) {
-            $form = callback_event('form.fetch', '', false, compact('name'));
+            $form = callback_event('form.fetch', '', false, compact('name', 'skin'));
         } else {
-            $form = safe_field('Form', 'txp_form', "name = '".doSlash($name)."'");
+            $form = safe_field('Form', 'txp_form', "name = '".doSlash($name)."' AND skin = '".doSlash($skin)."'");
         }
 
         if ($form === false) {
@@ -4266,7 +4268,7 @@ function fetch_form($name)
         $forms[$name] = $form;
     }
 
-    trace_add('['.gTxt('form').': '.$name.']');
+    trace_add('['.gTxt('form').': '.$skin.'.'.$name.']');
 
     return $forms[$name];
 }
