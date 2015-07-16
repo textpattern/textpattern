@@ -5611,6 +5611,7 @@ function trace_add($msg, $tracelevel_diff = 0)
         } else {
             $memory = "";
         }
+
         $txptrace[] = $memory . @str_repeat("\t", $txptracelevel) . $msg;
     }
 
@@ -5721,6 +5722,7 @@ function get_caller($num = 1, $start = 2)
     }
 
     $bt = debug_backtrace();
+
     for ($i = $start; $i < $num+$start; $i++) {
         if (!empty($bt[$i])) {
             $t = '';
