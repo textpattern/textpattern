@@ -182,8 +182,8 @@ function skin_list($message = '')
         '*,
             (select count(*) from '.safe_pfx_j('txp_section').' where txp_section.skin = txp_skin.name) as section_count,
             (select count(*) from '.safe_pfx_j('txp_page').' where txp_page.skin = txp_skin.name) as page_count,
-            (select count(*) from '.safe_pfx_j('txp_css').' where txp_css.skin = txp_skin.name) as css_count,
-            (select count(*) from '.safe_pfx_j('txp_form').' where txp_form.skin = txp_skin.name) as form_count',
+            (select count(*) from '.safe_pfx_j('txp_form').' where txp_form.skin = txp_skin.name) as form_count,
+            (select count(*) from '.safe_pfx_j('txp_css').' where txp_css.skin = txp_skin.name) as css_count',
         'txp_skin',
         "{$criteria} order by {$sort_sql} limit {$offset}, {$limit}"
     );
@@ -234,12 +234,12 @@ function skin_list($message = '')
                         (('page_count' == $sort) ? "$dir " : '').'txp-list-col-page_count skin_detail'
                 ).
                 column_head(
-                    'css', 'css_count', 'skin', true, $switch_dir, $crit, $search_method,
-                        (('css_count' == $sort) ? "$dir " : '').'txp-list-col-css_count skin_detail'
-                ).
-                column_head(
                     'forms', 'form_count', 'skin', true, $switch_dir, $crit, $search_method,
                         (('form_count' == $sort) ? "$dir " : '').'txp-list-col-form_count skin_detail'
+                ).
+                column_head(
+                    'css', 'css_count', 'skin', true, $switch_dir, $crit, $search_method,
+                        (('css_count' == $sort) ? "$dir " : '').'txp-list-col-css_count skin_detail'
                 )
             ).
             n.tag_end('thead').
@@ -334,10 +334,10 @@ function skin_list($message = '')
                     $pageLink, '', 'txp-list-col-page_count skin_detail'
                 ).
                 td(
-                    $cssLink, '', 'txp-list-col-css_count skin_detail'
+                    $formLink, '', 'txp-list-col-form_count skin_detail'
                 ).
                 td(
-                    $formLink, '', 'txp-list-col-form_count skin_detail'
+                    $cssLink, '', 'txp-list-col-css_count skin_detail'
                 ),
                 array('id' => 'txp_skin_'.$skin_name)
             );
