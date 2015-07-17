@@ -191,7 +191,7 @@ safe_create_index('txp_css', 'name(15), skin(15)', 'name_skin', 'unique');
 
 // ... and Sections...
 $cols = getThings('describe `'.PFX.'txp_section`');
-dmp($cols);
+
 if (!in_array('skin', $cols)) {
     safe_alter('txp_section',
         "ADD skin VARCHAR(255) NOT NULL DEFAULT 'default' AFTER name");
@@ -211,4 +211,9 @@ if (!$exists) {
         author='Team Textpattern',
         website='http://textpattern.com/'"
     );
+}
+
+// Add theme path pref.
+if (!get_pref('skin_base_path')) {
+    set_pref('skin_base_path', dirname(txpath).DS.'themes', 'admin', PREF_CORE, 'text_input', 70);
 }
