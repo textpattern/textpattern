@@ -2035,15 +2035,28 @@ function register_tab($area, $panel, $title)
 
 function pluggable_ui($event, $element, $default = '')
 {
-    $argv = func_get_args();
-    $argv = array_slice($argv, 2);
-    // Custom user interface, anyone?
-    // Signature for called functions:
-    // string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
-    $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => 0) + $argv);
+    global $plugin_callback, $production_status;
 
-    // Either plugins provided a user interface, or we render our own.
-    return ($ui === '') ? $default : $ui;
+    if (!is_array($plugin_callback)) {
+        return $default;
+    }
+
+    // Any payload parameters?
+    $argv = func_get_args();
+    $argv = (count($argv) > 3) ? array_slice($argv, 3) : array();
+    $return_value = $default;
+
+    foreach ($plugin_callback as $c) {
+        if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $element) && empty($c['pre'])) {
+            if (is_callable($c['function'])) {
+                $return_value = call_user_func_array($c['function'], array('event' => $event, 'step' => $element, 'data' => $return_value) + $argv);
+            } elseif ($production_status == 'debug') {
+                trigger_error(gTxt('unknown_callback_function', array('{function}' => callback_tostring($c['function']))), E_USER_WARNING);
+            }
+        }
+    }
+
+    return $return_value;
 }
 
 /**
