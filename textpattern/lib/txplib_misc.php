@@ -5550,6 +5550,7 @@ function do_list_unique($list, $delim = ',', $flags = TEXTPATTERN_STRIP_EMPTY_ST
     if ($flags & TEXTPATTERN_STRIP_EMPTY_STRING) {
         $out = array_filter($out, function ($v) {return ($v=='') ? false : true;});
     }
+
     return $out;
 }
 
@@ -5610,6 +5611,7 @@ function trace_add($msg, $tracelevel_diff = 0)
         } else {
             $memory = "";
         }
+
         $txptrace[] = $memory . @str_repeat("\t", $txptracelevel) . $msg;
     }
 
@@ -5720,6 +5722,7 @@ function get_caller($num = 1, $start = 2)
     }
 
     $bt = debug_backtrace();
+
     for ($i = $start; $i < $num+$start; $i++) {
         if (!empty($bt[$i])) {
             $t = '';
