@@ -1729,7 +1729,7 @@ function load_plugins($type = false)
             natsort($files);
 
             foreach ($files as $f) {
-                trace_add("[Loading plugin from cache dir '$f']");
+                trace_add("[Loading plugin from cache dir: '$f']");
                 load_plugin(basename($f, '.php'));
             }
         }
@@ -1748,7 +1748,7 @@ function load_plugins($type = false)
                 $plugins[] = $a['name'];
                 $plugins_ver[$a['name']] = $a['version'];
                 $GLOBALS['txp_current_plugin'] = $a['name'];
-                trace_add("[Loading plugin '{$a['name']}' version '{$a['version']}']");
+                trace_add("[Loading plugin: '{$a['name']}' version '{$a['version']}']");
                 $eval_ok = eval($a['code']);
 
                 if ($eval_ok === false) {
@@ -2501,7 +2501,7 @@ function splat($text)
                     $val = str_replace("''", "'", $m[3]);
 
                     if (strpos($m[3], '<txp:') !== false) {
-                        trace_add("[attribute '{$m[1]}']");
+                        trace_add("[attribute: '{$m[1]}']");
                         $val = parse($val);
                         trace_add('[/attribute]');
                     }
