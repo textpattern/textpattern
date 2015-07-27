@@ -189,69 +189,8 @@ if (gps('parentid') && gps('submit')) {
 }
 
 // We are dealing with a download.
-if (@$s == 'file_download') {
-    callback_event('file_download');
-
-    if (!isset($file_error)) {
-        $filename = sanitizeForFile($filename);
-        $fullpath = build_file_path($file_base_path, $filename);
-
-        if (is_file($fullpath)) {
-            // Discard any error PHP messages.
-            ob_clean();
-            $filesize = filesize($fullpath);
-            $sent = 0;
-            header('Content-Description: File Download');
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename="'.$filename.'"; size = "'.$filesize.'"');
-
-            // Fix for IE6 PDF bug on servers configured to send cache headers.
-            header('Cache-Control: private');
-            @ini_set("zlib.output_compression", "Off");
-            @set_time_limit(0);
-            @ignore_user_abort(true);
-
-            if ($file = fopen($fullpath, 'rb')) {
-                while (!feof($file) and (connection_status() == 0)) {
-                    echo fread($file, 1024 * 64);
-                    $sent += (1024 * 64);
-                    ob_flush();
-                    flush();
-                }
-                fclose($file);
-
-                // Record download.
-                if ((connection_status() == 0) and !connection_aborted()) {
-                    safe_update("txp_file", "downloads=downloads+1", 'id='.intval($id));
-                    log_hit('200');
-                } else {
-                    $pretext['request_uri'] .= ($sent >= $filesize)
-                        ? '#aborted'
-                        : "#aborted-at-".floor($sent * 100 / $filesize)."%";
-                    log_hit('200');
-                }
-            }
-        } else {
-            $file_error = 404;
-        }
-    }
-
-    // Deal with error.
-    if (isset($file_error)) {
-        switch ($file_error) {
-        case 403:
-            txp_die(gTxt('403_forbidden'), '403');
-            break;
-        case 404:
-            txp_die(gTxt('404_not_found'), '404');
-            break;
-        default:
-            txp_die(gTxt('500_internal_server_error'), '500');
-            break;
-        }
-    }
-
-    // Download done.
+if (@$s == 'file_download' && !empty($filename)) {
+    output_file_download($filename);
     exit(0);
 }
 
@@ -387,6 +326,7 @@ function preText($s, $prefs)
                                 $is_404 = empty($out['s']);
                             } elseif (empty($u4)) {
                                 $month = "$u1-$u2";
+
                                 if (!empty($u3)) {
                                     $month .= "-$u3";
                                 }
@@ -626,6 +566,7 @@ function textpattern()
 function output_css($s = '', $n = '')
 {
     $order = '';
+
     if ($n) {
         if (!is_scalar($n)) {
             txp_die('Not Found', 404);
@@ -654,6 +595,74 @@ function output_css($s = '', $n = '')
     }
 }
 
+// -------------------------------------------------------------
+function output_file_download($filename)
+{
+    global $file_error, $file_base_path, $pretext;
+
+    callback_event('file_download');
+
+    if (!isset($file_error)) {
+        $filename = sanitizeForFile($filename);
+        $fullpath = build_file_path($file_base_path, $filename);
+
+        if (is_file($fullpath)) {
+            // Discard any error PHP messages.
+            ob_clean();
+            $filesize = filesize($fullpath);
+            $sent = 0;
+            header('Content-Description: File Download');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.$filename.'"; size = "'.$filesize.'"');
+
+            // Fix for IE6 PDF bug on servers configured to send cache headers.
+            header('Cache-Control: private');
+            @ini_set("zlib.output_compression", "Off");
+            @set_time_limit(0);
+            @ignore_user_abort(true);
+
+            if ($file = fopen($fullpath, 'rb')) {
+                while (!feof($file) and (connection_status() == 0)) {
+                    echo fread($file, 1024 * 64);
+                    $sent += (1024 * 64);
+                    ob_flush();
+                    flush();
+                }
+
+                fclose($file);
+
+                // Record download.
+                if ((connection_status() == 0) and !connection_aborted()) {
+                    safe_update("txp_file", "downloads=downloads+1", 'id='.intval($pretext['id']));
+                } else {
+                    $pretext['request_uri'] .= ($sent >= $filesize)
+                        ? '#aborted'
+                        : "#aborted-at-".floor($sent * 100 / $filesize)."%";
+                }
+
+                log_hit('200');
+            }
+        } else {
+            $file_error = 404;
+        }
+    }
+
+    // Deal with error.
+    if (isset($file_error)) {
+        switch ($file_error) {
+        case 403:
+            txp_die(gTxt('403_forbidden'), '403');
+            break;
+        case 404:
+            txp_die(gTxt('404_not_found'), '404');
+            break;
+        default:
+            txp_die(gTxt('500_internal_server_error'), '500');
+            break;
+        }
+    }
+}
+
 // article() is called when parse() finds a <txp:article /> tag.
 // If an $id has been established, we output a single article,
 // otherwise, output a list.
@@ -668,6 +677,7 @@ function article($atts, $thing = null)
 
         return '';
     }
+
     $has_article_tag = true;
 
     return parseArticles($atts, '0', $thing);
@@ -810,6 +820,7 @@ function doArticles($atts, $iscustom, $thing = null)
         } else {
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
         }
+
         $sort = "$sortby $sortdir";
     } elseif ($sortdir) {
         trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
@@ -898,6 +909,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $pageout['total']       = $total;
 
         global $thispage;
+
         if (empty($thispage)) {
             $thispage = $pageout;
         }
@@ -942,10 +954,12 @@ function doArticles($atts, $iscustom, $thing = null)
             // Article form preview.
             if (txpinterface === 'admin' && ps('Form')) {
                 doAuth();
+
                 if (!has_privs('form')) {
                     txp_status_header('401 Unauthorized');
                     exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
                 }
+
                 $articles[] = parse(gps('Form'));
             } elseif ($allowoverride and $a['override_form']) {
                 $articles[] = parse_form($a['override_form']);
@@ -1065,6 +1079,7 @@ function makeOut()
 
     foreach (func_get_args() as $a) {
         $in = gps($a);
+
         if (is_scalar($in)) {
             $array[$a] = strval($in);
         } else {
