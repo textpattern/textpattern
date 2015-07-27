@@ -326,6 +326,7 @@ function preText($s, $prefs)
                                 $is_404 = empty($out['s']);
                             } elseif (empty($u4)) {
                                 $month = "$u1-$u2";
+
                                 if (!empty($u3)) {
                                     $month .= "-$u3";
                                 }
@@ -565,6 +566,7 @@ function textpattern()
 function output_css($s = '', $n = '')
 {
     $order = '';
+
     if ($n) {
         if (!is_scalar($n)) {
             txp_die('Not Found', 404);
@@ -626,6 +628,7 @@ function output_file_download($filename)
                     ob_flush();
                     flush();
                 }
+
                 fclose($file);
 
                 // Record download.
@@ -636,6 +639,7 @@ function output_file_download($filename)
                         ? '#aborted'
                         : "#aborted-at-".floor($sent * 100 / $filesize)."%";
                 }
+
                 log_hit('200');
             }
         } else {
@@ -673,6 +677,7 @@ function article($atts, $thing = null)
 
         return '';
     }
+
     $has_article_tag = true;
 
     return parseArticles($atts, '0', $thing);
@@ -815,6 +820,7 @@ function doArticles($atts, $iscustom, $thing = null)
         } else {
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
         }
+
         $sort = "$sortby $sortdir";
     } elseif ($sortdir) {
         trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
@@ -903,6 +909,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $pageout['total']       = $total;
 
         global $thispage;
+
         if (empty($thispage)) {
             $thispage = $pageout;
         }
@@ -947,10 +954,12 @@ function doArticles($atts, $iscustom, $thing = null)
             // Article form preview.
             if (txpinterface === 'admin' && ps('Form')) {
                 doAuth();
+
                 if (!has_privs('form')) {
                     txp_status_header('401 Unauthorized');
                     exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
                 }
+
                 $articles[] = parse(gps('Form'));
             } elseif ($allowoverride and $a['override_form']) {
                 $articles[] = parse_form($a['override_form']);
@@ -1070,6 +1079,7 @@ function makeOut()
 
     foreach (func_get_args() as $a) {
         $in = gps($a);
+
         if (is_scalar($in)) {
             $array[$a] = strval($in);
         } else {
