@@ -2055,6 +2055,10 @@ function article_validate($rs, &$msg)
 {
     global $prefs, $step, $statuses;
 
+    if (!empty($msg)) {
+        return false;
+    }
+
     $constraints = array(
         'Status' => new ChoiceConstraint(
             $rs['Status'],
