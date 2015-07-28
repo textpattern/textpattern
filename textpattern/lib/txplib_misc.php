@@ -5361,18 +5361,15 @@ function permlinkurl($article_array)
 
     extract(lAtts(array(
         'thisid'    => null,
-        'ID'        => null,
-        'Title'     => null,
+        'id'        => null,
         'title'     => null,
         'url_title' => null,
         'section'   => null,
-        'Section'   => null,
         'posted'    => null,
-        'Posted'    => null,
-    ), $article_array, false));
+    ), array_change_key_case($article_array, CASE_LOWER), false));
 
     if (empty($thisid)) {
-        $thisid = $ID;
+        $thisid = $id;
     }
 
     $thisid = (int) $thisid;
@@ -5381,20 +5378,8 @@ function permlinkurl($article_array)
         return $permlinks[$thisid];
     }
 
-    if (!isset($title)) {
-        $title = $Title;
-    }
-
     if (empty($url_title)) {
         $url_title = stripSpace($title);
-    }
-
-    if (empty($section)) {
-        $section = $Section;
-    }
-
-    if (!isset($posted)) {
-        $posted = $Posted;
     }
 
     $section = urlencode($section);
