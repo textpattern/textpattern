@@ -5332,7 +5332,7 @@ function permlinkurl_id($id)
 /**
  * Generates an article URL from the given data array.
  *
- * @param   array  $article_array An array consisting of keys 'thisid', 'section', 'title', 'url_title', 'posted'
+ * @param   array  $article_array An array consisting of keys 'thisid', 'section', 'title', 'url_title', 'posted', 'expires'
  * @return  string The URL
  * @package URL
  * @see     permlinkurl_id()
@@ -5341,13 +5341,14 @@ function permlinkurl_id($id)
  *     'thisid'    => 12,
  *     'section'   => 'blog',
  *     'url_title' => 'my-title',
- *     'posted'    => 1345414041
+ *     'posted'    => 1345414041,
+ *     'expires'   => 1345444077
  * ));
  */
 
 function permlinkurl($article_array)
 {
-    global $permlink_mode, $prefs, $permlinks;
+    global $permlink_mode, $prefs, $permlinks, $production_status;
 
     if (!$article_array || !is_array($article_array)) {
         return;
@@ -5366,6 +5367,7 @@ function permlinkurl($article_array)
         'url_title' => null,
         'section'   => null,
         'posted'    => null,
+        'expires'   => null,
     ), array_change_key_case($article_array, CASE_LOWER), false));
 
     if (empty($thisid)) {
@@ -5376,6 +5378,14 @@ function permlinkurl($article_array)
 
     if (isset($permlinks[$thisid])) {
         return $permlinks[$thisid];
+    }
+
+    if (empty($prefs['publish_expired_articles']) && !empty($expires) && $expires<time()) {
+        if ($production_status != 'live') {
+            trigger_error(gTxt('permlink_to_expired_article')." ID='{$thisid}'", E_USER_NOTICE);
+        }
+
+        return $permlinks[$thisid] = hu.'#expired_article';
     }
 
     if (empty($url_title)) {
