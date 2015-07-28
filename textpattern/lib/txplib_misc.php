@@ -5321,7 +5321,7 @@ function permlinkurl_id($id)
     }
 
     $rs = safe_row(
-        "ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted",
+        "ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted, unix_timestamp(Expires) as expires",
         'textpattern',
         "ID = $id"
     );
