@@ -1464,7 +1464,7 @@ function section_list($atts, $thing = null)
             $sections .= ', default';
         }
 
-        $sections = join(',', quote_list(do_list($sections)));
+        $sections = join(',', quote_list(do_list_unique($sections)));
         $sql[] = "name in ($sections)";
 
         if (!$sql_sort) {
@@ -1472,7 +1472,7 @@ function section_list($atts, $thing = null)
         }
     } else {
         if ($exclude) {
-            $exclude = join(',', quote_list(do_list($exclude)));
+            $exclude = join(',', quote_list(do_list_unique($exclude)));
             $sql[] = "name not in ($exclude)";
         }
 
