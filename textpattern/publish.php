@@ -565,7 +565,7 @@ function output_css($s = '', $n = '')
             txp_die('Not Found', 404);
         }
 
-        $n = do_list($n);
+        $n = do_list_unique($n);
         $cssname = join("','", doSlash($n));
 
         if (count($n) > 1) {
@@ -579,12 +579,9 @@ function output_css($s = '', $n = '')
         $cssname = safe_field('css', 'txp_section', "name='".doSlash($s)."'");
     }
 
-    if (isset($cssname)) {
+    if (!empty($cssname)) {
         $css = join(n, safe_column_num('css', 'txp_css', "name in ('$cssname')".$order));
-
-        if (isset($css)) {
-            echo $css;
-        }
+        echo $css;
     }
 }
 
