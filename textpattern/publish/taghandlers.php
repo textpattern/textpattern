@@ -1025,9 +1025,9 @@ function recent_articles($atts)
         $sort = "Posted $sortdir";
     }
 
-    $category = join("','", doSlash(do_list($category)));
+    $category = join("','", doSlash(do_list_unique($category)));
     $categories = ($category) ? "and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))" : '';
-    $section = ($section) ? " and Section IN ('".join("','", doSlash(do_list($section)))."')" : '';
+    $section = ($section) ? " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
     $expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.')';
 
     $rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern',
@@ -1146,7 +1146,7 @@ function related_articles($atts, $thing = null)
         return;
     }
 
-    $match = do_list($match);
+    $match = do_list_unique($match);
 
     if (!in_array('Category1', $match) and !in_array('Category2', $match)) {
         return;
@@ -1178,7 +1178,7 @@ function related_articles($atts, $thing = null)
 
     $categories = 'and ('.join(' or ', $categories).')';
 
-    $section = ($section) ? " and Section IN ('".join("','", doSlash(do_list($section)))."')" : '';
+    $section = ($section) ? " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
 
     $expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.') ';
     $rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires', 'textpattern',
