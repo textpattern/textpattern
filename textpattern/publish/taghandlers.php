@@ -600,24 +600,26 @@ function linklist($atts, $thing = null)
 
     $where = array();
     $filters = isset($atts['category']) || isset($atts['author']) || isset($atts['realname']);
-    $context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
+    $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
     $pageby = ($pageby == 'limit') ? $limit : $pageby;
 
     if ($category) {
-        $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+        $where[] = "category IN ('".join("','", doSlash(do_list_unique($category)))."')";
     }
 
     if ($id) {
-        $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
+        $where[] = "id IN ('".join("','", doSlash(do_list_unique($id)))."')";
     }
 
     if ($author) {
-        $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+        $where[] = "author IN ('".join("','", doSlash(do_list_unique($author)))."')";
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list($realname)), 'urldecode'))."')");
-        $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
+        if ($authorlist) {
+            $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+        }
     }
 
     // If no links are selected, try...
