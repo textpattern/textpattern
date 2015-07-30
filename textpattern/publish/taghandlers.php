@@ -3237,32 +3237,34 @@ function images($atts, $thing = null)
     $where = array();
     $has_content = $thing || $form;
     $filters = isset($atts['id']) || isset($atts['name']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['extension']) || $thumbnail === '1' || $thumbnail === '0';
-    $context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
+    $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
     $pageby = ($pageby == 'limit') ? $limit : $pageby;
 
     if ($name) {
-        $where[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
+        $where[] = "name IN ('".join("','", doSlash(do_list_unique($name)))."')";
     }
 
     if ($category) {
-        $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+        $where[] = "category IN ('".join("','", doSlash(do_list_unique($category)))."')";
     }
 
     if ($id) {
-        $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
+        $where[] = "id IN ('".join("','", doSlash(do_list_unique($id)))."')";
     }
 
     if ($author) {
-        $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+        $where[] = "author IN ('".join("','", doSlash(do_list_unique($author)))."')";
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list($realname)), 'urldecode'))."')");
-        $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
+        if ($authorlist) {
+            $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+        }
     }
 
     if ($extension) {
-        $where[] = "ext IN ('".join("','", doSlash(do_list($extension)))."')";
+        $where[] = "ext IN ('".join("','", doSlash(do_list_unique($extension)))."')";
     }
 
     if ($thumbnail === '0' || $thumbnail === '1') {
@@ -3276,7 +3278,7 @@ function images($atts, $thing = null)
                 case 'article':
                     // ...the article image field.
                     if ($thisarticle && !empty($thisarticle['article_image'])) {
-                        $items = do_list($thisarticle['article_image']);
+                        $items = do_list_unique($thisarticle['article_image']);
                         foreach ($items as &$item) {
                             if (is_numeric($item)) {
                                 $item = intval($item);
@@ -3317,7 +3319,7 @@ function images($atts, $thing = null)
 
     // Order of ids in 'id' attribute overrides default 'sort' attribute.
     if (empty($atts['sort']) && $id !== '') {
-        $safe_sort = 'field(id, '.join(',', doSlash(do_list($id))).')';
+        $safe_sort = 'field(id, '.join(',', doSlash(do_list_unique($id))).')';
     }
 
     // If nothing matches, output nothing.
