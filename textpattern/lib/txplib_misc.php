@@ -1846,6 +1846,7 @@ function callback_event($event, $step = '', $pre = 0)
     if (!is_array($plugin_callback)) {
         return '';
     }
+
     trace_add("[Callback_event: '$event', step='$step', pre='$pre']");
 
     // Any payload parameters?
@@ -5592,6 +5593,7 @@ function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
                 ($memory_now > $memory_last) ? $memory_now - $memory_last : '',
                 ($diff > 0.2 and $diff < 900) ? number_format($diff, 2, '.', '') : ''
             );
+
             if ($formTag != null && $memory_now > $maxMemUsage) {
                 $maxMemUsage = $memory_now;
                 $txptrace_maxMemMsg = "{$maxMemUsage} kB,  $formTag";
@@ -5658,6 +5660,7 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
             if (!empty($plugin_callback)) {
                 $out = sprintf('%40s |%40s |%20s | %s   ', 'function', 'event', 'step', 'pre').n;
                 $out = str_replace(' ', '_', $out);
+
                 foreach ($plugin_callback as $p) {
                     if (is_string($p['function'])) {
                         $name = $p['function'];
@@ -5668,6 +5671,7 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
                     }
                     $out .= sprintf('%40s | %-40s| %-20s| %s', $name, $p['event'], $p['step'], $p['pre']).n;
                 }
+
                 trace_out('Plugin callback:'.n.$out);
             }
 
@@ -5684,6 +5688,7 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
         if ($production_status === 'debug') {
             callback_event('trace_end', 'result');
         }
+
         return array('microdiff' => $microdiff, 'memory_peak' => $memory_peak, 'queries' => $txptrace_qcount);
     }
 }
@@ -5691,9 +5696,10 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
 /**
  * Display Trace log unless prohibited.
  *
- * Prohibition log output is useful for plugins that extend the functionality of the trace log.
+ * Prohibition log output is useful for plugins that extend the functionality of
+ * the trace log.
  *
- * @param   string $msg               The message
+ * @param   string $msg The message
  * @since   4.6.0
  * @package Debug
  * @see     trace_log()
@@ -5702,6 +5708,7 @@ function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
 function trace_out($msg)
 {
     global $txptrace_quiet;
+
     if (empty($txptrace_quiet)) {
         echo n.comment($msg.n).n;
     }
