@@ -187,21 +187,21 @@ function doLike($in)
 
 function txpspecialchars($string, $flags = ENT_QUOTES, $encoding = 'UTF-8', $double_encode = true)
 {
-//    Ignore ENT_HTML5 and ENT_XHTML for now.
-//    ENT_HTML5 and ENT_XHTML are defined in PHP 5.4+ but we consistently encode single quotes as &#039; in any doctype.
-//    global $prefs;
-//    static $h5 = null;
-//
-//    if (defined(ENT_HTML5)) {
-//        if ($h5 === null) {
-//            $h5 = ($prefs['doctype'] == 'html5' && txpinterface == 'public');
-//        }
-//
-//        if ($h5) {
-//            $flags = ($flags | ENT_HTML5) & ~ENT_HTML401;
-//        }
-//    }
-//
+    //    Ignore ENT_HTML5 and ENT_XHTML for now.
+    //    ENT_HTML5 and ENT_XHTML are defined in PHP 5.4+ but we consistently encode single quotes as &#039; in any doctype.
+    //    global $prefs;
+    //    static $h5 = null;
+    //
+    //    if (defined(ENT_HTML5)) {
+    //        if ($h5 === null) {
+    //            $h5 = ($prefs['doctype'] == 'html5' && txpinterface == 'public');
+    //        }
+    //
+    //        if ($h5) {
+    //            $flags = ($flags | ENT_HTML5) & ~ENT_HTML401;
+    //        }
+    //    }
+    //
     return htmlspecialchars($string, $flags, $encoding, $double_encode);
 }
 
@@ -1713,7 +1713,7 @@ function load_plugins($type = false)
     if (!is_array($plugins)) {
         $plugins = array();
     }
-    trace_add("[Loading plugins]", 1);
+    trace_add('[Loading plugins]', 1);
 
     if (!empty($prefs['plugin_cache_dir'])) {
         $dir = rtrim($prefs['plugin_cache_dir'], '/').'/';
@@ -1729,7 +1729,7 @@ function load_plugins($type = false)
             natsort($files);
 
             foreach ($files as $f) {
-                trace_add("[Loading plugin from cache dir '$f']");
+                trace_add("[Loading plugin from cache dir: '$f']");
                 load_plugin(basename($f, '.php'));
             }
         }
@@ -1748,7 +1748,7 @@ function load_plugins($type = false)
                 $plugins[] = $a['name'];
                 $plugins_ver[$a['name']] = $a['version'];
                 $GLOBALS['txp_current_plugin'] = $a['name'];
-                trace_add("[Loading plugin '{$a['name']}' version '{$a['version']}']");
+                trace_add("[Loading plugin: '{$a['name']}' version '{$a['version']}']");
                 $eval_ok = eval($a['code']);
 
                 if ($eval_ok === false) {
@@ -1847,6 +1847,8 @@ function callback_event($event, $step = '', $pre = 0)
         return '';
     }
 
+    trace_add("[Callback_event: '$event', step='$step', pre='$pre']");
+
     // Any payload parameters?
     $argv = func_get_args();
     $argv = (count($argv) > 3) ? array_slice($argv, 3) : array();
@@ -1854,6 +1856,13 @@ function callback_event($event, $step = '', $pre = 0)
     foreach ($plugin_callback as $c) {
         if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
             if (is_callable($c['function'])) {
+                if (is_string($c['function'])) {
+                    trace_add("\t[Call function: '{$c['function']}'".(empty($argv) ? '' : ", argv='".serialize($argv)."'") . "]");
+                } elseif (@is_object($c['function'][0])) {
+                    $objname = @get_class($c['function'][0]);
+                    trace_add("\t[Call object: '{$objname}']");
+                }
+
                 $return_value = call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
 
                 if (isset($out)) {
@@ -2493,9 +2502,9 @@ function splat($text)
                     $val = str_replace("''", "'", $m[3]);
 
                     if (strpos($m[3], '<txp:') !== false) {
-                        trace_add("[attribute '".$m[1]."']");
+                        trace_add("[attribute: '{$m[1]}']");
                         $val = parse($val);
-                        trace_add("[/attribute]");
+                        trace_add('[/attribute]');
                     }
 
                     break;
@@ -2510,32 +2519,6 @@ function splat($text)
     }
 
     return $atts;
-}
-
-/**
- * Renders peak memory usage in a HTML comment.
- *
- * @param   string      $message  The message associated with the logged memory usage
- * @param   bool        $returnit Return the usage wrapped in a HTML comment
- * @return  null|string HTML
- * @package Debug
- */
-
-function maxMemUsage($message = 'none', $returnit = false)
-{
-    try {
-        Txp::get('Textpattern_Debug_Memory')->logPeakUsage($message);
-
-        if ($returnit) {
-            if (Txp::get('Textpattern_Debug_Memory')->getLoggedUsage()) {
-                return n.comment(sprintf('Memory: %sKb, %s',
-                ceil(Txp::get('Textpattern_Debug_Memory')->getLoggedUsage()/1024), Txp::get('Textpattern_Debug_Memory')->getLoggedMessage()));
-            } else {
-                return n.comment('Memory: no info available');
-            }
-        }
-    } catch (Exception $e) {
-    }
 }
 
 /**
@@ -4150,14 +4133,8 @@ function txp_hash_password($password)
 function EvalElse($thing, $condition)
 {
     global $txp_current_tag;
-    static $gTxtTrue = null, $gTxtFalse;
 
-    if (empty($gTxtTrue)) {
-        $gTxtTrue = gTxt('true');
-        $gTxtFalse = gTxt('false');
-    }
-
-    trace_add("[$txp_current_tag: ".($condition ? $gTxtTrue : $gTxtFalse)."]");
+    trace_add("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
 
     $els = strpos($thing, '<txp:else');
 
@@ -4241,7 +4218,7 @@ function fetch_form($name)
         $forms[$name] = $form;
     }
 
-    trace_add('['.gTxt('form').': '.$name.']');
+    trace_add("[Form: '$name']");
 
     return $forms[$name];
 }
@@ -4307,7 +4284,7 @@ function fetch_page($name)
         return false;
     }
 
-    trace_add('['.gTxt('page').': '.$name.']');
+    trace_add("[Page: '$name']");
 
     return $page;
 }
@@ -4333,7 +4310,7 @@ function parse_page($name)
         $pretext['secondpass'] = false;
         $page = parse($page);
         $pretext['secondpass'] = true;
-        trace_add('[ ~~~ '.gTxt('secondpass').' ~~~ ]');
+        trace_add('[ ~~~ secondpass ~~~ ]');
         $page = parse($page);
     }
 
@@ -5597,19 +5574,35 @@ function quote_list($in)
  * @package Debug
  */
 
-function trace_add($msg, $tracelevel_diff = 0)
+function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
 {
-    global $production_status, $txptrace;
+    global $production_status, $txptrace, $txptrace_microstart, $txptrace_maxMemMsg;
+    static $time_last = 0;
     static $memory_last = 0;
     static $txptracelevel = 0;
+    static $maxMemUsage = 0;
 
     if ($production_status === 'debug' && !empty($msg)) {
         if (is_callable('memory_get_usage')) {
             $memory_now = ceil(memory_get_usage()/1024);
-            $memory = sprintf("%7s |%6s |", $memory_now, ($memory_now > $memory_last) ? $memory_now - $memory_last : "");
+            $time_now = getmicrotime();
+            $diff = ($time_now - $time_last) * 1000;
+
+            $memory = sprintf('%7s |%7s |%8s |',
+                $memory_now,
+                ($memory_now > $memory_last) ? $memory_now - $memory_last : '',
+                ($diff > 0.2 and $diff < 900) ? number_format($diff, 2, '.', '') : ''
+            );
+
+            if ($formTag != null && $memory_now > $maxMemUsage) {
+                $maxMemUsage = $memory_now;
+                $txptrace_maxMemMsg = "{$maxMemUsage} kB,  $formTag";
+            }
+
             $memory_last = $memory_now;
+            $time_last = $time_now;
         } else {
-            $memory = "";
+            $memory = '';
         }
 
         $txptrace[] = $memory . @str_repeat("\t", $txptracelevel) . $msg;
@@ -5621,43 +5614,103 @@ function trace_add($msg, $tracelevel_diff = 0)
 }
 
 /**
- * Trace log: Start / Display / Result values.
+ * Trace log: Start / Display / Result values / Quiet mode.
  *
- * @param   int   $flags One of TEXTPATTERN_TRACE_START | TEXTPATTERN_TRACE_DISPLAY | TEXTPATTERN_TRACE_RESULT
+ * @param   int   $flags One of TEXTPATTERN_TRACE_START  | TEXTPATTERN_TRACE_DISPLAY
+ *                              TEXTPATTERN_TRACE_RESULT | TEXTPATTERN_TRACE_QUIET
  * @return  mixed
+ * @since   4.6.0
  * @package Debug
  */
 
 function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
 {
-    global $production_status, $txptrace, $qtime, $qcount;
-    static $microstart = 0;
+    global $production_status, $plugin_callback, $txptrace,
+           $txptrace_quiet, $txptrace_qtime, $txptrace_qcount, $txptrace_microstart, $txptrace_maxMemMsg;
 
     if ($flags & TEXTPATTERN_TRACE_START) {
-        $microstart = getmicrotime();
+        $txptrace_microstart = getmicrotime();
         $production_status = 'debug';
         $txptrace = array();
+        trace_add('[Trace Start]');
         return;
     }
 
-    $microdiff = (getmicrotime() - $microstart);
+    if ($flags & TEXTPATTERN_TRACE_QUIET) {
+        $txptrace_quiet = 1;
+        return;
+    }
+
+    $microdiff = (getmicrotime() - $txptrace_microstart);
     $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
 
     if ($production_status !== 'live' && $flags & TEXTPATTERN_TRACE_DISPLAY) {
-        echo n,comment('Runtime:    '.substr($microdiff, 0, 6));
-        echo n,comment('Query time: '.sprintf('%02.6f', $qtime));
-        echo n,comment('Queries: '.$qcount);
-
-        echo n.comment(sprintf('Memory Peak: %sKb', $memory_peak));
-        echo maxMemUsage('', 1);
+        trace_add('[Trace End]');
+        echo n,comment('Runtime:     '.substr($microdiff, 0, 8));
+        echo n,comment('Query time:  '.sprintf('%02.6f', $txptrace_qtime)."; Queries: $txptrace_qcount ");
+        if (!empty($txptrace_maxMemMsg)) {
+            echo n.comment("Memory:      $txptrace_maxMemMsg");
+        }
+        echo n.comment(sprintf('Memory Peak: %s kB ', $memory_peak));
 
         if ($production_status === 'debug') {
-            echo n, comment('Trace log: '.n.'Mem(Kb)_|_+(Kb)_|_Trace___'.n.join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace)).n);
+            $trace_log = join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace));
+            trace_out('Trace log: '.n.'Mem(kB)_|__+(kB)_|___+(ms)_|_Trace___'.n.$trace_log);
+
+            if (!empty($plugin_callback)) {
+                $out = sprintf('%40s |%40s |%20s | %s   ', 'function', 'event', 'step', 'pre').n;
+                $out = str_replace(' ', '_', $out);
+
+                foreach ($plugin_callback as $p) {
+                    if (is_string($p['function'])) {
+                        $name = $p['function'];
+                    } elseif (@is_object($p['function'][0])) {
+                        $name = @get_class($p['function'][0]);
+                    } else {
+                        $name = '';
+                    }
+                    $out .= sprintf('%40s | %-40s| %-20s| %s', $name, $p['event'], $p['step'], $p['pre']).n;
+                }
+
+                trace_out('Plugin callback:'.n.$out);
+            }
+
+            if (preg_match_all('/(\[SQL.*\])/', $trace_log, $mm)) {
+                trace_out('Query log:'.n.join(n, $mm[1]).n.
+                    'Time: '.sprintf('%02.6f', $txptrace_qtime).": Queries: $txptrace_qcount ");
+            }
+
+            callback_event('trace_end', 'display');
         }
     }
 
     if ($flags & TEXTPATTERN_TRACE_RESULT) {
-        return array('microdiff' => $microdiff, 'memory_peak' => $memory_peak);
+        if ($production_status === 'debug') {
+            callback_event('trace_end', 'result');
+        }
+
+        return array('microdiff' => $microdiff, 'memory_peak' => $memory_peak, 'queries' => $txptrace_qcount);
+    }
+}
+
+/**
+ * Display Trace log unless prohibited.
+ *
+ * Prohibition log output is useful for plugins that extend the functionality of
+ * the trace log.
+ *
+ * @param   string $msg The message
+ * @since   4.6.0
+ * @package Debug
+ * @see     trace_log()
+ */
+
+function trace_out($msg)
+{
+    global $txptrace_quiet;
+
+    if (empty($txptrace_quiet)) {
+        echo n.comment($msg.n).n;
     }
 }
 

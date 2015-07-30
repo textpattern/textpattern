@@ -39,12 +39,7 @@ $loader->register();
 $loader = new Textpattern_Loader(txpath.'/lib');
 $loader->register();
 
-include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_publish.php';
-include_once txpath.'/lib/txplib_misc.php';
-
-trace_log(TEXTPATTERN_TRACE_START);
-
 include_once txpath.'/lib/txplib_db.php';
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
@@ -53,6 +48,7 @@ include_once txpath.'/lib/admin_config.php';
 include_once txpath.'/publish/taghandlers.php';
 include_once txpath.'/publish/log.php';
 include_once txpath.'/publish/comment.php';
+trace_add('[PHP Include end]');
 
 set_error_handler('publicErrorHandler', error_reporting());
 
@@ -176,8 +172,11 @@ extract($pretext);
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
 
-if (isset($feed)) {
-    exit($feed());
+if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
+    include txpath."/publish/{$feed}.php";
+    echo $feed();
+    trace_log(TEXTPATTERN_TRACE_DISPLAY);
+    exit;
 }
 
 if (gps('parentid') && gps('submit')) {
@@ -212,12 +211,10 @@ function preText($s, $prefs)
     $out =  makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
 
     if (gps('rss')) {
-        include txpath.'/publish/rss.php';
         $out['feed'] = 'rss';
     }
 
     if (gps('atom')) {
-        include txpath.'/publish/atom.php';
         $out['feed'] = 'atom';
     }
 
@@ -256,12 +253,10 @@ function preText($s, $prefs)
         if (strlen($u1)) {
             switch ($u1) {
                 case 'atom':
-                    include txpath.'/publish/atom.php';
                     $out['feed'] = 'atom';
                     break;
 
                 case 'rss':
-                    include txpath.'/publish/rss.php';
                     $out['feed'] = 'rss';
                     break;
 
@@ -556,8 +551,6 @@ function textpattern()
 
     header("Content-type: text/html; charset=utf-8");
     echo $html;
-
-    trace_log(TEXTPATTERN_TRACE_DISPLAY);
 
     callback_event('textpattern_end');
 }
