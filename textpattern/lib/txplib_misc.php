@@ -4198,7 +4198,15 @@ function EvalElse($thing, $condition)
 
 function fetch_form($name)
 {
+    global $prefs;
     static $forms = array();
+
+    if (empty($forms) && !empty($prefs['enable_preload_form']) && !has_handler('form.fetch')) {
+        $rs = safe_rows('name, Form', 'txp_form', '1=1');
+        foreach ($rs as $r) {
+            $forms[$r['name']] = $r['Form'];
+        }
+    }
 
     $name = (string) $name;
 
