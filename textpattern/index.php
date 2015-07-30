@@ -80,6 +80,10 @@ header("Content-type: text/html; charset=utf-8");
 
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
+include_once txpath.'/lib/constants.php';
+include txpath.'/lib/txplib_misc.php';
+
+trace_log(TEXTPATTERN_TRACE_START);
 
 include txpath.'/vendors/Textpattern/Loader.php';
 
@@ -89,17 +93,13 @@ $loader->register();
 $loader = new Textpattern_Loader(txpath.'/lib');
 $loader->register();
 
-include_once txpath.'/lib/constants.php';
-include txpath.'/lib/txplib_misc.php';
-
-trace_log(TEXTPATTERN_TRACE_START);
-
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/txplib_forms.php';
 include txpath.'/lib/txplib_html.php';
 include txpath.'/lib/txplib_theme.php';
 include txpath.'/lib/txplib_validator.php';
 include txpath.'/lib/admin_config.php';
+trace_add('[PHP Include end]');
 
 set_error_handler('adminErrorHandler', error_reporting());
 
@@ -222,8 +222,9 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
         trace_log(TEXTPATTERN_TRACE_DISPLAY);
     } else {
         $trace = trace_log(TEXTPATTERN_TRACE_RESULT);
-        header("X-Textpattern-Runtime: " . @$trace['microdiff']);
-        header("X-Textpattern-Memory: "  . @$trace['memory_peak']);
+        header('X-Textpattern-Runtime: ' . @$trace['microdiff']);
+        header('X-Textpattern-Memory: '  . @$trace['memory_peak']);
+        header('X-Textpattern-Queries: ' . @$trace['queries']);
     }
 } else {
     txp_die('DB-Connect was successful, but the textpattern-table was not found.',

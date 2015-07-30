@@ -50,6 +50,8 @@ if (!defined('TXP_DEBUG')) {
 define('TEXTPATTERN_TRACE_START',   0x1);
 define('TEXTPATTERN_TRACE_DISPLAY', 0x2);
 define('TEXTPATTERN_TRACE_RESULT',  0x4);
+define('TEXTPATTERN_TRACE_QUIET',   0x8);
+
 
 /**
  * Comment spam status.
