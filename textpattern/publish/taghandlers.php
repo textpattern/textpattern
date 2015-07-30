@@ -4435,14 +4435,14 @@ function file_download_list($atts, $thing = null)
     // Note: status treated slightly differently.
     $where = $statwhere = array();
     $filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['status']);
-    $context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
+    $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
     $pageby = ($pageby == 'limit') ? $limit : $pageby;
 
     if ($category) {
-        $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+        $where[] = "category IN ('".join("','", doSlash(do_list_unique($category)))."')";
     }
 
-    $ids = array_map('intval', do_list($id));
+    $ids = array_map('intval', do_list_unique($id));
 
     if ($id) {
         $where[] = "id IN ('".join("','", $ids)."')";
@@ -4453,12 +4453,14 @@ function file_download_list($atts, $thing = null)
     }
 
     if ($author) {
-        $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+        $where[] = "author IN ('".join("','", doSlash(do_list_unique($author)))."')";
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list($realname)), 'urldecode'))."')");
-        $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
+        if ($authorlist) {
+            $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+        }
     }
 
     // If no files are selected, try...
