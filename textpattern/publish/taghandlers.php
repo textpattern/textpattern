@@ -1330,14 +1330,14 @@ function category_list($atts, $thing = null)
     }
 
     if ($categories) {
-        $categories = do_list($categories);
+        $categories = do_list_unique($categories);
         $categories = join("','", doSlash($categories));
 
         $rs = safe_rows_start('name, title, description', 'txp_category',
             "type = '".doSlash($type)."' and name in ('$categories') order by ".($sort ? $sort : "field(name, '$categories')").$sql_limit);
     } else {
         if ($parent) {
-            $parents = join(',', quote_list(do_list($parent)));
+            $parents = join(',', quote_list(do_list_unique($parent)));
         }
 
         if ($children) {
@@ -1349,7 +1349,7 @@ function category_list($atts, $thing = null)
         }
 
         if ($exclude) {
-            $exclude = do_list($exclude);
+            $exclude = do_list_unique($exclude);
             $exclude = join("','", doSlash($exclude));
             $exclude = "and name not in('$exclude')";
         }
