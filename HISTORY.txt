@@ -9,7 +9,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Changed: <txp:article_custom /> accepts 'exclude' attribute to exclude articles by a comma-separated id list.
 * Changed: <txp:author /> accepts 'escape' and 'format' attributes.
 * Changed: <txp:category_list /> accepts 'html_id', 'limit' and 'offset' attributes.
-* Changed: <txp:link /> accepts 'name' attribute.
+* Changed: <txp:link /> accepts 'id' and 'name' attributes.
 * Changed: <txp:meta_author /> accepts 'escape' and 'format' attributes.
 * Changed: <txp:meta_keywords /> accepts 'escape', 'format' and 'separator' attributes.
 * Changed: <txp:password_protect /> tag can now be used as a container tag.
