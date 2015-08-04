@@ -6,18 +6,18 @@ Changes in 4.6.0 (Upcoming) TODO
 * New tags: <txp:authors />, <txp:meta_description />, <txp:if_description> and <txp:if_yield>.
 * Added: Default publishing status preference.
 * Added: Support for additional text markup languages.
-* Changed: <txp:link /> accepts 'name' attribute.
-* Changed: <txp:meta_keywords /> accepts 'escape', 'format' and 'separator' attributes.
-* Changed: <txp:meta_author /> accepts 'escape' and 'format' attributes.
+* Changed: <txp:article_custom /> accepts 'exclude' attribute to exclude articles by a comma-separated id list.
 * Changed: <txp:author /> accepts 'escape' and 'format' attributes.
 * Changed: <txp:category_list /> accepts 'html_id', 'limit' and 'offset' attributes.
+* Changed: <txp:link /> accepts 'name' attribute.
+* Changed: <txp:meta_author /> accepts 'escape' and 'format' attributes.
+* Changed: <txp:meta_keywords /> accepts 'escape', 'format' and 'separator' attributes.
+* Changed: <txp:password_protect /> tag can now be used as a container tag.
 * Changed: <txp:recent_articles /> accepts 'offset' attribute.
 * Changed: <txp:section_list /> accepts 'html_id', 'limit' and 'offset' attributes.
-* Changed: <txp:password_protect /> tag can now be used as a container tag.
-* Changed: <txp:article_custom /> accepts 'exclude' attribute to exclude articles by a comma-separated id list.
-* Changed: Deprecated 'breakclass' attribute for <txp:comments /> and <txp:image_info />.
 * Changed: Deprecated <txp:keywords> tag. Use <txp:meta_keywords format="" /> instead.
 * Changed: Deprecated <txp:rsd> tag.
+* Changed: Deprecated 'breakclass' attribute for <txp:comments /> and <txp:image_info />.
 * Changed: Removed Form (article) Preview facility.
 * Changed: Removed empty 'About' section from new installs.
 * Changed: Increase 'page' and 'css' sizes in txp_section table.
