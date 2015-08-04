@@ -9,9 +9,9 @@ Changes in 4.6.0 (Upcoming) TODO
 * Changed: <txp:meta_keywords /> accepts 'escape', 'format' and 'separator' attributes.
 * Changed: <txp:meta_author /> accepts 'escape' and 'format' attributes.
 * Changed: <txp:author /> accepts 'escape' and 'format' attributes.
-* Changed: <txp:category_list /> accepts 'html_id' attribute.
+* Changed: <txp:category_list /> accepts 'html_id', 'limit' and 'offset' attributes.
 * Changed: <txp:recent_articles /> accepts 'offset' attribute.
-* Changed: <txp:section_list /> accepts 'html_id' attribute.
+* Changed: <txp:section_list /> accepts 'html_id', 'limit' and 'offset' attributes.
 * Changed: <txp:password_protect /> tag can now be used as a container tag.
 * Changed: <txp:article_custom /> accepts 'exclude' attribute to exclude articles by a comma-separated id list.
 * Changed: Deprecated 'breakclass' attribute for <txp:comments /> and <txp:image_info />.
