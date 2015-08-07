@@ -54,7 +54,7 @@ assert_system_requirements();
 
 // Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2).
 // On 4.1 or greater use utf8-tables, if that is configures in config.php.
-$mysqlversion = mysql_get_server_info();
+$mysqlversion = mysqli_get_server_info($DB->link);
 $tabletype = (intval($mysqlversion[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $mysqlversion))
     ? " ENGINE=MyISAM "
     : " TYPE=MyISAM ";

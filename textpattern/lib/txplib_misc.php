@@ -4104,7 +4104,7 @@ function txp_validate($user, $password, $log = true)
         $passwords[] = "password(lower('".doSlash($password)."'))";
         $passwords[] = "password('".doSlash($password)."')";
 
-        if (version_compare(mysql_get_server_info(), '4.1.0', '>=')) {
+        if (version_compare(mysqli_get_server_info(), '4.1.0', '>=')) {
             $passwords[] = "old_password(lower('".doSlash($password)."'))";
             $passwords[] = "old_password('".doSlash($password)."')";
         }

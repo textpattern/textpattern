@@ -351,7 +351,7 @@ function printConfig()
         exit;
     }
 
-    $tables_exist = mysql_query("describe `".$_SESSION['dprefix']."textpattern`");
+    $tables_exist = mysqli_query($mylink, "describe `".$_SESSION['dprefix']."textpattern`");
     if ($tables_exist) {
         echo graf(
             span(setup_gTxt('tables_exist', array(
@@ -366,10 +366,10 @@ function printConfig()
     }
 
     // On 4.1 or greater use UTF-8-tables.
-    $version = mysql_get_server_info();
+    $version = mysqli_get_server_info($mylink);
 
     if (version_compare($version, '4.1') >= 0) {
-        if (mysql_query("SET NAMES utf8")) {
+        if (mysqli_query($mylink, "SET NAMES utf8")) {
             $_SESSION['dbcharset'] = "utf8";
         } else {
             $_SESSION['dbcharset'] = "latin1";
@@ -582,7 +582,7 @@ function createTxp()
     $nonce = md5(uniqid(rand(), true));
     $hash  = doSlash(txp_hash_password($_SESSION['pass']));
 
-    mysql_query("INSERT INTO `".PFX."txp_users` VALUES
+    mysqli_query($mylink, "INSERT INTO `".PFX."txp_users` VALUES
         (1,
         '".doSlash($_SESSION['name'])."',
         '$hash',
@@ -593,17 +593,17 @@ function createTxp()
         '$nonce')"
     );
 
-    mysql_query("update `".PFX."txp_prefs` set val = '".doSlash($siteurl)."' where `name`='siteurl'");
-    mysql_query("update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");
-    mysql_query("update `".PFX."txp_prefs` set val = '".getlocale(LANG)."' where `name`='locale'");
-    mysql_query("update `".PFX."textpattern` set Body = replace(Body, 'siteurl', '".
+    mysqli_query($mylink, "update `".PFX."txp_prefs` set val = '".doSlash($siteurl)."' where `name`='siteurl'");
+    mysqli_query($mylink, "update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");
+    mysqli_query($mylink, "update `".PFX."txp_prefs` set val = '".getlocale(LANG)."' where `name`='locale'");
+    mysqli_query($mylink, "update `".PFX."textpattern` set Body = replace(Body, 'siteurl', '".
         doSlash($urlpath)."'), Body_html = replace(Body_html, 'siteurl', '".
         doSlash($urlpath)."') WHERE ID = 1");
 
     // cf. update/_to_4.2.0.php.
     // TODO: Position might need altering when prefs panel layout is altered.
     $theme = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
-    mysql_query("insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".
+    mysqli_query($mylink, "insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".
         doSlash($theme)."', type = '1', event = 'admin', html = 'themename', position = '160'");
 
     echo fbCreate();
