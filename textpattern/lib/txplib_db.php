@@ -51,12 +51,28 @@ if (version_compare(PHP_VERSION, '5.3.0') < 0) {
 class DB
 {
     /**
-     * The database server.
+     * The database server hostname.
      *
      * @var string
      */
 
     public $host;
+
+    /**
+     * The database server port.
+     *
+     * @var int
+     */
+
+    public $port;
+
+    /**
+     * The database server socket.
+     *
+     * @var string
+     */
+
+    public $socket;
 
     /**
      * The database name.
@@ -149,7 +165,20 @@ class DB
     {
         global $txpcfg, $connected;
 
-        $this->host = $txpcfg['host'];
+        if (strpos($txpcfg['host'], ':') === false) {
+            $this->host = $txpcfg['host'];
+            $this->port = ini_get("mysqli.default_port");
+        } else {
+            list($this->host, $this->port) = explode(':', $txpcfg['host'], 2);
+            $this->port = intval($this->port);
+        }
+
+        if (isset($txpcfg['socket'])) {
+            $this->socket = $txpcfg['socket'];
+        } else {
+            $this->socket = ini_get("mysqli.default_socket");
+        }
+
         $this->db = $txpcfg['db'];
         $this->user = $txpcfg['user'];
         $this->pass = $txpcfg['pass'];
@@ -161,19 +190,19 @@ class DB
 
         if (isset($txpcfg['client_flags'])) {
             $this->client_flags = $txpcfg['client_flags'];
+        } else {
+            $this->client_flags = 0;
         }
 
         if (isset($txpcfg['dbcharset'])) {
             $this->charset = $txpcfg['dbcharset'];
         }
 
-        $this->link = @mysql_connect($this->host, $this->user, $this->pass, false, $this->client_flags);
+        $this->link = mysqli_init();
 
-        if (!$this->link) {
+        if (!mysqli_real_connect($this->link, $this->host, $this->user, $this->pass, $this->db, $this->port, $this->socket, $this->client_flags)) {
             die(db_down());
         }
-
-        @mysql_select_db($this->db, $this->link) or die(db_down());
 
         $version = $this->version = mysqli_get_server_info($this->link);
         $connected = true;
@@ -998,7 +1027,7 @@ function fetch($col, $table, $key, $val, $debug = false)
         if (mysqli_num_rows($r) > 0) {
             $row = mysqli_fetch_row($r);
             mysqli_free_result($r);
-            return $r[0];
+            return $row[0];
         }
 
         return '';

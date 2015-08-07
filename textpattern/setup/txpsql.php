@@ -28,8 +28,22 @@ if (!defined('TXP_INSTALL')) {
 @ignore_user_abort(1);
 @set_time_limit(0);
 
-$link = mysql_connect($dhost, $duser, $dpass, false, $dclient_flags);
-mysql_select_db($ddb);
+if (strpos($dhost, ':') === false) {
+    $host = $dhost;
+    $port = ini_get("mysqli.default_port");
+} else {
+    list($host, $port) = explode(':', $dhost, 2);
+    $port = intval($port);
+}
+
+if (isset($txpcfg['socket'])) {
+    $socket = $txpcfg['socket'];
+} else {
+    $socket = ini_get("mysqli.default_socket");
+}
+
+$link = mysqli_init();
+mysqli_real_connect($link, $host, $duser, $dpass, $ddb, $port, $socket, $dclient_flags);
 
 $result = mysqli_query($link, "describe `".PFX."textpattern`");
 
@@ -503,5 +517,6 @@ mysqli_query($link, "FLUSH TABLE `".PFX."txp_lang`");
 
 function safe_escape($in = '')
 {
+    global $link;
     return mysqli_real_escape_string($link, $in);
 }

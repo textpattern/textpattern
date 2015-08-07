@@ -306,10 +306,22 @@ function printConfig()
 
     echo hed(setup_gTxt("checking_database"), 2);
 
-    if (($mylink = mysql_connect($_SESSION['dhost'], $_SESSION['duser'], $_SESSION['dpass']))) {
+    if (strpos($_SESSION['dhost'], ':') === false) {
+        $dhost = $_SESSION['dhost'];
+        $dport = ini_get("mysqli.default_port");
+    } else {
+        list($dhost, $dport) = explode(':', $_SESSION['dhost'], 2);
+        $dport = intval($dport);
+    }
+
+    $dsocket = ini_get("mysqli.default_socket");
+
+    $mylink = mysqli_init();
+
+    if (@mysqli_real_connect($mylink, $dhost, $_SESSION['duser'], $_SESSION['dpass'], '', $dport, $dsocket)) {
         $_SESSION['dclient_flags'] = 0;
-    } elseif (($mylink = mysql_connect($_SESSION['dhost'], $_SESSION['duser'], $_SESSION['dpass'], false, MYSQL_CLIENT_SSL))) {
-        $_SESSION['dclient_flags'] = 'MYSQL_CLIENT_SSL';
+    } elseif (@mysqli_real_connect($mylink, $dhost, $_SESSION['duser'], $_SESSION['dpass'], '', $dport, $dsocket, MYSQLI_CLIENT_SSL)) {
+        $_SESSION['dclient_flags'] = 'MYSQLI_CLIENT_SSL';
     } else {
         echo graf(
                 span(setup_gTxt('db_cant_connect'), ' class="error"')
@@ -338,7 +350,7 @@ function printConfig()
         exit;
     }
 
-    if (!$mydb = mysql_select_db($_SESSION['ddb'])) {
+    if (!$mydb = mysqli_select_db($mylink, $_SESSION['ddb'])) {
         echo graf(
             span(setup_gTxt('db_doesnt_exist', array(
                 '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])),
@@ -493,8 +505,8 @@ function getTxpLogin()
 
 function createTxp()
 {
+    global $link;
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
-
     $_SESSION['name'] = ps('name');
     $_SESSION['realname'] = ps('RealName');
     $_SESSION['pass'] = ps('pass');
@@ -582,7 +594,7 @@ function createTxp()
     $nonce = md5(uniqid(rand(), true));
     $hash  = doSlash(txp_hash_password($_SESSION['pass']));
 
-    mysqli_query($mylink, "INSERT INTO `".PFX."txp_users` VALUES
+    mysqli_query($link, "INSERT INTO `".PFX."txp_users` VALUES
         (1,
         '".doSlash($_SESSION['name'])."',
         '$hash',
@@ -593,17 +605,17 @@ function createTxp()
         '$nonce')"
     );
 
-    mysqli_query($mylink, "update `".PFX."txp_prefs` set val = '".doSlash($siteurl)."' where `name`='siteurl'");
-    mysqli_query($mylink, "update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");
-    mysqli_query($mylink, "update `".PFX."txp_prefs` set val = '".getlocale(LANG)."' where `name`='locale'");
-    mysqli_query($mylink, "update `".PFX."textpattern` set Body = replace(Body, 'siteurl', '".
+    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".doSlash($siteurl)."' where `name`='siteurl'");
+    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");
+    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".getlocale(LANG)."' where `name`='locale'");
+    mysqli_query($link, "update `".PFX."textpattern` set Body = replace(Body, 'siteurl', '".
         doSlash($urlpath)."'), Body_html = replace(Body_html, 'siteurl', '".
         doSlash($urlpath)."') WHERE ID = 1");
 
     // cf. update/_to_4.2.0.php.
     // TODO: Position might need altering when prefs panel layout is altered.
     $theme = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
-    mysqli_query($mylink, "insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".
+    mysqli_query($link, "insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".
         doSlash($theme)."', type = '1', event = 'admin', html = 'themename', position = '160'");
 
     echo fbCreate();
