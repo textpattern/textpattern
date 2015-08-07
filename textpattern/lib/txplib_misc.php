@@ -2486,35 +2486,56 @@ function updateSitePath($here)
 
 function splat($text)
 {
-    $atts  = array();
+    static $stack, $parse;
 
-    if (preg_match_all('@(\w+)\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+))@s', $text, $match, PREG_SET_ORDER)) {
-        foreach ($match as $m) {
-            switch (count($m)) {
-                case 3:
-                    $val = str_replace('""', '"', $m[2]);
-                    break;
-                case 4:
-                    $val = str_replace("''", "'", $m[3]);
+    if (strlen($text) < 3) {
+        return array();
+    }
 
-                    if (strpos($m[3], ':') !== false) {
-                        trace_add("[attribute '".$m[1]."']");
-                        $val = parse($val);
-                        trace_add("[/attribute]");
-                    }
+    $sha = sha1($text);
 
-                    break;
-                case 5:
-                    $val = $m[4];
-                    trigger_error(gTxt('attribute_values_must_be_quoted'), E_USER_WARNING);
-                    break;
+    if (!isset($stack[$sha])) {
+        $stack[$sha] = array();
+        $parse[$sha] = array();
+
+        if (preg_match_all('@(\w+)\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+))@s', $text, $match, PREG_SET_ORDER)) {
+            foreach ($match as $m) {
+                switch (count($m)) {
+                    case 3:
+                        $val = str_replace('""', '"', $m[2]);
+                        break;
+                    case 4:
+                        $val = str_replace("''", "'", $m[3]);
+
+                        if (strpos($m[3], ':') !== false) {
+                            $parse[$sha][] = strtolower($m[1]);
+                        }
+
+                        break;
+                    case 5:
+                        $val = $m[4];
+                        trigger_error(gTxt('attribute_values_must_be_quoted'), E_USER_WARNING);
+                        break;
+                }
+
+                $stack[$sha][strtolower($m[1])] = $val;
             }
-
-            $atts[strtolower($m[1])] = $val;
         }
     }
 
-    return $atts;
+    if (empty($parse[$sha])) {
+        return $stack[$sha];
+    }
+    else {
+        $atts = $stack[$sha];
+
+        foreach ($parse[$sha] as $p) {
+            trace_add("[attribute '".$m[1]."']");
+            $atts[$p] = parse($atts[$p]);
+            trace_add("[/attribute]");
+        }
+        return $atts;
+    }
 }
 
 /**
