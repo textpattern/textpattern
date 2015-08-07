@@ -90,7 +90,8 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
             where user_id = ".$user['user_id']." and meta_key = '".$wpdbprefix."capabilities'
         ") or $errors[] = mysqli_error($b2link);
 
-        $privs = unserialize(mysql_result($user_privs_query, 0));
+        $row = mysqli_fetch_row($user_privs_query);
+        $privs = unserialize($row[0]);
 
         foreach ($privs as $key => $val) {
             // Convert the built-in WordPress roles to their Textpattern equivalent.

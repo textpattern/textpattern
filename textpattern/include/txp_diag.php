@@ -546,14 +546,16 @@ function doDiagnostics()
                 continue;
             }
 
-            $ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is', '\\1', mysql_result($ctr, 0, 'Create Table'));
+            $row = mysqli_fetch_assoc($ctr);
+            $ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is', '\\1', $row['Create Table']);
             if (isset($conn_char) && !stristr($ctcharset, 'CREATE') && ($conn_char != $ctcharset)) {
                 $table_msg[] = "$table is $ctcharset";
             }
 
             $ctr = safe_query("CHECK TABLE ".$table);
-            if (in_array(mysql_result($ctr, 0, 'Msg_type'), array('error', 'warning'))) {
-                $table_msg[] = $table.cs.mysql_result($ctr, 0, 'Msg_Text');
+            $row = mysqli_fetch_assoc($ctr);
+            if (in_array($row['Msg_type'], array('error', 'warning'))) {
+                $table_msg[] = $table.cs.$row['Msg_Text'];
             }
         }
 

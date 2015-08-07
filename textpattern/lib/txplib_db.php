@@ -774,10 +774,10 @@ function safe_field($thing, $table, $where, $debug = false)
     $r = safe_query($q, $debug);
 
     if (@mysqli_num_rows($r) > 0) {
-        $f = mysql_result($r, 0);
+        $row = mysqli_fetch_row($r);
         mysqli_free_result($r);
 
-        return $f;
+        return $row[0];
     }
 
     return false;
@@ -995,10 +995,13 @@ function fetch($col, $table, $key, $val, $debug = false)
     $q = "select $col from ".safe_pfx($table)." where `$key` = $val limit 1";
 
     if ($r = safe_query($q, $debug)) {
-        $thing = (mysqli_num_rows($r) > 0) ? mysql_result($r, 0) : '';
-        mysqli_free_result($r);
+        if (mysqli_num_rows($r) > 0) {
+            $row = mysqli_fetch_row($r);
+            mysqli_free_result($r);
+            return $r[0];
+        }
 
-        return $thing;
+        return '';
     }
 
     return false;
@@ -1136,10 +1139,13 @@ function numRows($r)
 function getThing($query, $debug = false)
 {
     if ($r = safe_query($query, $debug)) {
-        $thing = (mysqli_num_rows($r) != 0) ? mysql_result($r, 0) : '';
-        mysqli_free_result($r);
+        if (mysqli_num_rows($r) != 0) {
+          $row = mysqli_fetch_row($r);
+          mysqli_free_result($r);
+          return $row[0];
+        }
 
-        return $thing;
+        return '';
     }
 
     return false;
