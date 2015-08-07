@@ -40,6 +40,20 @@ if (!defined('TXP_DEBUG')) {
 }
 
 /**
+ * Trace log constants.
+ *
+ * @since   4.6.0
+ * @package Debug
+ * @see     trace_log()
+ */
+
+define('TEXTPATTERN_TRACE_START',   0x1);
+define('TEXTPATTERN_TRACE_DISPLAY', 0x2);
+define('TEXTPATTERN_TRACE_RESULT',  0x4);
+define('TEXTPATTERN_TRACE_QUIET',   0x8);
+
+
+/**
  * Comment spam status.
  *
  * @package Comment
@@ -783,14 +797,16 @@ define('TEXTPATTERN_LANG_OWNER_SYSTEM', '');
 define('TEXTPATTERN_LANG_OWNER_SITE', 'site');
 
 /**
- * Strip empty HTML attribute values.
+ * Strip empty values.
  *
  * @since   4.6.0
  * @package HTML
- * @see     join_atts()
+ * @see     join_atts(), do_list_unique()
  */
 
-define('TEXTPATTERN_ATTS_STRIP_EMPTY', 0x1);
+define('TEXTPATTERN_STRIP_NONE',         0);
+define('TEXTPATTERN_STRIP_EMPTY',        0x1);
+define('TEXTPATTERN_STRIP_EMPTY_STRING', 0x2);
 
 /**
  * Sends an adaptive announcement.

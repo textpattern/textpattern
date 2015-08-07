@@ -75,10 +75,14 @@ if (!defined("txpath")) {
 }
 
 if (!isset($txpcfg['table_prefix'])) {
-    ob_start(NULL, 2048);
+    ob_start(null, 2048);
     include txpath.'/config.php';
     ob_end_clean();
 }
+
+include txpath.'/lib/constants.php';
+include txpath.'/lib/txplib_misc.php';
+trace_log(TEXTPATTERN_TRACE_START);
 
 $nolog = 1;
 
@@ -91,3 +95,9 @@ include txpath.'/publish.php';
 $s = gps('s');
 $n = gps('n');
 output_css($s, $n);
+
+if ($production_status === 'debug') {
+    echo n.'/*';
+    trace_log(TEXTPATTERN_TRACE_DISPLAY);
+    echo n.'*/'.n;
+}

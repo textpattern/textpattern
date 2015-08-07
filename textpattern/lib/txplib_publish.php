@@ -90,7 +90,7 @@ function populateArticleData($rs)
 {
     global $thisarticle;
 
-    trace_add("[".gTxt('Article')." {$rs['ID']}]");
+    trace_add("[Article: '{$rs['ID']}']");
 
     foreach (article_column_map() as $key => $column) {
         $thisarticle[$key] = $rs[$column];
@@ -150,6 +150,7 @@ function article_column_map()
         'authorid' => 'AuthorID',
         'title' => 'Title',
         'url_title' => 'url_title',
+        'description' => 'description',
         'category1' => 'Category1',
         'category2' => 'Category2',
         'section' => 'Section',
@@ -453,20 +454,13 @@ function maybe_tag($tag)
 
 function processTags($tag, $atts, $thing = null)
 {
-    global $production_status, $txptrace, $txptracelevel, $txp_current_tag, $txp_current_form;
+    global $production_status, $txp_current_tag, $txp_current_form;
     static $registry = null;
 
     if ($production_status !== 'live') {
         $old_tag = $txp_current_tag;
-
         $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
-
-        trace_add($txp_current_tag);
-        ++$txptracelevel;
-
-        if ($production_status === 'debug') {
-            maxMemUsage("Form='$txp_current_form', Tag='$txp_current_tag'");
-        }
+        trace_add($txp_current_tag, 1, "Form='$txp_current_form', Tag='$txp_current_tag'");
     }
 
     if ($registry === null) {
@@ -493,10 +487,10 @@ function processTags($tag, $atts, $thing = null)
     }
 
     if ($production_status !== 'live') {
-        --$txptracelevel;
+        trace_add('', -1);
 
         if (isset($thing)) {
-            trace_add('</txp:'.$tag.'>');
+            trace_add("</txp:{$tag}>");
         }
 
         $txp_current_tag = $old_tag;

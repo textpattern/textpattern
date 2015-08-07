@@ -66,7 +66,7 @@ define("txpinterface", "admin");
 $thisversion = '4.6-dev';
 $txp_using_svn = true; // Set false for releases.
 
-ob_start(NULL, 2048);
+ob_start(null, 2048);
 
 if (!isset($txpcfg['table_prefix']) && !@include './config.php') {
     ob_end_clean();
@@ -80,6 +80,10 @@ header("Content-type: text/html; charset=utf-8");
 
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
+include_once txpath.'/lib/constants.php';
+include txpath.'/lib/txplib_misc.php';
+
+trace_log(TEXTPATTERN_TRACE_START);
 
 include txpath.'/vendors/Textpattern/Loader.php';
 
@@ -89,17 +93,15 @@ $loader->register();
 $loader = new Textpattern_Loader(txpath.'/lib');
 $loader->register();
 
-include_once txpath.'/lib/constants.php';
-include txpath.'/lib/txplib_misc.php';
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/txplib_forms.php';
 include txpath.'/lib/txplib_html.php';
 include txpath.'/lib/txplib_theme.php';
 include txpath.'/lib/txplib_validator.php';
 include txpath.'/lib/admin_config.php';
+trace_add('[PHP Include end]');
 
 set_error_handler('adminErrorHandler', error_reporting());
-$microstart = getmicrotime();
 
 if ($connected && safe_query("describe `".PFX."textpattern`")) {
     $dbversion = safe_field('val', 'txp_prefs', "name = 'version'");
@@ -184,7 +186,7 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
     janitor();
 
     // Article or form preview.
-    if (isset($_POST['form_preview']) || isset($_GET['txpreview'])) {
+    if (isset($_GET['txpreview'])) {
         include txpath.'/publish.php';
         textpattern();
         exit;
@@ -216,15 +218,13 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
 
     end_page();
 
-    $microdiff = substr(getmicrotime() - $microstart, 0, 6);
-    $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
-
     if ($app_mode != 'async') {
-        echo n.comment(gTxt('runtime').': '.$microdiff);
-        echo n.comment(sprintf('Memory: %sKb', $memory_peak));
+        trace_log(TEXTPATTERN_TRACE_DISPLAY);
     } else {
-        header("X-Textpattern-Runtime: $microdiff");
-        header("X-Textpattern-Memory: $memory_peak");
+        $trace = trace_log(TEXTPATTERN_TRACE_RESULT);
+        header('X-Textpattern-Runtime: ' . @$trace['microdiff']);
+        header('X-Textpattern-Memory: '  . @$trace['memory_peak']);
+        header('X-Textpattern-Queries: ' . @$trace['queries']);
     }
 } else {
     txp_die('DB-Connect was successful, but the textpattern-table was not found.',

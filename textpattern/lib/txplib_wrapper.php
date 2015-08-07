@@ -840,7 +840,7 @@ class TXP_Wrapper
     }
 
     /**
-     * Ping services.
+     * Pings Ping-O-Matic when an article is published.
      *
      * This is duplicated code from txp_article.php.
      *
@@ -853,11 +853,6 @@ class TXP_Wrapper
         extract($prefs);
 
         include_once txpath.'/lib/IXRClass.php';
-
-        if ($ping_textpattern_com) {
-            $tx_client = new IXR_Client('http://textpattern.com/xmlrpc/');
-            $tx_client->query('ping.Textpattern', $sitename, hu);
-        }
 
         if ($ping_weblogsdotcom == 1) {
             $wl_client = new IXR_Client('http://rpc.pingomatic.com/');

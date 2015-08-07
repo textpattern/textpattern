@@ -1,24 +1,21 @@
 /* fallbacks for lack of RGBa/opacity support in IE 8 */
 .ui-helper-zfix {
-  filter: Alpha(Opacity=0);
+  filter: alpha(opacity=0);
 }
 
 .ui-priority-secondary {
-  filter: Alpha(Opacity=66);
+  filter: alpha(opacity=66);
 }
 
 .ui-state-disabled {
-  filter: Alpha(Opacity=33);
+  filter: alpha(opacity=33);
 }
 .ui-state-disabled .ui-icon {
-  filter: Alpha(Opacity=33);
+  filter: alpha(opacity=33);
 }
 
+.ui-widget-overlay,
 .ui-widget-shadow {
-  filter: Alpha(Opacity=33);
-}
-
-.ui-widget-overlay {
   background: url("images/overlay-no-rgba.png");
 }
 

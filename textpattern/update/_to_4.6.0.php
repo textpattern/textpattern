@@ -92,3 +92,37 @@ safe_alter('txp_plugin', "MODIFY version VARCHAR(255) NOT NULL DEFAULT '1.0'");
 
 // Translation strings should allow more than 255 characters.
 safe_alter('txp_lang', "MODIFY data TEXT");
+
+// Add meta description to articles...
+$cols = getThings('describe `'.PFX.'textpattern`');
+
+if (!in_array('description', $cols)) {
+    safe_alter('textpattern',
+        "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER Keywords");
+}
+
+// ... categories...
+$cols = getThings('describe `'.PFX.'txp_category`');
+
+if (!in_array('description', $cols)) {
+    safe_alter('txp_category',
+        "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER title");
+}
+
+// ... and sections.
+$cols = getThings('describe `'.PFX.'txp_section`');
+
+if (!in_array('description', $cols)) {
+    safe_alter('txp_section',
+        "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER css");
+}
+
+// Remove textpattern.com ping pref.
+if (safe_field('name', 'txp_prefs', "name = 'ping_textpattern_com'")) {
+    safe_delete('txp_prefs', "name = 'ping_textpattern_com'");
+}
+
+// Add default publishing status pref.
+if (!get_pref('default_publish_status')) {
+    set_pref('default_publish_status', STATUS_LIVE, 'publish', PREF_CORE, 'defaultPublishStatus', 15, PREF_PRIVATE);
+}

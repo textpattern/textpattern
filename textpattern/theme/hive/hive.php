@@ -69,9 +69,6 @@ class hive_theme extends theme
         if (defined('hive_theme_hide_tag_builder_column')) {
             $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_tag_builder_column.css">';
         }
-        if (defined('hive_theme_hide_form_preview')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_form_preview.css">';
-        }
         // End of custom CSS toggles.
 
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">';

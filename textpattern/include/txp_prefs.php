@@ -132,7 +132,7 @@ function prefs_save()
         update_pref($name, (string) $post[$name], null, null, null, null, (string) $user_name);
     }
 
-    update_lastmod();
+    update_lastmod('preferences_saved');
 
     prefs_list(gTxt('preferences_saved'));
 }
@@ -665,6 +665,20 @@ function doctypes($name, $val)
     );
 
     return selectInput($name, $vals, $val, '', '', $name);
+}
+
+/**
+ * Renders a HTML &lt;select&gt; list of available publishing
+ * status values.
+ *
+ * @param  string $name HTML name and id of the widget
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function defaultPublishStatus($name, $val)
+{
+    return selectInput($name, status_list(), $val, '', '', $name);
 }
 
 /**

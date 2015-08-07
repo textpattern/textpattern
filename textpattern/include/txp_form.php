@@ -287,13 +287,6 @@ function form_edit($message = '')
         'title' => gTxt('form_clone'),
     ));
 
-    if (empty($type) || $type == 'article') {
-        $buttons .= href(gTxt('preview'), '#', array(
-            'id'    => 'form_preview',
-            'class' => 'form-preview',
-        ));
-    }
-
     if ($name) {
         $name_widgets .= n.span($buttons, array('class' => 'txp-actions'));
     } else {
@@ -365,7 +358,6 @@ function form_edit($message = '')
                     br.'<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($Form).'</textarea>'
                 ).
                 graf($type_widgets).
-                (empty($type) ? graf(gTxt('only_articles_can_be_previewed')) : '').
                 graf(
                     fInput('submit', 'save', gTxt('save'), 'publish').
                     eInput('form').sInput('form_save').
@@ -444,7 +436,7 @@ function form_save()
                                 type = '$type',
                                 name = '".doSlash($newname)."'"
                         )) {
-                            update_lastmod();
+                            update_lastmod('form_created', compact('newname', 'name', 'type', 'Form'));
                             $message = gTxt('form_created', array('{name}' => $newname));
                         } else {
                             $message = array(gTxt('form_save_failed'), E_ERROR);
@@ -462,7 +454,7 @@ function form_save()
                             name = '".doSlash($newname)."'",
                             "name = '".doSlash($name)."'"
                     )) {
-                        update_lastmod();
+                        update_lastmod('form_saved', compact('newname', 'name', 'type', 'Form'));
                         $message = gTxt('form_updated', array('{name}' => $name));
                     } else {
                         $message = array(gTxt('form_save_failed'), E_ERROR);
