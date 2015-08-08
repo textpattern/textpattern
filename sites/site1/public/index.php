@@ -71,7 +71,7 @@ if (!isset($here)) {
 // Pull in config unless configuration data has already been provided (multi-headed use).
 if (!isset($txpcfg['table_prefix'])) {
     // Use buffering to ensure bogus whitespace in config.php is ignored.
-    ob_start(NULL, 2048);
+    ob_start(null, 2048);
     include '../private/config.php';
     ob_end_clean();
 }

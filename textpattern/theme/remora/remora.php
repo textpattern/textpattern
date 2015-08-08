@@ -71,12 +71,12 @@ SF;
             $out[] = '</li>';
         }
 
-        $out[] = '<li id="view-site" class="primary tabdown inactive">'.
+        $out[] = '<li class="primary tabdown inactive" id="view-site">'.
             href(gTxt('tab_view_site'), hu, ' target="_blank"').
             '</li>';
 
         if ($txp_user) {
-            $out[] = '<li id="logout" class="primary tabdown inactive">'.
+            $out[] = '<li class="primary tabdown inactive" id="logout">'.
                 href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"').
                 '</li>';
         }

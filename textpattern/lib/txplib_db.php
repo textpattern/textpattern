@@ -339,7 +339,7 @@ function safe_escape_like($in = '')
 
 function safe_query($q = '', $debug = false, $unbuf = false)
 {
-    global $DB, $txpcfg, $qcount, $qtime, $production_status;
+    global $DB, $txpcfg, $txptrace_qcount, $txptrace_qtime, $production_status;
     $method = (!$unbuf) ? 'mysql_query' : 'mysql_unbuffered_query';
 
     if (!$q) {
@@ -353,14 +353,14 @@ function safe_query($q = '', $debug = false, $unbuf = false)
     $start = getmicrotime();
     $result = $method($q, $DB->link);
     $time = getmicrotime() - $start;
-    @$qtime += $time;
-    @$qcount++;
+    @$txptrace_qtime += $time;
+    @$txptrace_qcount++;
 
     if ($result === false) {
         trigger_error(mysql_error($DB->link), E_USER_ERROR);
     }
 
-    trace_add("[SQL ($time): $q]");
+    trace_add('[SQL ('.number_format($time, 6, '.', '')."): $q]");
 
     if (!$result) {
         return false;
@@ -1231,15 +1231,14 @@ function getTree($root, $type, $where = '1=1', $tbl = 'txp_category')
             array_pop($right);
         }
 
-        $out[] =
-            array(
-                'id' => $id,
-                'name' => $name,
-                'title' => $title,
-                'level' => count($right),
-                'children' => ($rgt - $lft - 1) / 2,
-                'parent' => $parent,
-            );
+        $out[] = array(
+            'id' => $id,
+            'name' => $name,
+            'title' => $title,
+            'level' => count($right),
+            'children' => ($rgt - $lft - 1) / 2,
+            'parent' => $parent,
+        );
 
         $right[] = $rgt;
     }
@@ -1288,14 +1287,13 @@ function getTreePath($target, $type, $tbl = 'txp_category')
             array_pop($right);
         }
 
-        $out[] =
-            array(
-                'id' => $id,
-                'name' => $name,
-                'title' => $title,
-                'level' => count($right),
-                'children' => ($rgt - $lft - 1) / 2,
-            );
+        $out[] = array(
+            'id' => $id,
+            'name' => $name,
+            'title' => $title,
+            'level' => count($right),
+            'children' => ($rgt - $lft - 1) / 2,
+        );
 
         $right[] = $rgt;
     }

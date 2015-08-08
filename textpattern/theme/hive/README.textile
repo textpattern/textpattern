@@ -53,10 +53,6 @@ Options are provided to hide certain sections/fields/features from displaying in
 
 @define('hive_theme_hide_tag_builder_column', true);@
 
-*Hide form preview button (forms page):*
-
-@define('hive_theme_hide_form_preview', true);@
-
 h2. License
 
 Major components:

@@ -75,6 +75,7 @@ class Textpattern_Loader
     public function register()
     {
         if ($this->directory) {
+            trace_add("[Textpattern autoload dir: '".str_replace(txpath.'/', '', $this->directory)."']");
             return spl_autoload_register(array($this, 'load'));
         }
 
@@ -140,9 +141,11 @@ class Textpattern_Loader
         $file .= str_replace('_', '/', $class).$this->extension;
 
         if (is_readable($file)) {
+            trace_add("\t[Load: '".str_replace(txpath.'/', '', $file)."']");
             require_once $file;
 
             if (class_exists($request, false)) {
+                trace_add("\t\t[Class loaded: '$class']");
                 return true;
             }
         }
