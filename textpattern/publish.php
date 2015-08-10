@@ -686,31 +686,38 @@ function doArticles($atts, $iscustom, $thing = null)
     $customFields = getCustomFields();
     $customlAtts = array_null(array_flip($customFields));
 
+    if ($iscustom) {
+        $extralAtts = array(
+            'category'      => '',
+            'section'       => '',
+            'excerpted'     => '',
+            'author'        => '',
+            'month'         => '',
+            'expired'       => $publish_expired_articles,
+            'id'            => '',
+            'exclude'       => '',
+        );
+    } else {
+        $extralAtts = array(
+            'listform'      => '',
+            'searchform'    => '',
+            'searchall'     => 1,
+            'searchsticky'  => 0,
+            'pageby'        => '',
+            'pgonly'        => 0,
+        );
+    }
+
     // Getting attributes.
     $theAtts = lAtts(array(
         'form'          => 'default',
-        'listform'      => '',
-        'searchform'    => '',
         'limit'         => 10,
-        'pageby'        => '',
-        'category'      => '',
-        'section'       => '',
-        'excerpted'     => '',
-        'author'        => '',
         'sort'          => '',
         'sortby'        => '', // Deprecated in 4.0.4.
         'sortdir'       => '', // Deprecated in 4.0.4.
-        'month'         => '',
         'keywords'      => '',
-        'expired'       => $publish_expired_articles,
-        'frontpage'     => '',
-        'id'            => '',
-        'exclude'       => '',
         'time'          => 'past',
         'status'        => STATUS_LIVE,
-        'pgonly'        => 0,
-        'searchall'     => 1,
-        'searchsticky'  => 0,
         'allowoverride' => (!$q and !$iscustom),
         'offset'        => 0,
         'wraptag'       => '',
@@ -718,10 +725,7 @@ function doArticles($atts, $iscustom, $thing = null)
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
-    ) +$customlAtts, $atts);
-
-    // If an article ID is specified, treat it as a custom list.
-    $iscustom = (!empty($theAtts['id']) || !empty($theAtts['exclude'])) ? true : $iscustom;
+    ) + $customlAtts + $extralAtts, $atts);
 
     // For the txp:article tag, some attributes are taken from globals;
     // override them, then stash all filter attributes.
@@ -731,10 +735,15 @@ function doArticles($atts, $iscustom, $thing = null)
         $theAtts['author'] = (!empty($author) ? $author : '');
         $theAtts['month'] = (!empty($month) ? $month : '');
         $theAtts['frontpage'] = ($s && $s == 'default') ? true : false;
-        $theAtts['excerpted'] = '';
+        $theAtts['excerpted'] = 0;
+        $theAtts['exclude'] = 0;
+        $theAtts['expired'] = $publish_expired_articles;
 
         filterAtts($theAtts);
+    } else {
+        $theAtts['frontpage'] = false;
     }
+
     extract($theAtts);
 
     // If a listform is specified, $thing is for doArticle() - hence ignore here.
