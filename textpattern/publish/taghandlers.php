@@ -1623,8 +1623,7 @@ function search_term($atts)
 // Link to next article, if it exists.
 function link_to_next($atts, $thing = null)
 {
-    global /** @noinspection PhpUnusedLocalVariableInspection */
-    $thisarticle, $next_id, $next_title, $prev_id, $prev_title;
+    global $thisarticle;
 
     assert_article();
 
@@ -1633,18 +1632,16 @@ function link_to_next($atts, $thing = null)
     ), $atts));
 
     if (is_array($thisarticle)) {
-        if (!isset($thisarticle['next_id'])) {
-            $np = getNextPrev();
-            $thisarticle = $thisarticle + $np;
-            extract($np);
+        if (!isset($thisarticle['next'])) {
+            $thisarticle = $thisarticle + getNextPrev();
         }
 
-        if ($next_id) {
-            $url = permlinkurl_id($next_id);
+        if ($thisarticle['next'] !== false) {
+            $url = permlinkurl($thisarticle['next']);
 
             if ($thing) {
                 $thing = parse($thing);
-                $next_title = escape_title($next_title);
+                $next_title = escape_title($thisarticle['next']['title']);
 
                 return href(
                     $thing,
@@ -1666,8 +1663,7 @@ function link_to_next($atts, $thing = null)
 // Link to previous article, if it exists.
 function link_to_prev($atts, $thing = null)
 {
-    global /** @noinspection PhpUnusedLocalVariableInspection */
-    $thisarticle, $next_id, $next_title, $prev_id, $prev_title;
+    global $thisarticle;
 
     assert_article();
 
@@ -1676,18 +1672,16 @@ function link_to_prev($atts, $thing = null)
     ), $atts));
 
     if (is_array($thisarticle)) {
-        if (!isset($thisarticle['prev_id'])) {
-            $np = getNextPrev();
-            $thisarticle = $thisarticle + $np;
-            extract($np);
+        if (!isset($thisarticle['prev'])) {
+            $thisarticle = $thisarticle + getNextPrev();
         }
 
-        if ($prev_id) {
-            $url = permlinkurl_id($prev_id);
+        if ($thisarticle['prev'] !== false) {
+            $url = permlinkurl($thisarticle['prev']);
 
             if ($thing) {
                 $thing = parse($thing);
-                $prev_title = escape_title($prev_title);
+                $prev_title = escape_title($thisarticle['prev']['title']);
 
                 return href(
                     $thing,
@@ -1708,8 +1702,7 @@ function link_to_prev($atts, $thing = null)
 
 function next_title()
 {
-    global /** @noinspection PhpUnusedLocalVariableInspection */
-    $thisarticle, $next_id, $next_title, $prev_id, $prev_title;
+    global $thisarticle;
 
     assert_article();
 
@@ -1717,21 +1710,22 @@ function next_title()
         return '';
     }
 
-    if (!isset($thisarticle['next_title'])) {
-        $np = getNextPrev();
-        $thisarticle = $thisarticle + $np;
-        extract($np);
+    if (!isset($thisarticle['next'])) {
+        $thisarticle = $thisarticle + getNextPrev();
     }
 
-    return escape_title($next_title);
+    if ($thisarticle['next'] !== false) {
+        return escape_title($thisarticle['next']['title']);
+    } else {
+        return '';
+    }
 }
 
 // -------------------------------------------------------------
 
 function prev_title()
 {
-    global /** @noinspection PhpUnusedLocalVariableInspection */
-    $thisarticle, $next_id, $next_title, $prev_id, $prev_title;
+    global $thisarticle;
 
     assert_article();
 
@@ -1739,13 +1733,15 @@ function prev_title()
         return '';
     }
 
-    if (!isset($thisarticle['prev_title'])) {
-        $np = getNextPrev();
-        $thisarticle = $thisarticle + $np;
-        extract($np);
+    if (!isset($thisarticle['prev'])) {
+        $thisarticle = $thisarticle + getNextPrev();
     }
 
-    return escape_title($prev_title);
+    if ($thisarticle['prev'] !== false) {
+        return escape_title($thisarticle['prev']['title']);
+    } else {
+        return '';
+    }
 }
 
 // -------------------------------------------------------------
