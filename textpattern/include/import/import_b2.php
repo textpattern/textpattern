@@ -49,13 +49,12 @@ function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_sectio
     // Keep some response on some part.
     $results = array();
 
-    $b2link = mysql_connect($b2dbhost, $b2dblogin, $b2dbpass, true);
+    $b2link = mysqli_connect($b2dbhost, $b2dblogin, $b2dbpass, $b2db);
 
     if (!$b2link) {
         return 'b2 database values don&#8217;t work. Go back, replace them and try again';
     }
 
-    mysql_select_db($b2db, $b2link);
     $results[] = 'connected to b2 database. Importing Data';
 
     // Copy and paste your table-definitions from b2config.php.
@@ -64,7 +63,7 @@ function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_sectio
     $tablecategories = 'b2categories';
     $tablecomments = 'b2comments';
 
-    $a = mysql_query("
+    $a = mysqli_query($b2link, "
         select
         ".$tableposts.".ID as ID,
         ".$tableposts.".post_date as Posted,
@@ -78,13 +77,13 @@ function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_sectio
         left join ".$tableusers." on
             ".$tableusers.".ID = ".$tableposts.".post_author
         ORDER BY post_date DESC
-    ", $b2link) or $results[] = mysql_error();
+    ") or $results[] = mysqli_error($b2link);
 
-    while ($b = mysql_fetch_array($a)) {
+    while ($b = mysqli_fetch_array($a)) {
         $articles[] = $b;
     }
 
-    $a = mysql_query("
+    $a = mysqli_query($b2link, "
         select
         ".$tablecomments.".comment_ID as discussid,
         ".$tablecomments.".comment_post_ID as parentid,
@@ -95,13 +94,13 @@ function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_sectio
         ".$tablecomments.".comment_content as message,
         ".$tablecomments.".comment_date as posted
         from ".$tablecomments."
-    ", $b2link) or $results[] = mysql_error();
+    ") or $results[] = mysqli_error($b2link);
 
-    while ($b = mysql_fetch_assoc($a)) {
+    while ($b = mysqli_fetch_assoc($a)) {
         $comments[] = $b;
     }
 
-    mysql_close($b2link);
+    mysqli_close($b2link);
 
     // Keep a handy copy of txpdb values.
     $txpdb      = $txpcfg['db'];
@@ -112,8 +111,6 @@ function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_sectio
     // Yes, we have to make a new connection, otherwise doArray complains.
     $DB = new DB;
     $txplink = &$DB->link;
-
-    mysql_select_db($txpdb, $txplink);
 
     $textile = new Textpattern_Textile_Parser();
 
@@ -141,7 +138,7 @@ function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_sectio
             $a['url_title'] = stripSpace($a['Title'], 1);
             $a['Body_html'] = $textile->textileThis($a['Body']);
             extract(array_slash($a));
-            $q = mysql_query("
+            $q = mysqli_query($txplink, "
                 insert into `".PFX."textpattern` set
                 ID           = '$ID',
                 Posted       = '$Posted',
@@ -158,9 +155,9 @@ function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_sectio
                 uid='".md5(uniqid(rand(), true))."',
                 feed_time='".substr($Posted, 0, 10)."',
                 Status    = '$insert_with_status',
-            ", $txplink) or $results[] = mysql_error();
+            ") or $results[] = mysqli_error($txplink);
 
-            if (mysql_insert_id()) {
+            if (mysqli_insert_id($txplink)) {
                 $results[] = 'inserted b2 entry '.$Title.
                     ' into Textpattern as article '.$ID.'';
             }
@@ -177,11 +174,11 @@ function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_sectio
 
             $message = nl2br($message);
 
-            $q = mysql_query("insert into `".PFX."txp_discuss` values
-                ($discussid, $parentid, '$name', '$email', '$web', '$ip', '$posted', '$message', 1)",
-            $txplink) or $results[] = mysql_error($q);
+            $q = mysqli_query($txplink, "insert into `".PFX."txp_discuss` values
+                ($discussid, $parentid, '$name', '$email', '$web', '$ip', '$posted', '$message', 1)"
+            ) or $results[] = mysqli_error($txplink);
 
-            if (mysql_insert_id()) {
+            if (mysqli_insert_id($txplink)) {
                 $results[] = 'inserted b2 comment '.strong($parentid).' into txp_discuss';
             }
         }

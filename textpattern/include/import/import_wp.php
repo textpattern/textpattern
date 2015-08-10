@@ -51,15 +51,13 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
 {
     global $txpcfg;
 
-    $b2link = mysql_connect($b2dbhost, $b2dblogin, $b2dbpass, true);
+    $b2link = mysqli_connect($b2dbhost, $b2dblogin, $b2dbpass, $b2db);
 
     if (!$b2link) {
         return 'WordPress database values don&#8217;t work. Go back, replace them and try again.';
     }
 
-    mysql_select_db($b2db, $b2link);
-
-    if (!mysql_query('SET NAMES '.doslash($wpdbcharset), $b2link)) {
+    if (!mysqli_query($b2link, 'SET NAMES '.doslash($wpdbcharset))) {
         return 'WordPress database does not support the requested character set. Aborting.';
     }
 
@@ -75,24 +73,25 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
 
     $users = array();
 
-    $user_query = mysql_query("
+    $user_query = mysqli_query($b2link, "
         select
             ID as user_id,
             user_login as name,
             user_email as email,
             display_name as RealName
         from ".$wpdbprefix."users
-    ", $b2link) or $errors[] = mysql_error();
+    ") or $errors[] = mysqli_error($b2link);
 
-    while ($user = mysql_fetch_array($user_query)) {
-        $user_privs_query = mysql_query("
+    while ($user = mysqli_fetch_array($user_query)) {
+        $user_privs_query = mysqli_query($b2link, "
             select
                 meta_value
             from ".$wpdbprefix."usermeta
             where user_id = ".$user['user_id']." and meta_key = '".$wpdbprefix."capabilities'
-        ", $b2link) or $errors[] = mysql_error();
+        ") or $errors[] = mysqli_error($b2link);
 
-        $privs = unserialize(mysql_result($user_privs_query, 0));
+        $row = mysqli_fetch_row($user_privs_query);
+        $privs = unserialize($row[0]);
 
         foreach ($privs as $key => $val) {
             // Convert the built-in WordPress roles to their Textpattern equivalent.
@@ -134,7 +133,7 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
 
     $categories = array();
 
-    $category_query = mysql_query("
+    $category_query = mysqli_query($b2link, "
         select
             t.slug as name,
             t.name as title,
@@ -143,18 +142,18 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
         from ".$wpdbprefix."terms as t inner join ".$wpdbprefix."term_taxonomy as tt
             on(t.term_id = tt.term_id)
         order by field(tt.taxonomy, 'category', 'post_tag', 'link_category'), tt.parent asc, t.name asc
-    ", $b2link) or $errors[] = mysql_error();
+    ") or $errors[] = mysqli_error($b2link);
 
-    while ($category = mysql_fetch_array($category_query)) {
+    while ($category = mysqli_fetch_array($category_query)) {
         if ($category['parent'] != 0) {
-            $category_parent_query = mysql_query("
+            $category_parent_query = mysqli_query($b2link, "
                 select
                     slug as name
                 from ".$wpdbprefix."terms
                 where term_id = '".doSlash($category['parent'])."'
-            ", $b2link) or $errors[] = mysql_error();
+            ") or $errors[] = mysqli_error($b2link);
 
-            while ($parent = mysql_fetch_array($category_parent_query)) {
+            while ($parent = mysqli_fetch_array($category_parent_query)) {
                 $category['parent'] = $parent['name'];
             }
         } else {
@@ -178,7 +177,7 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
     export articles - do not export post revisions from WordPress 2.6+
     */
 
-    $article_query = mysql_query("
+    $article_query = mysqli_query($b2link, "
         select
             p.ID as ID,
             p.post_status as Status,
@@ -194,9 +193,9 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
             on u.ID = p.post_author
         where p.post_type = 'post'
         order by p.ID asc
-    ", $b2link) or $errors[] = mysql_error();
+    ") or $errors[] = mysqli_error($b2link);
 
-    while ($article = mysql_fetch_array($article_query)) {
+    while ($article = mysqli_fetch_array($article_query)) {
         // Convert WordPress article status to Textpattern equivalent.
         switch ($article['Status']) {
             case 'draft':
@@ -239,7 +238,7 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
         // Article commments.
         $comments = array();
 
-        $comment_query = mysql_query("
+        $comment_query = mysqli_query($b2link, "
             select
                 comment_author_IP as ip,
                 comment_author as name,
@@ -250,9 +249,9 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
             from ".$wpdbprefix."comments
             where comment_post_ID = '".$article['ID']."'
             order by comment_ID asc
-        ", $b2link) or $errors[] = mysql_error();
+        ") or $errors[] = mysqli_error($b2link);
 
-        while ($comment = mysql_fetch_assoc($comment_query)) {
+        while ($comment = mysqli_fetch_assoc($comment_query)) {
             $comments[] = $comment;
         }
 
@@ -261,7 +260,7 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
         // Article categories.
         $article_categories = array();
 
-        $article_category_query = mysql_query("
+        $article_category_query = mysqli_query($b2link, "
             select
                 t.name as title,
                 t.slug as name
@@ -272,9 +271,9 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
             where tr.object_id = '".$article['ID']."' and tt.taxonomy in('post_tag', 'category')
             order by tr.object_id asc, t.name asc
             limit 2;
-        ", $b2link) or $errors[] = mysql_error();
+        ") or $errors[] = mysqli_error($b2link);
 
-        while ($category = mysql_fetch_array($article_category_query)) {
+        while ($category = mysqli_fetch_array($article_category_query)) {
             $article_categories[] = $category;
         }
 
@@ -284,13 +283,13 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
         // Article images.
         $article_images = array();
 
-        $article_image_query = mysql_query("
+        $article_image_query = mysqli_query($b2link, "
         select
             guid
         from ".$wpdbprefix."posts
-        where post_type = 'attachment' and post_mime_type like 'image/%' and post_parent=".$article['ID'], $b2link) or $errors[] = mysql_error();
+        where post_type = 'attachment' and post_mime_type like 'image/%' and post_parent=".$article['ID']) or $errors[] = mysqli_error($b2link);
 
-        while ($image = mysql_fetch_array($article_image_query)) {
+        while ($image = mysqli_fetch_array($article_image_query)) {
             $article_images[] = $image['guid'];
         }
 
@@ -308,7 +307,7 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
 
     $links = array();
 
-    $link_query = mysql_query("
+    $link_query = mysqli_query($b2link, "
         select
             link_id as id,
             link_name as linkname,
@@ -317,13 +316,13 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
             link_url as url
         from ".$wpdbprefix."links
         order by link_id asc
-    ", $b2link) or $errors[] = mysql_error();
+    ") or $errors[] = mysqli_error($b2link);
 
-    while ($link = mysql_fetch_array($link_query)) {
+    while ($link = mysqli_fetch_array($link_query)) {
         // Link categories.
         $link_categories = array();
 
-        $link_category_query = mysql_query("
+        $link_category_query = mysqli_query($b2link, "
             select
                 t.name as title,
                 t.slug as name
@@ -333,16 +332,16 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
                 on(tt.term_taxonomy_id = tr.term_taxonomy_id)
             where tr.object_id = '".$link['id']."' and tt.taxonomy = 'link_category'
             order by tr.object_id asc, t.name asc
-        ", $b2link) or $errors[] = mysql_error();
+        ") or $errors[] = mysqli_error($b2link);
 
-        while ($category = mysql_fetch_array($link_category_query)) {
+        while ($category = mysqli_fetch_array($link_category_query)) {
             $link['category'] = $category['name'];
         }
 
         $links[] = $link;
     }
 
-    mysql_close($b2link);
+    mysqli_close($b2link);
 
     /*
     begin import
@@ -357,8 +356,6 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
     // Yes, we have to make a new connection, otherwise doArray complains.
     $DB = new DB;
     $txplink = &$DB->link;
-
-    mysql_select_db($txpdb, $txplink);
 
     /*
     import users
@@ -378,7 +375,7 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
                 $pass = doSlash(generate_password(6));
                 $nonce = doSlash(md5(uniqid(mt_rand(), true)));
 
-                $rs = mysql_query("
+                $rs = mysqli_query($txplink, "
                     insert into ".safe_pfx('txp_users')." set
                         name     = '".doSlash($name)."',
                         pass     = 'import_wp_unknown',
@@ -386,9 +383,9 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
                         RealName = '".doSlash($RealName)."',
                         privs    = ".$privs.",
                         nonce    = '".doSlash($nonce)."'
-                ", $txplink) or $errors[] = mysql_error();
+                ") or $errors[] = mysqli_error($txplink);
 
-                if (mysql_insert_id()) {
+                if (mysqli_insert_id($txplink)) {
                     $results[] = '<li>'.$name.' ('.$RealName.')</li>';
                 }
             }
@@ -408,15 +405,15 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
             extract($category);
 
             if (!safe_row('id', 'txp_category', "name = '".doSlash($name)."' and type = '".doSlash($type)."' and parent = '".doSlash($parent)."'")) {
-                $rs = mysql_query("
+                $rs = mysqli_query($txplink, "
                     insert into ".safe_pfx('txp_category')." set
                         name   = '".doSlash($name)."',
                         title  = '".doSlash($title)."',
                         type   = '".doSlash($type)."',
                         parent = '".doSlash($parent)."'
-                ", $txplink) or $errors[] = mysql_error();
+                ") or $errors[] = mysqli_error($txplink);
 
-                if (mysql_insert_id()) {
+                if (mysqli_insert_id($txplink)) {
                     $results[] = '<li>'.$title.' ('.$type.')</li>';
                 }
             }
@@ -445,7 +442,7 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
             $Body_html = $textile->textileThis($Body);
 
             // Can not use array slash due to way on which comments are selected.
-            $rs = mysql_query("
+            $rs = mysqli_query($txplink, "
                 insert into ".safe_pfx('textpattern')." set
                     Posted         = '".doSlash($Posted)."',
                     LastMod        = '".doSlash($LastMod)."',
@@ -463,9 +460,9 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
                     Annotate       = '".doSlash($Annotate)."',
                     AnnotateInvite = '$default_comment_invite',
                     Status         = '".doSlash($Status)."'
-            ", $txplink) or $errors[] = mysql_error();
+            ") or $errors[] = mysqli_error($txplink);
 
-            if ((int) $insert_id = mysql_insert_id($txplink)) {
+            if ((int) $insert_id = mysqli_insert_id($txplink)) {
                 $results[] = '<li>'.$Title.'</li>';
 
                 if (!empty($comments)) {
@@ -477,7 +474,7 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
                         // The ugly workaround again.
                         $message = nl2br($message);
 
-                        $rs = mysql_query("
+                        $rs = mysqli_query($txplink, "
                             insert into ".safe_pfx('txp_discuss')." set
                                 parentid = '$insert_id',
                                 name     = '".doSlash($name)."',
@@ -487,9 +484,9 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
                                 posted   = '".doSlash($posted)."',
                                 message  = '".doSlash($message)."',
                                 visible  = 1
-                        ", $txplink) or $results[] = mysql_error();
+                        ") or $results[] = mysqli_error($txplink);
 
-                        if (mysql_insert_id()) {
+                        if (mysqli_insert_id($txplink)) {
                             $inserted_comments++;
                         }
                     }
@@ -512,7 +509,7 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
         foreach ($links as $link) {
             extract($link);
 
-            $rs = mysql_query("
+            $rs = mysqli_query($txplink, "
                 insert into ".safe_pfx('txp_link')." set
                     linkname    = '".doSlash($linkname)."',
                     linksort    = '".doSlash($linkname)."',
@@ -520,9 +517,9 @@ function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $inser
                     category    = '".doSlash($category)."',
                     date        = '".doSlash($date)."',
                     url         = '".doSlash($url)."'
-            ", $txplink) or $errors[] = mysql_error();
+            ") or $errors[] = mysqli_error($txplink);
 
-            if (mysql_insert_id()) {
+            if (mysqli_insert_id($txplink)) {
                 $results[] = '<li>'.$linkname.'</li>';
             }
         }

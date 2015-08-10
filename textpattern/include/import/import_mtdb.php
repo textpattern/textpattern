@@ -55,18 +55,17 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
     $authors_map = array();
     $categories_map = array();
 
-    $mtlink = mysql_connect($mt_dbhost, $mt_dblogin, $mt_dbpass, true);
+    $mtlink = mysqli_connect($mt_dbhost, $mt_dblogin, $mt_dbpass, $mt_db);
 
     if (!$mtlink) {
         return 'mt database values don&#8217;t work. Please replace them and try again';
     }
 
-    mysql_select_db($mt_db, $mtlink);
     $results[] = 'connected to mt database. Importing Data';
 
     sleep(2);
 
-    $a = mysql_query("
+    $a = mysqli_query($mtlink, "
         select
         author_id as user_id,
         author_nickname as name,
@@ -74,13 +73,13 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
         author_email as email,
         author_password as pass
         from mt_author
-    ", $mtlink);
+    ");
 
-    while ($b = mysql_fetch_assoc($a)) {
+    while ($b = mysqli_fetch_assoc($a)) {
         $authors[] = $b;
     }
 
-    $a = mysql_query("
+    $a = mysqli_query($mtlink, "
         select
         mt_entry.entry_id as ID,
         mt_entry.entry_text as Body,
@@ -93,13 +92,13 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
         mt_entry.entry_author_id as AuthorID
         from mt_entry
         where entry_blog_id = '$blog_id'
-    ", $mtlink);
+    ");
 
-    $results[] = mysql_error();
+    $results[] = mysqli_error($mtlink);
 
-    while ($b = mysql_fetch_assoc($a)) {
-        $cat = mysql_query("select placement_category_id as category_id from mt_placement where placement_entry_id='{$b['ID']}'");
-        while ($cat_id = mysql_fetch_row($cat)) {
+    while ($b = mysqli_fetch_assoc($a)) {
+        $cat = mysqli_query($mtlink, "select placement_category_id as category_id from mt_placement where placement_entry_id='{$b['ID']}'");
+        while ($cat_id = mysqli_fetch_row($cat)) {
             $categories[] = $cat_id[0];
         }
 
@@ -128,9 +127,9 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
             from mt_comment where comment_blog_id = '$blog_id' AND comment_entry_id='{$b['ID']}'
         ";
 
-        $c = mysql_query($q, $mtlink);
+        $c = mysqli_query($mtlink, $q);
 
-        while ($d = mysql_fetch_assoc($c)) {
+        while ($d = mysqli_fetch_assoc($c)) {
             $comments[] = $d;
         }
 
@@ -142,15 +141,15 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
         $articles[] = $b;
     }
 
-    $a = mysql_query("
+    $a = mysqli_query($mtlink, "
         select category_id,category_label from mt_category where category_blog_id='{$blog_id}'
-    ", $mtlink);
+    ");
 
-    while ($b = mysql_fetch_assoc($a)) {
+    while ($b = mysqli_fetch_assoc($a)) {
         $categories_map[$b['category_id']] = $b['category_label'];
     }
 
-    mysql_close($mtlink);
+    mysqli_close($mtlink);
 
     // Yes, we have to make a new connection, otherwise doArray complains.
     $DB = new DB;
@@ -180,7 +179,7 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
                 if ($q) {
                     $results[] = 'inserted '.$RealName.' into txp_users';
                 } else {
-                    $results[] = mysql_error();
+                    $results[] = mysqli_error($DB->link);
                 }
             }
         }
@@ -197,7 +196,7 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
                 if ($q) {
                     $results[] = 'inserted '.stripslashes($category).' into txp_category';
                 } else {
-                    $results[] = mysql_error();
+                    $results[] = mysqli_error($DB->link);
                 }
             }
         }
@@ -259,12 +258,12 @@ function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $in
                             $results[] = 'inserted MT comment '.$commentID.
                                 ' for article '.$insertID.' into txp_discuss';
                         } else {
-                            $results[] = mysql_error();
+                            $results[] = mysqli_error($DB->link);
                         }
                     }
                 }
             } else {
-                $results[] = mysql_error();
+                $results[] = mysqli_error($DB->link);
             }
         }
     }

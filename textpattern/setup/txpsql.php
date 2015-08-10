@@ -28,16 +28,30 @@ if (!defined('TXP_INSTALL')) {
 @ignore_user_abort(1);
 @set_time_limit(0);
 
-mysql_connect($dhost, $duser, $dpass, false, $dclient_flags);
-mysql_select_db($ddb);
+if (strpos($dhost, ':') === false) {
+    $host = $dhost;
+    $port = ini_get("mysqli.default_port");
+} else {
+    list($host, $port) = explode(':', $dhost, 2);
+    $port = intval($port);
+}
 
-$result = mysql_query("describe `".PFX."textpattern`");
+if (isset($txpcfg['socket'])) {
+    $socket = $txpcfg['socket'];
+} else {
+    $socket = ini_get("mysqli.default_socket");
+}
+
+$link = mysqli_init();
+mysqli_real_connect($link, $host, $duser, $dpass, $ddb, $port, $socket, $dclient_flags);
+
+$result = mysqli_query($link, "describe `".PFX."textpattern`");
 
 if ($result) {
     die("Textpattern database table already exists. Can't run setup.");
 }
 
-$version = mysql_get_server_info();
+$version = mysqli_get_server_info($link);
 
 // Use "ENGINE" if version of MySQL > 4.1.2.
 $tabletype = (version_compare($version, '4.1.2') >= 0) ? ' ENGINE=MyISAM ' : ' TYPE=MyISAM ';
@@ -50,7 +64,7 @@ if (isset($dbcharset)) {
         $tabletype .= " COLLATE utf8_general_ci ";
     }
 
-    mysql_query("SET NAMES ".$dbcharset);
+    mysqli_query($link, "SET NAMES ".$dbcharset);
 }
 
 // Default to messy URLs if we know clean ones won't work.
@@ -439,11 +453,11 @@ $GLOBALS['txp_install_successful'] = true;
 $GLOBALS['txp_err_count'] = 0;
 
 foreach ($create_sql as $query) {
-    $result = mysql_query($query);
+    $result = mysqli_query($link, $query);
 
     if (!$result) {
         $GLOBALS['txp_err_count']++;
-        echo "<b>".$GLOBALS['txp_err_count'].".</b> ".mysql_error()."<br />\n";
+        echo "<b>".$GLOBALS['txp_err_count'].".</b> ".mysqli_error($link)."<br />\n";
         echo "<!--\n $query \n-->\n";
         $GLOBALS['txp_install_successful'] = false;
     }
@@ -472,7 +486,7 @@ if (!$client->query('tups.getLanguage', $prefs['blog_uid'], LANG)) {
                 $lang_val = doSlash($lang_val);
 
                 if (@$lang_val) {
-                    mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='en-gb', name='".$lang_key."', event='".$evt_name."', data='".$lang_val."', lastmod='".$lastmod."'");
+                    mysqli_query($link, "INSERT DELAYED INTO `".PFX."txp_lang` SET lang='en-gb', name='".$lang_key."', event='".$evt_name."', data='".$lang_val."', lastmod='".$lastmod."'");
                 }
             }
         }
@@ -486,11 +500,11 @@ if (!$client->query('tups.getLanguage', $prefs['blog_uid'], LANG)) {
             $item[$name] = doSlash($value);
         }
 
-        mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='".LANG."', name='".$item['name']."', event='".$item['event']."', data='".$item['data']."', lastmod='".strftime('%Y%m%d%H%M%S', $item['uLastmod'])."'");
+        mysqli_query($link, "INSERT DELAYED INTO `".PFX."txp_lang` SET lang='".LANG."', name='".$item['name']."', event='".$item['event']."', data='".$item['data']."', lastmod='".strftime('%Y%m%d%H%M%S', $item['uLastmod'])."'");
     }
 }
 
-mysql_query("FLUSH TABLE `".PFX."txp_lang`");
+mysqli_query($link, "FLUSH TABLE `".PFX."txp_lang`");
 
 /**
  * Stub replacement for txplib_db.php/safe_escape()
@@ -500,5 +514,6 @@ mysql_query("FLUSH TABLE `".PFX."txp_lang`");
 
 function safe_escape($in = '')
 {
-    return mysql_real_escape_string($in);
+    global $link;
+    return mysqli_real_escape_string($link, $in);
 }
