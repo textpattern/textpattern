@@ -232,9 +232,9 @@ if (safe_field('name', 'txp_prefs', "name='path_to_site'") === false) {
 // 1.0: need to get non-manually set url-only titles into the textpattern table,
 // so we can start using title as an url search option.
 
-$rs = mysql_query("select ID, Title from `".PFX."textpattern` where url_title like ''");
+$rs = mysqli_query($DB->link, "select ID, Title from `".PFX."textpattern` where url_title like ''");
 
-while ($a = mysql_fetch_array($rs)) {
+while ($a = mysqli_fetch_array($rs)) {
     extract($a);
     $url_title = addslashes(stripSpace($Title, 1));
     assert_int($ID);
@@ -394,11 +394,11 @@ if (!in_array('ip', $txplog)) {
 
 // 1.0: need to get Excerpt_html values into the textpattern table, so catch
 // empty ones and populate them.
-$rs = mysql_query("select ID, Excerpt, textile_excerpt from `".PFX."textpattern` where Excerpt_html like ''");
+$rs = mysqli_query($DB->link, "select ID, Excerpt, textile_excerpt from `".PFX."textpattern` where Excerpt_html like ''");
 require_once txpath.'/lib/classTextile.php';
 $textile = new Textile();
 
-while ($a = @mysql_fetch_assoc($rs)) {
+while ($a = @mysqli_fetch_assoc($rs)) {
     extract($a);
     assert_int($ID);
     $lite = ($textile_excerpt) ? '' : 1;

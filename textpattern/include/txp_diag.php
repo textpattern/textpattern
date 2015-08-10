@@ -486,7 +486,7 @@ function doDiagnostics()
         strip_tags(gTxt('auto_dst')).cs.$auto_dst.n,
         strip_tags(gTxt('gmtoffset')).cs.$timezone_key.sp."($gmtoffset)".n,
 
-        'MySQL'.cs.mysql_get_server_info().n,
+        'MySQL'.cs.mysqli_get_server_info($DB->link).n,
         gTxt('db_server_time').cs.$db_server_time.n,
         gTxt('db_server_timeoffset').cs.$db_server_timeoffset.' s'.n,
         gTxt('db_global_timezone').cs.$db_global_timezone.n,
@@ -522,7 +522,7 @@ function doDiagnostics()
 
         $result = safe_query("SHOW variables like 'character_se%'");
 
-        while ($row = mysql_fetch_row($result)) {
+        while ($row = mysqli_fetch_row($result)) {
             $out[] = $row[0].cs.$row[1].n;
 
             if ($row[0] == 'character_set_connection') {
@@ -533,7 +533,7 @@ function doDiagnostics()
         $table_names = array(PFX.'textpattern');
         $result = safe_query("SHOW TABLES LIKE '".PFX."txp\_%'");
 
-        while ($row = mysql_fetch_row($result)) {
+        while ($row = mysqli_fetch_row($result)) {
             $table_names[] = $row[0];
         }
 
@@ -546,14 +546,16 @@ function doDiagnostics()
                 continue;
             }
 
-            $ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is', '\\1', mysql_result($ctr, 0, 'Create Table'));
+            $row = mysqli_fetch_assoc($ctr);
+            $ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is', '\\1', $row['Create Table']);
             if (isset($conn_char) && !stristr($ctcharset, 'CREATE') && ($conn_char != $ctcharset)) {
                 $table_msg[] = "$table is $ctcharset";
             }
 
             $ctr = safe_query("CHECK TABLE ".$table);
-            if (in_array(mysql_result($ctr, 0, 'Msg_type'), array('error', 'warning'))) {
-                $table_msg[] = $table.cs.mysql_result($ctr, 0, 'Msg_Text');
+            $row = mysqli_fetch_assoc($ctr);
+            if (in_array($row['Msg_type'], array('error', 'warning'))) {
+                $table_msg[] = $table.cs.$row['Msg_Text'];
             }
         }
 

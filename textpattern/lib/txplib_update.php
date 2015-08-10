@@ -44,6 +44,7 @@
 
 function install_language_from_file($lang)
 {
+    global $DB;
     $lang_files = glob(txpath.'/lang/'.$lang.'.{txt,textpack}', GLOB_BRACE);
 
     if (!empty($lang_files)) {
@@ -83,18 +84,18 @@ function install_language_from_file($lang)
                     if (!empty($data)) {
                         foreach ($data as $name => $value) {
                             $value = addslashes($value);
-                            $exists = mysql_query('SELECT name, lastmod FROM `'.PFX."txp_lang` WHERE `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
+                            $exists = mysqli_query($DB->link, 'SELECT name, lastmod FROM `'.PFX."txp_lang` WHERE `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
 
                             if ($exists) {
-                                $exists = mysql_fetch_row($exists);
+                                $exists = mysqli_fetch_row($exists);
                             }
 
                             if ($exists[1]) {
-                                mysql_query("UPDATE `".PFX."txp_lang` SET `lastmod`='$lastmod', `data`='$value' WHERE owner = ''".doSlash(TEXTPATTERN_LANG_OWNER_SYSTEM)." AND `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
-                                echo mysql_error();
+                                mysqli_query($DB->link, "UPDATE `".PFX."txp_lang` SET `lastmod`='$lastmod', `data`='$value' WHERE owner = ''".doSlash(TEXTPATTERN_LANG_OWNER_SYSTEM)." AND `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
+                                echo mysqli_error($DB->link);
                             } else {
-                                mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET `lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
-                                echo mysql_error();
+                                mysqli_query($DB->link, "INSERT DELAYED INTO `".PFX."txp_lang` SET `lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
+                                echo mysqli_error($DB->link);
                             }
                         }
                     }
@@ -122,16 +123,16 @@ function install_language_from_file($lang)
             // Remember to add the last one.
             if (!empty($data)) {
                 foreach ($data as $name => $value) {
-                    mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET `lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
+                    mysqli_query($DB->link, "INSERT DELAYED INTO `".PFX."txp_lang` SET `lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
                 }
             }
 
-            mysql_query("DELETE FROM `".PFX."txp_lang` WHERE owner = '' AND `lang`='".$lang."' AND `event` IN ('".join("','", array_unique($core_events))."') AND `lastmod`>$lastmod");
+            mysqli_query($DB->link, "DELETE FROM `".PFX."txp_lang` WHERE owner = '' AND `lang`='".$lang."' AND `event` IN ('".join("','", array_unique($core_events))."') AND `lastmod`>$lastmod");
             @fclose($file);
 
             // Delete empty fields if any.
-            mysql_query("DELETE FROM `".PFX."txp_lang` WHERE `data`=''");
-            mysql_query("FLUSH TABLE `".PFX."txp_lang`");
+            mysqli_query($DB->link, "DELETE FROM `".PFX."txp_lang` WHERE `data`=''");
+            mysqli_query($DB->link, "FLUSH TABLE `".PFX."txp_lang`");
 
             return true;
         }
