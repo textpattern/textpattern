@@ -2139,16 +2139,8 @@ function comments_form($atts)
     extract(lAtts(array(
         'class'         => __FUNCTION__,
         'form'          => 'comment_form',
-        'isize'         => '25',
-        'msgcols'       => '25',
-        'msgrows'       => '5',
-        'msgstyle'      => '',
         'show_preview'  => empty($has_comments_preview),
         'wraptag'       => '',
-        'previewlabel'  => gTxt('preview'),
-        'submitlabel'   => gTxt('submit'),
-        'rememberlabel' => gTxt('remember'),
-        'forgetlabel'   => gTxt('forget'),
     ), $atts));
 
     assert_article();
@@ -2179,10 +2171,235 @@ function comments_form($atts)
             $out = comments_preview(array());
         }
 
-        $out .= commentForm($thisid, $atts);
+        extract(doDeEnt(psa(array(
+            'parentid',
+            'backpage',
+        ))));
+
+        // If the form fields are filled (anything other than blank), pages really
+        // should not be saved by a public cache (rfc2616/14.9.1).
+        if (pcs('name') || pcs('email') || pcs('web')) {
+            header('Cache-Control: private');
+        }
+
+        $url = $GLOBALS['pretext']['request_uri'];
+
+        // Experimental clean URLs with only 404-error-document on Apache possibly
+        // requires messy URLs for POST requests.
+        if (defined('PARTLY_MESSY') and (PARTLY_MESSY)) {
+            $url = hu.'?id='.intval($parentid);
+        }
+
+        $out .= '<form id="txpCommentInputForm" method="post" action="'.txpspecialchars($url).'#cpreview">'.
+            n.'<div class="comments-wrapper">'.n. // Prevent XHTML Strict validation gotchas.
+            parse_form($form).
+            n.hInput('parentid', ($parentid ? $parentid : $thisid)).
+            n.hInput('backpage', ($preview ? $backpage : $url)).
+            n.'</div>'.
+            n.'</form>';
     }
 
     return (!$wraptag ? $out : doTag($out, $wraptag, $class));
+}
+
+// -------------------------------------------------------------
+
+function comment_name_input($atts)
+{
+    global $prefs;
+
+    extract(lAtts(array(
+        'size' => '25'
+    ), $atts));
+
+    $namewarn = false;
+    $name = pcs('name');
+    $h5 = ($prefs['doctype'] == 'html5');
+
+    if (ps('preview')) {
+        $name  = ps('name');
+        $namewarn = ($prefs['comments_require_name'] && !trim($name));
+
+        if ($namewarn) {
+            $evaluator = & get_comment_evaluator();
+            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_name_required'));
+        }
+    }
+
+    return fInput('text', 'name', $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name']);
+}
+
+// -------------------------------------------------------------
+
+function comment_email_input($atts)
+{
+    global $prefs;
+
+    extract(lAtts(array(
+        'size' => '25'
+    ), $atts));
+
+    $emailwarn = false;
+    $email = clean_url(pcs('email'));
+    $h5 = ($prefs['doctype'] == 'html5');
+
+    if (ps('preview')) {
+        $email  = clean_url(ps('email'));
+        $emailwarn = ($prefs['comments_require_email'] && !trim($email));
+
+        if ($emailwarn) {
+            $evaluator = & get_comment_evaluator();
+            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_email_required'));
+        }
+    }
+
+    return fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $comments_require_email);
+}
+
+// -------------------------------------------------------------
+
+function comment_web_input($atts)
+{
+    global $prefs;
+
+    extract(lAtts(array(
+        'size' => '25'
+    ), $atts));
+
+    $web = clean_url(pcs('web'));
+    $h5 = ($prefs['doctype'] == 'html5');
+
+    if (ps('preview')) {
+        $web  = clean_url(ps('web'));
+    }
+
+    return fInput($h5 ? 'text' : 'text', 'web', $web, 'comment_web_input', '', '', $size, '', 'web', false, false); /* TODO: maybe use type = 'url' once browsers are less strict */
+}
+
+// -------------------------------------------------------------
+
+function comment_message_input($atts)
+{
+    global $prefs;
+
+    extract(lAtts(array(
+        'rows'  => '5',
+        'cols'  => '25',
+        'style' => ''
+    ), $atts));
+
+    $commentwarn = false;
+    $n_message = 'message';
+    $formnonce = '';
+    $message = doDeEnt(ps('message'));
+
+    if ($message == '') { // Second or later preview will have randomised message-field name.
+        $in = getComment();
+        $message = doDeEnt($in['message']);
+    }
+
+    if (ps('preview')) {
+        $split = rand(1, 31);
+        $nonce = getNextNonce();
+        $secret = getNextSecret();
+        safe_insert("txp_discuss_nonce", "issue_time=now(), nonce='".doSlash($nonce)."', secret='".doSlash($secret)."'");
+        $n_message = md5('message'.$secret);
+        $formnonce = n.hInput(substr($nonce, 0, $split), substr($nonce, $split));
+        $commentwarn = (!trim($message));
+
+        if ($commentwarn) {
+            $evaluator = & get_comment_evaluator();
+            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_required'));
+        }
+    }
+
+    $required = ($prefs['doctype'] == 'html5') ? ' required' : '';
+    $cols = ($cols and is_numeric($cols)) ? ' cols="'.intval($cols).'"' : '';
+    $rows = ($rows and is_numeric($rows)) ? ' rows="'.intval($rows).'"' : '';
+    $style = ($style ? ' style="'.$style.'"' : '');
+
+    return '<textarea class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"').
+        ' id="message" name="'.$n_message.'"'.$cols.$rows.$style.$required.
+        '>'.txpspecialchars(substr(trim($message), 0, 65535)).'</textarea>'.
+        callback_event('comment.form').
+        $formnonce;
+}
+
+// -------------------------------------------------------------
+
+function comment_remember($atts)
+{
+    extract(lAtts(array(
+        'label'       => gTxt('remember'),
+        'forgetlabel' => gTxt('forget')
+    ), $atts));
+
+    extract(doDeEnt(psa(array(
+        'checkbox_type',
+        'remember',
+        'forget'
+    ))));
+
+    if (!ps('preview')) {
+        $rememberCookie = cs('txp_remember');
+
+        if ($rememberCookie === '') {
+            $checkbox_type = 'remember';
+            $remember = 1;
+        } elseif ($rememberCookie == 1) {
+            $checkbox_type = 'forget';
+        } else {
+            $checkbox_type = 'remember';
+        }
+    }
+
+    if ($checkbox_type == 'forget') {
+        // Inhibit default remember.
+        if ($forget == 1) {
+            destroyCookies();
+        }
+
+        $checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(txpspecialchars($forgetlabel), 'label', ' for="forget"');
+    } else {
+        // Inhibit default remember.
+        if ($remember != 1) {
+            destroyCookies();
+        }
+
+        $checkbox = checkbox('remember', 1, $remember, '', 'remember').' '.tag(txpspecialchars($rememberlabel), 'label', ' for="remember"');
+    }
+
+    $checkbox .= ' '.hInput('checkbox_type', $checkbox_type);
+
+    return $checkbox;
+}
+
+// -------------------------------------------------------------
+
+function comment_preview($atts)
+{
+    extract(lAtts(array(
+        'label'  => gTxt('preview')
+    ), $atts));
+
+    return fInput('submit', 'preview', $label, 'button', '', '', '', '', 'txpCommentPreview', false);
+}
+
+// -------------------------------------------------------------
+
+function comment_submit($atts)
+{
+    extract(lAtts(array(
+        'label'  => gTxt('submit')
+    ), $atts));
+
+    // If all fields check out, the submit button is active/clickable.
+    if (ps('preview')) {
+        return fInput('submit', 'submit', $label, 'button', '', '', '', '', 'txpCommentSubmit', false);
+    }
+    else {
+        return fInput('submit', 'submit', $label, 'button disabled', '', '', '', '', 'txpCommentSubmit', true);
+    }
 }
 
 // -------------------------------------------------------------
