@@ -2132,6 +2132,30 @@ function comments_invite($atts)
 
 // -------------------------------------------------------------
 
+function popup_comments($atts)
+{
+    extract(lAtts(array(
+        'form' => 'comments_display'
+    ), $atts));
+
+    $rs = safe_row(
+        '*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires',
+        'textpattern',
+        'ID='.intval(gps('parentid')).' and Status >= 4'
+    );
+
+    if ($rs) {
+        populateArticleData($rs);
+        $result = parse_form($form);
+
+        return $result;
+    }
+
+    return '';
+}
+
+// -------------------------------------------------------------
+
 function comments_form($atts)
 {
     global $thisarticle, $has_comments_preview;

@@ -54,35 +54,6 @@ function fetchComments($id)
 }
 
 /**
- * Returns a formatted comment thread and form.
- *
- * This function returns parsed 'comments_display' form template.
- *
- * @param  int         $id The article
- * @return string|null HTML
- * @example
- * echo discuss(12);
- */
-
-function discuss($id)
-{
-    $rs = safe_row(
-        '*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires',
-        'textpattern',
-        'ID='.intval($id).' and Status >= 4'
-    );
-
-    if ($rs) {
-        populateArticleData($rs);
-        $result = parse_form('comments_display');
-
-        return $result;
-    }
-
-    return '';
-}
-
-/**
  * Gets next nonce.
  *
  * @param  bool   $check_only
@@ -116,26 +87,6 @@ function getNextSecret($check_only = false)
     }
 
     return $secret;
-}
-
-/**
- * Parses a &lt;txp:popup_comments /&gt; tag.
- *
- * @param  int    $id The article's ID
- * @return string HTML
- */
-
-function popComments($id)
-{
-#    global $sitename, $s, $thisarticle;
-#    $preview = gps('preview');
-#    $h3 = ($preview) ? hed(gTxt('message_preview'), 3) : '';
-    $discuss = discuss($id);
-    ob_start('parse');
-    $out = fetch_form('popup_comments');
-    $out = str_replace("<txp:popup_comments />", $discuss, $out);
-
-    return $out;
 }
 
 /**
