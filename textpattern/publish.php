@@ -834,7 +834,7 @@ function doArticles($atts, $iscustom, $thing = null)
     $category  = join("','", doSlash(do_list($category)));
     $category  = (!$category)  ? '' : " and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))";
     $section   = (!$section)   ? '' : " and Section IN ('".join("','", doSlash(do_list($section)))."')";
-    $excerpted = ($excerpted == 'y' || $excerpted == '1')  ? " and Excerpt !=''" : '';
+    $excerpted = (!$excerpted) ? '' : " and Excerpt !=''";
     $author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list($author)))."')";
     $month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
     $ids = $id ? array_map('intval', do_list($id)) : array();
