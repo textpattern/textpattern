@@ -4055,6 +4055,8 @@ function change_user_group($user, $group)
 
 function txp_validate($user, $password, $log = true)
 {
+    global $DB;
+
     $safe_user = doSlash($user);
     $name = false;
 
@@ -4075,7 +4077,7 @@ function txp_validate($user, $password, $log = true)
         $passwords[] = "password(lower('".doSlash($password)."'))";
         $passwords[] = "password('".doSlash($password)."')";
 
-        if (version_compare(mysqli_get_server_info(), '4.1.0', '>=')) {
+        if (version_compare(mysqli_get_server_info($DB->link), '4.1.0', '>=')) {
             $passwords[] = "old_password(lower('".doSlash($password)."'))";
             $passwords[] = "old_password('".doSlash($password)."')";
         }
