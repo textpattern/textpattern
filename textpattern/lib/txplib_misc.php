@@ -2161,6 +2161,10 @@ function stripSpace($text, $force = false)
 /**
  * Sanitises a string for use in a URL.
  *
+ * Be aware that you still have to urlencode the string when appropriate. 
+ * This function just makes the string look prettier and excludes some
+ * unwanted characters, but leaves UTF-8 letters and digits intact.
+ *
  * @param  string $text The string
  * @return string
  * @package URL
@@ -2177,18 +2181,10 @@ function sanitizeForUrl($text)
     $in = $text;
     // Remove names entities and tags.
     $text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U", "", dumbDown($text));
-    // Dashify high-order chars leftover from dumbDown().
-    $text = preg_replace("/[\x80-\xff]/", "-", $text);
-    // Collapse spaces, minuses, (back-)slashes and non-words.
-    $text = preg_replace('/[\s\-\/\\\\]+/', '-', trim(preg_replace('/[^\w\s\-\/\\\\]/', '', $text)));
-    // Remove all non-whitelisted characters
-    $text = preg_replace("/[^A-Za-z0-9\-_]/", "", $text);
-
-    // Sanitising shouldn't leave us with plain nothing to show.
-    // Fall back on percent-encoded URLs as a last resort for RFC 1738 conformance.
-    if (empty($text) || $text == '-') {
-        $text = rawurlencode($in);
-    }
+    // Remove all characters except letter, number, dash, space and backslash
+    $text = preg_replace('/[^\p{L}\p{N}\-_\s\/\\\\]/u', '', $text);
+    // Collapse spaces, minuses, (back-)slashes.
+    $text = trim(preg_replace('/[\s\-\/\\\\]+/', '-', $text), '-');
 
     return $text;
 }
