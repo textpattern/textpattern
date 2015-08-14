@@ -198,6 +198,7 @@ function doTxpValidate()
 
             return $message;
         } else {
+            txp_status_header('401 Your session has expired');
             setcookie('txp_login', $c_userid, time() + 3600 * 24 * 365);
             setcookie('txp_login_public', '', time() - 3600, $pub_path);
             $message = array(gTxt('bad_cookie'), E_ERROR);
@@ -238,6 +239,7 @@ function doTxpValidate()
             return '';
         } else {
             sleep(3);
+            txp_status_header('401 Could not log in with that username/password');
             $message = array(gTxt('could_not_log_in'), E_ERROR);
         }
     } elseif ($p_reset) { // Reset request.
