@@ -5300,7 +5300,7 @@ function permlinkurl_id($id)
     }
 
     $rs = safe_row(
-        "ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted",
+        "ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted, unix_timestamp(Expires) as expires",
         'textpattern',
         "ID = $id"
     );
@@ -5311,7 +5311,7 @@ function permlinkurl_id($id)
 /**
  * Generates an article URL from the given data array.
  *
- * @param   array  $article_array An array consisting of keys 'thisid', 'section', 'title', 'url_title', 'posted'
+ * @param   array  $article_array An array consisting of keys 'thisid', 'section', 'title', 'url_title', 'posted', 'expires'
  * @return  string The URL
  * @package URL
  * @see     permlinkurl_id()
@@ -5320,13 +5320,14 @@ function permlinkurl_id($id)
  *     'thisid'    => 12,
  *     'section'   => 'blog',
  *     'url_title' => 'my-title',
- *     'posted'    => 1345414041
+ *     'posted'    => 1345414041,
+ *     'expires'   => 1345444077
  * ));
  */
 
 function permlinkurl($article_array)
 {
-    global $permlink_mode, $prefs, $permlinks;
+    global $permlink_mode, $prefs, $permlinks, $production_status;
 
     if (!$article_array || !is_array($article_array)) {
         return;
@@ -5340,18 +5341,16 @@ function permlinkurl($article_array)
 
     extract(lAtts(array(
         'thisid'    => null,
-        'ID'        => null,
-        'Title'     => null,
+        'id'        => null,
         'title'     => null,
         'url_title' => null,
         'section'   => null,
-        'Section'   => null,
         'posted'    => null,
-        'Posted'    => null,
-    ), $article_array, false));
+        'expires'   => null,
+    ), array_change_key_case($article_array, CASE_LOWER), false));
 
     if (empty($thisid)) {
-        $thisid = $ID;
+        $thisid = $id;
     }
 
     $thisid = (int) $thisid;
@@ -5360,20 +5359,16 @@ function permlinkurl($article_array)
         return $permlinks[$thisid];
     }
 
-    if (!isset($title)) {
-        $title = $Title;
+    if (empty($prefs['publish_expired_articles']) && !empty($expires) && $expires < time()) {
+        if ($production_status != 'live' && txpinterface == 'public') {
+            trigger_error(gTxt('permlink_to_expired_article', array('{id}' => $thisid)), E_USER_NOTICE);
+        }
+
+        return $permlinks[$thisid] = hu.'#expired_article';
     }
 
     if (empty($url_title)) {
         $url_title = stripSpace($title);
-    }
-
-    if (empty($section)) {
-        $section = $Section;
-    }
-
-    if (!isset($posted)) {
-        $posted = $Posted;
     }
 
     $section = urlencode($section);
