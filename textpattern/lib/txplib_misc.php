@@ -490,31 +490,25 @@ function load_lang($lang, $events = null)
         $events = array('public', 'common');
     }
 
-    $where = '';
+    $where = " and name != ''";
 
     if ($events) {
         $where .= ' and event in('.join(',', quote_list((array) $events)).')';
     }
 
+    $out = array();
+
     foreach (array($lang, 'en-gb') as $lang_code) {
         $rs = safe_rows_start('name, data', 'txp_lang', "lang='".doSlash($lang_code)."'".$where);
 
         if (!empty($rs)) {
-            break;
-        }
-    }
-
-    $out = array();
-
-    if (!empty($rs)) {
-        while($a = nextRow($rs)) {
-            if (!empty($a['name'])) {
+            while($a = nextRow($rs)) {
                 $out[$a['name']] = $a['data'];
             }
+
+            return $out;
         }
     }
-
-    return $out;
 }
 
 /**
