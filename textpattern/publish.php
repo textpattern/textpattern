@@ -565,7 +565,7 @@ function output_css($s = '', $n = '')
             txp_die('Not Found', 404);
         }
 
-        $n = do_list($n);
+        $n = do_list_unique($n);
         $cssname = join("','", doSlash($n));
 
         if (count($n) > 1) {
@@ -579,12 +579,9 @@ function output_css($s = '', $n = '')
         $cssname = safe_field('css', 'txp_section', "name='".doSlash($s)."'");
     }
 
-    if (isset($cssname)) {
+    if (!empty($cssname)) {
         $css = join(n, safe_column_num('css', 'txp_css', "name in ('$cssname')".$order));
-
-        if (isset($css)) {
-            echo $css;
-        }
+        echo $css;
     }
 }
 
@@ -768,7 +765,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
         // Searchable article fields are limited to the columns of the
         // textpattern table and a matching fulltext index must exist.
-        $cols = do_list($searchable_article_fields);
+        $cols = do_list_unique($searchable_article_fields);
 
         if (empty($cols) or $cols[0] == '') {
             $cols = array('Title', 'Body');
@@ -831,14 +828,14 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Building query parts.
     $frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';
-    $category  = join("','", doSlash(do_list($category)));
+    $category  = join("','", doSlash(do_list_unique($category)));
     $category  = (!$category)  ? '' : " and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))";
-    $section   = (!$section)   ? '' : " and Section IN ('".join("','", doSlash(do_list($section)))."')";
+    $section   = (!$section)   ? '' : " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')";
     $excerpted = (!$excerpted) ? '' : " and Excerpt !=''";
-    $author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list($author)))."')";
+    $author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list_unique($author)))."')";
     $month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
-    $ids = $id ? array_map('intval', do_list($id)) : array();
-    $exclude = $exclude ? array_map('intval', do_list($exclude)) : array();
+    $ids = $id ? array_map('intval', do_list_unique($id)) : array();
+    $exclude = $exclude ? array_map('intval', do_list_unique($exclude)) : array();
     $id        = ((!$id)        ? '' : " and ID IN (".join(',', $ids).")")
         .((!$exclude)   ? '' : " and ID NOT IN (".join(',', $exclude).")");
 
@@ -873,7 +870,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
     if ($keywords) {
-        $keys = doSlash(do_list($keywords));
+        $keys = doSlash(do_list_unique($keywords));
 
         foreach ($keys as $key) {
             $keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
