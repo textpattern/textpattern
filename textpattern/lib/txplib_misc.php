@@ -497,7 +497,7 @@ function load_lang($lang, $events = null)
     }
 
     foreach (array($lang, 'en-gb') as $lang_code) {
-        $rs = safe_rows('name, data', 'txp_lang', "lang='".doSlash($lang_code)."'".$where);
+        $rs = safe_rows_start('name, data', 'txp_lang', "lang='".doSlash($lang_code)."'".$where);
 
         if (!empty($rs)) {
             break;
@@ -507,10 +507,8 @@ function load_lang($lang, $events = null)
     $out = array();
 
     if (!empty($rs)) {
-        foreach ($rs as $a) {
-            if (!empty($a['name'])) {
-                $out[$a['name']] = $a['data'];
-            }
+        while($a = nextRow($rs)) {
+            $out[$a['name']] = $a['data'];
         }
     }
 
