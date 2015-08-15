@@ -622,7 +622,7 @@ function add_privs($res, $perm = '1')
     global $txp_permissions;
 
     if (!isset($txp_permissions[$res])) {
-        $perm = join(',', do_list($perm));
+        $perm = join(',', do_list_unique($perm));
         $txp_permissions[$res] = $perm;
     }
 }
@@ -2409,7 +2409,7 @@ function noWidow($str)
 function is_blacklisted($ip, $checks = '')
 {
     if (!$checks) {
-        $checks = do_list(get_pref('spam_blacklists'));
+        $checks = do_list_unique(get_pref('spam_blacklists'));
     }
 
     $rip = join('.', array_reverse(explode('.', $ip)));
