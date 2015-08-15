@@ -508,7 +508,9 @@ function load_lang($lang, $events = null)
 
     if (!empty($rs)) {
         while($a = nextRow($rs)) {
-            $out[$a['name']] = $a['data'];
+            if (!empty($a['name'])) {
+                $out[$a['name']] = $a['data'];
+            }
         }
     }
 
