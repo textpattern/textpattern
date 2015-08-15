@@ -509,6 +509,8 @@ function load_lang($lang, $events = null)
             return $out;
         }
     }
+
+    return $out;
 }
 
 /**
