@@ -4337,6 +4337,10 @@ function page_url($atts)
         'type' => 'request_uri',
     ), $atts));
 
+    if ($type == 'pg' and $pretext['pg'] == '') {
+        return '1';
+    }
+
     return @txpspecialchars($pretext[$type]);
 }
 
