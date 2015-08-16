@@ -600,24 +600,26 @@ function linklist($atts, $thing = null)
 
     $where = array();
     $filters = isset($atts['category']) || isset($atts['author']) || isset($atts['realname']);
-    $context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
+    $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
     $pageby = ($pageby == 'limit') ? $limit : $pageby;
 
     if ($category) {
-        $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+        $where[] = "category IN ('".join("','", doSlash(do_list_unique($category)))."')";
     }
 
     if ($id) {
-        $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
+        $where[] = "id IN ('".join("','", doSlash(do_list_unique($id)))."')";
     }
 
     if ($author) {
-        $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+        $where[] = "author IN ('".join("','", doSlash(do_list_unique($author)))."')";
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list($realname)), 'urldecode'))."')");
-        $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
+        if ($authorlist) {
+            $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+        }
     }
 
     // If no links are selected, try...
@@ -1025,9 +1027,9 @@ function recent_articles($atts)
         $sort = "Posted $sortdir";
     }
 
-    $category = join("','", doSlash(do_list($category)));
+    $category = join("','", doSlash(do_list_unique($category)));
     $categories = ($category) ? "and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))" : '';
-    $section = ($section) ? " and Section IN ('".join("','", doSlash(do_list($section)))."')" : '';
+    $section = ($section) ? " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
     $expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.')';
 
     $rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern',
@@ -1146,7 +1148,7 @@ function related_articles($atts, $thing = null)
         return;
     }
 
-    $match = do_list($match);
+    $match = do_list_unique($match);
 
     if (!in_array('Category1', $match) and !in_array('Category2', $match)) {
         return;
@@ -1178,7 +1180,7 @@ function related_articles($atts, $thing = null)
 
     $categories = 'and ('.join(' or ', $categories).')';
 
-    $section = ($section) ? " and Section IN ('".join("','", doSlash(do_list($section)))."')" : '';
+    $section = ($section) ? " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
 
     $expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.') ';
     $rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires', 'textpattern',
@@ -1328,14 +1330,14 @@ function category_list($atts, $thing = null)
     }
 
     if ($categories) {
-        $categories = do_list($categories);
+        $categories = do_list_unique($categories);
         $categories = join("','", doSlash($categories));
 
         $rs = safe_rows_start('name, title, description', 'txp_category',
             "type = '".doSlash($type)."' and name in ('$categories') order by ".($sort ? $sort : "field(name, '$categories')").$sql_limit);
     } else {
         if ($parent) {
-            $parents = join(',', quote_list(do_list($parent)));
+            $parents = join(',', quote_list(do_list_unique($parent)));
         }
 
         if ($children) {
@@ -1347,7 +1349,7 @@ function category_list($atts, $thing = null)
         }
 
         if ($exclude) {
-            $exclude = do_list($exclude);
+            $exclude = do_list_unique($exclude);
             $exclude = join("','", doSlash($exclude));
             $exclude = "and name not in('$exclude')";
         }
@@ -1462,7 +1464,7 @@ function section_list($atts, $thing = null)
             $sections .= ', default';
         }
 
-        $sections = join(',', quote_list(do_list($sections)));
+        $sections = join(',', quote_list(do_list_unique($sections)));
         $sql[] = "name in ($sections)";
 
         if (!$sql_sort) {
@@ -1470,7 +1472,7 @@ function section_list($atts, $thing = null)
         }
     } else {
         if ($exclude) {
-            $exclude = join(',', quote_list(do_list($exclude)));
+            $exclude = join(',', quote_list(do_list_unique($exclude)));
             $sql[] = "name not in ($exclude)";
         }
 
@@ -3472,32 +3474,34 @@ function images($atts, $thing = null)
     $where = array();
     $has_content = $thing || $form;
     $filters = isset($atts['id']) || isset($atts['name']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['extension']) || $thumbnail === '1' || $thumbnail === '0';
-    $context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
+    $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
     $pageby = ($pageby == 'limit') ? $limit : $pageby;
 
     if ($name) {
-        $where[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
+        $where[] = "name IN ('".join("','", doSlash(do_list_unique($name)))."')";
     }
 
     if ($category) {
-        $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+        $where[] = "category IN ('".join("','", doSlash(do_list_unique($category)))."')";
     }
 
     if ($id) {
-        $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
+        $where[] = "id IN ('".join("','", doSlash(do_list_unique($id)))."')";
     }
 
     if ($author) {
-        $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+        $where[] = "author IN ('".join("','", doSlash(do_list_unique($author)))."')";
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list($realname)), 'urldecode'))."')");
-        $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
+        if ($authorlist) {
+            $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+        }
     }
 
     if ($extension) {
-        $where[] = "ext IN ('".join("','", doSlash(do_list($extension)))."')";
+        $where[] = "ext IN ('".join("','", doSlash(do_list_unique($extension)))."')";
     }
 
     if ($thumbnail === '0' || $thumbnail === '1') {
@@ -3511,7 +3515,7 @@ function images($atts, $thing = null)
                 case 'article':
                     // ...the article image field.
                     if ($thisarticle && !empty($thisarticle['article_image'])) {
-                        $items = do_list($thisarticle['article_image']);
+                        $items = do_list_unique($thisarticle['article_image']);
                         foreach ($items as &$item) {
                             if (is_numeric($item)) {
                                 $item = intval($item);
@@ -3552,7 +3556,7 @@ function images($atts, $thing = null)
 
     // Order of ids in 'id' attribute overrides default 'sort' attribute.
     if (empty($atts['sort']) && $id !== '') {
-        $safe_sort = 'field(id, '.join(',', doSlash(do_list($id))).')';
+        $safe_sort = 'field(id, '.join(',', doSlash(do_list_unique($id))).')';
     }
 
     // If nothing matches, output nothing.
@@ -4668,14 +4672,14 @@ function file_download_list($atts, $thing = null)
     // Note: status treated slightly differently.
     $where = $statwhere = array();
     $filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['status']);
-    $context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
+    $context_list = (empty($auto_detect) || $filters) ? array() : do_list_unique($auto_detect);
     $pageby = ($pageby == 'limit') ? $limit : $pageby;
 
     if ($category) {
-        $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+        $where[] = "category IN ('".join("','", doSlash(do_list_unique($category)))."')";
     }
 
-    $ids = array_map('intval', do_list($id));
+    $ids = array_map('intval', do_list_unique($id));
 
     if ($id) {
         $where[] = "id IN ('".join("','", $ids)."')";
@@ -4686,12 +4690,14 @@ function file_download_list($atts, $thing = null)
     }
 
     if ($author) {
-        $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+        $where[] = "author IN ('".join("','", doSlash(do_list_unique($author)))."')";
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list($realname)), 'urldecode'))."')");
-        $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
+        if ($authorlist) {
+            $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+        }
     }
 
     // If no files are selected, try...
