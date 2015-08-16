@@ -490,27 +490,23 @@ function load_lang($lang, $events = null)
         $events = array('public', 'common');
     }
 
-    $where = '';
+    $where = " and name != ''";
 
     if ($events) {
         $where .= ' and event in('.join(',', quote_list((array) $events)).')';
     }
 
-    foreach (array($lang, 'en-gb') as $lang_code) {
-        $rs = safe_rows('name, data', 'txp_lang', "lang='".doSlash($lang_code)."'".$where);
-
-        if (!empty($rs)) {
-            break;
-        }
-    }
-
     $out = array();
 
-    if (!empty($rs)) {
-        foreach ($rs as $a) {
-            if (!empty($a['name'])) {
+    foreach (array($lang, 'en-gb') as $lang_code) {
+        $rs = safe_rows_start('name, data', 'txp_lang', "lang='".doSlash($lang_code)."'".$where);
+
+        if (!empty($rs)) {
+            while($a = nextRow($rs)) {
                 $out[$a['name']] = $a['data'];
             }
+
+            return $out;
         }
     }
 
@@ -622,7 +618,7 @@ function add_privs($res, $perm = '1')
     global $txp_permissions;
 
     if (!isset($txp_permissions[$res])) {
-        $perm = join(',', do_list($perm));
+        $perm = join(',', do_list_unique($perm));
         $txp_permissions[$res] = $perm;
     }
 }
@@ -2161,6 +2157,10 @@ function stripSpace($text, $force = false)
 /**
  * Sanitises a string for use in a URL.
  *
+ * Be aware that you still have to urlencode the string when appropriate. 
+ * This function just makes the string look prettier and excludes some
+ * unwanted characters, but leaves UTF-8 letters and digits intact.
+ *
  * @param  string $text The string
  * @return string
  * @package URL
@@ -2177,18 +2177,10 @@ function sanitizeForUrl($text)
     $in = $text;
     // Remove names entities and tags.
     $text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U", "", dumbDown($text));
-    // Dashify high-order chars leftover from dumbDown().
-    $text = preg_replace("/[\x80-\xff]/", "-", $text);
-    // Collapse spaces, minuses, (back-)slashes and non-words.
-    $text = preg_replace('/[\s\-\/\\\\]+/', '-', trim(preg_replace('/[^\w\s\-\/\\\\]/', '', $text)));
-    // Remove all non-whitelisted characters
-    $text = preg_replace("/[^A-Za-z0-9\-_]/", "", $text);
-
-    // Sanitising shouldn't leave us with plain nothing to show.
-    // Fall back on percent-encoded URLs as a last resort for RFC 1738 conformance.
-    if (empty($text) || $text == '-') {
-        $text = rawurlencode($in);
-    }
+    // Remove all characters except letter, number, dash, space and backslash
+    $text = preg_replace('/[^\p{L}\p{N}\-_\s\/\\\\]/u', '', $text);
+    // Collapse spaces, minuses, (back-)slashes.
+    $text = trim(preg_replace('/[\s\-\/\\\\]+/', '-', $text), '-');
 
     return $text;
 }
@@ -2409,7 +2401,7 @@ function noWidow($str)
 function is_blacklisted($ip, $checks = '')
 {
     if (!$checks) {
-        $checks = do_list(get_pref('spam_blacklists'));
+        $checks = do_list_unique(get_pref('spam_blacklists'));
     }
 
     $rip = join('.', array_reverse(explode('.', $ip)));
@@ -4076,6 +4068,8 @@ function change_user_group($user, $group)
 
 function txp_validate($user, $password, $log = true)
 {
+    global $DB;
+
     $safe_user = doSlash($user);
     $name = false;
 
@@ -4096,7 +4090,7 @@ function txp_validate($user, $password, $log = true)
         $passwords[] = "password(lower('".doSlash($password)."'))";
         $passwords[] = "password('".doSlash($password)."')";
 
-        if (version_compare(mysql_get_server_info(), '4.1.0', '>=')) {
+        if (version_compare(mysqli_get_server_info($DB->link), '4.1.0', '>=')) {
             $passwords[] = "old_password(lower('".doSlash($password)."'))";
             $passwords[] = "old_password('".doSlash($password)."')";
         }
@@ -5273,7 +5267,7 @@ function permlinkurl_id($id)
     }
 
     $rs = safe_row(
-        "ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted",
+        "ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted, unix_timestamp(Expires) as expires",
         'textpattern',
         "ID = $id"
     );
@@ -5284,7 +5278,7 @@ function permlinkurl_id($id)
 /**
  * Generates an article URL from the given data array.
  *
- * @param   array  $article_array An array consisting of keys 'thisid', 'section', 'title', 'url_title', 'posted'
+ * @param   array  $article_array An array consisting of keys 'thisid', 'section', 'title', 'url_title', 'posted', 'expires'
  * @return  string The URL
  * @package URL
  * @see     permlinkurl_id()
@@ -5293,13 +5287,14 @@ function permlinkurl_id($id)
  *     'thisid'    => 12,
  *     'section'   => 'blog',
  *     'url_title' => 'my-title',
- *     'posted'    => 1345414041
+ *     'posted'    => 1345414041,
+ *     'expires'   => 1345444077
  * ));
  */
 
 function permlinkurl($article_array)
 {
-    global $permlink_mode, $prefs, $permlinks;
+    global $permlink_mode, $prefs, $permlinks, $production_status;
 
     if (!$article_array || !is_array($article_array)) {
         return;
@@ -5313,18 +5308,16 @@ function permlinkurl($article_array)
 
     extract(lAtts(array(
         'thisid'    => null,
-        'ID'        => null,
-        'Title'     => null,
+        'id'        => null,
         'title'     => null,
         'url_title' => null,
         'section'   => null,
-        'Section'   => null,
         'posted'    => null,
-        'Posted'    => null,
-    ), $article_array, false));
+        'expires'   => null,
+    ), array_change_key_case($article_array, CASE_LOWER), false));
 
     if (empty($thisid)) {
-        $thisid = $ID;
+        $thisid = $id;
     }
 
     $thisid = (int) $thisid;
@@ -5333,20 +5326,16 @@ function permlinkurl($article_array)
         return $permlinks[$thisid];
     }
 
-    if (!isset($title)) {
-        $title = $Title;
+    if (empty($prefs['publish_expired_articles']) && !empty($expires) && $expires < time()) {
+        if ($production_status != 'live' && txpinterface == 'public') {
+            trigger_error(gTxt('permlink_to_expired_article', array('{id}' => $thisid)), E_USER_NOTICE);
+        }
+
+        return $permlinks[$thisid] = hu.'#expired_article';
     }
 
     if (empty($url_title)) {
         $url_title = stripSpace($title);
-    }
-
-    if (empty($section)) {
-        $section = $Section;
-    }
-
-    if (!isset($posted)) {
-        $posted = $Posted;
     }
 
     $section = urlencode($section);

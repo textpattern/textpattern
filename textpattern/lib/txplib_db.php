@@ -51,12 +51,28 @@ if (version_compare(PHP_VERSION, '5.3.0') < 0) {
 class DB
 {
     /**
-     * The database server.
+     * The database server hostname.
      *
      * @var string
      */
 
     public $host;
+
+    /**
+     * The database server port.
+     *
+     * @var int
+     */
+
+    public $port;
+
+    /**
+     * The database server socket.
+     *
+     * @var string
+     */
+
+    public $socket;
 
     /**
      * The database name.
@@ -149,7 +165,20 @@ class DB
     {
         global $txpcfg, $connected;
 
-        $this->host = $txpcfg['host'];
+        if (strpos($txpcfg['host'], ':') === false) {
+            $this->host = $txpcfg['host'];
+            $this->port = ini_get("mysqli.default_port");
+        } else {
+            list($this->host, $this->port) = explode(':', $txpcfg['host'], 2);
+            $this->port = intval($this->port);
+        }
+
+        if (isset($txpcfg['socket'])) {
+            $this->socket = $txpcfg['socket'];
+        } else {
+            $this->socket = ini_get("mysqli.default_socket");
+        }
+
         $this->db = $txpcfg['db'];
         $this->user = $txpcfg['user'];
         $this->pass = $txpcfg['pass'];
@@ -161,30 +190,30 @@ class DB
 
         if (isset($txpcfg['client_flags'])) {
             $this->client_flags = $txpcfg['client_flags'];
+        } else {
+            $this->client_flags = 0;
         }
 
         if (isset($txpcfg['dbcharset'])) {
             $this->charset = $txpcfg['dbcharset'];
         }
 
-        $this->link = @mysql_connect($this->host, $this->user, $this->pass, false, $this->client_flags);
+        $this->link = mysqli_init();
 
-        if (!$this->link) {
+        if (!mysqli_real_connect($this->link, $this->host, $this->user, $this->pass, $this->db, $this->port, $this->socket, $this->client_flags)) {
             die(db_down());
         }
 
-        @mysql_select_db($this->db, $this->link) or die(db_down());
-
-        $version = $this->version = mysql_get_server_info($this->link);
+        $version = $this->version = mysqli_get_server_info($this->link);
         $connected = true;
 
         // Be backwards compatible.
         if ($this->charset && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version))) {
-            mysql_query("SET NAMES ".$this->charset, $this->link);
+            mysqli_query($this->link, "SET NAMES ".$this->charset);
             $this->table_options['charset'] = $this->charset;
         }
 
-        $this->default_charset = mysql_client_encoding($this->link);
+        $this->default_charset = mysqli_character_set_name($this->link);
 
         // Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2).
         if (intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $version)) {
@@ -300,7 +329,7 @@ function safe_escape($in = '')
 {
     global $DB;
 
-    return mysql_real_escape_string($in, $DB->link);
+    return mysqli_real_escape_string($DB->link, $in);
 }
 
 /**
@@ -340,7 +369,7 @@ function safe_escape_like($in = '')
 function safe_query($q = '', $debug = false, $unbuf = false)
 {
     global $DB, $txpcfg, $txptrace_qcount, $txptrace_qtime, $production_status;
-    $method = (!$unbuf) ? 'mysql_query' : 'mysql_unbuffered_query';
+    $method = ($unbuf) ? MYSQLI_USE_RESULT : MYSQLI_STORE_RESULT;
 
     if (!$q) {
         return false;
@@ -351,13 +380,13 @@ function safe_query($q = '', $debug = false, $unbuf = false)
     }
 
     $start = getmicrotime();
-    $result = $method($q, $DB->link);
+    $result = mysqli_query($DB->link, $q, $method);
     $time = getmicrotime() - $start;
     @$txptrace_qtime += $time;
     @$txptrace_qcount++;
 
     if ($result === false) {
-        trigger_error(mysql_error($DB->link), E_USER_ERROR);
+        trigger_error(mysqli_error($DB->link), E_USER_ERROR);
     }
 
     trace_add('[SQL ('.number_format($time, 6, '.', '')."): $q]");
@@ -434,7 +463,7 @@ function safe_insert($table, $set, $debug = false)
     $q = "insert into ".safe_pfx($table)." set $set";
 
     if ($r = safe_query($q, $debug)) {
-        $id = mysql_insert_id($DB->link);
+        $id = mysqli_insert_id($DB->link);
 
         return ($id === 0 ? true : $id);
     }
@@ -463,7 +492,7 @@ function safe_upsert($table, $set, $where, $debug = false)
     // FIXME: lock the table so this is atomic?
     $r = safe_update($table, $set, $where, $debug);
 
-    if ($r and (mysql_affected_rows($DB->link) or safe_count($table, $where, $debug))) {
+    if ($r and (mysqli_affected_rows($DB->link) or safe_count($table, $where, $debug))) {
         return $r;
     } else {
         return safe_insert($table, join(', ', array($where, $set)), $debug);
@@ -509,7 +538,7 @@ function safe_alter($table, $alter, $debug = false)
 
 function safe_lock($table, $type = 'write', $debug = false)
 {
-    return (bool) safe_query('lock tables '.join(' '.$type.', ', doArray(do_list($table), 'safe_pfx')).' '.$type, $debug);
+    return (bool) safe_query('lock tables '.join(' '.$type.', ', doArray(do_list_unique($table), 'safe_pfx')).' '.$type, $debug);
 }
 
 /**
@@ -773,11 +802,11 @@ function safe_field($thing, $table, $where, $debug = false)
     $q = "select $thing from ".safe_pfx_j($table)." where $where";
     $r = safe_query($q, $debug);
 
-    if (@mysql_num_rows($r) > 0) {
-        $f = mysql_result($r, 0);
-        mysql_free_result($r);
+    if (@mysqli_num_rows($r) > 0) {
+        $row = mysqli_fetch_row($r);
+        mysqli_free_result($r);
 
-        return $f;
+        return $row[0];
     }
 
     return false;
@@ -995,10 +1024,13 @@ function fetch($col, $table, $key, $val, $debug = false)
     $q = "select $col from ".safe_pfx($table)." where `$key` = $val limit 1";
 
     if ($r = safe_query($q, $debug)) {
-        $thing = (mysql_num_rows($r) > 0) ? mysql_result($r, 0) : '';
-        mysql_free_result($r);
+        if (mysqli_num_rows($r) > 0) {
+            $row = mysqli_fetch_row($r);
+            mysqli_free_result($r);
+            return $row[0];
+        }
 
-        return $thing;
+        return '';
     }
 
     return false;
@@ -1016,8 +1048,8 @@ function fetch($col, $table, $key, $val, $debug = false)
 function getRow($query, $debug = false)
 {
     if ($r = safe_query($query, $debug)) {
-        $row = (mysql_num_rows($r) > 0) ? mysql_fetch_assoc($r) : false;
-        mysql_free_result($r);
+        $row = (mysqli_num_rows($r) > 0) ? mysqli_fetch_assoc($r) : false;
+        mysqli_free_result($r);
 
         return $row;
     }
@@ -1045,12 +1077,12 @@ function getRow($query, $debug = false)
 function getRows($query, $debug = false)
 {
     if ($r = safe_query($query, $debug)) {
-        if (mysql_num_rows($r) > 0) {
-            while ($a = mysql_fetch_assoc($r)) {
+        if (mysqli_num_rows($r) > 0) {
+            while ($a = mysqli_fetch_assoc($r)) {
                 $out[] = $a;
             }
 
-            mysql_free_result($r);
+            mysqli_free_result($r);
 
             return $out;
         }
@@ -1098,10 +1130,10 @@ function startRows($query, $debug = false)
 
 function nextRow($r)
 {
-    $row = mysql_fetch_assoc($r);
+    $row = mysqli_fetch_assoc($r);
 
     if ($row === false) {
-        mysql_free_result($r);
+        mysqli_free_result($r);
     }
 
     return $row;
@@ -1122,7 +1154,7 @@ function nextRow($r)
 
 function numRows($r)
 {
-    return mysql_num_rows($r);
+    return mysqli_num_rows($r);
 }
 
 /**
@@ -1136,10 +1168,13 @@ function numRows($r)
 function getThing($query, $debug = false)
 {
     if ($r = safe_query($query, $debug)) {
-        $thing = (mysql_num_rows($r) != 0) ? mysql_result($r, 0) : '';
-        mysql_free_result($r);
+        if (mysqli_num_rows($r) != 0) {
+          $row = mysqli_fetch_row($r);
+          mysqli_free_result($r);
+          return $row[0];
+        }
 
-        return $thing;
+        return '';
     }
 
     return false;
@@ -1368,10 +1403,11 @@ function rebuild_tree_full($type, $tbl = 'txp_category')
 
 function db_down()
 {
+    global $DB;
     // 503 status might discourage search engines from indexing or caching the
     // error message.
     txp_status_header('503 Service Unavailable');
-    $error = mysql_error();
+    $error = mysqli_error($DB->link);
 
     return <<<eod
 <!DOCTYPE html>

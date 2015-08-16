@@ -566,7 +566,7 @@ function output_css($s = '', $n = '')
             txp_die('Not Found', 404);
         }
 
-        $n = do_list($n);
+        $n = do_list_unique($n);
         $cssname = join("','", doSlash($n));
 
         if (count($n) > 1) {
@@ -580,12 +580,9 @@ function output_css($s = '', $n = '')
         $cssname = safe_field('css', 'txp_section', "name='".doSlash($s)."'");
     }
 
-    if (isset($cssname)) {
+    if (!empty($cssname)) {
         $css = join(n, safe_column_num('css', 'txp_css', "name in ('$cssname')".$order));
-
-        if (isset($css)) {
-            echo $css;
-        }
+        echo $css;
     }
 }
 
@@ -687,31 +684,38 @@ function doArticles($atts, $iscustom, $thing = null)
     $customFields = getCustomFields();
     $customlAtts = array_null(array_flip($customFields));
 
+    if ($iscustom) {
+        $extralAtts = array(
+            'category'  => '',
+            'section'   => '',
+            'excerpted' => '',
+            'author'    => '',
+            'month'     => '',
+            'expired'   => $publish_expired_articles,
+            'id'        => '',
+            'exclude'   => '',
+        );
+    } else {
+        $extralAtts = array(
+            'listform'     => '',
+            'searchform'   => '',
+            'searchall'    => 1,
+            'searchsticky' => 0,
+            'pageby'       => '',
+            'pgonly'       => 0,
+        );
+    }
+
     // Getting attributes.
     $theAtts = lAtts(array(
         'form'          => 'default',
-        'listform'      => '',
-        'searchform'    => '',
         'limit'         => 10,
-        'pageby'        => '',
-        'category'      => '',
-        'section'       => '',
-        'excerpted'     => '',
-        'author'        => '',
         'sort'          => '',
         'sortby'        => '', // Deprecated in 4.0.4.
         'sortdir'       => '', // Deprecated in 4.0.4.
-        'month'         => '',
         'keywords'      => '',
-        'expired'       => $publish_expired_articles,
-        'frontpage'     => '',
-        'id'            => '',
-        'exclude'       => '',
         'time'          => 'past',
         'status'        => STATUS_LIVE,
-        'pgonly'        => 0,
-        'searchall'     => 1,
-        'searchsticky'  => 0,
         'allowoverride' => (!$q and !$iscustom),
         'offset'        => 0,
         'wraptag'       => '',
@@ -719,10 +723,7 @@ function doArticles($atts, $iscustom, $thing = null)
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
-    ) +$customlAtts, $atts);
-
-    // If an article ID is specified, treat it as a custom list.
-    $iscustom = (!empty($theAtts['id']) || !empty($theAtts['exclude'])) ? true : $iscustom;
+    ) + $customlAtts + $extralAtts, $atts);
 
     // For the txp:article tag, some attributes are taken from globals;
     // override them, then stash all filter attributes.
@@ -732,10 +733,15 @@ function doArticles($atts, $iscustom, $thing = null)
         $theAtts['author'] = (!empty($author) ? $author : '');
         $theAtts['month'] = (!empty($month) ? $month : '');
         $theAtts['frontpage'] = ($s && $s == 'default') ? true : false;
-        $theAtts['excerpted'] = '';
+        $theAtts['excerpted'] = 0;
+        $theAtts['exclude'] = 0;
+        $theAtts['expired'] = $publish_expired_articles;
 
         filterAtts($theAtts);
+    } else {
+        $theAtts['frontpage'] = false;
     }
+
     extract($theAtts);
 
     // If a listform is specified, $thing is for doArticle() - hence ignore here.
@@ -760,7 +766,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
         // Searchable article fields are limited to the columns of the
         // textpattern table and a matching fulltext index must exist.
-        $cols = do_list($searchable_article_fields);
+        $cols = do_list_unique($searchable_article_fields);
 
         if (empty($cols) or $cols[0] == '') {
             $cols = array('Title', 'Body');
@@ -823,14 +829,14 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Building query parts.
     $frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';
-    $category  = join("','", doSlash(do_list($category)));
+    $category  = join("','", doSlash(do_list_unique($category)));
     $category  = (!$category)  ? '' : " and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))";
-    $section   = (!$section)   ? '' : " and Section IN ('".join("','", doSlash(do_list($section)))."')";
-    $excerpted = ($excerpted == 'y' || $excerpted == '1')  ? " and Excerpt !=''" : '';
-    $author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list($author)))."')";
+    $section   = (!$section)   ? '' : " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')";
+    $excerpted = (!$excerpted) ? '' : " and Excerpt !=''";
+    $author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list_unique($author)))."')";
     $month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
-    $ids = $id ? array_map('intval', do_list($id)) : array();
-    $exclude = $exclude ? array_map('intval', do_list($exclude)) : array();
+    $ids = $id ? array_map('intval', do_list_unique($id)) : array();
+    $exclude = $exclude ? array_map('intval', do_list_unique($exclude)) : array();
     $id        = ((!$id)        ? '' : " and ID IN (".join(',', $ids).")")
         .((!$exclude)   ? '' : " and ID NOT IN (".join(',', $exclude).")");
 
@@ -865,7 +871,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
     if ($keywords) {
-        $keys = doSlash(do_list($keywords));
+        $keys = doSlash(do_list_unique($keywords));
 
         foreach ($keys as $key) {
             $keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
