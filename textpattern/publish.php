@@ -685,23 +685,23 @@ function doArticles($atts, $iscustom, $thing = null)
 
     if ($iscustom) {
         $extralAtts = array(
-            'category'      => '',
-            'section'       => '',
-            'excerpted'     => '',
-            'author'        => '',
-            'month'         => '',
-            'expired'       => $publish_expired_articles,
-            'id'            => '',
-            'exclude'       => '',
+            'category'  => '',
+            'section'   => '',
+            'excerpted' => '',
+            'author'    => '',
+            'month'     => '',
+            'expired'   => $publish_expired_articles,
+            'id'        => '',
+            'exclude'   => '',
         );
     } else {
         $extralAtts = array(
-            'listform'      => '',
-            'searchform'    => '',
-            'searchall'     => 1,
-            'searchsticky'  => 0,
-            'pageby'        => '',
-            'pgonly'        => 0,
+            'listform'     => '',
+            'searchform'   => '',
+            'searchall'    => 1,
+            'searchsticky' => 0,
+            'pageby'       => '',
+            'pgonly'       => 0,
         );
     }
 
