@@ -2160,14 +2160,38 @@ function popup_comments($atts)
 
 function comments_form($atts)
 {
-    global $thisarticle, $has_comments_preview;
+    global $thisarticle, $has_comments_preview, $thiscommentsform;
 
-    extract(lAtts(array(
+    // deprecated attributes since TXP 4.6. Most of these (except msgstyle)
+    // were moved to the tags that occur within a comments_form, although
+    // some of the names changed.
+    $deprecated = array('isize', 'msgrows', 'msgcols', 'msgstyle', 
+        'previewlabel', 'submitlabel', 'rememberlabel', 'forgetlabel');
+
+    foreach($deprecated as $att) {
+        if (isset($atts[$att])) {
+            trigger_error(gTxt('deprecated_attribute', array('{name}' => $att)), E_USER_NOTICE);
+        }
+    }
+
+    $atts = lAtts(array(
         'class'         => __FUNCTION__,
         'form'          => 'comment_form',
+        'isize'         => '25',
+        'msgcols'       => '25',
+        'msgrows'       => '5',
+        'msgstyle'      => '',
         'show_preview'  => empty($has_comments_preview),
         'wraptag'       => '',
-    ), $atts));
+        'previewlabel'  => gTxt('preview'),
+        'submitlabel'   => gTxt('submit'),
+        'rememberlabel' => gTxt('remember'),
+        'forgetlabel'   => gTxt('forget'),
+    ), $atts);
+
+    extract($atts);
+
+    $thiscommentsform = array_intersect_key($atts, array_flip($deprecated));
 
     assert_article();
 
@@ -2220,7 +2244,7 @@ function comments_form($atts)
             n.'<div class="comments-wrapper">'.n. // Prevent XHTML Strict validation gotchas.
             parse_form($form).
             n.hInput('parentid', ($parentid ? $parentid : $thisid)).
-            n.hInput('backpage', ($preview ? $backpage : $url)).
+            n.hInput('backpage', (ps('preview') ? $backpage : $url)).
             n.'</div>'.
             n.'</form>';
     }
@@ -2232,10 +2256,10 @@ function comments_form($atts)
 
 function comment_name_input($atts)
 {
-    global $prefs;
+    global $prefs, $thiscommentsform;
 
     extract(lAtts(array(
-        'size' => '25'
+        'size' => $thiscommentsform['isize']
     ), $atts));
 
     $namewarn = false;
@@ -2259,10 +2283,10 @@ function comment_name_input($atts)
 
 function comment_email_input($atts)
 {
-    global $prefs;
+    global $prefs, $thiscommentsform;
 
     extract(lAtts(array(
-        'size' => '25'
+        'size' => $thiscommentsform['isize']
     ), $atts));
 
     $emailwarn = false;
@@ -2279,17 +2303,17 @@ function comment_email_input($atts)
         }
     }
 
-    return fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $comments_require_email);
+    return fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
 }
 
 // -------------------------------------------------------------
 
 function comment_web_input($atts)
 {
-    global $prefs;
+    global $prefs, $thiscommentsform;
 
     extract(lAtts(array(
-        'size' => '25'
+        'size' => $thiscommentsform['isize']
     ), $atts));
 
     $web = clean_url(pcs('web'));
@@ -2306,14 +2330,14 @@ function comment_web_input($atts)
 
 function comment_message_input($atts)
 {
-    global $prefs;
+    global $prefs, $thiscommentsform;
 
     extract(lAtts(array(
-        'rows'  => '5',
-        'cols'  => '25',
-        'style' => ''
+        'rows'  => $thiscommentsform['msgrows'],
+        'cols'  => $thiscommentsform['msgcols']
     ), $atts));
 
+    $style = $thiscommentsform['msgstyle'];
     $commentwarn = false;
     $n_message = 'message';
     $formnonce = '';
@@ -2355,9 +2379,11 @@ function comment_message_input($atts)
 
 function comment_remember($atts)
 {
+    global $thiscommentsform;
+
     extract(lAtts(array(
-        'label'       => gTxt('remember'),
-        'forgetlabel' => gTxt('forget')
+        'rememberlabel' => $thiscommentsform['rememberlabel'],
+        'forgetlabel'   => $thiscommentsform['forgetlabel']
     ), $atts));
 
     extract(doDeEnt(psa(array(
@@ -2404,8 +2430,10 @@ function comment_remember($atts)
 
 function comment_preview($atts)
 {
+    global $thiscommentsform;
+
     extract(lAtts(array(
-        'label'  => gTxt('preview')
+        'label'  => $thiscommentsform['previewlabel']
     ), $atts));
 
     return fInput('submit', 'preview', $label, 'button', '', '', '', '', 'txpCommentPreview', false);
@@ -2415,8 +2443,10 @@ function comment_preview($atts)
 
 function comment_submit($atts)
 {
+    global $thiscommentsform;
+
     extract(lAtts(array(
-        'label'  => gTxt('submit')
+        'label'  => $thiscommentsform['submitlabel']
     ), $atts));
 
     // If all fields check out, the submit button is active/clickable.
