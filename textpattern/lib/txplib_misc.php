@@ -4192,7 +4192,7 @@ function EvalElse($thing, $condition)
 
 function fetch_form($name)
 {
-    static $forms = array();
+    global $forms;
 
     $name = (string) $name;
 
