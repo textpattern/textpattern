@@ -934,7 +934,7 @@ function doArticles($atts, $iscustom, $thing = null)
     if ($q and !$iscustom and !$issticky) {
         $fname = ($searchform ? $searchform : 'search_results');
     } else {
-        $fname = ($listform ? $listform : $form);
+        $fname = (!empty($listform) ? $listform : $form);
     }
 
     if ($rs) {
