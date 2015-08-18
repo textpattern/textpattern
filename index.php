@@ -83,7 +83,7 @@ if (!isset($txpcfg['table_prefix'])) {
 }
 
 if (!isset($txpcfg['table_prefix'])) {
-    header("HTTP/1.0 503 Service Unavailable");
+    header('HTTP/1.0 503 Service Unavailable');
     exit('config.php is missing or corrupt.  To install Textpattern, visit <a href="./textpattern/setup/">textpattern/setup/</a>');
 }
 
