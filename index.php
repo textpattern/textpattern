@@ -82,14 +82,14 @@ if (!isset($txpcfg['table_prefix'])) {
     ob_end_clean();
 }
 
+if (!isset($txpcfg['table_prefix'])) {
+    header('HTTP/1.0 503 Service Unavailable');
+    exit('config.php is missing or corrupt.  To install Textpattern, visit <a href="./textpattern/setup/">textpattern/setup/</a>');
+}
+
 include txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
 trace_log(TEXTPATTERN_TRACE_START);
-
-if (!isset($txpcfg['table_prefix'])) {
-    txp_status_header('503 Service Unavailable');
-    exit('config.php is missing or corrupt.  To install Textpattern, visit <a href="./textpattern/setup/">textpattern/setup/</a>');
-}
 
 // Custom caches, etc?
 if (!empty($txpcfg['pre_publish_script'])) {
