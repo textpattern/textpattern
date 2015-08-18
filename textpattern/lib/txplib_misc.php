@@ -4243,6 +4243,7 @@ function parse_form($name)
 
         $old_form = $txp_current_form;
         $txp_current_form = $stack[] = $name;
+        trace_add("[Nesting forms: '".join("' / '", $stack)."']");
         $out = parse($f);
         $txp_current_form = $old_form;
         array_pop($stack);
