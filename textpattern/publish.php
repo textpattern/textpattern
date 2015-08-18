@@ -54,6 +54,7 @@ set_error_handler('publicErrorHandler', error_reporting());
 
 ob_start();
 
+$forms = array();
 $txp_current_tag = '';
 
 // Get all prefs as an array.
