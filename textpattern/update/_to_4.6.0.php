@@ -126,3 +126,8 @@ if (safe_field('name', 'txp_prefs', "name = 'ping_textpattern_com'")) {
 if (!get_pref('default_publish_status')) {
     set_pref('default_publish_status', STATUS_LIVE, 'publish', PREF_CORE, 'defaultPublishStatus', 15, PREF_PRIVATE);
 }
+
+// Add hidden pref to set how long a query can be cached.
+if (!get_pref('time_granularity')) {
+    set_pref('time_granularity', 3600, 'publish', PREF_HIDDEN);
+}

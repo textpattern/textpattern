@@ -1438,7 +1438,7 @@ function now()
     static $now = null;
 
     if (null === $now) {
-        $granularity = intval(get_pref('time_granularity', 60));
+        $granularity = intval(get_pref('time_granularity'));
 
         if ($granularity) {
             $now = (round(time()) / $granularity) * $granularity;
