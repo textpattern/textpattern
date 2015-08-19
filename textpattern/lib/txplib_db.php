@@ -1441,7 +1441,7 @@ function now()
         $granularity = intval(get_pref('time_granularity'));
 
         if ($granularity) {
-            $now = (round(time()) / $granularity) * $granularity;
+            $now = ceil(time() / $granularity) * $granularity;
             $now = 'FROM_UNIXTIME('.$now.')';
         } else {
             $now = 'NOW()';
