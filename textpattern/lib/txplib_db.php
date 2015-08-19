@@ -1423,3 +1423,36 @@ function db_down()
 </html>
 eod;
 }
+
+/**
+ * Replacement for SQL NOW()
+ *
+ * This function can be used when constructing SQL SELECT queries as a replacement
+ * for the NOW() function to allow the SQL server to cache the queries.
+ *
+ * @return string SQL query string partial
+ */
+
+function now()
+{
+    static $now = null;
+
+    if (null === $now) {
+        $granularity = get_pref('time_granularity');
+
+        if ($granularity !== '') {
+            $granularity = intval($granularity);
+        } else {
+            $granularity = 60;
+        }
+
+        if ($granularity) {
+            $now = (round(time()) / $granularity) * $granularity;
+            $now = 'FROM_UNIXTIME('.$now.')';
+        } else {
+            $now = 'NOW()';
+        }
+    }
+
+    return $now;
+}
