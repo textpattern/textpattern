@@ -129,5 +129,5 @@ if (!get_pref('default_publish_status')) {
 
 // Add pref to set how long a query containing NOW() can be cached.
 if (!get_pref('time_granularity')) {
-    set_pref('time_granularity', '0', 'publish', PREF_CORE, 'text_input', 125);
+    set_pref('time_granularity', '1', 'publish', PREF_CORE, 'text_input', 125);
 }

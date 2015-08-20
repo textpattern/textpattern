@@ -1442,9 +1442,9 @@ function now()
 
         if ($granularity) {
             $now = ceil(time() / $granularity) * $granularity;
-            $now = 'FROM_UNIXTIME('.$now.')';
+            $now = 'from_unixtime('.$now.')';
         } else {
-            $now = 'NOW()';
+            $now = 'now()';
         }
     }
 
