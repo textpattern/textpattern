@@ -1076,7 +1076,8 @@ function htmlPre($item, $atts = '')
 
 function comment($item)
 {
-    return '<!-- '.str_replace('-->', '&shy;&shy;>', $item).' -->';
+    // Note that the replacement string is two &#8208 characters
+    return '<!-- '.str_replace('--', '‐‐', $item).' -->';
 }
 
 /**
