@@ -190,6 +190,7 @@ function atom()
                 $e = array();
 
                 $a['posted'] = $uPosted;
+                $a['expires'] = $uExpires;
 
                 if ($show_comment_count_in_feed) {
                     $count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
