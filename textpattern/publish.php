@@ -844,14 +844,14 @@ function doArticles($atts, $iscustom, $thing = null)
             $time = "";
             break;
         case 'future':
-            $time = " and Posted > ".now();
+            $time = " and Posted > ".now('posted');
             break;
         default:
-            $time = " and Posted <= ".now();
+            $time = " and Posted <= ".now('posted');
     }
 
     if (!$expired) {
-        $time .= " and (".now()." <= Expires or Expires = ".NULLDATETIME.")";
+        $time .= " and (".now('expires')." <= Expires or Expires = ".NULLDATETIME.")";
     }
 
     $custom = '';

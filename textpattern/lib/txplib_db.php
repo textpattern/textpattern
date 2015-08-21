@@ -1427,26 +1427,45 @@ eod;
 /**
  * Replacement for SQL NOW()
  *
- * This function can be used when constructing SQL SELECT queries as a replacement
- * for the NOW() function to allow the SQL server to cache the queries.
+ * This function can be used when constructing SQL SELECT queries as a
+ * replacement for the NOW() function to allow the SQL server to cache the
+ * queries. Should only be used when comparing with the Posted or Expired
+ * columns from the textpattern (articles) table or the Created column from
+ * the txp_file table
  *
+ * @param  string $type   Column name, lower case (one of 'posted', 'expires', 'created')
+ * @param  bool   $update Force update 
  * @return string SQL query string partial
  */
 
-function now()
-{
-    static $now = null;
+function now($type, $update = false) {
+    static $nows = array();
+    static $time = null;
 
-    if (null === $now) {
-        $granularity = intval(get_pref('time_granularity'));
+    if (!in_array($type, array('posted', 'expires', 'created'))) {
+        return false;
+    }
 
-        if ($granularity) {
-            $now = ceil(time() / $granularity) * $granularity;
-            $now = 'from_unixtime('.$now.')';
-        } else {
-            $now = 'now()';
+    if (isset($nows[$type])) {
+        $now = $nows[$type];
+    } else {
+        if ($time === null) {
+            $time = time();
+        }
+
+        $pref = 'sql_now_'.$type;
+        $now = get_pref($pref, $time - 1);
+
+        if ($time > $now or $update) {
+            $table = ($type === 'created') ? 'txp_file' : 'textpattern';
+            $where = '1=1 having utime > '.$time.' order by utime asc limit 1';
+            $now = safe_field('unix_timestamp('.$type.') as utime', $table, $where);
+            $now = ($now === false) ? 2147483647 : intval($now) - 1; 
+            update_pref($pref, $now);
+            $nows[$type] = $now;
+            $now;
         }
     }
 
-    return $now;
+    return 'from_unixtime('.$now.')';
 }

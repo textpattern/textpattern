@@ -583,6 +583,8 @@ function list_multi_edit()
                 callback_event('articles_deleted', '', 0, $selected);
                 callback_event('multi_edited.articles', 'delete', 0, compact('selected', 'field', 'value'));
                 update_lastmod('articles_deleted', $selected);
+                now('posted', true);
+                now('expires', true);
 
                 return list_list(messenger('article', join(', ', $selected), 'deleted'));
             }
@@ -690,6 +692,8 @@ function list_multi_edit()
         }
 
         update_lastmod('articles_updated', compact('selected', 'field', 'value'));
+        now('posted', true);
+        now('expires', true);
         callback_event('multi_edited.articles', $edit_method, 0, compact('selected', 'field', 'value'));
 
         return list_list($message);

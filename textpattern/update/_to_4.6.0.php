@@ -127,7 +127,9 @@ if (!get_pref('default_publish_status')) {
     set_pref('default_publish_status', STATUS_LIVE, 'publish', PREF_CORE, 'defaultPublishStatus', 15, PREF_PRIVATE);
 }
 
-// Add pref to set how long a query containing NOW() can be cached.
-if (!get_pref('time_granularity')) {
-    set_pref('time_granularity', '1', 'publish', PREF_CORE, 'text_input', 125);
+// Add prefs to allow query caching when now() is used.
+if (!get_pref('sql_now_publish')) {
+    set_pref('sql_now_publish', time(), 'publish', PREF_HIDDEN);
+    set_pref('sql_now_expires', time(), 'publish', PREF_HIDDEN);
+    set_pref('sql_now_created', time(), 'publish', PREF_HIDDEN);
 }

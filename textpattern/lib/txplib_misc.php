@@ -4477,7 +4477,7 @@ function get_lastmod($unix_ts = null)
     }
 
     // Check for future articles that are now visible.
-    if ($max_article = safe_field('unix_timestamp(Posted)', 'textpattern', "Posted <= ".now()." and Status >= 4 order by Posted desc limit 1")) {
+    if ($max_article = safe_field('unix_timestamp(Posted)', 'textpattern', "Posted <= ".now('posted')." and Status >= 4 order by Posted desc limit 1")) {
         $unix_ts = max($unix_ts, $max_article);
     }
 

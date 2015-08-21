@@ -1030,10 +1030,10 @@ function recent_articles($atts)
     $category = join("','", doSlash(do_list_unique($category)));
     $categories = ($category) ? "and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))" : '';
     $section = ($section) ? " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
-    $expired = ($prefs['publish_expired_articles']) ? '' : ' and ('.now().' <= Expires or Expires = '.NULLDATETIME.')';
+    $expired = ($prefs['publish_expired_articles']) ? '' : ' and ('.now('expires').' <= Expires or Expires = '.NULLDATETIME.')';
 
     $rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern',
-        "Status = ".STATUS_LIVE." $section $categories and Posted <= ".now()."$expired order by ".doSlash($sort).' limit '.intval($offset).','.intval($limit));
+        "Status = ".STATUS_LIVE." $section $categories and Posted <= ".now('posted')."$expired order by ".doSlash($sort).' limit '.intval($offset).','.intval($limit));
 
     if ($rs) {
         $out = array();
@@ -1071,7 +1071,7 @@ function recent_comments($atts, $thing = null)
     ), $atts));
 
     $sort = preg_replace('/\bposted\b/', 'd.posted', $sort);
-    $expired = ($prefs['publish_expired_articles']) ? '' : ' and ('.now().' <= t.Expires or t.Expires = '.NULLDATETIME.') ';
+    $expired = ($prefs['publish_expired_articles']) ? '' : ' and ('.now('expires').' <= t.Expires or t.Expires = '.NULLDATETIME.') ';
 
     $rs = startRows('select d.name, d.email, d.web, d.message, d.discussid, unix_timestamp(d.Posted) as time, '.
         't.ID as thisid, unix_timestamp(t.Posted) as posted, t.Title as title, t.Section as section, t.url_title '.
@@ -1182,9 +1182,9 @@ function related_articles($atts, $thing = null)
 
     $section = ($section) ? " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
 
-    $expired = ($prefs['publish_expired_articles']) ? '' : ' and ('.now().' <= Expires or Expires = '.NULLDATETIME.') ';
+    $expired = ($prefs['publish_expired_articles']) ? '' : ' and ('.now('expires').' <= Expires or Expires = '.NULLDATETIME.') ';
     $rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires', 'textpattern',
-        'ID != '.intval($id)." and Status = ".STATUS_LIVE." $expired  and Posted <= ".now()." $categories $section order by ".doSlash($sort).' limit 0,'.intval($limit));
+        'ID != '.intval($id)." and Status = ".STATUS_LIVE." $expired  and Posted <= ".now('posted')." $categories $section order by ".doSlash($sort).' limit 0,'.intval($limit));
 
     if ($rs) {
         $out = array();
