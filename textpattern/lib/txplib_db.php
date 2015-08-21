@@ -1431,7 +1431,7 @@ eod;
  * replacement for the NOW() function to allow the SQL server to cache the
  * queries. Should only be used when comparing with the Posted or Expired
  * columns from the textpattern (articles) table or the Created column from
- * the txp_file table
+ * the txp_file table.
  *
  * @param  string $type   Column name, lower case (one of 'posted', 'expires', 'created')
  * @param  bool   $update Force update 
@@ -1463,7 +1463,6 @@ function now($type, $update = false) {
             $now = ($now === false) ? 2147483647 : intval($now) - 1; 
             update_pref($pref, $now);
             $nows[$type] = $now;
-            $now;
         }
     }
 
