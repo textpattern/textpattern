@@ -5351,12 +5351,13 @@ function permlinkurl($article_array)
         return $permlinks[$thisid];
     }
 
-    if (empty($prefs['publish_expired_articles']) && !empty($expires) && $expires < time()) {
-        if ($production_status != 'live' && txpinterface == 'public') {
-            trigger_error(gTxt('permlink_to_expired_article', array('{id}' => $thisid)), E_USER_NOTICE);
-        }
-
-        return $permlinks[$thisid] = hu.'#expired_article';
+    if (empty($prefs['publish_expired_articles']) &&
+        !empty($expires) &&
+        $expires < time() &&
+        $production_status != 'live' &&
+        txpinterface == 'public'
+    ) {
+        trigger_error(gTxt('permlink_to_expired_article', array('{id}' => $thisid)), E_USER_NOTICE);
     }
 
     if (empty($url_title)) {
