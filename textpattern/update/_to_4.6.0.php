@@ -128,8 +128,8 @@ if (!get_pref('default_publish_status')) {
 }
 
 // Add prefs to allow query caching when now() is used.
-if (!get_pref('sql_now_publish')) {
-    set_pref('sql_now_publish', time(), 'publish', PREF_HIDDEN);
+if (!get_pref('sql_now_posted')) {
+    set_pref('sql_now_posted', time(), 'publish', PREF_HIDDEN);
     set_pref('sql_now_expires', time(), 'publish', PREF_HIDDEN);
     set_pref('sql_now_created', time(), 'publish', PREF_HIDDEN);
 }
