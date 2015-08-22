@@ -30,7 +30,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Changed: Removed empty 'About' section from new installs.
 * Changed: Increase 'page' and 'css' sizes in txp_section table.
 * Changed: 'Prevent widowed words in article titles' preference defaults to 'No' in new installs.
-* Changed: Detailled debug trace log.
+* Changed: Detailed debug trace log.
 * Developer: Use 'mysqli' extension for DB access, lose dependency on 'mysql' extension.
 * Developer: Added jQuery UI library and a jQuery UI Textpattern theme to admin side.
 * Developer: Added DocBlock documentation comments throughout the source code.
