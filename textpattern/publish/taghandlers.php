@@ -2160,7 +2160,8 @@ function popup_comments($atts)
 
 function comments_form($atts)
 {
-    global $thisarticle, $has_comments_preview, $thiscommentsform;
+    global $thisarticle, $has_comments_preview;
+    global $thiscommentsform; // TODO: Remove any uses of $thiscommentsform when removing deprecated attributes from below.
 
     // deprecated attributes since TXP 4.6. Most of these (except msgstyle)
     // were moved to the tags that occur within a comments_form, although
