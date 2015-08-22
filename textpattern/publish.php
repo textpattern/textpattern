@@ -184,7 +184,7 @@ if (gps('parentid') && gps('submit')) {
 } elseif (gps('parentid') and $comments_mode == 1) {
     // Popup comments?
     header("Content-type: text/html; charset=utf-8");
-    exit(popComments(gps('parentid')));
+    exit(parse_form('popup_comments'));
 }
 
 // We are dealing with a download.
