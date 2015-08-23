@@ -4493,10 +4493,7 @@ function file_download_list($atts, $thing = null)
         return '';
     }
 
-    if (!$where) {
-        // If nothing matches, start with all files.
-        $where[] = "1=1";
-    }
+    $where[] = 'created <= '.now('created');
 
     $where = join(' AND ', array_merge($where, $statwhere));
 
