@@ -717,6 +717,7 @@ function file_db_add($filename, $category, $permissions, $description, $size, $t
 
     if ($rs) {
         $GLOBALS['ID'] = $rs;
+        now('created', true);
 
         return $GLOBALS['ID'];
     }
@@ -758,6 +759,7 @@ function file_create()
         if (is_file($newpath)) {
             file_set_perm($newpath);
             update_lastmod('file_created', compact('id', 'safe_filename', 'title', 'category', 'description'));
+            now('created', true);
             file_list(gTxt('linked_to_file').' '.$safe_filename);
         } else {
             file_list(gTxt('file_not_found').' '.$safe_filename);
@@ -822,6 +824,7 @@ function file_insert()
             } else {
                 file_set_perm($newpath);
                 update_lastmod('file_uploaded', compact('id', 'newname', 'title', 'category', 'description'));
+                now('created', true);
                 file_edit(gTxt('file_uploaded', array('{name}' => $newname)), $id);
             }
         }
@@ -885,6 +888,7 @@ function file_replace()
         } else {
             file_set_perm($newpath);
             update_lastmod('file_replaced', compact('id', 'filename'));
+            now('created', true);
 
             if ($size = filesize($newpath)) {
                 safe_update('txp_file', 'size = '.$size.', modified = now()', 'id = '.$id);
@@ -1002,6 +1006,7 @@ function file_save()
     }
 
     update_lastmod('file_saved', compact('id', 'filename', 'title', 'category', 'description', 'status', 'size'));
+    now('created', true);
     file_list(gTxt('file_updated', array('{name}' => $filename)));
 }
 
@@ -1052,6 +1057,7 @@ function file_delete($ids = array())
                 return;
             } else {
                 update_lastmod('file_deleted', $ids);
+                now('created', true);
                 file_list(gTxt('file_deleted', array('{name}' => join(', ', $ids))));
 
                 return;
