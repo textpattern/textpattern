@@ -458,7 +458,7 @@ function preText($s, $prefs)
             }
 
             $fn = empty($out['filename']) ? '' : ' and filename = \''.doSlash($out['filename']).'\'';
-            $rs = safe_row('*', 'txp_file', 'id='.intval($out['id']).' and status = '.STATUS_LIVE.$fn);
+            $rs = safe_row('*', 'txp_file', 'id='.intval($out['id']).' and status = '.STATUS_LIVE.' and created <= '.now('created').$fn);
         }
 
         return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404);

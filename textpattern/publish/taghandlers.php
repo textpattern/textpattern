@@ -4574,9 +4574,9 @@ function file_download($atts, $thing = null)
     $from_form = false;
 
     if ($id) {
-        $thisfile = fileDownloadFetchInfo('id = '.intval($id));
+        $thisfile = fileDownloadFetchInfo('id = '.intval($id).' and created <= '.now('created'));
     } elseif ($filename) {
-        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
+        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."' and created <= ".now('created'));
     } else {
         assert_file();
 
@@ -4610,9 +4610,9 @@ function file_download_link($atts, $thing = null)
     $from_form = false;
 
     if ($id) {
-        $thisfile = fileDownloadFetchInfo('id = '.intval($id));
+        $thisfile = fileDownloadFetchInfo('id = '.intval($id).' and created <= '.now('created'));
     } elseif ($filename) {
-        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
+        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."' and created <= ".now('created'));
     } else {
         assert_file();
 
