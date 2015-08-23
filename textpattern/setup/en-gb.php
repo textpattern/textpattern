@@ -1135,7 +1135,6 @@ $en_gb_lang = array(
         'include_default' => 'Include default section?',
         'inline_style' => 'Inline style (CSS)',
         'input_size' => 'Input size',
-        'isize' => 'Input size',
         'labeltag' => 'Label tag',
         'limit' => 'Display how many?',
         'linkclass' => 'CSS class for links',
