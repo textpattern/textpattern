@@ -538,7 +538,7 @@ function safe_alter($table, $alter, $debug = false)
 
 function safe_lock($table, $type = 'write', $debug = false)
 {
-    return (bool) safe_query('lock tables '.join(' '.$type.', ', doArray(do_list($table), 'safe_pfx')).' '.$type, $debug);
+    return (bool) safe_query('lock tables '.join(' '.$type.', ', doArray(do_list_unique($table), 'safe_pfx')).' '.$type, $debug);
 }
 
 /**

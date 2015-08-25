@@ -184,7 +184,7 @@ if (gps('parentid') && gps('submit')) {
 } elseif (gps('parentid') and $comments_mode == 1) {
     // Popup comments?
     header("Content-type: text/html; charset=utf-8");
-    exit(popComments(gps('parentid')));
+    exit(parse_form('popup_comments'));
 }
 
 // We are dealing with a download.
@@ -565,7 +565,7 @@ function output_css($s = '', $n = '')
             txp_die('Not Found', 404);
         }
 
-        $n = do_list($n);
+        $n = do_list_unique($n);
         $cssname = join("','", doSlash($n));
 
         if (count($n) > 1) {
@@ -579,11 +579,76 @@ function output_css($s = '', $n = '')
         $cssname = safe_field('css', 'txp_section', "name='".doSlash($s)."'");
     }
 
-    if (isset($cssname)) {
+    if (!empty($cssname)) {
         $css = join(n, safe_column_num('css', 'txp_css', "name in ('$cssname')".$order));
+        echo $css;
+    }
+}
 
-        if (isset($css)) {
-            echo $css;
+// -------------------------------------------------------------
+function output_file_download($filename)
+{
+    global $file_error, $file_base_path, $pretext;
+
+    callback_event('file_download');
+
+    if (!isset($file_error)) {
+        $filename = sanitizeForFile($filename);
+        $fullpath = build_file_path($file_base_path, $filename);
+
+        if (is_file($fullpath)) {
+            // Discard any error PHP messages.
+            ob_clean();
+            $filesize = filesize($fullpath);
+            $sent = 0;
+            header('Content-Description: File Download');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.$filename.'"; size = "'.$filesize.'"');
+
+            // Fix for IE6 PDF bug on servers configured to send cache headers.
+            header('Cache-Control: private');
+            @ini_set("zlib.output_compression", "Off");
+            @set_time_limit(0);
+            @ignore_user_abort(true);
+
+            if ($file = fopen($fullpath, 'rb')) {
+                while (!feof($file) and (connection_status() == 0)) {
+                    echo fread($file, 1024 * 64);
+                    $sent += (1024 * 64);
+                    ob_flush();
+                    flush();
+                }
+
+                fclose($file);
+
+                // Record download.
+                if ((connection_status() == 0) and !connection_aborted()) {
+                    safe_update("txp_file", "downloads=downloads+1", 'id='.intval($pretext['id']));
+                } else {
+                    $pretext['request_uri'] .= ($sent >= $filesize)
+                        ? '#aborted'
+                        : "#aborted-at-".floor($sent * 100 / $filesize)."%";
+                }
+
+                log_hit('200');
+            }
+        } else {
+            $file_error = 404;
+        }
+    }
+
+    // Deal with error.
+    if (isset($file_error)) {
+        switch ($file_error) {
+        case 403:
+            txp_die(gTxt('403_forbidden'), '403');
+            break;
+        case 404:
+            txp_die(gTxt('404_not_found'), '404');
+            break;
+        default:
+            txp_die(gTxt('500_internal_server_error'), '500');
+            break;
         }
     }
 }
@@ -688,23 +753,23 @@ function doArticles($atts, $iscustom, $thing = null)
 
     if ($iscustom) {
         $extralAtts = array(
-            'category'      => '',
-            'section'       => '',
-            'excerpted'     => '',
-            'author'        => '',
-            'month'         => '',
-            'expired'       => $publish_expired_articles,
-            'id'            => '',
-            'exclude'       => '',
+            'category'  => '',
+            'section'   => '',
+            'excerpted' => '',
+            'author'    => '',
+            'month'     => '',
+            'expired'   => $publish_expired_articles,
+            'id'        => '',
+            'exclude'   => '',
         );
     } else {
         $extralAtts = array(
-            'listform'      => '',
-            'searchform'    => '',
-            'searchall'     => 1,
-            'searchsticky'  => 0,
-            'pageby'        => '',
-            'pgonly'        => 0,
+            'listform'     => '',
+            'searchform'   => '',
+            'searchall'    => 1,
+            'searchsticky' => 0,
+            'pageby'       => '',
+            'pgonly'       => 0,
         );
     }
 
@@ -768,7 +833,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
         // Searchable article fields are limited to the columns of the
         // textpattern table and a matching fulltext index must exist.
-        $cols = do_list($searchable_article_fields);
+        $cols = do_list_unique($searchable_article_fields);
 
         if (empty($cols) or $cols[0] == '') {
             $cols = array('Title', 'Body');
@@ -831,14 +896,14 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Building query parts.
     $frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';
-    $category  = join("','", doSlash(do_list($category)));
+    $category  = join("','", doSlash(do_list_unique($category)));
     $category  = (!$category)  ? '' : " and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))";
-    $section   = (!$section)   ? '' : " and Section IN ('".join("','", doSlash(do_list($section)))."')";
-    $excerpted = ($excerpted == 'y' || $excerpted == '1')  ? " and Excerpt !=''" : '';
-    $author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list($author)))."')";
+    $section   = (!$section)   ? '' : " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')";
+    $excerpted = (!$excerpted) ? '' : " and Excerpt !=''";
+    $author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list_unique($author)))."')";
     $month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
-    $ids = $id ? array_map('intval', do_list($id)) : array();
-    $exclude = $exclude ? array_map('intval', do_list($exclude)) : array();
+    $ids = $id ? array_map('intval', do_list_unique($id)) : array();
+    $exclude = $exclude ? array_map('intval', do_list_unique($exclude)) : array();
     $id        = ((!$id)        ? '' : " and ID IN (".join(',', $ids).")")
         .((!$exclude)   ? '' : " and ID NOT IN (".join(',', $exclude).")");
 
@@ -873,7 +938,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
     if ($keywords) {
-        $keys = doSlash(do_list($keywords));
+        $keys = doSlash(do_list_unique($keywords));
 
         foreach ($keys as $key) {
             $keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
@@ -937,7 +1002,7 @@ function doArticles($atts, $iscustom, $thing = null)
     if ($q and !$iscustom and !$issticky) {
         $fname = ($searchform ? $searchform : 'search_results');
     } else {
-        $fname = ($listform ? $listform : $form);
+        $fname = (!empty($listform) ? $listform : $form);
     }
 
     if ($rs) {

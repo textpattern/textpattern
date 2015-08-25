@@ -479,7 +479,7 @@ function cat_event_category_create($event)
     $name = strtolower(sanitizeForUrl($title));
 
     if (!$name) {
-        $message = array(gTxt($event.'_category_invalid', array('{name}' => $name)), E_ERROR);
+        $message = array(gTxt($event.'_category_invalid', array('{name}' => $title)), E_ERROR);
 
         return cat_category_list($message);
     }
@@ -579,11 +579,12 @@ function cat_event_category_save($event, $table_name)
     extract(doSlash(array_map('assert_string', psa(array('id', 'name', 'description', 'old_name', 'parent', 'title')))));
     $id = assert_int($id);
 
-    $name = sanitizeForUrl($name);
+    $rawname = $name;
+    $name = sanitizeForUrl($rawname);
 
     // Make sure the name is valid.
     if (!$name) {
-        $message = array(gTxt($event.'_category_invalid', array('{name}' => $name)), E_ERROR);
+        $message = array(gTxt($event.'_category_invalid', array('{name}' => $rawname)), E_ERROR);
 
         return cat_category_list($message);
     }
