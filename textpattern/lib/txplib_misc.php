@@ -1843,8 +1843,6 @@ function callback_event($event, $step = '', $pre = 0)
         return '';
     }
 
-    trace_add("[Callback_event: '$event', step='$step', pre='".serialize($pre)."']");
-
     // Any payload parameters?
     $argv = func_get_args();
     $argv = (count($argv) > 3) ? array_slice($argv, 3) : array();
@@ -1855,6 +1853,8 @@ function callback_event($event, $step = '', $pre = 0)
         extract($pre);
     }
     else $prepend = $pre;
+
+    trace_add("[Callback_event: '$event', step='$step', pre='$prepend']");
 
     foreach ($plugin_callback as $c) {
         if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $prepend) {
