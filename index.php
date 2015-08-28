@@ -84,16 +84,19 @@ if (!isset($txpcfg['table_prefix'])) {
 
 include txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
+trace_log(TEXTPATTERN_TRACE_START);
 
 if (!isset($txpcfg['table_prefix'])) {
     txp_status_header('503 Service Unavailable');
     exit('config.php is missing or corrupt.  To install Textpattern, visit <a href="./textpattern/setup/">textpattern/setup/</a>');
 }
 
-// Custom caches, et cetera?
-if (isset($txpcfg['pre_publish_script'])) {
+// Custom caches, etc?
+if (!empty($txpcfg['pre_publish_script'])) {
+    trace_add("[Pre Publish Script: '{$txpcfg['pre_publish_script']}']");
     require $txpcfg['pre_publish_script'];
 }
 
 include txpath.'/publish.php';
 textpattern();
+trace_log(TEXTPATTERN_TRACE_DISPLAY);

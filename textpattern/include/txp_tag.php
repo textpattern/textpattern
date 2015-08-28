@@ -1084,7 +1084,22 @@ class Textpattern_Tag_BuilderTags
 
     function tag_comment_email_input()
     {
-        return $this->tbNoAtts();
+        $atts = gpsa(array(
+            'size',
+        ));
+
+        extract($atts);
+
+        $out = $this->tagbuildForm(
+            $this->startblock.
+            $this->widgets(array(
+                'input_size'   => $this->tbInput('size', $size, INPUT_TINY),
+            )).
+            $this->endform
+        ).
+        $this->build($atts);
+
+        return $out;
     }
 
     /**
@@ -1102,7 +1117,24 @@ class Textpattern_Tag_BuilderTags
 
     function tag_comment_message_input()
     {
-        return $this->tbNoAtts();
+        $atts = gpsa(array(
+            'cols',
+            'rows',
+        ));
+
+        extract($atts);
+
+        $out = $this->tagbuildForm(
+            $this->startblock.
+            $this->widgets(array(
+                'msgcols' => $this->tbInput('cols', $cols, INPUT_TINY),
+                'msgrows' => $this->tbInput('rows', $rows, INPUT_TINY),
+            )).
+            $this->endform
+        ).
+        $this->build($atts);
+
+        return $out;
     }
 
     /**
@@ -1133,7 +1165,22 @@ class Textpattern_Tag_BuilderTags
 
     function tag_comment_name_input()
     {
-        return $this->tbNoAtts();
+        $atts = gpsa(array(
+            'size',
+        ));
+
+        extract($atts);
+
+        $out = $this->tagbuildForm(
+            $this->startblock.
+            $this->widgets(array(
+                'input_size'   => $this->tbInput('size', $size, INPUT_TINY),
+            )).
+            $this->endform
+        ).
+        $this->build($atts);
+
+        return $out;
     }
 
     /**
@@ -1215,7 +1262,22 @@ class Textpattern_Tag_BuilderTags
 
     function tag_comment_web_input()
     {
-        return $this->tbNoAtts();
+        $atts = gpsa(array(
+            'size',
+        ));
+
+        extract($atts);
+
+        $out = $this->tagbuildForm(
+            $this->startblock.
+            $this->widgets(array(
+                'input_size'   => $this->tbInput('size', $size, INPUT_TINY),
+            )).
+            $this->endform
+        ).
+        $this->build($atts);
+
+        return $out;
     }
 
     /**
@@ -1261,12 +1323,8 @@ class Textpattern_Tag_BuilderTags
     function tag_comments_form()
     {
         $atts = gpsa(array(
-            'class',
             'id',
-            'isize',
             'form',
-            'msgcols',
-            'msgrows',
             'wraptag',
         ));
 
@@ -1276,12 +1334,8 @@ class Textpattern_Tag_BuilderTags
             $this->startblock.
             $this->widgets(array(
                 'id'      => $this->tbInput('id', $id),
-                'isize'   => $this->tbInput('isize', $isize, INPUT_TINY),
-                'msgcols' => $this->tbInput('msgcols', $msgcols, INPUT_TINY),
-                'msgrows' => $this->tbInput('msgrows', $msgrows, INPUT_TINY),
                 'form'    => $this->tbFormPop('form', 'comment', $form),
                 'wraptag' => $this->tbInput('wraptag', $wraptag),
-                'class'   => $this->tbInput('class', $class, INPUT_REGULAR),
             )).
             $this->endform
         ).

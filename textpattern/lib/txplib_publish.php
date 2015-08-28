@@ -90,7 +90,7 @@ function populateArticleData($rs)
 {
     global $thisarticle;
 
-    trace_add("[".gTxt('Article')." {$rs['ID']}]");
+    trace_add("[Article: '{$rs['ID']}']");
 
     foreach (article_column_map() as $key => $column) {
         $thisarticle[$key] = $rs[$column];
@@ -247,7 +247,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     $safe_name = safe_pfx('textpattern');
     $q = array(
-        "select ID, Title, url_title, unix_timestamp(Posted) as uposted
+        "select ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted
             from ".$safe_name." where $sortby $type ".$threshold,
         ($s != '' && $s != 'default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
         $id,
@@ -330,17 +330,8 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         $s = $thisarticle['section'];
     }
 
-    $thenext            = getNeighbour($threshold, $s, '>', $atts, $threshold_type);
-    $out['next_id']     = ($thenext) ? $thenext['ID'] : '';
-    $out['next_title']  = ($thenext) ? $thenext['Title'] : '';
-    $out['next_utitle'] = ($thenext) ? $thenext['url_title'] : '';
-    $out['next_posted'] = ($thenext) ? $thenext['uposted'] : '';
-
-    $theprev            = getNeighbour($threshold, $s, '<', $atts, $threshold_type);
-    $out['prev_id']     = ($theprev) ? $theprev['ID'] : '';
-    $out['prev_title']  = ($theprev) ? $theprev['Title'] : '';
-    $out['prev_utitle'] = ($theprev) ? $theprev['url_title'] : '';
-    $out['prev_posted'] = ($theprev) ? $theprev['uposted'] : '';
+    $out['next'] = getNeighbour($threshold, $s, '>', $atts, $threshold_type);
+    $out['prev'] = getNeighbour($threshold, $s, '<', $atts, $threshold_type);
 
     return $out;
 }
@@ -459,14 +450,8 @@ function processTags($tag, $atts, $thing = null)
 
     if ($production_status !== 'live') {
         $old_tag = $txp_current_tag;
-
         $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
-
-        trace_add($txp_current_tag, 1);
-
-        if ($production_status === 'debug') {
-            maxMemUsage("Form='$txp_current_form', Tag='$txp_current_tag'");
-        }
+        trace_add($txp_current_tag, 1, "Form='$txp_current_form', Tag='$txp_current_tag'");
     }
 
     if ($registry === null) {
@@ -496,7 +481,7 @@ function processTags($tag, $atts, $thing = null)
         trace_add('', -1);
 
         if (isset($thing)) {
-            trace_add('</txp:'.$tag.'>');
+            trace_add("</txp:{$tag}>");
         }
 
         $txp_current_tag = $old_tag;

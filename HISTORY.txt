@@ -6,21 +6,32 @@ Changes in 4.6.0 (Upcoming) TODO
 * New tags: <txp:authors />, <txp:meta_description />, <txp:if_description> and <txp:if_yield>.
 * Added: Default publishing status preference.
 * Added: Support for additional text markup languages.
-* Changed: <txp:meta_keywords /> accepts 'escape', 'format' and 'separator' attributes.
-* Changed: <txp:meta_author /> accepts 'escape' and 'format' attributes.
-* Changed: <txp:author /> accepts 'escape' and 'format' attributes.
-* Changed: <txp:category_list /> accepts 'html_id' attribute.
-* Changed: <txp:recent_articles /> accepts 'offset' attribute.
-* Changed: <txp:section_list /> accepts 'html_id' attribute.
-* Changed: <txp:password_protect /> tag can now be used as a container tag.
 * Changed: <txp:article_custom /> accepts 'exclude' attribute to exclude articles by a comma-separated id list.
-* Changed: Deprecated 'breakclass' attribute for <txp:comments /> and <txp:image_info />.
+* Changed: <txp:author /> accepts 'escape' and 'format' attributes.
+* Changed: <txp:category_list /> accepts 'html_id', 'limit' and 'offset' attributes.
+* Changed: <txp:comments_form/>: Deprecated attributes 'isize', 'msgcols', 'msgrows', 'msgstyle', 'previewlabel', 'submitlabel', 'rememberlabel', and 'forgetlabel'.
+* Changed: <txp:comment_email_input /> accepts attribute 'size'.
+* Changed: <txp:comment_message_input /> accepts attributes 'cols', 'rows'. Removed capability to apply an immediate style to the element.
+* Changed: <txp:comment_name_input /> accepts attribute 'size'.
+* Changed: <txp:comment_preview /> accepts attribute 'label'.
+* Changed: <txp:comment_remember /> accepts attributes 'rememberlabel', 'forgetlabel'.
+* Changed: <txp:comment_submit /> accepts attribute 'label'.
+* Changed: <txp:comment_web_input /> accepts attribute 'size'.
+* Changed: <txp:link /> accepts 'id' and 'name' attributes.
+* Changed: <txp:meta_author /> accepts 'escape' and 'format' attributes.
+* Changed: <txp:meta_keywords /> accepts 'escape', 'format' and 'separator' attributes.
+* Changed: <txp:password_protect /> tag can now be used as a container tag.
+* Changed: <txp:recent_articles /> accepts 'offset' attribute.
+* Changed: <txp:section_list /> accepts 'html_id', 'limit' and 'offset' attributes.
 * Changed: Deprecated <txp:keywords> tag. Use <txp:meta_keywords format="" /> instead.
 * Changed: Deprecated <txp:rsd> tag.
+* Changed: Deprecated 'breakclass' attribute for <txp:comments /> and <txp:image_info />.
 * Changed: Removed Form (article) Preview facility.
 * Changed: Removed empty 'About' section from new installs.
 * Changed: Increase 'page' and 'css' sizes in txp_section table.
 * Changed: 'Prevent widowed words in article titles' preference defaults to 'No' in new installs.
+* Changed: Detailed debug trace log.
+* Developer: Use 'mysqli' extension for DB access, lose dependency on 'mysql' extension.
 * Developer: Added jQuery UI library and a jQuery UI Textpattern theme to admin side.
 * Developer: Added DocBlock documentation comments throughout the source code.
 * Developer: Adherence to PSR coding standards where possible.
