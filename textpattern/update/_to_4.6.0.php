@@ -127,3 +127,15 @@ if (safe_field('name', 'txp_prefs', "name = 'ping_textpattern_com'")) {
 if (!get_pref('default_publish_status')) {
     set_pref('default_publish_status', STATUS_LIVE, 'publish', PREF_CORE, 'defaultPublishStatus', 15, PREF_PRIVATE);
 }
+
+// Recreate indexes to allow future conversion to charset utf8mb4
+safe_alter('txp_discuss_ipban', "DROP PRIMARY KEY, ADD PRIMARY KEY (`ip`(250))");
+safe_alter('txp_discuss_nonce', "DROP PRIMARY KEY, ADD PRIMARY KEY (`nonce`(250))");
+safe_alter('txp_css', "DROP INDEX `name`, ADD UNIQUE `name` (`name`(250))");
+safe_alter('txp_file', "DROP INDEX `filename`, ADD UNIQUE `filename` (`filename`(250))");
+safe_alter('txp_form', "DROP PRIMARY KEY, ADD PRIMARY KEY (`name`(250))");
+safe_alter('txp_page', "DROP PRIMARY KEY, ADD PRIMARY KEY (`name`(250))");
+safe_alter('txp_section', "DROP PRIMARY KEY, ADD PRIMARY KEY (`name`(250))");
+safe_alter('txp_prefs', "DROP INDEX `prefs_idx`, ADD UNIQUE `prefs_idx` (`prefs_id`,`name`(185),`user_name`)");
+safe_alter('textpattern', "DROP INDEX `section_status_idx`, ADD INDEX `section_status_idx` (`Section`(249),`Status`)");
+safe_alter('textpattern', "DROP INDEX `url_title_idx`, ADD INDEX `url_title_idx` (`url_title`(250))");
