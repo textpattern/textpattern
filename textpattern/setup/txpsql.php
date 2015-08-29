@@ -60,7 +60,9 @@ $tabletype = (version_compare($version, '4.1.2') >= 0) ? ' ENGINE=MyISAM ' : ' T
 if (isset($dbcharset)) {
     $tabletype .= " CHARACTER SET = $dbcharset ";
 
-    if ($dbcharset == 'utf8') {
+    if ($dbcharset == 'utf8mb4') {
+        $tabletype .= " COLLATE utf8mb4_unicode_ci ";
+    } elseif ($dbcharset == 'utf8') {
         $tabletype .= " COLLATE utf8_general_ci ";
     }
 
@@ -112,7 +114,7 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
     `Status` int(2) NOT NULL default '4',
     `textile_body` int(2) NOT NULL default '1',
     `textile_excerpt` int(2) NOT NULL default '1',
-    `Section` varchar(64) NOT NULL default '',
+    `Section` varchar(255) NOT NULL default '',
     `override_form` varchar(255) NOT NULL default '',
     `Keywords` varchar(255) NOT NULL default '',
     `url_title` varchar(255) NOT NULL default '',
@@ -161,7 +163,7 @@ $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (8, 'textpattern', 'li
 $create_sql[] = "CREATE TABLE `".PFX."txp_css` (
     `name` varchar(255) NOT NULL,
     `css` text NOT NULL,
-    UNIQUE KEY `name` (`name`)
+    UNIQUE KEY `name` (`name`(250))
 ) $tabletype ";
 
 // sql:txp_css
@@ -190,7 +192,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_discuss_ipban` (
     `name_used` varchar(255) NOT NULL default '',
     `date_banned` datetime NOT NULL default '0000-00-00 00:00:00',
     `banned_on_message` int(8) NOT NULL default '0',
-    PRIMARY KEY (`ip`)
+    PRIMARY KEY (`ip`(250))
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_discuss_nonce` (
@@ -198,7 +200,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_discuss_nonce` (
     `nonce` varchar(255) NOT NULL default '',
     `used` tinyint(4) NOT NULL default '0',
     `secret` varchar(255) NOT NULL default '',
-    PRIMARY KEY (`nonce`)
+    PRIMARY KEY (`nonce`(250))
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_file` (
@@ -209,14 +211,14 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_file` (
     `description` text NOT NULL,
     `downloads` int(4) unsigned NOT NULL default '0',
     PRIMARY KEY  (`id`),
-    UNIQUE KEY `filename` (`filename`)
+    UNIQUE KEY `filename` (`filename`(250))
 ) $tabletype PACK_KEYS=0 AUTO_INCREMENT=1 ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_form` (
-    `name` varchar(64) NOT NULL default '',
+    `name` varchar(255) NOT NULL default '',
     `type` varchar(28) NOT NULL default '',
     `Form` text NOT NULL,
-    PRIMARY KEY (`name`)
+    PRIMARY KEY (`name`(250))
 ) $tabletype PACK_KEYS=1";
 
 // sql:txp_form
@@ -292,9 +294,9 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
 ) $tabletype AUTO_INCREMENT=77 ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_page` (
-    `name` varchar(128) NOT NULL default '',
+    `name` varchar(255) NOT NULL default '',
     `user_html` text NOT NULL,
-    PRIMARY KEY (`name`)
+    PRIMARY KEY (`name`(250))
 ) $tabletype PACK_KEYS=1";
 
 // sql:txp_page
@@ -327,7 +329,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
     `html` varchar(64) NOT NULL default 'text_input',
     `position` smallint(5) unsigned NOT NULL default '0',
     `user_name` varchar(64) NOT NULL default '',
-    UNIQUE KEY `prefs_idx` (`prefs_id`,`name`, `user_name`),
+    UNIQUE KEY `prefs_idx` (`prefs_id`,`name`(185), `user_name`),
     KEY `name` (`name`),
     KEY `user_name` (`user_name`)
 ) $tabletype ";
@@ -422,7 +424,7 @@ $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'version', '1.0rc4', 
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'doctype', 'html5', 0, 'publish', 'doctypes', 190, '')";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_section` (
-    `name` varchar(128) NOT NULL default '',
+    `name` varchar(255) NOT NULL default '',
     `page` varchar(128) NOT NULL default '',
     `css` varchar(128) NOT NULL default '',
     `is_default` int(2) NOT NULL default '0',
@@ -430,7 +432,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_section` (
     `on_frontpage` int(2) NOT NULL default '1',
     `searchable` int(2) NOT NULL default '1',
     `title` varchar(255) NOT NULL default '',
-    PRIMARY KEY (`name`)
+    PRIMARY KEY (`name`(250))
 ) $tabletype PACK_KEYS=1";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('articles', 'archive', 'default', 1, 1, 1, 1, 'Articles')";

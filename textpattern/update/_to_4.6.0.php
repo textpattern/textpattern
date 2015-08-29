@@ -76,6 +76,7 @@ safe_update(
 
 // Usernames can be 64 characters long at most.
 safe_alter('txp_file', "MODIFY author VARCHAR(64) NOT NULL default ''");
+safe_alter('txp_link', "MODIFY author VARCHAR(64) NOT NULL default ''");
 safe_alter('txp_image', "MODIFY author VARCHAR(64) NOT NULL default ''");
 
 // Consistent name length limitations for presentation items.
