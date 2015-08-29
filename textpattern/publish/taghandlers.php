@@ -1564,9 +1564,9 @@ function search_input($atts)
         'match'   => 'exact',
     ), $atts));
 
-    if ($form) {
+    if ($form and !array_diff_key($atts, array('form' => true))) {
         $rs = fetch_form($form);
-
+        
         if ($rs) {
             return parse($rs);
         }
