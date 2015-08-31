@@ -1566,7 +1566,7 @@ function search_input($atts)
 
     if ($form and !array_diff_key($atts, array('form' => true))) {
         $rs = fetch_form($form);
-        
+
         if ($rs) {
             return parse($rs);
         }
