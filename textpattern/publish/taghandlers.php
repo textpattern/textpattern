@@ -1565,7 +1565,7 @@ function search_input($atts)
     ), $atts));
 
     if ($form) {
-        $rs = fetch('form', 'txp_form', 'name', $form);
+        $rs = fetch_form($form);
 
         if ($rs) {
             return parse($rs);
