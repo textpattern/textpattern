@@ -4558,7 +4558,7 @@ function handle_lastmod($unix_ts = null, $exit = true)
 function get_prefs($user = '')
 {
     $out = array();
-    $r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\''.doSlash($txp_user).'\'');
+    $r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\''.doSlash($user).'\'');
 
     if ($r) {
         while ($a = nextRow($r)) {
