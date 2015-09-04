@@ -253,7 +253,7 @@ function tabsort($area, $event)
 
 function areas()
 {
-    global $privs, $plugin_areas;
+    global $plugin_areas;
 
     $areas['start'] = array(
     );
