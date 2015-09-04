@@ -77,7 +77,7 @@ require_once txpath.'/lib/txplib_misc.php';
 require_once txpath.'/lib/admin_config.php';
 require_once txpath.'/lib/IXRClass.php';
 
-if ($connected && safe_query("describe `".PFX."textpattern`")) {
+if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) {
     // TODO: where is dbversion used?
     $dbversion = safe_field('val', 'txp_prefs', "name = 'version'");
 
