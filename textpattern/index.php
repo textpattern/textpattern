@@ -158,8 +158,8 @@ if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) 
     include txpath.'/include/txp_auth.php';
     doAuth();
 
-    // Once more for global plus private preferences.
-    $prefs = get_prefs();
+    // Private preferences.
+    $prefs = get_prefs($txp_user);
     extract($prefs);
 
     /**
