@@ -4541,14 +4541,16 @@ function handle_lastmod($unix_ts = null, $exit = true)
 }
 
 /**
- * Gets all preferences as an array.
+ * Gets preferences as an array.
  *
- * Returns all preference values from the database as an array. Shouldn't be used to
+ * Returns preference values from the database as an array. Shouldn't be used to
  * retrieve selected preferences, see get_pref() instead.
  *
- * If run on an authenticated admin page, the results include current user's
- * private preferences. Any global preference overrides equally named user prefs.
+ * By default only the global preferences are returned. 
+ * If the optional user name parameter is supplied, the private preferences
+ * for that user are returned.
  *
+ * @param   string $user User name.
  * @return  array
  * @package Pref
  * @access  private
