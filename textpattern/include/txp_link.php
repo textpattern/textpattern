@@ -142,7 +142,7 @@ function link_list($message = '')
 
     $sql_from =
         safe_pfx_j('txp_link')."
-        left join ".safe_pfx_j('txp_category')." on txp_category.name = txp_link.category and txp_category.type = 'file'
+        left join ".safe_pfx_j('txp_category')." on txp_category.name = txp_link.category and txp_category.type = 'link'
         left join ".safe_pfx_j('txp_users')." on txp_users.name = txp_link.author";
 
     if ($criteria === 1) {
