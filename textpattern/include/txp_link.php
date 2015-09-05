@@ -112,19 +112,19 @@ function link_list($message = '')
         $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
         $critsql = $verbatim ?
             array(
-                'id'          => "ID in ('".join("','", do_list($crit_escaped))."')",
-                'name'        => "linkname = '$crit_escaped'",
-                'description' => "description = '$crit_escaped'",
-                'url'         => "url = '$crit_escaped'",
-                'category'    => "category = '$crit_escaped'",
-                'author'      => "author = '$crit_escaped'",
+                'id'          => "txp_link.ID in ('".join("','", do_list($crit_escaped))."')",
+                'name'        => "txp_link.linkname = '$crit_escaped'",
+                'description' => "txp_link.description = '$crit_escaped'",
+                'url'         => "txp_link.url = '$crit_escaped'",
+                'category'    => "txp_link.category = '$crit_escaped' or txp_category.title = '$crit_escaped'",
+                'author'      => "txp_link.author = '$crit_escaped' or txp_users.RealName = '$crit_escaped'",
             ) : array(
-                'id'          => "ID in ('".join("','", do_list($crit_escaped))."')",
-                'name'        => "linkname like '%$crit_escaped%'",
-                'description' => "description like '%$crit_escaped%'",
-                'url'         => "url like '%$crit_escaped%'",
-                'category'    => "category like '%$crit_escaped%'",
-                'author'      => "author like '%$crit_escaped%'",
+                'id'          => "txp_link.ID in ('".join("','", do_list($crit_escaped))."')",
+                'name'        => "txp_link.linkname like '%$crit_escaped%'",
+                'description' => "txp_link.description like '%$crit_escaped%'",
+                'url'         => "txp_link.url like '%$crit_escaped%'",
+                'category'    => "txp_link.category like '%$crit_escaped%' or txp_category.title like '%$crit_escaped%'",
+                'author'      => "txp_link.author like '%$crit_escaped%' or txp_users.RealName like '%$crit_escaped%'",
             );
 
         if (array_key_exists($search_method, $critsql)) {
@@ -140,7 +140,16 @@ function link_list($message = '')
 
     $criteria .= callback_event('admin_criteria', 'link_list', 0, $criteria);
 
-    $total = getCount('txp_link', $criteria);
+    $sql_from =
+        safe_pfx_j('txp_link')."
+        left join ".safe_pfx_j('txp_category')." on txp_category.name = txp_link.category and txp_category.type = 'file'
+        left join ".safe_pfx_j('txp_users')." on txp_users.name = txp_link.author";
+
+    if ($criteria === 1) {
+        $total = getCount('txp_link', $criteria);
+    } else {
+        $total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
+    }
 
     echo hed(gTxt('tab_link'), 1, array('class' => 'txp-heading'));
     echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
@@ -168,8 +177,21 @@ function link_list($message = '')
     echo link_search_form($crit, $search_method).'</div>';
 
     $rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_link', "$criteria order by $sort_sql limit $offset, $limit");
+    $rs = safe_query(
+        "select
+            txp_link.id,
+            unix_timestamp(txp_link.date) as uDate,
+            txp_link.category,
+            txp_link.url,
+            txp_link.linkname,
+            txp_link.description,
+            txp_link.author,
+            txp_users.RealName as realname,
+            txp_category.Title as category_title
+        from $sql_from where $criteria order by $sort_sql limit $offset, $limit"
+    );
 
-    if ($rs) {
+    if ($rs and numRows($rs)) {
         $show_authors = !has_single_author('txp_link');
 
         echo
@@ -245,6 +267,10 @@ function link_list($message = '')
             $validator->setConstraints(array(new CategoryConstraint($link_category, array('type' => 'link'))));
             $vc = $validator->validate() ? '' : ' error';
 
+            if ($link_category) {
+                $link_category = span(txpspecialchars($link_category_title), array('title' => $link_category));
+            }
+
             $can_edit = has_privs('link.edit') || ($link_author === $txp_user && has_privs('link.edit.own'));
             $view_url = txpspecialchars($link_url);
 
@@ -262,7 +288,7 @@ function link_list($message = '')
                     txpspecialchars($link_description), '', 'txp-list-col-description links_detail'
                 ).
                 td(
-                    span($link_category, array('title' => fetch_category_title($link_category, 'link'))), '', 'txp-list-col-category category'.$vc
+                    $link_category, '', 'txp-list-col-category category'.$vc
                 ).
                 td(
                     href($view_url, $view_url, ' rel="external" target="_blank"'), '', 'txp-list-col-url'
@@ -272,7 +298,7 @@ function link_list($message = '')
                 ).
                 (
                     $show_authors
-                    ? td(span(txpspecialchars($link_author), array('title' => get_author_name($link_author))), '', 'txp-list-col-author name')
+                    ? td(span(txpspecialchars($link_realname), array('title' => $link_author)), '', 'txp-list-col-author name')
                     : ''
                 )
             );
