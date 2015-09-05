@@ -314,22 +314,22 @@ function author_list($message = '')
 
         if ($sort === '') {
             $sort = get_pref('admin_sort_column', 'name');
+        } else {
+            if (!in_array($sort, array('name', 'RealName', 'email', 'privs', 'last_login'))) {
+                $sort = 'name';
+            }
+
+            set_pref('admin_sort_column', $sort, 'admin', 2, '', 0, PREF_PRIVATE);
         }
 
         if ($dir === '') {
             $dir = get_pref('admin_sort_dir', 'asc');
-        }
-
-        $dir = ($dir == 'desc') ? 'desc' : 'asc';
-
-        if (!in_array($sort, array('name', 'RealName', 'email', 'privs', 'last_login'))) {
-            $sort = 'name';
+        } else {
+            $dir = ($dir == 'desc') ? 'desc' : 'asc';
+            set_pref('admin_sort_dir', $dir, 'admin', 2, '', 0, PREF_PRIVATE);
         }
 
         $sort_sql = $sort.' '.$dir;
-
-        set_pref('admin_sort_column', $sort, 'admin', 2, '', 0, PREF_PRIVATE);
-        set_pref('admin_sort_dir', $dir, 'admin', 2, '', 0, PREF_PRIVATE);
 
         $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 

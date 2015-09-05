@@ -71,12 +71,20 @@ function image_list($message = '')
 
     if ($sort === '') {
         $sort = get_pref('image_sort_column', 'id');
+    } else {
+        if (!in_array($sort, array('name', 'thumbnail', 'category', 'date', 'author'))) {
+            $sort = 'id';
+        }
+
+        set_pref('image_sort_column', $sort, 'image', 2, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('image_sort_dir', 'desc');
+    } else {
+        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        set_pref('image_sort_dir', $dir, 'image', 2, '', 0, PREF_PRIVATE);
     }
-    $dir = ($dir == 'asc') ? 'asc' : 'desc';
 
     echo hed(gTxt('tab_image'), 1, array('class' => 'txp-heading'));
     echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
@@ -112,9 +120,6 @@ function image_list($message = '')
             $sort_sql = 'id '.$dir;
             break;
     }
-
-    set_pref('image_sort_column', $sort, 'image', 2, '', 0, PREF_PRIVATE);
-    set_pref('image_sort_dir', $dir, 'image', 2, '', 0, PREF_PRIVATE);
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 

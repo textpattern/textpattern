@@ -63,12 +63,20 @@ function link_list($message = '')
 
     if ($sort === '') {
         $sort = get_pref('link_sort_column', 'name');
+    } else {
+        if (!in_array($sort, array('id', 'description', 'url', 'category', 'date', 'author'))) {
+            $sort = 'name';
+        }
+
+        set_pref('link_sort_column', $sort, 'link', 2, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('link_sort_dir', 'asc');
+    } else {
+        $dir = ($dir == 'desc') ? 'desc' : 'asc';
+        set_pref('link_sort_dir', $dir, 'link', 2, '', 0, PREF_PRIVATE);
     }
-    $dir = ($dir == 'desc') ? 'desc' : 'asc';
 
     switch ($sort) {
         case 'id':
@@ -94,9 +102,6 @@ function link_list($message = '')
             $sort_sql = 'linksort '.$dir.', id asc';
             break;
     }
-
-    set_pref('link_sort_column', $sort, 'link', 2, '', 0, PREF_PRIVATE);
-    set_pref('link_sort_dir', $dir, 'link', 2, '', 0, PREF_PRIVATE);
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
