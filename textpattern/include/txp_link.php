@@ -80,26 +80,26 @@ function link_list($message = '')
 
     switch ($sort) {
         case 'id':
-            $sort_sql = 'id '.$dir;
+            $sort_sql = 'txp_link.id '.$dir;
             break;
         case 'description':
-            $sort_sql = 'description '.$dir.', id asc';
+            $sort_sql = 'txp_link.description '.$dir.', txp_link.id asc';
             break;
         case 'url':
-            $sort_sql = 'url '.$dir.', id asc';
+            $sort_sql = 'txp_link.url '.$dir.', txp_link.id asc';
             break;
         case 'category':
-            $sort_sql = 'category '.$dir.', id asc';
+            $sort_sql = 'txp_category.title '.$dir.', txp_link.id asc';
             break;
         case 'date':
-            $sort_sql = 'date '.$dir.', id asc';
+            $sort_sql = 'txp_link.date '.$dir.', txp_link.id asc';
             break;
         case 'author':
-            $sort_sql = 'author '.$dir.', id asc';
+            $sort_sql = 'txp_users.RealName '.$dir.', txp_link.id asc';
             break;
         default:
             $sort = 'name';
-            $sort_sql = 'linksort '.$dir.', id asc';
+            $sort_sql = 'txp_link.linksort '.$dir.', txp_link.id asc';
             break;
     }
 
@@ -176,7 +176,6 @@ function link_list($message = '')
 
     echo link_search_form($crit, $search_method).'</div>';
 
-    $rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_link', "$criteria order by $sort_sql limit $offset, $limit");
     $rs = safe_query(
         "select
             txp_link.id,
