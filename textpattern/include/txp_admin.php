@@ -382,7 +382,7 @@ function author_list($message = '')
 
         list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-        $use_multi_edit = (has_privs('admin.edit') && (safe_count('txp_users', '1=1') > 1));
+        $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count('txp_users', '1=1') > 1));
 
         echo author_search_form($crit, $search_method).'</div>';
 
