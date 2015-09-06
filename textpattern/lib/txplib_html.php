@@ -1077,7 +1077,7 @@ function htmlPre($item, $atts = '')
 function comment($item)
 {
     // Note that the replacement string is two &#8208 characters
-    return '<!-- '.str_replace('--', '‐‐', $item).' -->';
+    return '<!-- '.str_replace('--', '- - ', $item).' -->';
 }
 
 /**
