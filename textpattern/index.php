@@ -103,12 +103,12 @@ trace_add('[PHP Include end]');
 
 set_error_handler('adminErrorHandler', error_reporting());
 
-if ($connected && safe_query("describe `".PFX."textpattern`")) {
-    $dbversion = safe_field('val', 'txp_prefs', "name = 'version'");
-
+if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) {
     // Global site preferences.
     $prefs = get_prefs();
     extract($prefs);
+
+    $dbversion = $version;
 
     if (empty($siteurl)) {
         $httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);
@@ -158,8 +158,8 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
     include txpath.'/include/txp_auth.php';
     doAuth();
 
-    // Once more for global plus private preferences.
-    $prefs = get_prefs();
+    // Add private preferences.
+    $prefs = array_merge(get_prefs($txp_user), $prefs);
     extract($prefs);
 
     /**
