@@ -840,6 +840,10 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
     $file = $file['tmp_name'];
 
     if ($uploaded) {
+        if ($error !== UPLOAD_ERR_OK) {
+            return upload_get_errormsg($error);
+        }
+
         $file = get_uploaded_file($file);
 
         if (get_pref('file_max_upload_size') < filesize($file)) {
