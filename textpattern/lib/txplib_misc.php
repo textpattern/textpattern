@@ -3240,7 +3240,7 @@ function get_filenames()
     $cwd = getcwd();
 
     if (chdir($file_base_path)) {
-        $directory = glob('*.*', GLOB_NOSORT);
+        $directory = glob('*', GLOB_NOSORT);
 
         if ($directory) {
             foreach ($directory as $filename) {
