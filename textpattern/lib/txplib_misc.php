@@ -840,6 +840,10 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
     $file = $file['tmp_name'];
 
     if ($uploaded) {
+        if ($error !== UPLOAD_ERR_OK) {
+            return upload_get_errormsg($error);
+        }
+
         $file = get_uploaded_file($file);
 
         if (get_pref('file_max_upload_size') < filesize($file)) {
@@ -3236,7 +3240,7 @@ function get_filenames()
     $cwd = getcwd();
 
     if (chdir($file_base_path)) {
-        $directory = glob('*.*', GLOB_NOSORT);
+        $directory = glob('*', GLOB_NOSORT);
 
         if ($directory) {
             foreach ($directory as $filename) {
@@ -3647,8 +3651,14 @@ function get_author_email($name)
 
 function has_single_author($table, $col = 'author')
 {
-    return (safe_field('COUNT(name)', 'txp_users', '1=1') <= 1) &&
-        (safe_field('COUNT(DISTINCT('.doSlash($col).'))', doSlash($table), '1=1') <= 1);
+    static $cache = array();
+
+    if (!isset($cache[$table][$col])) {
+        $cache[$table][$col] = (safe_field('COUNT(name)', 'txp_users', '1=1') <= 1) &&
+            (safe_field('COUNT(DISTINCT('.doSlash($col).'))', doSlash($table), '1=1') <= 1);
+    }
+
+    return $cache[$table][$col];
 }
 
 /**
@@ -4541,38 +4551,26 @@ function handle_lastmod($unix_ts = null, $exit = true)
 }
 
 /**
- * Gets all preferences as an array.
+ * Gets preferences as an array.
  *
- * Returns all preference values from the database as an array. Shouldn't be used to
+ * Returns preference values from the database as an array. Shouldn't be used to
  * retrieve selected preferences, see get_pref() instead.
  *
- * If run on an authenticated admin page, the results include current user's
- * private preferences. Any global preference overrides equally named user prefs.
+ * By default only the global preferences are returned. 
+ * If the optional user name parameter is supplied, the private preferences
+ * for that user are returned.
  *
+ * @param   string $user User name.
  * @return  array
  * @package Pref
  * @access  private
  * @see     get_pref()
  */
 
-function get_prefs()
+function get_prefs($user = '')
 {
-    global $txp_user;
     $out = array();
-
-    // Get current user's private prefs.
-    if ($txp_user) {
-        $r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\''.doSlash($txp_user).'\'');
-
-        if ($r) {
-            while ($a = nextRow($r)) {
-                $out[$a['name']] = $a['val'];
-            }
-        }
-    }
-
-    // Get global prefs, eventually override equally named user prefs.
-    $r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\'\'');
+    $r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\''.doSlash($user).'\'');
 
     if ($r) {
         while ($a = nextRow($r)) {

@@ -122,13 +122,20 @@ function discuss_list($message = '')
 
     if ($sort === '') {
         $sort = get_pref('discuss_sort_column', 'date');
+    } else {
+        if (!in_array($sort, array('id', 'ip', 'name', 'email', 'website', 'message', 'status', 'parent'))) {
+            $sort = 'date';
+        }
+
+        set_pref('discuss_sort_column', $sort, 'discuss', 2, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('discuss_sort_dir', 'desc');
+    } else {
+        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        set_pref('discuss_sort_dir', $dir, 'discuss', 2, '', 0, PREF_PRIVATE);
     }
-
-    $dir = ($dir == 'asc') ? 'asc' : 'desc';
 
     switch ($sort) {
         case 'id':
@@ -164,9 +171,6 @@ function discuss_list($message = '')
     if ($sort != 'date') {
         $sort_sql .= ', txp_discuss.posted asc';
     }
-
-    set_pref('discuss_sort_column', $sort, 'discuss', 2, '', 0, PREF_PRIVATE);
-    set_pref('discuss_sort_dir', $dir, 'discuss', 2, '', 0, PREF_PRIVATE);
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 

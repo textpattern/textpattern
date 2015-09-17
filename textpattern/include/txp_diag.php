@@ -170,7 +170,7 @@ function diag_msg_wrap($msg, $type = 'error')
 
 function doDiagnostics()
 {
-    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB;
+    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB, $txp_using_svn;
     extract(get_prefs());
 
     $urlparts = parse_url(hu);
@@ -183,21 +183,23 @@ function doDiagnostics()
     // not boolean.
     $is_register_globals = ((strcasecmp(ini_get('register_globals'), 'on') === 0) or (ini_get('register_globals') === '1'));
 
-    // Check for Textpattern updates, at most once every 24 hours.
-    $now = time();
-    $updateInfo = unserialize(get_pref('last_update_check', ''));
-
-    if (!$updateInfo || ($now > ($updateInfo['when'] + (60 * 60 * 24)))) {
-        $updates = checkUpdates();
-        $updateInfo['msg'] = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
-        $updateInfo['when'] = $now;
-        set_pref('last_update_check', serialize($updateInfo), 'publish', PREF_HIDDEN, 'text_input');
-    }
-
     $fail = array();
+    $now = time();
 
-    if (!empty($updateInfo['msg'])) {
-        $fail['textpattern_version_update'] = diag_msg_wrap($updateInfo['msg'], 'information');
+    if (!$txp_using_svn) {
+        // Check for Textpattern updates, at most once every 24 hours.
+        $updateInfo = unserialize(get_pref('last_update_check', ''));
+
+        if (!$updateInfo || ($now > ($updateInfo['when'] + (60 * 60 * 24)))) {
+            $updates = checkUpdates();
+            $updateInfo['msg'] = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
+            $updateInfo['when'] = $now;
+            set_pref('last_update_check', serialize($updateInfo), 'publish', PREF_HIDDEN, 'text_input');
+        }
+
+        if (!empty($updateInfo['msg'])) {
+            $fail['textpattern_version_update'] = diag_msg_wrap($updateInfo['msg'], 'information');
+        }
     }
 
     if (!is_callable('version_compare') || version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<')) {
@@ -291,7 +293,7 @@ function doDiagnostics()
     }
 
     // Files that don't match their checksums.
-    if ($modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
+    if (!$txp_using_svn and $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
         $fail['modified_files'] = diag_msg_wrap(gTxt('modified_files').cs.n.t.join(', '.n.t, $modified_files), 'warning');
     }
 

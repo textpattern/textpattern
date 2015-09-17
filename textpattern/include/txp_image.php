@@ -71,12 +71,20 @@ function image_list($message = '')
 
     if ($sort === '') {
         $sort = get_pref('image_sort_column', 'id');
+    } else {
+        if (!in_array($sort, array('name', 'thumbnail', 'category', 'date', 'author'))) {
+            $sort = 'id';
+        }
+
+        set_pref('image_sort_column', $sort, 'image', 2, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('image_sort_dir', 'desc');
+    } else {
+        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        set_pref('image_sort_dir', $dir, 'image', 2, '', 0, PREF_PRIVATE);
     }
-    $dir = ($dir == 'asc') ? 'asc' : 'desc';
 
     echo n.tag(
         hed(gTxt('tab_image'), 1, array('class' => 'txp-heading')),
@@ -98,28 +106,25 @@ function image_list($message = '')
 
     switch ($sort) {
         case 'name':
-            $sort_sql = 'name '.$dir;
+            $sort_sql = 'txp_image.name '.$dir;
             break;
         case 'thumbnail':
-            $sort_sql = 'thumbnail '.$dir.', id asc';
+            $sort_sql = 'txp_image.thumbnail '.$dir.', txp_image.id asc';
             break;
         case 'category':
-            $sort_sql = 'category '.$dir.', id asc';
+            $sort_sql = 'txp_category.title '.$dir.', txp_image.id asc';
             break;
         case 'date':
-            $sort_sql = 'date '.$dir.', id asc';
+            $sort_sql = 'txp_image.date '.$dir.', txp_image.id asc';
             break;
         case 'author':
-            $sort_sql = 'author '.$dir.', id asc';
+            $sort_sql = 'txp_users.RealName '.$dir.', txp_image.id asc';
             break;
         default:
             $sort = 'id';
-            $sort_sql = 'id '.$dir;
+            $sort_sql = 'txp_image.id '.$dir;
             break;
     }
-
-    set_pref('image_sort_column', $sort, 'image', 2, '', 0, PREF_PRIVATE);
-    set_pref('image_sort_dir', $dir, 'image', 2, '', 0, PREF_PRIVATE);
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
@@ -180,7 +185,7 @@ function image_list($message = '')
         left join ".safe_pfx_j('txp_users')." on txp_users.name = txp_image.author";
 
     if ($criteria === 1) {
-        $total = safe_count('txp_image', "$criteria");
+        $total = getCount('txp_image', $criteria);
     } else {
         $total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
     }
@@ -212,14 +217,13 @@ function image_list($message = '')
             txp_image.h,
             txp_image.alt,
             txp_image.caption,
-            txp_image.date,
+            unix_timestamp(txp_image.date) as uDate,
             txp_image.author,
             txp_image.thumbnail,
             txp_image.thumb_w,
             txp_image.thumb_h,
             txp_users.RealName as realname,
-            txp_category.Title as category_title,
-            unix_timestamp(txp_image.date) as uDate
+            txp_category.Title as category_title
         from $sql_from where $criteria order by $sort_sql limit $offset, $limit"
     );
 
@@ -326,9 +330,9 @@ function image_list($message = '')
             $validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'image'))));
             $vc = $validator->validate() ? '' : ' error';
 
-            $category = ($category)
-                ? span($category, array('title' => fetch_category_title($category, 'image')))
-                : '';
+            if ($category) {
+                $category = span(txpspecialchars($category_title), array('title' => $category));
+            }
 
             $can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
 
@@ -360,7 +364,7 @@ function image_list($message = '')
                 ).
                 (
                     $show_authors
-                    ? td(span(txpspecialchars($author), array('title' => get_author_name($author))), '', 'txp-list-col-author name')
+                    ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name')
                     : ''
                 )
             );

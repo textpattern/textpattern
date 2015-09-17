@@ -74,13 +74,20 @@ function log_list($message = '')
 
     if ($sort === '') {
         $sort = get_pref('log_sort_column', 'time');
+    } else {
+        if (!in_array($sort, array('ip', 'host', 'page', 'refer', 'method', 'status'))) {
+            $sort = 'time';
+        }
+
+        set_pref('log_sort_column', $sort, 'log', 2, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('log_sort_dir', 'desc');
+    } else {
+        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        set_pref('log_sort_dir', $dir, 'log', 2, '', 0, PREF_PRIVATE);
     }
-
-    $dir = ($dir == 'asc') ? 'asc' : 'desc';
 
     $expire_logs_after = assert_int($expire_logs_after);
 
@@ -110,9 +117,6 @@ function log_list($message = '')
             $sort_sql = 'time '.$dir;
             break;
     }
-
-    set_pref('log_sort_column', $sort, 'log', 2, '', 0, PREF_PRIVATE);
-    set_pref('log_sort_dir', $dir, 'log', 2, '', 0, PREF_PRIVATE);
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 

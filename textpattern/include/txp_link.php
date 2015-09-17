@@ -63,40 +63,45 @@ function link_list($message = '')
 
     if ($sort === '') {
         $sort = get_pref('link_sort_column', 'name');
+    } else {
+        if (!in_array($sort, array('id', 'description', 'url', 'category', 'date', 'author'))) {
+            $sort = 'name';
+        }
+
+        set_pref('link_sort_column', $sort, 'link', 2, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('link_sort_dir', 'asc');
+    } else {
+        $dir = ($dir == 'desc') ? 'desc' : 'asc';
+        set_pref('link_sort_dir', $dir, 'link', 2, '', 0, PREF_PRIVATE);
     }
-    $dir = ($dir == 'desc') ? 'desc' : 'asc';
 
     switch ($sort) {
         case 'id':
-            $sort_sql = 'id '.$dir;
+            $sort_sql = 'txp_link.id '.$dir;
             break;
         case 'description':
-            $sort_sql = 'description '.$dir.', id asc';
+            $sort_sql = 'txp_link.description '.$dir.', txp_link.id asc';
             break;
         case 'url':
-            $sort_sql = 'url '.$dir.', id asc';
+            $sort_sql = 'txp_link.url '.$dir.', txp_link.id asc';
             break;
         case 'category':
-            $sort_sql = 'category '.$dir.', id asc';
+            $sort_sql = 'txp_category.title '.$dir.', txp_link.id asc';
             break;
         case 'date':
-            $sort_sql = 'date '.$dir.', id asc';
+            $sort_sql = 'txp_link.date '.$dir.', txp_link.id asc';
             break;
         case 'author':
-            $sort_sql = 'author '.$dir.', id asc';
+            $sort_sql = 'txp_users.RealName '.$dir.', txp_link.id asc';
             break;
         default:
             $sort = 'name';
-            $sort_sql = 'linksort '.$dir.', id asc';
+            $sort_sql = 'txp_link.linksort '.$dir.', txp_link.id asc';
             break;
     }
-
-    set_pref('link_sort_column', $sort, 'link', 2, '', 0, PREF_PRIVATE);
-    set_pref('link_sort_dir', $dir, 'link', 2, '', 0, PREF_PRIVATE);
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
@@ -189,16 +194,14 @@ function link_list($message = '')
     $rs = safe_query(
         "select
             txp_link.id,
-            txp_link.linkname,
-            txp_link.url,
+            unix_timestamp(txp_link.date) as uDate,
             txp_link.category,
+            txp_link.url,
+            txp_link.linkname,
             txp_link.description,
-            txp_link.linksort,
-            txp_link.date,
             txp_link.author,
             txp_users.RealName as realname,
-            txp_category.Title as category_title,
-            unix_timestamp(txp_link.date) as uDate
+            txp_category.Title as category_title
         from $sql_from where $criteria order by $sort_sql limit $offset, $limit"
     );
 
@@ -275,6 +278,10 @@ function link_list($message = '')
             $validator->setConstraints(array(new CategoryConstraint($link_category, array('type' => 'link'))));
             $vc = $validator->validate() ? '' : ' error';
 
+            if ($link_category) {
+                $link_category = span(txpspecialchars($link_category_title), array('title' => $link_category));
+            }
+
             $can_edit = has_privs('link.edit') || ($link_author === $txp_user && has_privs('link.edit.own'));
             $view_url = txpspecialchars($link_url);
 
@@ -292,7 +299,7 @@ function link_list($message = '')
                     txpspecialchars($link_description), '', 'txp-list-col-description links_detail'
                 ).
                 td(
-                    span($link_category, array('title' => fetch_category_title($link_category, 'link'))), '', 'txp-list-col-category category'.$vc
+                    $link_category, '', 'txp-list-col-category category'.$vc
                 ).
                 td(
                     href($view_url, $view_url, ' rel="external" target="_blank"'), '', 'txp-list-col-url'
@@ -302,7 +309,7 @@ function link_list($message = '')
                 ).
                 (
                     $show_authors
-                    ? td(span(txpspecialchars($link_author), array('title' => get_author_name($link_author))), '', 'txp-list-col-author name')
+                    ? td(span(txpspecialchars($link_realname), array('title' => $link_author)), '', 'txp-list-col-author name')
                     : ''
                 )
             );

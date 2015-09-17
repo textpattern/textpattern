@@ -74,22 +74,22 @@ function plugin_list($message = '')
 
     if ($sort === '') {
         $sort = get_pref('plugin_sort_column', 'name');
+    } else {
+        if (!in_array($sort, array('name', 'status', 'author', 'version', 'modified', 'load_order'))) {
+            $sort = 'name';
+        }
+
+        set_pref('plugin_sort_column', $sort, 'plugin', 2, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('plugin_sort_dir', 'asc');
-    }
-
-    $dir = ($dir == 'desc') ? 'desc' : 'asc';
-
-    if (!in_array($sort, array('name', 'status', 'author', 'version', 'modified', 'load_order'))) {
-        $sort = 'name';
+    } else {
+        $dir = ($dir == 'desc') ? 'desc' : 'asc';
+        set_pref('plugin_sort_dir', $dir, 'plugin', 2, '', 0, PREF_PRIVATE);
     }
 
     $sort_sql = $sort.' '.$dir;
-
-    set_pref('plugin_sort_column', $sort, 'plugin', 2, '', 0, PREF_PRIVATE);
-    set_pref('plugin_sort_dir', $dir, 'plugin', 2, '', 0, PREF_PRIVATE);
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
