@@ -63,7 +63,7 @@ summary {
 /* Float clearing
    ========================================================================== */
 /**
- * Clearfix using the 'A new micro cleafix hack' method.
+ * Clearfix using the 'A new micro clearfix hack' method.
  *
  * More info: http://nicolasgallagher.com/micro-clearfix-hack/
  */
@@ -375,7 +375,7 @@ summary {
  * 2. Interrupt the decoration line to let the shape of the text show through
  *    in supported browsers.
  * 3. Specify link colour.
- * 4. Remove the gray background color from active links in IE 10.
+ * 4. Remove the grey background colour from active links in IE 10.
  * 5. Expanded CSS level 3 `text-decoration` property in supported browsers,
  *    older browsers will fallback to legacy `text-decoration` property.
  */
@@ -3089,7 +3089,7 @@ div.multi-edit {
 /**
  * TODO: Clearfix form paragraphs in panes.
  *
- * Adds to cleafix rules in Sass '_base.scss' file via `@extend`.
+ * Adds to clearfix rules in Sass '_base.scss' file via `@extend`.
  */
 /**
  * TODO: Label/value inline two-column layouts within panes.
@@ -3142,7 +3142,7 @@ div.multi-edit {
  *     <span class="jquery-ui-buttonset">
  *         <input class="radio active" type="radio" value="0" checked="checked">
  *         <label>No</label>
- *         <input class="radio" name="auto_dst" type="radio" value="1">
+ *         <input class="radio" type="radio" value="1">
  *         <label>Yes</label>
  *     </span>
  * </span>
