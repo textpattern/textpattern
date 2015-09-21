@@ -5113,7 +5113,7 @@ function rsd()
 
 function variable($atts, $thing = null)
 {
-    global $variable;
+    global $variable, $trace;
 
     extract(lAtts(array(
         'name'  => '',
@@ -5130,7 +5130,7 @@ function variable($atts, $thing = null)
         if (isset($variable[$name])) {
             return $variable[$name];
         } else {
-            trace_add("[<txp:variable>: Unknown variable '$name']");
+            $trace->log("[<txp:variable>: Unknown variable '$name']");
 
             return '';
         }

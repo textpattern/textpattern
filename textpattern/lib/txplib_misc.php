@@ -1472,7 +1472,7 @@ function pluginErrorHandler($errno, $errstr, $errfile, $errline)
 
 function tagErrorHandler($errno, $errstr, $errfile, $errline)
 {
-    global $production_status, $txp_current_tag, $txp_current_form, $pretext;
+    global $production_status, $txp_current_tag, $txp_current_form, $pretext, $trace;
 
     $error = array();
 
@@ -1523,8 +1523,7 @@ function tagErrorHandler($errno, $errstr, $errfile, $errline)
     if ($production_status == 'debug') {
         print "\n<pre class=\"backtrace\" dir=\"ltr\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
 
-        $trace_msg = gTxt('tag_error').' '.$txp_current_tag.' -> '.$error[$errno].': '.$errstr.' '.$locus;
-        trace_add($trace_msg);
+        $trace->log(gTxt('tag_error').' '.$txp_current_tag.' -> '.$error[$errno].': '.$errstr.' '.$locus);
     }
 }
 
@@ -1704,12 +1703,12 @@ function publicErrorHandler($errno, $errstr, $errfile, $errline)
 
 function load_plugins($type = false)
 {
-    global $prefs, $plugins, $plugins_ver, $app_mode;
+    global $prefs, $plugins, $plugins_ver, $app_mode, $trace;
 
     if (!is_array($plugins)) {
         $plugins = array();
     }
-    trace_add('[Loading plugins]', 1);
+    $trace->start('[Loading plugins]');
 
     if (!empty($prefs['plugin_cache_dir'])) {
         $dir = rtrim($prefs['plugin_cache_dir'], '/').'/';
@@ -1725,8 +1724,9 @@ function load_plugins($type = false)
             natsort($files);
 
             foreach ($files as $f) {
-                trace_add("[Loading plugin from cache dir: '$f']");
+                $trace->start("[Loading plugin from cache dir: '$f']");
                 load_plugin(basename($f, '.php'));
+                $trace->stop();
             }
         }
     }
@@ -1756,7 +1756,7 @@ function load_plugins($type = false)
         }
         restore_error_handler();
     }
-    trace_add('', -1);
+    $trace->stop();
 }
 
 /**
@@ -1837,13 +1837,13 @@ function register_page_extension($func, $event, $step = '', $top = 0)
 
 function callback_event($event, $step = '', $pre = 0)
 {
-    global $plugin_callback, $production_status;
+    global $plugin_callback, $production_status, $trace;
 
     if (!is_array($plugin_callback)) {
         return '';
     }
 
-    trace_add("[Callback_event: '$event', step='$step', pre='$pre']");
+    $trace->start("[Callback_event: '$event', step='$step', pre='$pre']");
 
     // Any payload parameters?
     $argv = func_get_args();
@@ -1853,10 +1853,10 @@ function callback_event($event, $step = '', $pre = 0)
         if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
             if (is_callable($c['function'])) {
                 if (is_string($c['function'])) {
-                    trace_add("\t[Call function: '{$c['function']}'".(empty($argv) ? '' : ", argv='".serialize($argv)."'") . "]");
+                    $trace->start("\t[Call function: '{$c['function']}'".(empty($argv) ? '' : ", argv='".serialize($argv)."'") . "]");
                 } elseif (@is_object($c['function'][0])) {
                     $objname = @get_class($c['function'][0]);
-                    trace_add("\t[Call object: '{$objname}']");
+                    $trace->start("\t[Call object: '{$objname}']");
                 }
 
                 $return_value = call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
@@ -1872,11 +1872,15 @@ function callback_event($event, $step = '', $pre = 0)
                 } else {
                     $out = $return_value;
                 }
+
+                $trace->stop();
             } elseif ($production_status == 'debug') {
                 trigger_error(gTxt('unknown_callback_function', array('{function}' => callback_tostring($c['function']))), E_USER_WARNING);
             }
         }
     }
+
+    $trace->stop();
 
     if (isset($out)) {
         return $out;
@@ -2482,6 +2486,8 @@ function updateSitePath($here)
 
 function splat($text)
 {
+    global $trace;
+
     $atts  = array();
 
     if (preg_match_all('@(\w+)\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+))@s', $text, $match, PREG_SET_ORDER)) {
@@ -2494,9 +2500,9 @@ function splat($text)
                     $val = str_replace("''", "'", $m[3]);
 
                     if (strpos($m[3], '<txp:') !== false) {
-                        trace_add("[attribute: '{$m[1]}']");
+                        $trace->start("[attribute: '{$m[1]}']");
                         $val = parse($val);
-                        trace_add('[/attribute]');
+                        $trace->stop('[/attribute]');
                     }
 
                     break;
@@ -4132,9 +4138,9 @@ function txp_hash_password($password)
 
 function EvalElse($thing, $condition)
 {
-    global $txp_current_tag;
+    global $txp_current_tag, $trace;
 
-    trace_add("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
+    $trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
 
     $els = strpos($thing, '<txp:else');
 
@@ -4198,6 +4204,8 @@ function EvalElse($thing, $condition)
 
 function fetch_form($name)
 {
+    global $trace;
+
     static $forms = array();
 
     $name = (string) $name;
@@ -4218,7 +4226,7 @@ function fetch_form($name)
         $forms[$name] = $form;
     }
 
-    trace_add("[Form: '$name']");
+    $trace->log("[Form: '$name']");
 
     return $forms[$name];
 }
@@ -4233,7 +4241,7 @@ function fetch_form($name)
 
 function parse_form($name)
 {
-    global $txp_current_form;
+    global $txp_current_form, $trace;
     static $stack = array();
 
     $out = '';
@@ -4249,7 +4257,7 @@ function parse_form($name)
 
         $old_form = $txp_current_form;
         $txp_current_form = $stack[] = $name;
-        trace_add("[Nesting forms: '".join("' / '", $stack)."']");
+        $trace->log("[Nesting forms: '".join("' / '", $stack)."']");
         $out = parse($f);
         $txp_current_form = $old_form;
         array_pop($stack);
@@ -4275,6 +4283,8 @@ function parse_form($name)
 
 function fetch_page($name)
 {
+    global $trace;
+
     if (has_handler('page.fetch')) {
         $page = callback_event('page.fetch', '', false, compact('name'));
     } else {
@@ -4285,7 +4295,7 @@ function fetch_page($name)
         return false;
     }
 
-    trace_add("[Page: '$name']");
+    $trace->log("[Page: '$name']");
 
     return $page;
 }
@@ -4303,7 +4313,7 @@ function fetch_page($name)
 
 function parse_page($name)
 {
-    global $pretext;
+    global $pretext, $trace;
 
     $page = fetch_page($name);
 
@@ -4311,7 +4321,7 @@ function parse_page($name)
         $pretext['secondpass'] = false;
         $page = parse($page);
         $pretext['secondpass'] = true;
-        trace_add('[ ~~~ secondpass ~~~ ]');
+        $trace->log('[ ~~~ secondpass ~~~ ]');
         $page = parse($page);
     }
 
@@ -5574,8 +5584,8 @@ function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
             $diff = ($time_now - $time_last) * 1000;
 
             $memory = sprintf('%7s |%7s |%8s |',
-                $memory_now,
-                ($memory_now > $memory_last) ? $memory_now - $memory_last : '',
+                $memory_now, ceil(memory_get_peak_usage()/1024),
+//                ($memory_now > $memory_last) ? $memory_now - $memory_last : '',
                 ($diff > 0.2 and $diff < 900) ? number_format($diff, 2, '.', '') : ''
             );
 

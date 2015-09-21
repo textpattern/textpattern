@@ -368,7 +368,7 @@ function safe_escape_like($in = '')
 
 function safe_query($q = '', $debug = false, $unbuf = false)
 {
-    global $DB, $txpcfg, $txptrace_qcount, $txptrace_qtime, $production_status;
+    global $DB, $txpcfg, $trace, $production_status;
     $method = ($unbuf) ? MYSQLI_USE_RESULT : MYSQLI_STORE_RESULT;
 
     if (!$q) {
@@ -379,17 +379,13 @@ function safe_query($q = '', $debug = false, $unbuf = false)
         dmp($q);
     }
 
-    $start = getmicrotime();
+    $trace->start("[SQL: $q ]", true);
     $result = mysqli_query($DB->link, $q, $method);
-    $time = getmicrotime() - $start;
-    @$txptrace_qtime += $time;
-    @$txptrace_qcount++;
+    $trace->stop();
 
     if ($result === false) {
         trigger_error(mysqli_error($DB->link), E_USER_ERROR);
     }
-
-    trace_add('[SQL ('.number_format($time, 6, '.', '')."): $q]");
 
     if (!$result) {
         return false;

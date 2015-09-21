@@ -80,10 +80,10 @@ header("Content-type: text/html; charset=utf-8");
 
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
+include txpath.'/lib/class.trace.php';
+$trace = new Trace();
 include_once txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
-
-trace_log(TEXTPATTERN_TRACE_START);
 
 include txpath.'/vendors/Textpattern/Loader.php';
 
@@ -93,13 +93,14 @@ $loader->register();
 $loader = new Textpattern_Loader(txpath.'/lib');
 $loader->register();
 
+$trace->start('[Static PHP includes]');
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/txplib_forms.php';
 include txpath.'/lib/txplib_html.php';
 include txpath.'/lib/txplib_theme.php';
 include txpath.'/lib/txplib_validator.php';
 include txpath.'/lib/admin_config.php';
-trace_add('[PHP Include end]');
+$trace->stop();
 
 set_error_handler('adminErrorHandler', error_reporting());
 
@@ -219,7 +220,8 @@ if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) 
     end_page();
 
     if ($app_mode != 'async') {
-        trace_log(TEXTPATTERN_TRACE_DISPLAY);
+        echo $trace->summary();
+        echo $trace->result();
     } else {
         $trace = trace_log(TEXTPATTERN_TRACE_RESULT);
         header('X-Textpattern-Runtime: ' . @$trace['microdiff']);

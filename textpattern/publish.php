@@ -39,6 +39,7 @@ $loader->register();
 $loader = new Textpattern_Loader(txpath.'/lib');
 $loader->register();
 
+$trace->start('[static PHP includes]');
 include_once txpath.'/lib/txplib_publish.php';
 include_once txpath.'/lib/txplib_db.php';
 include_once txpath.'/lib/txplib_html.php';
@@ -48,7 +49,7 @@ include_once txpath.'/lib/admin_config.php';
 include_once txpath.'/publish/taghandlers.php';
 include_once txpath.'/publish/log.php';
 include_once txpath.'/publish/comment.php';
-trace_add('[PHP Include end]');
+$trace->stop();
 
 set_error_handler('publicErrorHandler', error_reporting());
 
@@ -67,6 +68,11 @@ bombShelter();
 
 // Set a higher error level during initialisation.
 set_error_level(@$production_status == 'live' ? 'testing' : @$production_status);
+
+// disable tracing in live environment.
+if ($production_status == 'live') {
+    Trace::setQuiet(true);
+}
 
 // Use the current URL path if $siteurl is unknown.
 if (empty($siteurl)) {
