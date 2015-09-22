@@ -80,9 +80,10 @@ if (!isset($txpcfg['table_prefix'])) {
     ob_end_clean();
 }
 
+include txpath.'/lib/class.trace.php';
+$trace = new Trace();
 include txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
-$trace = new Trace();
 
 $nolog = 1;
 

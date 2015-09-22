@@ -82,6 +82,7 @@ error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
 include txpath.'/lib/class.trace.php';
 $trace = new Trace();
+$trace->start('[PHP includes]');
 include_once txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
 
@@ -93,7 +94,6 @@ $loader->register();
 $loader = new Textpattern_Loader(txpath.'/lib');
 $loader->register();
 
-$trace->start('[Static PHP includes]');
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/txplib_forms.php';
 include txpath.'/lib/txplib_html.php';

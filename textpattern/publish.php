@@ -39,7 +39,6 @@ $loader->register();
 $loader = new Textpattern_Loader(txpath.'/lib');
 $loader->register();
 
-$trace->start('[static PHP includes]');
 include_once txpath.'/lib/txplib_publish.php';
 include_once txpath.'/lib/txplib_db.php';
 include_once txpath.'/lib/txplib_html.php';

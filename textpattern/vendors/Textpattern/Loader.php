@@ -145,13 +145,16 @@ class Textpattern_Loader
         $file .= str_replace('_', '/', $class).$this->extension;
 
         if (is_readable($file)) {
-            $trace->log("\t[Load: '".str_replace(txpath.'/', '', $file)."']");
+            $trace->start("[Load: '".str_replace(txpath.'/', '', $file)."']");
             require_once $file;
 
             if (class_exists($request, false)) {
-                $trace->log("\t\t[Class loaded: '$class']");
+                $trace->log("[Class loaded: '$class']");
+                $trace->stop();
                 return true;
             }
+
+            $trace->stop();
         }
 
         return false;
