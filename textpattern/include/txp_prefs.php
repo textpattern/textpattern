@@ -185,6 +185,8 @@ function prefs_list($message = '')
 
     $last_event = null;
     $out = array();
+    $build = array();
+    $groupOut = array();
 
     if (numRows($rs)) {
         while ($a = nextRow($rs)) {
@@ -194,7 +196,8 @@ function prefs_list($message = '')
 
             if ($a['event'] !== $last_event) {
                 if ($last_event !== null) {
-                    echo wrapRegion('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
+                    $build[] = wrapGroup('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, 'txp-prefs-group', 'prefs_'.$last_event);
+                    $groupOut[] = tag(href($last_event, '#'.$last_event), 'li');
                 }
 
                 $last_event = $a['event'];
@@ -235,18 +238,26 @@ function prefs_list($message = '')
     if ($last_event === null) {
         echo graf(gTxt('no_preferences'));
     } else {
-        echo wrapRegion('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
+        $build[] = wrapGroup('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
+        $groupOut[] = tag(href($last_event, '#'.$last_event), 'li');
     }
 
+    echo wrapGroup(
+        'all_preferences',
+        tag(join(n, $groupOut), 'ul', array('class' => 'switcher-list')),
+        'all_preferences'
+        );
+
+    if ($last_event !== null) {
+        echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'));
+    }
+
+    echo join(n, $build);
     echo n.'</div>'.
         sInput('prefs_save').
         eInput('prefs').
         hInput('prefs_id', '1').
         tInput();
-
-    if ($last_event !== null) {
-        echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'));
-    }
 
     echo n.'</form>'.n.'</div>';
 }
