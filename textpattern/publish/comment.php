@@ -592,7 +592,7 @@ function checkCommentsAllowed($id)
 
 function comments_help()
 {
-    return '<a id="txpCommentHelpLink" href="'.HELP_URL.'?item=textile_comments&amp;language='.LANG.'" onclick="window.open(this.href, \'popupwindow\', \'width=300,height=400,scrollbars,resizable\'); return false;">'.gTxt('textile_help').'</a>';
+    return '<a id="txpCommentHelpLink" href="'.HELP_URL.'?item=textile_comments&amp;language='.txpspecialchars(LANG).'" onclick="window.open(this.href, \'popupwindow\', \'width=300,height=400,scrollbars,resizable\'); return false;">'.gTxt('textile_help').'</a>';
 }
 
 /**

@@ -89,7 +89,7 @@ function pagetop($pagetitle, $message = '')
     }
 
     ?><!DOCTYPE html>
-<html lang="<?php echo LANG;
+<html lang="<?php echo txpspecialchars(LANG);
     ?>" dir="<?php echo $lang_direction;
     ?>">
 <head>

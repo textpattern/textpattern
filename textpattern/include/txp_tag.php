@@ -36,7 +36,7 @@ header('X-Frame-Options: '.X_FRAME_OPTIONS);
 header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 
 ?><!DOCTYPE html>
-<html lang="<?php echo LANG; ?>" dir="<?php echo txpspecialchars(gTxt('lang_dir')); ?>">
+<html lang="<?php echo txpspecialchars(LANG); ?>" dir="<?php echo txpspecialchars(gTxt('lang_dir')); ?>">
 <head>
 <meta charset="utf-8">
 <title><?php echo gTxt('build'); ?> &#124; Textpattern CMS</title><?php echo
