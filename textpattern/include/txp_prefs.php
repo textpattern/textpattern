@@ -158,10 +158,8 @@ function prefs_list($message = '')
 
     $locale = setlocale(LC_ALL, $locale);
 
-    echo hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading'));
     echo n.'<div class="txp-container" id="prefs_container">'.
-        n.'<form class="prefs-form" method="post" action="index.php">'.
-        n.'<div class="txp-layout-textbox">';
+        n.'<form class="prefs-form" method="post" action="index.php">';
 
     // TODO: remove 'custom' when custom fields are refactored.
     $core_events = array('site', 'admin', 'publish', 'feeds', 'comments', 'custom');
@@ -240,24 +238,29 @@ function prefs_list($message = '')
     } else {
         $build[] = wrapGroup('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
         $groupOut[] = tag(href($last_event, '#'.$last_event), 'li');
+
+        echo n.'<div class="txp-layout-4col-cell-1alt">'.
+            hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')).
+            wrapGroup(
+            'all_preferences',
+            tag(join(n, $groupOut), 'ul', array('class' => 'switcher-list')),
+            'all_preferences'
+            );
+
+        if ($last_event !== null) {
+            echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'));
+        }
+
+        echo n.'</div>'.
+            n.'<div class="txp-layout-4col-cell-2-3-4">';
+
+        echo join(n, $build);
+        echo n.'</div>'.
+            sInput('prefs_save').
+            eInput('prefs').
+            hInput('prefs_id', '1').
+            tInput();
     }
-
-    echo wrapGroup(
-        'all_preferences',
-        tag(join(n, $groupOut), 'ul', array('class' => 'switcher-list')),
-        'all_preferences'
-        );
-
-    if ($last_event !== null) {
-        echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'));
-    }
-
-    echo join(n, $build);
-    echo n.'</div>'.
-        sInput('prefs_save').
-        eInput('prefs').
-        hInput('prefs_id', '1').
-        tInput();
 
     echo n.'</form>'.n.'</div>';
 }
