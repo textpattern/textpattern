@@ -186,16 +186,6 @@ function image_list($message = '')
             'id' => $event.'_control',
         ));
 
-    if (!is_dir(IMPATH) or !is_writeable(IMPATH)) {
-        echo graf(
-            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-            gTxt('img_dir_not_writeable', array('{imgdir}' => IMPATH)),
-            array('class' => 'alert-block warning')
-        );
-    } elseif (has_privs('image.edit.own')) {
-        echo upload_form(gTxt('upload_image'), 'upload_image', 'image_insert', 'image', '', $file_max_upload_size);
-    }
-
     if ($total < 1) {
         if ($criteria != 1) {
             echo $search->renderForm('image_list', $search_render_options).
@@ -211,7 +201,22 @@ function image_list($message = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $search->renderForm('image_list', $search_render_options);
+    echo $search->renderForm('image_list', $search_render_options).'</div>';
+
+    echo n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        ));
+
+    if (!is_dir(IMPATH) or !is_writeable(IMPATH)) {
+        echo graf(
+            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+            gTxt('img_dir_not_writeable', array('{imgdir}' => IMPATH)),
+            array('class' => 'alert-block warning')
+        );
+    } elseif (has_privs('image.edit.own')) {
+        echo upload_form(gTxt('upload_image'), 'upload_image', 'image_insert', 'image', '', $file_max_upload_size);
+    }
 
     $rs = safe_query(
         "select

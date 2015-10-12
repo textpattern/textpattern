@@ -188,6 +188,28 @@ function file_list($message = '')
             'id' => $event.'_control',
         ));
 
+    if ($total < 1) {
+        if ($criteria != 1) {
+            echo $search->renderForm('file_list', $search_render_options).
+                graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+        } else {
+            echo graf(gTxt('no_files_recorded'), ' class="indicator"').'</div>';
+        }
+
+        return;
+    }
+
+    $limit = max($file_list_pageby, 15);
+
+    list($page, $offset, $numPages) = pager($total, $limit, $page);
+
+    echo $search->renderForm('file_list', $search_render_options).'</div>';
+
+    echo n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        ));
+
     if (!is_dir($file_base_path) || !is_writeable($file_base_path)) {
         echo graf(
             span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
@@ -211,23 +233,6 @@ function file_list($message = '')
 
         echo file_upload_form(gTxt('upload_file'), 'upload', 'file_insert');
     }
-
-    if ($total < 1) {
-        if ($criteria != 1) {
-            echo $search->renderForm('file_list', $search_render_options).
-                graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
-        } else {
-            echo graf(gTxt('no_files_recorded'), ' class="indicator"').'</div>';
-        }
-
-        return;
-    }
-
-    $limit = max($file_list_pageby, 15);
-
-    list($page, $offset, $numPages) = pager($total, $limit, $page);
-
-    echo $search->renderForm('file_list', $search_render_options).'</div>';
 
     $rs = safe_query(
         "select
