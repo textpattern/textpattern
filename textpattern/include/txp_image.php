@@ -67,7 +67,13 @@ function image_list($message = '')
     pagetop(gTxt('tab_image'), $message);
 
     extract($txpcfg);
-    extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+    extract(gpsa(array(
+        'page',
+        'sort',
+        'dir',
+        'crit',
+        'search_method',
+    )));
 
     if ($sort === '') {
         $sort = get_pref('image_sort_column', 'id');
@@ -514,7 +520,13 @@ function image_edit($message = '', $id = '')
 
         pagetop(gTxt('edit_image'), $message);
 
-        extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+        extract(gpsa(array(
+            'page',
+            'sort',
+            'dir',
+            'crit',
+            'search_method'
+        )));
 
         if ($ext != '.swf') {
             $aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');

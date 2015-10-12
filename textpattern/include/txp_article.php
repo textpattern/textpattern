@@ -680,7 +680,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         );
     }
 
-    extract(gpsa(array('view', 'from_view', 'step')));
+    extract(gpsa(array(
+        'view',
+        'from_view',
+        'step',
+    )));
 
     // Newly-saved article.
     if (!empty($GLOBALS['ID'])) {

@@ -325,7 +325,13 @@ function author_list($message = '')
 
     // User list.
     if (has_privs('admin.list')) {
-        extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+        extract(gpsa(array(
+            'page',
+            'sort',
+            'dir',
+            'crit',
+            'search_method',
+        )));
 
         if ($sort === '') {
             $sort = get_pref('admin_sort_column', 'name');

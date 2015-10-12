@@ -59,7 +59,13 @@ function link_list($message = '')
 
     pagetop(gTxt('tab_link'), $message);
 
-    extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+    extract(gpsa(array(
+        'page',
+        'sort',
+        'dir',
+        'crit',
+        'search_method',
+    )));
 
     if ($sort === '') {
         $sort = get_pref('link_sort_column', 'name');

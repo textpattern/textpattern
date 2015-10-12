@@ -1428,7 +1428,13 @@ function pageby_form($event, $val, $step = null)
 
 function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = 'upload-form')
 {
-    extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+    extract(gpsa(array(
+        'page',
+        'sort',
+        'dir',
+        'crit',
+        'search_method',
+    )));
 
     if (is_array($search_method)) {
         $search_method = join(',', $search_method);

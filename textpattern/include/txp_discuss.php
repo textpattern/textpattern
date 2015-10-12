@@ -605,7 +605,12 @@ function discuss_edit()
 
 function ipban_add()
 {
-    extract(gpsa(array('ip', 'name', 'discussid')));
+    extract(gpsa(array(
+        'ip',
+        'name',
+        'discussid',
+    )));
+
     $discussid = assert_int($discussid);
 
     if (!$ip) {

@@ -70,7 +70,10 @@ function plugin_list($message = '')
         plugin_form().
         n.'</div>';
 
-    extract(gpsa(array('sort', 'dir')));
+    extract(gpsa(array(
+        'sort',
+        'dir',
+    )));
 
     if ($sort === '') {
         $sort = get_pref('plugin_sort_column', 'name');
