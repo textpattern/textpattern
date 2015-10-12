@@ -128,6 +128,8 @@ switch ($step) {
 
 function chooseLang()
 {
+    $_SESSION = array();
+
     echo n.'<div class="txp-container" id="setup_container">',
         n.'<div class="txp-setup">',
         hed('Welcome to Textpattern CMS', 1),

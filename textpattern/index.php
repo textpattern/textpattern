@@ -120,8 +120,6 @@ if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) 
     }
 
     define("LANG", $language);
-
-    // i18n: define("LANG","en-gb");
     define('txp_version', $thisversion);
 
     if (!defined('PROTOCOL')) {

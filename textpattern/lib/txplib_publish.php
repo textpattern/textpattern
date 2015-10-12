@@ -172,7 +172,7 @@ function article_column_map()
  * @param  string       $type           Lesser or greater neighbour? Either '<' (previous) or '>' (next)
  * @param  array        $atts           Attribute of article at threshold
  * @param  string       $threshold_type 'cooked': Use $threshold as SQL clause; 'raw': Use $threshold as an escapable scalar
- * @return array|string An array populated with article data, or the empty string in case of no matches
+ * @return array|bool   An array populated with article data, or 'false' in case of no matches
  */
 
 function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 'raw')
@@ -262,7 +262,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     $cache[$key] = getRow(join(n.' ', $q));
 
-    return (is_array($cache[$key])) ? $cache[$key] : '';
+    return (is_array($cache[$key])) ? $cache[$key] : false;
 }
 
 /**
@@ -271,7 +271,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
  * @param  int    $id        The "pivot" article's id; use zero (0) to indicate $thisarticle
  * @param  scalar $threshold The value to compare against if $id != 0
  * @param  string $s         Optional section restriction if $id != 0
- * @return array  An array populated with article data from the next and previous article
+ * @return array             An array populated with article data
  */
 
 function getNextPrev($id = 0, $threshold = null, $s = '')

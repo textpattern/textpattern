@@ -206,10 +206,6 @@ function doDiagnostics()
         $fail['php_version_required'] = diag_msg_wrap(gTxt('php_version_required', array('{version}' => REQUIRED_PHP_VERSION)));
     }
 
-    if (!isset($path_to_site)) {
-        $fail['path_to_site_missing'] = diag_msg_wrap(gTxt('path_to_site_missing'), 'warning');
-    }
-
     if (@gethostbyname($mydomain) === $mydomain) {
         $fail['dns_lookup_fails'] = diag_msg_wrap(gTxt('dns_lookup_fails').cs.$mydomain, 'warning');
     }

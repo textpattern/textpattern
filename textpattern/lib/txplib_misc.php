@@ -4556,7 +4556,7 @@ function handle_lastmod($unix_ts = null, $exit = true)
  * Returns preference values from the database as an array. Shouldn't be used to
  * retrieve selected preferences, see get_pref() instead.
  *
- * By default only the global preferences are returned. 
+ * By default only the global preferences are returned.
  * If the optional user name parameter is supplied, the private preferences
  * for that user are returned.
  *
@@ -5869,7 +5869,7 @@ function getMetaDescription($type = null)
                 $content = safe_field('description', 'txp_category', "name = '".doSlash($c)."'" . $clause);
             }
         } elseif ($type === 'section') {
-            $theSection = ($thissection) ? $thissection : $s;
+            $theSection = ($thissection) ? $thissection['name'] : $s;
             $content = safe_field('description', 'txp_section', "name = '".doSlash($theSection)."'");
         } elseif ($type === 'article') {
             assert_article();

@@ -4059,7 +4059,7 @@ function permlink($atts, $thing = null)
 
 function lang()
 {
-    return LANG;
+    return txpspecialchars(LANG);
 }
 
 /**
