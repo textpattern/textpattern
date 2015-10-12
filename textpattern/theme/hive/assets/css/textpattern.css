@@ -378,6 +378,7 @@ summary {
  * 4. Remove the grey background colour from active links in IE 10.
  * 5. Expanded CSS level 3 `text-decoration` property in supported browsers,
  *    older browsers will fallback to legacy `text-decoration` property.
+ * 6. Hide `.busy` class links when processing AJAX.
  */
 a {
   /* 1 */
@@ -401,6 +402,7 @@ a:focus {
 }
 a.busy {
   visibility: hidden;
+  /* 6 */
 }
 
 /**
@@ -2750,7 +2752,7 @@ hr {
  */
 .txp-search {
   float: right;
-  margin: 1em 0 0;
+  margin: 1em 0;
 }
 .txp-search .ui-menu {
   position: absolute;
@@ -2914,7 +2916,7 @@ span.spinner {
  * </div>
  */
 div.multi-edit {
-  margin: 1em 0;
+  margin: 1em 0 0;
 }
 
 /**
@@ -3053,10 +3055,6 @@ div.multi-edit {
  *     </ul>
  * </div>
  */
-.txp-navigation p,
-.txp-navigation ul {
-  margin: 0 0 0.5em;
-}
 .txp-navigation .pageby {
   float: left;
 }
@@ -3728,6 +3726,7 @@ div.code {
    */
   .txp-search,
   [dir="rtl"] .txp-search {
+    margin-top: 0;
     float: none;
   }
 
@@ -3871,4 +3870,20 @@ div.code {
   .ui-tabs .ui-tabs-panel {
     border-top-width: 0;
   }
+}
+/**
+ * Hide JavaScript-reliant UI when JavaScript unavailabe.
+ */
+.no-js .txp-search-options,
+.no-js .txp-list-options,
+.no-js .multi-edit,
+.no-js .txp-list-col-multi-edit {
+  display: none;
+}
+
+/**
+ * Show essential UI regardless, when JavaScript is unavailable.
+ */
+.no-js .toggle {
+  display: block !important;
 }
