@@ -92,24 +92,6 @@ function image_list($message = '')
         set_pref('image_sort_dir', $dir, 'image', 2, '', 0, PREF_PRIVATE);
     }
 
-    echo n.tag(
-        hed(gTxt('tab_image'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
-        n.tag_start('div', array(
-            'class' => 'txp-layout-2col-cell-2',
-            'id' => $event.'_control',
-        ));
-
-    if (!is_dir(IMPATH) or !is_writeable(IMPATH)) {
-        echo graf(
-            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-            gTxt('img_dir_not_writeable', array('{imgdir}' => IMPATH)),
-            array('class' => 'alert-block warning')
-        );
-    } elseif (has_privs('image.edit.own')) {
-        echo upload_form(gTxt('upload_image'), 'upload_image', 'image_insert', 'image', '', $file_max_upload_size);
-    }
-
     switch ($sort) {
         case 'name':
             $sort_sql = 'txp_image.name '.$dir;
@@ -194,6 +176,24 @@ function image_list($message = '')
         $total = getCount('txp_image', $criteria);
     } else {
         $total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
+    }
+
+    echo n.tag(
+        hed(gTxt('tab_image'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1')).
+        n.tag_start('div', array(
+            'class' => 'txp-layout-2col-cell-2',
+            'id' => $event.'_control',
+        ));
+
+    if (!is_dir(IMPATH) or !is_writeable(IMPATH)) {
+        echo graf(
+            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+            gTxt('img_dir_not_writeable', array('{imgdir}' => IMPATH)),
+            array('class' => 'alert-block warning')
+        );
+    } elseif (has_privs('image.edit.own')) {
+        echo upload_form(gTxt('upload_image'), 'upload_image', 'image_insert', 'image', '', $file_max_upload_size);
     }
 
     if ($total < 1) {

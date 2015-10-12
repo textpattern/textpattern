@@ -97,38 +97,6 @@ function file_list($message = '')
         set_pref('file_sort_dir', $dir, 'file', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
-    echo n.tag(
-        hed(gTxt('tab_file'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
-        n.tag_start('div', array(
-            'class' => 'txp-layout-2col-cell-2',
-            'id' => $event.'_control',
-        ));
-
-    if (!is_dir($file_base_path) || !is_writeable($file_base_path)) {
-        echo graf(
-            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-            gTxt('file_dir_not_writeable', array('{filedir}' => $file_base_path)),
-            array('class' => 'alert-block warning')
-        );
-    } elseif (has_privs('file.edit.own')) {
-        $existing_files = get_filenames();
-
-        if ($existing_files) {
-            echo form(
-                eInput('file').
-                sInput('file_create').
-                graf(
-                    tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
-                    sp.selectInput('filename', $existing_files, '', 1, '', 'file-existing').
-                    sp.fInput('submit', '', gTxt('Create')),
-                    array('class' => 'existing-file')
-                ), '', '', 'post', '', '', 'assign_file');
-        }
-
-        echo file_upload_form(gTxt('upload_file'), 'upload', 'file_insert');
-    }
-
     switch ($sort) {
         case 'id':
             $sort_sql = 'txp_file.id '.$dir;
@@ -210,6 +178,38 @@ function file_list($message = '')
         $total = safe_count('txp_file', $criteria);
     } else {
         $total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
+    }
+
+    echo n.tag(
+        hed(gTxt('tab_file'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1')).
+        n.tag_start('div', array(
+            'class' => 'txp-layout-2col-cell-2',
+            'id' => $event.'_control',
+        ));
+
+    if (!is_dir($file_base_path) || !is_writeable($file_base_path)) {
+        echo graf(
+            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+            gTxt('file_dir_not_writeable', array('{filedir}' => $file_base_path)),
+            array('class' => 'alert-block warning')
+        );
+    } elseif (has_privs('file.edit.own')) {
+        $existing_files = get_filenames();
+
+        if ($existing_files) {
+            echo form(
+                eInput('file').
+                sInput('file_create').
+                graf(
+                    tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
+                    sp.selectInput('filename', $existing_files, '', 1, '', 'file-existing').
+                    sp.fInput('submit', '', gTxt('Create')),
+                    array('class' => 'existing-file')
+                ), '', '', 'post', '', '', 'assign_file');
+        }
+
+        echo file_upload_form(gTxt('upload_file'), 'upload', 'file_insert');
     }
 
     if ($total < 1) {
