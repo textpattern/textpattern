@@ -252,11 +252,8 @@ function file_list($message = '')
     if ($rs && numRows($rs)) {
         $show_authors = !has_single_author('txp_file');
 
-        echo
-            n.tag_start('div', array(
-                'class' => 'txp-container',
-                'id'    => $event.'_container',
-            )).
+        echo n.tag(
+                toggle_box('files_detail'), 'div', array('class' => 'txp-list-options')).
             n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'files_form',
@@ -441,14 +438,12 @@ function file_list($message = '')
             file_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
-            graf(toggle_box('files_detail'), array('class' => 'detail-toggle')).
             n.tag_start('div', array(
                 'class' => 'txp-navigation',
                 'id'    => $event.'_navigation',
             )).
             pageby_form('file', $file_list_pageby).
             nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div').
             n.tag_end('div');
     }
 }
