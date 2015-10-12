@@ -231,7 +231,7 @@ function file_list($message = '')
                 ), '', '', 'post', '', '', 'assign_file');
         }
 
-        echo file_upload_form(gTxt('upload_file'), 'upload', 'file_insert');
+        echo n.tag(file_upload_form(gTxt('upload_file'), 'upload', 'file_insert'), 'div', array('class' => 'txp-control-panel'));
     }
 
     $rs = safe_query(

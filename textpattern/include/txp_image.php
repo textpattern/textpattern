@@ -215,7 +215,9 @@ function image_list($message = '')
             array('class' => 'alert-block warning')
         );
     } elseif (has_privs('image.edit.own')) {
-        echo upload_form(gTxt('upload_image'), 'upload_image', 'image_insert', 'image', '', $file_max_upload_size);
+        echo n.tag(
+            upload_form(gTxt('upload_image'), 'upload_image', 'image_insert', 'image', '', $file_max_upload_size)
+        , 'div', array('class' => 'txp-control-panel'));
     }
 
     $rs = safe_query(
@@ -239,7 +241,6 @@ function image_list($message = '')
     );
 
     echo pluggable_ui('image_ui', 'extend_controls', '', $rs);
-    echo '</div>'; // End txp-control-panel.
 
     if ($rs && numRows($rs)) {
         $show_authors = !has_single_author('txp_image');
