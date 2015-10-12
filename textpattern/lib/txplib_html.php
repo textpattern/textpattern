@@ -895,6 +895,10 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
         $help = array($help);
     }
 
+    if (empty($help)) {
+        $help = array(0 => '', 1 => '');
+    }
+
     $inlineHelp = (isset($help[1])) ? $help[1] : '';
 
     if ($label) {
