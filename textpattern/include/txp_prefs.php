@@ -194,7 +194,15 @@ function prefs_list($message = '')
 
             if ($a['event'] !== $last_event) {
                 if ($last_event !== null) {
-                    $build[] = wrapGroup('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, 'txp-prefs-group', 'prefs_'.$last_event);
+                    $build[] = tag(
+                        hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
+                        join(n, $out)
+                        , 'section', array(
+                            'class'           => 'txp-prefs-group',
+                            'id'              => 'prefs_group_'.$last_event,
+                            'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
+                        )
+                    );
                     $groupOut[] = tag(href($last_event, '#'.$last_event), 'li');
                 }
 
@@ -236,15 +244,23 @@ function prefs_list($message = '')
     if ($last_event === null) {
         echo graf(gTxt('no_preferences'));
     } else {
-        $build[] = wrapGroup('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
+        $build[] = tag(
+            hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
+            join(n, $out)
+            , 'section', array(
+                'class'           => 'txp-prefs-group',
+                'id'              => 'prefs_group_'.$last_event,
+                'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
+            )
+        );
         $groupOut[] = tag(href($last_event, '#'.$last_event), 'li');
 
         echo n.'<div class="txp-layout-4col-cell-1alt">'.
             hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')).
             wrapGroup(
-            'all_preferences',
-            tag(join(n, $groupOut), 'ul', array('class' => 'switcher-list')),
-            'all_preferences'
+                'all_preferences',
+                tag(join(n, $groupOut), 'ul', array('class' => 'switcher-list')),
+                'all_preferences'
             );
 
         if ($last_event !== null) {
@@ -252,10 +268,9 @@ function prefs_list($message = '')
         }
 
         echo n.'</div>'.
-            n.'<div class="txp-layout-4col-cell-2-3-4">';
-
-        echo join(n, $build);
-        echo n.'</div>'.
+            n.'<div class="txp-layout-4col-cell-2-3-4">'.
+            join(n, $build).
+            n.'</div>'.
             sInput('prefs_save').
             eInput('prefs').
             hInput('prefs_id', '1').
