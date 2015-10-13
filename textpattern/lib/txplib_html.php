@@ -1441,10 +1441,7 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
     }
 
     if (!$label_id) {
-        $p_class = 'edit-'.$event.'-upload';
         $label_id = $event.'-upload';
-    } else {
-        $p_class = 'edit-'.str_replace('_', '-', $label_id);
     }
 
     $argv = func_get_args();
@@ -1463,11 +1460,10 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
         hInput('search_method', $search_method).
         hInput('crit', $crit).
 
-        graf(
-            tag($label, 'label', array('for' => $label_id)).
-            popHelp($pophelp).
-            fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
-            fInput('submit', '', gTxt('upload')), array('class' => $p_class)).
+        tag($label, 'label', array('for' => $label_id)).
+        popHelp($pophelp).
+        fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
+        fInput('submit', '', gTxt('upload')).
 
         tInput().n,
 
