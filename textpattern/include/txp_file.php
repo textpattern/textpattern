@@ -27,6 +27,12 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Files panel.
+ *
+ * @package Admin\File
+ */
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -64,7 +70,11 @@ if ($event == 'file') {
     }
 }
 
-// -------------------------------------------------------------
+/**
+ * The main panel listing all files.
+ *
+ * @param string|array $message The activity message
+ */
 
 function file_list($message = '')
 {
