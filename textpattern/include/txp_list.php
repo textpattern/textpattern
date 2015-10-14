@@ -57,7 +57,7 @@ if ($event == 'list') {
 }
 
 /**
- * Outputs the main panel listing all articles.
+ * The main panel listing all articles.
  *
  * @param  string|array $message The activity message
  * @param  string       $post    Not used
