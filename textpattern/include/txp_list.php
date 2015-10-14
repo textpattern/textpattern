@@ -238,7 +238,7 @@ function list_list($message = '', $post = '')
             'class' => 'txp-layout-1col',
             'id'    => $event.'_container',
         )).
-        n.tag(sLink('article', '', gTxt('add_new_article'),'txp-button'), 'div', array('class' => 'txp-control-panel'));
+        n.tag(sLink('article', '', gTxt('add_new_article'), 'txp-button'), 'div', array('class' => 'txp-control-panel'));
 
     $rs = safe_query(
         "select
