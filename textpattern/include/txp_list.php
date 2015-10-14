@@ -214,7 +214,7 @@ function list_list($message = '', $post = '')
         'div', array('class' => 'txp-layout-2col-cell-1')).
         n.tag_start('div', array(
             'class' => 'txp-layout-2col-cell-2',
-            'id' => $event.'_control',
+            'id'    => $event.'_control',
         ));
 
     if ($total < 1) {
