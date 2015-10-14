@@ -97,15 +97,12 @@ function list_languages($message = '')
 
     $lang_form = tag(
         form(
-            graf(
-                tag(gTxt('active_language'), 'label', array('for' => 'language')).
-                languages('language', $active_lang).
-                eInput('lang').
-                sInput('save_language')
-            )
+            tag(gTxt('active_language'), 'label', array('for' => 'language')).
+            languages('language', $active_lang).
+            eInput('lang').
+            sInput('save_language')
         ), 'div', array(
             'class' => 'txp-control-panel',
-            'id'    => 'language_control',
         )
     );
 
@@ -246,7 +243,7 @@ function list_languages($message = '')
     echo hed(gTxt('tab_languages'), 1, array('class' => 'txp-heading'));
     echo
         n.tag_start('div', array(
-            'class' => 'txp-container',
+            'class' => 'txp-layout-1col',
             'id'    => 'language_container',
         ));
 
@@ -255,6 +252,8 @@ function list_languages($message = '')
     }
 
     echo $lang_form,
+        n.tag(
+            toggle_box('languages_detail'), 'div', array('class' => 'txp-list-options')).
         n.tag_start('div', array('class' => 'txp-listtables')).
         n.tag_start('table', array('class' => 'txp-list')).
         n.tag_start('thead').
@@ -278,7 +277,6 @@ function list_languages($message = '')
         n.tag_end('tbody').
         n.tag_end('table').
         n.tag_end('div').
-        graf(toggle_box('languages_detail'), array('class' => 'detail-toggle')).
 
         hed(gTxt('install_from_textpack'), 3).
         form(
