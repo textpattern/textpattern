@@ -302,26 +302,21 @@ function author_list($message = '')
 
     echo n.tag(
         hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
-        n.tag_start('div', array(
-            'class' => 'txp-layout-2col-cell-2',
-            'id'    => 'users_control',
-        ));
+        'div', array('class' => 'txp-layout-2col-cell-1')
+    );
 
     $buttons = array();
 
     // Change password button.
-    $buttons[] = sLink('admin', 'new_pass_form', gTxt('change_password'));
+    $buttons[] = sLink('admin', 'new_pass_form', gTxt('change_password'), 'txp-button');
 
     if (!has_privs('admin.edit')) {
         // Change email address button.
-        $buttons[] = sLink('admin', 'change_email_form', gTxt('change_email_address'));
+        $buttons[] = sLink('admin', 'change_email_form', gTxt('change_email_address'), 'txp-button');
     } else {
         // New author button.
-        $buttons[] = sLink('admin', 'author_edit', gTxt('add_new_author'));
+        $buttons[] = sLink('admin', 'author_edit', gTxt('add_new_author'), 'txp-button');
     }
-
-    echo graf(join(n, $buttons), array('class' => 'txp-buttons'));
 
     // User list.
     if (has_privs('admin.list')) {
@@ -393,6 +388,11 @@ function author_list($message = '')
 
         $total = getCount('txp_users', $criteria);
 
+        echo n.tag_start('div', array(
+            'class' => 'txp-layout-2col-cell-2',
+            'id'    => 'users_control',
+        ));
+
         if ($total < 1) {
             if ($criteria != 1) {
                 echo $search->renderForm('author_list', $search_render_options).
@@ -410,6 +410,12 @@ function author_list($message = '')
 
         echo $search->renderForm('author_list', $search_render_options).'</div>';
 
+        echo
+            n.tag_start('div', array(
+                'class' => 'txp-layout-1col',
+                'id'    => 'users_container',)).
+             n.tag(join(n, $buttons), 'div', array('class' => 'txp-control-panel'));
+
         $rs = safe_rows_start(
             '*, unix_timestamp(last_access) as last_login',
             'txp_users',
@@ -418,10 +424,6 @@ function author_list($message = '')
 
         if ($rs) {
             echo
-                n.tag_start('div', array(
-                    'class' => 'txp-container',
-                    'id'    => 'users_container',
-                )).
                 n.tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'users_form',
@@ -507,11 +509,17 @@ function author_list($message = '')
                 )).
                 pageby_form('admin', $author_list_pageby).
                 nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
-                n.tag_end('div').
                 n.tag_end('div');
         }
-    } else {
+
         echo n.tag_end('div');
+    } else {
+        echo
+            n.tag_start('div', array(
+                'class' => 'txp-layout-1col',
+                'id'    => 'users_container',)).
+            n.tag(join(n, $buttons), 'div', array('class' => 'txp-control-panel')).
+            n.tag_end('div');
     }
 }
 
