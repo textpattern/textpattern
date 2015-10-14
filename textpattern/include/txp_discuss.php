@@ -114,7 +114,6 @@ function short_preview($message)
  * Outputs the main panel listing all comments.
  *
  * @param  string|array $message The activity message
- * @param  string       $post    Not used
  */
 
 function discuss_list($message = '')
