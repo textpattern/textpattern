@@ -22,6 +22,12 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Links panel.
+ *
+ * @package Admin\Link
+ */
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -51,7 +57,11 @@ if ($event == 'link') {
     }
 }
 
-// -------------------------------------------------------------
+/**
+ * The main panel listing all links.
+ *
+ * @param string|array $message The activity message
+ */
 
 function link_list($message = '')
 {

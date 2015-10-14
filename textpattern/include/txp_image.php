@@ -22,6 +22,12 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Images panel.
+ *
+ * @package Admin\Image
+ */
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -58,7 +64,11 @@ if ($event == 'image') {
     }
 }
 
-// -------------------------------------------------------------
+/**
+ * The main panel listing all images.
+ *
+ * @param string|array $message The activity message
+ */
 
 function image_list($message = '')
 {

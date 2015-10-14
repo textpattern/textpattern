@@ -22,6 +22,12 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Comments panel.
+ *
+ * @package Admin\Discuss
+ */
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -104,7 +110,11 @@ function short_preview($message)
     return $message;
 }
 
-//-------------------------------------------------------------
+/**
+ * Outputs the main panel listing all comments.
+ *
+ * @param  string|array $message The activity message
+ */
 
 function discuss_list($message = '')
 {
