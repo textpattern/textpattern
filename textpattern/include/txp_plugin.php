@@ -98,7 +98,7 @@ function plugin_list($message = '')
             'class' => 'txp-layout-1col',
             'id'    => $event.'_container',
         )).
-        plugin_form();
+        n.tag(plugin_form(), 'div', array('class' => 'txp-control-panel'));
 
     $rs = safe_rows_start(
         'name, status, author, author_uri, version, description, length(help) as help, abs(strcmp(md5(code),code_md5)) as modified, load_order, flags',
@@ -566,15 +566,12 @@ function plugin_install()
 function plugin_form()
 {
     return form(
-        graf(
-            tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').br.
-            '<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'
-        ).
-        graf(
-            fInput('submit', 'install_new', gTxt('upload')).
-            eInput('plugin').
-            sInput('plugin_verify')
-        ), '', '', 'post', 'plugin-data', '', 'plugin_install_form');
+        tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
+        '<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'.
+        fInput('submit', 'install_new', gTxt('upload')).
+        eInput('plugin').
+        sInput('plugin_verify')
+        , '', '', 'post', 'plugin-data', '', 'plugin_install_form');
 }
 
 /**

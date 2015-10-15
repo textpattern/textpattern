@@ -2800,6 +2800,9 @@ hr {
 .txp-control-panel > * {
   margin: 0 1em 0 0;
 }
+.txp-control-panel > *:last-child {
+  margin-right: 0;
+}
 .txp-control-panel form {
   display: inline-block;
 }
@@ -3521,17 +3524,10 @@ tr.active .plugin-prefs {
 }
 
 /**
- * Remove margin above first `p` in plugin upload form, for layout consistency.
- */
-.plugin-data p:first-child {
-  margin-top: 0;
-}
-
-/**
- * Make plugin upload form `textarea` 50% of page width.
+ * Add some margin between plugin install `textarea` and submit button.
  */
 #plugin-install {
-  width: 50%;
+  margin-bottom: 1em;
 }
 
 #plugin-code {
