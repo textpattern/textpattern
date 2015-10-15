@@ -125,8 +125,7 @@ function page_edit($message = '')
     // Pages code columm.
 
     echo n.tag(
-        hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
+        hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading')).
         form(
             $titleblock.
             inputLabel(

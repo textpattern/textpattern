@@ -162,8 +162,7 @@ function css_edit($message = '')
     // Styles code columm.
 
     echo n.tag(
-        hed(gTxt('tab_style'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
+        hed(gTxt('tab_style'), 1, array('class' => 'txp-heading')).
         form(
             $titleblock.
             inputLabel(
