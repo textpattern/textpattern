@@ -375,7 +375,8 @@ function form_edit($message = '')
     // Forms code columm.
 
     echo n.tag(
-        hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading')).
+        hed(gTxt('tab_import').popHelp('forms_overview'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1')).
         form(
             $name_widgets.
             inputLabel(

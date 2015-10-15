@@ -105,7 +105,9 @@ function switch_tool()
 
     pagetop(gTxt('txp_import'), '');
 
-    echo hed(gTxt('tab_import'), 1, array('class' => 'txp-heading'));
+    echo n.tag(
+        hed(gTxt('tab_import'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1'));
 
     $content = '<section class="txp-edit">';
     $content .= hed(gTxt('txp_import'), 2);

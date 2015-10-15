@@ -430,8 +430,10 @@ function doDiagnostics()
 
     echo pagetop(gTxt('tab_diagnostics'), '');
 
-    echo hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading'));
-    echo n.'<div class="txp-container" id="'.$event.'_container">'.
+    echo n.tag(
+        hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1')).
+        n.'<div class="txp-container" id="'.$event.'_container">'.
         n.'<div id="pre_flight_check">'.
         hed(gTxt('preflight_check'), 2);
 

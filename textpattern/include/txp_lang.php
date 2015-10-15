@@ -240,8 +240,9 @@ function list_languages($message = '')
     // Output table and content.
     pagetop(gTxt('tab_languages'), $message);
 
-    echo hed(gTxt('tab_languages'), 1, array('class' => 'txp-heading'));
-    echo
+    echo n.tag(
+        hed(gTxt('tab_languages'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1')).
         n.tag_start('div', array(
             'class' => 'txp-layout-1col',
             'id'    => 'language_container',
@@ -278,7 +279,7 @@ function list_languages($message = '')
         n.tag_end('table').
         n.tag_end('div').
 
-        hed(gTxt('install_from_textpack'), 3).
+        hed(gTxt('install_from_textpack'), 2).
         n.tag(
             form(
                 '<label for="textpack-install">'.gTxt('install_textpack').'</label>'.popHelp('get_textpack').
