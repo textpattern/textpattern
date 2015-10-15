@@ -2244,11 +2244,13 @@ td {
  * 2. Remove default margin.
  */
 body {
+  box-sizing: border-box;
   /* 1 */
   position: relative;
   /* 2 */
   margin: 0;
-  padding: 4em 2.1% 0;
+  padding: 4em 2.1% 2.5em;
+  min-height: 100%;
   color: #333333;
   background: #ffffff;
 }
@@ -2392,6 +2394,14 @@ body {
  *     </footer>
  * </body>
  */
+.txp-footer {
+  position: absolute;
+  right: 2.1%;
+  bottom: 1.5em;
+  left: 2.1%;
+  height: 1em;
+}
+
 /**
  * Link to Textpattern official website.
  *
@@ -2401,6 +2411,7 @@ body {
  */
 .mothership {
   float: left;
+  margin: 0;
 }
 
 /**
@@ -2412,6 +2423,7 @@ body {
  */
 .pagejump {
   float: right;
+  margin: 0;
 }
 
 /* Navigation
@@ -2688,6 +2700,7 @@ html {
   -webkit-text-size-adjust: 100%;
   /* 2 */
   -ms-text-size-adjust: 100%;
+  height: 100%;
 }
 
 /**
@@ -3612,6 +3625,14 @@ div.code {
    */
   .txp-logout {
     right: 1.53846153846154em;
+  }
+
+  /**
+   * Adjust right/left absolute position of footer area.
+   */
+  .txp-footer {
+    right: 1.53846153846154em;
+    left: 1.53846153846154em;
   }
 }
 /* ==========================================================================
