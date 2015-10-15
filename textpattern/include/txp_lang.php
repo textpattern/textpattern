@@ -279,17 +279,15 @@ function list_languages($message = '')
         n.tag_end('div').
 
         hed(gTxt('install_from_textpack'), 3).
-        form(
-            graf(
-                '<label for="textpack-install">'.gTxt('install_textpack').'</label>'.popHelp('get_textpack').br.
-                n.'<textarea class="code" id="textpack-install" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'
-            ).
-            graf(
+        n.tag(
+            form(
+                '<label for="textpack-install">'.gTxt('install_textpack').'</label>'.popHelp('get_textpack').
+                n.'<textarea class="code" id="textpack-install" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'.
                 fInput('submit', 'install_new', gTxt('upload')).
                 eInput('lang').
                 sInput('get_textpack')
-            ), '', '', 'post', 'edit-form', '', 'text_uploader'
-        ).
+                , '', '', 'post', 'edit-form', '', 'text_uploader'
+            ), 'div', array('class' => 'txp-control-panel')).
 
         n.tag_end('div');
 }

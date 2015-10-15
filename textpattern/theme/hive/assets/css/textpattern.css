@@ -2806,6 +2806,9 @@ hr {
 .txp-control-panel form {
   display: inline-block;
 }
+.txp-control-panel textarea {
+  margin-bottom: 1em;
+}
 
 /**
  * Swap float/margin positions in RTL languages.
@@ -3507,10 +3510,6 @@ td.thumbnail a {
   margin-left: 0.6em;
 }
 
-#textpack-install {
-  width: 50%;
-}
-
 /* Admin -> Plugins page - additional layout
    ========================================================================== */
 tr .manage span,
@@ -3521,13 +3520,6 @@ tr .plugin-prefs {
 tr.active .manage span,
 tr.active .plugin-prefs {
   visibility: visible;
-}
-
-/**
- * Add some margin between plugin install `textarea` and submit button.
- */
-#plugin-install {
-  margin-bottom: 1em;
 }
 
 #plugin-code {
