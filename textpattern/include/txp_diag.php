@@ -433,8 +433,11 @@ function doDiagnostics()
     echo n.tag(
         hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading')),
         'div', array('class' => 'txp-layout-2col-cell-1')).
-        n.'<div class="txp-container" id="'.$event.'_container">'.
-        n.'<div id="pre_flight_check">'.
+        n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        )).
+        n.tag_start('div', array('id' => 'pre_flight_check')).
         hed(gTxt('preflight_check'), 2);
 
     if ($fail) {
@@ -445,8 +448,8 @@ function doDiagnostics()
         echo graf(diag_msg_wrap(gTxt('all_checks_passed'), 'success'));
     }
 
-    echo '</div>';
-    echo '<div id="diagnostics">',
+    echo n.tag_end('div').
+        n.tag_start('div', array('id' => 'diagnostics')).
         hed(gTxt('diagnostic_info'), 2);
 
     $fmt_date = '%Y-%m-%d %H:%M:%S';
@@ -614,8 +617,8 @@ function doDiagnostics()
     );
 
     echo join('', $out),
-        '</div>',
-        '</div>';
+        n.tag_end('div').
+        n.tag_end('div');
 }
 
 /**
