@@ -3520,6 +3520,16 @@ tr.active .plugin-prefs {
   visibility: visible;
 }
 
+/**
+ * Remove margin above first `p` in plugin upload form, for layout consistency.
+ */
+.plugin-data p:first-child {
+  margin-top: 0;
+}
+
+/**
+ * Make plugin upload form `textarea` 50% of page width.
+ */
 #plugin-install {
   width: 50%;
 }
@@ -3870,20 +3880,4 @@ div.code {
   .ui-tabs .ui-tabs-panel {
     border-top-width: 0;
   }
-}
-/**
- * Hide JavaScript-reliant UI when JavaScript unavailabe.
- */
-.no-js .txp-search-options,
-.no-js .txp-list-options,
-.no-js .multi-edit,
-.no-js .txp-list-col-multi-edit {
-  display: none;
-}
-
-/**
- * Show essential UI regardless, when JavaScript is unavailable.
- */
-.no-js .toggle {
-  display: block !important;
 }

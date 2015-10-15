@@ -65,11 +65,6 @@ function plugin_list($message = '')
 
     pagetop(gTxt('tab_plugins'), $message);
 
-    echo hed(gTxt('tab_plugins'), 1, array('class' => 'txp-heading'));
-    echo n.'<div class="txp-control-panel" id="'.$event.'_control">'.
-        plugin_form().
-        n.'</div>';
-
     extract(gpsa(array(
         'sort',
         'dir',
@@ -96,6 +91,15 @@ function plugin_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
+    echo n.tag(
+        hed(gTxt('tab_plugins'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1')).
+        n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        )).
+        plugin_form();
+
     $rs = safe_rows_start(
         'name, status, author, author_uri, version, description, length(help) as help, abs(strcmp(md5(code),code_md5)) as modified, load_order, flags',
         'txp_plugin',
@@ -104,10 +108,6 @@ function plugin_list($message = '')
 
     if ($rs and numRows($rs) > 0) {
         echo
-            n.tag_start('div', array(
-                'class' => 'txp-container',
-                'id'    => $event.'_container',
-            )).
             n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'plugin_form',
@@ -246,9 +246,10 @@ function plugin_list($message = '')
             n.tag_end('div').
             plugin_multiedit_form('', $sort, $dir, '', '').
             tInput().
-            n.tag_end('form').
-            n.tag_end('div');
+            n.tag_end('form');
     }
+
+    echo n.tag_end('div');
 }
 
 /**
