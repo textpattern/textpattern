@@ -200,6 +200,7 @@ $txp_permissions = array(
     'article.preview'             => '1,2,3,4',
     'article.publish'             => '1,2,3,4',
     'article.php'                 => '1,2',
+    'article.set_markup'          => '1,2,3,    6',
     'article'                     => '1,2,3,4,5,6',
     'list'                        => '1,2,3,4,5,6', // Likely the same as for article.
     'category'                    => '1,2,3',
