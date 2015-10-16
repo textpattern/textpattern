@@ -280,7 +280,6 @@ function areas()
         gTxt('tab_languages')   => 'lang',
         gTxt('tab_site_admin')  => 'admin',
         gTxt('tab_plugins')     => 'plugin',
-        gTxt('tab_import')      => 'import',
     );
 
     $areas['extensions'] = array(
