@@ -54,7 +54,7 @@ foreach ($rs as $row) {
 }
 
 if (!$has_idx) {
-    safe_query('alter ignore table `'.PFX.'textpattern` add index url_title_idx(`url_title`)');
+    safe_query('alter ignore table `'.PFX.'textpattern` add index url_title_idx(`url_title`(250))');
 }
 
 // Remove is_default from txp_section table and make it a preference.

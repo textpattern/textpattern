@@ -29,7 +29,7 @@ if (!defined('TXP_UPDATE')) {
 $cols = getThings('describe `'.PFX.'txp_prefs`');
 if (!in_array('user_name', $cols)) {
     safe_alter('txp_prefs',
-    "ADD `user_name` varchar(64) NOT NULL default '', DROP INDEX `prefs_idx`, ADD UNIQUE `prefs_idx` (`prefs_id`, `name`, `user_name`), ADD INDEX `user_name` (`user_name`)");
+    "ADD `user_name` varchar(64) NOT NULL default '', DROP INDEX `prefs_idx`, ADD UNIQUE `prefs_idx` (`prefs_id`, `name`(185), `user_name`), ADD INDEX `user_name` (`user_name`)");
 }
 
 // Remove a few global prefs in favour of future private ones.
@@ -89,7 +89,7 @@ foreach (array('txp_file', 'txp_link') as $table) {
     $cols = getThings('describe `'.PFX.$table.'`');
 
     if (!in_array('author', $cols)) {
-        safe_alter($table, "ADD author varchar(255) NOT NULL default '', ADD INDEX author_idx (author)");
+        safe_alter($table, "ADD author varchar(64) NOT NULL default '', ADD INDEX author_idx (author)");
         safe_update($table, "author='".doSlash($txp_user)."'", '1=1');
     }
 }
