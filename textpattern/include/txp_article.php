@@ -327,7 +327,7 @@ function article_save()
 
     $incoming = array_map('assert_string', psa($vars));
 
-    $oldArticle = safe_row('Status, url_title, Title, '.
+    $oldArticle = safe_row('Status, url_title, Title, textile_body, textile_excerpt, '.
         'unix_timestamp(LastMod) as sLastMod, LastModID, '.
         'unix_timestamp(Posted) as sPosted, '.
         'unix_timestamp(Expires) as sExpires',
@@ -351,7 +351,8 @@ function article_save()
     }
 
     if (!has_privs('article.set_markup')) {
-        $incoming['textile_body'] = $incoming['textile_excerpt'] = $use_textile;
+        $incoming['textile_body'] = $oldArticle['textile_body'];
+        $incoming['textile_excerpt'] = $oldArticle['textile_excerpt'];
     }
 
     $incoming = textile_main_fields($incoming);
@@ -748,6 +749,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
             if ($concurrent) {
                 $store_out['sLastMod'] = safe_field('unix_timestamp(LastMod) as sLastMod', 'textpattern', 'ID='.$ID);
+            }
+
+            if (!has_privs('article.set_markup')) {
+                $oldArticle = safe_row('textile_body, textile_excerpt', 'textpattern', 'ID = '.$ID);
+                $store_out['textile_body'] = $oldArticle['textile_body'];
+                $store_out['textile_excerpt'] = $oldArticle['textile_excerpt'];
             }
         }
 
