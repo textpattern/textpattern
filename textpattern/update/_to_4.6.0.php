@@ -126,3 +126,22 @@ if (safe_field('name', 'txp_prefs', "name = 'ping_textpattern_com'")) {
 if (!get_pref('default_publish_status')) {
     set_pref('default_publish_status', STATUS_LIVE, 'publish', PREF_CORE, 'defaultPublishStatus', 15, PREF_PRIVATE);
 }
+
+// Remove broken import functionality
+if (file_exists(txpath.DS.'include'.DS.'txp_import.php')) {
+    $import_files = array(
+        'BloggerImportTemplate.txt',
+        'import_blogger.php',
+        'import_mt.php',
+        'import_b2.php',
+        'import_mtdb.php',
+        'import_wp.php'
+    );
+
+    foreach($import_files as $file) {
+        unlink(txpath.DS.'include'.DS.'import'.DS.$file);
+    }
+
+    rmdir(txpath.DS.'include'.DS.'import');
+    unlink(txpath.DS.'include'.DS.'txp_import.php');
+}
