@@ -6,6 +6,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * New tags: <txp:authors />, <txp:meta_description />, <txp:if_description> and <txp:if_yield>.
 * Added: Default publishing status preference.
 * Added: Support for additional text markup languages.
+* Added: Privilege to change text markup language in "Write" tab.
 * Changed: <txp:article_custom /> accepts 'exclude' attribute to exclude articles by a comma-separated id list.
 * Changed: <txp:author /> accepts 'escape' and 'format' attributes.
 * Changed: <txp:category_list /> accepts 'html_id', 'limit' and 'offset' attributes.

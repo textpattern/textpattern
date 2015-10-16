@@ -136,7 +136,13 @@ function article_post()
 
     extract($prefs);
 
-    $incoming = doSlash(textile_main_fields(array_map('assert_string', psa($vars))));
+    $incoming = array_map('assert_string', psa($vars));
+
+    if (!has_privs('article.set_markup')) {
+        $incoming['textile_body'] = $incoming['textile_excerpt'] = $use_textile;
+    }
+
+    $incoming = doSlash(textile_main_fields($incoming));
     extract($incoming);
 
     $msg = '';
@@ -342,6 +348,10 @@ function article_save()
         article_edit(array(gTxt('concurrent_edit_by', array('{author}' => txpspecialchars($oldArticle['LastModID']))), E_ERROR), true, true);
 
         return;
+    }
+
+    if (!has_privs('article.set_markup')) {
+        $incoming['textile_body'] = $incoming['textile_excerpt'] = $use_textile;
     }
 
     $incoming = textile_main_fields($incoming);
@@ -911,13 +921,19 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // Advanced.
 
         // Markup selection.
-        $html_markup = pluggable_ui('article_ui', 'markup',
-            graf(
-                '<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
-                pref_text('textile_body', $textile_body, 'markup-body'), ' class="markup markup-body"').
-            graf(
-                '<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
-                pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt'), ' class="markup markup-excerpt"'), $rs);
+        if (has_privs('article.set_markup')) {
+            $html_markup =
+                graf(
+                    '<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
+                    pref_text('textile_body', $textile_body, 'markup-body'), ' class="markup markup-body"').
+                graf(
+                    '<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
+                    pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt'), ' class="markup markup-excerpt"');
+        } else {
+            $html_markup = '';
+        }
+
+        $html_markup = pluggable_ui('article_ui', 'markup', $html_markup, $rs);
 
         // Form override.
         $form_pop = $allow_form_override ? form_pop($override_form, 'override-form') : '';
