@@ -1091,7 +1091,7 @@ h3.txp-summary.expanded a:after {
   padding: 0 1em;
 }
 
-/* Progress meter (only used in core for setup pages)
+/* Progress meter (only used in core for setup panels)
    ========================================================================== */
 /**
  * Progress meter lists.
@@ -1961,7 +1961,7 @@ dt {
 }
 
 /**
- * Switcher lists, to swap between diffrent page templates/form templates/etc.
+ * Switcher lists, to swap between different page templates/form templates/etc.
  *
  * Example HTML:
  *
@@ -2308,7 +2308,7 @@ body {
 }
 
 /**
- * Hide header content area on login pages.
+ * Hide header content area on login panels.
  *
  * Move offscreen - don't `display:none` as we need to show #messagepane content.
  * `.txp-view-site` is OK to hide though (otherwise it affects page tabbing).
@@ -2751,7 +2751,9 @@ hr {
 /**
  * Search widget at top of lists.
  *
- * Appears on: listing pages.
+ * Appears on:
+ *
+ * List panels.
  *
  * Example HTML:
  *
@@ -2798,7 +2800,7 @@ hr {
  *
  * Appears on:
  *
- * List pages.
+ * List panels.
  *
  * Example HTML:
  *
@@ -2838,7 +2840,7 @@ hr {
  *
  * Appears on:
  *
- * List pages.
+ * List panels.
  *
  * Example HTML:
  *
@@ -2870,11 +2872,11 @@ hr {
 }
 
 /**
- * Additonal action links ('Duplicate', 'View', etc.) on some pages.
+ * Additonal action links ('Duplicate', 'View', etc.) on some panels.
  *
  * Appears on:
  *
- * Article write/edit page, pages page, forms page, styles page.
+ * Article write/edit panel, pages panel, forms panel, styles panel.
  *
  * Example HTML:
  *
@@ -2921,7 +2923,7 @@ span.spinner {
  *
  * Appears on:
  *
- * List pages.
+ * List panels.
  *
  * Example HTML:
  *
@@ -2946,7 +2948,7 @@ div.multi-edit {
  *
  * Appears on:
  *
- * List pages.
+ * List panels.
  *
  * Example HTML:
  *
@@ -2979,7 +2981,7 @@ div.multi-edit {
  *
  * Appears on:
  *
- * List pages.
+ * List panels.
  *
  * Example HTML:
  *
@@ -3057,7 +3059,7 @@ div.multi-edit {
   cursor: default;
 }
 
-/* List navigators on list pages.
+/* List navigators on list panels.
  *
  * Anchor elements kept to one line to prevent space between buttons.
  *
@@ -3175,7 +3177,7 @@ div.multi-edit {
  *
  * Appears on:
  *
- * Forms page.
+ * Forms panel.
  *
  * Example HTML:
  *
@@ -3286,10 +3288,10 @@ div.multi-edit {
   max-width: 56em;
 }
 
-/* Setup and login pages - additional layout
+/* Setup and login panels - additional layout
    ========================================================================== */
 /**
- * Reduced `body` top padding of setup/login pages.
+ * Reduced `body` top padding of setup/login panels.
  *
  * Example HTML:
  *
@@ -3302,7 +3304,7 @@ div.multi-edit {
 }
 
 /**
- * Column width and margins of setup pages.
+ * Column width and margins of setup panels.
  */
 .txp-setup {
   margin: 1em auto;
@@ -3313,7 +3315,7 @@ div.multi-edit {
 }
 
 /**
- * Column width and margins of login pages.
+ * Column width and margins of login panels.
  */
 .txp-login {
   margin: 1em auto;
@@ -3344,7 +3346,7 @@ div.multi-edit {
   width: 100%;
 }
 
-/* Tag builder page - additional layout
+/* Tag builder panel - additional layout
    ========================================================================== */
 /**
  * Remove `body` padding of tag builder popup panes.
@@ -3359,7 +3361,7 @@ div.multi-edit {
   padding-top: 1em;
 }
 
-/* Content -> Categories page - additional layout
+/* Content -> Categories panel - additional layout
    ========================================================================== */
 /**
  * Extra margin below multi-edit widgets on categories page.
@@ -3368,10 +3370,10 @@ div.multi-edit {
   margin-bottom: 1em;
 }
 
-/* Content -> Write page - additional layout
+/* Content -> Write panel - additional layout
    ========================================================================== */
 /**
- * View mode tabs on write pages.
+ * View mode tabs on write area.
  *
  * Example HTML:
  *
@@ -3460,7 +3462,7 @@ div.multi-edit {
   color: #777777;
 }
 
-/* Content -> Articles page - additional layout
+/* Content -> Articles panel - additional layout
    ========================================================================== */
 /**
  * Grey-out text for unpublished articles/non-modified dates in the list.
@@ -3470,7 +3472,7 @@ div.multi-edit {
   color: #777777;
 }
 
-/* Content -> Images page - additional layout
+/* Content -> Images panel - additional layout
    ========================================================================== */
 td.thumbnail a {
   outline: 0;
@@ -3504,13 +3506,13 @@ td.thumbnail a {
   float: right;
 }
 
-/* Content -> Files page - additional layout
+/* Content -> Files panel - additional layout
    ========================================================================== */
 .edit-file-replace input[type="submit"] {
   float: right;
 }
 
-/* Content -> Comments page - additional layout
+/* Content -> Comments panel - additional layout
    ========================================================================== */
 /**
  * Red background highlight for spam comment rows in the list.
@@ -3526,13 +3528,13 @@ td.thumbnail a {
   background: #f9f2e3;
 }
 
-/* Admin -> Languages page - additional layout
+/* Admin -> Languages panel - additional layout
    ========================================================================== */
 #page-lang .txp-list .modified {
   margin-left: 0.6em;
 }
 
-/* Admin -> Plugins page - additional layout
+/* Admin -> Plugins panel - additional layout
    ========================================================================== */
 tr .manage span,
 tr .plugin-prefs {
