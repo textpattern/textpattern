@@ -1458,32 +1458,6 @@ textpattern.Route.add('login', function ()
     }
 });
 
-// Import panel.
-
-textpattern.Route.add('import', function ()
-{
-    var importOptions =
-    {
-        'mtdb' : '#mtblogid, #databased',
-        'wp'   : '#wponly, #databased',
-        'b2'   : '#databased'
-    };
-
-    $('select[name=import_tool]').change(function ()
-    {
-        var value = $(this).val();
-
-        $.each(importOptions, function (option, selector)
-        {
-            $(selector).hide();
-        });
-
-        if ($.type(importOptions[value]) === 'string') {
-            $(importOptions[value]).show();
-        }
-    });
-});
-
 // Write panel.
 
 textpattern.Route.add('article', function ()
