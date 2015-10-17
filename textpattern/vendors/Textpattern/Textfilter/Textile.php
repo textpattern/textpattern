@@ -28,7 +28,9 @@
  * @package Textfilter
  */
 
-class Textpattern_Textfilter_Textile extends Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
+namespace Textpattern\Textfilter;
+
+class Textile extends Base implements TextfilterInterface
 {
     /**
      * Instance of Textile.
@@ -45,7 +47,7 @@ class Textpattern_Textfilter_Textile extends Textpattern_Textfilter_Base impleme
     public function __construct()
     {
         parent::__construct(USE_TEXTILE, gTxt('use_textile'));
-        $this->textile = new Textpattern_Textile_Parser();
+        $this->textile = new \Textpattern_Textile_Parser();
         $this->version = $this->textile->getVersion();
     }
 

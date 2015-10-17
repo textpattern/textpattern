@@ -1446,7 +1446,7 @@ function search_form($event, $step, $crit, $methods, $method, $default_method)
 function pref_text($name, $val, $id = '')
 {
     $id = ($id) ? $id : $name;
-    $vals = Txp::get('Textpattern_Textfilter_Registry')->getMap();
+    $vals = Txp::get('\Textpattern\Textfilter\Registry')->getMap();
 
     return selectInput($name, $vals, $val, '', '', $id);
 }

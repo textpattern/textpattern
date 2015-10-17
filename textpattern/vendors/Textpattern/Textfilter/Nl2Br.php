@@ -30,7 +30,9 @@
  * @package Textfilter
  */
 
-class Textpattern_Textfilter_Nl2Br extends Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
+namespace Textpattern\Textfilter;
+
+class Nl2Br extends Base implements TextfilterInterface
 {
     /**
      * Constructor.
