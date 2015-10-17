@@ -28,7 +28,7 @@
  * @package Tag
  */
 
-class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterface
+class Textpattern_Tag_Registry implements \Textpattern\Container\ReusableInterface
 {
     /**
      * Stores registered tags.

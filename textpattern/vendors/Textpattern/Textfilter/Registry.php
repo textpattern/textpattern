@@ -30,7 +30,7 @@ namespace Textpattern\Textfilter;
  * @package Textfilter
  */
 
-class Registry implements \ArrayAccess, \IteratorAggregate,  \Textpattern_Container_ReusableInterface
+class Registry implements \ArrayAccess, \IteratorAggregate,  \Textpattern\Container\ReusableInterface
 {
     /**
      * An array of filters.
