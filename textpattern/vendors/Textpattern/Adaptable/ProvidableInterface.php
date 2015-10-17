@@ -28,13 +28,15 @@
  * @package Adaptable
  */
 
-interface Textpattern_Adaptable_ProvidableInterface
+namespace Textpattern\Adaptable;
+
+interface ProvidableInterface
 {
     /**
      * Sets the current adapter.
      *
      * @param  Textpattern_Adaptable_Adapter $adapter The adapter
-     * @return Textpattern_Adaptable_ProvidableInterface
+     * @return ProvidableInterface
      */
 
     public function setAdapter(Textpattern_Adaptable_Adapter $adapter);

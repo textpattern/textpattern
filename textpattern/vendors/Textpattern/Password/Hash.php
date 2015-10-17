@@ -32,7 +32,7 @@
  * @package Password
  */
 
-class Textpattern_Password_Hash extends Textpattern_Adaptable_Providable
+class Textpattern_Password_Hash extends \Textpattern\Adaptable\Providable
 {
     /**
      * {@inheritdoc}

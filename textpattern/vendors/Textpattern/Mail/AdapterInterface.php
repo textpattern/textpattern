@@ -28,7 +28,7 @@
  * @package Mail
  */
 
-interface Textpattern_Mail_AdapterInterface extends Textpattern_Adaptable_AdapterInterface
+interface Textpattern_Mail_AdapterInterface extends \Textpattern\Adaptable\AdapterInterface
 {
     /**
      * Sets the subject.

@@ -28,7 +28,7 @@
  * @package Mail
  */
 
-class Textpattern_Mail_Compose extends Textpattern_Adaptable_Providable
+class Textpattern_Mail_Compose extends \Textpattern\Adaptable\Providable
 {
     /**
      * {@inheritdoc}

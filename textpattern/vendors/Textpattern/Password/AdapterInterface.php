@@ -28,7 +28,7 @@
  * @package Password
  */
 
-interface Textpattern_Password_AdapterInterface extends Textpattern_Adaptable_AdapterInterface
+interface Textpattern_Password_AdapterInterface extends \Textpattern\Adaptable\AdapterInterface
 {
     /**
      * Verifies the password.
