@@ -6318,7 +6318,7 @@ function janitor()
 
     // Update DST setting.
     if ($auto_dst && $timezone_key) {
-        $is_dst = Txp::get('Textpattern_Date_Timezone')->isDst(null, $timezone_key);
+        $is_dst = Txp::get('\Textpattern\Date\Timezone')->isDst(null, $timezone_key);
 
         if ($is_dst != $prefs['is_dst']) {
             $prefs['is_dst'] = $is_dst;
@@ -6351,7 +6351,7 @@ class timezone
 
     public function selectInput($name = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
     {
-        if ($details = Txp::get('Textpattern_Date_Timezone')->getTimeZones()) {
+        if ($details = Txp::get('\Textpattern\Date\Timezone')->getTimeZones()) {
             $thiscontinent = '';
             $selected = false;
 
@@ -6401,7 +6401,7 @@ class timezone
 
     public function details()
     {
-        return Txp::get('Textpattern_Date_Timezone')->getTimeZones();
+        return Txp::get('\Textpattern\Date\Timezone')->getTimeZones();
     }
 
     /**
@@ -6418,7 +6418,7 @@ class timezone
 
     public function key($gmtoffset)
     {
-        if ($idenfiers = Txp::get('Textpattern_Date_Timezone')->getOffsetIdentifiers($gmtoffset)) {
+        if ($idenfiers = Txp::get('\Textpattern\Date\Timezone')->getOffsetIdentifiers($gmtoffset)) {
             return $idenfiers[0];
         }
 
@@ -6437,7 +6437,7 @@ class timezone
 
     public static function is_dst($timestamp, $timezone_key)
     {
-        return Txp::get('Textpattern_Date_Timezone')->isDst($timestamp, $timezone_key);
+        return Txp::get('\Textpattern\Date\Timezone')->isDst($timestamp, $timezone_key);
     }
 
     /**

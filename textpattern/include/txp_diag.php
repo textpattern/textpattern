@@ -478,7 +478,7 @@ function doDiagnostics()
 
         gTxt('gd_library').cs.$gd.n,
 
-        gTxt('server').' TZ: '.Txp::get('Textpattern_Date_Timezone')->getTimeZone().n,
+        gTxt('server').' TZ: '.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
         gTxt('server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
         strip_tags(gTxt('is_dst')).cs.$is_dst.n,
         strip_tags(gTxt('auto_dst')).cs.$auto_dst.n,

@@ -31,7 +31,9 @@
  * @since   4.6.0
  */
 
-class Textpattern_Date_Timezone
+namespace Textpattern\Date;
+
+class Timezone
 {
     /**
      * Stores a list of details about each timezone.
@@ -74,7 +76,7 @@ class Textpattern_Date_Timezone
      * The following:
      *
      * <code>
-     * print_r(Txp::get('Textpattern_Date_Timezone')->getTimeZones());
+     * print_r(Txp::get('\Textpattern\Date\Timezone')->getTimeZones());
      * </code>
      *
      * Returns:
@@ -144,7 +146,7 @@ class Textpattern_Date_Timezone
      * value is ambiguous and merely useful for presentation purposes.
      *
      * <code>
-     * print_r(Txp::get('Textpattern_Date_Timezone')->getOffsetIdentifiers(3600));
+     * print_r(Txp::get('\Textpattern\Date\Timezone')->getOffsetIdentifiers(3600));
      * </code>
      *
      * Returns:
@@ -159,7 +161,7 @@ class Textpattern_Date_Timezone
      * )
      * </code>
      *
-     * @param  int        $offset Offset in seconds
+     * @param  int $offset Offset in seconds
      * @return array|bool An array of timezone identifiers, or FALSE
      */
 
@@ -181,24 +183,24 @@ class Textpattern_Date_Timezone
      * If timezone is NULL, checks the server default timezone.
      *
      * <code>
-     * echo Txp::get('Textpattern_Date_Timezone')->isDst('2013/06/20', 'Europe/London');
+     * echo Txp::get('\Textpattern\Date\Timezone')->isDst('2013/06/20', 'Europe/London');
      * </code>
      *
      * Returns TRUE, while this returns FALSE as the timezone does not use
      * daylight saving time:
      *
      * <code>
-     * echo Txp::get('Textpattern_Date_Timezone')->isDst('2013/06/20', 'Africa/Accra');
+     * echo Txp::get('\Textpattern\Date\Timezone')->isDst('2013/06/20', 'Africa/Accra');
      * </code>
      *
      * If it's winter this returns FALSE:
      *
      * <code>
-     * echo Txp::get('Textpattern_Date_Timezone')->isDst(null, 'Europe/London');
+     * echo Txp::get('\Textpattern\Date\Timezone')->isDst(null, 'Europe/London');
      * </code>
      *
      * @param  string|int|null $timestamp Time to check
-     * @param  string|null     $timezone  Timezone identifier
+     * @param  string|null $timezone Timezone identifier
      * @return bool            TRUE if timezone is using DST
      */
 
@@ -209,20 +211,20 @@ class Textpattern_Date_Timezone
         }
 
         try {
-            $timezone = new DateTimeZone($timezone);
+            $timezone = new \DateTimeZone($timezone);
 
             if ($timestamp !== null) {
-                if ((string) intval($timestamp) !== (string) $timestamp) {
+                if ((string)intval($timestamp) !== (string)$timestamp) {
                     $timestamp = strtotime($timestamp);
                 }
 
                 $timestamp = date('Y-m-d H:m:s', $timestamp);
             }
 
-            $dateTime = new DateTime($timestamp, $timezone);
+            $dateTime = new \DateTime($timestamp, $timezone);
 
-            return (bool) $dateTime->format('I');
-        } catch (Exception $e) {
+            return (bool)$dateTime->format('I');
+        } catch (\Exception $e) {
         }
 
         return false;
@@ -235,7 +237,7 @@ class Textpattern_Date_Timezone
      * drop DST.
      *
      * <code>
-     * print_r(Txp::get('Textpattern_Date_Timezone')->getDstPeriod('Europe/Helsinki'));
+     * print_r(Txp::get('\Textpattern\Date\Timezone')->getDstPeriod('Europe/Helsinki'));
      * </code>
      *
      * Returns:
@@ -263,9 +265,9 @@ class Textpattern_Date_Timezone
      * </code>
      *
      * @param  string|null $timezone The timezone identifier
-     * @param  int         Next transitions starting from when
+     * @param  int $from   Next transitions starting from when
      * @return array|bool  An array of next two transitions, or FALSE
-     * @throws Exception
+     * @throws \Exception
      */
 
     public function getDstPeriod($timezone = null, $from = null)
@@ -274,7 +276,7 @@ class Textpattern_Date_Timezone
             $timezone = $this->getTimeZone();
         }
 
-        $timezone = new DateTimeZone($timezone);
+        $timezone = new \DateTimeZone($timezone);
 
         if ($from === null) {
             $from = time();
@@ -309,20 +311,20 @@ class Textpattern_Date_Timezone
      * there is no abbreviation to give.
      *
      * <code>
-     * echo Txp::get('Textpattern_Date_Timezone')->getTimeZoneAbbreviation('Europe/London');
+     * echo Txp::get('\Textpattern\Date\Timezone')->getTimeZoneAbbreviation('Europe/London');
      * </code>
      *
      * Returns 'GMT', while the following returns 'FALSE':
      *
      * <code>
-     * echo Txp::get('Textpattern_Date_Timezone')->getTimeZoneAbbreviation('Africa/Accra', true);
+     * echo Txp::get('\Textpattern\Date\Timezone')->getTimeZoneAbbreviation('Africa/Accra', true);
      * </code>
      *
      * As according to the timezone database, the timezone does not currently
      * use DST.
      *
-     * @param  string      $timezone Timezone identifier
-     * @param  bool        $dst      TRUE to get the abbreviation during DST
+     * @param  string $timezone Timezone identifier
+     * @param  bool $dst TRUE to get the abbreviation during DST
      * @return string|bool The abbreviation, or FALSE on failure
      */
 
@@ -333,7 +335,7 @@ class Textpattern_Date_Timezone
                 $timezone = $this->getTimeZone();
             }
 
-            $timezone = new DateTimeZone($timezone);
+            $timezone = new \DateTimeZone($timezone);
             $time = time();
 
             if ($transitions = $timezone->getTransitions()) {
@@ -356,7 +358,7 @@ class Textpattern_Date_Timezone
                     }
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
         }
 
         return false;
@@ -369,7 +371,7 @@ class Textpattern_Date_Timezone
      * uses the server's default timezone.
      *
      * <code>
-     * print_r(Txp::get('Textpattern_Date_Timezone')->getIdentifier('Europe/London'));
+     * print_r(Txp::get('\Textpattern\Date\Timezone')->getIdentifier('Europe/London'));
      * </code>
      *
      * Returns:
@@ -400,7 +402,7 @@ class Textpattern_Date_Timezone
         }
 
         try {
-            $dateTime = new DateTime('now', new DateTimeZone($timezone));
+            $dateTime = new \DateTime('now', new \DateTimeZone($timezone));
 
             $data = array(
                 'continent' => '',
@@ -423,7 +425,7 @@ class Textpattern_Date_Timezone
             }
 
             return $data;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -434,32 +436,32 @@ class Textpattern_Date_Timezone
      * If an array of identifiers is given, the first one supported is used.
      *
      * <code>
-     * echo Txp::get('Textpattern_Date_Timezone')->setTimeZone('UTC');
+     * echo Txp::get('\Textpattern\Date\Timezone')->setTimeZone('UTC');
      * </code>
      *
      * Throws an exception if the identifier isn't valid.
      *
      * @param  array|string $identifiers The timezone identifier
-     * @return Textpattern_Date_Timezone
-     * @throws Exception
+     * @return Timezone
+     * @throws \Exception
      */
 
     public function setTimeZone($identifiers)
     {
-        foreach ((array) $identifiers as $identifier) {
+        foreach ((array)$identifiers as $identifier) {
             if (@date_default_timezone_set($identifier)) {
                 return $this;
             }
         }
 
-        throw new Exception(gTxt('invalid_argument', array('{name}' => 'identifiers')));
+        throw new \Exception(gTxt('invalid_argument', array('{name}' => 'identifiers')));
     }
 
     /**
      * Gets the server default timezone.
      *
      * <code>
-     * echo Txp::get('Textpattern_Date_Timezone')->setTimeZone('Europe/London')->getTimeZone();
+     * echo Txp::get('\Textpattern\Date\Timezone')->setTimeZone('Europe/London')->getTimeZone();
      * </code>
      *
      * The above returns 'Europe/London'.
