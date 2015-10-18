@@ -21,13 +21,15 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace Textpattern\Filter;
+
 /**
  * Callable filter.
  *
  * <code>
  * try {
- *     Txp::get('Textpattern_Filter_Callable', 'fn');
- * } catch (Textpattern_Filter_Exception $e) {
+ *     Txp::get('Textpattern\Filter\FilterCallable', 'fn');
+ * } catch (Textpattern\Filter\Exception $e) {
  *     echo $e->getMessage();
  * }
  * </code>
@@ -36,7 +38,7 @@
  * @package Filter
  */
 
-class Textpattern_Filter_Callable extends Textpattern_Type_Callable
+class FilterCallable extends Textpattern_Type_Callable
 {
     /**
      * {@inheritdoc}
@@ -45,7 +47,7 @@ class Textpattern_Filter_Callable extends Textpattern_Type_Callable
     public function __construct($callable)
     {
         if (!is_callable($callable)) {
-            throw new Textpattern_Filter_Exception(gTxt('assert_callable'));
+            throw new \Textpattern\Filter\Exception(gTxt('assert_callable'));
         }
 
         parent::__construct($callable);
