@@ -34,7 +34,7 @@
  * @package Textpack
  */
 
-class Textpattern_Textpack_String_Iterator extends Textpattern_Iterator_FileIterator implements Textpattern_Textpack_StringInterface
+class Textpattern_Textpack_String_Iterator extends \Textpattern\Iterator\FileIterator implements Textpattern_Textpack_StringInterface
 {
     /**
      * Stores Textpack parser instance.
