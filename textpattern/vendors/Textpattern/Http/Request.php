@@ -213,7 +213,7 @@ class Textpattern_Http_Request
         foreach ((array) $languages as $language) {
             $search = array($language);
 
-            if ($identifiers = Txp::get('Textpattern_L10n_Locale')->getLocaleIdentifiers($language)) {
+            if ($identifiers = Txp::get('\Textpattern\L10n\Locale')->getLocaleIdentifiers($language)) {
                 $search = array_map('strtolower', array_merge($search, $identifiers));
             }
 

@@ -25,14 +25,16 @@
  * Handles locales.
  *
  * <code>
- * echo Txp::get('Textpattern_L10n_Locale')->setLocale(LC_ALL, 'da-dk')->getLocale();
+ * echo Txp::get('Textpattern\L10n\Locale')->setLocale(LC_ALL, 'da-dk')->getLocale();
  * </code>
  *
  * @since   4.6.0
  * @package L10n
  */
 
-class Textpattern_L10n_Locale
+namespace Textpattern\L10n;
+
+class Locale
 {
     /**
      * An array of locale identifiers.
@@ -98,13 +100,13 @@ class Textpattern_L10n_Locale
      * The following would set the locale to English:
      *
      * <code>
-     * Txp::get('Textpattern_L10n_Locale')->setLocale(LC_ALL, 'en-GB');
+     * Txp::get('Textpattern\L10n\Locale')->setLocale(LC_ALL, 'en-GB');
      * </code>
      *
      * This would format currencies according to the French localisation:
      *
      * <code>
-     * Txp::get('Textpattern_L10n_Locale')->setLocale(LC_MONETARY, 'fr-FR');
+     * Txp::get('Textpattern\L10n\Locale')->setLocale(LC_MONETARY, 'fr-FR');
      * echo money_format('%i', 51.99);
      * </code>
      *
@@ -113,16 +115,16 @@ class Textpattern_L10n_Locale
      *
      * If an array of locales is provided, the first one that works is used.
      *
-     * @param  int          $category The localisation category to change
-     * @param  string|array $locale   The language code
-     * @return Textpattern_L10n_Locale
-     * @throws Exception
+     * @param  int $category The localisation category to change
+     * @param  string|array $locale The language code
+     * @return Locale
+     * @throws \Exception
      * @see    setlocale()
      */
 
     public function setLocale($category, $locale)
     {
-        foreach ((array) $locale as $name) {
+        foreach ((array)$locale as $name) {
             $code = strtolower($name);
 
             if (isset($this->locales[$code])) {
@@ -136,17 +138,17 @@ class Textpattern_L10n_Locale
             return $this;
         }
 
-        throw new Exception(gTxt('invalid_argument', array('{name}' => 'locale')));
+        throw new \Exception(gTxt('invalid_argument', array('{name}' => 'locale')));
     }
 
     /**
      * Gets the current locale.
      *
      * <code>
-     * echo Txp::get('Textpattern_L10n_Locale')->getLocale(LC_ALL);
+     * echo Txp::get('Textpattern\L10n\Locale')->getLocale(LC_ALL);
      * </code>
      *
-     * @param  int   $category The localisation category
+     * @param  int $category The localisation category
      * @return mixed
      */
 
@@ -164,13 +166,13 @@ class Textpattern_L10n_Locale
      * The following returns 'en_GB.UTF-8':
      *
      * <code>
-     * echo Txp::get('Textpattern_L10n_Locale')->getLanguageLocale('en-GB');
+     * echo Txp::get('Textpattern\L10n\Locale')->getLanguageLocale('en-GB');
      * </code>
      *
      * Returns the current locale name if the system doesn't have anything
      * more appropriate.
      *
-     * @param  string      $language The language
+     * @param  string $language The language
      * @return string|bool Locale code, or FALSE on error
      */
 
@@ -184,7 +186,7 @@ class Textpattern_L10n_Locale
             try {
                 $locale = $this->setLocale(LC_TIME, $language)->getLocale(LC_TIME);
                 $this->setLocale(LC_TIME, $original);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
             }
         }
 
@@ -201,16 +203,16 @@ class Textpattern_L10n_Locale
      * All these will return 'en-GB':
      *
      * <code>
-     * echo Txp::get('Textpattern_L10n_Locale')->getLocaleLanguage('en_GB.UTF-8');
-     * echo Txp::get('Textpattern_L10n_Locale')->getLocaleLanguage('en-gb');
-     * echo Txp::get('Textpattern_L10n_Locale')->getLocaleLanguage('english');
-     * echo Txp::get('Textpattern_L10n_Locale')->getLocaleLanguage('c');
-     * echo Txp::get('Textpattern_L10n_Locale')->getLocaleLanguage('English_UK.1252');
+     * echo Txp::get('Textpattern\L10n\Locale')->getLocaleLanguage('en_GB.UTF-8');
+     * echo Txp::get('Textpattern\L10n\Locale')->getLocaleLanguage('en-gb');
+     * echo Txp::get('Textpattern\L10n\Locale')->getLocaleLanguage('english');
+     * echo Txp::get('Textpattern\L10n\Locale')->getLocaleLanguage('c');
+     * echo Txp::get('Textpattern\L10n\Locale')->getLocaleLanguage('English_UK.1252');
      * </code>
      *
      * If the specified locale isn't supported, FALSE will be returned.
      *
-     * @param  string      $locale The locale identifier
+     * @param  string $locale The locale identifier
      * @return string|bool The language code, or FALSE on failure
      */
 
@@ -238,10 +240,10 @@ class Textpattern_L10n_Locale
      * returned by the OS.
      *
      * <code>
-     * echo Txp::get('Textpattern_L10n_Locale')->getCharset();
+     * echo Txp::get('Textpattern\L10n\Locale')->getCharset();
      * </code>
      *
-     * @param  int         $category The localisation category
+     * @param  int $category The localisation category
      * @return string|bool The character set, or FALSE on failure
      */
 
@@ -264,10 +266,10 @@ class Textpattern_L10n_Locale
      * Gets the language from the current locale.
      *
      * <code>
-     * echo Txp::get('Textpattern_L10n_Locale')->getLanguage();
+     * echo Txp::get('Textpattern\L10n\Locale')->getLanguage();
      * </code>
      *
-     * @param  int         $category The localisation category
+     * @param  int $category The localisation category
      * @return string|bool The language code, or FALSE on failure
      */
 
@@ -290,12 +292,12 @@ class Textpattern_L10n_Locale
      * locale identifiers.
      *
      * <code>
-     * print_r(Txp::get('Textpattern_L10n_Locale')->getLocaleIdentifiers('english'));
-     * print_r(Txp::get('Textpattern_L10n_Locale')->getLocaleIdentifiers('en'));
-     * print_r(Txp::get('Textpattern_L10n_Locale')->getLocaleIdentifiers('en-gb'));
+     * print_r(Txp::get('Textpattern\L10n\Locale')->getLocaleIdentifiers('english'));
+     * print_r(Txp::get('Textpattern\L10n\Locale')->getLocaleIdentifiers('en'));
+     * print_r(Txp::get('Textpattern\L10n\Locale')->getLocaleIdentifiers('en-gb'));
      * </code>
      *
-     * @param  string     $locale The locale or language code
+     * @param  string $locale The locale or language code
      * @return array|bool An array of identifiers, or FALSE if not supported
      */
 

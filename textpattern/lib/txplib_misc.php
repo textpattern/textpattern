@@ -3015,8 +3015,8 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     }
 
     if ($override_locale) {
-        $oldLocale = Txp::get('Textpattern_L10n_Locale')->getLocale(LC_TIME);
-        Txp::get('Textpattern_L10n_Locale')->setLocale(LC_TIME, $override_locale);
+        $oldLocale = Txp::get('\Textpattern\L10n\Locale')->getLocale(LC_TIME);
+        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, $override_locale);
     }
 
     if ($format == 'since') {
@@ -3050,7 +3050,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 
     // Revert to the old locale.
     if ($override_locale && $oldLocale) {
-        Txp::get('Textpattern_L10n_Locale')->setLocale(LC_TIME, $oldLocale);
+        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, $oldLocale);
     }
 
     return $str;
@@ -5810,7 +5810,7 @@ function get_caller($num = 1, $start = 2)
  * @return     string Current locale
  * @package    L10n
  * @deprecated in 4.6.0
- * @see        Textpattern_L10n_Locale::setLocale()
+ * @see        \Textpattern\L10n\Locale::setLocale()
  */
 
 function getlocale($lang)
@@ -5818,11 +5818,11 @@ function getlocale($lang)
     global $locale;
 
     try {
-        Txp::get('Textpattern_L10n_Locale')->setLocale(LC_TIME, array($lang, $locale));
+        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, array($lang, $locale));
     } catch (Exception $e) {
     }
 
-    return Txp::get('Textpattern_L10n_Locale')->getLocale(LC_TIME);
+    return Txp::get('\Textpattern\L10n\Locale')->getLocale(LC_TIME);
 }
 
 /**
