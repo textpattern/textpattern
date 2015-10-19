@@ -34,10 +34,10 @@ include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_misc.php';
 include txpath.'/vendors/Textpattern/Loader.php';
 
-$loader = new Textpattern_Loader(txpath.'/vendors');
+$loader = new \Textpattern\Loader(txpath.'/vendors');
 $loader->register();
 
-$loader = new Textpattern_Loader(txpath.'/lib');
+$loader = new \Textpattern\Loader(txpath.'/lib');
 $loader->register();
 
 if (!isset($_SESSION)) {
