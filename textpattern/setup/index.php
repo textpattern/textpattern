@@ -384,17 +384,23 @@ function printConfig()
         exit;
     }
 
-    // On 4.1 or greater use UTF-8-tables.
-    $version = mysqli_get_server_info($mylink);
-
-    if (version_compare($version, '4.1') >= 0) {
-        if (mysqli_query($mylink, "SET NAMES utf8")) {
-            $_SESSION['dbcharset'] = "utf8";
-        } else {
-            $_SESSION['dbcharset'] = "latin1";
-        }
+    // On MySQL 5.5.3+ use real UTF-8 tables, if the client supports it.
+    $_SESSION['dbcharset'] = "utf8mb4";
+    // Lower versions only support UTF-8 limited to 3 bytes per character
+    if (mysqli_get_server_version($mylink) < 50503) {
+        $_SESSION['dbcharset'] = "utf8";
     } else {
-        $_SESSION['dbcharset'] = "latin1";
+        if (FALSE !== strpos(mysqli_get_client_info($mylink), 'mysqlnd')) {
+            // mysqlnd 5.0.9+ required
+            if (mysqli_get_client_version($mylink) < 50009) {
+                $_SESSION['dbcharset'] = "utf8";
+            }
+        } else {
+            // libmysqlclient 5.5.3+ required
+            if (mysqli_get_client_version($mylink) < 50503) {
+                $_SESSION['dbcharset'] = "utf8";
+            }
+        }
     }
 
     echo graf(
