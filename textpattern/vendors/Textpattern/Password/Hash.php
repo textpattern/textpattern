@@ -25,14 +25,16 @@
  * Hashes and verifies a password.
  *
  * <code>
- * echo Txp::get('Textpattern_Password_Hash')->hash('password');
+ * echo Txp::get('\Textpattern\Password\Hash')->hash('password');
  * </code>
  *
  * @since   4.6.0
  * @package Password
  */
 
-class Textpattern_Password_Hash extends Textpattern_Adaptable_Providable
+namespace Textpattern\Password;
+
+class Hash extends \Textpattern\Adaptable\Providable
 {
     /**
      * {@inheritdoc}
@@ -40,6 +42,6 @@ class Textpattern_Password_Hash extends Textpattern_Adaptable_Providable
 
     public function getDefaultAdapter()
     {
-        return new Textpattern_Password_Adapter_PasswordHash();
+        return new \Textpattern\Password\Adapter\PasswordHash();
     }
 }

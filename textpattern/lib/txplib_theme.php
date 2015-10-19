@@ -115,7 +115,7 @@ class theme
     /**
      * Theme factory.
      *
-     * @param  string   $name Theme name
+     * @param  string $name Theme name
      * @return obj|bool An initialised theme object or FALSE on failure
      */
 
@@ -142,7 +142,7 @@ class theme
      * Initialise the theme singleton.
      *
      * @param  string $name Theme name
-     * @return obj    A valid theme object
+     * @return obj A valid theme object
      */
 
     public static function init($name = '')
@@ -203,7 +203,7 @@ class theme
      * Inherit from an ancestor theme.
      *
      * @param  string $name Name of ancestor theme
-     * @return bool   TRUE on success, FALSE on unavailable/invalid ancestor theme
+     * @return bool TRUE on success, FALSE on unavailable/invalid ancestor theme
      */
 
     public static function based_on($name)
@@ -232,7 +232,7 @@ class theme
      * @param  string $event    Currently active second level menu
      * @param  bool   $is_popup Just a popup window for tag builder et cetera
      * @param  array  $message  The contents of the notification message pane
-     * @return obj    This theme object
+     * @return obj This theme object
      */
 
     public function set_state($area, $event, $is_popup, $message)
@@ -339,8 +339,8 @@ class theme
     /**
      * Output notification message for synchronous HTML views.
      *
-     * @param  array  $thing Message text and status flag
-     * @param  bool   $modal If TRUE, immediate user interaction suggested
+     * @param  array $thing Message text and status flag
+     * @param  bool  $modal If TRUE, immediate user interaction suggested
      * @return string HTML
      * @example
      * global $theme;
@@ -355,8 +355,8 @@ class theme
     /**
      * Output notification message for asynchronous JavaScript views.
      *
-     * @param  array  $thing Message text and status flag
-     * @param  bool   $modal If TRUE, immediate user interaction suggested
+     * @param  array $thing Message text and status flag
+     * @param  bool  $modal If TRUE, immediate user interaction suggested
      * @return string JavaScript
      * @since 4.5.0
      * @example

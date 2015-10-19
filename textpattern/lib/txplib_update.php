@@ -38,7 +38,7 @@
  * strings are also stripped from the database.
  *
  * @param   string $lang The language code
- * @return  bool   TRUE on success
+ * @return  bool TRUE on success
  * @package L10n
  */
 

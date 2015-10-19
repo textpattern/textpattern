@@ -133,6 +133,7 @@ function rss()
                 $cb = callback_event('rss_entry');
 
                 $a['posted'] = $uPosted;
+                $a['expires'] = $uExpires;
 
                 $permlink = permlinkurl($a);
                 $summary = trim(replace_relative_urls(parse($thisarticle['excerpt']), $permlink));

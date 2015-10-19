@@ -404,7 +404,7 @@ function safe_query($q = '', $debug = false, $unbuf = false)
  * @param  string $table The table
  * @param  string $where The where clause
  * @param  bool   $debug Dump query
- * @return bool   FALSE on error
+ * @return bool FALSE on error
  * @see    safe_update()
  * @see    safe_insert()
  * @example
@@ -426,7 +426,7 @@ function safe_delete($table, $where, $debug = false)
  * @param  string $set   The set clause
  * @param  string $where The where clause
  * @param  bool   $debug Dump query
- * @return bool   FALSE on error
+ * @return bool FALSE on error
  * @see    safe_insert()
  * @see    safe_delete()
  * @example
@@ -444,9 +444,9 @@ function safe_update($table, $set, $where, $debug = false)
 /**
  * Inserts a new row into a table.
  *
- * @param  string   $table The table
- * @param  string   $set   The set clause
- * @param  bool     $debug Dump query
+ * @param  string $table The table
+ * @param  string $set   The set clause
+ * @param  bool   $debug Dump query
  * @return int|bool The last generated ID or FALSE on error. If the ID is 0, returns TRUE
  * @see    safe_update()
  * @see    safe_delete()
@@ -474,10 +474,10 @@ function safe_insert($table, $set, $debug = false)
 /**
  * Inserts a new row, or updates an existing if a matching row is found.
  *
- * @param  string   $table The table
- * @param  string   $set   The set clause
- * @param  string   $where The where clause
- * @param  bool     $debug Dump query
+ * @param  string $table The table
+ * @param  string $set   The set clause
+ * @param  string $where The where clause
+ * @param  bool   $debug Dump query
  * @return int|bool The last generated ID or FALSE on error. If the ID is 0, returns TRUE
  * @example
  * if ($r = safe_upsert('myTable', "data='foobar'", "name='example'"))
@@ -502,10 +502,10 @@ function safe_upsert($table, $set, $where, $debug = false)
 /**
  * Changes the structure of a table.
  *
- * @param   string $table The table
- * @param   string $alter The statement to execute
- * @param   bool   $debug Dump query
- * @return  bool   FALSE on error
+ * @param  string $table The table
+ * @param  string $alter The statement to execute
+ * @param  bool   $debug Dump query
+ * @return bool FALSE on error
  * @example
  * if (safe_alter('myTable', 'ADD myColumn TINYINT(1)'))
  * {
@@ -527,7 +527,7 @@ function safe_alter($table, $alter, $debug = false)
  * @param  string $table The table
  * @param  string $type  The lock type
  * @param  bool   $debug Dump the query
- * @return bool   TRUE if the tables are locked
+ * @return bool TRUE if the tables are locked
  * @since  4.6.0
  * @example
  * if (safe_lock('myTable'))
@@ -562,9 +562,9 @@ function safe_unlock($debug = false)
 /**
  * Gets an array of information about an index.
  *
- * @param  string     $table The table
- * @param  string     $index The index
- * @param  bool       $debug Dump the query
+ * @param  string $table The table
+ * @param  string $index The index
+ * @param  bool   $debug Dump the query
  * @return array|bool Array of information about the index, or FALSE on error
  * @since  4.6.0
  * @example
@@ -598,7 +598,7 @@ function safe_index($table, $index, $debug = false)
  * @param  string $index   The index. Either 'unique', 'fulltext', 'spatial'
  * @param  string $type    The index type
  * @param  bool   $debug   Dump the query
- * @return bool   TRUE if index exists
+ * @return bool TRUE if index exists
  * @since  4.6.0
  * @example
  * if (safe_create_index('myTable', 'col1(11), col2(11)', 'myIndex'))
@@ -628,7 +628,7 @@ function safe_create_index($table, $columns, $name, $index = 'fulltext', $type =
  * @param  string $table The table
  * @param  string $index The index
  * @param  bool   $debug Dump the query
- * @return bool   TRUE if the index no longer exists
+ * @return bool TRUE if the index no longer exists
  * @since  4.6.0
  * @example
  * if (safe_drop_index('myTable', 'primary'))
@@ -657,7 +657,7 @@ function safe_drop_index($table, $index, $debug = false)
  *
  * @param  string $table The table
  * @param  bool   $debug Dump query
- * @return bool   FALSE on error
+ * @return bool FALSE on error
  * @example
  * if (safe_optimize('myTable'))
  * {
@@ -1345,7 +1345,7 @@ function getTreePath($target, $type, $tbl = 'txp_category')
  * @param  string $left   The left ID
  * @param  string $type   The category type
  * @param  string $tbl    The table
- * @return int    The next left ID
+ * @return int The next left ID
  */
 
 function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
@@ -1379,7 +1379,7 @@ function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
  *
  * @param  string $type   The category type
  * @param  string $tbl    The table
- * @return int    The next left ID
+ * @return int The next left ID
  */
 
 function rebuild_tree_full($type, $tbl = 'txp_category')

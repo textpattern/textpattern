@@ -306,8 +306,8 @@ function save_language()
     )));
 
     if (safe_field('lang', 'txp_lang', "lang='".doSlash($language)."' limit 1")) {
-        $locale = $prefs['locale'] = Txp::get('Textpattern_L10n_Locale')->getLanguageLocale($language);
-        Txp::get('Textpattern_L10n_Locale')->setLocale(LC_ALL, $language);
+        $locale = $prefs['locale'] = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language);
+        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_ALL, $language);
         set_pref('locale', $locale);
         set_pref('language', $language);
         $textarray = load_lang($language);

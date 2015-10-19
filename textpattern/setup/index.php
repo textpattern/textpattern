@@ -30,12 +30,14 @@ define("txpinterface", "admin");
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
 
+include_once txpath.'/lib/constants.php';
+include_once txpath.'/lib/txplib_misc.php';
 include txpath.'/vendors/Textpattern/Loader.php';
 
-$loader = new Textpattern_Loader(txpath.'/vendors');
+$loader = new \Textpattern\Loader(txpath.'/vendors');
 $loader->register();
 
-$loader = new Textpattern_Loader(txpath.'/lib');
+$loader = new \Textpattern\Loader(txpath.'/lib');
 $loader->register();
 
 if (!isset($_SESSION)) {
@@ -46,10 +48,8 @@ if (!isset($_SESSION)) {
     }
 }
 
-include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
-include_once txpath.'/lib/txplib_misc.php';
 include_once txpath.'/lib/txplib_theme.php';
 include_once txpath.'/include/txp_auth.php';
 
@@ -128,6 +128,8 @@ switch ($step) {
 
 function chooseLang()
 {
+    $_SESSION = array();
+
     echo n.'<div class="txp-container" id="setup_container">',
         n.'<div class="txp-setup">',
         hed('Welcome to Textpattern CMS', 1),
@@ -382,17 +384,23 @@ function printConfig()
         exit;
     }
 
-    // On 4.1 or greater use UTF-8-tables.
-    $version = mysqli_get_server_info($mylink);
-
-    if (version_compare($version, '4.1') >= 0) {
-        if (mysqli_query($mylink, "SET NAMES utf8")) {
-            $_SESSION['dbcharset'] = "utf8";
-        } else {
-            $_SESSION['dbcharset'] = "latin1";
-        }
+    // On MySQL 5.5.3+ use real UTF-8 tables, if the client supports it.
+    $_SESSION['dbcharset'] = "utf8mb4";
+    // Lower versions only support UTF-8 limited to 3 bytes per character
+    if (mysqli_get_server_version($mylink) < 50503) {
+        $_SESSION['dbcharset'] = "utf8";
     } else {
-        $_SESSION['dbcharset'] = "latin1";
+        if (false !== strpos(mysqli_get_client_info($mylink), 'mysqlnd')) {
+            // mysqlnd 5.0.9+ required
+            if (mysqli_get_client_version($mylink) < 50009) {
+                $_SESSION['dbcharset'] = "utf8";
+            }
+        } else {
+            // libmysqlclient 5.5.3+ required
+            if (mysqli_get_client_version($mylink) < 50503) {
+                $_SESSION['dbcharset'] = "utf8";
+            }
+        }
     }
 
     echo graf(

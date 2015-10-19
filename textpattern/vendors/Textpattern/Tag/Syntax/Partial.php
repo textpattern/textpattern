@@ -27,7 +27,9 @@
  * @since  4.6.0
  */
 
-class Textpattern_Tag_Syntax_Partial
+namespace Textpattern\Tag\Syntax;
+
+class Partial
 {
     /**
      * Returns the inner content of the enclosing &lt;txp:output_form /&gt; tag.
@@ -62,6 +64,6 @@ class Textpattern_Tag_Syntax_Partial
 
         $inner = end($yield);
 
-        return parse(EvalElse($thing, $inner !== null && ($value === null || (string) $inner === (string) $value)));
+        return parse(EvalElse($thing, $inner !== null && ($value === null || (string)$inner === (string)$value)));
     }
 }

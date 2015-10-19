@@ -30,6 +30,8 @@
  * @package Adaptable
  */
 
-interface Textpattern_Adaptable_AdapterInterface
+namespace Textpattern\Adaptable;
+
+interface AdapterInterface
 {
 }

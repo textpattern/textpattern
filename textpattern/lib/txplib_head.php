@@ -48,7 +48,7 @@
 
 function pagetop($pagetitle, $message = '')
 {
-    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $privs;
+    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme;
 
     if ($app_mode == 'async') {
         return;
@@ -57,8 +57,6 @@ function pagetop($pagetitle, $message = '')
     $area = gps('area');
     $event = (!$event) ? 'article' : $event;
     $bm = gps('bm');
-
-    $privs = safe_field("privs", "txp_users", "name = '".doSlash($txp_user)."'");
 
     $areas = areas();
     $area = false;
@@ -91,7 +89,7 @@ function pagetop($pagetitle, $message = '')
     }
 
     ?><!DOCTYPE html>
-<html lang="<?php echo LANG;
+<html lang="<?php echo txpspecialchars(LANG);
     ?>" dir="<?php echo $lang_direction;
     ?>">
 <head>
@@ -255,7 +253,7 @@ function tabsort($area, $event)
 
 function areas()
 {
-    global $privs, $plugin_areas;
+    global $plugin_areas;
 
     $areas['start'] = array(
     );
@@ -282,7 +280,6 @@ function areas()
         gTxt('tab_languages')   => 'lang',
         gTxt('tab_site_admin')  => 'admin',
         gTxt('tab_plugins')     => 'plugin',
-        gTxt('tab_import')      => 'import',
     );
 
     $areas['extensions'] = array(

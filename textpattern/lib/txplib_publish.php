@@ -167,12 +167,12 @@ function article_column_map()
 /**
  * Find an adjacent article relative to a provided threshold level.
  *
- * @param  scalar       $threshold      The value to compare against
- * @param  string       $s              Optional section restriction
- * @param  string       $type           Lesser or greater neighbour? Either '<' (previous) or '>' (next)
- * @param  array        $atts           Attribute of article at threshold
- * @param  string       $threshold_type 'cooked': Use $threshold as SQL clause; 'raw': Use $threshold as an escapable scalar
- * @return array|string An array populated with article data, or the empty string in case of no matches
+ * @param  scalar $threshold      The value to compare against
+ * @param  string $s              Optional section restriction
+ * @param  string $type           Lesser or greater neighbour? Either '<' (previous) or '>' (next)
+ * @param  array  $atts           Attribute of article at threshold
+ * @param  string $threshold_type 'cooked': Use $threshold as SQL clause; 'raw': Use $threshold as an escapable scalar
+ * @return array|bool An array populated with article data, or 'false' in case of no matches
  */
 
 function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 'raw')
@@ -262,7 +262,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     $cache[$key] = getRow(join(n.' ', $q));
 
-    return (is_array($cache[$key])) ? $cache[$key] : '';
+    return (is_array($cache[$key])) ? $cache[$key] : false;
 }
 
 /**
@@ -271,7 +271,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
  * @param  int    $id        The "pivot" article's id; use zero (0) to indicate $thisarticle
  * @param  scalar $threshold The value to compare against if $id != 0
  * @param  string $s         Optional section restriction if $id != 0
- * @return array  An array populated with article data from the next and previous article
+ * @return array An array populated with article data
  */
 
 function getNextPrev($id = 0, $threshold = null, $s = '')
@@ -417,7 +417,7 @@ function parse($thing)
  * Guesstimate whether a given function name may be a valid tag handler.
  *
  * @param   string $tag function name
- * @return  bool   FALSE if the function name is not a valid tag handler
+ * @return  bool FALSE if the function name is not a valid tag handler
  * @package TagParser
  */
 
@@ -439,7 +439,7 @@ function maybe_tag($tag)
  * @param  string      $tag   The tag name
  * @param  string      $atts  The attribute string
  * @param  string|null $thing The tag's content in case of container tags
- * @return string      Parsed tag result
+ * @return string Parsed tag result
  * @package TagParser
  */
 
@@ -455,7 +455,7 @@ function processTags($tag, $atts, $thing = null)
     }
 
     if ($registry === null) {
-        $registry = Txp::get('Textpattern_Tag_Registry');
+        $registry = Txp::get('\Textpattern\Tag\Registry');
     }
 
     if ($registry->isRegistered($tag)) {
@@ -514,9 +514,9 @@ function bombShelter()
  * The given database table is prefixed with 'txp_'. As such this function can
  * only be used with core database tables.
  *
- * @param   string      $table The database table name
- * @param   string      $val   The name to look for
- * @param   bool        $debug Dump the query
+ * @param   string $table The database table name
+ * @param   string $val   The name to look for
+ * @param   bool   $debug Dump the query
  * @return  bool|string The item's name, or FALSE when it doesn't exist
  * @package Filter
  * @example
@@ -534,9 +534,9 @@ function ckEx($table, $val, $debug = false)
 /**
  * Checks if the given category exists.
  *
- * @param   string      $type  The category type, either 'article', 'file', 'link', 'image'
- * @param   string      $val   The category name to look for
- * @param   bool        $debug Dump the query
+ * @param   string $type  The category type, either 'article', 'file', 'link', 'image'
+ * @param   string $val   The category name to look for
+ * @param   bool   $debug Dump the query
  * @return  bool|string The category's name, or FALSE when it doesn't exist
  * @package Filter
  * @see     ckEx()
@@ -558,8 +558,8 @@ function ckCat($type, $val, $debug = false)
  * This function takes an article's ID, and checks if it's been published. If it
  * has, returns the section and the ID as an array. FALSE otherwise.
  *
- * @param   int        $val   The article ID
- * @param   bool       $debug Dump the query
+ * @param   int  $val   The article ID
+ * @param   bool $debug Dump the query
  * @return  array|bool Array of ID and section on success, FALSE otherwise
  * @package Filter
  * @example
@@ -581,8 +581,8 @@ function ckExID($val, $debug = false)
  * been published. If it has, returns the section and the ID as an array.
  * FALSE otherwise.
  *
- * @param   string     $val   The URL title
- * @param   bool       $debug Dump the query
+ * @param   string $val   The URL title
+ * @param   bool   $debug Dump the query
  * @return  array|bool Array of ID and section on success, FALSE otherwise
  * @package Filter
  * @example
@@ -604,9 +604,9 @@ function lookupByTitle($val, $debug = false)
  * been published. If it has, returns the section and the ID as an array.
  * FALSE otherwise.
  *
- * @param   string     $val     The URL title
- * @param   string     $section The section name
- * @param   bool       $debug   Dump the query
+ * @param   string $val     The URL title
+ * @param   string $section The section name
+ * @param   bool   $debug   Dump the query
  * @return  array|bool Array of ID and section on success, FALSE otherwise
  * @package Filter
  * @example
@@ -640,8 +640,8 @@ function lookupByIDSection($id, $section, $debug = false)
 /**
  * Lookup live article by ID.
  *
- * @param   int       $id    Article ID
- * @param   bool      $debug
+ * @param   int  $id    Article ID
+ * @param   bool $debug
  * @return  array|bool
  * @package Filter
  */
@@ -654,9 +654,9 @@ function lookupByID($id, $debug = false)
 /**
  * Lookup live article by date and URL title.
  *
- * @param   string     $when  date wildcard
- * @param   string     $title URL title
- * @param   bool       $debug
+ * @param   string $when  date wildcard
+ * @param   string $title URL title
+ * @param   bool   $debug
  * @return  array|bool
  * @package Filter
  */

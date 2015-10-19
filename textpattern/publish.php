@@ -33,10 +33,10 @@ if (!defined("txpinterface")) {
 
 include_once txpath.'/vendors/Textpattern/Loader.php';
 
-$loader = new Textpattern_Loader(txpath.'/vendors');
+$loader = new \Textpattern\Loader(txpath.'/vendors');
 $loader->register();
 
-$loader = new Textpattern_Loader(txpath.'/lib');
+$loader = new \Textpattern\Loader(txpath.'/lib');
 $loader->register();
 
 include_once txpath.'/lib/txplib_publish.php';
@@ -184,7 +184,7 @@ if (gps('parentid') && gps('submit')) {
 } elseif (gps('parentid') and $comments_mode == 1) {
     // Popup comments?
     header("Content-type: text/html; charset=utf-8");
-    exit(popComments(gps('parentid')));
+    exit(parse_form('popup_comments'));
 }
 
 // We are dealing with a download.
@@ -934,7 +934,7 @@ function doArticles($atts, $iscustom, $thing = null)
     if ($q and !$iscustom and !$issticky) {
         $fname = ($searchform ? $searchform : 'search_results');
     } else {
-        $fname = ($listform ? $listform : $form);
+        $fname = (!empty($listform) ? $listform : $form);
     }
 
     if ($rs) {

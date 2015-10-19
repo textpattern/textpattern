@@ -136,7 +136,13 @@ function article_post()
 
     extract($prefs);
 
-    $incoming = doSlash(textile_main_fields(array_map('assert_string', psa($vars))));
+    $incoming = array_map('assert_string', psa($vars));
+
+    if (!has_privs('article.set_markup')) {
+        $incoming['textile_body'] = $incoming['textile_excerpt'] = $use_textile;
+    }
+
+    $incoming = doSlash(textile_main_fields($incoming));
     extract($incoming);
 
     $msg = '';
@@ -323,7 +329,7 @@ function article_save()
 
     $incoming = array_map('assert_string', psa($vars));
 
-    $oldArticle = safe_row('Status, url_title, Title, '.
+    $oldArticle = safe_row('Status, url_title, Title, textile_body, textile_excerpt, '.
         'unix_timestamp(LastMod) as sLastMod, LastModID, '.
         'unix_timestamp(Posted) as sPosted, '.
         'unix_timestamp(Expires) as sExpires',
@@ -344,6 +350,11 @@ function article_save()
         article_edit(array(gTxt('concurrent_edit_by', array('{author}' => txpspecialchars($oldArticle['LastModID']))), E_ERROR), true, true);
 
         return;
+    }
+
+    if (!has_privs('article.set_markup')) {
+        $incoming['textile_body'] = $oldArticle['textile_body'];
+        $incoming['textile_excerpt'] = $oldArticle['textile_excerpt'];
     }
 
     $incoming = textile_main_fields($incoming);
@@ -743,10 +754,16 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             if ($concurrent) {
                 $store_out['sLastMod'] = safe_field('unix_timestamp(LastMod) as sLastMod', 'textpattern', 'ID='.$ID);
             }
+
+            if (!has_privs('article.set_markup')) {
+                $oldArticle = safe_row('textile_body, textile_excerpt', 'textpattern', 'ID = '.$ID);
+                $store_out['textile_body'] = $oldArticle['textile_body'];
+                $store_out['textile_excerpt'] = $oldArticle['textile_excerpt'];
+            }
         }
 
         // Use preferred Textfilter as default and fallback.
-        $hasfilter = new Textpattern_Textfilter_Constraint(null);
+        $hasfilter = new \Textpattern\Textfilter\Constraint(null);
         $validator = new Validator();
 
         foreach (array('textile_body', 'textile_excerpt') as $k) {
@@ -915,13 +932,19 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // Advanced.
 
         // Markup selection.
-        $html_markup = pluggable_ui('article_ui', 'markup',
-            graf(
-                '<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
-                pref_text('textile_body', $textile_body, 'markup-body'), ' class="markup markup-body"').
-            graf(
-                '<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
-                pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt'), ' class="markup markup-excerpt"'), $rs);
+        if (has_privs('article.set_markup')) {
+            $html_markup =
+                graf(
+                    '<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
+                    pref_text('textile_body', $textile_body, 'markup-body'), ' class="markup markup-body"').
+                graf(
+                    '<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
+                    pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt'), ' class="markup markup-excerpt"');
+        } else {
+            $html_markup = '';
+        }
+
+        $html_markup = pluggable_ui('article_ui', 'markup', $html_markup, $rs);
 
         // Form override.
         $form_pop = $allow_form_override ? form_pop($override_form, 'override-form') : '';
@@ -1186,7 +1209,7 @@ function checkIfNeighbour($whichway, $sPosted)
 /**
  * Renders an article status field.
  *
- * @param  int    $status Selected status
+ * @param  int $status Selected status
  * @return string HTML
  */
 
@@ -1330,7 +1353,7 @@ function check_url_title($url_title)
  *
  * This message is displayed when an article is saved.
  *
- * @param  int    $Status The status
+ * @param  int $Status The status
  * @return string The status message
  */
 
@@ -1357,19 +1380,19 @@ function get_status_message($Status)
 
 function textile_main_fields($incoming)
 {
-    $textile = new Textpattern_Textile_Parser();
+    $textile = new \Textpattern\Textile\Parser();
 
     $incoming['Title_plain'] = trim($incoming['Title']);
     $incoming['Title_html'] = ''; // not used
     $incoming['Title'] = $textile->textileEncode($incoming['Title_plain']);
 
-    $incoming['Body_html'] = Txp::get('Textpattern_Textfilter_Registry')->filter(
+    $incoming['Body_html'] = Txp::get('\Textpattern\Textfilter\Registry')->filter(
         $incoming['textile_body'],
         $incoming['Body'],
         array('field' => 'Body', 'options' => array('lite' => false), 'data' => $incoming)
     );
 
-    $incoming['Excerpt_html'] = Txp::get('Textpattern_Textfilter_Registry')->filter(
+    $incoming['Excerpt_html'] = Txp::get('\Textpattern\Textfilter\Registry')->filter(
         $incoming['textile_excerpt'],
         $incoming['Excerpt'],
         array('field' => 'Excerpt', 'options' => array('lite' => false), 'data' => $incoming)
@@ -1404,7 +1427,7 @@ function do_pings()
 /**
  * Renders the &lt;title&gt; element for the 'Write' page.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1425,10 +1448,10 @@ function article_partial_html_title($rs)
 function article_partial_sidehelp($rs)
 {
     // Show markup help for both body and excerpt if they are different.
-    $help = Txp::get('Textpattern_Textfilter_Registry')->getHelp($rs['textile_body']);
+    $help = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($rs['textile_body']);
 
     if ($rs['textile_body'] != $rs['textile_excerpt']) {
-        $help .= Txp::get('Textpattern_Textfilter_Registry')->getHelp($rs['textile_excerpt']);
+        $help .= Txp::get('\Textpattern\Textfilter\Registry')->getHelp($rs['textile_excerpt']);
     }
 
     $out = wrapRegion('textfilter_group', $help, 'textfilter_help', 'textfilter_help', 'article_textfilter_help');
@@ -1460,7 +1483,7 @@ function article_partial_title($rs)
 /**
  * Gets article's title from the given article data set.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string
  */
 
@@ -1475,7 +1498,7 @@ function article_partial_title_value($rs)
  * The rendered widget can be customised via the 'article_ui > author'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1496,7 +1519,7 @@ function article_partial_author($rs)
 /**
  * Renders custom field partial.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1518,7 +1541,7 @@ function article_partial_custom_field($rs, $key)
  * The rendered widget can be customised via the 'article_ui > url_title'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1533,7 +1556,7 @@ function article_partial_url_title($rs)
 /**
  * Gets URL title from the given article data set.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1548,7 +1571,7 @@ function article_partial_url_title_value($rs)
  * The rendered widget can be customised via the 'article_ui > description'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1563,7 +1586,7 @@ function article_partial_description($rs)
 /**
  * Gets description from the given article data set.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1578,7 +1601,7 @@ function article_partial_description_value($rs)
  * The rendered widget can be customised via the 'article_ui > keywords'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1593,7 +1616,7 @@ function article_partial_keywords($rs)
 /**
  * Gets keywords from the given article data set.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string
  */
 
@@ -1628,7 +1651,7 @@ function article_partial_image($rs)
  * The rendered widget can be customised via the 'article_ui > custom_fields'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1650,7 +1673,7 @@ function article_partial_custom_fields($rs)
  * The rendered widget can be customised via the 'article_ui > recent_articles'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1681,7 +1704,7 @@ function article_partial_recent_articles($rs)
 /**
  * Renders article duplicate link.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1698,7 +1721,7 @@ function article_partial_article_clone($rs)
 /**
  * Renders article view link.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1725,7 +1748,7 @@ function article_partial_article_view($rs)
  * The rendered widget can be customised via the 'article_ui > body'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1744,7 +1767,7 @@ function article_partial_body($rs)
  * The rendered widget can be customised via the 'article_ui > excerpt'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1763,7 +1786,7 @@ function article_partial_excerpt($rs)
  * The rendered widget can be customised via the 'article_ui > view'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1791,7 +1814,7 @@ function article_partial_view_modes($rs)
 /**
  * Renders next/prev links.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1826,7 +1849,7 @@ function article_partial_article_nav($rs)
  * The rendered widget can be customised via the 'article_ui > status'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1841,7 +1864,7 @@ function article_partial_status($rs)
  * The rendered widget can be customised via the 'article_ui > section'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1866,7 +1889,7 @@ function article_partial_section($rs)
  * The rendered widget can be customised via the 'article_ui > categories'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1899,7 +1922,7 @@ function article_partial_categories($rs)
  * The rendered widget can be customised via the 'article_ui > annotate_invite'
  * pluggable UI callback event.
  *
- * @param  array       $rs Article data
+ * @param  array $rs Article data
  * @return string|null HTML
  */
 
@@ -1958,7 +1981,7 @@ function article_partial_comments($rs)
  * The rendered widget can be customised via the 'article_ui > timestamp'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -2002,7 +2025,7 @@ function article_partial_posted($rs)
  * The rendered widget can be customised via the 'article_ui > expires'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -2077,11 +2100,11 @@ function article_validate($rs, &$msg)
             $rs['Category2'],
             array('type' => 'article')
         ),
-        'textile_body' => new Textpattern_Textfilter_Constraint(
+        'textile_body' => new \Textpattern\Textfilter\Constraint(
             $rs['textile_body'],
             array('message' => 'invalid_textfilter_body')
         ),
-        'textile_excerpt' => new Textpattern_Textfilter_Constraint(
+        'textile_excerpt' => new \Textpattern\Textfilter\Constraint(
             $rs['textile_excerpt'],
             array('message' => 'invalid_textfilter_excerpt')
         ),

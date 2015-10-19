@@ -30,7 +30,9 @@
  * @package Textfilter
  */
 
-interface Textpattern_Textfilter_Interface
+namespace Textpattern\Textfilter;
+
+interface TextfilterInterface
 {
     /**
      * Filters the given raw input value.

@@ -28,7 +28,9 @@
  * @package Type
  */
 
-interface Textpattern_Type_TypeInterface
+namespace Textpattern\Type;
+
+interface TypeInterface
 {
     /**
      * Gets string representation of the item.

@@ -37,7 +37,7 @@
  * @param  string $name     The login name
  * @param  string $email    The email address
  * @param  string $password The password
- * @return bool   FALSE on error.
+ * @return bool FALSE on error.
  * @see    send_new_password()
  * @example
  * if (send_password('John Doe', 'login', 'example@example.tld', 'password'))
@@ -73,7 +73,7 @@ function send_password($RealName, $name, $email, $password)
  * @param  string $password The new password
  * @param  string $email    The email address
  * @param  string $name     The login name
- * @return bool   FALSE on error.
+ * @return bool FALSE on error.
  * @see    send_password()
  * @see    reset_author_pass()
  * @example
@@ -151,7 +151,7 @@ function send_reset_confirmation_request($name)
  * Generates a random password of given length using the symbols set in
  * PASSWORD_SYMBOLS constant.
  *
- * @param  int    $length The length of the password
+ * @param  int $length The length of the password
  * @return string Random plain-text password
  * @see    PASSWORD_SYMBOLS
  * @see    PASSWORD_LENGTH

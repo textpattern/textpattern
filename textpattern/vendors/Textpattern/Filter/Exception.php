@@ -28,6 +28,8 @@
  * @package Filter
  */
 
-class Textpattern_Filter_Exception extends Exception
+namespace Textpattern\Filter;
+
+class Exception extends \Exception
 {
 }

@@ -27,6 +27,12 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Files panel.
+ *
+ * @package Admin\File
+ */
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -64,7 +70,11 @@ if ($event == 'file') {
     }
 }
 
-// -------------------------------------------------------------
+/**
+ * The main panel listing all files.
+ *
+ * @param string|array $message The activity message
+ */
 
 function file_list($message = '')
 {
@@ -82,16 +92,19 @@ function file_list($message = '')
 
     if ($sort === '') {
         $sort = get_pref('file_sort_column', 'filename');
+    } else {
+        if (!in_array($sort, array('id', 'description', 'category', 'title', 'downloads', 'author'))) {
+            $sort = 'filename';
+        }
+
+        set_pref('file_sort_column', $sort, 'file', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('file_sort_dir', 'asc');
-    }
-
-    if ($dir === 'desc') {
-        $dir = 'desc';
     } else {
-        $dir = 'asc';
+        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        set_pref('file_sort_dir', $dir, 'file', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     echo
@@ -147,14 +160,7 @@ function file_list($message = '')
             break;
     }
 
-    set_pref('file_sort_column', $sort, 'file', PREF_HIDDEN, '', 0, PREF_PRIVATE);
-    set_pref('file_sort_dir', $dir, 'file', PREF_HIDDEN, '', 0, PREF_PRIVATE);
-
-    if ($dir == 'desc') {
-        $switch_dir = 'asc';
-    } else {
-        $switch_dir = 'desc';
-    }
+    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
     $criteria = 1;
 

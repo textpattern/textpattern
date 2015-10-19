@@ -74,22 +74,22 @@ function plugin_list($message = '')
 
     if ($sort === '') {
         $sort = get_pref('plugin_sort_column', 'name');
+    } else {
+        if (!in_array($sort, array('name', 'status', 'author', 'version', 'modified', 'load_order'))) {
+            $sort = 'name';
+        }
+
+        set_pref('plugin_sort_column', $sort, 'plugin', 2, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('plugin_sort_dir', 'asc');
-    }
-
-    $dir = ($dir == 'desc') ? 'desc' : 'asc';
-
-    if (!in_array($sort, array('name', 'status', 'author', 'version', 'modified', 'load_order'))) {
-        $sort = 'name';
+    } else {
+        $dir = ($dir == 'desc') ? 'desc' : 'asc';
+        set_pref('plugin_sort_dir', $dir, 'plugin', 2, '', 0, PREF_PRIVATE);
     }
 
     $sort_sql = $sort.' '.$dir;
-
-    set_pref('plugin_sort_column', $sort, 'plugin', 2, '', 0, PREF_PRIVATE);
-    set_pref('plugin_sort_dir', $dir, 'plugin', 2, '', 0, PREF_PRIVATE);
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
@@ -416,7 +416,7 @@ function plugin_verify()
                 $source = '';
 
                 if (isset($plugin['help_raw']) && empty($plugin['allow_html_help'])) {
-                    $textile = new Textpattern_Textile_Parser();
+                    $textile = new \Textpattern\Textile\Parser();
                     $help_source = $textile->TextileRestricted($plugin['help_raw'], 0, 0);
                 } else {
                     $help_source = highlight_string($plugin['help'], true);
@@ -480,7 +480,7 @@ function plugin_install()
 
                 if (isset($help_raw) && empty($plugin['allow_html_help'])) {
                     // Default: help is in Textile format.
-                    $textile = new Textpattern_Textile_Parser();
+                    $textile = new \Textpattern\Textile\Parser();
                     $help = $textile->TextileRestricted($help_raw, 0, 0);
                 }
 
@@ -554,7 +554,7 @@ function plugin_install()
 /**
  * Renders a plugin installation form.
  *
- * @return string  HTML
+ * @return string HTML
  * @access private
  * @see    form()
  */

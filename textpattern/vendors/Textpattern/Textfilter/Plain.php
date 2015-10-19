@@ -28,7 +28,9 @@
  * @package Textfilter
  */
 
-class Textpattern_Textfilter_Plain extends Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
+namespace Textpattern\Textfilter;
+
+class Plain extends Base implements TextfilterInterface
 {
     /**
      * Constructor.
