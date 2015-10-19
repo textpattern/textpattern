@@ -22,6 +22,12 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Images panel.
+ *
+ * @package Admin\Image
+ */
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -58,7 +64,11 @@ if ($event == 'image') {
     }
 }
 
-// -------------------------------------------------------------
+/**
+ * The main panel listing all images.
+ *
+ * @param string|array $message The activity message
+ */
 
 function image_list($message = '')
 {
@@ -71,12 +81,20 @@ function image_list($message = '')
 
     if ($sort === '') {
         $sort = get_pref('image_sort_column', 'id');
+    } else {
+        if (!in_array($sort, array('name', 'thumbnail', 'category', 'date', 'author'))) {
+            $sort = 'id';
+        }
+
+        set_pref('image_sort_column', $sort, 'image', 2, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('image_sort_dir', 'desc');
+    } else {
+        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        set_pref('image_sort_dir', $dir, 'image', 2, '', 0, PREF_PRIVATE);
     }
-    $dir = ($dir == 'asc') ? 'asc' : 'desc';
 
     echo hed(gTxt('tab_image'), 1, array('class' => 'txp-heading'));
     echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
@@ -93,28 +111,25 @@ function image_list($message = '')
 
     switch ($sort) {
         case 'name':
-            $sort_sql = 'name '.$dir;
+            $sort_sql = 'txp_image.name '.$dir;
             break;
         case 'thumbnail':
-            $sort_sql = 'thumbnail '.$dir.', id asc';
+            $sort_sql = 'txp_image.thumbnail '.$dir.', txp_image.id asc';
             break;
         case 'category':
-            $sort_sql = 'category '.$dir.', id asc';
+            $sort_sql = 'txp_category.title '.$dir.', txp_image.id asc';
             break;
         case 'date':
-            $sort_sql = 'date '.$dir.', id asc';
+            $sort_sql = 'txp_image.date '.$dir.', txp_image.id asc';
             break;
         case 'author':
-            $sort_sql = 'author '.$dir.', id asc';
+            $sort_sql = 'txp_users.RealName '.$dir.', txp_image.id asc';
             break;
         default:
             $sort = 'id';
-            $sort_sql = 'id '.$dir;
+            $sort_sql = 'txp_image.id '.$dir;
             break;
     }
-
-    set_pref('image_sort_column', $sort, 'image', 2, '', 0, PREF_PRIVATE);
-    set_pref('image_sort_dir', $dir, 'image', 2, '', 0, PREF_PRIVATE);
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
@@ -125,19 +140,19 @@ function image_list($message = '')
         $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
         $critsql = $verbatim ?
             array(
-                'id'       => "ID in ('".join("','", do_list($crit_escaped))."')",
-                'name'     => "name = '$crit_escaped'",
-                'category' => "category = '$crit_escaped'",
-                'author'   => "author = '$crit_escaped'",
-                'alt'      => "alt = '$crit_escaped'",
-                'caption'  => "caption = '$crit_escaped'",
+                'id'       => "txp_image.ID in ('".join("','", do_list($crit_escaped))."')",
+                'name'     => "txp_image.name = '$crit_escaped'",
+                'category' => "txp_image.category = '$crit_escaped' or txp_category.title = '$crit_escaped'",
+                'author'   => "txp_image.author = '$crit_escaped' or txp_users.RealName = '$crit_escaped'",
+                'alt'      => "txp_image.alt = '$crit_escaped'",
+                'caption'  => "txp_image.caption = '$crit_escaped'",
             ) : array(
-                'id'       => "ID in ('".join("','", do_list($crit_escaped))."')",
-                'name'     => "name like '%$crit_escaped%'",
-                'category' => "category like '%$crit_escaped%'",
-                'author'   => "author like '%$crit_escaped%'",
-                'alt'      => "alt like '%$crit_escaped%'",
-                'caption'  => "caption like '%$crit_escaped%'",
+                'id'       => "txp_image.ID in ('".join("','", do_list($crit_escaped))."')",
+                'name'     => "txp_image.name like '%$crit_escaped%'",
+                'category' => "txp_image.category like '%$crit_escaped%'",
+                'author'   => "txp_image.author like '%$crit_escaped%' or txp_category.title like '%$crit_escaped%'",
+                'alt'      => "txp_image.alt like '%$crit_escaped%' or txp_users.RealName like '%$crit_escaped%'",
+                'caption'  => "txp_image.caption like '%$crit_escaped%'",
             );
 
         if (array_key_exists($search_method, $critsql)) {
@@ -154,7 +169,16 @@ function image_list($message = '')
 
     $criteria .= callback_event('admin_criteria', 'image_list', 0, $criteria);
 
-    $total = safe_count('txp_image', "$criteria");
+    $sql_from =
+        safe_pfx_j('txp_image')."
+        left join ".safe_pfx_j('txp_category')." on txp_category.name = txp_image.category and txp_category.type = 'image'
+        left join ".safe_pfx_j('txp_users')." on txp_users.name = txp_image.author";
+
+    if ($criteria === 1) {
+        $total = getCount('txp_image', $criteria);
+    } else {
+        $total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
+    }
 
     if ($total < 1) {
         if ($criteria != 1) {
@@ -173,9 +197,25 @@ function image_list($message = '')
 
     echo image_search_form($crit, $search_method);
 
-    $rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_image',
-        "$criteria order by $sort_sql limit $offset, $limit
-    ");
+    $rs = safe_query(
+        "select
+            txp_image.id,
+            txp_image.name,
+            txp_image.category,
+            txp_image.ext,
+            txp_image.w,
+            txp_image.h,
+            txp_image.alt,
+            txp_image.caption,
+            unix_timestamp(txp_image.date) as uDate,
+            txp_image.author,
+            txp_image.thumbnail,
+            txp_image.thumb_w,
+            txp_image.thumb_h,
+            txp_users.RealName as realname,
+            txp_category.Title as category_title
+        from $sql_from where $criteria order by $sort_sql limit $offset, $limit"
+    );
 
     echo pluggable_ui('image_ui', 'extend_controls', '', $rs);
     echo '</div>'; // End txp-control-panel.
@@ -280,9 +320,9 @@ function image_list($message = '')
             $validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'image'))));
             $vc = $validator->validate() ? '' : ' error';
 
-            $category = ($category)
-                ? span($category, array('title' => fetch_category_title($category, 'image')))
-                : '';
+            if ($category) {
+                $category = span(txpspecialchars($category_title), array('title' => $category));
+            }
 
             $can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
 
@@ -314,7 +354,7 @@ function image_list($message = '')
                 ).
                 (
                     $show_authors
-                    ? td(span(txpspecialchars($author), array('title' => get_author_name($author))), '', 'txp-list-col-author name')
+                    ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name')
                     : ''
                 )
             );

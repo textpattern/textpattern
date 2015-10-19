@@ -21,6 +21,8 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace Textpattern\Mail;
+
 /**
  * Exception.
  *
@@ -28,6 +30,6 @@
  * @package Mail
  */
 
-class Textpattern_Mail_Exception extends Exception
+class Exception extends \Exception
 {
 }

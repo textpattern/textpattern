@@ -27,7 +27,9 @@
  * @since  4.6.0
  */
 
-class Textpattern_Tag_Syntax_Image
+namespace Textpattern\Tag\Syntax;
+
+class Image
 {
     /**
      * Checks if the image is the first in the list.

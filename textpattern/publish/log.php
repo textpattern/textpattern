@@ -64,8 +64,8 @@ function log_hit($status)
  * The hit is ignore if $r is set to 'refer' and the HTTP REFERER header
  * is empty.
  *
- * @param  string   $r      Type of record to write, e.g. refer
- * @param  int      $status HTTP status code
+ * @param  string $r      Type of record to write, e.g. refer
+ * @param  int    $status HTTP status code
  * @access private
  * @see    log_hit()
  */

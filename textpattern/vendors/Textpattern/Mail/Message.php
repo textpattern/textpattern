@@ -28,7 +28,9 @@
  * @package Mail
  */
 
-class Textpattern_Mail_Message
+namespace Textpattern\Mail;
+
+class Message
 {
     /**
      * An array of senders.

@@ -31,7 +31,7 @@
 /**
  * Gets comments as an array from the given article.
  *
- * @param  int        $id The article ID
+ * @param  int $id The article ID
  * @return array|null An array of comments, or NULL on error
  * @example
  * if ($comments = fetchComments(12))
@@ -56,7 +56,7 @@ function fetchComments($id)
 /**
  * Gets next nonce.
  *
- * @param  bool   $check_only
+ * @param  bool $check_only
  * @return string A random MD5 hash
  */
 
@@ -74,7 +74,7 @@ function getNextNonce($check_only = false)
 /**
  * Gets next secret.
  *
- * @param  bool   $check_only
+ * @param  bool $check_only
  * @return string A random MD5 hash
  */
 
@@ -410,7 +410,7 @@ class comment_evaluation
     /**
      * Gets resulting estimated status.
      *
-     * @param  string     $result_type If 'numeric' returns the ID of the status, a localised label otherwise
+     * @param  string $result_type If 'numeric' returns the ID of the status, a localised label otherwise
      * @return int|string
      * @example
      * $evaluator =& get_comment_evaluator();
@@ -501,7 +501,7 @@ function &get_comment_evaluator()
  * This function will also do clean up and deletes expired nonces.
  *
  * @param  string $nonce The nonce
- * @return bool   TRUE if the nonce is valid
+ * @return bool TRUE if the nonce is valid
  * @see    getNextNonce()
  */
 
@@ -522,7 +522,7 @@ function checkNonce($nonce)
  * Checks if an IP address is banned.
  *
  * @param  string $ip The IP address
- * @return bool   TRUE if the IP is not banned
+ * @return bool TRUE if the IP is not banned
  * @example
  * if (checkBan('127.0.0.1') === false)
  * {
@@ -538,7 +538,7 @@ function checkNonce($nonce)
 /**
  * Checks if comments are open for the given article.
  *
- * @param  int  $id The article.
+ * @param  int $id The article.
  * @return bool FALSE if comments are closed
  * @example
  * if (checkCommentsAllowed(12))
@@ -592,7 +592,7 @@ function checkCommentsAllowed($id)
 
 function comments_help()
 {
-    return '<a id="txpCommentHelpLink" href="'.HELP_URL.'?item=textile_comments&amp;language='.LANG.'" onclick="window.open(this.href, \'popupwindow\', \'width=300,height=400,scrollbars,resizable\'); return false;">'.gTxt('textile_help').'</a>';
+    return '<a id="txpCommentHelpLink" href="'.HELP_URL.'?item=textile_comments&amp;language='.txpspecialchars(LANG).'" onclick="window.open(this.href, \'popupwindow\', \'width=300,height=400,scrollbars,resizable\'); return false;">'.gTxt('textile_help').'</a>';
 }
 
 /**

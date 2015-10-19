@@ -25,14 +25,16 @@
  * Autoloader.
  *
  * <code>
- * Txp::get('Textpattern_Loader', '/path/to/directory')->register();
+ * Txp::get('\Textpattern\Loader', '/path/to/directory')->register();
  * </code>
  *
  * @since   4.6.0
  * @package Autoloader
  */
 
-class Textpattern_Loader
+namespace Textpattern;
+
+class Loader
 {
     /**
      * Registered directory.

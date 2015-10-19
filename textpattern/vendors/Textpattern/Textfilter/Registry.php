@@ -21,6 +21,8 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace Textpattern\Textfilter;
+
 /**
  * A registry of Textfilters interfaces those to the core.
  *
@@ -28,7 +30,7 @@
  * @package Textfilter
  */
 
-class Textpattern_Textfilter_Registry implements ArrayAccess, IteratorAggregate, Textpattern_Container_ReusableInterface
+class Registry implements \ArrayAccess, \IteratorAggregate,  \Textpattern\Container\ReusableInterface
 {
     /**
      * An array of filters.
@@ -63,9 +65,9 @@ class Textpattern_Textfilter_Registry implements ArrayAccess, IteratorAggregate,
                 new $filter;
             }
         } else {
-            new Textpattern_Textfilter_Plain();
-            new Textpattern_Textfilter_Nl2Br();
-            new Textpattern_Textfilter_Textile();
+            new Plain();
+            new Nl2Br();
+            new Textile();
         }
 
         $this->filters = array();
@@ -204,6 +206,6 @@ class Textpattern_Textfilter_Registry implements ArrayAccess, IteratorAggregate,
 
     public function getIterator()
     {
-        return new ArrayIterator($this->filters);
+        return new \ArrayIterator($this->filters);
     }
 }

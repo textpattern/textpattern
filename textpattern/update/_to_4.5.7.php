@@ -32,7 +32,7 @@ safe_alter('txp_discuss', "MODIFY email VARCHAR(254) NOT NULL default ''");
 safe_alter('txp_log', "MODIFY ip VARCHAR(45) NOT NULL default ''");
 
 // Save sections correctly in articles.
-safe_alter('textpattern', "MODIFY Section VARCHAR(128) NOT NULL default ''");
+safe_alter('textpattern', "MODIFY Section VARCHAR(255) NOT NULL default ''");
 
 // Ensure all memory-mappable columns have defaults
 safe_alter('txp_form', "MODIFY `name` VARCHAR(64) NOT NULL default ''");

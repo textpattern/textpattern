@@ -80,13 +80,21 @@ function sec_section_list($message = '')
     )));
 
     if ($sort === '') {
-        $sort = get_pref('section_sort_column', 'time');
+        $sort = get_pref('section_sort_column', 'name');
+    } else {
+        if (!in_array($sort, array('title', 'page', 'css', 'in_rss', 'on_frontpage', 'searchable', 'article_count'))) {
+            $sort = 'name';
+        }
+
+        set_pref('section_sort_column', $sort, 'section', 2, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('section_sort_dir', 'desc');
+    } else {
+        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        set_pref('section_sort_dir', $dir, 'section', 2, '', 0, PREF_PRIVATE);
     }
-    $dir = ($dir == 'asc') ? 'asc' : 'desc';
 
     switch ($sort) {
         case 'title':
@@ -114,9 +122,6 @@ function sec_section_list($message = '')
             $sort_sql = 'name '.$dir;
             break;
     }
-
-    set_pref('section_sort_column', $sort, 'section', 2, '', 0, PREF_PRIVATE);
-    set_pref('section_sort_dir', $dir, 'section', 2, '', 0, PREF_PRIVATE);
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
