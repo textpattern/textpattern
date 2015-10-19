@@ -28,13 +28,15 @@
  * @package Password
  */
 
-interface Textpattern_Password_AdapterInterface extends \Textpattern\Adaptable\AdapterInterface
+namespace Textpattern\Password;
+
+interface AdapterInterface extends \Textpattern\Adaptable\AdapterInterface
 {
     /**
      * Verifies the password.
      *
      * @param  string $password The password
-     * @param  string $hash     The hash
+     * @param  string $hash The hash
      * @return bool   TRUE if the password matches the hash
      */
 

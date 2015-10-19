@@ -188,7 +188,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Converts the string to a callback.
      *
      * <code>
-     * Txp::get('Textpattern_Type_String', 'Textpattern_Password_Hash->hash')->toCallback();
+     * Txp::get('Textpattern_Type_String', '\Textpattern\Password\Hash->hash')->toCallback();
      * </code>
      *
      * @return mixed Callable

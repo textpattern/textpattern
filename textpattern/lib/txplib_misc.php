@@ -3776,7 +3776,7 @@ function create_user($name, $email, $password, $realname = '', $group = 0)
     }
 
     $nonce = md5(uniqid(mt_rand(), true));
-    $hash = Txp::get('Textpattern_Password_Hash')->hash($password);
+    $hash = Txp::get('\Textpattern\Password\Hash')->hash($password);
 
     if (
         safe_insert(
@@ -3875,7 +3875,7 @@ function change_user_password($user, $password)
         return false;
     }
 
-    $hash = Txp::get('Textpattern_Password_Hash')->hash($password);
+    $hash = Txp::get('\Textpattern\Password\Hash')->hash($password);
 
     if (
         safe_update(
@@ -4069,7 +4069,7 @@ function txp_validate($user, $password, $log = true)
     }
 
     // Check post-4.3-style passwords.
-    if (Txp::get('Textpattern_Password_Hash')->verify($password, $r['pass'])) {
+    if (Txp::get('\Textpattern\Password\Hash')->verify($password, $r['pass'])) {
         if (!$log || $r['privs'] > 0) {
             $name = $r['name'];
         }
@@ -4089,7 +4089,7 @@ function txp_validate($user, $password, $log = true)
 
         // Old password is good: migrate password to phpass.
         if ($name !== false) {
-            safe_update("txp_users", "pass = '".doSlash(Txp::get('Textpattern_Password_Hash')->hash($password))."'", "name = '$safe_user'");
+            safe_update("txp_users", "pass = '".doSlash(Txp::get('\Textpattern\Password\Hash')->hash($password))."'", "name = '$safe_user'");
         }
     }
 
