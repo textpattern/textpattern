@@ -28,7 +28,9 @@
  * @package Tag
  */
 
-class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterface
+namespace Textpattern\Tag;
+
+class Registry implements \Textpattern\Container\ReusableInterface
 {
     /**
      * Stores registered tags.
@@ -42,12 +44,12 @@ class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterfac
      * Registers a tag.
      *
      * <code>
-     * Txp::get('Textpattern_Tag_Registry')->register(array('class', 'method'), 'tag');
+     * Txp::get('\Textpattern\Tag\Registry')->register(array('class', 'method'), 'tag');
      * </code>
      *
      * @param  callback    $callback The tag callback
      * @param  string|null $tag      The tag name
-     * @return Textpattern_Tag_Registry
+     * @return \Textpattern\Tag\Registry
      */
 
     public function register($callback, $tag = null)
@@ -77,7 +79,7 @@ class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterfac
     public function process($tag, array $atts = null, $thing = null)
     {
         if ($this->isRegistered($tag)) {
-            return call_user_func($this->tags[$tag], (array) $atts, $thing);
+            return call_user_func($this->tags[$tag], (array)$atts, $thing);
         }
     }
 
@@ -85,7 +87,7 @@ class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterfac
      * Checks if a tag is registered.
      *
      * @param  string $tag The tag
-     * @return bool   TRUE if the tag exists
+     * @return bool TRUE if the tag exists
      */
 
     public function isRegistered($tag)

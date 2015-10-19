@@ -101,12 +101,12 @@ function prefs_save()
     // Forge $gmtoffset and $is_dst from $timezone_key if present.
     if (isset($post['timezone_key'])) {
         $key = $post['timezone_key'];
-        $tzd = Txp::get('Textpattern_Date_Timezone')->getTimeZones();
+        $tzd = Txp::get('\Textpattern\Date\Timezone')->getTimeZones();
 
         if (isset($tzd[$key])) {
             $prefs['timezone_key'] = $timezone_key = $key;
             $post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
-            $post['is_dst'] = $prefs['is_dst'] = $is_dst = Txp::get('Textpattern_Date_Timezone')->isDst(null, $key);
+            $post['is_dst'] = $prefs['is_dst'] = $is_dst = Txp::get('\Textpattern\Date\Timezone')->isDst(null, $key);
         }
     }
 
@@ -145,7 +145,7 @@ function prefs_save()
  * installed or updated when accessing the Preferences panel. Access to the
  * prefs can be controlled by using add_privs() on 'prefs.your-prefs-event-name'.
  *
- * @param  string $message The feedback / error string to display
+ * @param string $message The feedback / error string to display
  */
 
 function prefs_list($message = '')
@@ -263,7 +263,7 @@ function pref_func($func, $name, $val, $size = '')
     if ($func != 'func' && is_callable('pref_'.$func)) {
         $func = 'pref_'.$func;
     } else {
-        $string = new Textpattern_Type_String($func);
+        $string = new \Textpattern\Type\String($func);
         $func = $string->toCallback();
 
         if (!is_callable($func)) {
@@ -332,7 +332,7 @@ function gmtoffset_select($name, $val)
     $key = get_pref('timezone_key', '', true);
 
     if ($key === '') {
-        $key = (string) Txp::get('Textpattern_Date_Timezone')->getTimezone();
+        $key = (string) Txp::get('\Textpattern\Date\Timezone')->getTimezone();
     }
 
     $tz = new timezone;

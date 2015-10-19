@@ -27,7 +27,9 @@
  * @since  4.6.0
  */
 
-class Textpattern_Tag_Syntax_Authors
+namespace Textpattern\Tag\Syntax;
+
+class Authors
 {
     /**
      * Generates a list of authors.

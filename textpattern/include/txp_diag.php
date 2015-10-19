@@ -64,7 +64,7 @@ if ($event == 'diag') {
 /**
  * Checks if the given Apache module is installed and active.
  *
- * @param  string    $m The module
+ * @param  string $m The module
  * @return bool|null TRUE on success, NULL or FALSE on error
  */
 
@@ -82,7 +82,7 @@ function apache_module($m)
  *
  * This function verifies that the given temporary directory is writeable.
  *
- * @param  string    $dir The directory to check
+ * @param  string $dir The directory to check
  * @return bool|null NULL on error, TRUE on success
  */
 
@@ -123,7 +123,7 @@ function list_txp_tables()
  * @param  array  $tables   The tables to check
  * @param  string $type     Check type, either FOR UPGRADE, QUICK, FAST, MEDIUM, EXTENDED, CHANGED
  * @param  bool   $warnings If TRUE, displays warnings
- * @return array  An array of table statuses
+ * @return array An array of table statuses
  * @example
  * print_r(
  *     check_tables(list_txp_tables())
@@ -170,7 +170,7 @@ function diag_msg_wrap($msg, $type = 'error')
 
 function doDiagnostics()
 {
-    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB;
+    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB, $txp_using_svn;
     extract(get_prefs());
 
     $urlparts = parse_url(hu);
@@ -183,29 +183,27 @@ function doDiagnostics()
     // not boolean.
     $is_register_globals = ((strcasecmp(ini_get('register_globals'), 'on') === 0) or (ini_get('register_globals') === '1'));
 
-    // Check for Textpattern updates, at most once every 24 hours.
-    $now = time();
-    $updateInfo = unserialize(get_pref('last_update_check', ''));
-
-    if (!$updateInfo || ($now > ($updateInfo['when'] + (60 * 60 * 24)))) {
-        $updates = checkUpdates();
-        $updateInfo['msg'] = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
-        $updateInfo['when'] = $now;
-        set_pref('last_update_check', serialize($updateInfo), 'publish', PREF_HIDDEN, 'text_input');
-    }
-
     $fail = array();
+    $now = time();
 
-    if (!empty($updateInfo['msg'])) {
-        $fail['textpattern_version_update'] = diag_msg_wrap($updateInfo['msg'], 'information');
+    if (!$txp_using_svn) {
+        // Check for Textpattern updates, at most once every 24 hours.
+        $updateInfo = unserialize(get_pref('last_update_check', ''));
+
+        if (!$updateInfo || ($now > ($updateInfo['when'] + (60 * 60 * 24)))) {
+            $updates = checkUpdates();
+            $updateInfo['msg'] = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
+            $updateInfo['when'] = $now;
+            set_pref('last_update_check', serialize($updateInfo), 'publish', PREF_HIDDEN, 'text_input');
+        }
+
+        if (!empty($updateInfo['msg'])) {
+            $fail['textpattern_version_update'] = diag_msg_wrap($updateInfo['msg'], 'information');
+        }
     }
 
     if (!is_callable('version_compare') || version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<')) {
         $fail['php_version_required'] = diag_msg_wrap(gTxt('php_version_required', array('{version}' => REQUIRED_PHP_VERSION)));
-    }
-
-    if (!isset($path_to_site)) {
-        $fail['path_to_site_missing'] = diag_msg_wrap(gTxt('path_to_site_missing'), 'warning');
     }
 
     if (@gethostbyname($mydomain) === $mydomain) {
@@ -291,7 +289,7 @@ function doDiagnostics()
     }
 
     // Files that don't match their checksums.
-    if ($modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
+    if (!$txp_using_svn and $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
         $fail['modified_files'] = diag_msg_wrap(gTxt('modified_files').cs.n.t.join(', '.n.t, $modified_files), 'warning');
     }
 
@@ -480,13 +478,13 @@ function doDiagnostics()
 
         gTxt('gd_library').cs.$gd.n,
 
-        gTxt('server').' TZ: '.Txp::get('Textpattern_Date_Timezone')->getTimeZone().n,
+        gTxt('server').' TZ: '.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
         gTxt('server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
         strip_tags(gTxt('is_dst')).cs.$is_dst.n,
         strip_tags(gTxt('auto_dst')).cs.$auto_dst.n,
         strip_tags(gTxt('gmtoffset')).cs.$timezone_key.sp."($gmtoffset)".n,
 
-        'MySQL'.cs.mysql_get_server_info().n,
+        'MySQL'.cs.mysqli_get_server_info($DB->link).n,
         gTxt('db_server_time').cs.$db_server_time.n,
         gTxt('db_server_timeoffset').cs.$db_server_timeoffset.' s'.n,
         gTxt('db_global_timezone').cs.$db_global_timezone.n,
@@ -522,7 +520,7 @@ function doDiagnostics()
 
         $result = safe_query("SHOW variables like 'character_se%'");
 
-        while ($row = mysql_fetch_row($result)) {
+        while ($row = mysqli_fetch_row($result)) {
             $out[] = $row[0].cs.$row[1].n;
 
             if ($row[0] == 'character_set_connection') {
@@ -533,7 +531,7 @@ function doDiagnostics()
         $table_names = array(PFX.'textpattern');
         $result = safe_query("SHOW TABLES LIKE '".PFX."txp\_%'");
 
-        while ($row = mysql_fetch_row($result)) {
+        while ($row = mysqli_fetch_row($result)) {
             $table_names[] = $row[0];
         }
 
@@ -546,14 +544,16 @@ function doDiagnostics()
                 continue;
             }
 
-            $ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is', '\\1', mysql_result($ctr, 0, 'Create Table'));
+            $row = mysqli_fetch_assoc($ctr);
+            $ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is', '\\1', $row['Create Table']);
             if (isset($conn_char) && !stristr($ctcharset, 'CREATE') && ($conn_char != $ctcharset)) {
                 $table_msg[] = "$table is $ctcharset";
             }
 
             $ctr = safe_query("CHECK TABLE ".$table);
-            if (in_array(mysql_result($ctr, 0, 'Msg_type'), array('error', 'warning'))) {
-                $table_msg[] = $table.cs.mysql_result($ctr, 0, 'Msg_Text');
+            $row = mysqli_fetch_assoc($ctr);
+            if (in_array($row['Msg_type'], array('error', 'warning'))) {
+                $table_msg[] = $table.cs.$row['Msg_Text'];
             }
         }
 

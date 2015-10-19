@@ -25,7 +25,7 @@
  * File iterator.
  *
  * <code>
- * $file = new Textpattern_Iterator_FileIterator('file.txt');
+ * $file = new \Textpattern\Iterator\FileIterator('file.txt');
  * foreach ($file as $key => $line) {
  *     echo $line;
  * }
@@ -35,7 +35,9 @@
  * @package Iterator
  */
 
-class Textpattern_Iterator_FileIterator implements Iterator
+namespace Textpattern\Iterator;
+
+class FileIterator implements \Iterator
 {
     /**
      * Filename.
@@ -109,12 +111,12 @@ class Textpattern_Iterator_FileIterator implements Iterator
     /**
      * Returns the current element.
      *
-     * @return Textpattern_Type_String
+     * @return \Textpattern\Type\String
      */
 
     public function current()
     {
-        return new Textpattern_Type_String($this->current);
+        return new \Textpattern\Type\String($this->current);
     }
 
     /**
@@ -150,7 +152,7 @@ class Textpattern_Iterator_FileIterator implements Iterator
     {
         if (is_resource($this->filepointer) === false) {
             if (($this->filepointer = fopen($this->filename, 'r')) === false) {
-                throw new Exception(gTxt('invalid_argument', array('{name}' => 'filename')));
+                throw new \Exception(gTxt('invalid_argument', array('{name}' => 'filename')));
             }
         }
 

@@ -102,8 +102,8 @@ function atom()
         txp_die('Not Found', 404);
     }
 
-    $section = ($section ? array_slice(array_unique(do_list($section)), 0, $feed_filter_limit) : array());
-    $category = ($category ? array_slice(array_unique(do_list($category)), 0, $feed_filter_limit) : array());
+    $section = ($section ? array_slice(do_list_unique($section), 0, $feed_filter_limit) : array());
+    $category = ($category ? array_slice(do_list_unique($category), 0, $feed_filter_limit) : array());
     $st = array();
 
     foreach ($section as $s) {
@@ -190,6 +190,7 @@ function atom()
                 $e = array();
 
                 $a['posted'] = $uPosted;
+                $a['expires'] = $uExpires;
 
                 if ($show_comment_count_in_feed) {
                     $count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
@@ -377,7 +378,7 @@ function atom()
     header('Content-type: application/atom+xml; charset=utf-8');
 
     return chr(60).'?xml version="1.0" encoding="UTF-8"?'.chr(62).n.
-        '<feed xml:lang="'.$language.'" xmlns="http://www.w3.org/2005/Atom">'.join(n, $out).'</feed>';
+        '<feed xml:lang="'.txpspecialchars($language).'" xmlns="http://www.w3.org/2005/Atom">'.join(n, $out).'</feed>';
 }
 
 /**

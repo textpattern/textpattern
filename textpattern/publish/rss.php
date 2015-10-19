@@ -60,8 +60,8 @@ function rss()
         txp_die('Not Found', 404);
     }
 
-    $section = ($section ? array_slice(array_unique(do_list($section)), 0, $feed_filter_limit) : array());
-    $category = ($category ? array_slice(array_unique(do_list($category)), 0, $feed_filter_limit) : array());
+    $section = ($section ? array_slice(do_list_unique($section), 0, $feed_filter_limit) : array());
+    $category = ($category ? array_slice(do_list_unique($category), 0, $feed_filter_limit) : array());
     $st = array();
 
     foreach ($section as $s) {
@@ -133,6 +133,7 @@ function rss()
                 $cb = callback_event('rss_entry');
 
                 $a['posted'] = $uPosted;
+                $a['expires'] = $uExpires;
 
                 $permlink = permlinkurl($a);
                 $summary = trim(replace_relative_urls(parse($thisarticle['excerpt']), $permlink));

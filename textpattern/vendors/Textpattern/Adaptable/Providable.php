@@ -25,7 +25,7 @@
  * Adapting providable base class.
  *
  * <code>
- * class MyProvidableAdaptee extends Textpattern_Adaptable_Providable
+ * class MyProvidableAdaptee extends \Textpattern\Adaptable\Providable
  * {
  *     public function getDefaultAdaptableProvider()
  *     {
@@ -38,12 +38,14 @@
  * @package Adaptable
  */
 
-abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable_ProvidableInterface
+namespace Textpattern\Adaptable;
+
+abstract class Providable implements ProvidableInterface
 {
     /**
      * Stores an instance of the current provider.
      *
-     * @var Textpattern_Adaptable_Adapter
+     * @var \Textpattern\Adaptable\Adapter
      */
 
     private $adapter;
@@ -60,7 +62,7 @@ abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable
      * {@inheritdoc}
      */
 
-    public function setAdapter(Textpattern_Adaptable_Adapter $adapter)
+    public function setAdapter(\Textpattern\Adaptable\Adapter $adapter)
     {
         $this->adapter = $adapter;
 

@@ -80,19 +80,18 @@ header("Content-type: text/html; charset=utf-8");
 
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
-
-include txpath.'/vendors/Textpattern/Loader.php';
-
-$loader = new Textpattern_Loader(txpath.'/vendors');
-$loader->register();
-
-$loader = new Textpattern_Loader(txpath.'/lib');
-$loader->register();
-
 include_once txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
 
 trace_log(TEXTPATTERN_TRACE_START);
+
+include txpath.'/vendors/Textpattern/Loader.php';
+
+$loader = new \Textpattern\Loader(txpath.'/vendors');
+$loader->register();
+
+$loader = new \Textpattern\Loader(txpath.'/lib');
+$loader->register();
 
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/txplib_forms.php';
@@ -100,12 +99,11 @@ include txpath.'/lib/txplib_html.php';
 include txpath.'/lib/txplib_theme.php';
 include txpath.'/lib/txplib_validator.php';
 include txpath.'/lib/admin_config.php';
+trace_add('[PHP Include end]');
 
 set_error_handler('adminErrorHandler', error_reporting());
 
-if ($connected && safe_query("describe `".PFX."textpattern`")) {
-    $dbversion = safe_field('val', 'txp_prefs', "name = 'version'");
-
+if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) {
     // Global site preferences.
     $prefs = get_prefs();
     extract($prefs);
@@ -115,6 +113,8 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
     // content, such as custom fields, and also allows a dedicated time
     // value to be passed to SQL queries, alleviating NOW().
     $txpnow = time();
+
+    $dbversion = $version;
 
     if (empty($siteurl)) {
         $httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);
@@ -126,8 +126,6 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
     }
 
     define("LANG", $language);
-
-    // i18n: define("LANG","en-gb");
     define('txp_version', $thisversion);
 
     if (!defined('PROTOCOL')) {
@@ -164,8 +162,8 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
     include txpath.'/include/txp_auth.php';
     doAuth();
 
-    // Once more for global plus private preferences.
-    $prefs = get_prefs();
+    // Add private preferences.
+    $prefs = array_merge(get_prefs($txp_user), $prefs);
     extract($prefs);
 
     /**
@@ -228,8 +226,9 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
         trace_log(TEXTPATTERN_TRACE_DISPLAY);
     } else {
         $trace = trace_log(TEXTPATTERN_TRACE_RESULT);
-        header("X-Textpattern-Runtime: " . @$trace['microdiff']);
-        header("X-Textpattern-Memory: "  . @$trace['memory_peak']);
+        header('X-Textpattern-Runtime: ' . @$trace['microdiff']);
+        header('X-Textpattern-Memory: '  . @$trace['memory_peak']);
+        header('X-Textpattern-Queries: ' . @$trace['queries']);
     }
 } else {
     txp_die('DB-Connect was successful, but the textpattern-table was not found.',

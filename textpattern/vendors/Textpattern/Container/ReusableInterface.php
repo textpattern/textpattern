@@ -31,7 +31,7 @@
  * For instance, the following will remember the initial value:
  *
  * <code>
- * class Abc_Class implements Textpattern_Container_ReusableInterface
+ * class Abc_Class implements \Textpattern\Container\ReusableInterface
  * {
  *     public $random;
  *     public function __construct()
@@ -51,6 +51,8 @@
  * @package Container
  */
 
-interface Textpattern_Container_ReusableInterface
+namespace Textpattern\Container;
+
+interface ReusableInterface
 {
 }

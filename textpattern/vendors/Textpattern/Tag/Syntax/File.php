@@ -27,7 +27,9 @@
  * @since  4.6.0
  */
 
-class Textpattern_Tag_Syntax_File
+namespace Textpattern\Tag\Syntax;
+
+class File
 {
     /**
      * Checks if the file is the first in the list.

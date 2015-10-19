@@ -145,7 +145,7 @@ function deEntBrackets($in)
  * statement, the query is vulnerable to SQL injection attacks.
  *
  * @param   string|array $in The input value
- * @return  mixed        An array of escaped values or a string depending on $in
+ * @return  mixed An array of escaped values or a string depending on $in
  * @package DB
  * @example
  * echo safe_field('column', 'table', "color='" . doSlash(gps('color')) . "'");
@@ -160,7 +160,7 @@ function doSlash($in)
  * Escape SQL LIKE pattern's wildcards for use in an SQL statement.
  *
  * @param   string|array $in The input value
- * @return  mixed        An array of escaped values or a string depending on $in
+ * @return  mixed An array of escaped values or a string depending on $in
  * @since   4.6.0
  * @package DB
  * @example
@@ -187,21 +187,21 @@ function doLike($in)
 
 function txpspecialchars($string, $flags = ENT_QUOTES, $encoding = 'UTF-8', $double_encode = true)
 {
-//    Ignore ENT_HTML5 and ENT_XHTML for now.
-//    ENT_HTML5 and ENT_XHTML are defined in PHP 5.4+ but we consistently encode single quotes as &#039; in any doctype.
-//    global $prefs;
-//    static $h5 = null;
-//
-//    if (defined(ENT_HTML5)) {
-//        if ($h5 === null) {
-//            $h5 = ($prefs['doctype'] == 'html5' && txpinterface == 'public');
-//        }
-//
-//        if ($h5) {
-//            $flags = ($flags | ENT_HTML5) & ~ENT_HTML401;
-//        }
-//    }
-//
+    //    Ignore ENT_HTML5 and ENT_XHTML for now.
+    //    ENT_HTML5 and ENT_XHTML are defined in PHP 5.4+ but we consistently encode single quotes as &#039; in any doctype.
+    //    global $prefs;
+    //    static $h5 = null;
+    //
+    //    if (defined(ENT_HTML5)) {
+    //        if ($h5 === null) {
+    //            $h5 = ($prefs['doctype'] == 'html5' && txpinterface == 'public');
+    //        }
+    //
+    //        if ($h5) {
+    //            $flags = ($flags | ENT_HTML5) & ~ENT_HTML401;
+    //        }
+    //    }
+    //
     return htmlspecialchars($string, $flags, $encoding, $double_encode);
 }
 
@@ -209,7 +209,7 @@ function txpspecialchars($string, $flags = ENT_QUOTES, $encoding = 'UTF-8', $dou
  * Converts special characters to HTML entities.
  *
  * @param   array|string $in The input value
- * @return  mixed        The array or string with HTML syntax characters escaped
+ * @return  mixed The array or string with HTML syntax characters escaped
  * @package Filter
  */
 
@@ -405,7 +405,7 @@ function gTxtScript($var, $atts = array())
 /**
  * Returns given timestamp in a format of 01 Jan 2001 15:19:16.
  *
- * @param   int    $timestamp The UNIX timestamp
+ * @param   int $timestamp The UNIX timestamp
  * @return  string A formatted date
  * @access  private
  * @see     safe_stftime()
@@ -490,27 +490,23 @@ function load_lang($lang, $events = null)
         $events = array('public', 'common');
     }
 
-    $where = '';
+    $where = " and name != ''";
 
     if ($events) {
         $where .= ' and event in('.join(',', quote_list((array) $events)).')';
     }
 
-    foreach (array($lang, 'en-gb') as $lang_code) {
-        $rs = safe_rows('name, data', 'txp_lang', "lang='".doSlash($lang_code)."'".$where);
-
-        if (!empty($rs)) {
-            break;
-        }
-    }
-
     $out = array();
 
-    if (!empty($rs)) {
-        foreach ($rs as $a) {
-            if (!empty($a['name'])) {
+    foreach (array($lang, 'en-gb') as $lang_code) {
+        $rs = safe_rows_start('name, data', 'txp_lang', "lang='".doSlash($lang_code)."'".$where);
+
+        if (!empty($rs)) {
+            while($a = nextRow($rs)) {
                 $out[$a['name']] = $a['data'];
             }
+
+            return $out;
         }
     }
 
@@ -554,8 +550,8 @@ function load_lang_dates($lang)
  * If no $lang is specified, the strings are loaded from the currently
  * active language.
  *
- * @param   string       $event The event to get, e.g. "common", "admin", "public"
- * @param   string       $lang  The language code
+ * @param   string $event The event to get, e.g. "common", "admin", "public"
+ * @param   string $lang  The language code
  * @return  array|string Array of string on success, or an empty string when no strings were found
  * @package L10n
  * @see     load_lang()
@@ -622,7 +618,7 @@ function add_privs($res, $perm = '1')
     global $txp_permissions;
 
     if (!isset($txp_permissions[$res])) {
-        $perm = join(',', do_list($perm));
+        $perm = join(',', do_list_unique($perm));
         $txp_permissions[$res] = $perm;
     }
 }
@@ -782,7 +778,7 @@ function get_safe_image_types($type = null)
  * Checks if GD supports the given image type.
  *
  * @param   string $image_type Either '.gif', '.png', '.jpg'
- * @return  bool   TRUE if the type is supported
+ * @return  bool TRUE if the type is supported
  * @package Image
  */
 
@@ -844,6 +840,10 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
     $file = $file['tmp_name'];
 
     if ($uploaded) {
+        if ($error !== UPLOAD_ERR_OK) {
+            return upload_get_errormsg($error);
+        }
+
         $file = get_uploaded_file($file);
 
         if (get_pref('file_max_upload_size') < filesize($file)) {
@@ -943,7 +943,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
 /**
  * Gets an image as an array.
  *
- * @param   string     $where SQL where clause
+ * @param   string $where SQL where clause
  * @return  array|bool An image data, or FALSE on failure
  * @package Image
  * @example
@@ -1009,7 +1009,7 @@ function link_format_info($link)
  * Internally handles and normalises MAGIC_QUOTES_GPC,
  * strips CRLF from GET parameters and removes NULL bytes.
  *
- * @param   string       $thing The parameter to get
+ * @param   string $thing The parameter to get
  * @return  string|array The value of $thing, or an empty string
  * @package Network
  * @example
@@ -1079,7 +1079,7 @@ function gpsa($array)
  * Internally handles and normalises MAGIC_QUOTES_GPC,
  * and removes NULL bytes.
  *
- * @param   string       $thing    The parameter to get
+ * @param   string $thing The parameter to get
  * @return  string|array The value of $thing, or an empty string
  * @package Network
  * @example
@@ -1213,7 +1213,7 @@ function remote_addr()
  * Fetches either a HTTP cookie of the given name prefixed with
  * 'txp_', or a HTTP POST parameter without a prefix.
  *
- * @param   string       $thing The variable
+ * @param   string $thing The variable
  * @return  array|string The variable or an empty string
  * @package Network
  * @example
@@ -1273,7 +1273,7 @@ function cs($thing)
 /**
  * Converts a boolean to a localised "Yes" or "No" string.
  *
- * @param   bool   $status The boolean. Ignores type and as such can also take a string or an integer
+ * @param   bool $status The boolean. Ignores type and as such can also take a string or an integer
  * @return  string No if FALSE, Yes otherwise
  * @package L10n
  * @example
@@ -1306,7 +1306,7 @@ function getmicrotime()
  *
  * @param  string $name  The plugin
  * @param  bool   $force If TRUE loads the plugin even if it's disabled
- * @return bool   TRUE if the plugin is loaded
+ * @return bool TRUE if the plugin is loaded
  * @example
  * if (load_plugin('abc_plugin'))
  * {
@@ -1713,7 +1713,7 @@ function load_plugins($type = false)
     if (!is_array($plugins)) {
         $plugins = array();
     }
-    trace_add("[Loading plugins]", 1);
+    trace_add('[Loading plugins]', 1);
 
     if (!empty($prefs['plugin_cache_dir'])) {
         $dir = rtrim($prefs['plugin_cache_dir'], '/').'/';
@@ -1729,7 +1729,7 @@ function load_plugins($type = false)
             natsort($files);
 
             foreach ($files as $f) {
-                trace_add("[Loading plugin from cache dir '$f']");
+                trace_add("[Loading plugin from cache dir: '$f']");
                 load_plugin(basename($f, '.php'));
             }
         }
@@ -1748,7 +1748,7 @@ function load_plugins($type = false)
                 $plugins[] = $a['name'];
                 $plugins_ver[$a['name']] = $a['version'];
                 $GLOBALS['txp_current_plugin'] = $a['name'];
-                trace_add("[Loading plugin '{$a['name']}' version '{$a['version']}']");
+                trace_add("[Loading plugin: '{$a['name']}' version '{$a['version']}']");
                 $eval_ok = eval($a['code']);
 
                 if ($eval_ok === false) {
@@ -1847,6 +1847,8 @@ function callback_event($event, $step = '', $pre = 0)
         return '';
     }
 
+    trace_add("[Callback_event: '$event', step='$step', pre='$pre']");
+
     // Any payload parameters?
     $argv = func_get_args();
     $argv = (count($argv) > 3) ? array_slice($argv, 3) : array();
@@ -1854,6 +1856,13 @@ function callback_event($event, $step = '', $pre = 0)
     foreach ($plugin_callback as $c) {
         if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
             if (is_callable($c['function'])) {
+                if (is_string($c['function'])) {
+                    trace_add("\t[Call function: '{$c['function']}'".(empty($argv) ? '' : ", argv='".serialize($argv)."'") . "]");
+                } elseif (@is_object($c['function'][0])) {
+                    $objname = @get_class($c['function'][0]);
+                    trace_add("\t[Call object: '{$objname}']");
+                }
+
                 $return_value = call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
 
                 if (isset($out)) {
@@ -1888,7 +1897,7 @@ function callback_event($event, $step = '', $pre = 0)
  * @param   bool   $pre     Allows two callbacks, a prepending and an appending, with same event and step
  * @param   mixed  $data    Optional arguments for event handlers
  * @param   mixed  $options Optional arguments for event handlers
- * @return  array  Collection of return values from event handlers
+ * @return  array Collection of return values from event handlers
  * @since   4.5.0
  * @package Callback
  */
@@ -1928,25 +1937,25 @@ function callback_event_ref($event, $step = '', $pre = 0, &$data = null, &$optio
  * </code>
  *
  * @param      callback $callback The callback
- * @return     string   The $callback as a human-readable string
+ * @return     string The $callback as a human-readable string
  * @since      4.5.0
  * @package    Callback
  * @deprecated in 4.6.0
- * @see        Textpattern_Type_Callable::toString()
+ * @see        \Textpattern\Type\Callable::toString()
  */
 
 function callback_tostring($callback)
 {
-    return Txp::get('Textpattern_Type_Callable', $callback)->toString();
+    return Txp::get('\Textpattern\Type\TypeCallable', $callback)->toString();
 }
 
 /**
  * Checks if a callback event has active handlers.
  *
- * @param   string $event   The callback event
- * @param   string $step    The callback step
- * @param   bool   $pre     The position
- * @return  bool   TRUE if the event is active, FALSE otherwise
+ * @param   string $event The callback event
+ * @param   string $step  The callback step
+ * @param   bool   $pre   The position
+ * @return  bool TRUE if the event is active, FALSE otherwise
  * @since   4.6.0
  * @package Callback
  * @example
@@ -1964,10 +1973,10 @@ function has_handler($event, $step = '', $pre = 0)
 /**
  * Lists handlers attached to an event.
  *
- * @param   string     $event     The callback event
- * @param   string     $step      The callback step
- * @param   bool       $pre       The position
- * @param   bool       $as_string Return callables in string representation
+ * @param   string $event The callback event
+ * @param   string $step  The callback step
+ * @param   bool   $pre   The position
+ * @param   bool   $as_string Return callables in string representation
  * @return  array|bool An array of handlers, or FALSE
  * @since   4.6.0
  * @package Callback
@@ -2152,6 +2161,10 @@ function stripSpace($text, $force = false)
 /**
  * Sanitises a string for use in a URL.
  *
+ * Be aware that you still have to urlencode the string when appropriate.
+ * This function just makes the string look prettier and excludes some
+ * unwanted characters, but leaves UTF-8 letters and digits intact.
+ *
  * @param  string $text The string
  * @return string
  * @package URL
@@ -2168,18 +2181,10 @@ function sanitizeForUrl($text)
     $in = $text;
     // Remove names entities and tags.
     $text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U", "", dumbDown($text));
-    // Dashify high-order chars leftover from dumbDown().
-    $text = preg_replace("/[\x80-\xff]/", "-", $text);
-    // Collapse spaces, minuses, (back-)slashes and non-words.
-    $text = preg_replace('/[\s\-\/\\\\]+/', '-', trim(preg_replace('/[^\w\s\-\/\\\\]/', '', $text)));
-    // Remove all non-whitelisted characters
-    $text = preg_replace("/[^A-Za-z0-9\-_]/", "", $text);
-
-    // Sanitising shouldn't leave us with plain nothing to show.
-    // Fall back on percent-encoded URLs as a last resort for RFC 1738 conformance.
-    if (empty($text) || $text == '-') {
-        $text = rawurlencode($in);
-    }
+    // Remove all characters except letter, number, dash, space and backslash
+    $text = preg_replace('/[^\p{L}\p{N}\-_\s\/\\\\]/u', '', $text);
+    // Collapse spaces, minuses, (back-)slashes.
+    $text = trim(preg_replace('/[\s\-\/\\\\]+/', '-', $text), '-');
 
     return $text;
 }
@@ -2388,7 +2393,7 @@ function noWidow($str)
  *
  * @param   string       $ip     The IP address
  * @param   string|array $checks The checked lists. Defaults to 'spam_blacklists' preferences string
- * @return  string|bool  The lists the IP is on or FALSE
+ * @return  string|bool The lists the IP is on or FALSE
  * @package Comment
  * @example
  * if (is_blacklisted('127.0.0.1'))
@@ -2400,7 +2405,7 @@ function noWidow($str)
 function is_blacklisted($ip, $checks = '')
 {
     if (!$checks) {
-        $checks = do_list(get_pref('spam_blacklists'));
+        $checks = do_list_unique(get_pref('spam_blacklists'));
     }
 
     $rip = join('.', array_reverse(explode('.', $ip)));
@@ -2428,7 +2433,7 @@ function is_blacklisted($ip, $checks = '')
 /**
  * Checks if the user is authenticated on the public-side.
  *
- * @param   string     $user The checked username. If not provided, any user is accepted
+ * @param   string $user The checked username. If not provided, any user is accepted
  * @return  array|bool An array containing details about the user; name, RealName, email, privs. FALSE when the user hasn't authenticated.
  * @package User
  * @example
@@ -2473,8 +2478,8 @@ function updateSitePath($here)
 /**
  * Converts Textpattern tag's attribute list to an array.
  *
- * @param   string  $text The attribute list, e.g. foobar="1" barfoo="0"
- * @return  array   Array of attributes
+ * @param   string $text The attribute list, e.g. foobar="1" barfoo="0"
+ * @return  array Array of attributes
  * @access  private
  * @package TagParser
  */
@@ -2493,9 +2498,9 @@ function splat($text)
                     $val = str_replace("''", "'", $m[3]);
 
                     if (strpos($m[3], '<txp:') !== false) {
-                        trace_add("[attribute '".$m[1]."']");
+                        trace_add("[attribute: '{$m[1]}']");
                         $val = parse($val);
-                        trace_add("[/attribute]");
+                        trace_add('[/attribute]');
                     }
 
                     break;
@@ -2513,32 +2518,6 @@ function splat($text)
 }
 
 /**
- * Renders peak memory usage in a HTML comment.
- *
- * @param   string      $message  The message associated with the logged memory usage
- * @param   bool        $returnit Return the usage wrapped in a HTML comment
- * @return  null|string HTML
- * @package Debug
- */
-
-function maxMemUsage($message = 'none', $returnit = false)
-{
-    try {
-        Txp::get('Textpattern_Debug_Memory')->logPeakUsage($message);
-
-        if ($returnit) {
-            if (Txp::get('Textpattern_Debug_Memory')->getLoggedUsage()) {
-                return n.comment(sprintf('Memory: %sKb, %s',
-                ceil(Txp::get('Textpattern_Debug_Memory')->getLoggedUsage()/1024), Txp::get('Textpattern_Debug_Memory')->getLoggedMessage()));
-            } else {
-                return n.comment('Memory: no info available');
-            }
-        }
-    } catch (Exception $e) {
-    }
-}
-
-/**
  * Replaces CR and LF with spaces, and drops NULL bytes.
  *
  * Used for sanitising email headers.
@@ -2547,12 +2526,12 @@ function maxMemUsage($message = 'none', $returnit = false)
  * @return     string
  * @package    Mail
  * @deprecated in 4.6.0
- * @see        Textpattern_Mail_Encode::escapeHeader()
+ * @see        \Textpattern\Mail\Encode::escapeHeader()
  */
 
 function strip_rn($str)
 {
-    return Txp::get('Textpattern_Mail_Encode')->escapeHeader($str);
+    return Txp::get('\Textpattern\Mail\Encode')->escapeHeader($str);
 }
 
 /**
@@ -2590,9 +2569,9 @@ function is_valid_email($address)
  * @param   string $to_address The receiver
  * @param   string $subject    The subject
  * @param   string $body       The message
- * @param   string $reply_to   The reply to address
+ * @param   string $reply_to The reply to address
  * @return  bool   Returns FALSE when sending failed
- * @see     Textpattern_Mail_Compose
+ * @see     \Textpattern\Mail\Compose
  * @package Mail
  */
 
@@ -2625,7 +2604,7 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
         extract($sender);
 
         try {
-            $message = Txp::get('Textpattern_Mail_Compose')
+            $message = Txp::get('Textpattern\Mail\Compose')
                 ->from($email, $RealName)
                 ->to($to_address)
                 ->subject($subject)
@@ -2636,7 +2615,7 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
             }
 
             $message->send();
-        } catch (Exception $e) {
+        } catch (\Textpattern\Mail\Exception $e) {
             return false;
         }
 
@@ -2654,14 +2633,14 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
  * @return     string
  * @package    Mail
  * @deprecated in 4.6.0
- * @see        Textpattern_Mail_Encode::header()
+ * @see        \Textpattern\Mail\Encode::header()
  */
 
 function encode_mailheader($string, $type)
 {
     try {
-        return Txp::get('Textpattern_Mail_Encode')->header($string, $type);
-    } catch (Textpattern_Mail_Exception $e) {
+        return Txp::get('\Textpattern\Mail\Encode')->header($string, $type);
+    } catch (\Textpattern\Mail\Exception $e) {
         trigger_error($e->getMessage(), E_USER_WARNING);
     }
 }
@@ -2673,12 +2652,12 @@ function encode_mailheader($string, $type)
  * @return     string Encoded email address
  * @package    Mail
  * @deprecated in 4.6.0
- * @see        Textpattern_Mail_Encode::entityObfuscateAddress()
+ * @see        \Textpattern\Mail\Encode::entityObfuscateAddress()
  */
 
 function eE($txt)
 {
-    return Txp::get('Textpattern_Mail_Encode')->entityObfuscateAddress($txt);
+    return Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress($txt);
 }
 
 /**
@@ -2699,7 +2678,7 @@ function stripPHP($in)
  * @param   string $name Return specified parent category's sub-categories
  * @param   string $cat  The selected category option
  * @param   string $id   The HTML ID
- * @return  string|bool  HTML select field or FALSE on error
+ * @return  string|bool HTML select field or FALSE on error
  * @package Form
  */
 
@@ -2723,7 +2702,7 @@ function event_category_popup($name, $cat = '', $id = '')
  * @param   string $name The name
  * @param   string $type The type
  * @param   string $Form The template
- * @return  bool   FALSE on error
+ * @return  bool FALSE on error
  * @since   4.6.0
  * @package Template
  */
@@ -2756,7 +2735,7 @@ function create_form($name, $type, $Form)
  * Checks if a form template exists.
  *
  * @param   string $name The form
- * @return  bool   TRUE if the form exists
+ * @return  bool TRUE if the form exists
  * @since   4.6.0
  * @package Template
  */
@@ -2770,7 +2749,7 @@ function form_exists($name)
  * Validates a string as a form template name.
  *
  * @param   string $name The form name
- * @return  bool   TRUE if the string validates
+ * @return  bool TRUE if the string validates
  * @since   4.6.0
  * @package Template
  */
@@ -2952,7 +2931,7 @@ function event_multi_edit($table, $id_key)
 /**
  * Gets a "since days ago" date format from a given UNIX timestamp.
  *
- * @param   int    $stamp UNIX timestamp
+ * @param   int $stamp UNIX timestamp
  * @return  string "n days ago"
  * @package DateTime
  */
@@ -3036,8 +3015,8 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     }
 
     if ($override_locale) {
-        $oldLocale = Txp::get('Textpattern_L10n_Locale')->getLocale(LC_TIME);
-        Txp::get('Textpattern_L10n_Locale')->setLocale(LC_TIME, $override_locale);
+        $oldLocale = Txp::get('\Textpattern\L10n\Locale')->getLocale(LC_TIME);
+        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, $override_locale);
     }
 
     if ($format == 'since') {
@@ -3071,7 +3050,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 
     // Revert to the old locale.
     if ($override_locale && $oldLocale) {
-        Txp::get('Textpattern_L10n_Locale')->setLocale(LC_TIME, $oldLocale);
+        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, $oldLocale);
     }
 
     return $str;
@@ -3081,7 +3060,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
  * Converts a time string from the Textpattern timezone to GMT.
  *
  * @param   string $time_str The time string
- * @return  int    UNIX timestamp
+ * @return  int UNIX timestamp
  * @package DateTime
  */
 
@@ -3209,8 +3188,8 @@ function find_temp_dir()
 /**
  * Moves an uploaded file and returns its new location.
  *
- * @param   string      $f    The filename of the uploaded file
- * @param   string      $dest The destination of the moved file. If omitted, the file is moved to the temp directory
+ * @param   string $f    The filename of the uploaded file
+ * @param   string $dest The destination of the moved file. If omitted, the file is moved to the temp directory
  * @return  string|bool The new path or FALSE on error
  * @package File
  */
@@ -3261,7 +3240,7 @@ function get_filenames()
     $cwd = getcwd();
 
     if (chdir($file_base_path)) {
-        $directory = glob('*.*', GLOB_NOSORT);
+        $directory = glob('*', GLOB_NOSORT);
 
         if ($directory) {
             foreach ($directory as $filename) {
@@ -3344,7 +3323,7 @@ function set_error_level($level)
  *
  * @param   string $f    The file to move
  * @param   string $dest The destination
- * @return  bool   TRUE on success, or FALSE on error
+ * @return  bool TRUE on success, or FALSE on error
  * @package File
  */
 
@@ -3366,7 +3345,7 @@ function shift_uploaded_file($f, $dest)
 /**
  * Translates upload error code to a localised error message.
  *
- * @param   int    $err_code The error code
+ * @param   int $err_code The error code
  * @return  string The $err_code as a message
  * @package File
  */
@@ -3448,7 +3427,7 @@ function format_filesize($bytes, $decimals = 2, $format = '')
 /**
  * Gets a file download as an array.
  *
- * @param   string     $where SQL where clause
+ * @param   string $where SQL where clause
  * @return  array|bool An array of files, or FALSE on failure
  * @package File
  * @example
@@ -3575,7 +3554,7 @@ function is_mod_php()
  * Checks if a function is disabled.
  *
  * @param   string $function The function name
- * @return  bool   TRUE if the function is disabled
+ * @return  bool TRUE if the function is disabled
  * @package System
  * @example
  * if (is_disabled('mail'))
@@ -3672,15 +3651,21 @@ function get_author_email($name)
 
 function has_single_author($table, $col = 'author')
 {
-    return (safe_field('COUNT(name)', 'txp_users', '1=1') <= 1) &&
-        (safe_field('COUNT(DISTINCT('.doSlash($col).'))', doSlash($table), '1=1') <= 1);
+    static $cache = array();
+
+    if (!isset($cache[$table][$col])) {
+        $cache[$table][$col] = (safe_field('COUNT(name)', 'txp_users', '1=1') <= 1) &&
+            (safe_field('COUNT(DISTINCT('.doSlash($col).'))', doSlash($table), '1=1') <= 1);
+    }
+
+    return $cache[$table][$col];
 }
 
 /**
  * Validates a string as a username.
  *
  * @param   string $name The username
- * @return  bool   TRUE if the string valid
+ * @return  bool TRUE if the string valid
  * @since   4.6.0
  * @package User
  * @example
@@ -3719,7 +3704,7 @@ function is_valid_username($name)
  *
  * @param   string|array $owner     List of current owners
  * @param   string       $new_owner The new owner
- * @return  bool         FALSE on error
+ * @return  bool FALSE on error
  * @since   4.6.0
  * @package User
  * @example
@@ -3772,7 +3757,7 @@ function assign_user_assets($owner, $new_owner)
  * @param   string $password The password
  * @param   string $realname The real name
  * @param   int    $group    The user group
- * @return  bool   FALSE on error
+ * @return  bool FALSE on error
  * @since   4.6.0
  * @package User
  * @example
@@ -3791,7 +3776,7 @@ function create_user($name, $email, $password, $realname = '', $group = 0)
     }
 
     $nonce = md5(uniqid(mt_rand(), true));
-    $hash = Txp::get('Textpattern_Password_Hash')->hash($password);
+    $hash = Txp::get('\Textpattern\Password\Hash')->hash($password);
 
     if (
         safe_insert(
@@ -3825,7 +3810,7 @@ function create_user($name, $email, $password, $realname = '', $group = 0)
  * @param   string|null $email    The email address
  * @param   string|null $realname The real name
  * @param   array|null  $meta     Additional meta fields
- * @return  bool   FALSE on error
+ * @return  bool FALSE on error
  * @since   4.6.0
  * @package User
  * @example
@@ -3874,7 +3859,7 @@ function update_user($user, $email = null, $realname = null, $meta = array())
  *
  * @param   string $user     The updated user
  * @param   string $password The new password
- * @return  bool   FALSE on error
+ * @return  bool FALSE on error
  * @since   4.6.0
  * @package User
  * @example
@@ -3890,7 +3875,7 @@ function change_user_password($user, $password)
         return false;
     }
 
-    $hash = Txp::get('Textpattern_Password_Hash')->hash($password);
+    $hash = Txp::get('\Textpattern\Password\Hash')->hash($password);
 
     if (
         safe_update(
@@ -3916,7 +3901,7 @@ function change_user_password($user, $password)
  *
  * @param   string|array $user      List of removed users
  * @param   string       $new_owner Assign assets to
- * @return  bool         FALSE on error
+ * @return  bool FALSE on error
  * @since   4.6.0
  * @package User
  * @example
@@ -3958,7 +3943,7 @@ function remove_user($user, $new_owner)
  *
  * @param   string $user    Updated user
  * @param   string $newname The new name
- * @return  bool   FALSE on error
+ * @return  bool FALSE on error
  * @since   4.6.0
  * @package User
  * @example
@@ -3997,7 +3982,7 @@ function rename_user($user, $newname)
  * Checks if a user exists.
  *
  * @param   string $user The user
- * @return  bool   TRUE if the user exists
+ * @return  bool TRUE if the user exists
  * @since   4.6.0
  * @package User
  * @example
@@ -4019,7 +4004,7 @@ function user_exists($user)
  *
  * @param   string|array $user  Updated users
  * @param   int          $group The new group
- * @return  bool         FALSE on error
+ * @return  bool FALSE on error
  * @since   4.6.0
  * @package User
  * @example
@@ -4063,15 +4048,17 @@ function change_user_group($user, $group)
  * If $log is TRUE, also checks that the user has permissions to access the
  * admin side interface. On success, updates the user's last access timestamp.
  *
- * @param   string      $user     The login
- * @param   string      $password The password
- * @param   bool        $log      If TRUE, requires privilege level greater than 'none'
+ * @param   string $user     The login
+ * @param   string $password The password
+ * @param   bool   $log      If TRUE, requires privilege level greater than 'none'
  * @return  string|bool The user's login name or FALSE on error
  * @package User
  */
 
 function txp_validate($user, $password, $log = true)
 {
+    global $DB;
+
     $safe_user = doSlash($user);
     $name = false;
 
@@ -4082,7 +4069,7 @@ function txp_validate($user, $password, $log = true)
     }
 
     // Check post-4.3-style passwords.
-    if (Txp::get('Textpattern_Password_Hash')->verify($password, $r['pass'])) {
+    if (Txp::get('\Textpattern\Password\Hash')->verify($password, $r['pass'])) {
         if (!$log || $r['privs'] > 0) {
             $name = $r['name'];
         }
@@ -4092,7 +4079,7 @@ function txp_validate($user, $password, $log = true)
         $passwords[] = "password(lower('".doSlash($password)."'))";
         $passwords[] = "password('".doSlash($password)."')";
 
-        if (version_compare(mysql_get_server_info(), '4.1.0', '>=')) {
+        if (version_compare(mysqli_get_server_info($DB->link), '4.1.0', '>=')) {
             $passwords[] = "old_password(lower('".doSlash($password)."'))";
             $passwords[] = "old_password('".doSlash($password)."')";
         }
@@ -4102,7 +4089,7 @@ function txp_validate($user, $password, $log = true)
 
         // Old password is good: migrate password to phpass.
         if ($name !== false) {
-            safe_update("txp_users", "pass = '".doSlash(Txp::get('Textpattern_Password_Hash')->hash($password))."'", "name = '$safe_user'");
+            safe_update("txp_users", "pass = '".doSlash(Txp::get('\Textpattern\Password\Hash')->hash($password))."'", "name = '$safe_user'");
         }
     }
 
@@ -4139,9 +4126,9 @@ function txp_hash_password($password)
 /**
  * Extracts a statement from a if/else condition.
  *
- * @param   string  $thing     Statement in Textpattern tag markup presentation
- * @param   bool    $condition TRUE to return if statement, FALSE to else
- * @return  string  Either if or else statement
+ * @param   string $thing     Statement in Textpattern tag markup presentation
+ * @param   bool   $condition TRUE to return if statement, FALSE to else
+ * @return  string Either if or else statement
  * @package TagParser
  * @example
  * echo parse(EvalElse('true &lt;txp:else /&gt; false', 1 === 1));
@@ -4150,14 +4137,8 @@ function txp_hash_password($password)
 function EvalElse($thing, $condition)
 {
     global $txp_current_tag;
-    static $gTxtTrue = null, $gTxtFalse;
 
-    if (empty($gTxtTrue)) {
-        $gTxtTrue = gTxt('true');
-        $gTxtFalse = gTxt('false');
-    }
-
-    trace_add("[$txp_current_tag: ".($condition ? $gTxtTrue : $gTxtFalse)."]");
+    trace_add("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
 
     $els = strpos($thing, '<txp:else');
 
@@ -4241,7 +4222,7 @@ function fetch_form($name)
         $forms[$name] = $form;
     }
 
-    trace_add('['.gTxt('form').': '.$name.']');
+    trace_add("[Form: '$name']");
 
     return $forms[$name];
 }
@@ -4272,6 +4253,7 @@ function parse_form($name)
 
         $old_form = $txp_current_form;
         $txp_current_form = $stack[] = $name;
+        trace_add("[Nesting forms: '".join("' / '", $stack)."']");
         $out = parse($f);
         $txp_current_form = $old_form;
         array_pop($stack);
@@ -4287,7 +4269,7 @@ function parse_form($name)
  * to a 'page.fetch' callback event. Any value returned by the callback function
  * will be used as the template markup.
  *
- * @param   string      $name The template
+ * @param   string $name The template
  * @return  string|bool The page template, or FALSE on error
  * @package TagParser
  * @since   4.6.0
@@ -4307,7 +4289,7 @@ function fetch_page($name)
         return false;
     }
 
-    trace_add('['.gTxt('page').': '.$name.']');
+    trace_add("[Page: '$name']");
 
     return $page;
 }
@@ -4315,7 +4297,7 @@ function fetch_page($name)
 /**
  * Parses a page template.
  *
- * @param   string      $name The template
+ * @param   string $name The template
  * @return  string|bool The parsed page template, or FALSE on error
  * @since   4.6.0
  * @package TagParser
@@ -4333,7 +4315,7 @@ function parse_page($name)
         $pretext['secondpass'] = false;
         $page = parse($page);
         $pretext['secondpass'] = true;
-        trace_add('[ ~~~ '.gTxt('secondpass').' ~~~ ]');
+        trace_add('[ ~~~ secondpass ~~~ ]');
         $page = parse($page);
     }
 
@@ -4343,8 +4325,8 @@ function parse_page($name)
 /**
  * Gets a category's title.
  *
- * @param  string      $name The category
- * @param  string      $type Category's type. Either "article", "file", "image" or "link"
+ * @param  string $name The category
+ * @param  string $type Category's type. Either "article", "file", "image" or "link"
  * @return string|bool The title or FALSE on error
  */
 
@@ -4372,7 +4354,7 @@ function fetch_category_title($name, $type = 'article')
 /**
  * Gets a section's title.
  *
- * @param  string      $name The section
+ * @param  string $name The section
  * @return string|bool The title or FALSE on error
  */
 
@@ -4462,7 +4444,7 @@ function clean_comment_counts($parentids)
 
 function markup_comment($msg)
 {
-    $textile = new Textpattern_Textile_Parser();
+    $textile = new \Textpattern\Textile\Parser();
 
     return $textile->TextileRestricted($msg);
 }
@@ -4516,8 +4498,8 @@ function get_lastmod($unix_ts = null)
 /**
  * Sends and handles a lastmod header.
  *
- * @param   int|null   $unix_ts The last modification date as a UNIX timestamp
- * @param   bool       $exit    If TRUE, terminates the script
+ * @param   int|null $unix_ts The last modification date as a UNIX timestamp
+ * @param   bool     $exit    If TRUE, terminates the script
  * @return  array|null Array of sent HTTP status and the lastmod header, or NULL
  * @package Pref
  */
@@ -4569,38 +4551,26 @@ function handle_lastmod($unix_ts = null, $exit = true)
 }
 
 /**
- * Gets all preferences as an array.
+ * Gets preferences as an array.
  *
- * Returns all preference values from the database as an array. Shouldn't be used to
+ * Returns preference values from the database as an array. Shouldn't be used to
  * retrieve selected preferences, see get_pref() instead.
  *
- * If run on an authenticated admin page, the results include current user's
- * private preferences. Any global preference overrides equally named user prefs.
+ * By default only the global preferences are returned.
+ * If the optional user name parameter is supplied, the private preferences
+ * for that user are returned.
  *
+ * @param   string $user User name.
  * @return  array
  * @package Pref
  * @access  private
  * @see     get_pref()
  */
 
-function get_prefs()
+function get_prefs($user = '')
 {
-    global $txp_user;
     $out = array();
-
-    // Get current user's private prefs.
-    if ($txp_user) {
-        $r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\''.doSlash($txp_user).'\'');
-
-        if ($r) {
-            while ($a = nextRow($r)) {
-                $out[$a['name']] = $a['val'];
-            }
-        }
-    }
-
-    // Get global prefs, eventually override equally named user prefs.
-    $r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\'\'');
+    $r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\''.doSlash($user).'\'');
 
     if ($r) {
         while ($a = nextRow($r)) {
@@ -4621,7 +4591,7 @@ function get_prefs()
  * @param   string $html       The HTML control type the field uses. Can take a custom function name
  * @param   int    $position   Used to sort the field on the Preferences panel
  * @param   bool   $is_private If PREF_PRIVATE, is created as a user pref
- * @return  bool   FALSE on error
+ * @return  bool FALSE on error
  * @package Pref
  * @example
  * if (set_pref('myPref', 'value'))
@@ -4693,10 +4663,10 @@ function get_pref($thing, $default = '', $from_db = false)
  *
  * Removes preference strings based on the given arguments. Use NULL to omit an argument.
  *
- * @param   string|null      $name       The preference string name
- * @param   string|null      $event      The preference event
- * @param   string|null|bool $user_name  The owner. If PREF_PRIVATE, the current user
- * @return  bool             TRUE on success
+ * @param   string|null      $name      The preference string name
+ * @param   string|null      $event     The preference event
+ * @param   string|null|bool $user_name The owner. If PREF_PRIVATE, the current user
+ * @return  bool TRUE on success
  * @since   4.6.0
  * @package Pref
  * @example
@@ -4750,7 +4720,7 @@ function remove_pref($name = null, $event = null, $user_name = null)
  *
  * @param   string           $name      The preference string name
  * @param   string|null|bool $user_name Either the username, NULL, PREF_PRIVATE or PREF_GLOBAL
- * @return  bool             TRUE if the string exists, or FALSE on error
+ * @return  bool TRUE if the string exists, or FALSE on error
  * @since   4.6.0
  * @package Pref
  * @example
@@ -4798,7 +4768,7 @@ function pref_exists($name, $user_name = null)
  * @param   string      $html       The HTML control type the field uses. Can take a custom function name
  * @param   int         $position   Used to sort the field on the Preferences panel
  * @param   string|bool $user_name  The user name, PREF_GLOBAL or PREF_PRIVATE
- * @return  bool        TRUE if the string exists, FALSE on error
+ * @return  bool TRUE if the string exists, FALSE on error
  * @since   4.6.0
  * @package Pref
  * @example
@@ -4913,7 +4883,7 @@ function update_pref($name, $val = null, $event = null, $type = null, $html = nu
  * @param   string $newname   The new name
  * @param   string $name      The current name
  * @param   string $user_name Either the username, PREF_GLOBAL or PREF_PRIVATE
- * @return  bool   FALSE on error
+ * @return  bool FALSE on error
  * @since   4.6.0
  * @package Pref
  * @example
@@ -4994,8 +4964,8 @@ function getCustomFields($type = 'article', $when = null)
  * Build a query qualifier to filter non-matching custom fields from the
  * result set.
  *
- * @param   array       $custom An array of 'custom_field_name' => field_number tuples
- * @param   array       $pairs  Filter criteria: An array of 'name' => value tuples
+ * @param   array $custom An array of 'custom_field_name' => field_number tuples
+ * @param   array $pairs  Filter criteria: An array of 'name' => value tuples
  * @return  bool|string An SQL qualifier for a query's 'WHERE' part
  * @package CustomField
  */
@@ -5141,7 +5111,7 @@ eod;
  *
  * Builds a HTTP query string from an associative array.
  *
- * @param   array  $q The parameters for the query
+ * @param   array $q The parameters for the query
  * @return  string The query, including starting "?".
  * @package URL
  * @example
@@ -5181,7 +5151,7 @@ function join_qs($q)
  *
  * @param   array|string  $atts  HTML attributes
  * @param   int           $flags TEXTPATTERN_STRIP_EMPTY
- * @return  string        HTML attribute list
+ * @return  string HTML attribute list
  * @since   4.6.0
  * @package HTML
  * @example
@@ -5313,7 +5283,7 @@ function pagelinkurl($parts, $inherit = array())
  * If you need to generate a list of article URLs from already fetched table
  * rows, consider using permlinkurl() over this due to performance benefits.
  *
- * @param   int    $id The article ID
+ * @param   int $id The article ID
  * @return  string The URL
  * @see     permlinkurl()
  * @package URL
@@ -5332,7 +5302,7 @@ function permlinkurl_id($id)
     }
 
     $rs = safe_row(
-        "ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted",
+        "ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted, unix_timestamp(Expires) as expires",
         'textpattern',
         "ID = $id"
     );
@@ -5343,7 +5313,7 @@ function permlinkurl_id($id)
 /**
  * Generates an article URL from the given data array.
  *
- * @param   array  $article_array An array consisting of keys 'thisid', 'section', 'title', 'url_title', 'posted'
+ * @param   array $article_array An array consisting of keys 'thisid', 'section', 'title', 'url_title', 'posted', 'expires'
  * @return  string The URL
  * @package URL
  * @see     permlinkurl_id()
@@ -5352,13 +5322,14 @@ function permlinkurl_id($id)
  *     'thisid'    => 12,
  *     'section'   => 'blog',
  *     'url_title' => 'my-title',
- *     'posted'    => 1345414041
+ *     'posted'    => 1345414041,
+ *     'expires'   => 1345444077
  * ));
  */
 
 function permlinkurl($article_array)
 {
-    global $permlink_mode, $prefs, $permlinks;
+    global $permlink_mode, $prefs, $permlinks, $production_status;
 
     if (!$article_array || !is_array($article_array)) {
         return;
@@ -5372,18 +5343,16 @@ function permlinkurl($article_array)
 
     extract(lAtts(array(
         'thisid'    => null,
-        'ID'        => null,
-        'Title'     => null,
+        'id'        => null,
         'title'     => null,
         'url_title' => null,
         'section'   => null,
-        'Section'   => null,
         'posted'    => null,
-        'Posted'    => null,
-    ), $article_array, false));
+        'expires'   => null,
+    ), array_change_key_case($article_array, CASE_LOWER), false));
 
     if (empty($thisid)) {
-        $thisid = $ID;
+        $thisid = $id;
     }
 
     $thisid = (int) $thisid;
@@ -5392,20 +5361,17 @@ function permlinkurl($article_array)
         return $permlinks[$thisid];
     }
 
-    if (!isset($title)) {
-        $title = $Title;
+    if (empty($prefs['publish_expired_articles']) &&
+        !empty($expires) &&
+        $expires < time() &&
+        $production_status != 'live' &&
+        txpinterface == 'public'
+    ) {
+        trigger_error(gTxt('permlink_to_expired_article', array('{id}' => $thisid)), E_USER_NOTICE);
     }
 
     if (empty($url_title)) {
         $url_title = stripSpace($title);
-    }
-
-    if (empty($section)) {
-        $section = $Section;
-    }
-
-    if (!isset($posted)) {
-        $posted = $Posted;
     }
 
     $section = urlencode($section);
@@ -5501,7 +5467,7 @@ function imagesrcurl($id, $ext, $thumbnail = false)
  * @param  string $val   The searched value
  * @param  string $list  The value list
  * @param  string $delim The list boundary
- * @return bool   Returns TRUE if $val is found, FALSE otherwise
+ * @return bool Returns TRUE if $val is found, FALSE otherwise
  * @example
  * if (in_list('red', 'blue, green, red, yellow'))
  * {
@@ -5561,6 +5527,7 @@ function do_list_unique($list, $delim = ',', $flags = TEXTPATTERN_STRIP_EMPTY_ST
     if ($flags & TEXTPATTERN_STRIP_EMPTY_STRING) {
         $out = array_filter($out, function ($v) {return ($v=='') ? false : true;});
     }
+
     return $out;
 }
 
@@ -5602,25 +5569,42 @@ function quote_list($in)
 /**
  * Adds a line to the tag trace.
  *
- * @param   string $msg               The message
- * @param   int    $tracelevel_diff   Change trace level
+ * @param   string $msg             The message
+ * @param   int    $tracelevel_diff Change trace level
  * @package Debug
  */
 
-function trace_add($msg, $tracelevel_diff = 0)
+function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
 {
-    global $production_status, $txptrace;
+    global $production_status, $txptrace, $txptrace_microstart, $txptrace_maxMemMsg;
+    static $time_last = 0;
     static $memory_last = 0;
     static $txptracelevel = 0;
+    static $maxMemUsage = 0;
 
     if ($production_status === 'debug' && !empty($msg)) {
         if (is_callable('memory_get_usage')) {
             $memory_now = ceil(memory_get_usage()/1024);
-            $memory = sprintf("%7s |%6s |", $memory_now, ($memory_now > $memory_last) ? $memory_now - $memory_last : "");
+            $time_now = getmicrotime();
+            $diff = ($time_now - $time_last) * 1000;
+
+            $memory = sprintf('%7s |%7s |%8s |',
+                $memory_now,
+                ($memory_now > $memory_last) ? $memory_now - $memory_last : '',
+                ($diff > 0.2 and $diff < 900) ? number_format($diff, 2, '.', '') : ''
+            );
+
+            if ($formTag != null && $memory_now > $maxMemUsage) {
+                $maxMemUsage = $memory_now;
+                $txptrace_maxMemMsg = "{$maxMemUsage} kB,  $formTag";
+            }
+
             $memory_last = $memory_now;
+            $time_last = $time_now;
         } else {
-            $memory = "";
+            $memory = '';
         }
+
         $txptrace[] = $memory . @str_repeat("\t", $txptracelevel) . $msg;
     }
 
@@ -5630,43 +5614,103 @@ function trace_add($msg, $tracelevel_diff = 0)
 }
 
 /**
- * Trace log: Start / Display / Result values.
+ * Trace log: Start / Display / Result values / Quiet mode.
  *
- * @param   int   $flags One of TEXTPATTERN_TRACE_START | TEXTPATTERN_TRACE_DISPLAY | TEXTPATTERN_TRACE_RESULT
+ * @param   int   $flags One of TEXTPATTERN_TRACE_START  | TEXTPATTERN_TRACE_DISPLAY
+ *                              TEXTPATTERN_TRACE_RESULT | TEXTPATTERN_TRACE_QUIET
  * @return  mixed
+ * @since   4.6.0
  * @package Debug
  */
 
 function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
 {
-    global $production_status, $txptrace, $qtime, $qcount;
-    static $microstart = 0;
+    global $production_status, $plugin_callback, $txptrace,
+           $txptrace_quiet, $txptrace_qtime, $txptrace_qcount, $txptrace_microstart, $txptrace_maxMemMsg;
 
     if ($flags & TEXTPATTERN_TRACE_START) {
-        $microstart = getmicrotime();
+        $txptrace_microstart = getmicrotime();
         $production_status = 'debug';
         $txptrace = array();
+        trace_add('[Trace Start]');
         return;
     }
 
-    $microdiff = (getmicrotime() - $microstart);
+    if ($flags & TEXTPATTERN_TRACE_QUIET) {
+        $txptrace_quiet = 1;
+        return;
+    }
+
+    $microdiff = (getmicrotime() - $txptrace_microstart);
     $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
 
     if ($production_status !== 'live' && $flags & TEXTPATTERN_TRACE_DISPLAY) {
-        echo n,comment('Runtime:    '.substr($microdiff, 0, 6));
-        echo n,comment('Query time: '.sprintf('%02.6f', $qtime));
-        echo n,comment('Queries: '.$qcount);
-
-        echo n.comment(sprintf('Memory Peak: %sKb', $memory_peak));
-        echo maxMemUsage('', 1);
+        trace_add('[Trace End]');
+        echo n,comment('Runtime:     '.substr($microdiff, 0, 8));
+        echo n,comment('Query time:  '.sprintf('%02.6f', $txptrace_qtime)."; Queries: $txptrace_qcount ");
+        if (!empty($txptrace_maxMemMsg)) {
+            echo n.comment("Memory:      $txptrace_maxMemMsg");
+        }
+        echo n.comment(sprintf('Memory Peak: %s kB ', $memory_peak));
 
         if ($production_status === 'debug') {
-            echo n, comment('Trace log: '.n.'Mem(Kb)_|_+(Kb)_|_Trace___'.n.join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace)).n);
+            $trace_log = join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace));
+            trace_out('Trace log: '.n.'Mem(kB)_|__+(kB)_|___+(ms)_|_Trace___'.n.$trace_log);
+
+            if (!empty($plugin_callback)) {
+                $out = sprintf('%40s |%40s |%20s | %s   ', 'function', 'event', 'step', 'pre').n;
+                $out = str_replace(' ', '_', $out);
+
+                foreach ($plugin_callback as $p) {
+                    if (is_string($p['function'])) {
+                        $name = $p['function'];
+                    } elseif (@is_object($p['function'][0])) {
+                        $name = @get_class($p['function'][0]);
+                    } else {
+                        $name = '';
+                    }
+                    $out .= sprintf('%40s | %-40s| %-20s| %s', $name, $p['event'], $p['step'], $p['pre']).n;
+                }
+
+                trace_out('Plugin callback:'.n.$out);
+            }
+
+            if (preg_match_all('/(\[SQL.*\])/', $trace_log, $mm)) {
+                trace_out('Query log:'.n.join(n, $mm[1]).n.
+                    'Time: '.sprintf('%02.6f', $txptrace_qtime).": Queries: $txptrace_qcount ");
+            }
+
+            callback_event('trace_end', 'display');
         }
     }
 
     if ($flags & TEXTPATTERN_TRACE_RESULT) {
-        return array('microdiff' => $microdiff, 'memory_peak' => $memory_peak);
+        if ($production_status === 'debug') {
+            callback_event('trace_end', 'result');
+        }
+
+        return array('microdiff' => $microdiff, 'memory_peak' => $memory_peak, 'queries' => $txptrace_qcount);
+    }
+}
+
+/**
+ * Display Trace log unless prohibited.
+ *
+ * Prohibition log output is useful for plugins that extend the functionality of
+ * the trace log.
+ *
+ * @param   string $msg The message
+ * @since   4.6.0
+ * @package Debug
+ * @see     trace_log()
+ */
+
+function trace_out($msg)
+{
+    global $txptrace_quiet;
+
+    if (empty($txptrace_quiet)) {
+        echo n.comment($msg.n).n;
     }
 }
 
@@ -5731,6 +5775,7 @@ function get_caller($num = 1, $start = 2)
     }
 
     $bt = debug_backtrace();
+
     for ($i = $start; $i < $num+$start; $i++) {
         if (!empty($bt[$i])) {
             $t = '';
@@ -5776,7 +5821,7 @@ function get_caller($num = 1, $start = 2)
  * @return     string Current locale
  * @package    L10n
  * @deprecated in 4.6.0
- * @see        Textpattern_L10n_Locale::setLocale()
+ * @see        \Textpattern\L10n\Locale::setLocale()
  */
 
 function getlocale($lang)
@@ -5784,11 +5829,11 @@ function getlocale($lang)
     global $locale;
 
     try {
-        Txp::get('Textpattern_L10n_Locale')->setLocale(LC_TIME, array($lang, $locale));
+        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, array($lang, $locale));
     } catch (Exception $e) {
     }
 
-    return Txp::get('Textpattern_L10n_Locale')->getLocale(LC_TIME);
+    return Txp::get('\Textpattern\L10n\Locale')->getLocale(LC_TIME);
 }
 
 /**
@@ -5835,7 +5880,7 @@ function getMetaDescription($type = null)
                 $content = safe_field('description', 'txp_category', "name = '".doSlash($c)."'" . $clause);
             }
         } elseif ($type === 'section') {
-            $theSection = ($thissection) ? $thissection : $s;
+            $theSection = ($thissection) ? $thissection['name'] : $s;
             $content = safe_field('description', 'txp_section', "name = '".doSlash($theSection)."'");
         } elseif ($type === 'article') {
             assert_article();
@@ -5940,7 +5985,7 @@ function assert_category()
 /**
  * Validate a variable as an integer.
  *
- * @param  mixed    $myvar The variable
+ * @param  mixed $myvar The variable
  * @return int|bool The variable or FALSE on error
  */
 
@@ -5958,7 +6003,7 @@ function assert_int($myvar)
 /**
  * Validate a variable as a string.
  *
- * @param  mixed       $myvar The variable
+ * @param  mixed $myvar The variable
  * @return string|bool The variable or FALSE on error
  */
 
@@ -5976,7 +6021,7 @@ function assert_string($myvar)
 /**
  * Validate a variable as an array.
  *
- * @param  mixed      $myvar The variable
+ * @param  mixed $myvar The variable
  * @return array|bool The variable or FALSE on error
  */
 
@@ -6025,7 +6070,7 @@ function replace_relative_urls($html, $permalink = '')
 /**
  * Used for clean URL test.
  *
- * @param  array   $pretext
+ * @param  array $pretext
  * @access private
  */
 
@@ -6046,9 +6091,9 @@ function show_clean_test($pretext)
  * Takes a total number of items, a per page limit and the current page number,
  * and in return returns the page number, an offset and a number of pages.
  *
- * @param  int   $total The number of items in total
- * @param  int   $limit The number of items per page
- * @param  int   $page  The page number
+ * @param  int $total The number of items in total
+ * @param  int $limit The number of items per page
+ * @param  int $page  The page number
  * @return array Array of page, offset and number of pages.
  * @example
  * list($page, $offset, $num_pages) = pager(150, 10, 1);
@@ -6123,7 +6168,7 @@ function strip_prefix($str, $pfx)
  * Wraps an array of name => value tupels into an XML envelope, supports one
  * level of nested arrays at most.
  *
- * @param   array  $response
+ * @param   array $response
  * @return  string XML envelope
  * @package XML
  */
@@ -6284,7 +6329,7 @@ function janitor()
 
     // Update DST setting.
     if ($auto_dst && $timezone_key) {
-        $is_dst = Txp::get('Textpattern_Date_Timezone')->isDst(null, $timezone_key);
+        $is_dst = Txp::get('\Textpattern\Date\Timezone')->isDst(null, $timezone_key);
 
         if ($is_dst != $prefs['is_dst']) {
             $prefs['is_dst'] = $is_dst;
@@ -6305,19 +6350,19 @@ class timezone
     /**
      * Render HTML &lt;select&gt; element for choosing a timezone.
      *
-     * @param  string      $name        Element name
-     * @param  string      $value       Selected timezone
-     * @param  bool        $blank_first Add empty first option
-     * @param  bool|string $onchange
-     * @param  string      $select_id   HTML id attribute
-     * @return string      HTML markup
+     * @param      string      $name        Element name
+     * @param      string      $value       Selected timezone
+     * @param      bool        $blank_first Add empty first option
+     * @param      bool|string $onchange
+     * @param      string      $select_id   HTML id attribute
+     * @return     string HTML markup
      * @deprecated in 4.6.0
-     * @see        Textpattern_Date_Timezone::getTimeZones()
+     * @see        \Textpattern\Date\Timezone::getTimeZones()
      */
 
     public function selectInput($name = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
     {
-        if ($details = Txp::get('Textpattern_Date_Timezone')->getTimeZones()) {
+        if ($details = Txp::get('\Textpattern\Date\Timezone')->getTimeZones()) {
             $thiscontinent = '';
             $selected = false;
 
@@ -6360,14 +6405,14 @@ class timezone
     /**
      * Build a matrix of timezone details.
      *
-     * @return array Array of timezone details indexed by timezone key
+     * @return     array Array of timezone details indexed by timezone key
      * @deprecated in 4.6.0
-     * @see        Textpattern_Date_Timezone::getTimeZones()
+     * @see        \Textpattern\Date\Timezone::getTimeZones()
      */
 
     public function details()
     {
-        return Txp::get('Textpattern_Date_Timezone')->getTimeZones();
+        return Txp::get('\Textpattern\Date\Timezone')->getTimeZones();
     }
 
     /**
@@ -6376,15 +6421,15 @@ class timezone
      * NB: More than one key might fit any given GMT offset, thus the returned
      * value is ambiguous and merely useful for presentation purposes.
      *
-     * @param  int    $gmtoffset
-     * @return string timezone key
+     * @param      int $gmtoffset
+     * @return     string timezone key
      * @deprecated in 4.6.0
-     * @see        Textpattern_Date_Timezone::getOffsetIdentifiers()
+     * @see        \Textpattern\Date\Timezone::getOffsetIdentifiers()
      */
 
     public function key($gmtoffset)
     {
-        if ($idenfiers = Txp::get('Textpattern_Date_Timezone')->getOffsetIdentifiers($gmtoffset)) {
+        if ($idenfiers = Txp::get('\Textpattern\Date\Timezone')->getOffsetIdentifiers($gmtoffset)) {
             return $idenfiers[0];
         }
 
@@ -6394,16 +6439,16 @@ class timezone
     /**
      * Is DST in effect?
      *
-     * @param  int    $timestamp    When?
-     * @param  string $timezone_key Where?
-     * @return bool
+     * @param      int    $timestamp    When?
+     * @param      string $timezone_key Where?
+     * @return     bool
      * @deprecated in 4.6.0
-     * @see        Textpattern_Date_Timezone::isDst()
+     * @see        \Textpattern\Date\Timezone::isDst()
      */
 
     public static function is_dst($timestamp, $timezone_key)
     {
-        return Txp::get('Textpattern_Date_Timezone')->isDst($timestamp, $timezone_key);
+        return Txp::get('\Textpattern\Date\Timezone')->isDst($timestamp, $timezone_key);
     }
 
     /**
@@ -6411,7 +6456,7 @@ class timezone
      *
      * As of 4.6.0, always returns TRUE.
      *
-     * @return bool Timezone feature is enabled
+     * @return     bool Timezone feature is enabled
      * @deprecated in 4.6.0
      */
 
@@ -6430,13 +6475,13 @@ class timezone
  *
  * @param   string $textpack      The Textpack to install
  * @param   bool   $add_new_langs If TRUE, installs strings for any included language
- * @return  int    Number of installed strings
+ * @return  int Number of installed strings
  * @package L10n
  */
 
 function install_textpack($textpack, $add_new_langs = false)
 {
-    $parser = new Textpattern_Textpack_Parser();
+    $parser = new \Textpattern\Textpack\Parser();
     $parser->setLanguage(get_pref('language', 'en-gb'));
     $textpack = $parser->parse($textpack);
 
@@ -6537,9 +6582,9 @@ function assert_system_requirements()
  * isn't terminated. If the $step is valid and passes CSRF validation,
  * returns TRUE.
  *
- * @param   string  $step  Requested admin step
- * @param   array   $steps An array of valid steps with flag indicating CSRF needs, e.g. array('savething' => true, 'listthings' => false)
- * @return  bool    If the $step is valid, proceeds and returns TRUE. Dies on CSRF attempt.
+ * @param   string $step  Requested admin step
+ * @param   array  $steps An array of valid steps with flag indicating CSRF needs, e.g. array('savething' => true, 'listthings' => false)
+ * @return  bool If the $step is valid, proceeds and returns TRUE. Dies on CSRF attempt.
  * @see     form_token()
  * @package CSRF
  * @example
@@ -6680,7 +6725,7 @@ function status_list($labels = true, $exclude = array())
  *
  * @param  string $name    Status name
  * @param  int    $default Status code to return if $name is not a defined status name
- * @return int    Matching numerical status
+ * @return int Matching numerical status
  */
 
 function getStatusNum($name, $default = STATUS_LIVE)
@@ -6703,7 +6748,7 @@ function getStatusNum($name, $default = STATUS_LIVE)
  * file statuses, checksums or the digest of the install. It can also return the
  * parsed contents of the checksum file.
  *
- * @param   int        $flags Options are INTEGRITY_MD5 | INTEGRITY_STATUS | INTEGRITY_REALPATH | INTEGRITY_DIGEST
+ * @param   int $flags Options are INTEGRITY_MD5 | INTEGRITY_STATUS | INTEGRITY_REALPATH | INTEGRITY_DIGEST
  * @return  array|bool Array of files and status, or FALSE on error
  * @since   4.6.0
  * @package Debug

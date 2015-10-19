@@ -114,7 +114,7 @@ function form_list($curname)
     $criteria .= callback_event('admin_criteria', 'form_list', 0, $criteria);
 
     $rs = safe_rows_start(
-        '*',
+        'name, type',
         'txp_form',
         "$criteria order by field(type, ".join(',', quote_list(array_keys($form_types))).") asc, name asc"
     );
@@ -478,7 +478,7 @@ function form_save()
  * Deletes a form template with the given name.
  *
  * @param  string $name The form template
- * @return bool   FALSE on error
+ * @return bool FALSE on error
  */
 
 function form_delete($name)
@@ -499,7 +499,7 @@ function form_delete($name)
  *
  * @param  string $name The form template
  * @param  string $type The new type
- * @return bool   FALSE on error
+ * @return bool FALSE on error
  */
 
 function form_set_type($name, $type)

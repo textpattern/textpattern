@@ -20,7 +20,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
-
 /**
  * Adapter for PHP's mail function.
  *
@@ -28,12 +27,18 @@
  * @package Mail
  */
 
-class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
+namespace Textpattern\Mail\Adapter;
+
+use Textpattern\Mail\Encode;
+use Textpattern\Mail\Exception;
+use Textpattern\Mail\Message;
+
+class Mail implements \Textpattern\Mail\AdapterInterface
 {
     /**
      * The email fields.
      *
-     * @var Textpattern_Mail_Message
+     * @var \Textpattern\Mail\Message
      */
 
     protected $mail;
@@ -41,7 +46,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
     /**
      * Encoded email fields.
      *
-     * @var Textpattern_Mail_Message
+     * @var \Textpattern\Mail\Message
      */
 
     protected $encoded;
@@ -73,7 +78,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
     /**
      * The encoder.
      *
-     * @var Textpattern_Mail_Encode
+     * @var Encode
      */
 
     protected $encoder;
@@ -84,9 +89,9 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
 
     public function __construct()
     {
-        $this->mail = new Textpattern_Mail_Message();
-        $this->encoded = new Textpattern_Mail_Message();
-        $this->encoder = new Textpattern_Mail_Encode();
+        $this->mail = new Message();
+        $this->encoded = new Message();
+        $this->encoder = new Encode();
 
         if (IS_WIN) {
             $this->separator = "\r\n";
@@ -112,15 +117,15 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
      *
      * @param  string $name The field
      * @param  array  $args Arguments
-     * @return Textpattern_Mail_AdapterInterface
-     * @throws Textpattern_Mail_Exception
+     * @return \Textpattern\Mail\AdapterInterface
+     * @throws \Textpattern\Mail\Exception
      */
 
     public function __call($name, array $args = null)
     {
         if (!$args) {
             if (property_exists($this->mail, $name) === false) {
-                throw new Textpattern_Mail_Exception(gTxt('invalid_argument', array('{name}' => 'name')));
+                throw new Exception(gTxt('invalid_argument', array('{name}' => 'name')));
             }
 
             return $this->mail->$name;
@@ -139,8 +144,8 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
 
     public function subject($subject)
     {
-        if (!is_scalar($subject) || (string) $subject === '') {
-            throw new Textpattern_Mail_Exception(gTxt('invalid_argument', array('{name}' => 'subject')));
+        if (!is_scalar($subject) || (string)$subject === '') {
+            throw new Exception(gTxt('invalid_argument', array('{name}' => 'subject')));
         }
 
         $this->mail->subject = $subject;
@@ -180,8 +185,8 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
 
     public function header($name, $value)
     {
-        if ((string) $value === '' || !preg_match('/^[\041-\071\073-\176]+$/', $name)) {
-            throw new Textpattern_Mail_Exception(gTxt('invalid_header'));
+        if ((string)$value === '' || !preg_match('/^[\041-\071\073-\176]+$/', $name)) {
+            throw new Exception(gTxt('invalid_header'));
         }
 
         $this->mail->headers[$name] = $value;
@@ -197,11 +202,11 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
     public function send()
     {
         if (is_disabled('mail')) {
-            throw new Textpattern_Mail_Exception(gTxt('disabled_function', array('{name}' => 'mail')));
+            throw new Exception(gTxt('disabled_function', array('{name}' => 'mail')));
         }
 
         if (!$this->mail->from || !$this->mail->to) {
-            throw new Textpattern_Mail_Exception(gTxt('from_or_to_address_missing'));
+            throw new Exception(gTxt('from_or_to_address_missing'));
         }
 
         $headers = array();
@@ -212,7 +217,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
         }
 
         if ($this->encoded->bcc) {
-            $headers['Bcc'] = $this->encoded->bbc;
+            $headers['Bcc'] = $this->encoded->bcc;
         }
 
         if ($this->encoded->replyTo) {
@@ -229,7 +234,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
         $additional_headers = ($this->smtpFrom ? '-f'.$this->smtpFrom : null);
 
         if (mail($this->encoded->to, $this->encoded->subject, $this->encoded->body, $headers, $additional_headers) === false) {
-            throw new Textpattern_Mail_Exception(gTxt('sending_failed'));
+            throw new Exception(gTxt('sending_failed'));
         }
 
         return $this;
@@ -241,7 +246,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
      * @param  string $field   The field
      * @param  string $address The email address
      * @param  string $name    The name
-     * @return Textpattern_Mail_AdapterInterface
+     * @return \Textpattern\Mail\AdapterInterface
      */
 
     protected function addAddress($field, $address, $name = '')
@@ -253,6 +258,6 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
             return $this;
         }
 
-        throw new Textpattern_Mail_Exception(gTxt('invalid_argument', array('{name}' => 'address')));
+        throw new Exception(gTxt('invalid_argument', array('{name}' => 'address')));
     }
 }
