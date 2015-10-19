@@ -574,7 +574,6 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
  * @param  string $label     L10n label name
  * @param  string $pane      Pane reference for maintaining toggle state in prefs. Prefixed with 'pane_', suffixed with '_visible'
  * @param  string $class     CSS class name to apply to wrapper
- * @param  string $role      ARIA role name
  * @param  string $help      Help text item
  * @return string HTML
  * @since  4.6.0
@@ -638,7 +637,7 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
 
 function wrapGroup($id, $content, $label, $class = '', $help = '')
 {
-    return wrapRegion($id, $content, '', $label, '', $class, 'region', $help);
+    return wrapRegion($id, $content, '', $label, '', $class, $help);
 }
 
 /**

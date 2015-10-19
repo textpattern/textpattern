@@ -40,6 +40,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Developer: Added jQuery UI library and a jQuery UI Textpattern theme to admin side.
 * Developer: Added DocBlock documentation comments throughout the source code.
 * Developer: Adherence to PSR coding standards where possible.
+* Developer: Function signature for wrapRegion() changed: 7th parameter 'ARIA role' dropped, as it shouldn't be stated for semantic tags such as 'section'.
 
 Changes in 4.5.7
 
