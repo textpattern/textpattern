@@ -35,16 +35,16 @@ interface ProvidableInterface
     /**
      * Sets the current adapter.
      *
-     * @param  Textpattern_Adaptable_Adapter $adapter The adapter
+     * @param  \Textpattern\Adaptable\Adapter $adapter The adapter
      * @return ProvidableInterface
      */
 
-    public function setAdapter(Textpattern_Adaptable_Adapter $adapter);
+    public function setAdapter(\Textpattern\Adaptable\Adapter $adapter);
 
     /**
      * Gets the current adapter.
      *
-     * @return Textpattern_Adaptable_Adapter
+     * @return \Textpattern\Adaptable\Adapter
      */
 
     public function getAdapter();
@@ -52,7 +52,7 @@ interface ProvidableInterface
     /**
      * Gets the original default adapter.
      *
-     * @return Textpattern_Adaptable_Adapter
+     * @return \Textpattern\Adaptable\Adapter
      */
 
     public function getDefaultAdapter();

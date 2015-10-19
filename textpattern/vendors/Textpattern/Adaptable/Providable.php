@@ -45,7 +45,7 @@ abstract class Providable implements ProvidableInterface
     /**
      * Stores an instance of the current provider.
      *
-     * @var Textpattern_Adaptable_Adapter
+     * @var \Textpattern\Adaptable\Adapter
      */
 
     private $adapter;
@@ -62,7 +62,7 @@ abstract class Providable implements ProvidableInterface
      * {@inheritdoc}
      */
 
-    public function setAdapter(Textpattern_Adaptable_Adapter $adapter)
+    public function setAdapter(\Textpattern\Adaptable\Adapter $adapter)
     {
         $this->adapter = $adapter;
 

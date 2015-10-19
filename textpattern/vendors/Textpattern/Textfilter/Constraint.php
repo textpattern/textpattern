@@ -25,6 +25,8 @@
  * Imports Validator.
  */
 
+namespace Textpattern\Textfilter;
+
 require_once txpath.'/lib/txplib_validator.php';
 
 /**
@@ -33,8 +35,7 @@ require_once txpath.'/lib/txplib_validator.php';
  * @since   4.6.0
  * @package Textfilter
  */
-
-class Textpattern_Textfilter_Constraint extends Constraint
+class Constraint extends \Constraint
 {
     /**
      * Validates filter selection.
@@ -44,6 +45,6 @@ class Textpattern_Textfilter_Constraint extends Constraint
 
     public function validate()
     {
-        return array_key_exists($this->value, Txp::get('\Textpattern\Textfilter\Registry')->getMap());
+        return array_key_exists($this->value, \Txp::get('\Textpattern\Textfilter\Registry')->getMap());
     }
 }

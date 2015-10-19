@@ -759,7 +759,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         }
 
         // Use preferred Textfilter as default and fallback.
-        $hasfilter = new Textpattern_Textfilter_Constraint(null);
+        $hasfilter = new \Textpattern\Textfilter\Constraint(null);
         $validator = new Validator();
 
         foreach (array('textile_body', 'textile_excerpt') as $k) {
@@ -2096,11 +2096,11 @@ function article_validate($rs, &$msg)
             $rs['Category2'],
             array('type' => 'article')
         ),
-        'textile_body' => new Textpattern_Textfilter_Constraint(
+        'textile_body' => new \Textpattern\Textfilter\Constraint(
             $rs['textile_body'],
             array('message' => 'invalid_textfilter_body')
         ),
-        'textile_excerpt' => new Textpattern_Textfilter_Constraint(
+        'textile_excerpt' => new \Textpattern\Textfilter\Constraint(
             $rs['textile_excerpt'],
             array('message' => 'invalid_textfilter_excerpt')
         ),

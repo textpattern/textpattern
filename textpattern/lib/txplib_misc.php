@@ -6346,7 +6346,7 @@ class timezone
      * @param  string      $select_id   HTML id attribute
      * @return string      HTML markup
      * @deprecated in 4.6.0
-     * @see        Textpattern_Date_Timezone::getTimeZones()
+     * @see        \Textpattern\Date\Timezone::getTimeZones()
      */
 
     public function selectInput($name = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
@@ -6396,7 +6396,7 @@ class timezone
      *
      * @return array Array of timezone details indexed by timezone key
      * @deprecated in 4.6.0
-     * @see        Textpattern_Date_Timezone::getTimeZones()
+     * @see        \Textpattern\Date\Timezone::getTimeZones()
      */
 
     public function details()
@@ -6413,7 +6413,7 @@ class timezone
      * @param  int    $gmtoffset
      * @return string timezone key
      * @deprecated in 4.6.0
-     * @see        Textpattern_Date_Timezone::getOffsetIdentifiers()
+     * @see        \Textpattern\Date\Timezone::getOffsetIdentifiers()
      */
 
     public function key($gmtoffset)
@@ -6432,7 +6432,7 @@ class timezone
      * @param  string $timezone_key Where?
      * @return bool
      * @deprecated in 4.6.0
-     * @see        Textpattern_Date_Timezone::isDst()
+     * @see        \Textpattern\Date\Timezone::isDst()
      */
 
     public static function is_dst($timestamp, $timezone_key)
