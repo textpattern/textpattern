@@ -390,7 +390,7 @@ function printConfig()
     if (mysqli_get_server_version($mylink) < 50503) {
         $_SESSION['dbcharset'] = "utf8";
     } else {
-        if (FALSE !== strpos(mysqli_get_client_info($mylink), 'mysqlnd')) {
+        if (false !== strpos(mysqli_get_client_info($mylink), 'mysqlnd')) {
             // mysqlnd 5.0.9+ required
             if (mysqli_get_client_version($mylink) < 50009) {
                 $_SESSION['dbcharset'] = "utf8";
