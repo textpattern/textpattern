@@ -87,10 +87,10 @@ trace_log(TEXTPATTERN_TRACE_START);
 
 include txpath.'/vendors/Textpattern/Loader.php';
 
-$loader = new Textpattern_Loader(txpath.'/vendors');
+$loader = new \Textpattern\Loader(txpath.'/vendors');
 $loader->register();
 
-$loader = new Textpattern_Loader(txpath.'/lib');
+$loader = new \Textpattern\Loader(txpath.'/lib');
 $loader->register();
 
 include txpath.'/lib/txplib_db.php';

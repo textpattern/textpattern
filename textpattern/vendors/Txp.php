@@ -25,20 +25,20 @@
  * Factory.
  *
  * <code>
- * Txp::get('Textpattern_Password_Hash')->hash('abc');
- * Txp::get('Textpattern_Type_String', 'Hello word!')->replace('!', '.')->getLength();
+ * Txp::get('\Textpattern\Password\Hash')->hash('abc');
+ * Txp::get('\Textpattern\Type\String', 'Hello word!')->replace('!', '.')->getLength();
  * </code>
  *
  * @since   4.6.0
  * @package Container
  */
 
-class Txp implements Textpattern_Container_FactoryInterface
+class Txp implements \Textpattern\Container\FactoryInterface
 {
     /**
      * Stores the container instance.
      *
-     * @var Textpattern_Container_Container
+     * @var \Textpattern\Container\Container
      */
 
     private static $container;
@@ -61,7 +61,7 @@ class Txp implements Textpattern_Container_FactoryInterface
     public static function getContainer()
     {
         if (!self::$container) {
-            self::$container = new Textpattern_Container_Container();
+            self::$container = new \Textpattern\Container\Container();
         }
 
         return self::$container;

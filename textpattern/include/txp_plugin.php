@@ -420,7 +420,7 @@ function plugin_verify()
                 $source = '';
 
                 if (isset($plugin['help_raw']) && empty($plugin['allow_html_help'])) {
-                    $textile = new Textpattern_Textile_Parser();
+                    $textile = new \Textpattern\Textile\Parser();
                     $help_source = $textile->TextileRestricted($plugin['help_raw'], 0, 0);
                 } else {
                     $help_source = highlight_string($plugin['help'], true);
@@ -484,7 +484,7 @@ function plugin_install()
 
                 if (isset($help_raw) && empty($plugin['allow_html_help'])) {
                     // Default: help is in Textile format.
-                    $textile = new Textpattern_Textile_Parser();
+                    $textile = new \Textpattern\Textile\Parser();
                     $help = $textile->TextileRestricted($help_raw, 0, 0);
                 }
 
@@ -558,7 +558,7 @@ function plugin_install()
 /**
  * Renders a plugin installation form.
  *
- * @return string  HTML
+ * @return string HTML
  * @access private
  * @see    form()
  */

@@ -64,7 +64,7 @@ if ($event == 'diag') {
 /**
  * Checks if the given Apache module is installed and active.
  *
- * @param  string    $m The module
+ * @param  string $m The module
  * @return bool|null TRUE on success, NULL or FALSE on error
  */
 
@@ -82,7 +82,7 @@ function apache_module($m)
  *
  * This function verifies that the given temporary directory is writeable.
  *
- * @param  string    $dir The directory to check
+ * @param  string $dir The directory to check
  * @return bool|null NULL on error, TRUE on success
  */
 
@@ -123,7 +123,7 @@ function list_txp_tables()
  * @param  array  $tables   The tables to check
  * @param  string $type     Check type, either FOR UPGRADE, QUICK, FAST, MEDIUM, EXTENDED, CHANGED
  * @param  bool   $warnings If TRUE, displays warnings
- * @return array  An array of table statuses
+ * @return array An array of table statuses
  * @example
  * print_r(
  *     check_tables(list_txp_tables())
@@ -483,7 +483,7 @@ function doDiagnostics()
 
         gTxt('gd_library').cs.$gd.n,
 
-        gTxt('server').' TZ: '.Txp::get('Textpattern_Date_Timezone')->getTimeZone().n,
+        gTxt('server').' TZ: '.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
         gTxt('server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
         strip_tags(gTxt('is_dst')).cs.$is_dst.n,
         strip_tags(gTxt('auto_dst')).cs.$auto_dst.n,

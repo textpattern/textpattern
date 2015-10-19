@@ -27,18 +27,20 @@
  * Could be used as a seed or as a unique value itself.
  * Note that the value is not intended to be human-readable,
  * and as such should not be used for passwords. To generate
- * passwords, see Textpattern_Password_Generator instead.
+ * passwords, see \Textpattern\Password\Generator instead.
  *
  * <code>
- * echo Txp::get('Textpattern_Password_Random')->generate(196);
+ * echo Txp::get('\Textpattern\Password\Random')->generate(196);
  * </code>
  *
  * @since   4.6.0
  * @package Password
- * @see     Textpattern_Password_Generator
+ * @see     \Textpattern\Password\Generator
  */
 
-class Textpattern_Password_Random extends Textpattern_Password_Generator
+namespace Textpattern\Password;
+
+class Random extends \Textpattern\Password\Generator
 {
     /**
      * {@inheritdoc}
@@ -57,16 +59,16 @@ class Textpattern_Password_Random extends Textpattern_Password_Generator
      * Generates random bytes as a string of given length.
      *
      * <code>
-     * echo Txp::get('Textpattern_Password_Random')->generate(196);
+     * echo Txp::get('\Textpattern\Password\Random')->generate(196);
      * </code>
      *
-     * @param  int    $length The length of the generated value
+     * @param  int $length The length of the generated value
      * @return string The value
      */
 
     public function generate($length)
     {
-        $bytes = (int) ceil($length / 2);
+        $bytes = (int)ceil($length / 2);
 
         if (function_exists('mcrypt_create_iv') && version_compare(PHP_VERSION, '5.3.0') >= 0) {
             $random = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
