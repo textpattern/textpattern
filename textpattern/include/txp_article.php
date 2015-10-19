@@ -1376,7 +1376,7 @@ function get_status_message($Status)
 
 function textile_main_fields($incoming)
 {
-    $textile = new Textpattern_Textile_Parser();
+    $textile = new \Textpattern\Textile\Parser();
 
     $incoming['Title_plain'] = trim($incoming['Title']);
     $incoming['Title_html'] = ''; // not used

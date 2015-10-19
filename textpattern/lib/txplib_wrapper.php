@@ -913,7 +913,7 @@ class TXP_Wrapper
     {
         global $txpcfg;
 
-        $textile = new Textpattern_Textile_Parser();
+        $textile = new \Textpattern\Textile\Parser();
 
         if (!empty($event) and $event == 'article') {
             $incoming['Title_plain'] = $incoming['Title'];

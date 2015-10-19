@@ -4444,7 +4444,7 @@ function clean_comment_counts($parentids)
 
 function markup_comment($msg)
 {
-    $textile = new Textpattern_Textile_Parser();
+    $textile = new \Textpattern\Textile\Parser();
 
     return $textile->TextileRestricted($msg);
 }
