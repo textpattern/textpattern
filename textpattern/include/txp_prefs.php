@@ -203,7 +203,15 @@ function prefs_list($message = '')
                             'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
                         )
                     );
-                    $groupOut[] = tag(href(gTxt($last_event), '#'.$last_event), 'li');
+
+                    $groupOut[] = tag(href(
+                            gTxt($last_event),
+                            '#'.$last_event,
+                            array(
+                                'data-txp-pane'  => $last_event,
+                                'data-txp-token' => form_token(),
+                            )),
+                        'li');
                 }
 
                 $last_event = $a['event'];
@@ -253,7 +261,15 @@ function prefs_list($message = '')
                 'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
             )
         );
-        $groupOut[] = tag(href(gTxt($last_event), '#'.$last_event), 'li');
+
+        $groupOut[] = tag(href(
+                gTxt($last_event),
+                '#'.$last_event,
+                array(
+                    'data-txp-pane'  => $last_event,
+                    'data-txp-token' => form_token(),
+                )),
+            'li');
 
         echo n.'<div class="txp-layout-4col-cell-1alt">'.
             hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')).

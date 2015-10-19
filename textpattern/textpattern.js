@@ -1537,6 +1537,21 @@ textpattern.Route.add('form', function ()
     });
 });
 
+// Preferences panel.
+
+textpattern.Route.add('prefs', function ()
+{
+    $('#all_preferences').on('click', '.switcher-list a', function(ev) {
+        ev.preventDefault();
+        $('.txp-prefs-group').hide();
+        toggleDisplay.call(this, 'prefs_group_' + $(this).attr('href').substr(1));
+    });
+
+    // Todo: save pane state for currently open pref group, fallback to first if not set.
+    $('.txp-prefs-group').hide();
+    $('#prefs_group_site').show();
+});
+
 // Plugins panel.
 
 textpattern.Route.add('plugin', function ()
