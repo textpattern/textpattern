@@ -47,8 +47,8 @@ class Registry implements \Textpattern\Container\ReusableInterface
      * Txp::get('\Textpattern\Tag\Registry')->register(array('class', 'method'), 'tag');
      * </code>
      *
-     * @param  callback $callback The tag callback
-     * @param  string|null $tag The tag name
+     * @param  callback    $callback The tag callback
+     * @param  string|null $tag      The tag name
      * @return \Textpattern\Tag\Registry
      */
 
@@ -70,8 +70,8 @@ class Registry implements \Textpattern\Container\ReusableInterface
     /**
      * Processes a tag by name.
      *
-     * @param  string $tag The tag
-     * @param  array $atts An array of Attributes
+     * @param  string      $tag   The tag
+     * @param  array       $atts  An array of Attributes
      * @param  string|null $thing The contained statement
      * @return string|null The tag's results
      */
@@ -87,7 +87,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
      * Checks if a tag is registered.
      *
      * @param  string $tag The tag
-     * @return bool   TRUE if the tag exists
+     * @return bool TRUE if the tag exists
      */
 
     public function isRegistered($tag)

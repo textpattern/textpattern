@@ -34,7 +34,7 @@ class Image
     /**
      * Checks if the image is the first in the list.
      *
-     * @param  array $atts
+     * @param  array  $atts
      * @param  string $thing
      * @return string
      */
@@ -51,7 +51,7 @@ class Image
     /**
      * Checks if the image is the last in the list.
      *
-     * @param  array $atts
+     * @param  array  $atts
      * @param  string $thing
      * @return string
      */

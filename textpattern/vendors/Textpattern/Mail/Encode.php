@@ -81,7 +81,7 @@ class Encode
      * Encodes a string for use in an email header.
      *
      * @param  string $string The string
-     * @param  string $type The type of header, either "text" or "phrase"
+     * @param  string $type   The type of header, either "text" or "phrase"
      * @return string
      * @throws \Textpattern\Mail\Exception
      */

@@ -200,8 +200,8 @@ class Timezone
      * </code>
      *
      * @param  string|int|null $timestamp Time to check
-     * @param  string|null $timezone Timezone identifier
-     * @return bool            TRUE if timezone is using DST
+     * @param  string|null     $timezone  Timezone identifier
+     * @return bool TRUE if timezone is using DST
      */
 
     public function isDst($timestamp = null, $timezone = null)
@@ -265,8 +265,8 @@ class Timezone
      * </code>
      *
      * @param  string|null $timezone The timezone identifier
-     * @param  int $from   Next transitions starting from when
-     * @return array|bool  An array of next two transitions, or FALSE
+     * @param  int         $from     Next transitions starting from when
+     * @return array|bool An array of next two transitions, or FALSE
      * @throws \Exception
      */
 
@@ -324,7 +324,7 @@ class Timezone
      * use DST.
      *
      * @param  string $timezone Timezone identifier
-     * @param  bool $dst TRUE to get the abbreviation during DST
+     * @param  bool   $dst      TRUE to get the abbreviation during DST
      * @return string|bool The abbreviation, or FALSE on failure
      */
 
@@ -388,7 +388,7 @@ class Timezone
      * </code>
      *
      * @param  string|null $timezone Timezone identifier
-     * @return array|bool  An array, or FALSE on failure
+     * @return array|bool An array, or FALSE on failure
      */
 
     public function getIdentifier($timezone = null)

@@ -35,8 +35,8 @@ interface ContainerInterface
     /**
      * Gets an instance for the given alias.
      *
-     * @param  string $alias The class alias
-     * @param  array $options Options
+     * @param  string $alias   The class alias
+     * @param  array  $options Options
      * @return object Instance of the resolved class
      */
 

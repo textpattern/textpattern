@@ -155,7 +155,7 @@ class Request
      *
      * @param  string|array $formats   Format to check
      * @param  float        $threshold Quality threshold
-     * @return string|bool  Supported type, or FALSE if not
+     * @return string|bool Supported type, or FALSE if not
      */
 
     public function getAcceptedType($formats, $threshold = 0.1)
@@ -196,7 +196,7 @@ class Request
      *
      * @param  string|array $languages Languages to check
      * @param  float        $threshold Quality threshold
-     * @return string|bool  Accepted language, or FALSE
+     * @return string|bool Accepted language, or FALSE
      */
 
     public function getAcceptedLanguage($languages = null, $threshold = 0.1)
@@ -243,7 +243,7 @@ class Request
      *
      * @param  string|array $encodings Encoding
      * @param  float        $threshold Quality threshold
-     * @return string|bool  Encoding method, or FALSE
+     * @return string|bool Encoding method, or FALSE
      */
 
     public function getAcceptedEncoding($encodings = null, $threshold = 0.1)
@@ -554,7 +554,7 @@ class Request
      * Will return the client's User-Agent header, if it has any. If the client
      * didn't send User-Agent, the method returns FALSE.
      *
-     * @param  string      $name The header name
+     * @param  string $name The header name
      * @return string|bool The header value, or FALSE on failure
      */
 
@@ -743,7 +743,7 @@ class Request
      * </code>
      *
      * @param  string $header The header string
-     * @return array  Accepts map
+     * @return array Accepts map
      */
 
     public function getAcceptsMap($header)

@@ -66,9 +66,9 @@ class String extends \Textpattern\Type\String
      * </code>
      *
      * @param  string $pattern The pattern
-     * @param  array $matches Matches
-     * @param  int $flags Flags
-     * @param  int $offset Offset
+     * @param  array  $matches Matches
+     * @param  int    $flags   Flags
+     * @param  int    $offset  Offset
      * @return String
      * @throws \Textpattern\Filter\Exception
      */

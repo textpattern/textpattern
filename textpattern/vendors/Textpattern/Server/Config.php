@@ -77,7 +77,7 @@ class Config
      * Gets a server configuration variable.
      *
      * @param  string $name The variable
-     * @return mixed  The variable
+     * @return mixed The variable
      */
 
     public function getVariable($name)
