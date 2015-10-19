@@ -158,7 +158,7 @@ class TXP_Wrapper
     /**
      * Deletes an article with the given ID.
      *
-     * @param  int  $article_id The article
+     * @param  int $article_id The article
      * @return bool TRUE on success
      */
 
@@ -189,11 +189,11 @@ class TXP_Wrapper
      * privileges. If the user doesn't have 'article.edit' privileges,
      * only the user's own articles can be accessed.
      *
-     * @param  string     $what   The select clause
-     * @param  string     $where  The where clause
-     * @param  int        $offset The offset
-     * @param  int        $limit  The limit
-     * @param  bool       $slash  If TRUE, escapes $where and $what
+     * @param  string $what   The select clause
+     * @param  string $where  The where clause
+     * @param  int    $offset The offset
+     * @param  int    $limit  The limit
+     * @param  bool   $slash  If TRUE, escapes $where and $what
      * @return array|bool Array of artilces, or FALSE on failure
      */
 
@@ -238,9 +238,9 @@ class TXP_Wrapper
      * privileges. If the user doesn't have 'article.edit' privileges,
      * only the user's own articles can be accessed.
      *
-     * @param  string     $what  Select clause
-     * @param  string     $where Where clause
-     * @param  bool       $slash If TRUE, escapes $where and $what
+     * @param  string $what  Select clause
+     * @param  string $where Where clause
+     * @param  bool   $slash If TRUE, escapes $where and $what
      * @return array|bool An article, or FALSE on failure
      * @see    TXP_Wrapper::getArticleList()
      * @example
@@ -277,8 +277,8 @@ class TXP_Wrapper
      *
      * This method is an shortcut for TXP_Wrapper::getArticle().
      *
-     * @param  int        $article_id The article
-     * @param  string     $what       The SQL select clause
+     * @param  int    $article_id The article
+     * @param  string $what       The SQL select clause
      * @return array|bool The article, or FALSE on failure
      * @see    TXP_Wrapper::getArticle()
      * @example
@@ -310,8 +310,8 @@ class TXP_Wrapper
      * This method takes an array of article fields, and updates an article with
      * the given ID. Supplied values are sanitised and prepared internally.
      *
-     * @param  int      $article_id The article
-     * @param  array    $params     The article fields to update
+     * @param  int   $article_id The article
+     * @param  array $params     The article fields to update
      * @return int|bool The article id, or FALSE on failure
      * @example
      * $wrapper = new TXP_wrapper('username', 'password');
@@ -351,7 +351,7 @@ class TXP_Wrapper
     /**
      * Creates a new article.
      *
-     * @param  array    $params The article fields
+     * @param  array $params The article fields
      * @return int|bool Article ID, or FALSE on failure
      * @example
      * $wrapper = new TXP_wrapper('username', 'password');
@@ -408,7 +408,7 @@ class TXP_Wrapper
      *
      * This method requires authentication and 'article' privileges.
      *
-     * @param  string     $name The section name
+     * @param  string $name The section name
      * @return array|bool FALSE on failure
      * @example
      * $wrapper = new TXP_wrapper('username', 'password');
@@ -460,7 +460,7 @@ class TXP_Wrapper
      *
      * This method requires authentication and 'article' privileges.
      *
-     * @param  string     $name The category name
+     * @param  string $name The category name
      * @return array|bool FALSE on failure
      * @example
      * $wrapper = new TXP_wrapper('username', 'password');
@@ -488,7 +488,7 @@ class TXP_Wrapper
      *
      * This method requires authentication and 'article' privileges.
      *
-     * @param  string     $id The category ID
+     * @param  string $id The category ID
      * @return array|bool FALSE on failure
      */
 
@@ -510,7 +510,7 @@ class TXP_Wrapper
      *
      * This method requires authentication and 'article' privileges.
      *
-     * @param  string     $title The category title
+     * @param  string $title The category title
      * @return array|bool FALSE on failure
      */
 
@@ -554,7 +554,7 @@ class TXP_Wrapper
      *
      * This method requires authentication and 'page' privileges.
      *
-     * @param  string      $name The template
+     * @param  string $name The template
      * @return string|bool The template, or FALSE on failure
      */
 
@@ -576,7 +576,7 @@ class TXP_Wrapper
      *
      * @param  string $name The template name
      * @param  string $html The template contents
-     * @return bool   TRUE on success
+     * @return bool TRUE on success
      * @example
      * $wrapper = new TXP_wrapper('username', 'password');
      * if ($wrapper->setTemplate('default', '&lt;txp:site_name /&gt;'))
@@ -606,7 +606,7 @@ class TXP_Wrapper
      * @param  int    $article_id The article
      * @param  string $field      The field to update
      * @param  mixed  $value      The new value
-     * @return bool   TRUE on success
+     * @return bool TRUE on success
      * @see    TXP_wrapper::updateArticleID()
      * @example
      * $wrapper = new TXP_wrapper('username', 'password');
@@ -664,8 +664,8 @@ class TXP_Wrapper
     /**
      * Creates and updates articles.
      *
-     * @param  array    $incoming   The article fields
-     * @param  int      $article_id The ID of the article to update
+     * @param  array $incoming   The article fields
+     * @param  int   $article_id The ID of the article to update
      * @return int|bool The article ID on success, or FALSE on failure
      * @access private
      * @see    TXP_wrapper::udpateArticleId()
@@ -816,7 +816,7 @@ class TXP_Wrapper
      *
      * @param  string $user     The username
      * @param  string $password The password
-     * @return bool   TRUE on success
+     * @return bool TRUE on success
      * @access private
      */
 
@@ -933,8 +933,8 @@ class TXP_Wrapper
     /**
      * Formats a article field according to the given options.
      *
-     * @param  string $field  The field contents
-     * @param  int    $format Either LEAVE_TEXT_UNTOUCHED, CONVERT_LINEBREAKS, USE_TEXTILE
+     * @param  string  $field  The field contents
+     * @param  int     $format Either LEAVE_TEXT_UNTOUCHED, CONVERT_LINEBREAKS, USE_TEXTILE
      * @param  Textile An instance of Textile
      * @return string HTML formatted field
      * @access private

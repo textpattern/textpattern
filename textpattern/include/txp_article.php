@@ -1205,7 +1205,7 @@ function checkIfNeighbour($whichway, $sPosted)
 /**
  * Renders an article status field.
  *
- * @param  int    $status Selected status
+ * @param  int $status Selected status
  * @return string HTML
  */
 
@@ -1349,7 +1349,7 @@ function check_url_title($url_title)
  *
  * This message is displayed when an article is saved.
  *
- * @param  int    $Status The status
+ * @param  int $Status The status
  * @return string The status message
  */
 
@@ -1423,7 +1423,7 @@ function do_pings()
 /**
  * Renders the &lt;title&gt; element for the 'Write' page.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1479,7 +1479,7 @@ function article_partial_title($rs)
 /**
  * Gets article's title from the given article data set.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string
  */
 
@@ -1494,7 +1494,7 @@ function article_partial_title_value($rs)
  * The rendered widget can be customised via the 'article_ui > author'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1515,7 +1515,7 @@ function article_partial_author($rs)
 /**
  * Renders custom field partial.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1537,7 +1537,7 @@ function article_partial_custom_field($rs, $key)
  * The rendered widget can be customised via the 'article_ui > url_title'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1552,7 +1552,7 @@ function article_partial_url_title($rs)
 /**
  * Gets URL title from the given article data set.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1567,7 +1567,7 @@ function article_partial_url_title_value($rs)
  * The rendered widget can be customised via the 'article_ui > description'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1582,7 +1582,7 @@ function article_partial_description($rs)
 /**
  * Gets description from the given article data set.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1597,7 +1597,7 @@ function article_partial_description_value($rs)
  * The rendered widget can be customised via the 'article_ui > keywords'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1612,7 +1612,7 @@ function article_partial_keywords($rs)
 /**
  * Gets keywords from the given article data set.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string
  */
 
@@ -1647,7 +1647,7 @@ function article_partial_image($rs)
  * The rendered widget can be customised via the 'article_ui > custom_fields'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1669,7 +1669,7 @@ function article_partial_custom_fields($rs)
  * The rendered widget can be customised via the 'article_ui > recent_articles'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1700,7 +1700,7 @@ function article_partial_recent_articles($rs)
 /**
  * Renders article duplicate link.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1717,7 +1717,7 @@ function article_partial_article_clone($rs)
 /**
  * Renders article view link.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1744,7 +1744,7 @@ function article_partial_article_view($rs)
  * The rendered widget can be customised via the 'article_ui > body'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1763,7 +1763,7 @@ function article_partial_body($rs)
  * The rendered widget can be customised via the 'article_ui > excerpt'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1782,7 +1782,7 @@ function article_partial_excerpt($rs)
  * The rendered widget can be customised via the 'article_ui > view'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1810,7 +1810,7 @@ function article_partial_view_modes($rs)
 /**
  * Renders next/prev links.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1845,7 +1845,7 @@ function article_partial_article_nav($rs)
  * The rendered widget can be customised via the 'article_ui > status'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1860,7 +1860,7 @@ function article_partial_status($rs)
  * The rendered widget can be customised via the 'article_ui > section'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1885,7 +1885,7 @@ function article_partial_section($rs)
  * The rendered widget can be customised via the 'article_ui > categories'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -1918,7 +1918,7 @@ function article_partial_categories($rs)
  * The rendered widget can be customised via the 'article_ui > annotate_invite'
  * pluggable UI callback event.
  *
- * @param  array       $rs Article data
+ * @param  array $rs Article data
  * @return string|null HTML
  */
 
@@ -1977,7 +1977,7 @@ function article_partial_comments($rs)
  * The rendered widget can be customised via the 'article_ui > timestamp'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 
@@ -2021,7 +2021,7 @@ function article_partial_posted($rs)
  * The rendered widget can be customised via the 'article_ui > expires'
  * pluggable UI callback event.
  *
- * @param  array  $rs Article data
+ * @param  array $rs Article data
  * @return string HTML
  */
 

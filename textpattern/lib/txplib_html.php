@@ -178,7 +178,7 @@ function column_multi_head($head_items, $class = '')
  * @param  string       $text    Cell text
  * @param  string       $caption Is not used
  * @param  string|array $atts    HTML attributes
- * @return string       HTML
+ * @return string HTML
  */
 
 function hCell($text = '', $caption = '', $atts = '')
@@ -734,7 +734,7 @@ function td($content = '', $width = 0, $class = '', $id = '')
  *
  * @param  string       $content Cell content
  * @param  string|array $atts    Cell attributes
- * @return string       HTML
+ * @return string HTML
  */
 
 function tda($content, $atts = '')
@@ -751,7 +751,7 @@ function tda($content, $atts = '')
  *
  * @param  string       $content Cell content
  * @param  string|array $atts    Cell attributes
- * @return string       HTML
+ * @return string HTML
  * @access private
  * @see    tda()
  */
@@ -766,7 +766,7 @@ function tdtl($content, $atts = '')
  *
  * @param  string       $content Row content
  * @param  string|array $atts    Row attributes
- * @return string       HTML
+ * @return string HTML
  */
 
 function tr($content, $atts = '')
@@ -908,7 +908,7 @@ function inputLabel($name, $input, $label = '', $help = '', $atts = array(), $wr
  * @param  string       $content Enclosed content
  * @param  string       $tag     The tag without brackets
  * @param  string|array $atts    The element's HTML attributes
- * @return string       HTML
+ * @return string HTML
  * @example
  * echo tag('Link text', 'a', array('href' => '#', 'class' => 'warning'));
  */
@@ -921,9 +921,9 @@ function tag($content, $tag, $atts = '')
 /**
  * Renders anything as a HTML void element.
  *
- * @param  string       $tag  The tag without brackets
+ * @param  string $tag  The tag without brackets
  * @param  string|array $atts HTML attributes
- * @return string       HTML
+ * @return string HTML
  * @since  4.6.0
  * @example
  * echo tag_void('input', array('name' => 'name', 'type' => 'text'));
@@ -937,9 +937,9 @@ function tag_void($tag, $atts = '')
 /**
  * Renders anything as a HTML start tag.
  *
- * @param  string       $tag  The tag without brackets
+ * @param  string $tag The tag without brackets
  * @param  string|array $atts HTML attributes
- * @return string       A HTML start tag
+ * @return string A HTML start tag
  * @since  4.6.0
  * @example
  * echo tag_start('section', array('class' => 'myClass'));
@@ -953,8 +953,8 @@ function tag_start($tag, $atts = '')
 /**
  * Renders anything as a HTML end tag.
  *
- * @param  string       $tag  The tag without brackets
- * @return string       A HTML end tag
+ * @param  string $tag The tag without brackets
+ * @return string A HTML end tag
  * @since  4.6.0
  * @example
  * echo tag_end('section');
@@ -970,7 +970,7 @@ function tag_end($tag)
  *
  * @param  string       $item Enclosed content
  * @param  string|array $atts HTML attributes
- * @return string       HTML
+ * @return string HTML
  * @example
  * echo graf('This a paragraph.');
  */
@@ -986,7 +986,7 @@ function graf($item, $atts = '')
  * @param  string       $item  The Enclosed content
  * @param  int          $level Heading level 1...6
  * @param  string|array $atts  HTML attributes
- * @return string       HTML
+ * @return string HTML
  * @example
  * echo hed('Heading', 2);
  */
@@ -1002,7 +1002,7 @@ function hed($item, $level, $atts = '')
  * @param  string       $item Enclosed content
  * @param  string|array $href The link target
  * @param  string|array $atts HTML attributes
- * @return string       HTML
+ * @return string HTML
  */
 
 function href($item, $href, $atts = '')
@@ -1025,7 +1025,7 @@ function href($item, $href, $atts = '')
  *
  * @param  string       $item Enclosed content
  * @param  string|array $atts HTML attributes
- * @return string       HTML
+ * @return string HTML
  */
 
 function strong($item, $atts = '')
@@ -1038,7 +1038,7 @@ function strong($item, $atts = '')
  *
  * @param  string       $item Enclosed content
  * @param  string|array $atts HTML attributes
- * @return string       HTML
+ * @return string HTML
  */
 
 function span($item, $atts = '')
@@ -1084,7 +1084,7 @@ function comment($item)
  *
  * @param  string       $item The input string
  * @param  string|array $atts HTML attributes
- * @return string       HTML
+ * @return string HTML
  */
 
 function small($item, $atts = '')
@@ -1097,7 +1097,7 @@ function small($item, $atts = '')
  *
  * @param  array        $array Array of content => width pairs
  * @param  string|array $atts  Table row atrributes
- * @return string       A HTML table row
+ * @return string A HTML table row
  */
 
 function assRow($array, $atts = '')
@@ -1308,7 +1308,7 @@ function multi_edit($options, $event = null, $step = null, $page = '', $sort = '
  * @param  string      $event Event
  * @param  int         $val   Current setting
  * @param  string|null $step  Step
- * @return string      HTML
+ * @return string HTML
  */
 
 function pageby_form($event, $val, $step = null)
@@ -1523,7 +1523,7 @@ function script_js($js, $flags = '')
  * Renders a "Details" toggle checkbox.
  *
  * @param  string $classname Unique identfier. The cookie's name will be derived from this value
- * @param  bool      $form      Create as a stand-along &lt;form&gt; element
+ * @param  bool   $form      Create as a stand-along &lt;form&gt; element
  * @return string HTML
  */
 

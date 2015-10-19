@@ -478,7 +478,7 @@ function form_save()
  * Deletes a form template with the given name.
  *
  * @param  string $name The form template
- * @return bool   FALSE on error
+ * @return bool FALSE on error
  */
 
 function form_delete($name)
@@ -499,7 +499,7 @@ function form_delete($name)
  *
  * @param  string $name The form template
  * @param  string $type The new type
- * @return bool   FALSE on error
+ * @return bool FALSE on error
  */
 
 function form_set_type($name, $type)

@@ -554,7 +554,7 @@ function plugin_install()
 /**
  * Renders a plugin installation form.
  *
- * @return string  HTML
+ * @return string HTML
  * @access private
  * @see    form()
  */

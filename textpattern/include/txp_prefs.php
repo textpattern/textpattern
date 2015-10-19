@@ -145,7 +145,7 @@ function prefs_save()
  * installed or updated when accessing the Preferences panel. Access to the
  * prefs can be controlled by using add_privs() on 'prefs.your-prefs-event-name'.
  *
- * @param  string $message The feedback / error string to display
+ * @param string $message The feedback / error string to display
  */
 
 function prefs_list($message = '')

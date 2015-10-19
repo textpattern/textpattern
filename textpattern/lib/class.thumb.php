@@ -205,7 +205,7 @@ class wet_thumb
      *
      * @param  string $infile  Image file name.
      * @param  array  $outfile Array of thumb file names (1...n)
-     * @return bool   TRUE on success
+     * @return bool TRUE on success
      */
 
     public function write($infile, $outfile)
@@ -457,8 +457,8 @@ class wet_thumb
     /**
      * Return a reference to the the thumbnail image as a HTML a or img tag.
      *
-     * @param  bool   $aslink  Return an anchor tag to the source image
-     * @param  bool   $aspopup Open the link in new window
+     * @param  bool $aslink  Return an anchor tag to the source image
+     * @param  bool $aspopup Open the link in new window
      * @return string HTML markup
      */
 
@@ -522,7 +522,7 @@ class txp_thumb extends wet_thumb
      *
      * @param  string $dummy1 Isn't used.
      * @param  string $dummy2 Isn't used.
-     * @return bool   TRUE on success
+     * @return bool TRUE on success
      */
 
     public function write($dummy1 = '', $dummy2 = '')
