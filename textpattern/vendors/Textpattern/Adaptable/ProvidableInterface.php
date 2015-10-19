@@ -28,21 +28,23 @@
  * @package Adaptable
  */
 
-interface Textpattern_Adaptable_ProvidableInterface
+namespace Textpattern\Adaptable;
+
+interface ProvidableInterface
 {
     /**
      * Sets the current adapter.
      *
-     * @param  Textpattern_Adaptable_Adapter $adapter The adapter
-     * @return Textpattern_Adaptable_ProvidableInterface
+     * @param  \Textpattern\Adaptable\Adapter $adapter The adapter
+     * @return ProvidableInterface
      */
 
-    public function setAdapter(Textpattern_Adaptable_Adapter $adapter);
+    public function setAdapter(\Textpattern\Adaptable\Adapter $adapter);
 
     /**
      * Gets the current adapter.
      *
-     * @return Textpattern_Adaptable_Adapter
+     * @return \Textpattern\Adaptable\Adapter
      */
 
     public function getAdapter();
@@ -50,7 +52,7 @@ interface Textpattern_Adaptable_ProvidableInterface
     /**
      * Gets the original default adapter.
      *
-     * @return Textpattern_Adaptable_Adapter
+     * @return \Textpattern\Adaptable\Adapter
      */
 
     public function getDefaultAdapter();

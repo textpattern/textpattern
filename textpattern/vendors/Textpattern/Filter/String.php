@@ -26,8 +26,8 @@
  *
  * <code>
  * try {
- *     echo (string) Txp::get('Textpattern_Filter_String', 'Hello World!')->length(1, 64)->match('/^[a-z]$/i')->html();
- * } catch (Textpattern_Filter_Exception $e) {
+ *     echo (string) Txp::get('\Textpattern\Filter\String', 'Hello World!')->length(1, 64)->match('/^[a-z]$/i')->html();
+ * } catch (\Textpattern\Filter\Exception $e) {
  *     echo $e->getMessage();
  * }
  * </code>
@@ -36,7 +36,9 @@
  * @package Filter
  */
 
-class Textpattern_Filter_String extends Textpattern_Type_String
+namespace Textpattern\Filter;
+
+class String extends \Textpattern\Type\String
 {
     /**
      * {@inheritdoc}
@@ -45,7 +47,7 @@ class Textpattern_Filter_String extends Textpattern_Type_String
     public function __construct($string)
     {
         if (!is_string($string)) {
-            throw new Textpattern_Filter_Exception(gTxt('assert_string'));
+            throw new Exception(gTxt('assert_string'));
         }
 
         parent::__construct($string);
@@ -57,8 +59,8 @@ class Textpattern_Filter_String extends Textpattern_Type_String
      * <code>
      * try
      * {
-     *     echo (string) Txp::get('Textpattern_Filter_String', 'Hello World!')->match('/^[^0-9]$/');
-     * } catch (Textpattern_Filter_Exception $e) {
+     *     echo (string) Txp::get('Textpattern\Filter\String', 'Hello World!')->match('/^[^0-9]$/');
+     * } catch (\Textpattern\Filter\Exception $e) {
      *     echo $e->getMessage();
      * }
      * </code>
@@ -67,14 +69,14 @@ class Textpattern_Filter_String extends Textpattern_Type_String
      * @param  array  $matches Matches
      * @param  int    $flags   Flags
      * @param  int    $offset  Offset
-     * @return Textpattern_Filter_String
-     * @throws Textpattern_Filter_Exception
+     * @return String
+     * @throws \Textpattern\Filter\Exception
      */
 
     public function match($pattern, &$matches = null, $flags = 0, $offset = 0)
     {
         if (!preg_match($pattern, $this->string, $matches, $flags, $offset)) {
-            throw new Textpattern_Filter_Exception(gTxt('assert_pattern'));
+            throw new \Textpattern\Filter\Exception(gTxt('assert_pattern'));
         }
 
         return $this;
@@ -85,22 +87,22 @@ class Textpattern_Filter_String extends Textpattern_Type_String
      *
      * <code>
      * try {
-     *     echo (string) Txp::get('Textpattern_Filter_String', 'Hello World!')->length(64);
-     * } catch (Textpattern_Filter_Exception $e) {
+     *     echo (string) Txp::get('Textpattern\Filter\String', 'Hello World!')->length(64);
+     * } catch (\Textpattern\Filter\Exception $e) {
      *     echo $e->getMessage();
      * }
      * </code>
      *
      * @param  int $min The minimum length
      * @param  int $max The maximum length
-     * @return Textpattern_Filter_String
-     * @throws Textpattern_Filter_Exception
+     * @return String
+     * @throws \Textpattern\Filter\Exception
      */
 
     public function length($min, $max = null)
     {
         if ($this->getLength() < $min || ($max !== null && $this->getLength() > $max)) {
-            throw new Textpattern_Filter_Exception(gTxt('assert_length'));
+            throw new \Textpattern\Filter\Exception(gTxt('assert_length'));
         }
 
         return $this;

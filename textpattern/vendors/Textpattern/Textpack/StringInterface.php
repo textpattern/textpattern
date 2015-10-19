@@ -21,6 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace Textpattern\Textpack;
 /**
  * Textpack string template.
  *
@@ -28,7 +29,7 @@
  * @package Textpack
  */
 
-interface Textpattern_Textpack_StringInterface
+interface StringInterface
 {
     /**
      * Gets the name of the string.

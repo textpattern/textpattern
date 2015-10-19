@@ -30,12 +30,14 @@ define("txpinterface", "admin");
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
 
+include_once txpath.'/lib/constants.php';
+include_once txpath.'/lib/txplib_misc.php';
 include txpath.'/vendors/Textpattern/Loader.php';
 
-$loader = new Textpattern_Loader(txpath.'/vendors');
+$loader = new \Textpattern\Loader(txpath.'/vendors');
 $loader->register();
 
-$loader = new Textpattern_Loader(txpath.'/lib');
+$loader = new \Textpattern\Loader(txpath.'/lib');
 $loader->register();
 
 if (!isset($_SESSION)) {
@@ -46,10 +48,8 @@ if (!isset($_SESSION)) {
     }
 }
 
-include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
-include_once txpath.'/lib/txplib_misc.php';
 include_once txpath.'/lib/txplib_theme.php';
 include_once txpath.'/include/txp_auth.php';
 
@@ -128,6 +128,8 @@ switch ($step) {
 
 function chooseLang()
 {
+    $_SESSION = array();
+
     echo n.'<div class="txp-container" id="setup_container">',
         n.'<div class="txp-setup">',
         hed('Welcome to Textpattern CMS', 1),
@@ -311,10 +313,22 @@ function printConfig()
 
     echo hed(setup_gTxt("checking_database"), 2);
 
-    if (($mylink = mysql_connect($_SESSION['dhost'], $_SESSION['duser'], $_SESSION['dpass']))) {
+    if (strpos($_SESSION['dhost'], ':') === false) {
+        $dhost = $_SESSION['dhost'];
+        $dport = ini_get("mysqli.default_port");
+    } else {
+        list($dhost, $dport) = explode(':', $_SESSION['dhost'], 2);
+        $dport = intval($dport);
+    }
+
+    $dsocket = ini_get("mysqli.default_socket");
+
+    $mylink = mysqli_init();
+
+    if (@mysqli_real_connect($mylink, $dhost, $_SESSION['duser'], $_SESSION['dpass'], '', $dport, $dsocket)) {
         $_SESSION['dclient_flags'] = 0;
-    } elseif (($mylink = mysql_connect($_SESSION['dhost'], $_SESSION['duser'], $_SESSION['dpass'], false, MYSQL_CLIENT_SSL))) {
-        $_SESSION['dclient_flags'] = 'MYSQL_CLIENT_SSL';
+    } elseif (@mysqli_real_connect($mylink, $dhost, $_SESSION['duser'], $_SESSION['dpass'], '', $dport, $dsocket, MYSQLI_CLIENT_SSL)) {
+        $_SESSION['dclient_flags'] = 'MYSQLI_CLIENT_SSL';
     } else {
         echo graf(
                 span(setup_gTxt('db_cant_connect'), ' class="error"')
@@ -343,7 +357,7 @@ function printConfig()
         exit;
     }
 
-    if (!$mydb = mysql_select_db($_SESSION['ddb'])) {
+    if (!$mydb = mysqli_select_db($mylink, $_SESSION['ddb'])) {
         echo graf(
             span(setup_gTxt('db_doesnt_exist', array(
                 '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])),
@@ -356,7 +370,7 @@ function printConfig()
         exit;
     }
 
-    $tables_exist = mysql_query("describe `".$_SESSION['dprefix']."textpattern`");
+    $tables_exist = mysqli_query($mylink, "describe `".$_SESSION['dprefix']."textpattern`");
     if ($tables_exist) {
         echo graf(
             span(setup_gTxt('tables_exist', array(
@@ -370,17 +384,23 @@ function printConfig()
         exit;
     }
 
-    // On 4.1 or greater use UTF-8-tables.
-    $version = mysql_get_server_info();
-
-    if (version_compare($version, '4.1') >= 0) {
-        if (mysql_query("SET NAMES utf8")) {
-            $_SESSION['dbcharset'] = "utf8";
-        } else {
-            $_SESSION['dbcharset'] = "latin1";
-        }
+    // On MySQL 5.5.3+ use real UTF-8 tables, if the client supports it.
+    $_SESSION['dbcharset'] = "utf8mb4";
+    // Lower versions only support UTF-8 limited to 3 bytes per character
+    if (mysqli_get_server_version($mylink) < 50503) {
+        $_SESSION['dbcharset'] = "utf8";
     } else {
-        $_SESSION['dbcharset'] = "latin1";
+        if (false !== strpos(mysqli_get_client_info($mylink), 'mysqlnd')) {
+            // mysqlnd 5.0.9+ required
+            if (mysqli_get_client_version($mylink) < 50009) {
+                $_SESSION['dbcharset'] = "utf8";
+            }
+        } else {
+            // libmysqlclient 5.5.3+ required
+            if (mysqli_get_client_version($mylink) < 50503) {
+                $_SESSION['dbcharset'] = "utf8";
+            }
+        }
     }
 
     echo graf(
@@ -498,8 +518,8 @@ function getTxpLogin()
 
 function createTxp()
 {
+    global $link;
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
-
     $_SESSION['name'] = ps('name');
     $_SESSION['realname'] = ps('RealName');
     $_SESSION['pass'] = ps('pass');
@@ -587,7 +607,7 @@ function createTxp()
     $nonce = md5(uniqid(rand(), true));
     $hash  = doSlash(txp_hash_password($_SESSION['pass']));
 
-    mysql_query("INSERT INTO `".PFX."txp_users` VALUES
+    mysqli_query($link, "INSERT INTO `".PFX."txp_users` VALUES
         (1,
         '".doSlash($_SESSION['name'])."',
         '$hash',
@@ -598,17 +618,17 @@ function createTxp()
         '$nonce')"
     );
 
-    mysql_query("update `".PFX."txp_prefs` set val = '".doSlash($siteurl)."' where `name`='siteurl'");
-    mysql_query("update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");
-    mysql_query("update `".PFX."txp_prefs` set val = '".getlocale(LANG)."' where `name`='locale'");
-    mysql_query("update `".PFX."textpattern` set Body = replace(Body, 'siteurl', '".
+    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".doSlash($siteurl)."' where `name`='siteurl'");
+    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");
+    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".getlocale(LANG)."' where `name`='locale'");
+    mysqli_query($link, "update `".PFX."textpattern` set Body = replace(Body, 'siteurl', '".
         doSlash($urlpath)."'), Body_html = replace(Body_html, 'siteurl', '".
         doSlash($urlpath)."') WHERE ID = 1");
 
     // cf. update/_to_4.2.0.php.
     // TODO: Position might need altering when prefs panel layout is altered.
     $theme = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
-    mysql_query("insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".
+    mysqli_query($link, "insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".
         doSlash($theme)."', type = '1', event = 'admin', html = 'themename', position = '160'");
 
     echo fbCreate();

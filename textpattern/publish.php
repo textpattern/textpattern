@@ -33,18 +33,13 @@ if (!defined("txpinterface")) {
 
 include_once txpath.'/vendors/Textpattern/Loader.php';
 
-$loader = new Textpattern_Loader(txpath.'/vendors');
+$loader = new \Textpattern\Loader(txpath.'/vendors');
 $loader->register();
 
-$loader = new Textpattern_Loader(txpath.'/lib');
+$loader = new \Textpattern\Loader(txpath.'/lib');
 $loader->register();
 
-include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_publish.php';
-include_once txpath.'/lib/txplib_misc.php';
-
-trace_log(TEXTPATTERN_TRACE_START);
-
 include_once txpath.'/lib/txplib_db.php';
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
@@ -53,6 +48,7 @@ include_once txpath.'/lib/admin_config.php';
 include_once txpath.'/publish/taghandlers.php';
 include_once txpath.'/publish/log.php';
 include_once txpath.'/publish/comment.php';
+trace_add('[PHP Include end]');
 
 set_error_handler('publicErrorHandler', error_reporting());
 
@@ -176,8 +172,11 @@ extract($pretext);
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
 
-if (isset($feed)) {
-    exit($feed());
+if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
+    include txpath."/publish/{$feed}.php";
+    echo $feed();
+    trace_log(TEXTPATTERN_TRACE_DISPLAY);
+    exit;
 }
 
 if (gps('parentid') && gps('submit')) {
@@ -185,73 +184,12 @@ if (gps('parentid') && gps('submit')) {
 } elseif (gps('parentid') and $comments_mode == 1) {
     // Popup comments?
     header("Content-type: text/html; charset=utf-8");
-    exit(popComments(gps('parentid')));
+    exit(parse_form('popup_comments'));
 }
 
 // We are dealing with a download.
-if (@$s == 'file_download') {
-    callback_event('file_download');
-
-    if (!isset($file_error)) {
-        $filename = sanitizeForFile($filename);
-        $fullpath = build_file_path($file_base_path, $filename);
-
-        if (is_file($fullpath)) {
-            // Discard any error PHP messages.
-            ob_clean();
-            $filesize = filesize($fullpath);
-            $sent = 0;
-            header('Content-Description: File Download');
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename="'.$filename.'"; size = "'.$filesize.'"');
-
-            // Fix for IE6 PDF bug on servers configured to send cache headers.
-            header('Cache-Control: private');
-            @ini_set("zlib.output_compression", "Off");
-            @set_time_limit(0);
-            @ignore_user_abort(true);
-
-            if ($file = fopen($fullpath, 'rb')) {
-                while (!feof($file) and (connection_status() == 0)) {
-                    echo fread($file, 1024 * 64);
-                    $sent += (1024 * 64);
-                    ob_flush();
-                    flush();
-                }
-                fclose($file);
-
-                // Record download.
-                if ((connection_status() == 0) and !connection_aborted()) {
-                    safe_update("txp_file", "downloads=downloads+1", 'id='.intval($id));
-                    log_hit('200');
-                } else {
-                    $pretext['request_uri'] .= ($sent >= $filesize)
-                        ? '#aborted'
-                        : "#aborted-at-".floor($sent * 100 / $filesize)."%";
-                    log_hit('200');
-                }
-            }
-        } else {
-            $file_error = 404;
-        }
-    }
-
-    // Deal with error.
-    if (isset($file_error)) {
-        switch ($file_error) {
-        case 403:
-            txp_die(gTxt('403_forbidden'), '403');
-            break;
-        case 404:
-            txp_die(gTxt('404_not_found'), '404');
-            break;
-        default:
-            txp_die(gTxt('500_internal_server_error'), '500');
-            break;
-        }
-    }
-
-    // Download done.
+if (@$s == 'file_download' && !empty($filename)) {
+    output_file_download($filename);
     exit(0);
 }
 
@@ -273,12 +211,10 @@ function preText($s, $prefs)
     $out =  makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
 
     if (gps('rss')) {
-        include txpath.'/publish/rss.php';
         $out['feed'] = 'rss';
     }
 
     if (gps('atom')) {
-        include txpath.'/publish/atom.php';
         $out['feed'] = 'atom';
     }
 
@@ -317,12 +253,10 @@ function preText($s, $prefs)
         if (strlen($u1)) {
             switch ($u1) {
                 case 'atom':
-                    include txpath.'/publish/atom.php';
                     $out['feed'] = 'atom';
                     break;
 
                 case 'rss':
-                    include txpath.'/publish/rss.php';
                     $out['feed'] = 'rss';
                     break;
 
@@ -387,6 +321,7 @@ function preText($s, $prefs)
                                 $is_404 = empty($out['s']);
                             } elseif (empty($u4)) {
                                 $month = "$u1-$u2";
+
                                 if (!empty($u3)) {
                                     $month .= "-$u3";
                                 }
@@ -618,8 +553,6 @@ function textpattern()
     header("Content-type: text/html; charset=utf-8");
     echo $html;
 
-    trace_log(TEXTPATTERN_TRACE_DISPLAY);
-
     callback_event('textpattern_end');
 }
 
@@ -633,7 +566,7 @@ function output_css($s = '', $n = '', $t = '')
             txp_die('Not Found', 404);
         }
 
-        $n = do_list($n);
+        $n = do_list_unique($n);
         $cssname = join("','", doSlash($n));
 
         if (count($n) > 1) {
@@ -647,11 +580,76 @@ function output_css($s = '', $n = '', $t = '')
         $cssname = safe_field('css', 'txp_section', "name='".doSlash($s)."' AND skin='".doSlash($t)."'");
     }
 
-    if (isset($cssname)) {
+    if (!empty($cssname)) {
         $css = join(n, safe_column_num('css', 'txp_css', "name in ('$cssname')".$order));
+        echo $css;
+    }
+}
 
-        if (isset($css)) {
-            echo $css;
+// -------------------------------------------------------------
+function output_file_download($filename)
+{
+    global $file_error, $file_base_path, $pretext;
+
+    callback_event('file_download');
+
+    if (!isset($file_error)) {
+        $filename = sanitizeForFile($filename);
+        $fullpath = build_file_path($file_base_path, $filename);
+
+        if (is_file($fullpath)) {
+            // Discard any error PHP messages.
+            ob_clean();
+            $filesize = filesize($fullpath);
+            $sent = 0;
+            header('Content-Description: File Download');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.$filename.'"; size = "'.$filesize.'"');
+
+            // Fix for IE6 PDF bug on servers configured to send cache headers.
+            header('Cache-Control: private');
+            @ini_set("zlib.output_compression", "Off");
+            @set_time_limit(0);
+            @ignore_user_abort(true);
+
+            if ($file = fopen($fullpath, 'rb')) {
+                while (!feof($file) and (connection_status() == 0)) {
+                    echo fread($file, 1024 * 64);
+                    $sent += (1024 * 64);
+                    ob_flush();
+                    flush();
+                }
+
+                fclose($file);
+
+                // Record download.
+                if ((connection_status() == 0) and !connection_aborted()) {
+                    safe_update("txp_file", "downloads=downloads+1", 'id='.intval($pretext['id']));
+                } else {
+                    $pretext['request_uri'] .= ($sent >= $filesize)
+                        ? '#aborted'
+                        : "#aborted-at-".floor($sent * 100 / $filesize)."%";
+                }
+
+                log_hit('200');
+            }
+        } else {
+            $file_error = 404;
+        }
+    }
+
+    // Deal with error.
+    if (isset($file_error)) {
+        switch ($file_error) {
+        case 403:
+            txp_die(gTxt('403_forbidden'), '403');
+            break;
+        case 404:
+            txp_die(gTxt('404_not_found'), '404');
+            break;
+        default:
+            txp_die(gTxt('500_internal_server_error'), '500');
+            break;
         }
     }
 }
@@ -670,6 +668,7 @@ function article($atts, $thing = null)
 
         return '';
     }
+
     $has_article_tag = true;
 
     return parseArticles($atts, '0', $thing);
@@ -685,31 +684,38 @@ function doArticles($atts, $iscustom, $thing = null)
     $customFields = getCustomFields();
     $customlAtts = array_null(array_flip($customFields));
 
+    if ($iscustom) {
+        $extralAtts = array(
+            'category'  => '',
+            'section'   => '',
+            'excerpted' => '',
+            'author'    => '',
+            'month'     => '',
+            'expired'   => $publish_expired_articles,
+            'id'        => '',
+            'exclude'   => '',
+        );
+    } else {
+        $extralAtts = array(
+            'listform'     => '',
+            'searchform'   => '',
+            'searchall'    => 1,
+            'searchsticky' => 0,
+            'pageby'       => '',
+            'pgonly'       => 0,
+        );
+    }
+
     // Getting attributes.
     $theAtts = lAtts(array(
         'form'          => 'default',
-        'listform'      => '',
-        'searchform'    => '',
         'limit'         => 10,
-        'pageby'        => '',
-        'category'      => '',
-        'section'       => '',
-        'excerpted'     => '',
-        'author'        => '',
         'sort'          => '',
         'sortby'        => '', // Deprecated in 4.0.4.
         'sortdir'       => '', // Deprecated in 4.0.4.
-        'month'         => '',
         'keywords'      => '',
-        'expired'       => $publish_expired_articles,
-        'frontpage'     => '',
-        'id'            => '',
-        'exclude'            => '',
         'time'          => 'past',
         'status'        => STATUS_LIVE,
-        'pgonly'        => 0,
-        'searchall'     => 1,
-        'searchsticky'  => 0,
         'allowoverride' => (!$q and !$iscustom),
         'offset'        => 0,
         'wraptag'       => '',
@@ -717,10 +723,7 @@ function doArticles($atts, $iscustom, $thing = null)
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
-    ) +$customlAtts, $atts);
-
-    // If an article ID is specified, treat it as a custom list.
-    $iscustom = (!empty($theAtts['id']) || !empty($theAtts['exclude'])) ? true : $iscustom;
+    ) + $customlAtts + $extralAtts, $atts);
 
     // For the txp:article tag, some attributes are taken from globals;
     // override them, then stash all filter attributes.
@@ -730,10 +733,15 @@ function doArticles($atts, $iscustom, $thing = null)
         $theAtts['author'] = (!empty($author) ? $author : '');
         $theAtts['month'] = (!empty($month) ? $month : '');
         $theAtts['frontpage'] = ($s && $s == 'default') ? true : false;
-        $theAtts['excerpted'] = '';
+        $theAtts['excerpted'] = 0;
+        $theAtts['exclude'] = 0;
+        $theAtts['expired'] = $publish_expired_articles;
 
         filterAtts($theAtts);
+    } else {
+        $theAtts['frontpage'] = false;
     }
+
     extract($theAtts);
 
     // If a listform is specified, $thing is for doArticle() - hence ignore here.
@@ -758,7 +766,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
         // Searchable article fields are limited to the columns of the
         // textpattern table and a matching fulltext index must exist.
-        $cols = do_list($searchable_article_fields);
+        $cols = do_list_unique($searchable_article_fields);
 
         if (empty($cols) or $cols[0] == '') {
             $cols = array('Title', 'Body');
@@ -812,6 +820,7 @@ function doArticles($atts, $iscustom, $thing = null)
         } else {
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
         }
+
         $sort = "$sortby $sortdir";
     } elseif ($sortdir) {
         trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
@@ -820,14 +829,14 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Building query parts.
     $frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';
-    $category  = join("','", doSlash(do_list($category)));
+    $category  = join("','", doSlash(do_list_unique($category)));
     $category  = (!$category)  ? '' : " and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))";
-    $section   = (!$section)   ? '' : " and Section IN ('".join("','", doSlash(do_list($section)))."')";
-    $excerpted = ($excerpted == 'y' || $excerpted == '1')  ? " and Excerpt !=''" : '';
-    $author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list($author)))."')";
+    $section   = (!$section)   ? '' : " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')";
+    $excerpted = (!$excerpted) ? '' : " and Excerpt !=''";
+    $author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list_unique($author)))."')";
     $month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
-    $ids = $id ? array_map('intval', do_list($id)) : array();
-    $exclude = $exclude ? array_map('intval', do_list($exclude)) : array();
+    $ids = $id ? array_map('intval', do_list_unique($id)) : array();
+    $exclude = $exclude ? array_map('intval', do_list_unique($exclude)) : array();
     $id        = ((!$id)        ? '' : " and ID IN (".join(',', $ids).")")
         .((!$exclude)   ? '' : " and ID NOT IN (".join(',', $exclude).")");
 
@@ -862,7 +871,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
     if ($keywords) {
-        $keys = doSlash(do_list($keywords));
+        $keys = doSlash(do_list_unique($keywords));
 
         foreach ($keys as $key) {
             $keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
@@ -900,6 +909,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $pageout['total']       = $total;
 
         global $thispage;
+
         if (empty($thispage)) {
             $thispage = $pageout;
         }
@@ -925,7 +935,7 @@ function doArticles($atts, $iscustom, $thing = null)
     if ($q and !$iscustom and !$issticky) {
         $fname = ($searchform ? $searchform : 'search_results');
     } else {
-        $fname = ($listform ? $listform : $form);
+        $fname = (!empty($listform) ? $listform : $form);
     }
 
     if ($rs) {
@@ -944,10 +954,12 @@ function doArticles($atts, $iscustom, $thing = null)
             // Article form preview.
             if (txpinterface === 'admin' && ps('Form')) {
                 doAuth();
+
                 if (!has_privs('form')) {
                     txp_status_header('401 Unauthorized');
                     exit(hed('401 Unauthorized', 1).graf(gTxt('restricted_area')));
                 }
+
                 $articles[] = parse(gps('Form'));
             } elseif ($allowoverride and $a['override_form']) {
                 $articles[] = parse_form($a['override_form']);
@@ -1067,6 +1079,7 @@ function makeOut()
 
     foreach (func_get_args() as $a) {
         $in = gps($a);
+
         if (is_scalar($in)) {
             $array[$a] = strval($in);
         } else {

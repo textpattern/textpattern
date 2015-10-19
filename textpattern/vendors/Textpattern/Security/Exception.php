@@ -21,6 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 /**
  * Exception.
  *
@@ -28,6 +29,8 @@
  * @package Security
  */
 
-class Textpattern_Security_Exception extends Exception
+namespace Textpattern\Security;
+
+class Exception extends \Exception
 {
 }

@@ -50,7 +50,7 @@ foreach ($rs as $row) {
 }
 
 if (!$has_ss_idx) {
-    safe_query('alter ignore table `'.PFX.'textpattern` add index section_status_idx (Section,Status)');
+    safe_query('alter ignore table `'.PFX.'textpattern` add index section_status_idx (Section(249),Status)');
 }
 
 if (!safe_field('name', 'txp_prefs', "name = 'title_no_widow'")) {

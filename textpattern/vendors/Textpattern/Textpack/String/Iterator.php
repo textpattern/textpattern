@@ -25,7 +25,7 @@
  * Iterates over the given Textpack strings.
  *
  * <code>
- * foreach (Txp::get('Textpattern_Textpack_String_Iterator', 'en-gb.textpack') as $name => $string) {
+ * foreach (Txp::get('\Textpattern\Textpack\String\Iterator', 'en-gb.textpack') as $name => $string) {
  *     echo "{$name} is translated to: {$string} in " . $string->getLanguage();
  * }
  * </code>
@@ -34,12 +34,14 @@
  * @package Textpack
  */
 
-class Textpattern_Textpack_String_Iterator extends Textpattern_Iterator_FileIterator implements Textpattern_Textpack_StringInterface
+namespace Textpattern\Textpack\String;
+
+class Iterator extends \Textpattern\Iterator\FileIterator implements \Textpattern\Textpack\StringInterface
 {
     /**
      * Stores Textpack parser instance.
      *
-     * @var Textpattern_Textpack_Parser
+     * @var \Textpattern\Textpack\Parser
      */
 
     protected $parser;
@@ -50,7 +52,7 @@ class Textpattern_Textpack_String_Iterator extends Textpattern_Iterator_FileIter
 
     public function __construct($filename)
     {
-        $this->parser = Txp::get('Textpattern_Textpack_Parser');
+        $this->parser = \Txp::get('\Textpattern\Textpack\Parser');
         parent::__construct($filename);
     }
 
@@ -62,13 +64,13 @@ class Textpattern_Textpack_String_Iterator extends Textpattern_Iterator_FileIter
 
     public function __toString()
     {
-        return (string) $this->getString();
+        return (string)$this->getString();
     }
 
     /**
      * Returns the current element.
      *
-     * @return Textpattern_Textpack_StringIterator
+     * @return Iterator
      */
 
     public function current()

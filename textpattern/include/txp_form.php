@@ -116,7 +116,7 @@ function form_list($curname, $skin)
     $criteria .= callback_event('admin_criteria', 'form_list', 0, $criteria);
 
     $rs = safe_rows_start(
-        '*',
+        'name, type',
         'txp_form',
         "$criteria order by field(type, ".join(',', quote_list(array_keys($form_types))).") asc, name asc"
     );
@@ -510,7 +510,7 @@ function form_save()
  *
  * @param  string $name The form template
  * @param  string $skin The form skin in use
- * @return bool   FALSE on error
+ * @return bool FALSE on error
  */
 
 function form_delete($name, $skin)
@@ -532,7 +532,7 @@ function form_delete($name, $skin)
  *
  * @param  string $name The form template
  * @param  string $type The new type
- * @return bool   FALSE on error
+ * @return bool FALSE on error
  */
 
 function form_set_type($name, $type)
