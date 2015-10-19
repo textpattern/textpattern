@@ -111,12 +111,12 @@ class FileIterator implements \Iterator
     /**
      * Returns the current element.
      *
-     * @return \Textpattern_Type_String
+     * @return \Textpattern\Type\String
      */
 
     public function current()
     {
-        return new \Textpattern_Type_String($this->current);
+        return new \Textpattern\Type\String($this->current);
     }
 
     /**

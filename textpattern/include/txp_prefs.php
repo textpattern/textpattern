@@ -263,7 +263,7 @@ function pref_func($func, $name, $val, $size = '')
     if ($func != 'func' && is_callable('pref_'.$func)) {
         $func = 'pref_'.$func;
     } else {
-        $string = new Textpattern_Type_String($func);
+        $string = new \Textpattern\Type\String($func);
         $func = $string->toCallback();
 
         if (!is_callable($func)) {

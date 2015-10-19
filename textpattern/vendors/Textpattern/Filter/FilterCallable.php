@@ -28,7 +28,7 @@ namespace Textpattern\Filter;
  *
  * <code>
  * try {
- *     Txp::get('Textpattern\Filter\FilterCallable', 'fn');
+ *     Txp::get('\Textpattern\Filter\FilterCallable', 'fn');
  * } catch (Textpattern\Filter\Exception $e) {
  *     echo $e->getMessage();
  * }
@@ -38,7 +38,7 @@ namespace Textpattern\Filter;
  * @package Filter
  */
 
-class FilterCallable extends Textpattern_Type_Callable
+class FilterCallable extends \Textpattern\Type\TypeCallable
 {
     /**
      * {@inheritdoc}

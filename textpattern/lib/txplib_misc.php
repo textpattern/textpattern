@@ -1941,12 +1941,12 @@ function callback_event_ref($event, $step = '', $pre = 0, &$data = null, &$optio
  * @since      4.5.0
  * @package    Callback
  * @deprecated in 4.6.0
- * @see        Textpattern_Type_Callable::toString()
+ * @see        \Textpattern\Type\Callable::toString()
  */
 
 function callback_tostring($callback)
 {
-    return Txp::get('Textpattern_Type_Callable', $callback)->toString();
+    return Txp::get('\Textpattern\Type\TypeCallable', $callback)->toString();
 }
 
 /**
