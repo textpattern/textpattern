@@ -31,7 +31,9 @@
  * @package HTTP
  */
 
-class Textpattern_Http_Request
+namespace Textpattern\Http;
+
+class Request
 {
     /**
      * Protocol-port map.
@@ -108,7 +110,7 @@ class Textpattern_Http_Request
      * Constructor.
      *
      * <code>
-     * echo Txp::get('Textpattern_Http_Request', new Abc_Custom_Request_Data)->getHostName();
+     * echo Txp::get('\Textpattern\Http\Request', new Abc_Custom_Request_Data)->getHostName();
      * </code>
      *
      * @param \Textpattern\Server\Config|null $request The raw request data, defaults to the current request body
@@ -117,7 +119,7 @@ class Textpattern_Http_Request
     public function __construct(\Textpattern\Server\Config $request = null)
     {
         if ($request === null) {
-            $this->request = Txp::get('\Textpattern\Server\Config');
+            $this->request = \Txp::get('\Textpattern\Server\Config');
         } else {
             $this->request = $request;
         }
@@ -139,14 +141,14 @@ class Textpattern_Http_Request
      * supported:
      *
      * <code>
-     * echo Txp::get('Textpattern_Http_Request')->getAcceptedType('json');
-     * echo Txp::get('Textpattern_Http_Request')->getAcceptedType('application/json');
+     * echo Txp::get('\Textpattern\Http\Request')->getAcceptedType('json');
+     * echo Txp::get('\Textpattern\Http\Request')->getAcceptedType('application/json');
      * </code>
      *
      * The method can also be used to check an array of types:
      *
      * <code>
-     * echo Txp::get('Textpattern_Http_Request')->getAcceptedType(array('application/xml', 'application/x-xml'));
+     * echo Txp::get('\Textpattern\Http\Request')->getAcceptedType(array('application/xml', 'application/x-xml'));
      * </code>
      *
      * Stops on first accepted format.
@@ -185,7 +187,7 @@ class Textpattern_Http_Request
      * if an array, returns the language that the client favours the most.
      *
      * <code>
-     * echo Txp::get('Textpattern_Http_Request')->getAcceptedLanguage('fi-FI');
+     * echo Txp::get('\Textpattern\Http\Request')->getAcceptedLanguage('fi-FI');
      * </code>
      *
      * The above will return 'fi-FI' as long as the Accept-Language header
@@ -213,7 +215,7 @@ class Textpattern_Http_Request
         foreach ((array) $languages as $language) {
             $search = array($language);
 
-            if ($identifiers = Txp::get('\Textpattern\L10n\Locale')->getLocaleIdentifiers($language)) {
+            if ($identifiers = \Txp::get('\Textpattern\L10n\Locale')->getLocaleIdentifiers($language)) {
                 $search = array_map('strtolower', array_merge($search, $identifiers));
             }
 
@@ -234,7 +236,7 @@ class Textpattern_Http_Request
      * Negotiates a common encoding between the client and the server.
      *
      * <code>
-     * if (Txp::get('Textpattern_Http_Request')->getAcceptedEncoding('gzip')) {
+     * if (Txp::get('\Textpattern\Http\Request')->getAcceptedEncoding('gzip')) {
      *     echo 'Client accepts gzip.';
      * }
      * </code>
@@ -267,7 +269,7 @@ class Textpattern_Http_Request
      * Gets an absolute URL pointing to the requested document.
      *
      * <code>
-     * echo Txp::get('Textpattern_Http_Request')->getUrl();
+     * echo Txp::get('\Textpattern\Http\Request')->getUrl();
      * </code>
      *
      * The above will return URL pointing to the requested
@@ -291,7 +293,7 @@ class Textpattern_Http_Request
      * Gets the server hostname.
      *
      * <code>
-     * echo Txp::get('Textpattern_Http_Request')->getHost();
+     * echo Txp::get('\Textpattern\Http\Request')->getHost();
      * </code>
      *
      * Returns 'example.com' if requesting
@@ -312,7 +314,7 @@ class Textpattern_Http_Request
      * Neither '80' or 443 for HTTPS are returned.
      *
      * <code>
-     * echo Txp::get('Textpattern_Http_Request')->getPort();
+     * echo Txp::get('\Textpattern\Http\Request')->getPort();
      * </code>
      *
      * Returns '8080' if requesting http://example.test:8080/path/to/subpage.
@@ -339,7 +341,7 @@ class Textpattern_Http_Request
      * deemed necessary.
      *
      * <code>
-     * echo Txp::get('Textpattern_Http_Request')->getIp();
+     * echo Txp::get('\Textpattern\Http\Request')->getIp();
      * </code>
      *
      * Returns the IP address the request came from, e.g. '0.0.0.0'.
@@ -368,7 +370,7 @@ class Textpattern_Http_Request
      * logs as a cache layer.
      *
      * <code>
-     * echo Txp::get('Textpattern_Http_Request')->getRemoteHostname();
+     * echo Txp::get('\Textpattern\Http\Request')->getRemoteHostname();
      * </code>
      *
      * @return string|bool The hostname, or FALSE on failure
@@ -397,7 +399,7 @@ class Textpattern_Http_Request
      * Gets the request protocol.
      *
      * <code>
-     * echo Txp::get('Textpattern_Http_Request')->getProtocol();
+     * echo Txp::get('\Textpattern\Http\Request')->getProtocol();
      * </code>
      *
      * Returns 'https' if requesting https://example.test:8080/path/to/subpage.
@@ -429,7 +431,7 @@ class Textpattern_Http_Request
      * hostname or come from a HTTPS page to a HTTP page.
      *
      * <code>
-     * echo Txp::get('Textpattern_Http_Request')->getReferer();
+     * echo Txp::get('\Textpattern\Http\Request')->getReferer();
      * </code>
      *
      * Returns full URL such as 'http://example.com/referring/page.php?id=12'.
@@ -468,7 +470,7 @@ class Textpattern_Http_Request
      * Gets requested URI.
      *
      * <code>
-     * echo Txp::get('Textpattern_Http_Request')->getUri();
+     * echo Txp::get('\Textpattern\Http\Request')->getUri();
      * </code>
      *
      * Returns '/some/requested/page?and=query' if requesting
@@ -490,7 +492,7 @@ class Textpattern_Http_Request
      * The following:
      *
      * <code>
-     * print_r(Txp::get('Textpattern_Http_Request')->getHeaders());
+     * print_r(Txp::get('\Textpattern\Http\Request')->getHeaders());
      * </code>
      *
      * Returns:
@@ -546,7 +548,7 @@ class Textpattern_Http_Request
      * Gets a raw HTTP request header value.
      *
      * <code>
-     * echo Txp::get('Textpattern_Http_Request')->getHeader('User-Agent');
+     * echo Txp::get('\Textpattern\Http\Request')->getHeader('User-Agent');
      * </code>
      *
      * Will return the client's User-Agent header, if it has any. If the client
@@ -571,7 +573,7 @@ class Textpattern_Http_Request
      * Gets an array of HTTP cookies.
      *
      * <code>
-     * print_r(Txp::get('Textpattern_Http_Request')->getHeaders());
+     * print_r(Txp::get('\Textpattern\Http\Request')->getHeaders());
      * </code>
      *
      * Returns:
@@ -605,7 +607,7 @@ class Textpattern_Http_Request
      * Gets a HTTP cookie.
      *
      * <code>
-     * echo Txp::get('Textpattern_Http_Request')->getCookie('foobar');
+     * echo Txp::get('\Textpattern\Http\Request')->getCookie('foobar');
      * </code>
      *
      * @param  string $name The cookie name
@@ -629,7 +631,7 @@ class Textpattern_Http_Request
      * Gets a query string.
      *
      * <code>
-     * print_r(Txp::get('Textpattern_Http_Request')->getQuery());
+     * print_r(Txp::get('\Textpattern\Http\Request')->getQuery());
      * </code>
      *
      * If requesting "?event=article&amp;step=save", the above returns:
@@ -721,7 +723,7 @@ class Textpattern_Http_Request
      * and Accept-Language header values.
      *
      * <code>
-     * print_r(Txp::get('Textpattern_Http_Request')->getAcceptsMap('en-us;q=1.0,en;q=0.9'));
+     * print_r(Txp::get('\Textpattern\Http\Request')->getAcceptsMap('en-us;q=1.0,en;q=0.9'));
      * </code>
      *
      * Returns:
