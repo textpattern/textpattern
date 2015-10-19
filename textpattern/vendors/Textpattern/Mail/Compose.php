@@ -28,7 +28,9 @@
  * @package Mail
  */
 
-class Textpattern_Mail_Compose extends \Textpattern\Adaptable\Providable
+namespace Textpattern\Mail;
+
+class Compose extends \Textpattern\Adaptable\Providable
 {
     /**
      * {@inheritdoc}
@@ -36,6 +38,6 @@ class Textpattern_Mail_Compose extends \Textpattern\Adaptable\Providable
 
     public function getDefaultAdapter()
     {
-        return new Textpattern_Mail_Adapter_Mail();
+        return new \Textpattern\Mail\Adapter\Mail();
     }
 }

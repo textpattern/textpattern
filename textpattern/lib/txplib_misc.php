@@ -2526,12 +2526,12 @@ function splat($text)
  * @return     string
  * @package    Mail
  * @deprecated in 4.6.0
- * @see        Textpattern_Mail_Encode::escapeHeader()
+ * @see        \Textpattern\Mail\Encode::escapeHeader()
  */
 
 function strip_rn($str)
 {
-    return Txp::get('Textpattern_Mail_Encode')->escapeHeader($str);
+    return Txp::get('\Textpattern\Mail\Encode')->escapeHeader($str);
 }
 
 /**
@@ -2571,7 +2571,7 @@ function is_valid_email($address)
  * @param   string $body       The message
  * @param   string $reply_to   The reply to address
  * @return  bool   Returns FALSE when sending failed
- * @see     Textpattern_Mail_Compose
+ * @see     \Textpattern\Mail\Compose
  * @package Mail
  */
 
@@ -2604,7 +2604,7 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
         extract($sender);
 
         try {
-            $message = Txp::get('Textpattern_Mail_Compose')
+            $message = Txp::get('Textpattern\Mail\Compose')
                 ->from($email, $RealName)
                 ->to($to_address)
                 ->subject($subject)
@@ -2615,7 +2615,7 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
             }
 
             $message->send();
-        } catch (Exception $e) {
+        } catch (\Textpattern\Mail\Exception $e) {
             return false;
         }
 
@@ -2633,14 +2633,14 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
  * @return     string
  * @package    Mail
  * @deprecated in 4.6.0
- * @see        Textpattern_Mail_Encode::header()
+ * @see        \Textpattern\Mail\Encode::header()
  */
 
 function encode_mailheader($string, $type)
 {
     try {
-        return Txp::get('Textpattern_Mail_Encode')->header($string, $type);
-    } catch (Textpattern_Mail_Exception $e) {
+        return Txp::get('\Textpattern\Mail\Encode')->header($string, $type);
+    } catch (\Textpattern\Mail\Exception $e) {
         trigger_error($e->getMessage(), E_USER_WARNING);
     }
 }
@@ -2652,12 +2652,12 @@ function encode_mailheader($string, $type)
  * @return     string Encoded email address
  * @package    Mail
  * @deprecated in 4.6.0
- * @see        Textpattern_Mail_Encode::entityObfuscateAddress()
+ * @see        \Textpattern\Mail\Encode::entityObfuscateAddress()
  */
 
 function eE($txt)
 {
-    return Txp::get('Textpattern_Mail_Encode')->entityObfuscateAddress($txt);
+    return Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress($txt);
 }
 
 /**

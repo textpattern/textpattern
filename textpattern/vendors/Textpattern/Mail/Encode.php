@@ -28,7 +28,9 @@
  * @package Mail
  */
 
-class Textpattern_Mail_Encode
+namespace Textpattern\Mail;
+
+class Encode
 {
     /**
      * Wished character encoding.
@@ -52,7 +54,7 @@ class Textpattern_Mail_Encode
     /**
      * Encodes an address list to a valid email header value.
      *
-     * @param  array  $value The address list
+     * @param  array $value The address list
      * @return string
      */
 
@@ -79,9 +81,9 @@ class Textpattern_Mail_Encode
      * Encodes a string for use in an email header.
      *
      * @param  string $string The string
-     * @param  string $type   The type of header, either "text" or "phrase"
+     * @param  string $type The type of header, either "text" or "phrase"
      * @return string
-     * @throws Textpattern_Mail_Exception
+     * @throws \Textpattern\Mail\Exception
      */
 
     public function header($string, $type)
@@ -92,7 +94,7 @@ class Textpattern_Mail_Encode
                     $string = '"'.strtr($string, array("\\" => "\\\\", '"' => '\"')).'"';
                 }
             } elseif ($type != 'text') {
-                throw new Textpattern_Mail_Exception(gTxt('invalid_argument', array('{name}' => 'type')));
+                throw new \Textpattern\Mail\Exception(gTxt('invalid_argument', array('{name}' => 'type')));
             }
 
             return $string;
@@ -117,7 +119,7 @@ class Textpattern_Mail_Encode
      * Converts an email address into unicode entities.
      *
      * <code>
-     * echo Txp::get('Textpattern_Mail_Encode')->entityObfuscateAddress('john.doe@example.com');
+     * echo Txp::get('\Textpattern\Mail\Encode')->entityObfuscateAddress('john.doe@example.com');
      * </code>
      *
      * @param  string $address The email address
@@ -145,6 +147,6 @@ class Textpattern_Mail_Encode
 
     public function escapeHeader($string)
     {
-        return str_replace(array("\r\n", "\r", "\n", "\0"), array(' ', ' ', ' ', ''), (string) $string);
+        return str_replace(array("\r\n", "\r", "\n", "\0"), array(' ', ' ', ' ', ''), (string)$string);
     }
 }
