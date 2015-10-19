@@ -455,7 +455,7 @@ function processTags($tag, $atts, $thing = null)
     }
 
     if ($registry === null) {
-        $registry = Txp::get('Textpattern_Tag_Registry');
+        $registry = Txp::get('\Textpattern\Tag\Registry');
     }
 
     if ($registry->isRegistered($tag)) {

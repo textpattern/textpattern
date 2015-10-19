@@ -27,12 +27,14 @@
  * @since  4.6.0
  */
 
-class Textpattern_Tag_Syntax_Image
+namespace Textpattern\Tag\Syntax;
+
+class Image
 {
     /**
      * Checks if the image is the first in the list.
      *
-     * @param  array  $atts
+     * @param  array $atts
      * @param  string $thing
      * @return string
      */
@@ -49,7 +51,7 @@ class Textpattern_Tag_Syntax_Image
     /**
      * Checks if the image is the last in the list.
      *
-     * @param  array  $atts
+     * @param  array $atts
      * @param  string $thing
      * @return string
      */

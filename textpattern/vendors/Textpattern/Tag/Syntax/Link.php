@@ -27,12 +27,14 @@
  * @since  4.6.0
  */
 
-class Textpattern_Tag_Syntax_Link
+namespace Textpattern\Tag\Syntax;
+
+class Link
 {
     /**
      * Checks if the link is the first in the list.
      *
-     * @param  array  $atts
+     * @param  array $atts
      * @param  string $thing
      * @return string
      */
@@ -49,7 +51,7 @@ class Textpattern_Tag_Syntax_Link
     /**
      * Checks if the link is the last in the list.
      *
-     * @param  array  $atts
+     * @param  array $atts
      * @param  string $thing
      * @return string
      */
