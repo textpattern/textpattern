@@ -115,7 +115,7 @@ class Timezone
         if ($this->details === null) {
             $this->details = array();
 
-            if (($timezones = DateTimeZone::listIdentifiers()) === false) {
+            if (($timezones = \DateTimeZone::listIdentifiers()) === false) {
                 return false;
             }
 
