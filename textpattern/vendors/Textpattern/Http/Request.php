@@ -99,7 +99,7 @@ class Textpattern_Http_Request
      *
      * Wraps around PHP's $_SERVER variable.
      *
-     * @var Textpattern_Server_Var
+     * @var \Textpattern\Server\Config
      */
 
     protected $request;
@@ -111,13 +111,13 @@ class Textpattern_Http_Request
      * echo Txp::get('Textpattern_Http_Request', new Abc_Custom_Request_Data)->getHostName();
      * </code>
      *
-     * @param Textpattern_Server_Var|null $request The raw request data, defaults to the current request body
+     * @param \Textpattern\Server\Config|null $request The raw request data, defaults to the current request body
      */
 
-    public function __construct(Textpattern_Server_Config $request = null)
+    public function __construct(\Textpattern\Server\Config $request = null)
     {
         if ($request === null) {
-            $this->request = Txp::get('Textpattern_Server_Config');
+            $this->request = Txp::get('\Textpattern\Server\Config');
         } else {
             $this->request = $request;
         }
@@ -219,7 +219,7 @@ class Textpattern_Http_Request
 
             foreach ($accepts as $accept => $params) {
                 if (in_array(strtolower($accept), $search, true) && $params['q'] >= $threshold && $params['q'] >= $top) {
-                    $top = $quality;
+                    $top = $quality; // FIXME: $quality is made out of thin air.
                     $acceptedLanguage = $language;
                 }
             }

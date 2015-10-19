@@ -65,7 +65,7 @@ class Filter
 
     public function setMaxRequestUriLength($length)
     {
-        $uri = Txp::get('Textpattern_Server_Config')->getVariable('REQUEST_URI');
+        $uri = Txp::get('\Textpattern\Server\Config')->getVariable('REQUEST_URI');
 
         if (strlen($uri) > $length) {
             throw new Exception('Requested URL length exceeds application limit.');
@@ -85,7 +85,7 @@ class Filter
 
     public function registerGlobals()
     {
-        if (Txp::get('Textpattern_Server_Config')->getRegisterGlobals()) {
+        if (Txp::get('\Textpattern\Server\Config')->getRegisterGlobals()) {
             if (array_key_exists('GLOBALS', $_REQUEST) || array_key_exists('GLOBALS', $_FILES)) {
                 throw new Exception('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
             }
