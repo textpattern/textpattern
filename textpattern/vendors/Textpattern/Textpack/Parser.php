@@ -28,7 +28,9 @@
  * @package Textpack
  */
 
-class Textpattern_Textpack_Parser
+namespace Textpattern\Textpack;
+
+class Parser
 {
     /**
      * Stores the default language.
@@ -82,7 +84,7 @@ class Textpattern_Textpack_Parser
      * Converts a Textpack to an array.
      *
      * <code>
-     * $textpack = Textpattern_Textpack_Parser();
+     * $textpack = \Textpattern\Textpack\Parser();
      * print_r(
      *     $textpack->parse("string => translation")
      * );
@@ -94,7 +96,7 @@ class Textpattern_Textpack_Parser
 
     public function parse($textpack)
     {
-        $lines = explode(n, (string) $textpack);
+        $lines = explode(n, (string)$textpack);
         $out = array();
         $version = false;
         $lastmod = false;
