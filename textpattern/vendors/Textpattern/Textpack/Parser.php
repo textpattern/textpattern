@@ -91,7 +91,7 @@ class Parser
      * </code>
      *
      * @param  string $textpack The Textpack
-     * @return array  An array of translations
+     * @return array An array of translations
      */
 
     public function parse($textpack)

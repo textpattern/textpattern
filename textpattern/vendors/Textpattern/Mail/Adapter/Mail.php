@@ -116,7 +116,7 @@ class Mail implements \Textpattern\Mail\AdapterInterface
      * Sets or gets a message field.
      *
      * @param  string $name The field
-     * @param  array $args Arguments
+     * @param  array  $args Arguments
      * @return \Textpattern\Mail\AdapterInterface
      * @throws \Textpattern\Mail\Exception
      */
@@ -243,9 +243,9 @@ class Mail implements \Textpattern\Mail\AdapterInterface
     /**
      * Adds an address to the specified field.
      *
-     * @param  string $field The field
+     * @param  string $field   The field
      * @param  string $address The email address
-     * @param  string $name The name
+     * @param  string $name    The name
      * @return \Textpattern\Mail\AdapterInterface
      */
 

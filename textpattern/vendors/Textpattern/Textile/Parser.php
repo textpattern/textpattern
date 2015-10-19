@@ -69,11 +69,11 @@ class Parser extends Textile
     /**
      * Parses content in a restricted mode.
      *
-     * @param  string|null $text The input document in textile format
-     * @param  bool|null $lite Optional flag to switch the parser into lite mode
-     * @param  bool|null $noimage Optional flag controlling the conversion of images into HTML img tags
-     * @param  string|null $rel Relationship to apply to all generated links
-     * @return string      The text from the input document
+     * @param  string|null $text    The input document in textile format
+     * @param  bool|null   $lite    Optional flag to switch the parser into lite mode
+     * @param  bool|null   $noimage Optional flag controlling the conversion of images into HTML img tags
+     * @param  string|null $rel     Relationship to apply to all generated links
+     * @return string The text from the input document
      */
 
     public function textileRestricted($text, $lite = null, $noimage = null, $rel = null)

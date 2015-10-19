@@ -153,7 +153,7 @@ class String implements TypeInterface
      * </code>
      *
      * @param  string $needle The string to find
-     * @param  int $offset The search offset
+     * @param  int    $offset The search offset
      * @return int|bool FALSE if the string does not contain results
      */
 
@@ -237,7 +237,7 @@ class String implements TypeInterface
      * echo (string) Txp::get('\Textpattern\Type\String', '<strong>Hello World!</strong>')->html();
      * </code>
      *
-     * @param  int $flags A bitmask of one or more flags. The default is ENT_QUOTES
+     * @param  int  $flags         A bitmask of one or more flags. The default is ENT_QUOTES
      * @param  bool $double_encode When double_encode is turned off PHP will not encode existing HTML entities, the default is to convert everything
      * @return String
      */
@@ -256,7 +256,7 @@ class String implements TypeInterface
      * echo (string) Txp::get('\Textpattern\Type\String', 'Hello World!')->substring(2, 5);
      * </code>
      *
-     * @param  int $start The start
+     * @param  int $start  The start
      * @param  int $length The length
      * @return String
      */
@@ -280,7 +280,7 @@ class String implements TypeInterface
      * </code>
      *
      * @param  mixed $from The needle to find
-     * @param  mixed $to The replacement
+     * @param  mixed $to   The replacement
      * @return String
      */
 
@@ -300,7 +300,7 @@ class String implements TypeInterface
      * </code>
      *
      * @param  string $from String to find
-     * @param  string $to The replacement
+     * @param  string $to   The replacement
      * @return String
      */
 
@@ -372,7 +372,7 @@ class String implements TypeInterface
      * echo (string) Txp::get('\Textpattern\Type\String', 'Hello World!')->chunk(1);
      * </code>
      *
-     * @param  int $length The chunk length
+     * @param  int    $length    The chunk length
      * @param  string $delimiter The delimiter
      * @return String
      */
@@ -391,9 +391,9 @@ class String implements TypeInterface
      * echo (string) Txp::get('\Textpattern\Type\String', 'Hello World!')->wordWrap();
      * </code>
      *
-     * @param  int $length The line length
+     * @param  int    $length    The line length
      * @param  string $delimiter The line delimiter
-     * @param  bool $cut Cut off words
+     * @param  bool   $cut       Cut off words
      * @return String
      */
 

@@ -34,7 +34,7 @@ class Authors
     /**
      * Generates a list of authors.
      *
-     * @param  array $atts
+     * @param  array  $atts
      * @param  string $thing
      * @return string
      */

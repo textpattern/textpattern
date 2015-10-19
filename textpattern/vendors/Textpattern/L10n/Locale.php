@@ -115,8 +115,8 @@ class Locale
      *
      * If an array of locales is provided, the first one that works is used.
      *
-     * @param  int $category The localisation category to change
-     * @param  string|array $locale The language code
+     * @param  int          $category The localisation category to change
+     * @param  string|array $locale   The language code
      * @return Locale
      * @throws \Exception
      * @see    setlocale()

@@ -67,7 +67,7 @@ interface AdapterInterface extends \Textpattern\Adaptable\AdapterInterface
      * Txp::get('\Textpattern\Mail\Compose')->header('X-Mailer', 'abc_plugin');
      * </code>
      *
-     * @param  string $name The header name
+     * @param  string $name  The header name
      * @param  string $value The value
      * @return AdapterInterface
      * @throws \Textpattern\Mail\Exception

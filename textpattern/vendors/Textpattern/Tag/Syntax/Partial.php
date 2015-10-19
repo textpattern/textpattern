@@ -49,7 +49,7 @@ class Partial
     /**
      * Conditional for yield.
      *
-     * @param  array $atts
+     * @param  array  $atts
      * @param  string $thing
      * @return string
      */
