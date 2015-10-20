@@ -785,20 +785,18 @@ svg:not(:root) {
  * </a>
  */
 .content-image {
-  -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   border: solid 1px #cccccc;
   border-radius: 0.5em;
   padding: 4px;
   background: #ffffff;
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 a:hover .content-image {
   border-color: #0066ff;
 }
 a:focus .content-image {
-  -webkit-box-shadow: 0 0 7px #80b3ff;
-  box-shadow: 0 0 7px #80b3ff;
   border-color: #0066ff;
+  box-shadow: 0 0 7px #80b3ff;
 }
 
 /* Messages
@@ -900,14 +898,13 @@ a:focus .content-image {
   text-align: center;
 }
 #messagepane span.success, #messagepane span.warning, #messagepane span.error {
-  -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   display: inline-block;
   margin: 0 auto;
   border-radius: 0.5em 0.5em 0 0;
   padding: 0.53846153846154em 2.84615384615385em 0.53846153846154em 1em;
   max-width: 53.1538462em;
   color: #ffffff;
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 #messagepane span.success {
   background: #238c23;
@@ -1006,9 +1003,6 @@ a:focus .content-image {
  */
 h3.txp-summary,
 .txp-details > h3 {
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
   background-color: #eeeeee;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VlZWVlZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2RkZGRkZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -1022,6 +1016,8 @@ h3.txp-summary,
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #cccccc;
   height: 2em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 /**
@@ -1117,9 +1113,6 @@ h3.txp-summary.expanded a:after {
   counter-reset: step;
 }
 .progress-meter li {
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
   background-color: #eeeeee;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VlZWVlZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2RkZGRkZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -1133,6 +1126,8 @@ h3.txp-summary.expanded a:after {
   border-bottom: 1px solid #cccccc;
   border-left: 1px solid #e3e3e3;
   padding: 1em 1em 1em 4em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
 }
 .progress-meter li.active {
   background-color: #ffda44;
@@ -1344,9 +1339,8 @@ input[type="url"]:focus,
 input[type="week"]:focus,
 select:focus,
 textarea:focus {
-  -webkit-box-shadow: 0 0 7px #80b3ff;
-  box-shadow: 0 0 7px #80b3ff;
   border-color: #0066ff;
+  box-shadow: 0 0 7px #80b3ff;
   outline: 0;
 }
 
@@ -1488,11 +1482,10 @@ select[disabled] option,
 select[disabled] optgroup,
 textarea[disabled],
 .navlink-disabled {
-  -webkit-box-shadow: none !important;
-  box-shadow: none !important;
   border-color: #dddddd !important;
   color: #aaaaaa !important;
   background: #eeeeee !important;
+  box-shadow: none !important;
   text-shadow: none !important;
   /* 1 */
   opacity: 1;
@@ -1598,9 +1591,6 @@ input[type="button"],
 .txp-logout a,
 .navlink,
 .navlink-active {
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
   -moz-background-clip: padding;
   -webkit-background-clip: padding;
   background-clip: padding-box;
@@ -1622,6 +1612,8 @@ input[type="button"],
   font-weight: normal;
   text-align: center;
   color: #333333;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
   /* 2 */
   cursor: pointer;
 }
@@ -1650,8 +1642,6 @@ input[type="button"]:active,
 .txp-logout a:active,
 .navlink:active,
 .navlink-active:active {
-  -webkit-box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
-  box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   background-color: #e6e6e6;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2U2ZTZlNiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Q2ZDZkNiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -1659,6 +1649,7 @@ input[type="button"]:active,
   background-image: linear-gradient(#e6e6e6, #d6d6d6);
   border-color: #aaaaaa;
   color: #1a1a1a;
+  box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   text-decoration: none;
 }
 button:focus,
@@ -1669,9 +1660,8 @@ input[type="button"]:focus,
 .txp-logout a:focus,
 .navlink:focus,
 .navlink-active:focus {
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
   border-color: #0066ff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
   outline: 0;
 }
 
@@ -1729,14 +1719,13 @@ a.publish:focus {
  * </button>
  */
 button.destroy {
-  text-shadow: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
   border: 0;
   border-radius: 0;
   padding: 0.07692307692308em 0 0;
   height: auto;
   background: none;
+  box-shadow: none;
+  text-shadow: none;
 }
 button.destroy:focus {
   outline: thin dotted #0066ff;
@@ -2124,7 +2113,6 @@ td {
   font-weight: normal;
 }
 .txp-list thead th {
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
   background-color: #eeeeee;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VlZWVlZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2RkZGRkZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -2133,6 +2121,7 @@ td {
   border-top: 1px solid #dddddd;
   border-right: 1px solid #d1d1d1;
   border-bottom: 1px solid #cccccc;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
 }
 .txp-list thead th:first-child {
   border-left: 1px solid #dddddd;
@@ -2289,8 +2278,6 @@ body {
  * </body>
  */
 .txp-header {
-  -webkit-box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
-  box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   background-color: #ffda44;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZGE0NCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y3YzYwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -2305,6 +2292,7 @@ body {
   border-bottom: 1px solid #d8ad00;
   padding: 0 2.1%;
   height: 2.69230769230769em;
+  box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
 }
 
 /**
@@ -2519,12 +2507,12 @@ button.txp-nav-toggle {
   border-left: 1px solid #f7c600;
 }
 .txp-nav > ul > li > a {
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
   display: block;
   padding: 0 1em;
   line-height: 2.69230769230769em;
-  text-decoration: none;
   color: black;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  text-decoration: none;
 }
 .txp-nav > ul > li > a:hover {
   background: rgba(255, 255, 255, 0.2);
@@ -2625,8 +2613,6 @@ button.txp-nav-toggle {
  * </nav>
  */
 .dropdown-menu {
-  -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   position: absolute;
   top: 3em;
   left: 0;
@@ -2637,6 +2623,7 @@ button.txp-nav-toggle {
   border-radius: 0 0.5em 0.5em;
   min-width: 12em;
   background: #fff9e1;
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 .dropdown-menu li:first-child {
   border-radius: 0 0.5em 0 0;
@@ -3399,8 +3386,6 @@ div.multi-edit {
   clear: both;
 }
 #view_modes ul li {
-  -webkit-box-shadow: inset 0 -0.25em 0.5em rgba(102, 102, 102, 0.15);
-  box-shadow: inset 0 -0.25em 0.5em rgba(102, 102, 102, 0.15);
   position: relative;
   top: 0;
   float: left;
@@ -3410,17 +3395,17 @@ div.multi-edit {
   list-style: none;
   white-space: nowrap;
   background-color: #f2f2f2;
+  box-shadow: inset 0 -0.25em 0.5em rgba(102, 102, 102, 0.15);
 }
 #view_modes ul li:hover, #view_modes ul li:focus {
   border-color: #aaaaaa;
   background-color: #f7f7f7;
 }
 #view_modes ul li.active {
-  -webkit-box-shadow: none;
-  box-shadow: none;
   margin-bottom: -1px;
   padding-bottom: 1px;
   background-color: white;
+  box-shadow: none;
 }
 #view_modes ul a {
   float: left;
@@ -3665,9 +3650,6 @@ div.code {
    * <button class="txp-nav-toggle">
    */
   button.txp-nav-toggle {
-    text-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
     text-indent: 110%;
     white-space: nowrap;
     overflow: hidden;
@@ -3682,6 +3664,8 @@ div.code {
     height: 2em;
     background: transparent url("../img/sprite.svg") -10em 0;
     background-size: 13em 2em;
+    text-shadow: none;
+    box-shadow: none;
     font-size: 16px;
   }
   button.txp-nav-toggle:focus {
@@ -3702,14 +3686,13 @@ div.code {
    * Show the navigation menu when toggled on mobile layout.
    */
   .txp-nav.in .data-dropdown {
-    -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
     position: absolute;
     top: 3em;
     right: 0;
     left: 0;
     display: block;
     background: #fff9e1;
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   }
   .txp-nav.in .data-dropdown:before {
     position: absolute;
@@ -3737,12 +3720,11 @@ div.code {
    * Secondary-level navigation menu items (submenus).
    */
   .dropdown-menu {
-    -webkit-box-shadow: none;
-    box-shadow: none;
     position: static;
     border: 0;
     border-radius: 0;
     min-width: 0;
+    box-shadow: none;
   }
   .dropdown-menu a {
     padding: 0.5em 2em;
@@ -3872,12 +3854,11 @@ div.code {
    * Collapse jQuery UI tabs responsively.
    */
   .ui-tabs .ui-tabs-nav li {
-    -webkit-box-shadow: none;
-    box-shadow: none;
     float: none;
     margin: 0;
     margin-top: 2px;
     border-bottom-width: 1px;
+    box-shadow: none;
   }
   .ui-tabs .ui-tabs-nav li.ui-tabs-active {
     margin-bottom: 0;
