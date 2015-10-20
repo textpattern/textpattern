@@ -220,10 +220,20 @@ function list_list($message = '', $post = '')
     if ($total < 1) {
         if ($criteria != 1) {
             echo $search->renderForm('list', $search_render_options).
-                graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+                graf(
+                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                gTxt('no_results_found'),
+                array('class' => 'alert-block information')
+            );
         } else {
-            echo graf(gTxt('no_articles_recorded'), ' class="indicator"').'</div>';
+            echo graf(
+                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                gTxt('no_articles_recorded'),
+                array('class' => 'alert-block information')
+            );
         }
+
+        echo n.tag_end('div');
 
         return;
     }

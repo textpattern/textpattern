@@ -186,7 +186,10 @@ function sec_section_list($message = '')
     if ($total < 1) {
         if ($criteria != 1) {
             echo $search->renderForm('sec_section', $search_render_options).
-                graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+                graf(
+                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                gTxt('no_results_found'), array('class' => 'alert-block information')
+            ).n.tag_end('div');
         }
 
         return;

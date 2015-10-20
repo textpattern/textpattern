@@ -214,7 +214,7 @@ function file_list($message = '')
             );
         }
 
-        echo n.'</div>';
+        echo n.tag_end('div');
 
         return;
     }

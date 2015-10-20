@@ -274,10 +274,20 @@ function discuss_list($message = '')
     if ($total < 1) {
         if ($criteria != 1) {
             echo $search->renderForm('discuss_list', $search_render_options).
-                graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+                graf(
+                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                gTxt('no_results_found'),
+                array('class' => 'alert-block information')
+            );
         } else {
-            echo graf(gTxt('no_comments_recorded'), ' class="indicator"').'</div>';
+            echo graf(
+                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                gTxt('no_comments_recorded'),
+                array('class' => 'alert-block information')
+            );
         }
+
+        echo n.tag_end('div');
 
         return;
     }
@@ -610,7 +620,11 @@ function discuss_edit()
                 sInput('discuss_save').
                 n.'</section>', '', '', 'post', 'edit-form', '', 'discuss_edit_form'), '</div>';
     } else {
-        echo graf(gTxt('comment_not_found'), ' class="indicator"');
+        echo graf(
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt('comment_not_found'),
+            array('class' => 'alert-block information')
+        );
     }
 }
 
@@ -750,7 +764,11 @@ function ipban_list($message = '')
             n.tag_end('table').
             n.tag_end('div');
     } else {
-        echo graf(gTxt('no_ips_banned'), ' class="indicator"');
+        echo graf(
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt('no_ips_banned'),
+            array('class' => 'alert-block information')
+        );
     }
 
     echo n.tag_end('div');
