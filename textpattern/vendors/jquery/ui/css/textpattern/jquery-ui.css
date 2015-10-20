@@ -252,7 +252,6 @@ a.ui-state-default:focus {
 }
 
 .ui-draggable-handle {
-  -ms-touch-action: none;
   touch-action: none;
 }
 
@@ -260,9 +259,8 @@ a.ui-state-default:focus {
  * Class added when element is actively being dragged.
  */
 .ui-draggable-dragging {
-  -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   z-index: 1000;
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 
 /* Resizable
@@ -286,7 +284,6 @@ a.ui-state-default:focus {
 }
 
 .ui-resizable-handle {
-  -ms-touch-action: none;
   touch-action: none;
   position: absolute;
   display: block;
@@ -386,7 +383,6 @@ a.ui-state-default:focus {
  * </ol>
  */
 .ui-selectable {
-  -ms-touch-action: none;
   touch-action: none;
 }
 
@@ -423,12 +419,10 @@ a.ui-state-default:focus {
  * </ul>
  */
 .ui-sortable-helper {
-  -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 
 .ui-sortable-handle {
-  -ms-touch-action: none;
   touch-action: none;
 }
 
@@ -552,15 +546,9 @@ a.ui-state-default:focus {
  * </a>
  */
 .ui-button {
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
   -moz-background-clip: padding;
   -webkit-background-clip: padding;
   background-clip: padding-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
   background-color: #eeeeee;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2VlZWVlZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2RkZGRkZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -568,6 +556,7 @@ a.ui-state-default:focus {
   background-image: linear-gradient(#eeeeee, #dddddd);
   -webkit-transition: box-shadow 0.1s linear;
   transition: box-shadow 0.1s linear;
+  box-sizing: border-box;
   /* 1 */
   font-size: 100%;
   font-size: 1em;
@@ -586,6 +575,8 @@ a.ui-state-default:focus {
   text-align: center;
   vertical-align: baseline;
   color: #333333;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
   /* 4 */
   cursor: pointer;
 }
@@ -599,8 +590,6 @@ a.ui-state-default:focus {
   text-decoration: none;
 }
 .ui-button:active {
-  -webkit-box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
-  box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   background-color: #e6e6e6;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2U2ZTZlNiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Q2ZDZkNiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -608,12 +597,12 @@ a.ui-state-default:focus {
   background-image: linear-gradient(#e6e6e6, #d6d6d6);
   border-color: #aaaaaa;
   color: #1a1a1a;
+  box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   text-decoration: none;
 }
 .ui-button:focus {
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
   border-color: #0066ff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
   outline: 0;
 }
 
@@ -631,10 +620,9 @@ a.ui-button {
  * 1. `!important` required to override specificity.
  */
 .ui-button.ui-state-focus {
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
   /* 1 */
   border-color: #0066ff !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
   outline: 0;
 }
 
@@ -931,11 +919,10 @@ label.ui-state-active.ui-button:active {
  * </div>
  */
 .ui-datepicker {
-  -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   display: none;
   padding: 0.2em 0.2em 0;
   width: 17em;
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 .ui-datepicker .ui-datepicker-header {
   position: relative;
@@ -1131,13 +1118,12 @@ label.ui-state-active.ui-button:active {
  * </div>
  */
 .ui-dialog {
-  -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   position: absolute;
   top: 0;
   left: 0;
   z-index: 1002;
   padding: 0.2em;
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 .ui-dialog .ui-dialog-titlebar {
   position: relative;
@@ -1291,8 +1277,6 @@ label.ui-state-active.ui-button:active {
  * </ul>
  */
 .ui-menu {
-  -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   display: block;
   margin: 0;
   padding: 0;
@@ -1300,6 +1284,7 @@ label.ui-state-active.ui-button:active {
   font-size: 100%;
   font-size: 1em;
   line-height: 1.38461538461538em;
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   outline: 0;
   list-style: none;
 }
@@ -1475,9 +1460,8 @@ label.ui-state-active.ui-button:active {
   cursor: pointer;
 }
 .ui-selectmenu-button:focus {
-  -webkit-box-shadow: 0 0 7px #80b3ff;
-  box-shadow: 0 0 7px #80b3ff;
   border-color: #0066ff;
+  box-shadow: 0 0 7px #80b3ff;
   outline: 0;
 }
 .ui-selectmenu-button span.ui-icon {
@@ -1559,9 +1543,6 @@ label.ui-state-active.ui-button:active {
   text-align: left;
 }
 .ui-slider .ui-slider-handle {
-  -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  -ms-touch-action: none;
   touch-action: none;
   position: absolute;
   z-index: 2;
@@ -1570,6 +1551,7 @@ label.ui-state-active.ui-button:active {
   height: 20px;
   cursor: default;
   background-color: #ffffff;
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 .ui-slider .ui-slider-range {
   position: absolute;
@@ -1755,8 +1737,6 @@ label.ui-state-active.ui-button:active {
   background: none;
 }
 .ui-tabs .ui-tabs-nav li {
-  -webkit-box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
-  box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
   position: relative;
   top: 0;
   float: left;
@@ -1764,12 +1744,12 @@ label.ui-state-active.ui-button:active {
   border-bottom-width: 0;
   list-style: none;
   white-space: nowrap;
+  box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
 }
 .ui-tabs .ui-tabs-nav li.ui-tabs-active {
-  -webkit-box-shadow: none;
-  box-shadow: none;
   margin-bottom: -1px;
   padding-bottom: 1px;
+  box-shadow: none;
 }
 .ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
   cursor: text;
@@ -1825,12 +1805,11 @@ label.ui-state-active.ui-button:active {
  * </div>
  */
 .ui-tooltip {
-  -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   position: absolute;
   z-index: 9999;
   padding: 0.5em 1em;
   max-width: 22em;
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 
 /* ==========================================================================
@@ -1950,43 +1929,43 @@ label.ui-state-active.ui-button:active {
   background-position: 16px 16px;
 }
 
-.ui-icon-caret-1-n {
+.ui-icon-carat-1-n {
   background-position: 0 0;
 }
 
-.ui-icon-caret-1-ne {
+.ui-icon-carat-1-ne {
   background-position: -16px 0;
 }
 
-.ui-icon-caret-1-e {
+.ui-icon-carat-1-e {
   background-position: -32px 0;
 }
 
-.ui-icon-caret-1-se {
+.ui-icon-carat-1-se {
   background-position: -48px 0;
 }
 
-.ui-icon-caret-1-s {
+.ui-icon-carat-1-s {
   background-position: -64px 0;
 }
 
-.ui-icon-caret-1-sw {
+.ui-icon-carat-1-sw {
   background-position: -80px 0;
 }
 
-.ui-icon-caret-1-w {
+.ui-icon-carat-1-w {
   background-position: -96px 0;
 }
 
-.ui-icon-caret-1-nw {
+.ui-icon-carat-1-nw {
   background-position: -112px 0;
 }
 
-.ui-icon-caret-2-n-s {
+.ui-icon-carat-2-n-s {
   background-position: -128px 0;
 }
 
-.ui-icon-caret-2-e-w {
+.ui-icon-carat-2-e-w {
   background-position: -144px 0;
 }
 
