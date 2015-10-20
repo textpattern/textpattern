@@ -47,6 +47,7 @@
 /publish/taghandlers.php: 04a4de1ed448d67cb4532fade0ff48dd
 /textpattern.js: ba50de147f2d25f80b4a57b81e83d46b
 /theme/classic/classic.php: 6188336321c4489456385fbd3c6f052c
+/theme/hive/hive.php: b55e2e650c524f4403c6897d330e4f42
 /update/_to_1.0.0.php: 1bfdb882b9e3a20e18f3d199f1551685
 /update/_to_4.0.2.php: ac445163d8032eafe676e1df899140c5
 /update/_to_4.0.3.php: a307600fb20e05e2e4f4b2e34c962c8a
