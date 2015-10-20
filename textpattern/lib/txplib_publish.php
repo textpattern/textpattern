@@ -248,8 +248,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     $safe_name = safe_pfx('textpattern');
     $q = array(
         "select ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted
-            from ".$safe_name." where ($sortby $type ".$threshold,
-            "or $sortby = $threshold and ID $type $thisid)",
+            from ".$safe_name." where ($sortby $type ".$threshold." or $sortby = $threshold and ID $type $thisid)",
         ($s != '' && $s != 'default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
         $id,
         $time,
