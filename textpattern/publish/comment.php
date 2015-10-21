@@ -190,11 +190,6 @@ function saveComment()
     }
 
     $ip = serverset('REMOTE_ADDR');
-
-    if (!checkBan($ip)) {
-        txp_die(gTxt('you_have_been_banned'), '403');
-    }
-
     $blacklisted = is_blacklisted($ip);
 
     if ($blacklisted) {
@@ -517,23 +512,6 @@ function checkNonce($nonce)
     // Check for nonce.
     return (safe_row("*", "txp_discuss_nonce", "nonce='".doSlash($nonce)."' and used = 0")) ? true : false;
 }
-
-/**
- * Checks if an IP address is banned.
- *
- * @param  string $ip The IP address
- * @return bool TRUE if the IP is not banned
- * @example
- * if (checkBan('127.0.0.1') === false)
- * {
- *     echo "IP address is banned.";
- * }
- */
-
-    function checkBan($ip)
-    {
-        return (!fetch("ip", "txp_discuss_ipban", "ip", $ip)) ? true : false;
-    }
 
 /**
  * Checks if comments are open for the given article.

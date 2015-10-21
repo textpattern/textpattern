@@ -187,6 +187,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
 
 $create_sql[] = "INSERT INTO `".PFX."txp_discuss` VALUES (000001, 1, 'Donald Swain', 'donald.swain@example.com', 'example.com', '127.0.0.1', now(), '<p>I enjoy your site very much.</p>', 1)";
 
+// This table is only created here to avoid an error when trying to remove it in TXP 4.6.0
 $create_sql[] = "CREATE TABLE `".PFX."txp_discuss_ipban` (
     `ip` varchar(255) NOT NULL default '',
     `name_used` varchar(255) NOT NULL default '',
