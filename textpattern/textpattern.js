@@ -1543,13 +1543,24 @@ textpattern.Route.add('prefs', function ()
 {
     $('#all_preferences').on('click', '.switcher-list a', function(ev) {
         ev.preventDefault();
-        $('.txp-prefs-group').hide();
-        toggleDisplay.call(this, 'prefs_group_' + $(this).attr('href').substr(1));
+        var me = $(this);
+
+        $('.txp-prefs-group').hide().attr('aria-hidden', true);
+        $('.switcher-list [role=tab]').attr('aria-selected', false).attr('aria-expanded', false);
+
+        var prefsGroupId = 'prefs_group_' + me.attr('href').substr(1);
+
+        toggleDisplay.call(this, prefsGroupId);
+
+        $('#'+prefsGroupId).attr('aria-hidden', false);
+        me.closest('[role=tab]').attr('aria-selected', true).attr('aria-expanded', true);
     });
 
     // Todo: save pane state for currently open pref group, fallback to first if not set.
-    $('.txp-prefs-group').hide();
-    $('#prefs_group_site').show();
+    $('.txp-prefs-group').hide().attr('aria-hidden', true);
+    $('#prefs_group_site').show().attr('aria-hidden', false);
+    $('.switcher-list [role=tab]').attr('aria-selected', false).attr('aria-expanded', false)
+        .filter(':first').attr('aria-selected', true).attr('aria-expanded', true);
 });
 
 // Plugins panel.
