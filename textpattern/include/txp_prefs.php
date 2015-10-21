@@ -597,6 +597,24 @@ function dateformats($name, $val)
 }
 
 /**
+ * Renders a HTML &lt;select&gt; list of content permlink options.
+ *
+ * @param  string $name HTML name and id of the widget
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function permlink_format($name, $val)
+{
+    $vals = array(
+        '0'   => gTxt('permlink_intercapped'),
+        '1'   => gTxt('permlink_hyphenated'),
+    );
+
+    return selectInput($name, $vals, $val, '', '', $name);
+}
+
+/**
  * Renders a HTML &lt;select&gt; list of site production status.
  *
  * @param  string $name HTML name and id of the widget
