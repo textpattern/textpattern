@@ -783,8 +783,6 @@ svg:not(:root) {
  */
 .content-image {
   border: solid 1px #cccccc;
-  border-radius: 0.5em;
-  padding: 4px;
   background: #ffffff;
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
@@ -861,6 +859,7 @@ a:focus .content-image {
  * <p class="alert-block error">
  */
 .alert-block {
+  clear: both;
   border: 1px solid;
   padding: 0.53846153846154em 1em;
 }
