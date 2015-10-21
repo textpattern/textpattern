@@ -1,7 +1,7 @@
 /* HTML5 display definitions
    ========================================================================== */
 /**
- * Correct `block` display not defined for any HTML5 element in IE 8/9.
+ * Correct `block` display not defined for any HTML5 element in IE 9.
  * Correct `block` display not defined for `details` or `summary` in IE 10/11 and Firefox.
  * Correct `block` display not defined for `main` in IE 11.
  */
@@ -21,7 +21,7 @@ summary {
 }
 
 /**
- * 1. Correct `inline-block` display not defined in IE 8/9.
+ * 1. Correct `inline-block` display not defined in IE 9.
  * 2. Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.
  */
 audio,
@@ -35,8 +35,8 @@ video {
 }
 
 /**
- * Address `[hidden]` styling not present in IE 8/9/10.
- * Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.
+ * Address `[hidden]` styling not present in IE 9/10.
+ * Hide the `template` element in IE 9/11, Safari, and Firefox < 22.
  */
 [hidden],
 template {
@@ -544,7 +544,7 @@ dfn {
 }
 
 /**
- * Address styling not present in IE 8/9/10/11, Safari, and Chrome.
+ * Address styling not present in IE 9/10/11, Safari, and Chrome.
  */
 abbr[title],
 dfn[title] {
@@ -553,7 +553,7 @@ dfn[title] {
 }
 
 /**
- * Address styling not present in IE 8/9.
+ * Address styling not present in IE 9.
  */
 mark,
 var {
@@ -716,7 +716,7 @@ video {
  * Images.
  *
  * 1. Remove the gap between images and the bottom of their containers.
- * 2. Remove border when inside `a` element in IE 8-10.
+ * 2. Remove border when inside `a` element in IE 9/10.
  *
  * Image alignment (compatible with Textile markup syntax).
  *
@@ -758,7 +758,7 @@ img.align-center {
 }
 
 /**
- * Address margin not present in IE 8/9 and Safari.
+ * Address margin not present in IE 9 and Safari.
  */
 figure {
   margin: 0;
@@ -1205,7 +1205,7 @@ fieldset {
 }
 
 /**
- * 1. Correct `color` not being inherited in IE 8/9/10/11.
+ * 1. Correct `color` not being inherited in IE 9/10/11.
  * 2. Remove padding so people aren't caught out if they zero out fieldsets.
  */
 legend {
@@ -1346,7 +1346,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 /**
- * 1. Remove excess padding in IE 8/9/10.
+ * 1. Remove excess padding in IE 9/10.
  * 2. Correct margins for inline checkbox/radio labels.
  */
 input[type="checkbox"],
@@ -1433,7 +1433,7 @@ optgroup {
 }
 
 /**
- * 1. Remove default vertical scrollbar in IE 8/9/10/11.
+ * 1. Remove default vertical scrollbar in IE 9/10/11.
  * 2. Restrict to vertical resizing to prevent layout breakage.
  * 3. Remove unwanted space below `textarea` in Safari, Chrome, Opera.
  */
@@ -1552,8 +1552,8 @@ input.input-month, input.input-day, input.input-hour, input.input-minute, input.
 /* Buttons
    ========================================================================== */
 /**
- * 1. Address `overflow` set to `hidden` in IE 8/9/10/11.
- * 2. Correct `button` style inheritance in Firefox, IE 8/9/10/11, and Opera.
+ * 1. Address `overflow` set to `hidden` in IE 9/10/11.
+ * 2. Correct `button` style inheritance in Firefox, IE 9/10/11, and Opera.
  */
 button {
   /* 1 */

@@ -92,11 +92,6 @@ print <<<eod
 <link rel="stylesheet" href="../theme/hive/assets/css/textpattern.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <script src="../vendors/modernizr/modernizr/modernizr.js"></script>
-<!--[if lt IE 9]>
-<link rel="stylesheet" href="../vendors/jquery/ui/css/textpattern/jquery-ui-ie8.min.css">
-<link rel="stylesheet" href="../theme/hive/assets/css/ie8.min.css">
-<script src="../vendors/keithclark/selectivizr/selectivizr.min.js"></script>
-<![endif]-->
 </head>
 <body id="page-setup"{$bodyclass}>
 <main class="txp-body">
