@@ -44,8 +44,6 @@ header('X-UA-Compatible: '.X_UA_COMPATIBLE);
     <title><?php echo gTxt('build'); ?> &#124; Textpattern CMS</title><?php echo
         script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
         script_js('vendors/jquery/ui/js/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
-// TODO: Remove jQuery migrate plugin before release
-        script_js('//code.jquery.com/jquery-migrate-1.2.1.js', TEXTPATTERN_SCRIPT_URL).
         script_js(
             'var textpattern = '.json_encode(array(
                 'event'      => $event,
