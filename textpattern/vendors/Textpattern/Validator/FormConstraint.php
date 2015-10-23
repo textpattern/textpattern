@@ -22,24 +22,33 @@
  */
 
 /**
- * Constraint for Textfilters.
+ * Tests against existing form names.
  *
  * @since   4.6.0
- * @package Textfilter
+ * @package Validator
  */
 
-namespace Textpattern\Textfilter;
+namespace Textpattern\Validator;
 
-class Constraint extends \Textpattern\Validator\Constraint
+class FormConstraint extends ChoiceConstraint
 {
     /**
-     * Validates filter selection.
+     * Constructor.
      *
-     * @return bool
+     * @param mixed $value
+     * @param array $options
      */
 
-    public function validate()
+    public function __construct($value, $options = array())
     {
-        return array_key_exists($this->value, \Txp::get('\Textpattern\Textfilter\Registry')->getMap());
+        static $choices = null;
+        $options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_form'), $options, false);
+
+        if (null === $choices) {
+            $choices = safe_column('name', 'txp_form', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
+        }
+
+        $options['choices'] = $choices;
+        parent::__construct($value, $options);
     }
 }

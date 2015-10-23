@@ -22,24 +22,37 @@
  */
 
 /**
- * Constraint for Textfilters.
+ * Validates that a value is true.
  *
  * @since   4.6.0
- * @package Textfilter
+ * @package Validator
  */
 
-namespace Textpattern\Textfilter;
+namespace Textpattern\Validator;
 
-class Constraint extends \Textpattern\Validator\Constraint
+class TrueConstraint extends Constraint
 {
     /**
-     * Validates filter selection.
+     * Constructor.
+     *
+     * @param mixed $value
+     * @param array $options
+     */
+
+    public function __construct($value, $options = array())
+    {
+        $options = lAtts(array('message' => 'should_be_true'), $options, false);
+        parent::__construct($value, $options);
+    }
+
+    /**
+     * Validates.
      *
      * @return bool
      */
 
     public function validate()
     {
-        return array_key_exists($this->value, \Txp::get('\Textpattern\Textfilter\Registry')->getMap());
+        return (boolean)$this->value;
     }
 }

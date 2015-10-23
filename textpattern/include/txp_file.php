@@ -33,6 +33,10 @@
  * @package Admin\File
  */
 
+use Textpattern\Validator\CategoryConstraint;
+use Textpattern\Validator\ChoiceConstraint;
+use Textpattern\Validator\Validator;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }

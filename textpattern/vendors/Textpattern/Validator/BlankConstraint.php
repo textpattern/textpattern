@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Textpattern Content Management System
  * http://textpattern.com
@@ -21,25 +20,39 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace Textpattern\Validator;
+
 /**
- * Constraint for Textfilters.
+ * Validates that a value is blank, defined as equal to a blank string or equal
+ * to null.
  *
  * @since   4.6.0
- * @package Textfilter
+ * @package Validator
  */
 
-namespace Textpattern\Textfilter;
-
-class Constraint extends \Textpattern\Validator\Constraint
+class BlankConstraint extends Constraint
 {
     /**
-     * Validates filter selection.
+     * Constructor.
+     *
+     * @param mixed $value
+     * @param array $options
+     */
+
+    public function __construct($value, $options = array())
+    {
+        $options = lAtts(array('message' => 'should_be_blank'), $options, false);
+        parent::__construct($value, $options);
+    }
+
+    /**
+     * Validates.
      *
      * @return bool
      */
 
     public function validate()
     {
-        return array_key_exists($this->value, \Txp::get('\Textpattern\Textfilter\Registry')->getMap());
+        return $this->value === '' || $this->value === null;
     }
 }

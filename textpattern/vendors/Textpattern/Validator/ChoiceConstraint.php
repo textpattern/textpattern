@@ -22,24 +22,38 @@
  */
 
 /**
- * Constraint for Textfilters.
+ * Tests against a list of values.
  *
  * @since   4.6.0
- * @package Textfilter
+ * @package Validator
  */
 
-namespace Textpattern\Textfilter;
+namespace Textpattern\Validator;
 
-class Constraint extends \Textpattern\Validator\Constraint
+class ChoiceConstraint extends Constraint
 {
     /**
-     * Validates filter selection.
+     * Constructor.
+     *
+     * @param mixed $value
+     * @param array $options
+     */
+
+    public function __construct($value, $options = array())
+    {
+        $options = lAtts(array('choices' => array(), 'allow_blank' => false, 'message' => 'unknown_choice'), $options, false);
+        parent::__construct($value, $options);
+    }
+
+    /**
+     * Validates.
      *
      * @return bool
      */
 
     public function validate()
     {
-        return array_key_exists($this->value, \Txp::get('\Textpattern\Textfilter\Registry')->getMap());
+        return ($this->options['allow_blank'] && ('' === $this->value)) ||
+        in_array($this->value, $this->options['choices']);
     }
 }

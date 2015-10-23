@@ -28,6 +28,14 @@
  * @package Admin\Article
  */
 
+use Textpattern\Validator\BlankConstraint;
+use Textpattern\Validator\CategoryConstraint;
+use Textpattern\Validator\ChoiceConstraint;
+use Textpattern\Validator\FalseConstraint;
+use Textpattern\Validator\FormConstraint;
+use Textpattern\Validator\SectionConstraint;
+use Textpattern\Validator\Validator;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
