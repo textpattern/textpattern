@@ -303,10 +303,7 @@ function discuss_list($message = '')
     echo n.tag_start('div', array(
             'class' => 'txp-layout-1col',
             'id'    => $event.'_container',
-        )).
-        n.tag(
-            sLink('discuss', 'ipban_list', gTxt('list_banned_ips'), 'txp-button'),
-            'div', array('class' => 'txp-control-panel'));
+        ));
 
     $rs = safe_query(
         "select
