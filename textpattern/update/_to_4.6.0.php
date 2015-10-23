@@ -148,8 +148,14 @@ if (file_exists(txpath.DS.'include'.DS.'txp_import.php')) {
     unlink(txpath.DS.'include'.DS.'txp_import.php');
 }
 
+// Remove unused ipban table or recreate its index (for future utf8mb4 conversion)
+if (!safe_count('txp_discuss_ipban', '1=1')) {
+    safe_drop('txp_discuss_ipban');
+} else {
+    safe_alter('txp_discuss_ipban', "DROP PRIMARY KEY, ADD PRIMARY KEY (`ip`(250))");
+}
+
 // Recreate indexes to allow future conversion to charset utf8mb4
-safe_alter('txp_discuss_ipban', "DROP PRIMARY KEY, ADD PRIMARY KEY (`ip`(250))");
 safe_alter('txp_discuss_nonce', "DROP PRIMARY KEY, ADD PRIMARY KEY (`nonce`(250))");
 safe_alter('txp_css', "DROP INDEX `name`, ADD UNIQUE `name` (`name`(250))");
 safe_alter('txp_file', "DROP INDEX `filename`, ADD UNIQUE `filename` (`filename`(250))");

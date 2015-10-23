@@ -43,10 +43,7 @@ if ($event == 'discuss') {
         'discuss_save'          => true,
         'discuss_list'          => false,
         'discuss_edit'          => false,
-        'ipban_add'             => true,
         'discuss_multi_edit'    => true,
-        'ipban_list'            => false,
-        'ipban_unban'           => true,
         'discuss_change_pageby' => true,
     );
 
@@ -530,29 +527,6 @@ function discuss_edit()
 
         $message = txpspecialchars($message);
 
-        if (fetch('ip', 'txp_discuss_ipban', 'ip', $ip)) {
-            $ban_step = 'ipban_unban';
-            $ban_text = gTxt('unban');
-        } else {
-            $ban_step = 'ipban_add';
-            $ban_text = gTxt('ban');
-        }
-
-        $ban_link = sp.span('[', array('aria-hidden' => 'true')).
-            href(
-                $ban_text,
-                array(
-                    'event'      => 'discuss',
-                    'step'       => $ban_step,
-                    'ip'         => $ip,
-                    'name'       => $name,
-                    'discussid'  => $discussid,
-                    '_txp_token' => form_token(),
-                ),
-                array('class' => 'action-ban')
-            ).
-            span(']', array('aria-hidden' => 'true'));
-
         $status_list = selectInput(
             'visible',
             array(
@@ -630,152 +604,6 @@ function discuss_edit()
 
 // -------------------------------------------------------------
 
-function ipban_add()
-{
-    extract(gpsa(array(
-        'ip',
-        'name',
-        'discussid',
-    )));
-
-    $discussid = assert_int($discussid);
-
-    if (!$ip) {
-        return ipban_list(gTxt('cant_ban_blank_ip'));
-    }
-
-    $ban_exists = fetch('ip', 'txp_discuss_ipban', 'ip', $ip);
-
-    if ($ban_exists) {
-        $message = gTxt('ip_already_banned', array('{ip}' => $ip));
-
-        return ipban_list($message);
-    }
-
-    $rs = safe_insert('txp_discuss_ipban', "
-        ip = '".doSlash($ip)."',
-        name_used = '".doSlash($name)."',
-        banned_on_message = $discussid,
-        date_banned = now()
-    ");
-
-    // Hide all messages from that IP also.
-    if ($rs) {
-        safe_update('txp_discuss', "visible = ".SPAM, "ip = '".doSlash($ip)."'");
-
-        $message = gTxt('ip_banned', array('{ip}' => $ip));
-
-        return ipban_list($message);
-    }
-
-    ipban_list();
-}
-
-// -------------------------------------------------------------
-
-function ipban_unban()
-{
-    $ip = doSlash(gps('ip'));
-
-    $rs = safe_delete('txp_discuss_ipban', "ip = '$ip'");
-
-    if ($rs) {
-        $message = gTxt('ip_ban_removed', array('{ip}' => $ip));
-
-        ipban_list($message);
-    }
-}
-
-// -------------------------------------------------------------
-
-function ipban_list($message = '')
-{
-    global $event;
-
-    pageTop(gTxt('list_banned_ips'), $message);
-
-    echo n.tag(
-        hed(gTxt('banned_ips'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
-        n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_banned_control',
-        )).
-        n.tag(
-            sLink('discuss', 'discuss_list', gTxt('list_discussions'), 'txp-button'),
-            'div', array('class' => 'txp-control-panel'));
-
-    $rs = safe_rows_start('*, unix_timestamp(date_banned) as uBanned', 'txp_discuss_ipban',
-        "1 = 1 order by date_banned desc");
-
-    if ($rs and numRows($rs) > 0) {
-        echo n.tag_start('div', array('class' => 'txp-listtables')).
-            n.tag_start('table', array('class' => 'txp-list')).
-            n.tag_start('thead').
-            tr(
-                hCell(
-                    gTxt('date_banned'), '', ' class="txp-list-col-banned date" scope="col"'
-                ).
-                hCell(
-                    gTxt('IP'), '', ' class="txp-list-col-ip" scope="col"'
-                ).
-                hCell(
-                    gTxt('name_used'), '', ' class="txp-list-col-name" scope="col"'
-                ).
-                hCell(
-                    gTxt('banned_for'), '', ' class="txp-list-col-id" scope="col"'
-                )
-            ).
-            n.tag_end('thead').
-            n.tag_start('tbody');
-
-        while ($a = nextRow($rs)) {
-            extract($a);
-
-            echo tr(
-                hCell(
-                    gTime($uBanned), '', ' class="txp-list-col-banned date" scope="row"'
-                ).
-                td(
-                    txpspecialchars($ip).
-                    sp.span('[', array('aria-hidden' => 'true')).
-                    href(
-                        gTxt('unban'),
-                        array(
-                            'event'      => 'discuss',
-                            'step'       => 'ipban_unban',
-                            'ip'         => $ip,
-                            '_txp_token' => form_token(),
-                        ),
-                        array('class' => 'action-ban')
-                    ).
-                    span(']', array('aria-hidden' => 'true')), '', 'txp-list-col-ip'
-                ).
-                td(
-                    txpspecialchars($name_used), '', 'txp-list-col-name'
-                ).
-                td(
-                    href($banned_on_message, '?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$banned_on_message), '', 'txp-list-col-id'
-                )
-            );
-        }
-
-        echo n.tag_end('tbody').
-            n.tag_end('table').
-            n.tag_end('div');
-    } else {
-        echo graf(
-            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-            gTxt('no_ips_banned'),
-            array('class' => 'alert-block information')
-        );
-    }
-
-    echo n.tag_end('div');
-}
-
-// -------------------------------------------------------------
-
 function discuss_change_pageby()
 {
     event_change_pageby('comment');
@@ -790,7 +618,6 @@ function discuss_multiedit_form($page, $sort, $dir, $crit, $search_method)
         'visible'     => gTxt('show'),
         'unmoderated' => gTxt('hide_unmoderated'),
         'spam'        => gTxt('hide_spam'),
-        'ban'         => gTxt('ban_author'),
         'delete'      => gTxt('delete'),
     );
 
@@ -827,21 +654,6 @@ function discuss_multi_edit()
                 }
 
                 callback_event('discuss_deleted', '', 0, $done);
-            } elseif ($method == 'ban') {
-                // Ban the IP and hide all messages by that IP.
-                if (!safe_field('ip', 'txp_discuss_ipban', "ip='".doSlash($ip)."'")) {
-                    safe_insert("txp_discuss_ipban",
-                        "ip = '".doSlash($ip)."',
-                        name_used = '".doSlash($name)."',
-                        banned_on_message = $id,
-                        date_banned = now()
-                    ");
-                    safe_update('txp_discuss',
-                        "visible = ".SPAM,
-                        "ip='".doSlash($ip)."'"
-                    );
-                }
-                $done[] = $id;
             } elseif ($method == 'spam') {
                 if (safe_update('txp_discuss',
                     "visible = ".SPAM,
@@ -874,7 +686,6 @@ function discuss_multi_edit()
 
             $messages = array(
                 'delete'      => gTxt('comments_deleted', array('{list}' => $doneStr)),
-                'ban'         => gTxt('ips_banned', array('{list}' => $doneStr)),
                 'spam'        => gTxt('comments_marked_spam', array('{list}' => $doneStr)),
                 'unmoderated' => gTxt('comments_marked_unmoderated', array('{list}' => $doneStr)),
                 'visible'     => gTxt('comments_marked_visible', array('{list}' => $doneStr)),
