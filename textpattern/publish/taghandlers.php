@@ -2204,8 +2204,6 @@ function comments_form($atts)
 
     if (!checkCommentsAllowed($thisid)) {
         $out = graf(gTxt("comments_closed"), ' id="comments_closed"');
-    } elseif (!checkBan($ip)) {
-        $out = graf(gTxt('you_have_been_banned'), ' id="comments_banned"');
     } elseif ($blacklisted) {
         $out = graf(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), ' id="comments_blacklisted"');
     } elseif (gps('commented') !== '') {
