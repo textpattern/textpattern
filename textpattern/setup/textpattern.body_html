@@ -1,0 +1,23 @@
+	<h3>What do you want to do next?</h3>
+
+	<ul>
+		<li>Modify or even delete this article? The <a href="siteurl/textpattern/index.php?event=list">article list</a> is the place to start.</li>
+		<li>Change this site's name, or modify the style of the <span class="caps">URL</span>s? It's all up to your <a href="siteurl/textpattern/index.php?event=prefs">preferences</a>.</li>
+		<li>Get yourself acquainted with Textile, the humane web text generator which comes with Textpattern? The basics are <a href="http://textpattern.com/textile-sandbox">simple</a>. If you want to learn more about Textile, you can dig into an <a href="http://textpattern.com/textile-reference-manual">extensive manual</a> later.</li>
+		<li>Be guided through your <a href="http://textpattern.com/textpattern-first-steps">Textpattern first steps</a> by completing some basic tasks?</li>
+		<li>Study the <a href="http://textpattern.com/textpattern-semantic-model">Textpattern Semantic Model?</a></li>
+		<li>Add <a href="siteurl/textpattern/index.php?event=admin">another user</a>, or extend the capabilities with <a href="siteurl/textpattern/index.php?event=plugin">third party plugins</a> you discovered from the central plugin directory at <a href="http://textpattern.org/">Textpattern Resources</a>?</li>
+		<li>Dive in and learn by trial and error? Then please note:
+	<ul>
+		<li>When you <a href="siteurl/textpattern/index.php?event=article">write</a> an article you assign it to a section of your site.</li>
+		<li>Sections use a <a href="siteurl/textpattern/index.php?event=page">page template</a> and a <a href="siteurl/textpattern/index.php?event=css">style</a> as an output scaffold.</li>
+		<li>Page templates use <span class="caps">HTML</span> and Textpattern tags (like this: <code dir="ltr">&lt;txp:article /&gt;</code>) to build the markup.</li>
+		<li>Some Textpattern tags use <a href="siteurl/textpattern/index.php?event=form">forms</a>, which are building blocks for reusable snippets of code and markup you may build and use at your discretion.</li>
+	</ul></li>
+	</ul>
+
+	<p>There are a host of <a href="http://textpattern.com/faq/">Frequently Asked Questions</a> to help you get started.</p>
+
+	<p><a href="http://textpattern.com/textpattern-tag-reference">Textpattern tags</a>, their attributes and values are explained and sampled within the <a href="http://textpattern.net/">Textpattern User Documentation</a>, where you will also find valuable tips and tutorials.</p>
+
+	<p>If all else fails, there's a whole crowd of friendly, helpful people over at the <a href="http://forum.textpattern.com/">Textpattern support forum</a>. Come and pay a visit!</p>
