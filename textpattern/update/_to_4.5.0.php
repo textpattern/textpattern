@@ -39,7 +39,9 @@ if (safe_field('name', 'txp_prefs', "name = 'allow_raw_php_scripting'")) {
     safe_delete('txp_prefs', "name = 'allow_raw_php_scripting'");
 }
 
-safe_alter('txp_users', "MODIFY RealName VARCHAR(255) NOT NULL default '', MODIFY email VARCHAR(254) NOT NULL default ''");
+safe_alter('txp_users', "
+    MODIFY RealName VARCHAR(255) NOT NULL DEFAULT '',
+    MODIFY email VARCHAR(254) NOT NULL DEFAULT ''");
 
 // Remove any setup strings from lang table.
 safe_delete('txp_lang', "event='setup'");
@@ -54,7 +56,7 @@ foreach ($rs as $row) {
 }
 
 if (!$has_idx) {
-    safe_query('alter ignore table `'.PFX.'textpattern` add index url_title_idx(`url_title`(250))');
+    safe_query('alter ignore table `'.PFX.'textpattern` add index url_title_idx(url_title(250))');
 }
 
 // Remove is_default from txp_section table and make it a preference.
@@ -66,7 +68,7 @@ if (!safe_field('name', 'txp_prefs', "name = 'default_section'")) {
 $cols = getThings('describe `'.PFX.'txp_section`');
 
 if (in_array('is_default', $cols)) {
-    safe_alter('txp_section', "DROP `is_default`");
+    safe_alter('txp_section', "DROP is_default");
 }
 
 safe_alter('txp_css', 'MODIFY css MEDIUMTEXT NOT NULL');

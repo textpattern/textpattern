@@ -35,24 +35,24 @@ if (!safe_field('name', 'txp_prefs', "name = 'lastmod_keepalive'")) {
 $txpfile = getThings('describe `'.PFX.'txp_file`');
 
 if (!in_array('status', $txpfile)) {
-    safe_alter('txp_file', "add status smallint NOT NULL DEFAULT '4'");
+    safe_alter('txp_file', "ADD status SMALLINT NOT NULL DEFAULT '4'");
 }
 
 $update_files = 0;
 
 if (!in_array('modified', $txpfile)) {
-    safe_alter('txp_file', "add modified datetime NOT NULL default '0000-00-00 00:00:00'");
+    safe_alter('txp_file', "ADD modified DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
     $update_files = 1;
 }
 
 if (!in_array('created', $txpfile)) {
-    safe_alter('txp_file', "add created datetime NOT NULL default '0000-00-00 00:00:00'");
+    safe_alter('txp_file', "ADD created DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
     $update_files = 1;
 }
 
 if (!in_array('size', $txpfile)) {
     safe_alter('txp_file',
-        "add size bigint");
+        "ADD size BIGINT");
     $update_files = 1;
 }
 
@@ -61,7 +61,9 @@ if (!in_array('downloads', $txpfile)) {
 }
 
 if (array_intersect(array('modified', 'created'), $txpfile)) {
-    safe_alter('txp_file', "MODIFY modified datetime NOT NULL default '0000-00-00 00:00:00', MODIFY created datetime NOT NULL default '0000-00-00 00:00:00'");
+    safe_alter('txp_file', "
+        MODIFY modified DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+        MODIFY created DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
 }
 
 // Copy existing file timestamps into the new database columns.
@@ -83,7 +85,7 @@ safe_update('textpattern', "Keywords=TRIM(BOTH ',' FROM REPLACE(REPLACE(REPLACE(
 // Shift preferences to more intuitive spots.
 // Give positions, leave enough room for later additions.
 
-safe_update('txp_prefs', "position = 20", "name in(
+safe_update('txp_prefs', "position = 20", "name IN(
     'sitename',
     'comments_on_default',
     'img_dir',
@@ -92,7 +94,7 @@ safe_update('txp_prefs', "position = 20", "name in(
     'title_no_widow'
 )");
 
-safe_update('txp_prefs', "position = 40", "name in(
+safe_update('txp_prefs', "position = 40", "name IN(
     'siteurl',
     'comments_default_invite',
     'file_base_path',
@@ -101,8 +103,8 @@ safe_update('txp_prefs', "position = 40", "name in(
     'articles_use_excerpts'
 )");
 
-safe_update('txp_prefs', "position = 60", "name in('
-    site_slogan',
+safe_update('txp_prefs', "position = 60", "name IN(
+    'site_slogan',
     'comments_moderate',
     'never_display_email',
     'file_max_upload_size',
@@ -110,7 +112,7 @@ safe_update('txp_prefs', "position = 60", "name in('
     'allow_form_override'
 )");
 
-safe_update('txp_prefs', "position = 80", "name in(
+safe_update('txp_prefs', "position = 80", "name IN(
     'production_status',
     'comments_disabled_after',
     'tempdir',
@@ -119,7 +121,7 @@ safe_update('txp_prefs', "position = 80", "name in(
     'attach_titles_to_permalinks'
 )");
 
-safe_update('txp_prefs', "position = 100", "name in(
+safe_update('txp_prefs', "position = 100", "name IN(
     'gmtoffset',
     'comments_auto_append',
     'plugin_cache_dir',
@@ -127,7 +129,7 @@ safe_update('txp_prefs', "position = 100", "name in(
     'use_mail_on_feeds_id'
 )");
 
-safe_update('txp_prefs', "position = 120", "name in(
+safe_update('txp_prefs', "position = 120", "name IN(
     'is_dst',
     'comments_mode',
     'override_emailcharset'
@@ -135,37 +137,37 @@ safe_update('txp_prefs', "position = 120", "name in(
 
 safe_update('txp_prefs', "position = 120, event = 'publish'", "name = 'send_lastmod'");
 
-safe_update('txp_prefs', "position = 140", "name in(
+safe_update('txp_prefs', "position = 140", "name IN(
     'dateformat',
     'comments_dateformat',
     'spam_blacklists',
     'lastmod_keepalive'
 )");
 
-safe_update('txp_prefs', "position = 160", "name in(
+safe_update('txp_prefs', "position = 160", "name IN(
     'archive_dateformat',
     'comments_are_ol',
     'comment_means_site_updated',
     'ping_weblogsdotcom'
 )");
 
-safe_update('txp_prefs', "position = 180", "name in(
+safe_update('txp_prefs', "position = 180", "name IN(
     'permlink_mode',
     'comments_sendmail',
     'ping_textpattern_com'
 )");
 
-safe_update('txp_prefs', "position = 200", "name in(
+safe_update('txp_prefs', "position = 200", "name IN(
     'use_textile',
     'expire_logs_after'
 )");
 
-safe_update('txp_prefs', "position = 220", "name in(
+safe_update('txp_prefs', "position = 220", "name IN(
     'logging',
     'use_dns'
 )");
 
-safe_update('txp_prefs', "position = 240", "name in(
+safe_update('txp_prefs', "position = 240", "name IN(
     'use_comments',
     'max_url_len'
 )");
@@ -177,14 +179,14 @@ safe_update('txp_prefs', "position = 320", "name = 'allow_article_php_scripting'
 safe_update('txp_prefs', "position = 340", "name = 'allow_raw_php_scripting'");
 safe_update('txp_prefs', "position = 120, type = 1", "name = 'comments_disallow_images'");
 
-safe_update('txp_prefs', "event = 'comments'", "name in(
+safe_update('txp_prefs', "event = 'comments'", "name IN(
     'never_display_email',
     'comment_nofollow',
     'spam_blacklists',
     'comment_means_site_updated'
 )");
 
-safe_update('txp_prefs', "event = 'feeds'", "name in(
+safe_update('txp_prefs', "event = 'feeds'", "name IN(
     'syndicate_body_or_excerpt',
     'rss_how_many',
     'show_comment_count_in_feed',

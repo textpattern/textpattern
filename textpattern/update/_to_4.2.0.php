@@ -28,13 +28,16 @@ if (!defined('TXP_UPDATE')) {
 // Support for per-user private prefs.
 $cols = getThings('describe `'.PFX.'txp_prefs`');
 if (!in_array('user_name', $cols)) {
-    safe_alter('txp_prefs',
-    "ADD `user_name` varchar(64) NOT NULL default '', DROP INDEX `prefs_idx`, ADD UNIQUE `prefs_idx` (`prefs_id`, `name`(185), `user_name`), ADD INDEX `user_name` (`user_name`)");
+    safe_alter('txp_prefs', "
+        ADD user_name VARCHAR(64) NOT NULL DEFAULT '',
+        DROP INDEX prefs_idx,
+        ADD UNIQUE prefs_idx (prefs_id, name(185), user_name),
+        ADD INDEX user_name (user_name)");
 }
 
 // Remove a few global prefs in favour of future private ones.
 safe_delete('txp_prefs',
-    "user_name = '' AND name in ('article_list_pageby', 'author_list_pageby', 'comment_list_pageby', 'file_list_pageby', 'image_list_pageby', 'link_list_pageby', 'log_list_pageby')");
+    "user_name = '' AND name IN ('article_list_pageby', 'author_list_pageby', 'comment_list_pageby', 'file_list_pageby', 'image_list_pageby', 'link_list_pageby', 'log_list_pageby')");
 
 // Use dedicated prefs function for setting custom fields.
 safe_update('txp_prefs', "html='custom_set'",
@@ -65,7 +68,9 @@ if (!safe_field('name', 'txp_prefs', "name = 'default_event'")) {
 $cols = getThings('describe `'.PFX.'txp_image`');
 
 if (!in_array('thumb_w', $cols)) {
-    safe_alter('txp_image', "ADD `thumb_w` int(8) NOT NULL default 0, ADD `thumb_h` int(8) NOT NULL default 0");
+    safe_alter('txp_image', "
+        ADD thumb_w int(8) NOT NULL default 0,
+        ADD thumb_h int(8) NOT NULL default 0");
 }
 
 // Plugin flags.
@@ -80,8 +85,10 @@ if (!safe_field('name', 'txp_prefs', "name = 'theme_name'")) {
     safe_insert('txp_prefs', "prefs_id = 1, name = 'theme_name', val = 'classic', type = '1', event = 'admin', html = 'themename', position = '160'");
 }
 
-safe_alter('txp_plugin', 'CHANGE code code MEDIUMTEXT NOT NULL, CHANGE code_restore code_restore MEDIUMTEXT NOT NULL');
-safe_alter('txp_prefs', 'CHANGE val val TEXT NOT NULL');
+safe_alter('txp_plugin', "
+    CHANGE code code MEDIUMTEXT NOT NULL,
+    CHANGE code_restore code_restore MEDIUMTEXT NOT NULL");
+safe_alter('txp_prefs', "CHANGE val val TEXT NOT NULL");
 
 // Add author column to files and links, boldy assuming that the publisher in
 // charge of updating this site is the author of any existing content items.
@@ -97,7 +104,7 @@ foreach (array('txp_file', 'txp_link') as $table) {
 // Add indices on author columns.
 foreach (array('textpattern' => 'AuthorID', 'txp_image' => 'author') as $table => $col) {
     $has_idx = 0;
-    $rs = getRows('show index from `'.PFX.$table.'`');
+    $rs = getRows('SHOW INDEX FROM `'.PFX.$table.'`');
 
     foreach ($rs as $row) {
         if ($row['Key_name'] == 'author_idx') {

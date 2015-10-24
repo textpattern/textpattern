@@ -26,7 +26,7 @@ if (!defined('TXP_UPDATE')) {
 }
 
 $has_idx = 0;
-$rs = getRows('show index from `'.PFX.'txp_plugin`');
+$rs = getRows('SHOW INDEX FROM `'.PFX.'txp_plugin`');
 
 foreach ($rs as $row) {
     if ($row['Key_name'] == 'status_type_idx') {
@@ -35,7 +35,7 @@ foreach ($rs as $row) {
 }
 
 if (!$has_idx) {
-    safe_query('alter ignore table `'.PFX.'txp_plugin` add index status_type_idx(`status`, `type`)');
+    safe_query('ALTER IGNORE TABLE `'.PFX.'txp_plugin` ADD INDEX status_type_idx (`status`, `type`)');
 }
 
 // Preserve old tag behaviour during upgrades.

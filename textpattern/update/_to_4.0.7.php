@@ -49,7 +49,7 @@ if (!safe_field('val', 'txp_prefs', "name='author_list_pageby'")) {
 $txp = getThings('describe `'.PFX.'textpattern`');
 
 if (!in_array('Expires', $txp)) {
-    safe_alter("textpattern", "add `Expires` datetime NOT NULL default '0000-00-00 00:00:00' after `Posted`");
+    safe_alter('textpattern', "ADD Expires DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' AFTER Posted");
 }
 
 $has_expires_idx = 0;
@@ -62,7 +62,7 @@ foreach ($rs as $row) {
 }
 
 if (!$has_expires_idx) {
-    safe_query('alter ignore table `'.PFX.'textpattern` add index Expires_idx(Expires)');
+    safe_query('ALTER IGNORE TABLE `'.PFX.'textpattern` ADD INDEX Expires_idx (Expires)');
 }
 
 // Publish expired articles, or return 410?
