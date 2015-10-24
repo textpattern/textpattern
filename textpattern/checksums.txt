@@ -63,7 +63,6 @@
 /update/_to_4.5.0.php: b7d74ba6d1e892f2885a1426c7750811
 /update/_to_4.6.0.php: 120ea8076c9e59b6b0e84baaef5ce676
 /update/_update.php: 3402ad6d9cf92550da3b51296734a236
-/vendors/modernizr/modernizr/modernizr.js: e23f22a6520b44183a92538f272f495a
 /vendors/jquery/jquery/jquery.js: 13c0a5055cca7b2463b2f73701960b9e
 /vendors/jquery/ui/css/textpattern/jquery-ui.css: 7696d3664f3fa506ad52ca36691e356a
 /vendors/jquery/ui/js/jquery-ui.js: 6a8d2ad2b8a68c521fa71d81dfea6142
