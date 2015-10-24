@@ -134,7 +134,7 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
     KEY          categories_idx (Category1(10),Category2(10)),
     KEY          Posted         (Posted),
     FULLTEXT KEY searching      (Title,Body)
-) $tabletype PACK_KEYS=1 AUTO_INCREMENT=2 ";
+) $tabletype ";
 
 $setup_comment_invite = doSlash((gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite'));
 
@@ -149,7 +149,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_category` (
     rgt    INT(6)       NOT NULL DEFAULT '0',
     title  VARCHAR(255) NOT NULL DEFAULT '',
     PRIMARY KEY (id)
-) $tabletype PACK_KEYS=1";
+) $tabletype ";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (1, 'root', 'article', '', 1, 8, 'root')";
 $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (2, 'root', 'link', '', 1, 4, 'root')";
@@ -183,7 +183,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
     visible   TINYINT(4)               NOT NULL DEFAULT '1',
     PRIMARY KEY          (discussid),
     KEY         parentid (parentid)
-) $tabletype PACK_KEYS=1 AUTO_INCREMENT=2 ";
+) $tabletype ";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_discuss` VALUES (000001, 1, 'Donald Swain', 'donald.swain@example.com', 'example.com', '127.0.0.1', now(), '<p>I enjoy your site very much.</p>', 1)";
 
@@ -213,14 +213,14 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_file` (
     downloads   INT(4) UNSIGNED NOT NULL DEFAULT '0',
     PRIMARY KEY          (id),
     UNIQUE KEY  filename (filename(250))
-) $tabletype PACK_KEYS=0 AUTO_INCREMENT=1 ";
+) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_form` (
     name VARCHAR(255) NOT NULL DEFAULT '',
     type VARCHAR(28)  NOT NULL DEFAULT '',
     Form TEXT         NOT NULL,
     PRIMARY KEY (name(250))
-) $tabletype PACK_KEYS=1";
+) $tabletype ";
 
 // sql:txp_form
 $forms = array(
@@ -251,7 +251,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_image` (
     author    VARCHAR(255) NOT NULL DEFAULT '',
     thumbnail INT(2)       NOT NULL DEFAULT '0',
     PRIMARY KEY (id)
-) $tabletype PACK_KEYS=0";
+) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
     id      INT(9)      NOT NULL AUTO_INCREMENT,
@@ -263,7 +263,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
     PRIMARY KEY        (id),
     UNIQUE KEY  lang   (lang,name),
     KEY         lang_2 (lang,event)
-) $tabletype AUTO_INCREMENT=1 ";
+) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
     id          INT(6)       NOT NULL AUTO_INCREMENT,
@@ -274,7 +274,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
     linksort    VARCHAR(128) NOT NULL DEFAULT '',
     description TEXT         NOT NULL,
     PRIMARY KEY (id)
-) $tabletype PACK_KEYS=1 AUTO_INCREMENT=4 ";
+) $tabletype ";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (1, now(), 'textpattern', 'http://textpattern.com/', 'Textpattern Website', '10', '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (2, now(), 'textpattern', 'http://textpattern.net/', 'Textpattern User Documentation', '20', '')";
@@ -294,13 +294,13 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
     ip     VARCHAR(16)  NOT NULL DEFAULT '',
     PRIMARY KEY      (id),
     KEY         time (time)
-) $tabletype AUTO_INCREMENT=77 ";
+) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_page` (
     name      VARCHAR(255) NOT NULL DEFAULT '',
     user_html TEXT         NOT NULL,
     PRIMARY KEY (name(250))
-) $tabletype PACK_KEYS=1";
+) $tabletype ";
 
 // sql:txp_page
 foreach (array('archive', 'default', 'error_default') as $page_name) {
@@ -436,7 +436,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_section` (
     searchable   INT(2)       NOT NULL DEFAULT '1',
     title        VARCHAR(255) NOT NULL DEFAULT '',
     PRIMARY KEY (name(250))
-) $tabletype PACK_KEYS=1";
+) $tabletype ";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('articles', 'archive', 'default', 1, 1, 1, 1, 'Articles')";
 $create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('default', 'default', 'default', 0, 1, 1, 1, 'Default')";
@@ -452,7 +452,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_users` (
     nonce       VARCHAR(64)  NOT NULL DEFAULT '',
     PRIMARY KEY      (user_id),
     UNIQUE KEY  name (name)
-) $tabletype PACK_KEYS=1 AUTO_INCREMENT=2 ";
+) $tabletype ";
 
 $GLOBALS['txp_install_successful'] = true;
 $GLOBALS['txp_err_count'] = 0;
