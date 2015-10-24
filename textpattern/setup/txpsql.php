@@ -172,15 +172,15 @@ $create_sql[] = "INSERT INTO `".PFX."txp_css`(name,css) VALUES('ie8', ".file2sql
 // /sql:txp_css
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
-    discussid INT(6) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
-    parentid  INT(8)                   NOT NULL DEFAULT '0',
-    name      VARCHAR(255)             NOT NULL DEFAULT '',
-    email     VARCHAR(50)              NOT NULL DEFAULT '',
-    web       VARCHAR(255)             NOT NULL DEFAULT '',
-    ip        VARCHAR(100)             NOT NULL DEFAULT '',
-    posted    DATETIME                 NOT NULL DEFAULT '0000-00-00 00:00:00',
-    message   TEXT                     NOT NULL,
-    visible   TINYINT(4)               NOT NULL DEFAULT '1',
+    discussid INT(6) ZEROFILL NOT NULL AUTO_INCREMENT,
+    parentid  INT(8)          NOT NULL DEFAULT '0',
+    name      VARCHAR(255)    NOT NULL DEFAULT '',
+    email     VARCHAR(50)     NOT NULL DEFAULT '',
+    web       VARCHAR(255)    NOT NULL DEFAULT '',
+    ip        VARCHAR(100)    NOT NULL DEFAULT '',
+    posted    DATETIME        NOT NULL DEFAULT '0000-00-00 00:00:00',
+    message   TEXT            NOT NULL,
+    visible   TINYINT(4)      NOT NULL DEFAULT '1',
     PRIMARY KEY          (discussid),
     KEY         parentid (parentid)
 ) $tabletype ";
