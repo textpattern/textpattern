@@ -32,7 +32,7 @@ $txpcat = getThings('describe `'.PFX.'txp_category`');
 
 if (!in_array('id', $txpcat)) {
     safe_alter('txp_category',
-        'ADD id INT(6) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST');
+        'ADD id INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST');
 }
 
 if (!in_array('parent', $txpcat)) {
@@ -40,11 +40,11 @@ if (!in_array('parent', $txpcat)) {
 }
 
 if (!in_array('lft', $txpcat)) {
-    safe_alter('txp_category', "ADD lft INT(6) NOT NULL DEFAULT '0'");
+    safe_alter('txp_category', "ADD lft INT NOT NULL DEFAULT '0'");
 }
 
 if (!in_array('rgt', $txpcat)) {
-    safe_alter('txp_category', "ADD rgt INT(6) NOT NULL DEFAULT '0'");
+    safe_alter('txp_category', "ADD rgt INT NOT NULL DEFAULT '0'");
 }
 
 if (in_array('level', $txpcat)) {
@@ -59,12 +59,12 @@ if (!in_array('Keywords', $txp)) {
 
 if (in_array('Listing1', $txp) && !in_array('textile_body', $txp)) {
     safe_alter('textpattern',
-        "CHANGE Listing1 textile_body INT(2) DEFAULT '1' NOT NULL");
+        "CHANGE Listing1 textile_body INT DEFAULT '1' NOT NULL");
 }
 
 if (in_array('Listing2', $txp) && !in_array('textile_excerpt', $txp)) {
     safe_alter('textpattern',
-        "CHANGE Listing2 textile_excerpt INT(2) DEFAULT '1' NOT NULL");
+        "CHANGE Listing2 textile_excerpt INT DEFAULT '1' NOT NULL");
 }
 
 if (!in_array('url_title', $txp)) {
@@ -82,7 +82,7 @@ if (!in_array('Excerpt_html', $txp)) {
 
 // Comments count cache field.
 if (!in_array('comments_count', $txp)) {
-    safe_alter('textpattern', "ADD comments_count INT(8) NOT NULL AFTER AnnotateInvite ");
+    safe_alter('textpattern', "ADD comments_count INT NOT NULL AFTER AnnotateInvite ");
 }
 
 // Custom fields added for g1.19.
@@ -129,7 +129,7 @@ if (!in_array('custom_10', $txp)) {
 $txpsect = getThings('describe `'.PFX.'txp_section`');
 
 if (!in_array('searchable', $txpsect)) {
-    safe_alter('txp_section', "ADD searchable INT(2) NOT NULL DEFAULT 1");
+    safe_alter('txp_section', "ADD searchable INT NOT NULL DEFAULT 1");
 }
 
 $txpuser = getThings('describe `'.PFX.'txp_users`');
@@ -346,12 +346,12 @@ if (safe_field('val', 'txp_prefs', "name='file_base_path'") === false) {
 if (!safe_query("SELECT 1 FROM `".PFX."txp_file` LIMIT 0")) {
     // Do install.
     safe_query("CREATE TABLE `".PFX."txp_file` (
-        id          INT(11)         NOT NULL AUTO_INCREMENT,
-        filename    VARCHAR(255)    NOT NULL DEFAULT '',
-        category    VARCHAR(255)    NOT NULL DEFAULT '',
-        permissions VARCHAR(32)     NOT NULL DEFAULT '0',
-        description TEXT            NOT NULL DEFAULT '',
-        downloads   INT(4) UNSIGNED NOT NULL DEFAULT '0',
+        id          INT          NOT NULL AUTO_INCREMENT,
+        filename    VARCHAR(255) NOT NULL DEFAULT '',
+        category    VARCHAR(255) NOT NULL DEFAULT '',
+        permissions VARCHAR(32)  NOT NULL DEFAULT '0',
+        description TEXT         NOT NULL DEFAULT '',
+        downloads   INT UNSIGNED NOT NULL DEFAULT '0',
         PRIMARY KEY          ( id ),
         UNIQUE KEY  filename ( filename )
     ) $tabletype ");
@@ -374,7 +374,7 @@ if (!in_array('secret', $txpnonce)) {
 // 1.0: flag for admin-side plugins.
 $txpplugin = getThings('describe `'.PFX.'txp_plugin`');
 if (!in_array('type', $txpplugin)) {
-    safe_alter('txp_plugin', "ADD type INT(2) NOT NULL DEFAULT '0'");
+    safe_alter('txp_plugin', "ADD type INT NOT NULL DEFAULT '0'");
 }
 
 // 1.0: log status and method.
@@ -616,7 +616,7 @@ EOF;
 if (!safe_query("SELECT 1 FROM `".PFX."txp_lang` LIMIT 0")) {
     // Do install.
     safe_query("CREATE TABLE `".PFX."txp_lang` (
-        id      INT( 9 ) NOT NULL AUTO_INCREMENT ,
+        id      INT NOT NULL AUTO_INCREMENT ,
         lang    VARCHAR(16),
         name    VARCHAR(64),
         event   VARCHAR( 64 ) ,
