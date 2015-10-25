@@ -35,7 +35,7 @@ foreach ($rs as $row) {
 }
 
 if (!$has_idx) {
-    safe_query('ALTER IGNORE TABLE `'.PFX.'txp_plugin` ADD INDEX status_type_idx (`status`, `type`)');
+    safe_query('ALTER IGNORE TABLE `'.PFX.'txp_plugin` ADD INDEX status_type_idx (status, type)');
 }
 
 // Preserve old tag behaviour during upgrades.
