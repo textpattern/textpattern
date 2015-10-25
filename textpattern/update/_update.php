@@ -150,6 +150,12 @@ if (version_compare($dbversion, '4.5.4', '<')) {
     }
 }
 
+if (version_compare($dbversion, '4.5.7', '<')) {
+    if ((include txpath.DS.'update'.DS.'_to_4.5.7.php') !== false) {
+        $dbversion = '4.5.7';
+    }
+}
+
 if (version_compare($dbversion, '4.6.0', '<')) {
     if ((include txpath.DS.'update'.DS.'_to_4.6.0.php') !== false) {
 ;#        $dbversion = '4.6.0';
