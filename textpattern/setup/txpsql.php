@@ -456,7 +456,7 @@ $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_auto_append
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'dbupdatetime', '1122194504', 2, 'publish', 'text_input', 0, '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'version', '1.0rc4', 2, 'publish', 'text_input', 0, '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'doctype', 'html5', 0, 'publish', 'doctypes', 190, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'gmtoffset', $prefs['gmtoffset'], 0, 'site', 'gmtoffset', 100, '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'gmtoffset', ".$prefs['gmtoffset'].", 0, 'site', 'gmtoffset', 100, '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'plugin_cache_dir', '', 0, 'admin', 'text_input', 80, '')";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_section` (
@@ -491,14 +491,16 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_users` (
 
 $GLOBALS['txp_install_successful'] = true;
 $GLOBALS['txp_err_count'] = 0;
+$GLOBALS['txp_err_html'] = '';
 
 foreach ($create_sql as $query) {
     $result = mysqli_query($link, $query);
 
     if (!$result) {
         $GLOBALS['txp_err_count']++;
-        echo "<b>".$GLOBALS['txp_err_count'].".</b> ".mysqli_error($link)."<br />\n";
-        echo "<!--\n $query \n-->\n";
+        $GLOBALS['txp_err_html'] .= '<li>'.n.
+            '<b>'.htmlspecialchars(mysqli_error($link)).'</b><br />'.n.
+            '<pre>'.htmlspecialchars($query).'</pre>'.n.'</li>'.n;
         $GLOBALS['txp_install_successful'] = false;
     }
 }
