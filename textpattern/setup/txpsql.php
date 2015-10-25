@@ -143,7 +143,7 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
     FULLTEXT KEY searching          (Title,Body)
 ) $tabletype ";
 
-$setup_comment_invite = doSlash((gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite'));
+$setup_comment_invite = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite');
 
 $create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), '0000-00-00 00:00:00', '".doSlash($username)."', NOW(), '', 'Welcome to your site', '', ".file2sql('textpattern.body').", ".file2sql('textpattern.body_html').", ".file2sql('textpattern.excerpt').", ".file2sql('textpattern.excerpt_html').", '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, '1', '1', 'articles', '', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NOW())";
 
@@ -367,97 +367,127 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
     KEY        user_name (user_name)
 ) $tabletype ";
 
-$prefs['blog_uid'] = md5(uniqid(rand(), true));
-$prefs['gmtoffset'] = sprintf("%+d", gmmktime(0, 0, 0) - mktime(0, 0, 0));
+$blog_uid  = md5(uniqid(rand(), true));
+$gmtoffset = sprintf("%+d", gmmktime(0, 0, 0) - mktime(0, 0, 0));
 
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'prefs_id', '1', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'sitename', '".doSlash(gTxt('my_site'))."', 0, 'publish', 'text_input', 10, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'siteurl', 'comment.local', 0, 'publish', 'text_input', 20, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'site_slogan', '".doSlash(gTxt('my_slogan'))."', 0, 'publish', 'text_input', 30, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'language', 'en-gb', 2, 'publish', 'languages', 40, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'url_mode', '1', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'timeoffset', '0', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_on_default', '0', 0, 'comments', 'yesnoradio', 140, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_default_invite', '".$setup_comment_invite."', 0, 'comments', 'text_input', 180, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_mode', '0', 0, 'comments', 'commentmode', 200, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_disabled_after', '42', 0, 'comments', 'weeks', 210, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'use_textile', '2', 0, 'publish', 'pref_text', 110, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'ping_weblogsdotcom', '0', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'rss_how_many', '5', 1, 'admin', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'logging', 'none', 0, 'publish', 'logging', 100, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'use_comments', '1', 0, 'publish', 'yesnoradio', 120, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'use_categories', '1', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'use_sections', '1', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'send_lastmod', '0', 1, 'admin', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'path_from_root', '/', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'lastmod', '2005-07-23 16:24:10', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_dateformat', '%b %d, %I:%M %p', 0, 'comments', 'dateformats', 190, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'dateformat', 'since', 0, 'publish', 'dateformats', 70, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'archive_dateformat', '%b %d, %I:%M %p', 0, 'publish', 'dateformats', 80, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_moderate', '1', 0, 'comments', 'yesnoradio', 130, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'img_dir', 'images', 1, 'admin', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_disallow_images', '0', 0, 'comments', 'yesnoradio', 170, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_sendmail', '0', 0, 'comments', 'yesnoradio', 160, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_max_upload_size', '2000000', 1, 'admin', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_list_pageby', '25', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'path_to_site', '', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'article_list_pageby', '25', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'link_list_pageby', '25', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'image_list_pageby', '25', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'log_list_pageby', '25', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comment_list_pageby', '25', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'permlink_mode', '".doSlash($permlink_mode)."', 0, 'publish', 'permlinkmodes', 90, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_are_ol', '1', 0, 'comments', 'yesnoradio', 150, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'is_dst', '0', 0, 'publish', 'yesnoradio', 60, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'locale', 'en_GB.UTF-8', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'tempdir', '".doSlash(find_temp_dir())."', 1, 'admin', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_base_path', '".doSlash(dirname(txpath).DS.'files')."', 1, 'admin', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_uid', '".$prefs['blog_uid']."', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_mail_uid', '".doSlash('useremail')."', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_time_uid', '2005', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'edit_raw_css_by_default', '1', 1, 'css', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'allow_page_php_scripting', '1', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'allow_article_php_scripting', '1', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'allow_raw_php_scripting', '0', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'textile_links', '0', 1, 'link', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'show_article_category_count', '1', 2, 'category', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'show_comment_count_in_feed', '1', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'syndicate_body_or_excerpt', '1', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'include_email_atom', '1', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comment_means_site_updated', '1', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'never_display_email', '1', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_require_name', '1', 1, 'comments', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_require_email', '1', 1, 'comments', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'articles_use_excerpts', '1', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'allow_form_override', '1', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'attach_titles_to_permalinks', '1', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'permalink_title_format', '1', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'expire_logs_after', '7', 1, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'use_plugins', '1', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'custom_1_set', 'custom1', 1, 'custom', 'text_input', 1, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'custom_2_set', 'custom2', 1, 'custom', 'text_input', 2, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'custom_3_set', '', 1, 'custom', 'text_input', 3, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'custom_4_set', '', 1, 'custom', 'text_input', 4, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'custom_5_set', '', 1, 'custom', 'text_input', 5, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'custom_6_set', '', 1, 'custom', 'text_input', 6, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'custom_7_set', '', 1, 'custom', 'text_input', 7, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'custom_8_set', '', 1, 'custom', 'text_input', 8, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'custom_9_set', '', 1, 'custom', 'text_input', 9, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'custom_10_set', '', 1, 'custom', 'text_input', 10, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'use_dns', '0', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'admin_side_plugins', '1', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comment_nofollow', '1', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'use_mail_on_feeds_id', '0', 1, 'publish', 'yesnoradio', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'max_url_len', '1000', 1, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'spam_blacklists', '', 1, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'override_emailcharset', '0', 1, 'admin', 'yesnoradio', 21, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'production_status', 'testing', 0, 'publish', 'prod_levels', 210, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_auto_append', '0', 0, 'comments', 'yesnoradio', 211, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'dbupdatetime', '1122194504', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'version', '1.0rc4', 2, 'publish', 'text_input', 0, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'doctype', 'html5', 0, 'publish', 'doctypes', 190, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'gmtoffset', ".$prefs['gmtoffset'].", 0, 'site', 'gmtoffset', 100, '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'plugin_cache_dir', '', 0, 'admin', 'text_input', 80, '')";
+$prefs = array(
+    'admin' => array(
+        array(0,  20, 'text_input'      , 'img_dir'                    , 'images'),
+        array(0,  40, 'text_input'      , 'file_base_path'             , dirname(txpath).DS.'files'),
+        array(0,  60, 'text_input'      , 'file_max_upload_size'       , '2000000'),
+        array(0,  80, 'text_input'      , 'tempdir'                    , find_temp_dir()),
+        array(0, 100, 'text_input'      , 'plugin_cache_dir'           , ''),
+        array(0, 110, 'text_input'      , 'smtp_from'                  , ''),
+        array(0, 115, 'text_input'      , 'publisher_email'            , ''),
+        array(0, 120, 'yesnoradio'      , 'override_emailcharset'      , '0'),
+        array(0, 130, 'yesnoradio'      , 'enable_xmlrpc_server'       , '0'),
+        array(0, 150, 'default_event'   , 'default_event'              , 'article'),
+        array(0, 160, 'themename'       , 'theme_name'                 , 'hive'),
+    ),
+    'category' => array(
+        array(2,   0, 'yesnoradio'      , 'show_article_category_count', '1'),
+    ),
+    'comments' => array(
+        array(0,  20, 'yesnoradio'      , 'comments_on_default'        , '0'),
+        array(0,  40, 'text_input'      , 'comments_default_invite'    , $setup_comment_invite),
+        array(0,  60, 'yesnoradio'      , 'comments_moderate'          , '1'),
+        array(0,  80, 'weeks'           , 'comments_disabled_after'    , '42'),
+        array(0, 100, 'yesnoradio'      , 'comments_auto_append'       , '0'),
+        array(0, 120, 'commentmode'     , 'comments_mode'              , '0'),
+        array(0, 140, 'dateformats'     , 'comments_dateformat'        , '%b %d, %I:%M %p'),
+        array(0, 160, 'commentsendmail' , 'comments_sendmail'          , '0'),
+        array(0, 180, 'yesnoradio'      , 'comments_are_ol'            , '1'),
+        array(0, 200, 'yesnoradio'      , 'comment_means_site_updated' , '1'),
+        array(0, 220, 'yesnoradio'      , 'comments_require_name'      , '1'),
+        array(0, 240, 'yesnoradio'      , 'comments_require_email'     , '1'),
+        array(0, 260, 'yesnoradio'      , 'never_display_email'        , '1'),
+        array(0, 280, 'yesnoradio'      , 'comment_nofollow'           , '1'),
+        array(0, 300, 'yesnoradio'      , 'comments_disallow_images'   , '0'),
+        array(0, 320, 'yesnoradio'      , 'comments_use_fat_textile'   , '0'),
+        array(0, 340, 'text_input'      , 'spam_blacklists'            , ''),
+    ),
+    'custom' => array(
+        array(0,   1, 'custom_set'      , 'custom_1_set'               , 'custom1'),
+        array(0,   2, 'custom_set'      , 'custom_2_set'               , 'custom2'),
+        array(0,   3, 'custom_set'      , 'custom_3_set'               , ''),
+        array(0,   4, 'custom_set'      , 'custom_4_set'               , ''),
+        array(0,   5, 'custom_set'      , 'custom_5_set'               , ''),
+        array(0,   6, 'custom_set'      , 'custom_6_set'               , ''),
+        array(0,   7, 'custom_set'      , 'custom_7_set'               , ''),
+        array(0,   8, 'custom_set'      , 'custom_8_set'               , ''),
+        array(0,   9, 'custom_set'      , 'custom_9_set'               , ''),
+        array(0,  10, 'custom_set'      , 'custom_10_set'              , ''),
+    ),
+    'feeds' => array(
+        array(0,  20, 'yesnoradio'      , 'syndicate_body_or_excerpt'  , '1'),
+        array(0,  40, 'text_input'      , 'rss_how_many'               , '5'),
+        array(0,  60, 'yesnoradio'      , 'show_comment_count_in_feed' , '1'),
+        array(0,  80, 'yesnoradio'      , 'include_email_atom'         , '1'),
+        array(0, 100, 'yesnoradio'      , 'use_mail_on_feeds_id'       , '0'),
+    ),
+    'publish' => array(
+        array(0,  20, 'yesnoradio'      , 'title_no_widow'             , '0'),
+        array(0,  40, 'yesnoradio'      , 'articles_use_excerpts'      , '1'),
+        array(0,  60, 'yesnoradio'      , 'allow_form_override'        , '1'),
+        array(0,  80, 'yesnoradio'      , 'attach_titles_to_permalinks', '1'),
+        array(0, 100, 'yesnoradio'      , 'permalink_title_format'     , '1'),
+        array(0, 120, 'yesnoradio'      , 'send_lastmod'               , '1'),
+        array(0, 130, 'yesnoradio'      , 'publish_expired_articles'   , '0'),
+        array(0, 140, 'yesnoradio'      , 'lastmod_keepalive'          , '0'),
+        array(0, 160, 'yesnoradio'      , 'ping_weblogsdotcom'         , '0'),
+        array(0, 200, 'pref_text'       , 'use_textile'                , '1'),
+        array(0, 220, 'yesnoradio'      , 'use_dns'                    , '0'),
+        array(0, 260, 'yesnoradio'      , 'use_plugins'                , '1'),
+        array(0, 280, 'yesnoradio'      , 'admin_side_plugins'         , '1'),
+        array(0, 300, 'yesnoradio'      , 'allow_page_php_scripting'   , '1'),
+        array(0, 320, 'yesnoradio'      , 'allow_article_php_scripting', '1'),
+        array(0, 340, 'text_input'      , 'max_url_len'                , '1000'),
+        array(2,   0, 'text_input'      , 'blog_mail_uid'              , $useremail),
+        array(2,   0, 'text_input'      , 'blog_time_uid'              , '2005'),
+        array(2,   0, 'text_input'      , 'blog_uid'                   , $blog_uid),
+        array(2,   0, 'text_input'      , 'dbupdatetime'               , '0'),
+        array(2,   0, 'text_input'      , 'lastmod'                    , '2005-07-23 16:24:10'),
+        array(2,   0, 'text_input'      , 'locale'                     , 'en_GB.UTF-8'),
+        array(2,   0, 'text_input'      , 'path_from_root'             , '/'),
+        array(2,   0, 'text_input'      , 'path_to_site'               , dirname(txpath)),
+        array(2,   0, 'text_input'      , 'prefs_id'                   , '1'),
+        array(2,   0, 'text_input'      , 'searchable_article_fields'  , 'Title, Body'),
+        array(2,   0, 'text_input'      , 'textile_updated'            , '1'),
+        array(2,   0, 'text_input'      , 'timeoffset'                 , '0'),
+        array(2,   0, 'textinput'       , 'timezone_key'               , ''),
+        array(2,   0, 'text_input'      , 'url_mode'                   , '1'),
+        array(2,   0, 'text_input'      , 'use_categories'             , '1'),
+        array(2,   0, 'text_input'      , 'use_sections'               , '1'),
+        array(2,   0, 'text_input'      , 'version'                    , '4.5.7'),
+        array(2,  40, 'languages'       , 'language'                   , 'en-gb'),
+    ),
+    'section' => array(
+        array(2,   0, 'text_input'      , 'default_section'            , 'articles'),
+    ),
+    'site' => array(
+        array(0,  20, 'text_input'      , 'sitename'                   , gTxt('my_site')),
+        array(0,  30, 'text_input'      , 'site_slogan'                , gTxt('my_slogan')),
+        array(0,  40, 'text_input'      , 'siteurl'                    , 'example.com'),
+        array(0,  80, 'prod_levels'     , 'production_status'          , 'testing'),
+        array(0, 100, 'gmtoffset_select', 'gmtoffset'                  , $gmtoffset),
+        array(0, 115, 'yesnoradio'      , 'auto_dst'                   , '0'),
+        array(0, 120, 'is_dst'          , 'is_dst'                     , '0'),
+        array(0, 140, 'dateformats'     , 'dateformat'                 , 'since'),
+        array(0, 160, 'dateformats'     , 'archive_dateformat'         , '%b %d, %I:%M %p'),
+        array(0, 180, 'permlinkmodes'   , 'permlink_mode'              , $permlink_mode),
+        array(0, 190, 'doctypes'        , 'doctype'                    , 'html5'),
+        array(0, 220, 'logging'         , 'logging'                    , 'none'),
+        array(0, 230, 'text_input'      , 'expire_logs_after'          , '7'),
+        array(0, 240, 'yesnoradio'      , 'use_comments'               , '1'),
+    )
+);
+
+foreach ($prefs as $event => $event_prefs) {
+    foreach ($event_prefs as $p) {
+        $create_sql[] = "INSERT INTO `".PFX."txp_prefs` (event, type, position, html, name, val) ".
+            "VALUES ('".$event."', ".$p[0].", ".$p[1].", '".$p[2]."', '".$p[3]."', '".doSlash($p[4])."')";
+    }
+}
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_section` (
     name         VARCHAR(255) NOT NULL,
@@ -513,7 +543,7 @@ if (defined('TXP_TEST')) {
 require_once txpath.'/lib/IXRClass.php';
 $client = new IXR_Client('http://rpc.textpattern.com');
 
-if (!$client->query('tups.getLanguage', $prefs['blog_uid'], LANG)) {
+if (!$client->query('tups.getLanguage', $blog_uid, LANG)) {
     // If cannot install from lang file, setup the English lang.
     if (!install_language_from_file(LANG)) {
         $lang = 'en-gb';
