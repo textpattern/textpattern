@@ -169,3 +169,9 @@ safe_alter('txp_section',       "DROP PRIMARY KEY,              ADD PRIMARY KEY 
 safe_alter('txp_prefs',         "DROP INDEX prefs_idx,          ADD UNIQUE prefs_idx (prefs_id,name(185),user_name)");
 safe_alter('textpattern',       "DROP INDEX section_status_idx, ADD INDEX section_status_idx (Section(249),Status)");
 safe_alter('textpattern',       "DROP INDEX url_title_idx,      ADD INDEX url_title_idx (url_title(250))");
+
+// Fix typo: textinput should be text_input
+safe_update('txp_prefs', "html = 'text_input'", "name = 'timezone_key'");
+
+// Fix typo: position 40 should be 0 (because it's a hidden pref)
+safe_update('txp_prefs', "position = 0", "name = 'language'");
