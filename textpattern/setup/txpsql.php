@@ -145,7 +145,7 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
 
 $setup_comment_invite = doSlash((gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite'));
 
-$create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), '".doSlash($username)."', NOW(), '', 'Welcome to your site', '', ".file2sql('textpattern.body').", ".file2sql('textpattern.body_html').", ".file2sql('textpattern.excerpt').", ".file2sql('textpattern.excerpt_html').", '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, 1, 1, 'articles', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NOW())";
+$create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), '0000-00-00 00:00:00', '".doSlash($username)."', NOW(), '', 'Welcome to your site', '', ".file2sql('textpattern.body').", ".file2sql('textpattern.body_html').", ".file2sql('textpattern.excerpt').", ".file2sql('textpattern.excerpt_html').", '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, '1', '1', 'articles', '', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NOW())";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_category` (
     id          INT          NOT NULL AUTO_INCREMENT,
@@ -160,14 +160,14 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_category` (
     PRIMARY KEY (id)
 ) $tabletype ";
 
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (1, 'root', 'article', '', 1, 8, 'root')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (2, 'root', 'link', '', 1, 4, 'root')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (3, 'root', 'image', '', 1, 4, 'root')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (4, 'root', 'file', '', 1, 2, 'root')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (5, 'hope-for-the-future', 'article', 'root', 2, 3, 'Hope for the future')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (6, 'meaningful-labor', 'article', 'root', 4, 5, 'Meaningful labor')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (7, 'reciprocal-affection', 'article', 'root', 6, 7, 'Reciprocal affection')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (8, 'textpattern', 'link', 'root', 2, 3, 'Textpattern')";
+$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (1, 'root', 'article', '', 1, 8, 'root', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (2, 'root', 'link', '', 1, 4, 'root', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (3, 'root', 'image', '', 1, 4, 'root', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (4, 'root', 'file', '', 1, 2, 'root', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (5, 'hope-for-the-future', 'article', 'root', 2, 3, 'Hope for the future', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (6, 'meaningful-labor', 'article', 'root', 4, 5, 'Meaningful labor', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (7, 'reciprocal-affection', 'article', 'root', 6, 7, 'Reciprocal affection', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (8, 'textpattern', 'link', 'root', 2, 3, 'Textpattern', '')";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_css` (
     name VARCHAR(255) NOT NULL,
@@ -185,7 +185,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
     discussid INT(6) ZEROFILL NOT NULL AUTO_INCREMENT,
     parentid  INT             NOT NULL DEFAULT '0',
     name      VARCHAR(255)    NOT NULL DEFAULT '',
-    email     VARCHAR(50)     NOT NULL DEFAULT '',
+    email     VARCHAR(254)    NOT NULL DEFAULT '',
     web       VARCHAR(255)    NOT NULL DEFAULT '',
     ip        VARCHAR(100)    NOT NULL DEFAULT '',
     posted    DATETIME        NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -298,12 +298,12 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
     KEY         author_idx (author)
 ) $tabletype ";
 
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (1, NOW(), 'textpattern', 'http://textpattern.com/', 'Textpattern Website', '10', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (2, NOW(), 'textpattern', 'http://textpattern.net/', 'Textpattern User Documentation', '20', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (3, NOW(), 'textpattern', 'http://textpattern.org/', 'Textpattern Resources', '30', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (4, NOW(), 'textpattern', 'http://textpattern.com/@textpattern', '@textpattern', '40', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (5, NOW(), 'textpattern', 'http://textpattern.com/+', '+Textpattern CMS', '50', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (6, NOW(), 'textpattern', 'http://textpattern.com/facebook', 'Textpattern Facebook Group', '60', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (1, NOW(), 'textpattern', 'http://textpattern.com/', 'Textpattern Website', '10', '', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (2, NOW(), 'textpattern', 'http://textpattern.net/', 'Textpattern User Documentation', '20', '', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (3, NOW(), 'textpattern', 'http://textpattern.org/', 'Textpattern Resources', '30', '', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (4, NOW(), 'textpattern', 'http://textpattern.com/@textpattern', '@textpattern', '40', '', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (5, NOW(), 'textpattern', 'http://textpattern.com/+', '+Textpattern CMS', '50', '', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (6, NOW(), 'textpattern', 'http://textpattern.com/facebook', 'Textpattern Facebook Group', '60', '', '')";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
     id     INT          NOT NULL AUTO_INCREMENT,
@@ -313,7 +313,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
     refer  MEDIUMTEXT   NOT NULL,
     status INT          NOT NULL DEFAULT '200',
     method VARCHAR(16)  NOT NULL DEFAULT 'GET',
-    ip     VARCHAR(16)  NOT NULL DEFAULT '',
+    ip     VARCHAR(45)  NOT NULL DEFAULT '',
 
     PRIMARY KEY      (id),
     KEY         time (time),
@@ -321,7 +321,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_page` (
-    name      VARCHAR(255) NOT NULL DEFAULT '',
+    name      VARCHAR(255) NOT NULL,
     user_html TEXT         NOT NULL,
 
     PRIMARY KEY (name(250))
@@ -348,13 +348,13 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_plugin` (
     load_order   TINYINT  UNSIGNED NOT NULL DEFAULT '5',
     flags        SMALLINT UNSIGNED NOT NULL DEFAULT '0',
 
-    UNIQUE KEY name            (name)
+    UNIQUE KEY name            (name),
     KEY        status_type_idx (status,type)
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
     prefs_id  INT               NOT NULL DEFAULT '1',
-    name      VARCHAR(255)      NOT NULL DEFAULT '',
+    name      VARCHAR(255)      NOT NULL,
     val       TEXT              NOT NULL,
     type      SMALLINT UNSIGNED NOT NULL DEFAULT '2',
     event     VARCHAR(255)      NOT NULL DEFAULT 'publish',
