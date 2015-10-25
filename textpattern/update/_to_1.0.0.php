@@ -152,7 +152,7 @@ if ($txpusers) {
 }
 
 // 1.0rc: expanding password field in txp_users.
-safe_alter('txp_users', "CHANGE pass pass VARCHAR( 128 ) NOT NULL");
+safe_alter('txp_users', "CHANGE pass pass VARCHAR(128) NOT NULL");
 safe_alter('textpattern', "CHANGE Body Body MEDIUMTEXT NOT NULL");
 safe_alter('textpattern', "CHANGE Body_html Body_html MEDIUMTEXT NOT NULL");
 safe_alter('textpattern', "CHANGE Excerpt Excerpt TEXT NOT NULL");
@@ -352,8 +352,8 @@ if (!safe_query("SELECT 1 FROM `".PFX."txp_file` LIMIT 0")) {
         permissions VARCHAR(32)  NOT NULL DEFAULT '0',
         description TEXT         NOT NULL DEFAULT '',
         downloads   INT UNSIGNED NOT NULL DEFAULT '0',
-        PRIMARY KEY          ( id ),
-        UNIQUE KEY  filename ( filename )
+        PRIMARY KEY          (id),
+        UNIQUE KEY  filename (filename)
     ) $tabletype ");
 }
 
@@ -600,7 +600,7 @@ if (!in_array('position', $txpprefs)) {
     }
 }
 
-safe_alter('txp_prefs', "CHANGE html html VARCHAR( 64 ) DEFAULT 'text_input' NOT NULL");
+safe_alter('txp_prefs', "CHANGE html html VARCHAR(64) DEFAULT 'text_input' NOT NULL");
 safe_update('txp_prefs', "html='text_input'", "html=''");
 
 if (!fetch('form', 'txp_form', 'name', 'search_results')) {
@@ -616,13 +616,13 @@ EOF;
 if (!safe_query("SELECT 1 FROM `".PFX."txp_lang` LIMIT 0")) {
     // Do install.
     safe_query("CREATE TABLE `".PFX."txp_lang` (
-        id      INT NOT NULL AUTO_INCREMENT ,
-        lang    VARCHAR(16),
-        name    VARCHAR(64),
-        event   VARCHAR( 64 ) ,
+        id      INT         NOT NULL AUTO_INCREMENT ,
+        lang    VARCHAR(16) NOT NULL,
+        name    VARCHAR(64) NOT NULL,
+        event   VARCHAR(64) NOT NULL,
         data    TINYTEXT,
         lastmod TIMESTAMP,
-        PRIMARY KEY         ( id ),
+        PRIMARY KEY         (id),
         UNIQUE INDEX lang   (lang,name),
         INDEX        lang_2 (lang,event)
     ) $tabletype ");
