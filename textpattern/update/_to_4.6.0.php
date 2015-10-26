@@ -26,7 +26,7 @@ if (!defined('TXP_UPDATE')) {
 }
 
 safe_alter('textpattern', "
-    CHANGE COLUMN textile_body textile_body VARCHAR(32) NOT NULL DEFAULT '1',
+    CHANGE COLUMN textile_body    textile_body    VARCHAR(32) NOT NULL DEFAULT '1',
     CHANGE COLUMN textile_excerpt textile_excerpt VARCHAR(32) NOT NULL DEFAULT '1'");
 safe_update('txp_prefs', "name = 'pane_article_textfilter_help_visible'", "name = 'pane_article_textile_help_visible'");
 
@@ -36,7 +36,7 @@ $core_ev = doQuote(join("','", array('site', 'admin', 'publish', 'feeds', 'custo
 // 1) Increase event column size.
 safe_alter('txp_prefs', "
     MODIFY event VARCHAR(255) NOT NULL DEFAULT 'publish',
-    MODIFY html VARCHAR(255) NOT NULL DEFAULT 'text_input'");
+    MODIFY html  VARCHAR(255) NOT NULL DEFAULT 'text_input'");
 
 // 2) Remove basic/advanced distinction.
 safe_update('txp_prefs', "type = '".PREF_CORE."'", "type = '".PREF_PLUGIN."' AND event IN (".$core_ev.")");
@@ -80,8 +80,8 @@ safe_update(
 );
 
 // Usernames can be 64 characters long at most.
-safe_alter('txp_file', "MODIFY author VARCHAR(64) NOT NULL DEFAULT ''");
-safe_alter('txp_link', "MODIFY author VARCHAR(64) NOT NULL DEFAULT ''");
+safe_alter('txp_file',  "MODIFY author VARCHAR(64) NOT NULL DEFAULT ''");
+safe_alter('txp_link',  "MODIFY author VARCHAR(64) NOT NULL DEFAULT ''");
 safe_alter('txp_image', "MODIFY author VARCHAR(64) NOT NULL DEFAULT ''");
 
 // Consistent name length limitations for presentation items.
@@ -89,11 +89,11 @@ safe_alter('txp_form', "MODIFY name VARCHAR(255) NOT NULL");
 safe_alter('txp_page', "MODIFY name VARCHAR(255) NOT NULL");
 safe_alter('txp_section', "
     MODIFY page VARCHAR(255) NOT NULL DEFAULT '',
-    MODIFY css VARCHAR(255) NOT NULL DEFAULT ''");
+    MODIFY css  VARCHAR(255) NOT NULL DEFAULT ''");
 
 // Save sections correctly in articles.
 safe_alter('textpattern', "MODIFY Section VARCHAR(255) NOT NULL DEFAULT ''");
-safe_alter('txp_section', "MODIFY name VARCHAR(255) NOT NULL");
+safe_alter('txp_section', "MODIFY name    VARCHAR(255) NOT NULL");
 
 // Plugins can have longer version numbers.
 safe_alter('txp_plugin', "MODIFY version VARCHAR(255) NOT NULL DEFAULT '1.0'");
@@ -165,8 +165,8 @@ safe_alter('txp_file',          "DROP INDEX filename,           ADD UNIQUE filen
 safe_alter('txp_form',          "DROP PRIMARY KEY,              ADD PRIMARY KEY (name(250))");
 safe_alter('txp_page',          "DROP PRIMARY KEY,              ADD PRIMARY KEY (name(250))");
 safe_alter('txp_section',       "DROP PRIMARY KEY,              ADD PRIMARY KEY (name(250))");
-safe_alter('txp_prefs',         "DROP INDEX prefs_idx,          ADD UNIQUE prefs_idx (prefs_id,name(185),user_name)");
-safe_alter('textpattern',       "DROP INDEX section_status_idx, ADD INDEX section_status_idx (Section(249),Status)");
+safe_alter('txp_prefs',         "DROP INDEX prefs_idx,          ADD UNIQUE prefs_idx (prefs_id, name(185), user_name)");
+safe_alter('textpattern',       "DROP INDEX section_status_idx, ADD INDEX section_status_idx (Section(249), Status)");
 safe_alter('textpattern',       "DROP INDEX url_title_idx,      ADD INDEX url_title_idx (url_title(250))");
 
 // Fix typo: textinput should be text_input

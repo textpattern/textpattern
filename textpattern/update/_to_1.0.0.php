@@ -352,8 +352,8 @@ if (!safe_query("SELECT 1 FROM `".PFX."txp_file` LIMIT 0")) {
         permissions VARCHAR(32)  NOT NULL DEFAULT '0',
         description TEXT         NOT NULL DEFAULT '',
         downloads   INT UNSIGNED NOT NULL DEFAULT '0',
-        PRIMARY KEY          (id),
-        UNIQUE KEY  filename (filename)
+        PRIMARY KEY     (id),
+        UNIQUE filename (filename)
     ) $tabletype ");
 }
 
@@ -622,9 +622,9 @@ if (!safe_query("SELECT 1 FROM `".PFX."txp_lang` LIMIT 0")) {
         event   VARCHAR(64) NOT NULL,
         data    TINYTEXT,
         lastmod TIMESTAMP,
-        PRIMARY KEY         (id),
-        UNIQUE INDEX lang   (lang,name),
-        INDEX        lang_2 (lang,event)
+        PRIMARY KEY   (id),
+        UNIQUE lang   (lang,name),
+        INDEX  lang_2 (lang,event)
     ) $tabletype ");
 
     require_once txpath.'/lib/IXRClass.php';

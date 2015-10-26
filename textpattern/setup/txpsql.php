@@ -145,14 +145,14 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
     uid             VARCHAR(32)  NOT NULL DEFAULT '',
     feed_time       DATE         NOT NULL DEFAULT '0000-00-00',
 
-    PRIMARY KEY                     (ID),
-    KEY          categories_idx     (Category1(10), Category2(10)),
-    KEY          Posted             (Posted),
-    KEY          Expires_idx        (Expires),
-    KEY          author_idx         (AuthorID),
-    KEY          section_status_idx (Section(249), Status),
-    KEY          url_title_idx      (url_title(250)),
-    FULLTEXT KEY searching          (Title, Body)
+    PRIMARY KEY                 (ID),
+    INDEX    categories_idx     (Category1(10), Category2(10)),
+    INDEX    Posted             (Posted),
+    INDEX    Expires_idx        (Expires),
+    INDEX    author_idx         (AuthorID),
+    INDEX    section_status_idx (Section(249), Status),
+    INDEX    url_title_idx      (url_title(250)),
+    FULLTEXT searching          (Title, Body)
 ) $tabletype ";
 
 $setup_comment_invite = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite');
@@ -186,7 +186,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_css` (
     name VARCHAR(255) NOT NULL,
     css  MEDIUMTEXT   NOT NULL,
 
-    UNIQUE KEY name (name(250))
+    UNIQUE name (name(250))
 ) $tabletype ";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_css`(name, css) VALUES('default', ".file2sql('css.default').")";
@@ -203,8 +203,8 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
     message   TEXT            NOT NULL,
     visible   TINYINT         NOT NULL DEFAULT '1',
 
-    PRIMARY KEY          (discussid),
-    KEY         parentid (parentid)
+    PRIMARY KEY    (discussid),
+    INDEX parentid (parentid)
 ) $tabletype ";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_discuss` VALUES (000001, 1, 'Donald Swain', 'donald.swain@example.com', 'example.com', '127.0.0.1', NOW(), '<p>I enjoy your site very much.</p>', 1)";
@@ -232,9 +232,9 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_file` (
     size        BIGINT       DEFAULT NULL,
     author      VARCHAR(64)  NOT NULL DEFAULT '',
 
-    PRIMARY KEY            (id),
-    UNIQUE KEY  filename   (filename(250)),
-    KEY         author_idx (author)
+    PRIMARY KEY       (id),
+    UNIQUE filename   (filename(250)),
+    INDEX  author_idx (author)
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_form` (
@@ -275,8 +275,8 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_image` (
     thumb_w   INT          NOT NULL DEFAULT '0',
     thumb_h   INT          NOT NULL DEFAULT '0',
 
-    PRIMARY KEY            (id),
-    KEY         author_idx (author)
+    PRIMARY KEY      (id),
+    INDEX author_idx (author)
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
@@ -288,10 +288,10 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
     data    TEXT,
     lastmod TIMESTAMP,
 
-    PRIMARY KEY        (id),
-    UNIQUE KEY  lang   (lang, name),
-    KEY         lang_2 (lang, event),
-    KEY         owner  (owner)
+    PRIMARY KEY   (id),
+    UNIQUE lang   (lang, name),
+    INDEX  lang_2 (lang, event),
+    INDEX  owner  (owner)
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
@@ -304,8 +304,8 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
     description TEXT         NOT NULL,
     author      VARCHAR(64)  NOT NULL DEFAULT '',
 
-    PRIMARY KEY            (id),
-    KEY         author_idx (author)
+    PRIMARY KEY      (id),
+    INDEX author_idx (author)
 ) $tabletype ";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (1, NOW(), 'textpattern', 'http://textpattern.com/',             'Textpattern Website',            '10', '', '')";
@@ -325,9 +325,9 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
     method VARCHAR(16)  NOT NULL DEFAULT 'GET',
     ip     VARCHAR(45)  NOT NULL DEFAULT '',
 
-    PRIMARY KEY      (id),
-    KEY         time (time),
-    KEY         ip   (ip)
+    PRIMARY KEY (id),
+    INDEX time  (time),
+    INDEX ip    (ip)
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_page` (
@@ -356,8 +356,8 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_plugin` (
     load_order   TINYINT  UNSIGNED NOT NULL DEFAULT '5',
     flags        SMALLINT UNSIGNED NOT NULL DEFAULT '0',
 
-    UNIQUE KEY name            (name),
-    KEY        status_type_idx (status, type)
+    UNIQUE name            (name),
+    INDEX  status_type_idx (status, type)
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
@@ -370,9 +370,9 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
     position  SMALLINT UNSIGNED NOT NULL DEFAULT '0',
     user_name VARCHAR(64)       NOT NULL DEFAULT '',
 
-    UNIQUE KEY prefs_idx (prefs_id, name(185), user_name),
-    KEY        name      (name(250)),
-    KEY        user_name (user_name)
+    UNIQUE prefs_idx (prefs_id, name(185), user_name),
+    INDEX  name      (name(250)),
+    INDEX  user_name (user_name)
 ) $tabletype ";
 
 $blog_uid  = md5(uniqid(rand(), true));
@@ -523,8 +523,8 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_users` (
     last_access DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
     nonce       VARCHAR(64)  NOT NULL DEFAULT '',
 
-    PRIMARY KEY      (user_id),
-    UNIQUE KEY  name (name)
+    PRIMARY KEY (user_id),
+    UNIQUE name (name)
 ) $tabletype ";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_users` VALUES (
