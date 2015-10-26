@@ -25,7 +25,7 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-$txpplugin = getThings('describe `'.PFX.'txp_plugin`');
+$txpplugin = getThings('DESCRIBE `'.PFX.'txp_plugin`');
 
 if (!in_array('load_order', $txpplugin)) {
     safe_alter('txp_plugin',
@@ -46,14 +46,14 @@ if (!safe_field('val', 'txp_prefs', "name='author_list_pageby'")) {
 }
 
 // Expiry datetime for articles.
-$txp = getThings('describe `'.PFX.'textpattern`');
+$txp = getThings('DESCRIBE `'.PFX.'textpattern`');
 
 if (!in_array('Expires', $txp)) {
     safe_alter('textpattern', "ADD Expires DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' AFTER Posted");
 }
 
 $has_expires_idx = 0;
-$rs = getRows('show index from `'.PFX.'textpattern`');
+$rs = getRows("SHOW INDEX FROM `".PFX."textpattern`");
 
 foreach ($rs as $row) {
     if ($row['Key_name'] == 'Expires_idx') {

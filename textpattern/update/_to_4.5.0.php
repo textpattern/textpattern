@@ -47,7 +47,7 @@ safe_alter('txp_users', "
 safe_delete('txp_lang', "event='setup'");
 
 $has_idx = 0;
-$rs = getRows('show index from `'.PFX.'textpattern`');
+$rs = getRows("SHOW INDEX FROM `".PFX."textpattern`");
 
 foreach ($rs as $row) {
     if ($row['Key_name'] == 'url_title_idx') {
@@ -65,7 +65,7 @@ if (!safe_field('name', 'txp_prefs', "name = 'default_section'")) {
     safe_insert('txp_prefs', "prefs_id = 1, name = 'default_section', val = '".doSlash($current_default_section)."', type = '2', event = 'section', html = 'text_input', position = '0'");
 }
 
-$cols = getThings('describe `'.PFX.'txp_section`');
+$cols = getThings('DESCRIBE `'.PFX.'txp_section`');
 
 if (in_array('is_default', $cols)) {
     safe_alter('txp_section', "DROP is_default");

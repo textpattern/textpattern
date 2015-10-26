@@ -76,21 +76,23 @@ safe_update('txp_form', "type = 'comment'", "name = 'comments_display'");
 safe_update(
     'txp_log',
     "refer = CONCAT('http://', refer)",
-    "refer != '' and refer NOT LIKE 'http://%' and refer NOT LIKE 'https://%'"
+    "refer != '' AND refer NOT LIKE 'http://%' AND refer NOT LIKE 'https://%'"
 );
 
 // Usernames can be 64 characters long at most.
-safe_alter('txp_file', "MODIFY author VARCHAR(64) NOT NULL default ''");
-safe_alter('txp_link', "MODIFY author VARCHAR(64) NOT NULL default ''");
-safe_alter('txp_image', "MODIFY author VARCHAR(64) NOT NULL default ''");
+safe_alter('txp_file', "MODIFY author VARCHAR(64) NOT NULL DEFAULT ''");
+safe_alter('txp_link', "MODIFY author VARCHAR(64) NOT NULL DEFAULT ''");
+safe_alter('txp_image', "MODIFY author VARCHAR(64) NOT NULL DEFAULT ''");
 
 // Consistent name length limitations for presentation items.
 safe_alter('txp_form', "MODIFY name VARCHAR(255) NOT NULL");
 safe_alter('txp_page', "MODIFY name VARCHAR(255) NOT NULL");
-safe_alter('txp_section', "MODIFY page VARCHAR(255) NOT NULL default '', MODIFY css VARCHAR(255) NOT NULL default ''");
+safe_alter('txp_section', "
+    MODIFY page VARCHAR(255) NOT NULL DEFAULT '',
+    MODIFY css VARCHAR(255) NOT NULL DEFAULT ''");
 
 // Save sections correctly in articles.
-safe_alter('textpattern', "MODIFY Section VARCHAR(255) NOT NULL default ''");
+safe_alter('textpattern', "MODIFY Section VARCHAR(255) NOT NULL DEFAULT ''");
 safe_alter('txp_section', "MODIFY name VARCHAR(255) NOT NULL");
 
 // Plugins can have longer version numbers.
@@ -100,27 +102,24 @@ safe_alter('txp_plugin', "MODIFY version VARCHAR(255) NOT NULL DEFAULT '1.0'");
 safe_alter('txp_lang', "MODIFY data TEXT");
 
 // Add meta description to articles...
-$cols = getThings('describe `'.PFX.'textpattern`');
+$cols = getThings('DESCRIBE `'.PFX.'textpattern`');
 
 if (!in_array('description', $cols)) {
-    safe_alter('textpattern',
-        "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER Keywords");
+    safe_alter('textpattern', "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER Keywords");
 }
 
 // ... categories...
-$cols = getThings('describe `'.PFX.'txp_category`');
+$cols = getThings('DESCRIBE `'.PFX.'txp_category`');
 
 if (!in_array('description', $cols)) {
-    safe_alter('txp_category',
-        "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER title");
+    safe_alter('txp_category', "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER title");
 }
 
 // ... and sections.
-$cols = getThings('describe `'.PFX.'txp_section`');
+$cols = getThings('DESCRIBE `'.PFX.'txp_section`');
 
 if (!in_array('description', $cols)) {
-    safe_alter('txp_section',
-        "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER css");
+    safe_alter('txp_section', "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER css");
 }
 
 // Remove textpattern.com ping pref.

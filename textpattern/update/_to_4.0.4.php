@@ -36,12 +36,12 @@ if (!safe_field('name', 'txp_prefs', "name = 'log_list_pageby'")) {
 }
 
 // Turn on lastmod handling, and reset the lastmod date.
-safe_update('txp_prefs', "val='1'", "name='send_lastmod' and prefs_id='1'");
+safe_update('txp_prefs', "val='1'", "name='send_lastmod' AND prefs_id='1'");
 update_lastmod();
 
 // Speed up article queries.
 $has_ss_idx = 0;
-$rs = getRows('show index from `'.PFX.'textpattern`');
+$rs = getRows("SHOW INDEX FROM `".PFX."textpattern`");
 
 foreach ($rs as $row) {
     if ($row['Key_name'] == 'section_status_idx') {

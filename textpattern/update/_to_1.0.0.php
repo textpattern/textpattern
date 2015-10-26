@@ -28,7 +28,7 @@ if (!defined('TXP_UPDATE')) {
 safe_delete('txp_category', "name=''");
 safe_delete('txp_category', "name=' '");
 
-$txpcat = getThings('describe `'.PFX.'txp_category`');
+$txpcat = getThings('DESCRIBE `'.PFX.'txp_category`');
 
 if (!in_array('id', $txpcat)) {
     safe_alter('txp_category',
@@ -51,7 +51,7 @@ if (in_array('level', $txpcat)) {
     safe_alter('txp_category', "DROP level");
 }
 
-$txp = getThings('describe `'.PFX.'textpattern`');
+$txp = getThings('DESCRIBE `'.PFX.'textpattern`');
 
 if (!in_array('Keywords', $txp)) {
     safe_alter('textpattern', "ADD Keywords VARCHAR(255) NOT NULL");
@@ -126,13 +126,13 @@ if (!in_array('custom_10', $txp)) {
     safe_alter('textpattern', "ADD custom_10 VARCHAR(255) NOT NULL");
 }
 
-$txpsect = getThings('describe `'.PFX.'txp_section`');
+$txpsect = getThings('DESCRIBE `'.PFX.'txp_section`');
 
 if (!in_array('searchable', $txpsect)) {
     safe_alter('txp_section', "ADD searchable INT NOT NULL DEFAULT 1");
 }
 
-$txpuser = getThings('describe `'.PFX.'txp_users`');
+$txpuser = getThings('DESCRIBE `'.PFX.'txp_users`');
 
 if (!in_array('nonce', $txpuser)) {
     safe_alter('txp_users', "ADD nonce VARCHAR(64) NOT NULL");
@@ -232,7 +232,7 @@ if (safe_field('name', 'txp_prefs', "name='path_to_site'") === false) {
 // 1.0: need to get non-manually set url-only titles into the textpattern table,
 // so we can start using title as an url search option.
 
-$rs = mysqli_query($DB->link, "select ID, Title from `".PFX."textpattern` where url_title like ''");
+$rs = mysqli_query($DB->link, "SELECT ID, Title FROM `".PFX."textpattern` WHERE url_title LIKE ''");
 
 while ($a = mysqli_fetch_array($rs)) {
     extract($a);
@@ -366,19 +366,19 @@ if (safe_field('name', 'txp_form', "type='file'") === false) {
 // EOF: non image file upload tab.
 
 // 1.0: improved comment spam nonce.
-$txpnonce = getThings('describe `'.PFX.'txp_discuss_nonce`');
+$txpnonce = getThings('DESCRIBE `'.PFX.'txp_discuss_nonce`');
 if (!in_array('secret', $txpnonce)) {
     safe_alter('txp_discuss_nonce', "ADD secret VARCHAR(255) NOT NULL DEFAULT ''");
 }
 
 // 1.0: flag for admin-side plugins.
-$txpplugin = getThings('describe `'.PFX.'txp_plugin`');
+$txpplugin = getThings('DESCRIBE `'.PFX.'txp_plugin`');
 if (!in_array('type', $txpplugin)) {
     safe_alter('txp_plugin', "ADD type INT NOT NULL DEFAULT '0'");
 }
 
 // 1.0: log status and method.
-$txplog = getThings('describe `'.PFX.'txp_log`');
+$txplog = getThings('DESCRIBE `'.PFX.'txp_log`');
 
 if (!in_array('status', $txplog)) {
     safe_alter('txp_log', "ADD status INT NOT NULL DEFAULT '200'");
@@ -441,7 +441,7 @@ if (!in_array('uid', $txp)) {
 
 // 1.0: populate comments_count field.
 
-$rs = safe_rows_start('parentid, count(*) as thecount', 'txp_discuss', 'visible=1 group by parentid');
+$rs = safe_rows_start("parentid, count(*) AS thecount", 'txp_discuss', "visible=1 GROUP BY parentid");
 
 if ($rs) {
     while ($a = nextRow($rs)) {
@@ -469,7 +469,7 @@ if (safe_count('txp_category', "title=''") > 0) {
 
 // 1.0: Unique key and 'type' field for the txp_prefs table.
 $has_prefs_idx = 0;
-$rs = getRows('show index from `'.PFX.'txp_prefs`');
+$rs = getRows("SHOW INDEX FROM `".PFX."txp_prefs`");
 
 foreach ($rs as $row) {
     if ($row['Key_name'] == 'prefs_idx') {
@@ -481,7 +481,7 @@ foreach ($rs as $row) {
     }
 }
 
-$txpprefs = getThings('describe `'.PFX.'txp_prefs`');
+$txpprefs = getThings('DESCRIBE `'.PFX.'txp_prefs`');
 
 if (!in_array('type', $txpprefs)) {
     safe_alter('txp_prefs', "ADD type SMALLINT UNSIGNED NOT NULL DEFAULT '2'");
@@ -724,7 +724,7 @@ safe_update('txp_prefs', "type=2", "name='language'");
 // Show gmt-selection in prefs.
 safe_update('txp_prefs', "type=0, html='gmtoffset_select', position=50", "name='gmtoffset'");
 
-if (safe_field('name', 'txp_prefs', "prefs_id=1 and name='plugin_cache_dir'") === false) {
+if (safe_field('name', 'txp_prefs', "prefs_id=1 AND name='plugin_cache_dir'") === false) {
     $maxpos = safe_field('max(position)', 'txp_prefs', '1');
     safe_insert('txp_prefs', "name='plugin_cache_dir', val='', prefs_id='1', type='1', event='admin', position='".doSlash($maxpos)."', html='text_input'");
 }

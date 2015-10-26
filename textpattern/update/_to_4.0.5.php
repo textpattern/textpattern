@@ -32,7 +32,7 @@ if (!safe_field('name', 'txp_prefs', "name = 'lastmod_keepalive'")) {
 }
 
 // New status field for file downloads.
-$txpfile = getThings('describe `'.PFX.'txp_file`');
+$txpfile = getThings('DESCRIBE `'.PFX.'txp_file`');
 
 if (!in_array('status', $txpfile)) {
     safe_alter('txp_file', "ADD status SMALLINT NOT NULL DEFAULT '4'");
@@ -195,7 +195,7 @@ safe_update('txp_prefs', "event = 'feeds'", "name IN(
 )");
 
 // 'Textile links' feature removed due to unclear specs.
-safe_delete('txp_prefs', "event='link' and name='textile_links'");
+safe_delete('txp_prefs', "event='link' AND name='textile_links'");
 
 // Use TextileRestricted lite/fat in comments?
 if (!safe_field('name', 'txp_prefs', "name = 'comments_use_fat_textile'")) {

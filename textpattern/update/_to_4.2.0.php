@@ -26,7 +26,7 @@ if (!defined('TXP_UPDATE')) {
 }
 
 // Support for per-user private prefs.
-$cols = getThings('describe `'.PFX.'txp_prefs`');
+$cols = getThings('DESCRIBE `'.PFX.'txp_prefs`');
 if (!in_array('user_name', $cols)) {
     safe_alter('txp_prefs', "
         ADD user_name VARCHAR(64) NOT NULL DEFAULT '',
@@ -65,16 +65,16 @@ if (!safe_field('name', 'txp_prefs', "name = 'default_event'")) {
 }
 
 // Add columns for thumbnail dimensions.
-$cols = getThings('describe `'.PFX.'txp_image`');
+$cols = getThings('DESCRIBE `'.PFX.'txp_image`');
 
 if (!in_array('thumb_w', $cols)) {
     safe_alter('txp_image', "
-        ADD thumb_w int(8) NOT NULL default 0,
-        ADD thumb_h int(8) NOT NULL default 0");
+        ADD thumb_w int(8) NOT NULL DEFAULT 0,
+        ADD thumb_h int(8) NOT NULL DEFAULT 0");
 }
 
 // Plugin flags.
-$cols = getThings('describe `'.PFX.'txp_plugin`');
+$cols = getThings('DESCRIBE `'.PFX.'txp_plugin`');
 
 if (!in_array('flags', $cols)) {
     safe_alter('txp_plugin', "ADD flags SMALLINT UNSIGNED NOT NULL DEFAULT 0");
@@ -93,10 +93,12 @@ safe_alter('txp_prefs', "CHANGE val val TEXT NOT NULL");
 // Add author column to files and links, boldy assuming that the publisher in
 // charge of updating this site is the author of any existing content items.
 foreach (array('txp_file', 'txp_link') as $table) {
-    $cols = getThings('describe `'.PFX.$table.'`');
+    $cols = getThings('DESCRIBE `'.PFX.$table.'`');
 
     if (!in_array('author', $cols)) {
-        safe_alter($table, "ADD author varchar(64) NOT NULL default '', ADD INDEX author_idx (author)");
+        safe_alter($table, "
+            ADD author varchar(64) NOT NULL DEFAULT '',
+            ADD INDEX author_idx (author)");
         safe_update($table, "author='".doSlash($txp_user)."'", '1=1');
     }
 }
