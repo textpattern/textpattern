@@ -28,6 +28,16 @@ if (!defined('TXP_INSTALL')) {
 @ignore_user_abort(1);
 @set_time_limit(0);
 
+$ddb = $txpcfg['db'];
+$duser = $txpcfg['user'];
+$dpass = $txpcfg['pass'];
+$dhost = $txpcfg['host'];
+$dclient_flags = isset($txpcfg['client_flags']) ? $txpcfg['client_flags'] : 0;
+$dprefix = $txpcfg['table_prefix'];
+$dbcharset = $txpcfg['dbcharset'];
+
+define("PFX", trim($dprefix));
+
 if (strpos($dhost, ':') === false) {
     $host = $dhost;
     $port = ini_get("mysqli.default_port");
@@ -88,8 +98,10 @@ if (is_callable('apache_get_modules')) {
     }
 }
 
-$username = (!empty($_SESSION['name'])) ? $_SESSION['name'] : 'anon';
-$useremail = (!empty($_SESSION['email'])) ? $_SESSION['email'] : '';
+$siteurl = str_replace("http://", '', $_SESSION['siteurl']);
+$siteurl = str_replace(' ', '%20', rtrim($siteurl, "/"));
+$urlpath = preg_replace('#^[^/]+#', '', $siteurl);        
+$theme   = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
 
 $create_sql = array();
 
@@ -145,7 +157,8 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
 
 $setup_comment_invite = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite');
 
-$create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), '0000-00-00 00:00:00', '".doSlash($username)."', NOW(), '', 'Welcome to your site', '', ".file2sql('textpattern.body').", ".file2sql('textpattern.body_html').", ".file2sql('textpattern.excerpt').", ".file2sql('textpattern.excerpt_html').", '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, '1', '1', 'articles', '', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NOW())";
+$create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), '0000-00-00 00:00:00', '".doSlash($_SESSION['name'])."', NOW(), '', 'Welcome to your site', '', ".file2sql('textpattern.body').", ".file2sql('textpattern.body_html').", ".file2sql('textpattern.excerpt').", ".file2sql('textpattern.excerpt_html').", '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, '1', '1', 'articles', '', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NOW())";
+$create_sql[] = "UPDATE `".PFX."textpattern` SET Body = replace(Body, 'siteurl', '".doSlash($urlpath)."'), Body_html = replace(Body_html, 'siteurl', '".doSlash($urlpath)."') WHERE ID = 1");
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_category` (
     id          INT          NOT NULL AUTO_INCREMENT,
@@ -176,10 +189,8 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_css` (
     UNIQUE KEY name (name(250))
 ) $tabletype ";
 
-// sql:txp_css
 $create_sql[] = "INSERT INTO `".PFX."txp_css`(name,css) VALUES('default', ".file2sql('css.default').")";
 $create_sql[] = "INSERT INTO `".PFX."txp_css`(name,css) VALUES('ie8', ".file2sql('css.ie8').")";
-// /sql:txp_css
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
     discussid INT(6) ZEROFILL NOT NULL AUTO_INCREMENT,
@@ -234,7 +245,6 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_form` (
     PRIMARY KEY (name(250))
 ) $tabletype ";
 
-// sql:txp_form
 $forms = array(
     'article' => array('article_listing', 'default', 'search_results'),
     'comment' => array('comments', 'comments_display', 'comment_form', 'popup_comments'),
@@ -248,7 +258,6 @@ foreach ($forms as $form_type => $forms) {
         $create_sql[] = "INSERT INTO `".PFX."txp_form`(name,type,Form) VALUES('".$form_name."', '".$form_type."', ".file2sql('form.'.$form_name).")";
     }
 }
-// /sql:txp_form
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_image` (
     id        INT          NOT NULL AUTO_INCREMENT,
@@ -327,11 +336,9 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_page` (
     PRIMARY KEY (name(250))
 ) $tabletype ";
 
-// sql:txp_page
 foreach (array('archive', 'default', 'error_default') as $page_name) {
     $create_sql[] = "INSERT INTO `".PFX."txp_page`(name,user_html) VALUES('".$page_name."', ".file2sql('page.'.$page_name).")";
 }
-// /sql:txp_page
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_plugin` (
     name         VARCHAR(64)       NOT NULL DEFAULT '',
@@ -382,7 +389,7 @@ $prefs = array(
         array(0, 120, 'yesnoradio'      , 'override_emailcharset'      , '0'),
         array(0, 130, 'yesnoradio'      , 'enable_xmlrpc_server'       , '0'),
         array(0, 150, 'default_event'   , 'default_event'              , 'article'),
-        array(0, 160, 'themename'       , 'theme_name'                 , 'hive'),
+        array(0, 160, 'themename'       , 'theme_name'                 , $theme),
     ),
     'category' => array(
         array(2,   0, 'yesnoradio'      , 'show_article_category_count', '1'),
@@ -442,13 +449,13 @@ $prefs = array(
         array(0, 300, 'yesnoradio'      , 'allow_page_php_scripting'   , '1'),
         array(0, 320, 'yesnoradio'      , 'allow_article_php_scripting', '1'),
         array(0, 340, 'text_input'      , 'max_url_len'                , '1000'),
-        array(2,   0, 'text_input'      , 'blog_mail_uid'              , $useremail),
+        array(2,   0, 'text_input'      , 'blog_mail_uid'              , $_SESSION['email']),
         array(2,   0, 'text_input'      , 'blog_time_uid'              , '2005'),
         array(2,   0, 'text_input'      , 'blog_uid'                   , $blog_uid),
         array(2,   0, 'text_input'      , 'dbupdatetime'               , '0'),
-        array(2,   0, 'languages'       , 'language'                   , 'en-gb'),
+        array(2,   0, 'languages'       , 'language'                   , LANG),
         array(2,   0, 'text_input'      , 'lastmod'                    , '2005-07-23 16:24:10'),
-        array(2,   0, 'text_input'      , 'locale'                     , 'en_GB.UTF-8'),
+        array(2,   0, 'text_input'      , 'locale'                     , getlocale(LANG)),
         array(2,   0, 'text_input'      , 'path_from_root'             , '/'),
         array(2,   0, 'text_input'      , 'path_to_site'               , dirname(txpath)),
         array(2,   0, 'text_input'      , 'prefs_id'                   , '1'),
@@ -467,7 +474,7 @@ $prefs = array(
     'site' => array(
         array(0,  20, 'text_input'      , 'sitename'                   , gTxt('my_site')),
         array(0,  30, 'text_input'      , 'site_slogan'                , gTxt('my_slogan')),
-        array(0,  40, 'text_input'      , 'siteurl'                    , 'example.com'),
+        array(0,  40, 'text_input'      , 'siteurl'                    , $siteurl),
         array(0,  80, 'prod_levels'     , 'production_status'          , 'testing'),
         array(0, 100, 'gmtoffset_select', 'gmtoffset'                  , $gmtoffset),
         array(0, 115, 'yesnoradio'      , 'auto_dst'                   , '0'),
@@ -519,6 +526,16 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_users` (
     UNIQUE KEY  name (name)
 ) $tabletype ";
 
+$create_sql[] = "INSERT INTO `".PFX."txp_users` VALUES (
+    1,
+    '".doSlash($_SESSION['name'])."',
+    '".doSlash(txp_hash_password($_SESSION['pass']))."',
+    '".doSlash($_SESSION['realname'])."',
+    '".doSlash($_SESSION['email'])."',
+    1,
+    NOW(),
+    '".md5(uniqid(rand(), true))."')";
+
 $GLOBALS['txp_install_successful'] = true;
 $GLOBALS['txp_err_count'] = 0;
 $GLOBALS['txp_err_html'] = '';
@@ -533,11 +550,6 @@ foreach ($create_sql as $query) {
             '<pre>'.htmlspecialchars($query).'</pre>'.n.'</li>'.n;
         $GLOBALS['txp_install_successful'] = false;
     }
-}
-
-// Skip the RPC language fetch when testing.
-if (defined('TXP_TEST')) {
-    return;
 }
 
 require_once txpath.'/lib/IXRClass.php';
@@ -590,6 +602,7 @@ function safe_escape($in = '')
     return mysqli_real_escape_string($link, $in);
 }
 
-function file2sql($filename) {
+function file2sql($filename)
+{
     return "'".doSlash(file_get_contents(txpath.'/setup/'.$filename))."'";
 }
