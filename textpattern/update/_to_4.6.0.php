@@ -152,7 +152,7 @@ if (file_exists(txpath.DS.'include'.DS.'txp_import.php')) {
 }
 
 // Remove unused ipban table or recreate its index (for future utf8mb4 conversion)
-if (!safe_count('txp_discuss_ipban', '1=1')) {
+if (!safe_count('txp_discuss_ipban', '1 = 1')) {
     safe_drop('txp_discuss_ipban');
 } else {
     safe_alter('txp_discuss_ipban', "DROP PRIMARY KEY, ADD PRIMARY KEY (ip(250))");

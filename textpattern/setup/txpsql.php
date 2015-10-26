@@ -146,13 +146,13 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
     feed_time       DATE         NOT NULL DEFAULT '0000-00-00',
 
     PRIMARY KEY                     (ID),
-    KEY          categories_idx     (Category1(10),Category2(10)),
+    KEY          categories_idx     (Category1(10), Category2(10)),
     KEY          Posted             (Posted),
     KEY          Expires_idx        (Expires),
     KEY          author_idx         (AuthorID),
-    KEY          section_status_idx (Section(249),Status),
+    KEY          section_status_idx (Section(249), Status),
     KEY          url_title_idx      (url_title(250)),
-    FULLTEXT KEY searching          (Title,Body)
+    FULLTEXT KEY searching          (Title, Body)
 ) $tabletype ";
 
 $setup_comment_invite = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite');
@@ -189,8 +189,8 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_css` (
     UNIQUE KEY name (name(250))
 ) $tabletype ";
 
-$create_sql[] = "INSERT INTO `".PFX."txp_css`(name,css) VALUES('default', ".file2sql('css.default').")";
-$create_sql[] = "INSERT INTO `".PFX."txp_css`(name,css) VALUES('ie8', ".file2sql('css.ie8').")";
+$create_sql[] = "INSERT INTO `".PFX."txp_css`(name, css) VALUES('default', ".file2sql('css.default').")";
+$create_sql[] = "INSERT INTO `".PFX."txp_css`(name, css) VALUES('ie8', ".file2sql('css.ie8').")";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
     discussid INT(6) ZEROFILL NOT NULL AUTO_INCREMENT,
@@ -255,7 +255,8 @@ $forms = array(
 
 foreach ($forms as $form_type => $forms) {
     foreach ($forms as $form_name) {
-        $create_sql[] = "INSERT INTO `".PFX."txp_form`(name,type,Form) VALUES('".$form_name."', '".$form_type."', ".file2sql('form.'.$form_name).")";
+        $create_sql[] = "INSERT INTO `".PFX."txp_form`(name, type, Form)
+            VALUES('".$form_name."', '".$form_type."', ".file2sql('form.'.$form_name).")";
     }
 }
 
@@ -288,8 +289,8 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
     lastmod TIMESTAMP,
 
     PRIMARY KEY        (id),
-    UNIQUE KEY  lang   (lang,name),
-    KEY         lang_2 (lang,event),
+    UNIQUE KEY  lang   (lang, name),
+    KEY         lang_2 (lang, event),
     KEY         owner  (owner)
 ) $tabletype ";
 
@@ -307,12 +308,12 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
     KEY         author_idx (author)
 ) $tabletype ";
 
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (1, NOW(), 'textpattern', 'http://textpattern.com/', 'Textpattern Website', '10', '', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (2, NOW(), 'textpattern', 'http://textpattern.net/', 'Textpattern User Documentation', '20', '', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (3, NOW(), 'textpattern', 'http://textpattern.org/', 'Textpattern Resources', '30', '', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (4, NOW(), 'textpattern', 'http://textpattern.com/@textpattern', '@textpattern', '40', '', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (5, NOW(), 'textpattern', 'http://textpattern.com/+', '+Textpattern CMS', '50', '', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (6, NOW(), 'textpattern', 'http://textpattern.com/facebook', 'Textpattern Facebook Group', '60', '', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (1, NOW(), 'textpattern', 'http://textpattern.com/',             'Textpattern Website',            '10', '', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (2, NOW(), 'textpattern', 'http://textpattern.net/',             'Textpattern User Documentation', '20', '', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (3, NOW(), 'textpattern', 'http://textpattern.org/',             'Textpattern Resources',          '30', '', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (4, NOW(), 'textpattern', 'http://textpattern.com/@textpattern', '@textpattern',                   '40', '', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (5, NOW(), 'textpattern', 'http://textpattern.com/+',            '+Textpattern CMS',               '50', '', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (6, NOW(), 'textpattern', 'http://textpattern.com/facebook',     'Textpattern Facebook Group',     '60', '', '')";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
     id     INT          NOT NULL AUTO_INCREMENT,
@@ -337,7 +338,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_page` (
 ) $tabletype ";
 
 foreach (array('archive', 'default', 'error_default') as $page_name) {
-    $create_sql[] = "INSERT INTO `".PFX."txp_page`(name,user_html) VALUES('".$page_name."', ".file2sql('page.'.$page_name).")";
+    $create_sql[] = "INSERT INTO `".PFX."txp_page`(name, user_html) VALUES('".$page_name."', ".file2sql('page.'.$page_name).")";
 }
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_plugin` (
@@ -356,7 +357,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_plugin` (
     flags        SMALLINT UNSIGNED NOT NULL DEFAULT '0',
 
     UNIQUE KEY name            (name),
-    KEY        status_type_idx (status,type)
+    KEY        status_type_idx (status, type)
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
@@ -369,7 +370,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
     position  SMALLINT UNSIGNED NOT NULL DEFAULT '0',
     user_name VARCHAR(64)       NOT NULL DEFAULT '',
 
-    UNIQUE KEY prefs_idx (prefs_id,name(185), user_name),
+    UNIQUE KEY prefs_idx (prefs_id, name(185), user_name),
     KEY        name      (name(250)),
     KEY        user_name (user_name)
 ) $tabletype ";
@@ -570,7 +571,12 @@ if (!$client->query('tups.getLanguage', $blog_uid, LANG)) {
                 $lang_val = doSlash($lang_val);
 
                 if (@$lang_val) {
-                    mysqli_query($link, "INSERT DELAYED INTO `".PFX."txp_lang` SET lang='en-gb', name='".$lang_key."', event='".$evt_name."', data='".$lang_val."', lastmod='".$lastmod."'");
+                    mysqli_query($link, "INSERT DELAYED INTO `".PFX."txp_lang` SET
+                        lang = 'en-gb',
+                        name = '".$lang_key."',
+                        event = '".$evt_name."',
+                        data = '".$lang_val."',
+                        lastmod = '".$lastmod."'");
                 }
             }
         }
@@ -584,7 +590,12 @@ if (!$client->query('tups.getLanguage', $blog_uid, LANG)) {
             $item[$name] = doSlash($value);
         }
 
-        mysqli_query($link, "INSERT DELAYED INTO `".PFX."txp_lang` SET lang='".LANG."', name='".$item['name']."', event='".$item['event']."', data='".$item['data']."', lastmod='".strftime('%Y%m%d%H%M%S', $item['uLastmod'])."'");
+        mysqli_query($link, "INSERT DELAYED INTO `".PFX."txp_lang` SET
+            lang = '".LANG."',
+            name = '".$item['name']."',
+            event = '".$item['event']."',
+            data = '".$item['data']."',
+            lastmod = '".strftime('%Y%m%d%H%M%S', $item['uLastmod'])."'");
     }
 }
 

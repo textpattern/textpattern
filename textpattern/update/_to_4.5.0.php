@@ -44,7 +44,7 @@ safe_alter('txp_users', "
     MODIFY email VARCHAR(254) NOT NULL DEFAULT ''");
 
 // Remove any setup strings from lang table.
-safe_delete('txp_lang', "event='setup'");
+safe_delete('txp_lang', "event = 'setup'");
 
 $has_idx = 0;
 $rs = getRows("SHOW INDEX FROM `".PFX."textpattern`");
@@ -61,7 +61,7 @@ if (!$has_idx) {
 
 // Remove is_default from txp_section table and make it a preference.
 if (!safe_field('name', 'txp_prefs', "name = 'default_section'")) {
-    $current_default_section = safe_field('name', 'txp_section', 'is_default=1');
+    $current_default_section = safe_field('name', 'txp_section', 'is_default = 1');
     safe_insert('txp_prefs', "prefs_id = 1, name = 'default_section', val = '".doSlash($current_default_section)."', type = '2', event = 'section', html = 'text_input', position = '0'");
 }
 

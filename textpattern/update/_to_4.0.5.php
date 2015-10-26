@@ -28,7 +28,7 @@ if (!defined('TXP_UPDATE')) {
 safe_alter('txp_lang', 'DELAY_KEY_WRITE = 0');
 
 if (!safe_field('name', 'txp_prefs', "name = 'lastmod_keepalive'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'lastmod_keepalive', val = '0', type = '1', html='yesnoradio'");
+    safe_insert('txp_prefs', "prefs_id = 1, name = 'lastmod_keepalive', val = '0', type = '1', html = 'yesnoradio'");
 }
 
 // New status field for file downloads.
@@ -69,18 +69,42 @@ if (array_intersect(array('modified', 'created'), $txpfile)) {
 // Copy existing file timestamps into the new database columns.
 if ($update_files) {
     $prefs = get_prefs();
-    $rs = safe_rows('*', 'txp_file', '1=1');
+    $rs = safe_rows('*', 'txp_file', '1 = 1');
 
     foreach ($rs as $row) {
         $path = build_file_path(@$prefs['file_base_path'], @$row['filename']);
 
         if ($path and ($stat = @stat($path))) {
-            safe_update('txp_file', "created='".strftime('%Y-%m-%d %H:%M:%S', $stat['ctime'])."', modified='".strftime('%Y-%m-%d %H:%M:%S', $stat['mtime'])."', size='".doSlash(sprintf('%u', $stat['size']))."'", "id='".doSlash($row['id'])."'");
+            safe_update('txp_file', "created = '".strftime('%Y-%m-%d %H:%M:%S', $stat['ctime'])."', modified = '".strftime('%Y-%m-%d %H:%M:%S', $stat['mtime'])."', size = '".doSlash(sprintf('%u', $stat['size']))."'", "id = '".doSlash($row['id'])."'");
         }
     }
 }
 
-safe_update('textpattern', "Keywords=TRIM(BOTH ',' FROM REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Keywords,'\n',','),'\r',','),'\t',','),'    ',' '),'  ',' '),'  ',' '),' ,',','),', ',','),',,,,',','),',,',','),',,',','))", "Keywords != ''");
+safe_update('textpattern', "Keywords = TRIM(BOTH ',' FROM 
+    REPLACE(
+        REPLACE(
+            REPLACE(
+                REPLACE(
+                    REPLACE(
+                        REPLACE(
+                            REPLACE(
+                                REPLACE(
+                                    REPLACE(
+                                        REPLACE(
+                                            REPLACE(Keywords, '\n', ','),
+                                            '\r', ','),
+                                        '\t', ','),
+                                    '    ', ' '),
+                                '  ', ' '),
+                            '  ', ' '),
+                        ' ,', ','),
+                    ', ', ','),
+                ',,,,', ','),
+            ',,', ','),
+        ',,', ',')
+    )", 
+    "Keywords != ''"
+);
 
 // Shift preferences to more intuitive spots.
 // Give positions, leave enough room for later additions.
@@ -195,9 +219,9 @@ safe_update('txp_prefs', "event = 'feeds'", "name IN(
 )");
 
 // 'Textile links' feature removed due to unclear specs.
-safe_delete('txp_prefs', "event='link' AND name='textile_links'");
+safe_delete('txp_prefs', "event = 'link' AND name = 'textile_links'");
 
 // Use TextileRestricted lite/fat in comments?
 if (!safe_field('name', 'txp_prefs', "name = 'comments_use_fat_textile'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'comments_use_fat_textile', val = '0', type = '1', event='comments', html='yesnoradio', position='130'");
+    safe_insert('txp_prefs', "prefs_id = 1, name = 'comments_use_fat_textile', val = '0', type = '1', event = 'comments', html = 'yesnoradio', position = '130'");
 }

@@ -26,9 +26,9 @@ if (!defined('TXP_UPDATE')) {
 }
 
 // Raw CSS is now the only option.
-safe_delete('txp_prefs', "event='css' AND name='edit_raw_css_by_default'");
+safe_delete('txp_prefs', "event = 'css' AND name = 'edit_raw_css_by_default'");
 
-$rs = getRows("SELECT name,css FROM `".PFX."txp_css`");
+$rs = getRows("SELECT name, css FROM `".PFX."txp_css`");
 foreach ($rs as $row) {
     if (preg_match('%^[a-zA-Z0-9/+]*={0,2}$%', $row['css'])) {
         // Data is still base64 encoded.

@@ -40,14 +40,14 @@ safe_delete('txp_prefs',
     "user_name = '' AND name IN ('article_list_pageby', 'author_list_pageby', 'comment_list_pageby', 'file_list_pageby', 'image_list_pageby', 'link_list_pageby', 'log_list_pageby')");
 
 // Use dedicated prefs function for setting custom fields.
-safe_update('txp_prefs', "html='custom_set'",
-    "name IN ('custom_1_set', 'custom_2_set', 'custom_3_set', 'custom_4_set', 'custom_5_set', 'custom_6_set', 'custom_7_set', 'custom_8_set', 'custom_9_set', 'custom_10_set') AND html='text_input'");
+safe_update('txp_prefs', "html = 'custom_set'",
+    "name IN ('custom_1_set', 'custom_2_set', 'custom_3_set', 'custom_4_set', 'custom_5_set', 'custom_6_set', 'custom_7_set', 'custom_8_set', 'custom_9_set', 'custom_10_set') AND html = 'text_input'");
 
 // Send comments prefs.
-safe_update('txp_prefs', "html='commentsendmail'", "name='comments_sendmail' AND html='yesnoradio'");
+safe_update('txp_prefs', "html = 'commentsendmail'", "name = 'comments_sendmail' AND html = 'yesnoradio'");
 
 // Timezone prefs.
-safe_update('txp_prefs', "html='is_dst'", "name='is_dst' AND html='yesnoradio'");
+safe_update('txp_prefs', "html = 'is_dst'", "name = 'is_dst' AND html = 'yesnoradio'");
 
 if (!safe_field('name', 'txp_prefs', "name = 'auto_dst'")) {
     safe_insert('txp_prefs', "prefs_id = 1, name = 'auto_dst', val = '0', type = '0', event = 'publish', html = 'yesnoradio', position = '115'");
@@ -99,7 +99,7 @@ foreach (array('txp_file', 'txp_link') as $table) {
         safe_alter($table, "
             ADD author varchar(64) NOT NULL DEFAULT '',
             ADD INDEX author_idx (author)");
-        safe_update($table, "author='".doSlash($txp_user)."'", '1=1');
+        safe_update($table, "author='".doSlash($txp_user)."'", '1 = 1');
     }
 }
 
