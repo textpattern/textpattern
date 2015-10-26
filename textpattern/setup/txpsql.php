@@ -158,7 +158,7 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
 $setup_comment_invite = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite');
 
 $create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), '0000-00-00 00:00:00', '".doSlash($_SESSION['name'])."', NOW(), '', 'Welcome to your site', '', ".file2sql('textpattern.body').", ".file2sql('textpattern.body_html').", ".file2sql('textpattern.excerpt').", ".file2sql('textpattern.excerpt_html').", '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, '1', '1', 'articles', '', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NOW())";
-$create_sql[] = "UPDATE `".PFX."textpattern` SET Body = replace(Body, 'siteurl', '".doSlash($urlpath)."'), Body_html = replace(Body_html, 'siteurl', '".doSlash($urlpath)."') WHERE ID = 1";
+$create_sql[] = "UPDATE `".PFX."textpattern` SET Body = REPLACE(Body, 'siteurl', '".doSlash($urlpath)."'), Body_html = REPLACE(Body_html, 'siteurl', '".doSlash($urlpath)."') WHERE ID = 1";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_category` (
     id          INT          NOT NULL AUTO_INCREMENT,
@@ -572,10 +572,10 @@ if (!$client->query('tups.getLanguage', $blog_uid, LANG)) {
 
                 if (@$lang_val) {
                     mysqli_query($link, "INSERT DELAYED INTO `".PFX."txp_lang` SET
-                        lang = 'en-gb',
-                        name = '".$lang_key."',
-                        event = '".$evt_name."',
-                        data = '".$lang_val."',
+                        lang    = 'en-gb',
+                        name    = '".$lang_key."',
+                        event   = '".$evt_name."',
+                        data    = '".$lang_val."',
                         lastmod = '".$lastmod."'");
                 }
             }
@@ -591,10 +591,10 @@ if (!$client->query('tups.getLanguage', $blog_uid, LANG)) {
         }
 
         mysqli_query($link, "INSERT DELAYED INTO `".PFX."txp_lang` SET
-            lang = '".LANG."',
-            name = '".$item['name']."',
-            event = '".$item['event']."',
-            data = '".$item['data']."',
+            lang    = '".LANG."',
+            name    = '".$item['name']."',
+            event   = '".$item['event']."',
+            data    = '".$item['data']."',
             lastmod = '".strftime('%Y%m%d%H%M%S', $item['uLastmod'])."'");
     }
 }
