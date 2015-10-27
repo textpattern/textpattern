@@ -453,10 +453,10 @@ function getTxpLogin()
     // Default theme selector.
     $core_themes = array('classic', 'remora', 'hive');
 
-    $themes = theme::names();
+    $themes = \Textpattern\Admin\Theme::names();
 
     foreach ($themes as $t) {
-        $theme = theme::factory($t);
+        $theme = \Textpattern\Admin\Theme::factory($t);
 
         if ($theme) {
             $m = $theme->manifest();

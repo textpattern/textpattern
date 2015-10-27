@@ -151,7 +151,7 @@ if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) 
     $textarray = load_lang(LANG);
 
     // Initialise global theme.
-    $theme = theme::init();
+    $theme = \Textpattern\Admin\Theme::init();
 
     include txpath.'/include/txp_auth.php';
     doAuth();
@@ -200,7 +200,7 @@ if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) 
     }
 
     // Initialise private theme.
-    $theme = theme::init();
+    $theme = \Textpattern\Admin\Theme::init();
 
     include txpath.'/lib/txplib_head.php';
 
