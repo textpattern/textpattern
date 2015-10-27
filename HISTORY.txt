@@ -41,6 +41,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Developer: Added jQuery UI library and a jQuery UI Textpattern theme to admin side.
 * Developer: Added DocBlock documentation comments throughout the source code.
 * Developer: Adherence to PSR coding standards where possible.
+* Developer: Refactored 'Validator', 'Constraint', and 'theme' classes into the 'Textpattern' namespace; deprecated their 'txplib_validator' and 'txplib_theme' implementations.
 
 Changes in 4.5.7
 
