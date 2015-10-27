@@ -474,8 +474,8 @@ $prefs = array(
     ),
     'site' => array(
         array(0,  20, 'text_input'      , 'sitename'                   , gTxt('my_site')),
-        array(0,  30, 'text_input'      , 'site_slogan'                , gTxt('my_slogan')),
         array(0,  40, 'text_input'      , 'siteurl'                    , $siteurl),
+        array(0,  60, 'text_input'      , 'site_slogan'                , gTxt('my_slogan')),
         array(0,  80, 'prod_levels'     , 'production_status'          , 'testing'),
         array(0, 100, 'gmtoffset_select', 'gmtoffset'                  , $gmtoffset),
         array(0, 115, 'yesnoradio'      , 'auto_dst'                   , '0'),

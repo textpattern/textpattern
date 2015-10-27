@@ -180,6 +180,9 @@ safe_update('txp_prefs', "html = 'text_input'", "name = 'timezone_key'");
 // Fix typo: position 40 should be 0 (because it's a hidden pref)
 safe_update('txp_prefs', "position = 0", "name = 'language'");
 
+// Fix typo: position should be 60 instead of 30 (so it appears just below the site name)
+safe_update('txp_prefs', "position = 60", "name = 'site_slogan'");
+
 // Enforce some table changes that happened after 4.0.3 but weren't part of update scripts until now
 safe_alter('txp_css',  "MODIFY name  VARCHAR(255) NOT NULL");
 safe_alter('txp_lang', "MODIFY lang  VARCHAR(16)  NOT NULL");
