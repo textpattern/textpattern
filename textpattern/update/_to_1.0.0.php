@@ -468,18 +468,7 @@ if (safe_count('txp_category', "title = ''") > 0) {
 }
 
 // 1.0: Unique key and 'type' field for the txp_prefs table.
-$has_prefs_idx = 0;
-$rs = getRows("SHOW INDEX FROM `".PFX."txp_prefs`");
-
-foreach ($rs as $row) {
-    if ($row['Key_name'] == 'prefs_idx') {
-        $has_prefs_idx = 1;
-    }
-
-    if (!$has_prefs_idx) {
-        safe_query('ALTER IGNORE TABLE `'.PFX.'txp_prefs` ADD UNIQUE prefs_idx(prefs_id, name)');
-    }
-}
+safe_create_index('txp_prefs', 'prefs_id, name', 'prefs_idx', 'unique');
 
 $txpprefs = getThings('DESCRIBE `'.PFX.'txp_prefs`');
 

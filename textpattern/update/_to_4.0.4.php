@@ -40,18 +40,7 @@ safe_update('txp_prefs', "val = '1'", "name = 'send_lastmod' AND prefs_id = '1'"
 update_lastmod();
 
 // Speed up article queries.
-$has_ss_idx = 0;
-$rs = getRows("SHOW INDEX FROM `".PFX."textpattern`");
-
-foreach ($rs as $row) {
-    if ($row['Key_name'] == 'section_status_idx') {
-        $has_ss_idx = 1;
-    }
-}
-
-if (!$has_ss_idx) {
-    safe_query("ALTER IGNORE TABLE `".PFX."textpattern` ADD INDEX section_status_idx (Section, Status)");
-}
+safe_create_index('textpattern', 'Section, Status', 'section_status_idx');
 
 if (!safe_field('name', 'txp_prefs', "name = 'title_no_widow'")) {
     safe_insert('txp_prefs', "prefs_id = 1, name = 'title_no_widow', val = '0', type = '1', html = 'yesnoradio'");

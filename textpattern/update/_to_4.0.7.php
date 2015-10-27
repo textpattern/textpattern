@@ -52,18 +52,7 @@ if (!in_array('Expires', $txp)) {
     safe_alter('textpattern', "ADD Expires DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' AFTER Posted");
 }
 
-$has_expires_idx = 0;
-$rs = getRows("SHOW INDEX FROM `".PFX."textpattern`");
-
-foreach ($rs as $row) {
-    if ($row['Key_name'] == 'Expires_idx') {
-        $has_expires_idx = 1;
-    }
-}
-
-if (!$has_expires_idx) {
-    safe_query('ALTER IGNORE TABLE `'.PFX.'textpattern` ADD INDEX Expires_idx (Expires)');
-}
+safe_create_index('textpattern', 'Expires', 'Expires_idx');
 
 // Publish expired articles, or return 410?
 if (!safe_field('name', 'txp_prefs', "name = 'publish_expired_articles'")) {
