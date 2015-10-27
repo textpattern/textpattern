@@ -31,7 +31,7 @@ if (!in_array('user_name', $cols)) {
     safe_alter('txp_prefs', "
         ADD user_name VARCHAR(64) NOT NULL DEFAULT '',
         DROP INDEX prefs_idx,
-        ADD UNIQUE prefs_idx (prefs_id, name(185), user_name),
+        ADD UNIQUE prefs_idx (prefs_id, name, user_name),
         ADD INDEX user_name (user_name)");
 }
 
@@ -104,17 +104,5 @@ foreach (array('txp_file', 'txp_link') as $table) {
 }
 
 // Add indices on author columns.
-foreach (array('textpattern' => 'AuthorID', 'txp_image' => 'author') as $table => $col) {
-    $has_idx = 0;
-    $rs = getRows('SHOW INDEX FROM `'.PFX.$table.'`');
-
-    foreach ($rs as $row) {
-        if ($row['Key_name'] == 'author_idx') {
-            $has_idx = 1;
-        }
-    }
-
-    if (!$has_idx) {
-        safe_query('ALTER IGNORE TABLE `'.PFX.$table.'` ADD INDEX author_idx('.$col.')');
-    }
-}
+safe_create_index('textpattern', 'AuthorID', 'author_idx');
+safe_create_index('txp_image', 'author', 'author_idx');

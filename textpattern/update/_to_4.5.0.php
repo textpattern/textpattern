@@ -46,18 +46,7 @@ safe_alter('txp_users', "
 // Remove any setup strings from lang table.
 safe_delete('txp_lang', "event = 'setup'");
 
-$has_idx = 0;
-$rs = getRows("SHOW INDEX FROM `".PFX."textpattern`");
-
-foreach ($rs as $row) {
-    if ($row['Key_name'] == 'url_title_idx') {
-        $has_idx = 1;
-    }
-}
-
-if (!$has_idx) {
-    safe_query('alter ignore table `'.PFX.'textpattern` add index url_title_idx(url_title(250))');
-}
+safe_create_index('textpattern', 'url_title', 'url_title_idx');
 
 // Remove is_default from txp_section table and make it a preference.
 if (!safe_field('name', 'txp_prefs', "name = 'default_section'")) {

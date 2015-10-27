@@ -595,7 +595,7 @@ function safe_index($table, $index, $debug = false)
  * @param  string $table   The table
  * @param  string $columns Indexed columns
  * @param  string $name    The name
- * @param  string $index   The index. Either 'unique', 'fulltext', 'spatial'
+ * @param  string $index   The index. Either 'unique', 'fulltext', 'spatial' (default = standard index)
  * @param  string $type    The index type
  * @param  bool   $debug   Dump the query
  * @return bool TRUE if index exists
@@ -607,7 +607,7 @@ function safe_index($table, $index, $debug = false)
  * }
  */
 
-function safe_create_index($table, $columns, $name, $index = 'fulltext', $type = '', $debug = false)
+function safe_create_index($table, $columns, $name, $index = '', $type = '', $debug = false)
 {
     if (safe_index($table, $name, $debug)) {
         return true;
