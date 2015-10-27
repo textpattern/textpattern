@@ -331,7 +331,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_page` (
-    name      VARCHAR(255) NOT NULL,
+    name      VARCHAR(255) NOT NULL DEFAULT '',
     user_html TEXT         NOT NULL,
 
     PRIMARY KEY (name(250))
@@ -362,7 +362,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_plugin` (
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
     prefs_id  INT               NOT NULL DEFAULT '1',
-    name      VARCHAR(255)      NOT NULL,
+    name      VARCHAR(255)      NOT NULL DEFAULT '',
     val       TEXT              NOT NULL,
     type      SMALLINT UNSIGNED NOT NULL DEFAULT '2',
     event     VARCHAR(255)      NOT NULL DEFAULT 'publish',
@@ -498,7 +498,7 @@ foreach ($prefs as $event => $event_prefs) {
 }
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_section` (
-    name         VARCHAR(255) NOT NULL,
+    name         VARCHAR(255) NOT NULL DEFAULT '',
     page         VARCHAR(255) NOT NULL DEFAULT '',
     css          VARCHAR(255) NOT NULL DEFAULT '',
     description  VARCHAR(255) NOT NULL DEFAULT '',
@@ -516,7 +516,7 @@ $create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('default', 'default', 
 $create_sql[] = "CREATE TABLE `".PFX."txp_users` (
     user_id     INT          NOT NULL AUTO_INCREMENT,
     name        VARCHAR(64)  NOT NULL DEFAULT '',
-    pass        VARCHAR(128) NOT NULL DEFAULT '',
+    pass        VARCHAR(128) NOT NULL,
     RealName    VARCHAR(255) NOT NULL DEFAULT '',
     email       VARCHAR(254) NOT NULL DEFAULT '',
     privs       TINYINT      NOT NULL DEFAULT '1',

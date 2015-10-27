@@ -85,15 +85,15 @@ safe_alter('txp_link',  "MODIFY author VARCHAR(64) NOT NULL DEFAULT ''");
 safe_alter('txp_image', "MODIFY author VARCHAR(64) NOT NULL DEFAULT ''");
 
 // Consistent name length limitations for presentation items.
-safe_alter('txp_form', "MODIFY name VARCHAR(255) NOT NULL");
-safe_alter('txp_page', "MODIFY name VARCHAR(255) NOT NULL");
+safe_alter('txp_form', "MODIFY name VARCHAR(255) NOT NULL DEFAULT ''");
+safe_alter('txp_page', "MODIFY name VARCHAR(255) NOT NULL DEFAULT ''");
 safe_alter('txp_section', "
     MODIFY page VARCHAR(255) NOT NULL DEFAULT '',
     MODIFY css  VARCHAR(255) NOT NULL DEFAULT ''");
 
 // Save sections correctly in articles.
 safe_alter('textpattern', "MODIFY Section VARCHAR(255) NOT NULL DEFAULT ''");
-safe_alter('txp_section', "MODIFY name    VARCHAR(255) NOT NULL");
+safe_alter('txp_section', "MODIFY name    VARCHAR(255) NOT NULL DEFAULT ''");
 
 // Plugins can have longer version numbers.
 safe_alter('txp_plugin', "MODIFY version VARCHAR(255) NOT NULL DEFAULT '1.0'");

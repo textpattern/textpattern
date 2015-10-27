@@ -182,7 +182,7 @@ eod;
     safe_insert('txp_form', "name = 'popup_comments', type = 'comment', Form = '$popform'");
 }
 
-safe_update('txp_category', "lft = 0, rgt = 0", "name! = 'root'");
+safe_update('txp_category', "lft = 0, rgt = 0", "name != 'root'");
 
 safe_delete('txp_category', "name = 'root'");
 
