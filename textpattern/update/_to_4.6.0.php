@@ -59,7 +59,7 @@ safe_update('txp_prefs', "position = '320'", "name = 'comments_use_fat_textile'"
 safe_update('txp_prefs', "position = '340'", "name = 'spam_blacklists'");
 
 // Support for l10n string owners.
-$cols = getThings('describe `'.PFX.'txp_lang`');
+$cols = getThings('DESCRIBE `'.PFX.'txp_lang`');
 
 if (!in_array('owner', $cols)) {
     safe_alter('txp_lang', "
@@ -152,25 +152,43 @@ if (file_exists(txpath.DS.'include'.DS.'txp_import.php')) {
 }
 
 // Remove unused ipban table or recreate its index (for future utf8mb4 conversion)
-if (!safe_count('txp_discuss_ipban', '1 = 1')) {
-    safe_drop('txp_discuss_ipban');
-} else {
-    safe_alter('txp_discuss_ipban', "DROP PRIMARY KEY, ADD PRIMARY KEY (ip(250))");
+if (getThing("SHOW TABLES LIKE '".PFX."txp_discuss_ipban'")) {
+    if (!safe_count('txp_discuss_ipban', '1 = 1')) {
+        safe_drop('txp_discuss_ipban');
+    } else {
+        safe_alter('txp_discuss_ipban', "DROP PRIMARY KEY, ADD PRIMARY KEY (ip(250))");
+    }
 }
 
-// Recreate indexes to allow future conversion to charset utf8mb4
-safe_alter('txp_discuss_nonce', "DROP PRIMARY KEY,              ADD PRIMARY KEY (nonce(250))");
-safe_alter('txp_css',           "DROP INDEX name,               ADD UNIQUE name (name(250))");
-safe_alter('txp_file',          "DROP INDEX filename,           ADD UNIQUE filename (filename(250))");
-safe_alter('txp_form',          "DROP PRIMARY KEY,              ADD PRIMARY KEY (name(250))");
-safe_alter('txp_page',          "DROP PRIMARY KEY,              ADD PRIMARY KEY (name(250))");
-safe_alter('txp_section',       "DROP PRIMARY KEY,              ADD PRIMARY KEY (name(250))");
-safe_alter('txp_prefs',         "DROP INDEX prefs_idx,          ADD UNIQUE prefs_idx (prefs_id, name(185), user_name)");
-safe_alter('textpattern',       "DROP INDEX section_status_idx, ADD INDEX section_status_idx (Section(249), Status)");
-safe_alter('textpattern',       "DROP INDEX url_title_idx,      ADD INDEX url_title_idx (url_title(250))");
+// Recreate indexes with smaller key sizes to allow future conversion to charset utf8mb4
+safe_alter('txp_css',     "DROP INDEX name,               ADD UNIQUE name (name(250))");
+safe_alter('txp_file',    "DROP INDEX filename,           ADD UNIQUE filename (filename(250))");
+safe_alter('txp_form',    "DROP PRIMARY KEY,              ADD PRIMARY KEY (name(250))");
+safe_alter('txp_page',    "DROP PRIMARY KEY,              ADD PRIMARY KEY (name(250))");
+safe_alter('txp_section', "DROP PRIMARY KEY,              ADD PRIMARY KEY (name(250))");
+safe_alter('txp_prefs',   "DROP INDEX prefs_idx,          ADD UNIQUE prefs_idx (prefs_id, name(185), user_name)");
+safe_alter('txp_prefs',   "DROP INDEX name,               ADD INDEX name (name(250))");
+safe_alter('textpattern', "DROP INDEX section_status_idx, ADD INDEX section_status_idx (Section(249), Status)");
+safe_alter('textpattern', "DROP INDEX url_title_idx,      ADD INDEX url_title_idx (url_title(250))");
+// txp_discuss_nonce didn't have a primary key in 4.0.3, so we recreate its index in two steps
+safe_drop_index('txp_discuss_nonce', "PRIMARY");
+safe_alter('txp_discuss_nonce', "ADD PRIMARY KEY (nonce(250))");
 
 // Fix typo: textinput should be text_input
 safe_update('txp_prefs', "html = 'text_input'", "name = 'timezone_key'");
 
 // Fix typo: position 40 should be 0 (because it's a hidden pref)
 safe_update('txp_prefs', "position = 0", "name = 'language'");
+
+// Enforce some table changes that happened after 4.0.3 but weren't part of update scripts until now
+safe_alter('txp_css',  "MODIFY name  VARCHAR(255) NOT NULL");
+safe_alter('txp_lang', "MODIFY lang  VARCHAR(16)  NOT NULL");
+safe_alter('txp_lang', "MODIFY name  VARCHAR(64)  NOT NULL");
+safe_alter('txp_lang', "MODIFY event VARCHAR(64)  NOT NULL");
+safe_drop_index('txp_form', "name");
+safe_drop_index('txp_page', "name");
+safe_drop_index('txp_plugin', "name_2");
+safe_drop_index('txp_section', "name");
+
+// The txp_priv table was created for version 1.0, but never used nor created in later versions.
+safe_drop('txp_priv');
