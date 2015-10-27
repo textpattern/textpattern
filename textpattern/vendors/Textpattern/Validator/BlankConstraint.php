@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Textpattern Content Management System
  * http://textpattern.com
