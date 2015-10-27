@@ -714,9 +714,9 @@ function custom_set($name, $val)
 
 function themename($name, $val)
 {
-    $themes = theme::names();
+    $themes = \Textpattern\Admin\Theme::names();
     foreach ($themes as $t) {
-        $theme = theme::factory($t);
+        $theme = \Textpattern\Admin\Theme::factory($t);
         if ($theme) {
             $m = $theme->manifest();
             $title = empty($m['title']) ? ucwords($theme->name) : $m['title'];

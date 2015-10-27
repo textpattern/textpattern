@@ -21,25 +21,34 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Deprecation warning: This file serves merely as a compatibility layer for \Textpattern\Admin\Theme.
- * Use the base class for new and updated code.
- * TODO: Remove in v4.next.0
+/**
+ * Tests against existing form names.
+ *
+ * @since   4.6.0
+ * @package Validator
  */
 
-/**
- * Base for admin-side themes.
- *
- * @package Admin\Theme
- */
+namespace Textpattern\Validator;
 
-/**
- * Admin-side theme.
- *
- * @package Admin\Theme
- * @deprecated in 4.6.0
- * @see \Textpattern\Admin\Theme
- */
-class theme extends \Textpattern\Admin\Theme
+class FormConstraint extends ChoiceConstraint
 {
+    /**
+     * Constructor.
+     *
+     * @param mixed $value
+     * @param array $options
+     */
+
+    public function __construct($value, $options = array())
+    {
+        static $choices = null;
+        $options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_form'), $options, false);
+
+        if (null === $choices) {
+            $choices = safe_column('name', 'txp_form', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
+        }
+
+        $options['choices'] = $choices;
+        parent::__construct($value, $options);
+    }
 }

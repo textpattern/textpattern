@@ -22,20 +22,15 @@
  */
 
 /**
- * Imports Validator.
- */
-
-namespace Textpattern\Textfilter;
-
-require_once txpath.'/lib/txplib_validator.php';
-
-/**
  * Constraint for Textfilters.
  *
  * @since   4.6.0
  * @package Textfilter
  */
-class Constraint extends \Constraint
+
+namespace Textpattern\Textfilter;
+
+class Constraint extends \Textpattern\Validator\Constraint
 {
     /**
      * Validates filter selection.
