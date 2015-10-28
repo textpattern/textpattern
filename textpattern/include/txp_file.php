@@ -1117,7 +1117,7 @@ function file_set_perm($file)
 
 // -------------------------------------------------------------
 
-function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $class)
+function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $class = '')
 {
     global $file_max_upload_size;
 
