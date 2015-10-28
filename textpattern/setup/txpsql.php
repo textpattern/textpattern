@@ -98,10 +98,11 @@ if (is_callable('apache_get_modules')) {
     }
 }
 
-$siteurl = str_replace("http://", '', $_SESSION['siteurl']);
-$siteurl = str_replace(' ', '%20', rtrim($siteurl, "/"));
-$urlpath = preg_replace('#^[^/]+#', '', $siteurl);        
-$theme   = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
+$siteurl  = str_replace("http://", '', $_SESSION['siteurl']);
+$siteurl  = str_replace(' ', '%20', rtrim($siteurl, "/"));
+$urlpath  = preg_replace('#^[^/]+#', '', $siteurl);
+$theme    = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
+$themedir = txpath.DS.'setup';
 
 $create_sql = array();
 
@@ -157,8 +158,17 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
 
 $setup_comment_invite = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite');
 
-$create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), '0000-00-00 00:00:00', '".doSlash($_SESSION['name'])."', NOW(), '', 'Welcome to your site', '', ".file2sql('textpattern.body').", ".file2sql('textpattern.body_html').", ".file2sql('textpattern.excerpt').", ".file2sql('textpattern.excerpt_html').", '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, '1', '1', 'articles', '', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NOW())";
-$create_sql[] = "UPDATE `".PFX."textpattern` SET Body = REPLACE(Body, 'siteurl', '".doSlash($urlpath)."'), Body_html = REPLACE(Body_html, 'siteurl', '".doSlash($urlpath)."') WHERE ID = 1";
+require_once txpath.'/lib/classTextile.php';
+$textile = new Textile();
+
+$article['body']    = file_get_contents(txpath.DS.'setup'.DS.'article.body.txp');
+$article['excerpt'] = file_get_contents(txpath.DS.'setup'.DS.'article.excerpt.txp');
+$article = str_replace('siteurl', $urlpath, $article);
+$article['body_html']    = $textile->TextileThis($article['body']);
+$article['excerpt_html'] = $textile->TextileThis($article['excerpt']);
+$article = doSlash($article);
+
+$create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), '0000-00-00 00:00:00', '".doSlash($_SESSION['name'])."', NOW(), '', 'Welcome to your site', '', '".$article['body']."', '".$article['body_html']."', '".$article['excerpt']."', '".$article['excerpt_html']."', '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, '1', '1', 'articles', '', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NOW())";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_category` (
     id          INT          NOT NULL AUTO_INCREMENT,
@@ -189,8 +199,12 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_css` (
     UNIQUE name (name(250))
 ) $tabletype ";
 
-$create_sql[] = "INSERT INTO `".PFX."txp_css`(name, css) VALUES('default', ".file2sql('css.default').")";
-$create_sql[] = "INSERT INTO `".PFX."txp_css`(name, css) VALUES('ie8', ".file2sql('css.ie8').")";
+foreach(scandir($themedir.DS.'css') as $cssfile) {
+    if (preg_match('/^(\w+)\.css$/', $cssfile, $match)) {
+        $css = doSlash(file_get_contents($themedir.DS.'css'.DS.$cssfile));
+        $create_sql[] = "INSERT INTO `".PFX."txp_css`(name, css) VALUES('".$match[1]."', '".$css."')";
+    }
+}
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
     discussid INT(6) ZEROFILL NOT NULL AUTO_INCREMENT,
@@ -245,18 +259,11 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_form` (
     PRIMARY KEY (name(250))
 ) $tabletype ";
 
-$forms = array(
-    'article' => array('article_listing', 'default', 'search_results'),
-    'comment' => array('comments', 'comments_display', 'comment_form', 'popup_comments'),
-    'file'    => array('files'),
-    'link'    => array('plainlinks'),
-    'misc'    => array('images', 'search_input'),
-);
-
-foreach ($forms as $form_type => $forms) {
-    foreach ($forms as $form_name) {
-        $create_sql[] = "INSERT INTO `".PFX."txp_form`(name, type, Form)
-            VALUES('".$form_name."', '".$form_type."', ".file2sql('form.'.$form_name).")";
+foreach(scandir($themedir.DS.'forms') as $formfile) {
+    if (preg_match('/^(\w+).(\w+)\.txp$/', $formfile, $match)) {
+        $form = doSlash(file_get_contents($themedir.DS.'forms'.DS.$formfile));
+        $create_sql[] = "INSERT INTO `".PFX."txp_form`(type, name, Form)
+            VALUES('".$match[1]."', '".$match[2]."', '".$form."')";
     }
 }
 
@@ -337,8 +344,11 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_page` (
     PRIMARY KEY (name(250))
 ) $tabletype ";
 
-foreach (array('archive', 'default', 'error_default') as $page_name) {
-    $create_sql[] = "INSERT INTO `".PFX."txp_page`(name, user_html) VALUES('".$page_name."', ".file2sql('page.'.$page_name).")";
+foreach(scandir($themedir.DS.'pages') as $pagefile) {
+    if (preg_match('/^(\w+)\.txp$/', $pagefile, $match)) {
+        $page = doSlash(file_get_contents($themedir.DS.'pages'.DS.$pagefile));
+        $create_sql[] = "INSERT INTO `".PFX."txp_page`(name, user_html) VALUES('".$match[1]."', '".$page."')";
+    }
 }
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_plugin` (
@@ -611,9 +621,4 @@ function safe_escape($in = '')
 {
     global $link;
     return mysqli_real_escape_string($link, $in);
-}
-
-function file2sql($filename)
-{
-    return "'".doSlash(file_get_contents(txpath.'/setup/'.$filename))."'";
 }
