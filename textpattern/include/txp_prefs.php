@@ -201,25 +201,17 @@ function prefs_list($message = '')
                             'class'           => 'txp-prefs-group',
                             'id'              => 'prefs_group_'.$last_event,
                             'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
-                            'role'            => 'tabpanel',
                         )
                     );
 
-                    $groupOut[] = tag(href(
+                    $groupOut[] = n.tag(href(
                             gTxt($last_event),
-                            '#'.$last_event,
+                            '#prefs_group_'.$last_event,
                             array(
                                 'data-txp-pane'  => $last_event,
                                 'data-txp-token' => form_token(),
-                                'role'           => 'presentation',
-                                'tabindex'       => '-1',
                             )),
-                        'li',
-                        array(
-                            'role'            => 'tab',
-                            'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
-                            'aria-controls'   => 'prefs_group_'.$last_event,
-                        ));
+                        'li');
                 }
 
                 $last_event = $a['event'];
@@ -267,31 +259,23 @@ function prefs_list($message = '')
                 'class'           => 'txp-prefs-group',
                 'id'              => 'prefs_group_'.$last_event,
                 'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
-                'role'            => 'tabpanel',
             )
         );
 
-        $groupOut[] = tag(href(
+        $groupOut[] = n.tag(href(
                 gTxt($last_event),
-                '#'.$last_event,
+                '#prefs_group_'.$last_event,
                 array(
                     'data-txp-pane'  => $last_event,
                     'data-txp-token' => form_token(),
-                    'role'           => 'presentation',
-                    'tabindex'       => '-1',
                 )),
-            'li',
-            array(
-                'role'            => 'tab',
-                'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
-                'aria-controls'   => 'prefs_group_'.$last_event,
-            ));
+            'li').n;
 
         echo n.'<div class="txp-layout-4col-cell-1alt">'.
             hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')).
             wrapGroup(
                 'all_preferences',
-                tag(join(n, $groupOut), 'ul', array('class' => 'switcher-list', 'role' => 'tablist')),
+                n.tag(join($groupOut), 'ul', array('class' => 'switcher-list')),
                 'all_preferences'
             );
 
