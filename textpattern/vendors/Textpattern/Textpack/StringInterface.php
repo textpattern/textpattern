@@ -22,6 +22,7 @@
  */
 
 namespace Textpattern\Textpack;
+
 /**
  * Textpack string template.
  *
