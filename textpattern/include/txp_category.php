@@ -550,7 +550,7 @@ function cat_event_category_edit($evname)
             inputLabel(
                 'category_description',
                 text_area('description', 0, 0, $description, 'category_description', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE),
-                $evname.'_category_description', 'category_description', array('class' => 'txp-form-field edit-category-description')
+                $evname.'_category_description', 'category_description', array('class' => 'txp-form-field txp-form-field-textarea edit-category-description')
             ).
             pluggable_ui('category_ui', 'extend_detail_form', '', $row).
             hInput('id', $id).

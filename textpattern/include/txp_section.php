@@ -482,7 +482,7 @@ function section_edit()
     $out[] = inputLabel(
             'section_description',
             text_area('description', 0, 0, $sec_description, 'section_description', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE),
-            'section_description', 'section_description', array('class' => 'txp-form-field edit-section-description')
+            'section_description', 'section_description', array('class' => 'txp-form-field txp-form-field-textarea edit-section-description')
         ).
         inputLabel(
             'section_page',

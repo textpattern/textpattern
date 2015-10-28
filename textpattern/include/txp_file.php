@@ -638,8 +638,8 @@ function file_edit($message = '', $id = '')
         $existing_files = get_filenames();
 
         $replace = ($file_exists)
-            ? wrapGroup('file_upload_group', file_upload_form('', '', 'file_replace', $id, 'file_replace'), 'replace_file', 'replace-file', 'file_replace')
-            : wrapGroup('file_upload_group', file_upload_form('', '', 'file_replace', $id, 'file_reassign'), 'file_relink', 'upload-file', 'file_reassign');
+            ? file_upload_form(gTxt('replace_file'), 'file_replace', 'file_replace', $id, 'file_replace', ' replace-file')
+            : file_upload_form(gTxt('file_relink'), 'file_reassign', 'file_replace', $id, 'file_reassign', ' upload-file');
 
         $condition = span((($file_exists)
                 ? gTxt('file_status_ok')
@@ -1117,7 +1117,7 @@ function file_set_perm($file)
 
 // -------------------------------------------------------------
 
-function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '')
+function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $class = '')
 {
     global $file_max_upload_size;
 
@@ -1127,7 +1127,7 @@ function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '')
 
     $max_file_size = (intval($file_max_upload_size) == 0) ? '' : intval($file_max_upload_size);
 
-    return upload_form($label, $pophelp, $step, 'file', $id, $max_file_size, $label_id);
+    return upload_form($label, $pophelp, $step, 'file', $id, $max_file_size, $label_id, $class);
 }
 
 // -------------------------------------------------------------
