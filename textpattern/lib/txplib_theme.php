@@ -40,6 +40,6 @@
  * @deprecated in 4.6.0
  * @see \Textpattern\Admin\Theme
  */
-class theme extends \Textpattern\Admin\Theme
+abstract class theme extends \Textpattern\Admin\Theme
 {
 }

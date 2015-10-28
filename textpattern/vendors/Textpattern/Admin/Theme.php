@@ -42,7 +42,7 @@ if (!defined('THEME')) {
  *
  * @package Admin\Theme
  */
-class Theme
+abstract class Theme
 {
     /**
      * The theme name.
@@ -310,10 +310,7 @@ class Theme
      * @return string
      */
 
-    public function html_head()
-    {
-        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
-    }
+    abstract public function html_head();
 
     /**
      * Draw the theme's header.
@@ -321,10 +318,7 @@ class Theme
      * @return string
      */
 
-    public function header()
-    {
-        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
-    }
+    abstract public function header();
 
     /**
      * Draw the theme's footer.
@@ -332,10 +326,7 @@ class Theme
      * @return string
      */
 
-    public function footer()
-    {
-        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
-    }
+    abstract public function footer();
 
     /**
      * Output notification message for synchronous HTML views.
