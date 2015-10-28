@@ -525,8 +525,6 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
                             'class'     => 'current-page',
                             'id'        => 'current-page',
                             'size'      => INPUT_XSMALL,
-                            'min'       => 1,
-                            'max'       => $numPages,
                         )),
                     'page'
                 ).
