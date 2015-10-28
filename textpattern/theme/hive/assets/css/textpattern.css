@@ -3079,28 +3079,32 @@ div.multi-edit {
  * </div>
  */
 .txp-form-field-textarea,
-.txp-form-field-textarea .txp-input,
+.txp-form-field-textarea .txp-label,
 .txp-form-field-textarea .txp-value {
   -webkit-flex: none;
   -ms-flex: none;
   flex: none;
   display: block;
-  max-width: none;
+  max-width: inherit;
+  min-height: inherit;
 }
 
 /**
- * Don't flex form fields in for main content panes, login panes and
- * details panes.
+ * Don't flex form fields in for main content panes, login panes, details panes
+ * and file upload forms.
  */
 .txp-layout-4col-cell-1-2-3 .txp-form-field,
-.txp-layout-4col-cell-1-2-3 .txp-input,
+.txp-layout-4col-cell-1-2-3 .txp-label,
 .txp-layout-4col-cell-1-2-3 .txp-value,
 .txp-login .txp-form-field,
-.txp-login .txp-input,
+.txp-login .txp-label,
 .txp-login .txp-value,
 .txp-details .txp-form-field,
-.txp-details .txp-input,
-.txp-details .txp-value {
+.txp-details .txp-label,
+.txp-details .txp-value,
+.upload-form .txp-form-field,
+.upload-form .txp-label,
+.upload-form .txp-value {
   display: block;
 }
 
