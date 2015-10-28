@@ -1718,42 +1718,28 @@ ul.nav-tertiary li {
 }
 
 .nav-tertiary a,
-.nav-tertiary .navlink-disabled,
-.prev-next a,
-.prev-next .navlink-disabled {
+.nav-tertiary .navlink-disabled {
   border-radius: 0;
 }
 .nav-tertiary > :first-child,
 .nav-tertiary > :first-child > a,
-.nav-tertiary > :first-child > span,
-.prev-next > :first-child,
-.prev-next > :first-child > a,
-.prev-next > :first-child > span {
+.nav-tertiary > :first-child > span {
   border-radius: 0.5em 0 0 0.5em;
 }
 .nav-tertiary > :last-child,
 .nav-tertiary > :last-child > a,
-.nav-tertiary > :last-child > span,
-.prev-next > :last-child,
-.prev-next > :last-child > a,
-.prev-next > :last-child > span {
+.nav-tertiary > :last-child > span {
   border-radius: 0 0.5em 0.5em 0;
 }
 
 [dir="rtl"] .nav-tertiary > :first-child,
 [dir="rtl"] .nav-tertiary > :first-child > a,
-[dir="rtl"] .nav-tertiary > :first-child > span,
-[dir="rtl"] .prev-next > :first-child,
-[dir="rtl"] .prev-next > :first-child > a,
-[dir="rtl"] .prev-next > :first-child > span {
+[dir="rtl"] .nav-tertiary > :first-child > span {
   border-radius: 0 0.5em 0.5em 0;
 }
 [dir="rtl"] .nav-tertiary > :last-child,
 [dir="rtl"] .nav-tertiary > :last-child > a,
-[dir="rtl"] .nav-tertiary > :last-child > span,
-[dir="rtl"] .prev-next > :last-child,
-[dir="rtl"] .prev-next > :last-child > a,
-[dir="rtl"] .prev-next > :last-child > span {
+[dir="rtl"] .nav-tertiary > :last-child > span {
   border-radius: 0.5em 0 0 0.5em;
 }
 
