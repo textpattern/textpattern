@@ -24,7 +24,7 @@
 /**
  * Base for admin-side themes.
  *
- * @package Theme
+ * @package Admin\Theme
  */
 
 namespace Textpattern\Admin;
@@ -42,7 +42,8 @@ if (!defined('THEME')) {
  *
  * @package Admin\Theme
  */
-class Theme
+
+abstract class Theme
 {
     /**
      * The theme name.
@@ -80,8 +81,8 @@ class Theme
      * Stores an activity message.
      *
      * @var bool
-     * @see theme::announce()
-     * @see theme::announce_async()
+     * @see \Textpattern\Admin\Theme::announce()
+     * @see \Textpattern\Admin\Theme::announce_async()
      */
 
     public $message;
@@ -117,7 +118,7 @@ class Theme
      * Theme factory.
      *
      * @param  string $name Theme name
-     * @return \Textpattern\Admin\Theme\Theme|bool An initialised theme object or FALSE on failure
+     * @return \Textpattern\Admin\Theme|bool An initialised theme object or FALSE on failure
      */
 
     public static function factory($name)
@@ -143,7 +144,7 @@ class Theme
      * Initialise the theme singleton.
      *
      * @param  string $name Theme name
-     * @return \Textpattern\Admin\Theme\Theme A valid theme object
+     * @return \Textpattern\Admin\Theme A valid theme object
      */
 
     public static function init($name = '')
@@ -233,7 +234,7 @@ class Theme
      * @param  string $event Currently active second level menu
      * @param  bool $is_popup Just a popup window for tag builder et cetera
      * @param  array $message The contents of the notification message pane
-     * @return \Textpattern\Admin\Theme\Theme This theme object
+     * @return \Textpattern\Admin\Theme This theme object
      */
 
     public function set_state($area, $event, $is_popup, $message)
@@ -310,10 +311,7 @@ class Theme
      * @return string
      */
 
-    public function html_head()
-    {
-        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
-    }
+    abstract public function html_head();
 
     /**
      * Draw the theme's header.
@@ -321,10 +319,7 @@ class Theme
      * @return string
      */
 
-    public function header()
-    {
-        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
-    }
+    abstract public function header();
 
     /**
      * Draw the theme's footer.
@@ -332,10 +327,7 @@ class Theme
      * @return string
      */
 
-    public function footer()
-    {
-        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
-    }
+    abstract public function footer();
 
     /**
      * Output notification message for synchronous HTML views.
