@@ -591,7 +591,7 @@ function image_edit($message = '', $id = '')
             pluggable_ui(
                 'image_ui',
                 'image_edit',
-                wrapGroup('image_edit_group', upload_form('', '', 'image_replace', 'image', $id, $file_max_upload_size, 'image_replace', 'image-replace'), 'replace_image', 'replace-image', 'replace_image_form'),
+                upload_form(gTxt('replace_image'), 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image_replace', ' image-replace'),
                 $rs
             ),
 
@@ -609,7 +609,7 @@ function image_edit($message = '', $id = '')
             pluggable_ui(
                 'image_ui',
                 'thumbnail_edit',
-                wrapGroup('thumbnail_edit_group', upload_form('', '', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'upload_thumbnail', 'thumbnail-upload'), 'upload_thumbnail', 'thumbnail-upload', 'upload_thumbnail'),
+                upload_form(gTxt('upload_thumbnail'), 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'upload_thumbnail', ' thumbnail-upload'),
                 $rs
             ),
 

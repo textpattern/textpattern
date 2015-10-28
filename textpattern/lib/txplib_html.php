@@ -1425,7 +1425,7 @@ function pageby_form($event, $val, $step = null)
  * @return string HTML
  */
 
-function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = 'upload-form')
+function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = '')
 {
     extract(gpsa(array(
         'page',
@@ -1467,7 +1467,7 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
         tInput().n,
 
         'form', array(
-            'class'   => $class,
+            'class'   => 'upload-form'.$class,
             'method'  => 'post',
             'enctype' => 'multipart/form-data',
             'action'  => 'index.php',
