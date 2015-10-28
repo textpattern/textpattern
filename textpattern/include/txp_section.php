@@ -480,11 +480,6 @@ function section_edit()
     }
 
     $out[] = inputLabel(
-            'section_description',
-            text_area('description', 0, 0, $sec_description, 'section_description', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE),
-            'section_description', 'section_description', array('class' => 'txp-form-field txp-form-field-textarea edit-section-description')
-        ).
-        inputLabel(
             'section_page',
             selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'),
             'uses_page', 'section_uses_page', array('class' => 'txp-form-field edit-section-uses-page')
@@ -512,6 +507,12 @@ function section_edit()
                 '', 'section_searchable', array('class' => 'txp-form-field edit-section-searchable')
             );
     }
+
+    $out[] = inputLabel(
+            'section_description',
+            text_area('description', 0, 0, $sec_description, 'section_description', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE),
+            'section_description', 'section_description', array('class' => 'txp-form-field txp-form-field-textarea edit-section-description')
+        );
 
     $out[] = pluggable_ui('section_ui', 'extend_detail_form', '', $rs).
         graf(fInput('submit', '', gTxt('save'), 'publish')).
