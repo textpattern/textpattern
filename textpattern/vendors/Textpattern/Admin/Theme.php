@@ -80,8 +80,8 @@ class Theme
      * Stores an activity message.
      *
      * @var bool
-     * @see theme::announce()
-     * @see theme::announce_async()
+     * @see \Textpattern\Admin\Theme::announce()
+     * @see \Textpattern\Admin\Theme::announce_async()
      */
 
     public $message;
@@ -117,7 +117,7 @@ class Theme
      * Theme factory.
      *
      * @param  string $name Theme name
-     * @return \Textpattern\Admin\Theme\Theme|bool An initialised theme object or FALSE on failure
+     * @return \Textpattern\Admin\Theme|bool An initialised theme object or FALSE on failure
      */
 
     public static function factory($name)
@@ -143,7 +143,7 @@ class Theme
      * Initialise the theme singleton.
      *
      * @param  string $name Theme name
-     * @return \Textpattern\Admin\Theme\Theme A valid theme object
+     * @return \Textpattern\Admin\Theme A valid theme object
      */
 
     public static function init($name = '')
@@ -233,7 +233,7 @@ class Theme
      * @param  string $event Currently active second level menu
      * @param  bool $is_popup Just a popup window for tag builder et cetera
      * @param  array $message The contents of the notification message pane
-     * @return \Textpattern\Admin\Theme\Theme This theme object
+     * @return \Textpattern\Admin\Theme This theme object
      */
 
     public function set_state($area, $event, $is_popup, $message)
