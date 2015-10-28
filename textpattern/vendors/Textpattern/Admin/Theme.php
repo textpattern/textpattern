@@ -24,7 +24,7 @@
 /**
  * Base for admin-side themes.
  *
- * @package Theme
+ * @package Admin\Theme
  */
 
 namespace Textpattern\Admin;
