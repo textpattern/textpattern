@@ -1891,7 +1891,7 @@ function article_partial_article_nav($rs)
         ));
     }
 
-    return graf(join('', $out), ' class="nav-tertiary" role="navigation"');
+    return n.tag(join('', $out), 'nav', array('class' => 'nav-tertiary'));
 }
 
 /**
