@@ -3,6 +3,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Textile v2.5.
 * Improved RTL language support.
 * Improved admin side UI.
+* Requires PHP 5.3.3 or better. Compatible with PHP 7 (thanks Ruud van Melick).
 * New tags: <txp:authors />, <txp:meta_description />, <txp:if_description> and <txp:if_yield>.
 * Added: Default publishing status preference.
 * Added: Support for additional text markup languages.
@@ -34,7 +35,6 @@ Changes in 4.6.0 (Upcoming) TODO
 * Changed: Increase 'page' and 'css' sizes in txp_section table.
 * Changed: 'Prevent widowed words in article titles' preference defaults to 'No' in new installs.
 * Changed: Detailed debug trace log.
-* Changed: PHP7 compatibility (thanks Ruud van Melick).
 * Developer: getNextPref() now returns array members 'next' and 'prev' with article data, no longer returns array members 'next_id', 'next_title', 'next_utitle', 'next_posted', 'prev_id', 'prev_title', 'prev_utitle', 'prev_posted'
 * Developer: getNeighbour() returns 'false' if no matching neighbour article exists.
 * Developer: Use 'mysqli' extension for DB access, lose dependency on 'mysql' extension.
