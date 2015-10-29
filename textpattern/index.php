@@ -103,7 +103,7 @@ trace_add('[PHP Include end]');
 
 set_error_handler('adminErrorHandler', error_reporting());
 
-if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) {
+if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
     // Global site preferences.
     $prefs = get_prefs();
     extract($prefs);
