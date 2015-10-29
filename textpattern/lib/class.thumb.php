@@ -508,7 +508,7 @@ class txp_thumb extends wet_thumb
     public function __construct($id)
     {
         $id = assert_int($id);
-        $rs = safe_row('*', 'txp_image', 'id = '.$id.' limit 1');
+        $rs = safe_row("*", 'txp_image', "id = $id LIMIT 1");
         if ($rs) {
             extract($rs);
             $this->m_ext = $ext;
@@ -540,8 +540,8 @@ class txp_thumb extends wet_thumb
                 "thumbnail = 1,
                 thumb_w = $this->width,
                 thumb_h = $this->height,
-                date = now()",
-                'id = '.$this->m_id
+                date = NOW()",
+                "id = ".$this->m_id
             );
 
             chmod(IMPATH.$this->m_id.'t'.$this->m_ext, 0644);
@@ -565,7 +565,7 @@ class txp_thumb extends wet_thumb
         }
 
         if (unlink(IMPATH.$this->m_id.'t'.$this->m_ext)) {
-            safe_update('txp_image', 'thumbnail = 0', 'id = '.$this->m_id);
+            safe_update('txp_image', "thumbnail = 0", "id = ".$this->m_id);
 
             return true;
         }

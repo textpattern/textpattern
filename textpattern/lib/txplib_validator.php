@@ -269,7 +269,7 @@ class SectionConstraint extends ChoiceConstraint
         static $choices = null;
 
         if (null === $choices) {
-            $choices = safe_column('name', 'txp_section', '1=1');
+            $choices = safe_column("name", 'txp_section', "1 = 1");
         }
 
         $options['choices'] = $choices;
@@ -300,7 +300,7 @@ class CategoryConstraint extends ChoiceConstraint
         $options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_category'), $options, false);
 
         if (null === $choices) {
-            $choices = safe_column('name', 'txp_category', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
+            $choices = safe_column("name", 'txp_category', $options['type'] !== '' ? "type = '".doSlash($options['type'])."'" : "1 = 1");
         }
 
         $options['choices'] = $choices;
@@ -330,7 +330,7 @@ class FormConstraint extends ChoiceConstraint
         $options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_form'), $options, false);
 
         if (null === $choices) {
-            $choices = safe_column('name', 'txp_form', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
+            $choices = safe_column("name", 'txp_form', $options['type'] !== '' ? "type = '".doSlash($options['type'])."'" : "1 = 1");
         }
 
         $options['choices'] = $choices;

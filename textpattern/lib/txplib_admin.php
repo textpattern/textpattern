@@ -121,7 +121,7 @@ function send_reset_confirmation_request($name)
 {
     global $sitename;
 
-    $rs = safe_row('email, nonce', 'txp_users', "name = '".doSlash($name)."'");
+    $rs = safe_row("email, nonce", 'txp_users', "name = '".doSlash($name)."'");
 
     if ($rs) {
         extract($rs);
@@ -199,7 +199,7 @@ function generate_password($length = 10)
 
 function reset_author_pass($name)
 {
-    $email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
+    $email = safe_field("email", 'txp_users', "name = '".doSlash($name)."'");
 
     $new_pass = generate_password(PASSWORD_LENGTH);
     $rs = change_user_password($name, $new_pass);
