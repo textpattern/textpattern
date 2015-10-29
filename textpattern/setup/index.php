@@ -585,50 +585,10 @@ function createTxp()
         exit;
     }
 
-    $ddb = $txpcfg['db'];
-    $duser = $txpcfg['user'];
-    $dpass = $txpcfg['pass'];
-    $dhost = $txpcfg['host'];
-    $dclient_flags = isset($txpcfg['client_flags']) ? $txpcfg['client_flags'] : 0;
-    $dprefix = $txpcfg['table_prefix'];
-    $dbcharset = $txpcfg['dbcharset'];
-
-    $siteurl = str_replace("http://", '', $_SESSION['siteurl']);
-    $siteurl = str_replace(' ', '%20', rtrim($siteurl, "/"));
-    $urlpath = preg_replace('#^[^/]+#', '', $siteurl);
-
-    define("PFX", trim($dprefix));
     define('TXP_INSTALL', 1);
 
     include_once txpath.'/lib/txplib_update.php';
     include txpath.'/setup/txpsql.php';
-
-    $nonce = md5(uniqid(rand(), true));
-    $hash  = doSlash(txp_hash_password($_SESSION['pass']));
-
-    mysqli_query($link, "INSERT INTO `".PFX."txp_users` VALUES
-        (1,
-        '".doSlash($_SESSION['name'])."',
-        '$hash',
-        '".doSlash($_SESSION['realname'])."',
-        '".doSlash($_SESSION['email'])."',
-        1,
-        now(),
-        '$nonce')"
-    );
-
-    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".doSlash($siteurl)."' where `name`='siteurl'");
-    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");
-    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".getlocale(LANG)."' where `name`='locale'");
-    mysqli_query($link, "update `".PFX."textpattern` set Body = replace(Body, 'siteurl', '".
-        doSlash($urlpath)."'), Body_html = replace(Body_html, 'siteurl', '".
-        doSlash($urlpath)."') WHERE ID = 1");
-
-    // cf. update/_to_4.2.0.php.
-    // TODO: Position might need altering when prefs panel layout is altered.
-    $theme = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
-    mysqli_query($link, "insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".
-        doSlash($theme)."', type = '1', event = 'admin', html = 'themename', position = '160'");
 
     echo fbCreate();
 }
@@ -678,6 +638,7 @@ function fbCreate()
                 )), ' class="error"')
             ).
             n.'</div>'.
+            n.'<ol>'.n.$GLOBALS['txp_err_html'].'</ol>';
             n.'</div>';
     } else {
         // Clear the session so no data is leaked.
