@@ -28,6 +28,9 @@
  * @package Admin\Image
  */
 
+use Textpattern\Validator\CategoryConstraint;
+use Textpattern\Validator\Validator;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -496,7 +499,12 @@ function image_multi_edit()
     return image_list();
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders and outputs the image editor panel.
+ *
+ * @param string|array $message The activity message
+ * @param int          $id      The image ID
+ */
 
 function image_edit($message = '', $id = '')
 {

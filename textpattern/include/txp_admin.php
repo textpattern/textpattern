@@ -512,7 +512,7 @@ function author_search_form($crit, $method)
 }
 
 /**
- * User editor panel.
+ * Renders and outputs the user editor panel.
  *
  * Accessing requires 'admin.edit' privileges.
  */

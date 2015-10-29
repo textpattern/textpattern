@@ -50,7 +50,6 @@ if (!isset($_SESSION)) {
 
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
-include_once txpath.'/lib/txplib_theme.php';
 include_once txpath.'/include/txp_auth.php';
 
 assert_system_requirements();
@@ -453,10 +452,10 @@ function getTxpLogin()
     // Default theme selector.
     $core_themes = array('classic', 'remora', 'hive');
 
-    $themes = theme::names();
+    $themes = \Textpattern\Admin\Theme::names();
 
     foreach ($themes as $t) {
-        $theme = theme::factory($t);
+        $theme = \Textpattern\Admin\Theme::factory($t);
 
         if ($theme) {
             $m = $theme->manifest();

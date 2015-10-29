@@ -28,6 +28,9 @@
  * @package Admin\Link
  */
 
+use Textpattern\Validator\CategoryConstraint;
+use Textpattern\Validator\Validator;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -349,7 +352,11 @@ function link_search_form($crit, $method)
     return search_form('link', 'link_list', $crit, $methods, $method, 'name');
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders and outputs the link editor panel.
+ *
+ * @param string|array $message The activity message
+ */
 
 function link_edit($message = '')
 {

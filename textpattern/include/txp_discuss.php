@@ -28,6 +28,9 @@
  * @package Admin\Discuss
  */
 
+use Textpattern\Validator\ChoiceConstraint;
+use Textpattern\Validator\Validator;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -475,7 +478,9 @@ function discuss_search_form($crit, $method)
     return search_form('discuss', 'list', $crit, $methods, $method, 'message');
 }
 
-//-------------------------------------------------------------
+/**
+ * Renders and outputs the comment editor panel.
+ */
 
 function discuss_edit()
 {

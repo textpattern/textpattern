@@ -21,25 +21,39 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Deprecation warning: This file serves merely as a compatibility layer for \Textpattern\Admin\Theme.
- * Use the base class for new and updated code.
- * TODO: Remove in v4.next.0
- */
+namespace Textpattern\Validator;
 
 /**
- * Base for admin-side themes.
+ * Validates that a value is blank, defined as equal to a blank string or equal
+ * to null.
  *
- * @package Admin\Theme
+ * @since   4.6.0
+ * @package Validator
  */
 
-/**
- * Admin-side theme.
- *
- * @package Admin\Theme
- * @deprecated in 4.6.0
- * @see \Textpattern\Admin\Theme
- */
-abstract class theme extends \Textpattern\Admin\Theme
+class BlankConstraint extends Constraint
 {
+    /**
+     * Constructor.
+     *
+     * @param mixed $value
+     * @param array $options
+     */
+
+    public function __construct($value, $options = array())
+    {
+        $options = lAtts(array('message' => 'should_be_blank'), $options, false);
+        parent::__construct($value, $options);
+    }
+
+    /**
+     * Validates.
+     *
+     * @return bool
+     */
+
+    public function validate()
+    {
+        return $this->value === '' || $this->value === null;
+    }
 }
