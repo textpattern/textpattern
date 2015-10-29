@@ -534,14 +534,10 @@ function cat_event_category_edit($evname)
                 fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'),
                 $evname.'_category_name', '', array('class' => 'txp-form-field edit-category-name')
             ).
-            ($has_parent
-                ? inputLabel(
-                    'category_parent',
-                    $parent_widget,
-                    'parent', '', array('class' => 'txp-form-field edit-category-parent'))
-                : inputLabel(
-                    'category_parent',
-                    $parent_widget, '', array('class' => 'txp-form-field edit-category-parent'))
+            inputLabel(
+                'category_parent',
+                $parent_widget,
+                'parent', '', array('class' => 'txp-form-field edit-category-parent')
             ).
             inputLabel(
                 'category_title',
