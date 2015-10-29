@@ -367,7 +367,11 @@ function link_list($message = '')
     echo n.tag_end('div');
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders and outputs the link editor panel.
+ *
+ * @param string|array $message The activity message
+ */
 
 function link_edit($message = '')
 {

@@ -272,7 +272,7 @@ function switch_status()
 }
 
 /**
- * Editor panel for plugins.
+ * Renders and outputs the plugin editor panel.
  */
 
 function plugin_edit()

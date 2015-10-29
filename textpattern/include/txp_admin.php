@@ -529,7 +529,7 @@ function author_list($message = '')
 }
 
 /**
- * User editor panel.
+ * Renders and outputs the user editor panel.
  *
  * Accessing requires 'admin.edit' privileges.
  */

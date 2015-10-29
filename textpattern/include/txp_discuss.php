@@ -502,7 +502,9 @@ function discuss_list($message = '')
     echo n.tag_end('div');
 }
 
-//-------------------------------------------------------------
+/**
+ * Renders and outputs the comment editor panel.
+ */
 
 function discuss_edit()
 {
