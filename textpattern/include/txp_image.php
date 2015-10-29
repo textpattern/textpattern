@@ -654,8 +654,8 @@ function image_edit($message = '', $id = '')
                     ).
                     inputLabel(
                         'image_category',
-                        treeSelectInput('category', $all_image_cats, $category, 'image_category').
-                        sp.span('[', array('aria-hidden' => 'true')).
+                        event_category_popup('image', $category, 'image_category').
+                        span('[', array('aria-hidden' => 'true')).
                         eLink('category', 'list', '', '', gTxt('edit')).
                         span(']', array('aria-hidden' => 'true')),
                         'image_category', '', array('class' => 'txp-form-field edit-image-category')

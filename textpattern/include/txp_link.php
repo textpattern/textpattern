@@ -422,8 +422,8 @@ function link_edit($message = '')
             ).
             inputLabel(
                 'link_category',
-                linkcategory_popup($category).
-                sp.span('[', array('aria-hidden' => 'true')).
+                event_category_popup('link', $category, 'link_category').
+                span('[', array('aria-hidden' => 'true')).
                 eLink('category', 'list', '', '', gTxt('edit')).
                 span(']', array('aria-hidden' => 'true')),
                 'link_category', 'link_category', array('class' => 'txp-form-field edit-link-category')
@@ -446,7 +446,13 @@ function link_edit($message = '')
     echo '</div>';
 }
 
-//--------------------------------------------------------------
+/**
+ * Legacy link category HTML select field.
+ *
+ * @param      string $cat
+ * @return     string
+ * @deprecated in 4.6.0
+ */
 
 function linkcategory_popup($cat = '')
 {
