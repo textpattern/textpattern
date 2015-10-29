@@ -91,7 +91,7 @@ function rss()
         'limit'    => $limit,
     )).'" rel="self" type="application/rss+xml" />';
     $out[] = tag(doSpecial($site_slogan), 'description');
-    $last = fetch('unix_timestamp(val)', 'txp_prefs', 'name', 'lastmod');
+    $last = fetch("UNIX_TIMESTAMP(val)", 'txp_prefs', 'name', 'lastmod');
     $out[] = tag(safe_strftime('rfc822', $last), 'pubDate');
     $out[] = callback_event('rss_head');
 
@@ -101,28 +101,28 @@ function rss()
     $category = doSlash($category);
 
     if (!$area or $area == 'article') {
-        $sfilter = (!empty($section)) ? "and Section in ('".join("','", $section)."')" : '';
-        $cfilter = (!empty($category)) ? "and (Category1 in ('".join("','", $category)."') or Category2 in ('".join("','", $category)."'))" : '';
+        $sfilter = (!empty($section)) ? "AND Section IN ('".join("','", $section)."')" : '';
+        $cfilter = (!empty($category)) ? "AND (Category1 IN ('".join("','", $category)."') OR Category2 IN ('".join("','", $category)."'))" : '';
         $limit = ($limit) ? $limit : $rss_how_many;
         $limit = intval(min($limit, max(100, $rss_how_many)));
 
-        $frs = safe_column("name", "txp_section", "in_rss != '1'");
+        $frs = safe_column("name", 'txp_section', "in_rss != '1'");
 
         if ($frs) {
             foreach ($frs as $f) {
-                $query[] = "and Section != '".doSlash($f)."'";
+                $query[] = "AND Section != '".doSlash($f)."'";
             }
         }
 
         $query[] = $sfilter;
         $query[] = $cfilter;
 
-        $expired = ($publish_expired_articles) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.') ';
+        $expired = ($publish_expired_articles) ? "" : " AND (NOW() <= Expires OR Expires = ".NULLDATETIME.") ";
         $rs = safe_rows_start(
-            "*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires, ID as thisid",
-            "textpattern",
+            "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(LastMod) AS uLastMod, UNIX_TIMESTAMP(Expires) AS uExpires, ID AS thisid",
+            'textpattern',
             "Status = 4 ".join(' ', $query).
-            "and Posted < now()".$expired."order by Posted desc limit $limit"
+            "AND Posted < NOW()".$expired."ORDER BY Posted DESC LIMIT $limit"
         );
 
         if ($rs) {
@@ -174,11 +174,11 @@ function rss()
             }
         }
     } elseif ($area == 'link') {
-        $cfilter = ($category) ? "category in ('".join("','", $category)."')"  : '1';
+        $cfilter = ($category) ? "category IN ('".join("','", $category)."')"  : '1';
         $limit = ($limit) ? $limit : $rss_how_many;
         $limit = intval(min($limit, max(100, $rss_how_many)));
 
-        $rs = safe_rows_start("*, unix_timestamp(date) as uDate", "txp_link", "$cfilter order by date desc limit $limit");
+        $rs = safe_rows_start("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_link', "$cfilter ORDER BY date DESC LIMIT $limit");
 
         if ($rs) {
             while ($a = nextRow($rs)) {
@@ -198,19 +198,19 @@ function rss()
 
     if (!$articles) {
         if ($section) {
-            if (safe_field('name', 'txp_section', "name in ('".join("','", $section)."')") == false) {
+            if (safe_field("name", 'txp_section', "name IN ('".join("','", $section)."')") == false) {
                 txp_die(gTxt('404_not_found'), '404');
             }
         } elseif ($category) {
             switch ($area) {
                 case 'link':
-                    if (safe_field('id', 'txp_category', "name = '$category' and type = 'link'") == false) {
+                    if (safe_field("id", 'txp_category', "name = '$category' AND type = 'link'") == false) {
                         txp_die(gTxt('404_not_found'), '404');
                     }
                     break;
                 case 'article':
                 default:
-                    if (safe_field('id', 'txp_category', "name in ('".join("','", $category)."') and type = 'article'") == false) {
+                    if (safe_field("id", 'txp_category', "name IN ('".join("','", $category)."') AND type = 'article'") == false) {
                         txp_die(gTxt('404_not_found'), '404');
                     }
                     break;
