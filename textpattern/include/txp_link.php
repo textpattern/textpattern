@@ -431,7 +431,7 @@ function link_edit($message = '')
             inputLabel(
                 'link_description',
                 '<textarea class="txp-form-field-input" id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_MEDIUM.'">'.txpspecialchars($description).'</textarea>',
-                'description', 'link_description', array('class' => 'txp-form-field txp-form-field-textarea edit-link-description'), ''
+                'description', 'link_description', array('class' => 'txp-form-field txp-form-field-textarea edit-link-description')
             ).
             pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
             graf(fInput('submit', '', gTxt('save'), 'publish')).
