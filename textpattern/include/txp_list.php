@@ -31,6 +31,7 @@
 use Textpattern\Validator\CategoryConstraint;
 use Textpattern\Validator\SectionConstraint;
 use Textpattern\Validator\Validator;
+use Textpattern\Search\Filter;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -139,7 +140,7 @@ function list_list($message = '', $post = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $search = new Textpattern_Search_Filter($event,
+    $search = new Filter($event,
         array(
             'id' => array(
                 'column' => 'textpattern.ID',

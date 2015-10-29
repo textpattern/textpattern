@@ -35,7 +35,9 @@
  * @package Search
  */
 
-class Textpattern_Search_Method
+namespace Textpattern\Search;
+
+class Method
 {
     /**
      * The method's unique reference -- usually the form-submitted variable name.

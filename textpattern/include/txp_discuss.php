@@ -30,6 +30,7 @@
 
 use Textpattern\Validator\ChoiceConstraint;
 use Textpattern\Validator\Validator;
+use Textpattern\Search\Filter;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -184,7 +185,7 @@ function discuss_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $search = new Textpattern_Search_Filter($event,
+    $search = new Filter($event,
         array(
             'id' => array(
                 'column' => 'txp_discuss.discussid',

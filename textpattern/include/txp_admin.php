@@ -28,6 +28,8 @@
  * @package Admin\Admin
  */
 
+use Textpattern\Search\Filter;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -349,7 +351,7 @@ function author_list($message = '')
 
         $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-        $search = new Textpattern_Search_Filter($event,
+        $search = new Filter($event,
             array(
                 'id' => array(
                     'column' => 'txp_users.user_id',

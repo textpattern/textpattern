@@ -32,7 +32,9 @@
  * @package Search
  */
 
-class Textpattern_Search_Filter
+namespace Textpattern\Search;
+
+class Filter
 {
     /**
      * The filter's event.
@@ -43,7 +45,7 @@ class Textpattern_Search_Filter
     public $event;
 
     /**
-     * The available search methods as an array of Textpattern_Search_Method.
+     * The available search methods as an array of Textpattern\Search\Method.
      *
      * @var array
      */
@@ -124,7 +126,7 @@ class Textpattern_Search_Filter
     private function setMethods($methods)
     {
         foreach ($methods as $key => $atts) {
-            $this->methods[$key] = new Textpattern_Search_Method($key, $atts);
+            $this->methods[$key] = new \Textpattern\Search\Method($key, $atts);
         }
     }
 

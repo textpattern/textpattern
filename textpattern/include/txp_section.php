@@ -28,6 +28,8 @@
  * @package Admin\Section
  */
 
+use Textpattern\Search\Filter;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -125,7 +127,7 @@ function sec_section_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $search = new Textpattern_Search_Filter($event,
+    $search = new Filter($event,
         array(
             'name' => array(
                 'column' => 'txp_section.name',
