@@ -477,7 +477,9 @@ function discuss_search_form($crit, $method)
     return search_form('discuss', 'list', $crit, $methods, $method, 'message');
 }
 
-//-------------------------------------------------------------
+/**
+ * Renders and outputs the comment editor panel.
+ */
 
 function discuss_edit()
 {

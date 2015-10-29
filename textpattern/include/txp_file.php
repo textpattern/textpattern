@@ -579,7 +579,12 @@ function file_multi_edit()
     return file_list();
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders and outputs the file editor panel.
+ *
+ * @param string|array $message The activity message
+ * @param int          $id      The file ID
+ */
 
 function file_edit($message = '', $id = '')
 {

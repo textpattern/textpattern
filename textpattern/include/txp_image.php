@@ -499,7 +499,12 @@ function image_multi_edit()
     return image_list();
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders and outputs the image editor panel.
+ *
+ * @param string|array $message The activity message
+ * @param int          $id      The image ID
+ */
 
 function image_edit($message = '', $id = '')
 {

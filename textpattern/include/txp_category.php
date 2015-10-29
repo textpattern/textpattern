@@ -516,7 +516,7 @@ function cat_event_category_create($event)
 }
 
 /**
- * Renders and outputs a category editor.
+ * Renders and outputs a category editor panel.
  *
  * @param string $evname Type of category
  */
