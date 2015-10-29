@@ -497,39 +497,37 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
 
         // Previous page.
         if ($page > 1) {
-            $nav[] = PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step);
+            $nav[] = n.PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step);
         } else {
-            $nav[] = span(
+            $nav[] = n.span(
                 span(gTxt('prev'), array(
-                    'class' => 'ui-icon ui-icon ui-icon-arrowthick-1-w',
-                ),
+                    'class' => 'ui-icon ui-icon-arrowthick-1-w',
+                )),
                 array(
                     'class'         => 'disabled',
                     'aria-disabled' => 'true',
                     'aria-label'    => gTxt('prev'),
                 )
-            ));
+            );
         }
 
 
         $nav[] = form(
-                inputLabel(
-                    'current-page',
-                    tag_void(
-                        'input', array(
-                            'type'      => 'text',
-                            'inputmode' => 'numeric',
-                            'pattern'   => '[0-9]+',
-                            'name'      => 'page',
-                            'value'     => $page,
-                            'class'     => 'current-page',
-                            'id'        => 'current-page',
-                            'size'      => INPUT_XSMALL,
-                        )),
-                    'page'
-                ).
-                gTxt('of').
-                span($numPages, array('class' => 'total-pages')).
+                n.tag(gTxt('page'), 'label', array(
+                    'for' => 'current-page',
+                )).
+                n.tag_void('input', array(
+                    'class'     => 'current-page',
+                    'id'        => 'current-page',
+                    'name'      => 'page',
+                    'type'      => 'text',
+                    'size'      => INPUT_XSMALL,
+                    'inputmode' => 'numeric',
+                    'pattern'   => '[0-9]+',
+                    'value'     => $page,
+                )).
+                n.gTxt('of').
+                n.span($numPages, array('class' => 'total-pages')).
                 eInput($event).
                 hInput('sort', $sort).
                 hInput('dir', $dir).
@@ -542,21 +540,21 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
 
         // Next page.
         if ($page < $numPages) {
-            $nav[] = PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step);
+            $nav[] = n.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step);
         } else {
-            $nav[] = span(
+            $nav[] = n.span(
                 span(gTxt('next'), array(
-                    'class' => 'ui-icon ui-icon ui-icon-arrowthick-1-e',
-                ),
+                    'class' => 'ui-icon ui-icon-arrowthick-1-e',
+                )),
                 array(
                     'class'         => 'disabled',
                     'aria-disabled' => 'true',
                     'aria-label'    => gTxt('next'),
                 )
-            ));
+            );
         }
 
-        $out[] = n.tag(tag(join(tag_end('li').tag_start('li'), $nav), 'li'), 'ul', array('class' => 'nav-tertiary prev-next'));
+        $out[] = n.tag(join($nav).n, 'nav', array('class' => 'prev-next'));
     }
 
     return join('', $out);
@@ -1402,7 +1400,7 @@ function pageby_form($event, $val, $step = null)
         ));
     }
 
-    return graf(join('', $out), array('class' => 'nav-tertiary pageby'));
+    return n.tag(join('', $out), 'div', array('class' => 'nav-tertiary pageby'));
 }
 
 /**

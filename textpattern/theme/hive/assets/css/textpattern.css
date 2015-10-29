@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* HTML5 display definitions
    ========================================================================== */
 /**
@@ -52,7 +53,7 @@ summary {
  *
  * More info: http://nicolasgallagher.com/micro-clearfix-hack/
  */
-.clearfix:after, .progress-meter ol:after, .txp-body:after, .txp-edit p:after,
+.clearfix:after, .progress-meter ol:after, .txp-body:after, .txp-navigation:after, .txp-edit p:after,
 .txp-tagbuilder p:after,
 .edit-form p:after {
   content: "";
@@ -1692,17 +1693,16 @@ button.destroy:focus {
 }
 
 /**
- * Button sets - either `.nav-tertiary` or `.prev-next` depending on context.
+ * Tertiary button sets.
  *
  * Anchor elements kept to one line to prevent space between buttons.
+ *
+ * TODO: check if this would be better via flexbox instead?
  *
  * Example HTML:
  *
  * <p class="nav-tertiary">
  *     <a class="navlink-active">Page 1</a><a class="navlink">Page 2</a>
- * </p>
- * <p class="prev-next">
- *     <a class="navlink">Previous</a><a class="navlink">Next</a>
  * </p>
  */
 ul.nav-tertiary {
@@ -2915,35 +2915,43 @@ div.multi-edit {
  *
  * Anchor elements kept to one line to prevent space between buttons.
  *
- * TODO: check if this would be better via flexbox instead?
- *
- * @see .nav-tertiary
- *
  * Example HTML:
  *
  * <div class="txp-navigation" id="image_navigation">
  *     <p class="nav-tertiary pageby">
  *         <a class="navlink-active">15</a><a class="navlink">25</a><a class="navlink">50</a>
  *     </p>
- *     <ul class="nav-tertiary prev-next">
- *         Content
- *     </ul>
+ *     <nav class="prev-next">
+ *         <span class="disabled"><span class="ui-icon ui-icon-arrowthick-1-w">← Prev</span></span>
+ *         <form>
+ *             <label>Page</label>
+ *             <input class="current-page">
+ *             of <span class="total-pages">2</span>
+ *         </form>
+ *         <a><span class="ui-icon ui-icon-arrowthick-1-e">Next →</span></a>
+ *     </nav>
  * </div>
  */
-.txp-navigation .pageby {
+.pageby {
   float: left;
+  margin: 1em 0;
 }
-.txp-navigation .prev-next {
+
+.prev-next {
   float: right;
+  margin: 1em 0;
+}
+.prev-next form {
+  display: inline-block;
 }
 
 /**
  * Swap margin positions in RTL languages.
  */
-[dir="rtl"] .txp-navigation .pageby {
+[dir="rtl"] .pageby {
   float: right;
 }
-[dir="rtl"] .txp-navigation .prev-next {
+[dir="rtl"] .prev-next {
   float: left;
 }
 
@@ -3588,10 +3596,10 @@ div.code {
   }
 
   /**
-   * Remove float from `.txp-navigation` elements.
+   * Remove float from list navigators on list panels.
    */
-  .txp-navigation .pageby,
-  .txp-navigation .prev-next {
+  .pageby,
+  .prev-next {
     float: none;
   }
 
