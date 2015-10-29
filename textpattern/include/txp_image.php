@@ -577,8 +577,8 @@ function image_edit($message = '', $id = '')
             }
         }
 
-        echo n.'<div class="txp-container" id="'.$event.'_container">';
-        echo
+        echo n.'<div class="txp-container" id="'.$event.'_container">'.
+
             pluggable_ui(
                 'image_ui',
                 'fullsize_image',
@@ -586,7 +586,7 @@ function image_edit($message = '', $id = '')
                 $rs
             ),
 
-            '<section class="txp-edit">',
+            n.tag_start('section', array('class' => 'txp-edit')).
             hed(gTxt('edit_image'), 2),
 
             pluggable_ui(
@@ -662,7 +662,9 @@ function image_edit($message = '', $id = '')
                     hInput('search_method', $search_method).
                     hInput('crit', $crit), '', '', 'post', 'edit-form', '', 'image_details_form'),
             '</div>',
-        '</section>'.n.'</div>';
+
+            n.tag_end('section').
+            n.'</div>';
     }
 }
 

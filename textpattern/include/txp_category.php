@@ -526,7 +526,8 @@ function cat_event_category_edit($evname)
         pagetop(gTxt('edit_category'));
         extract($row);
         list($parent_widget, $has_parent) = cat_parent_pop($parent, $evname, $id);
-        $out = n.'<section class="txp-edit">'.
+
+        $out = n.tag_start('section', array('class' => 'txp-edit')).
             hed(gTxt('edit_category'), 2).
             inputLabel(
                 'category_name',
@@ -558,7 +559,8 @@ function cat_event_category_edit($evname)
             eInput('category').
             sInput('cat_'.$evname.'_save').
             hInput('old_name', $name).
-            n.'</section>';
+            n.tag_end('section');
+
         echo n.'<div class="txp-container" id="category_container">'.
             form($out, '', '', 'post', 'edit-form').
             n.'</div>';

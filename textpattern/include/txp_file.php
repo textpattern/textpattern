@@ -680,8 +680,8 @@ function file_edit($message = '', $id = '')
                 'div', array('class' => 'txp-form-field posted-now')
             );
 
-        echo n.'<div class="txp-container" id="'.$event.'_container">';
-        echo n.'<section class="txp-edit">'.
+        echo n.'<div class="txp-container" id="'.$event.'_container">'.
+            tag_start('section', array('class' => 'txp-edit')).
             hed(gTxt('edit_file'), 2).
             inputLabel('condition', $condition).
             inputLabel('name', $downloadlink).
@@ -719,7 +719,9 @@ function file_edit($message = '', $id = '')
                 hInput('page', $page).
                 hInput('crit', $crit).
                 hInput('search_method', $search_method), '', '', 'post', 'edit-form', '', (($file_exists) ? 'file_details' : 'assign_file')).
-            n.'</div>'.n.'</section>'.n.'</div>';
+            n.'</div>'.
+            n.tag_end('section').
+            n.'</div>';
     }
 }
 
