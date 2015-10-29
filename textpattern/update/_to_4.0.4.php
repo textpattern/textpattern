@@ -25,13 +25,13 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-if (!safe_field('name', 'txp_prefs', "name = 'allow_raw_php_scripting'")) {
+if (!safe_field("name", 'txp_prefs', "name = 'allow_raw_php_scripting'")) {
     safe_insert('txp_prefs', "prefs_id = 1, name = 'allow_raw_php_scripting', val = '1', type = '1', html = 'yesnoradio'");
 } else {
     safe_update('txp_prefs', "html = 'yesnoradio'", "name = 'allow_raw_php_scripting'");
 }
 
-if (!safe_field('name', 'txp_prefs', "name = 'log_list_pageby'")) {
+if (!safe_field("name", 'txp_prefs', "name = 'log_list_pageby'")) {
     safe_insert('txp_prefs', "prefs_id = 1, name = 'log_list_pageby', val = '25', type = 2, event = 'publish'");
 }
 
@@ -42,6 +42,6 @@ update_lastmod();
 // Speed up article queries.
 safe_create_index('textpattern', 'Section, Status', 'section_status_idx');
 
-if (!safe_field('name', 'txp_prefs', "name = 'title_no_widow'")) {
+if (!safe_field("name", 'txp_prefs', "name = 'title_no_widow'")) {
     safe_insert('txp_prefs', "prefs_id = 1, name = 'title_no_widow', val = '0', type = '1', html = 'yesnoradio'");
 }

@@ -27,12 +27,12 @@ if (!defined('TXP_UPDATE')) {
 
 safe_alter('txp_lang', 'DELAY_KEY_WRITE = 0');
 
-if (!safe_field('name', 'txp_prefs', "name = 'lastmod_keepalive'")) {
+if (!safe_field("name", 'txp_prefs', "name = 'lastmod_keepalive'")) {
     safe_insert('txp_prefs', "prefs_id = 1, name = 'lastmod_keepalive', val = '0', type = '1', html = 'yesnoradio'");
 }
 
 // New status field for file downloads.
-$txpfile = getThings('DESCRIBE `'.PFX.'txp_file`');
+$txpfile = getThings("DESCRIBE `".PFX."txp_file`");
 
 if (!in_array('status', $txpfile)) {
     safe_alter('txp_file', "ADD status SMALLINT NOT NULL DEFAULT '4'");
@@ -69,7 +69,7 @@ if (array_intersect(array('modified', 'created'), $txpfile)) {
 // Copy existing file timestamps into the new database columns.
 if ($update_files) {
     $prefs = get_prefs();
-    $rs = safe_rows('*', 'txp_file', '1 = 1');
+    $rs = safe_rows("*", 'txp_file', "1 = 1");
 
     foreach ($rs as $row) {
         $path = build_file_path(@$prefs['file_base_path'], @$row['filename']);
@@ -222,6 +222,6 @@ safe_update('txp_prefs', "event = 'feeds'", "name IN(
 safe_delete('txp_prefs', "event = 'link' AND name = 'textile_links'");
 
 // Use TextileRestricted lite/fat in comments?
-if (!safe_field('name', 'txp_prefs', "name = 'comments_use_fat_textile'")) {
+if (!safe_field("name", 'txp_prefs', "name = 'comments_use_fat_textile'")) {
     safe_insert('txp_prefs', "prefs_id = 1, name = 'comments_use_fat_textile', val = '0', type = '1', event = 'comments', html = 'yesnoradio', position = '130'");
 }

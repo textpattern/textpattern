@@ -37,7 +37,7 @@ foreach ($rs as $row) {
 }
 
 // Add column for file title.
-$cols = getThings('DESCRIBE `'.PFX.'txp_file`');
+$cols = getThings("DESCRIBE `".PFX."txp_file`");
 
 if (!in_array('title', $cols)) {
     safe_alter('txp_file', "ADD title VARCHAR(255) NULL AFTER filename");

@@ -59,7 +59,7 @@ safe_update('txp_prefs', "position = '320'", "name = 'comments_use_fat_textile'"
 safe_update('txp_prefs', "position = '340'", "name = 'spam_blacklists'");
 
 // Support for l10n string owners.
-$cols = getThings('DESCRIBE `'.PFX.'txp_lang`');
+$cols = getThings("DESCRIBE `".PFX."txp_lang`");
 
 if (!in_array('owner', $cols)) {
     safe_alter('txp_lang', "
@@ -102,21 +102,21 @@ safe_alter('txp_plugin', "MODIFY version VARCHAR(255) NOT NULL DEFAULT '1.0'");
 safe_alter('txp_lang', "MODIFY data TEXT");
 
 // Add meta description to articles...
-$cols = getThings('DESCRIBE `'.PFX.'textpattern`');
+$cols = getThings("DESCRIBE `".PFX."textpattern`");
 
 if (!in_array('description', $cols)) {
     safe_alter('textpattern', "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER Keywords");
 }
 
 // ... categories...
-$cols = getThings('DESCRIBE `'.PFX.'txp_category`');
+$cols = getThings("DESCRIBE `".PFX."txp_category`");
 
 if (!in_array('description', $cols)) {
     safe_alter('txp_category', "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER title");
 }
 
 // ... and sections.
-$cols = getThings('DESCRIBE `'.PFX.'txp_section`');
+$cols = getThings("DESCRIBE `".PFX."txp_section`");
 
 if (!in_array('description', $cols)) {
     safe_alter('txp_section', "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER css");
