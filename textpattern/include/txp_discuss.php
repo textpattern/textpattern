@@ -542,7 +542,7 @@ function discuss_edit()
 
         echo '<div class="txp-container" id="'.$event.'_container">'.
             form(
-                n.'<section class="txp-edit">'.
+                n.tag_start('section', array('class' => 'txp-edit')).
                 hed(gTxt('edit_comment'), 2).
                 inputLabel(
                     'status',
@@ -559,7 +559,8 @@ function discuss_edit()
                     href(txpspecialchars($ip), 'https://whois.domaintools.com/'.rawurlencode($ip), array(
                         'rel'    => 'external',
                         'target' => '_blank',
-                    )).$ban_link, ''
+                    )),
+                    '', '', array('class' => 'txp-form-field edit-comment-ip')
                 ).
                 inputLabel(
                     'email',
@@ -580,7 +581,7 @@ function discuss_edit()
                 inputLabel(
                     'commentmessage',
                     '<textarea class="txp-form-field-input" id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'">'.$message.'</textarea>',
-                    'message', '', array('class' => 'txp-form-field edit-comment-message'), ''
+                    'message', '', array('class' => 'txp-form-field txp-form-field-textarea edit-comment-message'), ''
                 ).
                 graf(fInput('submit', 'step', gTxt('save'), 'publish')).
                 hInput('sort', $sort).
@@ -593,7 +594,7 @@ function discuss_edit()
                 hInput('ip', $ip).
                 eInput('discuss').
                 sInput('discuss_save').
-                n.'</section>', '', '', 'post', 'edit-form', '', 'discuss_edit_form'), '</div>';
+                n.tag_end('section'), '', '', 'post', 'edit-form', '', 'discuss_edit_form'), '</div>';
     } else {
         echo graf(
             span(null, array('class' => 'ui-icon ui-icon-info')).' '.
