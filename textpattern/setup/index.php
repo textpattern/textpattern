@@ -369,7 +369,7 @@ function printConfig()
         exit;
     }
 
-    $tables_exist = mysqli_query($mylink, "describe `".$_SESSION['dprefix']."textpattern`");
+    $tables_exist = mysqli_query($mylink, "DESCRIBE `".$_SESSION['dprefix']."textpattern`");
     if ($tables_exist) {
         echo graf(
             span(setup_gTxt('tables_exist', array(

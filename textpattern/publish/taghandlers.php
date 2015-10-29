@@ -1004,7 +1004,7 @@ function recent_articles($atts)
         'limit'    => 10,
         'offset'   => 0,
         'section'  => '',
-        'sort'     => 'Posted desc',
+        'sort'     => 'Posted DESC',
         'sortby'   => '', // Deprecated.
         'sortdir'  => '', // Deprecated.
         'wraptag'  => '',
@@ -1066,7 +1066,7 @@ function recent_comments($atts, $thing = null)
         'labeltag' => '',
         'limit'    => 10,
         'offset'   => 0,
-        'sort'     => 'posted desc',
+        'sort'     => 'posted DESC',
         'wraptag'  => '',
     ), $atts));
 
@@ -1142,7 +1142,7 @@ function related_articles($atts, $thing = null)
         'match'    => 'Category1,Category2',
         'no_widow' => @$prefs['title_no_widow'],
         'section'  => '',
-        'sort'     => 'Posted desc',
+        'sort'     => 'Posted DESC',
         'wraptag'  => '',
     ), $atts));
 
