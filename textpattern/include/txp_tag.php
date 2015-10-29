@@ -410,7 +410,7 @@ class BuilderTags
     {
         $vals = array();
 
-        $rs = safe_rows_start('name', 'txp_users', '1 = 1 order by name');
+        $rs = safe_rows_start("name", 'txp_users', "1 = 1 ORDER BY name");
 
         if ($rs) {
             while ($a = nextRow($rs)) {
@@ -435,7 +435,7 @@ class BuilderTags
     {
         $vals = array();
 
-        $rs = safe_rows_start('name, title', 'txp_section', "name != 'default' order by name");
+        $rs = safe_rows_start("name, title", 'txp_section', "name != 'default' ORDER BY name");
 
         if ($rs && numRows($rs) > 0) {
             while ($a = nextRow($rs)) {
@@ -537,9 +537,9 @@ class BuilderTags
     {
         $vals = array();
 
-        $type = ($type) ? "type = '".doSlash($type)."'" : '1 = 1';
+        $type = ($type) ? "type = '".doSlash($type)."'" : "1 = 1";
 
-        $rs = safe_rows_start('name', 'txp_form', "$type order by name");
+        $rs = safe_rows_start("name", 'txp_form', "$type ORDER BY name");
 
         if ($rs and numRows($rs) > 0) {
             while ($a = nextRow($rs)) {
@@ -565,7 +565,7 @@ class BuilderTags
     {
         $vals = array();
 
-        $rs = safe_rows_start('name', 'txp_css', "1 = 1 order by name");
+        $rs = safe_rows_start("name", 'txp_css', "1 = 1 ORDER BY name");
 
         if ($rs) {
             while ($a = nextRow($rs)) {
