@@ -404,7 +404,7 @@ function sec_section_list($message = '')
 }
 
 /**
- * Renders and outputs the section editor.
+ * Renders and outputs the section editor panel.
  */
 
 function section_edit()

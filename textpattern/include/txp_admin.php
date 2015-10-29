@@ -529,6 +529,26 @@ function author_list($message = '')
 }
 
 /**
+ * Renders a user search form.
+ *
+ * @param string $crit   Current search criteria
+ * @param string $method Selected search method
+ */
+
+function author_search_form($crit, $method)
+{
+    $methods = array(
+        'id'        => gTxt('ID'),
+        'login'     => gTxt('login_name'),
+        'real_name' => gTxt('real_name'),
+        'email'     => gTxt('email'),
+        'privs'     => gTxt('privileges'),
+    );
+
+    return search_form('admin', 'author_list', $crit, $methods, $method, 'login');
+}
+
+/**
  * Renders and outputs the user editor panel.
  *
  * Accessing requires 'admin.edit' privileges.
