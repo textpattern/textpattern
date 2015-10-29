@@ -647,10 +647,29 @@ function image_edit($message = '', $id = '')
 
             '<div class="image-detail">',
                 form(
-                    inputLabel('image_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'), 'image_name').
-                    inputLabel('image_category', treeSelectInput('category', $all_image_cats, $category, 'image_category'), 'image_category').
-                    inputLabel('image_alt_text', fInput('text', 'alt', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'), 'alt_text').
-                    inputLabel('image_caption', text_area('caption', 0, 0, $caption, 'image_caption', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE), 'caption', '', '', '').
+                    inputLabel(
+                        'image_name',
+                        fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'),
+                        'image_name', '', array('class' => 'txp-form-field edit-image-name')
+                    ).
+                    inputLabel(
+                        'image_category',
+                        treeSelectInput('category', $all_image_cats, $category, 'image_category').
+                        sp.span('[', array('aria-hidden' => 'true')).
+                        eLink('category', 'list', '', '', gTxt('edit')).
+                        span(']', array('aria-hidden' => 'true')),
+                        'image_category', '', array('class' => 'txp-form-field edit-image-category')
+                    ).
+                    inputLabel(
+                        'image_alt_text',
+                        fInput('text', 'alt', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'),
+                        'alt_text', '', array('class' => 'txp-form-field edit-image-alt-text')
+                    ).
+                    inputLabel(
+                        'image_caption',
+                        text_area('caption', 0, 0, $caption, 'image_caption', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE),
+                        'caption', '', array('class' => 'txp-form-field txp-form-field-textarea edit-image-caption')
+                    ).
                     pluggable_ui('image_ui', 'extend_detail_form', '', $rs).
                     graf(fInput('submit', '', gTxt('save'), 'publish')).
                     hInput('id', $id).

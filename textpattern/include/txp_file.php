@@ -683,18 +683,53 @@ function file_edit($message = '', $id = '')
         echo n.'<div class="txp-container" id="'.$event.'_container">'.
             tag_start('section', array('class' => 'txp-edit')).
             hed(gTxt('edit_file'), 2).
-            inputLabel('condition', $condition).
-            inputLabel('name', $downloadlink).
-            inputLabel('download_count', $downloads).
             $replace.
+            inputLabel(
+                'condition',
+                $condition,
+                '', '', array('class' => 'txp-form-field edit-file-condition')
+            ).
+            inputLabel(
+                'name',
+                $downloadlink,
+                '', '', array('class' => 'txp-form-field edit-file-name')
+            ).
+            inputLabel(
+                'download_count',
+                $downloads,
+                '', '', array('class' => 'txp-form-field edit-file-download-count')
+            ).
             n.'<div class="file-detail '.($file_exists ? '' : 'not-').'exists">'.
             form(
                 (($file_exists)
-                ? inputLabel('file_status', selectInput('status', $file_statuses, $status, false, '', 'file_status'), 'file_status').
-                    inputLabel('file_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'), 'title').
-                    inputLabel('file_category', treeSelectInput('category', $all_file_cats, $category, 'file_category'), 'file_category').
-//                    inputLabel('perms', selectInput('perms', $levels, $permissions), 'permissions').
-                    inputLabel('file_description', '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>', 'description', '', '', '').
+                ? inputLabel(
+                        'file_status',
+                        selectInput('status', $file_statuses, $status, false, '', 'file_status'),
+                        'file_status', '', array('class' => 'txp-form-field edit-file-status')
+                    ).
+                    inputLabel(
+                        'file_title',
+                        fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'),
+                        'title', '', array('class' => 'txp-form-field edit-file-title')
+                    ).
+                    inputLabel(
+                        'file_category',
+                        treeSelectInput('category', $all_file_cats, $category, 'file_category').
+                        sp.span('[', array('aria-hidden' => 'true')).
+                        eLink('category', 'list', '', '', gTxt('edit')).
+                        span(']', array('aria-hidden' => 'true')),
+                        'file_category', '', array('class' => 'txp-form-field edit-file-category')
+                    ).
+//                    inputLabel(
+//                        'perms',
+//                        selectInput('perms', $levels, $permissions),
+//                        'permissions'
+//                    ).
+                    inputLabel(
+                        'file_description',
+                        '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>',
+                        'description', '', array('class' => 'txp-form-field txp-form-field-textarea edit-file-description')
+                    ).
                     $created.
                     pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
                     graf(fInput('submit', '', gTxt('Save'), 'publish')).
