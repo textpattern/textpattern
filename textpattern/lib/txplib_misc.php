@@ -1847,14 +1847,21 @@ function callback_event($event, $step = '', $pre = 0)
         return '';
     }
 
-    trace_add("[Callback_event: '$event', step='$step', pre='$pre']");
-
     // Any payload parameters?
     $argv = func_get_args();
     $argv = (count($argv) > 3) ? array_slice($argv, 3) : array();
 
+    // if $pre == array('prepend'=>0, 'renew'=>0, ...)
+    if (is_array($pre)) {
+        $prepend = 0;
+        extract($pre);
+    }
+    else $prepend = $pre;
+
+    trace_add("[Callback_event: '$event', step='$step', pre='$prepend']");
+
     foreach ($plugin_callback as $c) {
-        if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
+        if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $prepend) {
             if (is_callable($c['function'])) {
                 if (is_string($c['function'])) {
                     trace_add("\t[Call function: '{$c['function']}'".(empty($argv) ? '' : ", argv='".serialize($argv)."'") . "]");
@@ -1864,6 +1871,7 @@ function callback_event($event, $step = '', $pre = 0)
                 }
 
                 $return_value = call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
+                if(isset($renew)) $argv[$renew] = $return_value;
 
                 if (isset($out)) {
                     if (is_array($return_value) && is_array($out)) {
@@ -2049,8 +2057,7 @@ function pluggable_ui($event, $element, $default = '')
     // Custom user interface, anyone?
     // Signature for called functions:
     // string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
-    $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => 0) + $argv);
-
+    $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => array('renew'=>0)) + $argv);
     // Either plugins provided a user interface, or we render our own.
     return ($ui === '') ? $default : $ui;
 }

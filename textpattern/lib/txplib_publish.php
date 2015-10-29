@@ -248,7 +248,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     $safe_name = safe_pfx('textpattern');
     $q = array(
         "select ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted
-            from ".$safe_name." where $sortby $type ".$threshold,
+            from ".$safe_name." where ($sortby $type ".$threshold." or $sortby = $threshold and ID $type $thisid)",
         ($s != '' && $s != 'default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
         $id,
         $time,
@@ -257,6 +257,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         'and Status=4',
         'order by '.$sortby,
         ($type == '<') ? 'desc' : 'asc',
+        ',ID '.($type == '<' ? 'desc' : 'asc'),
         'limit 1',
     );
 
@@ -280,6 +281,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         // Pivot is specific article by ID: In lack of further information,
         // revert to default sort order 'Posted desc'.
         $atts = filterAtts(array('sortby' => 'Posted', 'sortdir' => 'desc'));
+        $atts['thisid'] = $id;
     } else {
         // Pivot is $thisarticle: Use article attributes to find its neighbours.
         assert_article();
@@ -289,6 +291,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         }
 
         $atts = filterAtts();
+        $atts['thisid'] = $thisarticle['thisid'];
         $m = preg_split('/\s+/', $atts['sort']);
 
         // If in doubt, fall back to chronologically descending order.
