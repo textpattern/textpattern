@@ -197,29 +197,74 @@ function file_list($message = '')
 
     echo n.tag(
         hed(gTxt('tab_file'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
+        'div', array('class' => 'txp-layout-2col-cell-1'));
+
+    $searchBlock =
         n.tag_start('div', array(
             'class' => 'txp-layout-2col-cell-2',
             'id'    => $event.'_control',
+        )).
+        $search->renderForm('file_list', $search_render_options).
+        n.tag_end('div');
+
+    $uploadBlock = array();
+
+    if (!is_dir($file_base_path) || !is_writeable($file_base_path)) {
+        $uploadBlock[] =
+            graf(
+                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+                gTxt('file_dir_not_writeable', array('{filedir}' => $file_base_path)),
+                array('class' => 'alert-block warning')
+            );
+    } elseif (has_privs('file.edit.own')) {
+        $uploadBlock[] =
+            n.tag_start('div', array('class' => 'txp-control-panel')).
+            n.file_upload_form(gTxt('upload_file'), 'upload', 'file_insert');
+
+        $existing_files = get_filenames();
+
+        if ($existing_files) {
+            $uploadBlock[] =
+                form(
+                    eInput('file').
+                    sInput('file_create').
+                    tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
+                    selectInput('filename', $existing_files, '', 1, '', 'file-existing').
+                    fInput('submit', '', gTxt('Create')),
+                '', '', 'post', 'assign-existing-form', '', 'assign_file');
+        }
+
+        $uploadBlock[] = tag_end('div');
+    }
+
+    $contentBlockStart = n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
         ));
+
+    $uploadBlock = implode(n, $uploadBlock);
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo $search->renderForm('file_list', $search_render_options).
+            echo $searchBlock.
+                $contentBlockStart.
+                $uploadBlock.
                 graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                gTxt('no_results_found'),
-                array('class' => 'alert-block information')
-            );
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_results_found'),
+                    array('class' => 'alert-block information')
+                ).
+                n.tag_end('div');
         } else {
-            echo graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                gTxt('no_files_recorded'),
-                array('class' => 'alert-block information')
-            );
+            echo $contentBlockStart.
+                $uploadBlock.
+                graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_files_recorded'),
+                    array('class' => 'alert-block information')
+                ).
+                n.tag_end('div');
         }
-
-        echo n.tag_end('div');
 
         return;
     }
@@ -228,36 +273,7 @@ function file_list($message = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $search->renderForm('file_list', $search_render_options).'</div>';
-
-    echo n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        ));
-
-    if (!is_dir($file_base_path) || !is_writeable($file_base_path)) {
-        echo graf(
-            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-            gTxt('file_dir_not_writeable', array('{filedir}' => $file_base_path)),
-            array('class' => 'alert-block warning')
-        );
-    } elseif (has_privs('file.edit.own')) {
-        $existing_files = get_filenames();
-
-        if ($existing_files) {
-            echo form(
-                eInput('file').
-                sInput('file_create').
-                graf(
-                    tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
-                    sp.selectInput('filename', $existing_files, '', 1, '', 'file-existing').
-                    sp.fInput('submit', '', gTxt('Create')),
-                    array('class' => 'existing-file')
-                ), '', '', 'post', '', '', 'assign_file');
-        }
-
-        echo n.tag(file_upload_form(gTxt('upload_file'), 'upload', 'file_insert'), 'div', array('class' => 'txp-control-panel'));
-    }
+    echo $searchBlock.$contentBlockStart.$uploadBlock;
 
     $rs = safe_query(
         "SELECT
@@ -618,8 +634,8 @@ function file_edit($message = '', $id = '')
     if (!$id) {
         $id = gps('id');
     }
-    $id = assert_int($id);
 
+    $id = assert_int($id);
     $rs = safe_row("*, UNIX_TIMESTAMP(created) AS created, UNIX_TIMESTAMP(modified) AS modified", 'txp_file', "id = $id");
 
     if ($rs) {
@@ -909,7 +925,6 @@ function file_replace()
     global $txp_user, $file_base_path;
 
     $id = assert_int(gps('id'));
-
     $rs = safe_row("filename, author", 'txp_file', "id = $id");
 
     if (!$rs) {
@@ -1003,21 +1018,23 @@ function file_save()
     }
 
     $id = $varray['id'] = assert_int($id);
-
     $permissions = gps('perms');
+
     if (is_array($permissions)) {
         asort($permissions);
         $permissions = implode(",", $permissions);
     }
+
     $varray['permissions'] = $permissions;
     $perms = doSlash($permissions);
-
     $rs = safe_row("filename, author", 'txp_file', "id = $id");
+
     if (!has_privs('file.edit') && !($rs['author'] === $txp_user && has_privs('file.edit.own'))) {
         require_privs();
     }
 
     $old_filename = $varray['old_filename'] = sanitizeForFile($rs['filename']);
+
     if ($old_filename != false && strcmp($old_filename, $filename) != 0) {
         $old_path = build_file_path($file_base_path, $old_filename);
         $new_path = build_file_path($file_base_path, $filename);
@@ -1032,6 +1049,7 @@ function file_save()
     }
 
     $created_ts = @safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+
     if ($publish_now) {
         $created = "NOW()";
     } elseif ($created_ts > 0) {
