@@ -657,7 +657,7 @@ function fbCreate()
                 )), ' class="error"')
             ).
             n.'</div>'.
-            n.'<ol>'.n.$GLOBALS['txp_err_html'].'</ol>';
+            n.'<ol>'.n.$GLOBALS['txp_err_html'].'</ol>'.
             n.'</div>';
     } else {
         // Clear the session so no data is leaked.
