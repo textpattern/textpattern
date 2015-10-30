@@ -161,8 +161,8 @@ $setup_comment_invite = (gTxt('setup_comment_invite') == 'setup_comment_invite')
 require_once txpath.'/lib/classTextile.php';
 $textile = new Textile();
 
-$article['body']    = file_get_contents(txpath.DS.'setup'.DS.'article.body.txp');
-$article['excerpt'] = file_get_contents(txpath.DS.'setup'.DS.'article.excerpt.txp');
+$article['body']    = file_get_contents(txpath.DS.'setup'.DS.'article.body.textile');
+$article['excerpt'] = file_get_contents(txpath.DS.'setup'.DS.'article.excerpt.textile');
 $article = str_replace('siteurl', $urlpath, $article);
 $article['body_html']    = $textile->TextileThis($article['body']);
 $article['excerpt_html'] = $textile->TextileThis($article['excerpt']);
