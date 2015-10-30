@@ -98,9 +98,9 @@ function list_list($message = '', $post = '')
     }
 
     if ($dir === '') {
-        $dir = get_pref('article_sort_dir', 'DESC');
+        $dir = get_pref('article_sort_dir', 'desc');
     } else {
-        $dir = ($dir == 'ASC') ? "ASC" : "DESC";
+        $dir = ($dir == 'asc') ? "asc" : "desc";
         set_pref('article_sort_dir', $dir, 'list', 2, '', 0, PREF_PRIVATE);
     }
 
@@ -143,7 +143,7 @@ function list_list($message = '', $post = '')
             break;
     }
 
-    $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
+    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
     $criteria = 1;
 

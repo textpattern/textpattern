@@ -93,9 +93,9 @@ function image_list($message = '')
     }
 
     if ($dir === '') {
-        $dir = get_pref('image_sort_dir', 'DESC');
+        $dir = get_pref('image_sort_dir', 'desc');
     } else {
-        $dir = ($dir == 'ASC') ? "ASC" : "DESC";
+        $dir = ($dir == 'asc') ? "asc" : "desc";
         set_pref('image_sort_dir', $dir, 'image', 2, '', 0, PREF_PRIVATE);
     }
 
@@ -134,7 +134,7 @@ function image_list($message = '')
             break;
     }
 
-    $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
+    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
     $criteria = 1;
 

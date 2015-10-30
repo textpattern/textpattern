@@ -159,7 +159,7 @@ function atom()
         $limit = ($limit) ? $limit : $rss_how_many;
         $limit = intval(min($limit, max(100, $rss_how_many)));
 
-        $frs = safe_column("name", 'txp_section,' "in_rss != '1'");
+        $frs = safe_column("name", 'txp_section', "in_rss != '1'");
 
         $query = array();
 

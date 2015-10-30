@@ -90,9 +90,9 @@ function sec_section_list($message = '')
     }
 
     if ($dir === '') {
-        $dir = get_pref('section_sort_dir', 'DESC');
+        $dir = get_pref('section_sort_dir', 'desc');
     } else {
-        $dir = ($dir == 'ASC') ? "ASC" : "DESC";
+        $dir = ($dir == 'asc') ? "asc" : "desc";
         set_pref('section_sort_dir', $dir, 'section', 2, '', 0, PREF_PRIVATE);
     }
 
@@ -123,7 +123,7 @@ function sec_section_list($message = '')
             break;
     }
 
-    $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
+    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
     $criteria = 1;
 
