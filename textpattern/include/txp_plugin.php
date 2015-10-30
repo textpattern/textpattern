@@ -92,6 +92,7 @@ function plugin_list($message = '')
     $sort_sql = "$sort $dir";
 
     $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
+    $dir = strtolower($dir);
 
     $rs = safe_rows_start(
         "name, status, author, author_uri, version, description, length(help) AS help, ABS(STRCMP(MD5(code), code_md5)) AS modified, load_order, flags",

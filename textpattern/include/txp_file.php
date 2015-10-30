@@ -165,6 +165,7 @@ function file_list($message = '')
     }
 
     $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
+    $dir = strtolower($dir);
 
     $criteria = 1;
 

@@ -144,6 +144,7 @@ function list_list($message = '', $post = '')
     }
 
     $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
+    $dir = strtolower($dir);
 
     $criteria = 1;
 

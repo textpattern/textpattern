@@ -332,6 +332,7 @@ function author_list($message = '')
         $sort_sql = $sort.' '.$dir;
 
         $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
+        $dir = strtolower($dir);
 
         $criteria = 1;
 
