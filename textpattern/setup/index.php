@@ -50,7 +50,6 @@ if (!isset($_SESSION)) {
 
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
-include_once txpath.'/lib/txplib_theme.php';
 include_once txpath.'/include/txp_auth.php';
 
 assert_system_requirements();
@@ -124,7 +123,9 @@ switch ($step) {
 </html>
 <?php
 
-// -------------------------------------------------------------
+/**
+ * Renders stage 0: welcome/choose language panel.
+ */
 
 function chooseLang()
 {
@@ -142,7 +143,11 @@ function chooseLang()
         n.'</div>';
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders progress meter displayed on stages 1 to 4 of installation process.
+ *
+ * @param int $stage The stage
+ */
 
 function txp_setup_progress_meter($stage = 1)
 {
@@ -171,7 +176,9 @@ function txp_setup_progress_meter($stage = 1)
     return join('', $out);
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders stage 1: database details panel.
+ */
 
 function getDbInfo()
 {
@@ -266,7 +273,10 @@ function getDbInfo()
         n.'</div>';
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders stage 2: either config details panel (success) or database details
+ * error message (fail).
+ */
 
 function printConfig()
 {
@@ -370,7 +380,7 @@ function printConfig()
         exit;
     }
 
-    $tables_exist = mysqli_query($mylink, "describe `".$_SESSION['dprefix']."textpattern`");
+    $tables_exist = mysqli_query($mylink, "DESCRIBE `".$_SESSION['dprefix']."textpattern`");
     if ($tables_exist) {
         echo graf(
             span(setup_gTxt('tables_exist', array(
@@ -413,7 +423,10 @@ function printConfig()
         n.'</div>';
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders stage 3: either admin user details panel (success) or config details
+ * error message (fail).
+ */
 
 function getTxpLogin()
 {
@@ -453,10 +466,10 @@ function getTxpLogin()
     // Default theme selector.
     $core_themes = array('classic', 'remora', 'hive');
 
-    $themes = theme::names();
+    $themes = \Textpattern\Admin\Theme::names();
 
     foreach ($themes as $t) {
-        $theme = theme::factory($t);
+        $theme = \Textpattern\Admin\Theme::factory($t);
 
         if ($theme) {
             $m = $theme->manifest();
@@ -514,7 +527,9 @@ function getTxpLogin()
         n.'</div>';
 }
 
-// -------------------------------------------------------------
+/**
+ * Re-renders stage 3: admin user details panel, due to user input errors.
+ */
 
 function createTxp()
 {
@@ -586,50 +601,10 @@ function createTxp()
         exit;
     }
 
-    $ddb = $txpcfg['db'];
-    $duser = $txpcfg['user'];
-    $dpass = $txpcfg['pass'];
-    $dhost = $txpcfg['host'];
-    $dclient_flags = isset($txpcfg['client_flags']) ? $txpcfg['client_flags'] : 0;
-    $dprefix = $txpcfg['table_prefix'];
-    $dbcharset = $txpcfg['dbcharset'];
-
-    $siteurl = str_replace("http://", '', $_SESSION['siteurl']);
-    $siteurl = str_replace(' ', '%20', rtrim($siteurl, "/"));
-    $urlpath = preg_replace('#^[^/]+#', '', $siteurl);
-
-    define("PFX", trim($dprefix));
     define('TXP_INSTALL', 1);
 
     include_once txpath.'/lib/txplib_update.php';
     include txpath.'/setup/txpsql.php';
-
-    $nonce = md5(uniqid(rand(), true));
-    $hash  = doSlash(txp_hash_password($_SESSION['pass']));
-
-    mysqli_query($link, "INSERT INTO `".PFX."txp_users` VALUES
-        (1,
-        '".doSlash($_SESSION['name'])."',
-        '$hash',
-        '".doSlash($_SESSION['realname'])."',
-        '".doSlash($_SESSION['email'])."',
-        1,
-        now(),
-        '$nonce')"
-    );
-
-    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".doSlash($siteurl)."' where `name`='siteurl'");
-    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");
-    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".getlocale(LANG)."' where `name`='locale'");
-    mysqli_query($link, "update `".PFX."textpattern` set Body = replace(Body, 'siteurl', '".
-        doSlash($urlpath)."'), Body_html = replace(Body_html, 'siteurl', '".
-        doSlash($urlpath)."') WHERE ID = 1");
-
-    // cf. update/_to_4.2.0.php.
-    // TODO: Position might need altering when prefs panel layout is altered.
-    $theme = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
-    mysqli_query($link, "insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".
-        doSlash($theme)."', type = '1', event = 'admin', html = 'themename', position = '160'");
 
     echo fbCreate();
 }
@@ -664,7 +639,10 @@ function makeConfig()
     .$close;
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders stage 4: either installation completed panel (success) or
+ * installation error message (fail).
+ */
 
 function fbCreate()
 {
@@ -679,6 +657,7 @@ function fbCreate()
                 )), ' class="error"')
             ).
             n.'</div>'.
+            n.'<ol>'.n.$GLOBALS['txp_err_html'].'</ol>'.
             n.'</div>';
     } else {
         // Clear the session so no data is leaked.

@@ -62,12 +62,12 @@ if ($event == 'lang') {
 
 function languages($name, $val)
 {
-    $installed_langs = safe_column('lang', 'txp_lang', "1 = 1 group by lang");
+    $installed_langs = safe_column("lang", 'txp_lang', "1 = 1 GROUP BY lang");
 
     $vals = array();
 
     foreach ($installed_langs as $lang) {
-        $vals[$lang] = safe_field('data', 'txp_lang', "name = '".doSlash($lang)."' AND lang = '".doSlash($lang)."'");
+        $vals[$lang] = safe_field("data", 'txp_lang', "name = '".doSlash($lang)."' AND lang = '".doSlash($lang)."'");
 
         if (trim($vals[$lang]) == '') {
             $vals[$lang] = $lang;
@@ -93,7 +93,7 @@ function list_languages($message = '')
 {
     require_once txpath.'/lib/IXRClass.php';
 
-    $active_lang = safe_field('val', 'txp_prefs', "name='language'");
+    $active_lang = safe_field("val", 'txp_prefs', "name = 'language'");
 
     $lang_form = tag(
         form(
@@ -150,7 +150,7 @@ function list_languages($message = '')
 
     // Get installed items from the database.
     // We need a value here for the language itself, not for each one of the rows.
-    $rows = safe_rows('lang, UNIX_TIMESTAMP(MAX(lastmod)) as lastmod', 'txp_lang', "1 GROUP BY lang ORDER BY lastmod DESC");
+    $rows = safe_rows("lang, UNIX_TIMESTAMP(MAX(lastmod)) AS lastmod", 'txp_lang', "1 = 1 GROUP BY lang ORDER BY lastmod DESC");
     $installed_lang = array();
 
     foreach ($rows as $language) {
@@ -305,7 +305,7 @@ function save_language()
         'language',
     )));
 
-    if (safe_field('lang', 'txp_lang', "lang='".doSlash($language)."' limit 1")) {
+    if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language)."' LIMIT 1")) {
         $locale = $prefs['locale'] = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language);
         Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_ALL, $language);
         set_pref('locale', $locale);
@@ -406,9 +406,9 @@ function install_lang_key(&$value, $key)
     )));
 
     $exists = safe_field(
-        'name',
+        "name",
         'txp_lang',
-        "name = '".doSlash($value['name'])."' and lang = '".doSlash($lang_code)."'"
+        "name = '".doSlash($value['name'])."' AND lang = '".doSlash($lang_code)."'"
     );
 
     $q =
@@ -421,12 +421,12 @@ function install_lang_key(&$value, $key)
         $value['ok'] = safe_update(
             'txp_lang',
             $q,
-            "owner = '".doSlash(TEXTPATTERN_LANG_OWNER_SYSTEM)."' and lang = '".doSlash($lang_code)."' and name = '".doSlash($value['name'])."'"
+            "owner = '".doSlash(TEXTPATTERN_LANG_OWNER_SYSTEM)."' AND lang = '".doSlash($lang_code)."' AND name = '".doSlash($value['name'])."'"
         );
     } else {
         $value['ok'] = safe_insert(
             'txp_lang',
-            $q.", lang='".doSlash($lang_code)."'"
+            "$q, lang = '".doSlash($lang_code)."'"
         );
     }
 }
@@ -456,7 +456,7 @@ function get_textpack()
 function remove_language()
 {
     $lang_code = ps('lang_code');
-    $ret = safe_delete('txp_lang', "lang='".doSlash($lang_code)."'");
+    $ret = safe_delete('txp_lang', "lang = '".doSlash($lang_code)."'");
 
     if ($ret) {
         callback_event('lang_deleted', '', 0, $lang_code);

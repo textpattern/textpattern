@@ -28,6 +28,9 @@
  * @package Admin\Image
  */
 
+use Textpattern\Validator\CategoryConstraint;
+use Textpattern\Validator\Validator;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -90,9 +93,9 @@ function image_list($message = '')
     }
 
     if ($dir === '') {
-        $dir = get_pref('image_sort_dir', 'desc');
+        $dir = get_pref('image_sort_dir', 'DESC');
     } else {
-        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        $dir = ($dir == 'ASC') ? "ASC" : "DESC";
         set_pref('image_sort_dir', $dir, 'image', 2, '', 0, PREF_PRIVATE);
     }
 
@@ -111,27 +114,27 @@ function image_list($message = '')
 
     switch ($sort) {
         case 'name':
-            $sort_sql = 'txp_image.name '.$dir;
+            $sort_sql = "txp_image.name $dir";
             break;
         case 'thumbnail':
-            $sort_sql = 'txp_image.thumbnail '.$dir.', txp_image.id asc';
+            $sort_sql = "txp_image.thumbnail $dir, txp_image.id ASC";
             break;
         case 'category':
-            $sort_sql = 'txp_category.title '.$dir.', txp_image.id asc';
+            $sort_sql = "txp_category.title $dir, txp_image.id ASC";
             break;
         case 'date':
-            $sort_sql = 'txp_image.date '.$dir.', txp_image.id asc';
+            $sort_sql = "txp_image.date $dir, txp_image.id ASC";
             break;
         case 'author':
-            $sort_sql = 'txp_users.RealName '.$dir.', txp_image.id asc';
+            $sort_sql = "txp_users.RealName $dir, txp_image.id ASC";
             break;
         default:
             $sort = 'id';
-            $sort_sql = 'txp_image.id '.$dir;
+            $sort_sql = "txp_image.id $dir";
             break;
     }
 
-    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+    $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
 
     $criteria = 1;
 
@@ -140,19 +143,19 @@ function image_list($message = '')
         $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
         $critsql = $verbatim ?
             array(
-                'id'       => "txp_image.ID in ('".join("','", do_list($crit_escaped))."')",
+                'id'       => "txp_image.ID IN ('".join("','", do_list($crit_escaped))."')",
                 'name'     => "txp_image.name = '$crit_escaped'",
-                'category' => "txp_image.category = '$crit_escaped' or txp_category.title = '$crit_escaped'",
-                'author'   => "txp_image.author = '$crit_escaped' or txp_users.RealName = '$crit_escaped'",
+                'category' => "txp_image.category = '$crit_escaped' OR txp_category.title = '$crit_escaped'",
+                'author'   => "txp_image.author = '$crit_escaped' OR txp_users.RealName = '$crit_escaped'",
                 'alt'      => "txp_image.alt = '$crit_escaped'",
                 'caption'  => "txp_image.caption = '$crit_escaped'",
             ) : array(
-                'id'       => "txp_image.ID in ('".join("','", do_list($crit_escaped))."')",
-                'name'     => "txp_image.name like '%$crit_escaped%'",
-                'category' => "txp_image.category like '%$crit_escaped%'",
-                'author'   => "txp_image.author like '%$crit_escaped%' or txp_category.title like '%$crit_escaped%'",
-                'alt'      => "txp_image.alt like '%$crit_escaped%' or txp_users.RealName like '%$crit_escaped%'",
-                'caption'  => "txp_image.caption like '%$crit_escaped%'",
+                'id'       => "txp_image.ID IN ('".join("','", do_list($crit_escaped))."')",
+                'name'     => "txp_image.name LIKE '%$crit_escaped%'",
+                'category' => "txp_image.category LIKE '%$crit_escaped%'",
+                'author'   => "txp_image.author LIKE '%$crit_escaped%' OR txp_category.title LIKE '%$crit_escaped%'",
+                'alt'      => "txp_image.alt LIKE '%$crit_escaped%' OR txp_users.RealName LIKE '%$crit_escaped%'",
+                'caption'  => "txp_image.caption LIKE '%$crit_escaped%'",
             );
 
         if (array_key_exists($search_method, $critsql)) {
@@ -171,13 +174,13 @@ function image_list($message = '')
 
     $sql_from =
         safe_pfx_j('txp_image')."
-        left join ".safe_pfx_j('txp_category')." on txp_category.name = txp_image.category and txp_category.type = 'image'
-        left join ".safe_pfx_j('txp_users')." on txp_users.name = txp_image.author";
+        LEFT JOIN ".safe_pfx_j('txp_category')." ON txp_category.name = txp_image.category AND txp_category.type = 'image'
+        LEFT JOIN ".safe_pfx_j('txp_users')." ON txp_users.name = txp_image.author";
 
     if ($criteria === 1) {
         $total = getCount('txp_image', $criteria);
     } else {
-        $total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
+        $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
 
     if ($total < 1) {
@@ -198,7 +201,7 @@ function image_list($message = '')
     echo image_search_form($crit, $search_method);
 
     $rs = safe_query(
-        "select
+        "SELECT
             txp_image.id,
             txp_image.name,
             txp_image.category,
@@ -207,14 +210,14 @@ function image_list($message = '')
             txp_image.h,
             txp_image.alt,
             txp_image.caption,
-            unix_timestamp(txp_image.date) as uDate,
+            UNIX_TIMESTAMP(txp_image.date) AS uDate,
             txp_image.author,
             txp_image.thumbnail,
             txp_image.thumb_w,
             txp_image.thumb_h,
-            txp_users.RealName as realname,
-            txp_category.Title as category_title
-        from $sql_from where $criteria order by $sort_sql limit $offset, $limit"
+            txp_users.RealName AS realname,
+            txp_category.Title AS category_title
+        FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
     );
 
     echo pluggable_ui('image_ui', 'extend_controls', '', $rs);
@@ -445,8 +448,8 @@ function image_multi_edit()
     }
 
     $selected = array_map('assert_int', $selected);
-    $method   = ps('edit_method');
-    $changed  = array();
+    $method = ps('edit_method');
+    $changed = array();
     $key = '';
 
     switch ($method) {
@@ -473,7 +476,7 @@ function image_multi_edit()
 
     if (!has_privs('image.edit')) {
         if (has_privs('image.edit.own')) {
-            $selected = safe_column('id', 'txp_image', 'id IN ('.join(',', $selected).') AND author=\''.doSlash($txp_user).'\'');
+            $selected = safe_column("id", 'txp_image', "id IN (".join(',', $selected).") AND author = '".doSlash($txp_user)."'");
         } else {
             $selected = array();
         }
@@ -496,7 +499,12 @@ function image_multi_edit()
     return image_list();
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders and outputs the image editor panel.
+ *
+ * @param string|array $message The activity message
+ * @param int          $id      The image ID
+ */
 
 function image_edit($message = '', $id = '')
 {
@@ -507,7 +515,7 @@ function image_edit($message = '', $id = '')
     }
 
     $id = assert_int($id);
-    $rs = safe_row("*, unix_timestamp(date) as uDate", "txp_image", "id = $id");
+    $rs = safe_row("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_image', "id = $id");
 
     if ($rs) {
         extract($rs);
@@ -670,7 +678,7 @@ function image_replace()
     extract($txpcfg);
 
     $id = assert_int(gps('id'));
-    $rs = safe_row("*", "txp_image", "id = $id");
+    $rs = safe_row("*", 'txp_image', "id = $id");
 
     if (!has_privs('image.edit') && !($rs['author'] === $txp_user && has_privs('image.edit.own'))) {
         image_list(gTxt('restricted_area'));
@@ -730,7 +738,7 @@ function thumbnail_insert()
             image_list(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR));
         } else {
             chmod($newpath, 0644);
-            safe_update("txp_image", "thumbnail = 1, thumb_w = $w, thumb_h = $h, date = now()", "id = $id");
+            safe_update('txp_image', "thumbnail = 1, thumb_w = $w, thumb_h = $h, date = NOW()", "id = $id");
 
             $message = gTxt('image_uploaded', array('{name}' => $name));
             update_lastmod('thumbnail_created', compact('id', 'w', 'h'));
@@ -770,7 +778,7 @@ function image_save()
     $validator = new Validator($constraints);
 
     if ($validator->validate() && safe_update(
-        "txp_image",
+        'txp_image',
         "name    = '$name',
         category = '$category',
         alt      = '$alt',
@@ -797,7 +805,7 @@ function image_delete($ids = array())
 
     if (!has_privs('image.delete')) {
         if (has_privs('image.delete.own')) {
-            $ids = safe_column('id', 'txp_image', 'id IN ('.join(',', $ids).') AND author=\''.doSlash($txp_user).'\'');
+            $ids = safe_column("id", 'txp_image', "id IN (".join(',', $ids).") AND author = '".doSlash($txp_user)."'");
         } else {
             $ids = array();
         }
@@ -805,7 +813,7 @@ function image_delete($ids = array())
 
     if (!empty($ids)) {
         $fail = array();
-        $rs   = safe_rows_start('id, ext', 'txp_image', 'id IN ('.join(',', $ids).')');
+        $rs   = safe_rows_start("id, ext", 'txp_image', "id IN (".join(',', $ids).")");
 
         if ($rs) {
             while ($a = nextRow($rs)) {
@@ -815,8 +823,7 @@ function image_delete($ids = array())
                 callback_event('image_deleted', $event, false, $id);
 
                 $rsd = safe_delete('txp_image', "id = $id");
-
-                $ul  = false;
+                $ul = false;
 
                 if (is_file(IMPATH.$id.$ext)) {
                     $ul = unlink(IMPATH.$id.$ext);

@@ -380,7 +380,7 @@ class Request
     {
         $ip = $this->getIp();
 
-        if (($host = safe_field('host', 'txp_log', "ip = '".doSlash($ip)."' limit 1")) !== false) {
+        if (($host = safe_field("host", 'txp_log', "ip = '".doSlash($ip)."' LIMIT 1")) !== false) {
             return $host;
         }
 

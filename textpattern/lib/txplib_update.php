@@ -84,17 +84,17 @@ function install_language_from_file($lang)
                     if (!empty($data)) {
                         foreach ($data as $name => $value) {
                             $value = addslashes($value);
-                            $exists = mysqli_query($DB->link, 'SELECT name, lastmod FROM `'.PFX."txp_lang` WHERE `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
+                            $exists = mysqli_query($DB->link, "SELECT name, lastmod FROM `".PFX."txp_lang` WHERE lang = '".$lang."' AND name = '$name' AND event = '$event'");
 
                             if ($exists) {
                                 $exists = mysqli_fetch_row($exists);
                             }
 
                             if ($exists[1]) {
-                                mysqli_query($DB->link, "UPDATE `".PFX."txp_lang` SET `lastmod`='$lastmod', `data`='$value' WHERE owner = ''".doSlash(TEXTPATTERN_LANG_OWNER_SYSTEM)." AND `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
+                                mysqli_query($DB->link, "UPDATE `".PFX."txp_lang` SET lastmod = '$lastmod', data = '$value' WHERE owner = '".doSlash(TEXTPATTERN_LANG_OWNER_SYSTEM)."' AND lang = '".$lang."' AND name = '$name' AND event = '$event'");
                                 echo mysqli_error($DB->link);
                             } else {
-                                mysqli_query($DB->link, "INSERT DELAYED INTO `".PFX."txp_lang` SET `lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
+                                mysqli_query($DB->link, "INSERT DELAYED INTO `".PFX."txp_lang` SET lang = '".$lang."', name = '$name', lastmod = '$lastmod', event = '$event', data = '$value'");
                                 echo mysqli_error($DB->link);
                             }
                         }
@@ -123,15 +123,15 @@ function install_language_from_file($lang)
             // Remember to add the last one.
             if (!empty($data)) {
                 foreach ($data as $name => $value) {
-                    mysqli_query($DB->link, "INSERT DELAYED INTO `".PFX."txp_lang` SET `lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
+                    mysqli_query($DB->link, "INSERT DELAYED INTO `".PFX."txp_lang` SET lang = '".$lang."', name = '$name', lastmod = '$lastmod', event = '$event', data = '$value'");
                 }
             }
 
-            mysqli_query($DB->link, "DELETE FROM `".PFX."txp_lang` WHERE owner = '' AND `lang`='".$lang."' AND `event` IN ('".join("','", array_unique($core_events))."') AND `lastmod`>$lastmod");
+            mysqli_query($DB->link, "DELETE FROM `".PFX."txp_lang` WHERE owner = '' AND lang = '".$lang."' AND event IN ('".join("','", array_unique($core_events))."') AND  lastmod > $lastmod");
             @fclose($file);
 
             // Delete empty fields if any.
-            mysqli_query($DB->link, "DELETE FROM `".PFX."txp_lang` WHERE `data`=''");
+            mysqli_query($DB->link, "DELETE FROM `".PFX."txp_lang` WHERE data = ''");
             mysqli_query($DB->link, "FLUSH TABLE `".PFX."txp_lang`");
 
             return true;

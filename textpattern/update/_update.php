@@ -56,8 +56,8 @@ assert_system_requirements();
 // On 4.1 or greater use utf8-tables, if that is configures in config.php.
 $mysqlversion = mysqli_get_server_info($DB->link);
 $tabletype = (intval($mysqlversion[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $mysqlversion))
-    ? " ENGINE=MyISAM "
-    : " TYPE=MyISAM ";
+    ? " ENGINE = MyISAM "
+    : " TYPE = MyISAM ";
 
 if (isset($txpcfg['dbcharset']) && (intval($mysqlversion[0]) >= 5 || preg_match('#^4\.[1-9]#', $mysqlversion))) {
     $tabletype .= " CHARACTER SET = ".$txpcfg['dbcharset']." ";
@@ -67,7 +67,7 @@ if (isset($txpcfg['dbcharset']) && (intval($mysqlversion[0]) >= 5 || preg_match(
 // forces an update check, which resets the message. Without this, people who
 // upgrade in future may still see a "new version available" message for some
 // time after upgrading.
-safe_delete('txp_prefs', 'name="last_update_check"');
+safe_delete('txp_prefs', "name = 'last_update_check'");
 
 // Update to 4.0.
 if (($dbversion == '') ||
@@ -150,6 +150,12 @@ if (version_compare($dbversion, '4.5.4', '<')) {
     }
 }
 
+if (version_compare($dbversion, '4.5.7', '<')) {
+    if ((include txpath.DS.'update'.DS.'_to_4.5.7.php') !== false) {
+        $dbversion = '4.5.7';
+    }
+}
+
 if (version_compare($dbversion, '4.6.0', '<')) {
     if ((include txpath.DS.'update'.DS.'_to_4.6.0.php') !== false) {
 ;#        $dbversion = '4.6.0';
@@ -170,11 +176,11 @@ if (is_array($files)) {
 
 // Keep track of updates for SVN users.
 safe_delete('txp_prefs', "name = 'dbupdatetime'");
-safe_insert('txp_prefs', "prefs_id=1, name='dbupdatetime',val='".max(newest_file(), time())."', type='2'");
+safe_insert('txp_prefs', "prefs_id = 1, name = 'dbupdatetime', val = '".max(newest_file(), time())."', type = '2'");
 
 // Update version.
 safe_delete('txp_prefs', "name = 'version'");
-safe_insert('txp_prefs', "prefs_id=1, name='version',val='$dbversion', type='2'");
+safe_insert('txp_prefs', "prefs_id = 1, name = 'version', val = '$dbversion', type = '2'");
 
 // Updated, baby. So let's get the fresh prefs and send them to languages.
 define('TXP_UPDATE_DONE', 1);

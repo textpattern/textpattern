@@ -44,7 +44,7 @@ function filterFrontPage()
 
     $filterFrontPage = false;
 
-    $rs = safe_column('name', 'txp_section', "on_frontpage != '1'");
+    $rs = safe_column("name", 'txp_section', "on_frontpage != '1'");
 
     if ($rs) {
         $filters = array();
@@ -70,11 +70,11 @@ function filterFrontPage()
  * @param array $rs An article as an assocative array
  * @example
  * if ($rs = safe_rows_start('*,
- *     unix_timestamp(Posted) as uPosted,
- *     unix_timestamp(Expires) as uExpires,
- *     unix_timestamp(LastMod) as uLastMod',
+ *     UNIX_TIMESTAMP(Posted) AS uPosted,
+ *     UNIX_TIMESTAMP(Expires) AS uExpires,
+ *     UNIX_TIMESTAMP(LastMod) AS uLastMod',
  *     'textpattern',
- *     '1=1'
+ *     '1 = 1'
  * ))
  * {
  *     global $thisarticle;
@@ -109,7 +109,7 @@ function populateArticleData($rs)
  * @param array $rs An article as an assocative array
  * @example
  * article_format_info(
- *     safe_row('*', 'textpattern', 'Status = 4 limit 1')
+ *     safe_row('*', 'textpattern', 'Status = 4 LIMIT 1')
  * )
  */
 
@@ -192,20 +192,20 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     // Building query parts; lifted from publish.php.
     $ids = array_map('intval', do_list($id));
-    $id = (!$id) ? '' : " and ID IN (".join(',', $ids).")";
+    $id = (!$id) ? '' : " AND ID IN (".join(',', $ids).")";
     switch ($time) {
         case 'any':
             $time = "";
             break;
         case 'future':
-            $time = " and Posted > ".now('posted');
+            $time = " AND Posted > ".now('posted');
             break;
         default:
-            $time = " and Posted <= ".now('posted');
+            $time = " AND Posted <= ".now('posted');
     }
 
     if (!$expired) {
-        $time .= " and (".now('expires')." <= Expires or Expires = ".NULLDATETIME.")";
+        $time .= " AND (".now('expires')." <= Expires OR Expires = ".NULLDATETIME.")";
     }
 
     $custom = '';
@@ -226,10 +226,10 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         $keys = doSlash(do_list($keywords));
 
         foreach ($keys as $key) {
-            $keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
+            $keyparts[] = "FIND_IN_SET('".$key."', Keywords)";
         }
 
-        $keywords = " and (".join(' or ', $keyparts).")";
+        $keywords = " AND (".join(" OR ", $keyparts).")";
     }
 
     // Invert $type for ascending sortdir.
@@ -247,17 +247,17 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     $safe_name = safe_pfx('textpattern');
     $q = array(
-        "select ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted
-            from ".$safe_name." where $sortby $type ".$threshold,
-        ($s != '' && $s != 'default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
+        "SELECT ID AS thisid, Section AS section, Title AS title, url_title, UNIX_TIMESTAMP(Posted) AS posted
+            FROM $safe_name WHERE $sortby $type $threshold",
+        ($s != '' && $s != 'default') ? "AND Section = '".doSlash($s)."'" : filterFrontPage(),
         $id,
         $time,
         $custom,
         $keywords,
-        'and Status=4',
-        'order by '.$sortby,
-        ($type == '<') ? 'desc' : 'asc',
-        'limit 1',
+        "AND Status = 4",
+        "ORDER BY $sortby",
+        ($type == '<') ? "DESC" : "ASC",
+        "LIMIT 1",
     );
 
     $cache[$key] = getRow(join(n.' ', $q));
@@ -279,7 +279,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
     if ($id !== 0) {
         // Pivot is specific article by ID: In lack of further information,
         // revert to default sort order 'Posted desc'.
-        $atts = filterAtts(array('sortby' => 'Posted', 'sortdir' => 'desc'));
+        $atts = filterAtts(array('sortby' => "Posted", 'sortdir' => "DESC"));
     } else {
         // Pivot is $thisarticle: Use article attributes to find its neighbours.
         assert_article();
@@ -296,26 +296,26 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
             || count($m) > 2        // Complex clause, e.g. 'foo asc, bar desc'
             || !preg_match('/^(?:[0-9a-zA-Z$_\x{0080}-\x{FFFF}]+|`[\x{0001}-\x{FFFF}]+`)$/u', $m[0])  // The clause's first verb is not a MySQL column identifier.
         ) {
-            $atts['sortby'] = 'Posted';
-            $atts['sortdir'] = 'desc';
+            $atts['sortby'] = "Posted";
+            $atts['sortdir'] = "DESC";
         } else {
             // Sort is like 'foo asc'.
             $atts['sortby'] = $m[0];
-            $atts['sortdir'] = (isset($m[1]) && strtolower($m[1]) == 'desc' ? 'desc' : 'asc');
+            $atts['sortdir'] = (isset($m[1]) && strtolower($m[1]) == 'desc' ? "DESC" : "ASC");
         }
 
         // Attributes with special treatment.
         switch ($atts['sortby']) {
             case 'Posted':
-                $threshold = 'from_unixtime('.doSlash($thisarticle['posted']).')';
+                $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['posted']).")";
                 $threshold_type = 'cooked';
                 break;
             case 'Expires':
-                $threshold = 'from_unixtime('.doSlash($thisarticle['expires']).')';
+                $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['expires']).")";
                 $threshold_type = 'cooked';
                 break;
             case 'LastMod':
-                $threshold = 'from_unixtime('.doSlash($thisarticle['modified']).')';
+                $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['modified']).")";
                 $threshold_type = 'cooked';
                 break;
             default:
@@ -345,7 +345,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
 
 function lastMod()
 {
-    $last = safe_field("unix_timestamp(val)", "txp_prefs", "`name`='lastmod' and prefs_id=1");
+    $last = safe_field("UNIX_TIMESTAMP(val)", 'txp_prefs', "name = 'lastmod' AND prefs_id = 1");
 
     return gmdate("D, d M Y H:i:s \G\M\T", $last);
 }
@@ -365,10 +365,10 @@ function parse($thing)
 
     $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-    $level  = 0;
-    $out    = '';
+    $level = 0;
+    $out = '';
     $inside = '';
-    $istag  = false;
+    $istag = false;
 
     foreach ($parsed as $chunk) {
         if ($istag) {
@@ -528,7 +528,7 @@ function bombShelter()
 
 function ckEx($table, $val, $debug = false)
 {
-    return safe_field("name", 'txp_'.$table, "`name` = '".doSlash($val)."' limit 1", $debug);
+    return safe_field("name", 'txp_'.$table, "name = '".doSlash($val)."' LIMIT 1", $debug);
 }
 
 /**
@@ -549,7 +549,7 @@ function ckEx($table, $val, $debug = false)
 
 function ckCat($type, $val, $debug = false)
 {
-    return safe_field("name", 'txp_category', "`name` = '".doSlash($val)."' AND type = '".doSlash($type)."' limit 1", $debug);
+    return safe_field("name", 'txp_category', "name = '".doSlash($val)."' AND type = '".doSlash($type)."' LIMIT 1", $debug);
 }
 
 /**
@@ -571,7 +571,7 @@ function ckCat($type, $val, $debug = false)
 
 function ckExID($val, $debug = false)
 {
-    return safe_row("ID, Section", 'textpattern', 'ID = '.intval($val).' and Status >= 4 limit 1', $debug);
+    return safe_row("ID, Section", 'textpattern', "ID = ".intval($val)." AND Status >= 4 LIMIT 1", $debug);
 }
 
 /**
@@ -594,7 +594,7 @@ function ckExID($val, $debug = false)
 
 function lookupByTitle($val, $debug = false)
 {
-    return safe_row("ID, Section", 'textpattern', "url_title = '".doSlash($val)."' and Status >= 4 limit 1", $debug);
+    return safe_row("ID, Section", 'textpattern', "url_title = '".doSlash($val)."' AND Status >= 4 LIMIT 1", $debug);
 }
 
 /**
@@ -618,7 +618,7 @@ function lookupByTitle($val, $debug = false)
 
 function lookupByTitleSection($val, $section, $debug = false)
 {
-    return safe_row("ID, Section", 'textpattern', "url_title = '".doSlash($val)."' AND Section='".doSlash($section)."' and Status >= 4 limit 1", $debug);
+    return safe_row("ID, Section", 'textpattern', "url_title = '".doSlash($val)."' AND Section = '".doSlash($section)."' AND Status >= 4 LIMIT 1", $debug);
 }
 
 /**
@@ -633,8 +633,7 @@ function lookupByTitleSection($val, $section, $debug = false)
 
 function lookupByIDSection($id, $section, $debug = false)
 {
-    return safe_row('ID, Section', 'textpattern',
-        'ID = '.intval($id)." and Section = '".doSlash($section)."' and Status >= 4 limit 1", $debug);
+    return safe_row("ID, Section", 'textpattern', "ID = ".intval($id)." AND Section = '".doSlash($section)."' AND Status >= 4 LIMIT 1", $debug);
 }
 
 /**
@@ -648,7 +647,7 @@ function lookupByIDSection($id, $section, $debug = false)
 
 function lookupByID($id, $debug = false)
 {
-    return safe_row("ID, Section", 'textpattern', 'ID = '.intval($id).' and Status >= 4 limit 1', $debug);
+    return safe_row("ID, Section", 'textpattern', "ID = ".intval($id)." AND Status >= 4 LIMIT 1", $debug);
 }
 
 /**
@@ -663,8 +662,7 @@ function lookupByID($id, $debug = false)
 
 function lookupByDateTitle($when, $title, $debug = false)
 {
-    return safe_row("ID, Section", "textpattern",
-        "posted like '".doSlash($when)."%' and url_title like '".doSlash($title)."' and Status >= 4 limit 1");
+    return safe_row("ID, Section", 'textpattern', "posted LIKE '".doSlash($when)."%' AND url_title LIKE '".doSlash($title)."' AND Status >= 4 LIMIT 1");
 }
 
 /**

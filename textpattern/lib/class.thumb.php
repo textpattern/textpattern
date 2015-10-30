@@ -399,8 +399,8 @@ class wet_thumb
         }
 
         // Finally, the real dimensions.
-        $this->height =  $this->_DST['height'];
-        $this->width =  $this->_DST['width'];
+        $this->height = $this->_DST['height'];
+        $this->width = $this->_DST['width'];
 
         // Add magnifying glass.
         if ($this->hint === true) {
@@ -410,7 +410,7 @@ class wet_thumb
                 imagefilledrectangle(
                     $this->_DST['image'],
                     0,
-                    $this->_DST['height']-9,
+                    $this->_DST['height'] - 9,
                     $this->_DST['width'],
                     $this->_DST['height'],
                     $trans
@@ -420,7 +420,7 @@ class wet_thumb
             $magnifier = imagecreatefromstring(gzuncompress(base64_decode("eJzrDPBz5+WS4mJgYOD19HAJAtLcIMzBBiRXrilXA1IsxU6eIRxAUMOR0gHkcxZ4RBYD1QiBMOOlu3V/gIISJa4RJc5FqYklmfl5CiGZuakMBoZ6hkZ6RgYGJs77ex2BalRBaoLz00rKE4tSGXwTk4vyc1NTMhMV3DKLUsvzi7KLFXwjFEAa2svWnGdgYPTydHEMqZhTOsE++1CAyNHzm2NZjgau+dAmXlAwoatQmOld3t/NPxlLMvY7sovPzXHf7re05BPzjpQTMkZTPjm1HlHkv6clYWK43Zt16rcDjdZ/3j2cd7qD4/HHH3GaprFrw0QZDHicORXl2JsPsveVTDz//L3N+WpxJ5Hff+10Tjdd2/Vi17vea79Om5w9zzyne9GLnWGrN8atby/ayXPOsu2w4quvVtxNCVVz5nAf3nDpZckBCedpqSc28WTOWnT7rZNXZSlPvFybie9EFc6y3bIMCn3JAoJ+kyyfn9qWq+LZ9Las26Jv482cDRE6Ci0B6gVbo2oj9KabzD8vyMK4ZMqMs2kSvW4chz88SXNzmeGjtj1QZK9M3HHL8L7HITX3t19//VVY8CYDg9Kvy2vDXu+6mGGxNOiltMPsjn/t9eJr0ja/FOdi5TyQ9Lz3fOqstOr99/dnro2vZ1jy76D/vYivPsBoYPB09XNZ55TQBAAJjs5s</body>")));
 
             imagealphablending($this->_DST['image'], true);
-            imagecopy($this->_DST['image'], $magnifier, $this->_DST['width']-15, $this->_DST['height']-14, 0, 0, 11, 11);
+            imagecopy($this->_DST['image'], $magnifier, $this->_DST['width'] - 15, $this->_DST['height'] - 14, 0, 0, 11, 11);
             imagedestroy($magnifier);
         }
 
@@ -508,7 +508,7 @@ class txp_thumb extends wet_thumb
     public function __construct($id)
     {
         $id = assert_int($id);
-        $rs = safe_row('*', 'txp_image', 'id = '.$id.' limit 1');
+        $rs = safe_row("*", 'txp_image', "id = $id LIMIT 1");
         if ($rs) {
             extract($rs);
             $this->m_ext = $ext;
@@ -540,8 +540,8 @@ class txp_thumb extends wet_thumb
                 "thumbnail = 1,
                 thumb_w = $this->width,
                 thumb_h = $this->height,
-                date = now()",
-                'id = '.$this->m_id
+                date = NOW()",
+                "id = ".$this->m_id
             );
 
             chmod(IMPATH.$this->m_id.'t'.$this->m_ext, 0644);
@@ -565,7 +565,7 @@ class txp_thumb extends wet_thumb
         }
 
         if (unlink(IMPATH.$this->m_id.'t'.$this->m_ext)) {
-            safe_update('txp_image', 'thumbnail = 0', 'id = '.$this->m_id);
+            safe_update('txp_image', "thumbnail = 0", "id = ".$this->m_id);
 
             return true;
         }
