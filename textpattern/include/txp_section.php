@@ -179,19 +179,58 @@ function sec_section_list($message = '')
 
     echo n.tag(
         hed(gTxt('tab_sections'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
-        n.tag_start('div', array(
-            'class' => 'txp-layout-2col-cell-2',
-            'id'    => $event.'_control',
+        'div', array('class' => 'txp-layout-2col-cell-1'));
+
+    $searchBlock =
+        n.tag(
+            $search->renderForm('sec_section', $search_render_options),
+            'div', array(
+                'class' => 'txp-layout-2col-cell-2',
+                'id'    => $event.'_control',
+            )
+        );
+
+    $createBlock = array();
+
+    if (has_privs('section.edit')) {
+        $createBlock[] =
+            n.tag(
+                sLink('section', 'section_edit', gTxt('create_section'), 'txp-button').
+                n.tag_start('form', array(
+                    'class'  => 'async',
+                    'id'     => 'default_section_form',
+                    'name'   => 'default_section_form',
+                    'method' => 'post',
+                    'action' => 'index.php',
+                )).
+                tag(gTxt('default_write_section'), 'label', array('for' => 'default_section')).
+                popHelp('section_default').
+                section_select_list().
+                eInput('section').
+                sInput('section_set_default').
+                n.tag_end('form'),
+                'div', array('class' => 'txp-control-panel')
+            );
+    }
+
+    $contentBlockStart = n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
         ));
+
+    $createBlock = implode(n, $createBlock);
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo $search->renderForm('sec_section', $search_render_options).
+            echo $searchBlock.
+                $contentBlockStart.
+                $createBlock.
                 graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                gTxt('no_results_found'), array('class' => 'alert-block information')
-            ).n.tag_end('div');
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_results_found'),
+                    array('class' => 'alert-block information')
+                ).
+                n.tag_end('div');
         }
 
         return;
@@ -201,29 +240,7 @@ function sec_section_list($message = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $search->renderForm('sec_section', $search_render_options).'</div>';
-
-    echo n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        )).
-        n.tag(
-            sLink('section', 'section_edit', gTxt('create_section'), 'txp-button').
-            n.tag_start('form', array(
-                'class'  => 'async',
-                'id'     => 'default_section_form',
-                'name'   => 'default_section_form',
-                'method' => 'post',
-                'action' => 'index.php',
-            )).
-            tag(gTxt('default_write_section'), 'label', array('for' => 'default_section')).
-            popHelp('section_default').
-            section_select_list().
-            eInput('section').
-            sInput('section_set_default').
-            n.tag_end('form'),
-            'div', array('class' => 'txp-control-panel')
-        );
+    echo $searchBlock.$contentBlockStart.$createBlock;
 
     $rs = safe_rows_start(
         "*, (SELECT COUNT(*) FROM ".safe_pfx_j('textpattern')." WHERE textpattern.Section = txp_section.name) AS article_count",
