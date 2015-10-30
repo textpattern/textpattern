@@ -117,7 +117,9 @@ switch ($step) {
 </html>
 <?php
 
-// -------------------------------------------------------------
+/**
+ * Renders stage 0: welcome/choose language panel.
+ */
 
 function chooseLang()
 {
@@ -135,7 +137,11 @@ function chooseLang()
         n.'</div>';
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders progress meter displayed on stages 1 to 4 of installation process.
+ *
+ * @param int $stage The stage
+ */
 
 function txp_setup_progress_meter($stage = 1)
 {
@@ -164,7 +170,9 @@ function txp_setup_progress_meter($stage = 1)
     return join('', $out);
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders stage 1: database details panel.
+ */
 
 function getDbInfo()
 {
@@ -263,7 +271,10 @@ function getDbInfo()
         n.'</div>';
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders stage 2: either config details panel (success) or database details
+ * error message (fail).
+ */
 
 function printConfig()
 {
@@ -410,7 +421,10 @@ function printConfig()
         n.'</div>';
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders stage 3: either admin user details panel (success) or config details
+ * error message (fail).
+ */
 
 function getTxpLogin()
 {
@@ -514,7 +528,9 @@ function getTxpLogin()
         n.'</div>';
 }
 
-// -------------------------------------------------------------
+/**
+ * Re-renders stage 3: admin user details panel, due to user input errors.
+ */
 
 function createTxp()
 {
@@ -624,7 +640,10 @@ function makeConfig()
     .$close;
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders stage 4: either installation completed panel (success) or
+ * installation error message (fail).
+ */
 
 function fbCreate()
 {
