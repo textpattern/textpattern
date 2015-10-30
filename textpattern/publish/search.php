@@ -52,11 +52,11 @@ function search($q)
     $form = (!$form) ? legacy_form() : $form;
 
     $rs = safe_rows(
-        "*, ID as thisid, unix_timestamp(Posted) as posted, Title as title,
-        match (Title,Body) against ('$q') as score",
-        "textpattern",
-        "(Title rlike '$q' or Body rlike '$q') $s_filter
-        and Status = 4 and Posted <=now() order by score desc limit 40");
+        "*, ID AS thisid, UNIX_TIMESTAMP(Posted) AS posted, Title AS title,
+        MATCH (Title,Body) AGAINST ('$q') AS score",
+        'textpattern',
+        "(Title RLIKE '$q' OR Body RLIKE '$q') $s_filter
+        AND Status = 4 AND Posted <= NOW() ORDER BY score DESC LIMIT 40");
 
     if ($rs) {
         $result_rows = count($rs);
@@ -120,10 +120,10 @@ function search($q)
 
 function filterSearch()
 {
-    $rs = safe_column("name", "txp_section", "searchable != '1'");
+    $rs = safe_column("name", 'txp_section', "searchable != '1'");
     if ($rs) {
         foreach ($rs as $name) {
-            $filters[] = "and Section != '".doSlash($name)."'";
+            $filters[] = "AND Section != '".doSlash($name)."'";
         }
 
         return join(' ', $filters);

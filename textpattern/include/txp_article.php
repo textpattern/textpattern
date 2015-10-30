@@ -164,7 +164,7 @@ function article_post()
 
         // Set and validate article timestamp.
         if ($publish_now == 1) {
-            $when = 'now()';
+            $when = "NOW()";
             $when_ts = time();
         } else {
             if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour) || !is_numeric($minute) || !is_numeric($second)) {
@@ -181,12 +181,12 @@ function article_post()
             }
 
             $when_ts = $ts - tz_offset($ts);
-            $when = "from_unixtime($when_ts)";
+            $when = "FROM_UNIXTIME($when_ts)";
         }
 
         // Force a reasonable 'last modified' date for future articles,
         // keep recent articles list in order.
-        $lastmod = ($when_ts > time() ? 'now()' : $when);
+        $lastmod = ($when_ts > time() ? "NOW()" : $when);
 
         // Set and validate expiry timestamp.
         if (empty($exp_year)) {
@@ -229,7 +229,7 @@ function article_post()
         }
 
         if ($expires) {
-            $whenexpires = "from_unixtime($expires)";
+            $whenexpires = "FROM_UNIXTIME($expires)";
         } else {
             $whenexpires = NULLDATETIME;
         }
@@ -265,7 +265,7 @@ function article_post()
         $rs = compact($vars);
         if (article_validate($rs, $msg)) {
             $ok = safe_insert(
-               "textpattern",
+               'textpattern',
                "Title           = '$Title',
                 Body            = '$Body',
                 Body_html       = '$Body_html',
@@ -291,7 +291,7 @@ function article_post()
                 AnnotateInvite  = '$AnnotateInvite',"
                 .(($cfs) ? $cfq.',' : '').
                 "uid            = '".md5(uniqid(rand(), true))."',
-                feed_time       = now()"
+                feed_time       = NOW()"
             );
 
             if ($ok) {
@@ -300,9 +300,9 @@ function article_post()
                 if ($is_clone) {
                     safe_update(
                         'textpattern',
-                        "Title = concat(Title, ' (', {$ok}, ')'),
-                        url_title = concat(url_title, '-', {$ok})",
-                        "ID = {$ok}"
+                        "Title = CONCAT(Title, ' (', $ok, ')'),
+                        url_title = CONCAT(url_title, '-', $ok)",
+                        "ID = $ok"
                     );
                 }
 
@@ -335,11 +335,11 @@ function article_save()
 
     $incoming = array_map('assert_string', psa($vars));
 
-    $oldArticle = safe_row('Status, url_title, Title, textile_body, textile_excerpt, '.
-        'unix_timestamp(LastMod) as sLastMod, LastModID, '.
-        'unix_timestamp(Posted) as sPosted, '.
-        'unix_timestamp(Expires) as sExpires',
-        'textpattern', 'ID = '.(int) $incoming['ID']);
+    $oldArticle = safe_row("Status, url_title, Title, textile_body, textile_excerpt,
+        UNIX_TIMESTAMP(LastMod) AS sLastMod, LastModID,
+        UNIX_TIMESTAMP(Posted) AS sPosted,
+        UNIX_TIMESTAMP(Expires) AS sExpires",
+        'textpattern', "ID = ".(int) $incoming['ID']);
 
     if (!(($oldArticle['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
         or ($oldArticle['Status'] >= STATUS_LIVE and $incoming['AuthorID'] === $txp_user and has_privs('article.edit.own.published'))
@@ -377,7 +377,7 @@ function article_save()
 
     // Set and validate article timestamp.
     if ($reset_time) {
-        $whenposted = "Posted=now()";
+        $whenposted = "Posted = NOW()";
         $when_ts = time();
     } else {
         if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour) || !is_numeric($minute) || !is_numeric($second)) {
@@ -393,7 +393,7 @@ function article_save()
             $when = $when_ts = $ts - tz_offset($ts);
         }
 
-        $whenposted = "Posted=from_unixtime($when)";
+        $whenposted = "Posted = FROM_UNIXTIME($when)";
     }
 
     // Set and validate expiry timestamp.
@@ -436,9 +436,9 @@ function article_save()
     }
 
     if ($expires) {
-        $whenexpires = "Expires=from_unixtime($expires)";
+        $whenexpires = "Expires = FROM_UNIXTIME($expires)";
     } else {
-        $whenexpires = "Expires=".NULLDATETIME;
+        $whenexpires = "Expires = ".NULLDATETIME;
     }
 
     // Auto-update custom-titles according to Title, as long as unpublished and
@@ -469,7 +469,7 @@ function article_save()
 
     $rs = compact($vars);
     if (article_validate($rs, $msg)) {
-        if (safe_update("textpattern",
+        if (safe_update('textpattern',
            "Title           = '$Title',
             Body            = '$Body',
             Body_html       = '$Body_html',
@@ -479,7 +479,7 @@ function article_save()
             description     = '$description',
             Image           = '$Image',
             Status          =  $Status,
-            LastMod         =  now(),
+            LastMod         =  NOW(),
             LastModID       = '$user',
             Section         = '$Section',
             Category1       = '$Category1',
@@ -728,11 +728,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $ID = assert_int($ID);
 
         $rs = safe_row(
-            "*, unix_timestamp(Posted) as sPosted,
-            unix_timestamp(Expires) as sExpires,
-            unix_timestamp(LastMod) as sLastMod",
-            "textpattern",
-            "ID=$ID"
+            "*, UNIX_TIMESTAMP(Posted) AS sPosted,
+            UNIX_TIMESTAMP(Expires) AS sExpires,
+            UNIX_TIMESTAMP(LastMod) AS sLastMod",
+            'textpattern',
+            "ID = $ID"
         );
 
         if (empty($rs)) {
@@ -756,11 +756,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             $store_out = gpsa($vars);
 
             if ($concurrent) {
-                $store_out['sLastMod'] = safe_field('unix_timestamp(LastMod) as sLastMod', 'textpattern', 'ID='.$ID);
+                $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");
             }
 
             if (!has_privs('article.set_markup')) {
-                $oldArticle = safe_row('textile_body, textile_excerpt', 'textpattern', 'ID = '.$ID);
+                $oldArticle = safe_row("textile_body, textile_excerpt", 'textpattern', "ID = $ID");
                 $store_out['textile_body'] = $oldArticle['textile_body'];
                 $store_out['textile_excerpt'] = $oldArticle['textile_excerpt'];
             }
@@ -1204,10 +1204,10 @@ function checkIfNeighbour($whichway, $sPosted)
 {
     $sPosted = assert_int($sPosted);
     $dir = ($whichway == 'prev') ? '<' : '>';
-    $ord = ($whichway == 'prev') ? 'desc' : 'asc';
+    $ord = ($whichway == 'prev') ? "DESC" : "ASC";
 
-    return safe_field("ID", "textpattern",
-        "Posted $dir from_unixtime($sPosted) order by Posted $ord limit 1");
+    return safe_field("ID", 'textpattern',
+        "Posted $dir FROM_UNIXTIME($sPosted) ORDER BY Posted $ord LIMIT 1");
 }
 
 /**
@@ -1240,7 +1240,7 @@ function status_display($status)
 
 function section_popup($Section, $id)
 {
-    $rs = safe_rows('name, title', 'txp_section', "name != 'default' order by title asc, name asc");
+    $rs = safe_rows("name, title", 'txp_section', "name != 'default' ORDER BY title ASC, name ASC");
 
     if ($rs) {
         $options = array();
@@ -1322,7 +1322,7 @@ function getDefaultSection()
 
 function form_pop($form, $id)
 {
-    $rs = safe_column('name', 'txp_form', "type = 'article' and name != 'default' order by name");
+    $rs = safe_column("name", 'txp_form', "type = 'article' AND name != 'default' ORDER BY name");
 
     if ($rs) {
         return selectInput('override_form', $rs, $form, true, '', $id);
@@ -1683,7 +1683,7 @@ function article_partial_custom_fields($rs)
 
 function article_partial_recent_articles($rs)
 {
-    $recents = safe_rows_start('Title, ID', 'textpattern', '1=1 order by LastMod desc limit '.(int) WRITE_RECENT_ARTICLES_COUNT);
+    $recents = safe_rows_start("Title, ID", 'textpattern', "1 = 1 ORDER BY LastMod DESC LIMIT ".(int) WRITE_RECENT_ARTICLES_COUNT);
     $ra = '';
 
     if ($recents && numRows($recents)) {

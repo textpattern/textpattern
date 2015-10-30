@@ -51,7 +51,7 @@ if ($event == 'list') {
 
     $all_cats = getTree('root', 'article');
     $all_authors = the_privileged('article.edit.own');
-    $all_sections = safe_column('name', 'txp_section', "name != 'default'");
+    $all_sections = safe_column("name", 'txp_section', "name != 'default'");
 
     $available_steps = array(
         'list_list'          => false,
@@ -98,9 +98,9 @@ function list_list($message = '', $post = '')
     }
 
     if ($dir === '') {
-        $dir = get_pref('article_sort_dir', 'desc');
+        $dir = get_pref('article_sort_dir', 'DESC');
     } else {
-        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        $dir = ($dir == 'ASC') ? "ASC" : "DESC";
         set_pref('article_sort_dir', $dir, 'list', 2, '', 0, PREF_PRIVATE);
     }
 
@@ -108,42 +108,42 @@ function list_list($message = '', $post = '')
 
     switch ($sort) {
         case 'id':
-            $sort_sql = 'textpattern.ID '.$dir;
+            $sort_sql = "textpattern.ID $dir";
             break;
         case 'title':
-            $sort_sql = 'textpattern.Title '.$dir.', textpattern.Posted desc';
+            $sort_sql = "textpattern.Title $dir, textpattern.Posted DESC";
             break;
         case 'expires':
-            $sort_sql = 'textpattern.Expires '.$dir;
+            $sort_sql = "textpattern.Expires $dir";
             break;
         case 'section':
-            $sort_sql = 'section.title '.$dir.', textpattern.Posted desc';
+            $sort_sql = "section.title $dir, textpattern.Posted DESC";
             break;
         case 'category1':
-            $sort_sql = 'category1.title '.$dir.', textpattern.Posted desc';
+            $sort_sql = "category1.title $dir, textpattern.Posted DESC";
             break;
         case 'category2':
-            $sort_sql = 'category2.title '.$dir.', textpattern.Posted desc';
+            $sort_sql = "category2.title $dir, textpattern.Posted DESC";
             break;
         case 'status':
-            $sort_sql = 'textpattern.Status '.$dir.', textpattern.Posted desc';
+            $sort_sql = "textpattern.Status $dir, textpattern.Posted DESC";
             break;
         case 'author':
-            $sort_sql = 'user.RealName '.$dir.', textpattern.Posted desc';
+            $sort_sql = "user.RealName $dir, textpattern.Posted DESC";
             break;
         case 'comments':
-            $sort_sql = 'textpattern.comments_count '.$dir.', textpattern.Posted desc';
+            $sort_sql = "textpattern.comments_count $dir, textpattern.Posted DESC";
             break;
         case 'lastmod':
-            $sort_sql = 'textpattern.LastMod '.$dir.', textpattern.Posted desc';
+            $sort_sql = "textpattern.LastMod $dir, textpattern.Posted DESC";
             break;
         default:
             $sort = 'posted';
-            $sort_sql = 'textpattern.Posted '.$dir;
+            $sort_sql = "textpattern.Posted $dir";
             break;
     }
 
-    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+    $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
 
     $criteria = 1;
 
@@ -152,27 +152,27 @@ function list_list($message = '', $post = '')
         $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
         $critsql = $verbatim ?
             array(
-                'id'                 => "textpattern.ID in ('".join("','", do_list($crit_escaped))."')",
-                'title_body_excerpt' => "textpattern.Title = '$crit_escaped' or textpattern.Body = '$crit_escaped' or textpattern.Excerpt = '$crit_escaped'",
-                'section'            => "textpattern.Section = '$crit_escaped' or section.title = '$crit_escaped'",
-                'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
-                'categories'         => "textpattern.Category1 = '$crit_escaped' or textpattern.Category2 = '$crit_escaped' or category1.title = '$crit_escaped' or category2.title = '$crit_escaped'",
+                'id'                 => "textpattern.ID IN ('".join("','", do_list($crit_escaped))."')",
+                'title_body_excerpt' => "textpattern.Title = '$crit_escaped' OR textpattern.Body = '$crit_escaped' OR textpattern.Excerpt = '$crit_escaped'",
+                'section'            => "textpattern.Section = '$crit_escaped' OR section.title = '$crit_escaped'",
+                'keywords'           => "FIND_IN_SET('".$crit_escaped."', textpattern.Keywords)",
+                'categories'         => "textpattern.Category1 = '$crit_escaped' OR textpattern.Category2 = '$crit_escaped' OR category1.title = '$crit_escaped' OR category2.title = '$crit_escaped'",
                 'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
-                'author'             => "textpattern.AuthorID = '$crit_escaped' or user.RealName = '$crit_escaped'",
-                'article_image'      => "textpattern.Image in ('".join("','", do_list($crit_escaped))."')",
+                'author'             => "textpattern.AuthorID = '$crit_escaped' OR user.RealName = '$crit_escaped'",
+                'article_image'      => "textpattern.Image IN ('".join("','", do_list($crit_escaped))."')",
                 'posted'             => "textpattern.Posted = '$crit_escaped'",
                 'lastmod'            => "textpattern.LastMod = '$crit_escaped'",
             ) : array(
-                'id'                 => "textpattern.ID in ('".join("','", do_list($crit_escaped))."')",
-                'title_body_excerpt' => "textpattern.Title like '%$crit_escaped%' or textpattern.Body like '%$crit_escaped%' or textpattern.Excerpt like '%$crit_escaped%'",
-                'section'            => "textpattern.Section like '%$crit_escaped%' or section.title like '%$crit_escaped%'",
-                'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
-                'categories'         => "textpattern.Category1 like '%$crit_escaped%' or textpattern.Category2 like '%$crit_escaped%' or category1.title like '%$crit_escaped%' or category2.title like '%$crit_escaped%'",
+                'id'                 => "textpattern.ID IN ('".join("','", do_list($crit_escaped))."')",
+                'title_body_excerpt' => "textpattern.Title LIKE '%$crit_escaped%' OR textpattern.Body LIKE '%$crit_escaped%' OR textpattern.Excerpt LIKE '%$crit_escaped%'",
+                'section'            => "textpattern.Section LIKE '%$crit_escaped%' OR section.title LIKE '%$crit_escaped%'",
+                'keywords'           => "FIND_IN_SET('".$crit_escaped."', textpattern.Keywords)",
+                'categories'         => "textpattern.Category1 LIKE '%$crit_escaped%' OR textpattern.Category2 LIKE '%$crit_escaped%' OR category1.title LIKE '%$crit_escaped%' OR category2.title LIKE '%$crit_escaped%'",
                 'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
-                'author'             => "textpattern.AuthorID like '%$crit_escaped%' or user.RealName like '%$crit_escaped%'",
-                'article_image'      => "textpattern.Image in ('".join("','", do_list($crit_escaped))."')",
-                'posted'             => "textpattern.Posted like '$crit_escaped%'",
-                'lastmod'            => "textpattern.LastMod like '$crit_escaped%'",
+                'author'             => "textpattern.AuthorID LIKE '%$crit_escaped%' OR user.RealName LIKE '%$crit_escaped%'",
+                'article_image'      => "textpattern.Image IN ('".join("','", do_list($crit_escaped))."')",
+                'posted'             => "textpattern.Posted LIKE '$crit_escaped%'",
+                'lastmod'            => "textpattern.LastMod LIKE '$crit_escaped%'",
             );
 
         if (array_key_exists($search_method, $critsql)) {
@@ -191,15 +191,15 @@ function list_list($message = '', $post = '')
 
     $sql_from =
         safe_pfx('textpattern')." textpattern
-        left join ".safe_pfx('txp_category')." category1 on category1.name = textpattern.Category1 and category1.type = 'article'
-        left join ".safe_pfx('txp_category')." category2 on category2.name = textpattern.Category2 and category2.type = 'article'
-        left join ".safe_pfx('txp_section')." section on section.name = textpattern.Section
-        left join ".safe_pfx('txp_users')." user on user.name = textpattern.AuthorID";
+        LEFT JOIN ".safe_pfx('txp_category')." category1 ON category1.name = textpattern.Category1 AND category1.type = 'article'
+        LEFT JOIN ".safe_pfx('txp_category')." category2 ON category2.name = textpattern.Category2 AND category2.type = 'article'
+        LEFT JOIN ".safe_pfx('txp_section')." section ON section.name = textpattern.Section
+        LEFT JOIN ".safe_pfx('txp_users')." user ON user.name = textpattern.AuthorID";
 
     if ($criteria === 1) {
         $total = safe_count('textpattern', $criteria);
     } else {
-        $total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
+        $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
 
     echo hed(gTxt('tab_list'), 1, array('class' => 'txp-heading'));
@@ -223,19 +223,19 @@ function list_list($message = '', $post = '')
     echo list_search_form($crit, $search_method).'</div>';
 
     $rs = safe_query(
-        "select
+        "SELECT
             textpattern.ID, textpattern.Title, textpattern.url_title, textpattern.Section,
             textpattern.Category1, textpattern.Category2,
             textpattern.Status, textpattern.Annotate, textpattern.AuthorID,
-            unix_timestamp(textpattern.Posted) as posted,
-            unix_timestamp(textpattern.LastMod) as lastmod,
-            unix_timestamp(textpattern.Expires) as expires,
-            category1.title as category1_title,
-            category2.title as category2_title,
-            section.title as section_title,
-            user.RealName as RealName,
-            (select count(*) from ".safe_pfx('txp_discuss')." where parentid = textpattern.ID) as total_comments
-        from $sql_from where $criteria order by $sort_sql limit $offset, $limit"
+            UNIX_TIMESTAMP(textpattern.Posted) AS posted,
+            UNIX_TIMESTAMP(textpattern.LastMod) AS lastmod,
+            UNIX_TIMESTAMP(textpattern.Expires) AS expires,
+            category1.title AS category1_title,
+            category2.title AS category2_title,
+            section.title AS section_title,
+            user.RealName AS RealName,
+            (SELECT COUNT(*) FROM ".safe_pfx('txp_discuss')." WHERE parentid = textpattern.ID) AS total_comments
+        FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
     );
 
     if ($rs) {
@@ -577,17 +577,17 @@ function list_multi_edit()
             if (!has_privs('article.delete')) {
                 if (has_privs('article.delete.own')) {
                     $allowed = safe_column_num(
-                        'ID',
+                        "ID",
                         'textpattern',
-                        "ID in(".join(',', $selected).") and AuthorID = '".doSlash($txp_user)."'"
+                        "ID IN (".join(',', $selected).") AND AuthorID = '".doSlash($txp_user)."'"
                     );
                 }
 
                 $selected = $allowed;
             }
 
-            if ($selected && safe_delete('textpattern', 'ID in ('.join(',', $selected).')')) {
-                safe_update('txp_discuss', "visible = ".MODERATE, "parentid in(".join(',', $selected).")");
+            if ($selected && safe_delete('textpattern', "ID IN (".join(',', $selected).")")) {
+                safe_update('txp_discuss', "visible = ".MODERATE, "parentid IN (".join(',', $selected).")");
                 callback_event('articles_deleted', '', 0, $selected);
                 callback_event('multi_edited.articles', 'delete', 0, compact('selected', 'field', 'value'));
                 update_lastmod('articles_deleted', $selected);
@@ -645,9 +645,9 @@ function list_multi_edit()
     }
 
     $selected = safe_rows(
-        'ID, AuthorID, Status',
+        "ID, AuthorID, Status",
         'textpattern',
-        'ID in ('.join(',', $selected).')'
+        "ID IN (".join(',', $selected).")"
     );
 
     foreach ($selected as $item) {
@@ -667,7 +667,7 @@ function list_multi_edit()
         $message = messenger('article', join(', ', $selected), 'modified');
 
         if ($edit_method === 'duplicate') {
-            $rs = safe_rows_start('*', 'textpattern', "ID in (".join(',', $selected).")");
+            $rs = safe_rows_start("*", 'textpattern', "ID IN (".join(',', $selected).")");
 
             if ($rs) {
                 while ($a = nextRow($rs)) {
@@ -676,24 +676,24 @@ function list_multi_edit()
                     $a['AuthorID'] = $txp_user;
 
                     foreach ($a as $name => &$value) {
-                        $value = "`{$name}` = '".doSlash($value)."'";
+                        $value = "`$name` = '".doSlash($value)."'";
                     }
 
                     if ($id = (int) safe_insert('textpattern', join(',', $a))) {
                         safe_update(
                             'textpattern',
-                            "Title = concat(Title, ' (', {$id}, ')'),
-                            url_title = concat(url_title, '-', {$id}),
-                            Posted = now(),
-                            feed_time = now()",
-                            "ID = {$id}"
+                            "Title = CONCAT(Title, ' (', $id, ')'),
+                            url_title = CONCAT(url_title, '-', $id),
+                            Posted = NOW(),
+                            feed_time = NOW()",
+                            "ID = $id"
                         );
                     }
                 }
             }
 
             $message = gTxt('duplicated_articles', array('{id}' => join(', ', $selected)));
-        } elseif (!$field || safe_update('textpattern', "$field = '".doSlash($value)."'", "ID in (".join(',', $selected).")") === false) {
+        } elseif (!$field || safe_update('textpattern', "$field = '".doSlash($value)."'", "ID IN (".join(',', $selected).")") === false) {
             return list_list();
         }
 

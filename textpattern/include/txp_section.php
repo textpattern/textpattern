@@ -36,8 +36,8 @@ if ($event == 'section') {
     require_privs('section');
 
     global $all_pages, $all_styles;
-    $all_pages = safe_column('name', 'txp_page', "1=1");
-    $all_styles = safe_column('name', 'txp_css', "1=1");
+    $all_pages = safe_column("name", 'txp_page', "1 = 1");
+    $all_styles = safe_column("name", 'txp_css', "1 = 1");
 
     $available_steps = array(
         'section_change_pageby' => true,
@@ -90,40 +90,40 @@ function sec_section_list($message = '')
     }
 
     if ($dir === '') {
-        $dir = get_pref('section_sort_dir', 'desc');
+        $dir = get_pref('section_sort_dir', 'DESC');
     } else {
-        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        $dir = ($dir == 'ASC') ? "ASC" : "DESC";
         set_pref('section_sort_dir', $dir, 'section', 2, '', 0, PREF_PRIVATE);
     }
 
     switch ($sort) {
         case 'title':
-            $sort_sql = 'title '.$dir;
+            $sort_sql = "title $dir";
             break;
         case 'page':
-            $sort_sql = 'page '.$dir;
+            $sort_sql = "page $dir";
             break;
         case 'css':
-            $sort_sql = 'css '.$dir;
+            $sort_sql = "css $dir";
             break;
         case 'in_rss':
-            $sort_sql = 'in_rss '.$dir;
+            $sort_sql = "in_rss $dir";
             break;
         case 'on_frontpage':
-            $sort_sql = 'on_frontpage '.$dir;
+            $sort_sql = "on_frontpage $dir";
             break;
         case 'searchable':
-            $sort_sql = 'searchable '.$dir;
+            $sort_sql = "searchable $dir";
             break;
         case 'article_count':
-            $sort_sql = 'article_count '.$dir;
+            $sort_sql = "article_count $dir";
             break;
         default:
-            $sort_sql = 'name '.$dir;
+            $sort_sql = "name $dir";
             break;
     }
 
-    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+    $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
 
     $criteria = 1;
 
@@ -138,37 +138,37 @@ function sec_section_list($message = '')
                 'css'          => "css = '$crit_escaped'",
                 'description'  => "description = '$crit_escaped'",
             ) : array(
-                'name'         => "name like '%$crit_escaped%'",
-                'title'        => "title like '%$crit_escaped%'",
-                'page'         => "page like '%$crit_escaped%'",
-                'css'          => "css like '%$crit_escaped%'",
-                'description'  => "description like '%$crit_escaped%'",
+                'name'         => "name LIKE '%$crit_escaped%'",
+                'title'        => "title LIKE '%$crit_escaped%'",
+                'page'         => "page LIKE '%$crit_escaped%'",
+                'css'          => "css LIKE '%$crit_escaped%'",
+                'description'  => "description LIKE '%$crit_escaped%'",
             );
 
         if ($verbatim) {
             $critsql['in_rss'] =
-                "('$crit_escaped' in ('".doSlash(gTxt('yes'))."', 1) and in_rss = 1) or
-                ('$crit_escaped' in ('".doSlash(gTxt('no'))."', '0') and in_rss = 0)";
+                "('$crit_escaped' IN ('".doSlash(gTxt('yes'))."', 1) AND in_rss = 1) OR
+                ('$crit_escaped' IN ('".doSlash(gTxt('no'))."', '0') AND in_rss = 0)";
 
             $critsql['on_frontpage'] =
-                "('$crit_escaped' in ('".doSlash(gTxt('yes'))."', 1) and on_frontpage = 1) or
-                ('$crit_escaped' in ('".doSlash(gTxt('no'))."', '0') and on_frontpage = 0)";
+                "('$crit_escaped' IN ('".doSlash(gTxt('yes'))."', 1) AND on_frontpage = 1) OR
+                ('$crit_escaped' IN ('".doSlash(gTxt('no'))."', '0') AND on_frontpage = 0)";
 
             $critsql['searchable'] =
-                "('$crit_escaped' in ('".doSlash(gTxt('yes'))."', 1) and searchable = 1) or
-                ('$crit_escaped' in ('".doSlash(gTxt('no'))."', '0') and searchable = 0)";
+                "('$crit_escaped' IN ('".doSlash(gTxt('yes'))."', 1) AND searchable = 1) OR
+                ('$crit_escaped' IN ('".doSlash(gTxt('no'))."', '0') AND searchable = 0)";
         } else {
             $critsql['in_rss'] =
-                "(('".doSlash(gTxt('yes'))."' like '%$crit_escaped%' or '$crit_escaped' = 1) and in_rss = 1) or
-                (('".doSlash(gTxt('no'))."' like '%$crit_escaped%' or '$crit_escaped' = '0') and in_rss = 0)";
+                "(('".doSlash(gTxt('yes'))."' LIKE '%$crit_escaped%' OR '$crit_escaped' = 1) AND in_rss = 1) OR
+                (('".doSlash(gTxt('no'))."' LIKE '%$crit_escaped%' OR '$crit_escaped' = '0') AND in_rss = 0)";
 
             $critsql['on_frontpage'] =
-                "(('".doSlash(gTxt('yes'))."' like '%$crit_escaped%' or '$crit_escaped' = 1) and on_frontpage = 1) or
-                (('".doSlash(gTxt('no'))."' like '%$crit_escaped%' or '$crit_escaped' = '0') and on_frontpage = 0)";
+                "(('".doSlash(gTxt('yes'))."' LIKE '%$crit_escaped%' OR '$crit_escaped' = 1) AND on_frontpage = 1) OR
+                (('".doSlash(gTxt('no'))."' LIKE '%$crit_escaped%' OR '$crit_escaped' = '0') AND on_frontpage = 0)";
 
             $critsql['searchable'] =
-                "(('".doSlash(gTxt('yes'))."' like '%$crit_escaped%' or '$crit_escaped' = 1) and searchable = 1) or
-                (('".doSlash(gTxt('no'))."' like '%$crit_escaped%' or '$crit_escaped' = '0') and searchable = 0)";
+                "(('".doSlash(gTxt('yes'))."' LIKE '%$crit_escaped%' OR '$crit_escaped' = 1) AND searchable = 1) OR
+                (('".doSlash(gTxt('no'))."' LIKE '%$crit_escaped%' OR '$crit_escaped' = '0') AND searchable = 0)";
         }
 
         $search_sql = array();
@@ -238,9 +238,9 @@ function sec_section_list($message = '')
     echo section_search_form($crit, $search_method).'</div>';
 
     $rs = safe_rows_start(
-        '*, (select count(*) from '.safe_pfx_j('textpattern').' where textpattern.Section = txp_section.name) as article_count',
+        "*, (SELECT COUNT(*) FROM ".safe_pfx_j('textpattern')." WHERE textpattern.Section = txp_section.name) AS article_count",
         'txp_section',
-        "{$criteria} order by {$sort_sql} limit {$offset}, {$limit}"
+        "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
     );
 
     if ($rs) {
@@ -444,7 +444,7 @@ function section_edit()
 
     if ($is_edit) {
         $rs = safe_row(
-            '*',
+            "*",
             'txp_section',
             "name = '".doSlash($name)."'"
         );
@@ -459,7 +459,7 @@ function section_edit()
         // Pulls defaults for the new section from the 'default'.
 
         $rs = safe_row(
-            '*',
+            "*",
             'txp_section',
             "name = 'default'"
         );
@@ -553,7 +553,7 @@ function section_save()
     extract($in, EXTR_PREFIX_ALL, 'safe');
 
     if ($name != strtolower($old_name)) {
-        if (safe_field('name', 'txp_section', "name='$safe_name'")) {
+        if (safe_field("name", 'txp_section', "name = '$safe_name'")) {
             // Invalid input. Halt all further processing (e.g. plugin event
             // handlers).
             $message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
@@ -643,7 +643,7 @@ function section_toggle_option()
     $value = (int) ($value === gTxt('no'));
 
     if (in_array($property, array('on_frontpage', 'in_rss', 'searchable'))) {
-        if (safe_update('txp_section', $property.' = '.$value, "name = '".doSlash($thing)."'")) {
+        if (safe_update('txp_section', "$property = $value", "name = '".doSlash($thing)."'")) {
             echo yes_no($value);
 
             return;
@@ -663,7 +663,7 @@ function section_set_default()
         'default_section',
     )));
 
-    $exists = safe_row('name', 'txp_section', "name = '".doSlash($default_section)."'");
+    $exists = safe_row("name", 'txp_section', "name = '".doSlash($default_section)."'");
 
     if ($exists && set_pref('default_section', $default_section, 'section', PREF_HIDDEN)) {
         send_script_response(announce(gTxt('default_section_updated')));
@@ -685,7 +685,7 @@ function section_set_default()
 function section_select_list()
 {
     $val = get_pref('default_section');
-    $sections = safe_rows('name, title', 'txp_section', "name != 'default' ORDER BY title, name");
+    $sections = safe_rows("name, title", 'txp_section', "name != 'default' ORDER BY title, name");
     $vals = array();
     foreach ($sections as $row) {
         $vals[$row['name']] = $row['title'];
@@ -705,14 +705,14 @@ function section_delete()
     $message = '';
 
     $sections = safe_column(
-        'name',
+        "name",
         'txp_section',
-        "name != 'default' and name in ({$selected}) and name not in (select Section from ".safe_pfx('textpattern').")"
+        "name != 'default' AND name IN ($selected) AND name NOT IN (SELECT Section FROM ".safe_pfx('textpattern').")"
     );
 
     $sectionsNotDeleted = array_diff($selectedList, $sections);
 
-    if ($sections && safe_delete('txp_section', 'name in ('.join(',', quote_list($sections)).')')) {
+    if ($sections && safe_delete('txp_section', "name IN (".join(',', quote_list($sections)).")")) {
         callback_event('sections_deleted', '', 0, $sections);
         $message = gTxt('section_deleted', array('{name}' => join(', ', $sections)));
     }
@@ -841,17 +841,17 @@ function section_multi_edit()
     }
 
     $sections = safe_column(
-        'name',
+        "name",
         'txp_section',
-        "name in (".join(',', quote_list($selected)).")"
+        "name IN (".join(',', quote_list($selected)).")"
     );
 
     if ($key && $sections) {
         if (
             safe_update(
                 'txp_section',
-                "{$key} = '".doSlash($val)."'",
-                "name in (".join(',', quote_list($sections)).")"
+                "$key = '".doSlash($val)."'",
+                "name IN (".join(',', quote_list($sections)).")"
             )
         ) {
             sec_section_list(gTxt('section_updated', array('{name}' => join(', ', $sections))));

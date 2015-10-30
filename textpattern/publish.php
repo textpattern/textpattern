@@ -413,7 +413,7 @@ function preText($s, $prefs)
     if ($out['author']) {
         $name = urldecode(strtolower(urlencode($out['author'])));
 
-        $name = safe_field('name', 'txp_users', "RealName like '".doSlash($out['author'])."'");
+        $name = safe_field('name', 'txp_users', "RealName LIKE '".doSlash($out['author'])."'");
 
         if ($name) {
             $out['author'] = $name;
@@ -435,7 +435,7 @@ function preText($s, $prefs)
         global $nolog;
 
         $nolog = true;
-        $rs = safe_row("ID as id,Section as s", 'textpattern', 'ID = '.intval(gps('txpreview')).' limit 1');
+        $rs = safe_row("ID AS id, Section AS s", 'textpattern', "ID = ".intval(gps('txpreview'))." LIMIT 1");
 
         if ($rs) {
             $is_404 = false;
@@ -457,8 +457,8 @@ function preText($s, $prefs)
                 $out['filename'] = preg_replace('/gz&$/i', 'gz', $out['filename']);
             }
 
-            $fn = empty($out['filename']) ? '' : ' and filename = \''.doSlash($out['filename']).'\'';
-            $rs = safe_row('*', 'txp_file', 'id='.intval($out['id']).' and status = '.STATUS_LIVE.$fn);
+            $fn = empty($out['filename']) ? '' : " AND filename = '".doSlash($out['filename'])."'";
+            $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE.$fn);
         }
 
         return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404);
@@ -478,13 +478,15 @@ function preText($s, $prefs)
 
     // By this point we should know the section, so grab its page and CSS.
     if (txpinterface != 'css') {
-        $rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' limit 1");
+        $rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
         $out['page'] = isset($rs['page']) ? $rs['page'] : '';
         $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
 
     if (is_numeric($id) and !$is_404) {
-        $a = safe_row('*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod', 'textpattern', 'ID='.intval($id).(gps('txpreview') ? '' : ' and Status in ('.STATUS_LIVE.','.STATUS_STICKY.')'));
+        $a = safe_row("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+            'textpattern',
+            "ID = ".intval($id).(gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")"));
 
         if ($a) {
             $out['id_keywords'] = $a['Keywords'];
@@ -569,18 +571,18 @@ function output_css($s = '', $n = '')
         $cssname = join("','", doSlash($n));
 
         if (count($n) > 1) {
-            $order  = " order by field(name, '$cssname')";
+            $order  = " ORDER BY FIELD(name, '$cssname')";
         }
     } elseif ($s) {
         if (!is_scalar($s)) {
             txp_die('Not Found', 404);
         }
 
-        $cssname = safe_field('css', 'txp_section', "name='".doSlash($s)."'");
+        $cssname = safe_field('css', 'txp_section', "name = '".doSlash($s)."'");
     }
 
     if (!empty($cssname)) {
-        $css = join(n, safe_column_num('css', 'txp_css', "name in ('$cssname')".$order));
+        $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$order));
         echo $css;
     }
 }
@@ -623,7 +625,7 @@ function output_file_download($filename)
 
                 // Record download.
                 if ((connection_status() == 0) and !connection_aborted()) {
-                    safe_update("txp_file", "downloads=downloads+1", 'id='.intval($pretext['id']));
+                    safe_update('txp_file', "downloads = downloads + 1", "id = ".intval($pretext['id']));
                 } else {
                     $pretext['request_uri'] .= ($sent >= $filesize)
                         ? '#aborted'
@@ -771,27 +773,27 @@ function doArticles($atts, $iscustom, $thing = null)
             $cols = array('Title', 'Body');
         }
 
-        $match = ', match (`'.join('`, `', $cols)."`) against ('$q') as score";
+        $match = ", MATCH (`".join("`, `", $cols)."`) AGAINST ('$q') AS score";
         $search_terms = preg_replace('/\s+/', ' ', str_replace(array('\\', '%', '_', '\''), array('\\\\', '\\%', '\\_', '\\\''), $q));
 
         if ($quoted || empty($m) || $m === 'exact') {
             for ($i = 0; $i < count($cols); $i++) {
-                $cols[$i] = "`$cols[$i]` like '%$search_terms%'";
+                $cols[$i] = "`$cols[$i]` LIKE '%$search_terms%'";
             }
         } else {
-            $colJoin = ($m === 'any') ? 'or' : 'and';
+            $colJoin = ($m === 'any') ? "OR" : "AND";
             $search_terms = explode(' ', $search_terms);
             for ($i = 0; $i < count($cols); $i++) {
                 $like = array();
                 foreach ($search_terms as $search_term) {
-                    $like[] = "`$cols[$i]` like '%$search_term%'";
+                    $like[] = "`$cols[$i]` LIKE '%$search_term%'";
                 }
-                $cols[$i] = '('.join(' '.$colJoin.' ', $like).')';
+                $cols[$i] = "(".join(" $colJoin ", $like).")";
             }
         }
 
-        $cols = join(' or ', $cols);
-        $search = " and ($cols) $s_filter";
+        $cols = join(" OR ", $cols);
+        $search = " AND ($cols) $s_filter";
 
         // searchall=0 can be used to show search results for the current
         // section only.
@@ -800,13 +802,13 @@ function doArticles($atts, $iscustom, $thing = null)
         }
 
         if (!$sort) {
-            $sort = 'score desc';
+            $sort = "score DESC";
         }
     } else {
         $match = $search = '';
 
         if (!$sort) {
-            $sort = 'Posted desc';
+            $sort = "Posted DESC";
         }
     }
 
@@ -815,7 +817,7 @@ function doArticles($atts, $iscustom, $thing = null)
         trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortby')), E_USER_NOTICE);
 
         if (!$sortdir) {
-            $sortdir = 'desc';
+            $sortdir = "DESC";
         } else {
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
         }
@@ -829,29 +831,29 @@ function doArticles($atts, $iscustom, $thing = null)
     // Building query parts.
     $frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';
     $category  = join("','", doSlash(do_list_unique($category)));
-    $category  = (!$category)  ? '' : " and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))";
-    $section   = (!$section)   ? '' : " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')";
-    $excerpted = (!$excerpted) ? '' : " and Excerpt !=''";
-    $author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list_unique($author)))."')";
-    $month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
+    $category  = (!$category)  ? '' : " AND (Category1 IN ('".$category."') OR Category2 IN ('".$category."'))";
+    $section   = (!$section)   ? '' : " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')";
+    $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
+    $author    = (!$author)    ? '' : " AND AuthorID IN ('".join("','", doSlash(do_list_unique($author)))."')";
+    $month     = (!$month)     ? '' : " AND Posted LIKE '".doSlash($month)."%'";
     $ids = $id ? array_map('intval', do_list_unique($id)) : array();
     $exclude = $exclude ? array_map('intval', do_list_unique($exclude)) : array();
-    $id        = ((!$id)        ? '' : " and ID IN (".join(',', $ids).")")
-        .((!$exclude)   ? '' : " and ID NOT IN (".join(',', $exclude).")");
+    $id        = ((!$id)        ? '' : " AND ID IN (".join(',', $ids).")")
+        .((!$exclude)   ? '' : " AND ID NOT IN (".join(',', $exclude).")");
 
     switch ($time) {
         case 'any':
             $time = "";
             break;
         case 'future':
-            $time = " and Posted > now()";
+            $time = " AND Posted > NOW()";
             break;
         default:
-            $time = " and Posted <= now()";
+            $time = " AND Posted <= NOW()";
     }
 
     if (!$expired) {
-        $time .= " and (now() <= Expires or Expires = ".NULLDATETIME.")";
+        $time .= " AND (NOW() <= Expires OR Expires = ".NULLDATETIME.")";
     }
 
     $custom = '';
@@ -873,21 +875,21 @@ function doArticles($atts, $iscustom, $thing = null)
         $keys = doSlash(do_list_unique($keywords));
 
         foreach ($keys as $key) {
-            $keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
+            $keyparts[] = "FIND_IN_SET('".$key."', Keywords)";
         }
 
-        $keywords = " and (".join(' or ', $keyparts).")";
+        $keywords = " AND (".join(' or ', $keyparts).")";
     }
 
     if ($q and $searchsticky) {
-        $statusq = ' and Status >= '.STATUS_LIVE;
+        $statusq = " AND Status >= ".STATUS_LIVE;
     } elseif ($id) {
-        $statusq = ' and Status >= '.STATUS_LIVE;
+        $statusq = " AND Status >= ".STATUS_LIVE;
     } else {
-        $statusq = ' and Status = '.intval($status);
+        $statusq = " AND Status = ".intval($status);
     }
 
-    $where = "1=1".$statusq.$time.
+    $where = "1 = 1".$statusq.$time.
         $search.$id.$category.$section.$excerpted.$month.$author.$keywords.$custom.$frontpage;
 
     // Do not paginate if we are on a custom list.
@@ -922,13 +924,14 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
     if (!empty($atts['id']) && empty($atts['sort'])) {
-        $safe_sort = 'field(id, '.join(',', $ids).')';
+        $safe_sort = "FIELD(id, ".join(',', $ids).")";
     } else {
         $safe_sort = doSlash($sort);
     }
 
-    $rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod".$match, 'textpattern',
-    $where.' order by '.$safe_sort.' limit '.intval($pgoffset).', '.intval($limit));
+    $rs = safe_rows_start("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$match,
+        'textpattern',
+        "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit));
 
     // Get the form name.
     if ($q and !$iscustom and !$issticky) {
@@ -1016,10 +1019,11 @@ function doArticle($atts, $thing = null)
         $id = assert_int($id);
         $thisarticle = null;
 
-        $q_status = ($status ? 'and Status = '.intval($status) : 'and Status in ('.STATUS_LIVE.','.STATUS_STICKY.')');
+        $q_status = ($status ? "AND Status = ".intval($status) : "AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")");
 
-        $rs = safe_row("*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod",
-                "textpattern", 'ID = '.$id." $q_status limit 1");
+        $rs = safe_row("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+            'textpattern',
+            "ID = $id $q_status LIMIT 1");
 
         if ($rs) {
             extract($rs);

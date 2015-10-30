@@ -61,13 +61,13 @@ function prefs_save()
 
     // Update custom fields count from database schema and cache it as a hidden pref.
     // TODO: move this when custom fields are refactored.
-    $max_custom_fields = count(preg_grep('/^custom_\d+/', getThings('describe '.safe_pfx('textpattern'))));
+    $max_custom_fields = count(preg_grep('/^custom_\d+/', getThings("DESCRIBE ".safe_pfx('textpattern'))));
     set_pref('max_custom_fields', $max_custom_fields, 'publish', 2);
 
     $sql = array();
-    $sql[] = 'prefs_id = 1 and event != "" and type in('.PREF_CORE.', '.PREF_PLUGIN.', '.PREF_HIDDEN.')';
-    $sql[] = "(user_name = '' or (user_name='".doSlash($txp_user)."' and name not in(
-            select name from ".safe_pfx('txp_prefs')." where user_name = ''
+    $sql[] = "prefs_id = 1 AND event != '' AND type IN (".PREF_CORE.", ".PREF_PLUGIN.", ".PREF_HIDDEN.")";
+    $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
+            SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
         )))";
 
     if (!get_pref('use_comments', 1, 1)) {
@@ -77,7 +77,7 @@ function prefs_save()
     $prefnames = safe_rows_start(
         "name, event, user_name, val",
         'txp_prefs',
-        join(' and ', $sql)
+        join(" AND ", $sql)
     );
 
     $post = stripPost();
@@ -126,7 +126,7 @@ function prefs_save()
         }
 
         if ($name === 'expire_logs_after' && (int) $post[$name] !== (int) $val) {
-            safe_delete('txp_log', 'time < date_sub(now(), interval '.intval($post[$name]).' day)');
+            safe_delete('txp_log', "time < DATE_SUB(NOW(), INTERVAL ".intval($post[$name])." DAY)");
         }
 
         update_pref($name, (string) $post[$name], null, null, null, null, (string) $user_name);
@@ -169,8 +169,8 @@ function prefs_list($message = '')
 
     $sql = array();
     $sql[] = 'prefs_id = 1 and event != "" and type in('.PREF_CORE.', '.PREF_PLUGIN.')';
-    $sql[] = "(user_name = '' or (user_name='".doSlash($txp_user)."' and name not in(
-            select name from ".safe_pfx('txp_prefs')." where user_name = ''
+    $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
+            SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
         )))";
 
     if (!get_pref('use_comments', 1, 1)) {
@@ -178,9 +178,9 @@ function prefs_list($message = '')
     }
 
     $rs = safe_rows_start(
-        "*, FIELD(event,{$joined_core}) as sort_value",
+        "*, FIELD(event, $joined_core) AS sort_value",
         'txp_prefs',
-        join(' and ', $sql)." ORDER BY sort_value = 0, sort_value, event, position"
+        join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, position"
     );
 
     $last_event = null;

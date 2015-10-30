@@ -83,20 +83,20 @@ function plugin_list($message = '')
     }
 
     if ($dir === '') {
-        $dir = get_pref('plugin_sort_dir', 'asc');
+        $dir = get_pref('plugin_sort_dir', 'ASC');
     } else {
-        $dir = ($dir == 'desc') ? 'desc' : 'asc';
+        $dir = ($dir == 'DESC') ? "DESC" : "ASC";
         set_pref('plugin_sort_dir', $dir, 'plugin', 2, '', 0, PREF_PRIVATE);
     }
 
-    $sort_sql = $sort.' '.$dir;
+    $sort_sql = "$sort $dir";
 
-    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+    $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
 
     $rs = safe_rows_start(
-        'name, status, author, author_uri, version, description, length(help) as help, abs(strcmp(md5(code),code_md5)) as modified, load_order, flags',
+        "name, status, author, author_uri, version, description, length(help) AS help, ABS(STRCMP(MD5(code), code_md5)) AS modified, load_order, flags",
         'txp_plugin',
-        '1 order by '.$sort_sql
+        "1 = 1 ORDER BY $sort_sql"
     );
 
     if ($rs and numRows($rs) > 0) {
@@ -259,7 +259,7 @@ function switch_status()
 
     safe_update('txp_plugin', "status = $change", "name = '".doSlash($thing)."'");
 
-    if (safe_field('flags', 'txp_plugin', "name ='".doSlash($thing)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
+    if (safe_field('flags', 'txp_plugin', "name = '".doSlash($thing)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
         load_plugin($thing, true);
         $message = callback_event("plugin_lifecycle.$thing", $change ? 'enabled' : 'disabled');
     }
@@ -293,7 +293,7 @@ function plugin_help()
 
     $name = gps('name');
     pagetop(gTxt('plugin_help'));
-    $help = ($name) ? safe_field('help', 'txp_plugin', "name = '".doSlash($name)."'") : '';
+    $help = ($name) ? safe_field("help", 'txp_plugin', "name = '".doSlash($name)."'") : '';
     echo '<div id="'.$event.'_container" class="txp-container txp-view">'
         .'<div class="text-column">'.$help.'</div>'
         .'</div>';
@@ -486,7 +486,7 @@ function plugin_install()
 
                 if ($exists) {
                     $rs = safe_update(
-                       "txp_plugin",
+                       'txp_plugin',
                         "type        = $type,
                         author       = '".doSlash($author)."',
                         author_uri   = '".doSlash($author_uri)."',
@@ -501,7 +501,7 @@ function plugin_install()
                     );
                 } else {
                     $rs = safe_insert(
-                       "txp_plugin",
+                       'txp_plugin',
                        "name         = '".doSlash($name)."',
                         status       = 0,
                         type         = $type,
@@ -625,7 +625,7 @@ function plugin_multi_edit()
     switch ($method) {
         case 'delete':
             foreach ($selected as $name) {
-                if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
+                if (safe_field("flags", 'txp_plugin', "name = '".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
                     load_plugin($name, true);
                     callback_event("plugin_lifecycle.$name", 'disabled');
                     callback_event("plugin_lifecycle.$name", 'deleted');
@@ -638,19 +638,19 @@ function plugin_multi_edit()
             break;
         case 'changestatus':
             foreach ($selected as $name) {
-                if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
-                    $status = safe_field('status', 'txp_plugin', "name ='".doSlash($name)."'");
+                if (safe_field("flags", 'txp_plugin', "name = '".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
+                    $status = safe_field("status", 'txp_plugin', "name = '".doSlash($name)."'");
                     load_plugin($name, true);
                     // Note: won't show returned messages anywhere due to
                     // potentially overwhelming verbiage.
                     callback_event("plugin_lifecycle.$name", $status ? 'disabled' : 'enabled');
                 }
             }
-            safe_update('txp_plugin', 'status = (1-status)', $where);
+            safe_update('txp_plugin', "status = (1 - status)", $where);
             break;
         case 'changeorder':
             $order = min(max(intval(ps('order')), 1), 9);
-            safe_update('txp_plugin', 'load_order = '.$order, $where);
+            safe_update('txp_plugin', "load_order = $order", $where);
             break;
     }
 

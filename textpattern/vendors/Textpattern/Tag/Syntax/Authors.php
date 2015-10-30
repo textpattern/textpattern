@@ -53,16 +53,16 @@ class Authors
             'limit'    => '',
             'name'     => '',
             'offset'   => '',
-            'sort'     => 'name asc',
+            'sort'     => 'name ASC',
             'wraptag'  => '',
         ), $atts));
 
         $sql = array('1 = 1');
         $sql_limit = '';
-        $sql_sort = ' order by '.doSlash($sort);
+        $sql_sort = " ORDER BY ".doSlash($sort);
 
         if ($name) {
-            $sql[] = 'name in ('.join(', ', quote_list(do_list($name))).')';
+            $sql[] = "name IN (".join(', ', quote_list(do_list($name))).")";
         }
 
         if ($group !== '') {
@@ -79,13 +79,13 @@ class Authors
         }
 
         if ($limit !== '' || $offset) {
-            $sql_limit = ' limit '.intval($offset).', '.($limit === '' ? PHP_INT_MAX : intval($limit));
+            $sql_limit = " LIMIT ".intval($offset).", ".($limit === '' ? PHP_INT_MAX : intval($limit));
         }
 
         $rs = safe_rows_start(
-            'user_id as id, name, RealName as realname, email, privs, last_access',
+            "user_id as id, name, RealName as realname, email, privs, last_access",
             'txp_users',
-            join(' and ', $sql)." {$sql_sort} {$sql_limit}"
+            join(" AND ", $sql)." $sql_sort $sql_limit"
         );
 
         if ($rs && numRows($rs)) {
