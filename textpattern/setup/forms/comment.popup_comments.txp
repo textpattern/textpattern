@@ -16,13 +16,6 @@
     <!-- CSS -->
     <txp:css format="link" media="" />
     <!-- ...or you can use (faster) external CSS files e.g. <link rel="stylesheet" href="<txp:site_url />css/default.css"> -->
-
-    <!-- HTML5/Media Queries support for IE 8 (you can remove this section if you don't intend to support IE 8) -->
-    <!--[if lt IE 9]>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <txp:css format="link" media="" name="ie8" />
-    <![endif]-->
-
 </head>
 
 <body class="popup-page">

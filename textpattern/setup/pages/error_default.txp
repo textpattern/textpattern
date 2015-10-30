@@ -21,12 +21,6 @@
     <!-- content feeds -->
     <txp:feed_link flavor="atom" format="link" label="Atom" />
     <txp:feed_link flavor="rss" format="link" label="RSS" />
-
-    <!-- HTML5/Media Queries support for IE 8 (you can remove this section if you don't intend to support IE 8) -->
-    <!--[if lt IE 9]>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <txp:css format="link" media="" name="ie8" />
-    <![endif]-->
 </head>
 
 <body class="error-page" itemscope itemtype="http://schema.org/WebPage">
