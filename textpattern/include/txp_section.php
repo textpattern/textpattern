@@ -554,7 +554,7 @@ function section_save()
     }
 
     // Prevent non-URL characters on section names.
-    $in['name']  = strtolower(sanitizeForUrl($in['name']));
+    $in['name'] = strtolower(sanitizeForUrl($in['name']));
 
     extract($in);
 
@@ -728,7 +728,7 @@ function section_delete()
 
     if ($sectionsNotDeleted) {
         $severity = ($message) ? E_WARNING : E_ERROR;
-        $message = array(($message ? $message . n : '') . gTxt('section_delete_failure', array('{name}' => join(', ', $sectionsNotDeleted))), $severity);
+        $message = array(($message ? $message.n : '') . gTxt('section_delete_failure', array('{name}' => join(', ', $sectionsNotDeleted))), $severity);
     }
 
     sec_section_list($message);

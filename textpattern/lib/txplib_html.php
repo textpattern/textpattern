@@ -1559,7 +1559,7 @@ function script_js($js, $flags = '')
                 $ext = pathinfo($js, PATHINFO_EXTENSION);
 
                 if ($ext) {
-                    $js = substr($js, 0, (strlen($ext)+1) * -1);
+                    $js = substr($js, 0, (strlen($ext) + 1) * -1);
                     $ext = '.'.$ext;
                 }
 

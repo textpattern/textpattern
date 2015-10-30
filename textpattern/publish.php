@@ -208,7 +208,7 @@ function preText($s, $prefs)
     callback_event('pretext');
 
     // Set messy variables.
-    $out =  makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
+    $out = makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
 
     if (gps('rss')) {
         $out['feed'] = 'rss';
@@ -571,7 +571,7 @@ function output_css($s = '', $n = '')
         $cssname = join("','", doSlash($n));
 
         if (count($n) > 1) {
-            $order  = " ORDER BY FIELD(name, '$cssname')";
+            $order = " ORDER BY FIELD(name, '$cssname')";
         }
     } elseif ($s) {
         if (!is_scalar($s)) {
@@ -896,7 +896,7 @@ function doArticles($atts, $iscustom, $thing = null)
     if (!$iscustom and !$issticky) {
         $grand_total = safe_count('textpattern', $where);
         $total = $grand_total - $offset;
-        $numPages = ceil($total/$pageby);
+        $numPages = ceil($total / $pageby);
         $pg = (!$pg) ? 1 : $pg;
         $pgoffset = $offset + (($pg - 1) * $pageby);
 

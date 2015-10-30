@@ -22,7 +22,7 @@
  */
 
 /**
- * Textpattern Wrapper Class for Textpattern 4.0.x
+ * Textpattern Wrapper Class for Textpattern 4.0.x.
  *
  * Main goal for this class is to be used as a textpattern data wrapper by
  * any code which needs to have access to the textpattern articles data,
@@ -638,7 +638,7 @@ class TXP_Wrapper
             $value = doSlash($value);
 
             if ($field == 'Posted') {
-                $value = strtotime($value)-tz_offset();
+                $value = strtotime($value) - tz_offset();
                 $value = "FROM_UNIXTIME($value)";
                 $sql = "Posted = $value";
             } elseif ($field == 'Status') {
@@ -723,7 +723,7 @@ class TXP_Wrapper
                 unset($incoming['Posted']);
             }
         } else {
-            $when = strtotime($incoming['Posted'])-tz_offset();
+            $when = strtotime($incoming['Posted']) - tz_offset();
             $when = "FROM_UNIXTIME($when)";
         }
 
@@ -784,7 +784,7 @@ class TXP_Wrapper
                 if (empty($incoming['Posted'])) {
                     $sql[] = "feed_time = CURDATE()";
                 } else {
-                    $when = strtotime($incoming['Posted'])-tz_offset();
+                    $when = strtotime($incoming['Posted']) - tz_offset();
                     $when = strftime("%Y-%m-%d", $when);
                     $sql[] = "feed_time = '".doSlash($when)."'";
                 }

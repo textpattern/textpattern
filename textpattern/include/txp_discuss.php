@@ -467,7 +467,7 @@ function discuss_list($message = '')
                     txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website discuss_detail'
                 ).
                 td(
-                    href(txpspecialchars($ip), 'https://whois.domaintools.com/' . rawurlencode($ip), array(
+                    href(txpspecialchars($ip), 'https://whois.domaintools.com/'.rawurlencode($ip), array(
                         'rel'    => 'external',
                         'target' => '_blank',
                     )), '', 'txp-list-col-ip discuss_detail'

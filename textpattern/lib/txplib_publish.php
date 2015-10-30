@@ -365,10 +365,10 @@ function parse($thing)
 
     $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-    $level  = 0;
-    $out    = '';
+    $level = 0;
+    $out = '';
     $inside = '';
-    $istag  = false;
+    $istag = false;
 
     foreach ($parsed as $chunk) {
         if ($istag) {

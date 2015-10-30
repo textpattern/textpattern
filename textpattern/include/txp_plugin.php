@@ -477,7 +477,7 @@ function plugin_install()
             if (is_array($plugin)) {
                 extract($plugin);
 
-                $type  = empty($type)  ? 0 : min(max(intval($type), 0), 5);
+                $type = empty($type) ? 0 : min(max(intval($type), 0), 5);
                 $order = empty($order) ? 5 : min(max(intval($order), 1), 9);
                 $flags = empty($flags) ? 0 : intval($flags);
                 $exists = fetch('name', 'txp_plugin', 'name', $name);
@@ -615,7 +615,7 @@ function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
 function plugin_multi_edit()
 {
     $selected = ps('selected');
-    $method   = assert_string(ps('edit_method'));
+    $method = assert_string(ps('edit_method'));
 
     if (!$selected or !is_array($selected)) {
         return plugin_list();

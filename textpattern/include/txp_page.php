@@ -240,7 +240,7 @@ function page_list($current)
 
 function page_delete()
 {
-    $name  = ps('name');
+    $name = ps('name');
     $count = safe_count('txp_section', "page = '".doSlash($name)."'");
     $message = '';
 

@@ -81,7 +81,7 @@ function doLoginForm($message)
 
     pagetop(gTxt('login'), $message);
 
-    $stay  = (cs('txp_login') and !gps('logout') ? 1 : 0);
+    $stay = (cs('txp_login') and !gps('logout') ? 1 : 0);
     $reset = gps('reset');
 
     $name = join(',', array_slice(explode(',', cs('txp_login')), 0, -1));
@@ -218,7 +218,7 @@ function doTxpValidate()
             setcookie(
                 'txp_login',
                 $name.','.$c_hash,
-                ($stay ? time()+3600*24*365 : 0),
+                ($stay ? time() + 3600 * 24 * 365 : 0),
                 null,
                 null,
                 null,
@@ -227,8 +227,8 @@ function doTxpValidate()
 
             setcookie(
                 'txp_login_public',
-                substr(md5($nonce), -10).$name,
-                ($stay ? time()+3600*24*30 : 0),
+                substr(md5($nonce), - 10).$name,
+                ($stay ? time() + 3600 * 24 * 30 : 0),
                 $pub_path
             );
 

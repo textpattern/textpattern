@@ -600,8 +600,8 @@ function link_multi_edit()
     }
 
     $selected = array_map('assert_int', $selected);
-    $method   = ps('edit_method');
-    $changed  = array();
+    $method = ps('edit_method');
+    $changed = array();
     $key = '';
 
     switch ($method) {

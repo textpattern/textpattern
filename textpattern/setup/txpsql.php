@@ -98,10 +98,10 @@ if (is_callable('apache_get_modules')) {
     }
 }
 
-$siteurl  = str_replace("http://", '', $_SESSION['siteurl']);
-$siteurl  = str_replace(' ', '%20', rtrim($siteurl, "/"));
-$urlpath  = preg_replace('#^[^/]+#', '', $siteurl);
-$theme    = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
+$siteurl = str_replace("http://", '', $_SESSION['siteurl']);
+$siteurl = str_replace(' ', '%20', rtrim($siteurl, "/"));
+$urlpath = preg_replace('#^[^/]+#', '', $siteurl);
+$theme = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
 $themedir = txpath.DS.'setup';
 
 $create_sql = array();
@@ -612,7 +612,7 @@ if (!$client->query('tups.getLanguage', $blog_uid, LANG)) {
 mysqli_query($link, "FLUSH TABLE `".PFX."txp_lang`");
 
 /**
- * Stub replacement for txplib_db.php/safe_escape()
+ * Stub replacement for txplib_db.php/safe_escape().
  *
  * @ignore
  */
