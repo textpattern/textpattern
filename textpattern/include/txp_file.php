@@ -106,38 +106,38 @@ function file_list($message = '')
     }
 
     if ($dir === '') {
-        $dir = get_pref('file_sort_dir', 'asc');
+        $dir = get_pref('file_sort_dir', 'ASC');
     } else {
-        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        $dir = ($dir == 'ASC') ? "ASC" : "DESC";
         set_pref('file_sort_dir', $dir, 'file', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
     switch ($sort) {
         case 'id':
-            $sort_sql = 'txp_file.id '.$dir;
+            $sort_sql = "txp_file.id $dir";
             break;
         case 'description':
-            $sort_sql = 'txp_file.description '.$dir.', txp_file.filename desc';
+            $sort_sql = "txp_file.description $dir, txp_file.filename DESC";
             break;
         case 'category':
-            $sort_sql = 'txp_category.title '.$dir.', txp_file.filename desc';
+            $sort_sql = "txp_category.title $dir, txp_file.filename DESC";
             break;
         case 'title':
-            $sort_sql = 'txp_file.title '.$dir.', txp_file.filename desc';
+            $sort_sql = "txp_file.title $dir, txp_file.filename DESC";
             break;
         case 'downloads':
-            $sort_sql = 'txp_file.downloads '.$dir.', txp_file.filename desc';
+            $sort_sql = "txp_file.downloads $dir, txp_file.filename DESC";
             break;
         case 'author':
-            $sort_sql = 'txp_users.RealName '.$dir.', txp_file.id asc';
+            $sort_sql = "txp_users.RealName $dir, txp_file.id ASC";
             break;
         default:
             $sort = 'filename';
-            $sort_sql = 'txp_file.filename '.$dir;
+            $sort_sql = "txp_file.filename $dir";
             break;
     }
 
-    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+    $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
 
     $search = new Filter($event,
         array(
@@ -186,13 +186,13 @@ function file_list($message = '')
 
     $sql_from =
         safe_pfx_j('txp_file')."
-        left join ".safe_pfx_j('txp_category')." on txp_category.name = txp_file.category and txp_category.type = 'file'
-        left join ".safe_pfx_j('txp_users')." on txp_users.name = txp_file.author";
+        LEFT JOIN ".safe_pfx_j('txp_category')." ON txp_category.name = txp_file.category AND txp_category.type = 'file'
+        LEFT JOIN ".safe_pfx_j('txp_users')." ON txp_users.name = txp_file.author";
 
     if ($criteria === 1) {
         $total = safe_count('txp_file', $criteria);
     } else {
-        $total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
+        $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
 
     echo n.tag(
@@ -260,7 +260,7 @@ function file_list($message = '')
     }
 
     $rs = safe_query(
-        "select
+        "SELECT
             txp_file.id,
             txp_file.filename,
             txp_file.title,
@@ -269,9 +269,9 @@ function file_list($message = '')
             txp_file.downloads,
             txp_file.status,
             txp_file.author,
-            txp_users.RealName as realname,
-            txp_category.Title as category_title
-        from $sql_from where $criteria order by $sort_sql limit $offset, $limit"
+            txp_users.RealName AS realname,
+            txp_category.Title AS category_title
+        FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
     );
 
     if ($rs && numRows($rs)) {
@@ -567,7 +567,7 @@ function file_multi_edit()
 
     if (!has_privs('file.edit')) {
         if (has_privs('file.edit.own')) {
-            $selected = safe_column('id', 'txp_file', 'id IN ('.join(',', $selected).') AND author=\''.doSlash($txp_user).'\'');
+            $selected = safe_column("id", 'txp_file', "id IN (".join(',', $selected).") AND author = '".doSlash($txp_user)."'");
         } else {
             $selected = array();
         }
@@ -620,7 +620,7 @@ function file_edit($message = '', $id = '')
     }
     $id = assert_int($id);
 
-    $rs = safe_row('*, unix_timestamp(created) as created, unix_timestamp(modified) as modified', 'txp_file', "id = $id");
+    $rs = safe_row("*, UNIX_TIMESTAMP(created) AS created, UNIX_TIMESTAMP(modified) AS modified", 'txp_file', "id = $id");
 
     if ($rs) {
         extract($rs);
@@ -775,15 +775,15 @@ function file_db_add($filename, $category, $permissions, $description, $size, $t
         return false;
     }
 
-    $rs = safe_insert("txp_file",
+    $rs = safe_insert('txp_file',
         "filename = '$filename',
          title = '$title',
          category = '$category',
          permissions = '$permissions',
          description = '$description',
          size = '$size',
-         created = now(),
-         modified = now(),
+         created = NOW(),
+         modified = NOW(),
          author = '".doSlash($txp_user)."'
     ");
 
@@ -882,8 +882,8 @@ function file_insert()
             $id = assert_int($id);
 
             if (!shift_uploaded_file($file, $newpath)) {
-                safe_delete("txp_file", "id = $id");
-                safe_alter("txp_file", "auto_increment=$id");
+                safe_delete('txp_file', "id = $id");
+                safe_alter('txp_file', "auto_increment = $id");
 
                 if (isset($GLOBALS['ID'])) {
                     unset($GLOBALS['ID']);
@@ -910,7 +910,7 @@ function file_replace()
 
     $id = assert_int(gps('id'));
 
-    $rs = safe_row('filename, author', 'txp_file', "id = $id");
+    $rs = safe_row("filename, author", 'txp_file', "id = $id");
 
     if (!$rs) {
         file_list(array(messenger(gTxt('invalid_id'), $id), E_ERROR));
@@ -945,7 +945,7 @@ function file_replace()
         }
 
         if (!shift_uploaded_file($file, $newpath)) {
-            safe_delete("txp_file", "id = $id");
+            safe_delete('txp_file', "id = $id");
 
             file_list(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR));
 
@@ -959,7 +959,7 @@ function file_replace()
             update_lastmod('file_replaced', compact('id', 'filename'));
 
             if ($size = filesize($newpath)) {
-                safe_update('txp_file', 'size = '.$size.', modified = now()', 'id = '.$id);
+                safe_update('txp_file', "size = $size, modified = NOW()", "id = $id");
             }
 
             file_edit(gTxt('file_uploaded', array('{name}' => $name)), $id);
@@ -1012,7 +1012,7 @@ function file_save()
     $varray['permissions'] = $permissions;
     $perms = doSlash($permissions);
 
-    $rs = safe_row('filename, author', 'txp_file', "id=$id");
+    $rs = safe_row("filename, author", 'txp_file', "id = $id");
     if (!has_privs('file.edit') && !($rs['author'] === $txp_user && has_privs('file.edit.own'))) {
         require_privs();
     }
@@ -1033,9 +1033,9 @@ function file_save()
 
     $created_ts = @safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
     if ($publish_now) {
-        $created = 'now()';
+        $created = "NOW()";
     } elseif ($created_ts > 0) {
-        $created = "from_unixtime('".$created_ts."')";
+        $created = "FROM_UNIXTIME('".$created_ts."')";
     } else {
         $created = '';
     }
@@ -1057,7 +1057,7 @@ function file_save()
         description = '$description',
         status = '$status',
         size = '$size',
-        modified = now()"
+        modified = NOW()"
         .($created ? ", created = $created" : ''), "id = $id");
 
     if (!$rs) {
@@ -1087,7 +1087,7 @@ function file_delete($ids = array())
 
     if (!has_privs('file.delete')) {
         if (has_privs('file.delete.own')) {
-            $ids = safe_column('id', 'txp_file', 'id IN ('.join(',', $ids).') AND author=\''.doSlash($txp_user).'\'');
+            $ids = safe_column("id", 'txp_file', "id IN (".join(',', $ids).") AND author = '".doSlash($txp_user)."'");
         } else {
             $ids = array();
         }
@@ -1096,7 +1096,7 @@ function file_delete($ids = array())
     if (!empty($ids)) {
         $fail = array();
 
-        $rs = safe_rows_start('id, filename', 'txp_file', 'id IN ('.join(',', $ids).')');
+        $rs = safe_rows_start("id, filename", 'txp_file', "id IN (".join(',', $ids).")");
 
         if ($rs) {
             while ($a = nextRow($rs)) {

@@ -341,15 +341,15 @@ function author_list($message = '')
         }
 
         if ($dir === '') {
-            $dir = get_pref('admin_sort_dir', 'asc');
+            $dir = get_pref('admin_sort_dir', 'ASC');
         } else {
-            $dir = ($dir == 'desc') ? 'desc' : 'asc';
+            $dir = ($dir == 'DESC') ? "DESC" : "ASC";
             set_pref('admin_sort_dir', $dir, 'admin', 2, '', 0, PREF_PRIVATE);
         }
 
         $sort_sql = $sort.' '.$dir;
 
-        $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+        $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
 
         $search = new Filter($event,
             array(
@@ -411,7 +411,7 @@ function author_list($message = '')
 
         list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-        $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count('txp_users', '1=1') > 1));
+        $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count('txp_users', "1 = 1") > 1));
 
         echo $search->renderForm('author_list', $search_render_options).'</div>';
 
@@ -422,9 +422,9 @@ function author_list($message = '')
              n.tag(join(n, $buttons), 'div', array('class' => 'txp-control-panel'));
 
         $rs = safe_rows_start(
-            '*, unix_timestamp(last_access) as last_login',
+            "*, UNIX_TIMESTAMP(last_access) AS last_login",
             'txp_users',
-            "$criteria order by $sort_sql limit $offset, $limit"
+            "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
         );
 
         if ($rs) {
@@ -552,7 +552,7 @@ function author_edit()
 
     if ($is_edit) {
         $user_id = assert_int($user_id);
-        $rs = safe_row('*', 'txp_users', "user_id = $user_id");
+        $rs = safe_row("*", 'txp_users', "user_id = $user_id");
         extract($rs);
     }
 
@@ -642,7 +642,7 @@ function admin_change_pageby()
 function author_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
     $privileges = privs();
-    $users = safe_column('name', 'txp_users', '1=1');
+    $users = safe_column("name", 'txp_users', "1 = 1");
 
     $methods = array(
         'changeprivilege' => array('label' => gTxt('changeprivilege'), 'html' => $privileges),
@@ -682,7 +682,7 @@ function admin_multi_edit()
     }
 
     $names = safe_column(
-        'name',
+        "name",
         'txp_users',
         "name IN (".join(',', quote_list($selected)).") AND name != '".doSlash($txp_user)."'"
     );
@@ -723,7 +723,7 @@ function admin_multi_edit()
                 $passwd = generate_password(PASSWORD_LENGTH);
 
                 if (change_user_password($name, $passwd)) {
-                    $email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
+                    $email = safe_field("email", 'txp_users', "name = '".doSlash($name)."'");
 
                     if (send_new_password($passwd, $email, $name)) {
                         $changed[] = $name;

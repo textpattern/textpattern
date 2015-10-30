@@ -176,9 +176,9 @@ function doTxpValidate()
 
     if ($c_userid and strlen($c_hash) == 32) { // Cookie exists.
         $r = safe_row(
-            'name, nonce',
+            "name, nonce",
             'txp_users',
-            "name='".doSlash($c_userid)."' AND last_access > DATE_SUB(NOW(), INTERVAL 30 DAY)"
+            "name = '".doSlash($c_userid)."' AND last_access > DATE_SUB(NOW(), INTERVAL 30 DAY)"
         );
 
         if ($r && $r['nonce'] && $r['nonce'] === md5($c_userid.pack('H*', $c_hash))) {
@@ -254,7 +254,7 @@ function doTxpValidate()
 
         $confirm = pack('H*', gps('confirm'));
         $name    = substr($confirm, 5);
-        $nonce   = safe_field('nonce', 'txp_users', "name = '".doSlash($name)."'");
+        $nonce   = safe_field("nonce", 'txp_users', "name = '".doSlash($name)."'");
 
         if ($nonce and $confirm === pack('H*', substr(md5($nonce), 0, 10)).$name) {
             include_once txpath.'/lib/txplib_admin.php';

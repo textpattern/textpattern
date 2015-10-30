@@ -106,7 +106,7 @@ function logit($r = '', $status = 200)
 
     if (!empty($prefs['use_dns'])) {
         // A crude rDNS cache.
-        if (($h = safe_field('host', 'txp_log', "ip='".doSlash($ip)."' limit 1")) !== false) {
+        if (($h = safe_field("host", 'txp_log', "ip = '".doSlash($ip)."' LIMIT 1")) !== false) {
             $host = $h;
         } else {
             // Double-check the rDNS.
@@ -140,7 +140,7 @@ function insert_logit($in)
     $in = doSlash($in);
     extract($in);
     safe_insert(
-        "txp_log",
-        "`time` = now(), page = '$uri', ip='$ip', host='$host', refer='$ref', status='$status', method='$method'"
+        'txp_log',
+        "time = NOW(), page = '$uri', ip = '$ip', host = '$host', refer = '$ref', status = '$status', method = '$method'"
     );
 }

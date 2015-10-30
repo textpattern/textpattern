@@ -204,7 +204,7 @@ function page_title($atts)
     $parent_id = (int) $parentid;
 
     if ($parent_id) {
-        $out .= gTxt('comments_on').' '.escape_title(safe_field('Title', 'textpattern', "ID = $parent_id"));
+        $out .= gTxt('comments_on').' '.escape_title(safe_field("Title", 'textpattern', "ID = $parent_id"));
     } elseif ($thisarticle['title']) {
         $out .= escape_title($thisarticle['title']);
     } elseif ($q) {
@@ -292,7 +292,7 @@ function image($atts)
         } else {
             $name = doSlash($name);
 
-            $rs = safe_row('*', 'txp_image', "name = '$name' limit 1");
+            $rs = safe_row("*", 'txp_image', "name = '$name' LIMIT 1");
 
             $cache['n'][$name] = $rs;
         }
@@ -302,7 +302,7 @@ function image($atts)
         } else {
             $id = (int) $id;
 
-            $rs = safe_row('*', 'txp_image', "id = $id limit 1");
+            $rs = safe_row("*", 'txp_image', "id = $id LIMIT 1");
 
             $cache['i'][$id] = $rs;
         }
@@ -390,11 +390,11 @@ function thumbnail($atts)
     if ($name) {
         $name = doSlash($name);
 
-        $rs = safe_row('*', 'txp_image', "name = '$name' limit 1");
+        $rs = safe_row("*", 'txp_image', "name = '$name' LIMIT 1");
     } elseif ($id) {
         $id = (int) $id;
 
-        $rs = safe_row('*', 'txp_image', "id = $id limit 1");
+        $rs = safe_row("*", 'txp_image', "id = $id LIMIT 1");
     } elseif ($thisimage) {
         $id = (int) $thisimage['id'];
         $rs = $thisimage;
@@ -616,7 +616,7 @@ function linklist($atts, $thing = null)
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
+        $authorlist = safe_column("name", 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
         if ($authorlist) {
             $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
         }
@@ -654,10 +654,10 @@ function linklist($atts, $thing = null)
 
     if (!$where) {
         // If nothing matches, start with all links.
-        $where[] = "1=1";
+        $where[] = "1 = 1";
     }
 
-    $where = join(' AND ', $where);
+    $where = join(" AND ", $where);
 
     // Set up paging if required.
     if ($limit && $pageby) {
@@ -685,11 +685,11 @@ function linklist($atts, $thing = null)
 
     $qparts = array(
         $where,
-        'order by '.doSlash($sort),
-        ($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : '',
+        'ORDER BY '.doSlash($sort),
+        ($limit) ? 'LIMIT '.intval($pgoffset).', '.intval($limit) : '',
     );
 
-    $rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_link', join(' ', $qparts));
+    $rs = safe_rows_start("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_link', join(' ', $qparts));
 
     if ($rs) {
         $count = 0;
@@ -734,13 +734,13 @@ function tpt_link($atts)
     $sql = array();
 
     if ($id) {
-        $sql[] = 'id = '.intval($id);
+        $sql[] = "id = ".intval($id);
     } elseif ($name) {
         $sql[] = "linkname = '".doSlash($name)."'";
     }
 
     if ($sql) {
-        $rs = safe_row('linkname, url', 'txp_link', implode(' and ', $sql).' limit 1');
+        $rs = safe_row("linkname, url", 'txp_link', implode(" AND ", $sql)." LIMIT 1");
     }
 
     if (!$rs) {
@@ -1004,7 +1004,7 @@ function recent_articles($atts)
         'limit'    => 10,
         'offset'   => 0,
         'section'  => '',
-        'sort'     => 'Posted desc',
+        'sort'     => 'Posted DESC',
         'sortby'   => '', // Deprecated.
         'sortdir'  => '', // Deprecated.
         'wraptag'  => '',
@@ -1028,12 +1028,12 @@ function recent_articles($atts)
     }
 
     $category = join("','", doSlash(do_list_unique($category)));
-    $categories = ($category) ? "and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))" : '';
-    $section = ($section) ? " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
-    $expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.')';
+    $categories = ($category) ? "AND (Category1 IN ('".$category."') or Category2 IN ('".$category."'))" : '';
+    $section = ($section) ? " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
+    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (NOW() <= Expires OR Expires = ".NULLDATETIME.")";
 
-    $rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern',
-        "Status = ".STATUS_LIVE." $section $categories and Posted <= now()$expired order by ".doSlash($sort).' limit '.intval($offset).','.intval($limit));
+    $rs = safe_rows_start("*, id AS thisid, UNIX_TIMESTAMP(Posted) AS posted", 'textpattern',
+        "Status = ".STATUS_LIVE." $section $categories AND Posted <= NOW()$expired ORDER BY ".doSlash($sort)." LIMIT ".intval($offset).", ".intval($limit));
 
     if ($rs) {
         $out = array();
@@ -1066,17 +1066,19 @@ function recent_comments($atts, $thing = null)
         'labeltag' => '',
         'limit'    => 10,
         'offset'   => 0,
-        'sort'     => 'posted desc',
+        'sort'     => 'posted DESC',
         'wraptag'  => '',
     ), $atts));
 
     $sort = preg_replace('/\bposted\b/', 'd.posted', $sort);
-    $expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= t.Expires or t.Expires = '.NULLDATETIME.') ';
+    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (NOW() <= t.Expires OR t.Expires = ".NULLDATETIME.") ";
 
-    $rs = startRows('select d.name, d.email, d.web, d.message, d.discussid, unix_timestamp(d.Posted) as time, '.
-        't.ID as thisid, unix_timestamp(t.Posted) as posted, t.Title as title, t.Section as section, t.url_title '.
-        'from '.safe_pfx('txp_discuss').' as d inner join '.safe_pfx('textpattern').' as t on d.parentid = t.ID '.
-        'where t.Status >= '.STATUS_LIVE.$expired.' and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit '.intval($offset).','.intval($limit));
+    $rs = startRows("SELECT d.name, d.email, d.web, d.message, d.discussid, UNIX_TIMESTAMP(d.Posted) AS time,
+            t.ID AS thisid, UNIX_TIMESTAMP(t.Posted) AS posted, t.Title AS title, t.Section AS section, t.url_title
+        FROM ".safe_pfx('txp_discuss')." AS d INNER JOIN ".safe_pfx('textpattern')." AS t ON d.parentid = t.ID
+        WHERE t.Status >= ".STATUS_LIVE.$expired." AND d.visible = ".VISIBLE."
+        ORDER BY ".doSlash($sort)."
+        LIMIT ".intval($offset).", ".intval($limit));
 
     if ($rs) {
         $out = array();
@@ -1140,7 +1142,7 @@ function related_articles($atts, $thing = null)
         'match'    => 'Category1,Category2',
         'no_widow' => @$prefs['title_no_widow'],
         'section'  => '',
-        'sort'     => 'Posted desc',
+        'sort'     => 'Posted DESC',
         'wraptag'  => '',
     ), $atts));
 
@@ -1171,20 +1173,22 @@ function related_articles($atts, $thing = null)
     $categories = array();
 
     if (in_array('Category1', $match)) {
-        $categories[] = "Category1 in('$cats')";
+        $categories[] = "Category1 IN ('$cats')";
     }
 
     if (in_array('Category2', $match)) {
-        $categories[] = "Category2 in('$cats')";
+        $categories[] = "Category2 IN ('$cats')";
     }
 
-    $categories = 'and ('.join(' or ', $categories).')';
+    $categories = "AND (".join(" OR ", $categories).')';
 
-    $section = ($section) ? " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
+    $section = ($section) ? " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
 
-    $expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.') ';
-    $rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires', 'textpattern',
-        'ID != '.intval($id)." and Status = ".STATUS_LIVE." $expired  and Posted <= now() $categories $section order by ".doSlash($sort).' limit 0,'.intval($limit));
+    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (NOW() <= Expires OR Expires = ".NULLDATETIME.") ";
+    $rs = safe_rows_start(
+        "*, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(LastMod) AS uLastMod, UNIX_TIMESTAMP(Expires) AS uExpires",
+        'textpattern',
+        "ID != ".intval($id)." AND Status = ".STATUS_LIVE." $expired AND Posted <= NOW() $categories $section ORDER BY ".doSlash($sort)." LIMIT 0, ".intval($limit));
 
     if ($rs) {
         $out = array();
@@ -1232,9 +1236,9 @@ function popup($atts)
     ), $atts));
 
     if ($type == 's') {
-        $rs = safe_rows_start('name, title', 'txp_section', "name != 'default' order by name");
+        $rs = safe_rows_start("name, title", 'txp_section', "name != 'default' ORDER BY name");
     } else {
-        $rs = safe_rows_start('name, title', 'txp_category', "type = 'article' and name != 'root' order by name");
+        $rs = safe_rows_start("name, title", 'txp_category', "type = 'article' AND name != 'root' ORDER BY name");
     }
 
     if ($rs) {
@@ -1326,15 +1330,15 @@ function category_list($atts, $thing = null)
     $sql_limit = '';
 
     if ($limit !== '' || $offset) {
-        $sql_limit = ' limit '.intval($offset).', '.($limit === '' ? PHP_INT_MAX : intval($limit));
+        $sql_limit = " LIMIT ".intval($offset).", ".($limit === '' ? PHP_INT_MAX : intval($limit));
     }
 
     if ($categories) {
         $categories = do_list_unique($categories);
         $categories = join("','", doSlash($categories));
 
-        $rs = safe_rows_start('name, title, description', 'txp_category',
-            "type = '".doSlash($type)."' and name in ('$categories') order by ".($sort ? $sort : "field(name, '$categories')").$sql_limit);
+        $rs = safe_rows_start("name, title, description", 'txp_category',
+            "type = '".doSlash($type)."' AND name IN ('$categories') ORDER BY ".($sort ? $sort : "FIELD(name, '$categories')").$sql_limit);
     } else {
         if ($parent) {
             $parents = join(',', quote_list(do_list_unique($parent)));
@@ -1345,34 +1349,34 @@ function category_list($atts, $thing = null)
         } else {
             // Descend only one level from either 'parent' or 'root', plus
             // parent category.
-            $shallow = ($parent) ? "and (parent in($parents) or name in($parents))" : "and parent = 'root'";
+            $shallow = ($parent) ? "AND (parent IN ($parents) OR name IN ($parents))" : "AND parent = 'root'";
         }
 
         if ($exclude) {
             $exclude = do_list_unique($exclude);
             $exclude = join("','", doSlash($exclude));
-            $exclude = "and name not in('$exclude')";
+            $exclude = "AND name NOT IN ('$exclude')";
         }
 
         if ($parent) {
-            $qs = safe_rows('lft, rgt', 'txp_category', "type = '".doSlash($type)."' and name in($parents)");
+            $qs = safe_rows("lft, rgt", 'txp_category', "type = '".doSlash($type)."' AND name IN ($parents)");
 
             if ($qs) {
                 $between = array();
 
                 foreach ($qs as $a) {
                     extract($a);
-                    $between[] = "(lft between $lft and $rgt)";
+                    $between[] = "(lft BETWEEN $lft AND $rgt)";
                 }
 
-                $rs = safe_rows_start('name, title, description', 'txp_category',
-                    "(".join(' or ', $between).") and type = '".doSlash($type)."' and name != 'default' $exclude $shallow order by ".($sort ? $sort : 'lft ASC').$sql_limit);
+                $rs = safe_rows_start("name, title, description", 'txp_category',
+                    "(".join(" OR ", $between).") AND type = '".doSlash($type)."' AND name != 'default' $exclude $shallow ORDER BY ".($sort ? $sort : "lft ASC").$sql_limit);
             } else {
                 $rs = array();
             }
         } else {
-            $rs = safe_rows_start('name, title, description', 'txp_category',
-                "type = '".doSlash($type)."' and name not in('default','root') $exclude $shallow order by ".($sort ? $sort : 'name ASC').$sql_limit);
+            $rs = safe_rows_start("name, title, description", 'txp_category',
+                "type = '".doSlash($type)."' AND name NOT IN ('default','root') $exclude $shallow ORDER BY ".($sort ? $sort : "name ASC").$sql_limit);
         }
     }
 
@@ -1456,7 +1460,7 @@ function section_list($atts, $thing = null)
     $sql[] = 1;
 
     if ($limit !== '' || $offset) {
-        $sql_limit = ' limit '.intval($offset).', '.($limit === '' ? PHP_INT_MAX : intval($limit));
+        $sql_limit = " LIMIT ".intval($offset).", ".($limit === '' ? PHP_INT_MAX : intval($limit));
     }
 
     if ($sections) {
@@ -1465,15 +1469,15 @@ function section_list($atts, $thing = null)
         }
 
         $sections = join(',', quote_list(do_list_unique($sections)));
-        $sql[] = "name in ($sections)";
+        $sql[] = "name IN ($sections)";
 
         if (!$sql_sort) {
-            $sql_sort = "field(name, $sections)";
+            $sql_sort = "FIELD(name, $sections)";
         }
     } else {
         if ($exclude) {
             $exclude = join(',', quote_list(do_list_unique($exclude)));
-            $sql[] = "name not in ($exclude)";
+            $sql[] = "name NOT IN ($exclude)";
         }
 
         if (!$include_default) {
@@ -1481,7 +1485,7 @@ function section_list($atts, $thing = null)
         }
 
         if (!$sql_sort) {
-            $sql_sort = 'name asc';
+            $sql_sort = "name ASC";
         }
     }
 
@@ -1490,9 +1494,9 @@ function section_list($atts, $thing = null)
     }
 
     $rs = safe_rows_start(
-        'name, title, description',
+        "name, title, description",
         'txp_section',
-        join(' and ', $sql).' order by '.$sql_sort.$sql_limit
+        join(" AND ", $sql)." ORDER BY ".$sql_sort.$sql_limit
     );
 
     if ($rs && $last = numRows($rs)) {
@@ -2141,9 +2145,9 @@ function popup_comments($atts)
     ), $atts));
 
     $rs = safe_row(
-        '*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires',
+        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(LastMod) AS uLastMod, UNIX_TIMESTAMP(Expires) AS uExpires",
         'textpattern',
-        'ID='.intval(gps('parentid')).' and Status >= 4'
+        "ID=".intval(gps('parentid'))." AND Status >= 4"
     );
 
     if ($rs) {
@@ -2351,7 +2355,7 @@ function comment_message_input($atts)
         $split = rand(1, 31);
         $nonce = getNextNonce();
         $secret = getNextSecret();
-        safe_insert("txp_discuss_nonce", "issue_time=now(), nonce='".doSlash($nonce)."', secret='".doSlash($secret)."'");
+        safe_insert('txp_discuss_nonce', "issue_time = NOW(), nonce = '".doSlash($nonce)."', secret = '".doSlash($secret)."'");
         $n_message = md5('message'.$secret);
         $formnonce = n.hInput(substr($nonce, 0, $split), substr($nonce, $split));
         $commentwarn = (!trim($message));
@@ -2509,12 +2513,11 @@ function comments_annotateinvite($atts, $thing)
 
     extract($thisarticle);
 
-    extract(
-        safe_row(
-            "Annotate,AnnotateInvite,unix_timestamp(Posted) as uPosted",
-                "textpattern", 'ID = '.intval($thisid)
-        )
-    );
+    extract(safe_row(
+        "Annotate, AnnotateInvite, UNIX_TIMESTAMP(Posted) AS uPosted",
+        'textpattern',
+        "ID = ".intval($thisid)
+    ));
 
     if (!$thing) {
         $thing = $AnnotateInvite;
@@ -2554,12 +2557,12 @@ function comments($atts)
     }
 
     $qparts = array(
-        'parentid='.intval($thisid).' and visible='.VISIBLE,
-        'order by '.doSlash($sort),
-        ($limit) ? 'limit '.intval($offset).', '.intval($limit) : '',
+        "parentid = ".intval($thisid)." AND visible = ".VISIBLE,
+        "ORDER BY ".doSlash($sort),
+        ($limit) ? "LIMIT ".intval($offset).", ".intval($limit) : '',
     );
 
-    $rs = safe_rows_start('*, unix_timestamp(posted) as time', 'txp_discuss', join(' ', $qparts));
+    $rs = safe_rows_start("*, UNIX_TIMESTAMP(posted) AS time", 'txp_discuss', join(' ', $qparts));
 
     $out = '';
 
@@ -3239,7 +3242,7 @@ function article_image($atts)
     }
 
     if (intval($image)) {
-        $rs = safe_row('*', 'txp_image', 'id = '.intval($image));
+        $rs = safe_row("*", 'txp_image', "id = ".intval($image));
 
         if ($rs) {
             $width = ($width == '') ? (($thumbnail) ? $rs['thumb_w'] : $rs['w']) : $width;
@@ -3416,12 +3419,12 @@ function image_index($atts)
     }
 
     $qparts = array(
-        "category = '".doSlash($c)."' and thumbnail = 1",
-        'order by '.doSlash($sort),
-        ($limit) ? 'limit '.intval($offset).', '.intval($limit) : '',
+        "category = '".doSlash($c)."' AND thumbnail = 1",
+        "ORDER BY ".doSlash($sort),
+        ($limit) ? "LIMIT ".intval($offset).", ".intval($limit) : '',
     );
 
-    $rs = safe_rows_start('*', 'txp_image',  join(' ', $qparts));
+    $rs = safe_rows_start("*", 'txp_image',  join(' ', $qparts));
 
     if ($rs) {
         $out = array();
@@ -3460,7 +3463,7 @@ function image_display($atts)
     global $s, $c, $p;
 
     if ($p) {
-        $rs = safe_row("*", "txp_image", 'id='.intval($p).' limit 1');
+        $rs = safe_row("*", 'txp_image', "id=".intval($p)." LIMIT 1");
 
         if ($rs) {
             extract($rs);
@@ -3523,7 +3526,7 @@ function images($atts, $thing = null)
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
+        $authorlist = safe_column("name", 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
         if ($authorlist) {
             $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
         }
@@ -3559,7 +3562,7 @@ function images($atts, $thing = null)
 
                         // Order of ids in article image field overrides default 'sort' attribute.
                         if (empty($atts['sort'])) {
-                            $safe_sort = "field(id, $items)";
+                            $safe_sort = "FIELD(id, $items)";
                         }
                     }
                     break;
@@ -3585,7 +3588,7 @@ function images($atts, $thing = null)
 
     // Order of ids in 'id' attribute overrides default 'sort' attribute.
     if (empty($atts['sort']) && $id !== '') {
-        $safe_sort = 'field(id, '.join(',', doSlash(do_list_unique($id))).')';
+        $safe_sort = "FIELD(id, ".join(',', doSlash(do_list_unique($id))).")";
     }
 
     // If nothing matches, output nothing.
@@ -3595,10 +3598,10 @@ function images($atts, $thing = null)
 
     // If nothing matches, start with all images.
     if (!$where) {
-        $where[] = "1=1";
+        $where[] = "1 = 1";
     }
 
-    $where = join(' AND ', $where);
+    $where = join(" AND ", $where);
 
     // Set up paging if required.
     if ($limit && $pageby) {
@@ -3626,11 +3629,11 @@ function images($atts, $thing = null)
 
     $qparts = array(
         $where,
-        'order by '.$safe_sort,
-        ($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : '',
+        "ORDER BY ".$safe_sort,
+        ($limit) ? "LIMIT ".intval($pgoffset).", ".intval($limit) : '',
     );
 
-    $rs = safe_rows_start('*', 'txp_image', join(' ', $qparts));
+    $rs = safe_rows_start("*", 'txp_image', join(' ', $qparts));
 
     if ($rs) {
         $out = array();
@@ -4092,7 +4095,7 @@ function formatCommentsInvite($AnnotateInvite, $Section, $ID)
 
     global $comments_mode;
 
-    $dc = safe_count('txp_discuss', 'parentid='.intval($ID).' and visible='.VISIBLE);
+    $dc = safe_count('txp_discuss', "parentid = ".intval($ID)." AND visible = ".VISIBLE);
 
     $ccount = ($dc) ?  '['.$dc.']' : '';
     if (!$comments_mode) {
@@ -4727,7 +4730,7 @@ function file_download_list($atts, $thing = null)
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
+        $authorlist = safe_column("name", 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
         if ($authorlist) {
             $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
         }
@@ -4765,10 +4768,10 @@ function file_download_list($atts, $thing = null)
 
     if (!$where) {
         // If nothing matches, start with all files.
-        $where[] = "1=1";
+        $where[] = "1 = 1";
     }
 
-    $where = join(' AND ', array_merge($where, $statwhere));
+    $where = join(" AND ", array_merge($where, $statwhere));
 
     // Set up paging if required.
     if ($limit && $pageby) {
@@ -4796,17 +4799,17 @@ function file_download_list($atts, $thing = null)
 
     // Preserve order of custom file ids unless 'sort' attribute is set.
     if (!empty($atts['id']) && empty($atts['sort'])) {
-        $safe_sort = 'field(id, '.join(',', $ids).')';
+        $safe_sort = "FIELD(id, ".join(',', $ids).")";
     } else {
         $safe_sort = doSlash($sort);
     }
 
     $qparts = array(
-        'order by '.$safe_sort,
-        ($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : '',
+        "ORDER BY ".$safe_sort,
+        ($limit) ? "LIMIT ".intval($pgoffset).", ".intval($limit) : '',
     );
 
-    $rs = safe_rows_start('*', 'txp_file', $where.' '.join(' ', $qparts));
+    $rs = safe_rows_start("*", 'txp_file', $where.' '.join(' ', $qparts));
 
     if ($rs) {
         $count = 0;

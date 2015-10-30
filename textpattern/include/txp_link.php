@@ -92,38 +92,38 @@ function link_list($message = '')
     }
 
     if ($dir === '') {
-        $dir = get_pref('link_sort_dir', 'asc');
+        $dir = get_pref('link_sort_dir', 'ASC');
     } else {
-        $dir = ($dir == 'desc') ? 'desc' : 'asc';
+        $dir = ($dir == 'DESC') ? "DESC" : "ASC";
         set_pref('link_sort_dir', $dir, 'link', 2, '', 0, PREF_PRIVATE);
     }
 
     switch ($sort) {
         case 'id':
-            $sort_sql = 'txp_link.id '.$dir;
+            $sort_sql = "txp_link.id $dir";
             break;
         case 'description':
-            $sort_sql = 'txp_link.description '.$dir.', txp_link.id asc';
+            $sort_sql = "txp_link.description $dir, txp_link.id ASC";
             break;
         case 'url':
-            $sort_sql = 'txp_link.url '.$dir.', txp_link.id asc';
+            $sort_sql = "txp_link.url $dir, txp_link.id ASC";
             break;
         case 'category':
-            $sort_sql = 'txp_category.title '.$dir.', txp_link.id asc';
+            $sort_sql = "txp_category.title $dir, txp_link.id ASC";
             break;
         case 'date':
-            $sort_sql = 'txp_link.date '.$dir.', txp_link.id asc';
+            $sort_sql = "txp_link.date $dir, txp_link.id ASC";
             break;
         case 'author':
-            $sort_sql = 'txp_users.RealName '.$dir.', txp_link.id asc';
+            $sort_sql = "txp_users.RealName $dir, txp_link.id ASC";
             break;
         default:
             $sort = 'name';
-            $sort_sql = 'txp_link.linksort '.$dir.', txp_link.id asc';
+            $sort_sql = "txp_link.linksort $dir, txp_link.id ASC";
             break;
     }
 
-    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+    $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
 
     $search = new Filter($event,
         array(
@@ -169,13 +169,13 @@ function link_list($message = '')
 
     $sql_from =
         safe_pfx_j('txp_link')."
-        left join ".safe_pfx_j('txp_category')." on txp_category.name = txp_link.category and txp_category.type = 'link'
-        left join ".safe_pfx_j('txp_users')." on txp_users.name = txp_link.author";
+        LEFT JOIN ".safe_pfx_j('txp_category')." ON txp_category.name = txp_link.category AND txp_category.type = 'link'
+        LEFT JOIN ".safe_pfx_j('txp_users')." ON txp_users.name = txp_link.author";
 
     if ($criteria === 1) {
         $total = safe_count('txp_link', $criteria);
     } else {
-        $total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
+        $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
 
     echo n.tag(
@@ -225,17 +225,17 @@ function link_list($message = '')
     }
 
     $rs = safe_query(
-        "select
+        "SELECT
             txp_link.id,
-            unix_timestamp(txp_link.date) as uDate,
+            UNIX_TIMESTAMP(txp_link.date) AS uDate,
             txp_link.category,
             txp_link.url,
             txp_link.linkname,
             txp_link.description,
             txp_link.author,
-            txp_users.RealName as realname,
-            txp_category.Title as category_title
-        from $sql_from where $criteria order by $sort_sql limit $offset, $limit"
+            txp_users.RealName AS realname,
+            txp_category.Title AS category_title
+        FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
     );
 
     if ($rs && numRows($rs)) {
@@ -389,7 +389,7 @@ function link_edit($message = '')
 
     if ($is_edit) {
         $id = assert_int($id);
-        $rs = safe_row('*', 'txp_link', "id = $id");
+        $rs = safe_row("*", 'txp_link', "id = $id");
 
         if ($rs) {
             extract($rs);
@@ -514,7 +514,7 @@ function link_save()
         } else {
             $ok = safe_insert('txp_link',
                 "category   = '$category',
-                date        = now(),
+                date        = NOW(),
                 url         = '".trim($url)."',
                 linkname    = '$linkname',
                 linksort    = '$linksort',
@@ -608,13 +608,13 @@ function link_multi_edit()
         case 'delete' :
             if (!has_privs('link.delete')) {
                 if (has_privs('link.delete.own')) {
-                    $selected = safe_column('id', 'txp_link', 'id IN ('.join(',', $selected).') AND author=\''.doSlash($txp_user).'\'');
+                    $selected = safe_column("id", 'txp_link', "id IN (".join(',', $selected).") AND author = '".doSlash($txp_user)."'");
                 } else {
                     $selected = array();
                 }
             }
             foreach ($selected as $id) {
-                if (safe_delete('txp_link', 'id = '.$id)) {
+                if (safe_delete('txp_link', "id = $id")) {
                     $changed[] = $id;
                 }
             }

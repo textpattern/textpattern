@@ -78,7 +78,7 @@ function discuss_save()
     callback_event_ref('discuss_ui', 'validate_save', 0, $varray, $constraints);
     $validator = new Validator($constraints);
 
-    if ($validator->validate() && safe_update("txp_discuss",
+    if ($validator->validate() && safe_update('txp_discuss',
         "email   = '$email',
          name    = '$name',
          web     = '$web',
@@ -142,48 +142,48 @@ function discuss_list($message = '')
     }
 
     if ($dir === '') {
-        $dir = get_pref('discuss_sort_dir', 'desc');
+        $dir = get_pref('discuss_sort_dir', 'DESC');
     } else {
-        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        $dir = ($dir == 'ASC') ? "ASC" : "DESC";
         set_pref('discuss_sort_dir', $dir, 'discuss', 2, '', 0, PREF_PRIVATE);
     }
 
     switch ($sort) {
         case 'id':
-            $sort_sql = 'txp_discuss.discussid '.$dir;
+            $sort_sql = "txp_discuss.discussid $dir";
             break;
         case 'ip':
-            $sort_sql = 'txp_discuss.ip '.$dir;
+            $sort_sql = "txp_discuss.ip $dir";
             break;
         case 'name':
-            $sort_sql = 'txp_discuss.name '.$dir;
+            $sort_sql = "txp_discuss.name $dir";
             break;
         case 'email':
-            $sort_sql = 'txp_discuss.email '.$dir;
+            $sort_sql = "txp_discuss.email $dir";
             break;
         case 'website':
-            $sort_sql = 'txp_discuss.web '.$dir;
+            $sort_sql = "txp_discuss.web $dir";
             break;
         case 'message':
-            $sort_sql = 'txp_discuss.message '.$dir;
+            $sort_sql = "txp_discuss.message $dir";
             break;
         case 'status':
-            $sort_sql = 'txp_discuss.visible '.$dir;
+            $sort_sql = "txp_discuss.visible $dir";
             break;
         case 'parent':
-            $sort_sql = 'txp_discuss.parentid '.$dir;
+            $sort_sql = "txp_discuss.parentid $dir";
             break;
         default:
             $sort = 'date';
-            $sort_sql = 'txp_discuss.posted '.$dir;
+            $sort_sql = "txp_discuss.posted $dir";
             break;
     }
 
     if ($sort != 'date') {
-        $sort_sql .= ', txp_discuss.posted asc';
+        $sort_sql .= ", txp_discuss.posted ASC";
     }
 
-    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+    $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
 
     $search = new Filter($event,
         array(
@@ -247,10 +247,11 @@ function discuss_list($message = '')
         left join ".safe_pfx_j('textpattern')." on txp_discuss.parentid = textpattern.ID";
 
     $counts = getRows(
-        "select txp_discuss.visible, COUNT(*) AS c
-        from ".safe_pfx_j('txp_discuss')."
-        left join ".safe_pfx_j('textpattern')." ON txp_discuss.parentid = textpattern.ID
-        where {$criteria} group by txp_discuss.visible"
+        "SELECT txp_discuss.visible, COUNT(*) AS c
+        FROM ".safe_pfx_j('txp_discuss')."
+            LEFT JOIN ".safe_pfx_j('textpattern')."
+            ON txp_discuss.parentid = textpattern.ID
+        WHERE $criteria GROUP BY txp_discuss.visible"
     );
 
     $count[SPAM] = $count[MODERATE] = $count[VISIBLE] = 0;
@@ -310,25 +311,25 @@ function discuss_list($message = '')
         ));
 
     $rs = safe_query(
-        "select
-        txp_discuss.discussid,
-        txp_discuss.parentid,
-        txp_discuss.name,
-        txp_discuss.email,
-        txp_discuss.web,
-        txp_discuss.ip,
-        txp_discuss.message,
-        txp_discuss.visible,
-        unix_timestamp(txp_discuss.posted) as uPosted,
-        textpattern.ID as thisid,
-        textpattern.Section as section,
-        textpattern.url_title,
-        textpattern.Title as title,
-        textpattern.Status,
-        unix_timestamp(textpattern.Posted) as posted
-        from ".safe_pfx_j('txp_discuss')."
-        left join ".safe_pfx_j('textpattern')." on txp_discuss.parentid = textpattern.ID
-        where {$criteria} order by {$sort_sql} limit {$offset}, {$limit}"
+        "SELECT
+            txp_discuss.discussid,
+            txp_discuss.parentid,
+            txp_discuss.name,
+            txp_discuss.email,
+            txp_discuss.web,
+            txp_discuss.ip,
+            txp_discuss.message,
+            txp_discuss.visible,
+            UNIX_TIMESTAMP(txp_discuss.posted) AS uPosted,
+            textpattern.ID AS thisid,
+            textpattern.Section AS section,
+            textpattern.url_title,
+            textpattern.Title AS title,
+            textpattern.Status,
+            UNIX_TIMESTAMP(textpattern.Posted) AS posted
+        FROM ".safe_pfx_j('txp_discuss')."
+            LEFT JOIN ".safe_pfx_j('textpattern')." ON txp_discuss.parentid = textpattern.ID
+        WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
     );
 
     if ($rs) {
@@ -523,7 +524,7 @@ function discuss_edit()
 
     $discussid = assert_int($discussid);
 
-    $rs = safe_row('*, unix_timestamp(posted) as uPosted', 'txp_discuss', "discussid = $discussid");
+    $rs = safe_row("*, UNIX_TIMESTAMP(posted) AS uPosted", 'txp_discuss', "discussid = $discussid");
 
     if ($rs) {
         extract($rs);
@@ -642,9 +643,9 @@ function discuss_multi_edit()
         foreach ($selected as $id) {
             $ids[] = assert_int($id);
         }
-        $parentids = safe_column("DISTINCT parentid", "txp_discuss", "discussid IN (".implode(',', $ids).")");
+        $parentids = safe_column("DISTINCT parentid", 'txp_discuss', "discussid IN (".implode(',', $ids).")");
 
-        $rs = safe_rows_start('*', 'txp_discuss', "discussid IN (".implode(',', $ids).")");
+        $rs = safe_rows_start("*", 'txp_discuss', "discussid IN (".implode(',', $ids).")");
 
         while ($row = nextRow($rs)) {
             extract($row);

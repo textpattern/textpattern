@@ -85,42 +85,42 @@ function log_list($message = '')
     }
 
     if ($dir === '') {
-        $dir = get_pref('log_sort_dir', 'desc');
+        $dir = get_pref('log_sort_dir', 'DESC');
     } else {
-        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        $dir = ($dir == 'ASC') ? "ASC" : "DESC";
         set_pref('log_sort_dir', $dir, 'log', 2, '', 0, PREF_PRIVATE);
     }
 
     $expire_logs_after = assert_int($expire_logs_after);
 
-    safe_delete('txp_log', "time < date_sub(now(), interval $expire_logs_after day)");
+    safe_delete('txp_log', "time < DATE_SUB(NOW(), INTERVAL $expire_logs_after DAY)");
 
     switch ($sort) {
         case 'ip':
-            $sort_sql = 'ip '.$dir;
+            $sort_sql = "ip $dir";
             break;
         case 'host':
-            $sort_sql = 'host '.$dir;
+            $sort_sql = "host $dir";
             break;
         case 'page':
-            $sort_sql = 'page '.$dir;
+            $sort_sql = "page $dir";
             break;
         case 'refer':
-            $sort_sql = 'refer '.$dir;
+            $sort_sql = "refer $dir";
             break;
         case 'method':
-            $sort_sql = 'method '.$dir;
+            $sort_sql = "method $dir";
             break;
         case 'status':
-            $sort_sql = 'status '.$dir;
+            $sort_sql = "status $dir";
             break;
         default:
             $sort = 'time';
-            $sort_sql = 'time '.$dir;
+            $sort_sql = "time $dir";
             break;
     }
 
-    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+    $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
 
     $search = new Filter($event,
         array(
@@ -200,9 +200,9 @@ function log_list($message = '')
         ));
 
     $rs = safe_rows_start(
-        '*, unix_timestamp(time) as uTime',
+        "*, UNIX_TIMESTAMP(time) AS uTime",
         'txp_log',
-        "$criteria order by $sort_sql limit $offset, $limit"
+        "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
     );
 
     if ($rs) {
