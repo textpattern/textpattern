@@ -323,10 +323,6 @@ function file_list($message = '')
                         (('title' == $sort) ? "$dir " : '').'txp-list-col-title files_detail'
                 ).
                 column_head(
-                    'description', 'description', 'file', true, $switch_dir, $crit, $search_method,
-                        (('description' == $sort) ? "$dir " : '').'txp-list-col-description files_detail'
-                ).
-                column_head(
                     'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method,
                         (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                 ).
@@ -441,9 +437,6 @@ function file_list($message = '')
                 ).
                 td(
                     txpspecialchars($title), '', 'txp-list-col-title files_detail'
-                ).
-                td(
-                    txpspecialchars($description), '', 'txp-list-col-description files_detail'
                 ).
                 td(
                     $category, '', 'txp-list-col-category category'.$vc
