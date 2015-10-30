@@ -197,12 +197,13 @@ function image_list($message = '')
         'div', array('class' => 'txp-layout-2col-cell-1'));
 
     $searchBlock =
-        n.tag_start('div', array(
-            'class' => 'txp-layout-2col-cell-2',
-            'id'    => $event.'_control',
-        )).
-        $search->renderForm('image_list', $search_render_options).
-        n.tag_end('div');
+        n.tag(
+            $search->renderForm('image_list', $search_render_options),
+            'div', array(
+                'class' => 'txp-layout-2col-cell-2',
+                'id'    => $event.'_control',
+            )
+        );
 
     $uploadBlock = array();
 
