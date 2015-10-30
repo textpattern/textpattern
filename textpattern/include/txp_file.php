@@ -116,8 +116,8 @@ function file_list($message = '')
         case 'id':
             $sort_sql = "txp_file.id $dir";
             break;
-        case 'description':
-            $sort_sql = "txp_file.description $dir, txp_file.filename DESC";
+        case 'date':
+            $sort_sql = "txp_file.created $dir, txp_file.id ASC";
             break;
         case 'category':
             $sort_sql = "txp_category.title $dir, txp_file.filename DESC";
@@ -282,6 +282,7 @@ function file_list($message = '')
             txp_file.title,
             txp_file.category,
             txp_file.description,
+            UNIX_TIMESTAMP(txp_file.created) AS uDate,
             txp_file.downloads,
             txp_file.status,
             txp_file.author,
@@ -321,6 +322,10 @@ function file_list($message = '')
                 column_head(
                     'title', 'title', 'file', true, $switch_dir, $crit, $search_method,
                         (('title' == $sort) ? "$dir " : '').'txp-list-col-title files_detail'
+                ).
+                column_head(
+                    'date', 'date', 'image', true, $switch_dir, $crit, $search_method,
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date files_detail'
                 ).
                 column_head(
                     'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method,
@@ -437,6 +442,9 @@ function file_list($message = '')
                 ).
                 td(
                     txpspecialchars($title), '', 'txp-list-col-title files_detail'
+                ).
+                td(
+                    gTime($uDate), '', 'txp-list-col-created date files_detail'
                 ).
                 td(
                     $category, '', 'txp-list-col-category category'.$vc
