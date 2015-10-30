@@ -460,7 +460,11 @@ function cat_event_category_list($event)
             $out .= cat_article_multiedit_form($event, $items);
         }
     } else {
-        $out .= graf(gTxt('no_categories_exist'));
+        $out .= graf(
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt('no_categories_exist'),
+            array('class' => 'alert-block information')
+        );
     }
 
     return $out;
