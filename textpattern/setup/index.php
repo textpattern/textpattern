@@ -88,8 +88,14 @@ print <<<eod
 <script>var textpattern = { do_spellcheck: "", textarray: {} };</script>
 <script src="../textpattern.js"></script>
 <link rel="stylesheet" href="../vendors/jquery/ui/css/textpattern/jquery-ui.min.css">
-<link rel="stylesheet" href="../theme/hive/assets/css/textpattern.min.css">
+<link rel="stylesheet" href="../theme/hive/css/textpattern.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<script src="../vendors/modernizr/modernizr/modernizr.js"></script>
+<!--[if lt IE 9]>
+<link rel="stylesheet" href="../vendors/jquery/ui/css/textpattern/jquery-ui-ie8.min.css">
+<link rel="stylesheet" href="../theme/hive/css/ie8.min.css">
+<script src="../vendors/keithclark/selectivizr/selectivizr.min.js"></script>
+<![endif]-->
 </head>
 <body id="page-setup"{$bodyclass}>
 <main class="txp-body">
@@ -210,41 +216,37 @@ function getDbInfo()
         hed(setup_gTxt('need_details'), 1).
         hed('MySQL', 2).
         graf(setup_gTxt('db_must_exist')).
-        inputLabel(
-            'setup_mysql_login',
-            fInput('text', 'duser', (isset($_SESSION['duser']) ? txpspecialchars($_SESSION['duser']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'),
-            'mysql_login', '', array('class' => 'txp-form-field')
-        ).
-        inputLabel(
-            'setup_mysql_pass',
-            fInput('text', 'dpass', (isset($_SESSION['dpass']) ? txpspecialchars($_SESSION['dpass']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_pass'),
-            'mysql_password', '', array('class' => 'txp-form-field')
-        ).
-        inputLabel(
-            'setup_mysql_server',
-            fInput('text', 'dhost', (isset($_SESSION['dhost']) ? txpspecialchars($_SESSION['dhost']) : 'localhost'), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true),
-            'mysql_server', '', array('class' => 'txp-form-field')
-        ).
-        inputLabel(
-            'setup_mysql_db',
-            fInput('text', 'ddb', (isset($_SESSION['ddb']) ? txpspecialchars($_SESSION['ddb']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true),
-            'mysql_database', '', array('class' => 'txp-form-field')
-        ).
-        inputLabel(
-            'setup_table_prefix',
-            fInput('text', 'dprefix', (isset($_SESSION['dprefix']) ? txpspecialchars($_SESSION['dprefix']) : ''), 'input-medium', '', '', INPUT_MEDIUM, '', 'setup_table_prefix'),
-            'table_prefix', 'table_prefix', array('class' => 'txp-form-field')
-        ).
-        hed(
-            setup_gTxt('site_url'), 2
-        ).
+
         graf(
-            setup_gTxt('please_enter_url')
+            span('<label for="setup_mysql_login">'.setup_gTxt('mysql_login').'</label>', ' class="txp-label"').
+            n.span(fInput('text', 'duser', (isset($_SESSION['duser']) ? txpspecialchars($_SESSION['duser']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'), ' class="txp-value"')
         ).
-        inputLabel(
-            'setup_site_url',
-            fInput('text', 'siteurl', txpspecialchars($guess_siteurl), '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
-            'http(s)://', 'siteurl', array('class' => 'txp-form-field')
+
+        graf(
+            span('<label for="setup_mysql_pass">'.setup_gTxt('mysql_password').'</label>', ' class="txp-label"').
+            n.span(fInput('text', 'dpass', (isset($_SESSION['dpass']) ? txpspecialchars($_SESSION['dpass']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_pass'), ' class="txp-value"')
+        ).
+
+        graf(
+            span('<label for="setup_mysql_server">'.setup_gTxt('mysql_server').'</label>', ' class="txp-label"').
+            n.span(fInput('text', 'dhost', (isset($_SESSION['dhost']) ? txpspecialchars($_SESSION['dhost']) : 'localhost'), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true), ' class="txp-value"')
+        ).
+
+        graf(
+            span('<label for="setup_mysql_db">'.setup_gTxt('mysql_database').'</label>', ' class="txp-label"').
+            n.span(fInput('text', 'ddb', (isset($_SESSION['ddb']) ? txpspecialchars($_SESSION['ddb']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true), ' class="txp-value"')
+        ).
+
+        graf(
+            span('<label for="setup_table_prefix">'.setup_gTxt('table_prefix').'</label>'.popHelp('table_prefix'), ' class="txp-label"').
+            n.span(fInput('text', 'dprefix', (isset($_SESSION['dprefix']) ? txpspecialchars($_SESSION['dprefix']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_table_prefix'), ' class="txp-value"')
+        ).
+
+        hed(setup_gTxt('site_url'), 2).
+        graf(setup_gTxt('please_enter_url')).
+        graf(
+            span('<label for="setup_site_url">http(s)://</label>'.popHelp('siteurl'), ' class="txp-label"').
+            n.span(fInput('text', 'siteurl', txpspecialchars($guess_siteurl), '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true), ' class="txp-value"')
         );
 
     if (is_disabled('mail')) {
@@ -471,43 +473,40 @@ function getTxpLogin()
         n.'<div class="txp-setup">';
 
     echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
-        hed(
-            setup_gTxt('creating_db_tables'), 2
-        ).
+        hed(setup_gTxt('creating_db_tables'), 2).
+        graf(setup_gTxt('about_to_create')).
+
         graf(
-            setup_gTxt('about_to_create')
+            span('<label for="setup_user_realname">'.setup_gTxt('your_full_name').'</label>', ' class="txp-label"').
+            n.span(fInput('text', 'RealName', (isset($_SESSION['realname']) ? txpspecialchars($_SESSION['realname']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true), ' class="txp-value"')
         ).
-        inputLabel(
-            'setup_user_realname',
-            fInput('text', 'RealName', (isset($_SESSION['realname']) ? txpspecialchars($_SESSION['realname']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true),
-            'your_full_name', '', array('class' => 'txp-form-field')
+
+        graf(
+            span('<label for="setup_user_login">'.setup_gTxt('setup_login').'</label>'.popHelp('setup_user_login'), ' class="txp-label"').
+            n.span(fInput('text', 'name', (isset($_SESSION['name']) ? txpspecialchars($_SESSION['name']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true), ' class="txp-value"')
         ).
-        inputLabel(
-            'setup_user_login',
-            fInput('text', 'name', (isset($_SESSION['name']) ? txpspecialchars($_SESSION['name']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true),
-            'setup_login', 'setup_user_login', array('class' => 'txp-form-field')
+
+        graf(
+            span('<label for="setup_user_pass">'.setup_gTxt('choose_password').'</label>'.popHelp('setup_user_pass'), ' class="txp-label"').
+            n.span(fInput('text', 'pass', (isset($_SESSION['pass']) ? txpspecialchars($_SESSION['pass']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true), ' class="txp-value"')
         ).
-        inputLabel(
-            'setup_user_pass',
-            fInput('text', 'pass', (isset($_SESSION['pass']) ? txpspecialchars($_SESSION['pass']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true),
-            'choose_password', 'setup_user_pass', array('class' => 'txp-form-field')
+
+        graf(
+            span('<label for="setup_user_email">'.setup_gTxt('your_email'), ' class="txp-label"').
+            n.span(fInput('email', 'email', (isset($_SESSION['email']) ? txpspecialchars($_SESSION['email']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true), ' class="txp-value"')
         ).
-        inputLabel(
-            'setup_user_email',
-            fInput('text', 'email', (isset($_SESSION['email']) ? txpspecialchars($_SESSION['email']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true),
-            'your_email', '', array('class' => 'txp-form-field')
+
+        hed(setup_gTxt('site_config'), 2).
+
+        graf(
+            span('<label for="setup_admin_theme">'.setup_gTxt('admin_theme').'</label>'.popHelp('theme_name'), ' class="txp-label"').
+            n.span($theme_chooser, ' class="txp-value"')
         ).
-        hed(
-            setup_gTxt('site_config'), 2
-        ).
-        inputLabel(
-            'setup_admin_theme',
-            $theme_chooser,
-            'admin_theme', 'theme_name', array('class' => 'txp-form-field')
-        ).
+
         graf(
             fInput('submit', 'Submit', setup_gTxt('next_step'), 'publish')
         ).
+
         sInput('createTxp').
         n.'</form>'.
         n.'</div>'.
@@ -586,50 +585,10 @@ function createTxp()
         exit;
     }
 
-    $ddb = $txpcfg['db'];
-    $duser = $txpcfg['user'];
-    $dpass = $txpcfg['pass'];
-    $dhost = $txpcfg['host'];
-    $dclient_flags = isset($txpcfg['client_flags']) ? $txpcfg['client_flags'] : 0;
-    $dprefix = $txpcfg['table_prefix'];
-    $dbcharset = $txpcfg['dbcharset'];
-
-    $siteurl = str_replace("http://", '', $_SESSION['siteurl']);
-    $siteurl = rtrim($siteurl, "/");
-    $urlpath = preg_replace('#^[^/]+#', '', $siteurl);
-
-    define("PFX", trim($dprefix));
     define('TXP_INSTALL', 1);
 
     include_once txpath.'/lib/txplib_update.php';
     include txpath.'/setup/txpsql.php';
-
-    $nonce = md5(uniqid(rand(), true));
-    $hash  = doSlash(txp_hash_password($_SESSION['pass']));
-
-    mysqli_query($link, "INSERT INTO `".PFX."txp_users` VALUES
-        (1,
-        '".doSlash($_SESSION['name'])."',
-        '$hash',
-        '".doSlash($_SESSION['realname'])."',
-        '".doSlash($_SESSION['email'])."',
-        1,
-        now(),
-        '$nonce')"
-    );
-
-    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".doSlash($siteurl)."' where `name`='siteurl'");
-    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");
-    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".getlocale(LANG)."' where `name`='locale'");
-    mysqli_query($link, "update `".PFX."textpattern` set Body = replace(Body, 'siteurl', '".
-        doSlash($urlpath)."'), Body_html = replace(Body_html, 'siteurl', '".
-        doSlash($urlpath)."') WHERE ID = 1");
-
-    // cf. update/_to_4.2.0.php.
-    // TODO: Position might need altering when prefs panel layout is altered.
-    $theme = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
-    mysqli_query($link, "insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".
-        doSlash($theme)."', type = '1', event = 'admin', html = 'themename', position = '160'");
 
     echo fbCreate();
 }
@@ -679,6 +638,7 @@ function fbCreate()
                 )), ' class="error"')
             ).
             n.'</div>'.
+            n.'<ol>'.n.$GLOBALS['txp_err_html'].'</ol>';
             n.'</div>';
     } else {
         // Clear the session so no data is leaked.
@@ -811,9 +771,8 @@ function langs()
 
     $default = (!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'en-gb');
 
-    $out = n.'<div class="txp-form-field">'.
-        n.'<label class="txp-form-field-label" for="setup_language">Please choose a language</label>'.
-        n.'<select  class="txp-form-field-input" id="setup_language" name="lang">';
+    $out = n.'<p><label for="setup_language">Please choose a language</label>'.
+        br.'<select name="lang" id="setup_language">';
 
     foreach ($langs as $a => $b) {
         $out .= n.'<option value="'.txpspecialchars($a).'"'.
@@ -821,8 +780,7 @@ function langs()
             '>'.txpspecialchars($b).'</option>';
     }
 
-    $out .= n.'</select>'.
-        n.'</div>';
+    $out .= n.'</select></p>';
 
     return $out;
 }
