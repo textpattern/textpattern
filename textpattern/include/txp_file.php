@@ -1177,7 +1177,17 @@ function file_set_perm($file)
     return @chmod($file, 0644);
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders a specific file upload form.
+ *
+ * @param  string $label         File name label. May be empty
+ * @param  string $pophelp       Help item
+ * @param  string $step          Step
+ * @param  string $id            File id
+ * @param  string $label_id      HTML id attribute for the filename input element
+ * @param  string $class         HTML class attribute for the form element
+ * @return string HTML
+ */
 
 function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $class = '')
 {

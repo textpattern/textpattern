@@ -1404,7 +1404,7 @@ function pageby_form($event, $val, $step = null)
 }
 
 /**
- * Renders a file upload form.
+ * Renders an upload form.
  *
  * The rendered form can be customised via the '{$event}_ui > upload_form'
  * pluggable UI callback event.
