@@ -267,26 +267,38 @@ function discuss_list($message = '')
 
     echo n.tag(
         hed(gTxt('list_discussions'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
-        n.tag_start('div', array(
-            'class' => 'txp-layout-2col-cell-2',
-            'id'    => $event.'_control',
+        'div', array('class' => 'txp-layout-2col-cell-1'));
+
+    $searchBlock =
+        n.tag(
+            $search->renderForm('discuss_list', $search_render_options),
+            'div', array(
+                'class' => 'txp-layout-2col-cell-2',
+                'id'    => $event.'_control',
+            )
+        );
+
+    $contentBlockStart = n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
         ));
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo $search->renderForm('discuss_list', $search_render_options).
+            echo $searchBlock.
+                $contentBlockStart.
                 graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                gTxt('no_results_found'),
-                array('class' => 'alert-block information')
-            );
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_results_found'),
+                    array('class' => 'alert-block information')
+                );
         } else {
-            echo graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                gTxt('no_comments_recorded'),
-                array('class' => 'alert-block information')
-            );
+            echo $contentBlockStart.
+                graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_comments_recorded'),
+                    array('class' => 'alert-block information')
+                );
         }
 
         echo n.tag_end('div');
@@ -303,12 +315,7 @@ function discuss_list($message = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $search->renderForm('discuss_list', $search_render_options).'</div>';
-
-    echo n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        ));
+    echo $searchBlock.$contentBlockStart;
 
     $rs = safe_query(
         "SELECT
