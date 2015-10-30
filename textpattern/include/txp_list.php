@@ -216,26 +216,52 @@ function list_list($message = '', $post = '')
 
     echo n.tag(
         hed(gTxt('tab_list'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
-        n.tag_start('div', array(
-            'class' => 'txp-layout-2col-cell-2',
-            'id'    => $event.'_control',
+        'div', array('class' => 'txp-layout-2col-cell-1'));
+
+    $searchBlock =
+        n.tag(
+            $search->renderForm('list', $search_render_options),
+            'div', array(
+                'class' => 'txp-layout-2col-cell-2',
+                'id'    => $event.'_control',
+            )
+        );
+
+    $createBlock = array();
+
+    if (has_privs('article.edit')) {
+        $createBlock[] =
+            n.tag(
+                sLink('article', 'article_edit', gTxt('add_new_article'), 'txp-button'),
+                'div', array('class' => 'txp-control-panel')
+            );
+    }
+
+    $contentBlockStart = n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
         ));
+
+    $createBlock = implode(n, $createBlock);
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo $search->renderForm('list', $search_render_options).
+            echo $searchBlock.
+                $contentBlockStart.
+                $createBlock.
                 graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                gTxt('no_results_found'),
-                array('class' => 'alert-block information')
-            );
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_results_found'),
+                    array('class' => 'alert-block information')
+                );
         } else {
-            echo graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                gTxt('no_articles_recorded'),
-                array('class' => 'alert-block information')
-            );
+            echo $contentBlockStart.
+                $createBlock.
+                graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_articles_recorded'),
+                    array('class' => 'alert-block information')
+                );
         }
 
         echo n.tag_end('div');
@@ -247,13 +273,7 @@ function list_list($message = '', $post = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $search->renderForm('list', $search_render_options).'</div>';
-
-    echo n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        )).
-        n.tag(sLink('article', '', gTxt('add_new_article'), 'txp-button'), 'div', array('class' => 'txp-control-panel'));
+    echo $searchBlock.$contentBlockStart.$createBlock;
 
     $rs = safe_query(
         "SELECT
