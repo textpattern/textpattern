@@ -253,8 +253,7 @@ function file_list($message = '')
                     span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                     gTxt('no_results_found'),
                     array('class' => 'alert-block information')
-                ).
-                n.tag_end('div');
+                );
         } else {
             echo $contentBlockStart.
                 $uploadBlock.
@@ -262,9 +261,10 @@ function file_list($message = '')
                     span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                     gTxt('no_files_recorded'),
                     array('class' => 'alert-block information')
-                ).
-                n.tag_end('div');
+                );
         }
+
+        echo n.tag_end('div');
 
         return;
     }
