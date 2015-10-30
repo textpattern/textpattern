@@ -164,23 +164,38 @@ function log_list($message = '')
 
     echo n.tag(
         hed(gTxt('tab_logs'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
-        n.tag_start('div', array('class' => 'txp-layout-2col-cell-2'));
+        'div', array('class' => 'txp-layout-2col-cell-1'));
+
+    $searchBlock =
+        n.tag(
+            $search->renderForm('log_list', $search_render_options),
+            'div', array(
+                'class' => 'txp-layout-2col-cell-2',
+                'id'    => $event.'_control',
+            )
+        );
+
+    $contentBlockStart = n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        ));
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo $search->renderForm('log_list', $search_render_options).
+            echo $searchBlock.
+                $contentBlockStart.
                 graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                gTxt('no_results_found'),
-                array('class' => 'alert-block information')
-            );
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_results_found'),
+                    array('class' => 'alert-block information')
+                );
         } else {
-            echo graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                gTxt('no_refers_recorded'),
-                array('class' => 'alert-block information')
-            );
+            echo $contentBlockStart.
+                graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_refers_recorded'),
+                    array('class' => 'alert-block information')
+                );
         }
 
         echo n.tag_end('div');
@@ -192,12 +207,7 @@ function log_list($message = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $search->renderForm('log_list', $search_render_options).'</div>';
-
-    echo n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        ));
+    echo $searchBlock.$contentBlockStart;
 
     $rs = safe_rows_start(
         "*, UNIX_TIMESTAMP(time) AS uTime",
