@@ -83,9 +83,9 @@ function log_list($message = '')
     }
 
     if ($dir === '') {
-        $dir = get_pref('log_sort_dir', 'DESC');
+        $dir = get_pref('log_sort_dir', 'desc');
     } else {
-        $dir = ($dir == 'ASC') ? "ASC" : "DESC";
+        $dir = ($dir == 'asc') ? "asc" : "desc";
         set_pref('log_sort_dir', $dir, 'log', 2, '', 0, PREF_PRIVATE);
     }
 
@@ -118,8 +118,7 @@ function log_list($message = '')
             break;
     }
 
-    $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
-    $dir = strtolower($dir);
+    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
     $criteria = 1;
 
