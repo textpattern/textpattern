@@ -283,7 +283,7 @@ function change_email_form()
 }
 
 /**
- * The main author list.
+ * The main panel listing all authors.
  *
  * @param string|array $message The activity message
  */
@@ -294,6 +294,10 @@ function author_list($message = '')
 
     pagetop(gTxt('tab_site_admin'), $message);
 
+    echo n.tag(
+        hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1'));
+
     if (is_disabled('mail')) {
         echo graf(
             span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
@@ -301,11 +305,6 @@ function author_list($message = '')
             array('class' => 'alert-block warning')
         );
     }
-
-    echo n.tag(
-        hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')
-    );
 
     $buttons = array();
 
