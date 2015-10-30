@@ -205,17 +205,17 @@ function image_list($message = '')
             )
         );
 
-    $uploadBlock = array();
+    $createBlock = array();
 
     if (!is_dir(IMPATH) or !is_writeable(IMPATH)) {
-        $uploadBlock[] =
+        $createBlock[] =
             graf(
                 span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
                 gTxt('img_dir_not_writeable', array('{imgdir}' => IMPATH)),
                 array('class' => 'alert-block warning')
             );
     } elseif (has_privs('image.edit.own')) {
-        $uploadBlock[] =
+        $createBlock[] =
             n.tag(
                 n.upload_form(gTxt('upload_image'), 'upload_image', 'image_insert', 'image', '', $file_max_upload_size),
                 'div', array('class' => 'txp-control-panel')
@@ -227,13 +227,13 @@ function image_list($message = '')
             'id'    => $event.'_container',
         ));
 
-    $uploadBlock = implode(n, $uploadBlock);
+    $createBlock = implode(n, $createBlock);
 
     if ($total < 1) {
         if ($criteria != 1) {
             echo $searchBlock.
                 $contentBlockStart.
-                $uploadBlock.
+                $createBlock.
                 graf(
                     span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                     gTxt('no_results_found'),
@@ -241,7 +241,7 @@ function image_list($message = '')
                 );
         } else {
             echo $contentBlockStart.
-                $uploadBlock.
+                $createBlock.
                 graf(
                     span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                     gTxt('no_images_recorded'),
@@ -258,7 +258,7 @@ function image_list($message = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $searchBlock.$contentBlockStart.$uploadBlock;
+    echo $searchBlock.$contentBlockStart.$createBlock;
 
     $rs = safe_query(
         "SELECT

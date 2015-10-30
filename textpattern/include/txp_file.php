@@ -208,24 +208,24 @@ function file_list($message = '')
             )
         );
 
-    $uploadBlock = array();
+    $createBlock = array();
 
     if (!is_dir($file_base_path) || !is_writeable($file_base_path)) {
-        $uploadBlock[] =
+        $createBlock[] =
             graf(
                 span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
                 gTxt('file_dir_not_writeable', array('{filedir}' => $file_base_path)),
                 array('class' => 'alert-block warning')
             );
     } elseif (has_privs('file.edit.own')) {
-        $uploadBlock[] =
+        $createBlock[] =
             n.tag_start('div', array('class' => 'txp-control-panel')).
             n.file_upload_form(gTxt('upload_file'), 'upload', 'file_insert');
 
         $existing_files = get_filenames();
 
         if ($existing_files) {
-            $uploadBlock[] =
+            $createBlock[] =
                 form(
                     eInput('file').
                     sInput('file_create').
@@ -235,7 +235,7 @@ function file_list($message = '')
                 '', '', 'post', 'assign-existing-form', '', 'assign_file');
         }
 
-        $uploadBlock[] = tag_end('div');
+        $createBlock[] = tag_end('div');
     }
 
     $contentBlockStart = n.tag_start('div', array(
@@ -243,13 +243,13 @@ function file_list($message = '')
             'id'    => $event.'_container',
         ));
 
-    $uploadBlock = implode(n, $uploadBlock);
+    $createBlock = implode(n, $createBlock);
 
     if ($total < 1) {
         if ($criteria != 1) {
             echo $searchBlock.
                 $contentBlockStart.
-                $uploadBlock.
+                $createBlock.
                 graf(
                     span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                     gTxt('no_results_found'),
@@ -257,7 +257,7 @@ function file_list($message = '')
                 );
         } else {
             echo $contentBlockStart.
-                $uploadBlock.
+                $createBlock.
                 graf(
                     span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                     gTxt('no_files_recorded'),
@@ -274,7 +274,7 @@ function file_list($message = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $searchBlock.$contentBlockStart.$uploadBlock;
+    echo $searchBlock.$contentBlockStart.$createBlock;
 
     $rs = safe_query(
         "SELECT
