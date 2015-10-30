@@ -263,7 +263,7 @@ function css_save()
 
 function css_delete()
 {
-    $name  = ps('name');
+    $name = ps('name');
     $count = safe_count('txp_section', "css = '".doSlash($name)."'");
     $message = '';
 

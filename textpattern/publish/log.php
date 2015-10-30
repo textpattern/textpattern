@@ -86,7 +86,7 @@ function logit($r = '', $status = 200)
         foreach (do_list(LOG_REFERER_PROTOCOLS) as $option) {
             if (strpos($referer, $option.'://') === 0) {
                 $protocol = $option;
-                $referer = substr($referer, strlen($protocol)+3);
+                $referer = substr($referer, strlen($protocol) + 3);
                 break;
             }
         }

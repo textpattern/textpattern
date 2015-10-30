@@ -523,7 +523,7 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
 
         // Jump to mid.
 
-        if ($end < $numPages-1) {
+        if ($end < $numPages - 1) {
             $between = $end + floor(($numPages-$end) / 2);
             $nav[] = href('&#8230;', $parameters + array('page' => $between), array(
                 'class' => 'navlink',
@@ -1497,7 +1497,7 @@ function script_js($js, $flags = '')
                 $ext = pathinfo($js, PATHINFO_EXTENSION);
 
                 if ($ext) {
-                    $js = substr($js, 0, (strlen($ext)+1) * -1);
+                    $js = substr($js, 0, (strlen($ext) + 1) * -1);
                     $ext = '.'.$ext;
                 }
 

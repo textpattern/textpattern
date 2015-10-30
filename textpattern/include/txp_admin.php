@@ -548,7 +548,7 @@ function author_edit()
     if ($is_edit) {
         $out[] = inputLabel('login_name', strong(txpspecialchars($name)));
     } else {
-        $out[] =  inputLabel('login_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), 'login_name', 'add_new_author');
+        $out[] = inputLabel('login_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), 'login_name', 'add_new_author');
     }
 
     $out[] = inputLabel('real_name', fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'), 'real_name').

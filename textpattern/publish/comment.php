@@ -419,7 +419,7 @@ class comment_evaluation
         $result = array();
 
         foreach ($this->status as $key => $value) {
-            $result[$key] = array_sum($value)/max(1, count($value));
+            $result[$key] = array_sum($value) / max(1, count($value));
         }
 
         arsort($result, SORT_NUMERIC);
@@ -537,7 +537,7 @@ function checkCommentsAllowed($id)
 
     if (isset($thisarticle['thisid']) && ($thisarticle['thisid'] == $id) && isset($thisarticle['annotate'])) {
         $Annotate = $thisarticle['annotate'];
-        $uPosted  = $thisarticle['posted'];
+        $uPosted = $thisarticle['posted'];
     } else {
         extract(
             safe_row(

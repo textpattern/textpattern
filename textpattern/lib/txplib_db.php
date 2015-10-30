@@ -1168,9 +1168,10 @@ function getThing($query, $debug = false)
 {
     if ($r = safe_query($query, $debug)) {
         if (mysqli_num_rows($r) != 0) {
-          $row = mysqli_fetch_row($r);
-          mysqli_free_result($r);
-          return $row[0];
+            $row = mysqli_fetch_row($r);
+            mysqli_free_result($r);
+
+            return $row[0];
         }
 
         return '';
@@ -1261,7 +1262,7 @@ function getTree($root, $type, $where = '1 = 1', $tbl = 'txp_category')
     while ($rs and $row = nextRow($rs)) {
         extract($row);
 
-        while (count($right) > 0 && $right[count($right)-1] < $rgt) {
+        while (count($right) > 0 && $right[count($right) - 1] < $rgt) {
             array_pop($right);
         }
 
@@ -1317,7 +1318,7 @@ function getTreePath($target, $type, $tbl = 'txp_category')
     while ($rs and $row = nextRow($rs)) {
         extract($row);
 
-        while (count($right) > 0 && $right[count($right)-1] < $rgt) {
+        while (count($right) > 0 && $right[count($right) - 1] < $rgt) {
             array_pop($right);
         }
 
@@ -1349,11 +1350,11 @@ function getTreePath($target, $type, $tbl = 'txp_category')
 
 function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
 {
-    $left  = assert_int($left);
+    $left = assert_int($left);
     $right = $left + 1;
 
     $parent = doSlash($parent);
-    $type   = doSlash($type);
+    $type = doSlash($type);
 
     $result = safe_column("name", $tbl,
         "parent = '$parent' AND type = '$type' ORDER BY name");

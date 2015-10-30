@@ -448,8 +448,8 @@ function image_multi_edit()
     }
 
     $selected = array_map('assert_int', $selected);
-    $method   = ps('edit_method');
-    $changed  = array();
+    $method = ps('edit_method');
+    $changed = array();
     $key = '';
 
     switch ($method) {
@@ -823,8 +823,7 @@ function image_delete($ids = array())
                 callback_event('image_deleted', $event, false, $id);
 
                 $rsd = safe_delete('txp_image', "id = $id");
-
-                $ul  = false;
+                $ul = false;
 
                 if (is_file(IMPATH.$id.$ext)) {
                     $ul = unlink(IMPATH.$id.$ext);

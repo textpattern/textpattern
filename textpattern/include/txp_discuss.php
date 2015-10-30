@@ -423,7 +423,7 @@ function discuss_list($message = '')
                     txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website discuss_detail'
                 ).
                 td(
-                    href(txpspecialchars($ip), 'https://whois.domaintools.com/' . rawurlencode($ip), array(
+                    href(txpspecialchars($ip), 'https://whois.domaintools.com/'.rawurlencode($ip), array(
                         'rel'    => 'external',
                         'target' => '_blank',
                     )), '', 'txp-list-col-ip discuss_detail'
@@ -524,7 +524,7 @@ function discuss_edit()
                 hed(gTxt('edit_comment'), 2).
                 inputLabel('status', $status_list, 'status').
                 inputLabel('name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'), 'name').
-                inputLabel('IP', href(txpspecialchars($ip), 'https://whois.domaintools.com/' . rawurlencode($ip), array(
+                inputLabel('IP', href(txpspecialchars($ip), 'https://whois.domaintools.com/'.rawurlencode($ip), array(
                     'rel'    => 'external',
                     'target' => '_blank',
                 )), '').
