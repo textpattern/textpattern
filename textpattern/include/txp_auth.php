@@ -81,7 +81,7 @@ function doLoginForm($message)
 
     pagetop(gTxt('login'), $message);
 
-    $stay  = (cs('txp_login') and !gps('logout') ? 1 : 0);
+    $stay = (cs('txp_login') and !gps('logout') ? 1 : 0);
     $reset = gps('reset');
 
     $name = join(',', array_slice(explode(',', cs('txp_login')), 0, -1));
@@ -177,9 +177,9 @@ function doTxpValidate()
 
     if ($c_userid and strlen($c_hash) == 32) { // Cookie exists.
         $r = safe_row(
-            'name, nonce',
+            "name, nonce",
             'txp_users',
-            "name='".doSlash($c_userid)."' AND last_access > DATE_SUB(NOW(), INTERVAL 30 DAY)"
+            "name = '".doSlash($c_userid)."' AND last_access > DATE_SUB(NOW(), INTERVAL 30 DAY)"
         );
 
         if ($r && $r['nonce'] && $r['nonce'] === md5($c_userid.pack('H*', $c_hash))) {
@@ -219,7 +219,7 @@ function doTxpValidate()
             setcookie(
                 'txp_login',
                 $name.','.$c_hash,
-                ($stay ? time()+3600*24*365 : 0),
+                ($stay ? time() + 3600 * 24 * 365 : 0),
                 null,
                 null,
                 null,
@@ -228,8 +228,8 @@ function doTxpValidate()
 
             setcookie(
                 'txp_login_public',
-                substr(md5($nonce), -10).$name,
-                ($stay ? time()+3600*24*30 : 0),
+                substr(md5($nonce), - 10).$name,
+                ($stay ? time() + 3600 * 24 * 30 : 0),
                 $pub_path
             );
 
@@ -255,7 +255,7 @@ function doTxpValidate()
 
         $confirm = pack('H*', gps('confirm'));
         $name    = substr($confirm, 5);
-        $nonce   = safe_field('nonce', 'txp_users', "name = '".doSlash($name)."'");
+        $nonce   = safe_field("nonce", 'txp_users', "name = '".doSlash($name)."'");
 
         if ($nonce and $confirm === pack('H*', substr(md5($nonce), 0, 10)).$name) {
             include_once txpath.'/lib/txplib_admin.php';

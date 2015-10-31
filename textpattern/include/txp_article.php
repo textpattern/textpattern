@@ -28,6 +28,14 @@
  * @package Admin\Article
  */
 
+use Textpattern\Validator\BlankConstraint;
+use Textpattern\Validator\CategoryConstraint;
+use Textpattern\Validator\ChoiceConstraint;
+use Textpattern\Validator\FalseConstraint;
+use Textpattern\Validator\FormConstraint;
+use Textpattern\Validator\SectionConstraint;
+use Textpattern\Validator\Validator;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -248,7 +256,7 @@ function article_post()
         // @Todo: Atomic with CFs.
         if (article_validate($rs, $msg)) {
             $ok = safe_insert(
-               "textpattern",
+               'textpattern',
                "Title           = '$Title',
                 Body            = '$Body',
                 Body_html       = '$Body_html',
@@ -282,9 +290,9 @@ function article_post()
                 if ($is_clone) {
                     safe_update(
                         'textpattern',
-                        "Title = concat(Title, ' (', {$ok}, ')'),
-                        url_title = concat(url_title, '-', {$ok})",
-                        "ID = {$ok}"
+                        "Title = CONCAT(Title, ' (', $ok, ')'),
+                        url_title = CONCAT(url_title, '-', $ok)",
+                        "ID = $ok"
                     );
                 }
 
@@ -320,11 +328,11 @@ function article_save()
     $incoming = array_map('assert_string', psa($vars));
     $sqlnow = strftime('%Y-%m-%d %T', $txpnow);
 
-    $oldArticle = safe_row('Status, url_title, Title, textile_body, textile_excerpt, '.
-        'unix_timestamp(LastMod) as sLastMod, LastModID, '.
-        'unix_timestamp(Posted) as sPosted, '.
-        'unix_timestamp(Expires) as sExpires',
-        'textpattern', 'ID = '.(int) $incoming['ID']);
+    $oldArticle = safe_row("Status, url_title, Title, textile_body, textile_excerpt,
+        UNIX_TIMESTAMP(LastMod) AS sLastMod, LastModID,
+        UNIX_TIMESTAMP(Posted) AS sPosted,
+        UNIX_TIMESTAMP(Expires) AS sExpires",
+        'textpattern', "ID = ".(int) $incoming['ID']);
 
     if (!(($oldArticle['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
         or ($oldArticle['Status'] >= STATUS_LIVE and $incoming['AuthorID'] === $txp_user and has_privs('article.edit.own.published'))
@@ -423,7 +431,7 @@ function article_save()
     if ($expires) {
         $whenexpires = "Expires='".strftime('%Y-%m-%d %T', $expires)."'";
     } else {
-        $whenexpires = "Expires=".NULLDATETIME;
+        $whenexpires = "Expires = ".NULLDATETIME;
     }
 
     // Auto-update custom-titles according to Title, as long as unpublished and
@@ -449,7 +457,7 @@ function article_save()
     $rs = compact($vars);
 
     if (article_validate($rs, $msg)) {
-        if (safe_update("textpattern",
+        if (safe_update('textpattern',
            "Title           = '$Title',
             Body            = '$Body',
             Body_html       = '$Body_html',
@@ -694,11 +702,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $ID = assert_int($ID);
 
         $rs = safe_row(
-            "*, unix_timestamp(Posted) as sPosted,
-            unix_timestamp(Expires) as sExpires,
-            unix_timestamp(LastMod) as sLastMod",
-            "textpattern",
-            "ID=$ID"
+            "*, UNIX_TIMESTAMP(Posted) AS sPosted,
+            UNIX_TIMESTAMP(Expires) AS sExpires,
+            UNIX_TIMESTAMP(LastMod) AS sLastMod",
+            'textpattern',
+            "ID = $ID"
         );
 
         if (empty($rs)) {
@@ -722,11 +730,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             $store_out = gpsa($vars);
 
             if ($concurrent) {
-                $store_out['sLastMod'] = safe_field('unix_timestamp(LastMod) as sLastMod', 'textpattern', 'ID='.$ID);
+                $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");
             }
 
             if (!has_privs('article.set_markup')) {
-                $oldArticle = safe_row('textile_body, textile_excerpt', 'textpattern', 'ID = '.$ID);
+                $oldArticle = safe_row("textile_body, textile_excerpt", 'textpattern', "ID = $ID");
                 $store_out['textile_body'] = $oldArticle['textile_body'];
                 $store_out['textile_excerpt'] = $oldArticle['textile_excerpt'];
             }
@@ -1170,10 +1178,10 @@ function checkIfNeighbour($whichway, $sPosted)
 {
     $sPosted = assert_int($sPosted);
     $dir = ($whichway == 'prev') ? '<' : '>';
-    $ord = ($whichway == 'prev') ? 'desc' : 'asc';
+    $ord = ($whichway == 'prev') ? "DESC" : "ASC";
 
-    return safe_field("ID", "textpattern",
-        "Posted $dir from_unixtime($sPosted) order by Posted $ord limit 1");
+    return safe_field("ID", 'textpattern',
+        "Posted $dir FROM_UNIXTIME($sPosted) ORDER BY Posted $ord LIMIT 1");
 }
 
 /**
@@ -1206,7 +1214,7 @@ function status_display($status)
 
 function section_popup($Section, $id)
 {
-    $rs = safe_rows('name, title', 'txp_section', "name != 'default' order by title asc, name asc");
+    $rs = safe_rows("name, title", 'txp_section', "name != 'default' ORDER BY title ASC, name ASC");
 
     if ($rs) {
         $options = array();
@@ -1288,7 +1296,7 @@ function getDefaultSection()
 
 function form_pop($form, $id)
 {
-    $rs = safe_column('name', 'txp_form', "type = 'article' and name != 'default' order by name");
+    $rs = safe_column("name", 'txp_form', "type = 'article' AND name != 'default' ORDER BY name");
 
     if ($rs) {
         return selectInput('override_form', $rs, $form, true, '', $id);
@@ -1663,7 +1671,7 @@ function article_partial_custom_fields($rs)
 
 function article_partial_recent_articles($rs)
 {
-    $recents = safe_rows_start('Title, ID', 'textpattern', '1=1 order by LastMod desc limit '.(int) WRITE_RECENT_ARTICLES_COUNT);
+    $recents = safe_rows_start("Title, ID", 'textpattern', "1 = 1 ORDER BY LastMod DESC LIMIT ".(int) WRITE_RECENT_ARTICLES_COUNT);
     $ra = '';
 
     if ($recents && numRows($recents)) {

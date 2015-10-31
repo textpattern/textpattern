@@ -72,12 +72,12 @@ if ($event == 'css') {
 function css_list($current, $default)
 {
     $out = array();
-    $protected = safe_column('DISTINCT css', 'txp_section', '1=1');
+    $protected = safe_column("DISTINCT css", 'txp_section', "1 = 1");
 
     $criteria = 1;
     $criteria .= callback_event('admin_criteria', 'css_list', 0, $criteria);
 
-    $rs = safe_rows_start('name', 'txp_css', $criteria);
+    $rs = safe_rows_start("name", 'txp_css', $criteria);
 
     if ($rs) {
         while ($a = nextRow($rs)) {
@@ -119,7 +119,7 @@ function css_edit($message = '')
 
     pagetop(gTxt('edit_css'), $message);
 
-    $default_name = safe_field('css', 'txp_section', "name = 'default'");
+    $default_name = safe_field("css", 'txp_section', "name = 'default'");
 
     extract(array_map('assert_string', gpsa(array(
         'copy',
@@ -212,7 +212,7 @@ function css_save()
             $_POST['newname'] = $newname;
         }
 
-        $exists = safe_field('name', 'txp_css', "name = '".doSlash($newname)."'");
+        $exists = safe_field("name", 'txp_css', "name = '".doSlash($newname)."'");
 
         if (($newname !== $name) && $exists) {
             $message = array(gTxt('css_already_exists', array('{name}' => $newname)), E_ERROR);
@@ -263,7 +263,7 @@ function css_save()
 
 function css_delete()
 {
-    $name  = ps('name');
+    $name = ps('name');
     $count = safe_count('txp_section', "css = '".doSlash($name)."'");
     $message = '';
 

@@ -25,7 +25,7 @@ if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
-class classic_theme extends theme
+class classic_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
     {

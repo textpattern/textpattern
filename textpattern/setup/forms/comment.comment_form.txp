@@ -1,0 +1,54 @@
+<p>
+    <txp:text item="enter_comment_here" />
+</p>
+
+<!-- if there is an error, then inform user -->
+<txp:if_comments_error>
+    <txp:comments_error class="error_message" wraptag="ol" break="li" />
+</txp:if_comments_error>
+
+<p class="large">
+    <label for="name">
+        <txp:text item="comment_name" />
+        <b class="required" title="<txp:text item="required" />">*</b>
+    </label>
+    <br>
+    <txp:comment_name_input size="32" />
+</p>
+
+<p class="large">
+    <label for="email">
+        <txp:text item="comment_email" />
+        <b class="required" title="<txp:text item="required" />">*</b>
+    </label>
+    <br>
+    <txp:comment_email_input size="32" />
+</p>
+
+<p class="large">
+    <label for="web">
+        <txp:text item="comment_web" />
+    </label>
+    <br>
+    <txp:comment_web_input size="32" />
+</p>
+
+<p>
+    <txp:comment_remember />
+</p>
+
+<p class="small">
+    <label for="message">
+        <txp:text item="comment_message" />
+        <b class="required" title="<txp:text item="required" />">*</b>
+    </label>
+    <br>
+    <txp:comment_message_input cols="64" rows="4" />
+</p>
+
+<!-- preview and submit buttons (note: submit button will have a class of 'disabled'
+     applied until you have previewed the message at least once) -->
+<p>
+    <txp:comment_preview />
+    <txp:comment_submit />
+</p>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="<txp:lang />" dir="<txp:text item="lang_dir" />">
+
+<head>
+    <meta charset="utf-8">
+    <title>
+        <txp:page_title />
+    </title>
+    <meta name="generator" content="Textpattern CMS">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, follow, noodp, noydir">
+
+    <!-- Google font API -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic">
+
+    <!-- CSS -->
+    <txp:css format="link" media="" />
+    <!-- ...or you can use (faster) external CSS files e.g. <link rel="stylesheet" href="<txp:site_url />css/default.css"> -->
+</head>
+
+<body class="popup-page">
+
+    <div class="wrapper">
+        <div class="container">
+
+            <!-- this form is only used if you set 'Comments mode' to 'popup' format in preferences -->
+            <txp:popup_comments />
+
+        </div> <!-- /.container -->
+    </div> <!-- /.wrapper -->
+
+</body>
+</html>

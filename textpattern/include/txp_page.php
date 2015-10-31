@@ -82,7 +82,7 @@ function page_edit($message = '')
     $newname = sanitizeForPage(assert_string(gps('newname')));
 
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
-        $name = safe_field('page', 'txp_section', "name = 'default'");
+        $name = safe_field("page", 'txp_section', "name = 'default'");
     } elseif (((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error) {
         $name = $newname;
     }
@@ -166,12 +166,12 @@ function page_edit($message = '')
 function page_list($current)
 {
     $out = array();
-    $protected = safe_column('DISTINCT page', 'txp_section', '1=1') + array('error_default');
+    $protected = safe_column("DISTINCT page", 'txp_section', "1 = 1") + array('error_default');
 
     $criteria = 1;
     $criteria .= callback_event('admin_criteria', 'page_list', 0, $criteria);
 
-    $rs = safe_rows_start('name', 'txp_page', "$criteria order by name asc");
+    $rs = safe_rows_start("name", 'txp_page', "$criteria ORDER BY name ASC");
 
     if ($rs) {
         while ($a = nextRow($rs)) {
@@ -207,7 +207,7 @@ function page_list($current)
 
 function page_delete()
 {
-    $name  = ps('name');
+    $name = ps('name');
     $count = safe_count('txp_section', "page = '".doSlash($name)."'");
     $message = '';
 
@@ -254,7 +254,7 @@ function page_save()
             $_POST['newname'] = $newname;
         }
 
-        $exists = safe_field('name', 'txp_page', "name = '".doSlash($newname)."'");
+        $exists = safe_field("name", 'txp_page', "name = '".doSlash($newname)."'");
 
         if ($newname !== $name && $exists !== false) {
             $message = array(gTxt('page_already_exists', array('{name}' => $newname)), E_ERROR);
@@ -279,7 +279,7 @@ function page_save()
                 }
             } else {
                 if (safe_update('txp_page', "user_html = '$html', name = '".doSlash($newname)."'", "name = '".doSlash($name)."'")) {
-                    safe_update('txp_section', "page = '".doSlash($newname)."'", "page='".doSlash($name)."'");
+                    safe_update('txp_section', "page = '".doSlash($newname)."'", "page = '".doSlash($name)."'");
                     update_lastmod('page_saved', compact('newname', 'name', 'html'));
                     $message = gTxt('page_updated', array('{name}' => $name));
                 } else {

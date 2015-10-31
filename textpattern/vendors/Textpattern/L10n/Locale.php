@@ -39,7 +39,7 @@ class Locale
     /**
      * An array of locale identifiers.
      *
-     * @var  array
+     * @var array
      */
 
     protected $locales = array(

@@ -273,7 +273,7 @@ function doDiagnostics()
     }
 
     if ($permlink_mode != 'messy') {
-        $rs = safe_column("name", "txp_section", "1");
+        $rs = safe_column("name", 'txp_section', "1 = 1");
 
         foreach ($rs as $name) {
             if ($name and @file_exists($path_to_site.'/'.$name)) {
@@ -372,7 +372,7 @@ function doDiagnostics()
     }
 
     $active_plugins = array();
-    if ($rows = safe_rows('name, version, code_md5, md5(code) as md5', 'txp_plugin', 'status > 0')) {
+    if ($rows = safe_rows("name, version, code_md5, MD5(code) AS md5", 'txp_plugin', "status > 0")) {
         foreach ($rows as $row) {
             $n = $row['name'].'-'.$row['version'];
 
@@ -425,7 +425,7 @@ function doDiagnostics()
     }
 
     // Database server time.
-    extract(doSpecial(getRow('select @@global.time_zone as db_global_timezone, @@session.time_zone as db_session_timezone, now() as db_server_time, unix_timestamp(now()) as db_server_timestamp')));
+    extract(doSpecial(getRow("SELECT @@global.time_zone AS db_global_timezone, @@session.time_zone AS db_session_timezone, NOW() AS db_server_time, UNIX_TIMESTAMP(NOW()) AS db_server_timestamp")));
     $db_server_timeoffset = $db_server_timestamp - $now;
 
     echo pagetop(gTxt('tab_diagnostics'), '');
@@ -518,7 +518,7 @@ function doDiagnostics()
     if ($step == 'high') {
         $out[] = n.'Charset (default/config)'.cs.$DB->default_charset.'/'.$DB->charset.n;
 
-        $result = safe_query("SHOW variables like 'character_se%'");
+        $result = safe_query("SHOW variables LIKE 'character_se%'");
 
         while ($row = mysqli_fetch_row($result)) {
             $out[] = $row[0].cs.$row[1].n;
@@ -538,7 +538,7 @@ function doDiagnostics()
         $table_msg = array();
 
         foreach ($table_names as $table) {
-            $ctr = safe_query("SHOW CREATE TABLE ".$table."");
+            $ctr = safe_query("SHOW CREATE TABLE $table");
             if (!$ctr) {
                 unset($table_names[$table]);
                 continue;
@@ -550,7 +550,7 @@ function doDiagnostics()
                 $table_msg[] = "$table is $ctcharset";
             }
 
-            $ctr = safe_query("CHECK TABLE ".$table);
+            $ctr = safe_query("CHECK TABLE $table");
             $row = mysqli_fetch_assoc($ctr);
             if (in_array($row['Msg_type'], array('error', 'warning'))) {
                 $table_msg[] = $table.cs.$row['Msg_Text'];
@@ -563,7 +563,7 @@ function doDiagnostics()
 
         $out[] = count($table_names).' Tables'.cs.implode(', ', $table_msg).n;
 
-        $cf = preg_grep('/^custom_\d+/', getThings('describe `'.PFX.'textpattern`'));
+        $cf = preg_grep('/^custom_\d+/', getThings("DESCRIBE `".PFX."textpattern`"));
         $out[] = n.get_pref('max_custom_fields', 10).sp.gTxt('custom').cs.
                     implode(', ', $cf).sp.'('.count($cf).')'.n;
 

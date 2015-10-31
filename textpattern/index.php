@@ -96,14 +96,12 @@ $loader->register();
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/txplib_forms.php';
 include txpath.'/lib/txplib_html.php';
-include txpath.'/lib/txplib_theme.php';
-include txpath.'/lib/txplib_validator.php';
 include txpath.'/lib/admin_config.php';
 trace_add('[PHP Include end]');
 
 set_error_handler('adminErrorHandler', error_reporting());
 
-if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) {
+if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
     // Global site preferences.
     $prefs = get_prefs();
     extract($prefs);
@@ -157,7 +155,7 @@ if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) 
     $textarray = load_lang(LANG);
 
     // Initialise global theme.
-    $theme = theme::init();
+    $theme = \Textpattern\Admin\Theme::init();
 
     include txpath.'/include/txp_auth.php';
     doAuth();
@@ -206,7 +204,7 @@ if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) 
     }
 
     // Initialise private theme.
-    $theme = theme::init();
+    $theme = \Textpattern\Admin\Theme::init();
 
     include txpath.'/lib/txplib_head.php';
 

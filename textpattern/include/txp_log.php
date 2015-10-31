@@ -85,36 +85,36 @@ function log_list($message = '')
     if ($dir === '') {
         $dir = get_pref('log_sort_dir', 'desc');
     } else {
-        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        $dir = ($dir == 'asc') ? "asc" : "desc";
         set_pref('log_sort_dir', $dir, 'log', 2, '', 0, PREF_PRIVATE);
     }
 
     $expire_logs_after = assert_int($expire_logs_after);
 
-    safe_delete('txp_log', "time < date_sub(now(), interval $expire_logs_after day)");
+    safe_delete('txp_log', "time < DATE_SUB(NOW(), INTERVAL $expire_logs_after DAY)");
 
     switch ($sort) {
         case 'ip':
-            $sort_sql = 'ip '.$dir;
+            $sort_sql = "ip $dir";
             break;
         case 'host':
-            $sort_sql = 'host '.$dir;
+            $sort_sql = "host $dir";
             break;
         case 'page':
-            $sort_sql = 'page '.$dir;
+            $sort_sql = "page $dir";
             break;
         case 'refer':
-            $sort_sql = 'refer '.$dir;
+            $sort_sql = "refer $dir";
             break;
         case 'method':
-            $sort_sql = 'method '.$dir;
+            $sort_sql = "method $dir";
             break;
         case 'status':
-            $sort_sql = 'status '.$dir;
+            $sort_sql = "status $dir";
             break;
         default:
             $sort = 'time';
-            $sort_sql = 'time '.$dir;
+            $sort_sql = "time $dir";
             break;
     }
 
@@ -134,12 +134,12 @@ function log_list($message = '')
                 'method' => "method = '$crit_escaped'",
                 'status' => "status = '$crit_escaped'",
             ) : array(
-                'ip'     => "ip like '%$crit_escaped%'",
-                'host'   => "host like '%$crit_escaped%'",
-                'page'   => "page like '%$crit_escaped%'",
-                'refer'  => "refer like '%$crit_escaped%'",
-                'method' => "method like '%$crit_escaped%'",
-                'status' => "status like '%$crit_escaped%'",
+                'ip'     => "ip LIKE '%$crit_escaped%'",
+                'host'   => "host LIKE '%$crit_escaped%'",
+                'page'   => "page LIKE '%$crit_escaped%'",
+                'refer'  => "refer LIKE '%$crit_escaped%'",
+                'method' => "method LIKE '%$crit_escaped%'",
+                'status' => "status LIKE '%$crit_escaped%'",
             );
 
         if (array_key_exists($search_method, $critsql)) {
@@ -179,9 +179,9 @@ function log_list($message = '')
     echo log_search_form($crit, $search_method).'</div>';
 
     $rs = safe_rows_start(
-        '*, unix_timestamp(time) as uTime',
+        "*, UNIX_TIMESTAMP(time) AS uTime",
         'txp_log',
-        "$criteria order by $sort_sql limit $offset, $limit"
+        "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
     );
 
     if ($rs) {
@@ -263,7 +263,7 @@ function log_list($message = '')
                     gTime($log_uTime), '', ' scope="row" class="txp-list-col-time"'
                 ).
                 td(
-                    href(txpspecialchars($log_ip), 'https://whois.domaintools.com/' . rawurlencode($log_ip), array(
+                    href(txpspecialchars($log_ip), 'https://whois.domaintools.com/'.rawurlencode($log_ip), array(
                         'rel'    => 'external',
                         'target' => '_blank',
                     )), '', 'txp-list-col-ip'
