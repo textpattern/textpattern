@@ -340,15 +340,15 @@ function author_list($message = '')
         }
 
         if ($dir === '') {
-            $dir = get_pref('admin_sort_dir', 'ASC');
+            $dir = get_pref('admin_sort_dir', 'asc');
         } else {
-            $dir = ($dir == 'DESC') ? "DESC" : "ASC";
+            $dir = ($dir == 'desc') ? "desc" : "asc";
             set_pref('admin_sort_dir', $dir, 'admin', 2, '', 0, PREF_PRIVATE);
         }
 
         $sort_sql = $sort.' '.$dir;
 
-        $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
+        $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
         $search = new Filter($event,
             array(

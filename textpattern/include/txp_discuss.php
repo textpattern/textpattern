@@ -142,9 +142,9 @@ function discuss_list($message = '')
     }
 
     if ($dir === '') {
-        $dir = get_pref('discuss_sort_dir', 'DESC');
+        $dir = get_pref('discuss_sort_dir', 'desc');
     } else {
-        $dir = ($dir == 'ASC') ? "ASC" : "DESC";
+        $dir = ($dir == 'asc') ? "asc" : "desc";
         set_pref('discuss_sort_dir', $dir, 'discuss', 2, '', 0, PREF_PRIVATE);
     }
 
@@ -183,7 +183,7 @@ function discuss_list($message = '')
         $sort_sql .= ", txp_discuss.posted ASC";
     }
 
-    $switch_dir = ($dir == 'DESC') ? 'ASC' : 'DESC';
+    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
     $search = new Filter($event,
         array(
