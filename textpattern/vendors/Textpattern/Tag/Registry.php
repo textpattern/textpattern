@@ -54,6 +54,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
 
     public function register($callback, $tag = null)
     {
+        // is_callable only checks syntax here to avoid autoloading
         if (is_callable($callback, true)) {
             if ($tag === null && is_string($callback)) {
                 $tag = $callback;
@@ -73,13 +74,15 @@ class Registry implements \Textpattern\Container\ReusableInterface
      * @param  string      $tag   The tag
      * @param  array       $atts  An array of Attributes
      * @param  string|null $thing The contained statement
-     * @return string|null The tag's results
+     * @return string|bool The tag's results (string) or FALSE on unknown tags
      */
 
     public function process($tag, array $atts = null, $thing = null)
     {
         if ($this->isRegistered($tag)) {
-            return call_user_func($this->tags[$tag], (array)$atts, $thing);
+            return (string) call_user_func($this->tags[$tag], (array)$atts, $thing);
+        } else {
+            return false;
         }
     }
 
