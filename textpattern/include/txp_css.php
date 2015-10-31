@@ -77,12 +77,12 @@ if ($event == 'css') {
 function css_list($current, $skin)
 {
     $out = array();
-    $protected = safe_column('DISTINCT css', 'txp_section', '1=1');
+    $protected = safe_column("DISTINCT css", 'txp_section', "1 = 1");
 
     $criteria = "skin = '" . doSlash($skin) . "'";
     $criteria .= callback_event('admin_criteria', 'css_list', 0, $criteria);
 
-    $rs = safe_rows_start('name', 'txp_css', $criteria);
+    $rs = safe_rows_start("name", 'txp_css', $criteria);
 
     if ($rs) {
         while ($a = nextRow($rs)) {
@@ -124,7 +124,7 @@ function css_edit($message = '')
 
     pagetop(gTxt('edit_css'), $message);
 
-    $default_name = safe_field('css', 'txp_section', "name = 'default'");
+    $default_name = safe_field("css", 'txp_section', "name = 'default'");
 
     extract(array_map('assert_string', gpsa(array(
         'copy',
@@ -291,7 +291,7 @@ function css_save()
 
 function css_delete()
 {
-    $name  = ps('name');
+    $name = ps('name');
     $skin = get_pref('skin_editing', 'default');
     $count = safe_count('txp_section', "css = '".doSlash($name)."'");
     $message = '';

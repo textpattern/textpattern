@@ -43,9 +43,9 @@
 function fetchComments($id)
 {
     $rs = safe_rows(
-        '*, unix_timestamp(posted) as time',
+        "*, UNIX_TIMESTAMP(posted) AS time",
         'txp_discuss',
-        'parentid='.intval($id).' and visible='.VISIBLE.' order by posted asc'
+        "parentid = ".intval($id)." AND visible = ".VISIBLE." ORDER BY posted ASC"
     );
 
     if ($rs) {
@@ -162,7 +162,7 @@ function getComment()
     $c['secret'] = '';
 
     if (!empty($n)) {
-        $rs = safe_row('nonce, secret', 'txp_discuss_nonce', "nonce in ('".join("','", $n)."')");
+        $rs = safe_row("nonce, secret", 'txp_discuss_nonce', "nonce IN ('".join("','", $n)."')");
         $c['nonce'] = $rs['nonce'];
         $c['secret'] = $rs['secret'];
     }
@@ -190,11 +190,6 @@ function saveComment()
     }
 
     $ip = serverset('REMOTE_ADDR');
-
-    if (!checkBan($ip)) {
-        txp_die(gTxt('you_have_been_banned'), '403');
-    }
-
     $blacklisted = is_blacklisted($ip);
 
     if ($blacklisted) {
@@ -217,9 +212,9 @@ function saveComment()
     $message2db = doSlash(markup_comment($message));
 
     $isdup = safe_row(
-        "message,name",
-        "txp_discuss",
-        "name='$name' and message='$message2db' and ip='".doSlash($ip)."'"
+        "message, name",
+        'txp_discuss',
+        "name = '$name' AND message = '$message2db' AND ip = '".doSlash($ip)."'"
     );
 
     if (
@@ -241,7 +236,7 @@ function saveComment()
         if ($visible != RELOAD) {
             $parentid = assert_int($parentid);
             $commentid = safe_insert(
-                "txp_discuss",
+                'txp_discuss',
                 "parentid = $parentid,
                  name     = '$name',
                  email    = '$email',
@@ -249,11 +244,11 @@ function saveComment()
                  ip       = '".doSlash($ip)."',
                  message  = '$message2db',
                  visible  = ".intval($visible).",
-                 posted   = now()"
+                 posted   = NOW()"
             );
 
             if ($commentid) {
-                safe_update("txp_discuss_nonce", "used = 1", "nonce='".doSlash($nonce)."'");
+                safe_update('txp_discuss_nonce', "used = 1", "nonce = '".doSlash($nonce)."'");
 
                 if ($prefs['comment_means_site_updated']) {
                     update_lastmod('comment_saved', compact('commentid', 'parentid', 'name', 'email', 'web', 'message', 'visible', 'ip'));
@@ -424,7 +419,7 @@ class comment_evaluation
         $result = array();
 
         foreach ($this->status as $key => $value) {
-            $result[$key] = array_sum($value)/max(1, count($value));
+            $result[$key] = array_sum($value) / max(1, count($value));
         }
 
         arsort($result, SORT_NUMERIC);
@@ -512,28 +507,11 @@ function checkNonce($nonce)
     }
 
     // Delete expired nonces.
-    safe_delete("txp_discuss_nonce", "issue_time < date_sub(now(),interval 10 minute)");
+    safe_delete('txp_discuss_nonce', "issue_time < DATE_SUB(NOW(), INTERVAL 10 MINUTE)");
 
     // Check for nonce.
-    return (safe_row("*", "txp_discuss_nonce", "nonce='".doSlash($nonce)."' and used = 0")) ? true : false;
+    return (safe_row("*", 'txp_discuss_nonce', "nonce = '".doSlash($nonce)."' AND used = 0")) ? true : false;
 }
-
-/**
- * Checks if an IP address is banned.
- *
- * @param  string $ip The IP address
- * @return bool TRUE if the IP is not banned
- * @example
- * if (checkBan('127.0.0.1') === false)
- * {
- *     echo "IP address is banned.";
- * }
- */
-
-    function checkBan($ip)
-    {
-        return (!fetch("ip", "txp_discuss_ipban", "ip", $ip)) ? true : false;
-    }
 
 /**
  * Checks if comments are open for the given article.
@@ -559,12 +537,12 @@ function checkCommentsAllowed($id)
 
     if (isset($thisarticle['thisid']) && ($thisarticle['thisid'] == $id) && isset($thisarticle['annotate'])) {
         $Annotate = $thisarticle['annotate'];
-        $uPosted  = $thisarticle['posted'];
+        $uPosted = $thisarticle['posted'];
     } else {
         extract(
             safe_row(
-                "Annotate,unix_timestamp(Posted) as uPosted",
-                "textpattern",
+                "Annotate, UNIX_TIMESTAMP(Posted) AS uPosted",
+                'textpattern',
                 "ID = $id"
             )
         );
@@ -628,9 +606,9 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
 
     $parentid = assert_int($parentid);
     $discussid = assert_int($discussid);
-    $article = safe_row("Section, Posted, ID, url_title, AuthorID, Title", "textpattern", "ID = $parentid");
+    $article = safe_row("Section, Posted, ID, url_title, AuthorID, Title", 'textpattern', "ID = $parentid");
     extract($article);
-    extract(safe_row("RealName, email", "txp_users", "name = '".doSlash($AuthorID)."'"));
+    extract(safe_row("RealName, email", 'txp_users', "name = '".doSlash($AuthorID)."'"));
 
     $out = gTxt('greeting')." $RealName,".n;
     $out .= str_replace('{title}', $Title, gTxt('comment_recorded')).n;

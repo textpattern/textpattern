@@ -325,7 +325,7 @@ function author_list($message = '')
         if ($dir === '') {
             $dir = get_pref('admin_sort_dir', 'asc');
         } else {
-            $dir = ($dir == 'desc') ? 'desc' : 'asc';
+            $dir = ($dir == 'desc') ? "desc" : "asc";
             set_pref('admin_sort_dir', $dir, 'admin', 2, '', 0, PREF_PRIVATE);
         }
 
@@ -341,17 +341,17 @@ function author_list($message = '')
             $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
             $critsql = $verbatim ?
                 array(
-                    'id'        => "user_id in ('".join("','", do_list($crit_escaped))."')",
+                    'id'        => "user_id IN ('".join("','", do_list($crit_escaped))."')",
                     'login'     => "name = '$crit_escaped'",
                     'real_name' => "RealName = '$crit_escaped'",
                     'email'     => "email = '$crit_escaped'",
-                    'privs'     => "convert(privs, char) in ('".join("','", do_list($crit_escaped))."')",
+                    'privs'     => "CONVERT(privs, char) IN ('".join("','", do_list($crit_escaped))."')",
                 ) : array(
-                    'id'        => "user_id in ('".join("','", do_list($crit_escaped))."')",
-                    'login'     => "name like '%$crit_escaped%'",
-                    'real_name' => "RealName like '%$crit_escaped%'",
-                    'email'     => "email like '%$crit_escaped%'",
-                    'privs'     => "convert(privs, char) in ('".join("','", do_list($crit_escaped))."')",
+                    'id'        => "user_id IN ('".join("','", do_list($crit_escaped))."')",
+                    'login'     => "name LIKE '%$crit_escaped%'",
+                    'real_name' => "RealName LIKE '%$crit_escaped%'",
+                    'email'     => "email LIKE '%$crit_escaped%'",
+                    'privs'     => "CONVERT(privs, char) IN ('".join("','", do_list($crit_escaped))."')",
                 );
 
             if (array_key_exists($search_method, $critsql)) {
@@ -382,14 +382,14 @@ function author_list($message = '')
 
         list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-        $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count('txp_users', '1=1') > 1));
+        $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count('txp_users', "1 = 1") > 1));
 
         echo author_search_form($crit, $search_method).'</div>';
 
         $rs = safe_rows_start(
-            '*, unix_timestamp(last_access) as last_login',
+            "*, UNIX_TIMESTAMP(last_access) AS last_login",
             'txp_users',
-            "$criteria order by $sort_sql limit $offset, $limit"
+            "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
         );
 
         if ($rs) {
@@ -512,7 +512,7 @@ function author_search_form($crit, $method)
 }
 
 /**
- * User editor panel.
+ * Renders and outputs the user editor panel.
  *
  * Accessing requires 'admin.edit' privileges.
  */
@@ -535,7 +535,7 @@ function author_edit()
 
     if ($is_edit) {
         $user_id = assert_int($user_id);
-        $rs = safe_row('*', 'txp_users', "user_id = $user_id");
+        $rs = safe_row("*", 'txp_users', "user_id = $user_id");
         extract($rs);
     }
 
@@ -548,7 +548,7 @@ function author_edit()
     if ($is_edit) {
         $out[] = inputLabel('login_name', strong(txpspecialchars($name)));
     } else {
-        $out[] =  inputLabel('login_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), 'login_name', 'add_new_author');
+        $out[] = inputLabel('login_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), 'login_name', 'add_new_author');
     }
 
     $out[] = inputLabel('real_name', fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'), 'real_name').
@@ -601,7 +601,7 @@ function admin_change_pageby()
 function author_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
     $privileges = privs();
-    $users = safe_column('name', 'txp_users', '1=1');
+    $users = safe_column("name", 'txp_users', "1 = 1");
 
     $methods = array(
         'changeprivilege' => array('label' => gTxt('changeprivilege'), 'html' => $privileges),
@@ -641,7 +641,7 @@ function admin_multi_edit()
     }
 
     $names = safe_column(
-        'name',
+        "name",
         'txp_users',
         "name IN (".join(',', quote_list($selected)).") AND name != '".doSlash($txp_user)."'"
     );
@@ -682,7 +682,7 @@ function admin_multi_edit()
                 $passwd = generate_password(PASSWORD_LENGTH);
 
                 if (change_user_password($name, $passwd)) {
-                    $email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
+                    $email = safe_field("email", 'txp_users', "name = '".doSlash($name)."'");
 
                     if (send_new_password($passwd, $email, $name)) {
                         $changed[] = $name;

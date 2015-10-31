@@ -116,9 +116,9 @@ function form_list($curname, $skin)
     $criteria .= callback_event('admin_criteria', 'form_list', 0, $criteria);
 
     $rs = safe_rows_start(
-        'name, type',
+        "name, type",
         'txp_form',
-        "$criteria order by field(type, ".join(',', quote_list(array_keys($form_types))).") asc, name asc"
+        "$criteria ORDER BY FIELD(type, ".join(',', quote_list(array_keys($form_types))).") ASC, name ASC"
     );
 
     if ($rs) {
@@ -276,7 +276,7 @@ function form_edit($message = '')
     $Form = gps('Form');
 
     if (!$save_error) {
-        $rs = safe_row('*', 'txp_form', "name='".doSlash($name)."' AND skin = '" . doSlash($skin) . "'");
+        $rs = safe_row('*', 'txp_form', "name = '".doSlash($name)."' AND skin = '" . doSlash($skin) . "'");
         extract($rs);
     }
 
@@ -445,7 +445,7 @@ function form_save()
                 $_POST['newname'] = $newname;
             }
 
-            $exists = safe_field('name', 'txp_form', "name = '".doSlash($newname)."'");
+            $exists = safe_field("name", 'txp_form', "name = '".doSlash($newname)."'");
 
             if ($newname !== $name && $exists !== false) {
                 $message = array(gTxt('form_already_exists', array('{name}' => $newname)), E_ERROR);
@@ -524,7 +524,7 @@ function form_delete($name, $skin)
     $name = doSlash($name);
     $skin = doSlash($skin);
 
-    return safe_delete("txp_form", "name='$name' AND skin='$skin'");
+    return safe_delete("txp_form", "name = '$name' AND skin = '$skin'");
 }
 
 /**
@@ -547,7 +547,7 @@ function form_set_type($name, $type)
     $type = doSlash($type);
     $skin = doSlash(get_pref('skin_editing', 'default'));
 
-    return safe_update('txp_form', "type='$type'", "name='$name' AND skin='$skin'");
+    return safe_update('txp_form', "type = '$type'", "name = '$name' AND skin = '$skin'");
 }
 
 /**

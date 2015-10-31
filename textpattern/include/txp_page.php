@@ -90,7 +90,7 @@ function page_edit($message = '')
     page_set_skin($skin);
 
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
-        $name = safe_field('page', 'txp_section', "name = 'default'");
+        $name = safe_field("page", 'txp_section', "name = 'default'");
     } elseif (((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error) {
         $name = $newname;
     }
@@ -109,7 +109,7 @@ function page_edit($message = '')
     }
 
     if (!$save_error) {
-        $html = safe_field('user_html', 'txp_page', "name='".doSlash($name)."' AND skin='" . doSlash($skin) . "'");
+        $html = safe_field('user_html', 'txp_page', "name = '".doSlash($name)."' AND skin = '" . doSlash($skin) . "'");
     } else {
         $html = gps('html');
     }
@@ -190,12 +190,12 @@ function page_edit($message = '')
 function page_list($current, $skin)
 {
     $out = array();
-    $protected = safe_column('DISTINCT page', 'txp_section', '1=1') + array('error_default');
+    $protected = safe_column("DISTINCT page", 'txp_section', "1 = 1") + array('error_default');
 
     $criteria = "skin = '" . doSlash($skin) . "'";
     $criteria .= callback_event('admin_criteria', 'page_list', 0, $criteria);
 
-    $rs = safe_rows_start('name', 'txp_page', "$criteria order by name asc");
+    $rs = safe_rows_start("name", 'txp_page', "$criteria ORDER BY name ASC");
 
     if ($rs) {
         while ($a = nextRow($rs)) {

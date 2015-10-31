@@ -25,7 +25,7 @@ if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
-theme::based_on('classic');
+\Textpattern\Admin\Theme::based_on('classic');
 
 class remora_theme extends classic_theme
 {

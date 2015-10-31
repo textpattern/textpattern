@@ -319,7 +319,7 @@ function safe_pfx_j($table)
  * @since  4.5.0
  * @see    doSlash()
  * @example
- * if (safe_update('myTable', "value='".doSlash($user_value)."'", "name='".doSlash($user_name)."'"))
+ * if (safe_update('myTable', "value = '".doSlash($user_value)."'", "name = '".doSlash($user_name)."'"))
  * {
  *     echo 'Updated.';
  * }
@@ -340,7 +340,7 @@ function safe_escape($in = '')
  * @since  4.6.0
  * @see    doLike()
  * @example
- * if (safe_update('myTable', "value='".doLike($user_value)."'", "name LIKE '".doLike($user_name)."'"))
+ * if (safe_update('myTable', "value = '".doLike($user_value)."'", "name LIKE '".doLike($user_name)."'"))
  * {
  *     echo 'Updated.';
  * }
@@ -408,7 +408,7 @@ function safe_query($q = '', $debug = false, $unbuf = false)
  * @see    safe_update()
  * @see    safe_insert()
  * @example
- * if (safe_delete('myTable', "name='test'"))
+ * if (safe_delete('myTable', "name = 'test'"))
  * {
  *     echo "'test' removed from 'myTable'.";
  * }
@@ -416,7 +416,7 @@ function safe_query($q = '', $debug = false, $unbuf = false)
 
 function safe_delete($table, $where, $debug = false)
 {
-    return (bool) safe_query("delete from ".safe_pfx($table)." where $where", $debug);
+    return (bool) safe_query("DELETE FROM ".safe_pfx($table)." WHERE $where", $debug);
 }
 
 /**
@@ -430,7 +430,7 @@ function safe_delete($table, $where, $debug = false)
  * @see    safe_insert()
  * @see    safe_delete()
  * @example
- * if (safe_update('myTable', "myField='newValue'", "name='test'"))
+ * if (safe_update('myTable', "myField = 'newValue'", "name = 'test'"))
  * {
  *     echo "'test' updated, 'myField' set to 'newValue'";
  * }
@@ -438,7 +438,7 @@ function safe_delete($table, $where, $debug = false)
 
 function safe_update($table, $set, $where, $debug = false)
 {
-    return (bool) safe_query("update ".safe_pfx($table)." set $set where $where", $debug);
+    return (bool) safe_query("UPDATE ".safe_pfx($table)." SET $set WHERE $where", $debug);
 }
 
 /**
@@ -451,7 +451,7 @@ function safe_update($table, $set, $where, $debug = false)
  * @see    safe_update()
  * @see    safe_delete()
  * @example
- * if ($id = safe_insert('myTable', "name='test', myField='newValue'"))
+ * if ($id = safe_insert('myTable', "name = 'test', myField = 'newValue'"))
  * {
  *     echo "Created a row to 'myTable' with the name 'test'. It has ID of {$id}.";
  * }
@@ -460,7 +460,7 @@ function safe_update($table, $set, $where, $debug = false)
 function safe_insert($table, $set, $debug = false)
 {
     global $DB;
-    $q = "insert into ".safe_pfx($table)." set $set";
+    $q = "INSERT INTO ".safe_pfx($table)." SET $set";
 
     if ($r = safe_query($q, $debug)) {
         $id = mysqli_insert_id($DB->link);
@@ -480,7 +480,7 @@ function safe_insert($table, $set, $debug = false)
  * @param  bool   $debug Dump query
  * @return int|bool The last generated ID or FALSE on error. If the ID is 0, returns TRUE
  * @example
- * if ($r = safe_upsert('myTable', "data='foobar'", "name='example'"))
+ * if ($r = safe_upsert('myTable', "data = 'foobar'", "name = 'example'"))
  * {
  *     echo "Inserted new row to 'myTable', or updated 'example'.";
  * }
@@ -515,7 +515,7 @@ function safe_upsert($table, $set, $where, $debug = false)
 
 function safe_alter($table, $alter, $debug = false)
 {
-    return (bool) safe_query("alter table ".safe_pfx($table)." $alter", $debug);
+    return (bool) safe_query("ALTER TABLE ".safe_pfx($table)." $alter", $debug);
 }
 
 /**
@@ -538,7 +538,7 @@ function safe_alter($table, $alter, $debug = false)
 
 function safe_lock($table, $type = 'write', $debug = false)
 {
-    return (bool) safe_query('lock tables '.join(' '.$type.', ', doArray(do_list_unique($table), 'safe_pfx')).' '.$type, $debug);
+    return (bool) safe_query("LOCK TABLES ".join(' '.$type.', ', doArray(do_list_unique($table), 'safe_pfx')).' '.$type, $debug);
 }
 
 /**
@@ -556,7 +556,7 @@ function safe_lock($table, $type = 'write', $debug = false)
 
 function safe_unlock($debug = false)
 {
-    return (bool) safe_query('unlock tables', $debug);
+    return (bool) safe_query("UNLOCK TABLES", $debug);
 }
 
 /**
@@ -578,7 +578,7 @@ function safe_index($table, $index, $debug = false)
 {
     $index = strtolower($index);
 
-    if ($r = safe_show('index', $table, $debug)) {
+    if ($r = safe_show("INDEX", $table, $debug)) {
         foreach ($r as $a) {
             if (strtolower($a['Key_name']) === $index) {
                 return $a;
@@ -595,7 +595,7 @@ function safe_index($table, $index, $debug = false)
  * @param  string $table   The table
  * @param  string $columns Indexed columns
  * @param  string $name    The name
- * @param  string $index   The index. Either 'unique', 'fulltext', 'spatial'
+ * @param  string $index   The index. Either 'unique', 'fulltext', 'spatial' (default = standard index)
  * @param  string $type    The index type
  * @param  bool   $debug   Dump the query
  * @return bool TRUE if index exists
@@ -607,16 +607,16 @@ function safe_index($table, $index, $debug = false)
  * }
  */
 
-function safe_create_index($table, $columns, $name, $index = 'fulltext', $type = '', $debug = false)
+function safe_create_index($table, $columns, $name, $index = '', $type = '', $debug = false)
 {
     if (safe_index($table, $name, $debug)) {
         return true;
     }
 
     if (strtolower($name) == 'primary') {
-        $q = 'alter table '.safe_pfx($table).' add primary key('.$columns.')';
+        $q = "ALTER TABLE ".safe_pfx($table)." ADD PRIMARY KEY ($columns)";
     } else {
-        $q = 'create '.$index.' index `'.$name.'`'.($type ? ' using '.$type : '').' on '.safe_pfx($table).' ('.$columns.')';
+        $q = "CREATE $index INDEX `$name` ".($type ? " USING ".$type : '')." ON ".safe_pfx($table)." ($columns)";
     }
 
     return (bool) safe_query($q, $debug);
@@ -644,9 +644,9 @@ function safe_drop_index($table, $index, $debug = false)
     }
 
     if (strtolower($index) === 'primary') {
-        $q = 'alter table '.safe_pfx($table).' drop primary key';
+        $q = "ALTER TABLE ".safe_pfx($table)." DROP PRIMARY KEY";
     } else {
-        $q = 'drop index `'.$index.'` on '.safe_pfx($table);
+        $q = "DROP INDEX `$index` ON ".safe_pfx($table);
     }
 
     return (bool) safe_query($q, $debug);
@@ -667,7 +667,7 @@ function safe_drop_index($table, $index, $debug = false)
 
 function safe_optimize($table, $debug = false)
 {
-    return (bool) safe_query("optimize table ".safe_pfx($table), $debug);
+    return (bool) safe_query("OPTIMIZE TABLE ".safe_pfx($table), $debug);
 }
 
 /**
@@ -685,7 +685,7 @@ function safe_optimize($table, $debug = false)
 
 function safe_repair($table, $debug = false)
 {
-    return (bool) safe_query("repair table ".safe_pfx($table), $debug);
+    return (bool) safe_query("REPAIR TABLE ".safe_pfx($table), $debug);
 }
 
 /**
@@ -708,7 +708,7 @@ function safe_repair($table, $debug = false)
 
 function safe_truncate($table, $debug = false)
 {
-    return (bool) safe_query("truncate table ".safe_pfx($table), $debug);
+    return (bool) safe_query("TRUNCATE TABLE ".safe_pfx($table), $debug);
 }
 
 /**
@@ -729,7 +729,7 @@ function safe_truncate($table, $debug = false)
 
 function safe_drop($table, $debug = false)
 {
-    return (bool) safe_query('drop table if exists '.safe_pfx($table), $debug);
+    return (bool) safe_query("DROP TABLE IF EXISTS ".safe_pfx($table), $debug);
 }
 
 /**
@@ -759,8 +759,7 @@ function safe_create($table, $definition, $options = '', $debug = false)
         $options .= ' '.$name.' = '.$value;
     }
 
-    $q = 'create table if not exists '.safe_pfx($table).' ('.
-        $definition.') '.$options.' AUTO_INCREMENT = 1 PACK_KEYS = 1';
+    $q = "CREATE TABLE IF NOT EXISTS ".safe_pfx($table)." ($definition) $options";
 
     return (bool) safe_query($q, $debug);
 }
@@ -777,7 +776,7 @@ function safe_create($table, $definition, $options = '', $debug = false)
 
 function safe_rename($table, $newname, $debug = false)
 {
-    return (bool) safe_query('rename table '.safe_pfx($table).' to '.safe_pfx($newname), $debug);
+    return (bool) safe_query("RENAME TABLE ".safe_pfx($table)." TO ".safe_pfx($newname), $debug);
 }
 
 /**
@@ -791,7 +790,7 @@ function safe_rename($table, $newname, $debug = false)
  * @param  bool   $debug Dump query
  * @return mixed  The field or FALSE on error
  * @example
- * if ($field = safe_field('column', 'table', '1=1'))
+ * if ($field = safe_field('column', 'table', '1 = 1'))
  * {
  *     echo $field;
  * }
@@ -799,7 +798,7 @@ function safe_rename($table, $newname, $debug = false)
 
 function safe_field($thing, $table, $where, $debug = false)
 {
-    $q = "select $thing from ".safe_pfx_j($table)." where $where";
+    $q = "SELECT $thing FROM ".safe_pfx_j($table)." WHERE $where";
     $r = safe_query($q, $debug);
 
     if (@mysqli_num_rows($r) > 0) {
@@ -824,7 +823,7 @@ function safe_field($thing, $table, $where, $debug = false)
 
 function safe_column($thing, $table, $where, $debug = false)
 {
-    $q = "select $thing from ".safe_pfx_j($table)." where $where";
+    $q = "SELECT $thing FROM ".safe_pfx_j($table)." WHERE $where";
     $rs = getRows($q, $debug);
 
     if ($rs) {
@@ -852,7 +851,7 @@ function safe_column($thing, $table, $where, $debug = false)
 
 function safe_column_num($thing, $table, $where, $debug = false)
 {
-    $q = "select $thing from ".safe_pfx_j($table)." where $where";
+    $q = "SELECT $thing FROM ".safe_pfx_j($table)." WHERE $where";
     $rs = getRows($q, $debug);
     if ($rs) {
         foreach ($rs as $a) {
@@ -878,7 +877,7 @@ function safe_column_num($thing, $table, $where, $debug = false)
  * @see    safe_rows_start()
  * @uses   getRow()
  * @example
- * if ($row = safe_row('column', 'table', '1=1'))
+ * if ($row = safe_row('column', 'table', '1 = 1'))
  * {
  *     echo $row['column'];
  * }
@@ -886,7 +885,7 @@ function safe_column_num($thing, $table, $where, $debug = false)
 
 function safe_row($things, $table, $where, $debug = false)
 {
-    $q = "select $things from ".safe_pfx_j($table)." where $where";
+    $q = "SELECT $things FROM ".safe_pfx_j($table)." WHERE $where";
     $rs = getRow($q, $debug);
 
     if ($rs) {
@@ -912,7 +911,7 @@ function safe_row($things, $table, $where, $debug = false)
  * @see    safe_rows_start()
  * @uses   getRows()
  * @example
- * $rs = safe_rows('column', 'table', '1=1');
+ * $rs = safe_rows('column', 'table', '1 = 1');
  * foreach ($rs as $row)
  * {
  *     echo $row['column'];
@@ -921,7 +920,7 @@ function safe_row($things, $table, $where, $debug = false)
 
 function safe_rows($things, $table, $where, $debug = false)
 {
-    $q = "select $things from ".safe_pfx_j($table)." where $where";
+    $q = "SELECT $things FROM ".safe_pfx_j($table)." WHERE $where";
     $rs = getRows($q, $debug);
 
     if ($rs) {
@@ -942,7 +941,7 @@ function safe_rows($things, $table, $where, $debug = false)
  * @see    nextRow()
  * @see    numRows()
  * @example
- * if ($rs = safe_rows_start('column', 'table', '1=1'))
+ * if ($rs = safe_rows_start('column', 'table', '1 = 1'))
  * {
  *     while ($row = nextRow($rs))
  *     {
@@ -953,7 +952,7 @@ function safe_rows($things, $table, $where, $debug = false)
 
 function safe_rows_start($things, $table, $where, $debug = false)
 {
-    $q = "select $things from ".safe_pfx_j($table)." where $where";
+    $q = "SELECT $things FROM ".safe_pfx_j($table)." WHERE $where";
 
     return startRows($q, $debug);
 }
@@ -966,7 +965,7 @@ function safe_rows_start($things, $table, $where, $debug = false)
  * @param  bool     $debug Dump query
  * @return int|bool Number of rows or FALSE on error
  * @example
- * if (($count = safe_count('myTable', '1=1')) !== false)
+ * if (($count = safe_count('myTable', '1 = 1')) !== false)
  * {
  *     echo "myTable contains {$count} rows.";
  * }
@@ -990,7 +989,7 @@ function safe_count($table, $where, $debug = false)
 
 function safe_show($thing, $table, $debug = false)
 {
-    $q = "show $thing from ".safe_pfx($table)."";
+    $q = "SHOW $thing FROM ".safe_pfx($table)."";
     $rs = getRows($q, $debug);
 
     if ($rs) {
@@ -1021,7 +1020,7 @@ function fetch($col, $table, $key, $val, $debug = false)
 {
     $key = doSlash($key);
     $val = (is_int($val)) ? $val : "'".doSlash($val)."'";
-    $q = "select $col from ".safe_pfx($table)." where `$key` = $val limit 1";
+    $q = "SELECT $col FROM ".safe_pfx($table)." WHERE `$key` = $val LIMIT 1";
 
     if ($r = safe_query($q, $debug)) {
         if (mysqli_num_rows($r) > 0) {
@@ -1119,7 +1118,7 @@ function startRows($query, $debug = false)
  * @return  array|bool  The row, or FALSE if there are no more rows
  * @see     safe_rows_start()
  * @example
- * if ($rs = safe_rows_start('column', 'table', '1=1'))
+ * if ($rs = safe_rows_start('column', 'table', '1 = 1'))
  * {
  *     while ($row = nextRow($rs))
  *     {
@@ -1146,7 +1145,7 @@ function nextRow($r)
  * @return int|bool The number of rows or FALSE on error
  * @see    safe_rows_start()
  * @example
- * if ($rs = safe_rows_start('column', 'table', '1=1'))
+ * if ($rs = safe_rows_start('column', 'table', '1 = 1'))
  * {
  *     echo numRows($rs);
  * }
@@ -1169,9 +1168,10 @@ function getThing($query, $debug = false)
 {
     if ($r = safe_query($query, $debug)) {
         if (mysqli_num_rows($r) != 0) {
-          $row = mysqli_fetch_row($r);
-          mysqli_free_result($r);
-          return $row[0];
+            $row = mysqli_fetch_row($r);
+            mysqli_free_result($r);
+
+            return $row[0];
         }
 
         return '';
@@ -1218,7 +1218,7 @@ function getThings($query, $debug = false)
 
 function getCount($table, $where, $debug = false)
 {
-    return getThing("select count(*) from ".safe_pfx_j($table)." where $where", $debug);
+    return getThing("SELECT COUNT(*) FROM ".safe_pfx_j($table)." WHERE $where", $debug);
 }
 
 /**
@@ -1233,15 +1233,15 @@ function getCount($table, $where, $debug = false)
  * @return array
  */
 
-function getTree($root, $type, $where = '1=1', $tbl = 'txp_category')
+function getTree($root, $type, $where = '1 = 1', $tbl = 'txp_category')
 {
     $root = doSlash($root);
     $type = doSlash($type);
 
     $rs = safe_row(
-        "lft as l, rgt as r",
+        "lft AS l, rgt AS r",
         $tbl,
-        "name='$root' and type = '$type'"
+        "name = '$root' AND type = '$type'"
     );
 
     if (!$rs) {
@@ -1256,13 +1256,13 @@ function getTree($root, $type, $where = '1=1', $tbl = 'txp_category')
     $rs = safe_rows_start(
         "id, name, lft, rgt, parent, title",
         $tbl,
-        "lft between $l and $r and type = '$type' and name != 'root' and $where order by lft asc"
+        "lft BETWEEN $l AND $r AND type = '$type' AND name != 'root' AND $where ORDER BY lft ASC"
     );
 
     while ($rs and $row = nextRow($rs)) {
         extract($row);
 
-        while (count($right) > 0 && $right[count($right)-1] < $rgt) {
+        while (count($right) > 0 && $right[count($right) - 1] < $rgt) {
             array_pop($right);
         }
 
@@ -1295,9 +1295,9 @@ function getTree($root, $type, $where = '1=1', $tbl = 'txp_category')
 function getTreePath($target, $type, $tbl = 'txp_category')
 {
     $rs = safe_row(
-        "lft as l, rgt as r",
+        "lft AS l, rgt AS r",
         $tbl,
-        "name='".doSlash($target)."' and type = '".doSlash($type)."'"
+        "name = '".doSlash($target)."' AND type = '".doSlash($type)."'"
     );
 
     if (!$rs) {
@@ -1309,7 +1309,7 @@ function getTreePath($target, $type, $tbl = 'txp_category')
     $rs = safe_rows_start(
         "*",
         $tbl,
-        "lft <= $l and rgt >= $r and type = '".doSlash($type)."' order by lft asc"
+        "lft <= $l AND rgt >= $r AND type = '".doSlash($type)."' ORDER BY lft ASC"
     );
 
     $out = array();
@@ -1318,7 +1318,7 @@ function getTreePath($target, $type, $tbl = 'txp_category')
     while ($rs and $row = nextRow($rs)) {
         extract($row);
 
-        while (count($right) > 0 && $right[count($right)-1] < $rgt) {
+        while (count($right) > 0 && $right[count($right) - 1] < $rgt) {
             array_pop($right);
         }
 
@@ -1350,14 +1350,14 @@ function getTreePath($target, $type, $tbl = 'txp_category')
 
 function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
 {
-    $left  = assert_int($left);
+    $left = assert_int($left);
     $right = $left + 1;
 
     $parent = doSlash($parent);
-    $type   = doSlash($type);
+    $type = doSlash($type);
 
     $result = safe_column("name", $tbl,
-        "parent='$parent' and type='$type' order by name");
+        "parent = '$parent' AND type = '$type' ORDER BY name");
 
     foreach ($result as $row) {
         $right = rebuild_tree($row, $right, $type, $tbl);
@@ -1365,8 +1365,8 @@ function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
 
     safe_update(
         $tbl,
-        "lft=$left, rgt=$right",
-        "name='$parent' and type='$type'"
+        "lft = $left, rgt = $right",
+        "name = '$parent' AND type = '$type'"
     );
 
     return $right + 1;
@@ -1385,8 +1385,8 @@ function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
 function rebuild_tree_full($type, $tbl = 'txp_category')
 {
     // Fix circular references, otherwise rebuild_tree() could get stuck in a loop.
-    safe_update($tbl, "parent=''", "type='".doSlash($type)."' and name='root'");
-    safe_update($tbl, "parent='root'", "type='".doSlash($type)."' and parent=name");
+    safe_update($tbl, "parent = ''", "type = '".doSlash($type)."' AND name = 'root'");
+    safe_update($tbl, "parent = 'root'", "type = '".doSlash($type)."' AND parent = name");
     rebuild_tree('root', 1, $type, $tbl);
 }
 

@@ -140,7 +140,7 @@ class Loader
             $file .= str_replace($this->separator, '/', $namespace).'/';
         }
 
-        $file .= str_replace('_', '/', $class).$this->extension;
+        $file .= $class.$this->extension;
 
         if (is_readable($file)) {
             trace_add("\t[Load: '".str_replace(txpath.'/', '', $file)."']");

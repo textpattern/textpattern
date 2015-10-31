@@ -1,0 +1,76 @@
+<!-- set up variables to check whether a file also has a title, description, category associated with it... -->
+<txp:variable name="file_download_title" value='<txp:file_download_name title="1" />' />
+<txp:variable name="file_download_description" value='<txp:file_download_description />' />
+<txp:variable name="file_download_category" value='<txp:file_download_category />' />
+
+<div itemscope itemtype="http://schema.org/DataDownload">
+
+    <!-- ...if exists, use the file title, otherwise use file name -->
+    <a href="<txp:file_download_link />" itemprop="contentUrl">
+        <strong itemprop="name">
+            <txp:if_variable name="file_download_title" value="">
+                <txp:file_download_name />
+            <txp:else />
+                <txp:file_download_name title="1" />
+            </txp:if_variable>
+        </strong>
+    </a>
+
+    <!-- ...if exists, use the file description, otherwise omit that line -->
+    <txp:if_variable name="file_download_description" value="">
+    <txp:else />
+        <div itemprop="description">
+            <txp:file_download_description />
+        </div>
+    </txp:if_variable>
+
+    <div class="footnote">
+
+        <!-- ...if exists, use the file category, otherwise omit that line -->
+        <txp:if_variable name="file_download_category" value="">
+        <txp:else />
+            <strong>
+                <txp:text item="category" />
+            </strong>
+            <span itemprop="keywords">
+                <txp:file_download_category title="1" />
+            </span>
+            &#183;
+        </txp:if_variable>
+
+        <strong>
+            <txp:text item="author" />
+        </strong>
+        <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span itemprop="name">
+                <txp:file_download_author link="1" />
+            </span>
+        </span>
+        &#183;
+        <strong>
+            <txp:text item="file_size" />
+        </strong>
+        <span itemprop="contentSize">
+            <txp:file_download_size />
+        </span>
+        &#183;
+        <strong>
+            <txp:text item="last_modified" />
+        </strong>
+        <time datetime="<txp:file_download_modified format="iso8601" />" itemprop="dateModified">
+            <txp:file_download_modified />
+        </time>
+        &#183;
+        <strong>
+            <txp:text item="download_count" />
+        </strong>
+        <span itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+            <meta itemprop="interactionType" content="http://schema.org/DownloadAction" />
+            <span itemprop="userInteractionCount">
+                <txp:file_download_downloads />
+            </span>
+        </span>
+
+    </div>
+
+</div>

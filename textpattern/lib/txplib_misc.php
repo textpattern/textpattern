@@ -148,7 +148,7 @@ function deEntBrackets($in)
  * @return  mixed An array of escaped values or a string depending on $in
  * @package DB
  * @example
- * echo safe_field('column', 'table', "color='" . doSlash(gps('color')) . "'");
+ * echo safe_field('column', 'table', "color = '" . doSlash(gps('color')) . "'");
  */
 
 function doSlash($in)
@@ -490,16 +490,16 @@ function load_lang($lang, $events = null)
         $events = array('public', 'common');
     }
 
-    $where = " and name != ''";
+    $where = " AND name != ''";
 
     if ($events) {
-        $where .= ' and event in('.join(',', quote_list((array) $events)).')';
+        $where .= " AND event IN (".join(',', quote_list((array) $events)).")";
     }
 
     $out = array();
 
     foreach (array($lang, 'en-gb') as $lang_code) {
-        $rs = safe_rows_start('name, data', 'txp_lang', "lang='".doSlash($lang_code)."'".$where);
+        $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang_code)."'".$where);
 
         if (!empty($rs)) {
             while($a = nextRow($rs)) {
@@ -563,11 +563,11 @@ function load_lang_dates($lang)
 
 function load_lang_event($event, $lang = LANG)
 {
-    $installed = (false !== safe_field('name', 'txp_lang', "lang='".doSlash($lang)."' limit 1"));
+    $installed = (false !== safe_field("name", 'txp_lang', "lang = '".doSlash($lang)."' LIMIT 1"));
 
     $lang_code = ($installed) ? $lang : 'en-gb';
 
-    $rs = safe_rows_start('name, data', 'txp_lang', "lang='".doSlash($lang_code)."' AND event='".doSlash($event)."'");
+    $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang_code)."' AND event = '".doSlash($event)."'");
 
     $out = array();
 
@@ -592,7 +592,7 @@ function check_privs()
 {
     trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'require_privs')), E_USER_NOTICE);
     global $txp_user;
-    $privs = safe_field("privs", "txp_users", "name='".doSlash($txp_user)."'");
+    $privs = safe_field("privs", 'txp_users', "name = '".doSlash($txp_user)."'");
     $args = func_get_args();
 
     if (!in_array($privs, $args)) {
@@ -651,7 +651,7 @@ function has_privs($res, $user = '')
 
     if ($user !== '') {
         if (!isset($privs[$user])) {
-            $privs[$user] = safe_field("privs", "txp_users", "name = '".doSlash($user)."'");
+            $privs[$user] = safe_field("privs", 'txp_users', "name = '".doSlash($user)."'");
         }
 
         if (isset($txp_permissions[$res]) && $privs[$user] && $txp_permissions[$res]) {
@@ -698,7 +698,7 @@ function the_privileged($res)
     global $txp_permissions;
 
     if (isset($txp_permissions[$res])) {
-        return safe_column('name', 'txp_users', "FIND_IN_SET(privs, '{$txp_permissions[$res]}') order by name asc");
+        return safe_column("name", 'txp_users', "FIND_IN_SET(privs, '".$txp_permissions[$res]."') ORDER BY name ASC");
     } else {
         return array();
     }
@@ -882,7 +882,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
         alt = '$alt',
         caption = '$caption',
         category = '$category',
-        date = now(),
+        date = NOW(),
         author = '".doSlash($txp_user)."'
     ";
 
@@ -955,7 +955,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
 
 function imageFetchInfo($where)
 {
-    $rs = safe_row('*', 'txp_image', $where);
+    $rs = safe_row("*", 'txp_image', $where);
 
     if ($rs) {
         return image_format_info($rs);
@@ -1348,7 +1348,7 @@ function load_plugin($name, $force = false)
         }
     }
 
-    $rs = safe_row("name, code, version", "txp_plugin", ($force ? '' : 'status = 1 AND ')."name='".doSlash($name)."'");
+    $rs = safe_row("name, code, version", 'txp_plugin', ($force ? '' : "status = 1 AND ")."name = '".doSlash($name)."'");
 
     if ($rs) {
         $plugins[] = $rs['name'];
@@ -1736,9 +1736,9 @@ function load_plugins($type = false)
     }
 
     $admin = ($app_mode == 'async' ? '4,5' : '1,3,4,5');
-    $where = 'status = 1 AND type IN ('.($type ? $admin : '0,1,5').')';
+    $where = "status = 1 AND type IN (".($type ? $admin : "0,1,5").")";
 
-    $rs = safe_rows("name, code, version", "txp_plugin", $where.' order by load_order asc, name asc');
+    $rs = safe_rows("name, code, version", 'txp_plugin', $where." ORDER BY load_order ASC, name ASC");
 
     if ($rs) {
         $old_error_handler = set_error_handler("pluginErrorHandler");
@@ -2451,7 +2451,7 @@ function is_logged_in($user = '')
         return false;
     }
 
-    $rs = safe_row('nonce, name, RealName, email, privs', 'txp_users', "name = '".doSlash($name)."'");
+    $rs = safe_row("nonce, name, RealName, email, privs", 'txp_users', "name = '".doSlash($name)."'");
 
     if ($rs and substr(md5($rs['nonce']), -10) === substr(cs('txp_login_public'), 0, 10)) {
         unset($rs['nonce']);
@@ -2582,7 +2582,7 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
     // Send the email as the currently logged in user.
     if ($txp_user) {
         $sender = safe_row(
-            'RealName, email',
+            "RealName, email",
             'txp_users',
             "name = '".doSlash($txp_user)."'"
         );
@@ -2594,7 +2594,7 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
     // If not logged in, the receiver is the sender.
     else {
         $sender = safe_row(
-            'RealName, email',
+            "RealName, email",
             'txp_users',
             "email = '".doSlash($to_address)."'"
         );
@@ -2742,7 +2742,7 @@ function create_form($name, $type, $Form)
 
 function form_exists($name)
 {
-    return (bool) safe_row('name', 'txp_form', "name = '".doSlash($name)."'");
+    return (bool) safe_row("name", 'txp_form', "name = '".doSlash($name)."'");
 }
 
 /**
@@ -3286,7 +3286,7 @@ function get_filenames()
         return array();
     }
 
-    $rs = safe_rows_start('filename', 'txp_file', '1 = 1');
+    $rs = safe_rows_start("filename", 'txp_file', "1 = 1");
 
     if ($rs && numRows($rs)) {
         while ($a = nextRow($rs)) {
@@ -3464,7 +3464,7 @@ function format_filesize($bytes, $decimals = 2, $format = '')
 
 function fileDownloadFetchInfo($where)
 {
-    $rs = safe_row('*', 'txp_file', $where);
+    $rs = safe_row("*", 'txp_file', $where);
 
     if ($rs) {
         return file_download_format_info($rs);
@@ -3679,8 +3679,8 @@ function has_single_author($table, $col = 'author')
     static $cache = array();
 
     if (!isset($cache[$table][$col])) {
-        $cache[$table][$col] = (safe_field('COUNT(name)', 'txp_users', '1=1') <= 1) &&
-            (safe_field('COUNT(DISTINCT('.doSlash($col).'))', doSlash($table), '1=1') <= 1);
+        $cache[$table][$col] = (safe_field("COUNT(name)", 'txp_users', "1 = 1") <= 1) &&
+            (safe_field("COUNT(DISTINCT(".doSlash($col)."))", doSlash($table), "1 = 1") <= 1);
     }
 
     return $cache[$table][$col];
@@ -3762,7 +3762,7 @@ function assign_user_assets($owner, $new_owner)
     $assign = doSlash($new_owner);
 
     foreach ($columns as $table => $column) {
-        if (safe_update($table, "$column = '$assign'", "$column in ($names)") === false) {
+        if (safe_update($table, "$column = '$assign'", "$column IN ($names)") === false) {
             return false;
         }
     }
@@ -3858,7 +3858,7 @@ function update_user($user, $email = null, $realname = null, $meta = array())
 
     foreach ($meta as $name => $value) {
         if ($value !== null) {
-            $set[] = $name."='".doSlash($value)."'";
+            $set[] = $name." = '".doSlash($value)."'";
         }
     }
 
@@ -3948,11 +3948,11 @@ function remove_user($user, $new_owner)
         return false;
     }
 
-    if (safe_delete('txp_prefs', "user_name in ($names)") === false) {
+    if (safe_delete('txp_prefs', "user_name IN ($names)") === false) {
         return false;
     }
 
-    if (safe_delete('txp_users', "name in ($names)") === false) {
+    if (safe_delete('txp_users', "name IN ($names)") === false) {
         return false;
     }
 
@@ -4019,7 +4019,7 @@ function rename_user($user, $newname)
 
 function user_exists($user)
 {
-    return (bool) safe_row('name', 'txp_users', "name = '".doSlash($user)."'");
+    return (bool) safe_row("name", 'txp_users', "name = '".doSlash($user)."'");
 }
 
 /**
@@ -4052,8 +4052,8 @@ function change_user_group($user, $group)
     if (
         safe_update(
             'txp_users',
-            'privs = '.intval($group),
-            "name in ($names)"
+            "privs = ".intval($group),
+            "name IN ($names)"
         ) === false
     ) {
         return false;
@@ -4087,7 +4087,7 @@ function txp_validate($user, $password, $log = true)
     $safe_user = doSlash($user);
     $name = false;
 
-    $r = safe_row('name, pass, privs', 'txp_users', "name = '$safe_user'");
+    $r = safe_row("name, pass, privs", 'txp_users', "name = '$safe_user'");
 
     if (!$r) {
         return false;
@@ -4101,26 +4101,26 @@ function txp_validate($user, $password, $log = true)
     } else {
         // No good password: check 4.3-style passwords.
         $passwords = array();
-        $passwords[] = "password(lower('".doSlash($password)."'))";
-        $passwords[] = "password('".doSlash($password)."')";
+        $passwords[] = "PASSWORD(LOWER('".doSlash($password)."'))";
+        $passwords[] = "PASSWORD('".doSlash($password)."')";
 
         if (version_compare(mysqli_get_server_info($DB->link), '4.1.0', '>=')) {
-            $passwords[] = "old_password(lower('".doSlash($password)."'))";
-            $passwords[] = "old_password('".doSlash($password)."')";
+            $passwords[] = "OLD_PASSWORD(LOWER('".doSlash($password)."'))";
+            $passwords[] = "OLD_PASSWORD('".doSlash($password)."')";
         }
 
-        $name = safe_field("name", "txp_users",
-            "name = '$safe_user' and (pass = ".join(' or pass = ', $passwords).") and privs > 0");
+        $name = safe_field("name", 'txp_users',
+            "name = '$safe_user' AND (pass = ".join(" OR pass = ", $passwords).") AND privs > 0");
 
         // Old password is good: migrate password to phpass.
         if ($name !== false) {
-            safe_update("txp_users", "pass = '".doSlash(Txp::get('\Textpattern\Password\Hash')->hash($password))."'", "name = '$safe_user'");
+            safe_update('txp_users', "pass = '".doSlash(Txp::get('\Textpattern\Password\Hash')->hash($password))."'", "name = '$safe_user'");
         }
     }
 
     if ($name !== false && $log) {
         // Update the last access time.
-        safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
+        safe_update('txp_users', "last_access = NOW()", "name = '$safe_user'");
     }
 
     return $name;
@@ -4374,7 +4374,7 @@ function fetch_category_title($name, $type = 'article')
         return $thiscategory['title'];
     }
 
-    $f = safe_field('title', 'txp_category', "name='".doSlash($name)."' and type='".doSlash($type)."'");
+    $f = safe_field("title", 'txp_category', "name = '".doSlash($name)."' AND type = '".doSlash($type)."'");
     $cattitles[$type][$name] = $f;
 
     return $f;
@@ -4408,7 +4408,7 @@ function fetch_section_title($name)
         return '';
     }
 
-    $f = safe_field('title', 'txp_section', "name='".doSlash($name)."'");
+    $f = safe_field("title", 'txp_section', "name = '".doSlash($name)."'");
     $sectitles[$name] = $f;
 
     return $f;
@@ -4425,9 +4425,9 @@ function fetch_section_title($name)
 function update_comments_count($id)
 {
     $id = assert_int($id);
-    $thecount = safe_field('count(*)', 'txp_discuss', 'parentid='.$id.' and visible='.VISIBLE);
+    $thecount = safe_field("COUNT(*)", 'txp_discuss', "parentid = ".$id." AND visible = ".VISIBLE);
     $thecount = assert_int($thecount);
-    $updated = safe_update('textpattern', 'comments_count='.$thecount, 'ID='.$id);
+    $updated = safe_update('textpattern', "comments_count = ".$thecount, "ID = ".$id);
 
     return ($updated) ? true : false;
 }
@@ -4442,7 +4442,7 @@ function update_comments_count($id)
 function clean_comment_counts($parentids)
 {
     $parentids = array_map('assert_int', $parentids);
-    $rs = safe_rows_start('parentid, count(*) as thecount', 'txp_discuss', 'parentid IN ('.implode(',', $parentids).') AND visible='.VISIBLE.' group by parentid');
+    $rs = safe_rows_start("parentid, COUNT(*) AS thecount", 'txp_discuss', "parentid IN (".implode(',', $parentids).") AND visible = ".VISIBLE." GROUP BY parentid");
 
     if (!$rs) {
         return;
@@ -4451,7 +4451,7 @@ function clean_comment_counts($parentids)
     $updated = array();
 
     while ($a = nextRow($rs)) {
-        safe_update('textpattern', "comments_count=".$a['thecount'], "ID=".$a['parentid']);
+        safe_update('textpattern', "comments_count = ".$a['thecount'], "ID = ".$a['parentid']);
         $updated[] = $a['parentid'];
     }
 
@@ -4459,7 +4459,7 @@ function clean_comment_counts($parentids)
     $leftover = array_diff($parentids, $updated);
 
     if ($leftover) {
-        safe_update('textpattern', "comments_count=0", "ID IN (".implode(',', $leftover).")");
+        safe_update('textpattern', "comments_count = 0", "ID IN (".implode(',', $leftover).")");
     }
 }
 
@@ -4498,7 +4498,7 @@ function update_lastmod($trigger = '', $rs = array())
     $whenStamp = time();
     $whenDate = strftime('%Y-%m-%d %H:%M:%S', $whenStamp);
 
-    safe_upsert("txp_prefs", "val = '$whenDate'", "name = 'lastmod'");
+    safe_upsert('txp_prefs', "val = '$whenDate'", "name = 'lastmod'");
     callback_event('site.update', $trigger, 0, $rs, compact('whenStamp', 'whenDate'));
 }
 
@@ -4517,7 +4517,7 @@ function get_lastmod($unix_ts = null)
     }
 
     // Check for future articles that are now visible.
-    if ($max_article = safe_field('unix_timestamp(Posted)', 'textpattern', "Posted <= now() and Status >= 4 order by Posted desc limit 1")) {
+    if ($max_article = safe_field("UNIX_TIMESTAMP(Posted)", 'textpattern', "Posted <= NOW() AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
         $unix_ts = max($unix_ts, $max_article);
     }
 
@@ -4599,7 +4599,7 @@ function handle_lastmod($unix_ts = null, $exit = true)
 function get_prefs($user = '')
 {
     $out = array();
-    $r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\''.doSlash($user).'\'');
+    $r = safe_rows_start("name, val", 'txp_prefs', "prefs_id = 1 AND user_name = '".doSlash($user)."'");
 
     if ($r) {
         while ($a = nextRow($r)) {
@@ -4670,9 +4670,9 @@ function get_pref($thing, $default = '', $from_db = false)
         $user_name = doSlash($txp_user);
 
         $field = safe_field(
-            'val',
+            "val",
             'txp_prefs',
-            "name='$name' and (user_name='' or user_name='$user_name') order by user_name limit 1"
+            "name = '$name' AND (user_name = '' OR user_name = '$user_name') ORDER BY user_name LIMIT 1"
         );
 
         if ($field !== false) {
@@ -4732,7 +4732,7 @@ function remove_pref($name = null, $event = null, $user_name = null)
     }
 
     if ($sql) {
-        return safe_delete('txp_prefs', join(' and ', $sql));
+        return safe_delete('txp_prefs', join(" AND ", $sql));
     }
 
     return false;
@@ -4778,7 +4778,7 @@ function pref_exists($name, $user_name = null)
         $sql[] = "user_name = '".doSlash((string) $user_name)."'";
     }
 
-    if (safe_row('name', 'txp_prefs', join(' and ', $sql))) {
+    if (safe_row("name", 'txp_prefs', join(" AND ", $sql))) {
         return true;
     }
 
@@ -4895,7 +4895,7 @@ function update_pref($name, $val = null, $event = null, $type = null, $html = nu
         }
     }
 
-    if ($set && safe_update('txp_prefs', join(', ', $set), join(' and ', $where))) {
+    if ($set && safe_update('txp_prefs', join(', ', $set), join(" AND ", $where))) {
         callback_event('preference.update', 'done', 0, compact('name', 'val', 'event', 'type', 'html', 'position', 'user_name'));
 
         return true;
@@ -4941,7 +4941,7 @@ function rename_pref($newname, $name, $user_name = null)
         $where[] = "user_name = '".doSlash((string) $user_name)."'";
     }
 
-    if (safe_update('txp_prefs', "name = '".doSlash($newname)."'", join(' and ', $where))) {
+    if (safe_update('txp_prefs', "name = '".doSlash($newname)."'", join(" AND ", $where))) {
         callback_event('preference.rename', 'done', 0, compact('newname', 'name', 'user_name'));
 
         return true;
@@ -5086,10 +5086,10 @@ function txp_die($msg, $status = '503', $url = '')
     }
 
     if ($connected && @txpinterface == 'public') {
-        $out = safe_field('user_html', 'txp_page', "name='error_".doSlash($code)."'");
+        $out = safe_field("user_html", 'txp_page', "name = 'error_".doSlash($code)."'");
 
         if ($out === false) {
-            $out = safe_field('user_html', 'txp_page', "name='error_default'");
+            $out = safe_field("user_html", 'txp_page', "name = 'error_default'");
         }
     } else {
         $out = <<<eod
@@ -5320,7 +5320,7 @@ function permlinkurl_id($id)
     }
 
     $rs = safe_row(
-        "ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted, unix_timestamp(Expires) as expires",
+        "ID AS thisid, Section AS section, Title AS title, url_title, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(Expires) AS expires",
         'textpattern',
         "ID = $id"
     );
@@ -5877,9 +5877,9 @@ function getMetaDescription($type = null)
         } elseif ($thisarticle) {
             $content = $thisarticle['description'];
         } elseif ($c) {
-            $content = safe_field('description', 'txp_category', "name = '".doSlash($c)."' AND type = '" . doSlash($context) . "'");
+            $content = safe_field("description", 'txp_category', "name = '".doSlash($c)."' AND type = '" . doSlash($context) . "'");
         } elseif ($s) {
-            $content = safe_field('description', 'txp_section', "name = '".doSlash($s)."'");
+            $content = safe_field("description", 'txp_section', "name = '".doSlash($s)."'");
         }
     } else {
         if (strpos($type, 'category') === 0) {
@@ -5895,11 +5895,11 @@ function getMetaDescription($type = null)
                 }
 
                 $clause = " AND type = '".$thisContext."'";
-                $content = safe_field('description', 'txp_category', "name = '".doSlash($c)."'" . $clause);
+                $content = safe_field("description", 'txp_category', "name = '".doSlash($c)."'" . $clause);
             }
         } elseif ($type === 'section') {
             $theSection = ($thissection) ? $thissection['name'] : $s;
-            $content = safe_field('description', 'txp_section', "name = '".doSlash($theSection)."'");
+            $content = safe_field("description", 'txp_section', "name = '".doSlash($theSection)."'");
         } elseif ($type === 'article') {
             assert_article();
             $content = ($thisarticle? $thisarticle['description'] : '');
@@ -6507,7 +6507,7 @@ function install_textpack($textpack, $add_new_langs = false)
         return 0;
     }
 
-    $installed_langs = safe_column('lang', 'txp_lang', "1 = 1 group by lang");
+    $installed_langs = safe_column("lang", 'txp_lang', "1 = 1 GROUP BY lang");
     $done = 0;
 
     foreach ($textpack as $translation) {
@@ -6517,7 +6517,7 @@ function install_textpack($textpack, $add_new_langs = false)
             continue;
         }
 
-        $where = "lang = '".doSlash($lang)."' and name = '".doSlash($name)."'";
+        $where = "lang = '".doSlash($lang)."' AND name = '".doSlash($name)."'";
 
         if (safe_count('txp_lang', $where)) {
             $r = safe_update(
@@ -6566,7 +6566,7 @@ function form_token()
     // Generate a ciphered token from the current user's nonce (thus valid for
     // login time plus 30 days) and a pinch of salt from the blog UID.
     if (empty($token)) {
-        $nonce = safe_field('nonce', 'txp_users', "name='".doSlash($txp_user)."'");
+        $nonce = safe_field("nonce", 'txp_users', "name = '".doSlash($txp_user)."'");
         $token = md5($nonce.get_pref('blog_uid'));
     }
 
