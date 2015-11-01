@@ -52,17 +52,6 @@ assert_system_requirements();
 @ignore_user_abort(1);
 @set_time_limit(0);
 
-// Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2).
-// On 4.1 or greater use utf8-tables, if that is configures in config.php.
-$mysqlversion = mysqli_get_server_info($DB->link);
-$tabletype = (intval($mysqlversion[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $mysqlversion))
-    ? " ENGINE = MyISAM "
-    : " TYPE = MyISAM ";
-
-if (isset($txpcfg['dbcharset']) && (intval($mysqlversion[0]) >= 5 || preg_match('#^4\.[1-9]#', $mysqlversion))) {
-    $tabletype .= " CHARACTER SET = ".$txpcfg['dbcharset']." ";
-}
-
 // Wipe out the last update check setting so the next visit to Diagnostics
 // forces an update check, which resets the message. Without this, people who
 // upgrade in future may still see a "new version available" message for some

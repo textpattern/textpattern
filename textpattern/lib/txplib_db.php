@@ -211,6 +211,12 @@ class DB
         if ($this->charset && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version))) {
             mysqli_query($this->link, "SET NAMES ".$this->charset);
             $this->table_options['charset'] = $this->charset;
+
+            if ($this->charset == 'utf8mb4') {
+                $this->table_options['collate'] = "utf8mb4_unicode_ci";
+            } elseif ($this->charset == 'utf8') {
+                $this->table_options['collate'] = "utf8_general_ci";
+            }
         }
 
         $this->default_charset = mysqli_character_set_name($this->link);
@@ -745,7 +751,7 @@ function safe_drop($table, $debug = false)
  * @return bool   TRUE if table exists
  * @since  4.6.0
  * @example
- * if (safe_create('myTable', 'id int(11)'))
+ * if (safe_create('myTable', "id int(11)"))
  * {
  *     echo "'myTable' exists.";
  * }
@@ -756,7 +762,7 @@ function safe_create($table, $definition, $options = '', $debug = false)
     global $DB;
 
     foreach ($DB->table_options as $name => $value) {
-        $options .= ' '.$name.' = '.$value;
+        $options .= ' '.strtoupper($name).' = '.$value;
     }
 
     $q = "CREATE TABLE IF NOT EXISTS ".safe_pfx($table)." ($definition) $options";

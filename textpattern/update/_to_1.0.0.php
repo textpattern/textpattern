@@ -341,19 +341,16 @@ if (safe_field("val", 'txp_prefs', "name = 'file_base_path'") === false) {
 }
 
 // 1.0: txp_file table.
-if (!safe_query("SELECT 1 FROM `".PFX."txp_file` LIMIT 0")) {
-    // Do install.
-    safe_query("CREATE TABLE `".PFX."txp_file` (
-        id          INT          NOT NULL AUTO_INCREMENT,
-        filename    VARCHAR(255) NOT NULL DEFAULT '',
-        category    VARCHAR(255) NOT NULL DEFAULT '',
-        permissions VARCHAR(32)  NOT NULL DEFAULT '0',
-        description TEXT         NOT NULL DEFAULT '',
-        downloads   INT UNSIGNED NOT NULL DEFAULT '0',
-        PRIMARY KEY     (id),
-        UNIQUE filename (filename)
-    ) $tabletype ");
-}
+safe_create('txp_file', "
+    id          INT          NOT NULL AUTO_INCREMENT,
+    filename    VARCHAR(255) NOT NULL DEFAULT '',
+    category    VARCHAR(255) NOT NULL DEFAULT '',
+    permissions VARCHAR(32)  NOT NULL DEFAULT '0',
+    description TEXT         NOT NULL DEFAULT '',
+    downloads   INT UNSIGNED NOT NULL DEFAULT '0',
+    PRIMARY KEY     (id),
+    UNIQUE filename (filename)"
+);
 
 if (safe_field("name", 'txp_form', "type = 'file'") === false) {
     safe_insert('txp_form', "
