@@ -201,3 +201,12 @@ safe_drop_index('txp_section', "name");
 
 // The txp_priv table was created for version 1.0, but never used nor created in later versions.
 safe_drop('txp_priv');
+
+// Remove empty update files
+foreach (array('4.4.0', '4.4.1') as $v) {
+    $file = txpath.DS.'update'.DS.'_to_'.$v.'.php';
+
+    if (file_exists($file)) {
+        unlink($file);
+    }
+}
