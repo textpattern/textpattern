@@ -790,7 +790,7 @@ function safe_rename($table, $newname, $debug = false)
  * @param  bool   $debug Dump query
  * @return mixed  The field or FALSE on error
  * @example
- * if ($field = safe_field('column', 'table', '1 = 1'))
+ * if ($field = safe_field("column", 'table', "1 = 1"))
  * {
  *     echo $field;
  * }
@@ -877,7 +877,7 @@ function safe_column_num($thing, $table, $where, $debug = false)
  * @see    safe_rows_start()
  * @uses   getRow()
  * @example
- * if ($row = safe_row('column', 'table', '1 = 1'))
+ * if ($row = safe_row("column", 'table', "1 = 1"))
  * {
  *     echo $row['column'];
  * }
@@ -911,7 +911,7 @@ function safe_row($things, $table, $where, $debug = false)
  * @see    safe_rows_start()
  * @uses   getRows()
  * @example
- * $rs = safe_rows('column', 'table', '1 = 1');
+ * $rs = safe_rows("column", 'table', "1 = 1");
  * foreach ($rs as $row)
  * {
  *     echo $row['column'];
@@ -941,7 +941,7 @@ function safe_rows($things, $table, $where, $debug = false)
  * @see    nextRow()
  * @see    numRows()
  * @example
- * if ($rs = safe_rows_start('column', 'table', '1 = 1'))
+ * if ($rs = safe_rows_start("column", 'table', "1 = 1"))
  * {
  *     while ($row = nextRow($rs))
  *     {
@@ -965,7 +965,7 @@ function safe_rows_start($things, $table, $where, $debug = false)
  * @param  bool     $debug Dump query
  * @return int|bool Number of rows or FALSE on error
  * @example
- * if (($count = safe_count('myTable', '1 = 1')) !== false)
+ * if (($count = safe_count("table", "1 = 1")) !== false)
  * {
  *     echo "myTable contains {$count} rows.";
  * }
@@ -1118,7 +1118,7 @@ function startRows($query, $debug = false)
  * @return  array|bool  The row, or FALSE if there are no more rows
  * @see     safe_rows_start()
  * @example
- * if ($rs = safe_rows_start('column', 'table', '1 = 1'))
+ * if ($rs = safe_rows_start("column", 'table', "1 = 1"))
  * {
  *     while ($row = nextRow($rs))
  *     {
@@ -1145,7 +1145,7 @@ function nextRow($r)
  * @return int|bool The number of rows or FALSE on error
  * @see    safe_rows_start()
  * @example
- * if ($rs = safe_rows_start('column', 'table', '1 = 1'))
+ * if ($rs = safe_rows_start("column", 'table', "1 = 1"))
  * {
  *     echo numRows($rs);
  * }
@@ -1233,7 +1233,7 @@ function getCount($table, $where, $debug = false)
  * @return array
  */
 
-function getTree($root, $type, $where = '1 = 1', $tbl = 'txp_category')
+function getTree($root, $type, $where = "1 = 1", $tbl = 'txp_category')
 {
     $root = doSlash($root);
     $type = doSlash($type);

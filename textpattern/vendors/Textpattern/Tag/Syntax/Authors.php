@@ -57,7 +57,7 @@ class Authors
             'wraptag'  => '',
         ), $atts));
 
-        $sql = array('1 = 1');
+        $sql = array("1 = 1");
         $sql_limit = '';
         $sql_sort = " ORDER BY ".doSlash($sort);
 

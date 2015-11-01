@@ -39,9 +39,8 @@ if (safe_field("name", 'txp_prefs', "name = 'allow_raw_php_scripting'")) {
     safe_delete('txp_prefs', "name = 'allow_raw_php_scripting'");
 }
 
-safe_alter('txp_users', "
-    MODIFY RealName VARCHAR(255) NOT NULL DEFAULT '',
-    MODIFY email VARCHAR(254) NOT NULL DEFAULT ''");
+safe_alter('txp_users', "MODIFY RealName VARCHAR(255) NOT NULL DEFAULT ''");
+safe_alter('txp_users', "MODIFY email    VARCHAR(254) NOT NULL DEFAULT ''");
 
 // Remove any setup strings from lang table.
 safe_delete('txp_lang', "event = 'setup'");

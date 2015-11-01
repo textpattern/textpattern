@@ -69,12 +69,12 @@ function filterFrontPage()
  *
  * @param array $rs An article as an assocative array
  * @example
- * if ($rs = safe_rows_start('*,
+ * if ($rs = safe_rows_start("*,
  *     UNIX_TIMESTAMP(Posted) AS uPosted,
  *     UNIX_TIMESTAMP(Expires) AS uExpires,
- *     UNIX_TIMESTAMP(LastMod) AS uLastMod',
+ *     UNIX_TIMESTAMP(LastMod) AS uLastMod",
  *     'textpattern',
- *     '1 = 1'
+ *     "1 = 1"
  * ))
  * {
  *     global $thisarticle;

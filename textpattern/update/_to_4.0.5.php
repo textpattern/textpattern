@@ -51,8 +51,7 @@ if (!in_array('created', $txpfile)) {
 }
 
 if (!in_array('size', $txpfile)) {
-    safe_alter('txp_file',
-        "ADD size BIGINT");
+    safe_alter('txp_file', "ADD size BIGINT");
     $update_files = 1;
 }
 
@@ -61,18 +60,18 @@ if (!in_array('downloads', $txpfile)) {
 }
 
 if (array_intersect(array('modified', 'created'), $txpfile)) {
-    safe_alter('txp_file', "
-        MODIFY modified DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-        MODIFY created DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
+    safe_alter('txp_file', "MODIFY modified DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
+    safe_alter('txp_file', "MODIFY created  DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
 }
 
 // Copy existing file timestamps into the new database columns.
 if ($update_files) {
-    $prefs = get_prefs();
-    $rs = safe_rows("*", 'txp_file', "1 = 1");
+    $rs  = safe_rows("*", 'txp_file', "1 = 1");
+    $dir = get_pref('file_base_path', dirname(txpath).DS.'files');
 
     foreach ($rs as $row) {
-        $path = build_file_path(@$prefs['file_base_path'], @$row['filename']);
+        if (empty($row['filename'])) continue;
+        $path = build_file_path($dir, $row['filename']);
 
         if ($path and ($stat = @stat($path))) {
             safe_update('txp_file', "created = '".strftime('%Y-%m-%d %H:%M:%S', $stat['ctime'])."', modified = '".strftime('%Y-%m-%d %H:%M:%S', $stat['mtime'])."', size = '".doSlash(sprintf('%u', $stat['size']))."'", "id = '".doSlash($row['id'])."'");

@@ -149,10 +149,11 @@ if ($txpusers) {
 }
 
 // 1.0rc: expanding password field in txp_users.
-safe_alter('txp_users', "CHANGE pass pass VARCHAR(128) NOT NULL");
-safe_alter('textpattern', "CHANGE Body Body MEDIUMTEXT NOT NULL");
-safe_alter('textpattern', "CHANGE Body_html Body_html MEDIUMTEXT NOT NULL");
-safe_alter('textpattern', "CHANGE Excerpt Excerpt TEXT NOT NULL");
+safe_alter('txp_users',   "MODIFY pass VARCHAR(128) NOT NULL");
+
+safe_alter('textpattern', "MODIFY Body      MEDIUMTEXT NOT NULL");
+safe_alter('textpattern', "MODIFY Body_html MEDIUMTEXT NOT NULL");
+safe_alter('textpattern', "MODIFY Excerpt   TEXT       NOT NULL");
 
 $popcom = fetch("*", 'txp_form', 'name', "popup_comments");
 
@@ -474,7 +475,7 @@ if (!in_array('type', $txpprefs)) {
 }
 
 // Update the updated with default hidden type for old plugins prefs.
-safe_alter('txp_prefs', "CHANGE type type SMALLINT UNSIGNED NOT NULL DEFAULT '2'");
+safe_alter('txp_prefs', "MODIFY type SMALLINT UNSIGNED NOT NULL DEFAULT '2'");
 
 if (!in_array('event', $txpprefs)) {
     safe_alter('txp_prefs', "ADD event VARCHAR(12) NOT NULL DEFAULT 'publish'");
@@ -586,7 +587,7 @@ if (!in_array('position', $txpprefs)) {
     }
 }
 
-safe_alter('txp_prefs', "CHANGE html html VARCHAR(64) DEFAULT 'text_input' NOT NULL");
+safe_alter('txp_prefs', "MODIFY html VARCHAR(64) DEFAULT 'text_input' NOT NULL");
 safe_update('txp_prefs', "html = 'text_input'", "html = ''");
 
 if (!fetch("form", 'txp_form', 'name', 'search_results')) {
@@ -690,19 +691,7 @@ for ($i = 1; $i <= 10; $i++) {
 }
 
 // Index ip column in txp_log.
-
-$ipidxset = false;
-$i = safe_show('index', 'txp_log');
-
-foreach ($i as $a => $b) {
-    if ($b['Column_name'] == 'ip') {
-        $ipidxset = true;
-    }
-}
-
-if (!$ipidxset) {
-    safe_query("ALTER TABLE `".PFX."txp_log` ADD INDEX ip (ip)");
-}
+safe_create_index('txp_log', 'ip', 'ip');
 
 // Language selection moves to Manage languages, Hide it from prefs.
 safe_update('txp_prefs', "type = 2", "name = 'language'");
