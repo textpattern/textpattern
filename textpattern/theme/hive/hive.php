@@ -76,13 +76,7 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<meta name="application-name" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
         $out[] = '<meta name="apple-mobile-web-app-capable" content="yes">';
         $out[] = '<meta name="apple-mobile-web-app-title" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
-        $out[] = '<script src="vendors/modernizr/modernizr/modernizr.js"></script>';
-        $out[] = '<script src="'.$this->url.'js/scripts.js"></script>';
-        $out[] = '<!--[if lt IE 9]>';
-        $out[] = '<script src="vendors/keithclark/selectivizr/selectivizr.min.js"></script>';
-        $out[] = '<link rel="stylesheet" href="vendors/jquery/ui/css/textpattern/jquery-ui-ie8.min.css">';
-        $out[] = '<link rel="stylesheet" href="'.$this->url.'css/ie8.min.css">';
-        $out[] = '<![endif]-->'.n;
+        $out[] = '<script src="'.$this->url.'js/scripts.js"></script>'.n;
 
         return join(n, $out);
     }
