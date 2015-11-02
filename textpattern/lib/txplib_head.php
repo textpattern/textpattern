@@ -91,8 +91,7 @@ function pagetop($pagetitle, $message = '')
     ?><!DOCTYPE html>
 <html lang="<?php echo txpspecialchars(LANG);
     ?>" dir="<?php echo $lang_direction;
-    ?>"
-    class="no-js">
+    ?>">
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
