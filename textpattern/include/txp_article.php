@@ -1116,10 +1116,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             $expires_block = $partials['expires']['html'];
         }
 
-        echo wrapRegion('dates_group', $posted_block.$expires_block, 'dates', 'date_settings', 'article_dates');
+        echo wrapRegion('txp-dates-group', $posted_block.$expires_block, 'txp-dates-group-content', 'date_settings', 'article_dates');
 
         // 'Comment options' collapsible section.
-        echo wrapRegion('comments_group', $partials['comments']['html'], 'comments', 'comment_settings', 'article_comments', (($use_comments == 1)
+        echo wrapRegion('txp-comments-group', $partials['comments']['html'], 'txp-comments-group-content', 'comment_settings', 'article_comments', (($use_comments == 1)
             ? ''
             : 'empty'
         ));
@@ -1148,7 +1148,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 $form_pop, ' class="override-form"'), $rs)
             : '';
 
-        echo wrapRegion('advanced_group', $html_markup.$html_override, 'advanced', 'advanced_options', 'article_advanced');
+        echo wrapRegion('txp-advanced-group', $html_markup.$html_override, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
 
         // 'Meta' collapsible section.
 
@@ -1161,7 +1161,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Keywords' field.
         $html_keywords = $partials['keywords']['html'];
 
-        echo wrapRegion('meta_group', $html_url_title.$html_description.$html_keywords, 'meta', 'meta', 'article_meta');
+        echo wrapRegion('txp-meta-group', $html_url_title.$html_description.$html_keywords, 'txp-meta-group-content', 'meta', 'article_meta');
 
         // 'Article image' collapsible section.
         echo $partials['image']['html'];
@@ -1176,7 +1176,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo $partials['sidehelp']['html'];
 
         // 'Recent articles' collapsible section.
-        echo wrapRegion('recent_group', $partials['recent_articles']['html'], 'recent', 'recent_articles', 'article_recent');
+        echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
 
         echo n.'</div>'; // End of #supporting_content.
 
