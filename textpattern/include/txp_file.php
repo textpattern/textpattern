@@ -682,8 +682,7 @@ function file_edit($message = '', $id = '')
                 tsi('day', '%d', $rs['created'], '', 'day'),
                 'publish_date',
                 array('', 'instructions_file_date'),
-                array('class' => 'txp-form-field date posted'),
-                ''
+                array('class' => 'txp-form-field date posted')
             ).
             inputLabel(
                 'hour',
@@ -694,8 +693,7 @@ function file_edit($message = '', $id = '')
                 tsi('second', '%S', $rs['created'], '', 'second'),
                 'publish_time',
                 array('', 'instructions_file_time'),
-                array('class' => 'txp-form-field time posted'),
-                ''
+                array('class' => 'txp-form-field time posted')
             ).
             n.tag(
                 checkbox('publish_now', '1', $publish_now, '', 'publish_now').

@@ -1045,8 +1045,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     tsi('day', '%d', $persist_timestamp, '', 'day'),
                     'publish_date',
                     array('timestamp', 'instructions_publish_date'),
-                    array('class' => 'txp-form-field date posted'),
-                    ''
+                    array('class' => 'txp-form-field date posted')
                 ).
                 inputLabel(
                     'hour',
@@ -1057,8 +1056,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     tsi('second', '%S', $persist_timestamp, '', 'second'),
                     'publish_time',
                     array('', 'instructions_publish_time'),
-                    array('class' => 'txp-form-field time posted'),
-                    ''
+                    array('class' => 'txp-form-field time posted')
                 ).
                 n.tag(
                     checkbox('publish_now', '1', $publish_now, '', 'publish_now').
@@ -1091,8 +1089,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     tsi('exp_day', '%d', $persist_timestamp, '', 'exp_day'),
                     'expire_date',
                     array('expires', 'instructions_expire_date'),
-                    array('class' => 'txp-form-field date expires'),
-                    ''
+                    array('class' => 'txp-form-field date expires')
                 ).
                 inputLabel(
                     'exp_hour',
@@ -1103,8 +1100,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     tsi('exp_second', '%S', $persist_timestamp, '', 'exp_second'),
                     'expire_time',
                     array('', 'instructions_expire_time'),
-                    array('class' => 'txp-form-field time expires'),
-                    ''
+                    array('class' => 'txp-form-field time expires')
                 ),
                 $rs
             );
@@ -2047,17 +2043,23 @@ function article_partial_posted($rs)
     $out =
         inputLabel(
             'year',
-            tsi('year', '%Y', $sPosted, '', 'year').' / '.
-            tsi('month', '%m', $sPosted, '', 'month').' / '.
+            tsi('year', '%Y', $sPosted, '', 'year').
+            ' <span role="separator">/</span> '.
+            tsi('month', '%m', $sPosted, '', 'month').
+            ' <span role="separator">/</span> '.
             tsi('day', '%d', $sPosted, '', 'day'),
-            gTxt('publish_date'), 'timestamp', array('class' => 'txp-form-field date posted')
+            'publish_date',
+            'timestamp', array('class' => 'txp-form-field date posted')
         ).
         inputLabel(
             'hour',
-            tsi('hour', '%H', $sPosted, '', 'hour').' : '.
-            tsi('minute', '%M', $sPosted, '', 'minute').' : '.
+            tsi('hour', '%H', $sPosted, '', 'hour').
+            ' <span role="separator">:</span> '.
+            tsi('minute', '%M', $sPosted, '', 'minute').
+            ' <span role="separator">:</span> '.
             tsi('second', '%S', $sPosted, '', 'second'),
-            gTxt('publish_time'), '', array('class' => 'txp-form-field time posted')
+            'publish_time',
+            '', array('class' => 'txp-form-field time posted')
         ).
         graf(
             checkbox('reset_time', '1', $reset_time, '', 'reset_time').
@@ -2084,17 +2086,23 @@ function article_partial_expires($rs)
     $out =
         inputLabel(
             'exp_year',
-            tsi('exp_year', '%Y', $sExpires, '', 'exp_year').' / '.
-            tsi('exp_month', '%m', $sExpires, '', 'exp_month').' / '.
+            tsi('exp_year', '%Y', $sExpires, '', 'exp_year').
+            ' <span role="separator">/</span> '.
+            tsi('exp_month', '%m', $sExpires, '', 'exp_month').
+            ' <span role="separator">/</span> '.
             tsi('exp_day', '%d', $sExpires, '', 'exp_day'),
-            gTxt('expire_date'), 'timestamp', array('class' => 'txp-form-field date expires')
+            'expire_date',
+            'timestamp', array('class' => 'txp-form-field date expires')
         ).
         inputLabel(
             'exp_hour',
-            tsi('exp_hour', '%H', $sExpires, '', 'exp_hour').' : '.
-            tsi('exp_minute', '%M', $sExpires, '', 'exp_minute').' : '.
+            tsi('exp_hour', '%H', $sExpires, '', 'exp_hour').
+            ' <span role="separator">:</span> '.
+            tsi('exp_minute', '%M', $sExpires, '', 'exp_minute').
+            ' <span role="separator">:</span> '.
             tsi('exp_second', '%S', $sExpires, '', 'exp_second'),
-            gTxt('expire_time'), '', array('class' => 'txp-form-field time expires')
+            'expire_time',
+            '', array('class' => 'txp-form-field time expires')
         ).
         hInput('sExpires', $sExpires);
 
