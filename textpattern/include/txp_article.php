@@ -2057,7 +2057,7 @@ function article_partial_posted($rs)
             tsi('hour', '%H', $sPosted, '', 'hour').' : '.
             tsi('minute', '%M', $sPosted, '', 'minute').' : '.
             tsi('second', '%S', $sPosted, '', 'second'),
-            gTxt('publish_tme'), '', array('class' => 'txp-form-field time posted')
+            gTxt('publish_time'), '', array('class' => 'txp-form-field time posted')
         ).
         graf(
             checkbox('reset_time', '1', $reset_time, '', 'reset_time').
