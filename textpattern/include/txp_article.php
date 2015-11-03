@@ -2057,7 +2057,7 @@ function article_partial_posted($rs)
             tsi('hour', '%H', $sPosted, '', 'hour').' : '.
             tsi('minute', '%M', $sPosted, '', 'minute').' : '.
             tsi('second', '%S', $sPosted, '', 'second'),
-            gTxt('publish_date'), '', array('class' => 'txp-form-field time posted')
+            gTxt('publish_tme'), '', array('class' => 'txp-form-field time posted')
         ).
         graf(
             checkbox('reset_time', '1', $reset_time, '', 'reset_time').
@@ -2094,7 +2094,7 @@ function article_partial_expires($rs)
             tsi('exp_hour', '%H', $sExpires, '', 'exp_hour').' : '.
             tsi('exp_minute', '%M', $sExpires, '', 'exp_minute').' : '.
             tsi('exp_second', '%S', $sExpires, '', 'exp_second'),
-            gTxt('expire_date'), '', array('class' => 'txp-form-field time expires')
+            gTxt('expire_time'), '', array('class' => 'txp-form-field time expires')
         ).
         hInput('sExpires', $sExpires);
 
