@@ -137,8 +137,8 @@ echo $theme->html_head();
     echo pluggable_ui('admin_side', 'header', $theme->header());
     callback_event('admin_side', 'pagetop_end');
     echo n.'</header><!-- /txp-header -->'.
+        n.'<main class="txp-body" aria-label="'.gTxt('main_content').'">'.
         n.'<div id="messagepane">'.$theme->announce($message).'</div>';
-        n.'<main class="txp-body" aria-label="'.gTxt('main_content').'">';
     callback_event('admin_side', 'main_content');
 }
 
