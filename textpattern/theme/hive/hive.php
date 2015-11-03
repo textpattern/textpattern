@@ -128,8 +128,6 @@ class hive_theme extends \Textpattern\Admin\Theme
                 href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"'), array('class' => 'txp-logout'));
         }
 
-        $out[] = '<div id="messagepane">'.$this->announce($this->message).'</div>';
-
         return join(n, $out);
     }
 
