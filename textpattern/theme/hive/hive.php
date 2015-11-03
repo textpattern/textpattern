@@ -193,7 +193,6 @@ class hive_theme extends \Textpattern\Admin\Theme
                 sp.href('&#215;', '#close', ' class="close" role="button" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"'),
                 array(
                     'class' => 'messageflash '.$class,
-                    'role'  => 'alert',
                 )
             );
 
