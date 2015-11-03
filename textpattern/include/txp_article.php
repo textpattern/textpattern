@@ -2045,30 +2045,23 @@ function article_partial_posted($rs)
     extract($rs);
 
     $out =
-        wrapRegion(
-            'write-timestamp',
-            graf(
-                checkbox('reset_time', '1', $reset_time, '', 'reset_time').
-                tag(gTxt('reset_time'), 'label', array('for' => 'reset_time')), ' class="reset-time"'
-            ).
-
-            graf(gTxt('published_at').popHelp('timestamp'), ' class="publish-at"').
-
-            graf(
-                span(gTxt('date'), array('class' => 'txp-label-fixed')).br.
-                tsi('year', '%Y', $sPosted).' / '.
-                tsi('month', '%m', $sPosted).' / '.
-                tsi('day', '%d', $sPosted), ' class="date posted created"'
-            ).
-
-            graf(
-                span(gTxt('time'), array('class' => 'txp-label-fixed')).br.
-                tsi('hour', '%H', $sPosted).' : '.
-                tsi('minute', '%M', $sPosted).' : '.
-                tsi('second', '%S', $sPosted), ' class="time posted created"'
-            ),
-            '',
-            gTxt('timestamp')
+        inputLabel(
+            'year',
+            tsi('year', '%Y', $sPosted, '', 'year').' / '.
+            tsi('month', '%m', $sPosted, '', 'month').' / '.
+            tsi('day', '%d', $sPosted, '', 'day'),
+            gTxt('publish_date'), 'timestamp', array('class' => 'txp-form-field date posted')
+        ).
+        inputLabel(
+            'hour',
+            tsi('hour', '%H', $sPosted, '', 'hour').' : '.
+            tsi('minute', '%M', $sPosted, '', 'minute').' : '.
+            tsi('second', '%S', $sPosted, '', 'second'),
+            gTxt('publish_date'), '', array('class' => 'txp-form-field time posted')
+        ).
+        graf(
+            checkbox('reset_time', '1', $reset_time, '', 'reset_time').
+            tag(gTxt('reset_time'), 'label', array('for' => 'reset_time')), ' class="reset-time"'
         );
 
     return pluggable_ui('article_ui', 'timestamp', $out, $rs);
@@ -2089,25 +2082,21 @@ function article_partial_expires($rs)
     extract($rs);
 
     $out =
-        wrapRegion(
-            'write-expires',
-            graf(
-                span(gTxt('date'), array('class' => 'txp-label-fixed')).br.
-                tsi('exp_year', '%Y', $sExpires).' / '.
-                tsi('exp_month', '%m', $sExpires).' / '.
-                tsi('exp_day', '%d', $sExpires), ' class="date expires"'
-            ).
-
-            graf(
-                span(gTxt('time'), array('class' => 'txp-label-fixed')).br.
-                tsi('exp_hour', '%H', $sExpires).' : '.
-                tsi('exp_minute', '%M', $sExpires).' : '.
-                tsi('exp_second', '%S', $sExpires), ' class="time expires"'
-            ).
-            hInput('sExpires', $sExpires),
-            '',
-            gTxt('expires')
-        );
+        inputLabel(
+            'exp_year',
+            tsi('exp_year', '%Y', $sExpires, '', 'exp_year').' / '.
+            tsi('exp_month', '%m', $sExpires, '', 'exp_month').' / '.
+            tsi('exp_day', '%d', $sExpires, '', 'exp_day'),
+            gTxt('expire_date'), 'timestamp', array('class' => 'txp-form-field date expires')
+        ).
+        inputLabel(
+            'exp_hour',
+            tsi('exp_hour', '%H', $sExpires, '', 'exp_hour').' : '.
+            tsi('exp_minute', '%M', $sExpires, '', 'exp_minute').' : '.
+            tsi('exp_second', '%S', $sExpires, '', 'exp_second'),
+            gTxt('expire_date'), '', array('class' => 'txp-form-field time expires')
+        ).
+        hInput('sExpires', $sExpires);
 
     return pluggable_ui('article_ui', 'expires', $out, $rs);
 }
