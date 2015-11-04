@@ -896,10 +896,7 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
     $inlineHelp = (isset($help[1])) ? $help[1] : '';
 
     if ($label) {
-        $labelContent = tag(gTxt($label).popHelp($help[0]), 'label', array(
-            'class' => 'txp-form-field-label',
-            'for'   => $name,
-        ));
+        $labelContent = tag(gTxt($label).popHelp($help[0]), 'label', array('for' => $name));
     } else {
         $labelContent = gTxt($name).popHelp($help[0]);
     }

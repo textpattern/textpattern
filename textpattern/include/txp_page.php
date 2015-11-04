@@ -89,7 +89,7 @@ function page_edit($message = '')
 
     $titleblock = inputLabel(
         'new_page',
-        fInput('text', 'newname', $name, 'txp-form-field-input input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true),
+        fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true),
         'page_name',
         array('', 'instructions_page_name'),
         array('class' => 'txp-form-field'),
@@ -130,7 +130,7 @@ function page_edit($message = '')
             $titleblock.
             inputLabel(
                 'html',
-                '<textarea class="txp-form-field-input code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($html).'</textarea>',
+                '<textarea class="code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($html).'</textarea>',
                 'page_code',
                 array('', 'instructions_page_code'),
                 array('class' => 'txp-form-field'),

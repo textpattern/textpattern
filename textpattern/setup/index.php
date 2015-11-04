@@ -792,8 +792,8 @@ function langs()
     $default = (!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'en-gb');
 
     $out = n.'<div class="txp-form-field">'.
-        n.'<label class="txp-form-field-label" for="setup_language">Please choose a language</label>'.
-        n.'<select  class="txp-form-field-input" id="setup_language" name="lang">';
+        n.'<label for="setup_language">Please choose a language</label>'.
+        n.'<select id="setup_language" name="lang">';
 
     foreach ($langs as $a => $b) {
         $out .= n.'<option value="'.txpspecialchars($a).'"'.

@@ -430,7 +430,7 @@ function link_edit($message = '')
             ).
             inputLabel(
                 'link_sort',
-                fInput('text', 'linksort', $linksort, '', '', '', INPUT_MEDIUM, '', 'link_sort'),
+                fInput('text', 'linksort', $linksort, 'input-medium', '', '', INPUT_MEDIUM, '', 'link_sort'),
                 'sort_value', 'link_sort', array('class' => 'txp-form-field edit-link-sort')
             ).
             // TODO: maybe use type="url" once browsers are less strict.
@@ -449,7 +449,7 @@ function link_edit($message = '')
             ).
             inputLabel(
                 'link_description',
-                '<textarea class="txp-form-field-input" id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_MEDIUM.'">'.txpspecialchars($description).'</textarea>',
+                '<textarea id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_MEDIUM.'">'.txpspecialchars($description).'</textarea>',
                 'description', 'link_description', array('class' => 'txp-form-field txp-form-field-textarea edit-link-description')
             ).
             pluggable_ui('link_ui', 'extend_detail_form', '', $rs).

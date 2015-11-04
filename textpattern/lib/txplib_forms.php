@@ -645,36 +645,36 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
     }
 
     if ($datevar == '%Y' || $name == 'year' || $name == 'exp_year') {
-        $class = ' input-year';
+        $class = 'input-year';
         $size = INPUT_XSMALL;
         $pattern = '[0-9]{4}';
     }
 
     if ($datevar == '%m' || $name == 'month' || $name == 'exp_month') {
-        $class = ' input-month';
+        $class = 'input-month';
         $pattern = '(0[1-9]|1[012])';
     }
 
     if ($datevar == '%d' || $name == 'day' || $name == 'exp_day') {
-        $class = ' input-day';
+        $class = 'input-day';
         $pattern = '(0[1-9]|1[0-9]|2[0-9]|3[01])';
     }
 
     if ($datevar == '%H' || $name == 'hour' || $name == 'exp_hour') {
-        $class = ' input-hour';
+        $class = 'input-hour';
         $pattern = '(0[0-9]|1[0-9]|2[0-3])';
     }
 
     if ($datevar == '%M' || $name == 'minute' || $name == 'exp_minute') {
-        $class = ' input-minute';
+        $class = 'input-minute';
     }
 
     if ($datevar == '%S' || $name == 'second' || $name == 'exp_second') {
-        $class = ' input-second';
+        $class = 'input-second';
     }
 
     return n.tag_void('input', array(
-        'class'       => 'txp-form-field-input'.$class,
+        'class'       => $class,
         'id'          => $id,
         'name'        => $name,
         'type'        => 'text',

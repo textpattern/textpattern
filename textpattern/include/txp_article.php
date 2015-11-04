@@ -1484,7 +1484,7 @@ function article_partial_title($rs)
 
     $out = inputLabel(
         'title',
-        fInput('text', 'Title', escape_title($rs['Title']), 'txp-form-field-input', '', '', INPUT_LARGE, '', 'title'),
+        fInput('text', 'Title', escape_title($rs['Title']), '', '', '', INPUT_LARGE, '', 'title'),
         'title',
         array('title', 'instructions_title'),
         array('class' => 'txp-form-field title'),
@@ -1563,7 +1563,7 @@ function article_partial_url_title($rs)
 {
     $out = inputLabel(
         'url-title',
-        fInput('text', 'url_title', article_partial_url_title_value($rs), 'txp-form-field-input', '', '', INPUT_REGULAR, '', 'url-title'),
+        fInput('text', 'url_title', article_partial_url_title_value($rs), '', '', '', INPUT_REGULAR, '', 'url-title'),
         'url_title',
         array('url_title', 'instructions_url_title'),
         array('class' => 'txp-form-field url-title'),
@@ -1599,7 +1599,7 @@ function article_partial_description($rs)
 {
     $out = inputLabel(
         'description',
-        '<textarea class="txp-form-field-input" id="description" name="description" cols="'.INPUT_MEDIUM.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars(article_partial_description_value($rs)).'</textarea>',
+        '<textarea id="description" name="description" cols="'.INPUT_MEDIUM.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars(article_partial_description_value($rs)).'</textarea>',
         'description',
         array('description', 'instructions_description'),
         array('class' => 'txp-form-field description'),
@@ -1635,7 +1635,7 @@ function article_partial_keywords($rs)
 {
     $out = inputLabel(
         'keywords',
-        '<textarea class="txp-form-field-input" id="keywords" name="Keywords" cols="'.INPUT_MEDIUM.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars(article_partial_keywords_value($rs)).'</textarea>',
+        '<textarea id="keywords" name="Keywords" cols="'.INPUT_MEDIUM.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars(article_partial_keywords_value($rs)).'</textarea>',
         'keywords',
         array('keywords', 'instructions_keywords'),
         array('class' => 'txp-form-field keywords'),
@@ -1672,7 +1672,7 @@ function article_partial_image($rs)
 {
     $default = inputLabel(
         'article-image',
-        fInput('text', 'Image', escape_title($rs['Image']), 'txp-form-field-input', '', '', INPUT_REGULAR, '', 'article-image'),
+        fInput('text', 'Image', escape_title($rs['Image']), '', '', '', INPUT_REGULAR, '', 'article-image'),
         'article_image',
         array('title', 'instructions_article_image'),
         array('class' => 'txp-form-field article-image'),
@@ -1793,7 +1793,7 @@ function article_partial_body($rs)
 {
     $out = inputLabel(
         'body',
-        '<textarea class="txp-form-field-input" id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($rs['Body']).'</textarea>',
+        '<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($rs['Body']).'</textarea>',
         'body',
         array('body', 'instructions_body'),
         array('class' => 'txp-form-field body'),
@@ -1817,7 +1817,7 @@ function article_partial_excerpt($rs)
 {
     $out = inputLabel(
         'excerpt',
-        '<textarea class="txp-form-field-input" id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>',
+        '<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>',
         'excerpt',
         array('excerpt', 'instructions_excerpt'),
         array('class' => 'txp-form-field excerpt'),
@@ -2014,7 +2014,7 @@ function article_partial_comments($rs)
                 ).
                 inputLabel(
                     'comment-invite',
-                    fInput('text', 'AnnotateInvite', $AnnotateInvite, 'txp-form-field-input', '', '', INPUT_REGULAR, '', 'comment-invite'),
+                    fInput('text', 'AnnotateInvite', $AnnotateInvite, '', '', '', INPUT_REGULAR, '', 'comment-invite'),
                     'comment_invitation',
                     array('', 'instructions_comment_invitation'),
                     array('class' => 'txp-form-field comment-invite'),

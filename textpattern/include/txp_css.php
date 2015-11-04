@@ -167,7 +167,7 @@ function css_edit($message = '')
             $titleblock.
             inputLabel(
                 'css',
-                '<textarea class="txp-form-field-input code" id="css" name="css" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thecss).'</textarea>',
+                '<textarea class="code" id="css" name="css" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thecss).'</textarea>',
                 'css_code',
                 array('', 'instructions_style_code'),
                 array('class' => 'txp-form-field'),

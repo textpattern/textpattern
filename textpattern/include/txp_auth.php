@@ -90,11 +90,8 @@ function doLoginForm($message)
     if ($reset) {
         $out[] = hed(gTxt('password_reset'), 1, array('id' => 'txp-login-heading')).
             n.tag(
-                n.tag(gTxt('name'), 'label', array(
-                    'class' => 'txp-form-field-label',
-                    'for' => 'login_name',
-                )).
-                fInput('text', 'p_userid', $name, 'txp-form-field-input', '', '', INPUT_REGULAR, '', 'login_name'),
+                n.tag(gTxt('name'), 'label', array('for' => 'login_name')).
+                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'),
                 'div', array('class' => 'txp-form-field login-name')).
             graf(
                 fInput('submit', '', gTxt('password_reset_button'), 'publish')).
@@ -104,18 +101,12 @@ function doLoginForm($message)
     } else {
         $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')).
             n.tag(
-                n.tag(gTxt('name'), 'label', array(
-                    'class' => 'txp-form-field-label',
-                    'for' => 'login_name',
-                )).
-                fInput('text', 'p_userid', $name, 'txp-form-field-input', '', '', INPUT_REGULAR, '', 'login_name'),
+                n.tag(gTxt('name'), 'label', array('for' => 'login_name')).
+                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'),
                 'div', array('class' => 'txp-form-field login-name')).
             n.tag(
-                n.tag(gTxt('password'), 'label', array(
-                    'class' => 'txp-form-field-label',
-                    'for' => 'login_password',
-                )).
-                fInput('password', 'p_password', '', 'txp-form-field-input', '', '', INPUT_REGULAR, '', 'login_password'),
+                n.tag(gTxt('password'), 'label', array('for' => 'login_password')).
+                fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password'),
                 'div', array('class' => 'txp-form-field login-password')).
             graf(
                 checkbox('stay', 1, $stay, '', 'login_stay').n.
