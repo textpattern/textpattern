@@ -1060,7 +1060,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 ).
                 n.tag(
                     checkbox('publish_now', '1', $publish_now, '', 'publish_now').
-                    n.'<label for="publish_now">'.gTxt('set_to_now').'</label>',
+                    n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
                     'div', array('class' => 'txp-form-field posted-now')
                 ),
                 array('sPosted' => $persist_timestamp) + $rs
@@ -2049,7 +2049,8 @@ function article_partial_posted($rs)
             ' <span role="separator">/</span> '.
             tsi('day', '%d', $sPosted, '', 'day'),
             'publish_date',
-            'timestamp', array('class' => 'txp-form-field date posted')
+            array('timestamp', 'instructions_publish_date'),
+            array('class' => 'txp-form-field date posted')
         ).
         inputLabel(
             'hour',
@@ -2059,11 +2060,13 @@ function article_partial_posted($rs)
             ' <span role="separator">:</span> '.
             tsi('second', '%S', $sPosted, '', 'second'),
             'publish_time',
-            '', array('class' => 'txp-form-field time posted')
+            array('', 'instructions_publish_time'),
+            array('class' => 'txp-form-field time posted')
         ).
-        graf(
+        n.tag(
             checkbox('reset_time', '1', $reset_time, '', 'reset_time').
-            tag(gTxt('reset_time'), 'label', array('for' => 'reset_time')), ' class="reset-time"'
+            n.tag(gTxt('reset_time'), 'label', array('for' => 'reset_time')),
+            'div', array('class' => 'txp-form-field reset-time')
         );
 
     return pluggable_ui('article_ui', 'timestamp', $out, $rs);
@@ -2092,7 +2095,8 @@ function article_partial_expires($rs)
             ' <span role="separator">/</span> '.
             tsi('exp_day', '%d', $sExpires, '', 'exp_day'),
             'expire_date',
-            'timestamp', array('class' => 'txp-form-field date expires')
+            array('expires', 'instructions_expire_date'),
+            array('class' => 'txp-form-field date expires')
         ).
         inputLabel(
             'exp_hour',
@@ -2102,7 +2106,8 @@ function article_partial_expires($rs)
             ' <span role="separator">:</span> '.
             tsi('exp_second', '%S', $sExpires, '', 'exp_second'),
             'expire_time',
-            '', array('class' => 'txp-form-field time expires')
+            array('', 'instructions_expire_time'),
+            array('class' => 'txp-form-field time expires')
         ).
         hInput('sExpires', $sExpires);
 

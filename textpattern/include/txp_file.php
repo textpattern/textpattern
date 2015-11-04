@@ -697,7 +697,7 @@ function file_edit($message = '', $id = '')
             ).
             n.tag(
                 checkbox('publish_now', '1', $publish_now, '', 'publish_now').
-                n.'<label for="publish_now">'.gTxt('set_to_now').'</label>',
+                n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
                 'div', array('class' => 'txp-form-field posted-now')
             );
 
