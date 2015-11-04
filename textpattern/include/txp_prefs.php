@@ -158,8 +158,7 @@ function prefs_list($message = '')
 
     $locale = setlocale(LC_ALL, $locale);
 
-    echo n.'<div class="txp-container" id="prefs_container">'.
-        n.'<form class="prefs-form" method="post" action="index.php">';
+    echo n.'<form class="prefs-form" method="post" action="index.php">';
 
     // TODO: remove 'custom' when custom fields are refactored.
     $core_events = array('site', 'admin', 'publish', 'feeds', 'comments', 'custom');
@@ -293,7 +292,7 @@ function prefs_list($message = '')
             tInput();
     }
 
-    echo n.'</form>'.n.'</div>';
+    echo n.'</form>';
 }
 
 /**

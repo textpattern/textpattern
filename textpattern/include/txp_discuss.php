@@ -550,8 +550,7 @@ function discuss_edit()
             '',
             'status');
 
-        echo '<div class="txp-container" id="'.$event.'_container">'.
-            form(
+        echo form(
                 n.tag_start('section', array('class' => 'txp-edit')).
                 hed(gTxt('edit_comment'), 2).
                 inputLabel(
@@ -604,7 +603,7 @@ function discuss_edit()
                 hInput('ip', $ip).
                 eInput('discuss').
                 sInput('discuss_save').
-                n.tag_end('section'), '', '', 'post', 'edit-form', '', 'discuss_edit_form'), '</div>';
+                n.tag_end('section'), '', '', 'post', 'edit-form', '', 'discuss_edit_form');
     } else {
         echo graf(
             span(null, array('class' => 'ui-icon ui-icon-info')).' '.

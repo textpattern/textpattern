@@ -545,10 +545,7 @@ function section_edit()
         hInput('dir', $dir).
         n.tag_end('section');
 
-    echo
-        n.tag_start('div', array('id' => $event.'_container', 'class' => 'txp-container')).
-        form(join('', $out), '', '', 'post', 'edit-form', '', 'section_details').
-        n.tag_end('div');
+    echo form(join('', $out), '', '', 'post', 'edit-form', '', 'section_details');
 }
 
 /**

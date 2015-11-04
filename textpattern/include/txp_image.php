@@ -598,9 +598,7 @@ function image_edit($message = '', $id = '')
             }
         }
 
-        echo n.'<div class="txp-container" id="'.$event.'_container">'.
-
-            pluggable_ui(
+        echo pluggable_ui(
                 'image_ui',
                 'fullsize_image',
                 $img,
@@ -703,8 +701,7 @@ function image_edit($message = '', $id = '')
                     hInput('crit', $crit), '', '', 'post', 'edit-form', '', 'image_details_form'),
             '</div>',
 
-            n.tag_end('section').
-            n.'</div>';
+            n.tag_end('section');
     }
 }
 

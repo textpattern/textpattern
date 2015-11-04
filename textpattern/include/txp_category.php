@@ -561,9 +561,7 @@ function cat_event_category_edit($evname)
             hInput('old_name', $name).
             n.tag_end('section');
 
-        echo n.'<div class="txp-container" id="category_container">'.
-            form($out, '', '', 'post', 'edit-form').
-            n.'</div>';
+        echo form($out, '', '', 'post', 'edit-form');
     } else {
         cat_category_list(array(gTxt('category_not_found'), E_ERROR));
     }

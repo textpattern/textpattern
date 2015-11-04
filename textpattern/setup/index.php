@@ -125,15 +125,13 @@ function chooseLang()
 {
     $_SESSION = array();
 
-    echo n.'<div class="txp-container" id="setup_container">',
-        n.'<div class="txp-setup">',
+    echo n.'<div class="txp-setup">',
         hed('Welcome to Textpattern CMS', 1),
         n.'<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">',
         langs(),
         graf(fInput('submit', 'Submit', 'Submit', 'publish')),
         sInput('getDbInfo'),
         n.'</form>',
-        n.'</div>',
         n.'</div>';
 }
 
@@ -186,8 +184,7 @@ function getDbInfo()
 
     global $txpcfg;
 
-    echo n.'<div class="txp-container" id="setup_container">',
-        txp_setup_progress_meter(1),
+    echo txp_setup_progress_meter(1),
         n.'<div class="txp-setup">';
 
     if (!isset($txpcfg['db'])) {
@@ -199,7 +196,6 @@ function getDbInfo()
                 span(setup_gTxt('already_installed', array('{txpath}' => txpath)), ' class="warning"')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
 
         exit;
@@ -267,7 +263,6 @@ function getDbInfo()
 
     echo sInput('printConfig').
         n.'</form>'.
-        n.'</div>'.
         n.'</div>';
 }
 
@@ -432,8 +427,6 @@ function getTxpLogin()
 
     global $txpcfg;
 
-    echo n.'<div class="txp-container" id="setup_container">';
-
     $problems = array();
 
     if (!isset($txpcfg['db'])) {
@@ -455,7 +448,6 @@ function getTxpLogin()
             n.'<div class="txp-setup">'.
             n.join(n, $problems).
             setup_config_contents().
-            n.'</div>'.
             n.'</div>';
 
         exit;
@@ -482,9 +474,8 @@ function getTxpLogin()
     $theme_chooser = selectInput('theme', $vals, (isset($_SESSION['theme']) ? txpspecialchars($_SESSION['theme']) : 'hive'), '', '', 'setup_admin_theme');
 
     echo txp_setup_progress_meter(3).
-        n.'<div class="txp-setup">';
-
-    echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
+        n.'<div class="txp-setup">'.
+        n.'<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         hed(
             setup_gTxt('creating_db_tables'), 2
         ).
@@ -524,7 +515,6 @@ function getTxpLogin()
         ).
         sInput('createTxp').
         n.'</form>'.
-        n.'</div>'.
         n.'</div>';
 }
 
@@ -543,40 +533,34 @@ function createTxp()
     $_SESSION['theme'] = ps('theme');
 
     if ($_SESSION['name'] == '') {
-        echo n.'<div class="txp-container" id="setup_container">'.
-            txp_setup_progress_meter(3).
+        echo txp_setup_progress_meter(3).
             n.'<div class="txp-setup">'.
             graf(
                 span(setup_gTxt('name_required'), ' class="error"')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
         exit;
     }
 
     if (!$_SESSION['pass']) {
-        echo n.'<div class="txp-container" id="setup_container">'.
-            txp_setup_progress_meter(3).
+        echo txp_setup_progress_meter(3).
             n.'<div class="txp-setup">'.
             graf(
                 span(setup_gTxt('pass_required'), ' class="error"')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
         exit;
     }
 
     if (!is_valid_email($_SESSION['email'])) {
-        echo n.'<div class="txp-container" id="setup_container">'.
-            txp_setup_progress_meter(3).
+        echo txp_setup_progress_meter(3).
             n.'<div class="txp-setup">'.
             graf(
                 span(setup_gTxt('email_required'), ' class="error"')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
         exit;
     }
@@ -647,8 +631,7 @@ function makeConfig()
 
 function fbCreate()
 {
-    echo n.'<div class="txp-container" id="setup_container">'.
-        txp_setup_progress_meter(4).
+    echo txp_setup_progress_meter(4).
         n.'<div class="txp-setup">';
 
     if ($GLOBALS['txp_install_successful'] === false) {
@@ -690,7 +673,6 @@ function fbCreate()
                 href(setup_gTxt('go_to_login'), $login_url, ' class="navlink publish"')
             ).
 
-            n.'</div>'.
             n.'</div>';
     }
 }

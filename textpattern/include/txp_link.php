@@ -394,8 +394,6 @@ function link_edit($message = '')
 
     pagetop(gTxt('tab_link'), $message);
 
-    echo '<div class="txp-container" id="'.$event.'_container">';
-
     extract(array_map('assert_string', gpsa($vars)));
 
     $is_edit = ($id && $step == 'link_edit');
@@ -461,8 +459,6 @@ function link_edit($message = '')
             hInput('crit', gps('crit')).
             n.tag_end('section'), '', '', 'post', 'edit-form', '', 'link_details');
     }
-
-    echo '</div>';
 }
 
 /**

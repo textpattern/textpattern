@@ -282,9 +282,7 @@ function plugin_edit()
     $name = gps('name');
     pagetop(gTxt('edit_plugins'));
 
-    echo n.'<div class="txp-container" id="'.$event.'_container">';
     echo plugin_edit_form($name);
-    echo '</div>';
 }
 
 /**
@@ -298,9 +296,7 @@ function plugin_help()
     $name = gps('name');
     pagetop(gTxt('plugin_help'));
     $help = ($name) ? safe_field('help', 'txp_plugin', "name = '".doSlash($name)."'") : '';
-    echo '<div class="txp-container txp-view" id="'.$event.'_container">'
-        .'<div class="text-column">'.$help.'</div>'
-        .'</div>';
+    echo n.tag($help, 'div', array('class' => 'txp-layout-textbox'));
 }
 
 /**
@@ -430,9 +426,7 @@ function plugin_verify()
                 $sub = fInput('submit', '', gTxt('install'), 'publish');
 
                 pagetop(gTxt('verify_plugin'));
-                echo
-                '<div class="txp-container txp-view" id="'.$event.'_container">'.
-                form(
+                echo form(
                     hed(gTxt('previewing_plugin'), 2).
                     tag($source, 'div', ' class="code" id="preview-plugin" dir="ltr"').
                     hed(gTxt('plugin_help').':', 2).
@@ -440,8 +434,8 @@ function plugin_verify()
                     $sub.
                     sInput('plugin_install').
                     eInput('plugin').
-                    hInput('plugin64', $plugin_encoded), '', '', 'post', 'plugin-info', '', 'plugin_preview').
-                '</div>';
+                    hInput('plugin64', $plugin_encoded), '', '', 'post', 'plugin-info', '', 'plugin_preview'
+                );
 
                 return;
             }
