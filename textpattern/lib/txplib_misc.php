@@ -4446,7 +4446,7 @@ function markup_comment($msg)
 {
     $textile = new \Textpattern\Textile\Parser();
 
-    return $textile->TextileRestricted($msg);
+    return $textile->textileRestricted($msg);
 }
 
 /**

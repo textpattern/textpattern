@@ -31,20 +31,12 @@
 namespace Textpattern\Textile;
 
 /**
- * Imports Textile.
- */
-
-use Textile;
-
-require_once txpath.'/lib/classTextile.php';
-
-/**
  * Textile parser.
  *
  * @since   4.6.0
  * @package Textile
  */
-class Parser extends Textile
+class Parser extends \Netcarver\Textile\Parser
 {
     /**
      * Constructor.
