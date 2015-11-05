@@ -1241,6 +1241,79 @@ jQuery.fn.txpSortable = function (options)
 };
 
 /**
+ * Mask/unmask password input field.
+ *
+ * @since  4.6.0
+ */
+
+textpattern.passwordMask = function()
+{
+    $('body').on('click', '#show_password', function() {
+        var inputBox = $(this).closest('form').find('input.txp-maskable');
+        var newType = (inputBox.attr('type') === 'password') ? 'text' : 'password';
+        textpattern.changeType(inputBox, newType);
+    });
+}
+
+/**
+ * Change the type of an input element.
+ *
+ * @param  {object} elem The <input/> element
+ * @param  {string} type The desired type
+ *
+ * @see    https://gist.github.com/3559343 for original
+ * @since  4.6.0
+ */
+
+textpattern.changeType = function(elem, type)
+{
+    if (elem.prop('type') === type) {
+        // Already the correct type.
+        return elem;
+    }
+
+    try {
+        // May fail if browser prevents it.
+        return elem.prop('type', type);
+    } catch(e) {
+        // Create the element by hand.
+        // Clone it via a div (jQuery has no html() method for an element).
+        var html = $("<div>").append(elem.clone()).html();
+
+        // Match existing attributes of type=text or type="text".
+        var regex = /type=(\")?([^\"\s]+)(\")?/;
+
+        // If no match, add the type attribute to the end; otherwise, replace it.
+        var tmp = $(html.match(regex) == null ?
+            html.replace(">", ' type="' + type + '">') :
+            html.replace(regex, 'type="' + type + '"'));
+
+        // Copy data from old element.
+        tmp.data('type', elem.data('type'));
+        var events = elem.data('events');
+        var cb = function(events) {
+            return function() {
+                // Re-bind all prior events.
+                for(var idx in events) {
+                    var ydx = events[idx];
+
+                    for(var jdx in ydx) {
+                        tmp.bind(idx, ydx[jdx].handler);
+                    }
+                }
+            }
+        }(events);
+
+        elem.replaceWith(tmp);
+
+        // Wait a smidge before firing callback.
+        setTimeout(cb, 10);
+
+        return tmp;
+    }
+}
+
+/**
  * Encodes a string for a use in HTML.
  *
  * @param  {string} string The string
@@ -1447,15 +1520,14 @@ textpattern.Route.add('login', function ()
     }
 
     // Focus on either username or password when empty.
-    var has_name = $('#login_name').val().length;
-    var password_box = $('#login_password').val();
-    var has_password = (password_box) ? password_box.length : 0;
+    $('#login_form input').each(function() {
+        if (this.value === '') {
+            this.focus();
+            return false;
+        }
+    });
 
-    if (!has_name) {
-        $('#login_name').focus();
-    } else if (!has_password) {
-        $('#login_password').focus();
-    }
+    textpattern.passwordMask();
 });
 
 // Write panel.
@@ -1535,6 +1607,13 @@ textpattern.Route.add('form', function ()
         'row'         : '.switcher-list li, .form-list-name',
         'highlighted' : '.switcher-list li'
     });
+});
+
+// Admin panel
+
+textpattern.Route.add('admin', function ()
+{
+    textpattern.passwordMask();
 });
 
 // Preferences panel.

@@ -132,7 +132,7 @@ function change_pass()
 {
     global $txp_user;
 
-    extract(psa(array('new_pass', 'mail_password')));
+    extract(psa(array('new_pass')));
 
     if (empty($new_pass)) {
         author_list(array(gTxt('password_required'), E_ERROR));
@@ -143,18 +143,8 @@ function change_pass()
     $rs = change_user_password($txp_user, $new_pass);
 
     if ($rs) {
-        $message = gTxt('password_changed');
-
-        if ($mail_password) {
-            $email = fetch('email', 'txp_users', 'name', $txp_user);
-
-            send_new_password($new_pass, $email, $txp_user);
-
-            $message .= sp.gTxt('and_mailed_to').sp.$email;
-        }
-
-        $message .= '.';
-
+        // Todo: Move full stop to Textpack.
+        $message = gTxt('password_changed') . '.';
         author_list($message);
     }
 }
@@ -241,12 +231,12 @@ function new_pass_form()
         hed(gTxt('change_password'), 2).
         inputLabel(
             'new_pass',
-            fInput('password', 'new_pass', '', '', '', '', INPUT_REGULAR, '', 'new_pass'),
+            fInput('password', 'new_pass', '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'new_pass'),
             'new_password', '', array('class' => 'txp-form-field edit-admin-new-password')
         ).
         graf(
-            checkbox('mail_password', '1', true, '', 'mail_password').
-            n.tag(gTxt('mail_it'), 'label', array('for' => 'mail_password')), array('class' => 'edit-admin-mail-password')).
+            checkbox('unmask', 1, false, 0, 'show_password').
+            n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')), array('class' => 'edit-admin-show-password')).
         graf(fInput('submit', 'change_pass', gTxt('submit'), 'publish')).
         eInput('admin').
         sInput('change_pass'),
@@ -714,20 +704,11 @@ function admin_multi_edit()
         case 'resetpassword':
 
             foreach ($names as $name) {
-                $passwd = generate_password(PASSWORD_LENGTH);
-
-                if (change_user_password($name, $passwd)) {
-                    $email = safe_field("email", 'txp_users', "name = '".doSlash($name)."'");
-
-                    if (send_new_password($passwd, $email, $name)) {
-                        $changed[] = $name;
-                        $msg = 'author_updated';
-                    } else {
-                        return author_list(array(gTxt('could_not_mail').' '.txpspecialchars($name), E_ERROR));
-                    }
-                }
+                send_reset_confirmation_request($name);
+                $changed[] = $name;
             }
 
+            $msg = 'password_reset_confirmation_request_sent';
             break;
     }
 

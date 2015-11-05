@@ -402,6 +402,53 @@ if (!defined('PASSWORD_SYMBOLS')) {
     define('PASSWORD_SYMBOLS', '23456789abcdefghijkmnopqrstuvwxyz');
 }
 
+if (!defined('HASHING_ALGORITHM')) {
+    /**
+     * Algorithm to use for hashing passwords/reset requests.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @since   4.6.0
+     * @see     PHP's hash_algos() function
+     * @example
+     * define('HASHING_ALGORITHM', 'whirlpool');
+     */
+
+    define('HASHING_ALGORITHM', 'ripemd256');
+}
+
+if (!defined('SALT_LENGTH')) {
+    /**
+     * Length of salt/selector hashes.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @since   4.6.0
+     * @example
+     * define('SALT_LENGTH', '80');
+     */
+
+    define('SALT_LENGTH', '64');
+}
+
+if (!defined('RESET_EXPIRY_MINUTES')) {
+    /**
+     * Length of time (in minutes) that a password reset request remains valid.
+     *
+     * This constant can be overridden from the config.php.
+     * Values under 60 may fall foul of DST changeover times, but meh.
+     *
+     * @package User
+     * @since   4.6.0
+     * @example
+     * define('RESET_EXPIRY_MINUTES', '90');
+     */
+
+    define('RESET_EXPIRY_MINUTES', '20');
+}
+
 if (!defined('LOGIN_COOKIE_HTTP_ONLY')) {
     /**
      * If TRUE, login cookie is set just for HTTP.

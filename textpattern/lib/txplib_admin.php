@@ -33,12 +33,16 @@
  * This function can be only executed when the currently authenticated user
  * trying to send the email was granted 'admin.edit' privileges.
  *
- * @param  string $RealName The real name
- * @param  string $name     The login name
- * @param  string $email    The email address
- * @param  string $password The password
- * @return bool FALSE on error.
- * @see    send_new_password()
+ * Should NEVER be used as sending plaintext passwords is wrong.
+ * Will be removed in future, in lieu of sending reset request tokens.
+ *
+ * @param      string $RealName The real name
+ * @param      string $name     The login name
+ * @param      string $email    The email address
+ * @param      string $password The password
+ * @return     bool FALSE on error.
+ * @deprecated in 4.6.0
+ * @see        send_new_password(), send_reset_confirmation_request
  * @example
  * if (send_password('John Doe', 'login', 'example@example.tld', 'password'))
  * {
@@ -70,12 +74,16 @@ function send_password($RealName, $name, $email, $password)
  * If the $name is FALSE, the password is sent to the currently
  * authenticated user.
  *
- * @param  string $password The new password
- * @param  string $email    The email address
- * @param  string $name     The login name
- * @return bool FALSE on error.
- * @see    send_password()
- * @see    reset_author_pass()
+ * Should NEVER be used as sending plaintext passwords is wrong.
+ * Will be removed in future, in lieu of sending reset request tokens.
+ *
+ * @param      string $password The new password
+ * @param      string $email    The email address
+ * @param      string $name     The login name
+ * @return     bool FALSE on error.
+ * @deprecated in 4.6.0
+ * @see        send_reset_confirmation_request
+ * @see        reset_author_pass()
  * @example
  * $pass = generate_password();
  * if (send_new_password($pass, 'example@example.tld', 'user'))
@@ -105,9 +113,9 @@ function send_new_password($password, $email, $name)
  * Sends a password reset link to a user's email address.
  *
  * This function will return a success message even when the specified user
- * doesn't exist. Though an error message could be thrown when user isn't found,
- * this is done due to security. This prevents the function from leaking
- * existing account names.
+ * doesn't exist. Though an error message could be thrown when a user isn't
+ * found, this is done due to security, which prevents the function from
+ * leaking existing account names.
  *
  * @param  string $name The login name
  * @return string A localized message string
@@ -121,18 +129,41 @@ function send_reset_confirmation_request($name)
 {
     global $sitename;
 
-    $rs = safe_row("email, nonce", 'txp_users', "name = '".doSlash($name)."'");
+    $rs = safe_row("user_id, email, nonce, pass", 'txp_users', "name = '".doSlash($name)."'");
 
     if ($rs) {
         extract($rs);
 
-        $confirm = bin2hex(pack('H*', substr(md5($nonce), 0, 10)).$name);
+        $uid = assert_int($user_id);
+
+        // The selector becomes an indirect reference to the txp_users row,
+        // which does not leak information.
+        $selector = Txp::get('\Textpattern\Password\Random')->generate(12);
+        $expiry = strftime('%Y-%m-%d %H:%M:%S', time() + (60 * RESET_EXPIRY_MINUTES));
+
+        // Use a hash of the nonce, selector and password.
+        // This ensures that confirmation requests expire automatically when:
+        //  a) The person next logs in, or
+        //  b) They successfully change their password (usually as a result of this reset request)
+        // Using the selector in the hash just injects randomness, otherwise two requests
+        // back-to-back would generate the same confirmation code.
+        // Old requests for the same user id are purged every time a new request is made.
+        $token = bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $nonce . $selector . $pass), 0, SALT_LENGTH)));
+        $confirm = $token.$selector;
+
+        // Remove any previous reset tokens and insert the new one.
+        safe_delete("txp_token", "reference_id = $uid AND type = 'password_reset'");
+        safe_insert("txp_token",
+                "reference_id = $uid,
+                type = 'password_reset',
+                selector = '".doSlash($selector)."',
+                token = '".doSlash($token)."',
+                expires = '".doSlash($expiry)."'
+            ");
 
         $message = gTxt('greeting').' '.$name.','.
-
-            n.n.gTxt('password_reset_confirmation').': '.
+            n.n.gTxt('password_reset_confirmation').
             n.hu.'textpattern/index.php?confirm='.$confirm;
-
         if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message)) {
             return gTxt('password_reset_confirmation_request_sent');
         } else {
@@ -141,6 +172,8 @@ function send_reset_confirmation_request($name)
     } else {
         // Though 'unknown_author' could be thrown, send generic 'request_sent'
         // message instead so that (non-)existence of account names are not leaked.
+        // There's a possibility of a timing attack revealing the existence of
+        // an account, which we could defend against to some degree.
         return gTxt('password_reset_confirmation_request_sent');
     }
 }
@@ -151,10 +184,14 @@ function send_reset_confirmation_request($name)
  * Generates a random password of given length using the symbols set in
  * PASSWORD_SYMBOLS constant.
  *
- * @param  int $length The length of the password
- * @return string Random plain-text password
- * @see    PASSWORD_SYMBOLS
- * @see    PASSWORD_LENGTH
+ * Should NEVER be used as it is not cryptographically secure.
+ * Will be removed in future, in lieu of sending reset request tokens.
+ *
+ * @param      int $length The length of the password
+ * @return     string Random plain-text password
+ * @deprecated in 4.6.0
+ * @see        \Textpattern\Password\Generate
+ * @see        \Textpattern\Password\Random
  * @example
  * echo generate_password(128);
  */
@@ -187,10 +224,14 @@ function generate_password($length = 10)
 /**
  * Resets the given user's password and emails it.
  *
- * The old password replaced with a new random-generated one.
+ * The old password is replaced with a new random-generated one.
+ *
+ * Should NEVER be used as sending plaintext passwords is wrong.
+ * Will be removed in future, in lieu of sending reset request tokens.
  *
  * @param  string $name The login name
  * @return string A localized message string
+ * @deprecated in 4.6.0
  * @see    PASSWORD_LENGTH
  * @see    generate_password()
  * @example

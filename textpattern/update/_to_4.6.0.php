@@ -196,3 +196,15 @@ safe_drop_index('txp_section', "name");
 
 // The txp_priv table was created for version 1.0, but never used nor created in later versions.
 safe_drop('txp_priv');
+
+// Add generic token table.
+safe_create('txp_token',"
+id           INT          NOT NULL AUTO_INCREMENT,
+reference_id INT          DEFAULT 0,
+type         VARCHAR(255) DEFAULT '',
+selector     CHAR(12)     DEFAULT '',
+token        VARCHAR(255) DEFAULT '',
+expires      DATETIME     DEFAULT '0000-00-00 00:00:00',
+PRIMARY KEY (id)
+"
+);

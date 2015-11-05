@@ -71,23 +71,26 @@ function doLoginForm($message)
     global $textarray_script, $event, $step;
 
     include txpath.'/lib/txplib_head.php';
+
     $event = 'login';
+
+    $stay = (cs('txp_login') && !gps('logout') ? 1 : 0);
+    $reset = gps('reset');
+    $confirm = gps('confirm');
 
     if (gps('logout')) {
         $step = 'logout';
-    } elseif (gps('reset')) {
+    } elseif ($reset) {
         $step = 'reset';
+    } elseif ($confirm) {
+        $step = 'confirm';
     }
-
-    pagetop(gTxt('login'), $message);
-
-    $stay = (cs('txp_login') and !gps('logout') ? 1 : 0);
-    $reset = gps('reset');
 
     $name = join(',', array_slice(explode(',', cs('txp_login')), 0, -1));
     $out = array();
 
     if ($reset) {
+        $pageTitle = gTxt('password_reset');
         $out[] = hed(gTxt('password_reset'), 1, array('id' => 'txp-login-heading')).
             n.tag(
                 n.tag(gTxt('name'), 'label', array('for' => 'login_name')).
@@ -98,7 +101,29 @@ function doLoginForm($message)
             graf(
                 href(gTxt('back_to_login'), 'index.php'), array('class' => 'login-return')).
             hInput('p_reset', 1);
+    } elseif ($confirm) {
+        $pageTitle = gTxt('change_password');
+        $out[] = hed(gTxt('change_password'), 1, array('id' => 'txp-change-password-heading')).
+            n.tag(
+                n.tag(gTxt('new_password'), 'label', array(
+                    'class' => 'txp-form-field-label',
+                    'for' => 'change_password',
+                )).
+                fInput('password', 'p_password', '', 'txp-form-field-input txp-maskable', '', '', INPUT_REGULAR, '', 'change_password', false, true),
+                'div', array('class' => 'txp-form-field change-password')).
+            graf(
+                checkbox('unmask', 1, false, 0, 'show_password').n.
+                tag(gTxt('show_password'), 'label', array('for' => 'show_password'))
+                , array('class' => 'show-password')).
+            graf(
+                fInput('submit', '', gTxt('password_confirm_button'), 'publish').n
+            ).
+            graf(
+                href(gTxt('back_to_login'), 'index.php'), array('class' => 'login-return'));
+        $out[] = hInput('hash', gps('confirm'));
+        $out[] = hInput('p_alter', 1);
     } else {
+        $pageTitle = gTxt('login');
         $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')).
             n.tag(
                 n.tag(gTxt('name'), 'label', array('for' => 'login_name')).
@@ -124,6 +149,8 @@ function doLoginForm($message)
         }
     }
 
+    pagetop($pageTitle, $message);
+
     echo form(
         join('', $out), '', '', 'post', 'txp-login', '', 'login_form').
 
@@ -136,6 +163,16 @@ function doLoginForm($message)
 /**
  * Validates the sent login form and creates a session.
  *
+ * During the reset request procedure, it is conceivable to verify the
+ * token as soon as it is presented in the URL, but that would require:
+ *  a) very similar code in both p_confirm and p_alter branches (unless refactored)
+ *  b) some way (other than via the message) to signal back to doLoginForm() that
+ *     the token is bogus so the 'change your password' form is not displayed.
+ *     Perhaps raise an exception?
+ *
+ * @todo  Investigate validating confirm token as soon as it's presented in URL (better UX).
+ * @todo  Could this be done via a Validator()?
+ *
  * @return string A localised feedback message
  * @see    doLoginForm()
  */
@@ -143,15 +180,18 @@ function doLoginForm($message)
 function doTxpValidate()
 {
     global $logout, $txp_user;
+
     $p_userid   = ps('p_userid');
     $p_password = ps('p_password');
     $p_reset    = ps('p_reset');
+    $p_alter    = ps('p_alter');
     $stay       = ps('stay');
+    $p_confirm  = gps('confirm');
     $logout     = gps('logout');
     $message    = '';
     $pub_path   = preg_replace('|//$|', '/', rhu.'/');
 
-    if (cs('txp_login') and strpos(cs('txp_login'), ',')) {
+    if (cs('txp_login') && strpos(cs('txp_login'), ',')) {
         $txp_login = explode(',', cs('txp_login'));
         $c_hash = end($txp_login);
         $c_userid = join(',', array_slice($txp_login, 0, -1));
@@ -165,7 +205,11 @@ function doTxpValidate()
         setcookie('txp_login_public', '', time() - 3600, $pub_path);
     }
 
-    if ($c_userid and strlen($c_hash) == 32) { // Cookie exists.
+    if ($c_userid && strlen($c_hash) === 32) {
+        // Cookie exists.
+        // @todo Improve security by using a better nonce/salt mechanism. md5 and uniqid are bad.
+        // @todo Flag cookie-based logins and force confirmation of old password when
+        // changing it from Admin->Users panel.
         $r = safe_row(
             "name, nonce",
             'txp_users',
@@ -193,7 +237,8 @@ function doTxpValidate()
             setcookie('txp_login_public', '', time() - 3600, $pub_path);
             $message = array(gTxt('bad_cookie'), E_ERROR);
         }
-    } elseif ($p_userid and $p_password) { // Incoming login vars.
+    } elseif ($p_userid && $p_password) {
+        // Incoming login vars.
         $name = txp_validate($p_userid, $p_password);
 
         if ($name !== false) {
@@ -218,7 +263,7 @@ function doTxpValidate()
 
             setcookie(
                 'txp_login_public',
-                substr(md5($nonce), - 10).$name,
+                substr(md5($nonce), -10).$name,
                 ($stay ? time() + 3600 * 24 * 30 : 0),
                 $pub_path
             );
@@ -232,25 +277,50 @@ function doTxpValidate()
             txp_status_header('401 Could not log in with that username/password');
             $message = array(gTxt('could_not_log_in'), E_ERROR);
         }
-    } elseif ($p_reset) { // Reset request.
+    } elseif ($p_reset) {
+        // Reset request.
         sleep(3);
 
         include_once txpath.'/lib/txplib_admin.php';
 
         $message = ($p_userid) ? send_reset_confirmation_request($p_userid) : '';
-    } elseif (gps('reset')) {
-        $message = '';
-    } elseif (gps('confirm')) {
+    } elseif ($p_alter) {
+        // Password change confirmation.
         sleep(3);
+        global $sitename;
 
-        $confirm = pack('H*', gps('confirm'));
-        $name    = substr($confirm, 5);
-        $nonce   = safe_field("nonce", 'txp_users', "name = '".doSlash($name)."'");
+        $pass = ps('p_password');
 
-        if ($nonce and $confirm === pack('H*', substr(md5($nonce), 0, 10)).$name) {
-            include_once txpath.'/lib/txplib_admin.php';
+        if (trim($pass) === '') {
+            $message = array(gTxt('password_required'), E_ERROR);
+        } else {
+            $hash = gps('hash');
+            $selector = substr($hash, SALT_LENGTH);
+            $tokenInfo = safe_row("reference_id, token, expires", 'txp_token', "selector = '".doSlash($selector)."' AND type='password_reset'");
 
-            $message = reset_author_pass($name);
+            if ($tokenInfo) {
+                if (strtotime($tokenInfo['expires']) <= time()) {
+                    $message = array(gTxt('token_expired'), E_ERROR);
+                } else {
+                    $uid = assert_int($tokenInfo['reference_id']);
+                    $row = safe_row("name, email, nonce, pass AS old_pass", 'txp_users', "user_id = $uid");
+
+                    if ($row['nonce'] && ($hash === bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $row['nonce'].$selector.$row['old_pass']), 0, SALT_LENGTH))).$selector)) {
+                        if (change_user_password($row['name'], $pass)) {
+                            $body = gTxt('greeting').' '.$row['name'].','.n.n.gTxt('password_change_confirmation');
+                            txpMail($row['email'], "[$sitename] ".gTxt('password_changed'), $body);
+                            $message = gTxt('password_changed');
+
+                            // Invalidate all reset requests in the wild for this user.
+                            safe_delete("txp_token", "reference_id = $uid AND type = 'password_reset'");
+                        }
+                    } else {
+                        $message = array(gTxt('invalid_token'), E_ERROR);
+                    }
+                }
+            } else {
+                $message = array(gTxt('invalid_token'), E_ERROR);
+            }
         }
     }
 
