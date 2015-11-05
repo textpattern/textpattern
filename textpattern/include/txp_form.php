@@ -267,7 +267,6 @@ function form_edit($message = '')
         extract($rs);
     }
 
-    // TODO: make this use readonly inputLabels instead of divs.
     if (in_array($name, $essential_forms)) {
         $name_widgets = inputLabel(
             'new_form',
