@@ -74,7 +74,7 @@ if (count($txpdir) > 3) {
 $step = ps('step');
 $rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i", '$1', $_SERVER['PHP_SELF']);
 $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
-$bodyclass = ($step == '') ? ' class="welcome"' : '';
+$bodyclass = ($step == '') ? ' welcome' : '';
 
 print <<<eod
 <!DOCTYPE html>
@@ -90,7 +90,7 @@ print <<<eod
 <link rel="stylesheet" href="../theme/hive/assets/css/textpattern.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 </head>
-<body id="page-setup"{$bodyclass}>
+<body class="setup{$bodyclass}" id="page-setup">
 <main class="txp-body">
 eod;
 
@@ -773,7 +773,10 @@ function langs()
     $default = (!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'en-gb');
 
     $out = n.'<div class="txp-form-field">'.
+        n.'<div class="txp-form-field-label">'.
         n.'<label for="setup_language">Please choose a language</label>'.
+        n.'</div>'.
+        n.'<div class="txp-form-field-value">'.
         n.'<select id="setup_language" name="lang">';
 
     foreach ($langs as $a => $b) {
@@ -783,6 +786,7 @@ function langs()
     }
 
     $out .= n.'</select>'.
+        n.'</div>'.
         n.'</div>';
 
     return $out;

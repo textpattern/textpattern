@@ -2207,7 +2207,7 @@ body {
  * Move offscreen - don't `display:none` as we need to show #messagepane content.
  * `.txp-view-site` is OK to hide though (otherwise it affects page tabbing).
  */
-.login-pane .txp-header {
+.login .txp-header {
   position: absolute;
   right: auto;
   left: -1000em;
@@ -6049,8 +6049,8 @@ label.ui-state-active.ui-button:active {
     padding: 4em 1.53846153846154em 0;
   }
 
-  #page-setup,
-  .login-pane {
+  .setup,
+  .login {
     padding: 1em 1.53846153846154em 0;
   }
 
