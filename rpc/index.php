@@ -77,6 +77,15 @@ require_once txpath.'/lib/txplib_misc.php';
 require_once txpath.'/lib/admin_config.php';
 require_once txpath.'/lib/IXRClass.php';
 
+require_once txpath.'/vendors/Textpattern/Loader.php';
+
+$loader = new \Textpattern\Loader(txpath.'/vendors');
+$loader->register();
+
+$loader = new \Textpattern\Loader(txpath.'/lib');
+$loader->register();
+
+
 if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) {
     // TODO: where is dbversion used?
     $dbversion = safe_field('val', 'txp_prefs', "name = 'version'");

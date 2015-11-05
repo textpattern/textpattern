@@ -33,11 +33,15 @@ require_once txpath.'/lib/txplib_html.php';
 
 class TXP_RPCServer extends IXR_IntrospectionServer
 {
-    function TXP_RPCServer()
+    function __construct()
     {
-        global $enable_xmlrpc_server;
+        global $enable_xmlrpc_server, $HTTP_RAW_POST_DATA;
 
-        $this->IXR_IntrospectionServer();
+        if (!$HTTP_RAW_POST_DATA) {
+            $HTTP_RAW_POST_DATA = file_get_contents('php://input');
+        }
+
+        parent::__construct();
 
         // Add API Methods as callbacks.
         if ($enable_xmlrpc_server) {
