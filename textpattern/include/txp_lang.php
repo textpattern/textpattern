@@ -287,7 +287,7 @@ function list_languages($message = '')
                 fInput('submit', 'install_new', gTxt('upload')).
                 eInput('lang').
                 sInput('get_textpack')
-                , '', '', 'post', 'edit-form', '', 'text_uploader'
+                , '', '', 'post', '', '', 'text_uploader'
             ), 'div', array('class' => 'txp-control-panel')).
 
         n.tag_end('div');

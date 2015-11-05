@@ -531,8 +531,7 @@ function cat_event_category_edit($evname)
         extract($row);
         list($parent_widget, $has_parent) = cat_parent_pop($parent, $evname, $id);
 
-        $out = n.tag_start('section', array('class' => 'txp-edit')).
-            hed(gTxt('edit_category'), 2).
+        $out = hed(gTxt('edit_category'), 2).
             inputLabel(
                 'category_name',
                 fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'),
@@ -558,10 +557,9 @@ function cat_event_category_edit($evname)
             graf(fInput('submit', '', gTxt('save'), 'publish')).
             eInput('category').
             sInput('cat_'.$evname.'_save').
-            hInput('old_name', $name).
-            n.tag_end('section');
+            hInput('old_name', $name);
 
-        echo form($out, '', '', 'post', 'edit-form');
+        echo form($out, '', '', 'post', 'txp-edit');
     } else {
         cat_category_list(array(gTxt('category_not_found'), E_ERROR));
     }

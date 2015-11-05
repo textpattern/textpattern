@@ -551,7 +551,6 @@ function discuss_edit()
             'status');
 
         echo form(
-                n.tag_start('section', array('class' => 'txp-edit')).
                 hed(gTxt('edit_comment'), 2).
                 inputLabel(
                     'status',
@@ -602,8 +601,8 @@ function discuss_edit()
                 hInput('parentid', $parentid).
                 hInput('ip', $ip).
                 eInput('discuss').
-                sInput('discuss_save').
-                n.tag_end('section'), '', '', 'post', 'edit-form', '', 'discuss_edit_form');
+                sInput('discuss_save'),
+            '', '', 'post', 'txp-edit', '', 'discuss_edit_form');
     } else {
         echo graf(
             span(null, array('class' => 'ui-icon ui-icon-info')).' '.

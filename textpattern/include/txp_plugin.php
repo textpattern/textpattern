@@ -319,7 +319,7 @@ function plugin_edit_form($name = '')
             graf(fInput('submit', '', gTxt('Save'), 'publish')).
             eInput('plugin').
             sInput('plugin_save').
-            hInput('name', $name), '', '', 'post', 'edit-form', '', 'plugin_details');
+            hInput('name', $name), '', '', 'post', '', '', 'plugin_details');
 }
 
 /**

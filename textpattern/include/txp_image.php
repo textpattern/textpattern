@@ -605,7 +605,6 @@ function image_edit($message = '', $id = '')
                 $rs
             ),
 
-            n.tag_start('section', array('class' => 'txp-edit')).
             hed(gTxt('edit_image'), 2),
 
             pluggable_ui(
@@ -655,7 +654,7 @@ function image_edit($message = '', $id = '')
                         hInput('dir', $dir).
                         hInput('page', $page).
                         hInput('search_method', $search_method).
-                        hInput('crit', $crit), '', '', 'post', 'edit-form', '', 'thumbnail_alter_form'),
+                        hInput('crit', $crit), '', '', 'post', '', '', 'thumbnail_alter_form'),
                     'create_thumbnail',
                     'thumbnail-alter',
                     'create_thumbnail'
@@ -698,10 +697,9 @@ function image_edit($message = '', $id = '')
                     hInput('dir', $dir).
                     hInput('page', $page).
                     hInput('search_method', $search_method).
-                    hInput('crit', $crit), '', '', 'post', 'edit-form', '', 'image_details_form'),
-            '</div>',
-
-            n.tag_end('section');
+                    hInput('crit', $crit),
+                '', '', 'post', '', '', 'image_details_form'),
+            '</div>';
     }
 }
 

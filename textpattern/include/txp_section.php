@@ -480,8 +480,7 @@ function section_edit()
 
     $out = array();
 
-    $out[] = n.tag_start('section', array('class' => 'txp-edit')).
-        hed($caption, 2);
+    $out[] = hed($caption, 2);
 
     if ($is_default_section) {
         $out[] = hInput('name', 'default');
@@ -542,10 +541,9 @@ function section_edit()
         hInput('crit', $crit).
         hInput('page', $page).
         hInput('sort', $sort).
-        hInput('dir', $dir).
-        n.tag_end('section');
+        hInput('dir', $dir);
 
-    echo form(join('', $out), '', '', 'post', 'edit-form', '', 'section_details');
+    echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'section_details');
 }
 
 /**

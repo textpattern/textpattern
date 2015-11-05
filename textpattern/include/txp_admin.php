@@ -238,21 +238,19 @@ function new_pass_form()
     pagetop(gTxt('tab_site_admin'), '');
 
     echo form(
-        n.tag(
-            hed(gTxt('change_password'), 2).
-            inputLabel(
-                'new_pass',
-                fInput('password', 'new_pass', '', '', '', '', INPUT_REGULAR, '', 'new_pass'),
-                'new_password', '', array('class' => 'txp-form-field edit-admin-new-password')
-            ).
-            graf(
-                checkbox('mail_password', '1', true, '', 'mail_password').
-                n.tag(gTxt('mail_it'), 'label', array('for' => 'mail_password')), array('class' => 'edit-admin-mail-password')).
-            graf(fInput('submit', 'change_pass', gTxt('submit'), 'publish')).
-            eInput('admin').
-            sInput('change_pass').n, 'section', array('class' => 'txp-edit')),
-            '', '', 'post', '', '', 'change_password'
-    );
+        hed(gTxt('change_password'), 2).
+        inputLabel(
+            'new_pass',
+            fInput('password', 'new_pass', '', '', '', '', INPUT_REGULAR, '', 'new_pass'),
+            'new_password', '', array('class' => 'txp-form-field edit-admin-new-password')
+        ).
+        graf(
+            checkbox('mail_password', '1', true, '', 'mail_password').
+            n.tag(gTxt('mail_it'), 'label', array('for' => 'mail_password')), array('class' => 'edit-admin-mail-password')).
+        graf(fInput('submit', 'change_pass', gTxt('submit'), 'publish')).
+        eInput('admin').
+        sInput('change_pass'),
+    '', '', 'post', 'txp-edit', '', 'change_password');
 }
 
 /**
@@ -268,18 +266,16 @@ function change_email_form()
     $email = fetch('email', 'txp_users', 'name', $txp_user);
 
     echo form(
-        n.tag(
-            hed(gTxt('change_email_address'), 2).
-            inputLabel(
-                'new_email',
-                fInput('text', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'),
-                'new_email', '', array('class' => 'txp-form-field edit-admin-new-email')
-            ).
-            graf(fInput('submit', 'change_email', gTxt('submit'), 'publish')).
-            eInput('admin').
-            sInput('change_email').
-            n, 'section', array('class' => 'txp-edit')
-        ), '', '', 'post', '', '', 'change_email');
+        hed(gTxt('change_email_address'), 2).
+        inputLabel(
+            'new_email',
+            fInput('text', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'),
+            'new_email', '', array('class' => 'txp-form-field edit-admin-new-email')
+        ).
+        graf(fInput('submit', 'change_email', gTxt('submit'), 'publish')).
+        eInput('admin').
+        sInput('change_email'),
+    '', '', 'post', 'txp-edit', '', 'change_email');
 }
 
 /**
@@ -613,8 +609,7 @@ function author_edit()
         $out[] = sInput('author_save_new');
     }
 
-    echo form(
-        n.tag(join('', $out).n, 'section', array('class' => 'txp-edit')), '', '', 'post', 'edit-form', '', 'user_edit');
+    echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'user_edit');
 }
 
 /**

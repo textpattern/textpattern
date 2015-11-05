@@ -56,9 +56,7 @@ summary {
  *
  * More info: http://nicolasgallagher.com/micro-clearfix-hack/
  */
-.clearfix:after, .progress-meter ol:after, .txp-body:after, .txp-navigation:after, .txp-edit p:after,
-.txp-tagbuilder p:after,
-.edit-form p:after {
+.clearfix:after, .progress-meter ol:after, .txp-body:after, .txp-navigation:after {
   content: "";
   display: table;
   clear: both;
@@ -2686,6 +2684,12 @@ hr {
 .txp-control-panel form {
   display: inline-block;
 }
+.txp-control-panel form .txp-form-field,
+.txp-control-panel form .txp-form-field-label,
+.txp-control-panel form .txp-form-field-value {
+  display: inline-block;
+  min-height: inherit;
+}
 .txp-control-panel textarea {
   margin-bottom: 1em;
 }
@@ -2971,32 +2975,27 @@ div.multi-edit {
 /* Panes
    ========================================================================== */
 /**
- * Styling of edit/tagbuilder panes.
+ * Styling of edit panels.
  *
- * 1. Maximum width of edit/tagbuilder panes.
- * 2. Remove margin above `h2` within panes.
+ * 1. Maximum width of edit panels.
+ * 2. Remove margin above `h2` within panels.
  */
-.txp-edit,
-.txp-tagbuilder {
+.txp-edit {
   margin: 0 auto 1em;
   padding: 1em 1em 1px;
   /* 1 */
   max-width: 55em;
   background: #f7f7f7;
 }
-.txp-edit h2,
-.txp-tagbuilder h2 {
+.txp-edit h2 {
   /* 2 */
   margin-top: 0;
 }
 
+/* Form fields.
+   ========================================================================== */
 /**
- * TODO: Clearfix form paragraphs in panes.
- *
- * Adds to clearfix rules in Sass '_base.scss' file via `@extend`.
- */
-/**
- * Form fields.
+ * Form field containers.
  *
  * Textpattern form fields can have optional inline help texts applied to them.
  *
@@ -3092,15 +3091,18 @@ div.multi-edit {
 .txp-layout-4col-cell-1-2-3 .txp-form-field,
 .txp-layout-4col-cell-1-2-3 .txp-form-field-label,
 .txp-layout-4col-cell-1-2-3 .txp-form-field-value,
-.txp-login .txp-form-field,
-.txp-login .txp-form-field-label,
-.txp-login .txp-form-field-value,
 .txp-details .txp-form-field,
 .txp-details .txp-form-field-label,
 .txp-details .txp-form-field-value,
 .upload-form .txp-form-field,
 .upload-form .txp-form-field-label,
-.upload-form .txp-form-field-value {
+.upload-form .txp-form-field-value,
+.welcome .txp-form-field,
+.welcome .txp-form-field-label,
+.welcome .txp-form-field-value,
+.login .txp-form-field,
+.login .txp-form-field-label,
+.login .txp-form-field-value {
   display: block;
 }
 
@@ -3165,7 +3167,7 @@ div.multi-edit {
  * Large Textpattern logo replaces `h1`.
  */
 .welcome h1,
-.txp-login h1 {
+.login h1 {
   /* 2 */
   text-indent: 110%;
   white-space: nowrap;
@@ -3183,21 +3185,6 @@ div.multi-edit {
  */
 .welcome select {
   width: 100%;
-}
-
-/* Tag builder panel - additional layout
-   ========================================================================== */
-/**
- * Remove `body` padding of tag builder popup panes.
- *
- * TODO: Change this from a popup window to a jQuery UI dialog window.
- *
- * Example HTML:
- *
- * <body id="tag-event">
- */
-#tag-event {
-  padding-top: 1em;
 }
 
 /* Content -> Categories panel - additional layout
@@ -3363,10 +3350,6 @@ tr .plugin-prefs {
 tr.active .manage span,
 tr.active .plugin-prefs {
   visibility: visible;
-}
-
-#plugin-code {
-  height: 23em;
 }
 
 div.code {
@@ -3607,7 +3590,7 @@ a.ui-state-default:focus {
 }
 
 /* ==========================================================================
-   jQuery UI Interactions
+   jQuery UI interactions
    ========================================================================== */
 /* Draggable
  ========================================================================== */
@@ -3807,7 +3790,7 @@ a.ui-state-default:focus {
 }
 
 /* ==========================================================================
-   jQuery UI Widgets
+   jQuery UI widgets
    ========================================================================== */
 /* Accordion
    ========================================================================== */
@@ -5167,7 +5150,7 @@ label.ui-state-active.ui-button:active {
 }
 
 /* ==========================================================================
-   jQuery UI Icons
+   jQuery UI icons
    ========================================================================== */
 /* Icons
    ========================================================================== */

@@ -419,7 +419,6 @@ function link_edit($message = '')
         $caption = gTxt(($is_edit) ? 'edit_link' : 'add_new_link');
 
         echo form(
-            n.tag_start('section', array('class' => 'txp-edit')).
             hed($caption, 2).
             inputLabel(
                 'link_name',
@@ -456,8 +455,8 @@ function link_edit($message = '')
             sInput('link_save').
             hInput('id', $id).
             hInput('search_method', gps('search_method')).
-            hInput('crit', gps('crit')).
-            n.tag_end('section'), '', '', 'post', 'edit-form', '', 'link_details');
+            hInput('crit', gps('crit')),
+        '', '', 'post', 'txp-edit', '', 'link_details');
     }
 }
 

@@ -701,8 +701,7 @@ function file_edit($message = '', $id = '')
                 'div', array('class' => 'txp-form-field posted-now')
             );
 
-        echo tag_start('section', array('class' => 'txp-edit')).
-            hed(gTxt('edit_file'), 2).
+        echo hed(gTxt('edit_file'), 2).
             $replace.
             inputLabel(
                 'condition',
@@ -773,9 +772,9 @@ function file_edit($message = '', $id = '')
                 hInput('dir', $dir).
                 hInput('page', $page).
                 hInput('crit', $crit).
-                hInput('search_method', $search_method), '', '', 'post', 'edit-form', '', (($file_exists) ? 'file_details' : 'assign_file')).
-            n.'</div>'.
-            n.tag_end('section');
+                hInput('search_method', $search_method),
+            '', '', 'post', 'txp-edit', '', (($file_exists) ? 'file_details' : 'assign_file')).
+            n.'</div>';
     }
 }
 
