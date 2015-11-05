@@ -151,7 +151,7 @@ function txp_setup_progress_meter($stage = 1)
 
     $out = array();
 
-    $out[] = n.'<div class="progress-meter">'.
+    $out[] = n.'<aside class="progress-meter">'.
         graf(setup_gTxt('progress_steps'), ' class="txp-accessibility"').
         n.'<ol>';
 
@@ -162,7 +162,7 @@ function txp_setup_progress_meter($stage = 1)
     }
 
     $out[] = n.'</ol>'.
-        n.'</div>';
+        n.'</aside>';
 
     return join('', $out);
 }
