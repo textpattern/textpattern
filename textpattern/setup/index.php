@@ -359,7 +359,7 @@ function printConfig()
         echo graf(
                 span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
                 setup_gTxt('prefix_bad_characters', array(
-                    '{dbprefix}' => strong(txpspecialchars($_SESSION['dprefix'])),
+                    '{dbprefix}' => strong(txpspecialchars($_SESSION['dprefix']))
                 ), 'raw'),
                 array('class' => 'alert-block error')
             ).
@@ -373,7 +373,7 @@ function printConfig()
         echo graf(
                 span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
                 setup_gTxt('db_doesnt_exist', array(
-                    '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])),
+                    '{dbname}' => strong(txpspecialchars($_SESSION['ddb']))
                 ), 'raw'),
                 array('class' => 'alert-block error')
             ).
@@ -388,7 +388,7 @@ function printConfig()
         echo graf(
                 span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
                 setup_gTxt('tables_exist', array(
-                    '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])),
+                    '{dbname}' => strong(txpspecialchars($_SESSION['ddb']))
                 ), 'raw'),
                 array('class' => 'alert-block error')
             ).
@@ -444,7 +444,11 @@ function getTxpLogin()
     if (!isset($txpcfg['db'])) {
         if (!is_readable(txpath.'/config.php')) {
             $problems[] = graf(
-                span(setup_gTxt('config_php_not_found', array('{file}' => txpspecialchars(txpath.'/config.php')), 'raw'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('config_php_not_found', array(
+                    '{file}' => txpspecialchars(txpath.'/config.php')
+                ), 'raw'),
+                array('class' => 'alert-block error')
             );
         } else {
             @include txpath.'/config.php';
@@ -453,7 +457,9 @@ function getTxpLogin()
 
     if (!isset($txpcfg) || ($txpcfg['db'] != $_SESSION['ddb']) || ($txpcfg['table_prefix'] != $_SESSION['dprefix'])) {
         $problems[] = graf(
-            span(setup_gTxt('config_php_does_not_match_input', '', 'raw'), ' class="error"')
+            span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+            setup_gTxt('config_php_does_not_match_input', '', 'raw'),
+            array('class' => 'alert-block error')
         );
 
         echo txp_setup_progress_meter(2).
@@ -548,10 +554,13 @@ function createTxp()
         echo txp_setup_progress_meter(3).
             n.'<div class="txp-setup">'.
             graf(
-                span(setup_gTxt('name_required'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('name_required'),
+                array('class' => 'alert-block error')
             ).
             setup_back_button(__FUNCTION__).
             n.'</div>';
+
         exit;
     }
 
@@ -559,10 +568,13 @@ function createTxp()
         echo txp_setup_progress_meter(3).
             n.'<div class="txp-setup">'.
             graf(
-                span(setup_gTxt('pass_required'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('pass_required'),
+                array('class' => 'alert-block error')
             ).
             setup_back_button(__FUNCTION__).
             n.'</div>';
+
         exit;
     }
 
@@ -570,10 +582,13 @@ function createTxp()
         echo txp_setup_progress_meter(3).
             n.'<div class="txp-setup">'.
             graf(
-                span(setup_gTxt('email_required'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('email_required'),
+                array('class' => 'alert-block error')
             ).
             setup_back_button(__FUNCTION__).
             n.'</div>';
+
         exit;
     }
 
@@ -581,19 +596,31 @@ function createTxp()
 
     if (!isset($txpcfg['db'])) {
         if (!is_readable(txpath.'/config.php')) {
-            $problems[] = graf('<span class="error">'.setup_gTxt('config_php_not_found', array('{file}' => txpspecialchars(txpath.'/config.php')), 'raw').'</span>');
+            $problems[] = graf(
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('config_php_not_found', array(
+                    '{file}' => txpspecialchars(txpath.'/config.php')
+                ), 'raw'),
+                array('class' => 'alert-block error')
+            );
         } else {
             @include txpath.'/config.php';
         }
     }
 
     if (!isset($txpcfg) || ($txpcfg['db'] != $_SESSION['ddb']) || ($txpcfg['table_prefix'] != $_SESSION['dprefix'])) {
-        $problems[] = graf('<span class="error">'.setup_gTxt('config_php_does_not_match_input', 'raw').'</span>');
+        $problems[] = graf(
+            span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+            setup_gTxt('config_php_does_not_match_input', '', 'raw'),
+            array('class' => 'alert-block error')
+        );
+
         echo txp_setup_progress_meter(3).
             n.'<div class="txp-setup">'.
             n.join(n, $problems).
             n.setup_config_contents().
             n.'</div>';
+
         exit;
     }
 
@@ -649,9 +676,11 @@ function fbCreate()
 
     if ($GLOBALS['txp_install_successful'] === false) {
         return graf(
-                span(setup_gTxt('errors_during_install', array(
-                    '{num}' => $GLOBALS['txp_err_count'],
-                )), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('config_php_not_found', array(
+                    '{num}' => $GLOBALS['txp_err_count']
+                )),
+                array('class' => 'alert-block error')
             ).
             n.'<ol>'.
             $GLOBALS['txp_err_html'].
@@ -662,31 +691,27 @@ function fbCreate()
         $_SESSION = array();
 
         $warnings = @find_temp_dir() ? '' : graf(
-            span(setup_gTxt('set_temp_dir_prefs'), ' class="warning"')
+            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+            setup_gTxt('set_temp_dir_prefs'),
+            array('class' => 'alert-block warning')
         );
 
         $login_url = $GLOBALS['rel_txpurl'].'/index.php';
 
         return hed(setup_gTxt('that_went_well'), 1).
-
             $warnings.
-
             graf(
                 setup_gTxt('you_can_access', array(
                     'index.php' => $login_url,
                 ))
             ).
-
             graf(
                 setup_gTxt('installation_postamble')
             ).
-
             hed(setup_gTxt('thanks_for_interest'), 3).
-
             graf(
                 href(setup_gTxt('go_to_login'), $login_url, ' class="navlink publish"')
             ).
-
             n.'</div>';
     }
 }
