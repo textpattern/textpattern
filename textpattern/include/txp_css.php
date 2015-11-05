@@ -141,8 +141,7 @@ function css_edit($message = '')
         fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style', false, true),
         'css_name',
         array('', 'instructions_style_name'),
-        array('class' => 'txp-form-field'),
-        ''
+        array('class' => 'txp-form-field')
     );
 
     if ($name === '') {
@@ -170,8 +169,7 @@ function css_edit($message = '')
                 '<textarea class="code" id="css" name="css" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thecss).'</textarea>',
                 'css_code',
                 array('', 'instructions_style_code'),
-                array('class' => 'txp-form-field'),
-                ''
+                array('class' => 'txp-form-field')
             ), '', '', 'post', '', '', 'style_form'),
         'div', array(
             'class' => 'txp-layout-4col-cell-1-2-3',

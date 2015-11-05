@@ -269,17 +269,22 @@ function form_edit($message = '')
 
     // TODO: make this use readonly inputLabels instead of divs.
     if (in_array($name, $essential_forms)) {
-        $name_widgets = tag(
-            n.tag(gTxt('form_name'), 'div', array('class' => 'txp-form-field-label')).
-            n.tag($name, 'div', array('class' => 'txp-form-field-value')),
-            'div', array('class' => 'txp-form-field')
+        $name_widgets = inputLabel(
+            'new_form',
+            fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true),
+            'form_name',
+            array('', 'instructions_form_name'),
+            array('class' => 'txp-form-field')
         );
 
-        $type_widgets = tag(
-            n.tag(gTxt('form_type'), 'div', array('class' => 'txp-form-field-label')).
-            n.tag($type, 'div', array('class' => 'txp-form-field-value')),
-            'div', array('class' => 'txp-form-field')
+        $type_widgets = inputLabel(
+            'type',
+            formTypes($type, false, 'type', true),
+            'form_type',
+            array('', 'instructions_form_type'),
+            array('class' => 'txp-form-field')
         );
+
     } else {
         $name_widgets = inputLabel(
             'new_form',
@@ -388,8 +393,7 @@ function form_edit($message = '')
                 '<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($Form).'</textarea>',
                 'form_code',
                 array('', 'instructions_form_code'),
-                array('class' => 'txp-form-field'),
-                ''
+                array('class' => 'txp-form-field')
             ).
             $type_widgets.
             (empty($type) ? graf(gTxt('only_articles_can_be_previewed')) : '')
@@ -567,13 +571,14 @@ function form_set_type($name, $type)
  * @param  string $type        The selected option
  * @param  bool   $blank_first If TRUE, the list defaults to an empty selection
  * @param  string $id          HTML id attribute value
+ * @param  bool   $disabled    If TRUE renders the select disabled
  * @return string HTML
  * @access private
  */
 
-function formTypes($type, $blank_first = true, $id = 'type')
+function formTypes($type, $blank_first = true, $id = 'type', $disabled = false)
 {
     global $form_types;
 
-    return selectInput('type', $form_types, $type, $blank_first, '', $id);
+    return selectInput('type', $form_types, $type, $blank_first, '', $id, false, $disabled);
 }

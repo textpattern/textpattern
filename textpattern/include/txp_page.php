@@ -92,8 +92,7 @@ function page_edit($message = '')
         fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true),
         'page_name',
         array('', 'instructions_page_name'),
-        array('class' => 'txp-form-field'),
-        ''
+        array('class' => 'txp-form-field')
     );
 
     if ($name === '') {
@@ -133,8 +132,7 @@ function page_edit($message = '')
                 '<textarea class="code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($html).'</textarea>',
                 'page_code',
                 array('', 'instructions_page_code'),
-                array('class' => 'txp-form-field'),
-                ''
+                array('class' => 'txp-form-field')
             ), '', '', 'post', '', '', 'page_form'),
         'div', array(
             'class' => 'txp-layout-4col-cell-1-2-3',
