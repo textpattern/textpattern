@@ -906,17 +906,17 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
     }
 
     if ($wraptag_val[0]) {
-        $input = tag($input, $wraptag_val[0], array('class' => 'txp-form-field-value'));
+        $input = n.tag($input, $wraptag_val[0], array('class' => 'txp-form-field-value'));
     }
 
     if (isset($wraptag_val[1]) && $wraptag_val[1]) {
-        $labeltag = tag($labelContent, $wraptag_val[1], array('class' => 'txp-form-field-label'));
+        $labeltag = n.tag($labelContent, $wraptag_val[1], array('class' => 'txp-form-field-label'));
     } else {
         $labeltag = $labelContent;
     }
 
     $out = n.tag(
-        n.$labeltag.
+        $labeltag.
         fieldHelp($inlineHelp).
         $input.n, 'div', $atts);
 
