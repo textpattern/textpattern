@@ -120,6 +120,7 @@ function onoffRadio($field, $checked = '', $tabindex = 0, $id = '')
  * @param  mixed  $onchange    If TRUE submits the form when an option is changed. If a string, inserts it to the select tag
  * @param  string $select_id   The HTML id
  * @param  bool   $check_type  Type-agnostic comparison
+ * @param  bool   $disabled    If TRUE renders the select disabled
  * @return string HTML
  * @example
  * echo selectInput('myInput', array(
@@ -128,7 +129,7 @@ function onoffRadio($field, $checked = '', $tabindex = 0, $id = '')
  * ));
  */
 
-function selectInput($name = '', $array = array(), $value = '', $blank_first = false, $onchange = '', $select_id = '', $check_type = false)
+function selectInput($name = '', $array = array(), $value = '', $blank_first = false, $onchange = '', $select_id = '', $check_type = false, $disabled = false)
 {
     $out = array();
 
@@ -151,8 +152,9 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
     }
 
     $atts = join_atts(array(
-        'id'   => $select_id,
-        'name' => $name,
+        'id'       => $select_id,
+        'name'     => $name,
+        'disabled' => (bool) $disabled,
     ));
 
     if ((string) $onchange === '1') {
