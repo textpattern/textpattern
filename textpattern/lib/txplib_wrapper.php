@@ -920,7 +920,7 @@ class TXP_Wrapper
         }
 
         if ($incoming['textile_body'] == USE_TEXTILE) {
-            $incoming['Title'] = $textile->TextileThis($incoming['Title'], '', 1);
+            $incoming['Title'] = $textile->textileThis($incoming['Title'], '', 1);
         }
 
         $incoming['url_title'] = preg_replace('|[\x00-\x1f#%+/?\x7f]|', '', $incoming['url_title']);
@@ -950,7 +950,7 @@ class TXP_Wrapper
                 $html = nl2br(trim($field));
                 break;
             case USE_TEXTILE:
-                $html = $textile->TextileThis($field);
+                $html = $textile->textileThis($field);
                 break;
         }
 

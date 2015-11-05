@@ -392,14 +392,13 @@ if (!in_array('ip', $txplog)) {
 // 1.0: need to get Excerpt_html values into the textpattern table, so catch
 // empty ones and populate them.
 $rs = mysqli_query($DB->link, "SELECT ID, Excerpt, textile_excerpt FROM `".PFX."textpattern` WHERE Excerpt_html LIKE ''");
-require_once txpath.'/lib/classTextile.php';
-$textile = new Textile();
+$textile = new \Netcarver\Textile\Parser();
 
 while ($a = @mysqli_fetch_assoc($rs)) {
     extract($a);
     assert_int($ID);
     $lite = ($textile_excerpt) ? '' : 1;
-    $Excerpt_html = $textile->TextileThis($Excerpt, $lite);
+    $Excerpt_html = $textile->textileThis($Excerpt, $lite);
     safe_update('textpattern', "Excerpt_html = '".doSlash($Excerpt_html)."'", "ID = $ID");
 }
 
