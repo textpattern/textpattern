@@ -97,7 +97,8 @@ summary {
   clear: both;
 }
 
-.txp-layout-2col-cell-1 {
+.txp-layout-2col-cell-1,
+.txp-layout-4col-cell-1-2 {
   width: 49.0196078%;
   float: left;
   margin-right: -100%;
@@ -106,7 +107,8 @@ summary {
   clear: both;
 }
 
-.txp-layout-2col-cell-2 {
+.txp-layout-2col-cell-2,
+.txp-layout-4col-cell-3-4 {
   width: 49.0196078%;
   float: right;
   margin-left: 0;
@@ -114,15 +116,7 @@ summary {
   clear: none;
 }
 
-.txp-layout-4col-cell-1 {
-  width: 23.5294118%;
-  float: left;
-  margin-right: -100%;
-  margin-left: 0;
-  clear: none;
-  clear: both;
-}
-
+.txp-layout-4col-cell-1,
 .txp-layout-4col-cell-1alt {
   width: 23.5294118%;
   float: left;
@@ -148,14 +142,7 @@ summary {
   clear: none;
 }
 
-.txp-layout-4col-cell-4 {
-  width: 23.5294118%;
-  float: right;
-  margin-left: 0;
-  margin-right: 0;
-  clear: none;
-}
-
+.txp-layout-4col-cell-4,
 .txp-layout-4col-cell-4alt {
   width: 23.5294118%;
   float: right;
@@ -164,28 +151,11 @@ summary {
   clear: none;
 }
 
-.txp-layout-4col-cell-1-2 {
-  width: 49.0196078%;
-  float: left;
-  margin-right: -100%;
-  margin-left: 0;
-  clear: none;
-  clear: both;
-}
-
 .txp-layout-4col-cell-2-3 {
   width: 49.0196078%;
   float: left;
   margin-right: -100%;
   margin-left: 25.4901961%;
-  clear: none;
-}
-
-.txp-layout-4col-cell-3-4 {
-  width: 49.0196078%;
-  float: right;
-  margin-left: 0;
-  margin-right: 0;
   clear: none;
 }
 
@@ -213,23 +183,7 @@ summary {
  * Cells for 4 column span variations become 1 column layout.
  */
 @media (max-width: 60em) {
-  .txp-layout-4col-cell-1 {
-    width: 49.0196078%;
-    float: left;
-    margin-right: -100%;
-    margin-left: 0;
-    clear: none;
-    clear: both;
-  }
-
-  .txp-layout-4col-cell-2 {
-    width: 49.0196078%;
-    float: right;
-    margin-left: 0;
-    margin-right: 0;
-    clear: none;
-  }
-
+  .txp-layout-4col-cell-1,
   .txp-layout-4col-cell-3 {
     width: 49.0196078%;
     float: left;
@@ -239,6 +193,7 @@ summary {
     clear: both;
   }
 
+  .txp-layout-4col-cell-2,
   .txp-layout-4col-cell-4 {
     width: 49.0196078%;
     float: right;
@@ -1065,17 +1020,17 @@ h3.txp-summary.expanded a:after {
  * Progress meter lists.
  *
  * Utilises CSS counters to increment the progress steps, more info -
- * https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Counters
+ * https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Lists_and_Counters/Using_CSS_counters
  *
  * Example HTML:
  *
- * <div class="progress-meter">
+ * <aside class="progress-meter">
  *     <ol>
  *         <li class="active"><strong>Item 1</strong></li>
  *         <li>Item 2</li>
  *         <li>Item 3</li>
  *     </ol>
- * </div>
+ * </aside>
  */
 .progress-meter ol {
   margin-bottom: 0;
@@ -2909,7 +2864,7 @@ div.multi-edit {
  *
  * Example HTML:
  *
- * <section id="comments_group" class="txp-details empty"></section>
+ * <section class="txp-details empty" id="comments_group"></section>
  */
 .empty {
   display: none;
@@ -3091,19 +3046,24 @@ div.multi-edit {
 .txp-layout-4col-cell-1-2-3 .txp-form-field,
 .txp-layout-4col-cell-1-2-3 .txp-form-field-label,
 .txp-layout-4col-cell-1-2-3 .txp-form-field-value,
+.txp-layout-4col-cell-4alt
 .txp-details .txp-form-field,
+.txp-layout-4col-cell-4alt
 .txp-details .txp-form-field-label,
+.txp-layout-4col-cell-4alt
 .txp-details .txp-form-field-value,
-.upload-form .txp-form-field,
-.upload-form .txp-form-field-label,
-.upload-form .txp-form-field-value,
 .welcome .txp-form-field,
 .welcome .txp-form-field-label,
 .welcome .txp-form-field-value,
 .login .txp-form-field,
 .login .txp-form-field-label,
 .login .txp-form-field-value {
+  -webkit-flex: none;
+  -ms-flex: none;
+  flex: none;
   display: block;
+  max-width: inherit;
+  min-height: inherit;
 }
 
 /**
