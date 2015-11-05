@@ -252,8 +252,10 @@ function getDbInfo()
 
     if (is_disabled('mail')) {
         echo graf(
-            span(setup_gTxt('warn_mail_unavailable'), ' class="warning"')
-        );
+            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+            setup_gTxt('warn_mail_unavailable'),
+            array('class' => 'alert-block warning'
+        ));
     }
 
     echo graf(
@@ -283,8 +285,7 @@ function printConfig()
 
     global $txpcfg;
 
-    echo n.'<div class="txp-container" id="setup_container">'.
-        txp_setup_progress_meter(2).
+    echo txp_setup_progress_meter(2).
         n.'<div class="txp-setup">';
 
     if (!isset($txpcfg['db'])) {
@@ -296,7 +297,6 @@ function printConfig()
                 span(setup_gTxt('already_installed', array('{txpath}' => txpath)), ' class="warning"')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
 
         exit;
@@ -308,8 +308,8 @@ function printConfig()
 //            '<span class="war">'.setup_gTxt('missing_db_details').'</span>'
 //        ).
 //        n.setup_back_button().
-//        n.'</div>'.
 //        n.'</div>';
+//
 //        exit;
 //    }
 
@@ -336,7 +336,6 @@ function printConfig()
                 span(setup_gTxt('db_cant_connect'), ' class="error"')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
 
         exit;
@@ -353,7 +352,6 @@ function printConfig()
             ), 'raw'), ' class="error"')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
 
         exit;
@@ -366,7 +364,6 @@ function printConfig()
             ), 'raw'), ' class="error"')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
 
         exit;
@@ -380,7 +377,6 @@ function printConfig()
             ), 'raw'), ' class="error"')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
 
         exit;
@@ -411,13 +407,12 @@ function printConfig()
     );
 
     echo setup_config_contents().
-        n.'</div>'.
         n.'</div>';
 }
 
 /**
- * Renders stage 3: either admin user details panel (success) or config details
- * error message (fail).
+ * Renders either stage 3: admin user details panel (on success), or stage 2:
+ * config details error message (on fail).
  */
 
 function getTxpLogin()
@@ -580,7 +575,6 @@ function createTxp()
             n.'<div class="txp-setup">'.
             n.join(n, $problems).
             n.setup_config_contents().
-            n.'</div>'.
             n.'</div>';
         exit;
     }
@@ -593,7 +587,9 @@ function createTxp()
     echo fbCreate();
 }
 
-// -------------------------------------------------------------
+/**
+ * Populate a textarea with config.php file code.
+ */
 
 function makeConfig()
 {
@@ -639,8 +635,9 @@ function fbCreate()
                     '{num}' => $GLOBALS['txp_err_count'],
                 )), ' class="error"')
             ).
-            n.'</div>'.
-            n.'<ol>'.n.$GLOBALS['txp_err_html'].'</ol>'.
+            n.'<ol>'.
+            $GLOBALS['txp_err_html'].
+            n.'</ol>'.
             n.'</div>';
     } else {
         // Clear the session so no data is leaked.
@@ -708,15 +705,11 @@ function setup_back_button($current = null)
 
     $prev = isset($prevSteps[$current]) ? $prevSteps[$current] : '';
 
-    return graf(
-        setup_gTxt('please_go_back')
-    ).
-    graf(
-        '<form method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
+    return graf(setup_gTxt('please_go_back')).
+        n.'<form method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         sInput($prev).
-        fInput('submit', 'submit', setup_gTxt('back'), 'navlink').
-        '</form>'
-    );
+        fInput('submit', 'submit', setup_gTxt('back'), 'navlink publish').
+        n.'</form>';
 }
 
 // -------------------------------------------------------------
