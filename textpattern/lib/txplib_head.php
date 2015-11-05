@@ -70,10 +70,10 @@ function pagetop($pagetitle, $message = '')
 
     if (gps('logout')) {
         $body_id = 'page-logout';
-        $area = 'login-pane';
+        $area = 'login';
     } elseif (!$txp_user) {
         $body_id = 'page-login';
-        $area = 'login-pane';
+        $area = 'login';
     } else {
         $body_id = 'page-'.txpspecialchars($event);
     }
