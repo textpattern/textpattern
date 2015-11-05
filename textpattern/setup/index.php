@@ -192,7 +192,9 @@ function getDbInfo()
 
     if (!empty($txpcfg['db'])) {
         echo graf(
-                span(setup_gTxt('already_installed', array('{txpath}' => txpath)), ' class="warning"')
+                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+                setup_gTxt('already_installed', array('{txpath}' => txpath)),
+                array('class' => 'alert-block warning')
             ).
             setup_back_button(__FUNCTION__).
             n.'</div>';
@@ -254,8 +256,8 @@ function getDbInfo()
         echo graf(
             span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
             setup_gTxt('warn_mail_unavailable'),
-            array('class' => 'alert-block warning'
-        ));
+            array('class' => 'alert-block warning')
+        );
     }
 
     echo graf(
@@ -268,8 +270,8 @@ function getDbInfo()
 }
 
 /**
- * Renders stage 2: either config details panel (success) or database details
- * error message (fail).
+ * Renders stage 2: either config details panel (on success) or database details
+ * error message (on fail).
  */
 
 function printConfig()
@@ -294,7 +296,9 @@ function printConfig()
 
     if (!empty($txpcfg['db'])) {
         echo graf(
-                span(setup_gTxt('already_installed', array('{txpath}' => txpath)), ' class="warning"')
+                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+                setup_gTxt('already_installed', array('{txpath}' => txpath)),
+                array('class' => 'alert-block warning')
             ).
             setup_back_button(__FUNCTION__).
             n.'</div>';
@@ -305,10 +309,12 @@ function printConfig()
 // TODO: @see http://forum.textpattern.com/viewtopic.php?pid=263205#p263205
 //    if ('' === $_SESSION['dhost'] || '' === $_SESSION['duser'] || '' === $_SESSION['ddb']) {
 //        echo graf(
-//            '<span class="war">'.setup_gTxt('missing_db_details').'</span>'
-//        ).
-//        n.setup_back_button().
-//        n.'</div>';
+//                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+//                setup_gTxt('missing_db_details'),
+//                array('class' => 'alert-block warning')
+//            ).
+//            n.setup_back_button(__FUNCTION__).
+//            n.'</div>';
 //
 //        exit;
 //    }
@@ -333,7 +339,9 @@ function printConfig()
         $_SESSION['dclient_flags'] = 'MYSQLI_CLIENT_SSL';
     } else {
         echo graf(
-                span(setup_gTxt('db_cant_connect'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('db_cant_connect'),
+                array('class' => 'alert-block error')
             ).
             setup_back_button(__FUNCTION__).
             n.'</div>';
@@ -342,14 +350,18 @@ function printConfig()
     }
 
     echo graf(
-        span(setup_gTxt('db_connected'), ' class="success"')
+        span(null, array('class' => 'ui-icon ui-icon-check')).' '.
+        setup_gTxt('db_connected'),
+        array('class' => 'alert-block success')
     );
 
     if (!($_SESSION['dprefix'] == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $_SESSION['dprefix']))) {
         echo graf(
-            span(setup_gTxt('prefix_bad_characters', array(
-                '{dbprefix}' => strong(txpspecialchars($_SESSION['dprefix'])),
-            ), 'raw'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('prefix_bad_characters', array(
+                    '{dbprefix}' => strong(txpspecialchars($_SESSION['dprefix'])),
+                ), 'raw'),
+                array('class' => 'alert-block error')
             ).
             setup_back_button(__FUNCTION__).
             n.'</div>';
@@ -359,9 +371,11 @@ function printConfig()
 
     if (!$mydb = mysqli_select_db($mylink, $_SESSION['ddb'])) {
         echo graf(
-            span(setup_gTxt('db_doesnt_exist', array(
-                '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])),
-            ), 'raw'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('db_doesnt_exist', array(
+                    '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])),
+                ), 'raw'),
+                array('class' => 'alert-block error')
             ).
             setup_back_button(__FUNCTION__).
             n.'</div>';
@@ -372,9 +386,11 @@ function printConfig()
     $tables_exist = mysqli_query($mylink, "DESCRIBE `".$_SESSION['dprefix']."textpattern`");
     if ($tables_exist) {
         echo graf(
-            span(setup_gTxt('tables_exist', array(
-                '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])),
-            ), 'raw'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('tables_exist', array(
+                    '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])),
+                ), 'raw'),
+                array('class' => 'alert-block error')
             ).
             setup_back_button(__FUNCTION__).
             n.'</div>';
@@ -402,8 +418,10 @@ function printConfig()
     }
 
     echo graf(
-        span(setup_gTxt('using_db', array(
-            '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])), ), 'raw').' ('.$_SESSION['dbcharset'].')', ' class="success"')
+        span(null, array('class' => 'ui-icon ui-icon-check')).' '.
+        setup_gTxt('using_db', array(
+            '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])), ), 'raw').' ('.$_SESSION['dbcharset'].')',
+        array('class' => 'alert-block success')
     );
 
     echo setup_config_contents().
