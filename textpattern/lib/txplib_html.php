@@ -862,7 +862,7 @@ function fInputCell($name, $var = '', $tabindex = 0, $size = 0, $help = false, $
  * @param  string       $input       Complete input control widget
  * @param  string       $label       Label
  * @param  string|array $help        Help text item | array(help text item, inline help text)
- * @param  string|array $atts        Class name (for b/c) | attribute pairs to assign to graf()
+ * @param  string|array $atts        Class name | attribute pairs to assign to container div
  * @param  string|array $wraptag_val Tag to wrap the value / label in, or empty to omit
  * @return string HTML
  * @example
