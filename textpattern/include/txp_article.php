@@ -1922,8 +1922,8 @@ function article_partial_section($rs)
         eLink('section', 'list', '', '', gTxt('edit')).
         span(']', array('aria-hidden' => 'true')),
         'section',
-        array('', 'instructions_status'),
-        array('class' => 'txp-form-field status')
+        array('', 'instructions_section'),
+        array('class' => 'txp-form-field section')
     );
 
     return pluggable_ui('article_ui', 'section', $out, $rs);
