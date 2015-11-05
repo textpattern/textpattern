@@ -1231,9 +1231,13 @@ function status_display($status)
         $status = get_pref('default_publish_status', STATUS_LIVE);
     }
 
-    return graf(
-        '<label for="status">'.gTxt('status').'</label>'.br.
-        selectInput('Status', $statuses, $status, false, '', 'status'), ' class="status"');
+    return inputLabel(
+        'status',
+        selectInput('Status', $statuses, $status, false, '', 'status'),
+        'status',
+        array('', 'instructions_status'),
+        array('class' => 'txp-form-field status')
+    );
 }
 
 /**
@@ -1487,8 +1491,7 @@ function article_partial_title($rs)
         fInput('text', 'Title', escape_title($rs['Title']), '', '', '', INPUT_LARGE, '', 'title'),
         'title',
         array('title', 'instructions_title'),
-        array('class' => 'txp-form-field title'),
-        ''
+        array('class' => 'txp-form-field title')
     );
 
     return pluggable_ui('article_ui', 'title', $out, $rs);
@@ -1566,8 +1569,7 @@ function article_partial_url_title($rs)
         fInput('text', 'url_title', article_partial_url_title_value($rs), '', '', '', INPUT_REGULAR, '', 'url-title'),
         'url_title',
         array('url_title', 'instructions_url_title'),
-        array('class' => 'txp-form-field url-title'),
-        ''
+        array('class' => 'txp-form-field url-title')
     );
 
     return pluggable_ui('article_ui', 'url_title', $out, $rs);
@@ -1602,8 +1604,7 @@ function article_partial_description($rs)
         '<textarea id="description" name="description" cols="'.INPUT_MEDIUM.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars(article_partial_description_value($rs)).'</textarea>',
         'description',
         array('description', 'instructions_description'),
-        array('class' => 'txp-form-field description'),
-        ''
+        array('class' => 'txp-form-field txp-form-field-textarea description')
     );
 
     return pluggable_ui('article_ui', 'description', $out, $rs);
@@ -1638,8 +1639,7 @@ function article_partial_keywords($rs)
         '<textarea id="keywords" name="Keywords" cols="'.INPUT_MEDIUM.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars(article_partial_keywords_value($rs)).'</textarea>',
         'keywords',
         array('keywords', 'instructions_keywords'),
-        array('class' => 'txp-form-field keywords'),
-        ''
+        array('class' => 'txp-form-field txp-form-field-textarea keywords')
     );
 
     return pluggable_ui('article_ui', 'keywords', $out, $rs);
@@ -1796,8 +1796,7 @@ function article_partial_body($rs)
         '<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($rs['Body']).'</textarea>',
         'body',
         array('body', 'instructions_body'),
-        array('class' => 'txp-form-field body'),
-        ''
+        array('class' => 'txp-form-field body')
     );
 
     return pluggable_ui('article_ui', 'body', $out, $rs);
@@ -1820,8 +1819,7 @@ function article_partial_excerpt($rs)
         '<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>',
         'excerpt',
         array('excerpt', 'instructions_excerpt'),
-        array('class' => 'txp-form-field excerpt'),
-        ''
+        array('class' => 'txp-form-field excerpt')
     );
 
     return pluggable_ui('article_ui', 'excerpt', $out, $rs);
@@ -1917,15 +1915,16 @@ function article_partial_status($rs)
 
 function article_partial_section($rs)
 {
-    $out = graf(
-        '<label for="section">'.gTxt('section').'</label>'.
-
-        sp.span(
-            span('[', array('aria-hidden' => 'true')).
-            eLink('section', '', '', '', gTxt('edit')).
-            span(']', array('aria-hidden' => 'true')), array('class' => 'section-edit')).br.
-
-        section_popup($rs['Section'], 'section'), ' class="section"');
+    $out = inputLabel(
+        'section',
+        section_popup($rs['Section'], 'section').sp.
+        span('[', array('aria-hidden' => 'true')).
+        eLink('section', 'list', '', '', gTxt('edit')).
+        span(']', array('aria-hidden' => 'true')),
+        'section',
+        array('', 'instructions_status'),
+        array('class' => 'txp-form-field status')
+    );
 
     return pluggable_ui('article_ui', 'section', $out, $rs);
 }
