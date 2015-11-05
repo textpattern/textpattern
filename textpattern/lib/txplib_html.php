@@ -869,7 +869,7 @@ function fInputCell($name, $var = '', $tabindex = 0, $size = 0, $help = false, $
  * echo inputLabel('active', yesnoRadio('active'), 'Keep active?');
  */
 
-function inputLabel($name, $input, $label = '', $help = array(), $atts = array(), $wraptag_val = array('span', 'span'))
+function inputLabel($name, $input, $label = '', $help = array(), $atts = array(), $wraptag_val = array('div', 'div'))
 {
     global $event;
 
@@ -906,11 +906,11 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
     }
 
     if ($wraptag_val[0]) {
-        $input = tag($input, $wraptag_val[0], array('class' => 'txp-value'));
+        $input = tag($input, $wraptag_val[0], array('class' => 'txp-form-field-value'));
     }
 
     if (isset($wraptag_val[1]) && $wraptag_val[1]) {
-        $labeltag = tag($labelContent, $wraptag_val[1], array('class' => 'txp-label'));
+        $labeltag = tag($labelContent, $wraptag_val[1], array('class' => 'txp-form-field-label'));
     } else {
         $labeltag = $labelContent;
     }

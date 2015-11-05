@@ -63,8 +63,7 @@
 /update/_to_4.6.0.php: c07d2a788b8a43d62a5edab0476eab39
 /update/_update.php: 3402ad6d9cf92550da3b51296734a236
 /vendors/jquery/jquery/jquery.js: 13c0a5055cca7b2463b2f73701960b9e
-/vendors/jquery/ui/css/textpattern/jquery-ui.css: 7696d3664f3fa506ad52ca36691e356a
-/vendors/jquery/ui/js/jquery-ui.js: 6a8d2ad2b8a68c521fa71d81dfea6142
+/vendors/jquery/jquery-ui/jquery-ui.js: 6a8d2ad2b8a68c521fa71d81dfea6142
 /vendors/Textpattern/Adaptable/AdapterInterface.php: fd35ed5e2c01ffa4ea44d3cebec358a5
 /vendors/Textpattern/Adaptable/Providable.php: 7e159168460cbbdc624618bf5ed3e933
 /vendors/Textpattern/Adaptable/ProvidableInterface.php: 9acebf06389c652a5f01b9974e279282

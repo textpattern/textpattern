@@ -29,7 +29,6 @@ class hive_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
     {
-        $out[] = '<link rel="stylesheet" href="vendors/jquery/ui/css/textpattern/jquery-ui.min.css">';
         $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.min.css">';
 
         // Start of custom CSS toggles (see README.textile for usage instructions).
@@ -191,9 +190,7 @@ class hive_theme extends \Textpattern\Admin\Theme
             $html = span(
                 span(null, array('class' => 'ui-icon '.$icon)).' '.gTxt($thing[0]).
                 sp.href('&#215;', '#close', ' class="close" role="button" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"'),
-                array(
-                    'class' => 'messageflash '.$class,
-                )
+                array('class' => 'messageflash '.$class)
             );
 
             // Try to inject $html into the message pane no matter when _announce()'s output is printed.

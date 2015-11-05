@@ -267,20 +267,26 @@ function form_edit($message = '')
         extract($rs);
     }
 
+    // TODO: make this use readonly inputLabels instead of divs.
     if (in_array($name, $essential_forms)) {
-        $name_widgets = graf(span(gTxt('form_name'), array('class' => 'txp-label-fixed')).br.
-            span($name, array('class' => 'txp-value-fixed')));
+        $name_widgets = tag(
+            n.tag(gTxt('form_name'), 'div', array('class' => 'txp-form-field-label')).
+            n.tag($name, 'div', array('class' => 'txp-form-field-value')),
+            'div', array('class' => 'txp-form-field')
+        );
 
-        $type_widgets = graf(span(gTxt('form_type'), array('class' => 'txp-label-fixed')).br.
-            span($type, array('class' => 'txp-value-fixed')));
+        $type_widgets = tag(
+            n.tag(gTxt('form_type'), 'div', array('class' => 'txp-form-field-label')).
+            n.tag($type, 'div', array('class' => 'txp-form-field-value')),
+            'div', array('class' => 'txp-form-field')
+        );
     } else {
         $name_widgets = inputLabel(
             'new_form',
             fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true),
             'form_name',
             array('', 'instructions_form_name'),
-            array('class' => 'txp-form-field'),
-            ''
+            array('class' => 'txp-form-field')
         );
 
         $type_widgets = inputLabel(
@@ -288,8 +294,7 @@ function form_edit($message = '')
             formTypes($type, false),
             'form_type',
             array('', 'instructions_form_type'),
-            array('class' => 'txp-form-field'),
-            ''
+            array('class' => 'txp-form-field')
         );
     }
 

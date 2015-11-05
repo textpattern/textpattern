@@ -84,10 +84,9 @@ print <<<eod
 <meta name="robots" content="noindex, nofollow">
 <title>Setup &#124; Textpattern CMS</title>
 <script src="../vendors/jquery/jquery/jquery.js"></script>
-<script src="../vendors/jquery/ui/js/jquery-ui.js"></script>
+<script src="../vendors/jquery/jquery-ui/jquery-ui.js"></script>
 <script>var textpattern = { do_spellcheck: "", textarray: {} };</script>
 <script src="../textpattern.js"></script>
-<link rel="stylesheet" href="../vendors/jquery/ui/css/textpattern/jquery-ui.min.css">
 <link rel="stylesheet" href="../theme/hive/assets/css/textpattern.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 </head>
