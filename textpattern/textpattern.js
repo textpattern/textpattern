@@ -890,7 +890,7 @@ textpattern.Route =
     attached : [],
 
     /**
-     * Attachs a listener.
+     * Attaches a listener.
      *
      * @param {string} pages The page
      * @param {object} fn    The callback
@@ -1240,6 +1240,73 @@ jQuery.fn.txpSortable = function (options)
     });
 };
 
+
+/**
+ * Password strength meter.
+ *
+ * @since 4.6.0
+ * @todo  Pass in name/email via 'options' to be injected in user_inputs[]
+ */
+
+textpattern.passwordStrength = function (options)
+{
+    jQuery('form').on('keyup', 'input.txp-maskable', function() {
+        var me = jQuery(this);
+        var pass = me.val();
+        var passResult = zxcvbn(pass, user_inputs=[]);
+        var strengthMap = {
+            "0": {
+                "class": "poor",
+                "width": "5"
+            },
+            "1": {
+                "class": "weak",
+                "width": "30"
+            },
+            "2": {
+                "class": "medium",
+                "width": "50"
+            },
+            "3": {
+                "class": "strong",
+                "width": "80"
+            },
+            "4": {
+                "class": "strongest",
+                "width": "100"
+            }
+        };
+
+        var offset = strengthMap[passResult.score];
+        me.siblings('.strength-helper').remove();
+
+        if (pass.length > 0) {
+            me.after('<div class="strength-helper">' +
+                    '<div class="strength-meter">' +
+                        '<div class="bar"></div>' +
+                        '<div class="indicator">Strength: ' + offset.class + '</div>' +
+                    '</div>' +
+                    '<div class="strength-advice"></div>' +
+                '</div>');
+        }
+
+        var helper = me.siblings('.strength-helper');
+        var meter = helper.find('.strength-meter');
+        var advice = helper.find('.strength-advice');
+
+        meter
+            .find('.bar')
+            .removeClass('poor weak medium strong strongest')
+            .addClass(offset.class)
+            .css('width', offset.width+'%');
+
+        var feedback = (passResult.feedback.warning.length) ? passResult.feedback.warning + '. ' : '';
+        feedback += 'Time to crack: ' + passResult.crack_times_display.offline_slow_hashing_1e4_per_second;
+        feedback += ((passResult.feedback.suggestions[0]) ? '<br />' + passResult.feedback.suggestions[0] : '');
+        advice.empty().append(feedback);
+    });
+}
+
 /**
  * Mask/unmask password input field.
  *
@@ -1248,7 +1315,7 @@ jQuery.fn.txpSortable = function (options)
 
 textpattern.passwordMask = function()
 {
-    $('body').on('click', '#show_password', function() {
+    $('form').on('click', '#show_password', function() {
         var inputBox = $(this).closest('form').find('input.txp-maskable');
         var newType = (inputBox.attr('type') === 'password') ? 'text' : 'password';
         textpattern.changeType(inputBox, newType);
@@ -1528,6 +1595,7 @@ textpattern.Route.add('login', function ()
     });
 
     textpattern.passwordMask();
+    textpattern.passwordStrength();
 });
 
 // Write panel.
@@ -1614,6 +1682,7 @@ textpattern.Route.add('form', function ()
 textpattern.Route.add('admin', function ()
 {
     textpattern.passwordMask();
+    textpattern.passwordStrength();
 });
 
 // Preferences panel.

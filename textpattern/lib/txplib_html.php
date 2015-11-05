@@ -86,6 +86,7 @@ function end_page()
         echo n.'</main><!-- /txp-body -->'.n.'<footer role="contentinfo" class="txp-footer">';
         echo pluggable_ui('admin_side', 'footer', $theme->footer());
         callback_event('admin_side', 'body_end');
+        echo script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL, array('admin', 'new_pass_form'));
         echo script_js('textpattern.textarray = '.json_encode($textarray_script)).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }
@@ -1541,41 +1542,55 @@ EOF;
 /**
  * Renders a &lt:script&gt; element.
  *
+ * The $route parameter allows script_js() to be included in fixed page
+ * locations (e.g. prior to the &lt;/body&gt; tag) but to only render
+ * its content if the event / step match.
+ *
  * @param  string     $js    JavaScript code
  * @param  int|string $flags Flags TEXTPATTERN_SCRIPT_URL | TEXTPATTERN_SCRIPT_ATTACH_VERSION, or noscript alternative if a string
+ * @param  array      $route Optional event/step upon which to add the script
  * @return string HTML with embedded script element
  * @example
  * echo script_js('/js/script.js', TEXTPATTERN_SCRIPT_URL);
  */
 
-function script_js($js, $flags = '')
+function script_js($js, $flags = '', $route = array())
 {
-    if (is_int($flags)) {
-        if ($flags & TEXTPATTERN_SCRIPT_URL) {
-            if ($flags & TEXTPATTERN_SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false) {
-                $ext = pathinfo($js, PATHINFO_EXTENSION);
+    global $event, $step;
 
-                if ($ext) {
-                    $js = substr($js, 0, (strlen($ext) + 1) * -1);
-                    $ext = '.'.$ext;
+    $targetEvent = empty($route[0]) ? null : $route[0];
+    $targetStep = empty($route[1]) ? null : $route[1];
+
+    if (($targetEvent === null || $targetEvent === $event) && ($targetStep === null || $targetStep === $step)) {
+        if (is_int($flags)) {
+            if ($flags & TEXTPATTERN_SCRIPT_URL) {
+                if ($flags & TEXTPATTERN_SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false) {
+                    $ext = pathinfo($js, PATHINFO_EXTENSION);
+
+                    if ($ext) {
+                        $js = substr($js, 0, (strlen($ext) + 1) * -1);
+                        $ext = '.'.$ext;
+                    }
+
+                    $js .= '.v'.txp_version.$ext;
                 }
 
-                $js .= '.v'.txp_version.$ext;
+                return n.tag(null, 'script', array('src' => $js));
             }
-
-            return n.tag(null, 'script', array('src' => $js));
         }
+
+        $js = preg_replace('#<(/?)(script)#i', '\\x3c$1$2', $js);
+
+        $out = n.tag(n.trim($js).n, 'script');
+
+        if ($flags) {
+            $out .= n.tag(n.trim($flags).n, 'noscript');
+        }
+
+        return $out;
     }
 
-    $js = preg_replace('#<(/?)(script)#i', '\\x3c$1$2', $js);
-
-    $out = n.tag(n.trim($js).n, 'script');
-
-    if ($flags) {
-        $out .= n.tag(n.trim($flags).n, 'noscript');
-    }
-
-    return $out;
+    return '';
 }
 
 /**
