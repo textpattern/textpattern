@@ -128,8 +128,8 @@ echo $theme->html_head();
     callback_event('admin_side', 'head_end');
     ?>
 </head>
-<body id="<?php echo $body_id;
-    ?>" class="not-ready <?php echo $area;
+<body class="not-ready <?php echo $area;
+    ?>" id="<?php echo $body_id;
     ?>">
 <header class="txp-header">
 <?php callback_event('admin_side', 'pagetop');
