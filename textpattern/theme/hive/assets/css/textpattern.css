@@ -1123,6 +1123,51 @@ h3.txp-summary.expanded a:after {
   left: auto;
 }
 
+/* Password strength meter (via zxcvbn.js)
+   ========================================================================== */
+strength-helper {
+  font-size: 86%;
+  line-height: 1.5;
+}
+
+.strength-meter {
+  position: relative;
+  width: 100%;
+  height: 1em;
+  background-color: #cccccc;
+}
+.strength-meter .bar {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  height: 1em;
+}
+.strength-meter .indicator {
+  position: absolute;
+  z-index: 3;
+  color: #ffffff;
+}
+
+.poor {
+  background-color: #9d261d;
+}
+
+.weak {
+  background-color: #b5590f;
+}
+
+.medium {
+  background-color: #cc8c00;
+}
+
+.strong {
+  background-color: #788c12;
+}
+
+.strongest {
+  background-color: #238c23;
+}
+
 /* Forms
    ========================================================================== */
 /**
