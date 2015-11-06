@@ -107,7 +107,7 @@ function doLoginForm($message)
             n.tag(
                 n.tag(gTxt('new_password'), 'label', array(
                     'class' => 'txp-form-field-label',
-                    'for' => 'change_password',
+                    'for'   => 'change_password',
                 )).
                 fInput('password', 'p_password', '', 'txp-form-field-input txp-maskable', '', '', INPUT_REGULAR, '', 'change_password', false, true),
                 'div', array('class' => 'txp-form-field change-password')).
