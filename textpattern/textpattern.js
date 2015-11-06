@@ -1278,32 +1278,23 @@ textpattern.passwordStrength = function (options)
         };
 
         var offset = strengthMap[passResult.score];
-        me.siblings('.strength-helper').remove();
+        me.siblings('.strength-meter').remove();
 
+        // Todo: gTxt().
         if (pass.length > 0) {
-            me.after('<div class="strength-helper">' +
-                    '<div class="strength-meter">' +
+            me.after('<div class="strength-meter">' +
                         '<div class="bar"></div>' +
                         '<div class="indicator">Strength: ' + offset.class + '</div>' +
-                    '</div>' +
-                    '<div class="strength-advice"></div>' +
-                '</div>');
+                    '</div>');
         }
 
-        var helper = me.siblings('.strength-helper');
-        var meter = helper.find('.strength-meter');
-        var advice = helper.find('.strength-advice');
+        var meter = me.siblings('.strength-meter');
 
         meter
             .find('.bar')
             .removeClass('poor weak medium strong strongest')
             .addClass(offset.class)
             .css('width', offset.width+'%');
-
-        var feedback = (passResult.feedback.warning.length) ? passResult.feedback.warning + '. ' : '';
-        feedback += 'Time to crack: ' + passResult.crack_times_display.offline_slow_hashing_1e4_per_second;
-        feedback += ((passResult.feedback.suggestions[0]) ? '<br />' + passResult.feedback.suggestions[0] : '');
-        advice.empty().append(feedback);
     });
 }
 
