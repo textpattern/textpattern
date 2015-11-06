@@ -143,8 +143,7 @@ function change_pass()
     $rs = change_user_password($txp_user, $new_pass);
 
     if ($rs) {
-        // Todo: Move full stop to Textpack.
-        $message = gTxt('password_changed') . '.';
+        $message = gTxt('password_changed');
         author_list($message);
     }
 }
