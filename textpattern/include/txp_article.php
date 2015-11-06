@@ -763,10 +763,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");
             }
 
-            if (!has_privs('article.set_markup')) {
+            if (!has_privs('article.set_markup') && !empty($ID)) {
                 $oldArticle = safe_row("textile_body, textile_excerpt", 'textpattern', "ID = $ID");
-                $store_out['textile_body'] = $oldArticle['textile_body'];
-                $store_out['textile_excerpt'] = $oldArticle['textile_excerpt'];
+                if (!empty($oldArticle)) {
+                    $store_out['textile_body'] = $oldArticle['textile_body'];
+                    $store_out['textile_excerpt'] = $oldArticle['textile_excerpt'];
+                }
             }
         }
 
