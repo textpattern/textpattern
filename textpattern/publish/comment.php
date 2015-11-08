@@ -610,7 +610,7 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
     extract($article);
     extract(safe_row("RealName, email", 'txp_users', "name = '".doSlash($AuthorID)."'"));
 
-    $out = gTxt('greeting')." $RealName,".n;
+    $out = gTxt('salutation', array('{name}' => $RealName)).n;
     $out .= str_replace('{title}', $Title, gTxt('comment_recorded')).n;
     $out .= permlinkurl_id($parentid).n;
 

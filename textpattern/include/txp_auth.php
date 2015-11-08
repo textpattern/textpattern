@@ -318,7 +318,7 @@ function doTxpValidate()
 
                     if ($row['nonce'] && ($hash === bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $row['nonce'].$selector.$row['old_pass']), 0, SALT_LENGTH))).$selector)) {
                         if (change_user_password($row['name'], $pass)) {
-                            $body = gTxt('greeting').' '.$row['name'].','.n.n.gTxt('password_change_confirmation');
+                            $body = gTxt('salutation', array('{name}' => $row['name'])).n.n.gTxt('password_change_confirmation');
                             txpMail($row['email'], "[$sitename] ".gTxt('password_changed'), $body);
                             $message = gTxt('password_changed');
 

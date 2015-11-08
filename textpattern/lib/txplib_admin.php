@@ -56,7 +56,7 @@ function send_password($RealName, $name, $email, $password)
 
     require_privs('admin.edit');
 
-    $message = gTxt('greeting').' '.$RealName.','.
+    $message = gTxt('salutation', array('{name}' => $RealName)).
 
         n.n.gTxt('you_have_been_registered').' '.$sitename.
 
@@ -100,7 +100,7 @@ function send_new_password($password, $email, $name)
         $name = $txp_user;
     }
 
-    $message = gTxt('greeting').' '.$name.','.
+    $message = gTxt('salutation', array('{name}' => $name)).
 
         n.n.gTxt('your_password_is').': '.$password.
 
@@ -161,7 +161,7 @@ function send_reset_confirmation_request($name)
                 expires = '".doSlash($expiry)."'
             ");
 
-        $message = gTxt('greeting').' '.$name.','.
+        $message = gTxt('salutation', array('{name}' => $name)).
             n.n.gTxt('password_reset_confirmation').
             n.hu.'textpattern/index.php?confirm='.$confirm;
         if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message)) {
