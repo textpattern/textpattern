@@ -1280,7 +1280,6 @@ textpattern.passwordStrength = function (options)
         var offset = strengthMap[passResult.score];
         me.siblings('.strength-meter').remove();
 
-        // Todo: gTxt().
         if (pass.length > 0) {
             me.after('<div class="strength-meter">' +
                 '<div class="bar"></div>' +
