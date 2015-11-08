@@ -1268,11 +1268,11 @@ textpattern.passwordStrength = function (options)
                 "width": "50"
             },
             "3": {
-                "class": "strong",
+                "class": "good",
                 "width": "75"
             },
             "4": {
-                "class": "strongest",
+                "class": "excellent",
                 "width": "100"
             }
         };
@@ -1283,7 +1283,7 @@ textpattern.passwordStrength = function (options)
         if (pass.length > 0) {
             me.after('<div class="strength-meter">' +
                 '<div class="bar"></div>' +
-                '<div class="indicator">' + textpattern.gTxt('password_strength') + textpattern.gTxt('password_'+offset.class) + '</div>' +
+                '<div class="indicator">' + textpattern.gTxt('password_'+offset.class) + '</div>' +
                 '</div>');
         }
 
@@ -1291,7 +1291,7 @@ textpattern.passwordStrength = function (options)
 
         meter
             .find('.bar')
-            .removeClass('poor weak medium strong strongest')
+            .removeClass('poor weak medium good excellent')
             .addClass(offset.class)
             .css('width', offset.width+'%');
     });
