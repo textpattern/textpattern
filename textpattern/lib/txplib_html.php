@@ -86,8 +86,21 @@ function end_page()
         echo n.'</main><!-- /txp-body -->'.n.'<footer role="contentinfo" class="txp-footer">';
         echo pluggable_ui('admin_side', 'footer', $theme->footer());
         callback_event('admin_side', 'body_end');
-        echo script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL, array('admin', 'new_pass_form'));
-        echo script_js('textpattern.textarray = '.json_encode($textarray_script)).
+
+        gTxtScript(array(
+            'password_strength',
+            'password_poor',
+            'password_weak',
+            'password_medium',
+            'password_strong',
+            'password_srongest',
+            ),
+            array(),
+            array('admin', 'new_pass_form')
+        );
+
+        echo script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL, array(array('admin','page'), array('new_pass_form', null))).
+            script_js('textpattern.textarray = '.json_encode($textarray_script)).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }
 }

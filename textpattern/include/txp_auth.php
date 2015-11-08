@@ -151,6 +151,16 @@ function doLoginForm($message)
 
     pagetop($pageTitle, $message);
 
+    gTxtScript(array(
+        'password_strength',
+        'password_poor',
+        'password_weak',
+        'password_medium',
+        'password_strong',
+        'password_srongest',
+        )
+    );
+
     echo form(
         join('', $out), '', '', 'post', 'txp-login', '', 'login_form').
 

@@ -1284,7 +1284,7 @@ textpattern.passwordStrength = function (options)
         if (pass.length > 0) {
             me.after('<div class="strength-meter">' +
                 '<div class="bar"></div>' +
-                '<div class="indicator">Strength: ' + offset.class + '</div>' +
+                '<div class="indicator">' + textpattern.gTxt('password_strength') + textpattern.gTxt('password_'+offset.class) + '</div>' +
                 '</div>');
         }
 
