@@ -99,7 +99,7 @@ function end_page()
             array('admin', 'new_pass_form')
         );
 
-        echo script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL, array(array('admin','page'), array('new_pass_form', null))).
+        echo script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL, array('admin', 'new_pass_form')).
             script_js('textpattern.textarray = '.json_encode($textarray_script)).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }
