@@ -230,12 +230,14 @@ function new_pass_form()
         hed(gTxt('change_password'), 2).
         inputLabel(
             'new_pass',
-            fInput('password', 'new_pass', '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'new_pass'),
+            fInput('password', 'new_pass', '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'new_pass').
+            n.tag(null, 'div', array('class' => 'strength-meter')).
+            n.tag(
+                checkbox('unmask', 1, false, 0, 'show_password').
+                n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
+            'div', array('class' => 'edit-admin-show-password')),
             'new_password', '', array('class' => 'txp-form-field edit-admin-new-password')
         ).
-        graf(
-            checkbox('unmask', 1, false, 0, 'show_password').
-            n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')), array('class' => 'edit-admin-show-password')).
         graf(fInput('submit', 'change_pass', gTxt('submit'), 'publish')).
         eInput('admin').
         sInput('change_pass'),
