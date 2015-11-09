@@ -1133,7 +1133,7 @@ h3.txp-summary.expanded a:after {
  * <div class="txp-form-field-value">
  *     <input class="txp-maskable" type="password">
  *     <div class="strength-meter">
- *         <div class="bar weak" style="width:28%;"></div>
+ *         <div class="bar password-strength-1" style="width:28%;"></div>
  *         <div class="indicator">Strength: poor</div>
  *     </div>
  *     <div class="edit-admin-show-password">
@@ -1148,6 +1148,9 @@ h3.txp-summary.expanded a:after {
   width: 100%;
   height: 1.38461538461538em;
   background-color: #a3a3a3;
+}
+.strength-meter:empty {
+  background-color: transparent;
 }
 .strength-meter .bar {
   position: absolute;
@@ -1166,23 +1169,23 @@ h3.txp-summary.expanded a:after {
 /**
  * Strength level colours.
  */
-.poor {
+.password-strength-0 {
   background-color: #9d261d;
 }
 
-.weak {
+.password-strength-1 {
   background-color: #b5590f;
 }
 
-.fair {
+.password-strength-2 {
   background-color: #cc8c00;
 }
 
-.good {
+.password-strength-3 {
   background-color: #788c12;
 }
 
-.strong {
+.password-strength-4 {
   background-color: #238c23;
 }
 
