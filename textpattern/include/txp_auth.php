@@ -92,37 +92,39 @@ function doLoginForm($message)
     if ($reset) {
         $pageTitle = gTxt('password_reset');
         $out[] = hed(gTxt('password_reset'), 1, array('id' => 'txp-login-heading')).
-            n.tag(
-                n.tag(gTxt('name'), 'label', array('for' => 'login_name')).
+            inputLabel(
+                'login_name',
                 fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'),
-                'div', array('class' => 'txp-form-field login-name')).
+                'name', '', array('class' => 'txp-form-field login-name')
+            ).
             graf(
-                fInput('submit', '', gTxt('password_reset_button'), 'publish')).
+                fInput('submit', '', gTxt('password_reset_button'), 'publish')
+            ).
             graf(
-                href(gTxt('back_to_login'), 'index.php'), array('class' => 'login-return')).
+                href(gTxt('back_to_login'), 'index.php'), array('class' => 'login-return')
+            ).
             hInput('p_reset', 1);
     } elseif ($confirm) {
         $pageTitle = gTxt('change_password');
         $out[] = hed(gTxt('change_password'), 1, array('id' => 'txp-change-password-heading')).
-            n.tag(
-                n.tag(gTxt('new_password'), 'label', array(
-                    'class' => 'txp-form-field-label',
-                    'for'   => 'change_password',
-                )).
-                fInput('password', 'p_password', '', 'txp-form-field-input txp-maskable', '', '', INPUT_REGULAR, '', 'change_password', false, true).
+            inputLabel(
+                'change_password',
+                fInput('password', 'p_password', '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'change_password', false, true).
                 n.tag(null, 'div', array('class' => 'strength-meter')).
                 n.tag(
                     checkbox('unmask', 1, false, 0, 'show_password').
                     n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
                     'div', array('class' => 'show-password')),
-                'div', array('class' => 'txp-form-field change-password')).
-            graf(
-                fInput('submit', '', gTxt('password_confirm_button'), 'publish').n
+                'new_password', '', array('class' => 'txp-form-field change-password')
             ).
             graf(
-                href(gTxt('back_to_login'), 'index.php'), array('class' => 'login-return'));
-        $out[] = hInput('hash', gps('confirm'));
-        $out[] = hInput('p_alter', 1);
+                fInput('submit', '', gTxt('password_confirm_button'), 'publish')
+            ).
+            graf(
+                href(gTxt('back_to_login'), 'index.php'), array('class' => 'login-return')
+            ).
+            hInput('hash', gps('confirm')).
+            hInput('p_alter', 1);
     } else {
         $pageTitle = gTxt('login');
         $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')).
@@ -139,13 +141,14 @@ function doLoginForm($message)
             graf(
                 checkbox('stay', 1, $stay, '', 'login_stay').n.
                 tag(gTxt('stay_logged_in'), 'label', array('for' => 'login_stay')).
-                popHelp('remember_login').n, array('class' => 'login-stay')).
-
-            graf(
-                fInput('submit', '', gTxt('log_in_button'), 'publish').n
+                popHelp('remember_login'), array('class' => 'login-stay')
             ).
             graf(
-                href(gTxt('password_forgotten'), '?reset=1'), array('class' => 'login-forgot'));
+                fInput('submit', '', gTxt('log_in_button'), 'publish')
+            ).
+            graf(
+                href(gTxt('password_forgotten'), '?reset=1'), array('class' => 'login-forgot')
+            );
 
         if (gps('event')) {
             $out[] = eInput(gps('event'));
