@@ -117,10 +117,6 @@ function doLoginForm($message)
                     'div', array('class' => 'show-password')),
                 'div', array('class' => 'txp-form-field change-password')).
             graf(
-                checkbox('unmask', 1, false, 0, 'show_password').n.
-                tag(gTxt('show_password'), 'label', array('for' => 'show_password'))
-                , array('class' => 'show-password')).
-            graf(
                 fInput('submit', '', gTxt('password_confirm_button'), 'publish').n
             ).
             graf(
