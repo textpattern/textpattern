@@ -1282,8 +1282,7 @@ textpattern.passwordStrength = function (options)
 
         meter
             .find('.bar')
-            .removeClass()
-            .addClass('password-strength-'+passResult.score)
+            .attr('class', 'bar password-strength-'+passResult.score)
             .css('width', offset.width+'%');
     });
 }
