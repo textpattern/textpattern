@@ -1,6 +1,6 @@
 Changes in 4.6.0 (Upcoming) TODO
 
-* Textile v2.5.
+* Textile v3.5.
 * Improved RTL language support.
 * Improved admin side UI.
 * Requires PHP 5.3.3 or better. Compatible with PHP 7 (thanks Ruud van Melick).
