@@ -1146,6 +1146,7 @@ h3.txp-summary.expanded a:after {
   box-sizing: border-box;
   position: relative;
   width: 100%;
+  max-width: 28em;
   height: 1.38461538461538em;
   background-color: #a3a3a3;
 }
