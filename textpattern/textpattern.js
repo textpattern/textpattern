@@ -1256,23 +1256,18 @@ textpattern.passwordStrength = function (options)
         var passResult = zxcvbn(pass, user_inputs=[]);
         var strengthMap = {
             "0": {
-                "class": "poor",
                 "width": "5"
             },
             "1": {
-                "class": "weak",
                 "width": "28"
             },
             "2": {
-                "class": "fair",
                 "width": "50"
             },
             "3": {
-                "class": "good",
                 "width": "75"
             },
             "4": {
-                "class": "strong",
                 "width": "100"
             }
         };
@@ -1282,13 +1277,13 @@ textpattern.passwordStrength = function (options)
         meter.empty();
 
         if (pass.length > 0) {
-            meter.append('<div class="bar"></div><div class="indicator">' + textpattern.gTxt('password_'+offset.class) + '</div>');
+            meter.append('<div class="bar"></div><div class="indicator">' + textpattern.gTxt('password_strength_'+passResult.score) + '</div>');
         }
 
         meter
             .find('.bar')
-            .removeClass('poor weak fair good strong')
-            .addClass(offset.class)
+            .removeClass()
+            .addClass('password-strength-'+passResult.score)
             .css('width', offset.width+'%');
     });
 }

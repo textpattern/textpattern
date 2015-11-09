@@ -153,11 +153,11 @@ function doLoginForm($message)
     pagetop($pageTitle, $message);
 
     gTxtScript(array(
-        'password_poor',
-        'password_weak',
-        'password_fair',
-        'password_good',
-        'password_strong',
+        'password_strength_0',
+        'password_strength_1',
+        'password_strength_2',
+        'password_strength_3',
+        'password_strength_4',
         )
     );
 

@@ -88,11 +88,11 @@ function end_page()
         callback_event('admin_side', 'body_end');
 
         gTxtScript(array(
-            'password_poor',
-            'password_weak',
-            'password_fair',
-            'password_good',
-            'password_strong',
+            'password_strength_0',
+            'password_strength_1',
+            'password_strength_2',
+            'password_strength_3',
+            'password_strength_4',
             ),
             array(),
             array('admin', 'new_pass_form')
