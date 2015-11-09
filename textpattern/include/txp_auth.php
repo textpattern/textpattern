@@ -126,14 +126,16 @@ function doLoginForm($message)
     } else {
         $pageTitle = gTxt('login');
         $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')).
-            n.tag(
-                n.tag(gTxt('name'), 'label', array('for' => 'login_name')).
+            inputLabel(
+                'login_name',
                 fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'),
-                'div', array('class' => 'txp-form-field login-name')).
-            n.tag(
-                n.tag(gTxt('password'), 'label', array('for' => 'login_password')).
+                'name', '', array('class' => 'txp-form-field login-name')
+            ).
+            inputLabel(
+                'login_password',
                 fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password'),
-                'div', array('class' => 'txp-form-field login-password')).
+                'password', '', array('class' => 'txp-form-field login-password')
+            ).
             graf(
                 checkbox('stay', 1, $stay, '', 'login_stay').n.
                 tag(gTxt('stay_logged_in'), 'label', array('for' => 'login_stay')).
