@@ -1125,6 +1125,23 @@ h3.txp-summary.expanded a:after {
 
 /* Password strength meter (via zxcvbn.js)
    ========================================================================== */
+/**
+ * Strength meter bar area and text area.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-form-field-value">
+ *     <input class="txp-maskable" type="password">
+ *     <div class="strength-meter">
+ *         <div class="bar weak" style="width:28%;"></div>
+ *         <div class="indicator">Strength: poor</div>
+ *     </div>
+ *     <div class="edit-admin-show-password">
+ *         <input class="checkbox" type="checkbox">
+ *         <label>Show password</label>
+ *     </div>
+ * </div>
+ */
 .strength-meter {
   box-sizing: border-box;
   position: relative;
@@ -1146,6 +1163,9 @@ h3.txp-summary.expanded a:after {
   color: #ffffff;
 }
 
+/**
+ * Strength level colours.
+ */
 .poor {
   background-color: #9d261d;
 }
@@ -1154,7 +1174,7 @@ h3.txp-summary.expanded a:after {
   background-color: #b5590f;
 }
 
-.medium {
+.fair {
   background-color: #cc8c00;
 }
 
@@ -1162,7 +1182,7 @@ h3.txp-summary.expanded a:after {
   background-color: #788c12;
 }
 
-.excellent {
+.strong {
   background-color: #238c23;
 }
 
