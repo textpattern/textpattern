@@ -155,9 +155,9 @@ function doLoginForm($message)
     gTxtScript(array(
         'password_poor',
         'password_weak',
-        'password_medium',
+        'password_fair',
         'password_good',
-        'password_excellent',
+        'password_strong',
         )
     );
 

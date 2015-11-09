@@ -1264,7 +1264,7 @@ textpattern.passwordStrength = function (options)
                 "width": "28"
             },
             "2": {
-                "class": "medium",
+                "class": "fair",
                 "width": "50"
             },
             "3": {
@@ -1272,26 +1272,22 @@ textpattern.passwordStrength = function (options)
                 "width": "75"
             },
             "4": {
-                "class": "excellent",
+                "class": "strong",
                 "width": "100"
             }
         };
 
         var offset = strengthMap[passResult.score];
-        me.siblings('.strength-meter').remove();
+        var meter = me.siblings('.strength-meter');
+        meter.empty();
 
         if (pass.length > 0) {
-            me.after('<div class="strength-meter">' +
-                '<div class="bar"></div>' +
-                '<div class="indicator">' + textpattern.gTxt('password_'+offset.class) + '</div>' +
-                '</div>');
+            meter.append('<div class="bar"></div><div class="indicator">' + textpattern.gTxt('password_'+offset.class) + '</div>');
         }
-
-        var meter = me.siblings('.strength-meter');
 
         meter
             .find('.bar')
-            .removeClass('poor weak medium good excellent')
+            .removeClass('poor weak fair good strong')
             .addClass(offset.class)
             .css('width', offset.width+'%');
     });

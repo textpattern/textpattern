@@ -90,9 +90,9 @@ function end_page()
         gTxtScript(array(
             'password_poor',
             'password_weak',
-            'password_medium',
+            'password_fair',
             'password_good',
-            'password_excellent',
+            'password_strong',
             ),
             array(),
             array('admin', 'new_pass_form')
