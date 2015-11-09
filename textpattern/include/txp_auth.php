@@ -109,7 +109,12 @@ function doLoginForm($message)
                     'class' => 'txp-form-field-label',
                     'for'   => 'change_password',
                 )).
-                fInput('password', 'p_password', '', 'txp-form-field-input txp-maskable', '', '', INPUT_REGULAR, '', 'change_password', false, true),
+                fInput('password', 'p_password', '', 'txp-form-field-input txp-maskable', '', '', INPUT_REGULAR, '', 'change_password', false, true).
+                n.tag(null, 'div', array('class' => 'strength-meter')).
+                n.tag(
+                    checkbox('unmask', 1, false, 0, 'show_password').
+                    n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
+                    'div', array('class' => 'show-password')),
                 'div', array('class' => 'txp-form-field change-password')).
             graf(
                 checkbox('unmask', 1, false, 0, 'show_password').n.

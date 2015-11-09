@@ -235,7 +235,7 @@ function new_pass_form()
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
                 n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
-            'div', array('class' => 'edit-admin-show-password')),
+                'div', array('class' => 'edit-admin-show-password')),
             'new_password', '', array('class' => 'txp-form-field edit-admin-new-password')
         ).
         graf(fInput('submit', 'change_pass', gTxt('submit'), 'publish')).
