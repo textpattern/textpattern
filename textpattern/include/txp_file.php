@@ -698,10 +698,11 @@ function file_edit($message = '', $id = '')
             n.tag(
                 checkbox('publish_now', '1', $publish_now, '', 'publish_now').
                 n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
-                'div', array('class' => 'txp-form-field posted-now')
+                'div', array('class' => 'posted-now')
             );
 
         echo hed(gTxt('edit_file'), 2).
+            n.tag_start('div', array('class' => 'txp-edit')).
             $replace.
             inputLabel(
                 'condition',
@@ -773,8 +774,9 @@ function file_edit($message = '', $id = '')
                 hInput('page', $page).
                 hInput('crit', $crit).
                 hInput('search_method', $search_method),
-            '', '', 'post', 'txp-edit', '', (($file_exists) ? 'file_details' : 'assign_file')).
+            '', '', 'post', '', '', (($file_exists) ? 'file_details' : 'assign_file')).
             n.'</div>';
+            n.tag_end('div');
     }
 }
 

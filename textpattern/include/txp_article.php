@@ -1063,7 +1063,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 n.tag(
                     checkbox('publish_now', '1', $publish_now, '', 'publish_now').
                     n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
-                    'div', array('class' => 'txp-form-field posted-now')
+                    'div', array('class' => 'posted-now')
                 ),
                 array('sPosted' => $persist_timestamp) + $rs
             );
@@ -2067,7 +2067,7 @@ function article_partial_posted($rs)
         n.tag(
             checkbox('reset_time', '1', $reset_time, '', 'reset_time').
             n.tag(gTxt('reset_time'), 'label', array('for' => 'reset_time')),
-            'div', array('class' => 'txp-form-field reset-time')
+            'div', array('class' => 'reset-time')
         );
 
     return pluggable_ui('article_ui', 'timestamp', $out, $rs);
