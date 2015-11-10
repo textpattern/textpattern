@@ -76,17 +76,28 @@ $rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i", '$1', $_SERVER['PHP_
 $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
 $bodyclass = ($step == '') ? ' welcome' : '';
 
-print <<<eod
+echo <<<eod
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <title>Setup &#124; Textpattern CMS</title>
-<script src="../vendors/jquery/jquery/jquery.js"></script>
-<script src="../vendors/jquery/jquery-ui/jquery-ui.js"></script>
-<script>var textpattern = { do_spellcheck: "", textarray: {} };</script>
-<script src="../textpattern.js"></script>
+eod;
+
+echo script_js('../vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('../vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('../vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL).
+    script_js(
+        'var textpattern = '.json_encode(array(
+            'event'         => 'setup',
+            'step'          => $step,
+            'do_spellcheck' => '',
+            'textarray'     => (object) null,
+            )).';').
+    script_js('../textpattern.js', TEXTPATTERN_SCRIPT_URL);
+
+echo <<<eod
 <link rel="stylesheet" href="../theme/hive/assets/css/textpattern.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 </head>
@@ -222,7 +233,12 @@ function getDbInfo()
         ).
         inputLabel(
             'setup_mysql_pass',
-            fInput('text', 'dpass', (isset($_SESSION['dpass']) ? txpspecialchars($_SESSION['dpass']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_pass'),
+            fInput('password', 'dpass', (isset($_SESSION['dpass']) ? txpspecialchars($_SESSION['dpass']) : ''), 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_mysql_pass').
+            n.tag(null, 'div', array('class' => 'strength-meter')).
+            n.tag(
+                checkbox('unmask', 1, false, 0, 'show_password').
+                n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
+                'div', array('class' => 'show-password')),
             'mysql_password', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
@@ -512,7 +528,12 @@ function getTxpLogin()
         ).
         inputLabel(
             'setup_user_pass',
-            fInput('text', 'pass', (isset($_SESSION['pass']) ? txpspecialchars($_SESSION['pass']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true),
+            fInput('password', 'pass', (isset($_SESSION['pass']) ? txpspecialchars($_SESSION['pass']) : ''), 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).
+            n.tag(null, 'div', array('class' => 'strength-meter')).
+            n.tag(
+                checkbox('unmask', 1, false, 0, 'show_password').
+                n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
+                'div', array('class' => 'show-password')),
             'choose_password', 'setup_user_pass', array('class' => 'txp-form-field')
         ).
         inputLabel(

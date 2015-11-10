@@ -1556,6 +1556,14 @@ function txp_search()
 
 var cookieEnabled = true;
 
+// Setup panel.
+
+textpattern.Route.add('setup', function ()
+{
+    textpattern.passwordMask();
+    textpattern.passwordStrength();
+});
+
 // Login panel.
 
 textpattern.Route.add('login', function ()
@@ -1657,7 +1665,7 @@ textpattern.Route.add('form', function ()
     });
 });
 
-// Admin panel
+// Admin panel.
 
 textpattern.Route.add('admin', function ()
 {
