@@ -71,10 +71,20 @@ if (count($txpdir) > 3) {
     $txpdir = '/';
 }
 
+global $textarray_script;
+
 $step = ps('step');
 $rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i", '$1', $_SERVER['PHP_SELF']);
 $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
 $bodyclass = ($step == '') ? ' welcome' : '';
+gTxtScript(array(
+    'password_strength_0',
+    'password_strength_1',
+    'password_strength_2',
+    'password_strength_3',
+    'password_strength_4',
+    )
+);
 
 echo <<<eod
 <!DOCTYPE html>
@@ -92,8 +102,7 @@ echo script_js('../vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
         'var textpattern = '.json_encode(array(
             'event'         => 'setup',
             'step'          => $step,
-            'do_spellcheck' => '',
-            'textarray'     => (object) null,
+            'textarray'     => (object) $textarray_script,
             )).';').
     script_js('../textpattern.js', TEXTPATTERN_SCRIPT_URL);
 
