@@ -1817,7 +1817,7 @@ function article_partial_body($rs)
         '<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($rs['Body']).'</textarea>',
         'body',
         array('body', 'instructions_body'),
-        array('class' => 'txp-form-field body')
+        array('class' => 'txp-form-field txp-form-field-textarea body')
     );
 
     return pluggable_ui('article_ui', 'body', $out, $rs);
@@ -1840,7 +1840,7 @@ function article_partial_excerpt($rs)
         '<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>',
         'excerpt',
         array('excerpt', 'instructions_excerpt'),
-        array('class' => 'txp-form-field excerpt')
+        array('class' => 'txp-form-field txp-form-field-textarea excerpt')
     );
 
     return pluggable_ui('article_ui', 'excerpt', $out, $rs);
