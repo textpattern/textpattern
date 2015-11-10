@@ -1127,12 +1127,20 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Article markup'/'Excerpt markup' selection.
         if (has_privs('article.set_markup')) {
             $html_markup =
-                graf(
-                    '<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
-                    pref_text('textile_body', $textile_body, 'markup-body'), ' class="markup markup-body"').
-                graf(
-                    '<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
-                    pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt'), ' class="markup markup-excerpt"');
+                inputLabel(
+                    'markup-body',
+                    pref_text('textile_body', $textile_body, 'markup-body'),
+                    'article_markup',
+                    array('', 'instructions_textile_body'),
+                    array('class' => 'txp-form-field markup markup-body')
+                ).
+                inputLabel(
+                    'markup-excerpt',
+                    pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt'),
+                    'excerpt_markup',
+                    array('', 'instructions_textile_excerpt'),
+                    array('class' => 'txp-form-field markup markup-excerpt')
+                );
         } else {
             $html_markup = '';
         }
@@ -1142,8 +1150,15 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Override form' selection.
         $form_pop = $allow_form_override ? form_pop($override_form, 'override-form') : '';
         $html_override = $form_pop
-            ? pluggable_ui('article_ui', 'override', graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.popHelp('override_form').br.
-                $form_pop, ' class="override-form"'), $rs)
+            ? pluggable_ui('article_ui', 'override',
+                inputLabel(
+                    'override-form',
+                    $form_pop,
+                    'override_default_form',
+                    array('override_form', 'instructions_override_form'),
+                    array('class' => 'txp-form-field override-form')
+                ),
+                $rs)
             : '';
 
         echo wrapRegion('txp-advanced-group', $html_markup.$html_override, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
@@ -1196,8 +1211,13 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
 function custField($num, $field, $content)
 {
-    return graf('<label for="custom-'.$num.'">'.$field.'</label>'.br.
-        fInput('text', 'custom_'.$num, $content, '', '', '', INPUT_REGULAR, '', 'custom-'.$num), ' class="custom-field custom-'.$num.'"');
+    return inputLabel(
+        'custom-'.$num,
+        fInput('text', 'custom_'.$num, $content, '', '', '', INPUT_REGULAR, '', 'custom-'.$num),
+        $field,
+        array('', 'instructions_custom_'.$num),
+        array('class' => 'txp-form-field custom-field custom-'.$num)
+    );
 }
 
 /**
@@ -1677,8 +1697,7 @@ function article_partial_image($rs)
         fInput('text', 'Image', escape_title($rs['Image']), '', '', '', INPUT_REGULAR, '', 'article-image'),
         'article_image',
         array('title', 'instructions_article_image'),
-        array('class' => 'txp-form-field article-image'),
-        ''
+        array('class' => 'txp-form-field article-image')
     );
 
     return wrapRegion('image_group', pluggable_ui('article_ui', 'article_image', $default, $rs), 'image', 'article_image', 'article_image');
@@ -1944,21 +1963,23 @@ function article_partial_section($rs)
 function article_partial_categories($rs)
 {
     $out = n.'<div id="categories_group">'.
-
-        graf(
-            '<label for="category-1">'.gTxt('category1').'</label>'.
-
-            sp.span(
-                span('[', array('aria-hidden' => 'true')).
-                eLink('category', '', '', '', gTxt('edit')).
-                span(']', array('aria-hidden' => 'true')), array('class' => 'category-edit')).br.
-
-            category_popup('Category1', $rs['Category1'], 'category-1'), ' class="category category-1"').
-
-        graf(
-            '<label for="category-2">'.gTxt('category2').'</label>'.br.
-            category_popup('Category2', $rs['Category2'], 'category-2'), ' class="category category-2"').
-
+        inputLabel(
+            'category-1',
+            category_popup('Category1', $rs['Category1'], 'category-1').sp.
+            span('[', array('aria-hidden' => 'true')).
+            eLink('category', 'list', '', '', gTxt('edit')).
+            span(']', array('aria-hidden' => 'true')),
+            'category1',
+            array('', 'instructions_category1'),
+            array('class' => 'txp-form-field category category-1')
+        ).
+        inputLabel(
+            'category-2',
+            category_popup('Category2', $rs['Category2'], 'category-2'),
+            'category2',
+            array('', 'instructions_category2'),
+            array('class' => 'txp-form-field category category-2')
+        ).
         n.'</div>';
 
     return pluggable_ui('article_ui', 'categories', $out, $rs);
@@ -2018,8 +2039,7 @@ function article_partial_comments($rs)
                     fInput('text', 'AnnotateInvite', $AnnotateInvite, '', '', '', INPUT_REGULAR, '', 'comment-invite'),
                     'comment_invitation',
                     array('', 'instructions_comment_invitation'),
-                    array('class' => 'txp-form-field comment-invite'),
-                    ''
+                    array('class' => 'txp-form-field comment-invite')
                 );
         }
 
