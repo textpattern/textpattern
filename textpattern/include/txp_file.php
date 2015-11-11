@@ -701,8 +701,8 @@ function file_edit($message = '', $id = '')
                 'div', array('class' => 'posted-now')
             );
 
-        echo hed(gTxt('edit_file'), 2).
-            n.tag_start('div', array('class' => 'txp-edit')).
+        echo n.tag_start('div', array('class' => 'txp-edit')).
+            hed(gTxt('edit_file'), 2).
             $replace.
             inputLabel(
                 'condition',
@@ -719,7 +719,6 @@ function file_edit($message = '', $id = '')
                 $downloads,
                 '', '', array('class' => 'txp-form-field edit-file-download-count')
             ).
-            n.'<div class="file-detail '.($file_exists ? '' : 'not-').'exists">'.
             form(
                 (($file_exists)
                 ? inputLabel(
@@ -727,6 +726,7 @@ function file_edit($message = '', $id = '')
                         selectInput('status', $file_statuses, $status, false, '', 'file_status'),
                         'file_status', '', array('class' => 'txp-form-field edit-file-status')
                     ).
+                    $created.
                     inputLabel(
                         'file_title',
                         fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'),
@@ -750,7 +750,6 @@ function file_edit($message = '', $id = '')
                         '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>',
                         'description', '', array('class' => 'txp-form-field txp-form-field-textarea edit-file-description')
                     ).
-                    $created.
                     pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
                     graf(fInput('submit', '', gTxt('Save'), 'publish')).
                     hInput('filename', $filename)
@@ -774,8 +773,7 @@ function file_edit($message = '', $id = '')
                 hInput('page', $page).
                 hInput('crit', $crit).
                 hInput('search_method', $search_method),
-            '', '', 'post', '', '', (($file_exists) ? 'file_details' : 'assign_file')).
-            n.'</div>';
+            '', '', 'post', 'file-detail '.(($file_exists) ? '' : 'not-').'exists', '', (($file_exists) ? 'file_details' : 'assign_file')).
             n.tag_end('div');
     }
 }
