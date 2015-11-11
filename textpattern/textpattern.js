@@ -1250,7 +1250,7 @@ jQuery.fn.txpSortable = function (options)
 
 textpattern.passwordStrength = function (options)
 {
-    jQuery('form').on('keyup', 'input.txp-maskable', function() {
+    jQuery('form').on('keyup', 'input.txp-strength-hint', function() {
         var me = jQuery(this);
         var pass = me.val();
         var passResult = zxcvbn(pass, user_inputs=[]);

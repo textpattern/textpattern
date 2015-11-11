@@ -230,7 +230,7 @@ function new_pass_form()
         hed(gTxt('change_password'), 2).
         inputLabel(
             'new_pass',
-            fInput('password', 'new_pass', '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'new_pass').
+            fInput('password', 'new_pass', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'new_pass').
             n.tag(null, 'div', array('class' => 'strength-meter')).
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').

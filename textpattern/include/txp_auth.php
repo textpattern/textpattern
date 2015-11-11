@@ -109,7 +109,7 @@ function doLoginForm($message)
         $out[] = hed(gTxt('change_password'), 1, array('id' => 'txp-change-password-heading')).
             inputLabel(
                 'change_password',
-                fInput('password', 'p_password', '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'change_password', false, true).
+                fInput('password', 'p_password', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'change_password', false, true).
                 n.tag(null, 'div', array('class' => 'strength-meter')).
                 n.tag(
                     checkbox('unmask', 1, false, 0, 'show_password').

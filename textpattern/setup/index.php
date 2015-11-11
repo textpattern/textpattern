@@ -243,10 +243,9 @@ function getDbInfo()
         inputLabel(
             'setup_mysql_pass',
             fInput('password', 'dpass', (isset($_SESSION['dpass']) ? txpspecialchars($_SESSION['dpass']) : ''), 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_mysql_pass').
-            n.tag(null, 'div', array('class' => 'strength-meter')).
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
-                n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
+                n.tag(gTxt('setup_show_password'), 'label', array('for' => 'show_password')),
                 'div', array('class' => 'show-password')),
             'mysql_password', '', array('class' => 'txp-form-field')
         ).
@@ -537,7 +536,7 @@ function getTxpLogin()
         ).
         inputLabel(
             'setup_user_pass',
-            fInput('password', 'pass', (isset($_SESSION['pass']) ? txpspecialchars($_SESSION['pass']) : ''), 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).
+            fInput('password', 'pass', (isset($_SESSION['pass']) ? txpspecialchars($_SESSION['pass']) : ''), 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).
             n.tag(null, 'div', array('class' => 'strength-meter')).
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
