@@ -1419,18 +1419,19 @@ function pageby_form($event, $val, $step = null)
  * The rendered form can be customised via the '{$event}_ui > upload_form'
  * pluggable UI callback event.
  *
- * @param  string $label         File name label. May be empty
- * @param  string $pophelp       Help item
- * @param  string $step          Step
- * @param  string $event         Event
- * @param  string $id            File id
- * @param  int    $max_file_size Maximum allowed file size
- * @param  string $label_id      HTML id attribute for the filename input element
- * @param  string $class         HTML class attribute for the form element
+ * @param  string       $label         File name label. May be empty
+ * @param  string       $pophelp       Help item
+ * @param  string       $step          Step
+ * @param  string       $event         Event
+ * @param  string       $id            File id
+ * @param  int          $max_file_size Maximum allowed file size
+ * @param  string       $label_id      HTML id attribute for the filename input element
+ * @param  string       $class         HTML class attribute for the form element
+ * @param  string|array $wraptag_val   Tag to wrap the value / label in, or empty to omit
  * @return string HTML
  */
 
-function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = '')
+function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = '', $wraptag_val = array('div', 'div'))
 {
     extract(gpsa(array(
         'page',
@@ -1446,6 +1447,12 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
 
     if (!$label_id) {
         $label_id = $event.'-upload';
+    }
+
+    if ($wraptag_val) {
+        $wraptag_class = 'txp-form-field file-uploader';
+    } else {
+        $wraptag_class = '';
     }
 
     $argv = func_get_args();
@@ -1464,10 +1471,15 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
         hInput('search_method', $search_method).
         hInput('crit', $crit).
 
-        tag($label, 'label', array('for' => $label_id)).
-        popHelp($pophelp).
-        fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
-        fInput('submit', '', gTxt('upload')).
+        inputLabel(
+            'file',
+            fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
+                fInput('submit', '', gTxt('upload')),
+            $label,
+            array($pophelp, 'instructions_'.$pophelp),
+            $wraptag_class,
+            $wraptag_val
+        ).
 
         tInput().n,
 

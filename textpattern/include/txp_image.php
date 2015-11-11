@@ -217,7 +217,7 @@ function image_list($message = '')
     } elseif (has_privs('image.edit.own')) {
         $createBlock[] =
             n.tag(
-                n.upload_form(gTxt('upload_image'), 'upload_image', 'image_insert', 'image', '', $file_max_upload_size),
+                n.upload_form('upload_image', 'upload_image', 'image_insert', 'image', '', $file_max_upload_size, '', '', ''),
                 'div', array('class' => 'txp-control-panel')
             );
     }
@@ -584,8 +584,7 @@ function image_edit($message = '', $id = '')
 
         if ($thumbnail and ($ext != '.swf')) {
             $thumb_info = $id.'t'.$ext.' ('.$thumb_w.' &#215; '.$thumb_h.')';
-            $thumb = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="'.$thumb_info.'" '.
-                        ($thumb_w ? 'width="'.$thumb_w.'" height="'.$thumb_h.'" title="'.$thumb_info.'"' : '').' />';
+            $thumb = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="'.$thumb_info.'" title="'.$thumb_info.'" />';
         } else {
             $thumb = '';
 
@@ -598,107 +597,116 @@ function image_edit($message = '', $id = '')
             }
         }
 
-        echo pluggable_ui(
+        $imageBlock = array();
+        $thumbBlock = array();
+        $imageBlock[] = pluggable_ui(
                 'image_ui',
                 'fullsize_image',
                 $img,
                 $rs
-            ),
+            );
 
-            hed(gTxt('edit_image'), 2),
-
-            pluggable_ui(
+        $imageBlock[] = pluggable_ui(
                 'image_ui',
                 'image_edit',
-                upload_form(gTxt('replace_image'), 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image_replace', ' image-replace'),
+                upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', ' image-replace'),
                 $rs
-            ),
+            );
 
-            pluggable_ui(
-                'image_ui',
-                'thumbnail_image',
-                '<div class="thumbnail-edit">'.
-                (($thumbnail)
-                    ? $thumb.n.dLink('image', 'thumbnail_delete', 'id', $id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
-                    :     '').
-                '</div>',
-                $rs
-            ),
+        $thumbBlock[] = hed(gTxt('create_thumbnail').popHelp('create_thumbnail'), 3);
 
-            pluggable_ui(
-                'image_ui',
-                'thumbnail_edit',
-                upload_form(gTxt('upload_thumbnail'), 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'upload_thumbnail', ' thumbnail-upload'),
-                $rs
-            ),
-
-            (check_gd($ext))
+        $thumbBlock[] = (check_gd($ext))
             ? pluggable_ui(
                 'image_ui',
                 'thumbnail_create',
-                wrapGroup(
-                    'thumbnail_create_group',
-                    form(
-                        graf(
+                form(
+                    graf(
+                            fInput('submit', '', gTxt('create')).
                             n.'<label for="width">'.gTxt('thumb_width').'</label>'.
                             fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width').
                             n.'<label for="height">'.gTxt('thumb_height').'</label>'.
                             fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').
                             n.'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.
-                            checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop').
-                            fInput('submit', '', gTxt('Create')), ' class="edit-alter-thumbnail"').
-                        hInput('id', $id).
-                        eInput('image').
-                        sInput('thumbnail_create').
-                        hInput('sort', $sort).
-                        hInput('dir', $dir).
-                        hInput('page', $page).
-                        hInput('search_method', $search_method).
-                        hInput('crit', $crit), '', '', 'post', '', '', 'thumbnail_alter_form'),
-                    'create_thumbnail',
-                    'thumbnail-alter',
-                    'create_thumbnail'
-                    ),
-                $rs
-            )
-            : '',
-
-            '<div class="image-detail">',
-                form(
-                    inputLabel(
-                        'image_name',
-                        fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'),
-                        'image_name', '', array('class' => 'txp-form-field edit-image-name')
-                    ).
-                    inputLabel(
-                        'image_category',
-                        event_category_popup('image', $category, 'image_category').
-                        span('[', array('aria-hidden' => 'true')).
-                        eLink('category', 'list', '', '', gTxt('edit')).
-                        span(']', array('aria-hidden' => 'true')),
-                        'image_category', '', array('class' => 'txp-form-field edit-image-category')
-                    ).
-                    inputLabel(
-                        'image_alt_text',
-                        fInput('text', 'alt', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'),
-                        'alt_text', '', array('class' => 'txp-form-field edit-image-alt-text')
-                    ).
-                    inputLabel(
-                        'image_caption',
-                        text_area('caption', 0, 0, $caption, 'image_caption', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE),
-                        'caption', '', array('class' => 'txp-form-field txp-form-field-textarea edit-image-caption')
-                    ).
-                    pluggable_ui('image_ui', 'extend_detail_form', '', $rs).
-                    graf(fInput('submit', '', gTxt('save'), 'publish')).
+                            checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop')
+                        , ' class="edit-alter-thumbnail"').
                     hInput('id', $id).
                     eInput('image').
-                    sInput('image_save').
+                    sInput('thumbnail_create').
                     hInput('sort', $sort).
                     hInput('dir', $dir).
                     hInput('page', $page).
                     hInput('search_method', $search_method).
-                    hInput('crit', $crit),
-                '', '', 'post', '', '', 'image_details_form'),
+                    hInput('crit', $crit)
+                    , '', '', 'post', '', '', 'thumbnail_alter_form'),
+                $rs
+            )
+            : '';
+
+        $thumbBlock[] = pluggable_ui(
+            'image_ui',
+            'thumbnail_image',
+            '<div class="thumbnail-image">'.
+            (($thumbnail)
+                ? $thumb.n.dLink('image', 'thumbnail_delete', 'id', $id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
+                : '').
+            '</div>',
+            $rs
+        );
+
+        $thumbBlock[] = pluggable_ui(
+            'image_ui',
+            'thumbnail_edit',
+            upload_form('upload_thumbnail', 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'thumbnail-upload', ' thumbnail-upload'),
+            $rs
+        );
+
+        echo n.tag(
+                    hed(gTxt('edit_image'), 1, array('class' => 'txp-heading')).
+                    n.implode(n, $imageBlock).
+                    '<hr />'.
+                    tag(implode(n, $thumbBlock), 'section', array('class' => 'thumbnail-alter')),
+                'div',
+                array('class' => 'txp-layout-4col-cell-1-2-3')
+            ).
+            '<div class="txp-layout-4col-cell-4alt">',
+                form(
+                    graf(fInput('submit', '', gTxt('save'), 'publish')).
+                    wrapGroup(
+                        'image-details',
+                        inputLabel(
+                            'image_name',
+                            fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'),
+                            'image_name', '', array('class' => 'txp-form-field edit-image-name')
+                        ).
+                        inputLabel(
+                            'image_category',
+                            event_category_popup('image', $category, 'image_category').
+                            span('[', array('aria-hidden' => 'true')).
+                            eLink('category', 'list', '', '', gTxt('edit')).
+                            span(']', array('aria-hidden' => 'true')),
+                            'image_category', '', array('class' => 'txp-form-field edit-image-category')
+                        ).
+                        inputLabel(
+                            'image_alt_text',
+                            fInput('text', 'alt', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'),
+                            'alt_text', '', array('class' => 'txp-form-field edit-image-alt-text')
+                        ).
+                        inputLabel(
+                            'image_caption',
+                            text_area('caption', 0, 0, $caption, 'image_caption', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE),
+                            'caption', '', array('class' => 'txp-form-field txp-form-field-textarea edit-image-caption')
+                        ).
+                        pluggable_ui('image_ui', 'extend_detail_form', '', $rs).
+                        hInput('id', $id).
+                        eInput('image').
+                        sInput('image_save').
+                        hInput('sort', $sort).
+                        hInput('dir', $dir).
+                        hInput('page', $page).
+                        hInput('search_method', $search_method).
+                        hInput('crit', $crit),
+                        'image_details'),
+                    '', '', 'post', '', '', 'image_details_form'),
             '</div>';
     }
 }

@@ -220,7 +220,7 @@ function file_list($message = '')
     } elseif (has_privs('file.edit.own')) {
         $createBlock[] =
             n.tag_start('div', array('class' => 'txp-control-panel')).
-            n.file_upload_form(gTxt('upload_file'), 'upload', 'file_insert');
+            n.file_upload_form('upload_file', 'upload', 'file_insert', '', '', '', '');
 
         $existing_files = get_filenames();
 
@@ -662,8 +662,8 @@ function file_edit($message = '', $id = '')
         $existing_files = get_filenames();
 
         $replace = ($file_exists)
-            ? file_upload_form(gTxt('replace_file'), 'file_replace', 'file_replace', $id, 'file_replace', ' replace-file')
-            : file_upload_form(gTxt('file_relink'), 'file_reassign', 'file_replace', $id, 'file_reassign', ' upload-file');
+            ? file_upload_form('replace_file', 'file_replace', 'file_replace', $id, 'file_replace', ' replace-file')
+            : file_upload_form('file_relink', 'file_reassign', 'file_replace', $id, 'file_reassign', ' upload-file');
 
         $condition = span((($file_exists)
                 ? gTxt('file_status_ok')
@@ -1178,16 +1178,17 @@ function file_set_perm($file)
 /**
  * Renders a specific file upload form.
  *
- * @param  string $label         File name label. May be empty
- * @param  string $pophelp       Help item
- * @param  string $step          Step
- * @param  string $id            File id
- * @param  string $label_id      HTML id attribute for the filename input element
- * @param  string $class         HTML class attribute for the form element
+ * @param  string       $label       File name label. May be empty
+ * @param  string       $pophelp     Help item
+ * @param  string       $step        Step
+ * @param  string       $id          File id
+ * @param  string       $label_id    HTML id attribute for the filename input element
+ * @param  string       $class       HTML class attribute for the form element
+ * @param  string|array $wraptag_val Tag to wrap the value / label in, or empty to omit
  * @return string HTML
  */
 
-function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $class = '')
+function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $class = '', $wraptag_val = array('div', 'div'))
 {
     global $file_max_upload_size;
 
@@ -1197,7 +1198,7 @@ function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $cl
 
     $max_file_size = (intval($file_max_upload_size) == 0) ? '' : intval($file_max_upload_size);
 
-    return upload_form($label, $pophelp, $step, 'file', $id, $max_file_size, $label_id, $class);
+    return upload_form($label, $pophelp, $step, 'file', $id, $max_file_size, $label_id, $class, $wraptag_val);
 }
 
 // -------------------------------------------------------------
