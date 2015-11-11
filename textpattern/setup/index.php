@@ -78,11 +78,11 @@ $rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i", '$1', $_SERVER['PHP_
 $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
 $bodyclass = ($step == '') ? ' welcome' : '';
 gTxtScript(array(
-    'password_strength_0',
-    'password_strength_1',
-    'password_strength_2',
-    'password_strength_3',
-    'password_strength_4',
+    'setup_password_strength_0',
+    'setup_password_strength_1',
+    'setup_password_strength_2',
+    'setup_password_strength_3',
+    'setup_password_strength_4',
     )
 );
 
@@ -541,7 +541,7 @@ function getTxpLogin()
             n.tag(null, 'div', array('class' => 'strength-meter')).
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
-                n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
+                n.tag(gTxt('setup_show_password'), 'label', array('for' => 'show_password')),
                 'div', array('class' => 'show-password')),
             'choose_password', 'setup_user_pass', array('class' => 'txp-form-field')
         ).
