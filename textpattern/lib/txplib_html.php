@@ -903,7 +903,10 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
     }
 
     if (empty($help)) {
-        $help = array(0 => '', 1 => '');
+        $help = array(
+            0 => '',
+            1 => ''
+        );
     }
 
     $inlineHelp = (isset($help[1])) ? $help[1] : '';
@@ -1452,43 +1455,40 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
     if ($wraptag_val) {
         $wraptag_class = 'txp-form-field file-uploader';
     } else {
-        $wraptag_class = '';
+        $wraptag_class = 'inline-file-uploader';
     }
 
     $argv = func_get_args();
 
     return pluggable_ui($event.'_ui', 'upload_form',
         n.tag(
-
-        (!empty($max_file_size) ? hInput('MAX_FILE_SIZE', $max_file_size) : '').
-        eInput($event).
-        sInput($step).
-        hInput('id', $id).
-
-        hInput('sort', $sort).
-        hInput('dir', $dir).
-        hInput('page', $page).
-        hInput('search_method', $search_method).
-        hInput('crit', $crit).
-
-        inputLabel(
-            'file',
-            fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
+            (!empty($max_file_size) ? hInput('MAX_FILE_SIZE', $max_file_size) : '').
+            eInput($event).
+            sInput($step).
+            hInput('id', $id).
+            hInput('sort', $sort).
+            hInput('dir', $dir).
+            hInput('page', $page).
+            hInput('search_method', $search_method).
+            hInput('crit', $crit).
+            inputLabel(
+                'file',
+                fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
                 fInput('submit', '', gTxt('upload')),
-            $label,
-            array($pophelp, 'instructions_'.$pophelp),
-            $wraptag_class,
-            $wraptag_val
-        ).
-
-        tInput().n,
-
-        'form', array(
-            'class'   => 'upload-form'.$class,
-            'method'  => 'post',
-            'enctype' => 'multipart/form-data',
-            'action'  => 'index.php',
-        )), $argv);
+                $label,
+                array($pophelp, 'instructions_'.$pophelp),
+                $wraptag_class,
+                $wraptag_val
+            ).
+            tInput().n,
+            'form', array(
+                'class'   => 'upload-form'.$class,
+                'method'  => 'post',
+                'enctype' => 'multipart/form-data',
+                'action'  => 'index.php',
+            )
+        ),
+        $argv);
 }
 
 /**
