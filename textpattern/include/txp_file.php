@@ -681,7 +681,7 @@ function file_edit($message = '', $id = '')
                 ' <span role="separator">/</span> '.
                 tsi('day', '%d', $rs['created'], '', 'day'),
                 'publish_date',
-                array('', 'instructions_file_date'),
+                array('timestamp_file', 'instructions_file_date'),
                 array('class' => 'txp-form-field date posted')
             ).
             inputLabel(
