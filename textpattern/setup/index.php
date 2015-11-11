@@ -530,6 +530,11 @@ function getTxpLogin()
             'your_full_name', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
+            'setup_user_email',
+            fInput('text', 'email', (isset($_SESSION['email']) ? txpspecialchars($_SESSION['email']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true),
+            'your_email', '', array('class' => 'txp-form-field')
+        ).
+        inputLabel(
             'setup_user_login',
             fInput('text', 'name', (isset($_SESSION['name']) ? txpspecialchars($_SESSION['name']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true),
             'setup_login', 'setup_user_login', array('class' => 'txp-form-field')
@@ -543,11 +548,6 @@ function getTxpLogin()
                 n.tag(gTxt('setup_show_password'), 'label', array('for' => 'show_password')),
                 'div', array('class' => 'show-password')),
             'choose_password', 'setup_user_pass', array('class' => 'txp-form-field')
-        ).
-        inputLabel(
-            'setup_user_email',
-            fInput('text', 'email', (isset($_SESSION['email']) ? txpspecialchars($_SESSION['email']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true),
-            'your_email', '', array('class' => 'txp-form-field')
         ).
         hed(
             setup_gTxt('site_config'), 2
