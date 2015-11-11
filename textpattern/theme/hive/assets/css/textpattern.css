@@ -2706,12 +2706,6 @@ hr {
 .txp-control-panel form {
   display: inline-block;
 }
-.txp-control-panel form .txp-form-field,
-.txp-control-panel form .txp-form-field-label,
-.txp-control-panel form .txp-form-field-value {
-  display: inline-block;
-  min-height: inherit;
-}
 .txp-control-panel textarea {
   margin-bottom: 1em;
 }
