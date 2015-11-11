@@ -1472,7 +1472,7 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
             hInput('search_method', $search_method).
             hInput('crit', $crit).
             inputLabel(
-                'file',
+                $label_id,
                 fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
                 fInput('submit', '', gTxt('upload')),
                 $label,
