@@ -3,7 +3,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Textile v3.5.
 * Improved RTL language support.
 * Improved admin side UI.
-* Requires PHP 5.3.3 or better. Compatible with PHP 7 (thanks Ruud van Melick).
+* Requires PHP 5.3.3 or newer. Compatible with PHP 7 (thanks Ruud van Melick).
 * New tags: <txp:authors />, <txp:meta_description />, <txp:if_description> and <txp:if_yield>.
 * Added: Default publishing status preference.
 * Added: Support for additional text markup languages.
