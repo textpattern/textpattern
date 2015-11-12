@@ -3291,18 +3291,18 @@ div.multi-edit {
 /**
  * Custom font size/weight/colour for elements in write -> main content area.
  */
-#main_content input {
+#main_content .text input {
   font-size: 16px;
 }
-#main_content textarea {
+#main_content .text textarea {
   font-size: 16px;
   line-height: 1.5em;
 }
-#main_content .title input {
+#main_content .text .title input {
   font-size: 20px;
   font-weight: bold;
 }
-#main_content .author {
+#main_content .text .author {
   color: #777777;
 }
 
