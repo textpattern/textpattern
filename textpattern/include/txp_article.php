@@ -937,9 +937,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     // Title input.
     if ($view == 'preview') {
-        echo n.'<div class="preview">'.hed(gTxt('preview'), 2).hed($Title, 1, ' class="title"');
+        echo n.'<div class="preview">'.hed($Title, 1, ' class="title"');
     } elseif ($view == 'html') {
-        echo n.'<div class="html">'.hed('HTML', 2).hed($Title, 1, ' class="title"');
+        echo n.'<div class="html">'.hed($Title, 1, ' class="title"');
     } elseif ($view == 'text') {
         echo n.'<div class="text">'.$partials['title']['html'];
     }
