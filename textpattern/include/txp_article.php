@@ -937,18 +937,26 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     // Title input.
     if ($view == 'preview') {
-        echo n.'<div class="preview">'.hed($Title, 1, ' class="title"');
+        echo n.'<div class="preview">'.
+            graf(gTxt('title'), array('class' => 'alert-block information')).
+            hed($Title, 1, ' class="title"');
     } elseif ($view == 'html') {
-        echo n.'<div class="html">'.hed($Title, 1, ' class="title"');
+        echo n.'<div class="html">'.
+            graf(gTxt('title'), array('class' => 'alert-block information')).
+            hed($Title, 1, ' class="title"');
     } elseif ($view == 'text') {
         echo n.'<div class="text">'.$partials['title']['html'];
     }
 
     // Body.
     if ($view == 'preview') {
-        echo n.'<div class="body">'.$Body_html.'</div>';
+        echo n.'<div class="body">'.
+                n.graf(gTxt('body'), array('class' => 'alert-block information')).
+                $Body_html.
+                '</div>';
     } elseif ($view == 'html') {
-        echo tag(str_replace(array(n, t), array(br, sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', ' class="body"');
+        echo graf(gTxt('body'), array('class' => 'alert-block information')).
+            n.tag(str_replace(array(n, t), array(br, sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', ' class="body"');
     } else {
         echo $partials['body']['html'];
     }
@@ -956,10 +964,13 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     // Excerpt.
     if ($articles_use_excerpts) {
         if ($view == 'preview') {
-            echo n.'<hr />'.n.'<div class="excerpt">'.$Excerpt_html.'</div>';
+            echo n.'<div class="excerpt">'.
+                graf(gTxt('excerpt'), array('class' => 'alert-block information')).
+                $Excerpt_html.
+                '</div>';
         } elseif ($view == 'html') {
-            echo n.'<hr />'.
-                tag(str_replace(array(n, t), array(br, sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'code', array('class' => 'excerpt'));
+            echo graf(gTxt('excerpt'), array('class' => 'alert-block information')).
+                n.tag(str_replace(array(n, t), array(br, sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'code', array('class' => 'excerpt'));
         } else {
             echo $partials['excerpt']['html'];
         }
