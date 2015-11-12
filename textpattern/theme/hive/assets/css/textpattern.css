@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /* ==========================================================================
    Global
    ========================================================================== */
@@ -2955,13 +2954,13 @@ div.multi-edit {
  *         <a class="navlink-active">15</a><a class="navlink">25</a><a class="navlink">50</a>
  *     </p>
  *     <nav class="prev-next">
- *         <span class="disabled"><span class="ui-icon ui-icon-arrowthick-1-w">← Prev</span></span>
+ *         <span class="disabled"><span class="ui-icon ui-icon-arrowthick-1-w">Previous</span></span>
  *         <form>
  *             <label>Page</label>
  *             <input class="current-page">
  *             of <span class="total-pages">2</span>
  *         </form>
- *         <a><span class="ui-icon ui-icon-arrowthick-1-e">Next →</span></a>
+ *         <a><span class="ui-icon ui-icon-arrowthick-1-e">Next</span></a>
  *     </nav>
  * </div>
  */
@@ -3292,15 +3291,15 @@ div.multi-edit {
 /**
  * Custom font size/weight/colour for elements in write -> main content area.
  */
-#main_content .text input {
+#main_content input {
   font-size: 16px;
 }
-#main_content .text textarea {
+#main_content textarea {
   font-size: 16px;
   line-height: 1.5em;
 }
-#main_content #title {
-  font-size: 1.25em;
+#main_content .title input {
+  font-size: 20px;
   font-weight: bold;
 }
 #main_content .author {
@@ -5145,6 +5144,11 @@ label.ui-state-active.ui-button:active {
   float: right;
 }
 
+/**
+ * Tabs vertical.
+ *
+ * TODO.
+ */
 /* Tooltip
    ========================================================================== */
 /**
