@@ -3038,12 +3038,6 @@ div.multi-edit {
  * </div>
  */
 .txp-form-field {
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-align-items: baseline;
-  -ms-flex-align: baseline;
-  align-items: baseline;
   margin: 1em 0;
 }
 
@@ -3065,15 +3059,42 @@ div.multi-edit {
  */
 .txp-form-field-label,
 .txp-form-field-value {
-  -webkit-flex: 1;
-  -ms-flex: 1 1 0%;
-  flex: 1;
-  min-height: 2.1538462em;
   max-width: 29em;
 }
 
 /**
- * Don't flex or constrain form fields for textareas.
+ * Inline form field pairings on edit panels and preferences group panels.
+ *
+ * Example HTML:
+ *
+ * <form class="txp-edit">
+ *     <div class="txp-form-field">
+ *         <div class="txp-form-field-label"></div>
+ *         <div class="txp-form-field-value"></div>
+ *     </div>
+ * </form>
+ */
+.txp-edit .txp-form-field,
+.txp-prefs-group .txp-form-field {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
+}
+.txp-edit .txp-form-field-label,
+.txp-edit .txp-form-field-value,
+.txp-prefs-group .txp-form-field-label,
+.txp-prefs-group .txp-form-field-value {
+  -webkit-flex: 1;
+  -ms-flex: 1 1 0%;
+  flex: 1;
+  min-height: 2.1538462em;
+}
+
+/**
+ * Don't inline or constrain form fields for textareas.
  *
  * Example HTML:
  *
@@ -3089,35 +3110,6 @@ div.multi-edit {
 .txp-form-field-textarea,
 .txp-form-field-textarea .txp-form-field-label,
 .txp-form-field-textarea .txp-form-field-value {
-  -webkit-flex: none;
-  -ms-flex: none;
-  flex: none;
-  display: block;
-  max-width: inherit;
-  min-height: inherit;
-}
-
-/**
- * Don't flex form fields for main content panes, login panes, details panes and
- * file upload forms.
- *
- * TODO: txp-details should only be 'unflexed' when in a single column.
- */
-.txp-layout-4col-cell-1-2-3 .txp-form-field,
-.txp-layout-4col-cell-1-2-3 .txp-form-field-label,
-.txp-layout-4col-cell-1-2-3 .txp-form-field-value,
-.txp-layout-4col-cell-4alt
-.txp-details .txp-form-field,
-.txp-layout-4col-cell-4alt
-.txp-details .txp-form-field-label,
-.txp-layout-4col-cell-4alt
-.txp-details .txp-form-field-value,
-.welcome .txp-form-field,
-.welcome .txp-form-field-label,
-.welcome .txp-form-field-value,
-.login .txp-form-field,
-.login .txp-form-field-label,
-.login .txp-form-field-value {
   -webkit-flex: none;
   -ms-flex: none;
   flex: none;
@@ -6222,31 +6214,25 @@ label.ui-state-active.ui-button:active {
   }
 
   /**
-   * Collapse 2 column form fields to 1 column.
+   * Collapse 2 column form fields to 1 column (remove flexbox).
    */
-  .txp-form-field {
+  .txp-edit .txp-form-field,
+  .txp-prefs-group .txp-form-field {
     display: block;
   }
 
   /**
    * Label/value one-column layouts within panes.
    *
-   * Collapsed from two-column format on desktop layout.
-   *
-   * Example HTML:
-   *
-   * <p>
-   *     <div class="txp-form-field-label">
-   *         <label>Label <a class="pophelp">i</a></label>
-   *     </span>
-   *     <div class="txp-form-field-value">
-   *         <input type="text" size="32">
-   *     </span>
-   * </p>
+   * Collapsed from two-column format on desktop layout (remove flexbox).
    */
-  .txp-form-field-label,
-  .txp-form-field-value {
-    display: block;
+  .txp-edit .txp-form-field-label,
+  .txp-edit .txp-form-field-value,
+  .txp-prefs-group .txp-form-field-label,
+  .txp-prefs-group .txp-form-field-value {
+    -webkit-flex: none;
+    -ms-flex: none;
+    flex: none;
     min-height: inherit;
   }
 
