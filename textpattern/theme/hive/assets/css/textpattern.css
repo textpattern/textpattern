@@ -55,7 +55,7 @@ summary {
  *
  * More info: http://nicolasgallagher.com/micro-clearfix-hack/
  */
-.clearfix:after, .progress-meter ol:after, .txp-body:after, .txp-navigation:after {
+.clearfix:after, .progress-meter ol:after, .txp-navigation:after {
   content: "";
   display: table;
   clear: both;
@@ -2187,6 +2187,7 @@ body {
   -ms-flex: 1 1 0%;
   flex: 1;
   margin: 0 auto;
+  width: 100%;
   max-width: 116em;
 }
 
