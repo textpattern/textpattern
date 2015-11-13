@@ -5,6 +5,9 @@ Changes in 4.6.0 (Upcoming) TODO
 * Improved admin side UI.
 * Requires PHP 5.3.3 or better. Compatible with PHP 7 (thanks Ruud van Melick).
 * New tags: <txp:authors />, <txp:meta_description />, <txp:if_description> and <txp:if_yield>.
+* No more plaintext passwords sent: password reset requests are handled directly on the server.
+* Twenty-minute validity for password reset requests by default. Configurable in config.php.
+* Stronger password hashes and strength meter implemented (zxcvbn).
 * Added: Default publishing status preference.
 * Added: Support for additional text markup languages.
 * Added: Privilege to change text markup language in 'Write' panel.
@@ -231,7 +234,7 @@ Changes in 4.2.0
 * Fixed: Bogus "Article tags cannot be used outside an article context" warning  in <txp:else />-branch of <txp:if_keywords>.
 * Fixed: Removed superflous &amp; encoding for article titles in <txp:recent_comments />.
 * Fixed: <txp:expires> uses "class" and "wraptag" attributes as intended.
-* New tag: <txp:link_id /> (thanks: Rick Siletti).
+* New tag: <txp:link_id /> (thanks: Rick Silletti).
 * New tag: <txp:yield />.
 * Changed: Article timestamp is left untouched for draft, pending, or hidden articles published into the future.
 * Changed: <txp:file_download_list /> tag accepts a comma-separated list of file ids in a new "id" attribute (thanks: Rick Silletti).
