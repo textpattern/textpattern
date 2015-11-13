@@ -3074,8 +3074,8 @@ div.multi-edit {
  *     </div>
  * </form>
  */
-.txp-edit .txp-form-field,
-.txp-prefs-group .txp-form-field {
+.txp-edit .txp-form-field:not(.txp-form-field-textarea),
+.txp-prefs-group .txp-form-field:not(.txp-form-field-textarea) {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -3107,13 +3107,11 @@ div.multi-edit {
  *     </div>
  * </div>
  */
-.txp-form-field-textarea,
 .txp-form-field-textarea .txp-form-field-label,
 .txp-form-field-textarea .txp-form-field-value {
   -webkit-flex: none;
   -ms-flex: none;
   flex: none;
-  display: block;
   max-width: inherit;
   min-height: inherit;
 }
@@ -6216,8 +6214,8 @@ label.ui-state-active.ui-button:active {
   /**
    * Collapse 2 column form fields to 1 column (remove flexbox).
    */
-  .txp-edit .txp-form-field,
-  .txp-prefs-group .txp-form-field {
+  .txp-edit .txp-form-field:not(.txp-form-field-textarea),
+  .txp-prefs-group .txp-form-field:not(.txp-form-field-textarea) {
     display: block;
   }
 
