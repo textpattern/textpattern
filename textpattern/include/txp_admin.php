@@ -281,10 +281,6 @@ function author_list($message = '')
 
     pagetop(gTxt('tab_site_admin'), $message);
 
-    echo n.tag(
-        hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1'));
-
     if (is_disabled('mail')) {
         echo graf(
             span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
@@ -376,18 +372,40 @@ function author_list($message = '')
 
         $total = getCount('txp_users', $criteria);
 
-        echo n.tag_start('div', array(
-            'class' => 'txp-layout-2col-cell-2',
-            'id'    => 'users_control',
-        ));
+        echo n.tag(
+            hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-2col-cell-1'));
+
+        $searchBlock =
+            n.tag(
+                $search->renderForm('author_list', $search_render_options),
+                'div', array(
+                    'class' => 'txp-layout-2col-cell-2',
+                    'id'    => 'users_control',
+                )
+            );
+
+        $createBlock = array();
+
+        $createBlock[] = n.tag(implode(n, $buttons), 'div', array('class' => 'txp-control-panel'));
+
+        $contentBlockStart = n.tag_start('div', array(
+                'class' => 'txp-layout-1col',
+                'id'    => 'users_container',
+            ));
+
+        $createBlock = implode(n, $createBlock);
 
         if ($total < 1) {
             if ($criteria != 1) {
-                echo $search->renderForm('author_list', $search_render_options).
+                echo $searchBlock.
+                    $contentBlockStart.
+                    $createBlock.
                     graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_results_found'), array('class' => 'alert-block information')
-                ).n.tag_end('div');
+                        span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                        gTxt('no_results_found'),
+                        array('class' => 'alert-block information')
+                    ).n.tag_end('div');
             }
 
             return;
@@ -399,13 +417,7 @@ function author_list($message = '')
 
         $use_multi_edit = (has_privs('admin.edit') && ($total > 1 or safe_count('txp_users', "1 = 1") > 1));
 
-        echo $search->renderForm('author_list', $search_render_options).'</div>';
-
-        echo
-            n.tag_start('div', array(
-                'class' => 'txp-layout-1col',
-                'id'    => 'users_container',)).
-             n.tag(join(n, $buttons), 'div', array('class' => 'txp-control-panel'));
+        echo $searchBlock.$contentBlockStart.$createBlock;
 
         $rs = safe_rows_start(
             "*, UNIX_TIMESTAMP(last_access) AS last_login",
@@ -509,7 +521,7 @@ function author_list($message = '')
             n.tag_start('div', array(
                 'class' => 'txp-layout-1col',
                 'id'    => 'users_container',)).
-            n.tag(join(n, $buttons), 'div', array('class' => 'txp-control-panel')).
+            n.tag(implode(n, $buttons), 'div', array('class' => 'txp-control-panel')).
             n.tag_end('div');
     }
 }
