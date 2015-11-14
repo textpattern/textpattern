@@ -670,7 +670,7 @@ function image_edit($message = '', $id = '')
             ).
             '<div class="txp-layout-4col-cell-4alt">',
                 form(
-                    graf(fInput('submit', '', gTxt('save'), 'publish')).
+                    graf(fInput('submit', '', gTxt('save'), 'publish'), array('class' => 'txp-save')).
                     wrapGroup(
                         'image-details',
                         inputLabel(
