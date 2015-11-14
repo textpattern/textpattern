@@ -232,7 +232,7 @@ function list_list($message = '', $post = '')
     if (has_privs('article.edit')) {
         $createBlock[] =
             n.tag(
-                sLink('article', 'article_edit', gTxt('add_new_article'), 'txp-button'),
+                sLink('article', '', gTxt('add_new_article'), 'txp-button'),
                 'div', array('class' => 'txp-control-panel')
             );
     }
