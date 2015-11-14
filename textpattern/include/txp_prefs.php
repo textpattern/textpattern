@@ -270,8 +270,8 @@ function prefs_list($message = '')
                 )),
             'li').n;
 
-        echo n.'<div class="txp-layout-4col-cell-1alt">'.
-            hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')).
+        echo hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')).
+            n.'<div class="txp-layout-4col-cell-1alt">'.
             wrapGroup(
                 'all_preferences',
                 n.tag(join($groupOut), 'ul', array('class' => 'switcher-list')),
