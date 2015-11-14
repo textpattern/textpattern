@@ -6313,25 +6313,25 @@ label.ui-state-active.ui-button:active {
   /**
    * Collapse jQuery UI tabs responsively.
    */
-  .ui-tabs .ui-tabs-nav li {
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
     float: none;
     margin: 0;
     margin-top: 2px;
     border-bottom-width: 1px;
     box-shadow: none;
   }
-  .ui-tabs .ui-tabs-nav li.ui-tabs-active {
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-active {
     margin-bottom: 0;
     padding-bottom: 0;
   }
-  [dir="rtl"] .ui-tabs .ui-tabs-nav li {
+  [dir="rtl"] .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
     float: none;
   }
-  .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
     display: block;
     float: none;
   }
-  [dir="rtl"] .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+  [dir="rtl"] .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
     float: none;
   }
 
