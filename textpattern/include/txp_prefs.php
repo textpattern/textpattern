@@ -279,7 +279,7 @@ function prefs_list($message = '')
             );
 
         if ($last_event !== null) {
-            echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'));
+            echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'), array('class' => 'txp-save'));
         }
 
         echo n.'</div>'.
