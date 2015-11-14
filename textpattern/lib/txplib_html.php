@@ -83,7 +83,7 @@ function end_page()
 
     if ($app_mode != 'async' && $event != 'tag') {
         callback_event('admin_side', 'main_content_end');
-        echo n.'</main><!-- /txp-body -->'.n.'<footer role="contentinfo" class="txp-footer">';
+        echo n.'</main><!-- /txp-body -->'.n.'<footer class="txp-footer">';
         echo pluggable_ui('admin_side', 'footer', $theme->footer());
         callback_event('admin_side', 'body_end');
 
