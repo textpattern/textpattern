@@ -452,7 +452,24 @@ function doDiagnostics()
 
     $fmt_date = '%Y-%m-%d %H:%M:%S';
 
+    $dets = array(
+        'low'  => gTxt('low'),
+        'high' => gTxt('high'),
+    );
+
     $out = array(
+        form(
+            eInput('diag').
+            inputLabel(
+                'diag_detail_level',
+                selectInput('step', $dets, $step, 0, 1, 'diag_detail_level'),
+                'detail',
+                '',
+                array('class' => 'txp-form-field diagnostic-details-level'),
+                ''
+            )
+        ),
+
         '<textarea class="code" id="diagnostics-detail" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr" readonly>',
 
         gTxt('txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
@@ -600,23 +617,6 @@ function doDiagnostics()
 
     $out[] = callback_event('diag_results', $step).n;
     $out[] = '</textarea>';
-
-    $dets = array(
-        'low'  => gTxt('low'),
-        'high' => gTxt('high'),
-    );
-
-    $out[] = form(
-        eInput('diag').
-        inputLabel(
-            'diag_detail_level',
-            selectInput('step', $dets, $step, 0, 1, 'diag_detail_level'),
-            'detail',
-            '',
-            array('class' => 'txp-form-field diagnostic-details-level'),
-            ''
-        )
-    );
 
     echo join('', $out),
         n.tag_end('div').
