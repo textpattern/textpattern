@@ -1680,8 +1680,8 @@ textpattern.Route.add('prefs', function ()
     var prefsGroup = $('#all_preferences div');
 
     prefsGroup.closest('form').tabs();
-    prefsGroup.addClass('ui-tabs-vertical ui-helper-clearfix');
-    prefsGroup.find('li').removeClass('ui-corner-top').addClass('ui-corner-left');
+    prefsGroup.addClass('ui-tabs-vertical');
+    prefsGroup.find('li').removeClass('ui-corner-top');
 
     // Todo: save pane state for currently open pref group, fallback to first if not set.
 
