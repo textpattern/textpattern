@@ -5084,17 +5084,17 @@ label.ui-state-active.ui-button:active {
  *     </div>
  * </div>
  */
-.ui-tabs {
+.ui-tabs:not(.ui-tabs-vertical) {
   /* 1 */
   position: relative;
   border: 0;
 }
-.ui-tabs .ui-tabs-nav {
+.ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav {
   margin: 0;
   padding: 0;
   background: none;
 }
-.ui-tabs .ui-tabs-nav li {
+.ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
   position: relative;
   top: 0;
   float: left;
@@ -5104,21 +5104,21 @@ label.ui-state-active.ui-button:active {
   white-space: nowrap;
   box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
 }
-.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+.ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-active {
   margin-bottom: -1px;
   padding-bottom: 1px;
   box-shadow: none;
 }
-.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
+.ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor, .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor, .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
   cursor: text;
 }
-.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+.ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
   float: left;
   padding: 0.5em 1em;
   color: #333333;
   text-decoration: none;
 }
-.ui-tabs .ui-tabs-panel {
+.ui-tabs:not(.ui-tabs-vertical) .ui-tabs-panel {
   display: block;
   margin: 0 0 1em;
   border-width: 1px 0;
@@ -5150,6 +5150,10 @@ label.ui-state-active.ui-button:active {
  *
  * TODO.
  */
+.ui-tabs-vertical .ui-tabs-nav .ui-tabs-active {
+  background: #e6f0ff;
+}
+
 /* Tooltip
    ========================================================================== */
 /**

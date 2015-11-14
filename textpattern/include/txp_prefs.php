@@ -158,7 +158,7 @@ function prefs_list($message = '')
 
     $locale = setlocale(LC_ALL, $locale);
 
-    echo n.'<form class="prefs-form" method="post" action="index.php">';
+    echo n.'<form class="prefs-form" id="prefs_form" method="post" action="index.php">';
 
     // TODO: remove 'custom' when custom fields are refactored.
     $core_events = array('site', 'admin', 'publish', 'feeds', 'comments', 'custom');
