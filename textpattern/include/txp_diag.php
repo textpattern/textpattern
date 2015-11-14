@@ -430,9 +430,7 @@ function doDiagnostics()
 
     echo pagetop(gTxt('tab_diagnostics'), '');
 
-    echo n.tag(
-        hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
+    echo hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading')).
         n.tag_start('div', array(
             'class' => 'txp-layout-1col',
             'id'    => $event.'_container',
