@@ -1677,7 +1677,7 @@ textpattern.Route.add('admin', function ()
 
 textpattern.Route.add('prefs', function ()
 {
-    var prefsGroup = $('#all_preferences div[role=group]');
+    var prefsGroup = $('#all_preferences div');
 
     prefsGroup.closest('form').tabs();
     prefsGroup.addClass('ui-tabs-vertical ui-helper-clearfix');
