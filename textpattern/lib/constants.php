@@ -660,7 +660,7 @@ define('INPUT_TINY', 2);
  * @package Form
  */
 
-define('TEXTAREA_HEIGHT_LARGE', 16);
+define('TEXTAREA_HEIGHT_LARGE', 24);
 
 /**
  * Textarea height regular.
@@ -669,7 +669,7 @@ define('TEXTAREA_HEIGHT_LARGE', 16);
  * @package Form
  */
 
-define('TEXTAREA_HEIGHT_REGULAR', 12);
+define('TEXTAREA_HEIGHT_REGULAR', 16);
 
 /**
  * Textarea height medium.

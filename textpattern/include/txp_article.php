@@ -1825,7 +1825,7 @@ function article_partial_body($rs)
 {
     $out = inputLabel(
         'body',
-        '<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($rs['Body']).'</textarea>',
+        '<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'">'.txpspecialchars($rs['Body']).'</textarea>',
         'body',
         array('body', 'instructions_body'),
         array('class' => 'txp-form-field txp-form-field-textarea body')

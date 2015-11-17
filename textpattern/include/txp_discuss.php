@@ -588,7 +588,7 @@ function discuss_edit()
                 ).
                 inputLabel(
                     'commentmessage',
-                    '<textarea id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'">'.$message.'</textarea>',
+                    '<textarea id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_MEDIUM.'">'.$message.'</textarea>',
                     'message', '', array('class' => 'txp-form-field txp-form-field-textarea edit-comment-message')
                 ).
                 graf(fInput('submit', 'step', gTxt('save'), 'publish')).
