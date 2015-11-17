@@ -76,7 +76,7 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<meta name="application-name" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
         $out[] = '<meta name="apple-mobile-web-app-capable" content="yes">';
         $out[] = '<meta name="apple-mobile-web-app-title" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
-        $out[] = '<script src="'.$this->url.'assets/js/main.js"></script>'.n;
+        $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
 
         return join(n, $out);
     }
