@@ -536,8 +536,8 @@ function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $col
     }
 
     return n.tag($thing, 'textarea', array(
-        'name'        => $name,
         'id'          => $id,
+        'name'        => $name,
         'rows'        => (int) $rows,
         'cols'        => (int) $cols,
         'style'       => $style,

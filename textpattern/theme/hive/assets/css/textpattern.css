@@ -6259,20 +6259,6 @@ label.ui-state-active.ui-button:active {
   }
 
   /**
-   * Reduce height of write -> body text area.
-   */
-  #page-article #body {
-    max-height: 18.75em;
-  }
-
-  /**
-   * Reduce height of code text areas.
-   */
-  textarea.code {
-    max-height: 20em;
-  }
-
-  /**
    * Remove float from list navigators on list panels.
    */
   .pageby,

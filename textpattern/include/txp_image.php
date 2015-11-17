@@ -693,7 +693,7 @@ function image_edit($message = '', $id = '')
                         ).
                         inputLabel(
                             'image_caption',
-                            text_area('caption', 0, 0, $caption, 'image_caption', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE),
+                            '<textarea id="image_caption" name="caption" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$caption.'</textarea>',
                             'caption', '', array('class' => 'txp-form-field txp-form-field-textarea edit-image-caption')
                         ).
                         pluggable_ui('image_ui', 'extend_detail_form', '', $rs).
