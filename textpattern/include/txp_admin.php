@@ -172,15 +172,15 @@ function author_save_new()
             return;
         }
 
-        $password = generate_password(PASSWORD_LENGTH);
+        $password = Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH);
 
         $rs = create_user($name, $email, $password, $RealName, $privs);
 
         if ($rs) {
-            send_password($RealName, $name, $email, $password);
+            send_account_activation($name);
 
             author_list(
-                gTxt('password_sent_to').sp.$email
+                gTxt('login_sent_to', array('{email}' => $email))
             );
 
             return;

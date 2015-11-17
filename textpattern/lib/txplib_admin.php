@@ -69,6 +69,68 @@ function send_password($RealName, $name, $email, $password)
 }
 
 /**
+ * Emails a new user with account details and requests they set a password.
+ *
+ * @param  string $name     The login name
+ * @return bool FALSE on error.
+ */
+
+function send_account_activation($name)
+{
+    global $sitename;
+
+    require_privs('admin.edit');
+
+    $rs = safe_row("user_id, email, nonce, RealName, pass", 'txp_users', "name = '".doSlash($name)."'");
+
+    if ($rs) {
+        extract($rs);
+
+        $uid = assert_int($user_id);
+
+        // The selector becomes an indirect reference to the txp_users row,
+        // which does not leak information.
+        $selector = Txp::get('\Textpattern\Password\Random')->generate(12);
+        $expiry = strftime('%Y-%m-%d %H:%M:%S', time() + (60 * ACTIVATION_EXPIRY_MINUTES));
+
+        // Use a hash of the nonce, selector and (temporary, already discarded) password.
+        // This ensures that activation requests expire automatically when:
+        //  a) The person logs in, or
+        //  b) They successfully set their password
+        // Using the selector in the hash just injects randomness, otherwise two requests
+        // back-to-back would generate the same activation code.
+        // Old activation tokens for the same user id are purged when password is set.
+        $token = bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $nonce . $selector . $pass), 0, SALT_LENGTH)));
+        $activation_code = $token.$selector;
+
+        // Remove any previous activation tokens and insert the new one.
+        safe_delete("txp_token", "reference_id = $uid AND type = 'account_activation'");
+        safe_insert("txp_token",
+                "reference_id = $uid,
+                type = 'account_activation',
+                selector = '".doSlash($selector)."',
+                token = '".doSlash($token)."',
+                expires = '".doSlash($expiry)."'
+            ");
+
+        $message = gTxt('salutation', array('{name}' => $RealName)).
+            n.n.gTxt('you_have_been_registered').' '.$sitename.
+
+            n.n.gTxt('your_login_is').': '.$name.
+            n.n.gTxt('account_activation_confirmation').
+            n.hu.'textpattern/index.php?activate='.$activation_code.
+
+            n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
+
+        if (txpMail($email, "[$sitename] ".gTxt('account_activation'), $message)) {
+            return gTxt('account_activation_sent');
+        } else {
+            return array(gTxt('could_not_mail'), E_ERROR);
+        }
+    }
+}
+
+/**
  * Sends a new password to an existing user.
  *
  * If the $name is FALSE, the password is sent to the currently
@@ -242,7 +304,8 @@ function reset_author_pass($name)
 {
     $email = safe_field("email", 'txp_users', "name = '".doSlash($name)."'");
 
-    $new_pass = generate_password(PASSWORD_LENGTH);
+    $new_pass = Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH);
+
     $rs = change_user_password($name, $new_pass);
 
     if ($rs) {

@@ -77,11 +77,14 @@ function doLoginForm($message)
     $stay = (cs('txp_login') && !gps('logout') ? 1 : 0);
     $reset = gps('reset');
     $confirm = gps('confirm');
+    $activate = gps('activate');
 
     if (gps('logout')) {
         $step = 'logout';
     } elseif ($reset) {
         $step = 'reset';
+    } elseif ($activate) {
+        $step = 'activate';
     } elseif ($confirm) {
         $step = 'confirm';
     }
@@ -104,18 +107,20 @@ function doLoginForm($message)
                 href(gTxt('back_to_login'), 'index.php'), array('class' => 'login-return')
             ).
             hInput('p_reset', 1);
-    } elseif ($confirm) {
-        $pageTitle = gTxt('change_password');
-        $out[] = hed(gTxt('change_password'), 1, array('id' => 'txp-change-password-heading')).
+    } elseif ($confirm || $activate) {
+        $pageTitle = ($confirm) ? gTxt('change_password') : gTxt('set_password');
+        $label = ($confirm) ? 'change_password' : 'set_password';
+        $class = ($confirm) ? 'change-password' : 'set-password';
+        $out[] = hed($pageTitle, 1, array('id' => 'txp-'.$class.'-heading')).
             inputLabel(
-                'change_password',
-                fInput('password', 'p_password', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'change_password', false, true).
+                $label,
+                fInput('password', 'p_password', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', $label, false, true).
                 n.tag(null, 'div', array('class' => 'strength-meter')).
                 n.tag(
                     checkbox('unmask', 1, false, 0, 'show_password').
                     n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
                     'div', array('class' => 'show-password')),
-                'new_password', '', array('class' => 'txp-form-field change-password')
+                'new_password', '', array('class' => 'txp-form-field '.$class)
             ).
             graf(
                 fInput('submit', '', gTxt('password_confirm_button'), 'publish')
@@ -123,8 +128,8 @@ function doLoginForm($message)
             graf(
                 href(gTxt('back_to_login'), 'index.php'), array('class' => 'login-return')
             ).
-            hInput('hash', gps('confirm')).
-            hInput('p_alter', 1);
+            hInput('hash', gps('confirm').gps('activate')).
+            hInput(($confirm ? 'p_alter' : 'p_set'), 1);
     } else {
         $pageTitle = gTxt('login');
         $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')).
@@ -201,6 +206,7 @@ function doTxpValidate()
     $p_password = ps('p_password');
     $p_reset    = ps('p_reset');
     $p_alter    = ps('p_alter');
+    $p_set      = ps('p_set');
     $stay       = ps('stay');
     $p_confirm  = gps('confirm');
     $logout     = gps('logout');
@@ -300,19 +306,21 @@ function doTxpValidate()
         include_once txpath.'/lib/txplib_admin.php';
 
         $message = ($p_userid) ? send_reset_confirmation_request($p_userid) : '';
-    } elseif ($p_alter) {
-        // Password change confirmation.
+    } elseif ($p_alter || $p_set) {
+        // Password change/set confirmation.
         sleep(3);
         global $sitename;
 
         $pass = ps('p_password');
+        $type = ($p_alter) ? 'password_reset' : 'account_activation';
 
         if (trim($pass) === '') {
             $message = array(gTxt('password_required'), E_ERROR);
         } else {
             $hash = gps('hash');
             $selector = substr($hash, SALT_LENGTH);
-            $tokenInfo = safe_row("reference_id, token, expires", 'txp_token', "selector = '".doSlash($selector)."' AND type='password_reset'");
+
+            $tokenInfo = safe_row("reference_id, token, expires", 'txp_token', "selector = '".doSlash($selector)."' AND type='$type'");
 
             if ($tokenInfo) {
                 if (strtotime($tokenInfo['expires']) <= time()) {
@@ -321,14 +329,15 @@ function doTxpValidate()
                     $uid = assert_int($tokenInfo['reference_id']);
                     $row = safe_row("name, email, nonce, pass AS old_pass", 'txp_users', "user_id = $uid");
 
-                    if ($row['nonce'] && ($hash === bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $row['nonce'].$selector.$row['old_pass']), 0, SALT_LENGTH))).$selector)) {
+                    if ($row && $row['nonce'] && ($hash === bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $row['nonce'].$selector.$row['old_pass']), 0, SALT_LENGTH))).$selector)) {
                         if (change_user_password($row['name'], $pass)) {
-                            $body = gTxt('salutation', array('{name}' => $row['name'])).n.n.gTxt('password_change_confirmation');
-                            txpMail($row['email'], "[$sitename] ".gTxt('password_changed'), $body);
-                            $message = gTxt('password_changed');
+                            $body = gTxt('salutation', array('{name}' => $row['name'])).
+                                n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation'));
+                            $message = ($p_alter) ? gTxt('password_changed') : gTxt('password_set');
+                            txpMail($row['email'], "[$sitename] ".$message, $body);
 
-                            // Invalidate all reset requests in the wild for this user.
-                            safe_delete("txp_token", "reference_id = $uid AND type = 'password_reset'");
+                            // Invalidate all tokens in the wild for this user.
+                            safe_delete("txp_token", "reference_id = $uid AND type IN ('password_reset', 'account_activation ')");
                         }
                     } else {
                         $message = array(gTxt('invalid_token'), E_ERROR);

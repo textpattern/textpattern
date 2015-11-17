@@ -355,7 +355,7 @@ if (!defined('PASSWORD_LENGTH')) {
      * define('PASSWORD_LENGTH', 14);
      */
 
-    define('PASSWORD_LENGTH', 10);
+    define('PASSWORD_LENGTH', 16);
 }
 
 if (!defined('PASSWORD_COMPLEXITY')) {
@@ -396,10 +396,10 @@ if (!defined('PASSWORD_SYMBOLS')) {
      * @since   4.6.0
      * @see     generate_password()
      * @example
-     * define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUYXZabcdefghijkmnopqrstuvwxyz_?!-');
+     * define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUYXZabcdefghijkmnopqrstuvwxyz_?!-@$%^*;:');
      */
 
-    define('PASSWORD_SYMBOLS', '23456789abcdefghijkmnopqrstuvwxyz');
+    define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz_-!?.');
 }
 
 if (!defined('HASHING_ALGORITHM')) {
@@ -447,6 +447,21 @@ if (!defined('RESET_EXPIRY_MINUTES')) {
      */
 
     define('RESET_EXPIRY_MINUTES', '20');
+}
+
+if (!defined('ACTIVATION_EXPIRY_MINUTES')) {
+    /**
+     * Length of time (in minutes) that a password activation (new account) link remains valid.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @since   4.6.0
+     * @example
+     * define('ACTIVATION_EXPIRY_MINUTES', '2880');
+     */
+
+    define('ACTIVATION_EXPIRY_MINUTES', '1440');
 }
 
 if (!defined('LOGIN_COOKIE_HTTP_ONLY')) {
