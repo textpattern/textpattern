@@ -123,7 +123,7 @@ function send_account_activation($name)
             n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
 
         if (txpMail($email, "[$sitename] ".gTxt('account_activation'), $message)) {
-            return gTxt('account_activation_sent');
+            return gTxt('login_sent_to', array('{email}' => $email));
         } else {
             return array(gTxt('could_not_mail'), E_ERROR);
         }

@@ -177,11 +177,9 @@ function author_save_new()
         $rs = create_user($name, $email, $password, $RealName, $privs);
 
         if ($rs) {
-            send_account_activation($name);
+            $message = send_account_activation($name);
 
-            author_list(
-                gTxt('login_sent_to', array('{email}' => $email))
-            );
+            author_list($message);
 
             return;
         }
