@@ -1027,7 +1027,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo pluggable_ui(
             'article_ui',
             'sort_display',
-            wrapRegion('write-sort', $partials['status']['html'].$partials['section']['html'].$partials['categories']['html'], '', gTxt('sort_display')),
+            wrapRegion('txp-write-sort-group', $partials['status']['html'].$partials['section']['html'].$partials['categories']['html'], '', gTxt('sort_display')),
             $rs
         );
 
@@ -1501,7 +1501,7 @@ function article_partial_sidehelp($rs)
         $help .= Txp::get('\Textpattern\Textfilter\Registry')->getHelp($rs['textile_excerpt']);
     }
 
-    $out = wrapRegion('textfilter_group', $help, 'textfilter_help', 'textfilter_help', 'article_textfilter_help');
+    $out = wrapRegion('txp-textfilter-group', $help, 'txp-textfilter-group-content', 'textfilter_help', 'article_textfilter_help');
 
     return pluggable_ui('article_ui', 'sidehelp', $out, $rs);
 }
@@ -1711,7 +1711,7 @@ function article_partial_image($rs)
         array('class' => 'txp-form-field article-image')
     );
 
-    return wrapRegion('image_group', pluggable_ui('article_ui', 'article_image', $default, $rs), 'image', 'article_image', 'article_image');
+    return wrapRegion('txp-image-group', pluggable_ui('article_ui', 'article_image', $default, $rs), 'txp-image-group-content', 'article_image', 'article_image');
 }
 
 /**
@@ -1733,7 +1733,7 @@ function article_partial_custom_fields($rs)
         $cf .= article_partial_custom_field($rs, "custom_field_{$k}");
     }
 
-    return wrapRegion('custom_field_group', pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'custom_field', 'custom', 'article_custom_field', (($cfs) ? '' : 'empty'));
+    return wrapRegion('txp-custom-field-group', pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'txp-custom-field-group-content', 'custom', 'article_custom_field', (($cfs) ? '' : 'empty'));
 }
 
 /**
