@@ -529,7 +529,7 @@ function section_edit()
     $out[] = inputLabel(
             'section_description',
             '<textarea id="section_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$sec_description.'</textarea>',
-            'section_description', 'section_description', array('class' => 'txp-form-field txp-form-field-textarea edit-section-description')
+            'description', 'section_description', array('class' => 'txp-form-field txp-form-field-textarea edit-section-description')
         );
 
     $out[] = pluggable_ui('section_ui', 'extend_detail_form', '', $rs).
