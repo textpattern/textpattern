@@ -3355,6 +3355,15 @@ div.multi-edit {
   background: #f9f2e3;
 }
 
+/* Admin -> Preferences panel - additional layout
+   ========================================================================== */
+/**
+ * Remove margin below heading.
+ */
+#page-prefs .txp-heading {
+  margin-bottom: 0;
+}
+
 /* Admin -> Languages panel - additional layout
    ========================================================================== */
 #page-lang .txp-list .modified {
