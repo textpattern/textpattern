@@ -2163,7 +2163,7 @@ body {
   position: relative;
   /* 2 */
   margin: 0;
-  padding: 4em 2.1% 0;
+  padding: 4em 2.75% 0;
   min-height: 100vh;
   color: #333333;
   background: #ffffff;
@@ -2216,7 +2216,7 @@ body {
   z-index: 1000;
   border-top: 1px solid #f7c600;
   border-bottom: 1px solid #d8ad00;
-  padding: 0 2.1%;
+  padding: 0 2.75%;
   height: 2.69230769230769em;
   box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
 }
@@ -2269,7 +2269,7 @@ body {
 .txp-view-site {
   float: left;
   margin: 0 1em;
-  max-width: 24%;
+  max-width: 22%;
   line-height: 2.69230769230769em;
   white-space: nowrap;
   overflow: hidden;
@@ -2290,7 +2290,7 @@ body {
 .txp-logout {
   position: absolute;
   top: -0.76923076923077em;
-  right: 2.1%;
+  right: 2.75%;
 }
 
 /* Footer
@@ -3162,7 +3162,7 @@ div.multi-edit {
  */
 .setup,
 .login {
-  padding: 1em 2.1% 0;
+  padding: 1em 2.75% 0;
 }
 
 /**
@@ -6068,12 +6068,12 @@ label.ui-state-active.ui-button:active {
    * Adjust right/left padding of body.
    */
   body {
-    padding: 4em 1.53846153846154em 0;
+    padding: 4em 2em 0;
   }
 
   .setup,
   .login {
-    padding: 1em 1.53846153846154em 0;
+    padding: 1em 2em 0;
   }
 
   /* Header < 768px
@@ -6082,7 +6082,7 @@ label.ui-state-active.ui-button:active {
    * Adjust right/left padding of header area.
    */
   .txp-header {
-    padding: 0 1.53846153846154em;
+    padding: 0 2em;
   }
 
   /**
@@ -6121,7 +6121,7 @@ label.ui-state-active.ui-button:active {
    * Adjust right absolute position of logout button.
    */
   .txp-logout {
-    right: 1.53846153846154em;
+    right: 2em;
   }
 }
 /* ==========================================================================
@@ -6190,7 +6190,7 @@ label.ui-state-active.ui-button:active {
   .txp-nav.in .data-dropdown:before {
     position: absolute;
     top: -0.5em;
-    left: 3.9375em;
+    left: 4.28em;
     z-index: 2;
     width: 1em;
     height: 0.5em;
@@ -6208,6 +6208,12 @@ label.ui-state-active.ui-button:active {
   .txp-nav > ul > li:first-child {
     border-left: 0;
   }
+  .txp-nav > ul > li > a {
+    padding: 0 2em;
+  }
+  .txp-nav > ul > li > a.dropdown-toggle:after {
+    right: 1em;
+  }
 
   /**
    * Secondary-level navigation menu items (submenus).
@@ -6220,7 +6226,7 @@ label.ui-state-active.ui-button:active {
     box-shadow: none;
   }
   .dropdown-menu a {
-    padding: 0.5em 2em;
+    padding: 0.5em 2em 0.5em 3em;
   }
   .dropdown-menu:before {
     display: none;
