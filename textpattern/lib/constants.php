@@ -449,19 +449,19 @@ if (!defined('RESET_EXPIRY_MINUTES')) {
     define('RESET_EXPIRY_MINUTES', '20');
 }
 
-if (!defined('ACTIVATION_EXPIRY_MINUTES')) {
+if (!defined('ACTIVATION_EXPIRY_HOURS')) {
     /**
-     * Length of time (in minutes) that a password activation (new account) link remains valid.
+     * Length of time (in hours) that a password activation (new account) link remains valid.
      *
      * This constant can be overridden from the config.php.
      *
      * @package User
      * @since   4.6.0
      * @example
-     * define('ACTIVATION_EXPIRY_MINUTES', '2880');
+     * define('ACTIVATION_EXPIRY_HOURS', '48');
      */
 
-    define('ACTIVATION_EXPIRY_MINUTES', '1440');
+    define('ACTIVATION_EXPIRY_HOURS', '168');
 }
 
 if (!defined('LOGIN_COOKIE_HTTP_ONLY')) {

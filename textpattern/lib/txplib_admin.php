@@ -91,7 +91,7 @@ function send_account_activation($name)
         // The selector becomes an indirect reference to the txp_users row,
         // which does not leak information.
         $selector = Txp::get('\Textpattern\Password\Random')->generate(12);
-        $expiry = strftime('%Y-%m-%d %H:%M:%S', time() + (60 * ACTIVATION_EXPIRY_MINUTES));
+        $expiry = strftime('%Y-%m-%d %H:%M:%S', time() + (60 * 60 * ACTIVATION_EXPIRY_HOURS));
 
         // Use a hash of the nonce, selector and (temporary, already discarded) password.
         // This ensures that activation requests expire automatically when:
