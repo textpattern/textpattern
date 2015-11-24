@@ -416,10 +416,11 @@ function file_list($message = '')
             }
 
             if ($file_exists) {
-                $id_column .=
-                    sp.span('[', array('aria-hidden' => 'true')).
+                $id_column .= sp.span(
+                    span('[', array('aria-hidden' => 'true')).
                     make_download_link($id, gTxt('download'), $filename).
-                    span(']', array('aria-hidden' => 'true'));
+                    span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link')
+                );
             }
 
             if (isset($file_statuses[$status])) {
@@ -735,10 +736,11 @@ function file_edit($message = '', $id = '')
                     inputLabel(
                         'file_category',
                         event_category_popup('file', $category, 'file_category').
-                        span('[', array('aria-hidden' => 'true')).
-                        eLink('category', 'list', '', '', gTxt('edit')).
-                        span(']', array('aria-hidden' => 'true')),
-                        'file_category', '', array('class' => 'txp-form-field edit-file-category')
+                        sp.span(
+                            span('[', array('aria-hidden' => 'true')).
+                            eLink('category', 'list', '', '', gTxt('edit')).
+                            span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link')
+                        ), 'file_category', '', array('class' => 'txp-form-field edit-file-category')
                     ).
 //                    inputLabel(
 //                        'perms',

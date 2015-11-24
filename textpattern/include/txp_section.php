@@ -371,7 +371,7 @@ function sec_section_list($message = '')
                     sp.span(
                         span('[', array('aria-hidden' => 'true')).
                         href(gTxt('view'), pagelinkurl(array('s' => $sec_name))).
-                        span(']', array('aria-hidden' => 'true')), array('class' => 'section_detail')
+                        span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link section_detail')
                     ), '', array(
                         'class' => 'txp-list-col-name',
                         'scope' => 'row',

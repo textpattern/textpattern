@@ -394,7 +394,8 @@ function image_list($message = '')
                     sp.span(
                         span('[', array('aria-hidden' => 'true')).
                         href(gTxt('view'), imagesrcurl($id, $ext)).
-                        span(']', array('aria-hidden' => 'true')), array('class' => 'images_detail')), '', ' class="txp-list-col-id" scope="row"').
+                        span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link images_detail')
+                    ), '', ' class="txp-list-col-id" scope="row"').
 
                 td(
                     ($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name'
@@ -681,10 +682,11 @@ function image_edit($message = '', $id = '')
                         inputLabel(
                             'image_category',
                             event_category_popup('image', $category, 'image_category').
-                            span('[', array('aria-hidden' => 'true')).
-                            eLink('category', 'list', '', '', gTxt('edit')).
-                            span(']', array('aria-hidden' => 'true')),
-                            'image_category', '', array('class' => 'txp-form-field edit-image-category')
+                            sp.span(
+                                span('[', array('aria-hidden' => 'true')).
+                                eLink('category', 'list', '', '', gTxt('edit')).
+                                span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link')
+                            ), 'image_category', '', array('class' => 'txp-form-field edit-image-category')
                         ).
                         inputLabel(
                             'image_alt_text',

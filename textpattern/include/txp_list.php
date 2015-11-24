@@ -441,10 +441,10 @@ function list_list($message = '', $post = '')
                 ).
                 hCell(
                     eLink('article', 'edit', 'ID', $ID, $ID).
-                    tag(
-                        sp.tag('[', 'span', array('aria-hidden' => 'true')).
+                    sp.span(
+                        span('[', array('aria-hidden' => 'true')).
                         href(gTxt('view'), $view_url).
-                        tag(']', 'span', array('aria-hidden' => 'true')), 'span', array('class' => 'articles_detail')
+                        span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link articles_detail')
                     ), '', ' class="txp-list-col-id" scope="row"'
                 ).
                 td(
