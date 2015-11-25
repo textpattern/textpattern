@@ -191,8 +191,9 @@ class hive_theme extends \Textpattern\Admin\Theme
                 span(null, array('class' => 'ui-icon '.$icon)).' '.gTxt($thing[0]).
                 sp.href('&#215;', '#close', ' class="close" role="button" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"'),
                 array(
-                    'class' => 'messageflash '.$class,
-                    'role'  => 'alert',
+                    'class'     => 'messageflash '.$class,
+                    'role'      => 'alert',
+                    'aria-live' => 'assertive',
                 )
             );
 
