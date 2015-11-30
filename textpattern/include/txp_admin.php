@@ -640,8 +640,9 @@ function author_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $users = safe_column("name", 'txp_users', "1 = 1");
 
     $methods = array(
-        'changeprivilege' => array('label' => gTxt('changeprivilege'), 'html' => $privileges),
-        'resetpassword'   => gTxt('resetpassword'),
+        'changeprivilege'  => array('label' => gTxt('changeprivilege'), 'html' => $privileges),
+        'resetpassword'    => gTxt('resetpassword'),
+        'resendactivation' => gTxt('resend_activation'),
     );
 
     if (count($users) > 1) {
@@ -720,6 +721,16 @@ function admin_multi_edit()
             }
 
             $msg = 'password_reset_confirmation_request_sent';
+            break;
+
+        case 'resendactivation':
+
+            foreach ($names as $name) {
+                send_account_activation($name);
+                $changed[] = $name;
+            }
+
+            $msg = 'resend_activation_request_sent';
             break;
     }
 
