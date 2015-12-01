@@ -2152,19 +2152,12 @@ td {
  * 2. Remove default margin.
  */
 body {
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
   box-sizing: border-box;
   /* 1 */
   position: relative;
   /* 2 */
   margin: 0;
   padding: 4em 2.75% 0;
-  min-height: 100vh;
   color: #333333;
   background: #ffffff;
 }
@@ -2183,14 +2176,22 @@ body {
  * </body>
  */
 .txp-body {
-  -webkit-flex: 1;
-  -ms-flex: 1 1 0%;
-  flex: 1;
   margin: 0 auto;
   width: 100%;
   max-width: 116em;
 }
 
+@supports (display: flex) {
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .txp-body {
+    flex: 1;
+  }
+}
 /* Header
    ========================================================================== */
 /**
@@ -2295,6 +2296,23 @@ body {
 
 /* Footer
    ========================================================================== */
+/**
+ * Footer content area.
+ *
+ * Example HTML:
+ *
+ * <body>
+ *     <header class="txp-header"></header>
+ *     <main class="txp-body"></main>
+ *     <footer class="txp-footer">
+ *         Content
+ *     </footer>
+ * </body>
+ */
+.txp-footer {
+  clear: both;
+}
+
 /**
  * Link to Textpattern official website.
  *
