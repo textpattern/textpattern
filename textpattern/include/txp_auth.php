@@ -332,12 +332,12 @@ function doTxpValidate()
                     if ($row && $row['nonce'] && ($hash === bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $row['nonce'].$selector.$row['old_pass']), 0, SALT_LENGTH))).$selector)) {
                         if (change_user_password($row['name'], $pass)) {
                             $body = gTxt('salutation', array('{name}' => $row['name'])).
-                                n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation'));
+                                n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation').n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php');
                             $message = ($p_alter) ? gTxt('password_changed') : gTxt('password_set');
                             txpMail($row['email'], "[$sitename] ".$message, $body);
 
                             // Invalidate all tokens in the wild for this user.
-                            safe_delete("txp_token", "reference_id = $uid AND type IN ('password_reset', 'account_activation ')");
+                            safe_delete("txp_token", "reference_id = $uid AND type IN ('password_reset', 'account_activation')");
                         }
                     } else {
                         $message = array(gTxt('invalid_token'), E_ERROR);

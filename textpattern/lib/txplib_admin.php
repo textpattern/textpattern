@@ -118,9 +118,7 @@ function send_account_activation($name)
 
             n.n.gTxt('your_login_is').': '.$name.
             n.n.gTxt('account_activation_confirmation').
-            n.hu.'textpattern/index.php?activate='.$activation_code.
-
-            n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
+            n.hu.'textpattern/index.php?activate='.$activation_code;
 
         if (txpMail($email, "[$sitename] ".gTxt('account_activation'), $message)) {
             return gTxt('login_sent_to', array('{email}' => $email));
