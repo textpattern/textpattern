@@ -135,7 +135,7 @@ function change_pass()
     extract(psa(array('current_pass', 'new_pass')));
 
     if (empty($new_pass)) {
-        author_list(array(gTxt('password_required'), E_ERROR));
+        new_pass_form(array(gTxt('password_required'), E_ERROR));
 
         return;
     }
@@ -148,7 +148,7 @@ function change_pass()
             author_list($message);
         }
     } else {
-        author_list(array(gTxt('password_invalid'), E_ERROR));
+        new_pass_form(array(gTxt('password_invalid'), E_ERROR));
     }
 }
 
@@ -224,9 +224,9 @@ function get_priv_level($priv)
  * Password changing form.
  */
 
-function new_pass_form()
+function new_pass_form($message = '')
 {
-    pagetop(gTxt('tab_site_admin'), '');
+    pagetop(gTxt('tab_site_admin'), $message);
 
     echo form(
         hed(gTxt('change_password'), 2).
@@ -245,7 +245,10 @@ function new_pass_form()
                 'div', array('class' => 'edit-admin-show-password')),
             'new_password', '', array('class' => 'txp-form-field edit-admin-new-password')
         ).
-        graf(fInput('submit', 'change_pass', gTxt('submit'), 'publish')).
+        graf(
+            fInput('submit', 'change_pass', gTxt('submit'), 'publish').
+            sLink('admin', '', gTxt('cancel'), 'txp-button')
+            ).
         eInput('admin').
         sInput('change_pass'),
     '', '', 'post', 'txp-edit', '', 'change_password');
