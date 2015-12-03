@@ -132,7 +132,7 @@ function change_pass()
 {
     global $txp_user;
 
-    extract(psa(array('new_pass')));
+    extract(psa(array('current_pass', 'new_pass')));
 
     if (empty($new_pass)) {
         author_list(array(gTxt('password_required'), E_ERROR));
@@ -140,11 +140,15 @@ function change_pass()
         return;
     }
 
-    $rs = change_user_password($txp_user, $new_pass);
+    if (txp_validate($txp_user, $current_pass)) {
+        $rs = change_user_password($txp_user, $new_pass);
 
-    if ($rs) {
-        $message = gTxt('password_changed');
-        author_list($message);
+        if ($rs) {
+            $message = gTxt('password_changed');
+            author_list($message);
+        }
+    } else {
+        author_list(array(gTxt('password_invalid'), E_ERROR));
     }
 }
 
@@ -226,6 +230,11 @@ function new_pass_form()
 
     echo form(
         hed(gTxt('change_password'), 2).
+        inputLabel(
+            'current_pass',
+            fInput('password', 'current_pass', '', '', '', '', INPUT_REGULAR, '', 'current_pass'),
+            'current_password', '', array('class' => 'txp-form-field edit-admin-current-password')
+        ).
         inputLabel(
             'new_pass',
             fInput('password', 'new_pass', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'new_pass').

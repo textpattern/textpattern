@@ -185,14 +185,18 @@ function doLoginForm($message)
  * Validates the sent login form and creates a session.
  *
  * During the reset request procedure, it is conceivable to verify the
- * token as soon as it is presented in the URL, but that would require:
- *  a) very similar code in both p_confirm and p_alter branches (unless refactored)
- *  b) some way (other than via the message) to signal back to doLoginForm() that
+ * token as soon as it's presented in the URL, but that would:
+ *  a) require refactoring code similarities in both p_confirm and p_alter branches
+ *  b) require some way (e.g. an Exception) to signal back to doLoginForm() that
  *     the token is bogus so the 'change your password' form is not displayed.
- *     Perhaps raise an exception?
+ *  c) leak information about the validity of a token, thus allowing rapid brute-force
+ *     attempts.
  *
- * @todo  Investigate validating confirm token as soon as it's presented in URL (better UX).
- * @todo  Could this be done via a Validator()?
+ * The inconvenience of a real user following an expired token and being told so
+ * after they've set a password is a small price to pay for the improved security
+ * and reduction of attack surface that validating after submission affords.
+ *
+ * @todo  Could the checks be done via a (reusable) Validator()?
  *
  * @return string A localised feedback message
  * @see    doLoginForm()
@@ -230,8 +234,6 @@ function doTxpValidate()
     if ($c_userid && strlen($c_hash) === 32) {
         // Cookie exists.
         // @todo Improve security by using a better nonce/salt mechanism. md5 and uniqid are bad.
-        // @todo Flag cookie-based logins and force confirmation of old password when
-        // changing it from Admin->Users panel.
         $r = safe_row(
             "name, nonce",
             'txp_users',
