@@ -92,6 +92,11 @@ function send_account_activation($name)
         // which does not leak information.
         $selector = Txp::get('\Textpattern\Password\Random')->generate(12);
         $expiryTimestamp = time() + (60 * 60 * ACTIVATION_EXPIRY_HOURS);
+        $expiryYear = safe_strftime('%Y', $expiryTimestamp);
+        $expiryMonth = safe_strftime('%B', $expiryTimestamp);
+        $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
+        $expiryTime = safe_strftime('%H:%M', $expiryTimestamp);
+
         $expiry = strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
 
         // Use a hash of the nonce, selector and (temporary, already discarded) password.
@@ -120,7 +125,12 @@ function send_account_activation($name)
             n.n.gTxt('your_login_is').': '.$name.
             n.n.gTxt('account_activation_confirmation').
             n.hu.'textpattern/index.php?activate='.$activation_code.
-            n.n.gTxt('link_expires', array('{when}' => safe_strftime('%Oe %B %Y, %H:%M', $expiryTimestamp)));
+            n.n.gTxt('link_expires', array(
+                '{year}'  => $expiryYear,
+                '{month}' => $expiryMonth,
+                '{day}'   => $expiryDay,
+                '{time}'  => $expiryTime,
+            ));
 
         if (txpMail($email, "[$sitename] ".gTxt('account_activation'), $message)) {
             return gTxt('login_sent_to', array('{email}' => $email));
@@ -202,6 +212,11 @@ function send_reset_confirmation_request($name)
         // which does not leak information.
         $selector = Txp::get('\Textpattern\Password\Random')->generate(12);
         $expiryTimestamp = time() + (60 * RESET_EXPIRY_MINUTES);
+        $expiryYear = safe_strftime('%Y', $expiryTimestamp);
+        $expiryMonth = safe_strftime('%B', $expiryTimestamp);
+        $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
+        $expiryTime = safe_strftime('%H:%M', $expiryTimestamp);
+
         $expiry = strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
 
         // Use a hash of the nonce, selector and password.
@@ -227,7 +242,12 @@ function send_reset_confirmation_request($name)
         $message = gTxt('salutation', array('{name}' => $name)).
             n.n.gTxt('password_reset_confirmation').
             n.hu.'textpattern/index.php?confirm='.$confirm.
-            n.n.gTxt('link_expires', array('{when}' => safe_strftime('%Oe %B %Y, %H:%M', $expiryTimestamp)));
+            n.n.gTxt('link_expires', array(
+                '{year}'  => $expiryYear,
+                '{month}' => $expiryMonth,
+                '{day}'   => $expiryDay,
+                '{time}'  => $expiryTime,
+            ));
         if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message)) {
             return gTxt('password_reset_confirmation_request_sent');
         } else {
