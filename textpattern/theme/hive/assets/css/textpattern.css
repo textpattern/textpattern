@@ -1910,10 +1910,6 @@ dt {
 .switcher-list li {
   position: relative;
   border-top: 1px solid #dddddd;
-  padding: 0.38461538461538em 3em 0.38461538461538em 1em;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 .switcher-list li:nth-child(odd) {
   background: #ffffff;
@@ -1923,6 +1919,13 @@ dt {
 }
 .switcher-list li.active {
   background: #e6f0ff;
+}
+.switcher-list li a {
+  display: block;
+  padding: 0.38461538461538em 2.5em 0.38461538461538em 1em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 /**
@@ -5187,12 +5190,16 @@ label.ui-state-active.ui-button:active {
 }
 
 /**
- * Tabs vertical.
- *
- * TODO.
+ * Additonal styling for tabs vertical.
  */
 .ui-tabs-vertical .ui-tabs-nav .ui-tabs-active {
   background: #e6f0ff;
+}
+.ui-tabs-vertical .ui-tabs-nav .ui-state-focus {
+  outline: none;
+}
+.ui-tabs-vertical .ui-tabs-nav .ui-state-focus a {
+  outline: thin dotted #0066ff;
 }
 
 /* Tooltip
