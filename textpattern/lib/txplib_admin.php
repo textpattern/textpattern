@@ -77,7 +77,7 @@ function send_password($RealName, $name, $email, $password)
 
 function send_account_activation($name)
 {
-    global $sitename, $dateformat;
+    global $sitename;
 
     require_privs('admin.edit');
 
@@ -120,7 +120,7 @@ function send_account_activation($name)
             n.n.gTxt('your_login_is').': '.$name.
             n.n.gTxt('account_activation_confirmation').
             n.hu.'textpattern/index.php?activate='.$activation_code.
-            n.n.gTxt('link_expires', array('{when}' => safe_strftime($dateformat, $expiryTimestamp)));
+            n.n.gTxt('link_expires', array('{when}' => safe_strftime('%Oe %B %Y, %H:%M', $expiryTimestamp)));
 
         if (txpMail($email, "[$sitename] ".gTxt('account_activation'), $message)) {
             return gTxt('login_sent_to', array('{email}' => $email));
@@ -189,7 +189,7 @@ function send_new_password($password, $email, $name)
 
 function send_reset_confirmation_request($name)
 {
-    global $sitename, $dateformat;
+    global $sitename;
 
     $rs = safe_row("user_id, email, nonce, pass", 'txp_users', "name = '".doSlash($name)."'");
 
@@ -227,7 +227,7 @@ function send_reset_confirmation_request($name)
         $message = gTxt('salutation', array('{name}' => $name)).
             n.n.gTxt('password_reset_confirmation').
             n.hu.'textpattern/index.php?confirm='.$confirm.
-            n.n.gTxt('link_expires', array('{when}' => safe_strftime($dateformat, $expiryTimestamp)));
+            n.n.gTxt('link_expires', array('{when}' => safe_strftime('%Oe %B %Y, %H:%M', $expiryTimestamp)));
         if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message)) {
             return gTxt('password_reset_confirmation_request_sent');
         } else {
