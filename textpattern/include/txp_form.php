@@ -140,11 +140,7 @@ function form_list($curname)
                 $group_out = array();
             }
 
-            if ($active) {
-                $editlink = txpspecialchars($name);
-            } else {
-                $editlink = eLink('form', 'form_edit', 'name', $name, $name);
-            }
+            $editlink = eLink('form', 'form_edit', 'name', $name, $name);
 
             if (!in_array($name, $essential_forms)) {
                 $modbox = span(

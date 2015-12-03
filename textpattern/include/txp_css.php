@@ -84,11 +84,7 @@ function css_list($current, $default)
             extract($a);
             $active = ($current === $name);
 
-            if ($active) {
-                $edit = txpspecialchars($name);
-            } else {
-                $edit = eLink('css', '', 'name', $name, $name);
-            }
+            $edit = eLink('css', '', 'name', $name, $name);
 
             if (!array_key_exists($name, $protected)) {
                 $edit .= dLink('css', 'css_delete', 'name', $name);
