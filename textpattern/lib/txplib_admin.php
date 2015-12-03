@@ -77,7 +77,7 @@ function send_password($RealName, $name, $email, $password)
 
 function send_account_activation($name)
 {
-    global $sitename;
+    global $sitename, $dateformat;
 
     require_privs('admin.edit');
 
@@ -91,7 +91,8 @@ function send_account_activation($name)
         // The selector becomes an indirect reference to the txp_users row,
         // which does not leak information.
         $selector = Txp::get('\Textpattern\Password\Random')->generate(12);
-        $expiry = strftime('%Y-%m-%d %H:%M:%S', time() + (60 * 60 * ACTIVATION_EXPIRY_HOURS));
+        $expiryTimestamp = time() + (60 * 60 * ACTIVATION_EXPIRY_HOURS);
+        $expiry = strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
 
         // Use a hash of the nonce, selector and (temporary, already discarded) password.
         // This ensures that activation requests expire automatically when:
@@ -118,7 +119,8 @@ function send_account_activation($name)
 
             n.n.gTxt('your_login_is').': '.$name.
             n.n.gTxt('account_activation_confirmation').
-            n.hu.'textpattern/index.php?activate='.$activation_code;
+            n.hu.'textpattern/index.php?activate='.$activation_code.
+            n.n.gTxt('link_expires', array('{when}' => safe_strftime($dateformat, $expiryTimestamp)));
 
         if (txpMail($email, "[$sitename] ".gTxt('account_activation'), $message)) {
             return gTxt('login_sent_to', array('{email}' => $email));
@@ -187,7 +189,7 @@ function send_new_password($password, $email, $name)
 
 function send_reset_confirmation_request($name)
 {
-    global $sitename;
+    global $sitename, $dateformat;
 
     $rs = safe_row("user_id, email, nonce, pass", 'txp_users', "name = '".doSlash($name)."'");
 
@@ -199,7 +201,8 @@ function send_reset_confirmation_request($name)
         // The selector becomes an indirect reference to the txp_users row,
         // which does not leak information.
         $selector = Txp::get('\Textpattern\Password\Random')->generate(12);
-        $expiry = strftime('%Y-%m-%d %H:%M:%S', time() + (60 * RESET_EXPIRY_MINUTES));
+        $expiryTimestamp = time() + (60 * RESET_EXPIRY_MINUTES);
+        $expiry = strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
 
         // Use a hash of the nonce, selector and password.
         // This ensures that confirmation requests expire automatically when:
@@ -223,7 +226,8 @@ function send_reset_confirmation_request($name)
 
         $message = gTxt('salutation', array('{name}' => $name)).
             n.n.gTxt('password_reset_confirmation').
-            n.hu.'textpattern/index.php?confirm='.$confirm;
+            n.hu.'textpattern/index.php?confirm='.$confirm.
+            n.n.gTxt('link_expires', array('{when}' => safe_strftime($dateformat, $expiryTimestamp)));
         if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message)) {
             return gTxt('password_reset_confirmation_request_sent');
         } else {
