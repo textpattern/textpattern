@@ -704,10 +704,18 @@ function admin_multi_edit()
         return author_list();
     }
 
+    $clause = '';
+
+    if ($method === 'resetpassword') {
+        $clause = " AND last_access != " . NULLDATETIME;
+    } elseif ($method === 'resendactivation') {
+        $clause = " AND last_access = " . NULLDATETIME;
+    }
+
     $names = safe_column(
         "name",
         'txp_users',
-        "name IN (".join(',', quote_list($selected)).") AND name != '".doSlash($txp_user)."'"
+        "name IN (".join(',', quote_list($selected)).") AND name != '".doSlash($txp_user)."'".$clause
     );
 
     if (!$names) {
