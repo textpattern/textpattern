@@ -519,7 +519,7 @@ function cat_event_category_create($event)
  * @param string $evname Type of category
  */
 
-function cat_event_category_edit($evname)
+function cat_event_category_edit($evname, $message = '')
 {
     $id     = assert_int(gps('id'));
     $parent = doSlash(gps('parent'));
@@ -527,7 +527,7 @@ function cat_event_category_edit($evname)
     $row = safe_row("*", 'txp_category', "id = $id");
 
     if ($row) {
-        pagetop(gTxt('edit_category'));
+        pagetop(gTxt('edit_category'), $message);
         extract($row);
         list($parent_widget, $has_parent) = cat_parent_pop($parent, $evname, $id);
 
@@ -554,7 +554,11 @@ function cat_event_category_edit($evname)
             ).
             pluggable_ui('category_ui', 'extend_detail_form', '', $row).
             hInput('id', $id).
-            graf(fInput('submit', '', gTxt('save'), 'publish')).
+            graf(
+                sLink('category', '', gTxt('cancel'), 'txp-button').
+                fInput('submit', '', gTxt('save'), 'publish'),
+                array('class' => 'txp-edit-actions')
+            ).
             eInput('category').
             sInput('cat_'.$evname.'_save').
             hInput('old_name', $name);
@@ -584,7 +588,7 @@ function cat_event_category_save($event, $table_name)
     if (!$name) {
         $message = array(gTxt($event.'_category_invalid', array('{name}' => $rawname)), E_ERROR);
 
-        return cat_category_list($message);
+        return cat_event_category_edit($event, $message);
     }
 
     // Don't allow rename to clobber an existing category.
@@ -593,7 +597,7 @@ function cat_event_category_save($event, $table_name)
     if ($existing_id and $existing_id != $id) {
         $message = array(gTxt($event.'_category_already_exists', array('{name}' => $name)), E_ERROR);
 
-        return cat_category_list($message);
+        return cat_event_category_edit($event, $message);
     }
 
 // TODO: validate parent?
