@@ -3044,7 +3044,7 @@ div.multi-edit {
 }
 
 /**
- * Styling of edit panel cancel/submit buttons.
+ * Styling of edit panel cancel/submit button combinations.
  */
 .txp-edit-actions {
   margin: 1em -1em;
@@ -3053,7 +3053,17 @@ div.multi-edit {
   text-align: right;
 }
 .txp-edit-actions > * {
-  margin-left: 1em;
+  margin: 0 0 0 1em;
+}
+
+/**
+ * Swap alignment and margin positions in RTL languages.
+ */
+[dir="rtl"] .txp-edit-actions {
+  text-align: left;
+}
+[dir="rtl"] .txp-edit-actions > * {
+  margin: 0 1em 0 0;
 }
 
 /* Form fields.
