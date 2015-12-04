@@ -443,10 +443,10 @@ if (!defined('RESET_EXPIRY_MINUTES')) {
      * @package User
      * @since   4.6.0
      * @example
-     * define('RESET_EXPIRY_MINUTES', '90');
+     * define('RESET_EXPIRY_MINUTES', '120');
      */
 
-    define('RESET_EXPIRY_MINUTES', '20');
+    define('RESET_EXPIRY_MINUTES', '90');
 }
 
 if (!defined('ACTIVATION_EXPIRY_HOURS')) {
