@@ -72,7 +72,7 @@ function change_email()
     $new_email = ps('new_email');
 
     if (!is_valid_email($new_email)) {
-        author_list(array(gTxt('email_required'), E_ERROR));
+        change_email_form(array(gTxt('email_required'), E_ERROR));
 
         return;
     }
@@ -85,7 +85,7 @@ function change_email()
         return;
     }
 
-    author_list(array(gTxt('author_save_failed'), E_ERROR));
+    change_email_form(array(gTxt('author_save_failed'), E_ERROR));
 }
 
 /**
@@ -108,7 +108,7 @@ function author_save()
     $privs = assert_int($privs);
 
     if (!is_valid_email($email)) {
-        author_list(array(gTxt('email_required'), E_ERROR));
+        author_edit(array(gTxt('email_required'), E_ERROR));
 
         return;
     }
@@ -121,7 +121,7 @@ function author_save()
         return;
     }
 
-    author_list(array(gTxt('author_save_failed'), E_ERROR));
+    author_edit(array(gTxt('author_save_failed'), E_ERROR));
 }
 
 /**
@@ -171,7 +171,7 @@ function author_save_new()
 
     if (is_valid_username($name) && is_valid_email($email)) {
         if (user_exists($name)) {
-            author_list(array(gTxt('author_already_exists', array('{name}' => $name)), E_ERROR));
+            author_edit(array(gTxt('author_already_exists', array('{name}' => $name)), E_ERROR));
 
             return;
         }
@@ -189,7 +189,7 @@ function author_save_new()
         }
     }
 
-    author_list(array(gTxt('error_adding_new_author'), E_ERROR));
+    author_edit(array(gTxt('error_adding_new_author'), E_ERROR));
 }
 
 /**
@@ -222,6 +222,8 @@ function get_priv_level($priv)
 
 /**
  * Password changing form.
+ *
+ * @param string|array $message The activity message
  */
 
 function new_pass_form($message = '')
@@ -257,13 +259,15 @@ function new_pass_form($message = '')
 
 /**
  * Email changing form.
+ *
+ * @param string|array $message The activity message
  */
 
-function change_email_form()
+function change_email_form($message = '')
 {
     global $txp_user;
 
-    pagetop(gTxt('tab_site_admin'), '');
+    pagetop(gTxt('tab_site_admin'), $message);
 
     $email = fetch('email', 'txp_users', 'name', $txp_user);
 
@@ -274,7 +278,11 @@ function change_email_form()
             fInput('text', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'),
             'new_email', '', array('class' => 'txp-form-field edit-admin-new-email')
         ).
-        graf(fInput('submit', 'change_email', gTxt('submit'), 'publish')).
+        graf(
+            sLink('admin', '', gTxt('cancel'), 'txp-button').
+            fInput('submit', 'change_email', gTxt('submit'), 'publish'),
+            array('class' => 'txp-edit-actions')
+        ).
         eInput('admin').
         sInput('change_email'),
     '', '', 'post', 'txp-edit', '', 'change_email');
@@ -541,15 +549,17 @@ function author_list($message = '')
  * Renders and outputs the user editor panel.
  *
  * Accessing requires 'admin.edit' privileges.
+ *
+ * @param string|array $message The activity message
  */
 
-function author_edit()
+function author_edit($message = '')
 {
     global $step, $txp_user;
 
     require_privs('admin.edit');
 
-    pagetop(gTxt('tab_site_admin'), '');
+    pagetop(gTxt('tab_site_admin'), $message);
 
     $vars = array('user_id', 'name', 'RealName', 'email', 'privs');
     $rs = array();
@@ -612,7 +622,11 @@ function author_edit()
     }
 
     $out[] = pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
-        graf(fInput('submit', '', gTxt('save'), 'publish')).
+        graf(
+            sLink('admin', '', gTxt('cancel'), 'txp-button').
+            fInput('submit', '', gTxt('save'), 'publish'),
+            array('class' => 'txp-edit-actions')
+        ).
         eInput('admin');
 
     if ($user_id) {
