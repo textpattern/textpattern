@@ -3,7 +3,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Textile v3.5.
 * Improved RTL language support.
 * Improved admin side UI.
-* Requires PHP 5.3.3 or better. Compatible with PHP 7 (thanks Ruud van Melick).
+* Requires PHP 5.3.3 or newer. Compatible with PHP 7 (thanks Ruud van Melick).
 * New tags: <txp:authors />, <txp:meta_description />, <txp:if_description> and <txp:if_yield>.
 * No more plaintext passwords sent: password reset requests are handled directly on the server.
 * Twenty-minute validity for password reset requests by default. Configurable in config.php.
@@ -30,8 +30,8 @@ Changes in 4.6.0 (Upcoming) TODO
 * Changed: <txp:password_protect /> tag can now be used as a container tag.
 * Changed: <txp:recent_articles /> accepts 'offset' attribute.
 * Changed: <txp:section_list /> accepts 'html_id', 'limit' and 'offset' attributes.
-* Changed: Deprecated <txp:keywords> tag. Use <txp:meta_keywords format="" /> instead.
-* Changed: Deprecated <txp:rsd> tag.
+* Changed: Deprecated <txp:keywords /> tag. Use <txp:meta_keywords format="" /> instead.
+* Changed: Deprecated <txp:rsd /> tag.
 * Changed: Deprecated 'breakclass' attribute for <txp:comments /> and <txp:image_info />.
 * Changed: Removed Form (article) Preview facility.
 * Changed: Removed empty 'About' section from new installs.
