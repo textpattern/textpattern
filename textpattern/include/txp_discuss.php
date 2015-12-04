@@ -591,7 +591,11 @@ function discuss_edit()
                     '<textarea id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_MEDIUM.'">'.$message.'</textarea>',
                     'message', '', array('class' => 'txp-form-field txp-form-field-textarea edit-comment-message')
                 ).
-                graf(fInput('submit', 'step', gTxt('save'), 'publish')).
+                graf(
+                    sLink('discuss', '', gTxt('cancel'), 'txp-button').
+                    fInput('submit', 'step', gTxt('save'), 'publish'),
+                    array('class' => 'txp-edit-actions')
+                ).
                 hInput('sort', $sort).
                 hInput('dir', $dir).
                 hInput('page', $page).

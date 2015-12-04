@@ -753,7 +753,11 @@ function file_edit($message = '', $id = '')
                         'description', '', array('class' => 'txp-form-field txp-form-field-textarea edit-file-description')
                     ).
                     pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-                    graf(fInput('submit', '', gTxt('Save'), 'publish')).
+                    graf(
+                        sLink('file', '', gTxt('cancel'), 'txp-button').
+                        fInput('submit', '', gTxt('save'), 'publish'),
+                        array('class' => 'txp-edit-actions')
+                    ).
                     hInput('filename', $filename)
                 : (empty($existing_files)
                         ? ''

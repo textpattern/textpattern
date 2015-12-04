@@ -451,7 +451,11 @@ function link_edit($message = '')
                 'description', 'link_description', array('class' => 'txp-form-field txp-form-field-textarea edit-link-description')
             ).
             pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
-            graf(fInput('submit', '', gTxt('save'), 'publish')).
+            graf(
+                sLink('link', '', gTxt('cancel'), 'txp-button').
+                fInput('submit', '', gTxt('save'), 'publish'),
+                array('class' => 'txp-edit-actions')
+            ).
             eInput('link').
             sInput('link_save').
             hInput('id', $id).
