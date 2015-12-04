@@ -246,9 +246,10 @@ function new_pass_form($message = '')
             'new_password', '', array('class' => 'txp-form-field edit-admin-new-password')
         ).
         graf(
-            fInput('submit', 'change_pass', gTxt('submit'), 'publish').
-            sLink('admin', '', gTxt('cancel'), 'txp-button')
-            ).
+            sLink('admin', '', gTxt('cancel'), 'txp-button').
+            fInput('submit', 'change_pass', gTxt('submit'), 'publish'),
+            array('class' => 'txp-edit-actions')
+        ).
         eInput('admin').
         sInput('change_pass'),
     '', '', 'post', 'txp-edit', '', 'change_password');
