@@ -41,11 +41,11 @@ if ($event == 'prefs') {
     ));
 
     switch (strtolower($step)) {
-        case "":
-        case "prefs_list":
+        case '':
+        case 'prefs_list':
             prefs_list();
             break;
-        case "prefs_save":
+        case 'prefs_save':
             prefs_save();
             break;
     }
@@ -158,10 +158,7 @@ function prefs_list($message = '')
 
     $locale = setlocale(LC_ALL, $locale);
 
-    echo hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="prefs_container" class="txp-container">'.
-        n.'<form method="post" class="prefs-form" action="index.php">'.
-        n.'<div class="txp-layout-textbox">';
+    echo n.'<form class="prefs-form" id="prefs_form" method="post" action="index.php">';
 
     // TODO: remove 'custom' when custom fields are refactored.
     $core_events = array('site', 'admin', 'publish', 'feeds', 'comments', 'custom');
@@ -185,6 +182,8 @@ function prefs_list($message = '')
 
     $last_event = null;
     $out = array();
+    $build = array();
+    $groupOut = array();
 
     if (numRows($rs)) {
         while ($a = nextRow($rs)) {
@@ -194,7 +193,24 @@ function prefs_list($message = '')
 
             if ($a['event'] !== $last_event) {
                 if ($last_event !== null) {
-                    echo wrapRegion('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
+                    $build[] = tag(
+                        hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
+                        join(n, $out)
+                        , 'section', array(
+                            'class'           => 'txp-prefs-group',
+                            'id'              => 'prefs_group_'.$last_event,
+                            'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
+                        )
+                    );
+
+                    $groupOut[] = n.tag(href(
+                            gTxt($last_event),
+                            '#prefs_group_'.$last_event,
+                            array(
+                                'data-txp-pane'  => $last_event,
+                                'data-txp-token' => form_token(),
+                            )),
+                        'li');
                 }
 
                 $last_event = $a['event'];
@@ -224,7 +240,10 @@ function prefs_list($message = '')
                 pref_func($a['html'], $a['name'], $a['val'], $size),
                 $label,
                 $help,
-                array('id' => 'prefs-'.$a['name'])
+                array(
+                    'class' => 'txp-form-field',
+                    'id'    => 'prefs-'.$a['name'],
+                )
             );
         }
     }
@@ -232,20 +251,48 @@ function prefs_list($message = '')
     if ($last_event === null) {
         echo graf(gTxt('no_preferences'));
     } else {
-        echo wrapRegion('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
+        $build[] = tag(
+            hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
+            join(n, $out)
+            , 'section', array(
+                'class'           => 'txp-prefs-group',
+                'id'              => 'prefs_group_'.$last_event,
+                'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
+            )
+        );
+
+        $groupOut[] = n.tag(href(
+                gTxt($last_event),
+                '#prefs_group_'.$last_event,
+                array(
+                    'data-txp-pane'  => $last_event,
+                    'data-txp-token' => form_token(),
+                )),
+            'li').n;
+
+        echo hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')).
+            n.'<div class="txp-layout-4col-cell-1alt">'.
+            wrapGroup(
+                'all_preferences',
+                n.tag(join($groupOut), 'ul', array('class' => 'switcher-list')),
+                'all_preferences'
+            );
+
+        if ($last_event !== null) {
+            echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'), array('class' => 'txp-save'));
+        }
+
+        echo n.'</div>'.
+            n.'<div class="txp-layout-4col-cell-2-3-4">'.
+            join(n, $build).
+            n.'</div>'.
+            sInput('prefs_save').
+            eInput('prefs').
+            hInput('prefs_id', '1').
+            tInput();
     }
 
-    echo n.'</div>'.
-        sInput('prefs_save').
-        eInput('prefs').
-        hInput('prefs_id', '1').
-        tInput();
-
-    if ($last_event !== null) {
-        echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'));
-    }
-
-    echo n.'</form>'.n.'</div>';
+    echo n.'</form>';
 }
 
 /**
@@ -415,7 +462,7 @@ function permlinkmodes($name, $val)
         'year_month_day_title' => gTxt('year_month_day_title'),
         'section_title'        => gTxt('section_title'),
         'title_only'           => gTxt('title_only'),
-        // 'category_subcategory' => gTxt('category_subcategory')
+        //'category_subcategory' => gTxt('category_subcategory'),
     );
 
     return selectInput($name, $vals, $val, '', '', $name);
@@ -533,6 +580,24 @@ function dateformats($name, $val)
 }
 
 /**
+ * Renders a HTML &lt;select&gt; list of content permlink options.
+ *
+ * @param  string $name HTML name and id of the widget
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function permlink_format($name, $val)
+{
+    $vals = array(
+        '0'   => gTxt('permlink_intercapped'),
+        '1'   => gTxt('permlink_hyphenated'),
+    );
+
+    return selectInput($name, $vals, $val, '', '', $name);
+}
+
+/**
  * Renders a HTML &lt;select&gt; list of site production status.
  *
  * @param  string $name HTML name and id of the widget
@@ -578,7 +643,7 @@ function default_event($name, $val)
         }
     }
 
-    return n.'<select id="default_event" name="'.$name.'" class="default-events">'.
+    return n.'<select class="default-events" id="default_event" name="'.$name.'">'.
         join('', $out).
         n.'</select>';
 }

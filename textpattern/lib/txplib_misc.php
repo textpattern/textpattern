@@ -382,24 +382,30 @@ function gTxt($var, $atts = array(), $escape = 'html')
  *
  * Only works on the admin-side pages.
  *
- * @param   string|array $var  Scalar or array of string keys
- * @param   array        $atts Array or array of arrays of variable substitution pairs
+ * @param   string|array $var   Scalar or array of string keys
+ * @param   array        $atts  Array or array of arrays of variable substitution pairs
+ * @param   array        $route Optional event/step upon which to add the strings
  * @since   4.5.0
  * @package L10n
  * @example
  * gTxtScript(array('string1', 'string2', 'string3'));
  */
 
-function gTxtScript($var, $atts = array())
+function gTxtScript($var, $atts = array(), $route = array())
 {
-    global $textarray_script;
+    global $textarray_script, $event, $step;
 
-    if (!is_array($textarray_script)) {
-        $textarray_script = array();
+    $targetEvent = empty($route[0]) ? null : $route[0];
+    $targetStep = empty($route[1]) ? null : $route[1];
+
+    if (($targetEvent === null || $targetEvent === $event) && ($targetStep === null || $targetStep === $step)) {
+        if (!is_array($textarray_script)) {
+            $textarray_script = array();
+        }
+
+        $data = is_array($var) ? array_map('gTxt', $var, $atts) : (array) gTxt($var, $atts);
+        $textarray_script = $textarray_script + array_combine((array) $var, $data);
     }
-
-    $data = is_array($var) ? array_map('gTxt', $var, $atts) : (array) gTxt($var, $atts);
-    $textarray_script = $textarray_script + array_combine((array) $var, $data);
 }
 
 /**
@@ -2688,7 +2694,7 @@ function event_category_popup($name, $cat = '', $id = '')
     $rs = getTree('root', $name);
 
     if ($rs) {
-        return treeSelectInput('category', $rs, $cat, $id);
+        return treeSelectInput('category', $rs, $cat, $id).sp;
     }
 
     return false;

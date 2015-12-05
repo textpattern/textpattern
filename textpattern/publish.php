@@ -987,7 +987,10 @@ function doArticle($atts, $thing = null)
     extract($prefs);
     extract($pretext);
 
-    extract(gpsa(array('parentid', 'preview')));
+    extract(gpsa(array(
+        'parentid',
+        'preview',
+    )));
 
     $theAtts = lAtts(array(
         'allowoverride' => '1',

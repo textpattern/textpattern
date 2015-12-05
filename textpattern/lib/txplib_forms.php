@@ -120,6 +120,7 @@ function onoffRadio($field, $checked = '', $tabindex = 0, $id = '')
  * @param  mixed  $onchange    If TRUE submits the form when an option is changed. If a string, inserts it to the select tag
  * @param  string $select_id   The HTML id
  * @param  bool   $check_type  Type-agnostic comparison
+ * @param  bool   $disabled    If TRUE renders the select disabled
  * @return string HTML
  * @example
  * echo selectInput('myInput', array(
@@ -128,7 +129,7 @@ function onoffRadio($field, $checked = '', $tabindex = 0, $id = '')
  * ));
  */
 
-function selectInput($name = '', $array = array(), $value = '', $blank_first = false, $onchange = '', $select_id = '', $check_type = false)
+function selectInput($name = '', $array = array(), $value = '', $blank_first = false, $onchange = '', $select_id = '', $check_type = false, $disabled = false)
 {
     $out = array();
 
@@ -151,8 +152,9 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
     }
 
     $atts = join_atts(array(
-        'name' => $name,
-        'id'   => $select_id,
+        'id'       => $select_id,
+        'name'     => $name,
+        'disabled' => (bool) $disabled,
     ));
 
     if ((string) $onchange === '1') {
@@ -161,7 +163,7 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         $atts .= ' '.trim($onchange);
     }
 
-    return n.'<select'.$atts.'>'.n.join(n, $out).n.'</select>';
+    return n.'<select'.$atts.'>'.n.join(n, $out).n.'</select>'; // TODO: use jQuery UI selectmenu?
 }
 
 /**
@@ -247,14 +249,14 @@ function treeSelectInput($select_name = '', $array = array(), $value = '', $sele
 function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '')
 {
     $atts = join_atts(array(
-        'type'        => $type,
-        'name'        => $name,
-        'size'        => (int) $size,
         'class'       => $class,
+        'id'          => $id,
+        'name'        => $name,
+        'type'        => $type,
+        'size'        => (int) $size,
         'title'       => $title,
         'onclick'     => $onClick,
         'tabindex'    => (int) $tab,
-        'id'          => $id,
         'disabled'    => (bool) $disabled,
         'required'    => (bool) $required,
         'placeholder' => $placeholder,
@@ -371,12 +373,12 @@ function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
     }
 
     $atts = join_atts(array(
-        'type'     => 'checkbox',
-        'name'     => $name,
+        'class'    => $class,
         'id'       => $id,
+        'name'     => $name,
+        'type'     => 'checkbox',
         'checked'  => (bool) $checked,
         'tabindex' => (int) $tabindex,
-        'class'    => $class,
     ));
 
     $atts .= join_atts(array('value' => (string) $value), 0);
@@ -421,12 +423,12 @@ function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
     }
 
     $atts = join_atts(array(
-        'type'     => 'radio',
-        'name'     => $name,
+        'class'    => $class,
         'id'       => $id,
+        'name'     => $name,
+        'type'     => 'radio',
         'checked'  => (bool) $checked,
         'tabindex' => (int) $tabindex,
-        'class'    => $class,
     ));
 
     $atts .= join_atts(array('value' => (string) $value), 0);
@@ -446,10 +448,11 @@ function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
  * @param  string $class    The HTML class
  * @param  string $fragment A URL fragment added to the form target
  * @param  string $id       The HTML id
+ * @param  string $role     ARIA role name
  * @return string HTML form element
  */
 
-function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '')
+function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '', $role = '')
 {
     $action = 'index.php';
 
@@ -462,12 +465,13 @@ function form($contents, $style = '', $onsubmit = '', $method = 'post', $class =
     }
 
     return n.tag($contents.tInput().n, 'form', array(
+        'class'    => $class,
+        'id'       => $id,
         'method'   => $method,
         'action'   => $action,
-        'id'       => $id,
-        'class'    => $class,
-        'style'    => $style,
         'onsubmit' => $onsubmit,
+        'role'     => $role,
+        'style'    => $style,
     ));
 }
 
@@ -531,9 +535,9 @@ function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $col
         $cols = 40;
     }
 
-    return tag($thing, 'textarea', array(
-        'name'        => $name,
+    return n.tag($thing, 'textarea', array(
         'id'          => $id,
+        'name'        => $name,
         'rows'        => (int) $rows,
         'cols'        => (int) $cols,
         'style'       => $style,
@@ -612,13 +616,14 @@ function radio_list($name, $values, $current_val = '', $hilight_val = '', $atts 
  * @param  string $datevar     The strftime format the date is displayed
  * @param  int    $time        The displayed date as a UNIX timestamp
  * @param  int    $tab         The HTML tabindex
+ * @param  string $id          The HTML id
  * @return string HTML
  * @access private
  * @example
  * echo tsi('year', '%Y', 1200000000);
  */
 
-function tsi($name, $datevar, $time, $tab = 0)
+function tsi($name, $datevar, $time, $tab = 0, $id = '')
 {
     static $placeholders = array(
         '%Y' => 'yyyy',
@@ -631,6 +636,7 @@ function tsi($name, $datevar, $time, $tab = 0)
 
     $value = $placeholder = '';
     $size = INPUT_TINY;
+    $pattern = '([0-5][0-9])';
 
     if ((int) $time) {
         $value = safe_strftime($datevar, (int) $time);
@@ -641,18 +647,47 @@ function tsi($name, $datevar, $time, $tab = 0)
     }
 
     if ($datevar == '%Y' || $name == 'year' || $name == 'exp_year') {
+        $class = 'input-year';
         $size = INPUT_XSMALL;
+        $pattern = '[0-9]{4}';
+    }
+
+    if ($datevar == '%m' || $name == 'month' || $name == 'exp_month') {
+        $class = 'input-month';
+        $pattern = '(0[1-9]|1[012])';
+    }
+
+    if ($datevar == '%d' || $name == 'day' || $name == 'exp_day') {
+        $class = 'input-day';
+        $pattern = '(0[1-9]|1[0-9]|2[0-9]|3[01])';
+    }
+
+    if ($datevar == '%H' || $name == 'hour' || $name == 'exp_hour') {
+        $class = 'input-hour';
+        $pattern = '(0[0-9]|1[0-9]|2[0-3])';
+    }
+
+    if ($datevar == '%M' || $name == 'minute' || $name == 'exp_minute') {
+        $class = 'input-minute';
+    }
+
+    if ($datevar == '%S' || $name == 'second' || $name == 'exp_second') {
+        $class = 'input-second';
     }
 
     return n.tag_void('input', array(
-        'type'        => 'text',
+        'class'       => $class,
+        'id'          => $id,
         'name'        => $name,
-        'value'       => $value,
+        'type'        => 'text',
+        'inputmode'   => 'numeric',
+        'pattern'     => $pattern,
         'size'        => (int) $size,
         'maxlength'   => $size,
-        'class'       => $name,
-        'tabindex'    => (int) $tab,
         'title'       => gTxt('article_'.$name),
+        'aria-label'  => gTxt('article_'.$name),
         'placeholder' => $placeholder,
+        'tabindex'    => (int) $tab,
+        'value'       => $value,
     ));
 }

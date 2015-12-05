@@ -13,6 +13,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Added: Privilege to change text markup language in 'Write' panel.
 * Removed: Import panel - the blog import options were obsolete (thanks Ruud van Melick).
 * Removed: Commenter IP ban feature - this method of banning is unreliable and becoming obsolete (thanks Ruud van Melick).
+* Removed: Modernizr unnecessary due to IE10 being our minimum IE browser requirement.
 * Changed: <txp:article_custom /> accepts 'exclude' attribute to exclude articles by a comma-separated id list.
 * Changed: <txp:author /> accepts 'escape' and 'format' attributes.
 * Changed: <txp:category_list /> accepts 'html_id', 'limit' and 'offset' attributes.
@@ -44,6 +45,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Developer: Added jQuery UI library to admin side.
 * Developer: Added DocBlock documentation comments throughout the source code.
 * Developer: Adherence to PSR coding standards where possible.
+* Developer: Function signature for wrapRegion() changed: 7th parameter 'ARIA role' dropped, as it shouldn't be stated for semantic tags such as 'section'.
 * Developer: Refactored 'Validator', 'Constraint', and 'theme' classes into the 'Textpattern' namespace; deprecated their 'txplib_validator' and 'txplib_theme' implementations.
 
 Changes in 4.5.7

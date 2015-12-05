@@ -430,9 +430,12 @@ function doDiagnostics()
 
     echo pagetop(gTxt('tab_diagnostics'), '');
 
-    echo hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="'.$event.'_container" class="txp-container">'.
-        n.'<div id="pre_flight_check">'.
+    echo hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading')).
+        n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        )).
+        n.tag_start('div', array('id' => 'pre_flight_check')).
         hed(gTxt('preflight_check'), 2);
 
     if ($fail) {
@@ -443,14 +446,31 @@ function doDiagnostics()
         echo graf(diag_msg_wrap(gTxt('all_checks_passed'), 'success'));
     }
 
-    echo '</div>';
-    echo '<div id="diagnostics">',
+    echo n.tag_end('div').
+        n.tag_start('div', array('id' => 'diagnostics')).
         hed(gTxt('diagnostic_info'), 2);
 
     $fmt_date = '%Y-%m-%d %H:%M:%S';
 
+    $dets = array(
+        'low'  => gTxt('low'),
+        'high' => gTxt('high'),
+    );
+
     $out = array(
-        '<p><textarea class="code" id="diagnostics-detail" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr" readonly>',
+        form(
+            eInput('diag').
+            inputLabel(
+                'diag_detail_level',
+                selectInput('step', $dets, $step, 0, 1, 'diag_detail_level'),
+                'detail',
+                '',
+                array('class' => 'txp-form-field diagnostic-details-level'),
+                ''
+            )
+        ),
+
+        '<textarea class="code" id="diagnostics-detail" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr" readonly>',
 
         gTxt('txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
 
@@ -596,25 +616,11 @@ function doDiagnostics()
     }
 
     $out[] = callback_event('diag_results', $step).n;
-    $out[] = '</textarea></p>';
-
-    $dets = array(
-        'low'  => gTxt('low'),
-        'high' => gTxt('high'),
-    );
-
-    $out[] =
-        form(
-            graf(
-                eInput('diag').
-                n.'<label>'.gTxt('detail').'</label>'.
-                selectInput('step', $dets, $step, 0, 1)
-            )
-        );
+    $out[] = '</textarea>';
 
     echo join('', $out),
-        '</div>',
-        '</div>';
+        n.tag_end('div').
+        n.tag_end('div');
 }
 
 /**
