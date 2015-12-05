@@ -459,13 +459,13 @@ function section_edit()
     } else {
         // Pulls defaults for the new section from the 'default'.
         $rs = safe_row(
-            "*",
+            "page, css, on_frontpage, in_rss, searchable",
             'txp_section',
             "name = 'default'"
         );
 
         if ($rs) {
-            $rs['name'] = $rs['title'] = '';
+            $rs['name'] = $rs['title'] = $rs['description'] = '';
         }
     }
 
@@ -533,7 +533,11 @@ function section_edit()
         );
 
     $out[] = pluggable_ui('section_ui', 'extend_detail_form', '', $rs).
-        graf(fInput('submit', '', gTxt('save'), 'publish')).
+        graf(
+            sLink('section', '', gTxt('cancel'), 'txp-button').
+            fInput('submit', '', gTxt('save'), 'publish'),
+            array('class' => 'txp-edit-actions')
+        ).
         eInput('section').
         sInput('section_save').
         hInput('old_name', $sec_name).
