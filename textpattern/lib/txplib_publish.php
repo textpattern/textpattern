@@ -232,6 +232,8 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         $keywords = " AND (".join(" OR ", $keyparts).")";
     }
 
+    $sortdir = strtolower($sortdir);
+
     // Invert $type for ascending sortdir.
     $types = array(
         '>' => array('desc' => '>', 'asc' => '<'),

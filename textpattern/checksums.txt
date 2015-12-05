@@ -46,7 +46,6 @@
 /publish/search.php: 8f670e2786579f5d8131cb901df45070
 /publish/taghandlers.php: a19d1c218ec6a8ce4b14c9b0597a1c1f
 /textpattern.js: ba50de147f2d25f80b4a57b81e83d46b
-/theme/classic/classic.php: 71f3b5d36e16e1404db6b17d4438aa84
 /theme/hive/hive.php: 087712f00de1c74934930f5219b86f00
 /update/_to_1.0.0.php: 1bfdb882b9e3a20e18f3d199f1551685
 /update/_to_4.0.2.php: ac445163d8032eafe676e1df899140c5
@@ -63,11 +62,8 @@
 /update/_to_4.5.0.php: b7d74ba6d1e892f2885a1426c7750811
 /update/_to_4.6.0.php: c07d2a788b8a43d62a5edab0476eab39
 /update/_update.php: 3402ad6d9cf92550da3b51296734a236
-/vendors/keithclark/selectivizr/selectivizr.min.js: ece63dfdab779d4a19395d12105514a9
-/vendors/modernizr/modernizr/modernizr.js: e23f22a6520b44183a92538f272f495a
 /vendors/jquery/jquery/jquery.js: 13c0a5055cca7b2463b2f73701960b9e
-/vendors/jquery/ui/css/textpattern/jquery-ui.css: 7696d3664f3fa506ad52ca36691e356a
-/vendors/jquery/ui/js/jquery-ui.js: 6a8d2ad2b8a68c521fa71d81dfea6142
+/vendors/jquery/jquery-ui/jquery-ui.js: 6a8d2ad2b8a68c521fa71d81dfea6142
 /vendors/Textpattern/Adaptable/AdapterInterface.php: fd35ed5e2c01ffa4ea44d3cebec358a5
 /vendors/Textpattern/Adaptable/Providable.php: 7e159168460cbbdc624618bf5ed3e933
 /vendors/Textpattern/Adaptable/ProvidableInterface.php: 9acebf06389c652a5f01b9974e279282

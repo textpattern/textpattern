@@ -355,7 +355,7 @@ if (!defined('PASSWORD_LENGTH')) {
      * define('PASSWORD_LENGTH', 14);
      */
 
-    define('PASSWORD_LENGTH', 10);
+    define('PASSWORD_LENGTH', 16);
 }
 
 if (!defined('PASSWORD_COMPLEXITY')) {
@@ -396,10 +396,72 @@ if (!defined('PASSWORD_SYMBOLS')) {
      * @since   4.6.0
      * @see     generate_password()
      * @example
-     * define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUYXZabcdefghijkmnopqrstuvwxyz_?!-');
+     * define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUYXZabcdefghijkmnopqrstuvwxyz_?!-@$%^*;:');
      */
 
-    define('PASSWORD_SYMBOLS', '23456789abcdefghijkmnopqrstuvwxyz');
+    define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz_-!?.');
+}
+
+if (!defined('HASHING_ALGORITHM')) {
+    /**
+     * Algorithm to use for hashing passwords/reset requests.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @since   4.6.0
+     * @see     PHP's hash_algos() function
+     * @example
+     * define('HASHING_ALGORITHM', 'whirlpool');
+     */
+
+    define('HASHING_ALGORITHM', 'ripemd256');
+}
+
+if (!defined('SALT_LENGTH')) {
+    /**
+     * Length of salt/selector hashes.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @since   4.6.0
+     * @example
+     * define('SALT_LENGTH', '80');
+     */
+
+    define('SALT_LENGTH', '64');
+}
+
+if (!defined('RESET_EXPIRY_MINUTES')) {
+    /**
+     * Length of time (in minutes) that a password reset request remains valid.
+     *
+     * This constant can be overridden from the config.php.
+     * Values under 60 may fall foul of DST changeover times, but meh.
+     *
+     * @package User
+     * @since   4.6.0
+     * @example
+     * define('RESET_EXPIRY_MINUTES', '120');
+     */
+
+    define('RESET_EXPIRY_MINUTES', '90');
+}
+
+if (!defined('ACTIVATION_EXPIRY_HOURS')) {
+    /**
+     * Length of time (in hours) that a password activation (new account) link remains valid.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @since   4.6.0
+     * @example
+     * define('ACTIVATION_EXPIRY_HOURS', '48');
+     */
+
+    define('ACTIVATION_EXPIRY_HOURS', '168');
 }
 
 if (!defined('LOGIN_COOKIE_HTTP_ONLY')) {
@@ -613,7 +675,7 @@ define('INPUT_TINY', 2);
  * @package Form
  */
 
-define('TEXTAREA_HEIGHT_LARGE', 24);
+define('TEXTAREA_HEIGHT_LARGE', 32);
 
 /**
  * Textarea height regular.

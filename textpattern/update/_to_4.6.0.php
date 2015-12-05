@@ -55,6 +55,7 @@ safe_update('txp_prefs', "position = '280'", "name = 'comment_nofollow'");
 safe_update('txp_prefs', "position = '300'", "name = 'comments_disallow_images'");
 safe_update('txp_prefs', "position = '320'", "name = 'comments_use_fat_textile'");
 safe_update('txp_prefs', "position = '340'", "name = 'spam_blacklists'");
+safe_update('txp_prefs', "html = 'permlink_format'", "name = 'permalink_title_format'");
 
 // Support for l10n string owners.
 $cols = getThings("DESCRIBE `".PFX."txp_lang`");
@@ -210,3 +211,15 @@ foreach (array('4.4.0', '4.4.1') as $v) {
         unlink($file);
     }
 }
+
+// Add generic token table.
+safe_create('txp_token',"
+id           INT          NOT NULL AUTO_INCREMENT,
+reference_id INT          DEFAULT 0,
+type         VARCHAR(255) DEFAULT '',
+selector     CHAR(12)     DEFAULT '',
+token        VARCHAR(255) DEFAULT '',
+expires      DATETIME     DEFAULT '0000-00-00 00:00:00',
+PRIMARY KEY (id)
+"
+);

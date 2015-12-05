@@ -890,7 +890,7 @@ textpattern.Route =
     attached : [],
 
     /**
-     * Attachs a listener.
+     * Attaches a listener.
      *
      * @param {string} pages The page
      * @param {object} fn    The callback
@@ -1240,6 +1240,126 @@ jQuery.fn.txpSortable = function (options)
     });
 };
 
+
+/**
+ * Password strength meter.
+ *
+ * @since 4.6.0
+ * @todo  Pass in name/email via 'options' to be injected in user_inputs[]
+ */
+
+textpattern.passwordStrength = function (options)
+{
+    jQuery('form').on('keyup', 'input.txp-strength-hint', function() {
+        var me = jQuery(this);
+        var pass = me.val();
+        var passResult = zxcvbn(pass, user_inputs=[]);
+        var strengthMap = {
+            "0": {
+                "width": "5"
+            },
+            "1": {
+                "width": "28"
+            },
+            "2": {
+                "width": "50"
+            },
+            "3": {
+                "width": "75"
+            },
+            "4": {
+                "width": "100"
+            }
+        };
+
+        var offset = strengthMap[passResult.score];
+        var meter = me.siblings('.strength-meter');
+        meter.empty();
+
+        if (pass.length > 0) {
+            meter.append('<div class="bar"></div><div class="indicator">' + textpattern.gTxt('password_strength_'+passResult.score) + '</div>');
+        }
+
+        meter
+            .find('.bar')
+            .attr('class', 'bar password-strength-'+passResult.score)
+            .css('width', offset.width+'%');
+    });
+}
+
+/**
+ * Mask/unmask password input field.
+ *
+ * @since  4.6.0
+ */
+
+textpattern.passwordMask = function()
+{
+    $('form').on('click', '#show_password', function() {
+        var inputBox = $(this).closest('form').find('input.txp-maskable');
+        var newType = (inputBox.attr('type') === 'password') ? 'text' : 'password';
+        textpattern.changeType(inputBox, newType);
+    });
+}
+
+/**
+ * Change the type of an input element.
+ *
+ * @param  {object} elem The <input/> element
+ * @param  {string} type The desired type
+ *
+ * @see    https://gist.github.com/3559343 for original
+ * @since  4.6.0
+ */
+
+textpattern.changeType = function(elem, type)
+{
+    if (elem.prop('type') === type) {
+        // Already the correct type.
+        return elem;
+    }
+
+    try {
+        // May fail if browser prevents it.
+        return elem.prop('type', type);
+    } catch(e) {
+        // Create the element by hand.
+        // Clone it via a div (jQuery has no html() method for an element).
+        var html = $("<div>").append(elem.clone()).html();
+
+        // Match existing attributes of type=text or type="text".
+        var regex = /type=(\")?([^\"\s]+)(\")?/;
+
+        // If no match, add the type attribute to the end; otherwise, replace it.
+        var tmp = $(html.match(regex) == null ?
+            html.replace(">", ' type="' + type + '">') :
+            html.replace(regex, 'type="' + type + '"'));
+
+        // Copy data from old element.
+        tmp.data('type', elem.data('type'));
+        var events = elem.data('events');
+        var cb = function(events) {
+            return function() {
+                // Re-bind all prior events.
+                for(var idx in events) {
+                    var ydx = events[idx];
+
+                    for(var jdx in ydx) {
+                        tmp.bind(idx, ydx[jdx].handler);
+                    }
+                }
+            }
+        }(events);
+
+        elem.replaceWith(tmp);
+
+        // Wait a smidge before firing callback.
+        setTimeout(cb, 10);
+
+        return tmp;
+    }
+}
+
 /**
  * Encodes a string for a use in HTML.
  *
@@ -1371,12 +1491,78 @@ $(document).keyup(function (e)
 });
 
 /**
+ * Search tool.
+ *
+ * @since 4.6.0
+ */
+
+function txp_search()
+{
+    var $ui = $('.txp-search');
+
+    $ui.find('.txp-search-button').button({
+        text: false,
+        icons:
+        {
+            primary: 'ui-icon-search'
+        }
+
+    }).click(function ()
+    {
+        $ui.submit();
+    });
+
+    $ui.find('.txp-search-options').button({
+        text: false,
+        icons:
+        {
+            primary: 'ui-icon-triangle-1-s'
+        }
+    }).on('click', function (e)
+    {
+        var menu = $ui.find('.txp-dropdown').toggle().position(
+        {
+            my: "right top", // TODO: need to swap this to 'left top' in RTL languages.
+            at: "right bottom", // TODO: need to swap this to 'left bottom' in RTL languages.
+            of: this
+        });
+        $(document).one('click blur', function ()
+        {
+            menu.hide();
+        });
+
+        return false;
+    });
+
+    $ui.find('.txp-search-buttons').buttonset();
+    $ui.find('.txp-dropdown').hide().menu().click(function (e) {
+        e.stopPropagation();
+    });
+
+    $ui.txpMultiEditForm({
+        'checkbox'    : 'input[name="search_method[]"][type=checkbox]',
+        'row'         : '.txp-dropdown li',
+        'highlighted' : '.txp-dropdown li',
+        'confirmation': false
+    });
+}
+
+
+/**
  * Cookie status.
  *
  * @deprecated in 4.6.0
  */
 
 var cookieEnabled = true;
+
+// Setup panel.
+
+textpattern.Route.add('setup', function ()
+{
+    textpattern.passwordMask();
+    textpattern.passwordStrength();
+});
 
 // Login panel.
 
@@ -1389,15 +1575,15 @@ textpattern.Route.add('login', function ()
     }
 
     // Focus on either username or password when empty.
-    var has_name = $('#login_name').val().length;
-    var password_box = $('#login_password').val();
-    var has_password = (password_box) ? password_box.length : 0;
+    $('#login_form input').each(function() {
+        if (this.value === '') {
+            this.focus();
+            return false;
+        }
+    });
 
-    if (!has_name) {
-        $('#login_name').focus();
-    } else if (!has_password) {
-        $('#login_password').focus();
-    }
+    textpattern.passwordMask();
+    textpattern.passwordStrength();
 });
 
 // Write panel.
@@ -1433,7 +1619,7 @@ textpattern.Route.add('article', function ()
         }
     });
 
-    $('#txp_clone').click(function (e)
+    $('.txp-clone').click(function (e)
     {
         e.preventDefault();
         form.append('<input type="hidden" name="copy" value="1" />'+
@@ -1457,10 +1643,14 @@ textpattern.Route.add('article', function ()
 
 textpattern.Route.add('css, page, form', function ()
 {
-    $('#txp_clone').click(function (e)
+    $('.txp-clone').click(function (e)
     {
         e.preventDefault();
-        $(this).parents('form').append('<input type="hidden" name="copy" value="1" />').submit();
+        var target = $(this).data('form');
+        if (target) {
+            $('#'+target).append('<input type="hidden" name="copy" value="1" />');
+            $('.txp-save input').click();
+        }
     });
 });
 
@@ -1473,6 +1663,29 @@ textpattern.Route.add('form', function ()
         'row'         : '.switcher-list li, .form-list-name',
         'highlighted' : '.switcher-list li'
     });
+});
+
+// Admin panel.
+
+textpattern.Route.add('admin', function ()
+{
+    textpattern.passwordMask();
+    textpattern.passwordStrength();
+});
+
+// Preferences panel.
+
+textpattern.Route.add('prefs', function ()
+{
+    var prefsGroup = $('#prefs_form');
+
+    prefsGroup.tabs().removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
+    prefsGroup.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
+    prefsGroup.find('.switcher-list li').removeClass('ui-state-default ui-corner-top');
+    prefsGroup.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
+
+    // TODO: save pane state for currently open pref group, fallback to first if not set.
+
 });
 
 // Plugins panel.
@@ -1569,17 +1782,48 @@ $(document).ready(function ()
         }
     });
 
+    // Hide popup elements.
+    $('.txp-dropdown').hide();
+
     // Event handling and automation.
     $(document).on('change.txpAutoSubmit', 'form [data-submit-on="change"]', function (e)
     {
         $(this).parents('form').submit();
     });
 
+    // Polyfills.
+    // Add support for form attribute in submit buttons.
+    if ($('html').hasClass('no-formattribute')) {
+        $('.txp-save input[form]').click(function(e) {
+            var targetForm = $(this).attr('form');
+            $('form[id='+targetForm+']').submit();
+        });
+    }
+
     // Establish UI defaults.
     $('.txp-dialog').txpDialog();
     $('.txp-dialog.modal').dialog('option', 'modal', true);
     $('.txp-datepicker').txpDatepicker();
     $('.txp-sortable').txpSortable();
+
+
+
+    // TODO: integrate jQuery UI stuff properly --------------------------------
+
+
+    // Selectmenu
+    $('.jquery-ui-selectmenu').selectmenu();
+
+    // Button
+    $('.jquery-ui-button').button();
+
+    // Button set
+    $('.jquery-ui-buttonset').buttonset();
+
+
+    // TODO: end integrate jQuery UI stuff properly ----------------------------
+
+
 
     // Find and open associated dialogs.
     $(document).on('click.txpDialog', '[data-txp-dialog]', function (e)

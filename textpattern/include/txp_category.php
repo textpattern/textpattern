@@ -69,32 +69,26 @@ function cat_category_list($message = "")
 {
     pagetop(gTxt('categories'), $message);
     $out = array(hed(gTxt('tab_organise'), 1, 'class="txp-heading"'),
-        '<div id="category_container" class="txp-layout-grid">',
-            n.tag(
-                n.tag(cat_article_list(), 'div', array('class' => 'categories')), 'div', array(
-                    'id'    => 'categories_article',
-                    'class' => 'txp-layout-cell txp-layout-1-4',
-                )
-            ),
-            n.tag(
-                n.tag(cat_image_list(), 'div', array('class' => 'categories')), 'div', array(
-                    'id'    => 'categories_image',
-                    'class' => 'txp-layout-cell txp-layout-1-4',
-                )
-            ),
-            n.tag(
-                n.tag(cat_file_list(), 'div', array('class' => 'categories')), 'div', array(
-                    'id'    => 'categories_file',
-                    'class' => 'txp-layout-cell txp-layout-1-4',
-                )
-            ),
-            n.tag(
-                n.tag(cat_link_list(), 'div', array('class' => 'categories')), 'div', array(
-                    'id'    => 'categories_link',
-                    'class' => 'txp-layout-cell txp-layout-1-4',
-                )
-            ),
-        '</div>',
+        n.tag(cat_article_list(), 'section', array(
+                'class' => 'txp-layout-4col-cell-1',
+                'id'    => 'categories_article',
+            )
+        ),
+        n.tag(cat_image_list(), 'section', array(
+                'class' => 'txp-layout-4col-cell-2',
+                'id'    => 'categories_image',
+            )
+        ),
+        n.tag(cat_file_list(), 'section', array(
+                'class' => 'txp-layout-4col-cell-3',
+                'id'    => 'categories_file',
+            )
+        ),
+        n.tag(cat_link_list(), 'section', array(
+                'class' => 'txp-layout-4col-cell-4',
+                'id'    => 'categories_link',
+            )
+        ),
         script_js(<<<EOS
             $(document).ready(function ()
             {
@@ -466,7 +460,11 @@ function cat_event_category_list($event)
             $out .= cat_article_multiedit_form($event, $items);
         }
     } else {
-        $out .= graf(gTxt('no_categories_exist'));
+        $out .= graf(
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt('no_categories_exist'),
+            array('class' => 'alert-block information')
+        );
     }
 
     return $out;
@@ -521,7 +519,7 @@ function cat_event_category_create($event)
  * @param string $evname Type of category
  */
 
-function cat_event_category_edit($evname)
+function cat_event_category_edit($evname, $message = '')
 {
     $id     = assert_int(gps('id'));
     $parent = doSlash(gps('parent'));
@@ -529,28 +527,43 @@ function cat_event_category_edit($evname)
     $row = safe_row("*", 'txp_category', "id = $id");
 
     if ($row) {
-        pagetop(gTxt('edit_category'));
+        pagetop(gTxt('edit_category'), $message);
         extract($row);
         list($parent_widget, $has_parent) = cat_parent_pop($parent, $evname, $id);
-        $out = n.'<section class="txp-edit">'.
-            hed(gTxt('edit_category'), 2).
-            inputLabel('category_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'), $evname.'_category_name').
-            ($has_parent
-                ? inputLabel('category_parent', $parent_widget, 'parent')
-                : inputLabel('category_parent', $parent_widget)
+
+        $out = hed(gTxt('edit_category'), 2).
+            inputLabel(
+                'category_name',
+                fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'),
+                $evname.'_category_name', '', array('class' => 'txp-form-field edit-category-name')
             ).
-            inputLabel('category_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').
-            inputLabel('category_description', text_area('description', 0, 0, $description, 'category_description', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE), $evname.'_category_description').
+            inputLabel(
+                'category_parent',
+                $parent_widget,
+                'parent', '', array('class' => 'txp-form-field edit-category-parent')
+            ).
+            inputLabel(
+                'category_title',
+                fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'),
+                $evname.'_category_title', '', array('class' => 'txp-form-field edit-category-title')
+            ).
+            inputLabel(
+                'category_description',
+                '<textarea id="category_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>',
+                $evname.'_category_description', 'category_description', array('class' => 'txp-form-field txp-form-field-textarea edit-category-description')
+            ).
             pluggable_ui('category_ui', 'extend_detail_form', '', $row).
             hInput('id', $id).
-            graf(fInput('submit', '', gTxt('save'), 'publish')).
+            graf(
+                sLink('category', '', gTxt('cancel'), 'txp-button').
+                fInput('submit', '', gTxt('save'), 'publish'),
+                array('class' => 'txp-edit-actions')
+            ).
             eInput('category').
             sInput('cat_'.$evname.'_save').
-            hInput('old_name', $name).
-            n.'</section>';
-        echo n.'<div id="category_container" class="txp-container">'.
-            form($out, '', '', 'post', 'edit-form').
-            n.'</div>';
+            hInput('old_name', $name);
+
+        echo form($out, '', '', 'post', 'txp-edit');
     } else {
         cat_category_list(array(gTxt('category_not_found'), E_ERROR));
     }
@@ -575,7 +588,7 @@ function cat_event_category_save($event, $table_name)
     if (!$name) {
         $message = array(gTxt($event.'_category_invalid', array('{name}' => $rawname)), E_ERROR);
 
-        return cat_category_list($message);
+        return cat_event_category_edit($event, $message);
     }
 
     // Don't allow rename to clobber an existing category.
@@ -584,7 +597,7 @@ function cat_event_category_save($event, $table_name)
     if ($existing_id and $existing_id != $id) {
         $message = array(gTxt($event.'_category_already_exists', array('{name}' => $name)), E_ERROR);
 
-        return cat_category_list($message);
+        return cat_event_category_edit($event, $message);
     }
 
 // TODO: validate parent?

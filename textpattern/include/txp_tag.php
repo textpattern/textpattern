@@ -43,7 +43,7 @@ header('X-UA-Compatible: '.X_UA_COMPATIBLE);
     <meta charset="utf-8">
     <title><?php echo gTxt('build'); ?> &#124; Textpattern CMS</title><?php echo
         script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
-        script_js('vendors/jquery/ui/js/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
+        script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
         script_js(
             'var textpattern = '.json_encode(array(
                 'event'      => $event,

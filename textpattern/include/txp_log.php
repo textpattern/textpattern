@@ -28,6 +28,8 @@
  * @package Admin\Log
  */
 
+use Textpattern\Search\Filter;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -120,54 +122,83 @@ function log_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $criteria = 1;
+    $search = new Filter($event,
+        array(
+            'ip' => array(
+                'column' => 'txp_log.ip',
+                'label'  => gTxt('IP'),
+            ),
+            'host' => array(
+                'column' => 'txp_log.host',
+                'label'  => gTxt('host'),
+            ),
+            'page' => array(
+                'column' => 'txp_log.page',
+                'label'  => gTxt('page'),
+            ),
+            'refer' => array(
+                'column' => 'txp_log.refer',
+                'label'  => gTxt('referrer'),
+            ),
+            'method' => array(
+                'column' => 'txp_log.method',
+                'label'  => gTxt('method'),
+            ),
+            'status' => array(
+                'column' => 'txp_log.status',
+                'label'  => gTxt('status'),
+                'type'   => 'integer',
+            ),
+        )
+    );
 
-    if ($search_method and $crit != '') {
-        $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
-        $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
-        $critsql = $verbatim ?
-            array(
-                'ip'     => "ip = '$crit_escaped'",
-                'host'   => "host = '$crit_escaped'",
-                'page'   => "page = '$crit_escaped'",
-                'refer'  => "refer = '$crit_escaped'",
-                'method' => "method = '$crit_escaped'",
-                'status' => "status = '$crit_escaped'",
-            ) : array(
-                'ip'     => "ip LIKE '%$crit_escaped%'",
-                'host'   => "host LIKE '%$crit_escaped%'",
-                'page'   => "page LIKE '%$crit_escaped%'",
-                'refer'  => "refer LIKE '%$crit_escaped%'",
-                'method' => "method LIKE '%$crit_escaped%'",
-                'status' => "status LIKE '%$crit_escaped%'",
-            );
+    list($criteria, $crit, $search_method) = $search->getFilter(array(
+            'status' => array('can_list' => true),
+        ));
 
-        if (array_key_exists($search_method, $critsql)) {
-            $criteria = $critsql[$search_method];
-            $limit = 500;
-        } else {
-            $search_method = '';
-            $crit = '';
-        }
-    } else {
-        $search_method = '';
-        $crit = '';
-    }
-
-    $criteria .= callback_event('admin_criteria', 'log_list', 0, $criteria);
+    $search_render_options = array(
+        'placeholder' => 'search_logs',
+    );
 
     $total = safe_count('txp_log', "$criteria");
 
-    echo hed(gTxt('tab_logs'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
+    echo n.tag(
+        hed(gTxt('tab_logs'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1'));
+
+    $searchBlock =
+        n.tag(
+            $search->renderForm('log_list', $search_render_options),
+            'div', array(
+                'class' => 'txp-layout-2col-cell-2',
+                'id'    => $event.'_control',
+            )
+        );
+
+    $contentBlockStart = n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        ));
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo log_search_form($crit, $search_method).
-                graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+            echo $searchBlock.
+                $contentBlockStart.
+                graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_results_found'),
+                    array('class' => 'alert-block information')
+                );
         } else {
-            echo graf(gTxt('no_refers_recorded'), ' class="indicator"').'</div>';
+            echo $contentBlockStart.
+                graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_refers_recorded'),
+                    array('class' => 'alert-block information')
+                );
         }
+
+        echo n.tag_end('div');
 
         return;
     }
@@ -176,7 +207,7 @@ function log_list($message = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo log_search_form($crit, $search_method).'</div>';
+    echo $searchBlock.$contentBlockStart;
 
     $rs = safe_rows_start(
         "*, UNIX_TIMESTAMP(time) AS uTime",
@@ -185,17 +216,14 @@ function log_list($message = '')
     );
 
     if ($rs) {
-        echo
-            n.tag_start('div', array(
-                'id'    => $event.'_container',
-                'class' => 'txp-container',
-            )).
+        echo n.tag(
+                toggle_box('log_detail'), 'div', array('class' => 'txp-list-options')).
             n.tag_start('form', array(
-                'action' => 'index.php',
-                'id'     => 'log_form',
                 'class'  => 'multi_edit_form',
-                'method' => 'post',
+                'id'     => 'log_form',
                 'name'   => 'longform',
+                'method' => 'post',
+                'action' => 'index.php',
             )).
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
@@ -203,7 +231,7 @@ function log_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'time', 'time', 'log', true, $switch_dir, $crit, $search_method,
@@ -260,7 +288,7 @@ function log_list($message = '')
                     fInput('checkbox', 'selected[]', $log_id), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    gTime($log_uTime), '', ' scope="row" class="txp-list-col-time"'
+                    gTime($log_uTime), '', ' class="txp-list-col-time" scope="row"'
                 ).
                 td(
                     href(txpspecialchars($log_ip), 'https://whois.domaintools.com/'.rawurlencode($log_ip), array(
@@ -293,38 +321,16 @@ function log_list($message = '')
             log_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
-            graf(toggle_box('log_detail'), array('class' => 'detail-toggle')).
             n.tag_start('div', array(
-                'id'    => $event.'_navigation',
                 'class' => 'txp-navigation',
+                'id'    => $event.'_navigation',
             )).
             pageby_form('log', $log_list_pageby).
             nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div').
             n.tag_end('div');
     }
-}
 
-/**
- * Renders a search form for logs.
- *
- * @param  string $crit   The current search criteria
- * @param  string $method The selected search method
- * @retrun string HTML
- */
-
-function log_search_form($crit, $method)
-{
-    $methods = array(
-        'ip'     => gTxt('IP'),
-        'host'   => gTxt('host'),
-        'page'   => gTxt('page'),
-        'refer'  => gTxt('referrer'),
-        'method' => gTxt('method'),
-        'status' => gTxt('status'),
-    );
-
-    return search_form('log', 'log_list', $crit, $methods, $method, 'page');
+    echo n.tag_end('div');
 }
 
 /**

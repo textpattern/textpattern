@@ -28,6 +28,8 @@
  * @package Admin\Section
  */
 
+use Textpattern\Search\Filter;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -125,107 +127,110 @@ function sec_section_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $criteria = 1;
+    $search = new Filter($event,
+        array(
+            'name' => array(
+                'column' => 'txp_section.name',
+                'label'  => gTxt('name'),
+            ),
+            'title' => array(
+                'column' => 'txp_section.title',
+                'label'  => gTxt('title'),
+            ),
+            'page' => array(
+                'column' => 'txp_section.page',
+                'label'  => gTxt('page'),
+            ),
+            'css' => array(
+                'column' => 'txp_section.css',
+                'label'  => gTxt('css'),
+            ),
+            'on_frontpage' => array(
+                'column' => 'txp_section.on_frontpage',
+                'label'  => gTxt('on_front_page'),
+                'type'   => 'boolean',
+            ),
+            'in_rss' => array(
+                'column' => 'txp_section.in_rss',
+                'label'  => gTxt('syndicate'),
+                'type'   => 'boolean',
+            ),
+            'searchable' => array(
+                'column' => 'txp_section.searchable',
+                'label'  => gTxt('include_in_search'),
+                'type'   => 'boolean',
+            ),
+        )
+    );
 
-    if ($search_method and $crit != '') {
-        $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
-        $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
-        $critsql = $verbatim ?
-            array(
-                'name'         => "name = '$crit_escaped'",
-                'title'        => "title = '$crit_escaped'",
-                'page'         => "page = '$crit_escaped'",
-                'css'          => "css = '$crit_escaped'",
-                'description'  => "description = '$crit_escaped'",
-            ) : array(
-                'name'         => "name LIKE '%$crit_escaped%'",
-                'title'        => "title LIKE '%$crit_escaped%'",
-                'page'         => "page LIKE '%$crit_escaped%'",
-                'css'          => "css LIKE '%$crit_escaped%'",
-                'description'  => "description LIKE '%$crit_escaped%'",
-            );
+    $alias_yes = '1, Yes';
+    $alias_no = '0, No';
+    $search->setAliases('on_frontpage', array($alias_no, $alias_yes));
+    $search->setAliases('in_rss', array($alias_no, $alias_yes));
+    $search->setAliases('searchable', array($alias_no, $alias_yes));
 
-        if ($verbatim) {
-            $critsql['in_rss'] =
-                "('$crit_escaped' IN ('".doSlash(gTxt('yes'))."', 1) AND in_rss = 1) OR
-                ('$crit_escaped' IN ('".doSlash(gTxt('no'))."', '0') AND in_rss = 0)";
+    list($criteria, $crit, $search_method) = $search->getFilter();
 
-            $critsql['on_frontpage'] =
-                "('$crit_escaped' IN ('".doSlash(gTxt('yes'))."', 1) AND on_frontpage = 1) OR
-                ('$crit_escaped' IN ('".doSlash(gTxt('no'))."', '0') AND on_frontpage = 0)";
-
-            $critsql['searchable'] =
-                "('$crit_escaped' IN ('".doSlash(gTxt('yes'))."', 1) AND searchable = 1) OR
-                ('$crit_escaped' IN ('".doSlash(gTxt('no'))."', '0') AND searchable = 0)";
-        } else {
-            $critsql['in_rss'] =
-                "(('".doSlash(gTxt('yes'))."' LIKE '%$crit_escaped%' OR '$crit_escaped' = 1) AND in_rss = 1) OR
-                (('".doSlash(gTxt('no'))."' LIKE '%$crit_escaped%' OR '$crit_escaped' = '0') AND in_rss = 0)";
-
-            $critsql['on_frontpage'] =
-                "(('".doSlash(gTxt('yes'))."' LIKE '%$crit_escaped%' OR '$crit_escaped' = 1) AND on_frontpage = 1) OR
-                (('".doSlash(gTxt('no'))."' LIKE '%$crit_escaped%' OR '$crit_escaped' = '0') AND on_frontpage = 0)";
-
-            $critsql['searchable'] =
-                "(('".doSlash(gTxt('yes'))."' LIKE '%$crit_escaped%' OR '$crit_escaped' = 1) AND searchable = 1) OR
-                (('".doSlash(gTxt('no'))."' LIKE '%$crit_escaped%' OR '$crit_escaped' = '0') AND searchable = 0)";
-        }
-
-        $search_sql = array();
-
-        foreach ((array) $search_method as $method) {
-            if (isset($critsql[$method])) {
-                $search_sql[] = $critsql[$method];
-            }
-        }
-
-        if ($search_sql) {
-            $criteria = join(' or ', $search_sql);
-            $limit = 500;
-        } else {
-            $search_method = '';
-            $crit = '';
-        }
-    } else {
-        $search_method = '';
-        $crit = '';
-    }
-
-    $criteria .= callback_event('admin_criteria', 'section_list', 0, $criteria);
+    $search_render_options = array(
+        'placeholder' => 'search_sections',
+    );
 
     $total = safe_count('txp_section', $criteria);
 
-    echo
-        hed(gTxt('tab_sections').popHelp('section_category'), 1, array('class' => 'txp-heading')).
-        n.tag_start('div', array('id' => $event.'_control', 'class' => 'txp-control-panel')).
+    echo n.tag(
+        hed(gTxt('tab_sections'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1'));
 
-        graf(
-            sLink('section', 'section_edit', gTxt('create_section')),
-            array('class' => 'txp-buttons')
-        ).
+    $searchBlock =
+        n.tag(
+            $search->renderForm('sec_section', $search_render_options),
+            'div', array(
+                'class' => 'txp-layout-2col-cell-2',
+                'id'    => $event.'_control',
+            )
+        );
 
-        n.tag_start('form', array(
-            'id'     => 'default_section_form',
-            'name'   => 'default_section_form',
-            'method' => 'post',
-            'action' => 'index.php',
-            'class'  => 'async',
-        )).
+    $createBlock = array();
 
-        graf(
-            tag(gTxt('default_write_section'), 'label', array('for' => 'default_section')).
-            popHelp('section_default').
-            section_select_list()
-        ).
+    if (has_privs('section.edit')) {
+        $createBlock[] =
+            n.tag(
+                sLink('section', 'section_edit', gTxt('create_section'), 'txp-button').
+                n.tag_start('form', array(
+                    'class'  => 'async',
+                    'id'     => 'default_section_form',
+                    'name'   => 'default_section_form',
+                    'method' => 'post',
+                    'action' => 'index.php',
+                )).
+                tag(gTxt('default_write_section'), 'label', array('for' => 'default_section')).
+                popHelp('section_default').
+                section_select_list().
+                eInput('section').
+                sInput('section_set_default').
+                n.tag_end('form'),
+                'div', array('class' => 'txp-control-panel')
+            );
+    }
 
-        eInput('section').
-        sInput('section_set_default').
-        n.tag_end('form');
+    $contentBlockStart = n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        ));
+
+    $createBlock = implode(n, $createBlock);
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo section_search_form($crit, $search_method).
-                graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+            echo $searchBlock.
+                $contentBlockStart.
+                $createBlock.
+                graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_results_found'),
+                    array('class' => 'alert-block information')
+                ).
+                n.tag_end('div');
         }
 
         return;
@@ -235,7 +240,7 @@ function sec_section_list($message = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo section_search_form($crit, $search_method).'</div>';
+    echo $searchBlock.$contentBlockStart.$createBlock;
 
     $rs = safe_rows_start(
         "*, (SELECT COUNT(*) FROM ".safe_pfx_j('textpattern')." WHERE textpattern.Section = txp_section.name) AS article_count",
@@ -244,17 +249,14 @@ function sec_section_list($message = '')
     );
 
     if ($rs) {
-        echo
-            n.tag_start('div', array(
-                'id'    => $event.'_container',
-                'class' => 'txp-container',
-            )).
+        echo n.tag(
+                toggle_box('section_detail'), 'div', array('class' => 'txp-list-options')).
             n.tag_start('form', array(
-                'action' => 'index.php',
-                'id'     => 'section_form',
                 'class'  => 'multi_edit_form',
-                'method' => 'post',
+                'id'     => 'section_form',
                 'name'   => 'longform',
+                'method' => 'post',
+                'action' => 'index.php',
             )).
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
@@ -262,7 +264,7 @@ function sec_section_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'name', 'name', 'section', true, $switch_dir, $crit, $search_method,
@@ -369,10 +371,10 @@ function sec_section_list($message = '')
                     sp.span(
                         span('[', array('aria-hidden' => 'true')).
                         href(gTxt('view'), pagelinkurl(array('s' => $sec_name))).
-                        span(']', array('aria-hidden' => 'true')), array('class' => 'section_detail')
+                        span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link section_detail')
                     ), '', array(
-                        'scope' => 'row',
                         'class' => 'txp-list-col-name',
+                        'scope' => 'row',
                     )
                 ).
                 td(
@@ -400,23 +402,22 @@ function sec_section_list($message = '')
             );
         }
 
-        echo
-            n.tag_end('tbody').
+        echo n.tag_end('tbody').
             n.tag_end('table').
             n.tag_end('div').
             section_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
-            graf(toggle_box('section_detail'), array('class' => 'detail-toggle')).
             n.tag_start('div', array(
-                'id'    => $event.'_navigation',
                 'class' => 'txp-navigation',
+                'id'    => $event.'_navigation',
             )).
             pageby_form('section', $section_list_pageby).
             nav_form('section', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div').
             n.tag_end('div');
     }
+
+    echo n.tag_end('div');
 }
 
 /**
@@ -457,15 +458,14 @@ function section_edit()
         }
     } else {
         // Pulls defaults for the new section from the 'default'.
-
         $rs = safe_row(
-            "*",
+            "page, css, on_frontpage, in_rss, searchable",
             'txp_section',
             "name = 'default'"
         );
 
         if ($rs) {
-            $rs['name'] = $rs['title'] = '';
+            $rs['name'] = $rs['title'] = $rs['description'] = '';
         }
     }
 
@@ -480,35 +480,64 @@ function section_edit()
 
     $out = array();
 
-    $out[] =
-        n.tag_start('section', array('class' => 'txp-edit')).
-        hed($caption, 2);
+    $out[] = hed($caption, 2);
 
     if ($is_default_section) {
         $out[] = hInput('name', 'default');
     } else {
-        $out[] =
-            inputLabel('section_name', fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name'), 'section_name').
-            inputLabel('section_title', fInput('text', 'title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'), 'section_longtitle');
+        $out[] = inputLabel(
+                'section_name',
+                fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name'),
+                'section_name', '', array('class' => 'txp-form-field edit-section-name')
+            ).
+            inputLabel(
+                'section_title',
+                fInput('text', 'title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'),
+                'section_longtitle', '', array('class' => 'txp-form-field edit-section-longtitle')
+            );
     }
 
-    $out[] =
-        inputLabel('section_description', text_area('description', 0, 0, $sec_description, 'section_description', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE), 'section_description');
-
-    $out[] =
-        inputLabel('section_page', selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').
-        inputLabel('section_css', selectInput('css', $all_styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css');
+    $out[] = inputLabel(
+            'section_page',
+            selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'),
+            'uses_page', 'section_uses_page', array('class' => 'txp-form-field edit-section-uses-page')
+        ).
+        inputLabel(
+            'section_css',
+            selectInput('css', $all_styles, $sec_css, '', '', 'section_css'),
+            'uses_style', 'section_uses_css', array('class' => 'txp-form-field edit-section-uses-css')
+        );
 
     if (!$is_default_section) {
-        $out[] =
-            inputLabel('on_front_page', yesnoradio('on_frontpage', $sec_on_frontpage, '', $sec_name), '', 'section_on_frontpage').
-            inputLabel('syndicate', yesnoradio('in_rss', $sec_in_rss, '', $sec_name), '', 'section_syndicate').
-            inputLabel('include_in_search', yesnoradio('searchable', $sec_searchable, '', $sec_name), '', 'section_searchable');
+        $out[] = inputLabel(
+                'on_front_page',
+                yesnoradio('on_frontpage', $sec_on_frontpage, '', $sec_name),
+                '', 'section_on_frontpage', array('class' => 'txp-form-field edit-section-on-frontpage')
+            ).
+            inputLabel(
+                'syndicate',
+                yesnoradio('in_rss', $sec_in_rss, '', $sec_name),
+                '', 'section_syndicate', array('class' => 'txp-form-field edit-section-syndicate')
+            ).
+            inputLabel(
+                'include_in_search',
+                yesnoradio('searchable', $sec_searchable, '', $sec_name),
+                '', 'section_searchable', array('class' => 'txp-form-field edit-section-searchable')
+            );
     }
 
-    $out[] =
-        pluggable_ui('section_ui', 'extend_detail_form', '', $rs).
-        graf(fInput('submit', '', gTxt('save'), 'publish')).
+    $out[] = inputLabel(
+            'section_description',
+            '<textarea id="section_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$sec_description.'</textarea>',
+            'description', 'section_description', array('class' => 'txp-form-field txp-form-field-textarea edit-section-description')
+        );
+
+    $out[] = pluggable_ui('section_ui', 'extend_detail_form', '', $rs).
+        graf(
+            sLink('section', '', gTxt('cancel'), 'txp-button').
+            fInput('submit', '', gTxt('save'), 'publish'),
+            array('class' => 'txp-edit-actions')
+        ).
         eInput('section').
         sInput('section_save').
         hInput('old_name', $sec_name).
@@ -516,13 +545,9 @@ function section_edit()
         hInput('crit', $crit).
         hInput('page', $page).
         hInput('sort', $sort).
-        hInput('dir', $dir).
-        n.tag_end('section');
+        hInput('dir', $dir);
 
-    echo
-        n.tag_start('div', array('id' => $event.'_container', 'class' => 'txp-container')).
-        form(join('', $out), '', '', 'post', 'edit-form', '', 'section_details').
-        n.tag_end('div');
+    echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'section_details');
 }
 
 /**
@@ -723,30 +748,6 @@ function section_delete()
     }
 
     sec_section_list($message);
-}
-
-/**
- * Renders a search form for sections.
- *
- * @param  string $crit   The current search criteria
- * @param  string $method The selected search method
- * @return HTML
- */
-
-function section_search_form($crit, $method)
-{
-    $methods = array(
-        'name'         => gTxt('name'),
-        'title'        => gTxt('title'),
-        'page'         => gTxt('page'),
-        'css'          => gTxt('css'),
-        'description'  => gTxt('description'),
-        'on_frontpage' => gTxt('on_front_page'),
-        'in_rss'       => gTxt('syndicate'),
-        'searchable'   => gTxt('include_in_search'),
-    );
-
-    return search_form('section', 'sec_section_list', $crit, $methods, $method, 'name');
 }
 
 /**

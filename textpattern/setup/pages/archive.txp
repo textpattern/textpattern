@@ -169,7 +169,7 @@
     </div> <!-- /.wrapper -->
 
     <!-- footer -->
-    <footer class="site-footer" role="contentinfo">
+    <footer class="site-footer">
         <p>
             <small>
                 <txp:text item="published_with" />

@@ -21,7 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Generated: 17 Sep 2015, 22:13:22 GMT
+// Generated: 11 Nov 2015, 10:13:13 GMT
 
 $langs = array(
     'ar-dz' => array(
@@ -194,11 +194,12 @@ $langs = array(
         'before_you_proceed' => 'Než pokročíš dále:',
         'checking_database' => 'Probíhá ověření spojení s databází',
         'choose_password' => 'Zvol si heslo',
-        'config_php_does_not_match_input' => 'Soubor s nastavením <code>config.php</code> neodpovídá volbám, jež jsi zadal. Vlož do souboru celý následující text.',
+        'config_php_does_not_match_input' => ' Soubor s nastavením <code>config.php</code> neodpovídá volbám, které jsi zadal. Vlož do souboru celý následující text.
+config_php_not_found => Nepodařilo se nalézt soubor s nastavením: <strong>{file}</strong>. Ověř, prosím, že skutečně existuje.',
         'config_php_not_found' => 'Nebylo lze nalézt soubor s nastavením: <strong>{file}</strong>. Ověř, prosím, že skutečně existuje.',
         'core_theme' => 'Vzhled administračního prostředí: {theme}',
-        'create_config' => 'Vytvoř soubor <code>config.php</code> s následujícím obsahem a pomocí FTP ho nahraj do adresáře <code>/textpattern/</code>.',
-        'creating_config' => 'Vytvářím config.php soubor',
+        'create_config' => 'Vytvoř soubor <code>config.php</code> s následujícím obsahem a pomocí FTP ho nahraj do složky <code>/textpattern/</code>.',
+        'creating_config' => 'Vytvářím soubor config.php',
         'creating_db_tables' => 'Vytvářím databázové tabulky',
         'db_cant_connect' => 'Nelze se připojit k databázi',
         'db_connected' => 'Spojeno',
@@ -219,7 +220,7 @@ $langs = array(
         'name_required' => 'Zadej správné přihlašovací jméno, prosím.',
         'need_details' => 'Přirozeně je třeba znát pár údajů',
         'next_step' => 'Další →',
-        'pass_required' => 'Prosím, zadej silnější heslo.',
+        'pass_required' => 'Zadej silné heslo, prosím.',
         'please_enter_url' => 'Zadej webovou adresu stránek.',
         'please_go_back' => 'Vrať se prosím zpět, oprav všechny chybné detaily a spusť proces znovu.',
         'populate_db' => 'Naplnit databázi',
@@ -229,10 +230,10 @@ $langs = array(
         'setup_comment_invite' => 'Komentář',
         'setup_login' => 'Zvol si uživatele (pouze z písmen a mezer)',
         'set_db_details' => 'Nastavit připojení k databázi',
-        'set_temp_dir_prefs' => 'Nebylo možno nalézt vhodný adresář pro dočasné soubory. Otevři <strong>Pokročilá nastavení</strong> a oprav <strong>Adresář dočasných souborů</strong>.',
+        'set_temp_dir_prefs' => 'Nepodařilo se nalézt vhodný adresář pro dočasné soubory. Otevři <strong>Pokročilá nastavení</strong> a oprav <strong>Adresář dočasných souborů</strong>.',
         'site_config' => 'Konfigurace webu',
         'site_url' => 'Adresa stránek',
-        'tables_exist' => 'Zdá se, že tabulky v databázi <strong>{dbname}</strong> už existují. Chceš-li pokračovat v procesu instalace, buď smaž existující tabulky, nebo zadej odlišnou předponu tabulek.',
+        'tables_exist' => 'Zdá se, že tabulky v databázi <strong>{dbname}</strong> už existují. Chceš-li pokračovat v procesu instalace, buď existující tabulky smaž, nebo zadej odlišnou předponu tabulek.',
         'table_prefix' => 'Předpona tabulek',
         'thanks_for_interest' => 'Děkujeme, že jsi o Textpattern projevil zájem.',
         'that_went_well' => 'Vše se zdařilo. Tabulky databáze byly vytvořeny a naplněny.',
@@ -385,6 +386,12 @@ $langs = array(
         'progress_steps' => 'There are 4 steps to this installation process:',
         'setup_comment_invite' => 'Comment',
         'setup_login' => 'Choose a login name',
+        'setup_password_strength_0' => 'Poor',
+        'setup_password_strength_1' => 'Weak',
+        'setup_password_strength_2' => 'Fair',
+        'setup_password_strength_3' => 'Good',
+        'setup_password_strength_4' => 'Strong',
+        'setup_show_password' => 'Show password',
         'set_db_details' => 'Set database details',
         'set_temp_dir_prefs' => 'Sorry, but Textpattern failed to find a writable directory to hold temporary files. Please visit the <strong>Preferences</strong> administration panel and adjust the <strong>Temporary directory path</strong> setting to suit your needs.',
         'site_config' => 'Site configuration',
@@ -443,6 +450,12 @@ $langs = array(
         'progress_steps' => 'There are 4 steps to this installation process:',
         'setup_comment_invite' => 'Comment',
         'setup_login' => 'Choose a login name',
+        'setup_password_strength_0' => 'Poor',
+        'setup_password_strength_1' => 'Weak',
+        'setup_password_strength_2' => 'Fair',
+        'setup_password_strength_3' => 'Good',
+        'setup_password_strength_4' => 'Strong',
+        'setup_show_password' => 'Show password',
         'set_db_details' => 'Set database details',
         'set_temp_dir_prefs' => 'Sorry, but Textpattern failed to find a writable directory to hold temporary files. Please visit the <strong>Preferences</strong> administration panel and adjust the <strong>Temporary directory path</strong> setting to suit your needs.',
         'site_config' => 'Site configuration',

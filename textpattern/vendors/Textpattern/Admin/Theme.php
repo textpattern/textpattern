@@ -42,6 +42,7 @@ if (!defined('THEME')) {
  *
  * @package Admin\Theme
  */
+
 abstract class Theme
 {
     /**

@@ -63,14 +63,14 @@ class Textile extends Base implements TextfilterInterface
         parent::filter($thing, $options);
 
         if (($this->options['restricted'])) {
-            return $this->textile->TextileRestricted(
+            return $this->textile->textileRestricted(
                 $thing,
                 $this->options['lite'],
                 $this->options['noimage'],
                 $this->options['rel']
             );
         } else {
-            return $this->textile->TextileThis(
+            return $this->textile->textileThis(
                 $thing,
                 $this->options['lite'],
                 '',
