@@ -2025,9 +2025,7 @@ function article_partial_comments($rs)
             $AnnotateInvite = $comments_default_invite;
         }
 
-        if ($comments_on_default == 1) {
-            $Annotate = 1;
-        }
+        $Annotate = $comments_on_default;
     }
 
     if ($use_comments == 1) {
