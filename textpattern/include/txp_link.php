@@ -154,7 +154,7 @@ function link_list($message = '')
             ),
             'linksort' => array(
                 'column' => 'txp_link.linksort',
-                'label'  => gTxt('link_sort'),
+                'label'  => gTxt('sort_value'),
             ),
         )
     );
