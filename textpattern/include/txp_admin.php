@@ -354,18 +354,13 @@ function author_list($message = '')
 
         $search = new Filter($event,
             array(
-                'id' => array(
-                    'column' => 'txp_users.user_id',
-                    'label'  => gTxt('ID'),
-                    'type'   => 'integer',
-                ),
                 'login' => array(
                     'column' => 'txp_users.name',
-                    'label'  => gTxt('name'),
+                    'label'  => gTxt('login_name'),
                 ),
                 'RealName' => array(
                     'column' => 'txp_users.RealName',
-                    'label'  => gTxt('RealName'),
+                    'label'  => gTxt('real_name'),
                 ),
                 'email' => array(
                     'column' => 'txp_users.email',
@@ -381,9 +376,7 @@ function author_list($message = '')
 
         $search->setAliases('privs', $levels);
 
-        list($criteria, $crit, $search_method) = $search->getFilter(array(
-                'id' => array('can_list' => true),
-            ));
+        list($criteria, $crit, $search_method) = $search->getFilter();
 
         $search_render_options = array(
             'placeholder' => 'search_users',
