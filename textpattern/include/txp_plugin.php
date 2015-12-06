@@ -427,7 +427,11 @@ function plugin_verify()
                 }
 
                 $source .= highlight_string('<?php'.$plugin['code'].'?>', true);
-                $sub = fInput('submit', '', gTxt('install'), 'publish');
+                $sub = graf(
+                    sLink('plugin', '', gTxt('cancel'), 'txp-button').
+                    fInput('submit', '', gTxt('install'), 'publish'),
+                    array('class' => 'txp-edit-actions')
+                );
 
                 pagetop(gTxt('verify_plugin'));
                 echo form(
