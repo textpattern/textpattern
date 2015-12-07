@@ -764,7 +764,11 @@ function file_edit($message = '', $id = '')
                         : gTxt('existing_file').selectInput('filename', $existing_files, '', 1)
                     ).
                     pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-                    graf(fInput('submit', '', gTxt('Save'), 'publish')).
+                    graf(
+                        sLink('file', '', gTxt('cancel'), 'txp-button').
+                        fInput('submit', '', gTxt('save'), 'publish'),
+                        array('class' => 'txp-edit-actions')
+                    ).
                     hInput('category', $category).
                     hInput('perms', ($permissions == '-1') ? '' : $permissions).
                     hInput('title', $title).
