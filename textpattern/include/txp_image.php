@@ -682,11 +682,8 @@ function image_edit($message = '', $id = '')
                         inputLabel(
                             'image_category',
                             event_category_popup('image', $category, 'image_category').
-                            sp.span(
-                                span('[', array('aria-hidden' => 'true')).
-                                eLink('category', 'list', '', '', gTxt('edit')).
-                                span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link')
-                            ), 'image_category', '', array('class' => 'txp-form-field edit-image-category')
+                            eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+                            'image_category', '', array('class' => 'txp-form-field edit-image-category')
                         ).
                         inputLabel(
                             'image_alt_text',

@@ -2914,20 +2914,6 @@ div.multi-edit {
 }
 
 /**
- * Ensure links display as inline blocks (prevents linebreak problems).
- *
- * Example HTML:
- *
- * <span class="txp-option-link">
- *     <span>[</span><a>Edit</a><span>]</span>
- * </span>
- */
-.txp-option-link {
-  display: inline-block;
-  white-space: nowrap;
-}
-
-/**
  * When text sections are linked with anchors, make sure there is ample padding
  * above so they don't become obscured by sticky `header` area.
  *

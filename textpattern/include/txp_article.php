@@ -1950,11 +1950,7 @@ function article_partial_section($rs)
     $out = inputLabel(
         'section',
         section_popup($rs['Section'], 'section').
-        sp.span(
-            span('[', array('aria-hidden' => 'true')).
-            eLink('section', 'list', '', '', gTxt('edit')).
-            span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link')
-        ),
+        eLink('section', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
         'section',
         array('', 'instructions_section'),
         array('class' => 'txp-form-field section')
@@ -1979,11 +1975,7 @@ function article_partial_categories($rs)
         inputLabel(
             'category-1',
             category_popup('Category1', $rs['Category1'], 'category-1').
-            sp.span(
-                span('[', array('aria-hidden' => 'true')).
-                eLink('category', 'list', '', '', gTxt('edit')).
-                span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link')
-            ),
+            eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
             'category1',
             array('', 'instructions_category1'),
             array('class' => 'txp-form-field category category-1')

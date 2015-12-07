@@ -439,11 +439,8 @@ function link_edit($message = '')
             inputLabel(
                 'link_category',
                 event_category_popup('link', $category, 'link_category').
-                sp.span(
-                    span('[', array('aria-hidden' => 'true')).
-                    eLink('category', 'list', '', '', gTxt('edit')).
-                    span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link')
-                ), 'link_category', 'link_category', array('class' => 'txp-form-field edit-link-category')
+                eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+                'link_category', 'link_category', array('class' => 'txp-form-field edit-link-category')
             ).
             inputLabel(
                 'link_description',
