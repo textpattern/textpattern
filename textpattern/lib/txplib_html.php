@@ -237,10 +237,11 @@ function sLink($event, $step, $linktext, $class = '')
  * @param  string $thing2   URL parameter key #2
  * @param  string $val2     URL parameter value #2
  * @param  string $title    Anchor title
+ * @param  string $class    HTML class attribute
  * @return string HTML
  */
 
-function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '', $title = '')
+function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '', $title = '', $class = '')
 {
     if ($title) {
         $title = gTxt($title);
@@ -259,6 +260,7 @@ function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '
         $thing2      => $val2,
         '_txp_token' => form_token(),
     ), array(
+        'class' => $class,
         'title' => $title,
     ));
 }
