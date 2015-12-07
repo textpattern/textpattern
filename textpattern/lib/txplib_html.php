@@ -275,17 +275,20 @@ function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '
  * @param  string $step  Step
  * @param  string $thing URL parameter key
  * @param  string $value URL parameter value
+ * @param  string $class HTML class attribute
  * @return string HTML
  */
 
-function wLink($event, $step = '', $thing = '', $value = '')
+function wLink($event, $step = '', $thing = '', $value = '', $class = ''
 {
     return href(sp.'!'.sp, array(
         'event'      => $event,
         'step'       => $step,
         $thing       => $value,
         '_txp_token' => form_token(),
-    ), array('class' => 'dlink'));
+    ), array(
+        'class' => $class,
+    ));
 }
 
 /**
