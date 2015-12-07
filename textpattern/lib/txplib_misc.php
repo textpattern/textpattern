@@ -2694,7 +2694,7 @@ function event_category_popup($name, $cat = '', $id = '')
     $rs = getTree('root', $name);
 
     if ($rs) {
-        return treeSelectInput('category', $rs, $cat, $id).sp;
+        return treeSelectInput('category', $rs, $cat, $id);
     }
 
     return false;

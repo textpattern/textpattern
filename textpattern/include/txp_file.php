@@ -736,7 +736,7 @@ function file_edit($message = '', $id = '')
                     inputLabel(
                         'file_category',
                         event_category_popup('file', $category, 'file_category').
-                        eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+                        n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
                         'file_category', '', array('class' => 'txp-form-field edit-file-category')
                     ).
 //                    inputLabel(

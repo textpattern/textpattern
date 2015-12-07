@@ -682,7 +682,7 @@ function image_edit($message = '', $id = '')
                         inputLabel(
                             'image_category',
                             event_category_popup('image', $category, 'image_category').
-                            eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+                            n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
                             'image_category', '', array('class' => 'txp-form-field edit-image-category')
                         ).
                         inputLabel(

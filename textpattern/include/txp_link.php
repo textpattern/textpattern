@@ -439,7 +439,7 @@ function link_edit($message = '')
             inputLabel(
                 'link_category',
                 event_category_popup('link', $category, 'link_category').
-                eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+                n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
                 'link_category', 'link_category', array('class' => 'txp-form-field edit-link-category')
             ).
             inputLabel(
