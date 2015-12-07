@@ -240,7 +240,7 @@ function sLink($event, $step, $linktext, $class = '')
  * @return string HTML
  */
 
-function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '', $title = 'edit')
+function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '', $title = '')
 {
     if ($title) {
         $title = gTxt($title);
