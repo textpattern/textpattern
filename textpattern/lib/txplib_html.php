@@ -279,16 +279,14 @@ function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '
  * @return string HTML
  */
 
-function wLink($event, $step = '', $thing = '', $value = '', $class = ''
+function wLink($event, $step = '', $thing = '', $value = '', $class = '')
 {
     return href(sp.'!'.sp, array(
         'event'      => $event,
         'step'       => $step,
         $thing       => $value,
         '_txp_token' => form_token(),
-    ), array(
-        'class' => $class,
-    ));
+    ), array('class' => $class));
 }
 
 /**
