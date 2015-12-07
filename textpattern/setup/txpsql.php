@@ -198,9 +198,9 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_css` (
     UNIQUE name (name(250))
 ) $tabletype ";
 
-foreach(scandir($themedir.DS.'css') as $cssfile) {
+foreach(scandir($themedir.DS.'styles') as $cssfile) {
     if (preg_match('/^(\w+)\.css$/', $cssfile, $match)) {
-        $css = doSlash(file_get_contents($themedir.DS.'css'.DS.$cssfile));
+        $css = doSlash(file_get_contents($themedir.DS.'styles'.DS.$cssfile));
         $create_sql[] = "INSERT INTO `".PFX."txp_css`(name, css) VALUES('".$match[1]."', '".$css."')";
     }
 }
