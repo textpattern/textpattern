@@ -38,7 +38,7 @@
 
 namespace Textpattern\Filter;
 
-class String extends \Textpattern\Type\String
+class String extends \Textpattern\Type\StringType
 {
     /**
      * {@inheritdoc}
