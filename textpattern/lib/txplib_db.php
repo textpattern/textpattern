@@ -200,9 +200,15 @@ class DB
 
         $this->link = mysqli_init();
 
+        // Suppress screen output from mysqli_real_connect().
+        $error_reporting = error_reporting();
+        error_reporting($error_reporting & ~(E_WARNING | E_NOTICE));
+
         if (!mysqli_real_connect($this->link, $this->host, $this->user, $this->pass, $this->db, $this->port, $this->socket, $this->client_flags)) {
             die(db_down());
         }
+
+        error_reporting($error_reporting);
 
         $version = $this->version = mysqli_get_server_info($this->link);
         $connected = true;
