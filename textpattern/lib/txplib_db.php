@@ -1407,7 +1407,11 @@ function db_down()
     // 503 status might discourage search engines from indexing or caching the
     // error message.
     txp_status_header('503 Service Unavailable');
-    $error = mysqli_error($DB->link);
+    if (is_object($DB)) {
+        $error = txpspecialchars(mysqli_error($DB->link));
+    } else {
+        $error = '$DB object is not available.';
+    }
 
     return <<<eod
 <!DOCTYPE html>
