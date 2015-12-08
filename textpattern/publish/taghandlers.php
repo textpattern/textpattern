@@ -2138,7 +2138,7 @@ function comments_invite($atts)
 
 // -------------------------------------------------------------
 
-function popup_comments($atts)
+function popup_comments($atts, $thing = null)
 {
     extract(lAtts(array(
         'form' => 'comments_display'
@@ -2152,9 +2152,7 @@ function popup_comments($atts)
 
     if ($rs) {
         populateArticleData($rs);
-        $result = parse_form($form);
-
-        return $result;
+        return ($thing === null ? parse_form($form) : parse($thing));
     }
 
     return '';
@@ -2162,7 +2160,7 @@ function popup_comments($atts)
 
 // -------------------------------------------------------------
 
-function comments_form($atts)
+function comments_form($atts, $thing = null)
 {
     global $thisarticle, $has_comments_preview;
     global $thiscommentsform; // TODO: Remove any uses of $thiscommentsform when removing deprecated attributes from below.
@@ -2245,7 +2243,7 @@ function comments_form($atts)
 
         $out .= '<form id="txpCommentInputForm" method="post" action="'.txpspecialchars($url).'#cpreview">'.
             n.'<div class="comments-wrapper">'.n. // Prevent XHTML Strict validation gotchas.
-            parse_form($form).
+            ($thing === null ? parse_form($form) : parse($thing)).
             n.hInput('parentid', ($parentid ? $parentid : $thisid)).
             n.hInput('backpage', (ps('preview') ? $backpage : $url)).
             n.'</div>'.
@@ -2528,7 +2526,7 @@ function comments_annotateinvite($atts, $thing)
 
 // -------------------------------------------------------------
 
-function comments($atts)
+function comments($atts, $thing = null)
 {
     global $thisarticle, $prefs;
     extract($prefs);
@@ -2571,7 +2569,7 @@ function comments($atts)
 
         while ($vars = nextRow($rs)) {
             $GLOBALS['thiscomment'] = $vars;
-            $comments[] = parse_form($form).n;
+            $comments[] = ($thing === null ? parse_form($form) : parse($thing)).n;
             unset($GLOBALS['thiscomment']);
         }
 
@@ -2583,7 +2581,7 @@ function comments($atts)
 
 // -------------------------------------------------------------
 
-function comments_preview($atts)
+function comments_preview($atts, $thing = null)
 {
     global $has_comments_preview;
 
@@ -2616,7 +2614,7 @@ function comments_preview($atts)
     $preview['web'] = clean_url($preview['web']);
 
     $GLOBALS['thiscomment'] = $preview;
-    $comments = parse_form($form).n;
+    $comments = ($thing === null ? parse_form($form) : parse($thing)).n;
     unset($GLOBALS['thiscomment']);
     $out = doTag($comments, $wraptag, $class);
 
