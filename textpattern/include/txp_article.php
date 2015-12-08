@@ -1127,11 +1127,30 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
         echo wrapRegion('txp-dates-group', $posted_block.$expires_block, 'txp-dates-group-content', 'date_settings', 'article_dates');
 
+        // 'Meta' collapsible section.
+
+        // 'URL-only title' field.
+        $html_url_title = $partials['url_title']['html'];
+
+        // 'Description' field.
+        $html_description = $partials['description']['html'];
+
+        // 'Keywords' field.
+        $html_keywords = $partials['keywords']['html'];
+
+        echo wrapRegion('txp-meta-group', $html_url_title.$html_description.$html_keywords, 'txp-meta-group-content', 'meta', 'article_meta');
+
         // 'Comment options' collapsible section.
         echo wrapRegion('txp-comments-group', $partials['comments']['html'], 'txp-comments-group-content', 'comment_settings', 'article_comments', (($use_comments == 1)
             ? ''
             : 'empty'
         ));
+
+        // 'Article image' collapsible section.
+        echo $partials['image']['html'];
+
+        // 'Custom fields' collapsible section.
+        echo $partials['custom_fields']['html'];
 
         // 'Advanced options' collapsible section.
 
@@ -1173,25 +1192,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             : '';
 
         echo wrapRegion('txp-advanced-group', $html_markup.$html_override, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
-
-        // 'Meta' collapsible section.
-
-        // 'URL-only title' field.
-        $html_url_title = $partials['url_title']['html'];
-
-        // 'Description' field.
-        $html_description = $partials['description']['html'];
-
-        // 'Keywords' field.
-        $html_keywords = $partials['keywords']['html'];
-
-        echo wrapRegion('txp-meta-group', $html_url_title.$html_description.$html_keywords, 'txp-meta-group-content', 'meta', 'article_meta');
-
-        // 'Article image' collapsible section.
-        echo $partials['image']['html'];
-
-        // 'Custom fields' collapsible section.
-        echo $partials['custom_fields']['html'];
 
         // Custom menu entries.
         echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
