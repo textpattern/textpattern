@@ -9,6 +9,9 @@ See LICENSE-LESSER.txt for terms and conditions.
 Includes contributions licensed under the New BSD License.
 See LICENSE-BSD-3.txt for terms and conditions.
 
+Released with a Contributor Code of Conduct. By participating in this project
+you agree to abide by its terms. See CODE_OF_CONDUCT.txt for more information.
+Violations should be reported here: http://textpattern.com/contact
 
 == About ==
 
