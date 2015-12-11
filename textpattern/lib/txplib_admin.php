@@ -201,23 +201,35 @@ function send_reset_confirmation_request($name)
 {
     global $sitename;
 
-    $rs = safe_row("user_id, email, nonce, pass", 'txp_users', "name = '".doSlash($name)."'");
+    $expiryTimestamp = time() + (60 * RESET_EXPIRY_MINUTES);
+    $expiry = strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
 
-    if ($rs) {
-        extract($rs);
+    $rs = safe_query(
+        "SELECT
+            txp_users.user_id, txp_users.email,
+            txp_users.nonce, txp_users.pass,
+            txp_token.type
+        FROM ".safe_pfx('txp_users')." txp_users
+        LEFT JOIN ".safe_pfx('txp_token')." txp_token
+        ON txp_users.user_id = txp_token.reference_id
+        WHERE txp_users.name = '".doSlash($name)."'
+        AND TIMESTAMPDIFF(SECOND, txp_token.expires, '".$expiry."') > ".(60 * RESET_RATE_LIMIT_MINUTES)."
+        AND txp_token.type = 'password_reset'");
+
+    $row = nextRow($rs);
+
+    if ($row) {
+        extract($row);
 
         $uid = assert_int($user_id);
 
         // The selector becomes an indirect reference to the txp_users row,
         // which does not leak information.
         $selector = Txp::get('\Textpattern\Password\Random')->generate(12);
-        $expiryTimestamp = time() + (60 * RESET_EXPIRY_MINUTES);
         $expiryYear = safe_strftime('%Y', $expiryTimestamp);
         $expiryMonth = safe_strftime('%B', $expiryTimestamp);
         $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
         $expiryTime = safe_strftime('%H:%M', $expiryTimestamp);
-
-        $expiry = strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
 
         // Use a hash of the nonce, selector and password.
         // This ensures that confirmation requests expire automatically when:
@@ -256,8 +268,9 @@ function send_reset_confirmation_request($name)
     } else {
         // Though 'unknown_author' could be thrown, send generic 'request_sent'
         // message instead so that (non-)existence of account names are not leaked.
-        // There's a possibility of a timing attack revealing the existence of
-        // an account, which we could defend against to some degree.
+        // Since this is a short circuit, there's a possibility of a timing attack
+        // revealing the existence of an account, which we could defend against
+        // to some degree.
         return gTxt('password_reset_confirmation_request_sent');
     }
 }
