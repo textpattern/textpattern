@@ -2439,13 +2439,13 @@ button.txp-nav-toggle {
   text-decoration: none;
 }
 .txp-nav > ul > li > a:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.3);
 }
 .txp-nav > ul > li.selected > a {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.3);
 }
 .txp-nav > ul > li.selected > a:hover {
-  background: rgba(255, 255, 255, 0.33);
+  background: rgba(255, 255, 255, 0.6);
 }
 
 /**
@@ -2820,7 +2820,7 @@ span.spinner {
 }
 @media (min-resolution: 1.25dppx), (min-resolution: 120dpi) {
   span.spinner {
-    background-image: url("../img/spinner@2x.gif") !important;
+    background-image: url("../img/spinner@2x.gif");
   }
 }
 
@@ -2911,6 +2911,18 @@ div.multi-edit {
 .multi-option.multi-step {
   margin-left: 0.30769230769231em;
   display: inline-block;
+}
+
+/**
+ * Ensure links display as inline blocks (prevents linebreak problems).
+ *
+ * Example HTML:
+ *
+ * <a class="txp-option-link">Edit</a>
+ */
+.txp-option-link {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 /**
@@ -4794,7 +4806,7 @@ label.ui-state-active.ui-button:active {
 }
 @media (min-resolution: 1.25dppx), (min-resolution: 120dpi) {
   .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar@2x.gif") !important;
+    background-image: url("../img/ui-progressbar@2x.gif");
   }
 }
 
@@ -4816,7 +4828,7 @@ label.ui-state-active.ui-button:active {
 }
 @media (min-resolution: 1.25dppx), (min-resolution: 120dpi) {
   .ui-progressbar-indeterminate .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar-indeterminate@2x.gif") !important;
+    background-image: url("../img/ui-progressbar-indeterminate@2x.gif");
   }
 }
 
