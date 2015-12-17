@@ -2253,9 +2253,9 @@ body {
     min-height: 100vh;
   }
   .txp-body {
-    -webkit-flex: 1 1 0%;
-        -ms-flex: 1 1 0%;
-            flex: 1 1 0%;
+    -webkit-flex: 1 1 auto;
+        -ms-flex: 1 1 auto;
+            flex: 1 1 auto;
   }
 }
 
@@ -3242,9 +3242,9 @@ div.multi-edit {
 .txp-edit .txp-form-field-value,
 .txp-prefs-group .txp-form-field-label,
 .txp-prefs-group .txp-form-field-value {
-  -webkit-flex: 1 1 0%;
-      -ms-flex: 1 1 0%;
-          flex: 1 1 0%;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
   min-height: 2.15384615384615em;
 }
 
