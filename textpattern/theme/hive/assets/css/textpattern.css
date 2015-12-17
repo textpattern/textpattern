@@ -2242,20 +2242,16 @@ body {
   margin: 0 auto;
 }
 
-@supports ((display: -webkit-flex) or (display: -ms-flexbox) or (display: flex)) {
+@supports (display: flex) {
   body {
-    display: -webkit-flex;
-    display: -ms-flexbox;
+    /* autoprefixer: off */
     display: flex;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column;
+    flex-direction: column;
     min-height: 100vh;
   }
   .txp-body {
-    -webkit-flex: 1 1 auto;
-        -ms-flex: 1 1 auto;
-            flex: 1 1 auto;
+    /* autoprefixer: off */
+    flex: 1 1 auto;
   }
 }
 
