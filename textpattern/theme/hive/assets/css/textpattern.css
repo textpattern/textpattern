@@ -353,6 +353,12 @@ a.busy {
   font-weight: normal;
 }
 
+.pophelp:focus,
+.pophelpsubtle:focus {
+  border-color: #0066ff;
+  outline: 0;
+}
+
 /**
  * Additional styling for popup help links in table headers.
  */
@@ -367,6 +373,10 @@ a.busy {
 .txp-list thead th a.pophelp:hover {
   color: #0066ff;
   text-decoration: underline;
+}
+
+.txp-list thead th a.pophelp:focus {
+  border-color: #0066ff;
 }
 
 /**
@@ -724,10 +734,15 @@ svg:not(:root) {
  * Example HTML:
  *
  * <img class="content-image">
- * <a>
+ *
+ * <a class="content-image-link">
  *     <img class="content-image">
  * </a>
  */
+.content-image-link:focus {
+  outline: 0;
+}
+
 .content-image {
   border: solid 1px #cccccc;
   background: #ffffff;
