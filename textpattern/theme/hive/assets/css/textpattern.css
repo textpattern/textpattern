@@ -330,7 +330,7 @@ a:hover, a:active {
 }
 
 a:focus {
-  outline: thin dotted #0066ff;
+  outline: thin solid #0066ff;
 }
 
 a.busy {
@@ -740,7 +740,6 @@ a:hover .content-image {
 
 a:focus .content-image {
   border-color: #0066ff;
-  box-shadow: 0 0 7px #80b3ff;
 }
 
 /* Messages
@@ -1319,7 +1318,6 @@ select,
 textarea {
   height: 2.15384615384615em;
   padding: 0.30769230769231em;
-  transition: box-shadow 0.1s linear;
   border: 1px solid #cccccc;
   border-radius: 0;
   background: #ffffff;
@@ -1347,7 +1345,6 @@ select:focus,
 textarea:focus {
   border-color: #0066ff;
   outline: 0;
-  box-shadow: 0 0 7px #80b3ff;
 }
 
 /**
@@ -1612,7 +1609,6 @@ input[type="button"],
   width: auto;
   height: 2.15384615384615em;
   padding: 0.30769230769231em 0.61538461538462em;
-  transition: box-shadow 0.1s linear;
   border: solid 1px #cccccc;
   border-radius: 0.5em;
   background-clip: padding-box;
@@ -1670,7 +1666,7 @@ input[type="button"]:focus,
 .navlink-active:focus {
   border-color: #0066ff;
   outline: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 /**
@@ -1733,7 +1729,7 @@ button.destroy {
 }
 
 button.destroy:focus {
-  outline: thin dotted #0066ff;
+  outline: thin solid #0066ff;
 }
 
 /**
@@ -2251,7 +2247,7 @@ body {
   }
   .txp-body {
     /* autoprefixer: off */
-    flex: 1 1 auto;
+    flex: 1;
   }
 }
 
@@ -3238,9 +3234,9 @@ div.multi-edit {
 .txp-edit .txp-form-field-value,
 .txp-prefs-group .txp-form-field-label,
 .txp-prefs-group .txp-form-field-value {
-  -webkit-flex: 1 1 auto;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  -webkit-flex: 1 1 0%;
+      -ms-flex: 1 1 0%;
+          flex: 1 1 0%;
   min-height: 2.15384615384615em;
 }
 
@@ -4113,7 +4109,6 @@ a.ui-state-default:focus {
   height: 2.1538462em;
   margin: 0 0.1em 0 0;
   padding: 0.30769230769231em 0.61538461538462em;
-  transition: box-shadow 0.1s linear;
   border: solid 1px #cccccc;
   background-clip: padding-box;
   color: #333333;
@@ -4155,7 +4150,7 @@ a.ui-state-default:focus {
 .ui-button:focus {
   border-color: #0066ff;
   outline: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 /**
@@ -4175,7 +4170,7 @@ a.ui-button {
   /* 1 */
   border-color: #0066ff !important;
   outline: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 /**
@@ -5049,7 +5044,6 @@ label.ui-state-active.ui-button:active {
 .ui-selectmenu-button {
   display: inline-block;
   position: relative;
-  transition: box-shadow 0.1s linear;
   background-color: #ffffff;
   /* 1 */
   font-size: 13px;
@@ -5063,7 +5057,6 @@ label.ui-state-active.ui-button:active {
 .ui-selectmenu-button:focus {
   border-color: #0066ff;
   outline: 0;
-  box-shadow: 0 0 7px #80b3ff;
 }
 
 .ui-selectmenu-button span.ui-icon {
@@ -5429,7 +5422,7 @@ label.ui-state-active.ui-button:active {
 }
 
 .ui-tabs-vertical .ui-tabs-nav .ui-state-focus a {
-  outline: thin dotted #0066ff;
+  outline: thin solid #0066ff;
 }
 
 /* Tooltip
@@ -6426,7 +6419,7 @@ label.ui-state-active.ui-button:active {
     box-shadow: none;
   }
   button.txp-nav-toggle:focus {
-    outline: thin dotted #0066ff;
+    outline: thin solid #0066ff;
   }
   button.txp-nav-toggle:not(.collapsed) {
     background-color: rgba(255, 255, 255, 0.33);
