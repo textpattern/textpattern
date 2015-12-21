@@ -309,6 +309,8 @@ function article_post()
                 if ($Status >= STATUS_LIVE) {
                     do_pings();
                     update_lastmod('article_posted', $rs);
+                    now('posted', true);
+                    now('expires', true);
                 }
 
                 callback_event('article_posted', '', false, $rs);
@@ -503,6 +505,8 @@ function article_save()
                 update_lastmod('article_saved', $rs);
             }
 
+            now('posted', true);
+            now('expires', true);
             callback_event('article_saved', '', false, $rs);
 
             if (empty($msg)) {

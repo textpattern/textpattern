@@ -1030,10 +1030,10 @@ function recent_articles($atts)
     $category = join("','", doSlash(do_list_unique($category)));
     $categories = ($category) ? "AND (Category1 IN ('".$category."') or Category2 IN ('".$category."'))" : '';
     $section = ($section) ? " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
-    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (NOW() <= Expires OR Expires = ".NULLDATETIME.")";
+    $expired = ($prefs['publish_expired_articles']) ? "" : " AND (".now('expires')." <= Expires OR Expires = ".NULLDATETIME.")";
 
     $rs = safe_rows_start("*, id AS thisid, UNIX_TIMESTAMP(Posted) AS posted", 'textpattern',
-        "Status = ".STATUS_LIVE." $section $categories AND Posted <= NOW()$expired ORDER BY ".doSlash($sort)." LIMIT ".intval($offset).", ".intval($limit));
+        "Status = ".STATUS_LIVE." $section $categories AND Posted <= ".now('posted').$expired." ORDER BY ".doSlash($sort)." LIMIT ".intval($offset).", ".intval($limit));
 
     if ($rs) {
         $out = array();
@@ -1071,7 +1071,7 @@ function recent_comments($atts, $thing = null)
     ), $atts));
 
     $sort = preg_replace('/\bposted\b/', 'd.posted', $sort);
-    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (NOW() <= t.Expires OR t.Expires = ".NULLDATETIME.") ";
+    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (".now('expires')." <= t.Expires OR t.Expires = ".NULLDATETIME.") ";
 
     $rs = startRows("SELECT d.name, d.email, d.web, d.message, d.discussid, UNIX_TIMESTAMP(d.Posted) AS time,
             t.ID AS thisid, UNIX_TIMESTAMP(t.Posted) AS posted, t.Title AS title, t.Section AS section, t.url_title
@@ -1184,11 +1184,11 @@ function related_articles($atts, $thing = null)
 
     $section = ($section) ? " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
 
-    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (NOW() <= Expires OR Expires = ".NULLDATETIME.") ";
+    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (".now('expires')." <= Expires OR Expires = ".NULLDATETIME.") ";
     $rs = safe_rows_start(
         "*, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(LastMod) AS uLastMod, UNIX_TIMESTAMP(Expires) AS uExpires",
         'textpattern',
-        "ID != ".intval($id)." AND Status = ".STATUS_LIVE." $expired AND Posted <= NOW() $categories $section ORDER BY ".doSlash($sort)." LIMIT 0, ".intval($limit));
+        "ID != ".intval($id)." AND Status = ".STATUS_LIVE." $expired AND Posted <= ".now('posted')." $categories $section ORDER BY ".doSlash($sort)." LIMIT 0, ".intval($limit));
 
     if ($rs) {
         $out = array();
@@ -4764,10 +4764,7 @@ function file_download_list($atts, $thing = null)
         return '';
     }
 
-    if (!$where) {
-        // If nothing matches, start with all files.
-        $where[] = "1 = 1";
-    }
+    $where[] = "created <= ".now('created');
 
     $where = join(" AND ", array_merge($where, $statwhere));
 
@@ -4848,9 +4845,9 @@ function file_download($atts, $thing = null)
     $from_form = false;
 
     if ($id) {
-        $thisfile = fileDownloadFetchInfo('id = '.intval($id));
+        $thisfile = fileDownloadFetchInfo('id = '.intval($id).' and created <= '.now('created'));
     } elseif ($filename) {
-        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
+        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."' and created <= ".now('created'));
     } else {
         assert_file();
 
@@ -4884,9 +4881,9 @@ function file_download_link($atts, $thing = null)
     $from_form = false;
 
     if ($id) {
-        $thisfile = fileDownloadFetchInfo('id = '.intval($id));
+        $thisfile = fileDownloadFetchInfo('id = '.intval($id).' and created <= '.now('created'));
     } elseif ($filename) {
-        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
+        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."' and created <= ".now('created'));
     } else {
         assert_file();
 

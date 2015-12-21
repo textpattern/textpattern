@@ -170,7 +170,7 @@ function atom()
         $query[] = $sfilter;
         $query[] = $cfilter;
 
-        $expired = ($publish_expired_articles) ? "" : " AND (NOW() <= Expires OR Expires = ".NULLDATETIME.") ";
+        $expired = ($publish_expired_articles) ? " " : " AND (".now('expires')." <= Expires OR Expires = ".NULLDATETIME.") ";
         $rs = safe_rows_start(
             "*,
             ID AS thisid,
@@ -178,7 +178,7 @@ function atom()
             UNIX_TIMESTAMP(Expires) AS uExpires,
             UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            "Status = 4 AND Posted <= NOW() $expired".join(' ', $query).
+            "Status = 4 AND Posted <= ".now('posted').$expired.join(' ', $query).
             "ORDER BY Posted DESC LIMIT $limit"
         );
 

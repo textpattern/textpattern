@@ -198,14 +198,14 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
             $time = "";
             break;
         case 'future':
-            $time = " AND Posted > NOW()";
+            $time = " AND Posted > ".now('posted');
             break;
         default:
-            $time = " AND Posted <= NOW()";
+            $time = " AND Posted <= ".now('posted');
     }
 
     if (!$expired) {
-        $time .= " AND (NOW() <= Expires OR Expires = ".NULLDATETIME.")";
+        $time .= " AND (".now('expires')." <= Expires OR Expires = ".NULLDATETIME.")";
     }
 
     $custom = '';

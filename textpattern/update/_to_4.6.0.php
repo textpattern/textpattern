@@ -133,6 +133,13 @@ if (!get_pref('default_publish_status')) {
     set_pref('default_publish_status', STATUS_LIVE, 'publish', PREF_CORE, 'defaultPublishStatus', 15, PREF_PRIVATE);
 }
 
+// Add prefs to allow query caching when now() is used.
+if (!get_pref('sql_now_posted')) {
+    set_pref('sql_now_posted', time(), 'publish', PREF_HIDDEN);
+    set_pref('sql_now_expires', time(), 'publish', PREF_HIDDEN);
+    set_pref('sql_now_created', time(), 'publish', PREF_HIDDEN);
+}
+
 // Remove broken import functionality
 if (file_exists(txpath.DS.'include'.DS.'txp_import.php')) {
     $import_files = array(

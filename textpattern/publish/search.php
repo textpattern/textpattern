@@ -56,7 +56,7 @@ function search($q)
         MATCH (Title,Body) AGAINST ('$q') AS score",
         'textpattern',
         "(Title RLIKE '$q' OR Body RLIKE '$q') $s_filter
-        AND Status = 4 AND Posted <= NOW() ORDER BY score DESC LIMIT 40");
+        AND Status = 4 AND Posted <= ".now('posted')." ORDER BY score DESC LIMIT 40");
 
     if ($rs) {
         $result_rows = count($rs);
