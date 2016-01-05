@@ -203,7 +203,7 @@ function plugin_list($message = '')
                 $manage[] = $plugin_prefs;
             }
 
-            $manage_items = ($manage) ? join(tag(sp.'&#124;'.sp, 'span'), $manage) : '-';
+            $manage_items = ($manage) ? join(sp.span('&#124;', array('role' => 'separator')).sp, $manage) : '-';
             $edit_url = eLink('plugin', 'plugin_edit', 'name', $name, $name);
 
             echo tr(
