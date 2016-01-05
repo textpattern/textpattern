@@ -186,9 +186,10 @@ function plugin_list($message = '')
             }
 
             if ($flags & PLUGIN_HAS_PREFS) {
-                $plugin_prefs = href(gTxt('plugin_prefs'), array(
-                    'event' => 'plugin_prefs.'.$name,
-                ), array('class' => 'plugin-prefs'));
+                $plugin_prefs = span(
+                    sp.span('&#124;', array('role' => 'separator')).
+                    sp.href(gTxt('plugin_prefs'), array('event' => 'plugin_prefs.'.$name)),
+                array('class' => 'plugin-prefs'));
             } else {
                 $plugin_prefs = '';
             }
@@ -203,7 +204,7 @@ function plugin_list($message = '')
                 $manage[] = $plugin_prefs;
             }
 
-            $manage_items = ($manage) ? join(sp.span('&#124;', array('role' => 'separator')).sp, $manage) : '-';
+            $manage_items = ($manage) ? join($manage) : '-';
             $edit_url = eLink('plugin', 'plugin_edit', 'name', $name, $name);
 
             echo tr(
