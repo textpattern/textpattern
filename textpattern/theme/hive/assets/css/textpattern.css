@@ -3276,7 +3276,7 @@ div.multi-edit {
 }
 
 /**
- *  Don't constrain form fields when in 3 column layout spans.
+ * Don't constrain form fields when in 3 column layout spans.
  */
 .txp-layout-4col-cell-1-2-3 .txp-form-field-label,
 .txp-layout-4col-cell-1-2-3 .txp-form-field-value,
@@ -3288,8 +3288,7 @@ div.multi-edit {
 /**
  * Form field inline help texts.
  *
- * 1. Limit maxiumum width of instructions, for legibility.
- * 2. Pull instructions closer to form fields.
+ * 1. Limit maximum width of instructions, for legibility.
  *
  * Example HTML:
  *
@@ -3304,8 +3303,6 @@ div.multi-edit {
 .txp-form-field-instructions {
   /* 1 */
   max-width: 56em;
-  /* 2 */
-  margin-top: -0.45454545454545em;
 }
 
 /* Setup and login panels - additional layout
