@@ -301,7 +301,7 @@ summary {
 /* Links
    ========================================================================== */
 /**
- * 1. Remove the grey background colour from active links in IE 10.
+ * 1. Remove potential background colour from active links.
  * 2. Specify link colour.
  * 3. Remove default underline style from non-hover state links.
  * 4. Interrupt the decoration line to let the shape of the text show through
@@ -455,7 +455,7 @@ h3 {
 }
 
 /**
- * Normalise `h4`, `h5` and `h6` headings (these are effectively unused).
+ * Normalize `h4`, `h5` and `h6` headings (these are effectively unused).
  */
 h4,
 h5,
@@ -516,7 +516,7 @@ var {
 }
 
 /**
- * Harmonise size and style of computer text.
+ * Harmonize size and style of computer text.
  */
 pre,
 code,
@@ -600,7 +600,7 @@ sub {
 }
 
 /**
- * Harmonise size and style of small text.
+ * Harmonize size and style of small text.
  */
 small,
 figcaption,
@@ -668,7 +668,7 @@ video {
 /**
  * Images.
  *
- * 1. Remove border when inside `a` element in IE 10.
+ * 1. Remove potential border when inside `a` element.
  * 2. Remove the gap between images and the bottom of their containers.
  *
  * Image alignment (compatible with Textile markup syntax).
@@ -722,7 +722,7 @@ figure {
 }
 
 /**
- * Correct overflow not hidden in IE 10/11.
+ * Correct overflow not hidden in IE 11.
  */
 svg:not(:root) {
   overflow: hidden;
@@ -1060,7 +1060,7 @@ h3.txp-summary.expanded a:after {
 /**
  * Progress meter lists.
  *
- * Utilises CSS counters to increment the progress steps, more info -
+ * Utilizes CSS counters to increment the progress steps, more info -
  * https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Lists_and_Counters/Using_CSS_counters
  *
  * Example HTML:
@@ -1255,13 +1255,10 @@ fieldset {
 }
 
 /**
- * 1. Remove padding so people aren't caught out if they zero out fieldsets.
- * 2. Correct `color` not being inherited in IE 10/11.
+ * Normalize styling of `legend`.
  */
 legend {
-  /* 1 */
   padding: 0;
-  /* 2 */
   border: 0;
 }
 
@@ -1380,7 +1377,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 /**
- * 1. Remove excess padding in IE 10.
+ * 1. Remove any excess padding.
  * 2. Correct margins for inline checkbox/radio labels.
  */
 input[type="checkbox"],
@@ -1461,7 +1458,7 @@ select[size="1"] {
 }
 
 /**
- * Normalise styling of `optgroup`.
+ * Normalize styling of `optgroup`.
  */
 optgroup {
   color: #333333;
@@ -1470,7 +1467,7 @@ optgroup {
 }
 
 /**
- * 1. Remove default vertical scrollbar in IE 10/11.
+ * 1. Remove default vertical scrollbar in IE 11.
  * 2. Remove unwanted space below `textarea` in Safari, Chrome, Opera.
  * 3. Restrict to vertical resizing to prevent layout breakage.
  */
@@ -1595,8 +1592,8 @@ input.input-month, input.input-day, input.input-hour, input.input-minute, input.
 /* Buttons
    ========================================================================== */
 /**
- * 1. Correct `button` style inheritance in Firefox, IE 10/11, and Opera.
- * 2. Address `overflow` set to `hidden` in IE 10/11.
+ * 1. Correct `button` style inheritance in Firefox, IE 11, and Opera.
+ * 2. Address `overflow` set to `hidden` in IE 11.
  */
 button {
   /* 1 */
@@ -1916,7 +1913,7 @@ dd {
 }
 
 /**
- * Italicise definition terms.
+ * Italicize definition terms.
  */
 dt {
   font-style: italic;
@@ -3590,7 +3587,7 @@ div.code {
 }
 
 /**
- * Normalise various rules to avoid style inheritance.
+ * Normalize various rules to avoid style inheritance.
  */
 .ui-helper-reset {
   margin: 0;
@@ -3614,7 +3611,7 @@ div.code {
 }
 
 /**
- * Normalise absolute positioning of jQuery UI elements to avoid misplacement.
+ * Normalize absolute positioning of jQuery UI elements to avoid misplacement.
  */
 .ui-helper-zfix {
   position: absolute;
@@ -3635,7 +3632,7 @@ div.code {
 /* Component containers
    ========================================================================== */
 /**
- * Normalise font size of nested jQuery UI widgets to avoid style inheritance.
+ * Normalize font size of nested jQuery UI widgets to avoid style inheritance.
  */
 .ui-widget .ui-widget {
   font-size: 13px;
@@ -3728,14 +3725,14 @@ a.ui-state-default:focus {
 }
 
 /**
- * Visually prioritised jQuery UI text.
+ * Visually prioritized jQuery UI text.
  */
 .ui-priority-primary {
   font-weight: bold;
 }
 
 /**
- * Visually non-prioritised jQuery UI text.
+ * Visually non-prioritized jQuery UI text.
  */
 .ui-priority-secondary {
   font-weight: normal;
@@ -4897,8 +4894,6 @@ label.ui-state-active.ui-button:active {
   margin: 0;
   padding: 0.30769230769231em 1em 0.30769230769231em 0.30769230769231em;
   cursor: pointer;
-  /* support: IE 10, see #8844 */
-  list-style-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
 }
 
 .ui-menu .ui-menu-item a {

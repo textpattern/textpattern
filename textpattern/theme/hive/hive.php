@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2014 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -229,7 +229,7 @@ EOS;
             'author'      => 'Team Textpattern',
             'author_uri'  => 'http://textpattern.com/',
             'version'     => $prefs['version'],
-            'description' => 'Textpattern Hive Theme',
+            'description' => 'Textpattern Hive Theme (Classic Yellow)',
             'help'        => 'https://github.com/philwareham/txp-hive-admin-theme',
         );
     }

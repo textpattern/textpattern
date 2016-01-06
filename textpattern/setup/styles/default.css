@@ -5,7 +5,7 @@
    ========================================================================== */
 /**
  * Correct `block` display not defined for any HTML5 element in older browsers.
- * Correct `block` display not defined for `details` or `summary` in IE 10/11 and Firefox.
+ * Correct `block` display not defined for `details` or `summary` in IE 11 and Firefox.
  * Correct `block` display not defined for `main` in IE 11.
  */
 article,
@@ -21,15 +21,6 @@ nav,
 section,
 summary {
   display: block;
-}
-
-/**
- * Address `[hidden]` styling not present in IE 10.
- * Hide the `template` element in IE 10/11 and Safari.
- */
-[hidden],
-template {
-  display: none;
 }
 
 /**
@@ -236,7 +227,7 @@ nav ol:after,
   /* Links
    ========================================================================== */
   /**
- * 1. Remove the grey background colour from active links in IE 10.
+ * 1. Remove potential background colour from active links.
  * 2. Specify link colour.
  * 3. Remove default underline style from non-hover state links.
  * 4. Interrupt the decoration line to let the shape of the text show through
@@ -326,7 +317,7 @@ nav ol:after,
     font-weight: bold;
   }
   /**
- * Harmonise size, style and vertical margin of headings.
+ * Harmonize size, style and vertical margin of headings.
  */
   h1,
   h2,
@@ -415,7 +406,7 @@ nav ol:after,
     color: #333333;
   }
   /**
- * Harmonise size and style of computer text.
+ * Harmonize size and style of computer text.
  */
   pre,
   code,
@@ -475,7 +466,7 @@ nav ol:after,
     bottom: -0.25em;
   }
   /**
- * Harmonise size and style of small text.
+ * Harmonize size and style of small text.
  */
   small,
   figcaption,
@@ -602,7 +593,7 @@ nav ol:after,
   /**
  * Images.
  *
- * 1. Remove border when inside `a` element in IE 10.
+ * 1. Remove potential border when inside `a` element.
  * 2. Remove the gap between images and the bottom of their containers.
  *
  * Image alignment (compatible with Textile markup syntax).
@@ -639,14 +630,12 @@ nav ol:after,
   }
   /**
  * Prevent modern browsers from displaying `audio` without controls.
- * Remove excess height in iOS 5 devices.
  */
   audio:not([controls]) {
     display: none;
-    height: 0;
   }
   /**
- * Correct overflow not hidden in IE 10/11.
+ * Correct overflow not hidden in IE 11.
  */
   svg:not(:root) {
     overflow: hidden;
@@ -746,7 +735,7 @@ nav ol:after,
     margin: 0 0 0 2em;
   }
   /**
- * Italicise definition terms.
+ * Italicize definition terms.
  */
   dt {
     font-style: italic;
@@ -783,13 +772,10 @@ nav ol:after,
     border: 1px solid #cccccc;
   }
   /**
- * 1. Remove padding so people aren't caught out if they zero out fieldsets.
- * 2. Correct `color` not being inherited in IE 10/11.
+ * Normalize styling of `legend`.
  */
   legend {
-    /* 1 */
     padding: 0;
-    /* 2 */
     border: 0;
   }
   /**
@@ -822,9 +808,9 @@ nav ol:after,
     border: 0;
   }
   /**
- * Remove inner padding and search cancel button in Safari and Chrome on OS X.
- * Safari (but not Chrome) clips the cancel button when the search input has
- * padding (and `textfield` appearance).
+ * Remove inner padding in Safari and Chrome on OS X. Safari (but not Chrome)
+ * clips the cancel button when the search input has padding (and `textfield`
+ * appearance).
  */
   input[type="search"]::-webkit-search-decoration {
     -webkit-appearance: none;
@@ -895,7 +881,7 @@ nav ol:after,
     height: auto;
   }
   /**
- * 1. Remove excess padding in IE 10.
+ * 1. Remove any excess padding.
  * 2. Correct margins for inline checkbox/radio labels.
  */
   input[type="checkbox"],
@@ -967,7 +953,7 @@ nav ol:after,
 
 @media screen {
   /**
- * Normalise styling of `optgroup`.
+ * Normalize styling of `optgroup`.
  */
   optgroup {
     color: #333333;
@@ -975,7 +961,7 @@ nav ol:after,
     font-weight: bold;
   }
   /**
- * 1. Remove default vertical scrollbar in IE 10/11.
+ * 1. Remove default vertical scrollbar in IE 11.
  * 2. Remove unwanted space below `textarea` in Safari, Chrome, Opera.
  * 3. Restrict to vertical resizing to prevent layout breakage.
  */
@@ -1062,8 +1048,8 @@ nav ol:after,
   /* Buttons
    ========================================================================== */
   /**
- * 1. Correct `button` style inheritance in Firefox, IE 10/11 and Opera.
- * 2. Address `overflow` set to `hidden` in IE 10/11.
+ * 1. Correct `button` style inheritance in Firefox, IE 11 and Opera.
+ * 2. Address `overflow` set to `hidden` in IE 11.
  */
   button {
     /* 1 */
@@ -1329,13 +1315,13 @@ nav ol:after,
     text-decoration: none;
   }
   /**
- *  Show long-form for abbreviations in print.
+ * Show long-form for abbreviations in print.
  */
   abbr[title]:after {
     content: " (" attr(title) ")";
   }
   /**
- *  Harmonise size, style and vertical margin of headings.
+ * Harmonize size, style and vertical margin of headings.
  */
   h1 {
     margin: 16pt 0;
@@ -1392,7 +1378,7 @@ nav ol:after,
     widows: 2;
   }
   /**
- * Harmonise size and style of small text.
+ * Harmonize size and style of small text.
  */
   footer,
   figcaption,
@@ -1504,7 +1490,7 @@ nav ol:after,
     list-style: decimal;
   }
   /**
- * Normalise margins on `dl` definition lists.
+ * Normalize margins on `dl` definition lists.
  */
   dl {
     padding: 0 0 8pt 1.8em;
@@ -1520,7 +1506,7 @@ nav ol:after,
     margin-bottom: 8pt;
   }
   /**
- * Harmonise styling for `caption`.
+ * Harmonize styling for `caption`.
  */
   caption {
     margin-bottom: 4pt;
