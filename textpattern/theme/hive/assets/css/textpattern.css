@@ -3046,19 +3046,6 @@ div.multi-edit {
 }
 
 /**
- * Hide empty containers from view (and from screen readers).
- *
- * TODO: this is a dirty solution - should be improved in HTML strucure.
- *
- * Example HTML:
- *
- * <section class="txp-details empty" id="comments_group"></section>
- */
-.empty {
-  display: none;
-}
-
-/**
  * Visually disabled text and anchors.
  */
 .disabled {
