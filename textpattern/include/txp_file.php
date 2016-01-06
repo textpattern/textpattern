@@ -416,10 +416,10 @@ function file_list($message = '')
             }
 
             if ($file_exists) {
-                $id_column .= sp.span(
-                    span('[', array('aria-hidden' => 'true')).
-                    make_download_link($id, gTxt('download'), $filename).
-                    span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link')
+                $id_column .= span(
+                    sp.span('&#124;', array('role' => 'separator')).
+                    sp.make_download_link($id, gTxt('download'), $filename),
+                    array('class' => 'txp-option-link files_detail')
                 );
             }
 

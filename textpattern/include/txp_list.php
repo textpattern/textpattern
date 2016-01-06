@@ -441,11 +441,14 @@ function list_list($message = '', $post = '')
                 ).
                 hCell(
                     eLink('article', 'edit', 'ID', $ID, $ID).
-                    sp.span(
-                        span('[', array('aria-hidden' => 'true')).
-                        href(gTxt('view'), $view_url).
-                        span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link articles_detail')
-                    ), '', ' class="txp-list-col-id" scope="row"'
+                    span(
+                        sp.span('&#124;', array('role' => 'separator')).
+                        sp.href(gTxt('view'), $view_url),
+                        array('class' => 'txp-option-link articles_detail')
+                    ), '', array(
+                        'class' => 'txp-list-col-id',
+                        'scope' => 'row',
+                    )
                 ).
                 td(
                     $Title, '', 'txp-list-col-title'

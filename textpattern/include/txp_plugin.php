@@ -189,7 +189,8 @@ function plugin_list($message = '')
                 $plugin_prefs = span(
                     sp.span('&#124;', array('role' => 'separator')).
                     sp.href(gTxt('plugin_prefs'), array('event' => 'plugin_prefs.'.$name)),
-                array('class' => 'plugin-prefs'));
+                    array('class' => 'plugin-prefs')
+                );
             } else {
                 $plugin_prefs = '';
             }

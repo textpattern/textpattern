@@ -391,12 +391,15 @@ function image_list($message = '')
                 ).
                 hCell(
                     ($can_edit ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id).
-                    sp.span(
-                        span('[', array('aria-hidden' => 'true')).
-                        href(gTxt('view'), imagesrcurl($id, $ext)).
-                        span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link images_detail')
-                    ), '', ' class="txp-list-col-id" scope="row"').
-
+                    span(
+                        sp.span('&#124;', array('role' => 'separator')).
+                        sp.href(gTxt('view'), imagesrcurl($id, $ext)),
+                        array('class' => 'txp-option-link images_detail')
+                    ), '', array(
+                        'class' => 'txp-list-col-id',
+                        'scope' => 'row',
+                    )
+                ).
                 td(
                     ($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name'
                 ).
