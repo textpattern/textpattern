@@ -1737,7 +1737,7 @@ function article_partial_custom_fields($rs)
         $cf .= article_partial_custom_field($rs, "custom_field_{$k}");
     }
 
-    return wrapRegion('txp-custom-field-group', pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'txp-custom-field-group-content', 'custom', 'article_custom_field', (($cfs) ? '' : 'empty'));
+    return wrapRegion('txp-custom-field-group', pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'txp-custom-field-group-content', 'custom', 'article_custom_field');
 }
 
 /**
