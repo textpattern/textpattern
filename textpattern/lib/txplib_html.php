@@ -620,8 +620,8 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
     if ($content) {
         $content =
             hed($label.popHelp($help), 3, array(
-                'class'          => $heading_class,
-                'id'             => $id.'-label',
+                'class' => $heading_class,
+                'id'    => $id.'-label',
             )).
             n.tag($content.n, 'div', $display_state).n;
     }

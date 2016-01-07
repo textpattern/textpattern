@@ -356,13 +356,16 @@ function image_list($message = '')
             if ($thumbnail) {
                 if ($ext != '.swf') {
                     $thumbnail = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
-                                        "title='$id$ext ($w &#215; $h)'".
-                                        ($thumb_w ? " width='$thumb_w' height='$thumb_h'" : '').' />';
+                        "title='$id$ext ($w &#215; $h)'".
+                        ($thumb_w ? " width='$thumb_w' height='$thumb_h'" : '').' />';
+                    $thumbexists = 1;
                 } else {
                     $thumbnail = '';
+                    $thumbexists = '';
                 }
             } else {
                 $thumbnail = gTxt('no');
+                $thumbexists = '';
             }
 
             if ($ext != '.swf') {
@@ -407,7 +410,7 @@ function image_list($message = '')
                     gTime($uDate), '', 'txp-list-col-created date images_detail'
                 ).
                 td(
-                    pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a), '', 'txp-list-col-thumbnail'
+                    pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a), '', 'txp-list-col-thumbnail'.($thumbexists ? ' has-thumbnail' : '')
                 ).
                 td(
                     $tagbuilder, '', 'txp-list-col-tag-build images_detail'

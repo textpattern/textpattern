@@ -733,16 +733,10 @@ svg:not(:root) {
  *
  * Example HTML:
  *
- * <img class="content-image">
- *
- * <a class="content-image-link">
+ * <a>
  *     <img class="content-image">
  * </a>
  */
-.content-image-link:focus {
-  outline: 0;
-}
-
 .content-image {
   border: solid 1px #cccccc;
   background: #ffffff;
@@ -3474,6 +3468,10 @@ span.spinner {
 
 /* Content -> Images panel - additional layout
    ========================================================================== */
+.has-thumbnail a:focus {
+  outline: 0;
+}
+
 .thumbnail-alter input {
   margin: 0 0.30769230769231em 0 0;
 }
