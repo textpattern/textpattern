@@ -3208,7 +3208,8 @@ span.spinner {
 }
 
 /**
- * Inline form field pairings on edit panels and preferences group panels.
+ * Inline form field pairings on edit panels, preferences group panels and
+ * setup panels.
  *
  * Example HTML:
  *
@@ -3220,7 +3221,8 @@ span.spinner {
  * </form>
  */
 .txp-edit .txp-form-field:not(.txp-form-field-textarea),
-.txp-prefs-group .txp-form-field:not(.txp-form-field-textarea) {
+.txp-prefs-group .txp-form-field:not(.txp-form-field-textarea),
+.setup .txp-form-field:not(.txp-form-field-textarea) {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -3232,7 +3234,9 @@ span.spinner {
 .txp-edit .txp-form-field-label,
 .txp-edit .txp-form-field-value,
 .txp-prefs-group .txp-form-field-label,
-.txp-prefs-group .txp-form-field-value {
+.txp-prefs-group .txp-form-field-value,
+.setup .txp-form-field-label,
+.setup .txp-form-field-value {
   -webkit-flex: 1 1 0%;
       -ms-flex: 1 1 0%;
           flex: 1 1 0%;
@@ -3416,7 +3420,7 @@ span.spinner {
 }
 
 #view_modes ul a {
-  padding: 0.36363636363636em 1em;
+  padding: 0.5em 1em;
   float: left;
   color: #333333;
   text-decoration: none;
