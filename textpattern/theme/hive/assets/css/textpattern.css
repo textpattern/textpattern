@@ -2936,7 +2936,7 @@ span.spinner {
  *     </select>
  * </div>
  */
-div.multi-edit {
+.multi-edit {
   margin: 1em 0 0;
 }
 
@@ -3490,6 +3490,16 @@ div.multi-edit {
   display: inline-block;
   margin-top: 5px;
   vertical-align: top;
+}
+
+/* Content -> Files panel - additional layout
+   ========================================================================== */
+/**
+ * Make sure form for selecting existing files is on a new line.
+ */
+.txp-control-panel .assign-existing-form {
+  margin-top: 1em;
+  display: block;
 }
 
 /* Content -> Comments panel - additional layout
