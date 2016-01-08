@@ -421,7 +421,7 @@ h1 {
 }
 
 h1 .pophelp {
-  font-size: 0.5em;
+  font-size: 13px;
 }
 
 /**
@@ -442,7 +442,7 @@ h2 {
 }
 
 h2 .pophelp {
-  font-size: 0.72222222222222em;
+  font-size: 13px;
 }
 
 /**
@@ -461,7 +461,7 @@ h4,
 h5,
 h6 {
   margin: 1em 0;
-  font-size: 1em;
+  font-size: 13px;
 }
 
 /**
@@ -608,8 +608,8 @@ tfoot,
 .footnote,
 .txp-form-field-instructions,
 .txp-footer {
-  font-size: 0.84615384615385em;
-  line-height: 0.8;
+  font-size: 11px;
+  line-height: 16px;
 }
 
 figcaption,
@@ -975,7 +975,7 @@ h3.txp-summary,
   margin: 0;
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #cccccc;
-  font-size: 1em;
+  font-size: 13px;
   font-weight: bold;
   line-height: 2em;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
@@ -1106,7 +1106,7 @@ h3.txp-summary.expanded a:after {
   border: 1px solid #ffffff;
   border-radius: 50%;
   background: #cccccc;
-  font-size: 1.23076em;
+  font-size: 16px;
   font-weight: bold;
   text-align: center;
   content: counter(step);
@@ -1275,6 +1275,7 @@ textarea,
   max-width: 100%;
   /* 2 */
   margin: 0;
+  color: #000000;
   font-family: Helvetica, Arial, sans-serif;
   /* 3 */
   font-size: 13px;
@@ -1494,7 +1495,7 @@ select[disabled] option,
 select[disabled] optgroup,
 textarea[disabled],
 .navlink-disabled {
-  border-color: #dddddd !important;
+  border-color: #d4d4d4 !important;
   background: #eeeeee !important;
   color: #aaaaaa !important;
   text-shadow: none !important;
@@ -1672,7 +1673,6 @@ input[type="button"]:focus,
 .navlink-active:focus {
   border-color: #0066ff;
   outline: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 /**
@@ -3378,8 +3378,8 @@ span.spinner {
   padding: 0;
   border-bottom: 1px solid #cccccc;
   background: none;
-  font-size: 0.84615384615385em;
-  line-height: 0.8;
+  font-size: 11px;
+  line-height: 16px;
 }
 
 #view_modes ul:after {
@@ -3500,8 +3500,8 @@ span.spinner {
  * Make sure form for selecting existing files is on a new line.
  */
 .txp-control-panel .assign-existing-form {
-  margin-top: 1em;
   display: block;
+  margin-top: 1em;
 }
 
 /* Content -> Comments panel - additional layout
@@ -5101,7 +5101,7 @@ label.ui-state-active.ui-button:active {
   margin: 0.5em 0 0;
   padding: 2px 0.30769230769231em;
   border-top: 1px solid #cccccc;
-  font-size: 1em;
+  font-size: 13px;
   font-weight: bold;
   line-height: 1.5;
 }

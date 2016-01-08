@@ -249,10 +249,10 @@ nav ol:after,
     text-decoration: underline;
   }
   a:focus {
-    outline: thin dotted #7fb2ff;
+    outline: thin solid #0066ff;
   }
   a:visited {
-    color: #00327f;
+    color: #003380;
   }
   /**
  * Additional styling for `h1` heading links.
@@ -355,7 +355,7 @@ nav ol:after,
   }
   h6 {
     margin: 1em 0;
-    font-size: 1em;
+    font-size: 16px;
     line-height: 1.5em;
   }
   /**
@@ -417,7 +417,7 @@ nav ol:after,
     background-color: #f7f7f7;
     color: #333333;
     font-family: Menlo, Consolas, Monaco, monospace;
-    font-size: 0.875em;
+    font-size: 14px;
     line-height: 1.5em;
   }
   code,
@@ -446,7 +446,7 @@ nav ol:after,
     padding: 0;
     border: 0;
     background-color: transparent;
-    font-size: 1em;
+    font-size: 14px;
   }
   /**
  * Prevent `sub` and `sup` affecting `line-height` in all browsers.
@@ -472,13 +472,13 @@ nav ol:after,
   figcaption,
   tfoot,
   .footnote {
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 1.5em;
   }
   figcaption,
   tfoot,
   .footnote {
-    color: #888888;
+    color: #777777;
   }
   figcaption {
     margin-top: 0.5em;
@@ -792,6 +792,7 @@ nav ol:after,
     max-width: 100%;
     /* 2 */
     margin: 0;
+    color: #000000;
     font-family: sans-serif;
     /* 3 */
     font-size: 16px;
@@ -863,7 +864,8 @@ nav ol:after,
   input[type="week"]:focus,
   select:focus,
   textarea:focus {
-    border-color: #7fb2ff;
+    border-color: #0066ff;
+    outline: 0;
   }
   /**
  * Remove padding from `color` fields.
@@ -992,7 +994,7 @@ nav ol:after,
   select[disabled] optgroup,
   textarea[disabled],
   span.disabled {
-    border-color: #e3e3e3 !important;
+    border-color: #d4d4d4 !important;
     background: #eeeeee !important;
     color: #aaaaaa !important;
     text-shadow: none !important;
@@ -1112,7 +1114,8 @@ nav ol:after,
   input[type="button"]:focus,
   input[type="reset"]:focus,
   input[type="submit"]:focus {
-    border-color: #7fb2ff;
+    border-color: #0066ff;
+    outline: 0;
   }
   /* Comments
    ========================================================================== */
