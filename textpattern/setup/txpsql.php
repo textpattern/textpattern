@@ -106,12 +106,16 @@ $themedir = txpath.DS.'setup';
 
 $create_sql = array();
 
+$mysql_version = (float) mysqli_get_server_info($link);
+# If we can't add the trigger (MySQL is < 5), then let's set that DEFAULT as previously specified
+$feed_time_default = ($mysql_version>=5) ? '' : ' DEFAULT "0000-00-00"';
+
 $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
     ID              INT          NOT NULL AUTO_INCREMENT,
-    Posted          DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
-    Expires         DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    Posted          DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    Expires         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     AuthorID        VARCHAR(64)  NOT NULL DEFAULT '',
-    LastMod         DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    LastMod         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     LastModID       VARCHAR(64)  NOT NULL DEFAULT '',
     Title           VARCHAR(255) NOT NULL DEFAULT '',
     Title_html      VARCHAR(255) NOT NULL DEFAULT '',
@@ -144,7 +148,7 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
     custom_9        VARCHAR(255) NOT NULL DEFAULT '',
     custom_10       VARCHAR(255) NOT NULL DEFAULT '',
     uid             VARCHAR(32)  NOT NULL DEFAULT '',
-    feed_time       DATE         NOT NULL DEFAULT '0000-00-00',
+    feed_time       DATE         NOT NULL".$feed_time_default.",
 
     PRIMARY KEY                 (ID),
     INDEX    categories_idx     (Category1(10), Category2(10)),
@@ -167,7 +171,17 @@ $article['body_html']    = $textile->textileThis($article['body']);
 $article['excerpt_html'] = $textile->textileThis($article['excerpt']);
 $article = doSlash($article);
 
-$create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), '0000-00-00 00:00:00', '".doSlash($_SESSION['name'])."', NOW(), '', 'Welcome to your site', '', '".$article['body']."', '".$article['body_html']."', '".$article['excerpt']."', '".$article['excerpt_html']."', '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, '1', '1', 'articles', '', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NOW())";
+if($mysql_version>=5) {
+$create_sql[] = "
+CREATE TRIGGER `feed_time` BEFORE INSERT ON `textpattern`
+FOR EACH ROW
+    if ( isnull(NEW.feed_time) ) then
+        SET NEW.feed_time=CURDATE();
+    end if
+";
+}
+
+$create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), NOW(), '".doSlash($_SESSION['name'])."', NOW(), '', 'Welcome to your site', '', '".$article['body']."', '".$article['body_html']."', '".$article['excerpt']."', '".$article['excerpt_html']."', '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, '1', '1', 'articles', '', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NULL)";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_category` (
     id          INT          NOT NULL AUTO_INCREMENT,
@@ -212,7 +226,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
     email     VARCHAR(254)    NOT NULL DEFAULT '',
     web       VARCHAR(255)    NOT NULL DEFAULT '',
     ip        VARCHAR(100)    NOT NULL DEFAULT '',
-    posted    DATETIME        NOT NULL DEFAULT '0000-00-00 00:00:00',
+    posted    DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     message   TEXT            NOT NULL,
     visible   TINYINT         NOT NULL DEFAULT '1',
 
@@ -223,7 +237,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
 $create_sql[] = "INSERT INTO `".PFX."txp_discuss` VALUES (000001, 1, 'Donald Swain', 'donald.swain@example.com', 'example.com', '127.0.0.1', NOW(), '<p>I enjoy your site very much.</p>', 1)";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_discuss_nonce` (
-    issue_time DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    issue_time DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     nonce      VARCHAR(255) NOT NULL DEFAULT '',
     used       TINYINT      NOT NULL DEFAULT '0',
     secret     VARCHAR(255) NOT NULL DEFAULT '',
@@ -240,8 +254,8 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_file` (
     description TEXT         NOT NULL,
     downloads   INT UNSIGNED NOT NULL DEFAULT '0',
     status	SMALLINT     NOT NULL DEFAULT '4',
-    modified    DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
-    created     DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    modified    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     size        BIGINT       DEFAULT NULL,
     author      VARCHAR(64)  NOT NULL DEFAULT '',
 
@@ -275,7 +289,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_image` (
     h         INT          NOT NULL DEFAULT '0',
     alt       VARCHAR(255) NOT NULL DEFAULT '',
     caption   TEXT         NOT NULL,
-    date      DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    date      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     author    VARCHAR(64)  NOT NULL DEFAULT '',
     thumbnail INT          NOT NULL DEFAULT '0',
     thumb_w   INT          NOT NULL DEFAULT '0',
@@ -302,7 +316,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
     id          INT          NOT NULL AUTO_INCREMENT,
-    date        DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    date        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     category    VARCHAR(64)  NOT NULL DEFAULT '',
     url         TEXT         NOT NULL,
     linkname    VARCHAR(255) NOT NULL DEFAULT '',
@@ -323,7 +337,7 @@ $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (6, NOW(), 'textpattern', 
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
     id     INT          NOT NULL AUTO_INCREMENT,
-    time   DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    time   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     host   VARCHAR(255) NOT NULL DEFAULT '',
     page   VARCHAR(255) NOT NULL DEFAULT '',
     refer  MEDIUMTEXT   NOT NULL,
@@ -529,7 +543,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_users` (
     RealName    VARCHAR(255) NOT NULL DEFAULT '',
     email       VARCHAR(254) NOT NULL DEFAULT '',
     privs       TINYINT      NOT NULL DEFAULT '1',
-    last_access DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    last_access DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     nonce       VARCHAR(64)  NOT NULL DEFAULT '',
 
     PRIMARY KEY (user_id),
@@ -552,7 +566,6 @@ $GLOBALS['txp_err_html'] = '';
 
 foreach ($create_sql as $query) {
     $result = mysqli_query($link, $query);
-
     if (!$result) {
         $GLOBALS['txp_err_count']++;
         $GLOBALS['txp_err_html'] .= '<li>'.n.
@@ -572,7 +585,7 @@ if (!$client->query('tups.getLanguage', $blog_uid, LANG)) {
         include_once txpath.'/setup/en-gb.php';
 
         if (!@$lastmod) {
-            $lastmod = '0000-00-00 00:00:00';
+            $lastmod = date('Y-m-d H:i:s');
         }
 
         foreach ($en_gb_lang as $evt_name => $evt_strings) {
