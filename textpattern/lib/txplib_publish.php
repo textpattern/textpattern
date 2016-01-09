@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -198,14 +198,14 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
             $time = "";
             break;
         case 'future':
-            $time = " AND Posted > NOW()";
+            $time = " AND Posted > ".now('posted');
             break;
         default:
-            $time = " AND Posted <= NOW()";
+            $time = " AND Posted <= ".now('posted');
     }
 
     if (!$expired) {
-        $time .= " AND (NOW() <= Expires OR Expires = ".NULLDATETIME.")";
+        $time .= " AND (".now('expires')." <= Expires OR Expires = ".NULLDATETIME.")";
     }
 
     $custom = '';

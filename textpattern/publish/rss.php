@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -117,12 +117,12 @@ function rss()
         $query[] = $sfilter;
         $query[] = $cfilter;
 
-        $expired = ($publish_expired_articles) ? "" : " AND (NOW() <= Expires OR Expires = ".NULLDATETIME.") ";
+        $expired = ($publish_expired_articles) ? " " : " AND (".now('expires')." <= Expires OR Expires = ".NULLDATETIME.") ";
         $rs = safe_rows_start(
             "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(LastMod) AS uLastMod, UNIX_TIMESTAMP(Expires) AS uExpires, ID AS thisid",
             'textpattern',
             "Status = 4 ".join(' ', $query).
-            "AND Posted < NOW()".$expired."ORDER BY Posted DESC LIMIT $limit"
+            "AND Posted < ".now('posted').$expired." ORDER BY Posted DESC LIMIT $limit"
         );
 
         if ($rs) {

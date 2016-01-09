@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -447,6 +447,21 @@ if (!defined('RESET_EXPIRY_MINUTES')) {
      */
 
     define('RESET_EXPIRY_MINUTES', '90');
+}
+
+if (!defined('RESET_RATE_LIMIT_MINUTES')) {
+    /**
+     * Minutes during which multiple user-submitted password reset requests are ignored.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @since   4.6.0
+     * @example
+     * define('RESET_RATE_LIMIT_MINUTES', '15');
+     */
+
+    define('RESET_RATE_LIMIT_MINUTES', '5');
 }
 
 if (!defined('ACTIVATION_EXPIRY_HOURS')) {

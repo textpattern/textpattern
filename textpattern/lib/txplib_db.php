@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -200,9 +200,15 @@ class DB
 
         $this->link = mysqli_init();
 
+        // Suppress screen output from mysqli_real_connect().
+        $error_reporting = error_reporting();
+        error_reporting($error_reporting & ~(E_WARNING | E_NOTICE));
+
         if (!mysqli_real_connect($this->link, $this->host, $this->user, $this->pass, $this->db, $this->port, $this->socket, $this->client_flags)) {
             die(db_down());
         }
+
+        error_reporting($error_reporting);
 
         $version = $this->version = mysqli_get_server_info($this->link);
         $connected = true;
@@ -1413,7 +1419,11 @@ function db_down()
     // 503 status might discourage search engines from indexing or caching the
     // error message.
     txp_status_header('503 Service Unavailable');
-    $error = mysqli_error($DB->link);
+    if (is_object($DB)) {
+        $error = txpspecialchars(mysqli_error($DB->link));
+    } else {
+        $error = '$DB object is not available.';
+    }
 
     return <<<eod
 <!DOCTYPE html>
@@ -1428,4 +1438,49 @@ function db_down()
 </body>
 </html>
 eod;
+}
+
+/**
+ * Replacement for SQL NOW()
+ *
+ * This function can be used when constructing SQL SELECT queries as a
+ * replacement for the NOW() function to allow the SQL server to cache the
+ * queries. Should only be used when comparing with the Posted or Expired
+ * columns from the textpattern (articles) table or the Created column from
+ * the txp_file table.
+ *
+ * @param  string $type   Column name, lower case (one of 'posted', 'expires', 'created')
+ * @param  bool   $update Force update 
+ * @return string SQL query string partial
+ */
+
+function now($type, $update = false) {
+    static $nows = array();
+    static $time = null;
+
+    if (!in_array($type, array('posted', 'expires', 'created'))) {
+        return false;
+    }
+
+    if (isset($nows[$type])) {
+        $now = $nows[$type];
+    } else {
+        if ($time === null) {
+            $time = time();
+        }
+
+        $pref = 'sql_now_'.$type;
+        $now = get_pref($pref, $time - 1);
+
+        if ($time > $now or $update) {
+            $table = ($type === 'created') ? 'txp_file' : 'textpattern';
+            $where = '1=1 having utime > '.$time.' order by utime asc limit 1';
+            $now = safe_field('unix_timestamp('.$type.') as utime', $table, $where);
+            $now = ($now === false) ? 2147483647 : intval($now) - 1; 
+            update_pref($pref, $now);
+            $nows[$type] = $now;
+        }
+    }
+
+    return 'from_unixtime('.$now.')';
 }

@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -441,11 +441,14 @@ function list_list($message = '', $post = '')
                 ).
                 hCell(
                     eLink('article', 'edit', 'ID', $ID, $ID).
-                    sp.span(
-                        span('[', array('aria-hidden' => 'true')).
-                        href(gTxt('view'), $view_url).
-                        span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link articles_detail')
-                    ), '', ' class="txp-list-col-id" scope="row"'
+                    span(
+                        sp.span('&#124;', array('role' => 'separator')).
+                        sp.href(gTxt('view'), $view_url),
+                        array('class' => 'txp-option-link articles_detail')
+                    ), '', array(
+                        'class' => 'txp-list-col-id',
+                        'scope' => 'row',
+                    )
                 ).
                 td(
                     $Title, '', 'txp-list-col-title'
@@ -614,6 +617,8 @@ function list_multi_edit()
                 callback_event('articles_deleted', '', 0, $selected);
                 callback_event('multi_edited.articles', 'delete', 0, compact('selected', 'field', 'value'));
                 update_lastmod('articles_deleted', $selected);
+                now('posted', true);
+                now('expires', true);
 
                 return list_list(messenger('article', join(', ', $selected), 'deleted'));
             }
@@ -721,6 +726,8 @@ function list_multi_edit()
         }
 
         update_lastmod('articles_updated', compact('selected', 'field', 'value'));
+        now('posted', true);
+        now('expires', true);
         callback_event('multi_edited.articles', $edit_method, 0, compact('selected', 'field', 'value'));
 
         return list_list($message);

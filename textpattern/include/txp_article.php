@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -309,6 +309,8 @@ function article_post()
                 if ($Status >= STATUS_LIVE) {
                     do_pings();
                     update_lastmod('article_posted', $rs);
+                    now('posted', true);
+                    now('expires', true);
                 }
 
                 callback_event('article_posted', '', false, $rs);
@@ -503,6 +505,8 @@ function article_save()
                 update_lastmod('article_saved', $rs);
             }
 
+            now('posted', true);
+            now('expires', true);
             callback_event('article_saved', '', false, $rs);
 
             if (empty($msg)) {
@@ -1127,11 +1131,31 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
         echo wrapRegion('txp-dates-group', $posted_block.$expires_block, 'txp-dates-group-content', 'date_settings', 'article_dates');
 
+        // 'Meta' collapsible section.
+
+        // 'URL-only title' field.
+        $html_url_title = $partials['url_title']['html'];
+
+        // 'Description' field.
+        $html_description = $partials['description']['html'];
+
+        // 'Keywords' field.
+        $html_keywords = $partials['keywords']['html'];
+
+        echo wrapRegion('txp-meta-group', $html_url_title.$html_description.$html_keywords, 'txp-meta-group-content', 'meta', 'article_meta');
+
         // 'Comment options' collapsible section.
+        // TODO: 'empty' class is a dirty solution - needs improvement.
         echo wrapRegion('txp-comments-group', $partials['comments']['html'], 'txp-comments-group-content', 'comment_settings', 'article_comments', (($use_comments == 1)
             ? ''
             : 'empty'
         ));
+
+        // 'Article image' collapsible section.
+        echo $partials['image']['html'];
+
+        // 'Custom fields' collapsible section.
+        echo $partials['custom_fields']['html'];
 
         // 'Advanced options' collapsible section.
 
@@ -1173,25 +1197,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             : '';
 
         echo wrapRegion('txp-advanced-group', $html_markup.$html_override, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
-
-        // 'Meta' collapsible section.
-
-        // 'URL-only title' field.
-        $html_url_title = $partials['url_title']['html'];
-
-        // 'Description' field.
-        $html_description = $partials['description']['html'];
-
-        // 'Keywords' field.
-        $html_keywords = $partials['keywords']['html'];
-
-        echo wrapRegion('txp-meta-group', $html_url_title.$html_description.$html_keywords, 'txp-meta-group-content', 'meta', 'article_meta');
-
-        // 'Article image' collapsible section.
-        echo $partials['image']['html'];
-
-        // 'Custom fields' collapsible section.
-        echo $partials['custom_fields']['html'];
 
         // Custom menu entries.
         echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
@@ -1733,7 +1738,7 @@ function article_partial_custom_fields($rs)
         $cf .= article_partial_custom_field($rs, "custom_field_{$k}");
     }
 
-    return wrapRegion('txp-custom-field-group', pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'txp-custom-field-group-content', 'custom', 'article_custom_field', (($cfs) ? '' : 'empty'));
+    return wrapRegion('txp-custom-field-group', pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'txp-custom-field-group-content', 'custom', 'article_custom_field');
 }
 
 /**
@@ -1950,11 +1955,7 @@ function article_partial_section($rs)
     $out = inputLabel(
         'section',
         section_popup($rs['Section'], 'section').
-        sp.span(
-            span('[', array('aria-hidden' => 'true')).
-            eLink('section', 'list', '', '', gTxt('edit')).
-            span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link')
-        ),
+        n.eLink('section', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
         'section',
         array('', 'instructions_section'),
         array('class' => 'txp-form-field section')
@@ -1979,11 +1980,7 @@ function article_partial_categories($rs)
         inputLabel(
             'category-1',
             category_popup('Category1', $rs['Category1'], 'category-1').
-            sp.span(
-                span('[', array('aria-hidden' => 'true')).
-                eLink('category', 'list', '', '', gTxt('edit')).
-                span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link')
-            ),
+            n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
             'category1',
             array('', 'instructions_category1'),
             array('class' => 'txp-form-field category category-1')
@@ -2025,9 +2022,7 @@ function article_partial_comments($rs)
             $AnnotateInvite = $comments_default_invite;
         }
 
-        if ($comments_on_default == 1) {
-            $Annotate = 1;
-        }
+        $Annotate = $comments_on_default;
     }
 
     if ($use_comments == 1) {

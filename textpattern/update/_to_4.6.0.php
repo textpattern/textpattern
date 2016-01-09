@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -125,6 +125,13 @@ safe_delete('txp_prefs', "name = 'ping_textpattern_com'");
 // Add default publishing status pref.
 if (!get_pref('default_publish_status')) {
     set_pref('default_publish_status', STATUS_LIVE, 'publish', PREF_CORE, 'defaultPublishStatus', 15, PREF_PRIVATE);
+}
+
+// Add prefs to allow query caching when now() is used.
+if (!get_pref('sql_now_posted')) {
+    set_pref('sql_now_posted', time(), 'publish', PREF_HIDDEN);
+    set_pref('sql_now_expires', time(), 'publish', PREF_HIDDEN);
+    set_pref('sql_now_created', time(), 'publish', PREF_HIDDEN);
 }
 
 // Remove broken import functionality

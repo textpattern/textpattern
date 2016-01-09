@@ -38,7 +38,8 @@ template {
 a,
 input,
 button {
-  touch-action: none;
+  -ms-touch-action: none;
+      touch-action: none;
 }
 
 /**
@@ -56,9 +57,9 @@ summary {
  * More info: http://nicolasgallagher.com/micro-clearfix-hack/
  */
 .clearfix:after, .progress-meter ol:after, .txp-navigation:after {
-  content: "";
   display: table;
   clear: both;
+  content: "";
 }
 
 /**
@@ -98,7 +99,7 @@ summary {
 
 .txp-layout-2col-cell-1,
 .txp-layout-4col-cell-1-2 {
-  width: 49.0196078%;
+  width: 49.0196078431%;
   float: left;
   margin-right: -100%;
   margin-left: 0;
@@ -108,7 +109,7 @@ summary {
 
 .txp-layout-2col-cell-2,
 .txp-layout-4col-cell-3-4 {
-  width: 49.0196078%;
+  width: 49.0196078431%;
   float: right;
   margin-left: 0;
   margin-right: 0;
@@ -117,7 +118,7 @@ summary {
 
 .txp-layout-4col-cell-1,
 .txp-layout-4col-cell-1alt {
-  width: 23.5294118%;
+  width: 23.5294117647%;
   float: left;
   margin-right: -100%;
   margin-left: 0;
@@ -126,24 +127,24 @@ summary {
 }
 
 .txp-layout-4col-cell-2 {
-  width: 23.5294118%;
+  width: 23.5294117647%;
   float: left;
   margin-right: -100%;
-  margin-left: 25.4901961%;
+  margin-left: 25.4901960784%;
   clear: none;
 }
 
 .txp-layout-4col-cell-3 {
-  width: 23.5294118%;
+  width: 23.5294117647%;
   float: left;
   margin-right: -100%;
-  margin-left: 50.9803922%;
+  margin-left: 50.9803921569%;
   clear: none;
 }
 
 .txp-layout-4col-cell-4,
 .txp-layout-4col-cell-4alt {
-  width: 23.5294118%;
+  width: 23.5294117647%;
   float: right;
   margin-left: 0;
   margin-right: 0;
@@ -151,15 +152,15 @@ summary {
 }
 
 .txp-layout-4col-cell-2-3 {
-  width: 49.0196078%;
+  width: 49.0196078431%;
   float: left;
   margin-right: -100%;
-  margin-left: 25.4901961%;
+  margin-left: 25.4901960784%;
   clear: none;
 }
 
 .txp-layout-4col-cell-1-2-3 {
-  width: 74.5098039%;
+  width: 74.5098039216%;
   float: left;
   margin-right: -100%;
   margin-left: 0;
@@ -168,7 +169,7 @@ summary {
 }
 
 .txp-layout-4col-cell-2-3-4 {
-  width: 74.5098039%;
+  width: 74.5098039216%;
   float: right;
   margin-left: 0;
   margin-right: 0;
@@ -184,23 +185,21 @@ summary {
 @media (max-width: 60em) {
   .txp-layout-4col-cell-1,
   .txp-layout-4col-cell-3 {
-    width: 49.0196078%;
+    width: 49.0196078431%;
     float: left;
     margin-right: -100%;
     margin-left: 0;
     clear: none;
     clear: both;
   }
-
   .txp-layout-4col-cell-2,
   .txp-layout-4col-cell-4 {
-    width: 49.0196078%;
+    width: 49.0196078431%;
     float: right;
     margin-left: 0;
     margin-right: 0;
     clear: none;
   }
-
   .txp-layout-4col-cell-1-2,
   .txp-layout-4col-cell-2-3,
   .txp-layout-4col-cell-3-4,
@@ -216,6 +215,7 @@ summary {
     clear: both;
   }
 }
+
 /**
  * Grid column cell changes at 2nd breakpoint downwards.
  *
@@ -237,6 +237,7 @@ summary {
     clear: both;
   }
 }
+
 /**
  * Text columns (fixed proportion cell)
  *
@@ -245,9 +246,9 @@ summary {
  * <div class="txp-layout-textbox">
  */
 .txp-layout-textbox {
-  clear: both;
-  margin: 0 auto;
   max-width: 57em;
+  margin: 0 auto;
+  clear: both;
 }
 
 /* Inline grids
@@ -275,19 +276,19 @@ summary {
  * </div>
  */
 .txp-grid {
-  text-align: center;
   margin-bottom: 0.6923077em;
+  text-align: center;
 }
 
 .txp-grid-cell {
-  box-sizing: border-box;
   display: inline-block;
-  margin: 0 0.1538462em 0.3076923em;
-  border: 1px solid #cccccc;
-  padding: 0 1em;
   max-width: 22.6153846em;
+  margin: 0 0.1538462em 0.3076923em;
+  padding: 0 1em;
+  border: 1px solid #cccccc;
   text-align: left;
   vertical-align: top;
+  box-sizing: border-box;
 }
 
 /**
@@ -300,35 +301,38 @@ summary {
 /* Links
    ========================================================================== */
 /**
- * 1. Remove default underline style from non-hover state links.
- * 2. Interrupt the decoration line to let the shape of the text show through
+ * 1. Remove potential background colour from active links.
+ * 2. Specify link colour.
+ * 3. Remove default underline style from non-hover state links.
+ * 4. Interrupt the decoration line to let the shape of the text show through
  *    in supported browsers.
- * 3. Specify link colour.
- * 4. Remove the grey background colour from active links in IE 10.
  * 5. Expanded CSS level 3 `text-decoration` property in supported browsers,
  *    older browsers will fallback to legacy `text-decoration` property.
  * 6. Hide `.busy` class links when processing AJAX.
  */
 a {
   /* 1 */
-  text-decoration: none;
-  /* 2 */
-  text-decoration-skip: ink edges;
-  /* 3 */
-  color: #004cbf;
-  /* 4 */
   background: transparent;
+  /* 2 */
+  color: #004cbf;
+  /* 3 */
+  text-decoration: none;
+  /* 4 */
+  text-decoration-skip: ink edges;
 }
+
 a:hover, a:active {
   outline: 0;
+  color: #0066ff;
   text-decoration: underline;
   text-decoration: #004cbf solid underline;
   /* 5 */
-  color: #0066ff;
 }
+
 a:focus {
-  outline: thin dotted #0066ff;
+  outline: thin solid #0066ff;
 }
+
 a.busy {
   visibility: hidden;
   /* 6 */
@@ -343,10 +347,16 @@ a.busy {
  */
 .pophelp,
 .pophelpsubtle {
+  padding: 0 0.4em;
   border: 1px solid #e0e0e0;
   border-radius: 50%;
-  padding: 0 0.4em;
   font-weight: normal;
+}
+
+.pophelp:focus,
+.pophelpsubtle:focus {
+  border-color: #0066ff;
+  outline: 0;
 }
 
 /**
@@ -355,13 +365,18 @@ a.busy {
 .txp-list thead th a.pophelp {
   display: inline;
   margin: 0;
-  border-color: #cccccc;
   padding: 0 0.4em;
+  border-color: #cccccc;
   color: #004cbf;
 }
+
 .txp-list thead th a.pophelp:hover {
   color: #0066ff;
   text-decoration: underline;
+}
+
+.txp-list thead th a.pophelp:focus {
+  border-color: #0066ff;
 }
 
 /**
@@ -373,9 +388,12 @@ a.busy {
 
 /* Typography
    ========================================================================== */
+/**
+ * Establish baseline.
+ */
 html {
-  font-size: 81.25%;
-  line-height: 1.5384615em;
+  font-size: 13px;
+  line-height: 20px;
 }
 
 /**
@@ -397,12 +415,13 @@ body {
  * </h1>
  */
 h1 {
+  margin: 0.26923076923077em 0 0.5em;
   font-size: 26px;
   line-height: 1.23076923076923;
-  margin: 0.26923076923077em 0 0.5em;
 }
+
 h1 .pophelp {
-  font-size: 0.5em;
+  font-size: 13px;
 }
 
 /**
@@ -417,31 +436,32 @@ h1 .pophelp {
  * </h2>
  */
 h2 {
+  margin: 0.5em 0 0.72222222222222em;
   font-size: 18px;
   line-height: 1.33333333333333;
-  margin: 0.5em 0 0.72222222222222em;
 }
+
 h2 .pophelp {
-  font-size: 0.72222222222222em;
+  font-size: 13px;
 }
 
 /**
  * `h3` headings.
  */
 h3 {
+  margin: 0.86666666666667em 0;
   font-size: 15px;
   line-height: 1.4;
-  margin: 0.86666666666667em 0;
 }
 
 /**
- * Normalise `h4`, `h5` and `h6` headings (these are effectively unused).
+ * Normalize `h4`, `h5` and `h6` headings (these are effectively unused).
  */
 h4,
 h5,
 h6 {
-  font-size: 1em;
   margin: 1em 0;
+  font-size: 13px;
 }
 
 /**
@@ -464,8 +484,8 @@ address {
  */
 blockquote {
   margin: 1em 0;
-  border-left: 3px solid #cccccc;
   padding: 0 0 0 1em;
+  border-left: 3px solid #cccccc;
 }
 
 /**
@@ -480,7 +500,6 @@ dfn {
  */
 abbr[title],
 dfn[title] {
-  -webkit-text-decoration: dotted underline;
   text-decoration: dotted underline;
   cursor: help;
 }
@@ -490,14 +509,14 @@ dfn[title] {
  */
 mark,
 var {
-  border-radius: 0.23076923076923em;
   padding: 1px 0.23076923076923em;
-  color: #333333;
+  border-radius: 0.23076923076923em;
   background: #e6f0ff;
+  color: #333333;
 }
 
 /**
- * Harmonise size and style of computer text.
+ * Harmonize size and style of computer text.
  */
 pre,
 code,
@@ -510,9 +529,9 @@ samp,
 code,
 kbd,
 samp {
+  padding: 1px 0.23076923076923em;
   border: 1px solid #e3e3e3;
   border-radius: 0.23076923076923em;
-  padding: 1px 0.23076923076923em;
   background: #f7f7f7;
 }
 
@@ -524,25 +543,26 @@ samp {
  * 3. Set tab size to 4 spaces.
  */
 pre {
+  margin: 1em 0;
+  padding: 0.53846153846154em 1em;
+  border: 1px solid #e3e3e3;
+  border-radius: 0.23076923076923em;
+  background: #f7f7f7;
   /* 1 */
   word-wrap: normal;
   /* 2 */
   overflow-x: auto;
-  margin: 1em 0;
-  border: 1px solid #e3e3e3;
-  border-radius: 0.23076923076923em;
-  padding: 0.53846153846154em 1em;
-  background: #f7f7f7;
   /* 3 */
-  tab-size: 4;
+  -moz-tab-size: 4;
+       tab-size: 4;
 }
 
 /**
  * Don't wrap lines of `textarea` code onto new lines.
  */
 textarea.code {
-  word-wrap: normal;
   white-space: pre;
+  word-wrap: normal;
 }
 
 /**
@@ -553,9 +573,9 @@ pre code,
 .code code,
 code.body,
 code.excerpt {
+  padding: 0;
   border: 0;
   border-radius: 0;
-  padding: 0;
   background: none;
 }
 
@@ -565,9 +585,9 @@ code.excerpt {
 sub,
 sup.footnote,
 sup {
-  font-size: 0.6923077em;
-  line-height: 0em;
   position: relative;
+  font-size: 0.69230769230769em;
+  line-height: 0;
   vertical-align: baseline;
 }
 
@@ -580,7 +600,7 @@ sub {
 }
 
 /**
- * Harmonise size and style of small text.
+ * Harmonize size and style of small text.
  */
 small,
 figcaption,
@@ -588,8 +608,8 @@ tfoot,
 .footnote,
 .txp-form-field-instructions,
 .txp-footer {
-  font-size: 0.8461538em;
-  line-height: 1.4545455em;
+  font-size: 11px;
+  line-height: 16px;
 }
 
 figcaption,
@@ -648,8 +668,8 @@ video {
 /**
  * Images.
  *
- * 1. Remove the gap between images and the bottom of their containers.
- * 2. Remove border when inside `a` element in IE 10.
+ * 1. Remove potential border when inside `a` element.
+ * 2. Remove the gap between images and the bottom of their containers.
  *
  * Image alignment (compatible with Textile markup syntax).
  *
@@ -661,18 +681,21 @@ video {
  */
 img {
   /* 1 */
-  vertical-align: middle;
-  /* 2 */
   border: 0;
+  /* 2 */
+  vertical-align: middle;
 }
+
 img.align-left {
-  float: left;
   margin: 1em 1em 1em 0;
+  float: left;
 }
+
 img.align-right {
-  float: right;
   margin: 1em 0 1em 1em;
+  float: right;
 }
+
 img.align-center {
   display: block;
   margin: 1em auto;
@@ -682,12 +705,13 @@ img.align-center {
  * Swap image alignment right/left positions in RTL languages.
  */
 [dir="rtl"] img.align-left {
-  float: right;
   margin: 1em 0 1em 1em;
+  float: right;
 }
+
 [dir="rtl"] img.align-right {
-  float: left;
   margin: 1em 1em 1em 0;
+  float: left;
 }
 
 /**
@@ -698,7 +722,7 @@ figure {
 }
 
 /**
- * Correct overflow not hidden in IE 10/11.
+ * Correct overflow not hidden in IE 11.
  */
 svg:not(:root) {
   overflow: hidden;
@@ -709,7 +733,6 @@ svg:not(:root) {
  *
  * Example HTML:
  *
- * <img class="content-image">
  * <a>
  *     <img class="content-image">
  * </a>
@@ -719,12 +742,13 @@ svg:not(:root) {
   background: #ffffff;
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
+
 a:hover .content-image {
   border-color: #0066ff;
 }
+
 a:focus .content-image {
   border-color: #0066ff;
-  box-shadow: 0 0 7px #80b3ff;
 }
 
 /* Messages
@@ -743,28 +767,28 @@ a:focus .content-image {
 .warning,
 .error,
 .information {
-  border-radius: 0.23076923076923em;
   padding: 1px 0.23076923076923em;
+  border-radius: 0.23076923076923em;
 }
 
 .success {
-  color: #238c23;
   background: #dff0d8;
+  color: #238c23;
 }
 
 .warning {
-  color: #cc8c00;
   background: #f7eedb;
+  color: #cc8c00;
 }
 
 .error {
-  color: #9d261d;
   background: #f2dede;
+  color: #9d261d;
 }
 
 .information {
-  color: #3a87ad;
   background: #e7f6fc;
+  color: #3a87ad;
 }
 
 /**
@@ -792,19 +816,23 @@ a:focus .content-image {
  * <p class="alert-block error">
  */
 .alert-block {
+  padding: 0.53846153846154em 1em;
   clear: both;
   border: 1px solid;
-  padding: 0.53846153846154em 1em;
 }
+
 .alert-block.success {
   border-color: #a3d48e;
 }
+
 .alert-block.warning {
   border-color: #e4c788;
 }
+
 .alert-block.error {
   border-color: #e1b2b2;
 }
+
 .alert-block.information {
   border-color: #b1e2f5;
 }
@@ -823,24 +851,28 @@ a:focus .content-image {
 #messagepane {
   position: fixed;
   bottom: 0;
-  z-index: 1000;
   text-align: center;
+  z-index: 1000;
 }
+
 #messagepane span.success, #messagepane span.warning, #messagepane span.error {
   display: inline-block;
+  max-width: 53.1538461538em;
   margin: 0 auto;
-  border-radius: 0.5em 0.5em 0 0;
   padding: 0.53846153846154em 2.84615384615385em 0.53846153846154em 1em;
-  max-width: 53.1538462em;
+  border-radius: 0.5em 0.5em 0 0;
   color: #ffffff;
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
+
 #messagepane span.success {
   background: #238c23;
 }
+
 #messagepane span.warning {
   background: #cc8c00;
 }
+
 #messagepane span.error {
   background: #9d261d;
 }
@@ -856,14 +888,15 @@ a:focus .content-image {
   position: absolute;
   top: 0.27777777777778em;
   right: 0.72222222222222em;
-  text-decoration: none;
   color: rgba(255, 255, 255, 0.6);
   font-size: 18px;
   font-weight: bold;
-}
-.close:hover {
   text-decoration: none;
+}
+
+.close:hover {
   color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
   cursor: pointer;
 }
 
@@ -874,7 +907,8 @@ a:focus .content-image {
   0% {
     opacity: 0;
   }
-  50%, 100% {
+  50%,
+  100% {
     opacity: 1;
   }
   75% {
@@ -885,16 +919,18 @@ a:focus .content-image {
   0% {
     opacity: 0;
   }
-  50%, 100% {
+  50%,
+  100% {
     opacity: 1;
   }
   75% {
     opacity: 0.5;
   }
 }
+
 .messageflash {
   -webkit-animation: messageflash 1s;
-  animation: messageflash 1s;
+          animation: messageflash 1s;
 }
 
 /* Twisties
@@ -935,15 +971,15 @@ h3.txp-summary,
   background-color: #dddddd;
   background-image: linear-gradient(#eeeeee, #dddddd);
   position: relative;
-  font-size: 1em;
-  font-weight: bold;
-  line-height: 2em;
+  height: 2em;
   margin: 0;
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #cccccc;
-  height: 2em;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 2em;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 /**
@@ -963,29 +999,32 @@ h3.txp-summary a {
   padding: 0 2em 0 1em;
   color: #333333;
 }
+
 h3.txp-summary a:hover {
   color: #333333;
   text-decoration: none;
 }
+
 h3.txp-summary a:after {
   text-indent: 110%;
+  text-transform: capitalize;
   white-space: nowrap;
   overflow: hidden;
-  text-transform: capitalize;
   display: block;
+  position: absolute;
+  top: 0.5625em;
+  right: 0.625em;
   width: 0;
   height: 0;
   border: 0 solid transparent;
-  border-left-color: #333333;
   border-width: 0.25em 0 0.25em 0.25em;
+  border-left-color: #333333;
   font-size: 16px;
-  position: absolute;
   content: "\2193";
-  top: 0.5625em;
-  right: 0.625em;
-  z-index: 10;
   opacity: 0.5;
+  z-index: 10;
 }
+
 h3.txp-summary a:hover:after {
   opacity: 1;
 }
@@ -994,15 +1033,12 @@ h3.txp-summary a:hover:after {
  * Additonal styling for lever summary headings - expanded state.
  */
 h3.txp-summary.expanded a:after {
-  display: block;
-  width: 0;
-  height: 0;
-  border: 0 solid transparent;
-  border-top-color: #333333;
-  border-width: 0.25em 0.25em 0 0.25em;
-  content: "\2191";
   top: 0.6875em;
   right: 0.5625em;
+  border: 0 solid transparent;
+  border-width: 0.25em 0.25em 0;
+  border-top-color: #333333;
+  content: "\2191";
 }
 
 /**
@@ -1018,7 +1054,7 @@ h3.txp-summary.expanded a:after {
 /**
  * Progress meter lists.
  *
- * Utilises CSS counters to increment the progress steps, more info -
+ * Utilizes CSS counters to increment the progress steps, more info -
  * https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Lists_and_Counters/Using_CSS_counters
  *
  * Example HTML:
@@ -1038,60 +1074,65 @@ h3.txp-summary.expanded a:after {
   text-align: center;
   counter-reset: step;
 }
+
 .progress-meter li {
   background-color: #dddddd;
   background-image: linear-gradient(#eeeeee, #dddddd);
-  position: relative;
   display: inline-block;
+  position: relative;
   margin: 0 1em 1em 0;
+  padding: 1em 1em 1em 4em;
   border-top: 1px solid #dddddd;
   border-right: 1px solid #e3e3e3;
   border-bottom: 1px solid #cccccc;
   border-left: 1px solid #e3e3e3;
-  padding: 1em 1em 1em 4em;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
+
 .progress-meter li.active {
   background-color: #f7c600;
   background-image: linear-gradient(#ffda44, #f7c600);
   border: 1px solid #f7c600;
   border-bottom-color: #d8ad00;
 }
+
 .progress-meter li:before {
   position: absolute;
   top: 0.4375em;
   left: 0.6875em;
-  z-index: 2;
+  width: 1.375em;
+  padding: 0.25em;
   border: 1px solid #ffffff;
   border-radius: 50%;
-  padding: 0.25em;
-  width: 1.375em;
   background: #cccccc;
-  font-size: 1.23076em;
+  font-size: 16px;
   font-weight: bold;
   text-align: center;
-  counter-increment: step;
   content: counter(step);
+  z-index: 2;
+  counter-increment: step;
 }
+
 .progress-meter li:after {
   text-indent: 110%;
+  text-transform: capitalize;
   white-space: nowrap;
   overflow: hidden;
-  text-transform: capitalize;
   display: block;
-  width: 0;
-  height: 0;
-  border: 0 solid transparent;
-  border-left-color: #cccccc;
-  border-width: 1.5em 0 1.5em 0.75em;
   position: absolute;
   top: -1px;
   left: 100%;
-  z-index: 2;
+  width: 0;
+  height: 0;
+  border: 0 solid transparent;
+  border-width: 1.5em 0 1.5em 0.75em;
+  border-left-color: #cccccc;
   font-size: 16px;
   content: "\2192";
+  z-index: 2;
 }
+
 .progress-meter strong {
   font-weight: normal;
 }
@@ -1102,24 +1143,24 @@ h3.txp-summary.expanded a:after {
 [dir="rtl"] .progress-meter ol {
   padding: 0;
 }
+
 [dir="rtl"] .progress-meter li {
   margin: 0 0 1em 1em;
   padding: 1em 4em 1em 1em;
 }
+
 [dir="rtl"] .progress-meter li:before {
   right: 0.6875em;
   left: auto;
 }
+
 [dir="rtl"] .progress-meter li:after {
-  display: block;
-  width: 0;
-  height: 0;
-  border: 0 solid transparent;
-  border-right-color: #cccccc;
-  border-width: 1.5em 0.75em 1.5em 0;
-  content: "\2190";
   right: 100%;
   left: auto;
+  border: 0 solid transparent;
+  border-width: 1.5em 0.75em 1.5em 0;
+  border-right-color: #cccccc;
+  content: "\2190";
 }
 
 /* Password strength meter (via zxcvbn.js)
@@ -1142,28 +1183,31 @@ h3.txp-summary.expanded a:after {
  * </div>
  */
 .strength-meter {
-  box-sizing: border-box;
   position: relative;
   width: 100%;
   max-width: 28em;
   height: 1.38461538461538em;
   background-color: #a3a3a3;
+  box-sizing: border-box;
 }
+
 .strength-meter:empty {
   background-color: transparent;
 }
+
 .strength-meter .bar {
   position: absolute;
-  z-index: 2;
   left: 0;
   height: 1.38461538461538em;
+  z-index: 2;
 }
+
 .strength-meter .indicator {
   position: absolute;
-  z-index: 3;
   padding: 0.15384615384615em 0.38461538461538em;
-  line-height: 1;
   color: #ffffff;
+  line-height: 1;
+  z-index: 3;
 }
 
 /**
@@ -1192,33 +1236,30 @@ h3.txp-summary.expanded a:after {
 /* Forms
    ========================================================================== */
 /**
- * 1. Define consistent fieldset border, margin, and padding.
- * 2. Address width being affected by wide descendants in Chrome, Firefox.
+ * 1. Address width being affected by wide descendants in Chrome, Firefox.
+ * 2. Define consistent fieldset border, margin, and padding.
  */
 fieldset {
   /* 1 */
-  margin: 1em 0;
-  border: 1px solid #cccccc;
-  padding: 1px 1em;
-  /* 2 */
   min-width: 0;
+  /* 2 */
+  margin: 1em 0;
+  padding: 1px 1em;
+  border: 1px solid #cccccc;
 }
 
 /**
- * 1. Correct `color` not being inherited in IE 10/11.
- * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+ * Normalize styling of `legend`.
  */
 legend {
-  /* 1 */
-  border: 0;
-  /* 2 */
   padding: 0;
+  border: 0;
 }
 
 /**
- * 1. Correct font properties not being inherited.
+ * 1. Prevent elements from spilling out of their parent.
  * 2. Address margins set differently in Firefox 4+, Safari, and Chrome.
- * 3. Prevent elements from spilling out of their parent.
+ * 3. Correct font properties not being inherited.
  */
 button,
 input,
@@ -1230,33 +1271,17 @@ textarea,
 .navlink,
 .navlink-active,
 .navlink-disabled {
-  box-sizing: border-box;
   /* 1 */
-  font-size: 100%;
-  font-size: 1em;
-  line-height: 1.3846154em;
+  max-width: 100%;
   /* 2 */
   margin: 0;
-  /* 3 */
-  max-width: 100%;
+  color: #000000;
   font-family: Helvetica, Arial, sans-serif;
+  /* 3 */
+  font-size: 13px;
+  line-height: 1.38461538461538em;
   vertical-align: baseline;
-}
-
-/**
- * Colour for placeholder text.
- */
-input::-moz-placeholder,
-textarea::-moz-placeholder {
-  color: #999999;
-}
-input:-ms-input-placeholder,
-textarea:-ms-input-placeholder {
-  color: #999999;
-}
-input::-webkit-input-placeholder,
-textarea::-webkit-input-placeholder {
-  color: #999999;
+  box-sizing: border-box;
 }
 
 /**
@@ -1264,8 +1289,8 @@ textarea::-webkit-input-placeholder {
  */
 button::-moz-focus-inner,
 input::-moz-focus-inner {
-  border: 0;
   padding: 0;
+  border: 0;
 }
 
 /**
@@ -1280,7 +1305,7 @@ input[type="search"]::-webkit-search-decoration {
 /**
  * Styling of form input fields.
  *
- * 1. Remove iOS Safari default styling.
+ * 1. Remove browser-specific default styling.
  */
 input[type="color"],
 input[type="date"],
@@ -1298,15 +1323,17 @@ input[type="url"],
 input[type="week"],
 select,
 textarea {
-  transition: box-shadow 0.1s linear;
-  /* 1 */
-  -webkit-appearance: none;
+  height: 2.15384615384615em;
+  padding: 0.30769230769231em;
   border: 1px solid #cccccc;
   border-radius: 0;
-  padding: 0.30769230769231em;
-  height: 2.15384615384615em;
   background: #ffffff;
+  /* 1 */
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
+
 input[type="color"]:focus,
 input[type="date"]:focus,
 input[type="datetime"]:focus,
@@ -1324,7 +1351,6 @@ input[type="week"]:focus,
 select:focus,
 textarea:focus {
   border-color: #0066ff;
-  box-shadow: 0 0 7px #80b3ff;
   outline: 0;
 }
 
@@ -1346,7 +1372,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 /**
- * 1. Remove excess padding in IE 10.
+ * 1. Remove any excess padding.
  * 2. Correct margins for inline checkbox/radio labels.
  */
 input[type="checkbox"],
@@ -1354,11 +1380,13 @@ input[type="radio"] {
   /* 1 */
   padding: 0;
 }
+
 input[type="checkbox"] + label,
 input[type="radio"] + label {
   /* 2 */
   margin: 0 0.5em 0 0;
 }
+
 input[type="checkbox"] + label:last-of-type,
 input[type="radio"] + label:last-of-type {
   /* 2 */
@@ -1372,6 +1400,7 @@ input[type="radio"] + label:last-of-type {
 [dir="rtl"] input[type="radio"] + label {
   margin: 0 0 0 0.5em;
 }
+
 [dir="rtl"] input[type="checkbox"] + label:last-of-type,
 [dir="rtl"] input[type="radio"] + label:last-of-type {
   margin: 0;
@@ -1402,19 +1431,18 @@ select[size="1"] {
 
 @media (-webkit-min-device-pixel-ratio: 0) {
   /**
-   * Address `select` alignment in Safari, Chrome, Opera.
-   */
+     * Address `select` alignment in Safari, Chrome, Opera.
+     */
   select[size],
   select[multiple],
   select[multiple][size] {
     padding-right: 0.30769230769231em;
     background-image: none;
   }
-
   /**
-   * Use indicator icon to signify the downdown ability of `select` in Safari,
-   * Chrome, Opera.
-   */
+     * Use indicator icon to signify the downdown ability of `select` in Safari,
+     * Chrome, Opera.
+     */
   select,
   select[size="0"],
   select[size="1"] {
@@ -1423,19 +1451,20 @@ select[size="1"] {
     background-size: 1em 0.30769230769231em;
   }
 }
+
 /**
- * Normalise styling of `optgroup`.
+ * Normalize styling of `optgroup`.
  */
 optgroup {
+  color: #333333;
   font-style: normal;
   font-weight: bold;
-  color: #333333;
 }
 
 /**
- * 1. Remove default vertical scrollbar in IE 10/11.
- * 2. Restrict to vertical resizing to prevent layout breakage.
- * 3. Remove unwanted space below `textarea` in Safari, Chrome, Opera.
+ * 1. Remove default vertical scrollbar in IE 11.
+ * 2. Remove unwanted space below `textarea` in Safari, Chrome, Opera.
+ * 3. Restrict to vertical resizing to prevent layout breakage.
  */
 textarea {
   width: 100%;
@@ -1444,16 +1473,16 @@ textarea {
   /* 1 */
   overflow: auto;
   /* 2 */
-  resize: vertical;
-  /* 3 */
   vertical-align: top;
+  /* 3 */
+  resize: vertical;
 }
 
 /**
  * Make sure disabled elements really are disabled and styled appropriately.
  *
- * 1. Override default iOS opacity setting.
- * 2. Re-set default cursor for disabled elements.
+ * 1. Re-set default cursor for disabled elements.
+ * 2. Override default iOS opacity setting.
  */
 button[disabled],
 button[disabled],
@@ -1466,15 +1495,15 @@ select[disabled] option,
 select[disabled] optgroup,
 textarea[disabled],
 .navlink-disabled {
-  border-color: #dddddd !important;
-  color: #aaaaaa !important;
+  border-color: #d4d4d4 !important;
   background: #eeeeee !important;
-  box-shadow: none !important;
+  color: #aaaaaa !important;
   text-shadow: none !important;
+  box-shadow: none !important;
   /* 1 */
-  opacity: 1;
-  /* 2 */
   cursor: default !important;
+  /* 2 */
+  opacity: 1;
 }
 
 /**
@@ -1546,31 +1575,32 @@ input.input-xsmall {
  * </div>
  */
 input.input-year {
-  text-align: center;
   width: 4.07692307692308em;
-}
-input.input-month, input.input-day, input.input-hour, input.input-minute, input.input-second {
   text-align: center;
+}
+
+input.input-month, input.input-day, input.input-hour, input.input-minute, input.input-second {
   width: 2.46153846153846em;
+  text-align: center;
 }
 
 /* Buttons
    ========================================================================== */
 /**
- * 1. Address `overflow` set to `hidden` in IE 10/11.
- * 2. Correct `button` style inheritance in Firefox, IE 10/11, and Opera.
+ * 1. Correct `button` style inheritance in Firefox, IE 11, and Opera.
+ * 2. Address `overflow` set to `hidden` in IE 11.
  */
 button {
   /* 1 */
-  overflow: visible;
-  /* 2 */
   text-transform: none;
+  /* 2 */
+  overflow: visible;
 }
 
 /**
- * 1. Remove iOS Safari default styling.
- * 2. Improve usability and consistency of cursor style between image-type
+ * 1. Improve usability and consistency of cursor style between image-type
  *    `input` and others.
+ * 2. Remove iOS Safari default styling.
  */
 button,
 input[type="reset"],
@@ -1582,24 +1612,26 @@ input[type="button"],
 .navlink-active {
   background-color: #dddddd;
   background-image: linear-gradient(#eeeeee, #dddddd);
-  transition: box-shadow 0.1s linear;
-  /* 1 */
-  -webkit-appearance: none;
-  background-clip: padding-box;
   display: inline-block;
-  border: solid 1px #cccccc;
-  border-radius: 0.5em;
-  padding: 0.30769230769231em 0.61538461538462em;
   width: auto;
   height: 2.15384615384615em;
+  padding: 0.30769230769231em 0.61538461538462em;
+  border: solid 1px #cccccc;
+  border-radius: 0.5em;
+  background-clip: padding-box;
+  color: #333333;
   font-weight: normal;
   text-align: center;
-  color: #333333;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  /* 2 */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  /* 1 */
   cursor: pointer;
+  /* 2 */
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
+
 button:hover,
 input[type="reset"]:hover,
 input[type="submit"]:hover,
@@ -1614,6 +1646,7 @@ input[type="button"]:hover,
   color: #333333;
   text-decoration: none;
 }
+
 button:active,
 input[type="reset"]:active,
 input[type="submit"]:active,
@@ -1626,9 +1659,10 @@ input[type="button"]:active,
   background-image: linear-gradient(#e6e6e6, #d6d6d6);
   border-color: #aaaaaa;
   color: #1a1a1a;
-  box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   text-decoration: none;
+  box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
 }
+
 button:focus,
 input[type="reset"]:focus,
 input[type="submit"]:focus,
@@ -1638,7 +1672,6 @@ input[type="button"]:focus,
 .navlink:focus,
 .navlink-active:focus {
   border-color: #0066ff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
   outline: 0;
 }
 
@@ -1654,11 +1687,12 @@ button.publish,
 a.publish {
   background-color: #ffd21b;
   background-image: linear-gradient(#ffe168, #ffd21b);
-  font-weight: bold;
-  border: 1px solid #f7c600;
-  padding: 0.61538461538462em 1em;
   height: 2.76923076923077em;
+  padding: 0.61538461538462em 1em;
+  border: 1px solid #f7c600;
+  font-weight: bold;
 }
+
 input[type="submit"].publish:hover,
 button.publish:hover,
 a.publish:hover {
@@ -1666,6 +1700,7 @@ a.publish:hover {
   background-image: linear-gradient(#ffe88b, #ffd93f);
   border: 1px solid #c49d00;
 }
+
 input[type="submit"].publish:active,
 button.publish:active,
 a.publish:active {
@@ -1673,6 +1708,7 @@ a.publish:active {
   background-image: linear-gradient(#ffdc4e, #ffcd02);
   border: 1px solid #c49d00;
 }
+
 input[type="submit"].publish:focus,
 button.publish:focus,
 a.publish:focus {
@@ -1689,16 +1725,17 @@ a.publish:focus {
  * </button>
  */
 button.destroy {
+  height: auto;
+  padding: 0.07692307692308em 0 0;
   border: 0;
   border-radius: 0;
-  padding: 0.07692307692308em 0 0;
-  height: auto;
   background: none;
-  box-shadow: none;
   text-shadow: none;
+  box-shadow: none;
 }
+
 button.destroy:focus {
-  outline: thin dotted #0066ff;
+  outline: thin solid #0066ff;
 }
 
 /**
@@ -1712,13 +1749,13 @@ button.destroy:focus {
  * </p>
  */
 .navlink-disabled {
-  box-sizing: border-box;
-  background-clip: padding-box;
   display: inline-block;
+  height: 2.15384615384615em;
+  padding: 0.30769230769231em 0.61538461538462em;
   border: 1px solid;
   border-radius: 0.5em;
-  padding: 0.30769230769231em 0.61538461538462em;
-  height: 2.15384615384615em;
+  background-clip: padding-box;
+  box-sizing: border-box;
 }
 
 /**
@@ -1735,9 +1772,10 @@ button.destroy:focus {
  * </p>
  */
 ul.nav-tertiary {
-  list-style: none;
   padding: 0;
+  list-style: none;
 }
+
 ul.nav-tertiary li {
   display: inline;
 }
@@ -1750,11 +1788,13 @@ ul.nav-tertiary li {
 .nav-tertiary .navlink-disabled {
   border-radius: 0;
 }
+
 .nav-tertiary > :first-child,
 .nav-tertiary > :first-child > a,
 .nav-tertiary > :first-child > span {
   border-radius: 0.5em 0 0 0.5em;
 }
+
 .nav-tertiary > :last-child,
 .nav-tertiary > :last-child > a,
 .nav-tertiary > :last-child > span {
@@ -1766,6 +1806,7 @@ ul.nav-tertiary li {
 [dir="rtl"] .nav-tertiary > :first-child > span {
   border-radius: 0 0.5em 0.5em 0;
 }
+
 [dir="rtl"] .nav-tertiary > :last-child,
 [dir="rtl"] .nav-tertiary > :last-child > a,
 [dir="rtl"] .nav-tertiary > :last-child > span {
@@ -1786,16 +1827,19 @@ ul.nav-tertiary li {
   background-image: linear-gradient(#e3edfc, #c7dbfa);
   border-color: #a3bef3;
 }
+
 .nav-tertiary .navlink-active:hover {
   background-color: #ccdefa;
   background-image: linear-gradient(#f1f6fe, #ccdefa);
   border-color: #6b8fe8;
 }
+
 .nav-tertiary .navlink-active:active {
   background-color: #b0cbf7;
   background-image: linear-gradient(#c7dbfa, #b0cbf7);
   border-color: #6b8fe8;
 }
+
 .nav-tertiary .navlink-active:focus {
   border-color: #0066ff;
 }
@@ -1815,9 +1859,9 @@ ul.nav-tertiary li {
  */
 .txp-search button.txp-search-button {
   margin-left: -0.35em;
-  border-radius: 0;
-  padding-left: 1.5em;
   padding-right: 1.5em;
+  padding-left: 1.5em;
+  border-radius: 0;
 }
 
 /* Lists
@@ -1863,7 +1907,7 @@ dd {
 }
 
 /**
- * Italicise definition terms.
+ * Italicize definition terms.
  */
 dt {
   font-style: italic;
@@ -1903,23 +1947,28 @@ dt {
  * </ul>
  */
 .switcher-list {
-  list-style: none;
   margin: 0 -1em;
   padding-left: 0;
+  list-style: none;
 }
+
 .switcher-list li {
   position: relative;
   border-top: 1px solid #dddddd;
 }
+
 .switcher-list li:nth-child(odd) {
   background: #ffffff;
 }
+
 .switcher-list li:first-child {
   border-top: 0;
 }
+
 .switcher-list li.active {
   background: #e6f0ff;
 }
+
 .switcher-list li a {
   display: block;
   padding: 0.38461538461538em 2.5em 0.38461538461538em 1em;
@@ -1977,8 +2026,8 @@ table {
  * Styling of table captions.
  */
 caption {
-  text-align: left;
   margin-bottom: 0.5em;
+  text-align: left;
 }
 
 /**
@@ -1993,9 +2042,9 @@ caption {
  */
 th,
 td {
-  vertical-align: top;
-  text-align: left;
   padding: 0;
+  text-align: left;
+  vertical-align: top;
 }
 
 /**
@@ -2041,22 +2090,28 @@ td {
 .txp-list {
   width: 100%;
 }
+
 .txp-list th,
 .txp-list td {
   padding: 0.38461538461538em 1em;
 }
+
 .txp-list tbody tr {
   border: 1px solid #dddddd;
 }
+
 .txp-list tbody tr:nth-child(even) {
   background: #f7f7f7;
 }
+
 .txp-list tbody tr.selected {
   background: #e6f0ff;
 }
+
 .txp-list tbody th {
   font-weight: normal;
 }
+
 .txp-list thead th {
   background-color: #dddddd;
   background-image: linear-gradient(#eeeeee, #dddddd);
@@ -2065,16 +2120,19 @@ td {
   border-bottom: 1px solid #cccccc;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
 }
+
 .txp-list thead th:first-child {
   border-left: 1px solid #dddddd;
 }
+
 .txp-list thead th a {
-  position: relative;
   display: block;
+  position: relative;
   margin: -0.38461538461538em -1em;
   padding: 0.38461538461538em 1em;
   color: #333333;
 }
+
 .txp-list thead th a:hover {
   color: #333333;
   text-decoration: none;
@@ -2090,43 +2148,45 @@ td {
  */
 .txp-list thead th.asc, .txp-list thead th.desc {
   background-color: #e4e4e4;
-  background-image: linear-gradient(#d3d3d3, #e4e4e4);
+  background-image: linear-gradient(lightgray, #e4e4e4);
 }
+
 .txp-list thead th.asc a:after, .txp-list thead th.desc a:after {
   text-indent: 110%;
+  text-transform: capitalize;
   white-space: nowrap;
   overflow: hidden;
-  text-transform: capitalize;
-  font-size: 16px;
+  display: block;
   position: absolute;
   top: 45%;
   right: 0.3125em;
-  z-index: 10;
+  width: 0;
+  height: 0;
+  font-size: 16px;
   opacity: 0.5;
+  z-index: 10;
 }
+
 [dir="rtl"] .txp-list thead th.asc a:after, [dir="rtl"] .txp-list thead th.desc a:after {
   right: auto;
   left: 0.3125em;
 }
+
 .txp-list thead th.asc a:hover:after, .txp-list thead th.desc a:hover:after {
   opacity: 1;
 }
+
 .txp-list thead th.desc a:after {
-  display: block;
-  width: 0;
-  height: 0;
   border: 0 solid transparent;
+  border-width: 0.25em 0.25em 0;
   border-top-color: #333333;
-  border-width: 0.25em 0.25em 0 0.25em;
   content: "\2193";
 }
+
 .txp-list thead th.asc a:after {
-  display: block;
-  width: 0;
-  height: 0;
   border: 0 solid transparent;
+  border-width: 0 0.25em 0.25em;
   border-bottom-color: #333333;
-  border-width: 0 0.25em 0.25em 0.25em;
   content: "\2191";
 }
 
@@ -2155,14 +2215,14 @@ td {
  * 2. Remove default margin.
  */
 body {
-  box-sizing: border-box;
   /* 1 */
   position: relative;
   /* 2 */
   margin: 0;
   padding: 4em 2.75% 0;
-  color: #333333;
   background: #ffffff;
+  color: #333333;
+  box-sizing: border-box;
 }
 
 /**
@@ -2179,22 +2239,24 @@ body {
  * </body>
  */
 .txp-body {
-  margin: 0 auto;
   width: 100%;
   max-width: 116em;
+  margin: 0 auto;
 }
 
 @supports (display: flex) {
   body {
+    /* autoprefixer: off */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
   }
-
   .txp-body {
+    /* autoprefixer: off */
     flex: 1;
   }
 }
+
 /* Header
    ========================================================================== */
 /**
@@ -2217,12 +2279,12 @@ body {
   top: 0;
   right: 0;
   left: 0;
-  z-index: 1000;
+  height: 2.69230769230769em;
+  padding: 0 2.75%;
   border-top: 1px solid #f7c600;
   border-bottom: 1px solid #d8ad00;
-  padding: 0 2.75%;
-  height: 2.69230769230769em;
   box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+  z-index: 1000;
 }
 
 /**
@@ -2249,16 +2311,16 @@ body {
  */
 .txp-header h1 {
   text-indent: 110%;
+  text-transform: capitalize;
   white-space: nowrap;
   overflow: hidden;
-  text-transform: capitalize;
-  float: left;
-  margin: 0.0625em 0.5em 0 0;
   width: 8em;
   height: 2em;
-  font-size: 16px;
+  margin: 0.0625em 0.5em 0 0;
+  float: left;
   background: url("../img/sprite.svg") no-repeat;
   background-size: 13em 2em;
+  font-size: 16px;
 }
 
 /**
@@ -2271,14 +2333,15 @@ body {
  * </p>
  */
 .txp-view-site {
-  float: left;
-  margin: 0 1em;
   max-width: 22%;
+  margin: 0 1em;
+  float: left;
   line-height: 2.69230769230769em;
+  text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
+
 .txp-view-site a {
   color: #333333;
   font-weight: bold;
@@ -2359,18 +2422,21 @@ button.txp-nav-toggle {
  * <nav class="txp-nav">
  */
 .txp-nav {
+  margin: 0;
   float: left;
   list-style: none;
-  margin: 0;
 }
+
 .txp-nav ul {
-  list-style: none;
   margin: 0;
   padding: 0;
+  list-style: none;
 }
+
 .txp-nav a {
   color: #333333;
 }
+
 .txp-nav a:hover {
   text-decoration: none;
 }
@@ -2421,29 +2487,34 @@ button.txp-nav-toggle {
  * </nav>
  */
 .txp-nav > ul > li {
-  position: relative;
   display: block;
+  position: relative;
   float: left;
   border-right: 1px solid #f7c600;
   background: rgba(255, 255, 255, 0.2);
 }
+
 .txp-nav > ul > li:first-child {
   border-left: 1px solid #f7c600;
 }
+
 .txp-nav > ul > li > a {
   display: block;
   padding: 0 1em;
-  line-height: 2.69230769230769em;
   color: black;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  line-height: 2.69230769230769em;
   text-decoration: none;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
 }
+
 .txp-nav > ul > li > a:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+
 .txp-nav > ul > li.selected > a {
   background: rgba(255, 255, 255, 0.2);
 }
+
 .txp-nav > ul > li.selected > a:hover {
   background: rgba(255, 255, 255, 0.33);
 }
@@ -2455,25 +2526,27 @@ button.txp-nav-toggle {
   position: relative;
   padding-right: 1.61538461538462em;
 }
+
 .txp-nav > ul > li > a.dropdown-toggle:after {
   text-indent: 110%;
+  text-transform: capitalize;
   white-space: nowrap;
   overflow: hidden;
-  text-transform: capitalize;
   display: block;
+  position: absolute;
+  top: 1em;
+  right: 0.5625em;
   width: 0;
   height: 0;
   border: 0 solid transparent;
+  border-width: 0.25em 0.25em 0;
   border-top-color: #333333;
-  border-width: 0.25em 0.25em 0 0.25em;
   font-size: 16px;
-  position: absolute;
   content: "\2193";
-  top: 1em;
-  right: 0.5625em;
-  z-index: 10;
   opacity: 0.5;
+  z-index: 10;
 }
+
 .txp-nav > ul > li > a.dropdown-toggle:hover:after, .txp-nav > ul > li > a.dropdown-toggle:active:after {
   opacity: 1;
 }
@@ -2482,12 +2555,9 @@ button.txp-nav-toggle {
  * Indicator symbols on open dropdown toggle links.
  */
 .txp-nav > ul > li.open > a.dropdown-toggle:after {
-  display: block;
-  width: 0;
-  height: 0;
   border: 0 solid transparent;
+  border-width: 0 0.25em 0.25em;
   border-bottom-color: #333333;
-  border-width: 0 0.25em 0.25em 0.25em;
   content: "\2191";
 }
 
@@ -2537,45 +2607,51 @@ button.txp-nav-toggle {
  * </nav>
  */
 .dropdown-menu {
+  display: none;
   position: absolute;
   top: 3em;
   left: 0;
-  z-index: 20000;
-  display: none;
+  min-width: 12em;
   border: 1px solid #d4d4d4;
   border-top: 0;
   border-radius: 0 0.5em 0.5em;
-  min-width: 12em;
   background: #fff9e1;
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+  z-index: 20000;
 }
+
 .dropdown-menu li:first-child {
   border-radius: 0 0.5em 0 0;
 }
+
 .dropdown-menu li:last-child {
   border-radius: 0 0 0.5em 0.5em;
 }
+
 .dropdown-menu li:hover {
   background: #ffefaf;
 }
+
 .dropdown-menu li.selected {
   background: #ffe88b;
 }
+
 .dropdown-menu a {
   display: block;
   padding: 0.5em 1em;
 }
+
 .dropdown-menu:before {
-  font-size: 16px;
   position: absolute;
-  content: "";
   top: -0.5em;
   left: 0.75em;
-  z-index: 2;
   width: 1em;
   height: 0.5em;
   background: url("../img/sprite.svg") no-repeat -12em 0;
   background-size: 13em 2em;
+  font-size: 16px;
+  content: "";
+  z-index: 2;
 }
 
 /**
@@ -2601,25 +2677,24 @@ button.txp-nav-toggle {
 /* Globally shared layout
    ========================================================================== */
 /**
- * 1. Prevent automatic text size adjustments on mobile devices.
+ * 1. Prevent text size adjust after mobile device orientation change.
  */
 html {
-  -webkit-tap-highlight-color: rgba(0, 102, 255, 0.5);
   /* 1 */
   -webkit-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+          text-size-adjust: 100%;
 }
 
 /**
  * Address differences between Firefox and other browsers.
  */
 hr {
-  box-sizing: content-box;
+  height: 0;
   clear: both;
   border: 0;
   border-bottom: 1px solid #cccccc;
-  height: 0;
+  box-sizing: content-box;
 }
 
 /**
@@ -2672,26 +2747,30 @@ hr {
  * </form>
  */
 .txp-search {
-  float: right;
   margin: 1em 0;
+  float: right;
 }
+
 .txp-search .ui-menu {
   position: absolute;
-  z-index: 100;
   width: 18em;
+  z-index: 100;
 }
+
 .txp-search .ui-menu-item {
   padding: 0 0 0 0.75em;
 }
+
 .txp-search .txp-dropdown input {
   vertical-align: -0.38461538461538em;
 }
+
 .txp-search .txp-dropdown label {
   display: inline-block;
-  padding: 0.30769230769231em 0.5em;
   width: 85%;
-  vertical-align: text-top;
+  padding: 0.30769230769231em 0.5em;
   cursor: pointer;
+  vertical-align: text-top;
 }
 
 /**
@@ -2715,18 +2794,22 @@ hr {
  * </div>
  */
 .txp-control-panel {
-  float: left;
   margin-bottom: 1em;
+  float: left;
 }
+
 .txp-control-panel > * {
   margin: 0 1em 0 0;
 }
+
 .txp-control-panel > *:last-child {
   margin-right: 0;
 }
+
 .txp-control-panel form {
   display: inline-block;
 }
+
 .txp-control-panel textarea {
   margin-bottom: 1em;
 }
@@ -2737,6 +2820,7 @@ hr {
 [dir="rtl"] .txp-control-panel {
   float: right;
 }
+
 [dir="rtl"] .txp-control-panel > * {
   margin: 0 0 0 1em;
 }
@@ -2757,12 +2841,14 @@ hr {
  * </div>
  */
 .txp-list-options {
-  float: right;
   margin: 0.46153846153846em 0 1em;
+  float: right;
 }
+
 .txp-list-options > * {
   margin: 0 0 0 1em;
 }
+
 .txp-list-options form {
   display: inline-block;
 }
@@ -2773,6 +2859,7 @@ hr {
 [dir="rtl"] .txp-list-options {
   float: left;
 }
+
 [dir="rtl"] .txp-list-options > * {
   margin: 0 1em 0 0;
 }
@@ -2818,9 +2905,10 @@ span.spinner {
   width: 13px;
   height: 13px;
 }
-@media (min-resolution: 1.25dppx), (min-resolution: 120dpi) {
+
+@media (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 1.25dppx), (min-resolution: 120dpi) {
   span.spinner {
-    background-image: url("../img/spinner@2x.gif") !important;
+    background-image: url("../img/spinner@2x.gif");
   }
 }
 
@@ -2842,7 +2930,7 @@ span.spinner {
  *     </select>
  * </div>
  */
-div.multi-edit {
+.multi-edit {
   margin: 1em 0 0;
 }
 
@@ -2909,8 +2997,8 @@ div.multi-edit {
  * </div>
  */
 .multi-option.multi-step {
-  margin-left: 0.30769230769231em;
   display: inline-block;
+  margin-left: 0.30769230769231em;
 }
 
 /**
@@ -2918,9 +3006,7 @@ div.multi-edit {
  *
  * Example HTML:
  *
- * <span class="txp-option-link">
- *     <span>[</span><a>Edit</a><span>]</span>
- * </span>
+ * <a class="txp-option-link">Edit</a>
  */
 .txp-option-link {
   display: inline-block;
@@ -2941,8 +3027,8 @@ div.multi-edit {
  */
 .text-section {
   margin-top: 3em;
-  border-top: 2px solid #cccccc;
   padding-top: 3em;
+  border-top: 2px solid #cccccc;
 }
 
 /**
@@ -2954,32 +3040,21 @@ div.multi-edit {
 }
 
 /**
- * Hide empty containers from view (and from screen readers).
- *
- * TODO: this is a dirty solution - should be improved in HTML strucure.
- *
- * Example HTML:
- *
- * <section class="txp-details empty" id="comments_group"></section>
- */
-.empty {
-  display: none;
-}
-
-/**
  * Visually disabled text and anchors.
  */
 .disabled {
   background-image: none;
-  opacity: 0.33;
   cursor: default !important;
+  opacity: 0.33;
 }
+
 .disabled a {
   text-decoration: none;
   cursor: default;
 }
 
-/* List navigators on list panels.
+/**
+ * List navigators on list panels.
  *
  * Anchor elements kept to one line to prevent space between buttons.
  *
@@ -3001,14 +3076,15 @@ div.multi-edit {
  * </div>
  */
 .pageby {
-  float: left;
   margin: 1em 0;
+  float: left;
 }
 
 .prev-next {
-  float: right;
   margin: 1em 0;
+  float: right;
 }
+
 .prev-next form {
   display: inline-block;
 }
@@ -3019,6 +3095,7 @@ div.multi-edit {
 [dir="rtl"] .pageby {
   float: right;
 }
+
 [dir="rtl"] .prev-next {
   float: left;
 }
@@ -3032,12 +3109,13 @@ div.multi-edit {
  * 2. Remove margin above `h2` within panels.
  */
 .txp-edit {
+  max-width: 55em;
   margin: 0 auto 1em;
   padding: 1em 1em 1px;
   /* 1 */
-  max-width: 55em;
   background: #f7f7f7;
 }
+
 .txp-edit h2 {
   /* 2 */
   margin-top: 0;
@@ -3048,10 +3126,11 @@ div.multi-edit {
  */
 .txp-edit-actions {
   margin: 1em -1em;
-  border-top: 2px solid #ffffff;
   padding: 1em 1em 0;
+  border-top: 2px solid #ffffff;
   text-align: right;
 }
+
 .txp-edit-actions > * {
   margin: 0 0 0 1em;
 }
@@ -3062,6 +3141,7 @@ div.multi-edit {
 [dir="rtl"] .txp-edit-actions {
   text-align: left;
 }
+
 [dir="rtl"] .txp-edit-actions > * {
   margin: 0 1em 0 0;
 }
@@ -3122,7 +3202,8 @@ div.multi-edit {
 }
 
 /**
- * Inline form field pairings on edit panels and preferences group panels.
+ * Inline form field pairings on edit panels, preferences group panels and
+ * setup panels.
  *
  * Example HTML:
  *
@@ -3134,22 +3215,26 @@ div.multi-edit {
  * </form>
  */
 .txp-edit .txp-form-field:not(.txp-form-field-textarea),
-.txp-prefs-group .txp-form-field:not(.txp-form-field-textarea) {
+.txp-prefs-group .txp-form-field:not(.txp-form-field-textarea),
+.setup .txp-form-field:not(.txp-form-field-textarea) {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   -webkit-align-items: baseline;
-  -ms-flex-align: baseline;
-  align-items: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
 }
+
 .txp-edit .txp-form-field-label,
 .txp-edit .txp-form-field-value,
 .txp-prefs-group .txp-form-field-label,
-.txp-prefs-group .txp-form-field-value {
-  -webkit-flex: 1;
-  -ms-flex: 1 1 0%;
-  flex: 1;
-  min-height: 2.1538462em;
+.txp-prefs-group .txp-form-field-value,
+.setup .txp-form-field-label,
+.setup .txp-form-field-value {
+  -webkit-flex: 1 1 0%;
+      -ms-flex: 1 1 0%;
+          flex: 1 1 0%;
+  min-height: 2.15384615384615em;
 }
 
 /**
@@ -3169,14 +3254,14 @@ div.multi-edit {
 .txp-form-field-textarea .txp-form-field-label,
 .txp-form-field-textarea .txp-form-field-value {
   -webkit-flex: none;
-  -ms-flex: none;
-  flex: none;
+      -ms-flex: none;
+          flex: none;
   max-width: inherit;
   min-height: inherit;
 }
 
 /**
- *  Don't constrain form fields when in 3 column layout spans.
+ * Don't constrain form fields when in 3 column layout spans.
  */
 .txp-layout-4col-cell-1-2-3 .txp-form-field-label,
 .txp-layout-4col-cell-1-2-3 .txp-form-field-value,
@@ -3188,8 +3273,7 @@ div.multi-edit {
 /**
  * Form field inline help texts.
  *
- * 1. Pull instructions closer to form fields.
- * 2. Limit maxiumum width of instructions, for legibility.
+ * 1. Limit maximum width of instructions, for legibility.
  *
  * Example HTML:
  *
@@ -3203,8 +3287,6 @@ div.multi-edit {
  */
 .txp-form-field-instructions {
   /* 1 */
-  margin-top: -0.45454545454545em;
-  /* 2 */
   max-width: 56em;
 }
 
@@ -3227,9 +3309,10 @@ div.multi-edit {
  * Column width and margins of setup panels.
  */
 .txp-setup {
-  margin: 1em auto;
   max-width: 42em;
+  margin: 1em auto;
 }
+
 .welcome .txp-setup {
   max-width: 20.30769230769231em;
 }
@@ -3238,8 +3321,8 @@ div.multi-edit {
  * Column width and margins of login panels.
  */
 .txp-login {
-  margin: 1em auto;
   max-width: 20.30769230769231em;
+  margin: 1em auto;
 }
 
 /**
@@ -3249,14 +3332,14 @@ div.multi-edit {
 .login h1 {
   /* 2 */
   text-indent: 110%;
+  text-transform: capitalize;
   white-space: nowrap;
   overflow: hidden;
-  text-transform: capitalize;
   width: 16.5em;
   height: 3.375em;
-  font-size: 16px;
   background: url("../img/textpattern.svg") no-repeat;
   background-size: 16.5em 3.375em;
+  font-size: 16px;
 }
 
 /**
@@ -3291,43 +3374,48 @@ div.multi-edit {
  * </div>
  */
 #view_modes ul {
-  font-size: 0.8461538em;
-  line-height: 1.4545455em;
   margin: 0;
-  border-bottom: 1px solid #cccccc;
   padding: 0;
+  border-bottom: 1px solid #cccccc;
   background: none;
+  font-size: 11px;
+  line-height: 16px;
 }
+
 #view_modes ul:after {
-  content: "";
   display: table;
   clear: both;
+  content: "";
 }
+
 #view_modes ul li {
   position: relative;
   top: 0;
-  float: left;
   margin-right: 2px;
+  float: left;
   border: 1px solid #cccccc;
   border-bottom-width: 0;
+  background-color: #f2f2f2;
   list-style: none;
   white-space: nowrap;
-  background-color: #f2f2f2;
   box-shadow: inset 0 -0.25em 0.5em rgba(102, 102, 102, 0.15);
 }
+
 #view_modes ul li:hover, #view_modes ul li:focus {
   border-color: #aaaaaa;
   background-color: #f7f7f7;
 }
+
 #view_modes ul li.active {
   margin-bottom: -1px;
   padding-bottom: 1px;
   background-color: white;
   box-shadow: none;
 }
+
 #view_modes ul a {
+  padding: 0.5em 1em;
   float: left;
-  padding: 0.36363636363636em 1em;
   color: #333333;
   text-decoration: none;
 }
@@ -3353,14 +3441,17 @@ div.multi-edit {
 #main_content .text input {
   font-size: 16px;
 }
+
 #main_content .text textarea {
   font-size: 16px;
   line-height: 1.5em;
 }
+
 #main_content .text .title input {
   font-size: 20px;
   font-weight: bold;
 }
+
 #main_content .author {
   color: #777777;
 }
@@ -3377,9 +3468,14 @@ div.multi-edit {
 
 /* Content -> Images panel - additional layout
    ========================================================================== */
+.has-thumbnail a:focus {
+  outline: 0;
+}
+
 .thumbnail-alter input {
   margin: 0 0.30769230769231em 0 0;
 }
+
 .thumbnail-alter input:last-child {
   margin: 0;
 }
@@ -3387,14 +3483,25 @@ div.multi-edit {
 [dir="rtl"] .thumbnail-alter input {
   margin: 0 0 0 0.30769230769231em;
 }
+
 [dir="rtl"] .thumbnail-alter input:last-child {
   margin: 0;
 }
 
 .thumbnail-image form {
   display: inline-block;
-  vertical-align: top;
   margin-top: 5px;
+  vertical-align: top;
+}
+
+/* Content -> Files panel - additional layout
+   ========================================================================== */
+/**
+ * Make sure form for selecting existing files is on a new line.
+ */
+.txp-control-panel .assign-existing-form {
+  display: block;
+  margin-top: 1em;
 }
 
 /* Content -> Comments panel - additional layout
@@ -3441,12 +3548,12 @@ tr.active .plugin-prefs {
 }
 
 div.code {
-  box-sizing: border-box;
-  margin-bottom: 1em;
-  border: 1px solid #cccccc;
-  padding: 0.15384615384615em 0.38461538461538em;
   height: 21em;
+  margin-bottom: 1em;
+  padding: 0.15384615384615em 0.38461538461538em;
+  border: 1px solid #cccccc;
   overflow: auto;
+  box-sizing: border-box;
 }
 
 /* ==========================================================================
@@ -3466,41 +3573,41 @@ div.code {
  */
 .ui-helper-hidden-accessible {
   position: absolute;
-  margin: -1px;
-  border: 0;
-  padding: 0;
   width: 1px;
   height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
   overflow: hidden;
   clip: rect(0 0 0 0);
 }
 
 /**
- * Normalise various rules to avoid style inheritance.
+ * Normalize various rules to avoid style inheritance.
  */
 .ui-helper-reset {
   margin: 0;
-  border: 0;
   padding: 0;
+  border: 0;
   outline: 0;
-  font-size: 100%;
-  line-height: 1.53846153846154em;
-  text-decoration: none;
+  font-size: 13px;
+  line-height: 20px;
   list-style: none;
+  text-decoration: none;
 }
 
 /**
  * Clearfix jQuery UI elements.
  */
 .ui-helper-clearfix:after {
-  content: "";
   display: table;
   clear: both;
   border-collapse: collapse;
+  content: "";
 }
 
 /**
- * Normalise absolute positioning of jQuery UI elements to avoid misplacement.
+ * Normalize absolute positioning of jQuery UI elements to avoid misplacement.
  */
 .ui-helper-zfix {
   position: absolute;
@@ -3521,10 +3628,10 @@ div.code {
 /* Component containers
    ========================================================================== */
 /**
- * Normalise font size of nested jQuery UI widgets to avoid style inheritance.
+ * Normalize font size of nested jQuery UI widgets to avoid style inheritance.
  */
 .ui-widget .ui-widget {
-  font-size: 100%;
+  font-size: 13px;
 }
 
 /**
@@ -3551,8 +3658,8 @@ div.code {
  */
 .ui-state-default {
   border: 1px solid #cccccc;
-  color: #333333;
   background-color: #f2f2f2;
+  color: #333333;
 }
 
 /**
@@ -3609,19 +3716,19 @@ a.ui-state-default:focus {
  */
 .ui-state-error {
   border: 1px solid #e1b2b2;
-  color: #9d261d;
   background-color: #f2dede;
+  color: #9d261d;
 }
 
 /**
- * Visually prioritised jQuery UI text.
+ * Visually prioritized jQuery UI text.
  */
 .ui-priority-primary {
   font-weight: bold;
 }
 
 /**
- * Visually non-prioritised jQuery UI text.
+ * Visually non-prioritized jQuery UI text.
  */
 .ui-priority-secondary {
   font-weight: normal;
@@ -3633,10 +3740,11 @@ a.ui-state-default:focus {
  */
 .ui-state-disabled {
   background-image: none;
+  cursor: default !important;
   opacity: 0.33;
   pointer-events: none;
-  cursor: default !important;
 }
+
 .ui-state-disabled a {
   text-decoration: none;
   cursor: default;
@@ -3655,10 +3763,10 @@ a.ui-state-default:focus {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1001;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.75);
+  z-index: 1001;
 }
 
 /* Shadows
@@ -3672,8 +3780,8 @@ a.ui-state-default:focus {
  */
 .ui-widget-shadow {
   margin: -0.5em 0 0 -0.5em;
-  border-radius: 0.5em;
   padding: 0.5em;
+  border-radius: 0.5em;
   background: rgba(0, 0, 0, 0.75);
 }
 
@@ -3699,15 +3807,16 @@ a.ui-state-default:focus {
 }
 
 .ui-draggable-handle {
-  touch-action: none;
+  -ms-touch-action: none;
+      touch-action: none;
 }
 
 /**
  * Class added when element is actively being dragged.
  */
 .ui-draggable-dragging {
-  z-index: 1000;
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+  z-index: 1000;
 }
 
 /* Resizable
@@ -3731,10 +3840,11 @@ a.ui-state-default:focus {
 }
 
 .ui-resizable-handle {
-  touch-action: none;
-  position: absolute;
   display: block;
+  position: absolute;
   font-size: 0.1px;
+  -ms-touch-action: none;
+      touch-action: none;
 }
 
 /**
@@ -3830,7 +3940,8 @@ a.ui-state-default:focus {
  * </ol>
  */
 .ui-selectable {
-  touch-action: none;
+  -ms-touch-action: none;
+      touch-action: none;
 }
 
 /**
@@ -3838,8 +3949,8 @@ a.ui-state-default:focus {
  */
 .ui-selectable-helper {
   position: absolute;
-  z-index: 100;
   border: 1px dotted #004cbf;
+  z-index: 100;
 }
 
 /* Sortable
@@ -3870,7 +3981,8 @@ a.ui-state-default:focus {
 }
 
 .ui-sortable-handle {
-  touch-action: none;
+  -ms-touch-action: none;
+      touch-action: none;
 }
 
 .ui-sortable-placeholder {
@@ -3908,28 +4020,32 @@ a.ui-state-default:focus {
  * </div>
  */
 .ui-accordion .ui-accordion-header {
-  position: relative;
   display: block;
+  position: relative;
   margin: 2px 0 0;
   padding: 0.5em 1em;
-  font-size: 100%;
+  font-size: 13px;
   cursor: pointer;
 }
+
 .ui-accordion .ui-accordion-header a {
   color: #333333;
   text-decoration: none;
 }
+
 .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
   position: absolute;
   top: 50%;
   left: 0.5em;
   margin-top: -8px;
 }
+
 .ui-accordion .ui-accordion-content {
-  border-top: 0;
   padding: 1px 1em;
+  border-top: 0;
   overflow: auto;
 }
+
 .ui-accordion .ui-accordion-icons,
 .ui-accordion .ui-accordion-icons .ui-accordion-icons {
   padding-left: 2em;
@@ -3942,6 +4058,7 @@ a.ui-state-default:focus {
   right: 0.5em;
   left: auto;
 }
+
 [dir="rtl"] .ui-accordion .ui-accordion-icons,
 [dir="rtl"] .ui-accordion .ui-accordion-icons .ui-accordion-icons {
   padding-right: 2em;
@@ -3981,10 +4098,10 @@ a.ui-state-default:focus {
  * https://jqueryui.com/button/
  *
  * 1. Correct font size not being inherited in all browsers.
- * 2. Remove iOS Safari default styling.
- * 3. The `overflow` property removes extra width in IE.
- * 4. Improve usability and consistency of cursor style between image-type
+ * 2. Improve usability and consistency of cursor style between image-type
  *    `input` and others.
+ * 3. The `overflow` property removes extra width in IE.
+ * 4. Remove iOS Safari default styling.
  *
  * Example HTML:
  *
@@ -3995,50 +4112,53 @@ a.ui-state-default:focus {
 .ui-button {
   background-color: #dddddd;
   background-image: linear-gradient(#eeeeee, #dddddd);
-  transition: box-shadow 0.1s linear;
-  box-sizing: border-box;
-  background-clip: padding-box;
-  /* 1 */
-  font-size: 100%;
-  font-size: 1em;
-  line-height: 1.3846154em;
-  /* 2 */
-  -webkit-appearance: none;
-  position: relative;
   display: inline-block;
+  position: relative;
+  height: 2.1538462em;
+  margin: 0 0.1em 0 0;
+  padding: 0.30769230769231em 0.61538461538462em;
+  border: solid 1px #cccccc;
+  background-clip: padding-box;
+  color: #333333;
+  font-family: Helvetica, Arial, sans-serif;
+  /* 1 */
+  font-size: 13px;
+  line-height: 1.3846154em;
+  text-align: center;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  /* 2 */
+  cursor: pointer;
   /* 3 */
   overflow: visible;
-  margin: 0 0.1em 0 0;
-  border: solid 1px #cccccc;
-  padding: 0.30769230769231em 0.61538461538462em;
-  height: 2.1538462em;
-  font-family: Helvetica, Arial, sans-serif;
-  text-align: center;
   vertical-align: baseline;
-  color: #333333;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  box-sizing: border-box;
   /* 4 */
-  cursor: pointer;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
+
 .ui-button:hover {
   background-color: #e8e8e8;
   background-image: linear-gradient(#f8f8f8, #e8e8e8);
   border-color: #aaaaaa;
   text-decoration: none;
 }
+
 .ui-button:active {
   background-color: #d6d6d6;
   background-image: linear-gradient(#e6e6e6, #d6d6d6);
   border-color: #aaaaaa;
   color: #1a1a1a;
-  box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   text-decoration: none;
+  box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
 }
+
 .ui-button:focus {
   border-color: #0066ff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
   outline: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 /**
@@ -4057,8 +4177,8 @@ a.ui-button {
 .ui-button.ui-state-focus {
   /* 1 */
   border-color: #0066ff !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 7px #80b3ff;
   outline: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 /**
@@ -4224,6 +4344,7 @@ button.ui-button-icons-only {
 .ui-buttonset {
   margin-right: 0.35em;
 }
+
 .ui-buttonset .ui-button {
   margin-right: -0.35em;
 }
@@ -4243,11 +4364,13 @@ label.ui-state-active.ui-button {
   background-image: linear-gradient(#e6f0ff, #cce0ff);
   border-color: #96c0ff;
 }
+
 label.ui-state-active.ui-button:hover {
   background-color: #d6e6ff;
   background-image: linear-gradient(#f5f9ff, #d6e6ff);
   border-color: #4a92ff;
 }
+
 label.ui-state-active.ui-button:active {
   background-color: #b3d1ff;
   background-image: linear-gradient(#cce0ff, #b3d1ff);
@@ -4261,6 +4384,7 @@ label.ui-state-active.ui-button:active {
   margin-right: 0;
   margin-left: 0.5em;
 }
+
 [dir="rtl"] .ui-buttonset .ui-button {
   margin-right: 0;
   margin-left: -0.35em;
@@ -4346,99 +4470,118 @@ label.ui-state-active.ui-button:active {
  */
 .ui-datepicker {
   display: none;
-  padding: 0.2em 0.2em 0;
   width: 17em;
+  padding: 0.2em 0.2em 0;
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
+
 .ui-datepicker .ui-datepicker-header {
   position: relative;
   padding: 0.2em 0;
 }
+
 .ui-datepicker .ui-datepicker-prev,
 .ui-datepicker .ui-datepicker-next {
   position: absolute;
   top: 0.2em;
-  border-radius: 0.5em;
   width: 1.8em;
   height: 1.8em;
+  border-radius: 0.5em;
   background-color: transparent;
 }
+
 .ui-datepicker .ui-datepicker-prev {
   left: 0.2em;
 }
+
 .ui-datepicker .ui-datepicker-next {
   right: 0.2em;
 }
+
 .ui-datepicker .ui-datepicker-prev span,
 .ui-datepicker .ui-datepicker-next span {
+  display: block;
   position: absolute;
   top: 50%;
   left: 50%;
-  display: block;
   margin-top: -8px;
   margin-left: -8px;
 }
+
 .ui-datepicker .ui-datepicker-title {
   margin: 0 2.2em;
   line-height: 1.8em;
   text-align: center;
 }
+
 .ui-datepicker .ui-datepicker-title select {
   margin: 0;
 }
+
 .ui-datepicker select.ui-datepicker-month,
 .ui-datepicker select.ui-datepicker-year {
   width: 45%;
 }
+
 .ui-datepicker table {
-  margin: 0 0 0.2em;
   width: 100%;
+  margin: 0 0 0.2em;
 }
+
 .ui-datepicker th {
-  border: 0;
   padding: 0.5em 0.2em;
+  border: 0;
   text-align: center;
 }
+
 .ui-datepicker td {
-  border: 0;
   padding: 1px;
+  border: 0;
 }
+
 .ui-datepicker td a,
 .ui-datepicker td span {
   display: block;
   padding: 0.2em;
   text-align: center;
 }
+
 .ui-datepicker td a.ui-state-active {
   border-color: #96c0ff;
   background-color: #e6f0ff;
 }
+
 .ui-datepicker td a.ui-state-highlight:hover {
   border-color: #f5a800;
 }
+
 .ui-datepicker td a.ui-state-active:hover {
   border-color: #4a92ff;
 }
+
 .ui-datepicker td.ui-datepicker-week-col {
   padding: 0.32em 0;
   text-align: center;
 }
+
 .ui-datepicker .ui-datepicker-buttonpane {
   margin: 0.7em 0 0;
-  border-left: 0;
+  padding: 0 0.2em;
   border-right: 0;
   border-bottom: 0;
-  padding: 0 0.2em;
+  border-left: 0;
   background-image: none;
 }
+
 .ui-datepicker .ui-datepicker-buttonpane button {
-  float: right;
+  width: auto;
   margin: 0.5em 0.2em 0.4em;
   padding: 0.2em 0.6em 0.3em;
-  width: auto;
-  overflow: visible;
+  float: right;
   cursor: pointer;
+  overflow: visible;
 }
+
 .ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current {
   float: left;
 }
@@ -4453,14 +4596,17 @@ label.ui-state-active.ui-button:active {
 .ui-datepicker-multi .ui-datepicker-group {
   float: left;
 }
+
 .ui-datepicker-multi .ui-datepicker-group table {
-  margin: 0 auto 0.4em;
   width: 95%;
+  margin: 0 auto 0.4em;
 }
+
 .ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header,
 .ui-datepicker-multi .ui-datepicker-group-middle .ui-datepicker-header {
   border-left-width: 0;
 }
+
 .ui-datepicker-multi .ui-datepicker-buttonpane {
   clear: left;
 }
@@ -4478,8 +4624,8 @@ label.ui-state-active.ui-button:active {
 }
 
 .ui-datepicker-row-break {
-  clear: both;
   width: 100%;
+  clear: both;
   font-size: 0;
 }
 
@@ -4490,20 +4636,25 @@ label.ui-state-active.ui-button:active {
   right: 0.2em;
   left: auto;
 }
+
 [dir="rtl"] .ui-datepicker-next {
   right: auto;
   left: 0.2em;
 }
+
 [dir="rtl"] .ui-datepicker-buttonpane {
   clear: right;
 }
+
 [dir="rtl"] .ui-datepicker-buttonpane button {
   float: left;
 }
+
 [dir="rtl"] .ui-datepicker-buttonpane button.ui-datepicker-current,
 [dir="rtl"] .ui-datepicker-group {
   float: right;
 }
+
 [dir="rtl"] .ui-datepicker-group-last .ui-datepicker-header,
 [dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
   border-right-width: 0;
@@ -4547,69 +4698,81 @@ label.ui-state-active.ui-button:active {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1002;
   padding: 0.2em;
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+  z-index: 1002;
 }
+
 .ui-dialog .ui-dialog-titlebar {
   position: relative;
   padding: 0.4em 1em;
 }
+
 .ui-dialog .ui-dialog-title {
-  float: left;
-  margin: 0.1em 0;
   width: 90%;
-  overflow: hidden;
-  white-space: nowrap;
+  margin: 0.1em 0;
+  float: left;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
+
 .ui-dialog .ui-dialog-titlebar-close {
   position: absolute;
   top: 50%;
   right: 0.3em;
-  margin: -10px 0 0;
-  border: 0;
   width: 20px;
   height: 20px;
+  margin: -10px 0 0;
+  border: 0;
   background: none;
 }
+
 .ui-dialog .ui-dialog-content {
   position: relative;
-  border: 0;
   padding: 0.5em 1em;
+  border: 0;
   background: none;
   overflow: auto;
 }
+
 .ui-dialog .ui-dialog-buttonpane {
   margin-top: 0.5em;
-  border-width: 1px 0 0;
   padding: 0.5em;
+  border-width: 1px 0 0;
   background-image: none;
   text-align: left;
 }
+
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
   float: right;
 }
+
 .ui-dialog .ui-dialog-buttonpane button {
   margin: 0.5em 0.4em 0.5em 0;
   cursor: pointer;
 }
+
 .ui-dialog .ui-resizable-n {
   top: 0;
   height: 2px;
 }
+
 .ui-dialog .ui-resizable-e {
   right: 0;
   width: 2px;
 }
+
 .ui-dialog .ui-resizable-s {
   bottom: 0;
   height: 2px;
 }
+
 .ui-dialog .ui-resizable-w {
   left: 0;
   width: 2px;
 }
+
 .ui-dialog .ui-resizable-se,
 .ui-dialog .ui-resizable-sw,
 .ui-dialog .ui-resizable-ne,
@@ -4617,18 +4780,22 @@ label.ui-state-active.ui-button:active {
   width: 7px;
   height: 7px;
 }
+
 .ui-dialog .ui-resizable-se {
   right: 0;
   bottom: 0;
 }
+
 .ui-dialog .ui-resizable-sw {
   bottom: 0;
   left: 0;
 }
+
 .ui-dialog .ui-resizable-ne {
   top: 0;
   right: 0;
 }
+
 .ui-dialog .ui-resizable-nw {
   top: 0;
   left: 0;
@@ -4706,40 +4873,43 @@ label.ui-state-active.ui-button:active {
   display: block;
   margin: 0;
   padding: 0;
-  /* 1 */
-  font-size: 100%;
-  font-size: 1em;
-  line-height: 1.38461538461538em;
-  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   outline: 0;
+  /* 1 */
+  font-size: 13px;
+  line-height: 1.38461538461538em;
   list-style: none;
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
+
 .ui-menu .ui-menu {
   position: absolute;
 }
+
 .ui-menu .ui-menu-item {
   position: relative;
   margin: 0;
   padding: 0.30769230769231em 1em 0.30769230769231em 0.30769230769231em;
   cursor: pointer;
-  /* support: IE 10, see #8844 */
-  list-style-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
 }
+
 .ui-menu .ui-menu-item a {
   color: #333333;
   text-decoration: none;
 }
+
 .ui-menu .ui-menu-divider {
+  height: 0;
   margin: 0.30769230769231em 0;
   border-width: 1px 0 0;
-  height: 0;
   font-size: 0;
   line-height: 0;
 }
+
 .ui-menu .ui-state-focus,
 .ui-menu .ui-state-active {
   background-color: #cce0ff;
 }
+
 .ui-menu .ui-icon {
   position: absolute;
   top: 0;
@@ -4747,6 +4917,7 @@ label.ui-state-active.ui-button:active {
   left: 0.25em;
   margin: auto 0;
 }
+
 .ui-menu .ui-menu-icon {
   right: 0;
   left: auto;
@@ -4758,6 +4929,7 @@ label.ui-state-active.ui-button:active {
 .ui-menu-icons {
   position: relative;
 }
+
 .ui-menu-icons .ui-menu-item {
   padding-left: 2em;
 }
@@ -4768,13 +4940,16 @@ label.ui-state-active.ui-button:active {
 [dir="rtl"] .ui-menu {
   padding: 0;
 }
+
 [dir="rtl"] .ui-menu .ui-menu-item {
   padding: 0.30769230769231em 0.30769230769231em 0.30769230769231em 1em;
 }
+
 [dir="rtl"] .ui-menu .ui-icon {
   right: 0.25em;
   left: auto;
 }
+
 [dir="rtl"] .ui-menu .ui-menu-icon {
   right: auto;
   left: 0;
@@ -4806,9 +4981,10 @@ label.ui-state-active.ui-button:active {
   height: 16px;
   background-color: #cce0ff;
 }
-@media (min-resolution: 1.25dppx), (min-resolution: 120dpi) {
+
+@media (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 1.25dppx), (min-resolution: 120dpi) {
   .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar@2x.gif") !important;
+    background-image: url("../img/ui-progressbar@2x.gif");
   }
 }
 
@@ -4828,9 +5004,10 @@ label.ui-state-active.ui-button:active {
   background-size: 16px 16px;
   background-color: #cccccc;
 }
-@media (min-resolution: 1.25dppx), (min-resolution: 120dpi) {
+
+@media (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 1.25dppx), (min-resolution: 120dpi) {
   .ui-progressbar-indeterminate .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar-indeterminate@2x.gif") !important;
+    background-image: url("../img/ui-progressbar-indeterminate@2x.gif");
   }
 }
 
@@ -4871,24 +5048,23 @@ label.ui-state-active.ui-button:active {
  * </div>
  */
 .ui-selectmenu-button {
-  transition: box-shadow 0.1s linear;
-  position: relative;
   display: inline-block;
-  overflow: hidden;
-  vertical-align: top;
+  position: relative;
+  background-color: #ffffff;
   /* 1 */
-  font-size: 100%;
-  font-size: 1em;
+  font-size: 13px;
   line-height: 1.38461538461538em;
   text-decoration: none;
-  background-color: #ffffff;
   cursor: pointer;
+  overflow: hidden;
+  vertical-align: top;
 }
+
 .ui-selectmenu-button:focus {
   border-color: #0066ff;
-  box-shadow: 0 0 7px #80b3ff;
   outline: 0;
 }
+
 .ui-selectmenu-button span.ui-icon {
   position: absolute;
   top: 50%;
@@ -4896,6 +5072,7 @@ label.ui-state-active.ui-button:active {
   left: auto;
   margin-top: -8px;
 }
+
 .ui-selectmenu-button span.ui-selectmenu-text {
   display: block;
   padding: 0.30769230769231em 1.75em 0.30769230769231em 0.30769230769231em;
@@ -4906,26 +5083,29 @@ label.ui-state-active.ui-button:active {
 }
 
 .ui-selectmenu-menu {
+  display: none;
   position: absolute;
   top: 0;
   left: 0;
-  display: none;
   margin: 0;
   padding: 0;
 }
+
 .ui-selectmenu-menu .ui-menu {
   overflow: auto;
   overflow-x: hidden;
 }
+
 .ui-selectmenu-menu .ui-menu .ui-selectmenu-optgroup {
-  margin: 0.5em 0 0;
-  border-top: 1px solid #cccccc;
-  padding: 2px 0.30769230769231em;
   height: auto;
-  font-size: 1em;
+  margin: 0.5em 0 0;
+  padding: 2px 0.30769230769231em;
+  border-top: 1px solid #cccccc;
+  font-size: 13px;
   font-weight: bold;
   line-height: 1.5;
 }
+
 .ui-selectmenu-menu .ui-menu .ui-selectmenu-optgroup:first-child {
   margin: 0;
   border: 0;
@@ -4942,6 +5122,7 @@ label.ui-state-active.ui-button:active {
   right: auto;
   left: 0.2em;
 }
+
 [dir="rtl"] .ui-selectmenu-button span.ui-selectmenu-text {
   padding: 0.30769230769231em 0.30769230769231em 0.30769230769231em 1.75em;
   text-align: right;
@@ -4967,24 +5148,27 @@ label.ui-state-active.ui-button:active {
   position: relative;
   text-align: left;
 }
+
 .ui-slider .ui-slider-handle {
-  touch-action: none;
   position: absolute;
-  z-index: 2;
-  border-radius: 50%;
   width: 20px;
   height: 20px;
-  cursor: default;
+  border-radius: 50%;
   background-color: #ffffff;
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+  cursor: default;
+  z-index: 2;
+  -ms-touch-action: none;
+      touch-action: none;
 }
+
 .ui-slider .ui-slider-range {
-  position: absolute;
-  z-index: 1;
   display: block;
+  position: absolute;
   border: 0;
   background-position: 0 0;
   font-size: 0.7em;
+  z-index: 1;
 }
 
 /**
@@ -4995,20 +5179,24 @@ label.ui-state-active.ui-button:active {
  * <div class="ui-slider ui-slider-horizontal">
  */
 .ui-slider-horizontal {
-  margin-bottom: 1em;
   height: 12px;
+  margin-bottom: 1em;
 }
+
 .ui-slider-horizontal .ui-slider-handle {
   top: -5px;
   margin-left: -10px;
 }
+
 .ui-slider-horizontal .ui-slider-range {
   top: 0;
   height: 100%;
 }
+
 .ui-slider-horizontal .ui-slider-range-min {
   left: 0;
 }
+
 .ui-slider-horizontal .ui-slider-range-max {
   right: 0;
 }
@@ -5024,17 +5212,21 @@ label.ui-state-active.ui-button:active {
   width: 12px;
   height: 100px;
 }
+
 .ui-slider-vertical .ui-slider-handle {
   left: -20px;
   margin-bottom: -10px;
 }
+
 .ui-slider-vertical .ui-slider-range {
   left: 0;
   width: 100%;
 }
+
 .ui-slider-vertical .ui-slider-range-min {
   bottom: 0;
 }
+
 .ui-slider-vertical .ui-slider-range-max {
   top: 0;
 }
@@ -5064,15 +5256,17 @@ label.ui-state-active.ui-button:active {
  * </span>
  */
 .ui-spinner {
-  position: relative;
   display: inline-block;
-  border: 0;
+  position: relative;
   padding: 0;
+  border: 0;
   vertical-align: baseline;
 }
+
 .ui-spinner .ui-spinner-input {
   padding-right: 24px;
 }
+
 .ui-spinner .ui-icon {
   position: absolute;
   top: 50%;
@@ -5081,17 +5275,17 @@ label.ui-state-active.ui-button:active {
 }
 
 .ui-spinner-button {
+  display: block;
   position: absolute;
   right: 0;
-  display: block;
-  margin: 0;
-  padding: 0;
   width: 18px;
   height: 42%;
+  margin: 0;
+  padding: 0;
   font-size: 0.53846153846154em;
   line-height: 1.57142857142857em;
-  overflow: hidden;
   cursor: default;
+  overflow: hidden;
 }
 
 .ui-spinner-up {
@@ -5109,6 +5303,7 @@ label.ui-state-active.ui-button:active {
   padding-right: 4px;
   padding-left: 24px;
 }
+
 [dir="rtl"] .ui-spinner-button {
   right: auto;
   left: 0;
@@ -5156,40 +5351,48 @@ label.ui-state-active.ui-button:active {
   position: relative;
   border: 0;
 }
+
 .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav {
   margin: 0;
   padding: 0;
   background: none;
 }
+
 .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
   position: relative;
   top: 0;
-  float: left;
   margin-right: 2px;
+  float: left;
   border-bottom-width: 0;
   list-style: none;
   white-space: nowrap;
   box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
 }
+
 .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-active {
   margin-bottom: -1px;
   padding-bottom: 1px;
   box-shadow: none;
 }
-.ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor, .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor, .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
+
+.ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor,
+.ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor,
+.ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
   cursor: text;
 }
+
 .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
-  float: left;
   padding: 0.5em 1em;
+  float: left;
   color: #333333;
   text-decoration: none;
 }
+
 .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-panel {
   display: block;
   margin: 0 0 1em;
-  border-width: 1px 0;
   padding: 1px 0;
+  border-width: 1px 0;
   background: none;
 }
 
@@ -5204,10 +5407,11 @@ label.ui-state-active.ui-button:active {
  * Tabs RTL support.
  */
 [dir="rtl"] .ui-tabs .ui-tabs-nav li {
-  float: right;
   margin-right: 0;
   margin-left: 2px;
+  float: right;
 }
+
 [dir="rtl"] .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
   float: right;
 }
@@ -5218,11 +5422,13 @@ label.ui-state-active.ui-button:active {
 .ui-tabs-vertical .ui-tabs-nav .ui-tabs-active {
   background: #e6f0ff;
 }
+
 .ui-tabs-vertical .ui-tabs-nav .ui-state-focus {
   outline: none;
 }
+
 .ui-tabs-vertical .ui-tabs-nav .ui-state-focus a {
-  outline: thin dotted #0066ff;
+  outline: thin solid #0066ff;
 }
 
 /* Tooltip
@@ -5244,10 +5450,10 @@ label.ui-state-active.ui-button:active {
  */
 .ui-tooltip {
   position: absolute;
-  z-index: 9999;
-  padding: 0.5em 1em;
   max-width: 22em;
+  padding: 0.5em 1em;
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+  z-index: 9999;
 }
 
 /* ==========================================================================
@@ -5270,12 +5476,12 @@ label.ui-state-active.ui-button:active {
   display: inline-block;
   width: 16px;
   height: 16px;
-  text-indent: -9999px;
-  overflow: hidden;
-  vertical-align: text-bottom;
   background-image: url("../img/ui-icon-sprite-333333.svg");
   background-repeat: no-repeat;
   background-size: 256px 272px;
+  text-indent: -9999px;
+  overflow: hidden;
+  vertical-align: text-bottom;
 }
 
 .ui-state-default .ui-icon,
@@ -6125,127 +6331,120 @@ label.ui-state-active.ui-button:active {
    ========================================================================== */
 @media (max-width: 60em) {
   /* Layout < 768px
-     ========================================================================== */
+       ========================================================================== */
   /**
-   * Adjust right/left padding of body.
-   */
+     * Adjust right/left padding of body.
+     */
   body {
     padding: 4em 2em 0;
   }
-
   .setup,
   .login {
     padding: 1em 2em 0;
   }
-
   /* Header < 768px
-     ========================================================================== */
+       ========================================================================== */
   /**
-   * Adjust right/left padding of header area.
-   */
+     * Adjust right/left padding of header area.
+     */
   .txp-header {
     padding: 0 2em;
   }
-
   /**
-   * Smaller version of Textpattern logo.
-   */
+     * Smaller version of Textpattern logo.
+     */
   .txp-header h1 {
     width: 1.625em;
   }
-
   /**
-   * 'View site' link.
-   *
-   * Example HTML:
-   *
-   * <p class="txp-view-site">
-   *      <a>My site</a>
-   * </p>
-   */
+     * 'View site' link.
+     *
+     * Example HTML:
+     *
+     * <p class="txp-view-site">
+     *      <a>My site</a>
+     * </p>
+     */
   .txp-view-site {
     margin: 0.0625em 0.375em 0;
     font-size: 16px;
   }
   .txp-view-site a {
     text-indent: 110%;
+    text-transform: capitalize;
     white-space: nowrap;
     overflow: hidden;
-    text-transform: capitalize;
     display: block;
     width: 2em;
     height: 2em;
     background: url("../img/sprite.svg") no-repeat -8em 0;
     background-size: 13em 2em;
   }
-
   /**
-   * Adjust right absolute position of logout button.
-   */
+     * Adjust right absolute position of logout button.
+     */
   .txp-logout {
     right: 2em;
   }
 }
+
 /* ==========================================================================
    Additional layout for devices < 547px
    ========================================================================== */
 @media (max-width: 47em) {
   /**
-   * Non-fixed header on mobile layout (because mobile nav menu couldn't scroll otherwise).
-   */
+     * Non-fixed header on mobile layout (because mobile nav menu couldn't scroll otherwise).
+     */
   .txp-header {
     position: absolute;
   }
-
   /**
-   * Show the navigation menu toggle button on mobile layout.
-   *
-   * Example HTML:
-   *
-   * <button class="txp-nav-toggle">
-   */
+     * Show the navigation menu toggle button on mobile layout.
+     *
+     * Example HTML:
+     *
+     * <button class="txp-nav-toggle">
+     */
   button.txp-nav-toggle {
     text-indent: 110%;
+    text-transform: capitalize;
     white-space: nowrap;
     overflow: hidden;
-    text-transform: capitalize;
     display: block;
-    float: left;
-    margin: 0.0625em 0 0;
-    border: 0;
-    border-radius: 0;
-    padding: 0;
     width: 2em;
     height: 2em;
+    margin: 0.0625em 0 0;
+    padding: 0;
+    float: left;
+    border: 0;
+    border-radius: 0;
     background: transparent url("../img/sprite.svg") -10em 0;
     background-size: 13em 2em;
+    font-size: 16px;
     text-shadow: none;
     box-shadow: none;
-    font-size: 16px;
   }
   button.txp-nav-toggle:focus {
-    outline: thin dotted #0066ff;
+    outline: thin solid #0066ff;
   }
   button.txp-nav-toggle:not(.collapsed) {
     background-color: rgba(255, 255, 255, 0.33);
   }
-
   /**
-   * Hide the navigation menu by default on mobile layout.
-   */
+     * Hide the navigation menu by default on mobile layout.
+     */
   .txp-nav .data-dropdown {
     display: none;
   }
-
   /**
-   * Show the navigation menu when toggled on mobile layout.
-   */
+     * Show the navigation menu when toggled on mobile layout.
+     */
   .txp-nav.in .data-dropdown {
+    display: block;
     position: absolute;
     top: 3em;
     right: 0;
     left: 0;
-    display: block;
     background: #fff9e1;
     box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   }
@@ -6253,15 +6452,14 @@ label.ui-state-active.ui-button:active {
     position: absolute;
     top: -0.5em;
     left: 4.28em;
-    z-index: 2;
     width: 1em;
     height: 0.5em;
     background: url("../img/sprite.svg") no-repeat -12em 0;
     background-size: 13em 2em;
     font-size: 16px;
     content: "";
+    z-index: 2;
   }
-
   .txp-nav > ul > li {
     float: none;
     border: 0;
@@ -6276,15 +6474,14 @@ label.ui-state-active.ui-button:active {
   .txp-nav > ul > li > a.dropdown-toggle:after {
     right: 1em;
   }
-
   /**
-   * Secondary-level navigation menu items (submenus).
-   */
+     * Secondary-level navigation menu items (submenus).
+     */
   .dropdown-menu {
     position: static;
+    min-width: 0;
     border: 0;
     border-radius: 0;
-    min-width: 0;
     box-shadow: none;
   }
   .dropdown-menu a {
@@ -6293,59 +6490,53 @@ label.ui-state-active.ui-button:active {
   .dropdown-menu:before {
     display: none;
   }
-
   /**
-   * Search widget at top of lists.
-   */
+     * Search widget at top of lists.
+     */
   .txp-search,
   [dir="rtl"] .txp-search {
     margin-top: 0;
     float: none;
   }
-
   /**
-   * Collapse 2 column form fields to 1 column (remove flexbox).
-   */
+     * Collapse 2 column form fields to 1 column (remove flexbox).
+     */
   .txp-edit .txp-form-field:not(.txp-form-field-textarea),
   .txp-prefs-group .txp-form-field:not(.txp-form-field-textarea) {
     display: block;
   }
-
   /**
-   * Label/value one-column layouts within panes.
-   *
-   * Collapsed from two-column format on desktop layout (remove flexbox).
-   */
+     * Label/value one-column layouts within panes.
+     *
+     * Collapsed from two-column format on desktop layout (remove flexbox).
+     */
   .txp-edit .txp-form-field-label,
   .txp-edit .txp-form-field-value,
   .txp-prefs-group .txp-form-field-label,
   .txp-prefs-group .txp-form-field-value {
     -webkit-flex: none;
-    -ms-flex: none;
-    flex: none;
+        -ms-flex: none;
+            flex: none;
     min-height: inherit;
   }
-
   /**
-   * Remove inline alignment margin values when collapsed.
-   */
-  .txp-form-field-value .jquery-ui-buttonset,
+     * Remove inline alignment margin values when collapsed.
+     */
   .txp-form-field-value input,
-  .txp-form-field-value select {
+  .txp-form-field-value select,
+  .txp-form-field-value .jquery-ui-buttonset {
     margin: 0;
   }
-
   /**
-   * Remove float from list navigators on list panels.
-   */
+     * Remove float from list navigators on list panels.
+     */
   .pageby,
   .prev-next {
     float: none;
   }
-
   /**
-   * Collapse progress meters responsively.
-   */
+     * Collapse progress meters responsively.
+     */
   .progress-meter ol {
     display: block;
     margin-bottom: 1em;
@@ -6353,16 +6544,15 @@ label.ui-state-active.ui-button:active {
   }
   .progress-meter li {
     display: block;
-    float: none;
     margin: 0;
+    float: none;
   }
   .progress-meter li:after {
     display: none;
   }
-
   /**
-   * Override specifity on collapsed progress meters in RTL languages.
-   */
+     * Override specifity on collapsed progress meters in RTL languages.
+     */
   [dir="rtl"] .progress-meter ol {
     text-align: right;
   }
@@ -6372,14 +6562,13 @@ label.ui-state-active.ui-button:active {
   [dir="rtl"] .progress-meter li:after {
     display: none;
   }
-
   /**
-   * Collapse jQuery UI tabs responsively.
-   */
+     * Collapse jQuery UI tabs responsively.
+     */
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
-    float: none;
     margin: 0;
     margin-top: 2px;
+    float: none;
     border-bottom-width: 1px;
     box-shadow: none;
   }
@@ -6397,10 +6586,9 @@ label.ui-state-active.ui-button:active {
   [dir="rtl"] .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
     float: none;
   }
-
   /**
-   * Remove top border from jQuery UI tabs panel.
-   */
+     * Remove top border from jQuery UI tabs panel.
+     */
   .ui-tabs .ui-tabs-panel {
     border-top-width: 0;
   }

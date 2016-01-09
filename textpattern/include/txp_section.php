@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -368,10 +368,10 @@ function sec_section_list($message = '')
                     href(
                         txpspecialchars($sec_name), $edit_url, array('title' => gTxt('edit'))
                     ).
-                    sp.span(
-                        span('[', array('aria-hidden' => 'true')).
-                        href(gTxt('view'), pagelinkurl(array('s' => $sec_name))).
-                        span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link section_detail')
+                    span(
+                        sp.span('&#124;', array('role' => 'separator')).
+                        sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name))),
+                        array('class' => 'txp-option-link section_detail')
                     ), '', array(
                         'class' => 'txp-list-col-name',
                         'scope' => 'row',

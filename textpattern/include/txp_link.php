@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -154,7 +154,7 @@ function link_list($message = '')
             ),
             'linksort' => array(
                 'column' => 'txp_link.linksort',
-                'label'  => gTxt('link_sort'),
+                'label'  => gTxt('sort_value'),
             ),
         )
     );
@@ -439,11 +439,8 @@ function link_edit($message = '')
             inputLabel(
                 'link_category',
                 event_category_popup('link', $category, 'link_category').
-                sp.span(
-                    span('[', array('aria-hidden' => 'true')).
-                    eLink('category', 'list', '', '', gTxt('edit')).
-                    span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link')
-                ), 'link_category', 'link_category', array('class' => 'txp-form-field edit-link-category')
+                n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+                'link_category', 'link_category', array('class' => 'txp-form-field edit-link-category')
             ).
             inputLabel(
                 'link_description',

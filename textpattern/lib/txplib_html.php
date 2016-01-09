@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -237,10 +237,11 @@ function sLink($event, $step, $linktext, $class = '')
  * @param  string $thing2   URL parameter key #2
  * @param  string $val2     URL parameter value #2
  * @param  string $title    Anchor title
+ * @param  string $class    HTML class attribute
  * @return string HTML
  */
 
-function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '', $title = 'edit')
+function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '', $title = '', $class = '')
 {
     if ($title) {
         $title = gTxt($title);
@@ -259,6 +260,7 @@ function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '
         $thing2      => $val2,
         '_txp_token' => form_token(),
     ), array(
+        'class' => $class,
         'title' => $title,
     ));
 }
@@ -273,17 +275,18 @@ function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '
  * @param  string $step  Step
  * @param  string $thing URL parameter key
  * @param  string $value URL parameter value
+ * @param  string $class HTML class attribute
  * @return string HTML
  */
 
-function wLink($event, $step = '', $thing = '', $value = '')
+function wLink($event, $step = '', $thing = '', $value = '', $class = '')
 {
     return href(sp.'!'.sp, array(
         'event'      => $event,
         'step'       => $step,
         $thing       => $value,
         '_txp_token' => form_token(),
-    ), array('class' => 'dlink'));
+    ), array('class' => $class));
 }
 
 /**
@@ -617,8 +620,8 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
     if ($content) {
         $content =
             hed($label.popHelp($help), 3, array(
-                'class'          => $heading_class,
-                'id'             => $id.'-label',
+                'class' => $heading_class,
+                'id'    => $id.'-label',
             )).
             n.tag($content.n, 'div', $display_state).n;
     }

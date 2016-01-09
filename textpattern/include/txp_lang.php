@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -249,7 +249,7 @@ function list_languages($message = '')
         ));
 
     if (isset($msg) && $msg) {
-        echo tag($msg, 'p', ' class="error lang-msg"');
+        echo graf('<span class="ui-icon ui-icon-closethick"></span> '.$msg, array('class' => 'alert-block error'));
     }
 
     echo $lang_form,
@@ -352,7 +352,7 @@ function get_language()
             return list_languages(gTxt($lang_code).sp.gTxt('updated'));
         } else {
             pagetop(gTxt('installing_language'));
-            echo tag(gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->", 'p', ' class="error lang-msg"');
+            echo graf('<span class="ui-icon ui-icon-closethick"></span> '.gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->", array('class' => 'alert-block error'));
         }
     } else {
         $response = $client->getResponse();

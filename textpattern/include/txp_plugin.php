@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -186,9 +186,11 @@ function plugin_list($message = '')
             }
 
             if ($flags & PLUGIN_HAS_PREFS) {
-                $plugin_prefs = href(gTxt('plugin_prefs'), array(
-                    'event' => 'plugin_prefs.'.$name,
-                ), array('class' => 'plugin-prefs'));
+                $plugin_prefs = span(
+                    sp.span('&#124;', array('role' => 'separator')).
+                    sp.href(gTxt('plugin_prefs'), array('event' => 'plugin_prefs.'.$name)),
+                    array('class' => 'plugin-prefs')
+                );
             } else {
                 $plugin_prefs = '';
             }
@@ -203,7 +205,7 @@ function plugin_list($message = '')
                 $manage[] = $plugin_prefs;
             }
 
-            $manage_items = ($manage) ? join(tag(sp.'&#124;'.sp, 'span'), $manage) : '-';
+            $manage_items = ($manage) ? join($manage) : '-';
             $edit_url = eLink('plugin', 'plugin_edit', 'name', $name, $name);
 
             echo tr(
@@ -427,7 +429,11 @@ function plugin_verify()
                 }
 
                 $source .= highlight_string('<?php'.$plugin['code'].'?>', true);
-                $sub = fInput('submit', '', gTxt('install'), 'publish');
+                $sub = graf(
+                    sLink('plugin', '', gTxt('cancel'), 'txp-button').
+                    fInput('submit', '', gTxt('install'), 'publish'),
+                    array('class' => 'txp-edit-actions')
+                );
 
                 pagetop(gTxt('verify_plugin'));
                 echo form(

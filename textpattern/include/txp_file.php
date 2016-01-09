@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2004 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * "Mod File Upload" by Michael Manfre
  * http://manfre.net
@@ -416,10 +416,10 @@ function file_list($message = '')
             }
 
             if ($file_exists) {
-                $id_column .= sp.span(
-                    span('[', array('aria-hidden' => 'true')).
-                    make_download_link($id, gTxt('download'), $filename).
-                    span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link')
+                $id_column .= span(
+                    sp.span('&#124;', array('role' => 'separator')).
+                    sp.make_download_link($id, gTxt('download'), $filename),
+                    array('class' => 'txp-option-link files_detail')
                 );
             }
 
@@ -736,11 +736,8 @@ function file_edit($message = '', $id = '')
                     inputLabel(
                         'file_category',
                         event_category_popup('file', $category, 'file_category').
-                        sp.span(
-                            span('[', array('aria-hidden' => 'true')).
-                            eLink('category', 'list', '', '', gTxt('edit')).
-                            span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link')
-                        ), 'file_category', '', array('class' => 'txp-form-field edit-file-category')
+                        n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+                        'file_category', '', array('class' => 'txp-form-field edit-file-category')
                     ).
 //                    inputLabel(
 //                        'perms',
@@ -764,7 +761,11 @@ function file_edit($message = '', $id = '')
                         : gTxt('existing_file').selectInput('filename', $existing_files, '', 1)
                     ).
                     pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-                    graf(fInput('submit', '', gTxt('Save'), 'publish')).
+                    graf(
+                        sLink('file', '', gTxt('cancel'), 'txp-button').
+                        fInput('submit', '', gTxt('save'), 'publish'),
+                        array('class' => 'txp-edit-actions')
+                    ).
                     hInput('category', $category).
                     hInput('perms', ($permissions == '-1') ? '' : $permissions).
                     hInput('title', $title).
@@ -808,6 +809,7 @@ function file_db_add($filename, $category, $permissions, $description, $size, $t
 
     if ($rs) {
         $GLOBALS['ID'] = $rs;
+        now('created', true);
 
         return $GLOBALS['ID'];
     }
@@ -849,6 +851,7 @@ function file_create()
         if (is_file($newpath)) {
             file_set_perm($newpath);
             update_lastmod('file_created', compact('id', 'safe_filename', 'title', 'category', 'description'));
+            now('created', true);
             file_list(gTxt('linked_to_file').' '.$safe_filename);
         } else {
             file_list(gTxt('file_not_found').' '.$safe_filename);
@@ -913,6 +916,7 @@ function file_insert()
             } else {
                 file_set_perm($newpath);
                 update_lastmod('file_uploaded', compact('id', 'newname', 'title', 'category', 'description'));
+                now('created', true);
                 file_edit(gTxt('file_uploaded', array('{name}' => $newname)), $id);
             }
         }
@@ -975,6 +979,7 @@ function file_replace()
         } else {
             file_set_perm($newpath);
             update_lastmod('file_replaced', compact('id', 'filename'));
+            now('created', true);
 
             if ($size = filesize($newpath)) {
                 safe_update('txp_file', "size = $size, modified = NOW()", "id = $id");
@@ -1095,6 +1100,7 @@ function file_save()
     }
 
     update_lastmod('file_saved', compact('id', 'filename', 'title', 'category', 'description', 'status', 'size'));
+    now('created', true);
     file_list(gTxt('file_updated', array('{name}' => $filename)));
 }
 
@@ -1145,6 +1151,7 @@ function file_delete($ids = array())
                 return;
             } else {
                 update_lastmod('file_deleted', $ids);
+                now('created', true);
                 file_list(gTxt('file_deleted', array('{name}' => join(', ', $ids))));
 
                 return;

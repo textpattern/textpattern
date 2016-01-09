@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -458,7 +458,7 @@ function preText($s, $prefs)
             }
 
             $fn = empty($out['filename']) ? '' : " AND filename = '".doSlash($out['filename'])."'";
-            $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE.$fn);
+            $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE." AND created <= ".now('created').$fn);
         }
 
         return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404);
@@ -846,14 +846,14 @@ function doArticles($atts, $iscustom, $thing = null)
             $time = "";
             break;
         case 'future':
-            $time = " AND Posted > NOW()";
+            $time = " AND Posted > ".now('posted');
             break;
         default:
-            $time = " AND Posted <= NOW()";
+            $time = " AND Posted <= ".now('posted');
     }
 
     if (!$expired) {
-        $time .= " AND (NOW() <= Expires OR Expires = ".NULLDATETIME.")";
+        $time .= " AND (".now('expires')." <= Expires OR Expires = ".NULLDATETIME.")";
     }
 
     $custom = '';

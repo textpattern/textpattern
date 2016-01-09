@@ -5,7 +5,7 @@
    ========================================================================== */
 /**
  * Correct `block` display not defined for any HTML5 element in older browsers.
- * Correct `block` display not defined for `details` or `summary` in IE 10/11 and Firefox.
+ * Correct `block` display not defined for `details` or `summary` in IE 11 and Firefox.
  * Correct `block` display not defined for `main` in IE 11.
  */
 article,
@@ -24,21 +24,13 @@ summary {
 }
 
 /**
- * Address `[hidden]` styling not present in IE 10.
- * Hide the `template` element in IE 10/11 and Safari.
- */
-[hidden],
-template {
-  display: none;
-}
-
-/**
  * Remove tap delay in modern browsers.
  */
 a,
 input,
 button {
-  touch-action: none;
+  -ms-touch-action: none;
+      touch-action: none;
 }
 
 /**
@@ -62,9 +54,9 @@ nav ol:after,
 .clearfix:after,
 .container:after,
 .paginator:after {
-  content: "";
   display: table;
   clear: both;
+  content: "";
 }
 
 /* ==========================================================================
@@ -75,31 +67,29 @@ nav ol:after,
    ========================================================================== */
   /**
  * 1. Always force scrollbar padding so we don't get 'jumping'.
- * 2. Prevent iOS and IE text size adjust after device orientation change,
- *    without disabling user zoom.
- * 3. As 2 above, for Windows Phone.
+ * 2. Prevent text size adjust after mobile device orientation change, without
+ *    disabling user zoom.
  */
   html {
-    -webkit-tap-highlight-color: rgba(0, 102, 255, 0.5);
     /* 1 */
     overflow-y: scroll;
     /* 2 */
     -webkit-text-size-adjust: 100%;
-    /* 3 */
-    -ms-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+            text-size-adjust: 100%;
   }
   /**
  * 1. Set `body` to `relative` to allow positioning of absolute elements.
- * 2. Remove default margin.
- * 3. Make sure body fills entire viewport height.
+ * 2. Make sure body fills entire viewport height.
+ * 3. Remove default margin.
  */
   body {
     /* 1 */
     position: relative;
     /* 2 */
-    margin: 0;
-    /* 3 */
     min-height: 100vh;
+    /* 3 */
+    margin: 0;
     background: #f7f7f7;
   }
   /**
@@ -114,9 +104,9 @@ nav ol:after,
  * </div>
  */
   .wrapper {
+    padding: 1px 0 1em;
     border-top: 1px solid #cccccc;
     border-bottom: 1px solid #cccccc;
-    padding: 1px 0 1em;
     background: #ffffff;
   }
   /**
@@ -133,9 +123,9 @@ nav ol:after,
   .site-header,
   .site-footer,
   .container {
-    margin: 0 auto;
     width: 88%;
     max-width: 86em;
+    margin: 0 auto;
   }
   /**
  * Additional styling for child content within site header.
@@ -175,8 +165,8 @@ nav ol:after,
  */
   .complementary-content {
     margin: 2em -6% 0;
-    border-top: 2px dashed #cccccc;
     padding: 0 6%;
+    border-top: 2px dashed #cccccc;
     /* 1 */
     word-wrap: break-word;
   }
@@ -200,9 +190,9 @@ nav ol:after,
     background-color: #dddddd;
   }
   .site-navigation ul {
+    max-width: 86em;
     margin: 0 auto;
     padding: 0;
-    max-width: 86em;
     list-style: none;
   }
   .site-navigation li {
@@ -237,32 +227,32 @@ nav ol:after,
   /* Links
    ========================================================================== */
   /**
- * 1. Remove default underline style from non-hover state links.
- * 2. Interrupt the decoration line to let the shape of the text show through
+ * 1. Remove potential background colour from active links.
+ * 2. Specify link colour.
+ * 3. Remove default underline style from non-hover state links.
+ * 4. Interrupt the decoration line to let the shape of the text show through
  *    in supported browsers.
- * 3. Specify link colour.
- * 4. Remove the grey background colour from active links in IE 10.
  */
   a {
     /* 1 */
-    text-decoration: none;
-    /* 2 */
-    text-decoration-skip: ink edges;
-    /* 3 */
-    color: #004cbf;
-    /* 4 */
     background-color: transparent;
+    /* 2 */
+    color: #004cbf;
+    /* 3 */
+    text-decoration: none;
+    /* 4 */
+    text-decoration-skip: ink edges;
   }
   a:hover, a:active {
     outline: 0;
-    text-decoration: underline;
     color: #0066ff;
+    text-decoration: underline;
   }
   a:focus {
-    outline: thin dotted #7fb2ff;
+    outline: thin solid #0066ff;
   }
   a:visited {
-    color: #00327f;
+    color: #003380;
   }
   /**
  * Additional styling for `h1` heading links.
@@ -275,9 +265,9 @@ nav ol:after,
     color: #333333;
   }
   h1 a:hover, h1 a:active {
-    text-decoration: none;
-    color: #333333;
     background-color: #f7f7f7;
+    color: #333333;
+    text-decoration: none;
   }
   /**
  * Additional styling for child links within site header.
@@ -316,8 +306,8 @@ nav ol:after,
  * Global font and text colour.
  */
   body {
-    font-family: "PT Serif", Georgia, serif;
     color: #333333;
+    font-family: "PT Serif", Georgia, serif;
   }
   /**
  * Sans-serif font for main navigation menu.
@@ -327,7 +317,7 @@ nav ol:after,
     font-weight: bold;
   }
   /**
- * Harmonise size, style and vertical margin of headings.
+ * Harmonize size, style and vertical margin of headings.
  */
   h1,
   h2,
@@ -339,34 +329,34 @@ nav ol:after,
     font-family: sans-serif;
   }
   h1 {
+    margin: 0.6315789em 0;
     font-size: 2.375em;
     line-height: 1.1842105em;
-    margin: 0.6315789em 0;
   }
   h2 {
+    margin: 0.8em 0;
     font-size: 1.875em;
     line-height: 1.2666667em;
-    margin: 0.8em 0;
   }
   h3 {
+    margin: 1em 0;
     font-size: 1.5em;
     line-height: 1.3333333em;
-    margin: 1em 0;
   }
   h4 {
+    margin: 1em 0;
     font-size: 1.25em;
     line-height: 1.4em;
-    margin: 1em 0;
   }
   h5 {
+    margin: 1em 0;
     font-size: 1.125em;
     line-height: 1.4444444em;
-    margin: 1em 0;
   }
   h6 {
-    font-size: 1em;
-    line-height: 1.5em;
     margin: 1em 0;
+    font-size: 16px;
+    line-height: 1.5em;
   }
   /**
  * Address style set to `bolder` in Firefox 4+, Safari, and Chrome.
@@ -385,10 +375,10 @@ nav ol:after,
  * Additional styling for blockquotes.
  */
   blockquote {
-    font-size: 1.25em;
-    line-height: 1.4em;
     margin: 0.8em 0;
+    font-size: 1.25em;
     font-style: italic;
+    line-height: 1.4em;
     text-align: center;
   }
   /**
@@ -402,7 +392,6 @@ nav ol:after,
  */
   abbr[title],
   dfn[title] {
-    -webkit-text-decoration: dotted underline;
     text-decoration: dotted underline;
     cursor: help;
   }
@@ -411,25 +400,25 @@ nav ol:after,
  */
   mark,
   var {
-    border-radius: 0.25em;
     padding: 0 0.25em;
-    color: #333333;
+    border-radius: 0.25em;
     background: #fff9e1;
+    color: #333333;
   }
   /**
- * Harmonise size and style of computer text.
+ * Harmonize size and style of computer text.
  */
   pre,
   code,
   kbd,
   samp {
-    font-size: 0.875em;
-    line-height: 1.5em;
     border: 1px solid #e3e3e3;
     border-radius: 0.2857143em;
-    font-family: Menlo, Consolas, Monaco, monospace;
-    color: #333333;
     background-color: #f7f7f7;
+    color: #333333;
+    font-family: Menlo, Consolas, Monaco, monospace;
+    font-size: 14px;
+    line-height: 1.5em;
   }
   code,
   kbd,
@@ -444,19 +433,20 @@ nav ol:after,
  * 3. Set tab size to 4 spaces.
  */
   pre {
+    padding: 0.5714286em 1.1428571em;
     /* 1 */
     word-wrap: normal;
     /* 2 */
     overflow-x: auto;
-    padding: 0.5714286em 1.1428571em;
     /* 3 */
-    tab-size: 4;
+    -moz-tab-size: 4;
+         tab-size: 4;
   }
   pre code {
-    font-size: 1em;
-    border: 0;
     padding: 0;
+    border: 0;
     background-color: transparent;
+    font-size: 14px;
   }
   /**
  * Prevent `sub` and `sup` affecting `line-height` in all browsers.
@@ -464,9 +454,9 @@ nav ol:after,
   sub,
   sup.footnote,
   sup {
-    font-size: 0.625em;
-    line-height: 0em;
     position: relative;
+    font-size: 0.625em;
+    line-height: 0;
     vertical-align: baseline;
   }
   sup {
@@ -476,19 +466,19 @@ nav ol:after,
     bottom: -0.25em;
   }
   /**
- * Harmonise size and style of small text.
+ * Harmonize size and style of small text.
  */
   small,
   figcaption,
   tfoot,
   .footnote {
-    font-size: 0.75em;
+    font-size: 12px;
     line-height: 1.5em;
   }
   figcaption,
   tfoot,
   .footnote {
-    color: #888888;
+    color: #777777;
   }
   figcaption {
     margin-top: 0.5em;
@@ -498,35 +488,35 @@ nav ol:after,
  * Address differences between Firefox and other browsers.
  */
   hr {
-    box-sizing: content-box;
+    height: 0;
     border: 0;
     border-bottom: 1px solid #cccccc;
-    height: 0;
+    box-sizing: content-box;
   }
   /* Support for non-latin languages (can be removed if not required)
    ========================================================================== */
   /**
  * Preferred font for Japanese language.
  */
-  html[lang="ja-jp"] {
+  [lang="ja-jp"] {
     font-family: "Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
   }
   /**
  * Preferred font for Korean language.
  */
-  html[lang="ko-kr"] {
+  [lang="ko-kr"] {
     font-family: GulimChe, Gulim, sans-serif;
   }
   /**
  * Preferred font for Chinese (PRC) language.
  */
-  html[lang="zh-cn"] {
+  [lang="zh-cn"] {
     font-family: SimHei, sans-serif;
   }
   /**
  * Preferred font for Chinese (Taiwan) language.
  */
-  html[lang="zh-tw"] {
+  [lang="zh-tw"] {
     font-family: PMingLiU, sans-serif;
   }
   /**
@@ -539,12 +529,12 @@ nav ol:after,
  * Swap image alignment right/left positions in RTL languages.
  */
   [dir="rtl"] img.align-left {
-    float: right;
     margin: 1em 0 1em 1em;
+    float: right;
   }
   [dir="rtl"] img.align-right {
-    float: left;
     margin: 1em 1em 1em 0;
+    float: left;
   }
   /**
  * Swap table caption alignment in RTL languages.
@@ -603,8 +593,8 @@ nav ol:after,
   /**
  * Images.
  *
- * 1. Remove the gap between images and the bottom of their containers.
- * 2. Remove border when inside `a` element in IE 10.
+ * 1. Remove potential border when inside `a` element.
+ * 2. Remove the gap between images and the bottom of their containers.
  *
  * Image alignment (compatible with Textile markup syntax).
  *
@@ -616,17 +606,17 @@ nav ol:after,
  */
   img {
     /* 1 */
-    vertical-align: middle;
-    /* 2 */
     border: 0;
+    /* 2 */
+    vertical-align: middle;
   }
   img.align-left {
-    float: left;
     margin: 1em 1em 1em 0;
+    float: left;
   }
   img.align-right {
-    float: right;
     margin: 1em 0 1em 1em;
+    float: right;
   }
   img.align-center {
     display: block;
@@ -640,14 +630,12 @@ nav ol:after,
   }
   /**
  * Prevent modern browsers from displaying `audio` without controls.
- * Remove excess height in iOS 5 devices.
  */
   audio:not([controls]) {
     display: none;
-    height: 0;
   }
   /**
- * Correct overflow not hidden in IE 10/11.
+ * Correct overflow not hidden in IE 11.
  */
   svg:not(:root) {
     overflow: hidden;
@@ -658,28 +646,28 @@ nav ol:after,
  * Consistent tables.
  */
   table {
+    width: 100%;
     margin-bottom: 1em;
     border-collapse: collapse;
     border-spacing: 0;
-    width: 100%;
   }
   /**
  * Styling of table captions.
  */
   caption {
+    margin-bottom: 0.5em;
     font-style: italic;
     text-align: left;
-    margin-bottom: 0.5em;
   }
   /**
  * Make table cells align top and left by default.
  */
   th,
   td {
-    vertical-align: top;
-    text-align: left;
-    border-bottom: 1px solid #cccccc;
     padding: 0.25em;
+    border-bottom: 1px solid #cccccc;
+    text-align: left;
+    vertical-align: top;
   }
   /**
  * 1. Remove padding from top cells of table header.
@@ -707,8 +695,8 @@ nav ol:after,
   tfoot tr:last-child th,
   tfoot tr:last-child td {
     /* 2 */
-    border-bottom: 0;
     padding-bottom: 0;
+    border-bottom: 0;
   }
   /**
  * Border at top of each new table row.
@@ -747,7 +735,7 @@ nav ol:after,
     margin: 0 0 0 2em;
   }
   /**
- * Italicise definition terms.
+ * Italicize definition terms.
  */
   dt {
     font-style: italic;
@@ -760,10 +748,10 @@ nav ol:after,
  * <ul class="article-list">
  */
   .article-list {
-    list-style: none;
     margin: 0 0 2em;
-    border-top: 1px solid #cccccc;
     padding: 0;
+    border-top: 1px solid #cccccc;
+    list-style: none;
   }
   .article-list li {
     margin-bottom: 0;
@@ -772,79 +760,58 @@ nav ol:after,
   /* Forms
    ========================================================================== */
   /**
- * 1. Define consistent fieldset border, margin, and padding.
- * 2. Address width being affected by wide descendants in Chrome, Firefox.
+ * 1. Address width being affected by wide descendants in Chrome, Firefox.
+ * 2. Define consistent fieldset border, margin, and padding.
  */
   fieldset {
     /* 1 */
-    margin: 1em 0;
-    border: 1px solid #cccccc;
-    padding: 1px 1em;
-    /* 2 */
     min-width: 0;
+    /* 2 */
+    margin: 1em 0;
+    padding: 1px 1em;
+    border: 1px solid #cccccc;
   }
   /**
- * 1. Correct `color` not being inherited in IE 10/11.
- * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+ * Normalize styling of `legend`.
  */
   legend {
-    /* 1 */
-    border: 0;
-    /* 2 */
     padding: 0;
+    border: 0;
   }
   /**
- * 1. Correct font properties not being inherited.
+ * 1. Prevent elements from spilling out of their parent.
  * 2. Address margins set differently in Firefox 4+, Safari, and Chrome.
- * 3. Prevent elements from spilling out of their parent.
+ * 3. Correct font properties not being inherited.
  */
   button,
   input,
   optgroup,
   select,
   textarea {
-    box-sizing: border-box;
     /* 1 */
-    font-size: 16px;
-    line-height: 1.375em;
+    max-width: 100%;
     /* 2 */
     margin: 0;
-    /* 3 */
-    max-width: 100%;
+    color: #000000;
     font-family: sans-serif;
+    /* 3 */
+    font-size: 16px;
+    line-height: 1.375em;
     vertical-align: baseline;
-  }
-  /**
- * Colour for placeholder text.
- */
-  input::-webkit-input-placeholder,
-  textarea::-webkit-input-placeholder {
-    color: #888888;
-  }
-  input::-moz-placeholder,
-  textarea::-moz-placeholder {
-    color: #888888;
-  }
-  input:-moz-placeholder,
-  textarea:-moz-placeholder {
-    color: #888888;
-  }
-  input:-ms-input-placeholder,
-  textarea:-ms-input-placeholder {
-    color: #888888;
+    box-sizing: border-box;
   }
   /**
  * Remove inner padding and border in Firefox 4+.
  */
   button::-moz-focus-inner,
   input::-moz-focus-inner {
-    border: 0;
     padding: 0;
+    border: 0;
   }
   /**
- * Remove inner padding and search cancel button in Safari and Chrome on OS X.
- * Safari (but not Chrome) clips the cancel button when the search input has
- * padding (and `textfield` appearance).
+ * Remove inner padding in Safari and Chrome on OS X. Safari (but not Chrome)
+ * clips the cancel button when the search input has padding (and `textfield`
+ * appearance).
  */
   input[type="search"]::-webkit-search-decoration {
     -webkit-appearance: none;
@@ -852,7 +819,7 @@ nav ol:after,
   /**
  * Styling of form input fields.
  *
- * 1. Remove iOS Safari default styling.
+ * 1. Remove browser-specific default styling.
  */
   input[type="color"],
   input[type="date"],
@@ -870,14 +837,16 @@ nav ol:after,
   input[type="week"],
   select,
   textarea {
+    height: 2.5em;
+    padding: 0.5em 0.1875em;
     transition: box-shadow 0.2s linear;
-    /* 1 */
-    -webkit-appearance: none;
     border: 1px solid #cccccc;
     border-radius: 0;
-    padding: 0.5em 0.1875em;
-    height: 2.5em;
     background: #ffffff;
+    /* 1 */
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
   }
   input[type="color"]:focus,
   input[type="date"]:focus,
@@ -895,7 +864,8 @@ nav ol:after,
   input[type="week"]:focus,
   select:focus,
   textarea:focus {
-    border-color: #7fb2ff;
+    border-color: #0066ff;
+    outline: 0;
   }
   /**
  * Remove padding from `color` fields.
@@ -913,7 +883,7 @@ nav ol:after,
     height: auto;
   }
   /**
- * 1. Remove excess padding in IE 10.
+ * 1. Remove any excess padding.
  * 2. Correct margins for inline checkbox/radio labels.
  */
   input[type="checkbox"],
@@ -985,17 +955,17 @@ nav ol:after,
 
 @media screen {
   /**
- * Normalise styling of `optgroup`.
+ * Normalize styling of `optgroup`.
  */
   optgroup {
+    color: #333333;
     font-style: normal;
     font-weight: bold;
-    color: #333333;
   }
   /**
- * 1. Remove default vertical scrollbar in IE 10/11.
- * 2. Restrict to vertical resizing to prevent layout breakage.
- * 3. Remove unwanted space below `textarea` in Safari, Chrome, Opera.
+ * 1. Remove default vertical scrollbar in IE 11.
+ * 2. Remove unwanted space below `textarea` in Safari, Chrome, Opera.
+ * 3. Restrict to vertical resizing to prevent layout breakage.
  */
   textarea {
     width: 100%;
@@ -1004,15 +974,15 @@ nav ol:after,
     /* 1 */
     overflow: auto;
     /* 2 */
-    resize: vertical;
-    /* 3 */
     vertical-align: top;
+    /* 3 */
+    resize: vertical;
   }
   /**
  * Make sure disabled elements really are disabled and styled appropriately.
  *
- * 1. Override default iOS opacity setting.
- * 2. Re-set default cursor for disabled elements.
+ * 1. Re-set default cursor for disabled elements.
+ * 2. Override default iOS opacity setting.
  */
   button[disabled],
   input[disabled],
@@ -1024,15 +994,15 @@ nav ol:after,
   select[disabled] optgroup,
   textarea[disabled],
   span.disabled {
-    border-color: #e3e3e3 !important;
-    color: #aaaaaa !important;
+    border-color: #d4d4d4 !important;
     background: #eeeeee !important;
-    box-shadow: none !important;
+    color: #aaaaaa !important;
     text-shadow: none !important;
+    box-shadow: none !important;
     /* 1 */
-    opacity: 1;
-    /* 2 */
     cursor: default !important;
+    /* 2 */
+    opacity: 1;
   }
   /**
  * Width display options for `input` fields. Height display options
@@ -1080,19 +1050,19 @@ nav ol:after,
   /* Buttons
    ========================================================================== */
   /**
- * 1. Address `overflow` set to `hidden` in IE 10/11.
- * 2. Correct `button` style inheritance in Firefox, IE 10/11 and Opera.
+ * 1. Correct `button` style inheritance in Firefox, IE 11 and Opera.
+ * 2. Address `overflow` set to `hidden` in IE 11.
  */
   button {
     /* 1 */
-    overflow: visible;
-    /* 2 */
     text-transform: none;
+    /* 2 */
+    overflow: visible;
   }
   /**
- * 1. Remove iOS Safari default styling.
- * 2. Improve usability and consistency of cursor style between image-type
+ * 1. Improve usability and consistency of cursor style between image-type
  *    `input` and others.
+ * 2. Remove browser-specific default styling.
  */
   button,
   input[type="button"],
@@ -1100,23 +1070,25 @@ nav ol:after,
   input[type="submit"] {
     background-color: #dddddd;
     background-image: linear-gradient(#eeeeee, #dddddd);
-    transition: box-shadow 0.2s linear;
-    /* 1 */
-    -webkit-appearance: none;
-    background-clip: padding-box;
     display: inline-block;
-    border: 1px solid #cccccc;
-    border-radius: 0.5em;
-    padding: 0.5em 0.75em;
     width: auto;
     height: 2.5em;
+    padding: 0.5em 0.75em;
+    transition: box-shadow 0.2s linear;
+    border: 1px solid #cccccc;
+    border-radius: 0.5em;
+    background-clip: padding-box;
+    color: #333333;
     font-weight: normal;
     text-align: center;
-    color: #333333;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
     text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-    /* 2 */
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    /* 1 */
     cursor: pointer;
+    /* 2 */
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
   }
   button:hover,
   input[type="button"]:hover,
@@ -1135,14 +1107,15 @@ nav ol:after,
     background-image: linear-gradient(lightgray, #e4e4e4);
     border-color: #aaaaaa;
     color: #1a1a1a;
-    box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
     text-decoration: none;
+    box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   }
   button:focus,
   input[type="button"]:focus,
   input[type="reset"]:focus,
   input[type="submit"]:focus {
-    border-color: #7fb2ff;
+    border-color: #0066ff;
+    outline: 0;
   }
   /* Comments
    ========================================================================== */
@@ -1155,8 +1128,8 @@ nav ol:after,
  */
   .comments {
     margin-bottom: 1em;
-    border-radius: 0.5em;
     padding: 1px 1em;
+    border-radius: 0.5em;
     background: #f7f7f7;
     word-wrap: break-word;
   }
@@ -1182,8 +1155,8 @@ nav ol:after,
  */
   #cpreview {
     margin-bottom: 2px;
-    border-radius: 0.5em;
     padding: 1em;
+    border-radius: 0.5em;
     background-color: #fff9e1;
   }
   /**
@@ -1258,9 +1231,9 @@ nav ol:after,
   /**
      * Two-column layout.
      *
-     * 1. Complementary content moves from under main content to the right
+     * 1. Golden ratio at container maximum width.
+     * 2. Complementary content moves from under main content to the right
      *    column and main column is reduced in width to allow this.
-     * 2. Golden ratio at container maximum width.
      *
      * Example HTML:
      *
@@ -1269,18 +1242,18 @@ nav ol:after,
      */
   main {
     /* 1 */
-    float: left;
-    /* 2 */
     width: 54%;
+    /* 2 */
+    float: left;
   }
   .complementary-content {
+    width: 30%;
+    margin: 2em 0;
+    padding: 0 1em;
     /* 1 */
     float: right;
-    margin: 2em 0;
     border: 1px solid #e3e3e3;
     border-radius: 0.5em;
-    padding: 0 1em;
-    width: 30%;
     background: #f7f7f7;
   }
 }
@@ -1297,10 +1270,10 @@ nav ol:after,
   *:after,
   *:first-letter,
   *:first-line {
-    color: #000000 !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
     background: transparent !important;
+    color: #000000 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
   }
   /**
  * Use a print-friendly font and size.
@@ -1345,59 +1318,59 @@ nav ol:after,
     text-decoration: none;
   }
   /**
- *  Show long-form for abbreviations in print.
+ * Show long-form for abbreviations in print.
  */
   abbr[title]:after {
     content: " (" attr(title) ")";
   }
   /**
- *  Harmonise size, style and vertical margin of headings.
+ * Harmonize size, style and vertical margin of headings.
  */
   h1 {
-    font-size: 32pt;
-    line-height: 36pt;
-    font-weight: normal;
     margin: 16pt 0;
+    font-size: 32pt;
+    font-weight: normal;
+    line-height: 36pt;
   }
   h2 {
+    margin: 14pt 0;
     font-size: 24pt;
     line-height: 28pt;
     page-break-after: avoid;
     orphans: 2;
     widows: 2;
-    margin: 14pt 0;
   }
   h3 {
+    margin: 12pt 0;
     font-size: 18pt;
     line-height: 22pt;
     page-break-after: avoid;
     orphans: 2;
     widows: 2;
-    margin: 12pt 0;
   }
   h4 {
+    margin: 11pt 0;
     font-size: 14pt;
     line-height: 18pt;
     page-break-after: avoid;
     orphans: 2;
     widows: 2;
-    margin: 11pt 0;
   }
   h5 {
+    margin: 10pt 0;
     font-size: 12pt;
     line-height: 16pt;
     page-break-after: avoid;
     orphans: 2;
     widows: 2;
-    margin: 10pt 0;
   }
   h6 {
+    margin: 9pt 0;
     font-size: 10pt;
     line-height: 14pt;
     page-break-after: avoid;
     orphans: 2;
     widows: 2;
-    margin: 9pt 0;
   }
   /**
  * Prevent widows (single final paragraph line on next page) and orphans (single
@@ -1408,7 +1381,7 @@ nav ol:after,
     widows: 2;
   }
   /**
- * Harmonise size and style of small text.
+ * Harmonize size and style of small text.
  */
   footer,
   figcaption,
@@ -1423,9 +1396,9 @@ nav ol:after,
  * 1. Avoid blockquotes breaking across multiple pages.
  */
   blockquote {
-    font-size: 16pt;
-    border-left: 3pt solid #000000;
     padding: 0 0 0 8pt;
+    border-left: 3pt solid #000000;
+    font-size: 16pt;
     /* 1 */
     page-break-inside: avoid;
   }
@@ -1434,8 +1407,8 @@ nav ol:after,
  */
   pre {
     margin-bottom: 8pt;
-    border: solid 1pt #000000;
     padding: 8pt;
+    border: solid 1pt #000000;
   }
   /**
  * Avoid user comments breaking across multiple pages.
@@ -1482,12 +1455,12 @@ nav ol:after,
     page-break-inside: avoid;
   }
   img.align-left {
-    float: left;
     margin: 1em 1em 1em 0;
+    float: left;
   }
   img.align-right {
-    float: right;
     margin: 1em 0 1em 1em;
+    float: right;
   }
   img.align-center {
     display: block;
@@ -1509,39 +1482,39 @@ nav ol:after,
  * Simple bullet styling for `ul` unordered lists.
  */
   ul {
-    list-style: square;
     padding: 0 0 8pt 1.8em;
+    list-style: square;
   }
   /**
  * Simple numerical styling for `ol` ordered lists.
  */
   ol {
-    list-style: decimal;
     padding: 0 0 8pt 1.8em;
+    list-style: decimal;
   }
   /**
- * Normalise margins on `dl` definition lists.
+ * Normalize margins on `dl` definition lists.
  */
   dl {
     padding: 0 0 8pt 1.8em;
   }
   /**
- * 1. Ensure margin below `table`.
- * 2. Make `table` span entire page width.
+ * 1. Make `table` span entire page width.
+ * 2. Ensure margin below `table`.
  */
   table {
     /* 1 */
-    margin-bottom: 8pt;
-    /* 2 */
     width: 100%;
+    /* 2 */
+    margin-bottom: 8pt;
   }
   /**
- * Harmonise styling for `caption`.
+ * Harmonize styling for `caption`.
  */
   caption {
+    margin-bottom: 4pt;
     font-weight: bold;
     text-align: left;
-    margin-bottom: 4pt;
   }
   /**
  * Display table head across multi-page tables.
@@ -1563,7 +1536,7 @@ nav ol:after,
  */
   th,
   td {
-    border-bottom: solid 1pt #000000;
     padding: 4pt 8pt;
+    border-bottom: solid 1pt #000000;
   }
 }

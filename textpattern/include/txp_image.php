@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -356,13 +356,16 @@ function image_list($message = '')
             if ($thumbnail) {
                 if ($ext != '.swf') {
                     $thumbnail = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
-                                        "title='$id$ext ($w &#215; $h)'".
-                                        ($thumb_w ? " width='$thumb_w' height='$thumb_h'" : '').' />';
+                        "title='$id$ext ($w &#215; $h)'".
+                        ($thumb_w ? " width='$thumb_w' height='$thumb_h'" : '').' />';
+                    $thumbexists = 1;
                 } else {
                     $thumbnail = '';
+                    $thumbexists = '';
                 }
             } else {
                 $thumbnail = gTxt('no');
+                $thumbexists = '';
             }
 
             if ($ext != '.swf') {
@@ -391,12 +394,15 @@ function image_list($message = '')
                 ).
                 hCell(
                     ($can_edit ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id).
-                    sp.span(
-                        span('[', array('aria-hidden' => 'true')).
-                        href(gTxt('view'), imagesrcurl($id, $ext)).
-                        span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link images_detail')
-                    ), '', ' class="txp-list-col-id" scope="row"').
-
+                    span(
+                        sp.span('&#124;', array('role' => 'separator')).
+                        sp.href(gTxt('view'), imagesrcurl($id, $ext)),
+                        array('class' => 'txp-option-link images_detail')
+                    ), '', array(
+                        'class' => 'txp-list-col-id',
+                        'scope' => 'row',
+                    )
+                ).
                 td(
                     ($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name'
                 ).
@@ -404,7 +410,7 @@ function image_list($message = '')
                     gTime($uDate), '', 'txp-list-col-created date images_detail'
                 ).
                 td(
-                    pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a), '', 'txp-list-col-thumbnail'
+                    pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a), '', 'txp-list-col-thumbnail'.($thumbexists ? ' has-thumbnail' : '')
                 ).
                 td(
                     $tagbuilder, '', 'txp-list-col-tag-build images_detail'
@@ -682,11 +688,8 @@ function image_edit($message = '', $id = '')
                         inputLabel(
                             'image_category',
                             event_category_popup('image', $category, 'image_category').
-                            sp.span(
-                                span('[', array('aria-hidden' => 'true')).
-                                eLink('category', 'list', '', '', gTxt('edit')).
-                                span(']', array('aria-hidden' => 'true')), array('class' => 'txp-option-link')
-                            ), 'image_category', '', array('class' => 'txp-form-field edit-image-category')
+                            n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+                            'image_category', '', array('class' => 'txp-form-field edit-image-category')
                         ).
                         inputLabel(
                             'image_alt_text',

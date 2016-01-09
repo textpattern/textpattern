@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -26,7 +26,7 @@
  *
  * <code>
  * try {
- *     echo (string) Txp::get('\Textpattern\Filter\String', 'Hello World!')->length(1, 64)->match('/^[a-z]$/i')->html();
+ *     echo (string) Txp::get('\Textpattern\Filter\StringFilter', 'Hello World!')->length(1, 64)->match('/^[a-z]$/i')->html();
  * } catch (\Textpattern\Filter\Exception $e) {
  *     echo $e->getMessage();
  * }
@@ -38,7 +38,7 @@
 
 namespace Textpattern\Filter;
 
-class String extends \Textpattern\Type\String
+class StringFilter extends \Textpattern\Type\StringType
 {
     /**
      * {@inheritdoc}
@@ -59,7 +59,7 @@ class String extends \Textpattern\Type\String
      * <code>
      * try
      * {
-     *     echo (string) Txp::get('Textpattern\Filter\String', 'Hello World!')->match('/^[^0-9]$/');
+     *     echo (string) Txp::get('Textpattern\Filter\StringFilter', 'Hello World!')->match('/^[^0-9]$/');
      * } catch (\Textpattern\Filter\Exception $e) {
      *     echo $e->getMessage();
      * }
@@ -69,7 +69,7 @@ class String extends \Textpattern\Type\String
      * @param  array  $matches Matches
      * @param  int    $flags   Flags
      * @param  int    $offset  Offset
-     * @return String
+     * @return StringFilter
      * @throws \Textpattern\Filter\Exception
      */
 
@@ -87,7 +87,7 @@ class String extends \Textpattern\Type\String
      *
      * <code>
      * try {
-     *     echo (string) Txp::get('Textpattern\Filter\String', 'Hello World!')->length(64);
+     *     echo (string) Txp::get('Textpattern\Filter\StringFilter', 'Hello World!')->length(64);
      * } catch (\Textpattern\Filter\Exception $e) {
      *     echo $e->getMessage();
      * }
@@ -95,7 +95,7 @@ class String extends \Textpattern\Type\String
      *
      * @param  int $min The minimum length
      * @param  int $max The maximum length
-     * @return String
+     * @return StringFilter
      * @throws \Textpattern\Filter\Exception
      */
 
