@@ -41,18 +41,19 @@ if (!in_array('status', $txpfile)) {
 $update_files = 0;
 
 if (!in_array('modified', $txpfile)) {
-    safe_alter('txp_file', "ADD modified DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
+    safe_alter('txp_file', "ADD modified DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00'");
+    safe_alter('txp_file', "MODIFY modified DATETIME NOT NULL");
     $update_files = 1;
 }
 
 if (!in_array('created', $txpfile)) {
-    safe_alter('txp_file', "ADD created DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
+    safe_alter('txp_file', "ADD created DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00'");
+    safe_alter('txp_file', "MODIFY created DATETIME NOT NULL");
     $update_files = 1;
 }
 
 if (!in_array('size', $txpfile)) {
-    safe_alter('txp_file',
-        "ADD size BIGINT");
+    safe_alter('txp_file', "ADD size BIGINT");
     $update_files = 1;
 }
 
@@ -61,9 +62,8 @@ if (!in_array('downloads', $txpfile)) {
 }
 
 if (array_intersect(array('modified', 'created'), $txpfile)) {
-    safe_alter('txp_file', "
-        MODIFY modified DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-        MODIFY created DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
+    safe_alter('txp_file', "MODIFY modified DATETIME NOT NULL");
+    safe_alter('txp_file', "MODIFY created  DATETIME NOT NULL");
 }
 
 // Copy existing file timestamps into the new database columns.
