@@ -183,7 +183,7 @@ if (!defined('REGEXP_UTF8')) {
  * @package DB
  */
 
-define('NULLDATETIME', '\'0000-00-00 00:00:00\'');
+define('NULLDATETIME', 'NULL');
 
 /**
  * Permlink URL mode.

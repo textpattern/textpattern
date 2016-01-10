@@ -11,3 +11,4 @@ ehthumbs.db
 Thumbs.db
 /vendor
 /composer.lock
+*~

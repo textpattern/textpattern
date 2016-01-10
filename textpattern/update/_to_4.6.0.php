@@ -219,14 +219,49 @@ foreach (array('4.4.0', '4.4.1') as $v) {
     }
 }
 
-// Add generic token table.
+// Add generic token table (dropping first, because of changes to the table setup)
+safe_drop('txp_token');
 safe_create('txp_token',"
-id           INT          NOT NULL AUTO_INCREMENT,
-reference_id INT          DEFAULT 0,
-type         VARCHAR(255) DEFAULT '',
-selector     CHAR(12)     DEFAULT '',
-token        VARCHAR(255) DEFAULT '',
-expires      DATETIME     DEFAULT '0000-00-00 00:00:00',
-PRIMARY KEY (id)
-"
-);
+    id           INT          NOT NULL AUTO_INCREMENT,
+    reference_id INT          NOT NULL DEFAULT 0,
+    type         VARCHAR(255) NOT NULL DEFAULT '',
+    selector     VARCHAR(12)  NOT NULL DEFAULT '',
+    token        VARCHAR(255) NOT NULL DEFAULT '',
+    expires      DATETIME     NOT NULL,
+
+    PRIMARY KEY (id)
+");
+
+// Get rid of default zero dates to make MySQL 5.7 happy.
+safe_alter('textpattern',       "MODIFY Posted      DATETIME NOT NULL");
+safe_alter('textpattern',       "MODIFY Expires     DATETIME     NULL DEFAULT NULL");
+safe_alter('textpattern',       "MODIFY LastMod     DATETIME NOT NULL");
+safe_alter('textpattern',       "MODIFY feed_time   DATE     NOT NULL"); //0000-00-00
+safe_alter('txp_discuss',       "MODIFY posted      DATETIME NOT NULL");
+safe_alter('txp_discuss_nonce', "MODIFY issue_time  DATETIME NOT NULL");
+safe_alter('txp_file',          "MODIFY created     DATETIME NOT NULL");
+safe_alter('txp_file',          "MODIFY modified    DATETIME NOT NULL");
+safe_alter('txp_image',         "MODIFY date        DATETIME NOT NULL");
+safe_alter('txp_link',          "MODIFY date        DATETIME NOT NULL");
+safe_alter('txp_log',           "MODIFY time        DATETIME NOT NULL");
+safe_alter('txp_users',         "MODIFY last_access DATETIME     NULL DEFAULT NULL");
+// remove logs and nonces with zero dates.
+safe_delete('txp_discuss_nonce', "DATE(issue_time) = '0000-00-00'");
+safe_delete('txp_log',           "DATE(time)       = '0000-00-00'");
+// replace zero dates (which shouldn't exist, really) with somewhat sensible values
+safe_update('textpattern', "Posted      = NOW()",   "DATE(Posted)      = '0000-00-00'");
+safe_update('textpattern', "Expires     = NULL",    "DATE(Expires)     = '0000-00-00'");
+safe_update('textpattern', "LastMod     = Posted",  "DATE(LastMod)     = '0000-00-00'");
+safe_update('txp_discuss', "posted      = NOW()",   "DATE(posted)      = '0000-00-00'");
+safe_update('txp_file',    "created     = NOW()",   "DATE(created)     = '0000-00-00'");
+safe_update('txp_file',    "modified    = created", "DATE(modified)    = '0000-00-00'");
+safe_update('txp_image',   "date        = NOW()",   "DATE(date)        = '0000-00-00'");
+safe_update('txp_link',    "date        = NOW()",   "DATE(date)        = '0000-00-00'");
+safe_update('txp_users',   "last_access = NULL",    "DATE(last_access) = '0000-00-00'");
+safe_update('textpattern', "feed_time   = DATE(Posted)", "feed_time    = '0000-00-00'");
+
+// category names are max 64 chars when created/edited, so don't pretend they can be longer
+safe_alter('textpattern', "MODIFY Category1 VARCHAR(64) NOT NULL DEFAULT ''");
+safe_alter('textpattern', "MODIFY Category2 VARCHAR(64) NOT NULL DEFAULT ''");
+safe_alter('txp_file',    "MODIFY category  VARCHAR(64) NOT NULL DEFAULT ''");
+safe_alter('txp_image',   "MODIFY category  VARCHAR(64) NOT NULL DEFAULT ''");
