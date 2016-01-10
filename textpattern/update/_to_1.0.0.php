@@ -345,7 +345,7 @@ if (!safe_query("SELECT 1 FROM `".PFX."txp_file` LIMIT 0")) {
     safe_query("CREATE TABLE `".PFX."txp_file` (
         id          INT          NOT NULL AUTO_INCREMENT,
         filename    VARCHAR(255) NOT NULL DEFAULT '',
-        category    VARCHAR(255) NOT NULL DEFAULT '',
+        category    VARCHAR(64)  NOT NULL DEFAULT '',
         permissions VARCHAR(32)  NOT NULL DEFAULT '0',
         description TEXT         NOT NULL DEFAULT '',
         downloads   INT UNSIGNED NOT NULL DEFAULT '0',
@@ -422,7 +422,9 @@ if (safe_field("val", 'txp_prefs', "name = 'blog_time_uid'") === false) {
 // Articles unique id.
 if (!in_array('uid', $txp)) {
     safe_alter('textpattern', "ADD uid VARCHAR(32) NOT NULL");
-    safe_alter('textpattern', "ADD feed_time DATE NOT NULL DEFAULT '0000-00-00'");
+    safe_alter('textpattern', "ADD feed_time DATE NOT NULL DEFAULT 1970-01-01");
+    safe_update('textpattern', "feed_time = DATE(Posted)", "feed_time = '1970-01-01'");
+    safe_alter('textpattern', "MODIFY feed_time DATE NOT NULL");
 
     $rs = safe_rows_start('ID, Posted', 'textpattern', '1');
 

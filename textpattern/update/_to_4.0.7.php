@@ -49,7 +49,7 @@ if (!safe_field("val", 'txp_prefs', "name = 'author_list_pageby'")) {
 $txp = getThings("DESCRIBE `".PFX."textpattern`");
 
 if (!in_array('Expires', $txp)) {
-    safe_alter('textpattern', "ADD Expires DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' AFTER Posted");
+    safe_alter('textpattern', "ADD Expires DATETIME AFTER Posted");
 }
 
 safe_create_index('textpattern', 'Expires', 'Expires_idx');
