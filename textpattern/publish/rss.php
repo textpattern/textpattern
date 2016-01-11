@@ -117,7 +117,7 @@ function rss()
         $query[] = $sfilter;
         $query[] = $cfilter;
 
-        $expired = ($publish_expired_articles) ? " " : " AND (".now('expires')." <= Expires OR Expires = ".NULLDATETIME.") ";
+        $expired = ($publish_expired_articles) ? " " : " AND (".now('expires')." <= Expires OR Expires IS NULL) ";
         $rs = safe_rows_start(
             "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(LastMod) AS uLastMod, UNIX_TIMESTAMP(Expires) AS uExpires, ID AS thisid",
             'textpattern',

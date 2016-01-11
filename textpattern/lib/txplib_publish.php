@@ -115,9 +115,9 @@ function populateArticleData($rs)
 
 function article_format_info($rs)
 {
-    $rs['uPosted'] = (($unix_ts = @strtotime($rs['Posted'])) > 0) ? $unix_ts : NULLDATETIME;
-    $rs['uLastMod'] = (($unix_ts = @strtotime($rs['LastMod'])) > 0) ? $unix_ts : NULLDATETIME;
-    $rs['uExpires'] = (($unix_ts = @strtotime($rs['Expires'])) > 0) ? $unix_ts : NULLDATETIME;
+    $rs['uPosted']  = (($unix_ts = @strtotime($rs['Posted']))  !== false) ? $unix_ts : null;
+    $rs['uLastMod'] = (($unix_ts = @strtotime($rs['LastMod'])) !== false) ? $unix_ts : null;
+    $rs['uExpires'] = (($unix_ts = @strtotime($rs['Expires'])) !== false) ? $unix_ts : null;
     populateArticleData($rs);
 }
 
@@ -205,7 +205,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     }
 
     if (!$expired) {
-        $time .= " AND (".now('expires')." <= Expires OR Expires = ".NULLDATETIME.")";
+        $time .= " AND (".now('expires')." <= Expires OR Expires IS NULL)";
     }
 
     $custom = '';
