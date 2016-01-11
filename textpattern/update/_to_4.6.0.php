@@ -212,7 +212,7 @@ safe_create('txp_token',"
     type         VARCHAR(255) NOT NULL DEFAULT '',
     selector     VARCHAR(12)  NOT NULL DEFAULT '',
     token        VARCHAR(255) NOT NULL DEFAULT '',
-    expires      DATETIME     NOT NULL,
+    expires      DATETIME         NULL DEFAULT NULL,
 
     PRIMARY KEY (id)
 ");

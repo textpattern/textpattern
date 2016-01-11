@@ -231,7 +231,7 @@ function article_post()
         if ($expires) {
             $whenexpires = "FROM_UNIXTIME($expires)";
         } else {
-            $whenexpires = NULLDATETIME;
+            $whenexpires = "NULL";
         }
 
         $user = doSlash($txp_user);
@@ -440,7 +440,7 @@ function article_save()
     if ($expires) {
         $whenexpires = "Expires = FROM_UNIXTIME($expires)";
     } else {
-        $whenexpires = "Expires = ".NULLDATETIME;
+        $whenexpires = "Expires = NULL";
     }
 
     // Auto-update custom-titles according to Title, as long as unpublished and
