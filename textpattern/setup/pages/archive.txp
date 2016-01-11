@@ -16,6 +16,8 @@
 
     <!-- specify meta description if available -->
     <txp:meta_description />
+    <!-- specify meta keywords if available -->
+    <txp:meta_keywords separator="," />
 
     <meta name="generator" content="Textpattern CMS">
     <meta name="viewport" content="width=device-width, initial-scale=1">
