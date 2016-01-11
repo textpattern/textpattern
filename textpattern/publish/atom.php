@@ -170,7 +170,7 @@ function atom()
         $query[] = $sfilter;
         $query[] = $cfilter;
 
-        $expired = ($publish_expired_articles) ? " " : " AND (".now('expires')." <= Expires OR Expires = ".NULLDATETIME.") ";
+        $expired = ($publish_expired_articles) ? " " : " AND (".now('expires')." <= Expires OR Expires IS NULL) ";
         $rs = safe_rows_start(
             "*,
             ID AS thisid,

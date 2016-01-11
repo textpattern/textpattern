@@ -853,7 +853,7 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     if (!$expired) {
-        $time .= " AND (".now('expires')." <= Expires OR Expires = ".NULLDATETIME.")";
+        $time .= " AND (".now('expires')." <= Expires OR Expires IS NULL)";
     }
 
     $custom = '';

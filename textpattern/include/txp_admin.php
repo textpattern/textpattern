@@ -700,9 +700,9 @@ function admin_multi_edit()
     $clause = '';
 
     if ($method === 'resetpassword') {
-        $clause = " AND last_access != " . NULLDATETIME;
+        $clause = " AND last_access IS NOT NULL";
     } elseif ($method === 'resendactivation') {
-        $clause = " AND last_access = " . NULLDATETIME;
+        $clause = " AND last_access IS NULL";
     }
 
     $names = safe_column(

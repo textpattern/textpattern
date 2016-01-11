@@ -109,7 +109,7 @@ $create_sql = array();
 $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
     ID              INT          NOT NULL AUTO_INCREMENT,
     Posted          DATETIME     NOT NULL,
-    Expires         DATETIME     NOT NULL,
+    Expires         DATETIME         NULL DEFAULT NULL,
     AuthorID        VARCHAR(64)  NOT NULL DEFAULT '',
     LastMod         DATETIME     NOT NULL,
     LastModID       VARCHAR(64)  NOT NULL DEFAULT '',
@@ -144,7 +144,7 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
     custom_9        VARCHAR(255) NOT NULL DEFAULT '',
     custom_10       VARCHAR(255) NOT NULL DEFAULT '',
     uid             VARCHAR(32)  NOT NULL DEFAULT '',
-    feed_time       DATE         NOT NULL DEFAULT,
+    feed_time       DATE         NOT NULL,
 
     PRIMARY KEY                 (ID),
     INDEX    categories_idx     (Category1(10), Category2(10)),
@@ -552,7 +552,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_token` (
     type         VARCHAR(255) NOT NULL DEFAULT '',
     selector     VARCHAR(12)  NOT NULL DEFAULT '',
     token        VARCHAR(255) NOT NULL DEFAULT '',
-    expires      DATETIME     NOT NULL,
+    expires      DATETIME         NULL DEFAULT NULL,
 
     PRIMARY KEY (id)
 ) $tabletype ";

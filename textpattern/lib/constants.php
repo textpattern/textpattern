@@ -178,14 +178,6 @@ if (!defined('REGEXP_UTF8')) {
 }
 
 /**
- * NULL datetime for use in an SQL statement.
- *
- * @package DB
- */
-
-define('NULLDATETIME', 'NULL');
-
-/**
  * Permlink URL mode.
  *
  * @package    URL
