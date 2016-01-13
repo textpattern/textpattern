@@ -283,7 +283,7 @@ function prefs_list($message = '')
         }
 
         echo n.'</div>'.
-            n.'<div class="txp-layout-4col-cell-2-3-4">'.
+            n.'<div class="txp-layout-4col-cell-2-3">'.
             join(n, $build).
             n.'</div>'.
             sInput('prefs_save').
