@@ -25,7 +25,7 @@ if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
-class hive_theme extends \Textpattern\Admin\Theme
+class hiveNeutral_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
     {
