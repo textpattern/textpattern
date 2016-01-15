@@ -1620,7 +1620,7 @@ function adminErrorHandler($errno, $errstr, $errfile, $errline)
 
     if ($production_status == 'debug' && has_privs('debug.backtrace')) {
         $msg .= n."in $errfile at line $errline";
-        $backtrace = join(n, get_caller(5, 1));
+        $backtrace = join(n, get_caller(10, 1));
     }
 
     if ($errno == E_ERROR || $errno == E_USER_ERROR) {
@@ -1655,6 +1655,31 @@ function adminErrorHandler($errno, $errstr, $errfile, $errline)
     } else {
         txp_die($msg, 500);
     }
+}
+
+/**
+ * Error handler for update scripts.
+ *
+ * @param   int    $errno
+ * @param   string $errstr
+ * @param   string $errfile
+ * @param   int    $errline
+ * @access  private
+ * @package Debug
+ */
+
+function updateErrorHandler($errno, $errstr, $errfile, $errline)
+{
+    global $production_status;
+
+    $old = $production_status;
+    $production_status = 'debug';
+
+    adminErrorHandler($errno, $errstr, $errfile, $errline);
+
+    $production_status = $old;
+
+    throw new Exception('update failed');
 }
 
 /**

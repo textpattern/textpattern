@@ -28,8 +28,7 @@ if (!defined('TXP_UPDATE')) {
 $txpplugin = getThings('DESCRIBE `'.PFX.'txp_plugin`');
 
 if (!in_array('load_order', $txpplugin)) {
-    safe_alter('txp_plugin',
-        "ADD load_order TINYINT UNSIGNED NOT NULL DEFAULT 5");
+    safe_alter('txp_plugin', "ADD load_order TINYINT UNSIGNED NOT NULL DEFAULT 5");
 }
 
 // Enable XML-RPC server?

@@ -38,41 +38,36 @@ if (!in_array('status', $txpfile)) {
     safe_alter('txp_file', "ADD status SMALLINT NOT NULL DEFAULT '4'");
 }
 
-$update_files = 0;
-
 if (!in_array('modified', $txpfile)) {
     safe_alter('txp_file', "ADD modified DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00'");
-    safe_alter('txp_file', "MODIFY modified DATETIME NOT NULL");
-    $update_files = 1;
 }
+
+safe_alter('txp_file', "MODIFY modified DATETIME NOT NULL");
 
 if (!in_array('created', $txpfile)) {
     safe_alter('txp_file', "ADD created DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00'");
-    safe_alter('txp_file', "MODIFY created DATETIME NOT NULL");
-    $update_files = 1;
 }
+
+safe_alter('txp_file', "MODIFY created DATETIME NOT NULL");
 
 if (!in_array('size', $txpfile)) {
     safe_alter('txp_file', "ADD size BIGINT");
-    $update_files = 1;
 }
 
 if (!in_array('downloads', $txpfile)) {
     safe_alter('txp_file', "ADD downloads INT DEFAULT '0' NOT NULL");
 }
 
-if (array_intersect(array('modified', 'created'), $txpfile)) {
-    safe_alter('txp_file', "MODIFY modified DATETIME NOT NULL");
-    safe_alter('txp_file', "MODIFY created  DATETIME NOT NULL");
-}
+$txpfile = getThings("DESCRIBE `".PFX."txp_file`");
 
 // Copy existing file timestamps into the new database columns.
-if ($update_files) {
-    $prefs = get_prefs();
-    $rs = safe_rows("*", 'txp_file', "1 = 1");
+if (array_intersect(array('modified', 'created', 'size', ), $txpfile)) {
+    $rs  = safe_rows("*", 'txp_file', "1 = 1");
+    $dir = get_pref('file_base_path', dirname(txpath).DS.'files');
 
     foreach ($rs as $row) {
-        $path = build_file_path(@$prefs['file_base_path'], @$row['filename']);
+        if (empty($row['filename'])) continue;
+        $path = build_file_path($dir, $row['filename']);
 
         if ($path and ($stat = @stat($path))) {
             safe_update('txp_file', "created = '".strftime('%Y-%m-%d %H:%M:%S', $stat['ctime'])."', modified = '".strftime('%Y-%m-%d %H:%M:%S', $stat['mtime'])."', size = '".doSlash(sprintf('%u', $stat['size']))."'", "id = '".doSlash($row['id'])."'");
