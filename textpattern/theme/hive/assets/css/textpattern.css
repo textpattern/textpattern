@@ -510,7 +510,7 @@ dfn[title] {
 mark,
 var {
   padding: 1px 0.23076923076923em;
-  border-radius: 0.23076923076923em;
+  border-radius: 0.25em;
   background: #e6f0ff;
   color: #333333;
 }
@@ -531,7 +531,7 @@ kbd,
 samp {
   padding: 1px 0.23076923076923em;
   border: 1px solid #e3e3e3;
-  border-radius: 0.23076923076923em;
+  border-radius: 0.25em;
   background: #f7f7f7;
 }
 
@@ -546,7 +546,7 @@ pre {
   margin: 1em 0;
   padding: 0.53846153846154em 1em;
   border: 1px solid #e3e3e3;
-  border-radius: 0.23076923076923em;
+  border-radius: 0.25em;
   background: #f7f7f7;
   /* 1 */
   word-wrap: normal;
@@ -768,7 +768,7 @@ a:focus .content-image {
 .error,
 .information {
   padding: 1px 0.23076923076923em;
-  border-radius: 0.23076923076923em;
+  border-radius: 0.25em;
 }
 
 .success {
@@ -4243,23 +4243,14 @@ button.ui-button-icons-only {
   width: 3.7em;
 }
 
-/**
- * Button rounded corners all.
- */
 .ui-button.ui-corner-all {
   border-radius: 0.5em;
 }
 
-/**
- * Button rounded corners on right only.
- */
 .ui-button.ui-corner-right {
   border-radius: 0 0.5em 0.5em 0;
 }
 
-/**
- * Button rounded corners on left only.
- */
 .ui-button.ui-corner-left {
   border-radius: 0.5em 0 0 0.5em;
 }

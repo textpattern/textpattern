@@ -1,4 +1,4 @@
-h1. Hive admin-side theme for Textpattern CMS
+h1. Hive admin-side theme (Classic Yellow) for Textpattern CMS
 
 *Please note 1:* You'll need to be using the "latest GitHub development of Textpattern":https://github.com/textpattern/textpattern in order to use this admin theme - we have done extensive work on improving the Textpattern admin-side code structure since v4.5 which directly relates to features used within this theme.
 
@@ -10,7 +10,7 @@ h2. Installation instructions
 
 # Upload the directory 'hive' into your Textpattern installation -> theme directory.
 # Log in to your Textpattern admin area. Navigate to admin -> preferences -> advanced.
-# Select 'Hive' from the 'Admin-side theme' dropdown list. Save the preferences.
+# Select 'Hive (Classic Yellow)' from the 'Admin-side theme' dropdown list. Save the preferences.
 # You can also install the theme easily using the "smd_admin_themes":http://stefdawson.com/sw/plugins/smd_admin_themes plugin.
 
 h2. Custom CSS toggles
