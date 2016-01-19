@@ -57,8 +57,6 @@
 /update/_to_4.0.8.php: e23bd4b14d5ed65fbb7451b708fb3cd2
 /update/_to_4.2.0.php: e6a90d913bedf8538ebcfd4144536064
 /update/_to_4.3.0.php: 041ae344709791697ac8dccc8207a9a5
-/update/_to_4.4.0.php: 63fccf49200788cf3b12a11bce1c37d2
-/update/_to_4.4.1.php: 63fccf49200788cf3b12a11bce1c37d2
 /update/_to_4.5.0.php: d1f2b65d897ea9cfec4dae7f5366c6d6
 /update/_to_4.6.0.php: 94d7a087933a1ea7aace548fa03ec8a9
 /update/_update.php: 85d3e110ccc6080de53f94cde76c0fd8

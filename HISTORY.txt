@@ -3,11 +3,12 @@ Changes in 4.6.0 (Upcoming) TODO
 * Textile v3.5.
 * Improved RTL language support.
 * Improved admin side UI.
-* Requires PHP 5.3.3 or newer. Compatible with PHP 7 (thanks Ruud van Melick).
+* Requires PHP 5.3.3 or newer. Compatible with PHP 7 and MySQL 5.7 (thanks Ruud van Melick).
 * New tags: <txp:authors />, <txp:meta_description />, <txp:if_description> and <txp:if_yield>.
 * No more plaintext passwords sent: password reset requests are handled directly on the server.
 * Twenty-minute validity for password reset requests by default. Configurable in config.php.
 * Stronger password hashes and strength meter implemented (zxcvbn).
+* Faster due to cache-friendly public side database queries and reduction of admin-side queries (thanks Ruud van Melick).
 * Added: Default publishing status preference.
 * Added: Support for additional text markup languages.
 * Added: Privilege to change text markup language in 'Write' panel.
@@ -18,6 +19,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Changed: <txp:author /> accepts 'escape' and 'format' attributes.
 * Changed: <txp:category_list /> accepts 'html_id', 'limit' and 'offset' attributes.
 * Changed: <txp:comments_form/>: Deprecated attributes 'isize', 'msgcols', 'msgrows', 'msgstyle', 'previewlabel', 'submitlabel', 'rememberlabel', and 'forgetlabel'.
+* Changed: <txp:comments/>, <txp:comments_form/>, <txp:comments_preview/> and <txp:popup_comments/> can be used as container tags.
 * Changed: <txp:comment_email_input /> accepts attribute 'size'.
 * Changed: <txp:comment_message_input /> accepts attributes 'cols', 'rows'. Removed capability to apply an immediate style to the element.
 * Changed: <txp:comment_name_input /> accepts attribute 'size'.
@@ -39,9 +41,11 @@ Changes in 4.6.0 (Upcoming) TODO
 * Changed: Increase 'page' and 'css' sizes in txp_section table.
 * Changed: 'Prevent widowed words in article titles' preference defaults to 'No' in new installs.
 * Changed: Detailed debug trace log.
+* Changed: Default charset is now utf8mb4: supports a wider range of characters, including emoji.
 * Developer: getNextPref() now returns array members 'next' and 'prev' with article data, no longer returns array members 'next_id', 'next_title', 'next_utitle', 'next_posted', 'prev_id', 'prev_title', 'prev_utitle', 'prev_posted'
 * Developer: getNeighbour() returns 'false' if no matching neighbour article exists.
 * Developer: Use 'mysqli' extension for DB access, lose dependency on 'mysql' extension.
+* Developer: Use the TXP 'now()' function instead of the SQL 'NOW()' function to create cache-friendly, faster SELECT queries.
 * Developer: Added jQuery UI library to admin side.
 * Developer: Added DocBlock documentation comments throughout the source code.
 * Developer: Adherence to PSR coding standards where possible.
