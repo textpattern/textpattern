@@ -1,4 +1,4 @@
-#@version 4.5.7;1449482128
+#@version 4.5.7;1452157862
 #@admin
 account_activation => Please activate your account
 account_activation_confirmation => Please use the link below to activate your account and set up a password.
@@ -1026,7 +1026,7 @@ your_ip_is_blacklisted_by => Your IP address has been blocklisted by
 you_have_been_banned => You have been banned from commenting.
 yyyy-mm => yyyy-mm
 #@section
-article_count => Articles in this section: <strong>{num}</strong>.
+article_count => Articles in this section: {num}.
 create_section => Create new section
 default_write_section => Default publishing section
 delete_section_confirmation => confirm section deletion

@@ -1068,7 +1068,7 @@ $en_gb_lang = array(
         'yyyy-mm' => 'yyyy-mm',
     ),
     'section' => array(
-        'article_count' => 'Articles in this section: <strong>{num}</strong>.',
+        'article_count' => 'Articles in this section: {num}.',
         'create_section' => 'Create new section',
         'default_write_section' => 'Default publishing section',
         'delete_section_confirmation' => 'confirm section deletion',
@@ -1349,4 +1349,4 @@ $en_gb_lang = array(
     ),
 );
 
-$lastmod = gmdate('Y-m-d H:m:s', 1449482128);
+$lastmod = gmdate('Y-m-d H:m:s', 1452157862);
