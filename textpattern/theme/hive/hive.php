@@ -226,10 +226,11 @@ EOS;
         global $prefs;
 
         return array(
+            'title'       => 'Hive',
+            'description' => 'Textpattern Hive admin theme (Classic Yellow)',
+            'version'     => $prefs['version'],
             'author'      => 'Team Textpattern',
             'author_uri'  => 'http://textpattern.com/',
-            'version'     => $prefs['version'],
-            'description' => 'Textpattern Hive Theme (Classic Yellow)',
             'help'        => 'https://github.com/philwareham/txp-hive-admin-theme',
         );
     }

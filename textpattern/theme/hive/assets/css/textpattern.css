@@ -1823,21 +1823,21 @@ ul.nav-tertiary li {
  * </p>
  */
 .nav-tertiary .navlink-active {
-  background-color: #c7dbfa;
-  background-image: linear-gradient(#e3edfc, #c7dbfa);
-  border-color: #a3bef3;
+  background-color: #cce0ff;
+  background-image: linear-gradient(#e6f0ff, #cce0ff);
+  border-color: #96c0ff;
 }
 
 .nav-tertiary .navlink-active:hover {
-  background-color: #ccdefa;
-  background-image: linear-gradient(#f1f6fe, #ccdefa);
-  border-color: #6b8fe8;
+  background-color: #d6e6ff;
+  background-image: linear-gradient(#f5f9ff, #d6e6ff);
+  border-color: #4a92ff;
 }
 
 .nav-tertiary .navlink-active:active {
-  background-color: #b0cbf7;
-  background-image: linear-gradient(#c7dbfa, #b0cbf7);
-  border-color: #6b8fe8;
+  background-color: #b3d1ff;
+  background-image: linear-gradient(#cce0ff, #b3d1ff);
+  border-color: #4a92ff;
 }
 
 .nav-tertiary .navlink-active:focus {
@@ -1858,7 +1858,7 @@ ul.nav-tertiary li {
  * </form>
  */
 .txp-search button.txp-search-button {
-  margin-left: -0.35em;
+  margin-left: -0.28em;
   padding-right: 1.5em;
   padding-left: 1.5em;
   border-radius: 0;
@@ -1955,6 +1955,7 @@ dt {
 .switcher-list li {
   position: relative;
   border-top: 1px solid #dddddd;
+  border-bottom: 1px solid transparent;
 }
 
 .switcher-list li:nth-child(odd) {
@@ -4333,11 +4334,11 @@ button.ui-button-icons-only {
  * </p>
  */
 .ui-buttonset {
-  margin-right: 0.35em;
+  margin-right: 0.28em;
 }
 
 .ui-buttonset .ui-button {
-  margin-right: -0.35em;
+  margin-right: -0.28em;
 }
 
 /**
@@ -4378,7 +4379,7 @@ label.ui-state-active.ui-button:active {
 
 [dir="rtl"] .ui-buttonset .ui-button {
   margin-right: 0;
-  margin-left: -0.35em;
+  margin-left: -0.28em;
 }
 
 /* Datepicker
