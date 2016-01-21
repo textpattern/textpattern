@@ -21,7 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Generated: 19 Jan 2016, 08:34:38 GMT
+// Generated: 21 Jan 2016, 09:53:50 GMT
 
 $langs = array(
     'ar-dz' => array(
@@ -240,7 +240,7 @@ config_php_not_found => Nepodařilo se nalézt soubor s nastavením: <strong>{fi
         'setup_password_strength_2' => 'Dobré',
         'setup_password_strength_3' => 'Silné',
         'setup_password_strength_4' => 'Velmi silné',
-        'setup_show_password' => 'Zopbrazit heslo',
+        'setup_show_password' => 'Zobrazit heslo',
         'set_db_details' => 'Nastavit připojení k databázi',
         'set_temp_dir_prefs' => 'Nepodařilo se nalézt vhodný adresář pro dočasné soubory. Otevři <strong>Pokročilá nastavení</strong> a oprav <strong>Adresář dočasných souborů</strong>.',
         'site_config' => 'Konfigurace webu',
@@ -325,10 +325,10 @@ config_php_not_found => Nepodařilo se nalézt soubor s nastavením: <strong>{fi
         'you_can_access' => 'Mit dem gewählten Benutzernamen und Passwort sollte jetzt die <a href="index.php">Administration</a> zugänglich sein.',
     ),
     'el-gr' => array(
-        'about_to_create' => 'Πρόκειται να δημιουργήσετε και να γεμίσετε με περιεχόμενο πίνακες της βάσης δεδομένων.',
+        'about_to_create' => 'Πρόκειται να δημιουργήσετε και να γεμίσετε με περιεχόμενο πίνακες της βάσης δεδομένων. Σε αυτό το στάδιο θα πρέπει επίσης να δημιουργήσετε ένα λογαριασμό διαχειριστή.',
         'add_config_file' => 'Προσθέστε το αρχείο config',
         'admin_theme' => 'Θέμα εμφάνισης πλευράς διαχείρισης',
-        'already_installed' => 'Φαίνεται πως το Textpattern είναι ήδη εγκατεστημένο. Αν θέλετε μια καθαρή εκ νέου εγκατάσταση, παρακαλούμε αφαιρέστε το αρχείο <code>config.php</code> από.',
+        'already_installed' => 'Φαίνεται πως το Textpattern είναι ήδη εγκατεστημένο. Αν θέλετε μια καθαρή εκ νέου εγκατάσταση, παρακαλούμε αφαιρέστε το αρχείο <code>config.php</code> από τον φάκελο <code>/textpattern/</code>.',
         'back' => 'Επιστροφή',
         'before_you_proceed' => 'Πριν προχωρήσετε',
         'checking_database' => 'Έλεγχος σύνδεσης βάσης δεδομένων',
@@ -359,7 +359,7 @@ config_php_not_found => Nepodařilo se nalézt soubor s nastavením: <strong>{fi
         'need_details' => 'Χρειαζόμαστε κάποιες απαραίτητες λεπτομέρειες',
         'next_step' => 'Επόμενο',
         'pass_required' => 'Καλείσθε να παράσχετε έναν ασφαλισμένο κωδικό πρόσβασης.',
-        'please_enter_url' => 'Παρακαλούμε εισάγετε την προσβάσιμη από τον παγκόσμιο ιστό διεύθυνση του ιστοτόπου σας.',
+        'please_enter_url' => 'Παρακαλούμε καταχωρίστε τη διεύθυνση του ιστοτόπου σας.',
         'please_go_back' => 'Παρακαλώ επιστρέψτε, διορθώστε τις εσφαλμένες λεπτομέρειες και επαναλάβετε αυτή τη διαδικασία.',
         'populate_db' => 'Ενημέρωση βάσης δεδομένων',
         'prefix_bad_characters' => 'Το πρόθεμα πίνακα {dbprefix} περιέχει χαρακτήρες που δεν επιτρέπονται. Ο πρώτος χαρακτήρας πρέπει να είναι μέσα στο εύρος <strong>a-zA-Z_</strong> και οι επό.',
@@ -368,7 +368,10 @@ config_php_not_found => Nepodařilo se nalézt soubor s nastavením: <strong>{fi
         'setup_comment_invite' => 'Σχόλια',
         'setup_login' => 'Επιλέξτε όνομα χρήστη (μόνο λατινικοί χαρακτήρες και -προαιρετικά- κενά)',
         'setup_password_strength_0' => 'Πολύ αδύναμο',
+        'setup_password_strength_1' => 'Αδύναμο',
+        'setup_password_strength_2' => 'Αρκετά καλός',
         'setup_password_strength_3' => 'Καλό',
+        'setup_password_strength_4' => 'Δυνατός',
         'setup_show_password' => 'Εμφάνιση κωδικού',
         'set_db_details' => 'Λεπτομέρειες βάσης δεδομένων',
         'set_temp_dir_prefs' => 'Συγγνώμη, αλλά το Textpattern απέτυχε να βρει ένα εγγράψιμο φάκελο για να δεχτεί προσωρινά αρχεία. Παρακαλώ επισκεφθείτε το πάνελ διαχείρισης <strong>προτιμήσεων</strong> και προσαρμόσετε τη ρύθμιση <strong>διαδρομή προσωρινού φακέλου</strong> για τις ανάγκες σας.',
@@ -1505,6 +1508,12 @@ config_php_not_found => Nepodařilo se nalézt soubor s nastavením: <strong>{fi
         'progress_steps' => 'Há 4 passos para este procedimento de instalação:',
         'setup_comment_invite' => 'Pode comentar',
         'setup_login' => 'Escolha o seu nome de acesso (por favor use apenas os caracteres básicos e espaços)',
+        'setup_password_strength_0' => 'Pobre',
+        'setup_password_strength_1' => 'Fraca',
+        'setup_password_strength_2' => 'Boa',
+        'setup_password_strength_3' => 'Ótima',
+        'setup_password_strength_4' => 'Forte',
+        'setup_show_password' => 'Mostrar senha',
         'set_db_details' => 'Informações do bando de dados',
         'set_temp_dir_prefs' => 'Desculpa, mas não conseguimos encontrar um diretório para escrever os arquivos temporários. Por favor, visite a “Guia de Preferências Avançadas” e ajuste o “caminho do diretório temporário” para que as configurações.',
         'site_config' => 'Configuração do site',
