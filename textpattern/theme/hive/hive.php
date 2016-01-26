@@ -118,7 +118,7 @@ class hive_theme extends \Textpattern\Admin\Theme
             $out[] = '</ul>';
             $out[] = '</nav>';
             $out[] = graf(
-                href(htmlspecialchars($GLOBALS["prefs"]["sitename"]), hu, array(
+                href(span(htmlspecialchars($GLOBALS["prefs"]["sitename"]), array('class' => 'txp-view-site-name')), hu, array(
                     'rel'    => 'external',
                     'target' => '_blank',
                     'title'  => gTxt('tab_view_site'),

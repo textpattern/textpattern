@@ -2292,7 +2292,6 @@ body {
  * Hide header content area on login panels.
  *
  * Move offscreen - don't `display:none` as we need to show #messagepane content.
- * `.txp-view-site` is OK to hide though (otherwise it affects page tabbing).
  */
 .login .txp-header {
   position: absolute;
@@ -2308,7 +2307,7 @@ body {
  * Example HTML:
  *
  * <header class="txp-header">
- *      <h1><a>My site</a></h1>
+ *     <h1><a>My site</a></h1>
  */
 .txp-header h1 {
   text-indent: 110%;
@@ -2330,7 +2329,9 @@ body {
  * Example HTML:
  *
  * <p class="txp-view-site">
- *      <a>My site</a>
+ *      <a>
+            <span class="txp-view-site-name">My site</span>
+        </a>
  * </p>
  */
 .txp-view-site {
@@ -3217,7 +3218,7 @@ span.spinner {
  */
 .txp-edit .txp-form-field:not(.txp-form-field-textarea),
 .txp-prefs-group .txp-form-field:not(.txp-form-field-textarea),
-.setup .txp-form-field:not(.txp-form-field-textarea) {
+.setup:not(.welcome) .txp-form-field:not(.txp-form-field-textarea) {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -3230,8 +3231,8 @@ span.spinner {
 .txp-edit .txp-form-field-value,
 .txp-prefs-group .txp-form-field-label,
 .txp-prefs-group .txp-form-field-value,
-.setup .txp-form-field-label,
-.setup .txp-form-field-value {
+.setup:not(.welcome) .txp-form-field-label,
+.setup:not(.welcome) .txp-form-field-value {
   -webkit-flex: 1 1 0%;
       -ms-flex: 1 1 0%;
           flex: 1 1 0%;
