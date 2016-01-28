@@ -460,23 +460,16 @@ function processTags($tag, $atts, $thing = null)
         $registry = Txp::get('\Textpattern\Tag\Registry');
     }
 
-    if ($registry->isRegistered($tag)) {
-        $out = $registry->process($tag, splat($atts), $thing);
-    }
+    $out = $registry->process($tag, splat($atts), $thing);
 
-    // Deprecated in 4.6.0.
-    elseif (maybe_tag($tag)) {
-        $out = $tag(splat($atts), $thing);
-        trigger_error(gTxt('unregistered_tag'), E_USER_NOTICE);
-    }
-
-    // Deprecated, remove in crockery.
-    elseif (isset($GLOBALS['pretext'][$tag])) {
-        $out = txpspecialchars($pretext[$tag]);
-        trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-    } else {
-        $out = '';
-        trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
+    if ($out === false) {
+        if (maybe_tag($tag)) { // Deprecated in 4.6.0.
+            trigger_error(gTxt('unregistered_tag'), E_USER_NOTICE);
+            $out = $registry->register($tag)->process($tag, splat($atts), $thing);
+        } else {
+            trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
+            $out = '';
+        }
     }
 
     if ($production_status !== 'live') {
