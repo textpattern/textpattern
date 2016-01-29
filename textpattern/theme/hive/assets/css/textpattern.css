@@ -958,9 +958,13 @@ a:focus .content-image {
  */
 .txp-details {
   margin: 1em 0;
-  border: 1px solid #e3e3e3;
-  border-top: 0;
+  border-right: 1px solid #e3e3e3;
+  border-left: 1px solid #e3e3e3;
   background: #f7f7f7;
+}
+
+.txp-details > div {
+  border-bottom: 1px solid #e3e3e3;
 }
 
 /**
@@ -4145,6 +4149,7 @@ a.ui-state-default:focus {
   background-color: #e8e8e8;
   background-image: linear-gradient(#f8f8f8, #e8e8e8);
   border-color: #aaaaaa;
+  color: #333333;
   text-decoration: none;
 }
 
