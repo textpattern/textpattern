@@ -1829,19 +1829,19 @@ ul.nav-tertiary li {
 .nav-tertiary .navlink-active {
   background-color: #cce0ff;
   background-image: linear-gradient(#e6f0ff, #cce0ff);
-  border-color: #96c0ff;
+  border-color: #96bfff;
 }
 
 .nav-tertiary .navlink-active:hover {
   background-color: #d6e6ff;
-  background-image: linear-gradient(#f5f9ff, #d6e6ff);
-  border-color: #4a92ff;
+  background-image: linear-gradient(#f0f6ff, #d6e6ff);
+  border-color: #4a91ff;
 }
 
 .nav-tertiary .navlink-active:active {
   background-color: #b3d1ff;
-  background-image: linear-gradient(#cce0ff, #b3d1ff);
-  border-color: #4a92ff;
+  background-image: linear-gradient(#cde1ff, #b3d1ff);
+  border-color: #4a91ff;
 }
 
 .nav-tertiary .navlink-active:focus {
@@ -4360,19 +4360,19 @@ button.ui-button-icons-only {
 label.ui-state-active.ui-button {
   background-color: #cce0ff;
   background-image: linear-gradient(#e6f0ff, #cce0ff);
-  border-color: #96c0ff;
+  border-color: #96bfff;
 }
 
 label.ui-state-active.ui-button:hover {
   background-color: #d6e6ff;
   background-image: linear-gradient(#f5f9ff, #d6e6ff);
-  border-color: #4a92ff;
+  border-color: #4a91ff;
 }
 
 label.ui-state-active.ui-button:active {
   background-color: #b3d1ff;
-  background-image: linear-gradient(#cce0ff, #b3d1ff);
-  border-color: #4a92ff;
+  background-image: linear-gradient(#cde1ff, #b3d1ff);
+  border-color: #4a91ff;
 }
 
 /**
