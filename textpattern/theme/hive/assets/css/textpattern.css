@@ -2497,7 +2497,7 @@ button.txp-nav-toggle {
   position: relative;
   float: left;
   border-right: 1px solid #f7c600;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .txp-nav > ul > li:first-child {
@@ -2514,15 +2514,15 @@ button.txp-nav-toggle {
 }
 
 .txp-nav > ul > li > a:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .txp-nav > ul > li.selected > a {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .txp-nav > ul > li.selected > a:hover {
-  background: rgba(255, 255, 255, 0.33);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 /**
@@ -2618,10 +2618,11 @@ button.txp-nav-toggle {
   top: 3em;
   left: 0;
   min-width: 12em;
-  border: 1px solid #d4d4d4;
-  border-top: 0;
+  border: 1px solid;
   border-radius: 0 0.5em 0.5em;
   background: #fff9e1;
+  border-top: 0;
+  border-color: #d4d4d4;
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   z-index: 20000;
 }
@@ -4871,6 +4872,7 @@ label.ui-state-active.ui-button:active {
   display: block;
   margin: 0;
   padding: 0;
+  border-color: #d4d4d4;
   outline: 0;
   /* 1 */
   font-size: 13px;
@@ -4905,7 +4907,7 @@ label.ui-state-active.ui-button:active {
 
 .ui-menu .ui-state-focus,
 .ui-menu .ui-state-active {
-  background-color: #cce0ff;
+  background-color: #e6f0ff;
 }
 
 .ui-menu .ui-icon {

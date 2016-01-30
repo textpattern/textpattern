@@ -134,7 +134,7 @@
     <rect x="164" y="22" width="24" height="4"/>
 </g>
 <g id="sprite-indicator">
-    <polygon fill="#e1a61a" points="208,8 207,8 199.5,0 200.5,0"/>
     <polygon fill="#fef5d2" points="207,8 192,8 199.5,0"/>
+    <polygon fill="#e1a61a" points="208,8 207,8 199.5,0 200.5,0"/>
 </g>
 </svg>
