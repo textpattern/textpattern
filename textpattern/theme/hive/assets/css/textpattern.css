@@ -1418,7 +1418,7 @@ select {
 }
 
 /**
- * Override height set in a previous rule and allow auto heght.
+ * Override height set in a previous rule and allow auto height.
  */
 select[size],
 select[multiple] {
@@ -1460,7 +1460,7 @@ select[size="1"] {
  * Normalize styling of `optgroup`.
  */
 optgroup {
-  color: #333333;
+  color: #000000;
   font-style: normal;
   font-weight: bold;
 }
@@ -1620,7 +1620,7 @@ input[type="button"],
   width: auto;
   height: 2.15384615384615em;
   padding: 0.30769230769231em 0.61538461538462em;
-  border: solid 1px #cccccc;
+  border: 1px solid #cccccc;
   border-radius: 0.5em;
   background-clip: padding-box;
   color: #333333;
