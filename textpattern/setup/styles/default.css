@@ -80,15 +80,12 @@ nav ol:after,
   }
   /**
  * 1. Set `body` to `relative` to allow positioning of absolute elements.
- * 2. Make sure body fills entire viewport height.
- * 3. Remove default margin.
+ * 2. Remove default margin.
  */
   body {
     /* 1 */
     position: relative;
     /* 2 */
-    min-height: 100vh;
-    /* 3 */
     margin: 0;
     background: #f7f7f7;
   }
@@ -915,7 +912,7 @@ nav ol:after,
     text-transform: none;
   }
   /**
- * Override height set in a previous rule and allow auto heght.
+ * Override height set in a previous rule and allow auto height.
  */
   select[size],
   select[multiple] {
@@ -958,7 +955,7 @@ nav ol:after,
  * Normalize styling of `optgroup`.
  */
   optgroup {
-    color: #333333;
+    color: #000000;
     font-style: normal;
     font-weight: bold;
   }
@@ -1097,14 +1094,15 @@ nav ol:after,
     background-color: #e8e8e8;
     background-image: linear-gradient(#f8f8f8, #e8e8e8);
     border-color: #aaaaaa;
+    color: #333333;
     text-decoration: none;
   }
   button:active,
   input[type="button"]:active,
   input[type="reset"]:active,
   input[type="submit"]:active {
-    background-color: #e4e4e4;
-    background-image: linear-gradient(lightgray, #e4e4e4);
+    background-color: #d6d6d6;
+    background-image: linear-gradient(#e6e6e6, #d6d6d6);
     border-color: #aaaaaa;
     color: #1a1a1a;
     text-decoration: none;
@@ -1411,12 +1409,6 @@ nav ol:after,
     border: solid 1pt #000000;
   }
   /**
- * Avoid user comments breaking across multiple pages.
- */
-  .comments {
-    page-break-inside: avoid;
-  }
-  /**
  * Use a print-friendly monospaced font and size.
  */
   pre,
@@ -1538,5 +1530,11 @@ nav ol:after,
   td {
     padding: 4pt 8pt;
     border-bottom: solid 1pt #000000;
+  }
+  /**
+ * Avoid user comments breaking across multiple pages.
+ */
+  .comments {
+    page-break-inside: avoid;
   }
 }

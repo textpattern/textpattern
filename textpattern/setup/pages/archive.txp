@@ -69,7 +69,7 @@
         <div class="container">
 
             <!-- Main content -->
-            <main aria-label="<txp:text item="main_content" />">
+            <main aria-label="<txp:text item="main_content" />" itemscope itemtype="http://schema.org/Blog">
 
                 <txp:if_article_list>
 

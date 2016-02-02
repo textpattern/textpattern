@@ -1,4 +1,4 @@
-<li class="article" itemscope itemtype="http://schema.org/Article">
+<li class="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
     <h4 itemprop="name headline">
         <a href="<txp:permlink />" itemprop="url">
             <txp:title />
@@ -17,6 +17,7 @@
         <time datetime="<txp:posted format="iso8601" />" itemprop="datePublished">
             <txp:posted />
         </time>
+        <meta itemprop="dateModified" content="<txp:posted format="iso8601" />" />
         &#183;
         <txp:text item="author" />
         <span itemprop="author" itemscope itemtype="http://schema.org/Person">
