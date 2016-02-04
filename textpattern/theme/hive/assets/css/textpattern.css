@@ -42,13 +42,6 @@ button {
       touch-action: none;
 }
 
-/**
- * Correct `summary` not showing as clickable.
- */
-summary {
-  cursor: pointer;
-}
-
 /* Float clearing
    ========================================================================== */
 /**
@@ -4124,7 +4117,7 @@ a.ui-state-default:focus {
   height: 2.1538462em;
   margin: 0 0.1em 0 0;
   padding: 0.30769230769231em 0.61538461538462em;
-  border: solid 1px #cccccc;
+  border: 1px solid #cccccc;
   background-clip: padding-box;
   color: #333333;
   font-family: Helvetica, Arial, sans-serif;
