@@ -265,3 +265,6 @@ safe_alter('textpattern', "MODIFY Category1 VARCHAR(64) NOT NULL DEFAULT ''");
 safe_alter('textpattern', "MODIFY Category2 VARCHAR(64) NOT NULL DEFAULT ''");
 safe_alter('txp_file',    "MODIFY category  VARCHAR(64) NOT NULL DEFAULT ''");
 safe_alter('txp_image',   "MODIFY category  VARCHAR(64) NOT NULL DEFAULT ''");
+
+// Farewell classic and remora themes.
+set_pref('theme_name', 'hive');
