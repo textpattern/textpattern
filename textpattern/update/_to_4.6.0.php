@@ -70,7 +70,7 @@ if (!in_array('owner', $cols)) {
 // tucking them away neatly when not required.
 safe_update('txp_form', "type = 'comment'", "name = 'comments_display'");
 
-// Adds protocol to logged HTTP referers.
+// Add protocol to logged HTTP referrers.
 safe_update(
     'txp_log',
     "refer = CONCAT('http://', refer)",
@@ -98,21 +98,21 @@ safe_alter('txp_plugin', "MODIFY version VARCHAR(255) NOT NULL DEFAULT '1.0'");
 // Translation strings should allow more than 255 characters.
 safe_alter('txp_lang', "MODIFY data TEXT");
 
-// Add meta description to articles...
+// Add meta description to articles.
 $cols = getThings("DESCRIBE `".PFX."textpattern`");
 
 if (!in_array('description', $cols)) {
     safe_alter('textpattern', "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER Keywords");
 }
 
-// ... categories...
+// Add meta description to categories.
 $cols = getThings("DESCRIBE `".PFX."txp_category`");
 
 if (!in_array('description', $cols)) {
     safe_alter('txp_category', "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER title");
 }
 
-// ... and sections.
+// Add meta description to sections.
 $cols = getThings("DESCRIBE `".PFX."txp_section`");
 
 if (!in_array('description', $cols)) {
@@ -134,7 +134,7 @@ if (!get_pref('sql_now_posted')) {
     set_pref('sql_now_created', time(), 'publish', PREF_HIDDEN);
 }
 
-// Remove broken import functionality
+// Remove broken import functionality.
 if (file_exists(txpath.DS.'include'.DS.'txp_import.php')) {
     $import_files = array(
         'BloggerImportTemplate.txt',
@@ -153,7 +153,7 @@ if (file_exists(txpath.DS.'include'.DS.'txp_import.php')) {
     unlink(txpath.DS.'include'.DS.'txp_import.php');
 }
 
-// Remove unused ipban table or recreate its index (for future utf8mb4 conversion)
+// Remove unused ipban table or recreate its index (for future utf8mb4 conversion).
 if (getThing("SHOW TABLES LIKE '".PFX."txp_discuss_ipban'")) {
     if (!safe_count('txp_discuss_ipban', "1 = 1")) {
         safe_drop('txp_discuss_ipban');
@@ -163,7 +163,7 @@ if (getThing("SHOW TABLES LIKE '".PFX."txp_discuss_ipban'")) {
     }
 }
 
-// Recreate indexes with smaller key sizes to allow future conversion to charset utf8mb4
+// Recreate indexes with smaller key sizes to allow future conversion to charset utf8mb4.
 safe_drop_index('txp_css',     "name");
 safe_drop_index('txp_file',    "filename");
 safe_drop_index('txp_form',    "PRIMARY");
@@ -173,7 +173,7 @@ safe_drop_index('txp_prefs',   "prefs_idx");
 safe_drop_index('txp_prefs',   "name");
 safe_drop_index('textpattern', "section_status_idx");
 safe_drop_index('textpattern', "url_title_idx");
-// not using safe_create_index here, because we just dropped the index
+// Not using safe_create_index here, because we just dropped the index.
 safe_alter('txp_css',     "ADD UNIQUE name (name(250))");
 safe_alter('txp_file',    "ADD UNIQUE filename (filename(250))");
 safe_alter('txp_form',    "ADD PRIMARY KEY (name(250))");
@@ -183,21 +183,22 @@ safe_alter('txp_prefs',   "ADD UNIQUE prefs_idx (prefs_id, name(185), user_name)
 safe_alter('txp_prefs',   "ADD INDEX name (name(250))");
 safe_alter('textpattern', "ADD INDEX section_status_idx (Section(249), Status)");
 safe_alter('textpattern', "ADD INDEX url_title_idx (url_title(250))");
-// specifically, txp_discuss_nonce didn't have a primary key in 4.0.3
+// Specifically, txp_discuss_nonce didn't have a primary key in 4.0.3
 // so it has to be done in two separate steps.
 safe_drop_index('txp_discuss_nonce', "PRIMARY");
 safe_alter('txp_discuss_nonce', "ADD PRIMARY KEY (nonce(250))");
 
-// Fix typo: textinput should be text_input
+// Fix typo: textinput should be text_input.
 safe_update('txp_prefs', "html = 'text_input'", "name = 'timezone_key'");
 
-// Fix typo: position 40 should be 0 (because it's a hidden pref)
+// Fix typo: position 40 should be 0 (because it's a hidden pref).
 safe_update('txp_prefs', "position = 0", "name = 'language'");
 
-// Fix typo: position should be 60 instead of 30 (so it appears just below the site name)
+// Fix typo: position should be 60 instead of 30 (so it appears just below the site name).
 safe_update('txp_prefs', "position = 60", "name = 'site_slogan'");
 
-// Enforce some table changes that happened after 4.0.3 but weren't part of update scripts until now
+// Enforce some table changes that happened after 4.0.3 but weren't part of
+// update scripts until now.
 safe_alter('txp_css',  "MODIFY name  VARCHAR(255) NOT NULL");
 safe_alter('txp_lang', "MODIFY lang  VARCHAR(16)  NOT NULL");
 safe_alter('txp_lang', "MODIFY name  VARCHAR(64)  NOT NULL");
@@ -207,10 +208,11 @@ safe_drop_index('txp_page', "name");
 safe_drop_index('txp_plugin', "name_2");
 safe_drop_index('txp_section', "name");
 
-// The txp_priv table was created for version 1.0, but never used nor created in later versions.
+// The txp_priv table was created for version 1.0, but never used nor created in
+// later versions.
 safe_drop('txp_priv');
 
-// Remove empty update files
+// Remove empty update files.
 foreach (array('4.4.0', '4.4.1') as $v) {
     $file = txpath.DS.'update'.DS.'_to_'.$v.'.php';
 
@@ -219,7 +221,7 @@ foreach (array('4.4.0', '4.4.1') as $v) {
     }
 }
 
-// Add generic token table (dropping first, because of changes to the table setup)
+// Add generic token table (dropping first, because of changes to the table setup).
 safe_drop('txp_token');
 safe_create('txp_token',"
     id           INT          NOT NULL AUTO_INCREMENT,
@@ -232,7 +234,7 @@ safe_create('txp_token',"
     PRIMARY KEY (id)
 ");
 
-// Get rid of default zero dates to make MySQL 5.7 happy.
+// Remove default zero dates to make MySQL 5.7 happy.
 safe_alter('textpattern',       "MODIFY Posted      DATETIME NOT NULL");
 safe_alter('textpattern',       "MODIFY Expires     DATETIME     NULL DEFAULT NULL");
 safe_alter('textpattern',       "MODIFY LastMod     DATETIME NOT NULL");
@@ -245,10 +247,10 @@ safe_alter('txp_image',         "MODIFY date        DATETIME NOT NULL");
 safe_alter('txp_link',          "MODIFY date        DATETIME NOT NULL");
 safe_alter('txp_log',           "MODIFY time        DATETIME NOT NULL");
 safe_alter('txp_users',         "MODIFY last_access DATETIME     NULL DEFAULT NULL");
-// remove logs and nonces with zero dates.
+// Remove logs and nonces with zero dates.
 safe_delete('txp_discuss_nonce', "DATE(issue_time) = '0000-00-00'");
 safe_delete('txp_log',           "DATE(time)       = '0000-00-00'");
-// replace zero dates (which shouldn't exist, really) with somewhat sensible values
+// Replace zero dates (which shouldn't exist, really) with somewhat sensible values.
 safe_update('textpattern', "Posted      = NOW()",   "DATE(Posted)      = '0000-00-00'");
 safe_update('textpattern', "Expires     = NULL",    "DATE(Expires)     = '0000-00-00'");
 safe_update('textpattern', "LastMod     = Posted",  "DATE(LastMod)     = '0000-00-00'");
@@ -260,11 +262,12 @@ safe_update('txp_link',    "date        = NOW()",   "DATE(date)        = '0000-0
 safe_update('txp_users',   "last_access = NULL",    "DATE(last_access) = '0000-00-00'");
 safe_update('textpattern', "feed_time   = DATE(Posted)", "feed_time    = '0000-00-00'");
 
-// category names are max 64 chars when created/edited, so don't pretend they can be longer
+// Category names are max 64 characters when created/edited, so don't pretend
+// they can be longer.
 safe_alter('textpattern', "MODIFY Category1 VARCHAR(64) NOT NULL DEFAULT ''");
 safe_alter('textpattern', "MODIFY Category2 VARCHAR(64) NOT NULL DEFAULT ''");
 safe_alter('txp_file',    "MODIFY category  VARCHAR(64) NOT NULL DEFAULT ''");
 safe_alter('txp_image',   "MODIFY category  VARCHAR(64) NOT NULL DEFAULT ''");
 
-// Farewell classic and remora themes.
+// Farewell Classic and Remora themes.
 set_pref('theme_name', 'hive');
