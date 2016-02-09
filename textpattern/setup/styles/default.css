@@ -94,8 +94,7 @@ nav ol:after,
  * </div>
  */
   .wrapper {
-    padding: 1px 0 1em;
-    border-top: 1px solid #cccccc;
+    padding: 1px 0;
     border-bottom: 1px solid #cccccc;
     background: #ffffff;
   }
@@ -114,7 +113,7 @@ nav ol:after,
   .site-footer,
   .container {
     width: 88%;
-    max-width: 86em;
+    max-width: 54em;
     margin: 0 auto;
   }
   /**
@@ -179,16 +178,23 @@ nav ol:after,
   .site-navigation {
     background-color: #dddddd;
   }
-  .site-navigation ul {
-    max-width: 86em;
+  .site-navigation > div {
+    position: relative;
+    max-width: 54em;
     margin: 0 auto;
+  }
+  .site-navigation ul {
+    margin: 0;
     padding: 0;
     list-style: none;
   }
   .site-navigation li {
     transition: box-shadow 0.2s linear;
-    border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
     background-color: #eeeeee;
+  }
+  .site-navigation li:first-child {
+    border-top: 1px solid #cccccc;
   }
   .site-navigation li:hover {
     background-color: #f8f8f8;
@@ -213,6 +219,22 @@ nav ol:after,
   .site-navigation a:active {
     color: #1a1a1a;
     text-decoration: none;
+  }
+  /**
+ * Search field in navigation.
+ */
+  .search {
+    padding: 1em 6% 0.5em;
+    background: #ffffff;
+  }
+  .search input[type="search"] {
+    width: 16em;
+    height: 2.125em;
+    padding-right: 0.1875em;
+    padding-left: 2em;
+    border-radius: 0.5em;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32px' height='32px' viewBox='0 0 32 32'><g fill='%23333'><path d='M4,13c0-5,4-9,9-9c5,0,9,4,9,9c0,5-4,9-9,9C8,22,4,18,4,13z M13,19c3.3,0,6-2.7,6-6s-2.7-6-6-6s-6,2.7-6,6S9.7,19,13,19z'/><path d='M17.5,19l1.5-1.5l4.5,3L28,25c0,0,0,1.5-0.75,2.25S25,28,25,28l-4.5-4.5L17.5,19z'/></g></svg>") no-repeat left center;
+    background-size: 2em 2em;
   }
   /* Links
    ========================================================================== */
@@ -345,7 +367,7 @@ nav ol:after,
   }
   h6 {
     margin: 1em 0;
-    font-size: 16px;
+    font-size: 1em;
     line-height: 1.5em;
   }
   /**
@@ -407,7 +429,7 @@ nav ol:after,
     background-color: #f7f7f7;
     color: #333333;
     font-family: Menlo, Consolas, Monaco, monospace;
-    font-size: 14px;
+    font-size: 0.875em;
     line-height: 1.5em;
   }
   code,
@@ -436,7 +458,7 @@ nav ol:after,
     padding: 0;
     border: 0;
     background-color: transparent;
-    font-size: 14px;
+    font-size: 1em;
   }
   /**
  * Prevent `sub` and `sup` affecting `line-height` in all browsers.
@@ -462,7 +484,7 @@ nav ol:after,
   figcaption,
   tfoot,
   .footnote {
-    font-size: 12px;
+    font-size: 0.75em;
     line-height: 1.5em;
   }
   figcaption,
@@ -516,6 +538,12 @@ nav ol:after,
     unicode-bidi: embed;
   }
   /**
+ * Computer code should be LTR.
+ */
+  [dir="rtl"] code {
+    direction: ltr;
+  }
+  /**
  * Swap image alignment right/left positions in RTL languages.
  */
   [dir="rtl"] img.align-left {
@@ -543,8 +571,8 @@ nav ol:after,
  * Swap menu/list padding positions in RTL languages.
  */
   [dir="rtl"] menu,
-  [dir="rtl"] ol,
-  [dir="rtl"] ul {
+  [dir="rtl"] ol:not(.site-navigation ul),
+  [dir="rtl"] ul:not(.site-navigation ul) {
     padding: 0 2em 0 0;
   }
   /**
@@ -785,7 +813,7 @@ nav ol:after,
     color: #000000;
     font-family: sans-serif;
     /* 3 */
-    font-size: 16px;
+    font-size: 1em;
     line-height: 1.375em;
     vertical-align: baseline;
     box-sizing: border-box;
@@ -892,13 +920,6 @@ nav ol:after,
     margin: 0;
   }
   /**
- * Inline search field in complementary content section.
- */
-  .complementary-content input[type="search"] {
-    display: inline-block;
-    width: 66%;
-  }
-  /**
  * Correct `select` style inheritance in Firefox.
  */
   select {
@@ -995,6 +1016,15 @@ nav ol:after,
     opacity: 1;
   }
   /**
+ * Styling for form field validation.
+ */
+  input:focus:invalid,
+  select:focus:invalid,
+  textarea:focus:invalid {
+    border-color: #9d261d;
+    box-shadow: none;
+  }
+  /**
  * Width display options for `input` fields. Height display options
  * for textareas.
  *
@@ -1027,15 +1057,6 @@ nav ol:after,
   .required {
     border: 0;
     color: #9d261d;
-  }
-  /**
- * Styling for form field validation.
- */
-  input:focus:invalid,
-  select:focus:invalid,
-  textarea:focus:invalid {
-    border-color: #9d261d;
-    box-shadow: none;
   }
   /* Buttons
    ========================================================================== */
@@ -1176,7 +1197,7 @@ nav ol:after,
 /* ==========================================================================
    Additional layout for screen media 576px and up
    ========================================================================== */
-@media only screen and (min-width: 36em) {
+@media only screen and (min-width: 38em) {
   /**
      * Desktop version of the navigation menu. Overrides mobile first version.
      *
@@ -1192,60 +1213,72 @@ nav ol:after,
      */
   .site-navigation {
     border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
   }
-  .site-navigation ul {
+  .site-navigation > div {
     width: 88%;
   }
   .site-navigation li {
     float: left;
-    border-top: 0;
     border-right: 1px solid #cccccc;
+    border-bottom: 0;
   }
   .site-navigation li:first-child {
+    border-top: 0;
+    border-left: 1px solid #cccccc;
+  }
+  [dir="rtl"] .site-navigation li {
+    float: right;
+  }
+  [dir="rtl"] .site-navigation li:first-child {
+    border-left: 0;
+  }
+  [dir="rtl"] .site-navigation li:last-child {
     border-left: 1px solid #cccccc;
   }
   .site-navigation a {
     padding: 0.5em 1em;
+  }
+  .search {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-top: -1.0625em;
+    padding: 0;
+    background: transparent;
+    z-index: 2;
+  }
+  [dir="rtl"] .search {
+    right: auto;
+    left: 0;
+  }
+  .search input[type="search"] {
+    width: 2.125em;
+    padding-right: 0;
+    transition: width 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    background-color: #eeeeee;
+    cursor: pointer;
+  }
+  .search input[type="search"]:hover {
+    background-color: #f8f8f8;
+  }
+  .search input[type="search"]:focus {
+    width: 16em;
+    padding-right: 0.1875em;
+    background-color: white;
+    cursor: auto;
   }
 }
 
 /* ==========================================================================
    Additional layout for screen media 864px and up
    ========================================================================== */
-@media only screen and (min-width: 50em) {
+@media only screen and (min-width: 46em) {
   /**
      * Enlarge baseline text size.
      */
   html {
     font-size: 112.5%;
-  }
-  /**
-     * Two-column layout.
-     *
-     * 1. Golden ratio at container maximum width.
-     * 2. Complementary content moves from under main content to the right
-     *    column and main column is reduced in width to allow this.
-     *
-     * Example HTML:
-     *
-     * <main></main>
-     * <aside class="complementary-content"></aside>
-     */
-  main {
-    /* 1 */
-    width: 54%;
-    /* 2 */
-    float: left;
-  }
-  .complementary-content {
-    width: 30%;
-    margin: 2em 0;
-    padding: 0 1em;
-    /* 1 */
-    float: right;
-    border: 1px solid #e3e3e3;
-    border-radius: 0.5em;
-    background: #f7f7f7;
   }
 }
 

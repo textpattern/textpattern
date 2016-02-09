@@ -84,13 +84,18 @@
 
     <!-- navigation -->
     <nav class="site-navigation" aria-label="<txp:text item="navigation" />" itemscope itemtype="http://schema.org/SiteNavigationElement">
-        <txp:section_list default_title='<txp:text item="home" />' include_default="1" wraptag="ul" break="">
-            <li<txp:if_section name='<txp:section />'> class="active"</txp:if_section>>
-                <a itemprop="url" href="<txp:section url="1" />">
-                    <txp:section title="1" />
-                </a>
-            </li>
-        </txp:section_list>
+        <div>
+            <txp:section_list default_title='<txp:text item="home" />' include_default="1" wraptag="ul" break="">
+                <li<txp:if_section name='<txp:section />'> class="active"</txp:if_section>>
+                    <a itemprop="url" href="<txp:section url="1" />">
+                        <txp:section title="1" />
+                    </a>
+                </li>
+            </txp:section_list>
+
+            <!-- links by default to form: 'search_input.misc.txp' unless you specify a different form -->
+            <txp:search_input />
+        </div>
     </nav>
 
     <div class="wrapper">
@@ -149,15 +154,15 @@
                         <p class="paginator">
                             <txp:if_variable name="prev" value="">
                             <txp:else />
-                                <a rel="prev" href="<txp:newer />" title="<txp:text item="newer" />">
-                                    ← <txp:text item="newer" />
+                                <a rel="prev" href="<txp:newer />">
+                                    <txp:text item="newer" />
                                 </a>
                             </txp:if_variable>
 
                             <txp:if_variable name="next" value="">
                             <txp:else />
-                                <a rel="next" href="<txp:older />" title="<txp:text item="older" />">
-                                    <txp:text item="older" /> →
+                                <a rel="next" href="<txp:older />">
+                                    <txp:text item="older" />
                                 </a>
                             </txp:if_variable>
                         </p>
@@ -169,9 +174,6 @@
 
             <!-- Complementary content -->
             <aside class="complementary-content">
-
-                <!-- links by default to form: 'search_input.misc.txp' unless you specify a different form -->
-                <txp:search_input />
 
                 <!-- feed links, default flavor is RSS, so we don't need to specify a flavor on the first feed_link -->
                 <p>
