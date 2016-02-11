@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <ruleset>
-    <rule ref="PSR2" />
+    <rule ref="PSR2">
+        <exclude name="Generic.Files.LineEndings.InvalidEOLChar" />
+    </rule>
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
         <severity>0</severity>
     </rule>
@@ -8,4 +10,6 @@
         <severity>0</severity>
     </rule>
     <rule ref="PEAR.NamingConventions.ValidClassName" />
+    <file>./</file>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
 </ruleset>

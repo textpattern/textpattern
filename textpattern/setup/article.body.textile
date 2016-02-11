@@ -1,0 +1,19 @@
+h3. What do you want to do next?
+
+* Modify or even delete this article? The "article list":siteurl/textpattern/index.php?event=list is the place to start.
+* Change this site's name, or modify the style of the URLs? It's all up to your "preferences":siteurl/textpattern/index.php?event=prefs.
+* Get yourself acquainted with Textile, the humane web text generator which comes with Textpattern? The basics are "simple":http://textpattern.com/textile-sandbox. If you want to learn more about Textile, you can dig into an "extensive manual":http://textpattern.com/textile-reference-manual later.
+* Be guided through your "Textpattern first steps":http://textpattern.com/textpattern-first-steps by completing some basic tasks?
+* Study the "Textpattern Semantic Model?":http://textpattern.com/textpattern-semantic-model
+* Add "another user":siteurl/textpattern/index.php?event=admin, or extend the capabilities with "third party plugins":siteurl/textpattern/index.php?event=plugin you discovered from the central plugin directory at "Textpattern Resources":http://textpattern.org/?
+* Dive in and learn by trial and error? Then please note:
+** When you "write":siteurl/textpattern/index.php?event=article an article you assign it to a section of your site.
+** Sections use a "page template":siteurl/textpattern/index.php?event=page and a "style":siteurl/textpattern/index.php?event=css as an output scaffold.
+** Page templates use HTML and Textpattern tags (like this: @<txp:article />@) to build the markup.
+** Some Textpattern tags use "forms":siteurl/textpattern/index.php?event=form, which are building blocks for reusable snippets of code and markup you may build and use at your discretion.
+
+There are a host of "Frequently Asked Questions":http://textpattern.com/faq/ to help you get started.
+
+"Textpattern tags":http://textpattern.com/textpattern-tag-reference, their attributes and values are explained and sampled within the "Textpattern User Documentation":http://textpattern.net/, where you will also find valuable tips and tutorials.
+
+If all else fails, there's a whole crowd of friendly, helpful people over at the "Textpattern support forum":http://forum.textpattern.com/. Come and pay a visit!

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,6 +28,8 @@
  * @package Filter
  */
 
-class Textpattern_Filter_Exception extends Exception
+namespace Textpattern\Filter;
+
+class Exception extends \Exception
 {
 }

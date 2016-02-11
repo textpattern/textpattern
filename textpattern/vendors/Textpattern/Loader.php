@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -25,14 +25,16 @@
  * Autoloader.
  *
  * <code>
- * Txp::get('Textpattern_Loader', '/path/to/directory')->register();
+ * Txp::get('\Textpattern\Loader', '/path/to/directory')->register();
  * </code>
  *
  * @since   4.6.0
  * @package Autoloader
  */
 
-class Textpattern_Loader
+namespace Textpattern;
+
+class Loader
 {
     /**
      * Registered directory.
@@ -138,7 +140,7 @@ class Textpattern_Loader
             $file .= str_replace($this->separator, '/', $namespace).'/';
         }
 
-        $file .= str_replace('_', '/', $class).$this->extension;
+        $file .= $class.$this->extension;
 
         if (is_readable($file)) {
             trace_add("\t[Load: '".str_replace(txpath.'/', '', $file)."']");

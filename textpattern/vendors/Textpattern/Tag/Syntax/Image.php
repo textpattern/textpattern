@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -27,7 +27,9 @@
  * @since  4.6.0
  */
 
-class Textpattern_Tag_Syntax_Image
+namespace Textpattern\Tag\Syntax;
+
+class Image
 {
     /**
      * Checks if the image is the first in the list.

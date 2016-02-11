@@ -1,30 +1,56 @@
 Changes in 4.6.0 (Upcoming) TODO
 
-* Textile v2.5.
+* Textile v3.5.
 * Improved RTL language support.
 * Improved admin side UI.
+* Requires PHP 5.3.3 or newer. Compatible with PHP 7 and MySQL 5.7 (thanks Ruud van Melick).
 * New tags: <txp:authors />, <txp:meta_description />, <txp:if_description> and <txp:if_yield>.
+* No more plaintext passwords sent: password reset requests are handled directly on the server.
+* Twenty-minute validity for password reset requests by default. Configurable in config.php.
+* Stronger password hashes and strength meter implemented (zxcvbn).
+* Faster due to cache-friendly public side database queries and reduction of admin-side queries (thanks Ruud van Melick).
 * Added: Default publishing status preference.
 * Added: Support for additional text markup languages.
+* Added: Privilege to change text markup language in 'Write' panel.
+* Removed: Import panel - the blog import options were obsolete (thanks Ruud van Melick).
+* Removed: Commenter IP ban feature - this method of banning is unreliable and becoming obsolete (thanks Ruud van Melick).
+* Removed: Modernizr unnecessary due to IE10 being our minimum IE browser requirement.
 * Changed: <txp:article_custom /> accepts 'exclude' attribute to exclude articles by a comma-separated id list.
 * Changed: <txp:author /> accepts 'escape' and 'format' attributes.
 * Changed: <txp:category_list /> accepts 'html_id', 'limit' and 'offset' attributes.
+* Changed: <txp:comments_form/>: Deprecated attributes 'isize', 'msgcols', 'msgrows', 'msgstyle', 'previewlabel', 'submitlabel', 'rememberlabel', and 'forgetlabel'.
+* Changed: <txp:comments/>, <txp:comments_form/>, <txp:comments_preview/> and <txp:popup_comments/> can be used as container tags.
+* Changed: <txp:comment_email_input /> accepts attribute 'size'.
+* Changed: <txp:comment_message_input /> accepts attributes 'cols', 'rows'. Removed capability to apply an immediate style to the element.
+* Changed: <txp:comment_name_input /> accepts attribute 'size'.
+* Changed: <txp:comment_preview /> accepts attribute 'label'.
+* Changed: <txp:comment_remember /> accepts attributes 'rememberlabel', 'forgetlabel'.
+* Changed: <txp:comment_submit /> accepts attribute 'label'.
+* Changed: <txp:comment_web_input /> accepts attribute 'size'.
 * Changed: <txp:link /> accepts 'id' and 'name' attributes.
 * Changed: <txp:meta_author /> accepts 'escape' and 'format' attributes.
 * Changed: <txp:meta_keywords /> accepts 'escape', 'format' and 'separator' attributes.
 * Changed: <txp:password_protect /> tag can now be used as a container tag.
 * Changed: <txp:recent_articles /> accepts 'offset' attribute.
 * Changed: <txp:section_list /> accepts 'html_id', 'limit' and 'offset' attributes.
-* Changed: Deprecated <txp:keywords> tag. Use <txp:meta_keywords format="" /> instead.
-* Changed: Deprecated <txp:rsd> tag.
+* Changed: Deprecated <txp:keywords /> tag. Use <txp:meta_keywords format="" /> instead.
+* Changed: Deprecated <txp:rsd /> tag.
 * Changed: Deprecated 'breakclass' attribute for <txp:comments /> and <txp:image_info />.
 * Changed: Removed Form (article) Preview facility.
 * Changed: Removed empty 'About' section from new installs.
 * Changed: Increase 'page' and 'css' sizes in txp_section table.
 * Changed: 'Prevent widowed words in article titles' preference defaults to 'No' in new installs.
-* Developer: Added jQuery UI library and a jQuery UI Textpattern theme to admin side.
+* Changed: Detailed debug trace log.
+* Changed: Default charset is now utf8mb4: supports a wider range of characters, including emoji.
+* Developer: getNextPref() now returns array members 'next' and 'prev' with article data, no longer returns array members 'next_id', 'next_title', 'next_utitle', 'next_posted', 'prev_id', 'prev_title', 'prev_utitle', 'prev_posted'
+* Developer: getNeighbour() returns 'false' if no matching neighbour article exists.
+* Developer: Use 'mysqli' extension for DB access, lose dependency on 'mysql' extension.
+* Developer: Use the TXP 'now()' function instead of the SQL 'NOW()' function to create cache-friendly, faster SELECT queries.
+* Developer: Added jQuery UI library to admin side.
 * Developer: Added DocBlock documentation comments throughout the source code.
 * Developer: Adherence to PSR coding standards where possible.
+* Developer: Function signature for wrapRegion() changed: 7th parameter 'ARIA role' dropped, as it shouldn't be stated for semantic tags such as 'section'.
+* Developer: Refactored 'Validator', 'Constraint', and 'theme' classes into the 'Textpattern' namespace; deprecated their 'txplib_validator' and 'txplib_theme' implementations.
 
 Changes in 4.5.7
 
@@ -214,7 +240,7 @@ Changes in 4.2.0
 * Fixed: Bogus "Article tags cannot be used outside an article context" warning  in <txp:else />-branch of <txp:if_keywords>.
 * Fixed: Removed superflous &amp; encoding for article titles in <txp:recent_comments />.
 * Fixed: <txp:expires> uses "class" and "wraptag" attributes as intended.
-* New tag: <txp:link_id /> (thanks: Rick Siletti).
+* New tag: <txp:link_id /> (thanks: Rick Silletti).
 * New tag: <txp:yield />.
 * Changed: Article timestamp is left untouched for draft, pending, or hidden articles published into the future.
 * Changed: <txp:file_download_list /> tag accepts a comma-separated list of file ids in a new "id" attribute (thanks: Rick Silletti).

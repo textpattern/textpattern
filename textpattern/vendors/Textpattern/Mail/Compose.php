@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,7 +28,9 @@
  * @package Mail
  */
 
-class Textpattern_Mail_Compose extends Textpattern_Adaptable_Providable
+namespace Textpattern\Mail;
+
+class Compose extends \Textpattern\Adaptable\Providable
 {
     /**
      * {@inheritdoc}
@@ -36,6 +38,6 @@ class Textpattern_Mail_Compose extends Textpattern_Adaptable_Providable
 
     public function getDefaultAdapter()
     {
-        return new Textpattern_Mail_Adapter_Mail();
+        return new \Textpattern\Mail\Adapter\Mail();
     }
 }

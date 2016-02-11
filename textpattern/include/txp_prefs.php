@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -41,11 +41,11 @@ if ($event == 'prefs') {
     ));
 
     switch (strtolower($step)) {
-        case "":
-        case "prefs_list":
+        case '':
+        case 'prefs_list':
             prefs_list();
             break;
-        case "prefs_save":
+        case 'prefs_save':
             prefs_save();
             break;
     }
@@ -61,13 +61,13 @@ function prefs_save()
 
     // Update custom fields count from database schema and cache it as a hidden pref.
     // TODO: move this when custom fields are refactored.
-    $max_custom_fields = count(preg_grep('/^custom_\d+/', getThings('describe '.safe_pfx('textpattern'))));
+    $max_custom_fields = count(preg_grep('/^custom_\d+/', getThings("DESCRIBE ".safe_pfx('textpattern'))));
     set_pref('max_custom_fields', $max_custom_fields, 'publish', 2);
 
     $sql = array();
-    $sql[] = 'prefs_id = 1 and event != "" and type in('.PREF_CORE.', '.PREF_PLUGIN.', '.PREF_HIDDEN.')';
-    $sql[] = "(user_name = '' or (user_name='".doSlash($txp_user)."' and name not in(
-            select name from ".safe_pfx('txp_prefs')." where user_name = ''
+    $sql[] = "prefs_id = 1 AND event != '' AND type IN (".PREF_CORE.", ".PREF_PLUGIN.", ".PREF_HIDDEN.")";
+    $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
+            SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
         )))";
 
     if (!get_pref('use_comments', 1, 1)) {
@@ -77,7 +77,7 @@ function prefs_save()
     $prefnames = safe_rows_start(
         "name, event, user_name, val",
         'txp_prefs',
-        join(' and ', $sql)
+        join(" AND ", $sql)
     );
 
     $post = stripPost();
@@ -101,12 +101,12 @@ function prefs_save()
     // Forge $gmtoffset and $is_dst from $timezone_key if present.
     if (isset($post['timezone_key'])) {
         $key = $post['timezone_key'];
-        $tzd = Txp::get('Textpattern_Date_Timezone')->getTimeZones();
+        $tzd = Txp::get('\Textpattern\Date\Timezone')->getTimeZones();
 
         if (isset($tzd[$key])) {
             $prefs['timezone_key'] = $timezone_key = $key;
             $post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
-            $post['is_dst'] = $prefs['is_dst'] = $is_dst = Txp::get('Textpattern_Date_Timezone')->isDst(null, $key);
+            $post['is_dst'] = $prefs['is_dst'] = $is_dst = Txp::get('\Textpattern\Date\Timezone')->isDst(null, $key);
         }
     }
 
@@ -126,7 +126,7 @@ function prefs_save()
         }
 
         if ($name === 'expire_logs_after' && (int) $post[$name] !== (int) $val) {
-            safe_delete('txp_log', 'time < date_sub(now(), interval '.intval($post[$name]).' day)');
+            safe_delete('txp_log', "time < DATE_SUB(NOW(), INTERVAL ".intval($post[$name])." DAY)");
         }
 
         update_pref($name, (string) $post[$name], null, null, null, null, (string) $user_name);
@@ -145,7 +145,7 @@ function prefs_save()
  * installed or updated when accessing the Preferences panel. Access to the
  * prefs can be controlled by using add_privs() on 'prefs.your-prefs-event-name'.
  *
- * @param  string $message The feedback / error string to display
+ * @param string $message The feedback / error string to display
  */
 
 function prefs_list($message = '')
@@ -158,10 +158,7 @@ function prefs_list($message = '')
 
     $locale = setlocale(LC_ALL, $locale);
 
-    echo hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="prefs_container" class="txp-container">'.
-        n.'<form method="post" class="prefs-form" action="index.php">'.
-        n.'<div class="txp-layout-textbox">';
+    echo n.'<form class="prefs-form" id="prefs_form" method="post" action="index.php">';
 
     // TODO: remove 'custom' when custom fields are refactored.
     $core_events = array('site', 'admin', 'publish', 'feeds', 'comments', 'custom');
@@ -169,8 +166,8 @@ function prefs_list($message = '')
 
     $sql = array();
     $sql[] = 'prefs_id = 1 and event != "" and type in('.PREF_CORE.', '.PREF_PLUGIN.')';
-    $sql[] = "(user_name = '' or (user_name='".doSlash($txp_user)."' and name not in(
-            select name from ".safe_pfx('txp_prefs')." where user_name = ''
+    $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
+            SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
         )))";
 
     if (!get_pref('use_comments', 1, 1)) {
@@ -178,13 +175,15 @@ function prefs_list($message = '')
     }
 
     $rs = safe_rows_start(
-        "*, FIELD(event,{$joined_core}) as sort_value",
+        "*, FIELD(event, $joined_core) AS sort_value",
         'txp_prefs',
-        join(' and ', $sql)." ORDER BY sort_value = 0, sort_value, event, position"
+        join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, position"
     );
 
     $last_event = null;
     $out = array();
+    $build = array();
+    $groupOut = array();
 
     if (numRows($rs)) {
         while ($a = nextRow($rs)) {
@@ -194,7 +193,24 @@ function prefs_list($message = '')
 
             if ($a['event'] !== $last_event) {
                 if ($last_event !== null) {
-                    echo wrapRegion('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
+                    $build[] = tag(
+                        hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
+                        join(n, $out)
+                        , 'section', array(
+                            'class'           => 'txp-prefs-group',
+                            'id'              => 'prefs_group_'.$last_event,
+                            'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
+                        )
+                    );
+
+                    $groupOut[] = n.tag(href(
+                            gTxt($last_event),
+                            '#prefs_group_'.$last_event,
+                            array(
+                                'data-txp-pane'  => $last_event,
+                                'data-txp-token' => form_token(),
+                            )),
+                        'li');
                 }
 
                 $last_event = $a['event'];
@@ -224,7 +240,10 @@ function prefs_list($message = '')
                 pref_func($a['html'], $a['name'], $a['val'], $size),
                 $label,
                 $help,
-                array('id' => 'prefs-'.$a['name'])
+                array(
+                    'class' => 'txp-form-field',
+                    'id'    => 'prefs-'.$a['name'],
+                )
             );
         }
     }
@@ -232,20 +251,48 @@ function prefs_list($message = '')
     if ($last_event === null) {
         echo graf(gTxt('no_preferences'));
     } else {
-        echo wrapRegion('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
+        $build[] = tag(
+            hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
+            join(n, $out)
+            , 'section', array(
+                'class'           => 'txp-prefs-group',
+                'id'              => 'prefs_group_'.$last_event,
+                'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
+            )
+        );
+
+        $groupOut[] = n.tag(href(
+                gTxt($last_event),
+                '#prefs_group_'.$last_event,
+                array(
+                    'data-txp-pane'  => $last_event,
+                    'data-txp-token' => form_token(),
+                )),
+            'li').n;
+
+        echo hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')).
+            n.'<div class="txp-layout-4col-cell-1alt">'.
+            wrapGroup(
+                'all_preferences',
+                n.tag(join($groupOut), 'ul', array('class' => 'switcher-list')),
+                'all_preferences'
+            );
+
+        if ($last_event !== null) {
+            echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'), array('class' => 'txp-save'));
+        }
+
+        echo n.'</div>'.
+            n.'<div class="txp-layout-4col-cell-2-3-4">'.
+            join(n, $build).
+            n.'</div>'.
+            sInput('prefs_save').
+            eInput('prefs').
+            hInput('prefs_id', '1').
+            tInput();
     }
 
-    echo n.'</div>'.
-        sInput('prefs_save').
-        eInput('prefs').
-        hInput('prefs_id', '1').
-        tInput();
-
-    if ($last_event !== null) {
-        echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'));
-    }
-
-    echo n.'</form>'.n.'</div>';
+    echo n.'</form>';
 }
 
 /**
@@ -263,7 +310,7 @@ function pref_func($func, $name, $val, $size = '')
     if ($func != 'func' && is_callable('pref_'.$func)) {
         $func = 'pref_'.$func;
     } else {
-        $string = new Textpattern_Type_String($func);
+        $string = new \Textpattern\Type\StringType($func);
         $func = $string->toCallback();
 
         if (!is_callable($func)) {
@@ -332,7 +379,7 @@ function gmtoffset_select($name, $val)
     $key = get_pref('timezone_key', '', true);
 
     if ($key === '') {
-        $key = (string) Txp::get('Textpattern_Date_Timezone')->getTimezone();
+        $key = (string) Txp::get('\Textpattern\Date\Timezone')->getTimezone();
     }
 
     $tz = new timezone;
@@ -415,7 +462,7 @@ function permlinkmodes($name, $val)
         'year_month_day_title' => gTxt('year_month_day_title'),
         'section_title'        => gTxt('section_title'),
         'title_only'           => gTxt('title_only'),
-        // 'category_subcategory' => gTxt('category_subcategory')
+        //'category_subcategory' => gTxt('category_subcategory'),
     );
 
     return selectInput($name, $vals, $val, '', '', $name);
@@ -533,6 +580,24 @@ function dateformats($name, $val)
 }
 
 /**
+ * Renders a HTML &lt;select&gt; list of content permlink options.
+ *
+ * @param  string $name HTML name and id of the widget
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function permlink_format($name, $val)
+{
+    $vals = array(
+        '0'   => gTxt('permlink_intercapped'),
+        '1'   => gTxt('permlink_hyphenated'),
+    );
+
+    return selectInput($name, $vals, $val, '', '', $name);
+}
+
+/**
  * Renders a HTML &lt;select&gt; list of site production status.
  *
  * @param  string $name HTML name and id of the widget
@@ -578,7 +643,7 @@ function default_event($name, $val)
         }
     }
 
-    return n.'<select id="default_event" name="'.$name.'" class="default-events">'.
+    return n.'<select class="default-events" id="default_event" name="'.$name.'">'.
         join('', $out).
         n.'</select>';
 }
@@ -632,9 +697,9 @@ function custom_set($name, $val)
 
 function themename($name, $val)
 {
-    $themes = theme::names();
+    $themes = \Textpattern\Admin\Theme::names();
     foreach ($themes as $t) {
-        $theme = theme::factory($t);
+        $theme = \Textpattern\Admin\Theme::factory($t);
         if ($theme) {
             $m = $theme->manifest();
             $title = empty($m['title']) ? ucwords($theme->name) : $m['title'];

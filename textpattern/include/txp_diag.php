@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -64,7 +64,7 @@ if ($event == 'diag') {
 /**
  * Checks if the given Apache module is installed and active.
  *
- * @param  string    $m The module
+ * @param  string $m The module
  * @return bool|null TRUE on success, NULL or FALSE on error
  */
 
@@ -82,7 +82,7 @@ function apache_module($m)
  *
  * This function verifies that the given temporary directory is writeable.
  *
- * @param  string    $dir The directory to check
+ * @param  string $dir The directory to check
  * @return bool|null NULL on error, TRUE on success
  */
 
@@ -123,7 +123,7 @@ function list_txp_tables()
  * @param  array  $tables   The tables to check
  * @param  string $type     Check type, either FOR UPGRADE, QUICK, FAST, MEDIUM, EXTENDED, CHANGED
  * @param  bool   $warnings If TRUE, displays warnings
- * @return array  An array of table statuses
+ * @return array An array of table statuses
  * @example
  * print_r(
  *     check_tables(list_txp_tables())
@@ -170,7 +170,7 @@ function diag_msg_wrap($msg, $type = 'error')
 
 function doDiagnostics()
 {
-    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB;
+    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB, $txp_using_svn;
     extract(get_prefs());
 
     $urlparts = parse_url(hu);
@@ -183,29 +183,27 @@ function doDiagnostics()
     // not boolean.
     $is_register_globals = ((strcasecmp(ini_get('register_globals'), 'on') === 0) or (ini_get('register_globals') === '1'));
 
-    // Check for Textpattern updates, at most once every 24 hours.
-    $now = time();
-    $updateInfo = unserialize(get_pref('last_update_check', ''));
-
-    if (!$updateInfo || ($now > ($updateInfo['when'] + (60 * 60 * 24)))) {
-        $updates = checkUpdates();
-        $updateInfo['msg'] = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
-        $updateInfo['when'] = $now;
-        set_pref('last_update_check', serialize($updateInfo), 'publish', PREF_HIDDEN, 'text_input');
-    }
-
     $fail = array();
+    $now = time();
 
-    if (!empty($updateInfo['msg'])) {
-        $fail['textpattern_version_update'] = diag_msg_wrap($updateInfo['msg'], 'information');
+    if (!$txp_using_svn) {
+        // Check for Textpattern updates, at most once every 24 hours.
+        $updateInfo = unserialize(get_pref('last_update_check', ''));
+
+        if (!$updateInfo || ($now > ($updateInfo['when'] + (60 * 60 * 24)))) {
+            $updates = checkUpdates();
+            $updateInfo['msg'] = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
+            $updateInfo['when'] = $now;
+            set_pref('last_update_check', serialize($updateInfo), 'publish', PREF_HIDDEN, 'text_input');
+        }
+
+        if (!empty($updateInfo['msg'])) {
+            $fail['textpattern_version_update'] = diag_msg_wrap($updateInfo['msg'], 'information');
+        }
     }
 
     if (!is_callable('version_compare') || version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<')) {
         $fail['php_version_required'] = diag_msg_wrap(gTxt('php_version_required', array('{version}' => REQUIRED_PHP_VERSION)));
-    }
-
-    if (!isset($path_to_site)) {
-        $fail['path_to_site_missing'] = diag_msg_wrap(gTxt('path_to_site_missing'), 'warning');
     }
 
     if (@gethostbyname($mydomain) === $mydomain) {
@@ -275,7 +273,7 @@ function doDiagnostics()
     }
 
     if ($permlink_mode != 'messy') {
-        $rs = safe_column("name", "txp_section", "1");
+        $rs = safe_column("name", 'txp_section', "1 = 1");
 
         foreach ($rs as $name) {
             if ($name and @file_exists($path_to_site.'/'.$name)) {
@@ -291,7 +289,7 @@ function doDiagnostics()
     }
 
     // Files that don't match their checksums.
-    if ($modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
+    if (!$txp_using_svn and $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
         $fail['modified_files'] = diag_msg_wrap(gTxt('modified_files').cs.n.t.join(', '.n.t, $modified_files), 'warning');
     }
 
@@ -374,7 +372,7 @@ function doDiagnostics()
     }
 
     $active_plugins = array();
-    if ($rows = safe_rows('name, version, code_md5, md5(code) as md5', 'txp_plugin', 'status > 0')) {
+    if ($rows = safe_rows("name, version, code_md5, MD5(code) AS md5", 'txp_plugin', "status > 0")) {
         foreach ($rows as $row) {
             $n = $row['name'].'-'.$row['version'];
 
@@ -427,14 +425,17 @@ function doDiagnostics()
     }
 
     // Database server time.
-    extract(doSpecial(getRow('select @@global.time_zone as db_global_timezone, @@session.time_zone as db_session_timezone, now() as db_server_time, unix_timestamp(now()) as db_server_timestamp')));
+    extract(doSpecial(getRow("SELECT @@global.time_zone AS db_global_timezone, @@session.time_zone AS db_session_timezone, NOW() AS db_server_time, UNIX_TIMESTAMP(NOW()) AS db_server_timestamp")));
     $db_server_timeoffset = $db_server_timestamp - $now;
 
     echo pagetop(gTxt('tab_diagnostics'), '');
 
-    echo hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="'.$event.'_container" class="txp-container">'.
-        n.'<div id="pre_flight_check">'.
+    echo hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading')).
+        n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        )).
+        n.tag_start('div', array('id' => 'pre_flight_check')).
         hed(gTxt('preflight_check'), 2);
 
     if ($fail) {
@@ -445,14 +446,31 @@ function doDiagnostics()
         echo graf(diag_msg_wrap(gTxt('all_checks_passed'), 'success'));
     }
 
-    echo '</div>';
-    echo '<div id="diagnostics">',
+    echo n.tag_end('div').
+        n.tag_start('div', array('id' => 'diagnostics')).
         hed(gTxt('diagnostic_info'), 2);
 
     $fmt_date = '%Y-%m-%d %H:%M:%S';
 
+    $dets = array(
+        'low'  => gTxt('low'),
+        'high' => gTxt('high'),
+    );
+
     $out = array(
-        '<p><textarea class="code" id="diagnostics-detail" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr" readonly>',
+        form(
+            eInput('diag').
+            inputLabel(
+                'diag_detail_level',
+                selectInput('step', $dets, $step, 0, 1, 'diag_detail_level'),
+                'detail',
+                '',
+                array('class' => 'txp-form-field diagnostic-details-level'),
+                ''
+            )
+        ),
+
+        '<textarea class="code" id="diagnostics-detail" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr" readonly>',
 
         gTxt('txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
 
@@ -480,7 +498,7 @@ function doDiagnostics()
 
         gTxt('gd_library').cs.$gd.n,
 
-        gTxt('server').' TZ: '.Txp::get('Textpattern_Date_Timezone')->getTimeZone().n,
+        gTxt('server').' TZ: '.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
         gTxt('server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
         strip_tags(gTxt('is_dst')).cs.$is_dst.n,
         strip_tags(gTxt('auto_dst')).cs.$auto_dst.n,
@@ -520,7 +538,7 @@ function doDiagnostics()
     if ($step == 'high') {
         $out[] = n.'Charset (default/config)'.cs.$DB->default_charset.'/'.$DB->charset.n;
 
-        $result = safe_query("SHOW variables like 'character_se%'");
+        $result = safe_query("SHOW variables LIKE 'character_se%'");
 
         while ($row = mysqli_fetch_row($result)) {
             $out[] = $row[0].cs.$row[1].n;
@@ -540,7 +558,7 @@ function doDiagnostics()
         $table_msg = array();
 
         foreach ($table_names as $table) {
-            $ctr = safe_query("SHOW CREATE TABLE ".$table."");
+            $ctr = safe_query("SHOW CREATE TABLE $table");
             if (!$ctr) {
                 unset($table_names[$table]);
                 continue;
@@ -552,7 +570,7 @@ function doDiagnostics()
                 $table_msg[] = "$table is $ctcharset";
             }
 
-            $ctr = safe_query("CHECK TABLE ".$table);
+            $ctr = safe_query("CHECK TABLE $table");
             $row = mysqli_fetch_assoc($ctr);
             if (in_array($row['Msg_type'], array('error', 'warning'))) {
                 $table_msg[] = $table.cs.$row['Msg_Text'];
@@ -565,7 +583,7 @@ function doDiagnostics()
 
         $out[] = count($table_names).' Tables'.cs.implode(', ', $table_msg).n;
 
-        $cf = preg_grep('/^custom_\d+/', getThings('describe `'.PFX.'textpattern`'));
+        $cf = preg_grep('/^custom_\d+/', getThings("DESCRIBE `".PFX."textpattern`"));
         $out[] = n.get_pref('max_custom_fields', 10).sp.gTxt('custom').cs.
                     implode(', ', $cf).sp.'('.count($cf).')'.n;
 
@@ -598,25 +616,11 @@ function doDiagnostics()
     }
 
     $out[] = callback_event('diag_results', $step).n;
-    $out[] = '</textarea></p>';
-
-    $dets = array(
-        'low'  => gTxt('low'),
-        'high' => gTxt('high'),
-    );
-
-    $out[] =
-        form(
-            graf(
-                eInput('diag').
-                n.'<label>'.gTxt('detail').'</label>'.
-                selectInput('step', $dets, $step, 0, 1)
-            )
-        );
+    $out[] = '</textarea>';
 
     echo join('', $out),
-        '</div>',
-        '</div>';
+        n.tag_end('div').
+        n.tag_end('div');
 }
 
 /**

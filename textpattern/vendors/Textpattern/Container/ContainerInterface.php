@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,7 +28,9 @@
  * @package Container
  */
 
-interface Textpattern_Container_ContainerInterface
+namespace Textpattern\Container;
+
+interface ContainerInterface
 {
     /**
      * Gets an instance for the given alias.
@@ -44,7 +46,7 @@ interface Textpattern_Container_ContainerInterface
      * Removes a registered class.
      *
      * @param  string $alias The alias
-     * @return Textpattern_Container_ContainerInterface
+     * @return \Textpattern\Container\ContainerInterface
      */
 
     public function remove($alias);
@@ -57,7 +59,7 @@ interface Textpattern_Container_ContainerInterface
      *
      * @param  string $alias The alias
      * @param  string $class The class
-     * @return Textpattern_Container_ContainerInterface
+     * @return \Textpattern\Container\ContainerInterface
      * @throws InvalidArgumentException
      */
 

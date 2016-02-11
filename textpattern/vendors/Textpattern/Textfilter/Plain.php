@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,7 +28,9 @@
  * @package Textfilter
  */
 
-class Textpattern_Textfilter_Plain extends Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
+namespace Textpattern\Textfilter;
+
+class Plain extends Base implements TextfilterInterface
 {
     /**
      * Constructor.

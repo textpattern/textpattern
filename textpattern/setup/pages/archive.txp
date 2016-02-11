@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="<txp:lang />" dir="<txp:text item="lang_dir" />">
+
+<head>
+    <meta charset="utf-8">
+    <title>
+        <txp:page_title />
+    </title>
+
+    <!-- Google font API -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic">
+
+    <!-- CSS -->
+    <txp:css format="link" media="" />
+    <!-- ...or you can use (faster) external CSS files e.g. <link rel="stylesheet" href="<txp:site_url />css/default.css"> -->
+
+    <!-- specify meta description if available -->
+    <txp:meta_description />
+    <!-- specify meta keywords if available -->
+    <txp:meta_keywords separator="," />
+
+    <meta name="generator" content="Textpattern CMS">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="index, follow, noodp, noydir">
+
+    <!-- specify canonical and author -->
+    <txp:if_individual_article>
+        <link rel="canonical" href="<txp:permlink />">
+        <txp:meta_author title="1" />
+    <txp:else />
+        <link rel="canonical" href="<txp:section url="1" />">
+    </txp:if_individual_article>
+
+    <!-- content feeds -->
+    <txp:feed_link flavor="atom" format="link" label="Atom" />
+    <txp:feed_link flavor="rss" format="link" label="RSS" />
+</head>
+
+<txp:if_article_list>
+    <body class="<txp:section />-page" itemscope itemtype="http://schema.org/CollectionPage">
+<txp:else />
+    <body class="<txp:section />-page" itemscope itemtype="http://schema.org/WebPage">
+</txp:if_article_list>
+
+    <!-- header -->
+    <header class="site-header">
+        <h1>
+            <txp:link_to_home>
+                <txp:site_name />
+            </txp:link_to_home>
+        </h1>
+        <h3>
+            <txp:site_slogan />
+        </h3>
+    </header>
+
+    <!-- navigation -->
+    <nav class="site-navigation" aria-label="<txp:text item="navigation" />" itemscope itemtype="http://schema.org/SiteNavigationElement">
+        <div>
+            <txp:section_list default_title='<txp:text item="home" />' include_default="1" wraptag="ul" break="">
+                <li<txp:if_section name='<txp:section />'> class="active"</txp:if_section>>
+                    <a itemprop="url" href="<txp:section url="1" />">
+                        <txp:section title="1" />
+                    </a>
+                </li>
+            </txp:section_list>
+
+            <!-- links by default to form: 'search_input.misc.txp' unless you specify a different form -->
+            <txp:search_input />
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <div class="container">
+
+            <!-- Main content -->
+            <main aria-label="<txp:text item="main_content" />" itemscope itemtype="http://schema.org/Blog">
+
+                <txp:if_article_list>
+
+                    <h1 itemprop="name">
+                        <txp:section title="1" />
+                    </h1>
+                    <txp:article class="article-list" form="article_listing" limit="5" wraptag="ul" />
+                    <!-- ...or if you want to list all articles from all sections instead, then replace txp:article with txp:article_custom -->
+
+                    <!-- add pagination links to foot of article listings if there are more articles available, this method
+                         is more flexible than using simple txp:link_to_prev/txp:link_to_next or txp:older/txp:newer tags -->
+                    <txp:variable name="more" value='<txp:newer /><txp:older />' />
+                    <txp:variable name="prev" value='<txp:newer />' />
+                    <txp:variable name="next" value='<txp:older />' />
+
+                    <txp:if_variable name="more" value="">
+                    <txp:else />
+                        <p class="paginator">
+                            <txp:if_variable name="prev" value="">
+                            <txp:else />
+                                <a rel="prev" href="<txp:newer />">
+                                    <txp:text item="newer" />
+                                </a>
+                            </txp:if_variable>
+
+                            <txp:if_variable name="next" value="">
+                            <txp:else />
+                                <a rel="next" href="<txp:older />">
+                                    <txp:text item="older" />
+                                </a>
+                            </txp:if_variable>
+                        </p>
+                    </txp:if_variable>
+
+                <txp:else />
+
+                    <txp:article />
+
+                    <!-- add pagination links to foot of article if there are more articles available, this method
+                         is more flexible than using simple txp:link_to_prev/txp:link_to_next or txp:older/txp:newer tags -->
+                    <txp:variable name="more" value='<txp:link_to_prev /><txp:link_to_next />' />
+                    <txp:variable name="prev" value='<txp:link_to_prev />' />
+                    <txp:variable name="next" value='<txp:link_to_next />' />
+
+                    <txp:if_variable name="more" value="">
+                    <txp:else />
+                        <p class="paginator">
+                            <txp:if_variable name="prev" value="">
+                            <txp:else />
+                                <a rel="prev" href="<txp:link_to_prev />" title="<txp:prev_title />">
+                                    <txp:text item="older" />
+                                </a>
+                            </txp:if_variable>
+
+                            <txp:if_variable name="next" value="">
+                            <txp:else />
+                                <a rel="next" href="<txp:link_to_next />" title="<txp:next_title />">
+                                    <txp:text item="newer" />
+                                </a>
+                            </txp:if_variable>
+                        </p>
+                    </txp:if_variable>
+
+                </txp:if_article_list>
+
+            </main>
+
+            <!-- Complementary content -->
+            <aside class="complementary-content">
+
+                <!-- feed links, default flavor is RSS, so we don't need to specify a flavor on the first feed_link -->
+                <p>
+                    <txp:feed_link class="feed-rss" label="RSS" />
+                    /
+                    <txp:feed_link class="feed-atom" flavor="atom" label="Atom" />
+                </p>
+
+                <!-- if links exist, renders a links list -->
+                <txp:variable name="links" value='<txp:linklist limit="1" />' />
+
+                <txp:if_variable name="links" value="">
+                <txp:else />
+                    <section>
+                        <h4>
+                            <txp:text item="links" />
+                        </h4>
+
+                        <!-- links by default to form: 'plainlinks.link.txp' unless you specify a different form -->
+                        <txp:linklist wraptag="ul" break="li" />
+                    </section>
+                </txp:if_variable>
+
+            </aside>
+
+        </div> <!-- /.container -->
+    </div> <!-- /.wrapper -->
+
+    <!-- footer -->
+    <footer class="site-footer">
+        <p>
+            <small>
+                <txp:text item="published_with" />
+                <a rel="external" href="http://textpattern.com" title="<txp:text item="go_txp_com" />">Textpattern CMS</a>
+            </small>
+        </p>
+    </footer>
+
+    <!-- add your own JavaScript here -->
+
+</body>
+</html>

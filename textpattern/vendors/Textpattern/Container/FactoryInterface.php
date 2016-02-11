@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,7 +28,9 @@
  * @package Container
  */
 
-interface Textpattern_Container_FactoryInterface
+namespace Textpattern\Container;
+
+interface FactoryInterface
 {
     /**
      * Gets an instance.
@@ -42,7 +44,7 @@ interface Textpattern_Container_FactoryInterface
     /**
      * Gets the container.
      *
-     * @return Textpattern_Container_ContainerInterface
+     * @return \Textpattern\Container\ContainerInterface
      */
 
     public static function getContainer();

@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -31,7 +31,7 @@
 /**
  * Gets comments as an array from the given article.
  *
- * @param  int        $id The article ID
+ * @param  int $id The article ID
  * @return array|null An array of comments, or NULL on error
  * @example
  * if ($comments = fetchComments(12))
@@ -43,9 +43,9 @@
 function fetchComments($id)
 {
     $rs = safe_rows(
-        '*, unix_timestamp(posted) as time',
+        "*, UNIX_TIMESTAMP(posted) AS time",
         'txp_discuss',
-        'parentid='.intval($id).' and visible='.VISIBLE.' order by posted asc'
+        "parentid = ".intval($id)." AND visible = ".VISIBLE." ORDER BY posted ASC"
     );
 
     if ($rs) {
@@ -54,38 +54,9 @@ function fetchComments($id)
 }
 
 /**
- * Returns a formatted comment thread and form.
- *
- * This function returns parsed 'comments_display' form template.
- *
- * @param  int         $id The article
- * @return string|null HTML
- * @example
- * echo discuss(12);
- */
-
-function discuss($id)
-{
-    $rs = safe_row(
-        '*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires',
-        'textpattern',
-        'ID='.intval($id).' and Status >= 4'
-    );
-
-    if ($rs) {
-        populateArticleData($rs);
-        $result = parse_form('comments_display');
-
-        return $result;
-    }
-
-    return '';
-}
-
-/**
  * Gets next nonce.
  *
- * @param  bool   $check_only
+ * @param  bool $check_only
  * @return string A random MD5 hash
  */
 
@@ -103,7 +74,7 @@ function getNextNonce($check_only = false)
 /**
  * Gets next secret.
  *
- * @param  bool   $check_only
+ * @param  bool $check_only
  * @return string A random MD5 hash
  */
 
@@ -116,209 +87,6 @@ function getNextSecret($check_only = false)
     }
 
     return $secret;
-}
-
-/**
- * Renders a HTML comment form.
- *
- * @param  int    $id   The Article ID
- * @param  array  $atts An array of attributes
- * @return string HTML
- */
-
-function commentForm($id, $atts = null)
-{
-    global $prefs;
-    extract($prefs);
-
-    $h5 = ($doctype == 'html5');
-
-    extract(lAtts(array(
-        'isize'         => '25',
-        'msgrows'       => '5',
-        'msgcols'       => '25',
-        'msgstyle'      => '',
-        'form'          => 'comment_form',
-        'previewlabel'  => gTxt('preview'),
-        'submitlabel'   => gTxt('submit'),
-        'rememberlabel' => gTxt('remember'),
-        'forgetlabel'   => gTxt('forget'),
-    ), $atts, 0));
-
-    $namewarn = false;
-    $emailwarn = false;
-    $commentwarn = false;
-    $name = pcs('name');
-    $email = clean_url(pcs('email'));
-    $web = clean_url(pcs('web'));
-    $n_message = 'message';
-
-    extract(doDeEnt(psa(array(
-        'checkbox_type',
-        'remember',
-        'forget',
-        'parentid',
-        'preview',
-        'message',
-        'submit',
-        'backpage',
-    ))));
-
-    if ($message == '') { // Second or later preview will have randomised message-field name.
-        $in = getComment();
-        $message = doDeEnt($in['message']);
-    }
-
-    if ($preview) {
-        $name  = ps('name');
-        $email = clean_url(ps('email'));
-        $web   = clean_url(ps('web'));
-        $nonce = getNextNonce();
-        $secret = getNextSecret();
-        safe_insert("txp_discuss_nonce", "issue_time=now(), nonce='".doSlash($nonce)."', secret='".doSlash($secret)."'");
-        $n_message = md5('message'.$secret);
-
-        $namewarn = ($comments_require_name && !trim($name));
-        $emailwarn = ($comments_require_email && !trim($email));
-        $commentwarn = (!trim($message));
-
-        $evaluator = & get_comment_evaluator();
-
-        if ($namewarn) {
-            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_name_required'));
-        }
-
-        if ($emailwarn) {
-            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_email_required'));
-        }
-
-        if ($commentwarn) {
-            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_required'));
-        }
-    } else {
-        $rememberCookie = cs('txp_remember');
-
-        if ($rememberCookie === '') {
-            $checkbox_type = 'remember';
-            $remember = 1;
-        } elseif ($rememberCookie == 1) {
-            $checkbox_type = 'forget';
-        } else {
-            $checkbox_type = 'remember';
-        }
-    }
-
-    // If the form fields are filled (anything other than blank), pages really
-    // should not be saved by a public cache (rfc2616/14.9.1).
-    if ($name || $email || $web) {
-        header('Cache-Control: private');
-    }
-
-    $parentid = (!$parentid) ? $id : $parentid;
-
-    $url = $GLOBALS['pretext']['request_uri'];
-
-    // Experimental clean URLs with only 404-error-document on Apache possibly
-    // requires messy URLs for POST requests.
-    if (defined('PARTLY_MESSY') and (PARTLY_MESSY)) {
-        $url = hu.'?id='.intval($parentid);
-    }
-
-    $out = '<form id="txpCommentInputForm" method="post" action="'.txpspecialchars($url).'#cpreview">'.
-
-        // Prevent XHTML Strict validation gotchas.
-        n.'<div class="comments-wrapper">'.n.n;
-
-    $Form = fetch('Form', 'txp_form', 'name', $form);
-
-    $required = ($h5) ? ' required' : '';
-
-    $msgcols = ($msgcols and is_numeric($msgcols)) ? ' cols="'.intval($msgcols).'"' : '';
-    $msgrows = ($msgrows and is_numeric($msgrows)) ? ' rows="'.intval($msgrows).'"' : '';
-    $msgstyle = ($msgstyle ? ' style="'.$msgstyle.'"' : '');
-
-    $textarea = '<textarea class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"').
-        ' id="message" name="'.$n_message.'"'.$msgcols.$msgrows.$msgstyle.$required.
-        '>'.txpspecialchars(substr(trim($message), 0, 65535)).'</textarea>';
-
-    // By default, the submit button is visible but disabled.
-    $comment_submit_button = fInput('submit', 'submit', $submitlabel, 'button disabled', '', '', '', '', 'txpCommentSubmit', true);
-
-    // If all fields check out, the submit button is active/clickable.
-    if ($preview) {
-        $comment_submit_button = fInput('submit', 'submit', $submitlabel, 'button', '', '', '', '', 'txpCommentSubmit', false);
-    }
-
-    if ($checkbox_type == 'forget') {
-        // Inhibit default remember.
-        if ($forget == 1) {
-            destroyCookies();
-        }
-
-        $checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(txpspecialchars($forgetlabel), 'label', ' for="forget"');
-    } else {
-        // Inhibit default remember.
-        if ($remember != 1) {
-            destroyCookies();
-        }
-
-        $checkbox = checkbox('remember', 1, $remember, '', 'remember').' '.tag(txpspecialchars($rememberlabel), 'label', ' for="remember"');
-    }
-
-    $checkbox .= ' '.hInput('checkbox_type', $checkbox_type);
-
-    $vals = array(
-        'comment_name_input'    => fInput('text', 'name', $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $isize, '', 'name', false, $h5 && $comments_require_name),
-        'comment_email_input'   => fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $isize, '', 'email', false, $h5 && $comments_require_email),
-        'comment_web_input'     => fInput($h5 ? 'text' : 'text', 'web', $web, 'comment_web_input', '', '', $isize, '', 'web', false, false), /* TODO: maybe use type = 'url' once browsers are less strict */
-        'comment_message_input' => $textarea.'<!-- plugin-place-holder -->',
-        'comment_remember'      => $checkbox,
-        'comment_preview'       => fInput('submit', 'preview', $previewlabel, 'button', '', '', '', '', 'txpCommentPreview', false),
-        'comment_submit'        => $comment_submit_button,
-    );
-
-    foreach ($vals as $a => $b) {
-        $Form = str_replace('<txp:'.$a.' />', $b, $Form);
-    }
-
-    $form = parse($Form);
-
-    $out .= $form.
-        n.hInput('parentid', $parentid);
-
-    $split = rand(1, 31);
-
-    $out .= ($preview) ? n.hInput(substr($nonce, 0, $split), substr($nonce, $split)) : '';
-
-    $out .= (!$preview) ?
-        n.hInput('backpage', $url) :
-        n.hInput('backpage', $backpage);
-
-    $out = str_replace('<!-- plugin-place-holder -->', callback_event('comment.form'), $out);
-
-    $out .= n.n.'</div>'.n.'</form>';
-
-    return $out;
-}
-
-/**
- * Parses a &lt;txp:popup_comments /&gt; tag.
- *
- * @param  int    $id The article's ID
- * @return string HTML
- */
-
-function popComments($id)
-{
-    global $sitename, $s, $thisarticle;
-    $preview = gps('preview');
-    $h3 = ($preview) ? hed(gTxt('message_preview'), 3) : '';
-    $discuss = discuss($id);
-    ob_start('parse');
-    $out = fetch_form('popup_comments');
-    $out = str_replace("<txp:popup_comments />", $discuss, $out);
-
-    return $out;
 }
 
 /**
@@ -394,7 +162,7 @@ function getComment()
     $c['secret'] = '';
 
     if (!empty($n)) {
-        $rs = safe_row('nonce, secret', 'txp_discuss_nonce', "nonce in ('".join("','", $n)."')");
+        $rs = safe_row("nonce, secret", 'txp_discuss_nonce', "nonce IN ('".join("','", $n)."')");
         $c['nonce'] = $rs['nonce'];
         $c['secret'] = $rs['secret'];
     }
@@ -422,11 +190,6 @@ function saveComment()
     }
 
     $ip = serverset('REMOTE_ADDR');
-
-    if (!checkBan($ip)) {
-        txp_die(gTxt('you_have_been_banned'), '403');
-    }
-
     $blacklisted = is_blacklisted($ip);
 
     if ($blacklisted) {
@@ -449,9 +212,9 @@ function saveComment()
     $message2db = doSlash(markup_comment($message));
 
     $isdup = safe_row(
-        "message,name",
-        "txp_discuss",
-        "name='$name' and message='$message2db' and ip='".doSlash($ip)."'"
+        "message, name",
+        'txp_discuss',
+        "name = '$name' AND message = '$message2db' AND ip = '".doSlash($ip)."'"
     );
 
     if (
@@ -473,7 +236,7 @@ function saveComment()
         if ($visible != RELOAD) {
             $parentid = assert_int($parentid);
             $commentid = safe_insert(
-                "txp_discuss",
+                'txp_discuss',
                 "parentid = $parentid,
                  name     = '$name',
                  email    = '$email',
@@ -481,11 +244,11 @@ function saveComment()
                  ip       = '".doSlash($ip)."',
                  message  = '$message2db',
                  visible  = ".intval($visible).",
-                 posted   = now()"
+                 posted   = NOW()"
             );
 
             if ($commentid) {
-                safe_update("txp_discuss_nonce", "used = 1", "nonce='".doSlash($nonce)."'");
+                safe_update('txp_discuss_nonce', "used = 1", "nonce = '".doSlash($nonce)."'");
 
                 if ($prefs['comment_means_site_updated']) {
                     update_lastmod('comment_saved', compact('commentid', 'parentid', 'name', 'email', 'web', 'message', 'visible', 'ip'));
@@ -642,7 +405,7 @@ class comment_evaluation
     /**
      * Gets resulting estimated status.
      *
-     * @param  string     $result_type If 'numeric' returns the ID of the status, a localised label otherwise
+     * @param  string $result_type If 'numeric' returns the ID of the status, a localised label otherwise
      * @return int|string
      * @example
      * $evaluator =& get_comment_evaluator();
@@ -656,7 +419,7 @@ class comment_evaluation
         $result = array();
 
         foreach ($this->status as $key => $value) {
-            $result[$key] = array_sum($value)/max(1, count($value));
+            $result[$key] = array_sum($value) / max(1, count($value));
         }
 
         arsort($result, SORT_NUMERIC);
@@ -733,7 +496,7 @@ function &get_comment_evaluator()
  * This function will also do clean up and deletes expired nonces.
  *
  * @param  string $nonce The nonce
- * @return bool   TRUE if the nonce is valid
+ * @return bool TRUE if the nonce is valid
  * @see    getNextNonce()
  */
 
@@ -744,33 +507,16 @@ function checkNonce($nonce)
     }
 
     // Delete expired nonces.
-    safe_delete("txp_discuss_nonce", "issue_time < date_sub(now(),interval 10 minute)");
+    safe_delete('txp_discuss_nonce', "issue_time < DATE_SUB(NOW(), INTERVAL 10 MINUTE)");
 
     // Check for nonce.
-    return (safe_row("*", "txp_discuss_nonce", "nonce='".doSlash($nonce)."' and used = 0")) ? true : false;
+    return (safe_row("*", 'txp_discuss_nonce', "nonce = '".doSlash($nonce)."' AND used = 0")) ? true : false;
 }
-
-/**
- * Checks if an IP address is banned.
- *
- * @param  string $ip The IP address
- * @return bool   TRUE if the IP is not banned
- * @example
- * if (checkBan('127.0.0.1') === false)
- * {
- *     echo "IP address is banned.";
- * }
- */
-
-    function checkBan($ip)
-    {
-        return (!fetch("ip", "txp_discuss_ipban", "ip", $ip)) ? true : false;
-    }
 
 /**
  * Checks if comments are open for the given article.
  *
- * @param  int  $id The article.
+ * @param  int $id The article.
  * @return bool FALSE if comments are closed
  * @example
  * if (checkCommentsAllowed(12))
@@ -791,12 +537,12 @@ function checkCommentsAllowed($id)
 
     if (isset($thisarticle['thisid']) && ($thisarticle['thisid'] == $id) && isset($thisarticle['annotate'])) {
         $Annotate = $thisarticle['annotate'];
-        $uPosted  = $thisarticle['posted'];
+        $uPosted = $thisarticle['posted'];
     } else {
         extract(
             safe_row(
-                "Annotate,unix_timestamp(Posted) as uPosted",
-                "textpattern",
+                "Annotate, UNIX_TIMESTAMP(Posted) AS uPosted",
+                'textpattern',
                 "ID = $id"
             )
         );
@@ -824,7 +570,7 @@ function checkCommentsAllowed($id)
 
 function comments_help()
 {
-    return '<a id="txpCommentHelpLink" href="'.HELP_URL.'?item=textile_comments&amp;language='.LANG.'" onclick="window.open(this.href, \'popupwindow\', \'width=300,height=400,scrollbars,resizable\'); return false;">'.gTxt('textile_help').'</a>';
+    return '<a id="txpCommentHelpLink" href="'.HELP_URL.'?item=textile_comments&amp;language='.txpspecialchars(LANG).'" onclick="window.open(this.href, \'popupwindow\', \'width=300,height=400,scrollbars,resizable\'); return false;">'.gTxt('textile_help').'</a>';
 }
 
 /**
@@ -860,11 +606,11 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
 
     $parentid = assert_int($parentid);
     $discussid = assert_int($discussid);
-    $article = safe_row("Section, Posted, ID, url_title, AuthorID, Title", "textpattern", "ID = $parentid");
+    $article = safe_row("Section, Posted, ID, url_title, AuthorID, Title", 'textpattern', "ID = $parentid");
     extract($article);
-    extract(safe_row("RealName, email", "txp_users", "name = '".doSlash($AuthorID)."'"));
+    extract(safe_row("RealName, email", 'txp_users', "name = '".doSlash($AuthorID)."'"));
 
-    $out = gTxt('greeting')." $RealName,".n;
+    $out = gTxt('salutation', array('{name}' => $RealName)).n;
     $out .= str_replace('{title}', $Title, gTxt('comment_recorded')).n;
     $out .= permlinkurl_id($parentid).n;
 

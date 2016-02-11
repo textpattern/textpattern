@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,14 +28,14 @@
  * @package Tag
  */
 
-Txp::get('Textpattern_Tag_Registry')
+Txp::get('\Textpattern\Tag\Registry')
     ->register('page_title')
     ->register('css')
     ->register('image')
     ->register('thumbnail')
     ->register('output_form')
-    ->register(array('Textpattern_Tag_Syntax_Partial', 'renderYield'), 'yield')
-    ->register(array('Textpattern_Tag_Syntax_Partial', 'renderIfYield'), 'if_yield')
+    ->register(array('\Textpattern\Tag\Syntax\Partial', 'renderYield'), 'yield')
+    ->register(array('\Textpattern\Tag\Syntax\Partial', 'renderIfYield'), 'if_yield')
     ->register('feed_link')
     ->register('link_feed_link')
     ->register('linklist')
@@ -48,8 +48,8 @@ Txp::get('Textpattern_Tag_Registry')
     ->register('link_date')
     ->register('link_category')
     ->register('link_id')
-    ->register(array('Textpattern_Tag_Syntax_Link', 'renderIfFirstLink'), 'if_first_link')
-    ->register(array('Textpattern_Tag_Syntax_Link', 'renderIfLastLink'), 'if_last_link')
+    ->register(array('\Textpattern\Tag\Syntax\Link', 'renderIfFirstLink'), 'if_first_link')
+    ->register(array('\Textpattern\Tag\Syntax\Link', 'renderIfLastLink'), 'if_last_link')
     ->register('email')
     ->register('password_protect')
     ->register('recent_articles')
@@ -94,7 +94,7 @@ Txp::get('Textpattern_Tag_Registry')
     ->register('comment_time')
     ->register('comment_message')
     ->register('comment_anchor')
-    ->register(array('Textpattern_Tag_Syntax_Authors', 'renderAuthors'), 'authors')
+    ->register(array('\Textpattern\Tag\Syntax\Authors', 'renderAuthors'), 'authors')
     ->register('author')
     ->register('author_email')
     ->register('if_author')
@@ -123,8 +123,8 @@ Txp::get('Textpattern_Tag_Registry')
     ->register('image_url')
     ->register('image_author')
     ->register('image_date')
-    ->register(array('Textpattern_Tag_Syntax_Image', 'renderIfFirstImage'), 'if_first_image')
-    ->register(array('Textpattern_Tag_Syntax_Image', 'renderIfLastImage'), 'if_last_image')
+    ->register(array('\Textpattern\Tag\Syntax\Image', 'renderIfFirstImage'), 'if_first_image')
+    ->register(array('\Textpattern\Tag\Syntax\Image', 'renderIfLastImage'), 'if_last_image')
     ->register('if_thumbnail')
     ->register('if_comments')
     ->register('if_comments_allowed')
@@ -172,8 +172,8 @@ Txp::get('Textpattern_Tag_Registry')
     ->register('file_download_author')
     ->register('file_download_downloads')
     ->register('file_download_description')
-    ->register(array('Textpattern_Tag_Syntax_File', 'renderIfFirstFile'), 'if_first_file')
-    ->register(array('Textpattern_Tag_Syntax_File', 'renderIfLastFile'), 'if_last_file')
+    ->register(array('\Textpattern\Tag\Syntax\File', 'renderIfFirstFile'), 'if_first_file')
+    ->register(array('\Textpattern\Tag\Syntax\File', 'renderIfLastFile'), 'if_last_file')
     ->register('hide')
     ->register('rsd')
     ->register('variable')
@@ -204,7 +204,7 @@ function page_title($atts)
     $parent_id = (int) $parentid;
 
     if ($parent_id) {
-        $out .= gTxt('comments_on').' '.escape_title(safe_field('Title', 'textpattern', "ID = $parent_id"));
+        $out .= gTxt('comments_on').' '.escape_title(safe_field("Title", 'textpattern', "ID = $parent_id"));
     } elseif ($thisarticle['title']) {
         $out .= escape_title($thisarticle['title']);
     } elseif ($q) {
@@ -292,7 +292,7 @@ function image($atts)
         } else {
             $name = doSlash($name);
 
-            $rs = safe_row('*', 'txp_image', "name = '$name' limit 1");
+            $rs = safe_row("*", 'txp_image', "name = '$name' LIMIT 1");
 
             $cache['n'][$name] = $rs;
         }
@@ -302,7 +302,7 @@ function image($atts)
         } else {
             $id = (int) $id;
 
-            $rs = safe_row('*', 'txp_image', "id = $id limit 1");
+            $rs = safe_row("*", 'txp_image', "id = $id LIMIT 1");
 
             $cache['i'][$id] = $rs;
         }
@@ -390,11 +390,11 @@ function thumbnail($atts)
     if ($name) {
         $name = doSlash($name);
 
-        $rs = safe_row('*', 'txp_image', "name = '$name' limit 1");
+        $rs = safe_row("*", 'txp_image', "name = '$name' LIMIT 1");
     } elseif ($id) {
         $id = (int) $id;
 
-        $rs = safe_row('*', 'txp_image', "id = $id limit 1");
+        $rs = safe_row("*", 'txp_image', "id = $id LIMIT 1");
     } elseif ($thisimage) {
         $id = (int) $thisimage['id'];
         $rs = $thisimage;
@@ -616,7 +616,7 @@ function linklist($atts, $thing = null)
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
+        $authorlist = safe_column("name", 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
         if ($authorlist) {
             $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
         }
@@ -654,10 +654,10 @@ function linklist($atts, $thing = null)
 
     if (!$where) {
         // If nothing matches, start with all links.
-        $where[] = "1=1";
+        $where[] = "1 = 1";
     }
 
-    $where = join(' AND ', $where);
+    $where = join(" AND ", $where);
 
     // Set up paging if required.
     if ($limit && $pageby) {
@@ -685,11 +685,11 @@ function linklist($atts, $thing = null)
 
     $qparts = array(
         $where,
-        'order by '.doSlash($sort),
-        ($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : '',
+        'ORDER BY '.doSlash($sort),
+        ($limit) ? 'LIMIT '.intval($pgoffset).', '.intval($limit) : '',
     );
 
-    $rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_link', join(' ', $qparts));
+    $rs = safe_rows_start("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_link', join(' ', $qparts));
 
     if ($rs) {
         $count = 0;
@@ -734,13 +734,13 @@ function tpt_link($atts)
     $sql = array();
 
     if ($id) {
-        $sql[] = 'id = '.intval($id);
+        $sql[] = "id = ".intval($id);
     } elseif ($name) {
         $sql[] = "linkname = '".doSlash($name)."'";
     }
 
     if ($sql) {
-        $rs = safe_row('linkname, url', 'txp_link', implode(' and ', $sql).' limit 1');
+        $rs = safe_row("linkname, url", 'txp_link', implode(" AND ", $sql)." LIMIT 1");
     }
 
     if (!$rs) {
@@ -1004,7 +1004,7 @@ function recent_articles($atts)
         'limit'    => 10,
         'offset'   => 0,
         'section'  => '',
-        'sort'     => 'Posted desc',
+        'sort'     => 'Posted DESC',
         'sortby'   => '', // Deprecated.
         'sortdir'  => '', // Deprecated.
         'wraptag'  => '',
@@ -1028,12 +1028,12 @@ function recent_articles($atts)
     }
 
     $category = join("','", doSlash(do_list_unique($category)));
-    $categories = ($category) ? "and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))" : '';
-    $section = ($section) ? " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
-    $expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.')';
+    $categories = ($category) ? "AND (Category1 IN ('".$category."') or Category2 IN ('".$category."'))" : '';
+    $section = ($section) ? " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
+    $expired = ($prefs['publish_expired_articles']) ? "" : " AND (".now('expires')." <= Expires OR Expires IS NULL)";
 
-    $rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern',
-        "Status = ".STATUS_LIVE." $section $categories and Posted <= now()$expired order by ".doSlash($sort).' limit '.intval($offset).','.intval($limit));
+    $rs = safe_rows_start("*, id AS thisid, UNIX_TIMESTAMP(Posted) AS posted", 'textpattern',
+        "Status = ".STATUS_LIVE." $section $categories AND Posted <= ".now('posted').$expired." ORDER BY ".doSlash($sort)." LIMIT ".intval($offset).", ".intval($limit));
 
     if ($rs) {
         $out = array();
@@ -1066,17 +1066,19 @@ function recent_comments($atts, $thing = null)
         'labeltag' => '',
         'limit'    => 10,
         'offset'   => 0,
-        'sort'     => 'posted desc',
+        'sort'     => 'posted DESC',
         'wraptag'  => '',
     ), $atts));
 
     $sort = preg_replace('/\bposted\b/', 'd.posted', $sort);
-    $expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= t.Expires or t.Expires = '.NULLDATETIME.') ';
+    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (".now('expires')." <= t.Expires OR t.Expires IS NULL) ";
 
-    $rs = startRows('select d.name, d.email, d.web, d.message, d.discussid, unix_timestamp(d.Posted) as time, '.
-        't.ID as thisid, unix_timestamp(t.Posted) as posted, t.Title as title, t.Section as section, t.url_title '.
-        'from '.safe_pfx('txp_discuss').' as d inner join '.safe_pfx('textpattern').' as t on d.parentid = t.ID '.
-        'where t.Status >= '.STATUS_LIVE.$expired.' and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit '.intval($offset).','.intval($limit));
+    $rs = startRows("SELECT d.name, d.email, d.web, d.message, d.discussid, UNIX_TIMESTAMP(d.Posted) AS time,
+            t.ID AS thisid, UNIX_TIMESTAMP(t.Posted) AS posted, t.Title AS title, t.Section AS section, t.url_title
+        FROM ".safe_pfx('txp_discuss')." AS d INNER JOIN ".safe_pfx('textpattern')." AS t ON d.parentid = t.ID
+        WHERE t.Status >= ".STATUS_LIVE.$expired." AND d.visible = ".VISIBLE."
+        ORDER BY ".doSlash($sort)."
+        LIMIT ".intval($offset).", ".intval($limit));
 
     if ($rs) {
         $out = array();
@@ -1140,7 +1142,7 @@ function related_articles($atts, $thing = null)
         'match'    => 'Category1,Category2',
         'no_widow' => @$prefs['title_no_widow'],
         'section'  => '',
-        'sort'     => 'Posted desc',
+        'sort'     => 'Posted DESC',
         'wraptag'  => '',
     ), $atts));
 
@@ -1171,20 +1173,22 @@ function related_articles($atts, $thing = null)
     $categories = array();
 
     if (in_array('Category1', $match)) {
-        $categories[] = "Category1 in('$cats')";
+        $categories[] = "Category1 IN ('$cats')";
     }
 
     if (in_array('Category2', $match)) {
-        $categories[] = "Category2 in('$cats')";
+        $categories[] = "Category2 IN ('$cats')";
     }
 
-    $categories = 'and ('.join(' or ', $categories).')';
+    $categories = "AND (".join(" OR ", $categories).')';
 
-    $section = ($section) ? " and Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
+    $section = ($section) ? " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
 
-    $expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.') ';
-    $rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires', 'textpattern',
-        'ID != '.intval($id)." and Status = ".STATUS_LIVE." $expired  and Posted <= now() $categories $section order by ".doSlash($sort).' limit 0,'.intval($limit));
+    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (".now('expires')." <= Expires OR Expires IS NULL) ";
+    $rs = safe_rows_start(
+        "*, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(LastMod) AS uLastMod, UNIX_TIMESTAMP(Expires) AS uExpires",
+        'textpattern',
+        "ID != ".intval($id)." AND Status = ".STATUS_LIVE." $expired AND Posted <= ".now('posted')." $categories $section ORDER BY ".doSlash($sort)." LIMIT 0, ".intval($limit));
 
     if ($rs) {
         $out = array();
@@ -1232,9 +1236,9 @@ function popup($atts)
     ), $atts));
 
     if ($type == 's') {
-        $rs = safe_rows_start('name, title', 'txp_section', "name != 'default' order by name");
+        $rs = safe_rows_start("name, title", 'txp_section', "name != 'default' ORDER BY name");
     } else {
-        $rs = safe_rows_start('name, title', 'txp_category', "type = 'article' and name != 'root' order by name");
+        $rs = safe_rows_start("name, title", 'txp_category', "type = 'article' AND name != 'root' ORDER BY name");
     }
 
     if ($rs) {
@@ -1326,15 +1330,15 @@ function category_list($atts, $thing = null)
     $sql_limit = '';
 
     if ($limit !== '' || $offset) {
-        $sql_limit = ' limit '.intval($offset).', '.($limit === '' ? PHP_INT_MAX : intval($limit));
+        $sql_limit = " LIMIT ".intval($offset).", ".($limit === '' ? PHP_INT_MAX : intval($limit));
     }
 
     if ($categories) {
         $categories = do_list_unique($categories);
         $categories = join("','", doSlash($categories));
 
-        $rs = safe_rows_start('name, title, description', 'txp_category',
-            "type = '".doSlash($type)."' and name in ('$categories') order by ".($sort ? $sort : "field(name, '$categories')").$sql_limit);
+        $rs = safe_rows_start("name, title, description", 'txp_category',
+            "type = '".doSlash($type)."' AND name IN ('$categories') ORDER BY ".($sort ? $sort : "FIELD(name, '$categories')").$sql_limit);
     } else {
         if ($parent) {
             $parents = join(',', quote_list(do_list_unique($parent)));
@@ -1345,34 +1349,34 @@ function category_list($atts, $thing = null)
         } else {
             // Descend only one level from either 'parent' or 'root', plus
             // parent category.
-            $shallow = ($parent) ? "and (parent in($parents) or name in($parents))" : "and parent = 'root'";
+            $shallow = ($parent) ? "AND (parent IN ($parents) OR name IN ($parents))" : "AND parent = 'root'";
         }
 
         if ($exclude) {
             $exclude = do_list_unique($exclude);
             $exclude = join("','", doSlash($exclude));
-            $exclude = "and name not in('$exclude')";
+            $exclude = "AND name NOT IN ('$exclude')";
         }
 
         if ($parent) {
-            $qs = safe_rows('lft, rgt', 'txp_category', "type = '".doSlash($type)."' and name in($parents)");
+            $qs = safe_rows("lft, rgt", 'txp_category', "type = '".doSlash($type)."' AND name IN ($parents)");
 
             if ($qs) {
                 $between = array();
 
                 foreach ($qs as $a) {
                     extract($a);
-                    $between[] = "(lft between $lft and $rgt)";
+                    $between[] = "(lft BETWEEN $lft AND $rgt)";
                 }
 
-                $rs = safe_rows_start('name, title, description', 'txp_category',
-                    "(".join(' or ', $between).") and type = '".doSlash($type)."' and name != 'default' $exclude $shallow order by ".($sort ? $sort : 'lft ASC').$sql_limit);
+                $rs = safe_rows_start("name, title, description", 'txp_category',
+                    "(".join(" OR ", $between).") AND type = '".doSlash($type)."' AND name != 'default' $exclude $shallow ORDER BY ".($sort ? $sort : "lft ASC").$sql_limit);
             } else {
                 $rs = array();
             }
         } else {
-            $rs = safe_rows_start('name, title, description', 'txp_category',
-                "type = '".doSlash($type)."' and name not in('default','root') $exclude $shallow order by ".($sort ? $sort : 'name ASC').$sql_limit);
+            $rs = safe_rows_start("name, title, description", 'txp_category',
+                "type = '".doSlash($type)."' AND name NOT IN ('default','root') $exclude $shallow ORDER BY ".($sort ? $sort : "name ASC").$sql_limit);
         }
     }
 
@@ -1456,7 +1460,7 @@ function section_list($atts, $thing = null)
     $sql[] = 1;
 
     if ($limit !== '' || $offset) {
-        $sql_limit = ' limit '.intval($offset).', '.($limit === '' ? PHP_INT_MAX : intval($limit));
+        $sql_limit = " LIMIT ".intval($offset).", ".($limit === '' ? PHP_INT_MAX : intval($limit));
     }
 
     if ($sections) {
@@ -1465,15 +1469,15 @@ function section_list($atts, $thing = null)
         }
 
         $sections = join(',', quote_list(do_list_unique($sections)));
-        $sql[] = "name in ($sections)";
+        $sql[] = "name IN ($sections)";
 
         if (!$sql_sort) {
-            $sql_sort = "field(name, $sections)";
+            $sql_sort = "FIELD(name, $sections)";
         }
     } else {
         if ($exclude) {
             $exclude = join(',', quote_list(do_list_unique($exclude)));
-            $sql[] = "name not in ($exclude)";
+            $sql[] = "name NOT IN ($exclude)";
         }
 
         if (!$include_default) {
@@ -1481,7 +1485,7 @@ function section_list($atts, $thing = null)
         }
 
         if (!$sql_sort) {
-            $sql_sort = 'name asc';
+            $sql_sort = "name ASC";
         }
     }
 
@@ -1490,9 +1494,9 @@ function section_list($atts, $thing = null)
     }
 
     $rs = safe_rows_start(
-        'name, title, description',
+        "name, title, description",
         'txp_section',
-        join(' and ', $sql).' order by '.$sql_sort.$sql_limit
+        join(" AND ", $sql)." ORDER BY ".$sql_sort.$sql_limit
     );
 
     if ($rs && $last = numRows($rs)) {
@@ -1564,8 +1568,8 @@ function search_input($atts)
         'match'   => 'exact',
     ), $atts));
 
-    if ($form) {
-        $rs = fetch('form', 'txp_form', 'name', $form);
+    if ($form and !array_diff_key($atts, array('form' => true))) {
+        $rs = fetch_form($form);
 
         if ($rs) {
             return parse($rs);
@@ -2134,11 +2138,46 @@ function comments_invite($atts)
 
 // -------------------------------------------------------------
 
-function comments_form($atts)
+function popup_comments($atts, $thing = null)
+{
+    extract(lAtts(array(
+        'form' => 'comments_display'
+    ), $atts));
+
+    $rs = safe_row(
+        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(LastMod) AS uLastMod, UNIX_TIMESTAMP(Expires) AS uExpires",
+        'textpattern',
+        "ID=".intval(gps('parentid'))." AND Status >= 4"
+    );
+
+    if ($rs) {
+        populateArticleData($rs);
+        return ($thing === null ? parse_form($form) : parse($thing));
+    }
+
+    return '';
+}
+
+// -------------------------------------------------------------
+
+function comments_form($atts, $thing = null)
 {
     global $thisarticle, $has_comments_preview;
+    global $thiscommentsform; // TODO: Remove any uses of $thiscommentsform when removing deprecated attributes from below.
 
-    extract(lAtts(array(
+    // deprecated attributes since TXP 4.6. Most of these (except msgstyle)
+    // were moved to the tags that occur within a comments_form, although
+    // some of the names changed.
+    $deprecated = array('isize', 'msgrows', 'msgcols', 'msgstyle', 
+        'previewlabel', 'submitlabel', 'rememberlabel', 'forgetlabel');
+
+    foreach($deprecated as $att) {
+        if (isset($atts[$att])) {
+            trigger_error(gTxt('deprecated_attribute', array('{name}' => $att)), E_USER_NOTICE);
+        }
+    }
+
+    $atts = lAtts(array(
         'class'         => __FUNCTION__,
         'form'          => 'comment_form',
         'isize'         => '25',
@@ -2151,7 +2190,11 @@ function comments_form($atts)
         'submitlabel'   => gTxt('submit'),
         'rememberlabel' => gTxt('remember'),
         'forgetlabel'   => gTxt('forget'),
-    ), $atts));
+    ), $atts);
+
+    extract($atts);
+
+    $thiscommentsform = array_intersect_key($atts, array_flip($deprecated));
 
     assert_article();
 
@@ -2163,8 +2206,6 @@ function comments_form($atts)
 
     if (!checkCommentsAllowed($thisid)) {
         $out = graf(gTxt("comments_closed"), ' id="comments_closed"');
-    } elseif (!checkBan($ip)) {
-        $out = graf(gTxt('you_have_been_banned'), ' id="comments_banned"');
     } elseif ($blacklisted) {
         $out = graf(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), ' id="comments_blacklisted"');
     } elseif (gps('commented') !== '') {
@@ -2181,10 +2222,241 @@ function comments_form($atts)
             $out = comments_preview(array());
         }
 
-        $out .= commentForm($thisid, $atts);
+        extract(doDeEnt(psa(array(
+            'parentid',
+            'backpage',
+        ))));
+
+        // If the form fields are filled (anything other than blank), pages really
+        // should not be saved by a public cache (rfc2616/14.9.1).
+        if (pcs('name') || pcs('email') || pcs('web')) {
+            header('Cache-Control: private');
+        }
+
+        $url = $GLOBALS['pretext']['request_uri'];
+
+        // Experimental clean URLs with only 404-error-document on Apache possibly
+        // requires messy URLs for POST requests.
+        if (defined('PARTLY_MESSY') and (PARTLY_MESSY)) {
+            $url = hu.'?id='.intval($parentid);
+        }
+
+        $out .= '<form id="txpCommentInputForm" method="post" action="'.txpspecialchars($url).'#cpreview">'.
+            n.'<div class="comments-wrapper">'.n. // Prevent XHTML Strict validation gotchas.
+            ($thing === null ? parse_form($form) : parse($thing)).
+            n.hInput('parentid', ($parentid ? $parentid : $thisid)).
+            n.hInput('backpage', (ps('preview') ? $backpage : $url)).
+            n.'</div>'.
+            n.'</form>';
     }
 
     return (!$wraptag ? $out : doTag($out, $wraptag, $class));
+}
+
+// -------------------------------------------------------------
+
+function comment_name_input($atts)
+{
+    global $prefs, $thiscommentsform;
+
+    extract(lAtts(array(
+        'size' => $thiscommentsform['isize']
+    ), $atts));
+
+    $namewarn = false;
+    $name = pcs('name');
+    $h5 = ($prefs['doctype'] == 'html5');
+
+    if (ps('preview')) {
+        $name  = ps('name');
+        $namewarn = ($prefs['comments_require_name'] && !trim($name));
+
+        if ($namewarn) {
+            $evaluator = & get_comment_evaluator();
+            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_name_required'));
+        }
+    }
+
+    return fInput('text', 'name', $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name']);
+}
+
+// -------------------------------------------------------------
+
+function comment_email_input($atts)
+{
+    global $prefs, $thiscommentsform;
+
+    extract(lAtts(array(
+        'size' => $thiscommentsform['isize']
+    ), $atts));
+
+    $emailwarn = false;
+    $email = clean_url(pcs('email'));
+    $h5 = ($prefs['doctype'] == 'html5');
+
+    if (ps('preview')) {
+        $email  = clean_url(ps('email'));
+        $emailwarn = ($prefs['comments_require_email'] && !trim($email));
+
+        if ($emailwarn) {
+            $evaluator = & get_comment_evaluator();
+            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_email_required'));
+        }
+    }
+
+    return fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
+}
+
+// -------------------------------------------------------------
+
+function comment_web_input($atts)
+{
+    global $prefs, $thiscommentsform;
+
+    extract(lAtts(array(
+        'size' => $thiscommentsform['isize']
+    ), $atts));
+
+    $web = clean_url(pcs('web'));
+    $h5 = ($prefs['doctype'] == 'html5');
+
+    if (ps('preview')) {
+        $web  = clean_url(ps('web'));
+    }
+
+    return fInput($h5 ? 'text' : 'text', 'web', $web, 'comment_web_input', '', '', $size, '', 'web', false, false); /* TODO: maybe use type = 'url' once browsers are less strict */
+}
+
+// -------------------------------------------------------------
+
+function comment_message_input($atts)
+{
+    global $prefs, $thiscommentsform;
+
+    extract(lAtts(array(
+        'rows'  => $thiscommentsform['msgrows'],
+        'cols'  => $thiscommentsform['msgcols']
+    ), $atts));
+
+    $style = $thiscommentsform['msgstyle'];
+    $commentwarn = false;
+    $n_message = 'message';
+    $formnonce = '';
+    $message = doDeEnt(ps('message'));
+
+    if ($message == '') { // Second or later preview will have randomised message-field name.
+        $in = getComment();
+        $message = doDeEnt($in['message']);
+    }
+
+    if (ps('preview')) {
+        $split = rand(1, 31);
+        $nonce = getNextNonce();
+        $secret = getNextSecret();
+        safe_insert('txp_discuss_nonce', "issue_time = NOW(), nonce = '".doSlash($nonce)."', secret = '".doSlash($secret)."'");
+        $n_message = md5('message'.$secret);
+        $formnonce = n.hInput(substr($nonce, 0, $split), substr($nonce, $split));
+        $commentwarn = (!trim($message));
+
+        if ($commentwarn) {
+            $evaluator = & get_comment_evaluator();
+            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_required'));
+        }
+    }
+
+    $required = ($prefs['doctype'] == 'html5') ? ' required' : '';
+    $cols = ($cols and is_numeric($cols)) ? ' cols="'.intval($cols).'"' : '';
+    $rows = ($rows and is_numeric($rows)) ? ' rows="'.intval($rows).'"' : '';
+    $style = ($style ? ' style="'.$style.'"' : '');
+
+    return '<textarea class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"').
+        ' id="message" name="'.$n_message.'"'.$cols.$rows.$style.$required.
+        '>'.txpspecialchars(substr(trim($message), 0, 65535)).'</textarea>'.
+        callback_event('comment.form').
+        $formnonce;
+}
+
+// -------------------------------------------------------------
+
+function comment_remember($atts)
+{
+    global $thiscommentsform;
+
+    extract(lAtts(array(
+        'rememberlabel' => $thiscommentsform['rememberlabel'],
+        'forgetlabel'   => $thiscommentsform['forgetlabel']
+    ), $atts));
+
+    extract(doDeEnt(psa(array(
+        'checkbox_type',
+        'remember',
+        'forget'
+    ))));
+
+    if (!ps('preview')) {
+        $rememberCookie = cs('txp_remember');
+
+        if ($rememberCookie === '') {
+            $checkbox_type = 'remember';
+            $remember = 1;
+        } elseif ($rememberCookie == 1) {
+            $checkbox_type = 'forget';
+        } else {
+            $checkbox_type = 'remember';
+        }
+    }
+
+    if ($checkbox_type == 'forget') {
+        // Inhibit default remember.
+        if ($forget == 1) {
+            destroyCookies();
+        }
+
+        $checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(txpspecialchars($forgetlabel), 'label', ' for="forget"');
+    } else {
+        // Inhibit default remember.
+        if ($remember != 1) {
+            destroyCookies();
+        }
+
+        $checkbox = checkbox('remember', 1, $remember, '', 'remember').' '.tag(txpspecialchars($rememberlabel), 'label', ' for="remember"');
+    }
+
+    $checkbox .= ' '.hInput('checkbox_type', $checkbox_type);
+
+    return $checkbox;
+}
+
+// -------------------------------------------------------------
+
+function comment_preview($atts)
+{
+    global $thiscommentsform;
+
+    extract(lAtts(array(
+        'label'  => $thiscommentsform['previewlabel']
+    ), $atts));
+
+    return fInput('submit', 'preview', $label, 'button', '', '', '', '', 'txpCommentPreview', false);
+}
+
+// -------------------------------------------------------------
+
+function comment_submit($atts)
+{
+    global $thiscommentsform;
+
+    extract(lAtts(array(
+        'label'  => $thiscommentsform['submitlabel']
+    ), $atts));
+
+    // If all fields check out, the submit button is active/clickable.
+    if (ps('preview')) {
+        return fInput('submit', 'submit', $label, 'button', '', '', '', '', 'txpCommentSubmit', false);
+    }
+    else {
+        return fInput('submit', 'submit', $label, 'button disabled', '', '', '', '', 'txpCommentSubmit', true);
+    }
 }
 
 // -------------------------------------------------------------
@@ -2239,12 +2511,11 @@ function comments_annotateinvite($atts, $thing)
 
     extract($thisarticle);
 
-    extract(
-        safe_row(
-            "Annotate,AnnotateInvite,unix_timestamp(Posted) as uPosted",
-                "textpattern", 'ID = '.intval($thisid)
-        )
-    );
+    extract(safe_row(
+        "Annotate, AnnotateInvite, UNIX_TIMESTAMP(Posted) AS uPosted",
+        'textpattern',
+        "ID = ".intval($thisid)
+    ));
 
     if (!$thing) {
         $thing = $AnnotateInvite;
@@ -2255,7 +2526,7 @@ function comments_annotateinvite($atts, $thing)
 
 // -------------------------------------------------------------
 
-function comments($atts)
+function comments($atts, $thing = null)
 {
     global $thisarticle, $prefs;
     extract($prefs);
@@ -2284,12 +2555,12 @@ function comments($atts)
     }
 
     $qparts = array(
-        'parentid='.intval($thisid).' and visible='.VISIBLE,
-        'order by '.doSlash($sort),
-        ($limit) ? 'limit '.intval($offset).', '.intval($limit) : '',
+        "parentid = ".intval($thisid)." AND visible = ".VISIBLE,
+        "ORDER BY ".doSlash($sort),
+        ($limit) ? "LIMIT ".intval($offset).", ".intval($limit) : '',
     );
 
-    $rs = safe_rows_start('*, unix_timestamp(posted) as time', 'txp_discuss', join(' ', $qparts));
+    $rs = safe_rows_start("*, UNIX_TIMESTAMP(posted) AS time", 'txp_discuss', join(' ', $qparts));
 
     $out = '';
 
@@ -2298,7 +2569,7 @@ function comments($atts)
 
         while ($vars = nextRow($rs)) {
             $GLOBALS['thiscomment'] = $vars;
-            $comments[] = parse_form($form).n;
+            $comments[] = ($thing === null ? parse_form($form) : parse($thing)).n;
             unset($GLOBALS['thiscomment']);
         }
 
@@ -2310,7 +2581,7 @@ function comments($atts)
 
 // -------------------------------------------------------------
 
-function comments_preview($atts)
+function comments_preview($atts, $thing = null)
 {
     global $has_comments_preview;
 
@@ -2343,7 +2614,7 @@ function comments_preview($atts)
     $preview['web'] = clean_url($preview['web']);
 
     $GLOBALS['thiscomment'] = $preview;
-    $comments = parse_form($form).n;
+    $comments = ($thing === null ? parse_form($form) : parse($thing)).n;
     unset($GLOBALS['thiscomment']);
     $out = doTag($comments, $wraptag, $class);
 
@@ -2969,7 +3240,7 @@ function article_image($atts)
     }
 
     if (intval($image)) {
-        $rs = safe_row('*', 'txp_image', 'id = '.intval($image));
+        $rs = safe_row("*", 'txp_image', "id = ".intval($image));
 
         if ($rs) {
             $width = ($width == '') ? (($thumbnail) ? $rs['thumb_w'] : $rs['w']) : $width;
@@ -3146,12 +3417,12 @@ function image_index($atts)
     }
 
     $qparts = array(
-        "category = '".doSlash($c)."' and thumbnail = 1",
-        'order by '.doSlash($sort),
-        ($limit) ? 'limit '.intval($offset).', '.intval($limit) : '',
+        "category = '".doSlash($c)."' AND thumbnail = 1",
+        "ORDER BY ".doSlash($sort),
+        ($limit) ? "LIMIT ".intval($offset).", ".intval($limit) : '',
     );
 
-    $rs = safe_rows_start('*', 'txp_image',  join(' ', $qparts));
+    $rs = safe_rows_start("*", 'txp_image',  join(' ', $qparts));
 
     if ($rs) {
         $out = array();
@@ -3190,7 +3461,7 @@ function image_display($atts)
     global $s, $c, $p;
 
     if ($p) {
-        $rs = safe_row("*", "txp_image", 'id='.intval($p).' limit 1');
+        $rs = safe_row("*", 'txp_image', "id=".intval($p)." LIMIT 1");
 
         if ($rs) {
             extract($rs);
@@ -3253,7 +3524,7 @@ function images($atts, $thing = null)
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
+        $authorlist = safe_column("name", 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
         if ($authorlist) {
             $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
         }
@@ -3289,7 +3560,7 @@ function images($atts, $thing = null)
 
                         // Order of ids in article image field overrides default 'sort' attribute.
                         if (empty($atts['sort'])) {
-                            $safe_sort = "field(id, $items)";
+                            $safe_sort = "FIELD(id, $items)";
                         }
                     }
                     break;
@@ -3315,7 +3586,7 @@ function images($atts, $thing = null)
 
     // Order of ids in 'id' attribute overrides default 'sort' attribute.
     if (empty($atts['sort']) && $id !== '') {
-        $safe_sort = 'field(id, '.join(',', doSlash(do_list_unique($id))).')';
+        $safe_sort = "FIELD(id, ".join(',', doSlash(do_list_unique($id))).")";
     }
 
     // If nothing matches, output nothing.
@@ -3325,10 +3596,10 @@ function images($atts, $thing = null)
 
     // If nothing matches, start with all images.
     if (!$where) {
-        $where[] = "1=1";
+        $where[] = "1 = 1";
     }
 
-    $where = join(' AND ', $where);
+    $where = join(" AND ", $where);
 
     // Set up paging if required.
     if ($limit && $pageby) {
@@ -3356,11 +3627,11 @@ function images($atts, $thing = null)
 
     $qparts = array(
         $where,
-        'order by '.$safe_sort,
-        ($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : '',
+        "ORDER BY ".$safe_sort,
+        ($limit) ? "LIMIT ".intval($pgoffset).", ".intval($limit) : '',
     );
 
-    $rs = safe_rows_start('*', 'txp_image', join(' ', $qparts));
+    $rs = safe_rows_start("*", 'txp_image', join(' ', $qparts));
 
     if ($rs) {
         $out = array();
@@ -3787,7 +4058,7 @@ function permlink($atts, $thing = null)
 
 function lang()
 {
-    return LANG;
+    return txpspecialchars(LANG);
 }
 
 /**
@@ -3822,7 +4093,7 @@ function formatCommentsInvite($AnnotateInvite, $Section, $ID)
 
     global $comments_mode;
 
-    $dc = safe_count('txp_discuss', 'parentid='.intval($ID).' and visible='.VISIBLE);
+    $dc = safe_count('txp_discuss', "parentid = ".intval($ID)." AND visible = ".VISIBLE);
 
     $ccount = ($dc) ?  '['.$dc.']' : '';
     if (!$comments_mode) {
@@ -4456,7 +4727,7 @@ function file_download_list($atts, $thing = null)
     }
 
     if ($realname) {
-        $authorlist = safe_column('name', 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
+        $authorlist = safe_column("name", 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
         if ($authorlist) {
             $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
         }
@@ -4492,12 +4763,9 @@ function file_download_list($atts, $thing = null)
         return '';
     }
 
-    if (!$where) {
-        // If nothing matches, start with all files.
-        $where[] = "1=1";
-    }
+    $where[] = "created <= ".now('created');
 
-    $where = join(' AND ', array_merge($where, $statwhere));
+    $where = join(" AND ", array_merge($where, $statwhere));
 
     // Set up paging if required.
     if ($limit && $pageby) {
@@ -4525,17 +4793,17 @@ function file_download_list($atts, $thing = null)
 
     // Preserve order of custom file ids unless 'sort' attribute is set.
     if (!empty($atts['id']) && empty($atts['sort'])) {
-        $safe_sort = 'field(id, '.join(',', $ids).')';
+        $safe_sort = "FIELD(id, ".join(',', $ids).")";
     } else {
         $safe_sort = doSlash($sort);
     }
 
     $qparts = array(
-        'order by '.$safe_sort,
-        ($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : '',
+        "ORDER BY ".$safe_sort,
+        ($limit) ? "LIMIT ".intval($pgoffset).", ".intval($limit) : '',
     );
 
-    $rs = safe_rows_start('*', 'txp_file', $where.' '.join(' ', $qparts));
+    $rs = safe_rows_start("*", 'txp_file', $where.' '.join(' ', $qparts));
 
     if ($rs) {
         $count = 0;
@@ -4576,9 +4844,9 @@ function file_download($atts, $thing = null)
     $from_form = false;
 
     if ($id) {
-        $thisfile = fileDownloadFetchInfo('id = '.intval($id));
+        $thisfile = fileDownloadFetchInfo('id = '.intval($id).' and created <= '.now('created'));
     } elseif ($filename) {
-        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
+        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."' and created <= ".now('created'));
     } else {
         assert_file();
 
@@ -4612,9 +4880,9 @@ function file_download_link($atts, $thing = null)
     $from_form = false;
 
     if ($id) {
-        $thisfile = fileDownloadFetchInfo('id = '.intval($id));
+        $thisfile = fileDownloadFetchInfo('id = '.intval($id).' and created <= '.now('created'));
     } elseif ($filename) {
-        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
+        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."' and created <= ".now('created'));
     } else {
         assert_file();
 

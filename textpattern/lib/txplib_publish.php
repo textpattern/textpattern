@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -44,7 +44,7 @@ function filterFrontPage()
 
     $filterFrontPage = false;
 
-    $rs = safe_column('name', 'txp_section', "on_frontpage != '1'");
+    $rs = safe_column("name", 'txp_section', "on_frontpage != '1'");
 
     if ($rs) {
         $filters = array();
@@ -69,12 +69,12 @@ function filterFrontPage()
  *
  * @param array $rs An article as an assocative array
  * @example
- * if ($rs = safe_rows_start('*,
- *     unix_timestamp(Posted) as uPosted,
- *     unix_timestamp(Expires) as uExpires,
- *     unix_timestamp(LastMod) as uLastMod',
+ * if ($rs = safe_rows_start("*,
+ *     UNIX_TIMESTAMP(Posted) AS uPosted,
+ *     UNIX_TIMESTAMP(Expires) AS uExpires,
+ *     UNIX_TIMESTAMP(LastMod) AS uLastMod",
  *     'textpattern',
- *     '1=1'
+ *     "1 = 1"
  * ))
  * {
  *     global $thisarticle;
@@ -109,15 +109,15 @@ function populateArticleData($rs)
  * @param array $rs An article as an assocative array
  * @example
  * article_format_info(
- *     safe_row('*', 'textpattern', 'Status = 4 limit 1')
+ *     safe_row('*', 'textpattern', 'Status = 4 LIMIT 1')
  * )
  */
 
 function article_format_info($rs)
 {
-    $rs['uPosted'] = (($unix_ts = @strtotime($rs['Posted'])) > 0) ? $unix_ts : NULLDATETIME;
-    $rs['uLastMod'] = (($unix_ts = @strtotime($rs['LastMod'])) > 0) ? $unix_ts : NULLDATETIME;
-    $rs['uExpires'] = (($unix_ts = @strtotime($rs['Expires'])) > 0) ? $unix_ts : NULLDATETIME;
+    $rs['uPosted']  = (($unix_ts = @strtotime($rs['Posted']))  !== false) ? $unix_ts : null;
+    $rs['uLastMod'] = (($unix_ts = @strtotime($rs['LastMod'])) !== false) ? $unix_ts : null;
+    $rs['uExpires'] = (($unix_ts = @strtotime($rs['Expires'])) !== false) ? $unix_ts : null;
     populateArticleData($rs);
 }
 
@@ -167,12 +167,12 @@ function article_column_map()
 /**
  * Find an adjacent article relative to a provided threshold level.
  *
- * @param  scalar       $threshold      The value to compare against
- * @param  string       $s              Optional section restriction
- * @param  string       $type           Lesser or greater neighbour? Either '<' (previous) or '>' (next)
- * @param  array        $atts           Attribute of article at threshold
- * @param  string       $threshold_type 'cooked': Use $threshold as SQL clause; 'raw': Use $threshold as an escapable scalar
- * @return array|string An array populated with article data, or the empty string in case of no matches
+ * @param  scalar $threshold      The value to compare against
+ * @param  string $s              Optional section restriction
+ * @param  string $type           Lesser or greater neighbour? Either '<' (previous) or '>' (next)
+ * @param  array  $atts           Attribute of article at threshold
+ * @param  string $threshold_type 'cooked': Use $threshold as SQL clause; 'raw': Use $threshold as an escapable scalar
+ * @return array|bool An array populated with article data, or 'false' in case of no matches
  */
 
 function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 'raw')
@@ -192,20 +192,20 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     // Building query parts; lifted from publish.php.
     $ids = array_map('intval', do_list($id));
-    $id = (!$id) ? '' : " and ID IN (".join(',', $ids).")";
+    $id = (!$id) ? '' : " AND ID IN (".join(',', $ids).")";
     switch ($time) {
         case 'any':
             $time = "";
             break;
         case 'future':
-            $time = " and Posted > now()";
+            $time = " AND Posted > ".now('posted');
             break;
         default:
-            $time = " and Posted <= now()";
+            $time = " AND Posted <= ".now('posted');
     }
 
     if (!$expired) {
-        $time .= " and (now() <= Expires or Expires = ".NULLDATETIME.")";
+        $time .= " AND (".now('expires')." <= Expires OR Expires IS NULL)";
     }
 
     $custom = '';
@@ -226,11 +226,13 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         $keys = doSlash(do_list($keywords));
 
         foreach ($keys as $key) {
-            $keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
+            $keyparts[] = "FIND_IN_SET('".$key."', Keywords)";
         }
 
-        $keywords = " and (".join(' or ', $keyparts).")";
+        $keywords = " AND (".join(" OR ", $keyparts).")";
     }
+
+    $sortdir = strtolower($sortdir);
 
     // Invert $type for ascending sortdir.
     $types = array(
@@ -247,22 +249,22 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     $safe_name = safe_pfx('textpattern');
     $q = array(
-        "select ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted
-            from ".$safe_name." where $sortby $type ".$threshold,
-        ($s != '' && $s != 'default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
+        "SELECT ID AS thisid, Section AS section, Title AS title, url_title, UNIX_TIMESTAMP(Posted) AS posted
+            FROM $safe_name WHERE $sortby $type $threshold",
+        ($s != '' && $s != 'default') ? "AND Section = '".doSlash($s)."'" : filterFrontPage(),
         $id,
         $time,
         $custom,
         $keywords,
-        'and Status=4',
-        'order by '.$sortby,
-        ($type == '<') ? 'desc' : 'asc',
-        'limit 1',
+        "AND Status = 4",
+        "ORDER BY $sortby",
+        ($type == '<') ? "DESC" : "ASC",
+        "LIMIT 1",
     );
 
     $cache[$key] = getRow(join(n.' ', $q));
 
-    return (is_array($cache[$key])) ? $cache[$key] : '';
+    return (is_array($cache[$key])) ? $cache[$key] : false;
 }
 
 /**
@@ -271,7 +273,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
  * @param  int    $id        The "pivot" article's id; use zero (0) to indicate $thisarticle
  * @param  scalar $threshold The value to compare against if $id != 0
  * @param  string $s         Optional section restriction if $id != 0
- * @return array  An array populated with article data from the next and previous article
+ * @return array An array populated with article data
  */
 
 function getNextPrev($id = 0, $threshold = null, $s = '')
@@ -279,7 +281,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
     if ($id !== 0) {
         // Pivot is specific article by ID: In lack of further information,
         // revert to default sort order 'Posted desc'.
-        $atts = filterAtts(array('sortby' => 'Posted', 'sortdir' => 'desc'));
+        $atts = filterAtts(array('sortby' => "Posted", 'sortdir' => "DESC"));
     } else {
         // Pivot is $thisarticle: Use article attributes to find its neighbours.
         assert_article();
@@ -296,26 +298,26 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
             || count($m) > 2        // Complex clause, e.g. 'foo asc, bar desc'
             || !preg_match('/^(?:[0-9a-zA-Z$_\x{0080}-\x{FFFF}]+|`[\x{0001}-\x{FFFF}]+`)$/u', $m[0])  // The clause's first verb is not a MySQL column identifier.
         ) {
-            $atts['sortby'] = 'Posted';
-            $atts['sortdir'] = 'desc';
+            $atts['sortby'] = "Posted";
+            $atts['sortdir'] = "DESC";
         } else {
             // Sort is like 'foo asc'.
             $atts['sortby'] = $m[0];
-            $atts['sortdir'] = (isset($m[1]) && strtolower($m[1]) == 'desc' ? 'desc' : 'asc');
+            $atts['sortdir'] = (isset($m[1]) && strtolower($m[1]) == 'desc' ? "DESC" : "ASC");
         }
 
         // Attributes with special treatment.
         switch ($atts['sortby']) {
             case 'Posted':
-                $threshold = 'from_unixtime('.doSlash($thisarticle['posted']).')';
+                $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['posted']).")";
                 $threshold_type = 'cooked';
                 break;
             case 'Expires':
-                $threshold = 'from_unixtime('.doSlash($thisarticle['expires']).')';
+                $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['expires']).")";
                 $threshold_type = 'cooked';
                 break;
             case 'LastMod':
-                $threshold = 'from_unixtime('.doSlash($thisarticle['modified']).')';
+                $threshold = "FROM_UNIXTIME(".doSlash($thisarticle['modified']).")";
                 $threshold_type = 'cooked';
                 break;
             default:
@@ -345,7 +347,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
 
 function lastMod()
 {
-    $last = safe_field("unix_timestamp(val)", "txp_prefs", "`name`='lastmod' and prefs_id=1");
+    $last = safe_field("UNIX_TIMESTAMP(val)", 'txp_prefs', "name = 'lastmod' AND prefs_id = 1");
 
     return gmdate("D, d M Y H:i:s \G\M\T", $last);
 }
@@ -492,7 +494,7 @@ function parse_else($thing, $condition)
  * Guesstimate whether a given function name may be a valid tag handler.
  *
  * @param   string $tag function name
- * @return  bool   FALSE if the function name is not a valid tag handler
+ * @return  bool FALSE if the function name is not a valid tag handler
  * @package TagParser
  */
 
@@ -514,7 +516,7 @@ function maybe_tag($tag)
  * @param  string      $tag   The tag name
  * @param  string      $atts  The attribute string
  * @param  string|null $thing The tag's content in case of container tags
- * @return string      Parsed tag result
+ * @return string Parsed tag result
  * @package TagParser
  */
 
@@ -530,20 +532,19 @@ function processTags($tag, $atts, $thing = null)
     }
 
     if ($registry === null) {
-        $registry = Txp::get('Textpattern_Tag_Registry');
+        $registry = Txp::get('\Textpattern\Tag\Registry');
     }
 
-    if ($registry->isRegistered($tag)) {
-        $out = $registry->process($tag, splat($atts), $thing);
-    }
+    $out = $registry->process($tag, splat($atts), $thing);
 
-    // Deprecated in 4.6.0.
-    elseif (maybe_tag($tag)) {
-        $out = $tag(splat($atts), $thing);
-        trigger_error(gTxt('unregistered_tag'), E_USER_NOTICE);
-    } else {
-        $out = '';
-        trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
+    if ($out === false) {
+        if (maybe_tag($tag)) { // Deprecated in 4.6.0.
+            trigger_error(gTxt('unregistered_tag'), E_USER_NOTICE);
+            $out = $registry->register($tag)->process($tag, splat($atts), $thing);
+        } else {
+            trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
+            $out = '';
+        }
     }
 
     if ($production_status !== 'live') {
@@ -583,9 +584,9 @@ function bombShelter()
  * The given database table is prefixed with 'txp_'. As such this function can
  * only be used with core database tables.
  *
- * @param   string      $table The database table name
- * @param   string      $val   The name to look for
- * @param   bool        $debug Dump the query
+ * @param   string $table The database table name
+ * @param   string $val   The name to look for
+ * @param   bool   $debug Dump the query
  * @return  bool|string The item's name, or FALSE when it doesn't exist
  * @package Filter
  * @example
@@ -597,15 +598,15 @@ function bombShelter()
 
 function ckEx($table, $val, $debug = false)
 {
-    return safe_field("name", 'txp_'.$table, "`name` = '".doSlash($val)."' limit 1", $debug);
+    return safe_field("name", 'txp_'.$table, "name = '".doSlash($val)."' LIMIT 1", $debug);
 }
 
 /**
  * Checks if the given category exists.
  *
- * @param   string      $type  The category type, either 'article', 'file', 'link', 'image'
- * @param   string      $val   The category name to look for
- * @param   bool        $debug Dump the query
+ * @param   string $type  The category type, either 'article', 'file', 'link', 'image'
+ * @param   string $val   The category name to look for
+ * @param   bool   $debug Dump the query
  * @return  bool|string The category's name, or FALSE when it doesn't exist
  * @package Filter
  * @see     ckEx()
@@ -618,7 +619,7 @@ function ckEx($table, $val, $debug = false)
 
 function ckCat($type, $val, $debug = false)
 {
-    return safe_field("name", 'txp_category', "`name` = '".doSlash($val)."' AND type = '".doSlash($type)."' limit 1", $debug);
+    return safe_field("name", 'txp_category', "name = '".doSlash($val)."' AND type = '".doSlash($type)."' LIMIT 1", $debug);
 }
 
 /**
@@ -627,8 +628,8 @@ function ckCat($type, $val, $debug = false)
  * This function takes an article's ID, and checks if it's been published. If it
  * has, returns the section and the ID as an array. FALSE otherwise.
  *
- * @param   int        $val   The article ID
- * @param   bool       $debug Dump the query
+ * @param   int  $val   The article ID
+ * @param   bool $debug Dump the query
  * @return  array|bool Array of ID and section on success, FALSE otherwise
  * @package Filter
  * @example
@@ -640,7 +641,7 @@ function ckCat($type, $val, $debug = false)
 
 function ckExID($val, $debug = false)
 {
-    return safe_row("ID, Section", 'textpattern', 'ID = '.intval($val).' and Status >= 4 limit 1', $debug);
+    return safe_row("ID, Section", 'textpattern', "ID = ".intval($val)." AND Status >= 4 LIMIT 1", $debug);
 }
 
 /**
@@ -650,8 +651,8 @@ function ckExID($val, $debug = false)
  * been published. If it has, returns the section and the ID as an array.
  * FALSE otherwise.
  *
- * @param   string     $val   The URL title
- * @param   bool       $debug Dump the query
+ * @param   string $val   The URL title
+ * @param   bool   $debug Dump the query
  * @return  array|bool Array of ID and section on success, FALSE otherwise
  * @package Filter
  * @example
@@ -663,7 +664,7 @@ function ckExID($val, $debug = false)
 
 function lookupByTitle($val, $debug = false)
 {
-    return safe_row("ID, Section", 'textpattern', "url_title = '".doSlash($val)."' and Status >= 4 limit 1", $debug);
+    return safe_row("ID, Section", 'textpattern', "url_title = '".doSlash($val)."' AND Status >= 4 LIMIT 1", $debug);
 }
 
 /**
@@ -673,9 +674,9 @@ function lookupByTitle($val, $debug = false)
  * been published. If it has, returns the section and the ID as an array.
  * FALSE otherwise.
  *
- * @param   string     $val     The URL title
- * @param   string     $section The section name
- * @param   bool       $debug   Dump the query
+ * @param   string $val     The URL title
+ * @param   string $section The section name
+ * @param   bool   $debug   Dump the query
  * @return  array|bool Array of ID and section on success, FALSE otherwise
  * @package Filter
  * @example
@@ -687,7 +688,7 @@ function lookupByTitle($val, $debug = false)
 
 function lookupByTitleSection($val, $section, $debug = false)
 {
-    return safe_row("ID, Section", 'textpattern', "url_title = '".doSlash($val)."' AND Section='".doSlash($section)."' and Status >= 4 limit 1", $debug);
+    return safe_row("ID, Section", 'textpattern', "url_title = '".doSlash($val)."' AND Section = '".doSlash($section)."' AND Status >= 4 LIMIT 1", $debug);
 }
 
 /**
@@ -702,38 +703,36 @@ function lookupByTitleSection($val, $section, $debug = false)
 
 function lookupByIDSection($id, $section, $debug = false)
 {
-    return safe_row('ID, Section', 'textpattern',
-        'ID = '.intval($id)." and Section = '".doSlash($section)."' and Status >= 4 limit 1", $debug);
+    return safe_row("ID, Section", 'textpattern', "ID = ".intval($id)." AND Section = '".doSlash($section)."' AND Status >= 4 LIMIT 1", $debug);
 }
 
 /**
  * Lookup live article by ID.
  *
- * @param   int       $id    Article ID
- * @param   bool      $debug
+ * @param   int  $id    Article ID
+ * @param   bool $debug
  * @return  array|bool
  * @package Filter
  */
 
 function lookupByID($id, $debug = false)
 {
-    return safe_row("ID, Section", 'textpattern', 'ID = '.intval($id).' and Status >= 4 limit 1', $debug);
+    return safe_row("ID, Section", 'textpattern', "ID = ".intval($id)." AND Status >= 4 LIMIT 1", $debug);
 }
 
 /**
  * Lookup live article by date and URL title.
  *
- * @param   string     $when  date wildcard
- * @param   string     $title URL title
- * @param   bool       $debug
+ * @param   string $when  date wildcard
+ * @param   string $title URL title
+ * @param   bool   $debug
  * @return  array|bool
  * @package Filter
  */
 
 function lookupByDateTitle($when, $title, $debug = false)
 {
-    return safe_row("ID, Section", "textpattern",
-        "posted like '".doSlash($when)."%' and url_title like '".doSlash($title)."' and Status >= 4 limit 1");
+    return safe_row("ID, Section", 'textpattern', "posted LIKE '".doSlash($when)."%' AND url_title LIKE '".doSlash($title)."' AND Status >= 4 LIMIT 1");
 }
 
 /**

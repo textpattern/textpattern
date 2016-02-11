@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,7 +28,9 @@
  * @package Textpack
  */
 
-class Textpattern_Textpack_Parser
+namespace Textpattern\Textpack;
+
+class Parser
 {
     /**
      * Stores the default language.
@@ -82,19 +84,19 @@ class Textpattern_Textpack_Parser
      * Converts a Textpack to an array.
      *
      * <code>
-     * $textpack = Textpattern_Textpack_Parser();
+     * $textpack = \Textpattern\Textpack\Parser();
      * print_r(
      *     $textpack->parse("string => translation")
      * );
      * </code>
      *
      * @param  string $textpack The Textpack
-     * @return array  An array of translations
+     * @return array An array of translations
      */
 
     public function parse($textpack)
     {
-        $lines = explode(n, (string) $textpack);
+        $lines = explode(n, (string)$textpack);
         $out = array();
         $version = false;
         $lastmod = false;

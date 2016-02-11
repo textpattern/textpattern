@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -69,32 +69,26 @@ function cat_category_list($message = "")
 {
     pagetop(gTxt('categories'), $message);
     $out = array(hed(gTxt('tab_organise'), 1, 'class="txp-heading"'),
-        '<div id="category_container" class="txp-layout-grid">',
-            n.tag(
-                n.tag(cat_article_list(), 'div', array('class' => 'categories')), 'div', array(
-                    'id'    => 'categories_article',
-                    'class' => 'txp-layout-cell txp-layout-1-4',
-                )
-            ),
-            n.tag(
-                n.tag(cat_image_list(), 'div', array('class' => 'categories')), 'div', array(
-                    'id'    => 'categories_image',
-                    'class' => 'txp-layout-cell txp-layout-1-4',
-                )
-            ),
-            n.tag(
-                n.tag(cat_file_list(), 'div', array('class' => 'categories')), 'div', array(
-                    'id'    => 'categories_file',
-                    'class' => 'txp-layout-cell txp-layout-1-4',
-                )
-            ),
-            n.tag(
-                n.tag(cat_link_list(), 'div', array('class' => 'categories')), 'div', array(
-                    'id'    => 'categories_link',
-                    'class' => 'txp-layout-cell txp-layout-1-4',
-                )
-            ),
-        '</div>',
+        n.tag(cat_article_list(), 'section', array(
+                'class' => 'txp-layout-4col-cell-1',
+                'id'    => 'categories_article',
+            )
+        ),
+        n.tag(cat_image_list(), 'section', array(
+                'class' => 'txp-layout-4col-cell-2',
+                'id'    => 'categories_image',
+            )
+        ),
+        n.tag(cat_file_list(), 'section', array(
+                'class' => 'txp-layout-4col-cell-3',
+                'id'    => 'categories_file',
+            )
+        ),
+        n.tag(cat_link_list(), 'section', array(
+                'class' => 'txp-layout-4col-cell-4',
+                'id'    => 'categories_link',
+            )
+        ),
         script_js(<<<EOS
             $(document).ready(function ()
             {
@@ -155,9 +149,9 @@ function cat_parent_pop($name, $type, $id)
 {
     if ($id) {
         $id = assert_int($id);
-        list($lft, $rgt) = array_values(safe_row('lft, rgt', 'txp_category', 'id = '.$id));
+        list($lft, $rgt) = array_values(safe_row("lft, rgt", 'txp_category', "id = $id"));
 
-        $rs = getTree('root', $type, "lft not between $lft and $rgt");
+        $rs = getTree('root', $type, "lft NOT BETWEEN $lft AND $rgt");
     } else {
         $rs = getTree('root', $type);
     }
@@ -287,13 +281,13 @@ function cat_category_multiedit()
 
         if ($method == 'delete' || $method == 'deleteforce') {
             if ($type === 'article') {
-                $used = 'name NOT IN(SELECT category1 FROM '.safe_pfx('textpattern').')'.
-                    ' AND name NOT IN(SELECT category2 FROM '.safe_pfx('textpattern').')';
+                $used = "name NOT IN (SELECT category1 FROM ".safe_pfx('textpattern').")
+                    AND name NOT IN (SELECT category2 FROM ".safe_pfx('textpattern').")";
             } else {
-                $used = 'name NOT IN(SELECT category FROM '.safe_pfx('txp_'.$type).')';
+                $used = "name NOT IN (SELECT category FROM ".safe_pfx('txp_'.$type).")";
             }
 
-            $rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."'".(($method == 'deleteforce') ? '' : " AND rgt - lft = 1 AND ".$used));
+            $rs = safe_rows("id, name", 'txp_category', "id IN (".join(',', $things).") AND type = '".$type."'".(($method == 'deleteforce') ? '' : " AND rgt - lft = 1 AND ".$used));
 
             if ($rs) {
                 foreach ($rs as $cat) {
@@ -301,7 +295,7 @@ function cat_category_multiedit()
                     $names[] = doSlash($cat['name']);
                 }
 
-                if (safe_delete('txp_category', 'id IN ('.join(',', $catid).')')) {
+                if (safe_delete('txp_category', "id IN (".join(',', $catid).")")) {
                     if ($method == 'deleteforce') {
                         // Clear the deleted category names from assets.
                         $affected = join("','", $names);
@@ -313,7 +307,7 @@ function cat_category_multiedit()
                         }
 
                         // Promote subcatagories of deleted catagories to root.
-                        safe_update('txp_category', "parent='root'", "parent IN ('$affected')");
+                        safe_update('txp_category', "parent = 'root'", "parent IN ('$affected')");
                     }
 
                     rebuild_tree_full($type);
@@ -327,10 +321,10 @@ function cat_category_multiedit()
         } elseif ($method == 'changeparent') {
             $new_parent = ps('new_parent');
 
-            $rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."'");
+            $rs = safe_rows("id, name", 'txp_category', "id IN (".join(',', $things).") AND type = '".$type."'");
 
             if ($rs) {
-                $exists = safe_field('name', 'txp_category', "name = '".doSlash($new_parent)."' AND type='$type'");
+                $exists = safe_field("name", 'txp_category', "name = '".doSlash($new_parent)."' AND type = '$type'");
                 $parent = ($exists === false) ? 'root' : $exists;
                 $to_change = $affected = array();
 
@@ -342,7 +336,7 @@ function cat_category_multiedit()
                     }
                 }
 
-                $ret = safe_update('txp_category', "parent='".doSlash($parent)."'", "name IN ('".join("','", $to_change)."') AND type='".$type."'");
+                $ret = safe_update('txp_category', "parent = '".doSlash($parent)."'", "name IN ('".join("','", $to_change)."') AND type = '".$type."'");
 
                 if ($ret) {
                     rebuild_tree_full($type);
@@ -397,11 +391,11 @@ function cat_event_category_list($event)
         if ($event == 'article') {
             // Count distinct articles for both categories, avoid duplicates.
             $rs2 = getRows(
-                'select category, count(*) as num from ('.
-                    'select ID, Category1 as category from '.safe_pfx('textpattern').
-                    ' union '.
-                    'select ID, Category2 as category from '.safe_pfx('textpattern').
-                ') as t where category != "" group by category');
+                "SELECT category, COUNT(*) AS num FROM (
+                    SELECT ID, Category1 AS category FROM ".safe_pfx('textpattern')."
+                        UNION
+                    SELECT ID, Category2 AS category FROM ".safe_pfx('textpattern')."
+                ) AS t WHERE category != '' GROUP BY category");
 
             if ($rs2 !== false) {
                 foreach ($rs2 as $a) {
@@ -411,13 +405,13 @@ function cat_event_category_list($event)
         } else {
             switch ($event) {
                 case 'link':
-                    $rs2 = safe_rows_start('category, count(*) as num', 'txp_link', "1 group by category");
+                    $rs2 = safe_rows_start("category, COUNT(*) AS num", 'txp_link', "1 = 1 GROUP BY category");
                     break;
                 case 'image':
-                    $rs2 = safe_rows_start('category, count(*) as num', 'txp_image', "1 group by category");
+                    $rs2 = safe_rows_start("category, COUNT(*) AS num", 'txp_image', "1 = 1 GROUP BY category");
                     break;
                 case 'file':
-                    $rs2 = safe_rows_start('category, count(*) as num', 'txp_file', "1 group by category");
+                    $rs2 = safe_rows_start("category, COUNT(*) AS num", 'txp_file', "1 = 1 GROUP BY category");
                     break;
             }
 
@@ -466,7 +460,11 @@ function cat_event_category_list($event)
             $out .= cat_article_multiedit_form($event, $items);
         }
     } else {
-        $out .= graf(gTxt('no_categories_exist'));
+        $out .= graf(
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt('no_categories_exist'),
+            array('class' => 'alert-block information')
+        );
     }
 
     return $out;
@@ -490,7 +488,7 @@ function cat_event_category_create($event)
         return cat_category_list($message);
     }
 
-    $exists = safe_field('name', 'txp_category', "name = '".doSlash($name)."' and type = '".doSlash($event)."'");
+    $exists = safe_field("name", 'txp_category', "name = '".doSlash($name)."' AND type = '".doSlash($event)."'");
 
     if ($exists !== false) {
         $message = array(gTxt($event.'_category_already_exists', array('{name}' => $name)), E_ERROR);
@@ -499,7 +497,7 @@ function cat_event_category_create($event)
     }
 
     $parent = strtolower(sanitizeForUrl(ps('parent_cat')));
-    $parent_exists = safe_field('name', 'txp_category', "name = '".doSlash($parent)."' and type = '".doSlash($event)."'");
+    $parent_exists = safe_field("name", 'txp_category', "name = '".doSlash($parent)."' AND type = '".doSlash($event)."'");
     $parent = ($parent_exists !== false) ? $parent_exists : 'root';
 
     $q = safe_insert('txp_category', "name = '".doSlash($name)."', title = '".doSlash($title)."', type = '".doSlash($event)."', parent = '".$parent."'");
@@ -516,41 +514,56 @@ function cat_event_category_create($event)
 }
 
 /**
- * Renders and outputs a category editor.
+ * Renders and outputs a category editor panel.
  *
  * @param string $evname Type of category
  */
 
-function cat_event_category_edit($evname)
+function cat_event_category_edit($evname, $message = '')
 {
     $id     = assert_int(gps('id'));
     $parent = doSlash(gps('parent'));
 
-    $row = safe_row('*', 'txp_category', "id=$id");
+    $row = safe_row("*", 'txp_category', "id = $id");
 
     if ($row) {
-        pagetop(gTxt('edit_category'));
+        pagetop(gTxt('edit_category'), $message);
         extract($row);
         list($parent_widget, $has_parent) = cat_parent_pop($parent, $evname, $id);
-        $out = n.'<section class="txp-edit">'.
-            hed(gTxt('edit_category'), 2).
-            inputLabel('category_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'), $evname.'_category_name').
-            ($has_parent
-                ? inputLabel('category_parent', $parent_widget, 'parent')
-                : inputLabel('category_parent', $parent_widget)
+
+        $out = hed(gTxt('edit_category'), 2).
+            inputLabel(
+                'category_name',
+                fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'),
+                $evname.'_category_name', '', array('class' => 'txp-form-field edit-category-name')
             ).
-            inputLabel('category_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').
-            inputLabel('category_description', text_area('description', 0, 0, $description, 'category_description', TEXTAREA_HEIGHT_SMALL, INPUT_LARGE), $evname.'_category_description').
+            inputLabel(
+                'category_parent',
+                $parent_widget,
+                'parent', '', array('class' => 'txp-form-field edit-category-parent')
+            ).
+            inputLabel(
+                'category_title',
+                fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'),
+                $evname.'_category_title', '', array('class' => 'txp-form-field edit-category-title')
+            ).
+            inputLabel(
+                'category_description',
+                '<textarea id="category_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>',
+                $evname.'_category_description', 'category_description', array('class' => 'txp-form-field txp-form-field-textarea edit-category-description')
+            ).
             pluggable_ui('category_ui', 'extend_detail_form', '', $row).
             hInput('id', $id).
-            graf(fInput('submit', '', gTxt('save'), 'publish')).
+            graf(
+                sLink('category', '', gTxt('cancel'), 'txp-button').
+                fInput('submit', '', gTxt('save'), 'publish'),
+                array('class' => 'txp-edit-actions')
+            ).
             eInput('category').
             sInput('cat_'.$evname.'_save').
-            hInput('old_name', $name).
-            n.'</section>';
-        echo n.'<div id="category_container" class="txp-container">'.
-            form($out, '', '', 'post', 'edit-form').
-            n.'</div>';
+            hInput('old_name', $name);
+
+        echo form($out, '', '', 'post', 'txp-edit');
     } else {
         cat_category_list(array(gTxt('category_not_found'), E_ERROR));
     }
@@ -575,16 +588,16 @@ function cat_event_category_save($event, $table_name)
     if (!$name) {
         $message = array(gTxt($event.'_category_invalid', array('{name}' => $rawname)), E_ERROR);
 
-        return cat_category_list($message);
+        return cat_event_category_edit($event, $message);
     }
 
     // Don't allow rename to clobber an existing category.
-    $existing_id = safe_field('id', 'txp_category', "name = '$name' and type = '$event'");
+    $existing_id = safe_field("id", 'txp_category', "name = '$name' AND type = '$event'");
 
     if ($existing_id and $existing_id != $id) {
         $message = array(gTxt($event.'_category_already_exists', array('{name}' => $name)), E_ERROR);
 
-        return cat_category_list($message);
+        return cat_event_category_edit($event, $message);
     }
 
 // TODO: validate parent?
@@ -593,7 +606,7 @@ function cat_event_category_save($event, $table_name)
     $message = array(gTxt('category_save_failed'), E_ERROR);
 
     if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title', description = '$description'", "id = $id") &&
-        safe_update('txp_category', "parent = '$name'", "parent = '$old_name' and type='$event'")) {
+        safe_update('txp_category', "parent = '$name'", "parent = '$old_name' AND type = '$event'")) {
         rebuild_tree_full($event);
 
         if ($event == 'article') {

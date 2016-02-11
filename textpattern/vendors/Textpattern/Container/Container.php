@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,7 +28,7 @@
  * Basic usage would happen with the getInstance() method:
  *
  * <code>
- * $container = new Textpattern_Container_Container();
+ * $container = new \Textpattern\Container\Container();
  * $container->getInstance('Abc_class', 'argument1', 'argument2');
  * </code>
  *
@@ -40,8 +40,9 @@
  * @package Container
  * @see     Txp
  */
+namespace Textpattern\Container;
 
-class Textpattern_Container_Container implements Textpattern_Container_ContainerInterface
+class Container implements \Textpattern\Container\ContainerInterface
 {
     /**
      * Stores registered classes.
@@ -119,12 +120,12 @@ class Textpattern_Container_Container implements Textpattern_Container_Container
                 $instance = new $class;
             }
 
-            if ($instance instanceof Textpattern_Container_ReusableInterface) {
+            if ($instance instanceof \Textpattern\Container\ReusableInterface) {
                 $this->instances[$alias] = $instance;
             }
         }
 
-        if ($instance instanceof Textpattern_Container_FactorableInterface) {
+        if ($instance instanceof \Textpattern\Container\FactorableInterface) {
             $instance = call_user_func_array(array($instance, 'getInstance'), $options);
         }
 

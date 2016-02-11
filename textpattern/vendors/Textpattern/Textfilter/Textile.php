@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,7 +28,9 @@
  * @package Textfilter
  */
 
-class Textpattern_Textfilter_Textile extends Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
+namespace Textpattern\Textfilter;
+
+class Textile extends Base implements TextfilterInterface
 {
     /**
      * Instance of Textile.
@@ -45,7 +47,7 @@ class Textpattern_Textfilter_Textile extends Textpattern_Textfilter_Base impleme
     public function __construct()
     {
         parent::__construct(USE_TEXTILE, gTxt('use_textile'));
-        $this->textile = new Textpattern_Textile_Parser();
+        $this->textile = new \Textpattern\Textile\Parser();
         $this->version = $this->textile->getVersion();
     }
 
@@ -61,14 +63,14 @@ class Textpattern_Textfilter_Textile extends Textpattern_Textfilter_Base impleme
         parent::filter($thing, $options);
 
         if (($this->options['restricted'])) {
-            return $this->textile->TextileRestricted(
+            return $this->textile->textileRestricted(
                 $thing,
                 $this->options['lite'],
                 $this->options['noimage'],
                 $this->options['rel']
             );
         } else {
-            return $this->textile->TextileThis(
+            return $this->textile->textileThis(
                 $thing,
                 $this->options['lite'],
                 '',

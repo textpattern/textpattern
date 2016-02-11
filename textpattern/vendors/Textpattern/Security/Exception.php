@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -21,6 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 /**
  * Exception.
  *
@@ -28,6 +29,8 @@
  * @package Security
  */
 
-class Textpattern_Security_Exception extends Exception
+namespace Textpattern\Security;
+
+class Exception extends \Exception
 {
 }
