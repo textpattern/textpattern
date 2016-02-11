@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -25,14 +25,16 @@
  * Generates a password.
  *
  * <code>
- * echo Txp::get('Textpattern_Password_Generator')->generate(16);
+ * echo Txp::get('\Textpattern\Password\Generator')->generate(16);
  * </code>
  *
  * @since   4.6.0
  * @package Password
  */
 
-class Textpattern_Password_Generator
+namespace Textpattern\Password;
+
+class Generator
 {
     /**
      * Stores the character table.
@@ -61,10 +63,10 @@ class Textpattern_Password_Generator
      * Generates a random password.
      *
      * <code>
-     * echo Txp::get('Textpattern_Password_Generator')->generate(16);
+     * echo Txp::get('\Textpattern\Password\Generator')->generate(16);
      * </code>
      *
-     * @param  int    $length The length of the generated password
+     * @param  int $length The length of the generated password
      * @return string The password
      */
 

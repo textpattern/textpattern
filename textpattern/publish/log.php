@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -64,8 +64,8 @@ function log_hit($status)
  * The hit is ignore if $r is set to 'refer' and the HTTP REFERER header
  * is empty.
  *
- * @param  string   $r      Type of record to write, e.g. refer
- * @param  int      $status HTTP status code
+ * @param  string $r      Type of record to write, e.g. refer
+ * @param  int    $status HTTP status code
  * @access private
  * @see    log_hit()
  */
@@ -86,7 +86,7 @@ function logit($r = '', $status = 200)
         foreach (do_list(LOG_REFERER_PROTOCOLS) as $option) {
             if (strpos($referer, $option.'://') === 0) {
                 $protocol = $option;
-                $referer = substr($referer, strlen($protocol)+3);
+                $referer = substr($referer, strlen($protocol) + 3);
                 break;
             }
         }
@@ -106,7 +106,7 @@ function logit($r = '', $status = 200)
 
     if (!empty($prefs['use_dns'])) {
         // A crude rDNS cache.
-        if (($h = safe_field('host', 'txp_log', "ip='".doSlash($ip)."' limit 1")) !== false) {
+        if (($h = safe_field("host", 'txp_log', "ip = '".doSlash($ip)."' LIMIT 1")) !== false) {
             $host = $h;
         } else {
             // Double-check the rDNS.
@@ -140,7 +140,7 @@ function insert_logit($in)
     $in = doSlash($in);
     extract($in);
     safe_insert(
-        "txp_log",
-        "`time` = now(), page = '$uri', ip='$ip', host='$host', refer='$ref', status='$status', method='$method'"
+        'txp_log',
+        "time = NOW(), page = '$uri', ip = '$ip', host = '$host', refer = '$ref', status = '$status', method = '$method'"
     );
 }

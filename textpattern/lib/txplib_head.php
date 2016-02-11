@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -70,10 +70,10 @@ function pagetop($pagetitle, $message = '')
 
     if (gps('logout')) {
         $body_id = 'page-logout';
-        $area = 'login-pane';
+        $area = 'login';
     } elseif (!$txp_user) {
         $body_id = 'page-login';
-        $area = 'login-pane';
+        $area = 'login';
     } else {
         $body_id = 'page-'.txpspecialchars($event);
     }
@@ -89,7 +89,7 @@ function pagetop($pagetitle, $message = '')
     }
 
     ?><!DOCTYPE html>
-<html lang="<?php echo LANG;
+<html lang="<?php echo txpspecialchars(LANG);
     ?>" dir="<?php echo $lang_direction;
     ?>">
 <head>
@@ -97,9 +97,7 @@ function pagetop($pagetitle, $message = '')
 <meta name="robots" content="noindex, nofollow">
 <title><?php echo admin_title($pagetitle)?></title><?php echo
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('vendors/jquery/ui/js/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
-// TODO: Remove jQuery migrate plugin before release
-    script_js('//code.jquery.com/jquery-migrate-1.2.1.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
     script_js(
         'var textpattern = '.json_encode(array(
             'event' => $event,
@@ -130,8 +128,8 @@ echo $theme->html_head();
     callback_event('admin_side', 'head_end');
     ?>
 </head>
-<body id="<?php echo $body_id;
-    ?>" class="not-ready <?php echo $area;
+<body class="not-ready <?php echo $area;
+    ?>" id="<?php echo $body_id;
     ?>">
 <header class="txp-header">
 <?php callback_event('admin_side', 'pagetop');
@@ -139,7 +137,8 @@ echo $theme->html_head();
     echo pluggable_ui('admin_side', 'header', $theme->header());
     callback_event('admin_side', 'pagetop_end');
     echo n.'</header><!-- /txp-header -->'.
-        n.'<main class="txp-body" aria-label="'.gTxt('main_content').'">';
+        n.'<main class="txp-body" aria-label="'.gTxt('main_content').'">'.
+        n.'<div id="messagepane">'.$theme->announce($message).'</div>';
     callback_event('admin_side', 'main_content');
 }
 
@@ -280,7 +279,6 @@ function areas()
         gTxt('tab_languages')   => 'lang',
         gTxt('tab_site_admin')  => 'admin',
         gTxt('tab_plugins')     => 'plugin',
-        gTxt('tab_import')      => 'import',
     );
 
     $areas['extensions'] = array(

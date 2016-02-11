@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,6 +28,11 @@
  * @package Admin\List
  */
 
+use Textpattern\Validator\CategoryConstraint;
+use Textpattern\Validator\SectionConstraint;
+use Textpattern\Validator\Validator;
+use Textpattern\Search\Filter;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -37,17 +42,11 @@ if ($event == 'list') {
 
     require_privs('article');
 
-    $statuses = array(
-        STATUS_DRAFT   => gTxt('draft'),
-        STATUS_HIDDEN  => gTxt('hidden'),
-        STATUS_PENDING => gTxt('pending'),
-        STATUS_LIVE    => gTxt('live'),
-        STATUS_STICKY  => gTxt('sticky'),
-    );
+    $statuses = status_list();
 
     $all_cats = getTree('root', 'article');
     $all_authors = the_privileged('article.edit.own');
-    $all_sections = safe_column('name', 'txp_section', "name != 'default'");
+    $all_sections = safe_column("name", 'txp_section', "name != 'default'");
 
     $available_steps = array(
         'list_list'          => false,
@@ -63,7 +62,7 @@ if ($event == 'list') {
 }
 
 /**
- * Outputs the main panel listing all articles.
+ * The main panel listing all articles.
  *
  * @param  string|array $message The activity message
  * @param  string       $post    Not used
@@ -96,7 +95,7 @@ function list_list($message = '', $post = '')
     if ($dir === '') {
         $dir = get_pref('article_sort_dir', 'desc');
     } else {
-        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        $dir = ($dir == 'asc') ? "asc" : "desc";
         set_pref('article_sort_dir', $dir, 'list', 2, '', 0, PREF_PRIVATE);
     }
 
@@ -104,110 +103,168 @@ function list_list($message = '', $post = '')
 
     switch ($sort) {
         case 'id':
-            $sort_sql = 'textpattern.ID '.$dir;
+            $sort_sql = "textpattern.ID $dir";
             break;
         case 'title':
-            $sort_sql = 'textpattern.Title '.$dir.', textpattern.Posted desc';
+            $sort_sql = "textpattern.Title $dir, textpattern.Posted DESC";
             break;
         case 'expires':
-            $sort_sql = 'textpattern.Expires '.$dir;
+            $sort_sql = "textpattern.Expires $dir";
             break;
         case 'section':
-            $sort_sql = 'section.title '.$dir.', textpattern.Posted desc';
+            $sort_sql = "section.title $dir, textpattern.Posted DESC";
             break;
         case 'category1':
-            $sort_sql = 'category1.title '.$dir.', textpattern.Posted desc';
+            $sort_sql = "category1.title $dir, textpattern.Posted DESC";
             break;
         case 'category2':
-            $sort_sql = 'category2.title '.$dir.', textpattern.Posted desc';
+            $sort_sql = "category2.title $dir, textpattern.Posted DESC";
             break;
         case 'status':
-            $sort_sql = 'textpattern.Status '.$dir.', textpattern.Posted desc';
+            $sort_sql = "textpattern.Status $dir, textpattern.Posted DESC";
             break;
         case 'author':
-            $sort_sql = 'user.RealName '.$dir.', textpattern.Posted desc';
+            $sort_sql = "user.RealName $dir, textpattern.Posted DESC";
             break;
         case 'comments':
-            $sort_sql = 'textpattern.comments_count '.$dir.', textpattern.Posted desc';
+            $sort_sql = "textpattern.comments_count $dir, textpattern.Posted DESC";
             break;
         case 'lastmod':
-            $sort_sql = 'textpattern.LastMod '.$dir.', textpattern.Posted desc';
+            $sort_sql = "textpattern.LastMod $dir, textpattern.Posted DESC";
             break;
         default:
             $sort = 'posted';
-            $sort_sql = 'textpattern.Posted '.$dir;
+            $sort_sql = "textpattern.Posted $dir";
             break;
     }
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $criteria = 1;
+    $search = new Filter($event,
+        array(
+            'id' => array(
+                'column' => 'textpattern.ID',
+                'label'  => gTxt('ID'),
+                'type'   => 'integer',
+            ),
+            'title_body_excerpt' => array(
+                'column' => array('textpattern.Title', 'textpattern.Body', 'textpattern.Excerpt'),
+                'label'  => gTxt('title_body_excerpt'),
+            ),
+            'section' => array(
+                'column' => array('textpattern.Section', 'section.title'),
+                'label'  => gTxt('section'),
+            ),
+            'keywords' => array(
+                'column' => 'textpattern.Keywords',
+                'label'  => gTxt('keywords'),
+                'type'   => 'find_in_set',
+            ),
+            'categories' => array(
+                'column' => array('textpattern.Category1', 'textpattern.Category2', 'category1.title', 'category2.title'),
+                'label'  => gTxt('categories'),
+            ),
+            'status' => array(
+                'column' => array('textpattern.Status'),
+                'label'  => gTxt('status'),
+                'type'   => 'boolean',
+            ),
+            'author' => array(
+                'column' => array('textpattern.AuthorID', 'user.RealName'),
+                'label'  => gTxt('author'),
+            ),
+            'article_image' => array(
+                'column' => array('textpattern.Image'),
+                'label'  => gTxt('article_image'),
+                'type'   => 'integer',
+            ),
+            'posted' => array(
+                'column' => array('textpattern.Posted'),
+                'label'  => gTxt('posted'),
+            ),
+            'lastmod' => array(
+                'column' => array('textpattern.LastMod'),
+                'label'  => gTxt('article_modified'),
+            ),
+        )
+    );
 
-    if ($search_method and $crit != '') {
-        $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
-        $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
-        $critsql = $verbatim ?
-            array(
-                'id'                 => "textpattern.ID in ('".join("','", do_list($crit_escaped))."')",
-                'title_body_excerpt' => "textpattern.Title = '$crit_escaped' or textpattern.Body = '$crit_escaped' or textpattern.Excerpt = '$crit_escaped'",
-                'section'            => "textpattern.Section = '$crit_escaped' or section.title = '$crit_escaped'",
-                'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
-                'categories'         => "textpattern.Category1 = '$crit_escaped' or textpattern.Category2 = '$crit_escaped' or category1.title = '$crit_escaped' or category2.title = '$crit_escaped'",
-                'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
-                'author'             => "textpattern.AuthorID = '$crit_escaped' or user.RealName = '$crit_escaped'",
-                'article_image'      => "textpattern.Image in ('".join("','", do_list($crit_escaped))."')",
-                'posted'             => "textpattern.Posted = '$crit_escaped'",
-                'lastmod'            => "textpattern.LastMod = '$crit_escaped'",
-            ) : array(
-                'id'                 => "textpattern.ID in ('".join("','", do_list($crit_escaped))."')",
-                'title_body_excerpt' => "textpattern.Title like '%$crit_escaped%' or textpattern.Body like '%$crit_escaped%' or textpattern.Excerpt like '%$crit_escaped%'",
-                'section'            => "textpattern.Section like '%$crit_escaped%' or section.title like '%$crit_escaped%'",
-                'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
-                'categories'         => "textpattern.Category1 like '%$crit_escaped%' or textpattern.Category2 like '%$crit_escaped%' or category1.title like '%$crit_escaped%' or category2.title like '%$crit_escaped%'",
-                'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
-                'author'             => "textpattern.AuthorID like '%$crit_escaped%' or user.RealName like '%$crit_escaped%'",
-                'article_image'      => "textpattern.Image in ('".join("','", do_list($crit_escaped))."')",
-                'posted'             => "textpattern.Posted like '$crit_escaped%'",
-                'lastmod'            => "textpattern.LastMod like '$crit_escaped%'",
-            );
+    $search->setAliases('status', $statuses);
 
-        if (array_key_exists($search_method, $critsql)) {
-            $criteria = $critsql[$search_method];
-            $limit = 500;
-        } else {
-            $search_method = '';
-            $crit = '';
-        }
-    } else {
-        $search_method = '';
-        $crit = '';
-    }
+    list($criteria, $crit, $search_method) = $search->getFilter(array(
+            'id'                 => array('can_list' => true),
+            'article_image'      => array('can_list' => true),
+            'title_body_excerpt' => array('always_like' => true),
+        ));
 
-    $criteria .= callback_event('admin_criteria', 'list_list', 0, $criteria);
+    $search_render_options = array(
+        'placeholder' => 'search_articles',
+    );
 
     $sql_from =
         safe_pfx('textpattern')." textpattern
-        left join ".safe_pfx('txp_category')." category1 on category1.name = textpattern.Category1 and category1.type = 'article'
-        left join ".safe_pfx('txp_category')." category2 on category2.name = textpattern.Category2 and category2.type = 'article'
-        left join ".safe_pfx('txp_section')." section on section.name = textpattern.Section
-        left join ".safe_pfx('txp_users')." user on user.name = textpattern.AuthorID";
+        LEFT JOIN ".safe_pfx('txp_category')." category1 ON category1.name = textpattern.Category1 AND category1.type = 'article'
+        LEFT JOIN ".safe_pfx('txp_category')." category2 ON category2.name = textpattern.Category2 AND category2.type = 'article'
+        LEFT JOIN ".safe_pfx('txp_section')." section ON section.name = textpattern.Section
+        LEFT JOIN ".safe_pfx('txp_users')." user ON user.name = textpattern.AuthorID";
 
     if ($criteria === 1) {
         $total = safe_count('textpattern', $criteria);
     } else {
-        $total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
+        $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
 
-    echo hed(gTxt('tab_list'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
+    echo n.tag(
+        hed(gTxt('tab_list'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1'));
+
+    $searchBlock =
+        n.tag(
+            $search->renderForm('list', $search_render_options),
+            'div', array(
+                'class' => 'txp-layout-2col-cell-2',
+                'id'    => $event.'_control',
+            )
+        );
+
+    $createBlock = array();
+
+    if (has_privs('article.edit')) {
+        $createBlock[] =
+            n.tag(
+                sLink('article', '', gTxt('add_new_article'), 'txp-button'),
+                'div', array('class' => 'txp-control-panel')
+            );
+    }
+
+    $contentBlockStart = n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        ));
+
+    $createBlock = implode(n, $createBlock);
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo list_search_form($crit, $search_method).
-                graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+            echo $searchBlock.
+                $contentBlockStart.
+                $createBlock.
+                graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_results_found'),
+                    array('class' => 'alert-block information')
+                );
         } else {
-            echo graf(gTxt('no_articles_recorded'), ' class="indicator"').'</div>';
+            echo $contentBlockStart.
+                $createBlock.
+                graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_articles_recorded'),
+                    array('class' => 'alert-block information')
+                );
         }
+
+        echo n.tag_end('div');
 
         return;
     }
@@ -216,38 +273,35 @@ function list_list($message = '', $post = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo list_search_form($crit, $search_method).'</div>';
+    echo $searchBlock.$contentBlockStart.$createBlock;
 
     $rs = safe_query(
-        "select
+        "SELECT
             textpattern.ID, textpattern.Title, textpattern.url_title, textpattern.Section,
             textpattern.Category1, textpattern.Category2,
             textpattern.Status, textpattern.Annotate, textpattern.AuthorID,
-            unix_timestamp(textpattern.Posted) as posted,
-            unix_timestamp(textpattern.LastMod) as lastmod,
-            unix_timestamp(textpattern.Expires) as expires,
-            category1.title as category1_title,
-            category2.title as category2_title,
-            section.title as section_title,
-            user.RealName as RealName,
-            (select count(*) from ".safe_pfx('txp_discuss')." where parentid = textpattern.ID) as total_comments
-        from $sql_from where $criteria order by $sort_sql limit $offset, $limit"
+            UNIX_TIMESTAMP(textpattern.Posted) AS posted,
+            UNIX_TIMESTAMP(textpattern.LastMod) AS lastmod,
+            UNIX_TIMESTAMP(textpattern.Expires) AS expires,
+            category1.title AS category1_title,
+            category2.title AS category2_title,
+            section.title AS section_title,
+            user.RealName AS RealName,
+            (SELECT COUNT(*) FROM ".safe_pfx('txp_discuss')." WHERE parentid = textpattern.ID) AS total_comments
+        FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
     );
 
     if ($rs) {
         $show_authors = !has_single_author('textpattern', 'AuthorID');
 
-        echo
-            n.tag_start('div', array(
-                'id'    => $event.'_container',
-                'class' => 'txp-container',
-            )).
+        echo n.tag(
+                toggle_box('articles_detail'), 'div', array('class' => 'txp-list-options')).
             n.tag_start('form', array(
-                'action' => 'index.php',
-                'id'     => 'articles_form',
                 'class'  => 'multi_edit_form',
-                'method' => 'post',
+                'id'     => 'articles_form',
                 'name'   => 'longform',
+                'method' => 'post',
+                'action' => 'index.php',
             )).
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
@@ -255,7 +309,7 @@ function list_list($message = '', $post = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'ID', 'id', 'list', true, $switch_dir, $crit, $search_method,
@@ -387,11 +441,14 @@ function list_list($message = '', $post = '')
                 ).
                 hCell(
                     eLink('article', 'edit', 'ID', $ID, $ID).
-                    tag(
-                        sp.tag('[', 'span', array('aria-hidden' => 'true')).
-                        href(gTxt('view'), $view_url).
-                        tag(']', 'span', array('aria-hidden' => 'true')), 'span', array('class' => 'articles_detail')
-                    ), '', ' scope="row" class="txp-list-col-id"'
+                    span(
+                        sp.span('&#124;', array('role' => 'separator')).
+                        sp.href(gTxt('view'), $view_url),
+                        array('class' => 'txp-option-link articles_detail')
+                    ), '', array(
+                        'class' => 'txp-list-col-id',
+                        'scope' => 'row',
+                    )
                 ).
                 td(
                     $Title, '', 'txp-list-col-title'
@@ -430,23 +487,22 @@ function list_list($message = '', $post = '')
             );
         }
 
-        echo
-            n.tag_end('tbody').
+        echo n.tag_end('tbody').
             n.tag_end('table').
             n.tag_end('div').
             list_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
-            graf(toggle_box('articles_detail'), array('class' => 'detail-toggle')).
             n.tag_start('div', array(
-                'id'    => $event.'_navigation',
                 'class' => 'txp-navigation',
+                'id'    => $event.'_navigation',
             )).
             pageby_form('list', $article_list_pageby).
             nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div').
             n.tag_end('div');
     }
+
+    echo n.tag_end('div');
 }
 
 /**
@@ -457,32 +513,6 @@ function list_change_pageby()
 {
     event_change_pageby('article');
     list_list();
-}
-
-/**
- * Renders a search form for articles.
- *
- * @param  string $crit   The current search criteria
- * @param  string $method The selected search method
- * @return string HTML
- */
-
-function list_search_form($crit, $method)
-{
-    $methods = array(
-        'id'                 => gTxt('ID'),
-        'title_body_excerpt' => gTxt('title_body_excerpt'),
-        'section'            => gTxt('section'),
-        'categories'         => gTxt('categories'),
-        'keywords'           => gTxt('keywords'),
-        'status'             => gTxt('status'),
-        'author'             => gTxt('author'),
-        'article_image'      => gTxt('article_image'),
-        'posted'             => gTxt('posted'),
-        'lastmod'            => gTxt('article_modified'),
-    );
-
-    return search_form('list', 'list', $crit, $methods, $method, 'title_body_excerpt');
 }
 
 /**
@@ -573,20 +603,22 @@ function list_multi_edit()
             if (!has_privs('article.delete')) {
                 if (has_privs('article.delete.own')) {
                     $allowed = safe_column_num(
-                        'ID',
+                        "ID",
                         'textpattern',
-                        "ID in(".join(',', $selected).") and AuthorID = '".doSlash($txp_user)."'"
+                        "ID IN (".join(',', $selected).") AND AuthorID = '".doSlash($txp_user)."'"
                     );
                 }
 
                 $selected = $allowed;
             }
 
-            if ($selected && safe_delete('textpattern', 'ID in ('.join(',', $selected).')')) {
-                safe_update('txp_discuss', "visible = ".MODERATE, "parentid in(".join(',', $selected).")");
+            if ($selected && safe_delete('textpattern', "ID IN (".join(',', $selected).")")) {
+                safe_update('txp_discuss', "visible = ".MODERATE, "parentid IN (".join(',', $selected).")");
                 callback_event('articles_deleted', '', 0, $selected);
                 callback_event('multi_edited.articles', 'delete', 0, compact('selected', 'field', 'value'));
                 update_lastmod('articles_deleted', $selected);
+                now('posted', true);
+                now('expires', true);
 
                 return list_list(messenger('article', join(', ', $selected), 'deleted'));
             }
@@ -641,9 +673,9 @@ function list_multi_edit()
     }
 
     $selected = safe_rows(
-        'ID, AuthorID, Status',
+        "ID, AuthorID, Status",
         'textpattern',
-        'ID in ('.join(',', $selected).')'
+        "ID IN (".join(',', $selected).")"
     );
 
     foreach ($selected as $item) {
@@ -663,7 +695,7 @@ function list_multi_edit()
         $message = messenger('article', join(', ', $selected), 'modified');
 
         if ($edit_method === 'duplicate') {
-            $rs = safe_rows_start('*', 'textpattern', "ID in (".join(',', $selected).")");
+            $rs = safe_rows_start("*", 'textpattern', "ID IN (".join(',', $selected).")");
 
             if ($rs) {
                 while ($a = nextRow($rs)) {
@@ -672,28 +704,30 @@ function list_multi_edit()
                     $a['AuthorID'] = $txp_user;
 
                     foreach ($a as $name => &$value) {
-                        $value = "`{$name}` = '".doSlash($value)."'";
+                        $value = "`$name` = '".doSlash($value)."'";
                     }
 
                     if ($id = (int) safe_insert('textpattern', join(',', $a))) {
                         safe_update(
                             'textpattern',
-                            "Title = concat(Title, ' (', {$id}, ')'),
-                            url_title = concat(url_title, '-', {$id}),
-                            Posted = now(),
-                            feed_time = now()",
-                            "ID = {$id}"
+                            "Title = CONCAT(Title, ' (', $id, ')'),
+                            url_title = CONCAT(url_title, '-', $id),
+                            Posted = NOW(),
+                            feed_time = NOW()",
+                            "ID = $id"
                         );
                     }
                 }
             }
 
             $message = gTxt('duplicated_articles', array('{id}' => join(', ', $selected)));
-        } elseif (!$field || safe_update('textpattern', "$field = '".doSlash($value)."'", "ID in (".join(',', $selected).")") === false) {
+        } elseif (!$field || safe_update('textpattern', "$field = '".doSlash($value)."'", "ID IN (".join(',', $selected).")") === false) {
             return list_list();
         }
 
         update_lastmod('articles_updated', compact('selected', 'field', 'value'));
+        now('posted', true);
+        now('expires', true);
         callback_event('multi_edited.articles', $edit_method, 0, compact('selected', 'field', 'value'));
 
         return list_list($message);

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -31,7 +31,7 @@
  * For instance, the following will remember the initial value:
  *
  * <code>
- * class Abc_Class implements Textpattern_Container_ReusableInterface
+ * class Abc_Class implements \Textpattern\Container\ReusableInterface
  * {
  *     public $random;
  *     public function __construct()
@@ -51,6 +51,8 @@
  * @package Container
  */
 
-interface Textpattern_Container_ReusableInterface
+namespace Textpattern\Container;
+
+interface ReusableInterface
 {
 }

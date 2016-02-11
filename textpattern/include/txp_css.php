@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -72,23 +72,19 @@ if ($event == 'css') {
 function css_list($current, $default)
 {
     $out = array();
-    $protected = safe_column('DISTINCT css', 'txp_section', '1=1');
+    $protected = safe_column("DISTINCT css", 'txp_section', "1 = 1");
 
     $criteria = 1;
     $criteria .= callback_event('admin_criteria', 'css_list', 0, $criteria);
 
-    $rs = safe_rows_start('name', 'txp_css', $criteria);
+    $rs = safe_rows_start("name", 'txp_css', $criteria);
 
     if ($rs) {
         while ($a = nextRow($rs)) {
             extract($a);
             $active = ($current === $name);
 
-            if ($active) {
-                $edit = txpspecialchars($name);
-            } else {
-                $edit = eLink('css', '', 'name', $name, $name);
-            }
+            $edit = eLink('css', '', 'name', $name, $name);
 
             if (!array_key_exists($name, $protected)) {
                 $edit .= dLink('css', 'css_delete', 'name', $name);
@@ -119,7 +115,7 @@ function css_edit($message = '')
 
     pagetop(gTxt('edit_css'), $message);
 
-    $default_name = safe_field('css', 'txp_section', "name = 'default'");
+    $default_name = safe_field("css", 'txp_section', "name = 'default'");
 
     extract(array_map('assert_string', gpsa(array(
         'copy',
@@ -136,19 +132,21 @@ function css_edit($message = '')
         $name = $newname;
     }
 
-    $buttons = n.tag(gTxt('css_name'), 'label', array('for' => 'new_style')).
-        br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style', false, true);
+    $titleblock = inputLabel(
+        'new_style',
+        fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style', false, true),
+        'css_name',
+        array('', 'instructions_style_name'),
+        array('class' => 'txp-form-field')
+    );
 
-    if ($name) {
-        $buttons .= n.span(
-            href(gTxt('duplicate'), '#', array(
-                'id'    => 'txp_clone',
-                'class' => 'clone',
-                'title' => gTxt('css_clone'),
-            )), array('class' => 'txp-actions'));
+    if ($name === '') {
+        $titleblock .= hInput('savenew', 'savenew');
     } else {
-        $buttons .= hInput('savenew', 'savenew');
+        $titleblock .= hInput('name', $name);
     }
+
+    $titleblock .= eInput('css').sInput('css_save');
 
     $thecss = gps('css');
 
@@ -156,33 +154,61 @@ function css_edit($message = '')
         $thecss = fetch('css', 'txp_css', 'name', $name);
     }
 
-    echo hed(gTxt('tab_style'), 1, array('class' => 'txp-heading'));
-    echo n.tag(
-        n.tag(
-            form(
-                graf($buttons).
-                graf(
-                    tag(gTxt('css_code'), 'label', array('for' => 'css')).
-                    br.'<textarea class="code" id="css" name="css" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thecss).'</textarea>'
-                ).
-                graf(
-                    fInput('submit', '', gTxt('save'), 'publish').
-                    eInput('css').sInput('css_save').
-                    hInput('name', $name)
-                ), '', '', 'post', 'edit-form', '', 'style_form').n, 'div', array(
-            'id'    => 'main_content',
-            'class' => 'txp-layout-cell txp-layout-3-4',
-        )).
+    // Styles code columm.
 
-        n.tag(
-            graf(sLink('css', 'pour', gTxt('create_new_css')), array('class' => 'action-create')).
-            css_list($name, $default_name).n, 'div', array(
+    echo n.tag(
+        hed(gTxt('tab_style'), 1, array('class' => 'txp-heading')).
+        form(
+            $titleblock.
+            inputLabel(
+                'css',
+                '<textarea class="code" id="css" name="css" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thecss).'</textarea>',
+                'css_code',
+                array('', 'instructions_style_code'),
+                array('class' => 'txp-form-field')
+            ), '', '', 'post', '', '', 'style_form'),
+        'div', array(
+            'class' => 'txp-layout-4col-cell-1-2-3',
+            'id'    => 'main_content',
+            'role'  => 'region',
+        )
+    );
+
+    // Styles create/switcher column.
+
+    $buttonExtras = '';
+
+    if ($name) {
+        $buttonExtras .= href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
+            'class'     => 'txp-clone',
+            'data-form' => 'style_form',
+        ));
+    }
+
+    $buttons = graf(
+        tag_void('input', array(
+            'class'  => 'publish',
+            'type'   => 'submit',
+            'method' => 'post',
+            'value'  =>  gTxt('save'),
+            'form'   => 'style_form',
+        )), ' class="txp-save"'
+    ).
+    graf(
+        sLink('css', 'pour', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_css'), 'txp-new').
+        $buttonExtras,
+        array('class' => 'txp-actions')
+    );
+
+    echo n.tag(
+        $buttons.
+        css_list($name, $default_name).n,
+        'div', array(
+            'class' => 'txp-layout-4col-cell-4alt',
             'id'    => 'content_switcher',
-            'class' => 'txp-layout-cell txp-layout-1-4',
-        )).n, 'div', array(
-        'id'    => $event.'_container',
-        'class' => 'txp-layout-grid',
-    ));
+            'role'  => 'region',
+        )
+    );
 }
 
 /**
@@ -212,7 +238,7 @@ function css_save()
             $_POST['newname'] = $newname;
         }
 
-        $exists = safe_field('name', 'txp_css', "name = '".doSlash($newname)."'");
+        $exists = safe_field("name", 'txp_css', "name = '".doSlash($newname)."'");
 
         if (($newname !== $name) && $exists) {
             $message = array(gTxt('css_already_exists', array('{name}' => $newname)), E_ERROR);
@@ -263,7 +289,7 @@ function css_save()
 
 function css_delete()
 {
-    $name  = ps('name');
+    $name = ps('name');
     $count = safe_count('txp_section', "css = '".doSlash($name)."'");
     $message = '';
 

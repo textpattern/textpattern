@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -22,19 +22,15 @@
  */
 
 /**
- * Imports Validator.
- */
-
-require_once txpath.'/lib/txplib_validator.php';
-
-/**
  * Constraint for Textfilters.
  *
  * @since   4.6.0
  * @package Textfilter
  */
 
-class Textpattern_Textfilter_Constraint extends Constraint
+namespace Textpattern\Textfilter;
+
+class Constraint extends \Textpattern\Validator\Constraint
 {
     /**
      * Validates filter selection.
@@ -44,6 +40,6 @@ class Textpattern_Textfilter_Constraint extends Constraint
 
     public function validate()
     {
-        return array_key_exists($this->value, Txp::get('Textpattern_Textfilter_Registry')->getMap());
+        return array_key_exists($this->value, \Txp::get('\Textpattern\Textfilter\Registry')->getMap());
     }
 }

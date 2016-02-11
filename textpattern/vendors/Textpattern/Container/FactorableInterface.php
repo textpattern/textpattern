@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -27,7 +27,7 @@
  * The following will call 'getInstance()' method when creating new instance:
  *
  * <code>
- * class Abc_Class implements Textpattern_Container_FactorableInterface
+ * class Abc_Class implements \Textpattern\Container\FactorableInterface
  * {
  *     public function getInstance()
  *     {
@@ -47,12 +47,14 @@
  * @package Container
  */
 
-interface Textpattern_Container_FactorableInterface
+namespace Textpattern\Container;
+
+interface FactorableInterface
 {
     /**
      * Gets an instance of the class for the factory.
      *
-     * @return Textpattern_Container_FactorableInterface
+     * @return \Textpattern\Container\FactorableInterface
      */
 
     public function getInstance();

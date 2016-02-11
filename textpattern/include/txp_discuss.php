@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -22,6 +22,16 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Comments panel.
+ *
+ * @package Admin\Discuss
+ */
+
+use Textpattern\Validator\ChoiceConstraint;
+use Textpattern\Validator\Validator;
+use Textpattern\Search\Filter;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -37,10 +47,7 @@ if ($event == 'discuss') {
         'discuss_save'          => true,
         'discuss_list'          => false,
         'discuss_edit'          => false,
-        'ipban_add'             => true,
         'discuss_multi_edit'    => true,
-        'ipban_list'            => false,
-        'ipban_unban'           => true,
         'discuss_change_pageby' => true,
     );
 
@@ -71,7 +78,7 @@ function discuss_save()
     callback_event_ref('discuss_ui', 'validate_save', 0, $varray, $constraints);
     $validator = new Validator($constraints);
 
-    if ($validator->validate() && safe_update("txp_discuss",
+    if ($validator->validate() && safe_update('txp_discuss',
         "email   = '$email',
          name    = '$name',
          web     = '$web',
@@ -104,7 +111,11 @@ function short_preview($message)
     return $message;
 }
 
-//-------------------------------------------------------------
+/**
+ * Outputs the main panel listing all comments.
+ *
+ * @param  string|array $message The activity message
+ */
 
 function discuss_list($message = '')
 {
@@ -133,90 +144,114 @@ function discuss_list($message = '')
     if ($dir === '') {
         $dir = get_pref('discuss_sort_dir', 'desc');
     } else {
-        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+        $dir = ($dir == 'asc') ? "asc" : "desc";
         set_pref('discuss_sort_dir', $dir, 'discuss', 2, '', 0, PREF_PRIVATE);
     }
 
     switch ($sort) {
         case 'id':
-            $sort_sql = 'txp_discuss.discussid '.$dir;
+            $sort_sql = "txp_discuss.discussid $dir";
             break;
         case 'ip':
-            $sort_sql = 'txp_discuss.ip '.$dir;
+            $sort_sql = "txp_discuss.ip $dir";
             break;
         case 'name':
-            $sort_sql = 'txp_discuss.name '.$dir;
+            $sort_sql = "txp_discuss.name $dir";
             break;
         case 'email':
-            $sort_sql = 'txp_discuss.email '.$dir;
+            $sort_sql = "txp_discuss.email $dir";
             break;
         case 'website':
-            $sort_sql = 'txp_discuss.web '.$dir;
+            $sort_sql = "txp_discuss.web $dir";
             break;
         case 'message':
-            $sort_sql = 'txp_discuss.message '.$dir;
+            $sort_sql = "txp_discuss.message $dir";
             break;
         case 'status':
-            $sort_sql = 'txp_discuss.visible '.$dir;
+            $sort_sql = "txp_discuss.visible $dir";
             break;
         case 'parent':
-            $sort_sql = 'txp_discuss.parentid '.$dir;
+            $sort_sql = "txp_discuss.parentid $dir";
             break;
         default:
             $sort = 'date';
-            $sort_sql = 'txp_discuss.posted '.$dir;
+            $sort_sql = "txp_discuss.posted $dir";
             break;
     }
 
     if ($sort != 'date') {
-        $sort_sql .= ', txp_discuss.posted asc';
+        $sort_sql .= ", txp_discuss.posted ASC";
     }
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $criteria = 1;
+    $search = new Filter($event,
+        array(
+            'id' => array(
+                'column' => 'txp_discuss.discussid',
+                'label'  => gTxt('ID'),
+                'type'   => 'integer',
+            ),
+            'parent' => array(
+                'column' => array('txp_discuss.parentid', 'textpattern.Title'),
+                'label'  => gTxt('parent'),
+            ),
+            'name' => array(
+                'column' => 'txp_discuss.name',
+                'label'  => gTxt('name'),
+            ),
+            'message' => array(
+                'column' => 'txp_discuss.message',
+                'label'  => gTxt('message'),
+            ),
+            'email' => array(
+                'column' => 'txp_discuss.email',
+                'label'  => gTxt('email'),
+            ),
+            'website' => array(
+                'column' => 'txp_discuss.web',
+                'label'  => gTxt('website'),
+            ),
+            'ip' => array(
+                'column' => 'txp_discuss.ip',
+                'label'  => gTxt('IP'),
+            ),
+            'visible' => array(
+                'column' => 'txp_discuss.visible',
+                'label'  => gTxt('visible'),
+                'type'   => 'numeric',
+            ),
+        )
+    );
 
-    if ($search_method and $crit != '') {
-        $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
-        $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
-        $critsql = $verbatim ?
-            array(
-                'id'      => "txp_discuss.discussid in ('".join("','", do_list($crit_escaped))."')",
-                'parent'  => "txp_discuss.parentid = '$crit_escaped'".((string) intval($crit_escaped) === $crit_escaped ? '' : " or textpattern.Title = '$crit_escaped'"),
-                'name'    => "txp_discuss.name = '$crit_escaped'",
-                'message' => "txp_discuss.message = '$crit_escaped'",
-                'email'   => "txp_discuss.email = '$crit_escaped'",
-                'website' => "txp_discuss.web = '$crit_escaped'",
-                'ip'      => "txp_discuss.ip = '$crit_escaped'",
-            ) : array(
-                'id'      => "txp_discuss.discussid in ('".join("','", do_list($crit_escaped))."')",
-                'parent'  => "txp_discuss.parentid = '$crit_escaped'".((string) intval($crit_escaped) === $crit_escaped ? '' : " or textpattern.Title like '%$crit_escaped%'"),
-                'name'    => "txp_discuss.name like '%$crit_escaped%'",
-                'message' => "txp_discuss.message like '%$crit_escaped%'",
-                'email'   => "txp_discuss.email like '%$crit_escaped%'",
-                'website' => "txp_discuss.web like '%$crit_escaped%'",
-                'ip'      => "txp_discuss.ip like '%$crit_escaped%'",
-            );
+    $alias_yes = VISIBLE.', Yes';
+    $alias_no = MODERATE.', No, Unmoderated, Pending';
+    $alias_spam = SPAM.', Spam';
 
-        if (array_key_exists($search_method, $critsql)) {
-            $criteria = $critsql[$search_method];
-            $limit = 500;
-        } else {
-            $search_method = '';
-            $crit = '';
-        }
-    } else {
-        $search_method = '';
-        $crit = '';
-    }
+    $search->setAliases('visible', array(
+        VISIBLE => $alias_yes,
+        MODERATE => $alias_no,
+        SPAM => $alias_spam,
+        ));
 
-    $criteria .= callback_event('admin_criteria', 'discuss_list', 0, $criteria);
+    list($criteria, $crit, $search_method) = $search->getFilter(array(
+            'id' => array('can_list' => true),
+        ));
+
+    $search_render_options = array(
+        'placeholder' => 'search_comments',
+    );
+
+    $sql_from =
+        safe_pfx_j('txp_discuss')."
+        left join ".safe_pfx_j('textpattern')." on txp_discuss.parentid = textpattern.ID";
 
     $counts = getRows(
-        "select txp_discuss.visible, COUNT(*) AS c
-        from ".safe_pfx_j('txp_discuss')."
-        left join ".safe_pfx_j('textpattern')." ON txp_discuss.parentid = textpattern.ID
-        where {$criteria} group by txp_discuss.visible"
+        "SELECT txp_discuss.visible, COUNT(*) AS c
+        FROM ".safe_pfx_j('txp_discuss')."
+            LEFT JOIN ".safe_pfx_j('textpattern')."
+            ON txp_discuss.parentid = textpattern.ID
+        WHERE $criteria GROUP BY txp_discuss.visible"
     );
 
     $count[SPAM] = $count[MODERATE] = $count[VISIBLE] = 0;
@@ -230,23 +265,46 @@ function discuss_list($message = '')
     // Grand total comment count.
     $total = $count[SPAM] + $count[MODERATE] + $count[VISIBLE];
 
-    echo hed(gTxt('list_discussions'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
-    echo graf(
-        sLink('discuss', 'ipban_list', gTxt('list_banned_ips')), ' class="txp-buttons"');
+    echo n.tag(
+        hed(gTxt('list_discussions'), 1, array('class' => 'txp-heading')),
+        'div', array('class' => 'txp-layout-2col-cell-1'));
+
+    $searchBlock =
+        n.tag(
+            $search->renderForm('discuss_list', $search_render_options),
+            'div', array(
+                'class' => 'txp-layout-2col-cell-2',
+                'id'    => $event.'_control',
+            )
+        );
+
+    $contentBlockStart = n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        ));
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo discuss_search_form($crit, $search_method).
-                graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+            echo $searchBlock.
+                $contentBlockStart.
+                graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_results_found'),
+                    array('class' => 'alert-block information')
+                );
         } else {
-            echo graf(gTxt('no_comments_recorded'), ' class="indicator"').'</div>';
+            echo $contentBlockStart.
+                graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_comments_recorded'),
+                    array('class' => 'alert-block information')
+                );
         }
+
+        echo n.tag_end('div');
 
         return;
     }
-
-    echo discuss_search_form($crit, $search_method).'</div>';
 
     if (!cs('toggle_show_spam')) {
         $total = $count[MODERATE] + $count[VISIBLE];
@@ -254,42 +312,44 @@ function discuss_list($message = '')
     }
 
     $limit = max($comment_list_pageby, 15);
+
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
+    echo $searchBlock.$contentBlockStart;
+
     $rs = safe_query(
-        "select
-        txp_discuss.discussid,
-        txp_discuss.parentid,
-        txp_discuss.name,
-        txp_discuss.email,
-        txp_discuss.web,
-        txp_discuss.ip,
-        txp_discuss.message,
-        txp_discuss.visible,
-        unix_timestamp(txp_discuss.posted) as uPosted,
-        textpattern.ID as thisid,
-        textpattern.Section as section,
-        textpattern.url_title,
-        textpattern.Title as title,
-        textpattern.Status,
-        unix_timestamp(textpattern.Posted) as posted
-        from ".safe_pfx_j('txp_discuss')."
-        left join ".safe_pfx_j('textpattern')." on txp_discuss.parentid = textpattern.ID
-        where {$criteria} order by {$sort_sql} limit {$offset}, {$limit}"
+        "SELECT
+            txp_discuss.discussid,
+            txp_discuss.parentid,
+            txp_discuss.name,
+            txp_discuss.email,
+            txp_discuss.web,
+            txp_discuss.ip,
+            txp_discuss.message,
+            txp_discuss.visible,
+            UNIX_TIMESTAMP(txp_discuss.posted) AS uPosted,
+            textpattern.ID AS thisid,
+            textpattern.Section AS section,
+            textpattern.url_title,
+            textpattern.Title AS title,
+            textpattern.Status,
+            UNIX_TIMESTAMP(textpattern.Posted) AS posted
+        FROM ".safe_pfx_j('txp_discuss')."
+            LEFT JOIN ".safe_pfx_j('textpattern')." ON txp_discuss.parentid = textpattern.ID
+        WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
     );
 
     if ($rs) {
-        echo
-            n.tag_start('div', array(
-                'id'    => $event.'_container',
-                'class' => 'txp-container',
-            )).
+        echo n.tag(
+                cookie_box('show_spam').
+                toggle_box('discuss_detail'),
+                'div', array('class' => 'txp-list-options')).
             n.tag_start('form', array(
-                'action' => 'index.php',
-                'id'     => 'discuss_form',
                 'class'  => 'multi_edit_form',
-                'method' => 'post',
+                'id'     => 'discuss_form',
                 'name'   => 'longform',
+                'method' => 'post',
+                'action' => 'index.php',
             )).
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
@@ -297,7 +357,7 @@ function discuss_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method,
@@ -396,7 +456,7 @@ function discuss_list($message = '')
                     fInput('checkbox', 'selected[]', $discussid), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' scope="row" class="txp-list-col-id"'
+                    href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' class="txp-list-col-id" scope="row"'
                 ).
                 td(
                     gTime($uPosted), '', 'txp-list-col-created date'
@@ -414,7 +474,7 @@ function discuss_list($message = '')
                     txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website discuss_detail'
                 ).
                 td(
-                    href(txpspecialchars($ip), 'https://whois.domaintools.com/' . rawurlencode($ip), array(
+                    href(txpspecialchars($ip), 'https://whois.domaintools.com/'.rawurlencode($ip), array(
                         'rel'    => 'external',
                         'target' => '_blank',
                     )), '', 'txp-list-col-ip discuss_detail'
@@ -432,44 +492,27 @@ function discuss_list($message = '')
             echo n.tr(tda(gTxt('just_spam_results_found'), ' colspan="10"'));
         }
 
-        echo
-            n.tag_end('tbody').
+        echo n.tag_end('tbody').
             n.tag_end('table').
             n.tag_end('div').
             discuss_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
-            graf(toggle_box('discuss_detail'), array('class' => 'detail-toggle')).
-            cookie_box('show_spam').
             n.tag_start('div', array(
-                'id'    => $event.'_navigation',
                 'class' => 'txp-navigation',
+                'id'    => $event.'_navigation',
             )).
             pageby_form('discuss', $comment_list_pageby).
             nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div').
             n.tag_end('div');
     }
+
+    echo n.tag_end('div');
 }
 
-//-------------------------------------------------------------
-
-function discuss_search_form($crit, $method)
-{
-    $methods = array(
-        'id'      => gTxt('ID'),
-        'parent'  => gTxt('parent'),
-        'name'    => gTxt('name'),
-        'message' => gTxt('message'),
-        'email'   => gTxt('email'),
-        'website' => gTxt('website'),
-        'ip'      => gTxt('IP'),
-    );
-
-    return search_form('discuss', 'list', $crit, $methods, $method, 'message');
-}
-
-//-------------------------------------------------------------
+/**
+ * Renders and outputs the comment editor panel.
+ */
 
 function discuss_edit()
 {
@@ -488,35 +531,12 @@ function discuss_edit()
 
     $discussid = assert_int($discussid);
 
-    $rs = safe_row('*, unix_timestamp(posted) as uPosted', 'txp_discuss', "discussid = $discussid");
+    $rs = safe_row("*, UNIX_TIMESTAMP(posted) AS uPosted", 'txp_discuss', "discussid = $discussid");
 
     if ($rs) {
         extract($rs);
 
         $message = txpspecialchars($message);
-
-        if (fetch('ip', 'txp_discuss_ipban', 'ip', $ip)) {
-            $ban_step = 'ipban_unban';
-            $ban_text = gTxt('unban');
-        } else {
-            $ban_step = 'ipban_add';
-            $ban_text = gTxt('ban');
-        }
-
-        $ban_link = sp.span('[', array('aria-hidden' => 'true')).
-            href(
-                $ban_text,
-                array(
-                    'event'      => 'discuss',
-                    'step'       => $ban_step,
-                    'ip'         => $ip,
-                    'name'       => $name,
-                    'discussid'  => $discussid,
-                    '_txp_token' => form_token(),
-                ),
-                array('class' => 'action-ban')
-            ).
-            span(']', array('aria-hidden' => 'true'));
 
         $status_list = selectInput(
             'visible',
@@ -530,174 +550,69 @@ function discuss_edit()
             '',
             'status');
 
-        echo '<div id="'.$event.'_container" class="txp-container">'.
-            form(
-                n.'<section class="txp-edit">'.
+        echo form(
                 hed(gTxt('edit_comment'), 2).
-                inputLabel('status', $status_list, 'status').
-                inputLabel('name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'), 'name').
-                inputLabel('IP', href(txpspecialchars($ip), 'https://whois.domaintools.com/' . rawurlencode($ip), array(
-                    'rel'    => 'external',
-                    'target' => '_blank',
-                )).$ban_link, '').
-                inputLabel('email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'), 'email').
-                inputLabel('website', fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'website'), 'website').
-                inputLabel('date', safe_strftime('%d %b %Y %X', $uPosted), '').
-                inputLabel('commentmessage', '<textarea id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'">'.$message.'</textarea>', 'message', '', '', '').
-                graf(fInput('submit', 'step', gTxt('save'), 'publish')).
-
+                inputLabel(
+                    'status',
+                    $status_list,
+                    'status', '', array('class' => 'txp-form-field edit-comment-status')
+                ).
+                inputLabel(
+                    'name',
+                    fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'),
+                    'name', '', array('class' => 'txp-form-field edit-comment-name')
+                ).
+                inputLabel(
+                    'IP',
+                    href(txpspecialchars($ip), 'https://whois.domaintools.com/'.rawurlencode($ip), array(
+                        'rel'    => 'external',
+                        'target' => '_blank',
+                    )),
+                    '', '', array('class' => 'txp-form-field edit-comment-ip')
+                ).
+                inputLabel(
+                    'email',
+                    fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'),
+                    'email', '', array('class' => 'txp-form-field edit-comment-email')
+                ).
+                inputLabel(
+                    'website',
+                    fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'website'),
+                    'website', '', array('class' => 'txp-form-field edit-comment-website')
+                ).
+                inputLabel(
+                    'date',
+                    safe_strftime('%d %b %Y %X',
+                    $uPosted),
+                    '', '', array('class' => 'txp-form-field edit-comment-date')
+                ).
+                inputLabel(
+                    'commentmessage',
+                    '<textarea id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_MEDIUM.'">'.$message.'</textarea>',
+                    'message', '', array('class' => 'txp-form-field txp-form-field-textarea edit-comment-message')
+                ).
+                graf(
+                    sLink('discuss', '', gTxt('cancel'), 'txp-button').
+                    fInput('submit', 'step', gTxt('save'), 'publish'),
+                    array('class' => 'txp-edit-actions')
+                ).
                 hInput('sort', $sort).
                 hInput('dir', $dir).
                 hInput('page', $page).
                 hInput('crit', $crit).
                 hInput('search_method', $search_method).
-
                 hInput('discussid', $discussid).
                 hInput('parentid', $parentid).
                 hInput('ip', $ip).
-
                 eInput('discuss').
-                sInput('discuss_save').
-                n.'</section>', '', '', 'post', 'edit-form', '', 'discuss_edit_form'), '</div>';
+                sInput('discuss_save'),
+            '', '', 'post', 'txp-edit', '', 'discuss_edit_form');
     } else {
-        echo graf(gTxt('comment_not_found'), ' class="indicator"');
-    }
-}
-
-// -------------------------------------------------------------
-
-function ipban_add()
-{
-    extract(gpsa(array('ip', 'name', 'discussid')));
-    $discussid = assert_int($discussid);
-
-    if (!$ip) {
-        return ipban_list(gTxt('cant_ban_blank_ip'));
-    }
-
-    $ban_exists = fetch('ip', 'txp_discuss_ipban', 'ip', $ip);
-
-    if ($ban_exists) {
-        $message = gTxt('ip_already_banned', array('{ip}' => $ip));
-
-        return ipban_list($message);
-    }
-
-    $rs = safe_insert('txp_discuss_ipban', "
-        ip = '".doSlash($ip)."',
-        name_used = '".doSlash($name)."',
-        banned_on_message = $discussid,
-        date_banned = now()
-    ");
-
-    // Hide all messages from that IP also.
-    if ($rs) {
-        safe_update('txp_discuss', "visible = ".SPAM, "ip = '".doSlash($ip)."'");
-
-        $message = gTxt('ip_banned', array('{ip}' => $ip));
-
-        return ipban_list($message);
-    }
-
-    ipban_list();
-}
-
-// -------------------------------------------------------------
-
-function ipban_unban()
-{
-    $ip = doSlash(gps('ip'));
-
-    $rs = safe_delete('txp_discuss_ipban', "ip = '$ip'");
-
-    if ($rs) {
-        $message = gTxt('ip_ban_removed', array('{ip}' => $ip));
-
-        ipban_list($message);
-    }
-}
-
-// -------------------------------------------------------------
-
-function ipban_list($message = '')
-{
-    global $event;
-
-    pageTop(gTxt('list_banned_ips'), $message);
-
-    echo hed(gTxt('banned_ips'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="'.$event.'_banned_control" class="txp-control-panel">'.
-        graf(
-            sLink('discuss', 'discuss_list', gTxt('list_discussions')), ' class="txp-buttons"').
-        n.'</div>';
-
-    $rs = safe_rows_start('*, unix_timestamp(date_banned) as uBanned', 'txp_discuss_ipban',
-        "1 = 1 order by date_banned desc");
-
-    if ($rs and numRows($rs) > 0) {
-        echo
-            n.tag_start('div', array(
-                'id'    => $event.'_ban_container',
-                'class' => 'txp-container',
-            )).
-            n.tag_start('div', array('class' => 'txp-listtables')).
-            n.tag_start('table', array('class' => 'txp-list')).
-            n.tag_start('thead').
-            tr(
-                hCell(
-                    gTxt('date_banned'), '', ' scope="col" class="txp-list-col-banned date"'
-                ).
-                hCell(
-                    gTxt('IP'), '', ' scope="col" class="txp-list-col-ip"'
-                ).
-                hCell(
-                    gTxt('name_used'), '', ' scope="col" class="txp-list-col-name"'
-                ).
-                hCell(
-                    gTxt('banned_for'), '', ' scope="col" class="txp-list-col-id"'
-                )
-            ).
-            n.tag_end('thead').
-            n.tag_start('tbody');
-
-        while ($a = nextRow($rs)) {
-            extract($a);
-
-            echo tr(
-                hCell(
-                    gTime($uBanned), '', ' scope="row" class="txp-list-col-banned date"'
-                ).
-                td(
-                    txpspecialchars($ip).
-                    sp.span('[', array('aria-hidden' => 'true')).
-                    href(
-                        gTxt('unban'),
-                        array(
-                            'event'      => 'discuss',
-                            'step'       => 'ipban_unban',
-                            'ip'         => $ip,
-                            '_txp_token' => form_token(),
-                        ),
-                        array('class' => 'action-ban')
-                    ).
-                    span(']', array('aria-hidden' => 'true')), '', 'txp-list-col-ip'
-                ).
-                td(
-                    txpspecialchars($name_used), '', 'txp-list-col-name'
-                ).
-                td(
-                    href($banned_on_message, '?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$banned_on_message), '', 'txp-list-col-id'
-                )
-            );
-        }
-
-        echo
-            n.tag_end('tbody').
-            n.tag_end('table').
-            n.tag_end('div').
-            n.tag_end('div');
-    } else {
-        echo graf(gTxt('no_ips_banned'), ' class="indicator"');
+        echo graf(
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt('comment_not_found'),
+            array('class' => 'alert-block information')
+        );
     }
 }
 
@@ -717,7 +632,6 @@ function discuss_multiedit_form($page, $sort, $dir, $crit, $search_method)
         'visible'     => gTxt('show'),
         'unmoderated' => gTxt('hide_unmoderated'),
         'spam'        => gTxt('hide_spam'),
-        'ban'         => gTxt('ban_author'),
         'delete'      => gTxt('delete'),
     );
 
@@ -738,9 +652,9 @@ function discuss_multi_edit()
         foreach ($selected as $id) {
             $ids[] = assert_int($id);
         }
-        $parentids = safe_column("DISTINCT parentid", "txp_discuss", "discussid IN (".implode(',', $ids).")");
+        $parentids = safe_column("DISTINCT parentid", 'txp_discuss', "discussid IN (".implode(',', $ids).")");
 
-        $rs = safe_rows_start('*', 'txp_discuss', "discussid IN (".implode(',', $ids).")");
+        $rs = safe_rows_start("*", 'txp_discuss', "discussid IN (".implode(',', $ids).")");
 
         while ($row = nextRow($rs)) {
             extract($row);
@@ -754,21 +668,6 @@ function discuss_multi_edit()
                 }
 
                 callback_event('discuss_deleted', '', 0, $done);
-            } elseif ($method == 'ban') {
-                // Ban the IP and hide all messages by that IP.
-                if (!safe_field('ip', 'txp_discuss_ipban', "ip='".doSlash($ip)."'")) {
-                    safe_insert("txp_discuss_ipban",
-                        "ip = '".doSlash($ip)."',
-                        name_used = '".doSlash($name)."',
-                        banned_on_message = $id,
-                        date_banned = now()
-                    ");
-                    safe_update('txp_discuss',
-                        "visible = ".SPAM,
-                        "ip='".doSlash($ip)."'"
-                    );
-                }
-                $done[] = $id;
             } elseif ($method == 'spam') {
                 if (safe_update('txp_discuss',
                     "visible = ".SPAM,
@@ -801,7 +700,6 @@ function discuss_multi_edit()
 
             $messages = array(
                 'delete'      => gTxt('comments_deleted', array('{list}' => $doneStr)),
-                'ban'         => gTxt('ips_banned', array('{list}' => $doneStr)),
                 'spam'        => gTxt('comments_marked_spam', array('{list}' => $doneStr)),
                 'unmoderated' => gTxt('comments_marked_unmoderated', array('{list}' => $doneStr)),
                 'visible'     => gTxt('comments_marked_visible', array('{list}' => $doneStr)),

@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -36,10 +36,10 @@ include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_misc.php';
 include txpath.'/vendors/Textpattern/Loader.php';
 
-$loader = new Textpattern_Loader(txpath.'/vendors');
+$loader = new \Textpattern\Loader(txpath.'/vendors');
 $loader->register();
 
-$loader = new Textpattern_Loader(txpath.'/lib');
+$loader = new \Textpattern\Loader(txpath.'/lib');
 $loader->register();
 
 if (!isset($_SESSION)) {
@@ -52,7 +52,6 @@ if (!isset($_SESSION)) {
 
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
-include_once txpath.'/lib/txplib_theme.php';
 include_once txpath.'/include/txp_auth.php';
 
 assert_system_requirements();
@@ -74,33 +73,46 @@ if (count($txpdir) > 3) {
     $txpdir = '/';
 }
 
+global $textarray_script;
+
 $step = ps('step');
 $rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i", '$1', $_SERVER['PHP_SELF']);
 $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
-$bodyclass = ($step == '') ? ' class="welcome"' : '';
+$bodyclass = ($step == '') ? ' welcome' : '';
+gTxtScript(array(
+    'setup_password_strength_0',
+    'setup_password_strength_1',
+    'setup_password_strength_2',
+    'setup_password_strength_3',
+    'setup_password_strength_4',
+    )
+);
 
-print <<<eod
+echo <<<eod
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <title>Setup &#124; Textpattern CMS</title>
-<script src="../vendors/jquery/jquery/jquery.js"></script>
-<script src="../vendors/jquery/ui/js/jquery-ui.js"></script>
-<script>var textpattern = { do_spellcheck: "", textarray: {} };</script>
-<script src="../textpattern.js"></script>
-<link rel="stylesheet" href="../vendors/jquery/ui/css/textpattern/jquery-ui.min.css">
-<link rel="stylesheet" href="../theme/hive/css/textpattern.min.css">
+eod;
+
+echo script_js('../vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('../vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('../vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL).
+    script_js(
+        'var textpattern = '.json_encode(array(
+            'event'         => 'setup',
+            'step'          => $step,
+            'textarray'     => (object) $textarray_script,
+            )).';').
+    script_js('../textpattern.js', TEXTPATTERN_SCRIPT_URL);
+
+echo <<<eod
+<link rel="stylesheet" href="../theme/hive/assets/css/textpattern.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<script src="../vendors/modernizr/modernizr/modernizr.js"></script>
-<!--[if lt IE 9]>
-<link rel="stylesheet" href="../vendors/jquery/ui/css/textpattern/jquery-ui-ie8.min.css">
-<link rel="stylesheet" href="../theme/hive/css/ie8.min.css">
-<script src="../vendors/keithclark/selectivizr/selectivizr.min.js"></script>
-<![endif]-->
 </head>
-<body id="page-setup"{$bodyclass}>
+<body class="setup{$bodyclass}" id="page-setup">
 <main class="txp-body">
 eod;
 
@@ -126,23 +138,29 @@ switch ($step) {
 </html>
 <?php
 
-// -------------------------------------------------------------
+/**
+ * Renders stage 0: welcome/choose language panel.
+ */
 
 function chooseLang()
 {
-    echo n.'<div class="txp-container" id="setup_container">',
-        n.'<div class="txp-setup">',
+    $_SESSION = array();
+
+    echo n.'<div class="txp-setup">',
         hed('Welcome to Textpattern CMS', 1),
         n.'<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">',
         langs(),
         graf(fInput('submit', 'Submit', 'Submit', 'publish')),
         sInput('getDbInfo'),
         n.'</form>',
-        n.'</div>',
         n.'</div>';
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders progress meter displayed on stages 1 to 4 of installation process.
+ *
+ * @param int $stage The stage
+ */
 
 function txp_setup_progress_meter($stage = 1)
 {
@@ -155,7 +173,7 @@ function txp_setup_progress_meter($stage = 1)
 
     $out = array();
 
-    $out[] = n.'<div class="progress-meter">'.
+    $out[] = n.'<aside class="progress-meter">'.
         graf(setup_gTxt('progress_steps'), ' class="txp-accessibility"').
         n.'<ol>';
 
@@ -166,12 +184,14 @@ function txp_setup_progress_meter($stage = 1)
     }
 
     $out[] = n.'</ol>'.
-        n.'</div>';
+        n.'</aside>';
 
     return join('', $out);
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders stage 1: database details panel.
+ */
 
 function getDbInfo()
 {
@@ -185,8 +205,7 @@ function getDbInfo()
 
     global $txpcfg;
 
-    echo n.'<div class="txp-container" id="setup_container">',
-        txp_setup_progress_meter(1),
+    echo txp_setup_progress_meter(1),
         n.'<div class="txp-setup">';
 
     if (!isset($txpcfg['db'])) {
@@ -195,10 +214,11 @@ function getDbInfo()
 
     if (!empty($txpcfg['db'])) {
         echo graf(
-                span(setup_gTxt('already_installed', array('{txpath}' => txpath)), ' class="warning"')
+                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+                setup_gTxt('already_installed', array('{txpath}' => txpath)),
+                array('class' => 'alert-block warning')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
 
         exit;
@@ -217,42 +237,52 @@ function getDbInfo()
         hed(setup_gTxt('need_details'), 1).
         hed('MySQL', 2).
         graf(setup_gTxt('db_must_exist')).
-
-        graf(
-            span('<label for="setup_mysql_login">'.setup_gTxt('mysql_login').'</label>', ' class="txp-label"').
-            n.span(fInput('text', 'duser', (isset($_SESSION['duser']) ? txpspecialchars($_SESSION['duser']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'), ' class="txp-value"')
+        inputLabel(
+            'setup_mysql_login',
+            fInput('text', 'duser', (isset($_SESSION['duser']) ? txpspecialchars($_SESSION['duser']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'),
+            'mysql_login', '', array('class' => 'txp-form-field')
         ).
-
-        graf(
-            span('<label for="setup_mysql_pass">'.setup_gTxt('mysql_password').'</label>', ' class="txp-label"').
-            n.span(fInput('text', 'dpass', (isset($_SESSION['dpass']) ? txpspecialchars($_SESSION['dpass']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_pass'), ' class="txp-value"')
+        inputLabel(
+            'setup_mysql_pass',
+            fInput('password', 'dpass', (isset($_SESSION['dpass']) ? txpspecialchars($_SESSION['dpass']) : ''), 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_mysql_pass').
+            n.tag(
+                checkbox('unmask', 1, false, 0, 'show_password').
+                n.tag(gTxt('setup_show_password'), 'label', array('for' => 'show_password')),
+                'div', array('class' => 'show-password')),
+            'mysql_password', '', array('class' => 'txp-form-field')
         ).
-
-        graf(
-            span('<label for="setup_mysql_server">'.setup_gTxt('mysql_server').'</label>', ' class="txp-label"').
-            n.span(fInput('text', 'dhost', (isset($_SESSION['dhost']) ? txpspecialchars($_SESSION['dhost']) : 'localhost'), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true), ' class="txp-value"')
+        inputLabel(
+            'setup_mysql_server',
+            fInput('text', 'dhost', (isset($_SESSION['dhost']) ? txpspecialchars($_SESSION['dhost']) : 'localhost'), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true),
+            'mysql_server', '', array('class' => 'txp-form-field')
         ).
-
-        graf(
-            span('<label for="setup_mysql_db">'.setup_gTxt('mysql_database').'</label>', ' class="txp-label"').
-            n.span(fInput('text', 'ddb', (isset($_SESSION['ddb']) ? txpspecialchars($_SESSION['ddb']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true), ' class="txp-value"')
+        inputLabel(
+            'setup_mysql_db',
+            fInput('text', 'ddb', (isset($_SESSION['ddb']) ? txpspecialchars($_SESSION['ddb']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true),
+            'mysql_database', '', array('class' => 'txp-form-field')
         ).
-
-        graf(
-            span('<label for="setup_table_prefix">'.setup_gTxt('table_prefix').'</label>'.popHelp('table_prefix'), ' class="txp-label"').
-            n.span(fInput('text', 'dprefix', (isset($_SESSION['dprefix']) ? txpspecialchars($_SESSION['dprefix']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_table_prefix'), ' class="txp-value"')
+        inputLabel(
+            'setup_table_prefix',
+            fInput('text', 'dprefix', (isset($_SESSION['dprefix']) ? txpspecialchars($_SESSION['dprefix']) : ''), 'input-medium', '', '', INPUT_MEDIUM, '', 'setup_table_prefix'),
+            'table_prefix', 'table_prefix', array('class' => 'txp-form-field')
         ).
-
-        hed(setup_gTxt('site_url'), 2).
-        graf(setup_gTxt('please_enter_url')).
+        hed(
+            setup_gTxt('site_url'), 2
+        ).
         graf(
-            span('<label for="setup_site_url">http(s)://</label>'.popHelp('siteurl'), ' class="txp-label"').
-            n.span(fInput('text', 'siteurl', txpspecialchars($guess_siteurl), '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true), ' class="txp-value"')
+            setup_gTxt('please_enter_url')
+        ).
+        inputLabel(
+            'setup_site_url',
+            fInput('text', 'siteurl', txpspecialchars($guess_siteurl), '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
+            'http(s)://', 'siteurl', array('class' => 'txp-form-field')
         );
 
     if (is_disabled('mail')) {
         echo graf(
-            span(setup_gTxt('warn_mail_unavailable'), ' class="warning"')
+            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+            setup_gTxt('warn_mail_unavailable'),
+            array('class' => 'alert-block warning')
         );
     }
 
@@ -262,11 +292,13 @@ function getDbInfo()
 
     echo sInput('printConfig').
         n.'</form>'.
-        n.'</div>'.
         n.'</div>';
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders stage 2: either config details panel (on success) or database details
+ * error message (on fail).
+ */
 
 function printConfig()
 {
@@ -281,8 +313,7 @@ function printConfig()
 
     global $txpcfg;
 
-    echo n.'<div class="txp-container" id="setup_container">'.
-        txp_setup_progress_meter(2).
+    echo txp_setup_progress_meter(2).
         n.'<div class="txp-setup">';
 
     if (!isset($txpcfg['db'])) {
@@ -291,10 +322,11 @@ function printConfig()
 
     if (!empty($txpcfg['db'])) {
         echo graf(
-                span(setup_gTxt('already_installed', array('{txpath}' => txpath)), ' class="warning"')
+                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+                setup_gTxt('already_installed', array('{txpath}' => txpath)),
+                array('class' => 'alert-block warning')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
 
         exit;
@@ -303,11 +335,13 @@ function printConfig()
 // TODO: @see http://forum.textpattern.com/viewtopic.php?pid=263205#p263205
 //    if ('' === $_SESSION['dhost'] || '' === $_SESSION['duser'] || '' === $_SESSION['ddb']) {
 //        echo graf(
-//            '<span class="war">'.setup_gTxt('missing_db_details').'</span>'
-//        ).
-//        n.setup_back_button().
-//        n.'</div>'.
-//        n.'</div>';
+//                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+//                setup_gTxt('missing_db_details'),
+//                array('class' => 'alert-block warning')
+//            ).
+//            n.setup_back_button(__FUNCTION__).
+//            n.'</div>';
+//
 //        exit;
 //    }
 
@@ -331,27 +365,31 @@ function printConfig()
         $_SESSION['dclient_flags'] = 'MYSQLI_CLIENT_SSL';
     } else {
         echo graf(
-                span(setup_gTxt('db_cant_connect'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('db_cant_connect'),
+                array('class' => 'alert-block error')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
 
         exit;
     }
 
     echo graf(
-        span(setup_gTxt('db_connected'), ' class="success"')
+        span(null, array('class' => 'ui-icon ui-icon-check')).' '.
+        setup_gTxt('db_connected'),
+        array('class' => 'alert-block success')
     );
 
     if (!($_SESSION['dprefix'] == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $_SESSION['dprefix']))) {
         echo graf(
-            span(setup_gTxt('prefix_bad_characters', array(
-                '{dbprefix}' => strong(txpspecialchars($_SESSION['dprefix'])),
-            ), 'raw'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('prefix_bad_characters', array(
+                    '{dbprefix}' => strong(txpspecialchars($_SESSION['dprefix']))
+                ), 'raw'),
+                array('class' => 'alert-block error')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
 
         exit;
@@ -359,55 +397,67 @@ function printConfig()
 
     if (!$mydb = mysqli_select_db($mylink, $_SESSION['ddb'])) {
         echo graf(
-            span(setup_gTxt('db_doesnt_exist', array(
-                '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])),
-            ), 'raw'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('db_doesnt_exist', array(
+                    '{dbname}' => strong(txpspecialchars($_SESSION['ddb']))
+                ), 'raw'),
+                array('class' => 'alert-block error')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
 
         exit;
     }
 
-    $tables_exist = mysqli_query($mylink, "describe `".$_SESSION['dprefix']."textpattern`");
+    $tables_exist = mysqli_query($mylink, "DESCRIBE `".$_SESSION['dprefix']."textpattern`");
     if ($tables_exist) {
         echo graf(
-            span(setup_gTxt('tables_exist', array(
-                '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])),
-            ), 'raw'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('tables_exist', array(
+                    '{dbname}' => strong(txpspecialchars($_SESSION['ddb']))
+                ), 'raw'),
+                array('class' => 'alert-block error')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
 
         exit;
     }
 
-    // On 4.1 or greater use UTF-8-tables.
-    $version = mysqli_get_server_info($mylink);
-
-    if (version_compare($version, '4.1') >= 0) {
-        if (mysqli_query($mylink, "SET NAMES utf8")) {
-            $_SESSION['dbcharset'] = "utf8";
-        } else {
-            $_SESSION['dbcharset'] = "latin1";
-        }
+    // On MySQL 5.5.3+ use real UTF-8 tables, if the client supports it.
+    $_SESSION['dbcharset'] = "utf8mb4";
+    // Lower versions only support UTF-8 limited to 3 bytes per character
+    if (mysqli_get_server_version($mylink) < 50503) {
+        $_SESSION['dbcharset'] = "utf8";
     } else {
-        $_SESSION['dbcharset'] = "latin1";
+        if (false !== strpos(mysqli_get_client_info($mylink), 'mysqlnd')) {
+            // mysqlnd 5.0.9+ required
+            if (mysqli_get_client_version($mylink) < 50009) {
+                $_SESSION['dbcharset'] = "utf8";
+            }
+        } else {
+            // libmysqlclient 5.5.3+ required
+            if (mysqli_get_client_version($mylink) < 50503) {
+                $_SESSION['dbcharset'] = "utf8";
+            }
+        }
     }
 
     echo graf(
-        span(setup_gTxt('using_db', array(
-            '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])), ), 'raw').' ('.$_SESSION['dbcharset'].')', ' class="success"')
+        span(null, array('class' => 'ui-icon ui-icon-check')).' '.
+        setup_gTxt('using_db', array(
+            '{dbname}' => strong(txpspecialchars($_SESSION['ddb'])), ), 'raw').' ('.$_SESSION['dbcharset'].')',
+        array('class' => 'alert-block success')
     );
 
     echo setup_config_contents().
-        n.'</div>'.
         n.'</div>';
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders either stage 3: admin user details panel (on success), or stage 2:
+ * config details error message (on fail).
+ */
 
 function getTxpLogin()
 {
@@ -415,14 +465,16 @@ function getTxpLogin()
 
     global $txpcfg;
 
-    echo n.'<div class="txp-container" id="setup_container">';
-
     $problems = array();
 
     if (!isset($txpcfg['db'])) {
         if (!is_readable(txpath.'/config.php')) {
             $problems[] = graf(
-                span(setup_gTxt('config_php_not_found', array('{file}' => txpspecialchars(txpath.'/config.php')), 'raw'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('config_php_not_found', array(
+                    '{file}' => txpspecialchars(txpath.'/config.php')
+                ), 'raw'),
+                array('class' => 'alert-block error')
             );
         } else {
             @include txpath.'/config.php';
@@ -431,14 +483,15 @@ function getTxpLogin()
 
     if (!isset($txpcfg) || ($txpcfg['db'] != $_SESSION['ddb']) || ($txpcfg['table_prefix'] != $_SESSION['dprefix'])) {
         $problems[] = graf(
-            span(setup_gTxt('config_php_does_not_match_input', '', 'raw'), ' class="error"')
+            span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+            setup_gTxt('config_php_does_not_match_input', '', 'raw'),
+            array('class' => 'alert-block error')
         );
 
         echo txp_setup_progress_meter(2).
             n.'<div class="txp-setup">'.
             n.join(n, $problems).
             setup_config_contents().
-            n.'</div>'.
             n.'</div>';
 
         exit;
@@ -447,10 +500,10 @@ function getTxpLogin()
     // Default theme selector.
     $core_themes = array('classic', 'remora', 'hive');
 
-    $themes = theme::names();
+    $themes = \Textpattern\Admin\Theme::names();
 
     foreach ($themes as $t) {
-        $theme = theme::factory($t);
+        $theme = \Textpattern\Admin\Theme::factory($t);
 
         if ($theme) {
             $m = $theme->manifest();
@@ -465,50 +518,58 @@ function getTxpLogin()
     $theme_chooser = selectInput('theme', $vals, (isset($_SESSION['theme']) ? txpspecialchars($_SESSION['theme']) : 'hive'), '', '', 'setup_admin_theme');
 
     echo txp_setup_progress_meter(3).
-        n.'<div class="txp-setup">';
-
-    echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
-        hed(setup_gTxt('creating_db_tables'), 2).
-        graf(setup_gTxt('about_to_create')).
-
-        graf(
-            span('<label for="setup_user_realname">'.setup_gTxt('your_full_name').'</label>', ' class="txp-label"').
-            n.span(fInput('text', 'RealName', (isset($_SESSION['realname']) ? txpspecialchars($_SESSION['realname']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true), ' class="txp-value"')
+        n.'<div class="txp-setup">'.
+        n.'<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
+        hed(
+            setup_gTxt('creating_db_tables'), 2
         ).
-
         graf(
-            span('<label for="setup_user_login">'.setup_gTxt('setup_login').'</label>'.popHelp('setup_user_login'), ' class="txp-label"').
-            n.span(fInput('text', 'name', (isset($_SESSION['name']) ? txpspecialchars($_SESSION['name']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true), ' class="txp-value"')
+            setup_gTxt('about_to_create')
         ).
-
-        graf(
-            span('<label for="setup_user_pass">'.setup_gTxt('choose_password').'</label>'.popHelp('setup_user_pass'), ' class="txp-label"').
-            n.span(fInput('text', 'pass', (isset($_SESSION['pass']) ? txpspecialchars($_SESSION['pass']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true), ' class="txp-value"')
+        inputLabel(
+            'setup_user_realname',
+            fInput('text', 'RealName', (isset($_SESSION['realname']) ? txpspecialchars($_SESSION['realname']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true),
+            'your_full_name', '', array('class' => 'txp-form-field')
         ).
-
-        graf(
-            span('<label for="setup_user_email">'.setup_gTxt('your_email'), ' class="txp-label"').
-            n.span(fInput('email', 'email', (isset($_SESSION['email']) ? txpspecialchars($_SESSION['email']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true), ' class="txp-value"')
+        inputLabel(
+            'setup_user_email',
+            fInput('text', 'email', (isset($_SESSION['email']) ? txpspecialchars($_SESSION['email']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true),
+            'your_email', '', array('class' => 'txp-form-field')
         ).
-
-        hed(setup_gTxt('site_config'), 2).
-
-        graf(
-            span('<label for="setup_admin_theme">'.setup_gTxt('admin_theme').'</label>'.popHelp('theme_name'), ' class="txp-label"').
-            n.span($theme_chooser, ' class="txp-value"')
+        inputLabel(
+            'setup_user_login',
+            fInput('text', 'name', (isset($_SESSION['name']) ? txpspecialchars($_SESSION['name']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true),
+            'setup_login', 'setup_user_login', array('class' => 'txp-form-field')
         ).
-
+        inputLabel(
+            'setup_user_pass',
+            fInput('password', 'pass', (isset($_SESSION['pass']) ? txpspecialchars($_SESSION['pass']) : ''), 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).
+            n.tag(null, 'div', array('class' => 'strength-meter')).
+            n.tag(
+                checkbox('unmask', 1, false, 0, 'show_password').
+                n.tag(gTxt('setup_show_password'), 'label', array('for' => 'show_password')),
+                'div', array('class' => 'show-password')),
+            'choose_password', 'setup_user_pass', array('class' => 'txp-form-field')
+        ).
+        hed(
+            setup_gTxt('site_config'), 2
+        ).
+        inputLabel(
+            'setup_admin_theme',
+            $theme_chooser,
+            'admin_theme', 'theme_name', array('class' => 'txp-form-field')
+        ).
         graf(
             fInput('submit', 'Submit', setup_gTxt('next_step'), 'publish')
         ).
-
         sInput('createTxp').
         n.'</form>'.
-        n.'</div>'.
         n.'</div>';
 }
 
-// -------------------------------------------------------------
+/**
+ * Re-renders stage 3: admin user details panel, due to user input errors.
+ */
 
 function createTxp()
 {
@@ -521,41 +582,44 @@ function createTxp()
     $_SESSION['theme'] = ps('theme');
 
     if ($_SESSION['name'] == '') {
-        echo n.'<div class="txp-container" id="setup_container">'.
-            txp_setup_progress_meter(3).
+        echo txp_setup_progress_meter(3).
             n.'<div class="txp-setup">'.
             graf(
-                span(setup_gTxt('name_required'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('name_required'),
+                array('class' => 'alert-block error')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
+
         exit;
     }
 
     if (!$_SESSION['pass']) {
-        echo n.'<div class="txp-container" id="setup_container">'.
-            txp_setup_progress_meter(3).
+        echo txp_setup_progress_meter(3).
             n.'<div class="txp-setup">'.
             graf(
-                span(setup_gTxt('pass_required'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('pass_required'),
+                array('class' => 'alert-block error')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
+
         exit;
     }
 
     if (!is_valid_email($_SESSION['email'])) {
-        echo n.'<div class="txp-container" id="setup_container">'.
-            txp_setup_progress_meter(3).
+        echo txp_setup_progress_meter(3).
             n.'<div class="txp-setup">'.
             graf(
-                span(setup_gTxt('email_required'), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('email_required'),
+                array('class' => 'alert-block error')
             ).
             setup_back_button(__FUNCTION__).
-            n.'</div>'.
             n.'</div>';
+
         exit;
     }
 
@@ -563,72 +627,45 @@ function createTxp()
 
     if (!isset($txpcfg['db'])) {
         if (!is_readable(txpath.'/config.php')) {
-            $problems[] = graf('<span class="error">'.setup_gTxt('config_php_not_found', array('{file}' => txpspecialchars(txpath.'/config.php')), 'raw').'</span>');
+            $problems[] = graf(
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('config_php_not_found', array(
+                    '{file}' => txpspecialchars(txpath.'/config.php')
+                ), 'raw'),
+                array('class' => 'alert-block error')
+            );
         } else {
             @include txpath.'/config.php';
         }
     }
 
     if (!isset($txpcfg) || ($txpcfg['db'] != $_SESSION['ddb']) || ($txpcfg['table_prefix'] != $_SESSION['dprefix'])) {
-        $problems[] = graf('<span class="error">'.setup_gTxt('config_php_does_not_match_input', 'raw').'</span>');
+        $problems[] = graf(
+            span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+            setup_gTxt('config_php_does_not_match_input', '', 'raw'),
+            array('class' => 'alert-block error')
+        );
+
         echo txp_setup_progress_meter(3).
             n.'<div class="txp-setup">'.
             n.join(n, $problems).
             n.setup_config_contents().
-            n.'</div>'.
             n.'</div>';
+
         exit;
     }
 
-    $ddb = $txpcfg['db'];
-    $duser = $txpcfg['user'];
-    $dpass = $txpcfg['pass'];
-    $dhost = $txpcfg['host'];
-    $dclient_flags = isset($txpcfg['client_flags']) ? $txpcfg['client_flags'] : 0;
-    $dprefix = $txpcfg['table_prefix'];
-    $dbcharset = $txpcfg['dbcharset'];
-
-    $siteurl = str_replace("http://", '', $_SESSION['siteurl']);
-    $siteurl = str_replace(' ', '%20', rtrim($siteurl, "/"));
-    $urlpath = preg_replace('#^[^/]+#', '', $siteurl);
-
-    define("PFX", trim($dprefix));
     define('TXP_INSTALL', 1);
 
     include_once txpath.'/lib/txplib_update.php';
     include txpath.'/setup/txpsql.php';
 
-    $nonce = md5(uniqid(rand(), true));
-    $hash  = doSlash(txp_hash_password($_SESSION['pass']));
-
-    mysqli_query($link, "INSERT INTO `".PFX."txp_users` VALUES
-        (1,
-        '".doSlash($_SESSION['name'])."',
-        '$hash',
-        '".doSlash($_SESSION['realname'])."',
-        '".doSlash($_SESSION['email'])."',
-        1,
-        now(),
-        '$nonce')"
-    );
-
-    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".doSlash($siteurl)."' where `name`='siteurl'");
-    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");
-    mysqli_query($link, "update `".PFX."txp_prefs` set val = '".getlocale(LANG)."' where `name`='locale'");
-    mysqli_query($link, "update `".PFX."textpattern` set Body = replace(Body, 'siteurl', '".
-        doSlash($urlpath)."'), Body_html = replace(Body_html, 'siteurl', '".
-        doSlash($urlpath)."') WHERE ID = 1");
-
-    // cf. update/_to_4.2.0.php.
-    // TODO: Position might need altering when prefs panel layout is altered.
-    $theme = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
-    mysqli_query($link, "insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".
-        doSlash($theme)."', type = '1', event = 'admin', html = 'themename', position = '160'");
-
     echo fbCreate();
 }
 
-// -------------------------------------------------------------
+/**
+ * Populate a textarea with config.php file code.
+ */
 
 function makeConfig()
 {
@@ -658,53 +695,54 @@ function makeConfig()
     .$close;
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders stage 4: either installation completed panel (success) or
+ * installation error message (fail).
+ */
 
 function fbCreate()
 {
-    echo n.'<div class="txp-container" id="setup_container">'.
-        txp_setup_progress_meter(4).
+    echo txp_setup_progress_meter(4).
         n.'<div class="txp-setup">';
 
     if ($GLOBALS['txp_install_successful'] === false) {
         return graf(
-                span(setup_gTxt('errors_during_install', array(
-                    '{num}' => $GLOBALS['txp_err_count'],
-                )), ' class="error"')
+                span(null, array('class' => 'ui-icon ui-icon-closethick')).' '.
+                setup_gTxt('config_php_not_found', array(
+                    '{num}' => $GLOBALS['txp_err_count']
+                )),
+                array('class' => 'alert-block error')
             ).
-            n.'</div>'.
+            n.'<ol>'.
+            $GLOBALS['txp_err_html'].
+            n.'</ol>'.
             n.'</div>';
     } else {
         // Clear the session so no data is leaked.
         $_SESSION = array();
 
         $warnings = @find_temp_dir() ? '' : graf(
-            span(setup_gTxt('set_temp_dir_prefs'), ' class="warning"')
+            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+            setup_gTxt('set_temp_dir_prefs'),
+            array('class' => 'alert-block warning')
         );
 
         $login_url = $GLOBALS['rel_txpurl'].'/index.php';
 
         return hed(setup_gTxt('that_went_well'), 1).
-
             $warnings.
-
             graf(
                 setup_gTxt('you_can_access', array(
                     'index.php' => $login_url,
                 ))
             ).
-
             graf(
                 setup_gTxt('installation_postamble')
             ).
-
             hed(setup_gTxt('thanks_for_interest'), 3).
-
             graf(
                 href(setup_gTxt('go_to_login'), $login_url, ' class="navlink publish"')
             ).
-
-            n.'</div>'.
             n.'</div>';
     }
 }
@@ -741,15 +779,11 @@ function setup_back_button($current = null)
 
     $prev = isset($prevSteps[$current]) ? $prevSteps[$current] : '';
 
-    return graf(
-        setup_gTxt('please_go_back')
-    ).
-    graf(
-        '<form method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
+    return graf(setup_gTxt('please_go_back')).
+        n.'<form method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         sInput($prev).
-        fInput('submit', 'submit', setup_gTxt('back'), 'navlink').
-        '</form>'
-    );
+        fInput('submit', 'submit', setup_gTxt('back'), 'navlink publish').
+        n.'</form>';
 }
 
 // -------------------------------------------------------------
@@ -805,8 +839,12 @@ function langs()
 
     $default = (!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'en-gb');
 
-    $out = n.'<p><label for="setup_language">Please choose a language</label>'.
-        br.'<select name="lang" id="setup_language">';
+    $out = n.'<div class="txp-form-field">'.
+        n.'<div class="txp-form-field-label">'.
+        n.'<label for="setup_language">Please choose a language</label>'.
+        n.'</div>'.
+        n.'<div class="txp-form-field-value">'.
+        n.'<select id="setup_language" name="lang">';
 
     foreach ($langs as $a => $b) {
         $out .= n.'<option value="'.txpspecialchars($a).'"'.
@@ -814,7 +852,9 @@ function langs()
             '>'.txpspecialchars($b).'</option>';
     }
 
-    $out .= n.'</select></p>';
+    $out .= n.'</select>'.
+        n.'</div>'.
+        n.'</div>';
 
     return $out;
 }

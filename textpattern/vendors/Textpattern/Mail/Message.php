@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,7 +28,9 @@
  * @package Mail
  */
 
-class Textpattern_Mail_Message
+namespace Textpattern\Mail;
+
+class Message
 {
     /**
      * An array of senders.

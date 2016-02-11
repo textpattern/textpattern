@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,18 +28,20 @@
  * @package Mail
  */
 
-interface Textpattern_Mail_AdapterInterface extends Textpattern_Adaptable_AdapterInterface
+namespace Textpattern\Mail;
+
+interface AdapterInterface extends \Textpattern\Adaptable\AdapterInterface
 {
     /**
      * Sets the subject.
      *
      * <code>
-     * Txp::get('Textpattern_Mail_Compose')->subject('My subject');
+     * Txp::get('\Textpattern\Mail\Compose')->subject('My subject');
      * </code>
      *
      * @param  string $subject The subject
-     * @return Textpattern_Mail_AdapterInterface
-     * @throws Textpattern_Mail_Exception
+     * @return AdapterInterface
+     * @throws \Textpattern\Mail\Exception
      */
 
     public function subject($subject);
@@ -48,12 +50,12 @@ interface Textpattern_Mail_AdapterInterface extends Textpattern_Adaptable_Adapte
      * Sets the message.
      *
      * <code>
-     * Txp::get('Textpattern_Mail_Compose')->body('Plain-text based message.');
+     * Txp::get('\Textpattern\Mail\Compose')->body('Plain-text based message.');
      * </code>
      *
      * @param  string $body The message
-     * @return Textpattern_Mail_AdapterInterface
-     * @throws Textpattern_Mail_Exception
+     * @return AdapterInterface
+     * @throws \Textpattern\Mail\Exception
      */
 
     public function body($body);
@@ -62,13 +64,13 @@ interface Textpattern_Mail_AdapterInterface extends Textpattern_Adaptable_Adapte
      * Sets an additional header.
      *
      * <code>
-     * Txp::get('Textpattern_Mail_Compose')->header('X-Mailer', 'abc_plugin');
+     * Txp::get('\Textpattern\Mail\Compose')->header('X-Mailer', 'abc_plugin');
      * </code>
      *
      * @param  string $name  The header name
      * @param  string $value The value
-     * @return Textpattern_Mail_AdapterInterface
-     * @throws Textpattern_Mail_Exception
+     * @return AdapterInterface
+     * @throws \Textpattern\Mail\Exception
      */
 
     public function header($name, $value);
@@ -77,7 +79,7 @@ interface Textpattern_Mail_AdapterInterface extends Textpattern_Adaptable_Adapte
      * Sends an email.
      *
      * <code>
-     * Txp::get('Textpattern_Mail_Compose')
+     * Txp::get('\Textpattern\Mail\Compose')
      *     ->to('to@example.com')
      *     ->from('from@example.com')
      *     ->subject('Subject')
@@ -85,8 +87,8 @@ interface Textpattern_Mail_AdapterInterface extends Textpattern_Adaptable_Adapte
      *     ->send();
      * </code>
      *
-     * @return Textpattern_Mail_AdapterInterface
-     * @throws Textpattern_Mail_Exception
+     * @return AdapterInterface
+     * @throws \Textpattern\Mail\Exception
      */
 
     public function send();

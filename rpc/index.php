@@ -7,7 +7,7 @@
  * XML-RPC Server for Textpattern 4.0.x
  * http://txp.kusor.com/rpc-api
  *
- * Copyright (C) 2005-2006, 2015 The Textpattern Development Team
+ * Copyright (C) 2005-2006, 2016 The Textpattern Development Team
  * Author: Pedro Palazón - http://kusor.com
  *
  * This file is part of Textpattern.
@@ -76,6 +76,15 @@ require_once txpath.'/lib/txplib_db.php';
 require_once txpath.'/lib/txplib_misc.php';
 require_once txpath.'/lib/admin_config.php';
 require_once txpath.'/lib/IXRClass.php';
+
+require_once txpath.'/vendors/Textpattern/Loader.php';
+
+$loader = new \Textpattern\Loader(txpath.'/vendors');
+$loader->register();
+
+$loader = new \Textpattern\Loader(txpath.'/lib');
+$loader->register();
+
 
 if ($connected && numRows(safe_query("show tables like '".PFX."textpattern'"))) {
     // TODO: where is dbversion used?

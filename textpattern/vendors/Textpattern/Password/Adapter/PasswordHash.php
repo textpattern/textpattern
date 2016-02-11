@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,12 +28,14 @@
  * @package Password
  */
 
-class Textpattern_Password_Adapter_PasswordHash implements Textpattern_Password_AdapterInterface
+namespace Textpattern\Password\Adapter;
+
+class PasswordHash implements \Textpattern\Password\AdapterInterface
 {
     /**
      * Stores an instance of PHPass.
      *
-     * @var PasswordHash
+     * @var \PasswordHash
      */
 
     private $phpass;
@@ -44,7 +46,7 @@ class Textpattern_Password_Adapter_PasswordHash implements Textpattern_Password_
 
     public function __construct()
     {
-        $this->phpass = new PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
+        $this->phpass = new \PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
     }
 
     /**

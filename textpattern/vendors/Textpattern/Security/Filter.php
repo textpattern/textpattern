@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -25,14 +25,18 @@
  * Basic security filter options.
  *
  * <code>
- * Txp::get('Textpattern_Security_Filter')->registerGlobals()->setMaxRequestUriLength(255);
+ * Txp::get('\Textpattern\Security\Filter')->registerGlobals()->setMaxRequestUriLength(255);
  * </code>
  *
  * @since   4.6.0
  * @package Security.
  */
 
-class Textpattern_Security_Filter
+namespace Textpattern\Security;
+
+use \Txp;
+
+class Filter
 {
     /**
      * An array of protected superglobals.
@@ -55,16 +59,16 @@ class Textpattern_Security_Filter
     /**
      * Protection from those who'd bomb the site by GET.
      *
-     * @throws Textpattern_Security_Exception
-     * @return Textpattern_Security_Filter
+     * @throws \Textpattern\Security\Exception
+     * @return \Textpattern\Security\Filter
      */
 
     public function setMaxRequestUriLength($length)
     {
-        $uri = Txp::get('Textpattern_Server_Config')->getVariable('REQUEST_URI');
+        $uri = Txp::get('\Textpattern\Server\Config')->getVariable('REQUEST_URI');
 
         if (strlen($uri) > $length) {
-            throw new Textpattern_Security_Exception('Requested URL length exceeds application limit.');
+            throw new Exception('Requested URL length exceeds application limit.');
         }
 
         return $this;
@@ -75,25 +79,25 @@ class Textpattern_Security_Filter
      *
      * Protects the server from global registering and overwriting attempts.
      *
-     * @throws Textpattern_Security_Exception
-     * @return Textpattern_Security_Filter
+     * @throws \Textpattern\Security\Exception
+     * @return \Textpattern\Security\Filter
      */
 
     public function registerGlobals()
     {
-        if (Txp::get('Textpattern_Server_Config')->getRegisterGlobals()) {
+        if (Txp::get('\Textpattern\Server\Config')->getRegisterGlobals()) {
             if (array_key_exists('GLOBALS', $_REQUEST) || array_key_exists('GLOBALS', $_FILES)) {
-                throw new Textpattern_Security_Exception('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
+                throw new Exception('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
             }
 
             $variables = array_merge(
-                isset($_SESSION) ? (array) $_SESSION : array(),
-                (array) $_ENV,
-                (array) $_GET,
-                (array) $_POST,
-                (array) $_COOKIE,
-                (array) $_FILES,
-                (array) $_SERVER
+                isset($_SESSION) ? (array)$_SESSION : array(),
+                (array)$_ENV,
+                (array)$_GET,
+                (array)$_POST,
+                (array)$_COOKIE,
+                (array)$_FILES,
+                (array)$_SERVER
             );
 
             foreach ($variables as $variable => $value) {

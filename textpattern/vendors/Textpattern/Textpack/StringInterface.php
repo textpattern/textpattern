@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -21,6 +21,8 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace Textpattern\Textpack;
+
 /**
  * Textpack string template.
  *
@@ -28,7 +30,7 @@
  * @package Textpack
  */
 
-interface Textpattern_Textpack_StringInterface
+interface StringInterface
 {
     /**
      * Gets the name of the string.

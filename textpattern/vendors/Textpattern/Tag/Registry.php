@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,7 +28,9 @@
  * @package Tag
  */
 
-class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterface
+namespace Textpattern\Tag;
+
+class Registry implements \Textpattern\Container\ReusableInterface
 {
     /**
      * Stores registered tags.
@@ -42,16 +44,17 @@ class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterfac
      * Registers a tag.
      *
      * <code>
-     * Txp::get('Textpattern_Tag_Registry')->register(array('class', 'method'), 'tag');
+     * Txp::get('\Textpattern\Tag\Registry')->register(array('class', 'method'), 'tag');
      * </code>
      *
      * @param  callback    $callback The tag callback
      * @param  string|null $tag      The tag name
-     * @return Textpattern_Tag_Registry
+     * @return \Textpattern\Tag\Registry
      */
 
     public function register($callback, $tag = null)
     {
+        // is_callable only checks syntax here to avoid autoloading
         if (is_callable($callback, true)) {
             if ($tag === null && is_string($callback)) {
                 $tag = $callback;
@@ -71,13 +74,15 @@ class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterfac
      * @param  string      $tag   The tag
      * @param  array       $atts  An array of Attributes
      * @param  string|null $thing The contained statement
-     * @return string|null The tag's results
+     * @return string|bool The tag's results (string) or FALSE on unknown tags
      */
 
     public function process($tag, array $atts = null, $thing = null)
     {
         if ($this->isRegistered($tag)) {
-            return call_user_func($this->tags[$tag], (array) $atts, $thing);
+            return (string) call_user_func($this->tags[$tag], (array)$atts, $thing);
+        } else {
+            return false;
         }
     }
 
@@ -85,7 +90,7 @@ class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterfac
      * Checks if a tag is registered.
      *
      * @param  string $tag The tag
-     * @return bool   TRUE if the tag exists
+     * @return bool TRUE if the tag exists
      */
 
     public function isRegistered($tag)

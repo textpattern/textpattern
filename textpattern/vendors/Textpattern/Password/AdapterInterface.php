@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,7 +28,9 @@
  * @package Password
  */
 
-interface Textpattern_Password_AdapterInterface extends Textpattern_Adaptable_AdapterInterface
+namespace Textpattern\Password;
+
+interface AdapterInterface extends \Textpattern\Adaptable\AdapterInterface
 {
     /**
      * Verifies the password.
