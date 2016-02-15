@@ -920,7 +920,7 @@ nav ol:after,
     margin: 0;
   }
   /**
- * Use indicator icon to signify the downdown ability of `select`.
+ * Use indicator icon to signify the drop-down ability of `select`.
  */
   select {
     padding-right: 1.5em;

@@ -1404,7 +1404,7 @@ input[type="radio"] + label:last-of-type {
 }
 
 /**
- * Use indicator icon to signify the downdown ability of `select`.
+ * Use indicator icon to signify the drop-down ability of `select`.
  */
 select {
   padding-right: 1.30769230769231em;
@@ -2644,7 +2644,7 @@ button.txp-nav-toggle {
 }
 
 /**
- * Show dropdown menu when downdown toggle clicked.
+ * Show drop-down menu when toggle clicked.
  *
  * Example HTML:
  *
