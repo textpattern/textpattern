@@ -2268,13 +2268,8 @@ function comment_name_input($atts)
     $h5 = ($prefs['doctype'] == 'html5');
 
     if (ps('preview')) {
-        $name  = ps('name');
-        $namewarn = ($prefs['comments_require_name'] && !trim($name));
-
-        if ($namewarn) {
-            $evaluator = & get_comment_evaluator();
-            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_name_required'));
-        }
+        $name = getComment()['name'];
+        $namewarn = ($prefs['comments_require_name'] && !$name);
     }
 
     return fInput('text', 'name', $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name']);
@@ -2295,13 +2290,8 @@ function comment_email_input($atts)
     $h5 = ($prefs['doctype'] == 'html5');
 
     if (ps('preview')) {
-        $email  = clean_url(ps('email'));
-        $emailwarn = ($prefs['comments_require_email'] && !trim($email));
-
-        if ($emailwarn) {
-            $evaluator = & get_comment_evaluator();
-            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_email_required'));
-        }
+        $email = getComment()['email'];
+        $emailwarn = ($prefs['comments_require_email'] && !$email);
     }
 
     return fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
@@ -2321,7 +2311,7 @@ function comment_web_input($atts)
     $h5 = ($prefs['doctype'] == 'html5');
 
     if (ps('preview')) {
-        $web  = clean_url(ps('web'));
+        $web = getComment()['web'];
     }
 
     return fInput($h5 ? 'text' : 'text', 'web', $web, 'comment_web_input', '', '', $size, '', 'web', false, false); /* TODO: maybe use type = 'url' once browsers are less strict */
@@ -2342,14 +2332,10 @@ function comment_message_input($atts)
     $commentwarn = false;
     $n_message = 'message';
     $formnonce = '';
-    $message = doDeEnt(ps('message'));
-
-    if ($message == '') { // Second or later preview will have randomised message-field name.
-        $in = getComment();
-        $message = doDeEnt($in['message']);
-    }
+    $message = '';
 
     if (ps('preview')) {
+        $message = getComment()['message'];
         $split = rand(1, 31);
         $nonce = getNextNonce();
         $secret = getNextSecret();
@@ -2357,11 +2343,6 @@ function comment_message_input($atts)
         $n_message = md5('message'.$secret);
         $formnonce = n.hInput(substr($nonce, 0, $split), substr($nonce, $split));
         $commentwarn = (!trim($message));
-
-        if ($commentwarn) {
-            $evaluator = & get_comment_evaluator();
-            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_required'));
-        }
     }
 
     $required = ($prefs['doctype'] == 'html5') ? ' required' : '';
