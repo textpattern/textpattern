@@ -706,7 +706,11 @@ function list_multi_edit()
                     $a['Status'] = ($a['Status'] >= STATUS_LIVE) ? STATUS_DRAFT : $a['Status'];
 
                     foreach ($a as $name => &$value) {
-                        $value = "`$name` = '".doSlash($value)."'";
+                        if ($name == 'Expires' && !$value) {
+                            $value = "Expires = NULL";
+                        } else {
+                            $value = "`$name` = '".doSlash($value)."'";
+                        }
                     }
 
                     if ($id = (int) safe_insert('textpattern', join(',', $a))) {
