@@ -25,12 +25,14 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
+safe_drop_column('txp_prefs', 'prefs_id');
+
 // Support for per-user private prefs.
 $cols = getThings("DESCRIBE `".PFX."txp_prefs`");
 if (!in_array('user_name', $cols)) {
     safe_alter('txp_prefs', "ADD user_name VARCHAR(64) NOT NULL DEFAULT ''");
     safe_drop_index('txp_prefs', 'prefs_idx');
-    safe_alter('txp_prefs', "ADD UNIQUE prefs_idx (prefs_id, name, user_name)");
+    safe_alter('txp_prefs', "ADD UNIQUE prefs_idx (name, user_name)");
     safe_create_index('txp_prefs', 'user_name', 'user_name');
 }
 
@@ -47,18 +49,18 @@ safe_update('txp_prefs', "html = 'commentsendmail'", "name = 'comments_sendmail'
 safe_update('txp_prefs', "html = 'is_dst'", "name = 'is_dst' AND html = 'yesnoradio'");
 
 if (!safe_field("name", 'txp_prefs', "name = 'auto_dst'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'auto_dst', val = '0', type = '0', event = 'publish', html = 'yesnoradio', position = '115'");
+    safe_insert('txp_prefs', "name = 'auto_dst', val = '0', type = '0', event = 'publish', html = 'yesnoradio', position = '115'");
 }
 
 if (!safe_field("name", 'txp_prefs', "name = 'timezone_key'")) {
     $tz = new timezone;
     $tz = $tz->key($gmtoffset);
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'timezone_key', val = '$tz', type = '2', event = 'publish', html = 'textinput', position = '0'");
+    safe_insert('txp_prefs', "name = 'timezone_key', val = '$tz', type = '2', event = 'publish', html = 'textinput', position = '0'");
 }
 
 // Default event admin pref.
 if (!safe_field("name", 'txp_prefs', "name = 'default_event'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'default_event', val = 'article', type = '1', event = 'admin', html = 'default_event', position = '150'");
+    safe_insert('txp_prefs', "name = 'default_event', val = 'article', type = '1', event = 'admin', html = 'default_event', position = '150'");
 }
 
 // Add columns for thumbnail dimensions.
@@ -81,7 +83,7 @@ if (!in_array('flags', $cols)) {
 
 // Default theme.
 if (!safe_field("name", 'txp_prefs', "name = 'theme_name'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'theme_name', val = 'classic', type = '1', event = 'admin', html = 'themename', position = '160'");
+    safe_insert('txp_prefs', "name = 'theme_name', val = 'classic', type = '1', event = 'admin', html = 'themename', position = '160'");
 }
 
 safe_alter('txp_plugin', "MODIFY code         MEDIUMTEXT NOT NULL");

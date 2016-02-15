@@ -370,7 +370,6 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_plugin` (
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
-    prefs_id  INT               NOT NULL DEFAULT '1',
     name      VARCHAR(255)      NOT NULL DEFAULT '',
     val       TEXT              NOT NULL,
     type      SMALLINT UNSIGNED NOT NULL DEFAULT '2',
@@ -379,7 +378,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
     position  SMALLINT UNSIGNED NOT NULL DEFAULT '0',
     user_name VARCHAR(64)       NOT NULL DEFAULT '',
 
-    UNIQUE prefs_idx (prefs_id, name(185), user_name),
+    UNIQUE prefs_idx (name(186), user_name),
     INDEX  name      (name(250)),
     INDEX  user_name (user_name)
 ) $tabletype ";
@@ -468,7 +467,6 @@ $prefs = array(
         array(2,   0, 'text_input'      , 'locale'                     , getlocale(LANG)),
         array(2,   0, 'text_input'      , 'path_from_root'             , '/'),
         array(2,   0, 'text_input'      , 'path_to_site'               , dirname(txpath)),
-        array(2,   0, 'text_input'      , 'prefs_id'                   , '1'),
         array(2,   0, 'text_input'      , 'searchable_article_fields'  , 'Title, Body'),
         array(2,   0, 'text_input'      , 'textile_updated'            , '1'),
         array(2,   0, 'text_input'      , 'timeoffset'                 , '0'),

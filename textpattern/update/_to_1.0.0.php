@@ -25,6 +25,7 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
+safe_drop_column('txp_prefs', 'prefs_id');
 safe_delete('txp_category', "name = ''");
 safe_delete('txp_category', "name = ' '");
 
@@ -196,35 +197,35 @@ safe_insert('txp_category', "name = 'root', parent = '', type = 'image', lft = 1
 rebuild_tree('root', 1, 'image');
 
 if (safe_field("val", 'txp_prefs', "name = 'article_list_pageby'") === false) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'article_list_pageby', val = 25");
+    safe_insert('txp_prefs', "name = 'article_list_pageby', val = 25");
 }
 
 if (safe_field("val", 'txp_prefs', "name = 'link_list_pageby'") === false) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'link_list_pageby', val = 25");
+    safe_insert('txp_prefs', "name = 'link_list_pageby', val = 25");
 }
 
 if (safe_field("val", 'txp_prefs', "name = 'image_list_pageby'") === false) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'image_list_pageby', val = 25");
+    safe_insert('txp_prefs', "name = 'image_list_pageby', val = 25");
 }
 
 if (safe_field("val", 'txp_prefs', "name = 'log_list_pageby'") === false) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'log_list_pageby', val = 25");
+    safe_insert('txp_prefs', "name = 'log_list_pageby', val = 25");
 }
 
 if (safe_field("val", 'txp_prefs', "name = 'comment_list_pageby'") === false) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'comment_list_pageby', val = 25");
+    safe_insert('txp_prefs', "name = 'comment_list_pageby', val = 25");
 }
 
 if (safe_field("val", 'txp_prefs', "name = 'permlink_mode'") === false) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'permlink_mode', val = 'section_id_title'");
+    safe_insert('txp_prefs', "name = 'permlink_mode', val = 'section_id_title'");
 }
 
 if (safe_field("val", 'txp_prefs', "name = 'comments_are_ol'") === false) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'comments_are_ol', val = '1'");
+    safe_insert('txp_prefs', "name = 'comments_are_ol', val = '1'");
 }
 
 if (safe_field("name", 'txp_prefs', "name = 'path_to_site'") === false) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'path_to_site', val = ''");
+    safe_insert('txp_prefs', "name = 'path_to_site', val = ''");
 }
 
 // 1.0: need to get non-manually set url-only titles into the textpattern table,
@@ -296,7 +297,7 @@ switch ($lang) {
 // 1.0: new time zone offset.
 // If we check for a val, and the val is 0, this add another empty one.
 if (safe_field("name", 'txp_prefs', "name = 'is_dst'") === false) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'is_dst', val = 0");
+    safe_insert('txp_prefs', "name = 'is_dst', val = 0");
 }
 
 // FIXME: this presupposes 'gmtoffset' won't be set at clean install (RC4+ probably will)
@@ -304,29 +305,29 @@ if (safe_field("val", 'txp_prefs', "name = 'gmtoffset'") === false) {
     $old_offset = safe_field("val", 'txp_prefs', "name = 'timeoffset'");
     $serveroffset = gmmktime(0, 0, 0) - mktime(0, 0, 0);
     $gmtoffset = sprintf("%+d", $serveroffset + $old_offset);
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'gmtoffset', val = '".doSlash($gmtoffset)."'");
+    safe_insert('txp_prefs', "name = 'gmtoffset', val = '".doSlash($gmtoffset)."'");
 }
 
 $tempdir = doSlash(find_temp_dir());
 
 // 1.0: locale support.
 if (safe_field("val", 'txp_prefs', "name = 'locale'") === false) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'locale', val = 'en_GB'");
+    safe_insert('txp_prefs', "name = 'locale', val = 'en_GB'");
 }
 
 // 1.0: temp dir.
 if (safe_field("val", 'txp_prefs', "name = 'tempdir'") === false) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'tempdir', val = '$tempdir'");
+    safe_insert('txp_prefs', "name = 'tempdir', val = '$tempdir'");
 }
 
 // Non image file upload tab.
 if (safe_field("val", 'txp_prefs', "name = 'file_list_pageby'") === false) {
-    safe_insert('txp_prefs', "val = 25, name = 'file_list_pageby', prefs_id = 1");
+    safe_insert('txp_prefs', "val = 25, name = 'file_list_pageby'");
 }
 
 // 1.0: max file upload size.
 if (safe_field("val", 'txp_prefs', "name = 'file_max_upload_size'") === false) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'file_max_upload_size', val = 2000000");
+    safe_insert('txp_prefs', "name = 'file_max_upload_size', val = 2000000");
 }
 
 // 1.0: txp_file root cat.
@@ -337,7 +338,7 @@ rebuild_tree('root', 1, 'file');
 
 // 1.0: txp_file folder.
 if (safe_field("val", 'txp_prefs', "name = 'file_base_path'") === false) {
-    safe_insert('txp_prefs', "val = '$tempdir', name = 'file_base_path', prefs_id = 1");
+    safe_insert('txp_prefs', "val = '$tempdir', name = 'file_base_path'");
 }
 
 // 1.0: txp_file table.
@@ -405,16 +406,16 @@ while ($a = @mysqli_fetch_assoc($rs)) {
 // Blog unique id.
 if (safe_field("val", 'txp_prefs', "name = 'blog_uid'") === false) {
     $prefs['blog_uid'] = md5(uniqid(rand(), true));
-    safe_insert('txp_prefs', "name = 'blog_uid', val = '".$prefs['blog_uid']."', prefs_id = '1'");
+    safe_insert('txp_prefs', "name = 'blog_uid', val = '".$prefs['blog_uid']."'");
 }
 
 if (safe_field("name", 'txp_prefs', "name = 'blog_mail_uid'") === false) {
     $mail = safe_field('email', 'txp_users', "privs = '1' LIMIT 1");
-    safe_insert('txp_prefs', "name = 'blog_mail_uid', val = '".doSlash($mail)."', prefs_id = '1'");
+    safe_insert('txp_prefs', "name = 'blog_mail_uid', val = '".doSlash($mail)."'");
 }
 
 if (safe_field("val", 'txp_prefs', "name = 'blog_time_uid'") === false) {
-    safe_insert('txp_prefs', "name = 'blog_time_uid', val = '".date("Y")."', prefs_id = '1'");
+    safe_insert('txp_prefs', "name = 'blog_time_uid', val = '".date("Y")."'");
 }
 
 // Articles unique id.
@@ -464,7 +465,7 @@ if (safe_count('txp_category', "title = ''") > 0) {
 }
 
 // 1.0: Unique key and 'type' field for the txp_prefs table.
-safe_create_index('txp_prefs', 'prefs_id, name', 'prefs_idx', 'unique');
+safe_create_index('txp_prefs', 'name', 'prefs_idx', 'unique');
 
 $txpprefs = getThings('DESCRIBE `'.PFX.'txp_prefs`');
 
@@ -520,7 +521,7 @@ if (!in_array('position', $txpprefs)) {
     );
 
     foreach ($prefs_new_cols as $pref_key => $pref_val) {
-        safe_update('txp_prefs', "html = '$pref_val[html]', event = '$pref_val[event]', type = '$pref_val[type]', position = '$pref_val[position]'", "name = '$pref_key' AND prefs_id = '1'");
+        safe_update('txp_prefs', "html = '$pref_val[html]', event = '$pref_val[event]', type = '$pref_val[type]', position = '$pref_val[position]'", "name = '$pref_key'");
     }
 
     $prefs_hidden_rows = array('prefs_id', 'use_categories', 'use_sections', 'path_from_root', 'url_mode', 'record_mentions',
@@ -529,7 +530,7 @@ if (!in_array('position', $txpprefs)) {
         'log_list_pageby',);
 
     foreach ($prefs_hidden_rows as $hidden_pref) {
-        safe_update('txp_prefs', "type = '2'", "name = '$hidden_pref' AND prefs_id = '1'");
+        safe_update('txp_prefs', "type = '2'", "name = '$hidden_pref'");
     }
 
     global $txpac;
@@ -580,7 +581,7 @@ if (!in_array('position', $txpprefs)) {
                     $evt = 'publish';
                 break;
             }
-            safe_insert('txp_prefs', "val = '$val', name = '$key' , prefs_id = '1', type = '1', html = '$html', event = '$evt'");
+            safe_insert('txp_prefs', "val = '$val', name = '$key' , type = '1', html = '$html', event = '$evt'");
         }
     }
 }
@@ -638,7 +639,7 @@ $maxpos = safe_field("MAX(position)", 'txp_prefs', "1 = 1");
 
 // 1.0: production_status setting to control error reporting.
 if (safe_field("val", 'txp_prefs', "name = 'production_status'") === false) {
-    safe_insert('txp_prefs', "name = 'production_status', val = 'testing', prefs_id = '1', type = '0', position = '".doSlash($maxpos)."', html = 'prod_levels'");
+    safe_insert('txp_prefs', "name = 'production_status', val = 'testing', type = '0', position = '".doSlash($maxpos)."', html = 'prod_levels'");
 }
 
 // Multiply position on prefs to allow easy reordering.
@@ -656,11 +657,11 @@ safe_update('txp_prefs', "type = '1'", "name = 'file_base_path'");
 
 // 1.0: add option to override charset for emails (ISO-8559-1 instead of UTF-8).
 if (safe_field("name", 'txp_prefs', "name = 'override_emailcharset'") === false) {
-    safe_insert('txp_prefs', "name = 'override_emailcharset', val = '0', prefs_id = '1', type = '1', event = 'admin', position = '".doSlash($maxpos)."', html = 'yesnoradio'");
+    safe_insert('txp_prefs', "name = 'override_emailcharset', val = '0', type = '1', event = 'admin', position = '".doSlash($maxpos)."', html = 'yesnoradio'");
 }
 
 if (safe_field("val", 'txp_prefs', "name = 'comments_auto_append'") === false) {
-    safe_insert('txp_prefs', "val = '1', name = 'comments_auto_append' , prefs_id = '1', type = '0', html = 'yesnoradio', event = 'comments', position = '211'");
+    safe_insert('txp_prefs', "val = '1', name = 'comments_auto_append' , type = '0', html = 'yesnoradio', event = 'comments', position = '211'");
 
     $form = <<<EOF
 <txp:comments />
@@ -677,7 +678,7 @@ if (!safe_count('txp_file', "1")) {
     $tempdir = find_temp_dir();
 
     if ($tempdir === safe_field("val", 'txp_prefs', "name = 'file_base_path'")) {
-        safe_update('txp_prefs', "val = '".doSlash(dirname(txpath).DS.'files')."', prefs_id = 1", "name = 'file_base_path'");
+        safe_update('txp_prefs', "val = '".doSlash(dirname(txpath).DS.'files')."'", "name = 'file_base_path'");
     }
 }
 
@@ -697,11 +698,11 @@ safe_update('txp_prefs', "type = 2", "name = 'language'");
 // Show gmt-selection in prefs.
 safe_update('txp_prefs', "type = 0, html = 'gmtoffset_select', position = 50", "name = 'gmtoffset'");
 
-if (safe_field("name", 'txp_prefs', "prefs_id = 1 AND name = 'plugin_cache_dir'") === false) {
+if (safe_field("name", 'txp_prefs', "name = 'plugin_cache_dir'") === false) {
     $maxpos = safe_field("MAX(position)", 'txp_prefs', "1 = 1");
-    safe_insert('txp_prefs', "name = 'plugin_cache_dir', val = '', prefs_id = '1', type = '1', event = 'admin', position = '".doSlash($maxpos)."', html = 'text_input'");
+    safe_insert('txp_prefs', "name = 'plugin_cache_dir', val = '', type = '1', event = 'admin', position = '".doSlash($maxpos)."', html = 'text_input'");
 }
 
 // Update version.
 safe_delete('txp_prefs', "name = 'version'");
-safe_insert('txp_prefs', "prefs_id = 1, name = 'version', val = '4.0', type = '2'");
+safe_insert('txp_prefs', "name = 'version', val = '4.0', type = '2'");

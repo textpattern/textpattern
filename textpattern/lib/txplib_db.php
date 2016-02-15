@@ -531,6 +531,29 @@ function safe_alter($table, $alter, $debug = false)
 }
 
 /**
+ * Removes column from table
+ *
+ * @param  string $table  The table
+ * @param  string $column The column to be removed
+ * @return bool TRUE if the column didn't exist or was successfully dropped.
+ * @since  4.6.0
+ * @example
+ * if (safe_drop_column('myTable', 'myColumn'))
+ * {
+ *     echo "Column 'myColumn' no longer exists in 'myTable'.";
+ * }
+ */
+
+function safe_drop_column($table, $column)
+{
+    if (numRows(safe_query("SHOW COLUMNS FROM ".safe_pfx($table)." WHERE field='".doSlash($column)."'"))) {
+        return (bool) safe_alter($table, "DROP COLUMN `".$column."`");
+    }
+
+    return true;
+}
+
+/**
  * Locks a table.
  *
  * The $table argument accepts comma-separated list of table names, if you need
