@@ -25,6 +25,13 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
+// Get rid of the prefs_id column in txp_prefs and the corresponding prefs entry
+// Note: we execute this drop command in older scripts as well, because up
+// to version 4.5.7, the prefs_id column didn't yet have a default value.
+safe_drop_column('txp_prefs', 'prefs_id');
+safe_delete('txp_prefs', "name = 'prefs_id'");
+
+# Change boolean/int to varchar(32)
 safe_alter('textpattern', "MODIFY textile_body    VARCHAR(32) NOT NULL DEFAULT '1'");
 safe_alter('textpattern', "MODIFY textile_excerpt VARCHAR(32) NOT NULL DEFAULT '1'");
 safe_update('txp_prefs', "name = 'pane_article_textfilter_help_visible'", "name = 'pane_article_textile_help_visible'");
@@ -179,7 +186,7 @@ safe_alter('txp_file',    "ADD UNIQUE filename (filename(250))");
 safe_alter('txp_form',    "ADD PRIMARY KEY (name(250))");
 safe_alter('txp_page',    "ADD PRIMARY KEY (name(250))");
 safe_alter('txp_section', "ADD PRIMARY KEY (name(250))");
-safe_alter('txp_prefs',   "ADD UNIQUE prefs_idx (prefs_id, name(185), user_name)");
+safe_alter('txp_prefs',   "ADD UNIQUE prefs_idx (name(186), user_name)");
 safe_alter('txp_prefs',   "ADD INDEX name (name(250))");
 safe_alter('textpattern', "ADD INDEX section_status_idx (Section(249), Status)");
 safe_alter('textpattern', "ADD INDEX url_title_idx (url_title(250))");

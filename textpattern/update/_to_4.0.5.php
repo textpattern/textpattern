@@ -25,10 +25,12 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
+safe_drop_column('txp_prefs', 'prefs_id');
+
 safe_alter('txp_lang', 'DELAY_KEY_WRITE = 0');
 
 if (!safe_field("name", 'txp_prefs', "name = 'lastmod_keepalive'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'lastmod_keepalive', val = '0', type = '1', html = 'yesnoradio'");
+    safe_insert('txp_prefs', "name = 'lastmod_keepalive', val = '0', type = '1', html = 'yesnoradio'");
 }
 
 // New status field for file downloads.
@@ -218,5 +220,5 @@ safe_delete('txp_prefs', "event = 'link' AND name = 'textile_links'");
 
 // Use TextileRestricted lite/fat in comments?
 if (!safe_field("name", 'txp_prefs', "name = 'comments_use_fat_textile'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'comments_use_fat_textile', val = '0', type = '1', event = 'comments', html = 'yesnoradio', position = '130'");
+    safe_insert('txp_prefs', "name = 'comments_use_fat_textile', val = '0', type = '1', event = 'comments', html = 'yesnoradio', position = '130'");
 }
