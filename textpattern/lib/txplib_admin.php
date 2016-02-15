@@ -95,7 +95,7 @@ function send_account_activation($name)
         $expiryYear = safe_strftime('%Y', $expiryTimestamp);
         $expiryMonth = safe_strftime('%B', $expiryTimestamp);
         $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
-        $expiryTime = safe_strftime('%H:%M', $expiryTimestamp);
+        $expiryTime = safe_strftime('%H:%M %Z', $expiryTimestamp);
 
         $expiry = strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
 
@@ -229,7 +229,7 @@ function send_reset_confirmation_request($name)
         $expiryYear = safe_strftime('%Y', $expiryTimestamp);
         $expiryMonth = safe_strftime('%B', $expiryTimestamp);
         $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
-        $expiryTime = safe_strftime('%H:%M', $expiryTimestamp);
+        $expiryTime = safe_strftime('%H:%M %Z', $expiryTimestamp);
 
         // Use a hash of the nonce, selector and password.
         // This ensures that confirmation requests expire automatically when:
