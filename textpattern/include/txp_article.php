@@ -163,7 +163,7 @@ function article_post()
         $Annotate = (int) $Annotate;
 
         // Set and validate article timestamp.
-        if ($publish_now == 1) {
+        if ($publish_now == 1 || $reset_time == 1) {
             $when = "NOW()";
             $when_ts = time();
         } else {
@@ -183,10 +183,6 @@ function article_post()
             $when_ts = $ts - tz_offset($ts);
             $when = "FROM_UNIXTIME($when_ts)";
         }
-
-        // Force a reasonable 'last modified' date for future articles,
-        // keep recent articles list in order.
-        $lastmod = ($when_ts > time() ? "NOW()" : $when);
 
         // Set and validate expiry timestamp.
         if (empty($exp_year)) {
@@ -278,7 +274,7 @@ function article_post()
                 Posted          =  $when,
                 Expires         =  $whenexpires,
                 AuthorID        = '$user',
-                LastMod         =  $lastmod,
+                LastMod         = NOW(),
                 LastModID       = '$user',
                 Section         = '$Section',
                 Category1       = '$Category1',
