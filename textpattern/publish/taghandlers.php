@@ -2268,7 +2268,8 @@ function comment_name_input($atts)
     $h5 = ($prefs['doctype'] == 'html5');
 
     if (ps('preview')) {
-        $name = getComment()['name'];
+        $comment = getComment();
+        $name = $comment['name'];
         $namewarn = ($prefs['comments_require_name'] && !$name);
     }
 
@@ -2290,7 +2291,8 @@ function comment_email_input($atts)
     $h5 = ($prefs['doctype'] == 'html5');
 
     if (ps('preview')) {
-        $email = getComment()['email'];
+        $comment = getComment();
+        $email = $comment['email'];
         $emailwarn = ($prefs['comments_require_email'] && !$email);
     }
 
@@ -2311,7 +2313,8 @@ function comment_web_input($atts)
     $h5 = ($prefs['doctype'] == 'html5');
 
     if (ps('preview')) {
-        $web = getComment()['web'];
+        $comment = getComment();
+        $web = $comment['web'];
     }
 
     return fInput($h5 ? 'text' : 'text', 'web', $web, 'comment_web_input', '', '', $size, '', 'web', false, false); /* TODO: maybe use type = 'url' once browsers are less strict */
@@ -2335,7 +2338,8 @@ function comment_message_input($atts)
     $message = '';
 
     if (ps('preview')) {
-        $message = getComment()['message'];
+        $comment = getComment();
+        $message = $comment['message'];
         $split = rand(1, 31);
         $nonce = getNextNonce();
         $secret = getNextSecret();
