@@ -306,12 +306,17 @@ function save_language()
     )));
 
     if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language)."' LIMIT 1")) {
-        $locale = $prefs['locale'] = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language);
-        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_ALL, $language);
-        set_pref('locale', $locale);
+        $locale = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language);
+        $new_locale = $prefs['locale'] = Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_ALL, array($language, 'C'))->getLocale();
+        set_pref('locale', $new_locale);
+        if ($new_locale == $locale) {
+            $msg = gTxt('preferences_saved');
+        } else {
+            $msg = array(gTxt('locale_not_available_for_language', array('{name}' => $language)), E_WARNING);
+        }
         set_pref('language', $language);
         $textarray = load_lang($language);
-        list_languages(gTxt('preferences_saved'));
+        list_languages($msg);
 
         return;
     }
