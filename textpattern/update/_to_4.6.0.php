@@ -55,7 +55,7 @@ safe_update('txp_prefs', "position = '280'", "name = 'comment_nofollow'");
 safe_update('txp_prefs', "position = '300'", "name = 'comments_disallow_images'");
 safe_update('txp_prefs', "position = '320'", "name = 'comments_use_fat_textile'");
 safe_update('txp_prefs', "position = '340'", "name = 'spam_blacklists'");
-safe_update('txp_prefs', "html = 'permlink_format'", "name = 'permalink_title_format'");
+safe_update('txp_prefs', "name = 'permlink_format', html = 'permlink_format'", "name = 'permalink_title_format'");
 
 // Support for l10n string owners.
 $cols = getThings("DESCRIBE `".PFX."txp_lang`");

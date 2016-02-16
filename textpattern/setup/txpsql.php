@@ -447,7 +447,7 @@ $prefs = array(
         array(0,  40, 'yesnoradio'      , 'articles_use_excerpts'      , '1'),
         array(0,  60, 'yesnoradio'      , 'allow_form_override'        , '1'),
         array(0,  80, 'yesnoradio'      , 'attach_titles_to_permalinks', '1'),
-        array(0, 100, 'yesnoradio'      , 'permalink_title_format'     , '1'),
+        array(0, 100, 'yesnoradio'      , 'permlink_format'            , '1'),
         array(0, 120, 'yesnoradio'      , 'send_lastmod'               , '1'),
         array(0, 130, 'yesnoradio'      , 'publish_expired_articles'   , '0'),
         array(0, 140, 'yesnoradio'      , 'lastmod_keepalive'          , '0'),
