@@ -496,7 +496,7 @@ function getTxpLogin()
     }
 
     // Default theme selector.
-    $core_themes = array('classic', 'remora', 'hive');
+    $core_themes = array('hive', 'hiveneutral');
 
     $themes = \Textpattern\Admin\Theme::names();
 
