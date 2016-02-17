@@ -104,18 +104,24 @@ class Trace {
     return "\n<!-- " . str_replace('--', '- - ', $str) . "-->\n";
   }
 
-  public function summary()
+  public function summary($array = false)
   {
-    $out = "Trace summary:\n";
-    $out .= "Runtime   : ". sprintf('%4.2f', (microtime(true) - $this->bigBang) * 1000) . " ms\n";
-    $out .= "Query time: ". sprintf('%4.2f', $this->queryTime * 1000) . " ms\n";
-    $out .= "Queries   : ". $this->queries . "\n";
+    $summary = array(
+      'Runtime'    => sprintf('%4.2f', (microtime(true) - $this->bigBang) * 1000) . ' ms',
+      'Query time' => sprintf('%4.2f', $this->queryTime * 1000) . ' ms',
+      'Queries'    => $this->queries,
+    );
 
     if ($this->memFunc) {
-      $out .= "Memory (*): ". ceil(memory_get_peak_usage() / 1024) . " kB\n";
+      $summary['Memory (*)'] = ceil(memory_get_peak_usage() / 1024) . ' kB';
     }
 
-    return $this->out($out);
+    $out = "Trace summary:\n";
+    foreach($summary as $key => $value) {
+      $out .= sprintf("%-10s: %s\n", $key, $value);
+    }
+
+    return $array ? $summary : $this->out($out);
   }
 
   public function result()
