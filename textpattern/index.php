@@ -219,10 +219,9 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         echo $trace->summary();
         echo $trace->result();
     } else {
-        $trace = trace_log(TEXTPATTERN_TRACE_RESULT);
-        header('X-Textpattern-Runtime: ' . @$trace['microdiff']);
-        header('X-Textpattern-Memory: '  . @$trace['memory_peak']);
-        header('X-Textpattern-Queries: ' . @$trace['queries']);
+        foreach($trace->summary(true) as $key => $value) {
+           header('X-Textpattern-'.preg_replace('/[^\w]+/', '', $key).': '.$value);
+        }
     }
 } else {
     txp_die('DB-Connect was successful, but the textpattern-table was not found.',

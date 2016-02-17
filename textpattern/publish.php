@@ -180,7 +180,12 @@ set_error_level($production_status);
 if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
     include txpath."/publish/{$feed}.php";
     echo $feed();
-    trace_log(TEXTPATTERN_TRACE_DISPLAY);
+    if ($production_status !== 'live') {
+      echo $trace->summary();
+      if ($production_status === 'debug') {
+        echo $trace->result();
+      }
+    }
     exit;
 }
 

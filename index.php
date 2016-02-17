@@ -95,8 +95,9 @@ if (!isset($txpcfg['table_prefix'])) {
 
 // Custom caches, etc?
 if (!empty($txpcfg['pre_publish_script'])) {
-    trace_add("[Pre Publish Script: '{$txpcfg['pre_publish_script']}']");
+    $trace->start("[Pre Publish Script: '{$txpcfg['pre_publish_script']}']");
     require $txpcfg['pre_publish_script'];
+    $trace->stop();
 }
 
 include txpath.'/publish.php';
