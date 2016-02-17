@@ -1,12 +1,12 @@
 =================================
-= Textpattern Multi-Site How-to =
+= Textpattern multi-site how-to =
 =                               =
 = Author: Sam Weiss (artagesw)  =
 =================================
 
 
 =========================
-= Contents of Directory =
+= Contents of directory =
 =========================
 
 This directory (sites) is optional. If you do not wish to host multiple
@@ -15,11 +15,11 @@ directory with no ill effects.
 
 This directory may be used to create multiple Textpattern-based sites from a
 single installation of Textpattern. With a multi-site setup, you may host
-multiple Textpattern sites while having only a single copy of the Textpattern
-core code to maintain and update.
+multiple sites while having only a single copy of the Textpattern core code to
+maintain and update.
 
 In a fresh installation, the sites directory will contain a single subdirectory
-named site1. You may rename the site1 directory to whatever you like.
+named 'site1'. You may rename the site1 directory to whatever you like.
 For example:
 
     subdomain.example.com
@@ -38,8 +38,8 @@ are maintained.
 = Overview =
 ============
 
-Textpattern 4.2 introduces new multi-site capabilities. You may take advantage
-of these capabilities to:
+Textpattern 4.2 introduced multi-site capabilities. You may take advantage of
+these capabilities to:
 
 1. Create multiple Textpattern-driven web sites from a single installation of
    the Textpattern core code base.
@@ -67,7 +67,7 @@ off a single shared installation of the Textpattern code:
 
 
 ========================================
-= How to Set up Textpattern Multi-Site =
+= How to Set up Textpattern multi-site =
 ========================================
 
 The following sections describe how to set up multiple Textpattern sites from a
@@ -81,7 +81,7 @@ B. Allow access to the admin area through a subdirectory of your site (the
 
 
 ==========================================
-= A. Multi-Site with Separate Admin Area =
+= A. Multi-Site with separate admin area =
 ==========================================
 
 This setup method results in separate subdomains for your Textpattern-powered
@@ -94,7 +94,7 @@ site and its associated admin area. For example:
     https://admin.example.com  <-- URL to your site's secure admin area login
 
 ----------------------------
-Step 1: Configure Web Server
+Step 1: Configure web server
 ----------------------------
 
 In order to separate the admin area into its own subdomain, you will need to use
@@ -132,7 +132,7 @@ hosts. Create a pair of virtual host configurations for each Textpattern site
 you will be hosting.
 
 -------------------------
-Step 2: Textpattern Setup
+Step 2: Textpattern setup
 -------------------------
 
 You should now be able to proceed through Textpattern's setup process.
@@ -163,10 +163,10 @@ You should now be able to proceed through Textpattern's setup process.
     define('txpath', $txpcfg['txpath']);
 
 -------------------------------
-Step 3: Secure the Installation
+Step 3: Secure the installation
 -------------------------------
 
-For security reasons, you should remove the Setup directory once the setup has
+For security reasons, you should remove the 'Setup' directory once the setup has
 been completed. Remove both of the following:
 
     sites/site1/admin/setup
@@ -176,7 +176,7 @@ been completed. Remove both of the following:
 
 The site1 template includes a symbolic link to the admin directory inside the
 public directory. This is only used for the alternate setup described below
-("Multi-Site with Integrated Admin Area"). Since we will be accessing the admin
+("Multi-site with integrated admin area"). Since we will be accessing the admin
 area from a separate subdomain, this symbolic link is not necessary and should
 be removed.
 
@@ -199,11 +199,11 @@ You may also want to remove the following files and directories from the
 top-level Textpattern directory, as they are not needed when running multi-site:
 
     files
-       images
-       index.php
+    images
+    index.php
 
 ---------------------------
-Step 4: There is no Step 4!
+Step 4: There is no step 4!
 ---------------------------
 
 But if you want to to set up additional sites, simply repeat steps 1 through 3
@@ -225,7 +225,7 @@ for each site. Your sites directory layout will look like the following:
 
 
 ============================================
-= B. Multi-Site with Integrated Admin Area =
+= B. Multi-site with integrated admin area =
 ============================================
 
 This setup method results in the more traditional Textpattern installation,
@@ -236,7 +236,7 @@ For example:
    http://www.example.com/admin  <-- URL to your site's admin area login
 
 ----------------------------
-Step 1: Configure Web Server
+Step 1: Configure web server
 ----------------------------
 
 You will need to use your web host's facilities to create a single virtual host
@@ -262,7 +262,7 @@ hosts. Create a single virtual host configuration for each Textpattern site you
 will be hosting.
 
 -------------------------
-Step 2: Textpattern Setup
+Step 2: Textpattern setup
 -------------------------
 
 You should now be able to proceed through Textpattern's setup process.
@@ -288,10 +288,10 @@ You should now be able to proceed through Textpattern's setup process.
     http://example.com/admin
 
 -------------------------------
-Step 3: Secure the Installation
+Step 3: Secure the installation
 -------------------------------
 
-For security reasons, you should remove the Setup directory once setup has
+For security reasons, you should remove the 'Setup' directory once setup has
 completed.
 
 Remove both of the following:
@@ -313,12 +313,12 @@ Remove the following:
 You may also want to remove the following files and directories from the
 top-level Textpattern directory, as they are not needed when running multi-site:
 
-       files
-       images
-       index.php
+    files
+    images
+    index.php
 
 ---------------------------
-Step 4: There is no Step 4!
+Step 4: There is no step 4!
 ---------------------------
 
 But if you want to to set up additional sites, simply repeat steps 1 through 3
@@ -339,9 +339,9 @@ for each site. Your sites directory layout will look like the following:
             public/
 
 
-=========================
-= Additional Miscellany =
-=========================
+===================
+= Additional note =
+===================
 
 The default article that is displayed after a clean installation will have some
 broken links. This is to be expected, as the links are hard-coded to the
