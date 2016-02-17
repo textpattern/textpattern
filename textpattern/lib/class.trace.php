@@ -13,7 +13,7 @@ class Trace {
 
   public function __construct()
   {
-    $this->bigBang = $this->getmicrotime();
+    $this->bigBang = isset($_SERVER['REQUEST_TIME_FLOAT']) ? $_SERVER['REQUEST_TIME_FLOAT'] : microtime(true);
     $this->memFunc = is_callable('memory_get_peak_usage');
   }
   
@@ -22,17 +22,10 @@ class Trace {
     self::$quiet = $quiet;
   }
 
-  function getmicrotime()
-  {
-    list($usec, $sec) = explode(" ", microtime());
-
-    return ((float) $usec + (float) $sec);
-  }
-  
   private function traceAdd($msg, $query = false)
   {
     $trace['level'] = sizeof($this->nest);
-    $trace['begin'] = $this->getmicrotime();
+    $trace['begin'] = microtime(true);
     $trace['query'] = $query;
     $trace['msg']   = $msg;
     array_push($this->trace, $trace);
@@ -71,7 +64,7 @@ class Trace {
     if (self::$quiet) return;
 
     $start = array_pop($this->nest);
-    $this->trace[$start]['end'] = $this->getmicrotime();
+    $this->trace[$start]['end'] = microtime(true);
 
     if ($this->trace[$start]['query']) {
       $this->queries++;
@@ -114,8 +107,8 @@ class Trace {
   public function summary()
   {
     $out = "Trace summary:\n";
-    $out .= "Runtime   : ". sprintf('%5.3f', ($this->getmicrotime() - $this->bigBang) * 1000) . " ms\n";
-    $out .= "Query time: ". sprintf('%5.3f', $this->queryTime * 1000) . " ms\n";
+    $out .= "Runtime   : ". sprintf('%4.2f', (microtime(true) - $this->bigBang) * 1000) . " ms\n";
+    $out .= "Query time: ". sprintf('%4.2f', $this->queryTime * 1000) . " ms\n";
     $out .= "Queries   : ". $this->queries . "\n";
 
     if ($this->memFunc) {
@@ -132,11 +125,11 @@ class Trace {
 
     foreach($this->trace as $nr => $trace) {
       $tracelog .= (in_array($nr, $this->memWhere)) ? '*' : ' ';
-      $tracelog .= sprintf(' %8.3f | ', ($trace['begin'] - $this->bigBang) * 1000);
+      $tracelog .= sprintf(' %8.2f | ', ($trace['begin'] - $this->bigBang) * 1000);
       $line = '';
 
       if (isset($trace['end'])) {
-        $line .= sprintf('%8.3f | ', ($trace['end'] - $trace['begin']) * 1000);
+        $line .= sprintf('%8.2f | ', ($trace['end'] - $trace['begin']) * 1000);
       }
       else {
         $line .= str_repeat(' ', 8) . ' | ';
