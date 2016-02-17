@@ -184,12 +184,16 @@ if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
     exit;
 }
 
-if (gps('parentid') && gps('submit')) {
-    saveComment();
-} elseif (gps('parentid') and $comments_mode == 1) {
-    // Popup comments?
-    header("Content-type: text/html; charset=utf-8");
-    exit(parse_form('popup_comments'));
+if (gps('parentid')) {
+    if (ps('submit')) {
+        saveComment();
+    } elseif (ps('preview')) {
+        checkCommentRequired(getComment());
+    } elseif ($comments_mode == 1) {
+        // Popup comments?
+        header("Content-type: text/html; charset=utf-8");
+        exit(parse_form('popup_comments'));
+    }
 }
 
 // We are dealing with a download.

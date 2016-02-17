@@ -1395,18 +1395,30 @@ input[type="radio"] + label:last-of-type {
 }
 
 /**
- * Correct `select` style inheritance in Firefox.
+ * Use indicator icon to signify the drop-down ability of `select`.
  */
 select {
+  padding-right: 1.30769230769231em;
+  background: #ffffff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='13px' height='4px' viewBox='0 0 13 4'><polygon fill='%23333' points='3.5,4 0,0 7,0'/></svg>") right center no-repeat;
+  background-size: 1em 0.30769230769231em;
   text-transform: none;
 }
 
 /**
- * Override height set in a previous rule and allow auto height.
+ * Remove browser-specific `select` UI in IE 11.
+ */
+select::-ms-expand {
+  opacity: 0;
+}
+
+/**
+ * Override height and background set in a previous rule and allow auto height.
  */
 select[size],
 select[multiple] {
   height: auto;
+  padding-right: 0.30769230769231em;
+  background-image: none;
 }
 
 /**
@@ -1415,29 +1427,6 @@ select[multiple] {
 select[size="0"],
 select[size="1"] {
   height: 2.15384615384615em;
-}
-
-@media (-webkit-min-device-pixel-ratio: 0) {
-  /**
-     * Address `select` alignment in Safari, Chrome, Opera.
-     */
-  select[size],
-  select[multiple],
-  select[multiple][size] {
-    padding-right: 0.30769230769231em;
-    background-image: none;
-  }
-  /**
-     * Use indicator icon to signify the downdown ability of `select` in Safari,
-     * Chrome, Opera.
-     */
-  select,
-  select[size="0"],
-  select[size="1"] {
-    padding-right: 2em;
-    background: #ffffff url("data:image/svg+xml,<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='13px' height='4px' viewBox='0 0 13 4' enable-background='new 0 0 13 4' xml:space='preserve'><polygon fill='#333333' points='3.5,4 0,0 7,0'/></svg>") right center no-repeat;
-    background-size: 1em 0.30769230769231em;
-  }
 }
 
 /**
@@ -2622,7 +2611,7 @@ button.txp-nav-toggle {
 }
 
 /**
- * Show dropdown menu when downdown toggle clicked.
+ * Show drop-down menu when toggle clicked.
  *
  * Example HTML:
  *

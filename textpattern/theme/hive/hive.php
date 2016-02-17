@@ -70,6 +70,7 @@ class hive_theme extends \Textpattern\Admin\Theme
         }
         // End of custom CSS toggles.
 
+        $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<meta name="theme-color" content="#ffda44">';
