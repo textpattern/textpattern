@@ -1779,8 +1779,9 @@ function load_plugins($type = false)
                 $plugins[] = $a['name'];
                 $plugins_ver[$a['name']] = $a['version'];
                 $GLOBALS['txp_current_plugin'] = $a['name'];
-                trace_add("[Loading plugin: '{$a['name']}' version '{$a['version']}']");
+                $trace->start("[Loading plugin: '{$a['name']}' version '{$a['version']}']");
                 $eval_ok = eval($a['code']);
+                $trace->stop();
 
                 if ($eval_ok === false) {
                     echo gTxt('plugin_load_error_above').strong($a['name']).n.br;
@@ -5601,147 +5602,17 @@ function quote_list($in)
  *
  * @param   string $msg             The message
  * @param   int    $tracelevel_diff Change trace level
+ * @deprecated in 4.6.0
  * @package Debug
  */
 
-function trace_add($msg, $tracelevel_diff = 0, $formTag = null)
+function trace_add($msg, $level = 0, $dummy = null)
 {
-    global $production_status, $txptrace, $txptrace_microstart, $txptrace_maxMemMsg;
-    static $time_last = 0;
-    static $memory_last = 0;
-    static $txptracelevel = 0;
-    static $maxMemUsage = 0;
-
-    if ($production_status === 'debug' && !empty($msg)) {
-        if (is_callable('memory_get_usage')) {
-            $memory_now = ceil(memory_get_usage()/1024);
-            $time_now = getmicrotime();
-            $diff = ($time_now - $time_last) * 1000;
-
-            $memory = sprintf('%7s |%7s |%8s |',
-                $memory_now, ceil(memory_get_peak_usage()/1024),
-//                ($memory_now > $memory_last) ? $memory_now - $memory_last : '',
-                ($diff > 0.2 and $diff < 900) ? number_format($diff, 2, '.', '') : ''
-            );
-
-            if ($formTag != null && $memory_now > $maxMemUsage) {
-                $maxMemUsage = $memory_now;
-                $txptrace_maxMemMsg = "{$maxMemUsage} kB,  $formTag";
-            }
-
-            $memory_last = $memory_now;
-            $time_last = $time_now;
-        } else {
-            $memory = '';
-        }
-
-        $txptrace[] = $memory . @str_repeat("\t", $txptracelevel) . $msg;
-    }
-
-    if ((int)$tracelevel_diff) {
-        $txptracelevel += (int)$tracelevel_diff;
-    }
-}
-
-/**
- * Trace log: Start / Display / Result values / Quiet mode.
- *
- * @param   int   $flags One of TEXTPATTERN_TRACE_START  | TEXTPATTERN_TRACE_DISPLAY
- *                              TEXTPATTERN_TRACE_RESULT | TEXTPATTERN_TRACE_QUIET
- * @return  mixed
- * @since   4.6.0
- * @package Debug
- */
-
-function trace_log($flags = TEXTPATTERN_TRACE_RESULT)
-{
-    global $production_status, $plugin_callback, $txptrace,
-           $txptrace_quiet, $txptrace_qtime, $txptrace_qcount, $txptrace_microstart, $txptrace_maxMemMsg;
-
-    if ($flags & TEXTPATTERN_TRACE_START) {
-        $txptrace_microstart = getmicrotime();
-        $production_status = 'debug';
-        $txptrace = array();
-        trace_add('[Trace Start]');
-        return;
-    }
-
-    if ($flags & TEXTPATTERN_TRACE_QUIET) {
-        $txptrace_quiet = 1;
-        return;
-    }
-
-    $microdiff = (getmicrotime() - $txptrace_microstart);
-    $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
-
-    if ($production_status !== 'live' && $flags & TEXTPATTERN_TRACE_DISPLAY) {
-        trace_add('[Trace End]');
-        echo n,comment('Runtime:     '.substr($microdiff, 0, 8));
-        echo n,comment('Query time:  '.sprintf('%02.6f', $txptrace_qtime)."; Queries: $txptrace_qcount ");
-        if (!empty($txptrace_maxMemMsg)) {
-            echo n.comment("Memory:      $txptrace_maxMemMsg");
-        }
-        echo n.comment(sprintf('Memory Peak: %s kB ', $memory_peak));
-
-        if ($production_status === 'debug') {
-            $trace_log = join(n, preg_replace('/[\r\n]+/s', ' ', $txptrace));
-            trace_out('Trace log: '.n.'Mem(kB)_|__+(kB)_|___+(ms)_|_Trace___'.n.$trace_log);
-
-            if (!empty($plugin_callback)) {
-                $out = sprintf('%40s |%40s |%20s | %s   ', 'function', 'event', 'step', 'pre').n;
-                $out = str_replace(' ', '_', $out);
-
-                foreach ($plugin_callback as $p) {
-                    if (is_string($p['function'])) {
-                        $name = $p['function'];
-                    } elseif (@is_object($p['function'][0])) {
-                        $name = @get_class($p['function'][0]);
-                    } else {
-                        $name = '';
-                    }
-                    $out .= sprintf('%40s | %-40s| %-20s| %s', $name, $p['event'], $p['step'], $p['pre']).n;
-                }
-
-                trace_out('Plugin callback:'.n.$out);
-            }
-
-            if (preg_match_all('/(\[SQL.*\])/', $trace_log, $mm)) {
-                trace_out('Query log:'.n.join(n, $mm[1]).n.
-                    'Time: '.sprintf('%02.6f', $txptrace_qtime).": Queries: $txptrace_qcount ");
-            }
-
-            callback_event('trace_end', 'display');
-        }
-    }
-
-    if ($flags & TEXTPATTERN_TRACE_RESULT) {
-        if ($production_status === 'debug') {
-            callback_event('trace_end', 'result');
-        }
-
-        return array('microdiff' => $microdiff, 'memory_peak' => $memory_peak, 'queries' => $txptrace_qcount);
-    }
-}
-
-/**
- * Display Trace log unless prohibited.
- *
- * Prohibition log output is useful for plugins that extend the functionality of
- * the trace log.
- *
- * @param   string $msg The message
- * @since   4.6.0
- * @package Debug
- * @see     trace_log()
- */
-
-function trace_out($msg)
-{
-    global $txptrace_quiet;
-
-    if (empty($txptrace_quiet)) {
-        echo n.comment($msg.n).n;
-    }
+    global $trace;
+    if     ((int) $level > 0) $trace->start($msg);
+    elseif ((int) $level < 0) $trace->stop();
+    else   $trace->log($msg);
+    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'class Trace')), E_USER_NOTICE);
 }
 
 /**
