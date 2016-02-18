@@ -784,6 +784,7 @@ $en_gb_lang = array(
         'leave_text_untouched' => 'Leave text untouched',
         'link' => 'Links',
         'locale' => 'Locale',
+        'locale_not_available_for_language' => 'No locale available for language <strong>{name}</strong>. Using default locale instead.',
         'logging' => 'Logging',
         'logs_expire' => 'Logs expire after how many days?',
         'manage_languages' => 'Language',
@@ -884,6 +885,7 @@ $en_gb_lang = array(
         'comments_on' => 'Comments on',
         'comments_permlink' => 'Permanent link',
         'comment_comment' => 'Comment',
+        'comment_duplicate' => 'Duplicate comments are not accepted.',
         'comment_email' => 'Email',
         'comment_email_required' => 'Please enter a valid email address.',
         'comment_invitation' => 'Invitation',
@@ -1349,4 +1351,4 @@ $en_gb_lang = array(
     ),
 );
 
-$lastmod = gmdate('Y-m-d H:m:s', 1452157862);
+$lastmod = gmdate('Y-m-d H:m:s', 1455784556);
