@@ -228,6 +228,8 @@ top-level Textpattern directory, as they are not needed when running multi-site:
     images
     index.php
 
+See also the "Additional notes" below.
+
 ---------------------------
 Step 4: There is no step 4!
 ---------------------------
@@ -352,6 +354,8 @@ top-level Textpattern directory, as they are not needed when running multi-site:
     images
     index.php
 
+See also the "Additional notes" below.
+
 ---------------------------
 Step 4: There is no step 4!
 ---------------------------
@@ -359,15 +363,6 @@ Step 4: There is no step 4!
 But if you want to to set up additional sites, simply repeat steps 1 through 3
 for each site. Your sites directory layout will look like the following:
 
-
-
-===================
-= Additional note =
-===================
-
-The default article that is displayed after a clean installation will have some
-broken links. This is to be expected, as the links are hard-coded to the
-traditional /textpattern/ back-end.
     multi-site-basedir/
       sites/
           example.com/
@@ -383,3 +378,42 @@ traditional /textpattern/ back-end.
               private/
               public/
       textpattern/
+
+
+====================
+= Additional notes =
+====================
+
+Adjustments, known problems and possible workarounds:
+
+* Errors on the Admin > Diagnostics panel:
+
+  * /path/to/multi-site-basedir/textpattern/setup/ still exists
+  * Site URL preference might be incorrect: admin.example.com
+
+  These two errors can be ignored.
+  
+  If you also deleted index.php, and the /files and /images folders in the 
+  base directory of your multi-site installation  you may additionally see:
+  
+  * Missing files: /../index.php
+  
+  This too can be ignored. If you also see:
+   
+  * File directory path is not writable: /path/to/multi-site-basedir/files
+  
+  you have forgotten to correct the file directory path to match your new 
+  site's /file directory (see above) and/or not given it write permissions.
+
+* The default article that is displayed after a clean installation will have 
+  some broken links. This is to be expected, as the links are hard-coded to 
+  the traditional /textpattern/ back-end.
+  
+* When using a unique admin domain, new user registration /activation emails 
+  will contain the wrong login url for the admin area.
+  
+* Some textpattern plugins may need manual adjustments to work with the 
+  multi-site setup.
+
+Please check the Textpattern forum – forum.textpattern.com – for further 
+details and tips for multi-site configurations.
