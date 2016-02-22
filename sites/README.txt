@@ -177,6 +177,17 @@ You should now be able to proceed through Textpattern's setup process.
 
     define('txpath', $txpcfg['txpath']);
 
+* After completing the installation routine, log in to the admin area at:
+
+    http://example.com/admin
+  
+  Visit the Admin > Preferences panel and under the “Admin” preferences, 
+  correct the “File directory path” to match the /files folder in your new 
+  site’s public directory. For example:
+  
+    /path/to/multi-site-basedir/sites/site1/public/files
+
+
 -------------------------------
 Step 3: Secure the installation
 -------------------------------
@@ -304,6 +315,12 @@ You should now be able to proceed through Textpattern's setup process.
   address bar at this point:
 
     http://example.com/admin
+
+* Visit the Admin > Preferences panel and under the “Admin” preferences, 
+  correct the “File directory path” to match the /files folder in your new 
+  site’s public directory. For example:
+  
+    /path/to/multi-site-basedir/sites/site1/public/files
 
 -------------------------------
 Step 3: Secure the installation
