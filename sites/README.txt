@@ -100,17 +100,20 @@ Step 1: Configure web server
 ----------------------------
 
 In order to separate the admin area into its own subdomain, you will need to use
-your web host's facilities to create two virtual hosts per Textpattern site. One
+your web host's facilities to create two virtual hosts per Textpattern site: one
 virtual host will be used to access the Textpattern admin area, and the other
-will be used to access the Textpattern-powered site. This configuration step is
-commonly performed via your host's web panel.
+will be used to access the Textpattern-powered site. You need to:
 
-You need to set the document root of the admin virtual host to the admin
-subdirectory of your site. Set the document root of the site virtual host to the
-public subdirectory of your site. Also, be sure that the virtual host allows
-traversing symbolic links.
+* Set the document root of the admin virtual host (e.g. admin.example.com)
+  to the /admin subdirectory of your site. 
 
-Here is an example config for Apache to create our virtual hosts for site1:
+* Set the document root of the public site virtual host (e.g. www.example.com)
+  to the /public subdirectory of your site. 
+
+This configuration step is commonly performed via your host's control panel.
+
+If your host allows you to manage your server config files directly, here is an 
+example config for Apache to create virtual hosts for site1:
 
     <VirtualHost *:80>
         ServerName example.com
