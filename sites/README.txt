@@ -118,19 +118,29 @@ example config for Apache to create virtual hosts for site1:
     <VirtualHost *:80>
         ServerName example.com
         ServerAlias www.example.com
-        DocumentRoot "/path/to/textpattern/sites/site1/public"
-        <Directory "/path/to/textpattern/sites/">
+        DocumentRoot "/path/to/multi-site-basedir/sites/site1/public"
+        <Directory "/path/to/multi-site-basedir/sites/">
             Options +FollowSymLinks
         </Directory>
     </VirtualHost>
 
     <VirtualHost *:80>
         ServerName admin.example.com
-        DocumentRoot "/path/to/textpattern/sites/site1/admin"
-        <Directory "/path/to/textpattern/sites/">
+        DocumentRoot "/path/to/multi-site-basedir/sites/site1/admin"
+        <Directory "/path/to/multi-site-basedir/sites/">
             Options +FollowSymLinks
         </Directory>
     </VirtualHost>
+
+where '/path/to' is your web server's path to your user/account directory and 
+'multi-site-basedir' is the name you have chosen to install Textpattern in. 
+This directory should not be accessible from the web.
+
+Note: if setting up a secured admin area on SSL, replace *:80 with *:443 (SSL) 
+in the second example and include the necessary certificates as per your host's
+instructions.
+
+Also, be sure that the virtual host allows traversing symbolic links.
 
 You may need to restart your web server before it will recognize new virtual
 hosts. Create a pair of virtual host configurations for each Textpattern site
@@ -214,19 +224,21 @@ Step 4: There is no step 4!
 But if you want to to set up additional sites, simply repeat steps 1 through 3
 for each site. Your sites directory layout will look like the following:
 
-    sites/
-        example.com/
-            admin/
-            private/
-            public/
-        example.net/
-            admin/
-            private/
-            public/
-        example.org/
-            admin/
-            private/
-            public/
+    multi-site-basedir/
+        sites/
+            example.com/
+                admin/
+                private/
+                public/
+            example.net/
+                admin/
+                private/
+                public/
+            example.org/
+                admin/
+                private/
+                public/
+        textpattern/
 
 
 ============================================
@@ -251,13 +263,14 @@ performed via your host's web panel.
 Set the document root of the site virtual host to the public subdirectory of
 your site. Also, be sure that the virtual host allows traversing symbolic links.
 
-Here is an example config for Apache to create our virtual host for site1:
+If your host allows you to manage your server config files directly, here is an 
+example config for Apache to create our virtual host for site1:
 
     <VirtualHost *:80>
         ServerName example.com
         ServerAlias www.example.com
-        DocumentRoot "/path/to/textpattern/sites/site1/public"
-        <Directory "/path/to/textpattern/sites/">
+        DocumentRoot "/path/to/multi-site-basedir/sites/site1/public"
+        <Directory "/path/to/multi-site-basedir/sites/">
             Options +FollowSymLinks
         </Directory>
     </VirtualHost>
@@ -329,19 +342,6 @@ Step 4: There is no step 4!
 But if you want to to set up additional sites, simply repeat steps 1 through 3
 for each site. Your sites directory layout will look like the following:
 
-    sites/
-        example.com/
-            admin/
-            private/
-            public/
-        example.net/
-            admin/
-            private/
-            public/
-        example.org/
-            admin/
-            private/
-            public/
 
 
 ===================
@@ -351,3 +351,18 @@ for each site. Your sites directory layout will look like the following:
 The default article that is displayed after a clean installation will have some
 broken links. This is to be expected, as the links are hard-coded to the
 traditional /textpattern/ back-end.
+    multi-site-basedir/
+      sites/
+          example.com/
+              admin/
+              private/
+              public/
+          example.net/
+              admin/
+              private/
+              public/
+          example.org/
+              admin/
+              private/
+              public/
+      textpattern/
