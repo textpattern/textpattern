@@ -69,7 +69,7 @@ off a single shared installation of the Textpattern code:
 
 
 ========================================
-= How to Set up Textpattern multi-site =
+= How to set up Textpattern multi-site =
 ========================================
 
 The following sections describe how to set up multiple Textpattern sites from a
@@ -83,7 +83,7 @@ B. Allow access to the admin area through a subdirectory of your site (the
 
 
 ==========================================
-= A. Multi-Site with separate admin area =
+= A. Multi-site with separate admin area =
 ==========================================
 
 This setup method results in separate subdomains for your Textpattern-powered
@@ -92,7 +92,7 @@ site and its associated admin area. For example:
     http://www.example.com     <-- URL to your site
 
     http://admin.example.com   <-- URL to your site's admin area login
-
+OR:
     https://admin.example.com  <-- URL to your site's secure admin area login
 
 ----------------------------
@@ -160,9 +160,9 @@ You should now be able to proceed through Textpattern's setup process.
 
     http://admin.example.com/setup
 
-* On MySQL setup page, be sure to enter the correct URL to your Textpattern site
-  (not the admin site) under Site URL. Textpattern will default to the URL of
-  your admin site and you will need to change that here. For example:
+* On the MySQL setup page, be sure to enter the correct URL to your Textpattern
+  site (not the admin site) under Site URL. Textpattern will default to the URL
+  of your admin site and you will need to change that here. For example:
 
     www.example.com
 
@@ -271,7 +271,7 @@ Step 1: Configure web server
 
 You will need to use your web host's facilities to create a single virtual host
 for each of your Textpattern sites. This configuration step is commonly
-performed via your host's web panel.
+performed via your host's control panel.
 
 Set the document root of the site virtual host to the public subdirectory of
 your site. Also, be sure that the virtual host allows traversing symbolic links.
@@ -300,11 +300,12 @@ You should now be able to proceed through Textpattern's setup process.
 
 * Go to: http://example.com and click the textpattern/setup/ link.
 
-* Textpattern will tell you to place your config.php file in /textpattern/.
-  This is INCORRECT. Place it in the private subdirectory of your site.
+* Follow the instructions. On the MySQL setup page, Textpattern will tell you
+  to place your config.php file in /textpattern/. This is INCORRECT. Place it 
+  in the private subdirectory of your site.
   For example:
 
-    /sites/site1/private/config.php.
+    /sites/site1/private/config.php
 
 * IMPORTANT! When you create your config.php file, be sure to add the following
   line just before the closing '?>' tag:
@@ -360,7 +361,7 @@ See also the "Additional notes" below.
 Step 4: There is no step 4!
 ---------------------------
 
-But if you want to to set up additional sites, simply repeat steps 1 through 3
+If you want to to set up additional sites, simply repeat steps 1 through 3
 for each site. Your sites directory layout will look like the following:
 
     multi-site-basedir/
