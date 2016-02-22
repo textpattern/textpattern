@@ -179,7 +179,7 @@ You should now be able to proceed through Textpattern's setup process.
 
 * After completing the installation routine, log in to the admin area at:
 
-    http://example.com/admin
+    http://admin.example.com/
   
   Visit the Admin > Preferences panel and under the “Admin” preferences, 
   correct the “File directory path” to match the /files folder in your new 
