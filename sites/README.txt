@@ -18,21 +18,23 @@ single installation of Textpattern. With a multi-site setup, you may host
 multiple sites while having only a single copy of the Textpattern core code to
 maintain and update.
 
-In a fresh installation, the sites directory will contain a single subdirectory
-named 'site1'. You may rename the site1 directory to whatever you like.
-For example:
+In a fresh installation, the sites directory contains a single subdirectory
+named 'site1'. This is a template of a default Textpattern multi-site. You can
+use the site1 directory directly and rename it to whatever you like. If you 
+plan to add further sites to your multi-site installation at a later date, you
+can also retain it as a blank template for future sites.
 
-    subdomain.example.com
+To set up a new site in your multi-site installation, simply duplicate the 
+entire site1 directory to a new directory (within the sites directory) with 
+a name appropriate for your new site.
+In the terminal, for example, change to the sites directory and enter:
 
-You may treat the site1 directory as a template for creating new Textpattern
-sites. Simply duplicate the entire site1 directory to a new directory (within
-the sites directory) with a name appropriate for your new site. For example:
-
-    cp -R site1 site2
+    cp -R site1 your-site-name
 
 IMPORTANT! Be sure to designate the "-R" option to cp so that symbolic links
 are maintained.
 
+Repeat this for each site in your multi-site installation.
 
 ============
 = Overview =
@@ -41,17 +43,17 @@ are maintained.
 Textpattern 4.2 introduced multi-site capabilities. You may take advantage of
 these capabilities to:
 
-1. Create multiple Textpattern-driven web sites from a single installation of
-   the Textpattern core code base.
+* Create multiple Textpattern-driven web sites from a single installation of
+  the Textpattern core code base.
 
-2. Separate the Textpattern admin area from the Textpattern-driven web site by
-   placing it into its own web root and subdomain.
+* Separate the Textpattern admin area from the Textpattern-driven web site by
+  placing it into its own web root and subdomain.
 
-3. Gain a modicum of extra security by removing the vast majority of the
-   Textpattern core code from the web document root.
+* Gain a modicum of extra security by removing the vast majority of the
+  Textpattern core code from the web document root.
 
-4. Easily protect the admin area via SSL, if you place it into its own web root
-   and subdomain.
+* Easily protect the admin area via SSL, if you place it into its own web root
+  and subdomain (see option A below).
 
 For example, you might have the following Textpattern-driven sites, all running
 off a single shared installation of the Textpattern code:
