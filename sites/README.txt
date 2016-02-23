@@ -18,21 +18,23 @@ single installation of Textpattern. With a multi-site setup, you may host
 multiple sites while having only a single copy of the Textpattern core code to
 maintain and update.
 
-In a fresh installation, the sites directory will contain a single subdirectory
-named 'site1'. You may rename the site1 directory to whatever you like.
-For example:
+In a fresh installation, the sites directory contains a single subdirectory
+named 'site1'. This is a template of a default Textpattern multi-site. You can
+use the site1 directory directly and rename it to whatever you like. If you 
+plan to add further sites to your multi-site installation at a later date, you
+can also retain it as a blank template for future sites.
 
-    subdomain.example.com
+To set up a new site in your multi-site installation, simply duplicate the 
+entire site1 directory to a new directory (within the sites directory) with 
+a name appropriate for your new site.
+In the terminal, for example, change to the sites directory and enter:
 
-You may treat the site1 directory as a template for creating new Textpattern
-sites. Simply duplicate the entire site1 directory to a new directory (within
-the sites directory) with a name appropriate for your new site. For example:
-
-    cp -R site1 site2
+    cp -R site1 your-site-name
 
 IMPORTANT! Be sure to designate the "-R" option to cp so that symbolic links
 are maintained.
 
+Repeat this for each site in your multi-site installation.
 
 ============
 = Overview =
@@ -41,17 +43,17 @@ are maintained.
 Textpattern 4.2 introduced multi-site capabilities. You may take advantage of
 these capabilities to:
 
-1. Create multiple Textpattern-driven web sites from a single installation of
-   the Textpattern core code base.
+* Create multiple Textpattern-driven web sites from a single installation of
+  the Textpattern core code base.
 
-2. Separate the Textpattern admin area from the Textpattern-driven web site by
-   placing it into its own web root and subdomain.
+* Separate the Textpattern admin area from the Textpattern-driven web site by
+  placing it into its own web root and subdomain.
 
-3. Gain a modicum of extra security by removing the vast majority of the
-   Textpattern core code from the web document root.
+* Gain a modicum of extra security by removing the vast majority of the
+  Textpattern core code from the web document root.
 
-4. Easily protect the admin area via SSL, if you place it into its own web root
-   and subdomain.
+* Easily protect the admin area via SSL, if you place it into its own web root
+  and subdomain (see option A below).
 
 For example, you might have the following Textpattern-driven sites, all running
 off a single shared installation of the Textpattern code:
@@ -67,7 +69,7 @@ off a single shared installation of the Textpattern code:
 
 
 ========================================
-= How to Set up Textpattern multi-site =
+= How to set up Textpattern multi-site =
 ========================================
 
 The following sections describe how to set up multiple Textpattern sites from a
@@ -81,7 +83,7 @@ B. Allow access to the admin area through a subdirectory of your site (the
 
 
 ==========================================
-= A. Multi-Site with separate admin area =
+= A. Multi-site with separate admin area =
 ==========================================
 
 This setup method results in separate subdomains for your Textpattern-powered
@@ -90,7 +92,7 @@ site and its associated admin area. For example:
     http://www.example.com     <-- URL to your site
 
     http://admin.example.com   <-- URL to your site's admin area login
-
+OR:
     https://admin.example.com  <-- URL to your site's secure admin area login
 
 ----------------------------
@@ -98,34 +100,47 @@ Step 1: Configure web server
 ----------------------------
 
 In order to separate the admin area into its own subdomain, you will need to use
-your web host's facilities to create two virtual hosts per Textpattern site. One
+your web host's facilities to create two virtual hosts per Textpattern site: one
 virtual host will be used to access the Textpattern admin area, and the other
-will be used to access the Textpattern-powered site. This configuration step is
-commonly performed via your host's web panel.
+will be used to access the Textpattern-powered site. You need to:
 
-You need to set the document root of the admin virtual host to the admin
-subdirectory of your site. Set the document root of the site virtual host to the
-public subdirectory of your site. Also, be sure that the virtual host allows
-traversing symbolic links.
+* Set the document root of the admin virtual host (e.g. admin.example.com)
+  to the /admin subdirectory of your site. 
 
-Here is an example config for Apache to create our virtual hosts for site1:
+* Set the document root of the public site virtual host (e.g. www.example.com)
+  to the /public subdirectory of your site. 
+
+This configuration step is commonly performed via your host's control panel.
+
+If your host allows you to manage your server config files directly, here is an 
+example config for Apache to create virtual hosts for site1:
 
     <VirtualHost *:80>
         ServerName example.com
         ServerAlias www.example.com
-        DocumentRoot "/path/to/textpattern/sites/site1/public"
-        <Directory "/path/to/textpattern/sites/">
+        DocumentRoot "/path/to/multi-site-basedir/sites/site1/public"
+        <Directory "/path/to/multi-site-basedir/sites/">
             Options +FollowSymLinks
         </Directory>
     </VirtualHost>
 
     <VirtualHost *:80>
         ServerName admin.example.com
-        DocumentRoot "/path/to/textpattern/sites/site1/admin"
-        <Directory "/path/to/textpattern/sites/">
+        DocumentRoot "/path/to/multi-site-basedir/sites/site1/admin"
+        <Directory "/path/to/multi-site-basedir/sites/">
             Options +FollowSymLinks
         </Directory>
     </VirtualHost>
+
+where '/path/to' is your web server's path to your user/account directory and 
+'multi-site-basedir' is the name you have chosen to install Textpattern in. 
+This directory should not be accessible from the web.
+
+Note: if setting up a secured admin area on SSL, replace *:80 with *:443 (SSL) 
+in the second example and include the necessary certificates as per your host's
+instructions.
+
+Also, be sure that the virtual host allows traversing symbolic links.
 
 You may need to restart your web server before it will recognize new virtual
 hosts. Create a pair of virtual host configurations for each Textpattern site
@@ -145,9 +160,9 @@ You should now be able to proceed through Textpattern's setup process.
 
     http://admin.example.com/setup
 
-* On MySQL setup page, be sure to enter the correct URL to your Textpattern site
-  (not the admin site) under Site URL. Textpattern will default to the URL of
-  your admin site and you will need to change that here. For example:
+* On the MySQL setup page, be sure to enter the correct URL to your Textpattern
+  site (not the admin site) under Site URL. Textpattern will default to the URL
+  of your admin site and you will need to change that here. For example:
 
     www.example.com
 
@@ -161,6 +176,17 @@ You should now be able to proceed through Textpattern's setup process.
   line just before the closing '?>' tag:
 
     define('txpath', $txpcfg['txpath']);
+
+* After completing the installation routine, log in to the admin area at:
+
+    http://admin.example.com/
+  
+  Visit the Admin > Preferences panel and under the “Admin” preferences, 
+  correct the “File directory path” to match the /files folder in your new 
+  site’s public directory. For example:
+  
+    /path/to/multi-site-basedir/sites/site1/public/files
+
 
 -------------------------------
 Step 3: Secure the installation
@@ -202,6 +228,8 @@ top-level Textpattern directory, as they are not needed when running multi-site:
     images
     index.php
 
+See also the "Additional notes" below.
+
 ---------------------------
 Step 4: There is no step 4!
 ---------------------------
@@ -209,19 +237,21 @@ Step 4: There is no step 4!
 But if you want to to set up additional sites, simply repeat steps 1 through 3
 for each site. Your sites directory layout will look like the following:
 
-    sites/
-        example.com/
-            admin/
-            private/
-            public/
-        example.net/
-            admin/
-            private/
-            public/
-        example.org/
-            admin/
-            private/
-            public/
+    multi-site-basedir/
+        sites/
+            example.com/
+                admin/
+                private/
+                public/
+            example.net/
+                admin/
+                private/
+                public/
+            example.org/
+                admin/
+                private/
+                public/
+        textpattern/
 
 
 ============================================
@@ -241,18 +271,19 @@ Step 1: Configure web server
 
 You will need to use your web host's facilities to create a single virtual host
 for each of your Textpattern sites. This configuration step is commonly
-performed via your host's web panel.
+performed via your host's control panel.
 
 Set the document root of the site virtual host to the public subdirectory of
 your site. Also, be sure that the virtual host allows traversing symbolic links.
 
-Here is an example config for Apache to create our virtual host for site1:
+If your host allows you to manage your server config files directly, here is an 
+example config for Apache to create our virtual host for site1:
 
     <VirtualHost *:80>
         ServerName example.com
         ServerAlias www.example.com
-        DocumentRoot "/path/to/textpattern/sites/site1/public"
-        <Directory "/path/to/textpattern/sites/">
+        DocumentRoot "/path/to/multi-site-basedir/sites/site1/public"
+        <Directory "/path/to/multi-site-basedir/sites/">
             Options +FollowSymLinks
         </Directory>
     </VirtualHost>
@@ -269,11 +300,12 @@ You should now be able to proceed through Textpattern's setup process.
 
 * Go to: http://example.com and click the textpattern/setup/ link.
 
-* Textpattern will tell you to place your config.php file in /textpattern/.
-  This is INCORRECT. Place it in the private subdirectory of your site.
+* Follow the instructions. On the MySQL setup page, Textpattern will tell you
+  to place your config.php file in /textpattern/. This is INCORRECT. Place it 
+  in the private subdirectory of your site.
   For example:
 
-    /sites/site1/private/config.php.
+    /sites/site1/private/config.php
 
 * IMPORTANT! When you create your config.php file, be sure to add the following
   line just before the closing '?>' tag:
@@ -286,6 +318,12 @@ You should now be able to proceed through Textpattern's setup process.
   address bar at this point:
 
     http://example.com/admin
+
+* Visit the Admin > Preferences panel and under the “Admin” preferences, 
+  correct the “File directory path” to match the /files folder in your new 
+  site’s public directory. For example:
+  
+    /path/to/multi-site-basedir/sites/site1/public/files
 
 -------------------------------
 Step 3: Secure the installation
@@ -317,32 +355,66 @@ top-level Textpattern directory, as they are not needed when running multi-site:
     images
     index.php
 
+See also the "Additional notes" below.
+
 ---------------------------
 Step 4: There is no step 4!
 ---------------------------
 
-But if you want to to set up additional sites, simply repeat steps 1 through 3
+If you want to to set up additional sites, simply repeat steps 1 through 3
 for each site. Your sites directory layout will look like the following:
 
-    sites/
-        example.com/
-            admin/
-            private/
-            public/
-        example.net/
-            admin/
-            private/
-            public/
-        example.org/
-            admin/
-            private/
-            public/
+    multi-site-basedir/
+      sites/
+          example.com/
+              admin/
+              private/
+              public/
+          example.net/
+              admin/
+              private/
+              public/
+          example.org/
+              admin/
+              private/
+              public/
+      textpattern/
 
 
-===================
-= Additional note =
-===================
+====================
+= Additional notes =
+====================
 
-The default article that is displayed after a clean installation will have some
-broken links. This is to be expected, as the links are hard-coded to the
-traditional /textpattern/ back-end.
+Adjustments, known problems and possible workarounds:
+
+* Errors on the Admin > Diagnostics panel:
+
+  * /path/to/multi-site-basedir/textpattern/setup/ still exists
+  * Site URL preference might be incorrect: admin.example.com
+
+  These two errors can be ignored.
+  
+  If you also deleted index.php, and the /files and /images folders in the 
+  base directory of your multi-site installation  you may additionally see:
+  
+  * Missing files: /../index.php
+  
+  This too can be ignored. If you also see:
+   
+  * File directory path is not writable: /path/to/multi-site-basedir/files
+  
+  you have forgotten to correct the file directory path to match your new 
+  site's /file directory (see above) and/or not given it write permissions.
+
+* The default article that is displayed after a clean installation will have 
+  some broken links. This is to be expected, as the links are hard-coded to 
+  the traditional /textpattern/ back-end.
+  
+* When using a unique admin domain, new user registration /activation emails 
+  will contain the wrong login url for the admin area.
+  
+* Some textpattern plugins may need manual adjustments to work with the 
+  multi-site setup.
+
+Please check the Textpattern forum – forum.textpattern.com – for further 
+details and tips for multi-site configurations.
