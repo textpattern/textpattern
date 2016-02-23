@@ -88,9 +88,9 @@ function filterFrontPage()
 
 function populateArticleData($rs)
 {
-    global $thisarticle;
+    global $thisarticle, $trace;
 
-    trace_add("[Article: '{$rs['ID']}']");
+    $trace->log("[Article: '{$rs['ID']}']");
 
     foreach (article_column_map() as $key => $column) {
         $thisarticle[$key] = $rs[$column];
@@ -447,13 +447,13 @@ function maybe_tag($tag)
 
 function processTags($tag, $atts, $thing = null)
 {
-    global $production_status, $txp_current_tag, $txp_current_form;
+    global $production_status, $txp_current_tag, $txp_current_form, $trace;
     static $registry = null;
 
     if ($production_status !== 'live') {
         $old_tag = $txp_current_tag;
         $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
-        trace_add($txp_current_tag, 1, "Form='$txp_current_form', Tag='$txp_current_tag'");
+        $trace->start($txp_current_tag);
     }
 
     if ($registry === null) {
@@ -473,12 +473,7 @@ function processTags($tag, $atts, $thing = null)
     }
 
     if ($production_status !== 'live') {
-        trace_add('', -1);
-
-        if (isset($thing)) {
-            trace_add("</txp:{$tag}>");
-        }
-
+        $trace->stop(isset($thing) ? "</txp:{$tag}>" : null);
         $txp_current_tag = $old_tag;
     }
 
@@ -702,7 +697,7 @@ function chopUrl($req)
 
 function filterAtts($atts = null)
 {
-    global $prefs;
+    global $prefs, $trace;
     static $out = array();
 
     if (is_array($atts)) {
@@ -716,15 +711,15 @@ function filterAtts($atts = null)
                 'id'            => '',
                 'time'          => 'past',
             ), $atts, 0);
-            trace_add('[filterAtts accepted]');
+            $trace->log('[filterAtts accepted]');
         } else {
             // TODO: deal w/ nested txp:article[_custom] tags.
-            trace_add('[filterAtts ignored]');
+            $trace->log('[filterAtts ignored]');
         }
     }
 
     if (empty($out)) {
-        trace_add('[filterAtts not set]');
+        $trace->log('[filterAtts not set]');
     }
 
     return $out;

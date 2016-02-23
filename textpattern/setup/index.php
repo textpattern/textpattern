@@ -30,6 +30,8 @@ define("txpinterface", "admin");
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
 
+include txpath.'/lib/class.trace.php';
+$trace = new Trace();
 include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_misc.php';
 include txpath.'/vendors/Textpattern/Loader.php';

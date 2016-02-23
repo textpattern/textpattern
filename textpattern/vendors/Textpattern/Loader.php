@@ -76,8 +76,10 @@ class Loader
 
     public function register()
     {
+        global $trace;
+
         if ($this->directory) {
-            trace_add("[Textpattern autoload dir: '".str_replace(txpath.'/', '', $this->directory)."']");
+            $trace->log("[Textpattern autoload dir: '".str_replace(txpath.'/', '', $this->directory)."']");
             return spl_autoload_register(array($this, 'load'));
         }
 
@@ -123,6 +125,8 @@ class Loader
 
     public function load($class)
     {
+        global $trace;
+
         $request = $class;
 
         if ($this->namespace !== null && strpos($class, $this->namespace.$this->separator) !== 0 ||
@@ -143,13 +147,16 @@ class Loader
         $file .= $class.$this->extension;
 
         if (is_readable($file)) {
-            trace_add("\t[Load: '".str_replace(txpath.'/', '', $file)."']");
+            $trace->start("[Load: '".str_replace(txpath.'/', '', $file)."']");
             require_once $file;
 
             if (class_exists($request, false)) {
-                trace_add("\t\t[Class loaded: '$class']");
+                $trace->log("[Class loaded: '$class']");
+                $trace->stop();
                 return true;
             }
+
+            $trace->stop();
         }
 
         return false;

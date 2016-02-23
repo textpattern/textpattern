@@ -80,9 +80,10 @@ if (!isset($txpcfg['table_prefix'])) {
     ob_end_clean();
 }
 
+include txpath.'/lib/class.trace.php';
+$trace = new Trace();
 include txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
-trace_log(TEXTPATTERN_TRACE_START);
 
 $nolog = 1;
 
@@ -97,7 +98,5 @@ $n = gps('n');
 output_css($s, $n);
 
 if ($production_status === 'debug') {
-    echo n.'/*';
-    trace_log(TEXTPATTERN_TRACE_DISPLAY);
-    echo n.'*/'.n;
+    echo n.'/*' . $trace->result() . n.'*/'.n;
 }

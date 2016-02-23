@@ -48,7 +48,7 @@ include_once txpath.'/lib/admin_config.php';
 include_once txpath.'/publish/taghandlers.php';
 include_once txpath.'/publish/log.php';
 include_once txpath.'/publish/comment.php';
-trace_add('[PHP Include end]');
+$trace->stop();
 
 set_error_handler('publicErrorHandler', error_reporting());
 
@@ -67,6 +67,11 @@ bombShelter();
 
 // Set a higher error level during initialisation.
 set_error_level(@$production_status == 'live' ? 'testing' : @$production_status);
+
+// disable tracing in live environment.
+if ($production_status == 'live') {
+    Trace::setQuiet(true);
+}
 
 // Use the current URL path if $siteurl is unknown.
 if (empty($siteurl)) {
@@ -175,7 +180,12 @@ set_error_level($production_status);
 if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
     include txpath."/publish/{$feed}.php";
     echo $feed();
-    trace_log(TEXTPATTERN_TRACE_DISPLAY);
+    if ($production_status !== 'live') {
+      echo $trace->summary();
+      if ($production_status === 'debug') {
+        echo $trace->result();
+      }
+    }
     exit;
 }
 
