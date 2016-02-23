@@ -1,0 +1,28 @@
+#DirectoryIndex index.php index.html
+
+#Options +FollowSymLinks
+#Options -Indexes
+#ErrorDocument 403 default
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	#RewriteBase /relative/web/path/
+
+	RewriteCond %{REQUEST_FILENAME} -f [OR]
+	RewriteCond %{REQUEST_FILENAME} -d
+	RewriteRule ^(.+) - [PT,L]
+
+	RewriteCond %{REQUEST_URI} !=/favicon.ico
+	RewriteRule ^(.*) index.php
+
+	RewriteCond %{HTTP:Authorization}  !^$
+	RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+</IfModule>
+
+#php_value register_globals 0
+
+# SVG
+<IfModule mod_mime.c>
+	AddType image/svg+xml  svg svgz
+	AddEncoding gzip       svgz
+</IfModule>
