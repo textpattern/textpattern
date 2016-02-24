@@ -1686,14 +1686,23 @@ textpattern.Route.add('admin', function ()
 textpattern.Route.add('prefs', function ()
 {
     var prefsGroup = $('#prefs_form');
+    var prefTabs = prefsGroup.find('.switcher-list li'); 
 
-    prefsGroup.tabs().removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
+    prefsGroup.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
     prefsGroup.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
-    prefsGroup.find('.switcher-list li').removeClass('ui-state-default ui-corner-top');
+    prefTabs.removeClass('ui-state-default ui-corner-top');
     prefsGroup.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
 
-    // TODO: save pane state for currently open pref group, fallback to first if not set.
-
+    prefTabs.on('click', 'a', function(ev) {
+        var me = $(this);
+        sendAsyncEvent({
+                event   : 'pane',
+                step    : 'tabVisible',
+                pane    : me.data('txp-pane'),
+                origin  : textpattern.event,
+                token   : me.data('txp-token')
+            });
+    });
 });
 
 // Plugins panel.
