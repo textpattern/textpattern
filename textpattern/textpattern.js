@@ -1245,12 +1245,18 @@ jQuery.fn.txpSortable = function (options)
  * Password strength meter.
  *
  * @since 4.6.0
+ * @param  {object}  options
+ * @param  {array}   options.gtxt_prefix  gTxt() string prefix
  * @todo  Pass in name/email via 'options' to be injected in user_inputs[]
  */
 
 textpattern.passwordStrength = function (options)
 {
     jQuery('form').on('keyup', 'input.txp-strength-hint', function() {
+        var settings = $.extend({
+            'gtxt_prefix' : ''
+        }, options);
+
         var me = jQuery(this);
         var pass = me.val();
         var passResult = zxcvbn(pass, user_inputs=[]);
@@ -1277,7 +1283,7 @@ textpattern.passwordStrength = function (options)
         meter.empty();
 
         if (pass.length > 0) {
-            meter.append('<div class="bar"></div><div class="indicator">' + textpattern.gTxt('password_strength_'+passResult.score) + '</div>');
+            meter.append('<div class="bar"></div><div class="indicator">' + textpattern.gTxt(settings.gtxt_prefix+'password_strength_'+passResult.score) + '</div>');
         }
 
         meter
@@ -1561,7 +1567,9 @@ var cookieEnabled = true;
 textpattern.Route.add('setup', function ()
 {
     textpattern.passwordMask();
-    textpattern.passwordStrength();
+    textpattern.passwordStrength({
+        'gtxt_prefix' : 'setup_'
+    });
 });
 
 // Login panel.
