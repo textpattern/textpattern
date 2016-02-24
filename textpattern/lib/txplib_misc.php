@@ -384,7 +384,7 @@ function gTxt($var, $atts = array(), $escape = 'html')
  *
  * @param   string|array $var   Scalar or array of string keys
  * @param   array        $atts  Array or array of arrays of variable substitution pairs
- * @param   array        $route Optional event/step upon which to add the strings
+ * @param   array        $route Optional events/steps upon which to add the strings
  * @since   4.5.0
  * @package L10n
  * @example
@@ -395,10 +395,10 @@ function gTxtScript($var, $atts = array(), $route = array())
 {
     global $textarray_script, $event, $step;
 
-    $targetEvent = empty($route[0]) ? null : $route[0];
-    $targetStep = empty($route[1]) ? null : $route[1];
+    $targetEvent = empty($route[0]) ? null : (array)$route[0];
+    $targetStep = empty($route[1]) ? null : (array)$route[1];
 
-    if (($targetEvent === null || $targetEvent === $event) && ($targetStep === null || $targetStep === $step)) {
+    if (($targetEvent === null || in_array($event, $targetEvent)) && ($targetStep === null || in_array($step, $targetStep))) {
         if (!is_array($textarray_script)) {
             $textarray_script = array();
         }
