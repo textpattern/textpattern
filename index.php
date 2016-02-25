@@ -84,9 +84,10 @@ if (!isset($txpcfg['table_prefix'])) {
 
 include txpath.'/lib/class.trace.php';
 $trace = new Trace();
-$trace->start('[PHP includes]');
+$trace->start('[PHP includes, stage 1]');
 include txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
+$trace->stop();
 
 if (!isset($txpcfg['table_prefix'])) {
     txp_status_header('503 Service Unavailable');

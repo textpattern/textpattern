@@ -31,6 +31,9 @@ if (!defined("txpinterface")) {
         ' (Otherwise note that publish.php cannot be called directly.)');
 }
 
+global $trace;
+
+$trace->start('[PHP includes, stage 2]');
 include_once txpath.'/vendors/Textpattern/Loader.php';
 
 $loader = new \Textpattern\Loader(txpath.'/vendors');
