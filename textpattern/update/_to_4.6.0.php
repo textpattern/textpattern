@@ -225,13 +225,14 @@ foreach (array('4.4.0', '4.4.1') as $v) {
 safe_drop('txp_token');
 safe_create('txp_token',"
     id           INT          NOT NULL AUTO_INCREMENT,
-    reference_id INT          NOT NULL DEFAULT 0,
-    type         VARCHAR(255) NOT NULL DEFAULT '',
+    reference_id INT          NOT NULL,
+    type         VARCHAR(255) NOT NULL,
     selector     VARCHAR(12)  NOT NULL DEFAULT '',
-    token        VARCHAR(255) NOT NULL DEFAULT '',
+    token        VARCHAR(255) NOT NULL,
     expires      DATETIME         NULL DEFAULT NULL,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE INDEX ref_type (reference_id, type)
 ");
 
 // Remove default zero dates to make MySQL 5.7 happy.
