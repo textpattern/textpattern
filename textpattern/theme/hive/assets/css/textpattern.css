@@ -551,14 +551,6 @@ pre {
 }
 
 /**
- * Don't wrap lines of `textarea` code onto new lines.
- */
-textarea.code {
-  white-space: pre;
-  word-wrap: normal;
-}
-
-/**
  * Override `code` styling for code display within preformatted text areas and
  * form text areas.
  */
@@ -570,6 +562,15 @@ code.excerpt {
   border: 0;
   border-radius: 0;
   background: none;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-hyphens: none;
+      -ms-hyphens: none;
+          hyphens: none;
 }
 
 /**
@@ -1462,6 +1463,13 @@ textarea {
   vertical-align: top;
   /* 3 */
   resize: vertical;
+}
+
+/**
+ * Ensure code text areas are always rendered left-to-right.
+ */
+textarea.code {
+  direction: ltr;
 }
 
 /**
@@ -5062,6 +5070,11 @@ label.ui-state-active.ui-button:active {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.ui-selectmenu-icon.ui-icon {
+  margin-top: 0;
+  float: right;
 }
 
 .ui-selectmenu-menu {
