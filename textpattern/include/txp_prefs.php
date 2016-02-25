@@ -212,7 +212,9 @@ function prefs_list($message = '')
                                 'data-txp-pane'  => $last_event,
                                 'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
                             )),
-                        'li');
+                        'li', array(
+                            'class' => (($last_event === $selected) ? 'ui-tabs-active ui-state-active' : '')
+                            ));
                 }
 
                 if ($last_event === $selected) {
@@ -275,7 +277,9 @@ function prefs_list($message = '')
                     'data-txp-pane'  => $last_event,
                     'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
                 )),
-            'li').n;
+            'li', array(
+                'class' => (($last_event === $selected) ? 'ui-tabs-active ui-state-active' : '')
+                )).n;
 
         if ($last_event === $selected) {
             $tabActive = $tabCount - 1;
