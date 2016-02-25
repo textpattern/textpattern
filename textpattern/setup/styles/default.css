@@ -459,6 +459,15 @@ nav ol:after,
     border: 0;
     background-color: transparent;
     font-size: 1em;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-hyphens: none;
+        -ms-hyphens: none;
+            hyphens: none;
   }
   /**
  * Prevent `sub` and `sup` affecting `line-height` in all browsers.
@@ -645,12 +654,6 @@ nav ol:after,
  */
   figure {
     margin: 0;
-  }
-  /**
- * Prevent modern browsers from displaying `audio` without controls.
- */
-  audio:not([controls]) {
-    display: none;
   }
   /**
  * Correct overflow not hidden in IE 11.
