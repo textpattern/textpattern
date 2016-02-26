@@ -957,7 +957,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     } elseif ($view == 'html') {
         echo graf(gTxt('body'), array('class' => 'alert-block information')).
             n.tag(
-                tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', array('class' => 'language-markup')),
+                tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', array(
+                    'class' => 'language-markup',
+                    'dir'   => 'ltr',
+                )),
                 'pre', array('class' => 'body line-numbers')
             );
     } else {
@@ -974,7 +977,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         } elseif ($view == 'html') {
             echo graf(gTxt('excerpt'), array('class' => 'alert-block information')).
                 n.tag(
-                    tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'code', array('class' => 'language-markup')),
+                    tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'code', array(
+                        'class' => 'language-markup',
+                        'dir'   => 'ltr',
+                    )),
                     'pre', array('class' => 'excerpt line-numbers')
                 );
         } else {
