@@ -47,6 +47,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Developer: Use 'mysqli' extension for DB access, lose dependency on 'mysql' extension.
 * Developer: Use the TXP 'now()' function instead of the SQL 'NOW()' function to create cache-friendly, faster SELECT queries.
 * Developer: Added jQuery UI library to admin side.
+* Developer: Added Prism code highlighting for <code> and <pre><code> to admin side. The following languages are supported (when specified via classnames on the <code> tag, i.e. using 'class="language-xxx"): 'language-markup', 'language-css', 'language-clike', 'language-javascript', 'language-json', 'language-php', 'language-markdown', 'language-textile'. Optional line numbers are also supported when code highlighting, by adding an additional classname of 'line-numbers' to the parent <pre> tag.
 * Developer: Added DocBlock documentation comments throughout the source code.
 * Developer: Adherence to PSR coding standards where possible.
 * Developer: Function signature for wrapRegion() changed: 7th parameter 'ARIA role' dropped, as it shouldn't be stated for semantic tags such as 'section'.
