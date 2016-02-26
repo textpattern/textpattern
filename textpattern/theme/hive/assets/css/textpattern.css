@@ -537,7 +537,7 @@ samp {
  */
 pre {
   margin: 1em 0;
-  padding: 0.53846153846154em 1em;
+  padding: 1em;
   border: 1px solid #e3e3e3;
   border-radius: 0.25em;
   background: #f7f7f7;
@@ -1247,13 +1247,6 @@ pre[class*="language-"] {
 }
 
 /**
- * Code blocks.
- */
-pre[class*="language-"] {
-  padding: 1.3076923em 1em;
-}
-
-/**
  * Inline code.
  */
 :not(pre) > code[class*="language-"] {
@@ -1335,7 +1328,7 @@ pre[class*="language-"] {
   cursor: help;
 }
 
-/*
+/**
  * Line numbers (plugin).
  */
 pre.line-numbers {
