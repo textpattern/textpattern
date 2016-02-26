@@ -232,7 +232,7 @@ safe_create('txp_token',"
     expires      DATETIME         NULL DEFAULT NULL,
 
     PRIMARY KEY (id),
-    UNIQUE INDEX ref_type (reference_id, type)
+    UNIQUE INDEX ref_type (reference_id, type(50))
 ");
 
 // Remove default zero dates to make MySQL 5.7 happy.
