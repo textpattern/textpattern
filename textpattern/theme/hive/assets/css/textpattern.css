@@ -1328,48 +1328,6 @@ pre[class*="language-"] {
   cursor: help;
 }
 
-/**
- * Line numbers (plugin).
- */
-pre.line-numbers {
-  position: relative;
-  padding-left: 3.8em;
-  counter-reset: linenumber;
-}
-
-pre.line-numbers > code {
-  position: relative;
-}
-
-.line-numbers .line-numbers-rows {
-  position: absolute;
-  top: 0;
-  left: -3.8em;
-  width: 3em;
-  border-right: 1px solid #999999;
-  font-size: 100%;
-  letter-spacing: -1px;
-  pointer-events: none;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-}
-
-.line-numbers-rows > span {
-  display: block;
-  pointer-events: none;
-  counter-increment: linenumber;
-}
-
-.line-numbers-rows > span:before {
-  display: block;
-  padding-right: 0.8em;
-  color: #999999;
-  text-align: right;
-  content: counter(linenumber);
-}
-
 /* Forms
    ========================================================================== */
 /**
