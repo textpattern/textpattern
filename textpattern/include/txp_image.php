@@ -606,12 +606,6 @@ function image_edit($message = '', $id = '')
 
         $imageBlock = array();
         $thumbBlock = array();
-        $imageBlock[] = pluggable_ui(
-                'image_ui',
-                'fullsize_image',
-                $img,
-                $rs
-            );
 
         $imageBlock[] = pluggable_ui(
                 'image_ui',
@@ -620,7 +614,21 @@ function image_edit($message = '', $id = '')
                 $rs
             );
 
+        $imageBlock[] = pluggable_ui(
+                'image_ui',
+                'fullsize_image',
+                $img,
+                $rs
+            );
+
         $thumbBlock[] = hed(gTxt('create_thumbnail').popHelp('create_thumbnail'), 3);
+
+        $thumbBlock[] = pluggable_ui(
+            'image_ui',
+            'thumbnail_edit',
+            upload_form('upload_thumbnail', 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'thumbnail-upload', ' thumbnail-upload'),
+            $rs
+        );
 
         $thumbBlock[] = (check_gd($ext))
             ? pluggable_ui(
@@ -657,13 +665,6 @@ function image_edit($message = '', $id = '')
                 ? $thumb.n.dLink('image', 'thumbnail_delete', 'id', $id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
                 : '').
             '</div>',
-            $rs
-        );
-
-        $thumbBlock[] = pluggable_ui(
-            'image_ui',
-            'thumbnail_edit',
-            upload_form('upload_thumbnail', 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'thumbnail-upload', ' thumbnail-upload'),
             $rs
         );
 
