@@ -1486,7 +1486,7 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
             ).
             tInput().n,
             'form', array(
-                'class'   => 'upload-form'.$class,
+                'class'   => 'upload-form'.($class ? ' '.trim($class) : ''),
                 'method'  => 'post',
                 'enctype' => 'multipart/form-data',
                 'action'  => 'index.php',
