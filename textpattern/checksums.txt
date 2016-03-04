@@ -112,7 +112,7 @@
 /vendors/Textpattern/Textpack/Parser.php: 2a1f718b9b11e97086161060c8e76b17
 /vendors/Textpattern/Textpack/String/Iterator.php: 135cf5d86e191bae3139703c51cdc217
 /vendors/Textpattern/Textpack/StringInterface.php: b6cc517b7ec5f0e1995916878d5ee358
-/vendors/Textpattern/Type/Callable.php: af1e2c7330803292e81aec97a198a373
+/vendors/Textpattern/Type/TypeCallable.php: af1e2c7330803292e81aec97a198a373
 /vendors/Textpattern/Type/StringType.php: c322366173b359c6d14223eee5b425bc
 /vendors/Textpattern/Type/TypeInterface.php: b1b40316a4aaa7fc99f43078f215ab16
 /../rpc/index.php: 3f3bf5070750bf950336c2ce5c16dbd5
