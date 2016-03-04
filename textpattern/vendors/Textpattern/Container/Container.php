@@ -114,7 +114,7 @@ class Container implements \Textpattern\Container\ContainerInterface
             $class = $this->resolveAlias($alias);
 
             if ($options && method_exists($class, '__construct')) {
-                $reflection = new ReflectionClass($class);
+                $reflection = new \ReflectionClass($class);
                 $instance = $reflection->newInstanceArgs($options);
             } else {
                 $instance = new $class;
