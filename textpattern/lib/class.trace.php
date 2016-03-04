@@ -63,7 +63,7 @@ class Trace {
   {
     if (self::$quiet) return;
 
-    $start = array_pop($this->nest);
+    $start = assert_int(array_pop($this->nest));
     $this->trace[$start]['end'] = microtime(true);
 
     if ($this->trace[$start]['query']) {
