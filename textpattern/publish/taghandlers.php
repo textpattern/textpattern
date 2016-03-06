@@ -1232,8 +1232,10 @@ function popup($atts)
         'class'        => '',
         'section'      => '',
         'this_section' => 0,
-        'type'         => 'c',
+        'type'         => 'category',
     ), $atts));
+
+    $type = substr($type, 0, 1);
 
     if ($type == 's') {
         $rs = safe_rows_start("name, title", 'txp_section', "name != 'default' ORDER BY name");
