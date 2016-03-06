@@ -71,7 +71,7 @@ class Parser extends \Netcarver\Textile\Parser
     public function textileRestricted($text, $lite = null, $noimage = null, $rel = null)
     {
         if ($lite === null) {
-            $lite = get_pref('comments_use_fat_textile', 1);
+            $lite = !get_pref('comments_use_fat_textile', 1);
         }
 
         if ($noimage === null) {
