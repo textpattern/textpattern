@@ -1153,11 +1153,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo wrapRegion('txp-meta-group', $html_url_title.$html_description.$html_keywords, 'txp-meta-group-content', 'meta', 'article_meta');
 
         // 'Comment options' collapsible section.
-        // TODO: 'empty' class is a dirty solution - needs improvement.
-        echo wrapRegion('txp-comments-group', $partials['comments']['html'], 'txp-comments-group-content', 'comment_settings', 'article_comments', (($use_comments == 1)
-            ? ''
-            : 'empty'
-        ));
+        echo wrapRegion('txp-comments-group', $partials['comments']['html'], 'txp-comments-group-content', 'comment_settings', 'article_comments');
 
         // 'Article image' collapsible section.
         echo $partials['image']['html'];
