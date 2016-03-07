@@ -828,10 +828,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     if ($step != 'create' && isset($sPosted)) {
         // Previous record?
-        $rs['prev_id'] = checkIfNeighbour('prev', $sPosted);
+        $rs['prev_id'] = checkIfNeighbour('prev', $sPosted, $ID);
 
         // Next record?
-        $rs['next_id'] = checkIfNeighbour('next', $sPosted);
+        $rs['next_id'] = checkIfNeighbour('next', $sPosted, $ID);
     } else {
         $rs['prev_id'] = $rs['next_id'] = 0;
     }
@@ -1251,11 +1251,12 @@ function custField($num, $field, $content)
 function checkIfNeighbour($whichway, $sPosted)
 {
     $sPosted = assert_int($sPosted);
+    $ID = assert_int($ID);
     $dir = ($whichway == 'prev') ? '<' : '>';
     $ord = ($whichway == 'prev') ? "DESC" : "ASC";
 
     return safe_field("ID", 'textpattern',
-        "Posted $dir FROM_UNIXTIME($sPosted) ORDER BY Posted $ord LIMIT 1");
+        "Posted $dir FROM_UNIXTIME($sPosted) OR Posted = FROM_UNIXTIME($sPosted) AND ID $dir $ID ORDER BY Posted $ord, ID $ord LIMIT 1");
 }
 
 /**
