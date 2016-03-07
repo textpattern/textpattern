@@ -105,8 +105,9 @@ include txpath.'/publish.php';
 textpattern();
 
 if ($production_status !== 'live') {
-  echo $trace->summary();
-  if ($production_status === 'debug') {
-    echo $trace->result();
-  }
+    echo $trace->summary();
+
+    if ($production_status === 'debug') {
+        echo $trace->result();
+    }
 }
