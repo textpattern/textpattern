@@ -1248,7 +1248,7 @@ function custField($num, $field, $content)
  * @return int
  */
 
-function checkIfNeighbour($whichway, $sPosted)
+function checkIfNeighbour($whichway, $sPosted, $ID)
 {
     $sPosted = assert_int($sPosted);
     $ID = assert_int($ID);
