@@ -189,6 +189,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     extract($atts);
     $expired = ($expired && ($prefs['publish_expired_articles']));
     $customFields = getCustomFields();
+    $thisid = isset($thisid) ? intval($thisid) : 0;
 
     // Building query parts; lifted from publish.php.
     $ids = array_map('intval', do_list($id));
@@ -249,8 +250,8 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     $safe_name = safe_pfx('textpattern');
     $q = array(
-        "SELECT ID AS thisid, Section AS section, Title AS title, url_title, UNIX_TIMESTAMP(Posted) AS posted
-            FROM $safe_name WHERE $sortby $type $threshold",
+        "SELECT ID AS thisid, Section AS section, Title AS title, url_title, UNIX_TIMESTAMP(Posted) AS posted FROM $safe_name
+            WHERE ($sortby $type $threshold OR ".($thisid ? "$sortby = $threshold AND ID $type $thisid" : "0").")",
         ($s != '' && $s != 'default') ? "AND Section = '".doSlash($s)."'" : filterFrontPage(),
         $id,
         $time,
@@ -259,6 +260,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         "AND Status = 4",
         "ORDER BY $sortby",
         ($type == '<') ? "DESC" : "ASC",
+        ', ID '.($type == '<' ? 'DESC' : 'ASC'),
         "LIMIT 1",
     );
 
@@ -281,7 +283,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
     if ($id !== 0) {
         // Pivot is specific article by ID: In lack of further information,
         // revert to default sort order 'Posted desc'.
-        $atts = filterAtts(array('sortby' => "Posted", 'sortdir' => "DESC"));
+        $atts = array('thisid' => $id) + filterAtts(array('sortby' => "Posted", 'sortdir' => "DESC"));
     } else {
         // Pivot is $thisarticle: Use article attributes to find its neighbours.
         assert_article();
@@ -290,7 +292,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
             return array();
         }
 
-        $atts = filterAtts();
+        $atts = array('thisid' => $thisarticle['thisid']) + filterAtts();
         $m = preg_split('/\s+/', $atts['sort']);
 
         // If in doubt, fall back to chronologically descending order.
