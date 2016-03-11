@@ -1245,11 +1245,14 @@ function custField($num, $field, $content)
  *
  * @param  string $whichway Either '&lt;' or '&gt;'
  * @param  int    Unix timestamp
+ * @param  int    pivot article ID
  * @return int
  */
 
-function checkIfNeighbour($whichway, $sPosted, $ID)
+function checkIfNeighbour($whichway, $sPosted, $ID = 0)
 {
+    // Eventual backward compatibility.
+    if(empty($ID)) $ID = !empty($GLOBALS['ID']) ? $GLOBALS['ID'] : gps('ID');
     $sPosted = assert_int($sPosted);
     $ID = assert_int($ID);
     $dir = ($whichway == 'prev') ? '<' : '>';
