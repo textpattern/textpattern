@@ -682,6 +682,11 @@ function image_edit($message = '', $id = '')
                     wrapGroup(
                         'image-details',
                         inputLabel(
+                            'id',
+                            $id,
+                            'id', '', array('class' => 'txp-form-field edit-image-id')
+                        ).
+                        inputLabel(
                             'image_name',
                             fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'),
                             'image_name', '', array('class' => 'txp-form-field edit-image-name')
