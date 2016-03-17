@@ -117,7 +117,7 @@ class Textile extends Base implements TextfilterInterface
             popHelpSubtle('super', 400, 300).'</li>'.
             n.'<li>'.'~'.gTxt('subscript').'~'.
             popHelpSubtle('subscript', 400, 400).'</li>'.
-            n.'<li>'.'"'.gTxt('linktext').'"'.
+            n.'<li>'.'"'.gTxt('linktext').'":url'.
             popHelpSubtle('link', 400, 300).'</li>'.
             n.'<li>'.'!'.gTxt('imageurl').'!'.
             popHelpSubtle('image', 400, 400).'</li>'.
