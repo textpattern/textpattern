@@ -790,8 +790,8 @@ nav ol:after,
  */
   legend {
     padding: 0;
-    color: inherit;
     /* 1 */
+    color: inherit;
   }
   /**
  * 1. Prevent elements from spilling out of their parent.

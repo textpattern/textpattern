@@ -1331,8 +1331,8 @@ fieldset {
  */
 legend {
   padding: 0;
-  color: inherit;
   /* 1 */
+  color: inherit;
 }
 
 /**
