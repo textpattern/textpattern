@@ -315,7 +315,7 @@ a {
 }
 
 a:hover, a:active {
-  outline: 0;
+  outline-width: 0;
   color: #0066ff;
   text-decoration: underline;
   text-decoration: #004cbf solid underline;
@@ -349,7 +349,7 @@ a.busy {
 .pophelp:focus,
 .pophelpsubtle:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
 }
 
 /**
@@ -479,13 +479,6 @@ blockquote {
   margin: 1em 0;
   padding: 0 0 0 1em;
   border-left: 3px solid #cccccc;
-}
-
-/**
- * Address styling not present in Safari and Chrome.
- */
-dfn {
-  font-style: italic;
 }
 
 /**
@@ -662,8 +655,7 @@ video {
 /**
  * Images.
  *
- * 1. Remove potential border when inside `a` element.
- * 2. Remove the gap between images and the bottom of their containers.
+ * 1. Remove the gap between images and the bottom of their containers.
  *
  * Image alignment (compatible with Textile markup syntax).
  *
@@ -675,8 +667,6 @@ video {
  */
 img {
   /* 1 */
-  border: 0;
-  /* 2 */
   vertical-align: middle;
 }
 
@@ -1336,10 +1326,13 @@ fieldset {
 
 /**
  * Normalize styling of `legend`.
+ *
+ * 1. Correct `color` not being inherited from fieldset in IE 11.
  */
 legend {
   padding: 0;
-  border: 0;
+  color: inherit;
+  /* 1 */
 }
 
 /**
@@ -1437,7 +1430,7 @@ input[type="week"]:focus,
 select:focus,
 textarea:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
 }
 
 /**
@@ -1746,7 +1739,7 @@ input[type="button"]:focus,
 .navlink:focus,
 .navlink-active:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
 }
 
 /**
@@ -3529,7 +3522,7 @@ span.spinner {
 /* Content -> Images panel - additional layout
    ========================================================================== */
 .has-thumbnail a:focus {
-  outline: 0;
+  outline-width: 0;
 }
 
 .thumbnail-alter input {
@@ -3649,7 +3642,7 @@ div.code {
   margin: 0;
   padding: 0;
   border: 0;
-  outline: 0;
+  outline-width: 0;
   font-size: 13px;
   line-height: 20px;
   list-style: none;
@@ -4211,7 +4204,7 @@ a.ui-state-default:focus {
 
 .ui-button:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
 }
 
 /**
@@ -4230,7 +4223,7 @@ a.ui-button {
 .ui-button.ui-state-focus {
   /* 1 */
   border-color: #0066ff !important;
-  outline: 0;
+  outline-width: 0;
 }
 
 /**
@@ -4912,7 +4905,7 @@ label.ui-state-active.ui-button:active {
   display: block;
   margin: 0;
   padding: 0;
-  outline: 0;
+  outline-width: 0;
   /* 1 */
   font-size: 13px;
   line-height: 1.38461538461538em;
@@ -5100,7 +5093,7 @@ label.ui-state-active.ui-button:active {
 
 .ui-selectmenu-button:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
 }
 
 .ui-selectmenu-button span.ui-icon {
