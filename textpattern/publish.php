@@ -735,6 +735,7 @@ function doArticles($atts, $iscustom, $thing = null)
         'time'          => 'past',
         'status'        => STATUS_LIVE,
         'allowoverride' => (!$q and !$iscustom),
+        'frontpage'     => !$iscustom,
         'offset'        => 0,
         'wraptag'       => '',
         'break'         => '',
@@ -750,14 +751,12 @@ function doArticles($atts, $iscustom, $thing = null)
         $theAtts['section'] = ($s && $s != 'default') ? $s : '';
         $theAtts['author'] = (!empty($author) ? $author : '');
         $theAtts['month'] = (!empty($month) ? $month : '');
-        $theAtts['frontpage'] = ($s && $s == 'default') ? true : false;
+        $theAtts['frontpage'] = ($theAtts['frontpage'] && $s && $s == 'default');
         $theAtts['excerpted'] = 0;
         $theAtts['exclude'] = 0;
         $theAtts['expired'] = $publish_expired_articles;
 
         filterAtts($theAtts);
-    } else {
-        $theAtts['frontpage'] = false;
     }
 
     extract($theAtts);
