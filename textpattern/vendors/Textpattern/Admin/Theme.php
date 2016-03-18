@@ -34,7 +34,7 @@ if (!defined('THEME')) {
      * Relative path to themes directory.
      */
 
-    define('THEME', 'theme/');
+    define('THEME', 'admin-themes/');
 }
 
 /**
