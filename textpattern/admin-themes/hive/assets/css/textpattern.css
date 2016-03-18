@@ -315,7 +315,7 @@ a {
 }
 
 a:hover, a:active {
-  outline: 0;
+  outline-width: 0;
   color: #0066ff;
   text-decoration: underline;
   text-decoration: #004cbf solid underline;
@@ -349,7 +349,7 @@ a.busy {
 .pophelp:focus,
 .pophelpsubtle:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
 }
 
 /**
@@ -484,13 +484,6 @@ blockquote {
 /**
  * Address styling not present in Safari and Chrome.
  */
-dfn {
-  font-style: italic;
-}
-
-/**
- * Address styling not present in Safari and Chrome.
- */
 abbr[title],
 dfn[title] {
   text-decoration: dotted underline;
@@ -537,7 +530,7 @@ samp {
  */
 pre {
   margin: 1em 0;
-  padding: 0.53846153846154em 1em;
+  padding: 1em;
   border: 1px solid #e3e3e3;
   border-radius: 0.25em;
   background: #f7f7f7;
@@ -548,14 +541,6 @@ pre {
   /* 3 */
   -moz-tab-size: 4;
        tab-size: 4;
-}
-
-/**
- * Don't wrap lines of `textarea` code onto new lines.
- */
-textarea.code {
-  white-space: pre;
-  word-wrap: normal;
 }
 
 /**
@@ -570,6 +555,15 @@ code.excerpt {
   border: 0;
   border-radius: 0;
   background: none;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-hyphens: none;
+      -ms-hyphens: none;
+          hyphens: none;
 }
 
 /**
@@ -661,8 +655,7 @@ video {
 /**
  * Images.
  *
- * 1. Remove potential border when inside `a` element.
- * 2. Remove the gap between images and the bottom of their containers.
+ * 1. Remove the gap between images and the bottom of their containers.
  *
  * Image alignment (compatible with Textile markup syntax).
  *
@@ -674,8 +667,6 @@ video {
  */
 img {
   /* 1 */
-  border: 0;
-  /* 2 */
   vertical-align: middle;
 }
 
@@ -1230,6 +1221,103 @@ h3.txp-summary.expanded a:after {
   background-color: #238c23;
 }
 
+/* Code highlighting (via Prism.js)
+   ========================================================================== */
+code[class*="language-"],
+pre[class*="language-"] {
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-hyphens: none;
+      -ms-hyphens: none;
+          hyphens: none;
+}
+
+/**
+ * Inline code.
+ */
+:not(pre) > code[class*="language-"] {
+  white-space: normal;
+}
+
+/**
+ * Syntax colours/styles.
+ */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #708090;
+}
+
+.token.punctuation {
+  color: #999999;
+}
+
+.namespace {
+  opacity: 0.7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #990055;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #669900;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  background: rgba(255, 255, 255, 0.5);
+  color: #a67f59;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #0077aa;
+}
+
+.token.function {
+  color: #dd4a68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #ee9900;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}
+
 /* Forms
    ========================================================================== */
 /**
@@ -1247,10 +1335,13 @@ fieldset {
 
 /**
  * Normalize styling of `legend`.
+ *
+ * 1. Correct `color` not being inherited from fieldset in IE 11.
  */
 legend {
   padding: 0;
-  border: 0;
+  /* 1 */
+  color: inherit;
 }
 
 /**
@@ -1348,7 +1439,7 @@ input[type="week"]:focus,
 select:focus,
 textarea:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
 }
 
 /**
@@ -1404,18 +1495,30 @@ input[type="radio"] + label:last-of-type {
 }
 
 /**
- * Correct `select` style inheritance in Firefox.
+ * Use indicator icon to signify the drop-down ability of `select`.
  */
 select {
+  padding-right: 1.30769230769231em;
+  background: #ffffff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='13px' height='4px' viewBox='0 0 13 4'><polygon fill='%23333' points='3.5,4 0,0 7,0'/></svg>") right center no-repeat;
+  background-size: 1em 0.30769230769231em;
   text-transform: none;
 }
 
 /**
- * Override height set in a previous rule and allow auto height.
+ * Remove browser-specific `select` UI in IE 11.
+ */
+select::-ms-expand {
+  opacity: 0;
+}
+
+/**
+ * Override height and background set in a previous rule and allow auto height.
  */
 select[size],
 select[multiple] {
   height: auto;
+  padding-right: 0.30769230769231em;
+  background-image: none;
 }
 
 /**
@@ -1424,29 +1527,6 @@ select[multiple] {
 select[size="0"],
 select[size="1"] {
   height: 2.15384615384615em;
-}
-
-@media (-webkit-min-device-pixel-ratio: 0) {
-  /**
-     * Address `select` alignment in Safari, Chrome, Opera.
-     */
-  select[size],
-  select[multiple],
-  select[multiple][size] {
-    padding-right: 0.30769230769231em;
-    background-image: none;
-  }
-  /**
-     * Use indicator icon to signify the downdown ability of `select` in Safari,
-     * Chrome, Opera.
-     */
-  select,
-  select[size="0"],
-  select[size="1"] {
-    padding-right: 2em;
-    background: #ffffff url("data:image/svg+xml,<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='13px' height='4px' viewBox='0 0 13 4' enable-background='new 0 0 13 4' xml:space='preserve'><polygon fill='#333333' points='3.5,4 0,0 7,0'/></svg>") right center no-repeat;
-    background-size: 1em 0.30769230769231em;
-  }
 }
 
 /**
@@ -1473,6 +1553,13 @@ textarea {
   vertical-align: top;
   /* 3 */
   resize: vertical;
+}
+
+/**
+ * Ensure code text areas are always rendered left-to-right.
+ */
+textarea.code {
+  direction: ltr;
 }
 
 /**
@@ -1669,7 +1756,7 @@ input[type="button"]:focus,
 .navlink:focus,
 .navlink-active:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
 }
 
 /**
@@ -2655,7 +2742,7 @@ button.txp-nav-toggle {
 }
 
 /**
- * Show dropdown menu when downdown toggle clicked.
+ * Show drop-down menu when toggle clicked.
  *
  * Example HTML:
  *
@@ -2691,6 +2778,7 @@ html {
  */
 hr {
   height: 0;
+  margin: 1.5em 0;
   clear: both;
   border: 0;
   border-bottom: 1px solid #cccccc;
@@ -3469,7 +3557,7 @@ span.spinner {
 /* Content -> Images panel - additional layout
    ========================================================================== */
 .has-thumbnail a:focus {
-  outline: 0;
+  outline-width: 0;
 }
 
 .thumbnail-alter input {
@@ -3589,7 +3677,7 @@ div.code {
   margin: 0;
   padding: 0;
   border: 0;
-  outline: 0;
+  outline-width: 0;
   font-size: 13px;
   line-height: 20px;
   list-style: none;
@@ -4158,7 +4246,7 @@ a.ui-state-default:focus {
 
 .ui-button:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
@@ -4178,7 +4266,7 @@ a.ui-button {
 .ui-button.ui-state-focus {
   /* 1 */
   border-color: #0066ff !important;
-  outline: 0;
+  outline-width: 0;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
@@ -4866,7 +4954,7 @@ label.ui-state-active.ui-button:active {
   margin: 0;
   padding: 0;
   border-color: #d4d4d4;
-  outline: 0;
+  outline-width: 0;
   /* 1 */
   font-size: 13px;
   line-height: 1.38461538461538em;
@@ -5055,7 +5143,7 @@ label.ui-state-active.ui-button:active {
 
 .ui-selectmenu-button:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
 }
 
 .ui-selectmenu-button span.ui-icon {
@@ -5073,6 +5161,11 @@ label.ui-state-active.ui-button:active {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.ui-selectmenu-icon.ui-icon {
+  margin-top: 0;
+  float: right;
 }
 
 .ui-selectmenu-menu {

@@ -25,7 +25,7 @@ if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
-class hiveNeutral_theme extends \Textpattern\Admin\Theme
+class hive_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
     {
@@ -70,6 +70,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
         }
         // End of custom CSS toggles.
 
+        $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<meta name="theme-color" content="#ffda44">';
@@ -226,8 +227,8 @@ EOS;
         global $prefs;
 
         return array(
-            'title'       => 'Hive (Flat Neutral)',
-            'description' => 'Textpattern Hive (Flat Neutral) admin theme',
+            'title'       => 'Hive',
+            'description' => 'Textpattern Hive admin theme (Classic Yellow)',
             'version'     => $prefs['version'],
             'author'      => 'Team Textpattern',
             'author_uri'  => 'http://textpattern.com/',

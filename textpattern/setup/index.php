@@ -30,6 +30,8 @@ define("txpinterface", "admin");
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
 
+include txpath.'/lib/class.trace.php';
+$trace = new Trace();
 include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_misc.php';
 include txpath.'/vendors/Textpattern/Loader.php';
@@ -71,48 +73,9 @@ if (count($txpdir) > 3) {
     $txpdir = '/';
 }
 
-global $textarray_script;
-
 $step = ps('step');
 $rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i", '$1', $_SERVER['PHP_SELF']);
 $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
-$bodyclass = ($step == '') ? ' welcome' : '';
-gTxtScript(array(
-    'setup_password_strength_0',
-    'setup_password_strength_1',
-    'setup_password_strength_2',
-    'setup_password_strength_3',
-    'setup_password_strength_4',
-    )
-);
-
-echo <<<eod
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="robots" content="noindex, nofollow">
-<title>Setup &#124; Textpattern CMS</title>
-eod;
-
-echo script_js('../vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('../vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('../vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL).
-    script_js(
-        'var textpattern = '.json_encode(array(
-            'event'         => 'setup',
-            'step'          => $step,
-            'textarray'     => (object) $textarray_script,
-            )).';').
-    script_js('../textpattern.js', TEXTPATTERN_SCRIPT_URL);
-
-echo <<<eod
-<link rel="stylesheet" href="../theme/hive/assets/css/textpattern.min.css">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-</head>
-<body class="setup{$bodyclass}" id="page-setup">
-<main class="txp-body">
-eod;
 
 switch ($step) {
     case '':
@@ -137,6 +100,59 @@ switch ($step) {
 <?php
 
 /**
+ * Return the top of page furniture.
+ *
+ * @param  string $step Name of the current Textpattern step of the setup wizard
+ * @return HTML
+ */
+
+function preamble($step = null)
+{
+    global $textarray_script;
+
+    $out = array();
+    $bodyclass = ($step == '') ? ' welcome' : '';
+    gTxtScript(array(
+        'setup_password_strength_0',
+        'setup_password_strength_1',
+        'setup_password_strength_2',
+        'setup_password_strength_3',
+        'setup_password_strength_4',
+        )
+    );
+
+    $out[] = <<<eod
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Setup &#124; Textpattern CMS</title>
+eod;
+
+    $out[] = script_js('../vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
+        script_js('../vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
+        script_js('../vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL).
+        script_js(
+            'var textpattern = '.json_encode(array(
+                'event'         => 'setup',
+                'step'          => $step,
+                'textarray'     => (object) $textarray_script,
+                )).';').
+        script_js('../textpattern.js', TEXTPATTERN_SCRIPT_URL);
+
+    $out[] = <<<eod
+    <link rel="stylesheet" href="../theme/hive/assets/css/textpattern.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    </head>
+    <body class="setup{$bodyclass}" id="page-setup">
+    <main class="txp-body">
+eod;
+
+    return join(n, $out);
+}
+
+/**
  * Renders stage 0: welcome/choose language panel.
  */
 
@@ -144,6 +160,7 @@ function chooseLang()
 {
     $_SESSION = array();
 
+    echo preamble();
     echo n.'<div class="txp-setup">',
         hed('Welcome to Textpattern CMS', 1),
         n.'<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">',
@@ -201,8 +218,9 @@ function getDbInfo()
 
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
 
-    global $txpcfg;
+    global $txpcfg, $step;
 
+    echo preamble($step);
     echo txp_setup_progress_meter(1),
         n.'<div class="txp-setup">';
 
@@ -306,11 +324,11 @@ function printConfig()
     $_SESSION['dhost'] = ps('dhost');
     $_SESSION['dprefix'] = ps('dprefix');
     $_SESSION['siteurl'] = ps('siteurl');
-
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
 
-    global $txpcfg;
+    global $txpcfg, $step;
 
+    echo preamble($step);
     echo txp_setup_progress_meter(2).
         n.'<div class="txp-setup">';
 
@@ -461,9 +479,11 @@ function getTxpLogin()
 {
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
 
-    global $txpcfg;
+    global $txpcfg, $step;
 
     $problems = array();
+
+    echo preamble($step);
 
     if (!isset($txpcfg['db'])) {
         if (!is_readable(txpath.'/config.php')) {
@@ -496,7 +516,7 @@ function getTxpLogin()
     }
 
     // Default theme selector.
-    $core_themes = array('classic', 'remora', 'hive');
+    $core_themes = array('hive', 'hiveneutral');
 
     $themes = \Textpattern\Admin\Theme::names();
 
@@ -571,8 +591,11 @@ function getTxpLogin()
 
 function createTxp()
 {
-    global $link;
+    global $link, $step;
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
+
+    echo preamble($step);
+
     $_SESSION['name'] = ps('name');
     $_SESSION['realname'] = ps('RealName');
     $_SESSION['pass'] = ps('pass');

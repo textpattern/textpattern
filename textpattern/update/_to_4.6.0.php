@@ -55,7 +55,7 @@ safe_update('txp_prefs', "position = '280'", "name = 'comment_nofollow'");
 safe_update('txp_prefs', "position = '300'", "name = 'comments_disallow_images'");
 safe_update('txp_prefs', "position = '320'", "name = 'comments_use_fat_textile'");
 safe_update('txp_prefs', "position = '340'", "name = 'spam_blacklists'");
-safe_update('txp_prefs', "html = 'permlink_format'", "name = 'permalink_title_format'");
+safe_update('txp_prefs', "name = 'permlink_format', html = 'permlink_format'", "name = 'permalink_title_format'");
 
 // Support for l10n string owners.
 $cols = getThings("DESCRIBE `".PFX."txp_lang`");
@@ -225,13 +225,14 @@ foreach (array('4.4.0', '4.4.1') as $v) {
 safe_drop('txp_token');
 safe_create('txp_token',"
     id           INT          NOT NULL AUTO_INCREMENT,
-    reference_id INT          NOT NULL DEFAULT 0,
-    type         VARCHAR(255) NOT NULL DEFAULT '',
+    reference_id INT          NOT NULL,
+    type         VARCHAR(255) NOT NULL,
     selector     VARCHAR(12)  NOT NULL DEFAULT '',
-    token        VARCHAR(255) NOT NULL DEFAULT '',
+    token        VARCHAR(255) NOT NULL,
     expires      DATETIME         NULL DEFAULT NULL,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE INDEX ref_type (reference_id, type(50))
 ");
 
 // Remove default zero dates to make MySQL 5.7 happy.

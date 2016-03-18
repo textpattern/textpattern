@@ -40,20 +40,6 @@ if (!defined('TXP_DEBUG')) {
 }
 
 /**
- * Trace log constants.
- *
- * @since   4.6.0
- * @package Debug
- * @see     trace_log()
- */
-
-define('TEXTPATTERN_TRACE_START',   0x1);
-define('TEXTPATTERN_TRACE_DISPLAY', 0x2);
-define('TEXTPATTERN_TRACE_RESULT',  0x4);
-define('TEXTPATTERN_TRACE_QUIET',   0x8);
-
-
-/**
  * Comment spam status.
  *
  * @package Comment

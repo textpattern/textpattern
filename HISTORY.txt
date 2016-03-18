@@ -15,6 +15,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Removed: Import panel - the blog import options were obsolete (thanks Ruud van Melick).
 * Removed: Commenter IP ban feature - this method of banning is unreliable and becoming obsolete (thanks Ruud van Melick).
 * Removed: Modernizr unnecessary due to IE10 being our minimum IE browser requirement.
+* Changed: The /textpattern/theme/ directory has been renamed to /textpattern/admin-themes/ for stronger differentiation between this and the public-side /themes/ directory planned for Textpattern 4.7. Additionally prevents breakage of preferences panel caused by old, incompatible themes residing in the previously titled admin theme directory during upgrade.
 * Changed: <txp:article_custom /> accepts 'exclude' attribute to exclude articles by a comma-separated id list.
 * Changed: <txp:author /> accepts 'escape' and 'format' attributes.
 * Changed: <txp:category_list /> accepts 'html_id', 'limit' and 'offset' attributes.
@@ -47,6 +48,7 @@ Changes in 4.6.0 (Upcoming) TODO
 * Developer: Use 'mysqli' extension for DB access, lose dependency on 'mysql' extension.
 * Developer: Use the TXP 'now()' function instead of the SQL 'NOW()' function to create cache-friendly, faster SELECT queries.
 * Developer: Added jQuery UI library to admin side.
+* Developer: Added Prism code highlighting for <code> and <pre><code> to admin side. The following languages are supported (when specified via classnames on the <code> tag, i.e. using 'class="language-xxx"): 'language-markup', 'language-css', 'language-clike', 'language-javascript', 'language-json', 'language-php', 'language-markdown', 'language-textile'. Optional line numbers are also supported when code highlighting, by adding an additional classname of 'line-numbers' to the parent <pre> tag.
 * Developer: Added DocBlock documentation comments throughout the source code.
 * Developer: Adherence to PSR coding standards where possible.
 * Developer: Function signature for wrapRegion() changed: 7th parameter 'ARIA role' dropped, as it shouldn't be stated for semantic tags such as 'section'.

@@ -95,7 +95,7 @@ function send_account_activation($name)
         $expiryYear = safe_strftime('%Y', $expiryTimestamp);
         $expiryMonth = safe_strftime('%B', $expiryTimestamp);
         $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
-        $expiryTime = safe_strftime('%H:%M', $expiryTimestamp);
+        $expiryTime = safe_strftime('%H:%M %Z', $expiryTimestamp);
 
         $expiry = strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
 
@@ -186,8 +186,7 @@ function send_new_password($password, $email, $name)
  *
  * This function will return a success message even when the specified user
  * doesn't exist. Though an error message could be thrown when a user isn't
- * found, this is done due to security, which prevents the function from
- * leaking existing account names.
+ * found, security best practice prevents leaking existing account names.
  *
  * @param  string $name The login name
  * @return string A localized message string
@@ -208,13 +207,12 @@ function send_reset_confirmation_request($name)
         "SELECT
             txp_users.user_id, txp_users.email,
             txp_users.nonce, txp_users.pass,
-            txp_token.type
+            txp_token.expires
         FROM ".safe_pfx('txp_users')." txp_users
         LEFT JOIN ".safe_pfx('txp_token')." txp_token
         ON txp_users.user_id = txp_token.reference_id
-        WHERE txp_users.name = '".doSlash($name)."'
-        AND TIMESTAMPDIFF(SECOND, txp_token.expires, '".$expiry."') > ".(60 * RESET_RATE_LIMIT_MINUTES)."
-        AND txp_token.type = 'password_reset'");
+        AND txp_token.type = 'password_reset'
+        WHERE txp_users.name = '".doSlash($name)."'");
 
     $row = nextRow($rs);
 
@@ -223,13 +221,22 @@ function send_reset_confirmation_request($name)
 
         $uid = assert_int($user_id);
 
+        // Rate limit the reset requests.
+        if ($expires) {
+            $originalExpiry = strtotime($expires);
+
+            if (($expiryTimestamp - $originalExpiry) < (60 * RESET_RATE_LIMIT_MINUTES)) {
+                return gTxt('password_reset_confirmation_request_sent');
+            }
+        }
+
         // The selector becomes an indirect reference to the txp_users row,
         // which does not leak information.
         $selector = Txp::get('\Textpattern\Password\Random')->generate(12);
         $expiryYear = safe_strftime('%Y', $expiryTimestamp);
         $expiryMonth = safe_strftime('%B', $expiryTimestamp);
         $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
-        $expiryTime = safe_strftime('%H:%M', $expiryTimestamp);
+        $expiryTime = safe_strftime('%H:%M %Z', $expiryTimestamp);
 
         // Use a hash of the nonce, selector and password.
         // This ensures that confirmation requests expire automatically when:

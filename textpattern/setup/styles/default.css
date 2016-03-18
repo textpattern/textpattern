@@ -256,7 +256,7 @@ nav ol:after,
     text-decoration-skip: ink edges;
   }
   a:hover, a:active {
-    outline: 0;
+    outline-width: 0;
     color: #0066ff;
     text-decoration: underline;
   }
@@ -396,12 +396,6 @@ nav ol:after,
   /**
  * Address styling not present in Safari and Chrome.
  */
-  dfn {
-    font-style: italic;
-  }
-  /**
- * Address styling not present in Safari and Chrome.
- */
   abbr[title],
   dfn[title] {
     text-decoration: dotted underline;
@@ -459,6 +453,15 @@ nav ol:after,
     border: 0;
     background-color: transparent;
     font-size: 1em;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-hyphens: none;
+        -ms-hyphens: none;
+            hyphens: none;
   }
   /**
  * Prevent `sub` and `sup` affecting `line-height` in all browsers.
@@ -611,8 +614,7 @@ nav ol:after,
   /**
  * Images.
  *
- * 1. Remove potential border when inside `a` element.
- * 2. Remove the gap between images and the bottom of their containers.
+ * 1. Remove the gap between images and the bottom of their containers.
  *
  * Image alignment (compatible with Textile markup syntax).
  *
@@ -624,8 +626,6 @@ nav ol:after,
  */
   img {
     /* 1 */
-    border: 0;
-    /* 2 */
     vertical-align: middle;
   }
   img.align-left {
@@ -645,12 +645,6 @@ nav ol:after,
  */
   figure {
     margin: 0;
-  }
-  /**
- * Prevent modern browsers from displaying `audio` without controls.
- */
-  audio:not([controls]) {
-    display: none;
   }
   /**
  * Correct overflow not hidden in IE 11.
@@ -791,10 +785,13 @@ nav ol:after,
   }
   /**
  * Normalize styling of `legend`.
+ *
+ * 1. Correct `color` not being inherited from fieldset in IE 11.
  */
   legend {
     padding: 0;
-    border: 0;
+    /* 1 */
+    color: inherit;
   }
   /**
  * 1. Prevent elements from spilling out of their parent.
@@ -883,7 +880,7 @@ nav ol:after,
   select:focus,
   textarea:focus {
     border-color: #0066ff;
-    outline: 0;
+    outline-width: 0;
   }
   /**
  * Remove padding from `color` fields.
@@ -920,17 +917,28 @@ nav ol:after,
     margin: 0;
   }
   /**
- * Correct `select` style inheritance in Firefox.
+ * Use indicator icon to signify the drop-down ability of `select`.
  */
   select {
+    padding-right: 1.5em;
+    background: #ffffff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='17px' height='5px' viewBox='0 0 17 5'><polygon fill='%23333' points='0,0 5,5 10,0'/></svg>") right center no-repeat;
+    background-size: 1.0625em 0.3125em;
     text-transform: none;
   }
   /**
- * Override height set in a previous rule and allow auto height.
+ * Remove browser-specific `select` UI in IE 11.
+ */
+  select::-ms-expand {
+    opacity: 0;
+  }
+  /**
+ * Override height and background set in a previous rule and allow auto height.
  */
   select[size],
   select[multiple] {
     height: auto;
+    padding-right: 0.5em;
+    background-image: none;
   }
   /**
  * Override height set in rule above and restrict to one line field.
@@ -939,32 +947,6 @@ nav ol:after,
   select[size="1"] {
     height: 2.5em;
   }
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-  /**
-     * Address `select` alignment in Safari, Chrome, Opera.
-     */
-  select[size],
-  select[multiple],
-  select[multiple][size] {
-    padding-right: 0.5em;
-    background-image: none;
-  }
-  /**
-     * Use indicator icon to signify the drop-down ability of `select` in Safari,
-     * Chrome, Opera.
-     */
-  select,
-  select[size="0"],
-  select[size="1"] {
-    padding-right: 1.5em;
-    background: #ffffff url("data:image/svg+xml,<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='17px' height='5px' viewBox='0 0 17 5' enable-background='new 0 0 17 5' xml:space='preserve'><polygon fill='#333333' points='0,0 5,5 10,0'/></svg>") right center no-repeat;
-    background-size: 1.0625em 0.3125em;
-  }
-}
-
-@media screen {
   /**
  * Normalize styling of `optgroup`.
  */
@@ -1127,7 +1109,7 @@ nav ol:after,
   input[type="reset"]:focus,
   input[type="submit"]:focus {
     border-color: #0066ff;
-    outline: 0;
+    outline-width: 0;
   }
   /* Comments
    ========================================================================== */
@@ -1313,14 +1295,14 @@ nav ol:after,
  * Visually separate header from body.
  */
   .site-header {
-    border-bottom: solid 1pt #000000;
+    border-bottom: 1pt solid #000000;
   }
   /**
  * Visually separate footer from body.
  */
   .site-footer {
     margin-top: 12pt;
-    border-top: solid 1pt #000000;
+    border-top: 1pt solid #000000;
   }
   /**
  * Hide unnecessary content from print.
@@ -1432,7 +1414,7 @@ nav ol:after,
   pre {
     margin-bottom: 8pt;
     padding: 8pt;
-    border: solid 1pt #000000;
+    border: 1pt solid #000000;
   }
   /**
  * Use a print-friendly monospaced font and size.
@@ -1555,7 +1537,7 @@ nav ol:after,
   th,
   td {
     padding: 4pt 8pt;
-    border-bottom: solid 1pt #000000;
+    border-bottom: 1pt solid #000000;
   }
   /**
  * Avoid user comments breaking across multiple pages.

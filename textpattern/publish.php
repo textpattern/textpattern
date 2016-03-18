@@ -31,6 +31,9 @@ if (!defined("txpinterface")) {
         ' (Otherwise note that publish.php cannot be called directly.)');
 }
 
+global $trace;
+
+$trace->start('[PHP includes, stage 2]');
 include_once txpath.'/vendors/Textpattern/Loader.php';
 
 $loader = new \Textpattern\Loader(txpath.'/vendors');
@@ -48,7 +51,7 @@ include_once txpath.'/lib/admin_config.php';
 include_once txpath.'/publish/taghandlers.php';
 include_once txpath.'/publish/log.php';
 include_once txpath.'/publish/comment.php';
-trace_add('[PHP Include end]');
+$trace->stop();
 
 set_error_handler('publicErrorHandler', error_reporting());
 
@@ -68,6 +71,11 @@ bombShelter();
 
 // Set a higher error level during initialisation.
 set_error_level(@$production_status == 'live' ? 'testing' : @$production_status);
+
+// disable tracing in live environment.
+if ($production_status == 'live') {
+    Trace::setQuiet(true);
+}
 
 // Use the current URL path if $siteurl is unknown.
 if (empty($siteurl)) {
@@ -176,16 +184,25 @@ set_error_level($production_status);
 if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
     include txpath."/publish/{$feed}.php";
     echo $feed();
-    trace_log(TEXTPATTERN_TRACE_DISPLAY);
+    if ($production_status !== 'live') {
+      echo $trace->summary();
+      if ($production_status === 'debug') {
+        echo $trace->result();
+      }
+    }
     exit;
 }
 
-if (gps('parentid') && gps('submit')) {
-    saveComment();
-} elseif (gps('parentid') and $comments_mode == 1) {
-    // Popup comments?
-    header("Content-type: text/html; charset=utf-8");
-    exit(parse_form('popup_comments'));
+if (gps('parentid')) {
+    if (ps('submit')) {
+        saveComment();
+    } elseif (ps('preview')) {
+        checkCommentRequired(getComment());
+    } elseif ($comments_mode == 1) {
+        // Popup comments?
+        header("Content-type: text/html; charset=utf-8");
+        exit(parse_form('popup_comments'));
+    }
 }
 
 // We are dealing with a download.
@@ -719,6 +736,7 @@ function doArticles($atts, $iscustom, $thing = null)
         'time'          => 'past',
         'status'        => STATUS_LIVE,
         'allowoverride' => (!$q and !$iscustom),
+        'frontpage'     => !$iscustom,
         'offset'        => 0,
         'wraptag'       => '',
         'break'         => '',
@@ -734,14 +752,12 @@ function doArticles($atts, $iscustom, $thing = null)
         $theAtts['section'] = ($s && $s != 'default') ? $s : '';
         $theAtts['author'] = (!empty($author) ? $author : '');
         $theAtts['month'] = (!empty($month) ? $month : '');
-        $theAtts['frontpage'] = ($s && $s == 'default') ? true : false;
+        $theAtts['frontpage'] = ($theAtts['frontpage'] && $s && $s == 'default');
         $theAtts['excerpted'] = 0;
         $theAtts['exclude'] = 0;
         $theAtts['expired'] = $publish_expired_articles;
 
         filterAtts($theAtts);
-    } else {
-        $theAtts['frontpage'] = false;
     }
 
     extract($theAtts);

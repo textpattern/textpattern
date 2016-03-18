@@ -88,9 +88,9 @@ function filterFrontPage()
 
 function populateArticleData($rs)
 {
-    global $thisarticle;
+    global $thisarticle, $trace;
 
-    trace_add("[Article: '{$rs['ID']}']");
+    $trace->log("[Article: '{$rs['ID']}']");
 
     foreach (article_column_map() as $key => $column) {
         $thisarticle[$key] = $rs[$column];
@@ -189,6 +189,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     extract($atts);
     $expired = ($expired && ($prefs['publish_expired_articles']));
     $customFields = getCustomFields();
+    $thisid = isset($thisid) ? intval($thisid) : 0;
 
     // Building query parts; lifted from publish.php.
     $ids = array_map('intval', do_list($id));
@@ -249,8 +250,8 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     $safe_name = safe_pfx('textpattern');
     $q = array(
-        "SELECT ID AS thisid, Section AS section, Title AS title, url_title, UNIX_TIMESTAMP(Posted) AS posted
-            FROM $safe_name WHERE $sortby $type $threshold",
+        "SELECT ID AS thisid, Section AS section, Title AS title, url_title, UNIX_TIMESTAMP(Posted) AS posted FROM $safe_name
+            WHERE ($sortby $type $threshold OR ".($thisid ? "$sortby = $threshold AND ID $type $thisid" : "0").")",
         ($s != '' && $s != 'default') ? "AND Section = '".doSlash($s)."'" : filterFrontPage(),
         $id,
         $time,
@@ -259,6 +260,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         "AND Status = 4",
         "ORDER BY $sortby",
         ($type == '<') ? "DESC" : "ASC",
+        ', ID '.($type == '<' ? 'DESC' : 'ASC'),
         "LIMIT 1",
     );
 
@@ -281,7 +283,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
     if ($id !== 0) {
         // Pivot is specific article by ID: In lack of further information,
         // revert to default sort order 'Posted desc'.
-        $atts = filterAtts(array('sortby' => "Posted", 'sortdir' => "DESC"));
+        $atts = array('thisid' => $id) + filterAtts(array('sortby' => "Posted", 'sortdir' => "DESC"));
     } else {
         // Pivot is $thisarticle: Use article attributes to find its neighbours.
         assert_article();
@@ -290,7 +292,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
             return array();
         }
 
-        $atts = filterAtts();
+        $atts = array('thisid' => $thisarticle['thisid']) + filterAtts();
         $m = preg_split('/\s+/', $atts['sort']);
 
         // If in doubt, fall back to chronologically descending order.
@@ -522,13 +524,13 @@ function maybe_tag($tag)
 
 function processTags($tag, $atts, $thing = null)
 {
-    global $production_status, $txp_current_tag, $txp_current_form;
+    global $production_status, $txp_current_tag, $txp_current_form, $trace;
     static $registry = null;
 
     if ($production_status !== 'live') {
         $old_tag = $txp_current_tag;
         $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
-        trace_add($txp_current_tag, 1, "Form='$txp_current_form', Tag='$txp_current_tag'");
+        $trace->start($txp_current_tag);
     }
 
     if ($registry === null) {
@@ -548,12 +550,7 @@ function processTags($tag, $atts, $thing = null)
     }
 
     if ($production_status !== 'live') {
-        trace_add('', -1);
-
-        if (isset($thing)) {
-            trace_add("</txp:{$tag}>");
-        }
-
+        $trace->stop(isset($thing) ? "</txp:{$tag}>" : null);
         $txp_current_tag = $old_tag;
     }
 
@@ -777,7 +774,7 @@ function chopUrl($req)
 
 function filterAtts($atts = null)
 {
-    global $prefs;
+    global $prefs, $trace;
     static $out = array();
 
     if (is_array($atts)) {
@@ -791,15 +788,15 @@ function filterAtts($atts = null)
                 'id'            => '',
                 'time'          => 'past',
             ), $atts, 0);
-            trace_add('[filterAtts accepted]');
+            $trace->log('[filterAtts accepted]');
         } else {
             // TODO: deal w/ nested txp:article[_custom] tags.
-            trace_add('[filterAtts ignored]');
+            $trace->log('[filterAtts ignored]');
         }
     }
 
     if (empty($out)) {
-        trace_add('[filterAtts not set]');
+        $trace->log('[filterAtts not set]');
     }
 
     return $out;

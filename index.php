@@ -82,9 +82,12 @@ if (!isset($txpcfg['table_prefix'])) {
     ob_end_clean();
 }
 
+include txpath.'/lib/class.trace.php';
+$trace = new Trace();
+$trace->start('[PHP includes, stage 1]');
 include txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
-trace_log(TEXTPATTERN_TRACE_START);
+$trace->stop();
 
 if (!isset($txpcfg['table_prefix'])) {
     txp_status_header('503 Service Unavailable');
@@ -93,10 +96,18 @@ if (!isset($txpcfg['table_prefix'])) {
 
 // Custom caches, etc?
 if (!empty($txpcfg['pre_publish_script'])) {
-    trace_add("[Pre Publish Script: '{$txpcfg['pre_publish_script']}']");
+    $trace->start("[Pre Publish Script: '{$txpcfg['pre_publish_script']}']");
     require $txpcfg['pre_publish_script'];
+    $trace->stop();
 }
 
 include txpath.'/publish.php';
 textpattern();
-trace_log(TEXTPATTERN_TRACE_DISPLAY);
+
+if ($production_status !== 'live') {
+    echo $trace->summary();
+
+    if ($production_status === 'debug') {
+        echo $trace->result();
+    }
+}

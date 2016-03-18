@@ -144,7 +144,7 @@ safe_update('txp_prefs', "position = 100", "name IN(
     'gmtoffset',
     'comments_auto_append',
     'plugin_cache_dir',
-    'permalink_title_format',
+    'permlink_format',
     'use_mail_on_feeds_id'
 )");
 

@@ -163,7 +163,7 @@ function article_post()
         $Annotate = (int) $Annotate;
 
         // Set and validate article timestamp.
-        if ($publish_now == 1) {
+        if ($publish_now == 1 || $reset_time == 1) {
             $when = "NOW()";
             $when_ts = time();
         } else {
@@ -183,10 +183,6 @@ function article_post()
             $when_ts = $ts - tz_offset($ts);
             $when = "FROM_UNIXTIME($when_ts)";
         }
-
-        // Force a reasonable 'last modified' date for future articles,
-        // keep recent articles list in order.
-        $lastmod = ($when_ts > time() ? "NOW()" : $when);
 
         // Set and validate expiry timestamp.
         if (empty($exp_year)) {
@@ -278,7 +274,7 @@ function article_post()
                 Posted          =  $when,
                 Expires         =  $whenexpires,
                 AuthorID        = '$user',
-                LastMod         =  $lastmod,
+                LastMod         = NOW(),
                 LastModID       = '$user',
                 Section         = '$Section',
                 Category1       = '$Category1',
@@ -832,10 +828,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     if ($step != 'create' && isset($sPosted)) {
         // Previous record?
-        $rs['prev_id'] = checkIfNeighbour('prev', $sPosted);
+        $rs['prev_id'] = checkIfNeighbour('prev', $sPosted, $ID);
 
         // Next record?
-        $rs['next_id'] = checkIfNeighbour('next', $sPosted);
+        $rs['next_id'] = checkIfNeighbour('next', $sPosted, $ID);
     } else {
         $rs['prev_id'] = $rs['next_id'] = 0;
     }
@@ -960,7 +956,13 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 '</div>';
     } elseif ($view == 'html') {
         echo graf(gTxt('body'), array('class' => 'alert-block information')).
-            n.tag(str_replace(array(n, t), array(br, sp.sp.sp.sp), txpspecialchars($Body_html)), 'pre', ' class="body"');
+            n.tag(
+                tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', array(
+                    'class' => 'language-markup',
+                    'dir'   => 'ltr',
+                )),
+                'pre', array('class' => 'body line-numbers')
+            );
     } else {
         echo $partials['body']['html'];
     }
@@ -974,7 +976,13 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 '</div>';
         } elseif ($view == 'html') {
             echo graf(gTxt('excerpt'), array('class' => 'alert-block information')).
-                n.tag(str_replace(array(n, t), array(br, sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'pre', array('class' => 'excerpt'));
+                n.tag(
+                    tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'code', array(
+                        'class' => 'language-markup',
+                        'dir'   => 'ltr',
+                    )),
+                    'pre', array('class' => 'excerpt line-numbers')
+                );
         } else {
             echo $partials['excerpt']['html'];
         }
@@ -1145,11 +1153,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo wrapRegion('txp-meta-group', $html_url_title.$html_description.$html_keywords, 'txp-meta-group-content', 'meta', 'article_meta');
 
         // 'Comment options' collapsible section.
-        // TODO: 'empty' class is a dirty solution - needs improvement.
-        echo wrapRegion('txp-comments-group', $partials['comments']['html'], 'txp-comments-group-content', 'comment_settings', 'article_comments', (($use_comments == 1)
-            ? ''
-            : 'empty'
-        ));
+        echo wrapRegion('txp-comments-group', $partials['comments']['html'], 'txp-comments-group-content', 'comment_settings', 'article_comments');
 
         // 'Article image' collapsible section.
         echo $partials['image']['html'];
@@ -1241,17 +1245,21 @@ function custField($num, $field, $content)
  *
  * @param  string $whichway Either '&lt;' or '&gt;'
  * @param  int    Unix timestamp
+ * @param  int    pivot article ID
  * @return int
  */
 
-function checkIfNeighbour($whichway, $sPosted)
+function checkIfNeighbour($whichway, $sPosted, $ID = 0)
 {
+    // Eventual backward compatibility.
+    if(empty($ID)) $ID = !empty($GLOBALS['ID']) ? $GLOBALS['ID'] : gps('ID');
     $sPosted = assert_int($sPosted);
+    $ID = assert_int($ID);
     $dir = ($whichway == 'prev') ? '<' : '>';
     $ord = ($whichway == 'prev') ? "DESC" : "ASC";
 
     return safe_field("ID", 'textpattern',
-        "Posted $dir FROM_UNIXTIME($sPosted) ORDER BY Posted $ord LIMIT 1");
+        "Posted $dir FROM_UNIXTIME($sPosted) OR Posted = FROM_UNIXTIME($sPosted) AND ID $dir $ID ORDER BY Posted $ord, ID $ord LIMIT 1");
 }
 
 /**

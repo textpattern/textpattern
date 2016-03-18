@@ -184,6 +184,8 @@ function prefs_list($message = '')
     $out = array();
     $build = array();
     $groupOut = array();
+    $tabCount = $tabActive = 0;
+    $selected = get_pref('pane_prefs_visible');
 
     if (numRows($rs)) {
         while ($a = nextRow($rs)) {
@@ -208,13 +210,20 @@ function prefs_list($message = '')
                             '#prefs_group_'.$last_event,
                             array(
                                 'data-txp-pane'  => $last_event,
-                                'data-txp-token' => form_token(),
+                                'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
                             )),
-                        'li');
+                        'li', array(
+                            'class' => (($last_event === $selected) ? 'ui-tabs-active ui-state-active' : '')
+                            ));
+                }
+
+                if ($last_event === $selected) {
+                    $tabActive = $tabCount - 1;
                 }
 
                 $last_event = $a['event'];
                 $out = array();
+                $tabCount++;
             }
 
             $label = '';
@@ -266,9 +275,15 @@ function prefs_list($message = '')
                 '#prefs_group_'.$last_event,
                 array(
                     'data-txp-pane'  => $last_event,
-                    'data-txp-token' => form_token(),
+                    'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
                 )),
-            'li').n;
+            'li', array(
+                'class' => (($last_event === $selected) ? 'ui-tabs-active ui-state-active' : '')
+                )).n;
+
+        if ($last_event === $selected) {
+            $tabActive = $tabCount - 1;
+        }
 
         echo hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')).
             n.'<div class="txp-layout-4col-cell-1alt">'.
@@ -292,7 +307,8 @@ function prefs_list($message = '')
             tInput();
     }
 
-    echo n.'</form>';
+    echo n.'</form>'.
+        script_js('var selectedTab = "' . $tabActive . '";');
 }
 
 /**

@@ -95,10 +95,11 @@ function end_page()
             'password_strength_4',
             ),
             array(),
-            array('admin', 'new_pass_form')
+            array(array('admin', 'admin'), array('new_pass_form', 'change_pass'))
         );
 
-        echo script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL, array('admin', 'new_pass_form')).
+        echo script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL, array(array('admin', 'admin'), array('new_pass_form', 'change_pass'))).
+            script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL).
             script_js('textpattern.textarray = '.json_encode($textarray_script)).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }
@@ -891,7 +892,7 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
 
     $arguments = compact('name', 'input', 'label', 'help', 'atts', 'wraptag_val');
 
-    $fallback_class = 'edit-'.str_replace('_', '-', $name);
+    $fallback_class = 'txp-form-field edit-'.str_replace('_', '-', $name);
 
     if ($atts && is_string($atts)) {
         $atts = array('class' => $atts);
@@ -1485,7 +1486,7 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
             ).
             tInput().n,
             'form', array(
-                'class'   => 'upload-form'.$class,
+                'class'   => 'upload-form'.($class ? ' '.trim($class) : ''),
                 'method'  => 'post',
                 'enctype' => 'multipart/form-data',
                 'action'  => 'index.php',
@@ -1575,7 +1576,7 @@ EOF;
  *
  * @param  string     $js    JavaScript code
  * @param  int|string $flags Flags TEXTPATTERN_SCRIPT_URL | TEXTPATTERN_SCRIPT_ATTACH_VERSION, or noscript alternative if a string
- * @param  array      $route Optional event/step upon which to add the script
+ * @param  array      $route Optional events/steps upon which to add the script
  * @return string HTML with embedded script element
  * @example
  * echo script_js('/js/script.js', TEXTPATTERN_SCRIPT_URL);
@@ -1585,10 +1586,10 @@ function script_js($js, $flags = '', $route = array())
 {
     global $event, $step;
 
-    $targetEvent = empty($route[0]) ? null : $route[0];
-    $targetStep = empty($route[1]) ? null : $route[1];
+    $targetEvent = empty($route[0]) ? null : (array)$route[0];
+    $targetStep = empty($route[1]) ? null : (array)$route[1];
 
-    if (($targetEvent === null || $targetEvent === $event) && ($targetStep === null || $targetStep === $step)) {
+    if (($targetEvent === null || in_array($event, $targetEvent)) && ($targetStep === null || in_array($step, $targetStep))) {
         if (is_int($flags)) {
             if ($flags & TEXTPATTERN_SCRIPT_URL) {
                 if ($flags & TEXTPATTERN_SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false) {

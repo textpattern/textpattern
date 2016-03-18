@@ -699,21 +699,27 @@ function list_multi_edit()
 
             if ($rs) {
                 while ($a = nextRow($rs)) {
-                    unset($a['ID'], $a['LastMod'], $a['LastModID'], $a['Expires']);
+                    unset($a['ID'], $a['comments_count']);
                     $a['uid'] = md5(uniqid(rand(), true));
                     $a['AuthorID'] = $txp_user;
+                    $a['LastModID'] = $txp_user;
+                    $a['Status'] = ($a['Status'] >= STATUS_LIVE) ? STATUS_DRAFT : $a['Status'];
 
                     foreach ($a as $name => &$value) {
-                        $value = "`$name` = '".doSlash($value)."'";
+                        if ($name == 'Expires' && !$value) {
+                            $value = "Expires = NULL";
+                        } else {
+                            $value = "`$name` = '".doSlash($value)."'";
+                        }
                     }
 
                     if ($id = (int) safe_insert('textpattern', join(',', $a))) {
                         safe_update(
                             'textpattern',
-                            "Title = CONCAT(Title, ' (', $id, ')'),
-                            url_title = CONCAT(url_title, '-', $id),
-                            Posted = NOW(),
-                            feed_time = NOW()",
+                            "Title     = CONCAT(Title, ' (', $id, ')'),
+                             url_title = CONCAT(url_title, '-', $id),
+                             LastMod   = NOW(),
+                             feed_time = NOW()",
                             "ID = $id"
                         );
                     }
