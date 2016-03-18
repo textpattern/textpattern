@@ -1,17 +1,12 @@
 h1. Hive admin-side theme (Flat Neutral) for Textpattern CMS
 
-*Please note 1:* You'll need to be using the "latest GitHub development of Textpattern":https://github.com/textpattern/textpattern in order to use this admin theme - we have done extensive work on improving the Textpattern admin-side code structure since v4.5 which directly relates to features used within this theme.
-
-*Please note 2:* This theme is currently under development, and as such parts of the code are probably unfinished/unformated/untested/broken - please check the "GitHub project":https://github.com/philwareham/txp-hive-admin-theme/commits/master regularly for the latest revisions.
-
 You are free to modify this theme, reuse code herein, and distribute all its supporting files as long as licences are respected (see below).
 
 h2. Installation instructions
 
-# Upload the directory 'hive-neutral' into your Textpattern installation -> theme directory.
-# Log in to your Textpattern admin area. Navigate to admin -> preferences -> advanced.
-# Select 'Hive (Neutral Grey)' from the 'Admin-side theme' dropdown list. Save the preferences.
-# You can also install the theme easily using the "smd_admin_themes":http://stefdawson.com/sw/plugins/smd_admin_themes plugin.
+# Upload the directory 'hive-neutral' into your Textpattern installation -> admin-themes directory.
+# Log in to your Textpattern admin area. Navigate to admin -> preferences -> admin.
+# Select 'Hive (Flat Neutral)' from the 'Admin-side theme' dropdown list. Save the preferences.
 
 h2. Custom CSS toggles
 
@@ -56,7 +51,3 @@ Options are provided to hide certain sections/fields/features from displaying in
 *Hide image caption field (image edit page):*
 
 @define('hive_theme_hide_image_caption', true);@
-
-h2. Browser support
-
-Supported browsers: Google Chrome 30+, Internet Explorer 8+, Mozilla Firefox 24+, Apple Safari 5+ (other browsers/versions will probably work fine, within reason, but those are the minimum browsers I routinely test against).
