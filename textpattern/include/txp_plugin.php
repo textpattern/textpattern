@@ -358,8 +358,7 @@ function status_link($status, $name, $linktext)
 {
     return asyncHref(
         $linktext,
-        array('step' => 'switch_status', 'thing' => $name),
-        ' title="'.($status == 1 ? gTxt('disable') : gTxt('enable')).'"'
+        array('step' => 'switch_status', 'thing' => $name)
     );
 }
 
