@@ -1204,6 +1204,7 @@ function related_articles($atts, $thing = null)
             if ($form === '' && $thing === null) {
                 $out[] = href($a['Title'], permlinkurl($a));
             } else {
+                $thisarticle = array();
                 populateArticleData($a);
                 $thisarticle['is_first'] = ($count == 1);
                 $thisarticle['is_last'] = ($count == $last);
