@@ -1191,10 +1191,13 @@ function related_articles($atts, $thing = null)
         "ID != ".intval($id)." AND Status = ".STATUS_LIVE." $expired AND Posted <= ".now('posted')." $categories $section ORDER BY ".doSlash($sort)." LIMIT 0, ".intval($limit));
 
     if ($rs) {
+        $count = 0;
+        $last = numRows($rs);
         $out = array();
         $old_article = $thisarticle;
 
         while ($a = nextRow($rs)) {
+            ++$count;
             $a['Title'] = ($no_widow) ? noWidow(escape_title($a['Title'])) : escape_title($a['Title']);
             $a['uPosted'] = $a['posted']; // populateArticleData() and permlinkurl() assume quite a bunch of posting dates...
 
@@ -1202,6 +1205,8 @@ function related_articles($atts, $thing = null)
                 $out[] = href($a['Title'], permlinkurl($a));
             } else {
                 populateArticleData($a);
+                $thisarticle['is_first'] = ($count == 1);
+                $thisarticle['is_last'] = ($count == $last);
 
                 if ($thing === null && $form !== '') {
                     $out[] = parse_form($form);
