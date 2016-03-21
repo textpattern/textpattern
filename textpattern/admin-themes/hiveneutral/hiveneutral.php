@@ -172,7 +172,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
         switch ($thing[1]) {
             case E_ERROR:
                 $class = 'error';
-                $icon = 'ui-icon-closethick';
+                $icon = 'ui-icon-alert';
                 break;
             case E_WARNING:
                 $class = 'warning';

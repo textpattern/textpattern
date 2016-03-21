@@ -5571,7 +5571,7 @@ label.ui-state-active.ui-button:active {
  * Example HTML:
  *
  * <p class="error">
- *     <span class="ui-icon ui-icon-closethick"></span>
+ *     <span class="ui-icon ui-icon-alert"></span>
  *     Error!
  * </p>
  */
