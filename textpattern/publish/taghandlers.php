@@ -1132,7 +1132,7 @@ function related_articles($atts, $thing = null)
 
     assert_article();
 
-    extract(lAtts(array(
+    $atts = lAtts(array(
         'break'    => br,
         'class'    => __FUNCTION__,
         'form'     => '',
@@ -1144,86 +1144,29 @@ function related_articles($atts, $thing = null)
         'section'  => '',
         'sort'     => 'Posted DESC',
         'wraptag'  => '',
-    ), $atts));
-
-    if (empty($thisarticle['category1']) and empty($thisarticle['category2'])) {
-        return;
+    ), $atts);
+    
+    $match = array_intersect(do_list_unique($atts['match']), array('Category1', 'Category2', 'Author'));
+    if(in_array('Author', $match)) {
+        $atts['author'] = $thisarticle['authorid'];
+        $match = array_diff($match, array('Author'));
     }
-
-    $match = do_list_unique($match);
-
-    if (!in_array('Category1', $match) and !in_array('Category2', $match)) {
-        return;
-    }
-
-    $id = $thisarticle['thisid'];
-
-    $cats = array();
-
-    if ($thisarticle['category1']) {
-        $cats[] = doSlash($thisarticle['category1']);
-    }
-
-    if ($thisarticle['category2']) {
-        $cats[] = doSlash($thisarticle['category2']);
-    }
-
-    $cats = join("','", $cats);
-
-    $categories = array();
-
-    if (in_array('Category1', $match)) {
-        $categories[] = "Category1 IN ('$cats')";
-    }
-
-    if (in_array('Category2', $match)) {
-        $categories[] = "Category2 IN ('$cats')";
-    }
-
-    $categories = "AND (".join(" OR ", $categories).')';
-
-    $section = ($section) ? " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
-
-    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (".now('expires')." <= Expires OR Expires IS NULL) ";
-    $rs = safe_rows_start(
-        "*, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(LastMod) AS uLastMod, UNIX_TIMESTAMP(Expires) AS uExpires",
-        'textpattern',
-        "ID != ".intval($id)." AND Status = ".STATUS_LIVE." $expired AND Posted <= ".now('posted')." $categories $section ORDER BY ".doSlash($sort)." LIMIT 0, ".intval($limit));
-
-    if ($rs) {
-        $count = 0;
-        $last = numRows($rs);
-        $out = array();
-        $old_article = $thisarticle;
-
-        while ($a = nextRow($rs)) {
-            ++$count;
-            $a['Title'] = ($no_widow) ? noWidow(escape_title($a['Title'])) : escape_title($a['Title']);
-            $a['uPosted'] = $a['posted']; // populateArticleData() and permlinkurl() assume quite a bunch of posting dates...
-
-            if ($form === '' && $thing === null) {
-                $out[] = href($a['Title'], permlinkurl($a));
-            } else {
-                $thisarticle = array();
-                populateArticleData($a);
-                $thisarticle['is_first'] = ($count == 1);
-                $thisarticle['is_last'] = ($count == $last);
-
-                if ($thing === null && $form !== '') {
-                    $out[] = parse_form($form);
-                } else {
-                    $out[] = parse($thing);
-                }
-            }
+    
+    if ($match) //Category1 or Category2 by now
+        if(empty($thisarticle['category1']) and empty($thisarticle['category2'])) {
+            return;
+        } else {
+            $atts['category'] = trim($thisarticle['category1'].','.$thisarticle['category2'], ',');
         }
-        $thisarticle = $old_article;
-
-        if ($out) {
-            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-        }
+    
+    $atts['match'] = implode(',', $match);
+    $atts['exclude'] = $thisarticle['thisid'];
+    if ($atts['form'] === '' && $thing === null) {
+        $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
     }
+    unset($atts['no_widow']);
 
-    return '';
+    return article_custom($atts, $thing);
 }
 
 // -------------------------------------------------------------
