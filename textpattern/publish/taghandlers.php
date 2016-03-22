@@ -1014,7 +1014,7 @@ function recent_articles($atts)
     $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
     unset($atts['no_widow']);
 
-    return article_custom($atts, $thing);;
+    return article_custom($atts, $thing);
 }
 
 // -------------------------------------------------------------
@@ -1116,28 +1116,42 @@ function related_articles($atts, $thing = null)
     $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category1', 'category2', 'author', 'keywords'), getCustomFields()));
     $categories = $cats = array();
 
-    foreach($match as $cf) switch($cf) {
-        case 'category1' : case 'category2' :
-            if(!empty($thisarticle[$cf])) $cats[] = $thisarticle[$cf];
-            $categories[] = ucwords($cf); break;
-        case 'author' :
-            $atts['author'] = $thisarticle['authorid']; break;
-        default :
-            if(empty($thisarticle[$cf])) return;
-            $atts[$cf] = $thisarticle[$cf];
+    foreach ($match as $cf) {
+        switch ($cf) {
+            case 'category1':
+            case 'category2':
+                if (!empty($thisarticle[$cf])) {
+                    $cats[] = $thisarticle[$cf];
+                }
+
+                $categories[] = ucwords($cf);
+                break;
+            case 'author':
+                $atts['author'] = $thisarticle['authorid'];
+                break;
+            default:
+                if (empty($thisarticle[$cf])) {
+                    return;
+                }
+
+                $atts[$cf] = $thisarticle[$cf];
+                break;
+        }
     }
-    
-    if(!empty($cats)) {
+
+    if (!empty($cats)) {
         $atts['category'] = implode(',', $cats);
-    } elseif($categories) {
+    } elseif ($categories) {
         return;
     }
     
     $atts['match'] = implode(',', $categories);
     $atts['exclude'] = $thisarticle['thisid'];
+
     if ($atts['form'] === '' && $thing === null) {
         $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
     }
+
     unset($atts['no_widow']);
 
     return article_custom($atts, $thing);
