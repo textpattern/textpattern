@@ -850,12 +850,15 @@ function doArticles($atts, $iscustom, $thing = null)
     $category  = join("','", doSlash(do_list_unique($category)));
     $categories = array();
     $match = do_list_unique($match);
+
     if (in_array('Category1', $match)) {
         $categories[] = "Category1 IN ('$category')";
     }
+
     if (in_array('Category2', $match)) {
         $categories[] = "Category2 IN ('$category')";
     }
+
     $categories = join(" OR ", $categories);
     $category  = (!$category or !$categories)  ? '' : " AND ($categories)";
     $section   = (!$section)   ? '' : " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')";
