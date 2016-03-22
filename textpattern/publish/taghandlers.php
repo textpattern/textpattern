@@ -995,8 +995,8 @@ function recent_articles($atts)
 {
     global $prefs;
 
-    extract(lAtts(array(
-        'break'    => br,
+    $atts = lAtts(array(
+        'break'    => 'br',
         'category' => '',
         'class'    => __FUNCTION__,
         'label'    => gTxt('recent_articles'),
@@ -1009,46 +1009,12 @@ function recent_articles($atts)
         'sortdir'  => '', // Deprecated.
         'wraptag'  => '',
         'no_widow' => @$prefs['title_no_widow'],
-    ), $atts));
+    ), $atts);
+    
+    $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
+    unset($atts['no_widow']);
 
-    // For backwards compatibility. sortby and sortdir are deprecated.
-    if ($sortby) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortby')), E_USER_NOTICE);
-
-        if (!$sortdir) {
-            $sortdir = 'desc';
-        } else {
-            trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
-        }
-
-        $sort = "$sortby $sortdir";
-    } elseif ($sortdir) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
-        $sort = "Posted $sortdir";
-    }
-
-    $category = join("','", doSlash(do_list_unique($category)));
-    $categories = ($category) ? "AND (Category1 IN ('".$category."') or Category2 IN ('".$category."'))" : '';
-    $section = ($section) ? " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
-    $expired = ($prefs['publish_expired_articles']) ? "" : " AND (".now('expires')." <= Expires OR Expires IS NULL)";
-
-    $rs = safe_rows_start("*, id AS thisid, UNIX_TIMESTAMP(Posted) AS posted", 'textpattern',
-        "Status = ".STATUS_LIVE." $section $categories AND Posted <= ".now('posted').$expired." ORDER BY ".doSlash($sort)." LIMIT ".intval($offset).", ".intval($limit));
-
-    if ($rs) {
-        $out = array();
-
-        while ($a = nextRow($rs)) {
-            $a['Title'] = ($no_widow) ? noWidow(escape_title($a['Title'])) : escape_title($a['Title']);
-            $out[] = href($a['Title'], permlinkurl($a));
-        }
-
-        if ($out) {
-            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-        }
-    }
-
-    return '';
+    return article_custom($atts, $thing);;
 }
 
 // -------------------------------------------------------------
@@ -1139,6 +1105,7 @@ function related_articles($atts, $thing = null)
         'label'    => '',
         'labeltag' => '',
         'limit'    => 10,
+        'offset'   => 0,
         'match'    => 'Category1,Category2',
         'no_widow' => @$prefs['title_no_widow'],
         'section'  => '',
@@ -1146,20 +1113,27 @@ function related_articles($atts, $thing = null)
         'wraptag'  => '',
     ), $atts);
     
-    $match = array_intersect(do_list_unique($atts['match']), array('Category1', 'Category2', 'Author'));
-    if(in_array('Author', $match)) {
-        $atts['author'] = $thisarticle['authorid'];
-        $match = array_diff($match, array('Author'));
+    $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category1', 'category2', 'author', 'keywords'), getCustomFields()));
+    $categories = $cats = array();
+
+    foreach($match as $cf) switch($cf) {
+        case 'category1' : case 'category2' :
+            if(!empty($thisarticle[$cf])) $cats[] = $thisarticle[$cf];
+            $categories[] = ucwords($cf); break;
+        case 'author' :
+            $atts['author'] = $thisarticle['authorid']; break;
+        default :
+            if(empty($thisarticle[$cf])) return;
+            $atts[$cf] = $thisarticle[$cf];
     }
     
-    if ($match) //Category1 or Category2 by now
-        if(empty($thisarticle['category1']) and empty($thisarticle['category2'])) {
-            return;
-        } else {
-            $atts['category'] = trim($thisarticle['category1'].','.$thisarticle['category2'], ',');
-        }
+    if(!empty($cats)) {
+        $atts['category'] = implode(',', $cats);
+    } elseif($categories) {
+        return;
+    }
     
-    $atts['match'] = implode(',', $match);
+    $atts['match'] = implode(',', $categories);
     $atts['exclude'] = $thisarticle['thisid'];
     if ($atts['form'] === '' && $thing === null) {
         $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
