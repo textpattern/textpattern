@@ -155,7 +155,7 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         'id'       => $select_id,
         'name'     => $name,
         'disabled' => (bool) $disabled,
-    ));
+    ), TEXTPATTERN_STRIP_EMPTY);
 
     if ((string) $onchange === '1') {
         $atts .= ' data-submit-on="change"';
@@ -260,7 +260,7 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
         'disabled'    => (bool) $disabled,
         'required'    => (bool) $required,
         'placeholder' => $placeholder,
-    ));
+    ), TEXTPATTERN_STRIP_EMPTY);
 
     if ($type != 'file' && $type != 'image') {
         $atts .= join_atts(array('value' => (string) $value), 0);
@@ -379,7 +379,7 @@ function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
         'type'     => 'checkbox',
         'checked'  => (bool) $checked,
         'tabindex' => (int) $tabindex,
-    ));
+    ), TEXTPATTERN_STRIP_EMPTY);
 
     $atts .= join_atts(array('value' => (string) $value), 0);
 
@@ -429,7 +429,7 @@ function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
         'type'     => 'radio',
         'checked'  => (bool) $checked,
         'tabindex' => (int) $tabindex,
-    ));
+    ), TEXTPATTERN_STRIP_EMPTY);
 
     $atts .= join_atts(array('value' => (string) $value), 0);
 
