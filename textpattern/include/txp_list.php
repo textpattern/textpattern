@@ -472,7 +472,7 @@ function list_list($message = '', $post = '')
                     $Category2, '', 'txp-list-col-category2 category articles_detail'.$vc[2]
                 ).
                 td(
-                    href($Status, $view_url, join_atts(array('title' => gTxt('view')))), '', 'txp-list-col-status'
+                    href($Status, $view_url, join_atts(array('title' => gTxt('view')), TEXTPATTERN_STRIP_EMPTY)), '', 'txp-list-col-status'
                 ).
                 (
                     $show_authors
