@@ -689,7 +689,7 @@ function startTable($id = '', $align = '', $class = '', $p = 0, $w = 0)
         'cellpadding' => (int) $p,
         'width'       => (int) $w,
         'align'       => $align,
-    ));
+    ), TEXTPATTERN_STRIP_EMPTY);
 
     return n.'<table'.$atts.'>';
 }
