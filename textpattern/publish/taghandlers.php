@@ -2199,7 +2199,8 @@ function comment_name_input($atts)
     global $prefs, $thiscommentsform;
 
     extract(lAtts(array(
-        'size' => $thiscommentsform['isize']
+        'size' => $thiscommentsform['isize'],
+        'class'  => 'comment_name_input'
     ), $atts));
 
     $namewarn = false;
@@ -2212,7 +2213,7 @@ function comment_name_input($atts)
         $namewarn = ($prefs['comments_require_name'] && !$name);
     }
 
-    return fInput('text', 'name', $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name']);
+    return fInput('text', 'name', $name, $class.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name']);
 }
 
 // -------------------------------------------------------------
@@ -2222,7 +2223,8 @@ function comment_email_input($atts)
     global $prefs, $thiscommentsform;
 
     extract(lAtts(array(
-        'size' => $thiscommentsform['isize']
+        'size' => $thiscommentsform['isize'],
+        'class'  => 'comment_email_input'
     ), $atts));
 
     $emailwarn = false;
@@ -2235,7 +2237,7 @@ function comment_email_input($atts)
         $emailwarn = ($prefs['comments_require_email'] && !$email);
     }
 
-    return fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
+    return fInput($h5 ? 'email' : 'text', 'email', $email, $class.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
 }
 
 // -------------------------------------------------------------
@@ -2245,7 +2247,8 @@ function comment_web_input($atts)
     global $prefs, $thiscommentsform;
 
     extract(lAtts(array(
-        'size' => $thiscommentsform['isize']
+        'size' => $thiscommentsform['isize'],
+        'class'  => 'comment_web_input'
     ), $atts));
 
     $web = clean_url(pcs('web'));
@@ -2256,7 +2259,7 @@ function comment_web_input($atts)
         $web = $comment['web'];
     }
 
-    return fInput($h5 ? 'text' : 'text', 'web', $web, 'comment_web_input', '', '', $size, '', 'web', false, false); /* TODO: maybe use type = 'url' once browsers are less strict */
+    return fInput($h5 ? 'text' : 'text', 'web', $web, $class, '', '', $size, '', 'web', false, false); /* TODO: maybe use type = 'url' once browsers are less strict */
 }
 
 // -------------------------------------------------------------
@@ -2267,7 +2270,8 @@ function comment_message_input($atts)
 
     extract(lAtts(array(
         'rows'  => $thiscommentsform['msgrows'],
-        'cols'  => $thiscommentsform['msgcols']
+        'cols'  => $thiscommentsform['msgcols'],
+        'class'  => 'txpCommentInputMessage'
     ), $atts));
 
     $style = $thiscommentsform['msgstyle'];
@@ -2293,7 +2297,7 @@ function comment_message_input($atts)
     $rows = ($rows and is_numeric($rows)) ? ' rows="'.intval($rows).'"' : '';
     $style = ($style ? ' style="'.$style.'"' : '');
 
-    return '<textarea class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"').
+    return '<textarea class="'.$class.(($commentwarn) ? ' comments_error"' : '"').
         ' id="message" name="'.$n_message.'"'.$cols.$rows.$style.$required.
         '>'.txpspecialchars(substr(trim($message), 0, 65535)).'</textarea>'.
         callback_event('comment.form').
@@ -2308,7 +2312,8 @@ function comment_remember($atts)
 
     extract(lAtts(array(
         'rememberlabel' => $thiscommentsform['rememberlabel'],
-        'forgetlabel'   => $thiscommentsform['forgetlabel']
+        'forgetlabel'   => $thiscommentsform['forgetlabel'],
+        'class'  => ''
     ), $atts));
 
     extract(doDeEnt(psa(array(
@@ -2336,14 +2341,14 @@ function comment_remember($atts)
             destroyCookies();
         }
 
-        $checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(txpspecialchars($forgetlabel), 'label', ' for="forget"');
+        $checkbox = checkbox('forget', 1, $class, $forget, '', 'forget').' '.tag(txpspecialchars($forgetlabel), 'label', ' for="forget"');
     } else {
         // Inhibit default remember.
         if ($remember != 1) {
             destroyCookies();
         }
 
-        $checkbox = checkbox('remember', 1, $remember, '', 'remember').' '.tag(txpspecialchars($rememberlabel), 'label', ' for="remember"');
+        $checkbox = checkbox('remember', 1, $class, $remember, '', 'remember').' '.tag(txpspecialchars($rememberlabel), 'label', ' for="remember"');
     }
 
     $checkbox .= ' '.hInput('checkbox_type', $checkbox_type);
@@ -2358,10 +2363,11 @@ function comment_preview($atts)
     global $thiscommentsform;
 
     extract(lAtts(array(
-        'label'  => $thiscommentsform['previewlabel']
+        'label'  => $thiscommentsform['previewlabel'],
+        'class'  => 'button'
     ), $atts));
 
-    return fInput('submit', 'preview', $label, 'button', '', '', '', '', 'txpCommentPreview', false);
+    return fInput('submit', 'preview', $label, $class, '', '', '', '', 'txpCommentPreview', false);
 }
 
 // -------------------------------------------------------------
@@ -2371,15 +2377,16 @@ function comment_submit($atts)
     global $thiscommentsform;
 
     extract(lAtts(array(
-        'label'  => $thiscommentsform['submitlabel']
+        'label'  => $thiscommentsform['submitlabel'],
+        'class'  => 'button'
     ), $atts));
 
     // If all fields check out, the submit button is active/clickable.
     if (ps('preview')) {
-        return fInput('submit', 'submit', $label, 'button', '', '', '', '', 'txpCommentSubmit', false);
+        return fInput('submit', 'submit', $label, $class, '', '', '', '', 'txpCommentSubmit', false);
     }
     else {
-        return fInput('submit', 'submit', $label, 'button disabled', '', '', '', '', 'txpCommentSubmit', true);
+        return fInput('submit', 'submit', $label, $class.' disabled', '', '', '', '', 'txpCommentSubmit', true);
     }
 }
 
