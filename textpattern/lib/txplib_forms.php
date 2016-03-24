@@ -356,6 +356,7 @@ function tInput()
  *
  * @param  string $name     The field
  * @param  string $value    The value
+ * @param  string $class       The HTML class
  * @param  bool   $checked  If TRUE the box is checked
  * @param  int    $tabindex The HTML tabindex
  * @param  string $id       The HTML id
@@ -364,9 +365,9 @@ function tInput()
  * echo checkbox('name', 'value', true);
  */
 
-function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
+function checkbox($name, $value, $class, $checked = true, $tabindex = 0, $id = '')
 {
-    $class = 'checkbox';
+    $class .= ' checkbox';
 
     if ($checked) {
         $class .= ' active';
