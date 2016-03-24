@@ -1879,7 +1879,9 @@ function callback_event($event, $step = '', $pre = 0)
         return '';
     }
 
-    $trace->start("[Callback_event: '$event', step='$step', pre='$pre']");
+    if ($production_status !== 'live') {
+        $trace->start("[Callback_event: '$event', step='$step', pre='$pre']");
+    }
 
     // Any payload parameters?
     $argv = func_get_args();
@@ -1888,7 +1890,9 @@ function callback_event($event, $step = '', $pre = 0)
     foreach ($plugin_callback as $c) {
         if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
             if (is_callable($c['function'])) {
-                $trace->start("\t[Call function: '".callback_tostring($c['function'])."'".(empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
+                if ($production_status !== 'live') {
+                    $trace->start("\t[Call function: '".callback_tostring($c['function'])."'".(empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
+                }
 
                 $return_value = call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
 
@@ -1904,14 +1908,18 @@ function callback_event($event, $step = '', $pre = 0)
                     $out = $return_value;
                 }
 
-                $trace->stop();
+                if ($production_status !== 'live') {
+                    $trace->stop();
+                }
             } elseif ($production_status == 'debug') {
                 trigger_error(gTxt('unknown_callback_function', array('{function}' => callback_tostring($c['function']))), E_USER_WARNING);
             }
         }
     }
 
-    $trace->stop();
+    if ($production_status !== 'live') {
+        $trace->stop();
+    }
 
     if (isset($out)) {
         return $out;
@@ -2517,7 +2525,7 @@ function updateSitePath($here)
 
 function splat($text)
 {
-    global $trace;
+    global $production_status, $trace;
 
     $atts  = array();
 
@@ -2531,9 +2539,15 @@ function splat($text)
                     $val = str_replace("''", "'", $m[3]);
 
                     if (strpos($m[3], '<txp:') !== false) {
-                        $trace->start("[attribute: '{$m[1]}']");
+                        if ($production_status !== 'live') {
+                            $trace->start("[attribute: '{$m[1]}']");
+                        }
+                        
                         $val = parse($val);
-                        $trace->stop('[/attribute]');
+                        
+                        if ($production_status !== 'live') {
+                            $trace->stop('[/attribute]');
+                        }
                     }
 
                     break;
@@ -4169,9 +4183,11 @@ function txp_hash_password($password)
 
 function EvalElse($thing, $condition)
 {
-    global $txp_current_tag, $trace;
+    global $production_status, $txp_current_tag, $trace;
 
-    $trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
+    if ($production_status !== 'live') {
+        $trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
+    }
 
     $els = strpos($thing, '<txp:else');
 
@@ -4235,7 +4251,7 @@ function EvalElse($thing, $condition)
 
 function fetch_form($name)
 {
-    global $trace;
+    global $production_status, $trace;
 
     static $forms = array();
 
@@ -4257,7 +4273,9 @@ function fetch_form($name)
         $forms[$name] = $form;
     }
 
-    $trace->log("[Form: '$name']");
+    if ($production_status !== 'live') {
+        $trace->log("[Form: '$name']");
+    }
 
     return $forms[$name];
 }
@@ -4272,7 +4290,7 @@ function fetch_form($name)
 
 function parse_form($name)
 {
-    global $txp_current_form, $trace;
+    global $production_status, $txp_current_form, $trace;
     static $stack = array();
 
     $out = '';
@@ -4288,7 +4306,9 @@ function parse_form($name)
 
         $old_form = $txp_current_form;
         $txp_current_form = $stack[] = $name;
-        $trace->log("[Nesting forms: '".join("' / '", $stack)."']");
+        if ($production_status !== 'live') {
+            $trace->log("[Nesting forms: '".join("' / '", $stack)."']");
+        }
         $out = parse($f);
         $txp_current_form = $old_form;
         array_pop($stack);

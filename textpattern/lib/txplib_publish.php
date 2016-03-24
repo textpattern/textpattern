@@ -88,9 +88,11 @@ function filterFrontPage()
 
 function populateArticleData($rs)
 {
-    global $thisarticle, $trace;
+    global $production_status, $thisarticle, $trace;
 
-    $trace->log("[Article: '{$rs['ID']}']");
+    if ($production_status !== 'live') {
+        $trace->log("[Article: '{$rs['ID']}']");
+    }
 
     foreach (article_column_map() as $key => $column) {
         $thisarticle[$key] = $rs[$column];
@@ -699,7 +701,7 @@ function chopUrl($req)
 
 function filterAtts($atts = null)
 {
-    global $prefs, $trace;
+    global $prefs, $production_status, $trace;
     static $out = array();
 
     if (is_array($atts)) {
@@ -716,11 +718,13 @@ function filterAtts($atts = null)
             $trace->log('[filterAtts accepted]');
         } else {
             // TODO: deal w/ nested txp:article[_custom] tags.
-            $trace->log('[filterAtts ignored]');
+            if ($production_status !== 'live') {
+                $trace->log('[filterAtts ignored]');
+            }
         }
     }
 
-    if (empty($out)) {
+    if (empty($out) && $production_status !== 'live') {
         $trace->log('[filterAtts not set]');
     }
 
