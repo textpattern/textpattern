@@ -3101,7 +3101,9 @@ function safe_strtotime($time_str)
 {
     $ts = strtotime($time_str);
 
-    return strtotime($time_str, time() + tz_offset($ts)) - tz_offset($ts);
+    // tz_offset calculations are expensive
+    $tz_offset = tz_offset($ts);
+    return strtotime($time_str, time() + $tz_offset) - $tz_offset;
 }
 
 /**
@@ -5176,7 +5178,7 @@ function join_qs($q)
  * or for 'href' and 'src' to a URL encoded query string.
  *
  * @param   array|string  $atts  HTML attributes
- * @param   int           $flags TEXTPATTERN_STRIP_EMPTY
+ * @param   int           $flags TEXTPATTERN_STRIP_EMPTY_STRING
  * @return  string HTML attribute list
  * @since   4.6.0
  * @package HTML
