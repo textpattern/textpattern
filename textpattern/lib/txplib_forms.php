@@ -263,7 +263,7 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
     ), TEXTPATTERN_STRIP_EMPTY);
 
     if ($type != 'file' && $type != 'image') {
-        $atts .= join_atts(array('value' => (string) $value), 0);
+        $atts .= join_atts(array('value' => (string) $value), TEXTPATTERN_STRIP_NONE);
     }
 
     return n.tag_void('input', $atts);
@@ -381,7 +381,7 @@ function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
         'tabindex' => (int) $tabindex,
     ), TEXTPATTERN_STRIP_EMPTY);
 
-    $atts .= join_atts(array('value' => (string) $value), 0);
+    $atts .= join_atts(array('value' => (string) $value), TEXTPATTERN_STRIP_NONE);
 
     return n.tag_void('input', $atts);
 }
@@ -431,7 +431,7 @@ function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
         'tabindex' => (int) $tabindex,
     ), TEXTPATTERN_STRIP_EMPTY);
 
-    $atts .= join_atts(array('value' => (string) $value), 0);
+    $atts .= join_atts(array('value' => (string) $value), TEXTPATTERN_STRIP_NONE);
 
     return n.tag_void('input', $atts);
 }
