@@ -5195,23 +5195,24 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
     $list = array();
 
     foreach ($atts as $name => $value) {
-        if (($flags & TEXTPATTERN_STRIP_EMPTY && !$value) || ($flags & TEXTPATTERN_STRIP_EMPTY_STRING && $value === '') || ($value === false)) {
+        if (($flags & TEXTPATTERN_STRIP_EMPTY && !$value) || ($value === false)) {
             continue;
-        } elseif (is_array($value)) {
-            if ($name == 'href' || $name == 'src') {
-                $list[] = $name.'="'.join_qs($value).'"';
-                continue;
-            }
-
-            $value = join(' ', $value);
-        } elseif ($value === true) {
-            $value = $name;
         } elseif ($value === null) {
             $list[] = $name;
             continue;
+        } elseif (is_array($value)) {
+            if ($name == 'href' || $name == 'src') {
+                $value = join_qs($value);
+            } else {
+                $value = txpspecialchars(join(' ', $value));
+            }
+        } else {
+            $value = txpspecialchars($value === true ? $name : $value);
         }
 
-        $list[] = $name.'="'.txpspecialchars($value).'"';
+        if (!($flags & TEXTPATTERN_STRIP_EMPTY_STRING && $value === '')) {
+            $list[] = $name.'="'.$value.'"';
+        }
     }
 
     return $list ? ' '.join(' ', $list) : '';
