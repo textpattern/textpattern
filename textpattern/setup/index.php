@@ -142,7 +142,7 @@ eod;
         script_js('../textpattern.js', TEXTPATTERN_SCRIPT_URL);
 
     $out[] = <<<eod
-    <link rel="stylesheet" href="../theme/hive/assets/css/textpattern.min.css">
+    <link rel="stylesheet" href="../admin-themes/hive/assets/css/textpattern.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     </head>
     <body class="setup{$bodyclass}" id="page-setup">
@@ -231,7 +231,7 @@ function getDbInfo()
     if (!empty($txpcfg['db'])) {
         echo graf(
                 span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                setup_gTxt('already_installed', array('{txpath}' => txpath)),
+                setup_gTxt('already_installed', array('{txpath}' => basename(txpath))),
                 array('class' => 'alert-block warning')
             ).
             setup_back_button(__FUNCTION__).
@@ -339,7 +339,7 @@ function printConfig()
     if (!empty($txpcfg['db'])) {
         echo graf(
                 span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                setup_gTxt('already_installed', array('{txpath}' => txpath)),
+                setup_gTxt('already_installed', array('{txpath}' => basename(txpath))),
                 array('class' => 'alert-block warning')
             ).
             setup_back_button(__FUNCTION__).
@@ -775,7 +775,7 @@ function setup_config_contents()
     return hed(setup_gTxt('creating_config'), 2).
         graf(
             strong(setup_gTxt('before_you_proceed')).' '.
-            setup_gTxt('create_config', array('{txpath}' => txpspecialchars(txpath)))
+            setup_gTxt('create_config', array('{txpath}' => basename(txpath)))
         ).
         n.'<textarea class="code" name="config" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'" dir="ltr" readonly>'.
             makeConfig().
