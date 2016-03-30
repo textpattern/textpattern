@@ -689,7 +689,7 @@ function startTable($id = '', $align = '', $class = '', $p = 0, $w = 0)
         'cellpadding' => (int) $p,
         'width'       => (int) $w,
         'align'       => $align,
-    ));
+    ), TEXTPATTERN_STRIP_EMPTY);
 
     return n.'<table'.$atts.'>';
 }
@@ -892,7 +892,7 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
 
     $arguments = compact('name', 'input', 'label', 'help', 'atts', 'wraptag_val');
 
-    $fallback_class = 'edit-'.str_replace('_', '-', $name);
+    $fallback_class = 'txp-form-field edit-'.str_replace('_', '-', $name);
 
     if ($atts && is_string($atts)) {
         $atts = array('class' => $atts);

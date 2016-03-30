@@ -315,7 +315,7 @@ a {
 }
 
 a:hover, a:active {
-  outline: 0;
+  outline-width: 0;
   color: #0066ff;
   text-decoration: underline;
   text-decoration: #004cbf solid underline;
@@ -349,7 +349,7 @@ a.busy {
 .pophelp:focus,
 .pophelpsubtle:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
 }
 
 /**
@@ -479,13 +479,6 @@ blockquote {
   margin: 1em 0;
   padding: 0 0 0 1em;
   border-left: 3px solid #cccccc;
-}
-
-/**
- * Address styling not present in Safari and Chrome.
- */
-dfn {
-  font-style: italic;
 }
 
 /**
@@ -662,8 +655,7 @@ video {
 /**
  * Images.
  *
- * 1. Remove potential border when inside `a` element.
- * 2. Remove the gap between images and the bottom of their containers.
+ * 1. Remove the gap between images and the bottom of their containers.
  *
  * Image alignment (compatible with Textile markup syntax).
  *
@@ -675,8 +667,6 @@ video {
  */
 img {
   /* 1 */
-  border: 0;
-  /* 2 */
   vertical-align: middle;
 }
 
@@ -1336,10 +1326,24 @@ fieldset {
 
 /**
  * Normalize styling of `legend`.
+ *
+ * 1. Correct wrapping not present in IE 11 and Edge 12/13.
+ * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+ * 3. Correct `color` not being inherited from fieldset in IE 11.
  */
 legend {
+  /* 1 */
+  display: table;
+  /* 1 */
+  max-width: 100%;
+  /* 2 */
   padding: 0;
-  border: 0;
+  /* 3 */
+  color: inherit;
+  /* 1 */
+  white-space: normal;
+  /* 1 */
+  box-sizing: border-box;
 }
 
 /**
@@ -1384,7 +1388,7 @@ input::-moz-focus-inner {
  * clips the cancel button when the search input has padding (and `textfield`
  * appearance).
  */
-input[type="search"]::-webkit-search-decoration {
+[type="search"]::-webkit-search-decoration {
   -webkit-appearance: none;
 }
 
@@ -1393,20 +1397,20 @@ input[type="search"]::-webkit-search-decoration {
  *
  * 1. Remove browser-specific default styling.
  */
-input[type="color"],
-input[type="date"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="email"],
-input[type="month"],
-input[type="number"],
-input[type="password"],
-input[type="search"],
-input[type="tel"],
-input[type="text"],
-input[type="time"],
-input[type="url"],
-input[type="week"],
+[type="color"],
+[type="date"],
+[type="datetime"],
+[type="datetime-local"],
+[type="email"],
+[type="month"],
+[type="number"],
+[type="password"],
+[type="search"],
+[type="tel"],
+[type="text"],
+[type="time"],
+[type="url"],
+[type="week"],
 select,
 textarea {
   height: 2.15384615384615em;
@@ -1420,30 +1424,30 @@ textarea {
           appearance: none;
 }
 
-input[type="color"]:focus,
-input[type="date"]:focus,
-input[type="datetime"]:focus,
-input[type="datetime-local"]:focus,
-input[type="email"]:focus,
-input[type="month"]:focus,
-input[type="number"]:focus,
-input[type="password"]:focus,
-input[type="search"]:focus,
-input[type="tel"]:focus,
-input[type="text"]:focus,
-input[type="time"]:focus,
-input[type="url"]:focus,
-input[type="week"]:focus,
+[type="color"]:focus,
+[type="date"]:focus,
+[type="datetime"]:focus,
+[type="datetime-local"]:focus,
+[type="email"]:focus,
+[type="month"]:focus,
+[type="number"]:focus,
+[type="password"]:focus,
+[type="search"]:focus,
+[type="tel"]:focus,
+[type="text"]:focus,
+[type="time"]:focus,
+[type="url"]:focus,
+[type="week"]:focus,
 select:focus,
 textarea:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
 }
 
 /**
  * Remove padding from `color` fields.
  */
-input[type="color"] {
+[type="color"] {
   padding: 0;
 }
 
@@ -1452,8 +1456,8 @@ input[type="color"] {
  * `font-size` values of the `input`, it causes the cursor style of the
  * decrement button to change from `default` to `text`.
  */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
   height: auto;
 }
 
@@ -1461,20 +1465,20 @@ input[type="number"]::-webkit-outer-spin-button {
  * 1. Remove any excess padding.
  * 2. Correct margins for inline checkbox/radio labels.
  */
-input[type="checkbox"],
-input[type="radio"] {
+[type="checkbox"],
+[type="radio"] {
   /* 1 */
   padding: 0;
 }
 
-input[type="checkbox"] + label,
-input[type="radio"] + label {
+[type="checkbox"] + label,
+[type="radio"] + label {
   /* 2 */
   margin: 0 0.5em 0 0;
 }
 
-input[type="checkbox"] + label:last-of-type,
-input[type="radio"] + label:last-of-type {
+[type="checkbox"] + label:last-of-type,
+[type="radio"] + label:last-of-type {
   /* 2 */
   margin: 0;
 }
@@ -1482,13 +1486,13 @@ input[type="radio"] + label:last-of-type {
 /**
  * Swap margin positions in RTL languages.
  */
-[dir="rtl"] input[type="checkbox"] + label,
-[dir="rtl"] input[type="radio"] + label {
+[dir="rtl"] [type="checkbox"] + label,
+[dir="rtl"] [type="radio"] + label {
   margin: 0 0 0 0.5em;
 }
 
-[dir="rtl"] input[type="checkbox"] + label:last-of-type,
-[dir="rtl"] input[type="radio"] + label:last-of-type {
+[dir="rtl"] [type="checkbox"] + label:last-of-type,
+[dir="rtl"] [type="radio"] + label:last-of-type {
   margin: 0;
 }
 
@@ -1566,16 +1570,9 @@ textarea.code {
  * 1. Re-set default cursor for disabled elements.
  * 2. Override default iOS opacity setting.
  */
-button[disabled],
-button[disabled],
-input[disabled],
-input[type="button"][disabled],
-input[type="reset"][disabled],
-input[type="submit"][disabled],
-select[disabled],
-select[disabled] option,
-select[disabled] optgroup,
-textarea[disabled],
+[disabled],
+[disabled] option,
+[disabled] optgroup,
 .navlink-disabled {
   border-color: #d4d4d4 !important;
   background: #eeeeee !important;
@@ -1683,9 +1680,9 @@ button {
  * 2. Remove iOS Safari default styling.
  */
 button,
-input[type="reset"],
-input[type="submit"],
-input[type="button"],
+[type="reset"],
+[type="submit"],
+[type="button"],
 .txp-button,
 .txp-logout a,
 .navlink,
@@ -1710,9 +1707,9 @@ input[type="button"],
 }
 
 button:hover,
-input[type="reset"]:hover,
-input[type="submit"]:hover,
-input[type="button"]:hover,
+[type="reset"]:hover,
+[type="submit"]:hover,
+[type="button"]:hover,
 .txp-button:hover,
 .txp-logout a:hover,
 .navlink:hover,
@@ -1724,9 +1721,9 @@ input[type="button"]:hover,
 }
 
 button:active,
-input[type="reset"]:active,
-input[type="submit"]:active,
-input[type="button"]:active,
+[type="reset"]:active,
+[type="submit"]:active,
+[type="button"]:active,
 .txp-button:active,
 .txp-logout a:active,
 .navlink:active,
@@ -1738,15 +1735,15 @@ input[type="button"]:active,
 }
 
 button:focus,
-input[type="reset"]:focus,
-input[type="submit"]:focus,
-input[type="button"]:focus,
+[type="reset"]:focus,
+[type="submit"]:focus,
+[type="button"]:focus,
 .txp-button:focus,
 .txp-logout a:focus,
 .navlink:focus,
 .navlink-active:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
 }
 
 /**
@@ -1756,7 +1753,7 @@ input[type="button"]:focus,
  *
  * <input type="submit" class="publish">
  */
-input[type="submit"].publish,
+[type="submit"].publish,
 button.publish,
 a.publish {
   background-color: #9fc158;
@@ -1766,21 +1763,21 @@ a.publish {
   font-weight: bold;
 }
 
-input[type="submit"].publish:hover,
+[type="submit"].publish:hover,
 button.publish:hover,
 a.publish:hover {
   background-color: #aecb72;
   border: 1px solid #718e35;
 }
 
-input[type="submit"].publish:active,
+[type="submit"].publish:active,
 button.publish:active,
 a.publish:active {
   background-color: #94ba45;
   border: 1px solid #718e35;
 }
 
-input[type="submit"].publish:focus,
+[type="submit"].publish:focus,
 button.publish:focus,
 a.publish:focus {
   border-color: #0066ff;
@@ -3529,7 +3526,7 @@ span.spinner {
 /* Content -> Images panel - additional layout
    ========================================================================== */
 .has-thumbnail a:focus {
-  outline: 0;
+  outline-width: 0;
 }
 
 .thumbnail-alter input {
@@ -3649,7 +3646,7 @@ div.code {
   margin: 0;
   padding: 0;
   border: 0;
-  outline: 0;
+  outline-width: 0;
   font-size: 13px;
   line-height: 20px;
   list-style: none;
@@ -4211,7 +4208,7 @@ a.ui-state-default:focus {
 
 .ui-button:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
 }
 
 /**
@@ -4230,7 +4227,7 @@ a.ui-button {
 .ui-button.ui-state-focus {
   /* 1 */
   border-color: #0066ff !important;
-  outline: 0;
+  outline-width: 0;
 }
 
 /**
@@ -4912,7 +4909,7 @@ label.ui-state-active.ui-button:active {
   display: block;
   margin: 0;
   padding: 0;
-  outline: 0;
+  outline-width: 0;
   /* 1 */
   font-size: 13px;
   line-height: 1.38461538461538em;
@@ -5100,7 +5097,7 @@ label.ui-state-active.ui-button:active {
 
 .ui-selectmenu-button:focus {
   border-color: #0066ff;
-  outline: 0;
+  outline-width: 0;
 }
 
 .ui-selectmenu-button span.ui-icon {
@@ -5464,7 +5461,7 @@ label.ui-state-active.ui-button:active {
 }
 
 .ui-tabs-vertical .ui-tabs-nav .ui-state-focus {
-  outline: none;
+  outline-width: 0;
 }
 
 .ui-tabs-vertical .ui-tabs-nav .ui-state-focus a {
@@ -5574,7 +5571,7 @@ label.ui-state-active.ui-button:active {
  * Example HTML:
  *
  * <p class="error">
- *     <span class="ui-icon ui-icon-closethick"></span>
+ *     <span class="ui-icon ui-icon-alert"></span>
  *     Error!
  * </p>
  */

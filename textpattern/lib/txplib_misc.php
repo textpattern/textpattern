@@ -3101,7 +3101,9 @@ function safe_strtotime($time_str)
 {
     $ts = strtotime($time_str);
 
-    return strtotime($time_str, time() + tz_offset($ts)) - tz_offset($ts);
+    // tz_offset calculations are expensive
+    $tz_offset = tz_offset($ts);
+    return strtotime($time_str, time() + $tz_offset) - $tz_offset;
 }
 
 /**
@@ -5176,7 +5178,7 @@ function join_qs($q)
  * or for 'href' and 'src' to a URL encoded query string.
  *
  * @param   array|string  $atts  HTML attributes
- * @param   int           $flags TEXTPATTERN_STRIP_EMPTY
+ * @param   int           $flags TEXTPATTERN_STRIP_EMPTY_STRING
  * @return  string HTML attribute list
  * @since   4.6.0
  * @package HTML
@@ -5184,7 +5186,7 @@ function join_qs($q)
  * echo join_atts(array('class' => 'myClass', 'disabled' => true));
  */
 
-function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY)
+function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
 {
     if (!is_array($atts)) {
         return $atts ? ' '.trim($atts) : '';
@@ -5193,23 +5195,24 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY)
     $list = array();
 
     foreach ($atts as $name => $value) {
-        if (($flags & TEXTPATTERN_STRIP_EMPTY && !$value) || $value === false) {
+        if (($flags & TEXTPATTERN_STRIP_EMPTY && !$value) || ($value === false)) {
             continue;
-        } elseif (is_array($value)) {
-            if ($name == 'href' || $name == 'src') {
-                $list[] = $name.'="'.join_qs($value).'"';
-                continue;
-            }
-
-            $value = join(' ', $value);
-        } elseif ($value === true) {
-            $value = $name;
         } elseif ($value === null) {
             $list[] = $name;
             continue;
+        } elseif (is_array($value)) {
+            if ($name == 'href' || $name == 'src') {
+                $value = join_qs($value);
+            } else {
+                $value = txpspecialchars(join(' ', $value));
+            }
+        } else {
+            $value = txpspecialchars($value === true ? $name : $value);
         }
 
-        $list[] = $name.'="'.txpspecialchars($value).'"';
+        if (!($flags & TEXTPATTERN_STRIP_EMPTY_STRING && $value === '')) {
+            $list[] = $name.'="'.$value.'"';
+        }
     }
 
     return $list ? ' '.join(' ', $list) : '';

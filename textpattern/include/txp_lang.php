@@ -249,7 +249,7 @@ function list_languages($message = '')
         ));
 
     if (isset($msg) && $msg) {
-        echo graf('<span class="ui-icon ui-icon-closethick"></span> '.$msg, array('class' => 'alert-block error'));
+        echo graf('<span class="ui-icon ui-icon-alert"></span> '.$msg, array('class' => 'alert-block error'));
     }
 
     echo $lang_form,
@@ -357,7 +357,7 @@ function get_language()
             return list_languages(gTxt($lang_code).sp.gTxt('updated'));
         } else {
             pagetop(gTxt('installing_language'));
-            echo graf('<span class="ui-icon ui-icon-closethick"></span> '.gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->", array('class' => 'alert-block error'));
+            echo graf('<span class="ui-icon ui-icon-alert"></span> '.gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->", array('class' => 'alert-block error'));
         }
     } else {
         $response = $client->getResponse();

@@ -25,7 +25,7 @@ if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
-class hive_theme extends \Textpattern\Admin\Theme
+class hiveNeutral_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
     {
@@ -172,7 +172,7 @@ class hive_theme extends \Textpattern\Admin\Theme
         switch ($thing[1]) {
             case E_ERROR:
                 $class = 'error';
-                $icon = 'ui-icon-closethick';
+                $icon = 'ui-icon-alert';
                 break;
             case E_WARNING:
                 $class = 'warning';
@@ -227,8 +227,8 @@ EOS;
         global $prefs;
 
         return array(
-            'title'       => 'Hive',
-            'description' => 'Textpattern Hive admin theme (Classic Yellow)',
+            'title'       => 'Hive (Flat Neutral)',
+            'description' => 'Textpattern Hive (Flat Neutral) admin theme',
             'version'     => $prefs['version'],
             'author'      => 'Team Textpattern',
             'author_uri'  => 'http://textpattern.com/',

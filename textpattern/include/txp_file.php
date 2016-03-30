@@ -711,6 +711,11 @@ function file_edit($message = '', $id = '')
                 '', '', array('class' => 'txp-form-field edit-file-condition')
             ).
             inputLabel(
+                'id',
+                $id,
+                'id', '', array('class' => 'txp-form-field edit-file-id')
+            ).
+            inputLabel(
                 'name',
                 $downloadlink,
                 '', '', array('class' => 'txp-form-field edit-file-name')

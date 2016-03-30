@@ -735,6 +735,8 @@ function doArticles($atts, $iscustom, $thing = null)
         'time'          => 'past',
         'status'        => STATUS_LIVE,
         'allowoverride' => (!$q and !$iscustom),
+        'frontpage'     => !$iscustom,
+        'match'         => 'Category1,Category2',
         'offset'        => 0,
         'wraptag'       => '',
         'break'         => '',
@@ -750,14 +752,12 @@ function doArticles($atts, $iscustom, $thing = null)
         $theAtts['section'] = ($s && $s != 'default') ? $s : '';
         $theAtts['author'] = (!empty($author) ? $author : '');
         $theAtts['month'] = (!empty($month) ? $month : '');
-        $theAtts['frontpage'] = ($s && $s == 'default') ? true : false;
+        $theAtts['frontpage'] = ($theAtts['frontpage'] && $s && $s == 'default');
         $theAtts['excerpted'] = 0;
         $theAtts['exclude'] = 0;
         $theAtts['expired'] = $publish_expired_articles;
 
         filterAtts($theAtts);
-    } else {
-        $theAtts['frontpage'] = false;
     }
 
     extract($theAtts);
@@ -790,7 +790,7 @@ function doArticles($atts, $iscustom, $thing = null)
             $cols = array('Title', 'Body');
         }
 
-        $match = ", MATCH (`".join("`, `", $cols)."`) AGAINST ('$q') AS score";
+        $score = ", MATCH (`".join("`, `", $cols)."`) AGAINST ('$q') AS score";
         $search_terms = preg_replace('/\s+/', ' ', str_replace(array('\\', '%', '_', '\''), array('\\\\', '\\%', '\\_', '\\\''), $q));
 
         if ($quoted || empty($m) || $m === 'exact') {
@@ -822,7 +822,7 @@ function doArticles($atts, $iscustom, $thing = null)
             $sort = "score DESC";
         }
     } else {
-        $match = $search = '';
+        $score = $search = '';
 
         if (!$sort) {
             $sort = "Posted DESC";
@@ -848,7 +848,19 @@ function doArticles($atts, $iscustom, $thing = null)
     // Building query parts.
     $frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';
     $category  = join("','", doSlash(do_list_unique($category)));
-    $category  = (!$category)  ? '' : " AND (Category1 IN ('".$category."') OR Category2 IN ('".$category."'))";
+    $categories = array();
+    $match = do_list_unique($match);
+
+    if (in_array('Category1', $match)) {
+        $categories[] = "Category1 IN ('$category')";
+    }
+
+    if (in_array('Category2', $match)) {
+        $categories[] = "Category2 IN ('$category')";
+    }
+
+    $categories = join(" OR ", $categories);
+    $category  = (!$category or !$categories)  ? '' : " AND ($categories)";
     $section   = (!$section)   ? '' : " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')";
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
     $author    = (!$author)    ? '' : " AND AuthorID IN ('".join("','", doSlash(do_list_unique($author)))."')";
@@ -946,7 +958,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $safe_sort = doSlash($sort);
     }
 
-    $rs = safe_rows_start("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$match,
+    $rs = safe_rows_start("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$score,
         'textpattern',
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit));
 

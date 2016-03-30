@@ -391,9 +391,15 @@ function safe_query($q = '', $debug = false, $unbuf = false)
         dmp($q);
     }
 
-    $trace->start("[SQL: $q ]", true);
+    if ($production_status !== 'live') {
+        $trace->start("[SQL: $q ]", true);
+    }
+    
     $result = mysqli_query($DB->link, $q, $method);
-    $trace->stop();
+    
+    if ($production_status !== 'live') {
+        $trace->stop();
+    }
 
     if ($result === false) {
         trigger_error(mysqli_error($DB->link), E_USER_ERROR);
