@@ -364,58 +364,133 @@ function lastMod()
 
 function parse($thing)
 {
-    $f = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
-    $t = '@:(\w+)(.*?)/?.$@s';
+    global $txp_parsed;
 
-    $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
+    if (false === strpos($thing, '<txp:') and false === strpos($thing, '::')) {
+        return $thing;
+    }
 
-    $level = 0;
-    $out = '';
-    $inside = '';
-    $istag = false;
+    $hash = sha1($thing);
 
-    foreach ($parsed as $chunk) {
-        if ($istag) {
-            if ($level === 0) {
-                preg_match($t, $chunk, $tag);
+    if(isset($txp_parsed[$hash])) {
+        $tags[0] = $txp_parsed[$hash];
+    } else {
+        $tags[0] = array();
+        $tag     = array();
+        $inside  = array();
+        $level   = 0;
+        $istag   = false;
 
-                if (substr($chunk, -2, 1) === '/') {
-                    // Self closing.
-                    $out .= processTags($tag[1], $tag[2]);
-                } else {
-                    // Opening.
+        $f = '@(</?(?:txp|[a-z]{3}:):\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
+        $t = '@^./?(txp|[a-z]{3}:):(\w+)(.*?)/?.$@s';
+
+        $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+        foreach ($parsed as $chunk) {
+            if ($istag) {
+                preg_match($t, $chunk, $tag[$level]);
+
+                // handle short tags
+                if (strlen($tag[$level][1]) !== 3 and $tag[$level][1] !== 'txp:' and $tag[$level][2] !== 'else') {
+                    $tag[$level][2] = $tag[$level][1] . $tag[$level][2];
+                    $tag[$level][2][3] = '_';    
+                }
+
+                if ($chunk[strlen($chunk) - 2] === '/') {
+                    // self closed tag
+                    $tags[$level][] = array($tag[$level][2], $tag[$level][3], null);
+
+                    if ($level) {
+			$inside[$level] .= $chunk;
+		    }
+                } elseif ($chunk[1] !== '/') {
+                    // opening tag
+                    if ($level) {
+			$inside[$level] .= $chunk;
+		    }
+
                     $level++;
-                }
-            } else {
-                if (substr($chunk, 1, 1) === '/') {
-                    // Closing.
-                    if (--$level === 0) {
-                        $out  .= processTags($tag[1], $tag[2], $inside);
-                        $inside = '';
-                    } else {
-                        $inside .= $chunk;
-                    }
-                } elseif (substr($chunk, -2, 1) !== '/') {
-                    // Opening inside open.
-                    ++$level;
-                    $inside .= $chunk;
+                    $inside[$level] = '';
+                    $tags[$level] = array();
                 } else {
-                    $inside .= $chunk;
+                    // closing tag
+                    $txp_parsed[sha1($inside[$level])] = $tags[$level];
+                    $level--;
+                    $tags[$level][] = array($tag[$level][2], $tag[$level][3], $inside[$level+1]);
+
+                    if ($level) {
+			$inside[$level] .= $inside[$level+1] . $chunk;
+		    }
                 }
-            }
-        } else {
-            if ($level) {
-                $inside .= $chunk;
             } else {
-                $out .= $chunk;
+                $tags[$level][] = $chunk;
+
+                if ($level) {
+		    $inside[$level] .= $chunk;
+		}
             }
+
+            $istag = !$istag;
         }
 
-        $istag = !$istag;
+        $txp_parsed[$hash] = $tags[0];
+    }
+
+    for ($tag = $tags[0], $out = $tag[0], $i = 1, $max = count($tag); $i < $max; $i++)
+    {
+        $t = $tag[$i];
+        $out .= processTags($t[0], $t[1], $t[2]) . $tag[++$i];
     }
 
     return $out;
 }
+
+/**
+ * Parse a string depending on an if/else condition
+ *
+ * @param   string  $thing     Statement in Textpattern tag markup presentation
+ * @param   bool    $condition TRUE to return if statement, FALSE to else
+ * @return  string The parsed string
+ * @package TagParser
+ * @example
+ * echo parse_else('true &lt;txp:else /&gt; false', 1 === 1);
+ */
+
+function parse_else($thing, $condition)
+{
+    global $txp_parsed, $txp_current_tag;
+
+    trace_add("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
+
+    if (!$condition and false === strpos($thing, ':else')) {
+        return '';
+    }
+
+    $tag = $txp_parsed[sha1($thing)];
+    $nr  = 1;
+    $tot = count($tag);
+
+    while ($nr < $tot and $tag[$nr][0] !== 'else') $nr += 2;
+
+    if ($condition) {
+        $out = $tag[0];
+        $i   = 1;
+        $max = $nr - 1;
+    } elseif ($nr < $tot) {
+        $out = $tag[$nr + 1];
+        $i   = $nr + 2;
+        $max = $tot;
+    } else {
+        return '';
+    }
+    
+    for (; $i < $max; $i++) {
+	$t = $tag[$i];
+        $out .= processTags($t[0], $t[1], $t[2]) . $tag[++$i];
+    }
+
+    return $out;
+} 
 
 /**
  * Guesstimate whether a given function name may be a valid tag handler.

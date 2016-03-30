@@ -58,6 +58,7 @@ set_error_handler('publicErrorHandler', error_reporting());
 ob_start();
 
 $txp_current_tag = '';
+$txp_parsed      = array();
 
 // Get all prefs as an array.
 $prefs = get_prefs();

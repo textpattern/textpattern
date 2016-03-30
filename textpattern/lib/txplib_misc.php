@@ -2517,37 +2517,57 @@ function updateSitePath($here)
 
 function splat($text)
 {
+    static $stack, $parse;
     global $trace;
 
-    $atts  = array();
+    if (strlen($text) < 3) {
+        return array();
+    }
 
-    if (preg_match_all('@(\w+)\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+))@s', $text, $match, PREG_SET_ORDER)) {
-        foreach ($match as $m) {
-            switch (count($m)) {
-                case 3:
-                    $val = str_replace('""', '"', $m[2]);
-                    break;
-                case 4:
-                    $val = str_replace("''", "'", $m[3]);
+    $sha = sha1($text);
 
-                    if (strpos($m[3], '<txp:') !== false) {
-                        $trace->start("[attribute: '{$m[1]}']");
-                        $val = parse($val);
-                        $trace->stop('[/attribute]');
-                    }
+    if (!isset($stack[$sha])) {
+        $stack[$sha] = array();
+        $parse[$sha] = array();
 
-                    break;
-                case 5:
-                    $val = $m[4];
-                    trigger_error(gTxt('attribute_values_must_be_quoted'), E_USER_WARNING);
-                    break;
+        if (preg_match_all('@(\w+)\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+))@s', $text, $match, PREG_SET_ORDER)) {
+            foreach ($match as $m) {
+                switch (count($m)) {
+                    case 3:
+                        $val = str_replace('""', '"', $m[2]);
+                        break;
+                    case 4:
+                        $val = str_replace("''", "'", $m[3]);
+
+                        if (strpos($m[3], ':') !== false) {
+                            $parse[$sha][] = strtolower($m[1]);
+                        }
+
+                        break;
+                    case 5:
+                        $val = $m[4];
+                        trigger_error(gTxt('attribute_values_must_be_quoted'), E_USER_WARNING);
+                        break;
+                }
+
+                $stack[$sha][strtolower($m[1])] = $val;
             }
-
-            $atts[strtolower($m[1])] = $val;
         }
     }
 
-    return $atts;
+    if (empty($parse[$sha])) {
+        return $stack[$sha];
+    }
+    else {
+        $atts = $stack[$sha];
+
+        foreach ($parse[$sha] as $p) {
+            $trace->start("[attribute '".$m[1]."']");
+            $atts[$p] = parse($atts[$p]);
+            $trace->stop('[/attribute]');
+        }
+        return $atts;
+    }
 }
 
 /**
@@ -4161,9 +4181,11 @@ function txp_hash_password($password)
 /**
  * Extracts a statement from a if/else condition.
  *
- * @param   string $thing     Statement in Textpattern tag markup presentation
- * @param   bool   $condition TRUE to return if statement, FALSE to else
- * @return  string Either if or else statement
+ * @param   string  $thing     Statement in Textpattern tag markup presentation
+ * @param   bool    $condition TRUE to return if statement, FALSE to else
+ * @return  string  Either if or else statement
+ * @deprecated in 4.6.0
+ * @see     parse_else
  * @package TagParser
  * @example
  * echo parse(EvalElse('true &lt;txp:else /&gt; false', 1 === 1));
@@ -4171,56 +4193,8 @@ function txp_hash_password($password)
 
 function EvalElse($thing, $condition)
 {
-    global $txp_current_tag, $trace;
-
-    $trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
-
-    $els = strpos($thing, '<txp:else');
-
-    if ($els === false) {
-        if ($condition) {
-            return $thing;
-        }
-
-        return '';
-    } elseif ($els === strpos($thing, '<txp:')) {
-        if ($condition) {
-            return substr($thing, 0, $els);
-        }
-
-        return substr($thing, strpos($thing, '>', $els) + 1);
-    }
-
-    $tag    = false;
-    $level  = 0;
-    $str    = '';
-    $regex  = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
-    $parsed = preg_split($regex, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
-
-    foreach ($parsed as $chunk) {
-        if ($tag) {
-            if ($level === 0 and strpos($chunk, 'else') === 5 and substr($chunk, -2, 1) === '/') {
-                if ($condition) {
-                    return $str;
-                }
-
-                return substr($thing, strlen($str)+strlen($chunk));
-            } elseif (substr($chunk, 1, 1) === '/') {
-                $level--;
-            } elseif (substr($chunk, -2, 1) !== '/') {
-                $level++;
-            }
-        }
-
-        $tag = !$tag;
-        $str .= $chunk;
-    }
-
-    if ($condition) {
-        return $thing;
-    }
-
-    return '';
+    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'parse_else (and remove the separate parse() call)')), E_USER_NOTICE);
+    return parse_else($thing, $condition);
 }
 
 /**
