@@ -95,7 +95,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
 
     public function isRegistered($tag)
     {
-        return array_key_exists($tag, $this->tags) && is_callable($this->tags[$tag]);
+        return isset($this->tags[$tag]) && is_callable($this->tags[$tag]);
     }
 
     /**
