@@ -4194,7 +4194,52 @@ function txp_hash_password($password)
 function EvalElse($thing, $condition)
 {
     trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'parse_else (and remove the separate parse() call)')), E_USER_NOTICE);
-    return parse_else($thing, $condition);
+
+	$els = strpos($thing, '<txp:else');
+
+	if ($els === FALSE)
+	{
+		return $condition ? $thing : '';
+	}
+
+	$hash = sha1($thing);
+	if (!isset($stack[$hash]))
+	{
+
+		$tag    = FALSE;
+		$level  = 0;
+		$str    = '';
+		$regex  = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
+		$parsed = preg_split($regex, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+		foreach ($parsed as $chunk) if (!isset($stack[$hash]))
+		{
+			if ($tag)
+			{
+				if ($level === 0 and strpos($chunk, 'else') === 5 and substr($chunk, -2, 1) === '/')
+				{
+					$stack[$hash] = array(
+						$str,
+						substr($thing, strlen($str) + strlen($chunk)));
+				}
+				elseif (substr($chunk, 1, 1) === '/')
+				{
+					$level--;
+				}
+				elseif (substr($chunk, -2, 1) !== '/')
+				{
+					$level++;
+				}
+			}
+
+			$tag = !$tag;
+			$str .= $chunk;
+		}
+	}
+	
+	if (!isset($stack[$hash])) $stack[$hash] = array($thing, '');
+	
+	return  $stack[$hash][$condition ? 0 : 1];
 }
 
 /**
