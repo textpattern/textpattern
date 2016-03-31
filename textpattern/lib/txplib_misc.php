@@ -3021,16 +3021,44 @@ function since($stamp)
 function tz_offset($timestamp = null)
 {
     global $gmtoffset, $timezone_key;
+    static $dtz = array(), $timezone_server = null;
+    
+    if ($timezone_server === null) {
+        $timezone_server = date_default_timezone_get();
+    }
 
-    if (is_null($timestamp)) {
+    if ($timezone_server === $timezone_key) {
+            return 0;
+    }
+
+    if ($timestamp === null) {
         $timestamp = time();
     }
 
-    extract(getdate($timestamp));
-    $serveroffset = gmmktime($hours, $minutes, 0, $mon, $mday, $year) - mktime($hours, $minutes, 0, $mon, $mday, $year);
-    $real_dst = timezone::is_dst($timestamp, $timezone_key);
-
-    return $gmtoffset - $serveroffset + ($real_dst ? 3600 : 0);
+    try {
+        if (!isset($dtz[$timezone_server])) {
+            $dtz[$timezone_server] = new \DateTimeZone($timezone_server);
+        }
+        
+        $transition = $dtz[$timezone_server]->getTransitions($timestamp, $timestamp);
+        $serveroffset = $transition[0]['offset'];
+    } catch(\Exception $e) {
+        extract(getdate($timestamp));
+        $serveroffset = gmmktime($hours, $minutes, 0, $mon, $mday, $year) - mktime($hours, $minutes, 0, $mon, $mday, $year);
+    }
+    
+    try {
+        if (!isset($dtz[$timezone_key])) {
+            $dtz[$timezone_key] = new \DateTimeZone($timezone_key);
+        }
+        
+        $transition = $dtz[$timezone_key]->getTransitions($timestamp, $timestamp);
+        $siteoffset = $transition[0]['offset'];
+    } catch(\Exception $e) {
+        $siteoffset = $gmtoffset;
+    }
+        
+    return $siteoffset - $serveroffset;
 }
 
 /**
