@@ -458,10 +458,10 @@ function parse($thing)
 
 function parse_else($thing, $condition)
 {
-    global $production_status, $txp_parsed, $txp_current_tag;
+    global $production_status, $trace, $txp_parsed, $txp_current_tag;
 
     if ($production_status !== 'live') {
-    	trace_add("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
+    	$trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
     }
 
     if (!$condition and false === strpos($thing, ':else')) {
