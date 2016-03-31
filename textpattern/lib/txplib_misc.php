@@ -2562,7 +2562,7 @@ function splat($text)
         $atts = $stack[$sha];
 
         if ($production_status !== 'live') foreach ($parse[$sha] as $p) {
-            $trace->start("[attribute '".$m[1]."']");
+            $trace->start("[attribute '".$p."']");
             $atts[$p] = parse($atts[$p]);
             $trace->stop('[/attribute]');
         } else foreach ($parse[$sha] as $p) {
@@ -4287,7 +4287,7 @@ function EvalElse($thing, $condition)
 
 function fetch_form($name)
 {
-    global $trace;
+    global $production_status, $trace;
 
     static $forms = array();
 
@@ -4309,7 +4309,9 @@ function fetch_form($name)
         $forms[$name] = $form;
     }
 
-    $trace->log("[Form: '$name']");
+    if ($production_status !== 'live') {
+    	$trace->log("[Form: '$name']");
+    }
 
     return $forms[$name];
 }
@@ -4324,7 +4326,7 @@ function fetch_form($name)
 
 function parse_form($name)
 {
-    global $txp_current_form, $trace;
+    global $production_status, $txp_current_form, $trace;
     static $stack = array();
 
     $out = '';
@@ -4340,7 +4342,9 @@ function parse_form($name)
 
         $old_form = $txp_current_form;
         $txp_current_form = $stack[] = $name;
-        $trace->log("[Nesting forms: '".join("' / '", $stack)."']");
+        if ($production_status !== 'live') {
+            $trace->log("[Nesting forms: '".join("' / '", $stack)."']");
+        }
         $out = parse($f);
         $txp_current_form = $old_form;
         array_pop($stack);
