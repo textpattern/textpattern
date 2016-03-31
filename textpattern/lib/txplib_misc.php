@@ -2518,7 +2518,7 @@ function updateSitePath($here)
 function splat($text)
 {
     static $stack, $parse;
-    global $trace;
+    global $production_status, $trace;
 
     if (strlen($text) < 3) {
         return array();
@@ -2561,11 +2561,14 @@ function splat($text)
     else {
         $atts = $stack[$sha];
 
-        foreach ($parse[$sha] as $p) {
+        if ($production_status !== 'live') foreach ($parse[$sha] as $p) {
             $trace->start("[attribute '".$m[1]."']");
             $atts[$p] = parse($atts[$p]);
             $trace->stop('[/attribute]');
+        } else foreach ($parse[$sha] as $p) {
+            $atts[$p] = parse($atts[$p]);
         }
+
         return $atts;
     }
 }
