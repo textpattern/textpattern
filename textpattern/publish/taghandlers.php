@@ -5036,7 +5036,7 @@ function variable($atts, $thing = null)
 
     extract(lAtts(array(
         'name'  => '',
-        'value' => parse($thing),
+        'value' => $thing !== null ? parse($thing) : null,
     ), $atts));
 
     if (empty($name)) {
