@@ -21,7 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Generated: 02 Mar 2016, 01:35:16 GMT
+// Generated: 31 Mar 2016, 03:17:09 GMT
 
 $langs = array(
     'ar-dz' => array(
@@ -2155,9 +2155,9 @@ config_php_not_found => Nepodařilo se nalézt soubor s nastavením: <strong>{fi
         'before_you_proceed' => '在您进行之前',
         'checking_database' => '检查数数据库连接…',
         'choose_password' => '选择一个密码',
-        'config_php_does_not_match_input' => ' <code>config.php</code>的内容与您输入的值不匹配。请准确地粘贴以下的文本。',
+        'config_php_does_not_match_input' => '<code>config.php</code> 的内容中没有匹配到您输入的值，请再次确认您输入的文本。',
         'config_php_not_found' => '没有在 <strong>{file}</strong> 找到配置文件。请再确认一次。',
-        'core_theme' => 'Core: {theme}',
+        'core_theme' => '主干： {theme}',
         'create_config' => '请在 <code>/textpattern/</code> 目录下建立 <code>config.php</code> 文件，并将下列内容复制到其中：',
         'creating_config' => '创建 config.php 文件',
         'creating_db_tables' => '创建数据库表',
@@ -2168,9 +2168,9 @@ config_php_not_found => Nepodařilo se nalézt soubor s nastavením: <strong>{fi
         'did_it' => '完成了',
         'email_required' => '请提供一个有效的 E-mail 地址。',
         'errors_during_install' => '在安装过程中出现 {num} 个错误，您可以在 <a href="http://forum.textpattern.com/" rel="external">Textpattern CMS 论坛</a>里请求帮助。',
-        'get_started' => 'Go!',
+        'get_started' => '启动！',
         'go_to_login' => '现在登录',
-        'installation_postamble' => '为了安全，您应该移除您Textpattern下的 <code>setup</code> 目录。请时时检查管理→诊断面板的更新公告或故障排除提示。',
+        'installation_postamble' => '基于安全考虑，您应当删除 <code>/textpattern/</code> 内的 <code>setup</code> 目录。请检查管理中的诊断是否还会给出提示。',
         'mysql_database' => 'MySQL 数据库',
         'mysql_login' => 'MySQL 帐号',
         'mysql_password' => 'MySQL 密码',
@@ -2182,18 +2182,24 @@ config_php_not_found => Nepodařilo se nalézt soubor s nastavením: <strong>{fi
         'next_step' => '前进 →',
         'pass_required' => '请提供一个强的密码。',
         'please_enter_url' => '请输入您的网站 URL',
-        'please_go_back' => '请返回，纠正任何错误的细节并再次尝试此过程。',
+        'please_go_back' => '返回，纠正任何错误的细节后再重试。',
         'populate_db' => '填充数据库',
         'prefix_bad_characters' => '资料表前缀 {dbprefix} 包含无效的字符。<br />第一个字符必须是 <b>a-zA-Z_</b> 中的一个，后面的字符必须是 <strong>a-zA-Z0-9_</strong> 中的字符。',
         'prefix_warning' => '（<strong>仅在</strong>一个数据库中进行多重安装时才需要）',
-        'progress_steps' => '安装过程总共有4步：',
+        'progress_steps' => '安装过程需要四步：',
         'setup_comment_invite' => '评论',
         'setup_login' => '登录帐号（请使用基本字符和空格）',
+        'setup_password_strength_0' => '脑残',
+        'setup_password_strength_1' => '弱',
+        'setup_password_strength_2' => '一般',
+        'setup_password_strength_3' => '好',
+        'setup_password_strength_4' => '强',
+        'setup_show_password' => '显示密码',
         'set_db_details' => '设置数据库细节',
         'set_temp_dir_prefs' => '对不起，我们找不到一个可写的目录来保存临时文件。请访问<strong>高级设置</strong>标签，把<strong>临时目录</strong>设置成你所需要的。',
         'site_config' => '网站配置',
         'site_url' => '网站 URL',
-        'tables_exist' => '<strong>{dbname}</strong>中已存在数据表。如果你想继续安装，可以删除现有的表，或选择不同的表前缀。',
+        'tables_exist' => '看来数据库 <strong>{dbname}</strong> 已存在。如果您想继续安装过程，要么删除数据库，要么选择不同的数据表前缀',
         'table_prefix' => '资料表前缀',
         'thanks_for_interest' => '感谢您的对 Textpattern 的支持。',
         'that_went_well' => '数据库资料表已顺利建立并运行。',
