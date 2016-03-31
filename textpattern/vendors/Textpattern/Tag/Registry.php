@@ -72,7 +72,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
      * Processes a tag by name.
      *
      * @param  string      $tag   The tag
-     * @param  array       $atts  An array of Attributes
+     * @param  array|null  $atts  An array of Attributes
      * @param  string|null $thing The contained statement
      * @return string|bool The tag's results (string) or FALSE on unknown tags
      */
@@ -95,7 +95,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
 
     public function isRegistered($tag)
     {
-        return array_key_exists($tag, $this->tags) && is_callable($this->tags[$tag]);
+        return isset($this->tags[$tag]) && is_callable($this->tags[$tag]);
     }
 
     /**

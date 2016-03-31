@@ -206,28 +206,31 @@ class Timezone
 
     public function isDst($timestamp = null, $timezone = null)
     {
+        static $DTZones = array();
+        
         if (!$timezone) {
             $timezone = $this->getTimeZone();
         }
-
-        try {
-            $timezone = new \DateTimeZone($timezone);
-
-            if ($timestamp !== null) {
-                if ((string)intval($timestamp) !== (string)$timestamp) {
-                    $timestamp = strtotime($timestamp);
-                }
-
-                $timestamp = date('Y-m-d H:m:s', $timestamp);
+            
+        if ($timestamp === null) {
+            $timestamp = time();
+        } else {
+            if ((string)intval($timestamp) !== (string)$timestamp) {
+                $timestamp = strtotime($timestamp);
             }
-
-            $dateTime = new \DateTime($timestamp, $timezone);
-
-            return (bool)$dateTime->format('I');
+        }
+        
+        try {
+            if (!isset($DTZones[$timezone])) {
+                $DTZones[$timezone] = new \DateTimeZone($timezone);
+            }
+            $transition = $DTZones[$timezone]->getTransitions($timestamp, $timestamp);
+            $isdst = $transition[0]['isdst'];
         } catch (\Exception $e) {
+            $isdst = false;
         }
 
-        return false;
+        return (bool)$isdst;
     }
 
     /**

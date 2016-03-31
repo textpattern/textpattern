@@ -1888,7 +1888,9 @@ function callback_event($event, $step = '', $pre = 0)
     foreach ($plugin_callback as $c) {
         if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
             if (is_callable($c['function'])) {
-                $trace->start("\t[Call function: '".callback_tostring($c['function'])."'".(empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
+                if ($production_status !== 'live') {
+                    $trace->start("\t[Call function: '".callback_tostring($c['function'])."'".(empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
+                }
 
                 $return_value = call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
 
@@ -1904,8 +1906,10 @@ function callback_event($event, $step = '', $pre = 0)
                     $out = $return_value;
                 }
 
-                $trace->stop();
-            } elseif ($production_status == 'debug') {
+                if ($production_status !== 'live') {
+                    $trace->stop();
+                }
+            } elseif ($production_status === 'debug') {
                 trigger_error(gTxt('unknown_callback_function', array('{function}' => callback_tostring($c['function']))), E_USER_WARNING);
             }
         }
@@ -2517,37 +2521,60 @@ function updateSitePath($here)
 
 function splat($text)
 {
-    global $trace;
+    static $stack, $parse;
+    global $production_status, $trace;
 
-    $atts  = array();
+    if (strlen($text) < 3) {
+        return array();
+    }
 
-    if (preg_match_all('@(\w+)\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+))@s', $text, $match, PREG_SET_ORDER)) {
-        foreach ($match as $m) {
-            switch (count($m)) {
-                case 3:
-                    $val = str_replace('""', '"', $m[2]);
-                    break;
-                case 4:
-                    $val = str_replace("''", "'", $m[3]);
+    $sha = sha1($text);
 
-                    if (strpos($m[3], '<txp:') !== false) {
-                        $trace->start("[attribute: '{$m[1]}']");
-                        $val = parse($val);
-                        $trace->stop('[/attribute]');
-                    }
+    if (!isset($stack[$sha])) {
+        $stack[$sha] = array();
+        $parse[$sha] = array();
 
-                    break;
-                case 5:
-                    $val = $m[4];
-                    trigger_error(gTxt('attribute_values_must_be_quoted'), E_USER_WARNING);
-                    break;
+        if (preg_match_all('@(\w+)\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+))@s', $text, $match, PREG_SET_ORDER)) {
+            foreach ($match as $m) {
+                switch (count($m)) {
+                    case 3:
+                        $val = str_replace('""', '"', $m[2]);
+                        break;
+                    case 4:
+                        $val = str_replace("''", "'", $m[3]);
+
+                        if (strpos($m[3], ':') !== false) {
+                            $parse[$sha][] = strtolower($m[1]);
+                        }
+
+                        break;
+                    case 5:
+                        $val = $m[4];
+                        trigger_error(gTxt('attribute_values_must_be_quoted'), E_USER_WARNING);
+                        break;
+                }
+
+                $stack[$sha][strtolower($m[1])] = $val;
             }
-
-            $atts[strtolower($m[1])] = $val;
         }
     }
 
-    return $atts;
+    if (empty($parse[$sha])) {
+        return $stack[$sha];
+    }
+    else {
+        $atts = $stack[$sha];
+
+        if ($production_status !== 'live') foreach ($parse[$sha] as $p) {
+            $trace->start("[attribute '".$p."']");
+            $atts[$p] = parse($atts[$p]);
+            $trace->stop('[/attribute]');
+        } else foreach ($parse[$sha] as $p) {
+            $atts[$p] = parse($atts[$p]);
+        }
+
+        return $atts;
+    }
 }
 
 /**
@@ -3001,16 +3028,44 @@ function since($stamp)
 function tz_offset($timestamp = null)
 {
     global $gmtoffset, $timezone_key;
+    static $dtz = array(), $timezone_server = null;
+    
+    if ($timezone_server === null) {
+        $timezone_server = date_default_timezone_get();
+    }
 
-    if (is_null($timestamp)) {
+    if ($timezone_server === $timezone_key) {
+            return 0;
+    }
+
+    if ($timestamp === null) {
         $timestamp = time();
     }
 
-    extract(getdate($timestamp));
-    $serveroffset = gmmktime($hours, $minutes, 0, $mon, $mday, $year) - mktime($hours, $minutes, 0, $mon, $mday, $year);
-    $real_dst = timezone::is_dst($timestamp, $timezone_key);
-
-    return $gmtoffset - $serveroffset + ($real_dst ? 3600 : 0);
+    try {
+        if (!isset($dtz[$timezone_server])) {
+            $dtz[$timezone_server] = new \DateTimeZone($timezone_server);
+        }
+        
+        $transition = $dtz[$timezone_server]->getTransitions($timestamp, $timestamp);
+        $serveroffset = $transition[0]['offset'];
+    } catch(\Exception $e) {
+        extract(getdate($timestamp));
+        $serveroffset = gmmktime($hours, $minutes, 0, $mon, $mday, $year) - mktime($hours, $minutes, 0, $mon, $mday, $year);
+    }
+    
+    try {
+        if (!isset($dtz[$timezone_key])) {
+            $dtz[$timezone_key] = new \DateTimeZone($timezone_key);
+        }
+        
+        $transition = $dtz[$timezone_key]->getTransitions($timestamp, $timestamp);
+        $siteoffset = $transition[0]['offset'];
+    } catch(\Exception $e) {
+        $siteoffset = $gmtoffset;
+    }
+        
+    return $siteoffset - $serveroffset;
 }
 
 /**
@@ -4161,9 +4216,11 @@ function txp_hash_password($password)
 /**
  * Extracts a statement from a if/else condition.
  *
- * @param   string $thing     Statement in Textpattern tag markup presentation
- * @param   bool   $condition TRUE to return if statement, FALSE to else
- * @return  string Either if or else statement
+ * @param   string  $thing     Statement in Textpattern tag markup presentation
+ * @param   bool    $condition TRUE to return if statement, FALSE to else
+ * @return  string  Either if or else statement
+ * @deprecated in 4.6.0
+ * @see     parse_else
  * @package TagParser
  * @example
  * echo parse(EvalElse('true &lt;txp:else /&gt; false', 1 === 1));
@@ -4171,56 +4228,53 @@ function txp_hash_password($password)
 
 function EvalElse($thing, $condition)
 {
-    global $txp_current_tag, $trace;
+    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'parse_else (and remove the separate parse() call)')), E_USER_NOTICE);
 
-    $trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
+	$els = strpos($thing, '<txp:else');
 
-    $els = strpos($thing, '<txp:else');
+	if ($els === FALSE)
+	{
+		return $condition ? $thing : '';
+	}
 
-    if ($els === false) {
-        if ($condition) {
-            return $thing;
-        }
+	$hash = sha1($thing);
+	if (!isset($stack[$hash]))
+	{
 
-        return '';
-    } elseif ($els === strpos($thing, '<txp:')) {
-        if ($condition) {
-            return substr($thing, 0, $els);
-        }
+		$tag    = FALSE;
+		$level  = 0;
+		$str    = '';
+		$regex  = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
+		$parsed = preg_split($regex, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-        return substr($thing, strpos($thing, '>', $els) + 1);
-    }
+		foreach ($parsed as $chunk) if (!isset($stack[$hash]))
+		{
+			if ($tag)
+			{
+				if ($level === 0 and strpos($chunk, 'else') === 5 and substr($chunk, -2, 1) === '/')
+				{
+					$stack[$hash] = array(
+						$str,
+						substr($thing, strlen($str) + strlen($chunk)));
+				}
+				elseif (substr($chunk, 1, 1) === '/')
+				{
+					$level--;
+				}
+				elseif (substr($chunk, -2, 1) !== '/')
+				{
+					$level++;
+				}
+			}
 
-    $tag    = false;
-    $level  = 0;
-    $str    = '';
-    $regex  = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
-    $parsed = preg_split($regex, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
-
-    foreach ($parsed as $chunk) {
-        if ($tag) {
-            if ($level === 0 and strpos($chunk, 'else') === 5 and substr($chunk, -2, 1) === '/') {
-                if ($condition) {
-                    return $str;
-                }
-
-                return substr($thing, strlen($str)+strlen($chunk));
-            } elseif (substr($chunk, 1, 1) === '/') {
-                $level--;
-            } elseif (substr($chunk, -2, 1) !== '/') {
-                $level++;
-            }
-        }
-
-        $tag = !$tag;
-        $str .= $chunk;
-    }
-
-    if ($condition) {
-        return $thing;
-    }
-
-    return '';
+			$tag = !$tag;
+			$str .= $chunk;
+		}
+	}
+	
+	if (!isset($stack[$hash])) $stack[$hash] = array($thing, '');
+	
+	return  $stack[$hash][$condition ? 0 : 1];
 }
 
 /**
@@ -4237,7 +4291,7 @@ function EvalElse($thing, $condition)
 
 function fetch_form($name)
 {
-    global $trace;
+    global $production_status, $trace;
 
     static $forms = array();
 
@@ -4259,7 +4313,9 @@ function fetch_form($name)
         $forms[$name] = $form;
     }
 
-    $trace->log("[Form: '$name']");
+    if ($production_status === 'debug') {
+    	$trace->log("[Form: '$name']");
+    }
 
     return $forms[$name];
 }
@@ -4274,7 +4330,7 @@ function fetch_form($name)
 
 function parse_form($name)
 {
-    global $txp_current_form, $trace;
+    global $production_status, $txp_current_form, $trace;
     static $stack = array();
 
     $out = '';
@@ -4290,7 +4346,9 @@ function parse_form($name)
 
         $old_form = $txp_current_form;
         $txp_current_form = $stack[] = $name;
-        $trace->log("[Nesting forms: '".join("' / '", $stack)."']");
+        if ($production_status === 'debug') {
+            $trace->log("[Nesting forms: '".join("' / '", $stack)."']");
+        }
         $out = parse($f);
         $txp_current_form = $old_form;
         array_pop($stack);
