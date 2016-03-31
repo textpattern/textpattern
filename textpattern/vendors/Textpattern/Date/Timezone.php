@@ -224,7 +224,8 @@ class Timezone
             if (!isset($DTZones[$timezone])) {
                 $DTZones[$timezone] = new \DateTimeZone($timezone);
             }
-            $isdst = $DTZones[$timezone]->getTransitions($timestamp, $timestamp)['isdst'];
+            $transition = $DTZones[$timezone]->getTransitions($timestamp, $timestamp);
+            $isdst = $transition[0]['isdst'];
         } catch (\Exception $e) {
             $isdst = false;
         }
