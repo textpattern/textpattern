@@ -1888,7 +1888,9 @@ function callback_event($event, $step = '', $pre = 0)
     foreach ($plugin_callback as $c) {
         if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre) {
             if (is_callable($c['function'])) {
-                $trace->start("\t[Call function: '".callback_tostring($c['function'])."'".(empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
+                if ($production_status !== 'live') {
+                    $trace->start("\t[Call function: '".callback_tostring($c['function'])."'".(empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
+                }
 
                 $return_value = call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
 
@@ -1904,8 +1906,10 @@ function callback_event($event, $step = '', $pre = 0)
                     $out = $return_value;
                 }
 
-                $trace->stop();
-            } elseif ($production_status == 'debug') {
+                if ($production_status !== 'live') {
+                    $trace->stop();
+                }
+            } elseif ($production_status === 'debug') {
                 trigger_error(gTxt('unknown_callback_function', array('{function}' => callback_tostring($c['function']))), E_USER_WARNING);
             }
         }
@@ -4309,7 +4313,7 @@ function fetch_form($name)
         $forms[$name] = $form;
     }
 
-    if ($production_status !== 'live') {
+    if ($production_status === 'debug') {
     	$trace->log("[Form: '$name']");
     }
 
@@ -4342,7 +4346,7 @@ function parse_form($name)
 
         $old_form = $txp_current_form;
         $txp_current_form = $stack[] = $name;
-        if ($production_status !== 'live') {
+        if ($production_status === 'debug') {
             $trace->log("[Nesting forms: '".join("' / '", $stack)."']");
         }
         $out = parse($f);
