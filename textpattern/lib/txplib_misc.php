@@ -1858,7 +1858,8 @@ function register_page_extension($func, $event, $step = '', $top = 0)
  *
  * @param   string $event The callback event
  * @param   string $step  Additional callback step
- * @param   bool   $pre   Allows two callbacks, a prepending and an appending, with same event and step
+ * @param   bool|int|array   $pre   Allows two callbacks, a prepending and an appending,
+ * with same event and step. Array allows return values chaining
  * @return  mixed  The value returned by the attached callback functions, or an empty string
  * @package Callback
  * @see     register_callback()
@@ -1879,6 +1880,7 @@ function callback_event($event, $step = '', $pre = 0)
         return '';
     }
 
+    list($pre, $renew) = (array)$pre + array(0, null);
     $trace->start("[Callback_event: '$event', step='$step', pre='$pre']");
 
     // Any payload parameters?
@@ -1893,6 +1895,9 @@ function callback_event($event, $step = '', $pre = 0)
                 }
 
                 $return_value = call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
+                if (isset($renew)) {
+                    $argv[$renew] = $return_value;
+                }
 
                 if (isset($out)) {
                     if (is_array($return_value) && is_array($out)) {
@@ -2084,7 +2089,7 @@ function pluggable_ui($event, $element, $default = '')
     // Custom user interface, anyone?
     // Signature for called functions:
     // string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
-    $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => 0) + $argv);
+    $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => array(0, 0)) + $argv);
 
     // Either plugins provided a user interface, or we render our own.
     return ($ui === '') ? $default : $ui;
