@@ -2561,16 +2561,19 @@ function splat($text)
 
     if (empty($parse[$sha])) {
         return $stack[$sha];
-    }
-    else {
+    } else {
         $atts = $stack[$sha];
 
-        if ($production_status !== 'live') foreach ($parse[$sha] as $p) {
-            $trace->start("[attribute '".$p."']");
-            $atts[$p] = parse($atts[$p]);
-            $trace->stop('[/attribute]');
-        } else foreach ($parse[$sha] as $p) {
-            $atts[$p] = parse($atts[$p]);
+        if ($production_status !== 'live') {
+            foreach ($parse[$sha] as $p) {
+                $trace->start("[attribute '".$p."']");
+                $atts[$p] = parse($atts[$p]);
+                $trace->stop('[/attribute]');
+            }
+        } else {
+            foreach ($parse[$sha] as $p) {
+                $atts[$p] = parse($atts[$p]);
+            }
         }
 
         return $atts;
