@@ -662,13 +662,15 @@ if (safe_field("name", 'txp_prefs', "name = 'override_emailcharset'") === false)
 if (safe_field("val", 'txp_prefs', "name = 'comments_auto_append'") === false) {
     safe_insert('txp_prefs', "val = '1', name = 'comments_auto_append' , prefs_id = '1', type = '0', html = 'yesnoradio', event = 'comments', position = '211'");
 
-    $form = <<<EOF
+    if (safe_field("name", 'txp_form', "name = 'comments_display'") === false) {
+        $form = <<<EOF
 <txp:comments />
 <txp:if_comments_allowed>
 <txp:comments_form />
 </txp:if_comments_allowed>
 EOF;
-    safe_insert('txp_form', "name = 'comments_display', type = 'article', Form = '".doSlash($form)."'");
+        safe_insert('txp_form', "name = 'comments_display', type = 'article', Form = '".doSlash($form)."'");
+    }
 }
 
 // /tmp is bad for permanent storage of files, if no files are uploaded yet,
