@@ -346,7 +346,7 @@ safe_create('txp_file', "
     filename    VARCHAR(255) NOT NULL DEFAULT '',
     category    VARCHAR(255) NOT NULL DEFAULT '',
     permissions VARCHAR(32)  NOT NULL DEFAULT '0',
-    description TEXT         NOT NULL DEFAULT '',
+    description TEXT         NOT NULL,
     downloads   INT UNSIGNED NOT NULL DEFAULT '0',
     PRIMARY KEY     (id),
     UNIQUE filename (filename)"
