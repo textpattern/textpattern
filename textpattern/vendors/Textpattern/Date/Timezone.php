@@ -207,11 +207,11 @@ class Timezone
     public function isDst($timestamp = null, $timezone = null)
     {
         static $DTZones = array();
-        
+
         if (!$timezone) {
             $timezone = $this->getTimeZone();
         }
-            
+
         if ($timestamp === null) {
             $timestamp = time();
         } else {
@@ -219,7 +219,7 @@ class Timezone
                 $timestamp = strtotime($timestamp);
             }
         }
-        
+
         try {
             if (!isset($DTZones[$timezone])) {
                 $DTZones[$timezone] = new \DateTimeZone($timezone);

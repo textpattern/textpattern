@@ -393,7 +393,7 @@ function parse($thing)
                 // handle short tags
                 if (strlen($tag[$level][1]) !== 3 and $tag[$level][1] !== 'txp:' and $tag[$level][2] !== 'else') {
                     $tag[$level][2] = $tag[$level][1] . $tag[$level][2];
-                    $tag[$level][2][3] = '_';    
+                    $tag[$level][2][3] = '_';
                 }
 
                 if ($chunk[strlen($chunk) - 2] === '/') {
@@ -485,14 +485,14 @@ function parse_else($thing, $condition)
     } else {
         return '';
     }
-    
+
     for (; $i < $max; $i++) {
 	$t = $tag[$i];
         $out .= processTags($t[0], $t[1], $t[2]) . $tag[++$i];
     }
 
     return $out;
-} 
+}
 
 /**
  * Guesstimate whether a given function name may be a valid tag handler.
