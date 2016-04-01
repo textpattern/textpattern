@@ -4172,11 +4172,6 @@ function txp_validate($user, $password, $log = true)
         $passwords[] = "PASSWORD(LOWER('".doSlash($password)."'))";
         $passwords[] = "PASSWORD('".doSlash($password)."')";
 
-        if (version_compare(mysqli_get_server_info($DB->link), '4.1.0', '>=')) {
-            $passwords[] = "OLD_PASSWORD(LOWER('".doSlash($password)."'))";
-            $passwords[] = "OLD_PASSWORD('".doSlash($password)."')";
-        }
-
         $name = safe_field("name", 'txp_users',
             "name = '$safe_user' AND (pass = ".join(" OR pass = ", $passwords).") AND privs > 0");
 
