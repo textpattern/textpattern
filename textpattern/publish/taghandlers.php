@@ -3913,7 +3913,7 @@ function if_description($atts, $thing = null)
 
     $content = getMetaDescription($type);
 
-    return parse(EvalElse($thing, !empty($content)));
+    return parse_else($thing, !empty($content));
 }
 
 
