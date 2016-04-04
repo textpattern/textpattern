@@ -986,7 +986,7 @@ function password_protect($atts, $thing = null)
         return '';
     }
 
-    return parse_else($thing, $access);
+    return parse($thing, $access);
 }
 
 // -------------------------------------------------------------
@@ -1899,7 +1899,7 @@ function if_article_id($atts, $thing)
     ), $atts));
 
     if ($id) {
-        return parse_else($thing, in_list($thisarticle['thisid'], $id));
+        return parse($thing, in_list($thisarticle['thisid'], $id));
     }
 }
 
@@ -1973,7 +1973,7 @@ function if_expires($atts, $thing)
 
     assert_article();
 
-    return parse_else($thing, $thisarticle['expires']);
+    return parse($thing, $thisarticle['expires']);
 }
 
 // -------------------------------------------------------------
@@ -1984,7 +1984,7 @@ function if_expired($atts, $thing)
 
     assert_article();
 
-    return parse_else($thing,
+    return parse($thing,
         $thisarticle['expires'] && ($thisarticle['expires'] <= time()));
 }
 
@@ -2408,7 +2408,7 @@ function if_comments_error($atts, $thing)
 {
     $evaluator = & get_comment_evaluator();
 
-    return parse_else($thing, (count($evaluator->get_result_message()) > 0));
+    return parse($thing, (count($evaluator->get_result_message()) > 0));
 }
 
 /**
@@ -2553,7 +2553,7 @@ function comments_preview($atts, $thing = null)
 
 function if_comments_preview($atts, $thing)
 {
-    return parse_else($thing, ps('preview') && checkCommentsAllowed(gps('parentid')));
+    return parse($thing, ps('preview') && checkCommentsAllowed(gps('parentid')));
 }
 
 // -------------------------------------------------------------
@@ -2801,16 +2801,16 @@ function if_author($atts, $thing)
     ), $atts));
 
     if ($thisauthor) {
-        return parse_else($thing, $name === '' || in_list($thisauthor['name'], $name));
+        return parse($thing, $name === '' || in_list($thisauthor['name'], $name));
     }
 
     $theType = ($type) ? $type == $context : true;
 
     if ($name) {
-        return parse_else($thing, ($theType && in_list($author, $name)));
+        return parse($thing, ($theType && in_list($author, $name)));
     }
 
-    return parse_else($thing, ($theType && (string) $author !== ''));
+    return parse($thing, ($theType && (string) $author !== ''));
 }
 
 // -------------------------------------------------------------
@@ -2828,10 +2828,10 @@ function if_article_author($atts, $thing)
     $author = $thisarticle['authorid'];
 
     if ($name) {
-        return parse_else($thing, in_list($author, $name));
+        return parse($thing, in_list($author, $name));
     }
 
-    return parse_else($thing, (string) $author !== '');
+    return parse($thing, (string) $author !== '');
 }
 
 // -------------------------------------------------------------
@@ -3124,7 +3124,7 @@ function if_keywords($atts, $thing = null)
         ? $thisarticle['keywords']
         : array_intersect(do_list($keywords), do_list($thisarticle['keywords']));
 
-    return parse_else($thing, !empty($condition));
+    return parse($thing, !empty($condition));
 }
 
 // -------------------------------------------------------------
@@ -3135,7 +3135,7 @@ function if_article_image($atts, $thing = '')
 
     assert_article();
 
-    return parse_else($thing, $thisarticle['article_image']);
+    return parse($thing, $thisarticle['article_image']);
 }
 
 // -------------------------------------------------------------
@@ -3771,7 +3771,7 @@ function if_thumbnail($atts, $thing)
 
     assert_image();
 
-    return parse_else($thing, ($thisimage['thumbnail'] == 1));
+    return parse($thing, ($thisimage['thumbnail'] == 1));
 }
 
 // -------------------------------------------------------------
@@ -3782,7 +3782,7 @@ function if_comments($atts, $thing)
 
     assert_article();
 
-    return parse_else($thing, ($thisarticle['comments_count'] > 0));
+    return parse($thing, ($thisarticle['comments_count'] > 0));
 }
 
 // -------------------------------------------------------------
@@ -3793,7 +3793,7 @@ function if_comments_allowed($atts, $thing)
 
     assert_article();
 
-    return parse_else($thing, checkCommentsAllowed($thisarticle['thisid']));
+    return parse($thing, checkCommentsAllowed($thisarticle['thisid']));
 }
 
 // -------------------------------------------------------------
@@ -3804,7 +3804,7 @@ function if_comments_disallowed($atts, $thing)
 
     assert_article();
 
-    return parse_else($thing, !checkCommentsAllowed($thisarticle['thisid']));
+    return parse($thing, !checkCommentsAllowed($thisarticle['thisid']));
 }
 
 // -------------------------------------------------------------
@@ -3813,7 +3813,7 @@ function if_individual_article($atts, $thing)
 {
     global $is_article_list;
 
-    return parse_else($thing, ($is_article_list == false));
+    return parse($thing, ($is_article_list == false));
 }
 
 // -------------------------------------------------------------
@@ -3822,7 +3822,7 @@ function if_article_list($atts, $thing)
 {
     global $is_article_list;
 
-    return parse_else($thing, ($is_article_list == true));
+    return parse($thing, ($is_article_list == true));
 }
 
 /**
@@ -3913,7 +3913,7 @@ function if_description($atts, $thing = null)
 
     $content = getMetaDescription($type);
 
-    return parse_else($thing, !empty($content));
+    return parse($thing, !empty($content));
 }
 
 
@@ -4148,7 +4148,7 @@ function if_excerpt($atts, $thing)
 
     assert_article();
 
-    return parse_else($thing, trim($thisarticle['excerpt']) !== '');
+    return parse($thing, trim($thisarticle['excerpt']) !== '');
 }
 
 // -------------------------------------------------------------
@@ -4159,7 +4159,7 @@ function if_search($atts, $thing)
 {
     global $pretext;
 
-    return parse_else($thing, !empty($pretext['q']));
+    return parse($thing, !empty($pretext['q']));
 }
 
 // -------------------------------------------------------------
@@ -4179,7 +4179,7 @@ function if_search_results($atts, $thing)
 
     $results = (int) $thispage['grand_total'];
 
-    return parse_else($thing, $results >= $min && (!$max || $results <= $max));
+    return parse($thing, $results >= $min && (!$max || $results <= $max));
 }
 
 // -------------------------------------------------------------
@@ -4196,9 +4196,9 @@ function if_category($atts, $thing)
     $theType = ($type) ? $type == $context : true;
 
     if ($name === false) {
-        return parse_else($thing, ($theType && !empty($c)));
+        return parse($thing, ($theType && !empty($c)));
     } else {
-        return parse_else($thing, ($theType && in_list($c, $name)));
+        return parse($thing, ($theType && in_list($c, $name)));
     }
 }
 
@@ -4234,9 +4234,9 @@ function if_article_category($atts, $thing)
     }
 
     if ($name) {
-        return parse_else($thing, array_intersect(do_list($name), $cats));
+        return parse($thing, array_intersect(do_list($name), $cats));
     } else {
-        return parse_else($thing, ($cats));
+        return parse($thing, ($cats));
     }
 }
 
@@ -4248,7 +4248,7 @@ function if_first_category($atts, $thing)
 
     assert_category();
 
-    return parse_else($thing, !empty($thiscategory['is_first']));
+    return parse($thing, !empty($thiscategory['is_first']));
 }
 
 // -------------------------------------------------------------
@@ -4259,7 +4259,7 @@ function if_last_category($atts, $thing)
 
     assert_category();
 
-    return parse_else($thing, !empty($thiscategory['is_last']));
+    return parse($thing, !empty($thiscategory['is_last']));
 }
 
 // -------------------------------------------------------------
@@ -4276,9 +4276,9 @@ function if_section($atts, $thing)
     $section = ($s == 'default' ? '' : $s);
 
     if ($section) {
-        return parse_else($thing, $name === false or in_list($section, $name));
+        return parse($thing, $name === false or in_list($section, $name));
     } else {
-        return parse_else($thing, $name !== false and (in_list('', $name) or in_list('default', $name)));
+        return parse($thing, $name !== false and (in_list('', $name) or in_list('default', $name)));
     }
 }
 
@@ -4296,7 +4296,7 @@ function if_article_section($atts, $thing)
 
     $section = $thisarticle['section'];
 
-    return parse_else($thing, in_list($section, $name));
+    return parse($thing, in_list($section, $name));
 }
 
 // -------------------------------------------------------------
@@ -4307,7 +4307,7 @@ function if_first_section($atts, $thing)
 
     assert_section();
 
-    return parse_else($thing, !empty($thissection['is_first']));
+    return parse($thing, !empty($thissection['is_first']));
 }
 
 // -------------------------------------------------------------
@@ -4318,7 +4318,7 @@ function if_last_section($atts, $thing)
 
     assert_section();
 
-    return parse_else($thing, !empty($thissection['is_last']));
+    return parse($thing, !empty($thissection['is_last']));
 }
 
 // -------------------------------------------------------------
@@ -4477,7 +4477,7 @@ function if_custom_field($atts, $thing)
         $cond = ($thisarticle[$name] !== '');
     }
 
-    return parse_else($thing, $cond);
+    return parse($thing, $cond);
 }
 
 // -------------------------------------------------------------
@@ -4519,7 +4519,7 @@ function if_status($atts, $thing)
         ? $txp_error_code
         : $pretext['status'];
 
-    return parse_else($thing, $status == $page_status);
+    return parse($thing, $status == $page_status);
 }
 
 // -------------------------------------------------------------
@@ -4546,12 +4546,12 @@ function if_different($atts, $thing)
     static $last;
 
     $key = md5($thing);
-    $out = parse_else($thing, 1);
+    $out = parse($thing, 1);
 
     if (empty($last[$key]) or $out != $last[$key]) {
         return $last[$key] = $out;
     } else {
-        return parse_else($thing, 0);
+        return parse($thing, 0);
     }
 }
 
@@ -4563,7 +4563,7 @@ function if_first_article($atts, $thing)
 
     assert_article();
 
-    return parse_else($thing, !empty($thisarticle['is_first']));
+    return parse($thing, !empty($thisarticle['is_first']));
 }
 
 // -------------------------------------------------------------
@@ -4574,7 +4574,7 @@ function if_last_article($atts, $thing)
 
     assert_article();
 
-    return parse_else($thing, !empty($thisarticle['is_last']));
+    return parse($thing, !empty($thisarticle['is_last']));
 }
 
 // -------------------------------------------------------------
@@ -4594,7 +4594,7 @@ function if_plugin($atts, $thing)
         trigger_error(gTxt('deprecated_attribute', array('{name}' => 'ver')), E_USER_NOTICE);
     }
 
-    return parse_else($thing, @in_array($name, $plugins) and (!$version or version_compare($plugins_ver[$name], $version) >= 0));
+    return parse($thing, @in_array($name, $plugins) and (!$version or version_compare($plugins_ver[$name], $version) >= 0));
 }
 
 // -------------------------------------------------------------
@@ -5085,5 +5085,5 @@ function if_variable($atts, $thing = null)
         $x = false;
     }
 
-    return parse_else($thing, $x);
+    return parse($thing, $x);
 }
