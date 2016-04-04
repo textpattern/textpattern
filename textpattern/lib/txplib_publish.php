@@ -358,15 +358,23 @@ function lastMod()
  * Parse a string and replace any Textpattern tags with their actual value.
  *
  * @param   string $thing The raw string
- * @param   bool $condition Process true/false part
+ * @param   null|bool $condition Process true/false part
  * @return  string The parsed string
  * @package TagParser
  */
 
-function parse($thing, $condition = true)
+function parse($thing, $condition = null)
 {
-    global $txp_parsed, $txp_else;
+    global $production_status, $trace, $txp_parsed, $txp_else, $txp_current_tag;
 
+    if (isset($condition)) {
+        if ($production_status === 'debug') {
+    	    $trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
+        }
+    } else {
+        $condition = true;
+    }
+    
     if (false === strpos($thing, '<txp:') and false === strpos($thing, '::')) {
         return $condition ? $thing : '';
     }
@@ -467,16 +475,6 @@ function parse($thing, $condition = true)
 
 function parse_else($thing, $condition)
 {
-    global $production_status, $trace, $txp_parsed, $txp_current_tag;
-
-    if ($production_status !== 'live') {
-    	$trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
-    }
-
-    if (!$condition and false === strpos($thing, ':else')) {
-        return '';
-    }
-
     return parse($thing, $condition);
 }
 
