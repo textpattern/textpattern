@@ -428,7 +428,9 @@ function parse($thing, $condition = true)
         $txp_else[$hash] = array($else[0] > 0 ? $else[0] : $count[0] + 2, $count[0]);
     }
 
-    if (empty($tag = $txp_parsed[$hash])) {
+    $tag = $txp_parsed[$hash];
+
+    if (empty($tag)) {
         return $condition ? $thing : '';
     }
     
