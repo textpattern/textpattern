@@ -4231,8 +4231,6 @@ function txp_hash_password($password)
 
 function EvalElse($thing, $condition)
 {
-    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'parse_else (and remove the separate parse() call)')), E_USER_NOTICE);
-
 	$els = strpos($thing, '<txp:else');
 
 	if ($els === FALSE)
