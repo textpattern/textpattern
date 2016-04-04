@@ -3037,7 +3037,7 @@ function tz_offset($timestamp = null)
 {
     global $gmtoffset, $timezone_key;
     static $dtz = array(), $timezone_server = null;
-    
+
     if ($timezone_server === null) {
         $timezone_server = date_default_timezone_get();
     }
@@ -3054,25 +3054,25 @@ function tz_offset($timestamp = null)
         if (!isset($dtz[$timezone_server])) {
             $dtz[$timezone_server] = new \DateTimeZone($timezone_server);
         }
-        
+
         $transition = $dtz[$timezone_server]->getTransitions($timestamp, $timestamp);
         $serveroffset = $transition[0]['offset'];
     } catch(\Exception $e) {
         extract(getdate($timestamp));
         $serveroffset = gmmktime($hours, $minutes, 0, $mon, $mday, $year) - mktime($hours, $minutes, 0, $mon, $mday, $year);
     }
-    
+
     try {
         if (!isset($dtz[$timezone_key])) {
             $dtz[$timezone_key] = new \DateTimeZone($timezone_key);
         }
-        
+
         $transition = $dtz[$timezone_key]->getTransitions($timestamp, $timestamp);
         $siteoffset = $transition[0]['offset'];
     } catch(\Exception $e) {
         $siteoffset = $gmtoffset;
     }
-        
+
     return $siteoffset - $serveroffset;
 }
 
@@ -4274,9 +4274,9 @@ function EvalElse($thing, $condition)
 			$str .= $chunk;
 		}
 	}
-	
+
 	if (!isset($stack[$hash])) $stack[$hash] = array($thing, '');
-	
+
 	return  $stack[$hash][$condition ? 0 : 1];
 }
 

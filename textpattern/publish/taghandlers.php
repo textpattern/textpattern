@@ -1010,7 +1010,7 @@ function recent_articles($atts)
         'wraptag'  => '',
         'no_widow' => @$prefs['title_no_widow'],
     ), $atts);
-    
+
     $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
     unset($atts['no_widow']);
 
@@ -1112,7 +1112,7 @@ function related_articles($atts, $thing = null)
         'sort'     => 'Posted DESC',
         'wraptag'  => '',
     ), $atts);
-    
+
     $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category1', 'category2', 'author', 'keywords'), getCustomFields()));
     $categories = $cats = array();
 
@@ -1144,7 +1144,7 @@ function related_articles($atts, $thing = null)
     } elseif ($categories) {
         return;
     }
-    
+
     $atts['match'] = implode(',', $categories);
     $atts['exclude'] = $thisarticle['thisid'];
 
@@ -2107,7 +2107,7 @@ function comments_form($atts, $thing = null)
     // deprecated attributes since TXP 4.6. Most of these (except msgstyle)
     // were moved to the tags that occur within a comments_form, although
     // some of the names changed.
-    $deprecated = array('isize', 'msgrows', 'msgcols', 'msgstyle', 
+    $deprecated = array('isize', 'msgrows', 'msgcols', 'msgstyle',
         'previewlabel', 'submitlabel', 'rememberlabel', 'forgetlabel');
 
     foreach($deprecated as $att) {
@@ -3913,7 +3913,7 @@ function if_description($atts, $thing = null)
 
     $content = getMetaDescription($type);
 
-    return parse(EvalElse($thing, !empty($content)));
+    return parse_else($thing, !empty($content));
 }
 
 
