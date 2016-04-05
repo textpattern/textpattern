@@ -1858,7 +1858,8 @@ function register_page_extension($func, $event, $step = '', $top = 0)
  *
  * @param   string $event The callback event
  * @param   string $step  Additional callback step
- * @param   bool   $pre   Allows two callbacks, a prepending and an appending, with same event and step
+ * @param   bool|int|array   $pre   Allows two callbacks, a prepending and an appending,
+ * with same event and step. Array allows return values chaining
  * @return  mixed  The value returned by the attached callback functions, or an empty string
  * @package Callback
  * @see     register_callback()
@@ -1879,6 +1880,7 @@ function callback_event($event, $step = '', $pre = 0)
         return '';
     }
 
+    list($pre, $renew) = (array)$pre + array(0, null);
     $trace->start("[Callback_event: '$event', step='$step', pre='$pre']");
 
     // Any payload parameters?
@@ -1893,6 +1895,9 @@ function callback_event($event, $step = '', $pre = 0)
                 }
 
                 $return_value = call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
+                if (isset($renew)) {
+                    $argv[$renew] = $return_value;
+                }
 
                 if (isset($out)) {
                     if (is_array($return_value) && is_array($out)) {
@@ -2084,7 +2089,7 @@ function pluggable_ui($event, $element, $default = '')
     // Custom user interface, anyone?
     // Signature for called functions:
     // string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
-    $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => 0) + $argv);
+    $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => array(0, 0)) + $argv);
 
     // Either plugins provided a user interface, or we render our own.
     return ($ui === '') ? $default : $ui;
@@ -4226,53 +4231,31 @@ function txp_hash_password($password)
 
 function EvalElse($thing, $condition)
 {
-    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'parse_else (and remove the separate parse() call)')), E_USER_NOTICE);
+    global $txp_parsed, $txp_else;
+    
+    if (strpos($thing, ':else') === FALSE || empty($txp_parsed[$hash = sha1($thing)]))
+    {
+        return $condition ? $thing : '';
+    }
 
-	$els = strpos($thing, '<txp:else');
+    $tag = $txp_parsed[$hash];
+    list($first, $last) = $txp_else[$hash];
 
-	if ($els === FALSE)
-	{
-		return $condition ? $thing : '';
-	}
+    if ($condition) {
+        $last = $first - 2;
+        $first   = 1;
+    } elseif ($first <= $last) {
+        $first  += 2;
+    } else {
+        return '';
+    }
+    
+    for ($out = $tag[$first - 1]; $first <= $last; $first++)
+    {
+        $out .= $tag[$first][0] . $tag[++$first];
+    }
 
-	$hash = sha1($thing);
-	if (!isset($stack[$hash]))
-	{
-
-		$tag    = FALSE;
-		$level  = 0;
-		$str    = '';
-		$regex  = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
-		$parsed = preg_split($regex, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
-
-		foreach ($parsed as $chunk) if (!isset($stack[$hash]))
-		{
-			if ($tag)
-			{
-				if ($level === 0 and strpos($chunk, 'else') === 5 and substr($chunk, -2, 1) === '/')
-				{
-					$stack[$hash] = array(
-						$str,
-						substr($thing, strlen($str) + strlen($chunk)));
-				}
-				elseif (substr($chunk, 1, 1) === '/')
-				{
-					$level--;
-				}
-				elseif (substr($chunk, -2, 1) !== '/')
-				{
-					$level++;
-				}
-			}
-
-			$tag = !$tag;
-			$str .= $chunk;
-		}
-	}
-
-	if (!isset($stack[$hash])) $stack[$hash] = array($thing, '');
-
-	return  $stack[$hash][$condition ? 0 : 1];
+    return $out;
 }
 
 /**
