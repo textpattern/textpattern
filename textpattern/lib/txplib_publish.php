@@ -408,7 +408,7 @@ function parse($thing, $condition = null)
 
                 if ($chunk[strlen($chunk) - 2] === '/') {
                     // self closed tag
-                    $tags[$level][] = array($tag[$level][2], $tag[$level][3], null);
+                    $tags[$level][] = array($chunk, $tag[$level][2], $tag[$level][3], null);
                     $inside[$level] .= $chunk;
                 } elseif ($chunk[1] !== '/') {
                     // opening tag
@@ -423,7 +423,7 @@ function parse($thing, $condition = null)
                     $txp_parsed[$sha] = $count[$level] > 2 ? $tags[$level] : false;
                     $txp_else[$sha] = array($else[$level] > 0 ? $else[$level] : $count[$level], $count[$level] - 2);
                     $level--;
-                    $tags[$level][] = array($tag[$level][2], $tag[$level][3], $inside[$level+1]);
+                    $tags[$level][] = array($chunk, $tag[$level][2], $tag[$level][3], $inside[$level+1]);
                     $inside[$level] .= $inside[$level+1] . $chunk;
                 }
             } else {
@@ -456,26 +456,10 @@ function parse($thing, $condition = null)
     for ($out = $tag[$first - 1]; $first <= $last; $first++)
     {
         $t = $tag[$first];
-        $out .= processTags($t[0], $t[1], $t[2]) . $tag[++$first];
+        $out .= processTags($t[1], $t[2], $t[3]) . $tag[++$first];
     }
 
     return $out;
-}
-
-/**
- * Parse a string depending on an if/else condition
- *
- * @param   string  $thing     Statement in Textpattern tag markup presentation
- * @param   bool    $condition TRUE to return if statement, FALSE to else
- * @return  string The parsed string
- * @package TagParser
- * @example
- * echo parse_else('true &lt;txp:else /&gt; false', 1 === 1);
- */
-
-function parse_else($thing, $condition)
-{
-    return parse($thing, $condition);
 }
 
 /**
