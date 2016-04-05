@@ -4231,51 +4231,31 @@ function txp_hash_password($password)
 
 function EvalElse($thing, $condition)
 {
-	$els = strpos($thing, '<txp:else');
+    global $txp_parsed, $txp_else;
+    
+    if (strpos($thing, ':else') === FALSE || empty($txp_parsed[$hash = sha1($thing)]))
+    {
+        return $condition ? $thing : '';
+    }
 
-	if ($els === FALSE)
-	{
-		return $condition ? $thing : '';
-	}
+    $tag = $txp_parsed[$hash];
+    list($first, $last) = $txp_else[$hash];
 
-	$hash = sha1($thing);
-	if (!isset($stack[$hash]))
-	{
+    if ($condition) {
+        $last = $first - 2;
+        $first   = 1;
+    } elseif ($first <= $last) {
+        $first  += 2;
+    } else {
+        return '';
+    }
+    
+    for ($out = $tag[$first - 1]; $first <= $last; $first++)
+    {
+        $out .= $tag[$first][0] . $tag[++$first];
+    }
 
-		$tag    = FALSE;
-		$level  = 0;
-		$str    = '';
-		$regex  = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
-		$parsed = preg_split($regex, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
-
-		foreach ($parsed as $chunk) if (!isset($stack[$hash]))
-		{
-			if ($tag)
-			{
-				if ($level === 0 and strpos($chunk, 'else') === 5 and substr($chunk, -2, 1) === '/')
-				{
-					$stack[$hash] = array(
-						$str,
-						substr($thing, strlen($str) + strlen($chunk)));
-				}
-				elseif (substr($chunk, 1, 1) === '/')
-				{
-					$level--;
-				}
-				elseif (substr($chunk, -2, 1) !== '/')
-				{
-					$level++;
-				}
-			}
-
-			$tag = !$tag;
-			$str .= $chunk;
-		}
-	}
-
-	if (!isset($stack[$hash])) $stack[$hash] = array($thing, '');
-
-	return  $stack[$hash][$condition ? 0 : 1];
+    return $out;
 }
 
 /**
