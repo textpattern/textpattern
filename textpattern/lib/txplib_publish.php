@@ -357,9 +357,9 @@ function lastMod()
 /**
  * Parse a string and replace any Textpattern tags with their actual value.
  *
- * @param   string $thing The raw string
+ * @param   string    $thing     The raw string
  * @param   null|bool $condition Process true/false part
- * @return  string The parsed string
+ * @return  string               The parsed string
  * @package TagParser
  */
 
@@ -374,7 +374,7 @@ function parse($thing, $condition = null)
     } else {
         $condition = true;
     }
-    
+
     if (false === strpos($thing, '<txp:') and false === strpos($thing, '::')) {
         return $condition ? $thing : '';
     }
@@ -398,27 +398,30 @@ function parse($thing, $condition = null)
             if ($i&1) {
                 preg_match($t, $chunk, $tag[$level]);
                 $count[$level] += 2;
-                if($tag[$level][2] === 'else') $else[$level] = $count[$level];
 
-                // handle short tags
+                if ($tag[$level][2] === 'else') {
+                    $else[$level] = $count[$level];
+                }
+
+                // Handle short tags.
                 if (strlen($tag[$level][1]) !== 3 and $tag[$level][1] !== 'txp:' and $tag[$level][2] !== 'else') {
                     $tag[$level][2] = $tag[$level][1] . $tag[$level][2];
-                    $tag[$level][2][3] = '_';    
+                    $tag[$level][2][3] = '_';
                 }
 
                 if ($chunk[strlen($chunk) - 2] === '/') {
-                    // self closed tag
+                    // Self closed tag.
                     $tags[$level][] = array($chunk, $tag[$level][2], $tag[$level][3], null);
                     $inside[$level] .= $chunk;
                 } elseif ($chunk[1] !== '/') {
-                    // opening tag
+                    // Opening tag.
                     $inside[$level] .= $chunk;
                     $level++;
                     $inside[$level] = '';
                     $else[$level] = $count[$level] = -1;
                     $tags[$level] = array();
                 } else {
-                    // closing tag
+                    // Closing tag.
                     $sha = sha1($inside[$level]);
                     $txp_parsed[$sha] = $count[$level] > 2 ? $tags[$level] : false;
                     $txp_else[$sha] = array($else[$level] > 0 ? $else[$level] : $count[$level], $count[$level] - 2);
@@ -441,7 +444,7 @@ function parse($thing, $condition = null)
     if (empty($tag)) {
         return $condition ? $thing : '';
     }
-    
+
     list($first, $last) = $txp_else[$hash];
 
     if ($condition) {
@@ -452,9 +455,8 @@ function parse($thing, $condition = null)
     } else {
         return '';
     }
-    
-    for ($out = $tag[$first - 1]; $first <= $last; $first++)
-    {
+
+    for ($out = $tag[$first - 1]; $first <= $last; $first++) {
         $t = $tag[$first];
         $out .= processTags($t[1], $t[2], $t[3]) . $tag[++$first];
     }
