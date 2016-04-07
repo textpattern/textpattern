@@ -704,6 +704,10 @@ function doArticles($atts, $iscustom, $thing = null)
     $customlAtts = array_null(array_flip($customFields));
 
     if ($iscustom) {
+
+        // Custom articles must not render search results.
+        $q = '';
+
         $extralAtts = array(
             'category'  => '',
             'section'   => '',
@@ -735,7 +739,7 @@ function doArticles($atts, $iscustom, $thing = null)
         'keywords'      => '',
         'time'          => 'past',
         'status'        => STATUS_LIVE,
-        'allowoverride' => (!$q and !$iscustom),
+        'allowoverride' => !$iscustom,
         'frontpage'     => !$iscustom,
         'match'         => 'Category1,Category2',
         'offset'        => 0,
@@ -775,7 +779,7 @@ function doArticles($atts, $iscustom, $thing = null)
     $issticky = ($status == STATUS_STICKY);
 
     // Give control to search, if necessary.
-    if ($q && !$iscustom && !$issticky) {
+    if ($q && !$issticky) {
         include_once txpath.'/publish/search.php';
 
         $s_filter = ($searchall ? filterSearch() : '');
@@ -911,7 +915,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $keywords = " AND (".join(' or ', $keyparts).")";
     }
 
-    if ($q and $searchsticky) {
+    if ($q && $searchsticky) {
         $statusq = " AND Status >= ".STATUS_LIVE;
     } elseif ($id) {
         $statusq = " AND Status >= ".STATUS_LIVE;
@@ -964,7 +968,7 @@ function doArticles($atts, $iscustom, $thing = null)
         "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit));
 
     // Get the form name.
-    if ($q and !$iscustom and !$issticky) {
+    if ($q && !$issticky) {
         $fname = ($searchform ? $searchform : 'search_results');
     } else {
         $fname = (!empty($listform) ? $listform : $form);
