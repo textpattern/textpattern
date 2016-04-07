@@ -1856,10 +1856,9 @@ function register_page_extension($func, $event, $step = '', $top = 0)
  *
  * Returns a combined value of all values returned by the callback handlers.
  *
- * @param   string $event The callback event
- * @param   string $step  Additional callback step
- * @param   bool|int|array   $pre   Allows two callbacks, a prepending and an appending,
- * with same event and step. Array allows return values chaining
+ * @param   string         $event The callback event
+ * @param   string         $step  Additional callback step
+ * @param   bool|int|array $pre   Allows two callbacks, a prepending and an appending, with same event and step. Array allows return values chaining
  * @return  mixed  The value returned by the attached callback functions, or an empty string
  * @package Callback
  * @see     register_callback()
@@ -4221,7 +4220,7 @@ function txp_hash_password($password)
  *
  * @param   string  $thing     Statement in Textpattern tag markup presentation
  * @param   bool    $condition TRUE to return if statement, FALSE to else
- * @return  string  Either if or else statement
+ * @return  string             Either if or else statement
  * @deprecated in 4.6.0
  * @see     parse_else
  * @package TagParser
@@ -4232,9 +4231,8 @@ function txp_hash_password($password)
 function EvalElse($thing, $condition)
 {
     global $txp_parsed, $txp_else;
-    
-    if (strpos($thing, ':else') === FALSE || empty($txp_parsed[$hash = sha1($thing)]))
-    {
+
+    if (strpos($thing, ':else') === FALSE || empty($txp_parsed[$hash = sha1($thing)])) {
         return $condition ? $thing : '';
     }
 
@@ -4249,9 +4247,8 @@ function EvalElse($thing, $condition)
     } else {
         return '';
     }
-    
-    for ($out = $tag[$first - 1]; $first <= $last; $first++)
-    {
+
+    for ($out = $tag[$first - 1]; $first <= $last; $first++) {
         $out .= $tag[$first][0] . $tag[++$first];
     }
 
