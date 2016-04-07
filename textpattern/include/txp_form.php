@@ -109,6 +109,8 @@ if ($event == 'form') {
 function form_list($curname)
 {
     global $essential_forms, $form_types;
+    
+    $panes = array_filter(explode(',', get_pref('stateful_panes')));
 
     $criteria = 1;
     $criteria .= callback_event('admin_criteria', 'form_list', 0, $criteria);
@@ -122,6 +124,7 @@ function form_list($curname)
     if ($rs) {
         $prev_type = null;
         $group_out = array();
+        $register = false;
 
         while ($a = nextRow($rs)) {
             extract($a);
@@ -129,6 +132,11 @@ function form_list($curname)
 
             if ($prev_type !== $type) {
                 if ($prev_type !== null) {
+                    if (!in_array('form_'.$prev_type, $panes)) {
+                        $panes[] = 'form_'.$prev_type;
+                        $register = true;
+                    }
+                    
                     $group_out = tag(n.join(n, $group_out).n, 'ul', array(
                         'class' => 'switcher-list',
                     ));
@@ -152,6 +160,10 @@ function form_list($curname)
             $group_out[] = tag(n.$modbox.$editlink.n, 'li', array(
                 'class' => $active ? 'active' : '',
             ));
+        }
+
+        if ($register) {
+            set_pref("stateful_panes", implode(',', $panes), 'admin', PREF_HIDDEN);
         }
 
         if ($prev_type !== null) {

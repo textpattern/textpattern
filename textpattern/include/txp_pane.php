@@ -33,6 +33,9 @@ if (!defined('txpinterface')) {
 
 class Textpattern_Admin_Pane
 {
+
+    private $panes = array();
+
     /**
      * Constructor.
      */
@@ -40,6 +43,8 @@ class Textpattern_Admin_Pane
     public function __construct()
     {
         global $step;
+
+        $this->panes = array_filter(explode(',', get_pref('stateful_panes')));
 
         $steps = array(
             'visible'    => true,
@@ -78,7 +83,7 @@ class Textpattern_Admin_Pane
 
         send_xml_response();
 
-        if ($this->valid_token($pane) && preg_match('/^[a-z0-9_-]+$/i', $pane)) {
+        if ($this->valid_token($pane) && preg_match('/^[a-z0-9_-]+$/i', $pane) && in_array($pane, $this->panes)) {
             set_pref("pane_{$pane}_visible", (int) ($visible === 'true'), $origin, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
 
             return;
@@ -100,7 +105,7 @@ class Textpattern_Admin_Pane
 
         send_xml_response();
 
-        if ($this->valid_token($pane) && preg_match('/^[a-z0-9_-]+$/i', $pane)) {
+        if ($this->valid_token($pane) && preg_match('/^[a-z0-9_-]+$/i', $pane) && in_array($pane, $this->panes)) {
             set_pref("pane_{$origin}_visible", ($pane), $origin, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
 
             return;
