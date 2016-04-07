@@ -597,6 +597,13 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
     $label = $label ? gTxt($label) : null;
 
     if ($anchor_id && $pane) {
+        $panes = array_filter(explode(',', get_pref('stateful_panes')));
+
+        if (!in_array($pane, $panes)) {
+            $panes[] = $pane;
+            set_pref("stateful_panes", implode(',', $panes), 'admin', PREF_HIDDEN);
+        }
+
         $visible = get_pref('pane_'.$pane.'_visible');
         $heading_class = 'txp-summary'.($visible ? ' expanded' : '');
         $display_state = array(
