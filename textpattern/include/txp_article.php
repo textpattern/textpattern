@@ -540,69 +540,82 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     )
     */
     $partials = array(
+        // 'Title' field.
         'html_title'   => array(
             'mode'     => PARTIAL_VOLATILE,
             'selector' => 'title',
             'cb'       => 'article_partial_html_title',
         ),
+        // 'Last modified' value.
         'sLastMod' => array(
             'mode'     => PARTIAL_VOLATILE_VALUE,
             'selector' => '[name=sLastMod]',
             'cb'       => 'article_partial_value',
         ),
+        // 'Posted' value.
         'sPosted' => array(
             'mode'     => PARTIAL_VOLATILE_VALUE,
             'selector' => '[name=sPosted]',
             'cb'       => 'article_partial_value',
         ),
+        // 'Text formatting help' section.
         'sidehelp' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#textfilter_group',
+            'selector' => '#txp-textfilter-group',
             'cb'       => 'article_partial_sidehelp',
         ),
+        // Meta 'URL-only title' region.
         'url_title' => array(
             'mode'     => PARTIAL_STATIC,
-            'selector' => 'p.url-title',
+            'selector' => 'div.url-title',
             'cb'       => 'article_partial_url_title',
         ),
+        // Meta 'URL-only title' field.
         'url_title_value' => array(
             'mode'     => PARTIAL_VOLATILE_VALUE,
             'selector' => '#url-title',
             'cb'       => 'article_partial_url_title_value',
         ),
+        // Meta 'Description' region.
         'description' => array(
             'mode'     => PARTIAL_STATIC,
-            'selector' => 'p.description',
+            'selector' => 'div.description',
             'cb'       => 'article_partial_description',
         ),
+        // Meta 'Description' field.
         'description_value'  => array(
             'mode'     => PARTIAL_VOLATILE_VALUE,
             'selector' => '#description',
             'cb'       => 'article_partial_description_value',
         ),
+        // Meta 'Keywords' region.
         'keywords' => array(
             'mode'     => PARTIAL_STATIC,
-            'selector' => 'p.keywords',
+            'selector' => 'div.keywords',
             'cb'       => 'article_partial_keywords',
         ),
+        // Meta 'Keywords' field.
         'keywords_value'  => array(
             'mode'     => PARTIAL_VOLATILE_VALUE,
             'selector' => '#keywords',
             'cb'       => 'article_partial_keywords_value',
         ),
+        // 'Article image' section.
         'image' => array(
             'mode'     => PARTIAL_STATIC,
-            'selector' => '#image_group',
+            'selector' => '#txp-image-group',
             'cb'       => 'article_partial_image',
         ),
+        // 'Custom fields' section.
         'custom_fields' => array(
             'mode'     => PARTIAL_STATIC,
-            'selector' => '#custom_field_group',
+            'selector' => '#txp-custom-field-group',
             'cb'       => 'article_partial_custom_fields',
         ),
+        // 'Recent articles' values.
         'recent_articles' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#recent_group .recent',
+            'selector' => '#txp-recent-group-content',
             'cb'       => 'article_partial_recent_articles',
         ),
         'title' => array(
