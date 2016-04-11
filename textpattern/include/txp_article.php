@@ -540,145 +540,173 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     )
     */
     $partials = array(
+        // HTML 'Title' field (in <head>).
         'html_title'   => array(
             'mode'     => PARTIAL_VOLATILE,
             'selector' => 'title',
             'cb'       => 'article_partial_html_title',
         ),
-        'sLastMod' => array(
-            'mode'     => PARTIAL_VOLATILE_VALUE,
-            'selector' => '[name=sLastMod]',
-            'cb'       => 'article_partial_value',
-        ),
-        'sPosted' => array(
-            'mode'     => PARTIAL_VOLATILE_VALUE,
-            'selector' => '[name=sPosted]',
-            'cb'       => 'article_partial_value',
-        ),
-        'sidehelp' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#textfilter_group',
-            'cb'       => 'article_partial_sidehelp',
-        ),
-        'url_title' => array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => 'p.url-title',
-            'cb'       => 'article_partial_url_title',
-        ),
-        'url_title_value' => array(
-            'mode'     => PARTIAL_VOLATILE_VALUE,
-            'selector' => '#url-title',
-            'cb'       => 'article_partial_url_title_value',
-        ),
-        'description' => array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => 'p.description',
-            'cb'       => 'article_partial_description',
-        ),
-        'description_value'  => array(
-            'mode'     => PARTIAL_VOLATILE_VALUE,
-            'selector' => '#description',
-            'cb'       => 'article_partial_description_value',
-        ),
-        'keywords' => array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => 'p.keywords',
-            'cb'       => 'article_partial_keywords',
-        ),
-        'keywords_value'  => array(
-            'mode'     => PARTIAL_VOLATILE_VALUE,
-            'selector' => '#keywords',
-            'cb'       => 'article_partial_keywords_value',
-        ),
-        'image' => array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => '#image_group',
-            'cb'       => 'article_partial_image',
-        ),
-        'custom_fields' => array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => '#custom_field_group',
-            'cb'       => 'article_partial_custom_fields',
-        ),
-        'recent_articles' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#recent_group .recent',
-            'cb'       => 'article_partial_recent_articles',
-        ),
-        'title' => array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => 'p.title',
-            'cb'       => 'article_partial_title',
-        ),
-        'title_value'  => array(
-            'mode'     => PARTIAL_VOLATILE_VALUE,
-            'selector' => '#title',
-            'cb'       => 'article_partial_title_value',
-        ),
-        'article_clone' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#article_partial_article_clone',
-            'cb'       => 'article_partial_article_clone',
-        ),
-        'article_view' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#article_partial_article_view',
-            'cb'       => 'article_partial_article_view',
-        ),
-        'body' => array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => 'p.body',
-            'cb'       => 'article_partial_body',
-        ),
-        'excerpt' => array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => 'p.excerpt',
-            'cb'       => 'article_partial_excerpt',
-        ),
-        'author' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => 'p.author',
-            'cb'       => 'article_partial_author',
-        ),
+        // 'Text/HTML/Preview' links region.
         'view_modes' => array(
             'mode'     => PARTIAL_VOLATILE,
             'selector' => '#view_modes',
             'cb'       => 'article_partial_view_modes',
         ),
+        // 'Title' region.
+        'title' => array(
+            'mode'     => PARTIAL_STATIC,
+            'selector' => 'div.title',
+            'cb'       => 'article_partial_title',
+        ),
+        // 'Title' field.
+        'title_value'  => array(
+            'mode'     => PARTIAL_VOLATILE_VALUE,
+            'selector' => '#title',
+            'cb'       => 'article_partial_title_value',
+        ),
+        // 'Body' region.
+        'body' => array(
+            'mode'     => PARTIAL_STATIC,
+            'selector' => 'div.body',
+            'cb'       => 'article_partial_body',
+        ),
+        // 'Excerpt' region.
+        'excerpt' => array(
+            'mode'     => PARTIAL_STATIC,
+            'selector' => 'div.excerpt',
+            'cb'       => 'article_partial_excerpt',
+        ),
+        // 'Author' region.
+        'author' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => 'p.author',
+            'cb'       => 'article_partial_author',
+        ),
+        // 'Posted' value.
+        'sPosted' => array(
+            'mode'     => PARTIAL_VOLATILE_VALUE,
+            'selector' => '[name=sPosted]',
+            'cb'       => 'article_partial_value',
+        ),
+        // 'Last modified' value.
+        'sLastMod' => array(
+            'mode'     => PARTIAL_VOLATILE_VALUE,
+            'selector' => '[name=sLastMod]',
+            'cb'       => 'article_partial_value',
+        ),
+        // 'Duplicate' link.
+        'article_clone' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => '#article_partial_article_clone',
+            'cb'       => 'article_partial_article_clone',
+        ),
+        // 'View' link.
+        'article_view' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => '#article_partial_article_view',
+            'cb'       => 'article_partial_article_view',
+        ),
+        // 'Previous/Next' article links region.
         'article_nav' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => 'p.nav-tertiary',
+            'selector' => 'nav.nav-tertiary',
             'cb'       => 'article_partial_article_nav',
         ),
+        // 'Status' region.
         'status' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#write-status',
+            'selector' => 'div.status',
             'cb'       => 'article_partial_status',
         ),
+        // 'Section' region.
+        'section' => array(
+            'mode'     => PARTIAL_STATIC,
+            'selector' => 'div.section',
+            'cb'       => 'article_partial_section',
+        ),
+        // Categories region.
         'categories' => array(
             'mode'     => PARTIAL_STATIC,
             'selector' => '#categories_group',
             'cb'       => 'article_partial_categories',
         ),
-        'section' => array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => 'p.section',
-            'cb'       => 'article_partial_section',
-        ),
-        'comments' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#write-comments',
-            'cb'       => 'article_partial_comments',
-        ),
+        // Publish date/time region.
         'posted' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#write-timestamp',
+            'selector' => '#publish-datetime-group',
             'cb'       => 'article_partial_posted',
         ),
+        // Expire date/time region.
         'expires' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#write-expires',
+            'selector' => '#expires-datetime-group',
             'cb'       => 'article_partial_expires',
+        ),
+        // Meta 'URL-only title' region.
+        'url_title' => array(
+            'mode'     => PARTIAL_STATIC,
+            'selector' => 'div.url-title',
+            'cb'       => 'article_partial_url_title',
+        ),
+        // Meta 'URL-only title' field.
+        'url_title_value' => array(
+            'mode'     => PARTIAL_VOLATILE_VALUE,
+            'selector' => '#url-title',
+            'cb'       => 'article_partial_url_title_value',
+        ),
+        // Meta 'Description' region.
+        'description' => array(
+            'mode'     => PARTIAL_STATIC,
+            'selector' => 'div.description',
+            'cb'       => 'article_partial_description',
+        ),
+        // Meta 'Description' field.
+        'description_value'  => array(
+            'mode'     => PARTIAL_VOLATILE_VALUE,
+            'selector' => '#description',
+            'cb'       => 'article_partial_description_value',
+        ),
+        // Meta 'Keywords' region.
+        'keywords' => array(
+            'mode'     => PARTIAL_STATIC,
+            'selector' => 'div.keywords',
+            'cb'       => 'article_partial_keywords',
+        ),
+        // Meta 'Keywords' field.
+        'keywords_value'  => array(
+            'mode'     => PARTIAL_VOLATILE_VALUE,
+            'selector' => '#keywords',
+            'cb'       => 'article_partial_keywords_value',
+        ),
+        // 'Comment options' section.
+        'comments' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => '#txp-comments-group',
+            'cb'       => 'article_partial_comments',
+        ),
+        // 'Article image' section.
+        'image' => array(
+            'mode'     => PARTIAL_STATIC,
+            'selector' => '#txp-image-group',
+            'cb'       => 'article_partial_image',
+        ),
+        // 'Custom fields' section.
+        'custom_fields' => array(
+            'mode'     => PARTIAL_STATIC,
+            'selector' => '#txp-custom-field-group',
+            'cb'       => 'article_partial_custom_fields',
+        ),
+        // 'Text formatting help' section.
+        'sidehelp' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => '#txp-textfilter-group',
+            'cb'       => 'article_partial_sidehelp',
+        ),
+        // 'Recent articles' values.
+        'recent_articles' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => '#txp-recent-group-content',
+            'cb'       => 'article_partial_recent_articles',
         ),
     );
 
@@ -2080,6 +2108,7 @@ function article_partial_posted($rs)
     extract($rs);
 
     $out =
+        n.tag_start('div', array('id' => 'publish-datetime-group')).
         inputLabel(
             'year',
             tsi('year', '%Y', $sPosted, '', 'year').
@@ -2106,7 +2135,8 @@ function article_partial_posted($rs)
             checkbox('reset_time', '1', $reset_time, '', 'reset_time').
             n.tag(gTxt('reset_time'), 'label', array('for' => 'reset_time')),
             'div', array('class' => 'reset-time')
-        );
+        ).
+        n.tag_end('div');
 
     return pluggable_ui('article_ui', 'timestamp', $out, $rs);
 }
@@ -2126,6 +2156,7 @@ function article_partial_expires($rs)
     extract($rs);
 
     $out =
+        n.tag_start('div', array('id' => 'expires-datetime-group')).
         inputLabel(
             'exp_year',
             tsi('exp_year', '%Y', $sExpires, '', 'exp_year').
@@ -2148,7 +2179,8 @@ function article_partial_expires($rs)
             array('', 'instructions_expire_time'),
             array('class' => 'txp-form-field time expires')
         ).
-        hInput('sExpires', $sExpires);
+        hInput('sExpires', $sExpires).
+        n.tag_end('div');
 
     return pluggable_ui('article_ui', 'expires', $out, $rs);
 }
