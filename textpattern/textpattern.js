@@ -671,7 +671,6 @@ function toggleDisplay(id)
                 origin  : textpattern.event,
                 token   : $(this).data('txp-token')
             });
-
         } else {
             var pane = obj.attr('id');
 
@@ -775,7 +774,7 @@ function setClassRemember(className, force)
 function sendAsyncEvent (data, fn, format)
 {
     if ($.type(data) === 'string' && data.length > 0) {
-        // Got serialised data.
+        // Got serialized data.
         data = data + '&app_mode=async&_txp_token=' + textpattern._txp_token;
     } else {
         data.app_mode = 'async';
@@ -953,7 +952,7 @@ textpattern.Route =
     },
 
     /**
-     * Initialises attached listeners.
+     * Initializes attached listeners.
      *
      * @param {object} options       Options
      * @param {string} options.event The event
@@ -1195,7 +1194,7 @@ jQuery.fn.txpDatepicker = function (options)
  * Creates a sortable element.
  *
  * This method creates a sortable widget, allowing to
- * reorder elements in a list and synchronises the updated
+ * reorder elements in a list and synchronizes the updated
  * order with the server.
  *
  * @param  {object}  options
@@ -1857,7 +1856,7 @@ $(document).ready(function ()
         $(this).parent().remove();
     });
 
-    // Initialise dynamic WAI-ARIA attributes.
+    // Initialize dynamic WAI-ARIA attributes.
     $('.txp-summary a').each(function (i, elm)
     {
         // Get id of toggled <section> region.
@@ -1933,7 +1932,7 @@ $(document).ready(function ()
         e.preventDefault();
     });
 
-    // Initialise panel specific JavaScript.
+    // Initialize panel specific JavaScript.
     textpattern.Route.init();
 
     // Arm UI.
