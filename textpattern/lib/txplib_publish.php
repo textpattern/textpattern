@@ -412,7 +412,7 @@ function parse($thing, $condition = null)
 
                 if ($chunk[strlen($chunk) - 2] === '/') {
                     // Self closed tag.
-                    $tags[$level][] = array($chunk, $tag[$level][2], $tag[$level][3], null);
+                    $tags[$level][] = array($chunk, $tag[$level][2], $tag[$level][3], null, null);
                     $inside[$level] .= $chunk;
                 } elseif ($chunk[1] !== '/') {
                     // Opening tag.
@@ -428,7 +428,7 @@ function parse($thing, $condition = null)
                     $txp_parsed[$sha] = $count[$level] > 2 ? $tags[$level] : false;
                     $txp_else[$sha] = array($else[$level] > 0 ? $else[$level] : $count[$level], $count[$level] - 2);
                     $level--;
-                    $tags[$level][] = array($outside[$level+1].$inside[$level+1].$chunk, $tag[$level][2], $tag[$level][3], $inside[$level+1]);
+                    $tags[$level][] = array($outside[$level+1], $tag[$level][2], $tag[$level][3], $inside[$level+1], $chunk);
                     $inside[$level] .= $inside[$level+1] . $chunk;
                 }
             } else {
