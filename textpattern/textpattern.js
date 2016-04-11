@@ -662,6 +662,7 @@ function toggleDisplay(id)
         // Send state of toggle pane to server.
         if ($(this).data('txp-token') && $(this).data('txp-pane')) {
             var pane = $(this).data('txp-pane');
+
             if (!localStorage) sendAsyncEvent({
                 event   : 'pane',
                 step    : 'visible',
@@ -670,9 +671,10 @@ function toggleDisplay(id)
                 origin  : textpattern.event,
                 token   : $(this).data('txp-token')
             });
-            
+
         } else {
             var pane = obj.attr('id');
+
             if (!localStorage) sendAsyncEvent({
                 event   : textpattern.event,
                 step    : 'save_pane_state',
@@ -680,11 +682,11 @@ function toggleDisplay(id)
                 visible : obj.is(':visible')
             });
         }
-        
+
         var data = new Object;
         data[pane] = obj.is(':visible');
         textpattern.storage.update(data);
-        
+
     }
 
     return false;
@@ -847,17 +849,18 @@ textpattern.storage =
     /**
      * Updates data.
      *
-     * @param  data The message
+     * @param   data The message
      * @example
      * textpattern.update({prefs : "site"});
      */
 
     update : function (data) {
-    
-        if (!localStorage) return;
-    
-        if (data)
-        {
+
+        if (!localStorage) {
+            return;
+        }
+
+        if (data) {
             $.extend(textpattern.storage.data, data);
             localStorage.setItem("textpattern", JSON.stringify(textpattern.storage.data));
         }
@@ -1738,45 +1741,52 @@ textpattern.Route.add('plugin', function ()
 textpattern.Route.add('', function ()
 {
     var prefsGroup = $('form:has(.switcher-list li a[data-txp-pane])');
-    if (prefsGroup.length == 0) return;
+
+    if (prefsGroup.length == 0) {
+        return;
+    }
+
     var prefTabs = prefsGroup.find('.switcher-list li');
     var $switchers = prefTabs.children('a[data-txp-pane]');
 
-    if (selectedTab === undefined) selectedTab = 0;
-    if (textpattern.storage.data[textpattern.event] !== undefined)
-        $switchers.each(function (i, elm) {
-            if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]) {
-                selectedTab = i;
-                $(elm).parent().addClass('ui-tabs-active ui-state-active');
-            }
-            else if (i != selectedTab)
-                $(elm).parent().removeClass('ui-tabs-active ui-state-active');
-        });
-    
+    if (selectedTab === undefined) {
+        selectedTab = 0;
+    }
+
+    if (textpattern.storage.data[textpattern.event] !== undefined) $switchers.each(function (i, elm)
+    {
+        if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]) {
+            selectedTab = i;
+            $(elm).parent().addClass('ui-tabs-active ui-state-active');
+        } else if (i != selectedTab) {
+            $(elm).parent().removeClass('ui-tabs-active ui-state-active');
+        }
+    });
+
     prefsGroup.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
     prefsGroup.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
     prefTabs.removeClass('ui-state-default ui-corner-top');
     prefsGroup.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
 
-    prefTabs.on('click', 'a[data-txp-pane]', function(ev) {
+    prefTabs.on('click', 'a[data-txp-pane]', function(ev)
+    {
         var me = $(this);
+
         if (!localStorage) sendAsyncEvent({
-                event   : 'pane',
-                step    : 'tabVisible',
-                pane    : me.data('txp-pane'),
-                origin  : textpattern.event,
-                token   : me.data('txp-token')
-            });
-            
+            event  : 'pane',
+            step   : 'tabVisible',
+            pane   : me.data('txp-pane'),
+            origin : textpattern.event,
+            token  : me.data('txp-token')
+        });
+
         var data = new Object;
         data[textpattern.event] = me.data('txp-pane');
         textpattern.storage.update(data);
-    });    
-
-    
+    });
 });
 
-// Initialise JavaScript.
+// Initialize JavaScript.
 
 $(document).ready(function ()
 {
@@ -1856,7 +1866,7 @@ $(document).ready(function ()
         if (region) {
 
             var $region = $(region);
-            
+
             var pane = $elm.data("txp-pane");
             if (pane !== undefined && textpattern.storage.data[pane] !== undefined)
                 if (textpattern.storage.data[pane]) {
