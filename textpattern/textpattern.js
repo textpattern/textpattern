@@ -1757,7 +1757,7 @@ textpattern.Route.add('', function ()
         if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]) {
             selectedTab = i;
             $(elm).parent().addClass('ui-tabs-active ui-state-active');
-        } else if (i != selectedTab) {
+        } else {
             $(elm).parent().removeClass('ui-tabs-active ui-state-active');
         }
     });
