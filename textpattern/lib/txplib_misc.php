@@ -4249,7 +4249,7 @@ function EvalElse($thing, $condition)
     }
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
-        $out .= $tag[$first][0] . $tag[++$first];
+        $out .= $tag[$first][0] . $tag[$first][3] . $tag[$first][4] . $tag[++$first];
     }
 
     return $out;
