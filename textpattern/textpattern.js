@@ -663,29 +663,32 @@ function toggleDisplay(id)
         if ($(this).data('txp-token') && $(this).data('txp-pane')) {
             var pane = $(this).data('txp-pane');
 
-            if (!localStorage) sendAsyncEvent({
-                event   : 'pane',
-                step    : 'visible',
-                pane    : $(this).data('txp-pane'),
-                visible : obj.is(':visible'),
-                origin  : textpattern.event,
-                token   : $(this).data('txp-token')
-            });
+            if (!localStorage) {
+                sendAsyncEvent({
+                    event   : 'pane',
+                    step    : 'visible',
+                    pane    : $(this).data('txp-pane'),
+                    visible : obj.is(':visible'),
+                    origin  : textpattern.event,
+                    token   : $(this).data('txp-token')
+                });
+            }
         } else {
             var pane = obj.attr('id');
 
-            if (!localStorage) sendAsyncEvent({
-                event   : textpattern.event,
-                step    : 'save_pane_state',
-                pane    : obj.attr('id'),
-                visible : obj.is(':visible')
-            });
+            if (!localStorage) {
+                sendAsyncEvent({
+                    event   : textpattern.event,
+                    step    : 'save_pane_state',
+                    pane    : obj.attr('id'),
+                    visible : obj.is(':visible')
+                });
+            }
         }
 
         var data = new Object;
         data[pane] = obj.is(':visible');
         textpattern.storage.update(data);
-
     }
 
     return false;
@@ -1752,15 +1755,16 @@ textpattern.Route.add('', function ()
         selectedTab = 0;
     }
 
-    if (textpattern.storage.data[textpattern.event] !== undefined) $switchers.each(function (i, elm)
-    {
-        if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]) {
-            selectedTab = i;
-            $(elm).parent().addClass('ui-tabs-active ui-state-active');
-        } else {
-            $(elm).parent().removeClass('ui-tabs-active ui-state-active');
-        }
-    });
+    if (textpattern.storage.data[textpattern.event] !== undefined) {
+        $switchers.each(function (i, elm) {
+            if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]) {
+                selectedTab = i;
+                $(elm).parent().addClass('ui-tabs-active ui-state-active');
+            } else {
+                $(elm).parent().removeClass('ui-tabs-active ui-state-active');
+            }
+        });
+    }
 
     prefsGroup.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
     prefsGroup.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
