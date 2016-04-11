@@ -384,6 +384,7 @@ function parse($thing, $condition = null)
     if(!isset($txp_parsed[$hash])) {
         $tags    = array(array());
         $tag     = array();
+        $outside = array();
         $inside  = array('');
         $else    = array(-1);
         $count   = array(-1);
@@ -417,6 +418,7 @@ function parse($thing, $condition = null)
                     // Opening tag.
                     $inside[$level] .= $chunk;
                     $level++;
+                    $outside[$level] = $chunk;
                     $inside[$level] = '';
                     $else[$level] = $count[$level] = -1;
                     $tags[$level] = array();
@@ -426,7 +428,7 @@ function parse($thing, $condition = null)
                     $txp_parsed[$sha] = $count[$level] > 2 ? $tags[$level] : false;
                     $txp_else[$sha] = array($else[$level] > 0 ? $else[$level] : $count[$level], $count[$level] - 2);
                     $level--;
-                    $tags[$level][] = array($chunk, $tag[$level][2], $tag[$level][3], $inside[$level+1]);
+                    $tags[$level][] = array($outside[$level+1].$inside[$level+1].$chunk, $tag[$level][2], $tag[$level][3], $inside[$level+1]);
                     $inside[$level] .= $inside[$level+1] . $chunk;
                 }
             } else {
