@@ -661,7 +661,9 @@ function toggleDisplay(id)
 
         // Send state of toggle pane to server.
         if ($(this).data('txp-token') && $(this).data('txp-pane')) {
-            sendAsyncEvent({
+            var pane = $(this).data('txp-pane');
+
+            if (!localStorage) sendAsyncEvent({
                 event   : 'pane',
                 step    : 'visible',
                 pane    : $(this).data('txp-pane'),
@@ -670,13 +672,20 @@ function toggleDisplay(id)
                 token   : $(this).data('txp-token')
             });
         } else {
-            sendAsyncEvent({
+            var pane = obj.attr('id');
+
+            if (!localStorage) sendAsyncEvent({
                 event   : textpattern.event,
                 step    : 'save_pane_state',
                 pane    : obj.attr('id'),
                 visible : obj.is(':visible')
             });
         }
+
+        var data = new Object;
+        data[pane] = obj.is(':visible');
+        textpattern.storage.update(data);
+
     }
 
     return false;
@@ -765,7 +774,7 @@ function setClassRemember(className, force)
 function sendAsyncEvent (data, fn, format)
 {
     if ($.type(data) === 'string' && data.length > 0) {
-        // Got serialised data.
+        // Got serialized data.
         data = data + '&app_mode=async&_txp_token=' + textpattern._txp_token;
     } else {
         data.app_mode = 'async';
@@ -819,6 +828,41 @@ textpattern.Relay =
     {
         $(this).on(event, fn);
         return this;
+    }
+};
+
+/**
+ * Textpattern localStorage.
+ *
+ * @since 4.6.0
+ */
+
+textpattern.storage =
+{
+    /**
+     * Textpattern localStorage data.
+     */
+
+    data : (localStorage ? JSON.parse(localStorage.getItem("textpattern")) : null) || {},
+
+    /**
+     * Updates data.
+     *
+     * @param   data The message
+     * @example
+     * textpattern.update({prefs : "site"});
+     */
+
+    update : function (data) {
+
+        if (!localStorage) {
+            return;
+        }
+
+        if (data) {
+            $.extend(textpattern.storage.data, data);
+            localStorage.setItem("textpattern", JSON.stringify(textpattern.storage.data));
+        }
     }
 };
 
@@ -908,7 +952,7 @@ textpattern.Route =
     },
 
     /**
-     * Initialises attached listeners.
+     * Initializes attached listeners.
      *
      * @param {object} options       Options
      * @param {string} options.event The event
@@ -924,7 +968,7 @@ textpattern.Route =
 
         $.each(textpattern.Route.attached, function (index, data)
         {
-            if (data.page === options.event || data.page === options.event + '.' + options.step) {
+            if (data.page === '' || data.page === options.event || data.page === options.event + '.' + options.step) {
                 data.fn({
                     'event' : options.event,
                     'step'  : options.step,
@@ -1150,7 +1194,7 @@ jQuery.fn.txpDatepicker = function (options)
  * Creates a sortable element.
  *
  * This method creates a sortable widget, allowing to
- * reorder elements in a list and synchronises the updated
+ * reorder elements in a list and synchronizes the updated
  * order with the server.
  *
  * @param  {object}  options
@@ -1681,30 +1725,6 @@ textpattern.Route.add('admin', function ()
     textpattern.passwordStrength();
 });
 
-// Preferences panel.
-
-textpattern.Route.add('prefs', function ()
-{
-    var prefsGroup = $('#prefs_form');
-    var prefTabs = prefsGroup.find('.switcher-list li'); 
-
-    prefsGroup.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
-    prefsGroup.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
-    prefTabs.removeClass('ui-state-default ui-corner-top');
-    prefsGroup.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
-
-    prefTabs.on('click', 'a', function(ev) {
-        var me = $(this);
-        sendAsyncEvent({
-                event   : 'pane',
-                step    : 'tabVisible',
-                pane    : me.data('txp-pane'),
-                origin  : textpattern.event,
-                token   : me.data('txp-token')
-            });
-    });
-});
-
 // Plugins panel.
 
 textpattern.Route.add('plugin', function ()
@@ -1715,7 +1735,57 @@ textpattern.Route.add('plugin', function ()
     });
 });
 
-// Initialise JavaScript.
+// All panels?
+
+textpattern.Route.add('', function ()
+{
+    var prefsGroup = $('form:has(.switcher-list li a[data-txp-pane])');
+
+    if (prefsGroup.length == 0) {
+        return;
+    }
+
+    var prefTabs = prefsGroup.find('.switcher-list li');
+    var $switchers = prefTabs.children('a[data-txp-pane]');
+
+    if (selectedTab === undefined) {
+        selectedTab = 0;
+    }
+
+    if (textpattern.storage.data[textpattern.event] !== undefined) $switchers.each(function (i, elm)
+    {
+        if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]) {
+            selectedTab = i;
+            $(elm).parent().addClass('ui-tabs-active ui-state-active');
+        } else {
+            $(elm).parent().removeClass('ui-tabs-active ui-state-active');
+        }
+    });
+
+    prefsGroup.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
+    prefsGroup.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
+    prefTabs.removeClass('ui-state-default ui-corner-top');
+    prefsGroup.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
+
+    prefTabs.on('click', 'a[data-txp-pane]', function(ev)
+    {
+        var me = $(this);
+
+        if (!localStorage) sendAsyncEvent({
+            event  : 'pane',
+            step   : 'tabVisible',
+            pane   : me.data('txp-pane'),
+            origin : textpattern.event,
+            token  : me.data('txp-token')
+        });
+
+        var data = new Object;
+        data[textpattern.event] = me.data('txp-pane');
+        textpattern.storage.update(data);
+    });
+});
+
+// Initialize JavaScript.
 
 $(document).ready(function ()
 {
@@ -1786,15 +1856,28 @@ $(document).ready(function ()
         $(this).parent().remove();
     });
 
-    // Initialise dynamic WAI-ARIA attributes.
+    // Initialize dynamic WAI-ARIA attributes.
     $('.txp-summary a').each(function (i, elm)
     {
         // Get id of toggled <section> region.
-        var region = $(elm).attr('href');
+        var $elm = $(elm), region = $elm.attr('href');
 
         if (region) {
-            var $region = $(region), vis = $region.is(':visible').toString();
-            $(elm).attr('aria-controls', region.substr(1)).attr('aria-pressed', vis);
+
+            var $region = $(region);
+
+            var pane = $elm.data("txp-pane");
+            if (pane !== undefined && textpattern.storage.data[pane] !== undefined)
+                if (textpattern.storage.data[pane]) {
+                    $elm.parent(".txp-summary").addClass("expanded");
+                    $region.show();
+                } else {
+                    $elm.parent(".txp-summary").removeClass("expanded");
+                    $region.hide();
+                }
+
+            var vis = $region.is(':visible').toString();
+            $elm.attr('aria-controls', region.substr(1)).attr('aria-pressed', vis);
             $region.attr('aria-expanded', vis);
         }
     });
@@ -1849,7 +1932,7 @@ $(document).ready(function ()
         e.preventDefault();
     });
 
-    // Initialise panel specific JavaScript.
+    // Initialize panel specific JavaScript.
     textpattern.Route.init();
 
     // Arm UI.
