@@ -519,8 +519,8 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_section` (
     PRIMARY KEY (name(250))
 ) $tabletype ";
 
-$create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('articles', 'archive', 'default', 1, 1, 1, 1, 'Articles')";
-$create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('default', 'default', 'default', 0, 1, 1, 1, 'Default')";
+$create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('articles', 'archive', 'default', '', 1, 1, 1, 'Articles')";
+$create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('default', 'default', 'default', '', 1, 1, 1, 'Default')";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_users` (
     user_id     INT          NOT NULL AUTO_INCREMENT,
