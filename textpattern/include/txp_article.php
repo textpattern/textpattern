@@ -1097,7 +1097,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     ' <span role="separator">/</span> '.
                     tsi('day', '%d', $persist_timestamp, '', 'day'),
                     'publish_date',
-                    array('timestamp', 'instructions_publish_date'),
+                    array('publish_date', 'instructions_publish_date'),
                     array('class' => 'txp-form-field date posted')
                 ).
                 inputLabel(
@@ -1141,7 +1141,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     ' <span role="separator">/</span> '.
                     tsi('exp_day', '%d', $persist_timestamp, '', 'exp_day'),
                     'expire_date',
-                    array('expires', 'instructions_expire_date'),
+                    array('expire_date', 'instructions_expire_date'),
                     array('class' => 'txp-form-field date expires')
                 ).
                 inputLabel(
@@ -2117,7 +2117,7 @@ function article_partial_posted($rs)
             ' <span role="separator">/</span> '.
             tsi('day', '%d', $sPosted, '', 'day'),
             'publish_date',
-            array('timestamp', 'instructions_publish_date'),
+            array('publish_date', 'instructions_publish_date'),
             array('class' => 'txp-form-field date posted')
         ).
         inputLabel(
@@ -2165,7 +2165,7 @@ function article_partial_expires($rs)
             ' <span role="separator">/</span> '.
             tsi('exp_day', '%d', $sExpires, '', 'exp_day'),
             'expire_date',
-            array('expires', 'instructions_expire_date'),
+            array('expire_date', 'instructions_expire_date'),
             array('class' => 'txp-form-field date expires')
         ).
         inputLabel(
