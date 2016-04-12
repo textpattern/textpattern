@@ -681,7 +681,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Comment options' section.
         'comments' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#txp-comments-group-content .comment-annotate',
+            'selector' => '#write-comments',
             'cb'       => 'article_partial_comments',
         ),
         // 'Article image' section.
@@ -2074,9 +2074,13 @@ function article_partial_comments($rs)
         }
 
         if ($comments_expired) {
-            $invite = graf(gTxt('expired'), ' class="comment-annotate"');
+            $invite = graf(gTxt('expired'), array(
+                'class' => 'comment-annotate',
+                'id'    => 'write-comments',
+            ));
         } else {
-            $invite = n.tag(
+            $invite = n.tag_start('div', array('id' => 'write-comments')).
+                n.tag(
                     onoffRadio('Annotate', $Annotate),
                     'div', array('class' => 'txp-form-field comment-annotate')
                 ).
@@ -2086,7 +2090,8 @@ function article_partial_comments($rs)
                     'comment_invitation',
                     array('', 'instructions_comment_invitation'),
                     array('class' => 'txp-form-field comment-invite')
-                );
+                ).
+                n.tag_end('div');
         }
 
         return pluggable_ui('article_ui', 'annotate_invite', $invite, $rs);
