@@ -1748,7 +1748,7 @@ function article_partial_image($rs)
         'article-image',
         fInput('text', 'Image', escape_title($rs['Image']), '', '', '', INPUT_REGULAR, '', 'article-image'),
         'article_image',
-        array('title', 'instructions_article_image'),
+        array('article_image', 'instructions_article_image'),
         array('class' => 'txp-form-field article-image')
     );
 
