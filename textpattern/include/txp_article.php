@@ -681,7 +681,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Comment options' section.
         'comments' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#txp-comments-group',
+            'selector' => '#txp-comments-group-content .comment-annotate',
             'cb'       => 'article_partial_comments',
         ),
         // 'Article image' section.
@@ -705,7 +705,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Recent articles' values.
         'recent_articles' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#txp-recent-group',
+            'selector' => '#txp-recent-group-content .recent',
             'cb'       => 'article_partial_recent_articles',
         ),
     );
@@ -1181,7 +1181,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo wrapRegion('txp-meta-group', $html_url_title.$html_description.$html_keywords, 'txp-meta-group-content', 'meta', 'article_meta');
 
         // 'Comment options' collapsible section.
-        echo $partials['comments']['html'];
+        echo wrapRegion('txp-comments-group', $partials['comments']['html'], 'txp-comments-group-content', 'comment_settings', 'article_comments');
 
         // 'Article image' collapsible section.
         echo $partials['image']['html'];
@@ -1237,7 +1237,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo $partials['sidehelp']['html'];
 
         // 'Recent articles' collapsible section.
-        echo $partials['recent_articles']['html'];
+        echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
 
         echo n.'</div>'; // End of #supporting_content.
 
@@ -1807,8 +1807,8 @@ function article_partial_recent_articles($rs)
 
         $ra .= '</ol>';
     }
-    
-    return wrapRegion('txp-recent-group', pluggable_ui('article_ui', 'recent_articles', $ra, $rs), 'txp-recent-group-content', 'recent_articles', 'article_recent');
+
+    return pluggable_ui('article_ui', 'recent_articles', $ra, $rs);
 }
 
 /**
@@ -2088,8 +2088,8 @@ function article_partial_comments($rs)
                     array('class' => 'txp-form-field comment-invite')
                 );
         }
-        
-        return wrapRegion('txp-comments-group', pluggable_ui('article_ui', 'annotate_invite', $invite, $rs), 'txp-comments-group-content', 'comment_settings', 'article_comments');
+
+        return pluggable_ui('article_ui', 'annotate_invite', $invite, $rs);
     }
 }
 
