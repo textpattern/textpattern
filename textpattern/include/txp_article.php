@@ -699,7 +699,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Text formatting help' section.
         'sidehelp' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#txp-textfilter-group',
+            'selector' => 'ul.textile',
             'cb'       => 'article_partial_sidehelp',
         ),
         // 'Recent articles' values.
@@ -1238,7 +1238,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
 
         // 'Text formatting help' collapsible section.
-        echo $partials['sidehelp']['html'];
+        echo wrapRegion('txp-textfilter-group', $partials['sidehelp']['html'], 'txp-textfilter-group-content', 'textfilter_help', 'article_textfilter_help');
 
         // 'Recent articles' collapsible section.
         echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
@@ -1546,9 +1546,7 @@ function article_partial_sidehelp($rs)
         $help .= Txp::get('\Textpattern\Textfilter\Registry')->getHelp($rs['textile_excerpt']);
     }
 
-    $out = wrapRegion('txp-textfilter-group', $help, 'txp-textfilter-group-content', 'textfilter_help', 'article_textfilter_help');
-
-    return pluggable_ui('article_ui', 'sidehelp', $out, $rs);
+    return pluggable_ui('article_ui', 'sidehelp', $help, $rs);
 }
 
 /**
