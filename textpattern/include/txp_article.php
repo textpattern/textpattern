@@ -534,7 +534,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     $partials is an array of:
     $key => array (
         'mode' => {PARTIAL_STATIC | PARTIAL_VOLATILE | PARTIAL_VOLATILE_VALUE},
-        'selector' => $DOM_selector,
+        'selector' => $DOM_selector or array($selector, $fragment) of $DOM_selectors,
          'cb' => $callback_function,
          'html' => $return_value_of_callback_function (need not be intialised here)
     )
@@ -705,7 +705,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Recent articles' values.
         'recent_articles' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#txp-recent-group-content .recent',
+            'selector' => array('#txp-recent-group-content .recent', '.recent'),
             'cb'       => 'article_partial_recent_articles',
         ),
     );
@@ -893,14 +893,18 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 trigger_error("Empty selector for partial '$k'", E_USER_ERROR);
             } else {
                 // Build response script.
+                list($selector, $fragment) = (array)$p['selector'] + array(null, null);
+                if (!isset($fragment)) {
+                    $fragment = $selector;
+                }
                 if ($p['mode'] == PARTIAL_VOLATILE) {
                     // Volatile partials replace *all* of the existing HTML
-                    // fragment for their selector.
-                    $response[] = '$("'.$p['selector'].'").replaceWith("'.escape_js($p['html']).'")';
+                    // fragment for their selector with the new one.
+                    $response[] = '$("'.$selector.'").replaceWith($("<div>'.escape_js($p['html']).'</div>").find("'.$fragment.'"))';
                 } elseif ($p['mode'] == PARTIAL_VOLATILE_VALUE) {
                     // Volatile partial values replace the *value* of elements
                     // matching their selector.
-                    $response[] = '$("'.$p['selector'].'").val("'.escape_js($p['html']).'")';
+                    $response[] = '$("'.$selector.'").val("'.escape_js($p['html']).'")';
                 }
             }
         }
