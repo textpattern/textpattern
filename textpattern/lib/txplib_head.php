@@ -258,12 +258,12 @@ function areas()
     );
 
     $areas['content'] = array(
-        gTxt('tab_organise') => 'category',
         gTxt('tab_write')    => 'article',
         gTxt('tab_list')     => 'list',
         gTxt('tab_image')    => 'image',
         gTxt('tab_file')     => 'file',
         gTxt('tab_link')     => 'link',
+        gTxt('tab_organise') => 'category',
     );
 
     $areas['presentation'] = array(
