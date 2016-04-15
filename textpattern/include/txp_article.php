@@ -231,7 +231,6 @@ function article_post()
         }
 
         $user = doSlash($txp_user);
-        $description = doSlash($description);
         $Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
         $msg = '';
 
@@ -451,9 +450,7 @@ function article_save()
     }
 
     $Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
-
     $user = doSlash($txp_user);
-    $description = doSlash($description);
 
     $cfq = array();
     $cfs = getCustomFields();
