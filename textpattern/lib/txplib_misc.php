@@ -4605,13 +4605,6 @@ function handle_lastmod($unix_ts = null, $exit = true)
 
             txp_status_header('304 Not Modified');
 
-            // Some mod_deflate versions have a bug that breaks subsequent
-            // requests when keepalive is used.  dropping the connection
-            // is the only reliable way to fix this.
-            if (!get_pref('lastmod_keepalive')) {
-                header('Connection: close');
-            }
-
             header('Content-Length: 0');
 
             // Discard all output.

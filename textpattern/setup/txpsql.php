@@ -450,7 +450,6 @@ $prefs = array(
         array(0, 100, 'permlink_format' , 'permlink_format'            , '1'),
         array(0, 120, 'yesnoradio'      , 'send_lastmod'               , '1'),
         array(0, 130, 'yesnoradio'      , 'publish_expired_articles'   , '0'),
-        array(0, 140, 'yesnoradio'      , 'lastmod_keepalive'          , '0'),
         array(0, 160, 'yesnoradio'      , 'ping_weblogsdotcom'         , '0'),
         array(0, 200, 'pref_text'       , 'use_textile'                , '1'),
         array(0, 220, 'yesnoradio'      , 'use_dns'                    , '0'),

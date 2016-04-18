@@ -27,10 +27,6 @@ if (!defined('TXP_UPDATE')) {
 
 safe_alter('txp_lang', 'DELAY_KEY_WRITE = 0');
 
-if (!safe_field("name", 'txp_prefs', "name = 'lastmod_keepalive'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'lastmod_keepalive', val = '0', type = '1', html = 'yesnoradio'");
-}
-
 // New status field for file downloads.
 $txpfile = getThings("DESCRIBE `".PFX."txp_file`");
 
@@ -159,8 +155,7 @@ safe_update('txp_prefs', "position = 120, event = 'publish'", "name = 'send_last
 safe_update('txp_prefs', "position = 140", "name IN(
     'dateformat',
     'comments_dateformat',
-    'spam_blacklists',
-    'lastmod_keepalive'
+    'spam_blacklists'
 )");
 
 safe_update('txp_prefs', "position = 160", "name IN(
