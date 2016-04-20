@@ -1561,7 +1561,7 @@ function article_partial_title($rs)
 
     $out = inputLabel(
         'title',
-        fInput('text', 'Title', escape_title($rs['Title']), '', '', '', INPUT_LARGE, '', 'title'),
+        fInput('text', 'Title', $rs['Title'], '', '', '', INPUT_LARGE, '', 'title'),
         'title',
         array('title', 'instructions_title'),
         array('class' => 'txp-form-field title')
@@ -1579,7 +1579,7 @@ function article_partial_title($rs)
 
 function article_partial_title_value($rs)
 {
-    return html_entity_decode($rs['Title'], ENT_QUOTES, 'UTF-8');
+    return $rs['Title'];
 }
 
 /**
@@ -1745,7 +1745,7 @@ function article_partial_image($rs)
 {
     $default = inputLabel(
         'article-image',
-        fInput('text', 'Image', escape_title($rs['Image']), '', '', '', INPUT_REGULAR, '', 'article-image'),
+        fInput('text', 'Image', $rs['Image'], '', '', '', INPUT_REGULAR, '', 'article-image'),
         'article_image',
         array('article_image', 'instructions_article_image'),
         array('class' => 'txp-form-field article-image')
