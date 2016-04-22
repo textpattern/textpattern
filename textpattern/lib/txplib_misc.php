@@ -1898,7 +1898,7 @@ function callback_event($event, $step = '', $pre = 0)
                     $argv[$renew] = $return_value;
                 }
 
-                if (isset($out)) {
+                if (isset($out) && !isset($renew)) {
                     if (is_array($return_value) && is_array($out)) {
                         $out = array_merge($out, $return_value);
                     } elseif (is_bool($return_value) && is_bool($out)) {
