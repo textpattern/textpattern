@@ -968,11 +968,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     if ($view == 'preview') {
         echo n.'<div class="preview">'.
             graf(gTxt('title'), array('class' => 'alert-block information')).
-            hed($Title, 1, ' class="title"');
+            hed(txpspecialchars($Title), 1, ' class="title"');
     } elseif ($view == 'html') {
         echo n.'<div class="html">'.
             graf(gTxt('title'), array('class' => 'alert-block information')).
-            hed($Title, 1, ' class="title"');
+            hed(txpspecialchars($Title), 1, ' class="title"');
     } elseif ($view == 'text') {
         echo n.'<div class="text">'.$partials['title']['html'];
     }
