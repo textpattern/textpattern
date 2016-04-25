@@ -32,11 +32,11 @@ The development version can be obtained from the "Textpattern repository on GitH
 
 h2(#install). Install Textpattern
 
-Please see the "README.txt":https://github.com/textpattern/textpattern/blob/master/README.txt for details on installing Textpattern.
+Please see "README.txt":https://github.com/textpattern/textpattern/blob/master/README.txt for details on installing Textpattern.
 
 h2(#upgrade). Upgrade Textpattern
 
-Please see the "README.txt":https://github.com/textpattern/textpattern/blob/master/README.txt for details on upgrading Textpattern.
+Please see "README.txt":https://github.com/textpattern/textpattern/blob/master/README.txt for details on upgrading Textpattern.
 
 h2(#help-support). Help and support
 
