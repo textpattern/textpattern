@@ -40,7 +40,7 @@
 
 function rss()
 {
-    global $prefs, $thisarticle;
+    global $prefs;
     set_error_handler('feedErrorHandler');
     ob_clean();
     extract($prefs);
@@ -136,8 +136,8 @@ function rss()
                 $a['expires'] = $uExpires;
 
                 $permlink = permlinkurl($a);
-                $summary = trim(replace_relative_urls(parse($thisarticle['excerpt']), $permlink));
-                $content = trim(replace_relative_urls(parse($thisarticle['body']), $permlink));
+                $summary = trim(replace_relative_urls(parse($a['Excerpt_html']), $permlink));
+                $content = trim(replace_relative_urls(parse($a['Body_html']), $permlink));
 
                 if ($syndicate_body_or_excerpt) {
                     // Short feed: use body as summary if there's no excerpt.
