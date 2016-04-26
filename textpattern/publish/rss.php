@@ -127,6 +127,8 @@ function rss()
 
         if ($rs) {
             while ($a = nextRow($rs)) {
+                // In case $GLOBALS['thisarticle'] is unset
+                global $thisarticle;
                 extract($a);
                 populateArticleData($a);
 
@@ -136,8 +138,8 @@ function rss()
                 $a['expires'] = $uExpires;
 
                 $permlink = permlinkurl($a);
-                $summary = trim(replace_relative_urls(parse($a['Excerpt_html']), $permlink));
-                $content = trim(replace_relative_urls(parse($a['Body_html']), $permlink));
+                $summary = trim(replace_relative_urls(parse($thisarticle['excerpt']), $permlink));
+                $content = trim(replace_relative_urls(parse($thisarticle['body']), $permlink));
 
                 if ($syndicate_body_or_excerpt) {
                     // Short feed: use body as summary if there's no excerpt.
