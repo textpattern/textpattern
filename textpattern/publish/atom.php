@@ -80,7 +80,7 @@ define("r_relself", ' rel="self"');
 
 function atom()
 {
-    global $thisarticle, $prefs;
+    global $prefs;
     set_error_handler('feedErrorHandler');
     ob_clean();
     extract($prefs);
@@ -184,6 +184,8 @@ function atom()
 
         if ($rs) {
             while ($a = nextRow($rs)) {
+                // In case $GLOBALS['thisarticle'] is unset
+                global $thisarticle;
                 extract($a);
                 populateArticleData($a);
                 $cb = callback_event('atom_entry');
