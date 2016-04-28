@@ -23,7 +23,7 @@ vagrantfile:
                         id: machine1
                         hostname: machine1.puphpet
                         network:
-                            private_network: 192.168.56.125
+                            private_network: 192.168.56.101
                             forwarded_port:
                                 vflmnfp_mwkox9qjj6xo:
                                     host: '9790'
