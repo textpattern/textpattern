@@ -11,4 +11,4 @@ ehthumbs.db
 Thumbs.db
 composer.lock
 .idea/*
-.vendor/*
+vendor/*
