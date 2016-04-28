@@ -1,0 +1,9 @@
+HOSTS:
+  fedora-21:
+    roles:
+      - master
+    platform: fedora-21-x86_64
+    box: chef/fedora-21
+    hypervisor: vagrant
+CONFIG:
+  type: foss

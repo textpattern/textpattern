@@ -1,0 +1,9 @@
+fixtures:
+  repositories:
+    stdlib: "git://github.com/puppetlabs/puppetlabs-stdlib.git"
+    concat:
+      repo: "git://github.com/puppetlabs/puppetlabs-concat.git"
+      branch: "1.2.x"
+    portage: "git://github.com/gentoo/puppet-portage.git"
+  symlinks:
+    apache: "#{source_dir}"

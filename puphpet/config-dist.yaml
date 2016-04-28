@@ -1,0 +1,418 @@
+vagrantfile:
+    target: local
+    vm:
+        provider:
+            local:
+                box: puphpet/centos65-x64
+                box_url: puphpet/centos65-x64
+                box_version: '0'
+                chosen_virtualizer: virtualbox
+                virtualizers:
+                    virtualbox:
+                        modifyvm:
+                            natdnshostresolver1: false
+                        showgui: 0
+                    vmware:
+                        numvcpus: 1
+                    parallels:
+                        use_linked_clone: 0
+                        check_guest_tools: 0
+                        update_guest_tools: 0
+                machines:
+                    vflm_yxq5o5avheaa:
+                        id: machine1
+                        hostname: machine1.puphpet
+                        network:
+                            private_network: 192.168.56.125
+                            forwarded_port:
+                                vflmnfp_mwkox9qjj6xo:
+                                    host: '9790'
+                                    guest: '22'
+                        memory: '512'
+                        cpus: '1'
+        provision:
+            puppet:
+                manifests_path: puphpet/puppet/manifests
+                module_path: puphpet/puppet/modules
+                options:
+                    - '--verbose'
+                    - '--hiera_config /vagrant/puphpet/puppet/hiera.yaml'
+        synced_folder:
+            vflsf_hmpdq9oprdh5:
+                source: ./
+                target: /var/www/public_html
+                sync_type: default
+                smb:
+                    smb_host: ''
+                    smb_username: ''
+                    smb_password: ''
+                    mount_options:
+                        dir_mode: '0775'
+                        file_mode: '0664'
+                rsync:
+                    args:
+                        - '--verbose'
+                        - '--archive'
+                        - '-z'
+                    exclude:
+                        - .vagrant/
+                        - .git/
+                    auto: 'true'
+                owner: www-data
+                group: www-data
+        usable_port_range:
+            start: 10200
+            stop: 10500
+        post_up_message: ''
+    ssh:
+        host: 'false'
+        port: 'false'
+        private_key_path: 'false'
+        username: vagrant
+        guest_port: 'false'
+        keep_alive: '1'
+        forward_agent: 'false'
+        forward_x11: 'false'
+        shell: 'bash -l'
+        insert_key: 'false'
+    vagrant:
+        host: detect
+    proxy:
+        http: ''
+        https: ''
+        ftp: ''
+        no_proxy: ''
+server:
+    install: '1'
+    packages: {  }
+users_groups:
+    install: '1'
+    groups: {  }
+    users: {  }
+locale:
+    install: '1'
+    settings:
+        default_locale: en_US.UTF-8
+        locales:
+            - en_GB.UTF-8
+            - en_US.UTF-8
+        timezone: UTC
+firewall:
+    install: '1'
+    rules: {  }
+cron:
+    install: '1'
+    jobs: {  }
+nginx:
+    install: '0'
+    settings:
+        default_vhost: 1
+        proxy_buffer_size: 128k
+        proxy_buffers: '4 256k'
+        proxy_connect_timeout: 600s
+        proxy_send_timeout: 600s
+        proxy_read_timeout: 600s
+        names_hash_bucket_size: 128
+    upstreams: {  }
+    vhosts:
+        nxv_1aoydhej46l2:
+            server_name: awesome.dev
+            server_aliases:
+                - www.awesome.dev
+            www_root: /var/www/awesome
+            listen_port: '80'
+            index_files:
+                - index.html
+                - index.htm
+                - index.php
+            client_max_body_size: 1m
+            ssl: '0'
+            ssl_cert: ''
+            ssl_key: ''
+            ssl_port: '443'
+            ssl_protocols: ''
+            ssl_ciphers: ''
+            rewrite_to_https: '1'
+            spdy: '1'
+            locations:
+                nxvl_027xomdrx076:
+                    location: /
+                    try_files:
+                        - $uri
+                        - $uri/
+                        - /index.php$is_args$args
+                    fastcgi: ''
+                    fastcgi_index: ''
+                    fastcgi_split_path: ''
+                    proxy: ''
+                    proxy_redirect: ''
+                nxvl_6dy9ya9owhyt:
+                    location: '~ \.php$'
+                    try_files:
+                        - $uri
+                        - $uri/
+                        - /index.php$is_args$args
+                    fastcgi: '127.0.0.1:9000'
+                    fastcgi_index: index.php
+                    fastcgi_split_path: '^(.+\.php)(/.*)$'
+                    fast_cgi_params_extra:
+                        - 'SCRIPT_FILENAME $request_filename'
+                        - 'APP_ENV dev'
+                    set:
+                        - '$path_info $fastcgi_path_info'
+                    proxy: ''
+                    proxy_redirect: ''
+    proxies: {  }
+apache:
+    install: '1'
+    settings:
+        version: 2.4
+        user: www-data
+        group: www-data
+        default_vhost: true
+        manage_user: false
+        manage_group: false
+        sendfile: 0
+    modules:
+        - proxy_fcgi
+        - rewrite
+    vhosts:
+        av_wzwjxpt5c4c9:
+            servername: textpattern.local
+            docroot: /var/www/public_html
+            port: '80'
+            setenv:
+                - 'APP_ENV dev'
+            setenvif:
+                - 'Authorization "(.*)" HTTP_AUTHORIZATION=$1'
+            custom_fragment: ''
+            ssl: '0'
+            ssl_cert: ''
+            ssl_key: ''
+            ssl_chain: ''
+            ssl_certs_dir: ''
+            ssl_protocol: ''
+            ssl_cipher: ''
+            directories:
+                avd_ofxe6wdygjf4:
+                    path: /var/www/public_html
+                    options:
+                        - Indexes
+                        - FollowSymlinks
+                        - MultiViews
+                    allow_override:
+                        - All
+                    require:
+                        - 'all granted'
+                    custom_fragment: ''
+                    files_match:
+                        avdfm_5f5rwvqkrd6d:
+                            path: \.php$
+                            sethandler: 'proxy:fcgi://127.0.0.1:9000'
+                            custom_fragment: ''
+                            provider: filesmatch
+                    provider: directory
+letsencrypt:
+    install: '1'
+    settings:
+        email: ''
+    domains: {  }
+php:
+    install: '1'
+    settings:
+        version: '56'
+    modules:
+        php:
+            - cli
+            - intl
+            - xml
+        pear: {  }
+        pecl: {  }
+    ini:
+        display_errors: 'On'
+        error_reporting: '-1'
+        session.save_path: /var/lib/php/session
+        date.timezone: UTC
+    fpm_ini:
+        error_log: /var/log/php-fpm.log
+    fpm_pools:
+        phpfp_km86pcv5lgt7:
+            ini:
+                prefix: www
+                listen: '127.0.0.1:9000'
+                security.limit_extensions: .php
+                user: www-user
+                group: www-data
+    composer: '1'
+    composer_home: ''
+xdebug:
+    install: '1'
+    settings:
+        xdebug.default_enable: '1'
+        xdebug.remote_autostart: '0'
+        xdebug.remote_connect_back: '1'
+        xdebug.remote_enable: '1'
+        xdebug.remote_handler: dbgp
+        xdebug.remote_port: '9000'
+blackfire:
+    install: '0'
+    settings:
+        server_id: ''
+        server_token: ''
+        agent:
+            http_proxy: ''
+            https_proxy: ''
+            log_file: stderr
+            log_level: '1'
+        php:
+            agent_timeout: '0.25'
+            log_file: ''
+            log_level: '1'
+xhprof:
+    install: '0'
+wpcli:
+    install: '0'
+    version: v0.21.1
+drush:
+    install: '0'
+    version: 8.0.5
+ruby:
+    install: '1'
+    versions:
+        rv_uuwmqq5i9fjw:
+            default: '1'
+            bundler: '1'
+            version: 1.9.3
+            gems:
+                - deep_merge
+                - activesupport
+                - vine
+python:
+    install: '0'
+    packages: {  }
+    versions: {  }
+nodejs:
+    install: '0'
+    settings:
+        version: '5'
+    npm_packages: {  }
+hhvm:
+    install: '0'
+    nightly: 0
+    composer: '1'
+    composer_home: ''
+    settings: {  }
+    server_ini:
+        hhvm.server.host: 127.0.0.1
+        hhvm.server.port: '9000'
+        hhvm.log.use_log_file: '1'
+        hhvm.log.file: /var/log/hhvm/error.log
+    php_ini:
+        display_errors: 'On'
+        error_reporting: '-1'
+        date.timezone: UTC
+mariadb:
+    install: '0'
+    settings:
+        version: '10.1'
+        root_password: '123'
+        override_options: {  }
+    adminer: 0
+    users:
+        mariadbnu_6tipv18p6v0k:
+            name: dbuser
+            password: '123'
+    databases:
+        mariadbnd_g9vedm590zuh:
+            name: dbname
+            sql: ''
+    grants:
+        mariadbng_vcdbf4ggxnvu:
+            user: dbuser
+            table: '*.*'
+            privileges:
+                - ALL
+mysql:
+    install: '1'
+    settings:
+        version: '5.6'
+        root_password: root
+        override_options: {  }
+    adminer: '1'
+    users:
+        mysqlnu_6bvylqkooc28:
+            name: ''
+            password: ''
+    databases:
+        mysqlnd_nckbfwhgf9gz:
+            name: databasename
+            sql: ''
+    grants: {  }
+postgresql:
+    install: '0'
+    settings:
+        global:
+            encoding: UTF8
+            version: '9.4'
+        server:
+            postgres_password: '123'
+    databases: {  }
+    users: {  }
+    grants: {  }
+    adminer: 0
+mongodb:
+    install: '0'
+    settings:
+        bind_ip: 127.0.0.1
+        port: '27017'
+    globals:
+        version: 2.6.0
+    databases: {  }
+redis:
+    install: '0'
+    settings:
+        port: '6379'
+sqlite:
+    install: '0'
+    adminer: 0
+    databases: {  }
+mailhog:
+    install: '0'
+    settings:
+        smtp_ip: 0.0.0.0
+        smtp_port: 1025
+        http_ip: 0.0.0.0
+        http_port: '8025'
+        path: /usr/local/bin/mailhog
+beanstalkd:
+    install: '0'
+    settings:
+        listenaddress: 0.0.0.0
+        listenport: '11300'
+        maxjobsize: '65535'
+        maxconnections: '1024'
+        binlogdir: /var/lib/beanstalkd/binlog
+        binlogfsync: null
+        binlogsize: '10485760'
+    beanstalk_console: 0
+rabbitmq:
+    install: '0'
+    settings:
+        port: '5672'
+    users: {  }
+    vhosts: {  }
+    plugins: {  }
+elastic_search:
+    install: '0'
+    settings:
+        version: 2.3.1
+        java_install: true
+    instances:
+        esi_i2uzyg9ai2gu:
+            name: es-01
+solr:
+    install: '0'
+    settings:
+        version: 4.10.2
+        port: '8984'
+

@@ -1,0 +1,16 @@
+HOSTS:
+  ubuntu1404:
+    roles:
+      - agent
+    platform: ubuntu-14.04-amd64
+    template: ubuntu-1404-x86_64
+    hypervisor: vcloud
+CONFIG:
+  type: foss
+  keyfile: ~/.ssh/id_rsa-acceptance
+  nfs_server: none
+  consoleport: 443
+  datastore: instance0
+  folder: Delivery/Quality Assurance/Enterprise/Dynamic
+  resourcepool: delivery/Quality Assurance/Enterprise/Dynamic
+  pooling_api: http://vcloud.delivery.puppetlabs.net/

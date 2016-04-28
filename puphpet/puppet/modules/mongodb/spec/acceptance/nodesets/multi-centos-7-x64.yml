@@ -1,0 +1,15 @@
+HOSTS:
+  'master':
+    roles:
+      - master
+    platform: el-7-x86_64
+    hypervisor : vagrant
+    box : puppetlabs/centos-7.0-64-nocm
+  'slave':
+    roles:
+      - slave
+    platform: el-7-x86_64
+    hypervisor : vagrant
+    box : puppetlabs/centos-7.0-64-nocm
+CONFIG:
+  type: foss

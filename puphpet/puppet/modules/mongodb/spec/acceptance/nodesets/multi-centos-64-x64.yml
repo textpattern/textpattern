@@ -1,0 +1,17 @@
+HOSTS:
+  'master':
+    roles:
+      - master
+    platform: el-6-x86_64
+    hypervisor : vagrant
+    box : centos-64-x64-vbox4210-nocm
+    box_url : http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210-nocm.box
+  'slave':
+    roles:
+      - master
+    platform: el-6-x86_64
+    hypervisor : vagrant
+    box : centos-64-x64-vbox4210-nocm
+    box_url : http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210-nocm.box
+CONFIG:
+  type: foss

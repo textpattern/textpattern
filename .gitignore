@@ -12,3 +12,6 @@ Thumbs.db
 composer.lock
 .idea/*
 vendor/*
+puphpet/config.yaml
+.vagrant/*
+textpattern/config.php
