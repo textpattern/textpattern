@@ -1561,7 +1561,7 @@ function article_partial_title($rs)
 
     $out = inputLabel(
         'title',
-        fInput('text', 'Title', $rs['Title'], '', '', '', INPUT_LARGE, '', 'title'),
+        fInput('text', 'Title', preg_replace("/&amp;(?![#a-z0-9]+;)/i", "&", $rs['Title']), '', '', '', INPUT_LARGE, '', 'title'),
         'title',
         array('title', 'instructions_title'),
         array('class' => 'txp-form-field title')
@@ -1579,7 +1579,7 @@ function article_partial_title($rs)
 
 function article_partial_title_value($rs)
 {
-    return $rs['Title'];
+    return preg_replace("/&amp;(?![#a-z0-9]+;)/i", "&", $rs['Title']);
 }
 
 /**
