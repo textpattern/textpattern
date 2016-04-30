@@ -169,7 +169,8 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         $atts .= ' '.trim($onchange);
     }
 
-    return n.'<select'.$atts.$multiple.'>'.n.join(n, $out).n.'</select>'; // TODO: use jQuery UI selectmenu?
+    return n.'<select'.$atts.$multiple.'>'.n.join(n, $out).n.'</select>'
+        .($multiple ? n.'<input type="hidden" value="" name="'.txpspecialchars($name).'" />'.n : ''); // TODO: use jQuery UI selectmenu?
 }
 
 /**
