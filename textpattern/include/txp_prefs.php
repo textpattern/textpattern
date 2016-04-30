@@ -122,7 +122,7 @@ function prefs_save()
         }
         
         if (is_array($post[$name])) {
-            $post[$name] = implode(',', $post[$name]);
+            $post[$name] = implode(',', array_diff($post[$name], array('')));
         }
 
         if ($name === 'logging' && $post[$name] === 'none' && $post[$name] !== $val) {
