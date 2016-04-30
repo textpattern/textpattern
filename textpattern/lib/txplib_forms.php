@@ -134,10 +134,16 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
     $out = array();
 
     $selected = false;
-    $value = (string) $value;
+    $multiple = is_array($value) ? ' multiple="multiple"' : '';
+    
+    if ($multiple) {
+        $name .= '[]';
+    } else {
+        $value = (string) $value;
+    }
 
     foreach ($array as $avalue => $alabel) {
-        if ($value === (string) $avalue) {
+        if (!$multiple && $value === (string) $avalue || $multiple && in_array($avalue, $value)) {
             $sel = ' selected="selected"';
             $selected = true;
         } else {
@@ -163,7 +169,7 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         $atts .= ' '.trim($onchange);
     }
 
-    return n.'<select'.$atts.'>'.n.join(n, $out).n.'</select>'; // TODO: use jQuery UI selectmenu?
+    return n.'<select'.$atts.$multiple.'>'.n.join(n, $out).n.'</select>'; // TODO: use jQuery UI selectmenu?
 }
 
 /**
