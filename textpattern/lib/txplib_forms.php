@@ -115,7 +115,7 @@ function onoffRadio($field, $checked = '', $tabindex = 0, $id = '')
  *
  * @param  string $name        The field
  * @param  array  $array       The values as an array array( 'value' => 'label' )
- * @param  string $value       The selected option. Takes a value from $value
+ * @param  mixed  $value       The selected option(s). If an array, renders the select multiple
  * @param  bool   $blank_first If TRUE, prepends an empty option to the list
  * @param  mixed  $onchange    If TRUE submits the form when an option is changed. If a string, inserts it to the select tag
  * @param  string $select_id   The HTML id
