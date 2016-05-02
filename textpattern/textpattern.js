@@ -660,10 +660,10 @@ function toggleDisplay(id)
         obj.toggle();
 
         // Send state of toggle pane to localStorage or server.
-        if ($(this).data('txp-token') && $(this).data('txp-pane')) {
+        if ($(this).data('txp-pane')) {
             var pane = $(this).data('txp-pane');
 
-            if (!localStorage) {
+            if (!localStorage && $(this).data('txp-token')) {
                 sendAsyncEvent({
                     event   : 'pane',
                     step    : 'visible',
@@ -672,20 +672,23 @@ function toggleDisplay(id)
                     origin  : textpattern.event,
                     token   : $(this).data('txp-token')
                 });
-            } else {
-                var data = new Object;
-                data[pane] = obj.is(':visible');
-                textpattern.storage.update(data);
             }
         } else {
             var pane = obj.attr('id');
-            sendAsyncEvent({
-                event   : textpattern.event,
-                step    : 'save_pane_state',
-                pane    : obj.attr('id'),
-                visible : obj.is(':visible')
-            });
+
+            if (!localStorage) {
+                sendAsyncEvent({
+                    event   : textpattern.event,
+                    step    : 'save_pane_state',
+                    pane    : obj.attr('id'),
+                    visible : obj.is(':visible')
+                });
+            }
         }
+
+        var data = new Object;
+        data[pane] = obj.is(':visible');
+        textpattern.storage.update(data);
     }
 
     return false;
@@ -1866,9 +1869,15 @@ $(document).ready(function ()
         if (region) {
 
             var $region = $(region);
+            region = region.substr(1);
 
             var pane = $elm.data("txp-pane");
-            if (pane !== undefined && textpattern.storage.data[pane] !== undefined)
+            
+            if (pane === undefined) {
+                pane = region;
+            }
+
+            if (textpattern.storage.data[pane] !== undefined) {
                 if (textpattern.storage.data[pane]) {
                     $elm.parent(".txp-summary").addClass("expanded");
                     $region.show();
@@ -1876,9 +1885,10 @@ $(document).ready(function ()
                     $elm.parent(".txp-summary").removeClass("expanded");
                     $region.hide();
                 }
+            }
 
             var vis = $region.is(':visible').toString();
-            $elm.attr('aria-controls', region.substr(1)).attr('aria-pressed', vis);
+            $elm.attr('aria-controls', region).attr('aria-pressed', vis);
             $region.attr('aria-expanded', vis);
         }
     });
