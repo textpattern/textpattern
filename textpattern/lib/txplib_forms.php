@@ -169,8 +169,8 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         $atts .= ' '.trim($onchange);
     }
 
-    return n.'<select'.$atts.$multiple.'>'.n.join(n, $out).n.'</select>'
-        .($multiple ? n.'<input type="hidden" value="" name="'.txpspecialchars($name).'" />'.n : ''); // TODO: use jQuery UI selectmenu?
+    return n.'<select'.$atts.$multiple.'>'.n.join(n, $out).n.'</select>'.n
+        .($multiple ? hInput($name, '').n : ''); // TODO: use jQuery UI selectmenu?
 }
 
 /**
@@ -408,6 +408,40 @@ function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
 function checkbox2($name, $value, $tabindex = 0, $id = '')
 {
     return checkbox($name, 1, $value, $tabindex, $id);
+}
+
+/**
+ * A checkbox set.
+ *
+ * @param  string $name       The field
+ * @param  array  $array      The values => labels array
+ * @param  array  $value      Checked values
+ * @param  string $wraptag    An HTML wrapper tag for the set
+ * @param  string $break      Checkboxes wrapper/separator
+ * @param  string $class      Class applied to the wraptag
+ * @param  string $breakclass Class applied to break tag
+ * @param  string $atts       HTML attributes applied to the wraptag
+ * @param  string $breakatts  HTML attributes applied to the break tag
+ * @param  string $id         HTML id applied to the wraptag
+* @return string HTML input
+ * @example
+ * echo checkboxSet('fruit', array('a'=>'Apple', 'b'=>'Banana'), array('b'));
+ */
+
+function checkboxSet($name = '', $array = array(), $value = array(), $wraptag = '', $break = '', $class = '', $breakclass = '', $atts = '', $breakatts = '', $id = '')
+{
+    $out = array();
+
+    if ($name) {
+        $name .= '[]';
+    }
+
+    foreach ($array as $avalue => $alabel) {
+        $out[] = checkbox($name, $avalue, in_array($avalue, $value)).n
+            .'<label>'.txpspecialchars($alabel).'</label>';
+    }
+
+    return $out ? n.doWrap($out, $wraptag, $break, $class, $breakclass, $atts, $breakatts, $id).n.hInput($name, '') : '';
 }
 
 /**
