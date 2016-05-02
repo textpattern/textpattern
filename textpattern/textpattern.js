@@ -659,7 +659,7 @@ function toggleDisplay(id)
     if (obj.length) {
         obj.toggle();
 
-        // Send state of toggle pane to server.
+        // Send state of toggle pane to localStorage or server.
         if ($(this).data('txp-token') && $(this).data('txp-pane')) {
             var pane = $(this).data('txp-pane');
 
@@ -672,23 +672,20 @@ function toggleDisplay(id)
                     origin  : textpattern.event,
                     token   : $(this).data('txp-token')
                 });
+            } else {
+                var data = new Object;
+                data[pane] = obj.is(':visible');
+                textpattern.storage.update(data);
             }
         } else {
             var pane = obj.attr('id');
-
-            if (!localStorage) {
-                sendAsyncEvent({
-                    event   : textpattern.event,
-                    step    : 'save_pane_state',
-                    pane    : obj.attr('id'),
-                    visible : obj.is(':visible')
-                });
-            }
+            sendAsyncEvent({
+                event   : textpattern.event,
+                step    : 'save_pane_state',
+                pane    : obj.attr('id'),
+                visible : obj.is(':visible')
+            });
         }
-
-        var data = new Object;
-        data[pane] = obj.is(':visible');
-        textpattern.storage.update(data);
     }
 
     return false;
