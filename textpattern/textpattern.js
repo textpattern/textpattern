@@ -776,9 +776,14 @@ function setClassRemember(className, force)
 
 function sendAsyncEvent (data, fn, format)
 {
+    var formdata = false;
     if ($.type(data) === 'string' && data.length > 0) {
         // Got serialized data.
         data = data + '&app_mode=async&_txp_token=' + textpattern._txp_token;
+    } else if (data instanceof FormData) {
+        formdata = true;
+        data.append("app_mode", 'async');
+        data.append("_txp_token", textpattern._txp_token);
     } else {
         data.app_mode = 'async';
         data._txp_token = textpattern._txp_token;
@@ -786,7 +791,17 @@ function sendAsyncEvent (data, fn, format)
 
     format = format || 'xml';
 
-    return $.post('index.php', data, fn, format);
+    return formdata ?
+        $.ajax({
+            type: "POST",
+            url: 'index.php',
+            data: data,
+            success: fn,
+            dataType: format,
+            processData: false,
+            contentType: false
+        }) : 
+        $.post('index.php', data, fn, format);
 }
 
 /**
@@ -1010,7 +1025,7 @@ jQuery.fn.txpAsyncForm = function (options)
         var form =
         {
             button  : $this.find('input[type="submit"]:focus').eq(0),
-            data    : $this.serialize(),
+            data    : ( window.FormData === undefined ? $this.serialize() : new FormData(this) ),
             spinner : $('<span />').addClass('spinner')
         };
 
@@ -1025,9 +1040,12 @@ jQuery.fn.txpAsyncForm = function (options)
 
         form.button.attr('disabled', true).after(form.spinner);
 
-        if (form.data) {
-            form.data += '&' + (form.button.attr('name') || '_txp_submit') + '=' + (form.button.val() || '_txp_submit');
-        }
+        if (form.data)
+            if ( form.data instanceof FormData ) {
+                form.data.append(form.button.attr('name') || '_txp_submit' , form.button.val() || '_txp_submit');
+            } else {
+                form.data += '&' + (form.button.attr('name') || '_txp_submit') + '=' + (form.button.val() || '_txp_submit');
+            }
 
         sendAsyncEvent(form.data, function () {}, options.dataType)
             .done(function (data, textStatus, jqXHR)
