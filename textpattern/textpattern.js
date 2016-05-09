@@ -659,11 +659,11 @@ function toggleDisplay(id)
     if (obj.length) {
         obj.toggle();
 
-        // Send state of toggle pane to server.
-        if ($(this).data('txp-token') && $(this).data('txp-pane')) {
+        // Send state of toggle pane to localStorage or server.
+        if ($(this).data('txp-pane')) {
             var pane = $(this).data('txp-pane');
 
-            if (!localStorage) {
+            if (!localStorage && $(this).data('txp-token')) {
                 sendAsyncEvent({
                     event   : 'pane',
                     step    : 'visible',
@@ -1887,9 +1887,15 @@ $(document).ready(function ()
         if (region) {
 
             var $region = $(region);
+            region = region.substr(1);
 
             var pane = $elm.data("txp-pane");
-            if (pane !== undefined && textpattern.storage.data[pane] !== undefined)
+            
+            if (pane === undefined) {
+                pane = region;
+            }
+
+            if (textpattern.storage.data[pane] !== undefined) {
                 if (textpattern.storage.data[pane]) {
                     $elm.parent(".txp-summary").addClass("expanded");
                     $region.show();
@@ -1897,9 +1903,10 @@ $(document).ready(function ()
                     $elm.parent(".txp-summary").removeClass("expanded");
                     $region.hide();
                 }
+            }
 
             var vis = $region.is(':visible').toString();
-            $elm.attr('aria-controls', region.substr(1)).attr('aria-pressed', vis);
+            $elm.attr('aria-controls', region).attr('aria-pressed', vis);
             $region.attr('aria-expanded', vis);
         }
     });

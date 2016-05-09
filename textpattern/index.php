@@ -224,6 +224,6 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         }
     }
 } else {
-    txp_die('DB-Connect was successful, but the textpattern-table was not found.',
+    txp_die('Database connection was successful, but the <code>textpattern</code> table was not found.',
         '503 Service Unavailable');
 }
