@@ -683,14 +683,14 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         ),
         // 'Article image' section.
         'image' => array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => '#txp-image-group',
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => array('#txp-image-group .txp-container', '.txp-container'),
             'cb'       => 'article_partial_image',
         ),
         // 'Custom fields' section.
         'custom_fields' => array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => '#txp-custom-field-group',
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => array('#txp-custom-field-group-content .txp-container', '.txp-container'),
             'cb'       => 'article_partial_custom_fields',
         ),
         // 'Text formatting help' section.
@@ -1185,10 +1185,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo wrapRegion('txp-comments-group', $partials['comments']['html'], 'txp-comments-group-content', 'comment_settings', 'article_comments');
 
         // 'Article image' collapsible section.
-        echo $partials['image']['html'];
+        echo wrapRegion('txp-image-group', $partials['image']['html'], 'txp-image-group-content', 'article_image', 'article_image');
 
         // 'Custom fields' collapsible section.
-        echo $partials['custom_fields']['html'];
+        echo wrapRegion('txp-custom-field-group', $partials['custom_fields']['html'], 'txp-custom-field-group-content', 'custom', 'article_custom_field');
 
         // 'Advanced options' collapsible section.
 
@@ -1751,7 +1751,7 @@ function article_partial_image($rs)
         array('class' => 'txp-form-field article-image')
     );
 
-    return wrapRegion('txp-image-group', pluggable_ui('article_ui', 'article_image', $default, $rs), 'txp-image-group-content', 'article_image', 'article_image');
+    return tag(pluggable_ui('article_ui', 'article_image', $default, $rs), 'div', array('class' => 'txp-container'));
 }
 
 /**
@@ -1773,7 +1773,7 @@ function article_partial_custom_fields($rs)
         $cf .= article_partial_custom_field($rs, "custom_field_{$k}");
     }
 
-    return wrapRegion('txp-custom-field-group', pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'txp-custom-field-group-content', 'custom', 'article_custom_field');
+    return tag(pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'div', array('class' => 'txp-container'));
 }
 
 /**
