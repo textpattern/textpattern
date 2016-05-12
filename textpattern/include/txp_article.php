@@ -774,7 +774,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
         if ($from_view == 'preview' or $from_view == 'html') {
             $store_out = array();
-            $store = unserialize(base64_decode(ps('store')));
+            $store = json_decode(base64_decode(ps('store')), true);
 
             foreach ($vars as $var) {
                 if (isset($store[$var])) {
@@ -944,7 +944,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         ));
 
     if (!empty($store_out)) {
-        echo hInput('store', base64_encode(serialize($store_out)));
+        echo hInput('store', base64_encode(json_encode($store_out)));
     }
 
     echo hInput('ID', $ID).
