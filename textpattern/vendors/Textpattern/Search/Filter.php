@@ -237,7 +237,7 @@ class Filter
             $selected = do_list($selected);
         }
 
-        $set_all = ((count($selected) === 1 && $selected[0] === 'all') || (count($selected) === count($methods)));
+        $set_all = ((count($selected) === 1 && $selected[0] === 'all') || (count($selected) === count($methods)) || (count($selected) === 0));
 
         if ($label_all) {
             $methods = array('all' => gTxt($label_all)) + $methods;
@@ -309,8 +309,9 @@ EOJS
         if ($this->search_method === '') {
             $this->loadDefaultSearchMethod($this->event);
         }
-        // Normalise to an array of trimmed strings.
-        $this->search_method = do_list(join(',', (array)$this->search_method));
+        // Normalise to an array of trimmed trueish strings, containing keys of known $methods.
+        $this->search_method = array_filter(do_list(join(',', (array)$this->search_method)));
+        $this->search_method = array_intersect($this->search_method, array_keys($this->methods));
     }
 
     /**
@@ -321,10 +322,8 @@ EOJS
     public function loadDefaultSearchMethod()
     {
         assert_string($this->event);
-        $this->search_method = unserialize(get_pref('search_options_'.$this->event));
-        if (!is_array($this->search_method)) {
-            $this->search_method = array();
-        }
+        $this->search_method = array_filter(do_list(get_pref('search_options_'.$this->event)));
+        $this->search_method = array_intersect($this->search_method, array_keys($this->methods));
         return $this->search_method;
     }
 
@@ -335,6 +334,6 @@ EOJS
     {
         assert_string($this->event);
         assert_array($this->search_method);
-        set_pref('search_options_'.$this->event, serialize($this->search_method), $this->event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+        set_pref('search_options_'.$this->event, join(', ', $this->search_method), $this->event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
     }
 }
