@@ -55,7 +55,7 @@ class Filter
     /**
      * The filter's in-use search method(s).
      *
-     * @var string|array
+     * @var string[]
      */
 
     protected $search_method;
@@ -87,10 +87,10 @@ class Filter
     /**
      * General constructor for searches.
      *
-     * @param string $event   The admin-side event to which this search relates
-     * @param string $methods Available search methods
-     * @param string $crit    Criteria to be used in filter. If omitted, uses GET/POST value
-     * @param string $method  Search method(s) to filter by. If omitted, uses GET/POST value or last-used method
+     * @param string    $event      The admin-side event to which this search relates
+     * @param string    $methods    Available search methods
+     * @param string    $crit       Criteria to be used in filter. If omitted, uses GET/POST value
+     * @param string[]  $method     Search method(s) to filter by. If omitted, uses GET/POST value or last-used method
      */
 
     public function __construct($event, $methods, $crit = null, $method = null)
@@ -105,14 +105,7 @@ class Filter
             $this->crit = gps('crit');
         }
 
-        if ($method === null) {
-            $this->search_method = gps('search_method');
-
-            if ($this->search_method === '') {
-                $this->search_method = unserialize(get_pref('search_options_'.$event));
-            }
-        }
-
+        $this->setSearchMethod($method);
         $this->verbatim = (bool) preg_match('/^"(.*)"$/', $this->crit, $m);
         $this->crit_escaped = ($this->verbatim) ? doSlash($m[1]) : doLike($this->crit);
     }
@@ -185,10 +178,6 @@ class Filter
 
             $search_criteria = array();
 
-            if (!is_array($this->search_method)) {
-                $this->search_method = do_list($this->search_method);
-            }
-
             foreach ($this->search_method as $selected_method) {
                 if (array_key_exists($selected_method, $this->methods)) {
                     $search_criteria[] = join(' or ', $this->methods[$selected_method]->getCriteria($this->crit_escaped, $this->verbatim));
@@ -201,15 +190,15 @@ class Filter
 
                 if (is_array($this->search_method)) {
                     $out['search_method'] = join(',', $this->search_method);
-                    set_pref('search_options_'.$this->event, serialize($this->search_method), $this->event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+                    $this->saveDefaultSearchMethod();
                 }
             } else {
                 $out['crit'] = '';
-                $out['search_method'] = get_pref('search_options_'.$this->event);
+                $out['search_method'] = join(',', $this->loadDefaultSearchMethod());
             }
         } else {
             $out['crit'] = '';
-            $out['search_method'] = get_pref('search_options_'.$this->event);
+            $out['search_method'] =  join(',', $this->loadDefaultSearchMethod());
         }
 
         $out['criteria'] .= callback_event('admin_criteria', $this->event.'_list', 0, $out['criteria']);
@@ -306,5 +295,46 @@ EOJS
         }
 
         return $out;
+    }
+
+    /**
+     * Search method(s) to filter by. If omitted, uses GET/POST value or last-used method.
+     * 
+     * @param string[]|string   $method  The method key(s) as either an array of strings or a comma-separated list.
+     */
+    public function setSearchMethod($method = null)
+    {
+        $this->search_method = empty($method) ? gps('search_method'): $method;
+
+        if ($this->search_method === '') {
+            $this->loadDefaultSearchMethod($this->event);
+        }
+        // Normalise to an array of trimmed strings.
+        $this->search_method = do_list(join(',', (array)$this->search_method));
+    }
+
+    /**
+     * Load default search method from a private preference.
+     * 
+     * @return  string[]    The default search method key(s).
+     */
+    public function loadDefaultSearchMethod()
+    {
+        assert_string($this->event);
+        $this->search_method = unserialize(get_pref('search_options_'.$this->event));
+        if (!is_array($this->search_method)) {
+            $this->search_method = array();
+        }
+        return $this->search_method;
+    }
+
+    /**
+     * Save default search method to a private preference.
+     */
+    public function saveDefaultSearchMethod()
+    {
+        assert_string($this->event);
+        assert_array($this->search_method);
+        set_pref('search_options_'.$this->event, serialize($this->search_method), $this->event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
     }
 }
