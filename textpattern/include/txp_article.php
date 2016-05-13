@@ -612,7 +612,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Status' region.
         'status' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => 'div.status',
+            'selector' => '#txp-container-status',
             'cb'       => 'article_partial_status',
         ),
         // 'Section' region.
@@ -683,14 +683,14 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         ),
         // 'Article image' section.
         'image' => array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => '#txp-image-group',
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => array('#txp-image-group .txp-container', '.txp-container'),
             'cb'       => 'article_partial_image',
         ),
         // 'Custom fields' section.
         'custom_fields' => array(
-            'mode'     => PARTIAL_STATIC,
-            'selector' => '#txp-custom-field-group',
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => array('#txp-custom-field-group-content .txp-container', '.txp-container'),
             'cb'       => 'article_partial_custom_fields',
         ),
         // 'Text formatting help' section.
@@ -702,7 +702,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Recent articles' values.
         'recent_articles' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => array('#txp-recent-group-content .recent', '.recent'),
+            'selector' => array('#txp-recent-group-content .txp-container', '.txp-container'),
             'cb'       => 'article_partial_recent_articles',
         ),
     );
@@ -1185,10 +1185,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo wrapRegion('txp-comments-group', $partials['comments']['html'], 'txp-comments-group-content', 'comment_settings', 'article_comments');
 
         // 'Article image' collapsible section.
-        echo $partials['image']['html'];
+        echo wrapRegion('txp-image-group', $partials['image']['html'], 'txp-image-group-content', 'article_image', 'article_image');
 
         // 'Custom fields' collapsible section.
-        echo $partials['custom_fields']['html'];
+        echo wrapRegion('txp-custom-field-group', $partials['custom_fields']['html'], 'txp-custom-field-group-content', 'custom', 'article_custom_field');
 
         // 'Advanced options' collapsible section.
 
@@ -1751,7 +1751,7 @@ function article_partial_image($rs)
         array('class' => 'txp-form-field article-image')
     );
 
-    return wrapRegion('txp-image-group', pluggable_ui('article_ui', 'article_image', $default, $rs), 'txp-image-group-content', 'article_image', 'article_image');
+    return tag(pluggable_ui('article_ui', 'article_image', $default, $rs), 'div', array('class' => 'txp-container'));
 }
 
 /**
@@ -1773,7 +1773,7 @@ function article_partial_custom_fields($rs)
         $cf .= article_partial_custom_field($rs, "custom_field_{$k}");
     }
 
-    return wrapRegion('txp-custom-field-group', pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'txp-custom-field-group-content', 'custom', 'article_custom_field');
+    return tag(pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'div', array('class' => 'txp-container'));
 }
 
 /**
@@ -1807,7 +1807,7 @@ function article_partial_recent_articles($rs)
         $ra .= '</ol>';
     }
 
-    return pluggable_ui('article_ui', 'recent_articles', $ra, $rs);
+    return tag(pluggable_ui('article_ui', 'recent_articles', $ra, $rs), 'div', array('class' => 'txp-container'));
 }
 
 /**
@@ -1972,7 +1972,7 @@ function article_partial_article_nav($rs)
 
 function article_partial_status($rs)
 {
-    return pluggable_ui('article_ui', 'status', status_display($rs['Status']), $rs);
+    return n.tag(pluggable_ui('article_ui', 'status', status_display($rs['Status']), $rs), 'div', array('id' => 'txp-container-status'));
 }
 
 /**
@@ -2078,8 +2078,7 @@ function article_partial_comments($rs)
                 'id'    => 'write-comments',
             ));
         } else {
-            $invite = n.tag_start('div', array('id' => 'write-comments')).
-                n.tag(
+            $invite = n.tag(
                     onoffRadio('Annotate', $Annotate),
                     'div', array('class' => 'txp-form-field comment-annotate')
                 ).
@@ -2089,11 +2088,12 @@ function article_partial_comments($rs)
                     'comment_invitation',
                     array('', 'instructions_comment_invitation'),
                     array('class' => 'txp-form-field comment-invite')
-                ).
-                n.tag_end('div');
+                );
         }
 
-        return pluggable_ui('article_ui', 'annotate_invite', $invite, $rs);
+        return n.tag_start('div', array('id' => 'write-comments')).
+            pluggable_ui('article_ui', 'annotate_invite', $invite, $rs).
+            n.tag_end('div');
     }
 }
 
@@ -2112,7 +2112,6 @@ function article_partial_posted($rs)
     extract($rs);
 
     $out =
-        n.tag_start('div', array('id' => 'publish-datetime-group')).
         inputLabel(
             'year',
             tsi('year', '%Y', $sPosted, '', 'year').
@@ -2139,10 +2138,11 @@ function article_partial_posted($rs)
             checkbox('reset_time', '1', $reset_time, '', 'reset_time').
             n.tag(gTxt('reset_time'), 'label', array('for' => 'reset_time')),
             'div', array('class' => 'reset-time')
-        ).
-        n.tag_end('div');
+        );
 
-    return pluggable_ui('article_ui', 'timestamp', $out, $rs);
+    return n.tag_start('div', array('id' => 'publish-datetime-group')).
+        pluggable_ui('article_ui', 'timestamp', $out, $rs).
+        n.tag_end('div');
 }
 
 /**
@@ -2160,7 +2160,6 @@ function article_partial_expires($rs)
     extract($rs);
 
     $out =
-        n.tag_start('div', array('id' => 'expires-datetime-group')).
         inputLabel(
             'exp_year',
             tsi('exp_year', '%Y', $sExpires, '', 'exp_year').
@@ -2183,10 +2182,11 @@ function article_partial_expires($rs)
             array('', 'instructions_expire_time'),
             array('class' => 'txp-form-field time expires')
         ).
-        hInput('sExpires', $sExpires).
-        n.tag_end('div');
+        hInput('sExpires', $sExpires);
 
-    return pluggable_ui('article_ui', 'expires', $out, $rs);
+    return n.tag_start('div', array('id' => 'expires-datetime-group')).
+        pluggable_ui('article_ui', 'expires', $out, $rs).
+        n.tag_end('div');
 }
 
 /**

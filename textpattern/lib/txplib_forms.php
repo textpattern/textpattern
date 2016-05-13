@@ -115,7 +115,7 @@ function onoffRadio($field, $checked = '', $tabindex = 0, $id = '')
  *
  * @param  string $name        The field
  * @param  array  $array       The values as an array array( 'value' => 'label' )
- * @param  string $value       The selected option. Takes a value from $value
+ * @param  mixed  $value       The selected option(s). If an array, renders the select multiple
  * @param  bool   $blank_first If TRUE, prepends an empty option to the list
  * @param  mixed  $onchange    If TRUE submits the form when an option is changed. If a string, inserts it to the select tag
  * @param  string $select_id   The HTML id
@@ -134,10 +134,16 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
     $out = array();
 
     $selected = false;
-    $value = (string) $value;
+    $multiple = is_array($value) ? ' multiple="multiple"' : '';
+    
+    if ($multiple) {
+        $name .= '[]';
+    } else {
+        $value = (string) $value;
+    }
 
     foreach ($array as $avalue => $alabel) {
-        if ($value === (string) $avalue) {
+        if (!$multiple && $value === (string) $avalue || $multiple && in_array($avalue, $value)) {
             $sel = ' selected="selected"';
             $selected = true;
         } else {
@@ -163,7 +169,8 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
         $atts .= ' '.trim($onchange);
     }
 
-    return n.'<select'.$atts.'>'.n.join(n, $out).n.'</select>'; // TODO: use jQuery UI selectmenu?
+    return n.'<select'.$atts.$multiple.'>'.n.join(n, $out).n.'</select>'.n
+        .($multiple ? hInput($name, '').n : ''); // TODO: use jQuery UI selectmenu?
 }
 
 /**

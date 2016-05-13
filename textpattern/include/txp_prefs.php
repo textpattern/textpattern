@@ -120,6 +120,10 @@ function prefs_save()
         if (!isset($post[$name]) || !has_privs('prefs.'.$event)) {
             continue;
         }
+        
+        if (is_array($post[$name])) {
+            $post[$name] = implode(',', array_diff($post[$name], array('')));
+        }
 
         if ($name === 'logging' && $post[$name] === 'none' && $post[$name] !== $val) {
             safe_truncate('txp_log');
