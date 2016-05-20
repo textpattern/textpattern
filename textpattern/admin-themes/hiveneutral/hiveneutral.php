@@ -229,7 +229,7 @@ EOS;
         return array(
             'title'       => 'Hive (Flat Neutral)',
             'description' => 'Textpattern Hive (Flat Neutral) admin theme',
-            'version'     => '4.6.0',
+            'version'     => '4.6.0-beta',
             'author'      => 'Phil Wareham',
             'author_uri'  => 'https://github.com/philwareham',
             'help'        => 'https://github.com/philwareham/textpattern-hive-admin-theme',
