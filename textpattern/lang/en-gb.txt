@@ -1,4 +1,4 @@
-#@version 4.5.7;1455784556
+#@version 4.6.0-beta;1460968809
 #@admin
 account_activation => Please activate your account
 account_activation_confirmation => Please use the link below to activate your account and set up a password.
@@ -103,6 +103,7 @@ date_settings => Date and time
 excerpt_markup => Excerpt markup
 expires => Expires
 invalid_postdate => Invalid date or time.
+linktext => linktext(title)
 meta => Meta
 no_articles_recorded => No articles recorded.
 or_publish_at => …or publish at
@@ -598,7 +599,6 @@ edit_link => Edit link
 edit_links => Links
 linkcategory => Link categories
 links_deleted => Link(s) deleted: <strong>{list}</strong>.
-linktext => linktext
 link_created => Link <strong>{name}</strong> created.
 link_deleted => Link <strong>{name}</strong> deleted.
 link_empty => Links should not be empty.
@@ -945,7 +945,7 @@ newer => Newer
 next => Next
 no => No
 none => None
-nopopup => nopopup
+nopopup => current window
 no_comments => There are currently no comments on this article.
 no_search_matches => Sorry, no results found matching your search request
 numeric_list => Numeric list
@@ -960,7 +960,7 @@ permanent_link => Permanent link to this article
 permlink => Permanent link
 plugin_load_error => A problem occurred while loading the plugin:
 plugin_load_error_above => The above errors were caused by the plugin:
-popup => popup
+popup => popup window
 post => Post
 posted => Posted
 posted_by => Posted by
