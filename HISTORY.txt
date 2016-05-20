@@ -1,4 +1,4 @@
-Changes in 4.6.0 (Upcoming) TODO
+Changes in 4.6.0 (Upcoming)
 
 * Textile v3.5.
 * Improved RTL language support.
