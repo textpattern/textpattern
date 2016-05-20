@@ -1,6 +1,6 @@
 /**
  * Write/edit panel: Expires fields.
  */
-#write-expires {
+.expires {
   display: none !important;
 }

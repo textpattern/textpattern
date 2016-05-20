@@ -88,8 +88,8 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = hed(htmlspecialchars($GLOBALS["prefs"]["sitename"]), 1);
 
         if ($txp_user) {
-            $out[] = '<button class="txp-nav-toggle collapsed" type="button" data-toggle="collapse" data-target=".txp-nav"><span class="txp-accessibility">'.gTxt('navigation').'</span></button>';
-            $out[] = '<nav class="txp-nav" aria-label="'.gTxt('navigation').'">';
+            $out[] = '<button class="txp-nav-toggle collapsed" type="button" data-toggle="collapse" data-target="#txp-nav" aria-expanded="false" aria-controls="txp-nav"><span class="txp-accessibility">'.gTxt('navigation').'</span></button>';
+            $out[] = '<nav class="txp-nav" id="txp-nav" aria-label="'.gTxt('navigation').'">';
             $out[] = '<ul class="data-dropdown">';
             $txpnavdrop = 0;
 
@@ -229,10 +229,10 @@ EOS;
         return array(
             'title'       => 'Hive',
             'description' => 'Textpattern Hive admin theme (Classic Yellow)',
-            'version'     => $prefs['version'],
-            'author'      => 'Team Textpattern',
-            'author_uri'  => 'http://textpattern.com/',
-            'help'        => 'https://github.com/philwareham/txp-hive-admin-theme',
+            'version'     => '4.6.0',
+            'author'      => 'Phil Wareham',
+            'author_uri'  => 'https://github.com/philwareham',
+            'help'        => 'https://github.com/philwareham/textpattern-hive-admin-theme',
         );
     }
 }
