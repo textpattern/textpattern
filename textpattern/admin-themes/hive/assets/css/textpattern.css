@@ -2845,6 +2845,7 @@ hr {
   display: inline-block;
   width: 85%;
   padding: 0.30769230769231em;
+  cursor: pointer;
   vertical-align: text-top;
 }
 
