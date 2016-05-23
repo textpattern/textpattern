@@ -1393,6 +1393,10 @@ function pageby_form($event, $val, $step = null)
         $step = $event.'_change_pageby';
     }
 
+    if (empty($val)) {
+        $val = $vals[0];
+    }
+
     $out = array();
 
     foreach ($vals as $qty) {
