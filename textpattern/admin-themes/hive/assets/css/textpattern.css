@@ -2837,10 +2837,6 @@ hr {
   z-index: 100;
 }
 
-.txp-search .ui-menu-item {
-  padding: 0 0 0 0.75em;
-}
-
 .txp-search .txp-dropdown input {
   vertical-align: -0.38461538461538em;
 }
@@ -2848,8 +2844,7 @@ hr {
 .txp-search .txp-dropdown label {
   display: inline-block;
   width: 85%;
-  padding: 0.30769230769231em 0.5em;
-  cursor: pointer;
+  padding: 0.30769230769231em;
   vertical-align: text-top;
 }
 

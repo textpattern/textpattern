@@ -248,8 +248,10 @@ class Filter
         foreach ($methods as $key => $value) {
             $name = ($key === 'all') ? 'select_all' : 'search_method[]';
             $method_list[] = tag(
-                checkbox($name, $key, ($set_all || in_array($key, $selected)), 0, 'search-'.$key.$id_counter).
-                n.tag($value, 'label', array('for' => 'search-'.$key.$id_counter)).n,
+                n.tag(
+                    checkbox($name, $key, ($set_all || in_array($key, $selected)), 0, 'search-'.$key.$id_counter).
+                    n.tag($value, 'label', array('for' => 'search-'.$key.$id_counter)).n,
+                    'div').n,
                 'li'
             );
         }
@@ -299,7 +301,7 @@ EOJS
 
     /**
      * Search method(s) to filter by. If omitted, uses GET/POST value or last-used method.
-     * 
+     *
      * @param string[]|string   $method  The method key(s) as either an array of strings or a comma-separated list.
      */
     public function setSearchMethod($method = null)
@@ -316,7 +318,7 @@ EOJS
 
     /**
      * Load default search method from a private preference.
-     * 
+     *
      * @return  string[]    The default search method key(s).
      */
     public function loadDefaultSearchMethod()
