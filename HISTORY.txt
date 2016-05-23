@@ -6,9 +6,10 @@ Changes in 4.6.0 (Upcoming)
 * Requires PHP 5.3.3 or newer. Compatible with PHP 7 and MySQL 5.7 (thanks Ruud van Melick).
 * New tags: <txp:authors />, <txp:meta_description />, <txp:if_description> and <txp:if_yield>.
 * No more plaintext passwords sent: password reset requests are handled directly on the server.
-* Twenty-minute validity for password reset requests by default. Configurable in config.php.
+* One-week validity for new account activation requests by default. Configurable in config.php (see ACTIVATION_EXPIRY_HOURS).
+* Ninety-minute validity for password reset requests by default. Configurable in config.php (see RESET_EXPIRY_MINUTES).
 * Stronger password hashes and strength meter implemented (zxcvbn).
-* Faster due to cache-friendly public side database queries and reduction of admin-side queries (thanks Ruud van Melick).
+* Faster due to cache-friendly public side database queries, parser improvements and reduction of admin-side queries (thanks Ruud van Melick and etc).
 * Added: Default publishing status preference.
 * Added: Support for additional text markup languages.
 * Added: Privilege to change text markup language in 'Write' panel.
@@ -39,14 +40,14 @@ Changes in 4.6.0 (Upcoming)
 * Changed: Deprecated 'breakclass' attribute for <txp:comments /> and <txp:image_info />.
 * Changed: Removed Form (article) Preview facility.
 * Changed: Removed empty 'About' section from new installs.
-* Changed: Increase 'page' and 'css' sizes in txp_section table.
+* Changed: Increased 'page' and 'css' sizes in txp_section table.
 * Changed: 'Prevent widowed words in article titles' preference defaults to 'No' in new installs.
 * Changed: Detailed debug trace log.
 * Changed: Default charset is now utf8mb4: supports a wider range of characters, including emoji.
 * Developer: getNextPref() now returns array members 'next' and 'prev' with article data, no longer returns array members 'next_id', 'next_title', 'next_utitle', 'next_posted', 'prev_id', 'prev_title', 'prev_utitle', 'prev_posted'
 * Developer: getNeighbour() returns 'false' if no matching neighbour article exists.
-* Developer: Use 'mysqli' extension for DB access, lose dependency on 'mysql' extension.
-* Developer: Use the TXP 'now()' function instead of the SQL 'NOW()' function to create cache-friendly, faster SELECT queries.
+* Developer: Uses 'mysqli' extension for DB access, lose dependency on 'mysql' extension.
+* Developer: Uses the TXP 'now()' function instead of the SQL 'NOW()' function to create cache-friendly, faster SELECT queries.
 * Developer: Added jQuery UI library to admin side.
 * Developer: Added Prism code highlighting for <code> and <pre><code> to admin side. The following languages are supported (when specified via classnames on the <code> tag, i.e. using 'class="language-xxx"): 'language-markup', 'language-css', 'language-clike', 'language-javascript', 'language-json', 'language-php', 'language-markdown', 'language-textile'. Optional line numbers are also supported when code highlighting, by adding an additional classname of 'line-numbers' to the parent <pre> tag.
 * Developer: Added DocBlock documentation comments throughout the source code.
