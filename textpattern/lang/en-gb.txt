@@ -1,4 +1,4 @@
-#@version 4.6.0-beta;1460968809
+#@version 4.6.0-beta;1464085333
 #@admin
 account_activation => Please activate your account
 account_activation_confirmation => Please use the link below to activate your account and set up a password.
@@ -280,6 +280,7 @@ ru-ru => Русский
 salutation => Dear {name},
 save_new => Save new
 search_all => Search all
+search_options => Search options
 showing_search_results => Showing {from} to {to} of {total}
 site_slogan => Site slogan
 sk-sk => Slovenčina

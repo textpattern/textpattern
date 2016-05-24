@@ -307,6 +307,7 @@ $en_gb_lang = array(
         'salutation' => 'Dear {name},',
         'save_new' => 'Save new',
         'search_all' => 'Search all',
+        'search_options' => 'Search options',
         'showing_search_results' => 'Showing {from} to {to} of {total}',
         'site_slogan' => 'Site slogan',
         'sk-sk' => 'Slovenčina',
@@ -1350,4 +1351,4 @@ $en_gb_lang = array(
         'wraptag' => 'Wrap tag',
     ),
 );
-$lastmod = gmdate('Y-m-d H:m:s', 1460968809);
+$lastmod = gmdate('Y-m-d H:m:s', 1464085333);
