@@ -5,10 +5,10 @@
  * http://textpattern.com
  *
  * XML-RPC Server for Textpattern 4.0.x
- * http://txp.kusor.com/rpc-api
+ * http://web.archive.org/web/20150119065246/http://txp.kusor.com/rpc-api
  *
  * Copyright (C) 2005-2006, 2016 The Textpattern Development Team
- * Author: Pedro Palazón - http://kusor.com
+ * Author: Pedro Palazón
  *
  * This file is part of Textpattern.
  *
