@@ -272,4 +272,8 @@ safe_alter('txp_file',    "MODIFY category  VARCHAR(64) NOT NULL DEFAULT ''");
 safe_alter('txp_image',   "MODIFY category  VARCHAR(64) NOT NULL DEFAULT ''");
 
 // Farewell Classic and Remora themes.
-set_pref('theme_name', 'hive');
+$availableThemes = \Textpattern\Admin\Theme::names();
+
+if (!in_array(get_pref('theme_name'), $availableThemes)) {
+    set_pref('theme_name', 'hive');
+}
