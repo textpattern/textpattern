@@ -1692,7 +1692,7 @@ textpattern.Route.add('article', function ()
         }
     });
 
-    $('.txp-clone').click(function (e)
+    $('.txp-actions').on('click', '.txp-clone', function (e)
     {
         e.preventDefault();
         form.append('<input type="hidden" name="copy" value="1" />'+
