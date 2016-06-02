@@ -19,6 +19,7 @@ Changes in 4.6.0 (Upcoming)
 * Changed: The /textpattern/theme/ directory has been renamed to /textpattern/admin-themes/ for stronger differentiation between this and the public-side /themes/ directory planned for Textpattern 4.7. Additionally prevents breakage of preferences panel caused by old, incompatible themes residing in the previously titled admin theme directory during upgrade.
 * Changed: <txp:article_custom /> accepts 'exclude' attribute to exclude articles by a comma-separated id list.
 * Changed: <txp:author /> accepts 'escape' and 'format' attributes.
+* Changed: <txp:breadcrumbs />: Removed deprecated attribute 'sep'.
 * Changed: <txp:category_list /> accepts 'html_id', 'limit' and 'offset' attributes.
 * Changed: <txp:comments_form/>: Deprecated attributes 'isize', 'msgcols', 'msgrows', 'msgstyle', 'previewlabel', 'submitlabel', 'rememberlabel', and 'forgetlabel'.
 * Changed: <txp:comments/>, <txp:comments_form/>, <txp:comments_preview/> and <txp:popup_comments/> can be used as container tags.
