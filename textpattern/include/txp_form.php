@@ -390,8 +390,7 @@ function form_edit($message = '')
                 'form_code',
                 array('', 'instructions_form_code'),
                 array('class' => 'txp-form-field')
-            ).
-            (empty($type) ? graf(gTxt('only_articles_can_be_previewed')) : '')
+            )
             , '', '', 'post', '', '', 'form_form'),
         'div', array(
             'class' => 'txp-layout-4col-cell-1-2-3',
