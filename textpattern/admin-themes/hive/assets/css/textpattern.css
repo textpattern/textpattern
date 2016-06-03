@@ -1819,8 +1819,19 @@ button.destroy {
   box-shadow: none;
 }
 
+button.destroy:hover, button.destroy:active {
+  background: none;
+}
+
 button.destroy:focus {
   outline: thin solid #0066ff;
+}
+
+button.destroy:hover .ui-icon,
+button.destroy:active .ui-icon,
+button.destroy:focus .ui-icon {
+  -webkit-filter: brightness(0.66);
+          filter: brightness(0.66);
 }
 
 /**
@@ -3904,8 +3915,7 @@ a.ui-state-default:focus {
 /**
  * Default state icons.
  */
-.ui-state-default .ui-icon,
-.destroy .ui-icon {
+.ui-state-default .ui-icon {
   background-image: url("../img/ui-icon-sprite-555555.svg");
 }
 
@@ -3916,10 +3926,7 @@ a.ui-state-default:focus {
 .ui-widget-header .ui-icon,
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon,
-.ui-state-active .ui-icon,
-.destroy:hover .ui-icon,
-.destroy:active .ui-icon,
-.destroy:focus .ui-icon {
+.ui-state-active .ui-icon {
   background-image: url("../img/ui-icon-sprite-333333.svg");
 }
 
@@ -3964,7 +3971,8 @@ a.ui-state-default:focus {
  */
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon,
-.error .ui-icon {
+.error .ui-icon,
+.destroy .ui-icon {
   background-image: url("../img/ui-icon-sprite-error.svg");
 }
 
