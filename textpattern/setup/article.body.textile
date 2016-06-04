@@ -16,4 +16,4 @@ There are a host of "Frequently Asked Questions":http://textpattern.com/faq/ to 
 
 "Textpattern tags":http://textpattern.com/textpattern-tag-reference, their attributes and values are explained and sampled within the "Textpattern User Documentation":http://textpattern.net/, where you will also find valuable tips and tutorials.
 
-If all else fails, there's a whole crowd of friendly, helpful people over at the "Textpattern support forum":http://forum.textpattern.com/. Come and pay a visit!
+There's also a crowd of friendly, helpful people over at the "Textpattern support forum":http://forum.textpattern.com/. Come and pay a visit!
