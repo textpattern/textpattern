@@ -3878,8 +3878,6 @@ a.ui-state-default:focus {
 
 /**
  * Default state icons.
- *
- * TODO: Use `filter: brightness()` in future, instead of dedicated image.
  */
 .ui-state-default .ui-icon {
   background-image: url("../img/ui-icon-sprite-555555.svg");
@@ -3887,8 +3885,6 @@ a.ui-state-default:focus {
 
 /**
  * Weighted content icons and interaction state icons.
- *
- * TODO: See `filter: brightness()` above.
  */
 .ui-widget-content .ui-icon,
 .ui-widget-header .ui-icon,

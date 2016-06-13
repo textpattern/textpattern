@@ -107,9 +107,3 @@ $txpcfg['client_flags'] = 0;
  */
 
 // define('ihu', 'http://static.example.com/');
-
-/*
- * Optional, advanced: custom CSS rules for admin-side themes
- */
-
-// define('admin_custom_css', true);
