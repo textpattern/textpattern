@@ -102,14 +102,20 @@ $txpcfg['dbcharset'] = 'utf8';
 $txpcfg['client_flags'] = 0;
 
 /*
- * Optional, advanced: http address of the site serving images
+ * Optional, advanced: http address of the site serving images.
  * see http://forum.textpattern.com/viewtopic.php?id=34493
  */
 
 // define('ihu', 'http://static.example.com/');
 
 /*
- * Optional, advanced: custom CSS rules for admin-side themes
+ * Optional, advanced: custom CSS rules for admin-side themes.
  */
 
-// define('admin_custom_css', true);
+// define('admin_custom_css', 'your_custom_rules.css');
+
+/*
+ * Optional, advanced: custom JavaScript rules for admin-side themes.
+ */
+
+// define('admin_custom_js', 'your_custom_javascript.js');
