@@ -34,7 +34,7 @@ class hive_theme extends \Textpattern\Admin\Theme
 
         $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.min.css">';
 
-        // Custom CSS (see README.textile for usage instructions).
+        // Custom CSS (see theme README for usage instructions).
         if (defined('admin_custom_css')) {
             $custom_css = admin_custom_css;
         } else {
@@ -54,7 +54,7 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<meta name="apple-mobile-web-app-title" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
 
-        // Custom JavaScript (see README.textile for usage instructions).
+        // Custom JavaScript (see theme README for usage instructions).
         if (defined('admin_custom_js')) {
             $custom_js = admin_custom_js;
         } else {
