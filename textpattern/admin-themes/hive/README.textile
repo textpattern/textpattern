@@ -8,46 +8,12 @@ h2. Installation instructions
 # Log in to your Textpattern admin area. Navigate to admin -> preferences -> admin.
 # Select 'Hive (Classic Yellow)' from the 'Admin-side theme' dropdown list. Save the preferences.
 
-h2. Custom CSS toggles
+h2. Optional custom CSS file toggle for advanced users
 
-Options are provided to hide certain sections/fields/features from displaying in the admin pages. To use them simply add any of the rules below to your textpattern -> config.php file, before the closing @?>@ line.
+We provide an optional user-defined custom CSS file for customization of the admin-side theme, this is located at: assets -> css -> custom.css. Enable this file by uncommenting (or adding) the following line within your Textpattern @config.php@ file (before the closing @?>@ line):
 
-*Hide Textpattern branding:*
+bc. define('admin_custom_css', true);
 
-@define('hive_theme_hide_branding', true);@
+You can then uncomment any of the pre-made rules within the CSS file - or add your own rules - to customize the admin-side theme to your requirement.
 
-*Hide page headings:*
-
-@define('hive_theme_hide_headings', true);@
-
-*Hide preview tabs group (write/edit page):*
-
-@define('hive_theme_hide_preview_tabs_group', true);@
-
-*Hide text filter group (write/edit page):*
-
-@define('hive_theme_hide_textfilter_group', true);@
-
-*Hide advanced group (write/edit page):*
-
-@define('hive_theme_hide_advanced_group', true);@
-
-*Hide recent articles group (write/edit page):*
-
-@define('hive_theme_hide_recent_articles_group', true);@
-
-*Hide keywords field (write/edit page):*
-
-@define('hive_theme_hide_keywords_field', true);@
-
-*Hide comments group (write/edit page):*
-
-@define('hive_theme_hide_comments_group', true);@
-
-*Hide expires fields (write/edit page):*
-
-@define('hive_theme_hide_expires_field', true);@
-
-*Hide image caption field (image edit page):*
-
-@define('hive_theme_hide_image_caption', true);@
+*Note:* be careful not to overwrite your own custom rules when updating to a new version of Textpattern!
