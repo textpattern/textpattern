@@ -29,11 +29,20 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
     {
+        $cssPath = 'assets'.DS.'css';
+        $jsPath = 'assets'.DS.'js';
+
         $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.min.css">';
 
-        // Custom CSS toggle (see README.textile for usage instructions).
+        // Custom CSS (see README.textile for usage instructions).
         if (defined('admin_custom_css')) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/custom.css">';
+            $custom_css = admin_custom_css;
+        } else {
+            $custom_css = 'custom.css';
+        }
+
+        if (file_exists(txpath.DS.THEME.$this->name.DS.$cssPath.DS.$custom_css)) {
+            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/'.$custom_css.'">';
         }
 
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
@@ -44,6 +53,17 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
         $out[] = '<meta name="apple-mobile-web-app-capable" content="yes">';
         $out[] = '<meta name="apple-mobile-web-app-title" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
+
+        // Custom JavaScript (see README.textile for usage instructions).
+        if (defined('admin_custom_js')) {
+            $custom_js = admin_custom_js;
+        } else {
+            $custom_js = 'custom.js';
+        }
+
+        if (file_exists(txpath.DS.THEME.$this->name.DS.$jsPath.DS.$custom_js)) {
+            $out[] = '<script src="'.$this->url.'assets/js/'.$custom_js.'"></script>'.n;
+        }
 
         return join(n, $out);
     }

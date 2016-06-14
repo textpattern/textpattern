@@ -8,12 +8,18 @@ h2. Installation instructions
 # Log in to your Textpattern admin area. Navigate to admin -> preferences -> admin.
 # Select 'Hive (Flat Neutral)' from the 'Admin-side theme' dropdown list. Save the preferences.
 
-h2. Optional custom CSS file toggle for advanced users
+h2. Optional custom files for advanced users
 
-We provide an optional user-defined custom CSS file for customization of the admin-side theme, this is located at: assets -> css -> custom.css. Enable this file by uncommenting (or adding) the following line within your Textpattern @config.php@ file (before the closing @?>@ line):
+We provide an optional user-defined custom CSS and JavaScript file for customization of the admin-side theme. By default, these are located at:
 
-bc. define('admin_custom_css', true);
+* assets -> css -> custom.css
+* assets -> css -> custom.js
 
-You can then uncomment any of the pre-made rules within the CSS file - or add your own rules - to customize the admin-side theme to your requirement.
+You may use different file names by adding the following line(s) within your Textpattern @config.php@ file (before the closing @?>@ line):
+
+bc. define('admin_custom_css', 'your_custom_rules.css');
+define('admin_custom_js', 'your_custom_javascript.js');
+
+You can then use those files to customize the admin-side theme to your requirement.
 
 *Note:* be careful not to overwrite your own custom rules when updating to a new version of Textpattern!
