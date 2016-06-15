@@ -1,6 +1,6 @@
 Changes in 4.6.0 (Upcoming)
 
-* Textile v3.5.
+* Textile v3.5. Also support for adding other text filters via plugins (for example, Markdown).
 * Improved RTL language support.
 * Improved admin side UI.
 * Requires PHP 5.3.3 or newer. Compatible with PHP 7 and MySQL 5.7 (thanks Ruud van Melick).
@@ -12,7 +12,7 @@ Changes in 4.6.0 (Upcoming)
 * Faster due to cache-friendly public side database queries, parser improvements and reduction of admin-side queries (thanks Ruud van Melick and etc).
 * Added: Default publishing status preference.
 * Added: Support for additional text markup languages.
-* Added: Privilege to change text markup language in 'Write' panel.
+* Added: Support for custom CSS and JavaScript files in admin themes, for advanced users.
 * Removed: Import panel - the blog import options were obsolete (thanks Ruud van Melick).
 * Removed: Commenter IP ban feature - this method of banning is unreliable and becoming obsolete (thanks Ruud van Melick).
 * Removed: Modernizr unnecessary due to IE10 being our minimum IE browser requirement.
