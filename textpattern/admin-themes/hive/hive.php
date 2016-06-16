@@ -190,13 +190,6 @@ class hive_theme extends \Textpattern\Admin\Theme
                 $(document).ready(function ()
                 {
                     $("#messagepane").html("{$js}");
-                    $(window).resize(function ()
-                    {
-                        $("#messagepane").css({
-                            left: ($(window).width() - $("#messagepane").outerWidth()) / 2
-                        });
-                    });
-                    $(window).resize();
                 });
 EOS;
         }
