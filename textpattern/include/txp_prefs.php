@@ -424,6 +424,12 @@ function gmtoffset_select($name, $val)
 
 function is_dst($name, $val)
 {
+    global $timezone_key, $auto_dst;
+
+    if ($auto_dst) {
+        $val = (int)Txp::get('\Textpattern\Date\Timezone')->isDst(null, $timezone_key);
+    }
+
     $ui = yesnoRadio($name, $val).
     script_js(<<<EOS
         $(document).ready(function ()
