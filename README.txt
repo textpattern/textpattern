@@ -47,10 +47,12 @@ system. Textpattern is both free and open source.
 * Ensure your MySQL database user has INDEX permissions in addition to any
   permissions previously granted.
 * Replace the top-level index.php, css.php and .htaccess files, everything in
-  the /js/ directory, everything in the /rpc/ directory and everything in the
-  /textpattern/ directory (except /textpattern/config.php) with the
-  corresponding files in this distribution. Note: css.php and /rpc/ may not
-  exist if the installed version of Textpattern is prior to 4.2.0.
+  the /rpc/ directory and everything in the /textpattern/ directory (except
+  /textpattern/config.php) with the corresponding files in this distribution.
+  When uploading the textpattern folder, ensure you merge its contents with
+  your existing site to preserve any custom files in your existing installation.
+  Note: css.php and /rpc/ may not exist if the installed version of
+  Textpattern is prior to 4.2.0.
 * It is recommended that the browser cache is cleared to ensure the newer files
   are used in preference to the older files.
 * Log in to the Textpattern admin-side. The upgrade script(s) will run
