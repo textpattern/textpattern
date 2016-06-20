@@ -38,8 +38,8 @@ if ($event == 'section') {
     require_privs('section');
 
     global $all_pages, $all_styles;
-    $all_pages = safe_column("name", 'txp_page', "1 = 1");
-    $all_styles = safe_column("name", 'txp_css', "1 = 1");
+    $all_pages = safe_column("name", 'txp_page', "1 = 1 ORDER BY name");
+    $all_styles = safe_column("name", 'txp_css', "1 = 1 ORDER BY name");
 
     $available_steps = array(
         'section_change_pageby' => true,
