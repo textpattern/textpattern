@@ -99,14 +99,17 @@ function prefs_save()
     }
 
     // Forge $gmtoffset and $is_dst from $timezone_key if present.
-    if (isset($post['timezone_key'])) {
+    if (!empty($post['timezone_key'])) {
         $key = $post['timezone_key'];
         $tzd = Txp::get('\Textpattern\Date\Timezone')->getTimeZones();
 
         if (isset($tzd[$key])) {
             $prefs['timezone_key'] = $timezone_key = $key;
-            $post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
-            $post['is_dst'] = $prefs['is_dst'] = $is_dst = Txp::get('\Textpattern\Date\Timezone')->isDst(null, $key);
+
+            if ($auto_dst) {
+                $post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
+                $post['is_dst'] = $prefs['is_dst'] = $is_dst = (int)Txp::get('\Textpattern\Date\Timezone')->isDst(null, $key);
+            }
         }
     }
 
