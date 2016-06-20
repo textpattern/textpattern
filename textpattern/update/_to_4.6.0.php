@@ -43,6 +43,7 @@ safe_update('txp_prefs', "type = '".PREF_CORE."'", "type = '".PREF_PLUGIN."' AND
 safe_update('txp_prefs', "event = 'site'", "name IN ('sitename', 'siteurl', 'site_slogan', 'production_status', 'gmtoffset', 'auto_dst', 'is_dst', 'dateformat', 'archive_dateformat', 'permlink_mode', 'doctype', 'logging', 'use_comments', 'expire_logs_after')");
 
 // 4) Reorder existing prefs into a more logical progression.
+safe_update('txp_prefs', "position = '110'", "name = 'gmtoffset'");
 safe_update('txp_prefs', "position = '230'", "name = 'expire_logs_after'");
 safe_update('txp_prefs', "position = '340'", "name = 'max_url_len'");
 safe_update('txp_prefs', "position = '160'", "name = 'comments_sendmail'");
