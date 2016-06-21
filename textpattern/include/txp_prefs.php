@@ -434,18 +434,26 @@ function is_dst($name, $val)
     script_js(<<<EOS
         $(document).ready(function ()
         {
-            var radio = $("#prefs-is_dst input");
+            var radio = $("#prefs-is_dst");
+            var radioInput = radio.find('input');
+            var radioLabel = radio.find('.txp-form-field-label');
+            var dstOn = $("#auto_dst-1");
+            var dstOff = $("#auto_dst-0");
+
             if (radio) {
-                if ($("#auto_dst-1").prop("checked")) {
-                    radio.prop("disabled", "disabled");
+                if (dstOn.prop("checked")) {
+                    radioInput.prop("disabled", "disabled");
+                    radioLabel.addClass('disabled');
                 }
 
-                $("#auto_dst-0").click(function () {
-                    radio.removeProp("disabled");
+                dstOff.click(function () {
+                    radioInput.removeProp("disabled");
+                    radioLabel.removeClass('disabled');
                 });
 
-                $("#auto_dst-1").click(function () {
-                    radio.prop("disabled", "disabled");
+                dstOn.click(function () {
+                    radioInput.prop("disabled", "disabled");
+                    radioLabel.addClass('disabled');
                 });
             }
         });
