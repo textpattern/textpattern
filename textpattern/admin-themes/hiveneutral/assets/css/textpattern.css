@@ -2942,11 +2942,19 @@ hr {
   margin: 0.5em 1em 0 0;
 }
 
+.txp-actions a:last-child {
+  margin: 0.5em 0 0 0;
+}
+
 /**
  * Swap margin positions in RTL languages.
  */
 [dir="rtl"] .txp-actions a {
   margin: 0.5em 0 0 1em;
+}
+
+[dir="rtl"] .txp-actions a:last-child {
+  margin: 0.5em 0 0 0;
 }
 
 /**
