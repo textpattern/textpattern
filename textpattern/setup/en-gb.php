@@ -991,6 +991,7 @@ $en_gb_lang = array(
         'no_comments' => 'There are currently no comments on this article.',
         'no_search_matches' => 'Sorry, no results found matching your search request',
         'numeric_list' => 'Numeric list',
+        'of' => 'of',
         'off' => 'Off',
         'older' => 'Older',
         'on' => 'On',
@@ -1351,4 +1352,5 @@ $en_gb_lang = array(
         'wraptag' => 'Wrap tag',
     ),
 );
-$lastmod = gmdate('Y-m-d H:m:s', 1464085333);
+$lastmod = gmdate('Y-m-d H:m:s', 1466583229);
+

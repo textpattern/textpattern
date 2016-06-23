@@ -1,4 +1,4 @@
-#@version 4.6.0-beta;1464085333
+#@version 4.6.0-beta;1466583229
 #@admin
 account_activation => Please activate your account
 account_activation_confirmation => Please use the link below to activate your account and set up a password.
@@ -950,6 +950,7 @@ nopopup => current window
 no_comments => There are currently no comments on this article.
 no_search_matches => Sorry, no results found matching your search request
 numeric_list => Numeric list
+of => of
 off => Off
 older => Older
 on => On
