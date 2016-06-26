@@ -29,5 +29,7 @@ ob_end_clean();
 if (!defined('txpath')) {
     define("txpath", realpath(dirname(__FILE__).'/../../../../textpattern'));
 }
+define("is_multisite", true);
+define("multisite_root_path", dirname(dirname(dirname(__FILE__))));
 
 include txpath.'/setup/index.php';
