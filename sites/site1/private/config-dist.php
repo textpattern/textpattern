@@ -108,6 +108,17 @@ $txpcfg['client_flags'] = 0;
 
 // define('ihu', 'http://static.example.com/');
 
+/*
+ * Multi-Site setup: 
+ *
+ * Set txpath for shared txp and vendor directories
+ * see https://github.com/textpattern/textpattern/blob/master/sites/README.txt#L160
+ */
+
+if (!defined('txpath')) {
+  define('txpath', $txpcfg['txpath']);
+}
+
 
 /**
  * Multi-Site setup: 
