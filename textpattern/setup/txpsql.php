@@ -387,10 +387,12 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
 $blog_uid  = md5(uniqid(rand(), true));
 $gmtoffset = sprintf("%+d", gmmktime(0, 0, 0) - mktime(0, 0, 0));
 
+$path_to_public_site = (isset($txpcfg['multisite_root_path'])) ? $txpcfg['multisite_root_path'].DS.'public' : dirname(txpath);
+
 $prefs = array(
     'admin' => array(
         array(0,  20, 'text_input'      , 'img_dir'                    , 'images'),
-        array(0,  40, 'text_input'      , 'file_base_path'             , dirname(txpath).DS.'files'),
+        array(0,  40, 'text_input'      , 'file_base_path'             , $path_to_public_site.DS.'files'),
         array(0,  60, 'text_input'      , 'file_max_upload_size'       , '2000000'),
         array(0,  80, 'text_input'      , 'tempdir'                    , find_temp_dir()),
         array(0, 100, 'text_input'      , 'plugin_cache_dir'           , ''),
@@ -466,7 +468,7 @@ $prefs = array(
         array(2,   0, 'text_input'      , 'lastmod'                    , '2005-07-23 16:24:10'),
         array(2,   0, 'text_input'      , 'locale'                     , getlocale(LANG)),
         array(2,   0, 'text_input'      , 'path_from_root'             , '/'),
-        array(2,   0, 'text_input'      , 'path_to_site'               , dirname(txpath)),
+        array(2,   0, 'text_input'      , 'path_to_site'               , $path_to_public_site),
         array(2,   0, 'text_input'      , 'prefs_id'                   , '1'),
         array(2,   0, 'text_input'      , 'searchable_article_fields'  , 'Title, Body'),
         array(2,   0, 'text_input'      , 'textile_updated'            , '1'),

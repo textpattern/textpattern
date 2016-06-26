@@ -228,10 +228,12 @@ function getDbInfo()
         @include txpath.'/config.php';
     }
 
+    $config_path = (defined('is_multisite')) ? multisite_root_path.'/private/' : '/'.basename(txpath).'/';
+
     if (!empty($txpcfg['db'])) {
         echo graf(
                 span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                setup_gTxt('already_installed', array('{txpath}' => basename(txpath))),
+                setup_gTxt('already_installed', array('{configpath}' => $config_path)),
                 array('class' => 'alert-block warning')
             ).
             setup_back_button(__FUNCTION__).
@@ -242,11 +244,23 @@ function getDbInfo()
 
     if (isset($_SESSION['siteurl'])) {
         $guess_siteurl = $_SESSION['siteurl'];
+    } elseif (defined('is_multisite')) {
+        $guess_adminurl = (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+        $guess_cookiedomain = substr($guess_adminurl, strpos($guess_adminurl, '.') + 1);
+        $guess_siteurl = 'www.'.$guess_cookiedomain;
     } elseif (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST'])) {
         $guess_siteurl = (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
         $guess_siteurl .= $GLOBALS['rel_siteurl'];
     } else {
         $guess_siteurl = 'mysite.com';
+    }
+
+    if (isset($_SESSION['adminurl'])) {
+        $guess_adminurl = $_SESSION['adminurl'];
+    }
+
+    if (isset($_SESSION['cookiedomain'])) {
+        $guess_cookiedomain = $_SESSION['cookiedomain'];
     }
 
     echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
@@ -294,6 +308,31 @@ function getDbInfo()
             'http(s)://', 'siteurl', array('class' => 'txp-form-field')
         );
 
+    if (defined('is_multisite')) {
+    echo hed(
+            setup_gTxt('admin_url_multisite'), 2
+        ).
+        graf(
+            setup_gTxt('please_enter_admin_url')
+        ).
+        inputLabel(
+            'setup_admin_url',
+            fInput('text', 'adminurl', txpspecialchars($guess_adminurl), '', '', '', INPUT_REGULAR, '', 'setup_admin_url', '', true),
+            'http(s)://', 'adminurl', array('class' => 'txp-form-field')
+        ).
+        hed(
+            setup_gTxt('cookie_domain_multisite'), 2
+            ).
+        graf(
+            setup_gTxt('please_enter_cookie_domain')
+        ).
+        inputLabel(
+            'setup_cookie_domain',
+            fInput('text', 'cookiedomain', txpspecialchars($guess_cookiedomain), '', '', '', INPUT_REGULAR, '', 'setup_cookie_domain', '', true),
+            'domain name', 'cookiedomain', array('class' => 'txp-form-field')
+        );
+    }
+
     if (is_disabled('mail')) {
         echo graf(
             span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
@@ -325,6 +364,11 @@ function printConfig()
     $_SESSION['dprefix'] = ps('dprefix');
     $_SESSION['siteurl'] = ps('siteurl');
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
+
+    if (defined('is_multisite')) {
+        $_SESSION['adminurl'] = ps('adminurl'); 
+        $_SESSION['cookiedomain'] = ps('cookiedomain');    
+    }
 
     global $txpcfg, $step;
 
@@ -703,17 +747,27 @@ function makeConfig()
 
     $_SESSION = doSpecial($_SESSION);
 
-    return
-    $open."\n"
+    $config_details = $open."\n"
     .o.'db'.m.$_SESSION['ddb'].nl
     .o.'user'.m.$_SESSION['duser'].nl
     .o.'pass'.m.$_SESSION['dpass'].nl
     .o.'host'.m.$_SESSION['dhost'].nl
     .($_SESSION['dclient_flags'] ? o.'client_flags'."'] = ".$_SESSION['dclient_flags'].";\n" : '')
     .o.'table_prefix'.m.$_SESSION['dprefix'].nl
-    .o.'txpath'.m.txpath.nl
     .o.'dbcharset'.m.$_SESSION['dbcharset'].nl
-    .$close;
+    .o.'txpath'.m.txpath.nl;
+
+    if (defined('is_multisite')) {
+      $config_details .= 
+        o.'multisite_root_path'.m.multisite_root_path.nl
+        .($_SESSION['adminurl'] ? 'define(\'ahu\', \''.$_SESSION['adminurl']."');\n" : '')
+        .($_SESSION['cookiedomain'] ? 'define(\'cookie_domain\', \''.$_SESSION['cookiedomain']."');\n" : '')
+        .'if (!defined(\'txpath\')) { define(\'txpath\', $txpcfg[\'txpath\']); }'."\n";
+    }
+
+    $config_details .= $close;
+
+    return $config_details;
 }
 
 /**
@@ -739,6 +793,9 @@ function fbCreate()
             n.'</ol>'.
             n.'</div>';
     } else {
+        if (defined('is_multisite')) {
+            $multisite_login_url = 'http://'.rtrim(preg_replace('|^https?://|', '', $_SESSION['adminurl']), '/').'/';
+        }
         // Clear the session so no data is leaked.
         $_SESSION = array();
 
@@ -748,7 +805,9 @@ function fbCreate()
             array('class' => 'alert-block warning')
         );
 
-        $login_url = $GLOBALS['rel_txpurl'].'/index.php';
+        $setup_path = (defined('is_multisite')) ? multisite_root_path.'/public/ & '.multisite_root_path.'/admin/' : '/'.basename(txpath).'/';
+        
+        $login_url = (defined('is_multisite')) ? $multisite_login_url.'index.php' : $GLOBALS['rel_txpurl'].'/index.php';
 
         return hed(setup_gTxt('that_went_well'), 1).
             $warnings.
@@ -758,7 +817,7 @@ function fbCreate()
                 ))
             ).
             graf(
-                setup_gTxt('installation_postamble')
+                setup_gTxt('installation_postamble', array('{setuppath}' => $setup_path))
             ).
             hed(setup_gTxt('thanks_for_interest'), 3).
             graf(
@@ -772,10 +831,12 @@ function fbCreate()
 
 function setup_config_contents()
 {
+    $config_path = (defined('is_multisite')) ? multisite_root_path.'/private/' : '/'.basename(txpath).'/';
+    
     return hed(setup_gTxt('creating_config'), 2).
         graf(
             strong(setup_gTxt('before_you_proceed')).' '.
-            setup_gTxt('create_config', array('{txpath}' => basename(txpath)))
+            setup_gTxt('create_config', array('{configpath}' => $config_path))
         ).
         n.'<textarea class="code" name="config" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'" dir="ltr" readonly>'.
             makeConfig().
