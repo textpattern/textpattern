@@ -107,3 +107,13 @@ $txpcfg['client_flags'] = 0;
  */
 
 // define('ihu', 'http://static.example.com/');
+
+
+/**
+ * Multi-Site setup: 
+ *
+ * Set HTTP address of Textpattern admin URL.
+ *
+ */
+
+// define("ahu", 'http://admin.example.com/');

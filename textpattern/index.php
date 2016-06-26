@@ -143,6 +143,14 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         define('ihu', hu);
     }
 
+    // HTTP address of Textpattern admin URL.
+    if (!defined('ahu')) {
+        define('ahu', hu.'textpattern/');
+    } else {
+        $adminurl = rtrim(preg_replace('|^https?://|', '', ahu), '/');
+        define('ahu', PROTOCOL.$adminurl.'/');
+    }
+
     if (!empty($locale)) {
         setlocale(LC_ALL, $locale);
     }

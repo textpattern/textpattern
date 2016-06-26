@@ -114,6 +114,14 @@ if (!defined('ihu')) {
     define('ihu', hu);
 }
 
+// HTTP address of Textpattern admin URL.
+if (!defined('ahu')) {
+    define('ahu', hu.'textpattern/');
+} else {
+    $adminurl = rtrim(preg_replace('|^https?://|', '', ahu), '/');
+    define('ahu', PROTOCOL.$adminurl.'/');
+}
+
 if (!defined('SITE_HOST')) {
     /**
      * Site hostname.
