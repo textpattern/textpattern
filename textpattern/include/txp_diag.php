@@ -256,8 +256,19 @@ function doDiagnostics()
         $fail['file_uploads_disabled'] = diag_msg_wrap(gTxt('file_uploads_disabled'), 'information');
     }
 
-    if (@is_dir(txpath.DS.'setup')) {
-        $fail['setup_still_exists'] = diag_msg_wrap(txpath.DS."setup".DS.' '.gTxt('still_exists'), 'warning');
+    if (isset($txpcfg['multisite_root_path'])) {
+        if (@is_dir($txpcfg['multisite_root_path'].DS.'admin'.DS.'setup')) {
+            $multisite_setup_msg['admin'] =$txpcfg['multisite_root_path'].DS.'admin'.DS."setup".DS.' '.gTxt('still_exists');
+        }
+        if (@is_dir($txpcfg['multisite_root_path'].DS.'public'.DS.'setup')) {
+            $multisite_setup_msg['public'] =$txpcfg['multisite_root_path'].DS.'public'.DS."setup".DS.' '.gTxt('still_exists');
+        }
+        if(isset($multisite_setup_msg))
+            $fail['setup_still_exists'] = diag_msg_wrap(join('<br/>', $multisite_setup_msg), 'warning');
+    } else {
+        if (@is_dir(txpath.DS.'setup')) {
+            $fail['setup_still_exists'] = diag_msg_wrap(txpath.DS."setup".DS.' '.gTxt('still_exists'), 'warning');
+        }
     }
 
     if (empty($tempdir)) {
@@ -341,7 +352,10 @@ function doDiagnostics()
     $guess_site_url = $_SERVER['HTTP_HOST'].preg_replace('#[/\\\\]$#', '', dirname(dirname($_SERVER['SCRIPT_NAME'])));
 
     if ($siteurl and strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.')) {
-        $fail['site_url_mismatch'] = diag_msg_wrap(gTxt('site_url_mismatch').cs.$guess_site_url, 'warning');
+        // skip warning if multi-site setup as $guess_site_url and $siteurl will mismatch      
+        if(!isset($txpcfg['multisite_root_path'])) {
+            $fail['site_url_mismatch'] = diag_msg_wrap(gTxt('site_url_mismatch').cs.$guess_site_url, 'warning');
+        }
     }
 
     // Test clean URL server vars.
@@ -478,6 +492,8 @@ function doDiagnostics()
 
         gTxt('document_root').cs.@$_SERVER['DOCUMENT_ROOT'].(($real_doc_root != @$_SERVER['DOCUMENT_ROOT']) ? ' ('.$real_doc_root.')' : '').n,
 
+        (isset($txpcfg['multisite_root_path'])) ? gTxt('multisite_root_path').cs.$txpcfg['multisite_root_path'].n : '',
+        
         '$path_to_site'.cs.$path_to_site.n,
 
         gTxt('txp_path').cs.txpath.n,
@@ -491,6 +507,10 @@ function doDiagnostics()
         gTxt('tempdir').cs.$tempdir.n,
 
         gTxt('web_domain').cs.$siteurl.n,
+
+        (defined('ahu')) ? gTxt('admin_url').cs.rtrim(preg_replace('|^https?://|', '', ahu), '/').n : '',
+
+        (defined('cookie_domain')) ? gTxt('cookie_domain').cs.cookie_domain.n : '',
 
         gTxt('php_version').cs.phpversion().n,
 
