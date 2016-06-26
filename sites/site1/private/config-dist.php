@@ -127,3 +127,14 @@ $txpcfg['client_flags'] = 0;
  */
  
 // define('cookie_domain', 'example.com');
+
+
+/**
+ * Multi-Site setup:
+ *
+ * Full server path to multi-site root directory, no slash at the end
+ * This directory contains the site's /public, /private, and /admin directories.
+ *
+ */
+
+// $txpcfg['multisite_root_path'] = '/path/to/sites/example-site-dir';
