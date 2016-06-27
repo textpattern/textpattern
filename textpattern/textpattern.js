@@ -1768,12 +1768,24 @@ textpattern.Route.add('', function ()
 
     var prefTabs = prefsGroup.find('.switcher-list li');
     var $switchers = prefTabs.children('a[data-txp-pane]');
+    var $section = null;
 
     if (selectedTab === undefined) {
         selectedTab = 0;
     }
 
-    if (textpattern.storage.data[textpattern.event] !== undefined) {
+    if (window.location.hash) {
+        var $section = prefsGroup.find($(window.location.hash).closest('section'));
+
+        if ($section.length) {
+            selectedTab = $section.index();
+        } else {
+            $section = null;
+        }
+
+    }
+
+    if (!$section && textpattern.storage.data[textpattern.event] !== undefined) {
         $switchers.each(function (i, elm) {
             if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]) {
                 selectedTab = i;
