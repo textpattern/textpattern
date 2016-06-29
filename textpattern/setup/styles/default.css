@@ -40,13 +40,13 @@ button {
  *
  * More info: http://nicolasgallagher.com/micro-clearfix-hack/
  */
-header:after,
-footer:after,
-nav ul:after,
-nav ol:after,
-.clearfix:after,
-.container:after,
-.paginator:after {
+header::after,
+footer::after,
+nav ul::after,
+nav ol::after,
+.clearfix::after,
+.container::after,
+.paginator::after {
   display: table;
   clear: both;
   content: "";
@@ -1275,10 +1275,10 @@ nav ol:after,
  * Remove unnecessary global styling from printed media.
  */
   *,
-  *:before,
-  *:after,
-  *:first-letter,
-  *:first-line {
+  *::before,
+  *::after,
+  *::first-letter,
+  *::first-line {
     background: transparent !important;
     color: #000000 !important;
     text-shadow: none !important;
@@ -1329,7 +1329,7 @@ nav ol:after,
   /**
  * Show long-form for abbreviations in print.
  */
-  abbr[title]:after {
+  abbr[title]::after {
     content: " (" attr(title) ")";
   }
   /**
