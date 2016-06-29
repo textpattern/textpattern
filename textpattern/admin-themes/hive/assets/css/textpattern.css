@@ -49,7 +49,7 @@ button {
  *
  * More info: http://nicolasgallagher.com/micro-clearfix-hack/
  */
-.clearfix:after, .progress-meter ol:after, .txp-navigation:after {
+.clearfix::after, .progress-meter ol::after, .txp-navigation::after {
   display: table;
   clear: both;
   content: "";
@@ -984,7 +984,7 @@ h3.txp-summary a:hover {
   text-decoration: none;
 }
 
-h3.txp-summary a:after {
+h3.txp-summary a::after {
   text-indent: 110%;
   text-transform: capitalize;
   white-space: nowrap;
@@ -1004,14 +1004,14 @@ h3.txp-summary a:after {
   z-index: 10;
 }
 
-h3.txp-summary a:hover:after {
+h3.txp-summary a:hover::after {
   opacity: 1;
 }
 
 /**
  * Additonal styling for lever summary headings - expanded state.
  */
-h3.txp-summary.expanded a:after {
+h3.txp-summary.expanded a::after {
   top: 0.6875em;
   right: 0.5625em;
   border: 0 solid transparent;
@@ -1076,7 +1076,7 @@ h3.txp-summary.expanded a:after {
   border-bottom-color: #d8ad00;
 }
 
-.progress-meter li:before {
+.progress-meter li::before {
   position: absolute;
   top: 0.4375em;
   left: 0.6875em;
@@ -1093,7 +1093,7 @@ h3.txp-summary.expanded a:after {
   counter-increment: step;
 }
 
-.progress-meter li:after {
+.progress-meter li::after {
   text-indent: 110%;
   text-transform: capitalize;
   white-space: nowrap;
@@ -1128,12 +1128,12 @@ h3.txp-summary.expanded a:after {
   padding: 1em 4em 1em 1em;
 }
 
-[dir="rtl"] .progress-meter li:before {
+[dir="rtl"] .progress-meter li::before {
   right: 0.6875em;
   left: auto;
 }
 
-[dir="rtl"] .progress-meter li:after {
+[dir="rtl"] .progress-meter li::after {
   right: 100%;
   left: auto;
   border: 0 solid transparent;
@@ -2257,7 +2257,7 @@ td {
   background-image: linear-gradient(lightgray, #e4e4e4);
 }
 
-.txp-list thead th.asc a:after, .txp-list thead th.desc a:after {
+.txp-list thead th.asc a::after, .txp-list thead th.desc a::after {
   text-indent: 110%;
   text-transform: capitalize;
   white-space: nowrap;
@@ -2273,23 +2273,23 @@ td {
   z-index: 10;
 }
 
-[dir="rtl"] .txp-list thead th.asc a:after, [dir="rtl"] .txp-list thead th.desc a:after {
+[dir="rtl"] .txp-list thead th.asc a::after, [dir="rtl"] .txp-list thead th.desc a::after {
   right: auto;
   left: 0.3125em;
 }
 
-.txp-list thead th.asc a:hover:after, .txp-list thead th.desc a:hover:after {
+.txp-list thead th.asc a:hover::after, .txp-list thead th.desc a:hover::after {
   opacity: 1;
 }
 
-.txp-list thead th.desc a:after {
+.txp-list thead th.desc a::after {
   border: 0 solid transparent;
   border-width: 0.25em 0.25em 0;
   border-top-color: #333333;
   content: "\2193";
 }
 
-.txp-list thead th.asc a:after {
+.txp-list thead th.asc a::after {
   border: 0 solid transparent;
   border-width: 0 0.25em 0.25em;
   border-bottom-color: #333333;
@@ -2634,7 +2634,7 @@ button.txp-nav-toggle {
   padding-right: 1.61538461538462em;
 }
 
-.txp-nav > ul > li > a.dropdown-toggle:after {
+.txp-nav > ul > li > a.dropdown-toggle::after {
   text-indent: 110%;
   text-transform: capitalize;
   white-space: nowrap;
@@ -2654,14 +2654,14 @@ button.txp-nav-toggle {
   z-index: 10;
 }
 
-.txp-nav > ul > li > a.dropdown-toggle:hover:after, .txp-nav > ul > li > a.dropdown-toggle:active:after {
+.txp-nav > ul > li > a.dropdown-toggle:hover::after, .txp-nav > ul > li > a.dropdown-toggle:active::after {
   opacity: 1;
 }
 
 /**
  * Indicator symbols on open dropdown toggle links.
  */
-.txp-nav > ul > li.open > a.dropdown-toggle:after {
+.txp-nav > ul > li.open > a.dropdown-toggle::after {
   border: 0 solid transparent;
   border-width: 0 0.25em 0.25em;
   border-bottom-color: #333333;
@@ -2749,7 +2749,7 @@ button.txp-nav-toggle {
   padding: 0.5em 1em;
 }
 
-.dropdown-menu:before {
+.dropdown-menu::before {
   position: absolute;
   top: -0.5em;
   left: 0.75em;
@@ -2990,7 +2990,7 @@ hr {
 }
 
 .txp-actions a:last-child {
-  margin: 0.5em 0 0 0;
+  margin: 0.5em 0 0;
 }
 
 /**
@@ -3001,7 +3001,7 @@ hr {
 }
 
 [dir="rtl"] .txp-actions a:last-child {
-  margin: 0.5em 0 0 0;
+  margin: 0.5em 0 0;
 }
 
 /**
@@ -3499,7 +3499,7 @@ span.spinner {
   line-height: 16px;
 }
 
-#view_modes ul:after {
+#view_modes ul::after {
   display: table;
   clear: both;
   content: "";
@@ -3716,7 +3716,7 @@ div.code {
 /**
  * Clearfix jQuery UI elements.
  */
-.ui-helper-clearfix:after {
+.ui-helper-clearfix::after {
   display: table;
   clear: both;
   border-collapse: collapse;
@@ -6556,7 +6556,7 @@ label.ui-state-active.ui-button:active {
     background: #fff9e1;
     box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   }
-  .txp-nav.in .data-dropdown:before {
+  .txp-nav.in .data-dropdown::before {
     position: absolute;
     top: -0.5em;
     left: 4.28em;
@@ -6579,7 +6579,7 @@ label.ui-state-active.ui-button:active {
   .txp-nav > ul > li > a {
     padding: 0 2em;
   }
-  .txp-nav > ul > li > a.dropdown-toggle:after {
+  .txp-nav > ul > li > a.dropdown-toggle::after {
     right: 1em;
   }
   /**
@@ -6595,7 +6595,7 @@ label.ui-state-active.ui-button:active {
   .dropdown-menu a {
     padding: 0.5em 2em 0.5em 3em;
   }
-  .dropdown-menu:before {
+  .dropdown-menu::before {
     display: none;
   }
   /**
@@ -6654,7 +6654,7 @@ label.ui-state-active.ui-button:active {
     margin: 0;
     float: none;
   }
-  .progress-meter li:after {
+  .progress-meter li::after {
     display: none;
   }
   /**
@@ -6666,7 +6666,7 @@ label.ui-state-active.ui-button:active {
   [dir="rtl"] .progress-meter li {
     margin: 0;
   }
-  [dir="rtl"] .progress-meter li:after {
+  [dir="rtl"] .progress-meter li::after {
     display: none;
   }
   /**
