@@ -1768,12 +1768,12 @@ textpattern.Route.add('', function ()
 
     var prefTabs = prefsGroup.find('.switcher-list li');
     var $switchers = prefTabs.children('a[data-txp-pane]');
+    var $section = window.location.hash ? prefsGroup.find($(window.location.hash).closest('section')) : [];
 
-    if (selectedTab === undefined) {
-        selectedTab = 0;
+    if ($section.length) {
+        selectedTab = $section.index();
     }
-
-    if (textpattern.storage.data[textpattern.event] !== undefined) {
+    else if (textpattern.storage.data[textpattern.event] !== undefined) {
         $switchers.each(function (i, elm) {
             if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]) {
                 selectedTab = i;
@@ -1782,6 +1782,10 @@ textpattern.Route.add('', function ()
                 $(elm).parent().removeClass('ui-tabs-active ui-state-active');
             }
         });
+    }
+
+    if (selectedTab === undefined) {
+        selectedTab = 0;
     }
 
     prefsGroup.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
