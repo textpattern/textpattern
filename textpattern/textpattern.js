@@ -663,7 +663,7 @@ function toggleDisplay(id)
         if ($(this).data('txp-pane')) {
             var pane = $(this).data('txp-pane');
 
-            if (!localStorage && $(this).data('txp-token')) {
+            if (!window.localStorage && $(this).data('txp-token')) {
                 sendAsyncEvent({
                     event   : 'pane',
                     step    : 'visible',
@@ -676,7 +676,7 @@ function toggleDisplay(id)
         } else {
             var pane = obj.attr('id');
 
-            if (!localStorage) {
+            if (!window.localStorage) {
                 sendAsyncEvent({
                     event   : textpattern.event,
                     step    : 'save_pane_state',
@@ -861,7 +861,7 @@ textpattern.storage =
      * Textpattern localStorage data.
      */
 
-    data : (localStorage ? JSON.parse(localStorage.getItem("textpattern")) : null) || {},
+    data : (window.localStorage ? JSON.parse(window.localStorage.getItem("textpattern")) : null) || {},
 
     /**
      * Updates data.
@@ -873,13 +873,13 @@ textpattern.storage =
 
     update : function (data) {
 
-        if (!localStorage) {
+        if (!window.localStorage) {
             return;
         }
 
         if (data) {
             $.extend(textpattern.storage.data, data);
-            localStorage.setItem("textpattern", JSON.stringify(textpattern.storage.data));
+            window.localStorage.setItem("textpattern", JSON.stringify(textpattern.storage.data));
         }
     }
 };
@@ -1797,7 +1797,7 @@ textpattern.Route.add('', function ()
     {
         var me = $(this);
 
-        if (!localStorage) sendAsyncEvent({
+        if (!window.localStorage) sendAsyncEvent({
             event  : 'pane',
             step   : 'tabVisible',
             pane   : me.data('txp-pane'),
