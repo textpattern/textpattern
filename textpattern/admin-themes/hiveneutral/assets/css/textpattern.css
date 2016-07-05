@@ -2382,13 +2382,11 @@ body {
  * Example HTML:
  *
  * <header class="txp-header">
- *     <h1><a>My site</a></h1>
+ *     <h1>
+ *         <a><span>My site</span></a>
+ *     </h1>
  */
 .txp-header h1 {
-  text-indent: 110%;
-  text-transform: capitalize;
-  white-space: nowrap;
-  overflow: hidden;
   width: 8em;
   height: 2em;
   margin: 0.0625em 0.5em 0 0;
@@ -2398,25 +2396,33 @@ body {
   font-size: 16px;
 }
 
+.txp-header h1 a {
+  display: block;
+  width: 8em;
+  height: 2em;
+}
+
+.txp-header h1 a span {
+  text-indent: 110%;
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+}
+
 /**
  * 'View site' link.
  *
  * Example HTML:
  *
  * <p class="txp-view-site">
- *      <a>
-            <span class="txp-view-site-name">My site</span>
-        </a>
+ *      <a>View site</a>
  * </p>
  */
 .txp-view-site {
-  max-width: 22%;
   margin: 0 1em;
   float: left;
   line-height: 2.69230769230769em;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 
 .txp-view-site a {
@@ -6416,7 +6422,7 @@ label.ui-state-active.ui-button:active {
      * Example HTML:
      *
      * <p class="txp-view-site">
-     *      <a>My site</a>
+     *      <a>View site</a>
      * </p>
      */
   .txp-view-site {
