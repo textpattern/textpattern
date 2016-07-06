@@ -3930,6 +3930,9 @@ a.ui-state-default:focus {
  * <span class="ui-icon ui-icon-caret-1-n"></span>
  * <span class="ui-icon ui-icon-folder-collapsed"></span>
  * <span class="ui-icon ui-icon-play"></span>
+ *
+ * TODO: Use `mask` in future (http://caniuse.com/#search=mask), instead of
+ * `filter` or dedicated image.
  */
 .ui-icon {
   display: inline-block;
@@ -3953,22 +3956,25 @@ a.ui-state-default:focus {
 /**
  * Default state icons.
  *
- * TODO: Use `filter: brightness()` in future, instead of dedicated image.
+ * TODO: Use `mask` in future.
  */
 .ui-state-default .ui-icon {
-  background-image: url("../img/ui-icon-sprite-555555.svg");
+  -webkit-filter: brightness(1.6666667);
+          filter: brightness(1.6666667);
 }
 
 /**
  * Weighted content icons and interaction state icons.
  *
- * TODO: See `filter: brightness()` above.
+ * TODO: Use `mask` in future.
  */
 .ui-widget-content .ui-icon,
 .ui-widget-header .ui-icon,
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon,
 .ui-state-active .ui-icon {
+  -webkit-filter: none;
+          filter: none;
   background-image: url("../img/ui-icon-sprite-333333.svg");
 }
 
@@ -3981,6 +3987,8 @@ a.ui-state-default:focus {
  *     <span class="ui-icon ui-icon-check"></span>
  *     Success!
  * </p>
+ *
+ * TODO: Use `mask` in future.
  */
 .success .ui-icon {
   background-image: url("../img/ui-icon-sprite-success.svg");
@@ -3995,6 +4003,8 @@ a.ui-state-default:focus {
  *     <span class="ui-icon ui-icon-alert"></span>
  *     Warning!
  * </p>
+ *
+ * TODO: Use `mask` in future.
  */
 .ui-state-highlight .ui-icon,
 .warning .ui-icon {
@@ -4010,6 +4020,8 @@ a.ui-state-default:focus {
  *     <span class="ui-icon ui-icon-alert"></span>
  *     Error!
  * </p>
+ *
+ * TODO: Use `mask` in future.
  */
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon,
@@ -4027,6 +4039,8 @@ a.ui-state-default:focus {
  *     <span class="ui-icon ui-icon-info"></span>
  *     Content
  * </p>
+ *
+ * TODO: Use `mask` in future.
  */
 .information .ui-icon {
   background-image: url("../img/ui-icon-sprite-info.svg");
@@ -4034,6 +4048,8 @@ a.ui-state-default:focus {
 
 /**
  * Icons within Textpattern system message panes.
+ *
+ * TODO: Use `mask` in future.
  */
 #messagepane .ui-icon {
   background-image: url("../img/ui-icon-sprite-ffffff.svg");
@@ -4041,6 +4057,8 @@ a.ui-state-default:focus {
 
 /**
  * Icon sprite positionings.
+ *
+ * TODO: Use `mask` in future.
  */
 .ui-icon-blank {
   background-position: 16px 16px;
@@ -4747,6 +4765,8 @@ a.ui-state-default:focus {
  *
  * <span class="ui-icon ui-extra-icon-code"></span>
  * <span class="ui-icon ui-extra-icon-download"></span>
+ *
+ * TODO: Use `mask` in future.
  */
 .ui-extra-icon-code {
   background-position: 0 -256px;
