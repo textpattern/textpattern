@@ -73,10 +73,10 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
         global $txp_user;
 
         $default_event = get_pref('default_event');
-        $homelink = htmlspecialchars($GLOBALS["prefs"]["sitename"]);
+        $homelink = span(htmlspecialchars($GLOBALS["prefs"]["sitename"]));
 
         if (!empty($default_event) && has_privs($default_event)) {
-            $homelink = href(span($homelink), array('event' => $default_event));
+            $homelink = href($homelink, array('event' => $default_event));
         }
 
         $out[] = hed($homelink, 1);

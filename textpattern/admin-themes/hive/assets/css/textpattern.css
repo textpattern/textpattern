@@ -2432,7 +2432,7 @@ body {
   height: 2em;
 }
 
-.txp-header h1 a span {
+.txp-header h1 span {
   text-indent: 110%;
   text-transform: capitalize;
   white-space: nowrap;
