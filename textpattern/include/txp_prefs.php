@@ -123,7 +123,7 @@ function prefs_save()
         if (!isset($post[$name]) || !has_privs('prefs.'.$event)) {
             continue;
         }
-        
+
         if (is_array($post[$name])) {
             $post[$name] = implode(',', array_diff($post[$name], array('')));
         }
@@ -265,7 +265,11 @@ function prefs_list($message = '')
     }
 
     if ($last_event === null) {
-        echo graf(gTxt('no_preferences'));
+        echo graf(
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt('no_preferences'),
+            array('class' => 'alert-block information')
+        );
     } else {
         $build[] = tag(
             hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
