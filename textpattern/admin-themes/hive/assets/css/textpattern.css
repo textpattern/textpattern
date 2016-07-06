@@ -6470,6 +6470,9 @@ label.ui-state-active.ui-button:active {
   .txp-header h1 {
     width: 1.625em;
   }
+  .txp-header h1 a {
+    width: 1.625em;
+  }
   /**
      * 'View site' link.
      *
