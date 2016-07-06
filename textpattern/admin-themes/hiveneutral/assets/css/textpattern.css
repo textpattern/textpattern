@@ -3939,7 +3939,6 @@ a.ui-state-default:focus {
 .ui-state-active .ui-icon {
   -webkit-filter: none;
           filter: none;
-  background-image: url("../img/ui-icon-sprite-333333.svg");
 }
 
 /**
