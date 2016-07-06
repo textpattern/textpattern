@@ -796,6 +796,7 @@ $en_gb_lang = array(
         'never_display_email' => 'Hide commenter email address?',
         'new_textpattern_version_available' => 'There is a new Textpattern version available. Do you want to <a href="http://textpattern.com/download" rel="external" title="Go to the Textpattern website download area">download it</a>?',
         'no_popup' => 'current window',
+        'no_preferences' => 'No preferences available.',
         'override_emailcharset' => 'Use ISO-8859-1 encoding in emails (default is UTF-8)?',
         'path_from_root' => 'Sub-directory (if any)',
         'path_to_site_missing' => '<code>$path_to_site</code> is not set (update <code>index.php</code>)',
@@ -1352,5 +1353,4 @@ $en_gb_lang = array(
         'wraptag' => 'Wrap tag',
     ),
 );
-$lastmod = gmdate('Y-m-d H:m:s', 1466583229);
-
+$lastmod = gmdate('Y-m-d H:m:s', 1467783494);
