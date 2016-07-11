@@ -956,7 +956,7 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
 
 function tag($content, $tag, $atts = '')
 {
-    return ('' !== $content) ? '<'.$tag.join_atts($atts).'>'.$content.'</'.$tag.'>' : '';
+    return empty($tag) || $content === '' ? $content : '<'.$tag.join_atts($atts).'>'.$content.'</'.$tag.'>';
 }
 
 /**
