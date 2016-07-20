@@ -1,6 +1,6 @@
 /../index.php: 3cfe26d7a340c96d8e870d53c39d521b
 /../css.php: 83502d3287ecfb9bcd29a1ae001bbdf4
-/admin-themes/hive/hive.php: 3e871d97304325f1b3832127a806728e
+/admin-themes/hive/hive.php: a28d0a779b641d79e6f9d3996d1f1348
 /css.php: faee2855df2f9a0d3015f747d96da46d
 /include/txp_admin.php: bef9d18207f3607ba6a00633963533bb
 /include/txp_article.php: 9e373a8c8460de3a272412f6d76ba62e
@@ -10,7 +10,7 @@
 /include/txp_diag.php: ea3216a34cc202523debdd1c0fc06393
 /include/txp_discuss.php: bfa3bc4fa570d02777e3c86b267e6ab6
 /include/txp_file.php: 7ad4f86e64d318277752655d3837687e
-/include/txp_form.php: ea39f666e584cb7267f24abad5230ede
+/include/txp_form.php: cc99fd40a1157826625f4f498c9bb51a
 /include/txp_image.php: 8fffde39e22de41439055bff6353df8e
 /include/txp_link.php: 314ccb83bf256e9668b827880415664d
 /include/txp_list.php: 2d93ee776f4c374e43fcf03117b4b9f4
@@ -18,10 +18,10 @@
 /include/txp_page.php: c5732badf1528c27e88a41640f5f3f6d
 /include/txp_pane.php: 57d46bff0f479fc026ded5315b25d7ae
 /include/txp_plugin.php: f43d5096db915a698343345a1ea1c28c
-/include/txp_prefs.php: 7fdab0af98042c2fc8ddf238ca69ca31
-/include/txp_section.php: 0447aa52e946753aa9e34947f75b54ef
+/include/txp_prefs.php: 53e5bf39ced2c141fcac979ee801f397
+/include/txp_section.php: 542fd229eb0782b801b94050b0788e00
 /include/txp_tag.php: 5c966ea6ec1b8ae0f5681630dd8d6607
-/index.php: 2b069b19f5b990575487b0fa42234339
+/index.php: 8791189ad57ddc53f7f0bb4afa33e62d
 /lib/IXRClass.php: c94e0dbee47499e27f00defed601e622
 /lib/admin_config.php: 1351935ee15ac3ed4c6af4316e6e9832
 /lib/class.thumb.php: 71964afc4f57d6b05a85979f7eb0b67c
@@ -32,7 +32,7 @@
 /lib/txplib_db.php: 664b5da4e8ba893575885a7679f9b0df
 /lib/txplib_forms.php: e4b23a17b0dbb5c33756853c1db70547
 /lib/txplib_head.php: 081263c8d777b30dd0b45bf93f5daa9b
-/lib/txplib_html.php: 452ae6e26444ce735b6e05f127492318
+/lib/txplib_html.php: 99069ce78d8af2ff865f3c0a3b29385c
 /lib/txplib_misc.php: 1bbffc441bcadcad41504ca51bdfb8bd
 /lib/txplib_publish.php: 2640e6557859fb0a2c5dc81ba467a9f3
 /lib/txplib_theme.php: 668b9c0545e0195e60edf3d9db3dc3c0
@@ -46,7 +46,7 @@
 /publish/rss.php: 3e34ede49f8e58e12a859cb11814c8e4
 /publish/search.php: cf1088ace995767c564d36a09f80e03d
 /publish/taghandlers.php: 5b0472f0d335ddf7d4c145f69cd0ae25
-/textpattern.js: 0735a0be0701fe19525e70c9baad0771
+/textpattern.js: 76152a2664145247d50d77a4259c232b
 /update/_to_1.0.0.php: 675ed80463fff21f4935daa98ad92264
 /update/_to_4.0.2.php: 81b94a3d97c05c9b5e4ab67d32f2575c
 /update/_to_4.0.3.php: bb84ca30f19c25738e1aa8f1e25c7ec6
@@ -58,12 +58,12 @@
 /update/_to_4.2.0.php: f02e8800675d0405ab74c77bbed4893b
 /update/_to_4.3.0.php: 3f5a9b3df5d4229e0805035ab188228c
 /update/_to_4.5.0.php: 22f9861ff5cc6525ae06fe8a3990a1b5
-/update/_to_4.6.0.php: 2fa5eca364f0fa38c29d959004e208e7
+/update/_to_4.6.0.php: 90559e1af571c95b2a284f3948b24432
 /update/_update.php: b9bde667597bcb4ec85d0ee182f450ce
 /vendors/dropbox/zxcvbn/zxcvbn.js: 4205e94f2892e590b4fbebb1c3c3a326
 /vendors/jquery/jquery/jquery.js: 618538b4ab9639d444e962729a927f15
-/vendors/jquery/jquery-ui/jquery-ui.js: 146e7dd7c4aa7de4873e6ed29f19ffe6
-/vendors/PrismJS/prism/prism.js: 0c6d7aa345a948135d1443d8fc70bf68
+/vendors/jquery/jquery-ui/jquery-ui.js: f5e9e19a3c99f2875ecc6d2653ff8b3d
+/vendors/PrismJS/prism/prism.js: 15cc0ae9c1d1b037c5bdd04fae9132de
 /vendors/Netcarver/Textile/DataBag.php: 00e9b640661e123680c06ae575242b93
 /vendors/Netcarver/Textile/Parser.php: 0c9049c815db0bfb6ad09c9d144243f9
 /vendors/Netcarver/Textile/Tag.php: 0c6bdc7ab918ecaf53ae7a772073a168
