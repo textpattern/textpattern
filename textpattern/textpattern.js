@@ -800,7 +800,7 @@ function sendAsyncEvent (data, fn, format)
             dataType: format,
             processData: false,
             contentType: false
-        }) : 
+        }) :
         $.post('index.php', data, fn, format);
 }
 
@@ -1572,23 +1572,16 @@ function txp_search()
     var $ui = $('.txp-search');
 
     $ui.find('.txp-search-button').button({
-        text: false,
-        icons:
-        {
-            primary: 'ui-icon-search'
-        }
-
+        showLabel: false,
+        icon: 'ui-icon-search'
     }).click(function ()
     {
         $ui.submit();
     });
 
     $ui.find('.txp-search-options').button({
-        text: false,
-        icons:
-        {
-            primary: 'ui-icon-triangle-1-s'
-        }
+        showLabel: false,
+        icon: 'ui-icon-triangle-1-s'
     }).on('click', function (e)
     {
         var menu = $ui.find('.txp-dropdown').toggle().position(
@@ -1605,7 +1598,7 @@ function txp_search()
         return false;
     });
 
-    $ui.find('.txp-search-buttons').buttonset();
+    $ui.find('.txp-search-buttons').controlgroup();
     $ui.find('.txp-dropdown').hide().menu().click(function (e) {
         e.stopPropagation();
     });
@@ -1894,7 +1887,7 @@ $(document).ready(function ()
             region = region.substr(1);
 
             var pane = $elm.data("txp-pane");
-            
+
             if (pane === undefined) {
                 pane = region;
             }
@@ -1951,7 +1944,7 @@ $(document).ready(function ()
     $('.jquery-ui-button').button();
 
     // Button set
-    $('.jquery-ui-buttonset').buttonset();
+    $('.jquery-ui-buttonset').controlgroup();
 
 
     // TODO: end integrate jQuery UI stuff properly ----------------------------
