@@ -2414,6 +2414,13 @@ body {
 }
 
 /**
+ * Reverse Textpattern logo margin in RTL languages.
+ */
+[dir="rtl"] .txp-header h1 {
+  margin: 0.0625em 0 0 0.5em;
+}
+
+/**
  * 'View site' link.
  *
  * Example HTML:
@@ -2528,6 +2535,11 @@ button.txp-nav-toggle {
   list-style: none;
 }
 
+.txp-nav > ul {
+  display: -ms-flexbox;
+  display: flex;
+}
+
 .txp-nav a {
   color: #333333;
 }
@@ -2584,7 +2596,6 @@ button.txp-nav-toggle {
 .txp-nav > ul > li {
   display: block;
   position: relative;
-  float: left;
   border-right: 1px solid #c7e0f6;
   background: rgba(255, 255, 255, 0.25);
 }
@@ -2614,11 +2625,23 @@ button.txp-nav-toggle {
 }
 
 /**
+ * Reverse border in RTL languages.
+ */
+[dir="rtl"] .txp-nav > ul > li {
+  border-right: 0;
+  border-left: 1px solid #c7e0f6;
+}
+
+[dir="rtl"] .txp-nav > ul > li:first-child {
+  border-right: 1px solid #c7e0f6;
+}
+
+/**
  * Indicator symbols on closed dropdown toggle links.
  */
 .txp-nav > ul > li > a.dropdown-toggle {
   position: relative;
-  padding-right: 1.61538461538462em;
+  padding: 0 1.61538461538462em 0 1em;
 }
 
 .txp-nav > ul > li > a.dropdown-toggle::after {
@@ -2643,6 +2666,18 @@ button.txp-nav-toggle {
 
 .txp-nav > ul > li > a.dropdown-toggle:hover::after, .txp-nav > ul > li > a.dropdown-toggle:active::after {
   opacity: 1;
+}
+
+/**
+ * Indicator symbols in RTL languages.
+ */
+[dir="rtl"] .txp-nav > ul > li > a.dropdown-toggle {
+  padding: 0 1em 0 1.61538461538462em;
+}
+
+[dir="rtl"] .txp-nav > ul > li > a.dropdown-toggle::after {
+  right: auto;
+  left: 0.5625em;
 }
 
 /**
@@ -2705,6 +2740,8 @@ button.txp-nav-toggle {
   position: absolute;
   top: 3em;
   left: 0;
+  -ms-flex: none;
+      flex: none;
   min-width: 12em;
   border: 1px solid;
   border-radius: 0 0.3em 0.3em;
@@ -2745,6 +2782,24 @@ button.txp-nav-toggle {
   font-size: 16px;
   content: "";
   z-index: 2;
+}
+
+/**
+ * Secondary-level navigation menu in RTL languages.
+ */
+[dir="rtl"] .dropdown-menu {
+  right: 0;
+  left: auto;
+  border-radius: 0.3em 0 0.3em;
+}
+
+[dir="rtl"] .dropdown-menu li:first-child {
+  border-radius: 0.3em 0 0;
+}
+
+[dir="rtl"] .dropdown-menu::before {
+  right: 0.75em;
+  left: auto;
 }
 
 /**
