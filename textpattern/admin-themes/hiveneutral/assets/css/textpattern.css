@@ -2352,6 +2352,8 @@ body {
  */
 .txp-header {
   background-color: #c7e0f6;
+  display: -ms-flexbox;
+  display: flex;
   position: fixed;
   top: 0;
   right: 0;
@@ -2387,10 +2389,11 @@ body {
  *     </h1>
  */
 .txp-header h1 {
-  width: 8em;
+  -ms-flex: none;
+      flex: none;
+  width: 8.125em;
   height: 2em;
   margin: 0.0625em 0.5em 0 0;
-  float: left;
   background: url("../img/sprite.svg") no-repeat;
   background-size: 13em 2em;
   font-size: 16px;
@@ -2398,7 +2401,7 @@ body {
 
 .txp-header h1 a {
   display: block;
-  width: 8em;
+  width: 8.125em;
   height: 2em;
 }
 
@@ -2416,13 +2419,20 @@ body {
  * Example HTML:
  *
  * <p class="txp-view-site">
- *      <a>View site</a>
+ *     <a>
+ *         <span class="txp-view-site-name">My site</span>
+ *     </a>
  * </p>
  */
 .txp-view-site {
+  -ms-flex: 1;
+      flex: 1;
   margin: 0 1em;
-  float: left;
+  padding: 0 1px;
   line-height: 2.69230769230769em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .txp-view-site a {
@@ -2438,9 +2448,10 @@ body {
  * <p class="txp-logout">
  */
 .txp-logout {
-  position: absolute;
+  position: relative;
   top: -0.76923076923077em;
-  right: 2.75%;
+  -ms-flex: none;
+      flex: none;
 }
 
 /* Footer
@@ -2505,8 +2516,9 @@ button.txp-nav-toggle {
  * <nav class="txp-nav">
  */
 .txp-nav {
+  -ms-flex: none;
+      flex: none;
   margin: 0;
-  float: left;
   list-style: none;
 }
 
@@ -6433,10 +6445,10 @@ label.ui-state-active.ui-button:active {
      * Smaller version of Textpattern logo.
      */
   .txp-header h1 {
-    width: 1.625em;
+    width: 1.75em;
   }
   .txp-header h1 a {
-    width: 1.625em;
+    width: 1.75em;
   }
   /**
      * 'View site' link.
@@ -6444,12 +6456,16 @@ label.ui-state-active.ui-button:active {
      * Example HTML:
      *
      * <p class="txp-view-site">
-     *      <a>View site</a>
+     *     <a>
+     *         <span class="txp-view-site-name">My site</span>
+     *     </a>
      * </p>
      */
   .txp-view-site {
     margin: 0.0625em 0.375em 0;
+    padding: 0;
     font-size: 16px;
+    overflow: inherit;
   }
   .txp-view-site a {
     text-indent: 110%;
@@ -6461,12 +6477,6 @@ label.ui-state-active.ui-button:active {
     height: 2em;
     background: url("../img/sprite.svg") no-repeat -8em 0;
     background-size: 13em 2em;
-  }
-  /**
-     * Adjust right absolute position of logout button.
-     */
-  .txp-logout {
-    right: 2em;
   }
 }
 
