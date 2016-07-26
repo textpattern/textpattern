@@ -6622,7 +6622,7 @@ label.ui-state-active.ui-button:active {
   .txp-nav.in .data-dropdown::before {
     position: absolute;
     top: -0.5em;
-    left: 4.28em;
+    left: 4.375em;
     width: 1em;
     height: 0.5em;
     background: url("../img/sprite.svg") no-repeat -12em 0;
@@ -6630,6 +6630,10 @@ label.ui-state-active.ui-button:active {
     font-size: 16px;
     content: "";
     z-index: 2;
+  }
+  [dir="rtl"] .txp-nav.in .data-dropdown::before {
+    right: 4.375em;
+    left: auto;
   }
   .txp-nav > ul > li {
     float: none;
@@ -6639,11 +6643,20 @@ label.ui-state-active.ui-button:active {
   .txp-nav > ul > li:first-child {
     border-left: 0;
   }
-  .txp-nav > ul > li > a {
+  .txp-nav > ul > li > a,
+  .txp-nav > ul > li > a.dropdown-toggle {
     padding: 0 2em;
   }
-  .txp-nav > ul > li > a.dropdown-toggle::after {
+  [dir="rtl"] .txp-nav > ul > li > a, [dir="rtl"]
+  .txp-nav > ul > li > a.dropdown-toggle {
+    padding: 0 2em;
+  }
+  .txp-nav > ul > li a.dropdown-toggle::after {
     right: 1em;
+  }
+  [dir="rtl"] .txp-nav > ul > li a.dropdown-toggle::after {
+    right: auto;
+    left: 1em;
   }
   /**
      * Secondary-level navigation menu items (submenus).
@@ -6656,6 +6669,9 @@ label.ui-state-active.ui-button:active {
   }
   .dropdown-menu a {
     padding: 0.5em 2em 0.5em 3em;
+  }
+  [dir="rtl"] .dropdown-menu a {
+    padding: 0.5em 3em 0.5em 2em;
   }
   .dropdown-menu::before {
     display: none;
