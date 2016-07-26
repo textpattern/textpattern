@@ -835,7 +835,8 @@ a:focus .content-image {
   position: fixed;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
   text-align: center;
   z-index: 1000;
 }
@@ -887,6 +888,20 @@ a:focus .content-image {
 /*
  * Flash the alert message using CSS animation.
  */
+@-webkit-keyframes messageflash {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 @keyframes messageflash {
   0% {
     opacity: 0;
@@ -903,7 +918,8 @@ a:focus .content-image {
 }
 
 .messageflash {
-  animation: messageflash 1s;
+  -webkit-animation: messageflash 1s;
+          animation: messageflash 1s;
 }
 
 /* Twisties
@@ -2352,6 +2368,7 @@ body {
  */
 .txp-header {
   background-color: #c7e0f6;
+  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   position: fixed;
@@ -2389,8 +2406,9 @@ body {
  *     </h1>
  */
 .txp-header h1 {
-  -ms-flex: none;
-      flex: none;
+  -webkit-flex: none;
+      -ms-flex: none;
+          flex: none;
   width: 8.125em;
   height: 2em;
   margin: 0.0625em 0.5em 0 0;
@@ -2432,8 +2450,9 @@ body {
  * </p>
  */
 .txp-view-site {
-  -ms-flex: 1;
-      flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
   margin: 0 1em;
   padding: 0 1px;
   line-height: 2.69230769230769em;
@@ -2457,8 +2476,9 @@ body {
 .txp-logout {
   position: relative;
   top: -0.76923076923077em;
-  -ms-flex: none;
-      flex: none;
+  -webkit-flex: none;
+      -ms-flex: none;
+          flex: none;
 }
 
 /* Footer
@@ -2523,8 +2543,9 @@ button.txp-nav-toggle {
  * <nav class="txp-nav">
  */
 .txp-nav {
-  -ms-flex: none;
-      flex: none;
+  -webkit-flex: none;
+      -ms-flex: none;
+          flex: none;
   margin: 0;
   list-style: none;
 }
@@ -2536,6 +2557,7 @@ button.txp-nav-toggle {
 }
 
 .txp-nav > ul {
+  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
@@ -2740,8 +2762,9 @@ button.txp-nav-toggle {
   position: absolute;
   top: 3em;
   left: 0;
-  -ms-flex: none;
-      flex: none;
+  -webkit-flex: none;
+      -ms-flex: none;
+          flex: none;
   min-width: 12em;
   border: 1px solid;
   border-radius: 0 0.3em 0.3em;
@@ -2790,7 +2813,7 @@ button.txp-nav-toggle {
 [dir="rtl"] .dropdown-menu {
   right: 0;
   left: auto;
-  border-radius: 0.3em 0 0.3em;
+  border-radius: 0.3em 0;
 }
 
 [dir="rtl"] .dropdown-menu li:first-child {
@@ -3378,10 +3401,12 @@ span.spinner {
 .txp-edit .txp-form-field:not(.txp-form-field-textarea),
 .txp-prefs-group .txp-form-field:not(.txp-form-field-textarea),
 .setup:not(.welcome) .txp-form-field:not(.txp-form-field-textarea) {
+  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-align: baseline;
-      align-items: baseline;
+  -webkit-align-items: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
 }
 
 .txp-edit .txp-form-field-label,
@@ -3390,8 +3415,9 @@ span.spinner {
 .txp-prefs-group .txp-form-field-value,
 .setup:not(.welcome) .txp-form-field-label,
 .setup:not(.welcome) .txp-form-field-value {
-  -ms-flex: 1 1 0%;
-      flex: 1 1 0%;
+  -webkit-flex: 1 1 0%;
+      -ms-flex: 1 1 0%;
+          flex: 1 1 0%;
   min-height: 2.15384615384615em;
 }
 
@@ -3411,8 +3437,9 @@ span.spinner {
  */
 .txp-form-field-textarea .txp-form-field-label,
 .txp-form-field-textarea .txp-form-field-value {
-  -ms-flex: none;
-      flex: none;
+  -webkit-flex: none;
+      -ms-flex: none;
+          flex: none;
   max-width: inherit;
   min-height: inherit;
 }
@@ -6657,8 +6684,9 @@ label.ui-state-active.ui-button:active {
   .txp-edit .txp-form-field-value,
   .txp-prefs-group .txp-form-field-label,
   .txp-prefs-group .txp-form-field-value {
-    -ms-flex: none;
-        flex: none;
+    -webkit-flex: none;
+        -ms-flex: none;
+            flex: none;
     min-height: inherit;
   }
   /**
