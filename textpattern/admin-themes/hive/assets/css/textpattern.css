@@ -1489,14 +1489,14 @@ textarea:focus {
   padding: 0;
 }
 
-[type="checkbox"] + label,
-[type="radio"] + label {
+[type="checkbox"] + label:not(.ui-controlgroup-item),
+[type="radio"] + label:not(.ui-controlgroup-item) {
   /* 2 */
   margin: 0 0.5em 0 0;
 }
 
-[type="checkbox"] + label:last-of-type,
-[type="radio"] + label:last-of-type {
+[type="checkbox"] + label:not(.ui-controlgroup-item):last-of-type,
+[type="radio"] + label:not(.ui-controlgroup-item):last-of-type {
   /* 2 */
   margin: 0;
 }
@@ -1504,13 +1504,13 @@ textarea:focus {
 /**
  * Swap margin positions in RTL languages.
  */
-[dir="rtl"] [type="checkbox"] + label,
-[dir="rtl"] [type="radio"] + label {
+[dir="rtl"] [type="checkbox"] + label:not(.ui-controlgroup-item),
+[dir="rtl"] [type="radio"] + label:not(.ui-controlgroup-item) {
   margin: 0 0 0 0.5em;
 }
 
-[dir="rtl"] [type="checkbox"] + label:last-of-type,
-[dir="rtl"] [type="radio"] + label:last-of-type {
+[dir="rtl"] [type="checkbox"] + label:not(.ui-controlgroup-item):last-of-type,
+[dir="rtl"] [type="radio"] + label:not(.ui-controlgroup-item):last-of-type {
   margin: 0;
 }
 
@@ -1961,6 +1961,8 @@ ul.nav-tertiary li {
 /**
  * Search widget 'search' button.
  *
+ * 1. Correct specificity for RTL languages.
+ *
  * Example HTML:
  *
  * <form class="txp-search">
@@ -1972,9 +1974,13 @@ ul.nav-tertiary li {
  * </form>
  */
 .txp-search button.txp-search-button {
-  margin-left: -0.28em;
   padding-right: 1.5em;
   padding-left: 1.5em;
+  border-radius: 0;
+}
+
+[dir="rtl"] .txp-search button.txp-search-button {
+  /* 1 */
   border-radius: 0;
 }
 
@@ -2952,8 +2958,13 @@ hr {
  * </form>
  */
 .txp-search {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: flex-end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
   margin: 1em 0;
-  float: right;
 }
 
 .txp-search .ui-menu {
@@ -2972,13 +2983,6 @@ hr {
   padding: 0.23076923076923em 0.30769230769231em;
   cursor: pointer;
   vertical-align: text-top;
-}
-
-/**
- * Swap float position in RTL languages.
- */
-[dir="rtl"] .txp-search {
-  float: left;
 }
 
 /**
@@ -5335,8 +5339,16 @@ input.ui-button.ui-button-icon-only {
   border-radius: 0 0.5em 0.5em 0;
 }
 
+[dir="rtl"] .ui-button.ui-corner-right {
+  border-radius: 0.5em 0 0 0.5em;
+}
+
 .ui-button.ui-corner-left {
   border-radius: 0.5em 0 0 0.5em;
+}
+
+[dir="rtl"] .ui-button.ui-corner-left {
+  border-radius: 0 0.5em 0.5em 0;
 }
 
 /**
@@ -5469,14 +5481,17 @@ label.ui-state-active.ui-button:active {
  * </fieldset>
  */
 .ui-controlgroup {
-  display: inline-block;
-  vertical-align: top;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-flow: row wrap;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
 }
 
 .ui-controlgroup .ui-controlgroup-item {
   margin-right: 0;
   margin-left: 0;
-  float: left;
 }
 
 .ui-controlgroup .ui-controlgroup-item:focus, .ui-controlgroup .ui-controlgroup-item.ui-visual-focus {
@@ -5504,14 +5519,23 @@ label.ui-state-active.ui-button:active {
   border-right: 0;
 }
 
+.ui-controlgroup-vertical {
+  -webkit-flex-flow: column;
+      -ms-flex-flow: column;
+          flex-flow: column;
+}
+
 .ui-controlgroup-vertical .ui-controlgroup-item {
   display: block;
   width: 100%;
   margin-top: 0;
   margin-bottom: 0;
-  float: none;
   text-align: left;
   box-sizing: border-box;
+}
+
+[dir="rtl"] .ui-controlgroup-vertical .ui-controlgroup-item {
+  text-align: right;
 }
 
 .ui-controlgroup-vertical .ui-controlgroup-label + .ui-controlgroup-item {
@@ -5794,9 +5818,17 @@ label.ui-state-active.ui-button:active {
   left: auto;
 }
 
+[dir="rtl"] .ui-datepicker-prev span {
+  background-position: -48px -192px;
+}
+
 [dir="rtl"] .ui-datepicker-next {
   right: auto;
   left: 0.2em;
+}
+
+[dir="rtl"] .ui-datepicker-next span {
+  background-position: -80px -192px;
 }
 
 [dir="rtl"] .ui-datepicker-buttonpane {
