@@ -284,6 +284,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         // Pivot is specific article by ID: In lack of further information,
         // revert to default sort order 'Posted desc'.
         $atts = array('thisid' => $id) + filterAtts(array('sortby' => "Posted", 'sortdir' => "DESC"));
+        $threshold_type = 'raw';
     } else {
         // Pivot is $thisarticle: Use article attributes to find its neighbours.
         assert_article();
