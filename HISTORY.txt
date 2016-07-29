@@ -35,7 +35,7 @@ Changes in 4.6.0 (Upcoming)
 * Changed: <txp:password_protect /> can be used as a container tag.
 * Changed: <txp:recent_articles /> accepts 'offset' attribute.
 * Changed: <txp:section_list /> accepts 'html_id', 'limit' and 'offset' attributes.
-* Changed: Deprecated <txp:keywords /> tag. Use <txp:meta_keywords /> instead.
+* Changed: Deprecated <txp:keywords /> tag. Use <txp:meta_keywords format="" /> instead.
 * Changed: Deprecated <txp:rsd /> tag.
 * Changed: Deprecated 'breakclass' attribute for <txp:comments /> and <txp:image_info />.
 * Changed: Removed Form (article) Preview facility.
