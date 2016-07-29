@@ -439,7 +439,7 @@ $prefs = array(
         array(0,  20, 'yesnoradio'      , 'syndicate_body_or_excerpt'  , '1'),
         array(0,  40, 'text_input'      , 'rss_how_many'               , '5'),
         array(0,  60, 'yesnoradio'      , 'show_comment_count_in_feed' , '1'),
-        array(0,  80, 'yesnoradio'      , 'include_email_atom'         , '1'),
+        array(0,  80, 'yesnoradio'      , 'include_email_atom'         , '0'),
         array(0, 100, 'yesnoradio'      , 'use_mail_on_feeds_id'       , '0'),
     ),
     'publish' => array(
