@@ -24,6 +24,12 @@
  */
 
 /**
+ * Ascertain the page direction (LTR or RTL) as a variable.
+ */
+
+var langdir = document.documentElement.dir;
+
+/**
  * Checks if HTTP cookies are enabled.
  *
  * @return {boolean}
@@ -1584,12 +1590,22 @@ function txp_search()
         icon: 'ui-icon-triangle-1-s'
     }).on('click', function (e)
     {
-        var menu = $ui.find('.txp-dropdown').toggle().position(
-        {
-            my: "right top", // TODO: need to swap this to 'left top' in RTL languages.
-            at: "right bottom", // TODO: need to swap this to 'left bottom' in RTL languages.
-            of: this
-        });
+        if (langdir === 'rtl') {
+            var menu = $ui.find('.txp-dropdown').toggle().position(
+            {
+                my: "left top",
+                at: "left bottom",
+                of: this
+            });
+        } else {
+            var menu = $ui.find('.txp-dropdown').toggle().position(
+            {
+                my: "right top",
+                at: "right bottom",
+                of: this
+            });
+        };
+
         $(document).one('click blur', function ()
         {
             menu.hide();
@@ -1944,7 +1960,7 @@ $(document).ready(function ()
     $('.jquery-ui-button').button();
 
     // Button set
-    $('.jquery-ui-buttonset').controlgroup();
+    $('.jquery-ui-controlgroup').controlgroup();
 
 
     // TODO: end integrate jQuery UI stuff properly ----------------------------

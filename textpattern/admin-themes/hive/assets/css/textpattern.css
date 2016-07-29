@@ -5907,6 +5907,10 @@ label.ui-state-active.ui-button:active {
   overflow: hidden;
 }
 
+[dir="rtl"] .ui-dialog .ui-dialog-title {
+  float: right;
+}
+
 .ui-dialog .ui-dialog-titlebar-close {
   position: absolute;
   top: 50%;
@@ -5914,6 +5918,11 @@ label.ui-state-active.ui-button:active {
   width: 20px;
   height: 20px;
   margin: -10px 0 0;
+}
+
+[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
+  right: auto;
+  left: 0.3em;
 }
 
 .ui-dialog .ui-dialog-content {
@@ -5936,9 +5945,17 @@ label.ui-state-active.ui-button:active {
   float: right;
 }
 
+[dir="rtl"] .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+  float: left;
+}
+
 .ui-dialog .ui-dialog-buttonpane button {
   margin: 0.5em 0.4em 0.5em 0;
   cursor: pointer;
+}
+
+[dir="rtl"] .ui-dialog .ui-dialog-buttonpane button {
+  margin: 0.5em 0 0.5em 0.4em;
 }
 
 /**
@@ -6800,7 +6817,7 @@ label.ui-state-active.ui-button:active {
      */
   .txp-form-field-value input,
   .txp-form-field-value select,
-  .txp-form-field-value .jquery-ui-buttonset {
+  .txp-form-field-value .jquery-ui-controlgroup {
     margin: 0;
   }
   /**
