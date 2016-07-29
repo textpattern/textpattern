@@ -1,6 +1,6 @@
 Changes in 4.6.0 (Upcoming)
 
-* Textile v3.5. Also support for adding other text filters via plugins (for example, Markdown).
+* Textile v3.5.
 * Improved RTL language support.
 * Improved admin side UI.
 * Requires PHP 5.3.3 or newer. Compatible with PHP 7 and MySQL 5.7 (thanks Ruud van Melick).
@@ -10,6 +10,7 @@ Changes in 4.6.0 (Upcoming)
 * Ninety-minute validity for password reset requests by default. Configurable in config.php (see RESET_EXPIRY_MINUTES).
 * Stronger password hashes and strength meter implemented (zxcvbn).
 * Faster due to cache-friendly public side database queries, parser improvements and reduction of admin-side queries (thanks Ruud van Melick and etc).
+* Added: Support for adding other markup languages  (for example, Markdown) via plugins.
 * Added: Default publishing status preference.
 * Added: Support for additional text markup languages.
 * Added: Support for custom CSS and JavaScript files in admin themes, for advanced users.
