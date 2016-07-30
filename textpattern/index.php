@@ -35,7 +35,8 @@ if (@ini_get('register_globals')) {
         (array) $_POST,
         (array) $_COOKIE,
         (array) $_FILES,
-        (array) $_SERVER);
+        (array) $_SERVER
+    );
 
     // As the deliberately awkward-named local variable $_txpfoo MUST NOT be unset to avoid notices further
     // down, we must remove any potentially identical-named global from the list of global names here.
@@ -219,11 +220,13 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         echo $trace->summary();
         echo $trace->result();
     } else {
-        foreach($trace->summary(true) as $key => $value) {
-           header('X-Textpattern-'.preg_replace('/[^\w]+/', '', $key).': '.$value);
+        foreach ($trace->summary(true) as $key => $value) {
+            header('X-Textpattern-'.preg_replace('/[^\w]+/', '', $key).': '.$value);
         }
     }
 } else {
-    txp_die('Database connection was successful, but the <code>textpattern</code> table was not found.',
-        '503 Service Unavailable');
+    txp_die(
+        'Database connection was successful, but the <code>textpattern</code> table was not found.',
+        '503 Service Unavailable'
+    );
 }
