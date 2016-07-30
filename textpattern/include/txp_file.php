@@ -139,7 +139,8 @@ function file_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $search = new Filter($event,
+    $search = new Filter(
+        $event,
         array(
             'id' => array(
                 'column' => 'txp_file.id',
@@ -197,16 +198,15 @@ function file_list($message = '')
 
     echo n.tag(
         hed(gTxt('tab_file'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1'));
+        'div',
+        array('class' => 'txp-layout-2col-cell-1')
+    );
 
     $searchBlock =
-        n.tag(
-            $search->renderForm('file_list', $search_render_options),
-            'div', array(
+        n.tag($search->renderForm('file_list', $search_render_options), 'div', array(
                 'class' => 'txp-layout-2col-cell-2',
                 'id'    => $event.'_control',
-            )
-        );
+        ));
 
     $createBlock = array();
 
@@ -225,14 +225,19 @@ function file_list($message = '')
         $existing_files = get_filenames();
 
         if ($existing_files) {
-            $createBlock[] =
-                form(
-                    eInput('file').
-                    sInput('file_create').
-                    tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
-                    selectInput('filename', $existing_files, '', 1, '', 'file-existing').
-                    fInput('submit', '', gTxt('Create')),
-                '', '', 'post', 'assign-existing-form', '', 'assign_file');
+            $createBlock[] = form(
+                eInput('file').
+                sInput('file_create').
+                tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
+                selectInput('filename', $existing_files, '', 1, '', 'file-existing').
+                fInput('submit', '', gTxt('Create')),
+                '',
+                '',
+                'post',
+                'assign-existing-form',
+                '',
+                'assign_file'
+            );
         }
 
         $createBlock[] = tag_end('div');
@@ -295,8 +300,7 @@ function file_list($message = '')
     if ($rs && numRows($rs)) {
         $show_authors = !has_single_author('txp_file');
 
-        echo n.tag(
-                toggle_box('files_detail'), 'div', array('class' => 'txp-list-options')).
+        echo n.tag(toggle_box('files_detail'), 'div', array('class' => 'txp-list-options')).
             n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'files_form',
@@ -310,45 +314,39 @@ function file_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                    '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'ID', 'id', 'file', true, $switch_dir, $crit, $search_method,
-                        (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
+                    (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
                     'file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method,
-                        (('filename' == $sort) ? "$dir " : '').'txp-list-col-filename'
+                    (('filename' == $sort) ? "$dir " : '').'txp-list-col-filename'
                 ).
                 column_head(
                     'title', 'title', 'file', true, $switch_dir, $crit, $search_method,
-                        (('title' == $sort) ? "$dir " : '').'txp-list-col-title files_detail'
+                    (('title' == $sort) ? "$dir " : '').'txp-list-col-title files_detail'
                 ).
                 column_head(
                     'date', 'date', 'image', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date files_detail'
+                    (('date' == $sort) ? "$dir " : '').'txp-list-col-created date files_detail'
                 ).
                 column_head(
                     'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method,
-                        (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
+                    (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                 ).
-                hCell(gTxt(
-                    'tags'), '', ' class="txp-list-col-tag-build files_detail" scope="col"'
-                ).
-                hCell(gTxt(
-                    'status'), '', ' class="txp-list-col-status" scope="col"'
-                ).
-                hCell(gTxt(
-                    'condition'), '', ' class="txp-list-col-condition" scope="col"'
-                ).
+                hCell(gTxt('tags'), '', ' class="txp-list-col-tag-build files_detail" scope="col"').
+                hCell(gTxt('status'), '', ' class="txp-list-col-status" scope="col"').
+                hCell(gTxt('condition'), '', ' class="txp-list-col-condition" scope="col"').
                 column_head(
                     'downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method,
-                        (('downloads' == $sort) ? "$dir " : '').'txp-list-col-downloads'
+                    (('downloads' == $sort) ? "$dir " : '').'txp-list-col-downloads'
                 ).
                 (
                     $show_authors
                     ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method,
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
+                      (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
                     : ''
                 )
             ).
@@ -430,43 +428,27 @@ function file_list($message = '')
             }
 
             echo tr(
-                td(
-                    $multi_edit, '', 'txp-list-col-multi-edit'
-                ).
-                hCell(
-                    $id_column, '', array(
+                td($multi_edit, '', 'txp-list-col-multi-edit').
+                hCell($id_column, '', array(
                         'class' => 'txp-list-col-id',
                         'scope' => 'row',
-                    )
-                ).
-                td(
-                    $name, '', 'txp-list-col-filename'
-                ).
-                td(
-                    txpspecialchars($title), '', 'txp-list-col-title files_detail'
-                ).
-                td(
-                    gTime($uDate), '', 'txp-list-col-created date files_detail'
-                ).
-                td(
-                    $category, '', 'txp-list-col-category category'.$vc
-                ).
+                )).
+                td($name, '', 'txp-list-col-filename').
+                td(txpspecialchars($title), '', 'txp-list-col-title files_detail').
+                td(gTime($uDate), '', 'txp-list-col-created date files_detail').
+                td($category, '', 'txp-list-col-category category'.$vc).
                 td(
                     href('Textile', $tag_url + array('type' => 'textile'), ' target="_blank" onclick="popWin(this.href); return false;"').
                     sp.span('&#124;', array('role' => 'separator')).
                     sp.href('Textpattern', $tag_url + array('type' => 'textpattern'), ' target="_blank" onclick="popWin(this.href); return false;"').
                     sp.span('&#124;', array('role' => 'separator')).
-                    sp.href('HTML', $tag_url + array('type' => 'html'), ' target="_blank" onclick="popWin(this.href); return false;"'), '', 'txp-list-col-tag-build files_detail').
-
-                td(
-                    $status, '', 'txp-list-col-status'
+                    sp.href('HTML', $tag_url + array('type' => 'html'), ' target="_blank" onclick="popWin(this.href); return false;"'),
+                    '',
+                    'txp-list-col-tag-build files_detail'
                 ).
-                td(
-                    $condition, '', 'txp-list-col-condition'
-                ).
-                td(
-                    $downloads, '', 'txp-list-col-downloads'
-                ).
+                td($status, '', 'txp-list-col-status').
+                td($condition, '', 'txp-list-col-condition').
+                td($downloads, '', 'txp-list-col-downloads').
                 (
                     $show_authors
                     ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name')
@@ -569,7 +551,7 @@ function file_multi_edit()
             $key = 'downloads';
             $val = 0;
             break;
-        case 'changestatus' :
+        case 'changestatus':
             $key = 'status';
             $val = ps('status');
 
@@ -699,94 +681,97 @@ function file_edit($message = '', $id = '')
             n.tag(
                 checkbox('publish_now', '1', $publish_now, '', 'publish_now').
                 n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
-                'div', array('class' => 'posted-now')
+                'div',
+                array('class' => 'posted-now')
             );
 
         echo n.tag_start('div', array('class' => 'txp-edit')).
-            hed(gTxt('edit_file'), 2).
-            $replace.
-            inputLabel(
-                'condition',
-                $condition,
-                '', '', array('class' => 'txp-form-field edit-file-condition')
-            ).
-            inputLabel(
-                'id',
-                $id,
-                'id', '', array('class' => 'txp-form-field edit-file-id')
-            ).
-            inputLabel(
-                'name',
-                $downloadlink,
-                '', '', array('class' => 'txp-form-field edit-file-name')
-            ).
-            inputLabel(
-                'download_count',
-                $downloads,
-                '', '', array('class' => 'txp-form-field edit-file-download-count')
-            ).
-            form(
-                (($file_exists)
-                ? inputLabel(
-                        'file_status',
-                        selectInput('status', $file_statuses, $status, false, '', 'file_status'),
-                        'file_status', '', array('class' => 'txp-form-field edit-file-status')
-                    ).
-                    $created.
-                    inputLabel(
-                        'file_title',
-                        fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'),
-                        'title', '', array('class' => 'txp-form-field edit-file-title')
-                    ).
-                    inputLabel(
-                        'file_category',
-                        event_category_popup('file', $category, 'file_category').
-                        n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
-                        'file_category', '', array('class' => 'txp-form-field edit-file-category')
-                    ).
-//                    inputLabel(
-//                        'perms',
-//                        selectInput('perms', $levels, $permissions),
-//                        'permissions'
-//                    ).
-                    inputLabel(
-                        'file_description',
-                        '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>',
-                        'description', '', array('class' => 'txp-form-field txp-form-field-textarea edit-file-description')
-                    ).
-                    pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-                    graf(
-                        sLink('file', '', gTxt('cancel'), 'txp-button').
-                        fInput('submit', '', gTxt('save'), 'publish'),
-                        array('class' => 'txp-edit-actions')
-                    ).
-                    hInput('filename', $filename)
-                : (empty($existing_files)
-                        ? ''
-                        : gTxt('existing_file').selectInput('filename', $existing_files, '', 1)
-                    ).
-                    pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-                    graf(
-                        sLink('file', '', gTxt('cancel'), 'txp-button').
-                        fInput('submit', '', gTxt('save'), 'publish'),
-                        array('class' => 'txp-edit-actions')
-                    ).
-                    hInput('category', $category).
-                    hInput('perms', ($permissions == '-1') ? '' : $permissions).
-                    hInput('title', $title).
-                    hInput('description', $description).
-                    hInput('status', $status)
+        hed(gTxt('edit_file'), 2).
+        $replace.
+        inputLabel(
+            'condition', $condition, '', '',
+            array('class' => 'txp-form-field edit-file-condition')
+        ).
+        inputLabel(
+            'id', $id, 'id', '',
+            array('class' => 'txp-form-field edit-file-id')
+        ).
+        inputLabel(
+            'name', $downloadlink, '', '',
+            array('class' => 'txp-form-field edit-file-name')
+        ).
+        inputLabel(
+            'download_count', $downloads, '', '',
+            array('class' => 'txp-form-field edit-file-download-count')
+        ).
+        form(
+            (($file_exists)
+            ? inputLabel(
+                    'file_status',
+                    selectInput('status', $file_statuses, $status, false, '', 'file_status'),
+                    'file_status', '', array('class' => 'txp-form-field edit-file-status')
                 ).
-                eInput('file').
-                sInput('file_save').
-                hInput('id', $id).
-                hInput('sort', $sort).
-                hInput('dir', $dir).
-                hInput('page', $page).
-                hInput('crit', $crit).
-                hInput('search_method', $search_method),
-            '', '', 'post', 'file-detail '.(($file_exists) ? '' : 'not-').'exists', '', (($file_exists) ? 'file_details' : 'assign_file')).
-            n.tag_end('div');
+                $created.
+                inputLabel(
+                    'file_title',
+                    fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'),
+                    'title', '', array('class' => 'txp-form-field edit-file-title')
+                ).
+                inputLabel(
+                    'file_category',
+                    event_category_popup('file', $category, 'file_category').
+                    n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+                    'file_category',
+                    '',
+                    array('class' => 'txp-form-field edit-file-category')
+                ).
+//              inputLabel(
+//                  'perms',
+//                  selectInput('perms', $levels, $permissions),
+//                  'permissions'
+//              ).
+                inputLabel(
+                    'file_description',
+                    '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>',
+                    'description', '', array('class' => 'txp-form-field txp-form-field-textarea edit-file-description')
+                ).
+                pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
+                graf(
+                    sLink('file', '', gTxt('cancel'), 'txp-button').
+                    fInput('submit', '', gTxt('save'), 'publish'),
+                    array('class' => 'txp-edit-actions')
+                ).
+                hInput('filename', $filename)
+            : (empty($existing_files)
+                    ? ''
+                    : gTxt('existing_file').selectInput('filename', $existing_files, '', 1)
+                ).
+                pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
+                graf(
+                    sLink('file', '', gTxt('cancel'), 'txp-button').
+                    fInput('submit', '', gTxt('save'), 'publish'),
+                    array('class' => 'txp-edit-actions')
+                ).
+                hInput('category', $category).
+                hInput('perms', ($permissions == '-1') ? '' : $permissions).
+                hInput('title', $title).
+                hInput('description', $description).
+                hInput('status', $status)
+            ).
+            eInput('file').
+            sInput('file_save').
+            hInput('id', $id).
+            hInput('sort', $sort).
+            hInput('dir', $dir).
+            hInput('page', $page).
+            hInput('crit', $crit).
+            hInput('search_method', $search_method),
+            '',
+            '',
+            'post',
+            'file-detail '.(($file_exists) ? '' : 'not-').'exists', '', (($file_exists) ? 'file_details' : 'assign_file')
+        ).
+        n.tag_end('div');
     }
 }
 
@@ -800,7 +785,8 @@ function file_db_add($filename, $category, $permissions, $description, $size, $t
         return false;
     }
 
-    $rs = safe_insert('txp_file',
+    $rs = safe_insert(
+        'txp_file',
         "filename = '$filename',
          title = '$title',
          category = '$category',
@@ -810,7 +796,8 @@ function file_db_add($filename, $category, $permissions, $description, $size, $t
          created = NOW(),
          modified = NOW(),
          author = '".doSlash($txp_user)."'
-    ");
+        "
+    );
 
     if ($rs) {
         $GLOBALS['ID'] = $rs;
