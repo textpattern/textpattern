@@ -167,7 +167,9 @@ function article_post()
             $when = "NOW()";
             $when_ts = time();
         } else {
-            if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour) || !is_numeric($minute) || !is_numeric($second)) {
+            if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) ||
+                !is_numeric($hour) || !is_numeric($minute) || !is_numeric($second)
+            ) {
                 $ts = false;
             } else {
                 $ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
@@ -260,8 +262,8 @@ function article_post()
         $rs = compact($vars);
         if (article_validate($rs, $msg)) {
             $ok = safe_insert(
-               'textpattern',
-               "Title           = '$Title',
+                'textpattern',
+                "Title           = '$Title',
                 Body            = '$Body',
                 Body_html       = '$Body_html',
                 Excerpt         = '$Excerpt',
@@ -332,11 +334,14 @@ function article_save()
 
     $incoming = array_map('assert_string', psa($vars));
 
-    $oldArticle = safe_row("Status, url_title, Title, textile_body, textile_excerpt,
+    $oldArticle = safe_row(
+        "Status, url_title, Title, textile_body, textile_excerpt,
         UNIX_TIMESTAMP(LastMod) AS sLastMod, LastModID,
         UNIX_TIMESTAMP(Posted) AS sPosted,
         UNIX_TIMESTAMP(Expires) AS sExpires",
-        'textpattern', "ID = ".(int) $incoming['ID']);
+        'textpattern',
+        "ID = ".(int) $incoming['ID']
+    );
 
     if (!(($oldArticle['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
         or ($oldArticle['Status'] >= STATUS_LIVE and $incoming['AuthorID'] === $txp_user and has_privs('article.edit.own.published'))
@@ -464,8 +469,9 @@ function article_save()
 
     $rs = compact($vars);
     if (article_validate($rs, $msg)) {
-        if (safe_update('textpattern',
-           "Title           = '$Title',
+        if (safe_update(
+            'textpattern',
+            "Title          = '$Title',
             Body            = '$Body',
             Body_html       = '$Body_html',
             Excerpt         = '$Excerpt',
@@ -990,7 +996,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     'class' => 'language-markup',
                     'dir'   => 'ltr',
                 )),
-                'pre', array('class' => 'body line-numbers')
+                'pre',
+                array('class' => 'body line-numbers')
             );
     } else {
         echo $partials['body']['html'];
@@ -1004,13 +1011,15 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 $Excerpt_html.
                 '</div>';
         } elseif ($view == 'html') {
-            echo graf(gTxt('excerpt'), array('class' => 'alert-block information')).
+            echo
+                graf(gTxt('excerpt'), array('class' => 'alert-block information')).
                 n.tag(
                     tag(str_replace(array(t), array(sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'code', array(
                         'class' => 'language-markup',
                         'dir'   => 'ltr',
                     )),
-                    'pre', array('class' => 'excerpt line-numbers')
+                    'pre',
+                    array('class' => 'excerpt line-numbers')
                 );
         } else {
             echo $partials['excerpt']['html'];
@@ -1018,7 +1027,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     }
 
     echo hInput('from_view', $view),
-        n.'</div>';
+         n.'</div>';
 
     // Author.
     if ($view == "text" && $step != "create") {
@@ -1026,7 +1035,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     }
 
     echo n.'</div>'.// End of #main_content.
-        n.'</div>'; // End of .txp-layout-4col-cell-1-2-3.
+         n.'</div>'; // End of .txp-layout-4col-cell-1-2-3.
 
     // Sidebar column (only shown if in text editing view).
     if ($view == 'text') {
@@ -1041,8 +1050,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             }
 
             echo graf($push_button, array('class' => 'txp-save'));
-        } elseif (
-            ($Status >= STATUS_LIVE && has_privs('article.edit.published')) ||
+        } elseif (($Status >= STATUS_LIVE && has_privs('article.edit.published')) ||
             ($Status >= STATUS_LIVE && $AuthorID === $txp_user && has_privs('article.edit.own.published')) ||
             ($Status < STATUS_LIVE && has_privs('article.edit')) ||
             ($Status < STATUS_LIVE && $AuthorID === $txp_user && has_privs('article.edit.own'))
@@ -1065,12 +1073,13 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo n.'<div role="region" id="supporting_content">';
 
         // 'Sort and display' section.
-        echo pluggable_ui(
-            'article_ui',
-            'sort_display',
-            wrapRegion('txp-write-sort-group', $partials['status']['html'].$partials['section']['html'].$partials['categories']['html'], '', gTxt('sort_display')),
-            $rs
-        );
+        echo
+            pluggable_ui(
+                'article_ui',
+                'sort_display',
+                wrapRegion('txp-write-sort-group', $partials['status']['html'].$partials['section']['html'].$partials['categories']['html'], '', gTxt('sort_display')),
+                $rs
+            );
 
         // 'Date and time' collapsible section.
 
@@ -1115,7 +1124,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 n.tag(
                     checkbox('publish_now', '1', $publish_now, '', 'publish_now').
                     n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
-                    'div', array('class' => 'posted-now')
+                    'div',
+                    array('class' => 'posted-now')
                 ),
                 array('sPosted' => $persist_timestamp) + $rs
             );
@@ -1166,7 +1176,14 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             $expires_block = $partials['expires']['html'];
         }
 
-        echo wrapRegion('txp-dates-group', $posted_block.$expires_block, 'txp-dates-group-content', 'date_settings', 'article_dates');
+        echo
+            wrapRegion(
+                'txp-dates-group',
+                $posted_block.$expires_block,
+                'txp-dates-group-content',
+                'date_settings',
+                'article_dates'
+            );
 
         // 'Meta' collapsible section.
 
@@ -1179,16 +1196,44 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Keywords' field.
         $html_keywords = $partials['keywords']['html'];
 
-        echo wrapRegion('txp-meta-group', $html_url_title.$html_description.$html_keywords, 'txp-meta-group-content', 'meta', 'article_meta');
+        echo
+            wrapRegion(
+                'txp-meta-group',
+                $html_url_title.$html_description.$html_keywords,
+                'txp-meta-group-content',
+                'meta',
+                'article_meta'
+            );
 
         // 'Comment options' collapsible section.
-        echo wrapRegion('txp-comments-group', $partials['comments']['html'], 'txp-comments-group-content', 'comment_settings', 'article_comments');
+        echo
+            wrapRegion(
+                'txp-comments-group',
+                $partials['comments']['html'],
+                'txp-comments-group-content',
+                'comment_settings',
+                'article_comments'
+            );
 
         // 'Article image' collapsible section.
-        echo wrapRegion('txp-image-group', $partials['image']['html'], 'txp-image-group-content', 'article_image', 'article_image');
+        echo
+            wrapRegion(
+                'txp-image-group',
+                $partials['image']['html'],
+                'txp-image-group-content',
+                'article_image',
+                'article_image'
+            );
 
         // 'Custom fields' collapsible section.
-        echo wrapRegion('txp-custom-field-group', $partials['custom_fields']['html'], 'txp-custom-field-group-content', 'custom', 'article_custom_field');
+        echo
+            wrapRegion(
+                'txp-custom-field-group',
+                $partials['custom_fields']['html'],
+                'txp-custom-field-group-content',
+                'custom',
+                'article_custom_field'
+            );
 
         // 'Advanced options' collapsible section.
 
@@ -1218,7 +1263,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Override form' selection.
         $form_pop = $allow_form_override ? form_pop($override_form, 'override-form') : '';
         $html_override = $form_pop
-            ? pluggable_ui('article_ui', 'override',
+            ? pluggable_ui(
+                'article_ui',
+                'override',
                 inputLabel(
                     'override-form',
                     $form_pop,
@@ -1226,19 +1273,38 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     array('override_form', 'instructions_override_form'),
                     array('class' => 'txp-form-field override-form')
                 ),
-                $rs)
+                $rs
+            )
             : '';
 
-        echo wrapRegion('txp-advanced-group', $html_markup.$html_override, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
+        echo wrapRegion(
+            'txp-advanced-group',
+            $html_markup.$html_override,
+            'txp-advanced-group-content',
+            'advanced_options',
+            'article_advanced'
+        );
 
         // Custom menu entries.
         echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
 
         // 'Text formatting help' collapsible section.
-        echo wrapRegion('txp-textfilter-group', $partials['sidehelp']['html'], 'txp-textfilter-group-content', 'textfilter_help', 'article_textfilter_help');
+        echo wrapRegion(
+            'txp-textfilter-group',
+            $partials['sidehelp']['html'],
+            'txp-textfilter-group-content',
+            'textfilter_help',
+            'article_textfilter_help'
+        );
 
         // 'Recent articles' collapsible section.
-        echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
+        echo wrapRegion(
+            'txp-recent-group',
+            $partials['recent_articles']['html'],
+            'txp-recent-group-content',
+            'recent_articles',
+            'article_recent'
+        );
 
         echo n.'</div>'; // End of #supporting_content.
 
@@ -1281,14 +1347,21 @@ function custField($num, $field, $content)
 function checkIfNeighbour($whichway, $sPosted, $ID = 0)
 {
     // Eventual backward compatibility.
-    if(empty($ID)) $ID = !empty($GLOBALS['ID']) ? $GLOBALS['ID'] : gps('ID');
+    if (empty($ID)) {
+        $ID = !empty($GLOBALS['ID']);
+    } else {
+        $GLOBALS['ID'] : gps('ID');
+    }
     $sPosted = assert_int($sPosted);
     $ID = assert_int($ID);
     $dir = ($whichway == 'prev') ? '<' : '>';
     $ord = ($whichway == 'prev') ? "DESC" : "ASC";
 
-    return safe_field("ID", 'textpattern',
-        "Posted $dir FROM_UNIXTIME($sPosted) OR Posted = FROM_UNIXTIME($sPosted) AND ID $dir $ID ORDER BY Posted $ord, ID $ord LIMIT 1");
+    return safe_field(
+        "ID",
+        'textpattern',
+        "Posted $dir FROM_UNIXTIME($sPosted) OR Posted = FROM_UNIXTIME($sPosted) AND ID $dir $ID ORDER BY Posted $ord, ID $ord LIMIT 1"
+    );
 }
 
 /**
@@ -1622,7 +1695,7 @@ function article_partial_custom_field($rs, $key)
     $custom_x_set = "custom_{$m[1]}_set";
     $custom_x = "custom_{$m[1]}";
 
-    return ($$custom_x_set !== '' ? custField($m[1], $$custom_x_set,  $rs[$custom_x]) : '');
+    return ($$custom_x_set !== '' ? custField($m[1], $$custom_x_set, $rs[$custom_x]) : '');
 }
 
 /**
@@ -1972,7 +2045,11 @@ function article_partial_article_nav($rs)
 
 function article_partial_status($rs)
 {
-    return n.tag(pluggable_ui('article_ui', 'status', status_display($rs['Status']), $rs), 'div', array('id' => 'txp-container-status'));
+    return n.tag(
+        pluggable_ui('article_ui', 'status', status_display($rs['Status']), $rs),
+        'div',
+        array('id' => 'txp-container-status')
+    );
 }
 
 /**
@@ -2079,16 +2156,17 @@ function article_partial_comments($rs)
             ));
         } else {
             $invite = n.tag(
-                    onoffRadio('Annotate', $Annotate),
-                    'div', array('class' => 'txp-form-field comment-annotate')
-                ).
-                inputLabel(
-                    'comment-invite',
-                    fInput('text', 'AnnotateInvite', $AnnotateInvite, '', '', '', INPUT_REGULAR, '', 'comment-invite'),
-                    'comment_invitation',
-                    array('', 'instructions_comment_invitation'),
-                    array('class' => 'txp-form-field comment-invite')
-                );
+                onoffRadio('Annotate', $Annotate),
+                'div',
+                array('class' => 'txp-form-field comment-annotate')
+            ).
+            inputLabel(
+                'comment-invite',
+                fInput('text', 'AnnotateInvite', $AnnotateInvite, '', '', '', INPUT_REGULAR, '', 'comment-invite'),
+                'comment_invitation',
+                array('', 'instructions_comment_invitation'),
+                array('class' => 'txp-form-field comment-invite')
+            );
         }
 
         return n.tag_start('div', array('id' => 'write-comments')).
@@ -2137,7 +2215,8 @@ function article_partial_posted($rs)
         n.tag(
             checkbox('reset_time', '1', $reset_time, '', 'reset_time').
             n.tag(gTxt('reset_time'), 'label', array('for' => 'reset_time')),
-            'div', array('class' => 'reset-time')
+            'div',
+            array('class' => 'reset-time')
         );
 
     return n.tag_start('div', array('id' => 'publish-datetime-group')).

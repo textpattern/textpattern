@@ -70,25 +70,21 @@ function cat_category_list($message = "")
     pagetop(gTxt('categories'), $message);
     $out = array(hed(gTxt('tab_organise'), 1, 'class="txp-heading"'),
         n.tag(cat_article_list(), 'section', array(
-                'class' => 'txp-layout-4col-cell-1',
-                'id'    => 'categories_article',
-            )
-        ),
+            'class' => 'txp-layout-4col-cell-1',
+            'id'    => 'categories_article',
+        )),
         n.tag(cat_image_list(), 'section', array(
                 'class' => 'txp-layout-4col-cell-2',
                 'id'    => 'categories_image',
-            )
-        ),
+        )),
         n.tag(cat_file_list(), 'section', array(
-                'class' => 'txp-layout-4col-cell-3',
-                'id'    => 'categories_file',
-            )
-        ),
+            'class' => 'txp-layout-4col-cell-3',
+            'id'    => 'categories_file',
+        )),
         n.tag(cat_link_list(), 'section', array(
-                'class' => 'txp-layout-4col-cell-4',
-                'id'    => 'categories_link',
-            )
-        ),
+            'class' => 'txp-layout-4col-cell-4',
+            'id'    => 'categories_link',
+        )),
         script_js(<<<EOS
             $(document).ready(function ()
             {
@@ -259,7 +255,13 @@ function cat_article_multiedit_form($area, $array)
             form(
                 join('', $array).
                 hInput('type', $area).
-                multi_edit($methods, 'category', 'cat_category_multiedit', '', '', '', '', '', $area), '', '', 'post', 'category-tree', '', 'category_'.$area.'_form'
+                multi_edit($methods, 'category', 'cat_category_multiedit', '', '', '', '', '', $area),
+                '',
+                '',
+                'post',
+                'category-tree',
+                '',
+                'category_'.$area.'_form'
             );
     }
 
@@ -383,7 +385,12 @@ function cat_event_category_list($event)
                 fInput('submit', '', gTxt('Create')).
                 eInput('category').
                 sInput('cat_'.$event.'_create')
-            ), '', '', 'post', $event);
+            ),
+            '',
+            '',
+            'post',
+            $event
+        );
 
     if ($rs) {
         $total_count = array();
@@ -395,7 +402,8 @@ function cat_event_category_list($event)
                     SELECT ID, Category1 AS category FROM ".safe_pfx('textpattern')."
                         UNION
                     SELECT ID, Category2 AS category FROM ".safe_pfx('textpattern')."
-                ) AS t WHERE category != '' GROUP BY category");
+                ) AS t WHERE category != '' GROUP BY category"
+            );
 
             if ($rs2 !== false) {
                 foreach ($rs2 as $a) {
@@ -453,7 +461,9 @@ function cat_event_category_list($event)
             }
 
             $items[] = graf(
-                checkbox('selected[]', $id, 0).sp.str_repeat(sp.sp, $level * 2).$edit_link.sp.$count, ' class="level-'.$level.'"');
+                checkbox('selected[]', $id, 0).sp.str_repeat(sp.sp, $level * 2).$edit_link.sp.$count,
+                ' class="level-'.$level.'"'
+            );
         }
 
         if ($items) {
@@ -535,22 +545,30 @@ function cat_event_category_edit($evname, $message = '')
             inputLabel(
                 'category_name',
                 fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'),
-                $evname.'_category_name', '', array('class' => 'txp-form-field edit-category-name')
+                $evname.'_category_name',
+                '',
+                array('class' => 'txp-form-field edit-category-name')
             ).
             inputLabel(
                 'category_parent',
                 $parent_widget,
-                'parent', '', array('class' => 'txp-form-field edit-category-parent')
+                'parent',
+                '',
+                array('class' => 'txp-form-field edit-category-parent')
             ).
             inputLabel(
                 'category_title',
                 fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'),
-                $evname.'_category_title', '', array('class' => 'txp-form-field edit-category-title')
+                $evname.'_category_title',
+                '',
+                array('class' => 'txp-form-field edit-category-title')
             ).
             inputLabel(
                 'category_description',
                 '<textarea id="category_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>',
-                $evname.'_category_description', 'category_description', array('class' => 'txp-form-field txp-form-field-textarea edit-category-description')
+                $evname.'_category_description',
+                'category_description',
+                array('class' => 'txp-form-field txp-form-field-textarea edit-category-description')
             ).
             pluggable_ui('category_ui', 'extend_detail_form', '', $row).
             hInput('id', $id).

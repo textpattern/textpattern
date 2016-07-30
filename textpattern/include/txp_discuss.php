@@ -78,7 +78,8 @@ function discuss_save()
     callback_event_ref('discuss_ui', 'validate_save', 0, $varray, $constraints);
     $validator = new Validator($constraints);
 
-    if ($validator->validate() && safe_update('txp_discuss',
+    if ($validator->validate() && safe_update(
+        'txp_discuss',
         "email   = '$email',
          name    = '$name',
          web     = '$web',
@@ -185,7 +186,8 @@ function discuss_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $search = new Filter($event,
+    $search = new Filter(
+        $event,
         array(
             'id' => array(
                 'column' => 'txp_discuss.discussid',
@@ -267,12 +269,15 @@ function discuss_list($message = '')
 
     echo n.tag(
         hed(gTxt('list_discussions'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1'));
+        'div',
+        array('class' => 'txp-layout-2col-cell-1')
+    );
 
     $searchBlock =
         n.tag(
             $search->renderForm('discuss_list', $search_render_options),
-            'div', array(
+            'div',
+            array(
                 'class' => 'txp-layout-2col-cell-2',
                 'id'    => $event.'_control',
             )
@@ -340,10 +345,13 @@ function discuss_list($message = '')
     );
 
     if ($rs) {
-        echo n.tag(
+        echo
+            n.tag(
                 cookie_box('show_spam').
                 toggle_box('discuss_detail'),
-                'div', array('class' => 'txp-list-options')).
+                'div',
+                array('class' => 'txp-list-options')
+            ).
             n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'discuss_form',
@@ -357,43 +365,44 @@ function discuss_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                    '',
+                    ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
+                    (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
                     'date', 'date', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
+                    (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
                 ).
                 column_head(
                     'name', 'name', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
+                    (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
                     'message', 'message', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('message' == $sort) ? "$dir " : 'txp-list-col-message')
+                    (('message' == $sort) ? "$dir " : 'txp-list-col-message')
                 ).
                 column_head(
                     'email', 'email', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('email' == $sort) ? "$dir " : '').'txp-list-col-email discuss_detail'
+                    (('email' == $sort) ? "$dir " : '').'txp-list-col-email discuss_detail'
                 ).
                 column_head(
                     'website', 'website', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('website' == $sort) ? "$dir " : '').'txp-list-col-website discuss_detail'
+                    (('website' == $sort) ? "$dir " : '').'txp-list-col-website discuss_detail'
                 ).
                 column_head(
                     'IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip discuss_detail'
+                    (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip discuss_detail'
                 ).
                 column_head(
                     'status', 'status', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
+                    (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
                 ).
                 column_head(
                     'parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('parent' == $sort) ? "$dir " : '').'txp-list-col-parent'
+                    (('parent' == $sort) ? "$dir " : '').'txp-list-col-parent'
                 )
             ).
             n.tag_end('thead');
@@ -452,39 +461,28 @@ function discuss_list($message = '')
             }
 
             echo tr(
-                td(
-                    fInput('checkbox', 'selected[]', $discussid), '', 'txp-list-col-multi-edit'
-                ).
+                td(fInput('checkbox', 'selected[]', $discussid), '', 'txp-list-col-multi-edit').
                 hCell(
-                    href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' class="txp-list-col-id" scope="row"'
+                    href($discussid, $edit_url, ' title="'.gTxt('edit').'"'),
+                    '',
+                    ' class="txp-list-col-id" scope="row"'
                 ).
-                td(
-                    gTime($uPosted), '', 'txp-list-col-created date'
-                ).
-                td(
-                    txpspecialchars(soft_wrap($name, 15)), '', 'txp-list-col-name'
-                ).
-                td(
-                    short_preview($dmessage), '', 'txp-list-col-message'
-                ).
-                td(
-                    txpspecialchars(soft_wrap($email, 15)), '', 'txp-list-col-email discuss_detail'
-                ).
-                td(
-                    txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website discuss_detail'
-                ).
+                td(gTime($uPosted), '', 'txp-list-col-created date').
+                td(txpspecialchars(soft_wrap($name, 15)), '', 'txp-list-col-name').
+                td(short_preview($dmessage), '', 'txp-list-col-message').
+                td(txpspecialchars(soft_wrap($email, 15)), '', 'txp-list-col-email discuss_detail').
+                td(txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website discuss_detail').
                 td(
                     href(txpspecialchars($ip), 'https://whois.domaintools.com/'.rawurlencode($ip), array(
                         'rel'    => 'external',
                         'target' => '_blank',
-                    )), '', 'txp-list-col-ip discuss_detail'
+                    )),
+                    '',
+                    'txp-list-col-ip discuss_detail'
                 ).
-                td(
-                    $view, '', 'txp-list-col-status'
-                ).
-                td(
-                    $parent, '', 'txp-list-col-parent'
-                ), ' class="'.$row_class.'"'
+                td($view, '', 'txp-list-col-status').
+                td($parent, '', 'txp-list-col-parent'),
+                ' class="'.$row_class.'"'
             );
         }
 
@@ -492,7 +490,8 @@ function discuss_list($message = '')
             echo n.tr(tda(gTxt('just_spam_results_found'), ' colspan="10"'));
         }
 
-        echo n.tag_end('tbody').
+        echo
+            n.tag_end('tbody').
             n.tag_end('table').
             n.tag_end('div').
             discuss_multiedit_form($page, $sort, $dir, $crit, $search_method).
@@ -548,19 +547,25 @@ function discuss_edit()
             $visible,
             false,
             '',
-            'status');
+            'status'
+        );
 
-        echo form(
+        echo
+            form(
                 hed(gTxt('edit_comment'), 2).
                 inputLabel(
                     'status',
                     $status_list,
-                    'status', '', array('class' => 'txp-form-field edit-comment-status')
+                    'status',
+                    '',
+                    array('class' => 'txp-form-field edit-comment-status')
                 ).
                 inputLabel(
                     'name',
                     fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'),
-                    'name', '', array('class' => 'txp-form-field edit-comment-name')
+                    'name',
+                    '',
+                    array('class' => 'txp-form-field edit-comment-name')
                 ).
                 inputLabel(
                     'IP',
@@ -568,28 +573,37 @@ function discuss_edit()
                         'rel'    => 'external',
                         'target' => '_blank',
                     )),
-                    '', '', array('class' => 'txp-form-field edit-comment-ip')
+                    '',
+                    '',
+                    array('class' => 'txp-form-field edit-comment-ip')
                 ).
                 inputLabel(
                     'email',
                     fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'),
-                    'email', '', array('class' => 'txp-form-field edit-comment-email')
+                    'email',
+                    '',
+                    array('class' => 'txp-form-field edit-comment-email')
                 ).
                 inputLabel(
                     'website',
                     fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'website'),
-                    'website', '', array('class' => 'txp-form-field edit-comment-website')
+                    'website',
+                    '',
+                    array('class' => 'txp-form-field edit-comment-website')
                 ).
                 inputLabel(
                     'date',
-                    safe_strftime('%d %b %Y %X',
-                    $uPosted),
-                    '', '', array('class' => 'txp-form-field edit-comment-date')
+                    safe_strftime('%d %b %Y %X', $uPosted),
+                    '',
+                    '',
+                    array('class' => 'txp-form-field edit-comment-date')
                 ).
                 inputLabel(
                     'commentmessage',
                     '<textarea id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_MEDIUM.'">'.$message.'</textarea>',
-                    'message', '', array('class' => 'txp-form-field txp-form-field-textarea edit-comment-message')
+                    'message',
+                    '',
+                    array('class' => 'txp-form-field txp-form-field-textarea edit-comment-message')
                 ).
                 graf(
                     sLink('discuss', '', gTxt('cancel'), 'txp-button').
@@ -606,7 +620,13 @@ function discuss_edit()
                 hInput('ip', $ip).
                 eInput('discuss').
                 sInput('discuss_save'),
-            '', '', 'post', 'txp-edit', '', 'discuss_edit_form');
+                '',
+                '',
+                'post',
+                'txp-edit',
+                '',
+                'discuss_edit_form'
+            );
     } else {
         echo graf(
             span(null, array('class' => 'ui-icon ui-icon-info')).' '.
@@ -669,24 +689,15 @@ function discuss_multi_edit()
 
                 callback_event('discuss_deleted', '', 0, $done);
             } elseif ($method == 'spam') {
-                if (safe_update('txp_discuss',
-                    "visible = ".SPAM,
-                    "discussid = $id"
-                )) {
+                if (safe_update('txp_discuss', "visible = ".SPAM, "discussid = $id")) {
                     $done[] = $id;
                 }
             } elseif ($method == 'unmoderated') {
-                if (safe_update('txp_discuss',
-                    "visible = ".MODERATE,
-                    "discussid = $id"
-                )) {
+                if (safe_update('txp_discuss', "visible = ".MODERATE, "discussid = $id")) {
                     $done[] = $id;
                 }
             } elseif ($method == 'visible') {
-                if (safe_update('txp_discuss',
-                    "visible = ".VISIBLE,
-                    "discussid = $id"
-                )) {
+                if (safe_update('txp_discuss', "visible = ".VISIBLE, "discussid = $id")) {
                     $done[] = $id;
                 }
             }

@@ -27,7 +27,7 @@ if (!defined('txpinterface')) {
 
 class hive_theme extends \Textpattern\Admin\Theme
 {
-    function html_head()
+    public function html_head()
     {
         $cssPath = 'assets'.DS.'css';
         $jsPath = 'assets'.DS.'js';
@@ -68,7 +68,7 @@ class hive_theme extends \Textpattern\Admin\Theme
         return join(n, $out);
     }
 
-    function header()
+    public function header()
     {
         global $txp_user;
 
@@ -91,8 +91,11 @@ class hive_theme extends \Textpattern\Admin\Theme
                 $txpnavdrop++;
                 $class = ($tab['active']) ? ' selected' : '';
                 $out[] = '<li class="dropdown'.$class.'">'.
-                    n.href($tab['label'], '#',
-                    ' class="dropdown-toggle" id="txp-nav-drop'.$txpnavdrop.'" role="button" aria-controls="txp-nav-drop'.$txpnavdrop.'-menu" data-toggle="dropdown"');
+                    n.href(
+                        $tab['label'],
+                        '#',
+                        ' class="dropdown-toggle" id="txp-nav-drop'.$txpnavdrop.'" role="button" aria-controls="txp-nav-drop'.$txpnavdrop.'-menu" data-toggle="dropdown"'
+                    );
 
                 if (!empty($tab['items'])) {
                     $out[] = '<ul class="dropdown-menu" id="txp-nav-drop'.$txpnavdrop.'-menu" role="menu" aria-labelledby="txp-nav-drop'.$txpnavdrop.'">';
@@ -113,38 +116,47 @@ class hive_theme extends \Textpattern\Admin\Theme
             $out[] = '</ul>';
             $out[] = '</nav>';
             $out[] = graf(
-                href(span(htmlspecialchars($GLOBALS["prefs"]["sitename"]), array('class' => 'txp-view-site-name')), hu, array(
-                    'target' => '_blank',
-                    'title'  => gTxt('tab_view_site'),
-                )), array('class' => 'txp-view-site'));
+                href(
+                    span(htmlspecialchars($GLOBALS["prefs"]["sitename"]), array('class' => 'txp-view-site-name')),
+                    hu,
+                    array(
+                        'target' => '_blank',
+                        'title'  => gTxt('tab_view_site'),
+                    )
+                ),
+                array('class' => 'txp-view-site')
+            );
             $out[] = graf(
-                href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"'), array('class' => 'txp-logout'));
+                href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"'),
+                array('class' => 'txp-logout')
+            );
         }
 
         return join(n, $out);
     }
 
-    function footer()
+    public function footer()
     {
         $out[] = graf(
             href('Textpattern CMS', 'http://textpattern.com', array(
                 'rel'    => 'external',
                 'target' => '_blank',
                 'title'  => gTxt('go_txp_com'),
-            )).
-            ' (v'.txp_version.')', array('class' => 'mothership'));
+            )).' (v'.txp_version.')',
+            array('class' => 'mothership')
+        );
 
         $out[] = graf(href(gTxt('back_to_top'), '#'), array('class' => 'pagejump'));
 
         return join(n, $out);
     }
 
-    function announce($thing = array('', 0), $modal = false)
+    public function announce($thing = array('', 0), $modal = false)
     {
         return $this->_announce($thing, false, $modal);
     }
 
-    function announce_async($thing = array('', 0), $modal = false)
+    public function announce_async($thing = array('', 0), $modal = false)
     {
         return $this->_announce($thing, true, $modal);
     }
@@ -208,7 +220,7 @@ EOS;
         }
     }
 
-    function manifest()
+    public function manifest()
     {
         global $prefs;
 

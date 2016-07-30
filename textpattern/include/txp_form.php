@@ -144,7 +144,9 @@ function form_list($curname)
 
             if (!in_array($name, $essential_forms)) {
                 $modbox = span(
-                    checkbox('selected_forms[]', txpspecialchars($name), false), array('class' => 'switcher-action'));
+                    checkbox('selected_forms[]', txpspecialchars($name), false),
+                    array('class' => 'switcher-action')
+                );
             } else {
                 $modbox = '';
             }
@@ -279,7 +281,6 @@ function form_edit($message = '')
             array('', 'instructions_form_type'),
             array('class' => 'txp-form-field')
         );
-
     } else {
         $name_widgets = inputLabel(
             'new_form',
@@ -316,13 +317,17 @@ function form_edit($message = '')
     }
 
     $buttons = graf(
-        tag_void('input', array(
-            'class'  => 'publish',
-            'type'   => 'submit',
-            'method' => 'post',
-            'value'  =>  gTxt('save'),
-            'form'   => 'form_form',
-        )), ' class="txp-save"'
+        tag_void(
+            'input',
+            array(
+                'class'  => 'publish',
+                'type'   => 'submit',
+                'method' => 'post',
+                'value'  =>  gTxt('save'),
+                'form'   => 'form_form',
+            )
+        ),
+        ' class="txp-save"'
     ).
     graf(
         sLink('form', 'form_create', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_form'), 'txp-new').
@@ -390,9 +395,16 @@ function form_edit($message = '')
                 'form_code',
                 array('', 'instructions_form_code'),
                 array('class' => 'txp-form-field')
-            )
-            , '', '', 'post', '', '', 'form_form'),
-        'div', array(
+            ),
+            '',
+            '',
+            'post',
+            '',
+            '',
+            'form_form'
+        ),
+        'div',
+        array(
             'class' => 'txp-layout-4col-cell-1-2-3',
             'id'    => 'main_content',
             'role'  => 'region',
@@ -404,7 +416,8 @@ function form_edit($message = '')
     echo n.tag(
         $buttons.
         form_list($name).n,
-        'div', array(
+        'div',
+        array(
             'class' => 'txp-layout-4col-cell-4alt',
             'id'    => 'content_switcher',
             'role'  => 'region',
@@ -474,10 +487,10 @@ function form_save()
                 if ($savenew or $copy) {
                     if ($newname) {
                         if (safe_insert(
-                                'txp_form',
-                                "Form = '$Form',
-                                type = '$type',
-                                name = '".doSlash($newname)."'"
+                            'txp_form',
+                            "Form = '$Form',
+                            type = '$type',
+                            name = '".doSlash($newname)."'"
                         )) {
                             update_lastmod('form_created', compact('newname', 'name', 'type', 'Form'));
                             $message = gTxt('form_created', array('{name}' => $newname));
@@ -491,11 +504,11 @@ function form_save()
                     }
                 } else {
                     if (safe_update(
-                            'txp_form',
-                            "Form = '$Form',
-                            type = '$type',
-                            name = '".doSlash($newname)."'",
-                            "name = '".doSlash($name)."'"
+                        'txp_form',
+                        "Form = '$Form',
+                        type = '$type',
+                        name = '".doSlash($newname)."'",
+                        "name = '".doSlash($name)."'"
                     )) {
                         update_lastmod('form_saved', compact('newname', 'name', 'type', 'Form'));
                         $message = gTxt('form_updated', array('{name}' => $name));

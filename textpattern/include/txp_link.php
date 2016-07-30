@@ -125,7 +125,8 @@ function link_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $search = new Filter($event,
+    $search = new Filter(
+        $event,
         array(
             'id' => array(
                 'column' => 'txp_link.id',
@@ -180,31 +181,36 @@ function link_list($message = '')
 
     echo n.tag(
         hed(gTxt('tab_link'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1'));
+        'div',
+        array('class' => 'txp-layout-2col-cell-1')
+    );
 
-    $searchBlock =
-        n.tag(
-            $search->renderForm('link_list', $search_render_options),
-            'div', array(
-                'class' => 'txp-layout-2col-cell-2',
-                'id'    => $event.'_control',
-            )
-        );
+    $searchBlock = n.tag(
+        $search->renderForm('link_list', $search_render_options),
+        'div',
+        array(
+            'class' => 'txp-layout-2col-cell-2',
+            'id'    => $event.'_control',
+        )
+    );
 
     $createBlock = array();
 
     if (has_privs('link.edit')) {
-        $createBlock[] =
-            n.tag(
-                sLink('link', 'link_edit', gTxt('add_new_link'), 'txp-button'),
-                'div', array('class' => 'txp-control-panel')
-            );
+        $createBlock[] = n.tag(
+            sLink('link', 'link_edit', gTxt('add_new_link'), 'txp-button'),
+            'div',
+            array('class' => 'txp-control-panel')
+        );
     }
 
-    $contentBlockStart = n.tag_start('div', array(
+    $contentBlockStart = n.tag_start(
+        'div',
+        array(
             'class' => 'txp-layout-1col',
             'id'    => $event.'_container',
-        ));
+        )
+    );
 
     $createBlock = implode(n, $createBlock);
 
@@ -256,8 +262,8 @@ function link_list($message = '')
     if ($rs && numRows($rs)) {
         $show_authors = !has_single_author('txp_link');
 
-        echo n.tag(
-                toggle_box('links_detail'), 'div', array('class' => 'txp-list-options')).
+        echo
+            n.tag(toggle_box('links_detail'), 'div', array('class' => 'txp-list-options')).
             n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'links_form',
@@ -271,36 +277,37 @@ function link_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                    '',
+                    ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'ID', 'id', 'link', true, $switch_dir, $crit, $search_method,
-                        (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
+                    (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
                     'link_name', 'name', 'link', true, $switch_dir, $crit, $search_method,
-                        (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
+                    (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
                     'description', 'description', 'link', true, $switch_dir, $crit, $search_method,
-                        (('description' == $sort) ? "$dir " : '').'txp-list-col-description links_detail'
+                    (('description' == $sort) ? "$dir " : '').'txp-list-col-description links_detail'
                 ).
                 column_head(
                     'link_category', 'category', 'link', true, $switch_dir, $crit, $search_method,
-                        (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
+                    (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                 ).
                 column_head(
                     'url', 'url', 'link', true, $switch_dir, $crit, $search_method,
-                        (('url' == $sort) ? "$dir " : '').'txp-list-col-url'
+                    (('url' == $sort) ? "$dir " : '').'txp-list-col-url'
                 ).
                 column_head(
                     'date', 'date', 'link', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date links_detail'
+                    (('date' == $sort) ? "$dir " : '').'txp-list-col-created date links_detail'
                 ).
                 (
                     $show_authors
                     ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method,
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
+                      (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
                     : ''
                 )
             ).
@@ -334,27 +341,25 @@ function link_list($message = '')
             $view_url = txpspecialchars($link_url);
 
             echo tr(
-                td(
-                    fInput('checkbox', 'selected[]', $link_id), '', 'txp-list-col-multi-edit'
-                ).
+                td(fInput('checkbox', 'selected[]', $link_id), '', 'txp-list-col-multi-edit').
                 hCell(
-                    ($can_edit ? href($link_id, $edit_url, ' title="'.gTxt('edit').'"') : $link_id), '', ' class="txp-list-col-id" scope="row"'
+                    ($can_edit ? href($link_id, $edit_url, ' title="'.gTxt('edit').'"') : $link_id),
+                    '',
+                    ' class="txp-list-col-id" scope="row"'
                 ).
                 td(
-                    ($can_edit ? href(txpspecialchars($link_linkname), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($link_linkname)), '', 'txp-list-col-name'
+                    (
+                        $can_edit
+                        ? href(txpspecialchars($link_linkname), $edit_url, ' title="'.gTxt('edit').'"')
+                        : txpspecialchars($link_linkname)
+                    ),
+                    '',
+                    'txp-list-col-name'
                 ).
-                td(
-                    txpspecialchars($link_description), '', 'txp-list-col-description links_detail'
-                ).
-                td(
-                    $link_category, '', 'txp-list-col-category category'.$vc
-                ).
-                td(
-                    href($view_url, $view_url, ' rel="external" target="_blank"'), '', 'txp-list-col-url'
-                ).
-                td(
-                    gTime($link_uDate), '', 'txp-list-col-created date links_detail'
-                ).
+                td(txpspecialchars($link_description), '', 'txp-list-col-description links_detail').
+                td($link_category, '', 'txp-list-col-category category'.$vc).
+                td(href($view_url, $view_url, ' rel="external" target="_blank"'), '', 'txp-list-col-url').
+                td(gTime($link_uDate), '', 'txp-list-col-created date links_detail').
                 (
                     $show_authors
                     ? td(span(txpspecialchars($link_realname), array('title' => $link_author)), '', 'txp-list-col-author name')
@@ -364,19 +369,19 @@ function link_list($message = '')
         }
 
         echo n.tag_end('tbody').
-            n.tag_end('table').
-            n.tag_end('div').
-            link_multiedit_form($page, $sort, $dir, $crit, $search_method).
-            tInput().
-            n.tag_end('form').
+             n.tag_end('table').
+             n.tag_end('div').
+             link_multiedit_form($page, $sort, $dir, $crit, $search_method).
+             tInput().
+             n.tag_end('form').
 
-            n.tag_start('div', array(
-                'class' => 'txp-navigation',
-                'id'    => $event.'_navigation',
-            )).
-            pageby_form('link', $link_list_pageby).
-            nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div');
+             n.tag_start('div', array(
+                 'class' => 'txp-navigation',
+                 'id'    => $event.'_navigation',
+             )).
+             pageby_form('link', $link_list_pageby).
+             nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+             n.tag_end('div');
     }
 
     echo n.tag_end('div');
@@ -423,29 +428,39 @@ function link_edit($message = '')
             inputLabel(
                 'link_name',
                 fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'link_name'),
-                'title', '', array('class' => 'txp-form-field edit-link-name')
+                'title',
+                '',
+                array('class' => 'txp-form-field edit-link-name')
             ).
             inputLabel(
                 'link_sort',
                 fInput('text', 'linksort', $linksort, 'input-medium', '', '', INPUT_MEDIUM, '', 'link_sort'),
-                'sort_value', 'link_sort', array('class' => 'txp-form-field edit-link-sort')
+                'sort_value',
+                'link_sort',
+                array('class' => 'txp-form-field edit-link-sort')
             ).
             // TODO: maybe use type="url" once browsers are less strict.
             inputLabel(
                 'link_url',
                 fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'link_url'),
-                'url', 'link_url', array('class' => 'txp-form-field edit-link-url')
+                'url',
+                'link_url',
+                array('class' => 'txp-form-field edit-link-url')
             ).
             inputLabel(
                 'link_category',
                 event_category_popup('link', $category, 'link_category').
                 n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
-                'link_category', 'link_category', array('class' => 'txp-form-field edit-link-category')
+                'link_category',
+                'link_category',
+                array('class' => 'txp-form-field edit-link-category')
             ).
             inputLabel(
                 'link_description',
                 '<textarea id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars($description).'</textarea>',
-                'description', 'link_description', array('class' => 'txp-form-field txp-form-field-textarea edit-link-description')
+                'description',
+                'link_description',
+                array('class' => 'txp-form-field txp-form-field-textarea edit-link-description')
             ).
             pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
             graf(
@@ -458,7 +473,13 @@ function link_edit($message = '')
             hInput('id', $id).
             hInput('search_method', gps('search_method')).
             hInput('crit', gps('crit')),
-        '', '', 'post', 'txp-edit', '', 'link_details');
+            '',
+            '',
+            'post',
+            'txp-edit',
+            '',
+            'link_details'
+        );
     }
 }
 
@@ -514,24 +535,28 @@ function link_save()
 
     if ($validator->validate()) {
         if ($id) {
-            $ok = safe_update('txp_link',
-                "category   = '$category',
-                url         = '".trim($url)."',
-                linkname    = '$linkname',
-                linksort    = '$linksort',
-                description = '$description',
-                author      = '".doSlash($txp_user)."'",
+            $ok = safe_update(
+                'txp_link',
+                "category    = '$category',
+                 url         = '".trim($url)."',
+                 linkname    = '$linkname',
+                 linksort    = '$linksort',
+                 description = '$description',
+                 author      = '".doSlash($txp_user)."'
+                ",
                 "id = $id"
             );
         } else {
-            $ok = safe_insert('txp_link',
-                "category   = '$category',
-                date        = NOW(),
-                url         = '".trim($url)."',
-                linkname    = '$linkname',
-                linksort    = '$linksort',
-                description = '$description',
-                author      = '".doSlash($txp_user)."'"
+            $ok = safe_insert(
+                'txp_link',
+                "category    = '$category',
+                 date        = NOW(),
+                 url         = '".trim($url)."',
+                 linkname    = '$linkname',
+                 linksort    = '$linksort',
+                 description = '$description',
+                 author      = '".doSlash($txp_user)."'
+                "
             );
             if ($ok) {
                 $GLOBALS['ID'] = $_POST['id'] = $ok;
@@ -617,7 +642,7 @@ function link_multi_edit()
     $key = '';
 
     switch ($method) {
-        case 'delete' :
+        case 'delete':
             if (!has_privs('link.delete')) {
                 if (has_privs('link.delete.own')) {
                     $selected = safe_column("id", 'txp_link', "id IN (".join(',', $selected).") AND author = '".doSlash($txp_user)."'");
@@ -666,9 +691,12 @@ function link_multi_edit()
     if ($changed) {
         update_lastmod('link_updated', $changed);
 
-        link_list(gTxt(
-            ($method == 'delete' ? 'links_deleted' : 'link_updated'),
-            array(($method == 'delete' ? '{list}' : '{name}') => join(', ', $changed))));
+        link_list(
+            gTxt(
+                ($method == 'delete' ? 'links_deleted' : 'link_updated'),
+                array(($method == 'delete' ? '{list}' : '{name}') => join(', ', $changed))
+            )
+        );
 
         return;
     }

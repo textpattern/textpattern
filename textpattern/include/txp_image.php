@@ -130,7 +130,8 @@ function image_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $search = new Filter($event,
+    $search = new Filter(
+        $event,
         array(
             'id' => array(
                 'column' => 'txp_image.id',
@@ -194,12 +195,15 @@ function image_list($message = '')
 
     echo n.tag(
         hed(gTxt('tab_image'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1'));
+        'div',
+        array('class' => 'txp-layout-2col-cell-1')
+    );
 
     $searchBlock =
         n.tag(
             $search->renderForm('image_list', $search_render_options),
-            'div', array(
+            'div',
+            array(
                 'class' => 'txp-layout-2col-cell-2',
                 'id'    => $event.'_control',
             )
@@ -218,7 +222,8 @@ function image_list($message = '')
         $createBlock[] =
             n.tag(
                 n.upload_form('upload_image', 'upload_image', 'image_insert', 'image', '', $file_max_upload_size, '', '', ''),
-                'div', array('class' => 'txp-control-panel')
+                'div',
+                array('class' => 'txp-control-panel')
             );
     }
 
@@ -285,8 +290,12 @@ function image_list($message = '')
     if ($rs && numRows($rs)) {
         $show_authors = !has_single_author('txp_image');
 
-        echo n.tag(
-                toggle_box('images_detail'), 'div', array('class' => 'txp-list-options')).
+        echo
+            n.tag(
+                toggle_box('images_detail'),
+                'div',
+                array('class' => 'txp-list-options')
+            ).
             n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'images_form',
@@ -300,35 +309,36 @@ function image_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                    '',
+                    ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'ID', 'id', 'image', true, $switch_dir, $crit, $search_method,
-                        (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
+                    (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
                     'name', 'name', 'image', true, $switch_dir, $crit, $search_method,
-                        (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
+                    (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
                     'date', 'date', 'image', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date images_detail'
+                    (('date' == $sort) ? "$dir " : '').'txp-list-col-created date images_detail'
                 ).
                 column_head(
                     'thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method,
-                        (('thumbnail' == $sort) ? "$dir " : '').'txp-list-col-thumbnail'
+                    (('thumbnail' == $sort) ? "$dir " : '').'txp-list-col-thumbnail'
                 ).
                 hCell(
                     gTxt('tags'), '', ' class="txp-list-col-tag-build images_detail" scope="col"'
                 ).
                 column_head(
                     'image_category', 'category', 'image', true, $switch_dir, $crit, $search_method,
-                        (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
+                    (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                 ).
                 (
                     $show_authors
                     ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method,
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
+                      (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
                     : ''
                 )
             ).
@@ -389,35 +399,29 @@ function image_list($message = '')
             $can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
 
             echo tr(
-                td(
-                    $can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;', '', 'txp-list-col-multi-edit'
-                ).
+                td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;', '', 'txp-list-col-multi-edit').
                 hCell(
                     ($can_edit ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id).
                     span(
                         sp.span('&#124;', array('role' => 'separator')).
                         sp.href(gTxt('view'), imagesrcurl($id, $ext)),
                         array('class' => 'txp-option-link images_detail')
-                    ), '', array(
+                    ),
+                    '',
+                    array(
                         'class' => 'txp-list-col-id',
                         'scope' => 'row',
                     )
                 ).
+                td(($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name').
+                td(gTime($uDate), '', 'txp-list-col-created date images_detail').
                 td(
-                    ($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name'
+                    pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a),
+                    '',
+                    'txp-list-col-thumbnail'.($thumbexists ? ' has-thumbnail' : '')
                 ).
-                td(
-                    gTime($uDate), '', 'txp-list-col-created date images_detail'
-                ).
-                td(
-                    pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a), '', 'txp-list-col-thumbnail'.($thumbexists ? ' has-thumbnail' : '')
-                ).
-                td(
-                    $tagbuilder, '', 'txp-list-col-tag-build images_detail'
-                ).
-                td(
-                    $category, '', 'txp-list-col-category category'.$vc
-                ).
+                td($tagbuilder, '', 'txp-list-col-tag-build images_detail').
+                td($category, '', 'txp-list-col-category category'.$vc).
                 (
                     $show_authors
                     ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name')
@@ -608,18 +612,18 @@ function image_edit($message = '', $id = '')
         $thumbBlock = array();
 
         $imageBlock[] = pluggable_ui(
-                'image_ui',
-                'image_edit',
-                upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', ' image-replace'),
-                $rs
-            );
+            'image_ui',
+            'image_edit',
+            upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', ' image-replace'),
+            $rs
+        );
 
         $imageBlock[] = pluggable_ui(
-                'image_ui',
-                'fullsize_image',
-                $img,
-                $rs
-            );
+            'image_ui',
+            'fullsize_image',
+            $img,
+            $rs
+        );
 
         $thumbBlock[] = hed(gTxt('create_thumbnail').popHelp('create_thumbnail'), 3);
 
@@ -636,14 +640,15 @@ function image_edit($message = '', $id = '')
                 'thumbnail_create',
                 form(
                     graf(
-                            n.'<label for="width">'.gTxt('thumb_width').'</label>'.
-                            fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width').
-                            n.'<label for="height">'.gTxt('thumb_height').'</label>'.
-                            fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').
-                            n.'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.
-                            checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop').
-                            fInput('submit', '', gTxt('create'))
-                        , ' class="edit-alter-thumbnail"').
+                        n.'<label for="width">'.gTxt('thumb_width').'</label>'.
+                        fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width').
+                        n.'<label for="height">'.gTxt('thumb_height').'</label>'.
+                        fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').
+                        n.'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.
+                        checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop').
+                        fInput('submit', '', gTxt('create')),
+                        ' class="edit-alter-thumbnail"'
+                    ).
                     hInput('id', $id).
                     eInput('image').
                     sInput('thumbnail_create').
@@ -651,8 +656,14 @@ function image_edit($message = '', $id = '')
                     hInput('dir', $dir).
                     hInput('page', $page).
                     hInput('search_method', $search_method).
-                    hInput('crit', $crit)
-                    , '', '', 'post', '', '', 'thumbnail_alter_form'),
+                    hInput('crit', $crit),
+                    '',
+                    '',
+                    'post',
+                    '',
+                    '',
+                    'thumbnail_alter_form'
+                ),
                 $rs
             )
             : '';
@@ -669,56 +680,67 @@ function image_edit($message = '', $id = '')
         );
 
         echo n.tag(
-                    hed(gTxt('edit_image'), 1, array('class' => 'txp-heading')).
-                    n.implode(n, $imageBlock).
-                    '<hr />'.
-                    tag(implode(n, $thumbBlock), 'section', array('class' => 'thumbnail-alter')),
-                'div',
-                array('class' => 'txp-layout-4col-cell-1-2-3')
-            ).
-            '<div class="txp-layout-4col-cell-4alt">',
-                form(
-                    graf(fInput('submit', '', gTxt('save'), 'publish'), array('class' => 'txp-save')).
-                    wrapGroup(
-                        'image-details',
-                        inputLabel(
-                            'id',
-                            $id,
-                            'id', '', array('class' => 'txp-form-field edit-image-id')
-                        ).
-                        inputLabel(
-                            'image_name',
-                            fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'),
-                            'image_name', '', array('class' => 'txp-form-field edit-image-name')
-                        ).
-                        inputLabel(
-                            'image_category',
-                            event_category_popup('image', $category, 'image_category').
-                            n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
-                            'image_category', '', array('class' => 'txp-form-field edit-image-category')
-                        ).
-                        inputLabel(
-                            'image_alt_text',
-                            fInput('text', 'alt', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'),
-                            'alt_text', '', array('class' => 'txp-form-field edit-image-alt-text')
-                        ).
-                        inputLabel(
-                            'image_caption',
-                            '<textarea id="image_caption" name="caption" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$caption.'</textarea>',
-                            'caption', '', array('class' => 'txp-form-field txp-form-field-textarea edit-image-caption')
-                        ).
-                        pluggable_ui('image_ui', 'extend_detail_form', '', $rs).
-                        hInput('id', $id).
-                        eInput('image').
-                        sInput('image_save').
-                        hInput('sort', $sort).
-                        hInput('dir', $dir).
-                        hInput('page', $page).
-                        hInput('search_method', $search_method).
-                        hInput('crit', $crit),
-                        'image_details'),
-                    '', '', 'post', '', '', 'image_details_form'),
-            '</div>';
+            hed(gTxt('edit_image'), 1, array('class' => 'txp-heading')).
+            n.implode(n, $imageBlock).
+            '<hr />'.
+            tag(implode(n, $thumbBlock), 'section', array('class' => 'thumbnail-alter')),
+            'div',
+            array('class' => 'txp-layout-4col-cell-1-2-3')
+        ).
+        '<div class="txp-layout-4col-cell-4alt">',
+            form(
+                graf(fInput('submit', '', gTxt('save'), 'publish'), array('class' => 'txp-save')).
+                wrapGroup(
+                    'image-details',
+                    inputLabel('id', $id, 'id', '', array('class' => 'txp-form-field edit-image-id')).
+                    inputLabel(
+                        'image_name',
+                        fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'),
+                        'image_name',
+                        '',
+                        array('class' => 'txp-form-field edit-image-name')
+                    ).
+                    inputLabel(
+                        'image_category',
+                        event_category_popup('image', $category, 'image_category').
+                        n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+                        'image_category',
+                        '',
+                        array('class' => 'txp-form-field edit-image-category')
+                    ).
+                    inputLabel(
+                        'image_alt_text',
+                        fInput('text', 'alt', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'),
+                        'alt_text',
+                        '',
+                        array('class' => 'txp-form-field edit-image-alt-text')
+                    ).
+                    inputLabel(
+                        'image_caption',
+                        '<textarea id="image_caption" name="caption" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$caption.'</textarea>',
+                        'caption',
+                        '',
+                        array('class' => 'txp-form-field txp-form-field-textarea edit-image-caption')
+                    ).
+                    pluggable_ui('image_ui', 'extend_detail_form', '', $rs).
+                    hInput('id', $id).
+                    eInput('image').
+                    sInput('image_save').
+                    hInput('sort', $sort).
+                    hInput('dir', $dir).
+                    hInput('page', $page).
+                    hInput('search_method', $search_method).
+                    hInput('crit', $crit),
+                    'image_details'
+                ),
+                '',
+                '',
+                'post',
+                '',
+                '',
+                'image_details_form'
+            ),
+        '</div>';
     }
 }
 

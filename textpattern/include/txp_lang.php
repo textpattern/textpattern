@@ -101,9 +101,9 @@ function list_languages($message = '')
             languages('language', $active_lang).
             eInput('lang').
             sInput('save_language')
-        ), 'div', array(
-            'class' => 'txp-control-panel',
-        )
+        ),
+        'div',
+        array('class' => 'txp-control-panel')
     );
 
     $client = new IXR_Client(RPC_SERVER);
@@ -195,7 +195,8 @@ function list_languages($message = '')
                     ? n.span(safe_strftime('%d %b %Y %X', $langdat['db_lastmod']), array('class' => 'date modified'))
                     : ''
                 )
-            ), (isset($langdat['db_lastmod']) && $rpc_updated)
+            ),
+            (isset($langdat['db_lastmod']) && $rpc_updated)
                 ? ' class="highlight lang-value"'
                 : ' class="lang-value"'
         );
@@ -221,16 +222,19 @@ function list_languages($message = '')
             n.span(safe_strftime(get_pref('archive_dateformat'), $langdat['file_lastmod']), array(
                 'class' => 'date '.($file_updated ? 'created' : 'modified'),
             ))
-            : '-', ' class="lang-value languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"'
+            : '-',
+              ' class="lang-value languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"'
         );
 
         $list .= tr(
-        // Lang-Name and Date.
+            // Lang-Name and Date.
             hCell(
-                gTxt($langname), '', (isset($langdat['db_lastmod']) && $rpc_updated)
-                        ? ' class="highlight lang-label" scope="row"'
-                        : ' class="lang-label" scope="row"'
-                ).
+                gTxt($langname),
+                '',
+                (isset($langdat['db_lastmod']) && $rpc_updated)
+                ? ' class="highlight lang-label" scope="row"'
+                : ' class="lang-label" scope="row"'
+            ).
             n.$rpc_install.
             n.$lang_file.
             tda((in_array($langname, $installed_lang) ? dLink('lang', 'remove_language', 'lang_code', $langname, 1) : '-'), ' class="languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"')
@@ -240,9 +244,12 @@ function list_languages($message = '')
     // Output table and content.
     pagetop(gTxt('tab_languages'), $message);
 
-    echo n.tag(
-        hed(gTxt('tab_languages'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
+    echo
+        n.tag(
+            hed(gTxt('tab_languages'), 1, array('class' => 'txp-heading')),
+            'div',
+            array('class' => 'txp-layout-2col-cell-1')
+        ).
         n.tag_start('div', array(
             'class' => 'txp-layout-1col',
             'id'    => 'language_container',
@@ -253,24 +260,15 @@ function list_languages($message = '')
     }
 
     echo $lang_form,
-        n.tag(
-            toggle_box('languages_detail'), 'div', array('class' => 'txp-list-options')).
+        n.tag(toggle_box('languages_detail'), 'div', array('class' => 'txp-list-options')).
         n.tag_start('div', array('class' => 'txp-listtables')).
         n.tag_start('table', array('class' => 'txp-list')).
         n.tag_start('thead').
         tr(
-            hCell(
-                gTxt('language'), '', ' scope="col"'
-            ).
-            hCell(
-                gTxt('from_server').popHelp('install_lang_from_server'), '', ' scope="col"'
-            ).
-            hCell(
-                gTxt('from_file').popHelp('install_lang_from_file'), '', ' class="languages_detail" scope="col"'
-            ).
-            hCell(
-                gTxt('remove_lang').popHelp('remove_lang'), '', ' class="languages_detail" scope="col"'
-            )
+            hCell(gTxt('language'), '', ' scope="col"').
+            hCell(gTxt('from_server').popHelp('install_lang_from_server'), '', ' scope="col"').
+            hCell(gTxt('from_file').popHelp('install_lang_from_file'), '', ' class="languages_detail" scope="col"').
+            hCell(gTxt('remove_lang').popHelp('remove_lang'), '', ' class="languages_detail" scope="col"')
         ).
         n.tag_end('thead').
         n.tag_start('tbody').
@@ -286,9 +284,17 @@ function list_languages($message = '')
                 n.'<textarea class="code" id="textpack-install" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'.
                 fInput('submit', 'install_new', gTxt('upload')).
                 eInput('lang').
-                sInput('get_textpack')
-                , '', '', 'post', '', '', 'text_uploader'
-            ), 'div', array('class' => 'txp-control-panel')).
+                sInput('get_textpack'),
+                '',
+                '',
+                'post',
+                '',
+                '',
+                'text_uploader'
+            ),
+            'div',
+            array('class' => 'txp-control-panel')
+        ).
 
         n.tag_end('div');
 }

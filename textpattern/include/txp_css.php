@@ -166,8 +166,16 @@ function css_edit($message = '')
                 'css_code',
                 array('', 'instructions_style_code'),
                 array('class' => 'txp-form-field')
-            ), '', '', 'post', '', '', 'style_form'),
-        'div', array(
+            ),
+            '',
+            '',
+            'post',
+            '',
+            '',
+            'style_form'
+        ),
+        'div',
+        array(
             'class' => 'txp-layout-4col-cell-1-2-3',
             'id'    => 'main_content',
             'role'  => 'region',
@@ -192,7 +200,8 @@ function css_edit($message = '')
             'method' => 'post',
             'value'  =>  gTxt('save'),
             'form'   => 'style_form',
-        )), ' class="txp-save"'
+        )),
+        ' class="txp-save"'
     ).
     graf(
         sLink('css', 'pour', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_css'), 'txp-new').
@@ -203,7 +212,8 @@ function css_edit($message = '')
     echo n.tag(
         $buttons.
         css_list($name, $default_name).n,
-        'div', array(
+        'div',
+        array(
             'class' => 'txp-layout-4col-cell-4alt',
             'id'    => 'content_switcher',
             'role'  => 'region',
