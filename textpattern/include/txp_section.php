@@ -127,7 +127,8 @@ function sec_section_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $search = new Filter($event,
+    $search = new Filter(
+        $event,
         array(
             'name' => array(
                 'column' => 'txp_section.name',
@@ -177,14 +178,18 @@ function sec_section_list($message = '')
 
     $total = safe_count('txp_section', $criteria);
 
-    echo n.tag(
-        hed(gTxt('tab_sections'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1'));
+    echo
+        n.tag(
+            hed(gTxt('tab_sections'), 1, array('class' => 'txp-heading')),
+            'div',
+            array('class' => 'txp-layout-2col-cell-1')
+        );
 
     $searchBlock =
         n.tag(
             $search->renderForm('sec_section', $search_render_options),
-            'div', array(
+            'div',
+            array(
                 'class' => 'txp-layout-2col-cell-2',
                 'id'    => $event.'_control',
             )
@@ -193,24 +198,24 @@ function sec_section_list($message = '')
     $createBlock = array();
 
     if (has_privs('section.edit')) {
-        $createBlock[] =
-            n.tag(
-                sLink('section', 'section_edit', gTxt('create_section'), 'txp-button').
-                n.tag_start('form', array(
-                    'class'  => 'async',
-                    'id'     => 'default_section_form',
-                    'name'   => 'default_section_form',
-                    'method' => 'post',
-                    'action' => 'index.php',
-                )).
-                tag(gTxt('default_write_section'), 'label', array('for' => 'default_section')).
-                popHelp('section_default').
-                section_select_list().
-                eInput('section').
-                sInput('section_set_default').
-                n.tag_end('form'),
-                'div', array('class' => 'txp-control-panel')
-            );
+        $createBlock[] = n.tag(
+            sLink('section', 'section_edit', gTxt('create_section'), 'txp-button').
+            n.tag_start('form', array(
+                'class'  => 'async',
+                'id'     => 'default_section_form',
+                'name'   => 'default_section_form',
+                'method' => 'post',
+                'action' => 'index.php',
+            )).
+            tag(gTxt('default_write_section'), 'label', array('for' => 'default_section')).
+            popHelp('section_default').
+            section_select_list().
+            eInput('section').
+            sInput('section_set_default').
+            n.tag_end('form'),
+            'div',
+            array('class' => 'txp-control-panel')
+        );
     }
 
     $contentBlockStart = n.tag_start('div', array(
@@ -249,8 +254,8 @@ function sec_section_list($message = '')
     );
 
     if ($rs) {
-        echo n.tag(
-                toggle_box('section_detail'), 'div', array('class' => 'txp-list-options')).
+        echo
+            n.tag(toggle_box('section_detail'), 'div', array('class' => 'txp-list-options')).
             n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'section_form',
@@ -264,19 +269,20 @@ function sec_section_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                    '',
+                    ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'name', 'name', 'section', true, $switch_dir, $crit, $search_method,
-                        (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
+                    (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
                     'title', 'title', 'section', true, $switch_dir, $crit, $search_method,
-                        (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
+                    (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
                 ).
                 column_head(
                     'page', 'page', 'section', true, $switch_dir, $crit, $search_method,
-                        (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
+                    (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
                 ).
                 column_head(
                     'css', 'css', 'section', true, $switch_dir, $crit, $search_method,
@@ -284,19 +290,19 @@ function sec_section_list($message = '')
                 ).
                 column_head(
                     'on_front_page', 'on_frontpage', 'section', true, $switch_dir, $crit, $search_method,
-                        (('on_frontpage' == $sort) ? "$dir " : '').'txp-list-col-frontpage section_detail'
+                    (('on_frontpage' == $sort) ? "$dir " : '').'txp-list-col-frontpage section_detail'
                 ).
                 column_head(
                     'syndicate', 'in_rss', 'section', true, $switch_dir, $crit, $search_method,
-                        (('in_rss' == $sort) ? "$dir " : '').'txp-list-col-syndicate section_detail'
+                    (('in_rss' == $sort) ? "$dir " : '').'txp-list-col-syndicate section_detail'
                 ).
                 column_head(
                     'include_in_search', 'searchable', 'section', true, $switch_dir, $crit, $search_method,
-                        (('searchable' == $sort) ? "$dir " : '').'txp-list-col-searchable section_detail'
+                    (('searchable' == $sort) ? "$dir " : '').'txp-list-col-searchable section_detail'
                 ).
                 column_head(
                     'articles', 'article_count', 'section', true, $switch_dir, $crit, $search_method,
-                        (('article_count' == $sort) ? "$dir " : '').'txp-list-col-article_count section_detail'
+                    (('article_count' == $sort) ? "$dir " : '').'txp-list-col-article_count section_detail'
                 )
             ).
             n.tag_end('thead').
@@ -360,49 +366,35 @@ function sec_section_list($message = '')
                 'name'  => $sec_css,
             ), array('title' => gTxt('edit')));
 
-            echo tr(
-                td(
-                    fInput('checkbox', 'selected[]', $sec_name), '', 'txp-list-col-multi-edit'
-                ).
-                hCell(
-                    href(
-                        txpspecialchars($sec_name), $edit_url, array('title' => gTxt('edit'))
+            echo
+                tr(
+                    td(fInput('checkbox', 'selected[]', $sec_name), '', 'txp-list-col-multi-edit').
+                    hCell(
+                        href(txpspecialchars($sec_name), $edit_url, array('title' => gTxt('edit'))).
+                        span(
+                            sp.span('&#124;', array('role' => 'separator')).
+                            sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name))),
+                            array('class' => 'txp-option-link section_detail')
+                        ),
+                        '',
+                        array(
+                            'class' => 'txp-list-col-name',
+                            'scope' => 'row',
+                        )
                     ).
-                    span(
-                        sp.span('&#124;', array('role' => 'separator')).
-                        sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name))),
-                        array('class' => 'txp-option-link section_detail')
-                    ), '', array(
-                        'class' => 'txp-list-col-name',
-                        'scope' => 'row',
-                    )
-                ).
-                td(
-                    txpspecialchars($sec_title), '', 'txp-list-col-title'
-                ).
-                td(
-                    $sec_page, '', 'txp-list-col-page'
-                ).
-                td(
-                    $sec_css, '', 'txp-list-col-style'
-                ).
-                td(
-                    $sec_on_frontpage, '', 'txp-list-col-frontpage section_detail'
-                ).
-                td(
-                    $sec_in_rss, '', 'txp-list-col-syndicate section_detail'
-                ).
-                td(
-                    $sec_searchable, '', 'txp-list-col-searchable section_detail'
-                ).
-                td(
-                    $articles, '', 'txp-list-col-article_count section_detail'
-                ),
-                array('id' => 'txp_section_'.$sec_name)
-            );
+                    td(txpspecialchars($sec_title), '', 'txp-list-col-title').
+                    td($sec_page, '', 'txp-list-col-page').
+                    td($sec_css, '', 'txp-list-col-style').
+                    td($sec_on_frontpage, '', 'txp-list-col-frontpage section_detail').
+                    td($sec_in_rss, '', 'txp-list-col-syndicate section_detail').
+                    td($sec_searchable, '', 'txp-list-col-searchable section_detail').
+                    td($articles, '', 'txp-list-col-article_count section_detail'),
+                    array('id' => 'txp_section_'.$sec_name)
+                );
         }
 
-        echo n.tag_end('tbody').
+        echo
+            n.tag_end('tbody').
             n.tag_end('table').
             n.tag_end('div').
             section_multiedit_form($page, $sort, $dir, $crit, $search_method).
@@ -485,52 +477,70 @@ function section_edit()
     if ($is_default_section) {
         $out[] = hInput('name', 'default');
     } else {
-        $out[] = inputLabel(
-                'section_name',
-                fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name'),
-                'section_name', '', array('class' => 'txp-form-field edit-section-name')
-            ).
-            inputLabel(
-                'section_title',
-                fInput('text', 'title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'),
-                'section_longtitle', '', array('class' => 'txp-form-field edit-section-longtitle')
-            );
-    }
-
-    $out[] = inputLabel(
-            'section_page',
-            selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'),
-            'uses_page', 'section_uses_page', array('class' => 'txp-form-field edit-section-uses-page')
+        $out[] =
+        inputLabel(
+            'section_name',
+            fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name'),
+            'section_name',
+            '',
+            array('class' => 'txp-form-field edit-section-name')
         ).
         inputLabel(
-            'section_css',
-            selectInput('css', $all_styles, $sec_css, '', '', 'section_css'),
-            'uses_style', 'section_uses_css', array('class' => 'txp-form-field edit-section-uses-css')
+            'section_title',
+            fInput('text', 'title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'),
+            'section_longtitle',
+            '',
+            array('class' => 'txp-form-field edit-section-longtitle')
         );
+    }
+
+    $out[] =
+    inputLabel(
+        'section_page',
+        selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'),
+        'uses_page',
+        'section_uses_page',
+        array('class' => 'txp-form-field edit-section-uses-page')
+    ).
+    inputLabel(
+        'section_css',
+        selectInput('css', $all_styles, $sec_css, '', '', 'section_css'),
+        'uses_style',
+        'section_uses_css',
+        array('class' => 'txp-form-field edit-section-uses-css')
+    );
 
     if (!$is_default_section) {
         $out[] = inputLabel(
-                'on_front_page',
-                yesnoradio('on_frontpage', $sec_on_frontpage, '', $sec_name),
-                '', 'section_on_frontpage', array('class' => 'txp-form-field edit-section-on-frontpage')
-            ).
-            inputLabel(
-                'syndicate',
-                yesnoradio('in_rss', $sec_in_rss, '', $sec_name),
-                '', 'section_syndicate', array('class' => 'txp-form-field edit-section-syndicate')
-            ).
-            inputLabel(
-                'include_in_search',
-                yesnoradio('searchable', $sec_searchable, '', $sec_name),
-                '', 'section_searchable', array('class' => 'txp-form-field edit-section-searchable')
-            );
+            'on_front_page',
+            yesnoradio('on_frontpage', $sec_on_frontpage, '', $sec_name),
+            '',
+            'section_on_frontpage',
+            array('class' => 'txp-form-field edit-section-on-frontpage')
+        ).
+        inputLabel(
+            'syndicate',
+            yesnoradio('in_rss', $sec_in_rss, '', $sec_name),
+            '',
+            'section_syndicate',
+            array('class' => 'txp-form-field edit-section-syndicate')
+        ).
+        inputLabel(
+            'include_in_search',
+            yesnoradio('searchable', $sec_searchable, '', $sec_name),
+            '',
+            'section_searchable',
+            array('class' => 'txp-form-field edit-section-searchable')
+        );
     }
 
     $out[] = inputLabel(
-            'section_description',
-            '<textarea id="section_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$sec_description.'</textarea>',
-            'description', 'section_description', array('class' => 'txp-form-field txp-form-field-textarea edit-section-description')
-        );
+        'section_description',
+        '<textarea id="section_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$sec_description.'</textarea>',
+        'description',
+        'section_description',
+        array('class' => 'txp-form-field txp-form-field-textarea edit-section-description')
+    );
 
     $out[] = pluggable_ui('section_ui', 'extend_detail_form', '', $rs).
         graf(
@@ -848,13 +858,11 @@ function section_multi_edit()
     );
 
     if ($key && $sections) {
-        if (
-            safe_update(
-                'txp_section',
-                "$key = '".doSlash($val)."'",
-                "name IN (".join(',', quote_list($sections)).")"
-            )
-        ) {
+        if (safe_update(
+            'txp_section',
+            "$key = '".doSlash($val)."'",
+            "name IN (".join(',', quote_list($sections)).")"
+        )) {
             sec_section_list(gTxt('section_updated', array('{name}' => join(', ', $sections))));
 
             return;
