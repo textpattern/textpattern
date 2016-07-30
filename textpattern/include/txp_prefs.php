@@ -204,24 +204,27 @@ function prefs_list($message = '')
                 if ($last_event !== null) {
                     $build[] = tag(
                         hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
-                        join(n, $out)
-                        , 'section', array(
+                        join(n, $out),
+                        'section',
+                        array(
                             'class'           => 'txp-prefs-group',
                             'id'              => 'prefs_group_'.$last_event,
                             'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
                         )
                     );
 
-                    $groupOut[] = n.tag(href(
+                    $groupOut[] = n.tag(
+                        href(
                             gTxt($last_event),
                             '#prefs_group_'.$last_event,
                             array(
                                 'data-txp-pane'  => $last_event,
                                 'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
-                            )),
-                        'li', array(
-                            'class' => (($last_event === $selected) ? 'ui-tabs-active ui-state-active' : '')
-                            ));
+                            )
+                        ),
+                        'li',
+                        array('class' => (($last_event === $selected) ? 'ui-tabs-active ui-state-active' : ''))
+                    );
                 }
 
                 if ($last_event === $selected) {
@@ -273,24 +276,27 @@ function prefs_list($message = '')
     } else {
         $build[] = tag(
             hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
-            join(n, $out)
-            , 'section', array(
+            join(n, $out),
+            'section',
+            array(
                 'class'           => 'txp-prefs-group',
                 'id'              => 'prefs_group_'.$last_event,
                 'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
             )
         );
 
-        $groupOut[] = n.tag(href(
+        $groupOut[] = n.tag(
+            href(
                 gTxt($last_event),
                 '#prefs_group_'.$last_event,
                 array(
                     'data-txp-pane'  => $last_event,
                     'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
-                )),
-            'li', array(
-                'class' => (($last_event === $selected) ? 'ui-tabs-active ui-state-active' : '')
-                )).n;
+                )
+            ),
+            'li',
+            array('class' => (($last_event === $selected) ? 'ui-tabs-active ui-state-active' : ''))
+        ).n;
 
         if ($last_event === $selected) {
             $tabActive = $tabCount - 1;
@@ -750,8 +756,7 @@ function themename($name, $val)
     }
     asort($vals, SORT_STRING);
 
-    return pluggable_ui('prefs_ui', 'theme_name',
-        selectInput($name, $vals, $val, '', '', $name));
+    return pluggable_ui('prefs_ui', 'theme_name', selectInput($name, $vals, $val, '', '', $name));
 }
 
 /**
