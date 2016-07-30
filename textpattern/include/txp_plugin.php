@@ -91,9 +91,12 @@ function plugin_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    echo n.tag(
-        hed(gTxt('tab_plugins'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
+    echo
+        n.tag(
+            hed(gTxt('tab_plugins'), 1, array('class' => 'txp-heading')),
+            'div',
+            array('class' => 'txp-layout-2col-cell-1')
+        ).
         n.tag_start('div', array(
             'class' => 'txp-layout-1col',
             'id'    => $event.'_container',
@@ -121,38 +124,35 @@ function plugin_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                    '',
+                    ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'plugin', 'name', 'plugin', true, $switch_dir, '', '',
-                        (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
+                    (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
                     'author', 'author', 'plugin', true, $switch_dir, '', '',
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author'
+                    (('author' == $sort) ? "$dir " : '').'txp-list-col-author'
                 ).
                 column_head(
                     'version', 'version', 'plugin', true, $switch_dir, '', '',
-                        (('version' == $sort) ? "$dir " : '').'txp-list-col-version'
+                    (('version' == $sort) ? "$dir " : '').'txp-list-col-version'
                 ).
                 column_head(
                     'plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '',
-                        (('modified' == $sort) ? "$dir " : '').'txp-list-col-modified'
+                    (('modified' == $sort) ? "$dir " : '').'txp-list-col-modified'
                 ).
-                hCell(gTxt(
-                    'description'), '', ' class="txp-list-col-description" scope="col"'
-                ).
+                hCell(gTxt('description'), '', ' class="txp-list-col-description" scope="col"').
                 column_head(
                     'active', 'status', 'plugin', true, $switch_dir, '', '',
-                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
+                    (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
                 ).
                 column_head(
                     'order', 'load_order', 'plugin', true, $switch_dir, '', '',
-                        (('load_order' == $sort) ? "$dir " : '').'txp-list-col-load-order'
+                    (('load_order' == $sort) ? "$dir " : '').'txp-list-col-load-order'
                 ).
-                hCell(
-                    gTxt('manage'), '',  ' class="txp-list-col-manage" scope="col"'
-                )
+                hCell(gTxt('manage'), '',  ' class="txp-list-col-manage" scope="col"')
             ).
             n.tag_end('thead').
             n.tag_start('tbody');
@@ -208,47 +208,30 @@ function plugin_list($message = '')
             $manage_items = ($manage) ? join($manage) : '-';
             $edit_url = eLink('plugin', 'plugin_edit', 'name', $name, $name);
 
-            echo tr(
-                td(
-                    fInput('checkbox', 'selected[]', $name), '', 'txp-list-col-multi-edit'
-                ).
-                hCell(
-                    $edit_url, '', ' class="txp-list-col-name" scope="row"'
-                ).
-                td(
-                    href($author, $a['author_uri'], array('rel' => 'external')), '', 'txp-list-col-author'
-                ).
-                td(
-                    $version, '', 'txp-list-col-version'
-                ).
-                td(
-                    ($modified ? span(gTxt('yes'), array('class' => 'warning')) : ''), '', 'txp-list-col-modified'
-                ).
-                td(
-                    $description, '', 'txp-list-col-description'
-                ).
-                td(
-                    status_link($status, $name, yes_no($status)), '', 'txp-list-col-status'
-                ).
-                td(
-                    $load_order, '', 'txp-list-col-load-order'
-                ).
-                td(
-                    $manage_items, '', 'txp-list-col-manage'
-                ),
-                $status ? ' class="active"' : ''
-            );
+            echo
+                tr(
+                    td(fInput('checkbox', 'selected[]', $name), '', 'txp-list-col-multi-edit').
+                    hCell($edit_url, '', ' class="txp-list-col-name" scope="row"').
+                    td(href($author, $a['author_uri'], array('rel' => 'external')), '', 'txp-list-col-author').
+                    td($version, '', 'txp-list-col-version').
+                    td(($modified ? span(gTxt('yes'), array('class' => 'warning')) : ''), '', 'txp-list-col-modified').
+                    td($description, '', 'txp-list-col-description').
+                    td(status_link($status, $name, yes_no($status)), '', 'txp-list-col-status').
+                    td($load_order, '', 'txp-list-col-load-order').
+                    td($manage_items, '', 'txp-list-col-manage'),
+                    $status ? ' class="active"' : ''
+                );
 
             unset($name, $page, $deletelink);
         }
 
         echo
-            n.tag_end('tbody').
-            n.tag_end('table').
-            n.tag_end('div').
-            plugin_multiedit_form('', $sort, $dir, '', '').
-            tInput().
-            n.tag_end('form');
+        n.tag_end('tbody').
+        n.tag_end('table').
+        n.tag_end('div').
+        plugin_multiedit_form('', $sort, $dir, '', '').
+        tInput().
+        n.tag_end('form');
     }
 
     echo n.tag_end('div');
@@ -315,17 +298,24 @@ function plugin_edit_form($name = '')
     $thing = ($code) ? $code : '';
 
     return
-        form(
-            hed(gTxt('edit_plugin', array('{name}' => $name)), 2).
-            graf('<textarea class="code" id="plugin_code" name="code" cols="'.INPUT_XLARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thing).'</textarea>', ' class="edit-plugin-code"').
-            graf(
-                sLink('plugin', '', gTxt('cancel'), 'txp-button').
-                fInput('submit', '', gTxt('save'), 'publish'),
-                array('class' => 'txp-edit-actions')
-            ).
-            eInput('plugin').
-            sInput('plugin_save').
-            hInput('name', $name), '', '', 'post', '', '', 'plugin_details');
+    form(
+        hed(gTxt('edit_plugin', array('{name}' => $name)), 2).
+        graf('<textarea class="code" id="plugin_code" name="code" cols="'.INPUT_XLARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thing).'</textarea>', ' class="edit-plugin-code"').
+        graf(
+            sLink('plugin', '', gTxt('cancel'), 'txp-button').
+            fInput('submit', '', gTxt('save'), 'publish'),
+            array('class' => 'txp-edit-actions')
+        ).
+        eInput('plugin').
+        sInput('plugin_save').
+        hInput('name', $name),
+        '',
+        '',
+        'post',
+        '',
+        '',
+        'plugin_details'
+    );
 }
 
 /**
@@ -435,16 +425,23 @@ function plugin_verify()
                 );
 
                 pagetop(gTxt('verify_plugin'));
-                echo form(
-                    hed(gTxt('previewing_plugin'), 2).
-                    tag($source, 'div', ' class="code" id="preview-plugin" dir="ltr"').
-                    hed(gTxt('plugin_help').':', 2).
-                    tag($help_source, 'div', ' class="code" id="preview-help" dir="ltr"').
-                    $sub.
-                    sInput('plugin_install').
-                    eInput('plugin').
-                    hInput('plugin64', $plugin_encoded), '', '', 'post', 'plugin-info', '', 'plugin_preview'
-                );
+                echo
+                    form(
+                        hed(gTxt('previewing_plugin'), 2).
+                        tag($source, 'div', ' class="code" id="preview-plugin" dir="ltr"').
+                        hed(gTxt('plugin_help').':', 2).
+                        tag($help_source, 'div', ' class="code" id="preview-help" dir="ltr"').
+                        $sub.
+                        sInput('plugin_install').
+                        eInput('plugin').
+                        hInput('plugin64', $plugin_encoded),
+                        '',
+                        '',
+                        'post',
+                        'plugin-info',
+                        '',
+                        'plugin_preview'
+                    );
 
                 return;
             }
@@ -493,35 +490,37 @@ function plugin_install()
 
                 if ($exists) {
                     $rs = safe_update(
-                       'txp_plugin',
-                        "type        = $type,
-                        author       = '".doSlash($author)."',
-                        author_uri   = '".doSlash($author_uri)."',
-                        version      = '".doSlash($version)."',
-                        description  = '".doSlash($description)."',
-                        help         = '".doSlash($help)."',
-                        code         = '".doSlash($code)."',
-                        code_restore = '".doSlash($code)."',
-                        code_md5     = '".doSlash($md5)."',
-                        flags        = $flags",
+                        'txp_plugin',
+                        "type         = $type,
+                         author       = '".doSlash($author)."',
+                         author_uri   = '".doSlash($author_uri)."',
+                         version      = '".doSlash($version)."',
+                         description  = '".doSlash($description)."',
+                         help         = '".doSlash($help)."',
+                         code         = '".doSlash($code)."',
+                         code_restore = '".doSlash($code)."',
+                         code_md5     = '".doSlash($md5)."',
+                         flags        = $flags
+                        ",
                         "name        = '".doSlash($name)."'"
                     );
                 } else {
                     $rs = safe_insert(
-                       'txp_plugin',
-                       "name         = '".doSlash($name)."',
-                        status       = 0,
-                        type         = $type,
-                        author       = '".doSlash($author)."',
-                        author_uri   = '".doSlash($author_uri)."',
-                        version      = '".doSlash($version)."',
-                        description  = '".doSlash($description)."',
-                        help         = '".doSlash($help)."',
-                        code         = '".doSlash($code)."',
-                        code_restore = '".doSlash($code)."',
-                        code_md5     = '".doSlash($md5)."',
-                        load_order   = '".$order."',
-                        flags        = $flags"
+                        'txp_plugin',
+                        "name         = '".doSlash($name)."',
+                         status       = 0,
+                         type         = $type,
+                         author       = '".doSlash($author)."',
+                         author_uri   = '".doSlash($author_uri)."',
+                         version      = '".doSlash($version)."',
+                         description  = '".doSlash($description)."',
+                         help         = '".doSlash($help)."',
+                         code         = '".doSlash($code)."',
+                         code_restore = '".doSlash($code)."',
+                         code_md5     = '".doSlash($md5)."',
+                         load_order   = '".$order."',
+                         flags        = $flags
+                        "
                     );
                 }
 
@@ -573,8 +572,14 @@ function plugin_form()
         '<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'.
         fInput('submit', 'install_new', gTxt('upload')).
         eInput('plugin').
-        sInput('plugin_verify')
-        , '', '', 'post', 'plugin-data', '', 'plugin_install_form');
+        sInput('plugin_verify'),
+        '',
+        '',
+        'post',
+        'plugin-data',
+        '',
+        'plugin_install_form'
+    );
 }
 
 /**
