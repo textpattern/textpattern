@@ -33,7 +33,7 @@ require_once txpath.'/lib/txplib_html.php';
 
 class TXP_RPCServer extends IXR_IntrospectionServer
 {
-    function __construct()
+    public function __construct()
     {
         global $enable_xmlrpc_server, $HTTP_RAW_POST_DATA;
 
@@ -202,7 +202,7 @@ class TXP_RPCServer extends IXR_IntrospectionServer
 
     // Override serve method in order to keep requests logs too while dealing
     // with unknown clients.
-    function serve($data = false)
+    public function serve($data = false)
     {
         if (!$data) {
             global $HTTP_RAW_POST_DATA;
@@ -215,20 +215,17 @@ class TXP_RPCServer extends IXR_IntrospectionServer
 
             $rx = '/<?xml.*encoding=[\'"](.*?)[\'"].*?>/m';
 
-            // First, handle the known UAs in order to serve proper content.
             if (strpos('w.bloggar', $_SERVER['HTTP_USER_AGENT']) !== false) {
+                // First, handle the known UAs in order to serve proper content.
                 $encoding = 'iso-8859-1';
-            }
-            // Find for supplied encoding before to try other things.
-            elseif (preg_match($rx, $HTTP_RAW_POST_DATA, $xml_enc)) {
+            } elseif (preg_match($rx, $HTTP_RAW_POST_DATA, $xml_enc)) {
+                // Find for supplied encoding before to try other things.
                 $encoding = strtolower($xml_enc[1]);
-            }
-            // Try UTF-8 detect.
-            elseif (preg_match('/^([\x00-\x7f]|[\xc2-\xdf][\x80-\xbf]|\xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xec][\x80-\xbf]{2}|\xed[\x80-\x9f][\x80-\xbf]|[\xee-\xef][\x80-\xbf]{2}|f0[\x90-\xbf][\x80-\xbf]{2}|[\xf1-\xf3][\x80-\xbf]{3}|\xf4[\x80-\x8f][\x80-\xbf]{2})*$/', $HTTP_RAW_POST_DATA) === 1) {
+            } elseif (preg_match('/^([\x00-\x7f]|[\xc2-\xdf][\x80-\xbf]|\xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xec][\x80-\xbf]{2}|\xed[\x80-\x9f][\x80-\xbf]|[\xee-\xef][\x80-\xbf]{2}|f0[\x90-\xbf][\x80-\xbf]{2}|[\xf1-\xf3][\x80-\xbf]{3}|\xf4[\x80-\x8f][\x80-\xbf]{2})*$/', $HTTP_RAW_POST_DATA) === 1) {
+                // Try UTF-8 detect.
                 $encoding = 'utf-8';
-            }
-            // Otherwise, use ISO-8859-1.
-            else {
+            } else {
+                // Otherwise, use ISO-8859-1.
                 $encoding = 'iso-8859-1';
             }
 
@@ -295,7 +292,7 @@ EOD;
     }
 
     // Override default UTF-8 output, if needed.
-    function output($xml, $enc = 'utf-8')
+    public function output($xml, $enc = 'utf-8')
     {
         // Be kind with non-UTF-8 capable clients.
         if ($enc != 'utf-8') {
@@ -323,7 +320,7 @@ EOD;
 //---------------------------------------------------------
 
     // Really Simple Discoverability 1.0 response.
-    function rsd()
+    public function rsd()
     {
         global $enable_xmlrpc_server;
 
@@ -338,10 +335,14 @@ EOD;
                             n.'<api name="Movable Type" blogID="" preferred="true" apiLink="'.txrpcpath.'" />'.
                             n.'<api name="MetaWeblog" blogID="" preferred="false" apiLink="'.txrpcpath.'" />'.
                             n.'<api name="Blogger" blogID="" preferred="false" apiLink="'.txrpcpath.'" />'.n,
-                            'apis').n,
-                    'service').n,
-                    'rsd', ' version="1.0" xmlns="http://archipelago.phrasewise.com/rsd"')
-                );
+                            'apis'
+                        ).n,
+                        'service'
+                    ).n,
+                    'rsd',
+                    ' version="1.0" xmlns="http://archipelago.phrasewise.com/rsd"'
+                )
+            );
         } else {
             header('Status: 501 Not Implemented');
             header('HTTP/1.1 501 Not Implemented');
@@ -352,7 +353,7 @@ EOD;
 //---------------------------------------------------------
 
     // Blogger API.
-    function blogger_newPost($params)
+    public function blogger_newPost($params)
     {
         list($appkey, $blogid, $username, $password, $content, $publish) = $params;
 
@@ -376,7 +377,7 @@ EOD;
         return intval($rs);
     }
 
-    function blogger_editPost($params)
+    public function blogger_editPost($params)
     {
         list($appkey, $postid, $username, $password, $content, $publish) = $params;
 
@@ -405,7 +406,7 @@ EOD;
         return true;
     }
 
-    function blogger_getUsersBlogs($params)
+    public function blogger_getUsersBlogs($params)
     {
         list($appkey, $username, $password) = $params;
 
@@ -436,7 +437,7 @@ EOD;
         return $sections;
     }
 
-    function blogger_getUserInfo($params)
+    public function blogger_getUserInfo($params)
     {
         list($appkey, $username, $password) = $params;
 
@@ -473,7 +474,7 @@ EOD;
         return $uinfo;
     }
 
-    function blogger_getTemplate($params)
+    public function blogger_getTemplate($params)
     {
         list($appkey, $blogid, $username, $password, $templateType) = $params;
 
@@ -504,7 +505,7 @@ EOD;
         return $rs;
     }
 
-    function blogger_setTemplate($params)
+    public function blogger_setTemplate($params)
     {
         list($appkey, $blogid, $username, $password, $template, $templateType) = $params;
 
@@ -538,7 +539,7 @@ EOD;
 //---------------------------------------------------------
 
     // Blogger 2.0.
-    function blogger_getPost($params)
+    public function blogger_getPost($params)
     {
         list($appkey, $postid, $username, $password) = $params;
 
@@ -564,7 +565,7 @@ EOD;
         return $out;
     }
 
-    function blogger_deletePost($params)
+    public function blogger_deletePost($params)
     {
         list($appkey, $postid, $username, $password, $publish) = $params;
 
@@ -584,7 +585,7 @@ EOD;
         return $rs;
     }
 
-    function blogger_getRecentPosts($params)
+    public function blogger_getRecentPosts($params)
     {
         list($appkey, $blogid, $username, $password, $numberOfPosts) = $params;
 
@@ -594,7 +595,13 @@ EOD;
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        $articles = $txp->getArticleList('ID, Body, AuthorId, unix_timestamp(Posted) as uPosted', "Section='".doSlash($blogid)."'", '0', $numberOfPosts, false);
+        $articles = $txp->getArticleList(
+            'ID, Body, AuthorId, unix_timestamp(Posted) as uPosted',
+            "Section='".doSlash($blogid)."'",
+            '0',
+            $numberOfPosts,
+            false
+        );
 
         if (false === $articles) {
             return new IXR_Error(207, gTxt('problem_getting_articles'));
@@ -615,7 +622,7 @@ EOD;
 //---------------------------------------------------------
 
     // metaWeblog API.
-    function metaWeblog_getPost($params)
+    public function metaWeblog_getPost($params)
     {
         list($postid, $username, $password) = $params;
 
@@ -634,7 +641,7 @@ EOD;
         return $this->_buildMetaWeblogStruct($rs, $txp);
     }
 
-    function metaWeblog_newPost($params)
+    public function metaWeblog_newPost($params)
     {
         list($blogid, $username, $password, $struct, $publish) = $params;
 
@@ -658,7 +665,7 @@ EOD;
         return "$rs";
     }
 
-    function metaWeblog_editPost($params)
+    public function metaWeblog_editPost($params)
     {
         list($postid, $username, $password, $struct, $publish) = $params;
 
@@ -679,7 +686,7 @@ EOD;
         return true;
     }
 
-    function metaWeblog_getCategories($params)
+    public function metaWeblog_getCategories($params)
     {
         list($blogid, $username, $password) = $params;
 
@@ -711,7 +718,7 @@ EOD;
         return $cats;
     }
 
-    function metaWeblog_getRecentPosts($params)
+    public function metaWeblog_getRecentPosts($params)
     {
         list($blogid, $username, $password, $numberOfPosts) = $params;
 
@@ -721,8 +728,13 @@ EOD;
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        $articles = $txp->getArticleList('ID, Title, url_title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, AuthorID, unix_timestamp(Posted) as uPosted',
-            "Section='".doSlash($blogid)."'", '0', $numberOfPosts, false);
+        $articles = $txp->getArticleList(
+            'ID, Title, url_title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, AuthorID, unix_timestamp(Posted) as uPosted',
+            "Section='".doSlash($blogid)."'",
+            '0',
+            $numberOfPosts,
+            false
+        );
 
         if (false === $articles) {
             return new IXR_Error(207, gTxt('problem_getting_articles'));
@@ -740,7 +752,7 @@ EOD;
 //---------------------------------------------------------
 
     // MovableType API.
-    function mt_getRecentPostTitles($params)
+    public function mt_getRecentPostTitles($params)
     {
         list($blogid, $username, $password, $numberOfPosts) = $params;
 
@@ -774,7 +786,7 @@ EOD;
         return $out;
     }
 
-    function mt_getCategoryList($params)
+    public function mt_getCategoryList($params)
     {
         list($blogid, $username, $password) = $params;
 
@@ -802,7 +814,7 @@ EOD;
         return $cats;
     }
 
-    function mt_supportedTextFilters($params)
+    public function mt_supportedTextFilters($params)
     {
         $filters = array(
             array('key' => '0', 'label' => 'LEAVE_TEXT_UNTOUCHED'),
@@ -813,7 +825,7 @@ EOD;
         return $filters;
     }
 
-    function mt_getPostCategories($params)
+    public function mt_getPostCategories($params)
     {
         list($postid, $username, $password) = $params;
 
@@ -858,7 +870,7 @@ EOD;
 
     // TODO: explain what 'expecific' is ;)
     // Supported to avoid some client expecific behaviour.
-    function mt_publishPost($params)
+    public function mt_publishPost($params)
     {
         list($postid, $username, $password) = $params;
 
@@ -877,7 +889,7 @@ EOD;
         return true;
     }
 
-    function mt_setPostCategories($params)
+    public function mt_setPostCategories($params)
     {
         list($postid, $username, $password, $categories) = $params;
 
@@ -928,7 +940,7 @@ EOD;
      */
 
     // Code refactoring for blogger_newPost and blogger_editPost.
-    function _getBloggerContents($content)
+    public function _getBloggerContents($content)
     {
         $body = $content;
 
@@ -950,7 +962,7 @@ EOD;
     }
 
     // Code refactoring for metaWeblog_newPost and metaweblog_EditPost.
-    function _getMetaWeblogContents($struct, $publish, $txp)
+    private function _getMetaWeblogContents($struct, $publish, $txp)
     {
         global $gmtoffset, $is_dst;
 
@@ -1030,7 +1042,7 @@ EOD;
     // Common code to metaWeblog_getPost and metaWeblog_getRecentPosts could
     // not be this placed on a different file from taghandlers?
     // Remove if it is the case.
-    function _buildMetaWeblogStruct($rs, $txp)
+    private function _buildMetaWeblogStruct($rs, $txp)
     {
         global $permlink_mode, $is_dst, $gmtoffset;
 
