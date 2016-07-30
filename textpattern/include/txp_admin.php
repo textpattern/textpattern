@@ -230,31 +230,44 @@ function new_pass_form($message = '')
 {
     pagetop(gTxt('tab_site_admin'), $message);
 
-    echo form(
-        hed(gTxt('change_password'), 2).
-        inputLabel(
-            'current_pass',
-            fInput('password', 'current_pass', '', '', '', '', INPUT_REGULAR, '', 'current_pass'),
-            'current_password', '', array('class' => 'txp-form-field edit-admin-current-password')
-        ).
-        inputLabel(
-            'new_pass',
-            fInput('password', 'new_pass', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'new_pass').
-            n.tag(null, 'div', array('class' => 'strength-meter')).
-            n.tag(
-                checkbox('unmask', 1, false, 0, 'show_password').
-                n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
-                'div', array('class' => 'edit-admin-show-password')),
-            'new_password', '', array('class' => 'txp-form-field edit-admin-new-password')
-        ).
-        graf(
-            sLink('admin', '', gTxt('cancel'), 'txp-button').
-            fInput('submit', 'change_pass', gTxt('submit'), 'publish'),
-            array('class' => 'txp-edit-actions')
-        ).
-        eInput('admin').
-        sInput('change_pass'),
-    '', '', 'post', 'txp-edit', '', 'change_password');
+    echo
+        form(
+            hed(gTxt('change_password'), 2).
+            inputLabel(
+                'current_pass',
+                fInput('password', 'current_pass', '', '', '', '', INPUT_REGULAR, '', 'current_pass'),
+                'current_password',
+                '',
+                array('class' => 'txp-form-field edit-admin-current-password')
+            ).
+            inputLabel(
+                'new_pass',
+                fInput('password', 'new_pass', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'new_pass').
+                n.tag(null, 'div', array('class' => 'strength-meter')).
+                n.tag(
+                    checkbox('unmask', 1, false, 0, 'show_password').
+                    n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
+                    'div',
+                    array('class' => 'edit-admin-show-password')
+                ),
+                'new_password',
+                '',
+                array('class' => 'txp-form-field edit-admin-new-password')
+            ).
+            graf(
+                sLink('admin', '', gTxt('cancel'), 'txp-button').
+                fInput('submit', 'change_pass', gTxt('submit'), 'publish'),
+                array('class' => 'txp-edit-actions')
+            ).
+            eInput('admin').
+            sInput('change_pass'),
+            '',
+            '',
+            'post',
+            'txp-edit',
+            '',
+            'change_password'
+        );
 }
 
 /**
@@ -271,21 +284,30 @@ function change_email_form($message = '')
 
     $email = fetch('email', 'txp_users', 'name', $txp_user);
 
-    echo form(
-        hed(gTxt('change_email_address'), 2).
-        inputLabel(
-            'new_email',
-            fInput('text', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'),
-            'new_email', '', array('class' => 'txp-form-field edit-admin-new-email')
-        ).
-        graf(
-            sLink('admin', '', gTxt('cancel'), 'txp-button').
-            fInput('submit', 'change_email', gTxt('submit'), 'publish'),
-            array('class' => 'txp-edit-actions')
-        ).
-        eInput('admin').
-        sInput('change_email'),
-    '', '', 'post', 'txp-edit', '', 'change_email');
+    echo
+        form(
+            hed(gTxt('change_email_address'), 2).
+            inputLabel(
+                'new_email',
+                fInput('text', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'),
+                'new_email',
+                '',
+                array('class' => 'txp-form-field edit-admin-new-email')
+            ).
+            graf(
+                sLink('admin', '', gTxt('cancel'), 'txp-button').
+                fInput('submit', 'change_email', gTxt('submit'), 'publish'),
+                array('class' => 'txp-edit-actions')
+            ).
+            eInput('admin').
+            sInput('change_email'),
+            '',
+            '',
+            'post',
+            'txp-edit',
+            '',
+            'change_email'
+        );
 }
 
 /**
@@ -352,7 +374,8 @@ function author_list($message = '')
 
         $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-        $search = new Filter($event,
+        $search = new Filter(
+            $event,
             array(
                 'login' => array(
                     'column' => 'txp_users.name',
@@ -386,12 +409,15 @@ function author_list($message = '')
 
         echo n.tag(
             hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-2col-cell-1'));
+            'div',
+            array('class' => 'txp-layout-2col-cell-1')
+        );
 
         $searchBlock =
             n.tag(
                 $search->renderForm('author_list', $search_render_options),
-                'div', array(
+                'div',
+                array(
                     'class' => 'txp-layout-2col-cell-2',
                     'id'    => 'users_control',
                 )
@@ -410,7 +436,8 @@ function author_list($message = '')
 
         if ($total < 1) {
             if ($criteria != 1) {
-                echo $searchBlock.
+                echo
+                    $searchBlock.
                     $contentBlockStart.
                     $createBlock.
                     graf(
@@ -454,29 +481,30 @@ function author_list($message = '')
                         ($use_multi_edit)
                         ? hCell(
                             fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                                '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                            '',
+                            ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                         )
                         : hCell('', '', ' class="txp-list-col-multi-edit" scope="col"')
                     ).
                     column_head(
                         'login_name', 'name', 'admin', true, $switch_dir, '', '',
-                            (('name' == $sort) ? "$dir " : '').'txp-list-col-login-name name'
+                        (('name' == $sort) ? "$dir " : '').'txp-list-col-login-name name'
                     ).
                     column_head(
                         'real_name', 'RealName', 'admin', true, $switch_dir, '', '',
-                            (('RealName' == $sort) ? "$dir " : '').'txp-list-col-real-name name'
+                        (('RealName' == $sort) ? "$dir " : '').'txp-list-col-real-name name'
                     ).
                     column_head(
                         'email', 'email', 'admin', true, $switch_dir, '', '',
-                            (('email' == $sort) ? "$dir " : '').'txp-list-col-email'
+                        (('email' == $sort) ? "$dir " : '').'txp-list-col-email'
                     ).
                     column_head(
                         'privileges', 'privs', 'admin', true, $switch_dir, '', '',
-                            (('privs' == $sort) ? "$dir " : '').'txp-list-col-privs'
+                        (('privs' == $sort) ? "$dir " : '').'txp-list-col-privs'
                     ).
                     column_head(
                         'last_login', 'last_login', 'admin', true, $switch_dir, '', '',
-                            (('last_login' == $sort) ? "$dir " : '').'txp-list-col-last-login date'
+                        (('last_login' == $sort) ? "$dir " : '').'txp-list-col-last-login date'
                     )
                 ).
                 n.tag_end('thead').
@@ -487,22 +515,28 @@ function author_list($message = '')
 
                 echo tr(
                     td(
-                        ((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'txp-list-col-multi-edit'
+                        ((has_privs('admin.edit') and $txp_user != $a['name'])
+                        ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox')
+                        : ''),
+                        '',
+                        'txp-list-col-multi-edit'
                     ).
                     hCell(
-                        ((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' class="txp-list-col-login-name name" scope="row"'
+                        ((has_privs('admin.edit'))
+                        ? eLink('admin', 'author_edit', 'user_id', $user_id, $name)
+                        : $name),
+                        '',
+                        ' class="txp-list-col-login-name name" scope="row"'
                     ).
+                    td($RealName, '', 'txp-list-col-real-name name').
+                    td(href($email, 'mailto:'.$email), '', 'txp-list-col-email').
+                    td(get_priv_level($privs), '', 'txp-list-col-privs').
                     td(
-                        $RealName, '', 'txp-list-col-real-name name'
-                    ).
-                    td(
-                        href($email, 'mailto:'.$email), '', 'txp-list-col-email'
-                    ).
-                    td(
-                        get_priv_level($privs), '', 'txp-list-col-privs'
-                    ).
-                    td(
-                        ($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'txp-list-col-last-login date'
+                        ($last_login
+                        ? safe_strftime('%b&#160;%Y', $last_login)
+                        : ''),
+                        '',
+                        'txp-list-col-last-login date'
                     )
                 );
             }
@@ -578,38 +612,50 @@ function author_edit($message = '')
         $out[] = inputLabel(
             'login_name',
             strong(txpspecialchars($name)),
-            '', '', array('class' => 'txp-form-field edit-admin-login-name')
+            '',
+            '',
+            array('class' => 'txp-form-field edit-admin-login-name')
         );
     } else {
         $out[] = inputLabel(
             'login_name',
             fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name'),
-            'login_name', 'add_new_author', array('class' => 'txp-form-field edit-admin-login-name')
+            'login_name',
+            'add_new_author',
+            array('class' => 'txp-form-field edit-admin-login-name')
         );
     }
 
     $out[] = inputLabel(
-            'real_name',
-            fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'),
-            'real_name', '', array('class' => 'txp-form-field edit-admin-name')
-        ).
-        inputLabel(
-            'login_email',
-            fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'),
-            'email', '', array('class' => 'txp-form-field edit-admin-email')
-        );
+        'real_name',
+        fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'),
+        'real_name',
+        '',
+        array('class' => 'txp-form-field edit-admin-name')
+    ).
+    inputLabel(
+        'login_email',
+        fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'),
+        'email',
+        '',
+        array('class' => 'txp-form-field edit-admin-email')
+    );
 
     if ($txp_user != $name) {
         $out[] = inputLabel(
             'privileges',
             privs($privs),
-            'privileges', 'about_privileges', array('class' => 'txp-form-field edit-admin-privileges')
+            'privileges',
+            'about_privileges',
+            array('class' => 'txp-form-field edit-admin-privileges')
         );
     } else {
         $out[] = inputLabel(
             'privileges',
             strong(get_priv_level($privs)),
-            '', '', array('class' => 'txp-form-field edit-admin-privileges')
+            '',
+            '',
+            array('class' => 'txp-form-field edit-admin-privileges')
         ).
         hInput('privs', $privs);
     }
@@ -717,7 +763,6 @@ function admin_multi_edit()
 
     switch ($method) {
         case 'delete':
-
             $assign_assets = ps('assign_assets');
 
             if (!$assign_assets) {
@@ -729,20 +774,16 @@ function admin_multi_edit()
                 callback_event('authors_deleted', '', 0, $changed);
                 $msg = 'author_deleted';
             }
-
             break;
 
         case 'changeprivilege':
-
             if (change_user_group($names, ps('privs'))) {
                 $changed = $names;
                 $msg = 'author_updated';
             }
-
             break;
 
         case 'resetpassword':
-
             foreach ($names as $name) {
                 send_reset_confirmation_request($name);
                 $changed[] = $name;
@@ -752,7 +793,6 @@ function admin_multi_edit()
             break;
 
         case 'resendactivation':
-
             foreach ($names as $name) {
                 send_account_activation($name);
                 $changed[] = $name;
