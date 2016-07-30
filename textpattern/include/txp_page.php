@@ -123,23 +123,32 @@ function page_edit($message = '')
 
     // Pages code columm.
 
-    echo n.tag(
-        hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading')).
-        form(
-            $titleblock.
-            inputLabel(
-                'html',
-                '<textarea class="code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($html).'</textarea>',
-                'page_code',
-                array('', 'instructions_page_code'),
-                array('class' => 'txp-form-field')
-            ), '', '', 'post', '', '', 'page_form'),
-        'div', array(
-            'class' => 'txp-layout-4col-cell-1-2-3',
-            'id'    => 'main_content',
-            'role'  => 'region',
-        )
-    );
+    echo
+        n.tag(
+            hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading')).
+            form(
+                $titleblock.
+                inputLabel(
+                    'html',
+                    '<textarea class="code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($html).'</textarea>',
+                    'page_code',
+                    array('', 'instructions_page_code'),
+                    array('class' => 'txp-form-field')
+                ),
+                '',
+                '',
+                'post',
+                '',
+                '',
+                'page_form'
+            ),
+            'div',
+            array(
+                'class' => 'txp-layout-4col-cell-1-2-3',
+                'id'    => 'main_content',
+                'role'  => 'region',
+            )
+        );
 
     // Pages create/switcher column.
 
@@ -159,7 +168,8 @@ function page_edit($message = '')
             'method' => 'post',
             'value'  =>  gTxt('save'),
             'form'   => 'page_form',
-        )), ' class="txp-save"'
+        )),
+        ' class="txp-save"'
     ).
     graf(
         sLink('page', 'page_new', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_page'), 'txp-new').
@@ -170,7 +180,8 @@ function page_edit($message = '')
     echo n.tag(
         $buttons.
         page_list($name).n,
-        'div', array(
+        'div',
+        array(
             'class' => 'txp-layout-4col-cell-4alt',
             'id'    => 'content_switcher',
             'role'  => 'region',
