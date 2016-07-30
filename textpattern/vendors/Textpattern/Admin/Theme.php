@@ -276,6 +276,17 @@ abstract class Theme
 
                 foreach ($items as $a => $b) {
                     if (has_privs($b)) {
+                        if ($b == 'prefs') {
+                            global $txp_permissions;
+                            foreach (array_keys($txp_permissions) as $key) {
+                                if (strpos($key, 'prefs.') === 0 && has_privs($key)) {
+                                    $show_prefs = true;
+                                    break;
+                                }
+                            }
+                            if (empty($show_prefs)) continue;
+                        }
+
                         if ($e_ === '') {
                             $e_ = $b;
                         }
