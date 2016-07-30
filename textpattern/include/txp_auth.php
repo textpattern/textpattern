@@ -53,12 +53,11 @@ function doAuth()
     if (!$txp_user) {
         if (trim(ps('app_mode')) == 'async') {
             echo script_js(
-                'alert("'.escape_js(gTxt('login_to_textpattern')).'"); 
+                'alert("'.escape_js(gTxt('login_to_textpattern')).'");
                 window.location.assign("index.php")'
             );
             exit();
-        }
-        else {
+        } else {
             doLoginForm($message);
         }
     }
@@ -107,13 +106,16 @@ function doLoginForm($message)
             inputLabel(
                 'login_name',
                 fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'),
-                'name', '', array('class' => 'txp-form-field login-name')
+                'name',
+                '',
+                array('class' => 'txp-form-field login-name')
             ).
             graf(
                 fInput('submit', '', gTxt('password_reset_button'), 'publish')
             ).
             graf(
-                href(gTxt('back_to_login'), 'index.php'), array('class' => 'login-return')
+                href(gTxt('back_to_login'), 'index.php'),
+                array('class' => 'login-return')
             ).
             hInput('p_reset', 1);
     } elseif ($confirm || $activate) {
@@ -128,14 +130,19 @@ function doLoginForm($message)
                 n.tag(
                     checkbox('unmask', 1, false, 0, 'show_password').
                     n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
-                    'div', array('class' => 'show-password')),
-                'new_password', '', array('class' => 'txp-form-field '.$class)
+                    'div',
+                    array('class' => 'show-password')
+                ),
+                'new_password',
+                '',
+                array('class' => 'txp-form-field '.$class)
             ).
             graf(
                 fInput('submit', '', gTxt('password_confirm_button'), 'publish')
             ).
             graf(
-                href(gTxt('back_to_login'), 'index.php'), array('class' => 'login-return')
+                href(gTxt('back_to_login'), 'index.php'),
+                array('class' => 'login-return')
             ).
             hInput('hash', gps('confirm').gps('activate')).
             hInput(($confirm ? 'p_alter' : 'p_set'), 1);
@@ -145,23 +152,29 @@ function doLoginForm($message)
             inputLabel(
                 'login_name',
                 fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'),
-                'name', '', array('class' => 'txp-form-field login-name')
+                'name',
+                '',
+                array('class' => 'txp-form-field login-name')
             ).
             inputLabel(
                 'login_password',
                 fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password'),
-                'password', '', array('class' => 'txp-form-field login-password')
+                'password',
+                '',
+                array('class' => 'txp-form-field login-password')
             ).
             graf(
                 checkbox('stay', 1, $stay, '', 'login_stay').n.
                 tag(gTxt('stay_logged_in'), 'label', array('for' => 'login_stay')).
-                popHelp('remember_login'), array('class' => 'login-stay')
+                popHelp('remember_login'),
+                array('class' => 'login-stay')
             ).
             graf(
                 fInput('submit', '', gTxt('log_in_button'), 'publish')
             ).
             graf(
-                href(gTxt('password_forgotten'), '?reset=1'), array('class' => 'login-forgot')
+                href(gTxt('password_forgotten'), '?reset=1'),
+                array('class' => 'login-forgot')
             );
 
         if (gps('event')) {
@@ -171,17 +184,17 @@ function doLoginForm($message)
 
     pagetop($pageTitle, $message);
 
-    gTxtScript(array(
-        'password_strength_0',
-        'password_strength_1',
-        'password_strength_2',
-        'password_strength_3',
-        'password_strength_4',
+    gTxtScript(
+        array(
+            'password_strength_0',
+            'password_strength_1',
+            'password_strength_2',
+            'password_strength_3',
+            'password_strength_4',
         )
     );
 
-    echo form(
-        join('', $out), '', '', 'post', 'txp-login', '', 'login_form').
+    echo form(join('', $out), '', '', 'post', 'txp-login', '', 'login_form').
 
     script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL).
     script_js('textpattern.textarray = '.json_encode($textarray_script)).
