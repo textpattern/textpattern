@@ -79,7 +79,7 @@ safe_delete('txp_prefs', "name = 'last_update_check'");
 set_error_handler("updateErrorHandler");
 
 try {
-    foreach($dbupdates as $dbupdate) {
+    foreach ($dbupdates as $dbupdate) {
         if (version_compare($dbversion, $dbupdate, '<')) {
             if ((include txpath.DS.'update'.DS.'_to_'.$dbupdate.'.php') === false) {
                 trigger_error('Something bad happened. Not sure what exactly', E_USER_ERROR);
@@ -94,8 +94,7 @@ try {
     // Keep track of updates for SVN users.
     safe_delete('txp_prefs', "name = 'dbupdatetime'");
     safe_insert('txp_prefs', "prefs_id = 1, name = 'dbupdatetime', val = '".max(newest_file(), time())."', type = '2'");
-}
-catch(Exception $e) {
+} catch (Exception $e) {
     // Nothing to do here, the goal was just to abort the update scripts
     // Error message already communicated via updateErrorHandler
 }

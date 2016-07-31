@@ -204,8 +204,7 @@ function prefs_list($message = '')
                 if ($last_event !== null) {
                     $build[] = tag(
                         hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
-                        join(n, $out)
-                        , 'section', array(
+                        join(n, $out), 'section', array(
                             'class'           => 'txp-prefs-group',
                             'id'              => 'prefs_group_'.$last_event,
                             'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
@@ -273,8 +272,7 @@ function prefs_list($message = '')
     } else {
         $build[] = tag(
             hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
-            join(n, $out)
-            , 'section', array(
+            join(n, $out), 'section', array(
                 'class'           => 'txp-prefs-group',
                 'id'              => 'prefs_group_'.$last_event,
                 'aria-labelledby' => 'prefs_group_'.$last_event.'-label',

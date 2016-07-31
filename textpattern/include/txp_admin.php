@@ -532,7 +532,8 @@ function author_list($message = '')
         echo
             n.tag_start('div', array(
                 'class' => 'txp-layout-1col',
-                'id'    => 'users_container',)).
+                'id'    => 'users_container',
+            )).
             n.tag(implode(n, $buttons), 'div', array('class' => 'txp-control-panel')).
             n.tag_end('div');
     }

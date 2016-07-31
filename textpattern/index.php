@@ -219,8 +219,8 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         echo $trace->summary();
         echo $trace->result();
     } else {
-        foreach($trace->summary(true) as $key => $value) {
-           header('X-Textpattern-'.preg_replace('/[^\w]+/', '', $key).': '.$value);
+        foreach ($trace->summary(true) as $key => $value) {
+            header('X-Textpattern-'.preg_replace('/[^\w]+/', '', $key).': '.$value);
         }
     }
 } else {

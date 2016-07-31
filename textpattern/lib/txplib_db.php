@@ -394,9 +394,9 @@ function safe_query($q = '', $debug = false, $unbuf = false)
     if ($production_status !== 'live') {
         $trace->start("[SQL: $q ]", true);
     }
-    
+
     $result = mysqli_query($DB->link, $q, $method);
-    
+
     if ($production_status !== 'live') {
         $trace->stop();
     }
@@ -1452,11 +1452,12 @@ eod;
  * the txp_file table.
  *
  * @param  string $type   Column name, lower case (one of 'posted', 'expires', 'created')
- * @param  bool   $update Force update 
+ * @param  bool   $update Force update
  * @return string SQL query string partial
  */
 
-function now($type, $update = false) {
+function now($type, $update = false)
+{
     static $nows = array();
     static $time = null;
 
@@ -1478,7 +1479,7 @@ function now($type, $update = false) {
             $table = ($type === 'created') ? 'txp_file' : 'textpattern';
             $where = '1=1 having utime > '.$time.' order by utime asc limit 1';
             $now = safe_field('unix_timestamp('.$type.') as utime', $table, $where);
-            $now = ($now === false) ? 2147483647 : intval($now) - 1; 
+            $now = ($now === false) ? 2147483647 : intval($now) - 1;
             update_pref($pref, $now);
             $nows[$type] = $now;
         }

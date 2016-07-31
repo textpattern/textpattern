@@ -573,8 +573,7 @@ function plugin_form()
         '<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'.
         fInput('submit', 'install_new', gTxt('upload')).
         eInput('plugin').
-        sInput('plugin_verify')
-        , '', '', 'post', 'plugin-data', '', 'plugin_install_form');
+        sInput('plugin_verify'), '', '', 'post', 'plugin-data', '', 'plugin_install_form');
 }
 
 /**

@@ -1,6 +1,7 @@
 <?php
 
-class Trace {
+class Trace
+{
     private static $quiet = false;
     private $bigBang;
     private $memFunc;
@@ -48,7 +49,9 @@ class Trace {
 
     public function start($msg, $query = false)
     {
-        if (self::$quiet) return;
+        if (self::$quiet) {
+            return;
+        }
 
         $start = sizeof($this->trace);
 
@@ -62,7 +65,9 @@ class Trace {
 
     public function stop($msg = null)
     {
-        if (self::$quiet) return;
+        if (self::$quiet) {
+            return;
+        }
 
         $start = assert_int(array_pop($this->nest));
         $this->trace[$start]['end'] = microtime(true);
@@ -87,7 +92,9 @@ class Trace {
 
     public function log($msg)
     {
-        if (self::$quiet) return;
+        if (self::$quiet) {
+            return;
+        }
 
         $start = sizeof($this->trace);
 
@@ -100,7 +107,9 @@ class Trace {
 
     private function out($str)
     {
-        if (self::$quiet) return '';
+        if (self::$quiet) {
+            return '';
+        }
 
         return "\n<!-- " . str_replace('--', '- - ', $str) . "-->\n";
     }
@@ -118,7 +127,7 @@ class Trace {
         }
 
         $out = "Trace summary:\n";
-        foreach($summary as $key => $value) {
+        foreach ($summary as $key => $value) {
             $out .= sprintf("%-10s: %s\n", $key, $value);
         }
 
@@ -130,7 +139,7 @@ class Trace {
         $tracelog = "Trace log:\n  Time(ms) | Duration | Trace\n";
         $querylog = "Query log:\nDuration | Query\n";
 
-        foreach($this->trace as $nr => $trace) {
+        foreach ($this->trace as $nr => $trace) {
             $tracelog .= (in_array($nr, $this->memWhere)) ? '*' : ' ';
             $tracelog .= sprintf(' %8.2f | ', ($trace['begin'] - $this->bigBang) * 1000);
             $line = '';

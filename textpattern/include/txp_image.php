@@ -642,8 +642,7 @@ function image_edit($message = '', $id = '')
                             fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').
                             n.'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.
                             checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop').
-                            fInput('submit', '', gTxt('create'))
-                        , ' class="edit-alter-thumbnail"').
+                            fInput('submit', '', gTxt('create')), ' class="edit-alter-thumbnail"').
                     hInput('id', $id).
                     eInput('image').
                     sInput('thumbnail_create').
@@ -651,8 +650,7 @@ function image_edit($message = '', $id = '')
                     hInput('dir', $dir).
                     hInput('page', $page).
                     hInput('search_method', $search_method).
-                    hInput('crit', $crit)
-                    , '', '', 'post', '', '', 'thumbnail_alter_form'),
+                    hInput('crit', $crit), '', '', 'post', '', '', 'thumbnail_alter_form'),
                 $rs
             )
             : '';

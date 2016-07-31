@@ -86,12 +86,8 @@ function pagetop($pagetitle, $message = '')
     if (!in_array($lang_direction, array('ltr', 'rtl'))) {
         // Apply biased default for missing translations.
         $lang_direction = 'ltr';
-    }
-
-    ?><!DOCTYPE html>
-<html lang="<?php echo txpspecialchars(LANG);
-    ?>" dir="<?php echo $lang_direction;
-    ?>">
+    } ?><!DOCTYPE html>
+<html lang="<?php echo txpspecialchars(LANG); ?>" dir="<?php echo $lang_direction; ?>">
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
@@ -125,12 +121,9 @@ function pagetop($pagetitle, $message = '')
 </style>
 <?php
 echo $theme->html_head();
-    callback_event('admin_side', 'head_end');
-    ?>
+    callback_event('admin_side', 'head_end'); ?>
 </head>
-<body class="not-ready <?php echo $area;
-    ?>" id="<?php echo $body_id;
-    ?>">
+<body class="not-ready <?php echo $area; ?>" id="<?php echo $body_id; ?>">
 <header class="txp-header">
 <?php callback_event('admin_side', 'pagetop');
     $theme->set_state($area, $event, $bm, $message);

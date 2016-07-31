@@ -279,7 +279,6 @@ function form_edit($message = '')
             array('', 'instructions_form_type'),
             array('class' => 'txp-form-field')
         );
-
     } else {
         $name_widgets = inputLabel(
             'new_form',
@@ -390,8 +389,7 @@ function form_edit($message = '')
                 'form_code',
                 array('', 'instructions_form_code'),
                 array('class' => 'txp-form-field')
-            )
-            , '', '', 'post', '', '', 'form_form'),
+            ), '', '', 'post', '', '', 'form_form'),
         'div', array(
             'class' => 'txp-layout-4col-cell-1-2-3',
             'id'    => 'main_content',

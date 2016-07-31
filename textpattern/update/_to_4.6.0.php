@@ -147,7 +147,7 @@ if (file_exists(txpath.DS.'include'.DS.'txp_import.php')) {
         'import_wp.php'
     );
 
-    foreach($import_files as $file) {
+    foreach ($import_files as $file) {
         unlink(txpath.DS.'include'.DS.'import'.DS.$file);
     }
 
@@ -225,7 +225,7 @@ foreach (array('4.4.0', '4.4.1') as $v) {
 
 // Add generic token table (dropping first, because of changes to the table setup).
 safe_drop('txp_token');
-safe_create('txp_token',"
+safe_create('txp_token', "
     id           INT          NOT NULL AUTO_INCREMENT,
     reference_id INT          NOT NULL,
     type         VARCHAR(255) NOT NULL,

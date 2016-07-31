@@ -2110,7 +2110,7 @@ function comments_form($atts, $thing = null)
     $deprecated = array('isize', 'msgrows', 'msgcols', 'msgstyle',
         'previewlabel', 'submitlabel', 'rememberlabel', 'forgetlabel');
 
-    foreach($deprecated as $att) {
+    foreach ($deprecated as $att) {
         if (isset($atts[$att])) {
             trigger_error(gTxt('deprecated_attribute', array('{name}' => $att)), E_USER_NOTICE);
         }
@@ -2377,8 +2377,7 @@ function comment_submit($atts)
     // If all fields check out, the submit button is active/clickable.
     if (ps('preview')) {
         return fInput('submit', 'submit', $label, 'button', '', '', '', '', 'txpCommentSubmit', false);
-    }
-    else {
+    } else {
         return fInput('submit', 'submit', $label, 'button disabled', '', '', '', '', 'txpCommentSubmit', true);
     }
 }

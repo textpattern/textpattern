@@ -57,8 +57,7 @@ function doAuth()
                 window.location.assign("index.php")'
             );
             exit();
-        }
-        else {
+        } else {
             doLoginForm($message);
         }
     }

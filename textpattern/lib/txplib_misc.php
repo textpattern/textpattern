@@ -508,7 +508,7 @@ function load_lang($lang, $events = null)
         $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang_code)."'".$where);
 
         if (!empty($rs)) {
-            while($a = nextRow($rs)) {
+            while ($a = nextRow($rs)) {
                 $out[$a['name']] = $a['data'];
             }
 
@@ -3042,7 +3042,7 @@ function tz_offset($timestamp = null)
     }
 
     if ($timezone_server === $timezone_key) {
-            return 0;
+        return 0;
     }
 
     if ($timestamp === null) {
@@ -3056,7 +3056,7 @@ function tz_offset($timestamp = null)
 
         $transition = $dtz[$timezone_server]->getTransitions($timestamp, $timestamp);
         $serveroffset = $transition[0]['offset'];
-    } catch(\Exception $e) {
+    } catch (\Exception $e) {
         extract(getdate($timestamp));
         $serveroffset = gmmktime($hours, $minutes, 0, $mon, $mday, $year) - mktime($hours, $minutes, 0, $mon, $mday, $year);
     }
@@ -3068,7 +3068,7 @@ function tz_offset($timestamp = null)
 
         $transition = $dtz[$timezone_key]->getTransitions($timestamp, $timestamp);
         $siteoffset = $transition[0]['offset'];
-    } catch(\Exception $e) {
+    } catch (\Exception $e) {
         $siteoffset = $gmtoffset;
     }
 
@@ -4232,7 +4232,7 @@ function EvalElse($thing, $condition)
 {
     global $txp_parsed, $txp_else;
 
-    if (strpos($thing, ':else') === FALSE || empty($txp_parsed[$hash = sha1($thing)])) {
+    if (strpos($thing, ':else') === false || empty($txp_parsed[$hash = sha1($thing)])) {
         return $condition ? $thing : '';
     }
 
@@ -4292,7 +4292,7 @@ function fetch_form($name)
     }
 
     if ($production_status === 'debug') {
-    	$trace->log("[Form: '$name']");
+        $trace->log("[Form: '$name']");
     }
 
     return $forms[$name];
@@ -5636,9 +5636,15 @@ function quote_list($in)
 function trace_add($msg, $level = 0, $dummy = null)
 {
     global $trace;
-    if     ((int) $level > 0) $trace->start($msg);
-    elseif ((int) $level < 0) $trace->stop();
-    else   $trace->log($msg);
+
+    if ((int) $level > 0) {
+        $trace->start($msg);
+    } elseif ((int) $level < 0) {
+        $trace->stop();
+    } else {
+        $trace->log($msg);
+    }
+
     trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'class Trace')), E_USER_NOTICE);
 }
 

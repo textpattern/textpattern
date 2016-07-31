@@ -151,7 +151,7 @@ function article_post()
     }
 
     $incoming = doSlash(textile_main_fields($incoming));
-     extract($incoming);
+    extract($incoming);
 
     $msg = '';
     if ($Title or $Body or $Excerpt) {
@@ -1281,7 +1281,9 @@ function custField($num, $field, $content)
 function checkIfNeighbour($whichway, $sPosted, $ID = 0)
 {
     // Eventual backward compatibility.
-    if(empty($ID)) $ID = !empty($GLOBALS['ID']) ? $GLOBALS['ID'] : gps('ID');
+    if (empty($ID)) {
+        $ID = !empty($GLOBALS['ID']) ? $GLOBALS['ID'] : gps('ID');
+    }
     $sPosted = assert_int($sPosted);
     $ID = assert_int($ID);
     $dir = ($whichway == 'prev') ? '<' : '>';

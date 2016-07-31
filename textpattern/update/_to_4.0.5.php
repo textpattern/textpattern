@@ -62,7 +62,10 @@ if (array_intersect(array('modified', 'created', 'size', ), $txpfile)) {
     $dir = get_pref('file_base_path', dirname(txpath).DS.'files');
 
     foreach ($rs as $row) {
-        if (empty($row['filename'])) continue;
+        if (empty($row['filename'])) {
+            continue;
+        }
+
         $path = build_file_path($dir, $row['filename']);
 
         if ($path and ($stat = @stat($path))) {
@@ -71,7 +74,7 @@ if (array_intersect(array('modified', 'created', 'size', ), $txpfile)) {
     }
 }
 
-safe_update('textpattern', "Keywords = TRIM(BOTH ',' FROM 
+safe_update('textpattern', "Keywords = TRIM(BOTH ',' FROM
     REPLACE(
         REPLACE(
             REPLACE(
@@ -93,7 +96,7 @@ safe_update('textpattern', "Keywords = TRIM(BOTH ',' FROM
                 ',,,,', ','),
             ',,', ','),
         ',,', ',')
-    )", 
+    )",
     "Keywords != ''"
 );
 

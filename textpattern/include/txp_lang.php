@@ -286,8 +286,7 @@ function list_languages($message = '')
                 n.'<textarea class="code" id="textpack-install" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'.
                 fInput('submit', 'install_new', gTxt('upload')).
                 eInput('lang').
-                sInput('get_textpack')
-                , '', '', 'post', '', '', 'text_uploader'
+                sInput('get_textpack'), '', '', 'post', '', '', 'text_uploader'
             ), 'div', array('class' => 'txp-control-panel')).
 
         n.tag_end('div');

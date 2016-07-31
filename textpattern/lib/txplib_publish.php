@@ -370,7 +370,7 @@ function parse($thing, $condition = null)
 
     if (isset($condition)) {
         if ($production_status === 'debug') {
-    	    $trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
+            $trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
         }
     } else {
         $condition = true;
@@ -382,7 +382,7 @@ function parse($thing, $condition = null)
 
     $hash = sha1($thing);
 
-    if(!isset($txp_parsed[$hash])) {
+    if (!isset($txp_parsed[$hash])) {
         $tags    = array(array());
         $tag     = array();
         $outside = array();
