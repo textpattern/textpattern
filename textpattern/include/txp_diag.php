@@ -498,13 +498,13 @@ function doDiagnostics()
 
         gTxt('gd_library').cs.$gd.n,
 
-        gTxt('server').' TZ: '.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
+        gTxt('server_timezone')cs.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
         gTxt('server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
         strip_tags(gTxt('is_dst')).cs.$is_dst.n,
         strip_tags(gTxt('auto_dst')).cs.$auto_dst.n,
         strip_tags(gTxt('gmtoffset')).cs.$timezone_key.sp."($gmtoffset)".n,
 
-        'MySQL'.cs.mysqli_get_server_info($DB->link).n,
+        gTxt('db_server_version').cs.mysqli_get_server_info($DB->link).n,
         gTxt('db_server_time').cs.$db_server_time.n,
         gTxt('db_server_timeoffset').cs.$db_server_timeoffset.' s'.n,
         gTxt('db_global_timezone').cs.$db_global_timezone.n,
@@ -512,7 +512,7 @@ function doDiagnostics()
 
         gTxt('locale').cs.$locale.n,
 
-        (isset($_SERVER['SERVER_SOFTWARE'])) ? gTxt('server').cs.$_SERVER['SERVER_SOFTWARE'].n : '',
+        (isset($_SERVER['SERVER_SOFTWARE'])) ? gTxt('http_server_version').cs.$_SERVER['SERVER_SOFTWARE'].n : '',
 
         (is_callable('apache_get_version')) ? gTxt('apache_version').cs.@apache_get_version().n : '',
 
