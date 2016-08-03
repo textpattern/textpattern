@@ -434,6 +434,10 @@ $en_gb_lang = array(
         'cleanurl_only_apache' => 'Clean URLs are only supported on Apache, use at your own risk.',
         'clean_url_data_failed' => 'Clean URL data test failed',
         'clean_url_test_failed' => 'Clean URL test failed.',
+        'db_global_timezone' => 'Database server timezone',
+        'db_server_time' => 'Database server time',
+        'db_server_timeoffset' => 'Database server time offset',
+        'db_session_timezone' => 'Database session timezone',
         'detail' => 'Detail',
         'dev_version_live' => 'You are running a development version of Textpattern on a live server.',
         'diagnostic_info' => 'Diagnostic info',
@@ -804,7 +808,7 @@ $en_gb_lang = array(
         'permlink_format' => 'Permalink title URL pattern',
         'permlink_hyphenated' => 'Hyphenated (title-like-this)',
         'permlink_intercapped' => 'Intercapped (TitleLikeThis)',
-        'permlink_mode' => 'URL pattern',
+        'permlink_mode' => 'Article URL pattern',
         'ping_textpattern_com' => 'Ping textpattern.com?',
         'ping_weblogsdotcom' => 'Ping pingomatic.com?',
         'plugin_cache_dir' => 'Plugin cache directory path',
@@ -1353,4 +1357,4 @@ $en_gb_lang = array(
         'wraptag' => 'Wrap tag',
     ),
 );
-$lastmod = gmdate('Y-m-d H:m:s', 1467783494);
+$lastmod = gmdate('Y-m-d H:m:s', 1470248280);
