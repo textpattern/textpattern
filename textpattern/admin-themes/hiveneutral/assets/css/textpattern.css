@@ -1510,7 +1510,7 @@ textarea:focus {
  */
 select {
   padding-right: 1.30769230769231em;
-  background: #ffffff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='13px' height='4px' viewBox='0 0 13 4'><polygon fill='%23333' points='3.5,4 0,0 7,0'/></svg>") right center no-repeat;
+  background: #ffffff url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxM3B4JyBoZWlnaHQ9JzRweCcgdmlld0JveD0nMCAwIDEzIDQnPjxwb2x5Z29uIGZpbGw9JyMzMzMnIHBvaW50cz0nMy41LDQgMCwwIDcsMCcvPjwvc3ZnPg==") right center no-repeat;
   background-size: 1em 0.30769230769231em;
   text-transform: none;
 }
@@ -5929,6 +5929,7 @@ label.ui-state-active.ui-button:active {
  * https://jqueryui.com/menu/
  *
  * 1. Correct font size not being inherited in all browsers.
+ * 2. Workaround for IE 11 and Edge incorrectly displaying a list marker.
  *
  * Example HTML:
  *
@@ -5996,6 +5997,8 @@ label.ui-state-active.ui-button:active {
 .ui-menu .ui-menu-item {
   margin: 0;
   cursor: pointer;
+  /* 2 */
+  list-style-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
 }
 
 .ui-menu .ui-menu-item a {
@@ -6230,6 +6233,14 @@ label.ui-state-active.ui-button:active {
 [dir="rtl"] .ui-selectmenu-text {
   margin-right: 0;
   margin-left: 1em;
+}
+
+[dir="rtl"] .ui-selectmenu-button.ui-controlgroup-item.ui-corner-tr {
+  border-radius: 0.3em 0 0 0.3em;
+}
+
+[dir="rtl"] .ui-selectmenu-button.ui-controlgroup-item.ui-corner-tl {
+  border-radius: 0 0.3em 0.3em 0;
 }
 
 /* Slider
@@ -6802,7 +6813,6 @@ label.ui-state-active.ui-button:active {
      */
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
     margin: 0;
-    margin-top: 2px;
     float: none;
     border-bottom-width: 1px;
   }
