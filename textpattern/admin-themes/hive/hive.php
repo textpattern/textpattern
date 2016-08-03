@@ -49,9 +49,9 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<meta name="theme-color" content="#ffda44">';
-        $out[] = '<meta name="application-name" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
+        $out[] = '<meta name="application-name" content="'.htmlspecialchars($GLOBALS['prefs']['sitename']).'">';
         $out[] = '<meta name="apple-mobile-web-app-capable" content="yes">';
-        $out[] = '<meta name="apple-mobile-web-app-title" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
+        $out[] = '<meta name="apple-mobile-web-app-title" content="'.htmlspecialchars($GLOBALS['prefs']['sitename']).'">';
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
 
         // Custom JavaScript (see theme README for usage instructions).
@@ -100,7 +100,7 @@ class hive_theme extends \Textpattern\Admin\Theme
                     foreach ($tab['items'] as $item) {
                         $class = ($item['active']) ? ' class="selected"' : '';
                         $out[] = '<li'.$class.' role="presentation">'.
-                            href($item["label"], array('event' => $item['event']), ' role="menuitem" tabindex="-1"').
+                            href($item['label'], array('event' => $item['event']), ' role="menuitem" tabindex="-1"').
                             '</li>';
                     }
 
@@ -113,7 +113,7 @@ class hive_theme extends \Textpattern\Admin\Theme
             $out[] = '</ul>';
             $out[] = '</nav>';
             $out[] = graf(
-                href(span(htmlspecialchars($GLOBALS["prefs"]["sitename"]), array('class' => 'txp-view-site-name')), hu, array(
+                href(span(htmlspecialchars($GLOBALS['prefs']['sitename']), array('class' => 'txp-view-site-name')), hu, array(
                     'target' => '_blank',
                     'title'  => gTxt('tab_view_site'),
                 )), array('class' => 'txp-view-site'));
