@@ -280,11 +280,12 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
 function getNextPrev($id = 0, $threshold = null, $s = '')
 {
+    $threshold_type = 'raw';
+
     if ($id !== 0) {
         // Pivot is specific article by ID: In lack of further information,
         // revert to default sort order 'Posted desc'.
-        $atts = array('thisid' => $id) + filterAtts(array('sortby' => "Posted", 'sortdir' => "DESC"));
-        $threshold_type = 'raw';
+        $atts = filterAtts() + array('sortby' => 'Posted', 'sortdir' => 'DESC', 'thisid' => $id);
     } else {
         // Pivot is $thisarticle: Use article attributes to find its neighbours.
         assert_article();
@@ -293,7 +294,8 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
             return array();
         }
 
-        $atts = array('thisid' => $thisarticle['thisid']) + filterAtts();
+        $s = $thisarticle['section'];
+        $atts = filterAtts() + array('thisid' => $thisarticle['thisid'], 'sort' => 'Posted DESC');
         $m = preg_split('/\s+/', $atts['sort']);
 
         // If in doubt, fall back to chronologically descending order.
@@ -328,11 +330,8 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
                 $acm = array_flip(article_column_map());
                 $key = $acm[$atts['sortby']];
                 $threshold = $thisarticle[$key];
-                $threshold_type = 'raw';
                 break;
         }
-
-        $s = $thisarticle['section'];
     }
 
     $out['next'] = getNeighbour($threshold, $s, '>', $atts, $threshold_type);
