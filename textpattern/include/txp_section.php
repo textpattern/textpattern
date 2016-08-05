@@ -177,9 +177,11 @@ function sec_section_list($message = '')
 
     $total = safe_count('txp_section', $criteria);
 
-    echo n.tag(
-        hed(gTxt('tab_sections'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col'));
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_sections'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-2col')
+        );
 
     $searchBlock =
         n.tag(
@@ -405,7 +407,7 @@ function sec_section_list($message = '')
 
         echo n.tag_end('tbody').
             n.tag_end('table').
-            n.tag_end('div').
+            n.tag_end('div'). // End of .txp-listtables.
             section_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
@@ -418,7 +420,8 @@ function sec_section_list($message = '')
             n.tag_end('div');
     }
 
-    echo n.tag_end('div');
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.
 }
 
 /**
