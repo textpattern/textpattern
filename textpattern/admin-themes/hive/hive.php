@@ -215,7 +215,7 @@ EOS;
         return array(
             'title'       => 'Hive',
             'description' => 'Textpattern Hive admin theme (Classic Yellow)',
-            'version'     => '4.6.0-beta.2',
+            'version'     => '4.6.0-beta.3',
             'author'      => 'Phil Wareham',
             'author_uri'  => 'https://github.com/philwareham',
             'help'        => 'https://github.com/philwareham/textpattern-hive-admin-theme',
