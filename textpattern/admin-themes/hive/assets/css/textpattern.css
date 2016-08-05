@@ -1297,7 +1297,7 @@ select {
 }
 
 /**
- * Swap margin positions in RTL languages.
+ * Swap `select` icon position in RTL languages.
  */
 [dir="rtl"] select {
   padding-right: 0.30769230769231em;
