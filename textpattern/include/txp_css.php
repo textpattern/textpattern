@@ -156,23 +156,24 @@ function css_edit($message = '')
 
     // Styles code columm.
 
-    echo n.tag(
-        hed(gTxt('tab_style'), 1, array('class' => 'txp-heading')).
-        form(
-            $titleblock.
-            inputLabel(
-                'css',
-                '<textarea class="code" id="css" name="css" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thecss).'</textarea>',
-                'css_code',
-                array('', 'instructions_style_code'),
-                array('class' => 'txp-form-field')
-            ), '', '', 'post', '', '', 'style_form'),
-        'div', array(
-            'class' => 'txp-layout-4col-cell-1-2-3',
-            'id'    => 'main_content',
-            'role'  => 'region',
-        )
-    );
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_style'), 1, array('class' => 'txp-heading')).
+            form(
+                $titleblock.
+                inputLabel(
+                    'css',
+                    '<textarea class="code" id="css" name="css" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thecss).'</textarea>',
+                    'css_code',
+                    array('', 'instructions_style_code'),
+                    array('class' => 'txp-form-field')
+                ), '', '', 'post', '', '', 'style_form'),
+            'div', array(
+                'class' => 'txp-layout-4col-3span',
+                'id'    => 'main_content',
+                'role'  => 'region',
+            )
+        );
 
     // Styles create/switcher column.
 
@@ -204,11 +205,13 @@ function css_edit($message = '')
         $buttons.
         css_list($name, $default_name).n,
         'div', array(
-            'class' => 'txp-layout-4col-cell-4alt',
+            'class' => 'txp-layout-4col-alt',
             'id'    => 'content_switcher',
             'role'  => 'region',
         )
     );
+
+    echo n.'</div>'; // End of .txp-layout.
 }
 
 /**

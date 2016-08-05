@@ -294,8 +294,12 @@ function prefs_list($message = '')
             $tabActive = $tabCount - 1;
         }
 
-        echo hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')).
-            n.'<div class="txp-layout-4col-cell-1alt">'.
+        echo n.'<div class="txp-layout">'.
+            n.tag(
+                hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')),
+                'div', array('class' => 'txp-layout-1col')
+            ).
+            n.tag_start('div', array('class' => 'txp-layout-4col-alt')).
             wrapGroup(
                 'all_preferences',
                 n.tag(join($groupOut), 'ul', array('class' => 'switcher-list')),
@@ -306,17 +310,18 @@ function prefs_list($message = '')
             echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'), array('class' => 'txp-save'));
         }
 
-        echo n.'</div>'.
-            n.'<div class="txp-layout-4col-cell-2-3-4">'.
+        echo n.tag_end('div'). // End of .txp-layout-4col-alt.
+            n.tag_start('div', array('class' => 'txp-layout-4col-3span')).
             join(n, $build).
-            n.'</div>'.
+            n.tag_end('div'). // End of .txp-layout-4col-3span.
             sInput('prefs_save').
             eInput('prefs').
             hInput('prefs_id', '1').
             tInput();
     }
 
-    echo n.'</form>'.
+    echo n.'</div>'. // End of .txp-layout.
+        n.'</form>'.
         script_js('var selectedTab = "' . $tabActive . '";');
 }
 

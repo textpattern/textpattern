@@ -378,24 +378,25 @@ function form_edit($message = '')
 
     // Forms code columm.
 
-    echo n.tag(
-        hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading')).
-        form(
-            $name_widgets.
-            $type_widgets.
-            inputLabel(
-                'form',
-                '<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($Form).'</textarea>',
-                'form_code',
-                array('', 'instructions_form_code'),
-                array('class' => 'txp-form-field')
-            ), '', '', 'post', '', '', 'form_form'),
-        'div', array(
-            'class' => 'txp-layout-4col-cell-1-2-3',
-            'id'    => 'main_content',
-            'role'  => 'region',
-        )
-    );
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading')).
+            form(
+                $name_widgets.
+                $type_widgets.
+                inputLabel(
+                    'form',
+                    '<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($Form).'</textarea>',
+                    'form_code',
+                    array('', 'instructions_form_code'),
+                    array('class' => 'txp-form-field')
+                ), '', '', 'post', '', '', 'form_form'),
+            'div', array(
+                'class' => 'txp-layout-4col-3span',
+                'id'    => 'main_content',
+                'role'  => 'region',
+            )
+        );
 
     // Forms create/switcher column.
 
@@ -403,7 +404,7 @@ function form_edit($message = '')
         $buttons.
         form_list($name).n,
         'div', array(
-            'class' => 'txp-layout-4col-cell-4alt',
+            'class' => 'txp-layout-4col-alt',
             'id'    => 'content_switcher',
             'role'  => 'region',
         )
@@ -417,6 +418,8 @@ function form_edit($message = '')
 //        'id'    => 'tagbuild_links',
 //        'class' => '',
 //    ));
+
+    echo n.'</div>'; // End of .txp-layout.
 }
 
 /**

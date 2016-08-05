@@ -179,13 +179,13 @@ function sec_section_list($message = '')
 
     echo n.tag(
         hed(gTxt('tab_sections'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1'));
+        'div', array('class' => 'txp-layout-2col'));
 
     $searchBlock =
         n.tag(
             $search->renderForm('sec_section', $search_render_options),
             'div', array(
-                'class' => 'txp-layout-2col-cell-2',
+                'class' => 'txp-layout-2col',
                 'id'    => $event.'_control',
             )
         );
@@ -230,7 +230,8 @@ function sec_section_list($message = '')
                     gTxt('no_results_found'),
                     array('class' => 'alert-block information')
                 ).
-                n.tag_end('div');
+                n.tag_end('div'). // End of .txp-layout-1col.
+                n.'</div>'; // End of .txp-layout.
         }
 
         return;

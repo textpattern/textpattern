@@ -1034,7 +1034,7 @@ function graf($item, $atts = '')
 
 function hed($item, $level, $atts = '')
 {
-    return n.tag($item, 'h'.$level, $atts);
+    return n.tag($item, 'h'.$level, $atts).n;
 }
 
 /**

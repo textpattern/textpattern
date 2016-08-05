@@ -265,15 +265,17 @@ function discuss_list($message = '')
     // Grand total comment count.
     $total = $count[SPAM] + $count[MODERATE] + $count[VISIBLE];
 
-    echo n.tag(
-        hed(gTxt('list_discussions'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1'));
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('list_discussions'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-2col')
+        );
 
     $searchBlock =
         n.tag(
             $search->renderForm('discuss_list', $search_render_options),
             'div', array(
-                'class' => 'txp-layout-2col-cell-2',
+                'class' => 'txp-layout-2col',
                 'id'    => $event.'_control',
             )
         );
@@ -301,7 +303,8 @@ function discuss_list($message = '')
                 );
         }
 
-        echo n.tag_end('div');
+        echo n.tag_end('div'). // End of .txp-layout-1col.
+            n.'</div>'; // End of .txp-layout.
 
         return;
     }
@@ -494,7 +497,7 @@ function discuss_list($message = '')
 
         echo n.tag_end('tbody').
             n.tag_end('table').
-            n.tag_end('div').
+            n.tag_end('div'). // End of .txp-listtables.
             discuss_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
@@ -507,7 +510,8 @@ function discuss_list($message = '')
             n.tag_end('div');
     }
 
-    echo n.tag_end('div');
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.
 }
 
 /**

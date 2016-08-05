@@ -123,23 +123,24 @@ function page_edit($message = '')
 
     // Pages code columm.
 
-    echo n.tag(
-        hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading')).
-        form(
-            $titleblock.
-            inputLabel(
-                'html',
-                '<textarea class="code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($html).'</textarea>',
-                'page_code',
-                array('', 'instructions_page_code'),
-                array('class' => 'txp-form-field')
-            ), '', '', 'post', '', '', 'page_form'),
-        'div', array(
-            'class' => 'txp-layout-4col-cell-1-2-3',
-            'id'    => 'main_content',
-            'role'  => 'region',
-        )
-    );
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading')).
+            form(
+                $titleblock.
+                inputLabel(
+                    'html',
+                    '<textarea class="code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($html).'</textarea>',
+                    'page_code',
+                    array('', 'instructions_page_code'),
+                    array('class' => 'txp-form-field')
+                ), '', '', 'post', '', '', 'page_form'),
+            'div', array(
+                'class' => 'txp-layout-4col-3span',
+                'id'    => 'main_content',
+                'role'  => 'region',
+            )
+        );
 
     // Pages create/switcher column.
 
@@ -171,7 +172,7 @@ function page_edit($message = '')
         $buttons.
         page_list($name).n,
         'div', array(
-            'class' => 'txp-layout-4col-cell-4alt',
+            'class' => 'txp-layout-4col-alt',
             'id'    => 'content_switcher',
             'role'  => 'region',
         )
@@ -185,6 +186,8 @@ function page_edit($message = '')
 //        'class' => '',
 //        'id'    => 'tagbuild_links',
 //    ));
+
+    echo n.'</div>'; // End of .txp-layout.
 }
 
 /**

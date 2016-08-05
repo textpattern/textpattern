@@ -178,15 +178,17 @@ function link_list($message = '')
         $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
 
-    echo n.tag(
-        hed(gTxt('tab_link'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1'));
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_link'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-2col')
+        );
 
     $searchBlock =
         n.tag(
             $search->renderForm('link_list', $search_render_options),
             'div', array(
-                'class' => 'txp-layout-2col-cell-2',
+                'class' => 'txp-layout-2col',
                 'id'    => $event.'_control',
             )
         );
@@ -228,7 +230,8 @@ function link_list($message = '')
                 );
         }
 
-        echo n.tag_end('div');
+        n.tag_end('div'). // End of .txp-layout-1col.
+            n.'</div>'; // End of .txp-layout.;
 
         return;
     }

@@ -192,15 +192,17 @@ function image_list($message = '')
         $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
 
-    echo n.tag(
-        hed(gTxt('tab_image'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1'));
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_image'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-2col')
+        );
 
     $searchBlock =
         n.tag(
             $search->renderForm('image_list', $search_render_options),
             'div', array(
-                'class' => 'txp-layout-2col-cell-2',
+                'class' => 'txp-layout-2col',
                 'id'    => $event.'_control',
             )
         );
@@ -249,7 +251,8 @@ function image_list($message = '')
                 );
         }
 
-        echo n.tag_end('div');
+        echo n.tag_end('div'). // End of .txp-layout-1col.
+            n.'</div>'; // End of .txp-layout.
 
         return;
     }
@@ -429,7 +432,7 @@ function image_list($message = '')
         echo
             n.tag_end('tbody').
             n.tag_end('table').
-            n.tag_end('div').
+            n.tag_end('div'). // End of .txp-listtables.
             image_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
@@ -441,6 +444,9 @@ function image_list($message = '')
             nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div');
     }
+
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.
 }
 
 // -------------------------------------------------------------
@@ -666,15 +672,15 @@ function image_edit($message = '', $id = '')
             $rs
         );
 
-        echo n.tag(
-                    hed(gTxt('edit_image'), 1, array('class' => 'txp-heading')).
-                    n.implode(n, $imageBlock).
-                    '<hr />'.
-                    tag(implode(n, $thumbBlock), 'section', array('class' => 'thumbnail-alter')),
-                'div',
-                array('class' => 'txp-layout-4col-cell-1-2-3')
+        echo n.'<div class="txp-layout">'.
+            n.tag(
+                hed(gTxt('edit_image'), 1, array('class' => 'txp-heading')).
+                n.implode(n, $imageBlock).
+                n.'<hr />'.
+                n.tag(implode(n, $thumbBlock), 'section', array('class' => 'thumbnail-alter')),
+                'div', array('class' => 'txp-layout-4col-3span')
             ).
-            '<div class="txp-layout-4col-cell-4alt">',
+            n.tag(
                 form(
                     graf(fInput('submit', '', gTxt('save'), 'publish'), array('class' => 'txp-save')).
                     wrapGroup(
@@ -716,7 +722,9 @@ function image_edit($message = '', $id = '')
                         hInput('crit', $crit),
                         'image_details'),
                     '', '', 'post', '', '', 'image_details_form'),
-            '</div>';
+                'div', array('class' => 'txp-layout-4col-alt')
+            ).
+            n.'</div>'; // End of .txp-layout.
     }
 }
 

@@ -240,9 +240,11 @@ function list_languages($message = '')
     // Output table and content.
     pagetop(gTxt('tab_languages'), $message);
 
-    echo n.tag(
-        hed(gTxt('tab_languages'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_languages'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-1col')
+        ).
         n.tag_start('div', array(
             'class' => 'txp-layout-1col',
             'id'    => 'language_container',
@@ -277,7 +279,7 @@ function list_languages($message = '')
         $list.
         n.tag_end('tbody').
         n.tag_end('table').
-        n.tag_end('div').
+        n.tag_end('div'). // End of .txp-listtables.
 
         hed(gTxt('install_from_textpack'), 2).
         n.tag(
@@ -287,9 +289,10 @@ function list_languages($message = '')
                 fInput('submit', 'install_new', gTxt('upload')).
                 eInput('lang').
                 sInput('get_textpack'), '', '', 'post', '', '', 'text_uploader'
-            ), 'div', array('class' => 'txp-control-panel')).
+            ), 'div', array('class' => 'txp-control-panel'));
 
-        n.tag_end('div');
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.;
 }
 
 /**

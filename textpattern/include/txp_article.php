@@ -934,14 +934,14 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $class[] = 'async';
     }
 
-    echo
-        n.tag_start('form', array(
+    echo n.tag_start('form', array(
             'class'  => $class,
             'id'     => 'article_form',
             'name'   => 'article_form',
             'method' => 'post',
             'action' => 'index.php',
-        ));
+        )).
+        n.'<div class="txp-layout">';
 
     if (!empty($store_out)) {
         echo hInput('store', base64_encode(json_encode($store_out)));
@@ -956,7 +956,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         hInput('LastModID', $LastModID).
         n.'<input type="hidden" name="view" />';
 
-    echo n.'<div class="txp-layout-4col-cell-1-2-3">'.
+    echo n.'<div class="txp-layout-4col-3span">'.
         hed(gTxt('tab_write'), 1, array('class' => 'txp-heading'));
 
     echo n.'<div role="region" id="main_content">';
@@ -1026,11 +1026,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     }
 
     echo n.'</div>'.// End of #main_content.
-        n.'</div>'; // End of .txp-layout-4col-cell-1-2-3.
+        n.'</div>'; // End of .txp-layout-4col-3span.
 
     // Sidebar column (only shown if in text editing view).
     if ($view == 'text') {
-        echo n.'<div class="txp-layout-4col-cell-4alt">';
+        echo n.'<div class="txp-layout-4col-alt">';
 
         // 'Publish/Save' button.
         if ($step == 'create' and empty($GLOBALS['ID'])) {
@@ -1240,12 +1240,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Recent articles' collapsible section.
         echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
 
-        echo n.'</div>'; // End of #supporting_content.
-
-        echo n.'</div>'; // End of .txp-layout-4col-cell-4alt.
+        echo n.'</div>'. // End of #supporting_content.
+            n.'</div>'; // End of .txp-layout-4col-alt.
     }
 
     echo tInput().
+        n.'</div>'. // End of .txp-layout.
         n.'</form>';
 }
 

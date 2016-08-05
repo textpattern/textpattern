@@ -91,9 +91,11 @@ function plugin_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    echo n.tag(
-        hed(gTxt('tab_plugins'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_plugins'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-2col')
+        ).
         n.tag_start('div', array(
             'class' => 'txp-layout-1col',
             'id'    => $event.'_container',
@@ -245,13 +247,14 @@ function plugin_list($message = '')
         echo
             n.tag_end('tbody').
             n.tag_end('table').
-            n.tag_end('div').
+            n.tag_end('div'). // End of .txp-listtables.
             plugin_multiedit_form('', $sort, $dir, '', '').
             tInput().
             n.tag_end('form');
     }
 
-    echo n.tag_end('div');
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.
 }
 
 /**

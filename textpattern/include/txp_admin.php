@@ -384,15 +384,17 @@ function author_list($message = '')
 
         $total = getCount('txp_users', $criteria);
 
-        echo n.tag(
-            hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-2col-cell-1'));
+        echo n.'<div class="txp-layout">'.
+            n.tag(
+                hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading')),
+                'div', array('class' => 'txp-layout-2col')
+            );
 
         $searchBlock =
             n.tag(
                 $search->renderForm('author_list', $search_render_options),
                 'div', array(
-                    'class' => 'txp-layout-2col-cell-2',
+                    'class' => 'txp-layout-2col',
                     'id'    => 'users_control',
                 )
             );
@@ -417,7 +419,9 @@ function author_list($message = '')
                         span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                         gTxt('no_results_found'),
                         array('class' => 'alert-block information')
-                    ).n.tag_end('div');
+                    ).
+                    n.tag_end('div'). // End of .txp-layout-1col.
+                    n.'</div>'; // End of .txp-layout.
             }
 
             return;
@@ -510,7 +514,7 @@ function author_list($message = '')
             echo
                 n.tag_end('tbody').
                 n.tag_end('table').
-                n.tag_end('div').
+                n.tag_end('div'). // End of .txp-listtables.
                 (
                     ($use_multi_edit)
                     ? author_multiedit_form($page, $sort, $dir, $crit, $search_method)
@@ -527,7 +531,7 @@ function author_list($message = '')
                 n.tag_end('div');
         }
 
-        echo n.tag_end('div');
+        echo n.tag_end('div'); // End of .txp-layout-1col.
     } else {
         echo
             n.tag_start('div', array(
@@ -535,8 +539,10 @@ function author_list($message = '')
                 'id'    => 'users_container',
             )).
             n.tag(implode(n, $buttons), 'div', array('class' => 'txp-control-panel')).
-            n.tag_end('div');
+            n.tag_end('div'); // End of .txp-layout-1col.
     }
+
+    echo n.'</div>'; // End of .txp-layout.
 }
 
 /**

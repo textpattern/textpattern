@@ -68,27 +68,32 @@ if ($event == 'category') {
 function cat_category_list($message = "")
 {
     pagetop(gTxt('categories'), $message);
-    $out = array(hed(gTxt('tab_organise'), 1, 'class="txp-heading"'),
+    $out = array(n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_organise'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-1col')
+        ),
         n.tag(cat_article_list(), 'section', array(
-                'class' => 'txp-layout-4col-cell-1',
+                'class' => 'txp-layout-4col',
                 'id'    => 'categories_article',
             )
         ),
         n.tag(cat_image_list(), 'section', array(
-                'class' => 'txp-layout-4col-cell-2',
+                'class' => 'txp-layout-4col',
                 'id'    => 'categories_image',
             )
         ),
         n.tag(cat_file_list(), 'section', array(
-                'class' => 'txp-layout-4col-cell-3',
+                'class' => 'txp-layout-4col',
                 'id'    => 'categories_file',
             )
         ),
         n.tag(cat_link_list(), 'section', array(
-                'class' => 'txp-layout-4col-cell-4',
+                'class' => 'txp-layout-4col',
                 'id'    => 'categories_link',
             )
         ),
+        n.'</div>', // End of .txp-layout.
         script_js(<<<EOS
             $(document).ready(function ()
             {
