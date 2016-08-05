@@ -94,7 +94,7 @@ function plugin_list($message = '')
     echo n.'<div class="txp-layout">'.
         n.tag(
             hed(gTxt('tab_plugins'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-2col')
+            'div', array('class' => 'txp-layout-1col')
         ).
         n.tag_start('div', array(
             'class' => 'txp-layout-1col',
