@@ -597,6 +597,15 @@ nav ol::after,
     margin: 0;
   }
   /**
+ * Swap paginator (prev/next) navigation links on articles/article lists.
+ */
+  [dir="rtl"] .paginator [rel="prev"] {
+    float: right;
+  }
+  [dir="rtl"] .paginator [rel="next"] {
+    float: left;
+  }
+  /**
  * Swap anchor float position on comments.
  */
   [dir="rtl"] .comments h4 .comment-anchor {
@@ -1469,6 +1478,17 @@ nav ol::after,
   img.align-center {
     display: block;
     margin: 1em auto;
+  }
+  /**
+ * Swap image alignment right/left positions in RTL languages.
+ */
+  [dir="rtl"] img.align-left {
+    margin: 1em 0 1em 1em;
+    float: right;
+  }
+  [dir="rtl"] img.align-right {
+    margin: 1em 1em 1em 0;
+    float: left;
   }
   /**
  * Ensure margin below `figure`.
