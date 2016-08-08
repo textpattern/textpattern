@@ -230,7 +230,7 @@ function link_list($message = '')
                 );
         }
 
-        n.tag_end('div'). // End of .txp-layout-1col.
+        echo n.tag_end('div'). // End of .txp-layout-1col.
             n.'</div>'; // End of .txp-layout.;
 
         return;
@@ -382,7 +382,8 @@ function link_list($message = '')
             n.tag_end('div');
     }
 
-    echo n.tag_end('div');
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.
 }
 
 /**
