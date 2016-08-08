@@ -737,13 +737,18 @@ function stackRows()
  * @return string HTML
  */
 
-function td($content = '', $width = 0, $class = '', $id = '')
+function td($content = '', $width = null, $class = '', $id = '')
 {
-    return tda($content, array(
+    $opts = array(
         'class' => $class,
         'id'    => $id,
-        'width' => (int) $width,
-    ));
+    );
+
+    if (is_numeric($width)) {
+        $opts['width'] = (int) $width;
+    }
+
+    return tda($content, $opts);
 }
 
 /**
@@ -802,13 +807,18 @@ function tr($content, $atts = '')
  * @return string HTML
  */
 
-function tdcs($content, $span, $width = 0, $class = '')
+function tdcs($content, $span, $width = null, $class = '')
 {
-    return tda($content, array(
+    $opts = array(
         'class'   => $class,
         'colspan' => (int) $span,
-        'width'   => (int) $width,
-    ));
+    );
+
+    if (is_numeric($width)) {
+        $opts['width'] = (int) $width;
+    }
+
+    return tda($content, $opts);
 }
 
 /**
@@ -821,13 +831,18 @@ function tdcs($content, $span, $width = 0, $class = '')
  * @return string HTML
  */
 
-function tdrs($content, $span, $width = 0, $class = '')
+function tdrs($content, $span, $width = null, $class = '')
 {
-    return tda($content, array(
+    $opts = array(
         'class'   => $class,
         'rowspan' => (int) $span,
-        'width'   => (int) $width,
-    ));
+    );
+
+    if (is_numeric($width)) {
+        $opts['width'] = (int) $width;
+    }
+
+    return tda($content, $opts);
 }
 
 /**
