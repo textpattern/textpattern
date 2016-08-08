@@ -320,7 +320,6 @@ function form_edit($message = '')
             'type'   => 'submit',
             'method' => 'post',
             'value'  =>  gTxt('save'),
-            'form'   => 'form_form',
         )), ' class="txp-save"'
     ).
     graf(
@@ -376,36 +375,41 @@ function form_edit($message = '')
         $tagbuild_links .= wrapRegion($item[1].'_group', popTagLinks($tb), $item[1], $item[0], $item[1]);
     }
 
-    // Forms code columm.
-
     echo n.'<div class="txp-layout">'.
         n.tag(
-            hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading')).
-            form(
-                $name_widgets.
-                $type_widgets.
-                inputLabel(
-                    'form',
-                    '<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($Form).'</textarea>',
-                    'form_code',
-                    array('', 'instructions_form_code'),
-                    array('class' => 'txp-form-field')
-                ), '', '', 'post', '', '', 'form_form'),
-            'div', array(
-                'class' => 'txp-layout-4col-3span',
-                'id'    => 'main_content',
-                'role'  => 'region',
-            )
+            hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-1col')
         );
 
     // Forms create/switcher column.
 
     echo n.tag(
-        $buttons.
         form_list($name).n,
         'div', array(
             'class' => 'txp-layout-4col-alt',
             'id'    => 'content_switcher',
+            'role'  => 'region',
+        )
+    );
+
+    // Forms code columm.
+
+    echo n.tag(
+        form(
+            $name_widgets.
+            $type_widgets.
+            inputLabel(
+                'form',
+                '<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($Form).'</textarea>',
+                'form_code',
+                array('', 'instructions_form_code'),
+                array('class' => 'txp-form-field')
+            ).
+            $buttons
+            , '', '', 'post', '', '', 'form_form'),
+        'div', array(
+            'class' => 'txp-layout-4col-3span',
+            'id'    => 'main_content',
             'role'  => 'region',
         )
     );

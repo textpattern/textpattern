@@ -190,6 +190,17 @@ h1 .pophelp {
 }
 
 /**
+ * Omit margin below heading on image edit, pages, forms, styles, prefs panels.
+ */
+#page-image .txp-heading,
+#page-form .txp-heading,
+#page-page .txp-heading,
+#page-css .txp-heading,
+#page-prefs .txp-heading {
+  margin-bottom: 0;
+}
+
+/**
  * `h2` headings.
  *
  * Example HTML:
@@ -3352,6 +3363,23 @@ span.spinner {
   max-width: 56em;
 }
 
+/**
+ * Tag builder link on Forms panel and Pages panel.
+ */
+.txp-tagbuilder-link {
+  position: relative;
+  margin: 0 1px;
+  float: right;
+  z-index: 2;
+}
+
+/**
+ * Swap alignment of tag builder link in RTL languages.
+ */
+[dir="rtl"] .txp-tagbuilder-link {
+  float: left;
+}
+
 /* Setup and login panels - additional layout
    ========================================================================== */
 /**
@@ -3578,15 +3606,6 @@ span.spinner {
  */
 #page-discuss .txp-list tr.moderate {
   background: #f9f2e3;
-}
-
-/* Admin -> Preferences panel - additional layout
-   ========================================================================== */
-/**
- * Remove margin below heading.
- */
-#page-prefs .txp-heading {
-  margin-bottom: 0;
 }
 
 /* Admin -> Languages panel - additional layout

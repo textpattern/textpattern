@@ -674,15 +674,11 @@ function image_edit($message = '', $id = '')
 
         echo n.'<div class="txp-layout">'.
             n.tag(
-                hed(gTxt('edit_image'), 1, array('class' => 'txp-heading')).
-                n.implode(n, $imageBlock).
-                n.'<hr />'.
-                n.tag(implode(n, $thumbBlock), 'section', array('class' => 'thumbnail-alter')),
-                'div', array('class' => 'txp-layout-4col-3span')
+                hed(gTxt('edit_image'), 1, array('class' => 'txp-heading')),
+                'div', array('class' => 'txp-layout-1col')
             ).
             n.tag(
                 form(
-                    graf(fInput('submit', '', gTxt('save'), 'publish'), array('class' => 'txp-save')).
                     wrapGroup(
                         'image-details',
                         inputLabel(
@@ -720,9 +716,17 @@ function image_edit($message = '', $id = '')
                         hInput('page', $page).
                         hInput('search_method', $search_method).
                         hInput('crit', $crit),
-                        'image_details'),
+                        'image_details'
+                    ).
+                    graf(fInput('submit', '', gTxt('save'), 'publish'), array('class' => 'txp-save')),
                     '', '', 'post', '', '', 'image_details_form'),
                 'div', array('class' => 'txp-layout-4col-alt')
+            ).
+            n.tag(
+                n.implode(n, $imageBlock).
+                n.'<hr />'.
+                n.tag(implode(n, $thumbBlock), 'section', array('class' => 'thumbnail-alter')),
+                'div', array('class' => 'txp-layout-4col-3span')
             ).
             n.'</div>'; // End of .txp-layout.
     }

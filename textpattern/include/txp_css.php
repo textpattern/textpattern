@@ -154,29 +154,6 @@ function css_edit($message = '')
         $thecss = fetch('css', 'txp_css', 'name', $name);
     }
 
-    // Styles code columm.
-
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_style'), 1, array('class' => 'txp-heading')).
-            form(
-                $titleblock.
-                inputLabel(
-                    'css',
-                    '<textarea class="code" id="css" name="css" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thecss).'</textarea>',
-                    'css_code',
-                    array('', 'instructions_style_code'),
-                    array('class' => 'txp-form-field')
-                ), '', '', 'post', '', '', 'style_form'),
-            'div', array(
-                'class' => 'txp-layout-4col-3span',
-                'id'    => 'main_content',
-                'role'  => 'region',
-            )
-        );
-
-    // Styles create/switcher column.
-
     $buttonExtras = '';
 
     if ($name) {
@@ -192,7 +169,6 @@ function css_edit($message = '')
             'type'   => 'submit',
             'method' => 'post',
             'value'  =>  gTxt('save'),
-            'form'   => 'style_form',
         )), ' class="txp-save"'
     ).
     graf(
@@ -201,12 +177,40 @@ function css_edit($message = '')
         array('class' => 'txp-actions')
     );
 
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_style'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-1col')
+        );
+
+    // Styles create/switcher column.
+
     echo n.tag(
-        $buttons.
         css_list($name, $default_name).n,
         'div', array(
             'class' => 'txp-layout-4col-alt',
             'id'    => 'content_switcher',
+            'role'  => 'region',
+        )
+    );
+
+    // Styles code columm.
+
+    echo n.tag(
+        form(
+            $titleblock.
+            inputLabel(
+                'css',
+                '<textarea class="code" id="css" name="css" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thecss).'</textarea>',
+                'css_code',
+                array('', 'instructions_style_code'),
+                array('class' => 'txp-form-field')
+            ).
+            $buttons
+            , '', '', 'post', '', '', 'style_form'),
+        'div', array(
+            'class' => 'txp-layout-4col-3span',
+            'id'    => 'main_content',
             'role'  => 'region',
         )
     );
