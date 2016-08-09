@@ -375,6 +375,17 @@ function form_edit($message = '')
         $tagbuild_links .= wrapRegion($item[1].'_group', popTagLinks($tb), $item[1], $item[0], $item[1]);
     }
 
+    $listActions = graf(
+        href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
+            'class'         => 'txp-expand-all',
+            'aria-controls' => 'allforms_form',
+        )).
+        href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
+            'class'         => 'txp-collapse-all',
+            'aria-controls' => 'allforms_form',
+        )), array('class' => 'txp-actions')
+    );
+
     echo n.'<div class="txp-layout">'.
         n.tag(
             hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading')),
@@ -382,8 +393,8 @@ function form_edit($message = '')
         );
 
     // Forms create/switcher column.
-
     echo n.tag(
+        $listActions.n.
         form_list($name).n,
         'div', array(
             'class' => 'txp-layout-4col-alt',
@@ -393,7 +404,6 @@ function form_edit($message = '')
     );
 
     // Forms code columm.
-
     echo n.tag(
         form(
             $name_widgets.

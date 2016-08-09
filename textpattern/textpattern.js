@@ -1745,6 +1745,30 @@ textpattern.Route.add('form', function ()
         'row'         : '.switcher-list li, .form-list-name',
         'highlighted' : '.switcher-list li'
     });
+
+    $('.txp-collapse-all').click(function(ev) {
+        ev.preventDefault();
+
+        $('.txp-summary a').each(function (i, elm) {
+            var $elm = $(elm);
+
+            if ($elm.parent(".txp-summary").hasClass("expanded")) {
+                $elm.click();
+            }
+        });
+    });
+
+    $('.txp-expand-all').click(function(ev) {
+        ev.preventDefault();
+
+        $('.txp-summary a').each(function (i, elm) {
+            var $elm = $(elm);
+
+            if (!$elm.parent(".txp-summary").hasClass("expanded")) {
+                $elm.click();
+            }
+        });
+    });
 });
 
 // Admin panel.
