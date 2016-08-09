@@ -233,7 +233,7 @@ nav ol::after,
     padding-right: 0.1875em;
     padding-left: 2em;
     border-radius: 0.5em;
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32px' height='32px' viewBox='0 0 32 32'><g fill='%23333'><path d='M4,13c0-5,4-9,9-9c5,0,9,4,9,9c0,5-4,9-9,9C8,22,4,18,4,13z M13,19c3.3,0,6-2.7,6-6s-2.7-6-6-6s-6,2.7-6,6S9.7,19,13,19z'/><path d='M17.5,19l1.5-1.5l4.5,3L28,25c0,0,0,1.5-0.75,2.25S25,28,25,28l-4.5-4.5L17.5,19z'/></g></svg>") no-repeat left center;
+    background: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMnB4JyBoZWlnaHQ9JzMycHgnIHZpZXdCb3g9JzAgMCAzMiAzMic+PGcgZmlsbD0nJTIzMzMzJz48cGF0aCBkPSdNNCwxM2MwLTUsNC05LDktOWM1LDAsOSw0LDksOWMwLDUtNCw5LTksOUM4LDIyLDQsMTgsNCwxM3ogTTEzLDE5YzMuMywwLDYtMi43LDYtNnMtMi43LTYtNi02cy02LDIuNy02LDZTOS43LDE5LDEzLDE5eicvPjxwYXRoIGQ9J00xNy41LDE5bDEuNS0xLjVsNC41LDNMMjgsMjVjMCwwLDAsMS41LTAuNzUsMi4yNVMyNSwyOCwyNSwyOGwtNC41LTQuNUwxNy41LDE5eicvPjwvZz48L3N2Zz4=") no-repeat left center;
     background-size: 2em 2em;
   }
   /* Links
@@ -944,9 +944,17 @@ nav ol::after,
  */
   select {
     padding-right: 1.5em;
-    background: #ffffff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='17px' height='5px' viewBox='0 0 17 5'><polygon fill='%23333' points='0,0 5,5 10,0'/></svg>") right center no-repeat;
+    background: #ffffff url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxN3B4JyBoZWlnaHQ9JzVweCcgdmlld0JveD0nMCAwIDE3IDUnPjxwb2x5Z29uIGZpbGw9JyUyMzMzMycgcG9pbnRzPScwLDAgNSw1IDEwLDAnLz48L3N2Zz4=") right center no-repeat;
     background-size: 1.0625em 0.3125em;
     text-transform: none;
+  }
+  /**
+ * Swap `select` icon position in RTL languages.
+ */
+  [dir="rtl"] select {
+    padding-right: 0.1875em;
+    padding-left: 1.5em;
+    background-position: 0.5em center;
   }
   /**
  * Remove browser-specific `select` UI in IE 11.
