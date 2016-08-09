@@ -444,7 +444,11 @@ function doDiagnostics()
 
     echo pagetop(gTxt('tab_diagnostics'), '');
 
-    echo hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading')).
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-1col')
+        ).
         n.tag_start('div', array(
             'class' => 'txp-layout-1col',
             'id'    => $event.'_container',
@@ -460,7 +464,7 @@ function doDiagnostics()
         echo graf(diag_msg_wrap(gTxt('all_checks_passed'), 'success'));
     }
 
-    echo n.tag_end('div').
+    echo n.tag_end('div'). // End of #pre_flight_check.
         n.tag_start('div', array('id' => 'diagnostics')).
         hed(gTxt('diagnostic_info'), 2);
 
@@ -639,8 +643,9 @@ function doDiagnostics()
     $out[] = '</textarea>';
 
     echo join('', $out),
-        n.tag_end('div').
-        n.tag_end('div');
+        n.tag_end('div'). // End of #diagnostics.
+        n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.;
 }
 
 /**

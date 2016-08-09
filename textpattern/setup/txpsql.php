@@ -198,7 +198,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_css` (
     UNIQUE name (name(250))
 ) $tabletype ";
 
-foreach(scandir($themedir.DS.'styles') as $cssfile) {
+foreach (scandir($themedir.DS.'styles') as $cssfile) {
     if (preg_match('/^(\w+)\.css$/', $cssfile, $match)) {
         $css = doSlash(file_get_contents($themedir.DS.'styles'.DS.$cssfile));
         $create_sql[] = "INSERT INTO `".PFX."txp_css`(name, css) VALUES('".$match[1]."', '".$css."')";
@@ -258,7 +258,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_form` (
     PRIMARY KEY (name(250))
 ) $tabletype ";
 
-foreach(scandir($themedir.DS.'forms') as $formfile) {
+foreach (scandir($themedir.DS.'forms') as $formfile) {
     if (preg_match('/^(\w+).(\w+)\.txp$/', $formfile, $match)) {
         $form = doSlash(file_get_contents($themedir.DS.'forms'.DS.$formfile));
         $create_sql[] = "INSERT INTO `".PFX."txp_form`(type, name, Form)
@@ -343,7 +343,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_page` (
     PRIMARY KEY (name(250))
 ) $tabletype ";
 
-foreach(scandir($themedir.DS.'pages') as $pagefile) {
+foreach (scandir($themedir.DS.'pages') as $pagefile) {
     if (preg_match('/^(\w+)\.txp$/', $pagefile, $match)) {
         $page = doSlash(file_get_contents($themedir.DS.'pages'.DS.$pagefile));
         $create_sql[] = "INSERT INTO `".PFX."txp_page`(name, user_html) VALUES('".$match[1]."', '".$page."')";
@@ -441,7 +441,7 @@ $prefs = array(
         array(0,  20, 'yesnoradio'      , 'syndicate_body_or_excerpt'  , '1'),
         array(0,  40, 'text_input'      , 'rss_how_many'               , '5'),
         array(0,  60, 'yesnoradio'      , 'show_comment_count_in_feed' , '1'),
-        array(0,  80, 'yesnoradio'      , 'include_email_atom'         , '1'),
+        array(0,  80, 'yesnoradio'      , 'include_email_atom'         , '0'),
         array(0, 100, 'yesnoradio'      , 'use_mail_on_feeds_id'       , '0'),
     ),
     'publish' => array(

@@ -1,4 +1,4 @@
-#@version 4.6.0-beta;1466583229
+#@version 4.6.0-beta.3;1470248280
 #@admin
 account_activation => Please activate your account
 account_activation_confirmation => Please use the link below to activate your account and set up a password.
@@ -405,6 +405,10 @@ apache_version => Apache version
 cleanurl_only_apache => Clean URLs are only supported on Apache, use at your own risk.
 clean_url_data_failed => Clean URL data test failed
 clean_url_test_failed => Clean URL test failed.
+db_global_timezone => Database server timezone
+db_server_time => Database server time
+db_server_timeoffset => Database server time offset
+db_session_timezone => Database session timezone
 detail => Detail
 dev_version_live => You are running a development version of Textpattern on a live server.
 diagnostic_info => Diagnostic info
@@ -756,6 +760,7 @@ messy => ?=messy
 never_display_email => Hide commenter email address?
 new_textpattern_version_available => There is a new Textpattern version available. Do you want to <a href="http://textpattern.com/download" rel="external" title="Go to the Textpattern website download area">download it</a>?
 no_popup => current window
+no_preferences => No preferences available.
 override_emailcharset => Use ISO-8859-1 encoding in emails (default is UTF-8)?
 path_from_root => Sub-directory (if any)
 path_to_site_missing => <code>$path_to_site</code> is not set (update <code>index.php</code>)
@@ -763,7 +768,7 @@ permalink_title_format => Permalink title-like-this (instead of TitleLikeThis)?
 permlink_format => Permalink title URL pattern
 permlink_hyphenated => Hyphenated (title-like-this)
 permlink_intercapped => Intercapped (TitleLikeThis)
-permlink_mode => URL pattern
+permlink_mode => Article URL pattern
 ping_textpattern_com => Ping textpattern.com?
 ping_weblogsdotcom => Ping pingomatic.com?
 plugin_cache_dir => Plugin cache directory path

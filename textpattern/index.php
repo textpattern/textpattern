@@ -63,7 +63,7 @@ if (!defined('txpath')) {
 
 define("txpinterface", "admin");
 
-$thisversion = '4.6.0-beta';
+$thisversion = '4.6.0-beta.3';
 $txp_using_svn = true; // Set false for releases.
 
 ob_start(null, 2048);
@@ -227,8 +227,8 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         echo $trace->summary();
         echo $trace->result();
     } else {
-        foreach($trace->summary(true) as $key => $value) {
-           header('X-Textpattern-'.preg_replace('/[^\w]+/', '', $key).': '.$value);
+        foreach ($trace->summary(true) as $key => $value) {
+            header('X-Textpattern-'.preg_replace('/[^\w]+/', '', $key).': '.$value);
         }
     }
 } else {
