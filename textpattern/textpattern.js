@@ -1627,6 +1627,35 @@ function txp_search()
     });
 }
 
+/**
+ * Set expanded/collapsed nature of all twisty boxes in a panel.
+ *
+ * The direction can either be 'expand' or 'collapse', passed
+ * in as an argument to the handler.
+ *
+ * @param  {event} ev Event that triggered the function
+ * @since  4.6.0
+ */
+
+function txp_expand_collapse_all(ev) {
+    ev.preventDefault();
+
+    var direction = ev.data;
+
+    $('.txp-summary a').each(function (i, elm) {
+        var $elm = $(elm);
+
+        if (direction === 'collapse') {
+            if ($elm.parent(".txp-summary").hasClass("expanded")) {
+                $elm.click();
+            }
+        } else {
+            if (!$elm.parent(".txp-summary").hasClass("expanded")) {
+                $elm.click();
+            }
+        }
+    });
+}
 
 /**
  * Cookie status.
@@ -1709,6 +1738,9 @@ textpattern.Route.add('article', function ()
         form.off('submit.txpAsyncForm').trigger('submit');
     });
 
+    $('.txp-collapse-all').on('click', null, 'collapse', txp_expand_collapse_all);
+    $('.txp-expand-all').on('click', null, 'expand', txp_expand_collapse_all);
+
     // Switch to Text/HTML/Preview mode.
     $(document).on('click',
         '[data-view-mode]',
@@ -1746,29 +1778,8 @@ textpattern.Route.add('form', function ()
         'highlighted' : '.switcher-list li'
     });
 
-    $('.txp-collapse-all').click(function(ev) {
-        ev.preventDefault();
-
-        $('.txp-summary a').each(function (i, elm) {
-            var $elm = $(elm);
-
-            if ($elm.parent(".txp-summary").hasClass("expanded")) {
-                $elm.click();
-            }
-        });
-    });
-
-    $('.txp-expand-all').click(function(ev) {
-        ev.preventDefault();
-
-        $('.txp-summary a').each(function (i, elm) {
-            var $elm = $(elm);
-
-            if (!$elm.parent(".txp-summary").hasClass("expanded")) {
-                $elm.click();
-            }
-        });
-    });
+    $('.txp-collapse-all').on('click', null, 'collapse', txp_expand_collapse_all);
+    $('.txp-expand-all').on('click', null, 'expand', txp_expand_collapse_all);
 });
 
 // Admin panel.

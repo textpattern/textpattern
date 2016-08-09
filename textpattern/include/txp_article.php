@@ -1064,6 +1064,17 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
         echo n.'<div role="region" id="supporting_content">';
 
+        echo graf(
+            href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
+                'class'         => 'txp-expand-all',
+                'aria-controls' => 'supporting_content',
+            )).
+            href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
+                'class'         => 'txp-collapse-all',
+                'aria-controls' => 'supporting_content',
+            )), array('class' => 'txp-actions')
+        );
+
         // 'Sort and display' section.
         echo pluggable_ui(
             'article_ui',
