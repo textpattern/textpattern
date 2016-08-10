@@ -270,6 +270,11 @@ class Filter
         // TODO: consider moving Route.add() to textpattern.js, but that involves adding one
         // call per panel that requires search, instead of auto-adding it when invoked here.
         return form(
+            href(gTxt('search_clear'), array(
+                'event' => $event,
+            ), array(
+                'class' => 'txp-search-clear',
+            )).
             fInput('search', 'crit', $this->crit, 'txp-search-input', '', '', 24, 0, '', false, false, gTxt($placeholder)).
             eInput($event).
             sInput($step).
