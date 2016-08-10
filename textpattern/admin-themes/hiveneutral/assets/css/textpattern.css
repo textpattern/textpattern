@@ -2804,6 +2804,7 @@ hr {
  * Example HTML:
  *
  * <form class="txp-search">
+ *     <a class="txp-search-clear">Clear search</a>
  *     <input class="txp-search-input" type="search" size="24">
  *     <span class="txp-search-buttons">
  *         <button class="txp-search-button">Search</button>
@@ -2837,6 +2838,17 @@ hr {
   padding: 0.23076923076923em 0.30769230769231em;
   cursor: pointer;
   vertical-align: text-top;
+}
+
+.txp-search-clear {
+  position: relative;
+  top: 0.30769230769231em;
+  right: 1em;
+}
+
+[dir="rtl"] .txp-search-clear {
+  right: auto;
+  left: 1em;
 }
 
 /**
@@ -6654,10 +6666,20 @@ label.ui-state-active.ui-button:active {
      */
   .txp-search,
   [dir="rtl"] .txp-search {
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
     -webkit-justify-content: flex-start;
         -ms-flex-pack: start;
             justify-content: flex-start;
     margin-top: 0;
+  }
+  /**
+     * Reposition search clearer.
+     */
+  .txp-search-clear {
+    position: static;
+    width: 100%;
   }
   /**
      * Collapse 2 column form fields to 1 column (remove flexbox).
