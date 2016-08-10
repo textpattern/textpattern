@@ -1,4 +1,4 @@
-#@version 4.6.0-beta.3;1470248280
+#@version 4.6.0-beta.3;1470842305
 #@admin
 account_activation => Please activate your account
 account_activation_confirmation => Please use the link below to activate your account and set up a password.
@@ -199,6 +199,7 @@ changeparent => Change parent
 changesection => Change section
 changestatus => Change status
 close => Close
+collapse_all => Collapse all
 comment => Comment
 comments_expired => Commenting has expired for this article.
 confirm_delete_popup => Really delete?
@@ -221,6 +222,7 @@ en-us => English (American)
 es-es => Español
 et-ee => Eesti
 excerpt => Excerpt
+expand_all => Expand all
 expired => Expired
 expire_date => Expire date
 expire_time => Expire time
@@ -280,6 +282,7 @@ ru-ru => Русский
 salutation => Dear {name},
 save_new => Save new
 search_all => Search all
+search_clear => Clear search
 search_options => Search options
 showing_search_results => Showing {from} to {to} of {total}
 site_slogan => Site slogan
