@@ -959,8 +959,15 @@ nav ol::after,
   /**
  * Remove browser-specific `select` UI in IE 11.
  */
-  select::-ms-expand {
+  select:-ms-expand {
     opacity: 0;
+  }
+  /**
+ * Remove browser-specific `select` UI in Firefox 4+.
+ */
+  select:-moz-focusring {
+    color: transparent;
+    text-shadow: 0 0 0 #000000;
   }
   /**
  * Override height and background set in a previous rule and allow auto height.
