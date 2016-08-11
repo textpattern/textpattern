@@ -2804,7 +2804,7 @@ hr {
  * Example HTML:
  *
  * <form class="txp-search">
- *     <a class="txp-search-clear">Clear search</a>
+ *     <span class="txp-search-clear"><a>Clear search</a></span>
  *     <input class="txp-search-input" type="search" size="24">
  *     <span class="txp-search-buttons">
  *         <button class="txp-search-button">Search</button>
@@ -2828,6 +2828,12 @@ hr {
   z-index: 100;
 }
 
+.txp-search .ui-controlgroup {
+  -webkit-flex-wrap: nowrap;
+      -ms-flex-wrap: nowrap;
+          flex-wrap: nowrap;
+}
+
 .txp-search .txp-dropdown input {
   vertical-align: -0.23076923076923em;
 }
@@ -2841,14 +2847,15 @@ hr {
 }
 
 .txp-search-clear {
-  position: relative;
-  top: 0.30769230769231em;
-  right: 1em;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  margin: auto 0.5em;
+  text-align: right;
 }
 
 [dir="rtl"] .txp-search-clear {
-  right: auto;
-  left: 1em;
+  text-align: left;
 }
 
 /**
@@ -6535,6 +6542,33 @@ label.ui-state-active.ui-button:active {
     background: url("../img/sprite.svg") no-repeat -8em 0;
     background-size: 13em 2em;
   }
+  /**
+     * Search widget at top of lists.
+     */
+  .txp-search,
+  [dir="rtl"] .txp-search {
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+    -webkit-justify-content: flex-start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
+    margin-top: 0;
+  }
+  /**
+     * Reposition search clearer.
+     */
+  .txp-search-clear {
+    -webkit-flex: 1 0 auto;
+        -ms-flex: 1 0 auto;
+            flex: 1 0 auto;
+    width: 100%;
+    margin: 0 0 0.5em;
+    text-align: left;
+  }
+  [dir="rtl"] .txp-search-clear {
+    text-align: right;
+  }
 }
 
 /* ==========================================================================
@@ -6660,26 +6694,6 @@ label.ui-state-active.ui-button:active {
   }
   .dropdown-menu::before {
     display: none;
-  }
-  /**
-     * Search widget at top of lists.
-     */
-  .txp-search,
-  [dir="rtl"] .txp-search {
-    -webkit-flex-wrap: wrap;
-        -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
-    -webkit-justify-content: flex-start;
-        -ms-flex-pack: start;
-            justify-content: flex-start;
-    margin-top: 0;
-  }
-  /**
-     * Reposition search clearer.
-     */
-  .txp-search-clear {
-    position: static;
-    width: 100%;
   }
   /**
      * Collapse 2 column form fields to 1 column (remove flexbox).

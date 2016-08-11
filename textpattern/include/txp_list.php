@@ -217,14 +217,14 @@ function list_list($message = '', $post = '')
     echo n.'<div class="txp-layout">'.
         n.tag(
             hed(gTxt('tab_list'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-2col')
+            'div', array('class' => 'txp-layout-4col-alt')
         );
 
     $searchBlock =
         n.tag(
             $search->renderForm('list', $search_render_options),
             'div', array(
-                'class' => 'txp-layout-2col',
+                'class' => 'txp-layout-4col-3span',
                 'id'    => $event.'_control',
             )
         );
