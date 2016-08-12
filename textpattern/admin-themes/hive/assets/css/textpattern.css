@@ -1319,7 +1319,7 @@ select {
 /**
  * Remove browser-specific `select` UI in IE 11.
  */
-select:-ms-expand {
+select::-ms-expand {
   opacity: 0;
 }
 
