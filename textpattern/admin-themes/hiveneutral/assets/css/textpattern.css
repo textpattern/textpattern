@@ -2225,48 +2225,44 @@ body {
 /* Inline grids
    ========================================================================== */
 /**
- * Rudimentary inline grid type layouts.
+ * Inline grid type layouts.
  *
- * As this layout uses `inline-block`, you will need to collapse the white
- * space between each `.txp-grid-cell` to negate any unwanted margin between the
- * cells. Once CSS3 flexbox module is more settled and has improved browser
- * support, this layout type can be made more robust.
- *
- * TODO: use Flexbox for this.
+ * You should define a specific width for each .txp-grid-cell, either as a class
+ * attribute or style attribute, otherwise the cell width stretches to the
+ * content within it.
  *
  * Example HTML:
  *
  * <div class="txp-grid">
- *     <div class="txp-grid-cell" style="width:10em;">
+ *     <div class="txp-grid-cell" style="width:30em;">
  *         Content
- *     </div><div class="txp-grid-cell" style="width:10em;">
+ *     </div>
+ *     <div class="txp-grid-cell" style="width:15em;">
  *         Content
- *     </div><div class="txp-grid-cell" style="width:10em;">
+ *     </div>
+ *     <div class="txp-grid-cell" style="width:15em;">
  *         Content
  *     </div>
  * </div>
  */
 .txp-grid {
-  margin-bottom: 0.6923077em;
-  text-align: center;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin: -2px;
 }
 
 .txp-grid-cell {
-  display: inline-block;
-  max-width: 22.6153846em;
-  margin: 0 0.1538462em 0.3076923em;
+  margin: 2px;
   padding: 0 1em;
   border: 1px solid #cccccc;
-  text-align: left;
-  vertical-align: top;
   box-sizing: border-box;
-}
-
-/**
- * Align grid cells to right in RTL languages.
- */
-[dir="rtl"] .txp-grid-cell {
-  text-align: right;
 }
 
 /* Header
