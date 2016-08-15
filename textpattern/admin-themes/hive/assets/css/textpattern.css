@@ -6131,9 +6131,39 @@ label.ui-state-active.ui-button:active {
  *     </ul>
  * </div>
  */
-.ui-selectmenu-icon.ui-icon {
+.ui-selectmenu-button {
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.ui-selectmenu-button:not(.ui-controlgroup-item) {
+  border-radius: 0.5em;
+}
+
+.ui-selectmenu-button.ui-controlgroup-item.ui-corner-tr {
+  border-radius: 0 0.5em 0.5em 0;
+}
+
+.ui-selectmenu-button.ui-controlgroup-item.ui-corner-tl {
+  border-radius: 0.5em 0 0 0.5em;
+}
+
+.ui-selectmenu-icon {
+  -webkit-flex: none;
+      -ms-flex: none;
+          flex: none;
+  -webkit-order: 2;
+      -ms-flex-order: 2;
+          order: 2;
   margin: 0 -0.25em 0 0.25em;
-  float: right;
+}
+
+.ui-selectmenu-text {
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .ui-selectmenu-menu {
@@ -6169,48 +6199,19 @@ label.ui-state-active.ui-button:active {
   display: block;
 }
 
-.ui-selectmenu-text {
-  display: block;
-  margin-right: 1em;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.ui-selectmenu-button.ui-button {
-  white-space: nowrap;
-}
-
-.ui-selectmenu-button:not(.ui-controlgroup-item) {
-  border-radius: 0.5em;
-}
-
-.ui-selectmenu-button.ui-controlgroup-item.ui-corner-tr {
-  border-radius: 0 0.5em 0.5em 0;
-}
-
-.ui-selectmenu-button.ui-controlgroup-item.ui-corner-tl {
-  border-radius: 0.5em 0 0 0.5em;
-}
-
 /**
  * Selectmenu RTL support.
  */
-[dir="rtl"] .ui-selectmenu-icon.ui-icon {
-  margin: 0 0.25em 0 -0.25em;
-  float: left;
-}
-
-[dir="rtl"] .ui-selectmenu-text {
-  margin-right: 0;
-  margin-left: 1em;
-}
-
 [dir="rtl"] .ui-selectmenu-button.ui-controlgroup-item.ui-corner-tr {
   border-radius: 0.5em 0 0 0.5em;
 }
 
 [dir="rtl"] .ui-selectmenu-button.ui-controlgroup-item.ui-corner-tl {
   border-radius: 0 0.5em 0.5em 0;
+}
+
+[dir="rtl"] .ui-selectmenu-icon {
+  margin: 0 0.25em 0 -0.25em;
 }
 
 /* Slider
