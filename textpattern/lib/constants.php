@@ -496,10 +496,10 @@ if (!defined('X_UA_COMPATIBLE')) {
      * @since   4.6.0
      * @package HTML
      * @example
-     * define('X_UA_COMPATIBLE', 'IE=IE9');
+     * define('X_UA_COMPATIBLE', 'ie=ie9');
      */
 
-    define('X_UA_COMPATIBLE', 'IE=edge,chrome=1');
+    define('X_UA_COMPATIBLE', 'ie=edge');
 }
 
 if (!defined('AJAX_TIMEOUT')) {
