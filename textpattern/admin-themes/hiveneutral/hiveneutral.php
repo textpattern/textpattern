@@ -50,6 +50,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<meta name="theme-color" content="#ffda44">';
         $out[] = '<meta name="application-name" content="'.htmlspecialchars($GLOBALS['prefs']['sitename']).'">';
+        $out[] = '<meta name="mobile-web-app-capable" content="yes">';
         $out[] = '<meta name="apple-mobile-web-app-capable" content="yes">';
         $out[] = '<meta name="apple-mobile-web-app-title" content="'.htmlspecialchars($GLOBALS['prefs']['sitename']).'">';
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
