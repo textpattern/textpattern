@@ -1167,6 +1167,57 @@ jQuery.fn.txpAsyncHref = function (options)
 };
 
 /**
+ * Sends a link using AJAX and processes the HTML response.
+ *
+ * @param  {object} options          Options
+ * @param  {string} options.dataType The response data type
+ * @param  {object} options.success  The success callback
+ * @param  {object} options.error    The error callback
+ * @return {object} this
+ * @since  4.6.0
+ */
+
+function txpAsyncLink(event)
+{
+    event.preventDefault();
+    var $this = $(event.target);
+    var url = $this.attr('href').replace('?', '');
+
+    // Show feedback while processing.
+    $this.addClass('busy');
+    $('body').addClass('busy');
+
+    sendAsyncEvent(url, function () {}, 'html')
+        .done(function (data, textStatus, jqXHR)
+        {
+            textpattern.Relay.callback('txpAsyncLink.success', {
+                'this'       : $this,
+                'event'      : event,
+                'data'       : data,
+                'textStatus' : textStatus,
+                'jqXHR'      : jqXHR
+            });
+        })
+        .fail(function (jqXHR, textStatus, errorThrown)
+        {
+            textpattern.Relay.callback('txpAsyncLink.error', {
+                'this'         : $this,
+                'event'        : event,
+                'jqXHR'        : jqXHR,
+                'ajaxSettings' : $.ajaxSetup(),
+                'thrownError'  : errorThrown
+            });
+        })
+        .always(function ()
+        {
+            $this.removeClass('busy');
+            $('body').removeClass('busy');
+        });
+
+    return this;
+};
+
+/**
  * Creates a UI dialog.
  *
  * @param  {object} options Options
@@ -1658,6 +1709,47 @@ function txp_expand_collapse_all(ev) {
 }
 
 /**
+ * Restore sub-panel twistys to their as-stored state.
+ *
+ * @return {[type]} [description]
+ */
+function restorePanes()
+{
+    // Initialize dynamic WAI-ARIA attributes.
+    $('.txp-summary a').each(function (i, elm)
+    {
+        // Get id of toggled <section> region.
+        var $elm = $(elm), region = $elm.attr('href');
+
+        if (region) {
+
+            var $region = $(region);
+            region = region.substr(1);
+
+            var pane = $elm.data("txp-pane");
+
+            if (pane === undefined) {
+                pane = region;
+            }
+
+            if (textpattern.storage.data[pane] !== undefined) {
+                if (textpattern.storage.data[pane]) {
+                    $elm.parent(".txp-summary").addClass("expanded");
+                    $region.show();
+                } else {
+                    $elm.parent(".txp-summary").removeClass("expanded");
+                    $region.hide();
+                }
+            }
+
+            var vis = $region.is(':visible').toString();
+            $elm.attr('aria-controls', region).attr('aria-pressed', vis);
+            $region.attr('aria-expanded', vis);
+        }
+    });
+}
+
+/**
  * Cookie status.
  *
  * @deprecated in 4.6.0
@@ -1766,6 +1858,70 @@ textpattern.Route.add('css, page, form', function ()
             $('.txp-save input').click();
         }
     });
+});
+
+// Pages panel.
+
+textpattern.Route.add('page', function ()
+{
+    $('.tagbuild_wrapper').on('click', '.txp-collapse-all', 'collapse', txp_expand_collapse_all);
+    $('.tagbuild_wrapper').on('click', '.txp-expand-all', 'expand', txp_expand_collapse_all);
+
+    // Set up asynchronous tag builder links.
+    textpattern.Relay.register('txpAsyncLink.success', function (event, data)
+    {
+        $('#tagbuild_links').html($(data['data']));
+        restorePanes();
+
+        // Set up asynchronous tagbuilder form submission.
+        // @todo This only works on first submission, grrrrr.
+        $('form.asynchtml').txpAsyncForm({
+            dataType: 'html',
+            error: function ()
+            {
+                window.alert(textpattern.gTxt('form_submission_error'));
+            },
+            success: function()
+            {
+                textpattern.Relay.register('txpAsyncForm.success', function (event, data)
+                {
+                    $('#tagbuild_links').html($(data['data']));
+                });
+            }
+        });
+    });
+
+    $('.tagbuild_wrapper').on('click', '.poptaglink', function(ev) {
+        txpAsyncLink(ev);
+    });
+
+    $('.tagbuild_wrapper').dialog({
+        autoOpen: false
+    });
+
+    $('.txp-tagbuilder-link').on('click', function() {
+        $(".tagbuild_wrapper").dialog('open');
+    });
+
+/*
+    // Set up delegated asynchronous tagbuilder form submission???
+    $('.tagbuild_wrapper').on('submit', 'form.asynchtml', function(ev) {
+        $(ev.target).txpAsyncForm({
+            dataType: 'html',
+            error: function ()
+            {
+                window.alert(textpattern.gTxt('form_submission_error'));
+            },
+            success: function()
+            {
+                textpattern.Relay.register('txpAsyncForm.success', function (event, data)
+                {
+                    $('#tagbuild_links').html($(data['data']));
+                });
+            }
+        });
+    });
+*/
 });
 
 // Forms panel.
@@ -1926,38 +2082,7 @@ $(document).ready(function ()
         $(this).parent().remove();
     });
 
-    // Initialize dynamic WAI-ARIA attributes.
-    $('.txp-summary a').each(function (i, elm)
-    {
-        // Get id of toggled <section> region.
-        var $elm = $(elm), region = $elm.attr('href');
-
-        if (region) {
-
-            var $region = $(region);
-            region = region.substr(1);
-
-            var pane = $elm.data("txp-pane");
-
-            if (pane === undefined) {
-                pane = region;
-            }
-
-            if (textpattern.storage.data[pane] !== undefined) {
-                if (textpattern.storage.data[pane]) {
-                    $elm.parent(".txp-summary").addClass("expanded");
-                    $region.show();
-                } else {
-                    $elm.parent(".txp-summary").removeClass("expanded");
-                    $region.hide();
-                }
-            }
-
-            var vis = $region.is(':visible').toString();
-            $elm.attr('aria-controls', region).attr('aria-pressed', vis);
-            $region.attr('aria-expanded', vis);
-        }
-    });
+    restorePanes();
 
     // Hide popup elements.
     $('.txp-dropdown').hide();

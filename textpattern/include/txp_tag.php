@@ -37,29 +37,9 @@ if (!defined('txpinterface')) {
 header('X-Frame-Options: '.X_FRAME_OPTIONS);
 header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 
-?><!DOCTYPE html>
-<html lang="<?php echo txpspecialchars(LANG); ?>" dir="<?php echo txpspecialchars(gTxt('lang_dir')); ?>">
-<head>
-    <meta charset="utf-8">
-    <title><?php echo gTxt('build'); ?> &#124; Textpattern CMS</title><?php echo
-        script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
-        script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
-        script_js(
-            'var textpattern = '.json_encode(array(
-                'event'      => $event,
-                'step'       => $step,
-                '_txp_token' => form_token(),
-                'textarray'  => (object)null,
-            )).';').
-        script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
-    // Mandatory un-themable Textpattern core styles
-    ?>
-    <?php echo $theme->html_head(); ?>
-</head>
-<body id="tag-event">
-<?php echo \Txp::get('\Textpattern\Tag\BuilderTags')->renderTagHelp(gps('tag_name')); ?>
-</body>
-</html>
+?><div id="tag-event">
+<?php echo \Txp::get('\Textpattern\Tag\BuilderTags')->renderTagHelp(gps('tag_name'), gps('panel')); ?>
+</div>
 <?php
 
 /**
@@ -98,17 +78,24 @@ class BuilderTags
     /**
      * Returns a single tag handler instance.
      *
-     * @param  string $name The tag
+     * @param  string $name  The tag
+     * @param  string $panel The panel from which the tag was invoked
      * @return string|bool HTML or FALSE on error
      */
 
-    public function renderTagHelp($name)
+    public function renderTagHelp($name, $panel)
     {
         $this->tagname = (string)$name;
         $method = 'tag_'.$this->tagname;
 
         if (method_exists($this, $method)) {
-            $this->startblock = hed(
+            $this->startblock = href(
+                    'back',
+                    '?event='.$panel.'&step=tagbuild',
+                    array(
+                        'class' => 'poptaglink')
+                ).
+                hed(
                 gTxt('tag_'.$this->tagname).sp.
                 href(
                     'i',
@@ -130,7 +117,8 @@ class BuilderTags
                 ).
                 eInput('tag').
                 sInput('build').
-                hInput('tag_name', $this->tagname);
+                hInput('tag_name', $this->tagname).
+                hInput('panel', $panel);
 
             return $this->$method($this->tagname);
         }
@@ -147,7 +135,7 @@ class BuilderTags
 
     private function tagbuildForm($content)
     {
-        return form($content, '', '', 'post', 'txp-tagbuilder', 'txp-tagbuilder-output');
+        return form($content, '', '', 'post', 'asynchtml txp-tagbuilder', 'txp-tagbuilder-output');
     }
 
     /**

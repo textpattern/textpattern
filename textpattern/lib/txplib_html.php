@@ -1280,12 +1280,14 @@ function popHelpSubtle($help_var, $width = 0, $height = 0)
 
 function popTag($var, $text, $width = 0, $height = 0)
 {
+    global $event;
+
     return href($text, array(
         'event'    => 'tag',
         'tag_name' => $var,
+        'panel'    => $event,
     ), array(
-        'target'  => '_blank',
-        'onclick' => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
+        'class'  => 'poptaglink',
     ));
 }
 

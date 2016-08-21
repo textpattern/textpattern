@@ -39,6 +39,7 @@ if ($event == 'page') {
         'page_edit'   => false,
         'page_save'   => true,
         'page_delete' => true,
+        'tagbuild'    => false,
     ));
 
     switch (strtolower($step)) {
@@ -56,6 +57,9 @@ if ($event == 'page') {
             break;
         case 'page_new':
             page_new();
+            break;
+        case 'tagbuild':
+            page_tagbuild();
             break;
     }
 }
@@ -105,22 +109,6 @@ function page_edit($message = '')
 
     $html = (!$save_error) ? fetch('user_html', 'txp_page', 'name', $name) : gps('html');
 
-    // Format of each entry is popTagLink -> array ( gTxt() string, class/ID).
-    $tagbuild_items = array(
-        'page_article'     => array('page_article_hed',     'article-tags'),
-        'page_article_nav' => array('page_article_nav_hed', 'article-nav-tags'),
-        'page_nav'         => array('page_nav_hed',         'nav-tags'),
-        'page_xml'         => array('page_xml_hed',         'xml-tags'),
-        'page_misc'        => array('page_misc_hed',        'misc-tags'),
-        'page_file'        => array('page_file_hed',        'file-tags'),
-    );
-
-    $tagbuild_links = '';
-
-    foreach ($tagbuild_items as $tb => $item) {
-        $tagbuild_links .= wrapRegion($item[1].'_group', taglinks($tb), $item[1], $item[0], 'page_'.$item[1]);
-    }
-
     echo n.'<div class="txp-layout">'.
         n.tag(
             hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading')),
@@ -166,6 +154,9 @@ function page_edit($message = '')
     echo n.tag(
         form(
             $titleblock.
+            href('<span class="ui-icon ui-extra-icon-code"></span> '.gTxt('tagbuilder'), '#', array(
+                'class' => 'txp-tagbuilder-link',
+            )).
             inputLabel(
                 'html',
                 '<textarea class="code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($html).'</textarea>',
@@ -182,14 +173,8 @@ function page_edit($message = '')
         )
     );
 
-    // Pages tag builder column. TODO: make this a modal?
-//    echo n.tag(
-//        hed(gTxt('tagbuilder'), 2).
-//        $tagbuild_links
-//    , 'div', array(
-//        'class' => '',
-//        'id'    => 'tagbuild_links',
-//    ));
+    // Tag builder dialog.
+    page_tagbuild();
 
     echo n.'</div>'; // End of .txp-layout.
 }
@@ -342,6 +327,52 @@ function page_save()
 function page_new()
 {
     page_edit();
+}
+
+/**
+ * Return a list of tag builder tags.
+ *
+ * @return HTML
+ */
+
+function page_tagbuild()
+{
+    $listActions = graf(
+        href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
+            'class'         => 'txp-expand-all',
+            'aria-controls' => 'tagbuild_links',
+        )).
+        href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
+            'class'         => 'txp-collapse-all',
+            'aria-controls' => 'tagbuild_links',
+        )), array('class' => 'txp-actions')
+    );
+
+    // Format of each entry is popTagLink -> array ( gTxt() string, class/ID).
+    $tagbuild_items = array(
+        'page_article'     => array('page_article_hed',     'article-tags'),
+        'page_article_nav' => array('page_article_nav_hed', 'article-nav-tags'),
+        'page_nav'         => array('page_nav_hed',         'nav-tags'),
+        'page_xml'         => array('page_xml_hed',         'xml-tags'),
+        'page_misc'        => array('page_misc_hed',        'misc-tags'),
+        'page_file'        => array('page_file_hed',        'file-tags'),
+    );
+
+    $tagbuild_links = '';
+
+    foreach ($tagbuild_items as $tb => $item) {
+        $tagbuild_links .= wrapRegion($item[1].'_group', taglinks($tb), $item[1], $item[0], 'page_'.$item[1]);
+    }
+
+    echo n.tag(tag(
+       $listActions.
+       $tagbuild_links, 'div', array(
+           'class' => '',
+           'title' => gTxt('tagbuilder'),
+           'id'    => 'tagbuild_links',
+    )), 'div', array(
+        'class' => 'tagbuild_wrapper',
+    ));
 }
 
 /**
