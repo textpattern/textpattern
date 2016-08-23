@@ -128,10 +128,9 @@ class hive_theme extends \Textpattern\Admin\Theme
     function footer()
     {
         $out[] = graf(
-            href('Textpattern CMS', 'http://textpattern.com', array(
+            href('Textpattern CMS'.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), 'http://textpattern.com', array(
                 'rel'    => 'external',
                 'target' => '_blank',
-                'title'  => gTxt('go_txp_com'),
             )).
             ' (v'.txp_version.')', array('class' => 'mothership'));
 
