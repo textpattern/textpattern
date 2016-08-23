@@ -350,12 +350,12 @@ function page_tagbuild()
 
     // Format of each entry is popTagLink -> array ( gTxt() string, class/ID).
     $tagbuild_items = array(
-        'page_article'     => array('page_article_hed',     'article-tags'),
+        'page_article'     => array('page_article_hed','article-tags'),
         'page_article_nav' => array('page_article_nav_hed', 'article-nav-tags'),
-        'page_nav'         => array('page_nav_hed',         'nav-tags'),
-        'page_xml'         => array('page_xml_hed',         'xml-tags'),
-        'page_misc'        => array('page_misc_hed',        'misc-tags'),
-        'page_file'        => array('page_file_hed',        'file-tags'),
+        'page_nav'         => array('page_nav_hed', 'nav-tags'),
+        'page_xml'         => array('page_xml_hed', 'xml-tags'),
+        'page_misc'        => array('page_misc_hed', 'misc-tags'),
+        'page_file'        => array('page_file_hed', 'file-tags'),
     );
 
     $tagbuild_links = '';
@@ -367,9 +367,9 @@ function page_tagbuild()
     echo n.tag(tag(
        $listActions.
        $tagbuild_links, 'div', array(
-           'class' => '',
-           'title' => gTxt('tagbuilder'),
-           'id'    => 'tagbuild_links',
+           'aria-label' => gTxt('tagbuilder'),
+           'title'      => gTxt('tagbuilder'),
+           'id'         => 'tagbuild_links',
     )), 'div', array(
         'class' => 'tagbuild_wrapper',
     ));
