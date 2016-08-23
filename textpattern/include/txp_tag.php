@@ -94,7 +94,7 @@ class BuilderTags
                 href(gTxt('documentation').sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')),
                     'http://docs.textpattern.io/tags/'.$this->tagname,
                     array(
-                        'class'  => 'txp-tagbuilder-docs-link'
+                        'class'  => 'txp-tagbuilder-docs-link',
                         'rel'    => 'external',
                         'target' => '_blank',
                     )
