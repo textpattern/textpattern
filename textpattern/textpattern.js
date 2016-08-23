@@ -1891,7 +1891,7 @@ textpattern.Route.add('page', function ()
         });
     });
 
-    $('.tagbuild_wrapper').on('click', '.poptaglink', function(ev) {
+    $('.tagbuild_wrapper').on('click', '.txp-tagbuilder-back-link', function(ev) {
         txpAsyncLink(ev);
     });
 
