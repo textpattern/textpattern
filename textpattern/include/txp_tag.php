@@ -89,28 +89,16 @@ class BuilderTags
         $method = 'tag_'.$this->tagname;
 
         if (method_exists($this, $method)) {
-            $this->startblock = href(
-                    'back',
-                    '?event='.$panel.'&step=tagbuild',
+            $this->startblock = href(gTxt('go_back'), '?event='.$panel.'&step=tagbuild', array('class' => 'txp-tagbuilder-back-link')).
+                hed(gTxt('tag_'.$this->tagname), 2).
+                href(gTxt('documentation').sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')),
+                    'http://docs.textpattern.io/tags/'.$this->tagname,
                     array(
-                        'class' => 'poptaglink')
-                ).
-                hed(
-                gTxt('tag_'.$this->tagname).sp.
-                href(
-                    'i',
-                    'http://www.textpattern.net/wiki/index.php?title='.$this->tagname,
-                    array(
-                        'rel'        => 'help',
-                        'target'     => '_blank',
-                        'class'      => 'pophelp',
-                        'role'       => 'button',
-                        'title'      => gTxt('help'),
-                        'aria-label' => gTxt('help'),
+                        'class'  => 'txp-tagbuilder-docs-link'
+                        'rel'    => 'external',
+                        'target' => '_blank',
                     )
-                ),
-                2
-            );
+                );
 
             $this->endform = graf(
                     fInput('submit', '', gTxt('build'), 'publish')
