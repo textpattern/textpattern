@@ -367,9 +367,9 @@ function page_tagbuild()
     echo n.tag(tag(
        $listActions.
        $tagbuild_links, 'div', array(
+           'id'         => 'tagbuild_links',
            'aria-label' => gTxt('tagbuilder'),
            'title'      => gTxt('tagbuilder'),
-           'id'         => 'tagbuild_links',
     )), 'div', array(
         'class' => 'tagbuild_wrapper',
     ));
