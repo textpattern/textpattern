@@ -155,7 +155,7 @@ function page_edit($message = '')
         form(
             $titleblock.
             href('<span class="ui-icon ui-extra-icon-code"></span> '.gTxt('tagbuilder'), '#', array(
-                'class' => 'txp-tagbuilder-link',
+                'class' => 'txp-tagbuilder-dialog',
             )).
             inputLabel(
                 'html',
