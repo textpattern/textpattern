@@ -1,4 +1,4 @@
-#@version 4.6.0-beta.3;1470842305
+#@version 4.6.0-beta.3;1471956226
 #@admin
 account_activation => Please activate your account
 account_activation_confirmation => Please use the link below to activate your account and set up a password.
@@ -886,6 +886,7 @@ deprecated_configuration => Configuration option <strong>{name}</strong> is depr
 deprecated_function => Function <strong>{name}</strong> is deprecated.
 deprecated_function_with => Function <strong>{name}</strong> is deprecated: use <strong>{with}</strong> instead.
 deprecated_tag => tag is deprecated
+documentation => Documentation
 download_count => Download count
 edit => Edit
 email => Email
@@ -907,6 +908,7 @@ forget => Forget
 form => Form
 forms => Forms
 go => Go
+go_back => Go back
 go_content => Go to content
 go_nav => Go to navigation
 go_search => Go to search
@@ -963,6 +965,7 @@ off => Off
 older => Older
 on => On
 only_articles_can_be_previewed => <strong>Note:</strong> only article forms can be previewed.
+opens_external_link => (opens an external link in a new window)
 page => Page
 pages => Pages
 paragraph => paragraph

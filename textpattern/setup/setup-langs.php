@@ -21,7 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Generated: 23 Jun 2016, 01:11:42 GMT
+// Generated: 24 Aug 2016, 12:06:39 GMT
 
 $langs = array(
     'ar-dz' => array(
@@ -1059,7 +1059,7 @@ config_php_not_found => Nepodařilo se nalézt soubor s nastavením: <strong>{fi
         'choose_password' => 'Scegli una password',
         'config_php_does_not_match_input' => 'Il contenuto di <code>config.php</code> non corrisponde ai valori che hai inserito. Incolla esattamente il testo seguente.',
         'config_php_not_found' => 'Non ho trovato il file di configurazione nel posto previsto <strong>{file}</strong>. Controllane ancora una volta l’esistenza.',
-        'core_theme' => 'Core: {theme}',
+        'core_theme' => 'Nucleo: {theme}',
         'create_config' => 'Crea un file di nome <code>config.php</code> nella cartella <code>/textpattern/</code> e incollaci dentro ciò che segue…',
         'creating_config' => 'Creo il file config.php',
         'creating_db_tables' => 'Creo le tabelle del database',
@@ -1741,7 +1741,7 @@ config_php_not_found => Nepodařilo se nalézt soubor s nastavením: <strong>{fi
         'errors_during_install' => 'Počas inštalácie sa vyskytlo <strong>{num}</strong> chýb. Môžete požiadať o pomoc na <a href="http://forum.textpattern.com" rel="external">fóre Textpattern</a>.',
         'get_started' => 'Začať!',
         'go_to_login' => 'Prihlásiť sa',
-        'installation_postamble' => 'Z dôvodu bezpečnosti doporučujeme zmazať zložku <code>setup</code> z adresára <code>/textpattern/</code>. Čas od času spustite diagnostiku na záložke Správa pre kontrolu aktualizácií a vyhľadanie problémov.<code>.',
+        'installation_postamble' => 'Z dôvodu bezpečnosti doporučujeme zmazať zložku <code>setup</code> z adresára <code>/textpattern/</code>. Čas od času spustite diagnostiku na záložke Správa pre kontrolu aktualizácií a vyhľadanie problémov.',
         'mysql_database' => 'MySQL databáza',
         'mysql_login' => 'MySQL login',
         'mysql_password' => 'MySQL heslo',
