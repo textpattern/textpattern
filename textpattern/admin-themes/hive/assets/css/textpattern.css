@@ -3015,6 +3015,13 @@ hr {
 }
 
 /**
+ * Remove top margin when inside a dialog box.
+ */
+.ui-dialog .txp-actions {
+  margin-top: 0;
+}
+
+/**
  * AJAX spinners.
  *
  * Example HTML:
