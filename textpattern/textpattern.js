@@ -1899,7 +1899,8 @@ textpattern.Route.add('page', function ()
         autoOpen: false
     });
 
-    $('.txp-tagbuilder-dialog').on('click', function() {
+    $('.txp-tagbuilder-dialog').on('click', function(ev) {
+        ev.preventDefault();
         $(".tagbuild_wrapper").dialog('open');
     });
 
