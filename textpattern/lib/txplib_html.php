@@ -1287,7 +1287,7 @@ function popTag($var, $text, $width = 0, $height = 0)
         'tag_name' => $var,
         'panel'    => $event,
     ), array(
-        'class'  => 'poptaglink',
+        'class'  => 'txp-tagbuilder-link',
     ));
 }
 
