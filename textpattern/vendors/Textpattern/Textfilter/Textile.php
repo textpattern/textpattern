@@ -122,9 +122,12 @@ class Textile extends Base implements TextfilterInterface
             n.'<li>'.'!'.gTxt('imageurl').'!'.
             popHelpSubtle('image', 400, 400).'</li>'.
             n.'</ul>'.
-
             graf(
-                href(gTxt('More'), 'http://textpattern.com/textile-sandbox', ' id="textile-docs-link" rel="external" target="_blank"')
+                href(gTxt('documentation').sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), 'http://textpattern.com/textile-sandbox', array(
+                    'class' => 'textile-docs-link',
+                    'rel'    => 'external',
+                    'target' => '_blank',
+                ))
             );
     }
 }
