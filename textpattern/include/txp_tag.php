@@ -104,7 +104,7 @@ class BuilderTags
                 );
 
             $this->endform = graf(
-                    fInput('submit', '', gTxt('build'), 'publish')
+                    fInput('submit', '', gTxt('build'))
                 ).
                 eInput('tag').
                 sInput('build').
