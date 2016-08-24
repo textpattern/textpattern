@@ -59,7 +59,7 @@ if ($event == 'page') {
             page_new();
             break;
         case 'tagbuild':
-            page_tagbuild();
+            echo page_tagbuild();
             break;
     }
 }
@@ -174,7 +174,13 @@ function page_edit($message = '')
     );
 
     // Tag builder dialog.
-    page_tagbuild();
+    echo n.tag(
+        page_tagbuild(),
+        'div', array(
+            'id'         => 'tagbuild_links',
+            'aria-label' => gTxt('tagbuilder'),
+            'title'      => gTxt('tagbuilder'),
+    ));
 
     echo n.'</div>'; // End of .txp-layout.
 }
@@ -340,11 +346,11 @@ function page_tagbuild()
     $listActions = graf(
         href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
             'class'         => 'txp-expand-all',
-            'aria-controls' => 'tagbuild_wrapper',
+            'aria-controls' => 'tagbuild_links',
         )).
         href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
             'class'         => 'txp-collapse-all',
-            'aria-controls' => 'tagbuild_wrapper',
+            'aria-controls' => 'tagbuild_links',
         )), array('class' => 'txp-actions')
     );
 
@@ -364,16 +370,7 @@ function page_tagbuild()
         $tagbuild_links .= wrapRegion($item[1].'_group', taglinks($tb), $item[1], $item[0], 'page_'.$item[1]);
     }
 
-    echo n.tag(tag(
-        $listActions.
-        $tagbuild_links, 'div', array(
-            'id'    => 'tagbuild_wrapper',
-            'class' => 'tagbuild_wrapper',
-    )), 'div', array(
-        'id' => 'tagbuild_links',
-        'aria-label' => gTxt('tagbuilder'),
-        'title'      => gTxt('tagbuilder'),
-    ));
+    return $listActions.$tagbuild_links;
 }
 
 /**
