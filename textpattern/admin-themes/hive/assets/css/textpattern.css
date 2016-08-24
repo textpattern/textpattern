@@ -3422,7 +3422,7 @@ span.spinner {
 /**
  * Tag builder link on Forms panel and Pages panel.
  */
-.txp-tagbuilder-link {
+.txp-tagbuilder-dialog {
   position: relative;
   margin: 0 1px;
   float: right;
@@ -3432,7 +3432,7 @@ span.spinner {
 /**
  * Swap alignment of tag builder link in RTL languages.
  */
-[dir="rtl"] .txp-tagbuilder-link {
+[dir="rtl"] .txp-tagbuilder-dialog {
   float: left;
 }
 
