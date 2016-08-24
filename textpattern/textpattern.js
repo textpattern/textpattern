@@ -1864,8 +1864,8 @@ textpattern.Route.add('css, page, form', function ()
 
 textpattern.Route.add('page', function ()
 {
-    $('.tagbuild_wrapper').on('click', '.txp-collapse-all', 'collapse', txp_expand_collapse_all);
-    $('.tagbuild_wrapper').on('click', '.txp-expand-all', 'expand', txp_expand_collapse_all);
+    $('#tagbuild_links').on('click', '.txp-collapse-all', 'collapse', txp_expand_collapse_all);
+    $('#tagbuild_links').on('click', '.txp-expand-all', 'expand', txp_expand_collapse_all);
 
     // Set up asynchronous tag builder links.
     textpattern.Relay.register('txpAsyncLink.success', function (event, data)
@@ -1891,22 +1891,22 @@ textpattern.Route.add('page', function ()
         });
     });
 
-    $('.tagbuild_wrapper').on('click', '.txp-tagbuilder-link', function(ev) {
+    $('#tagbuild_links').on('click', '.txp-tagbuilder-link', function(ev) {
         txpAsyncLink(ev);
     });
 
-    $('.tagbuild_wrapper').dialog({
+    $('#tagbuild_links').dialog({
         autoOpen: false
     });
 
     $('.txp-tagbuilder-dialog').on('click', function(ev) {
         ev.preventDefault();
-        $(".tagbuild_wrapper").dialog('open');
+        $("#tagbuild_links").dialog('open');
     });
 
 /*
     // Set up delegated asynchronous tagbuilder form submission???
-    $('.tagbuild_wrapper').on('submit', 'form.asynchtml', function(ev) {
+    $('#tagbuild_links').on('submit', 'form.asynchtml', function(ev) {
         $(ev.target).txpAsyncForm({
             dataType: 'html',
             error: function ()

@@ -340,11 +340,11 @@ function page_tagbuild()
     $listActions = graf(
         href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
             'class'         => 'txp-expand-all',
-            'aria-controls' => 'tagbuild_links',
+            'aria-controls' => 'tagbuild_wrapper',
         )).
         href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
             'class'         => 'txp-collapse-all',
-            'aria-controls' => 'tagbuild_links',
+            'aria-controls' => 'tagbuild_wrapper',
         )), array('class' => 'txp-actions')
     );
 
@@ -365,13 +365,14 @@ function page_tagbuild()
     }
 
     echo n.tag(tag(
-       $listActions.
-       $tagbuild_links, 'div', array(
-           'id'         => 'tagbuild_links',
-           'aria-label' => gTxt('tagbuilder'),
-           'title'      => gTxt('tagbuilder'),
+        $listActions.
+        $tagbuild_links, 'div', array(
+            'id'    => 'tagbuild_wrapper',
+            'class' => 'tagbuild_wrapper',
     )), 'div', array(
-        'class' => 'tagbuild_wrapper',
+        'id' => 'tagbuild_links',
+        'aria-label' => gTxt('tagbuilder'),
+        'title'      => gTxt('tagbuilder'),
     ));
 }
 
