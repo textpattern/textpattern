@@ -89,7 +89,10 @@ class BuilderTags
         $method = 'tag_'.$this->tagname;
 
         if (method_exists($this, $method)) {
-            $this->startblock = href(gTxt('go_back'), '?event='.$panel.'&step=tagbuild', array('class' => 'txp-tagbuilder-link')).
+            $this->startblock = graf(
+                    href(gTxt('go_back'), '?event='.$panel.'&step=tagbuild', array('class' => 'txp-tagbuilder-link')),
+                    array('class' => 'txp-actions')
+                ).
                 hed(gTxt('tag_'.$this->tagname), 2).
                 href(gTxt('documentation').sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')),
                     'http://docs.textpattern.io/tags/'.$this->tagname,
