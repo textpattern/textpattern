@@ -1692,9 +1692,9 @@ function txp_expand_collapse_all(ev) {
     ev.preventDefault();
 
     var direction = ev.data.direction,
-        container = ev.data.container || 'body';
+        container = ev.data.container || (ev.delegateTarget == ev.target ? 'body' : ev.delegateTarget);
 
-    $(container + ' .txp-summary a').each(function (i, elm) {
+    $(container).find('.txp-summary a').each(function (i, elm) {
         var $elm = $(elm);
 
         if (direction === 'collapse') {
@@ -1831,9 +1831,6 @@ textpattern.Route.add('article', function ()
         form.off('submit.txpAsyncForm').trigger('submit');
     });
 
-    $('.txp-collapse-all').on('click', null, {direction: 'collapse'}, txp_expand_collapse_all);
-    $('.txp-expand-all').on('click', null, {direction: 'expand'}, txp_expand_collapse_all);
-
     // Switch to Text/HTML/Preview mode.
     $(document).on('click',
         '[data-view-mode]',
@@ -1863,17 +1860,14 @@ textpattern.Route.add('css, page, form', function ()
 
 // Pages panel.
 
-textpattern.Route.add('page', function ()
+textpattern.Route.add('page, form', function ()
 {
-    $('#tagbuild_links').on('click', '.txp-collapse-all', {direction: 'collapse'}, txp_expand_collapse_all);
-    $('#tagbuild_links').on('click', '.txp-expand-all', {direction: 'expand'}, txp_expand_collapse_all);
-
     // Set up asynchronous tag builder links.
     textpattern.Relay.register('txpAsyncLink.success', function (event, data)
     {
         $('#tagbuild_links').html($(data['data']));
         restorePanes();
-
+/*
         // Set up asynchronous tagbuilder form submission.
         // @todo This only works on first submission, grrrrr.
         $('form.asynchtml').txpAsyncForm({
@@ -1890,6 +1884,7 @@ textpattern.Route.add('page', function ()
                 });
             }
         });
+*/
     });
 
     $('#tagbuild_links').on('click', '.txp-tagbuilder-link', function(ev) {
@@ -1905,10 +1900,9 @@ textpattern.Route.add('page', function ()
         $("#tagbuild_links").dialog('open');
     });
 
-/*
     // Set up delegated asynchronous tagbuilder form submission???
-    $('#tagbuild_links').on('submit', 'form.asynchtml', function(ev) {
-        $(ev.target).txpAsyncForm({
+    $('#tagbuild_links').on('click', 'form.asynchtml input[type="submit"]', function(ev) {
+        $(this).closest('form.asynchtml').txpAsyncForm({
             dataType: 'html',
             error: function ()
             {
@@ -1923,7 +1917,7 @@ textpattern.Route.add('page', function ()
             }
         });
     });
-*/
+
 });
 
 // Forms panel.
@@ -1934,50 +1928,6 @@ textpattern.Route.add('form', function ()
         'checkbox'    : 'input[name="selected_forms[]"][type=checkbox]',
         'row'         : '.switcher-list li, .form-list-name',
         'highlighted' : '.switcher-list li'
-    });
-
-    $('#content_switcher .txp-collapse-all').on('click', null, {direction: 'collapse', container: '#allforms_form'}, txp_expand_collapse_all);
-    $('#content_switcher .txp-expand-all').on('click', null, {direction: 'expand', container: '#allforms_form'}, txp_expand_collapse_all);
-
-    $('#tagbuild_links').on('click', '.txp-collapse-all', {direction: 'collapse', container: '#tagbuild_links'}, txp_expand_collapse_all);
-    $('#tagbuild_links').on('click', '.txp-expand-all', {direction: 'expand', container: '#tagbuild_links'}, txp_expand_collapse_all);
-
-    // Set up asynchronous tag builder links.
-    // @todo Too much duplication with Pages panel: Refactor somehow.
-    textpattern.Relay.register('txpAsyncLink.success', function (event, data)
-    {
-        $('#tagbuild_links').html($(data['data']));
-        restorePanes();
-
-        // Set up asynchronous tagbuilder form submission.
-        // @todo This only works on first submission, grrrrr.
-        $('form.asynchtml').txpAsyncForm({
-            dataType: 'html',
-            error: function ()
-            {
-                window.alert(textpattern.gTxt('form_submission_error'));
-            },
-            success: function()
-            {
-                textpattern.Relay.register('txpAsyncForm.success', function (event, data)
-                {
-                    $('#tagbuild_links').html($(data['data']));
-                });
-            }
-        });
-    });
-
-    $('#tagbuild_links').on('click', '.txp-tagbuilder-link', function(ev) {
-        txpAsyncLink(ev);
-    });
-
-    $('#tagbuild_links').dialog({
-        autoOpen: false
-    });
-
-    $('.txp-tagbuilder-dialog').on('click', function(ev) {
-        ev.preventDefault();
-        $("#tagbuild_links").dialog('open');
     });
 });
 
@@ -2002,7 +1952,12 @@ textpattern.Route.add('plugin', function ()
 // All panels?
 
 textpattern.Route.add('', function ()
-{
+{    
+    // Collapse/Expand all support.
+    $('#supporting_content, #tagbuild_links, #content_switcher').on('click', '.txp-collapse-all', {direction: 'collapse'}, txp_expand_collapse_all)
+        .on('click', '.txp-expand-all', {direction: 'expand'}, txp_expand_collapse_all);
+
+    // Pane states
     var prefsGroup = $('form:has(.switcher-list li a[data-txp-pane])');
 
     if (prefsGroup.length == 0) {
