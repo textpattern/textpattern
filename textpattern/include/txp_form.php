@@ -72,6 +72,7 @@ if ($event == 'form') {
         'form_delete'     => true,
         'form_multi_edit' => true,
         'form_save'       => true,
+        'tagbuild'        => false,
     ));
 
     switch (strtolower($step)) {
@@ -92,6 +93,9 @@ if ($event == 'form') {
             break;
         case 'form_save':
             form_save();
+            break;
+        case 'tagbuild':
+            echo form_tagbuild();
             break;
     }
 }
@@ -328,53 +332,6 @@ function form_edit($message = '')
         array('class' => 'txp-actions')
     );
 
-    // Generate the tagbuilder links.
-    // Format of each entry is popTagLink -> array ( gTxt string, class/ID ).
-    $tagbuild_items = array(
-        'article' => array(
-            'articles',
-            'article-tags',
-        ),
-        'link' => array(
-            'links',
-            'link-tags',
-        ),
-        'comment' => array(
-            'comments',
-            'comment-tags',
-        ),
-        'comment_details' => array(
-            'comment_details',
-            'comment-detail-tags',
-        ),
-        'comment_form' => array(
-            'comment_form',
-            'comment-form-tags',
-        ),
-        'search_result' => array(
-            'search_results_form',
-            'search-result-tags',
-        ),
-        'file_download' => array(
-            'file_download_tags',
-            'file-tags',
-        ),
-        'category' => array(
-            'category_tags',
-            'category-tags',
-        ),
-        'section' => array(
-            'section_tags',
-            'section-tags',
-        ),
-    );
-
-    $tagbuild_links = '';
-
-    foreach ($tagbuild_items as $tb => $item) {
-        $tagbuild_links .= wrapRegion($item[1].'_group', popTagLinks($tb), $item[1], $item[0], $item[1]);
-    }
-
     $listActions = graf(
         href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
             'class'         => 'txp-expand-all',
@@ -408,6 +365,9 @@ function form_edit($message = '')
         form(
             $name_widgets.
             $type_widgets.
+            href('<span class="ui-icon ui-extra-icon-code"></span> '.gTxt('tagbuilder'), '#', array(
+                'class' => 'txp-tagbuilder-dialog',
+            )).
             inputLabel(
                 'form',
                 '<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($Form).'</textarea>',
@@ -424,14 +384,14 @@ function form_edit($message = '')
         )
     );
 
-    // Forms tag builder column. TODO: make this a modal?
-//    echo n.tag(
-//        hed(gTxt('tagbuilder'), 2).
-//        $tagbuild_links.n
-//    , 'div', array(
-//        'id'    => 'tagbuild_links',
-//        'class' => '',
-//    ));
+    // Tag builder dialog.
+    echo n.tag(
+        form_tagbuild(),
+        'div', array(
+            'id'         => 'tagbuild_links',
+            'aria-label' => gTxt('tagbuilder'),
+            'title'      => gTxt('tagbuilder'),
+        ));
 
     echo n.'</div>'; // End of .txp-layout.
 }
@@ -590,4 +550,46 @@ function formTypes($type, $blank_first = true, $id = 'type', $disabled = false)
     global $form_types;
 
     return selectInput('type', $form_types, $type, $blank_first, '', $id, false, $disabled);
+}
+
+/**
+ * Return a list of tag builder tags.
+ *
+ * @return HTML
+ */
+
+function form_tagbuild()
+{
+    $listActions = graf(
+        href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
+            'class'         => 'txp-expand-all',
+            'aria-controls' => 'tagbuild_links',
+        )).
+        href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
+            'class'         => 'txp-collapse-all',
+            'aria-controls' => 'tagbuild_links',
+        )), array('class' => 'txp-actions')
+    );
+
+    // Generate the tagbuilder links.
+    // Format of each entry is popTagLink -> array ( gTxt string, class/ID ).
+    $tagbuild_items = array(
+        'article'         => array('articles', 'article-tags'),
+        'link'            => array('links', 'link-tags'),
+        'comment'         => array('comments', 'comment-tags'),
+        'comment_details' => array('comment_details', 'comment-detail-tags'),
+        'comment_form'    => array('comment_form', 'comment-form-tags'),
+        'search_result'   => array('search_results_form', 'search-result-tags'),
+        'file_download'   => array('file_download_tags', 'file-tags'),
+        'category'        => array('category_tags', 'category-tags'),
+        'section'         => array('section_tags', 'section-tags'),
+    );
+
+    $tagbuild_links = '';
+
+    foreach ($tagbuild_items as $tb => $item) {
+        $tagbuild_links .= wrapRegion($item[1].'_group', popTagLinks($tb), $item[1], $item[0], $item[1]);
+    }
+
+    return $listActions.$tagbuild_links;
 }
