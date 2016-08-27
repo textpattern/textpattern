@@ -1714,10 +1714,10 @@ function txp_expand_collapse_all(ev) {
  *
  * @return {[type]} [description]
  */
-function restorePanes()
+jQuery.fn.restorePanes = function ()
 {
     // Initialize dynamic WAI-ARIA attributes.
-    $('.txp-summary a').each(function (i, elm)
+    $(this).find('.txp-summary a').each(function (i, elm)
     {
         // Get id of toggled <section> region.
         var $elm = $(elm), region = $elm.attr('href');
@@ -1865,8 +1865,7 @@ textpattern.Route.add('page, form, file', function ()
     // Set up asynchronous tag builder links.
     textpattern.Relay.register('txpAsyncLink.success', function (event, data)
     {
-        $('#tagbuild_links').html($(data['data'])).dialog('open');
-        restorePanes();
+        $('#tagbuild_links').html($(data['data'])).dialog('open').restorePanes();
     });
 
     $('#tagbuild_links, .files_detail').on('click', '.txp-tagbuilder-link', function(ev) {
@@ -2061,7 +2060,7 @@ $(document).ready(function ()
         $(this).parent().remove();
     });
 
-    restorePanes();
+    $('body').restorePanes();
 
     // Hide popup elements.
     $('.txp-dropdown').hide();
