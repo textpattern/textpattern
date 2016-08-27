@@ -1269,24 +1269,22 @@ function popHelpSubtle($help_var, $width = 0, $height = 0)
 }
 
 /**
- * Renders a link that opens a popup tag help window.
+ * Renders a link that opens a popup tag area.
  *
- * @param  string $var    Tag name
- * @param  string $text   Link text
- * @param  int    $width  Popup window width
- * @param  int    $height Popup window height
+ * @param  string $var   Tag name
+ * @param  string $text  Link text
+ * @param  array  $atts  Attributes to add to the link
  * @return string HTML
  */
 
-function popTag($var, $text, $width = 0, $height = 0)
+function popTag($var, $text, $atts = array())
 {
-    global $event;
-
-    return href($text, array(
+    $opts = array(
         'event'    => 'tag',
         'tag_name' => $var,
-        'panel'    => $event,
-    ), array(
+    ) + $atts;
+
+    return href($text, $opts, array(
         'class'  => 'txp-tagbuilder-link',
     ));
 }
@@ -1300,6 +1298,8 @@ function popTag($var, $text, $width = 0, $height = 0)
 
 function popTagLinks($type)
 {
+    global $event;
+
     include txpath.'/lib/taglib.php';
 
     $arname = $type.'_tags';
@@ -1307,7 +1307,7 @@ function popTagLinks($type)
     $out = array();
 
     foreach ($$arname as $a) {
-        $out[] = tag(popTag($a, gTxt('tag_'.$a)), 'li');
+        $out[] = tag(popTag($a, gTxt('tag_'.$a), array('panel' => $event)), 'li');
     }
 
     return n.tag(n.join(n, $out).n, 'ul', array('class' => 'plain-list'));

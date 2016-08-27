@@ -375,9 +375,8 @@ function file_list($message = '')
                 'crit'          => $crit,
             );
 
+            $tagName = 'file_download_link';
             $tag_url = array(
-                'event'       => 'tag',
-                'tag_name'    => 'file_download_link',
                 'id'          => $id,
                 'description' => $description,
                 'filename'    => $filename,
@@ -455,12 +454,11 @@ function file_list($message = '')
                     $category, '', 'txp-list-col-category category'.$vc
                 ).
                 td(
-                    href('Textile', $tag_url + array('type' => 'textile'), ' target="_blank" onclick="popWin(this.href); return false;"').
+                    popTag($tagName, 'Textile', array('type' => 'textile') + $tag_url).
                     sp.span('&#124;', array('role' => 'separator')).
-                    sp.href('Textpattern', $tag_url + array('type' => 'textpattern'), ' target="_blank" onclick="popWin(this.href); return false;"').
+                    sp.popTag($tagName, 'Textpattern', array('type' => 'textpattern') + $tag_url).
                     sp.span('&#124;', array('role' => 'separator')).
-                    sp.href('HTML', $tag_url + array('type' => 'html'), ' target="_blank" onclick="popWin(this.href); return false;"'), '', 'txp-list-col-tag-build files_detail').
-
+                    sp.popTag($tagName, 'HTML', array('type' => 'html') + $tag_url), '', 'txp-list-col-tag-build files_detail').
                 td(
                     $status, '', 'txp-list-col-status'
                 ).
@@ -495,6 +493,13 @@ function file_list($message = '')
     }
 
     echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.tag(
+        null,
+        'div', array(
+            'id'         => 'tagbuild_links',
+            'aria-label' => gTxt('tagbuilder'),
+            'title'      => gTxt('tagbuilder'),
+        )).
         n.'</div>'; // End of .txp-layout.
 }
 

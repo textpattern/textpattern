@@ -1858,7 +1858,7 @@ textpattern.Route.add('css, page, form', function ()
     });
 });
 
-// Pages panel.
+// Tagbuilder.
 
 textpattern.Route.add('page, form', function ()
 {
@@ -1867,24 +1867,6 @@ textpattern.Route.add('page, form', function ()
     {
         $('#tagbuild_links').html($(data['data']));
         restorePanes();
-/*
-        // Set up asynchronous tagbuilder form submission.
-        // @todo This only works on first submission, grrrrr.
-        $('form.asynchtml').txpAsyncForm({
-            dataType: 'html',
-            error: function ()
-            {
-                window.alert(textpattern.gTxt('form_submission_error'));
-            },
-            success: function()
-            {
-                textpattern.Relay.register('txpAsyncForm.success', function (event, data)
-                {
-                    $('#tagbuild_links').html($(data['data']));
-                });
-            }
-        });
-*/
     });
 
     $('#tagbuild_links').on('click', '.txp-tagbuilder-link', function(ev) {
@@ -1917,7 +1899,6 @@ textpattern.Route.add('page, form', function ()
             }
         });
     });
-
 });
 
 // Forms panel.
