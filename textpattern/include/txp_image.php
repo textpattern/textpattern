@@ -372,12 +372,21 @@ function image_list($message = '')
             }
 
             if ($ext != '.swf') {
-                $tag_url = '?event=tag'.a.'tag_name=image'.a.'id='.$id.a.'ext='.$ext.a.'w='.$w.a.'h='.$h.a.'alt='.urlencode($alt).a.'caption='.urlencode($caption);
-                $tagbuilder = href('Textile', $tag_url.a.'type=textile', ' target="_blank" onclick="popWin(this.href); return false;"').
+                $tagName = 'image';
+                $tag_url = array(
+                    'id'      => $id,
+                    'ext'     => $ext,
+                    'w'       => $w,
+                    'h'       => $h,
+                    'alt'     => urlencode($alt),
+                    'caption' => urlencode($caption),
+                );
+
+                $tagbuilder = popTag($tagName, 'Textile', array('type' => 'textile') + $tag_url).
                     sp.span('&#124;', array('role' => 'separator')).
-                    sp.href('Textpattern', $tag_url.a.'type=textpattern', ' target="_blank" onclick="popWin(this.href); return false;"').
+                    sp.popTag($tagName, 'Textpattern', array('type' => 'textpattern') + $tag_url).
                     sp.span('&#124;', array('role' => 'separator')).
-                    sp.href('HTML', $tag_url.a.'type=html', ' target="_blank" onclick="popWin(this.href); return false;"');
+                    sp.popTag($tagName, 'HTML', array('type' => 'html') + $tag_url);
             } else {
                 $tagbuilder = sp;
             }
@@ -446,6 +455,13 @@ function image_list($message = '')
     }
 
     echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.tag(
+        null,
+        'div', array(
+            'id'         => 'tagbuild_links',
+            'aria-label' => gTxt('tagbuilder'),
+            'title'      => gTxt('tagbuilder'),
+        )).
         n.'</div>'; // End of .txp-layout.
 }
 

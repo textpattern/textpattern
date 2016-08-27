@@ -1860,7 +1860,7 @@ textpattern.Route.add('css, page, form', function ()
 
 // Tagbuilder.
 
-textpattern.Route.add('page, form, file', function ()
+textpattern.Route.add('page, form, file, image', function ()
 {
     // Set up asynchronous tag builder links.
     textpattern.Relay.register('txpAsyncLink.success', function (event, data)
@@ -1868,7 +1868,7 @@ textpattern.Route.add('page, form, file', function ()
         $('#tagbuild_links').html($(data['data'])).dialog('open').restorePanes();
     });
 
-    $('#tagbuild_links, .files_detail').on('click', '.txp-tagbuilder-link', function(ev) {
+    $('#tagbuild_links, .files_detail, .images_detail').on('click', '.txp-tagbuilder-link', function(ev) {
         txpAsyncLink(ev);
     });
 
