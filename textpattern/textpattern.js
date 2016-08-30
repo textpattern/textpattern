@@ -1868,6 +1868,11 @@ textpattern.Route.add('page, form, file, image', function ()
         $('#tagbuild_links').html($(data['data'])).dialog('open').restorePanes();
     });
 
+    textpattern.Relay.register('txpAsyncForm.success', function (event, data)
+    {
+        $('#tagbuild_links').html($(data['data']));
+    });
+
     $('#tagbuild_links, .files_detail, .images_detail').on('click', '.txp-tagbuilder-link', function(ev) {
         txpAsyncLink(ev);
     });
@@ -1891,10 +1896,6 @@ textpattern.Route.add('page, form, file, image', function ()
             },
             success: function()
             {
-                textpattern.Relay.register('txpAsyncForm.success', function (event, data)
-                {
-                    $('#tagbuild_links').html($(data['data']));
-                });
             }
         });
     });
