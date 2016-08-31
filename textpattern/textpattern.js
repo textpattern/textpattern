@@ -1878,7 +1878,10 @@ textpattern.Route.add('page, form, file, image', function ()
     });
 
     $('#tagbuild_links').dialog({
-        autoOpen: false
+        autoOpen: false,
+        focus: function(ev, ui) {
+            $(ev.target).closest('.ui-dialog').find('.ui-dialog-titlebar-close').focus();
+        }
     });
 
     $('.txp-tagbuilder-dialog').on('click', function(ev) {
@@ -1886,7 +1889,7 @@ textpattern.Route.add('page, form, file, image', function ()
         $("#tagbuild_links").dialog('open');
     });
 
-    // Set up delegated asynchronous tagbuilder form submission???
+    // Set up delegated asynchronous tagbuilder form submission.
     $('#tagbuild_links').on('click', 'form.asynchtml input[type="submit"]', function(ev) {
         $(this).closest('form.asynchtml').txpAsyncForm({
             dataType: 'html',
