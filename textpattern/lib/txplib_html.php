@@ -892,24 +892,23 @@ function fInputCell($name, $var = '', $tabindex = 0, $size = 0, $help = false, $
  *
  * @param  string       $name        Input name
  * @param  string       $input       Complete input control widget
- * @param  string       $label       Label
+ * @param  string|array $label       Label text | array (label text, HTML block to append to label)
  * @param  string|array $help        Help text item | array(help text item, inline help text)
  * @param  string|array $atts        Class name | attribute pairs to assign to container div
  * @param  string|array $wraptag_val Tag to wrap the value / label in, or empty to omit
- * @param  string|array $wraptag_val Tag to wrap the value / label in, or empty to omit
- * @param  string       $tools       Helper tool links to append after label (such as Tag builder)
  * @return string HTML
  * @example
  * echo inputLabel('active', yesnoRadio('active'), 'Keep active?');
  */
 
-function inputLabel($name, $input, $label = '', $help = array(), $atts = array(), $wraptag_val = array('div', 'div'), $tools = '')
+function inputLabel($name, $input, $label = '', $help = array(), $atts = array(), $wraptag_val = array('div', 'div'))
 {
     global $event;
 
-    $arguments = compact('name', 'input', 'label', 'help', 'atts', 'wraptag_val', 'tools');
+    $arguments = compact('name', 'input', 'label', 'help', 'atts', 'wraptag_val');
 
     $fallback_class = 'txp-form-field edit-'.str_replace('_', '-', $name);
+    $tools = '';
 
     if ($atts && is_string($atts)) {
         $atts = array('class' => $atts);
@@ -921,6 +920,14 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
 
     if (!is_array($help)) {
         $help = array($help);
+    }
+
+    if (is_array($label)) {
+        if (isset($label[1])) {
+            $tools = (string) $label[1];
+        }
+
+        $label = (string) $label[0];
     }
 
     if (empty($help)) {

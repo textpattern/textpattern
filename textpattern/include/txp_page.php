@@ -157,13 +157,15 @@ function page_edit($message = '')
             inputLabel(
                 'html',
                 '<textarea class="code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($html).'</textarea>',
-                'page_code',
+                array(
+                    'page_code',
+                    n.href('<span class="ui-icon ui-extra-icon-code"></span>'.gTxt('tagbuilder'), '#', array(
+                        'class' => 'txp-tagbuilder-dialog',
+                    )),
+                ),
                 array('', 'instructions_page_code'),
                 array('class' => 'txp-form-field'),
-                array('div', 'div'),
-                n.href('<span class="ui-icon ui-extra-icon-code"></span> '.gTxt('tagbuilder'), '#', array(
-                    'class' => 'txp-tagbuilder-dialog',
-                ))
+                array('div', 'div')
             ).
             $buttons
             , '', '', 'post', '', '', 'page_form'),
