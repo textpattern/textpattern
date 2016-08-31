@@ -159,9 +159,7 @@ function page_edit($message = '')
                 '<textarea class="code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($html).'</textarea>',
                 array(
                     'page_code',
-                    n.href('<span class="ui-icon ui-extra-icon-code"></span>'.gTxt('tagbuilder'), '#', array(
-                        'class' => 'txp-tagbuilder-dialog',
-                    )),
+                    n.href('<span class="ui-icon ui-extra-icon-code"></span> '.gTxt('tagbuilder'), '#', array('class' => 'txp-tagbuilder-dialog')),
                 ),
                 array('', 'instructions_page_code'),
                 array('class' => 'txp-form-field'),
