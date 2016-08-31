@@ -294,22 +294,6 @@ function atom()
             }
         }
     } else {
-        // Turn on compression if we aren't using it already.
-        if (extension_loaded('zlib') && ini_get("zlib.output_compression") == 0 &&
-            ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()
-        ) {
-            // Make sure notices/warnings/errors don't fudge up the feed when
-            // compression is used.
-            $buf = '';
-
-            while ($b = @ob_get_clean()) {
-                $buf .= $b;
-            }
-
-            @ob_start('ob_gzhandler');
-            echo $buf;
-        }
-
         handle_lastmod();
         $hims = serverset('HTTP_IF_MODIFIED_SINCE');
         $imsd = ($hims) ? strtotime($hims) : 0;
