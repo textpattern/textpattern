@@ -365,15 +365,16 @@ function form_edit($message = '')
         form(
             $name_widgets.
             $type_widgets.
-            href('<span class="ui-icon ui-extra-icon-code"></span> '.gTxt('tagbuilder'), '#', array(
-                'class' => 'txp-tagbuilder-dialog',
-            )).
             inputLabel(
                 'form',
                 '<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($Form).'</textarea>',
                 'form_code',
                 array('', 'instructions_form_code'),
-                array('class' => 'txp-form-field')
+                array('class' => 'txp-form-field'),
+                array('div', 'div'),
+                n.href(' <span class="ui-icon ui-extra-icon-code"></span> '.gTxt('tagbuilder'), '#', array(
+                    'class' => 'txp-tagbuilder-dialog',
+                ))
             ).
             $buttons
             , '', '', 'post', '', '', 'form_form'),

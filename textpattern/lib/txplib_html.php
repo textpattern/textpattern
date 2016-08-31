@@ -896,16 +896,18 @@ function fInputCell($name, $var = '', $tabindex = 0, $size = 0, $help = false, $
  * @param  string|array $help        Help text item | array(help text item, inline help text)
  * @param  string|array $atts        Class name | attribute pairs to assign to container div
  * @param  string|array $wraptag_val Tag to wrap the value / label in, or empty to omit
+ * @param  string|array $wraptag_val Tag to wrap the value / label in, or empty to omit
+ * @param  string       $tools       Helper tool links to append after label (such as Tag builder)
  * @return string HTML
  * @example
  * echo inputLabel('active', yesnoRadio('active'), 'Keep active?');
  */
 
-function inputLabel($name, $input, $label = '', $help = array(), $atts = array(), $wraptag_val = array('div', 'div'))
+function inputLabel($name, $input, $label = '', $help = array(), $atts = array(), $wraptag_val = array('div', 'div'), $tools = '')
 {
     global $event;
 
-    $arguments = compact('name', 'input', 'label', 'help', 'atts', 'wraptag_val');
+    $arguments = compact('name', 'input', 'label', 'help', 'atts', 'wraptag_val', 'tools');
 
     $fallback_class = 'txp-form-field edit-'.str_replace('_', '-', $name);
 
@@ -931,9 +933,9 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
     $inlineHelp = (isset($help[1])) ? $help[1] : '';
 
     if ($label) {
-        $labelContent = tag(gTxt($label).popHelp($help[0]), 'label', array('for' => $name));
+        $labelContent = tag(gTxt($label).popHelp($help[0]), 'label', array('for' => $name)).$tools;
     } else {
-        $labelContent = gTxt($name).popHelp($help[0]);
+        $labelContent = gTxt($name).popHelp($help[0]).$tools;
     }
 
     if (!is_array($wraptag_val)) {
