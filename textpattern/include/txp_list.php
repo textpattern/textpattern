@@ -179,12 +179,14 @@ function list_list($message = '', $post = '')
                 'type'   => 'integer',
             ),
             'posted' => array(
-                'column' => array('textpattern.Posted'),
-                'label'  => gTxt('posted'),
+                'column'  => array('textpattern.Posted'),
+                'label'   => gTxt('posted'),
+                'options' => array('case_sensitive' => true),
             ),
             'lastmod' => array(
-                'column' => array('textpattern.LastMod'),
-                'label'  => gTxt('article_modified'),
+                'column'  => array('textpattern.LastMod'),
+                'label'   => gTxt('article_modified'),
+                'options' => array('case_sensitive' => true),
             ),
         )
     );
