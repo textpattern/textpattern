@@ -380,6 +380,7 @@ function file_list($message = '')
                 'id'          => $id,
                 'description' => $description,
                 'filename'    => $filename,
+                'step'        => 'build',
             );
 
             $file_exists = file_exists(build_file_path($file_base_path, $filename));
