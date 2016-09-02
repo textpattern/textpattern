@@ -380,6 +380,7 @@ function image_list($message = '')
                     'h'       => $h,
                     'alt'     => urlencode($alt),
                     'caption' => urlencode($caption),
+                    'step'    => 'build',
                 );
 
                 $tagbuilder = popTag($tagName, 'Textile', array('type' => 'textile') + $tag_url).
