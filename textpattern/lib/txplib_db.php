@@ -228,7 +228,7 @@ class DB
         $this->default_charset = mysqli_character_set_name($this->link);
 
         // Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2).
-        if (intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $version)) {
+        if (version_compare($version, '5') >= 0 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $version)) {
             $this->table_options['engine'] = 'MyISAM';
             unset($this->table_options['type']);
         }
