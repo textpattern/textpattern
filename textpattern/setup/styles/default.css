@@ -1303,7 +1303,10 @@ nav ol::after,
   *::before,
   *::after,
   *::first-letter,
-  *::first-line {
+  p::first-line,
+  div::first-line,
+  blockquote::first-line,
+  li::first-line {
     background: transparent !important;
     color: #000000 !important;
     text-shadow: none !important;
@@ -1438,11 +1441,15 @@ nav ol::after,
   }
   /**
  * Simple preformatted text styling.
+ *
+ * 1. Ensure pre blocks are wrapped when printed.
  */
   pre {
     margin-bottom: 8pt;
     padding: 8pt;
     border: 1pt solid #000000;
+    /* 1 */
+    white-space: pre-wrap !important;
   }
   /**
  * Use a print-friendly monospaced font and size.
@@ -1465,8 +1472,7 @@ nav ol::after,
   /**
  * Images.
  *
- * 1. Ensure images are maximum possible width.
- * 2. Avoid images breaking across multiple pages.
+ * 1. Avoid images breaking across multiple pages.
  *
  * Image alignment (compatible with Textile markup syntax).
  *
@@ -1478,8 +1484,6 @@ nav ol::after,
  */
   img {
     /* 1 */
-    max-width: 100% !important;
-    /* 2 */
     page-break-inside: avoid;
   }
   img.align-left {
