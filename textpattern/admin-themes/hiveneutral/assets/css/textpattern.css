@@ -1858,7 +1858,7 @@ dd {
   background: #eaf3fc;
 }
 
-.switcher-list li a {
+.switcher-list a {
   display: block;
   padding: 0.38461538461538em 2.5em 0.38461538461538em 1em;
   text-overflow: ellipsis;
@@ -1875,24 +1875,40 @@ dd {
 }
 
 /**
+ * Multi-edit checkboxes within switcher lists.
+ */
+.switcher-action {
+  position: absolute;
+  top: 0.38461538461538em;
+  left: 1em;
+  z-index: 2;
+}
+
+.switcher-action + a {
+  padding-right: 1em;
+  padding-left: 2.5em;
+}
+
+[dir="rtl"] .switcher-action {
+  right: 1em;
+  left: auto;
+}
+
+[dir="rtl"] .switcher-action + a {
+  padding-right: 2.5em;
+  padding-left: 1em;
+}
+
+/**
  * 'Destroy' buttons within switcher lists.
  */
-.switcher-action,
 .switcher-list .destroy {
   position: absolute;
+  top: 0.46153846153846em;
   right: 1em;
   z-index: 2;
 }
 
-.switcher-action {
-  top: 0.38461538461538em;
-}
-
-.switcher-list .destroy {
-  top: 0.46153846153846em;
-}
-
-[dir="rtl"] .switcher-action,
 [dir="rtl"] .switcher-list .destroy {
   right: auto;
   left: 1em;
