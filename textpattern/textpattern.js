@@ -1866,11 +1866,13 @@ textpattern.Route.add('page, form, file, image', function ()
     textpattern.Relay.register('txpAsyncLink.success', function (event, data)
     {
         $('#tagbuild_links').html($(data['data'])).dialog('open').restorePanes();
+        $('#txp-tagbuilder-output').select();
     });
 
     textpattern.Relay.register('txpAsyncForm.success', function (event, data)
     {
         $('#tagbuild_links').html($(data['data']));
+        $('#txp-tagbuilder-output').select();
     });
 
     $('#tagbuild_links, .files_detail, .images_detail').on('click', '.txp-tagbuilder-link', function(ev) {
