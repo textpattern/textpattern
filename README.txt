@@ -16,6 +16,18 @@ Textpattern CMS is a flexible, elegant and easy-to-use content management
 system. Textpattern is both free and open source.
 
 
+== Getting Started ==
+
+* The Textpattern FAQ is available at http://textpattern.com/faq/
+* In-depth documentation and a comprehensive tag index is available in the
+  Textpattern user documentation at http://docs.textpattern.io
+* You can get support and information via:
+   Forum:    http://forum.textpattern.com/
+   Twitter:  http://textpattern.com/@textpattern
+   Google+:  http://textpattern.com/+
+   Facebook: http://textpattern.com/facebook
+
+
 == Installation ==
 
 * Extract the Textpattern files to your site (in the web root, subdomain or
@@ -36,6 +48,21 @@ system. Textpattern is both free and open source.
   browser to start the installation process and follow the directions.
 * When the installation is complete, remove the /textpattern/setup/ directory
   from your site.
+* If you are running Textpattern on an Apache web server, you can rename
+  /files/.htaccess-dist to /files/.htaccess to prohibit direct URL access to
+  your uploaded files. Thus the only route to these files becomes through the
+  /file_download/ directory. It is recommended you consider employing this
+  feature. Alternatively, move your /files/ directory out of a web-accessible
+  location. Once moved, you can specify your new directory location from the
+  Textpattern Admin Preferences (Admin -> Preferences -> Admin).
+
+
+== IMPORTANT ==
+
+* Check back regularly at http://textpattern.com/ to see if an update is
+  available. Updates are as painless as possible, often fixing important bugs
+  and/or security-related issues as well as offering additional features and
+  functionality.
 
 
 == Upgrading ==
@@ -74,30 +101,8 @@ system. Textpattern is both free and open source.
 * Remove the /textpattern/setup/ directory from your site.
 
 
-== Getting Started ==
+== Additional Resources ==
 
-* The Textpattern FAQ is available at http://textpattern.com/faq/
-* In-depth documentation and a comprehensive tag index is available in the
-  Textpattern documentation at http://textpattern.net/
-* You can get support and information via:
-   Forum:    http://forum.textpattern.com/
-   Twitter:  http://textpattern.com/@textpattern
-   Google+:  http://textpattern.com/+
-   Facebook: http://textpattern.com/facebook
-* If you are running an Apache web server, rename the .htaccess-dist file
-  in the /files/ directory to .htaccess to prohibit direct URL access to
-  your files. Thus the only route to these files becomes through the
-  /file_download/ directory. It is recommended you consider employing this
-  feature. Alternatively, move your /files/ directory out of a web-accessible
-  location. Once moved, you can tell Textpattern of your new directory location
-  from the Advanced Preferences.
 * There are additional resources for the default front-side theme, such as
   Sass preprocessor files, available at:
     http://textpattern.com/default-theme/tree/master/
-
-
-== IMPORTANT ==
-
-* Check back regularly at http://textpattern.com/ to see if updates are
-  available. Updates are as painless as possible, often fixing important bugs
-  and/or security-related issues.
