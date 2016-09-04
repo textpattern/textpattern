@@ -18,14 +18,14 @@ system. Textpattern is both free and open source.
 
 == Installation ==
 
-* Extract the Textpattern files to your site (in the web root, or a
+* Extract the Textpattern files to your site (in the web root, subdomain or
   subdirectory). The top-level index.php file should reside in this directory,
   as should the /textpattern/ and /rpc/ directories.
 * Ensure the top-level .htaccess file is transferred to your site. The file is
-  hidden by default on some operating systems, including OS X. Most FTP clients
-  and IDEs have an option to show these hidden files. Otherwise, you can
-  temporarily show hidden files in OS X by using the Terminal.app - follow these
-  instructions:
+  hidden by default on some operating systems, including OS X/macOS. Most FTP
+  clients and IDEs have an option to show these hidden files. Otherwise, you can
+  temporarily show hidden files in OS X/macOS by using the Terminal.app - follow
+  these instructions:
     http://textpattern.com/hidden-files-osx
 * Create or verify the existence of a working MySQL database with valid username
   and password. From Textpattern 4.6.0, the MySQL database user requires INDEX
@@ -49,7 +49,7 @@ system. Textpattern is both free and open source.
 * Replace the top-level index.php, css.php and .htaccess files, everything in
   the /rpc/ directory and everything in the /textpattern/ directory (except
   /textpattern/config.php) with the corresponding files in this distribution.
-  When uploading the textpattern folder, ensure you merge its contents with
+  When uploading the /textpattern/ directory, ensure you merge its contents with
   your existing site to preserve any custom files in your existing installation.
   Note: css.php and /rpc/ may not exist if the installed version of
   Textpattern is prior to 4.2.0.
