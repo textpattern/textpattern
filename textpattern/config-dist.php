@@ -96,7 +96,7 @@ $txpcfg['dbcharset'] = 'utf8';
  * MYSQL_CLIENT_IGNORE_SPACE, MYSQL_CLIENT_INTERACTIVE
  *
  * @global int $txpcfg['client_flags']
- * @link   http://www.php.net/manual/function.mysql-connect.php
+ * @link   https://secure.php.net/manual/en/function.mysql-connect.php
  */
 
 $txpcfg['client_flags'] = 0;

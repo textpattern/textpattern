@@ -385,7 +385,7 @@ function plugin_verify()
     // Check for pre-4.0 style plugin.
     if (strpos($plugin, '$plugin=\'') !== false) {
         // Try to increase PCRE's backtrack limit in PHP 5.2+ to accommodate to
-        // x-large plugins. See http://bugs.php.net/bug.php?id=40846.
+        // x-large plugins. See https://bugs.php.net/bug.php?id=40846.
         @ini_set('pcre.backtrack_limit', '1000000');
         $plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
         // Have we hit yet another PCRE restriction?
