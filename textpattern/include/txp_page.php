@@ -178,6 +178,7 @@ function page_edit($message = '')
     echo n.tag(
         page_tagbuild(),
         'div', array(
+            'class'      => 'txp-tagbuilder-content',
             'id'         => 'tagbuild_links',
             'aria-label' => gTxt('tagbuilder'),
             'title'      => gTxt('tagbuilder'),

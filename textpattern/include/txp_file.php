@@ -497,6 +497,7 @@ function file_list($message = '')
         n.tag(
         null,
         'div', array(
+            'class'      => 'txp-tagbuilder-content',
             'id'         => 'tagbuild_links',
             'aria-label' => gTxt('tagbuilder'),
             'title'      => gTxt('tagbuilder'),
