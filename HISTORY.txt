@@ -40,12 +40,13 @@ Changes in 4.6.0 (Upcoming)
 * Changed: Deprecated 'breakclass' attribute for <txp:comments /> and <txp:image_info />.
 * Changed: Removed Form (article) Preview facility.
 * Changed: Removed empty 'About' section from new installs.
+* Changed: Tag builder has been reworked as a dialog window.
 * Changed: Increased 'page' and 'css' sizes in txp_section table.
 * Changed: 'Prevent widowed words in article titles' preference defaults to 'No' in new installs.
 * Changed: 'Include email in Atom feeds' preference defaults to 'No' in new installs.
 * Changed: Detailed debug trace log.
 * Changed: Default charset is now utf8mb4: supports a wider range of characters, including emoji.
-* Changed: Removed built-in Gzip compression of RSS feed and Atom feed
+* Changed: Removed built-in Gzip compression of RSS feed and Atom feed.
 * Developer: getNextPref() now returns array members 'next' and 'prev' with article data, no longer returns array members 'next_id', 'next_title', 'next_utitle', 'next_posted', 'prev_id', 'prev_title', 'prev_utitle', 'prev_posted'
 * Developer: getNeighbour() returns 'false' if no matching neighbour article exists.
 * Developer: Uses 'mysqli' extension for database access, lose dependency on 'mysql' extension.
