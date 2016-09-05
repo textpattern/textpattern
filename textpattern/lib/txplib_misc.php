@@ -897,29 +897,28 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
 
         if ($rs) {
             $id = $GLOBALS['ID'] = $rs;
+        } else {
+            return gTxt('image_save_error');
         }
-
-        $update = false;
     } else {
         $id = assert_int($id);
-        $rs = safe_update('txp_image', $q, "id = $id");
-        $update = true;
-    }
-
-    if (!$rs) {
-        return gTxt('image_save_error');
     }
 
     $newpath = IMPATH.$id.$ext;
 
     if (shift_uploaded_file($file, $newpath) == false) {
-        if (!$update) {
+        if (!empty($rs)) {
             safe_delete('txp_image', "id = $id");
+            unset($GLOBALS['ID']);
         }
 
-        unset($GLOBALS['ID']);
-
         return $newpath.sp.gTxt('upload_dir_perms');
+    } elseif (empty($rs)) {
+        $rs = safe_update('txp_image', $q, "id = $id");
+
+        if (!$rs) {
+            return gTxt('image_save_error');
+        }
     }
 
     @chmod($newpath, 0644);
