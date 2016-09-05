@@ -309,14 +309,20 @@ function form_edit($message = '')
 
     $name_widgets .= eInput('form').sInput('form_save');
 
-    $buttonExtras = '';
+    $actionsExtras = '';
 
     if ($name) {
-        $buttonExtras .= href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
+        $actionsExtras .= href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
             'class'     => 'txp-clone',
             'data-form' => 'form_form',
         ));
     }
+
+    $actions = graf(
+        sLink('form', 'form_create', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_form'), 'txp-new').
+        $actionsExtras,
+        array('class' => 'txp-actions txp-actions-inline')
+    );
 
     $buttons = graf(
         tag_void('input', array(
@@ -325,11 +331,6 @@ function form_edit($message = '')
             'method' => 'post',
             'value'  =>  gTxt('save'),
         )), ' class="txp-save"'
-    ).
-    graf(
-        sLink('form', 'form_create', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_form'), 'txp-new').
-        $buttonExtras,
-        array('class' => 'txp-actions')
     );
 
     $listActions = graf(
@@ -363,6 +364,7 @@ function form_edit($message = '')
     // Forms code columm.
     echo n.tag(
         form(
+            $actions.
             $name_widgets.
             $type_widgets.
             inputLabel(

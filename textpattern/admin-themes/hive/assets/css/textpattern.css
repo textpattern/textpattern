@@ -3038,6 +3038,25 @@ hr {
 }
 
 /**
+ * Inline the action links.
+ *
+ * Appears on:
+ *
+ * Article pages panel, forms panel, styles panel.
+ */
+.txp-actions-inline {
+  margin-top: 1.30769230769231em;
+  float: right;
+}
+
+/**
+ * Swap position in RTL languages.
+ */
+[dir="rtl"] .txp-actions-inline {
+  float: left;
+}
+
+/**
  * AJAX spinners.
  *
  * Example HTML:
@@ -6900,5 +6919,13 @@ label.ui-state-active.ui-button:active {
      */
   .ui-tabs .ui-tabs-panel {
     border-top-width: 0;
+  }
+  /**
+     * Remove float from inline the action links.
+     */
+  .txp-actions-inline,
+  [dir="rtl"] .txp-actions-inline {
+    margin-top: 0;
+    float: none;
   }
 }

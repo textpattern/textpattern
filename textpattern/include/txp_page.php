@@ -117,14 +117,20 @@ function page_edit($message = '')
 
     // Pages create/switcher column.
 
-    $buttonExtras = '';
+    $actionsExtras = '';
 
     if ($name) {
-        $buttonExtras .= href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
+        $actionsExtras .= href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
             'class'     => 'txp-clone',
             'data-form' => 'page_form',
         ));
     }
+
+    $actions = graf(
+        sLink('page', 'page_new', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_page'), 'txp-new').
+        $actionsExtras,
+        array('class' => 'txp-actions txp-actions-inline')
+    );
 
     $buttons = graf(
         tag_void('input', array(
@@ -133,11 +139,6 @@ function page_edit($message = '')
             'method' => 'post',
             'value'  =>  gTxt('save'),
         )), ' class="txp-save"'
-    ).
-    graf(
-        sLink('page', 'page_new', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_page'), 'txp-new').
-        $buttonExtras,
-        array('class' => 'txp-actions')
     );
 
     echo n.tag(
@@ -153,6 +154,7 @@ function page_edit($message = '')
 
     echo n.tag(
         form(
+            $actions.
             $titleblock.
             inputLabel(
                 'html',

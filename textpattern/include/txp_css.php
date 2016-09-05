@@ -154,14 +154,20 @@ function css_edit($message = '')
         $thecss = fetch('css', 'txp_css', 'name', $name);
     }
 
-    $buttonExtras = '';
+    $actionsExtras = '';
 
     if ($name) {
-        $buttonExtras .= href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
+        $actionsExtras .= href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
             'class'     => 'txp-clone',
             'data-form' => 'style_form',
         ));
     }
+
+    $actions = graf(
+        sLink('css', 'pour', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_css'), 'txp-new').
+        $actionsExtras,
+        array('class' => 'txp-actions txp-actions-inline')
+    );
 
     $buttons = graf(
         tag_void('input', array(
@@ -170,11 +176,6 @@ function css_edit($message = '')
             'method' => 'post',
             'value'  =>  gTxt('save'),
         )), ' class="txp-save"'
-    ).
-    graf(
-        sLink('css', 'pour', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_css'), 'txp-new').
-        $buttonExtras,
-        array('class' => 'txp-actions')
     );
 
     echo n.'<div class="txp-layout">'.
@@ -198,6 +199,7 @@ function css_edit($message = '')
 
     echo n.tag(
         form(
+            $actions.
             $titleblock.
             inputLabel(
                 'css',
