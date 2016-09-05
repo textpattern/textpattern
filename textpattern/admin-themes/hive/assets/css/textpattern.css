@@ -3459,6 +3459,33 @@ span.spinner {
   float: left;
 }
 
+/**
+ * Ensure Tag builder vertical footprint doesn't spill out of screen area.
+ */
+.txp-tagbuilder-container {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: column;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+.txp-tagbuilder-container .ui-dialog-titlebar {
+  -webkit-flex: none;
+      -ms-flex: none;
+          flex: none;
+}
+
+.txp-tagbuilder-content {
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  overflow: scroll;
+}
+
 /* Setup and login panels - additional layout
    ========================================================================== */
 /**
