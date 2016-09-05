@@ -1064,6 +1064,14 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
         echo n.'<div role="region" id="supporting_content">';
 
+        // 'Sort and display' section.
+        echo pluggable_ui(
+            'article_ui',
+            'sort_display',
+            wrapRegion('txp-write-sort-group', $partials['status']['html'].$partials['section']['html'].$partials['categories']['html'], '', gTxt('sort_display')),
+            $rs
+        );
+
         echo graf(
             href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
                 'class'         => 'txp-expand-all',
@@ -1073,14 +1081,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 'class'         => 'txp-collapse-all',
                 'aria-controls' => 'supporting_content',
             )), array('class' => 'txp-actions')
-        );
-
-        // 'Sort and display' section.
-        echo pluggable_ui(
-            'article_ui',
-            'sort_display',
-            wrapRegion('txp-write-sort-group', $partials['status']['html'].$partials['section']['html'].$partials['categories']['html'], '', gTxt('sort_display')),
-            $rs
         );
 
         // 'Date and time' collapsible section.
