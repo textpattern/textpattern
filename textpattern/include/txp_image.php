@@ -842,7 +842,7 @@ function thumbnail_insert()
         $newpath = IMPATH.$id.'t'.$ext;
 
         if (shift_uploaded_file($file, $newpath) == false) {
-            image_list(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR));
+            image_edit(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR), $id);
         } else {
             chmod($newpath, 0644);
             safe_update('txp_image', "thumbnail = 1, thumb_w = $w, thumb_h = $h, date = NOW()", "id = $id");
@@ -854,9 +854,9 @@ function thumbnail_insert()
         }
     } else {
         if ($file === false) {
-            image_list(array(upload_get_errormsg($_FILES['thefile']['error']), E_ERROR));
+            image_edit(array(upload_get_errormsg($_FILES['thefile']['error']), E_ERROR), $id);
         } else {
-            image_list(array(gTxt('only_graphic_files_allowed'), E_ERROR));
+            image_edit(array(gTxt('only_graphic_files_allowed'), E_ERROR), $id);
         }
     }
 }
