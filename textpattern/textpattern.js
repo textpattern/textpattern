@@ -1865,13 +1865,13 @@ textpattern.Route.add('page, form, file, image', function ()
     // Set up asynchronous tag builder links.
     textpattern.Relay.register('txpAsyncLink.success', function (event, data)
     {
-        $('#tagbuild_links').html($(data['data'])).dialog('open').restorePanes();
+        $('#tagbuild_links').html($(data['data'])).focus().dialog('open').restorePanes();
         $('#txp-tagbuilder-output').select();
     });
 
     textpattern.Relay.register('txpAsyncForm.success', function (event, data)
     {
-        $('#tagbuild_links').html($(data['data']));
+        $('#tagbuild_links').html($(data['data'])).focus();
         $('#txp-tagbuilder-output').select();
     });
 
@@ -1883,13 +1883,17 @@ textpattern.Route.add('page, form, file, image', function ()
         dialogClass: 'txp-tagbuilder-container',
         autoOpen: false,
         focus: function(ev, ui) {
-            $(ev.target).closest('.ui-dialog').find('.ui-dialog-titlebar-close').focus();
+            $(ev.target).closest('.ui-dialog').focus();
         }
     });
 
     $('.txp-tagbuilder-dialog').on('click', function(ev) {
         ev.preventDefault();
-        $("#tagbuild_links").dialog('open');
+        if ($("#tagbuild_links").dialog('isOpen')) {
+            $("#tagbuild_links").dialog('close');
+        } else {
+            $("#tagbuild_links").dialog('open');
+        }
     });
 
     // Set up delegated asynchronous tagbuilder form submission.
