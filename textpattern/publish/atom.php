@@ -352,8 +352,6 @@ function atom()
         if ($cutarticles) {
             // header("HTTP/1.1 226 IM Used");
             // This should be used as opposed to 200, but Apache doesn't like it.
-            // http://intertwingly.net/blog/2004/09/11/Vary-ETag/ says that the
-            // status code should be 200.
             header("Cache-Control: no-store, im");
             header("IM: feed");
         }
