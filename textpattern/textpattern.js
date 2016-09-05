@@ -1880,6 +1880,7 @@ textpattern.Route.add('page, form, file, image', function ()
     });
 
     $('#tagbuild_links').dialog({
+        dialogClass: 'txp-tagbuilder-container',
         autoOpen: false,
         focus: function(ev, ui) {
             $(ev.target).closest('.ui-dialog').find('.ui-dialog-titlebar-close').focus();
@@ -1938,7 +1939,7 @@ textpattern.Route.add('plugin', function ()
 // All panels?
 
 textpattern.Route.add('', function ()
-{    
+{
     // Collapse/Expand all support.
     $('#supporting_content, #tagbuild_links, #content_switcher').on('click', '.txp-collapse-all', {direction: 'collapse'}, txp_expand_collapse_all)
         .on('click', '.txp-expand-all', {direction: 'expand'}, txp_expand_collapse_all);
