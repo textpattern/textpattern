@@ -960,6 +960,10 @@ class BuilderTags
             'wraptag',
         ));
 
+        if (!isset($_POST['label'])) {
+            $atts['label'] = gTxt('categories');
+        }
+
         extract($atts);
 
         $out = $this->tagbuildForm(
@@ -972,7 +976,7 @@ class BuilderTags
                     'this_section'          => $this->tbYesNoPop('this_section', $this_section),
                     'category_list_section' => $this->tbSectionPop('section', $section),
                     'sort'                  => $this->tbListSortPop($sort),
-                    'label'                 => $this->tbInput('label', ($label ? $label : gTxt('categories')), INPUT_REGULAR),
+                    'label'                 => $this->tbInput('label', $label, INPUT_REGULAR),
                     'labeltag'              => $this->tbInput('labeltag', $labeltag),
                     'wraptag'               => $this->tbInput('wraptag', $wraptag),
                     'class'                 => $this->tbInput('class', $class, INPUT_REGULAR),
@@ -1629,6 +1633,10 @@ class BuilderTags
             'description',
         ));
 
+        if (!isset($_POST['type'])) {
+            $atts['type'] = 'textpattern';
+        }
+
         extract($atts);
 
         $types = array(
@@ -1640,7 +1648,7 @@ class BuilderTags
         $out = $this->tagbuildForm(
             $this->startblock.
             $this->widgets(array(
-                'type'        => ''.selectInput('type', $types, ($type ? $type : 'textpattern'), false, '', 'type'),
+                'type'        => ''.selectInput('type', $types, $type, false, '', 'type'),
                 'id'          => $this->tbInput('id', $id),
                 'filename'    => $this->tbInput('filename', $filename, INPUT_REGULAR),
                 'link_text'   => $this->tbInput('linktext', ($linktext ? $linktext : ''), INPUT_REGULAR, 'link_text'),
@@ -1868,6 +1876,10 @@ class BuilderTags
             'type',
         ));
 
+        if (!isset($_POST['type'])) {
+            $atts['type'] = 'textpattern';
+        }
+
         extract($atts);
 
         $types = array(
@@ -1882,7 +1894,7 @@ class BuilderTags
                 'type'         => ''.selectInput(
                         'type',
                         $types,
-                        ($type ? $type : 'textpattern'),
+                        $type,
                         false,
                         '',
                         'type'
@@ -2164,14 +2176,14 @@ class BuilderTags
 
         extract($atts);
 
-        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : null;
+        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : gTxt('tag_home');
 
         $out = $this->tagbuildForm(
                 $this->startblock.
                 $this->widgets(array(
                     'link_text' => $this->tbInput(
                         'linktext',
-                        ($linktext !== null ? $linktext : gTxt('tag_home')),
+                        $linktext,
                         INPUT_REGULAR,
                         'link_text'
                     ),
@@ -2196,14 +2208,14 @@ class BuilderTags
 
         extract($atts);
 
-        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : null;
+        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : '<txp:next_title />';
 
         $out = $this->tagbuildForm(
                 $this->startblock.
                 $this->widgets(array(
                     'link_text'  => $this->tbInput(
                         'linktext',
-                        ($linktext !== null ? $linktext : '<txp:next_title />'),
+                        $linktext,
                         INPUT_REGULAR,
                         'link_text'
                     ),
@@ -2228,14 +2240,14 @@ class BuilderTags
 
         extract($atts);
 
-        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : null;
+        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : '<txp:prev_title />';
 
         $out = $this->tagbuildForm(
                 $this->startblock.
                 $this->widgets(array(
                     'link_text'  => $this->tbInput(
                         'linktext',
-                        ($linktext !== null ? $linktext : '<txp:prev_title />'),
+                        $linktext,
                         INPUT_REGULAR,
                         'link_text'
                     ),
@@ -2327,14 +2339,14 @@ class BuilderTags
 
     function tag_newer()
     {
-        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : null;
+        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : '<txp:text item="newer" />';
 
         $out = $this->tagbuildForm(
                 $this->startblock.
                 $this->widget('link_text',
                     $this->tbInput(
                         'linktext',
-                        ($linktext !== null ? $linktext : '<txp:text item="newer" />'),
+                        $linktext,
                         INPUT_REGULAR,
                         'link_text'
                     )).
@@ -2360,14 +2372,14 @@ class BuilderTags
 
     function tag_older()
     {
-        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : null;
+        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : '<txp:text item="older" />';
 
         $out = $this->tagbuildForm(
                 $this->startblock.
                 $this->widget('link_text',
                     $this->tbInput(
                         'linktext',
-                        ($linktext !== null ? $linktext : '<txp:text item="older" />'),
+                        $linktext,
                         INPUT_REGULAR,
                         'link_text'
                     )).
@@ -2464,7 +2476,7 @@ class BuilderTags
 
         extract($atts);
 
-        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : null;
+        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : '<txp:title />';
 
         $out = $this->tagbuildForm(
                 $this->startblock.
@@ -2472,7 +2484,7 @@ class BuilderTags
                     'id'           => $this->tbInput('id', $id),
                     'link_text'    => $this->tbInput(
                         'linktext',
-                        ($linktext !== null ? $linktext : '<txp:title />'),
+                        $linktext,
                         INPUT_REGULAR,
                         'link_text'
                     ),
@@ -2501,6 +2513,10 @@ class BuilderTags
             'type',
             'wraptag',
         ));
+        
+        if (!isset($_POST['label'])) {
+            $atts['label'] = gTxt('browse');
+        }
 
         extract($atts);
 
@@ -2515,7 +2531,7 @@ class BuilderTags
                     'type'         => ' '.selectInput('type', $types, $type, true, '', 'type'),
                     'section'      => $this->tbSectionPop('section', $section),
                     'this_section' => $this->tbYesNoPop('this_section', $this_section),
-                    'label'        => $this->tbInput('label', ($label ? $label : gTxt('browse')), INPUT_REGULAR),
+                    'label'        => $this->tbInput('label', $label, INPUT_REGULAR),
                     'wraptag'      => $this->tbInput('wraptag', $wraptag),
                     'class'        => $this->tbInput('class', $class, INPUT_REGULAR),
                 )).
@@ -2580,6 +2596,10 @@ class BuilderTags
             'wraptag',
         ));
 
+        if (!isset($_POST['label'])) {
+            $atts['label'] = gTxt('recent_articles');
+        }
+
         extract($atts);
 
         $out = $this->tagbuildForm(
@@ -2589,7 +2609,7 @@ class BuilderTags
                     'category' => $this->tbCategoryPop($category),
                     'sort'     => $this->tbSortPop($sort),
                     'limit'    => $this->tbInput('limit', $limit, INPUT_TINY),
-                    'label'    => $this->tbInput('label', ($label ? $label : gTxt('recent_articles')), INPUT_REGULAR),
+                    'label'    => $this->tbInput('label', $label, INPUT_REGULAR),
                     'labeltag' => $this->tbInput('labeltag', $labeltag),
                     'wraptag'  => $this->tbInput('wraptag', $wraptag),
                     'break'    => $this->tbInput('break', $break),
@@ -2616,6 +2636,10 @@ class BuilderTags
             'sort',
             'wraptag',
         ));
+
+        if (!isset($_POST['label'])) {
+            $atts['label'] = gTxt('recent_comments');
+        }
 
         extract($atts);
 
@@ -2655,9 +2679,11 @@ class BuilderTags
             'wraptag',
         ));
 
-        extract($atts);
+        if (!isset($_POST['label'])) {
+            $atts['label'] = gTxt('tag_related_articles');
+        }
 
-        $label = (!$label) ? gTxt('tag_related_articles') : $label;
+        extract($atts);
 
         $out = $this->tagbuildForm(
                 $this->startblock.
@@ -2696,6 +2722,10 @@ class BuilderTags
             'wraptag',
         ));
 
+        if (!isset($_POST['label'])) {
+            $atts['label'] = gTxt('search');
+        }
+
         extract($atts);
 
         $out = $this->tagbuildForm(
@@ -2705,7 +2735,7 @@ class BuilderTags
                     'section'     => $this->tbSectionPop('section', $section),
                     'button_text' => $this->tbInput('button', $button, INPUT_REGULAR, 'button_text'),
                     'input_size'  => $this->tbInput('size', $size, INPUT_TINY, 'input_size'),
-                    'label'       => $this->tbInput('label', ($label ? $label : gTxt('search')), INPUT_REGULAR),
+                    'label'       => $this->tbInput('label', $label, INPUT_REGULAR),
                     'wraptag'     => $this->tbInput('wraptag', $wraptag),
                     'class'       => $this->tbInput('class', $class, INPUT_REGULAR),
                     'form'        => $this->tbFormPop('form', 'misc', $form),
