@@ -107,7 +107,7 @@ safe_insert('txp_prefs', "prefs_id = 1, name = 'version', val = '$dbversion', ty
 
 // Invite optional third parties to the update experience
 // Convention: Put custom code into file(s) at textpattern/update/custom/post-update-abc-foo.php
-// where 'abc' is the third party's reserved prefix (@see http://textpattern.net/wiki/index.php?title=Reserved_Plugin_Prefixes)
+// where 'abc' is the third party's reserved prefix (@see http://docs.textpattern.io/development/plugin-developer-prefixes)
 // and 'foo' is whatever. The execution order among all files is undefined.
 $files = glob(txpath.'/update/custom/post-update*.php');
 
