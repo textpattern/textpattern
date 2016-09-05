@@ -5644,8 +5644,6 @@ function trace_add($msg, $level = 0, $dummy = null)
     } else {
         $trace->log($msg);
     }
-
-    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'class Trace')), E_USER_NOTICE);
 }
 
 /**
