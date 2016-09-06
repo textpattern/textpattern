@@ -475,7 +475,7 @@ $prefs = array(
         array(2,   0, 'text_input'      , 'url_mode'                   , '1'),
         array(2,   0, 'text_input'      , 'use_categories'             , '1'),
         array(2,   0, 'text_input'      , 'use_sections'               , '1'),
-        array(2,   0, 'text_input'      , 'version'                    , '4.5.7'),
+        array(2,   0, 'text_input'      , 'version'                    , '4.6.0'),
     ),
     'section' => array(
         array(2,   0, 'text_input'      , 'default_section'            , 'articles'),
