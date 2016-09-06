@@ -1865,13 +1865,13 @@ textpattern.Route.add('page, form, file, image', function ()
     // Set up asynchronous tag builder links.
     textpattern.Relay.register('txpAsyncLink.success', function (event, data)
     {
-        $('#tagbuild_links').html($(data['data'])).focus().dialog('open').restorePanes();
+        $('#tagbuild_links').dialog('close').html($(data['data'])).dialog('open').restorePanes();
         $('#txp-tagbuilder-output').select();
     });
 
     textpattern.Relay.register('txpAsyncForm.success', function (event, data)
     {
-        $('#tagbuild_links').html($(data['data'])).focus();
+        $('#tagbuild_links').html($(data['data']));
         $('#txp-tagbuilder-output').select();
     });
 
