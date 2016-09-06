@@ -985,8 +985,6 @@ function file_replace()
         }
 
         if (!shift_uploaded_file($file, $newpath)) {
-            safe_delete('txp_file', "id = $id");
-
             file_list(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR));
 
             // Rename tmp back.
