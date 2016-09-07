@@ -1,4 +1,4 @@
-#@version 4.6.0;1471956226
+#@version 4.6.0;1473180743
 #@admin
 account_activation => Please activate your account
 account_activation_confirmation => Please use the link below to activate your account and set up a password.
@@ -985,7 +985,9 @@ published_at => Published at
 raw_php_deprecated => Raw PHP tags are deprecated
 recently => Recently
 recent_articles => Recent articles
+recent_comments => Recent comments
 recent_posts => Recent posts
+related_articles => Related articles
 remember => Remember
 required => Required
 revert => Revert

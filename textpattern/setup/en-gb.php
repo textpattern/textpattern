@@ -1026,7 +1026,9 @@ $en_gb_lang = array(
         'raw_php_deprecated' => 'Raw PHP tags are deprecated',
         'recently' => 'Recently',
         'recent_articles' => 'Recent articles',
+        'recent_comments' => 'Recent comments',
         'recent_posts' => 'Recent posts',
+        'related_articles' => 'Related articles',
         'remember' => 'Remember',
         'required' => 'Required',
         'revert' => 'Revert',
@@ -1363,4 +1365,4 @@ $en_gb_lang = array(
         'wraptag' => 'Wrap tag',
     ),
 );
-$lastmod = gmdate('Y-m-d H:m:s', 1471956226);
+$lastmod = gmdate('Y-m-d H:m:s', 1473180743);

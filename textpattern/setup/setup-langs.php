@@ -21,7 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Generated: 06 Sep 2016, 10:35:50 GMT
+// Generated: 07 Sep 2016, 08:39:56 GMT
 
 $langs = array(
     'ar-dz' => array(
@@ -200,8 +200,7 @@ $langs = array(
         'before_you_proceed' => 'Než pokročíš dále:',
         'checking_database' => 'Probíhá ověření spojení s databází',
         'choose_password' => 'Zvol si heslo',
-        'config_php_does_not_match_input' => 'Soubor s nastavením <code>config.php</code> neodpovídá volbám, které jsi zadal. Vlož do souboru celý následující text.
-config_php_not_found => Nepodařilo se nalézt soubor s nastavením: <strong>{file}</strong>. Ověř, prosím, že skutečně existuje.',
+        'config_php_does_not_match_input' => 'Soubor s nastavením <code>config.php</code> neodpovídá volbám, které jsi zadal. Vlož do souboru celý následující text.',
         'config_php_not_found' => 'Nepodařilo se nalézt soubor s nastavením: <strong>{file}</strong>. Ověř, prosím, že skutečně existuje.',
         'core_theme' => 'Vzhled administračního prostředí: {theme}',
         'create_config' => 'Vytvoř soubor <code>config.php</code> s následujícím obsahem a pomocí FTP ho nahraj do složky <code>/textpattern/</code>.',
@@ -2056,7 +2055,7 @@ config_php_not_found => Nepodařilo se nalézt soubor s nastavením: <strong>{fi
     'ur-in' => array(
         'about_to_create' => 'اب ڈیٹابیس کے جدول بھریں جاینگے',
         'already_installed' => 'Textpattern لگتا ہے کی کو نصب کرنا چاہتے ہیں تو Textpattern اگر آپ پھر تازہ پوشہ سے حذف کرے <code dir="ltr">Textpattern</code> فائل کو <code dir="ltr">config.php</code> اور پھر کوشس کریں',
-        'before_you_proceed' => 'آگے جانے سے پہلے <br />',
+        'before_you_proceed' => 'آگے جانے سے پہلے',
         'checking_database' => 'ڈیٹابیس مع ربط کر رہا ہے',
         'choose_password' => 'ایک پاسورڈ انتخاب کریں',
         'create_config' => 'نام کی ایک فائل بناۓ اور اس میں مندرجہ ذیل کوڈ داخل کریں <code dir="ltr">config.php</code> پوشہ میں <code dir="ltr">/textpattern/</code> اب ',
