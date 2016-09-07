@@ -255,12 +255,12 @@ function getDbInfo()
         graf(setup_gTxt('db_must_exist')).
         inputLabel(
             'setup_mysql_login',
-            fInput('text', 'duser', (isset($_SESSION['duser']) ? txpspecialchars($_SESSION['duser']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'),
+            fInput('text', 'duser', (isset($_SESSION['duser']) ? $_SESSION['duser'] : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'),
             'mysql_login', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_mysql_pass',
-            fInput('password', 'dpass', (isset($_SESSION['dpass']) ? txpspecialchars($_SESSION['dpass']) : ''), 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_mysql_pass').
+            fInput('password', 'dpass', (isset($_SESSION['dpass']) ? $_SESSION['dpass'] : ''), 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_mysql_pass').
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
                 n.tag(gTxt('setup_show_password'), 'label', array('for' => 'show_password')),
@@ -269,17 +269,17 @@ function getDbInfo()
         ).
         inputLabel(
             'setup_mysql_server',
-            fInput('text', 'dhost', (isset($_SESSION['dhost']) ? txpspecialchars($_SESSION['dhost']) : 'localhost'), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true),
+            fInput('text', 'dhost', (isset($_SESSION['dhost']) ? $_SESSION['dhost'] : 'localhost'), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true),
             'mysql_server', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_mysql_db',
-            fInput('text', 'ddb', (isset($_SESSION['ddb']) ? txpspecialchars($_SESSION['ddb']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true),
+            fInput('text', 'ddb', (isset($_SESSION['ddb']) ? $_SESSION['ddb'] : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true),
             'mysql_database', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_table_prefix',
-            fInput('text', 'dprefix', (isset($_SESSION['dprefix']) ? txpspecialchars($_SESSION['dprefix']) : ''), 'input-medium', '', '', INPUT_MEDIUM, '', 'setup_table_prefix'),
+            fInput('text', 'dprefix', (isset($_SESSION['dprefix']) ? $_SESSION['dprefix'] : ''), 'input-medium', '', '', INPUT_MEDIUM, '', 'setup_table_prefix'),
             'table_prefix', 'table_prefix', array('class' => 'txp-form-field')
         ).
         hed(
@@ -290,7 +290,7 @@ function getDbInfo()
         ).
         inputLabel(
             'setup_site_url',
-            fInput('text', 'siteurl', txpspecialchars($guess_siteurl), '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
+            fInput('text', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
             'http(s)://', 'siteurl', array('class' => 'txp-form-field')
         );
 
@@ -546,22 +546,22 @@ function getTxpLogin()
         ).
         inputLabel(
             'setup_user_realname',
-            fInput('text', 'RealName', (isset($_SESSION['realname']) ? txpspecialchars($_SESSION['realname']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true),
+            fInput('text', 'RealName', (isset($_SESSION['realname']) ? $_SESSION['realname'] : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true),
             'your_full_name', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_user_email',
-            fInput('text', 'email', (isset($_SESSION['email']) ? txpspecialchars($_SESSION['email']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true),
+            fInput('text', 'email', (isset($_SESSION['email']) ? $_SESSION['email'] : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true),
             'your_email', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_user_login',
-            fInput('text', 'name', (isset($_SESSION['name']) ? txpspecialchars($_SESSION['name']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true),
+            fInput('text', 'name', (isset($_SESSION['name']) ? $_SESSION['name'] : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true),
             'setup_login', 'setup_user_login', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_user_pass',
-            fInput('password', 'pass', (isset($_SESSION['pass']) ? txpspecialchars($_SESSION['pass']) : ''), 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).
+            fInput('password', 'pass', (isset($_SESSION['pass']) ? $_SESSION['pass'] : ''), 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).
             n.tag(null, 'div', array('class' => 'strength-meter')).
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
