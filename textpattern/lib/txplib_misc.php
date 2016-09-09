@@ -3844,6 +3844,32 @@ function assign_user_assets($owner, $new_owner)
 }
 
 /**
+ * Return private preferences required to be set for the given (new) user.
+ *
+ * The returned structure comprises a nested array. Each row is an
+ * array, with key being the pref event, and array made up of:
+ *  -> pref type
+ *  -> position
+ *  -> html control
+ *  -> name (gTxt)
+ *  -> value
+ *  -> user name
+ *
+ * @param   string $user_name The user name against which to assign the prefs
+ * @since   4.6.0
+ * @package Pref
+ */
+
+function new_user_prefs($user_name)
+{
+    return array(
+        'publish' => array(
+            array(PREF_CORE, 15, 'defaultPublishStatus', 'default_publish_status', STATUS_LIVE, $user_name),
+        ),
+    );
+}
+
+/**
  * Creates a user account.
  *
  * On a successful run, will trigger a 'user.create > done' callback event.
@@ -3886,6 +3912,14 @@ function create_user($name, $email, $password, $realname = '', $group = 0)
         ) === false
     ) {
         return false;
+    }
+
+    $privatePrefs = new_user_prefs($name);
+
+    foreach ($privatePrefs as $event => $event_prefs) {
+        foreach ($event_prefs as $p) {
+            create_pref($p[3], $p[4], $event, $p[0], $p[2], $p[1], $p[5]);
+        }
     }
 
     callback_event('user.create', 'done', 0, compact('name', 'email', 'password', 'realname', 'group', 'nonce', 'hash'));

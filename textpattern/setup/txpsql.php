@@ -387,7 +387,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
 $blog_uid  = md5(uniqid(rand(), true));
 $gmtoffset = sprintf("%+d", gmmktime(0, 0, 0) - mktime(0, 0, 0));
 
-$prefs = array(
+$prefs = array_merge_recursive(array(
     'admin' => array(
         array(PREF_CORE,    20, 'text_input'      , 'img_dir'                    , 'images'),
         array(PREF_CORE,    40, 'text_input'      , 'file_base_path'             , dirname(txpath).DS.'files'),
@@ -496,12 +496,13 @@ $prefs = array(
         array(PREF_CORE,   230, 'text_input'      , 'expire_logs_after'          , '7'),
         array(PREF_CORE,   240, 'yesnoradio'      , 'use_comments'               , '1'),
     )
-);
+), new_user_prefs($_SESSION['name']));
 
 foreach ($prefs as $event => $event_prefs) {
     foreach ($event_prefs as $p) {
-        $create_sql[] = "INSERT INTO `".PFX."txp_prefs` (event, type, position, html, name, val) ".
-            "VALUES ('".$event."', ".$p[0].", ".$p[1].", '".$p[2]."', '".$p[3]."', '".doSlash($p[4])."')";
+        $username = empty($p[5]) ? '' : doSlash($p[5]);
+        $create_sql[] = "INSERT INTO `".PFX."txp_prefs` (event, type, position, html, name, val, user_name) ".
+            "VALUES ('".$event."', ".$p[0].", ".$p[1].", '".$p[2]."', '".$p[3]."', '".doSlash($p[4])."', '".$username."')";
     }
 }
 
