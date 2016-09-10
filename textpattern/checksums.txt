@@ -63,7 +63,7 @@
 /update/_to_4.3.0.php: 6a819428ad8c1952a7ce5e394abe2823
 /update/_to_4.5.0.php: 328e41695d6fd6be1c3e18b86e91ab08
 /update/_to_4.5.7.php: 12f67c98bc6479b54dc7f02cade86638
-/update/_to_4.6.0.php: a43a3128f20b0ccfec2420287f962281
+/update/_to_4.6.0.php: 1ef8c82d6dd6263c746eb5ada604702b
 /update/_update.php: 9339f4bca4bc46b0aadf8a0039142e23
 /vendors/dropbox/zxcvbn/zxcvbn.js: 552e88c7475079aa29c5cd91aa1925c7
 /vendors/jquery/jquery/jquery.js: 4f252523d4af0b478c810c2547a63e19
