@@ -223,6 +223,15 @@ foreach (array('4.4.0', '4.4.1') as $v) {
     }
 }
 
+// Remove unnecessary licence files that have been moved to root.
+foreach (array('license', 'lgpl-2.1') as $v) {
+    $file = txpath.DS.$v.'.txt';
+
+    if (file_exists($file)) {
+        unlink($file);
+    }
+}
+
 // Add generic token table (dropping first, because of changes to the table setup).
 safe_drop('txp_token');
 safe_create('txp_token', "
