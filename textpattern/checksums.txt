@@ -23,7 +23,7 @@
 /include/txp_prefs.php: 6951674c8e3267b9171acf90e52a28a4
 /include/txp_section.php: 9a9bb075ec2ae48a8898392a28f80c10
 /include/txp_tag.php: b7ce7f8161b8e160cc227601414171d7
-/index.php: 53bba65f05a1bfa479d05f027806b0e4
+/index.php: e4cb62c52cd3b4623aa35c301166bb0d
 /lib/IXRClass.php: a1b525b4a9ed12dcb5677d5232a3d92e
 /lib/PasswordHash.php: 40e06a9c70b96309728e0a02822a6722
 /lib/admin_config.php: e81e53b7c3083ac599967072df52c49f

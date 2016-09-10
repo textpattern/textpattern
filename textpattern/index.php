@@ -64,7 +64,7 @@ if (!defined('txpath')) {
 define("txpinterface", "admin");
 
 $thisversion = '4.6.0';
-$txp_using_svn = true; // Set false for releases.
+$txp_using_svn = false; // Set false for releases.
 
 ob_start(null, 2048);
 
