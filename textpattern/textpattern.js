@@ -1843,6 +1843,16 @@ textpattern.Route.add('article', function ()
     );
 });
 
+// Uncheck reset on timestamp change.
+
+textpattern.Route.add('article, file', function ()
+{
+    $(document).on('change', '.posted input', function (e)
+    {
+        $('#publish_now, #reset_time').prop('checked', false);
+    });
+});
+
 // 'Clone' button on Pages, Forms, Styles panels.
 
 textpattern.Route.add('css, page, form', function ()

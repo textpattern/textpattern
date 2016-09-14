@@ -1124,7 +1124,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     array('class' => 'txp-form-field time posted')
                 ).
                 n.tag(
-                    checkbox('publish_now', '1', $publish_now, '', 'publish_now').
+                    checkbox('publish_now', '1', true, '', 'publish_now').
                     n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
                     'div', array('class' => 'posted-now')
                 ),
