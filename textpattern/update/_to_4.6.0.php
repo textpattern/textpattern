@@ -148,11 +148,11 @@ if (file_exists(txpath.DS.'include'.DS.'txp_import.php')) {
     );
 
     foreach ($import_files as $file) {
-        unlink(txpath.DS.'include'.DS.'import'.DS.$file);
+        @unlink(txpath.DS.'include'.DS.'import'.DS.$file);
     }
 
-    rmdir(txpath.DS.'include'.DS.'import');
-    unlink(txpath.DS.'include'.DS.'txp_import.php');
+    @rmdir(txpath.DS.'include'.DS.'import');
+    @unlink(txpath.DS.'include'.DS.'txp_import.php');
 }
 
 // Remove unused ipban table or recreate its index (for future utf8mb4 conversion).
@@ -219,7 +219,7 @@ foreach (array('4.4.0', '4.4.1') as $v) {
     $file = txpath.DS.'update'.DS.'_to_'.$v.'.php';
 
     if (file_exists($file)) {
-        unlink($file);
+        @unlink($file);
     }
 }
 
@@ -228,7 +228,7 @@ foreach (array('license', 'lgpl-2.1') as $v) {
     $file = txpath.DS.$v.'.txt';
 
     if (file_exists($file)) {
-        unlink($file);
+        @unlink($file);
     }
 }
 
