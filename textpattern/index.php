@@ -64,7 +64,8 @@ if (!defined('txpath')) {
 define("txpinterface", "admin");
 
 $thisversion = '4.7.0-dev';
-$txp_using_svn = true; // Set false for releases.
+// $txp_using_svn deprecated in 4.7.0.
+$txp_using_svn = $txp_is_dev = true; // Set false for releases.
 
 ob_start(null, 2048);
 
@@ -175,7 +176,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     $step = trim(gps('step'));
     $app_mode = trim(gps('app_mode'));
 
-    if (!$dbversion or ($dbversion != $thisversion) or $txp_using_svn) {
+    if (!$dbversion or ($dbversion != $thisversion) or $txp_is_dev) {
         define('TXP_UPDATE', 1);
         include txpath.'/update/_update.php';
     }

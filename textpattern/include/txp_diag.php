@@ -170,7 +170,7 @@ function diag_msg_wrap($msg, $type = 'error')
 
 function doDiagnostics()
 {
-    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB, $txp_using_svn;
+    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB, $txp_is_dev;
     extract(get_prefs());
 
     $urlparts = parse_url(hu);
@@ -186,7 +186,7 @@ function doDiagnostics()
     $fail = array();
     $now = time();
 
-    if (!$txp_using_svn) {
+    if (!$txp_is_dev) {
         // Check for Textpattern updates, at most once every 24 hours.
         $updateInfo = unserialize(get_pref('last_update_check', ''));
 
@@ -289,7 +289,7 @@ function doDiagnostics()
     }
 
     // Files that don't match their checksums.
-    if (!$txp_using_svn and $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
+    if (!$txp_is_dev and $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
         $fail['modified_files'] = diag_msg_wrap(gTxt('modified_files').cs.n.t.join(', '.n.t, $modified_files), 'warning');
     }
 

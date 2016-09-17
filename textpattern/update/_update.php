@@ -25,7 +25,7 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-global $thisversion, $dbversion, $txp_using_svn, $dbupdatetime;
+global $thisversion, $dbversion, $txp_is_dev, $dbupdatetime;
 
 $dbupdates = array(
     '1.0.0',
@@ -62,7 +62,7 @@ if (($dbversion == '') ||
 $dbversion_target = $dbupdates[sizeof($dbupdates) - 1];
 
 if ($dbversion == $dbversion_target ||
-    ($txp_using_svn && (newest_file() <= $dbupdatetime))) {
+    ($txp_is_dev && (newest_file() <= $dbupdatetime))) {
     return;
 }
 
@@ -86,7 +86,7 @@ try {
                 trigger_error('Something bad happened. Not sure what exactly', E_USER_ERROR);
             }
 
-            if (!($txp_using_svn && $dbversion_target == $dbupdate)) {
+            if (!($txp_is_dev && $dbversion_target == $dbupdate)) {
                 $dbversion = $dbupdate;
             }
         }
