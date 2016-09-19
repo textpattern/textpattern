@@ -45,6 +45,7 @@ class hive_theme extends \Textpattern\Admin\Theme
             $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/'.$custom_css.'">';
         }
 
+        $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<meta name="theme-color" content="#ffda44">';
@@ -214,7 +215,7 @@ EOS;
         return array(
             'title'       => 'Hive',
             'description' => 'Textpattern Hive admin theme (Classic Yellow)',
-            'version'     => '4.6.1-dev',
+            'version'     => '4.6.0',
             'author'      => 'Phil Wareham',
             'author_uri'  => 'https://github.com/philwareham',
             'help'        => 'https://github.com/philwareham/textpattern-hive-admin-theme',
