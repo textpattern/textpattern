@@ -25,13 +25,12 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-// Move a few licence files. De-clutters the root directory a tad.
+// Remove a few licence files. De-clutters the root directory a tad.
 foreach (array('LICENSE-BSD-3', 'LICENSE-LESSER') as $v) {
-    $orig = txpath.DS.'..'.DS.$v.'.txt';
-    $file = txpath.DS.'lib'.DS.$v.'.txt';
+    $file = txpath.DS.'..'.DS.$v.'.txt';
 
-    if (file_exists($orig)) {
-        @rename($orig, $file);
+    if (file_exists($file)) {
+        @unlink($file);
     }
 }
 
