@@ -1973,7 +1973,7 @@ function if_expires($atts, $thing)
 
     assert_article();
 
-    return parse($thing, $thisarticle['expires']);
+    return parse($thing, !empty($thisarticle['expires']));
 }
 
 // -------------------------------------------------------------
@@ -1985,7 +1985,7 @@ function if_expired($atts, $thing)
     assert_article();
 
     return parse($thing,
-        $thisarticle['expires'] && ($thisarticle['expires'] <= time()));
+        !empty($thisarticle['expires']) && ($thisarticle['expires'] <= time()));
 }
 
 // -------------------------------------------------------------
@@ -3134,7 +3134,7 @@ function if_article_image($atts, $thing = '')
 
     assert_article();
 
-    return parse($thing, $thisarticle['article_image']);
+    return parse($thing, !empty($thisarticle['article_image']));
 }
 
 // -------------------------------------------------------------
@@ -4476,7 +4476,7 @@ function if_custom_field($atts, $thing)
         $cond = ($thisarticle[$name] !== '');
     }
 
-    return parse($thing, $cond);
+    return parse($thing, !empty($cond));
 }
 
 // -------------------------------------------------------------
