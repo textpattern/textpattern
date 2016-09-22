@@ -2537,9 +2537,12 @@ function splat($text)
         $stack[$sha] = array();
         $parse[$sha] = array();
 
-        if (preg_match_all('@(\w+)\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+))@s', $text, $match, PREG_SET_ORDER)) {
+        if (preg_match_all('@(\w+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
             foreach ($match as $m) {
                 switch (count($m)) {
+                    case 2:
+                        $val = true;
+                        break;
                     case 3:
                         $val = str_replace('""', '"', $m[2]);
                         break;
