@@ -390,7 +390,7 @@ function parse($thing, $condition = null)
         $count   = array(-1);
         $level   = 0;
 
-        $f = '@(</?(?:txp|[a-z]{3}:):\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
+        $f = '@(</?(?:txp|[a-z]{3}:):\w+(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?'.chr(62).')@s';
         $t = '@^./?(txp|[a-z]{3}:):(\w+)(.*?)/?.$@s';
 
         $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
