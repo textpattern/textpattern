@@ -5,7 +5,7 @@
    ========================================================================== */
 /**
  * Correct `block` display not defined for any HTML5 element in older browsers.
- * Correct `block` display not defined for `details` or `summary` in IE 10/11 and Firefox.
+ * Correct `block` display not defined for `details` or `summary` in IE 11 and Firefox.
  * Correct `block` display not defined for `main` in IE 11.
  */
 article,
@@ -24,10 +24,8 @@ summary {
 }
 
 /**
- * Address `[hidden]` styling not present in IE 10.
- * Hide the `template` element in IE 10/11 and Safari.
+ * Hide the `template` element in IE 11 and Safari.
  */
-[hidden],
 template {
   display: none;
 }
@@ -619,8 +617,7 @@ a:focus .content-image {
   position: fixed;
   bottom: 0;
   left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
+  transform: translateX(-50%);
   text-align: center;
   z-index: 1000;
 }
@@ -673,38 +670,21 @@ a:focus .content-image {
 /*
  * Flash the alert message using CSS animation.
  */
-@-webkit-keyframes messageflash {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  75% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
-  }
-}
 @keyframes messageflash {
   0% {
     opacity: 0;
   }
-  50% {
-    opacity: 1;
-  }
   75% {
     opacity: 0.5;
   }
+  50%,
   100% {
     opacity: 1;
   }
 }
 
 .messageflash {
-  -webkit-animation: messageflash 1s;
-          animation: messageflash 1s;
+  animation: messageflash 1s;
 }
 
 /* Twisties
@@ -756,8 +736,6 @@ h3.txp-summary,
   font-size: 13px;
   font-weight: bold;
   line-height: 2em;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 /**
@@ -864,8 +842,6 @@ h3.txp-summary.expanded a::after {
   border-right: 1px solid #e3e3e3;
   border-bottom: 1px solid #cccccc;
   border-left: 1px solid #e3e3e3;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .progress-meter li.active {
@@ -1397,8 +1373,6 @@ textarea.code {
   border-color: #d4d4d4 !important;
   background: #eeeeee !important;
   color: #aaaaaa !important;
-  text-shadow: none !important;
-  box-shadow: none !important;
   /* 1 */
   cursor: default !important;
   /* 2 */
@@ -1521,8 +1495,6 @@ input[type="button"],
   color: #333333;
   font-weight: normal;
   text-align: center;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
   /* 1 */
   cursor: pointer;
   /* 2 */
@@ -1633,8 +1605,6 @@ button.destroy {
   border: 0;
   border-radius: 0;
   background: none;
-  text-shadow: none;
-  box-shadow: none;
 }
 
 button.destroy:hover, button.destroy:active {
@@ -1880,6 +1850,10 @@ dd {
 }
 
 .switcher-list li.active {
+  background: #fff9e1;
+}
+
+.switcher-list li.selected {
   background: #e6f0ff;
 }
 
@@ -2062,7 +2036,6 @@ td {
   border-top: 1px solid #dddddd;
   border-right: 1px solid #d1d1d1;
   border-bottom: 1px solid #cccccc;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .txp-list thead th:first-child {
@@ -2159,14 +2132,12 @@ td {
  * 2. Remove default margin.
  */
 body {
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   /* 1 */
   position: relative;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+      flex-direction: column;
   min-height: 100vh;
   /* 2 */
   margin: 0;
@@ -2190,9 +2161,8 @@ body {
  * </body>
  */
 .txp-body {
-  -webkit-flex-grow: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  -ms-flex-positive: 1;
+      flex-grow: 1;
   width: 100%;
   max-width: 116em;
   margin: 0 auto;
@@ -2204,12 +2174,10 @@ body {
  * Flex container.
  */
 .txp-layout {
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   margin: 0 -1em;
 }
 
@@ -2290,15 +2258,12 @@ body {
  * </div>
  */
 .txp-grid {
-  display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-pack: center;
+      justify-content: center;
   margin: -2px;
 }
 
@@ -2327,7 +2292,6 @@ body {
 .txp-header {
   background-color: #f7c600;
   background-image: linear-gradient(#ffda44, #f7c600);
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   position: fixed;
@@ -2366,9 +2330,8 @@ body {
  *     </h1>
  */
 .txp-header h1 {
-  -webkit-flex: none;
-      -ms-flex: none;
-          flex: none;
+  -ms-flex: none;
+      flex: none;
   width: 8.125em;
   height: 2em;
   margin: 0.0625em 0.5em 0 0;
@@ -2410,9 +2373,8 @@ body {
  * </p>
  */
 .txp-view-site {
-  -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  -ms-flex: 1;
+      flex: 1;
   margin: 0 1em;
   padding: 0 1px;
   line-height: 2.69230769230769em;
@@ -2436,9 +2398,8 @@ body {
 .txp-logout {
   position: relative;
   top: -0.76923076923077em;
-  -webkit-flex: none;
-      -ms-flex: none;
-          flex: none;
+  -ms-flex: none;
+      flex: none;
 }
 
 /* Footer
@@ -2457,12 +2418,10 @@ body {
  * </body>
  */
 .txp-footer {
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: space-between;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
 }
 
 /* Navigation
@@ -2486,9 +2445,8 @@ button.txp-nav-toggle {
  * <nav class="txp-nav">
  */
 .txp-nav {
-  -webkit-flex: none;
-      -ms-flex: none;
-          flex: none;
+  -ms-flex: none;
+      flex: none;
   margin: 0;
   list-style: none;
 }
@@ -2500,7 +2458,6 @@ button.txp-nav-toggle {
 }
 
 .txp-nav > ul {
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
@@ -2575,7 +2532,6 @@ button.txp-nav-toggle {
   color: black;
   line-height: 2.69230769230769em;
   text-decoration: none;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .txp-nav > ul > li > a:hover {
@@ -2706,9 +2662,8 @@ button.txp-nav-toggle {
   position: absolute;
   top: 3em;
   left: 0;
-  -webkit-flex: none;
-      -ms-flex: none;
-          flex: none;
+  -ms-flex: none;
+      flex: none;
   min-width: 12em;
   border: 1px solid;
   border-radius: 0 0.5em 0.5em;
@@ -2866,12 +2821,10 @@ hr {
  * </form>
  */
 .txp-search {
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-justify-content: flex-end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
+  -ms-flex-pack: end;
+      justify-content: flex-end;
   margin: 1em 0;
 }
 
@@ -2882,9 +2835,8 @@ hr {
 }
 
 .txp-search .ui-controlgroup {
-  -webkit-flex-wrap: nowrap;
-      -ms-flex-wrap: nowrap;
-          flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
 }
 
 .txp-search .txp-dropdown input {
@@ -2900,9 +2852,8 @@ hr {
 }
 
 .txp-search-clear {
-  -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  -ms-flex: 1;
+      flex: 1;
   margin: auto 0.5em;
   text-align: right;
 }
@@ -3390,12 +3341,10 @@ span.spinner {
 .txp-edit .txp-form-field:not(.txp-form-field-textarea),
 .txp-prefs-group .txp-form-field:not(.txp-form-field-textarea),
 .setup:not(.welcome) .txp-form-field:not(.txp-form-field-textarea) {
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-align-items: baseline;
-      -ms-flex-align: baseline;
-          align-items: baseline;
+  -ms-flex-align: baseline;
+      align-items: baseline;
 }
 
 .txp-edit .txp-form-field-label,
@@ -3404,9 +3353,8 @@ span.spinner {
 .txp-prefs-group .txp-form-field-value,
 .setup:not(.welcome) .txp-form-field-label,
 .setup:not(.welcome) .txp-form-field-value {
-  -webkit-flex: 1 1 0%;
-      -ms-flex: 1 1 0%;
-          flex: 1 1 0%;
+  -ms-flex: 1 1 0%;
+      flex: 1 1 0%;
   min-height: 2.15384615384615em;
 }
 
@@ -3426,9 +3374,8 @@ span.spinner {
  */
 .txp-form-field-textarea .txp-form-field-label,
 .txp-form-field-textarea .txp-form-field-value {
-  -webkit-flex: none;
-      -ms-flex: none;
-          flex: none;
+  -ms-flex: none;
+      flex: none;
   max-width: inherit;
   min-height: inherit;
 }
@@ -3479,29 +3426,28 @@ span.spinner {
 }
 
 /**
- * Ensure Tag builder vertical footprint doesn't spill out of screen area.
+ * Ensure dialog box vertical footprint doesn't spill out of screen area.
  */
+.txp-dialog-container,
 .txp-tagbuilder-container {
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-flow: column;
-      -ms-flex-flow: column;
-          flex-flow: column;
+  -ms-flex-flow: column;
+      flex-flow: column;
   max-height: 90vh;
   overflow: hidden;
 }
 
+.txp-dialog-container .ui-dialog-titlebar,
 .txp-tagbuilder-container .ui-dialog-titlebar {
-  -webkit-flex: none;
-      -ms-flex: none;
-          flex: none;
+  -ms-flex: none;
+      flex: none;
 }
 
+.txp-dialog-content,
 .txp-tagbuilder-content {
-  -webkit-flex: 1 1 auto;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
   overflow: scroll;
 }
 
@@ -3592,55 +3538,44 @@ span.spinner {
   margin: 0;
   padding: 0;
   border-bottom: 1px solid #cccccc;
-  background: none;
   font-size: 11px;
   line-height: 16px;
 }
 
-#view_modes ul::after {
-  display: table;
-  clear: both;
-  content: "";
+#view_modes ul li {
+  display: inline-block;
 }
 
-#view_modes ul li {
+#view_modes ul a {
+  display: block;
   position: relative;
-  top: 0;
-  margin-right: 2px;
-  float: left;
+  bottom: -1px;
+  padding: 0.5em 1em;
   border: 1px solid #cccccc;
-  border-bottom-width: 0;
   background-color: #f2f2f2;
-  list-style: none;
-  white-space: nowrap;
+  color: #333333;
+  text-decoration: none;
   box-shadow: inset 0 -0.25em 0.5em rgba(102, 102, 102, 0.15);
 }
 
-#view_modes ul li:hover, #view_modes ul li:focus {
+#view_modes ul a:hover {
   border-color: #aaaaaa;
   background-color: #f7f7f7;
 }
 
-#view_modes ul li.active {
-  margin-bottom: -1px;
-  padding-bottom: 1px;
+#view_modes ul a:focus {
+  border-color: #0066ff;
+  outline: none;
+}
+
+#view_modes ul .active a {
+  border-bottom-color: #ffffff;
   background-color: white;
   box-shadow: none;
 }
 
-#view_modes ul a {
-  padding: 0.5em 1em;
-  float: left;
-  color: #333333;
-  text-decoration: none;
-}
-
-/**
- * View mode tabs RTL support.
- */
-[dir="rtl"] #view_modes ul li,
-[dir="rtl"] #view_modes ul a {
-  float: right;
+#view_modes ul .active a:focus {
+  border-color: #0066ff;
 }
 
 /**
@@ -5238,8 +5173,6 @@ a.ui-state-default:focus {
   font-size: 13px;
   line-height: 1.3846154em;
   text-align: center;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
   /* 2 */
   cursor: pointer;
   /* 3 */
@@ -5276,7 +5209,6 @@ a.ui-state-default:focus {
 .ui-button:focus {
   border-color: #0066ff;
   outline-width: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 /**
@@ -5287,7 +5219,6 @@ a.ui-state-default:focus {
 .ui-button.ui-state-focus {
   /* 1 */
   border-color: #0066ff !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 /**
@@ -5385,16 +5316,6 @@ input.ui-button.ui-icon-notext .ui-icon {
   box-shadow: inset 1px 1px 1px #cccccc;
 }
 
-.ui-checkboxradio-label .ui-state-highlight {
-  border-color: #cce0ff;
-  background-color: #e6f0ff;
-}
-
-.ui-checkboxradio-label .ui-state-hover {
-  border-color: inherit;
-  background-color: inherit;
-}
-
 .ui-checkboxradio-radio-label .ui-icon-background {
   width: 16px;
   height: 16px;
@@ -5466,12 +5387,10 @@ label.ui-state-active.ui-button:active {
  * </fieldset>
  */
 .ui-controlgroup {
-  display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-flex-flow: row wrap;
-      -ms-flex-flow: row wrap;
-          flex-flow: row wrap;
+  -ms-flex-flow: row wrap;
+      flex-flow: row wrap;
 }
 
 .ui-controlgroup .ui-controlgroup-item {
@@ -5505,9 +5424,8 @@ label.ui-state-active.ui-button:active {
 }
 
 .ui-controlgroup-vertical {
-  -webkit-flex-flow: column;
-      -ms-flex-flow: column;
-          flex-flow: column;
+  -ms-flex-flow: column;
+      flex-flow: column;
 }
 
 .ui-controlgroup-vertical .ui-controlgroup-item {
@@ -6197,7 +6115,6 @@ label.ui-state-active.ui-button:active {
  * </div>
  */
 .ui-selectmenu-button {
-  display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
@@ -6215,12 +6132,10 @@ label.ui-state-active.ui-button:active {
 }
 
 .ui-selectmenu-icon {
-  -webkit-flex: none;
-      -ms-flex: none;
-          flex: none;
-  -webkit-order: 2;
-      -ms-flex-order: 2;
-          order: 2;
+  -ms-flex: none;
+      flex: none;
+  -ms-flex-order: 2;
+      order: 2;
   margin: 0 -0.25em 0 0.25em;
 }
 
@@ -6564,7 +6479,7 @@ label.ui-state-active.ui-button:active {
  * Additonal styling for tabs vertical.
  */
 .ui-tabs-vertical .ui-tabs-nav .ui-tabs-active {
-  background: #e6f0ff;
+  background: #fff9e1;
 }
 
 .ui-tabs-vertical .ui-tabs-nav .ui-state-focus a {
@@ -6675,21 +6590,18 @@ label.ui-state-active.ui-button:active {
      */
   .txp-search,
   [dir="rtl"] .txp-search {
-    -webkit-flex-wrap: wrap;
-        -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
-    -webkit-justify-content: flex-start;
-        -ms-flex-pack: start;
-            justify-content: flex-start;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -ms-flex-pack: start;
+        justify-content: flex-start;
     margin-top: 0;
   }
   /**
      * Reposition search clearer.
      */
   .txp-search-clear {
-    -webkit-flex: 1 0 auto;
-        -ms-flex: 1 0 auto;
-            flex: 1 0 auto;
+    -ms-flex: 1 0 auto;
+        flex: 1 0 auto;
     width: 100%;
     margin: 0 0 0.5em;
     text-align: left;
@@ -6742,8 +6654,6 @@ label.ui-state-active.ui-button:active {
     background: transparent url("../img/sprite.svg") -10em 0;
     background-size: 13em 2em;
     font-size: 16px;
-    text-shadow: none;
-    box-shadow: none;
   }
   button.txp-nav-toggle:focus {
     outline: thin solid #0066ff;
@@ -6843,9 +6753,8 @@ label.ui-state-active.ui-button:active {
   .txp-edit .txp-form-field-value,
   .txp-prefs-group .txp-form-field-label,
   .txp-prefs-group .txp-form-field-value {
-    -webkit-flex: none;
-        -ms-flex: none;
-            flex: none;
+    -ms-flex: none;
+        flex: none;
     min-height: inherit;
   }
   /**
