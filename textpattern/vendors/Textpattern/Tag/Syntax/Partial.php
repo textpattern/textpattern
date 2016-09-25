@@ -64,6 +64,6 @@ class Partial
 
         $inner = end($yield);
 
-        return parse(EvalElse($thing, $inner !== null && ($value === null || (string)$inner === (string)$value)));
+        return parse($thing, $inner !== null && ($value === null || (string)$inner === (string)$value));
     }
 }
