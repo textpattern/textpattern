@@ -45,7 +45,7 @@ class Link
 
         assert_link();
 
-        return parse(EvalElse($thing, !empty($thislink['is_first'])));
+        return parse($thing, !empty($thislink['is_first']));
     }
 
     /**
@@ -62,6 +62,6 @@ class Link
 
         assert_link();
 
-        return parse(EvalElse($thing, !empty($thislink['is_last'])));
+        return parse($thing, !empty($thislink['is_last']));
     }
 }
