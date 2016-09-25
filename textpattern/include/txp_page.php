@@ -96,7 +96,7 @@ function page_edit($message = '')
         fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true),
         'page_name',
         array('', 'instructions_page_name'),
-        array('class' => 'txp-form-field')
+        array('class' => 'txp-form-field name')
     );
 
     if ($name === '') {

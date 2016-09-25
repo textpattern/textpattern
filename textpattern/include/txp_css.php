@@ -137,7 +137,7 @@ function css_edit($message = '')
         fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style', false, true),
         'css_name',
         array('', 'instructions_style_name'),
-        array('class' => 'txp-form-field')
+        array('class' => 'txp-form-field name')
     );
 
     if ($name === '') {

@@ -273,7 +273,7 @@ function form_edit($message = '')
             fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true),
             'form_name',
             array('', 'instructions_form_name'),
-            array('class' => 'txp-form-field')
+            array('class' => 'txp-form-field name')
         );
 
         $type_widgets = inputLabel(
@@ -281,7 +281,7 @@ function form_edit($message = '')
             formTypes($type, false, 'type', true),
             'form_type',
             array('', 'instructions_form_type'),
-            array('class' => 'txp-form-field')
+            array('class' => 'txp-form-field type')
         );
     } else {
         $name_widgets = inputLabel(
@@ -289,7 +289,7 @@ function form_edit($message = '')
             fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true),
             'form_name',
             array('', 'instructions_form_name'),
-            array('class' => 'txp-form-field')
+            array('class' => 'txp-form-field name')
         );
 
         $type_widgets = inputLabel(
@@ -297,7 +297,7 @@ function form_edit($message = '')
             formTypes($type, false),
             'form_type',
             array('', 'instructions_form_type'),
-            array('class' => 'txp-form-field')
+            array('class' => 'txp-form-field type')
         );
     }
 
