@@ -45,7 +45,7 @@ class Image
 
         assert_image();
 
-        return parse(EvalElse($thing, !empty($thisimage['is_first'])));
+        return parse($thing, !empty($thisimage['is_first']));
     }
 
     /**
@@ -62,6 +62,6 @@ class Image
 
         assert_image();
 
-        return parse(EvalElse($thing, !empty($thisimage['is_last'])));
+        return parse($thing, !empty($thisimage['is_last']));
     }
 }
