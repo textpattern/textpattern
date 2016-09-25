@@ -45,7 +45,7 @@ class File
 
         assert_file();
 
-        return parse(EvalElse($thing, !empty($thisfile['is_first'])));
+        return parse($thing, !empty($thisfile['is_first']));
     }
 
     /**
@@ -62,6 +62,6 @@ class File
 
         assert_file();
 
-        return parse(EvalElse($thing, !empty($thisfile['is_last'])));
+        return parse($thing, !empty($thisfile['is_last']));
     }
 }
