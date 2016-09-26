@@ -475,6 +475,9 @@ $prefs = array_merge_recursive(array(
         array(PREF_HIDDEN,   0, 'text_input'      , 'url_mode'                   , '1'),
         array(PREF_HIDDEN,   0, 'text_input'      , 'use_categories'             , '1'),
         array(PREF_HIDDEN,   0, 'text_input'      , 'use_sections'               , '1'),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'sql_now_posted'             , time()),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'sql_now_expires'            , time()),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'sql_now_created'            , time()),
         array(PREF_HIDDEN,   0, 'text_input'      , 'version'                    , '4.6.0'),
     ),
     'section' => array(
