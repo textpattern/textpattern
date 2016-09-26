@@ -3679,6 +3679,26 @@ span.spinner {
   background: #f9f2e3;
 }
 
+/* Presentation -> Forms panel - additional layout
+   ========================================================================== */
+#page-form .name {
+  display: inline-block;
+  margin: 1em 1em 0 0;
+}
+
+#page-form .name input {
+  width: 14.46153846153846em;
+}
+
+[dir="rtl"] #page-form .name {
+  margin: 1em 0 0 1em;
+}
+
+#page-form .type {
+  display: inline-block;
+  margin: 1em 0 0;
+}
+
 /* Admin -> Languages panel - additional layout
    ========================================================================== */
 #page-lang .txp-list .modified {
@@ -5974,7 +5994,7 @@ label.ui-state-active.ui-button:active {
 
 .ui-menu .ui-menu-item-wrapper {
   position: relative;
-  padding: 0.30769230769231em 1em 0.30769230769231em 0.30769230769231em;
+  padding: 0.30769230769231em 1em 0.30769230769231em 0.61538461538462em;
 }
 
 .ui-menu .ui-menu-divider {
@@ -6022,7 +6042,7 @@ label.ui-state-active.ui-button:active {
 }
 
 [dir="rtl"] .ui-menu .ui-menu-item-wrapper {
-  padding: 0.30769230769231em 0.30769230769231em 0.30769230769231em 1em;
+  padding: 0.30769230769231em 0.61538461538462em 0.30769230769231em 1em;
 }
 
 [dir="rtl"] .ui-menu .ui-icon {
