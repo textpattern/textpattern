@@ -3057,6 +3057,10 @@ span.spinner {
   margin: 1em 0 0;
 }
 
+#page-form .txp-layout-4col-3span .txp-actions a {
+  margin-top: 1.5em;
+}
+
 /* Admin -> Languages panel - additional layout
    ========================================================================== */
 #page-lang .txp-list .modified {
