@@ -26,11 +26,13 @@ if (!defined('TXP_UPDATE')) {
 }
 
 // Remove a few licence files. De-clutters the root directory a tad.
-foreach (array('LICENSE-BSD-3', 'LICENSE-LESSER') as $v) {
-    $file = txpath.DS.'..'.DS.$v.'.txt';
+if (is_writable(txpath.DS.'..')) {
+    foreach (array('LICENSE-BSD-3', 'LICENSE-LESSER') as $v) {
+        $file = txpath.DS.'..'.DS.$v.'.txt';
 
-    if (file_exists($file)) {
-        @unlink($file);
+        if (file_exists($file)) {
+            unlink($file);
+        }
     }
 }
 
