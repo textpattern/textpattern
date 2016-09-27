@@ -137,7 +137,7 @@ if (!get_pref('sql_now_posted')) {
 }
 
 // Remove broken import functionality.
-if (file_exists(txpath.DS.'include'.DS.'txp_import.php')) {
+if (is_writable(txpath.DS.'include') && file_exists(txpath.DS.'include'.DS.'txp_import.php')) {
     $import_files = array(
         'BloggerImportTemplate.txt',
         'import_blogger.php',
@@ -147,12 +147,16 @@ if (file_exists(txpath.DS.'include'.DS.'txp_import.php')) {
         'import_wp.php'
     );
 
-    foreach ($import_files as $file) {
-        @unlink(txpath.DS.'include'.DS.'import'.DS.$file);
+    if (is_writable(txpath.DS.'include'.DS.'import')) {
+        foreach ($import_files as $file) {
+            if (file_exists(txpath.DS.'include'.DS.'import'.DS.$file)) {
+                unlink(txpath.DS.'include'.DS.'import'.DS.$file);
+            }
+        }
+        rmdir(txpath.DS.'include'.DS.'import');
     }
 
-    @rmdir(txpath.DS.'include'.DS.'import');
-    @unlink(txpath.DS.'include'.DS.'txp_import.php');
+    unlink(txpath.DS.'include'.DS.'txp_import.php');
 }
 
 // Remove unused ipban table or recreate its index (for future utf8mb4 conversion).
@@ -215,20 +219,24 @@ safe_drop_index('txp_section', "name");
 safe_drop('txp_priv');
 
 // Remove empty update files.
-foreach (array('4.4.0', '4.4.1') as $v) {
-    $file = txpath.DS.'update'.DS.'_to_'.$v.'.php';
+if (is_writable(txpath.DS.'update')) {
+    foreach (array('4.4.0', '4.4.1') as $v) {
+        $file = txpath.DS.'update'.DS.'_to_'.$v.'.php';
 
-    if (file_exists($file)) {
-        @unlink($file);
+        if (file_exists($file)) {
+            unlink($file);
+        }
     }
 }
 
 // Remove unnecessary licence files that have been moved to root.
-foreach (array('license', 'lgpl-2.1') as $v) {
-    $file = txpath.DS.$v.'.txt';
+if (is_writable(txpath)) {
+    foreach (array('license', 'lgpl-2.1') as $v) {
+        $file = txpath.DS.$v.'.txt';
 
-    if (file_exists($file)) {
-        @unlink($file);
+        if (file_exists($file)) {
+            unlink($file);
+        }
     }
 }
 
