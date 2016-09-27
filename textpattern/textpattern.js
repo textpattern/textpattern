@@ -1992,9 +1992,9 @@ textpattern.Route.add('', function ()
     prefTabs.removeClass('ui-state-default ui-corner-top');
     prefsGroup.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
 
-    prefTabs.on('click', 'a[data-txp-pane]', function(ev)
+    prefTabs.on('click focus', function(ev)
     {
-        var me = $(this);
+        var me = $(this).children('a[data-txp-pane]');
 
         if (!window.localStorage) sendAsyncEvent({
             event  : 'pane',
