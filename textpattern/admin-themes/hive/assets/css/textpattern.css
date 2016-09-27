@@ -3709,6 +3709,12 @@ span.spinner {
   margin-top: 1.5em;
 }
 
+/* Admin -> Preferences panel - additional layout
+   ========================================================================== */
+.txp-prefs-group {
+  max-width: 60em;
+}
+
 /* Admin -> Languages panel - additional layout
    ========================================================================== */
 #page-lang .txp-list .modified {
