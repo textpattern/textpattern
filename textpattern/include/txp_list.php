@@ -563,7 +563,7 @@ function list_multiedit_form($page, $sort, $dir, $crit, $search_method)
         unset($methods['changecategory1'], $methods['changecategory2']);
     }
 
-    if (has_single_author('textpattern', 'AuthorID')) {
+    if (has_single_author('textpattern', 'AuthorID') || !has_privs('article.edit')) {
         unset($methods['changeauthor']);
     }
 
