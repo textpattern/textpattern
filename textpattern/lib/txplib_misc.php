@@ -3110,7 +3110,15 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 
     if ($override_locale) {
         $oldLocale = Txp::get('\Textpattern\L10n\Locale')->getLocale(LC_TIME);
-        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, $override_locale);
+
+        try {
+            Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, $override_locale);
+        } catch (\Exception $e) {
+            // Revert to original locale on error and signal that the
+            // later revert isn't necessary
+            Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, $oldLocale);
+            $oldLocale = false;
+        }
     }
 
     if ($format == 'since') {
