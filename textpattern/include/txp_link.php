@@ -659,6 +659,14 @@ function link_multi_edit()
             break;
     }
 
+    if (!has_privs('link.edit')) {
+        if (has_privs('link.edit.own')) {
+            $selected = safe_column("id", 'txp_link', "id IN (".join(',', $selected).") AND author = '".doSlash($txp_user)."'");
+        } else {
+            $selected = array();
+        }
+    }
+
     if ($selected and $key) {
         foreach ($selected as $id) {
             if (safe_update('txp_link', "$key = '".doSlash($val)."'", "id = $id")) {
