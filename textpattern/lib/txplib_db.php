@@ -398,8 +398,7 @@ function safe_query($q = '', $debug = false, $unbuf = false)
     $result = mysqli_query($DB->link, $q, $method);
 
     if ($production_status !== 'live') {
-        $trace->log("[Rows: ".intval(@mysqli_num_rows($result))."]");
-        $trace->stop();
+        $trace->stop("[Rows: ".intval(@mysqli_num_rows($result))."]");
     }
 
     if ($result === false) {
