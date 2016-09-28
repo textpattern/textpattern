@@ -7,7 +7,10 @@ Changes in 4.6.1
 * Fixed: Conditional tags now trigger correctly (thanks, craigerskine).
 * Fixed: Missing sql_now_* preferences (thanks, makss).
 * Fixed: Save preference pane states on keyboard focus too (thanks, phiw13).
+* Changed: Multi-edit widget now sticks to panel bottom when navigating long list tables (thanks, phiw13).
+* Changed: Made better use of available screen estate for presentation panel code textareas (thanks, phiw13).
 * Changed: Tightened up vertical layout on Forms panel.
+* Changed: Put an upper limit on preference group widths for better readability (thanks, phiw13).
 * jQuery UI 1.12.1.
 * zxcvbn 4.4.0.
 
