@@ -1,7 +1,7 @@
 Textpattern CMS
 ===============
 
-![Textpattern Logo](http://textpattern.com/assets/img/branding/carver/carver-128px.svg "Textpattern Logo"):http://textpattern.com
+[![Textpattern Logo](http://textpattern.com/assets/img/branding/carver/carver-64px.svg)](http://textpattern.com/)
 
 **A flexible, elegant and easy-to-use content management system.**
 
