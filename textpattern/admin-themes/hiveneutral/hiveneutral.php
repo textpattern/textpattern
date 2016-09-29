@@ -46,13 +46,8 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
         }
 
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
-        $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">';
+        $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
-        $out[] = '<meta name="theme-color" content="#ffda44">';
-        $out[] = '<meta name="application-name" content="'.htmlspecialchars($GLOBALS['prefs']['sitename']).'">';
-        $out[] = '<meta name="mobile-web-app-capable" content="yes">';
-        $out[] = '<meta name="apple-mobile-web-app-capable" content="yes">';
-        $out[] = '<meta name="apple-mobile-web-app-title" content="'.htmlspecialchars($GLOBALS['prefs']['sitename']).'">';
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
 
         // Custom JavaScript (see theme README for usage instructions).
