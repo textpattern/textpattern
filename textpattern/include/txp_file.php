@@ -527,7 +527,7 @@ function file_multiedit_form($page, $sort, $dir, $crit, $search_method)
         unset($methods['changecategory']);
     }
 
-    if (has_single_author('txp_file')) {
+    if (has_single_author('txp_file') || !has_privs('file.edit')) {
         unset($methods['changeauthor']);
     }
 
@@ -574,7 +574,7 @@ function file_multi_edit()
             break;
         case 'changeauthor':
             $val = ps('author');
-            if (in_array($val, $all_file_authors)) {
+            if (has_privs('file.edit') && in_array($val, $all_file_authors)) {
                 $key = 'author';
             }
             break;

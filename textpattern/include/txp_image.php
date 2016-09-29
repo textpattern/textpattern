@@ -486,7 +486,7 @@ function image_multiedit_form($page, $sort, $dir, $crit, $search_method)
         unset($methods['changecategory']);
     }
 
-    if (has_single_author('txp_image')) {
+    if (has_single_author('txp_image') || !has_privs('image.edit')) {
         unset($methods['changeauthor']);
     }
 
@@ -533,7 +533,7 @@ function image_multi_edit()
             break;
         case 'changeauthor':
             $val = ps('author');
-            if (in_array($val, $all_image_authors)) {
+            if (has_privs('image.edit') && in_array($val, $all_image_authors)) {
                 $key = 'author';
             }
             break;
