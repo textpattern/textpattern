@@ -5013,7 +5013,16 @@ function file_download_description($atts)
 
 function hide()
 {
-    return '';
+    global $pretext;
+
+    extract(lAtts(array(
+        'pass'  => 0,
+    ), $atts));
+
+    if ($pass && empty($pretext['secondpass'])) {
+
+        return $thing;
+    }
 }
 
 // -------------------------------------------------------------
