@@ -527,7 +527,7 @@ function file_multiedit_form($page, $sort, $dir, $crit, $search_method)
         unset($methods['changecategory']);
     }
 
-    if (has_single_author('txp_file')) {
+    if (has_single_author('txp_file') || !has_privs('file.edit')) {
         unset($methods['changeauthor']);
     }
 
@@ -574,7 +574,7 @@ function file_multi_edit()
             break;
         case 'changeauthor':
             $val = ps('author');
-            if (in_array($val, $all_file_authors)) {
+            if (has_privs('file.edit') && in_array($val, $all_file_authors)) {
                 $key = 'author';
             }
             break;
@@ -764,7 +764,7 @@ function file_edit($message = '', $id = '')
 //                    ).
                     inputLabel(
                         'file_description',
-                        '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>',
+                        '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.htmlspecialchars($description, ENT_NOQUOTES).'</textarea>',
                         'description', '', array('class' => 'txp-form-field txp-form-field-textarea edit-file-description')
                     ).
                     pluggable_ui('file_ui', 'extend_detail_form', '', $rs).

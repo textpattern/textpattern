@@ -583,7 +583,7 @@ function link_multiedit_form($page, $sort, $dir, $crit, $search_method)
         unset($methods['changecategory']);
     }
 
-    if (has_single_author('txp_link')) {
+    if (has_single_author('txp_link') || !has_privs('link.edit')) {
         unset($methods['changeauthor']);
     }
 
@@ -649,7 +649,7 @@ function link_multi_edit()
             break;
         case 'changeauthor':
             $val = ps('author');
-            if (in_array($val, $all_link_authors)) {
+            if (has_privs('link.edit') && in_array($val, $all_link_authors)) {
                 $key = 'author';
             }
             break;
@@ -657,6 +657,14 @@ function link_multi_edit()
             $key = '';
             $val = '';
             break;
+    }
+
+    if (!has_privs('link.edit')) {
+        if (has_privs('link.edit.own')) {
+            $selected = safe_column("id", 'txp_link', "id IN (".join(',', $selected).") AND author = '".doSlash($txp_user)."'");
+        } else {
+            $selected = array();
+        }
     }
 
     if ($selected and $key) {
