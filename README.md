@@ -11,7 +11,7 @@ Textpattern is [free and open source](#legal) software.
 -   [Download Textpattern](#download-textpattern)
 -   [Install Textpattern](#install-textpattern)
 -   [Upgrade Textpattern](#upgrade-textpattern)
--   [Help and Support](help-and-support)
+-   [Help and Support](#help-and-support)
 -   [Contributing](#contributing)
 -   [Legal](#legal)
 
