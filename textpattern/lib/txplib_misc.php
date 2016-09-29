@@ -6078,14 +6078,14 @@ function replace_relative_urls($html, $permalink = '')
 
     // URLs like "/foo/bar" - relative to the domain.
     if (serverSet('HTTP_HOST')) {
-        $html = preg_replace('@(<a[^>]+href=")/@', '$1'.PROTOCOL.serverSet('HTTP_HOST').'/', $html);
-        $html = preg_replace('@(<img[^>]+src=")/@', '$1'.PROTOCOL.serverSet('HTTP_HOST').'/', $html);
+        $html = preg_replace('@(<a[^>]+href=")/(?!/)@', '$1'.PROTOCOL.serverSet('HTTP_HOST').'/', $html);
+        $html = preg_replace('@(<img[^>]+src=")/(?!/)@', '$1'.PROTOCOL.serverSet('HTTP_HOST').'/', $html);
     }
 
     // "foo/bar" - relative to the textpattern root,
     // leave "http:", "mailto:" et al. as absolute URLs.
-    $html = preg_replace('@(<a[^>]+href=")(?!\w+:)@', '$1'.PROTOCOL.$siteurl.'/$2', $html);
-    $html = preg_replace('@(<img[^>]+src=")(?!\w+:)@', '$1'.PROTOCOL.$siteurl.'/$2', $html);
+    $html = preg_replace('@(<a[^>]+href=")(?!\w+:|//)@', '$1'.PROTOCOL.$siteurl.'/$2', $html);
+    $html = preg_replace('@(<img[^>]+src=")(?!\w+:|//)@', '$1'.PROTOCOL.$siteurl.'/$2', $html);
 
     if ($permalink) {
         $html = preg_replace("/href=\\\"#(.*)\"/", "href=\"".$permalink."#\\1\"", $html);
