@@ -764,7 +764,7 @@ function file_edit($message = '', $id = '')
 //                    ).
                     inputLabel(
                         'file_description',
-                        '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>',
+                        '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.htmlspecialchars($description, ENT_NOQUOTES).'</textarea>',
                         'description', '', array('class' => 'txp-form-field txp-form-field-textarea edit-file-description')
                     ).
                     pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
