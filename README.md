@@ -8,10 +8,10 @@ Textpattern CMS
 Textpattern is [free and open source](#legal) software.
 
 -   [System requirements](#system-requirements)
--   [Download Textpattern](#download)
--   [Install Textpattern](#install)
--   [Upgrade Textpattern](#upgrade)
--   [Help and Support](help-support)
+-   [Download Textpattern](#download-textpattern)
+-   [Install Textpattern](#install-textpattern)
+-   [Upgrade Textpattern](#upgrade-textpattern)
+-   [Help and Support](help-and-support)
 -   [Contributing](#contributing)
 -   [Legal](#legal)
 
@@ -24,7 +24,7 @@ Ensure the server meets or exceeds the [system
 requirements](http://textpattern.com/about/119/system-requirements)
 before you continue.
 
-Download Textpattern {#download}
+Download Textpattern
 --------------------
 
 ### Production release
@@ -41,21 +41,21 @@ on GitHub](https://github.com/textpattern/textpattern). Note that
 development versions are works-in-progress and not recommended for use
 on live production servers.
 
-Install Textpattern {#install}
+Install Textpattern
 -------------------
 
 Please see
 [README.txt](https://github.com/textpattern/textpattern/blob/master/README.txt)
 for details on installing Textpattern.
 
-Upgrade Textpattern {#upgrade}
+Upgrade Textpattern
 -------------------
 
 Please see
 [README.txt](https://github.com/textpattern/textpattern/blob/master/README.txt)
 for details on upgrading Textpattern.
 
-Help and support {#help-support}
+Help and support
 ----------------
 
 The [Textpattern support forum](http://forum.textpattern.com) is home to
