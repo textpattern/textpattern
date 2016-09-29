@@ -5011,7 +5011,7 @@ function file_download_description($atts)
 
 // -------------------------------------------------------------
 
-function hide()
+function hide($atts, $thing = NULL)
 {
     global $pretext;
 
