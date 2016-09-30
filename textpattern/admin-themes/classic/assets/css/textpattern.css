@@ -1691,13 +1691,32 @@ caption {
 }
 
 /**
+ * Table row borders.
+ */
+tbody {
+  border-top: 1px solid #cccccc;
+}
+
+tbody th {
+  border-bottom: 1px solid #cccccc;
+}
+
+tbody td {
+  border-bottom: 1px solid #cccccc;
+}
+
+/**
  * Make table cells align top and left by default.
  */
 th,
 td {
-  padding: 0;
+  padding: 0.3em 1em 0.3em 0;
   text-align: left;
   vertical-align: top;
+}
+
+td:last-child {
+  padding: 0.3em 0;
 }
 
 /**
@@ -1705,7 +1724,16 @@ td {
  */
 [dir="rtl"] th,
 [dir="rtl"] td {
+  padding: 0.3em 0 0.3em 1em;
   text-align: right;
+}
+
+/**
+ * Align header cell content at bottom of cell.
+ */
+thead th,
+thead td {
+  vertical-align: bottom;
 }
 
 /**
@@ -1744,49 +1772,12 @@ td {
   width: 100%;
 }
 
-.txp-list th,
-.txp-list td {
-  padding: 0.3em 1em 0.3em 0;
-}
-
-[dir="rtl"] .txp-list th, [dir="rtl"]
-.txp-list td {
-  padding: 0.3em 0 0.3em 1em;
-}
-
-.txp-list td:last-child {
-  padding: 0.3em 0;
-}
-
-.txp-list tbody {
-  border-top: 1px solid #cccccc;
-}
-
 .txp-list tbody tr.selected {
   background: #e3edfc;
 }
 
 .txp-list tbody th {
-  border-bottom: 1px solid #cccccc;
   font-weight: normal;
-}
-
-.txp-list tbody td {
-  border-bottom: 1px solid #cccccc;
-}
-
-.txp-list thead th,
-.txp-list thead td {
-  vertical-align: bottom;
-}
-
-.txp-list thead th a {
-  margin-right: 14px;
-}
-
-[dir="rtl"] .txp-list thead th a {
-  margin-right: 0;
-  margin-left: 14px;
 }
 
 /**
@@ -1797,6 +1788,15 @@ td {
  * <th class="asc scope="col"><a></a></th>
  * <th class="desc scope="col"><a></a></th>
  */
+.txp-list thead th a {
+  margin-right: 14px;
+}
+
+[dir="rtl"] .txp-list thead th a {
+  margin-right: 0;
+  margin-left: 14px;
+}
+
 .txp-list thead th.asc a,
 .txp-list thead th.desc a {
   margin-right: 0;
