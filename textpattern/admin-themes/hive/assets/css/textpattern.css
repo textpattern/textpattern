@@ -1956,11 +1956,22 @@ caption {
 }
 
 /**
+ * Table row borders.
+ */
+tr {
+  border: 1px solid #dddddd;
+}
+
+thead th {
+  background-color: #eeeeee;
+}
+
+/**
  * Make table cells align top and left by default.
  */
 th,
 td {
-  padding: 0;
+  padding: 0.38461538461538em 1em;
   text-align: left;
   vertical-align: top;
 }
@@ -2009,11 +2020,6 @@ td {
   width: 100%;
 }
 
-.txp-list th,
-.txp-list td {
-  padding: 0.38461538461538em 1em;
-}
-
 .txp-list tbody tr {
   border: 1px solid #dddddd;
 }
@@ -2036,6 +2042,7 @@ td {
   border-top: 1px solid #dddddd;
   border-right: 1px solid #d1d1d1;
   border-bottom: 1px solid #cccccc;
+  border-left: 0;
 }
 
 .txp-list thead th:first-child {
