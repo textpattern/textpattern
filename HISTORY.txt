@@ -11,7 +11,6 @@ Changes in 4.6.1
 * Fixed: Avoid setLocale errors if locale unavailable in lang tag attributes (thanks, brachycera).
 * Fixed: 'Change author' multi-edit only available to users with sufficient rights (thanks, makss).
 * Fixed: Relative URLs in feeds (thanks, hidalgo).
-* Changed: Multi-edit widget now sticks to panel bottom when navigating long list tables (thanks, phiw13).
 * Changed: Made better use of available screen estate for presentation panel code textareas (thanks, phiw13).
 * Changed: Tightened up vertical layout on Forms panel.
 * Changed: Put an upper limit on preference group widths for better readability (thanks, phiw13).
