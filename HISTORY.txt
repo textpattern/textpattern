@@ -14,7 +14,7 @@ Changes in 4.6.1
 * Changed: Made better use of available screen estate for presentation panel code textareas (thanks, phiw13).
 * Changed: Tightened up vertical layout on Forms panel.
 * Changed: Put an upper limit on preference group widths for better readability (thanks, phiw13).
-* Changed: CONTRIBUTING.textile points to docs site.
+* Changed: CONTRIBUTING.textile info has been consolidated into main README file.
 * jQuery UI 1.12.1.
 * zxcvbn 4.4.0.
 
