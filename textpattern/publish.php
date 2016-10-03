@@ -727,8 +727,6 @@ function doArticles($atts, $iscustom, $thing = null)
             'searchform'   => '',
             'searchall'    => 1,
             'searchsticky' => 0,
-            'pageby'       => '',
-            'pgonly'       => 0,
         );
     }
 
@@ -746,6 +744,8 @@ function doArticles($atts, $iscustom, $thing = null)
         'frontpage'     => !$iscustom,
         'match'         => 'Category1,Category2',
         'offset'        => 0,
+        'pageby'        => '',
+        'pgonly'        => 0,
         'wraptag'       => '',
         'break'         => '',
         'label'         => '',
@@ -931,25 +931,26 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Do not paginate if we are on a custom list.
     if (!$iscustom and !$issticky) {
-        $grand_total = safe_count('textpattern', $where);
-        $total = $grand_total - $offset;
-        $numPages = ceil($total / $pageby);
         $pg = (!$pg) ? 1 : $pg;
         $pgoffset = $offset + (($pg - 1) * $pageby);
-
-        // Send paging info to txp:newer and txp:older.
-        $pageout['pg']          = $pg;
-        $pageout['numPages']    = $numPages;
-        $pageout['s']           = $s;
-        $pageout['c']           = $c;
-        $pageout['context']     = 'article';
-        $pageout['grand_total'] = $grand_total;
-        $pageout['total']       = $total;
 
         global $thispage;
 
         if (empty($thispage)) {
-            $thispage = $pageout;
+            $grand_total = safe_count('textpattern', $where);
+            $total = $grand_total - $offset;
+            $numPages = ceil($total / $pageby);
+
+            // Send paging info to txp:newer and txp:older.
+            $thispage = array(
+                'pg'          => $pg,
+                'numPages'    => $numPages,
+                's'           => $s,
+                'c'           => $c,
+                'context'     => 'article',
+                'grand_total' => $grand_total,
+                'total'       => $total
+            );
         }
 
         if ($pgonly) {
@@ -957,6 +958,12 @@ function doArticles($atts, $iscustom, $thing = null)
         }
     } else {
         $pgoffset = $offset;
+        if ($pgonly) {
+            $grand_total = safe_count('textpattern', $where);
+            $total = $grand_total - $offset;
+            $numPages = ceil($total / $pageby);
+            return $numPages;
+        }
     }
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
