@@ -106,3 +106,10 @@ system. Textpattern is both free and open source.
 * There are additional resources for the default front-side theme, such as
   Sass preprocessor files, available at:
     http://textpattern.com/default-theme/tree/master/
+
+
+== Contributing ==
+
+Want to help out with the development of Textpattern CMS? Please refer to the
+Contributing documentation http://docs.textpattern.io/development/contributing
+for full details.
