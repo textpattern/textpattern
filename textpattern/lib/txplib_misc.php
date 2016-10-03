@@ -2753,7 +2753,6 @@ function stripPHP($in)
 
 function event_category_popup($name, $cat = '', $id = '')
 {
-    $arr = array('');
     $rs = getTree('root', $name);
 
     if ($rs) {
