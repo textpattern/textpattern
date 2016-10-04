@@ -24,7 +24,7 @@ h2(#download). Download Textpattern
 
 h3. Production release
 
-The current production release is version 4.6.0. It can be downloaded from the Textpattern website as a ".zip":http://textpattern.com/latest.zip or ".tar.gz":http://textpattern.com/latest.tar.gz archive.
+The current production release is version 4.6.1. It can be downloaded from the Textpattern website as a ".zip":http://textpattern.com/latest.zip or ".tar.gz":http://textpattern.com/latest.tar.gz archive.
 
 h3. Development version
 

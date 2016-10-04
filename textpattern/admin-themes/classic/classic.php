@@ -216,7 +216,7 @@ EOS;
         return array(
             'title'       => 'Classic',
             'description' => 'Textpattern Classic admin theme',
-            'version'     => '4.6.1-dev',
+            'version'     => '4.6.1',
             'author'      => 'Phil Wareham',
             'author_uri'  => 'https://github.com/philwareham',
             'help'        => 'https://github.com/philwareham/textpattern-classic-admin-theme',
