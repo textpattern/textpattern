@@ -3040,6 +3040,7 @@ span.spinner {
   padding: 0.3076923em 0;
   background: #f7f7f7;
   box-shadow: 0 -1em 1em -0.5em #f7f7f7;
+  z-index: 20;
 }
 
 /**
