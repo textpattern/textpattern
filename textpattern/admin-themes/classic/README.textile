@@ -2,8 +2,6 @@ h1. Classic admin-side theme for Textpattern CMS
 
 You are free to modify this theme, reuse code herein, and distribute all its supporting files as long as licences are respected (see below).
 
-*Please note:* This theme is currently under development, and as such parts of the code are probably unfinished/unformated/untested/broken - please check the "GitHub project":https://github.com/philwareham/txp-classic-admin-theme/commits/master regularly for the latest revisions.
-
 h2. Installation instructions
 
 # Upload the directory 'classic' into your Textpattern installation -> admin-themes directory.
