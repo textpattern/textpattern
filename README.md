@@ -26,7 +26,7 @@ before you continue.
 
 ### Production release
 
-The current production release is version 4.6.0. It can be downloaded from the
+The current production release is version 4.6.1. It can be downloaded from the
 Textpattern website as a
 [.zip](http://textpattern.com/latest.zip) or
 [.tar.gz](http://textpattern.com/latest.tar.gz) archive.
