@@ -21,7 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Generated: 04 Oct 2016, 11:47:12 GMT
+// Generated: 06 Oct 2016, 08:32:09 GMT
 
 $langs = array(
     'ar-dz' => array(
@@ -1306,9 +1306,16 @@ $langs = array(
         'progress_steps' => 'Uzstādīšanas procesā ir 4 soļi:',
         'setup_comment_invite' => 'Komentēt',
         'setup_login' => 'Izvēlēties lietotāja vārdu (izmantojiet tikai latīņu burtus un atstarpes)',
+        'setup_password_strength_0' => 'Ļoti vāja',
+        'setup_password_strength_1' => 'Vāja',
+        'setup_password_strength_2' => 'Vidēja',
+        'setup_password_strength_3' => 'Laba',
+        'setup_password_strength_4' => 'Spēcīga',
+        'setup_show_password' => 'Rādīt paroli',
         'set_db_details' => 'Ievadiet datubāzes datus',
         'site_config' => 'Vietnes konfigurācija',
         'site_url' => 'Lapas adrese',
+        'tables_exist' => 'Šķiet, ka datubāzē <strong>{dbname}</strong> tabulas jau pastāv. Ja vēlaties turpināt uzstādīšanu, vai nu nodzēsiet esošās tabulas, vai arī izvēlieties atšķirīgu tabulu prefiksu.',
         'table_prefix' => 'Tabulu priedēklis (fakultatīvs)',
         'thanks_for_interest' => 'Paldies par jūsu interesi par Textpattern',
         'that_went_well' => 'Instalācija ir pabeigta. Datubāzes tabulas tika veiksmīgi izveidotas un aizpildītas.',
