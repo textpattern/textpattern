@@ -78,7 +78,7 @@ safe_delete('txp_prefs', "name = 'last_update_check'");
 
 set_error_handler("updateErrorHandler");
 
-$updates = array_fill_keys($dbuptates, true);
+$updates = array_fill_keys($dbupdates, true);
 
 if (!isset($updates[$dbversion_target])) {
     $updates[$dbversion_target] = false;
