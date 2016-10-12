@@ -3,7 +3,8 @@ Changes in 4.6.2
 * Maintenance release with bug fixes.
 * Fixed: More complete SQL trace on non-row-based queries.
 * Fixed: Update process for filesystem-only releases.
-* Added: Latvian setup translations.
+* Added: Support for printing of admin panels.
+* Added: Additonal Latvian setup translations.
 
 Changes in 4.6.1
 
