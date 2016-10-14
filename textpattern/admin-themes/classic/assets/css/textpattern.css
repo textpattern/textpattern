@@ -935,12 +935,6 @@ button {
     outline-width: 0;
   }
   /**
- * Remove padding from `color` fields.
- */
-  [type="color"] {
-    padding: 0;
-  }
-  /**
  * Fix the cursor style for Chrome's increment/decrement buttons. For certain
  * `font-size` values of the `input`, it causes the cursor style of the
  * decrement button to change from `default` to `text`.
