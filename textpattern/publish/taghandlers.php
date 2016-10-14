@@ -4196,11 +4196,6 @@ function if_search_results($atts, $thing)
         return '';
     }
 
-    extract(lAtts(array(
-        'min' => 1,
-        'max' => 0,
-    ), $atts));
-
     if (empty($thispage)) {
         $args = '';
         foreach ($atts as $arg => $val) {
@@ -4208,6 +4203,11 @@ function if_search_results($atts, $thing)
         }
         return '<txp:if_search_results'.$args.(isset($thing) ? '>'.$thing.'</txp:if_search_results>' : ' />');
     }
+
+    extract(lAtts(array(
+        'min' => 1,
+        'max' => 0,
+    ), $atts));
 
     $results = (int) $thispage['grand_total'];
 
