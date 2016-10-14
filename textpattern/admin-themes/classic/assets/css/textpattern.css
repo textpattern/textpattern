@@ -625,18 +625,6 @@ button {
   /*
  * Flash the alert message using CSS animation.
  */
-  @keyframes messageflash {
-    0% {
-      opacity: 0;
-    }
-    75% {
-      opacity: 0.5;
-    }
-    50%,
-    100% {
-      opacity: 1;
-    }
-  }
   .messageflash {
     animation: messageflash 1s;
   }
@@ -4019,9 +4007,7 @@ button {
  *
  * Example HTML:
  *
- * <a class="ui-button ui-button-text-only">
- *     <span class="ui-button-text">Button</span>
- * </a>
+ * <a class="ui-button ui-corner-all ui-widget">Button</a>
  */
   .ui-button {
     display: inline-block;
@@ -4086,9 +4072,10 @@ button {
  *
  * Example HTML:
  *
- * <a class="ui-button ui-button-icon-only">
- *     <span class="ui-button-icon-primary ui-icon ui-icon-locked"></span>
- *     <span class="ui-button-text">Button one icon, no text</span>
+ * <a class="ui-button ui-corner-all ui-widget ui-button-icon-only">
+ *     <span class="ui-button-icon ui-icon ui-icon-gear"></span>
+ *     <span class="ui-button-icon-space"> </span>
+ *     Button one icon, no text
  * </a>
  */
   .ui-button-icon-only {
@@ -4170,18 +4157,16 @@ button {
  *
  * Example HTML:
  *
- * <input class="ui-helper-hidden-accessible" id="check" type="checkbox">
- * <label for="check" class="ui-button ui-button-text-only ui-state-active">
- *     <span class="ui-button-text">Toggle</span>
- * </label>
+ * <input class="ui-checkboxradio ui-helper-hidden-accessible" id="check" type="checkbox">
+ * <label for="check" class="ui-checkboxradio-label ui-corner-all ui-button ui-widget ui-checkboxradio-checked ui-state-active">Dogs</label>
  */
-  label.ui-state-active.ui-button {
+  .ui-checkboxradio-checked.ui-button {
     background-color: #fff8dd;
   }
-  label.ui-state-active.ui-button:hover {
+  .ui-checkboxradio-checked.ui-button:hover {
     background-color: #fffdf7;
   }
-  label.ui-state-active.ui-button:active {
+  .ui-checkboxradio-checked.ui-button:active {
     background-color: #fff0b4;
   }
   /* Controlgroup
@@ -5214,6 +5199,22 @@ button {
     padding: 0.5em 1em;
     box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
     z-index: 9999;
+  }
+}
+
+/* ==========================================================================
+   Animation `keyframes` need to appear outside of `screen` rules
+   ========================================================================== */
+@keyframes messageflash {
+  0% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 0.5;
+  }
+  50%,
+  100% {
+    opacity: 1;
   }
 }
 
