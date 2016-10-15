@@ -6,13 +6,13 @@
     RewriteEngine On
 
     # Uncomment if you need web access to some folder
-#    RewriteCond %{REQUEST_URI} ^/textpattern/some_folder [OR]
+#    RewriteCond %{REQUEST_FILENAME} /textpattern/some_folder [OR]
 
     # Allow web access to /textpattern/index.php and /textpattern/setup/index.php
-    RewriteCond %{REQUEST_URI} ^/textpattern/(setup/)?(index\.php)?$ [OR]
+    RewriteCond %{REQUEST_FILENAME} /textpattern/(setup/)?(index\.php)?$ [OR]
 
     # Allow web access to js, css, images
-    RewriteCond %{REQUEST_URI} \.(js|css|svg|png|jpg|gif|ico)$ [NC]
+    RewriteCond %{REQUEST_FILENAME} \.(js|css|svg|png|jpg|gif|ico)$ [NC]
     RewriteRule ^(.*) - [L]
 
     # Deny web access to other files
