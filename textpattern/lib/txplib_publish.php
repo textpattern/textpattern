@@ -365,7 +365,7 @@ function lastMod()
 
 function parse($thing, $condition = null)
 {
-    global $production_status, $trace, $txp_parsed, $txp_else, $txp_current_tag;
+    global $pretext, $production_status, $trace, $txp_parsed, $txp_else, $txp_current_tag;
 
     if (isset($condition)) {
         if ($production_status === 'debug') {
@@ -459,8 +459,10 @@ function parse($thing, $condition = null)
     }
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
+        $pretext['process_on_secondpass'] = false;
         $t = $tag[$first];
-        $out .= processTags($t[1], $t[2], $t[3]) . $tag[++$first];
+        $chunk = processTags($t[1], $t[2], $t[3]);
+        $out .= (empty($pretext['process_on_secondpass']) || !empty($pretext['secondpass']) ? $chunk : $t[0].$t[3].$t[4]) . $tag[++$first];
     }
 
     return $out;
@@ -501,14 +503,14 @@ function processTags($tag, $atts, $thing = null)
     global $production_status, $txp_current_tag, $txp_current_form, $trace;
     static $registry = null;
 
+    if ($registry === null) {
+        $registry = Txp::get('\Textpattern\Tag\Registry');
+    }
+
     if ($production_status !== 'live') {
         $old_tag = $txp_current_tag;
         $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
         $trace->start($txp_current_tag);
-    }
-
-    if ($registry === null) {
-        $registry = Txp::get('\Textpattern\Tag\Registry');
     }
 
     $out = $registry->process($tag, splat($atts), $thing);
