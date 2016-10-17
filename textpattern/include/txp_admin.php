@@ -590,7 +590,7 @@ function author_edit($message = '')
     } else {
         $out[] = inputLabel(
             'login_name',
-            fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name'),
+            fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name',false, true),
             'login_name', 'add_new_author', array('class' => 'txp-form-field edit-admin-login-name')
         );
     }
@@ -602,7 +602,7 @@ function author_edit($message = '')
         ).
         inputLabel(
             'login_email',
-            fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'),
+            fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email', false, true),
             'email', '', array('class' => 'txp-form-field edit-admin-email')
         );
 
