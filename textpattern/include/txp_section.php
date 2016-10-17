@@ -491,7 +491,7 @@ function section_edit()
     } else {
         $out[] = inputLabel(
                 'section_name',
-                fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name'),
+                fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name', false, true),
                 'section_name', '', array('class' => 'txp-form-field edit-section-name')
             ).
             inputLabel(
