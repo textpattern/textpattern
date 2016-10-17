@@ -1736,11 +1736,8 @@ function newer($atts, $thing = null)
     global $thispage, $pretext, $m;
 
     if (empty($thispage)) {
-        $args = '';
-        foreach ($atts as $arg => $val) {
-            $args .= ' '.$arg.'="'.str_replace('"', '""', $val).'"';
-        }
-        return '<txp:newer'.$args.(isset($thing) ? '>'.$thing.'</txp:newer>' : ' />');
+        $pretext['process_on_secondpass'] = true;
+        return;
     }
 
     extract(lAtts(array(
@@ -1798,11 +1795,8 @@ function older($atts, $thing = null)
     global $thispage, $pretext, $m;
 
     if (empty($thispage)) {
-        $args = '';
-        foreach ($atts as $arg => $val) {
-            $args .= ' '.$arg.'="'.str_replace('"', '""', $val).'"';
-        }
-        return '<txp:older'.$args.(isset($thing) ? '>'.$thing.'</txp:older>' : ' />');
+        $pretext['process_on_secondpass'] = true;
+        return;
     }
 
     extract(lAtts(array(
@@ -3317,14 +3311,11 @@ function search_result_date($atts)
 
 function search_result_count($atts)
 {
-    global $thispage;
+    global $thispage, $pretext;
 
     if (empty($thispage)) {
-        $args = '';
-        foreach ($atts as $arg => $val) {
-            $args .= ' '.$arg.'="'.str_replace('"', '""', $val).'"';
-        }
-        return '<txp:search_result_count'.$args.' />';
+        $pretext['process_on_secondpass'] = true;
+        return;
     }
 
     $t = @$thispage['grand_total'];
@@ -4197,11 +4188,8 @@ function if_search_results($atts, $thing)
     }
 
     if (empty($thispage)) {
-        $args = '';
-        foreach ($atts as $arg => $val) {
-            $args .= ' '.$arg.'="'.str_replace('"', '""', $val).'"';
-        }
-        return '<txp:if_search_results'.$args.(isset($thing) ? '>'.$thing.'</txp:if_search_results>' : ' />');
+        $pretext['process_on_secondpass'] = true;
+        return;
     }
 
     extract(lAtts(array(
