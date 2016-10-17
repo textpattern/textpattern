@@ -377,7 +377,7 @@ function cat_event_category_list($event)
         form(
             graf(
                 tag(gTxt('create_new_category'), 'label', array('for' => $event.'_category_new')).br.
-                fInput('text', 'title', '', '', '', '', INPUT_REGULAR, '', $event.'_category_new')
+                fInput('text', 'title', '', '', '', '', INPUT_REGULAR, '', $event.'_category_new', false, true)
             ).
             (($rs)
                 ? graf('<label'.$for.'>'.gTxt('parent').'</label>'.br.
