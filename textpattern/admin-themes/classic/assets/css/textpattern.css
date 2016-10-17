@@ -935,6 +935,12 @@ button {
     outline-width: 0;
   }
   /**
+ * Fix vertical alignment of `color` fields with their label.
+ */
+  [type="color"] {
+    vertical-align: middle;
+  }
+  /**
  * Fix the cursor style for Chrome's increment/decrement buttons. For certain
  * `font-size` values of the `input`, it causes the cursor style of the
  * decrement button to change from `default` to `text`.
