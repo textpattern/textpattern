@@ -459,10 +459,10 @@ function parse($thing, $condition = null)
     }
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
-        $pretext['process_on_secondpass'] = false;
         $t = $tag[$first];
         $chunk = processTags($t[1], $t[2], $t[3]);
         $out .= (empty($pretext['process_on_secondpass']) || !empty($pretext['secondpass']) ? $chunk : $t[0].$t[3].$t[4]) . $tag[++$first];
+        $pretext['process_on_secondpass'] = false;
     }
 
     return $out;
