@@ -700,7 +700,7 @@ function article($atts, $thing = null)
 
 function doArticles($atts, $iscustom, $thing = null)
 {
-    global $pretext, $prefs;
+    global $pretext, $prefs, $thispage;
     extract($pretext);
     extract($prefs);
     $customFields = getCustomFields();
@@ -934,8 +934,6 @@ function doArticles($atts, $iscustom, $thing = null)
         $pg = (!$pg) ? 1 : $pg;
         $pgoffset = $offset + (($pg - 1) * $pageby);
 
-        global $thispage;
-
         if (empty($thispage)) {
             $grand_total = safe_count('textpattern', $where);
             $total = $grand_total - $offset;
@@ -959,10 +957,12 @@ function doArticles($atts, $iscustom, $thing = null)
     } else {
         $pgoffset = $offset;
         if ($pgonly) {
-            $grand_total = safe_count('textpattern', $where);
-            $total = $grand_total - $offset;
-            $numPages = ceil($total / $pageby);
-            return $numPages;
+            if (empty($thispage) || array_diff_key($atts, array('pgonly' => true))) {
+                $total = safe_count('textpattern', $where) - $offset;
+                return ceil($total / $pageby);
+            } else {
+                return $thispage['numPages'];
+            }
         }
     }
 
