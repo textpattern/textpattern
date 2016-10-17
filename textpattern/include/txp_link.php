@@ -426,7 +426,7 @@ function link_edit($message = '')
             hed($caption, 2).
             inputLabel(
                 'link_name',
-                fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'link_name'),
+                fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'link_name', false, true),
                 'title', '', array('class' => 'txp-form-field edit-link-name')
             ).
             inputLabel(
@@ -437,7 +437,7 @@ function link_edit($message = '')
             // TODO: maybe use type="url" once browsers are less strict.
             inputLabel(
                 'link_url',
-                fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'link_url'),
+                fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'link_url', false, true),
                 'url', 'link_url', array('class' => 'txp-form-field edit-link-url')
             ).
             inputLabel(
