@@ -1113,6 +1113,12 @@ button {
     outline-width: 0;
   }
   /**
+ * Fix vertical alignment of `color` fields with their label.
+ */
+  [type="color"] {
+    vertical-align: middle;
+  }
+  /**
  * Fix the cursor style for Chrome's increment/decrement buttons. For certain
  * `font-size` values of the `input`, it causes the cursor style of the
  * decrement button to change from `default` to `text`.
@@ -1317,6 +1323,15 @@ button {
   input.input-month, input.input-day, input.input-hour, input.input-minute, input.input-second {
     width: 2.46153846153846em;
     text-align: center;
+  }
+  /**
+ * Styling for form field validation.
+ */
+  input:focus:invalid,
+  select:focus:invalid,
+  textarea:focus:invalid {
+    border-color: #9d261d;
+    box-shadow: none;
   }
   /**
  * 1. Add the correct display in IE 11.
