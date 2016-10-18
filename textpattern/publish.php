@@ -955,15 +955,12 @@ function doArticles($atts, $iscustom, $thing = null)
             return;
         }
     } else {
-        $pgoffset = $offset;
         if ($pgonly) {
-            if (empty($thispage) || array_diff_key($atts, array('pgonly' => true))) {
-                $total = safe_count('textpattern', $where) - $offset;
-                return ceil($total / $pageby);
-            } else {
-                return $thispage['numPages'];
-            }
+            $total = safe_count('textpattern', $where) - $offset;
+            return ceil($total / $pageby);
         }
+
+        $pgoffset = $offset;
     }
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
