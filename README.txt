@@ -75,7 +75,8 @@ system. Textpattern is both free and open source.
   permissions previously granted.
 * Replace the top-level index.php, css.php and .htaccess files, everything in
   the /rpc/ directory and everything in the /textpattern/ directory (except
-  /textpattern/config.php) with the corresponding files in this distribution.
+  /textpattern/config.php and the /textpattern/setup directory) with the
+  corresponding files in this distribution.
   When uploading the /textpattern/ directory, ensure you merge its contents with
   your existing site to preserve any custom files in your existing installation.
   Note: css.php and /rpc/ may not exist if the installed version of
@@ -98,7 +99,6 @@ system. Textpattern is both free and open source.
   This is expected behaviour. The messages will disappear with subsequent
   navigation in the admin-side.
 * Verify all preference settings (Admin -> Preferences).
-* Remove the /textpattern/setup/ directory from your site.
 
 
 == Additional Resources ==

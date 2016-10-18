@@ -3,6 +3,9 @@ Changes in 4.6.2
 * Maintenance release with bug fixes.
 * Fixed: More complete SQL trace on non-row-based queries.
 * Fixed: Update process for filesystem-only releases.
+* Fixed: Normalise link text in some tag builder tags (thanks, makss).
+* Fixed: CSS animation keyframes need to appear outside screen rules.
+* Added: Better cross-browser support for input type=color (thanks, NicolasGraph).
 * Added: Support for printing of admin panels.
 * Added: Additonal Latvian setup translations.
 
