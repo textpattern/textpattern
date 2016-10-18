@@ -21,7 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Generated: 06 Oct 2016, 08:32:09 GMT
+// Generated: 18 Oct 2016, 10:00:10 GMT
 
 $langs = array(
     'ar-dz' => array(
