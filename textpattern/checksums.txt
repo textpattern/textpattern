@@ -23,8 +23,8 @@
 /include/txp_plugin.php: c10be88d56fe2daa3a297d6a5a4bc7ae
 /include/txp_prefs.php: 6951674c8e3267b9171acf90e52a28a4
 /include/txp_section.php: 9a9bb075ec2ae48a8898392a28f80c10
-/include/txp_tag.php: b7ce7f8161b8e160cc227601414171d7
-/index.php: 75c3057a11191194d4437bd5970c88dc
+/include/txp_tag.php: b06927b4f0304e7ee8a7e88f2615d6d2
+/index.php: 73f449df6cee012fcfcdf005a8710a30
 /lib/IXRClass.php: a1b525b4a9ed12dcb5677d5232a3d92e
 /lib/PasswordHash.php: 40e06a9c70b96309728e0a02822a6722
 /lib/admin_config.php: e81e53b7c3083ac599967072df52c49f
