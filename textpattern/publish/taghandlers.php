@@ -1735,6 +1735,11 @@ function newer($atts, $thing = null)
 {
     global $thispage, $pretext, $m;
 
+    if (empty($thispage)) {
+        $pretext['process_on_secondpass'] = true;
+        return;
+    }
+
     extract(lAtts(array(
         'showalways' => 0,
         'title'      => '',
@@ -1788,6 +1793,11 @@ function newer($atts, $thing = null)
 function older($atts, $thing = null)
 {
     global $thispage, $pretext, $m;
+
+    if (empty($thispage)) {
+        $pretext['process_on_secondpass'] = true;
+        return;
+    }
 
     extract(lAtts(array(
         'showalways' => 0,
@@ -3301,7 +3311,13 @@ function search_result_date($atts)
 
 function search_result_count($atts)
 {
-    global $thispage;
+    global $thispage, $pretext;
+
+    if (empty($thispage)) {
+        $pretext['process_on_secondpass'] = true;
+        return;
+    }
+
     $t = @$thispage['grand_total'];
 
     extract(lAtts(array(
@@ -4169,6 +4185,11 @@ function if_search_results($atts, $thing)
 
     if (empty($pretext['q'])) {
         return '';
+    }
+
+    if (empty($thispage)) {
+        $pretext['process_on_secondpass'] = true;
+        return;
     }
 
     extract(lAtts(array(
