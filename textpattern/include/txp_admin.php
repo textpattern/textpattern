@@ -234,12 +234,12 @@ function new_pass_form($message = '')
         hed(gTxt('change_password'), 2).
         inputLabel(
             'current_pass',
-            fInput('password', 'current_pass', '', '', '', '', INPUT_REGULAR, '', 'current_pass'),
+            fInput('password', 'current_pass', '', '', '', '', INPUT_REGULAR, '', 'current_pass', false, true),
             'current_password', '', array('class' => 'txp-form-field edit-admin-current-password')
         ).
         inputLabel(
             'new_pass',
-            fInput('password', 'new_pass', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'new_pass').
+            fInput('password', 'new_pass', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'new_pass', false, true).
             n.tag(null, 'div', array('class' => 'strength-meter')).
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
