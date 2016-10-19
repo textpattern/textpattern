@@ -90,7 +90,7 @@ button {
             text-decoration-skip: ink edges;
   }
   a:hover, a:active {
-    outline-width: 0;
+    outline: 0;
     color: #b16f2e;
     text-decoration: underline;
     /* 4 */
@@ -121,7 +121,7 @@ button {
   .pophelp:focus,
   .pophelpsubtle:focus {
     border-color: #5b9dd9;
-    outline-width: 0;
+    outline: 0;
   }
   /**
  * Additional styling for popup help links in table headers.
@@ -932,7 +932,7 @@ button {
   select:focus,
   textarea:focus {
     border-color: #5b9dd9;
-    outline-width: 0;
+    outline: 0;
   }
   /**
  * Fix vertical alignment of `color` fields with their label.
@@ -1248,7 +1248,7 @@ button {
   .navlink:focus,
   .navlink-active:focus {
     border-color: #5b9dd9;
-    outline-width: 0;
+    outline: 0;
   }
   /**
  * Additional styling for primary buttons.
@@ -2737,7 +2737,7 @@ button {
   /* Content -> Images panel - additional layout
    ========================================================================== */
   .has-thumbnail a:focus {
-    outline-width: 0;
+    outline: 0;
   }
   .thumbnail-alter input {
     margin: 0 0.3333333em 0 0;
@@ -2859,7 +2859,7 @@ button {
     margin: 0;
     padding: 0;
     border: 0;
-    outline-width: 0;
+    outline: 0;
     font-size: 12px;
     line-height: 18px;
     list-style: none;
@@ -2943,10 +2943,10 @@ button {
  */
   .ui-state-focus {
     border-color: #5b9dd9;
-    outline-width: 0;
+    outline: 0;
   }
   .ui-state-focus a {
-    outline-width: 0;
+    outline: 0;
   }
   /**
  * Active jQuery UI widget interaction state.
@@ -4073,7 +4073,7 @@ button {
   }
   .ui-button:focus {
     border-color: #5b9dd9;
-    outline-width: 0;
+    outline: 0;
   }
   /**
  * Focus styling for buttons.
@@ -4694,7 +4694,7 @@ button {
     margin: 0;
     padding: 0;
     border-color: #d4d4d4;
-    outline-width: 0;
+    outline: 0;
     /* 1 */
     font-size: 12px;
     line-height: 1.5em;

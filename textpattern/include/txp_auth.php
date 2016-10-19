@@ -105,7 +105,7 @@ function doLoginForm($message)
         $out[] = hed(gTxt('password_reset'), 1, array('id' => 'txp-login-heading')).
             inputLabel(
                 'login_name',
-                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'),
+                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
                 'name', '', array('class' => 'txp-form-field login-name')
             ).
             graf(
@@ -143,12 +143,12 @@ function doLoginForm($message)
         $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')).
             inputLabel(
                 'login_name',
-                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'),
+                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
                 'name', '', array('class' => 'txp-form-field login-name')
             ).
             inputLabel(
                 'login_password',
-                fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password'),
+                fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password', false, true),
                 'password', '', array('class' => 'txp-form-field login-password')
             ).
             graf(
