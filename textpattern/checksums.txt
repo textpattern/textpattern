@@ -136,5 +136,5 @@
 /vendors/Textpattern/Validator/TrueConstraint.php: 415c2ec0adc2a37b0c9bfb82af66b000
 /vendors/Textpattern/Validator/Validator.php: ff06c7f8ccdc75c195c8cc38c624ea0f
 /vendors/Txp.php: 3cbca9376577717d0a4cfc80903013ff
-/../rpc/index.php: 4db8478da4adc93f9f0b06413b720669
+/../rpc/index.php: 0224ea0630db20bf33bfd7f94f94d048
 /../rpc/TXP_RPCServer.php: 07d1eb0be897b20a30b5116ade060a2e
