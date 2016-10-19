@@ -539,7 +539,7 @@ function cat_event_category_edit($evname, $message = '')
         $out = hed(gTxt('edit_category'), 2).
             inputLabel(
                 'category_name',
-                fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'),
+                fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name', false, true),
                 $evname.'_category_name', '', array('class' => 'txp-form-field edit-category-name')
             ).
             inputLabel(
