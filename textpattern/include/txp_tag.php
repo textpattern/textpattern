@@ -2176,7 +2176,7 @@ class BuilderTags
 
         extract($atts);
 
-        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : gTxt('tag_home');
+        $linktext = isset($_POST['linktext']) ? ps('linktext') : gTxt('tag_home');
 
         $out = $this->tagbuildForm(
                 $this->startblock.
@@ -2208,7 +2208,7 @@ class BuilderTags
 
         extract($atts);
 
-        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : '<txp:next_title />';
+        $linktext = isset($_POST['linktext']) ? ps('linktext') : '<txp:next_title />';
 
         $out = $this->tagbuildForm(
                 $this->startblock.
@@ -2240,7 +2240,7 @@ class BuilderTags
 
         extract($atts);
 
-        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : '<txp:prev_title />';
+        $linktext = isset($_POST['linktext']) ? ps('linktext') : '<txp:prev_title />';
 
         $out = $this->tagbuildForm(
                 $this->startblock.
@@ -2339,7 +2339,7 @@ class BuilderTags
 
     function tag_newer()
     {
-        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : '<txp:text item="newer" />';
+        $linktext = isset($_POST['linktext']) ? ps('linktext') : '<txp:text item="newer" />';
 
         $out = $this->tagbuildForm(
                 $this->startblock.
@@ -2372,7 +2372,7 @@ class BuilderTags
 
     function tag_older()
     {
-        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : '<txp:text item="older" />';
+        $linktext = isset($_POST['linktext']) ? ps('linktext') : '<txp:text item="older" />';
 
         $out = $this->tagbuildForm(
                 $this->startblock.
@@ -2476,7 +2476,7 @@ class BuilderTags
 
         extract($atts);
 
-        $linktext = isset($_POST['linktext']) ? $_POST['linktext'] : '<txp:title />';
+        $linktext = isset($_POST['linktext']) ? ps('linktext') : '<txp:title />';
 
         $out = $this->tagbuildForm(
                 $this->startblock.
