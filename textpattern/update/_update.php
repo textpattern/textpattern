@@ -59,7 +59,7 @@ if (($dbversion == '') ||
     $dbversion = '0.9.9';
 }
 
-$dbversion_target = $dbupdates[sizeof($dbupdates) - 1];
+$dbversion_target = $thisversion;
 
 if ($dbversion == $dbversion_target ||
     ($txp_is_dev && (newest_file() <= $dbupdatetime))) {
@@ -79,10 +79,16 @@ safe_delete('txp_prefs', "name = 'last_update_check'");
 
 set_error_handler("updateErrorHandler");
 
+$updates = array_fill_keys($dbupdates, true);
+
+if (!isset($updates[$dbversion_target])) {
+    $updates[$dbversion_target] = false;
+}
+
 try {
-    foreach ($dbupdates as $dbupdate) {
+    foreach ($updates as $dbupdate => $update) {
         if (version_compare($dbversion, $dbupdate, '<')) {
-            if ((include txpath.DS.'update'.DS.'_to_'.$dbupdate.'.php') === false) {
+            if ($update && (include txpath.DS.'update'.DS.'_to_'.$dbupdate.'.php') === false) {
                 trigger_error('Something bad happened. Not sure what exactly', E_USER_ERROR);
             }
 
