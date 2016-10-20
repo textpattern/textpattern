@@ -1150,10 +1150,17 @@ button {
   /**
  * Styling for form field validation.
  */
-  input:focus:invalid, input:-moz-ui-invalid,
+  input:focus:invalid,
   select:focus:invalid,
+  textarea:focus:invalid {
+    border-color: #9d261d;
+    box-shadow: none;
+  }
+  /**
+ * Styling for Firefox-specfic form field validation.
+ */
+  input:-moz-ui-invalid,
   select:-moz-ui-invalid,
-  textarea:focus:invalid,
   textarea:-moz-ui-invalid {
     border-color: #9d261d;
     box-shadow: none;
