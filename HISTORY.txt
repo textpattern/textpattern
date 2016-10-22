@@ -8,7 +8,7 @@ Changes in 4.6.2
 * Fixed: Define Trace in RPC (thanks, Retrax/makss).
 * Added: Better cross-browser support for input type=color (thanks, NicolasGraph).
 * Added: Support for printing of admin panels.
-* Added: Additonal Latvian setup translations.
+* Added: Additional Latvian setup translations.
 
 Changes in 4.6.1
 
