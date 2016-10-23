@@ -520,12 +520,6 @@ class Request
             return $this->headers;
         }
 
-        if (function_exists('apache_request_headers')) {
-            if ($this->headers = apache_request_headers()) {
-                return $this->headers;
-            }
-        }
-
         $this->headers = array();
 
         foreach ($_SERVER as $name => $value) {

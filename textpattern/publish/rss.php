@@ -223,14 +223,8 @@ function rss()
         $hims = serverset('HTTP_IF_MODIFIED_SINCE');
         $imsd = ($hims) ? strtotime($hims) : 0;
 
-        if (is_callable('apache_request_headers')) {
-            $headers = apache_request_headers();
-
-            if (isset($headers["A-IM"])) {
-                $canaim = strpos($headers["A-IM"], "feed");
-            } else {
-                $canaim = false;
-            }
+        if (isset($_SERVER["HTTP_A_IM"])) {
+            $canaim = strpos($_SERVER["HTTP_A_IM"], "feed");
         } else {
             $canaim = false;
         }
