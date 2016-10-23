@@ -359,7 +359,7 @@ function atom()
 
     $out = array_merge($out, $articles);
 
-    header('Content-type: application/atom+xml; charset=utf-8');
+    header('Content-Type: application/atom+xml; charset=utf-8');
 
     return chr(60).'?xml version="1.0" encoding="UTF-8"?'.chr(62).n.
         '<feed xml:lang="'.txpspecialchars($language).'" xmlns="http://www.w3.org/2005/Atom">'.join(n, $out).'</feed>';
