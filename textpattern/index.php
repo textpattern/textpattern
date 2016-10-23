@@ -76,7 +76,7 @@ if (!isset($txpcfg['table_prefix']) && !@include './config.php') {
     ob_end_clean();
 }
 
-header("Content-type: text/html; charset=utf-8");
+header("Content-Type: text/html; charset=utf-8");
 
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");

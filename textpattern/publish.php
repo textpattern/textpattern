@@ -203,7 +203,7 @@ if (gps('parentid')) {
         checkCommentRequired(getComment());
     } elseif ($comments_mode == 1) {
         // Popup comments?
-        header("Content-type: text/html; charset=utf-8");
+        header("Content-Type: text/html; charset=utf-8");
         exit(parse_form('popup_comments'));
     }
 }
@@ -572,7 +572,7 @@ function textpattern()
 
     restore_error_handler();
 
-    header("Content-type: text/html; charset=utf-8");
+    header("Content-Type: text/html; charset=utf-8");
     echo $html;
 
     callback_event('textpattern_end');

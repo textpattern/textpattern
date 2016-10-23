@@ -5230,7 +5230,7 @@ function txp_die($msg, $status = '503', $url = '')
 eod;
     }
 
-    header("Content-type: text/html; charset=utf-8");
+    header("Content-Type: text/html; charset=utf-8");
 
     if (is_callable('parse')) {
         $txp_error_message = $msg;
