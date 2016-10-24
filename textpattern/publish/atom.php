@@ -350,8 +350,7 @@ function atom()
         }
 
         if ($cutarticles) {
-            // header("HTTP/1.1 226 IM Used");
-            // This should be used as opposed to 200, but Apache doesn't like it.
+            header("HTTP/1.1 226 IM Used");
             header("Cache-Control: no-store, im");
             header("IM: feed");
         }
