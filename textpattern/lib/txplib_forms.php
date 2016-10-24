@@ -277,22 +277,6 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
 }
 
 /**
- * Sanitises a page title.
- *
- * @param      string $text The input string
- * @return     string
- * @deprecated in 4.2.0
- * @see        escape_title()
- */
-
-function cleanfInput($text)
-{
-    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'escape_title')), E_USER_NOTICE);
-
-    return escape_title($text);
-}
-
-/**
  * Hidden form input.
  *
  * @param  string $name  The name
