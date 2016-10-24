@@ -1,8 +1,0 @@
-/**
- * Compatibility style sheet, serves as a fallback for third-party
- * extensions with no admin-side theming capability.
- *
- * @deprecated in 4.2.0
- */
-
-@import "admin-themes/hive/assets/css/textpattern.min.css";
