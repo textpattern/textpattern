@@ -181,6 +181,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article')
     ->register('article_custom')
     ->register('txp_die')
+    ->register('txp_eval', 'evaluate')
     ->register('comments_help')
     ->register('comment_name_input')
     ->register('comment_email_input')
@@ -5111,4 +5112,47 @@ function if_variable($atts, $thing = null)
     }
 
     return isset($thing) ? parse($thing, $x) : $x;
+}
+
+// -------------------------------------------------------------
+
+function txp_eval($atts, $thing = null)
+{
+    static $dom = null, $xpath = null, $functions = null;
+
+    if (!class_exists('DOMDocument')) {
+        trigger_error('Missing PHP DOM extension');
+
+        return parse($thing, false);
+    }
+
+    extract(lAtts(array(
+        'query'  => null
+    ), $atts));
+
+    if (empty($query)) {
+        $x = $query;
+    } else {
+        if (!isset($dom)) {
+            $dom = new DOMDocument;
+            $xpath = new DOMXpath($dom);
+            $functions = implode('|', do_list_unique(get_pref('txp_functions')));
+            if($functions) {
+                $xpath->registerNamespace('php', 'http://php.net/xpath');
+                $xpath->registerPHPFunctions($functions);
+            }
+        }
+
+        if ($functions) {
+                $query = preg_replace('/\b('.$functions.')\s*\(/', "php:function('$1',", $query);
+        }
+
+        $x = $xpath->evaluate($query);
+
+        if($x instanceOf DOMNodeList) {
+            $x = $x->length;
+        }
+    }
+
+    return isset($thing) ? parse($thing, !empty($x)) : $x;
 }
