@@ -369,7 +369,7 @@ function parse($thing, $condition = null)
 
     if (isset($condition)) {
         if ($production_status === 'debug') {
-            $trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
+            $trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false').']');
         }
     } else {
         $condition = true;
@@ -406,14 +406,14 @@ function parse($thing, $condition = null)
 
                 // Handle short tags.
                 if (strlen($tag[$level][1]) !== 3 && $tag[$level][1] !== 'txp:' && $tag[$level][2] !== 'else') {
-                    $tag[$level][2] = $tag[$level][1] . $tag[$level][2];
+                    $tag[$level][2] = $tag[$level][1].$tag[$level][2];
                     $tag[$level][2][3] = '_';
                 }
 
                 if ($chunk[strlen($chunk) - 2] === '/') {
                     // Self closed tag.
                     if ($chunk[1] === '/') {
-                        trigger_error(txpspecialchars(gTxt('ambiguous_tag') . ' ' . $chunk));
+                        trigger_error(txpspecialchars(gTxt('ambiguous_tag').' '.$chunk));
                     }
 
                     $tags[$level][] = array($chunk, $tag[$level][2], $tag[$level][3], null, null);
@@ -429,14 +429,14 @@ function parse($thing, $condition = null)
                 } else {
                     // Closing tag.
                     if ($level < 1) {
-                        trigger_error(txpspecialchars(gTxt('lonely_closing_tag') . ' ' . $chunk));
+                        trigger_error(txpspecialchars(gTxt('lonely_closing_tag').' '.$chunk));
                         $tags[$level][] = array($chunk, null, '', null, null);
                         $inside[$level] .= $chunk;
                         continue;
                     }
 
                     if ($production_status !== 'live' && $tag[$level-1][2] != $tag[$level][2]) {
-                        $trace->log(gTxt('tag_mismatch') . ': ' . $outside[$level] . $inside[$level] . $chunk);
+                        $trace->log(gTxt('tag_mismatch').': '.$outside[$level].$inside[$level].$chunk);
                     }
 
                     $sha = sha1($inside[$level]);
@@ -444,7 +444,7 @@ function parse($thing, $condition = null)
                     $txp_else[$sha] = array($else[$level] > 0 ? $else[$level] : $count[$level], $count[$level] - 2);
                     $level--;
                     $tags[$level][] = array($outside[$level+1], $tag[$level][2], $tag[$level][3], $inside[$level+1], $chunk);
-                    $inside[$level] .= $inside[$level+1] . $chunk;
+                    $inside[$level] .= $inside[$level+1].$chunk;
                 }
             } else {
                 $tags[$level][] = $chunk;
@@ -465,7 +465,7 @@ function parse($thing, $condition = null)
             if ($level == 0) {
                 break;
             }
-            trigger_error(txpspecialchars(gTxt('unclosed_tag') .n . $outside[$level] . $inside[$level] . n));
+            trigger_error(txpspecialchars(gTxt('unclosed_tag').n.$outside[$level].$inside[$level].n));
             $level--;
             $tags[$level][] = array($outside[$level+1], $tag[$level][2], $tag[$level][3], $inside[$level+1], '');
             $inside[$level] .= $inside[$level+1];
@@ -492,7 +492,7 @@ function parse($thing, $condition = null)
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
         $t = $tag[$first];
-        $out .= processTags($t[1], $t[2], $t[3]) . $tag[++$first];
+        $out .= processTags($t[1], $t[2], $t[3]).$tag[++$first];
     }
 
     return $out;

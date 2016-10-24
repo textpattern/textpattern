@@ -3412,7 +3412,7 @@ function make_download_link($id, $label = '', $filename = '')
     // Do not use the array() form of passing $atts to href().
     // Doing so breaks download links on the admin side due to
     // double-encoding of the ampersands.
-    return href($label, $url, ' title = "' . gTxt('download') . '"');
+    return href($label, $url, ' title = "'.gTxt('download').'"');
 }
 
 /**
@@ -4299,7 +4299,7 @@ function generate_user_token($ref, $type, $expiryTimestamp, $pass, $nonce)
     // Using the selector in the hash just injects randomness, otherwise two requests
     // back-to-back would generate the same code.
     // Old requests for the same user id are purged when password is set.
-    $token = bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $nonce . $selector . $pass), 0, SALT_LENGTH)));
+    $token = bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $nonce.$selector.$pass), 0, SALT_LENGTH)));
     $user_token = $token.$selector;
 
     // Remove any previous activation tokens and insert the new one.
@@ -4350,7 +4350,7 @@ function EvalElse($thing, $condition)
     }
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
-        $out .= $tag[$first][0] . $tag[$first][3] . $tag[$first][4] . $tag[++$first];
+        $out .= $tag[$first][0].$tag[$first][3].$tag[$first][4].$tag[++$first];
     }
 
     return $out;
@@ -5900,7 +5900,7 @@ function getMetaDescription($type = null)
         } elseif ($thisarticle) {
             $content = $thisarticle['description'];
         } elseif ($c) {
-            $content = safe_field("description", 'txp_category', "name = '".doSlash($c)."' AND type = '" . doSlash($context) . "'");
+            $content = safe_field("description", 'txp_category', "name = '".doSlash($c)."' AND type = '".doSlash($context)."'");
         } elseif ($s) {
             $content = safe_field("description", 'txp_section', "name = '".doSlash($s)."'");
         }
@@ -5918,7 +5918,7 @@ function getMetaDescription($type = null)
                 }
 
                 $clause = " AND type = '".$thisContext."'";
-                $content = safe_field("description", 'txp_category', "name = '".doSlash($c)."'" . $clause);
+                $content = safe_field("description", 'txp_category', "name = '".doSlash($c)."'".$clause);
             }
         } elseif ($type === 'section') {
             $theSection = ($thissection) ? $thissection['name'] : $s;

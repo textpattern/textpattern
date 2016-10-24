@@ -99,5 +99,5 @@ $n = gps('n');
 output_css($s, $n);
 
 if ($production_status === 'debug') {
-    echo n.'/*' . $trace->result() . n.'*/'.n;
+    echo n.'/*'.$trace->result().n.'*/'.n;
 }
