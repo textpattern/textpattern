@@ -135,7 +135,7 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
 
     $selected = false;
     $multiple = is_array($value) ? ' multiple="multiple"' : '';
-    
+
     if ($multiple) {
         $name .= '[]';
     } else {
