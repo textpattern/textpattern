@@ -1058,6 +1058,7 @@ function fetch($col, $table, $key, $val, $debug = false)
         if (mysqli_num_rows($r) > 0) {
             $row = mysqli_fetch_row($r);
             mysqli_free_result($r);
+
             return $row[0];
         }
 

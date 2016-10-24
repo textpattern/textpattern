@@ -80,6 +80,7 @@ class Loader
 
         if ($this->directory) {
             $trace->log("[Textpattern autoload dir: '".str_replace(txpath.'/', '', $this->directory)."']");
+
             return spl_autoload_register(array($this, 'load'));
         }
 
@@ -153,6 +154,7 @@ class Loader
             if (class_exists($request, false)) {
                 $trace->log("[Class loaded: '$class']");
                 $trace->stop();
+
                 return true;
             }
 

@@ -2091,6 +2091,7 @@ function popup_comments($atts, $thing = null)
 
     if ($rs) {
         populateArticleData($rs);
+
         return ($thing === null ? parse_form($form) : parse($thing));
     }
 

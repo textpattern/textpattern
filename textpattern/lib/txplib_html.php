@@ -452,6 +452,7 @@ function prevnext_link($name, $event, $step, $id, $title = '', $rel = '')
 function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit = '', $search_method = '', $step = 'list')
 {
     $theClass = ($type === 'next') ? 'ui-icon-arrowthick-1-e' : 'ui-icon-arrowthick-1-w';
+
     return href(
         span(
             $label,

@@ -3187,6 +3187,7 @@ function safe_strtotime($time_str)
 
     // tz_offset calculations are expensive
     $tz_offset = tz_offset($ts);
+
     return strtotime($time_str, time() + $tz_offset) - $tz_offset;
 }
 

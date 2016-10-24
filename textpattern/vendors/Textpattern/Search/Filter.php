@@ -333,6 +333,7 @@ EOJS
         assert_string($this->event);
         $this->search_method = array_filter(do_list(get_pref('search_options_'.$this->event)));
         $this->search_method = array_intersect($this->search_method, array_keys($this->methods));
+
         return $this->search_method;
     }
 
