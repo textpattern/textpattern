@@ -285,43 +285,6 @@ function escape_js($js)
 }
 
 /**
- * A shell for htmlspecialchars() with $flags defaulting to ENT_QUOTES.
- *
- * @param      string $str The input string
- * @return     string
- * @deprecated in 4.2.0
- * @see        txpspecialchars()
- * @package    Filter
- */
-
-function escape_output($str)
-{
-    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'txpspecialchars')), E_USER_NOTICE);
-
-    return txpspecialchars($str);
-}
-
-/**
- * Replaces &lt; and &gt; characters with entities.
- *
- * @param      string $str The input string
- * @return     string
- * @deprecated in 4.2.0
- * @see        txpspecialchars()
- * @package    Filter
- */
-
-function escape_tags($str)
-{
-    trigger_error(gTxt('deprecated_function', array('{name}' => __FUNCTION__)), E_USER_NOTICE);
-
-    return strtr($str, array(
-        '<' => '&#60;',
-        '>' => '&#62;',
-    ));
-}
-
-/**
  * Escapes CDATA section for an XML document.
  *
  * @param   string $str The string
@@ -584,27 +547,6 @@ function load_lang_event($event, $lang = LANG)
     }
 
     return ($out) ? $out : '';
-}
-
-/**
- * Requires privileges from a user.
- *
- * @deprecated in 4.3.0
- * @see        require_privs()
- * @package    User
- */
-
-function check_privs()
-{
-    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'require_privs')), E_USER_NOTICE);
-    global $txp_user;
-    $privs = safe_field("privs", 'txp_users', "name = '".doSlash($txp_user)."'");
-    $args = func_get_args();
-
-    if (!in_array($privs, $args)) {
-        exit(pageTop('Restricted').'<p style="margin-top:3em;text-align:center">'.
-            gTxt('restricted_area').'</p>');
-    }
 }
 
 /**
@@ -2108,44 +2050,6 @@ function pluggable_ui($event, $element, $default = '')
 }
 
 /**
- * Gets an attribute from the $theatts global.
- *
- * @param      string $name
- * @param      string $default
- * @return     string
- * @deprecated in 4.2.0
- * @see        lAtts()
- * @package    TagParser
- */
-
-function getAtt($name, $default = null)
-{
-    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'lAtts')), E_USER_NOTICE);
-    global $theseatts;
-
-    return isset($theseatts[$name]) ? $theseatts[$name] : $default;
-}
-
-/**
- * Gets an attribute from the given array.
- *
- * @param      array  $atts
- * @param      string $name
- * @param      string $default
- * @return     string
- * @deprecated in 4.2.0
- * @see        lAtts()
- * @package    TagParser
- */
-
-function gAtt(&$atts, $name, $default = null)
-{
-    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'lAtts')), E_USER_NOTICE);
-
-    return isset($atts[$name]) ? $atts[$name] : $default;
-}
-
-/**
  * Merge the second array into the first array.
  *
  * @param   array $pairs The first array
@@ -2168,24 +2072,6 @@ function lAtts($pairs, $atts, $warn = true)
     }
 
     return ($pairs) ? $pairs : false;
-}
-
-/**
- * Generates All, None and Range selection buttons.
- *
- * @return     string HTML
- * @deprecated in 4.5.0
- * @see        multi_edit()
- * @package    Form
- */
-
-function select_buttons()
-{
-    return
-    gTxt('select').
-    n.fInput('button', 'selall', gTxt('all'), '', 'select all', 'selectall();').
-    n.fInput('button', 'selnone', gTxt('none'), '', 'select none', 'deselectall();').
-    n.fInput('button', 'selrange', gTxt('range'), '', 'select range', 'selectrange();');
 }
 
 /**
@@ -2941,41 +2827,6 @@ function event_change_pageby($name = null)
 }
 
 /**
- * Generates a multi-edit widget.
- *
- * @param      string $name
- * @param      array  $methods
- * @param      int    $page
- * @param      string $sort
- * @param      string $dir
- * @param      string $crit
- * @param      string $search_method
- * @deprecated in 4.5.0
- * @see        multi_edit()
- * @package    Form
- */
-
-function event_multiedit_form($name, $methods = null, $page, $sort, $dir, $crit, $search_method)
-{
-    $method = ps('edit_method');
-
-    if ($methods === null) {
-        $methods = array(
-            'delete' => gTxt('delete'),
-        );
-    }
-
-    return '<label for="withselected">'.gTxt('with_selected').'</label>'.
-        n.selectInput('edit_method', $methods, $method, 1, ' id="withselected" onchange="poweredit(this); return false;"').
-        n.eInput($name).
-        n.sInput($name.'_multi_edit').
-        n.hInput('page', $page).
-        ($sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '').
-        (($crit != '') ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '').
-        n.fInput('submit', '', gTxt('go'));
-}
-
-/**
  * Generic multi-edit form's edit handler shared across panels.
  *
  * Receives an action from a multi-edit form and runs it in the given
@@ -3620,54 +3471,6 @@ function fileDownloadFormatTime($params)
     }
 
     return '';
-}
-
-/**
- * Checks if the system is Windows.
- *
- * Exists for backwards compatibility.
- *
- * @return     bool
- * @deprecated in 4.3.0
- * @see        IS_WIN
- * @package    System
- */
-
-function is_windows()
-{
-    return IS_WIN;
-}
-
-/**
- * Checks if PHP is run as CGI.
- *
- * Exists for backwards compatibility.
- *
- * @return     bool
- * @deprecated in 4.3.0
- * @see        IS_CGI
- * @package    System
- */
-
-function is_cgi()
-{
-    return IS_CGI;
-}
-
-/**
- * Checks if PHP is run as Apache module.
- *
- * Exists for backwards compatibility.
- *
- * @return     bool
- * @deprecated in 4.3.0
- * @see        IS_APACHE
- * @package    System
- */
-
-function is_mod_php()
-{
-    return IS_APACHE;
 }
 
 /**
