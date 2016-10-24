@@ -56,7 +56,7 @@ include_once txpath.'/include/txp_auth.php';
 
 assert_system_requirements();
 
-header("Content-type: text/html; charset=utf-8");
+header("Content-Type: text/html; charset=utf-8");
 header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 
 // Drop trailing cruft.
