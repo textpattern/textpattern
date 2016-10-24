@@ -3470,7 +3470,7 @@ function upload_get_errormsg($err_code)
             $msg = gTxt('upload_err_ini_size');
             break;
         // Value: 2; The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
-        case UPLOAD_ERR_FORM_SIZE :
+        case UPLOAD_ERR_FORM_SIZE:
             $msg = gTxt('upload_err_form_size');
             break;
         // Value: 3; The uploaded file was only partially uploaded.
@@ -5671,7 +5671,9 @@ function do_list_unique($list, $delim = ',', $flags = TEXTPATTERN_STRIP_EMPTY_ST
     }
 
     if ($flags & TEXTPATTERN_STRIP_EMPTY_STRING) {
-        $out = array_filter($out, function ($v) {return ($v=='') ? false : true;});
+        $out = array_filter($out, function ($v) {
+            return ($v=='') ? false : true;
+        });
     }
 
     return $out;

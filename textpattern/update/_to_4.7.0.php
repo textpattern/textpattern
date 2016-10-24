@@ -35,5 +35,3 @@ if (is_writable(txpath.DS.'..')) {
         }
     }
 }
-
-

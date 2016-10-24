@@ -462,7 +462,9 @@ function parse($thing, $condition = null)
             $count[$level] += 2;
             $txp_parsed[$sha] = $count[$level] > 2 ? $tags[$level] : false;
             $txp_else[$sha] = array($else[$level] > 0 ? $else[$level] : $count[$level], $count[$level] - 2);
-            if ($level == 0) break;
+            if ($level == 0) {
+                break;
+            }
             trigger_error(txpspecialchars(gTxt('unclosed_tag') .n . $outside[$level] . $inside[$level] . n));
             $level--;
             $tags[$level][] = array($outside[$level+1], $tag[$level][2], $tag[$level][3], $inside[$level+1], '');

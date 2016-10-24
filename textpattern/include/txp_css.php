@@ -208,8 +208,7 @@ function css_edit($message = '')
                 array('', 'instructions_style_code'),
                 array('class' => 'txp-form-field')
             ).
-            $buttons
-            , '', '', 'post', '', '', 'style_form'),
+            $buttons, '', '', 'post', '', '', 'style_form'),
         'div', array(
             'class' => 'txp-layout-4col-3span',
             'id'    => 'main_content',

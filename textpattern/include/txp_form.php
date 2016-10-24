@@ -378,8 +378,7 @@ function form_edit($message = '')
                 array('class' => 'txp-form-field'),
                 array('div', 'div')
             ).
-            $buttons
-            , '', '', 'post', '', '', 'form_form'),
+            $buttons, '', '', 'post', '', '', 'form_form'),
         'div', array(
             'class' => 'txp-layout-4col-3span',
             'id'    => 'main_content',
