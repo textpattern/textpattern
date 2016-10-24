@@ -1460,8 +1460,13 @@ function pluginErrorHandler($errno, $errstr, $errfile, $errline)
         return;
     }
 
-    printf('<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
-        $txp_current_plugin, $error[$errno], $errstr, $errline);
+    printf(
+        '<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
+        $txp_current_plugin,
+        $error[$errno],
+        $errstr,
+        $errline
+    );
 
     if ($production_status == 'debug') {
         print "\n<pre class=\"backtrace\" dir=\"ltr\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
@@ -1526,8 +1531,13 @@ function tagErrorHandler($errno, $errstr, $errfile, $errline)
         '{form}' => $txp_current_form,
     ));
 
-    printf("<pre dir=\"auto\">".gTxt('tag_error').' <b>%s</b> -> <b> %s: %s %s</b></pre>',
-            txpspecialchars($txp_current_tag), $error[$errno], $errstr, $locus);
+    printf(
+        "<pre dir=\"auto\">".gTxt('tag_error').' <b>%s</b> -> <b> %s: %s %s</b></pre>',
+        txpspecialchars($txp_current_tag),
+        $error[$errno],
+        $errstr,
+        $locus
+    );
 
     if ($production_status == 'debug') {
         print "\n<pre class=\"backtrace\" dir=\"ltr\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
@@ -1721,8 +1731,12 @@ function publicErrorHandler($errno, $errstr, $errfile, $errline)
         return;
     }
 
-    printf("<pre dir=\"auto\">".gTxt('general_error').' <b>%s: %s on line %s</b></pre>',
-        $error[$errno], $errstr, $errline);
+    printf(
+        "<pre dir=\"auto\">".gTxt('general_error').' <b>%s: %s on line %s</b></pre>',
+        $error[$errno],
+        $errstr,
+        $errline
+    );
 
     if ($production_status == 'debug') {
         print "\n<pre class=\"backtrace\" dir=\"ltr\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
@@ -2385,7 +2399,6 @@ function dumbDown($str, $lang = LANG)
                     $array[$lang] = array_merge($array[$lang], $i18n[$lang]);
                 }
             }
-
             // Load an old file (no sections) just in case.
             else {
                 $array[$lang] = array_merge($array[$lang], $i18n);

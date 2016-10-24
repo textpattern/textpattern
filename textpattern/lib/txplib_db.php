@@ -1388,8 +1388,11 @@ function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
     $parent = doSlash($parent);
     $type = doSlash($type);
 
-    $result = safe_column("name", $tbl,
-        "parent = '$parent' AND type = '$type' ORDER BY name");
+    $result = safe_column(
+        "name",
+        $tbl,
+        "parent = '$parent' AND type = '$type' ORDER BY name"
+    );
 
     foreach ($result as $row) {
         $right = rebuild_tree($row, $right, $type, $tbl);

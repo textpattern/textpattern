@@ -609,7 +609,8 @@ function radio_list($name, $values, $current_val = '', $hilight_val = '', $atts 
         $out[] = tag(
             radio($name, $value, ((string) $current_val === (string) $value), $id).
             n.tag($label, 'label', array('for' => $id)),
-            'li', array('class' => $class)
+            'li',
+            array('class' => $class)
         );
     }
 
