@@ -775,15 +775,3 @@ function admin_multi_edit()
 
     author_list($msg);
 }
-
-/**
- * Legacy panel.
- *
- * @param      string|array $message
- * @deprecated in 4.2.0
- */
-
-function admin($message = '')
-{
-    author_list($message);
-}

@@ -271,8 +271,7 @@ function rss()
         }
 
         if ($cutarticles) {
-            // header("HTTP/1.1 226 IM Used");
-            // This should be used as opposed to 200, but Apache doesn't like it.
+            header("HTTP/1.1 226 IM Used");
             header("Cache-Control: no-store, im");
             header("IM: feed");
         }
@@ -291,27 +290,4 @@ function rss()
         '<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">'.n.
         tag(join(n, $out), 'channel').n.
         '</rss>';
-}
-
-/**
- * Converts HTML entities to UTF-8 characters.
- *
- * @param      string $toUnicode
- * @return     string
- * @deprecated in 4.0.4
- */
-
-function rss_safe_hed($toUnicode)
-{
-    if (version_compare(phpversion(), "5.0.0", ">=")) {
-        $str =  html_entity_decode($toUnicode, ENT_QUOTES, "UTF-8");
-    } else {
-        $trans_tbl = get_html_translation_table(HTML_ENTITIES);
-        foreach ($trans_tbl as $k => $v) {
-            $ttr[$v] = utf8_encode($k);
-        }
-        $str = strtr($toUnicode, $ttr);
-    }
-
-    return $str;
 }

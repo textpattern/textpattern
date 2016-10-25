@@ -2413,43 +2413,6 @@ function if_comments_error($atts, $thing = null)
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
-/**
- * Renders a heading for comments.
- *
- * @param      array  $atts
- * @param      string $thing
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function comments_annotateinvite($atts, $thing)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    global $thisarticle, $pretext;
-
-    extract(lAtts(array(
-        'class'   => __FUNCTION__,
-        'wraptag' => 'h3',
-    ), $atts));
-
-    assert_article();
-
-    extract($thisarticle);
-
-    extract(safe_row(
-        "Annotate, AnnotateInvite, UNIX_TIMESTAMP(Posted) AS uPosted",
-        'textpattern',
-        "ID = ".intval($thisid)
-    ));
-
-    if (!$thing) {
-        $thing = $AnnotateInvite;
-    }
-
-    return (!$Annotate) ? '' : doTag($thing, $wraptag, $class, ' id="'.gTxt('comment').'"');
-}
-
 // -------------------------------------------------------------
 
 function comments($atts, $thing = null)
@@ -3991,94 +3954,6 @@ function permlink($atts, $thing = null)
 function lang()
 {
     return txpspecialchars(LANG);
-}
-
-/**
- * Formats article permanent links.
- *
- * @param      int    $ID
- * @param      string $Section
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function formatPermLink($ID, $Section)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    return permlinkurl_id($ID);
-}
-
-/**
- * Formats comments invite link.
- *
- * @param      string $AnnotateInvite
- * @param      string $Section
- * @param      int    $ID
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function formatCommentsInvite($AnnotateInvite, $Section, $ID)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    global $comments_mode;
-
-    $dc = safe_count('txp_discuss', "parentid = ".intval($ID)." AND visible = ".VISIBLE);
-
-    $ccount = ($dc) ?  '['.$dc.']' : '';
-    if (!$comments_mode) {
-        return '<a href="'.permlinkurl_id($ID).'/#'.gTxt('comment').
-            '">'.$AnnotateInvite.'</a>'.$ccount;
-    } else {
-        return "<a href=\"".hu."?parentid=$ID\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\">".$AnnotateInvite.'</a> '.$ccount;
-    }
-}
-
-/**
- * Formats article permanent link.
- *
- * @param      string $text
- * @param      string $plink
- * @param      string $Title
- * @param      string $url_title
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function doPermlink($text, $plink, $Title, $url_title)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    global $url_mode;
-    $Title = ($url_title) ? $url_title : stripSpace($Title);
-    $Title = ($url_mode) ? $Title : '';
-
-    return preg_replace("/<(txp:permlink)>(.*)<\/\\1>/sU",
-        "<a href=\"".$plink.$Title."\" title=\"".gTxt('permanent_link')."\">$2</a>", $text);
-}
-
-/**
- * Formats article link.
- *
- * @param      int    $ID
- * @param      string $Title
- * @param      string $url_title
- * @param      string $Section
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function doArticleHref($ID, $Title, $url_title, $Section)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    $conTitle = ($url_title) ? $url_title : stripSpace($Title);
-
-    return ($GLOBALS['url_mode'])
-    ?    tag($Title, 'a', ' href="'.hu.$Section.'/'.$ID.'/'.$conTitle.'"')
-    :    tag($Title, 'a', ' href="'.hu.'index.php?id='.$ID.'"');
 }
 
 // -------------------------------------------------------------
