@@ -522,15 +522,15 @@ function feed_link($atts, $thing = null)
 
     $title = txpspecialchars($title);
 
-    if ($format == 'link') {
-        $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
+    $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
 
+    if ($format == 'link') {
         return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
     }
 
     $txt = ($thing === null ? $label : parse($thing));
 
-    $out = href($txt, $url, ' title="'.$title.'"');
+    $out = href($txt, $url, array('type' => $type, 'title' => $title));
 
     return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 }
@@ -563,13 +563,13 @@ function link_feed_link($atts)
 
     $title = txpspecialchars($title);
 
-    if ($format == 'link') {
-        $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
+    $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
 
+    if ($format == 'link') {
         return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
     }
 
-    $out = href($label, $url, ' title="'.$title.'"');
+    $out = href($label, $url, array('type' => $type, 'title' => $title));
 
     return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 }
