@@ -4993,7 +4993,7 @@ function if_variable($atts, $thing = null)
 
 function txp_eval($atts, $thing = null)
 {
-    static $dom = null, $xpath = null, $functions = null;
+    static $xpath = null, $functions = null;
 
     if (!class_exists('DOMDocument')) {
         trigger_error('Missing PHP DOM extension');
@@ -5008,9 +5008,8 @@ function txp_eval($atts, $thing = null)
     if (empty($query)) {
         $x = $query;
     } else {
-        if (!isset($dom)) {
-            $dom = new DOMDocument;
-            $xpath = new DOMXpath($dom);
+        if (!isset($xpath)) {
+            $xpath = new DOMXpath(new DOMDocument);
             $functions = implode('|', do_list_unique(get_pref('txp_functions')));
             if($functions) {
                 $xpath->registerNamespace('php', 'http://php.net/xpath');
