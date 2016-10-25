@@ -663,19 +663,6 @@ function wrapGroup($id, $content, $label, $class = '', $help = '')
 /**
  * Renders start of a layout &lt;table&gt; element.
  *
- * @return     string HTML
- * @deprecated in 4.4.0
- */
-
-function startSkelTable()
-{
-    return
-    '<table width="300" cellpadding="0" cellspacing="0" style="border:1px #ccc solid">';
-}
-
-/**
- * Renders start of a layout &lt;table&gt; element.
- *
  * @param  string $id    HTML id attribute
  * @param  string $align HTML align attribute
  * @param  string $class HTML class attribute
