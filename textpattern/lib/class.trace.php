@@ -111,19 +111,19 @@ class Trace
             return '';
         }
 
-        return "\n<!-- " . str_replace('--', '- - ', $str) . "-->\n";
+        return "\n<!-- ".str_replace('--', '- - ', $str)."-->\n";
     }
 
     public function summary($array = false)
     {
         $summary = array(
-            'Runtime'    => sprintf('%4.2f', (microtime(true) - $this->bigBang) * 1000) . ' ms',
-            'Query time' => sprintf('%4.2f', $this->queryTime * 1000) . ' ms',
+            'Runtime'    => sprintf('%4.2f', (microtime(true) - $this->bigBang) * 1000).' ms',
+            'Query time' => sprintf('%4.2f', $this->queryTime * 1000).' ms',
             'Queries'    => $this->queries,
         );
 
         if ($this->memFunc) {
-            $summary['Memory (*)'] = ceil(memory_get_peak_usage() / 1024) . ' kB';
+            $summary['Memory (*)'] = ceil(memory_get_peak_usage() / 1024).' kB';
         }
 
         $out = "Trace summary:\n";
@@ -147,14 +147,14 @@ class Trace
             if (isset($trace['end'])) {
                 $line .= sprintf('%8.2f | ', ($trace['end'] - $trace['begin']) * 1000);
             } else {
-                $line .= str_repeat(' ', 8) . ' | ';
+                $line .= str_repeat(' ', 8).' | ';
             }
 
             if ($trace['query']) {
-                $querylog .= $line . $trace['msg'] . "\n";
+                $querylog .= $line.$trace['msg']."\n";
             }
 
-            $line .= str_repeat("\t", $trace['level']) . $trace['msg'] . "\n";
+            $line .= str_repeat("\t", $trace['level']).$trace['msg']."\n";
             $tracelog .= $line;
         }
 

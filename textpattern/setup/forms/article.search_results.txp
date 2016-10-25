@@ -8,16 +8,12 @@
         <h3>
             <txp:search_result_count />
             <txp:text item="matching_search_request" />
-            <q>
-                <txp:search_term />
-            </q>
+            <q><txp:search_term /></q>
         </h3>
     <txp:else />
         <h3>
             <txp:text item="too_common_search_term" />
-            <q>
-                <txp:search_term />
-            </q>
+            <q><txp:search_term /></q>
         </h3>
     </txp:if_search_results>
 

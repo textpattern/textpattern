@@ -215,7 +215,7 @@ $en_gb_lang = array(
         'bs-ba' => 'Bosanski',
         'ca-es' => 'Català',
         'cancel' => 'Cancel',
-        'cannot_instantiate_theme' => 'Theme <strong>{name}</strong> ({class}) failed to load properly from file {path}. The default theme will be used as a fallback.',
+        'cannot_instantiate_theme' => 'Theme <strong>{name}</strong> ({class}) failed to load properly from file {path}. The default theme will be used as a fallback when you refresh this page.',
         'category' => 'Category',
         'changeauthor' => 'Change author',
         'changecategory' => 'Change category',
@@ -775,7 +775,7 @@ $en_gb_lang = array(
         'file_max_upload_size' => 'Maximum file size of uploads (in bytes)',
         'from_file' => 'Install from file',
         'from_server' => 'Install from remote server',
-        'gmtoffset' => 'Time zone',
+        'gmtoffset' => 'Time zone (GMT offset in seconds)',
         'ham' => 'All but spam',
         'hours_days_ago' => 'hours/days ago',
         'id_title' => '/id/title',
@@ -1365,4 +1365,4 @@ $en_gb_lang = array(
         'wraptag' => 'Wrap tag',
     ),
 );
-$lastmod = gmdate('Y-m-d H:m:s', 1473180743);
+$lastmod = gmdate('Y-m-d H:m:s', 1474445001);

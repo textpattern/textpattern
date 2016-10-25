@@ -491,7 +491,7 @@ function section_edit()
     } else {
         $out[] = inputLabel(
                 'section_name',
-                fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name'),
+                fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name', false, true),
                 'section_name', '', array('class' => 'txp-form-field edit-section-name')
             ).
             inputLabel(
@@ -748,7 +748,7 @@ function section_delete()
 
     if ($sectionsNotDeleted) {
         $severity = ($message) ? E_WARNING : E_ERROR;
-        $message = array(($message ? $message.n : '') . gTxt('section_delete_failure', array('{name}' => join(', ', $sectionsNotDeleted))), $severity);
+        $message = array(($message ? $message.n : '').gTxt('section_delete_failure', array('{name}' => join(', ', $sectionsNotDeleted))), $severity);
     }
 
     sec_section_list($message);

@@ -105,7 +105,8 @@ function send_reset_confirmation_request($name)
         LEFT JOIN ".safe_pfx('txp_token')." txp_token
         ON txp_users.user_id = txp_token.reference_id
         AND txp_token.type = 'password_reset'
-        WHERE txp_users.name = '".doSlash($name)."'");
+        WHERE txp_users.name = '".doSlash($name)."'"
+    );
 
     $row = nextRow($rs);
 

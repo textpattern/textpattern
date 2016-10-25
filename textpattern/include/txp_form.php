@@ -378,8 +378,7 @@ function form_edit($message = '')
                 array('class' => 'txp-form-field'),
                 array('div', 'div')
             ).
-            $buttons
-            , '', '', 'post', '', '', 'form_form'),
+            $buttons, '', '', 'post', '', '', 'form_form'),
         'div', array(
             'class' => 'txp-layout-4col-3span',
             'id'    => 'main_content',
@@ -453,10 +452,10 @@ function form_save()
                 if ($savenew or $copy) {
                     if ($newname) {
                         if (safe_insert(
-                                'txp_form',
-                                "Form = '$Form',
-                                type = '$type',
-                                name = '".doSlash($newname)."'"
+                            'txp_form',
+                            "Form = '$Form',
+                            type = '$type',
+                            name = '".doSlash($newname)."'"
                         )) {
                             update_lastmod('form_created', compact('newname', 'name', 'type', 'Form'));
                             $message = gTxt('form_created', array('{name}' => $newname));
@@ -470,11 +469,11 @@ function form_save()
                     }
                 } else {
                     if (safe_update(
-                            'txp_form',
-                            "Form = '$Form',
-                            type = '$type',
-                            name = '".doSlash($newname)."'",
-                            "name = '".doSlash($name)."'"
+                        'txp_form',
+                        "Form = '$Form',
+                        type = '$type',
+                        name = '".doSlash($newname)."'",
+                        "name = '".doSlash($name)."'"
                     )) {
                         update_lastmod('form_saved', compact('newname', 'name', 'type', 'Form'));
                         $message = gTxt('form_updated', array('{name}' => $name));

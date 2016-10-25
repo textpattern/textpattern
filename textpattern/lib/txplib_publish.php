@@ -369,13 +369,13 @@ function parse($thing, $condition = null)
 
     if (isset($condition)) {
         if ($production_status === 'debug') {
-            $trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false') .']');
+            $trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false').']');
         }
     } else {
         $condition = true;
     }
 
-    if (false === strpos($thing, '<txp:') and false === strpos($thing, '::')) {
+    if (false === strpos($thing, '<txp:') && false === strpos($thing, '::')) {
         return $condition ? $thing : '';
     }
 
@@ -390,8 +390,8 @@ function parse($thing, $condition = null)
         $count   = array(-1);
         $level   = 0;
 
-        $f = '@(</?(?:txp|[a-z]{3}:):\w+(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?'.chr(62).')@s';
-        $t = '@^./?(txp|[a-z]{3}:):(\w+)(.*?)/?.$@s';
+        $f = '@(</?(?:txp|[a-z]{3}:):\w+(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+        $t = '@^</?(txp|[a-z]{3}:):(\w+)(.*?)/?\>$@s';
 
         $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
 
@@ -405,13 +405,17 @@ function parse($thing, $condition = null)
                 }
 
                 // Handle short tags.
-                if (strlen($tag[$level][1]) !== 3 and $tag[$level][1] !== 'txp:' and $tag[$level][2] !== 'else') {
-                    $tag[$level][2] = $tag[$level][1] . $tag[$level][2];
+                if (strlen($tag[$level][1]) !== 3 && $tag[$level][1] !== 'txp:' && $tag[$level][2] !== 'else') {
+                    $tag[$level][2] = $tag[$level][1].$tag[$level][2];
                     $tag[$level][2][3] = '_';
                 }
 
                 if ($chunk[strlen($chunk) - 2] === '/') {
                     // Self closed tag.
+                    if ($chunk[1] === '/') {
+                        trigger_error(txpspecialchars(gTxt('ambiguous_tag').' '.$chunk));
+                    }
+
                     $tags[$level][] = array($chunk, $tag[$level][2], $tag[$level][3], null, null);
                     $inside[$level] .= $chunk;
                 } elseif ($chunk[1] !== '/') {
@@ -424,12 +428,23 @@ function parse($thing, $condition = null)
                     $tags[$level] = array();
                 } else {
                     // Closing tag.
+                    if ($level < 1) {
+                        trigger_error(txpspecialchars(gTxt('lonely_closing_tag').' '.$chunk));
+                        $tags[$level][] = array($chunk, null, '', null, null);
+                        $inside[$level] .= $chunk;
+                        continue;
+                    }
+
+                    if ($production_status !== 'live' && $tag[$level-1][2] != $tag[$level][2]) {
+                        $trace->log(gTxt('tag_mismatch').': '.$outside[$level].$inside[$level].$chunk);
+                    }
+
                     $sha = sha1($inside[$level]);
                     $txp_parsed[$sha] = $count[$level] > 2 ? $tags[$level] : false;
                     $txp_else[$sha] = array($else[$level] > 0 ? $else[$level] : $count[$level], $count[$level] - 2);
                     $level--;
                     $tags[$level][] = array($outside[$level+1], $tag[$level][2], $tag[$level][3], $inside[$level+1], $chunk);
-                    $inside[$level] .= $inside[$level+1] . $chunk;
+                    $inside[$level] .= $inside[$level+1].$chunk;
                 }
             } else {
                 $tags[$level][] = $chunk;
@@ -437,8 +452,25 @@ function parse($thing, $condition = null)
             }
         }
 
+        // Auto-closing
+/*
         $txp_parsed[$hash] = $count[0] > 0 ? $tags[0] : false;
         $txp_else[$hash] = array($else[0] > 0 ? $else[0] : $count[0] + 2, $count[0]);
+*/
+        while ($level >= 0) {
+            $sha = $level ? sha1($inside[$level]) : $hash;
+            $count[$level] += 2;
+            $txp_parsed[$sha] = $count[$level] > 2 ? $tags[$level] : false;
+            $txp_else[$sha] = array($else[$level] > 0 ? $else[$level] : $count[$level], $count[$level] - 2);
+            if ($level == 0) {
+                break;
+            }
+            trigger_error(txpspecialchars(gTxt('unclosed_tag').n.$outside[$level].$inside[$level].n));
+            $level--;
+            $tags[$level][] = array($outside[$level+1], $tag[$level][2], $tag[$level][3], $inside[$level+1], '');
+            $inside[$level] .= $inside[$level+1];
+            $tags[$level][] = '';
+        }
     }
 
     $tag = $txp_parsed[$hash];
@@ -460,7 +492,7 @@ function parse($thing, $condition = null)
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
         $t = $tag[$first];
-        $out .= processTags($t[1], $t[2], $t[3]) . $tag[++$first];
+        $out .= processTags($t[1], $t[2], $t[3]).$tag[++$first];
     }
 
     return $out;
@@ -500,6 +532,10 @@ function processTags($tag, $atts, $thing = null)
 {
     global $production_status, $txp_current_tag, $txp_current_form, $trace;
     static $registry = null;
+
+    if (empty($tag)) {
+        return;
+    }
 
     if ($production_status !== 'live') {
         $old_tag = $txp_current_tag;

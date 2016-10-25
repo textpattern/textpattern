@@ -21,7 +21,7 @@
     <txp:meta_keywords separator="," />
 
     <meta name="generator" content="Textpattern CMS">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- specify robots, canonical and author -->
     <txp:if_search>

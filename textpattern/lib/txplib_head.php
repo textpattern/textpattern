@@ -95,19 +95,24 @@ function pagetop($pagetitle, $message = '')
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
     script_js(
-        'var textpattern = '.json_encode(array(
-            'event' => $event,
-            'step' => $step,
-            '_txp_token' => form_token(),
-            'ajax_timeout' => (int) AJAX_TIMEOUT,
-            'textarray' => (object) null,
-            'do_spellcheck' => get_pref('do_spellcheck',
-                '#page-article #body, #page-article #title,'.
-                '#page-image #alt-text, #page-image #caption,'.
-                '#page-file #description,'.
-                '#page-link #link-title, #page-link #link-description'),
-            'production_status' => get_pref('production_status'),
-        )).';').
+        'var textpattern = '.json_encode(
+            array(
+                'event' => $event,
+                'step' => $step,
+                '_txp_token' => form_token(),
+                'ajax_timeout' => (int) AJAX_TIMEOUT,
+                'textarray' => (object) null,
+                'do_spellcheck' => get_pref(
+                    'do_spellcheck',
+                    '#page-article #body, #page-article #title,'.
+                    '#page-image #alt-text, #page-image #caption,'.
+                    '#page-file #description,'.
+                    '#page-link #link-title, #page-link #link-description'
+                ),
+                'production_status' => get_pref('production_status'),
+            )
+        ).';'
+    ).
     script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
     gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled', 'ok', 'save', 'publish'));
     // Mandatory un-themable Textpattern core styles ?>

@@ -21,7 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Generated: 07 Sep 2016, 08:39:56 GMT
+// Generated: 18 Oct 2016, 10:00:10 GMT
 
 $langs = array(
     'ar-dz' => array(
@@ -1306,9 +1306,16 @@ $langs = array(
         'progress_steps' => 'Uzstādīšanas procesā ir 4 soļi:',
         'setup_comment_invite' => 'Komentēt',
         'setup_login' => 'Izvēlēties lietotāja vārdu (izmantojiet tikai latīņu burtus un atstarpes)',
+        'setup_password_strength_0' => 'Ļoti vāja',
+        'setup_password_strength_1' => 'Vāja',
+        'setup_password_strength_2' => 'Vidēja',
+        'setup_password_strength_3' => 'Laba',
+        'setup_password_strength_4' => 'Spēcīga',
+        'setup_show_password' => 'Rādīt paroli',
         'set_db_details' => 'Ievadiet datubāzes datus',
         'site_config' => 'Vietnes konfigurācija',
         'site_url' => 'Lapas adrese',
+        'tables_exist' => 'Šķiet, ka datubāzē <strong>{dbname}</strong> tabulas jau pastāv. Ja vēlaties turpināt uzstādīšanu, vai nu nodzēsiet esošās tabulas, vai arī izvēlieties atšķirīgu tabulu prefiksu.',
         'table_prefix' => 'Tabulu priedēklis (fakultatīvs)',
         'thanks_for_interest' => 'Paldies par jūsu interesi par Textpattern',
         'that_went_well' => 'Instalācija ir pabeigta. Datubāzes tabulas tika veiksmīgi izveidotas un aizpildītas.',
@@ -1892,7 +1899,7 @@ $langs = array(
         'need_details' => 'Ofrånkomligen så behöver vi några detaljer…',
         'next_step' => 'Nästa',
         'pass_required' => 'Var god ange ett starkt lösenord.',
-        'please_enter_url' => 'Var god ange den från webben nåbara adressen till din sajt.',
+        'please_enter_url' => 'Ange webbadressen till din webbplats.',
         'please_go_back' => 'Var god backa, ändra eventuella fel och försök igen.',
         'populate_db' => 'Fyll på databasen',
         'prefix_bad_characters' => 'Tabellprefixet {dbprefix} innehåller icke tillåtna tecken. Det första tecknet måste matcha någon av <strong>a-zA-Z_</strong> och alla följande tecken måste matcha någon av <strong>a-zA-Z0-9_</strong>.',
@@ -1908,8 +1915,8 @@ $langs = array(
         'setup_show_password' => 'Visa lösenord',
         'set_db_details' => 'Ange databasdetaljer',
         'set_temp_dir_prefs' => 'Ledsen, kunde inte hitta en skrivbar katalog att lagra tillfälliga filer. Var god använd fliken <strong>Avancerade inställningar</strong> och ändra <strong>Tillfällig katalog</strong> där.',
-        'site_config' => 'Sajtkonfiguration',
-        'site_url' => 'Sajt-URL',
+        'site_config' => 'Webbplatskonfiguration',
+        'site_url' => 'Webbplats-URL',
         'tables_exist' => 'Det verkar som att tabellerna i <strong>{dbname}</strong> redan finns. Vill du ändå fortsätta måste du antingen ta bort dem först eller ange ett annat tabell-prefix för den här installationen.',
         'table_prefix' => 'Tabell-prefix (tillval)',
         'thanks_for_interest' => 'Tack för ditt intresse för Textpattern',

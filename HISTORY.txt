@@ -1,3 +1,15 @@
+Changes in 4.6.2
+
+* Maintenance release with bug fixes.
+* Fixed: More complete SQL trace on non-row-based queries.
+* Fixed: Update process for filesystem-only releases.
+* Fixed: Normalise link text in some tag builder tags (thanks, makss).
+* Fixed: Incorrect focus ring styling.
+* Fixed: Define Trace in RPC (thanks, Retrax/makss).
+* Added: Better cross-browser support for input type=color (thanks, NicolasGraph).
+* Added: Support for printing of admin panels.
+* Added: Additional Latvian setup translations.
+
 Changes in 4.6.1
 
 * Maintenance release with bug fixes.
@@ -14,7 +26,7 @@ Changes in 4.6.1
 * Changed: Made better use of available screen estate for presentation panel code textareas (thanks, phiw13).
 * Changed: Tightened up vertical layout on Forms panel.
 * Changed: Put an upper limit on preference group widths for better readability (thanks, phiw13).
-* Changed: CONTRIBUTING.textile points to docs site.
+* Changed: CONTRIBUTING.textile info has been consolidated into main README.txt file.
 * jQuery UI 1.12.1.
 * zxcvbn 4.4.0.
 

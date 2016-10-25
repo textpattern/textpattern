@@ -167,8 +167,7 @@ function page_edit($message = '')
                 array('class' => 'txp-form-field'),
                 array('div', 'div')
             ).
-            $buttons
-            , '', '', 'post', '', '', 'page_form'),
+            $buttons, '', '', 'post', '', '', 'page_form'),
         'div', array(
             'class' => 'txp-layout-4col-3span',
             'id'    => 'main_content',
@@ -360,7 +359,7 @@ function page_tagbuild()
 
     // Format of each entry is popTagLink -> array ( gTxt() string, class/ID).
     $tagbuild_items = array(
-        'page_article'     => array('page_article_hed','article-tags'),
+        'page_article'     => array('page_article_hed', 'article-tags'),
         'page_article_nav' => array('page_article_nav_hed', 'article-nav-tags'),
         'page_nav'         => array('page_nav_hed', 'nav-tags'),
         'page_xml'         => array('page_xml_hed', 'xml-tags'),

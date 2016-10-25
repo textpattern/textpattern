@@ -87,15 +87,19 @@ function end_page()
         echo pluggable_ui('admin_side', 'footer', $theme->footer());
         callback_event('admin_side', 'body_end');
 
-        gTxtScript(array(
-            'password_strength_0',
-            'password_strength_1',
-            'password_strength_2',
-            'password_strength_3',
-            'password_strength_4',
+        gTxtScript(
+            array(
+                'password_strength_0',
+                'password_strength_1',
+                'password_strength_2',
+                'password_strength_3',
+                'password_strength_4',
             ),
             array(),
-            array(array('admin', 'admin'), array('new_pass_form', 'change_pass'))
+            array(
+                array('admin', 'admin'),
+                array('new_pass_form', 'change_pass')
+            )
         );
 
         echo script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL, array(array('admin', 'admin'), array('new_pass_form', 'change_pass'))).
@@ -448,21 +452,24 @@ function prevnext_link($name, $event, $step, $id, $title = '', $rel = '')
 function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit = '', $search_method = '', $step = 'list')
 {
     $theClass = ($type === 'next') ? 'ui-icon-arrowthick-1-e' : 'ui-icon-arrowthick-1-w';
-    return href(span(
-            $label, array('class' => 'ui-icon '.$theClass)
-        ),
-        array(
-        'event'         => $event,
-        'step'          => $step,
-        'page'          => (int) $page,
-        'dir'           => $dir,
-        'crit'          => $crit,
-        'search_method' => $search_method,
-    ), array(
-        'rel'        => $type,
-        'title'      => $label,
-        'aria-label' => $label,
-    ));
+
+    return href(
+        span(
+            $label,
+            array('class' => 'ui-icon '.$theClass)
+        ), array(
+            'event'         => $event,
+            'step'          => $step,
+            'page'          => (int) $page,
+            'dir'           => $dir,
+            'crit'          => $crit,
+            'search_method' => $search_method,
+        ), array(
+            'rel'        => $type,
+            'title'      => $label,
+            'aria-label' => $label,
+        )
+    );
 }
 
 /**
@@ -530,30 +537,31 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
 
 
         $nav[] = form(
-                n.tag(gTxt('page'), 'label', array(
+            n.tag(gTxt('page'), 'label', array(
                     'for' => 'current-page',
-                )).
-                n.tag_void('input', array(
-                    'class'     => 'current-page',
-                    'id'        => 'current-page',
-                    'name'      => 'page',
-                    'type'      => 'text',
-                    'size'      => INPUT_XSMALL,
-                    'inputmode' => 'numeric',
-                    'pattern'   => '[0-9]+',
-                    'value'     => $page,
-                )).
-                n.gTxt('of').
-                n.span($numPages, array('class' => 'total-pages')).
-                eInput($event).
-                hInput('sort', $sort).
-                hInput('dir', $dir).
-                hInput('crit', $crit).
-                hInput('search_method', $search_method),
-                '',
-                '',
-                'get'
-            );
+                )
+            ).
+            n.tag_void('input', array(
+                'class'     => 'current-page',
+                'id'        => 'current-page',
+                'name'      => 'page',
+                'type'      => 'text',
+                'size'      => INPUT_XSMALL,
+                'inputmode' => 'numeric',
+                'pattern'   => '[0-9]+',
+                'value'     => $page,
+            )).
+            n.gTxt('of').
+            n.span($numPages, array('class' => 'total-pages')).
+            eInput($event).
+            hInput('sort', $sort).
+            hInput('dir', $dir).
+            hInput('crit', $crit).
+            hInput('search_method', $search_method),
+            '',
+            '',
+            'get'
+        );
 
         // Next page.
         if ($page < $numPages) {
@@ -650,19 +658,6 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
 function wrapGroup($id, $content, $label, $class = '', $help = '')
 {
     return wrapRegion($id, $content, '', $label, '', $class, $help);
-}
-
-/**
- * Renders start of a layout &lt;table&gt; element.
- *
- * @return     string HTML
- * @deprecated in 4.4.0
- */
-
-function startSkelTable()
-{
-    return
-    '<table width="300" cellpadding="0" cellspacing="0" style="border:1px #ccc solid">';
 }
 
 /**
@@ -962,7 +957,10 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
     $out = n.tag(
         $labeltag.
         fieldHelp($inlineHelp).
-        $input.n, 'div', $atts);
+        $input.n,
+        'div',
+        $atts
+    );
 
     return pluggable_ui($event.'_ui', 'inputlabel.'.$name, $out, $arguments);
 }
@@ -1395,7 +1393,9 @@ function multi_edit($options, $event = null, $step = null, $page = '', $sort = '
         ($sort ? hInput('sort', $sort).hInput('dir', $dir) : '').
         ($crit !== '' ? hInput('crit', $crit).hInput('search_method', $search_method) : '').
         join('', $html).
-        fInput('submit', '', gTxt('go')), 'div', array('class' => 'multi-edit'));
+        fInput('submit', '', gTxt('go')),
+        'div', array('class' => 'multi-edit')
+    );
 }
 
 /**
@@ -1494,7 +1494,9 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
 
     $argv = func_get_args();
 
-    return pluggable_ui($event.'_ui', 'upload_form',
+    return pluggable_ui(
+        $event.'_ui',
+        'upload_form',
         n.tag(
             (!empty($max_file_size) ? hInput('MAX_FILE_SIZE', $max_file_size) : '').
             eInput($event).
@@ -1522,7 +1524,8 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
                 'action'  => 'index.php',
             )
         ),
-        $argv);
+        $argv
+    );
 }
 
 /**
@@ -1549,7 +1552,8 @@ function search_form($event, $step, $crit, $methods, $method, $default_method)
             eInput($event).
             sInput($step).
             fInput('submit', 'search', gTxt('go'))
-        ), '', '', 'get', 'search-form');
+        ), '', '', 'get', 'search-form'
+    );
 }
 
 /**

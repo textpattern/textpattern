@@ -136,7 +136,7 @@ class classic_theme extends \Textpattern\Admin\Theme
             ));
         }
 
-        return join(n, $out);;
+        return join(n, $out);
     }
 
     function announce($thing = array('', 0), $modal = false)

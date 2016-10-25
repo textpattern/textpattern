@@ -44,7 +44,8 @@ if (@ini_get('register_globals')) {
         (array) $_POST,
         (array) $_COOKIE,
         (array) $_FILES,
-        (array) $_SERVER);
+        (array) $_SERVER
+    );
 
     // As the deliberate awkwardly-named local variable $_txpfoo MUST NOT be
     // unset to avoid notices further down, we must remove any potential
@@ -72,6 +73,10 @@ define('txpath', dirname(dirname(__FILE__)).'/textpattern');
 define('txpinterface', 'xmlrpc');
 
 require_once txpath.'/config.php';
+require_once txpath.'/lib/class.trace.php';
+
+$trace = new Trace();
+
 require_once txpath.'/lib/txplib_db.php';
 require_once txpath.'/lib/txplib_misc.php';
 require_once txpath.'/lib/admin_config.php';

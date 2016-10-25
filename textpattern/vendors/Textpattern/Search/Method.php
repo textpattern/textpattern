@@ -262,7 +262,7 @@ class Method
             }
 
             if ($this->options['case_sensitive']) {
-                $column = 'BINARY '. $column;
+                $column = 'BINARY '.$column;
             }
 
             if ($this->options['can_list']) {
