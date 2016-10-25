@@ -4933,15 +4933,44 @@ function getCustomFields()
  * @package CustomField
  */
 
-function buildCustomSql($custom, $pairs)
+function buildCustomSql($custom, $pairs, $match = null)
 {
     if ($pairs) {
         $pairs = doSlash($pairs);
+        $match = $match ? do_list_unique($match) : array();
+        $sep = doSlash(',');
 
         foreach ($pairs as $k => $v) {
             if (in_array($k, $custom)) {
                 $no = array_keys($custom, $k);
-                $out[] = "and custom_".$no[0]." like '$v'";
+                $custom_n = 'custom_'.$no[0];
+                $matched = false;
+
+                foreach ($match as $chunk) {
+                    if (preg_match("/^{$k}\[(.*)\]$/", $chunk, $matches)) {
+                        $matched = true;
+                        $var = array();
+
+                        switch ($matches[1]) {
+                            case '' :
+                            foreach (do_list($v, $sep) as $val) {
+                                $var[] = "CONCAT('".$sep."', {$custom_n}, '".$sep."') LIKE '%{$sep}{$val}{$sep}%'";
+                            }
+                            break;
+                            default:
+                            $ind = array_map('intval', do_list_unique($matches[1], '|'));
+                            foreach (do_list($v, $sep) as $i => $val) {
+                                if (in_array($i+1, $ind)) {
+                                    $var[] = "CONCAT('".$sep."', {$custom_n}, '".$sep."') LIKE '%{$sep}{$val}{$sep}%'";
+                                }
+                            }
+                        }
+
+                        $out[] = "AND (".implode(' OR ', $var).")";
+                    }
+                }
+
+                if (empty($matched)) $out[] = "AND {$custom_n} LIKE '$v'";
             }
         }
     }
