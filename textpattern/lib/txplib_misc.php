@@ -4927,8 +4927,9 @@ function getCustomFields()
  * Build a query qualifier to filter non-matching custom fields from the
  * result set.
  *
- * @param   array $custom An array of 'custom_field_name' => field_number tupels
- * @param   array $pairs  Filter criteria: An array of 'name' => value tupels
+ * @param   array   $custom An array of 'custom_field_name' => field_number tupels
+ * @param   array   $pairs  Filter criteria: An array of 'name' => value tupels
+ * @param   string  $match  Match criteria: 'name1,name2[1|3]'
  * @return  bool|string An SQL qualifier for a query's 'WHERE' part
  * @package CustomField
  */
@@ -4944,29 +4945,32 @@ function buildCustomSql($custom, $pairs, $match = null)
             if (in_array($k, $custom)) {
                 $no = array_keys($custom, $k);
                 $custom_n = 'custom_'.$no[0];
+                $val = do_list($v, $sep);
                 $matched = false;
 
                 foreach ($match as $chunk) {
                     if (preg_match("/^{$k}\[(.*)\]$/", $chunk, $matches)) {
                         $matched = true;
                         $var = array();
+                        $neg = '';
 
                         switch ($matches[1]) {
+                            case 0 : $neg = 'NOT';
                             case '' :
-                            foreach (do_list($v, $sep) as $val) {
-                                $var[] = "CONCAT('".$sep."', {$custom_n}, '".$sep."') LIKE '%{$sep}{$val}{$sep}%'";
+                            foreach ($val as $item) {
+                                $var[] = "CONCAT('".$sep."', {$custom_n}, '".$sep."') LIKE '%{$sep}{$item}{$sep}%'";
                             }
                             break;
-                            default:
+                            default :
                             $ind = array_map('intval', do_list_unique($matches[1], '|'));
-                            foreach (do_list($v, $sep) as $i => $val) {
-                                if (in_array($i+1, $ind)) {
-                                    $var[] = "CONCAT('".$sep."', {$custom_n}, '".$sep."') LIKE '%{$sep}{$val}{$sep}%'";
+                            foreach ($ind as $i) {
+                                if (isset($val[$j = abs($i)-1])) {
+                                    $var[] = ($i < 0 ? 'NOT ' : '')."CONCAT('".$sep."', {$custom_n}, '".$sep."') LIKE '%{$sep}{$val[$j]}{$sep}%'";
                                 }
                             }
                         }
 
-                        $out[] = "AND (".implode(' OR ', $var).")";
+                        $out[] = "AND $neg (".implode(' OR ', $var).")";
                     }
                 }
 
