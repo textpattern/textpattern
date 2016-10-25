@@ -5386,4 +5386,10 @@ button {
   h6 {
     page-break-after: avoid;
   }
+  /**
+ * Make pref panels printable.
+ */
+  .txp-prefs-group.ui-tabs-panel {
+    display: block !important;
+  }
 }
