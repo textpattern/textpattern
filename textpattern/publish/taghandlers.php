@@ -1095,6 +1095,7 @@ function recent_comments($atts, $thing = null)
 function related_articles($atts, $thing = null)
 {
     global $thisarticle, $prefs;
+    static $fields = null;
 
     assert_article();
 
@@ -1113,7 +1114,12 @@ function related_articles($atts, $thing = null)
         'wraptag'  => '',
     ), $atts);
 
-    $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category1', 'category2', 'author', 'keywords'), getCustomFields()));
+    if (!isset($fields)) {
+        $fields = array_merge(array('category1', 'category2', 'author', 'keywords'), getCustomFields());
+    }
+
+    $match = do_list_unique(strtolower($atts['match']));
+    $matches = array_intersect($match, $fields);
     $categories = $cats = array();
 
     foreach ($match as $cf) {
@@ -1130,6 +1136,8 @@ function related_articles($atts, $thing = null)
                 $atts['author'] = $thisarticle['authorid'];
                 break;
             default:
+                $cf = strtok($cf, '[');
+
                 if (empty($thisarticle[$cf])) {
                     return;
                 }
@@ -1145,7 +1153,7 @@ function related_articles($atts, $thing = null)
         return;
     }
 
-    $atts['match'] = implode(',', $categories);
+    $atts['match'] = implode(',', array_merge(array_diff($match, $fields), $categories));
     $atts['exclude'] = $thisarticle['thisid'];
 
     if ($atts['form'] === '' && $thing === null) {
