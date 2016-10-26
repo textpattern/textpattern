@@ -231,12 +231,12 @@ function preText($s, $prefs)
     // Set messy variables.
     $out = makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author');
 
-    if (gps('rss')) {
-        $out['feed'] = 'rss';
+    if (gps('atom') || gps('feed')) {
+        $out['feed'] = 'atom';
     }
 
-    if (gps('atom')) {
-        $out['feed'] = 'atom';
+    if (gps('rss')) {
+        $out['feed'] = 'rss';
     }
 
     // Some useful vars for taghandlers, plugins.
@@ -274,6 +274,10 @@ function preText($s, $prefs)
         if (strlen($u1)) {
             switch ($u1) {
                 case 'atom':
+                    $out['feed'] = 'atom';
+                    break;
+
+                case 'feed':
                     $out['feed'] = 'atom';
                     break;
 
