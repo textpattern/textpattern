@@ -4268,6 +4268,7 @@ function custom_field($atts)
 
     extract(lAtts(array(
         'name'    => get_pref('custom_1_set'),
+        'item'  => null,
         'escape'  => 'html',
         'default' => '',
     ), $atts));
@@ -4290,6 +4291,12 @@ function custom_field($atts)
     $is_article_body = 1;
     $out = ($escape == 'html' ? txpspecialchars($out) : parse($out));
     $is_article_body = $was_article_body;
+
+    if (isset($item)) {
+        $item = intval($item) - 1;
+        $out = do_list($out);
+        $out = isset($out[$item]) ? $out[$item] : false;
+    }
 
     return $out;
 }
