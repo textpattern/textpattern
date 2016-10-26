@@ -5041,7 +5041,6 @@ function txp_die($msg, $status = '503', $url = '')
 <html lang="en">
 <head>
    <meta charset="utf-8">
-   <meta name="robots" content="noindex">
    <title>Textpattern Error: <txp:error_status /></title>
 </head>
 <body>
