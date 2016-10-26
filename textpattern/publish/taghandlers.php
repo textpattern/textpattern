@@ -4167,9 +4167,9 @@ function if_section($atts, $thing = null)
     $section = ($s == 'default' ? '' : $s);
 
     if ($section) {
-        $x = $name === false or in_list($section, $name);
+        $x = $name === false || in_list($section, $name);
     } else {
-        $x = $name !== false and (in_list('', $name) or in_list('default', $name));
+        $x = $name !== false && (in_list('', $name) || in_list('default', $name));
     }
 
     return isset($thing) ? parse($thing, $x) : $x;
@@ -4493,7 +4493,7 @@ function if_plugin($atts, $thing = null)
         trigger_error(gTxt('deprecated_attribute', array('{name}' => 'ver')), E_USER_NOTICE);
     }
 
-    $x = @in_array($name, $plugins) and (!$version or version_compare($plugins_ver[$name], $version) >= 0);
+    $x = @in_array($name, $plugins) && (!$version || version_compare($plugins_ver[$name], $version) >= 0);
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
