@@ -369,7 +369,7 @@ function parse($thing, $condition = null)
 
     if (isset($condition)) {
         if ($production_status === 'debug') {
-            $trace->log("[$txp_current_tag: ".($condition ? 'true' : 'false').']');
+            $trace->log('['.($condition ? 'true' : 'false').']');
         }
     } else {
         $condition = true;
@@ -453,10 +453,6 @@ function parse($thing, $condition = null)
         }
 
         // Auto-closing
-/*
-        $txp_parsed[$hash] = $count[0] > 0 ? $tags[0] : false;
-        $txp_else[$hash] = array($else[0] > 0 ? $else[0] : $count[0] + 2, $count[0]);
-*/
         while ($level >= 0) {
             $sha = $level ? sha1($inside[$level]) : $hash;
             $count[$level] += 2;
@@ -492,7 +488,10 @@ function parse($thing, $condition = null)
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
         $t = $tag[$first];
+        $old_tag = $txp_current_tag;
+        $txp_current_tag = $t[0].$t[3].$t[4];
         $out .= processTags($t[1], $t[2], $t[3]).$tag[++$first];
+        $txp_current_tag = $old_tag;
     }
 
     return $out;
@@ -538,9 +537,7 @@ function processTags($tag, $atts, $thing = null)
     }
 
     if ($production_status !== 'live') {
-        $old_tag = $txp_current_tag;
-        $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
-        $trace->start($txp_current_tag);
+        $trace->start('<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>'));
     }
 
     if ($registry === null) {
@@ -561,7 +558,6 @@ function processTags($tag, $atts, $thing = null)
 
     if ($production_status !== 'live') {
         $trace->stop(isset($thing) ? "</txp:{$tag}>" : null);
-        $txp_current_tag = $old_tag;
     }
 
     return $out;
