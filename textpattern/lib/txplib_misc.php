@@ -5026,7 +5026,7 @@ function txp_die($msg, $status = '503', $url = '')
     if ($url && in_array($code, array(301, 302, 303, 307))) {
         ob_end_clean();
         header("Location: $url", true, $code);
-        die('<html><head><meta http-equiv="refresh" content="0;URL='.txpspecialchars($url).'"></head><body></body></html>');
+        die('<html><head><meta http-equiv="refresh" content="0;URL='.txpspecialchars($url).'"></head><body><p>Document has <a href="'.txpspecialchars($url).'">moved here</a>.</p></body></html>');
     }
 
     if ($connected && @txpinterface == 'public') {
