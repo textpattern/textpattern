@@ -5005,6 +5005,8 @@ function txp_eval($atts, $thing = null)
         'query'  => null
     ), $atts));
 
+    $query = trim($query);
+
     if (empty($query)) {
         $x = $query;
     } else {
