@@ -543,13 +543,14 @@ function processTags($tag, $atts, $thing = null)
 
     $old_tag = $txp_current_tag;
     $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? ">$thing</txp:$tag>" : '/>');
-    $out = $registry->process($tag, splat($atts), $thing);
+    $split = splat($atts);
+    $out = $registry->process($tag, $split, $thing);
     $txp_current_tag = $old_tag;
 
     if ($out === false) {
         if (maybe_tag($tag)) { // Deprecated in 4.6.0.
             trigger_error(gTxt('unregistered_tag'), E_USER_NOTICE);
-            $out = $registry->register($tag)->process($tag, splat($atts), $thing);
+            $out = $registry->register($tag)->process($tag, $split, $thing);
         } else {
             trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
             $out = '';
