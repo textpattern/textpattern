@@ -365,7 +365,7 @@ function lastMod()
 
 function parse($thing, $condition = null)
 {
-    global $production_status, $trace, $txp_parsed, $txp_else, $txp_current_tag;
+    global $production_status, $trace, $txp_parsed, $txp_else;
 
     if (isset($condition)) {
         if ($production_status === 'debug') {
@@ -488,10 +488,7 @@ function parse($thing, $condition = null)
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
         $t = $tag[$first];
-        $old_tag = $txp_current_tag;
-        $txp_current_tag = $t[0].$t[3].$t[4];
         $out .= processTags($t[1], $t[2], $t[3]).$tag[++$first];
-        $txp_current_tag = $old_tag;
     }
 
     return $out;
@@ -544,7 +541,10 @@ function processTags($tag, $atts, $thing = null)
         $registry = Txp::get('\Textpattern\Tag\Registry');
     }
 
+    $old_tag = $txp_current_tag;
+    $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? ">$thing</txp:$tag>" : '/>');
     $out = $registry->process($tag, splat($atts), $thing);
+    $txp_current_tag = $old_tag;
 
     if ($out === false) {
         if (maybe_tag($tag)) { // Deprecated in 4.6.0.
