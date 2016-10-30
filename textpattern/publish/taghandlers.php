@@ -530,7 +530,10 @@ function feed_link($atts, $thing = null)
 
     $txt = ($thing === null ? $label : parse($thing));
 
-    $out = href($txt, $url, array('type' => $type, 'title' => $title));
+    $out = href($txt, $url, array(
+        'type'  => $type,
+        'title' => $title,
+    ));
 
     return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 }
@@ -569,7 +572,10 @@ function link_feed_link($atts)
         return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
     }
 
-    $out = href($label, $url, array('type' => $type, 'title' => $title));
+    $out = href($label, $url, array(
+        'type'  => $type,
+        'title' => $title,
+    ));
 
     return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 }
