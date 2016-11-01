@@ -1739,10 +1739,10 @@ function link_to_home($atts, $thing = null)
 
 function newer($atts, $thing = null)
 {
-    global $thispage, $pretext, $m, $txp_current_tag;
+    global $thispage, $pretext, $m;
 
     if (empty($thispage)) {
-        return empty($pretext['secondpass']) ? $txp_current_tag : '';
+        return '';
     }
 
     extract(lAtts(array(
@@ -1797,10 +1797,10 @@ function newer($atts, $thing = null)
 
 function older($atts, $thing = null)
 {
-    global $thispage, $pretext, $m, $txp_current_tag;
+    global $thispage, $pretext, $m;
 
     if (empty($thispage)) {
-        return empty($pretext['secondpass']) ? $txp_current_tag : '';
+        return '';
     }
 
     extract(lAtts(array(
@@ -3280,10 +3280,10 @@ function search_result_date($atts)
 
 function search_result_count($atts)
 {
-    global $pretext, $thispage, $txp_current_tag;
+    global $thispage;
 
     if (empty($thispage)) {
-        return empty($pretext['secondpass']) ? $txp_current_tag : '';
+        return '';
     }
 
     $t = @$thispage['grand_total'];
@@ -4069,14 +4069,10 @@ function if_search($atts, $thing = null)
 
 function if_search_results($atts, $thing = null)
 {
-    global $thispage, $pretext, $txp_current_tag;
+    global $thispage;
 
-    if (empty($pretext['q'])) {
+    if (empty($pretext['q']) || empty($thispage)) {
         return '';
-    }
-
-    if (empty($thispage)) {
-        return empty($pretext['secondpass']) ? $txp_current_tag : '';
     }
 
     extract(lAtts(array(
