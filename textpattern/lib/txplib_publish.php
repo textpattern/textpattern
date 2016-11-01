@@ -534,18 +534,17 @@ function processTags($tag, $atts, $thing = null)
     }
 
     if ($production_status !== 'live') {
-        $trace->start('<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>'));
+        $old_tag = $txp_current_tag;
+        $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
+        $trace->start($txp_current_tag);
     }
 
     if ($registry === null) {
         $registry = Txp::get('\Textpattern\Tag\Registry');
     }
 
-    $old_tag = $txp_current_tag;
-    $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? ">$thing</txp:$tag>" : '/>');
     $split = splat($atts);
     $out = $registry->process($tag, $split, $thing);
-    $txp_current_tag = $old_tag;
 
     if ($out === false) {
         if (maybe_tag($tag)) { // Deprecated in 4.6.0.
@@ -559,6 +558,7 @@ function processTags($tag, $atts, $thing = null)
 
     if ($production_status !== 'live') {
         $trace->stop(isset($thing) ? "</txp:{$tag}>" : null);
+        $txp_current_tag = $old_tag;
     }
 
     return $out;
