@@ -233,7 +233,6 @@ function css_edit($message = '', $refresh_partials = false)
         );
 
     // Styles create/switcher column.
-    // @todo Volatile partials in case name has changed.
     echo n.tag(
         $partials['list']['html'].n,
         'div', array(
