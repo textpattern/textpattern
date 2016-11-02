@@ -859,8 +859,8 @@ define('TEXTPATTERN_LANG_OWNER_SITE', 'site');
  * @see     join_atts(), do_list_unique()
  */
 
-define('TEXTPATTERN_STRIP_NONE',         0);
-define('TEXTPATTERN_STRIP_EMPTY',        0x1);
+define('TEXTPATTERN_STRIP_NONE', 0);
+define('TEXTPATTERN_STRIP_EMPTY', 0x1);
 define('TEXTPATTERN_STRIP_EMPTY_STRING', 0x2);
 
 /**

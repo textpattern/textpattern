@@ -634,5 +634,6 @@ mysqli_query($link, "FLUSH TABLE `".PFX."txp_lang`");
 function safe_escape($in = '')
 {
     global $link;
+
     return mysqli_real_escape_string($link, $in);
 }

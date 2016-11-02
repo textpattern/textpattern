@@ -621,7 +621,7 @@ function link_multi_edit()
     $key = '';
 
     switch ($method) {
-        case 'delete' :
+        case 'delete':
             if (!has_privs('link.delete')) {
                 if (has_privs('link.delete.own')) {
                     $selected = safe_column("id", 'txp_link', "id IN (".join(',', $selected).") AND author = '".doSlash($txp_user)."'");

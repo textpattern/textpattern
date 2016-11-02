@@ -590,7 +590,7 @@ function author_edit($message = '')
     } else {
         $out[] = inputLabel(
             'login_name',
-            fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name',false, true),
+            fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
             'login_name', 'add_new_author', array('class' => 'txp-form-field edit-admin-login-name')
         );
     }
@@ -774,16 +774,4 @@ function admin_multi_edit()
     }
 
     author_list($msg);
-}
-
-/**
- * Legacy panel.
- *
- * @param      string|array $message
- * @deprecated in 4.2.0
- */
-
-function admin($message = '')
-{
-    author_list($message);
 }

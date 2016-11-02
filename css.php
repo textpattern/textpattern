@@ -40,7 +40,8 @@ if (@ini_get('register_globals')) {
         (array) $_POST,
         (array) $_COOKIE,
         (array) $_FILES,
-        (array) $_SERVER);
+        (array) $_SERVER
+    );
 
     // As the deliberate awkwardly-named local variable $_txpfoo MUST NOT be
     // unset to avoid notices further down, we must remove any potential
@@ -64,7 +65,7 @@ if (@ini_get('register_globals')) {
     }
 }
 
-header('Content-type: text/css');
+header('Content-Type: text/css; charset=utf-8');
 
 if (!defined("txpath")) {
     /**
@@ -98,5 +99,5 @@ $n = gps('n');
 output_css($s, $n);
 
 if ($production_status === 'debug') {
-    echo n.'/*' . $trace->result() . n.'*/'.n;
+    echo n.'/*'.$trace->result().n.'*/'.n;
 }

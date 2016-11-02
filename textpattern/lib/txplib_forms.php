@@ -135,7 +135,7 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
 
     $selected = false;
     $multiple = is_array($value) ? ' multiple="multiple"' : '';
-    
+
     if ($multiple) {
         $name .= '[]';
     } else {
@@ -274,22 +274,6 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
     }
 
     return n.tag_void('input', $atts);
-}
-
-/**
- * Sanitises a page title.
- *
- * @param      string $text The input string
- * @return     string
- * @deprecated in 4.2.0
- * @see        escape_title()
- */
-
-function cleanfInput($text)
-{
-    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'escape_title')), E_USER_NOTICE);
-
-    return escape_title($text);
 }
 
 /**
@@ -609,7 +593,8 @@ function radio_list($name, $values, $current_val = '', $hilight_val = '', $atts 
         $out[] = tag(
             radio($name, $value, ((string) $current_val === (string) $value), $id).
             n.tag($label, 'label', array('for' => $id)),
-            'li', array('class' => $class)
+            'li',
+            array('class' => $class)
         );
     }
 

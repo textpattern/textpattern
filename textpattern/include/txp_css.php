@@ -249,8 +249,7 @@ function css_edit($message = '', $refresh_partials = false)
             $actions.
             $partials['name']['html'].
             $partials['css']['html'].
-            $buttons
-            , '', '', 'post', $class, '', 'style_form'),
+            $buttons, '', '', 'post', $class, '', 'style_form'),
         'div', array(
             'class' => 'txp-layout-4col-3span',
             'id'    => 'main_content',

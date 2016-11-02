@@ -582,7 +582,7 @@ function file_multi_edit()
             $key = 'downloads';
             $val = 0;
             break;
-        case 'changestatus' :
+        case 'changestatus':
             $key = 'status';
             $val = ps('status');
 

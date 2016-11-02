@@ -203,7 +203,7 @@ if (gps('parentid')) {
         checkCommentRequired(getComment());
     } elseif ($comments_mode == 1) {
         // Popup comments?
-        header("Content-type: text/html; charset=utf-8");
+        header("Content-Type: text/html; charset=utf-8");
         exit(parse_form('popup_comments'));
     }
 }
@@ -285,7 +285,8 @@ function preText($s, $prefs)
                 // only way to make it multibyte-safe without breaking
                 // backwards-compatibility.
                 case urldecode(strtolower(urlencode(gTxt('section')))):
-                    $out['s'] = (ckEx('section', $u2)) ? $u2 : ''; $is_404 = empty($out['s']);
+                    $out['s'] = (ckEx('section', $u2)) ? $u2 : '';
+                    $is_404 = empty($out['s']);
                     break;
 
                 case urldecode(strtolower(urlencode(gTxt('category')))):
@@ -322,7 +323,6 @@ function preText($s, $prefs)
                 default:
                     // Then see if the prefs-defined permlink scheme is usable.
                     switch ($permlink_mode) {
-
                         case 'section_id_title':
                             if (empty($u2)) {
                                 $out['s'] = (ckEx('section', $u1)) ? $u1 : '';
@@ -505,9 +505,11 @@ function preText($s, $prefs)
     }
 
     if (is_numeric($id) and !$is_404) {
-        $a = safe_row("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+        $a = safe_row(
+            "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            "ID = ".intval($id).(gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")"));
+            "ID = ".intval($id).(gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")")
+        );
 
         if ($a) {
             $out['id_keywords'] = $a['Keywords'];
@@ -572,7 +574,7 @@ function textpattern()
 
     restore_error_handler();
 
-    header("Content-type: text/html; charset=utf-8");
+    header("Content-Type: text/html; charset=utf-8");
     echo $html;
 
     callback_event('textpattern_end');
@@ -663,15 +665,15 @@ function output_file_download($filename)
     // Deal with error.
     if (isset($file_error)) {
         switch ($file_error) {
-        case 403:
-            txp_die(gTxt('403_forbidden'), '403');
-            break;
-        case 404:
-            txp_die(gTxt('404_not_found'), '404');
-            break;
-        default:
-            txp_die(gTxt('500_internal_server_error'), '500');
-            break;
+            case 403:
+                txp_die(gTxt('403_forbidden'), '403');
+                break;
+            case 404:
+                txp_die(gTxt('404_not_found'), '404');
+                break;
+            default:
+                txp_die(gTxt('500_internal_server_error'), '500');
+                break;
         }
     }
 }
@@ -707,7 +709,6 @@ function doArticles($atts, $iscustom, $thing = null)
     $customlAtts = array_null(array_flip($customFields));
 
     if ($iscustom) {
-
         // Custom articles must not render search results.
         $q = '';
 
@@ -966,9 +967,11 @@ function doArticles($atts, $iscustom, $thing = null)
         $safe_sort = doSlash($sort);
     }
 
-    $rs = safe_rows_start("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$score,
+    $rs = safe_rows_start(
+        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$score,
         'textpattern',
-        "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit));
+        "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
+    );
 
     // Get the form name.
     if ($q && !$issticky) {
@@ -1061,9 +1064,11 @@ function doArticle($atts, $thing = null)
 
         $q_status = ($status ? "AND Status = ".intval($status) : "AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")");
 
-        $rs = safe_row("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+        $rs = safe_row(
+            "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            "ID = $id $q_status LIMIT 1");
+            "ID = $id $q_status LIMIT 1"
+        );
 
         if ($rs) {
             extract($rs);

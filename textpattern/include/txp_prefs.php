@@ -322,7 +322,7 @@ function prefs_list($message = '')
 
     echo n.'</div>'. // End of .txp-layout.
         n.'</form>'.
-        script_js('var selectedTab = "' . $tabActive . '";');
+        script_js('var selectedTab = "'.$tabActive.'";');
 }
 
 /**

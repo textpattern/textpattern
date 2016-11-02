@@ -522,15 +522,18 @@ function feed_link($atts, $thing = null)
 
     $title = txpspecialchars($title);
 
-    if ($format == 'link') {
-        $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
+    $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
 
+    if ($format == 'link') {
         return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
     }
 
     $txt = ($thing === null ? $label : parse($thing));
 
-    $out = href($txt, $url, ' title="'.$title.'"');
+    $out = href($txt, $url, array(
+        'type'  => $type,
+        'title' => $title,
+    ));
 
     return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 }
@@ -563,13 +566,16 @@ function link_feed_link($atts)
 
     $title = txpspecialchars($title);
 
-    if ($format == 'link') {
-        $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
+    $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
 
+    if ($format == 'link') {
         return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
     }
 
-    $out = href($label, $url, ' title="'.$title.'"');
+    $out = href($label, $url, array(
+        'type'  => $type,
+        'title' => $title,
+    ));
 
     return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 }
@@ -1735,6 +1741,10 @@ function newer($atts, $thing = null)
 {
     global $thispage, $pretext, $m;
 
+    if (empty($thispage)) {
+        return '';
+    }
+
     extract(lAtts(array(
         'showalways' => 0,
         'title'      => '',
@@ -1788,6 +1798,10 @@ function newer($atts, $thing = null)
 function older($atts, $thing = null)
 {
     global $thispage, $pretext, $m;
+
+    if (empty($thispage)) {
+        return '';
+    }
 
     extract(lAtts(array(
         'showalways' => 0,
@@ -1888,7 +1902,7 @@ function article_url_title()
 
 // -------------------------------------------------------------
 
-function if_article_id($atts, $thing)
+function if_article_id($atts, $thing = null)
 {
     global $thisarticle, $pretext;
 
@@ -1898,9 +1912,8 @@ function if_article_id($atts, $thing)
         'id' => $pretext['id'],
     ), $atts));
 
-    if ($id) {
-        return parse($thing, in_list($thisarticle['thisid'], $id));
-    }
+    $x = $id && in_list($thisarticle['thisid'], $id);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -1967,25 +1980,26 @@ function expires($atts)
 
 // -------------------------------------------------------------
 
-function if_expires($atts, $thing)
+function if_expires($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse($thing, !empty($thisarticle['expires']));
+    $x = !empty($thisarticle['expires']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_expired($atts, $thing)
+function if_expired($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse($thing,
-        !empty($thisarticle['expires']) && ($thisarticle['expires'] <= time()));
+    $x = !empty($thisarticle['expires']) && ($thisarticle['expires'] <= time());
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -2091,6 +2105,7 @@ function popup_comments($atts, $thing = null)
 
     if ($rs) {
         populateArticleData($rs);
+
         return ($thing === null ? parse_form($form) : parse($thing));
     }
 
@@ -2403,48 +2418,12 @@ function comments_error($atts)
 
 // -------------------------------------------------------------
 
-function if_comments_error($atts, $thing)
+function if_comments_error($atts, $thing = null)
 {
     $evaluator = & get_comment_evaluator();
 
-    return parse($thing, (count($evaluator->get_result_message()) > 0));
-}
-
-/**
- * Renders a heading for comments.
- *
- * @param      array  $atts
- * @param      string $thing
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function comments_annotateinvite($atts, $thing)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    global $thisarticle, $pretext;
-
-    extract(lAtts(array(
-        'class'   => __FUNCTION__,
-        'wraptag' => 'h3',
-    ), $atts));
-
-    assert_article();
-
-    extract($thisarticle);
-
-    extract(safe_row(
-        "Annotate, AnnotateInvite, UNIX_TIMESTAMP(Posted) AS uPosted",
-        'textpattern',
-        "ID = ".intval($thisid)
-    ));
-
-    if (!$thing) {
-        $thing = $AnnotateInvite;
-    }
-
-    return (!$Annotate) ? '' : doTag($thing, $wraptag, $class, ' id="'.gTxt('comment').'"');
+    $x = (count($evaluator->get_result_message()) > 0);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -2550,9 +2529,10 @@ function comments_preview($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function if_comments_preview($atts, $thing)
+function if_comments_preview($atts, $thing = null)
 {
-    return parse($thing, ps('preview') && checkCommentsAllowed(gps('parentid')));
+    $x = ps('preview') && checkCommentsAllowed(gps('parentid'));
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -2790,7 +2770,7 @@ function author_email($atts)
 
 // -------------------------------------------------------------
 
-function if_author($atts, $thing)
+function if_author($atts, $thing = null)
 {
     global $author, $context, $thisauthor;
 
@@ -2799,22 +2779,22 @@ function if_author($atts, $thing)
         'name' => '',
     ), $atts));
 
-    if ($thisauthor) {
-        return parse($thing, $name === '' || in_list($thisauthor['name'], $name));
-    }
-
     $theType = ($type) ? $type == $context : true;
 
-    if ($name) {
-        return parse($thing, ($theType && in_list($author, $name)));
+    if ($thisauthor) {
+        $x = $name === '' || in_list($thisauthor['name'], $name);
+    } elseif ($name) {
+        $x = ($theType && in_list($author, $name));
+    } else {
+        $x = ($theType && (string) $author !== '');
     }
 
-    return parse($thing, ($theType && (string) $author !== ''));
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_article_author($atts, $thing)
+function if_article_author($atts, $thing = null)
 {
     global $thisarticle;
 
@@ -2826,11 +2806,8 @@ function if_article_author($atts, $thing)
 
     $author = $thisarticle['authorid'];
 
-    if ($name) {
-        return parse($thing, in_list($author, $name));
-    }
-
-    return parse($thing, (string) $author !== '');
+    $x = $name ? in_list($author, $name) : (string) $author !== '';
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -3123,18 +3100,20 @@ function if_keywords($atts, $thing = null)
         ? $thisarticle['keywords']
         : array_intersect(do_list($keywords), do_list($thisarticle['keywords']));
 
-    return parse($thing, !empty($condition));
+    $x = !empty($condition);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_article_image($atts, $thing = '')
+function if_article_image($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse($thing, !empty($thisarticle['article_image']));
+    $x = !empty($thisarticle['article_image']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -3302,6 +3281,11 @@ function search_result_date($atts)
 function search_result_count($atts)
 {
     global $thispage;
+
+    if (empty($thispage)) {
+        return '';
+    }
+
     $t = @$thispage['grand_total'];
 
     extract(lAtts(array(
@@ -3764,64 +3748,70 @@ function image_date($atts)
 
 // -------------------------------------------------------------
 
-function if_thumbnail($atts, $thing)
+function if_thumbnail($atts, $thing = null)
 {
     global $thisimage;
 
     assert_image();
 
-    return parse($thing, ($thisimage['thumbnail'] == 1));
+    $x = ($thisimage['thumbnail'] == 1);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_comments($atts, $thing)
+function if_comments($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse($thing, ($thisarticle['comments_count'] > 0));
+    $x = ($thisarticle['comments_count'] > 0);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_comments_allowed($atts, $thing)
+function if_comments_allowed($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse($thing, checkCommentsAllowed($thisarticle['thisid']));
+    $x = checkCommentsAllowed($thisarticle['thisid']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_comments_disallowed($atts, $thing)
+function if_comments_disallowed($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse($thing, !checkCommentsAllowed($thisarticle['thisid']));
+    $x = !checkCommentsAllowed($thisarticle['thisid']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_individual_article($atts, $thing)
+function if_individual_article($atts, $thing = null)
 {
     global $is_article_list;
 
-    return parse($thing, ($is_article_list == false));
+    $x = ($is_article_list == false);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_article_list($atts, $thing)
+function if_article_list($atts, $thing = null)
 {
     global $is_article_list;
 
-    return parse($thing, ($is_article_list == true));
+    $x = ($is_article_list == true);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 /**
@@ -3910,9 +3900,9 @@ function if_description($atts, $thing = null)
         'type' => null,
     ), $atts));
 
-    $content = getMetaDescription($type);
+    $x = !empty(getMetaDescription($type));
 
-    return parse($thing, !empty($content));
+    return isset($thing) ? parse($thing, $x) : $x;;
 }
 
 
@@ -3984,94 +3974,6 @@ function lang()
     return txpspecialchars(LANG);
 }
 
-/**
- * Formats article permanent links.
- *
- * @param      int    $ID
- * @param      string $Section
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function formatPermLink($ID, $Section)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    return permlinkurl_id($ID);
-}
-
-/**
- * Formats comments invite link.
- *
- * @param      string $AnnotateInvite
- * @param      string $Section
- * @param      int    $ID
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function formatCommentsInvite($AnnotateInvite, $Section, $ID)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    global $comments_mode;
-
-    $dc = safe_count('txp_discuss', "parentid = ".intval($ID)." AND visible = ".VISIBLE);
-
-    $ccount = ($dc) ?  '['.$dc.']' : '';
-    if (!$comments_mode) {
-        return '<a href="'.permlinkurl_id($ID).'/#'.gTxt('comment').
-            '">'.$AnnotateInvite.'</a>'.$ccount;
-    } else {
-        return "<a href=\"".hu."?parentid=$ID\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\">".$AnnotateInvite.'</a> '.$ccount;
-    }
-}
-
-/**
- * Formats article permanent link.
- *
- * @param      string $text
- * @param      string $plink
- * @param      string $Title
- * @param      string $url_title
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function doPermlink($text, $plink, $Title, $url_title)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    global $url_mode;
-    $Title = ($url_title) ? $url_title : stripSpace($Title);
-    $Title = ($url_mode) ? $Title : '';
-
-    return preg_replace("/<(txp:permlink)>(.*)<\/\\1>/sU",
-        "<a href=\"".$plink.$Title."\" title=\"".gTxt('permanent_link')."\">$2</a>", $text);
-}
-
-/**
- * Formats article link.
- *
- * @param      int    $ID
- * @param      string $Title
- * @param      string $url_title
- * @param      string $Section
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function doArticleHref($ID, $Title, $url_title, $Section)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    $conTitle = ($url_title) ? $url_title : stripSpace($Title);
-
-    return ($GLOBALS['url_mode'])
-    ?    tag($Title, 'a', ' href="'.hu.$Section.'/'.$ID.'/'.$conTitle.'"')
-    :    tag($Title, 'a', ' href="'.hu.'index.php?id='.$ID.'"');
-}
-
 // -------------------------------------------------------------
 
 function breadcrumb($atts)
@@ -4141,33 +4043,35 @@ function breadcrumb($atts)
 
 //------------------------------------------------------------------------
 
-function if_excerpt($atts, $thing)
+function if_excerpt($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse($thing, trim($thisarticle['excerpt']) !== '');
+    $x = trim($thisarticle['excerpt']) !== '';
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 // Searches use default page. This tag allows you to use different templates if searching
 // -------------------------------------------------------------
 
-function if_search($atts, $thing)
+function if_search($atts, $thing = null)
 {
     global $pretext;
 
-    return parse($thing, !empty($pretext['q']));
+    $x = !empty($pretext['q']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_search_results($atts, $thing)
+function if_search_results($atts, $thing = null)
 {
-    global $thispage, $pretext;
+    global $thispage;
 
-    if (empty($pretext['q'])) {
+    if (empty($pretext['q']) || empty($thispage)) {
         return '';
     }
 
@@ -4178,12 +4082,13 @@ function if_search_results($atts, $thing)
 
     $results = (int) $thispage['grand_total'];
 
-    return parse($thing, $results >= $min && (!$max || $results <= $max));
+    $x = $results >= $min && (!$max || $results <= $max);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_category($atts, $thing)
+function if_category($atts, $thing = null)
 {
     global $c, $context;
 
@@ -4195,15 +4100,17 @@ function if_category($atts, $thing)
     $theType = ($type) ? $type == $context : true;
 
     if ($name === false) {
-        return parse($thing, ($theType && !empty($c)));
+        $x = ($theType && !empty($c));
     } else {
-        return parse($thing, ($theType && in_list($c, $name)));
+        $x = ($theType && in_list($c, $name));
     }
+
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_article_category($atts, $thing)
+function if_article_category($atts, $thing = null)
 {
     global $thisarticle;
 
@@ -4233,37 +4140,41 @@ function if_article_category($atts, $thing)
     }
 
     if ($name) {
-        return parse($thing, array_intersect(do_list($name), $cats));
+        $x = !empty(array_intersect(do_list($name), $cats));
     } else {
-        return parse($thing, ($cats));
+        $x = !empty($cats);
     }
+
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_first_category($atts, $thing)
+function if_first_category($atts, $thing = null)
 {
     global $thiscategory;
 
     assert_category();
 
-    return parse($thing, !empty($thiscategory['is_first']));
+    $x = !empty($thiscategory['is_first']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_last_category($atts, $thing)
+function if_last_category($atts, $thing = null)
 {
     global $thiscategory;
 
     assert_category();
 
-    return parse($thing, !empty($thiscategory['is_last']));
+    $x = !empty($thiscategory['is_last']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_section($atts, $thing)
+function if_section($atts, $thing = null)
 {
     global $pretext;
     extract($pretext);
@@ -4275,15 +4186,17 @@ function if_section($atts, $thing)
     $section = ($s == 'default' ? '' : $s);
 
     if ($section) {
-        return parse($thing, $name === false or in_list($section, $name));
+        $x = $name === false || in_list($section, $name);
     } else {
-        return parse($thing, $name !== false and (in_list('', $name) or in_list('default', $name)));
+        $x = $name !== false && (in_list('', $name) || in_list('default', $name));
     }
+
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_article_section($atts, $thing)
+function if_article_section($atts, $thing = null)
 {
     global $thisarticle;
 
@@ -4295,29 +4208,32 @@ function if_article_section($atts, $thing)
 
     $section = $thisarticle['section'];
 
-    return parse($thing, in_list($section, $name));
+    $x = in_list($section, $name);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_first_section($atts, $thing)
+function if_first_section($atts, $thing = null)
 {
     global $thissection;
 
     assert_section();
 
-    return parse($thing, !empty($thissection['is_first']));
+    $x = !empty($thissection['is_first']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_last_section($atts, $thing)
+function if_last_section($atts, $thing = null)
 {
     global $thissection;
 
     assert_section();
 
-    return parse($thing, !empty($thissection['is_last']));
+    $x = !empty($thissection['is_last']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -4391,7 +4307,7 @@ function custom_field($atts)
 
 // -------------------------------------------------------------
 
-function if_custom_field($atts, $thing)
+function if_custom_field($atts, $thing = null)
 {
     global $thisarticle;
 
@@ -4476,7 +4392,7 @@ function if_custom_field($atts, $thing)
         $cond = ($thisarticle[$name] !== '');
     }
 
-    return parse($thing, !empty($cond));
+    return isset($thing) ? parse($thing, !empty($cond)) : !empty($cond);
 }
 
 // -------------------------------------------------------------
@@ -4506,7 +4422,7 @@ function error_status()
 
 // -------------------------------------------------------------
 
-function if_status($atts, $thing)
+function if_status($atts, $thing = null)
 {
     global $pretext, $txp_error_code;
 
@@ -4518,7 +4434,8 @@ function if_status($atts, $thing)
         ? $txp_error_code
         : $pretext['status'];
 
-    return parse($thing, $status == $page_status);
+    $x = $status == $page_status;
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -4556,29 +4473,31 @@ function if_different($atts, $thing)
 
 // -------------------------------------------------------------
 
-function if_first_article($atts, $thing)
+function if_first_article($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse($thing, !empty($thisarticle['is_first']));
+    $x = !empty($thisarticle['is_first']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_last_article($atts, $thing)
+function if_last_article($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse($thing, !empty($thisarticle['is_last']));
+    $x = !empty($thisarticle['is_last']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_plugin($atts, $thing)
+function if_plugin($atts, $thing = null)
 {
     global $plugins, $plugins_ver;
 
@@ -4593,7 +4512,8 @@ function if_plugin($atts, $thing)
         trigger_error(gTxt('deprecated_attribute', array('{name}' => 'ver')), E_USER_NOTICE);
     }
 
-    return parse($thing, @in_array($name, $plugins) and (!$version or version_compare($plugins_ver[$name], $version) >= 0));
+    $x = @in_array($name, $plugins) && (!$version || version_compare($plugins_ver[$name], $version) >= 0);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -5011,9 +4931,57 @@ function file_download_description($atts)
 
 // -------------------------------------------------------------
 
-function hide()
+function hide($atts, $thing=null)
 {
-    return '';
+    global $txp_parsed, $txp_else;
+
+    if (empty($atts)) {
+        return '';
+    }
+
+    extract(lAtts(array(
+        'test'		=> false,
+        'insert'	=> false,
+        'ignore'	=> false
+    ), $atts));
+
+    $test = $test === true || empty($test) || is_numeric($test) ? array() : do_list_unique($test);
+    $insert = $insert ? do_list_unique($insert) : array();
+    $ignore = $ignore ? do_list_unique($ignore) : array();
+
+    $hash = sha1($thing);
+    $tag = $txp_parsed[$hash];
+
+    if (empty($tag)) {
+        return $thing;
+    }
+
+    $nr = $txp_else[$hash][0] - 2;
+    $out = array($tag[0]);
+
+    for ($isempty  = true, $tags = array(), $n = 1; $n <= $nr; $n++) {
+        $t = $tag[$n];
+        
+        if (in_array($t[1], $insert)) {
+            $out[] = $t;
+            $tags[] = $n;
+        } else {
+            $nextag = processTags($t[1], $t[2], $t[3]);
+            $out[] = $nextag;
+            $isempty &= trim($nextag) === '' || ($test ? !in_array($t[1], $test) : in_array($t[1], $ignore));
+        }
+
+        $out[] = $tag[++$n];
+    }
+
+    if (!$isempty) {
+        foreach ($tags as $n) {
+            $t = $out[$n];
+            $out[$n] = processTags($t[1], $t[2], $t[3]);
+        }
+    }
+
+    return $isempty ? parse($thing, false) : implode('', $out);
 }
 
 // -------------------------------------------------------------
@@ -5084,5 +5052,5 @@ function if_variable($atts, $thing = null)
         $x = false;
     }
 
-    return parse($thing, $x);
+    return isset($thing) ? parse($thing, $x) : $x;
 }

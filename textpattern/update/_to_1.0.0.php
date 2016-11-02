@@ -149,7 +149,7 @@ if ($txpusers) {
 }
 
 // 1.0rc: expanding password field in txp_users.
-safe_alter('txp_users',   "MODIFY pass VARCHAR(128) NOT NULL");
+safe_alter('txp_users', "MODIFY pass VARCHAR(128) NOT NULL");
 
 safe_alter('textpattern', "MODIFY Body      MEDIUMTEXT NOT NULL");
 safe_alter('textpattern', "MODIFY Body_html MEDIUMTEXT NOT NULL");
@@ -246,51 +246,51 @@ $lang = fetch("val", 'txp_prefs', 'name', 'language');
 switch ($lang) {
     case 'czech':
         $rs = safe_update('txp_prefs', "val = 'cs-cs'", "name = 'language' AND val = 'czech'");
-    break;
+        break;
     case 'danish':
         $rs = safe_update('txp_prefs', "val = 'da-da'", "name = 'language' AND val = 'danish'");
-    break;
+        break;
     case 'dutch':
         $rs = safe_update('txp_prefs', "val = 'nl-nl'", "name = 'language' AND val = 'dutch'");
-    break;
+        break;
     case 'finish':
         $rs = safe_update('txp_prefs', "val = 'fi-fi'", "name = 'language' AND val = 'finish'");
-    break;
+        break;
     case 'french':
         $rs = safe_update('txp_prefs', "val = 'fr-fr'", "name = 'language' AND val = 'french'");
-    break;
+        break;
     case 'german':
         $rs = safe_update('txp_prefs', "val = 'de-de'", "name = 'language' AND val = 'german'");
-    break;
+        break;
     case 'italian':
         $rs = safe_update('txp_prefs', "val = 'it-it'", "name = 'language' AND val = 'italian'");
-    break;
+        break;
     case 'polish':
         $rs = safe_update('txp_prefs', "val = 'pl-pl'", "name = 'language' AND val = 'polish'");
-    break;
+        break;
     case 'portuguese':
         $rs = safe_update('txp_prefs', "val = 'pt-pt'", "name = 'language' AND val = 'portuguese'");
-    break;
+        break;
     case 'russian':
         $rs = safe_update('txp_prefs', "val = 'ru-ru'", "name = 'language' AND val = 'russian'");
-    break;
+        break;
     case 'scotts':
         //I'm not sure of this one
         $rs = safe_update('txp_prefs', "val = 'gl-gl'", "name = 'language' AND val = 'scotts'");
-    break;
+        break;
     case 'spanish':
         $rs = safe_update('txp_prefs', "val = 'es-es'", "name = 'language' AND val = 'spanish'");
-    break;
+        break;
     case 'swedish':
         $rs = safe_update('txp_prefs', "val = 'sv-sv'", "name = 'language' AND val = 'swedish'");
-    break;
+        break;
     case 'tagalog':
         $rs = safe_update('txp_prefs', "val = 'tl-tl'", "name = 'language' AND val = 'tagalog'");
-    break;
+        break;
     case 'english':
     default:
         $rs = safe_update('txp_prefs', "val = 'en-gb'", "name = 'language' AND val = 'english'");
-    break;
+        break;
 }
 
 // 1.0: new time zone offset.
@@ -550,35 +550,34 @@ if (!in_array('position', $txpprefs)) {
                 case 'custom_10_set':
                     $evt = 'custom';
                     $html = 'text_input';
-                break;
-
+                    break;
                 case 'edit_raw_css_by_default':
                     $evt = 'css';
                     $html = 'yesnoradio';
-                break;
+                    break;
                 case 'spam_blacklists':
                 case 'expire_logs_after':
                 case 'max_url_len':
                     $html = 'text_input';
                     $evt = 'publish';
-                break;
+                    break;
                 case 'textile_links':
                     $html = 'yesnoradio';
                     $evt = 'link';
-                break;
+                    break;
                 case 'show_article_category_count':
                     $html = 'yesnoradio';
                     $evt = 'category';
-                break;
+                    break;
                 case 'comments_require_name':
                 case 'comments_require_email':
                     $html = 'yesnoradio';
                     $evt = 'comments';
-                break;
+                    break;
                 default:
                     $html = 'yesnoradio';
                     $evt = 'publish';
-                break;
+                    break;
             }
             safe_insert('txp_prefs', "val = '$val', name = '$key' , prefs_id = '1', type = '1', html = '$html', event = '$evt'");
         }
