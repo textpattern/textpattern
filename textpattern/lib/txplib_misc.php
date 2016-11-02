@@ -409,6 +409,68 @@ function gTxtScript($var, $atts = array(), $route = array())
 }
 
 /**
+ * Handle refreshing the passed AJAX content to the UI.
+ *
+ * @param  array $partials Partials array
+ * @param  array $rs       Record set of the edited content
+ */
+
+function updatePartials($partials, $rs, $types)
+{
+    if (!is_array($types)) {
+        $types = array($types);
+    }
+
+    foreach ($partials as $k => $p) {
+        if (in_array($p['mode'], $types)) {
+            $cb = $p['cb'];
+            $partials[$k]['html'] = (is_array($cb) ? call_user_func($cb, $rs, $k) : $cb($rs, $k));
+        }
+    }
+
+    return $partials;
+}
+
+/**
+ * Handle refreshing the passed AJAX content to the UI.
+ *
+ * @param  array $partials Partials array
+ * @return array           Response to send back to the browser
+ */
+
+function updateVolatilePartials($partials)
+{
+    $response = array();
+
+    // Update the volatile partials.
+    foreach ($partials as $k => $p) {
+        // Volatile partials need a target DOM selector.
+        if (empty($p['selector']) && $p['mode'] != PARTIAL_STATIC) {
+            trigger_error("Empty selector for partial '$k'", E_USER_ERROR);
+        } else {
+            // Build response script.
+            list($selector, $fragment) = (array)$p['selector'] + array(null, null);
+
+            if (!isset($fragment)) {
+                $fragment = $selector;
+            }
+
+            if ($p['mode'] == PARTIAL_VOLATILE) {
+                // Volatile partials replace *all* of the existing HTML
+                // fragment for their selector with the new one.
+                $response[] = '$("'.$selector.'").replaceWith($("<div>'.escape_js($p['html']).'</div>").find("'.$fragment.'"))';
+            } elseif ($p['mode'] == PARTIAL_VOLATILE_VALUE) {
+                // Volatile partial values replace the *value* of elements
+                // matching their selector.
+                $response[] = '$("'.$selector.'").val("'.escape_js($p['html']).'")';
+            }
+        }
+    }
+
+    return $response;
+}
+
+/**
  * Returns given timestamp in a format of 01 Jan 2001 15:19:16.
  *
  * @param   int $timestamp The UNIX timestamp
