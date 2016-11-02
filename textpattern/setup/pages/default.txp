@@ -144,9 +144,7 @@
                         </txp:if_author>
                     </txp:if_category>
 
-                    <!-- add pagination links to foot of article listings/category listings/author listings if there are more articles available,
-                         this method is more flexible than using simple txp:link_to_prev/txp:link_to_next or txp:older/txp:newer tags -->
-
+                    <!-- add pagination links to foot of article listings/category listings/author listings if there are more articles available -->
                     <txp:hide test>
                         <p class="paginator">
                             <txp:hide test="newer">
