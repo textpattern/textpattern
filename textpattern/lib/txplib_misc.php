@@ -4548,39 +4548,41 @@ function get_lastmod($unix_ts = null)
 
 function handle_lastmod($unix_ts = null, $exit = true)
 {
-    if (get_pref('send_lastmod') && get_pref('production_status') == 'live') {
+    if (get_pref('production_status') != 'live') {
+        header('Cache-Control: no-cache, no-store, max-age=0');
+    }
+
+    elseif (get_pref('send_lastmod') && get_pref('production_status') == 'live') {
         $unix_ts = get_lastmod($unix_ts);
 
         // Make sure lastmod isn't in the future.
         $unix_ts = min($unix_ts, time());
 
-        // Or too far in the past (7 days).
-        $unix_ts = max($unix_ts, time() - 3600 * 24 * 7);
-
         $last = safe_strftime('rfc822', $unix_ts, 1);
         header("Last-Modified: $last");
-        header('Cache-Control: no-cache');
 
-        $hims = serverSet('HTTP_IF_MODIFIED_SINCE');
+        $etag = base_convert($unix_ts, 10, 32);
+        header('ETag: "' . $etag . '"');
 
-        if ($hims and @strtotime($hims) >= $unix_ts) {
+        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+            $hims = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
+            $imsd = ($hims) ? strtotime($hims) : 0;
+        } elseif (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+            $hinm = trim(trim($_SERVER['HTTP_IF_NONE_MATCH']), '"');
+            $inmd = ($hinm) ? base_convert(explode('-gzip', $hinm)[0], 32, 10) : 0;
+        }
+
+        if ((isset($imsd) && $imsd >= $unix_ts) ||
+            (isset($inmd) && $inmd >= $unix_ts)) {   return;
             log_hit('304');
-
-            if (!$exit) {
-                return array('304', $last);
-            }
-
-            txp_status_header('304 Not Modified');
 
             header('Content-Length: 0');
 
-            // Discard all output.
-            while (@ob_end_clean());
-            exit;
-        }
+            txp_status_header('304 Not Modified');
 
-        if (!$exit) {
-            return array('200', $last);
+            if ($exit) {
+                exit();
+            }
         }
     }
 }
