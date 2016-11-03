@@ -171,8 +171,7 @@ function rss()
 
                 $articles[$ID] = tag($item, 'item');
 
-                $etags[$ID] = strtoupper(dechex(crc32($articles[$ID])));
-                $dates[$ID] = $uPosted;
+                $dates[$ID] = $uLastMod;
             }
         }
     } elseif ($area == 'link') {
@@ -192,8 +191,7 @@ function rss()
                     tag(safe_strftime('rfc822', $uDate), 'pubDate');
                 $articles[$id] = tag($item, 'item');
 
-                $etags[$id] = strtoupper(dechex(crc32($articles[$id])));
-                $dates[$id] = $date;
+                $dates[$id] = $uLastMod;
             }
         }
     }
@@ -219,65 +217,45 @@ function rss()
             }
         }
     } else {
-        handle_lastmod();
-        $hims = serverset('HTTP_IF_MODIFIED_SINCE');
-        $imsd = ($hims) ? strtotime($hims) : 0;
+        header('Vary: A-IM, If-None-Match, If-Modified-Since');
 
-        if (isset($_SERVER["HTTP_A_IM"])) {
-            $canaim = strpos($_SERVER["HTTP_A_IM"], "feed");
-        } else {
-            $canaim = false;
+        handle_lastmod(max($dates));
+
+        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+            $hims = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
+            $imsd = ($hims) ? strtotime($hims) : 0;
+        } elseif (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+            $hinm = trim(trim($_SERVER['HTTP_IF_NONE_MATCH']), '"');
+            $inmd = ($hinm) ? base_convert(explode('-gzip', $hinm)[0], 32, 10) : 0;
         }
-
-        $hinm = stripslashes(serverset('HTTP_IF_NONE_MATCH'));
+        if (isset($imsd) || isset($inmd)) {
+          $clfd = max(intval($imsd), intval($inmd));
+        }
 
         $cutarticles = false;
 
-        if ($canaim !== false) {
-            foreach ($articles as $id => $thing) {
-                if (strpos($hinm, $etags[$id]) !== false) {
-                    unset($articles[$id]);
-                    $cutarticles = true;
-                    $cut_etag = true;
-                }
+        if (isset($_SERVER["HTTP_A_IM"]) &&
+            strpos($_SERVER["HTTP_A_IM"], "feed") &&
+            isset($clfd) && $clfd > 0) {
 
-                if ($dates[$id] < $imsd) {
+            foreach($articles as $id => $entry) {
+                if ($dates[$id] <= $clfd) {
                     unset($articles[$id]);
                     $cutarticles = true;
-                    $cut_time = true;
                 }
             }
         }
 
-        if (isset($cut_etag) && isset($cut_time)) {
-            header("Vary: If-None-Match, If-Modified-Since");
-        } elseif (isset($cut_etag)) {
-            header("Vary: If-None-Match");
-        } elseif (isset($cut_time)) {
-            header("Vary: If-Modified-Since");
-        }
-
-        $etag = @join("-", $etags);
-
-        if (strstr($hinm, $etag)) {
-            txp_status_header('304 Not Modified');
-            exit(0);
-        }
-
         if ($cutarticles) {
             header("HTTP/1.1 226 IM Used");
-            header("Cache-Control: no-store, im");
-            header("IM: feed");
+            header("Cache-Control: IM", false);
+            header("IM: feed", false);
         }
     }
 
     $out = array_merge($out, $articles);
 
     header("Content-Type: application/rss+xml; charset=utf-8");
-
-    if (isset($etag)) {
-        header('ETag: "'.$etag.'"');
-    }
 
     return
         '<?xml version="1.0" encoding="utf-8"?>'.n.
