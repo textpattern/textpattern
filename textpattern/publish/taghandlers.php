@@ -3900,7 +3900,8 @@ function if_description($atts, $thing = null)
         'type' => null,
     ), $atts));
 
-    $x = !empty(getMetaDescription($type));
+    $content = getMetaDescription($type);
+    $x = !empty($content);
 
     return isset($thing) ? parse($thing, $x) : $x;;
 }
@@ -4140,10 +4141,10 @@ function if_article_category($atts, $thing = null)
     }
 
     if ($name) {
-        $x = !empty(array_intersect(do_list($name), $cats));
-    } else {
-        $x = !empty($cats);
+        $cats = array_intersect(do_list($name), $cats);
     }
+
+    $x = !empty($cats);
 
     return isset($thing) ? parse($thing, $x) : $x;
 }
