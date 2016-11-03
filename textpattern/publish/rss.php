@@ -259,7 +259,7 @@ function rss()
 
         $etag = @join("-", $etags);
 
-        if (strstr($hinm, $etag)) {
+        if ($hinm == $etag)) {
             txp_status_header('304 Not Modified');
             exit(0);
         }
