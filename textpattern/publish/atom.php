@@ -302,7 +302,9 @@ function atom()
             $imsd = ($hims) ? strtotime($hims) : 0;
         } elseif (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
             $hinm = trim(trim($_SERVER['HTTP_IF_NONE_MATCH']), '"');
-            $inmd = ($hinm) ? base_convert(explode('-gzip', $hinm)[0], 32, 10) : 0;
+            $hinm_apache_gzip_workaround = explode('-gzip', $hinm);
+            $hinm_apache_gzip_workaround = $hinm_apache_gzip_workaround[0];
+            $inmd = ($hinm) ? base_convert($hinm_apache_gzip_workaround, 32, 10) : 0;
         }
         if (isset($imsd) || isset($inmd)) {
           $clfd = max(intval($imsd), intval($inmd));
