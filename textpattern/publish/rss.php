@@ -221,6 +221,7 @@ function rss()
 
         handle_lastmod(max($dates));
 
+        // Get timestamp from request caching headers
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
             $hims = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
             $imsd = ($hims) ? strtotime($hims) : 0;
@@ -238,6 +239,7 @@ function rss()
             strpos($_SERVER["HTTP_A_IM"], "feed") &&
             isset($clfd) && $clfd > 0) {
 
+            // Remove articles with timestamps older than the request timestamp
             foreach($articles as $id => $entry) {
                 if ($dates[$id] <= $clfd) {
                     unset($articles[$id]);
@@ -246,6 +248,7 @@ function rss()
             }
         }
 
+        // Indicate that instance manipulation was applied
         if ($cutarticles) {
             header("HTTP/1.1 226 IM Used");
             header("Cache-Control: IM", false);
