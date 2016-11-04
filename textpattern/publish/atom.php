@@ -226,6 +226,7 @@ function atom()
                     if (!trim($summary)) {
                         $summary = $content;
                     }
+
                     $content = '';
                 }
 
@@ -282,12 +283,14 @@ function atom()
                     if (safe_field("id", 'txp_category', "name = '$category' AND type = 'link'") == false) {
                         txp_die(gTxt('404_not_found'), '404');
                     }
+
                     break;
                 case 'article':
                 default:
                     if (safe_field("id", 'txp_category', "name IN ('".join("','", $category)."') AND type = 'article'") == false) {
                         txp_die(gTxt('404_not_found'), '404');
                     }
+
                     break;
             }
         }
@@ -303,6 +306,7 @@ function atom()
             $hinm = trim(trim($_SERVER['HTTP_IF_NONE_MATCH']), '"');
             $inmd = ($hinm) ? base_convert(explode('-gzip', $hinm)[0], 32, 10) : 0;
         }
+
         if (isset($imsd) || isset($inmd)) {
           $clfd = max(intval($imsd), intval($inmd));
         }
@@ -313,7 +317,7 @@ function atom()
             strpos($_SERVER["HTTP_A_IM"], "feed") &&
             isset($clfd) && $clfd > 0) {
 
-            foreach($articles as $id => $entry) {
+            foreach ($articles as $id => $entry) {
                 if ($dates[$id] <= $clfd) {
                     unset($articles[$id]);
                     $cutarticles = true;
