@@ -223,12 +223,15 @@ function rss()
 
         handle_lastmod(max($dates));
 
+        // Get timestamp from request caching headers
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
             $hims = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
             $imsd = ($hims) ? strtotime($hims) : 0;
         } elseif (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
             $hinm = trim(trim($_SERVER['HTTP_IF_NONE_MATCH']), '"');
-            $inmd = ($hinm) ? base_convert(explode('-gzip', $hinm)[0], 32, 10) : 0;
+            $hinm_apache_gzip_workaround = explode('-gzip', $hinm);
+            $hinm_apache_gzip_workaround = $hinm_apache_gzip_workaround[0];
+            $inmd = ($hinm) ? base_convert($hinm_apache_gzip_workaround, 32, 10) : 0;
         }
 
         if (isset($imsd) || isset($inmd)) {
@@ -241,6 +244,7 @@ function rss()
             strpos($_SERVER["HTTP_A_IM"], "feed") &&
             isset($clfd) && $clfd > 0) {
 
+            // Remove articles with timestamps older than the request timestamp
             foreach ($articles as $id => $entry) {
                 if ($dates[$id] <= $clfd) {
                     unset($articles[$id]);
@@ -249,6 +253,7 @@ function rss()
             }
         }
 
+        // Indicate that instance manipulation was applied
         if ($cutarticles) {
             header("HTTP/1.1 226 IM Used");
             header("Cache-Control: IM", false);

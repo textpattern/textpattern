@@ -4548,6 +4548,7 @@ function get_lastmod($unix_ts = null)
 
 function handle_lastmod($unix_ts = null, $exit = true)
 {
+    // Disable caching when not in production
     if (get_pref('production_status') != 'live') {
         header('Cache-Control: no-cache, no-store, max-age=0');
     }
@@ -4564,16 +4565,20 @@ function handle_lastmod($unix_ts = null, $exit = true)
         $etag = base_convert($unix_ts, 10, 32);
         header('ETag: "' . $etag . '"');
 
+        // Get timestamp from request caching headers
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
             $hims = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
             $imsd = ($hims) ? strtotime($hims) : 0;
         } elseif (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
             $hinm = trim(trim($_SERVER['HTTP_IF_NONE_MATCH']), '"');
-            $inmd = ($hinm) ? base_convert(explode('-gzip', $hinm)[0], 32, 10) : 0;
+            $hinm_apache_gzip_workaround = explode('-gzip', $hinm);
+            $hinm_apache_gzip_workaround = $hinm_apache_gzip_workaround[0];
+            $inmd = ($hinm) ? base_convert($hinm_apache_gzip_workaround, 32, 10) : 0;
         }
 
+        // Check request timestamps against the current timestamp
         if ((isset($imsd) && $imsd >= $unix_ts) ||
-            (isset($inmd) && $inmd >= $unix_ts)) {   return;
+            (isset($inmd) && $inmd >= $unix_ts)) {
             log_hit('304');
 
             header('Content-Length: 0');
@@ -4583,7 +4588,11 @@ function handle_lastmod($unix_ts = null, $exit = true)
             if ($exit) {
                 exit();
             }
+
+            return array('304', $last);
         }
+
+        return array('200', $last);
     }
 }
 
