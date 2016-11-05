@@ -2,9 +2,8 @@
   "name": "Textpattern CMS",
   "description": "Textpattern is a flexible, elegant and easy-to-use CMS.",
   "homepage": "http://textpattern.com",
-  "licence": "GPLv2",
-  "version": {
-    "textpattern-version-release": "4.6.2",
-    "textpattern-version-prerelease": null
+  "textpattern-version": {
+    "release": "4.6.2",
+    "prerelease": null
   }
  }
