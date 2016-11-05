@@ -4,7 +4,7 @@
   "homepage": "http://textpattern.com",
   "licence": "GPLv2",
   "version": {
-    "release-version-number": "4.6.2",
-    "prerelease-version-number": null
+    "textpattern-version-release": "4.6.2",
+    "textpattern-version-prerelease": null
   }
  }
