@@ -4070,7 +4070,7 @@ function if_search($atts, $thing = null)
 
 function if_search_results($atts, $thing = null)
 {
-    global $thispage;
+    global $pretext, $thispage;
 
     if (empty($pretext['q']) || empty($thispage)) {
         return '';
