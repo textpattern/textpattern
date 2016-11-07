@@ -1862,8 +1862,9 @@ textpattern.Route.add('css, page, form', function ()
         e.preventDefault();
         var target = $(this).data('form');
         if (target) {
-            $('#'+target).append('<input type="hidden" name="copy" value="1" />');
-            $('.txp-save input').click();
+            var $target = $('#'+target);
+            $target.append('<input type="hidden" name="copy" value="1" />');
+            $target.off('submit.txpAsyncForm').trigger('submit');
         }
     });
 });

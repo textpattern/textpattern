@@ -51,8 +51,6 @@
 /publish/search.php: 3d7e0fcea6f40d31dae8c7fb208e35e6
 /publish/taghandlers.php: 5653e0dcd45db67c5607db6d386738fb
 /textpattern.js: d7654c4b09d4b59f08d72a0701e91771
-/update/_to_1.0.0.php: 038fee881209aae809666177852f0c64
-/update/_to_4.0.2.php: 2fda6b67e48855a503d31b226739c1e8
 /update/_to_4.0.3.php: 0ed87e575b17dc7a5c96ae68a3d16397
 /update/_to_4.0.4.php: bf3676db9029bcd37c2df43bef3443f0
 /update/_to_4.0.5.php: fa4026347c767cfbd6450cd98c9e37f6

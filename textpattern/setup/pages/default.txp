@@ -144,30 +144,22 @@
                         </txp:if_author>
                     </txp:if_category>
 
-                    <!-- add pagination links to foot of article listings/category listings/author listings if there are more articles available,
-                         this method is more flexible than using simple txp:link_to_prev/txp:link_to_next or txp:older/txp:newer tags -->
-                    <txp:variable name="more" value='<txp:newer /><txp:older />' />
-                    <txp:variable name="prev" value='<txp:newer />' />
-                    <txp:variable name="next" value='<txp:older />' />
-
-                    <txp:if_variable name="more" value="">
-                    <txp:else />
+                    <!-- add pagination links to foot of article listings/category listings/author listings if there are more articles available -->
+                    <txp:hide test>
                         <p class="paginator">
-                            <txp:if_variable name="prev" value="">
-                            <txp:else />
+                            <txp:hide test="newer">
                                 <a rel="prev" href="<txp:newer />">
                                     <txp:text item="newer" />
                                 </a>
-                            </txp:if_variable>
+                            </txp:hide>
 
-                            <txp:if_variable name="next" value="">
-                            <txp:else />
+                            <txp:hide test="older">
                                 <a rel="next" href="<txp:older />">
                                     <txp:text item="older" />
                                 </a>
-                            </txp:if_variable>
+                            </txp:hide>
                         </p>
-                    </txp:if_variable>
+                    </txp:hide>
 
                 </txp:if_search>
 
@@ -208,7 +200,7 @@
         <p>
             <small>
                 <txp:text item="published_with" />
-                <a rel="external" href="http://textpattern.com" title="<txp:text item="go_txp_com" />">Textpattern CMS</a>
+                <a rel="external nofollow" href="http://textpattern.com" title="<txp:text item="go_txp_com" />">Textpattern CMS</a>
             </small>
         </p>
     </footer>

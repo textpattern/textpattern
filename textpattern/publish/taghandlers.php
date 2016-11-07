@@ -523,15 +523,18 @@ function feed_link($atts, $thing = null)
 
     $title = txpspecialchars($title);
 
-    if ($format == 'link') {
-        $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
+    $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
 
+    if ($format == 'link') {
         return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
     }
 
     $txt = ($thing === null ? $label : parse($thing));
 
-    $out = href($txt, $url, ' title="'.$title.'"');
+    $out = href($txt, $url, array(
+        'type'  => $type,
+        'title' => $title,
+    ));
 
     return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 }
@@ -564,13 +567,16 @@ function link_feed_link($atts)
 
     $title = txpspecialchars($title);
 
-    if ($format == 'link') {
-        $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
+    $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
 
+    if ($format == 'link') {
         return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
     }
 
-    $out = href($label, $url, ' title="'.$title.'"');
+    $out = href($label, $url, array(
+        'type'  => $type,
+        'title' => $title,
+    ));
 
     return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 }
@@ -1734,10 +1740,10 @@ function link_to_home($atts, $thing = null)
 
 function newer($atts, $thing = null)
 {
-    global $thispage, $pretext, $m, $txp_current_tag;
+    global $thispage, $pretext, $m;
 
     if (empty($thispage)) {
-        return empty($pretext['secondpass']) ? $txp_current_tag : '';
+        return '';
     }
 
     extract(lAtts(array(
@@ -1792,10 +1798,10 @@ function newer($atts, $thing = null)
 
 function older($atts, $thing = null)
 {
-    global $thispage, $pretext, $m, $txp_current_tag;
+    global $thispage, $pretext, $m;
 
     if (empty($thispage)) {
-        return empty($pretext['secondpass']) ? $txp_current_tag : '';
+        return '';
     }
 
     extract(lAtts(array(
@@ -3275,10 +3281,10 @@ function search_result_date($atts)
 
 function search_result_count($atts)
 {
-    global $pretext, $thispage, $txp_current_tag;
+    global $thispage;
 
     if (empty($thispage)) {
-        return empty($pretext['secondpass']) ? $txp_current_tag : '';
+        return '';
     }
 
     $t = @$thispage['grand_total'];
@@ -3895,7 +3901,8 @@ function if_description($atts, $thing = null)
         'type' => null,
     ), $atts));
 
-    $x = !empty(getMetaDescription($type));
+    $content = getMetaDescription($type);
+    $x = !empty($content);
 
     return isset($thing) ? parse($thing, $x) : $x;;
 }
@@ -4064,14 +4071,10 @@ function if_search($atts, $thing = null)
 
 function if_search_results($atts, $thing = null)
 {
-    global $thispage, $pretext, $txp_current_tag;
+    global $pretext, $thispage;
 
-    if (empty($pretext['q'])) {
+    if (empty($pretext['q']) || empty($thispage)) {
         return '';
-    }
-
-    if (empty($thispage)) {
-        return empty($pretext['secondpass']) ? $txp_current_tag : '';
     }
 
     extract(lAtts(array(
@@ -4139,10 +4142,10 @@ function if_article_category($atts, $thing = null)
     }
 
     if ($name) {
-        $x = !empty(array_intersect(do_list($name), $cats));
-    } else {
-        $x = !empty($cats);
+        $cats = array_intersect(do_list($name), $cats);
     }
+
+    $x = !empty($cats);
 
     return isset($thing) ? parse($thing, $x) : $x;
 }
@@ -4930,9 +4933,57 @@ function file_download_description($atts)
 
 // -------------------------------------------------------------
 
-function hide()
+function hide($atts, $thing=null)
 {
-    return '';
+    global $txp_parsed, $txp_else;
+
+    if (empty($atts)) {
+        return '';
+    }
+
+    extract(lAtts(array(
+        'test'		=> false,
+        'insert'	=> false,
+        'ignore'	=> false
+    ), $atts));
+
+    $test = $test === true || empty($test) || is_numeric($test) ? array() : do_list_unique($test);
+    $insert = $insert ? do_list_unique($insert) : array();
+    $ignore = $ignore ? do_list_unique($ignore) : array();
+
+    $hash = sha1($thing);
+    $tag = $txp_parsed[$hash];
+
+    if (empty($tag)) {
+        return $thing;
+    }
+
+    $nr = $txp_else[$hash][0] - 2;
+    $out = array($tag[0]);
+
+    for ($isempty  = true, $tags = array(), $n = 1; $n <= $nr; $n++) {
+        $t = $tag[$n];
+        
+        if (in_array($t[1], $insert)) {
+            $out[] = $t;
+            $tags[] = $n;
+        } else {
+            $nextag = processTags($t[1], $t[2], $t[3]);
+            $out[] = $nextag;
+            $isempty &= trim($nextag) === '' || ($test ? !in_array($t[1], $test) : in_array($t[1], $ignore));
+        }
+
+        $out[] = $tag[++$n];
+    }
+
+    if (!$isempty) {
+        foreach ($tags as $n) {
+            $t = $out[$n];
+            $out[$n] = processTags($t[1], $t[2], $t[3]);
+        }
+    }
+
+    return $isempty ? parse($thing, false) : implode('', $out);
 }
 
 // -------------------------------------------------------------

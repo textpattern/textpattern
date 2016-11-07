@@ -387,7 +387,7 @@ class TXP_Wrapper
      * $wrapper = new TXP_wrapper('username', 'password');
      * if ($sections = $wrapper->getSectionsList())
      * {
-     *     foreach($sections as $section)
+     *     foreach ($sections as $section)
      *     {
      *         echo $section['title'];
      *     }
@@ -439,7 +439,7 @@ class TXP_Wrapper
      * $wrapper = new TXP_wrapper('username', 'password');
      * if ($categories = $wrapper->getCategoryList())
      * {
-     *     foreach($categories as $category)
+     *     foreach ($categories as $category)
      *     {
      *         echo $category['title'];
      *     }
