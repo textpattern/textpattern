@@ -866,12 +866,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     $rs['partials_meta'] = &$partials;
 
     // Get content for volatile partials.
-    foreach ($partials as $k => $p) {
-        if ($p['mode'] == PARTIAL_VOLATILE || $p['mode'] == PARTIAL_VOLATILE_VALUE) {
-            $cb = $p['cb'];
-            $partials[$k]['html'] = (is_array($cb) ? call_user_func($cb, $rs, $k) : $cb($rs, $k));
-        }
-    }
+    $partials = updatePartials($partials, $rs, array(PARTIAL_VOLATILE, PARTIAL_VOLATILE_VALUE));
 
     if ($refresh_partials) {
         $response[] = announce($message);
@@ -883,40 +878,15 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             $response[] = '$("#article_form").addClass("published").removeClass("saved")';
         }
 
-        // Update the volatile partials.
-        foreach ($partials as $k => $p) {
-            // Volatile partials need a target DOM selector.
-            if (empty($p['selector']) && $p['mode'] != PARTIAL_STATIC) {
-                trigger_error("Empty selector for partial '$k'", E_USER_ERROR);
-            } else {
-                // Build response script.
-                list($selector, $fragment) = (array)$p['selector'] + array(null, null);
-                if (!isset($fragment)) {
-                    $fragment = $selector;
-                }
-                if ($p['mode'] == PARTIAL_VOLATILE) {
-                    // Volatile partials replace *all* of the existing HTML
-                    // fragment for their selector with the new one.
-                    $response[] = '$("'.$selector.'").replaceWith($("<div>'.escape_js($p['html']).'</div>").find("'.$fragment.'"))';
-                } elseif ($p['mode'] == PARTIAL_VOLATILE_VALUE) {
-                    // Volatile partial values replace the *value* of elements
-                    // matching their selector.
-                    $response[] = '$("'.$selector.'").val("'.escape_js($p['html']).'")';
-                }
-            }
-        }
+        $response = array_merge($response, updateVolatilePartials($partials));
         send_script_response(join(";\n", $response));
 
         // Bail out.
         return;
     }
 
-    foreach ($partials as $k => $p) {
-        if ($p['mode'] == PARTIAL_STATIC) {
-            $cb = $p['cb'];
-            $partials[$k]['html'] = (is_array($cb) ? call_user_func($cb, $rs, $k) : $cb($rs, $k));
-        }
-    }
+    // Get content for static partials.
+    $partials = updatePartials($partials, $rs, PARTIAL_STATIC);
 
     $page_title = $ID ? $Title : gTxt('write');
 

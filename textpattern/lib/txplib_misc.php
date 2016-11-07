@@ -372,6 +372,68 @@ function gTxtScript($var, $atts = array(), $route = array())
 }
 
 /**
+ * Handle refreshing the passed AJAX content to the UI.
+ *
+ * @param  array $partials Partials array
+ * @param  array $rs       Record set of the edited content
+ */
+
+function updatePartials($partials, $rs, $types)
+{
+    if (!is_array($types)) {
+        $types = array($types);
+    }
+
+    foreach ($partials as $k => $p) {
+        if (in_array($p['mode'], $types)) {
+            $cb = $p['cb'];
+            $partials[$k]['html'] = (is_array($cb) ? call_user_func($cb, $rs, $k) : $cb($rs, $k));
+        }
+    }
+
+    return $partials;
+}
+
+/**
+ * Handle refreshing the passed AJAX content to the UI.
+ *
+ * @param  array $partials Partials array
+ * @return array           Response to send back to the browser
+ */
+
+function updateVolatilePartials($partials)
+{
+    $response = array();
+
+    // Update the volatile partials.
+    foreach ($partials as $k => $p) {
+        // Volatile partials need a target DOM selector.
+        if (empty($p['selector']) && $p['mode'] != PARTIAL_STATIC) {
+            trigger_error("Empty selector for partial '$k'", E_USER_ERROR);
+        } else {
+            // Build response script.
+            list($selector, $fragment) = (array)$p['selector'] + array(null, null);
+
+            if (!isset($fragment)) {
+                $fragment = $selector;
+            }
+
+            if ($p['mode'] == PARTIAL_VOLATILE) {
+                // Volatile partials replace *all* of the existing HTML
+                // fragment for their selector with the new one.
+                $response[] = '$("'.$selector.'").replaceWith($("<div>'.escape_js($p['html']).'</div>").find("'.$fragment.'"))';
+            } elseif ($p['mode'] == PARTIAL_VOLATILE_VALUE) {
+                // Volatile partial values replace the *value* of elements
+                // matching their selector.
+                $response[] = '$("'.$selector.'").val("'.escape_js($p['html']).'")';
+            }
+        }
+    }
+
+    return $response;
+}
+
+/**
  * Returns given timestamp in a format of 01 Jan 2001 15:19:16.
  *
  * @param   int $timestamp The UNIX timestamp
@@ -4486,40 +4548,51 @@ function get_lastmod($unix_ts = null)
 
 function handle_lastmod($unix_ts = null, $exit = true)
 {
-    if (get_pref('send_lastmod') && get_pref('production_status') == 'live') {
+    // Disable caching when not in production
+    if (get_pref('production_status') != 'live') {
+        header('Cache-Control: no-cache, no-store, max-age=0');
+    }
+
+    elseif (get_pref('send_lastmod') && get_pref('production_status') == 'live') {
         $unix_ts = get_lastmod($unix_ts);
 
         // Make sure lastmod isn't in the future.
         $unix_ts = min($unix_ts, time());
 
-        // Or too far in the past (7 days).
-        $unix_ts = max($unix_ts, time() - 3600 * 24 * 7);
-
         $last = safe_strftime('rfc822', $unix_ts, 1);
         header("Last-Modified: $last");
-        header('Cache-Control: no-cache');
 
-        $hims = serverSet('HTTP_IF_MODIFIED_SINCE');
+        $etag = base_convert($unix_ts, 10, 32);
+        header('ETag: "' . $etag . '"');
 
-        if ($hims and @strtotime($hims) >= $unix_ts) {
+        // Get timestamp from request caching headers
+        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+            $hims = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
+            $imsd = ($hims) ? strtotime($hims) : 0;
+        } elseif (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+            $hinm = trim(trim($_SERVER['HTTP_IF_NONE_MATCH']), '"');
+            $hinm_apache_gzip_workaround = explode('-gzip', $hinm);
+            $hinm_apache_gzip_workaround = $hinm_apache_gzip_workaround[0];
+            $inmd = ($hinm) ? base_convert($hinm_apache_gzip_workaround, 32, 10) : 0;
+        }
+
+        // Check request timestamps against the current timestamp
+        if ((isset($imsd) && $imsd >= $unix_ts) ||
+            (isset($inmd) && $inmd >= $unix_ts)) {
             log_hit('304');
-
-            if (!$exit) {
-                return array('304', $last);
-            }
-
-            txp_status_header('304 Not Modified');
 
             header('Content-Length: 0');
 
-            // Discard all output.
-            while (@ob_end_clean());
-            exit;
+            txp_status_header('304 Not Modified');
+
+            if ($exit) {
+                exit();
+            }
+
+            return array('304', $last);
         }
 
-        if (!$exit) {
-            return array('200', $last);
-        }
+        return array('200', $last);
     }
 }
 
@@ -5074,6 +5147,7 @@ function txp_die($msg, $status = '503', $url = '')
 <html lang="en">
 <head>
    <meta charset="utf-8">
+   <meta name="robots" content="noindex">
    <title>Textpattern Error: <txp:error_status /></title>
 </head>
 <body>

@@ -64,27 +64,21 @@
 
 </txp:article>
 
-<!-- check if there are further results and provide pagination links or disabled buttons depending on the result,
-     this method is more flexible than using simple txp:older/txp:newer tags -->
+<!-- check if there are further results and provide pagination links depending on the result -->
 <txp:if_search_results min="11">
+    <txp:hide test>
+        <p class="paginator">
+            <txp:hide test="newer">
+                <a rel="prev" href="<txp:newer />">
+                    <txp:text item="prev" />
+                </a>
+            </txp:hide>
 
-    <txp:variable name="prev" value='<txp:older />' />
-    <txp:variable name="next" value='<txp:newer />' />
-
-    <p class="paginator">
-        <txp:if_variable name="next" value="">
-        <txp:else />
-            <a rel="prev" href="<txp:newer />">
-                <txp:text item="prev" />
-            </a>
-        </txp:if_variable>
-
-        <txp:if_variable name="prev" value="">
-        <txp:else />
-            <a rel="next" href="<txp:older />">
-                <txp:text item="next" />
-            </a>
-        </txp:if_variable>
-    </p>
-
+            <txp:hide test="older">
+                <a rel="next" href="<txp:older />">
+                    <txp:text item="next" />
+                </a>
+            </txp:hide>
+        </p>
+    </txp:hide>
 </txp:if_search_results>

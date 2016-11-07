@@ -365,7 +365,7 @@ function lastMod()
 
 function parse($thing, $condition = null)
 {
-    global $production_status, $trace, $txp_parsed, $txp_else, $txp_current_tag;
+    global $production_status, $trace, $txp_parsed, $txp_else;
 
     if (isset($condition)) {
         if ($production_status === 'debug') {
@@ -488,10 +488,7 @@ function parse($thing, $condition = null)
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
         $t = $tag[$first];
-        $old_tag = $txp_current_tag;
-        $txp_current_tag = $t[0].$t[3].$t[4];
         $out .= processTags($t[1], $t[2], $t[3]).$tag[++$first];
-        $txp_current_tag = $old_tag;
     }
 
     return $out;
@@ -537,19 +534,22 @@ function processTags($tag, $atts, $thing = null)
     }
 
     if ($production_status !== 'live') {
-        $trace->start('<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>'));
+        $old_tag = $txp_current_tag;
+        $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
+        $trace->start($txp_current_tag);
     }
 
     if ($registry === null) {
         $registry = Txp::get('\Textpattern\Tag\Registry');
     }
 
-    $out = $registry->process($tag, splat($atts), $thing);
+    $split = splat($atts);
+    $out = $registry->process($tag, $split, $thing);
 
     if ($out === false) {
         if (maybe_tag($tag)) { // Deprecated in 4.6.0.
             trigger_error(gTxt('unregistered_tag'), E_USER_NOTICE);
-            $out = $registry->register($tag)->process($tag, splat($atts), $thing);
+            $out = $registry->register($tag)->process($tag, $split, $thing);
         } else {
             trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
             $out = '';
@@ -558,6 +558,7 @@ function processTags($tag, $atts, $thing = null)
 
     if ($production_status !== 'live') {
         $trace->stop(isset($thing) ? "</txp:{$tag}>" : null);
+        $txp_current_tag = $old_tag;
     }
 
     return $out;
