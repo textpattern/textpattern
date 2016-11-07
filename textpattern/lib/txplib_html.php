@@ -1255,7 +1255,7 @@ function fieldHelp($help_var)
 
     $ui = n.tag($help_text, 'div', array('class' => 'txp-form-field-instructions'));
 
-    return pluggable_ui('admin_help_field', $help_var, $ui, compact('help_var', 'textile'));
+    return pluggable_ui('admin_help_field', $help_var, $ui, compact('help_var'));
 }
 
 /**
