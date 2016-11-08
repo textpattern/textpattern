@@ -4933,57 +4933,37 @@ function file_download_description($atts)
 
 // -------------------------------------------------------------
 
-function hide($atts, $thing=null)
+function hide($atts = array(), $thing = null)
 {
-    global $txp_parsed, $txp_else;
-
-    if (empty($atts)) {
+    if (empty($atts) || empty($thing)) {
         return '';
     }
 
     extract(lAtts(array(
-        'test'		=> false,
-        'insert'	=> false,
-        'ignore'	=> false
+        'process'	=> null
     ), $atts));
 
-    $test = $test === true || empty($test) || is_numeric($test) ? array() : do_list_unique($test);
-    $insert = $insert ? do_list_unique($insert) : array();
-    $ignore = $ignore ? do_list_unique($ignore) : array();
+    global $txp_parsed, $txp_else;
 
     $hash = sha1($thing);
     $tag = $txp_parsed[$hash];
 
-    if (empty($tag)) {
-        return $thing;
+    if (empty($tag) || empty($txp_else[$hash]) || !($process = trim($process))) {
+        return '';
     }
 
     $nr = $txp_else[$hash][0] - 2;
-    $out = array($tag[0]);
+    $process = is_numeric($process) ? true : do_list_unique($process);
 
-    for ($isempty  = true, $tags = array(), $n = 1; $n <= $nr; $n++) {
+    for ($n = 1; $n <= $nr; $n++) {
         $t = $tag[$n];
         
-        if (in_array($t[1], $insert)) {
-            $out[] = $t;
-            $tags[] = $n;
-        } else {
-            $nextag = processTags($t[1], $t[2], $t[3]);
-            $out[] = $nextag;
-            $isempty &= trim($nextag) === '' || ($test ? !in_array($t[1], $test) : in_array($t[1], $ignore));
-        }
-
-        $out[] = $tag[++$n];
-    }
-
-    if (!$isempty) {
-        foreach ($tags as $n) {
-            $t = $out[$n];
-            $out[$n] = processTags($t[1], $t[2], $t[3]);
+        if ($process === true || in_array($t[1], $process)) {
+            processTags($t[1], $t[2], $t[3]);
         }
     }
 
-    return $isempty ? parse($thing, false) : implode('', $out);
+    return '';
 }
 
 // -------------------------------------------------------------
