@@ -5061,30 +5061,29 @@ function if_variable($atts, $thing = null)
 
 function txp_eval($atts, $thing = null)
 {
+    global $txp_parsed, $txp_else;
     static $xpath = null, $functions = null;
 
-    if (!class_exists('DOMDocument')) {
-        trigger_error('Missing PHP DOM extension');
-
-        return parse($thing, false);
-    }
-
     extract(lAtts(array(
-        'query'  => null
+        'query' => null,
+        'test'	=> null
     ), $atts));
 
-    $query = trim($query);
-
-    if (empty($query)) {
+    if (!isset($query)) {
+        $x = true;
+    } elseif (!($query = trim($query))) {
         $x = $query;
-    } else {
+    } elseif (class_exists('DOMDocument')) {
         if (!isset($xpath)) {
             $xpath = new DOMXpath(new DOMDocument);
-            $functions = implode('|', do_list_unique(get_pref('txp_functions')));
+            $functions = do_list_unique(get_pref('txp_functions'));
+
             if($functions) {
                 $xpath->registerNamespace('php', 'http://php.net/xpath');
                 $xpath->registerPHPFunctions($functions);
             }
+
+            $functions = implode('|', $functions);
         }
 
         if ($functions) {
@@ -5096,7 +5095,52 @@ function txp_eval($atts, $thing = null)
         if($x instanceOf DOMNodeList) {
             $x = $x->length;
         }
+    } else {
+        trigger_error('Missing PHP DOM extension');
+        return;
     }
 
-    return isset($thing) ? parse($thing, !empty($x)) : $x;
+    if (!isset($thing)) {
+        return $x;
+    } elseif (empty($x)) {
+        return parse($thing, false);
+    } elseif (!($test = trim($test))) {
+        return parse($thing, true);
+    }
+
+    $hash = sha1($thing);
+    $tag = $txp_parsed[$hash];
+
+    if (empty($tag) || empty($txp_else[$hash])) {
+        return $thing;
+    }
+
+    $test = is_numeric($test) ? false : do_list_unique($test);
+    $isempty = true;
+    $nr = $txp_else[$hash][0] - 2;
+    $out = array($tag[0]);
+
+    for ($tags = array(), $n = 1; $n <= $nr; $n++) {
+        $t = $tag[$n];
+        
+        if ($test && !in_array($t[1], $test)) {
+            $out[] = $t;
+            $tags[] = $n;
+        } else {
+            $nextag = processTags($t[1], $t[2], $t[3]);
+            $out[] = $nextag;
+            $isempty &= trim($nextag) === '';
+        }
+
+        $out[] = $tag[++$n];
+    }
+
+    if (!$isempty) {
+        foreach ($tags as $n) {
+            $t = $out[$n];
+            $out[$n] = processTags($t[1], $t[2], $t[3]);
+        }
+    }
+
+    return $isempty ? parse($thing, false) : implode('', $out);
 }
