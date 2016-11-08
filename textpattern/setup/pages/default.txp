@@ -145,21 +145,21 @@
                     </txp:if_category>
 
                     <!-- add pagination links to foot of article listings/category listings/author listings if there are more articles available -->
-                    <txp:hide test>
+                    <txp:evaluate test>
                         <p class="paginator">
-                            <txp:hide test="newer">
+                            <txp:evaluate test="newer">
                                 <a rel="prev" href="<txp:newer />">
                                     <txp:text item="newer" />
                                 </a>
-                            </txp:hide>
+                            </txp:evaluate>
 
-                            <txp:hide test="older">
+                            <txp:evaluate test="older">
                                 <a rel="next" href="<txp:older />">
                                     <txp:text item="older" />
                                 </a>
-                            </txp:hide>
+                            </txp:evaluate>
                         </p>
-                    </txp:hide>
+                    </txp:evaluate>
 
                 </txp:if_search>
 
@@ -176,10 +176,7 @@
                 </p>
 
                 <!-- if links exist, renders a links list -->
-                <txp:variable name="links" value='<txp:linklist limit="1" />' />
-
-                <txp:if_variable name="links" value="">
-                <txp:else />
+                <txp:evaluate test="linklist">
                     <section>
                         <h4>
                             <txp:text item="links" />
@@ -188,7 +185,7 @@
                         <!-- links by default to form: 'plainlinks.link.txp' unless you specify a different form -->
                         <txp:linklist wraptag="ul" break="li" />
                     </section>
-                </txp:if_variable>
+                </txp:evaluate>
 
             </aside>
 
