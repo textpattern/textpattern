@@ -4250,7 +4250,7 @@ function fetch_form($name)
         }
 
         if ($form === false) {
-            trigger_error(gTxt('form_not_found').': '.$name);
+            trigger_error(gTxt('form_not_found').' '.$name);
 
             return '';
         }

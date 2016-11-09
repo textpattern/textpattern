@@ -57,7 +57,7 @@ function send_account_activation($name)
         $message = gTxt('salutation', array('{name}' => $RealName)).
             n.n.gTxt('you_have_been_registered').' '.$sitename.
 
-            n.n.gTxt('your_login_is').': '.$name.
+            n.n.gTxt('your_login_is').' '.$name.
             n.n.gTxt('account_activation_confirmation').
             n.hu.'textpattern/index.php?activate='.$activation_code.
             n.n.gTxt('link_expires', array(
@@ -186,10 +186,10 @@ function send_password($RealName, $name, $email, $password)
 
         n.n.gTxt('you_have_been_registered').' '.$sitename.
 
-        n.n.gTxt('your_login_is').': '.$name.
-        n.gTxt('your_password_is').': '.$password.
+        n.n.gTxt('your_login_is').' '.$name.
+        n.gTxt('your_password_is').' '.$password.
 
-        n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
+        n.n.gTxt('log_in_at').' '.hu.'textpattern/index.php';
 
     return txpMail($email, "[$sitename] ".gTxt('your_login_info'), $message);
 }
@@ -228,9 +228,9 @@ function send_new_password($password, $email, $name)
 
     $message = gTxt('salutation', array('{name}' => $name)).
 
-        n.n.gTxt('your_password_is').': '.$password.
+        n.n.gTxt('your_password_is').' '.$password.
 
-        n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
+        n.n.gTxt('log_in_at').' '.hu.'textpattern/index.php';
 
     return txpMail($email, "[$sitename] ".gTxt('your_new_password'), $message);
 }

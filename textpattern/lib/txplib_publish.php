@@ -436,7 +436,7 @@ function parse($thing, $condition = null)
                     }
 
                     if ($production_status !== 'live' && $tag[$level-1][2] != $tag[$level][2]) {
-                        $trace->log(gTxt('tag_mismatch').': '.$outside[$level].$inside[$level].$chunk);
+                        $trace->log(gTxt('tag_mismatch').' '.$outside[$level].$inside[$level].$chunk);
                     }
 
                     $sha = sha1($inside[$level]);

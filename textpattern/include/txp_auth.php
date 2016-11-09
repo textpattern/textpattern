@@ -53,7 +53,7 @@ function doAuth()
     if (!$txp_user) {
         if (trim(ps('app_mode')) == 'async') {
             echo script_js(
-                'alert("'.escape_js(gTxt('login_to_textpattern')).'"); 
+                'alert("'.escape_js(gTxt('login_to_textpattern')).'");
                 window.location.assign("index.php")'
             );
             exit();
@@ -342,7 +342,7 @@ function doTxpValidate()
                     if ($row && $row['nonce'] && ($hash === bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $row['nonce'].$selector.$row['old_pass']), 0, SALT_LENGTH))).$selector)) {
                         if (change_user_password($row['name'], $pass)) {
                             $body = gTxt('salutation', array('{name}' => $row['name'])).
-                                n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation').n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php');
+                                n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation').n.n.gTxt('log_in_at').' '.hu.'textpattern/index.php');
                             $message = ($p_alter) ? gTxt('password_changed') : gTxt('password_set');
                             txpMail($row['email'], "[$sitename] ".$message, $body);
 
