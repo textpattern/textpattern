@@ -5076,7 +5076,7 @@ function txp_eval($atts, $thing = null)
             $x = $x->length;
         }
     } else {
-        trigger_error(gTxt('gd_unavailable'));
+        trigger_error('PHP DOM extension '.gTxt('gd_unavailable'));
         return;
     }
 
