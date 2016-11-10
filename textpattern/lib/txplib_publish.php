@@ -402,8 +402,8 @@ function parse($thing, $condition = null)
         $count   = array(-1);
         $level   = 0;
 
-        $f = '@(</?'.$pattern.':\w+(?:\s+#?\w+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
-        $t = '@^</?('.$pattern.'):(\w+)(.*?)/?\>$@s';
+        $f = '@(</?'.$pattern.'::?\w+(?:\s+#?\w+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+        $t = '@^</?('.$pattern.')::?(\w+)(.*?)/?\>$@s';
 
         $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
 
