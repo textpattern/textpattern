@@ -86,42 +86,42 @@
                     <!-- ...or if you want to list all articles from all sections instead, then replace txp:article with txp:article_custom -->
 
                     <!-- add pagination links to foot of article listings if there are more articles available -->
-                    <txp:hide test>
+                    <txp:evaluate test>
                         <p class="paginator">
-                            <txp:hide test="newer">
+                            <txp:evaluate test="newer">
                                 <a rel="prev" href="<txp:newer />">
                                     <txp:text item="newer" />
                                 </a>
-                            </txp:hide>
+                            </txp:evaluate>
 
-                            <txp:hide test="older">
+                            <txp:evaluate test="older">
                                 <a rel="next" href="<txp:older />">
                                     <txp:text item="older" />
                                 </a>
-                            </txp:hide>
+                            </txp:evaluate>
                         </p>
-                    </txp:hide>
+                    </txp:evaluate>
 
                 <txp:else />
 
                     <txp:article />
 
                     <!-- add pagination links to foot of article if there are more articles available -->
-                    <txp:hide test>
+                    <txp:evaluate test>
                         <p class="paginator">
-                            <txp:hide test="link_to_prev">
+                            <txp:evaluate test="link_to_prev">
                                 <a rel="prev" href="<txp:link_to_prev />" title="<txp:prev_title />">
                                     <txp:text item="older" />
                                 </a>
-                            </txp:hide>
+                            </txp:evaluate>
 
-                            <txp:hide test="link_to_next">
+                            <txp:evaluate test="link_to_next">
                                 <a rel="next" href="<txp:link_to_next />" title="<txp:next_title />">
                                     <txp:text item="newer" />
                                 </a>
-                            </txp:hide>
+                            </txp:evaluate>
                         </p>
-                    </txp:hide>
+                    </txp:evaluate>
 
                 </txp:if_article_list>
 
@@ -138,10 +138,7 @@
                 </p>
 
                 <!-- if links exist, renders a links list -->
-                <txp:variable name="links" value='<txp:linklist limit="1" />' />
-
-                <txp:if_variable name="links" value="">
-                <txp:else />
+                <txp:evaluate test="linklist">
                     <section>
                         <h4>
                             <txp:text item="links" />
@@ -150,7 +147,7 @@
                         <!-- links by default to form: 'plainlinks.link.txp' unless you specify a different form -->
                         <txp:linklist wraptag="ul" break="li" />
                     </section>
-                </txp:if_variable>
+                </txp:evaluate>
 
             </aside>
 
