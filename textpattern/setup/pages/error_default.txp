@@ -78,10 +78,7 @@
                 </p>
 
                 <!-- if links exist, renders a links list -->
-                <txp:variable name="links" value='<txp:linklist limit="1" />' />
-
-                <txp:if_variable name="links" value="">
-                <txp:else />
+                <txp:evaluate test="linklist">
                     <section>
                         <h4>
                             <txp:text item="links" />
@@ -90,7 +87,7 @@
                         <!-- links by default to form: 'plainlinks.link.txp' unless you specify a different form -->
                         <txp:linklist wraptag="ul" break="li" />
                     </section>
-                </txp:if_variable>
+                </txp:evaluate>
 
             </aside>
 
