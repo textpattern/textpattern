@@ -414,14 +414,16 @@ function updateVolatilePartials($partials)
             // Build response script.
             list($selector, $fragment) = (array)$p['selector'] + array(null, null);
 
-            if (!isset($fragment)) {
-                $fragment = $selector;
-            }
-
             if ($p['mode'] == PARTIAL_VOLATILE) {
                 // Volatile partials replace *all* of the existing HTML
                 // fragment for their selector with the new one.
-                $response[] = '$("'.$selector.'").replaceWith($("<div>'.escape_js($p['html']).'</div>").find("'.$fragment.'"))';
+                $html = escape_js($p['html']);
+                $selector = do_list($selector);
+                $fragment = isset($fragment) ? do_list($fragment) + $selector : $selector;
+
+                foreach ($selector as $i => $sel) {
+                    $response[] = '$("'.$sel.'").replaceWith($("<div>'.$html.'</div>").find("'.$fragment[$i].'"))';
+                }
             } elseif ($p['mode'] == PARTIAL_VOLATILE_VALUE) {
                 // Volatile partial values replace the *value* of elements
                 // matching their selector.
