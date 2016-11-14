@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -138,7 +138,7 @@ function destroyCookies()
  * );
  */
 
-function getComment()
+function getComment($obfuscated = false)
 {
     $c = psa(array(
         'parentid',
@@ -166,7 +166,15 @@ function getComment()
         $c['nonce'] = $rs['nonce'];
         $c['secret'] = $rs['secret'];
     }
-    $c['message'] = ps(md5('message'.$c['secret']));
+
+    if ($obfuscated || $c['message'] == '') {
+        $c['message'] = ps(md5('message'.$c['secret']));
+    }
+
+    $c['name']    = trim(strip_tags(deEntBrackets($c['name'])));
+    $c['web']     = trim(clean_url(strip_tags(deEntBrackets($c['web']))));
+    $c['email']   = trim(clean_url(strip_tags(deEntBrackets($c['email']))));
+    $c['message'] = trim(substr(trim(doDeEnt($c['message'])), 0, 65535));
 
     return $c;
 }
@@ -180,10 +188,10 @@ function saveComment()
     global $siteurl, $comments_moderate, $comments_sendmail, $comments_disallow_images, $prefs;
 
     $ref = serverset('HTTP_REFERRER');
-    $in = getComment();
+    $comment = getComment(true);
     $evaluator = & get_comment_evaluator();
 
-    extract($in);
+    extract($comment);
 
     if (!checkCommentsAllowed($parentid)) {
         txp_die(gTxt('comments_closed'), '403');
@@ -196,37 +204,24 @@ function saveComment()
         txp_die(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), '403');
     }
 
-    $web = clean_url($web);
-    $email = clean_url($email);
-
     if ($remember == 1 || ps('checkbox_type') == 'forget' && ps('forget') != 1) {
         setCookies($name, $email, $web);
     } else {
         destroyCookies();
     }
 
-    $name = doSlash(strip_tags(deEntBrackets($name)));
-    $web = doSlash(strip_tags(deEntBrackets($web)));
-    $email = doSlash(strip_tags(deEntBrackets($email)));
-    $message = substr(trim($message), 0, 65535);
-    $message2db = doSlash(markup_comment($message));
+    $message2db = markup_comment($message);
 
     $isdup = safe_row(
         "message, name",
         'txp_discuss',
-        "name = '$name' AND message = '$message2db' AND ip = '".doSlash($ip)."'"
+        "name = '".doSlash($name)."' AND message = '".doSlash($message2db)."' AND ip = '".doSlash($ip)."'"
     );
 
-    if (
-        ($prefs['comments_require_name'] && !trim($name)) ||
-        ($prefs['comments_require_email'] && !trim($email)) ||
-        (!trim($message))
-    ) {
-        $evaluator->add_estimate(RELOAD, 1); // The error-messages are added in the preview-code.
-    }
+    checkCommentRequired($comment);
 
     if ($isdup) {
-        $evaluator->add_estimate(RELOAD, 1); // FIXME? Tell the user about dupe?
+        $evaluator->add_estimate(RELOAD, 1, gTxt('comment_duplicate'));
     }
 
     if (($evaluator->get_result() != RELOAD) && checkNonce($nonce)) {
@@ -238,11 +233,11 @@ function saveComment()
             $commentid = safe_insert(
                 'txp_discuss',
                 "parentid = $parentid,
-                 name     = '$name',
-                 email    = '$email',
-                 web      = '$web',
+                 name     = '".doSlash($name)."',
+                 email    = '".doSlash($email)."',
+                 web      = '".doSlash($web)."',
                  ip       = '".doSlash($ip)."',
-                 message  = '$message2db',
+                 message  = '".doSlash($message2db)."',
                  visible  = ".intval($visible).",
                  posted   = NOW()"
             );
@@ -296,6 +291,31 @@ function saveComment()
     // Force another Preview.
     $_POST['preview'] = RELOAD;
     //$evaluator->write_trace();
+}
+
+/**
+ * Checks if all required comment fields are filled out.
+ *
+ * To be used only by TXP itself
+ *
+ * @param array comment fields (from getComment())
+ */
+
+function checkCommentRequired($comment)
+{
+    global $prefs;
+
+    $evaluator = & get_comment_evaluator();
+
+    if ($prefs['comments_require_name'] && !$comment['name']) {
+        $evaluator->add_estimate(RELOAD, 1, gTxt('comment_name_required'));
+    }
+    if ($prefs['comments_require_email'] && !$comment['email']) {
+        $evaluator->add_estimate(RELOAD, 1, gTxt('comment_email_required'));
+    }
+    if (!$comment['message']) {
+        $evaluator->add_estimate(RELOAD, 1, gTxt('comment_required'));
+    }
 }
 
 /**
@@ -610,7 +630,7 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
     extract($article);
     extract(safe_row("RealName, email", 'txp_users', "name = '".doSlash($AuthorID)."'"));
 
-    $out = gTxt('greeting')." $RealName,".n;
+    $out = gTxt('salutation', array('{name}' => $RealName)).n;
     $out .= str_replace('{title}', $Title, gTxt('comment_recorded')).n;
     $out .= permlinkurl_id($parentid).n;
 

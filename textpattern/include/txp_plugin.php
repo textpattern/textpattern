@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -65,12 +65,10 @@ function plugin_list($message = '')
 
     pagetop(gTxt('tab_plugins'), $message);
 
-    echo hed(gTxt('tab_plugins'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="'.$event.'_control" class="txp-control-panel">'.
-        plugin_form().
-        n.'</div>';
-
-    extract(gpsa(array('sort', 'dir')));
+    extract(gpsa(array(
+        'sort',
+        'dir',
+    )));
 
     if ($sort === '') {
         $sort = get_pref('plugin_sort_column', 'name');
@@ -93,6 +91,17 @@ function plugin_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_plugins'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-1col')
+        ).
+        n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        )).
+        n.tag(plugin_form(), 'div', array('class' => 'txp-control-panel'));
+
     $rs = safe_rows_start(
         "name, status, author, author_uri, version, description, length(help) AS help, ABS(STRCMP(MD5(code), code_md5)) AS modified, load_order, flags",
         'txp_plugin',
@@ -101,16 +110,12 @@ function plugin_list($message = '')
 
     if ($rs and numRows($rs) > 0) {
         echo
-            n.tag_start('div', array(
-                'id'    => $event.'_container',
-                'class' => 'txp-container',
-            )).
             n.tag_start('form', array(
-                'action' => 'index.php',
-                'id'     => 'plugin_form',
                 'class'  => 'multi_edit_form',
-                'method' => 'post',
+                'id'     => 'plugin_form',
                 'name'   => 'longform',
+                'method' => 'post',
+                'action' => 'index.php',
             )).
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
@@ -118,7 +123,7 @@ function plugin_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'plugin', 'name', 'plugin', true, $switch_dir, '', '',
@@ -137,7 +142,7 @@ function plugin_list($message = '')
                         (('modified' == $sort) ? "$dir " : '').'txp-list-col-modified'
                 ).
                 hCell(gTxt(
-                    'description'), '', ' scope="col" class="txp-list-col-description"'
+                    'description'), '', ' class="txp-list-col-description" scope="col"'
                 ).
                 column_head(
                     'active', 'status', 'plugin', true, $switch_dir, '', '',
@@ -148,7 +153,7 @@ function plugin_list($message = '')
                         (('load_order' == $sort) ? "$dir " : '').'txp-list-col-load-order'
                 ).
                 hCell(
-                    gTxt('manage'), '',  ' scope="col" class="txp-list-col-manage"'
+                    gTxt('manage'), '',  ' class="txp-list-col-manage" scope="col"'
                 )
             ).
             n.tag_end('thead').
@@ -183,9 +188,11 @@ function plugin_list($message = '')
             }
 
             if ($flags & PLUGIN_HAS_PREFS) {
-                $plugin_prefs = href(gTxt('plugin_prefs'), array(
-                    'event' => 'plugin_prefs.'.$name,
-                ), array('class' => 'plugin-prefs'));
+                $plugin_prefs = span(
+                    sp.span('&#124;', array('role' => 'separator')).
+                    sp.href(gTxt('plugin_prefs'), array('event' => 'plugin_prefs.'.$name)),
+                    array('class' => 'plugin-prefs')
+                );
             } else {
                 $plugin_prefs = '';
             }
@@ -200,7 +207,7 @@ function plugin_list($message = '')
                 $manage[] = $plugin_prefs;
             }
 
-            $manage_items = ($manage) ? join(tag(sp.'&#124;'.sp, 'span'), $manage) : '-';
+            $manage_items = ($manage) ? join($manage) : '-';
             $edit_url = eLink('plugin', 'plugin_edit', 'name', $name, $name);
 
             echo tr(
@@ -208,7 +215,7 @@ function plugin_list($message = '')
                     fInput('checkbox', 'selected[]', $name), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    $edit_url, '', ' scope="row" class="txp-list-col-name"'
+                    $edit_url, '', ' class="txp-list-col-name" scope="row"'
                 ).
                 td(
                     href($author, $a['author_uri'], array('rel' => 'external')), '', 'txp-list-col-author'
@@ -240,12 +247,14 @@ function plugin_list($message = '')
         echo
             n.tag_end('tbody').
             n.tag_end('table').
-            n.tag_end('div').
+            n.tag_end('div'). // End of .txp-listtables.
             plugin_multiedit_form('', $sort, $dir, '', '').
             tInput().
-            n.tag_end('form').
-            n.tag_end('div');
+            n.tag_end('form');
     }
+
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.
 }
 
 /**
@@ -278,9 +287,7 @@ function plugin_edit()
     $name = gps('name');
     pagetop(gTxt('edit_plugins'));
 
-    echo n.'<div id="'.$event.'_container" class="txp-container">';
     echo plugin_edit_form($name);
-    echo '</div>';
 }
 
 /**
@@ -293,10 +300,8 @@ function plugin_help()
 
     $name = gps('name');
     pagetop(gTxt('plugin_help'));
-    $help = ($name) ? safe_field("help", 'txp_plugin', "name = '".doSlash($name)."'") : '';
-    echo '<div id="'.$event.'_container" class="txp-container txp-view">'
-        .'<div class="text-column">'.$help.'</div>'
-        .'</div>';
+    $help = ($name) ? safe_field('help', 'txp_plugin', "name = '".doSlash($name)."'") : '';
+    echo n.tag($help, 'div', array('class' => 'txp-layout-textbox'));
 }
 
 /**
@@ -316,10 +321,14 @@ function plugin_edit_form($name = '')
         form(
             hed(gTxt('edit_plugin', array('{name}' => $name)), 2).
             graf('<textarea class="code" id="plugin_code" name="code" cols="'.INPUT_XLARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thing).'</textarea>', ' class="edit-plugin-code"').
-            graf(fInput('submit', '', gTxt('Save'), 'publish')).
+            graf(
+                sLink('plugin', '', gTxt('cancel'), 'txp-button').
+                fInput('submit', '', gTxt('save'), 'publish'),
+                array('class' => 'txp-edit-actions')
+            ).
             eInput('plugin').
             sInput('plugin_save').
-            hInput('name', $name), '', '', 'post', 'edit-form', '', 'plugin_details');
+            hInput('name', $name), '', '', 'post', '', '', 'plugin_details');
 }
 
 /**
@@ -352,8 +361,7 @@ function status_link($status, $name, $linktext)
 {
     return asyncHref(
         $linktext,
-        array('step' => 'switch_status', 'thing' => $name),
-        ' title="'.($status == 1 ? gTxt('disable') : gTxt('enable')).'"'
+        array('step' => 'switch_status', 'thing' => $name)
     );
 }
 
@@ -377,7 +385,7 @@ function plugin_verify()
     // Check for pre-4.0 style plugin.
     if (strpos($plugin, '$plugin=\'') !== false) {
         // Try to increase PCRE's backtrack limit in PHP 5.2+ to accommodate to
-        // x-large plugins. See http://bugs.php.net/bug.php?id=40846.
+        // x-large plugins. See https://bugs.php.net/bug.php?id=40846.
         @ini_set('pcre.backtrack_limit', '1000000');
         $plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
         // Have we hit yet another PCRE restriction?
@@ -417,18 +425,20 @@ function plugin_verify()
 
                 if (isset($plugin['help_raw']) && empty($plugin['allow_html_help'])) {
                     $textile = new \Textpattern\Textile\Parser();
-                    $help_source = $textile->TextileRestricted($plugin['help_raw'], 0, 0);
+                    $help_source = $textile->textileRestricted($plugin['help_raw'], 0, 0);
                 } else {
                     $help_source = highlight_string($plugin['help'], true);
                 }
 
                 $source .= highlight_string('<?php'.$plugin['code'].'?>', true);
-                $sub = fInput('submit', '', gTxt('install'), 'publish');
+                $sub = graf(
+                    sLink('plugin', '', gTxt('cancel'), 'txp-button').
+                    fInput('submit', '', gTxt('install'), 'publish'),
+                    array('class' => 'txp-edit-actions')
+                );
 
                 pagetop(gTxt('verify_plugin'));
-                echo
-                '<div id="'.$event.'_container" class="txp-container txp-view">'.
-                form(
+                echo form(
                     hed(gTxt('previewing_plugin'), 2).
                     tag($source, 'div', ' class="code" id="preview-plugin" dir="ltr"').
                     hed(gTxt('plugin_help').':', 2).
@@ -436,8 +446,8 @@ function plugin_verify()
                     $sub.
                     sInput('plugin_install').
                     eInput('plugin').
-                    hInput('plugin64', $plugin_encoded), '', '', 'post', 'plugin-info', '', 'plugin_preview').
-                '</div>';
+                    hInput('plugin64', $plugin_encoded), '', '', 'post', 'plugin-info', '', 'plugin_preview'
+                );
 
                 return;
             }
@@ -481,7 +491,7 @@ function plugin_install()
                 if (isset($help_raw) && empty($plugin['allow_html_help'])) {
                     // Default: help is in Textile format.
                     $textile = new \Textpattern\Textile\Parser();
-                    $help = $textile->TextileRestricted($help_raw, 0, 0);
+                    $help = $textile->textileRestricted($help_raw, 0, 0);
                 }
 
                 if ($exists) {
@@ -562,15 +572,11 @@ function plugin_install()
 function plugin_form()
 {
     return form(
-        graf(
-            tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').br.
-            '<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'
-        ).
-        graf(
-            fInput('submit', 'install_new', gTxt('upload')).
-            eInput('plugin').
-            sInput('plugin_verify')
-        ), '', '', 'post', 'plugin-data', '', 'plugin_install_form');
+        tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
+        '<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
+        fInput('submit', 'install_new', gTxt('upload')).
+        eInput('plugin').
+        sInput('plugin_verify'), '', '', 'post', 'plugin-data', '', 'plugin_install_form');
 }
 
 /**

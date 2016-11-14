@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -114,7 +114,7 @@ class Container implements \Textpattern\Container\ContainerInterface
             $class = $this->resolveAlias($alias);
 
             if ($options && method_exists($class, '__construct')) {
-                $reflection = new ReflectionClass($class);
+                $reflection = new \ReflectionClass($class);
                 $instance = $reflection->newInstanceArgs($options);
             } else {
                 $instance = new $class;

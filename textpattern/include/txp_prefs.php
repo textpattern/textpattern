@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -41,11 +41,11 @@ if ($event == 'prefs') {
     ));
 
     switch (strtolower($step)) {
-        case "":
-        case "prefs_list":
+        case '':
+        case 'prefs_list':
             prefs_list();
             break;
-        case "prefs_save":
+        case 'prefs_save':
             prefs_save();
             break;
     }
@@ -99,14 +99,17 @@ function prefs_save()
     }
 
     // Forge $gmtoffset and $is_dst from $timezone_key if present.
-    if (isset($post['timezone_key'])) {
+    if (!empty($post['timezone_key'])) {
         $key = $post['timezone_key'];
         $tzd = Txp::get('\Textpattern\Date\Timezone')->getTimeZones();
 
         if (isset($tzd[$key])) {
             $prefs['timezone_key'] = $timezone_key = $key;
-            $post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
-            $post['is_dst'] = $prefs['is_dst'] = $is_dst = Txp::get('\Textpattern\Date\Timezone')->isDst(null, $key);
+
+            if ($auto_dst) {
+                $post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
+                $post['is_dst'] = $prefs['is_dst'] = $is_dst = (int)Txp::get('\Textpattern\Date\Timezone')->isDst(null, $key);
+            }
         }
     }
 
@@ -119,6 +122,10 @@ function prefs_save()
 
         if (!isset($post[$name]) || !has_privs('prefs.'.$event)) {
             continue;
+        }
+
+        if (is_array($post[$name])) {
+            $post[$name] = implode(',', array_diff($post[$name], array('')));
         }
 
         if ($name === 'logging' && $post[$name] === 'none' && $post[$name] !== $val) {
@@ -158,10 +165,7 @@ function prefs_list($message = '')
 
     $locale = setlocale(LC_ALL, $locale);
 
-    echo hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="prefs_container" class="txp-container">'.
-        n.'<form method="post" class="prefs-form" action="index.php">'.
-        n.'<div class="txp-layout-textbox">';
+    echo n.'<form class="prefs-form" id="prefs_form" method="post" action="index.php">';
 
     // TODO: remove 'custom' when custom fields are refactored.
     $core_events = array('site', 'admin', 'publish', 'feeds', 'comments', 'custom');
@@ -185,6 +189,10 @@ function prefs_list($message = '')
 
     $last_event = null;
     $out = array();
+    $build = array();
+    $groupOut = array();
+    $tabCount = $tabActive = 0;
+    $selected = get_pref('pane_prefs_visible');
 
     if (numRows($rs)) {
         while ($a = nextRow($rs)) {
@@ -194,11 +202,34 @@ function prefs_list($message = '')
 
             if ($a['event'] !== $last_event) {
                 if ($last_event !== null) {
-                    echo wrapRegion('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
+                    $build[] = tag(
+                        hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
+                        join(n, $out), 'section', array(
+                            'class'           => 'txp-prefs-group',
+                            'id'              => 'prefs_group_'.$last_event,
+                            'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
+                        )
+                    );
+
+                    $groupOut[] = n.tag(href(
+                            gTxt($last_event),
+                            '#prefs_group_'.$last_event,
+                            array(
+                                'data-txp-pane'  => $last_event,
+                                'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
+                            )),
+                        'li', array(
+                            'class' => (($last_event === $selected) ? 'ui-tabs-active ui-state-active' : '')
+                            ));
+                }
+
+                if ($last_event === $selected) {
+                    $tabActive = $tabCount - 1;
                 }
 
                 $last_event = $a['event'];
                 $out = array();
+                $tabCount++;
             }
 
             $label = '';
@@ -224,28 +255,74 @@ function prefs_list($message = '')
                 pref_func($a['html'], $a['name'], $a['val'], $size),
                 $label,
                 $help,
-                array('id' => 'prefs-'.$a['name'])
+                array(
+                    'class' => 'txp-form-field',
+                    'id'    => 'prefs-'.$a['name'],
+                )
             );
         }
     }
 
     if ($last_event === null) {
-        echo graf(gTxt('no_preferences'));
+        echo graf(
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt('no_preferences'),
+            array('class' => 'alert-block information')
+        );
     } else {
-        echo wrapRegion('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
+        $build[] = tag(
+            hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
+            join(n, $out), 'section', array(
+                'class'           => 'txp-prefs-group',
+                'id'              => 'prefs_group_'.$last_event,
+                'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
+            )
+        );
+
+        $groupOut[] = n.tag(href(
+                gTxt($last_event),
+                '#prefs_group_'.$last_event,
+                array(
+                    'data-txp-pane'  => $last_event,
+                    'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
+                )),
+            'li', array(
+                'class' => (($last_event === $selected) ? 'ui-tabs-active ui-state-active' : '')
+                )).n;
+
+        if ($last_event === $selected) {
+            $tabActive = $tabCount - 1;
+        }
+
+        echo n.'<div class="txp-layout">'.
+            n.tag(
+                hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')),
+                'div', array('class' => 'txp-layout-1col')
+            ).
+            n.tag_start('div', array('class' => 'txp-layout-4col-alt')).
+            wrapGroup(
+                'all_preferences',
+                n.tag(join($groupOut), 'ul', array('class' => 'switcher-list')),
+                'all_preferences'
+            );
+
+        if ($last_event !== null) {
+            echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'), array('class' => 'txp-save'));
+        }
+
+        echo n.tag_end('div'). // End of .txp-layout-4col-alt.
+            n.tag_start('div', array('class' => 'txp-layout-4col-3span')).
+            join(n, $build).
+            n.tag_end('div'). // End of .txp-layout-4col-3span.
+            sInput('prefs_save').
+            eInput('prefs').
+            hInput('prefs_id', '1').
+            tInput();
     }
 
-    echo n.'</div>'.
-        sInput('prefs_save').
-        eInput('prefs').
-        hInput('prefs_id', '1').
-        tInput();
-
-    if ($last_event !== null) {
-        echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'));
-    }
-
-    echo n.'</form>'.n.'</div>';
+    echo n.'</div>'. // End of .txp-layout.
+        n.'</form>'.
+        script_js('var selectedTab = "'.$tabActive.'";');
 }
 
 /**
@@ -263,7 +340,7 @@ function pref_func($func, $name, $val, $size = '')
     if ($func != 'func' && is_callable('pref_'.$func)) {
         $func = 'pref_'.$func;
     } else {
-        $string = new \Textpattern\Type\String($func);
+        $string = new \Textpattern\Type\StringType($func);
         $func = $string->toCallback();
 
         if (!is_callable($func)) {
@@ -354,22 +431,36 @@ function gmtoffset_select($name, $val)
 
 function is_dst($name, $val)
 {
+    global $timezone_key, $auto_dst;
+
+    if ($auto_dst) {
+        $val = (int)Txp::get('\Textpattern\Date\Timezone')->isDst(null, $timezone_key);
+    }
+
     $ui = yesnoRadio($name, $val).
     script_js(<<<EOS
         $(document).ready(function ()
         {
-            var radio = $("#prefs-is_dst input");
+            var radio = $("#prefs-is_dst");
+            var radioInput = radio.find('input');
+            var radioLabel = radio.find('.txp-form-field-label');
+            var dstOn = $("#auto_dst-1");
+            var dstOff = $("#auto_dst-0");
+
             if (radio) {
-                if ($("#auto_dst-1").prop("checked")) {
-                    radio.prop("disabled", "disabled");
+                if (dstOn.prop("checked")) {
+                    radioInput.prop("disabled", "disabled");
+                    radioLabel.addClass('disabled');
                 }
 
-                $("#auto_dst-0").click(function () {
-                    radio.removeProp("disabled");
+                dstOff.click(function () {
+                    radioInput.removeProp("disabled");
+                    radioLabel.removeClass('disabled');
                 });
 
-                $("#auto_dst-1").click(function () {
-                    radio.prop("disabled", "disabled");
+                dstOn.click(function () {
+                    radioInput.prop("disabled", "disabled");
+                    radioLabel.addClass('disabled');
                 });
             }
         });
@@ -415,7 +506,7 @@ function permlinkmodes($name, $val)
         'year_month_day_title' => gTxt('year_month_day_title'),
         'section_title'        => gTxt('section_title'),
         'title_only'           => gTxt('title_only'),
-        // 'category_subcategory' => gTxt('category_subcategory')
+        //'category_subcategory' => gTxt('category_subcategory'),
     );
 
     return selectInput($name, $vals, $val, '', '', $name);
@@ -533,6 +624,24 @@ function dateformats($name, $val)
 }
 
 /**
+ * Renders a HTML &lt;select&gt; list of content permlink options.
+ *
+ * @param  string $name HTML name and id of the widget
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function permlink_format($name, $val)
+{
+    $vals = array(
+        '0'   => gTxt('permlink_intercapped'),
+        '1'   => gTxt('permlink_hyphenated'),
+    );
+
+    return selectInput($name, $vals, $val, '', '', $name);
+}
+
+/**
  * Renders a HTML &lt;select&gt; list of site production status.
  *
  * @param  string $name HTML name and id of the widget
@@ -578,7 +687,7 @@ function default_event($name, $val)
         }
     }
 
-    return n.'<select id="default_event" name="'.$name.'" class="default-events">'.
+    return n.'<select class="default-events" id="default_event" name="'.$name.'">'.
         join('', $out).
         n.'</select>';
 }

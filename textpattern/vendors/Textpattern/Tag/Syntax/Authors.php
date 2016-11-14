@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -57,7 +57,7 @@ class Authors
             'wraptag'  => '',
         ), $atts));
 
-        $sql = array('1 = 1');
+        $sql = array("1 = 1");
         $sql_limit = '';
         $sql_sort = " ORDER BY ".doSlash($sort);
 

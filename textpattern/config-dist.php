@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -96,14 +96,26 @@ $txpcfg['dbcharset'] = 'utf8';
  * MYSQL_CLIENT_IGNORE_SPACE, MYSQL_CLIENT_INTERACTIVE
  *
  * @global int $txpcfg['client_flags']
- * @link   http://www.php.net/manual/function.mysql-connect.php
+ * @link   https://secure.php.net/manual/en/mysqli.real-connect.php
  */
 
 $txpcfg['client_flags'] = 0;
 
 /*
- * Optional, advanced: http address of the site serving images
+ * Optional, advanced: http address of the site serving images.
  * see http://forum.textpattern.com/viewtopic.php?id=34493
  */
 
 // define('ihu', 'http://static.example.com/');
+
+/*
+ * Optional, advanced: custom CSS rules for admin-side themes.
+ */
+
+// define('admin_custom_css', 'your_custom_rules.css');
+
+/*
+ * Optional, advanced: custom JavaScript rules for admin-side themes.
+ */
+
+// define('admin_custom_js', 'your_custom_javascript.js');

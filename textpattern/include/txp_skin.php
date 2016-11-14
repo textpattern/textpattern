@@ -500,25 +500,27 @@ function skin_save()
                 website = '$safe_website'");
 
             if ($ok) {
-                // Set up blank assets for the skin.
-                // Todo: insert both Pages in one call.
-                safe_insert('txp_page',
-                    "name = 'default', skin = '$safe_name'");
+                // Set up blank assets for the skin using the default names.
+                // Todo: Insert both Pages in one call.
+                $defaults = safe_row("css, page", 'txp_section', "name = 'default'");
 
                 safe_insert('txp_page',
-                    "name = 'error_default', skin = '$safe_name'");
+                    "name = '" .$defaults['page']. "', skin = '$safe_name', user_html=''");
+
+                safe_insert('txp_page',
+                    "name = 'error_default', skin = '$safe_name', user_html=''");
 
                 safe_insert('txp_css',
-                    "name = 'default', skin = '$safe_name'");
+                    "name = '" .$defaults['css']. "', skin = '$safe_name', css=''");
 
                 $forms = get_essential_forms();
 
                 foreach ($forms as $form => $group) {
-                    $name = doSlash($form);
-                    $type = doSlash($group);
+                    $formName = doSlash($form);
+                    $formType = doSlash($group);
 
                     safe_insert('txp_form',
-                        "name = '$name', type = '$type', skin = '$safe_name'"
+                        "name = '$formName', type = '$formType', skin = '$safe_name', Form=''"
                     );
                 }
             }

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -111,12 +111,12 @@ class FileIterator implements \Iterator
     /**
      * Returns the current element.
      *
-     * @return \Textpattern\Type\String
+     * @return \Textpattern\Type\StringType
      */
 
     public function current()
     {
-        return new \Textpattern\Type\String($this->current);
+        return new \Textpattern\Type\StringType($this->current);
     }
 
     /**

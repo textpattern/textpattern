@@ -8,16 +8,12 @@
         <h3>
             <txp:search_result_count />
             <txp:text item="matching_search_request" />
-            <q>
-                <txp:search_term />
-            </q>
+            <q><txp:search_term /></q>
         </h3>
     <txp:else />
         <h3>
             <txp:text item="too_common_search_term" />
-            <q>
-                <txp:search_term />
-            </q>
+            <q><txp:search_term /></q>
         </h3>
     </txp:if_search_results>
 
@@ -55,6 +51,7 @@
             <time datetime="<txp:posted format="iso8601" />" itemprop="datePublished">
                 <txp:posted />
             </time>
+            <meta itemprop="dateModified" content="<txp:posted format="iso8601" />" />
             &#183;
             <txp:text item="author" />
             <span itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -67,27 +64,21 @@
 
 </txp:article>
 
-<!-- check if there are further results and provide pagination links or disabled buttons depending on the result,
-     this method is more flexible than using simple txp:older/txp:newer tags -->
+<!-- check if there are further results and provide pagination links depending on the result -->
 <txp:if_search_results min="11">
+    <txp:evaluate test>
+        <p class="paginator">
+            <txp:evaluate test="newer">
+                <a rel="prev" href="<txp:newer />">
+                    <txp:text item="prev" />
+                </a>
+            </txp:evaluate>
 
-    <txp:variable name="prev" value='<txp:older />' />
-    <txp:variable name="next" value='<txp:newer />' />
-
-    <p class="paginator">
-        <txp:if_variable name="next" value="">
-        <txp:else />
-            <a rel="prev" href="<txp:newer />" title="<txp:text item="prev" />">
-                ← <txp:text item="prev" />
-            </a>
-        </txp:if_variable>
-
-        <txp:if_variable name="prev" value="">
-        <txp:else />
-            <a rel="next" href="<txp:older />" title="<txp:text item="next" />">
-                <txp:text item="next" /> →
-            </a>
-        </txp:if_variable>
-    </p>
-
+            <txp:evaluate test="older">
+                <a rel="next" href="<txp:older />">
+                    <txp:text item="next" />
+                </a>
+            </txp:evaluate>
+        </p>
+    </txp:evaluate>
 </txp:if_search_results>

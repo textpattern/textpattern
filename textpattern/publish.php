@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -31,6 +31,9 @@ if (!defined("txpinterface")) {
         ' (Otherwise note that publish.php cannot be called directly.)');
 }
 
+global $trace;
+
+$trace->start('[PHP includes, stage 2]');
 include_once txpath.'/vendors/Textpattern/Loader.php';
 
 $loader = new \Textpattern\Loader(txpath.'/vendors');
@@ -48,13 +51,14 @@ include_once txpath.'/lib/admin_config.php';
 include_once txpath.'/publish/taghandlers.php';
 include_once txpath.'/publish/log.php';
 include_once txpath.'/publish/comment.php';
-trace_add('[PHP Include end]');
+$trace->stop();
 
 set_error_handler('publicErrorHandler', error_reporting());
 
 ob_start();
 
 $txp_current_tag = '';
+$txp_parsed      = array();
 
 // Get all prefs as an array.
 $prefs = get_prefs();
@@ -67,6 +71,11 @@ bombShelter();
 
 // Set a higher error level during initialisation.
 set_error_level(@$production_status == 'live' ? 'testing' : @$production_status);
+
+// disable tracing in live environment.
+if ($production_status == 'live') {
+    Trace::setQuiet(true);
+}
 
 // Use the current URL path if $siteurl is unknown.
 if (empty($siteurl)) {
@@ -175,16 +184,28 @@ set_error_level($production_status);
 if (!empty($feed) && in_array($feed, array('atom', 'rss'), true)) {
     include txpath."/publish/{$feed}.php";
     echo $feed();
-    trace_log(TEXTPATTERN_TRACE_DISPLAY);
+
+    if ($production_status !== 'live') {
+        echo $trace->summary();
+
+        if ($production_status === 'debug') {
+            echo $trace->result();
+        }
+    }
+
     exit;
 }
 
-if (gps('parentid') && gps('submit')) {
-    saveComment();
-} elseif (gps('parentid') and $comments_mode == 1) {
-    // Popup comments?
-    header("Content-type: text/html; charset=utf-8");
-    exit(parse_form('popup_comments'));
+if (gps('parentid')) {
+    if (ps('submit')) {
+        saveComment();
+    } elseif (ps('preview')) {
+        checkCommentRequired(getComment());
+    } elseif ($comments_mode == 1) {
+        // Popup comments?
+        header("Content-Type: text/html; charset=utf-8");
+        exit(parse_form('popup_comments'));
+    }
 }
 
 // We are dealing with a download.
@@ -264,7 +285,8 @@ function preText($s, $prefs)
                 // only way to make it multibyte-safe without breaking
                 // backwards-compatibility.
                 case urldecode(strtolower(urlencode(gTxt('section')))):
-                    $out['s'] = (ckEx('section', $u2)) ? $u2 : ''; $is_404 = empty($out['s']);
+                    $out['s'] = (ckEx('section', $u2)) ? $u2 : '';
+                    $is_404 = empty($out['s']);
                     break;
 
                 case urldecode(strtolower(urlencode(gTxt('category')))):
@@ -301,7 +323,6 @@ function preText($s, $prefs)
                 default:
                     // Then see if the prefs-defined permlink scheme is usable.
                     switch ($permlink_mode) {
-
                         case 'section_id_title':
                             if (empty($u2)) {
                                 $out['s'] = (ckEx('section', $u1)) ? $u1 : '';
@@ -458,7 +479,7 @@ function preText($s, $prefs)
             }
 
             $fn = empty($out['filename']) ? '' : " AND filename = '".doSlash($out['filename'])."'";
-            $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE.$fn);
+            $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE." AND created <= ".now('created').$fn);
         }
 
         return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404);
@@ -485,9 +506,11 @@ function preText($s, $prefs)
     }
 
     if (is_numeric($id) and !$is_404) {
-        $a = safe_row("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+        $a = safe_row(
+            "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            "ID = ".intval($id).(gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")"));
+            "ID = ".intval($id).(gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")")
+        );
 
         if ($a) {
             $out['id_keywords'] = $a['Keywords'];
@@ -552,7 +575,7 @@ function textpattern()
 
     restore_error_handler();
 
-    header("Content-type: text/html; charset=utf-8");
+    header("Content-Type: text/html; charset=utf-8");
     echo $html;
 
     callback_event('textpattern_end');
@@ -643,15 +666,15 @@ function output_file_download($filename)
     // Deal with error.
     if (isset($file_error)) {
         switch ($file_error) {
-        case 403:
-            txp_die(gTxt('403_forbidden'), '403');
-            break;
-        case 404:
-            txp_die(gTxt('404_not_found'), '404');
-            break;
-        default:
-            txp_die(gTxt('500_internal_server_error'), '500');
-            break;
+            case 403:
+                txp_die(gTxt('403_forbidden'), '403');
+                break;
+            case 404:
+                txp_die(gTxt('404_not_found'), '404');
+                break;
+            default:
+                txp_die(gTxt('500_internal_server_error'), '500');
+                break;
         }
     }
 }
@@ -680,13 +703,16 @@ function article($atts, $thing = null)
 
 function doArticles($atts, $iscustom, $thing = null)
 {
-    global $pretext, $prefs;
+    global $pretext, $prefs, $thispage;
     extract($pretext);
     extract($prefs);
     $customFields = getCustomFields();
     $customlAtts = array_null(array_flip($customFields));
 
     if ($iscustom) {
+        // Custom articles must not render search results.
+        $q = '';
+
         $extralAtts = array(
             'category'  => '',
             'section'   => '',
@@ -703,8 +729,6 @@ function doArticles($atts, $iscustom, $thing = null)
             'searchform'   => '',
             'searchall'    => 1,
             'searchsticky' => 0,
-            'pageby'       => '',
-            'pgonly'       => 0,
         );
     }
 
@@ -718,8 +742,12 @@ function doArticles($atts, $iscustom, $thing = null)
         'keywords'      => '',
         'time'          => 'past',
         'status'        => STATUS_LIVE,
-        'allowoverride' => (!$q and !$iscustom),
+        'allowoverride' => !$iscustom,
+        'frontpage'     => !$iscustom,
+        'match'         => 'Category1,Category2',
         'offset'        => 0,
+        'pageby'        => '',
+        'pgonly'        => 0,
         'wraptag'       => '',
         'break'         => '',
         'label'         => '',
@@ -734,14 +762,12 @@ function doArticles($atts, $iscustom, $thing = null)
         $theAtts['section'] = ($s && $s != 'default') ? $s : '';
         $theAtts['author'] = (!empty($author) ? $author : '');
         $theAtts['month'] = (!empty($month) ? $month : '');
-        $theAtts['frontpage'] = ($s && $s == 'default') ? true : false;
+        $theAtts['frontpage'] = ($theAtts['frontpage'] && $s && $s == 'default');
         $theAtts['excerpted'] = 0;
         $theAtts['exclude'] = 0;
         $theAtts['expired'] = $publish_expired_articles;
 
         filterAtts($theAtts);
-    } else {
-        $theAtts['frontpage'] = false;
     }
 
     extract($theAtts);
@@ -758,7 +784,7 @@ function doArticles($atts, $iscustom, $thing = null)
     $issticky = ($status == STATUS_STICKY);
 
     // Give control to search, if necessary.
-    if ($q && !$iscustom && !$issticky) {
+    if ($q && !$issticky) {
         include_once txpath.'/publish/search.php';
 
         $s_filter = ($searchall ? filterSearch() : '');
@@ -774,7 +800,7 @@ function doArticles($atts, $iscustom, $thing = null)
             $cols = array('Title', 'Body');
         }
 
-        $match = ", MATCH (`".join("`, `", $cols)."`) AGAINST ('$q') AS score";
+        $score = ", MATCH (`".join("`, `", $cols)."`) AGAINST ('$q') AS score";
         $search_terms = preg_replace('/\s+/', ' ', str_replace(array('\\', '%', '_', '\''), array('\\\\', '\\%', '\\_', '\\\''), $q));
 
         if ($quoted || empty($m) || $m === 'exact') {
@@ -806,7 +832,7 @@ function doArticles($atts, $iscustom, $thing = null)
             $sort = "score DESC";
         }
     } else {
-        $match = $search = '';
+        $score = $search = '';
 
         if (!$sort) {
             $sort = "Posted DESC";
@@ -832,7 +858,19 @@ function doArticles($atts, $iscustom, $thing = null)
     // Building query parts.
     $frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';
     $category  = join("','", doSlash(do_list_unique($category)));
-    $category  = (!$category)  ? '' : " AND (Category1 IN ('".$category."') OR Category2 IN ('".$category."'))";
+    $categories = array();
+    $match = do_list_unique($match);
+
+    if (in_array('Category1', $match)) {
+        $categories[] = "Category1 IN ('$category')";
+    }
+
+    if (in_array('Category2', $match)) {
+        $categories[] = "Category2 IN ('$category')";
+    }
+
+    $categories = join(" OR ", $categories);
+    $category  = (!$category or !$categories)  ? '' : " AND ($categories)";
     $section   = (!$section)   ? '' : " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')";
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
     $author    = (!$author)    ? '' : " AND AuthorID IN ('".join("','", doSlash(do_list_unique($author)))."')";
@@ -847,14 +885,14 @@ function doArticles($atts, $iscustom, $thing = null)
             $time = "";
             break;
         case 'future':
-            $time = " AND Posted > NOW()";
+            $time = " AND Posted > ".now('posted');
             break;
         default:
-            $time = " AND Posted <= NOW()";
+            $time = " AND Posted <= ".now('posted');
     }
 
     if (!$expired) {
-        $time .= " AND (NOW() <= Expires OR Expires = ".NULLDATETIME.")";
+        $time .= " AND (".now('expires')." <= Expires OR Expires IS NULL)";
     }
 
     $custom = '';
@@ -882,7 +920,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $keywords = " AND (".join(' or ', $keyparts).")";
     }
 
-    if ($q and $searchsticky) {
+    if ($q && $searchsticky) {
         $statusq = " AND Status >= ".STATUS_LIVE;
     } elseif ($id) {
         $statusq = " AND Status >= ".STATUS_LIVE;
@@ -895,31 +933,35 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Do not paginate if we are on a custom list.
     if (!$iscustom and !$issticky) {
-        $grand_total = safe_count('textpattern', $where);
-        $total = $grand_total - $offset;
-        $numPages = ceil($total / $pageby);
         $pg = (!$pg) ? 1 : $pg;
         $pgoffset = $offset + (($pg - 1) * $pageby);
 
-        // Send paging info to txp:newer and txp:older.
-        $pageout['pg']          = $pg;
-        $pageout['numPages']    = $numPages;
-        $pageout['s']           = $s;
-        $pageout['c']           = $c;
-        $pageout['context']     = 'article';
-        $pageout['grand_total'] = $grand_total;
-        $pageout['total']       = $total;
-
-        global $thispage;
-
         if (empty($thispage)) {
-            $thispage = $pageout;
+            $grand_total = safe_count('textpattern', $where);
+            $total = $grand_total - $offset;
+            $numPages = ceil($total / $pageby);
+
+            // Send paging info to txp:newer and txp:older.
+            $thispage = array(
+                'pg'          => $pg,
+                'numPages'    => $numPages,
+                's'           => $s,
+                'c'           => $c,
+                'context'     => 'article',
+                'grand_total' => $grand_total,
+                'total'       => $total
+            );
         }
 
         if ($pgonly) {
             return;
         }
     } else {
+        if ($pgonly) {
+            $total = safe_count('textpattern', $where) - $offset;
+            return ceil($total / $pageby);
+        }
+
         $pgoffset = $offset;
     }
 
@@ -930,12 +972,14 @@ function doArticles($atts, $iscustom, $thing = null)
         $safe_sort = doSlash($sort);
     }
 
-    $rs = safe_rows_start("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$match,
+    $rs = safe_rows_start(
+        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$score,
         'textpattern',
-        "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit));
+        "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
+    );
 
     // Get the form name.
-    if ($q and !$iscustom and !$issticky) {
+    if ($q && !$issticky) {
         $fname = ($searchform ? $searchform : 'search_results');
     } else {
         $fname = (!empty($listform) ? $listform : $form);
@@ -988,7 +1032,10 @@ function doArticle($atts, $thing = null)
     extract($prefs);
     extract($pretext);
 
-    extract(gpsa(array('parentid', 'preview')));
+    extract(gpsa(array(
+        'parentid',
+        'preview',
+    )));
 
     $theAtts = lAtts(array(
         'allowoverride' => '1',
@@ -1022,9 +1069,11 @@ function doArticle($atts, $thing = null)
 
         $q_status = ($status ? "AND Status = ".intval($status) : "AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")");
 
-        $rs = safe_row("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+        $rs = safe_row(
+            "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            "ID = $id $q_status LIMIT 1");
+            "ID = $id $q_status LIMIT 1"
+        );
 
         if ($rs) {
             extract($rs);

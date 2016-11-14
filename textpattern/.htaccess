@@ -1,0 +1,3 @@
+<IfModule mod_headers.c>
+    Header set Content-Security-Policy "frame-ancestors 'self'"
+</IfModule>

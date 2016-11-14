@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2004 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * "Mod File Upload" by Michael Manfre
  * http://manfre.net
@@ -36,6 +36,7 @@
 use Textpattern\Validator\CategoryConstraint;
 use Textpattern\Validator\ChoiceConstraint;
 use Textpattern\Validator\Validator;
+use Textpattern\Search\Filter;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -111,40 +112,12 @@ function file_list($message = '')
         set_pref('file_sort_dir', $dir, 'file', PREF_HIDDEN, '', 0, PREF_PRIVATE);
     }
 
-    echo
-        hed(gTxt('tab_file'), 1, array('class' => 'txp-heading')).
-        n.tag_start('div', array('id' => $event.'_control', 'class' => 'txp-control-panel'));
-
-    if (!is_dir($file_base_path) || !is_writeable($file_base_path)) {
-        echo graf(
-            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-            gTxt('file_dir_not_writeable', array('{filedir}' => $file_base_path)),
-            array('class' => 'alert-block warning')
-        );
-    } elseif (has_privs('file.edit.own')) {
-        $existing_files = get_filenames();
-
-        if ($existing_files) {
-            echo form(
-                eInput('file').
-                sInput('file_create').
-                graf(
-                    tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
-                    sp.selectInput('filename', $existing_files, '', 1, '', 'file-existing').
-                    sp.fInput('submit', '', gTxt('Create')),
-                    array('class' => 'existing-file')
-                ), '', '', 'post', '', '', 'assign_file');
-        }
-
-        echo file_upload_form(gTxt('upload_file'), 'upload', 'file_insert');
-    }
-
     switch ($sort) {
         case 'id':
             $sort_sql = "txp_file.id $dir";
             break;
-        case 'description':
-            $sort_sql = "txp_file.description $dir, txp_file.filename DESC";
+        case 'date':
+            $sort_sql = "txp_file.created $dir, txp_file.id ASC";
             break;
         case 'category':
             $sort_sql = "txp_category.title $dir, txp_file.filename DESC";
@@ -166,41 +139,50 @@ function file_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $criteria = 1;
+    $search = new Filter($event,
+        array(
+            'id' => array(
+                'column' => 'txp_file.id',
+                'label'  => gTxt('ID'),
+                'type'   => 'integer',
+            ),
+            'filename' => array(
+                'column' => 'txp_file.filename',
+                'label'  => gTxt('file_name'),
+            ),
+            'title' => array(
+                'column' => 'txp_file.title',
+                'label'  => gTxt('title'),
+            ),
+            'description' => array(
+                'column' => 'txp_file.description',
+                'label'  => gTxt('description'),
+            ),
+            'category' => array(
+                'column' => array('txp_file.category', 'txp_category.title'),
+                'label'  => gTxt('file_category'),
+            ),
+            'status' => array(
+                'column' => array('txp_file.status'),
+                'label'  => gTxt('status'),
+                'type'   => 'boolean',
+            ),
+            'author' => array(
+                'column' => array('txp_file.author', 'txp_users.RealName'),
+                'label'  => gTxt('author'),
+            ),
+        )
+    );
 
-    if ($search_method && $crit !== '') {
-        $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
-        $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
-        $critsql = $verbatim ?
-            array(
-                'id'          => "txp_file.id IN ('".join("','", do_list($crit_escaped))."')",
-                'filename'    => "txp_file.filename = '$crit_escaped'",
-                'title'       => "txp_file.title = '$crit_escaped'",
-                'description' => "txp_file.description = '$crit_escaped'",
-                'category'    => "txp_file.category = '$crit_escaped' OR txp_category.title = '$crit_escaped'",
-                'author'      => "txp_file.author = '$crit_escaped' OR txp_users.RealName = '$crit_escaped'",
-            ) :    array(
-                'id'          => "txp_file.id IN ('".join("','", do_list($crit_escaped))."')",
-                'filename'    => "txp_file.filename LIKE '%$crit_escaped%'",
-                'title'       => "txp_file.title LIKE '%$crit_escaped%'",
-                'description' => "txp_file.description LIKE '%$crit_escaped%'",
-                'category'    => "txp_file.category LIKE '%$crit_escaped%' OR txp_category.title LIKE '%$crit_escaped%'",
-                'author'      => "txp_file.author LIKE '%$crit_escaped%' OR txp_users.RealName LIKE '%$crit_escaped%'",
-            );
+    $search->setAliases('status', $file_statuses);
 
-        if (array_key_exists($search_method, $critsql)) {
-            $criteria = $critsql[$search_method];
-            $limit = 500;
-        } else {
-            $search_method = '';
-            $crit = '';
-        }
-    } else {
-        $search_method = '';
-        $crit = '';
-    }
+    list($criteria, $crit, $search_method) = $search->getFilter(array(
+            'id' => array('can_list' => true),
+        ));
 
-    $criteria .= callback_event('admin_criteria', 'file_list', 0, $criteria);
+    $search_render_options = array(
+        'placeholder' => 'search_files',
+    );
 
     $sql_from =
         safe_pfx_j('txp_file')."
@@ -213,13 +195,80 @@ function file_list($message = '')
         $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
 
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_file'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-4col-alt')
+        );
+
+    $searchBlock =
+        n.tag(
+            $search->renderForm('file_list', $search_render_options),
+            'div', array(
+                'class' => 'txp-layout-4col-3span',
+                'id'    => $event.'_control',
+            )
+        );
+
+    $createBlock = array();
+
+    if (!is_dir($file_base_path) || !is_writeable($file_base_path)) {
+        $createBlock[] =
+            graf(
+                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+                gTxt('file_dir_not_writeable', array('{filedir}' => $file_base_path)),
+                array('class' => 'alert-block warning')
+            );
+    } elseif (has_privs('file.edit.own')) {
+        $createBlock[] =
+            n.tag_start('div', array('class' => 'txp-control-panel')).
+            n.file_upload_form('upload_file', 'upload', 'file_insert', '', '', '', '');
+
+        $existing_files = get_filenames();
+
+        if ($existing_files) {
+            $createBlock[] =
+                form(
+                    eInput('file').
+                    sInput('file_create').
+                    tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
+                    selectInput('filename', $existing_files, '', 1, '', 'file-existing').
+                    fInput('submit', '', gTxt('Create')),
+                '', '', 'post', 'assign-existing-form', '', 'assign_file');
+        }
+
+        $createBlock[] = tag_end('div');
+    }
+
+    $contentBlockStart = n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        ));
+
+    $createBlock = implode(n, $createBlock);
+
     if ($total < 1) {
         if ($criteria != 1) {
-            echo file_search_form($crit, $search_method).
-                graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+            echo $searchBlock.
+                $contentBlockStart.
+                $createBlock.
+                graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_results_found'),
+                    array('class' => 'alert-block information')
+                );
         } else {
-            echo graf(gTxt('no_files_recorded'), ' class="indicator"').'</div>';
+            echo $contentBlockStart.
+                $createBlock.
+                graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_files_recorded'),
+                    array('class' => 'alert-block information')
+                );
         }
+
+        echo n.tag_end('div'). // End of .txp-layout-1col.
+            n.'</div>'; // End of .txp-layout.
 
         return;
     }
@@ -228,7 +277,7 @@ function file_list($message = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo file_search_form($crit, $search_method).'</div>';
+    echo $searchBlock.$contentBlockStart.$createBlock;
 
     $rs = safe_query(
         "SELECT
@@ -237,6 +286,7 @@ function file_list($message = '')
             txp_file.title,
             txp_file.category,
             txp_file.description,
+            UNIX_TIMESTAMP(txp_file.created) AS uDate,
             txp_file.downloads,
             txp_file.status,
             txp_file.author,
@@ -248,17 +298,14 @@ function file_list($message = '')
     if ($rs && numRows($rs)) {
         $show_authors = !has_single_author('txp_file');
 
-        echo
-            n.tag_start('div', array(
-                'id'    => $event.'_container',
-                'class' => 'txp-container',
-            )).
+        echo n.tag(
+                toggle_box('files_detail'), 'div', array('class' => 'txp-list-options')).
             n.tag_start('form', array(
-                'action' => 'index.php',
-                'id'     => 'files_form',
                 'class'  => 'multi_edit_form',
-                'method' => 'post',
+                'id'     => 'files_form',
                 'name'   => 'longform',
+                'method' => 'post',
+                'action' => 'index.php',
             )).
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
@@ -266,7 +313,7 @@ function file_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'ID', 'id', 'file', true, $switch_dir, $crit, $search_method,
@@ -278,24 +325,24 @@ function file_list($message = '')
                 ).
                 column_head(
                     'title', 'title', 'file', true, $switch_dir, $crit, $search_method,
-                        (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
+                        (('title' == $sort) ? "$dir " : '').'txp-list-col-title files_detail'
                 ).
                 column_head(
-                    'description', 'description', 'file', true, $switch_dir, $crit, $search_method,
-                        (('description' == $sort) ? "$dir " : '').'txp-list-col-description files_detail'
+                    'date', 'date', 'image', true, $switch_dir, $crit, $search_method,
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date files_detail'
                 ).
                 column_head(
                     'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method,
                         (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                 ).
                 hCell(gTxt(
-                    'tags'), '', ' scope="col" class="txp-list-col-tag-build files_detail"'
+                    'tags'), '', ' class="txp-list-col-tag-build files_detail" scope="col"'
                 ).
                 hCell(gTxt(
-                    'status'), '', ' scope="col" class="txp-list-col-status"'
+                    'status'), '', ' class="txp-list-col-status" scope="col"'
                 ).
                 hCell(gTxt(
-                    'condition'), '', ' scope="col" class="txp-list-col-condition"'
+                    'condition'), '', ' class="txp-list-col-condition" scope="col"'
                 ).
                 column_head(
                     'downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method,
@@ -328,12 +375,12 @@ function file_list($message = '')
                 'crit'          => $crit,
             );
 
+            $tagName = 'file_download_link';
             $tag_url = array(
-                'event'       => 'tag',
-                'tag_name'    => 'file_download_link',
                 'id'          => $id,
                 'description' => $description,
                 'filename'    => $filename,
+                'step'        => 'build',
             );
 
             $file_exists = file_exists(build_file_path($file_base_path, $filename));
@@ -372,10 +419,11 @@ function file_list($message = '')
             }
 
             if ($file_exists) {
-                $id_column .=
-                    sp.span('[', array('aria-hidden' => 'true')).
-                    make_download_link($id, gTxt('download'), $filename).
-                    span(']', array('aria-hidden' => 'true'));
+                $id_column .= span(
+                    sp.span('&#124;', array('role' => 'separator')).
+                    sp.make_download_link($id, gTxt('download'), $filename),
+                    array('class' => 'txp-option-link files_detail')
+                );
             }
 
             if (isset($file_statuses[$status])) {
@@ -389,27 +437,29 @@ function file_list($message = '')
                     $multi_edit, '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    $id_column, '', array('scope' => 'row', 'class' => 'txp-list-col-id')
+                    $id_column, '', array(
+                        'class' => 'txp-list-col-id',
+                        'scope' => 'row',
+                    )
                 ).
                 td(
                     $name, '', 'txp-list-col-filename'
                 ).
                 td(
-                    txpspecialchars($title), '', 'txp-list-col-title'
+                    txpspecialchars($title), '', 'txp-list-col-title files_detail'
                 ).
                 td(
-                    txpspecialchars($description), '', 'txp-list-col-description files_detail'
+                    gTime($uDate), '', 'txp-list-col-created date files_detail'
                 ).
                 td(
                     $category, '', 'txp-list-col-category category'.$vc
                 ).
                 td(
-                    href('Textile', $tag_url + array('type' => 'textile'), ' target="_blank" onclick="popWin(this.href); return false;"').
+                    popTag($tagName, 'Textile', array('type' => 'textile') + $tag_url).
                     sp.span('&#124;', array('role' => 'separator')).
-                    sp.href('Textpattern', $tag_url + array('type' => 'textpattern'), ' target="_blank" onclick="popWin(this.href); return false;"').
+                    sp.popTag($tagName, 'Textpattern', array('type' => 'textpattern') + $tag_url).
                     sp.span('&#124;', array('role' => 'separator')).
-                    sp.href('HTML', $tag_url + array('type' => 'html'), ' target="_blank" onclick="popWin(this.href); return false;"'), '', 'txp-list-col-tag-build files_detail').
-
+                    sp.popTag($tagName, 'HTML', array('type' => 'html') + $tag_url), '', 'txp-list-col-tag-build files_detail').
                 td(
                     $status, '', 'txp-list-col-status'
                 ).
@@ -430,36 +480,29 @@ function file_list($message = '')
         echo
             n.tag_end('tbody').
             n.tag_end('table').
-            n.tag_end('div').
+            n.tag_end('div'). // End of .txp-listtables.
             file_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
-            graf(toggle_box('files_detail'), array('class' => 'detail-toggle')).
             n.tag_start('div', array(
-                'id'    => $event.'_navigation',
                 'class' => 'txp-navigation',
+                'id'    => $event.'_navigation',
             )).
             pageby_form('file', $file_list_pageby).
             nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div').
             n.tag_end('div');
     }
-}
 
-// -------------------------------------------------------------
-
-function file_search_form($crit, $method)
-{
-    $methods = array(
-        'id'          => gTxt('ID'),
-        'filename'    => gTxt('file_name'),
-        'title'       => gTxt('title'),
-        'description' => gTxt('description'),
-        'category'    => gTxt('file_category'),
-        'author'      => gTxt('author'),
-    );
-
-    return search_form('file', 'file_list', $crit, $methods, $method, 'filename');
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.tag(
+        null,
+        'div', array(
+            'class'      => 'txp-tagbuilder-content',
+            'id'         => 'tagbuild_links',
+            'aria-label' => gTxt('tagbuilder'),
+            'title'      => gTxt('tagbuilder'),
+        )).
+        n.'</div>'; // End of .txp-layout.
 }
 
 // -------------------------------------------------------------
@@ -484,7 +527,7 @@ function file_multiedit_form($page, $sort, $dir, $crit, $search_method)
         unset($methods['changecategory']);
     }
 
-    if (has_single_author('txp_file')) {
+    if (has_single_author('txp_file') || !has_privs('file.edit')) {
         unset($methods['changeauthor']);
     }
 
@@ -531,7 +574,7 @@ function file_multi_edit()
             break;
         case 'changeauthor':
             $val = ps('author');
-            if (in_array($val, $all_file_authors)) {
+            if (has_privs('file.edit') && in_array($val, $all_file_authors)) {
                 $key = 'author';
             }
             break;
@@ -607,8 +650,8 @@ function file_edit($message = '', $id = '')
     if (!$id) {
         $id = gps('id');
     }
-    $id = assert_int($id);
 
+    $id = assert_int($id);
     $rs = safe_row("*, UNIX_TIMESTAMP(created) AS created, UNIX_TIMESTAMP(modified) AS modified", 'txp_file', "id = $id");
 
     if ($rs) {
@@ -633,8 +676,8 @@ function file_edit($message = '', $id = '')
         $existing_files = get_filenames();
 
         $replace = ($file_exists)
-            ? wrapGroup('file_upload_group', file_upload_form('', '', 'file_replace', $id, 'file_replace'), 'replace_file', 'replace-file', 'file_replace')
-            : wrapGroup('file_upload_group', file_upload_form('', '', 'file_replace', $id, 'file_reassign'), 'file_relink', 'upload-file', 'file_reassign');
+            ? file_upload_form('replace_file', 'file_replace', 'file_replace', $id, 'file_replace', ' replace-file')
+            : file_upload_form('file_relink', 'file_reassign', 'file_replace', $id, 'file_reassign', ' upload-file');
 
         $condition = span((($file_exists)
                 ? gTxt('file_status_ok')
@@ -644,52 +687,103 @@ function file_edit($message = '', $id = '')
         $downloadlink = ($file_exists) ? make_download_link($id, txpspecialchars($filename), $filename) : txpspecialchars($filename);
 
         $created =
-                graf(
-                    checkbox('publish_now', '1', $publish_now, '', 'publish_now').
-                    n.'<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="edit-file-publish-now"'
-                ).
+            inputLabel(
+                'year',
+                tsi('year', '%Y', $rs['created'], '', 'year').
+                ' <span role="separator">/</span> '.
+                tsi('month', '%m', $rs['created'], '', 'month').
+                ' <span role="separator">/</span> '.
+                tsi('day', '%d', $rs['created'], '', 'day'),
+                'publish_date',
+                array('timestamp_file', 'instructions_file_date'),
+                array('class' => 'txp-form-field date posted')
+            ).
+            inputLabel(
+                'hour',
+                tsi('hour', '%H', $rs['created'], '', 'hour').
+                ' <span role="separator">:</span> '.
+                tsi('minute', '%M', $rs['created'], '', 'minute').
+                ' <span role="separator">:</span> '.
+                tsi('second', '%S', $rs['created'], '', 'second'),
+                'publish_time',
+                array('', 'instructions_file_time'),
+                array('class' => 'txp-form-field time posted')
+            ).
+            n.tag(
+                checkbox('publish_now', '1', $publish_now, '', 'publish_now').
+                n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
+                'div', array('class' => 'posted-now')
+            );
 
-                graf(gTxt('or_publish_at').popHelp('timestamp'), ' class="edit-file-publish-at"').
-
-                graf(
-                    span(gTxt('date'), array('class' => 'txp-label-fixed')).br.
-                    tsi('year', '%Y', $rs['created'], '', gTxt('yyyy')).' / '.
-                    tsi('month', '%m', $rs['created'], '', gTxt('mm')).' / '.
-                    tsi('day', '%d', $rs['created'], '', gTxt('dd')), ' class="edit-file-published"'
-                ).
-
-                graf(
-                    span(gTxt('time'), array('class' => 'txp-label-fixed')).br.
-                    tsi('hour', '%H', $rs['created'], '', gTxt('hh')).' : '.
-                    tsi('minute', '%M', $rs['created'], '', gTxt('mm')).' : '.
-                    tsi('second', '%S', $rs['created'], '', gTxt('ss')), ' class="edit-file-created"'
-                );
-
-        echo n.'<div id="'.$event.'_container" class="txp-container">';
-        echo n.'<section class="txp-edit">'.
+        echo n.tag_start('div', array('class' => 'txp-edit')).
             hed(gTxt('edit_file'), 2).
-            inputLabel('condition', $condition).
-            inputLabel('name', $downloadlink).
-            inputLabel('download_count', $downloads).
             $replace.
-            n.'<div class="file-detail '.($file_exists ? '' : 'not-').'exists">'.
+            inputLabel(
+                'condition',
+                $condition,
+                '', '', array('class' => 'txp-form-field edit-file-condition')
+            ).
+            inputLabel(
+                'id',
+                $id,
+                'id', '', array('class' => 'txp-form-field edit-file-id')
+            ).
+            inputLabel(
+                'name',
+                $downloadlink,
+                '', '', array('class' => 'txp-form-field edit-file-name')
+            ).
+            inputLabel(
+                'download_count',
+                $downloads,
+                '', '', array('class' => 'txp-form-field edit-file-download-count')
+            ).
             form(
                 (($file_exists)
-                ? inputLabel('file_status', selectInput('status', $file_statuses, $status, false, '', 'file_status'), 'file_status').
-                    inputLabel('file_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'), 'title').
-                    inputLabel('file_category', treeSelectInput('category', $all_file_cats, $category, 'file_category'), 'file_category').
-//                    inputLabel('perms', selectInput('perms', $levels, $permissions), 'permissions').
-                    inputLabel('file_description', '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>', 'description', '', '', '').
-                    wrapRegion('file_created', $created, '', gTxt('timestamp'), '', 'file-created').
+                ? inputLabel(
+                        'file_status',
+                        selectInput('status', $file_statuses, $status, false, '', 'file_status'),
+                        'file_status', '', array('class' => 'txp-form-field edit-file-status')
+                    ).
+                    $created.
+                    inputLabel(
+                        'file_title',
+                        fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'),
+                        'title', '', array('class' => 'txp-form-field edit-file-title')
+                    ).
+                    inputLabel(
+                        'file_category',
+                        event_category_popup('file', $category, 'file_category').
+                        n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+                        'file_category', '', array('class' => 'txp-form-field edit-file-category')
+                    ).
+//                    inputLabel(
+//                        'perms',
+//                        selectInput('perms', $levels, $permissions),
+//                        'permissions'
+//                    ).
+                    inputLabel(
+                        'file_description',
+                        '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.htmlspecialchars($description, ENT_NOQUOTES).'</textarea>',
+                        'description', '', array('class' => 'txp-form-field txp-form-field-textarea edit-file-description')
+                    ).
                     pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-                    graf(fInput('submit', '', gTxt('Save'), 'publish')).
+                    graf(
+                        sLink('file', '', gTxt('cancel'), 'txp-button').
+                        fInput('submit', '', gTxt('save'), 'publish'),
+                        array('class' => 'txp-edit-actions')
+                    ).
                     hInput('filename', $filename)
                 : (empty($existing_files)
                         ? ''
                         : gTxt('existing_file').selectInput('filename', $existing_files, '', 1)
                     ).
                     pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-                    graf(fInput('submit', '', gTxt('Save'), 'publish')).
+                    graf(
+                        sLink('file', '', gTxt('cancel'), 'txp-button').
+                        fInput('submit', '', gTxt('save'), 'publish'),
+                        array('class' => 'txp-edit-actions')
+                    ).
                     hInput('category', $category).
                     hInput('perms', ($permissions == '-1') ? '' : $permissions).
                     hInput('title', $title).
@@ -703,8 +797,9 @@ function file_edit($message = '', $id = '')
                 hInput('dir', $dir).
                 hInput('page', $page).
                 hInput('crit', $crit).
-                hInput('search_method', $search_method), '', '', 'post', 'edit-form', '', (($file_exists) ? 'file_details' : 'assign_file')).
-            n.'</div>'.n.'</section>'.n.'</div>';
+                hInput('search_method', $search_method),
+            '', '', 'post', 'file-detail '.(($file_exists) ? '' : 'not-').'exists', '', (($file_exists) ? 'file_details' : 'assign_file')).
+            n.tag_end('div');
     }
 }
 
@@ -732,6 +827,7 @@ function file_db_add($filename, $category, $permissions, $description, $size, $t
 
     if ($rs) {
         $GLOBALS['ID'] = $rs;
+        now('created', true);
 
         return $GLOBALS['ID'];
     }
@@ -773,6 +869,7 @@ function file_create()
         if (is_file($newpath)) {
             file_set_perm($newpath);
             update_lastmod('file_created', compact('id', 'safe_filename', 'title', 'category', 'description'));
+            now('created', true);
             file_list(gTxt('linked_to_file').' '.$safe_filename);
         } else {
             file_list(gTxt('file_not_found').' '.$safe_filename);
@@ -837,6 +934,7 @@ function file_insert()
             } else {
                 file_set_perm($newpath);
                 update_lastmod('file_uploaded', compact('id', 'newname', 'title', 'category', 'description'));
+                now('created', true);
                 file_edit(gTxt('file_uploaded', array('{name}' => $newname)), $id);
             }
         }
@@ -852,7 +950,6 @@ function file_replace()
     global $txp_user, $file_base_path;
 
     $id = assert_int(gps('id'));
-
     $rs = safe_row("filename, author", 'txp_file', "id = $id");
 
     if (!$rs) {
@@ -888,8 +985,6 @@ function file_replace()
         }
 
         if (!shift_uploaded_file($file, $newpath)) {
-            safe_delete('txp_file', "id = $id");
-
             file_list(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR));
 
             // Rename tmp back.
@@ -900,6 +995,7 @@ function file_replace()
         } else {
             file_set_perm($newpath);
             update_lastmod('file_replaced', compact('id', 'filename'));
+            now('created', true);
 
             if ($size = filesize($newpath)) {
                 safe_update('txp_file', "size = $size, modified = NOW()", "id = $id");
@@ -946,21 +1042,23 @@ function file_save()
     }
 
     $id = $varray['id'] = assert_int($id);
-
     $permissions = gps('perms');
+
     if (is_array($permissions)) {
         asort($permissions);
         $permissions = implode(",", $permissions);
     }
+
     $varray['permissions'] = $permissions;
     $perms = doSlash($permissions);
-
     $rs = safe_row("filename, author", 'txp_file', "id = $id");
+
     if (!has_privs('file.edit') && !($rs['author'] === $txp_user && has_privs('file.edit.own'))) {
         require_privs();
     }
 
     $old_filename = $varray['old_filename'] = sanitizeForFile($rs['filename']);
+
     if ($old_filename != false && strcmp($old_filename, $filename) != 0) {
         $old_path = build_file_path($file_base_path, $old_filename);
         $new_path = build_file_path($file_base_path, $filename);
@@ -975,6 +1073,7 @@ function file_save()
     }
 
     $created_ts = @safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+
     if ($publish_now) {
         $created = "NOW()";
     } elseif ($created_ts > 0) {
@@ -1017,6 +1116,7 @@ function file_save()
     }
 
     update_lastmod('file_saved', compact('id', 'filename', 'title', 'category', 'description', 'status', 'size'));
+    now('created', true);
     file_list(gTxt('file_updated', array('{name}' => $filename)));
 }
 
@@ -1067,6 +1167,7 @@ function file_delete($ids = array())
                 return;
             } else {
                 update_lastmod('file_deleted', $ids);
+                now('created', true);
                 file_list(gTxt('file_deleted', array('{name}' => join(', ', $ids))));
 
                 return;
@@ -1101,9 +1202,20 @@ function file_set_perm($file)
     return @chmod($file, 0644);
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders a specific file upload form.
+ *
+ * @param  string       $label       File name label. May be empty
+ * @param  string       $pophelp     Help item
+ * @param  string       $step        Step
+ * @param  string       $id          File id
+ * @param  string       $label_id    HTML id attribute for the filename input element
+ * @param  string       $class       HTML class attribute for the form element
+ * @param  string|array $wraptag_val Tag to wrap the value / label in, or empty to omit
+ * @return string HTML
+ */
 
-function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '')
+function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $class = '', $wraptag_val = array('div', 'div'))
 {
     global $file_max_upload_size;
 
@@ -1113,7 +1225,7 @@ function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '')
 
     $max_file_size = (intval($file_max_upload_size) == 0) ? '' : intval($file_max_upload_size);
 
-    return upload_form($label, $pophelp, $step, 'file', $id, $max_file_size, $label_id);
+    return upload_form($label, $pophelp, $step, 'file', $id, $max_file_size, $label_id, $class, $wraptag_val);
 }
 
 // -------------------------------------------------------------

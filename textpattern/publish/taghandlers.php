@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -181,6 +181,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article')
     ->register('article_custom')
     ->register('txp_die')
+    ->register('txp_eval', 'evaluate')
     ->register('comments_help')
     ->register('comment_name_input')
     ->register('comment_email_input')
@@ -523,15 +524,18 @@ function feed_link($atts, $thing = null)
 
     $title = txpspecialchars($title);
 
-    if ($format == 'link') {
-        $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
+    $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
 
+    if ($format == 'link') {
         return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
     }
 
     $txt = ($thing === null ? $label : parse($thing));
 
-    $out = href($txt, $url, ' title="'.$title.'"');
+    $out = href($txt, $url, array(
+        'type'  => $type,
+        'title' => $title,
+    ));
 
     return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 }
@@ -564,13 +568,16 @@ function link_feed_link($atts)
 
     $title = txpspecialchars($title);
 
-    if ($format == 'link') {
-        $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
+    $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
 
+    if ($format == 'link') {
         return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
     }
 
-    $out = href($label, $url, ' title="'.$title.'"');
+    $out = href($label, $url, array(
+        'type'  => $type,
+        'title' => $title,
+    ));
 
     return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 }
@@ -987,7 +994,7 @@ function password_protect($atts, $thing = null)
         return '';
     }
 
-    return parse(EvalElse($thing, $access));
+    return parse($thing, $access);
 }
 
 // -------------------------------------------------------------
@@ -996,8 +1003,8 @@ function recent_articles($atts)
 {
     global $prefs;
 
-    extract(lAtts(array(
-        'break'    => br,
+    $atts = lAtts(array(
+        'break'    => 'br',
         'category' => '',
         'class'    => __FUNCTION__,
         'label'    => gTxt('recent_articles'),
@@ -1010,46 +1017,12 @@ function recent_articles($atts)
         'sortdir'  => '', // Deprecated.
         'wraptag'  => '',
         'no_widow' => @$prefs['title_no_widow'],
-    ), $atts));
+    ), $atts);
 
-    // For backwards compatibility. sortby and sortdir are deprecated.
-    if ($sortby) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortby')), E_USER_NOTICE);
+    $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
+    unset($atts['no_widow']);
 
-        if (!$sortdir) {
-            $sortdir = 'desc';
-        } else {
-            trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
-        }
-
-        $sort = "$sortby $sortdir";
-    } elseif ($sortdir) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
-        $sort = "Posted $sortdir";
-    }
-
-    $category = join("','", doSlash(do_list_unique($category)));
-    $categories = ($category) ? "AND (Category1 IN ('".$category."') or Category2 IN ('".$category."'))" : '';
-    $section = ($section) ? " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
-    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (NOW() <= Expires OR Expires = ".NULLDATETIME.")";
-
-    $rs = safe_rows_start("*, id AS thisid, UNIX_TIMESTAMP(Posted) AS posted", 'textpattern',
-        "Status = ".STATUS_LIVE." $section $categories AND Posted <= NOW()$expired ORDER BY ".doSlash($sort)." LIMIT ".intval($offset).", ".intval($limit));
-
-    if ($rs) {
-        $out = array();
-
-        while ($a = nextRow($rs)) {
-            $a['Title'] = ($no_widow) ? noWidow(escape_title($a['Title'])) : escape_title($a['Title']);
-            $out[] = href($a['Title'], permlinkurl($a));
-        }
-
-        if ($out) {
-            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-        }
-    }
-
-    return '';
+    return article_custom($atts, $thing);
 }
 
 // -------------------------------------------------------------
@@ -1072,7 +1045,7 @@ function recent_comments($atts, $thing = null)
     ), $atts));
 
     $sort = preg_replace('/\bposted\b/', 'd.posted', $sort);
-    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (NOW() <= t.Expires OR t.Expires = ".NULLDATETIME.") ";
+    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (".now('expires')." <= t.Expires OR t.Expires IS NULL) ";
 
     $rs = startRows("SELECT d.name, d.email, d.web, d.message, d.discussid, UNIX_TIMESTAMP(d.Posted) AS time,
             t.ID AS thisid, UNIX_TIMESTAMP(t.Posted) AS posted, t.Title AS title, t.Section AS section, t.url_title
@@ -1133,92 +1106,63 @@ function related_articles($atts, $thing = null)
 
     assert_article();
 
-    extract(lAtts(array(
+    $atts = lAtts(array(
         'break'    => br,
         'class'    => __FUNCTION__,
         'form'     => '',
         'label'    => '',
         'labeltag' => '',
         'limit'    => 10,
+        'offset'   => 0,
         'match'    => 'Category1,Category2',
         'no_widow' => @$prefs['title_no_widow'],
         'section'  => '',
         'sort'     => 'Posted DESC',
         'wraptag'  => '',
-    ), $atts));
+    ), $atts);
 
-    if (empty($thisarticle['category1']) and empty($thisarticle['category2'])) {
-        return;
-    }
+    $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category1', 'category2', 'author', 'keywords'), getCustomFields()));
+    $categories = $cats = array();
 
-    $match = do_list_unique($match);
-
-    if (!in_array('Category1', $match) and !in_array('Category2', $match)) {
-        return;
-    }
-
-    $id = $thisarticle['thisid'];
-
-    $cats = array();
-
-    if ($thisarticle['category1']) {
-        $cats[] = doSlash($thisarticle['category1']);
-    }
-
-    if ($thisarticle['category2']) {
-        $cats[] = doSlash($thisarticle['category2']);
-    }
-
-    $cats = join("','", $cats);
-
-    $categories = array();
-
-    if (in_array('Category1', $match)) {
-        $categories[] = "Category1 IN ('$cats')";
-    }
-
-    if (in_array('Category2', $match)) {
-        $categories[] = "Category2 IN ('$cats')";
-    }
-
-    $categories = "AND (".join(" OR ", $categories).')';
-
-    $section = ($section) ? " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')" : '';
-
-    $expired = ($prefs['publish_expired_articles']) ? '' : " AND (NOW() <= Expires OR Expires = ".NULLDATETIME.") ";
-    $rs = safe_rows_start(
-        "*, UNIX_TIMESTAMP(Posted) AS posted, UNIX_TIMESTAMP(LastMod) AS uLastMod, UNIX_TIMESTAMP(Expires) AS uExpires",
-        'textpattern',
-        "ID != ".intval($id)." AND Status = ".STATUS_LIVE." $expired AND Posted <= NOW() $categories $section ORDER BY ".doSlash($sort)." LIMIT 0, ".intval($limit));
-
-    if ($rs) {
-        $out = array();
-        $old_article = $thisarticle;
-
-        while ($a = nextRow($rs)) {
-            $a['Title'] = ($no_widow) ? noWidow(escape_title($a['Title'])) : escape_title($a['Title']);
-            $a['uPosted'] = $a['posted']; // populateArticleData() and permlinkurl() assume quite a bunch of posting dates...
-
-            if ($form === '' && $thing === null) {
-                $out[] = href($a['Title'], permlinkurl($a));
-            } else {
-                populateArticleData($a);
-
-                if ($thing === null && $form !== '') {
-                    $out[] = parse_form($form);
-                } else {
-                    $out[] = parse($thing);
+    foreach ($match as $cf) {
+        switch ($cf) {
+            case 'category1':
+            case 'category2':
+                if (!empty($thisarticle[$cf])) {
+                    $cats[] = $thisarticle[$cf];
                 }
-            }
-        }
-        $thisarticle = $old_article;
 
-        if ($out) {
-            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
+                $categories[] = ucwords($cf);
+                break;
+            case 'author':
+                $atts['author'] = $thisarticle['authorid'];
+                break;
+            default:
+                if (empty($thisarticle[$cf])) {
+                    return;
+                }
+
+                $atts[$cf] = $thisarticle[$cf];
+                break;
         }
     }
 
-    return '';
+    if (!empty($cats)) {
+        $atts['category'] = implode(',', $cats);
+    } elseif ($categories) {
+        return;
+    }
+
+    $atts['match'] = implode(',', $categories);
+    $atts['exclude'] = $thisarticle['thisid'];
+
+    if ($atts['form'] === '' && $thing === null) {
+        $thing = '<txp:permlink><txp:title no_widow="'.($atts['no_widow'] ? '1' : '').'" /></txp:permlink>';
+    }
+
+    unset($atts['no_widow']);
+
+    return article_custom($atts, $thing);
 }
 
 // -------------------------------------------------------------
@@ -1233,8 +1177,10 @@ function popup($atts)
         'class'        => '',
         'section'      => '',
         'this_section' => 0,
-        'type'         => 'c',
+        'type'         => 'category',
     ), $atts));
+
+    $type = substr($type, 0, 1);
 
     if ($type == 's') {
         $rs = safe_rows_start("name, title", 'txp_section', "name != 'default' ORDER BY name");
@@ -1797,6 +1743,10 @@ function newer($atts, $thing = null)
 {
     global $thispage, $pretext, $m;
 
+    if (empty($thispage)) {
+        return '';
+    }
+
     extract(lAtts(array(
         'showalways' => 0,
         'title'      => '',
@@ -1850,6 +1800,10 @@ function newer($atts, $thing = null)
 function older($atts, $thing = null)
 {
     global $thispage, $pretext, $m;
+
+    if (empty($thispage)) {
+        return '';
+    }
 
     extract(lAtts(array(
         'showalways' => 0,
@@ -1950,7 +1904,7 @@ function article_url_title()
 
 // -------------------------------------------------------------
 
-function if_article_id($atts, $thing)
+function if_article_id($atts, $thing = null)
 {
     global $thisarticle, $pretext;
 
@@ -1960,9 +1914,8 @@ function if_article_id($atts, $thing)
         'id' => $pretext['id'],
     ), $atts));
 
-    if ($id) {
-        return parse(EvalElse($thing, in_list($thisarticle['thisid'], $id)));
-    }
+    $x = $id && in_list($thisarticle['thisid'], $id);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -2029,25 +1982,26 @@ function expires($atts)
 
 // -------------------------------------------------------------
 
-function if_expires($atts, $thing)
+function if_expires($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse(EvalElse($thing, $thisarticle['expires']));
+    $x = !empty($thisarticle['expires']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_expired($atts, $thing)
+function if_expired($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse(EvalElse($thing,
-        $thisarticle['expires'] && ($thisarticle['expires'] <= time())));
+    $x = !empty($thisarticle['expires']) && ($thisarticle['expires'] <= time());
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -2139,7 +2093,7 @@ function comments_invite($atts)
 
 // -------------------------------------------------------------
 
-function popup_comments($atts)
+function popup_comments($atts, $thing = null)
 {
     extract(lAtts(array(
         'form' => 'comments_display'
@@ -2153,9 +2107,8 @@ function popup_comments($atts)
 
     if ($rs) {
         populateArticleData($rs);
-        $result = parse_form($form);
 
-        return $result;
+        return ($thing === null ? parse_form($form) : parse($thing));
     }
 
     return '';
@@ -2163,7 +2116,7 @@ function popup_comments($atts)
 
 // -------------------------------------------------------------
 
-function comments_form($atts)
+function comments_form($atts, $thing = null)
 {
     global $thisarticle, $has_comments_preview;
     global $thiscommentsform; // TODO: Remove any uses of $thiscommentsform when removing deprecated attributes from below.
@@ -2171,10 +2124,10 @@ function comments_form($atts)
     // deprecated attributes since TXP 4.6. Most of these (except msgstyle)
     // were moved to the tags that occur within a comments_form, although
     // some of the names changed.
-    $deprecated = array('isize', 'msgrows', 'msgcols', 'msgstyle', 
+    $deprecated = array('isize', 'msgrows', 'msgcols', 'msgstyle',
         'previewlabel', 'submitlabel', 'rememberlabel', 'forgetlabel');
 
-    foreach($deprecated as $att) {
+    foreach ($deprecated as $att) {
         if (isset($atts[$att])) {
             trigger_error(gTxt('deprecated_attribute', array('{name}' => $att)), E_USER_NOTICE);
         }
@@ -2246,7 +2199,7 @@ function comments_form($atts)
 
         $out .= '<form id="txpCommentInputForm" method="post" action="'.txpspecialchars($url).'#cpreview">'.
             n.'<div class="comments-wrapper">'.n. // Prevent XHTML Strict validation gotchas.
-            parse_form($form).
+            ($thing === null ? parse_form($form) : parse($thing)).
             n.hInput('parentid', ($parentid ? $parentid : $thisid)).
             n.hInput('backpage', (ps('preview') ? $backpage : $url)).
             n.'</div>'.
@@ -2271,13 +2224,9 @@ function comment_name_input($atts)
     $h5 = ($prefs['doctype'] == 'html5');
 
     if (ps('preview')) {
-        $name  = ps('name');
-        $namewarn = ($prefs['comments_require_name'] && !trim($name));
-
-        if ($namewarn) {
-            $evaluator = & get_comment_evaluator();
-            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_name_required'));
-        }
+        $comment = getComment();
+        $name = $comment['name'];
+        $namewarn = ($prefs['comments_require_name'] && !$name);
     }
 
     return fInput('text', 'name', $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $size, '', 'name', false, $h5 && $prefs['comments_require_name']);
@@ -2298,13 +2247,9 @@ function comment_email_input($atts)
     $h5 = ($prefs['doctype'] == 'html5');
 
     if (ps('preview')) {
-        $email  = clean_url(ps('email'));
-        $emailwarn = ($prefs['comments_require_email'] && !trim($email));
-
-        if ($emailwarn) {
-            $evaluator = & get_comment_evaluator();
-            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_email_required'));
-        }
+        $comment = getComment();
+        $email = $comment['email'];
+        $emailwarn = ($prefs['comments_require_email'] && !$email);
     }
 
     return fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
@@ -2324,7 +2269,8 @@ function comment_web_input($atts)
     $h5 = ($prefs['doctype'] == 'html5');
 
     if (ps('preview')) {
-        $web  = clean_url(ps('web'));
+        $comment = getComment();
+        $web = $comment['web'];
     }
 
     return fInput($h5 ? 'text' : 'text', 'web', $web, 'comment_web_input', '', '', $size, '', 'web', false, false); /* TODO: maybe use type = 'url' once browsers are less strict */
@@ -2345,14 +2291,11 @@ function comment_message_input($atts)
     $commentwarn = false;
     $n_message = 'message';
     $formnonce = '';
-    $message = doDeEnt(ps('message'));
-
-    if ($message == '') { // Second or later preview will have randomised message-field name.
-        $in = getComment();
-        $message = doDeEnt($in['message']);
-    }
+    $message = '';
 
     if (ps('preview')) {
+        $comment = getComment();
+        $message = $comment['message'];
         $split = rand(1, 31);
         $nonce = getNextNonce();
         $secret = getNextSecret();
@@ -2360,11 +2303,6 @@ function comment_message_input($atts)
         $n_message = md5('message'.$secret);
         $formnonce = n.hInput(substr($nonce, 0, $split), substr($nonce, $split));
         $commentwarn = (!trim($message));
-
-        if ($commentwarn) {
-            $evaluator = & get_comment_evaluator();
-            $evaluator->add_estimate(RELOAD, 1, gTxt('comment_required'));
-        }
     }
 
     $required = ($prefs['doctype'] == 'html5') ? ' required' : '';
@@ -2456,8 +2394,7 @@ function comment_submit($atts)
     // If all fields check out, the submit button is active/clickable.
     if (ps('preview')) {
         return fInput('submit', 'submit', $label, 'button', '', '', '', '', 'txpCommentSubmit', false);
-    }
-    else {
+    } else {
         return fInput('submit', 'submit', $label, 'button disabled', '', '', '', '', 'txpCommentSubmit', true);
     }
 }
@@ -2483,53 +2420,17 @@ function comments_error($atts)
 
 // -------------------------------------------------------------
 
-function if_comments_error($atts, $thing)
+function if_comments_error($atts, $thing = null)
 {
     $evaluator = & get_comment_evaluator();
 
-    return parse(EvalElse($thing, (count($evaluator->get_result_message()) > 0)));
-}
-
-/**
- * Renders a heading for comments.
- *
- * @param      array  $atts
- * @param      string $thing
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function comments_annotateinvite($atts, $thing)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    global $thisarticle, $pretext;
-
-    extract(lAtts(array(
-        'class'   => __FUNCTION__,
-        'wraptag' => 'h3',
-    ), $atts));
-
-    assert_article();
-
-    extract($thisarticle);
-
-    extract(safe_row(
-        "Annotate, AnnotateInvite, UNIX_TIMESTAMP(Posted) AS uPosted",
-        'textpattern',
-        "ID = ".intval($thisid)
-    ));
-
-    if (!$thing) {
-        $thing = $AnnotateInvite;
-    }
-
-    return (!$Annotate) ? '' : doTag($thing, $wraptag, $class, ' id="'.gTxt('comment').'"');
+    $x = (count($evaluator->get_result_message()) > 0);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function comments($atts)
+function comments($atts, $thing = null)
 {
     global $thisarticle, $prefs;
     extract($prefs);
@@ -2572,7 +2473,7 @@ function comments($atts)
 
         while ($vars = nextRow($rs)) {
             $GLOBALS['thiscomment'] = $vars;
-            $comments[] = parse_form($form).n;
+            $comments[] = ($thing === null ? parse_form($form) : parse($thing)).n;
             unset($GLOBALS['thiscomment']);
         }
 
@@ -2584,7 +2485,7 @@ function comments($atts)
 
 // -------------------------------------------------------------
 
-function comments_preview($atts)
+function comments_preview($atts, $thing = null)
 {
     global $has_comments_preview;
 
@@ -2617,7 +2518,7 @@ function comments_preview($atts)
     $preview['web'] = clean_url($preview['web']);
 
     $GLOBALS['thiscomment'] = $preview;
-    $comments = parse_form($form).n;
+    $comments = ($thing === null ? parse_form($form) : parse($thing)).n;
     unset($GLOBALS['thiscomment']);
     $out = doTag($comments, $wraptag, $class);
 
@@ -2630,9 +2531,10 @@ function comments_preview($atts)
 
 // -------------------------------------------------------------
 
-function if_comments_preview($atts, $thing)
+function if_comments_preview($atts, $thing = null)
 {
-    return parse(EvalElse($thing, ps('preview') && checkCommentsAllowed(gps('parentid'))));
+    $x = ps('preview') && checkCommentsAllowed(gps('parentid'));
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -2870,7 +2772,7 @@ function author_email($atts)
 
 // -------------------------------------------------------------
 
-function if_author($atts, $thing)
+function if_author($atts, $thing = null)
 {
     global $author, $context, $thisauthor;
 
@@ -2879,22 +2781,22 @@ function if_author($atts, $thing)
         'name' => '',
     ), $atts));
 
-    if ($thisauthor) {
-        return parse(EvalElse($thing, $name === '' || in_list($thisauthor['name'], $name)));
-    }
-
     $theType = ($type) ? $type == $context : true;
 
-    if ($name) {
-        return parse(EvalElse($thing, ($theType && in_list($author, $name))));
+    if ($thisauthor) {
+        $x = $name === '' || in_list($thisauthor['name'], $name);
+    } elseif ($name) {
+        $x = ($theType && in_list($author, $name));
+    } else {
+        $x = ($theType && (string) $author !== '');
     }
 
-    return parse(EvalElse($thing, ($theType && (string) $author !== '')));
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_article_author($atts, $thing)
+function if_article_author($atts, $thing = null)
 {
     global $thisarticle;
 
@@ -2906,11 +2808,8 @@ function if_article_author($atts, $thing)
 
     $author = $thisarticle['authorid'];
 
-    if ($name) {
-        return parse(EvalElse($thing, in_list($author, $name)));
-    }
-
-    return parse(EvalElse($thing, (string) $author !== ''));
+    $x = $name ? in_list($author, $name) : (string) $author !== '';
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -3203,18 +3102,20 @@ function if_keywords($atts, $thing = null)
         ? $thisarticle['keywords']
         : array_intersect(do_list($keywords), do_list($thisarticle['keywords']));
 
-    return parse(EvalElse($thing, !empty($condition)));
+    $x = !empty($condition);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_article_image($atts, $thing = '')
+function if_article_image($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse(EvalElse($thing, $thisarticle['article_image']));
+    $x = !empty($thisarticle['article_image']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -3382,6 +3283,11 @@ function search_result_date($atts)
 function search_result_count($atts)
 {
     global $thispage;
+
+    if (empty($thispage)) {
+        return '';
+    }
+
     $t = @$thispage['grand_total'];
 
     extract(lAtts(array(
@@ -3844,64 +3750,70 @@ function image_date($atts)
 
 // -------------------------------------------------------------
 
-function if_thumbnail($atts, $thing)
+function if_thumbnail($atts, $thing = null)
 {
     global $thisimage;
 
     assert_image();
 
-    return parse(EvalElse($thing, ($thisimage['thumbnail'] == 1)));
+    $x = ($thisimage['thumbnail'] == 1);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_comments($atts, $thing)
+function if_comments($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse(EvalElse($thing, ($thisarticle['comments_count'] > 0)));
+    $x = ($thisarticle['comments_count'] > 0);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_comments_allowed($atts, $thing)
+function if_comments_allowed($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse(EvalElse($thing, checkCommentsAllowed($thisarticle['thisid'])));
+    $x = checkCommentsAllowed($thisarticle['thisid']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_comments_disallowed($atts, $thing)
+function if_comments_disallowed($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse(EvalElse($thing, !checkCommentsAllowed($thisarticle['thisid'])));
+    $x = !checkCommentsAllowed($thisarticle['thisid']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_individual_article($atts, $thing)
+function if_individual_article($atts, $thing = null)
 {
     global $is_article_list;
 
-    return parse(EvalElse($thing, ($is_article_list == false)));
+    $x = ($is_article_list == false);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_article_list($atts, $thing)
+function if_article_list($atts, $thing = null)
 {
     global $is_article_list;
 
-    return parse(EvalElse($thing, ($is_article_list == true)));
+    $x = ($is_article_list == true);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 /**
@@ -3991,8 +3903,9 @@ function if_description($atts, $thing = null)
     ), $atts));
 
     $content = getMetaDescription($type);
+    $x = !empty($content);
 
-    return parse(EvalElse($thing, !empty($content)));
+    return isset($thing) ? parse($thing, $x) : $x;;
 }
 
 
@@ -4064,94 +3977,6 @@ function lang()
     return txpspecialchars(LANG);
 }
 
-/**
- * Formats article permanent links.
- *
- * @param      int    $ID
- * @param      string $Section
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function formatPermLink($ID, $Section)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    return permlinkurl_id($ID);
-}
-
-/**
- * Formats comments invite link.
- *
- * @param      string $AnnotateInvite
- * @param      string $Section
- * @param      int    $ID
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function formatCommentsInvite($AnnotateInvite, $Section, $ID)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    global $comments_mode;
-
-    $dc = safe_count('txp_discuss', "parentid = ".intval($ID)." AND visible = ".VISIBLE);
-
-    $ccount = ($dc) ?  '['.$dc.']' : '';
-    if (!$comments_mode) {
-        return '<a href="'.permlinkurl_id($ID).'/#'.gTxt('comment').
-            '">'.$AnnotateInvite.'</a>'.$ccount;
-    } else {
-        return "<a href=\"".hu."?parentid=$ID\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\">".$AnnotateInvite.'</a> '.$ccount;
-    }
-}
-
-/**
- * Formats article permanent link.
- *
- * @param      string $text
- * @param      string $plink
- * @param      string $Title
- * @param      string $url_title
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function doPermlink($text, $plink, $Title, $url_title)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    global $url_mode;
-    $Title = ($url_title) ? $url_title : stripSpace($Title);
-    $Title = ($url_mode) ? $Title : '';
-
-    return preg_replace("/<(txp:permlink)>(.*)<\/\\1>/sU",
-        "<a href=\"".$plink.$Title."\" title=\"".gTxt('permanent_link')."\">$2</a>", $text);
-}
-
-/**
- * Formats article link.
- *
- * @param      int    $ID
- * @param      string $Title
- * @param      string $url_title
- * @param      string $Section
- * @return     string
- * @deprecated in 4.0.0
- */
-
-function doArticleHref($ID, $Title, $url_title, $Section)
-{
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-    $conTitle = ($url_title) ? $url_title : stripSpace($Title);
-
-    return ($GLOBALS['url_mode'])
-    ?    tag($Title, 'a', ' href="'.hu.$Section.'/'.$ID.'/'.$conTitle.'"')
-    :    tag($Title, 'a', ' href="'.hu.'index.php?id='.$ID.'"');
-}
-
 // -------------------------------------------------------------
 
 function breadcrumb($atts)
@@ -4221,33 +4046,35 @@ function breadcrumb($atts)
 
 //------------------------------------------------------------------------
 
-function if_excerpt($atts, $thing)
+function if_excerpt($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse(EvalElse($thing, trim($thisarticle['excerpt']) !== ''));
+    $x = trim($thisarticle['excerpt']) !== '';
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 // Searches use default page. This tag allows you to use different templates if searching
 // -------------------------------------------------------------
 
-function if_search($atts, $thing)
+function if_search($atts, $thing = null)
 {
     global $pretext;
 
-    return parse(EvalElse($thing, !empty($pretext['q'])));
+    $x = !empty($pretext['q']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_search_results($atts, $thing)
+function if_search_results($atts, $thing = null)
 {
-    global $thispage, $pretext;
+    global $pretext, $thispage;
 
-    if (empty($pretext['q'])) {
+    if (empty($pretext['q']) || empty($thispage)) {
         return '';
     }
 
@@ -4258,12 +4085,13 @@ function if_search_results($atts, $thing)
 
     $results = (int) $thispage['grand_total'];
 
-    return parse(EvalElse($thing, $results >= $min && (!$max || $results <= $max)));
+    $x = $results >= $min && (!$max || $results <= $max);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_category($atts, $thing)
+function if_category($atts, $thing = null)
 {
     global $c, $context;
 
@@ -4275,15 +4103,17 @@ function if_category($atts, $thing)
     $theType = ($type) ? $type == $context : true;
 
     if ($name === false) {
-        return parse(EvalElse($thing, ($theType && !empty($c))));
+        $x = ($theType && !empty($c));
     } else {
-        return parse(EvalElse($thing, ($theType && in_list($c, $name))));
+        $x = ($theType && in_list($c, $name));
     }
+
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_article_category($atts, $thing)
+function if_article_category($atts, $thing = null)
 {
     global $thisarticle;
 
@@ -4313,37 +4143,41 @@ function if_article_category($atts, $thing)
     }
 
     if ($name) {
-        return parse(EvalElse($thing, array_intersect(do_list($name), $cats)));
-    } else {
-        return parse(EvalElse($thing, ($cats)));
+        $cats = array_intersect(do_list($name), $cats);
     }
+
+    $x = !empty($cats);
+
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_first_category($atts, $thing)
+function if_first_category($atts, $thing = null)
 {
     global $thiscategory;
 
     assert_category();
 
-    return parse(EvalElse($thing, !empty($thiscategory['is_first'])));
+    $x = !empty($thiscategory['is_first']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_last_category($atts, $thing)
+function if_last_category($atts, $thing = null)
 {
     global $thiscategory;
 
     assert_category();
 
-    return parse(EvalElse($thing, !empty($thiscategory['is_last'])));
+    $x = !empty($thiscategory['is_last']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_section($atts, $thing)
+function if_section($atts, $thing = null)
 {
     global $pretext;
     extract($pretext);
@@ -4355,15 +4189,17 @@ function if_section($atts, $thing)
     $section = ($s == 'default' ? '' : $s);
 
     if ($section) {
-        return parse(EvalElse($thing, $name === false or in_list($section, $name)));
+        $x = $name === false || in_list($section, $name);
     } else {
-        return parse(EvalElse($thing, $name !== false and (in_list('', $name) or in_list('default', $name))));
+        $x = $name !== false && (in_list('', $name) || in_list('default', $name));
     }
+
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_article_section($atts, $thing)
+function if_article_section($atts, $thing = null)
 {
     global $thisarticle;
 
@@ -4375,29 +4211,32 @@ function if_article_section($atts, $thing)
 
     $section = $thisarticle['section'];
 
-    return parse(EvalElse($thing, in_list($section, $name)));
+    $x = in_list($section, $name);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_first_section($atts, $thing)
+function if_first_section($atts, $thing = null)
 {
     global $thissection;
 
     assert_section();
 
-    return parse(EvalElse($thing, !empty($thissection['is_first'])));
+    $x = !empty($thissection['is_first']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_last_section($atts, $thing)
+function if_last_section($atts, $thing = null)
 {
     global $thissection;
 
     assert_section();
 
-    return parse(EvalElse($thing, !empty($thissection['is_last'])));
+    $x = !empty($thissection['is_last']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -4471,7 +4310,7 @@ function custom_field($atts)
 
 // -------------------------------------------------------------
 
-function if_custom_field($atts, $thing)
+function if_custom_field($atts, $thing = null)
 {
     global $thisarticle;
 
@@ -4556,7 +4395,7 @@ function if_custom_field($atts, $thing)
         $cond = ($thisarticle[$name] !== '');
     }
 
-    return parse(EvalElse($thing, $cond));
+    return isset($thing) ? parse($thing, !empty($cond)) : !empty($cond);
 }
 
 // -------------------------------------------------------------
@@ -4586,7 +4425,7 @@ function error_status()
 
 // -------------------------------------------------------------
 
-function if_status($atts, $thing)
+function if_status($atts, $thing = null)
 {
     global $pretext, $txp_error_code;
 
@@ -4598,7 +4437,8 @@ function if_status($atts, $thing)
         ? $txp_error_code
         : $pretext['status'];
 
-    return parse(EvalElse($thing, $status == $page_status));
+    $x = $status == $page_status;
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -4625,41 +4465,42 @@ function if_different($atts, $thing)
     static $last;
 
     $key = md5($thing);
-    $cond = EvalElse($thing, 1);
-    $out = parse($cond);
+    $out = parse($thing, 1);
 
     if (empty($last[$key]) or $out != $last[$key]) {
         return $last[$key] = $out;
     } else {
-        return parse(EvalElse($thing, 0));
+        return parse($thing, 0);
     }
 }
 
 // -------------------------------------------------------------
 
-function if_first_article($atts, $thing)
+function if_first_article($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse(EvalElse($thing, !empty($thisarticle['is_first'])));
+    $x = !empty($thisarticle['is_first']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_last_article($atts, $thing)
+function if_last_article($atts, $thing = null)
 {
     global $thisarticle;
 
     assert_article();
 
-    return parse(EvalElse($thing, !empty($thisarticle['is_last'])));
+    $x = !empty($thisarticle['is_last']);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
 
-function if_plugin($atts, $thing)
+function if_plugin($atts, $thing = null)
 {
     global $plugins, $plugins_ver;
 
@@ -4674,7 +4515,8 @@ function if_plugin($atts, $thing)
         trigger_error(gTxt('deprecated_attribute', array('{name}' => 'ver')), E_USER_NOTICE);
     }
 
-    return parse(EvalElse($thing, @in_array($name, $plugins) and (!$version or version_compare($plugins_ver[$name], $version) >= 0)));
+    $x = @in_array($name, $plugins) && (!$version || version_compare($plugins_ver[$name], $version) >= 0);
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 // -------------------------------------------------------------
@@ -4767,10 +4609,7 @@ function file_download_list($atts, $thing = null)
         return '';
     }
 
-    if (!$where) {
-        // If nothing matches, start with all files.
-        $where[] = "1 = 1";
-    }
+    $where[] = "created <= ".now('created');
 
     $where = join(" AND ", array_merge($where, $statwhere));
 
@@ -4851,9 +4690,9 @@ function file_download($atts, $thing = null)
     $from_form = false;
 
     if ($id) {
-        $thisfile = fileDownloadFetchInfo('id = '.intval($id));
+        $thisfile = fileDownloadFetchInfo('id = '.intval($id).' and created <= '.now('created'));
     } elseif ($filename) {
-        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
+        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."' and created <= ".now('created'));
     } else {
         assert_file();
 
@@ -4887,9 +4726,9 @@ function file_download_link($atts, $thing = null)
     $from_form = false;
 
     if ($id) {
-        $thisfile = fileDownloadFetchInfo('id = '.intval($id));
+        $thisfile = fileDownloadFetchInfo('id = '.intval($id).' and created <= '.now('created'));
     } elseif ($filename) {
-        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
+        $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."' and created <= ".now('created'));
     } else {
         assert_file();
 
@@ -5095,8 +4934,36 @@ function file_download_description($atts)
 
 // -------------------------------------------------------------
 
-function hide()
+function hide($atts = array(), $thing = null)
 {
+    if (empty($atts) || empty($thing)) {
+        return '';
+    }
+
+    extract(lAtts(array(
+        'process'	=> null
+    ), $atts));
+
+    global $txp_parsed, $txp_else;
+
+    $hash = sha1($thing);
+    $tag = $txp_parsed[$hash];
+
+    if (empty($tag) || empty($txp_else[$hash]) || !($process = trim($process))) {
+        return '';
+    }
+
+    $nr = $txp_else[$hash][0] - 2;
+    $process = is_numeric($process) ? true : do_list_unique($process);
+
+    for ($n = 1; $n <= $nr; $n++) {
+        $t = $tag[$n];
+        
+        if ($process === true || in_array($t[1], $process)) {
+            processTags($t[1], $t[2], $t[3]);
+        }
+    }
+
     return '';
 }
 
@@ -5115,11 +4982,11 @@ function rsd()
 
 function variable($atts, $thing = null)
 {
-    global $variable;
+    global $variable, $trace;
 
     extract(lAtts(array(
         'name'  => '',
-        'value' => parse($thing),
+        'value' => $thing !== null ? parse($thing) : null,
     ), $atts));
 
     if (empty($name)) {
@@ -5132,7 +4999,7 @@ function variable($atts, $thing = null)
         if (isset($variable[$name])) {
             return $variable[$name];
         } else {
-            trace_add("[<txp:variable>: Unknown variable '$name']");
+            $trace->log("[<txp:variable>: Unknown variable '$name']");
 
             return '';
         }
@@ -5168,5 +5035,93 @@ function if_variable($atts, $thing = null)
         $x = false;
     }
 
-    return parse(EvalElse($thing, $x));
+    return isset($thing) ? parse($thing, $x) : $x;
+}
+
+// -------------------------------------------------------------
+
+function txp_eval($atts, $thing = null)
+{
+    global $txp_parsed, $txp_else;
+    static $xpath = null, $functions = null;
+
+    extract(lAtts(array(
+        'query' => null,
+        'test'	=> null
+    ), $atts));
+
+    if (!isset($query)) {
+        $x = true;
+    } elseif (!($query = trim($query))) {
+        $x = $query;
+    } elseif (class_exists('DOMDocument')) {
+        if (!isset($xpath)) {
+            $xpath = new DOMXpath(new DOMDocument);
+            $functions = do_list_unique(get_pref('txp_functions'));
+
+            if($functions) {
+                $xpath->registerNamespace('php', 'http://php.net/xpath');
+                $xpath->registerPHPFunctions($functions);
+            }
+
+            $functions = implode('|', $functions);
+        }
+
+        if ($functions) {
+                $query = preg_replace('/\b('.$functions.')\s*\(/', "php:function('$1',", $query);
+        }
+
+        $x = $xpath->evaluate($query);
+
+        if($x instanceOf DOMNodeList) {
+            $x = $x->length;
+        }
+    } else {
+        trigger_error('PHP DOM extension '.gTxt('gd_unavailable'));
+        return;
+    }
+
+    if (!isset($thing)) {
+        return $x;
+    } elseif (empty($x)) {
+        return parse($thing, false);
+    } elseif (!($test = trim($test))) {
+        return parse($thing, true);
+    }
+
+    $hash = sha1($thing);
+    $tag = $txp_parsed[$hash];
+
+    if (empty($tag) || empty($txp_else[$hash])) {
+        return $thing;
+    }
+
+    $test = is_numeric($test) ? false : do_list_unique($test);
+    $isempty = true;
+    $nr = $txp_else[$hash][0] - 2;
+    $out = array($tag[0]);
+
+    for ($tags = array(), $n = 1; $n <= $nr; $n++) {
+        $t = $tag[$n];
+        
+        if ($test && !in_array($t[1], $test)) {
+            $out[] = $t;
+            $tags[] = $n;
+        } else {
+            $nextag = processTags($t[1], $t[2], $t[3]);
+            $out[] = $nextag;
+            $isempty &= trim($nextag) === '';
+        }
+
+        $out[] = $tag[++$n];
+    }
+
+    if (!$isempty) {
+        foreach ($tags as $n) {
+            $t = $out[$n];
+            $out[$n] = processTags($t[1], $t[2], $t[3]);
+        }
+    }
+
+    return $isempty ? parse($thing, false) : implode('', $out);
 }

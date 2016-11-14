@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -70,10 +70,10 @@ function pagetop($pagetitle, $message = '')
 
     if (gps('logout')) {
         $body_id = 'page-logout';
-        $area = 'login-pane';
+        $area = 'login';
     } elseif (!$txp_user) {
         $body_id = 'page-login';
-        $area = 'login-pane';
+        $area = 'login';
     } else {
         $body_id = 'page-'.txpspecialchars($event);
     }
@@ -86,32 +86,33 @@ function pagetop($pagetitle, $message = '')
     if (!in_array($lang_direction, array('ltr', 'rtl'))) {
         // Apply biased default for missing translations.
         $lang_direction = 'ltr';
-    }
-
-    ?><!DOCTYPE html>
-<html lang="<?php echo txpspecialchars(LANG);
-    ?>" dir="<?php echo $lang_direction;
-    ?>">
+    } ?><!DOCTYPE html>
+<html lang="<?php echo txpspecialchars(LANG); ?>" dir="<?php echo $lang_direction; ?>">
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <title><?php echo admin_title($pagetitle)?></title><?php echo
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('vendors/jquery/ui/js/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
     script_js(
-        'var textpattern = '.json_encode(array(
-            'event' => $event,
-            'step' => $step,
-            '_txp_token' => form_token(),
-            'ajax_timeout' => (int) AJAX_TIMEOUT,
-            'textarray' => (object) null,
-            'do_spellcheck' => get_pref('do_spellcheck',
-                '#page-article #body, #page-article #title,'.
-                '#page-image #alt-text, #page-image #caption,'.
-                '#page-file #description,'.
-                '#page-link #link-title, #page-link #link-description'),
-            'production_status' => get_pref('production_status'),
-        )).';').
+        'var textpattern = '.json_encode(
+            array(
+                'event' => $event,
+                'step' => $step,
+                '_txp_token' => form_token(),
+                'ajax_timeout' => (int) AJAX_TIMEOUT,
+                'textarray' => (object) null,
+                'do_spellcheck' => get_pref(
+                    'do_spellcheck',
+                    '#page-article #body, #page-article #title,'.
+                    '#page-image #alt-text, #page-image #caption,'.
+                    '#page-file #description,'.
+                    '#page-link #link-title, #page-link #link-description'
+                ),
+                'production_status' => get_pref('production_status'),
+            )
+        ).';'
+    ).
     script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
     gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled', 'ok', 'save', 'publish'));
     // Mandatory un-themable Textpattern core styles ?>
@@ -125,19 +126,17 @@ function pagetop($pagetitle, $message = '')
 </style>
 <?php
 echo $theme->html_head();
-    callback_event('admin_side', 'head_end');
-    ?>
+    callback_event('admin_side', 'head_end'); ?>
 </head>
-<body id="<?php echo $body_id;
-    ?>" class="not-ready <?php echo $area;
-    ?>">
+<body class="not-ready <?php echo $area; ?>" id="<?php echo $body_id; ?>">
 <header class="txp-header">
 <?php callback_event('admin_side', 'pagetop');
     $theme->set_state($area, $event, $bm, $message);
     echo pluggable_ui('admin_side', 'header', $theme->header());
     callback_event('admin_side', 'pagetop_end');
     echo n.'</header><!-- /txp-header -->'.
-        n.'<main class="txp-body" aria-label="'.gTxt('main_content').'">';
+        n.'<main class="txp-body" aria-label="'.gTxt('main_content').'">'.
+        n.'<div id="messagepane">'.$theme->announce($message).'</div>';
     callback_event('admin_side', 'main_content');
 }
 
@@ -257,12 +256,12 @@ function areas()
     );
 
     $areas['content'] = array(
-        gTxt('tab_organise') => 'category',
         gTxt('tab_write')    => 'article',
         gTxt('tab_list')     => 'list',
         gTxt('tab_image')    => 'image',
         gTxt('tab_file')     => 'file',
         gTxt('tab_link')     => 'link',
+        gTxt('tab_organise') => 'category',
     );
 
     $areas['presentation'] = array(

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -27,10 +27,6 @@ if (!defined('TXP_UPDATE')) {
 
 safe_alter('txp_lang', 'DELAY_KEY_WRITE = 0');
 
-if (!safe_field("name", 'txp_prefs', "name = 'lastmod_keepalive'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'lastmod_keepalive', val = '0', type = '1', html = 'yesnoradio'");
-}
-
 // New status field for file downloads.
 $txpfile = getThings("DESCRIBE `".PFX."txp_file`");
 
@@ -38,41 +34,39 @@ if (!in_array('status', $txpfile)) {
     safe_alter('txp_file', "ADD status SMALLINT NOT NULL DEFAULT '4'");
 }
 
-$update_files = 0;
-
 if (!in_array('modified', $txpfile)) {
-    safe_alter('txp_file', "ADD modified DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
-    $update_files = 1;
+    safe_alter('txp_file', "ADD modified DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00'");
 }
+
+safe_alter('txp_file', "MODIFY modified DATETIME NOT NULL");
 
 if (!in_array('created', $txpfile)) {
-    safe_alter('txp_file', "ADD created DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
-    $update_files = 1;
+    safe_alter('txp_file', "ADD created DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00'");
 }
 
+safe_alter('txp_file', "MODIFY created DATETIME NOT NULL");
+
 if (!in_array('size', $txpfile)) {
-    safe_alter('txp_file',
-        "ADD size BIGINT");
-    $update_files = 1;
+    safe_alter('txp_file', "ADD size BIGINT");
 }
 
 if (!in_array('downloads', $txpfile)) {
     safe_alter('txp_file', "ADD downloads INT DEFAULT '0' NOT NULL");
 }
 
-if (array_intersect(array('modified', 'created'), $txpfile)) {
-    safe_alter('txp_file', "
-        MODIFY modified DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-        MODIFY created DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
-}
+$txpfile = getThings("DESCRIBE `".PFX."txp_file`");
 
 // Copy existing file timestamps into the new database columns.
-if ($update_files) {
-    $prefs = get_prefs();
-    $rs = safe_rows("*", 'txp_file', "1 = 1");
+if (array_intersect(array('modified', 'created', 'size', ), $txpfile)) {
+    $rs  = safe_rows("*", 'txp_file', "1 = 1");
+    $dir = get_pref('file_base_path', dirname(txpath).DS.'files');
 
     foreach ($rs as $row) {
-        $path = build_file_path(@$prefs['file_base_path'], @$row['filename']);
+        if (empty($row['filename'])) {
+            continue;
+        }
+
+        $path = build_file_path($dir, $row['filename']);
 
         if ($path and ($stat = @stat($path))) {
             safe_update('txp_file', "created = '".strftime('%Y-%m-%d %H:%M:%S', $stat['ctime'])."', modified = '".strftime('%Y-%m-%d %H:%M:%S', $stat['mtime'])."', size = '".doSlash(sprintf('%u', $stat['size']))."'", "id = '".doSlash($row['id'])."'");
@@ -80,7 +74,7 @@ if ($update_files) {
     }
 }
 
-safe_update('textpattern', "Keywords = TRIM(BOTH ',' FROM 
+safe_update('textpattern', "Keywords = TRIM(BOTH ',' FROM
     REPLACE(
         REPLACE(
             REPLACE(
@@ -102,7 +96,7 @@ safe_update('textpattern', "Keywords = TRIM(BOTH ',' FROM
                 ',,,,', ','),
             ',,', ','),
         ',,', ',')
-    )", 
+    )",
     "Keywords != ''"
 );
 
@@ -149,7 +143,7 @@ safe_update('txp_prefs', "position = 100", "name IN(
     'gmtoffset',
     'comments_auto_append',
     'plugin_cache_dir',
-    'permalink_title_format',
+    'permlink_format',
     'use_mail_on_feeds_id'
 )");
 
@@ -164,8 +158,7 @@ safe_update('txp_prefs', "position = 120, event = 'publish'", "name = 'send_last
 safe_update('txp_prefs', "position = 140", "name IN(
     'dateformat',
     'comments_dateformat',
-    'spam_blacklists',
-    'lastmod_keepalive'
+    'spam_blacklists'
 )");
 
 safe_update('txp_prefs', "position = 160", "name IN(

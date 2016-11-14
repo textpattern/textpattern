@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -518,12 +518,6 @@ class Request
     {
         if ($this->headers !== null) {
             return $this->headers;
-        }
-
-        if (function_exists('apache_request_headers')) {
-            if ($this->headers = apache_request_headers()) {
-                return $this->headers;
-            }
         }
 
         $this->headers = array();

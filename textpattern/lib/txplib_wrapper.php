@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -32,8 +32,8 @@
  * properly. See RPC Server implementation to view an example of the required
  * files and predefined variables.
  *
- * @link      http://txp.kusor.com/wrapper
- * @author    Pedro Palazon - http://kusor.net/
+ * @link      http://web.archive.org/web/20141201035729/http://txp.kusor.com/wrapper
+ * @author    Pedro Palazón
  * @copyright 2005-2008 The Textpattern Development Team - http://textpattern.com
  */
 
@@ -387,7 +387,7 @@ class TXP_Wrapper
      * $wrapper = new TXP_wrapper('username', 'password');
      * if ($sections = $wrapper->getSectionsList())
      * {
-     *     foreach($sections as $section)
+     *     foreach ($sections as $section)
      *     {
      *         echo $section['title'];
      *     }
@@ -439,7 +439,7 @@ class TXP_Wrapper
      * $wrapper = new TXP_wrapper('username', 'password');
      * if ($categories = $wrapper->getCategoryList())
      * {
-     *     foreach($categories as $category)
+     *     foreach ($categories as $category)
      *     {
      *         echo $category['title'];
      *     }
@@ -920,7 +920,7 @@ class TXP_Wrapper
         }
 
         if ($incoming['textile_body'] == USE_TEXTILE) {
-            $incoming['Title'] = $textile->TextileThis($incoming['Title'], '', 1);
+            $incoming['Title'] = $textile->textileThis($incoming['Title'], '', 1);
         }
 
         $incoming['url_title'] = preg_replace('|[\x00-\x1f#%+/?\x7f]|', '', $incoming['url_title']);
@@ -950,7 +950,7 @@ class TXP_Wrapper
                 $html = nl2br(trim($field));
                 break;
             case USE_TEXTILE:
-                $html = $textile->TextileThis($field);
+                $html = $textile->textileThis($field);
                 break;
         }
 

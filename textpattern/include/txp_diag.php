@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -170,7 +170,7 @@ function diag_msg_wrap($msg, $type = 'error')
 
 function doDiagnostics()
 {
-    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB, $txp_using_svn;
+    global $prefs, $files, $txpcfg, $event, $step, $theme, $DB, $txp_is_dev;
     extract(get_prefs());
 
     $urlparts = parse_url(hu);
@@ -186,7 +186,7 @@ function doDiagnostics()
     $fail = array();
     $now = time();
 
-    if (!$txp_using_svn) {
+    if (!$txp_is_dev) {
         // Check for Textpattern updates, at most once every 24 hours.
         $updateInfo = unserialize(get_pref('last_update_check', ''));
 
@@ -289,7 +289,7 @@ function doDiagnostics()
     }
 
     // Files that don't match their checksums.
-    if (!$txp_using_svn and $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
+    if (!$txp_is_dev and $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
         $fail['modified_files'] = diag_msg_wrap(gTxt('modified_files').cs.n.t.join(', '.n.t, $modified_files), 'warning');
     }
 
@@ -430,9 +430,16 @@ function doDiagnostics()
 
     echo pagetop(gTxt('tab_diagnostics'), '');
 
-    echo hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="'.$event.'_container" class="txp-container">'.
-        n.'<div id="pre_flight_check">'.
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-1col')
+        ).
+        n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        )).
+        n.tag_start('div', array('id' => 'pre_flight_check')).
         hed(gTxt('preflight_check'), 2);
 
     if ($fail) {
@@ -443,14 +450,31 @@ function doDiagnostics()
         echo graf(diag_msg_wrap(gTxt('all_checks_passed'), 'success'));
     }
 
-    echo '</div>';
-    echo '<div id="diagnostics">',
+    echo n.tag_end('div'). // End of #pre_flight_check.
+        n.tag_start('div', array('id' => 'diagnostics')).
         hed(gTxt('diagnostic_info'), 2);
 
     $fmt_date = '%Y-%m-%d %H:%M:%S';
 
+    $dets = array(
+        'low'  => gTxt('low'),
+        'high' => gTxt('high'),
+    );
+
     $out = array(
-        '<p><textarea class="code" id="diagnostics-detail" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr" readonly>',
+        form(
+            eInput('diag').
+            inputLabel(
+                'diag_detail_level',
+                selectInput('step', $dets, $step, 0, 1, 'diag_detail_level'),
+                'detail',
+                '',
+                array('class' => 'txp-form-field diagnostic-details-level'),
+                ''
+            )
+        ),
+
+        '<textarea class="code" id="diagnostics-detail" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr" readonly>',
 
         gTxt('txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
 
@@ -596,25 +620,12 @@ function doDiagnostics()
     }
 
     $out[] = callback_event('diag_results', $step).n;
-    $out[] = '</textarea></p>';
-
-    $dets = array(
-        'low'  => gTxt('low'),
-        'high' => gTxt('high'),
-    );
-
-    $out[] =
-        form(
-            graf(
-                eInput('diag').
-                n.'<label>'.gTxt('detail').'</label>'.
-                selectInput('step', $dets, $step, 0, 1)
-            )
-        );
+    $out[] = '</textarea>';
 
     echo join('', $out),
-        '</div>',
-        '</div>';
+        n.tag_end('div'). // End of #diagnostics.
+        n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.;
 }
 
 /**

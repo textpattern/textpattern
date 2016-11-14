@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -31,20 +31,12 @@
 namespace Textpattern\Textile;
 
 /**
- * Imports Textile.
- */
-
-use Textile;
-
-require_once txpath.'/lib/classTextile.php';
-
-/**
  * Textile parser.
  *
  * @since   4.6.0
  * @package Textile
  */
-class Parser extends Textile
+class Parser extends \Netcarver\Textile\Parser
 {
     /**
      * Constructor.
@@ -79,7 +71,7 @@ class Parser extends Textile
     public function textileRestricted($text, $lite = null, $noimage = null, $rel = null)
     {
         if ($lite === null) {
-            $lite = get_pref('comments_use_fat_textile', 1);
+            $lite = !get_pref('comments_use_fat_textile', 1);
         }
 
         if ($noimage === null) {

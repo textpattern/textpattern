@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -200,9 +200,15 @@ class DB
 
         $this->link = mysqli_init();
 
+        // Suppress screen output from mysqli_real_connect().
+        $error_reporting = error_reporting();
+        error_reporting($error_reporting & ~(E_WARNING | E_NOTICE));
+
         if (!mysqli_real_connect($this->link, $this->host, $this->user, $this->pass, $this->db, $this->port, $this->socket, $this->client_flags)) {
             die(db_down());
         }
+
+        error_reporting($error_reporting);
 
         $version = $this->version = mysqli_get_server_info($this->link);
         $connected = true;
@@ -211,12 +217,18 @@ class DB
         if ($this->charset && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version))) {
             mysqli_query($this->link, "SET NAMES ".$this->charset);
             $this->table_options['charset'] = $this->charset;
+
+            if ($this->charset == 'utf8mb4') {
+                $this->table_options['collate'] = "utf8mb4_unicode_ci";
+            } elseif ($this->charset == 'utf8') {
+                $this->table_options['collate'] = "utf8_general_ci";
+            }
         }
 
         $this->default_charset = mysqli_character_set_name($this->link);
 
         // Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2).
-        if (intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $version)) {
+        if (version_compare($version, '5') >= 0 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $version)) {
             $this->table_options['engine'] = 'MyISAM';
             unset($this->table_options['type']);
         }
@@ -368,7 +380,7 @@ function safe_escape_like($in = '')
 
 function safe_query($q = '', $debug = false, $unbuf = false)
 {
-    global $DB, $txpcfg, $txptrace_qcount, $txptrace_qtime, $production_status;
+    global $DB, $trace, $production_status;
     $method = ($unbuf) ? MYSQLI_USE_RESULT : MYSQLI_STORE_RESULT;
 
     if (!$q) {
@@ -379,17 +391,23 @@ function safe_query($q = '', $debug = false, $unbuf = false)
         dmp($q);
     }
 
-    $start = getmicrotime();
+    if ($production_status !== 'live') {
+        $trace->start("[SQL: $q ]", true);
+    }
+
     $result = mysqli_query($DB->link, $q, $method);
-    $time = getmicrotime() - $start;
-    @$txptrace_qtime += $time;
-    @$txptrace_qcount++;
+
+    if ($production_status !== 'live') {
+        if (is_bool($result)) {
+            $trace->stop();
+        } else {
+            $trace->stop("[Rows: ".intval(@mysqli_num_rows($result))."]");
+        }
+    }
 
     if ($result === false) {
         trigger_error(mysqli_error($DB->link), E_USER_ERROR);
     }
-
-    trace_add('[SQL ('.number_format($time, 6, '.', '')."): $q]");
 
     if (!$result) {
         return false;
@@ -474,10 +492,10 @@ function safe_insert($table, $set, $debug = false)
 /**
  * Inserts a new row, or updates an existing if a matching row is found.
  *
- * @param  string $table The table
- * @param  string $set   The set clause
- * @param  string $where The where clause
- * @param  bool   $debug Dump query
+ * @param  string       $table The table
+ * @param  string       $set   The set clause
+ * @param  string|array $where The where clause
+ * @param  bool         $debug Dump query
  * @return int|bool The last generated ID or FALSE on error. If the ID is 0, returns TRUE
  * @example
  * if ($r = safe_upsert('myTable', "data = 'foobar'", "name = 'example'"))
@@ -489,13 +507,27 @@ function safe_insert($table, $set, $debug = false)
 function safe_upsert($table, $set, $where, $debug = false)
 {
     global $DB;
+
+    if (is_array($where)) {
+        $whereset = array();
+        $where = doSlash($where);
+
+        foreach ($where as $key => $val) {
+            $whereset[] = "$key = '$val'";
+        }
+
+        $where = implode(' AND ', $whereset);
+    } else {
+        $whereset = array($where);
+    }
+
     // FIXME: lock the table so this is atomic?
     $r = safe_update($table, $set, $where, $debug);
 
     if ($r and (mysqli_affected_rows($DB->link) or safe_count($table, $where, $debug))) {
         return $r;
     } else {
-        return safe_insert($table, join(', ', array($where, $set)), $debug);
+        return safe_insert($table, join(', ', array(implode(', ', $whereset), $set)), $debug);
     }
 }
 
@@ -745,7 +777,7 @@ function safe_drop($table, $debug = false)
  * @return bool   TRUE if table exists
  * @since  4.6.0
  * @example
- * if (safe_create('myTable', 'id int(11)'))
+ * if (safe_create('myTable', "id int(11)"))
  * {
  *     echo "'myTable' exists.";
  * }
@@ -756,7 +788,7 @@ function safe_create($table, $definition, $options = '', $debug = false)
     global $DB;
 
     foreach ($DB->table_options as $name => $value) {
-        $options .= ' '.$name.' = '.$value;
+        $options .= ' '.strtoupper($name).' = '.$value;
     }
 
     $q = "CREATE TABLE IF NOT EXISTS ".safe_pfx($table)." ($definition) $options";
@@ -790,7 +822,7 @@ function safe_rename($table, $newname, $debug = false)
  * @param  bool   $debug Dump query
  * @return mixed  The field or FALSE on error
  * @example
- * if ($field = safe_field('column', 'table', '1 = 1'))
+ * if ($field = safe_field("column", 'table', "1 = 1"))
  * {
  *     echo $field;
  * }
@@ -877,7 +909,7 @@ function safe_column_num($thing, $table, $where, $debug = false)
  * @see    safe_rows_start()
  * @uses   getRow()
  * @example
- * if ($row = safe_row('column', 'table', '1 = 1'))
+ * if ($row = safe_row("column", 'table', "1 = 1"))
  * {
  *     echo $row['column'];
  * }
@@ -911,7 +943,7 @@ function safe_row($things, $table, $where, $debug = false)
  * @see    safe_rows_start()
  * @uses   getRows()
  * @example
- * $rs = safe_rows('column', 'table', '1 = 1');
+ * $rs = safe_rows("column", 'table', "1 = 1");
  * foreach ($rs as $row)
  * {
  *     echo $row['column'];
@@ -941,7 +973,7 @@ function safe_rows($things, $table, $where, $debug = false)
  * @see    nextRow()
  * @see    numRows()
  * @example
- * if ($rs = safe_rows_start('column', 'table', '1 = 1'))
+ * if ($rs = safe_rows_start("column", 'table', "1 = 1"))
  * {
  *     while ($row = nextRow($rs))
  *     {
@@ -965,7 +997,7 @@ function safe_rows_start($things, $table, $where, $debug = false)
  * @param  bool     $debug Dump query
  * @return int|bool Number of rows or FALSE on error
  * @example
- * if (($count = safe_count('myTable', '1 = 1')) !== false)
+ * if (($count = safe_count("table", "1 = 1")) !== false)
  * {
  *     echo "myTable contains {$count} rows.";
  * }
@@ -1026,6 +1058,7 @@ function fetch($col, $table, $key, $val, $debug = false)
         if (mysqli_num_rows($r) > 0) {
             $row = mysqli_fetch_row($r);
             mysqli_free_result($r);
+
             return $row[0];
         }
 
@@ -1118,7 +1151,7 @@ function startRows($query, $debug = false)
  * @return  array|bool  The row, or FALSE if there are no more rows
  * @see     safe_rows_start()
  * @example
- * if ($rs = safe_rows_start('column', 'table', '1 = 1'))
+ * if ($rs = safe_rows_start("column", 'table', "1 = 1"))
  * {
  *     while ($row = nextRow($rs))
  *     {
@@ -1145,7 +1178,7 @@ function nextRow($r)
  * @return int|bool The number of rows or FALSE on error
  * @see    safe_rows_start()
  * @example
- * if ($rs = safe_rows_start('column', 'table', '1 = 1'))
+ * if ($rs = safe_rows_start("column", 'table', "1 = 1"))
  * {
  *     echo numRows($rs);
  * }
@@ -1233,7 +1266,7 @@ function getCount($table, $where, $debug = false)
  * @return array
  */
 
-function getTree($root, $type, $where = '1 = 1', $tbl = 'txp_category')
+function getTree($root, $type, $where = "1 = 1", $tbl = 'txp_category')
 {
     $root = doSlash($root);
     $type = doSlash($type);
@@ -1356,8 +1389,11 @@ function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
     $parent = doSlash($parent);
     $type = doSlash($type);
 
-    $result = safe_column("name", $tbl,
-        "parent = '$parent' AND type = '$type' ORDER BY name");
+    $result = safe_column(
+        "name",
+        $tbl,
+        "parent = '$parent' AND type = '$type' ORDER BY name"
+    );
 
     foreach ($result as $row) {
         $right = rebuild_tree($row, $right, $type, $tbl);
@@ -1407,13 +1443,18 @@ function db_down()
     // 503 status might discourage search engines from indexing or caching the
     // error message.
     txp_status_header('503 Service Unavailable');
-    $error = mysqli_error($DB->link);
+    if (is_object($DB)) {
+        $error = txpspecialchars(mysqli_error($DB->link));
+    } else {
+        $error = '$DB object is not available.';
+    }
 
     return <<<eod
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="robots" content="noindex">
     <title>Database unavailable</title>
 </head>
 <body>
@@ -1422,4 +1463,50 @@ function db_down()
 </body>
 </html>
 eod;
+}
+
+/**
+ * Replacement for SQL NOW()
+ *
+ * This function can be used when constructing SQL SELECT queries as a
+ * replacement for the NOW() function to allow the SQL server to cache the
+ * queries. Should only be used when comparing with the Posted or Expired
+ * columns from the textpattern (articles) table or the Created column from
+ * the txp_file table.
+ *
+ * @param  string $type   Column name, lower case (one of 'posted', 'expires', 'created')
+ * @param  bool   $update Force update
+ * @return string SQL query string partial
+ */
+
+function now($type, $update = false)
+{
+    static $nows = array();
+    static $time = null;
+
+    if (!in_array($type, array('posted', 'expires', 'created'))) {
+        return false;
+    }
+
+    if (isset($nows[$type])) {
+        $now = $nows[$type];
+    } else {
+        if ($time === null) {
+            $time = time();
+        }
+
+        $pref = 'sql_now_'.$type;
+        $now = get_pref($pref, $time - 1);
+
+        if ($time > $now or $update) {
+            $table = ($type === 'created') ? 'txp_file' : 'textpattern';
+            $where = '1=1 having utime > '.$time.' order by utime asc limit 1';
+            $now = safe_field('unix_timestamp('.$type.') as utime', $table, $where);
+            $now = ($now === false) ? 2147483647 : intval($now) - 1;
+            update_pref($pref, $now);
+            $nows[$type] = $now;
+        }
+    }
+
+    return 'from_unixtime('.$now.')';
 }

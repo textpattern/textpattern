@@ -2,7 +2,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -22,6 +22,12 @@
 /**
  * Collection of client-side tools.
  */
+
+/**
+ * Ascertain the page direction (LTR or RTL) as a variable.
+ */
+
+var langdir = document.documentElement.dir;
 
 /**
  * Checks if HTTP cookies are enabled.
@@ -659,24 +665,36 @@ function toggleDisplay(id)
     if (obj.length) {
         obj.toggle();
 
-        // Send state of toggle pane to server.
-        if ($(this).data('txp-token') && $(this).data('txp-pane')) {
-            sendAsyncEvent({
-                event   : 'pane',
-                step    : 'visible',
-                pane    : $(this).data('txp-pane'),
-                visible : obj.is(':visible'),
-                origin  : textpattern.event,
-                token   : $(this).data('txp-token')
-            });
+        // Send state of toggle pane to localStorage or server.
+        if ($(this).data('txp-pane')) {
+            var pane = $(this).data('txp-pane');
+
+            if (!window.localStorage && $(this).data('txp-token')) {
+                sendAsyncEvent({
+                    event   : 'pane',
+                    step    : 'visible',
+                    pane    : $(this).data('txp-pane'),
+                    visible : obj.is(':visible'),
+                    origin  : textpattern.event,
+                    token   : $(this).data('txp-token')
+                });
+            }
         } else {
-            sendAsyncEvent({
-                event   : textpattern.event,
-                step    : 'save_pane_state',
-                pane    : obj.attr('id'),
-                visible : obj.is(':visible')
-            });
+            var pane = obj.attr('id');
+
+            if (!window.localStorage) {
+                sendAsyncEvent({
+                    event   : textpattern.event,
+                    step    : 'save_pane_state',
+                    pane    : obj.attr('id'),
+                    visible : obj.is(':visible')
+                });
+            }
         }
+
+        var data = new Object;
+        data[pane] = obj.is(':visible');
+        textpattern.storage.update(data);
     }
 
     return false;
@@ -764,9 +782,14 @@ function setClassRemember(className, force)
 
 function sendAsyncEvent (data, fn, format)
 {
+    var formdata = false;
     if ($.type(data) === 'string' && data.length > 0) {
-        // Got serialised data.
+        // Got serialized data.
         data = data + '&app_mode=async&_txp_token=' + textpattern._txp_token;
+    } else if (data instanceof FormData) {
+        formdata = true;
+        data.append("app_mode", 'async');
+        data.append("_txp_token", textpattern._txp_token);
     } else {
         data.app_mode = 'async';
         data._txp_token = textpattern._txp_token;
@@ -774,7 +797,17 @@ function sendAsyncEvent (data, fn, format)
 
     format = format || 'xml';
 
-    return $.post('index.php', data, fn, format);
+    return formdata ?
+        $.ajax({
+            type: "POST",
+            url: 'index.php',
+            data: data,
+            success: fn,
+            dataType: format,
+            processData: false,
+            contentType: false
+        }) :
+        $.post('index.php', data, fn, format);
 }
 
 /**
@@ -819,6 +852,41 @@ textpattern.Relay =
     {
         $(this).on(event, fn);
         return this;
+    }
+};
+
+/**
+ * Textpattern localStorage.
+ *
+ * @since 4.6.0
+ */
+
+textpattern.storage =
+{
+    /**
+     * Textpattern localStorage data.
+     */
+
+    data : (window.localStorage ? JSON.parse(window.localStorage.getItem("textpattern")) : null) || {},
+
+    /**
+     * Updates data.
+     *
+     * @param   data The message
+     * @example
+     * textpattern.update({prefs : "site"});
+     */
+
+    update : function (data) {
+
+        if (!window.localStorage) {
+            return;
+        }
+
+        if (data) {
+            $.extend(textpattern.storage.data, data);
+            window.localStorage.setItem("textpattern", JSON.stringify(textpattern.storage.data));
+        }
     }
 };
 
@@ -890,7 +958,7 @@ textpattern.Route =
     attached : [],
 
     /**
-     * Attachs a listener.
+     * Attaches a listener.
      *
      * @param {string} pages The page
      * @param {object} fn    The callback
@@ -908,7 +976,7 @@ textpattern.Route =
     },
 
     /**
-     * Initialises attached listeners.
+     * Initializes attached listeners.
      *
      * @param {object} options       Options
      * @param {string} options.event The event
@@ -924,7 +992,7 @@ textpattern.Route =
 
         $.each(textpattern.Route.attached, function (index, data)
         {
-            if (data.page === options.event || data.page === options.event + '.' + options.step) {
+            if (data.page === '' || data.page === options.event || data.page === options.event + '.' + options.step) {
                 data.fn({
                     'event' : options.event,
                     'step'  : options.step,
@@ -963,7 +1031,7 @@ jQuery.fn.txpAsyncForm = function (options)
         var form =
         {
             button  : $this.find('input[type="submit"]:focus').eq(0),
-            data    : $this.serialize(),
+            data    : ( window.FormData === undefined ? $this.serialize() : new FormData(this) ),
             spinner : $('<span />').addClass('spinner')
         };
 
@@ -978,9 +1046,12 @@ jQuery.fn.txpAsyncForm = function (options)
 
         form.button.attr('disabled', true).after(form.spinner);
 
-        if (form.data) {
-            form.data += '&' + (form.button.attr('name') || '_txp_submit') + '=' + (form.button.val() || '_txp_submit');
-        }
+        if (form.data)
+            if ( form.data instanceof FormData ) {
+                form.data.append(form.button.attr('name') || '_txp_submit' , form.button.val() || '_txp_submit');
+            } else {
+                form.data += '&' + (form.button.attr('name') || '_txp_submit') + '=' + (form.button.val() || '_txp_submit');
+            }
 
         sendAsyncEvent(form.data, function () {}, options.dataType)
             .done(function (data, textStatus, jqXHR)
@@ -1096,6 +1167,57 @@ jQuery.fn.txpAsyncHref = function (options)
 };
 
 /**
+ * Sends a link using AJAX and processes the HTML response.
+ *
+ * @param  {object} options          Options
+ * @param  {string} options.dataType The response data type
+ * @param  {object} options.success  The success callback
+ * @param  {object} options.error    The error callback
+ * @return {object} this
+ * @since  4.6.0
+ */
+
+function txpAsyncLink(event)
+{
+    event.preventDefault();
+    var $this = $(event.target);
+    var url = $this.attr('href').replace('?', '');
+
+    // Show feedback while processing.
+    $this.addClass('busy');
+    $('body').addClass('busy');
+
+    sendAsyncEvent(url, function () {}, 'html')
+        .done(function (data, textStatus, jqXHR)
+        {
+            textpattern.Relay.callback('txpAsyncLink.success', {
+                'this'       : $this,
+                'event'      : event,
+                'data'       : data,
+                'textStatus' : textStatus,
+                'jqXHR'      : jqXHR
+            });
+        })
+        .fail(function (jqXHR, textStatus, errorThrown)
+        {
+            textpattern.Relay.callback('txpAsyncLink.error', {
+                'this'         : $this,
+                'event'        : event,
+                'jqXHR'        : jqXHR,
+                'ajaxSettings' : $.ajaxSetup(),
+                'thrownError'  : errorThrown
+            });
+        })
+        .always(function ()
+        {
+            $this.removeClass('busy');
+            $('body').removeClass('busy');
+        });
+
+    return this;
+};
+
+/**
  * Creates a UI dialog.
  *
  * @param  {object} options Options
@@ -1150,7 +1272,7 @@ jQuery.fn.txpDatepicker = function (options)
  * Creates a sortable element.
  *
  * This method creates a sortable widget, allowing to
- * reorder elements in a list and synchronises the updated
+ * reorder elements in a list and synchronizes the updated
  * order with the server.
  *
  * @param  {object}  options
@@ -1239,6 +1361,132 @@ jQuery.fn.txpSortable = function (options)
         items    : options.items
     });
 };
+
+
+/**
+ * Password strength meter.
+ *
+ * @since 4.6.0
+ * @param  {object}  options
+ * @param  {array}   options.gtxt_prefix  gTxt() string prefix
+ * @todo  Pass in name/email via 'options' to be injected in user_inputs[]
+ */
+
+textpattern.passwordStrength = function (options)
+{
+    jQuery('form').on('keyup', 'input.txp-strength-hint', function() {
+        var settings = $.extend({
+            'gtxt_prefix' : ''
+        }, options);
+
+        var me = jQuery(this);
+        var pass = me.val();
+        var passResult = zxcvbn(pass, user_inputs=[]);
+        var strengthMap = {
+            "0": {
+                "width": "5"
+            },
+            "1": {
+                "width": "28"
+            },
+            "2": {
+                "width": "50"
+            },
+            "3": {
+                "width": "75"
+            },
+            "4": {
+                "width": "100"
+            }
+        };
+
+        var offset = strengthMap[passResult.score];
+        var meter = me.siblings('.strength-meter');
+        meter.empty();
+
+        if (pass.length > 0) {
+            meter.append('<div class="bar"></div><div class="indicator">' + textpattern.gTxt(settings.gtxt_prefix+'password_strength_'+passResult.score) + '</div>');
+        }
+
+        meter
+            .find('.bar')
+            .attr('class', 'bar password-strength-'+passResult.score)
+            .css('width', offset.width+'%');
+    });
+}
+
+/**
+ * Mask/unmask password input field.
+ *
+ * @since  4.6.0
+ */
+
+textpattern.passwordMask = function()
+{
+    $('form').on('click', '#show_password', function() {
+        var inputBox = $(this).closest('form').find('input.txp-maskable');
+        var newType = (inputBox.attr('type') === 'password') ? 'text' : 'password';
+        textpattern.changeType(inputBox, newType);
+    });
+}
+
+/**
+ * Change the type of an input element.
+ *
+ * @param  {object} elem The <input/> element
+ * @param  {string} type The desired type
+ *
+ * @see    https://gist.github.com/3559343 for original
+ * @since  4.6.0
+ */
+
+textpattern.changeType = function(elem, type)
+{
+    if (elem.prop('type') === type) {
+        // Already the correct type.
+        return elem;
+    }
+
+    try {
+        // May fail if browser prevents it.
+        return elem.prop('type', type);
+    } catch(e) {
+        // Create the element by hand.
+        // Clone it via a div (jQuery has no html() method for an element).
+        var html = $("<div>").append(elem.clone()).html();
+
+        // Match existing attributes of type=text or type="text".
+        var regex = /type=(\")?([^\"\s]+)(\")?/;
+
+        // If no match, add the type attribute to the end; otherwise, replace it.
+        var tmp = $(html.match(regex) == null ?
+            html.replace(">", ' type="' + type + '">') :
+            html.replace(regex, 'type="' + type + '"'));
+
+        // Copy data from old element.
+        tmp.data('type', elem.data('type'));
+        var events = elem.data('events');
+        var cb = function(events) {
+            return function() {
+                // Re-bind all prior events.
+                for(var idx in events) {
+                    var ydx = events[idx];
+
+                    for(var jdx in ydx) {
+                        tmp.bind(idx, ydx[jdx].handler);
+                    }
+                }
+            }
+        }(events);
+
+        elem.replaceWith(tmp);
+
+        // Wait a smidge before firing callback.
+        setTimeout(cb, 10);
+
+        return tmp;
+    }
+}
 
 /**
  * Encodes a string for a use in HTML.
@@ -1371,12 +1619,154 @@ $(document).keyup(function (e)
 });
 
 /**
+ * Search tool.
+ *
+ * @since 4.6.0
+ */
+
+function txp_search()
+{
+    var $ui = $('.txp-search');
+
+    $ui.find('.txp-search-button').button({
+        showLabel: false,
+        icon: 'ui-icon-search'
+    }).click(function ()
+    {
+        $ui.submit();
+    });
+
+    $ui.find('.txp-search-options').button({
+        showLabel: false,
+        icon: 'ui-icon-triangle-1-s'
+    }).on('click', function (e)
+    {
+        if (langdir === 'rtl') {
+            var menu = $ui.find('.txp-dropdown').toggle().position(
+            {
+                my: "left top",
+                at: "left bottom",
+                of: this
+            });
+        } else {
+            var menu = $ui.find('.txp-dropdown').toggle().position(
+            {
+                my: "right top",
+                at: "right bottom",
+                of: this
+            });
+        };
+
+        $(document).one('click blur', function ()
+        {
+            menu.hide();
+        });
+
+        return false;
+    });
+
+    $ui.find('.txp-search-buttons').controlgroup();
+    $ui.find('.txp-dropdown').hide().menu().click(function (e) {
+        e.stopPropagation();
+    });
+
+    $ui.txpMultiEditForm({
+        'checkbox'    : 'input[name="search_method[]"][type=checkbox]',
+        'row'         : '.txp-dropdown li',
+        'highlighted' : '.txp-dropdown li',
+        'confirmation': false
+    });
+}
+
+/**
+ * Set expanded/collapsed nature of all twisty boxes in a panel.
+ *
+ * The direction can either be 'expand' or 'collapse', passed
+ * in as an argument to the handler.
+ *
+ * @param  {event} ev Event that triggered the function
+ * @since  4.6.0
+ */
+
+function txp_expand_collapse_all(ev) {
+    ev.preventDefault();
+
+    var direction = ev.data.direction,
+        container = ev.data.container || (ev.delegateTarget == ev.target ? 'body' : ev.delegateTarget);
+
+    $(container).find('.txp-summary a').each(function (i, elm) {
+        var $elm = $(elm);
+
+        if (direction === 'collapse') {
+            if ($elm.parent(".txp-summary").hasClass("expanded")) {
+                $elm.click();
+            }
+        } else {
+            if (!$elm.parent(".txp-summary").hasClass("expanded")) {
+                $elm.click();
+            }
+        }
+    });
+}
+
+/**
+ * Restore sub-panel twistys to their as-stored state.
+ *
+ * @return {[type]} [description]
+ */
+jQuery.fn.restorePanes = function ()
+{
+    // Initialize dynamic WAI-ARIA attributes.
+    $(this).find('.txp-summary a').each(function (i, elm)
+    {
+        // Get id of toggled <section> region.
+        var $elm = $(elm), region = $elm.attr('href');
+
+        if (region) {
+
+            var $region = $(region);
+            region = region.substr(1);
+
+            var pane = $elm.data("txp-pane");
+
+            if (pane === undefined) {
+                pane = region;
+            }
+
+            if (textpattern.storage.data[pane] !== undefined) {
+                if (textpattern.storage.data[pane]) {
+                    $elm.parent(".txp-summary").addClass("expanded");
+                    $region.show();
+                } else {
+                    $elm.parent(".txp-summary").removeClass("expanded");
+                    $region.hide();
+                }
+            }
+
+            var vis = $region.is(':visible').toString();
+            $elm.attr('aria-controls', region).attr('aria-pressed', vis);
+            $region.attr('aria-expanded', vis);
+        }
+    });
+}
+
+/**
  * Cookie status.
  *
  * @deprecated in 4.6.0
  */
 
 var cookieEnabled = true;
+
+// Setup panel.
+
+textpattern.Route.add('setup', function ()
+{
+    textpattern.passwordMask();
+    textpattern.passwordStrength({
+        'gtxt_prefix' : 'setup_'
+    });
+});
 
 // Login panel.
 
@@ -1389,15 +1779,15 @@ textpattern.Route.add('login', function ()
     }
 
     // Focus on either username or password when empty.
-    var has_name = $('#login_name').val().length;
-    var password_box = $('#login_password').val();
-    var has_password = (password_box) ? password_box.length : 0;
+    $('#login_form input').each(function() {
+        if (this.value === '') {
+            this.focus();
+            return false;
+        }
+    });
 
-    if (!has_name) {
-        $('#login_name').focus();
-    } else if (!has_password) {
-        $('#login_password').focus();
-    }
+    textpattern.passwordMask();
+    textpattern.passwordStrength();
 });
 
 // Write panel.
@@ -1433,7 +1823,7 @@ textpattern.Route.add('article', function ()
         }
     });
 
-    $('#txp_clone').click(function (e)
+    $('.txp-actions').on('click', '.txp-clone', function (e)
     {
         e.preventDefault();
         form.append('<input type="hidden" name="copy" value="1" />'+
@@ -1453,14 +1843,78 @@ textpattern.Route.add('article', function ()
     );
 });
 
+// Uncheck reset on timestamp change.
+
+textpattern.Route.add('article, file', function ()
+{
+    $(document).on('change', '.posted input', function (e)
+    {
+        $('#publish_now, #reset_time').prop('checked', false);
+    });
+});
+
 // 'Clone' button on Pages, Forms, Styles panels.
 
 textpattern.Route.add('css, page, form', function ()
 {
-    $('#txp_clone').click(function (e)
+    $('.txp-clone').click(function (e)
     {
         e.preventDefault();
-        $(this).parents('form').append('<input type="hidden" name="copy" value="1" />').submit();
+        var target = $(this).data('form');
+        if (target) {
+            var $target = $('#'+target);
+            $target.append('<input type="hidden" name="copy" value="1" />');
+            $target.off('submit.txpAsyncForm').trigger('submit');
+        }
+    });
+});
+
+// Tagbuilder.
+
+textpattern.Route.add('page, form, file, image', function ()
+{
+    // Set up asynchronous tag builder links.
+    textpattern.Relay.register('txpAsyncLink.success', function (event, data)
+    {
+        $('#tagbuild_links').dialog('close').html($(data['data'])).dialog('open').restorePanes();
+        $('#txp-tagbuilder-output').select();
+    });
+
+    $('#tagbuild_links, .files_detail, .images_detail').on('click', '.txp-tagbuilder-link', function(ev) {
+        txpAsyncLink(ev);
+    });
+
+    $('#tagbuild_links').dialog({
+        dialogClass: 'txp-tagbuilder-container',
+        autoOpen: false,
+        focus: function(ev, ui) {
+            $(ev.target).closest('.ui-dialog').focus();
+        }
+    });
+
+    $('.txp-tagbuilder-dialog').on('click', function(ev) {
+        ev.preventDefault();
+        if ($("#tagbuild_links").dialog('isOpen')) {
+            $("#tagbuild_links").dialog('close');
+        } else {
+            $("#tagbuild_links").dialog('open');
+        }
+    });
+
+    // Set up delegated asynchronous tagbuilder form submission.
+    $('#tagbuild_links').on('click', 'form.asynchtml input[type="submit"]', function(ev) {
+        $(this).closest('form.asynchtml').txpAsyncForm({
+            dataType: 'html',
+            error: function ()
+            {
+                window.alert(textpattern.gTxt('form_submission_error'));
+            },
+            success: function($this, event, data)
+            {
+                $('#tagbuild_links').html(data);
+                $('#txp-tagbuilder-output').select();
+            }
+        });
     });
 });
 
@@ -1514,6 +1968,14 @@ textpattern.Route.add('form', function ()
     });
 });
 
+// Admin panel.
+
+textpattern.Route.add('admin', function ()
+{
+    textpattern.passwordMask();
+    textpattern.passwordStrength();
+});
+
 // Plugins panel.
 
 textpattern.Route.add('plugin', function ()
@@ -1524,7 +1986,67 @@ textpattern.Route.add('plugin', function ()
     });
 });
 
-// Initialise JavaScript.
+// All panels?
+
+textpattern.Route.add('', function ()
+{
+    // Collapse/Expand all support.
+    $('#supporting_content, #tagbuild_links, #content_switcher').on('click', '.txp-collapse-all', {direction: 'collapse'}, txp_expand_collapse_all)
+        .on('click', '.txp-expand-all', {direction: 'expand'}, txp_expand_collapse_all);
+
+    // Pane states
+    var prefsGroup = $('form:has(.switcher-list li a[data-txp-pane])');
+
+    if (prefsGroup.length == 0) {
+        return;
+    }
+
+    var prefTabs = prefsGroup.find('.switcher-list li');
+    var $switchers = prefTabs.children('a[data-txp-pane]');
+    var $section = window.location.hash ? prefsGroup.find($(window.location.hash).closest('section')) : [];
+
+    if ($section.length) {
+        selectedTab = $section.index();
+    }
+    else if (textpattern.storage.data[textpattern.event] !== undefined) {
+        $switchers.each(function (i, elm) {
+            if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]) {
+                selectedTab = i;
+                $(elm).parent().addClass('ui-tabs-active ui-state-active');
+            } else {
+                $(elm).parent().removeClass('ui-tabs-active ui-state-active');
+            }
+        });
+    }
+
+    if (selectedTab === undefined) {
+        selectedTab = 0;
+    }
+
+    prefsGroup.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
+    prefsGroup.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
+    prefTabs.removeClass('ui-state-default ui-corner-top');
+    prefsGroup.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
+
+    prefTabs.on('click focus', function(ev)
+    {
+        var me = $(this).children('a[data-txp-pane]');
+
+        if (!window.localStorage) sendAsyncEvent({
+            event  : 'pane',
+            step   : 'tabVisible',
+            pane   : me.data('txp-pane'),
+            origin : textpattern.event,
+            token  : me.data('txp-token')
+        });
+
+        var data = new Object;
+        data[textpattern.event] = me.data('txp-pane');
+        textpattern.storage.update(data);
+    });
+});
+
+// Initialize JavaScript.
 
 $(document).ready(function ()
 {
@@ -1595,18 +2117,10 @@ $(document).ready(function ()
         $(this).parent().remove();
     });
 
-    // Initialise dynamic WAI-ARIA attributes.
-    $('.txp-summary a').each(function (i, elm)
-    {
-        // Get id of toggled <section> region.
-        var region = $(elm).attr('href');
+    $('body').restorePanes();
 
-        if (region) {
-            var $region = $(region), vis = $region.is(':visible').toString();
-            $(elm).attr('aria-controls', region.substr(1)).attr('aria-pressed', vis);
-            $region.attr('aria-expanded', vis);
-        }
-    });
+    // Hide popup elements.
+    $('.txp-dropdown').hide();
 
     // Event handling and automation.
     $(document).on('change.txpAutoSubmit', 'form [data-submit-on="change"]', function (e)
@@ -1614,11 +2128,39 @@ $(document).ready(function ()
         $(this).parents('form').submit();
     });
 
+    // Polyfills.
+    // Add support for form attribute in submit buttons.
+    if ($('html').hasClass('no-formattribute')) {
+        $('.txp-save input[form]').click(function(e) {
+            var targetForm = $(this).attr('form');
+            $('form[id='+targetForm+']').submit();
+        });
+    }
+
     // Establish UI defaults.
     $('.txp-dialog').txpDialog();
     $('.txp-dialog.modal').dialog('option', 'modal', true);
     $('.txp-datepicker').txpDatepicker();
     $('.txp-sortable').txpSortable();
+
+
+
+    // TODO: integrate jQuery UI stuff properly --------------------------------
+
+
+    // Selectmenu
+    $('.jquery-ui-selectmenu').selectmenu();
+
+    // Button
+    $('.jquery-ui-button').button();
+
+    // Button set
+    $('.jquery-ui-controlgroup').controlgroup();
+
+
+    // TODO: end integrate jQuery UI stuff properly ----------------------------
+
+
 
     // Find and open associated dialogs.
     $(document).on('click.txpDialog', '[data-txp-dialog]', function (e)
@@ -1627,7 +2169,7 @@ $(document).ready(function ()
         e.preventDefault();
     });
 
-    // Initialise panel specific JavaScript.
+    // Initialize panel specific JavaScript.
     textpattern.Route.init();
 
     // Arm UI.

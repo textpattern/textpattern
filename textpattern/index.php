@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -35,7 +35,8 @@ if (@ini_get('register_globals')) {
         (array) $_POST,
         (array) $_COOKIE,
         (array) $_FILES,
-        (array) $_SERVER);
+        (array) $_SERVER
+    );
 
     // As the deliberately awkward-named local variable $_txpfoo MUST NOT be unset to avoid notices further
     // down, we must remove any potentially identical-named global from the list of global names here.
@@ -63,8 +64,9 @@ if (!defined('txpath')) {
 
 define("txpinterface", "admin");
 
-$thisversion = '4.6-dev';
-$txp_using_svn = true; // Set false for releases.
+$thisversion = '4.7.0-dev';
+// $txp_using_svn deprecated in 4.7.0.
+$txp_using_svn = $txp_is_dev = true; // Set false for releases.
 
 ob_start(null, 2048);
 
@@ -76,14 +78,15 @@ if (!isset($txpcfg['table_prefix']) && !@include './config.php') {
     ob_end_clean();
 }
 
-header("Content-type: text/html; charset=utf-8");
+header("Content-Type: text/html; charset=utf-8");
 
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
+include txpath.'/lib/class.trace.php';
+$trace = new Trace();
+$trace->start('[PHP includes]');
 include_once txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
-
-trace_log(TEXTPATTERN_TRACE_START);
 
 include txpath.'/vendors/Textpattern/Loader.php';
 
@@ -97,7 +100,7 @@ include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/txplib_forms.php';
 include txpath.'/lib/txplib_html.php';
 include txpath.'/lib/admin_config.php';
-trace_add('[PHP Include end]');
+$trace->stop();
 
 set_error_handler('adminErrorHandler', error_reporting());
 
@@ -174,7 +177,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     $step = trim(gps('step'));
     $app_mode = trim(gps('app_mode'));
 
-    if (!$dbversion or ($dbversion != $thisversion) or $txp_using_svn) {
+    if (!$dbversion or ($dbversion != $thisversion) or $txp_is_dev) {
         define('TXP_UPDATE', 1);
         include txpath.'/update/_update.php';
     }
@@ -215,14 +218,16 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     end_page();
 
     if ($app_mode != 'async') {
-        trace_log(TEXTPATTERN_TRACE_DISPLAY);
+        echo $trace->summary();
+        echo $trace->result();
     } else {
-        $trace = trace_log(TEXTPATTERN_TRACE_RESULT);
-        header('X-Textpattern-Runtime: ' . @$trace['microdiff']);
-        header('X-Textpattern-Memory: '  . @$trace['memory_peak']);
-        header('X-Textpattern-Queries: ' . @$trace['queries']);
+        foreach ($trace->summary(true) as $key => $value) {
+            header('X-Textpattern-'.preg_replace('/[^\w]+/', '', $key).': '.$value);
+        }
     }
 } else {
-    txp_die('DB-Connect was successful, but the textpattern-table was not found.',
-        '503 Service Unavailable');
+    txp_die(
+        'Database connection was successful, but the <code>textpattern</code> table was not found.',
+        '503 Service Unavailable'
+    );
 }

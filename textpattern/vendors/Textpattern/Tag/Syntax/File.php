@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -45,7 +45,7 @@ class File
 
         assert_file();
 
-        return parse(EvalElse($thing, !empty($thisfile['is_first'])));
+        return parse($thing, !empty($thisfile['is_first']));
     }
 
     /**
@@ -62,6 +62,6 @@ class File
 
         assert_file();
 
-        return parse(EvalElse($thing, !empty($thisfile['is_last'])));
+        return parse($thing, !empty($thisfile['is_last']));
     }
 }

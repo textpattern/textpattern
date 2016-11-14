@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,17 +28,147 @@
  */
 
 /**
+ * Emails a new user with account details and requests they set a password.
+ *
+ * @param  string $name     The login name
+ * @return bool FALSE on error.
+ */
+
+function send_account_activation($name)
+{
+    global $sitename;
+
+    require_privs('admin.edit');
+
+    $rs = safe_row("user_id, email, nonce, RealName, pass", 'txp_users', "name = '".doSlash($name)."'");
+
+    if ($rs) {
+        extract($rs);
+
+        $expiryTimestamp = time() + (60 * 60 * ACTIVATION_EXPIRY_HOURS);
+
+        $activation_code = generate_user_token($user_id, 'account_activation', $expiryTimestamp, $pass, $nonce);
+
+        $expiryYear = safe_strftime('%Y', $expiryTimestamp);
+        $expiryMonth = safe_strftime('%B', $expiryTimestamp);
+        $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
+        $expiryTime = safe_strftime('%H:%M %Z', $expiryTimestamp);
+
+        $message = gTxt('salutation', array('{name}' => $RealName)).
+            n.n.gTxt('you_have_been_registered').' '.$sitename.
+
+            n.n.gTxt('your_login_is').' '.$name.
+            n.n.gTxt('account_activation_confirmation').
+            n.hu.'textpattern/index.php?activate='.$activation_code.
+            n.n.gTxt('link_expires', array(
+                '{year}'  => $expiryYear,
+                '{month}' => $expiryMonth,
+                '{day}'   => $expiryDay,
+                '{time}'  => $expiryTime,
+            ));
+
+        if (txpMail($email, "[$sitename] ".gTxt('account_activation'), $message)) {
+            return gTxt('login_sent_to', array('{email}' => $email));
+        } else {
+            return array(gTxt('could_not_mail'), E_ERROR);
+        }
+    }
+}
+
+/**
+ * Sends a password reset link to a user's email address.
+ *
+ * This function will return a success message even when the specified user
+ * doesn't exist. Though an error message could be thrown when a user isn't
+ * found, security best practice prevents leaking existing account names.
+ *
+ * @param  string $name The login name
+ * @return string A localized message string
+ * @see    send_new_password()
+ * @see    reset_author_pass()
+ * @example
+ * echo send_reset_confirmation_request('username');
+ */
+
+function send_reset_confirmation_request($name)
+{
+    global $sitename;
+
+    $expiryTimestamp = time() + (60 * RESET_EXPIRY_MINUTES);
+
+    $rs = safe_query(
+        "SELECT
+            txp_users.user_id, txp_users.email,
+            txp_users.nonce, txp_users.pass,
+            txp_token.expires
+        FROM ".safe_pfx('txp_users')." txp_users
+        LEFT JOIN ".safe_pfx('txp_token')." txp_token
+        ON txp_users.user_id = txp_token.reference_id
+        AND txp_token.type = 'password_reset'
+        WHERE txp_users.name = '".doSlash($name)."'"
+    );
+
+    $row = nextRow($rs);
+
+    if ($row) {
+        extract($row);
+
+        // Rate limit the reset requests.
+        if ($expires) {
+            $originalExpiry = strtotime($expires);
+
+            if (($expiryTimestamp - $originalExpiry) < (60 * RESET_RATE_LIMIT_MINUTES)) {
+                return gTxt('password_reset_confirmation_request_sent');
+            }
+        }
+
+        $confirm = generate_user_token($user_id, 'password_reset', $expiryTimestamp, $pass, $nonce);
+
+        $expiryYear = safe_strftime('%Y', $expiryTimestamp);
+        $expiryMonth = safe_strftime('%B', $expiryTimestamp);
+        $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
+        $expiryTime = safe_strftime('%H:%M %Z', $expiryTimestamp);
+
+        $message = gTxt('salutation', array('{name}' => $name)).
+            n.n.gTxt('password_reset_confirmation').
+            n.hu.'textpattern/index.php?confirm='.$confirm.
+            n.n.gTxt('link_expires', array(
+                '{year}'  => $expiryYear,
+                '{month}' => $expiryMonth,
+                '{day}'   => $expiryDay,
+                '{time}'  => $expiryTime,
+            ));
+        if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message)) {
+            return gTxt('password_reset_confirmation_request_sent');
+        } else {
+            return array(gTxt('could_not_mail'), E_ERROR);
+        }
+    } else {
+        // Though 'unknown_author' could be thrown, send generic 'request_sent'
+        // message instead so that (non-)existence of account names are not leaked.
+        // Since this is a short circuit, there's a possibility of a timing attack
+        // revealing the existence of an account, which we could defend against
+        // to some degree.
+        return gTxt('password_reset_confirmation_request_sent');
+    }
+}
+
+/**
  * Emails a new user with login details.
  *
  * This function can be only executed when the currently authenticated user
  * trying to send the email was granted 'admin.edit' privileges.
  *
- * @param  string $RealName The real name
- * @param  string $name     The login name
- * @param  string $email    The email address
- * @param  string $password The password
- * @return bool FALSE on error.
- * @see    send_new_password()
+ * Should NEVER be used as sending plaintext passwords is wrong.
+ * Will be removed in future, in lieu of sending reset request tokens.
+ *
+ * @param      string $RealName The real name
+ * @param      string $name     The login name
+ * @param      string $email    The email address
+ * @param      string $password The password
+ * @return     bool FALSE on error.
+ * @deprecated in 4.6.0
+ * @see        send_new_password(), send_reset_confirmation_request
  * @example
  * if (send_password('John Doe', 'login', 'example@example.tld', 'password'))
  * {
@@ -52,14 +182,14 @@ function send_password($RealName, $name, $email, $password)
 
     require_privs('admin.edit');
 
-    $message = gTxt('greeting').' '.$RealName.','.
+    $message = gTxt('salutation', array('{name}' => $RealName)).
 
         n.n.gTxt('you_have_been_registered').' '.$sitename.
 
-        n.n.gTxt('your_login_is').': '.$name.
-        n.gTxt('your_password_is').': '.$password.
+        n.n.gTxt('your_login_is').' '.$name.
+        n.gTxt('your_password_is').' '.$password.
 
-        n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
+        n.n.gTxt('log_in_at').' '.hu.'textpattern/index.php';
 
     return txpMail($email, "[$sitename] ".gTxt('your_login_info'), $message);
 }
@@ -70,12 +200,16 @@ function send_password($RealName, $name, $email, $password)
  * If the $name is FALSE, the password is sent to the currently
  * authenticated user.
  *
- * @param  string $password The new password
- * @param  string $email    The email address
- * @param  string $name     The login name
- * @return bool FALSE on error.
- * @see    send_password()
- * @see    reset_author_pass()
+ * Should NEVER be used as sending plaintext passwords is wrong.
+ * Will be removed in future, in lieu of sending reset request tokens.
+ *
+ * @param      string $password The new password
+ * @param      string $email    The email address
+ * @param      string $name     The login name
+ * @return     bool FALSE on error.
+ * @deprecated in 4.6.0
+ * @see        send_reset_confirmation_request
+ * @see        reset_author_pass()
  * @example
  * $pass = generate_password();
  * if (send_new_password($pass, 'example@example.tld', 'user'))
@@ -92,57 +226,13 @@ function send_new_password($password, $email, $name)
         $name = $txp_user;
     }
 
-    $message = gTxt('greeting').' '.$name.','.
+    $message = gTxt('salutation', array('{name}' => $name)).
 
-        n.n.gTxt('your_password_is').': '.$password.
+        n.n.gTxt('your_password_is').' '.$password.
 
-        n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
+        n.n.gTxt('log_in_at').' '.hu.'textpattern/index.php';
 
     return txpMail($email, "[$sitename] ".gTxt('your_new_password'), $message);
-}
-
-/**
- * Sends a password reset link to a user's email address.
- *
- * This function will return a success message even when the specified user
- * doesn't exist. Though an error message could be thrown when user isn't found,
- * this is done due to security. This prevents the function from leaking
- * existing account names.
- *
- * @param  string $name The login name
- * @return string A localized message string
- * @see    send_new_password()
- * @see    reset_author_pass()
- * @example
- * echo send_reset_confirmation_request('username');
- */
-
-function send_reset_confirmation_request($name)
-{
-    global $sitename;
-
-    $rs = safe_row("email, nonce", 'txp_users', "name = '".doSlash($name)."'");
-
-    if ($rs) {
-        extract($rs);
-
-        $confirm = bin2hex(pack('H*', substr(md5($nonce), 0, 10)).$name);
-
-        $message = gTxt('greeting').' '.$name.','.
-
-            n.n.gTxt('password_reset_confirmation').': '.
-            n.hu.'textpattern/index.php?confirm='.$confirm;
-
-        if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message)) {
-            return gTxt('password_reset_confirmation_request_sent');
-        } else {
-            return array(gTxt('could_not_mail'), E_ERROR);
-        }
-    } else {
-        // Though 'unknown_author' could be thrown, send generic 'request_sent'
-        // message instead so that (non-)existence of account names are not leaked.
-        return gTxt('password_reset_confirmation_request_sent');
-    }
 }
 
 /**
@@ -151,10 +241,14 @@ function send_reset_confirmation_request($name)
  * Generates a random password of given length using the symbols set in
  * PASSWORD_SYMBOLS constant.
  *
- * @param  int $length The length of the password
- * @return string Random plain-text password
- * @see    PASSWORD_SYMBOLS
- * @see    PASSWORD_LENGTH
+ * Should NEVER be used as it is not cryptographically secure.
+ * Will be removed in future, in lieu of sending reset request tokens.
+ *
+ * @param      int $length The length of the password
+ * @return     string Random plain-text password
+ * @deprecated in 4.6.0
+ * @see        \Textpattern\Password\Generate
+ * @see        \Textpattern\Password\Random
  * @example
  * echo generate_password(128);
  */
@@ -187,10 +281,14 @@ function generate_password($length = 10)
 /**
  * Resets the given user's password and emails it.
  *
- * The old password replaced with a new random-generated one.
+ * The old password is replaced with a new random-generated one.
+ *
+ * Should NEVER be used as sending plaintext passwords is wrong.
+ * Will be removed in future, in lieu of sending reset request tokens.
  *
  * @param  string $name The login name
  * @return string A localized message string
+ * @deprecated in 4.6.0
  * @see    PASSWORD_LENGTH
  * @see    generate_password()
  * @example
@@ -201,7 +299,8 @@ function reset_author_pass($name)
 {
     $email = safe_field("email", 'txp_users', "name = '".doSlash($name)."'");
 
-    $new_pass = generate_password(PASSWORD_LENGTH);
+    $new_pass = Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH);
+
     $rs = change_user_password($name, $new_pass);
 
     if ($rs) {

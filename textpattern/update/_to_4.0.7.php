@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -28,8 +28,7 @@ if (!defined('TXP_UPDATE')) {
 $txpplugin = getThings('DESCRIBE `'.PFX.'txp_plugin`');
 
 if (!in_array('load_order', $txpplugin)) {
-    safe_alter('txp_plugin',
-        "ADD load_order TINYINT UNSIGNED NOT NULL DEFAULT 5");
+    safe_alter('txp_plugin', "ADD load_order TINYINT UNSIGNED NOT NULL DEFAULT 5");
 }
 
 // Enable XML-RPC server?
@@ -49,7 +48,7 @@ if (!safe_field("val", 'txp_prefs', "name = 'author_list_pageby'")) {
 $txp = getThings("DESCRIBE `".PFX."textpattern`");
 
 if (!in_array('Expires', $txp)) {
-    safe_alter('textpattern', "ADD Expires DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' AFTER Posted");
+    safe_alter('textpattern', "ADD Expires DATETIME AFTER Posted");
 }
 
 safe_create_index('textpattern', 'Expires', 'Expires_idx');

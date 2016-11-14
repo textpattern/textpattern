@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -40,7 +40,8 @@ if (@ini_get('register_globals')) {
         (array) $_POST,
         (array) $_COOKIE,
         (array) $_FILES,
-        (array) $_SERVER);
+        (array) $_SERVER
+    );
 
     // As the deliberate awkwardly-named local variable $_txpfoo MUST NOT be
     // unset to avoid notices further down, we must remove any potential
@@ -64,7 +65,7 @@ if (@ini_get('register_globals')) {
     }
 }
 
-header('Content-type: text/css');
+header('Content-Type: text/css; charset=utf-8');
 
 if (!defined("txpath")) {
     /**
@@ -80,9 +81,10 @@ if (!isset($txpcfg['table_prefix'])) {
     ob_end_clean();
 }
 
+include txpath.'/lib/class.trace.php';
+$trace = new Trace();
 include txpath.'/lib/constants.php';
 include txpath.'/lib/txplib_misc.php';
-trace_log(TEXTPATTERN_TRACE_START);
 
 $nolog = 1;
 
@@ -98,7 +100,5 @@ $t = gps('t');
 output_css($s, $n, $t);
 
 if ($production_status === 'debug') {
-    echo n.'/*';
-    trace_log(TEXTPATTERN_TRACE_DISPLAY);
-    echo n.'*/'.n;
+    echo n.'/*'.$trace->result().n.'*/'.n;
 }

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -108,10 +108,10 @@ $create_sql = array();
 
 $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
     ID              INT          NOT NULL AUTO_INCREMENT,
-    Posted          DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
-    Expires         DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    Posted          DATETIME     NOT NULL,
+    Expires         DATETIME         NULL DEFAULT NULL,
     AuthorID        VARCHAR(64)  NOT NULL DEFAULT '',
-    LastMod         DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    LastMod         DATETIME     NOT NULL,
     LastModID       VARCHAR(64)  NOT NULL DEFAULT '',
     Title           VARCHAR(255) NOT NULL DEFAULT '',
     Title_html      VARCHAR(255) NOT NULL DEFAULT '',
@@ -120,8 +120,8 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
     Excerpt         TEXT         NOT NULL,
     Excerpt_html    MEDIUMTEXT   NOT NULL,
     Image           VARCHAR(255) NOT NULL DEFAULT '',
-    Category1       VARCHAR(128) NOT NULL DEFAULT '',
-    Category2       VARCHAR(128) NOT NULL DEFAULT '',
+    Category1       VARCHAR(64)  NOT NULL DEFAULT '',
+    Category2       VARCHAR(64)  NOT NULL DEFAULT '',
     Annotate        INT          NOT NULL DEFAULT '0',
     AnnotateInvite  VARCHAR(255) NOT NULL DEFAULT '',
     comments_count  INT          NOT NULL DEFAULT '0',
@@ -144,7 +144,7 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
     custom_9        VARCHAR(255) NOT NULL DEFAULT '',
     custom_10       VARCHAR(255) NOT NULL DEFAULT '',
     uid             VARCHAR(32)  NOT NULL DEFAULT '',
-    feed_time       DATE         NOT NULL DEFAULT '0000-00-00',
+    feed_time       DATE         NOT NULL,
 
     PRIMARY KEY                 (ID),
     INDEX    categories_idx     (Category1(10), Category2(10)),
@@ -158,17 +158,16 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
 
 $setup_comment_invite = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite');
 
-require_once txpath.'/lib/classTextile.php';
-$textile = new Textile();
+$textile = new \Netcarver\Textile\Parser();
 
 $article['body']    = file_get_contents(txpath.DS.'setup'.DS.'article.body.textile');
 $article['excerpt'] = file_get_contents(txpath.DS.'setup'.DS.'article.excerpt.textile');
 $article = str_replace('siteurl', $urlpath, $article);
-$article['body_html']    = $textile->TextileThis($article['body']);
-$article['excerpt_html'] = $textile->TextileThis($article['excerpt']);
+$article['body_html']    = $textile->textileThis($article['body']);
+$article['excerpt_html'] = $textile->textileThis($article['excerpt']);
 $article = doSlash($article);
 
-$create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), '0000-00-00 00:00:00', '".doSlash($_SESSION['name'])."', NOW(), '', 'Welcome to your site', '', '".$article['body']."', '".$article['body_html']."', '".$article['excerpt']."', '".$article['excerpt_html']."', '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, '1', '1', 'articles', '', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NOW())";
+$create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), NULL, '".doSlash($_SESSION['name'])."', NOW(), '', 'Welcome to your site', '', '".$article['body']."', '".$article['body_html']."', '".$article['excerpt']."', '".$article['excerpt_html']."', '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, '1', '1', 'articles', '', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NOW())";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_category` (
     id          INT          NOT NULL AUTO_INCREMENT,
@@ -199,9 +198,9 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_css` (
     UNIQUE name (name(250))
 ) $tabletype ";
 
-foreach(scandir($themedir.DS.'css') as $cssfile) {
+foreach (scandir($themedir.DS.'styles') as $cssfile) {
     if (preg_match('/^(\w+)\.css$/', $cssfile, $match)) {
-        $css = doSlash(file_get_contents($themedir.DS.'css'.DS.$cssfile));
+        $css = doSlash(file_get_contents($themedir.DS.'styles'.DS.$cssfile));
         $create_sql[] = "INSERT INTO `".PFX."txp_css`(name, css) VALUES('".$match[1]."', '".$css."')";
     }
 }
@@ -213,7 +212,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
     email     VARCHAR(254)    NOT NULL DEFAULT '',
     web       VARCHAR(255)    NOT NULL DEFAULT '',
     ip        VARCHAR(100)    NOT NULL DEFAULT '',
-    posted    DATETIME        NOT NULL DEFAULT '0000-00-00 00:00:00',
+    posted    DATETIME        NOT NULL,
     message   TEXT            NOT NULL,
     visible   TINYINT         NOT NULL DEFAULT '1',
 
@@ -224,7 +223,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
 $create_sql[] = "INSERT INTO `".PFX."txp_discuss` VALUES (000001, 1, 'Donald Swain', 'donald.swain@example.com', 'example.com', '127.0.0.1', NOW(), '<p>I enjoy your site very much.</p>', 1)";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_discuss_nonce` (
-    issue_time DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    issue_time DATETIME     NOT NULL,
     nonce      VARCHAR(255) NOT NULL DEFAULT '',
     used       TINYINT      NOT NULL DEFAULT '0',
     secret     VARCHAR(255) NOT NULL DEFAULT '',
@@ -236,13 +235,13 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_file` (
     id          INT          NOT NULL AUTO_INCREMENT,
     filename    VARCHAR(255) NOT NULL DEFAULT '',
     title       VARCHAR(255) DEFAULT NULL,
-    category    VARCHAR(255) NOT NULL DEFAULT '',
+    category    VARCHAR(64)  NOT NULL DEFAULT '',
     permissions VARCHAR(32)  NOT NULL DEFAULT '0',
     description TEXT         NOT NULL,
     downloads   INT UNSIGNED NOT NULL DEFAULT '0',
     status	SMALLINT     NOT NULL DEFAULT '4',
-    modified    DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
-    created     DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    modified    DATETIME     NOT NULL,
+    created     DATETIME     NOT NULL,
     size        BIGINT       DEFAULT NULL,
     author      VARCHAR(64)  NOT NULL DEFAULT '',
 
@@ -259,7 +258,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_form` (
     PRIMARY KEY (name(250))
 ) $tabletype ";
 
-foreach(scandir($themedir.DS.'forms') as $formfile) {
+foreach (scandir($themedir.DS.'forms') as $formfile) {
     if (preg_match('/^(\w+).(\w+)\.txp$/', $formfile, $match)) {
         $form = doSlash(file_get_contents($themedir.DS.'forms'.DS.$formfile));
         $create_sql[] = "INSERT INTO `".PFX."txp_form`(type, name, Form)
@@ -270,13 +269,13 @@ foreach(scandir($themedir.DS.'forms') as $formfile) {
 $create_sql[] = "CREATE TABLE `".PFX."txp_image` (
     id        INT          NOT NULL AUTO_INCREMENT,
     name      VARCHAR(255) NOT NULL DEFAULT '',
-    category  VARCHAR(255) NOT NULL DEFAULT '',
+    category  VARCHAR(64)  NOT NULL DEFAULT '',
     ext       VARCHAR(20)  NOT NULL DEFAULT '',
     w         INT          NOT NULL DEFAULT '0',
     h         INT          NOT NULL DEFAULT '0',
     alt       VARCHAR(255) NOT NULL DEFAULT '',
     caption   TEXT         NOT NULL,
-    date      DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    date      DATETIME     NOT NULL,
     author    VARCHAR(64)  NOT NULL DEFAULT '',
     thumbnail INT          NOT NULL DEFAULT '0',
     thumb_w   INT          NOT NULL DEFAULT '0',
@@ -303,7 +302,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
     id          INT          NOT NULL AUTO_INCREMENT,
-    date        DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    date        DATETIME     NOT NULL,
     category    VARCHAR(64)  NOT NULL DEFAULT '',
     url         TEXT         NOT NULL,
     linkname    VARCHAR(255) NOT NULL DEFAULT '',
@@ -316,7 +315,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
 ) $tabletype ";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (1, NOW(), 'textpattern', 'http://textpattern.com/',             'Textpattern Website',            '10', '', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (2, NOW(), 'textpattern', 'http://textpattern.net/',             'Textpattern User Documentation', '20', '', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (2, NOW(), 'textpattern', 'http://docs.textpattern.io/',         'Textpattern User Documentation', '20', '', '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (3, NOW(), 'textpattern', 'http://textpattern.org/',             'Textpattern Resources',          '30', '', '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (4, NOW(), 'textpattern', 'http://textpattern.com/@textpattern', '@textpattern',                   '40', '', '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (5, NOW(), 'textpattern', 'http://textpattern.com/+',            '+Textpattern CMS',               '50', '', '')";
@@ -324,7 +323,7 @@ $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (6, NOW(), 'textpattern', 
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
     id     INT          NOT NULL AUTO_INCREMENT,
-    time   DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    time   DATETIME     NOT NULL,
     host   VARCHAR(255) NOT NULL DEFAULT '',
     page   VARCHAR(255) NOT NULL DEFAULT '',
     refer  MEDIUMTEXT   NOT NULL,
@@ -344,7 +343,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_page` (
     PRIMARY KEY (name(250))
 ) $tabletype ";
 
-foreach(scandir($themedir.DS.'pages') as $pagefile) {
+foreach (scandir($themedir.DS.'pages') as $pagefile) {
     if (preg_match('/^(\w+)\.txp$/', $pagefile, $match)) {
         $page = doSlash(file_get_contents($themedir.DS.'pages'.DS.$pagefile));
         $create_sql[] = "INSERT INTO `".PFX."txp_page`(name, user_html) VALUES('".$match[1]."', '".$page."')";
@@ -388,122 +387,125 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
 $blog_uid  = md5(uniqid(rand(), true));
 $gmtoffset = sprintf("%+d", gmmktime(0, 0, 0) - mktime(0, 0, 0));
 
-$prefs = array(
+$prefs = array_merge_recursive(array(
     'admin' => array(
-        array(0,  20, 'text_input'      , 'img_dir'                    , 'images'),
-        array(0,  40, 'text_input'      , 'file_base_path'             , dirname(txpath).DS.'files'),
-        array(0,  60, 'text_input'      , 'file_max_upload_size'       , '2000000'),
-        array(0,  80, 'text_input'      , 'tempdir'                    , find_temp_dir()),
-        array(0, 100, 'text_input'      , 'plugin_cache_dir'           , ''),
-        array(0, 110, 'text_input'      , 'smtp_from'                  , ''),
-        array(0, 115, 'text_input'      , 'publisher_email'            , ''),
-        array(0, 120, 'yesnoradio'      , 'override_emailcharset'      , '0'),
-        array(0, 130, 'yesnoradio'      , 'enable_xmlrpc_server'       , '0'),
-        array(0, 150, 'default_event'   , 'default_event'              , 'article'),
-        array(0, 160, 'themename'       , 'theme_name'                 , $theme),
+        array(PREF_CORE,    20, 'text_input'      , 'img_dir'                    , 'images'),
+        array(PREF_CORE,    40, 'text_input'      , 'file_base_path'             , dirname(txpath).DS.'files'),
+        array(PREF_CORE,    60, 'text_input'      , 'file_max_upload_size'       , '2000000'),
+        array(PREF_CORE,    80, 'text_input'      , 'tempdir'                    , find_temp_dir()),
+        array(PREF_CORE,   100, 'text_input'      , 'plugin_cache_dir'           , ''),
+        array(PREF_CORE,   110, 'text_input'      , 'smtp_from'                  , ''),
+        array(PREF_CORE,   115, 'text_input'      , 'publisher_email'            , ''),
+        array(PREF_CORE,   120, 'yesnoradio'      , 'override_emailcharset'      , '0'),
+        array(PREF_CORE,   130, 'yesnoradio'      , 'enable_xmlrpc_server'       , '0'),
+        array(PREF_CORE,   150, 'default_event'   , 'default_event'              , 'article'),
+        array(PREF_CORE,   160, 'themename'       , 'theme_name'                 , $theme),
     ),
     'category' => array(
-        array(2,   0, 'yesnoradio'      , 'show_article_category_count', '1'),
+        array(PREF_HIDDEN,   0, 'yesnoradio'      , 'show_article_category_count', '1'),
     ),
     'comments' => array(
-        array(0,  20, 'yesnoradio'      , 'comments_on_default'        , '0'),
-        array(0,  40, 'text_input'      , 'comments_default_invite'    , $setup_comment_invite),
-        array(0,  60, 'yesnoradio'      , 'comments_moderate'          , '1'),
-        array(0,  80, 'weeks'           , 'comments_disabled_after'    , '42'),
-        array(0, 100, 'yesnoradio'      , 'comments_auto_append'       , '0'),
-        array(0, 120, 'commentmode'     , 'comments_mode'              , '0'),
-        array(0, 140, 'dateformats'     , 'comments_dateformat'        , '%b %d, %I:%M %p'),
-        array(0, 160, 'commentsendmail' , 'comments_sendmail'          , '0'),
-        array(0, 180, 'yesnoradio'      , 'comments_are_ol'            , '1'),
-        array(0, 200, 'yesnoradio'      , 'comment_means_site_updated' , '1'),
-        array(0, 220, 'yesnoradio'      , 'comments_require_name'      , '1'),
-        array(0, 240, 'yesnoradio'      , 'comments_require_email'     , '1'),
-        array(0, 260, 'yesnoradio'      , 'never_display_email'        , '1'),
-        array(0, 280, 'yesnoradio'      , 'comment_nofollow'           , '1'),
-        array(0, 300, 'yesnoradio'      , 'comments_disallow_images'   , '0'),
-        array(0, 320, 'yesnoradio'      , 'comments_use_fat_textile'   , '0'),
-        array(0, 340, 'text_input'      , 'spam_blacklists'            , ''),
+        array(PREF_CORE,    20, 'yesnoradio'      , 'comments_on_default'        , '0'),
+        array(PREF_CORE,    40, 'text_input'      , 'comments_default_invite'    , $setup_comment_invite),
+        array(PREF_CORE,    60, 'yesnoradio'      , 'comments_moderate'          , '1'),
+        array(PREF_CORE,    80, 'weeks'           , 'comments_disabled_after'    , '42'),
+        array(PREF_CORE,   100, 'yesnoradio'      , 'comments_auto_append'       , '0'),
+        array(PREF_CORE,   120, 'commentmode'     , 'comments_mode'              , '0'),
+        array(PREF_CORE,   140, 'dateformats'     , 'comments_dateformat'        , '%b %d, %I:%M %p'),
+        array(PREF_CORE,   160, 'commentsendmail' , 'comments_sendmail'          , '0'),
+        array(PREF_CORE,   180, 'yesnoradio'      , 'comments_are_ol'            , '1'),
+        array(PREF_CORE,   200, 'yesnoradio'      , 'comment_means_site_updated' , '1'),
+        array(PREF_CORE,   220, 'yesnoradio'      , 'comments_require_name'      , '1'),
+        array(PREF_CORE,   240, 'yesnoradio'      , 'comments_require_email'     , '1'),
+        array(PREF_CORE,   260, 'yesnoradio'      , 'never_display_email'        , '1'),
+        array(PREF_CORE,   280, 'yesnoradio'      , 'comment_nofollow'           , '1'),
+        array(PREF_CORE,   300, 'yesnoradio'      , 'comments_disallow_images'   , '0'),
+        array(PREF_CORE,   320, 'yesnoradio'      , 'comments_use_fat_textile'   , '0'),
+        array(PREF_CORE,   340, 'text_input'      , 'spam_blacklists'            , ''),
     ),
     'custom' => array(
-        array(0,   1, 'custom_set'      , 'custom_1_set'               , 'custom1'),
-        array(0,   2, 'custom_set'      , 'custom_2_set'               , 'custom2'),
-        array(0,   3, 'custom_set'      , 'custom_3_set'               , ''),
-        array(0,   4, 'custom_set'      , 'custom_4_set'               , ''),
-        array(0,   5, 'custom_set'      , 'custom_5_set'               , ''),
-        array(0,   6, 'custom_set'      , 'custom_6_set'               , ''),
-        array(0,   7, 'custom_set'      , 'custom_7_set'               , ''),
-        array(0,   8, 'custom_set'      , 'custom_8_set'               , ''),
-        array(0,   9, 'custom_set'      , 'custom_9_set'               , ''),
-        array(0,  10, 'custom_set'      , 'custom_10_set'              , ''),
+        array(PREF_CORE,     1, 'custom_set'      , 'custom_1_set'               , 'custom1'),
+        array(PREF_CORE,     2, 'custom_set'      , 'custom_2_set'               , 'custom2'),
+        array(PREF_CORE,     3, 'custom_set'      , 'custom_3_set'               , ''),
+        array(PREF_CORE,     4, 'custom_set'      , 'custom_4_set'               , ''),
+        array(PREF_CORE,     5, 'custom_set'      , 'custom_5_set'               , ''),
+        array(PREF_CORE,     6, 'custom_set'      , 'custom_6_set'               , ''),
+        array(PREF_CORE,     7, 'custom_set'      , 'custom_7_set'               , ''),
+        array(PREF_CORE,     8, 'custom_set'      , 'custom_8_set'               , ''),
+        array(PREF_CORE,     9, 'custom_set'      , 'custom_9_set'               , ''),
+        array(PREF_CORE,    10, 'custom_set'      , 'custom_10_set'              , ''),
     ),
     'feeds' => array(
-        array(0,  20, 'yesnoradio'      , 'syndicate_body_or_excerpt'  , '1'),
-        array(0,  40, 'text_input'      , 'rss_how_many'               , '5'),
-        array(0,  60, 'yesnoradio'      , 'show_comment_count_in_feed' , '1'),
-        array(0,  80, 'yesnoradio'      , 'include_email_atom'         , '1'),
-        array(0, 100, 'yesnoradio'      , 'use_mail_on_feeds_id'       , '0'),
+        array(PREF_CORE,    20, 'yesnoradio'      , 'syndicate_body_or_excerpt'  , '1'),
+        array(PREF_CORE,    40, 'text_input'      , 'rss_how_many'               , '5'),
+        array(PREF_CORE,    60, 'yesnoradio'      , 'show_comment_count_in_feed' , '1'),
+        array(PREF_CORE,    80, 'yesnoradio'      , 'include_email_atom'         , '0'),
+        array(PREF_CORE,   100, 'yesnoradio'      , 'use_mail_on_feeds_id'       , '0'),
     ),
     'publish' => array(
-        array(0,  20, 'yesnoradio'      , 'title_no_widow'             , '0'),
-        array(0,  40, 'yesnoradio'      , 'articles_use_excerpts'      , '1'),
-        array(0,  60, 'yesnoradio'      , 'allow_form_override'        , '1'),
-        array(0,  80, 'yesnoradio'      , 'attach_titles_to_permalinks', '1'),
-        array(0, 100, 'yesnoradio'      , 'permalink_title_format'     , '1'),
-        array(0, 120, 'yesnoradio'      , 'send_lastmod'               , '1'),
-        array(0, 130, 'yesnoradio'      , 'publish_expired_articles'   , '0'),
-        array(0, 140, 'yesnoradio'      , 'lastmod_keepalive'          , '0'),
-        array(0, 160, 'yesnoradio'      , 'ping_weblogsdotcom'         , '0'),
-        array(0, 200, 'pref_text'       , 'use_textile'                , '1'),
-        array(0, 220, 'yesnoradio'      , 'use_dns'                    , '0'),
-        array(0, 260, 'yesnoradio'      , 'use_plugins'                , '1'),
-        array(0, 280, 'yesnoradio'      , 'admin_side_plugins'         , '1'),
-        array(0, 300, 'yesnoradio'      , 'allow_page_php_scripting'   , '1'),
-        array(0, 320, 'yesnoradio'      , 'allow_article_php_scripting', '1'),
-        array(0, 340, 'text_input'      , 'max_url_len'                , '1000'),
-        array(2,   0, 'text_input'      , 'blog_mail_uid'              , $_SESSION['email']),
-        array(2,   0, 'text_input'      , 'blog_time_uid'              , '2005'),
-        array(2,   0, 'text_input'      , 'blog_uid'                   , $blog_uid),
-        array(2,   0, 'text_input'      , 'dbupdatetime'               , '0'),
-        array(2,   0, 'languages'       , 'language'                   , LANG),
-        array(2,   0, 'text_input'      , 'lastmod'                    , '2005-07-23 16:24:10'),
-        array(2,   0, 'text_input'      , 'locale'                     , getlocale(LANG)),
-        array(2,   0, 'text_input'      , 'path_from_root'             , '/'),
-        array(2,   0, 'text_input'      , 'path_to_site'               , dirname(txpath)),
-        array(2,   0, 'text_input'      , 'prefs_id'                   , '1'),
-        array(2,   0, 'text_input'      , 'searchable_article_fields'  , 'Title, Body'),
-        array(2,   0, 'text_input'      , 'textile_updated'            , '1'),
-        array(2,   0, 'text_input'      , 'timeoffset'                 , '0'),
-        array(2,   0, 'text_input'      , 'timezone_key'               , ''),
-        array(2,   0, 'text_input'      , 'url_mode'                   , '1'),
-        array(2,   0, 'text_input'      , 'use_categories'             , '1'),
-        array(2,   0, 'text_input'      , 'use_sections'               , '1'),
-        array(2,   0, 'text_input'      , 'version'                    , '4.5.7'),
+        array(PREF_CORE,    20, 'yesnoradio'      , 'title_no_widow'             , '0'),
+        array(PREF_CORE,    40, 'yesnoradio'      , 'articles_use_excerpts'      , '1'),
+        array(PREF_CORE,    60, 'yesnoradio'      , 'allow_form_override'        , '1'),
+        array(PREF_CORE,    80, 'yesnoradio'      , 'attach_titles_to_permalinks', '1'),
+        array(PREF_CORE,   100, 'permlink_format' , 'permlink_format'            , '1'),
+        array(PREF_CORE,   120, 'yesnoradio'      , 'send_lastmod'               , '1'),
+        array(PREF_CORE,   130, 'yesnoradio'      , 'publish_expired_articles'   , '0'),
+        array(PREF_CORE,   160, 'yesnoradio'      , 'ping_weblogsdotcom'         , '0'),
+        array(PREF_CORE,   200, 'pref_text'       , 'use_textile'                , '1'),
+        array(PREF_CORE,   220, 'yesnoradio'      , 'use_dns'                    , '0'),
+        array(PREF_CORE,   260, 'yesnoradio'      , 'use_plugins'                , '1'),
+        array(PREF_CORE,   280, 'yesnoradio'      , 'admin_side_plugins'         , '1'),
+        array(PREF_CORE,   300, 'yesnoradio'      , 'allow_page_php_scripting'   , '1'),
+        array(PREF_CORE,   320, 'yesnoradio'      , 'allow_article_php_scripting', '1'),
+        array(PREF_CORE,   340, 'text_input'      , 'max_url_len'                , '1000'),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'blog_mail_uid'              , $_SESSION['email']),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'blog_time_uid'              , '2005'),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'blog_uid'                   , $blog_uid),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'dbupdatetime'               , '0'),
+        array(PREF_HIDDEN,   0, 'languages'       , 'language'                   , LANG),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'lastmod'                    , '2005-07-23 16:24:10'),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'locale'                     , getlocale(LANG)),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'path_from_root'             , '/'),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'path_to_site'               , dirname(txpath)),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'prefs_id'                   , '1'),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'searchable_article_fields'  , 'Title, Body'),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'textile_updated'            , '1'),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'timeoffset'                 , '0'),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'timezone_key'               , ''),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'url_mode'                   , '1'),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'use_categories'             , '1'),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'use_sections'               , '1'),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'sql_now_posted'             , time()),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'sql_now_expires'            , time()),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'sql_now_created'            , time()),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'version'                    , '4.6.2'),
     ),
     'section' => array(
-        array(2,   0, 'text_input'      , 'default_section'            , 'articles'),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'default_section'            , 'articles'),
     ),
     'site' => array(
-        array(0,  20, 'text_input'      , 'sitename'                   , gTxt('my_site')),
-        array(0,  40, 'text_input'      , 'siteurl'                    , $siteurl),
-        array(0,  60, 'text_input'      , 'site_slogan'                , gTxt('my_slogan')),
-        array(0,  80, 'prod_levels'     , 'production_status'          , 'testing'),
-        array(0, 100, 'gmtoffset_select', 'gmtoffset'                  , $gmtoffset),
-        array(0, 115, 'yesnoradio'      , 'auto_dst'                   , '0'),
-        array(0, 120, 'is_dst'          , 'is_dst'                     , '0'),
-        array(0, 140, 'dateformats'     , 'dateformat'                 , 'since'),
-        array(0, 160, 'dateformats'     , 'archive_dateformat'         , '%b %d, %I:%M %p'),
-        array(0, 180, 'permlinkmodes'   , 'permlink_mode'              , $permlink_mode),
-        array(0, 190, 'doctypes'        , 'doctype'                    , 'html5'),
-        array(0, 220, 'logging'         , 'logging'                    , 'none'),
-        array(0, 230, 'text_input'      , 'expire_logs_after'          , '7'),
-        array(0, 240, 'yesnoradio'      , 'use_comments'               , '1'),
+        array(PREF_CORE,    20, 'text_input'      , 'sitename'                   , gTxt('my_site')),
+        array(PREF_CORE,    40, 'text_input'      , 'siteurl'                    , $siteurl),
+        array(PREF_CORE,    60, 'text_input'      , 'site_slogan'                , gTxt('my_slogan')),
+        array(PREF_CORE,    80, 'prod_levels'     , 'production_status'          , 'testing'),
+        array(PREF_CORE,   110, 'gmtoffset_select', 'gmtoffset'                  , $gmtoffset),
+        array(PREF_CORE,   115, 'yesnoradio'      , 'auto_dst'                   , '0'),
+        array(PREF_CORE,   120, 'is_dst'          , 'is_dst'                     , '0'),
+        array(PREF_CORE,   140, 'dateformats'     , 'dateformat'                 , 'since'),
+        array(PREF_CORE,   160, 'dateformats'     , 'archive_dateformat'         , '%b %d, %I:%M %p'),
+        array(PREF_CORE,   180, 'permlinkmodes'   , 'permlink_mode'              , $permlink_mode),
+        array(PREF_CORE,   190, 'doctypes'        , 'doctype'                    , 'html5'),
+        array(PREF_CORE,   220, 'logging'         , 'logging'                    , 'none'),
+        array(PREF_CORE,   230, 'text_input'      , 'expire_logs_after'          , '7'),
+        array(PREF_CORE,   240, 'yesnoradio'      , 'use_comments'               , '1'),
     )
-);
+), new_user_prefs($_SESSION['name']));
 
 foreach ($prefs as $event => $event_prefs) {
     foreach ($event_prefs as $p) {
-        $create_sql[] = "INSERT INTO `".PFX."txp_prefs` (event, type, position, html, name, val) ".
-            "VALUES ('".$event."', ".$p[0].", ".$p[1].", '".$p[2]."', '".$p[3]."', '".doSlash($p[4])."')";
+        $username = empty($p[5]) ? '' : doSlash($p[5]);
+        $create_sql[] = "INSERT INTO `".PFX."txp_prefs` (event, type, position, html, name, val, user_name) ".
+            "VALUES ('".$event."', ".$p[0].", ".$p[1].", '".$p[2]."', '".$p[3]."', '".doSlash($p[4])."', '".$username."')";
     }
 }
 
@@ -520,8 +522,8 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_section` (
     PRIMARY KEY (name(250))
 ) $tabletype ";
 
-$create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('articles', 'archive', 'default', 1, 1, 1, 1, 'Articles')";
-$create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('default', 'default', 'default', 0, 1, 1, 1, 'Default')";
+$create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('articles', 'archive', 'default', '', 1, 1, 1, 'Articles')";
+$create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('default', 'default', 'default', '', 1, 1, 1, 'Default')";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_users` (
     user_id     INT          NOT NULL AUTO_INCREMENT,
@@ -530,7 +532,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_users` (
     RealName    VARCHAR(255) NOT NULL DEFAULT '',
     email       VARCHAR(254) NOT NULL DEFAULT '',
     privs       TINYINT      NOT NULL DEFAULT '1',
-    last_access DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+    last_access DATETIME         NULL DEFAULT NULL,
     nonce       VARCHAR(64)  NOT NULL DEFAULT '',
 
     PRIMARY KEY (user_id),
@@ -546,6 +548,18 @@ $create_sql[] = "INSERT INTO `".PFX."txp_users` VALUES (
     1,
     NOW(),
     '".md5(uniqid(rand(), true))."')";
+
+$create_sql[] = "CREATE TABLE `".PFX."txp_token` (
+    id           INT          NOT NULL AUTO_INCREMENT,
+    reference_id INT          NOT NULL,
+    type         VARCHAR(255) NOT NULL,
+    selector     VARCHAR(12)  NOT NULL DEFAULT '',
+    token        VARCHAR(255) NOT NULL,
+    expires      DATETIME         NULL DEFAULT NULL,
+
+    PRIMARY KEY (id),
+    UNIQUE ref_type (reference_id, type(50))
+) $tabletype ";
 
 $GLOBALS['txp_install_successful'] = true;
 $GLOBALS['txp_err_count'] = 0;
@@ -573,7 +587,7 @@ if (!$client->query('tups.getLanguage', $blog_uid, LANG)) {
         include_once txpath.'/setup/en-gb.php';
 
         if (!@$lastmod) {
-            $lastmod = '0000-00-00 00:00:00';
+            $lastmod = '1970-01-01 00:00:00';
         }
 
         foreach ($en_gb_lang as $evt_name => $evt_strings) {
@@ -620,5 +634,6 @@ mysqli_query($link, "FLUSH TABLE `".PFX."txp_lang`");
 function safe_escape($in = '')
 {
     global $link;
+
     return mysqli_real_escape_string($link, $in);
 }

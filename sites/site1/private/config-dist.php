@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -96,7 +96,7 @@ $txpcfg['dbcharset'] = 'utf8';
  * MYSQL_CLIENT_IGNORE_SPACE, MYSQL_CLIENT_INTERACTIVE
  *
  * @global int $txpcfg['client_flags']
- * @link   http://www.php.net/manual/function.mysql-connect.php
+ * @link   https://secure.php.net/manual/en/mysqli.real-connect.php
  */
 
 $txpcfg['client_flags'] = 0;

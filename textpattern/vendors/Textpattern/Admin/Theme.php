@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -34,7 +34,7 @@ if (!defined('THEME')) {
      * Relative path to themes directory.
      */
 
-    define('THEME', 'theme/');
+    define('THEME', 'admin-themes/');
 }
 
 /**
@@ -42,6 +42,7 @@ if (!defined('THEME')) {
  *
  * @package Admin\Theme
  */
+
 abstract class Theme
 {
     /**

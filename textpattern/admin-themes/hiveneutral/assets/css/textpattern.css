@@ -1,0 +1,6310 @@
+/* ==========================================================================
+   Styling and layout for all media
+   ========================================================================== */
+/* HTML5 display definitions
+   ========================================================================== */
+/**
+ * Add the correct display in various browsers.
+ */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+main,
+menu,
+nav,
+section {
+  display: block;
+}
+
+summary {
+  display: list-item;
+}
+
+/**
+ * Add the correct display in IE 11.
+ */
+canvas {
+  display: inline-block;
+}
+
+template {
+  display: none;
+}
+
+/**
+ * Remove tap delay in modern browsers.
+ */
+a,
+input,
+button {
+  -ms-touch-action: none;
+      touch-action: none;
+}
+
+/* Float clearing
+   ========================================================================== */
+/**
+ * Clearfix using the 'A new micro clearfix hack' method.
+ *
+ * More info: http://nicolasgallagher.com/micro-clearfix-hack/
+ */
+.clearfix::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+/**
+ * Basic float clearer.
+ */
+.clear {
+  clear: both;
+}
+
+/* ==========================================================================
+   Styling and layout for screen media
+   ========================================================================== */
+@media screen {
+  /* Links
+   ========================================================================== */
+  /**
+ * 1. Specify link colour.
+ * 2. Remove default underline style from non-hover state links.
+ * 3. Interrupt the decoration line to let the shape of the text show through
+ *    in supported browsers.
+ * 4. Expanded CSS level 3 `text-decoration` property in supported browsers,
+ *    older browsers will fallback to legacy `text-decoration` property.
+ * 5. Hide `.busy` class links when processing AJAX.
+ */
+  a {
+    /* 1 */
+    color: #004cbf;
+    /* 2 */
+    text-decoration: none;
+    /* 3 */
+    -webkit-text-decoration-skip: ink edges;
+            text-decoration-skip: ink edges;
+  }
+  a:hover, a:active {
+    outline: 0;
+    color: #0066ff;
+    text-decoration: underline;
+    /* 4 */
+    text-decoration: #004cbf solid underline;
+  }
+  a:focus {
+    outline: thin solid #0066ff;
+  }
+  a.busy {
+    /* 5 */
+    visibility: hidden;
+  }
+  /**
+ * Additional styling for popup help links.
+ *
+ * Example HTML:
+ *
+ * <a class="pophelp">i</a>
+ */
+  .pophelp,
+  .pophelpsubtle {
+    padding: 0 0.4em;
+    border: 1px solid #e0e0e0;
+    border-radius: 50%;
+    font-weight: normal;
+  }
+  .pophelp:focus,
+  .pophelpsubtle:focus {
+    border-color: #0066ff;
+    outline: 0;
+  }
+  /**
+ * Additional styling for popup help links in table headers.
+ */
+  .txp-list thead th a.pophelp {
+    display: inline;
+    margin: 0;
+    padding: 0 0.4em;
+    border-color: #cccccc;
+    color: #004cbf;
+  }
+  .txp-list thead th a.pophelp:hover {
+    color: #0066ff;
+    text-decoration: underline;
+  }
+  .txp-list thead th a.pophelp:focus {
+    border-color: #0066ff;
+  }
+  /**
+ * Reduce risk of render glitches in links on RTL languages.
+ */
+  [dir="rtl"] a {
+    unicode-bidi: embed;
+  }
+  /* Typography
+   ========================================================================== */
+  /**
+ * Establish baseline.
+ */
+  html {
+    font-size: 13px;
+    line-height: 20px;
+  }
+  /**
+ * Global font and colour.
+ */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  /**
+ * `h1` headings.
+ *
+ * Example HTML:
+ *
+ * <h1>Heading</h1>
+ * <h1>
+ *     Heading
+ *     <a class="pophelp">i</a>
+ * </h1>
+ */
+  h1 {
+    margin: 0.26923076923077em 0 0.5em;
+    font-size: 26px;
+    line-height: 1.23076923076923;
+  }
+  h1 .pophelp {
+    font-size: 13px;
+  }
+  /**
+ * Omit margin below heading on image edit, pages, forms, styles, prefs panels.
+ */
+  #page-image .txp-heading,
+  #page-form .txp-heading,
+  #page-page .txp-heading,
+  #page-css .txp-heading,
+  #page-prefs .txp-heading {
+    margin-bottom: 0;
+  }
+  /**
+ * `h2` headings.
+ *
+ * Example HTML:
+ *
+ * <h2>Heading</h2>
+ * <h2>
+ *     Heading
+ *     <a class="pophelp">i</a>
+ * </h2>
+ */
+  h2 {
+    margin: 0.5em 0 0.72222222222222em;
+    font-size: 18px;
+    line-height: 1.33333333333333;
+  }
+  h2 .pophelp {
+    font-size: 13px;
+  }
+  /**
+ * `h3` headings.
+ */
+  h3 {
+    margin: 0.86666666666667em 0;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+  /**
+ * Normalize `h4`, `h5` and `h6` headings (these are effectively unused).
+ */
+  h4,
+  h5,
+  h6 {
+    margin: 1em 0;
+    font-size: 13px;
+  }
+  /**
+ * Add the correct font weight in Chrome, Edge, and Safari.
+ */
+  b,
+  strong {
+    font-weight: bolder;
+  }
+  /**
+ * Add vertical margin to addresses.
+ */
+  address {
+    margin: 1em 0;
+  }
+  /**
+ * Additional styling for blockquotes.
+ */
+  blockquote {
+    margin: 1em 0;
+    padding: 0 0 0 1em;
+    border-left: 3px solid #cccccc;
+  }
+  /**
+ * 1. Remove the bottom border in Firefox.
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+  abbr[title] {
+    /* 1 */
+    border-bottom: 0;
+    /* 2 */
+    text-decoration: underline;
+    /* 2 */
+    text-decoration: underline dotted;
+  }
+  /**
+ * Add the correct font style.
+ */
+  dfn {
+    font-style: italic;
+  }
+  /**
+ * Consistent styling for `mark` and `var` tags.
+ */
+  mark,
+  var {
+    padding: 1px 0.23076923076923em;
+    border-radius: 0.15em;
+    background: #eaf3fc;
+    color: #333333;
+  }
+  /**
+ * Harmonize size and style of computer text.
+ */
+  pre,
+  code,
+  kbd,
+  samp,
+  .code {
+    font-family: Menlo, Consolas, Monaco, monospace;
+  }
+  code,
+  kbd,
+  samp {
+    padding: 1px 0.23076923076923em;
+    border: 1px solid #e3e3e3;
+    border-radius: 0.15em;
+    background: #f7f7f7;
+  }
+  /**
+ * Additional stylng for preformatted text/code.
+ *
+ * 1. Don't wrap long words.
+ * 2. Contain overflow in all browsers.
+ * 3. Set tab size to 4 spaces.
+ */
+  pre {
+    margin: 1em 0;
+    padding: 1em;
+    border: 1px solid #e3e3e3;
+    border-radius: 0.15em;
+    background: #f7f7f7;
+    /* 1 */
+    word-wrap: normal;
+    /* 2 */
+    overflow-x: auto;
+    /* 3 */
+    -moz-tab-size: 4;
+         tab-size: 4;
+  }
+  /**
+ * Override `code` styling for code display within preformatted text areas and
+ * form text areas.
+ */
+  pre code,
+  .code code,
+  code.body,
+  code.excerpt {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-hyphens: none;
+        -ms-hyphens: none;
+            hyphens: none;
+  }
+  /**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+  sub,
+  sup.footnote,
+  sup {
+    position: relative;
+    font-size: 0.69230769230769em;
+    line-height: 0;
+    vertical-align: baseline;
+  }
+  sup {
+    top: -0.5em;
+  }
+  sub {
+    bottom: -0.33333333333333em;
+  }
+  /**
+ * Harmonize size and style of small text.
+ */
+  small,
+  figcaption,
+  tfoot,
+  .footnote,
+  .txp-form-field-instructions,
+  .txp-footer {
+    font-size: 11px;
+    line-height: 16px;
+  }
+  figcaption,
+  tfoot,
+  .footnote,
+  .txp-form-field-instructions {
+    color: #777777;
+  }
+  figcaption {
+    margin-top: 0.5em;
+    font-style: italic;
+  }
+  /* Support for non-latin languages
+   ========================================================================== */
+  /**
+ * Preferred font for Japanese language.
+ */
+  html[lang="ja-jp"] {
+    font-family: "Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
+  }
+  /**
+ * Preferred font for Korean language.
+ */
+  html[lang="ko-kr"] {
+    font-family: GulimChe, Gulim, sans-serif;
+  }
+  /**
+ * Preferred font for Chinese (PRC) language.
+ */
+  html[lang="zh-cn"] {
+    font-family: SimHei, sans-serif;
+  }
+  /**
+ * Preferred font for Chinese (Taiwan) language.
+ */
+  html[lang="zh-tw"] {
+    font-family: PMingLiU, sans-serif;
+  }
+  /* Embedded content
+   ========================================================================== */
+  /**
+ * Add the correct display in IE 11.
+ */
+  audio,
+  video {
+    display: inline-block;
+  }
+  /**
+ * Make embedded elements responsive.
+ */
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+  /**
+ * Images.
+ *
+ * 1. Remove the gap between images and the bottom of their containers.
+ *
+ * Image alignment (compatible with Textile markup syntax).
+ *
+ * Example HTML:
+ *
+ * <img class="align-left">
+ * <img class="align-right">
+ * <img class="align-center">
+ */
+  img {
+    /* 1 */
+    vertical-align: middle;
+  }
+  img.align-left {
+    margin: 1em 1em 1em 0;
+    float: left;
+  }
+  img.align-right {
+    margin: 1em 0 1em 1em;
+    float: right;
+  }
+  img.align-center {
+    display: block;
+    margin: 1em auto;
+  }
+  /**
+ * Swap image alignment right/left positions in RTL languages.
+ */
+  [dir="rtl"] img.align-left {
+    margin: 1em 0 1em 1em;
+    float: right;
+  }
+  [dir="rtl"] img.align-right {
+    margin: 1em 1em 1em 0;
+    float: left;
+  }
+  /**
+ * Address margin not present in Safari.
+ */
+  figure {
+    margin: 0;
+  }
+  /**
+ * Hide the overflow in IE 11.
+ */
+  svg:not(:root) {
+    overflow: hidden;
+  }
+  /**
+ * Content images and content images with links.
+ *
+ * Example HTML:
+ *
+ * <a>
+ *     <img class="content-image">
+ * </a>
+ */
+  .content-image {
+    border: solid 1px #cccccc;
+    background: #f7f7f7;
+  }
+  a:hover .content-image {
+    border-color: #0066ff;
+  }
+  a:focus .content-image {
+    border-color: #0066ff;
+  }
+  /* Messages
+   ========================================================================== */
+  /**
+ * Alert labels.
+ *
+ * Example HTML:
+ *
+ * <span class="success">
+ * <span class="error">
+ * <strong class="success">
+ * <strong class="error">
+ */
+  .success,
+  .warning,
+  .error,
+  .information {
+    padding: 1px 0.23076923076923em;
+    border-radius: 0.15em;
+  }
+  .success {
+    background: #dff0d8;
+    color: #238c23;
+  }
+  .warning {
+    background: #f7eedb;
+    color: #cc8c00;
+  }
+  .error {
+    background: #f2dede;
+    color: #9d261d;
+  }
+  .information {
+    background: #e7f6fc;
+    color: #3a87ad;
+  }
+  /**
+ * Highlight background.
+ *
+ * Example HTML:
+ *
+ * <table>
+ *     <tr>
+ *         <td class="highlight></td>
+ *         <td></td>
+ *     </tr>
+ * </table>
+ */
+  .highlight {
+    background: #fff9e1;
+  }
+  /**
+ * Alert boxes.
+ *
+ * Example HTML:
+ *
+ * <p class="alert-block success">
+ * <p class="alert-block error">
+ */
+  .alert-block {
+    padding: 0.53846153846154em 1em;
+    clear: both;
+    border: 1px solid;
+  }
+  .alert-block.success {
+    border-color: #a3d48e;
+  }
+  .alert-block.warning {
+    border-color: #e4c788;
+  }
+  .alert-block.error {
+    border-color: #e1b2b2;
+  }
+  .alert-block.information {
+    border-color: #b1e2f5;
+  }
+  /**
+ * System messages.
+ *
+ * Example HTML:
+ *
+ * <div id="messagepane">
+ *     <span role="alert" class="error">
+ *         Content
+ *     </span>
+ * </div>
+ */
+  #messagepane {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 1000;
+  }
+  #messagepane span.success, #messagepane span.warning, #messagepane span.error {
+    display: inline-block;
+    max-width: 53.1538461538em;
+    margin: 0 auto;
+    padding: 0.53846153846154em 2.84615384615385em 0.53846153846154em 1em;
+    border-radius: 0.3em 0.3em 0 0;
+    color: #ffffff;
+  }
+  #messagepane span.success {
+    background: #238c23;
+  }
+  #messagepane span.warning {
+    background: #cc8c00;
+  }
+  #messagepane span.error {
+    background: #9d261d;
+  }
+  /*
+ * Message close icon.
+ *
+ * Example HTML:
+ *
+ * <a role="button" class="close" aria-label="Close">&times;</a>
+ */
+  .close {
+    position: absolute;
+    top: 0.27777777777778em;
+    right: 0.72222222222222em;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  .close:hover {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  /*
+ * Flash the alert message using CSS animation.
+ */
+  .messageflash {
+    animation: messageflash 1s;
+  }
+  /* Twisties
+   ========================================================================== */
+  /**
+ * Collapsible and non-collapsible summary/details boxes.
+ *
+ * Example HTML:
+ *
+ * <section class="txp-details">
+ *     <h3 class="txp-summary expanded">
+ *         <a>Heading (lever)</a>
+ *     </h3>
+ *     <div class="toggle">
+ *         Content
+ *     </div>
+ * </section>
+ *
+ * <section class="txp-details">
+ *     <h3>Heading</h3>
+ *     <div>
+ *         Content
+ *     </div>
+ * </section>
+ */
+  .txp-details {
+    margin: 1em 0;
+    border-right: 1px solid #cccccc;
+    border-left: 1px solid #cccccc;
+    background: #f7f7f7;
+  }
+  .txp-details > div {
+    border-bottom: 1px solid #cccccc;
+  }
+  /**
+ * Styling for summary headings.
+ */
+  h3.txp-summary,
+  .txp-details > h3 {
+    background-color: #eeeeee;
+    position: relative;
+    height: 2em;
+    margin: 0;
+    border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 2em;
+  }
+  /**
+ * Padding for non-collapsible summary headings.
+ *
+ * For collapsible summary headings the padding is done via the `a` tag.
+ */
+  .txp-details > h3:not(.txp-summary) {
+    padding: 0 1em;
+  }
+  /**
+ * Additonal styling for lever summary headings.
+ */
+  h3.txp-summary a {
+    display: block;
+    padding: 0 2em 0 1em;
+    color: #333333;
+  }
+  h3.txp-summary a:hover {
+    color: #333333;
+    text-decoration: none;
+  }
+  h3.txp-summary a::after {
+    text-indent: 110%;
+    text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    position: absolute;
+    top: 0.5625em;
+    right: 0.625em;
+    width: 0;
+    height: 0;
+    border: 0 solid transparent;
+    border-width: 0.25em 0 0.25em 0.25em;
+    border-left-color: #333333;
+    font-size: 16px;
+    content: "\2193";
+    opacity: 0.5;
+    z-index: 10;
+  }
+  h3.txp-summary a:hover::after {
+    opacity: 1;
+  }
+  /**
+ * Additonal styling for lever summary headings - expanded state.
+ */
+  h3.txp-summary.expanded a::after {
+    top: 0.6875em;
+    right: 0.5625em;
+    border: 0 solid transparent;
+    border-width: 0.25em 0.25em 0;
+    border-top-color: #333333;
+    content: "\2191";
+  }
+  /**
+ * Pad left and right of inner details content container.
+ */
+  .toggle,
+  .txp-details > div {
+    padding: 0 1em;
+  }
+  /* Progress meter (only used in core for setup panels)
+   ========================================================================== */
+  /**
+ * Progress meter lists.
+ *
+ * Utilizes CSS counters to increment the progress steps, more info -
+ * https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Lists_and_Counters/Using_CSS_counters
+ *
+ * Example HTML:
+ *
+ * <aside class="progress-meter">
+ *     <ol>
+ *         <li class="active"><strong>Item 1</strong></li>
+ *         <li>Item 2</li>
+ *         <li>Item 3</li>
+ *     </ol>
+ * </aside>
+ */
+  .progress-meter ol {
+    margin-bottom: 0;
+    padding: 0;
+    list-style: none;
+    text-align: center;
+    counter-reset: step;
+  }
+  .progress-meter li {
+    background-color: #eeeeee;
+    display: inline-block;
+    position: relative;
+    margin: 0 1em 1em 0;
+    padding: 1em 1em 1em 4em;
+    border-top: 1px solid #eeeeee;
+    border-right: 1px solid #e3e3e3;
+    border-bottom: 1px solid gainsboro;
+    border-left: 1px solid #e3e3e3;
+  }
+  .progress-meter li.active {
+    background-color: #c7e0f6;
+    border: 1px solid #c7e0f6;
+    border-bottom-color: #add1f2;
+  }
+  .progress-meter li::before {
+    position: absolute;
+    top: 0.4375em;
+    left: 0.6875em;
+    width: 1.375em;
+    padding: 0.25em;
+    border: 1px solid #f7f7f7;
+    border-radius: 50%;
+    background: #cccccc;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    content: counter(step);
+    z-index: 2;
+    counter-increment: step;
+  }
+  .progress-meter li::after {
+    text-indent: 110%;
+    text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    position: absolute;
+    top: -1px;
+    left: 100%;
+    width: 0;
+    height: 0;
+    border: 0 solid transparent;
+    border-width: 1.5em 0 1.5em 0.75em;
+    border-left-color: #cccccc;
+    font-size: 16px;
+    content: "\2192";
+    z-index: 2;
+  }
+  .progress-meter strong {
+    font-weight: normal;
+  }
+  /**
+ * Swap margin/padding/numerical/arrow positions in RTL languages.
+ */
+  [dir="rtl"] .progress-meter ol {
+    padding: 0;
+  }
+  [dir="rtl"] .progress-meter li {
+    margin: 0 0 1em 1em;
+    padding: 1em 4em 1em 1em;
+  }
+  [dir="rtl"] .progress-meter li::before {
+    right: 0.6875em;
+    left: auto;
+  }
+  [dir="rtl"] .progress-meter li::after {
+    right: 100%;
+    left: auto;
+    border: 0 solid transparent;
+    border-width: 1.5em 0.75em 1.5em 0;
+    border-right-color: #cccccc;
+    content: "\2190";
+  }
+  /* Password strength meter (via zxcvbn.js)
+   ========================================================================== */
+  /**
+ * Strength meter bar area and text area.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-form-field-value">
+ *     <input class="txp-maskable" type="password">
+ *     <div class="strength-meter">
+ *         <div class="bar password-strength-1" style="width:28%;"></div>
+ *         <div class="indicator">Strength: poor</div>
+ *     </div>
+ *     <div class="edit-admin-show-password">
+ *         <input class="checkbox" type="checkbox">
+ *         <label>Show password</label>
+ *     </div>
+ * </div>
+ */
+  .strength-meter {
+    position: relative;
+    width: 100%;
+    max-width: 28em;
+    height: 1.38461538461538em;
+    background-color: #a3a3a3;
+    box-sizing: border-box;
+  }
+  .strength-meter:empty {
+    background-color: transparent;
+  }
+  .strength-meter .bar {
+    position: absolute;
+    left: 0;
+    height: 1.38461538461538em;
+    z-index: 2;
+  }
+  .strength-meter .indicator {
+    position: absolute;
+    padding: 0.15384615384615em 0.38461538461538em;
+    color: #ffffff;
+    line-height: 1;
+    z-index: 3;
+  }
+  /**
+ * Strength level colours.
+ */
+  .password-strength-0 {
+    background-color: #9d261d;
+  }
+  .password-strength-1 {
+    background-color: #b5590f;
+  }
+  .password-strength-2 {
+    background-color: #cc8c00;
+  }
+  .password-strength-3 {
+    background-color: #788c12;
+  }
+  .password-strength-4 {
+    background-color: #238c23;
+  }
+  /* Code highlighting (via Prism.js)
+   ========================================================================== */
+  code[class*="language-"],
+  pre[class*="language-"] {
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-hyphens: none;
+        -ms-hyphens: none;
+            hyphens: none;
+  }
+  /**
+ * Inline code.
+ */
+  :not(pre) > code[class*="language-"] {
+    white-space: normal;
+  }
+  /**
+ * Syntax colours/styles.
+ */
+  .token.comment,
+  .token.prolog,
+  .token.doctype,
+  .token.cdata {
+    color: #708090;
+  }
+  .token.punctuation {
+    color: #999999;
+  }
+  .namespace {
+    opacity: 0.7;
+  }
+  .token.property,
+  .token.tag,
+  .token.boolean,
+  .token.number,
+  .token.constant,
+  .token.symbol,
+  .token.deleted {
+    color: #990055;
+  }
+  .token.selector,
+  .token.attr-name,
+  .token.string,
+  .token.char,
+  .token.builtin,
+  .token.inserted {
+    color: #669900;
+  }
+  .token.operator,
+  .token.entity,
+  .token.url,
+  .language-css .token.string,
+  .style .token.string {
+    background: rgba(255, 255, 255, 0.5);
+    color: #a67f59;
+  }
+  .token.atrule,
+  .token.attr-value,
+  .token.keyword {
+    color: #0077aa;
+  }
+  .token.function {
+    color: #dd4a68;
+  }
+  .token.regex,
+  .token.important,
+  .token.variable {
+    color: #ee9900;
+  }
+  .token.important,
+  .token.bold {
+    font-weight: bold;
+  }
+  .token.italic {
+    font-style: italic;
+  }
+  .token.entity {
+    cursor: help;
+  }
+  /* Forms
+   ========================================================================== */
+  /**
+ * 1. Address width being affected by wide descendants in Chrome, Firefox.
+ * 2. Define consistent fieldset border, margin, and padding.
+ */
+  fieldset {
+    /* 1 */
+    min-width: 0;
+    /* 2 */
+    margin: 1em 0;
+    padding: 1px 1em;
+    border: 1px solid #cccccc;
+  }
+  /**
+ * Normalize styling of `legend`.
+ *
+ * 1. Correct wrapping not present in IE 11 and Edge 12/13.
+ * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+ * 3. Correct `color` not being inherited from fieldset in IE 11.
+ */
+  legend {
+    /* 1 */
+    display: table;
+    /* 1 */
+    max-width: 100%;
+    /* 2 */
+    padding: 0;
+    /* 3 */
+    color: inherit;
+    /* 1 */
+    white-space: normal;
+    /* 1 */
+    box-sizing: border-box;
+  }
+  /**
+ * 1. Prevent elements from spilling out of their parent.
+ * 2. Address margins set differently in Firefox 4+, Safari, and Chrome.
+ * 3. Correct font properties not being inherited.
+ */
+  button,
+  input,
+  optgroup,
+  select,
+  textarea,
+  .txp-button,
+  .txp-logout a,
+  .navlink,
+  .navlink-active,
+  .navlink-disabled {
+    /* 1 */
+    max-width: 100%;
+    /* 2 */
+    margin: 0;
+    color: #000000;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    /* 3 */
+    font-size: 13px;
+    line-height: 1.38461538461538em;
+    vertical-align: baseline;
+    box-sizing: border-box;
+  }
+  /**
+ * Remove the inner border and padding in Firefox.
+ */
+  button::-moz-focus-inner,
+  [type="button"]::-moz-focus-inner,
+  [type="reset"]::-moz-focus-inner,
+  [type="submit"]::-moz-focus-inner {
+    padding: 0;
+    border-style: none;
+  }
+  /**
+ * Remove inner padding in Safari and Chrome on OS X. Safari (but not Chrome)
+ * clips the cancel button when the search input has padding (and `textfield`
+ * appearance).
+ */
+  [type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  /**
+ * Styling of form input fields.
+ *
+ * 1. Remove browser-specific default styling.
+ */
+  [type="color"],
+  [type="date"],
+  [type="datetime"],
+  [type="datetime-local"],
+  [type="email"],
+  [type="month"],
+  [type="number"],
+  [type="password"],
+  [type="search"],
+  [type="tel"],
+  [type="text"],
+  [type="time"],
+  [type="url"],
+  [type="week"],
+  select,
+  textarea {
+    height: 2.15384615384615em;
+    padding: 0.30769230769231em;
+    border: 1px solid #cccccc;
+    border-radius: 0;
+    background: #ffffff;
+    /* 1 */
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+  }
+  [type="color"]:focus,
+  [type="date"]:focus,
+  [type="datetime"]:focus,
+  [type="datetime-local"]:focus,
+  [type="email"]:focus,
+  [type="month"]:focus,
+  [type="number"]:focus,
+  [type="password"]:focus,
+  [type="search"]:focus,
+  [type="tel"]:focus,
+  [type="text"]:focus,
+  [type="time"]:focus,
+  [type="url"]:focus,
+  [type="week"]:focus,
+  select:focus,
+  textarea:focus {
+    border-color: #0066ff;
+    outline: 0;
+  }
+  /**
+ * Fix vertical alignment of `color` fields with their label.
+ */
+  [type="color"] {
+    vertical-align: middle;
+  }
+  /**
+ * Fix the cursor style for Chrome's increment/decrement buttons. For certain
+ * `font-size` values of the `input`, it causes the cursor style of the
+ * decrement button to change from `default` to `text`.
+ */
+  [type="number"]::-webkit-inner-spin-button,
+  [type="number"]::-webkit-outer-spin-button {
+    height: auto;
+  }
+  /**
+ * 1. Remove any excess padding.
+ * 2. Correct margins for inline checkbox/radio labels.
+ */
+  [type="checkbox"],
+  [type="radio"] {
+    /* 1 */
+    padding: 0;
+  }
+  [type="checkbox"] + label:not(.ui-controlgroup-item),
+  [type="radio"] + label:not(.ui-controlgroup-item) {
+    /* 2 */
+    margin: 0 0.5em 0 0;
+  }
+  [type="checkbox"] + label:not(.ui-controlgroup-item):last-of-type,
+  [type="radio"] + label:not(.ui-controlgroup-item):last-of-type {
+    /* 2 */
+    margin: 0;
+  }
+  /**
+ * Swap margin positions in RTL languages.
+ */
+  [dir="rtl"] [type="checkbox"] + label:not(.ui-controlgroup-item),
+  [dir="rtl"] [type="radio"] + label:not(.ui-controlgroup-item) {
+    margin: 0 0 0 0.5em;
+  }
+  [dir="rtl"] [type="checkbox"] + label:not(.ui-controlgroup-item):last-of-type,
+  [dir="rtl"] [type="radio"] + label:not(.ui-controlgroup-item):last-of-type {
+    margin: 0;
+  }
+  /**
+ * Use indicator icon to signify the drop-down ability of `select`.
+ */
+  select {
+    padding-right: 1.30769230769231em;
+    background: #ffffff url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxM3B4JyBoZWlnaHQ9JzRweCcgdmlld0JveD0nMCAwIDEzIDQnPjxwb2x5Z29uIGZpbGw9JyMzMzMnIHBvaW50cz0nMy41LDQgMCwwIDcsMCcvPjwvc3ZnPg==") right center no-repeat;
+    background-size: 1em 0.30769230769231em;
+    text-transform: none;
+  }
+  /**
+ * Swap `select` icon position in RTL languages.
+ */
+  [dir="rtl"] select {
+    padding-right: 0.30769230769231em;
+    padding-left: 1.30769230769231em;
+    background-position: 0.46153846153846em center;
+  }
+  /**
+ * Remove browser-specific `select` UI in IE 11.
+ */
+  select::-ms-expand {
+    opacity: 0;
+  }
+  /**
+ * Remove browser-specific `select` UI in Firefox 4+.
+ */
+  select:-moz-focusring {
+    color: transparent;
+    text-shadow: 0 0 0 #000000;
+  }
+  /**
+ * Override height and background set in a previous rule and allow auto height.
+ */
+  select[size],
+  select[multiple] {
+    height: auto;
+    padding-right: 0.30769230769231em;
+    background-image: none;
+    vertical-align: top;
+  }
+  /**
+ * Override height set in rule above and restrict to one line field.
+ */
+  select[size="0"],
+  select[size="1"] {
+    height: 2.15384615384615em;
+    vertical-align: baseline;
+  }
+  /**
+ * Normalize styling of `optgroup`.
+ */
+  optgroup {
+    color: #000000;
+    font-style: normal;
+    font-weight: bold;
+  }
+  /**
+ * 1. Remove default vertical scrollbar in IE 11.
+ * 2. Remove unwanted space below `textarea` in Safari, Chrome, Opera.
+ * 3. Restrict to vertical resizing to prevent layout breakage.
+ */
+  textarea {
+    width: 100%;
+    height: auto;
+    min-height: 3em;
+    /* 1 */
+    overflow: auto;
+    /* 2 */
+    vertical-align: top;
+    /* 3 */
+    resize: vertical;
+  }
+  /**
+ * Ensure code text areas are always rendered left-to-right.
+ */
+  textarea.code {
+    direction: ltr;
+  }
+  /**
+ * Make sure disabled elements really are disabled and styled appropriately.
+ *
+ * 1. Re-set default cursor for disabled elements.
+ * 2. Override default iOS opacity setting.
+ */
+  [disabled],
+  [disabled] option,
+  [disabled] optgroup,
+  .navlink-disabled {
+    border-color: #d4d4d4 !important;
+    background: #eeeeee !important;
+    color: #aaaaaa !important;
+    /* 1 */
+    cursor: default !important;
+    /* 2 */
+    opacity: 1;
+  }
+  /**
+ * Width display options for `input` fields.
+ *
+ * Example HTML:
+ *
+ * <input size="32">
+ * <input class="large">
+ * <input class="medium">
+ * <input class="small">
+ * <input class="xsmall">
+ */
+  input[size="32"] {
+    width: 100%;
+    max-width: 28em;
+  }
+  input.input-large {
+    width: 100%;
+  }
+  input.input-medium {
+    width: 50%;
+    max-width: 14.46153846153846em;
+  }
+  input.input-small {
+    width: 25%;
+    max-width: 7.61538461538462em;
+  }
+  input.input-xsmall {
+    width: 16%;
+    max-width: 4.23076923076923em;
+  }
+  /**
+ * Width display options for date and time `input` fields.
+ *
+ * Note: These are intentionally *not* using the HTML5 input type contexts.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-form-field date posted">
+ *     <div class="txp-form-field-label">
+ *         <label>Publish date</label>
+ *     </div>
+ *     <div class="txp-form-field-value">
+ *         <input class="input-year">
+ *         <span role="separator">/</span>
+ *         <input class="input-month">
+ *         <span role="separator">/</span>
+ *         <input class="input-day">
+ *     </div>
+ * </div>
+ *
+ * <div class="txp-form-field time posted">
+ *     <div class="txp-form-field-label">
+ *         <label>Publish time</label>
+ *     </div>
+ *     <div class="txp-form-field-value">
+ *         <input class="input-hour">
+ *         <span role="separator">:</span>
+ *         <input class="input-minute">
+ *         <span role="separator">:</span>
+ *         <input class="input-second">
+ *     </div>
+ * </div>
+ */
+  input.input-year {
+    width: 4.07692307692308em;
+    text-align: center;
+  }
+  input.input-month, input.input-day, input.input-hour, input.input-minute, input.input-second {
+    width: 2.46153846153846em;
+    text-align: center;
+  }
+  /**
+ * Styling for form field validation.
+ */
+  input:focus:invalid,
+  select:focus:invalid,
+  textarea:focus:invalid {
+    border-color: #9d261d;
+    box-shadow: none;
+  }
+  /**
+ * Styling for Firefox-specfic form field validation.
+ */
+  input:-moz-ui-invalid,
+  select:-moz-ui-invalid,
+  textarea:-moz-ui-invalid {
+    border-color: #9d261d;
+    box-shadow: none;
+  }
+  /**
+ * 1. Add the correct display in IE 11.
+ * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+  progress {
+    /* 1 */
+    display: inline-block;
+    /* 2 */
+    vertical-align: baseline;
+  }
+  /* Buttons
+   ========================================================================== */
+  /**
+ * 1. Correct `button` style inheritance in Firefox, IE 11, and Opera.
+ * 2. Address `overflow` set to `hidden` in IE 11.
+ */
+  button {
+    /* 1 */
+    text-transform: none;
+    /* 2 */
+    overflow: visible;
+  }
+  /**
+ * 1. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 2. Remove iOS Safari default styling.
+ */
+  button,
+  [type="reset"],
+  [type="submit"],
+  input[type="button"],
+  .txp-button,
+  .txp-logout a,
+  .navlink,
+  .navlink-active {
+    background-color: #5ba4e5;
+    display: inline-block;
+    width: auto;
+    height: 2.15384615384615em;
+    padding: 0.30769230769231em 0.61538461538462em;
+    border: 1px solid #3c93e0;
+    border-radius: 0.3em;
+    background-clip: padding-box;
+    color: #ffffff;
+    font-weight: normal;
+    text-align: center;
+    /* 1 */
+    cursor: pointer;
+    /* 2 */
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+  }
+  button:hover,
+  [type="reset"]:hover,
+  [type="submit"]:hover,
+  input[type="button"]:hover,
+  .txp-button:hover,
+  .txp-logout a:hover,
+  .navlink:hover,
+  .navlink-active:hover {
+    background-color: #6daee8;
+    border-color: #1e72bc;
+    color: #ffffff;
+    text-decoration: none;
+  }
+  button:active,
+  [type="reset"]:active,
+  [type="submit"]:active,
+  input[type="button"]:active,
+  .txp-button:active,
+  .txp-logout a:active,
+  .navlink:active,
+  .navlink-active:active {
+    background-color: #4e9de3;
+    border-color: #1e72bc;
+    color: #e6e6e6;
+    text-decoration: none;
+  }
+  button:focus,
+  [type="reset"]:focus,
+  [type="submit"]:focus,
+  input[type="button"]:focus,
+  .txp-button:focus,
+  .txp-logout a:focus,
+  .navlink:focus,
+  .navlink-active:focus {
+    border-color: #0066ff;
+    outline: 0;
+  }
+  /**
+ * Additional styling for primary buttons.
+ *
+ * Example HTML:
+ *
+ * <input type="submit" class="publish">
+ */
+  [type="submit"].publish,
+  button.publish,
+  a.publish {
+    background-color: #9fc158;
+    height: 2.76923076923077em;
+    padding: 0.61538461538462em 1em;
+    border: 1px solid #8eb342;
+    font-weight: bold;
+  }
+  [type="submit"].publish:hover,
+  button.publish:hover,
+  a.publish:hover {
+    background-color: #aecb72;
+    border: 1px solid #718e35;
+  }
+  [type="submit"].publish:active,
+  button.publish:active,
+  a.publish:active {
+    background-color: #94ba45;
+    border: 1px solid #718e35;
+  }
+  [type="submit"].publish:focus,
+  button.publish:focus,
+  a.publish:focus {
+    border-color: #0066ff;
+  }
+  /**
+ * Additional styling for delete (destroy) buttons.
+ *
+ * Example HTML:
+ *
+ * <button class="destroy" type="submit">
+ *     <span class="ui-icon ui-icon-close">Destroy</span>
+ * </button>
+ */
+  button.destroy {
+    height: auto;
+    padding: 0.07692307692308em 0 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+  button.destroy:hover, button.destroy:active {
+    background: none;
+  }
+  button.destroy:focus {
+    outline: thin solid #0066ff;
+  }
+  button.destroy:hover .ui-icon,
+  button.destroy:active .ui-icon,
+  button.destroy:focus .ui-icon {
+    -webkit-filter: brightness(0.66);
+            filter: brightness(0.66);
+  }
+  /**
+ * Grey-out disabled navlinks (but keep them in button style).
+ *
+ * Example HTML:
+ *
+ * <p class="prev-next">
+ *     <span class="navlink-disabled">Previous</span>
+ *     <a class="navlink">Next</a>
+ * </p>
+ */
+  .navlink-disabled {
+    display: inline-block;
+    height: 2.15384615384615em;
+    padding: 0.30769230769231em 0.61538461538462em;
+    border: 1px solid;
+    border-radius: 0.3em;
+    background-clip: padding-box;
+    box-sizing: border-box;
+  }
+  /**
+ * Tertiary button sets.
+ *
+ * Anchor elements kept to one line to prevent space between buttons.
+ *
+ * TODO: check if this would be better via flexbox instead?
+ *
+ * Example HTML:
+ *
+ * <p class="nav-tertiary">
+ *     <a class="navlink-active">Page 1</a><a class="navlink">Page 2</a>
+ * </p>
+ */
+  ul.nav-tertiary {
+    padding: 0;
+    list-style: none;
+  }
+  ul.nav-tertiary li {
+    display: inline;
+  }
+  [dir="rtl"] ul.nav-tertiary {
+    padding: 0;
+  }
+  .nav-tertiary a,
+  .nav-tertiary .navlink-disabled {
+    border-radius: 0;
+  }
+  .nav-tertiary > :first-child,
+  .nav-tertiary > :first-child > a,
+  .nav-tertiary > :first-child > span {
+    border-radius: 0.3em 0 0 0.3em;
+  }
+  .nav-tertiary > :last-child,
+  .nav-tertiary > :last-child > a,
+  .nav-tertiary > :last-child > span {
+    border-radius: 0 0.3em 0.3em 0;
+  }
+  [dir="rtl"] .nav-tertiary > :first-child,
+  [dir="rtl"] .nav-tertiary > :first-child > a,
+  [dir="rtl"] .nav-tertiary > :first-child > span {
+    border-radius: 0 0.3em 0.3em 0;
+  }
+  [dir="rtl"] .nav-tertiary > :last-child,
+  [dir="rtl"] .nav-tertiary > :last-child > a,
+  [dir="rtl"] .nav-tertiary > :last-child > span {
+    border-radius: 0.3em 0 0 0.3em;
+  }
+  /**
+ * Indication of the currently active `.nav-tertiary` button.
+ *
+ * Example HTML:
+ *
+ * <p class="nav-tertiary">
+ *     <a class="navlink-active">Page 1</a><a class="navlink">Page 2</a>
+ * </p>
+ */
+  .nav-tertiary .navlink-active {
+    background-color: #9dc8ef;
+    border-color: #6faee7;
+  }
+  .nav-tertiary .navlink-active:hover {
+    background-color: #a6cdf0;
+    border-color: #2d89dd;
+  }
+  .nav-tertiary .navlink-active:active {
+    background-color: #87bceb;
+    border-color: #2d89dd;
+  }
+  .nav-tertiary .navlink-active:focus {
+    border-color: #0066ff;
+  }
+  /**
+ * Search widget 'search' button.
+ *
+ * 1. Correct specificity for RTL languages.
+ *
+ * Example HTML:
+ *
+ * <form class="txp-search">
+ *     <input class="txp-search-input" type="search" size="24">
+ *     <span class="txp-search-buttons">
+ *         <button class="txp-search-button">Search</button>
+ *         <button class="txp-search-options">Search criteria</button>
+ *     </span>
+ * </form>
+ */
+  .txp-search button.txp-search-button {
+    padding-right: 1.5em;
+    padding-left: 1.5em;
+    border-radius: 0;
+  }
+  [dir="rtl"] .txp-search button.txp-search-button {
+    /* 1 */
+    border-radius: 0;
+  }
+  /* Lists
+   ========================================================================== */
+  /**
+ * Address paddings set differently.
+ */
+  menu,
+  ol,
+  ul {
+    padding: 0 0 0 2em;
+  }
+  /**
+ * Swap padding positions in RTL languages.
+ */
+  [dir="rtl"] menu,
+  [dir="rtl"] ol,
+  [dir="rtl"] ul {
+    padding: 0 2em 0 0;
+  }
+  /**
+ * Remove margins from nested lists.
+ */
+  li > ul,
+  li > ol {
+    margin: 0;
+  }
+  /**
+ * Address margins set differently.
+ */
+  dd {
+    margin: 0 0 0 2em;
+  }
+  /**
+ * Swap margin positions in RTL languages.
+ */
+  [dir="rtl"] dd {
+    margin: 0 2em 0 0;
+  }
+  /**
+ * Have a list with no bullets/numerals.
+ *
+ * Example HTML:
+ *
+ * <ul class="plain-list">
+ * <ol class="plain-list">
+ */
+  .plain-list {
+    padding: 0;
+    list-style: none;
+  }
+  /**
+ * Ensure padding stays removed in RTL languages.
+ *
+ * Required for specificity.
+ */
+  [dir="rtl"] .plain-list {
+    padding: 0;
+  }
+  /**
+ * Switcher lists, to swap between different page templates/form templates/etc.
+ *
+ * Example HTML:
+ *
+ * <ul class="switcher-list">
+ *     <li class="active"></li>
+ *     <li><a></a></li>
+ *     <li><a></a></li>
+ * </ul>
+ */
+  .switcher-list {
+    margin: 0 -1em;
+    padding: 0;
+    list-style: none;
+  }
+  .switcher-list li {
+    position: relative;
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid transparent;
+  }
+  .switcher-list li:nth-child(odd) {
+    background: #f7f7f7;
+  }
+  .switcher-list li:first-child {
+    border-top: 0;
+  }
+  .switcher-list li.active {
+    background: #fff9e1;
+  }
+  .switcher-list li.selected {
+    background: #eaf3fc;
+  }
+  .switcher-list a {
+    display: block;
+    padding: 0.38461538461538em 2.5em 0.38461538461538em 1em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  [dir="rtl"] .switcher-list {
+    padding: 0;
+  }
+  [dir="rtl"] .switcher-list a {
+    padding: 0.38461538461538em 1em 0.38461538461538em 2.5em;
+  }
+  /**
+ * Multi-edit checkboxes within switcher lists.
+ */
+  .switcher-action {
+    position: absolute;
+    top: 0.38461538461538em;
+    left: 1em;
+    z-index: 2;
+  }
+  .switcher-action + a {
+    padding-right: 1em;
+    padding-left: 2.5em;
+  }
+  [dir="rtl"] .switcher-action {
+    right: 1em;
+    left: auto;
+  }
+  [dir="rtl"] .switcher-action + a {
+    padding-right: 2.5em;
+    padding-left: 1em;
+  }
+  /**
+ * 'Destroy' buttons within switcher lists.
+ */
+  .switcher-list .destroy {
+    position: absolute;
+    top: 0.46153846153846em;
+    right: 1em;
+    z-index: 2;
+  }
+  [dir="rtl"] .switcher-list .destroy {
+    right: auto;
+    left: 1em;
+  }
+  /* Tables
+   ========================================================================== */
+  /**
+ * 1. Make sure list tables clear any preceeding grid cell floats.
+ * 2. Allow overflow scroll on tables.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-listtables">
+ *     <table></table>
+ * </div>
+ */
+  .txp-listtables {
+    /* 1 */
+    clear: both;
+    /* 2 */
+    overflow-x: auto;
+  }
+  /**
+ * Consistent tables.
+ */
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  /**
+ * Styling of table captions.
+ */
+  caption {
+    margin-bottom: 0.5em;
+    text-align: left;
+  }
+  /**
+ * Swap caption alignment in RTL languages.
+ */
+  [dir="rtl"] caption {
+    text-align: right;
+  }
+  /**
+ * Table row borders.
+ */
+  tr {
+    border: 1px solid #eeeeee;
+  }
+  thead th {
+    background-color: #eeeeee;
+  }
+  /**
+ * Make table cells align top and left by default.
+ */
+  th,
+  td {
+    padding: 0.38461538461538em 1em;
+    text-align: left;
+    vertical-align: top;
+  }
+  /**
+ * Swap table cell text alignments in RTL languages.
+ */
+  [dir="rtl"] th,
+  [dir="rtl"] td {
+    text-align: right;
+  }
+  /**
+ * Listing tables.
+ *
+ * Example HTML:
+ *
+ * <table class="txp-list">
+ *     <thead>
+ *         <tr>
+ *             <th class="multi-edit" scope="col"></th>
+ *             <th class="asc scope="col"><a></a></th>
+ *             <th scope="col"><a></a></th>
+ *         </tr>
+ *     </thead>
+ *     <tfoot>
+ *         <tr>
+ *             <td colspan="3"></td>
+ *         </tr>
+ *     </tfoot>
+ *     <tbody>
+ *         <tr>
+ *             <th class="multi-edit" scope="row"></th>
+ *             <td></td>
+ *             <td></td>
+ *         </tr>
+ *         <tr class="selected">
+ *             <th class="multi-edit" scope="row"></th>
+ *             <td></td>
+ *             <td></td>
+ *         </tr>
+ *     </tbody>
+ * </table>
+ */
+  .txp-list {
+    width: 100%;
+  }
+  .txp-list tbody tr:nth-child(even) {
+    background: #f7f7f7;
+  }
+  .txp-list tbody tr.selected {
+    background: #eaf3fc;
+  }
+  .txp-list tbody th {
+    font-weight: normal;
+  }
+  .txp-list thead th {
+    background-color: #eeeeee;
+    border-top: 1px solid #eeeeee;
+    border-right: 1px solid #e1e1e1;
+    border-bottom: 1px solid gainsboro;
+    border-left: 0;
+  }
+  .txp-list thead th:first-child {
+    border-left: 1px solid #eeeeee;
+  }
+  .txp-list thead th a {
+    display: block;
+    position: relative;
+    margin: -0.38461538461538em -1em;
+    padding: 0.38461538461538em 1em;
+    color: #333333;
+  }
+  .txp-list thead th a:hover {
+    color: #333333;
+    text-decoration: none;
+  }
+  /**
+ * Backgrounds and indicator icons on currently active sortable `thead th`.
+ *
+ * Example HTML:
+ *
+ * <th class="asc scope="col"><a></a></th>
+ * <th class="desc scope="col"><a></a></th>
+ */
+  .txp-list thead th.asc, .txp-list thead th.desc {
+    background-color: #e4e4e4;
+  }
+  .txp-list thead th.asc a::after, .txp-list thead th.desc a::after {
+    text-indent: 110%;
+    text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    position: absolute;
+    top: 45%;
+    right: 0.3125em;
+    width: 0;
+    height: 0;
+    font-size: 16px;
+    opacity: 0.5;
+    z-index: 10;
+  }
+  [dir="rtl"] .txp-list thead th.asc a::after, [dir="rtl"] .txp-list thead th.desc a::after {
+    right: auto;
+    left: 0.3125em;
+  }
+  .txp-list thead th.asc a:hover::after, .txp-list thead th.desc a:hover::after {
+    opacity: 1;
+  }
+  .txp-list thead th.desc a::after {
+    border: 0 solid transparent;
+    border-width: 0.25em 0.25em 0;
+    border-top-color: #333333;
+    content: "\2193";
+  }
+  .txp-list thead th.asc a::after {
+    border: 0 solid transparent;
+    border-width: 0 0.25em 0.25em;
+    border-bottom-color: #333333;
+    content: "\2191";
+  }
+  /**
+ * Consistent width for table multi-edit checkbox columns.
+ */
+  .txp-list-col-multi-edit {
+    width: 13px;
+  }
+  /**
+ * Avoid wrapping of content in table '#ID' columns.
+ */
+  .txp-list-col-id {
+    white-space: nowrap;
+  }
+  /* Container
+   ========================================================================== */
+  /**
+ * 1. Make body position relative so subsequent items can be positioned
+ *    absolutely if desired.
+ * 2. Remove default margin.
+ */
+  body {
+    display: -ms-flexbox;
+    display: flex;
+    /* 1 */
+    position: relative;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    min-height: 100vh;
+    /* 2 */
+    margin: 0;
+    padding: 4em 2.75% 0;
+    background: #f7f7f7;
+    color: #333333;
+    box-sizing: border-box;
+  }
+  /**
+ * Main content area.
+ *
+ * Example HTML:
+ *
+ * <body>
+ *     <header class="txp-header"></header>
+ *     <main class="txp-body">
+ *         Content
+ *     </main>
+ *     <footer class="txp-footer"></footer>
+ * </body>
+ */
+  .txp-body {
+    -ms-flex-positive: 1;
+        flex-grow: 1;
+    width: 100%;
+    max-width: 116em;
+    margin: 0 auto;
+  }
+  /* Layout grid
+   ========================================================================== */
+  /**
+ * Flex container.
+ */
+  .txp-layout {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    margin: 0 -1em;
+  }
+  .txp-layout > * {
+    min-width: 0;
+    padding: 0 1em;
+    box-sizing: border-box;
+  }
+  /**
+ * Generate sizes all for grid column cells.
+ *
+ * Because this is desktop first, all cells span variations are defined
+ * initially (1 column full width, 2 column, 4 column). We will then
+ * adjust them at various breakpoints.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-layout-1col"></div>
+ *
+ * <div class="txp-layout-2col">
+ * <div class="txp-layout-2col">
+ *
+ * <div class="txp-layout-4col-3span"></div>
+ * <div class="txp-layout-4col"></div>
+ */
+  .txp-layout-1col {
+    width: 100%;
+  }
+  .txp-layout-4col-3span {
+    width: 75%;
+  }
+  .txp-layout-2col,
+  .txp-layout-4col-2span {
+    width: 50%;
+  }
+  .txp-layout-4col,
+  .txp-layout-4col-alt {
+    width: 25%;
+  }
+  /**
+ * Text columns (fixed proportion cell)
+ *
+ * Example HTML:
+ *
+ * <div class="txp-layout-textbox">
+ */
+  .txp-layout-textbox {
+    max-width: 57em;
+    margin: 0 auto;
+  }
+  /* Inline grids
+   ========================================================================== */
+  /**
+ * Inline grid type layouts.
+ *
+ * You should define a specific width for each .txp-grid-cell, either as a class
+ * attribute or style attribute, otherwise the cell width stretches to the
+ * content within it.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-grid">
+ *     <div class="txp-grid-cell" style="width:30em;">
+ *         Content
+ *     </div>
+ *     <div class="txp-grid-cell" style="width:15em;">
+ *         Content
+ *     </div>
+ *     <div class="txp-grid-cell" style="width:15em;">
+ *         Content
+ *     </div>
+ * </div>
+ */
+  .txp-grid {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -ms-flex-pack: center;
+        justify-content: center;
+    margin: -2px;
+  }
+  .txp-grid-cell {
+    margin: 2px;
+    padding: 0 1em;
+    border: 1px solid #cccccc;
+    box-sizing: border-box;
+  }
+  /* Header
+   ========================================================================== */
+  /**
+ * Header content area.
+ *
+ * Example HTML:
+ *
+ * <body>
+ *     <header class="txp-header">
+ *         Content
+ *     </header>
+ *     <main class="txp-body"></main>
+ *     <footer class="txp-footer"></footer>
+ * </body>
+ */
+  .txp-header {
+    background-color: #c7e0f6;
+    display: -ms-flexbox;
+    display: flex;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 2.69230769230769em;
+    padding: 0 2.75%;
+    border-top: 1px solid #c7e0f6;
+    border-bottom: 1px solid #add1f2;
+    z-index: 1000;
+  }
+  /**
+ * Hide header content area on login panels.
+ *
+ * Move offscreen - don't `display:none` as we need to show #messagepane content.
+ */
+  .login .txp-header {
+    position: absolute;
+    right: auto;
+    left: -1000em;
+    width: 1px;
+    height: 1px;
+  }
+  /**
+ * Textpattern logo.
+ *
+ * Example HTML:
+ *
+ * <header class="txp-header">
+ *     <h1>
+ *         <a><span>My site</span></a>
+ *     </h1>
+ */
+  .txp-header h1 {
+    -ms-flex: none;
+        flex: none;
+    width: 8.125em;
+    height: 2em;
+    margin: 0.0625em 0.5em 0 0;
+    background: url("../img/sprite.svg") no-repeat;
+    background-size: 13em 2em;
+    font-size: 16px;
+  }
+  .txp-header h1 a {
+    display: block;
+    width: 8.125em;
+    height: 2em;
+  }
+  .txp-header h1 span {
+    text-indent: 110%;
+    text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+  }
+  /**
+ * Reverse Textpattern logo margin in RTL languages.
+ */
+  [dir="rtl"] .txp-header h1 {
+    margin: 0.0625em 0 0 0.5em;
+  }
+  /**
+ * 'View site' link.
+ *
+ * Example HTML:
+ *
+ * <p class="txp-view-site">
+ *     <a>
+ *         <span class="txp-view-site-name">My site</span>
+ *     </a>
+ * </p>
+ */
+  .txp-view-site {
+    -ms-flex: 1;
+        flex: 1;
+    margin: 0 1em;
+    padding: 0 1px;
+    line-height: 2.69230769230769em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .txp-view-site a {
+    color: #333333;
+    font-weight: bold;
+  }
+  /**
+ * Positioning of logout button.
+ *
+ * Example HTML:
+ *
+ * <p class="txp-logout">
+ */
+  .txp-logout {
+    position: relative;
+    top: -0.76923076923077em;
+    -ms-flex: none;
+        flex: none;
+  }
+  /* Footer
+   ========================================================================== */
+  /**
+ * Footer content area.
+ *
+ * Example HTML:
+ *
+ * <body>
+ *     <header class="txp-header"></header>
+ *     <main class="txp-body"></main>
+ *     <footer class="txp-footer">
+ *         Content
+ *     </footer>
+ * </body>
+ */
+  .txp-footer {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+        justify-content: space-between;
+  }
+  /* Navigation
+   ========================================================================== */
+  /**
+ * Hide the navigation menu toggle button on desktop layout.
+ *
+ * Example HTML:
+ *
+ * <button class="txp-nav-toggle">
+ */
+  button.txp-nav-toggle {
+    display: none;
+  }
+  /**
+ * Base styling for the navigation menu.
+ *
+ * Example HTML:
+ *
+ * <nav class="txp-nav">
+ */
+  .txp-nav {
+    -ms-flex: none;
+        flex: none;
+    margin: 0;
+    list-style: none;
+  }
+  .txp-nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .txp-nav > ul {
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .txp-nav a {
+    color: #333333;
+  }
+  .txp-nav a:hover {
+    text-decoration: none;
+  }
+  /**
+ * Primary-level navigation menu items (dropdown toggles).
+ *
+ * Example HTML:
+ *
+ * <nav class="txp-nav">
+ *     <ul class="data-dropdown">
+ *         <li class="dropdown selected">
+ *             <a class="dropdown-toggle">
+ *                 Content
+ *             </a>
+ *             <ul class="dropdown-menu">
+ *                 <li><a></a></li>
+ *                 <li class="selected"><a></a></li>
+ *                 <li><a></a></li>
+ *             </ul>
+ *         </li>
+ *         <li class="dropdown">
+ *             <a class="dropdown-toggle">
+ *                 Presentation
+ *             </a>
+ *             <ul class="dropdown-menu">
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *             </ul>
+ *         </li>
+ *         <li class="dropdown open">
+ *             <a class="dropdown-toggle">
+ *                 Admin
+ *             </a>
+ *             <ul class="dropdown-menu">
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *             </ul>
+ *         </li>
+ *         <li>
+ *             <a>
+ *                 Non-dropdown link
+ *             </a>
+ *         </li>
+ *     </ul>
+ * </nav>
+ */
+  .txp-nav > ul > li {
+    display: block;
+    position: relative;
+    border-right: 1px solid #c7e0f6;
+    background: rgba(255, 255, 255, 0.25);
+  }
+  .txp-nav > ul > li:first-child {
+    border-left: 1px solid #c7e0f6;
+  }
+  .txp-nav > ul > li > a {
+    display: block;
+    padding: 0 1em;
+    color: black;
+    line-height: 2.69230769230769em;
+    text-decoration: none;
+  }
+  .txp-nav > ul > li > a:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+  .txp-nav > ul > li.selected > a {
+    background: rgba(255, 255, 255, 0.25);
+  }
+  .txp-nav > ul > li.selected > a:hover {
+    background: rgba(255, 255, 255, 0.4);
+  }
+  /**
+ * Reverse border in RTL languages.
+ */
+  [dir="rtl"] .txp-nav > ul > li {
+    border-right: 0;
+    border-left: 1px solid #c7e0f6;
+  }
+  [dir="rtl"] .txp-nav > ul > li:first-child {
+    border-right: 1px solid #c7e0f6;
+  }
+  /**
+ * Indicator symbols on closed dropdown toggle links.
+ */
+  .txp-nav > ul > li > a.dropdown-toggle {
+    position: relative;
+    padding: 0 1.61538461538462em 0 1em;
+  }
+  .txp-nav > ul > li > a.dropdown-toggle::after {
+    text-indent: 110%;
+    text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    position: absolute;
+    top: 1em;
+    right: 0.5625em;
+    width: 0;
+    height: 0;
+    border: 0 solid transparent;
+    border-width: 0.25em 0.25em 0;
+    border-top-color: #333333;
+    font-size: 16px;
+    content: "\2193";
+    opacity: 0.5;
+    z-index: 10;
+  }
+  .txp-nav > ul > li > a.dropdown-toggle:hover::after, .txp-nav > ul > li > a.dropdown-toggle:active::after {
+    opacity: 1;
+  }
+  /**
+ * Indicator symbols in RTL languages.
+ */
+  [dir="rtl"] .txp-nav > ul > li > a.dropdown-toggle {
+    padding: 0 1em 0 1.61538461538462em;
+  }
+  [dir="rtl"] .txp-nav > ul > li > a.dropdown-toggle::after {
+    right: auto;
+    left: 0.5625em;
+  }
+  /**
+ * Indicator symbols on open dropdown toggle links.
+ */
+  .txp-nav > ul > li.open > a.dropdown-toggle::after {
+    border: 0 solid transparent;
+    border-width: 0 0.25em 0.25em;
+    border-bottom-color: #333333;
+    content: "\2191";
+  }
+  /**
+ * Secondary-level navigation menu items (dropdown menus).
+ *
+ * Example HTML:
+ *
+ * <nav class="txp-nav">
+ *     <ul class="data-dropdown">
+ *         <li class="dropdown selected">
+ *             <a class="dropdown-toggle">
+ *                 Content
+ *             </a>
+ *             <ul class="dropdown-menu">
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *                 <li class="selected"><a></a></li>
+ *             </ul>
+ *         </li>
+ *         <li class="dropdown">
+ *             <a class="dropdown-toggle">
+ *                 Presentation
+ *             </a>
+ *             <ul class="dropdown-menu">
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *             </ul>
+ *         </li>
+ *         <li class="dropdown open">
+ *             <a class="dropdown-toggle">
+ *                 Admin
+ *             </a>
+ *             <ul class="dropdown-menu">
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *                 <li><a></a></li>
+ *             </ul>
+ *         </li>
+ *         <li>
+ *             <a>
+ *                 Non-dropdown link
+ *             </a>
+ *         </li>
+ *     </ul>
+ * </nav>
+ */
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 3em;
+    left: 0;
+    -ms-flex: none;
+        flex: none;
+    min-width: 12em;
+    border: 1px solid;
+    border-radius: 0 0.3em 0.3em;
+    background: #fff9e1;
+    border-color: #cccccc;
+    z-index: 20000;
+  }
+  .dropdown-menu li:first-child {
+    border-radius: 0 0.3em 0 0;
+  }
+  .dropdown-menu li:last-child {
+    border-radius: 0 0 0.3em 0.3em;
+  }
+  .dropdown-menu li:hover {
+    background: white;
+  }
+  .dropdown-menu li.selected {
+    background: white;
+  }
+  .dropdown-menu a {
+    display: block;
+    padding: 0.5em 1em;
+  }
+  .dropdown-menu::before {
+    position: absolute;
+    top: -0.5em;
+    left: 0.75em;
+    width: 1em;
+    height: 0.5em;
+    background: url("../img/sprite.svg") no-repeat -12em 0;
+    background-size: 13em 2em;
+    font-size: 16px;
+    content: "";
+    z-index: 2;
+  }
+  /**
+ * Secondary-level navigation menu in RTL languages.
+ */
+  [dir="rtl"] .dropdown-menu {
+    right: 0;
+    left: auto;
+    border-radius: 0.3em 0;
+  }
+  [dir="rtl"] .dropdown-menu li:first-child {
+    border-radius: 0.3em 0 0;
+  }
+  [dir="rtl"] .dropdown-menu::before {
+    right: 0.75em;
+    left: auto;
+  }
+  /**
+ * Show drop-down menu when toggle clicked.
+ *
+ * Example HTML:
+ *
+ * <li class="dropdown open">
+ *     <a class="dropdown-toggle">
+ *         Admin
+ *     </a>
+ *     <ul class="dropdown-menu">
+ *         <li><a></a></li>
+ *         <li><a></a></li>
+ *         <li><a></a></li>
+ *     </ul>
+ * </li>
+ */
+  .open > .dropdown-menu {
+    display: block;
+  }
+  /* Globally shared layout
+   ========================================================================== */
+  /**
+ * 1. Prevent text size adjust after mobile device orientation change.
+ */
+  html {
+    /* 1 */
+    -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+  }
+  /**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+  hr {
+    /* 1 */
+    height: 0;
+    margin: 1.5em 0;
+    clear: both;
+    border: 0;
+    border-bottom: 1px solid #cccccc;
+    /* 2 */
+    overflow: visible;
+    /* 1 */
+    box-sizing: content-box;
+  }
+  /**
+ * Hide text but still allow screen reader access.
+ *
+ * Example HTML:
+ *
+ * <h1 class="txp-accessibility">
+ */
+  .txp-accessibility {
+    position: absolute;
+    left: -1000em;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  /**
+ * Swap absolute positions in RTL languages.
+ *
+ * This avoids browser scrollbar displaying incorrectly.
+ */
+  [dir="rtl"] .txp-accessibility {
+    right: -1000em;
+    left: auto;
+  }
+  /**
+ * Ensure dropdowns are hidden at page load (prevents content 'jumping').
+ */
+  .txp-dropdown {
+    display: none;
+  }
+  /**
+ * Search widget at top of lists.
+ *
+ * Appears on:
+ *
+ * List panels.
+ *
+ * Example HTML:
+ *
+ * <form class="txp-search">
+ *     <span class="txp-search-clear"><a>Clear search</a></span>
+ *     <input class="txp-search-input" type="search" size="24">
+ *     <span class="txp-search-buttons">
+ *         <button class="txp-search-button">Search</button>
+ *         <button class="txp-search-options">Search criteria</button>
+ *     </span>
+ * </form>
+ */
+  .txp-search {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: end;
+        justify-content: flex-end;
+    margin: 1em 0;
+  }
+  .txp-search .ui-menu {
+    position: absolute;
+    width: 18em;
+    z-index: 100;
+  }
+  .txp-search .ui-controlgroup {
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+  }
+  .txp-search .txp-dropdown input {
+    vertical-align: -0.23076923076923em;
+  }
+  .txp-search .txp-dropdown label {
+    display: inline-block;
+    width: 85%;
+    padding: 0.23076923076923em 0.30769230769231em;
+    cursor: pointer;
+    vertical-align: text-top;
+  }
+  .txp-search-clear {
+    -ms-flex: 1;
+        flex: 1;
+    margin: auto 0.5em;
+    text-align: right;
+  }
+  [dir="rtl"] .txp-search-clear {
+    text-align: left;
+  }
+  /**
+ * Actions and upload forms at top of listings.
+ *
+ * Appears on:
+ *
+ * List panels.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-control-panel">
+ *     Content
+ * </div>
+ */
+  .txp-control-panel {
+    margin-bottom: 1em;
+    float: left;
+  }
+  .txp-control-panel > * {
+    margin: 0 1em 0 0;
+  }
+  .txp-control-panel > *:last-child {
+    margin-right: 0;
+  }
+  .txp-control-panel form {
+    display: inline-block;
+  }
+  .txp-control-panel textarea {
+    margin-bottom: 1em;
+  }
+  /**
+ * Swap float/margin positions in RTL languages.
+ */
+  [dir="rtl"] .txp-control-panel {
+    float: right;
+  }
+  [dir="rtl"] .txp-control-panel > * {
+    margin: 0 0 0 1em;
+  }
+  /**
+ * List display options at top of listings.
+ *
+ * Appears on:
+ *
+ * List panels.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-list-options">
+ *     <a>List view</a>
+ *     <a>Grid view</a>
+ *     <a>List options</a>
+ * </div>
+ */
+  .txp-list-options {
+    margin: 0.46153846153846em 0 1em;
+    float: right;
+  }
+  .txp-list-options > * {
+    margin: 0 0 0 1em;
+  }
+  .txp-list-options form {
+    display: inline-block;
+  }
+  /**
+ * Swap float/margin positions in RTL languages.
+ */
+  [dir="rtl"] .txp-list-options {
+    float: left;
+  }
+  [dir="rtl"] .txp-list-options > * {
+    margin: 0 1em 0 0;
+  }
+  /**
+ * Additonal action links ('Duplicate', 'View', etc.) on some panels.
+ *
+ * Appears on:
+ *
+ * Article write/edit panel, pages panel, forms panel, styles panel.
+ *
+ * Example HTML:
+ *
+ * <p class="txp-actions">
+ *     <a class="txp-article-view">View</a>
+ *     <a class="txp-clone">Duplicate</a>
+ *     <a class="txp-new">Create new</a>
+ * </p>
+ */
+  .txp-actions a {
+    display: inline-block;
+    margin: 0.5em 1em 0 0;
+  }
+  .txp-actions a:last-child {
+    margin: 0.5em 0 0;
+  }
+  /**
+ * Swap margin positions in RTL languages.
+ */
+  [dir="rtl"] .txp-actions a {
+    margin: 0.5em 0 0 1em;
+  }
+  [dir="rtl"] .txp-actions a:last-child {
+    margin: 0.5em 0 0;
+  }
+  /**
+ * Remove top margin when inside a dialog box.
+ */
+  .ui-dialog .txp-actions {
+    margin-top: 0;
+  }
+  /**
+ * Inline the action links.
+ *
+ * Appears on:
+ *
+ * Article pages panel, forms panel, styles panel.
+ */
+  .txp-actions-inline {
+    margin-top: 1.30769230769231em;
+    float: right;
+  }
+  /**
+ * Swap position in RTL languages.
+ */
+  [dir="rtl"] .txp-actions-inline {
+    float: left;
+  }
+  /**
+ * AJAX spinners.
+ *
+ * Example HTML:
+ *
+ * <span class="spinner"></span>
+ */
+  span.spinner {
+    display: inline-block;
+    position: relative;
+    top: 50%;
+    width: 1em;
+    height: 1em;
+    margin: -0.5em auto 0;
+    border: 0.25em solid transparent;
+    border-radius: 50%;
+    border-top-color: #333333;
+    border-bottom-color: #333333;
+    vertical-align: middle;
+    animation: spinning linear 1s infinite;
+  }
+  /**
+ * Parent container for multi-edit `select` widget at bottom of listings.
+ *
+ * Appears on:
+ *
+ * List panels.
+ *
+ * Example HTML:
+ *
+ * <div class="multi-edit">
+ *     <select>
+ *         <option selected="selected">With selected...</option>
+ *         <option>Change author</option>
+ *         <option>Duplicate</option>
+ *         <option>Delete</option>
+ *     </select>
+ * </div>
+ */
+  .multi-edit {
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0;
+    margin: 1em 0 0;
+    padding: 0.3076923em 0;
+    background: #f7f7f7;
+    box-shadow: 0 -1em 1em -0.5em #f7f7f7;
+    z-index: 20;
+  }
+  /**
+ * Hide secondary `select` element on multi-edit `select` widget.
+ *
+ * Display is controlled via JavaScript (hidden by default until an action is
+ * selected by user, then overrode by `.multi-step`).
+ *
+ * Appears on:
+ *
+ * List panels.
+ *
+ * Example HTML:
+ *
+ * <div class="multi-edit">
+ *     <select>
+ *         <option selected="selected">With selected...</option>
+ *         <option>Change author</option>
+ *         <option>Duplicate</option>
+ *         <option>Delete</option>
+ *     </select>
+ *     <div class="multi-option">
+ *         <select name="order">
+ *             <option value="1">1</option>
+ *             <option value="2">1</option>
+ *             <option value="3" selected="selected">5</option>
+ *         </select>
+ *     </div>
+ *     <input type="submit" value="Go">
+ * </div>
+ */
+  .multi-option {
+    display: none;
+  }
+  /**
+ * Show secondary `select` element on multi-edit `select` widget.
+ *
+ * Display is controlled via JavaScript (class not present until an action is
+ * selected by user, then overrides `.multi-edit`).
+ *
+ * Appears on:
+ *
+ * List panels.
+ *
+ * Example HTML:
+ *
+ * <div class="multi-edit">
+ *     <select>
+ *         <option selected="selected">With selected...</option>
+ *         <option>Change author</option>
+ *         <option>Duplicate</option>
+ *         <option>Delete</option>
+ *     </select>
+ *     <div class="multi-option multi-step">
+ *         <select name="order">
+ *             <option value="1">1</option>
+ *             <option value="2">1</option>
+ *             <option value="3" selected="selected">5</option>
+ *         </select>
+ *     </div>
+ *     <input type="submit" value="Go">
+ * </div>
+ */
+  .multi-option.multi-step {
+    display: inline-block;
+    margin-left: 0.30769230769231em;
+  }
+  /**
+ * Ensure links display as inline blocks (prevents linebreak problems).
+ *
+ * Example HTML:
+ *
+ * <a class="txp-option-link">Edit</a>
+ */
+  .txp-option-link {
+    display: inline-block;
+    white-space: nowrap;
+  }
+  /**
+ * When text sections are linked with anchors, make sure there is ample padding
+ * above so they don't become obscured by sticky `header` area.
+ *
+ * Appears on:
+ *
+ * Plugin help pages, miscellaneous text pages.
+ *
+ * Example HTML:
+ *
+ * <section class="text-section" id="help-section02">
+ */
+  .text-section {
+    margin-top: 3em;
+    padding-top: 3em;
+    border-top: 2px solid #cccccc;
+  }
+  /**
+ * System permissions 'keep out' messages.
+ */
+  .restricted-area {
+    font-size: 2em;
+    text-align: center;
+  }
+  /**
+ * Visually disabled text and anchors.
+ */
+  .disabled {
+    background-image: none;
+    cursor: default !important;
+    opacity: 0.33;
+  }
+  .disabled a {
+    text-decoration: none;
+    cursor: default;
+  }
+  /**
+ * List navigators on list panels.
+ *
+ * Anchor elements kept to one line to prevent space between buttons.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-navigation" id="image_navigation">
+ *     <p class="nav-tertiary pageby">
+ *         <a class="navlink-active">15</a><a class="navlink">25</a><a class="navlink">50</a>
+ *     </p>
+ *     <nav class="prev-next">
+ *         <span class="disabled"><span class="ui-icon ui-icon-arrowthick-1-w">Previous</span></span>
+ *         <form>
+ *             <label>Page</label>
+ *             <input class="current-page">
+ *             of <span class="total-pages">2</span>
+ *         </form>
+ *         <a><span class="ui-icon ui-icon-arrowthick-1-e">Next</span></a>
+ *     </nav>
+ * </div>
+ */
+  .txp-navigation::after {
+    display: table;
+    clear: both;
+    content: "";
+  }
+  .pageby {
+    margin: 1em 0;
+    float: left;
+  }
+  .prev-next {
+    margin: 1em 0;
+    float: right;
+  }
+  .prev-next form {
+    display: inline-block;
+  }
+  /**
+ * Swap margin positions and arrow icons in RTL languages.
+ */
+  [dir="rtl"] .pageby {
+    float: right;
+  }
+  [dir="rtl"] .prev-next {
+    float: left;
+  }
+  [dir="rtl"] .prev-next .ui-icon-arrowthick-1-w {
+    background-position: -32px -48px;
+  }
+  [dir="rtl"] .prev-next .ui-icon-arrowthick-1-e {
+    background-position: -96px -48px;
+  }
+  /* Panes
+   ========================================================================== */
+  /**
+ * Styling of edit panels.
+ *
+ * 1. Maximum width of edit panels.
+ * 2. Remove margin above `h2` within panels.
+ */
+  .txp-edit {
+    max-width: 55em;
+    margin: 0 auto 1em;
+    padding: 1em 1em 1px;
+    /* 1 */
+    background: #f7f7f7;
+  }
+  .txp-edit h2 {
+    /* 2 */
+    margin-top: 0;
+  }
+  /**
+ * Styling of edit panel cancel/submit button combinations.
+ */
+  .txp-edit-actions {
+    margin: 1em -1em;
+    padding: 1em 1em 0;
+    border-top: 2px solid #f7f7f7;
+    text-align: right;
+  }
+  .txp-edit-actions > * {
+    margin: 0 0 0 1em;
+  }
+  /**
+ * Swap alignment and margin positions in RTL languages.
+ */
+  [dir="rtl"] .txp-edit-actions {
+    text-align: left;
+  }
+  [dir="rtl"] .txp-edit-actions > * {
+    margin: 0 1em 0 0;
+  }
+  /* Form fields.
+   ========================================================================== */
+  /**
+ * Form field containers.
+ *
+ * Textpattern form fields can have optional inline help texts applied to them.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-form-field">
+ *     <div class="txp-form-field-label">
+ *         <label> <a class="pophelp">i</a></label>
+ *     </div>
+ *     <div class="txp-form-field-value">
+ *         <input>
+ *     </div>
+ * </div>
+ *
+ * <div class="txp-form-field">
+ *     <div class="txp-form-field-label">
+ *         <label> <a class="pophelp">i</a></label>
+ *     </div>
+ *     <div class="txp-form-field-instructions">
+ *         <p>(Optional) intructions on how to fill out this form field.</p>
+ *     </div>
+ *     <div class="txp-form-field-value">
+ *         <input>
+ *     </div>
+ * </div>
+ */
+  .txp-form-field {
+    margin: 1em 0;
+  }
+  /**
+ * Label/value form field pairings.
+ *
+ * Note: this is always collapsed to a one-column format on mobile layout.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-form-field">
+ *     <div class="txp-form-field-label">
+ *         <label>Label <a class="pophelp">i</a></label>
+ *     </div>
+ *     <div class="txp-form-field-value">
+ *         <input type="text" size="32">
+ *     </div>
+ * </div>
+ */
+  .txp-form-field-label,
+  .txp-form-field-value {
+    max-width: 29em;
+  }
+  /**
+ * Inline form field pairings on edit panels, preferences group panels and
+ * setup panels.
+ *
+ * Example HTML:
+ *
+ * <form class="txp-edit">
+ *     <div class="txp-form-field">
+ *         <div class="txp-form-field-label"></div>
+ *         <div class="txp-form-field-value"></div>
+ *     </div>
+ * </form>
+ */
+  .txp-edit .txp-form-field:not(.txp-form-field-textarea),
+  .txp-prefs-group .txp-form-field:not(.txp-form-field-textarea),
+  .setup:not(.welcome) .txp-form-field:not(.txp-form-field-textarea) {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: baseline;
+        align-items: baseline;
+  }
+  .txp-edit .txp-form-field-label,
+  .txp-edit .txp-form-field-value,
+  .txp-prefs-group .txp-form-field-label,
+  .txp-prefs-group .txp-form-field-value,
+  .setup:not(.welcome) .txp-form-field-label,
+  .setup:not(.welcome) .txp-form-field-value {
+    -ms-flex: 1 1 0%;
+        flex: 1 1 0%;
+    min-height: 2.15384615384615em;
+  }
+  /**
+ * Don't inline or constrain form fields for textareas.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-form-field txp-form-field-textarea">
+ *     <div class="txp-form-field-label">
+ *         <label>Label <a class="pophelp">i</a></label>
+ *     </div>
+ *     <div class="txp-form-field-value">
+ *         <textarea></textarea>
+ *     </div>
+ * </div>
+ */
+  .txp-form-field-textarea .txp-form-field-label,
+  .txp-form-field-textarea .txp-form-field-value {
+    -ms-flex: none;
+        flex: none;
+    max-width: inherit;
+    min-height: inherit;
+  }
+  /**
+ * Don't constrain form fields when in 3 column layout spans.
+ */
+  .txp-layout-4col-3span .txp-form-field-label,
+  .txp-layout-4col-3span .txp-form-field-value {
+    max-width: inherit;
+  }
+  /**
+ * Form field inline help texts.
+ *
+ * 1. Limit maximum width of instructions, for legibility.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-form-field>
+ *     <div class="txp-form-field-label"></div>
+ *     <div class="txp-form-field-instructions">
+ *         <p>(Optional) intructions on how to fill out this form field.</p>
+ *     </div>
+ *     <div class="txp-form-field-value"></div>
+ * </div>
+ */
+  .txp-form-field-instructions {
+    /* 1 */
+    max-width: 56em;
+  }
+  /**
+ * Tag builder link on Forms panel and Pages panel.
+ */
+  .txp-tagbuilder-dialog {
+    position: relative;
+    margin: 0 1px;
+    float: right;
+    z-index: 2;
+  }
+  /**
+ * Swap alignment of tag builder link in RTL languages.
+ */
+  [dir="rtl"] .txp-tagbuilder-dialog {
+    float: left;
+  }
+  /**
+ * Ensure dialog box vertical footprint doesn't spill out of screen area.
+ */
+  .txp-dialog-container,
+  .txp-tagbuilder-container {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-flow: column;
+        flex-flow: column;
+    max-height: 90vh;
+    overflow: hidden;
+  }
+  .txp-dialog-container .ui-dialog-titlebar,
+  .txp-tagbuilder-container .ui-dialog-titlebar {
+    -ms-flex: none;
+        flex: none;
+  }
+  .txp-dialog-content,
+  .txp-tagbuilder-content {
+    -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+    overflow: scroll;
+  }
+  /* Setup and login panels - additional layout
+   ========================================================================== */
+  /**
+ * Reduced `body` top padding of setup/login panels.
+ *
+ * Example HTML:
+ *
+ * <body class="setup">
+ * <body class="login">
+ */
+  .setup,
+  .login {
+    padding: 1em 2.75% 0;
+  }
+  /**
+ * Column width and margins of setup panels.
+ */
+  .txp-setup {
+    max-width: 42em;
+    margin: 1em auto;
+  }
+  .welcome .txp-setup {
+    max-width: 20.30769230769231em;
+  }
+  /**
+ * Column width and margins of login panels.
+ */
+  .txp-login {
+    max-width: 20.30769230769231em;
+    margin: 1em auto;
+  }
+  /**
+ * Large Textpattern logo replaces `h1`.
+ */
+  .welcome h1,
+  .login h1 {
+    /* 2 */
+    text-indent: 110%;
+    text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 16.5em;
+    height: 3.375em;
+    background: url("../img/textpattern.svg") no-repeat;
+    background-size: 16.5em 3.375em;
+    font-size: 16px;
+  }
+  /**
+ * Welcome page `select` spans entire column width.
+ */
+  .welcome select {
+    width: 100%;
+  }
+  /* Content -> Categories panel - additional layout
+   ========================================================================== */
+  /**
+ * Extra margin below multi-edit widgets on categories page.
+ */
+  #page-category .multi-edit {
+    margin-bottom: 1em;
+  }
+  /* Content -> Write panel - additional layout
+   ========================================================================== */
+  /**
+ * View mode tabs on write area.
+ *
+ * Example HTML:
+ *
+ * <div id="view_modes">
+ *     <ul>
+ *         <li id="tab-text" class="active"><a>Text</a></li>
+ *         <li id="tab-html"><a>HTML</a></li>
+ *         <li id="tab-preview"><a>Preview</a></li>
+ *     </ul>
+ * </div>
+ */
+  #view_modes ul {
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #cccccc;
+    font-size: 11px;
+    line-height: 16px;
+  }
+  #view_modes ul li {
+    display: inline-block;
+  }
+  #view_modes ul a {
+    display: block;
+    position: relative;
+    bottom: -1px;
+    padding: 0.5em 1em;
+    border: 1px solid #cccccc;
+    background-color: #f2f2f2;
+    color: #333333;
+    text-decoration: none;
+  }
+  #view_modes ul a:hover {
+    border-color: #aaaaaa;
+    background-color: #f7f7f7;
+  }
+  #view_modes ul a:focus {
+    border-color: #0066ff;
+    outline: none;
+  }
+  #view_modes ul .active a {
+    border-bottom-color: #f7f7f7;
+    background-color: white;
+  }
+  #view_modes ul .active a:focus {
+    border-color: #0066ff;
+  }
+  /**
+ * Write page excerpt field when in HTML preview.
+ */
+  .html .excerpt {
+    margin-bottom: 1em;
+  }
+  /**
+ * Custom font size/weight/colour for elements in write -> main content area.
+ */
+  #main_content .text input {
+    font-size: 16px;
+  }
+  #main_content .text textarea {
+    font-size: 16px;
+    line-height: 1.5em;
+  }
+  #main_content .text .title input {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  #main_content .author {
+    color: #777777;
+  }
+  /* Content -> Articles panel - additional layout
+   ========================================================================== */
+  /**
+ * Grey-out text for unpublished articles/non-modified dates in the list.
+ */
+  .unpublished,
+  .not-modified {
+    color: #777777;
+  }
+  /* Content -> Images panel - additional layout
+   ========================================================================== */
+  .has-thumbnail a:focus {
+    outline: 0;
+  }
+  .thumbnail-alter input {
+    margin: 0 0.30769230769231em 0 0;
+  }
+  .thumbnail-alter input:last-child {
+    margin: 0;
+  }
+  [dir="rtl"] .thumbnail-alter input {
+    margin: 0 0 0 0.30769230769231em;
+  }
+  [dir="rtl"] .thumbnail-alter input:last-child {
+    margin: 0;
+  }
+  .thumbnail-image form {
+    display: inline-block;
+    margin-top: 5px;
+    vertical-align: top;
+  }
+  /* Content -> Files panel - additional layout
+   ========================================================================== */
+  /**
+ * Make sure form for selecting existing files is on a new line.
+ */
+  .txp-control-panel .assign-existing-form {
+    display: block;
+    margin-top: 1em;
+  }
+  /* Content -> Comments panel - additional layout
+   ========================================================================== */
+  /**
+ * Red background highlight for spam comment rows in the list.
+ */
+  #page-discuss .txp-list tr.spam {
+    background: #f5e5e5;
+  }
+  /**
+ * Yellow background highlight for unmoderated comment rows in the list.
+ */
+  #page-discuss .txp-list tr.moderate {
+    background: #f9f2e3;
+  }
+  /* Presentation -> all panels - additional layout
+   ========================================================================== */
+  .presentation textarea.code {
+    height: 64vh;
+  }
+  /* Presentation -> Forms panel - additional layout
+   ========================================================================== */
+  #page-form .name {
+    display: inline-block;
+    margin: 1em 1em 0 0;
+  }
+  #page-form .name input {
+    width: 14.46153846153846em;
+  }
+  [dir="rtl"] #page-form .name {
+    margin: 1em 0 0 1em;
+  }
+  #page-form .type {
+    display: inline-block;
+    margin: 1em 0 0;
+  }
+  #page-form .txp-layout-4col-3span .txp-actions a {
+    margin-top: 1.5em;
+  }
+  /* Admin -> Preferences panel - additional layout
+   ========================================================================== */
+  .txp-prefs-group {
+    max-width: 60em;
+  }
+  /* Admin -> Languages panel - additional layout
+   ========================================================================== */
+  #page-lang .txp-list .modified {
+    margin-left: 0.6em;
+  }
+  /* Admin -> Plugins panel - additional layout
+   ========================================================================== */
+  tr .manage span,
+  tr .plugin-prefs {
+    visibility: hidden;
+  }
+  tr.active .manage span,
+  tr.active .plugin-prefs {
+    visibility: visible;
+  }
+  div.code {
+    height: 21em;
+    margin-bottom: 1em;
+    padding: 0.15384615384615em 0.38461538461538em;
+    border: 1px solid #cccccc;
+    overflow: auto;
+    box-sizing: border-box;
+  }
+  /* Layout helpers
+   ========================================================================== */
+  /**
+ * Hide jQuery UI elements.
+ */
+  .ui-helper-hidden {
+    display: none;
+  }
+  /**
+ * Hide jQuery UI  text but still allow screen reader access.
+ */
+  .ui-helper-hidden-accessible {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+  /**
+ * Normalize various rules to avoid style inheritance.
+ */
+  .ui-helper-reset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 13px;
+    line-height: 20px;
+    list-style: none;
+    text-decoration: none;
+  }
+  /**
+ * Clearfix jQuery UI elements.
+ */
+  .ui-helper-clearfix::after {
+    display: table;
+    clear: both;
+    border-collapse: collapse;
+    content: "";
+  }
+  /**
+ * Normalize absolute positioning of jQuery UI elements to avoid misplacement.
+ */
+  .ui-helper-zfix {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
+  /**
+ * Make jQuery UI elements show above other elements.
+ */
+  .ui-front {
+    z-index: 100;
+  }
+  /* Component containers
+   ========================================================================== */
+  /**
+ * Normalize font size of nested jQuery UI widgets to avoid style inheritance.
+ */
+  .ui-widget .ui-widget {
+    font-size: 13px;
+  }
+  /**
+ * General style for jQuery widget content.
+ */
+  .ui-widget-content {
+    border: 1px solid #cccccc;
+    background-color: #f7f7f7;
+  }
+  /**
+ * General style for jQuery widget headers.
+ */
+  .ui-widget-header {
+    background-color: #eeeeee;
+    font-weight: bold;
+  }
+  /* Interaction states
+   ========================================================================== */
+  /**
+ * Default jQuery UI widget interaction state.
+ */
+  .ui-state-default {
+    border: 1px solid #cccccc;
+    background-color: #f2f2f2;
+    color: #333333;
+  }
+  /**
+ * Override hover/focus states for anchors in certain situations.
+ */
+  a.ui-state-default:hover,
+  a.ui-state-default:focus {
+    color: #333333;
+    text-decoration: none;
+  }
+  /**
+ * Hover jQuery UI widget interaction states.
+ */
+  .ui-state-hover {
+    border-color: #aaaaaa;
+    background-color: #f7f7f7;
+  }
+  /**
+ * Focus jQuery UI widget interaction states.
+ */
+  .ui-state-focus {
+    border-color: #0066ff;
+    outline: 0;
+  }
+  .ui-state-focus a {
+    outline: 0;
+  }
+  /**
+ * Active jQuery UI widget interaction state.
+ */
+  .ui-state-active {
+    background-color: white;
+  }
+  /**
+ * Highlight colour for jQuery UI widgets currently in 'selecting' state.
+ */
+  .ui-selecting {
+    background-color: #d4e7f8;
+  }
+  /**
+ * Highlight colour for jQuery UI widgets currently in 'selected' state.
+ */
+  .ui-selected {
+    background-color: #eaf3fc;
+  }
+  /* Interaction cues
+   ========================================================================== */
+  /**
+ * jQuery UI highlight cue colouring.
+ */
+  .ui-state-highlight {
+    border: 1px solid #e4c788;
+    background-color: #f7eedb;
+  }
+  /**
+ * jQuery UI error cue colouring.
+ */
+  .ui-state-error {
+    border: 1px solid #e1b2b2;
+    background-color: #f2dede;
+    color: #9d261d;
+  }
+  /**
+ * Visually prioritized jQuery UI text.
+ */
+  .ui-priority-primary {
+    font-weight: bold;
+  }
+  /**
+ * Visually non-prioritized jQuery UI text.
+ */
+  .ui-priority-secondary {
+    font-weight: normal;
+    opacity: 0.66;
+  }
+  /**
+ * Visually disabled jQuery UI text and anchors.
+ */
+  .ui-state-disabled {
+    background-image: none;
+    cursor: default !important;
+    opacity: 0.33;
+    pointer-events: none;
+  }
+  .ui-state-disabled a {
+    text-decoration: none;
+    cursor: default;
+  }
+  /* Overlays
+   ========================================================================== */
+  /**
+ * Dark, semi-transparent container overlays.
+ *
+ * Example HTML:
+ *
+ * <div class="ui-widget-overlay"></div>
+ */
+  .ui-widget-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+  }
+  /* Shadows
+   ========================================================================== */
+  /**
+ * Faux shadows via `background-color`.
+ *
+ * Example HTML:
+ *
+ * <div class="ui-widget-shadow"></div>
+ */
+  .ui-widget-shadow {
+    box-shadow: 0 0 5px #666666;
+  }
+  /* Icons
+   ========================================================================== */
+  /**
+ * jQuery UI icon sprites, various colourschemes depending of usage state.
+ *
+ * Also used for 'Destroy' button.
+ *
+ * Example HTML:
+ *
+ * <span class="ui-icon ui-icon-caret-1-n"></span>
+ * <span class="ui-icon ui-icon-folder-collapsed"></span>
+ * <span class="ui-icon ui-icon-play"></span>
+ *
+ * TODO: Use `mask` in future (http://caniuse.com/#search=mask), instead of
+ * `filter` or dedicated image.
+ */
+  .ui-icon {
+    display: inline-block;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    background-image: url("../img/ui-icon-sprite-333333.svg");
+    background-repeat: no-repeat;
+    background-size: 256px 272px;
+    text-indent: -9999px;
+    overflow: hidden;
+    vertical-align: text-bottom;
+  }
+  .ui-widget-icon-block {
+    display: block;
+    left: 50%;
+    margin-left: -8px;
+  }
+  /**
+ * Default state icons.
+ *
+ * TODO: Use `mask` in future.
+ */
+  .ui-state-default .ui-icon {
+    -webkit-filter: brightness(1.6666667);
+            filter: brightness(1.6666667);
+  }
+  /**
+ * Weighted content icons and interaction state icons.
+ *
+ * TODO: Use `mask` in future.
+ */
+  .ui-widget-content .ui-icon,
+  .ui-widget-header .ui-icon,
+  .ui-state-hover .ui-icon,
+  .ui-state-focus .ui-icon,
+  .ui-state-active .ui-icon {
+    -webkit-filter: none;
+            filter: none;
+  }
+  /**
+ * 'Succes' state icons.
+ *
+ * Example HTML:
+ *
+ * <p class="success">
+ *     <span class="ui-icon ui-icon-check"></span>
+ *     Success!
+ * </p>
+ *
+ * TODO: Use `mask` in future.
+ */
+  .success .ui-icon {
+    background-image: url("../img/ui-icon-sprite-success.svg");
+  }
+  /**
+ * 'Warning' state icons.
+ *
+ * Example HTML:
+ *
+ * <p class="warning">
+ *     <span class="ui-icon ui-icon-alert"></span>
+ *     Warning!
+ * </p>
+ *
+ * TODO: Use `mask` in future.
+ */
+  .ui-state-highlight .ui-icon,
+  .warning .ui-icon {
+    background-image: url("../img/ui-icon-sprite-warning.svg");
+  }
+  /**
+ * 'Error' state icons.
+ *
+ * Example HTML:
+ *
+ * <p class="error">
+ *     <span class="ui-icon ui-icon-alert"></span>
+ *     Error!
+ * </p>
+ *
+ * TODO: Use `mask` in future.
+ */
+  .ui-state-error .ui-icon,
+  .ui-state-error-text .ui-icon,
+  .error .ui-icon,
+  .destroy .ui-icon {
+    background-image: url("../img/ui-icon-sprite-error.svg");
+  }
+  /**
+ * 'Information' state icons.
+ *
+ * Example HTML:
+ *
+ * <p class="information">
+ *     <span class="ui-icon ui-icon-info"></span>
+ *     Content
+ * </p>
+ *
+ * TODO: Use `mask` in future.
+ */
+  .information .ui-icon {
+    background-image: url("../img/ui-icon-sprite-info.svg");
+  }
+  /**
+ * Icons within Textpattern system message panes.
+ *
+ * TODO: Use `mask` in future.
+ */
+  #messagepane .ui-icon {
+    background-image: url("../img/ui-icon-sprite-ffffff.svg");
+  }
+  /**
+ * Icon sprite positionings.
+ *
+ * TODO: Use `mask` in future.
+ */
+  .ui-icon-blank {
+    background-position: 16px 16px;
+  }
+  .ui-icon-caret-1-n {
+    background-position: 0 0;
+  }
+  .ui-icon-caret-1-ne {
+    background-position: -16px 0;
+  }
+  .ui-icon-caret-1-e {
+    background-position: -32px 0;
+  }
+  .ui-icon-caret-1-se {
+    background-position: -48px 0;
+  }
+  .ui-icon-caret-1-s {
+    background-position: -64px 0;
+  }
+  .ui-icon-caret-1-sw {
+    background-position: -80px 0;
+  }
+  .ui-icon-caret-1-w {
+    background-position: -96px 0;
+  }
+  .ui-icon-caret-1-nw {
+    background-position: -112px 0;
+  }
+  .ui-icon-caret-2-n-s {
+    background-position: -128px 0;
+  }
+  .ui-icon-caret-2-e-w {
+    background-position: -144px 0;
+  }
+  .ui-icon-triangle-1-n {
+    background-position: 0 -16px;
+  }
+  .ui-icon-triangle-1-ne {
+    background-position: -16px -16px;
+  }
+  .ui-icon-triangle-1-e {
+    background-position: -32px -16px;
+  }
+  .ui-icon-triangle-1-se {
+    background-position: -48px -16px;
+  }
+  .ui-icon-triangle-1-s {
+    background-position: -64px -16px;
+  }
+  .ui-icon-triangle-1-sw {
+    background-position: -80px -16px;
+  }
+  .ui-icon-triangle-1-w {
+    background-position: -96px -16px;
+  }
+  .ui-icon-triangle-1-nw {
+    background-position: -112px -16px;
+  }
+  .ui-icon-triangle-2-n-s {
+    background-position: -128px -16px;
+  }
+  .ui-icon-triangle-2-e-w {
+    background-position: -144px -16px;
+  }
+  .ui-icon-arrow-1-n {
+    background-position: 0 -32px;
+  }
+  .ui-icon-arrow-1-ne {
+    background-position: -16px -32px;
+  }
+  .ui-icon-arrow-1-e {
+    background-position: -32px -32px;
+  }
+  .ui-icon-arrow-1-se {
+    background-position: -48px -32px;
+  }
+  .ui-icon-arrow-1-s {
+    background-position: -64px -32px;
+  }
+  .ui-icon-arrow-1-sw {
+    background-position: -80px -32px;
+  }
+  .ui-icon-arrow-1-w {
+    background-position: -96px -32px;
+  }
+  .ui-icon-arrow-1-nw {
+    background-position: -112px -32px;
+  }
+  .ui-icon-arrow-2-n-s {
+    background-position: -128px -32px;
+  }
+  .ui-icon-arrow-2-ne-sw {
+    background-position: -144px -32px;
+  }
+  .ui-icon-arrow-2-e-w {
+    background-position: -160px -32px;
+  }
+  .ui-icon-arrow-2-se-nw {
+    background-position: -176px -32px;
+  }
+  .ui-icon-arrowstop-1-n {
+    background-position: -192px -32px;
+  }
+  .ui-icon-arrowstop-1-e {
+    background-position: -208px -32px;
+  }
+  .ui-icon-arrowstop-1-s {
+    background-position: -224px -32px;
+  }
+  .ui-icon-arrowstop-1-w {
+    background-position: -240px -32px;
+  }
+  .ui-icon-arrowthick-1-n {
+    background-position: 0 -48px;
+  }
+  .ui-icon-arrowthick-1-ne {
+    background-position: -16px -48px;
+  }
+  .ui-icon-arrowthick-1-e {
+    background-position: -32px -48px;
+  }
+  .ui-icon-arrowthick-1-se {
+    background-position: -48px -48px;
+  }
+  .ui-icon-arrowthick-1-s {
+    background-position: -64px -48px;
+  }
+  .ui-icon-arrowthick-1-sw {
+    background-position: -80px -48px;
+  }
+  .ui-icon-arrowthick-1-w {
+    background-position: -96px -48px;
+  }
+  .ui-icon-arrowthick-1-nw {
+    background-position: -112px -48px;
+  }
+  .ui-icon-arrowthick-2-n-s {
+    background-position: -128px -48px;
+  }
+  .ui-icon-arrowthick-2-ne-sw {
+    background-position: -144px -48px;
+  }
+  .ui-icon-arrowthick-2-e-w {
+    background-position: -160px -48px;
+  }
+  .ui-icon-arrowthick-2-se-nw {
+    background-position: -176px -48px;
+  }
+  .ui-icon-arrowthickstop-1-n {
+    background-position: -192px -48px;
+  }
+  .ui-icon-arrowthickstop-1-e {
+    background-position: -208px -48px;
+  }
+  .ui-icon-arrowthickstop-1-s {
+    background-position: -224px -48px;
+  }
+  .ui-icon-arrowthickstop-1-w {
+    background-position: -240px -48px;
+  }
+  .ui-icon-arrowreturnthick-1-w {
+    background-position: 0 -64px;
+  }
+  .ui-icon-arrowreturnthick-1-n {
+    background-position: -16px -64px;
+  }
+  .ui-icon-arrowreturnthick-1-e {
+    background-position: -32px -64px;
+  }
+  .ui-icon-arrowreturnthick-1-s {
+    background-position: -48px -64px;
+  }
+  .ui-icon-arrowreturn-1-w {
+    background-position: -64px -64px;
+  }
+  .ui-icon-arrowreturn-1-n {
+    background-position: -80px -64px;
+  }
+  .ui-icon-arrowreturn-1-e {
+    background-position: -96px -64px;
+  }
+  .ui-icon-arrowreturn-1-s {
+    background-position: -112px -64px;
+  }
+  .ui-icon-arrowrefresh-1-w {
+    background-position: -128px -64px;
+  }
+  .ui-icon-arrowrefresh-1-n {
+    background-position: -144px -64px;
+  }
+  .ui-icon-arrowrefresh-1-e {
+    background-position: -160px -64px;
+  }
+  .ui-icon-arrowrefresh-1-s {
+    background-position: -176px -64px;
+  }
+  .ui-icon-arrow-4 {
+    background-position: 0 -80px;
+  }
+  .ui-icon-arrow-4-diag {
+    background-position: -16px -80px;
+  }
+  .ui-icon-extlink {
+    background-position: -32px -80px;
+  }
+  .ui-icon-newwin {
+    background-position: -48px -80px;
+  }
+  .ui-icon-refresh {
+    background-position: -64px -80px;
+  }
+  .ui-icon-shuffle {
+    background-position: -80px -80px;
+  }
+  .ui-icon-transfer-e-w {
+    background-position: -96px -80px;
+  }
+  .ui-icon-transferthick-e-w {
+    background-position: -112px -80px;
+  }
+  .ui-icon-folder-collapsed {
+    background-position: 0 -96px;
+  }
+  .ui-icon-folder-open {
+    background-position: -16px -96px;
+  }
+  .ui-icon-document {
+    background-position: -32px -96px;
+  }
+  .ui-icon-document-b {
+    background-position: -48px -96px;
+  }
+  .ui-icon-note {
+    background-position: -64px -96px;
+  }
+  .ui-icon-mail-closed {
+    background-position: -80px -96px;
+  }
+  .ui-icon-mail-open {
+    background-position: -96px -96px;
+  }
+  .ui-icon-suitcase {
+    background-position: -112px -96px;
+  }
+  .ui-icon-comment {
+    background-position: -128px -96px;
+  }
+  .ui-icon-person {
+    background-position: -144px -96px;
+  }
+  .ui-icon-print {
+    background-position: -160px -96px;
+  }
+  .ui-icon-trash {
+    background-position: -176px -96px;
+  }
+  .ui-icon-locked {
+    background-position: -192px -96px;
+  }
+  .ui-icon-unlocked {
+    background-position: -208px -96px;
+  }
+  .ui-icon-bookmark {
+    background-position: -224px -96px;
+  }
+  .ui-icon-tag {
+    background-position: -240px -96px;
+  }
+  .ui-icon-home {
+    background-position: 0 -112px;
+  }
+  .ui-icon-flag {
+    background-position: -16px -112px;
+  }
+  .ui-icon-calendar {
+    background-position: -32px -112px;
+  }
+  .ui-icon-cart {
+    background-position: -48px -112px;
+  }
+  .ui-icon-pencil {
+    background-position: -64px -112px;
+  }
+  .ui-icon-clock {
+    background-position: -80px -112px;
+  }
+  .ui-icon-disk {
+    background-position: -96px -112px;
+  }
+  .ui-icon-calculator {
+    background-position: -112px -112px;
+  }
+  .ui-icon-zoomin {
+    background-position: -128px -112px;
+  }
+  .ui-icon-zoomout {
+    background-position: -144px -112px;
+  }
+  .ui-icon-search {
+    background-position: -160px -112px;
+  }
+  .ui-icon-wrench {
+    background-position: -176px -112px;
+  }
+  .ui-icon-gear {
+    background-position: -192px -112px;
+  }
+  .ui-icon-heart {
+    background-position: -208px -112px;
+  }
+  .ui-icon-star {
+    background-position: -224px -112px;
+  }
+  .ui-icon-link {
+    background-position: -240px -112px;
+  }
+  .ui-icon-cancel {
+    background-position: 0 -128px;
+  }
+  .ui-icon-plus {
+    background-position: -16px -128px;
+  }
+  .ui-icon-plusthick {
+    background-position: -32px -128px;
+  }
+  .ui-icon-minus {
+    background-position: -48px -128px;
+  }
+  .ui-icon-minusthick {
+    background-position: -64px -128px;
+  }
+  .ui-icon-close {
+    background-position: -80px -128px;
+  }
+  .ui-icon-closethick {
+    background-position: -96px -128px;
+  }
+  .ui-icon-key {
+    background-position: -112px -128px;
+  }
+  .ui-icon-lightbulb {
+    background-position: -128px -128px;
+  }
+  .ui-icon-scissors {
+    background-position: -144px -128px;
+  }
+  .ui-icon-clipboard {
+    background-position: -160px -128px;
+  }
+  .ui-icon-copy {
+    background-position: -176px -128px;
+  }
+  .ui-icon-contact {
+    background-position: -192px -128px;
+  }
+  .ui-icon-image {
+    background-position: -208px -128px;
+  }
+  .ui-icon-video {
+    background-position: -224px -128px;
+  }
+  .ui-icon-script {
+    background-position: -240px -128px;
+  }
+  .ui-icon-alert {
+    background-position: 0 -144px;
+  }
+  .ui-icon-info {
+    background-position: -16px -144px;
+  }
+  .ui-icon-notice {
+    background-position: -32px -144px;
+  }
+  .ui-icon-help {
+    background-position: -48px -144px;
+  }
+  .ui-icon-check {
+    background-position: -64px -144px;
+  }
+  .ui-icon-bullet {
+    background-position: -80px -144px;
+  }
+  .ui-icon-radio-on {
+    background-position: -96px -144px;
+  }
+  .ui-icon-radio-off {
+    background-position: -112px -144px;
+  }
+  .ui-icon-pin-w {
+    background-position: -128px -144px;
+  }
+  .ui-icon-pin-s {
+    background-position: -144px -144px;
+  }
+  .ui-icon-play {
+    background-position: 0 -160px;
+  }
+  .ui-icon-pause {
+    background-position: -16px -160px;
+  }
+  .ui-icon-seek-next {
+    background-position: -32px -160px;
+  }
+  .ui-icon-seek-prev {
+    background-position: -48px -160px;
+  }
+  .ui-icon-seek-end {
+    background-position: -64px -160px;
+  }
+  .ui-icon-seek-start {
+    background-position: -80px -160px;
+  }
+  .ui-icon-stop {
+    background-position: -96px -160px;
+  }
+  .ui-icon-eject {
+    background-position: -112px -160px;
+  }
+  .ui-icon-volume-off {
+    background-position: -128px -160px;
+  }
+  .ui-icon-volume-on {
+    background-position: -144px -160px;
+  }
+  .ui-icon-power {
+    background-position: 0 -176px;
+  }
+  .ui-icon-signal-diag {
+    background-position: -16px -176px;
+  }
+  .ui-icon-signal {
+    background-position: -32px -176px;
+  }
+  .ui-icon-battery-0 {
+    background-position: -48px -176px;
+  }
+  .ui-icon-battery-1 {
+    background-position: -64px -176px;
+  }
+  .ui-icon-battery-2 {
+    background-position: -80px -176px;
+  }
+  .ui-icon-battery-3 {
+    background-position: -96px -176px;
+  }
+  .ui-icon-circle-plus {
+    background-position: 0 -192px;
+  }
+  .ui-icon-circle-minus {
+    background-position: -16px -192px;
+  }
+  .ui-icon-circle-close {
+    background-position: -32px -192px;
+  }
+  .ui-icon-circle-triangle-e {
+    background-position: -48px -192px;
+  }
+  .ui-icon-circle-triangle-s {
+    background-position: -64px -192px;
+  }
+  .ui-icon-circle-triangle-w {
+    background-position: -80px -192px;
+  }
+  .ui-icon-circle-triangle-n {
+    background-position: -96px -192px;
+  }
+  .ui-icon-circle-arrow-e {
+    background-position: -112px -192px;
+  }
+  .ui-icon-circle-arrow-s {
+    background-position: -128px -192px;
+  }
+  .ui-icon-circle-arrow-w {
+    background-position: -144px -192px;
+  }
+  .ui-icon-circle-arrow-n {
+    background-position: -160px -192px;
+  }
+  .ui-icon-circle-zoomin {
+    background-position: -176px -192px;
+  }
+  .ui-icon-circle-zoomout {
+    background-position: -192px -192px;
+  }
+  .ui-icon-circle-check {
+    background-position: -208px -192px;
+  }
+  .ui-icon-circlesmall-plus {
+    background-position: 0 -208px;
+  }
+  .ui-icon-circlesmall-minus {
+    background-position: -16px -208px;
+  }
+  .ui-icon-circlesmall-close {
+    background-position: -32px -208px;
+  }
+  .ui-icon-squaresmall-plus {
+    background-position: -48px -208px;
+  }
+  .ui-icon-squaresmall-minus {
+    background-position: -64px -208px;
+  }
+  .ui-icon-squaresmall-close {
+    background-position: -80px -208px;
+  }
+  .ui-icon-grip-dotted-vertical {
+    background-position: 0 -224px;
+  }
+  .ui-icon-grip-dotted-horizontal {
+    background-position: -16px -224px;
+  }
+  .ui-icon-grip-solid-vertical {
+    background-position: -32px -224px;
+  }
+  .ui-icon-grip-solid-horizontal {
+    background-position: -48px -224px;
+  }
+  .ui-icon-gripsmall-diagonal-se {
+    background-position: -64px -224px;
+  }
+  .ui-icon-grip-diagonal-se {
+    background-position: -80px -224px;
+  }
+  /* Hive extra icons
+   ========================================================================== */
+  /**
+ * Additional handy icons we've added to the standard jQuery UI icon sprite.
+ *
+ * Example HTML:
+ *
+ * <span class="ui-icon ui-extra-icon-code"></span>
+ * <span class="ui-icon ui-extra-icon-download"></span>
+ *
+ * TODO: Use `mask` in future.
+ */
+  .ui-extra-icon-code {
+    background-position: 0 -256px;
+  }
+  .ui-extra-icon-list {
+    background-position: -16px -256px;
+  }
+  .ui-extra-icon-grid {
+    background-position: -32px -256px;
+  }
+  .ui-extra-icon-download {
+    background-position: -48px -256px;
+  }
+  .ui-extra-icon-upload {
+    background-position: -64px -256px;
+  }
+  .ui-extra-icon-attach {
+    background-position: -80px -256px;
+  }
+  .ui-extra-icon-new-document {
+    background-position: -96px -256px;
+  }
+  .ui-extra-icon-facebook {
+    background-position: -112px -256px;
+  }
+  .ui-extra-icon-googleplus {
+    background-position: -128px -256px;
+  }
+  .ui-extra-icon-linkedin {
+    background-position: -144px -256px;
+  }
+  .ui-extra-icon-twitter {
+    background-position: -160px -256px;
+  }
+  .ui-extra-icon-github {
+    background-position: -176px -256px;
+  }
+  /* Draggable
+ ========================================================================== */
+  /**
+ * jQuery UI Draggable.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/draggable/
+ *
+ * Example HTML:
+ *
+ * <div class="ui-draggable">
+ *     Content
+ * </div>
+ */
+  .ui-draggable {
+    transition: box-shadow 0.1s linear;
+  }
+  .ui-draggable-handle {
+    -ms-touch-action: none;
+        touch-action: none;
+  }
+  /**
+ * Class added when element is actively being dragged.
+ */
+  .ui-draggable-dragging {
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+  /* Resizable
+   ========================================================================== */
+  /**
+ * jQuery UI Selectable.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/resizable/
+ *
+ * Example HTML:
+ *
+ * <div class="ui-resizable">
+ *     <strong>Resize me!</strong>
+ *     <div class="ui-resizable-handle ui-resizable-e"></div>
+ *     <div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se"></div>
+ * </div>
+ */
+  .ui-resizable {
+    position: relative;
+  }
+  .ui-resizable-handle {
+    display: block;
+    position: absolute;
+    font-size: 0.1px;
+    -ms-touch-action: none;
+        touch-action: none;
+  }
+  /**
+ * Disabled or auto-hidden resizables.
+ */
+  .ui-resizable-disabled .ui-resizable-handle,
+  .ui-resizable-autohide .ui-resizable-handle {
+    display: none;
+  }
+  /**
+ * Resize handle positioning options.
+ */
+  .ui-resizable-n {
+    top: -5px;
+    left: 0;
+    width: 100%;
+    height: 7px;
+    cursor: n-resize;
+  }
+  .ui-resizable-s {
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 7px;
+    cursor: s-resize;
+  }
+  .ui-resizable-e {
+    top: 0;
+    right: -5px;
+    width: 7px;
+    height: 100%;
+    cursor: e-resize;
+  }
+  .ui-resizable-w {
+    top: 0;
+    left: -5px;
+    width: 7px;
+    height: 100%;
+    cursor: w-resize;
+  }
+  .ui-resizable-se {
+    right: 1px;
+    bottom: 1px;
+    width: 12px;
+    height: 12px;
+    cursor: se-resize;
+  }
+  .ui-resizable-sw {
+    bottom: -5px;
+    left: -5px;
+    width: 9px;
+    height: 9px;
+    cursor: sw-resize;
+  }
+  .ui-resizable-nw {
+    top: -5px;
+    left: -5px;
+    width: 9px;
+    height: 9px;
+    cursor: nw-resize;
+  }
+  .ui-resizable-ne {
+    top: -5px;
+    right: -5px;
+    width: 9px;
+    height: 9px;
+    cursor: ne-resize;
+  }
+  /* Selectable
+   ========================================================================== */
+  /**
+ * jQuery UI Selectable.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/selectable/
+ *
+ * Example HTML:
+ *
+ * <ol class="ui-selectable">
+ *     <li class="ui-selectee">Item 1</li>
+ *     <li class="ui-selectee ui-selected">Item 2 (selected)</li>
+ *     <li class="ui-selectee">Item 3</li>
+ *     <li class="ui-selectee">Item 4</li>
+ * </ol>
+ */
+  .ui-selectable {
+    -ms-touch-action: none;
+        touch-action: none;
+  }
+  /**
+ * Drag to select.
+ */
+  .ui-selectable-helper {
+    position: absolute;
+    border: 1px dotted #004cbf;
+    z-index: 100;
+  }
+  /* Sortable
+ ========================================================================== */
+  /**
+ * jQuery UI Sortable.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/sortable/
+ *
+ * Example HTML:
+ *
+ * <ul class="ui-sortable">
+ *     <li>
+ *         Item 1
+ *     </li>
+ *     <li class="ui-sortable-helper">
+ *         Item 2 (this item is currently being actively sorted)
+ *     </li>
+ *     <li class="ui-sortable-placeholder"></li>
+ *     <li>
+ *         Item 3
+ *     </li>
+ * </ul>
+ */
+  .ui-sortable-helper {
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+  }
+  .ui-sortable-handle {
+    -ms-touch-action: none;
+        touch-action: none;
+  }
+  .ui-sortable-placeholder {
+    border: 1px dotted #004cbf;
+  }
+  /* Accordion
+   ========================================================================== */
+  /**
+ * jQuery UI Accordion.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/accordion/
+ *
+ * Example HTML:
+ *
+ * <div class="ui-accordion">
+ *     <h3 class="ui-accordion-header">
+ *         <span class="ui-accordion-header-icon"></span>
+ *         <a>Section 1 lever</a>
+ *     </h3>
+ *     <div class="ui-accordion-content">
+ *         Section 1 content
+ *     </div>
+ *     <h3 class="ui-accordion-header">
+ *         <span class="ui-accordion-header-icon"></span>
+ *         <a>Section 2 lever</a>
+ *     </h3>
+ *     <div class="ui-accordion-content">
+ *         Section 2 content
+ *     </div>
+ * </div>
+ */
+  .ui-accordion .ui-accordion-header {
+    display: block;
+    position: relative;
+    margin: 2px 0 0;
+    padding: 0.5em 1em;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .ui-accordion .ui-accordion-header a {
+    color: #333333;
+    text-decoration: none;
+  }
+  .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+    position: absolute;
+    top: 50%;
+    left: 0.5em;
+    margin-top: -8px;
+  }
+  .ui-accordion .ui-accordion-content {
+    padding: 1px 1em;
+    border-top: 0;
+    overflow: auto;
+  }
+  .ui-accordion .ui-accordion-icons,
+  .ui-accordion .ui-accordion-icons .ui-accordion-icons {
+    padding-left: 2em;
+  }
+  /**
+ * Accordion RTL support.
+ */
+  [dir="rtl"] .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+    right: 0.5em;
+    left: auto;
+  }
+  [dir="rtl"] .ui-accordion .ui-accordion-icons,
+  [dir="rtl"] .ui-accordion .ui-accordion-icons .ui-accordion-icons {
+    padding-right: 2em;
+    padding-left: 0;
+  }
+  /* Autocomplete
+   ========================================================================== */
+  /**
+ * jQuery UI Autocomplete.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/autocomplete/
+ *
+ * Example HTML:
+ *
+ * <input type="text" class="ui-autocomplete-input">
+ * <ul class="ui-autocomplete">
+ *     <li><a></a></li>
+ *     <li><a></a></li>
+ *     <li><a></a></li>
+ * </ul>
+ */
+  .ui-autocomplete {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: default;
+  }
+  /* Button
+   ========================================================================== */
+  /**
+ * jQuery UI Button.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/button/
+ *
+ * 1. Correct font size not being inherited in all browsers.
+ * 2. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 3. The `overflow` property removes extra width in IE.
+ * 4. Remove iOS Safari default styling.
+ *
+ * Example HTML:
+ *
+ * <a class="ui-button ui-corner-all ui-widget">Button</a>
+ */
+  .ui-button {
+    background-color: #5ba4e5;
+    display: inline-block;
+    position: relative;
+    height: 2.1538462em;
+    margin: 0 0.1em 0 0;
+    padding: 0.30769230769231em 0.61538461538462em;
+    border: 1px solid #3c93e0;
+    background-clip: padding-box;
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    /* 1 */
+    font-size: 13px;
+    line-height: 1.3846154em;
+    text-align: center;
+    /* 2 */
+    cursor: pointer;
+    /* 3 */
+    overflow: visible;
+    vertical-align: baseline;
+    box-sizing: border-box;
+    /* 4 */
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+  }
+  .ui-button:hover {
+    background-color: #6daee8;
+    border-color: #1e72bc;
+    color: #ffffff;
+    text-decoration: none;
+  }
+  .ui-button:active {
+    background-color: #4e9de3;
+    border-color: #1e72bc;
+    color: #e6e6e6;
+    text-decoration: none;
+  }
+  .ui-button:focus {
+    border-color: #0066ff;
+    outline: 0;
+  }
+  /**
+ * Focus styling for buttons.
+ *
+ * 1. `!important` required to override specificity.
+ */
+  .ui-button.ui-state-focus {
+    /* 1 */
+    border-color: #0066ff !important;
+  }
+  /**
+ * Single-icon-only button.
+ *
+ * To make room for the icon, a width needs to be set here.
+ *
+ * Example HTML:
+ *
+ * <a class="ui-button ui-corner-all ui-widget ui-button-icon-only">
+ *     <span class="ui-button-icon ui-icon ui-icon-gear"></span>
+ *     <span class="ui-button-icon-space"> </span>
+ *     Button one icon, no text
+ * </a>
+ */
+  .ui-button-icon-only {
+    width: 2.1538462em;
+    text-indent: -9999px;
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+  /**
+ * No icon support for input elements.
+ */
+  input.ui-button.ui-button-icon-only {
+    text-indent: 0;
+  }
+  .ui-button.ui-corner-all {
+    border-radius: 0.3em;
+  }
+  .ui-button.ui-corner-right {
+    border-radius: 0 0.3em 0.3em 0;
+  }
+  [dir="rtl"] .ui-button.ui-corner-right {
+    border-radius: 0.3em 0 0 0.3em;
+  }
+  .ui-button.ui-corner-left {
+    border-radius: 0.3em 0 0 0.3em;
+  }
+  [dir="rtl"] .ui-button.ui-corner-left {
+    border-radius: 0 0.3em 0.3em 0;
+  }
+  /**
+ * Button icon element(s).
+ */
+  .ui-button-icon-only .ui-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -8px;
+    margin-left: -8px;
+  }
+  .ui-button.ui-icon-notext .ui-icon {
+    padding: 0;
+    text-indent: -9999px;
+    white-space: nowrap;
+  }
+  input.ui-button.ui-icon-notext .ui-icon {
+    padding: 0.4em 1em;
+    text-indent: 0;
+    white-space: normal;
+  }
+  /* Checkboxradio
+   ========================================================================== */
+  /**
+ * jQuery UI Checkboxradio.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/checkboxradio/
+ *
+ * Example HTML:
+ *
+ * <fieldset>
+ *     <legend>Select a Location:</legend>
+ *     <label for="radio-1">New York</label>
+ *     <input id="radio-1" name="radio-1" type="radio">
+ *     <label for="radio-2">Paris</label>
+ *     <input id="radio-2" name="radio-1" type="radio">
+ *     <label for="radio-3">London</label>
+ *     <input id="radio-3" name="radio-1" type="radio">
+ * </fieldset>
+ */
+  .ui-checkboxradio-label .ui-icon-background {
+    border: 0;
+    border-radius: 0.12em;
+    box-shadow: inset 1px 1px 1px #cccccc;
+  }
+  .ui-checkboxradio-radio-label .ui-icon-background {
+    width: 16px;
+    height: 16px;
+    border: 0;
+    border-radius: 1em;
+    overflow: visible;
+  }
+  .ui-checkboxradio-radio-label.ui-checkboxradio-checked .ui-icon, .ui-checkboxradio-radio-label.ui-checkboxradio-checked:hover .ui-icon {
+    width: 8px;
+    height: 8px;
+    border-width: 4px;
+    border-style: solid;
+    background-image: none;
+  }
+  .ui-checkboxradio-disabled {
+    pointer-events: none;
+  }
+  /**
+ * Checkboxes as buttons - pressed state.
+ *
+ * Example HTML:
+ *
+ * <input class="ui-checkboxradio ui-helper-hidden-accessible" id="check" type="checkbox">
+ * <label for="check" class="ui-checkboxradio-label ui-corner-all ui-button ui-widget ui-checkboxradio-checked ui-state-active">Dogs</label>
+ */
+  .ui-checkboxradio-checked.ui-button {
+    background-color: #9dc8ef;
+    border-color: #6faee7;
+  }
+  .ui-checkboxradio-checked.ui-button:hover {
+    background-color: #a6cdf0;
+    background-image: linear-gradient(#aacff1, #a6cdf0);
+    border-color: #2d89dd;
+  }
+  .ui-checkboxradio-checked.ui-button:active {
+    background-color: #87bceb;
+    border-color: #2d89dd;
+  }
+  /* Controlgroup
+   ========================================================================== */
+  /**
+ * jQuery UI Controlgroup.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/controlgroup/
+ *
+ * Example HTML:
+ *
+ * <fieldset>
+ *     <legend>Favourite drink</legend>
+ *     <div id="radio">
+ *         <input id="tea" name="drink" type="radio">
+ *         <label for="tea">Tea</label>
+ *         <input id="coffee" name="drink" type="radio" checked="checked">
+ *         <label for="coffee">Coffee</label>
+ *         <input id="tequila" name="drink" type="radio">
+ *         <label for="tequila">Tequila</label>
+ *     </div>
+ * </fieldset>
+ */
+  .ui-controlgroup {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-flow: row wrap;
+        flex-flow: row wrap;
+  }
+  .ui-controlgroup .ui-controlgroup-item {
+    margin-right: 0;
+    margin-left: 0;
+  }
+  .ui-controlgroup .ui-controlgroup-item:focus, .ui-controlgroup .ui-controlgroup-item.ui-visual-focus {
+    z-index: 9999;
+  }
+  .ui-controlgroup .ui-controlgroup-label {
+    padding: 0.4em 1em;
+  }
+  .ui-controlgroup .ui-controlgroup-label span {
+    font-size: 80%;
+  }
+  .ui-controlgroup .ui-state-highlight {
+    border-color: #9dc8ef;
+    background-color: #9dc8ef;
+  }
+  .ui-controlgroup-horizontal .ui-controlgroup-label + .ui-controlgroup-item {
+    border-left: 0;
+  }
+  .ui-controlgroup-horizontal .ui-controlgroup-label.ui-widget-content {
+    border-right: 0;
+  }
+  .ui-controlgroup-vertical {
+    -ms-flex-flow: column;
+        flex-flow: column;
+  }
+  .ui-controlgroup-vertical .ui-controlgroup-item {
+    display: block;
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: left;
+    box-sizing: border-box;
+  }
+  [dir="rtl"] .ui-controlgroup-vertical .ui-controlgroup-item {
+    text-align: right;
+  }
+  .ui-controlgroup-vertical .ui-controlgroup-label + .ui-controlgroup-item {
+    border-top: 0;
+  }
+  .ui-controlgroup-vertical .ui-controlgroup-label.ui-widget-content {
+    border-bottom: 0;
+  }
+  /**
+ * Spinner specific style fixes.
+ */
+  .ui-controlgroup-vertical .ui-spinner-input {
+    width: calc(100% - 2.4em);
+  }
+  .ui-controlgroup-vertical .ui-spinner .ui-spinner-up {
+    border-top-style: solid;
+  }
+  /* Datepicker
+   ========================================================================== */
+  /**
+ * jQuery UI Datepicker.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/datepicker/
+ *
+ * Example HTML:
+ *
+ * <div class="ui-datepicker">
+ *     <div class="ui-datepicker-header">
+ *         <a class="ui-datepicker-prev">
+ *             <span>Prev</span>
+ *         </a>
+ *         <a class="ui-datepicker-next">
+ *             <span>Next</span>
+ *         </a>
+ *         <div class="ui-datepicker-title">
+ *             <span class="ui-datepicker-month">April</span>
+ *             <span class="ui-datepicker-year">2014</span>
+ *         </div>
+ *     </div>
+ *     <table class="ui-datepicker-calendar">
+ *         <thead>
+ *             <tr>
+ *                 <th class="ui-datepicker-week-end">
+ *                     <span>Su</span>
+ *                 </th>
+ *                 <th>
+ *                     <span>Mo</span>
+ *                 </th>
+ *                 <th>
+ *                     <span>Tu</span>
+ *                 </th>
+ *                 <th>
+ *                     <span>We</span>
+ *                 </th>
+ *                 <th>
+ *                     <span>Th</span>
+ *                 </th>
+ *                 <th>
+ *                     <span>Fr</span>
+ *                 </th>
+ *                 <th class="ui-datepicker-week-end">
+ *                     <span>Sa</span>
+ *                 </th>
+ *             </tr>
+ *         </thead>
+ *         <tbody>
+ *             <tr>
+ *                 <td class="ui-datepicker-week-end ui-datepicker-other-month ui-datepicker-unselectable">
+ *                     &nbsp;
+ *                 </td>
+ *                 <td class="ui-datepicker-other-month ui-datepicker-unselectable">
+ *                     &nbsp;
+ *                 </td>
+ *                 <td>
+ *                     <a>1</a>
+ *                 </td>
+ *                 <td>
+ *                     <a>2</a>
+ *                 </td>
+ *                 <td>
+ *                     <a>3</a>
+ *                 </td>
+ *                 <td class="ui-datepicker-days-cell-over ui-datepicker-current-day ui-datepicker-today">
+ *                     <a class="ui-state-highlight ui-state-active">4</a>
+ *                 </td>
+ *                 <td>
+ *                     <a>5</a>
+ *                 </td>
+ *             </tr>
+ *             ...etc...
+ *         </tbody>
+ *     </table>
+ * </div>
+ */
+  .ui-datepicker {
+    display: none;
+    width: 17em;
+    padding: 0.2em 0.2em 0;
+  }
+  .ui-datepicker .ui-datepicker-header {
+    position: relative;
+    padding: 0.2em 0;
+  }
+  .ui-datepicker .ui-datepicker-prev,
+  .ui-datepicker .ui-datepicker-next {
+    position: absolute;
+    top: 0.2em;
+    width: 1.8em;
+    height: 1.8em;
+    border-radius: 0.3em;
+    background-color: transparent;
+  }
+  .ui-datepicker .ui-datepicker-prev {
+    left: 0.2em;
+  }
+  .ui-datepicker .ui-datepicker-next {
+    right: 0.2em;
+  }
+  .ui-datepicker .ui-datepicker-prev span,
+  .ui-datepicker .ui-datepicker-next span {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -8px;
+    margin-left: -8px;
+  }
+  .ui-datepicker .ui-datepicker-prev-hover,
+  .ui-datepicker .ui-datepicker-next-hover {
+    background-color: #f7f7f7;
+  }
+  .ui-datepicker .ui-datepicker-title {
+    margin: 0 2.2em;
+    line-height: 1.8em;
+    text-align: center;
+  }
+  .ui-datepicker .ui-datepicker-title select {
+    margin: 0;
+  }
+  .ui-datepicker select.ui-datepicker-month,
+  .ui-datepicker select.ui-datepicker-year {
+    width: 45%;
+  }
+  .ui-datepicker table {
+    width: 100%;
+    margin: 0 0 0.2em;
+  }
+  .ui-datepicker th {
+    padding: 0.5em 0.2em;
+    border: 0;
+    text-align: center;
+  }
+  .ui-datepicker td {
+    padding: 1px;
+    border: 0;
+  }
+  .ui-datepicker td a,
+  .ui-datepicker td span {
+    display: block;
+    padding: 0.2em;
+    text-align: center;
+  }
+  .ui-datepicker td a.ui-state-active {
+    border-color: #96c0ff;
+    background-color: #eaf3fc;
+  }
+  .ui-datepicker td a.ui-state-highlight:hover {
+    border-color: #f5a800;
+  }
+  .ui-datepicker td a.ui-state-active:hover {
+    border-color: #4a92ff;
+  }
+  .ui-datepicker td.ui-datepicker-week-col {
+    padding: 0.32em 0;
+    text-align: center;
+  }
+  .ui-datepicker .ui-datepicker-buttonpane {
+    margin: 0.7em 0 0;
+    padding: 0 0.2em;
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    background-image: none;
+  }
+  .ui-datepicker .ui-datepicker-buttonpane button {
+    width: auto;
+    margin: 0.5em 0.2em 0.4em;
+    padding: 0.2em 0.6em 0.3em;
+    float: right;
+    cursor: pointer;
+    overflow: visible;
+  }
+  .ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current {
+    float: left;
+  }
+  .ui-datepicker .ui-icon {
+    display: block;
+    top: 0.3em;
+    left: 0.5em;
+    background-repeat: no-repeat;
+    text-indent: -9999px;
+    overflow: hidden;
+  }
+  /**
+ * Multiple calendars.
+ */
+  .ui-datepicker.ui-datepicker-multi {
+    width: auto;
+  }
+  .ui-datepicker-multi .ui-datepicker-group {
+    float: left;
+  }
+  .ui-datepicker-multi .ui-datepicker-group table {
+    width: 95%;
+    margin: 0 auto 0.4em;
+  }
+  .ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header,
+  .ui-datepicker-multi .ui-datepicker-group-middle .ui-datepicker-header {
+    border-left-width: 0;
+  }
+  .ui-datepicker-multi .ui-datepicker-buttonpane {
+    clear: left;
+  }
+  .ui-datepicker-multi-2 .ui-datepicker-group {
+    width: 50%;
+  }
+  .ui-datepicker-multi-3 .ui-datepicker-group {
+    width: 33.3%;
+  }
+  .ui-datepicker-multi-4 .ui-datepicker-group {
+    width: 25%;
+  }
+  .ui-datepicker-row-break {
+    width: 100%;
+    clear: both;
+    font-size: 0;
+  }
+  /**
+ * Datepicker RTL support.
+ */
+  [dir="rtl"] .ui-datepicker-prev {
+    right: 0.2em;
+    left: auto;
+  }
+  [dir="rtl"] .ui-datepicker-prev span {
+    background-position: -48px -192px;
+  }
+  [dir="rtl"] .ui-datepicker-next {
+    right: auto;
+    left: 0.2em;
+  }
+  [dir="rtl"] .ui-datepicker-next span {
+    background-position: -80px -192px;
+  }
+  [dir="rtl"] .ui-datepicker-buttonpane {
+    clear: right;
+  }
+  [dir="rtl"] .ui-datepicker-buttonpane button {
+    float: left;
+  }
+  [dir="rtl"] .ui-datepicker-buttonpane button.ui-datepicker-current,
+  [dir="rtl"] .ui-datepicker-group {
+    float: right;
+  }
+  [dir="rtl"] .ui-datepicker-group-last .ui-datepicker-header,
+  [dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
+    border-right-width: 0;
+    border-left-width: 1px;
+  }
+  /* Dialog
+   ========================================================================== */
+  /**
+ * jQuery UI Dialog.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/dialog/
+ *
+ * Example HTML:
+ *
+ * <div class="ui-dialog ui-front ui-dialog-buttons ui-draggable">
+ *     <div class="ui-dialog-titlebar">
+ *         <span class="ui-dialog-title">Modal dialog example</span>
+ *         <button class="ui-button ui-button-icon-only ui-dialog-titlebar-close">
+ *             <span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>
+ *             <span class="ui-button-text">close</span>
+ *         </button>
+ *     </div>
+ *     <div class="ui-dialog-content">
+ *         Content
+ *     </div>
+ *     <div class="ui-dialog-buttonpane">
+ *         <div class="ui-dialog-buttonset">
+ *             <button class="ui-button ui-button-text-only">
+ *                 <span class="ui-button-text">Cancel</span>
+ *             </button>
+ *             <button class="ui-button ui-button-text-only">
+ *                 <span class="ui-button-text">Ok</span>
+ *             </button>
+ *         </div>
+ *     </div>
+ * </div>
+ */
+  .ui-dialog {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.2em;
+    outline: 0;
+    z-index: 1002;
+  }
+  .ui-dialog .ui-dialog-titlebar {
+    position: relative;
+    padding: 0.4em 1em;
+  }
+  .ui-dialog .ui-dialog-title {
+    width: 90%;
+    margin: 0.1em 0;
+    float: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  [dir="rtl"] .ui-dialog .ui-dialog-title {
+    float: right;
+  }
+  .ui-dialog .ui-dialog-titlebar-close {
+    position: absolute;
+    top: 50%;
+    right: 0.3em;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0;
+  }
+  [dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
+    right: auto;
+    left: 0.3em;
+  }
+  .ui-dialog .ui-dialog-content {
+    position: relative;
+    padding: 0.5em 1em;
+    border: 0;
+    background: none;
+    overflow: auto;
+  }
+  .ui-dialog .ui-dialog-buttonpane {
+    margin-top: 0.5em;
+    padding: 0.5em;
+    border-width: 1px 0 0;
+    background-image: none;
+    text-align: left;
+  }
+  .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+    float: right;
+  }
+  [dir="rtl"] .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+    float: left;
+  }
+  .ui-dialog .ui-dialog-buttonpane button {
+    margin: 0.5em 0.4em 0.5em 0;
+    cursor: pointer;
+  }
+  [dir="rtl"] .ui-dialog .ui-dialog-buttonpane button {
+    margin: 0.5em 0 0.5em 0.4em;
+  }
+  /**
+ * Change cursor when window is being dragged.
+ */
+  .ui-draggable .ui-dialog-titlebar {
+    cursor: move;
+  }
+  /* Menu
+   ========================================================================== */
+  /**
+ * jQuery UI Menu.
+ *
+ * Menus are vertical format only. Horizontal format menus are not provided by
+ * jQuery UI.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/menu/
+ *
+ * 1. Correct font size not being inherited in all browsers.
+ * 2. Workaround for IE 11 and Edge incorrectly displaying a list marker.
+ *
+ * Example HTML:
+ *
+ * <ul class="ui-menu">
+ *     <li class="ui-state-disabled ui-menu-item">
+ *         <a>Item 1 (disabled)</a>
+ *     </li>
+ *     <li class="ui-menu-item">
+ *         <a>Item 2</a>
+ *     </li>
+ *     <li class="ui-menu-item">
+ *         <a>
+ *             <span class="ui-menu-icon ui-icon ui-icon-caret-1-e"></span>
+ *             Item 3
+ *         </a>
+ *         <ul class="ui-menu">
+ *             <li class="ui-menu-item">
+ *                 <a>Item 3 subitem 1</a>
+ *             </li>
+ *             <li class="ui-menu-item">
+ *                 <a>Item 3 subitem 2</a>
+ *             </li>
+ *         </ul>
+ *     </li>
+ *     <li class="ui-menu-item">
+ *         <a>
+ *             <span class="ui-menu-icon ui-icon ui-icon-caret-1-e"></span>
+ *             Item 4
+ *         </a>
+ *         <ul class="ui-menu">
+ *             <li class="ui-menu-item">
+ *                 <span class="ui-menu-icon ui-icon ui-icon-caret-1-e"></span>
+ *                 <a>Item 4 subitem 1</a>
+ *                 <ul class="ui-menu">
+ *                     <li class="ui-menu-item">
+ *                         <a>Item 4 subitem 1 subsubitem 1</a>
+ *                     </li>
+ *                     <li class="ui-menu-item">
+ *                         <a>Item 4 subitem 1 subsubitem 2</a>
+ *                     </li>
+ *                 </ul>
+ *             </li>
+ *             <li class="ui-menu-item">
+ *                 <a>Item 3 subitem 2</a>
+ *             </li>
+ *         </ul>
+ *     </li>
+ * </ul>
+ */
+  .ui-menu {
+    display: block;
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    /* 1 */
+    font-size: 13px;
+    line-height: 1.38461538461538em;
+    list-style: none;
+  }
+  .ui-menu .ui-menu {
+    position: absolute;
+  }
+  .ui-menu .ui-menu-item {
+    margin: 0;
+    cursor: pointer;
+    /* 2 */
+    list-style-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
+  }
+  .ui-menu .ui-menu-item a {
+    color: #333333;
+    text-decoration: none;
+  }
+  .ui-menu .ui-menu-item-wrapper {
+    position: relative;
+    padding: 0.30769230769231em 1em 0.30769230769231em 0.61538461538462em;
+  }
+  .ui-menu .ui-menu-divider {
+    height: 0;
+    margin: 0.30769230769231em 0;
+    border-width: 1px 0 0;
+    font-size: 0;
+    line-height: 0;
+  }
+  .ui-menu .ui-state-focus,
+  .ui-menu .ui-state-active {
+    background-color: #eaf3fc;
+  }
+  .ui-menu .ui-icon {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0.25em;
+    margin: auto 0;
+  }
+  .ui-menu .ui-menu-icon {
+    right: 0;
+    left: auto;
+  }
+  /**
+ * Allow additional icons in menu items.
+ */
+  .ui-menu-icons {
+    position: relative;
+  }
+  .ui-menu-icons .ui-menu-item-wrapper {
+    padding-left: 2em;
+  }
+  /**
+ * Menu RTL support.
+ */
+  [dir="rtl"] .ui-menu {
+    padding: 0;
+  }
+  [dir="rtl"] .ui-menu .ui-menu-item-wrapper {
+    padding: 0.30769230769231em 0.61538461538462em 0.30769230769231em 1em;
+  }
+  [dir="rtl"] .ui-menu .ui-icon {
+    right: 0.25em;
+    left: auto;
+  }
+  [dir="rtl"] .ui-menu .ui-menu-icon {
+    right: auto;
+    left: 0;
+  }
+  /* Progressbar
+   ========================================================================== */
+  /**
+ * jQuery UI Progressbar.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/progressbar/
+ *
+ * Example HTML:
+ *
+ * <div class="ui-progressbar">
+ *     <div class="ui-progressbar-value" style="width: 37%;"></div>
+ * </div>
+ */
+  .ui-progressbar {
+    margin-bottom: 1em;
+    text-align: left;
+    overflow: hidden;
+  }
+  .ui-progressbar-value {
+    background-image: url("../img/ui-progressbar.gif");
+    background-size: 16px 16px;
+    height: 16px;
+    background-color: #d4e7f8;
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 1.25), screen and (min-resolution: 1.25dppx), screen and (min-resolution: 120dpi) {
+  .ui-progressbar-value {
+    background-image: url("../img/ui-progressbar@2x.gif");
+  }
+}
+
+@media screen {
+  /**
+ * Progressbar with indeterminate value.
+ *
+ * Example HTML:
+ *
+ * <div class="ui-progressbar ui-progressbar-indeterminate">
+ *     <div class="ui-progressbar-value" style="width:100%;">
+ *         <div class="ui-progressbar-overlay"></div>
+ *     </div>
+ * </div>
+ */
+  .ui-progressbar-indeterminate .ui-progressbar-value {
+    background-image: url("../img/ui-progressbar-indeterminate.gif");
+    background-size: 16px 16px;
+    background-color: #cccccc;
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 1.25), screen and (min-resolution: 1.25dppx), screen and (min-resolution: 120dpi) {
+  .ui-progressbar-indeterminate .ui-progressbar-value {
+    background-image: url("../img/ui-progressbar-indeterminate@2x.gif");
+  }
+}
+
+@media screen {
+  /* Selectmenu
+   ========================================================================== */
+  /**
+ * jQuery UI Selectmenu.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/selectmenu/
+ *
+ * 1. Correct font size not being inherited in all browsers.
+ *
+ * Example HTML:
+ *
+ * <p>
+ *     <label>Select a speed</label><br>
+ *     <select class="jquery-ui-selectmenu" style="display:none;">
+ *         <option>Slower</option>
+ *         <option>Slow</option>
+ *         <option selected="selected">Medium</option>
+ *         <option>Fast</option>
+ *         <option>Faster</option>
+ *     </select>
+ *     <span class="ui-selectmenu-button ui-widget ui-state-default ui-corner-all">
+ *         <span class="ui-icon ui-icon-triangle-1-s"></span>
+ *         <span class="ui-selectmenu-text">Medium</span>
+ *     </span>
+ * </p>
+ * <div class="ui-selectmenu-menu ui-front ui-selectmenu-open">
+ *     <ul class="ui-menu ui-widget ui-widget-content ui-corner-bottom">
+ *         <li class="ui-menu-item ui-state-focus">Slower</li>
+ *         <li class="ui-menu-item">Slow</li>
+ *         <li class="ui-menu-item">Medium</li>
+ *         <li class="ui-menu-item">Fast</li>
+ *         <li class="ui-menu-item">Faster</li>
+ *     </ul>
+ * </div>
+ */
+  .ui-selectmenu-button {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+  }
+  .ui-selectmenu-button:not(.ui-controlgroup-item) {
+    border-radius: 0.3em;
+  }
+  .ui-selectmenu-button.ui-controlgroup-item.ui-corner-tr {
+    border-radius: 0 0.3em 0.3em 0;
+  }
+  .ui-selectmenu-button.ui-controlgroup-item.ui-corner-tl {
+    border-radius: 0.3em 0 0 0.3em;
+  }
+  .ui-selectmenu-icon {
+    -ms-flex: none;
+        flex: none;
+    -ms-flex-order: 2;
+        order: 2;
+    margin: 0 -0.25em 0 0.25em;
+  }
+  .ui-selectmenu-text {
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .ui-selectmenu-menu {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+  }
+  .ui-selectmenu-menu .ui-menu {
+    overflow: auto;
+    overflow-x: hidden;
+  }
+  .ui-selectmenu-menu .ui-menu .ui-selectmenu-optgroup {
+    height: auto;
+    margin: 0.5em 0 0;
+    padding: 2px 0.61538461538462em;
+    border-top: 1px solid #cccccc;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1.5;
+  }
+  .ui-selectmenu-menu .ui-menu .ui-selectmenu-optgroup:first-child {
+    margin: 0;
+    border: 0;
+  }
+  .ui-selectmenu-open {
+    display: block;
+  }
+  /**
+ * Selectmenu RTL support.
+ */
+  [dir="rtl"] .ui-selectmenu-button.ui-controlgroup-item.ui-corner-tr {
+    border-radius: 0.3em 0 0 0.3em;
+  }
+  [dir="rtl"] .ui-selectmenu-button.ui-controlgroup-item.ui-corner-tl {
+    border-radius: 0 0.3em 0.3em 0;
+  }
+  [dir="rtl"] .ui-selectmenu-icon {
+    margin: 0 0.25em 0 -0.25em;
+  }
+  /* Slider
+   ========================================================================== */
+  /**
+ * jQuery UI Slider.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/slider/
+ *
+ * Example HTML:
+ *
+ * <div class="ui-slider ui-slider-horizontal">
+ *     <div class="ui-slider-range" style="left: 17%; width: 50%;"></div>
+ *     <a class="ui-slider-handle" style="left: 17%;"></a>
+ *     <a class="ui-slider-handle" style="left: 67%;"></a>
+ * </div>
+ */
+  .ui-slider {
+    position: relative;
+    text-align: left;
+  }
+  .ui-slider .ui-slider-handle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #f7f7f7;
+    cursor: default;
+    z-index: 2;
+    -ms-touch-action: none;
+        touch-action: none;
+  }
+  .ui-slider .ui-slider-range {
+    display: block;
+    position: absolute;
+    border: 0;
+    background-position: 0 0;
+    font-size: 0.7em;
+    z-index: 1;
+  }
+  /**
+ * Slider - horizontal format.
+ *
+ * Example HTML:
+ *
+ * <div class="ui-slider ui-slider-horizontal">
+ */
+  .ui-slider-horizontal {
+    height: 12px;
+    margin-bottom: 1em;
+  }
+  .ui-slider-horizontal .ui-slider-handle {
+    top: -5px;
+    margin-left: -10px;
+  }
+  .ui-slider-horizontal .ui-slider-range {
+    top: 0;
+    height: 100%;
+  }
+  .ui-slider-horizontal .ui-slider-range-min {
+    left: 0;
+  }
+  .ui-slider-horizontal .ui-slider-range-max {
+    right: 0;
+  }
+  /**
+ * Slider - vertical format.
+ *
+ * Example HTML:
+ *
+ * <div class="ui-slider ui-slider-vertical">
+ */
+  .ui-slider-vertical {
+    width: 12px;
+    height: 100px;
+  }
+  .ui-slider-vertical .ui-slider-handle {
+    left: -20px;
+    margin-bottom: -10px;
+  }
+  .ui-slider-vertical .ui-slider-range {
+    left: 0;
+    width: 100%;
+  }
+  .ui-slider-vertical .ui-slider-range-min {
+    bottom: 0;
+  }
+  .ui-slider-vertical .ui-slider-range-max {
+    top: 0;
+  }
+  /* Spinner
+   ========================================================================== */
+  /**
+ * jQuery UI Spinner.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/spinner/
+ *
+ * Example HTML:
+ *
+ * <span class="ui-spinner">
+ *     <input type="text" class="ui-spinner-input">
+ *     <a class="ui-spinner-button ui-spinner-up ui-button ui-button-text-only">
+ *         <span class="ui-button-text">
+ *             <span class="ui-icon ui-icon-triangle-1-n">+</span>
+ *         </span>
+ *     </a>
+ *     <a class="ui-spinner-button ui-spinner-down ui-button ui-button-text-only">
+ *         <span class="ui-button-text">
+ *             <span class="ui-icon ui-icon-triangle-1-s">-</span>
+ *         </span>
+ *     </a>
+ * </span>
+ */
+  .ui-spinner {
+    display: inline-block;
+    position: relative;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+  }
+  .ui-spinner .ui-spinner-input {
+    padding-right: 24px;
+  }
+  .ui-spinner-button {
+    display: block;
+    position: absolute;
+    right: 0;
+    width: 18px;
+    height: 42%;
+    margin: 0;
+    padding: 0;
+    font-size: 0.53846153846154em;
+    line-height: 1.57142857142857em;
+    cursor: default;
+    overflow: hidden;
+  }
+  .ui-spinner-up {
+    top: 0;
+  }
+  .ui-spinner-down {
+    bottom: 0;
+  }
+  /**
+ * Spinner RTL support.
+ */
+  [dir="rtl"] .ui-spinner .ui-spinner-input {
+    padding-right: 4px;
+    padding-left: 24px;
+  }
+  [dir="rtl"] .ui-spinner-button {
+    right: auto;
+    left: 0;
+  }
+  /* Tabs
+   ========================================================================== */
+  /**
+ * jQuery UI Tabs.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/tabs/
+ *
+ * 1. `position: relative` prevents IE scroll bug (elements with
+ *    `position: relative` inside a parent container with `overflow: auto`
+ *    appear as "fixed")
+ *
+ * Example HTML:
+ *
+ * <div class="ui-tabs>
+ *     <ul class="ui-tabs-nav">
+ *         <li class="ui-tabs-active">
+ *             <a class="ui-tabs-anchor">Tab 1</a>
+ *         </li>
+ *         <li>
+ *             <a class="ui-tabs-anchor">Tab 2</a>
+ *         </li>
+ *         <li>
+ *             <a class="ui-tabs-anchor">Tab 3</a>
+ *         </li>
+ *     </ul>
+ *     <div class="ui-tabs-panel" aria-expanded="true">
+ *         Tab 1 content
+ *     </div>
+ *     <div class="ui-tabs-panel aria-expanded="false" aria-hidden="true">
+ *         Tab 2 content
+ *     </div>
+ *     <div class="ui-tabs-panel aria-expanded="false" aria-hidden="true">
+ *         Tab 3 content
+ *     </div>
+ * </div>
+ */
+  .ui-tabs:not(.ui-tabs-vertical) {
+    /* 1 */
+    position: relative;
+    border: 0;
+  }
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav {
+    margin: 0;
+    padding: 0;
+    background: none;
+  }
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
+    position: relative;
+    top: 0;
+    margin-right: 2px;
+    float: left;
+    border-bottom-width: 0;
+    list-style: none;
+    white-space: nowrap;
+  }
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-active {
+    margin-bottom: -1px;
+    padding-bottom: 1px;
+  }
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor,
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor,
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
+    cursor: text;
+  }
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
+    padding: 0.5em 1em;
+    float: left;
+    color: #333333;
+    text-decoration: none;
+  }
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-panel {
+    display: block;
+    margin: 0 0 1em;
+    padding: 1px 0;
+    border-width: 1px 0;
+    background: none;
+  }
+  /**
+ * Maintain cursor style when collapsing a collapsible tab.
+ */
+  .ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor {
+    cursor: pointer;
+  }
+  /**
+ * Tabs RTL support.
+ */
+  [dir="rtl"] .ui-tabs .ui-tabs-nav li {
+    margin-right: 0;
+    margin-left: 2px;
+    float: right;
+  }
+  [dir="rtl"] .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    float: right;
+  }
+  /**
+ * Additonal styling for tabs vertical.
+ */
+  .ui-tabs-vertical .ui-tabs-nav .ui-tabs-active {
+    background: #fff9e1;
+  }
+  .ui-tabs-vertical .ui-tabs-nav .ui-state-focus a {
+    outline: thin solid #0066ff;
+  }
+  /* Tooltip
+   ========================================================================== */
+  /**
+ * jQuery UI Tooltip.
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://jqueryui.com/tooltip/
+ *
+ * Example HTML:
+ *
+ * <a>Link with a tooltip</a>
+ * <div class="ui-tooltip">
+ *     <div class="ui-tooltip-content">
+ *         Content
+ *     </div>
+ * </div>
+ */
+  .ui-tooltip {
+    position: absolute;
+    max-width: 22em;
+    padding: 0.5em 1em;
+    z-index: 9999;
+  }
+}
+
+/* ==========================================================================
+   Responsive layout for screen media
+   ========================================================================== */
+/* ==========================================================================
+   Additional layout for devices < 768px
+   ========================================================================== */
+@media (max-width: 60em) {
+  /**
+     * Adjust right/left padding of body.
+     */
+  body {
+    padding: 4em 2em 0;
+  }
+  .setup,
+  .login {
+    padding: 1em 2em 0;
+  }
+  /**
+     * Grid column cell changes at 1st breakpoint downwards.
+     *
+     * Cells for 4 column layout become 2 column layout.
+     * Cells for 4 column span variations become 1 column layout.
+     */
+  .txp-layout-4col {
+    width: 50%;
+  }
+  .txp-layout-4col-alt,
+  .txp-layout-4col-2span,
+  .txp-layout-4col-3span {
+    width: 100%;
+  }
+  /**
+     * Adjust right/left padding of header area.
+     */
+  .txp-header {
+    padding: 0 2em;
+  }
+  /**
+     * Smaller version of Textpattern logo.
+     */
+  .txp-header h1 {
+    width: 1.75em;
+  }
+  .txp-header h1 a {
+    width: 1.75em;
+  }
+  /**
+     * 'View site' link.
+     *
+     * Example HTML:
+     *
+     * <p class="txp-view-site">
+     *     <a>
+     *         <span class="txp-view-site-name">My site</span>
+     *     </a>
+     * </p>
+     */
+  .txp-view-site {
+    margin: 0.0625em 0.375em 0;
+    padding: 0;
+    font-size: 16px;
+    overflow: inherit;
+  }
+  .txp-view-site a {
+    text-indent: 110%;
+    text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    width: 2em;
+    height: 2em;
+    background: url("../img/sprite.svg") no-repeat -8em 0;
+    background-size: 13em 2em;
+  }
+  /**
+     * Search widget at top of lists.
+     */
+  .txp-search,
+  [dir="rtl"] .txp-search {
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -ms-flex-pack: start;
+        justify-content: flex-start;
+    margin-top: 0;
+  }
+  /**
+     * Reposition search clearer.
+     */
+  .txp-search-clear {
+    -ms-flex: 1 0 auto;
+        flex: 1 0 auto;
+    width: 100%;
+    margin: 0 0 0.5em;
+    text-align: left;
+  }
+  [dir="rtl"] .txp-search-clear {
+    text-align: right;
+  }
+  /**
+     * Reset Form panel 'name' and 'type' fields to blocks.
+     */
+  #page-form .name,
+  #page-form .type {
+    display: block;
+    margin: 1em 0;
+  }
+  #page-form .txp-actions a {
+    margin-top: 0.5em;
+  }
+}
+
+/* ==========================================================================
+   Additional layout for devices < 547px
+   ========================================================================== */
+@media (max-width: 47em) {
+  /**
+     * Grid column cell changes at 2nd breakpoint downwards.
+     *
+     * Cells for 2 column layout become 1 column layout.
+     * Cells for 4 column layout become 1 column layout.
+     */
+  .txp-layout-2col,
+  .txp-layout-4col {
+    width: 100%;
+  }
+  /**
+     * Non-fixed header on mobile layout (because mobile nav menu couldn't scroll otherwise).
+     */
+  .txp-header {
+    position: absolute;
+  }
+  /**
+     * Show the navigation menu toggle button on mobile layout.
+     *
+     * Example HTML:
+     *
+     * <button class="txp-nav-toggle">
+     */
+  button.txp-nav-toggle {
+    text-indent: 110%;
+    text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    width: 2em;
+    height: 2em;
+    margin: 0.0625em 0 0;
+    padding: 0;
+    float: left;
+    border: 0;
+    border-radius: 0;
+    background: transparent url("../img/sprite.svg") -10em 0;
+    background-size: 13em 2em;
+    font-size: 16px;
+  }
+  button.txp-nav-toggle:focus {
+    outline: thin solid #0066ff;
+  }
+  button.txp-nav-toggle:not(.collapsed) {
+    background-color: rgba(255, 255, 255, 0.33);
+  }
+  /**
+     * Hide the navigation menu by default on mobile layout.
+     */
+  .txp-nav .data-dropdown {
+    display: none;
+  }
+  /**
+     * Show the navigation menu when toggled on mobile layout.
+     */
+  .txp-nav.in .data-dropdown {
+    display: block;
+    position: absolute;
+    top: 3em;
+    right: 0;
+    left: 0;
+    background: #fff9e1;
+  }
+  .txp-nav.in .data-dropdown::before {
+    position: absolute;
+    top: -0.5em;
+    left: 4.375em;
+    width: 1em;
+    height: 0.5em;
+    background: url("../img/sprite.svg") no-repeat -12em 0;
+    background-size: 13em 2em;
+    font-size: 16px;
+    content: "";
+    z-index: 2;
+  }
+  [dir="rtl"] .txp-nav.in .data-dropdown::before {
+    right: 4.375em;
+    left: auto;
+  }
+  .txp-nav > ul > li {
+    float: none;
+    border: 0;
+    border-bottom: 1px solid #d4d4d4;
+  }
+  .txp-nav > ul > li:first-child {
+    border-left: 0;
+  }
+  .txp-nav > ul > li > a,
+  .txp-nav > ul > li > a.dropdown-toggle {
+    padding: 0 2em;
+  }
+  [dir="rtl"] .txp-nav > ul > li > a, [dir="rtl"]
+  .txp-nav > ul > li > a.dropdown-toggle {
+    padding: 0 2em;
+  }
+  .txp-nav > ul > li a.dropdown-toggle::after {
+    right: 1em;
+  }
+  [dir="rtl"] .txp-nav > ul > li a.dropdown-toggle::after {
+    right: auto;
+    left: 1em;
+  }
+  /**
+     * Secondary-level navigation menu items (submenus).
+     */
+  .dropdown-menu {
+    position: static;
+    min-width: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  .dropdown-menu a {
+    padding: 0.5em 2em 0.5em 3em;
+  }
+  [dir="rtl"] .dropdown-menu a {
+    padding: 0.5em 3em 0.5em 2em;
+  }
+  .dropdown-menu::before {
+    display: none;
+  }
+  /**
+     * Collapse 2 column form fields to 1 column (remove flexbox).
+     */
+  .txp-edit .txp-form-field:not(.txp-form-field-textarea),
+  .txp-prefs-group .txp-form-field:not(.txp-form-field-textarea) {
+    display: block;
+  }
+  /**
+     * Label/value one-column layouts within panes.
+     *
+     * Collapsed from two-column format on desktop layout (remove flexbox).
+     */
+  .txp-edit .txp-form-field-label,
+  .txp-edit .txp-form-field-value,
+  .txp-prefs-group .txp-form-field-label,
+  .txp-prefs-group .txp-form-field-value {
+    -ms-flex: none;
+        flex: none;
+    min-height: inherit;
+  }
+  /**
+     * Remove inline alignment margin values when collapsed.
+     */
+  .txp-form-field-value input,
+  .txp-form-field-value select,
+  .txp-form-field-value .jquery-ui-controlgroup {
+    margin: 0;
+  }
+  /**
+     * Remove float from list navigators on list panels.
+     */
+  .pageby,
+  .prev-next {
+    float: none;
+  }
+  /**
+     * Collapse progress meters responsively.
+     */
+  .progress-meter ol {
+    display: block;
+    margin-bottom: 1em;
+    text-align: left;
+  }
+  .progress-meter li {
+    display: block;
+    margin: 0;
+    float: none;
+  }
+  .progress-meter li::after {
+    display: none;
+  }
+  /**
+     * Override specifity on collapsed progress meters in RTL languages.
+     */
+  [dir="rtl"] .progress-meter ol {
+    text-align: right;
+  }
+  [dir="rtl"] .progress-meter li {
+    margin: 0;
+  }
+  [dir="rtl"] .progress-meter li::after {
+    display: none;
+  }
+  /**
+     * Collapse jQuery UI tabs responsively.
+     */
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
+    margin: 0;
+    float: none;
+    border-bottom-width: 1px;
+  }
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-active {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  [dir="rtl"] .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
+    float: none;
+  }
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
+    display: block;
+    float: none;
+  }
+  [dir="rtl"] .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
+    float: none;
+  }
+  /**
+     * Remove top border from jQuery UI tabs panel.
+     */
+  .ui-tabs .ui-tabs-panel {
+    border-top-width: 0;
+  }
+  /**
+     * Remove float from inline the action links.
+     */
+  .txp-actions-inline,
+  [dir="rtl"] .txp-actions-inline {
+    margin-top: 0;
+    float: none;
+  }
+}
+
+/* ==========================================================================
+   Animation `keyframes` need to appear outside of `screen` rules
+   ========================================================================== */
+@keyframes spinning {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes messageflash {
+  0% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 0.5;
+  }
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Styling and layout for print media
+   ========================================================================== */
+@media print {
+  /**
+ * Remove unnecessary global styling from printed media.
+ */
+  *,
+  *::before,
+  *::after,
+  *::first-letter,
+  p::first-line,
+  div::first-line,
+  blockquote::first-line,
+  li::first-line {
+    background: transparent !important;
+    color: #000000 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+  /**
+ * Use a print-friendly font and size.
+ */
+  body {
+    font-family: sans-serif;
+    font-size: 8pt;
+    line-height: 1.5;
+  }
+  /**
+ * Hide unnecessary content from print.
+ */
+  nav,
+  audio,
+  video,
+  .txp-header,
+  .txp-footer,
+  .txp-search,
+  .txp-navigation,
+  .txp-actions,
+  .txp-control-panel,
+  .txp-list-options,
+  .txp-list-col-multi-edit,
+  .multi-edit,
+  .pophelp,
+  .pophelpsubtle,
+  #messagepane,
+  #content_switcher,
+  #view_modes {
+    display: none;
+  }
+  /**
+ * Make sure links are not underlined.
+ */
+  a {
+    text-decoration: none;
+  }
+  /**
+ * Ensure monospaced font is used.
+ */
+  pre,
+  code,
+  kbd,
+  samp,
+  var,
+  .code {
+    font-family: monospace;
+  }
+  /**
+ * Ensure pre blocks are wrapped when printed.
+ */
+  pre {
+    white-space: pre-wrap;
+  }
+  /**
+ * Basic preformatted/blockquote styling.
+ */
+  pre,
+  blockquote {
+    border: 1px solid #000000;
+    page-break-inside: avoid;
+  }
+  /**
+ * Avoid images breaking across multiple pages.
+ */
+  img {
+    page-break-inside: avoid;
+  }
+  /**
+ * Borders on various elements.
+ */
+  table,
+  input,
+  textarea {
+    border: 1px solid #000000;
+  }
+  /**
+ * Display table head across multi-page tables.
+ */
+  thead {
+    display: table-header-group;
+  }
+  /**
+ * Avoid table rows breaking across multiple pages.
+ */
+  tr {
+    page-break-inside: avoid;
+  }
+  /**
+ * Avoid paragraph orphans and widows.
+ */
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    orphans: 2;
+    widows: 2;
+  }
+  /**
+ * Avoid headings breaking across multiple pages.
+ */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid;
+  }
+  /**
+ * Make pref panels printable.
+ */
+  .txp-prefs-group.ui-tabs-panel {
+    display: block !important;
+  }
+}
+
+@media screen {
+  .txp-list tbody tr,
+  .txp-list thead th,
+  .txp-list thead th:first-child {
+    border-color: #cccccc;
+  }
+  .ui-button .ui-icon {
+    background-image: url("../img/ui-icon-sprite-ffffff.svg");
+  }
+  .dropdown-menu {
+    border-radius: 0;
+    background: #ffffff;
+  }
+  .dropdown-menu li:hover {
+    background: #eaf3fc;
+  }
+  .dropdown-menu li.selected {
+    background: #d4e7f8;
+  }
+  table,
+  .switcher-list,
+  .ui-menu {
+    background: #ffffff;
+  }
+}

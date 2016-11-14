@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -40,27 +40,31 @@ if ($event == 'page') {
         'page_save'        => true,
         'page_delete'      => true,
         'page_skin_change' => true,
+        'tagbuild'         => false,
     ));
 
     switch (strtolower($step)) {
-        case "":
+        case '':
             page_edit();
             break;
-        case "page_edit":
+        case 'page_edit':
             page_edit();
             break;
-        case "page_save":
+        case 'page_save':
             page_save();
             break;
-        case "page_delete":
+        case 'page_delete':
             page_delete();
             break;
-        case "page_new":
+        case 'page_new':
             page_new();
             break;
         case "page_skin_change":
             page_skin_change();
             page_edit();
+            break;
+        case 'tagbuild':
+            echo page_tagbuild();
             break;
     }
 }
@@ -68,14 +72,49 @@ if ($event == 'page') {
 /**
  * The main Page editor panel.
  *
- * @param string|array $message The activity message
+ * @param string|array $message          The activity message
+ * @param bool         $refresh_partials Whether to refresh partial contents
  */
 
-function page_edit($message = '')
+function page_edit($message = '', $refresh_partials = false)
 {
     global $event, $step;
 
-    pagetop(gTxt('edit_pages'), $message);
+    /*
+    $partials is an array of:
+    $key => array (
+        'mode' => {PARTIAL_STATIC | PARTIAL_VOLATILE | PARTIAL_VOLATILE_VALUE},
+        'selector' => $DOM_selector or array($selector, $fragment) of $DOM_selectors,
+         'cb' => $callback_function,
+         'html' => $return_value_of_callback_function (need not be intialised here)
+    )
+    */
+    $partials = array(
+        // Stylesheet list.
+        'list' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => '#all_pages',
+            'cb'       => 'page_list',
+        ),
+        // Name field.
+        'name' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => 'div.name',
+            'cb'       => 'page_partial_name',
+        ),
+        // Name value.
+        'name_value'  => array(
+            'mode'     => PARTIAL_VOLATILE_VALUE,
+            'selector' => '#new_page,input[name=name]',
+            'cb'       => 'page_partial_name_value',
+        ),
+        // Textarea.
+        'template' => array(
+            'mode'     => PARTIAL_STATIC,
+            'selector' => 'div.template',
+            'cb'       => 'page_partial_template',
+        ),
+    );
 
     extract(array_map('assert_string', gpsa(array(
         'copy',
@@ -84,28 +123,25 @@ function page_edit($message = '')
         'skin',
     ))));
 
+    $default_name = safe_field("page", 'txp_section', "name = 'default'");
+
     $name = sanitizeForPage(assert_string(gps('name')));
     $newname = sanitizeForPage(assert_string(gps('newname')));
     $skin = ($skin !== '') ? $skin : get_pref('skin_editing', 'default', true);
+    $class = 'async';
+
     page_set_skin($skin);
+    $skin_list = get_skin_list();
 
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
-        $name = safe_field("page", 'txp_section', "name = 'default'");
-    } elseif (((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error) {
+        $name = $default_name;
+    } elseif ((($copy || $savenew) && $newname) && !$save_error) {
         $name = $newname;
-    }
-
-    $buttons = n.tag(gTxt('page_name'), 'label', array('for' => 'new_page')).
-        br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true);
-
-    if ($name) {
-        $buttons .= span(href(gTxt('duplicate'), '#', array(
-            'id'    => 'txp_clone',
-            'class' => 'clone',
-            'title' => gTxt('page_clone'),
-        )), array('class' => 'txp-actions'));
-    } else {
-        $buttons .= hInput('savenew', 'savenew');
+    } elseif ((($newname && ($newname != $name)) || $step === 'page_new') && !$save_error) {
+        $name = $newname;
+        $class = '';
+    } elseif ($savenew && $save_error) {
+        $class = '';
     }
 
     if (!$save_error) {
@@ -114,85 +150,122 @@ function page_edit($message = '')
         $html = gps('html');
     }
 
-    // Format of each entry is popTagLink -> array ( gTxt() string, class/ID).
-    $tagbuild_items = array(
-        'page_article'     => array('page_article_hed',     'article-tags'),
-        'page_article_nav' => array('page_article_nav_hed', 'article-nav-tags'),
-        'page_nav'         => array('page_nav_hed',         'nav-tags'),
-        'page_xml'         => array('page_xml_hed',         'xml-tags'),
-        'page_misc'        => array('page_misc_hed',        'misc-tags'),
-        'page_file'        => array('page_file_hed',        'file-tags'),
-    );
+    $actionsExtras = '';
 
-    $tagbuild_links = '';
-
-    foreach ($tagbuild_items as $tb => $item) {
-        $tagbuild_links .= wrapRegion($item[1].'_group', taglinks($tb), $item[1], $item[0], 'page_'.$item[1]);
+    if ($name) {
+        $actionsExtras .= href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
+            'class'     => 'txp-clone',
+            'data-form' => 'page_form',
+        ));
     }
 
-    $skin_list = get_skin_list();
+    $actions = graf(
+        sLink('page', 'page_new', '<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new_page'), 'txp-new').
+        $actionsExtras,
+        array('class' => 'txp-actions txp-actions-inline')
+    );
 
-    echo hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading'));
-    echo n.tag(
+    $skinBlock = '';
 
-        n.tag(
-            hed(gTxt('tagbuilder'), 2).
-            $tagbuild_links, 'div', array(
-            'id'    => 'tagbuild_links',
-            'class' => 'txp-layout-cell txp-layout-1-4',
-        )).
-
-        n.tag(
-            form(
-                graf($buttons).
-                graf(
-                    tag(gTxt('page_code'), 'label', array('for' => 'html')).
-                    br.'<textarea class="code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($html).'</textarea>'
-                ).
-                graf(
-                    fInput('submit', '', gTxt('save'), 'publish').
-                    eInput('page').sInput('page_save').
-                    hInput('name', $name).
-                    hInput('skin', $skin)
-                ), '', '', 'post', 'edit-form', '', 'page_form'), 'div', array(
-            'id'    => 'main_content',
-            'class' => 'txp-layout-cell txp-layout-2-4',
-        )).
-
-        n.tag(
-            graf(sLink('page', 'page_new', gTxt('create_new_page')), ' class="action-create"').
-            ((count($skin_list) > 1)
-            ? form(
+    if (count($skin_list) > 1) {
+        $skinBlock =
+            n.form(
                 inputLabel('skin', selectInput('skin', $skin_list, $skin, false, 1, 'skin'), 'skin').
                 eInput('page').
                 sInput('page_skin_change')
-                )
-            : ''
-            ).
-            page_list($name, $skin).
-        n, 'div', array(
+            , '', '', 'post', 'txp-layout-4col-3span');
+    }
+
+    $buttons = graf(
+        tag_void('input', array(
+            'class'  => 'publish',
+            'type'   => 'submit',
+            'method' => 'post',
+            'value'  =>  gTxt('save'),
+        )), ' class="txp-save"'
+    );
+
+    $rs = array(
+        'name'    => $name,
+        'newname' => $newname,
+        'default' => $default_name,
+        'skin'    => $skin,
+        'html'    => $html,
+        );
+
+    // Get content for volatile partials.
+    $partials = updatePartials($partials, $rs, array(PARTIAL_VOLATILE, PARTIAL_VOLATILE_VALUE));
+
+    if ($refresh_partials) {
+        $response[] = announce($message);
+        $response = array_merge($response, updateVolatilePartials($partials));
+        send_script_response(join(";\n", $response));
+
+        // Bail out.
+        return;
+    }
+
+    // Get content for static partials.
+    $partials = updatePartials($partials, $rs, PARTIAL_STATIC);
+
+    pagetop(gTxt('edit_pages'), $message);
+
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-4col-alt')
+        ).$skinBlock;
+
+    // Pages create/switcher column.
+    echo n.tag(
+        $partials['list']['html'].n,
+        'div', array(
+            'class' => 'txp-layout-4col-alt',
             'id'    => 'content_switcher',
-            'class' => 'txp-layout-cell txp-layout-1-4',
-        )).n, 'div', array(
-        'id'    => $event.'_container',
-        'class' => 'txp-layout-grid',
+            'role'  => 'region',
+        )
+    );
+
+    // Pages code columm.
+    echo n.tag(
+        form(
+            $actions.
+            $partials['name']['html'].
+            $partials['template']['html'].
+            $buttons, '', '', 'post', $class, '', 'page_form'),
+        'div', array(
+            'class' => 'txp-layout-4col-3span',
+            'id'    => 'main_content',
+            'role'  => 'region',
+        )
+    );
+
+    // Tag builder dialog.
+    echo n.tag(
+        page_tagbuild(),
+        'div', array(
+            'class'      => 'txp-tagbuilder-content',
+            'id'         => 'tagbuild_links',
+            'aria-label' => gTxt('tagbuilder'),
+            'title'      => gTxt('tagbuilder'),
     ));
+
+    echo n.'</div>'; // End of .txp-layout.
 }
 
 /**
  * Renders a list of page templates.
  *
- * @param  string $current The selected template
- * @param  string $skin    The selected skin
+ * @param  string $current The selected template info
  * @return string HTML
  */
 
-function page_list($current, $skin)
+function page_list($current)
 {
     $out = array();
     $protected = safe_column("DISTINCT page", 'txp_section', "1 = 1") + array('error_default');
 
-    $criteria = "skin = '" . doSlash($skin) . "'";
+    $criteria = "skin = '" . doSlash($current['skin']) . "'";
     $criteria .= callback_event('admin_criteria', 'page_list', 0, $criteria);
 
     $rs = safe_rows_start("name", 'txp_page', "$criteria ORDER BY name ASC");
@@ -200,19 +273,15 @@ function page_list($current, $skin)
     if ($rs) {
         while ($a = nextRow($rs)) {
             extract($a);
-            $active = ($current === $name);
+            $active = ($current['name'] === $name);
 
-            if ($active) {
-                $edit = txpspecialchars($name);
-            } else {
-                $edit = eLink('page', '', 'name', $name, $name);
-            }
+            $edit = eLink('page', '', 'name', $name, $name);
 
             if (!in_array($name, $protected)) {
                 $edit .= dLink('page', 'page_delete', 'name', $name);
             }
 
-            $out[] = tag($edit, 'li', array(
+            $out[] = tag(n.$edit.n, 'li', array(
                 'class' => $active ? 'active' : '',
             ));
         }
@@ -258,6 +327,8 @@ function page_delete()
 
 function page_save()
 {
+    global $app_mode;
+
     extract(doSlash(array_map('assert_string', psa(array(
         'savenew',
         'html',
@@ -290,6 +361,7 @@ function page_save()
 
         if ($newname !== $name && $exists !== false) {
             $message = array(gTxt('page_already_exists', array('{name}' => $newname)), E_ERROR);
+
             if ($savenew) {
                 $_POST['newname'] = '';
             }
@@ -315,7 +387,7 @@ function page_save()
                         "name = '$safe_name' AND skin = '$safe_skin'")) {
                     safe_update('txp_section', "page = '$safe_newname'", "page='$safe_name'");
                     update_lastmod('page_saved', compact('newname', 'name', 'html'));
-                    $message = gTxt('page_updated', array('{name}' => $name));
+                    $message = gTxt('page_updated', array('{name}' => $newname));
                 } else {
                     $message = array(gTxt('page_save_failed'), E_ERROR);
                     $save_error = true;
@@ -330,7 +402,7 @@ function page_save()
         callback_event('page_saved', '', 0, $name, $newname);
     }
 
-    page_edit($message);
+    page_edit($message, ($app_mode === 'async') ? true : false);
 }
 
 /**
@@ -358,7 +430,9 @@ function page_skin_change($skin = null)
         $skin = gps('skin');
     }
 
-    page_set_skin($skin);
+    if ($skin) {
+        page_set_skin($skin);
+    }
 
     return true;
 }
@@ -377,6 +451,44 @@ function page_set_skin($skin)
 }
 
 /**
+ * Return a list of tag builder tags.
+ *
+ * @return HTML
+ */
+
+function page_tagbuild()
+{
+    $listActions = graf(
+        href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
+            'class'         => 'txp-expand-all',
+            'aria-controls' => 'tagbuild_links',
+        )).
+        href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
+            'class'         => 'txp-collapse-all',
+            'aria-controls' => 'tagbuild_links',
+        )), array('class' => 'txp-actions')
+    );
+
+    // Format of each entry is popTagLink -> array ( gTxt() string, class/ID).
+    $tagbuild_items = array(
+        'page_article'     => array('page_article_hed', 'article-tags'),
+        'page_article_nav' => array('page_article_nav_hed', 'article-nav-tags'),
+        'page_nav'         => array('page_nav_hed', 'nav-tags'),
+        'page_xml'         => array('page_xml_hed', 'xml-tags'),
+        'page_misc'        => array('page_misc_hed', 'misc-tags'),
+        'page_file'        => array('page_file_hed', 'file-tags'),
+    );
+
+    $tagbuild_links = '';
+
+    foreach ($tagbuild_items as $tb => $item) {
+        $tagbuild_links .= wrapRegion($item[1].'_group', taglinks($tb), $item[1], $item[0], 'page_'.$item[1]);
+    }
+
+    return $listActions.$tagbuild_links;
+}
+
+/**
  * Renders a list of tag builder options.
  *
  * @param  string $type
@@ -388,4 +500,72 @@ function page_set_skin($skin)
 function taglinks($type)
 {
     return popTagLinks($type);
+}
+
+/**
+ * Renders page name field.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function page_partial_name($rs)
+{
+    $name = $rs['name'];
+    $skin = $rs['skin'];
+
+    $titleblock = inputLabel(
+        'new_page',
+        fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true),
+        'page_name',
+        array('', 'instructions_page_name'),
+        array('class' => 'txp-form-field name')
+    );
+
+    if ($name === '') {
+        $titleblock .= hInput('savenew', 'savenew');
+    } else {
+        $titleblock .= hInput('name', $name);
+    }
+
+    $titleblock .= hInput('skin', $skin).
+        eInput('page').sInput('page_save');
+
+    return $titleblock;
+}
+
+/**
+ * Renders page name value.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function page_partial_name_value($rs)
+{
+    return $rs['name'];
+}
+
+/**
+ * Renders page textarea field.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function page_partial_template($rs)
+{
+    $out = inputLabel(
+        'html',
+        '<textarea class="code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($rs['html']).'</textarea>',
+        array(
+            'page_code',
+            n.href('<span class="ui-icon ui-extra-icon-code"></span> '.gTxt('tagbuilder'), '#', array('class' => 'txp-tagbuilder-dialog')),
+        ),
+        array('', 'instructions_page_code'),
+        array('class' => 'txp-form-field template'),
+        array('div', 'div')
+    );
+
+    return $out;
 }

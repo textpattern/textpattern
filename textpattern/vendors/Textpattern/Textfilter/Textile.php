@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -63,14 +63,14 @@ class Textile extends Base implements TextfilterInterface
         parent::filter($thing, $options);
 
         if (($this->options['restricted'])) {
-            return $this->textile->TextileRestricted(
+            return $this->textile->textileRestricted(
                 $thing,
                 $this->options['lite'],
                 $this->options['noimage'],
                 $this->options['rel']
             );
         } else {
-            return $this->textile->TextileThis(
+            return $this->textile->textileThis(
                 $thing,
                 $this->options['lite'],
                 '',
@@ -117,14 +117,17 @@ class Textile extends Base implements TextfilterInterface
             popHelpSubtle('super', 400, 300).'</li>'.
             n.'<li>'.'~'.gTxt('subscript').'~'.
             popHelpSubtle('subscript', 400, 400).'</li>'.
-            n.'<li>'.'"'.gTxt('linktext').'"'.
+            n.'<li>'.'"'.gTxt('linktext').'":url'.
             popHelpSubtle('link', 400, 300).'</li>'.
             n.'<li>'.'!'.gTxt('imageurl').'!'.
             popHelpSubtle('image', 400, 400).'</li>'.
             n.'</ul>'.
-
             graf(
-                href(gTxt('More'), 'http://textpattern.com/textile-sandbox', ' id="textile-docs-link" rel="external" target="_blank"')
+                href(gTxt('documentation').sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), 'http://textpattern.com/textile-sandbox', array(
+                    'class' => 'textile-docs-link',
+                    'rel'    => 'external',
+                    'target' => '_blank',
+                ))
             );
     }
 }
