@@ -28,6 +28,8 @@
  * @package Admin\Skin
  */
 
+use Textpattern\Search\Filter;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -45,7 +47,6 @@ if ($event == 'skin') {
         'skin_save'          => true,
         'skin_edit'          => false,
         'skin_multi_edit'    => true,
-        'skin_toggle_option' => true,
     );
 
     if ($step && bouncer($step, $available_steps)) {
@@ -76,17 +77,28 @@ function skin_list($message = '')
     )));
 
     if ($sort === '') {
-        $sort = get_pref('skin_sort_column', 'time');
+        $sort = get_pref('skin_sort_column', 'name');
+    } else {
+        if (!in_array($sort, array('name', 'title', 'version', 'author', 'section_count', 'page_count', 'form_count', 'css_count'))) {
+            $sort = 'name';
+        }
+
+        set_pref('skin_sort_column', $sort, 'skin', 2, '', 0, PREF_PRIVATE);
     }
 
     if ($dir === '') {
         $dir = get_pref('skin_sort_dir', 'desc');
+    } else {
+        $dir = ($dir == 'asc') ? "asc" : "desc";
+        set_pref('skin_sort_dir', $dir, 'skin', 2, '', 0, PREF_PRIVATE);
     }
-    $dir = ($dir == 'asc') ? 'asc' : 'desc';
 
     switch ($sort) {
         case 'title':
             $sort_sql = 'title '.$dir;
+            break;
+        case 'version':
+            $sort_sql = 'version '.$dir;
             break;
         case 'author':
             $sort_sql = 'author '.$dir;
@@ -97,11 +109,11 @@ function skin_list($message = '')
         case 'page_count':
             $sort_sql = 'page_count '.$dir;
             break;
-        case 'css_count':
-            $sort_sql = 'css_count '.$dir;
-            break;
         case 'form_count':
             $sort_sql = 'form_count '.$dir;
+            break;
+        case 'css_count':
+            $sort_sql = 'css_count '.$dir;
             break;
         case 'name':
         default:
@@ -109,64 +121,77 @@ function skin_list($message = '')
             break;
     }
 
-    set_pref('skin_sort_column', $sort, 'skin', 2, '', 0, PREF_PRIVATE);
-    set_pref('skin_sort_dir', $dir, 'skin', 2, '', 0, PREF_PRIVATE);
-
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    $criteria = 1;
+    $search = new Filter($event,
+        array(
+            'name' => array(
+                'column' => 'txp_skin.name',
+                'label'  => gTxt('name'),
+            ),
+            'title' => array(
+                'column' => 'txp_skin.title',
+                'label'  => gTxt('title'),
+            ),
+            'author' => array(
+                'column' => 'txp_skin.author',
+                'label'  => gTxt('author'),
+            ),
+        )
+    );
 
-    if ($search_method and $crit != '') {
-        $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
-        $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
-        $critsql = $verbatim ?
-            array(
-                'name'   => "name = '$crit_escaped'",
-                'title'  => "title = '$crit_escaped'",
-                'author' => "author = '$crit_escaped'",
-            ) : array(
-                'name'   => "name like '%$crit_escaped%'",
-                'title'  => "title like '%$crit_escaped%'",
-                'author' => "author like '%$crit_escaped%'",
-            );
+    list($criteria, $crit, $search_method) = $search->getFilter();
 
-        $search_sql = array();
-
-        foreach ((array) $search_method as $method) {
-            if (isset($critsql[$method])) {
-                $search_sql[] = $critsql[$method];
-            }
-        }
-
-        if ($search_sql) {
-            $criteria = join(' or ', $search_sql);
-            $limit = 500;
-        } else {
-            $search_method = '';
-            $crit = '';
-        }
-    } else {
-        $search_method = '';
-        $crit = '';
-    }
-
-    $criteria .= callback_event('admin_criteria', 'skin_list', 0, $criteria);
+    $search_render_options = array(
+        'placeholder' => 'search_skins',
+    );
 
     $total = safe_count('txp_skin', $criteria);
 
-    echo
-        hed(gTxt('tab_skins').popHelp('skin_category'), 1, array('class' => 'txp-heading')).
-        n.tag_start('div', array('id' => $event.'_control', 'class' => 'txp-control-panel')).
-
-        graf(
-            sLink('skin', 'skin_edit', gTxt('create_skin')),
-            array('class' => 'txp-buttons')
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_skins').popHelp('skin_category'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-4col-alt')
         );
+
+    $searchBlock =
+        n.tag(
+            $search->renderForm('skin', $search_render_options),
+            'div', array(
+                'class' => 'txp-layout-4col-3span',
+                'id'    => $event.'_control',
+            )
+        );
+
+    $createBlock = array();
+
+    if (has_privs('skin.edit')) {
+        $createBlock[] =
+            n.tag(
+                sLink('skin', 'skin_edit', gTxt('create_skin'), 'txp-button')
+                , 'div', array('class' => 'txp-control-panel')
+            );
+    }
+
+    $contentBlockStart = n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event.'_container',
+        ));
+
+    $createBlock = implode(n, $createBlock);
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo skin_search_form($crit, $search_method).
-                graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+            echo $searchBlock.
+                $contentBlockStart.
+                $createBlock.
+                graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_results_found'),
+                    array('class' => 'alert-block information')
+                ).
+                n.tag_end('div'). // End of .txp-layout-1col.
+                n.'</div>'; // End of .txp-layout.
         }
 
         return;
@@ -176,7 +201,7 @@ function skin_list($message = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo skin_search_form($crit, $search_method).'</div>';
+    echo $searchBlock.$contentBlockStart.$createBlock;
 
     $rs = safe_rows_start(
         '*,
@@ -189,17 +214,14 @@ function skin_list($message = '')
     );
 
     if ($rs) {
-        echo
-            n.tag_start('div', array(
-                'id'    => $event.'_container',
-                'class' => 'txp-container',
-            )).
+        echo n.tag(
+            toggle_box('skin_detail'), 'div', array('class' => 'txp-list-options')).
             n.tag_start('form', array(
-                'action' => 'index.php',
-                'id'     => 'skin_form',
                 'class'  => 'multi_edit_form',
-                'method' => 'post',
+                'id'     => 'skin_form',
                 'name'   => 'longform',
+                'method' => 'post',
+                'action' => 'index.php',
             )).
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
@@ -207,7 +229,7 @@ function skin_list($message = '')
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
                 ).
                 column_head(
                     'name', 'name', 'skin', true, $switch_dir, $crit, $search_method,
@@ -343,23 +365,23 @@ function skin_list($message = '')
             );
         }
 
-        echo
-            n.tag_end('tbody').
+        echo n.tag_end('tbody').
             n.tag_end('table').
-            n.tag_end('div').
+            n.tag_end('div'). // End of .txp-listtables.
             skin_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
-            graf(toggle_box('skin_detail'), array('class' => 'detail-toggle')).
             n.tag_start('div', array(
-                'id'    => $event.'_navigation',
                 'class' => 'txp-navigation',
+                'id'    => $event.'_navigation',
             )).
             pageby_form('skin', $skin_list_pageby).
             nav_form('skin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div').
             n.tag_end('div');
     }
+
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.
 }
 
 /**
@@ -407,20 +429,25 @@ function skin_edit()
 
     $out = array();
 
-    $out[] =
-        n.tag_start('section', array('class' => 'txp-edit')).
-        hed($caption, 2);
+    $out[] = hed($caption, 2);
+    $fields = array('name', 'title', 'version', 'author', 'website');
 
-    $out[] =
-        inputLabel('skin_name', fInput('text', 'name', $skin_name, '', '', '', INPUT_REGULAR, '', 'skin_name'), 'skin_name').
-        inputLabel('skin_title', fInput('text', 'title', $skin_title, '', '', '', INPUT_REGULAR, '', 'skin_title'), 'skin_title').
-        inputLabel('skin_version', fInput('text', 'version', $skin_version, '', '', '', INPUT_REGULAR, '', 'skin_version'), 'skin_version').
-        inputLabel('skin_author', fInput('text', 'author', $skin_author, '', '', '', INPUT_REGULAR, '', 'skin_author'), 'skin_author').
-        inputLabel('skin_website', fInput('text', 'website', $skin_website, '', '', '', INPUT_REGULAR, '', 'skin_website'), 'skin_website');
+    foreach ($fields as $field) {
+        $current = ${"skin_".$field};
 
-    $out[] =
-        pluggable_ui('skin_ui', 'extend_detail_form', '', $rs).
-        graf(fInput('submit', '', gTxt('save'), 'publish')).
+        $out[] = inputLabel(
+            "skin_$field",
+            fInput('text', $field, $current, '', '', '', INPUT_REGULAR, '', "skin_$field"),
+            "skin_$field"
+        );
+    }
+
+    $out[] = pluggable_ui('skin_ui', 'extend_detail_form', '', $rs).
+        graf(
+            sLink('skin', '', gTxt('cancel'), 'txp-button').
+            fInput('submit', '', gTxt('save'), 'publish'),
+            array('class' => 'txp-edit-actions')
+        ).
         eInput('skin').
         sInput('skin_save').
         hInput('old_name', $skin_name).
@@ -428,13 +455,9 @@ function skin_edit()
         hInput('crit', $crit).
         hInput('page', $page).
         hInput('sort', $sort).
-        hInput('dir', $dir).
-        n.tag_end('skin');
+        hInput('dir', $dir);
 
-    echo
-        n.tag_start('div', array('id' => $event.'_container', 'class' => 'txp-container')).
-        form(join('', $out), '', '', 'post', 'edit-form', '', 'skin_details').
-        n.tag_end('div');
+    echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'skin_details');
 }
 
 /**
@@ -602,25 +625,6 @@ function skin_delete()
     }
 
     skin_list($message);
-}
-
-/**
- * Renders a search form for skins.
- *
- * @param  string $crit   The current search criteria
- * @param  string $method The selected search method
- * @return HTML
- */
-
-function skin_search_form($crit, $method)
-{
-    $methods = array(
-        'name'   => gTxt('name'),
-        'title'  => gTxt('title'),
-        'author' => gTxt('author'),
-    );
-
-    return search_form('skin', 'skin_list', $crit, $methods, $method, 'name');
 }
 
 /**
