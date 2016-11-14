@@ -213,7 +213,7 @@ function page_edit($message = '', $refresh_partials = false)
     echo n.'<div class="txp-layout">'.
         n.tag(
             hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-4col-alt')
+            'div', array('class' => ($skinBlock ? 'txp-layout-4col-alt': 'txp-layout-1col'))
         ).$skinBlock;
 
     // Pages create/switcher column.
