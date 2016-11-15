@@ -2107,7 +2107,7 @@ function pluggable_ui($event, $element, $default = '')
     // Custom user interface, anyone?
     // Signature for called functions:
     // string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
-    $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => array(0, 0)) + $argv);
+    $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => trim((string)$default) === '' ? 0 : array(0, 0)) + $argv);
 
     // Either plugins provided a user interface, or we render our own.
     return ($ui === '') ? $default : $ui;
