@@ -176,14 +176,16 @@ function form_list($current)
             $out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
         }
 
+        $out = tag(implode('', $out), 'div', array('id' => 'allforms_form_sections', 'role' => 'region'));
+
         $methods = array(
             'changetype' => array('label' => gTxt('changetype'), 'html' => formTypes('', false, 'changetype')),
             'delete'     => gTxt('delete'),
         );
 
-        $out[] = multi_edit($methods, 'form', 'form_multi_edit');
+        $out .= multi_edit($methods, 'form', 'form_multi_edit');
 
-        return form(join('', $out), '', '', 'post', '', '', 'allforms_form');
+        return form($out, '', '', 'post', '', '', 'allforms_form');
     }
 }
 
@@ -269,7 +271,7 @@ function form_edit($message = '', $refresh_partials = false)
         // Form list.
         'list' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => array('#form_article>ul, #form_misc>ul, #form_comment>ul, #form_file>ul, #form_link>ul, #form_section>ul'),
+            'selector' => '#allforms_form_sections',
             'cb'       => 'form_list',
         ),
         // Name field.
@@ -398,6 +400,7 @@ function form_edit($message = '', $refresh_partials = false)
     if ($refresh_partials) {
         $response[] = announce($message);
         $response = array_merge($response, updateVolatilePartials($partials));
+        $response[] = '$("#allforms_form_sections").restorePanes()';
         send_script_response(join(";\n", $response));
 
         // Bail out.
