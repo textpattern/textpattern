@@ -57,7 +57,7 @@ if (!$files) {
 if ($event == 'diag') {
     require_privs('diag');
 
-    $step = gps('step');
+    $step = ($step) ? $step : gps('step');
     doDiagnostics();
 }
 
@@ -185,16 +185,31 @@ function doDiagnostics()
 
     $fail = array();
     $now = time();
+    $heading = gTxt('tab_diagnostics');
 
     if (!$txp_is_dev) {
+        if ($step === 'update' && defined('TXP_UPDATE')) {
+            // @todo Gather messages from the ugrade/install scripts (perhaps via
+            // a FlashMessage structure) and present them above pre-flight check.
+            $heading = gTxt('welcome_to_txp', array('{version}' => txp_version));
+            $step = 'low';
+        }
+
         // Check for Textpattern updates, at most once every 24 hours.
+        // For legacy reasons, attempt an unserialize() first and if it fails,
+        // try the more recent json_decode().
+        // @todo Entirely remove unserialize() in some future version.
         $updateInfo = unserialize(get_pref('last_update_check', ''));
+
+        if ($updateInfo === false) {
+            $updateInfo = json_decode(get_pref('last_update_check', ''));
+        }
 
         if (!$updateInfo || ($now > ($updateInfo['when'] + (60 * 60 * 24)))) {
             $updates = checkUpdates();
             $updateInfo['msg'] = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
             $updateInfo['when'] = $now;
-            set_pref('last_update_check', serialize($updateInfo), 'publish', PREF_HIDDEN, 'text_input');
+            set_pref('last_update_check', json_encode($updateInfo), 'publish', PREF_HIDDEN, 'text_input');
         }
 
         if (!empty($updateInfo['msg'])) {
@@ -432,7 +447,7 @@ function doDiagnostics()
 
     echo n.'<div class="txp-layout">'.
         n.tag(
-            hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading')),
+            hed($heading, 1, array('class' => 'txp-heading')),
             'div', array('class' => 'txp-layout-1col')
         ).
         n.tag_start('div', array(
