@@ -88,12 +88,14 @@ function filterFrontPage()
 
 function populateArticleData($rs)
 {
-    global $thisarticle, $trace;
+    global $production_status, $thisarticle, $trace;
 
-    $trace->log("[Article: '{$rs['ID']}']");
+    if ($production_status === 'debug') {
+        $trace->log("[Article: '{$rs['ID']}']");    
+    }
 
     foreach (article_column_map() as $key => $column) {
-        $thisarticle[$key] = $rs[$column];
+        $thisarticle[$key] = isset($rs[$column]) ? $rs[$column] : null;
     }
 }
 
@@ -367,12 +369,12 @@ function parse($thing, $condition = null)
 {
     global $production_status, $trace, $txp_parsed, $txp_else;
 
-    // Replace null with a pref to enable <abc:tags />.
+    // Replace null with a pref to enable <abc::tags />.
     static $pattern, $short_tags = null;
 
     if (!isset($short_tags)) {
         $short_tags = get_pref('enable_short_tags');
-        $pattern = $short_tags ? '[a-z]{3}' : 'txp';
+        $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp';
     }
         
     if (isset($condition)) {
@@ -387,7 +389,7 @@ function parse($thing, $condition = null)
         if (false === strpos($thing, "<{$pattern}:")) {
             return $condition ? $thing : '';
         }
-    } elseif (!preg_match("@<{$pattern}:@", $thing)) {
+    } elseif (!preg_match("@<(?:{$pattern}):@", $thing)) {
         return $condition ? $thing : '';
     }
 
@@ -402,8 +404,8 @@ function parse($thing, $condition = null)
         $count   = array(-1);
         $level   = 0;
 
-        $f = '@(</?'.$pattern.'::?\w+(?:\s+#?\w+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
-        $t = '@^</?('.$pattern.')::?(\w+)(.*?)/?\>$@s';
+        $f = '@(</?(?:'.$pattern.'):\w+(?:\s+#?\w+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+        $t = '@^</?('.$pattern.'):(\w+)(.*?)/?\>$@s';
 
         $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
 
@@ -415,8 +417,8 @@ function parse($thing, $condition = null)
                 if ($tag[$level][2] === 'else') {
                     $else[$level] = $count[$level];
                 } elseif ($short_tags && $tag[$level][1] !== 'txp') {
-                    // Handle <abc:tags />.
-                    $tag[$level][2] = $tag[$level][1].'_'.$tag[$level][2];
+                    // Handle <abc::tags />.
+                    $tag[$level][2] = rtrim($tag[$level][1], ':').'_'.$tag[$level][2];
                 }
 
                 if ($chunk[strlen($chunk) - 2] === '/') {
