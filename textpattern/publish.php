@@ -508,7 +508,7 @@ function preText($s, $prefs)
         $a = safe_row(
             "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            "ID = ".intval($id).(gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")")
+            "ID = ".intval($id).(gps('txpreview') ? '' : " AND Status IN (".implode(',', array_keys(status_group('published', false))).")")
         );
 
         if ($a) {
@@ -920,9 +920,9 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     if ($q && $searchsticky) {
-        $statusq = " AND Status >= ".STATUS_LIVE;
+        $statusq = " AND Status IN (".implode(',', array_keys(status_group('published', false))).")";
     } elseif ($id) {
-        $statusq = " AND Status >= ".STATUS_LIVE;
+        $statusq = " AND Status IN (".implode(',', array_keys(status_group('published', false))).")";
     } else {
         $statusq = " AND Status = ".intval($status);
     }
@@ -1066,7 +1066,7 @@ function doArticle($atts, $thing = null)
         $id = assert_int($id);
         $thisarticle = null;
 
-        $q_status = ($status ? "AND Status = ".intval($status) : "AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")");
+        $q_status = ($status ? "AND Status = ".intval($status) : "AND Status IN (".implode(',', array_keys(status_group('published', false))).")");
 
         $rs = safe_row(
             "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
