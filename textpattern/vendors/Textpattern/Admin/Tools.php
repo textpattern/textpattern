@@ -64,8 +64,6 @@ class Tools
     public static function removeFiles($root, $files = null)
     {
         if(!is_dir($root) || !is_writable($root)) {
-            $this->warnings[] = $root.' is not writable';
-
             return false;
         } elseif (!isset($files)) {
             $files = array_diff(scandir($root), array('.', '..'));
