@@ -234,11 +234,11 @@ function article_post()
         $Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
         $msg = '';
 
-        if (!has_privs('article.publish') && $Status >= STATUS_LIVE) {
+        if (!has_privs('article.publish') && has_status_group($Status, 'published')) {
             $Status = STATUS_PENDING;
         }
 
-        if ($is_clone && $Status >= STATUS_LIVE) {
+        if ($is_clone && has_status_group($Status, 'published')) {
             $Status = STATUS_DRAFT;
             $url_title = '';
         }
@@ -301,7 +301,7 @@ function article_post()
                     );
                 }
 
-                if ($Status >= STATUS_LIVE) {
+                if (has_status_group($Status, 'published')) {
                     do_pings();
                     update_lastmod('article_posted', $rs);
                     now('posted', true);
@@ -338,10 +338,13 @@ function article_save()
         UNIX_TIMESTAMP(Expires) AS sExpires",
         'textpattern', "ID = ".(int) $incoming['ID']);
 
-    if (!(($oldArticle['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
-        or ($oldArticle['Status'] >= STATUS_LIVE and $incoming['AuthorID'] === $txp_user and has_privs('article.edit.own.published'))
-        or ($oldArticle['Status'] < STATUS_LIVE and has_privs('article.edit'))
-        or ($oldArticle['Status'] < STATUS_LIVE and $incoming['AuthorID'] === $txp_user and has_privs('article.edit.own')))) {
+    $wasPublished = has_status_group($oldArticle['Status'], 'published');
+    $wasUnpublished = has_status_group($oldArticle['Status'], 'unpublished');
+
+    if (!(($wasPublished and has_privs('article.edit.published'))
+        or ($wasPublished and $incoming['AuthorID'] === $txp_user and has_privs('article.edit.own.published'))
+        or ($wasUnpublished and has_privs('article.edit'))
+        or ($wasUnpublished and $incoming['AuthorID'] === $txp_user and has_privs('article.edit.own')))) {
         // Not allowed, you silly rabbit, you shouldn't even be here.
         // Show default editing screen.
         article_edit();
@@ -368,7 +371,7 @@ function article_save()
     // Comments may be on, off, or disabled.
     $Annotate = (int) $Annotate;
 
-    if (!has_privs('article.publish') && $Status >= STATUS_LIVE) {
+    if (!has_privs('article.publish') && has_status_group($Status, 'published')) {
         $Status = STATUS_PENDING;
     }
 
@@ -441,7 +444,7 @@ function article_save()
     // Auto-update custom-titles according to Title, as long as unpublished and
     // NOT customised.
     if (empty($url_title)
-        || (($oldArticle['Status'] < STATUS_LIVE)
+        || (($wasUnpublished)
         && ($oldArticle['url_title'] === $url_title)
         && ($oldArticle['url_title'] === stripSpace($oldArticle['Title'], 1))
         && ($oldArticle['Title'] !== $Title)
@@ -490,11 +493,13 @@ function article_save()
             $whenexpires",
             "ID = $ID"
         )) {
-            if ($Status >= STATUS_LIVE && $oldArticle['Status'] < STATUS_LIVE) {
+            $isNowPublished = has_status_group($Status, 'published');
+
+            if ($isNowPublished && $wasUnpublished) {
                 do_pings();
             }
 
-            if ($Status >= STATUS_LIVE || $oldArticle['Status'] >= STATUS_LIVE) {
+            if ($isNowPublished || $wasPublished) {
                 update_lastmod('article_saved', $rs);
             }
 
@@ -872,7 +877,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $response[] = announce($message);
         $response[] = '$("#article_form [type=submit]").val(textpattern.gTxt("save"))';
 
-        if ($Status < STATUS_LIVE) {
+        if (has_status_group($Status, 'unpublished')) {
             $response[] = '$("#article_form").addClass("saved").removeClass("published")';
         } else {
             $response[] = '$("#article_form").addClass("published").removeClass("saved")';
@@ -894,7 +899,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     $class = array();
 
-    if ($Status >= STATUS_LIVE) {
+    if (has_status_group($Status, 'published')) {
         $class[] = 'published';
     } elseif ($ID) {
         $class[] = 'saved';
@@ -1012,10 +1017,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
             echo graf($push_button, array('class' => 'txp-save'));
         } elseif (
-            ($Status >= STATUS_LIVE && has_privs('article.edit.published')) ||
-            ($Status >= STATUS_LIVE && $AuthorID === $txp_user && has_privs('article.edit.own.published')) ||
-            ($Status < STATUS_LIVE && has_privs('article.edit')) ||
-            ($Status < STATUS_LIVE && $AuthorID === $txp_user && has_privs('article.edit.own'))
+            (($isPublished = has_status_group($Status, 'published')) && has_privs('article.edit.published')) ||
+            ($isPublished && $AuthorID === $txp_user && has_privs('article.edit.own.published')) ||
+            (($isUnpublished = has_status_group($Status, 'unpublished')) && has_privs('article.edit')) ||
+            ($isUnpublished && $AuthorID === $txp_user && has_privs('article.edit.own'))
         ) {
             echo graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
         }
@@ -1821,7 +1826,7 @@ function article_partial_article_view($rs)
 {
     extract($rs);
 
-    if ($Status != STATUS_LIVE and $Status != STATUS_STICKY) {
+    if (has_status_group($Status, 'unpublished')) {
         $url = '?txpreview='.intval($ID).'.'.time(); // Article ID plus cachebuster.
     } else {
         include_once txpath.'/publish/taghandlers.php';

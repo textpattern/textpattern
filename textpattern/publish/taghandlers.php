@@ -1049,7 +1049,7 @@ function recent_comments($atts, $thing = null)
     $rs = startRows("SELECT d.name, d.email, d.web, d.message, d.discussid, UNIX_TIMESTAMP(d.Posted) AS time,
             t.ID AS thisid, UNIX_TIMESTAMP(t.Posted) AS posted, t.Title AS title, t.Section AS section, t.url_title
         FROM ".safe_pfx('txp_discuss')." AS d INNER JOIN ".safe_pfx('textpattern')." AS t ON d.parentid = t.ID
-        WHERE t.Status >= ".STATUS_LIVE.$expired." AND d.visible = ".VISIBLE."
+        WHERE t.Status IN(".implode(',', array_keys(status_group('published', false))).")".$expired." AND d.visible = ".VISIBLE."
         ORDER BY ".doSlash($sort)."
         LIMIT ".intval($offset).", ".intval($limit));
 

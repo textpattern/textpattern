@@ -6642,6 +6642,78 @@ function status_list($labels = true, $exclude = array())
 }
 
 /**
+ * Return a list of status codes and their associated names by group.
+ *
+ * The groups can be extended with a 'status.types > groups' callback event.
+ * Callback functions get passed three arguments: '$event', '$step' and
+ * '$status_list'. The third parameter contains a nested array of $group =>
+ * 'status_code => label' pairs.
+ *
+ * Note the unpublished statuses are not in numerical order, by design.
+ * This facilitates plugins that may wish to introduce a 'publisher workflow'.
+ * Such plugins could define a new group and/or could introduce a
+ * 'next status' feature which might step through the status codes within
+ * a group to indicate a document's flow through an editorial chain.
+ * Hidden->Draft->Pending (i.e. draft, then review by an editor prior to
+ * publication) is a logical default workflow.
+ *
+ * @param   string The group to return
+ * @param   bool   Return the list with L10n labels (for UI purposes) or raw values (for comparisons)
+ * @return  array  A status array
+ * @since   4.7.0
+ */
+
+function status_group($group = 'published', $labels = true)
+{
+    $status_list = array(
+        'unpublished' => array(
+            STATUS_HIDDEN  => 'hidden',
+            STATUS_DRAFT   => 'draft',
+            STATUS_PENDING => 'pending',
+        ),
+        'published' => array(
+            STATUS_LIVE    => 'live',
+            STATUS_STICKY  => 'sticky',
+        ),
+        'files' => array(
+            STATUS_HIDDEN  => 'hidden',
+            STATUS_PENDING => 'pending',
+            STATUS_LIVE    => 'live',
+        ),
+    );
+
+    callback_event_ref('status.types', 'groups', 0, $status_list);
+
+    $outList = array();
+
+    if (array_key_exists($group, $status_list)) {
+        $outList = $status_list[$group];
+    }
+
+    if ($labels) {
+        $outList = array_map('gTxt', $outList);
+    }
+
+    return $outList;
+}
+
+/**
+ * Determine if the passed $status is in the nominated $group.
+ *
+ * @param   int     $status Status code
+ * @param   string  $group  Group name
+ * @return  boolean
+ * @since   4.7.0
+ */
+
+function has_status_group($status, $group)
+{
+    $statuses = status_group($group, false);
+
+    return array_key_exists($status, $statuses);
+}
+
+/**
  * Translates article status names into numerical status codes.
  *
  * @param  string $name    Status name
