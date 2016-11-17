@@ -1,3 +1,12 @@
+Changes in 4.7.0 (upcoming)
+
+* Textile v3.6.
+* Added: Pages, Forms and Styles panels save some changes without page refreshes (AJAX).
+* Changed: Upgrades land on Diagnostics panel, with suitable message.
+* Changed: Enable HTTP 226 responses (thanks, da2x).
+* Changed: Make pref panels fully printable (thanks, Philippe).
+* zxcvbn 4.4.1.
+
 Changes in 4.6.2
 
 * Maintenance release with bug fixes.
