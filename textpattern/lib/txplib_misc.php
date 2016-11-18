@@ -5302,7 +5302,7 @@ function pagelinkurl($parts, $inherit = array())
             unset($keys['c'], $keys['context']);
         }
 
-        return rtrim($url.join_qs($keys), '/');
+        return rtrim($url, '/').join_qs($keys);
     }
 }
 
@@ -5411,7 +5411,7 @@ function permlinkurl($article_array)
             if ($prefs['attach_titles_to_permalinks']) {
                 $out = hu."$section/$thisid/$url_title";
             } else {
-                $out = hu."$section/$thisid/";
+                $out = hu."$section/$thisid";
             }
             break;
         case 'year_month_day_title':
@@ -5422,7 +5422,7 @@ function permlinkurl($article_array)
             if ($prefs['attach_titles_to_permalinks']) {
                 $out = hu."$thisid/$url_title";
             } else {
-                $out = hu."$thisid/";
+                $out = hu."$thisid";
             }
             break;
         case 'section_title':
@@ -5436,7 +5436,7 @@ function permlinkurl($article_array)
             break;
     }
 
-    return $permlinks[$thisid] = rtrim($out, '/');
+    return $permlinks[$thisid] = $out;
 }
 
 /**
