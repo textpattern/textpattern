@@ -1,7 +1,7 @@
 Changes in 4.7.0 (upcoming)
 
 * Textile v3.6.
-* Added: Pages, Forms and Styles panels save some changes without page refreshes (AJAX).
+* Added: Pages, Forms and Styles panels save some changes without page refreshes (Ajax).
 * Added: Parser enhancements: valueless attributes and short tags.
 * Added: <txp:evaluate /> tag.
 * Added: <txp:article_custom /> tag can count pages.
