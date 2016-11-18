@@ -248,19 +248,19 @@ function skin_list($message = '')
                         (('author' == $sort) ? "$dir " : '').'txp-list-col-author'
                 ).
                 column_head(
-                    'sections', 'section_count', 'skin', true, $switch_dir, $crit, $search_method,
+                    'tab_sections', 'section_count', 'skin', true, $switch_dir, $crit, $search_method,
                         (('section_count' == $sort) ? "$dir " : '').'txp-list-col-section_count skin_detail'
                 ).
                 column_head(
-                    'pages', 'page_count', 'skin', true, $switch_dir, $crit, $search_method,
+                    'tab_pages', 'page_count', 'skin', true, $switch_dir, $crit, $search_method,
                         (('page_count' == $sort) ? "$dir " : '').'txp-list-col-page_count skin_detail'
                 ).
                 column_head(
-                    'forms', 'form_count', 'skin', true, $switch_dir, $crit, $search_method,
+                    'tab_forms', 'form_count', 'skin', true, $switch_dir, $crit, $search_method,
                         (('form_count' == $sort) ? "$dir " : '').'txp-list-col-form_count skin_detail'
                 ).
                 column_head(
-                    'css', 'css_count', 'skin', true, $switch_dir, $crit, $search_method,
+                    'tab_style', 'css_count', 'skin', true, $switch_dir, $crit, $search_method,
                         (('css_count' == $sort) ? "$dir " : '').'txp-list-col-css_count skin_detail'
                 )
             ).
