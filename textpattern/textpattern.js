@@ -79,44 +79,6 @@ function popWin(url, width, height, options)
 }
 
 /**
- * Legacy multi-edit tool.
- *
- * @param      {object} elm
- * @deprecated in 4.6.0
- */
-
-function poweredit(elm)
-{
-    var something = elm.options[elm.selectedIndex].value;
-
-    // Add another chunk of HTML
-    var pjs = document.getElementById('js');
-
-    if (pjs == null) {
-        var br = document.createElement('br');
-        elm.parentNode.appendChild(br);
-
-        pjs = document.createElement('P');
-        pjs.setAttribute('id', 'js');
-        elm.parentNode.appendChild(pjs);
-    }
-
-    if (pjs.style.display == 'none' || pjs.style.display == '') {
-        pjs.style.display = 'block';
-    }
-
-    if (something != '') {
-        switch (something) {
-            default:
-                pjs.style.display = 'none';
-                break;
-        }
-    }
-
-    return false;
-}
-
-/**
  * Basic confirmation for potentially powerful choices (like deletion,
  * for example).
  *
@@ -127,67 +89,6 @@ function poweredit(elm)
 function verify(msg)
 {
     return confirm(msg);
-}
-
-/**
- * Selects all multi-edit checkboxes.
- *
- * @deprecated in 4.5.0
- */
-
-function selectall()
-{
-    $('form[name=longform] input[type=checkbox][name="selected[]"]').prop('checked', true);
-}
-
-/**
- * De-selects all multi-edit checkboxes.
- *
- * @deprecated in 4.5.0
- */
-
-function deselectall()
-{
-    $('form[name=longform] input[type=checkbox][name="selected[]"]').prop('checked', false);
-}
-
-/**
- * Selects a range of multi-edit checkboxes.
- *
- * @deprecated in 4.5.0
- */
-
-function selectrange()
-{
-    var inrange = false;
-
-    $('form[name=longform] input[type=checkbox][name="selected[]"]').each(function ()
-    {
-        var $this = $(this);
-
-        if ($this.is(':checked')) {
-            inrange = (!inrange) ? true : false;
-        }
-
-        if (inrange) {
-            $this.prop('checked', true);
-        }
-    });
-}
-
-/**
- * ?
- *
- * @deprecated in 4.5.0
- */
-
-function cleanSelects()
-{
-    var withsel = document.getElementById('withselected');
-
-    if (withsel && withsel.options[withsel.selectedIndex].value != '') {
-        return (withsel.selectedIndex = 0);
-    }
 }
 
 /**
@@ -1737,10 +1638,10 @@ jQuery.fn.restorePanes = function ()
                 if (textpattern.storage.data[pane]) {
                     $elm.parent(".txp-summary").addClass("expanded");
                     $region.show();
-                } else {
+                } /*else {
                     $elm.parent(".txp-summary").removeClass("expanded");
                     $region.hide();
-                }
+                }*/
             }
 
             var vis = $region.is(':visible').toString();
