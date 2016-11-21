@@ -191,8 +191,6 @@ function prefs_list($message = '')
     $out = array();
     $build = array();
     $groupOut = array();
-    $tabCount = $tabActive = 0;
-    $selected = get_pref('pane_prefs_visible');
 
     if (numRows($rs)) {
         while ($a = nextRow($rs)) {
@@ -218,18 +216,11 @@ function prefs_list($message = '')
                                 'data-txp-pane'  => $last_event,
                                 'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
                             )),
-                        'li', array(
-                            'class' => (($last_event === $selected) ? 'ui-tabs-active ui-state-active' : '')
-                            ));
-                }
-
-                if ($last_event === $selected) {
-                    $tabActive = $tabCount - 1;
+                        'li');
                 }
 
                 $last_event = $a['event'];
                 $out = array();
-                $tabCount++;
             }
 
             $label = '';
@@ -286,13 +277,7 @@ function prefs_list($message = '')
                     'data-txp-pane'  => $last_event,
                     'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
                 )),
-            'li', array(
-                'class' => (($last_event === $selected) ? 'ui-tabs-active ui-state-active' : '')
-                )).n;
-
-        if ($last_event === $selected) {
-            $tabActive = $tabCount - 1;
-        }
+            'li').n;
 
         echo n.'<div class="txp-layout">'.
             n.tag(
@@ -321,8 +306,7 @@ function prefs_list($message = '')
     }
 
     echo n.'</div>'. // End of .txp-layout.
-        n.'</form>'.
-        script_js('var selectedTab = "'.$tabActive.'";');
+        n.'</form>';
 }
 
 /**

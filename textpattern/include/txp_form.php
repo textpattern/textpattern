@@ -368,8 +368,10 @@ function form_edit($message = '', $refresh_partials = false)
 
     if ($refresh_partials) {
         $response[] = announce($message);
+        $response[] = 'var $allforms = $("#allforms_form"), minHeight = $allforms.prop("style").minHeight';
+        $response[] = '$allforms.css("min-height", $allforms.height())';
         $response = array_merge($response, updateVolatilePartials($partials));
-        $response[] = '$("#allforms_form_sections").restorePanes()';
+        $response[] = '$allforms.restorePanes().css("min-height", minHeight)';
         send_script_response(join(";\n", $response));
 
         // Bail out.

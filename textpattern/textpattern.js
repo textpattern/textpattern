@@ -566,34 +566,10 @@ function toggleDisplay(id)
     if (obj.length) {
         obj.toggle();
 
-        // Send state of toggle pane to localStorage or server.
-        if ($(this).data('txp-pane')) {
-            var pane = $(this).data('txp-pane');
-
-            if (!window.localStorage && $(this).data('txp-token')) {
-                sendAsyncEvent({
-                    event   : 'pane',
-                    step    : 'visible',
-                    pane    : $(this).data('txp-pane'),
-                    visible : obj.is(':visible'),
-                    origin  : textpattern.event,
-                    token   : $(this).data('txp-token')
-                });
-            }
-        } else {
-            var pane = obj.attr('id');
-
-            if (!window.localStorage) {
-                sendAsyncEvent({
-                    event   : textpattern.event,
-                    step    : 'save_pane_state',
-                    pane    : obj.attr('id'),
-                    visible : obj.is(':visible')
-                });
-            }
-        }
-
+        // Send state of toggle pane to localStorage.
+        var pane = $(this).data('txp-pane') || obj.attr('id');
         var data = new Object;
+
         data[pane] = obj.is(':visible');
         textpattern.storage.update(data);
     }
@@ -1649,6 +1625,8 @@ jQuery.fn.restorePanes = function ()
             $region.attr('aria-expanded', vis);
         }
     });
+
+    return $(this);
 }
 
 /**
@@ -1870,16 +1848,8 @@ textpattern.Route.add('', function ()
     prefTabs.on('click focus', function(ev)
     {
         var me = $(this).children('a[data-txp-pane]');
-
-        if (!window.localStorage) sendAsyncEvent({
-            event  : 'pane',
-            step   : 'tabVisible',
-            pane   : me.data('txp-pane'),
-            origin : textpattern.event,
-            token  : me.data('txp-token')
-        });
-
         var data = new Object;
+
         data[textpattern.event] = me.data('txp-pane');
         textpattern.storage.update(data);
     });
