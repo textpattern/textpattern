@@ -125,15 +125,10 @@ function form_list($current)
 
     if ($rs) {
         $prev_type = null;
-        $visible = null;
 
         while ($a = nextRow($rs)) {
             extract($a);
             $active = ($current['name'] === $name);
-
-            if ($active && $name !== 'default') {
-                $visible = $type;
-            }
 
             if ($prev_type !== $type) {
                 if ($prev_type !== null) {
@@ -141,7 +136,7 @@ function form_list($current)
                         'class' => 'switcher-list',
                     ));
 
-                    $out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type, '', '', $prev_type === $visible);
+                    $out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
                 }
 
                 $prev_type = $type;
@@ -167,7 +162,7 @@ function form_list($current)
                 'class' => 'switcher-list',
             ));
 
-            $out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type, '', '',  $prev_type === $visible);
+            $out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
         }
 
         $out = tag(implode('', $out), 'div', array('id' => 'allforms_form_sections', 'role' => 'region'));

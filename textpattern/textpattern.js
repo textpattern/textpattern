@@ -1867,29 +1867,6 @@ textpattern.Route.add('', function ()
     var $switchers = prefTabs.children('a[data-txp-pane]');
     var $section = window.location.hash ? prefsGroup.find($(window.location.hash).closest('section')) : [];
 
-    if ($section.length) {
-        selectedTab = $section.index();
-    }
-    else if (textpattern.storage.data[textpattern.event] !== undefined) {
-        $switchers.each(function (i, elm) {
-            if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]) {
-                selectedTab = i;
-                $(elm).parent().addClass('ui-tabs-active ui-state-active');
-            } else {
-                $(elm).parent().removeClass('ui-tabs-active ui-state-active');
-            }
-        });
-    }
-
-    if (selectedTab === undefined) {
-        selectedTab = 0;
-    }
-
-    prefsGroup.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
-    prefsGroup.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
-    prefTabs.removeClass('ui-state-default ui-corner-top');
-    prefsGroup.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
-
     prefTabs.on('click focus', function(ev)
     {
         var me = $(this).children('a[data-txp-pane]');
@@ -1906,6 +1883,26 @@ textpattern.Route.add('', function ()
         data[textpattern.event] = me.data('txp-pane');
         textpattern.storage.update(data);
     });
+
+    if ($section.length) {
+        selectedTab = $section.index();
+        $switchers.eq(selectedTab).click();
+    } else if (textpattern.storage.data[textpattern.event] !== undefined) {
+        $switchers.each(function (i, elm) {
+            if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]) {
+                selectedTab = i;
+            }
+        });
+    }
+
+    if (selectedTab === undefined) {
+        selectedTab = 0;
+    }
+
+    prefsGroup.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
+    prefsGroup.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
+    prefTabs.removeClass('ui-state-default ui-corner-top');
+    prefsGroup.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
 });
 
 // Initialize JavaScript.
