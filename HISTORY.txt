@@ -1,8 +1,9 @@
 Changes in 4.7.0 (upcoming)
 
 * Textile v3.6.
-* Added: Pages, Forms and Styles panels save some changes without page refreshes (AJAX).
-* Added: Parser enhancements: valueless attributes and short tags.
+* Added: Pages, Forms and Styles panels save some changes without page refreshes (Ajax).
+* Added: Valueless attributes.
+* Added: Short tags.
 * Added: <txp:evaluate /> tag.
 * Added: <txp:article_custom /> tag can count pages.
 * Changed: Upgrades land on Diagnostics panel, with suitable message.
@@ -179,7 +180,7 @@ Changes in 4.5.0
 * User interface realignment and clean-up.
 * Additional admin theme (Hive).
 * Beautified setup process.
-* Write, Plugin and Section panels save some changes without page refreshes (AJAX).
+* Write, Plugin and Section panels save some changes without page refreshes (Ajax).
 * WordPress import tool imports image media attachemnts as article images, can use 'utf8' or 'latin1' source databases.
 * New advanced preference "Login info email address" allows to define a 'From:' address from which  a new user's login info is sent.
 * Check for new Textpattern version moved from Preferences to Diagnostics panel.
@@ -203,11 +204,11 @@ Changes in 4.5.0
 * Developer: Introduce textpattern.Relay, a pub/sub hub for client-side events.
 * Developer: Introduce txpAsyncForm (a jQuery plugin for asynchronous posts from forms) and txpAsyncHref (a jQuery plugin for asynchronous posts from links)
 * Developer: Introduce safe_escape(), Constraint() and Validator() classes plus their descendents, callback_event_ref(), theme::announce_async()
-* Developer: Restrict plugin type '3' to load only at non-AJAX requests. Introduce plugin type '4' to be loaded on the admin side for both AJAX and non-AJAX requests. Introduce plugin type '5' to be loaded on the public side and on the admin side for both AJAX and non-AJAX requests.
+* Developer: Restrict plugin type '3' to load only at non-Ajax requests. Introduce plugin type '4' to be loaded on the admin side for both Ajax and non-Ajax requests. Introduce plugin type '5' to be loaded on the public side and on the admin side for both Ajax and non-Ajax requests.
 * Developer: Run custom post-update code from txpath.'/update/custom/post-update*.php' if this glob() exists.
 * Developer: Include custom code like page-caches before the page is assembled by setting $txpcfg['pre_publish_script'] to a valid filename.
-* Developer: Modified plugin type '1': Load only on non-AJAX requests on the admin-side.
-* Developer: Additional plugin types '4' (admin-side, only for AJAX requests), and '5' (public side; admin-side, only for AJAX requests).
+* Developer: Modified plugin type '1': Load only on non-Ajax requests on the admin-side.
+* Developer: Additional plugin types '4' (admin-side, only for Ajax requests), and '5' (public side; admin-side, only for Ajax requests).
 * Security: Admin-side disallows framing, sends "X-Frame-Options: SAMEORIGIN" header.
 * Security: The 'txp_login' cookie is set with a 'HttpOnly' attribute.
 * Security: Fixed a persistent XSS vulnerability in Textile discovered by Mauro Gentile.
@@ -303,7 +304,7 @@ Changes in 4.2.0
 * Developer: Increased maximum preferences value size to TEXT (64 KiB).
 * Developer: Core support for unlimited custom fields (thanks: Gerhard Lazu).
 * Developer: Thumbnail dimensions are stored in the image table.
-* Developer: Sending requests to the admin-side with URL parameter 'app_mode' set to 'async' suppress any default admin-side output. Think AJAX.
+* Developer: Sending requests to the admin-side with URL parameter 'app_mode' set to 'async' suppress any default admin-side output. Think Ajax.
 * Developer: Cached plugins are loaded in natural sort order.
 * Developer: Deprecated cleanfInput(), escape_output(), escape_tags(), getAtt(), gAtt(), and input() functions. These will be removed in next release.
 * Developer: Plugins can flag their interest in lifecycle events (install, uninstall, activate, deactivate). @see http://svn.textpattern.com/development/4.x-plugin-template/.

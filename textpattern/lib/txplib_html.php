@@ -599,19 +599,18 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
  * @since  4.6.0
  */
 
-function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $help = '')
+function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $help = '', $visible = null)
 {
     global $event;
     $label = $label ? gTxt($label) : null;
 
     if ($anchor_id && $pane) {
-        $visible = get_pref('pane_'.$pane.'_visible');
         $heading_class = 'txp-summary'.($visible ? ' expanded' : '');
         $display_state = array(
             'class' => 'toggle',
             'id'    => $anchor_id,
             'role'  => 'group',
-            'style' => $visible ? 'display: block' : 'display: none',
+            'style' => $visible ? '' : 'display: none',
         );
 
         $label = href($label, '#'.$anchor_id, array(

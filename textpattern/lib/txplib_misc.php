@@ -5278,41 +5278,31 @@ function pagelinkurl($parts, $inherit = array())
         return hu.'index.php'.join_qs($keys);
     } else {
         // All clean URL modes use the same schemes for list pages.
-        $url = '';
+        $url = hu;
 
         if (!empty($keys['rss'])) {
             $url = hu.'rss/';
             unset($keys['rss']);
-
-            return $url.join_qs($keys);
         } elseif (!empty($keys['atom'])) {
             $url = hu.'atom/';
             unset($keys['atom']);
-
-            return $url.join_qs($keys);
         } elseif (!empty($keys['s'])) {
             if (!empty($keys['context'])) {
                 $keys['context'] = gTxt($keys['context'].'_context');
             }
             $url = hu.urlencode($keys['s']).'/';
             unset($keys['s']);
-
-            return $url.join_qs($keys);
         } elseif (!empty($keys['author'])) {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
             $url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
-
-            return $url.join_qs($keys);
         } elseif (!empty($keys['c'])) {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
             $url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct.urlencode($keys['c']).'/';
             unset($keys['c'], $keys['context']);
-
-            return $url.join_qs($keys);
         }
 
-        return hu.join_qs($keys);
+        return rtrim($url, '/').join_qs($keys);
     }
 }
 
@@ -5421,7 +5411,7 @@ function permlinkurl($article_array)
             if ($prefs['attach_titles_to_permalinks']) {
                 $out = hu."$section/$thisid/$url_title";
             } else {
-                $out = hu."$section/$thisid/";
+                $out = hu."$section/$thisid";
             }
             break;
         case 'year_month_day_title':
@@ -5432,7 +5422,7 @@ function permlinkurl($article_array)
             if ($prefs['attach_titles_to_permalinks']) {
                 $out = hu."$thisid/$url_title";
             } else {
-                $out = hu."$thisid/";
+                $out = hu."$thisid";
             }
             break;
         case 'section_title':
