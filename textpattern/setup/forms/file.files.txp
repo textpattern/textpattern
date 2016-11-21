@@ -1,34 +1,27 @@
-<!-- set up variables to check whether a file also has a title, description, category associated with it... -->
-<txp:variable name="file_download_title" value='<txp:file_download_name title="1" />' />
-<txp:variable name="file_download_description" value='<txp:file_download_description />' />
-<txp:variable name="file_download_category" value='<txp:file_download_category />' />
-
 <div itemscope itemtype="http://schema.org/DataDownload">
 
     <!-- ...if exists, use the file title, otherwise use file name -->
     <a href="<txp:file_download_link />" itemprop="contentUrl">
         <strong itemprop="name">
-            <txp:if_variable name="file_download_title" value="">
-                <txp:file_download_name />
-            <txp:else />
+            <txp:evaluate>
                 <txp:file_download_name title="1" />
-            </txp:if_variable>
+            <txp:else />
+                <txp:file_download_name />
+            </txp:evaluate>
         </strong>
     </a>
 
     <!-- ...if exists, use the file description, otherwise omit that line -->
-    <txp:if_variable name="file_download_description" value="">
-    <txp:else />
+    <txp:evaluate test>
         <div itemprop="description">
             <txp:file_download_description />
         </div>
-    </txp:if_variable>
+    </txp:evaluate>
 
     <div class="footnote">
 
         <!-- ...if exists, use the file category, otherwise omit that line -->
-        <txp:if_variable name="file_download_category" value="">
-        <txp:else />
+        <txp:evaluate test="file_download_category">
             <strong>
                 <txp:text item="category" />
             </strong>
@@ -36,7 +29,7 @@
                 <txp:file_download_category title="1" />
             </span>
             &#183;
-        </txp:if_variable>
+        </txp:evaluate>
 
         <strong>
             <txp:text item="author" />

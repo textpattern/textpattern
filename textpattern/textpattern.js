@@ -79,44 +79,6 @@ function popWin(url, width, height, options)
 }
 
 /**
- * Legacy multi-edit tool.
- *
- * @param      {object} elm
- * @deprecated in 4.6.0
- */
-
-function poweredit(elm)
-{
-    var something = elm.options[elm.selectedIndex].value;
-
-    // Add another chunk of HTML
-    var pjs = document.getElementById('js');
-
-    if (pjs == null) {
-        var br = document.createElement('br');
-        elm.parentNode.appendChild(br);
-
-        pjs = document.createElement('P');
-        pjs.setAttribute('id', 'js');
-        elm.parentNode.appendChild(pjs);
-    }
-
-    if (pjs.style.display == 'none' || pjs.style.display == '') {
-        pjs.style.display = 'block';
-    }
-
-    if (something != '') {
-        switch (something) {
-            default:
-                pjs.style.display = 'none';
-                break;
-        }
-    }
-
-    return false;
-}
-
-/**
  * Basic confirmation for potentially powerful choices (like deletion,
  * for example).
  *
@@ -127,67 +89,6 @@ function poweredit(elm)
 function verify(msg)
 {
     return confirm(msg);
-}
-
-/**
- * Selects all multi-edit checkboxes.
- *
- * @deprecated in 4.5.0
- */
-
-function selectall()
-{
-    $('form[name=longform] input[type=checkbox][name="selected[]"]').prop('checked', true);
-}
-
-/**
- * De-selects all multi-edit checkboxes.
- *
- * @deprecated in 4.5.0
- */
-
-function deselectall()
-{
-    $('form[name=longform] input[type=checkbox][name="selected[]"]').prop('checked', false);
-}
-
-/**
- * Selects a range of multi-edit checkboxes.
- *
- * @deprecated in 4.5.0
- */
-
-function selectrange()
-{
-    var inrange = false;
-
-    $('form[name=longform] input[type=checkbox][name="selected[]"]').each(function ()
-    {
-        var $this = $(this);
-
-        if ($this.is(':checked')) {
-            inrange = (!inrange) ? true : false;
-        }
-
-        if (inrange) {
-            $this.prop('checked', true);
-        }
-    });
-}
-
-/**
- * ?
- *
- * @deprecated in 4.5.0
- */
-
-function cleanSelects()
-{
-    var withsel = document.getElementById('withselected');
-
-    if (withsel && withsel.options[withsel.selectedIndex].value != '') {
-        return (withsel.selectedIndex = 0);
-    }
 }
 
 /**
@@ -665,34 +566,10 @@ function toggleDisplay(id)
     if (obj.length) {
         obj.toggle();
 
-        // Send state of toggle pane to localStorage or server.
-        if ($(this).data('txp-pane')) {
-            var pane = $(this).data('txp-pane');
-
-            if (!window.localStorage && $(this).data('txp-token')) {
-                sendAsyncEvent({
-                    event   : 'pane',
-                    step    : 'visible',
-                    pane    : $(this).data('txp-pane'),
-                    visible : obj.is(':visible'),
-                    origin  : textpattern.event,
-                    token   : $(this).data('txp-token')
-                });
-            }
-        } else {
-            var pane = obj.attr('id');
-
-            if (!window.localStorage) {
-                sendAsyncEvent({
-                    event   : textpattern.event,
-                    step    : 'save_pane_state',
-                    pane    : obj.attr('id'),
-                    visible : obj.is(':visible')
-                });
-            }
-        }
-
+        // Send state of toggle pane to localStorage.
+        var pane = $(this).data('txp-pane') || obj.attr('id');
         var data = new Object;
+
         data[pane] = obj.is(':visible');
         textpattern.storage.update(data);
     }
@@ -1737,10 +1614,10 @@ jQuery.fn.restorePanes = function ()
                 if (textpattern.storage.data[pane]) {
                     $elm.parent(".txp-summary").addClass("expanded");
                     $region.show();
-                } else {
+                } /*else {
                     $elm.parent(".txp-summary").removeClass("expanded");
                     $region.hide();
-                }
+                }*/
             }
 
             var vis = $region.is(':visible').toString();
@@ -1748,6 +1625,8 @@ jQuery.fn.restorePanes = function ()
             $region.attr('aria-expanded', vis);
         }
     });
+
+    return $(this);
 }
 
 /**
@@ -2005,16 +1884,22 @@ textpattern.Route.add('', function ()
     var $switchers = prefTabs.children('a[data-txp-pane]');
     var $section = window.location.hash ? prefsGroup.find($(window.location.hash).closest('section')) : [];
 
+    prefTabs.on('click focus', function(ev)
+    {
+        var me = $(this).children('a[data-txp-pane]');
+        var data = new Object;
+
+        data[textpattern.event] = me.data('txp-pane');
+        textpattern.storage.update(data);
+    });
+
     if ($section.length) {
         selectedTab = $section.index();
-    }
-    else if (textpattern.storage.data[textpattern.event] !== undefined) {
+        $switchers.eq(selectedTab).click();
+    } else if (textpattern.storage.data[textpattern.event] !== undefined) {
         $switchers.each(function (i, elm) {
             if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]) {
                 selectedTab = i;
-                $(elm).parent().addClass('ui-tabs-active ui-state-active');
-            } else {
-                $(elm).parent().removeClass('ui-tabs-active ui-state-active');
             }
         });
     }
@@ -2027,23 +1912,6 @@ textpattern.Route.add('', function ()
     prefsGroup.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
     prefTabs.removeClass('ui-state-default ui-corner-top');
     prefsGroup.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
-
-    prefTabs.on('click focus', function(ev)
-    {
-        var me = $(this).children('a[data-txp-pane]');
-
-        if (!window.localStorage) sendAsyncEvent({
-            event  : 'pane',
-            step   : 'tabVisible',
-            pane   : me.data('txp-pane'),
-            origin : textpattern.event,
-            token  : me.data('txp-token')
-        });
-
-        var data = new Object;
-        data[textpattern.event] = me.data('txp-pane');
-        textpattern.storage.update(data);
-    });
 });
 
 // Initialize JavaScript.

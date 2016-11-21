@@ -5047,7 +5047,7 @@ function txp_eval($atts, $thing = null)
 
     extract(lAtts(array(
         'query' => null,
-        'test'	=> null
+        'test'	=> !isset($atts['query'])
     ), $atts));
 
     if (!isset($query)) {
@@ -5085,19 +5085,18 @@ function txp_eval($atts, $thing = null)
         return $x;
     } elseif (empty($x)) {
         return parse($thing, false);
-    } elseif (!($test = trim($test))) {
-        return parse($thing, true);
     }
 
     $hash = sha1($thing);
-    $tag = $txp_parsed[$hash];
 
-    if (empty($tag) || empty($txp_else[$hash])) {
+    if (empty($txp_parsed[$hash]) || empty($txp_else[$hash])) {
         return $thing;
     }
 
-    $test = is_numeric($test) ? false : do_list_unique($test);
-    $isempty = true;
+    $test = trim($test);
+    $isempty = !empty($test);
+    $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
+    $tag = $txp_parsed[$hash];
     $nr = $txp_else[$hash][0] - 2;
     $out = array($tag[0]);
 
@@ -5116,12 +5115,14 @@ function txp_eval($atts, $thing = null)
         $out[] = $tag[++$n];
     }
 
-    if (!$isempty) {
-        foreach ($tags as $n) {
-            $t = $out[$n];
-            $out[$n] = processTags($t[1], $t[2], $t[3]);
-        }
+    if ($isempty) {
+        return parse($thing, false);
     }
 
-    return $isempty ? parse($thing, false) : implode('', $out);
+    foreach ($tags as $n) {
+        $t = $out[$n];
+        $out[$n] = processTags($t[1], $t[2], $t[3]);
+    }
+
+    return implode('', $out);
 }
