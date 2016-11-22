@@ -275,7 +275,7 @@ function change_email_form($message = '')
         hed(gTxt('change_email_address'), 2).
         inputLabel(
             'new_email',
-            fInput('text', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'),
+            fInput('email', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'),
             'new_email', '', array('class' => 'txp-form-field edit-admin-new-email')
         ).
         graf(
