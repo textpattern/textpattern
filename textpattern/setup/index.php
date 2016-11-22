@@ -551,7 +551,7 @@ function getTxpLogin()
         ).
         inputLabel(
             'setup_user_email',
-            fInput('text', 'email', (isset($_SESSION['email']) ? $_SESSION['email'] : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true),
+            fInput('email', 'email', (isset($_SESSION['email']) ? $_SESSION['email'] : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true),
             'your_email', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
