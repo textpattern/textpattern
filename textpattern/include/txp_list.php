@@ -70,7 +70,7 @@ if ($event == 'list') {
 
 function list_list($message = '', $post = '')
 {
-    global $statuses, $use_comments, $comments_disabled_after, $step, $txp_user, $article_list_pageby, $event;
+    global $statuses, $use_comments, $comments_disabled_after, $step, $txp_user, $event;
 
     pagetop(gTxt('tab_list'), $message);
 
@@ -274,7 +274,8 @@ function list_list($message = '', $post = '')
         return;
     }
 
-    $limit = max($article_list_pageby, 15);
+    $paginator = new \Textpattern\Admin\Paginator($event, 'article');
+    $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -502,7 +503,7 @@ function list_list($message = '', $post = '')
                 'class' => 'txp-navigation',
                 'id'    => $event.'_navigation',
             )).
-            pageby_form('list', $article_list_pageby).
+            $paginator->render().
             nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div');
     }
@@ -517,7 +518,9 @@ function list_list($message = '', $post = '')
 
 function list_change_pageby()
 {
-    event_change_pageby('article');
+    global $event;
+
+    Txp::get('\Textpattern\Admin\Paginator', $event, 'article')->change();
     list_list();
 }
 

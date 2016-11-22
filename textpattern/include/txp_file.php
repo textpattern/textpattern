@@ -83,7 +83,7 @@ if ($event == 'file') {
 
 function file_list($message = '')
 {
-    global $file_base_path, $file_statuses, $file_list_pageby, $txp_user, $event;
+    global $file_base_path, $file_statuses, $txp_user, $event;
 
     pagetop(gTxt('tab_file'), $message);
 
@@ -273,7 +273,8 @@ function file_list($message = '')
         return;
     }
 
-    $limit = max($file_list_pageby, 15);
+    $paginator = new \Textpattern\Admin\Paginator();
+    $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -488,7 +489,7 @@ function file_list($message = '')
                 'class' => 'txp-navigation',
                 'id'    => $event.'_navigation',
             )).
-            pageby_form('file', $file_list_pageby).
+            $paginator->render().
             nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div');
     }
@@ -1232,6 +1233,6 @@ function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $cl
 
 function file_change_pageby()
 {
-    event_change_pageby('file');
+    Txp::get('\Textpattern\Admin\Paginator')->change();
     file_list();
 }
