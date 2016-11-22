@@ -2872,22 +2872,14 @@ function get_essential_forms()
  * creates a user-specific preference value "$name_list_pageby".
  *
  * @param string|null $name The name of the list
+ * @deprecated in 4.7.0
  */
 
 function event_change_pageby($name = null)
 {
-    global $event, $prefs;
+    global $event;
 
-    if ($name === null) {
-        $name = $event;
-    }
-
-    $qty = gps('qty');
-    assert_int($qty);
-    $pageby = $name.'_list_pageby';
-    $GLOBALS[$pageby] = $prefs[$pageby] = $qty;
-
-    set_pref($pageby, $qty, $event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+    Txp::get('\Textpattern\Admin\Paginator', $event, $name)->change();
 }
 
 /**

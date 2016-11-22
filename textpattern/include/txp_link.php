@@ -69,7 +69,7 @@ if ($event == 'link') {
 
 function link_list($message = '')
 {
-    global $event, $step, $link_list_pageby, $txp_user;
+    global $event, $step, $txp_user;
 
     pagetop(gTxt('tab_link'), $message);
 
@@ -236,7 +236,8 @@ function link_list($message = '')
         return;
     }
 
-    $limit = max($link_list_pageby, 15);
+    $paginator = new \Textpattern\Admin\Paginator();
+    $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -377,7 +378,7 @@ function link_list($message = '')
                 'class' => 'txp-navigation',
                 'id'    => $event.'_navigation',
             )).
-            pageby_form('link', $link_list_pageby).
+            $paginator->render().
             nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div');
     }
@@ -560,7 +561,7 @@ function link_save()
 
 function link_change_pageby()
 {
-    event_change_pageby('link');
+    Txp::get('\Textpattern\Admin\Paginator')->change();
     link_list();
 }
 

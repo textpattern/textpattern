@@ -296,7 +296,7 @@ function change_email_form($message = '')
 
 function author_list($message = '')
 {
-    global $event, $txp_user, $author_list_pageby, $levels;
+    global $event, $txp_user, $levels;
 
     pagetop(gTxt('tab_site_admin'), $message);
 
@@ -427,7 +427,8 @@ function author_list($message = '')
             return;
         }
 
-        $limit = max($author_list_pageby, 15);
+        $paginator = new \Textpattern\Admin\Paginator($event, 'author');
+        $limit = $paginator->getLimit();
 
         list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -526,7 +527,7 @@ function author_list($message = '')
                     'class' => 'txp-navigation',
                     'id'    => 'users_navigation',
                 )).
-                pageby_form('admin', $author_list_pageby).
+                $paginator->render().
                 nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
                 n.tag_end('div');
         }
@@ -646,7 +647,9 @@ function author_edit($message = '')
 
 function admin_change_pageby()
 {
-    event_change_pageby('author');
+    global $event;
+
+    Txp::get('\Textpattern\Admin\Paginator', $event, 'author')->change();
     author_list();
 }
 
