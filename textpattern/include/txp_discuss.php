@@ -119,7 +119,7 @@ function short_preview($message)
 
 function discuss_list($message = '')
 {
-    global $event, $comment_list_pageby;
+    global $event;
 
     pagetop(gTxt('list_discussions'), $message);
 
@@ -314,7 +314,8 @@ function discuss_list($message = '')
         $criteria = 'visible != '.intval(SPAM).' and '.$criteria;
     }
 
-    $limit = max($comment_list_pageby, 15);
+    $paginator = new \Textpattern\Admin\Paginator($event, 'comment');
+    $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -505,7 +506,7 @@ function discuss_list($message = '')
                 'class' => 'txp-navigation',
                 'id'    => $event.'_navigation',
             )).
-            pageby_form('discuss', $comment_list_pageby).
+            $paginator->render().
             nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div');
     }
@@ -624,7 +625,9 @@ function discuss_edit()
 
 function discuss_change_pageby()
 {
-    event_change_pageby('comment');
+    global $event;
+
+    Txp::get('\Textpattern\Admin\Paginator', $event, 'comment')->change();
     discuss_list();
 }
 

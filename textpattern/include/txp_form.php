@@ -261,7 +261,7 @@ function form_edit($message = '', $refresh_partials = false)
     $partials is an array of:
     $key => array (
         'mode' => {PARTIAL_STATIC | PARTIAL_VOLATILE | PARTIAL_VOLATILE_VALUE},
-        'selector' => $DOM_selector or array($selector, $fragment) of $DOM_selectors,
+        'selector' => $DOM_selector or array($selector, $fragment, $script) of $DOM_selectors,
          'cb' => $callback_function,
          'html' => $return_value_of_callback_function (need not be intialised here)
     )
@@ -270,7 +270,7 @@ function form_edit($message = '', $refresh_partials = false)
         // Form list.
         'list' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#allforms_form_sections',
+            'selector' => array('#allforms_form_sections', null, '.restorePanes()'),
             'cb'       => 'form_list',
         ),
         // Name field.
@@ -398,10 +398,7 @@ function form_edit($message = '', $refresh_partials = false)
 
     if ($refresh_partials) {
         $response[] = announce($message);
-        $response[] = 'var $allforms = $("#allforms_form"), minHeight = $allforms.prop("style").minHeight';
-        $response[] = '$allforms.css("min-height", $allforms.height())';
         $response = array_merge($response, updateVolatilePartials($partials));
-        $response[] = '$allforms.restorePanes().css("min-height", minHeight)';
         send_script_response(join(";\n", $response));
 
         // Bail out.

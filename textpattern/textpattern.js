@@ -1593,15 +1593,16 @@ function txp_expand_collapse_all(ev) {
  */
 jQuery.fn.restorePanes = function ()
 {
+    var $this = $(this);
     // Initialize dynamic WAI-ARIA attributes.
-    $(this).find('.txp-summary a').each(function (i, elm)
+    $this.find('.txp-summary a').each(function (i, elm)
     {
         // Get id of toggled <section> region.
         var $elm = $(elm), region = $elm.attr('href');
 
         if (region) {
 
-            var $region = $(region);
+            var $region = $this.find(region);
             region = region.substr(1);
 
             var pane = $elm.data("txp-pane");
@@ -1869,10 +1870,6 @@ textpattern.Route.add('plugin', function ()
 
 textpattern.Route.add('', function ()
 {
-    // Collapse/Expand all support.
-    $('#supporting_content, #tagbuild_links, #content_switcher').on('click', '.txp-collapse-all', {direction: 'collapse'}, txp_expand_collapse_all)
-        .on('click', '.txp-expand-all', {direction: 'expand'}, txp_expand_collapse_all);
-
     // Pane states
     var prefsGroup = $('form:has(.switcher-list li a[data-txp-pane])');
 
@@ -1918,6 +1915,12 @@ textpattern.Route.add('', function ()
 
 $(document).ready(function ()
 {
+    $('body').restorePanes();
+
+    // Collapse/Expand all support.
+    $('#supporting_content, #tagbuild_links, #content_switcher').on('click', '.txp-collapse-all', {direction: 'collapse'}, txp_expand_collapse_all)
+        .on('click', '.txp-expand-all', {direction: 'expand'}, txp_expand_collapse_all);
+
     // Confirmation dialogs.
     $(document).on('click.txpVerify', 'a[data-verify]', function (e)
     {
@@ -1984,8 +1987,6 @@ $(document).ready(function ()
         e.preventDefault();
         $(this).parent().remove();
     });
-
-    $('body').restorePanes();
 
     // Hide popup elements.
     $('.txp-dropdown').hide();

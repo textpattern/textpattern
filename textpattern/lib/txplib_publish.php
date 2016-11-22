@@ -91,7 +91,7 @@ function populateArticleData($rs)
     global $production_status, $thisarticle, $trace;
 
     if ($production_status === 'debug') {
-        $trace->log("[Article: '{$rs['ID']}']");    
+        $trace->log("[Article: '{$rs['ID']}']");
     }
 
     foreach (article_column_map() as $key => $column) {
@@ -376,7 +376,7 @@ function parse($thing, $condition = null)
         $short_tags = get_pref('enable_short_tags');
         $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp';
     }
-        
+
     if (isset($condition)) {
         if ($production_status === 'debug') {
             $trace->log('['.($condition ? 'true' : 'false').']');

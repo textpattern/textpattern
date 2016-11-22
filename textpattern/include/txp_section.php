@@ -70,7 +70,7 @@ if ($event == 'section') {
 
 function sec_section_list($message = '')
 {
-    global $event, $section_list_pageby;
+    global $event;
 
     pagetop(gTxt('tab_sections'), $message);
 
@@ -251,7 +251,8 @@ function sec_section_list($message = '')
         return;
     }
 
-    $limit = max($section_list_pageby, 15);
+    $paginator = new \Textpattern\Admin\Paginator();
+    $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -434,7 +435,7 @@ function sec_section_list($message = '')
                 'class' => 'txp-navigation',
                 'id'    => $event.'_navigation',
             )).
-            pageby_form('section', $section_list_pageby).
+            $paginator->render().
             nav_form('section', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div');
     }
@@ -717,7 +718,7 @@ function section_save()
 
 function section_change_pageby()
 {
-    event_change_pageby('section');
+    Txp::get('\Textpattern\Admin\Paginator')->change();
     sec_section_list();
 }
 

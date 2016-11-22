@@ -2252,7 +2252,7 @@ function comment_email_input($atts)
         $emailwarn = ($prefs['comments_require_email'] && !$email);
     }
 
-    return fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
+    return fInput($h5 ? 'email' : 'email', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
 }
 
 // -------------------------------------------------------------
@@ -4958,7 +4958,7 @@ function hide($atts = array(), $thing = null)
 
     for ($n = 1; $n <= $nr; $n++) {
         $t = $tag[$n];
-        
+
         if ($process === true || in_array($t[1], $process)) {
             processTags($t[1], $t[2], $t[3]);
         }
@@ -5102,7 +5102,7 @@ function txp_eval($atts, $thing = null)
 
     for ($tags = array(), $n = 1; $n <= $nr; $n++) {
         $t = $tag[$n];
-        
+
         if ($test && !in_array($t[1], $test)) {
             $out[] = $t;
             $tags[] = $n;

@@ -412,14 +412,14 @@ function updateVolatilePartials($partials)
             trigger_error("Empty selector for partial '$k'", E_USER_ERROR);
         } else {
             // Build response script.
-            list($selector, $fragment) = (array)$p['selector'] + array(null, null);
+            list($selector, $fragment, $script) = (array)$p['selector'] + array(null, null, '');
 
             if ($p['mode'] == PARTIAL_VOLATILE) {
                 // Volatile partials replace *all* of the existing HTML
                 // fragment for their selector with the new one.
                 $selector = do_list($selector);
                 $fragment = isset($fragment) ? do_list($fragment) + $selector : $selector;
-                $response[] = 'var $html = $("<div>'.escape_js($p['html']).'</div>")';
+                $response[] = 'var $html = $("<div>'.escape_js($p['html']).'</div>")'.$script;
 
                 foreach ($selector as $i => $sel) {
                     $response[] = '$("'.$sel.'").replaceWith($html.find("'.$fragment[$i].'"))';
@@ -2897,22 +2897,14 @@ function get_skin_list()
  * creates a user-specific preference value "$name_list_pageby".
  *
  * @param string|null $name The name of the list
+ * @deprecated in 4.7.0
  */
 
 function event_change_pageby($name = null)
 {
-    global $event, $prefs;
+    global $event;
 
-    if ($name === null) {
-        $name = $event;
-    }
-
-    $qty = gps('qty');
-    assert_int($qty);
-    $pageby = $name.'_list_pageby';
-    $GLOBALS[$pageby] = $prefs[$pageby] = $qty;
-
-    set_pref($pageby, $qty, $event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+    Txp::get('\Textpattern\Admin\Paginator', $event, $name)->change();
 }
 
 /**
