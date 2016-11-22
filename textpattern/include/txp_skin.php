@@ -64,7 +64,7 @@ if ($event == 'skin') {
 
 function skin_list($message = '')
 {
-    global $event, $skin_list_pageby;
+    global $event;
 
     pagetop(gTxt('tab_skins'), $message);
 
@@ -197,7 +197,8 @@ function skin_list($message = '')
         return;
     }
 
-    $limit = max($skin_list_pageby, 15);
+    $paginator = new \Textpattern\Admin\Paginator();
+    $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -375,7 +376,7 @@ function skin_list($message = '')
                 'class' => 'txp-navigation',
                 'id'    => $event.'_navigation',
             )).
-            pageby_form('skin', $skin_list_pageby).
+            $paginator->render().
             nav_form('skin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div');
     }
@@ -567,7 +568,7 @@ function skin_save()
 
 function skin_change_pageby()
 {
-    event_change_pageby('skin');
+    Txp::get('\Textpattern\Admin\Paginator')->change();
     skin_list();
 }
 
