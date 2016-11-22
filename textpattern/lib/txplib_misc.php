@@ -412,14 +412,14 @@ function updateVolatilePartials($partials)
             trigger_error("Empty selector for partial '$k'", E_USER_ERROR);
         } else {
             // Build response script.
-            list($selector, $fragment) = (array)$p['selector'] + array(null, null);
+            list($selector, $fragment, $script) = (array)$p['selector'] + array(null, null, '');
 
             if ($p['mode'] == PARTIAL_VOLATILE) {
                 // Volatile partials replace *all* of the existing HTML
                 // fragment for their selector with the new one.
                 $selector = do_list($selector);
                 $fragment = isset($fragment) ? do_list($fragment) + $selector : $selector;
-                $response[] = 'var $html = $("<div>'.escape_js($p['html']).'</div>")';
+                $response[] = 'var $html = $("<div>'.escape_js($p['html']).'</div>")'.$script;
 
                 foreach ($selector as $i => $sel) {
                     $response[] = '$("'.$sel.'").replaceWith($html.find("'.$fragment[$i].'"))';
