@@ -161,6 +161,15 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     $prefs = array_merge(get_prefs($txp_user), $prefs);
     extract($prefs);
 
+    // Reload string pack using per-user language.
+    $lang_ui = (empty($language_ui)) ? $language : $language_ui;
+
+    // Loading langs twice is expensive, so only do it when necessary.
+    // @todo Optimisations to language loader will help here.
+    if ($lang_ui !== $language) {
+        $textarray = load_lang($lang_ui);
+    }
+
     /**
      * @ignore
      */
