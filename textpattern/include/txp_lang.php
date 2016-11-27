@@ -296,15 +296,17 @@ function list_languages($message = '')
         n.tag_end('table').
         n.tag_end('div'). // End of .txp-listtables.
 
-        hed(gTxt('install_from_textpack'), 2).
-        n.tag(
-            form(
-                '<label for="textpack-install">'.gTxt('install_textpack').'</label>'.popHelp('get_textpack').
-                n.'<textarea class="code" id="textpack-install" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
-                fInput('submit', 'install_new', gTxt('upload')).
-                eInput('lang').
-                sInput('get_textpack'), '', '', 'post', '', '', 'text_uploader'
-            ), 'div', array('class' => 'txp-control-panel'));
+        ((has_privs('lang.edit'))
+            ? hed(gTxt('install_from_textpack'), 2).
+                n.tag(
+                    form(
+                        '<label for="textpack-install">'.gTxt('install_textpack').'</label>'.popHelp('get_textpack').
+                        n.'<textarea class="code" id="textpack-install" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
+                        fInput('submit', 'install_new', gTxt('upload')).
+                        eInput('lang').
+                        sInput('get_textpack'), '', '', 'post', '', '', 'text_uploader'
+                    ), 'div', array('class' => 'txp-control-panel'))
+            : '');
 
     echo n.tag_end('div'). // End of .txp-layout-1col.
         n.'</div>'; // End of .txp-layout.;
@@ -318,7 +320,7 @@ function save_language()
 {
     global $locale;
 
-    require_privs('admin.edit');
+    require_privs('lang.edit');
 
     extract(psa(array(
         'language',
@@ -488,13 +490,15 @@ function install_lang_key(&$value, $key)
 /**
  * Installs a Textpack.
  *
- * The Textpack is feeded by a 'textpack' HTTP POST parameter.
+ * The Textpack to load is fed by a 'textpack' HTTP POST parameter.
  *
  * @see install_textpack()
  */
 
 function get_textpack()
 {
+    require_privs('lang.edit');
+
     $textpack = ps('textpack');
     $n = install_textpack($textpack, true);
     list_languages(gTxt('textpack_strings_installed', array('{count}' => $n)));
@@ -509,7 +513,7 @@ function get_textpack()
 
 function remove_language()
 {
-    require_privs('admin.edit');
+    require_privs('lang.edit');
 
     $lang_code = ps('lang_code');
     $ret = safe_delete('txp_lang', "lang = '".doSlash($lang_code)."'");
