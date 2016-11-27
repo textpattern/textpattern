@@ -389,7 +389,7 @@ function save_language_ui()
 
 function get_language()
 {
-    global $prefs, $textarray;
+    global $prefs;
     require_once txpath.'/lib/IXRClass.php';
     $lang_code = gps('lang_code');
 
@@ -399,10 +399,6 @@ function get_language()
     @set_time_limit(90); // TODO: 90 seconds: seriously?
     if (gps('force') == 'file' || !$client->query('tups.getLanguage', $prefs['blog_uid'], $lang_code)) {
         if ((gps('force') == 'file' || gps('updating') !== '1') && install_language_from_file($lang_code)) {
-            if (defined('LANG')) {
-                $textarray = load_lang(LANG);
-            }
-
             callback_event('lang_installed', 'file', false, $lang_code);
 
             return list_languages(gTxt($lang_code).sp.gTxt('updated'));
@@ -423,10 +419,6 @@ function get_language()
 
             for ($i = 0; $i < $size; $i++) {
                 $errors += (!$lang_struct[$i]['ok']);
-            }
-
-            if (defined('LANG')) {
-                $textarray = load_lang(LANG);
             }
         }
 
