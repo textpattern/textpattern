@@ -54,7 +54,7 @@ class Parser
 
     public function __construct()
     {
-        $this->language = get_pref('language', 'en-gb');
+        $this->language = get_pref('language', TEXTPATTERN_DEFAULT_LANG);
         $this->owner = TEXTPATTERN_LANG_OWNER_SITE;
     }
 

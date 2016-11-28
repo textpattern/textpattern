@@ -531,7 +531,7 @@ function load_lang($lang, $events = null)
 
     $out = array();
 
-    foreach (array($lang, 'en-gb') as $lang_code) {
+    foreach (array($lang, TEXTPATTERN_DEFAULT_LANG) as $lang_code) {
         $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang_code)."'".$where);
 
         if (!empty($rs)) {
@@ -598,7 +598,7 @@ function load_lang_event($event, $lang = LANG)
 {
     $installed = (false !== safe_field("name", 'txp_lang', "lang = '".doSlash($lang)."' LIMIT 1"));
 
-    $lang_code = ($installed) ? $lang : 'en-gb';
+    $lang_code = ($installed) ? $lang : TEXTPATTERN_DEFAULT_LANG;
 
     $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang_code)."' AND event = '".doSlash($event)."'");
 
@@ -3052,7 +3052,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     } elseif ($format == 'rfc822') {
         $format = '%a, %d %b %Y %H:%M:%S GMT';
         $gmt = true;
-        $override_locale = 'en-gb';
+        $override_locale = TEXTPATTERN_DEFAULT_LANG;
     }
 
     if ($override_locale) {
@@ -6414,7 +6414,7 @@ class timezone
 function install_textpack($textpack, $add_new_langs = false)
 {
     $parser = new \Textpattern\Textpack\Parser();
-    $parser->setLanguage(get_pref('language', 'en-gb'));
+    $parser->setLanguage(get_pref('language', TEXTPATTERN_DEFAULT_LANG));
     $textpack = $parser->parse($textpack);
 
     if (!$textpack) {
