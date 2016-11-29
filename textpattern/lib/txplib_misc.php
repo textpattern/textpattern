@@ -2246,9 +2246,13 @@ function sanitizeForPage($text)
  * @package L10n
  */
 
-function dumbDown($str, $lang = LANG)
+function dumbDown($str, $lang = null)
 {
     static $array;
+
+    if ($lang === null) {
+        $lang = get_pref('language_ui', LANG);
+    }
 
     if (empty($array[$lang])) {
         $array[$lang] = array( // Nasty, huh?

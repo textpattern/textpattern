@@ -1212,7 +1212,9 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
         return '';
     }
 
-    $ui = sp.href('i', HELP_URL.'?item='.urlencode($help_var).'&language='.urlencode(LANG), array(
+    $lang_ui = get_pref('language_ui', LANG);
+
+    $ui = sp.href('i', HELP_URL.'?item='.urlencode($help_var).'&language='.urlencode($lang_ui), array(
         'class'      => $class,
         'rel'        => 'help',
         'target'     => '_blank',
