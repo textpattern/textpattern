@@ -82,12 +82,13 @@ function pagetop($pagetitle, $message = '')
     header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 
     $lang_direction = gTxt('lang_dir');
+    $lang_ui = get_pref('language_ui', LANG);
 
     if (!in_array($lang_direction, array('ltr', 'rtl'))) {
         // Apply biased default for missing translations.
         $lang_direction = 'ltr';
     } ?><!DOCTYPE html>
-<html lang="<?php echo txpspecialchars(LANG); ?>" dir="<?php echo $lang_direction; ?>">
+<html lang="<?php echo txpspecialchars($lang_ui); ?>" dir="<?php echo $lang_direction; ?>">
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">

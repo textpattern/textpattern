@@ -396,8 +396,7 @@ function gmtoffset_select($name, $val)
         $key = (string) Txp::get('\Textpattern\Date\Timezone')->getTimezone();
     }
 
-    $tz = new timezone;
-    $ui = $tz->selectInput('timezone_key', $key, false, '', 'gmtoffset');
+    $ui = timezoneSelectInput('timezone_key', $key, false, '', 'gmtoffset');
 
     return pluggable_ui('prefs_ui', 'gmtoffset', $ui, $name, $val);
 }
