@@ -51,8 +51,7 @@ if (!safe_field("name", 'txp_prefs', "name = 'auto_dst'")) {
 }
 
 if (!safe_field("name", 'txp_prefs', "name = 'timezone_key'")) {
-    $tz = new timezone;
-    $tz = $tz->key($gmtoffset);
+    $tz = (($identifiers = Txp::get('\Textpattern\Date\Timezone')->getOffsetIdentifiers($gmtoffset)) ? $identifiers[0] : '');
     safe_insert('txp_prefs', "prefs_id = 1, name = 'timezone_key', val = '$tz', type = '2', event = 'publish', html = 'textinput', position = '0'");
 }
 
