@@ -66,19 +66,19 @@
 
 <!-- check if there are further results and provide pagination links depending on the result -->
 <txp:if_search_results min="11">
-    <txp:hide test>
+    <txp:evaluate test>
         <p class="paginator">
-            <txp:hide test="newer">
+            <txp:evaluate test="newer">
                 <a rel="prev" href="<txp:newer />">
                     <txp:text item="prev" />
                 </a>
-            </txp:hide>
+            </txp:evaluate>
 
-            <txp:hide test="older">
+            <txp:evaluate test="older">
                 <a rel="next" href="<txp:older />">
                     <txp:text item="next" />
                 </a>
-            </txp:hide>
+            </txp:evaluate>
         </p>
-    </txp:hide>
+    </txp:evaluate>
 </txp:if_search_results>

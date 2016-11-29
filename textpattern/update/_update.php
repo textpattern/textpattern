@@ -124,10 +124,10 @@ if (is_array($files)) {
     }
 }
 
-// Updated, baby. So let's get the fresh prefs and send them to languages.
+// Updated, baby. So let's get the fresh prefs and send them to Diagnostics.
 define('TXP_UPDATE_DONE', 1);
-$event = 'lang';
-$step = 'list_languages';
+$event = 'diag';
+$step = 'update';
 
 $prefs = get_prefs();
 

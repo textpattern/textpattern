@@ -76,7 +76,7 @@ if ($event == 'image') {
 
 function image_list($message = '')
 {
-    global $txpcfg, $extensions, $img_dir, $file_max_upload_size, $image_list_pageby, $txp_user, $event;
+    global $txpcfg, $extensions, $img_dir, $file_max_upload_size, $txp_user, $event;
 
     pagetop(gTxt('tab_image'), $message);
 
@@ -257,7 +257,8 @@ function image_list($message = '')
         return;
     }
 
-    $limit = max($image_list_pageby, 15);
+    $paginator = new \Textpattern\Admin\Paginator();
+    $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -450,7 +451,7 @@ function image_list($message = '')
                 'class' => 'txp-navigation',
                 'id'    => $event.'_navigation',
             )).
-            pageby_form('image', $image_list_pageby).
+            $paginator->render().
             nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div');
     }
@@ -961,7 +962,7 @@ function image_delete($ids = array())
 
 function image_change_pageby()
 {
-    event_change_pageby('image');
+    Txp::get('\Textpattern\Admin\Paginator')->change();
     image_list();
 }
 

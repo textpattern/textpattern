@@ -6,10 +6,8 @@
  * @link https://github.com/textile/php-textile
  */
 
-namespace Netcarver\Textile;
-
 /*
- * Copyright (c) 2013, Netcarver https://github.com/netcarver
+ * Copyright (c) 2014, Netcarver https://github.com/netcarver
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -38,17 +36,19 @@ namespace Netcarver\Textile;
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace Netcarver\Textile;
+
 /**
  * Simple data storage.
  *
- * This class to allows storing assignments in an internal
+ * This class allows storing assignments in an internal
  * data array.
  *
- * <code>
- * use Netcarver\Textile\DataBag;
+ * bc. use Netcarver\Textile\DataBag;
  * $plant = new DataBag(array('key' => 'value'));
  * $plant->flower('rose')->color('red');
- * </code>
+ *
+ * @internal
  */
 
 class DataBag
@@ -78,11 +78,9 @@ class DataBag
      * Empty values are rejected, unless the
      * second argument is set TRUE.
      *
-     * <code>
-     * use Netcarver\Textile\DataBag;
+     * bc. use Netcarver\Textile\DataBag;
      * $plant = new DataBag(array('key' => 'value'));
      * $plant->flower('rose')->color('red')->emptyValue(false, true);
-     * </code>
      *
      * @param   string $name   The name
      * @param   array  $params Arguments

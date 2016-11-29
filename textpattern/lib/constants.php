@@ -851,6 +851,17 @@ define('TEXTPATTERN_LANG_OWNER_SYSTEM', '');
 
 define('TEXTPATTERN_LANG_OWNER_SITE', 'site');
 
+if (!defined('TEXTPATTERN_DEFAULT_LANG')) {
+    /**
+     * The default/fallback language identifier.
+     *
+     * @since   4.7.0
+     * @package L10n
+     */
+
+    define('TEXTPATTERN_DEFAULT_LANG', 'en-gb');
+}
+
 /**
  * Strip empty values.
  *

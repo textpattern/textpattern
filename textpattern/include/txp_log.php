@@ -62,7 +62,7 @@ if ($event == 'log') {
 
 function log_list($message = '')
 {
-    global $event, $log_list_pageby, $expire_logs_after;
+    global $event, $expire_logs_after;
 
     pagetop(gTxt('tab_logs'), $message);
 
@@ -206,7 +206,8 @@ function log_list($message = '')
         return;
     }
 
-    $limit = max($log_list_pageby, 15);
+    $paginator = new \Textpattern\Admin\Paginator();
+    $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -328,7 +329,7 @@ function log_list($message = '')
                 'class' => 'txp-navigation',
                 'id'    => $event.'_navigation',
             )).
-            pageby_form('log', $log_list_pageby).
+            $paginator->render().
             nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div');
     }
@@ -343,7 +344,7 @@ function log_list($message = '')
 
 function log_change_pageby()
 {
-    event_change_pageby('log');
+    Txp::get('\Textpattern\Admin\Paginator')->change();
     log_list();
 }
 
