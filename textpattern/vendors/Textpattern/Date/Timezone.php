@@ -476,4 +476,57 @@ class Timezone
     {
         return @date_default_timezone_get();
     }
+
+    /**
+     * Render HTML &lt;select&gt; element for choosing a timezone.
+     *
+     * @param      string      $name        Element name
+     * @param      string      $value       Selected timezone
+     * @param      bool        $blank_first Add empty first option
+     * @param      bool|string $onchange
+     * @param      string      $select_id   HTML id attribute
+     * @return     string HTML markup
+     */
+
+    public function selectInput($name = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
+    {
+        if ($details = $this->getTimeZones()) {
+            $thiscontinent = '';
+            $selected = false;
+
+            foreach ($details as $timezone_id => $tz) {
+                extract($tz);
+
+                if ($value == $timezone_id) {
+                    $selected = true;
+                }
+
+                if ($continent !== $thiscontinent) {
+                    if ($thiscontinent !== '') {
+                        $out[] = n.'</optgroup>';
+                    }
+
+                    $out[] = n.'<optgroup label="'.gTxt($continent).'">';
+                    $thiscontinent = $continent;
+                }
+
+                $where = gTxt(str_replace('_', ' ', $city))
+                    .(!empty($subcity) ? '/'.gTxt(str_replace('_', ' ', $subcity)) : '').t
+                    /*."($abbr)"*/;
+
+                $out[] = n.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').'>'.$where.' ('.$offset.')'.'</option>';
+            }
+
+            $out[] = n.'</optgroup>';
+
+            return n.'<select'.($select_id ? ' id="'.$select_id.'"' : '').' name="'.$name.'"'.
+                ($onchange == 1 ? ' onchange="submit(this.form);"' : $onchange).
+                '>'.
+                ($blank_first ? n.'<option value=""'.($selected == false ? ' selected="selected"' : '').'>&#160;</option>' : '').
+                join('', $out).
+                n.'</select>';
+        }
+
+        return '';
+    }
 }
