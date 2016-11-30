@@ -13,6 +13,9 @@ Changes in 4.7.0 (upcoming)
 * Changed: Upgrades land on Diagnostics panel, with suitable message.
 * Changed: Enable HTTP 226 responses (thanks, da2x).
 * Changed: Make pref panels fully printable (thanks, Philippe).
+* Changed: Pane states stored only client-side (localStorage).
+* Changed: pluggable_ui() behaves more intelligently when chaining.
+* Changed: Pagination steps are more grid friendly: 12/24/48/96.
 * Changed: Deprecated support for uploading .swf images (support will be removed
   entirely at Textpattern 4.8.0).
 * zxcvbn 4.4.1.
