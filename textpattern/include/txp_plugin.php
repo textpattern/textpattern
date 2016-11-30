@@ -299,9 +299,33 @@ function plugin_help()
     global $event;
 
     $name = gps('name');
+
+    // Note that TEXTPATTERN_DEFAULT_LANG is not used here.
+    // The assumption is that plugin help is in English, unless otherwise stated.
+    $default_lang = $lang_plugin = 'en-gb';
+
     pagetop(gTxt('plugin_help'));
     $help = ($name) ? safe_field('help', 'txp_plugin', "name = '".doSlash($name)."'") : '';
-    echo n.tag($help, 'div', array('class' => 'txp-layout-textbox'));
+    $helpArray = do_list($help, n);
+
+    if (preg_match('/^#@language\s+(.+)$/', $helpArray[0], $m)) {
+        $lang_plugin = $m[1];
+        $help = implode(n, array_slice($helpArray, 1));
+    }
+
+    if ($lang_plugin !== $default_lang) {
+        $direction = safe_field('data', 'txp_lang', "lang = '".doSlash($lang_plugin)."' AND name='lang_dir'");
+    }
+
+    if (empty($direction) || !in_array($direction, array('ltr', 'rtl'))) {
+        $direction = 'ltr';
+    }
+
+    echo n.tag($help, 'div', array(
+        'class' => 'txp-layout-textbox',
+        'lang'  => $lang_plugin,
+        'dir'   => $direction,
+    ));
 }
 
 /**

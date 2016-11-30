@@ -1827,6 +1827,24 @@ textpattern.Route.add('plugin', function ()
     });
 });
 
+// Images edit panel.
+
+textpattern.Route.add('image', function ()
+{
+    $('.thumbnail-swap-size').button({
+        showLabel: false,
+        icon: 'ui-icon-transfer-e-w'
+    }).on('click', function (ev)
+    {
+        var $w = $('#width');
+        var $h = $('#height');
+        var width = $w.val();
+        var height = $h.val();
+        $w.val(height);
+        $h.val(width);
+    });
+});
+
 // All panels?
 
 textpattern.Route.add('', function ()
