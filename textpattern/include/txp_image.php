@@ -661,13 +661,15 @@ function image_edit($message = '', $id = '')
                 'thumbnail_create',
                 form(
                     graf(
-                            n.'<label for="width">'.gTxt('thumb_width').'</label>'.
-                            fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width').
-                            n.'<label for="height">'.gTxt('thumb_height').'</label>'.
-                            fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').
-                            n.'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.
-                            checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop').
-                            fInput('submit', '', gTxt('create')), ' class="edit-alter-thumbnail"').
+                        n.'<label for="width">'.gTxt('thumb_width').'</label>'.
+                        fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width').
+                        n.'<button class="thumbnail-swap-size">'.gTxt('swap_values').'</button>'.
+                        n.'<label for="height">'.gTxt('thumb_height').'</label>'.
+                        fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').
+                        n.'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.
+                        checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop').
+                        fInput('submit', '', gTxt('create')), ' class="edit-alter-thumbnail"'
+                    ).
                     hInput('id', $id).
                     eInput('image').
                     sInput('thumbnail_create').
