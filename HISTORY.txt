@@ -11,7 +11,6 @@ Changes in 4.7.0 (upcoming)
   preference).
 * Added: Button to swap width/height values on image edit thumbnail generator.
 * Changed: Upgrades land on Diagnostics panel, with suitable message.
-* Changed: Only privileged users can install Textpacks.
 * Changed: Enable HTTP 226 responses (thanks, da2x).
 * Changed: Make pref panels fully printable (thanks, Philippe).
 * Changed: Deprecated support for uploading .swf images (support will be removed
