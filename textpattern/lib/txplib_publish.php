@@ -799,8 +799,6 @@ function filterAtts($atts = null)
         if (empty($out)) {
             $out = lAtts(array(
                 'sort'     => 'Posted desc',
-                'sortby'   => '',
-                'sortdir'  => '',
                 'keywords' => '',
                 'expired'  => $prefs['publish_expired_articles'],
                 'id'       => '',

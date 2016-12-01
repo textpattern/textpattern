@@ -736,8 +736,6 @@ function doArticles($atts, $iscustom, $thing = null)
         'form'          => 'default',
         'limit'         => 10,
         'sort'          => '',
-        'sortby'        => '', // Deprecated in 4.0.4.
-        'sortdir'       => '', // Deprecated in 4.0.4.
         'keywords'      => '',
         'time'          => 'past',
         'status'        => STATUS_LIVE,
@@ -836,22 +834,6 @@ function doArticles($atts, $iscustom, $thing = null)
         if (!$sort) {
             $sort = "Posted DESC";
         }
-    }
-
-    // For backwards compatibility. sortby and sortdir are deprecated.
-    if ($sortby) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortby')), E_USER_NOTICE);
-
-        if (!$sortdir) {
-            $sortdir = "DESC";
-        } else {
-            trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
-        }
-
-        $sort = "$sortby $sortdir";
-    } elseif ($sortdir) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
-        $sort = "Posted $sortdir";
     }
 
     // Building query parts.

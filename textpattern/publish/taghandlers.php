@@ -1006,8 +1006,6 @@ function recent_articles($atts)
         'offset'   => 0,
         'section'  => '',
         'sort'     => 'Posted DESC',
-        'sortby'   => '', // Deprecated.
-        'sortdir'  => '', // Deprecated.
         'wraptag'  => '',
         'no_widow' => @$prefs['title_no_widow'],
     ), $atts);
