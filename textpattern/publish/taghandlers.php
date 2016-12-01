@@ -234,17 +234,11 @@ function css($atts)
     extract(lAtts(array(
         'format' => 'url',
         'media'  => 'screen',
-        'n'      => $css, // Deprecated in 4.3.0.
         'name'   => $css,
         'rel'    => 'stylesheet',
         'theme'  => $pretext['skin'],
         'title'  => '',
     ), $atts));
-
-    if (isset($atts['n'])) {
-        $name = $n;
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'n')), E_USER_NOTICE);
-    }
 
     if (empty($name)) {
         $name = 'default';
@@ -1013,8 +1007,6 @@ function recent_articles($atts)
         'offset'   => 0,
         'section'  => '',
         'sort'     => 'Posted DESC',
-        'sortby'   => '', // Deprecated.
-        'sortdir'  => '', // Deprecated.
         'wraptag'  => '',
         'no_widow' => @$prefs['title_no_widow'],
     ), $atts);
@@ -3309,16 +3301,11 @@ function image_index($atts)
         'wraptag'  => '',
         'class'    => __FUNCTION__,
         'labeltag' => '',
-        'c'        => $c, // Keep the option to override categories due to backward compatibility.
         'category' => $c,
         'limit'    => 0,
         'offset'   => 0,
         'sort'     => 'name ASC',
     ), $atts));
-
-    if (isset($atts['c'])) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'c')), E_USER_NOTICE);
-    }
 
     if (isset($atts['category'])) {
         // Override the global.
@@ -3985,7 +3972,6 @@ function breadcrumb($atts)
 
     extract(lAtts(array(
         'wraptag'   => 'p',
-        'sep'       => '&#160;&#187;&#160;', // Deprecated in 4.3.0.
         'separator' => '&#160;&#187;&#160;',
         'link'      => 1,
         'label'     => $sitename,
@@ -3993,11 +3979,6 @@ function breadcrumb($atts)
         'class'     => '',
         'linkclass' => '',
     ), $atts));
-
-    if (isset($atts['sep'])) {
-        $separator = $sep;
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sep')), E_USER_NOTICE);
-    }
 
     // For BC, get rid of in crockery.
     if ($link == 'y') {
@@ -4319,15 +4300,9 @@ function if_custom_field($atts, $thing = null)
     extract(lAtts(array(
         'name'      => get_pref('custom_1_set'),
         'value'     => null,
-        'val'       => null, // Deprecated in 4.3.0.
         'match'     => 'exact',
         'separator' => '',
     ), $atts));
-
-    if (isset($atts['val'])) {
-        $value = $val;
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'val')), E_USER_NOTICE);
-    }
 
     $name = strtolower($name);
 
@@ -4506,14 +4481,8 @@ function if_plugin($atts, $thing = null)
 
     extract(lAtts(array(
         'name'    => '',
-        'ver'     => '', // Deprecated in 4.3.0.
         'version' => '',
     ), $atts));
-
-    if (isset($atts['ver'])) {
-        $version = $ver;
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'ver')), E_USER_NOTICE);
-    }
 
     $x = @in_array($name, $plugins) && (!$version || version_compare($plugins_ver[$name], $version) >= 0);
     return isset($thing) ? parse($thing, $x) : $x;

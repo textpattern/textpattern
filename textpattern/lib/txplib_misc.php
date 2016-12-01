@@ -6418,7 +6418,7 @@ class timezone
 function install_textpack($textpack, $add_new_langs = false)
 {
     $parser = new \Textpattern\Textpack\Parser();
-    $parser->setLanguage(get_pref('language', TEXTPATTERN_DEFAULT_LANG));
+    $parser->setLanguage(get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG));
     $textpack = $parser->parse($textpack);
 
     if (!$textpack) {
