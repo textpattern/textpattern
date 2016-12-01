@@ -234,16 +234,10 @@ function css($atts)
     extract(lAtts(array(
         'format' => 'url',
         'media'  => 'screen',
-        'n'      => $css, // Deprecated in 4.3.0.
         'name'   => $css,
         'rel'    => 'stylesheet',
         'title'  => '',
     ), $atts));
-
-    if (isset($atts['n'])) {
-        $name = $n;
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'n')), E_USER_NOTICE);
-    }
 
     if (empty($name)) {
         $name = 'default';
