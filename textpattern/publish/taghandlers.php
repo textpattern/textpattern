@@ -181,6 +181,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('article')
     ->register('article_custom')
     ->register('txp_die')
+    ->register('txp_eval', 'evaluate')
     ->register('comments_help')
     ->register('comment_name_input')
     ->register('comment_email_input')
@@ -233,16 +234,10 @@ function css($atts)
     extract(lAtts(array(
         'format' => 'url',
         'media'  => 'screen',
-        'n'      => $css, // Deprecated in 4.3.0.
         'name'   => $css,
         'rel'    => 'stylesheet',
         'title'  => '',
     ), $atts));
-
-    if (isset($atts['n'])) {
-        $name = $n;
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'n')), E_USER_NOTICE);
-    }
 
     if (empty($name)) {
         $name = 'default';
@@ -1011,8 +1006,6 @@ function recent_articles($atts)
         'offset'   => 0,
         'section'  => '',
         'sort'     => 'Posted DESC',
-        'sortby'   => '', // Deprecated.
-        'sortdir'  => '', // Deprecated.
         'wraptag'  => '',
         'no_widow' => @$prefs['title_no_widow'],
     ), $atts);
@@ -2250,7 +2243,7 @@ function comment_email_input($atts)
         $emailwarn = ($prefs['comments_require_email'] && !$email);
     }
 
-    return fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
+    return fInput($h5 ? 'email' : 'email', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $size, '', 'email', false, $h5 && $prefs['comments_require_email']);
 }
 
 // -------------------------------------------------------------
@@ -3307,16 +3300,11 @@ function image_index($atts)
         'wraptag'  => '',
         'class'    => __FUNCTION__,
         'labeltag' => '',
-        'c'        => $c, // Keep the option to override categories due to backward compatibility.
         'category' => $c,
         'limit'    => 0,
         'offset'   => 0,
         'sort'     => 'name ASC',
     ), $atts));
-
-    if (isset($atts['c'])) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'c')), E_USER_NOTICE);
-    }
 
     if (isset($atts['category'])) {
         // Override the global.
@@ -3983,7 +3971,6 @@ function breadcrumb($atts)
 
     extract(lAtts(array(
         'wraptag'   => 'p',
-        'sep'       => '&#160;&#187;&#160;', // Deprecated in 4.3.0.
         'separator' => '&#160;&#187;&#160;',
         'link'      => 1,
         'label'     => $sitename,
@@ -3991,11 +3978,6 @@ function breadcrumb($atts)
         'class'     => '',
         'linkclass' => '',
     ), $atts));
-
-    if (isset($atts['sep'])) {
-        $separator = $sep;
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sep')), E_USER_NOTICE);
-    }
 
     // For BC, get rid of in crockery.
     if ($link == 'y') {
@@ -4317,15 +4299,9 @@ function if_custom_field($atts, $thing = null)
     extract(lAtts(array(
         'name'      => get_pref('custom_1_set'),
         'value'     => null,
-        'val'       => null, // Deprecated in 4.3.0.
         'match'     => 'exact',
         'separator' => '',
     ), $atts));
-
-    if (isset($atts['val'])) {
-        $value = $val;
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'val')), E_USER_NOTICE);
-    }
 
     $name = strtolower($name);
 
@@ -4504,14 +4480,8 @@ function if_plugin($atts, $thing = null)
 
     extract(lAtts(array(
         'name'    => '',
-        'ver'     => '', // Deprecated in 4.3.0.
         'version' => '',
     ), $atts));
-
-    if (isset($atts['ver'])) {
-        $version = $ver;
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'ver')), E_USER_NOTICE);
-    }
 
     $x = @in_array($name, $plugins) && (!$version || version_compare($plugins_ver[$name], $version) >= 0);
     return isset($thing) ? parse($thing, $x) : $x;
@@ -4932,57 +4902,37 @@ function file_download_description($atts)
 
 // -------------------------------------------------------------
 
-function hide($atts, $thing=null)
+function hide($atts = array(), $thing = null)
 {
-    global $txp_parsed, $txp_else;
-
-    if (empty($atts)) {
+    if (empty($atts) || empty($thing)) {
         return '';
     }
 
     extract(lAtts(array(
-        'test'		=> false,
-        'insert'	=> false,
-        'ignore'	=> false
+        'process'	=> null
     ), $atts));
 
-    $test = $test === true || empty($test) || is_numeric($test) ? array() : do_list_unique($test);
-    $insert = $insert ? do_list_unique($insert) : array();
-    $ignore = $ignore ? do_list_unique($ignore) : array();
+    global $txp_parsed, $txp_else;
 
     $hash = sha1($thing);
     $tag = $txp_parsed[$hash];
 
-    if (empty($tag)) {
-        return $thing;
+    if (empty($tag) || empty($txp_else[$hash]) || !($process = trim($process))) {
+        return '';
     }
 
     $nr = $txp_else[$hash][0] - 2;
-    $out = array($tag[0]);
+    $process = is_numeric($process) ? true : do_list_unique($process);
 
-    for ($isempty  = true, $tags = array(), $n = 1; $n <= $nr; $n++) {
+    for ($n = 1; $n <= $nr; $n++) {
         $t = $tag[$n];
-        
-        if (in_array($t[1], $insert)) {
-            $out[] = $t;
-            $tags[] = $n;
-        } else {
-            $nextag = processTags($t[1], $t[2], $t[3]);
-            $out[] = $nextag;
-            $isempty &= trim($nextag) === '' || ($test ? !in_array($t[1], $test) : in_array($t[1], $ignore));
-        }
 
-        $out[] = $tag[++$n];
-    }
-
-    if (!$isempty) {
-        foreach ($tags as $n) {
-            $t = $out[$n];
-            $out[$n] = processTags($t[1], $t[2], $t[3]);
+        if ($process === true || in_array($t[1], $process)) {
+            processTags($t[1], $t[2], $t[3]);
         }
     }
 
-    return $isempty ? parse($thing, false) : implode('', $out);
+    return '';
 }
 
 // -------------------------------------------------------------
@@ -5054,4 +5004,93 @@ function if_variable($atts, $thing = null)
     }
 
     return isset($thing) ? parse($thing, $x) : $x;
+}
+
+// -------------------------------------------------------------
+
+function txp_eval($atts, $thing = null)
+{
+    global $txp_parsed, $txp_else;
+    static $xpath = null, $functions = null;
+
+    extract(lAtts(array(
+        'query' => null,
+        'test'	=> !isset($atts['query'])
+    ), $atts));
+
+    if (!isset($query)) {
+        $x = true;
+    } elseif (!($query = trim($query))) {
+        $x = $query;
+    } elseif (class_exists('DOMDocument')) {
+        if (!isset($xpath)) {
+            $xpath = new DOMXpath(new DOMDocument);
+            $functions = do_list_unique(get_pref('txp_functions'));
+
+            if($functions) {
+                $xpath->registerNamespace('php', 'http://php.net/xpath');
+                $xpath->registerPHPFunctions($functions);
+            }
+
+            $functions = implode('|', $functions);
+        }
+
+        if ($functions) {
+                $query = preg_replace('/\b('.$functions.')\s*\(/', "php:function('$1',", $query);
+        }
+
+        $x = $xpath->evaluate($query);
+
+        if($x instanceOf DOMNodeList) {
+            $x = $x->length;
+        }
+    } else {
+        trigger_error('PHP DOM extension '.gTxt('gd_unavailable'));
+        return;
+    }
+
+    if (!isset($thing)) {
+        return $x;
+    } elseif (empty($x)) {
+        return parse($thing, false);
+    }
+
+    $hash = sha1($thing);
+
+    if (empty($txp_parsed[$hash]) || empty($txp_else[$hash])) {
+        return $thing;
+    }
+
+    $test = trim($test);
+    $isempty = !empty($test);
+    $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
+    $tag = $txp_parsed[$hash];
+    $nr = $txp_else[$hash][0] - 2;
+    $out = array($tag[0]);
+
+    for ($tags = array(), $n = 1; $n <= $nr; $n++) {
+        $t = $tag[$n];
+
+        if ($test && !in_array($t[1], $test)) {
+            $out[] = $t;
+            $tags[] = $n;
+        } else {
+            $nextag = processTags($t[1], $t[2], $t[3]);
+            $out[] = $nextag;
+            $isempty &= trim($nextag) === '';
+        }
+
+        $out[] = $tag[++$n];
+    }
+
+    if ($isempty) {
+        return parse($thing, false);
+    }
+
+    foreach ($tags as $n) {
+        $t = $out[$n];
+        $out[$n] = processTags($t[1], $t[2], $t[3]);
+    }
+
+    return implode('', $out);
 }

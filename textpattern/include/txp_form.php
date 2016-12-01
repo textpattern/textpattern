@@ -106,11 +106,11 @@ if ($event == 'form') {
  * This function returns a list of form templates, wrapped in a multi-edit
  * form widget.
  *
- * @param  string $curname The selected form
+ * @param  array  $current The selected form info
  * @return string HTML
  */
 
-function form_list($curname)
+function form_list($current)
 {
     global $essential_forms, $form_types;
 
@@ -125,11 +125,10 @@ function form_list($curname)
 
     if ($rs) {
         $prev_type = null;
-        $group_out = array();
 
         while ($a = nextRow($rs)) {
             extract($a);
-            $active = ($curname === $name);
+            $active = ($current['name'] === $name);
 
             if ($prev_type !== $type) {
                 if ($prev_type !== null) {
@@ -166,14 +165,16 @@ function form_list($curname)
             $out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
         }
 
+        $out = tag(implode('', $out), 'div', array('id' => 'allforms_form_sections', 'role' => 'region'));
+
         $methods = array(
             'changetype' => array('label' => gTxt('changetype'), 'html' => formTypes('', false, 'changetype')),
             'delete'     => gTxt('delete'),
         );
 
-        $out[] = multi_edit($methods, 'form', 'form_multi_edit');
+        $out .= multi_edit($methods, 'form', 'form_multi_edit');
 
-        return form(join('', $out), '', '', 'post', '', '', 'allforms_form');
+        return form($out, '', '', 'post', '', '', 'allforms_form');
     }
 }
 
@@ -235,14 +236,61 @@ function form_create()
 /**
  * Renders the main Form editor panel.
  *
- * @param string|array $message The activity message
+ * @param string|array $message          The activity message
+ * @param bool         $refresh_partials Whether to refresh partial contents
  */
 
-function form_edit($message = '')
+function form_edit($message = '', $refresh_partials = false)
 {
-    global $event, $step, $essential_forms;
+    global $event, $step;
 
-    pagetop(gTxt('edit_forms'), $message);
+    /*
+    $partials is an array of:
+    $key => array (
+        'mode' => {PARTIAL_STATIC | PARTIAL_VOLATILE | PARTIAL_VOLATILE_VALUE},
+        'selector' => $DOM_selector or array($selector, $fragment, $script) of $DOM_selectors,
+         'cb' => $callback_function,
+         'html' => $return_value_of_callback_function (need not be intialised here)
+    )
+    */
+    $partials = array(
+        // Form list.
+        'list' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => array('#allforms_form_sections', null, '.restorePanes()'),
+            'cb'       => 'form_list',
+        ),
+        // Name field.
+        'name' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => 'div.name',
+            'cb'       => 'form_partial_name',
+        ),
+        // Name value.
+        'name_value'  => array(
+            'mode'     => PARTIAL_VOLATILE_VALUE,
+            'selector' => '#new_form,input[name=name]',
+            'cb'       => 'form_partial_name_value',
+        ),
+        // Type field.
+        'type' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => '.type',
+            'cb'       => 'form_partial_type',
+        ),
+        // Type value.
+        'type_value' => array(
+            'mode'     => PARTIAL_VOLATILE_VALUE,
+            'selector' => 'input[name=type]',
+            'cb'       => 'form_partial_type_value',
+        ),
+        // Textarea.
+        'template' => array(
+            'mode'     => PARTIAL_STATIC,
+            'selector' => 'div.template',
+            'cb'       => 'form_partial_template',
+        ),
+    );
 
     extract(array_map('assert_string', gpsa(array(
         'copy',
@@ -253,11 +301,17 @@ function form_edit($message = '')
     $name = sanitizeForPage(assert_string(gps('name')));
     $type = assert_string(gps('type'));
     $newname = sanitizeForPage(assert_string(gps('newname')));
+    $class = 'async';
 
     if ($step == 'form_delete' || empty($name) && $step != 'form_create' && !$savenew) {
         $name = 'default';
-    } elseif (((($copy || $savenew) && $newname) || ($newname && $newname !== $name)) && !$save_error) {
+    } elseif ((($copy || $savenew) && $newname) && !$save_error) {
         $name = $newname;
+    } elseif ((($newname && ($newname != $name)) || $step === 'form_create') && !$save_error) {
+        $name = $newname;
+        $class = '';
+    } elseif ($savenew && $save_error) {
+        $class = '';
     }
 
     $Form = gps('Form');
@@ -266,48 +320,6 @@ function form_edit($message = '')
         $rs = safe_row("*", 'txp_form', "name = '".doSlash($name)."'");
         extract($rs);
     }
-
-    if (in_array($name, $essential_forms)) {
-        $name_widgets = inputLabel(
-            'new_form',
-            fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true),
-            'form_name',
-            array('', 'instructions_form_name'),
-            array('class' => 'txp-form-field name')
-        );
-
-        $type_widgets = inputLabel(
-            'type',
-            formTypes($type, false, 'type', true),
-            'form_type',
-            array('', 'instructions_form_type'),
-            array('class' => 'txp-form-field type')
-        );
-    } else {
-        $name_widgets = inputLabel(
-            'new_form',
-            fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true),
-            'form_name',
-            array('', 'instructions_form_name'),
-            array('class' => 'txp-form-field name')
-        );
-
-        $type_widgets = inputLabel(
-            'type',
-            formTypes($type, false),
-            'form_type',
-            array('', 'instructions_form_type'),
-            array('class' => 'txp-form-field type')
-        );
-    }
-
-    if ($name === '') {
-        $name_widgets .= hInput('savenew', 'savenew');
-    } else {
-        $name_widgets .= hInput('name', $name);
-    }
-
-    $name_widgets .= eInput('form').sInput('form_save');
 
     $actionsExtras = '';
 
@@ -344,6 +356,30 @@ function form_edit($message = '')
         )), array('class' => 'txp-actions')
     );
 
+    $rs = array(
+        'name'    => $name,
+        'newname' => $newname,
+        'type'    => $type,
+        'form'    => $Form,
+        );
+
+    // Get content for volatile partials.
+    $partials = updatePartials($partials, $rs, array(PARTIAL_VOLATILE, PARTIAL_VOLATILE_VALUE));
+
+    if ($refresh_partials) {
+        $response[] = announce($message);
+        $response = array_merge($response, updateVolatilePartials($partials));
+        send_script_response(join(";\n", $response));
+
+        // Bail out.
+        return;
+    }
+
+    // Get content for static partials.
+    $partials = updatePartials($partials, $rs, PARTIAL_STATIC);
+
+    pagetop(gTxt('edit_forms'), $message);
+
     echo n.'<div class="txp-layout">'.
         n.tag(
             hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading')),
@@ -353,7 +389,7 @@ function form_edit($message = '')
     // Forms create/switcher column.
     echo n.tag(
         $listActions.n.
-        form_list($name).n,
+        $partials['list']['html'].n,
         'div', array(
             'class' => 'txp-layout-4col-alt',
             'id'    => 'content_switcher',
@@ -365,20 +401,10 @@ function form_edit($message = '')
     echo n.tag(
         form(
             $actions.
-            $name_widgets.
-            $type_widgets.
-            inputLabel(
-                'form',
-                '<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($Form).'</textarea>',
-                array(
-                    'form_code',
-                    n.href('<span class="ui-icon ui-extra-icon-code"></span> '.gTxt('tagbuilder'), '#', array('class' => 'txp-tagbuilder-dialog')),
-                ),
-                array('', 'instructions_form_code'),
-                array('class' => 'txp-form-field'),
-                array('div', 'div')
-            ).
-            $buttons, '', '', 'post', '', '', 'form_form'),
+            $partials['name']['html'].
+            $partials['type']['html'].
+            $partials['template']['html'].
+            $buttons, '', '', 'post', $class, '', 'form_form'),
         'div', array(
             'class' => 'txp-layout-4col-3span',
             'id'    => 'main_content',
@@ -405,7 +431,7 @@ function form_edit($message = '')
 
 function form_save()
 {
-    global $essential_forms, $form_types;
+    global $essential_forms, $form_types, $app_mode;
 
     extract(doSlash(array_map('assert_string', psa(array(
         'savenew',
@@ -476,7 +502,7 @@ function form_save()
                         "name = '".doSlash($name)."'"
                     )) {
                         update_lastmod('form_saved', compact('newname', 'name', 'type', 'Form'));
-                        $message = gTxt('form_updated', array('{name}' => $name));
+                        $message = gTxt('form_updated', array('{name}' => $newname));
                     } else {
                         $message = array(gTxt('form_save_failed'), E_ERROR);
                         $save_error = true;
@@ -492,7 +518,7 @@ function form_save()
         callback_event('form_saved', '', 0, $name, $newname);
     }
 
-    form_edit($message);
+    form_edit($message, ($app_mode === 'async') ? true : false);
 }
 
 /**
@@ -595,4 +621,121 @@ function form_tagbuild()
     }
 
     return $listActions.$tagbuild_links;
+}
+
+/**
+ * Renders form name field.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function form_partial_name($rs)
+{
+    global $essential_forms;
+
+    $name = $rs['name'];
+
+    if (in_array($name, $essential_forms)) {
+        $nameInput = fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true);
+    } else {
+        $nameInput = fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
+    }
+
+    $name_widgets = inputLabel(
+        'new_form',
+        $nameInput,
+        'form_name',
+        array('', 'instructions_form_name'),
+        array('class' => 'txp-form-field name')
+    );
+
+    if ($name === '') {
+        $name_widgets .= hInput('savenew', 'savenew');
+    } else {
+        $name_widgets .= hInput('name', $name);
+    }
+
+    $name_widgets .= eInput('form').sInput('form_save');
+
+    return $name_widgets;
+}
+
+/**
+ * Renders form type field.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function form_partial_type($rs)
+{
+    global $essential_forms;
+
+    $name = $rs['name'];
+    $type = $rs['type'];
+
+    if (in_array($name, $essential_forms)) {
+        $typeInput = formTypes($type, false, 'type', true);
+    } else {
+        $typeInput = formTypes($type, false);
+    }
+
+    $type_widgets = inputLabel(
+        'type',
+        $typeInput,
+        'form_type',
+        array('', 'instructions_form_type'),
+        array('class' => 'txp-form-field type')
+    );
+
+    return $type_widgets;
+}
+
+/**
+ * Renders form name value.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function form_partial_name_value($rs)
+{
+    return $rs['name'];
+}
+
+/**
+ * Renders form type value.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function form_partial_type_value($rs)
+{
+    return $rs['type'];
+}
+
+/**
+ * Renders form textarea field.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function form_partial_template($rs)
+{
+    $out = inputLabel(
+        'form',
+        '<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($rs['form']).'</textarea>',
+        array(
+            'form_code',
+            n.href('<span class="ui-icon ui-extra-icon-code"></span> '.gTxt('tagbuilder'), '#', array('class' => 'txp-tagbuilder-dialog')),
+        ),
+        array('', 'instructions_form_code'),
+        array('class' => 'txp-form-field template'),
+        array('div', 'div')
+    );
+
+    return $out;
 }

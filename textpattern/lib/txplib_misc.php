@@ -412,16 +412,18 @@ function updateVolatilePartials($partials)
             trigger_error("Empty selector for partial '$k'", E_USER_ERROR);
         } else {
             // Build response script.
-            list($selector, $fragment) = (array)$p['selector'] + array(null, null);
-
-            if (!isset($fragment)) {
-                $fragment = $selector;
-            }
+            list($selector, $fragment, $script) = (array)$p['selector'] + array(null, null, '');
 
             if ($p['mode'] == PARTIAL_VOLATILE) {
                 // Volatile partials replace *all* of the existing HTML
                 // fragment for their selector with the new one.
-                $response[] = '$("'.$selector.'").replaceWith($("<div>'.escape_js($p['html']).'</div>").find("'.$fragment.'"))';
+                $selector = do_list($selector);
+                $fragment = isset($fragment) ? do_list($fragment) + $selector : $selector;
+                $response[] = 'var $html = $("<div>'.escape_js($p['html']).'</div>")'.$script;
+
+                foreach ($selector as $i => $sel) {
+                    $response[] = '$("'.$sel.'").replaceWith($html.find("'.$fragment[$i].'"))';
+                }
             } elseif ($p['mode'] == PARTIAL_VOLATILE_VALUE) {
                 // Volatile partial values replace the *value* of elements
                 // matching their selector.
@@ -529,7 +531,7 @@ function load_lang($lang, $events = null)
 
     $out = array();
 
-    foreach (array($lang, 'en-gb') as $lang_code) {
+    foreach (array($lang, TEXTPATTERN_DEFAULT_LANG) as $lang_code) {
         $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang_code)."'".$where);
 
         if (!empty($rs)) {
@@ -596,7 +598,7 @@ function load_lang_event($event, $lang = LANG)
 {
     $installed = (false !== safe_field("name", 'txp_lang', "lang = '".doSlash($lang)."' LIMIT 1"));
 
-    $lang_code = ($installed) ? $lang : 'en-gb';
+    $lang_code = ($installed) ? $lang : TEXTPATTERN_DEFAULT_LANG;
 
     $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang_code)."' AND event = '".doSlash($event)."'");
 
@@ -2105,7 +2107,7 @@ function pluggable_ui($event, $element, $default = '')
     // Custom user interface, anyone?
     // Signature for called functions:
     // string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
-    $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => array(0, 0)) + $argv);
+    $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => trim((string)$default) === '' ? 0 : array(0, 0)) + $argv);
 
     // Either plugins provided a user interface, or we render our own.
     return ($ui === '') ? $default : $ui;
@@ -2244,9 +2246,13 @@ function sanitizeForPage($text)
  * @package L10n
  */
 
-function dumbDown($str, $lang = LANG)
+function dumbDown($str, $lang = null)
 {
     static $array;
+
+    if ($lang === null) {
+        $lang = get_pref('language_ui', LANG);
+    }
 
     if (empty($array[$lang])) {
         $array[$lang] = array( // Nasty, huh?
@@ -2870,22 +2876,14 @@ function get_essential_forms()
  * creates a user-specific preference value "$name_list_pageby".
  *
  * @param string|null $name The name of the list
+ * @deprecated in 4.7.0
  */
 
 function event_change_pageby($name = null)
 {
-    global $event, $prefs;
+    global $event;
 
-    if ($name === null) {
-        $name = $event;
-    }
-
-    $qty = gps('qty');
-    assert_int($qty);
-    $pageby = $name.'_list_pageby';
-    $GLOBALS[$pageby] = $prefs[$pageby] = $qty;
-
-    set_pref($pageby, $qty, $event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+    Txp::get('\Textpattern\Admin\Paginator', $event, $name)->change();
 }
 
 /**
@@ -3033,7 +3031,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     } elseif ($format == 'rfc822') {
         $format = '%a, %d %b %Y %H:%M:%S GMT';
         $gmt = true;
-        $override_locale = 'en-gb';
+        $override_locale = TEXTPATTERN_DEFAULT_LANG;
     }
 
     if ($override_locale) {
@@ -4250,7 +4248,7 @@ function fetch_form($name)
         }
 
         if ($form === false) {
-            trigger_error(gTxt('form_not_found').': '.$name);
+            trigger_error(gTxt('form_not_found').' '.$name);
 
             return '';
         }
@@ -5276,41 +5274,31 @@ function pagelinkurl($parts, $inherit = array())
         return hu.'index.php'.join_qs($keys);
     } else {
         // All clean URL modes use the same schemes for list pages.
-        $url = '';
+        $url = hu;
 
         if (!empty($keys['rss'])) {
             $url = hu.'rss/';
             unset($keys['rss']);
-
-            return $url.join_qs($keys);
         } elseif (!empty($keys['atom'])) {
             $url = hu.'atom/';
             unset($keys['atom']);
-
-            return $url.join_qs($keys);
         } elseif (!empty($keys['s'])) {
             if (!empty($keys['context'])) {
                 $keys['context'] = gTxt($keys['context'].'_context');
             }
             $url = hu.urlencode($keys['s']).'/';
             unset($keys['s']);
-
-            return $url.join_qs($keys);
         } elseif (!empty($keys['author'])) {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
             $url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
             unset($keys['author'], $keys['context']);
-
-            return $url.join_qs($keys);
         } elseif (!empty($keys['c'])) {
             $ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
             $url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct.urlencode($keys['c']).'/';
             unset($keys['c'], $keys['context']);
-
-            return $url.join_qs($keys);
         }
 
-        return hu.join_qs($keys);
+        return rtrim($url, '/').join_qs($keys);
     }
 }
 
@@ -5419,7 +5407,7 @@ function permlinkurl($article_array)
             if ($prefs['attach_titles_to_permalinks']) {
                 $out = hu."$section/$thisid/$url_title";
             } else {
-                $out = hu."$section/$thisid/";
+                $out = hu."$section/$thisid";
             }
             break;
         case 'year_month_day_title':
@@ -5430,7 +5418,7 @@ function permlinkurl($article_array)
             if ($prefs['attach_titles_to_permalinks']) {
                 $out = hu."$thisid/$url_title";
             } else {
-                $out = hu."$thisid/";
+                $out = hu."$thisid";
             }
             break;
         case 'section_title':
@@ -6401,7 +6389,7 @@ class timezone
 function install_textpack($textpack, $add_new_langs = false)
 {
     $parser = new \Textpattern\Textpack\Parser();
-    $parser->setLanguage(get_pref('language', 'en-gb'));
+    $parser->setLanguage(get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG));
     $textpack = $parser->parse($textpack);
 
     if (!$textpack) {

@@ -67,14 +67,49 @@ if ($event == 'page') {
 /**
  * The main Page editor panel.
  *
- * @param string|array $message The activity message
+ * @param string|array $message          The activity message
+ * @param bool         $refresh_partials Whether to refresh partial contents
  */
 
-function page_edit($message = '')
+function page_edit($message = '', $refresh_partials = false)
 {
     global $event, $step;
 
-    pagetop(gTxt('edit_pages'), $message);
+    /*
+    $partials is an array of:
+    $key => array (
+        'mode' => {PARTIAL_STATIC | PARTIAL_VOLATILE | PARTIAL_VOLATILE_VALUE},
+        'selector' => $DOM_selector or array($selector, $fragment) of $DOM_selectors,
+         'cb' => $callback_function,
+         'html' => $return_value_of_callback_function (need not be intialised here)
+    )
+    */
+    $partials = array(
+        // Stylesheet list.
+        'list' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => '#all_pages',
+            'cb'       => 'page_list',
+        ),
+        // Name field.
+        'name' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => 'div.name',
+            'cb'       => 'page_partial_name',
+        ),
+        // Name value.
+        'name_value'  => array(
+            'mode'     => PARTIAL_VOLATILE_VALUE,
+            'selector' => '#new_page,input[name=name]',
+            'cb'       => 'page_partial_name_value',
+        ),
+        // Textarea.
+        'template' => array(
+            'mode'     => PARTIAL_STATIC,
+            'selector' => 'div.template',
+            'cb'       => 'page_partial_template',
+        ),
+    );
 
     extract(array_map('assert_string', gpsa(array(
         'copy',
@@ -82,40 +117,24 @@ function page_edit($message = '')
         'savenew',
     ))));
 
+    $default_name = safe_field("page", 'txp_section', "name = 'default'");
+
     $name = sanitizeForPage(assert_string(gps('name')));
     $newname = sanitizeForPage(assert_string(gps('newname')));
+    $class = 'async';
 
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
-        $name = safe_field("page", 'txp_section', "name = 'default'");
-    } elseif (((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error) {
+        $name = $default_name;
+    } elseif ((($copy || $savenew) && $newname) && !$save_error) {
         $name = $newname;
+    } elseif ((($newname && ($newname != $name)) || $step === 'page_new') && !$save_error) {
+        $name = $newname;
+        $class = '';
+    } elseif ($savenew && $save_error) {
+        $class = '';
     }
-
-    $titleblock = inputLabel(
-        'new_page',
-        fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true),
-        'page_name',
-        array('', 'instructions_page_name'),
-        array('class' => 'txp-form-field name')
-    );
-
-    if ($name === '') {
-        $titleblock .= hInput('savenew', 'savenew');
-    } else {
-        $titleblock .= hInput('name', $name);
-    }
-
-    $titleblock .= eInput('page').sInput('page_save');
 
     $html = (!$save_error) ? fetch('user_html', 'txp_page', 'name', $name) : gps('html');
-
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-1col')
-        );
-
-    // Pages create/switcher column.
 
     $actionsExtras = '';
 
@@ -141,8 +160,39 @@ function page_edit($message = '')
         )), ' class="txp-save"'
     );
 
+    $rs = array(
+        'name'    => $name,
+        'newname' => $newname,
+        'default' => $default_name,
+        'html'    => $html,
+        );
+
+    // Get content for volatile partials.
+    $partials = updatePartials($partials, $rs, array(PARTIAL_VOLATILE, PARTIAL_VOLATILE_VALUE));
+
+    if ($refresh_partials) {
+        $response[] = announce($message);
+        $response = array_merge($response, updateVolatilePartials($partials));
+        send_script_response(join(";\n", $response));
+
+        // Bail out.
+        return;
+    }
+
+    // Get content for static partials.
+    $partials = updatePartials($partials, $rs, PARTIAL_STATIC);
+
+    pagetop(gTxt('edit_pages'), $message);
+
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-1col')
+        );
+
+    // Pages create/switcher column.
     echo n.tag(
-        page_list($name).n,
+        $partials['list']['html'].n,
         'div', array(
             'class' => 'txp-layout-4col-alt',
             'id'    => 'content_switcher',
@@ -151,23 +201,12 @@ function page_edit($message = '')
     );
 
     // Pages code columm.
-
     echo n.tag(
         form(
             $actions.
-            $titleblock.
-            inputLabel(
-                'html',
-                '<textarea class="code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($html).'</textarea>',
-                array(
-                    'page_code',
-                    n.href('<span class="ui-icon ui-extra-icon-code"></span> '.gTxt('tagbuilder'), '#', array('class' => 'txp-tagbuilder-dialog')),
-                ),
-                array('', 'instructions_page_code'),
-                array('class' => 'txp-form-field'),
-                array('div', 'div')
-            ).
-            $buttons, '', '', 'post', '', '', 'page_form'),
+            $partials['name']['html'].
+            $partials['template']['html'].
+            $buttons, '', '', 'post', $class, '', 'page_form'),
         'div', array(
             'class' => 'txp-layout-4col-3span',
             'id'    => 'main_content',
@@ -208,7 +247,7 @@ function page_list($current)
     if ($rs) {
         while ($a = nextRow($rs)) {
             extract($a);
-            $active = ($current === $name);
+            $active = ($current['name'] === $name);
 
             $edit = eLink('page', '', 'name', $name, $name);
 
@@ -216,7 +255,7 @@ function page_list($current)
                 $edit .= dLink('page', 'page_delete', 'name', $name);
             }
 
-            $out[] = tag($edit, 'li', array(
+            $out[] = tag(n.$edit.n, 'li', array(
                 'class' => $active ? 'active' : '',
             ));
         }
@@ -261,6 +300,8 @@ function page_delete()
 
 function page_save()
 {
+    global $app_mode;
+
     extract(doSlash(array_map('assert_string', psa(array(
         'savenew',
         'html',
@@ -286,6 +327,7 @@ function page_save()
 
         if ($newname !== $name && $exists !== false) {
             $message = array(gTxt('page_already_exists', array('{name}' => $newname)), E_ERROR);
+
             if ($savenew) {
                 $_POST['newname'] = '';
             }
@@ -309,7 +351,7 @@ function page_save()
                 if (safe_update('txp_page', "user_html = '$html', name = '".doSlash($newname)."'", "name = '".doSlash($name)."'")) {
                     safe_update('txp_section', "page = '".doSlash($newname)."'", "page = '".doSlash($name)."'");
                     update_lastmod('page_saved', compact('newname', 'name', 'html'));
-                    $message = gTxt('page_updated', array('{name}' => $name));
+                    $message = gTxt('page_updated', array('{name}' => $newname));
                 } else {
                     $message = array(gTxt('page_save_failed'), E_ERROR);
                     $save_error = true;
@@ -324,7 +366,7 @@ function page_save()
         callback_event('page_saved', '', 0, $name, $newname);
     }
 
-    page_edit($message);
+    page_edit($message, ($app_mode === 'async') ? true : false);
 }
 
 /**
@@ -388,4 +430,71 @@ function page_tagbuild()
 function taglinks($type)
 {
     return popTagLinks($type);
+}
+
+/**
+ * Renders page name field.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function page_partial_name($rs)
+{
+    $name = $rs['name'];
+    $newname = $rs['newname'];
+
+    $titleblock = inputLabel(
+        'new_page',
+        fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true),
+        'page_name',
+        array('', 'instructions_page_name'),
+        array('class' => 'txp-form-field name')
+    );
+
+    if ($name === '') {
+        $titleblock .= hInput('savenew', 'savenew');
+    } else {
+        $titleblock .= hInput('name', $name);
+    }
+
+    $titleblock .= eInput('page').sInput('page_save');
+
+    return $titleblock;
+}
+
+/**
+ * Renders page name field.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function page_partial_name_value($rs)
+{
+    return $rs['name'];
+}
+
+/**
+ * Renders page textarea field.
+ *
+ * @param  array  $rs Record set
+ * @return string HTML
+ */
+
+function page_partial_template($rs)
+{
+    $out = inputLabel(
+        'html',
+        '<textarea class="code" id="html" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($rs['html']).'</textarea>',
+        array(
+            'page_code',
+            n.href('<span class="ui-icon ui-extra-icon-code"></span> '.gTxt('tagbuilder'), '#', array('class' => 'txp-tagbuilder-dialog')),
+        ),
+        array('', 'instructions_page_code'),
+        array('class' => 'txp-form-field template'),
+        array('div', 'div')
+    );
+
+    return $out;
 }

@@ -599,19 +599,18 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
  * @since  4.6.0
  */
 
-function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $help = '')
+function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $help = '', $visible = null)
 {
     global $event;
     $label = $label ? gTxt($label) : null;
 
     if ($anchor_id && $pane) {
-        $visible = get_pref('pane_'.$pane.'_visible');
         $heading_class = 'txp-summary'.($visible ? ' expanded' : '');
         $display_state = array(
             'class' => 'toggle',
             'id'    => $anchor_id,
             'role'  => 'group',
-            'style' => $visible ? 'display: block' : 'display: none',
+            'style' => $visible ? '' : 'display: none',
         );
 
         $label = href($label, '#'.$anchor_id, array(
@@ -1213,7 +1212,9 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
         return '';
     }
 
-    $ui = sp.href('i', HELP_URL.'?item='.urlencode($help_var).'&language='.urlencode(LANG), array(
+    $lang_ui = get_pref('language_ui', LANG);
+
+    $ui = sp.href('i', HELP_URL.'?item='.urlencode($help_var).'&language='.urlencode($lang_ui), array(
         'class'      => $class,
         'rel'        => 'help',
         'target'     => '_blank',
@@ -1408,46 +1409,12 @@ function multi_edit($options, $event = null, $step = null, $page = '', $sort = '
  * @param  int         $val   Current setting
  * @param  string|null $step  Step
  * @return string HTML
+ * @deprecated in 4.7.0
  */
 
 function pageby_form($event, $val, $step = null)
 {
-    $vals = array(15, 25, 50, 100);
-    callback_event_ref($event.'_ui', 'pageby_values', 0, $vals);
-
-    if ($step === null) {
-        $step = $event.'_change_pageby';
-    }
-
-    if (empty($val)) {
-        $val = $vals[0];
-    }
-
-    $out = array();
-
-    foreach ($vals as $qty) {
-        if ($qty == $val) {
-            $class = 'navlink-active';
-            $aria_pressed = 'true';
-        } else {
-            $class = 'navlink';
-            $aria_pressed = 'false';
-        }
-
-        $out[] = href($qty, array(
-            'event'      => $event,
-            'step'       => $step,
-            'qty'        => $qty,
-            '_txp_token' => form_token(),
-        ), array(
-            'class'        => $class,
-            'title'        => gTxt('view_per_page', array('{page}' => $qty)),
-            'aria-pressed' => $aria_pressed,
-            'role'         => 'button',
-        ));
-    }
-
-    return n.tag(join('', $out), 'div', array('class' => 'nav-tertiary pageby'));
+    return Txp::get('\Textpattern\Admin\Paginator', $event, $step)->render();
 }
 
 /**

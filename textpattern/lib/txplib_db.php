@@ -214,7 +214,7 @@ class DB
         $connected = true;
 
         // Be backwards compatible.
-        if ($this->charset && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version))) {
+        if ($this->charset && (version_compare($version, '5') >= 0 || preg_match('#^4\.[1-9]#', $version))) {
             mysqli_query($this->link, "SET NAMES ".$this->charset);
             $this->table_options['charset'] = $this->charset;
 
