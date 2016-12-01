@@ -498,9 +498,22 @@ function preText($s, $prefs)
     }
 
     // By this point we should know the section, so grab its page and CSS.
+    // Logged-in users with enough privs use the skin they're currently editing.
     if (txpinterface != 'css') {
         $rs = safe_row("skin, page, css", "txp_section", "name = '".doSlash($s)."' limit 1");
-        $out['skin'] = isset($rs['skin']) ? $rs['skin'] : '';
+
+        $userInfo = is_logged_in();
+        $skin = '';
+
+        if (isset($userInfo['name']) && has_privs('skin', $userInfo['name'])) {
+            // Can't use get_pref() because it assumes $txp_user, which is not set on public site.
+            $skin = safe_field(
+                "val",
+                "txp_prefs",
+                "name = 'skin_editing' AND (user_name = '".doSlash($userInfo['name'])."')");
+        }
+
+        $out['skin'] = ($skin !== '' ? $skin : (isset($rs['skin']) ? $rs['skin'] : ''));
         $out['page'] = isset($rs['page']) ? $rs['page'] : '';
         $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
