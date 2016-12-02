@@ -1803,36 +1803,41 @@ textpattern.Route.add('page, form, file, image', function ()
 
 textpattern.Route.add('section', function ()
 {
-    var theSelects = $('#section_details, .multi_edit_form');
-
+    /**
+     * Show/hide assets base on the selected theme.
+     *
+     * @param  string skin The theme name from which to show assets
+     */
     function section_theme_hide(skin) {
-        $('#section_page option, #css option, #multiedit_page option, #multiedit_css option')
-            .hide().filter('[data-skin="'+skin+'"]').show();
-//            .end().not('[data-skin="'+skin+'"]').removeAttr('selected');
+        $('#section_page, #section_css, #multiedit_page, #multiedit_css').each(function() {
+            var $options = $(this).find('option'),
+                $selected = $options.filter(':selected'),
+                $current = $options.filter('[data-skin="'+skin+'"]');
+
+            $options.hide().filter('[data-skin="'+$selected.data('skin')+'"]').removeAttr("selected");
+            $selected.attr('selected', 'selected');
+            $selected = $current.filter('[selected]');
+
+            if (!$selected.length) {
+                $selected = $current.first();
+            }
+
+            $selected.prop('selected', true).attr('selected', 'selected');
+            $current.show()
+        });
     }
 
-    function section_theme_deselect(skin) {
-        $('#section_page option, #css option, #multiedit_page option, #multiedit_css option')
-            .removeAttr("selected").filter('[data-skin="'+skin+'"]')
-            .filter(':first').attr('selected', 'selected');
-    }
-
-    theSelects.on('change', '#section_skin, #multiedit_skin', function() {
+    $('#section_details, .multi_edit_form').on('change', '#section_skin, #multiedit_skin', function() {
         section_theme_hide($(this).val());
     });
 
-    // Invoke the handler now so it only runs the hide/show.
+    // Invoke the handler now to set things on initial page load.
     $('#section_skin').change();
-
-    theSelects.on('change', '#section_skin, #multiedit_skin', function() {
-        section_theme_deselect($(this).val())
-    });
 
     $('select[name=edit_method').change(function() {
         if ($(this).val() === 'changepagestyle') {
             var theSkin = $('#multiedit_skin').val();
             section_theme_hide(theSkin);
-            section_theme_deselect(theSkin);
         }
     });
 });
