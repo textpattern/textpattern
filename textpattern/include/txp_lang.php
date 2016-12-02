@@ -67,7 +67,7 @@ function languages($name, $val)
     static $installed_langs = null;
 
     if (!$installed_langs) {
-        $installed_langs = safe_column("lang", 'txp_lang', "1 = 1 GROUP BY lang", 1);
+        $installed_langs = safe_column("lang", 'txp_lang', "1 = 1 GROUP BY lang");
     }
 
     $vals = array();
