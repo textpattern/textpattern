@@ -59,11 +59,16 @@ if ($event == 'lang') {
  * @param  string $name The HTML name and ID to assign to the select control
  * @param  string $val  The currently active language identifier (en-gb, fr-fr, ...)
  * @return string HTML
+ * @todo   Move this to a central location so it can also be used by install_textpack, etc
  */
 
 function languages($name, $val)
 {
-    $installed_langs = safe_column("lang", 'txp_lang', "1 = 1 GROUP BY lang");
+    static $installed_langs = null;
+
+    if (!$installed_langs) {
+        $installed_langs = safe_column("lang", 'txp_lang', "1 = 1 GROUP BY lang", 1);
+    }
 
     $vals = array();
 
