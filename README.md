@@ -2,8 +2,6 @@
 
 [![Textpattern Logo](http://textpattern.com/assets/img/branding/carver/carver-128px.svg)](http://textpattern.com/)
 
-[![Downloads](https://img.shields.io/github/downloads/textpattern/textpattern/total.svg)](https://github.com/textpattern/textpattern/archive/master.zip)
-
 **A flexible, elegant and easy-to-use content management system.**
 
 Textpattern is [free and open source](#legal) software.
