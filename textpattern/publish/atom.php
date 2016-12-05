@@ -85,8 +85,6 @@ function atom()
     ob_clean();
     extract($prefs);
 
-    $last = fetch("UNIX_TIMESTAMP(val)", 'txp_prefs', 'name', 'lastmod');
-
     extract(doSlash(gpsa(array(
         'limit',
         'area',
@@ -139,7 +137,7 @@ function atom()
     $out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section) ? '/'.join(',', $section) : '').(($category) ? '/'.join(',', $category) : ''), 'id');
 
     $out[] = tag('Textpattern', 'generator', ' uri="http://textpattern.com/" version="'.$version.'"');
-    $out[] = tag(safe_strftime("w3cdtf", $last), 'updated');
+    $out[] = tag(safe_strftime("w3cdtf", strtotime($lastmod)), 'updated');
 
     $auth[] = tag($pub['RealName'], 'name');
     $auth[] = ($include_email_atom) ? tag(eE($pub['email']), 'email') : '';
@@ -152,19 +150,20 @@ function atom()
     $articles = array();
     $section = doSlash($section);
     $category = doSlash($category);
+    $limit = ($limit) ? $limit : $rss_how_many;
+    $limit = intval(min($limit, max(100, $rss_how_many)));
 
     if (!$area or $area == 'article') {
         $sfilter = (!empty($section)) ? "AND Section IN ('".join("','", $section)."')" : '';
         $cfilter = (!empty($category)) ? "AND (Category1 IN ('".join("','", $category)."') OR Category2 IN ('".join("','", $category)."'))" : '';
-        $limit = ($limit) ? $limit : $rss_how_many;
-        $limit = intval(min($limit, max(100, $rss_how_many)));
 
         $frs = safe_column("name", 'txp_section', "in_rss != '1'");
-
         $query = array();
 
-        foreach ($frs as $f) {
-            $query[] = "AND Section != '".doSlash($f)."'";
+        if ($frs) {
+            foreach ($frs as $f) {
+                $query[] = "AND Section != '".doSlash($f)."'";
+            }
         }
 
         $query[] = $sfilter;
@@ -244,15 +243,14 @@ function atom()
             }
         }
     } elseif ($area == 'link') {
-        $cfilter = ($category) ? "category in ('".join("','", $category)."')" : '1';
-        $limit = ($limit) ? $limit : $rss_how_many;
-        $limit = intval(min($limit, max(100, $rss_how_many)));
+        $cfilter = ($category) ? "category IN ('".join("','", $category)."')" : '1';
 
         $rs = safe_rows_start("*", 'txp_link', "$cfilter ORDER BY date DESC, id DESC LIMIT $limit");
 
         if ($rs) {
             while ($a = nextRow($rs)) {
                 extract($a);
+                $e = array();
 
                 $e['title'] = tag(htmlspecialchars($linkname), 'title', t_html);
                 $e['content'] = tag(n.htmlspecialchars($description).n, 'content', t_html);
@@ -262,7 +260,7 @@ function atom()
                 $e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$url.'" />';
 
                 $e['issued'] = tag(safe_strftime('w3cdtf', strtotime($date)), 'published');
-                $e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z', strtotime($date)), 'updated');
+                $e['modified'] = tag(safe_strftime('w3cdtf', strtotime($date)), 'updated');
                 $e['id'] = tag('tag:'.$mail_or_domain.','.safe_strftime('%Y-%m-%d', strtotime($date)).':'.$blog_uid.'/'.$id, 'id');
 
                 $articles[$id] = tag(n.t.t.join(n.t.t, $e).n, 'entry');
