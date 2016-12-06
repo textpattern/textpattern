@@ -444,7 +444,7 @@ if (!$client->query('tups.getLanguage', $blog_uid, LANG)) {
                 $lang_val = doSlash($lang_val);
 
                 if (@$lang_val) {
-                    safe_query("INSERT DELAYED INTO `".PFX."txp_lang` SET
+                    safe_insert('txp_lang', "
                         lang    = 'en-gb',
                         name    = '".$lang_key."',
                         event   = '".$evt_name."',
@@ -459,11 +459,9 @@ if (!$client->query('tups.getLanguage', $blog_uid, LANG)) {
     $lang_struct = unserialize($response);
 
     foreach ($lang_struct as $item) {
-        foreach ($item as $name => $value) {
-            $item[$name] = doSlash($value);
-        }
+        $item = doSlash($item);
 
-        safe_query("INSERT DELAYED INTO `".PFX."txp_lang` SET
+        safe_insert('txp_lang', "
             lang    = '".LANG."',
             name    = '".$item['name']."',
             event   = '".$item['event']."',
@@ -471,5 +469,3 @@ if (!$client->query('tups.getLanguage', $blog_uid, LANG)) {
             lastmod = '".strftime('%Y%m%d%H%M%S', $item['uLastmod'])."'");
     }
 }
-
-safe_query("FLUSH TABLE `".PFX."txp_lang`");
