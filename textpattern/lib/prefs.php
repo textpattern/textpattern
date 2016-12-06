@@ -26,9 +26,11 @@ $permlink_mode = empty($permlink_mode) ? 'messy' : $permlink_mode;
 $blog_uid  = empty($blog_uid) ? md5(uniqid(rand(), true)) : $blog_uid;
 $setup_comment_invite = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite');
 $theme = empty($theme) ? 'hive' : $theme;
+$siteurl = empty($siteurl) ? $GLOBALS['siteurl'] : $siteurl;
 
 // maybe drop its pref? It used only for atom/rss feeds
 $blog_mail_uid = empty($_SESSION['email']) ? md5(rand()).'blog@gmail.com' : $_SESSION['email'];
+$language = empty(LANG) ? 'en-gb' : LANG;
 
 
 $default_prefs = array(
@@ -106,9 +108,9 @@ $default_prefs = array(
         array(PREF_HIDDEN,   0, 'text_input'      , 'blog_time_uid'              , '2005'),
         array(PREF_HIDDEN,   0, 'text_input'      , 'blog_uid'                   , $blog_uid),
         array(PREF_HIDDEN,   0, 'text_input'      , 'dbupdatetime'               , '0'),
-        array(PREF_HIDDEN,   0, 'languages'       , 'language'                   , LANG),
+        array(PREF_HIDDEN,   0, 'languages'       , 'language'                   , $language),
         array(PREF_HIDDEN,   0, 'text_input'      , 'lastmod'                    , '2005-07-23 16:24:10'),
-        array(PREF_HIDDEN,   0, 'text_input'      , 'locale'                     , getlocale(LANG)),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'locale'                     , getlocale($language)),
         array(PREF_HIDDEN,   0, 'text_input'      , 'path_from_root'             , '/'),
         array(PREF_HIDDEN,   0, 'text_input'      , 'path_to_site'               , dirname(txpath)),
         array(PREF_HIDDEN,   0, 'text_input'      , 'prefs_id'                   , '1'),

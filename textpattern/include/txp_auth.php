@@ -300,6 +300,11 @@ function doTxpValidate()
                 $pub_path
             );
 
+            $privs = safe_field("privs", 'txp_users', "name = '".doSlash($name)."'");
+            if ($privs == 1) {
+                check_prefs_integrity();
+            }
+
             // Login is good, create $txp_user.
             $txp_user = $name;
 

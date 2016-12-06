@@ -6747,3 +6747,25 @@ function check_file_integrity($flags = INTEGRITY_STATUS)
 
     return $return;
 }
+
+/**
+ * Checks prefs integrity and AutoCreate missing prefs.
+ *
+ */
+
+function check_prefs_integrity()
+{
+    global $prefs;
+    $prefs = get_prefs();
+    include txpath.'/lib/prefs.php';
+
+    foreach ($default_prefs as $event => $event_prefs) {
+        foreach ($event_prefs as $p) {
+            if (! isset($prefs[$p[3]])) {
+                safe_insert('txp_prefs', "event='{$event}', type='{$p[0]}', position='{$p[1]}', html='{$p[2]}', name='{$p[3]}', val='".doSlash($p[4])."'");
+            }
+        }
+    }
+
+    $prefs = get_prefs();
+}
