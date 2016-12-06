@@ -28,55 +28,16 @@ if (!defined('TXP_INSTALL')) {
 @ignore_user_abort(1);
 @set_time_limit(0);
 
-$ddb = $txpcfg['db'];
-$duser = $txpcfg['user'];
-$dpass = $txpcfg['pass'];
-$dhost = $txpcfg['host'];
-$dclient_flags = isset($txpcfg['client_flags']) ? $txpcfg['client_flags'] : 0;
-$dprefix = $txpcfg['table_prefix'];
-$dbcharset = $txpcfg['dbcharset'];
+global $DB;
+include txpath.'/lib/txplib_db.php';
 
-define("PFX", trim($dprefix));
-
-if (strpos($dhost, ':') === false) {
-    $host = $dhost;
-    $port = ini_get("mysqli.default_port");
-} else {
-    list($host, $port) = explode(':', $dhost, 2);
-    $port = intval($port);
-}
-
-if (isset($txpcfg['socket'])) {
-    $socket = $txpcfg['socket'];
-} else {
-    $socket = ini_get("mysqli.default_socket");
-}
-
-$link = mysqli_init();
-mysqli_real_connect($link, $host, $duser, $dpass, $ddb, $port, $socket, $dclient_flags);
-
-$result = mysqli_query($link, "DESCRIBE `".PFX."textpattern`");
-
-if ($result) {
+if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
     die("Textpattern database table already exists. Can't run setup.");
 }
 
-$version = mysqli_get_server_info($link);
-
-// Use "ENGINE" if version of MySQL > 4.1.2.
-$tabletype = (version_compare($version, '4.1.2') >= 0) ? " ENGINE = MyISAM " : " TYPE = MyISAM ";
-
-// On 4.1 or greater use UTF-8 tables.
-if (isset($dbcharset)) {
-    $tabletype .= " CHARACTER SET = $dbcharset ";
-
-    if ($dbcharset == 'utf8mb4') {
-        $tabletype .= " COLLATE utf8mb4_unicode_ci ";
-    } elseif ($dbcharset == 'utf8') {
-        $tabletype .= " COLLATE utf8_general_ci ";
-    }
-
-    mysqli_query($link, "SET NAMES ".$dbcharset);
+$tabletype = '';
+foreach ($DB->table_options as $name => $value) {
+    $tabletype .= ' '.strtoupper($name).' = '.$value;
 }
 
 // Default to messy URLs if we know clean ones won't work.
@@ -566,12 +527,12 @@ $GLOBALS['txp_err_count'] = 0;
 $GLOBALS['txp_err_html'] = '';
 
 foreach ($create_sql as $query) {
-    $result = mysqli_query($link, $query);
+    $result = safe_query($query);
 
     if (!$result) {
         $GLOBALS['txp_err_count']++;
         $GLOBALS['txp_err_html'] .= '<li>'.n.
-            '<b>'.htmlspecialchars(mysqli_error($link)).'</b><br />'.n.
+            '<b>'.htmlspecialchars(mysqli_error($DB->link)).'</b><br />'.n.
             '<pre>'.htmlspecialchars($query).'</pre>'.n.'</li>'.n;
         $GLOBALS['txp_install_successful'] = false;
     }
@@ -595,7 +556,7 @@ if (!$client->query('tups.getLanguage', $blog_uid, LANG)) {
                 $lang_val = doSlash($lang_val);
 
                 if (@$lang_val) {
-                    mysqli_query($link, "INSERT DELAYED INTO `".PFX."txp_lang` SET
+                    safe_query("INSERT DELAYED INTO `".PFX."txp_lang` SET
                         lang    = 'en-gb',
                         name    = '".$lang_key."',
                         event   = '".$evt_name."',
@@ -614,7 +575,7 @@ if (!$client->query('tups.getLanguage', $blog_uid, LANG)) {
             $item[$name] = doSlash($value);
         }
 
-        mysqli_query($link, "INSERT DELAYED INTO `".PFX."txp_lang` SET
+        safe_query("INSERT DELAYED INTO `".PFX."txp_lang` SET
             lang    = '".LANG."',
             name    = '".$item['name']."',
             event   = '".$item['event']."',
@@ -623,17 +584,4 @@ if (!$client->query('tups.getLanguage', $blog_uid, LANG)) {
     }
 }
 
-mysqli_query($link, "FLUSH TABLE `".PFX."txp_lang`");
-
-/**
- * Stub replacement for txplib_db.php/safe_escape().
- *
- * @ignore
- */
-
-function safe_escape($in = '')
-{
-    global $link;
-
-    return mysqli_real_escape_string($link, $in);
-}
+safe_query("FLUSH TABLE `".PFX."txp_lang`");
