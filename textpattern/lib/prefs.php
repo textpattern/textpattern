@@ -21,6 +21,16 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+$permlink_mode = empty($permlink_mode) ? 'messy' : $permlink_mode;
+$blog_uid  = empty($blog_uid) ? md5(uniqid(rand(), true)) : $blog_uid;
+$setup_comment_invite = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite');
+$theme = empty($theme) ? 'hive' : $theme;
+
+// maybe drop its pref? It used only for atom/rss feeds
+$blog_mail_uid = empty($_SESSION['email']) ? md5(rand()).'blog@gmail.com' : $_SESSION['email'];
+
+
 $default_prefs = array(
     'admin' => array(
         array(PREF_CORE,    20, 'text_input'      , 'img_dir'                    , 'images'),
@@ -58,8 +68,8 @@ $default_prefs = array(
         array(PREF_CORE,   340, 'text_input'      , 'spam_blacklists'            , ''),
     ),
     'custom' => array(
-        array(PREF_CORE,     1, 'custom_set'      , 'custom_1_set'               , 'custom1'),
-        array(PREF_CORE,     2, 'custom_set'      , 'custom_2_set'               , 'custom2'),
+        array(PREF_CORE,     1, 'custom_set'      , 'custom_1_set'               , ''),
+        array(PREF_CORE,     2, 'custom_set'      , 'custom_2_set'               , ''),
         array(PREF_CORE,     3, 'custom_set'      , 'custom_3_set'               , ''),
         array(PREF_CORE,     4, 'custom_set'      , 'custom_4_set'               , ''),
         array(PREF_CORE,     5, 'custom_set'      , 'custom_5_set'               , ''),
@@ -92,7 +102,7 @@ $default_prefs = array(
         array(PREF_CORE,   300, 'yesnoradio'      , 'allow_page_php_scripting'   , '1'),
         array(PREF_CORE,   320, 'yesnoradio'      , 'allow_article_php_scripting', '1'),
         array(PREF_CORE,   340, 'text_input'      , 'max_url_len'                , '1000'),
-        array(PREF_HIDDEN,   0, 'text_input'      , 'blog_mail_uid'              , $_SESSION['email']),
+        array(PREF_HIDDEN,   0, 'text_input'      , 'blog_mail_uid'              , $blog_mail_uid),
         array(PREF_HIDDEN,   0, 'text_input'      , 'blog_time_uid'              , '2005'),
         array(PREF_HIDDEN,   0, 'text_input'      , 'blog_uid'                   , $blog_uid),
         array(PREF_HIDDEN,   0, 'text_input'      , 'dbupdatetime'               , '0'),
@@ -122,7 +132,7 @@ $default_prefs = array(
         array(PREF_CORE,    40, 'text_input'      , 'siteurl'                    , $siteurl),
         array(PREF_CORE,    60, 'text_input'      , 'site_slogan'                , gTxt('my_slogan')),
         array(PREF_CORE,    80, 'prod_levels'     , 'production_status'          , 'testing'),
-        array(PREF_CORE,   110, 'gmtoffset_select', 'gmtoffset'                  , $gmtoffset),
+        array(PREF_CORE,   110, 'gmtoffset_select', 'gmtoffset'                  , sprintf("%+d", gmmktime(0, 0, 0) - mktime(0, 0, 0))),
         array(PREF_CORE,   115, 'yesnoradio'      , 'auto_dst'                   , '0'),
         array(PREF_CORE,   120, 'is_dst'          , 'is_dst'                     , '0'),
         array(PREF_CORE,   140, 'dateformats'     , 'dateformat'                 , 'since'),

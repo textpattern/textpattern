@@ -346,8 +346,6 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
 ) $tabletype ";
 
 
-$blog_uid  = md5(uniqid(rand(), true));
-$gmtoffset = sprintf("%+d", gmmktime(0, 0, 0) - mktime(0, 0, 0));
 include txpath.'/lib/prefs.php';
 
 $prefs = array_merge_recursive($default_prefs, new_user_prefs($_SESSION['name']));
