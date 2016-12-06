@@ -30,7 +30,9 @@ $siteurl = empty($siteurl) ? $GLOBALS['siteurl'] : $siteurl;
 
 // maybe drop its pref? It used only for atom/rss feeds
 $blog_mail_uid = empty($_SESSION['email']) ? md5(rand()).'blog@gmail.com' : $_SESSION['email'];
-$language = empty(LANG) ? 'en-gb' : LANG;
+
+$language = LANG;
+$language = empty($language) ? 'en-gb' : $language;
 
 
 $default_prefs = array(
