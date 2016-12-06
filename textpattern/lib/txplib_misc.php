@@ -4074,8 +4074,6 @@ function change_user_group($user, $group)
 
 function txp_validate($user, $password, $log = true)
 {
-    global $DB;
-
     $safe_user = doSlash($user);
     $name = false;
 
