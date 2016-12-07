@@ -352,9 +352,10 @@ $prefs = array_merge_recursive($default_prefs, new_user_prefs($_SESSION['name'])
 
 foreach ($prefs as $event => $event_prefs) {
     foreach ($event_prefs as $p) {
-        $username = empty($p[5]) ? '' : doSlash($p[5]);
+        $p = doSlash($p);
+        $username = empty($p[5]) ? '' : $p[5];
         $create_sql[] = "INSERT INTO `".PFX."txp_prefs` (event, type, position, html, name, val, user_name) ".
-            "VALUES ('".$event."', ".$p[0].", ".$p[1].", '".$p[2]."', '".$p[3]."', '".doSlash($p[4])."', '".$username."')";
+            "VALUES ('{$event}', '{$p[0]}', '{$p[1]}', '{$p[2]}', '{$p[3]}', '{$p[4]}', '{$username}')";
     }
 }
 
