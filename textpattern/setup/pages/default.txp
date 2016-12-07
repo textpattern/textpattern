@@ -39,12 +39,7 @@
         <txp:if_section name="">
             <link rel="canonical" href="<txp:site_url />">
         <txp:else />
-            <txp:if_individual_article>
-                <link rel="canonical" href="<txp:permlink />">
-                <txp:meta_author title="1" />
-            <txp:else />
-                <link rel="canonical" href="<txp:section url="1" />">
-            </txp:if_individual_article>
+            <link rel="canonical" href="<txp:section url="1" />">
         </txp:if_section>
     </txp:if_search>
 

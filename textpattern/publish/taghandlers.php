@@ -198,26 +198,26 @@ function page_title($atts)
     global $parentid, $thisarticle, $id, $q, $c, $author, $context, $s, $pg, $sitename;
 
     extract(lAtts(array(
-        'separator' => ': ',
+        'separator' => ' | ',
     ), $atts));
 
-    $out = txpspecialchars($sitename.$separator);
+    $appending = txpspecialchars($separator.$sitename);
     $parent_id = (int) $parentid;
 
     if ($parent_id) {
-        $out .= gTxt('comments_on').' '.escape_title(safe_field("Title", 'textpattern', "ID = $parent_id"));
+        $out = gTxt('comments_on').' '.escape_title(safe_field("Title", 'textpattern', "ID = $parent_id")).$appending;
     } elseif ($thisarticle['title']) {
-        $out .= escape_title($thisarticle['title']);
+        $out = escape_title($thisarticle['title']).$appending;
     } elseif ($q) {
-        $out .= gTxt('search_results').txpspecialchars($separator.$q);
+        $out = gTxt('search_results').' '.gTxt('txt_quote_double_open').txpspecialchars($q).gTxt('txt_quote_double_close').$appending;
     } elseif ($c) {
-        $out .= txpspecialchars(fetch_category_title($c, $context));
+        $out = txpspecialchars(fetch_category_title($c, $context)).$appending;
     } elseif ($s and $s != 'default') {
-        $out .= txpspecialchars(fetch_section_title($s));
+        $out = txpspecialchars(fetch_section_title($s)).$appending;
     } elseif ($author) {
-        $out .= txpspecialchars(get_author_name($author));
+        $out = txpspecialchars(get_author_name($author)).$appending;
     } elseif ($pg) {
-        $out .= gTxt('page').' '.$pg;
+        $out = gTxt('page').' '.$pg.$appending;
     } else {
         $out = txpspecialchars($sitename);
     }
