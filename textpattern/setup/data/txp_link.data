@@ -1,0 +1,6 @@
+(NULL, NOW(), 'textpattern', 'http://textpattern.com/',             'Textpattern Website',            '10', '', ''),
+(NULL, NOW(), 'textpattern', 'http://docs.textpattern.io/',         'Textpattern User Documentation', '20', '', ''),
+(NULL, NOW(), 'textpattern', 'http://textpattern.org/',             'Textpattern Resources',          '30', '', ''),
+(NULL, NOW(), 'textpattern', 'http://textpattern.com/@textpattern', '@textpattern',                   '40', '', ''),
+(NULL, NOW(), 'textpattern', 'http://textpattern.com/+',            '+Textpattern CMS',               '50', '', ''),
+(NULL, NOW(), 'textpattern', 'http://textpattern.com/facebook',     'Textpattern Facebook Group',     '60', '', '')

@@ -68,6 +68,14 @@ $themedir = txpath.DS.'setup';
 
 $create_sql = array();
 
+foreach (get_files_content($structuredir, 'data') as $key=>$data) {
+    $create_sql[] = "INSERT INTO `".PFX."{$key}` VALUES ".$data;
+}
+
+foreach (get_files_content($themedir.'/data', 'data') as $key=>$data) {
+    $create_sql[] = "INSERT INTO `".PFX."{$key}` VALUES ".$data;
+}
+
 $setup_comment_invite = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite');
 
 $textile = new \Netcarver\Textile\Parser();
@@ -82,34 +90,14 @@ $article = doSlash($article);
 $create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), NULL, '".doSlash($_SESSION['name'])."', NOW(), '', 'Welcome to your site', '', '".$article['body']."', '".$article['body_html']."', '".$article['excerpt']."', '".$article['excerpt_html']."', '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, '1', '1', 'articles', '', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NOW())";
 
 
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (1, 'root', 'article', '', 1, 8, 'root', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (2, 'root', 'link', '', 1, 4, 'root', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (3, 'root', 'image', '', 1, 4, 'root', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (4, 'root', 'file', '', 1, 2, 'root', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (5, 'hope-for-the-future', 'article', 'root', 2, 3, 'Hope for the future', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (6, 'meaningful-labor', 'article', 'root', 4, 5, 'Meaningful labor', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (7, 'reciprocal-affection', 'article', 'root', 6, 7, 'Reciprocal affection', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (8, 'textpattern', 'link', 'root', 2, 3, 'Textpattern', '')";
-
-
 foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
     $create_sql[] = "INSERT INTO `".PFX."txp_css`(name, css) VALUES('".doSlash($key)."', '".doSlash($data)."')";
 }
-
-
-$create_sql[] = "INSERT INTO `".PFX."txp_discuss` VALUES (000001, 1, 'Donald Swain', 'donald.swain@example.com', 'example.com', '127.0.0.1', NOW(), '<p>I enjoy your site very much.</p>', 1)";
 
 foreach (get_files_content($themedir.'/forms', 'txp') as $key=>$data) {
     list($type, $name) = explode('.', $key);
     $create_sql[] = "INSERT INTO `".PFX."txp_form`(type, name, Form) VALUES('".doSlash($type)."', '".doSlash($name)."', '".doSlash($data)."')";
 }
-
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (1, NOW(), 'textpattern', 'http://textpattern.com/',             'Textpattern Website',            '10', '', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (2, NOW(), 'textpattern', 'http://docs.textpattern.io/',         'Textpattern User Documentation', '20', '', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (3, NOW(), 'textpattern', 'http://textpattern.org/',             'Textpattern Resources',          '30', '', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (4, NOW(), 'textpattern', 'http://textpattern.com/@textpattern', '@textpattern',                   '40', '', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (5, NOW(), 'textpattern', 'http://textpattern.com/+',            '+Textpattern CMS',               '50', '', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (6, NOW(), 'textpattern', 'http://textpattern.com/facebook',     'Textpattern Facebook Group',     '60', '', '')";
 
 foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
     $create_sql[] = "INSERT INTO `".PFX."txp_page`(name, user_html) VALUES('".doSlash($key)."', '".doSlash($data)."')";
@@ -127,9 +115,6 @@ foreach ($prefs as $event => $event_prefs) {
             "VALUES ('{$event}', '{$p[0]}', '{$p[1]}', '{$p[2]}', '{$p[3]}', '{$p[4]}', '{$username}')";
     }
 }
-
-$create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('articles', 'archive', 'default', '', 1, 1, 1, 'Articles')";
-$create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('default', 'default', 'default', '', 1, 1, 1, 'Default')";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_users` VALUES (
     1,
@@ -157,6 +142,13 @@ foreach ($create_sql as $query) {
         $GLOBALS['txp_install_successful'] = false;
     }
 }
+
+// Reduild categories tree
+rebuild_tree_full('article');
+rebuild_tree_full('link');
+rebuild_tree_full('image');
+rebuild_tree_full('file');
+
 
 require_once txpath.'/lib/IXRClass.php';
 $client = new IXR_Client('http://rpc.textpattern.com');
