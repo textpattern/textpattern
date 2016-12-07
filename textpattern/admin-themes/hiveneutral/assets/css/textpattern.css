@@ -507,27 +507,35 @@ button {
  * <strong class="success">
  * <strong class="error">
  */
-  .success,
-  .warning,
-  .error,
-  .information {
+  p.success,
+  p.warning,
+  p.error,
+  p.information {
     padding: 1px 0.23076923076923em;
     border-radius: 0.15em;
   }
   .success {
     background: #dff0d8;
+  }
+  .success:not(li) {
     color: #238c23;
   }
   .warning {
     background: #f7eedb;
+  }
+  .warning:not(li) {
     color: #cc8c00;
   }
   .error {
     background: #f2dede;
+  }
+  .error:not(li) {
     color: #9d261d;
   }
   .information {
     background: #e7f6fc;
+  }
+  .information:not(li) {
     color: #3a87ad;
   }
   /**
@@ -2076,8 +2084,6 @@ button {
     display: inline-flex;
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
-    -ms-flex-pack: center;
-        justify-content: center;
     width: 100%;
     margin: -2px;
     padding: 0;

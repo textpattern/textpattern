@@ -504,15 +504,27 @@ button {
  * <strong class="error">
  */
   .success {
+    background: #dff0d8;
+  }
+  .success:not(li) {
     color: #238c23;
   }
   .warning {
+    background: #f7eedb;
+  }
+  .warning:not(li) {
     color: #cc8c00;
   }
   .error {
+    background: #f2dede;
+  }
+  .error:not(li) {
     color: #9d261d;
   }
   .information {
+    background: #e7f6fc;
+  }
+  .information:not(li) {
     color: #3a87ad;
   }
   /**
@@ -1809,21 +1821,49 @@ button {
  *         Content
  *     </div>
  * </div>
+ *
+ * <ul class="txp-grid">
+ *     <li>
+ *         Content
+ *     </li>
+ *     <li>
+ *         Content
+ *     </li>
+ *     <li>
+ *         Content
+ *     </li>
+ * </ul>
  */
   .txp-grid {
     display: -ms-inline-flexbox;
     display: inline-flex;
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
-    -ms-flex-pack: center;
-        justify-content: center;
+    width: 100%;
     margin: -2px;
+    padding: 0;
+    clear: both;
+    list-style: none;
+  }
+  .txp-grid > * {
+    position: relative;
+    margin: 2px;
   }
   .txp-grid-cell {
-    margin: 2px;
     padding: 0 1em;
     border: 1px solid #cccccc;
     box-sizing: border-box;
+  }
+  .txp-grid-multi-edit {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    padding: 3px 6px;
+    border: 1px solid #d4d4d4;
+    border-top: 0;
+    border-left: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 2;
   }
   /* Header
    ========================================================================== */
