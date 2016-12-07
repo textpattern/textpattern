@@ -107,8 +107,8 @@ class Parser
         foreach ($lines as $line) {
             $line = trim($line);
 
-            // A comment line.
-            if (preg_match('/^#[^@]/', $line, $m)) {
+            // A blank/comment line.
+            if ($line === '' || preg_match('/^#[^@]/', $line, $m)) {
                 continue;
             }
 

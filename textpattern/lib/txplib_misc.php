@@ -6380,61 +6380,16 @@ class timezone
  * This is done to avoid tampering with lastmod dates used for RPC server
  * interactions, caching and update checks.
  *
- * @param   string $textpack      The Textpack to install
- * @param   bool   $add_new_langs If TRUE, installs strings for any included language
- * @return  int Number of installed strings
- * @package L10n
+ * @param      string $textpack      The Textpack to install
+ * @param      bool   $add_new_langs If TRUE, installs strings for any included language
+ * @return     int Number of installed strings
+ * @package    L10n
+ * @deprecated in 4.7.0
  */
 
 function install_textpack($textpack, $add_new_langs = false)
 {
-    $parser = new \Textpattern\Textpack\Parser();
-    $parser->setLanguage(get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG));
-    $textpack = $parser->parse($textpack);
-
-    if (!$textpack) {
-        return 0;
-    }
-
-    $installed_langs = safe_column("lang", 'txp_lang', "1 = 1 GROUP BY lang");
-    $done = 0;
-
-    foreach ($textpack as $translation) {
-        extract($translation);
-
-        if (!$add_new_langs && !in_array($lang, $installed_langs)) {
-            continue;
-        }
-
-        $where = "lang = '".doSlash($lang)."' AND name = '".doSlash($name)."'";
-
-        if (safe_count('txp_lang', $where)) {
-            $r = safe_update(
-                'txp_lang',
-                "lastmod = '2005-08-14',
-                data = '".doSlash($data)."',
-                event = '".doSlash($event)."',
-                owner = '".doSlash($owner)."'",
-                $where
-            );
-        } else {
-            $r = safe_insert(
-                'txp_lang',
-                "lastmod = '2005-08-14',
-                data = '".doSlash($data)."',
-                event = '".doSlash($event)."',
-                owner = '".doSlash($owner)."',
-                lang = '".doSlash($lang)."',
-                name = '".doSlash($name)."'"
-            );
-        }
-
-        if ($r) {
-            $done++;
-        }
-    }
-
-    return $done;
+    return Txp::get('\Textpattern\L10n\Lang')->install_textpack($textpack, $add_new_langs);
 }
 
 /**
