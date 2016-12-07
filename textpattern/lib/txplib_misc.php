@@ -6759,8 +6759,8 @@ function check_prefs_integrity()
 
     foreach ($default_prefs as $event => $event_prefs) {
         foreach ($event_prefs as $p) {
-            if (! isset($prefs[$p[3]])) {
-                safe_insert('txp_prefs', "event='{$event}', type='{$p[0]}', position='{$p[1]}', html='{$p[2]}', name='{$p[3]}', val='".doSlash($p[4])."'");
+            if (get_pref($p[3], false) === false ) {
+                set_pref($p[3], $p[4], $event, $p[0], $p[2], $p[1]);
             }
         }
     }
