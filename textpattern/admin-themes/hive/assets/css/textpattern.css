@@ -3453,8 +3453,8 @@ button {
   }
   /* Admin -> Languages panel - additional layout
    ========================================================================== */
-  #page-lang .txp-list .modified {
-    margin-left: 0.6em;
+  #page-lang .txp-grid-cell {
+    min-width: 19em;
   }
   /* Admin -> Plugins panel - additional layout
    ========================================================================== */
