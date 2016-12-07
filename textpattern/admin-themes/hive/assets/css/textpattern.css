@@ -508,10 +508,10 @@ button {
  * <strong class="success">
  * <strong class="error">
  */
-  p.success,
-  p.warning,
-  p.error,
-  p.information {
+  .success:not(li),
+  .warning:not(li),
+  .error:not(li),
+  .information:not(li) {
     padding: 1px 0.23076923076923em;
     border-radius: 0.25em;
   }
@@ -562,21 +562,21 @@ button {
  * <p class="alert-block success">
  * <p class="alert-block error">
  */
-  .alert-block {
+  .alert-block:not(li) {
     padding: 0.53846153846154em 1em;
     clear: both;
     border: 1px solid;
   }
-  .alert-block.success {
+  .alert-block:not(li).success {
     border-color: #a3d48e;
   }
-  .alert-block.warning {
+  .alert-block:not(li).warning {
     border-color: #e4c788;
   }
-  .alert-block.error {
+  .alert-block:not(li).error {
     border-color: #e1b2b2;
   }
-  .alert-block.information {
+  .alert-block:not(li).information {
     border-color: #b1e2f5;
   }
   /**
@@ -2609,10 +2609,41 @@ button {
     left: auto;
   }
   /**
- * Ensure dropdowns are hidden at page load (prevents content 'jumping').
+ * Drop down lists.
+ *
+ * 1. Ensure dropdowns are hidden at page load (prevents content 'jumping').
+ *
+ * <ul class="txp-dropdown">
+ *     <li>
+ *         <div>
+ *             <input class="checkbox" type="checkbox">
+ *             <label>Search all</label>
+ *         </div>
+ *     </li>
+ *     <li>
+ *         <div>
+ *             <input class="checkbox active" type="checkbox">
+ *             <label>ID#</label>
+ *         </div>
+ *     </li>
+ * </ul>
  */
   .txp-dropdown {
+    /* 1 */
     display: none;
+    position: absolute;
+    width: 18em;
+    z-index: 100;
+  }
+  .txp-dropdown .checkbox {
+    vertical-align: -0.23076923076923em;
+  }
+  .txp-dropdown .checkbox + label {
+    display: inline-block;
+    width: 85%;
+    padding: 0.23076923076923em 0.30769230769231em;
+    cursor: pointer;
+    vertical-align: text-top;
   }
   /**
  * Search widget at top of lists.
@@ -2639,24 +2670,12 @@ button {
         justify-content: flex-end;
     margin: 1em 0;
   }
-  .txp-search .ui-menu {
-    position: absolute;
-    width: 18em;
-    z-index: 100;
-  }
   .txp-search .ui-controlgroup {
     -ms-flex-wrap: nowrap;
         flex-wrap: nowrap;
   }
-  .txp-search .txp-dropdown input {
-    vertical-align: -0.23076923076923em;
-  }
-  .txp-search .txp-dropdown label {
-    display: inline-block;
-    width: 85%;
-    padding: 0.23076923076923em 0.30769230769231em;
-    cursor: pointer;
-    vertical-align: text-top;
+  .txp-search .txp-dropdown {
+    z-index: 101;
   }
   .txp-search-clear {
     -ms-flex: 1;
@@ -2724,7 +2743,7 @@ button {
     margin: 0.46153846153846em 0 1em;
     float: right;
   }
-  .txp-list-options > * {
+  .txp-list-options > *:not(ul) {
     margin: 0 0 0 1em;
   }
   .txp-list-options form {
@@ -3434,8 +3453,8 @@ button {
   }
   /* Admin -> Languages panel - additional layout
    ========================================================================== */
-  #page-lang .txp-list .modified {
-    margin-left: 0.6em;
+  #page-lang .txp-grid-cell {
+    min-width: 19em;
   }
   /* Admin -> Plugins panel - additional layout
    ========================================================================== */
@@ -5437,7 +5456,7 @@ button {
     background-image: url("../img/ui-progressbar.gif");
     background-size: 16px 16px;
     height: 16px;
-    background-color: #cce0ff;
+    background-color: #f7c600;
   }
 }
 
@@ -5460,19 +5479,8 @@ button {
  * </div>
  */
   .ui-progressbar-indeterminate .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar-indeterminate.gif");
-    background-size: 16px 16px;
     background-color: #cccccc;
   }
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 1.25), screen and (min-resolution: 1.25dppx), screen and (min-resolution: 120dpi) {
-  .ui-progressbar-indeterminate .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar-indeterminate@2x.gif");
-  }
-}
-
-@media screen {
   /* Selectmenu
    ========================================================================== */
   /**
