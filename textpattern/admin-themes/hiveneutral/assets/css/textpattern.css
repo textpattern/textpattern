@@ -507,10 +507,10 @@ button {
  * <strong class="success">
  * <strong class="error">
  */
-  p.success,
-  p.warning,
-  p.error,
-  p.information {
+  .success:not(li),
+  .warning:not(li),
+  .error:not(li),
+  .information:not(li) {
     padding: 1px 0.23076923076923em;
     border-radius: 0.15em;
   }
@@ -561,21 +561,21 @@ button {
  * <p class="alert-block success">
  * <p class="alert-block error">
  */
-  .alert-block {
+  .alert-block:not(li) {
     padding: 0.53846153846154em 1em;
     clear: both;
     border: 1px solid;
   }
-  .alert-block.success {
+  .alert-block:not(li).success {
     border-color: #a3d48e;
   }
-  .alert-block.warning {
+  .alert-block:not(li).warning {
     border-color: #e4c788;
   }
-  .alert-block.error {
+  .alert-block:not(li).error {
     border-color: #e1b2b2;
   }
-  .alert-block.information {
+  .alert-block:not(li).information {
     border-color: #b1e2f5;
   }
   /**
