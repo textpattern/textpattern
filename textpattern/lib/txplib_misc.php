@@ -6767,3 +6767,20 @@ function check_prefs_integrity()
 
     $prefs = get_prefs();
 }
+
+/**
+ * Returns the contents of the found files as an array.
+ *
+ */
+
+function get_files_content($dir, $ext)
+{
+    $result = array();
+    foreach(scandir($dir) as $file){
+        if (preg_match('/^(.+)\.'.$ext.'$/', $file, $match)) {
+            $result[$match[1]] = file_get_contents("$dir/$file");
+        }
+    }
+
+    return $result;
+}

@@ -37,11 +37,8 @@ if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
 
 $structuredir = txpath.'/update/structure';
 
-foreach (scandir($structuredir) as $file) {
-    if (preg_match('/^(\w+)\.table$/', $file, $match)) {
-        $definition = file_get_contents($structuredir."/$file");
-        safe_create($match[1], $definition);
-    }
+foreach (get_files_content($structuredir, 'table') as $key=>$data) {
+    safe_create($key, $data);
 }
 
 // Default to messy URLs if we know clean ones won't work.
@@ -95,22 +92,16 @@ $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (7, 'reciprocal-affect
 $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (8, 'textpattern', 'link', 'root', 2, 3, 'Textpattern', '')";
 
 
-foreach (scandir($themedir.DS.'styles') as $cssfile) {
-    if (preg_match('/^(\w+)\.css$/', $cssfile, $match)) {
-        $css = doSlash(file_get_contents($themedir.DS.'styles'.DS.$cssfile));
-        $create_sql[] = "INSERT INTO `".PFX."txp_css`(name, css) VALUES('".$match[1]."', '".$css."')";
-    }
+foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
+    $create_sql[] = "INSERT INTO `".PFX."txp_css`(name, css) VALUES('".doSlash($key)."', '".doSlash($data)."')";
 }
 
 
 $create_sql[] = "INSERT INTO `".PFX."txp_discuss` VALUES (000001, 1, 'Donald Swain', 'donald.swain@example.com', 'example.com', '127.0.0.1', NOW(), '<p>I enjoy your site very much.</p>', 1)";
 
-foreach (scandir($themedir.DS.'forms') as $formfile) {
-    if (preg_match('/^(\w+).(\w+)\.txp$/', $formfile, $match)) {
-        $form = doSlash(file_get_contents($themedir.DS.'forms'.DS.$formfile));
-        $create_sql[] = "INSERT INTO `".PFX."txp_form`(type, name, Form)
-            VALUES('".$match[1]."', '".$match[2]."', '".$form."')";
-    }
+foreach (get_files_content($themedir.'/forms', 'txp') as $key=>$data) {
+    list($type, $name) = explode('.', $key);
+    $create_sql[] = "INSERT INTO `".PFX."txp_form`(type, name, Form) VALUES('".doSlash($type)."', '".doSlash($name)."', '".doSlash($data)."')";
 }
 
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (1, NOW(), 'textpattern', 'http://textpattern.com/',             'Textpattern Website',            '10', '', '')";
@@ -120,11 +111,8 @@ $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (4, NOW(), 'textpattern', 
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (5, NOW(), 'textpattern', 'http://textpattern.com/+',            '+Textpattern CMS',               '50', '', '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (6, NOW(), 'textpattern', 'http://textpattern.com/facebook',     'Textpattern Facebook Group',     '60', '', '')";
 
-foreach (scandir($themedir.DS.'pages') as $pagefile) {
-    if (preg_match('/^(\w+)\.txp$/', $pagefile, $match)) {
-        $page = doSlash(file_get_contents($themedir.DS.'pages'.DS.$pagefile));
-        $create_sql[] = "INSERT INTO `".PFX."txp_page`(name, user_html) VALUES('".$match[1]."', '".$page."')";
-    }
+foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
+    $create_sql[] = "INSERT INTO `".PFX."txp_page`(name, user_html) VALUES('".doSlash($key)."', '".doSlash($data)."')";
 }
 
 include txpath.'/lib/prefs.php';
