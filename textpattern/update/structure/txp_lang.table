@@ -1,0 +1,12 @@
+id      INT         NOT NULL AUTO_INCREMENT,
+lang    VARCHAR(16) NOT NULL,
+name    VARCHAR(64) NOT NULL,
+event   VARCHAR(64) NOT NULL,
+owner   VARCHAR(64) NOT NULL DEFAULT '',
+data    TEXT,
+lastmod TIMESTAMP,
+
+PRIMARY KEY   (id),
+UNIQUE lang   (lang, name),
+INDEX  lang_2 (lang, event),
+INDEX  owner  (owner)

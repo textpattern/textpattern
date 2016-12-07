@@ -35,9 +35,13 @@ if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
     die("Textpattern database table already exists. Can't run setup.");
 }
 
-$tabletype = '';
-foreach ($DB->table_options as $name => $value) {
-    $tabletype .= ' '.strtoupper($name).' = '.$value;
+$structuredir = txpath.'/update/structure';
+
+foreach (scandir($structuredir) as $file) {
+    if (preg_match('/^(\w+)\.table$/', $file, $match)) {
+        $definition = file_get_contents($structuredir."/$file");
+        safe_create($match[1], $definition);
+    }
 }
 
 // Default to messy URLs if we know clean ones won't work.
@@ -67,56 +71,6 @@ $themedir = txpath.DS.'setup';
 
 $create_sql = array();
 
-$create_sql[] = "CREATE TABLE `".PFX."textpattern` (
-    ID              INT          NOT NULL AUTO_INCREMENT,
-    Posted          DATETIME     NOT NULL,
-    Expires         DATETIME         NULL DEFAULT NULL,
-    AuthorID        VARCHAR(64)  NOT NULL DEFAULT '',
-    LastMod         DATETIME     NOT NULL,
-    LastModID       VARCHAR(64)  NOT NULL DEFAULT '',
-    Title           VARCHAR(255) NOT NULL DEFAULT '',
-    Title_html      VARCHAR(255) NOT NULL DEFAULT '',
-    Body            MEDIUMTEXT   NOT NULL,
-    Body_html       MEDIUMTEXT   NOT NULL,
-    Excerpt         TEXT         NOT NULL,
-    Excerpt_html    MEDIUMTEXT   NOT NULL,
-    Image           VARCHAR(255) NOT NULL DEFAULT '',
-    Category1       VARCHAR(64)  NOT NULL DEFAULT '',
-    Category2       VARCHAR(64)  NOT NULL DEFAULT '',
-    Annotate        INT          NOT NULL DEFAULT '0',
-    AnnotateInvite  VARCHAR(255) NOT NULL DEFAULT '',
-    comments_count  INT          NOT NULL DEFAULT '0',
-    Status          INT          NOT NULL DEFAULT '4',
-    textile_body    VARCHAR(32)  NOT NULL DEFAULT '1',
-    textile_excerpt VARCHAR(32)  NOT NULL DEFAULT '1',
-    Section         VARCHAR(255) NOT NULL DEFAULT '',
-    override_form   VARCHAR(255) NOT NULL DEFAULT '',
-    Keywords        VARCHAR(255) NOT NULL DEFAULT '',
-    description     VARCHAR(255) NOT NULL DEFAULT '',
-    url_title       VARCHAR(255) NOT NULL DEFAULT '',
-    custom_1        VARCHAR(255) NOT NULL DEFAULT '',
-    custom_2        VARCHAR(255) NOT NULL DEFAULT '',
-    custom_3        VARCHAR(255) NOT NULL DEFAULT '',
-    custom_4        VARCHAR(255) NOT NULL DEFAULT '',
-    custom_5        VARCHAR(255) NOT NULL DEFAULT '',
-    custom_6        VARCHAR(255) NOT NULL DEFAULT '',
-    custom_7        VARCHAR(255) NOT NULL DEFAULT '',
-    custom_8        VARCHAR(255) NOT NULL DEFAULT '',
-    custom_9        VARCHAR(255) NOT NULL DEFAULT '',
-    custom_10       VARCHAR(255) NOT NULL DEFAULT '',
-    uid             VARCHAR(32)  NOT NULL DEFAULT '',
-    feed_time       DATE         NOT NULL,
-
-    PRIMARY KEY                 (ID),
-    INDEX    categories_idx     (Category1(10), Category2(10)),
-    INDEX    Posted             (Posted),
-    INDEX    Expires_idx        (Expires),
-    INDEX    author_idx         (AuthorID),
-    INDEX    section_status_idx (Section(249), Status),
-    INDEX    url_title_idx      (url_title(250)),
-    FULLTEXT searching          (Title, Body)
-) $tabletype ";
-
 $setup_comment_invite = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite');
 
 $textile = new \Netcarver\Textile\Parser();
@@ -130,18 +84,6 @@ $article = doSlash($article);
 
 $create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), NULL, '".doSlash($_SESSION['name'])."', NOW(), '', 'Welcome to your site', '', '".$article['body']."', '".$article['body_html']."', '".$article['excerpt']."', '".$article['excerpt_html']."', '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, '1', '1', 'articles', '', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NOW())";
 
-$create_sql[] = "CREATE TABLE `".PFX."txp_category` (
-    id          INT          NOT NULL AUTO_INCREMENT,
-    name        VARCHAR(64)  NOT NULL DEFAULT '',
-    type        VARCHAR(64)  NOT NULL DEFAULT '',
-    parent      VARCHAR(64)  NOT NULL DEFAULT '',
-    lft         INT          NOT NULL DEFAULT '0',
-    rgt         INT          NOT NULL DEFAULT '0',
-    title       VARCHAR(255) NOT NULL DEFAULT '',
-    description VARCHAR(255) NOT NULL DEFAULT '',
-
-    PRIMARY KEY (id)
-) $tabletype ";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (1, 'root', 'article', '', 1, 8, 'root', '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (2, 'root', 'link', '', 1, 4, 'root', '')";
@@ -152,12 +94,6 @@ $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (6, 'meaningful-labor'
 $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (7, 'reciprocal-affection', 'article', 'root', 6, 7, 'Reciprocal affection', '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (8, 'textpattern', 'link', 'root', 2, 3, 'Textpattern', '')";
 
-$create_sql[] = "CREATE TABLE `".PFX."txp_css` (
-    name VARCHAR(255) NOT NULL,
-    css  MEDIUMTEXT   NOT NULL,
-
-    UNIQUE name (name(250))
-) $tabletype ";
 
 foreach (scandir($themedir.DS.'styles') as $cssfile) {
     if (preg_match('/^(\w+)\.css$/', $cssfile, $match)) {
@@ -166,58 +102,8 @@ foreach (scandir($themedir.DS.'styles') as $cssfile) {
     }
 }
 
-$create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
-    discussid INT(6) ZEROFILL NOT NULL AUTO_INCREMENT,
-    parentid  INT             NOT NULL DEFAULT '0',
-    name      VARCHAR(255)    NOT NULL DEFAULT '',
-    email     VARCHAR(254)    NOT NULL DEFAULT '',
-    web       VARCHAR(255)    NOT NULL DEFAULT '',
-    ip        VARCHAR(100)    NOT NULL DEFAULT '',
-    posted    DATETIME        NOT NULL,
-    message   TEXT            NOT NULL,
-    visible   TINYINT         NOT NULL DEFAULT '1',
-
-    PRIMARY KEY    (discussid),
-    INDEX parentid (parentid)
-) $tabletype ";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_discuss` VALUES (000001, 1, 'Donald Swain', 'donald.swain@example.com', 'example.com', '127.0.0.1', NOW(), '<p>I enjoy your site very much.</p>', 1)";
-
-$create_sql[] = "CREATE TABLE `".PFX."txp_discuss_nonce` (
-    issue_time DATETIME     NOT NULL,
-    nonce      VARCHAR(255) NOT NULL DEFAULT '',
-    used       TINYINT      NOT NULL DEFAULT '0',
-    secret     VARCHAR(255) NOT NULL DEFAULT '',
-
-    PRIMARY KEY (nonce(250))
-) $tabletype ";
-
-$create_sql[] = "CREATE TABLE `".PFX."txp_file` (
-    id          INT          NOT NULL AUTO_INCREMENT,
-    filename    VARCHAR(255) NOT NULL DEFAULT '',
-    title       VARCHAR(255) DEFAULT NULL,
-    category    VARCHAR(64)  NOT NULL DEFAULT '',
-    permissions VARCHAR(32)  NOT NULL DEFAULT '0',
-    description TEXT         NOT NULL,
-    downloads   INT UNSIGNED NOT NULL DEFAULT '0',
-    status	SMALLINT     NOT NULL DEFAULT '4',
-    modified    DATETIME     NOT NULL,
-    created     DATETIME     NOT NULL,
-    size        BIGINT       DEFAULT NULL,
-    author      VARCHAR(64)  NOT NULL DEFAULT '',
-
-    PRIMARY KEY       (id),
-    UNIQUE filename   (filename(250)),
-    INDEX  author_idx (author)
-) $tabletype ";
-
-$create_sql[] = "CREATE TABLE `".PFX."txp_form` (
-    name VARCHAR(255) NOT NULL DEFAULT '',
-    type VARCHAR(28)  NOT NULL DEFAULT '',
-    Form TEXT         NOT NULL,
-
-    PRIMARY KEY (name(250))
-) $tabletype ";
 
 foreach (scandir($themedir.DS.'forms') as $formfile) {
     if (preg_match('/^(\w+).(\w+)\.txp$/', $formfile, $match)) {
@@ -227,54 +113,6 @@ foreach (scandir($themedir.DS.'forms') as $formfile) {
     }
 }
 
-$create_sql[] = "CREATE TABLE `".PFX."txp_image` (
-    id        INT          NOT NULL AUTO_INCREMENT,
-    name      VARCHAR(255) NOT NULL DEFAULT '',
-    category  VARCHAR(64)  NOT NULL DEFAULT '',
-    ext       VARCHAR(20)  NOT NULL DEFAULT '',
-    w         INT          NOT NULL DEFAULT '0',
-    h         INT          NOT NULL DEFAULT '0',
-    alt       VARCHAR(255) NOT NULL DEFAULT '',
-    caption   TEXT         NOT NULL,
-    date      DATETIME     NOT NULL,
-    author    VARCHAR(64)  NOT NULL DEFAULT '',
-    thumbnail INT          NOT NULL DEFAULT '0',
-    thumb_w   INT          NOT NULL DEFAULT '0',
-    thumb_h   INT          NOT NULL DEFAULT '0',
-
-    PRIMARY KEY      (id),
-    INDEX author_idx (author)
-) $tabletype ";
-
-$create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
-    id      INT         NOT NULL AUTO_INCREMENT,
-    lang    VARCHAR(16) NOT NULL,
-    name    VARCHAR(64) NOT NULL,
-    event   VARCHAR(64) NOT NULL,
-    owner   VARCHAR(64) NOT NULL DEFAULT '',
-    data    TEXT,
-    lastmod TIMESTAMP,
-
-    PRIMARY KEY   (id),
-    UNIQUE lang   (lang, name),
-    INDEX  lang_2 (lang, event),
-    INDEX  owner  (owner)
-) $tabletype ";
-
-$create_sql[] = "CREATE TABLE `".PFX."txp_link` (
-    id          INT          NOT NULL AUTO_INCREMENT,
-    date        DATETIME     NOT NULL,
-    category    VARCHAR(64)  NOT NULL DEFAULT '',
-    url         TEXT         NOT NULL,
-    linkname    VARCHAR(255) NOT NULL DEFAULT '',
-    linksort    VARCHAR(128) NOT NULL DEFAULT '',
-    description TEXT         NOT NULL,
-    author      VARCHAR(64)  NOT NULL DEFAULT '',
-
-    PRIMARY KEY      (id),
-    INDEX author_idx (author)
-) $tabletype ";
-
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (1, NOW(), 'textpattern', 'http://textpattern.com/',             'Textpattern Website',            '10', '', '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (2, NOW(), 'textpattern', 'http://docs.textpattern.io/',         'Textpattern User Documentation', '20', '', '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (3, NOW(), 'textpattern', 'http://textpattern.org/',             'Textpattern Resources',          '30', '', '')";
@@ -282,69 +120,12 @@ $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (4, NOW(), 'textpattern', 
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (5, NOW(), 'textpattern', 'http://textpattern.com/+',            '+Textpattern CMS',               '50', '', '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (6, NOW(), 'textpattern', 'http://textpattern.com/facebook',     'Textpattern Facebook Group',     '60', '', '')";
 
-$create_sql[] = "CREATE TABLE `".PFX."txp_log` (
-    id     INT          NOT NULL AUTO_INCREMENT,
-    time   DATETIME     NOT NULL,
-    host   VARCHAR(255) NOT NULL DEFAULT '',
-    page   VARCHAR(255) NOT NULL DEFAULT '',
-    refer  MEDIUMTEXT   NOT NULL,
-    status INT          NOT NULL DEFAULT '200',
-    method VARCHAR(16)  NOT NULL DEFAULT 'GET',
-    ip     VARCHAR(45)  NOT NULL DEFAULT '',
-
-    PRIMARY KEY (id),
-    INDEX time  (time),
-    INDEX ip    (ip)
-) $tabletype ";
-
-$create_sql[] = "CREATE TABLE `".PFX."txp_page` (
-    name      VARCHAR(255) NOT NULL DEFAULT '',
-    user_html TEXT         NOT NULL,
-
-    PRIMARY KEY (name(250))
-) $tabletype ";
-
 foreach (scandir($themedir.DS.'pages') as $pagefile) {
     if (preg_match('/^(\w+)\.txp$/', $pagefile, $match)) {
         $page = doSlash(file_get_contents($themedir.DS.'pages'.DS.$pagefile));
         $create_sql[] = "INSERT INTO `".PFX."txp_page`(name, user_html) VALUES('".$match[1]."', '".$page."')";
     }
 }
-
-$create_sql[] = "CREATE TABLE `".PFX."txp_plugin` (
-    name         VARCHAR(64)       NOT NULL DEFAULT '',
-    status       INT               NOT NULL DEFAULT '1',
-    author       VARCHAR(128)      NOT NULL DEFAULT '',
-    author_uri   VARCHAR(128)      NOT NULL DEFAULT '',
-    version      VARCHAR(255)      NOT NULL DEFAULT '1.0',
-    description  TEXT              NOT NULL,
-    help         TEXT              NOT NULL,
-    code         MEDIUMTEXT        NOT NULL,
-    code_restore MEDIUMTEXT        NOT NULL,
-    code_md5     VARCHAR(32)       NOT NULL DEFAULT '',
-    type         INT               NOT NULL DEFAULT '0',
-    load_order   TINYINT  UNSIGNED NOT NULL DEFAULT '5',
-    flags        SMALLINT UNSIGNED NOT NULL DEFAULT '0',
-
-    UNIQUE name            (name),
-    INDEX  status_type_idx (status, type)
-) $tabletype ";
-
-$create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
-    prefs_id  INT               NOT NULL DEFAULT '1',
-    name      VARCHAR(255)      NOT NULL DEFAULT '',
-    val       TEXT              NOT NULL,
-    type      SMALLINT UNSIGNED NOT NULL DEFAULT '2',
-    event     VARCHAR(255)      NOT NULL DEFAULT 'publish',
-    html      VARCHAR(255)      NOT NULL DEFAULT 'text_input',
-    position  SMALLINT UNSIGNED NOT NULL DEFAULT '0',
-    user_name VARCHAR(64)       NOT NULL DEFAULT '',
-
-    UNIQUE prefs_idx (prefs_id, name(185), user_name),
-    INDEX  name      (name(250)),
-    INDEX  user_name (user_name)
-) $tabletype ";
-
 
 include txpath.'/lib/prefs.php';
 
@@ -359,35 +140,8 @@ foreach ($prefs as $event => $event_prefs) {
     }
 }
 
-$create_sql[] = "CREATE TABLE `".PFX."txp_section` (
-    name         VARCHAR(255) NOT NULL DEFAULT '',
-    page         VARCHAR(255) NOT NULL DEFAULT '',
-    css          VARCHAR(255) NOT NULL DEFAULT '',
-    description  VARCHAR(255) NOT NULL DEFAULT '',
-    in_rss       INT          NOT NULL DEFAULT '1',
-    on_frontpage INT          NOT NULL DEFAULT '1',
-    searchable   INT          NOT NULL DEFAULT '1',
-    title        VARCHAR(255) NOT NULL DEFAULT '',
-
-    PRIMARY KEY (name(250))
-) $tabletype ";
-
 $create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('articles', 'archive', 'default', '', 1, 1, 1, 'Articles')";
 $create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('default', 'default', 'default', '', 1, 1, 1, 'Default')";
-
-$create_sql[] = "CREATE TABLE `".PFX."txp_users` (
-    user_id     INT          NOT NULL AUTO_INCREMENT,
-    name        VARCHAR(64)  NOT NULL DEFAULT '',
-    pass        VARCHAR(128) NOT NULL,
-    RealName    VARCHAR(255) NOT NULL DEFAULT '',
-    email       VARCHAR(254) NOT NULL DEFAULT '',
-    privs       TINYINT      NOT NULL DEFAULT '1',
-    last_access DATETIME         NULL DEFAULT NULL,
-    nonce       VARCHAR(64)  NOT NULL DEFAULT '',
-
-    PRIMARY KEY (user_id),
-    UNIQUE name (name)
-) $tabletype ";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_users` VALUES (
     1,
@@ -399,17 +153,6 @@ $create_sql[] = "INSERT INTO `".PFX."txp_users` VALUES (
     NOW(),
     '".md5(uniqid(rand(), true))."')";
 
-$create_sql[] = "CREATE TABLE `".PFX."txp_token` (
-    id           INT          NOT NULL AUTO_INCREMENT,
-    reference_id INT          NOT NULL,
-    type         VARCHAR(255) NOT NULL,
-    selector     VARCHAR(12)  NOT NULL DEFAULT '',
-    token        VARCHAR(255) NOT NULL,
-    expires      DATETIME         NULL DEFAULT NULL,
-
-    PRIMARY KEY (id),
-    UNIQUE ref_type (reference_id, type(50))
-) $tabletype ";
 
 $GLOBALS['txp_install_successful'] = true;
 $GLOBALS['txp_err_count'] = 0;
