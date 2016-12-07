@@ -736,10 +736,8 @@ function doArticles($atts, $iscustom, $thing = null)
         'form'          => 'default',
         'limit'         => 10,
         'sort'          => '',
-        'sortby'        => '', // Deprecated in 4.0.4.
-        'sortdir'       => '', // Deprecated in 4.0.4.
         'keywords'      => '',
-        'time'          => 'past',
+        'time'          => null,
         'status'        => STATUS_LIVE,
         'allowoverride' => !$iscustom,
         'frontpage'     => !$iscustom,
@@ -838,22 +836,6 @@ function doArticles($atts, $iscustom, $thing = null)
         }
     }
 
-    // For backwards compatibility. sortby and sortdir are deprecated.
-    if ($sortby) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortby')), E_USER_NOTICE);
-
-        if (!$sortdir) {
-            $sortdir = "DESC";
-        } else {
-            trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
-        }
-
-        $sort = "$sortby $sortdir";
-    } elseif ($sortdir) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
-        $sort = "Posted $sortdir";
-    }
-
     // Building query parts.
     $frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';
     $category  = join("','", doSlash(do_list_unique($category)));
@@ -873,21 +855,40 @@ function doArticles($atts, $iscustom, $thing = null)
     $section   = (!$section)   ? '' : " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')";
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
     $author    = (!$author)    ? '' : " AND AuthorID IN ('".join("','", doSlash(do_list_unique($author)))."')";
-    $month     = (!$month)     ? '' : " AND Posted LIKE '".doSlash($month)."%'";
     $ids = $id ? array_map('intval', do_list_unique($id)) : array();
     $exclude = $exclude ? array_map('intval', do_list_unique($exclude)) : array();
     $id        = ((!$id)        ? '' : " AND ID IN (".join(',', $ids).")")
         .((!$exclude)   ? '' : " AND ID NOT IN (".join(',', $exclude).")");
 
-    switch ($time) {
-        case 'any':
-            $time = "";
-            break;
-        case 'future':
-            $time = " AND Posted > ".now('posted');
-            break;
-        default:
-            $time = " AND Posted <= ".now('posted');
+    if (!isset($time) || $time === 'any') {
+        $time = ($month ? " AND Posted LIKE '".doSlash($month)."%'" : '').
+        ($time ? '' : " AND Posted <= ".now('posted'));
+    } else {
+        $start = $month ? strtotime($month) : false;
+
+        if ($start === false) {
+            $from = $month ? "'".doSlash($month)."'" : now('posted');
+            $start = time();
+        } else {
+            $from = "FROM_UNIXTIME($start)";
+        }
+
+        switch ($time) {
+            case 'future':
+                $time = " AND Posted > $from";
+                break;
+            case 'past':
+                $time = " AND Posted <= $from";
+                break;
+            default:
+                $stop = strtotime($time, $start) or time();
+
+                if ($start > $stop) {
+                    list($start, $stop) = array($stop, $start);
+                }
+
+                $time = " AND Posted BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)";
+        }
     }
 
     if (!$expired) {
@@ -928,7 +929,7 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     $where = "1 = 1".$statusq.$time.
-        $search.$id.$category.$section.$excerpted.$month.$author.$keywords.$custom.$frontpage;
+        $search.$id.$category.$section.$excerpted.$author.$keywords.$custom.$frontpage;
 
     // Do not paginate if we are on a custom list.
     if (!$iscustom and !$issticky) {

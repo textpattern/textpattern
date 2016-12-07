@@ -489,6 +489,13 @@ button {
   a:focus .content-image {
     border-color: #0066ff;
   }
+  .img-preview:focus {
+    outline: 0;
+  }
+  .img-preview img {
+    width: 120px;
+    height: 120px;
+  }
   /* Messages
    ========================================================================== */
   /**
@@ -501,27 +508,35 @@ button {
  * <strong class="success">
  * <strong class="error">
  */
-  .success,
-  .warning,
-  .error,
-  .information {
+  p.success,
+  p.warning,
+  p.error,
+  p.information {
     padding: 1px 0.23076923076923em;
     border-radius: 0.25em;
   }
   .success {
     background: #dff0d8;
+  }
+  .success:not(li) {
     color: #238c23;
   }
   .warning {
     background: #f7eedb;
+  }
+  .warning:not(li) {
     color: #cc8c00;
   }
   .error {
     background: #f2dede;
+  }
+  .error:not(li) {
     color: #9d261d;
   }
   .information {
     background: #e7f6fc;
+  }
+  .information:not(li) {
     color: #3a87ad;
   }
   /**
@@ -1984,7 +1999,7 @@ button {
     -ms-flex-positive: 1;
         flex-grow: 1;
     width: 100%;
-    max-width: 116em;
+    max-width: 116.3076923em;
     margin: 0 auto;
   }
   /* Layout grid
@@ -2068,21 +2083,49 @@ button {
  *         Content
  *     </div>
  * </div>
+ *
+ * <ul class="txp-grid">
+ *     <li>
+ *         Content
+ *     </li>
+ *     <li>
+ *         Content
+ *     </li>
+ *     <li>
+ *         Content
+ *     </li>
+ * </ul>
  */
   .txp-grid {
     display: -ms-inline-flexbox;
     display: inline-flex;
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
-    -ms-flex-pack: center;
-        justify-content: center;
+    width: 100%;
     margin: -2px;
+    padding: 0;
+    clear: both;
+    list-style: none;
+  }
+  .txp-grid > * {
+    position: relative;
+    margin: 2px;
   }
   .txp-grid-cell {
-    margin: 2px;
     padding: 0 1em;
     border: 1px solid #cccccc;
     box-sizing: border-box;
+  }
+  .txp-grid-multi-edit {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    padding: 3px 6px;
+    border: 1px solid #d4d4d4;
+    border-top: 0;
+    border-left: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 2;
   }
   /* Header
    ========================================================================== */
@@ -3320,9 +3363,6 @@ button {
   }
   /* Content -> Images panel - additional layout
    ========================================================================== */
-  .has-thumbnail a:focus {
-    outline: 0;
-  }
   .thumbnail-alter input {
     margin: 0 0.30769230769231em 0 0;
   }
