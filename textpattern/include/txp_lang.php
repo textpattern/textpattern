@@ -213,7 +213,7 @@ function list_languages($message = '')
         '</ul>'.
 
         ((has_privs('lang.edit'))
-            ? hed(gTxt('install_from_textpack'), 2).
+            ? hed(gTxt('install_from_textpack'), 3).
                 n.tag(
                     form(
                         '<label for="textpack-install">'.gTxt('install_textpack').'</label>'.popHelp('get_textpack').
