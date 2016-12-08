@@ -28,7 +28,7 @@ if (!defined('TXP_INSTALL')) {
 @ignore_user_abort(1);
 @set_time_limit(0);
 
-global $DB, $txp_groups, $blog_uid;
+global $DB, $txp_groups, $blog_uid, $prefs;
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/admin_config.php';
 
@@ -39,8 +39,6 @@ $urlpath = preg_replace('#^[^/]+#', '', $siteurl);
 $theme = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
 $themedir = txpath.DS.'setup';
 $structuredir = txpath.'/update/structure';
-
-$setup_comment_invite = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite');
 
 // Default to messy URLs if we know clean ones won't work.
 $permlink_mode = 'section_id_title';
@@ -77,6 +75,8 @@ foreach ($default_prefs as $name => $p) {
     create_pref($name, $p[4], $p[0], $p[1], $p[3], $p[2]);
 }
 
+$prefs = get_prefs();
+
 create_user($_SESSION['name'], $_SESSION['email'], $_SESSION['pass'], $_SESSION['realname'], 1);
 
 setup_txp_lang(LANG);
@@ -101,11 +101,12 @@ foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
     safe_query("INSERT INTO `".PFX."txp_page`(name, user_html) VALUES('".doSlash($key)."', '".doSlash($data)."')");
 }
 
+// FIXME: Load theme prefs
 
-// Load theme /articles filename format: id.section.textile
 
-global $prefs;
-$prefs['permlink_format'] = 1;
+
+// Load theme /articles
+// filename format: id.section.textile
 
 $textile = new \Netcarver\Textile\Parser();
 
@@ -147,7 +148,7 @@ $GLOBALS['txp_err_count'] = 0;
 $GLOBALS['txp_err_html'] = '';
 
 
-// Funal reduild category trees
+// Funal rebuild category trees
 rebuild_tree_full('article');
 rebuild_tree_full('link');
 rebuild_tree_full('image');
@@ -166,18 +167,15 @@ function setup_article_insert($article)
         Excerpt         = '".@$excerpt."',
         Excerpt_html    = '$excerpt_html',
         Status          = 4,
-
         Category1       = '$category1',
         Category2       = '$category2',
         Section         = '$section',
-
         AuthorID        = '$user',
         Posted          = NOW(),
         LastMod         = NOW(),
         textile_body    = '1',
         textile_excerpt = '1',
         Annotate        =  $annotate,
-
         url_title       = '$url_title',
         AnnotateInvite  = '$invite',
         uid            = '".md5(uniqid(rand(), true))."',
