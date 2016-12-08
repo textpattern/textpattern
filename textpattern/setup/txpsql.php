@@ -51,15 +51,10 @@ if (is_callable('apache_get_modules')) {
     if (!is_array($modules) || !in_array('mod_rewrite', $modules)) {
         $permlink_mode = 'messy';
     }
-} else {
-    $server_software = (@$_SERVER['SERVER_SOFTWARE'] || @$_SERVER['HTTP_HOST'])
-        ? ((@$_SERVER['SERVER_SOFTWARE']) ? @$_SERVER['SERVER_SOFTWARE'] : $_SERVER['HTTP_HOST'])
-        : '';
-
-    if (!stristr($server_software, 'Apache')) {
-        $permlink_mode = 'messy';
-    }
+} elseif (!stristr(serverSet('SERVER_SOFTWARE'), 'Apache')) {
+    $permlink_mode = 'messy';
 }
+
 
 $siteurl = str_replace("http://", '', $_SESSION['siteurl']);
 $siteurl = str_replace(' ', '%20', rtrim($siteurl, "/"));
