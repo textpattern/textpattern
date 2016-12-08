@@ -5415,24 +5415,17 @@ button {
  */
   .ui-progressbar {
     margin-bottom: 1em;
+    border-radius: 4px;
     text-align: left;
     overflow: hidden;
   }
   .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar.gif");
-    background-size: 16px 16px;
-    height: 16px;
+    height: 8px;
     background-color: #c7e0f6;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+    background-size: 24px 24px;
+    animation: progressbar-stripes linear 4s infinite;
   }
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 1.25), screen and (min-resolution: 1.25dppx), screen and (min-resolution: 120dpi) {
-  .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar@2x.gif");
-  }
-}
-
-@media screen {
   /**
  * Progressbar with indeterminate value.
  *
@@ -6189,6 +6182,15 @@ button {
   50%,
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes progressbar-stripes {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 48px 0;
   }
 }
 
