@@ -28,8 +28,9 @@ if (!defined('TXP_INSTALL')) {
 @ignore_user_abort(1);
 @set_time_limit(0);
 
-global $DB;
+global $DB, $txp_groups;
 include txpath.'/lib/txplib_db.php';
+include txpath.'/lib/admin_config.php';
 
 if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
     die("Textpattern database table already exists. Can't run setup.");
@@ -109,26 +110,7 @@ foreach ($default_prefs as $name => $p) {
     create_pref($name, $p[4], $p[0], $p[1], $p[3], $p[2]);
 }
 
-$prefs = new_user_prefs($_SESSION['name']);
-foreach ($prefs as $event => $event_prefs) {
-    foreach ($event_prefs as $p) {
-        $p = doSlash($p);
-        $username = empty($p[5]) ? '' : $p[5];
-        $create_sql[] = "INSERT INTO `".PFX."txp_prefs` (event, type, position, html, name, val, user_name) ".
-            "VALUES ('{$event}', '{$p[0]}', '{$p[1]}', '{$p[2]}', '{$p[3]}', '{$p[4]}', '{$username}')";
-    }
-}
-
-$create_sql[] = "INSERT INTO `".PFX."txp_users` VALUES (
-    1,
-    '".doSlash($_SESSION['name'])."',
-    '".doSlash(txp_hash_password($_SESSION['pass']))."',
-    '".doSlash($_SESSION['realname'])."',
-    '".doSlash($_SESSION['email'])."',
-    1,
-    NOW(),
-    '".md5(uniqid(rand(), true))."')";
-
+create_user($_SESSION['name'], $_SESSION['email'], $_SESSION['pass'], $_SESSION['realname'], 1);
 
 $GLOBALS['txp_install_successful'] = true;
 $GLOBALS['txp_err_count'] = 0;
