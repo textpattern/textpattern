@@ -105,8 +105,11 @@ foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
 
 include txpath.'/lib/prefs.php';
 
-$prefs = array_merge_recursive($default_prefs, new_user_prefs($_SESSION['name']));
+foreach ($default_prefs as $name => $p) {
+    create_pref($name, $p[4], $p[0], $p[1], $p[3], $p[2]);
+}
 
+$prefs = new_user_prefs($_SESSION['name']);
 foreach ($prefs as $event => $event_prefs) {
     foreach ($event_prefs as $p) {
         $p = doSlash($p);

@@ -6757,11 +6757,9 @@ function check_prefs_integrity()
     $prefs = get_prefs();
     include txpath.'/lib/prefs.php';
 
-    foreach ($default_prefs as $event => $event_prefs) {
-        foreach ($event_prefs as $p) {
-            if (get_pref($p[3], false) === false ) {
-                set_pref($p[3], $p[4], $event, $p[0], $p[2], $p[1]);
-            }
+    foreach ($default_prefs as $name => $p) {
+        if (get_pref($name, false) === false ) {
+            create_pref($name, $p[4], $p[0], $p[1], $p[3], $p[2]);
         }
     }
 
