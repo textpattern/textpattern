@@ -6758,7 +6758,7 @@ function check_prefs_integrity()
     include txpath.'/lib/prefs.php';
 
     foreach ($default_prefs as $name => $p) {
-        if (get_pref($name, false) === false ) {
+        if (get_pref($name, false) === false) {
             create_pref($name, $p[4], $p[0], $p[1], $p[3], $p[2]);
         }
     }
@@ -6774,7 +6774,7 @@ function check_prefs_integrity()
 function get_files_content($dir, $ext)
 {
     $result = array();
-    foreach(scandir($dir) as $file){
+    foreach (scandir($dir) as $file) {
         if (preg_match('/^(.+)\.'.$ext.'$/', $file, $match)) {
             $result[$match[1]] = file_get_contents("$dir/$file");
         }

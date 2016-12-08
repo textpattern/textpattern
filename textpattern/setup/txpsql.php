@@ -117,12 +117,12 @@ foreach (get_files_content($themedir.'/articles', 'textile') as $key=>$data) {
 
     if (preg_match_all('%===\s+(title|body|excerpt|category)(.*?)(?====)%is', $data."===", $match)) {
         // Default title
-        $article['title'] = "Article ".$article['id']; 
+        $article['title'] = "Article ".$article['id'];
         $article['invite'] = $setup_comment_invite;
         $article['user'] = $_SESSION['name'];
         $article['annotate'] = 1;
 
-        foreach($match[1] as $i=>$who ){
+        foreach ($match[1] as $i=>$who) {
             $article[strtolower($who)] = trim($match[2][$i]);
         }
 
@@ -136,7 +136,6 @@ foreach (get_files_content($themedir.'/articles', 'textile') as $key=>$data) {
 
         setup_article_insert($article);
         update_comments_count($article['id']);
-
     }
 }
 
