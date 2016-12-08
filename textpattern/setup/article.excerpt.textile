@@ -1,1 +1,0 @@
-This is a Textpattern article excerpt. Article excerpts are optional but can be used effectively to summarise an article's content, for example with Textpattern's built-in article syndication and with the @<txp:excerpt />@ tag.

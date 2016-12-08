@@ -102,19 +102,43 @@ foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
 }
 
 
+// Load theme /articles filename format: id.section.textile
 
-// FIXME: Make some wrapper for article and move data to $themedir/articles folder
+global $prefs;
+$prefs['permlink_format'] = 1;
+
 $textile = new \Netcarver\Textile\Parser();
 
-$article['body']    = file_get_contents(txpath.DS.'setup'.DS.'article.body.textile');
-$article['excerpt'] = file_get_contents(txpath.DS.'setup'.DS.'article.excerpt.textile');
-$article = str_replace('siteurl', $urlpath, $article);
-$article['body_html']    = $textile->textileThis($article['body']);
-$article['excerpt_html'] = $textile->textileThis($article['excerpt']);
-$article = doSlash($article);
+foreach (get_files_content($themedir.'/articles', 'textile') as $key=>$data) {
+    $article = array();
+    list($article['id'], $article['section']) = explode('.', $key);
+    $data = str_replace('siteurl', $urlpath, $data);
 
-safe_query("INSERT INTO `".PFX."textpattern` VALUES (1, NOW(), NULL, '".doSlash($_SESSION['name'])."', NOW(), '', 'Welcome to your site', '', '".$article['body']."', '".$article['body_html']."', '".$article['excerpt']."', '".$article['excerpt_html']."', '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, '1', '1', 'articles', '', '', '', 'welcome-to-your-site', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', NOW())");
-// Article hardcode end
+    if (preg_match_all('%===\s+(title|body|excerpt|category)(.*?)(?====)%is', $data."===", $match)) {
+        // Default title
+        $article['title'] = "Article ".$article['id']; 
+        $article['invite'] = $setup_comment_invite;
+        $article['user'] = $_SESSION['name'];
+        $article['annotate'] = 1;
+
+        foreach($match[1] as $i=>$who ){
+            $article[strtolower($who)] = trim($match[2][$i]);
+        }
+
+        $article['body_html']    = $textile->textileThis(@$article['body']);
+        $article['excerpt_html'] = $textile->textileThis(@$article['excerpt']);
+        $article['url_title'] = stripSpace($article['title'], 1);
+
+        $category = @do_list_unique($article['category']);
+        $article['category1'] = @$category[0];
+        $article['category2'] = @$category[1];
+
+        setup_article_insert($article);
+        update_comments_count($article['id']);
+
+    }
+}
+
 
 
 // FIXME: Need some check
@@ -130,6 +154,36 @@ rebuild_tree_full('image');
 rebuild_tree_full('file');
 
 
+function setup_article_insert($article)
+{
+    extract(doSlash($article));
+
+    safe_insert('textpattern', "
+        ID              = '$id',
+        Title           = '$title',
+        Body            = '".@$body."',
+        Body_html       = '$body_html',
+        Excerpt         = '".@$excerpt."',
+        Excerpt_html    = '$excerpt_html',
+        Status          = 4,
+
+        Category1       = '$category1',
+        Category2       = '$category2',
+        Section         = '$section',
+
+        AuthorID        = '$user',
+        Posted          = NOW(),
+        LastMod         = NOW(),
+        textile_body    = '1',
+        textile_excerpt = '1',
+        Annotate        =  $annotate,
+
+        url_title       = '$url_title',
+        AnnotateInvite  = '$invite',
+        uid            = '".md5(uniqid(rand(), true))."',
+        feed_time       = NOW()"
+    );
+}
 
 function setup_txp_lang($lang)
 {
