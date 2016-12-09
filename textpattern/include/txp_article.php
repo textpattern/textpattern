@@ -1834,8 +1834,9 @@ function article_partial_article_view($rs)
     }
 
     return n.href('<span class="ui-icon ui-icon-notice"></span> '.gTxt('view'), $url, array(
-        'class' => 'txp-article-view',
-        'id'    => 'article_partial_article_view',
+        'class'  => 'txp-article-view',
+        'id'     => 'article_partial_article_view',
+        'target' => '_blank',
     ));
 }
 

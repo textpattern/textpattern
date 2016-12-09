@@ -665,7 +665,7 @@ button {
  */
   h3.txp-summary a {
     padding: 0 0 0 0.8em;
-    background: url("../img/expand-collapse.svg") no-repeat 0 4px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='100' viewBox='0 0 7 100'%3E%3Cpath fill='%23963' d='M1 7V0l4 3.5M0 96h7l-3.5 4'/%3E%3C/svg%3E") no-repeat 0 4px;
   }
   h3.txp-summary.expanded a {
     background-position: 0 -90px;
@@ -996,7 +996,7 @@ button {
  */
   select {
     padding-right: 1.3333333em;
-    background: #f7f7f7 url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMXB4JyBoZWlnaHQ9JzRweCcgdmlld0JveD0nMCAwIDExIDQnPjxwb2x5Z29uIGZpbGw9JyMzMzMnIHBvaW50cz0nMy41LDQgMCwwIDcsMCcvPjwvc3ZnPg==") right center no-repeat;
+    background: #f7f7f7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='4' viewBox='0 0 11 4'%3E%3Cpolygon fill='%23333' points='3.5,4 0,0 7,0'/%3E%3C/svg%3E") right center no-repeat;
     background-size: 0.9166667em 0.3333333;
     text-transform: none;
   }
@@ -1668,7 +1668,7 @@ button {
   .txp-list thead th.desc a {
     margin-right: 0;
     padding-right: 14px;
-    background: url("../img/arrow-up-down.svg") no-repeat;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='48' viewBox='0 0 9 48'%3E%3Cpath fill='%23fabc2b' d='M4.5 0L0 5h2v4h5V5h2M4.5 48L9 43H7v-4H2v4H0'/%3E%3C/svg%3E") no-repeat;
   }
   [dir="rtl"] .txp-list thead th.asc a, [dir="rtl"]
   .txp-list thead th.desc a {
@@ -1906,8 +1906,8 @@ button {
     width: 6.75em;
     height: 1.5em;
     margin: 0.25em 0;
-    background: url("../img/sprite.svg") no-repeat 0 0;
-    background-size: 11.25em 1.5em;
+    background: url("../img/textpattern.svg") no-repeat 0 0;
+    background-size: 9em 1.5em;
     font-size: 16px;
   }
   .navpop {
@@ -2054,10 +2054,41 @@ button {
     left: auto;
   }
   /**
- * Ensure dropdowns are hidden at page load (prevents content 'jumping').
+ * Drop down lists.
+ *
+ * 1. Ensure dropdowns are hidden at page load (prevents content 'jumping').
+ *
+ * <ul class="txp-dropdown">
+ *     <li>
+ *         <div>
+ *             <input class="checkbox" type="checkbox">
+ *             <label>Search all</label>
+ *         </div>
+ *     </li>
+ *     <li>
+ *         <div>
+ *             <input class="checkbox active" type="checkbox">
+ *             <label>ID#</label>
+ *         </div>
+ *     </li>
+ * </ul>
  */
   .txp-dropdown {
+    /* 1 */
     display: none;
+    position: absolute;
+    width: 18em;
+    z-index: 100;
+  }
+  .txp-dropdown .checkbox {
+    vertical-align: -0.25em;
+  }
+  .txp-dropdown .checkbox + label {
+    display: inline-block;
+    width: 85%;
+    padding: 0.25em;
+    cursor: pointer;
+    vertical-align: text-top;
   }
   /**
  * Search widget at top of lists.
@@ -2093,15 +2124,8 @@ button {
     -ms-flex-wrap: nowrap;
         flex-wrap: nowrap;
   }
-  .txp-search .txp-dropdown input {
-    vertical-align: -0.23076923076923em;
-  }
-  .txp-search .txp-dropdown label {
-    display: inline-block;
-    width: 85%;
-    padding: 0.23076923076923em 0.30769230769231em;
-    cursor: pointer;
-    vertical-align: text-top;
+  .txp-search .txp-dropdown {
+    z-index: 101;
   }
   .txp-search-clear {
     -ms-flex: 1;
@@ -2859,8 +2883,8 @@ button {
   }
   /* Admin -> Languages panel - additional layout
    ========================================================================== */
-  #page-lang .txp-list .modified {
-    margin-left: 0.75em;
+  #page-lang .txp-grid-cell {
+    min-width: 20.75em;
   }
   /* Admin -> Plugins panel - additional layout
    ========================================================================== */
@@ -4835,20 +4859,9 @@ button {
     overflow: hidden;
   }
   .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar.gif");
-    background-size: 16px 16px;
-    height: 16px;
+    height: 8px;
     background-color: #c7dbfa;
   }
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 1.25), screen and (min-resolution: 1.25dppx), screen and (min-resolution: 120dpi) {
-  .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar@2x.gif");
-  }
-}
-
-@media screen {
   /**
  * Progressbar with indeterminate value.
  *
@@ -4861,19 +4874,8 @@ button {
  * </div>
  */
   .ui-progressbar-indeterminate .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar-indeterminate.gif");
-    background-size: 16px 16px;
     background-color: #cccccc;
   }
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 1.25), screen and (min-resolution: 1.25dppx), screen and (min-resolution: 120dpi) {
-  .ui-progressbar-indeterminate .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar-indeterminate@2x.gif");
-  }
-}
-
-@media screen {
   /* Selectmenu
    ========================================================================== */
   /**
