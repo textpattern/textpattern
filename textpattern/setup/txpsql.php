@@ -150,9 +150,21 @@ foreach (get_files_content($themedir.'/articles', 'xml') as $key=>$data) {
         }
 
         $id = setup_article_insert($article);
-
-        // FIXIT: Add comments from xml ($a->comment)
-        if ($id && false) {
+        if ($id && !empty($a->comment)) {
+            foreach ($a->comment as $c) {
+                $name = empty($c->name) ? 'txp-user' : $c->name;
+                $email = empty($c->email) ? stripSpace($name, 1).'@example.com' : $c->email;
+                safe_insert('txp_discuss', "
+                    parentid        = '$id',
+                    name            = '".doSlash($name)."',
+                    email           = '".doSlash($email)."',
+                    web             = '".doSlash($c->web)."',
+                    message         = '".doSlash($c->message)."',
+                    posted          = NOW(),
+                    ip              = '127.0.0.1',
+                    visible         = 1"
+                );
+            }
             update_comments_count($id);
         }
     }
