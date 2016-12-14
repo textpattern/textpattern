@@ -1,11 +1,10 @@
-=== title
-Welcome to your site
-
-=== category
-hope-for-the-future, meaningful-labor
-
-=== body
-
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<article>
+    <title>Welcome to your site</title>
+    <category>hope-for-the-future</category>
+    <category>meaningful-labor</category>
+    <body format="textile"><![CDATA[
 h3. What do you want to do next?
 
 * Modify or delete this article? The "article list":siteurl/textpattern/index.php?event=list is the place to start.
@@ -25,7 +24,22 @@ There is a host of "Frequently Asked Questions":http://textpattern.com/faq/ to h
 "Textpattern tags":http://docs.textpattern.io/tags/, their attributes and values are explained and sampled within the "Textpattern User Documentation":http://docs.textpattern.io/, where you will also find valuable tips and tutorials.
 
 There's also a crowd of friendly, helpful people over at the "Textpattern support forum":http://forum.textpattern.com/. Come and pay a visit!
-
-=== excerpt
-
+]]></body>
+    <excerpt format="textile"><![CDATA[
 This is a Textpattern article excerpt. Article excerpts are optional but can be used effectively to summarise an article's content, for example with Textpattern's built-in article syndication and with the @<txp:excerpt />@ tag.
+]]></excerpt>
+</article>
+
+
+<article>
+    <title>Second article</title>
+    <category>hope-for-the-future</category>
+    <body><![CDATA[
+<h3>HTML body content</h3>
+]]></body>
+    <excerpt><![CDATA[
+<h3>HTML excerpt content</h3>
+]]></excerpt>
+</article>
+
+</resources>

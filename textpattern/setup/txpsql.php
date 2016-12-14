@@ -110,35 +110,53 @@ foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
 
 $textile = new \Netcarver\Textile\Parser();
 
-foreach (get_files_content($themedir.'/articles', 'textile') as $key=>$data) {
-    $article = array();
-    list($article['id'], $article['section']) = explode('.', $key);
+foreach (get_files_content($themedir.'/articles', 'xml') as $key=>$data) {
+    list($section, $notused) = explode('.', $key);
     $data = str_replace('siteurl', $urlpath, $data);
 
-    if (preg_match_all('%===\s+(title|body|excerpt|category)(.*?)(?====)%is', $data."===", $match)) {
-        // Default title
-        $article['title'] = "Article ".$article['id'];
+    $xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA);
+    foreach ($xml->article as $a) {
+        $article = array();
+        $article['section'] = empty($a->section) ? $section : $a->section;
+
+        $article['title'] = $a->title;
+        $article['url_title'] = stripSpace($article['title'], 1);
+
+        $article['category1'] = @$a->category[0];
+        $article['category2'] = @$a->category[1];
+
         $article['invite'] = $setup_comment_invite;
         $article['user'] = $_SESSION['name'];
         $article['annotate'] = 1;
 
-        foreach ($match[1] as $i=>$who) {
-            $article[strtolower($who)] = trim($match[2][$i]);
+        $article['body'] = @$a->body;
+        $format = $a->body->attributes()->format;
+        if ($format == 'textile') {
+            $article['body_html'] = $textile->textileThis($article['body']);
+            $article['textile_body'] = 1;
+        } else {
+            $article['body_html'] = $article['body'];
+            $article['textile_body'] = 0;
         }
 
-        $article['body_html']    = $textile->textileThis(@$article['body']);
-        $article['excerpt_html'] = $textile->textileThis(@$article['excerpt']);
-        $article['url_title'] = stripSpace($article['title'], 1);
+        $article['excerpt'] = @$a->excerpt;
+        $format = $a->excerpt->attributes()->format;
+        if ($format == 'textile') {
+            $article['excerpt_html'] = $textile->textileThis($article['excerpt']);
+            $article['textile_excerpt'] = 1;
+        } else {
+            $article['excerpt_html'] = $article['excerpt'];
+            $article['textile_excerpt'] = 0;
+        }
 
-        $category = @do_list_unique($article['category']);
-        $article['category1'] = @$category[0];
-        $article['category2'] = @$category[1];
+        $id = setup_article_insert($article);
 
-        setup_article_insert($article);
-        update_comments_count($article['id']);
+        // FIXIT: Add comments from xml ($a->comment)
+        if ($id && false) {
+            update_comments_count($id);
+        }
     }
 }
-
 
 
 // FIXME: Need some check
@@ -147,7 +165,7 @@ $GLOBALS['txp_err_count'] = 0;
 $GLOBALS['txp_err_html'] = '';
 
 
-// Funal rebuild category trees
+// Final rebuild category trees
 rebuild_tree_full('article');
 rebuild_tree_full('link');
 rebuild_tree_full('image');
@@ -158,8 +176,7 @@ function setup_article_insert($article)
 {
     extract(doSlash($article));
 
-    safe_insert('textpattern', "
-        ID              = '$id',
+    return safe_insert('textpattern', "
         Title           = '$title',
         Body            = '".@$body."',
         Body_html       = '$body_html',
@@ -172,8 +189,8 @@ function setup_article_insert($article)
         AuthorID        = '$user',
         Posted          = NOW(),
         LastMod         = NOW(),
-        textile_body    = '1',
-        textile_excerpt = '1',
+        textile_body    = $textile_body,
+        textile_excerpt = $textile_excerpt,
         Annotate        =  $annotate,
         url_title       = '$url_title',
         AnnotateInvite  = '$invite',
