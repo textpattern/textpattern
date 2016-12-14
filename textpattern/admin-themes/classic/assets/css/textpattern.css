@@ -2552,6 +2552,7 @@ button {
  */
   .txp-form-field {
     margin: 1em 0;
+    vertical-align: top;
   }
   /**
  * Label/value form field pairings.
