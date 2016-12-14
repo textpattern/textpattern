@@ -1,0 +1,30 @@
+[
+    {
+        "name": "hope-for-the-future",
+        "type": "article",
+        "parent": "root",
+        "title": "Hope for the future",
+        "description": ""
+    },
+    {
+        "name": "meaningful-labor",
+        "type": "article",
+        "parent": "root",
+        "title": "Meaningful labor",
+        "description": ""
+    },
+    {
+        "name": "reciprocal-affection",
+        "type": "article",
+        "parent": "root",
+        "title": "Reciprocal affection",
+        "description": ""
+    },
+    {
+        "name": "textpattern",
+        "type": "link",
+        "parent": "root",
+        "title": "Textpattern",
+        "description": ""
+    }
+]

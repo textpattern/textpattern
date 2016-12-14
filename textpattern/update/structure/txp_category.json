@@ -1,0 +1,30 @@
+[
+    {
+        "name": "root",
+        "type": "article",
+        "parent": "",
+        "title": "root",
+        "description": ""
+    },
+    {
+        "name": "root",
+        "type": "link",
+        "parent": "",
+        "title": "root",
+        "description": ""
+    },
+    {
+        "name": "root",
+        "type": "image",
+        "parent": "",
+        "title": "root",
+        "description": ""
+    },
+    {
+        "name": "root",
+        "type": "file",
+        "parent": "",
+        "title": "root",
+        "description": ""
+    }
+]

@@ -1,0 +1,12 @@
+[
+    {
+        "name": "articles",
+        "page": "archive",
+        "css": "default",
+        "description": "",
+        "in_rss": "1",
+        "on_frontpage": "1",
+        "searchable": "1",
+        "title": "Articles"
+    }
+]

@@ -1510,3 +1510,18 @@ function now($type, $update = false)
 
     return 'from_unixtime('.$now.')';
 }
+
+// Make sql set string from array
+
+function make_sql_set($array)
+{
+    $out = array();
+    foreach (doSlash($array) as $field=>$data) {
+        if (in_array($data, array('NOW()', 'NULL'), true)) {
+            $out[]="`{$field}`=$data";
+        } else {
+            $out[]="`{$field}`='$data'";
+        }
+    }
+    return implode(', ', $out);
+}
