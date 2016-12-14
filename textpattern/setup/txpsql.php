@@ -125,39 +125,41 @@ foreach (get_files_content($themedir.'/articles', 'xml') as $key=>$data) {
     $xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA);
     foreach ($xml->article as $a) {
         $article = array();
-        $article['section'] = empty($a->section) ? $section : $a->section;
+        $article['Section']   = empty($a->section) ? $section : $a->section;
+        $article['Title']     = trim($a->title);
+        $article['url_title'] = stripSpace($article['Title'], 1);
+        $article['Category1'] = @$a->category[0];
+        $article['Category2'] = @$a->category[1];
 
-        $article['title'] = $a->title;
-        $article['url_title'] = stripSpace($article['title'], 1);
-
-        $article['category1'] = @$a->category[0];
-        $article['category2'] = @$a->category[1];
-
-        $article['invite'] = $setup_comment_invite;
-        $article['user'] = $_SESSION['name'];
-        $article['annotate'] = 1;
-
-        $article['body'] = @$a->body;
+        $article['Body'] = @trim($a->body);
         $format = $a->body->attributes()->format;
         if ($format == 'textile') {
-            $article['body_html'] = $textile->textileThis($article['body']);
-            $article['textile_body'] = 1;
+            $article['Body_html']       = $textile->textileThis($article['Body']);
+            $article['textile_body']    = 1;
         } else {
-            $article['body_html'] = $article['body'];
-            $article['textile_body'] = 0;
+            $article['Body_html']       = $article['Body'];
+            $article['textile_body']    = 0;
         }
 
-        $article['excerpt'] = @$a->excerpt;
+        $article['Excerpt'] = @trim($a->excerpt);
         $format = $a->excerpt->attributes()->format;
         if ($format == 'textile') {
-            $article['excerpt_html'] = $textile->textileThis($article['excerpt']);
+            $article['Excerpt_html']    = $textile->textileThis($article['Excerpt']);
             $article['textile_excerpt'] = 1;
         } else {
-            $article['excerpt_html'] = $article['excerpt'];
+            $article['Excerpt_html']    = $article['Excerpt'];
             $article['textile_excerpt'] = 0;
         }
 
-        $id = setup_article_insert($article);
+        $article['AnnotateInvite'] = $setup_comment_invite;
+        $article['AuthorID'] = $_SESSION['name'];
+        $article['Annotate'] = 1;
+        $article['Status'] = 4;
+        $article['Posted'] = $article['LastMod'] = $article['feed_time'] = 'NOW()';
+        $article['uid'] = md5(uniqid(rand(), true));
+
+        $id = safe_insert('textpattern', make_sql_set($article));
+
         if ($id && !empty($a->comment)) {
             foreach ($a->comment as $c) {
                 $name = empty($c->name) ? 'txp-user' : $c->name;
@@ -192,32 +194,6 @@ rebuild_tree_full('image');
 rebuild_tree_full('file');
 
 
-function setup_article_insert($article)
-{
-    extract(doSlash($article));
-
-    return safe_insert('textpattern', "
-        Title           = '$title',
-        Body            = '".@$body."',
-        Body_html       = '$body_html',
-        Excerpt         = '".@$excerpt."',
-        Excerpt_html    = '$excerpt_html',
-        Status          = 4,
-        Category1       = '$category1',
-        Category2       = '$category2',
-        Section         = '$section',
-        AuthorID        = '$user',
-        Posted          = NOW(),
-        LastMod         = NOW(),
-        textile_body    = $textile_body,
-        textile_excerpt = $textile_excerpt,
-        Annotate        =  $annotate,
-        url_title       = '$url_title',
-        AnnotateInvite  = '$invite',
-        uid            = '".md5(uniqid(rand(), true))."',
-        feed_time       = NOW()"
-    );
-}
 
 function setup_txp_lang($lang)
 {
