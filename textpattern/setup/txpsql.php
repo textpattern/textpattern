@@ -64,8 +64,13 @@ foreach (get_files_content($structuredir, 'table') as $key=>$data) {
 }
 
 // Initial mandatory data
-foreach (get_files_content($structuredir, 'data') as $key=>$data) {
-    safe_query("INSERT INTO `".PFX."{$key}` VALUES ".$data);
+foreach (get_files_content($structuredir, 'json') as $key=>$data) {
+    $json = json_decode($data, true);
+    if (is_array($json)) {
+        foreach ($json as $j) {
+            safe_insert($key, make_sql_set($j));
+        }
+    }
 }
 
 // Create core prefs
@@ -84,8 +89,13 @@ setup_txp_lang(LANG);
 // Theme setup
 
 // Load theme /data, /styles, /forms, /pages
-foreach (get_files_content($themedir.'/data', 'data') as $key=>$data) {
-    safe_query("INSERT INTO `".PFX."{$key}` VALUES ".$data);
+foreach (get_files_content($themedir.'/data', 'json') as $key=>$data) {
+    $json = json_decode($data, true);
+    if (is_array($json)) {
+        foreach ($json as $j) {
+            safe_insert($key, make_sql_set($j));
+        }
+    }
 }
 
 foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
@@ -105,8 +115,6 @@ foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
 
 
 
-// Load theme /articles
-// filename format: id.section.textile
 
 $textile = new \Netcarver\Textile\Parser();
 
