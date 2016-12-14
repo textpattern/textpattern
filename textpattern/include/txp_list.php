@@ -449,7 +449,7 @@ function list_list($message = '', $post = '')
                     eLink('article', 'edit', 'ID', $ID, $ID).
                     span(
                         sp.span('&#124;', array('role' => 'separator')).
-                        sp.href(gTxt('view'), $view_url),
+                        sp.href(gTxt('view'), $view_url, array('target' => '_blank')),
                         array('class' => 'txp-option-link articles_detail')
                     ), '', array(
                         'class' => 'txp-list-col-id',
@@ -478,7 +478,10 @@ function list_list($message = '', $post = '')
                     $Category2, '', 'txp-list-col-category2 category articles_detail'.$vc[2]
                 ).
                 td(
-                    href($Status, $view_url, join_atts(array('title' => gTxt('view')), TEXTPATTERN_STRIP_EMPTY)), '', 'txp-list-col-status'
+                    href($Status, $view_url, join_atts(array(
+                        'target' => '_blank',
+                        'title'  => gTxt('view'),
+                    ), TEXTPATTERN_STRIP_EMPTY)), '', 'txp-list-col-status'
                 ).
                 (
                     $show_authors
