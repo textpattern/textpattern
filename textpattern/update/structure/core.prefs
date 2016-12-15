@@ -1,0 +1,667 @@
+{
+    "img_dir": {
+        "val": "images",
+        "type": "0",
+        "event": "admin",
+        "html": "text_input",
+        "position": "20"
+    },
+    "file_base_path": {
+        "val": "",
+        "type": "0",
+        "event": "admin",
+        "html": "text_input",
+        "position": "40"
+    },
+    "file_max_upload_size": {
+        "val": "2000000",
+        "type": "0",
+        "event": "admin",
+        "html": "text_input",
+        "position": "60"
+    },
+    "tempdir": {
+        "val": "",
+        "type": "0",
+        "event": "admin",
+        "html": "text_input",
+        "position": "80"
+    },
+    "plugin_cache_dir": {
+        "val": "",
+        "type": "0",
+        "event": "admin",
+        "html": "text_input",
+        "position": "100"
+    },
+    "smtp_from": {
+        "val": "",
+        "type": "0",
+        "event": "admin",
+        "html": "text_input",
+        "position": "110"
+    },
+    "publisher_email": {
+        "val": "",
+        "type": "0",
+        "event": "admin",
+        "html": "text_input",
+        "position": "115"
+    },
+    "override_emailcharset": {
+        "val": "0",
+        "type": "0",
+        "event": "admin",
+        "html": "yesnoradio",
+        "position": "120"
+    },
+    "enable_xmlrpc_server": {
+        "val": "0",
+        "type": "0",
+        "event": "admin",
+        "html": "yesnoradio",
+        "position": "130"
+    },
+    "default_event": {
+        "val": "article",
+        "type": "0",
+        "event": "admin",
+        "html": "default_event",
+        "position": "150"
+    },
+    "theme_name": {
+        "val": "",
+        "type": "0",
+        "event": "admin",
+        "html": "themename",
+        "position": "160"
+    },
+    "show_article_category_count": {
+        "val": "1",
+        "type": "2",
+        "event": "category",
+        "html": "yesnoradio",
+        "position": "0"
+    },
+    "comments_on_default": {
+        "val": "0",
+        "type": "0",
+        "event": "comments",
+        "html": "yesnoradio",
+        "position": "20"
+    },
+    "comments_default_invite": {
+        "val": "",
+        "type": "0",
+        "event": "comments",
+        "html": "text_input",
+        "position": "40"
+    },
+    "comments_moderate": {
+        "val": "1",
+        "type": "0",
+        "event": "comments",
+        "html": "yesnoradio",
+        "position": "60"
+    },
+    "comments_disabled_after": {
+        "val": "42",
+        "type": "0",
+        "event": "comments",
+        "html": "weeks",
+        "position": "80"
+    },
+    "comments_auto_append": {
+        "val": "0",
+        "type": "0",
+        "event": "comments",
+        "html": "yesnoradio",
+        "position": "100"
+    },
+    "comments_mode": {
+        "val": "0",
+        "type": "0",
+        "event": "comments",
+        "html": "commentmode",
+        "position": "120"
+    },
+    "comments_dateformat": {
+        "val": "%b %d, %I:%M %p",
+        "type": "0",
+        "event": "comments",
+        "html": "dateformats",
+        "position": "140"
+    },
+    "comments_sendmail": {
+        "val": "0",
+        "type": "0",
+        "event": "comments",
+        "html": "commentsendmail",
+        "position": "160"
+    },
+    "comments_are_ol": {
+        "val": "1",
+        "type": "0",
+        "event": "comments",
+        "html": "yesnoradio",
+        "position": "180"
+    },
+    "comment_means_site_updated": {
+        "val": "1",
+        "type": "0",
+        "event": "comments",
+        "html": "yesnoradio",
+        "position": "200"
+    },
+    "comments_require_name": {
+        "val": "1",
+        "type": "0",
+        "event": "comments",
+        "html": "yesnoradio",
+        "position": "220"
+    },
+    "comments_require_email": {
+        "val": "1",
+        "type": "0",
+        "event": "comments",
+        "html": "yesnoradio",
+        "position": "240"
+    },
+    "never_display_email": {
+        "val": "1",
+        "type": "0",
+        "event": "comments",
+        "html": "yesnoradio",
+        "position": "260"
+    },
+    "comment_nofollow": {
+        "val": "1",
+        "type": "0",
+        "event": "comments",
+        "html": "yesnoradio",
+        "position": "280"
+    },
+    "comments_disallow_images": {
+        "val": "0",
+        "type": "0",
+        "event": "comments",
+        "html": "yesnoradio",
+        "position": "300"
+    },
+    "comments_use_fat_textile": {
+        "val": "0",
+        "type": "0",
+        "event": "comments",
+        "html": "yesnoradio",
+        "position": "320"
+    },
+    "spam_blacklists": {
+        "val": "",
+        "type": "0",
+        "event": "comments",
+        "html": "text_input",
+        "position": "340"
+    },
+    "custom_1_set": {
+        "val": "",
+        "type": "0",
+        "event": "custom",
+        "html": "custom_set",
+        "position": "1"
+    },
+    "custom_2_set": {
+        "val": "",
+        "type": "0",
+        "event": "custom",
+        "html": "custom_set",
+        "position": "2"
+    },
+    "custom_3_set": {
+        "val": "",
+        "type": "0",
+        "event": "custom",
+        "html": "custom_set",
+        "position": "3"
+    },
+    "custom_4_set": {
+        "val": "",
+        "type": "0",
+        "event": "custom",
+        "html": "custom_set",
+        "position": "4"
+    },
+    "custom_5_set": {
+        "val": "",
+        "type": "0",
+        "event": "custom",
+        "html": "custom_set",
+        "position": "5"
+    },
+    "custom_6_set": {
+        "val": "",
+        "type": "0",
+        "event": "custom",
+        "html": "custom_set",
+        "position": "6"
+    },
+    "custom_7_set": {
+        "val": "",
+        "type": "0",
+        "event": "custom",
+        "html": "custom_set",
+        "position": "7"
+    },
+    "custom_8_set": {
+        "val": "",
+        "type": "0",
+        "event": "custom",
+        "html": "custom_set",
+        "position": "8"
+    },
+    "custom_9_set": {
+        "val": "",
+        "type": "0",
+        "event": "custom",
+        "html": "custom_set",
+        "position": "9"
+    },
+    "custom_10_set": {
+        "val": "",
+        "type": "0",
+        "event": "custom",
+        "html": "custom_set",
+        "position": "10"
+    },
+    "syndicate_body_or_excerpt": {
+        "val": "1",
+        "type": "0",
+        "event": "feeds",
+        "html": "yesnoradio",
+        "position": "20"
+    },
+    "rss_how_many": {
+        "val": "5",
+        "type": "0",
+        "event": "feeds",
+        "html": "text_input",
+        "position": "40"
+    },
+    "show_comment_count_in_feed": {
+        "val": "1",
+        "type": "0",
+        "event": "feeds",
+        "html": "yesnoradio",
+        "position": "60"
+    },
+    "include_email_atom": {
+        "val": "0",
+        "type": "0",
+        "event": "feeds",
+        "html": "yesnoradio",
+        "position": "80"
+    },
+    "use_mail_on_feeds_id": {
+        "val": "0",
+        "type": "0",
+        "event": "feeds",
+        "html": "yesnoradio",
+        "position": "100"
+    },
+    "title_no_widow": {
+        "val": "0",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "20"
+    },
+    "articles_use_excerpts": {
+        "val": "1",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "40"
+    },
+    "allow_form_override": {
+        "val": "1",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "60"
+    },
+    "attach_titles_to_permalinks": {
+        "val": "1",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "80"
+    },
+    "permlink_format": {
+        "val": "1",
+        "type": "0",
+        "event": "publish",
+        "html": "permlink_format",
+        "position": "100"
+    },
+    "send_lastmod": {
+        "val": "1",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "120"
+    },
+    "publish_expired_articles": {
+        "val": "0",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "130"
+    },
+    "ping_weblogsdotcom": {
+        "val": "0",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "160"
+    },
+    "use_textile": {
+        "val": "1",
+        "type": "0",
+        "event": "publish",
+        "html": "pref_text",
+        "position": "200"
+    },
+    "use_dns": {
+        "val": "0",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "220"
+    },
+    "use_plugins": {
+        "val": "1",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "260"
+    },
+    "admin_side_plugins": {
+        "val": "1",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "280"
+    },
+    "allow_page_php_scripting": {
+        "val": "1",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "300"
+    },
+    "allow_article_php_scripting": {
+        "val": "1",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "320"
+    },
+    "max_url_len": {
+        "val": "1000",
+        "type": "0",
+        "event": "publish",
+        "html": "text_input",
+        "position": "340"
+    },
+    "blog_mail_uid": {
+        "val": "",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "blog_time_uid": {
+        "val": "2005",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "blog_uid": {
+        "val": "",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "dbupdatetime": {
+        "val": "1481826165",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "language": {
+        "val": "",
+        "type": "2",
+        "event": "publish",
+        "html": "languages",
+        "position": "0"
+    },
+    "lastmod": {
+        "val": "2016-12-15 21:58:40",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "locale": {
+        "val": "",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "path_from_root": {
+        "val": "\/",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "path_to_site": {
+        "val": "",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "prefs_id": {
+        "val": "1",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "searchable_article_fields": {
+        "val": "Title, Body",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "textile_updated": {
+        "val": "1",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "timeoffset": {
+        "val": "0",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "timezone_key": {
+        "val": "",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "url_mode": {
+        "val": "1",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "use_categories": {
+        "val": "1",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "use_sections": {
+        "val": "1",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "sql_now_posted": {
+        "val": "",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "sql_now_expires": {
+        "val": "",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "sql_now_created": {
+        "val": "",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "version": {
+        "val": "4.7.0",
+        "type": "2",
+        "event": "publish",
+        "html": "text_input",
+        "position": "0"
+    },
+    "default_section": {
+        "val": "articles",
+        "type": "2",
+        "event": "section",
+        "html": "text_input",
+        "position": "0"
+    },
+    "sitename": {
+        "val": "",
+        "type": "0",
+        "event": "site",
+        "html": "text_input",
+        "position": "20"
+    },
+    "siteurl": {
+        "val": "",
+        "type": "0",
+        "event": "site",
+        "html": "text_input",
+        "position": "40"
+    },
+    "site_slogan": {
+        "val": "",
+        "type": "0",
+        "event": "site",
+        "html": "text_input",
+        "position": "60"
+    },
+    "production_status": {
+        "val": "testing",
+        "type": "0",
+        "event": "site",
+        "html": "prod_levels",
+        "position": "80"
+    },
+    "gmtoffset": {
+        "val": "",
+        "type": "0",
+        "event": "site",
+        "html": "gmtoffset_select",
+        "position": "110"
+    },
+    "auto_dst": {
+        "val": "0",
+        "type": "0",
+        "event": "site",
+        "html": "yesnoradio",
+        "position": "115"
+    },
+    "is_dst": {
+        "val": "0",
+        "type": "0",
+        "event": "site",
+        "html": "is_dst",
+        "position": "120"
+    },
+    "dateformat": {
+        "val": "since",
+        "type": "0",
+        "event": "site",
+        "html": "dateformats",
+        "position": "140"
+    },
+    "archive_dateformat": {
+        "val": "%b %d, %I:%M %p",
+        "type": "0",
+        "event": "site",
+        "html": "dateformats",
+        "position": "160"
+    },
+    "permlink_mode": {
+        "val": "",
+        "type": "0",
+        "event": "site",
+        "html": "permlinkmodes",
+        "position": "180"
+    },
+    "doctype": {
+        "val": "html5",
+        "type": "0",
+        "event": "site",
+        "html": "doctypes",
+        "position": "190"
+    },
+    "logging": {
+        "val": "none",
+        "type": "0",
+        "event": "site",
+        "html": "logging",
+        "position": "220"
+    },
+    "expire_logs_after": {
+        "val": "7",
+        "type": "0",
+        "event": "site",
+        "html": "text_input",
+        "position": "230"
+    },
+    "use_comments": {
+        "val": "1",
+        "type": "0",
+        "event": "site",
+        "html": "yesnoradio",
+        "position": "240"
+    }
+}

@@ -28,7 +28,8 @@ if (!defined('TXP_INSTALL')) {
 @ignore_user_abort(1);
 @set_time_limit(0);
 
-global $DB, $txp_groups, $blog_uid, $prefs;
+global $DB, $txp_groups, $prefs;
+global $permlink_mode, $siteurl, $blog_uid, $theme_name;
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/admin_config.php';
 
@@ -36,12 +37,12 @@ include txpath.'/lib/admin_config.php';
 $siteurl = str_replace("http://", '', $_SESSION['siteurl']);
 $siteurl = str_replace(' ', '%20', rtrim($siteurl, "/"));
 $urlpath = preg_replace('#^[^/]+#', '', $siteurl);
-$theme = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
+$theme_name = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
 $themedir = txpath.DS.'setup';
 $structuredir = txpath.'/update/structure';
 
 // Default to messy URLs if we know clean ones won't work.
-$permlink_mode = 'section_id_title';
+$permlink_mode = 'section_title';
 
 if (is_callable('apache_get_modules')) {
     $modules = @apache_get_modules();
@@ -74,12 +75,9 @@ foreach (get_files_content($structuredir, 'json') as $key=>$data) {
 }
 
 // Create core prefs
-include txpath.'/lib/prefs.php';
-
-foreach ($default_prefs as $name => $p) {
-    create_pref($name, $p[4], $p[0], $p[1], $p[3], $p[2]);
+foreach (get_prefs_default() as $name => $p) {
+    @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
 }
-
 $prefs = get_prefs();
 
 create_user($_SESSION['name'], $_SESSION['email'], $_SESSION['pass'], $_SESSION['realname'], 1);
@@ -130,7 +128,7 @@ foreach (get_files_content($themedir.'/articles', 'xml') as $key=>$data) {
         $article['section']   = $section;
         $article['status'] = STATUS_LIVE;
         $article['annotate'] = 1;
-        $article['annotateinvite'] = $setup_comment_invite;
+        $article['annotateinvite'] = $prefs['comments_default_invite'];
 
         foreach ($optional_fields as $field) {
             if (!empty($a->$field)) {

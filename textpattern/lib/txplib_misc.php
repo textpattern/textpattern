@@ -6755,11 +6755,10 @@ function check_prefs_integrity()
 {
     global $prefs;
     $prefs = get_prefs();
-    include txpath.'/lib/prefs.php';
 
-    foreach ($default_prefs as $name => $p) {
+    foreach (get_prefs_default() as $name => $p) {
         if (get_pref($name, false) === false) {
-            create_pref($name, $p[4], $p[0], $p[1], $p[3], $p[2]);
+            @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
         }
     }
 
@@ -6781,4 +6780,48 @@ function get_files_content($dir, $ext)
     }
 
     return $result;
+}
+
+/**
+ * Get default core prefs
+ *
+ */
+
+function get_prefs_default()
+{
+    global $permlink_mode, $siteurl, $blog_uid, $theme_name;
+
+    $out = @json_decode(file_get_contents(txpath.'/update/structure/core.prefs'), true);
+    if (empty($out)) {
+        return array();
+    }
+
+    $language = LANG;
+    $language = empty($language) ? 'en-gb' : $language;
+
+    $pf = array();
+    $pf['file_base_path'] = dirname(txpath).DS.'files';
+    $pf['path_to_site']   = dirname(txpath);
+    $pf['tempdir']        = find_temp_dir();
+    $pf['siteurl']        = $siteurl;
+    $pf['theme_name']     = empty($theme_name) ? 'hive' : $theme_name;
+    $pf['blog_mail_uid']  = empty($_SESSION['email']) ? md5(rand()).'blog@gmail.com' : $_SESSION['email'];
+    $pf['blog_uid']       = empty($blog_uid) ? md5(uniqid(rand(), true)) : $blog_uid;
+    $pf['language']       = $language;
+    $pf['locale']         = getlocale($language);
+    $pf['sitename']       = gTxt('my_site');
+    $pf['site_slogan']    = gTxt('my_slogan');
+    $pf['gmtoffset']      = sprintf("%+d", gmmktime(0, 0, 0) - mktime(0, 0, 0));
+    $pf['permlink_mode']  = empty($permlink_mode) ? 'messy' : $permlink_mode;
+    $pf['sql_now_posted'] = $pf['sql_now_expires'] = $pf['sql_now_created'] = time();
+    $pf['comments_default_invite'] = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment'
+        : gTxt('setup_comment_invite');
+
+    foreach ($pf as $name => $val) {
+        if (isset($out[$name])) {
+            $out[$name]['val'] = $val;
+        }
+    }
+
+    return $out;
 }
