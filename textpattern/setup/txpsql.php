@@ -115,7 +115,7 @@ foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
 
 
 
-
+// Load articles
 $textile = new \Netcarver\Textile\Parser();
 $optional_fields = array('section', 'status', 'keywords', 'description', 'annotate', 'annotateinvite',
 'custom_1', 'custom_2', 'custom_3', 'custom_4', 'custom_5', 'custom_6', 'custom_7', 'custom_8', 'custom_9', 'custom_10');
@@ -128,7 +128,7 @@ foreach (get_files_content($themedir.'/articles', 'xml') as $key=>$data) {
     foreach ($xml->article as $a) {
         $article = array();
         $article['section']   = $section;
-        $article['status'] = 4;
+        $article['status'] = STATUS_LIVE;
         $article['annotate'] = 1;
         $article['annotateinvite'] = $setup_comment_invite;
 
