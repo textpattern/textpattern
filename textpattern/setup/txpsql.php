@@ -117,6 +117,8 @@ foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
 
 
 $textile = new \Netcarver\Textile\Parser();
+$optional_fields = array('section', 'status', 'keywords', 'description', 'annotate', 'annotateinvite',
+'custom_1', 'custom_2', 'custom_3', 'custom_4', 'custom_5', 'custom_6', 'custom_7', 'custom_8', 'custom_9', 'custom_10');
 
 foreach (get_files_content($themedir.'/articles', 'xml') as $key=>$data) {
     list($section, $notused) = explode('.', $key);
@@ -125,7 +127,17 @@ foreach (get_files_content($themedir.'/articles', 'xml') as $key=>$data) {
     $xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA);
     foreach ($xml->article as $a) {
         $article = array();
-        $article['Section']   = empty($a->section) ? $section : $a->section;
+        $article['section']   = $section;
+        $article['status'] = 4;
+        $article['annotate'] = 1;
+        $article['annotateinvite'] = $setup_comment_invite;
+
+        foreach ($optional_fields as $field) {
+            if (!empty($a->$field)) {
+                $article[$field] = $a->$field;
+            }
+        }
+
         $article['Title']     = trim($a->title);
         $article['url_title'] = stripSpace($article['Title'], 1);
         $article['Category1'] = @$a->category[0];
@@ -151,10 +163,7 @@ foreach (get_files_content($themedir.'/articles', 'xml') as $key=>$data) {
             $article['textile_excerpt'] = 0;
         }
 
-        $article['AnnotateInvite'] = $setup_comment_invite;
         $article['AuthorID'] = $_SESSION['name'];
-        $article['Annotate'] = 1;
-        $article['Status'] = 4;
         $article['Posted'] = $article['LastMod'] = $article['feed_time'] = 'NOW()';
         $article['uid'] = md5(uniqid(rand(), true));
 
