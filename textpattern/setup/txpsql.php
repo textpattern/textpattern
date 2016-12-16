@@ -109,8 +109,21 @@ foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
     safe_query("INSERT INTO `".PFX."txp_page`(name, user_html) VALUES('".doSlash($key)."', '".doSlash($data)."')");
 }
 
-// FIXME: Load theme prefs
 
+/*  Load theme prefs:
+        /data/core.prefs    - Allow override some core prefs. Used only in setup theme.
+        /data/theme.prefs   - Theme global and private prefs.
+                                global  - Used in setup and for AutoCreate missing prefs.
+                                private - Will be created after user login
+*/
+foreach (get_files_content($themedir.'/data', 'prefs') as $key=>$data) {
+    if ($out = @json_decode($data, true)) {
+        foreach ($out as $name => $p) {
+            $private = empty($p['private']) ? PREF_GLOBAL : PREF_PRIVATE;
+            @set_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position'], $private);
+        }
+    }
+}
 
 
 // Load articles

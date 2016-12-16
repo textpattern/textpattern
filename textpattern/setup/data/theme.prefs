@@ -1,0 +1,17 @@
+{
+    "hive_test1": {
+        "val": "It's theme Global pref",
+        "type": "0",
+        "event": "theme",
+        "html": "text_input",
+        "position": "0"
+    },
+    "hive_test2": {
+        "val": "It's theme Private pref",
+        "type": "0",
+        "event": "theme",
+        "html": "text_input",
+        "position": "0",
+	"private": "1"
+    }
+}

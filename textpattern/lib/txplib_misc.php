@@ -6729,6 +6729,18 @@ function check_prefs_integrity()
         }
     }
 
+    // Theme prefs
+
+    // FIXME: Hardcode!!! need change to theme path
+    if ($out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true)) {
+        foreach ($out as $name => $p) {
+            if (get_pref($name, false) === false) {
+                $private = empty($p['private']) ? PREF_GLOBAL : PREF_PRIVATE;
+                @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position'], $private);
+            }
+        }
+    }
+
     $prefs = get_prefs();
 }
 
