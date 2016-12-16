@@ -663,5 +663,13 @@
         "event": "site",
         "html": "yesnoradio",
         "position": "240"
+    },
+    "default_publish_status": {
+        "val": "4",
+        "type": "0",
+        "event": "publish",
+        "html": "defaultPublishStatus",
+        "position": "15",
+        "private": "1"
     }
 }
