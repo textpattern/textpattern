@@ -434,7 +434,7 @@
         "position": "0"
     },
     "dbupdatetime": {
-        "val": "1481826165",
+        "val": "0",
         "type": "2",
         "event": "publish",
         "html": "text_input",
@@ -448,7 +448,7 @@
         "position": "0"
     },
     "lastmod": {
-        "val": "2016-12-15 21:58:40",
+        "val": "2005-07-23 16:24:10",
         "type": "2",
         "event": "publish",
         "html": "text_input",
