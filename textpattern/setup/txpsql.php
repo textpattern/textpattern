@@ -119,8 +119,9 @@ foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
 foreach (get_files_content($themedir.'/data', 'prefs') as $key=>$data) {
     if ($out = @json_decode($data, true)) {
         foreach ($out as $name => $p) {
-            $private = empty($p['private']) ? PREF_GLOBAL : PREF_PRIVATE;
-            @set_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position'], $private);
+            if (empty($p['private'])) {
+                @set_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
+            }
         }
     }
 }
