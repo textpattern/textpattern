@@ -113,16 +113,17 @@ button {
   .pophelp,
   .pophelpsubtle {
     display: inline-block;
-    width: 1.384615384615385em;
+    width: 1.230769230769231em;
     border: 1px solid #e0e0e0;
     border-radius: 50%;
     font-weight: normal;
-    line-height: 1.384615384615385em;
+    line-height: 1.230769230769231em;
     text-align: center;
   }
   .pophelp:hover, .pophelp:active,
   .pophelpsubtle:hover,
   .pophelpsubtle:active {
+    border-color: #bbbbbb;
     background-color: #fff9e1;
     text-decoration: none;
   }
