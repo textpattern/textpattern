@@ -1880,7 +1880,7 @@ textpattern.Route.add('', function ()
         });
     }
 
-    if (selectedTab === undefined) {
+    if (typeof selectedTab === 'undefined') {
         selectedTab = 0;
     }
 
