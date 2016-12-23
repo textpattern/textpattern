@@ -873,7 +873,7 @@ button {
     font-family: Helvetica, Arial, sans-serif;
     /* 3 */
     font-size: 12px;
-    line-height: 1.5em;
+    line-height: 1.666666666666667em;
     vertical-align: baseline;
     box-sizing: border-box;
   }
@@ -916,7 +916,7 @@ button {
   [type="week"],
   select,
   textarea {
-    height: 2.1666667em;
+    height: 2.333333333333333em;
     padding: 0.25em;
     border: 1px solid;
     border-radius: 0;
@@ -1036,7 +1036,7 @@ button {
  */
   select[size="0"],
   select[size="1"] {
-    height: 2.1666667em;
+    height: 2.333333333333333em;
     vertical-align: baseline;
   }
   /**
@@ -1214,7 +1214,7 @@ button {
   .navlink-active {
     display: inline-block;
     width: auto;
-    height: 2.1666667em;
+    height: 2.333333333333333em;
     padding: 0.25em 0.75em;
     border: 1px solid;
     border-color: #dddddd #c7c7c7 #c7c7c7 #dddddd;
@@ -1257,7 +1257,7 @@ button {
   .navlink-active:active {
     border-color: #cccccc #b7b7b7 #b7b7b7 #cccccc;
     background-color: #dddddd;
-    color: #1a1a1a;
+    color: #1a1919;
     text-decoration: none;
   }
   button:focus,
@@ -1342,7 +1342,7 @@ button {
  */
   .navlink-disabled {
     display: inline-block;
-    height: 2.1666667em;
+    height: 2.333333333333333em;
     padding: 0.25em 0.75em;
     border: 1px solid;
     background-clip: padding-box;
@@ -2006,7 +2006,8 @@ button {
   /* Globally shared layout
    ========================================================================== */
   /**
- * 1. Prevent text size adjust after mobile device orientation change.
+ * 1. Prevent adjustments of font size after orientation changes in
+ *    IE on Windows Phone and in iOS.
  */
   html {
     /* 1 */
@@ -2551,6 +2552,7 @@ button {
  */
   .txp-form-field {
     margin: 1em 0;
+    vertical-align: top;
   }
   /**
  * Label/value form field pairings.
@@ -4104,7 +4106,7 @@ button {
   .ui-button {
     display: inline-block;
     position: relative;
-    height: 2.1666667em;
+    height: 2.333333333333333em;
     margin: 0 0.1em 0 0;
     padding: 0.25em 0.75em;
     border: 1px solid;
@@ -4115,7 +4117,7 @@ button {
     font-family: Helvetica, Arial, sans-serif;
     /* 1 */
     font-size: 12px;
-    line-height: 1.5em;
+    line-height: 1.666666666666667em;
     text-align: center;
     /* 2 */
     cursor: pointer;
@@ -4141,7 +4143,7 @@ button {
   .ui-button:active {
     border-color: #cccccc #b7b7b7 #b7b7b7 #cccccc;
     background-color: #dddddd;
-    color: #1a1a1a;
+    color: #1a1919;
     text-decoration: none;
   }
   .ui-button:focus {
@@ -4770,7 +4772,7 @@ button {
     outline: 0;
     /* 1 */
     font-size: 12px;
-    line-height: 1.5em;
+    line-height: 1.666666666666667em;
     list-style: none;
     box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   }
