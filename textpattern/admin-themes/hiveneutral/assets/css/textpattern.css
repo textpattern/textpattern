@@ -112,10 +112,20 @@ button {
  */
   .pophelp,
   .pophelpsubtle {
-    padding: 0 0.4em;
+    display: inline-block;
+    width: 1.230769230769231em;
     border: 1px solid #e0e0e0;
     border-radius: 50%;
     font-weight: normal;
+    line-height: 1.230769230769231em;
+    text-align: center;
+  }
+  .pophelp:hover, .pophelp:active,
+  .pophelpsubtle:hover,
+  .pophelpsubtle:active {
+    border-color: #2283d9;
+    background-color: #fff9e1;
+    text-decoration: none;
   }
   .pophelp:focus,
   .pophelpsubtle:focus {
@@ -1050,7 +1060,7 @@ button {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     /* 3 */
     font-size: 13px;
-    line-height: 1.38461538461538em;
+    line-height: 20px;
     vertical-align: baseline;
     box-sizing: border-box;
   }
@@ -1093,7 +1103,7 @@ button {
   [type="week"],
   select,
   textarea {
-    height: 2.15384615384615em;
+    height: 2.307692307692308em;
     padding: 0.30769230769231em;
     border: 1px solid #cccccc;
     border-radius: 0;
@@ -1212,7 +1222,7 @@ button {
  */
   select[size="0"],
   select[size="1"] {
-    height: 2.15384615384615em;
+    height: 2.307692307692308em;
     vertical-align: baseline;
   }
   /**
@@ -1390,7 +1400,7 @@ button {
     background-color: #5ba4e5;
     display: inline-block;
     width: auto;
-    height: 2.15384615384615em;
+    height: 2.307692307692308em;
     padding: 0.30769230769231em 0.61538461538462em;
     border: 1px solid #3c93e0;
     border-radius: 0.3em;
@@ -1432,7 +1442,7 @@ button {
   .navlink-active:active {
     background-color: #4e9de3;
     border-color: #1e72bc;
-    color: #e6e6e6;
+    color: #e6e5e5;
     text-decoration: none;
   }
   button:focus,
@@ -1519,7 +1529,7 @@ button {
  */
   .navlink-disabled {
     display: inline-block;
-    height: 2.15384615384615em;
+    height: 2.307692307692308em;
     padding: 0.30769230769231em 0.61538461538462em;
     border: 1px solid;
     border-radius: 0.3em;
@@ -2540,7 +2550,8 @@ button {
   /* Globally shared layout
    ========================================================================== */
   /**
- * 1. Prevent text size adjust after mobile device orientation change.
+ * 1. Prevent adjustments of font size after orientation changes in
+ *    IE on Windows Phone and in iOS.
  */
   html {
     /* 1 */
@@ -3077,6 +3088,7 @@ button {
  */
   .txp-form-field {
     margin: 1em 0;
+    vertical-align: top;
   }
   /**
  * Label/value form field pairings.
@@ -3127,7 +3139,7 @@ button {
   .setup:not(.welcome) .txp-form-field-value {
     -ms-flex: 1 1 0%;
         flex: 1 1 0%;
-    min-height: 2.15384615384615em;
+    min-height: 2.307692307692308em;
   }
   /**
  * Don't inline or constrain form fields for textareas.
@@ -4653,7 +4665,7 @@ button {
     background-color: #5ba4e5;
     display: inline-block;
     position: relative;
-    height: 2.1538462em;
+    height: 2.307692307692308em;
     margin: 0 0.1em 0 0;
     padding: 0.30769230769231em 0.61538461538462em;
     border: 1px solid #3c93e0;
@@ -4662,7 +4674,7 @@ button {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     /* 1 */
     font-size: 13px;
-    line-height: 1.3846154em;
+    line-height: 20px;
     text-align: center;
     /* 2 */
     cursor: pointer;
@@ -4688,7 +4700,7 @@ button {
   .ui-button:active {
     background-color: #4e9de3;
     border-color: #1e72bc;
-    color: #e6e6e6;
+    color: #e6e5e5;
     text-decoration: none;
   }
   .ui-button:focus {
@@ -5331,7 +5343,7 @@ button {
     outline: 0;
     /* 1 */
     font-size: 13px;
-    line-height: 1.38461538461538em;
+    line-height: 20px;
     list-style: none;
   }
   .ui-menu .ui-menu {
