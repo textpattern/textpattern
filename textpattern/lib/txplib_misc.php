@@ -6719,26 +6719,33 @@ function check_file_integrity($flags = INTEGRITY_STATUS)
 
 function check_prefs_integrity()
 {
-    global $prefs;
-    $prefs = get_prefs();
+    global $prefs, $txp_user;
 
-    foreach (get_prefs_default() as $name => $p) {
-        if (get_pref($name, false) === false) {
-            $private = empty($p['private']) ? PREF_GLOBAL : PREF_PRIVATE;
-            @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position'], $private);
+    // FIXME: Hardcode!!! need change to theme path
+    if ($prefs_theme = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true)) {
+        $prefs_check = array_merge($prefs_theme, get_prefs_default());
+    } else {
+        $prefs_check = get_prefs_default();
+    }
+
+    if ($rs = safe_rows_start('name, type, event, html, position', 'txp_prefs', "user_name = '' OR user_name = '".doSlash($txp_user)."'")) {
+        while ($row = nextRow($rs)) {
+            $name = array_shift($row);
+            if ($def = @$prefs_check[$name]) {
+                $private = empty($def['private']) ? PREF_GLOBAL : PREF_PRIVATE;
+                unset($def['val'], $def['private']);
+                if ($def != $row) {
+                    @update_pref($name, null, $def['event'], $def['type'], $def['html'], $def['position'], $private);
+                }
+                unset($prefs_check[$name]);
+            }
         }
     }
 
-    // Theme prefs
-
-    // FIXME: Hardcode!!! need change to theme path
-    if ($out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true)) {
-        foreach ($out as $name => $p) {
-            if (get_pref($name, false) === false) {
-                $private = empty($p['private']) ? PREF_GLOBAL : PREF_PRIVATE;
-                @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position'], $private);
-            }
-        }
+    // Create missing prefs
+    foreach ($prefs_check as $name => $p) {
+        $private = empty($p['private']) ? PREF_GLOBAL : PREF_PRIVATE;
+        @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position'], $private);
     }
 
     $prefs = get_prefs();
