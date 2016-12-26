@@ -6783,7 +6783,12 @@ function get_prefs_default()
     }
 
     $language = LANG;
-    $language = empty($language) ? 'en-gb' : $language;
+    if (empty($language)) {
+        $language = safe_field('lang', 'txp_lang', '1=1 GROUP BY lang ORDER BY COUNT(*) DESC');
+        if (empty($language)) {
+            $language = 'en-gb';
+        }
+    }
 
     $pf = array();
     $pf['file_base_path'] = dirname(txpath).DS.'files';
