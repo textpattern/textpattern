@@ -108,9 +108,11 @@ try {
 
 restore_error_handler();
 
-// Update version.
-safe_delete('txp_prefs', "name = 'version'");
-safe_insert('txp_prefs', "name = 'version', val = '$dbversion', type = '2'");
+// Update version if not dev.
+if (!$txp_is_dev) {
+    remove_pref('version', 'publish');
+    create_pref('version', $dbversion, 'publish', PREF_HIDDEN);
+}
 
 // Invite optional third parties to the update experience
 // Convention: Put custom code into file(s) at textpattern/update/custom/post-update-abc-foo.php
