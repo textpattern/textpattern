@@ -43,12 +43,8 @@ $cols = getThings("DESCRIBE `".PFX."txp_section`");
 if (!safe_field("name", 'txp_prefs', "name = 'default_section'")) {
     if (in_array('is_default', $cols)) {
         $current_default_section = safe_field("name", 'txp_section', "is_default = 1");
-    } else {
-        // Nothing we can do. Pick first one.
-        $current_default_section = safe_field("name", 'txp_section', "1 LIMIT 1");
+        safe_insert('txp_prefs', "prefs_id = 1, name = 'default_section', val = '".doSlash($current_default_section)."', type = '2', event = 'section', html = 'text_input', position = '0'");
     }
-
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'default_section', val = '".doSlash($current_default_section)."', type = '2', event = 'section', html = 'text_input', position = '0'");
 }
 
 if (in_array('is_default', $cols)) {

@@ -6775,7 +6775,7 @@ function get_files_content($dir, $ext)
 
 function get_prefs_default()
 {
-    global $permlink_mode, $siteurl, $blog_uid, $theme_name;
+    global $permlink_mode, $siteurl, $blog_uid, $theme_name, $pref;
 
     $out = @json_decode(file_get_contents(txpath.'/update/structure/core.prefs'), true);
     if (empty($out)) {
@@ -6807,6 +6807,8 @@ function get_prefs_default()
     $pf['sql_now_posted'] = $pf['sql_now_expires'] = $pf['sql_now_created'] = time();
     $pf['comments_default_invite'] = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment'
         : gTxt('setup_comment_invite');
+    $pf['default_section']= empty($pref['default_section']) ? safe_field('name', 'txp_section', "name<>'default'")
+        : $pref['default_section'];
 
     foreach ($pf as $name => $val) {
         if (isset($out[$name])) {

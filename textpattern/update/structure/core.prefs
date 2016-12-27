@@ -560,7 +560,7 @@
         "position": "0"
     },
     "default_section": {
-        "val": "articles",
+        "val": "",
         "type": "2",
         "event": "section",
         "html": "text_input",
