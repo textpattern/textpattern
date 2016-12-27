@@ -4578,7 +4578,7 @@ function handle_lastmod($unix_ts = null, $exit = true)
 function get_prefs($user = '')
 {
     $out = array();
-    $r = safe_rows_start("name, val", 'txp_prefs', "prefs_id = 1 AND user_name = '".doSlash($user)."'");
+    $r = safe_rows_start("name, val", 'txp_prefs', "user_name = '".doSlash($user)."'");
 
     if ($r) {
         while ($a = nextRow($r)) {
@@ -4805,8 +4805,7 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
     if (
         safe_insert(
             'txp_prefs',
-            "prefs_id = 1,
-            name = '".doSlash($name)."',
+            "name = '".doSlash($name)."',
             val = '".doSlash($val)."',
             event = '".doSlash($event)."',
             html = '".doSlash($html)."',

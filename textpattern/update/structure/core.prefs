@@ -475,13 +475,6 @@
         "html": "text_input",
         "position": "0"
     },
-    "prefs_id": {
-        "val": "1",
-        "type": "2",
-        "event": "publish",
-        "html": "text_input",
-        "position": "0"
-    },
     "searchable_article_fields": {
         "val": "Title, Body",
         "type": "2",

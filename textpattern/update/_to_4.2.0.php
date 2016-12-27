@@ -29,8 +29,6 @@ if (!defined('TXP_UPDATE')) {
 $cols = getThings("DESCRIBE `".PFX."txp_prefs`");
 if (!in_array('user_name', $cols)) {
     safe_alter('txp_prefs', "ADD user_name VARCHAR(64) NOT NULL DEFAULT ''");
-    safe_drop_index('txp_prefs', 'prefs_idx');
-    safe_alter('txp_prefs', "ADD UNIQUE prefs_idx (prefs_id, name, user_name)");
     safe_create_index('txp_prefs', 'user_name', 'user_name');
 }
 
