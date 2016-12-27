@@ -28,7 +28,7 @@ if (!defined('TXP_INSTALL')) {
 @ignore_user_abort(1);
 @set_time_limit(0);
 
-global $DB, $txp_groups, $prefs;
+global $DB, $txp_groups, $prefs, $txp_user;
 global $permlink_mode, $siteurl, $blog_uid, $theme_name;
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/admin_config.php';
@@ -36,7 +36,6 @@ include txpath.'/lib/admin_config.php';
 // Variable set
 $siteurl = str_replace("http://", '', $_SESSION['siteurl']);
 $siteurl = str_replace(' ', '%20', rtrim($siteurl, "/"));
-$urlpath = preg_replace('#^[^/]+#', '', $siteurl);
 $theme_name = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
 $themedir = txpath.DS.'setup';
 $structuredir = txpath.'/update/structure';
@@ -79,8 +78,9 @@ foreach (get_prefs_default() as $name => $p) {
     @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
 }
 $prefs = get_prefs();
+$txp_user = $_SESSION['name'];
 
-create_user($_SESSION['name'], $_SESSION['email'], $_SESSION['pass'], $_SESSION['realname'], 1);
+create_user($txp_user, $_SESSION['email'], $_SESSION['pass'], $_SESSION['realname'], 1);
 
 setup_txp_lang(LANG);
 
@@ -128,11 +128,19 @@ foreach (get_files_content($themedir.'/data', 'prefs') as $key=>$data) {
 
 
 // Load articles
+article_import($themedir.'/articles');
+
+
+function article_import($dir)
+{
+    global $prefs, $siteurl, $txp_user;
+    $urlpath = preg_replace('#^[^/]+#', '', $siteurl);
+
 $textile = new \Netcarver\Textile\Parser();
 $optional_fields = array('section', 'status', 'keywords', 'description', 'annotate', 'annotateinvite',
 'custom_1', 'custom_2', 'custom_3', 'custom_4', 'custom_5', 'custom_6', 'custom_7', 'custom_8', 'custom_9', 'custom_10');
 
-foreach (get_files_content($themedir.'/articles', 'xml') as $key=>$data) {
+foreach (get_files_content($dir, 'xml') as $key=>$data) {
     list($section, $notused) = explode('.', $key);
     $data = str_replace('siteurl', $urlpath, $data);
 
@@ -175,7 +183,7 @@ foreach (get_files_content($themedir.'/articles', 'xml') as $key=>$data) {
             $article['textile_excerpt'] = 0;
         }
 
-        $article['AuthorID'] = $_SESSION['name'];
+        $article['AuthorID'] = $txp_user;
         $article['Posted'] = $article['LastMod'] = $article['feed_time'] = 'NOW()';
         $article['uid'] = md5(uniqid(rand(), true));
 
@@ -199,6 +207,7 @@ foreach (get_files_content($themedir.'/articles', 'xml') as $key=>$data) {
             update_comments_count($id);
         }
     }
+}
 }
 
 
