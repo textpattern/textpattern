@@ -144,6 +144,89 @@ rebuild_tree_full('image');
 rebuild_tree_full('file');
 
 
+/**
+ * Import articles with comment from xml files
+ *
+ */
+
+function article_import($dir)
+{
+    global $prefs, $siteurl, $txp_user;
+    $urlpath = preg_replace('#^[^/]+#', '', $siteurl);
+
+    $textile = new \Netcarver\Textile\Parser();
+    $optional_fields = array('section', 'status', 'keywords', 'description', 'annotate', 'annotateinvite',
+    'custom_1', 'custom_2', 'custom_3', 'custom_4', 'custom_5', 'custom_6', 'custom_7', 'custom_8', 'custom_9', 'custom_10');
+
+    foreach (get_files_content($dir, 'xml') as $key=>$data) {
+        list($section, $notused) = explode('.', $key);
+        $data = str_replace('siteurl', $urlpath, $data);
+
+        $xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA);
+        foreach ($xml->article as $a) {
+            $article = array();
+            $article['section']   = $section;
+            $article['status'] = STATUS_LIVE;
+            $article['annotate'] = 1;
+            $article['annotateinvite'] = $prefs['comments_default_invite'];
+
+            foreach ($optional_fields as $field) {
+                if (!empty($a->$field)) {
+                    $article[$field] = $a->$field;
+                }
+            }
+
+            $article['Title']     = trim($a->title);
+            $article['url_title'] = stripSpace($article['Title'], 1);
+            $article['Category1'] = @$a->category[0];
+            $article['Category2'] = @$a->category[1];
+
+            $article['Body'] = @trim($a->body);
+            $format = $a->body->attributes()->format;
+            if ($format == 'textile') {
+                $article['Body_html']       = $textile->textileThis($article['Body']);
+                $article['textile_body']    = 1;
+            } else {
+                $article['Body_html']       = $article['Body'];
+                $article['textile_body']    = 0;
+            }
+
+            $article['Excerpt'] = @trim($a->excerpt);
+            $format = $a->excerpt->attributes()->format;
+            if ($format == 'textile') {
+                $article['Excerpt_html']    = $textile->textileThis($article['Excerpt']);
+                $article['textile_excerpt'] = 1;
+            } else {
+                $article['Excerpt_html']    = $article['Excerpt'];
+                $article['textile_excerpt'] = 0;
+            }
+
+            $article['AuthorID'] = $txp_user;
+            $article['Posted'] = $article['LastMod'] = $article['feed_time'] = 'NOW()';
+            $article['uid'] = md5(uniqid(rand(), true));
+
+            $id = safe_insert('textpattern', make_sql_set($article));
+
+            if ($id && !empty($a->comment)) {
+                foreach ($a->comment as $c) {
+                    $name = empty($c->name) ? 'txp-user' : $c->name;
+                    $email = empty($c->email) ? stripSpace($name, 1).'@example.com' : $c->email;
+                    safe_insert('txp_discuss', "
+                        parentid        = '$id',
+                        name            = '".doSlash($name)."',
+                        email           = '".doSlash($email)."',
+                        web             = '".doSlash($c->web)."',
+                        message         = '".doSlash($c->message)."',
+                        posted          = NOW(),
+                        ip              = '127.0.0.1',
+                        visible         = 1"
+                    );
+                }
+                update_comments_count($id);
+            }
+        }
+    }
+}
 
 function setup_txp_lang($lang)
 {
