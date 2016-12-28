@@ -6720,12 +6720,7 @@ function check_prefs_integrity()
 {
     global $prefs, $txp_user;
 
-    // FIXME: Hardcode!!! need change to theme path
-    if ($prefs_theme = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true)) {
-        $prefs_check = array_merge($prefs_theme, get_prefs_default());
-    } else {
-        $prefs_check = get_prefs_default();
-    }
+    $prefs_check = array_merge(get_prefs_theme(), get_prefs_default());
 
     if ($rs = safe_rows_start('name, type, event, html, position', 'txp_prefs', "user_name = '' OR user_name = '".doSlash($txp_user)."'")) {
         while ($row = nextRow($rs)) {
@@ -6818,6 +6813,21 @@ function get_prefs_default()
     return $out;
 }
 
+/**
+ * Get Theme prefs
+ * Now Textpatern does not support themes. If the setup folder is deleted, it will return an empty array.
+ */
+
+function get_prefs_theme()
+{
+    $out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true);
+    if (empty($out)) {
+
+        return array();
+    }
+
+    return $out;
+}
 
 /**
  * Import articles with comment from xml files
