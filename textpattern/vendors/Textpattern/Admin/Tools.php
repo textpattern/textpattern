@@ -25,7 +25,7 @@
  * Remove files and directories.
  *
  * <code>
- * Txp::get('Textpattern\Admin\Tools')::removeFiles(txpath, 'setup');
+ * Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
  * </code>
  *
  * @since   4.6.0
