@@ -411,7 +411,7 @@ function list_list($message = '', $post = '')
             if ($total_comments) {
                 $comments = href($comments, array(
                     'event'         => 'discuss',
-                    'step'          => 'list',
+                    'step'          => 'discuss_list',
                     'search_method' => 'parent',
                     'crit'          => $ID,
                 ), array('title' => gTxt('manage')));
