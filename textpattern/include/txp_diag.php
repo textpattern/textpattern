@@ -193,6 +193,7 @@ function doDiagnostics()
             // a FlashMessage structure) and present them above pre-flight check.
             $heading = gTxt('welcome_to_txp', array('{version}' => txp_version));
             $step = 'low';
+            Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
         }
 
         // Check for Textpattern updates, at most once every 24 hours.
