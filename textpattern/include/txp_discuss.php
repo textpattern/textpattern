@@ -446,7 +446,10 @@ function discuss_list($message = '')
             } else {
                 $parent_title = empty($title) ? '<em>'.gTxt('untitled').'</em>' : escape_title($title);
 
-                $parent = href($parent_title, '?event=article'.a.'step=edit'.a.'ID='.$parentid);
+                $parent = href(
+                    span(gTxt('search'), array('class' => 'ui-icon ui-icon-search')),
+                    '?event=discuss'.a.'step=discuss_list'.a.'search_method=parent'.a.'crit='.$parentid).sp.
+                    href($parent_title, '?event=article'.a.'step=edit'.a.'ID='.$parentid);
 
                 $view = $comment_status;
 
