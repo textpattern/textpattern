@@ -4925,7 +4925,7 @@ function hide($atts = array(), $thing = null)
     $nr = $txp_else[$hash][0] - 2;
     $process = is_numeric($process) ? true : do_list_unique($process);
 
-    for ($n = 1; $n <= $nr; $n++) {
+    for ($n = 1; $n <= $nr; $n+=2) {
         $t = $tag[$n];
 
         if ($process === true || in_array($t[1], $process)) {
