@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -3043,7 +3043,7 @@ function tz_offset($timestamp = null)
 
 function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 {
-    global $locale;
+    static $charsets = array();
 
     if (!$time) {
         $time = time();
@@ -3080,13 +3080,11 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
         $str = strftime($format, $time + tz_offset($time));
     }
 
-    @list($lang, $charset) = explode('.', $locale);
-
-    if (empty($charset)) {
-        $charset = 'ISO-8859-1';
-    } elseif (IS_WIN and is_numeric($charset)) {
-        $charset = 'Windows-'.$charset;
+    if (!isset($charsets[$override_locale])) {
+        $charsets[$override_locale] = Txp::get('\Textpattern\L10n\Locale')->getCharset(LC_TIME, IS_WIN ? 'Windows-1252' : 'ISO-8859-1');
     }
+
+    $charset = $charsets[$override_locale];
 
     if ($charset != 'UTF-8' and $format != 'since') {
         $new = '';

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
