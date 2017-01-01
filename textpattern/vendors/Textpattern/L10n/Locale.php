@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -43,52 +43,52 @@ class Locale
      */
 
     protected $locales = array(
-        'ar-dz' => array('ar_DZ.UTF-8', 'ar_DZ', 'ara', 'ar', 'arabic', 'ar_DZ.ISO_8859-6', 'Arabic_Saudi Arabia.1256'),
-        'bg-bg' => array('bg_BG.UTF-8', 'bg_BG', 'bg', 'bul', 'bulgarian', 'bg_BG.ISO_8859-5', 'Bulgarian_Bulgaria.1251'),
+        'ar-dz' => array('ar_DZ.UTF-8', 'ar_DZ.ISO_8859-6', 'Arabic_Saudi Arabia.1256', 'ar_DZ', 'ara', 'ar', 'arabic'),
+        'bg-bg' => array('bg_BG.UTF-8', 'bg_BG.ISO_8859-5', 'Bulgarian_Bulgaria.1251', 'bg_BG', 'bg', 'bul', 'bulgarian'),
         'bs-ba' => array('bs_BA.UTF-8', 'bs_BA', 'bs', 'bos', 'bosnian'),
-        'ca-es' => array('ca_ES.UTF-8', 'ca_ES', 'cat', 'ca', 'catalan', 'ca_ES.ISO_8859-1', 'Catalan_Spain.1252'),
-        'cs-cz' => array('cs_CZ.UTF-8', 'cs_CZ', 'ces', 'cze', 'cs', 'csy', 'czech', 'cs_CZ.ISO_8859-2', 'Czech_Czech Republic.1250'),
-        'da-dk' => array('da_DK.UTF-8', 'da_DK', 'da', 'dan', 'danish', 'da_DK.ISO_8859-1', 'Danish_Denmark.1252'),
-        'de-de' => array('de_DE.UTF-8', 'de_DE', 'de', 'deu', 'german', 'de_DE.ISO_8859-1', 'de_DE.ISO_8859-16', 'German_Germany.1252'),
-        'el-gr' => array('el_GR.UTF-8', 'el_GR', 'el', 'gre', 'greek', 'el_GR.ISO_8859-7', 'Greek_Greece.1253'),
-        'en-gb' => array('en_GB.UTF-8', 'en_GB', 'en_UK', 'eng', 'en', 'english-uk', 'english', 'en_GB.ISO_8859-1', 'C', 'English_UK.1252'),
-        'en-us' => array('en_US.UTF-8', 'en_US', 'english-us', 'eng', 'en', 'english', 'en_US.ISO_8859-1', 'English_USA.1252'),
-        'es-es' => array('es_ES.UTF-8', 'es_ES', 'esp', 'spanish', 'es_ES.ISO_8859-1', 'Spanish_Spain.1252'),
-        'et-ee' => array('et_EE.UTF-8', 'et_EE', 'et', 'est', 'estonian', 'et_EE.ISO_8859-1', 'et_EE.ISO_8859-15', 'Estonian_Estonia.1257'),
-        'fa-ir' => array('fa_IR.UTF-8', 'fa_IR', 'fa', 'persian', 'per', 'fas', 'farsi', 'Farsi_Iran.1256'),
-        'fi-fi' => array('fi_FI.UTF-8', 'fi_FI', 'fin', 'fi', 'finnish', 'fi_FI.ISO_8859-1', 'fi_FI.ISO-8859-15', 'fi_FI.ISO_8859-16', 'Finnish_Finland.1252'),
-        'fr-fr' => array('fr_FR.UTF-8', 'fr_FR', 'fra', 'fre', 'fr', 'french', 'fr_FR.ISO_8859-1', 'fr_FR.ISO-8859-15', 'fr_FR.ISO_8859-16', 'French_France.1252'),
+        'ca-es' => array('ca_ES.UTF-8', 'ca_ES.ISO_8859-1', 'Catalan_Spain.1252', 'ca_ES', 'cat', 'ca', 'catalan'),
+        'cs-cz' => array('cs_CZ.UTF-8', 'cs_CZ.ISO_8859-2', 'Czech_Czech Republic.1250', 'cs_CZ', 'ces', 'cze', 'cs', 'csy', 'czech'),
+        'da-dk' => array('da_DK.UTF-8', 'da_DK.ISO_8859-1', 'Danish_Denmark.1252', 'da_DK', 'da', 'dan', 'danish'),
+        'de-de' => array('de_DE.UTF-8', 'de_DE.ISO_8859-1', 'de_DE.ISO_8859-16', 'German_Germany.1252', 'de_DE', 'de', 'deu', 'german'),
+        'el-gr' => array('el_GR.UTF-8', 'el_GR.ISO_8859-7', 'Greek_Greece.1253', 'el_GR', 'el', 'gre', 'greek'),
+        'en-gb' => array('en_GB.UTF-8', 'en_GB.ISO_8859-1', 'English_UK.1252', 'en_GB', 'en_UK', 'eng', 'en', 'english-uk', 'english', 'C'),
+        'en-us' => array('en_US.UTF-8', 'en_US.ISO_8859-1', 'English_USA.1252', 'en_US', 'english-us', 'eng', 'en', 'english'),
+        'es-es' => array('es_ES.UTF-8', 'es_ES.ISO_8859-1', 'Spanish_Spain.1252', 'es_ES', 'esp', 'spanish'),
+        'et-ee' => array('et_EE.UTF-8', 'et_EE.ISO_8859-1', 'et_EE.ISO_8859-15', 'Estonian_Estonia.1257', 'et_EE', 'et', 'est', 'estonian'),
+        'fa-ir' => array('fa_IR.UTF-8', 'Farsi_Iran.1256', 'fa_IR', 'fa', 'persian', 'per', 'fas', 'farsi'),
+        'fi-fi' => array('fi_FI.UTF-8', 'fi_FI.ISO_8859-1', 'fi_FI.ISO-8859-15', 'fi_FI.ISO_8859-16', 'Finnish_Finland.1252', 'fi_FI', 'fin', 'fi', 'finnish'),
+        'fr-fr' => array('fr_FR.UTF-8', 'fr_FR.ISO_8859-1', 'fr_FR.ISO-8859-15', 'fr_FR.ISO_8859-16', 'French_France.1252', 'fr_FR', 'fra', 'fre', 'fr', 'french'),
         'gl-gz' => array('gl_GZ.UTF-8', 'gl_GZ', 'glg', 'gl'),
-        'gl-es' => array('gl_ES.UTF-8', 'gl_ES', 'gle', 'gl', 'galician', 'galleco', 'gl_ES.ISO_8859-1', 'Galician_Spain.1252'),
-        'he-il' => array('he_IL.UTF-8', 'he_IL', 'heb', 'he', 'hebrew', 'he_IL.ISO_8859-8', 'Hebrew_Israel.1255'),
-        'hr-hr' => array('hr_HR.UTF-8', 'hr_HR', 'hr', 'hrv', 'croatian', 'hr_HR.ISO_8859-2', 'hr_HR.ISO_8859-16', 'Croatian_Croatia.1250'),
-        'hu-hu' => array('hu_HU.UTF-8', 'hu_HU', 'hun', 'hu', 'hungarian', 'hu_HU.ISO_8859-2', 'hu_HU.ISO_8859-16', 'Hungarian_Hungary.1250'),
-        'id-id' => array('id_ID.UTF-8', 'id_ID', 'id', 'ind', 'indonesian', 'id_ID.ISO_8859-1', 'Indonesian_indonesia.1252'),
-        'is-is' => array('is_IS.UTF-8', 'is_IS', 'is', 'ice', 'isl', 'icelandic', 'is_IS.ISO_8859-1', 'Icelandic_Iceland.1252'),
-        'it-it' => array('it_IT.UTF-8', 'it_IT', 'it', 'ita', 'italian', 'it_IT.ISO_8859-1', 'it_IT.ISO_8859-16', 'Italian_Italy.1252'),
-        'ja-jp' => array('ja_JP.UTF-8', 'ja_JP', 'ja', 'jpn', 'japanese', 'Japanese_Japan.932'),
-        'ko-kr' => array('ko_KR.UTF-8', 'ko_KR', 'ko', 'kor', 'korean', 'Korean_Korea.949'),
-        'lt-lt' => array('lt_LT.UTF-8', 'lt_LT', 'lt', 'lit', 'lithuanian', 'lt_LT.ISO_8859-4', 'Lithuanian_Lithuania.1257'),
-        'lv-lv' => array('lv_LV.UTF-8', 'lv_LV', 'lv', 'lav', 'latvian', 'lv_LV.ISO_8859-4', 'Latvian_Latvia.1257'),
-        'nl-nl' => array('nl_NL.UTF-8', 'nl_NL', 'dut', 'nla', 'nl', 'nld', 'dutch', 'nl_NL.ISO_8859-1', 'Dutch_Netherlands.1252'),
-        'nn-no' => array('nn_NO.UTF-8', 'nn_NO', 'no', 'nn', 'nor', 'nno', 'nb', 'nob', 'norwegian', 'no_NO.ISO_8859-1', 'Norwegian_Norway.1252'),
-        'no-no' => array('no_NO.UTF-8', 'no_NO', 'no', 'nor', 'norwegian', 'no_NO.ISO_8859-1', 'Norwegian_Norway.1252'),
-        'pl-pl' => array('pl_PL.UTF-8', 'pl_PL', 'pl', 'pol', 'polish', 'po_PO.ISO_8859-2', 'Polish_Poland.1250'),
-        'pt-br' => array('pt_BR.UTF-8', 'pt_BR', 'pt', 'ptb', 'portuguese-brazil', 'Portuguese_Brazil.1252'),
-        'pt-pt' => array('pt_PT.UTF-8', 'pt_PT', 'por', 'portuguese', 'pt_PT.ISO_8859-1', 'Portuguese_Portugal.1252'),
-        'ro-ro' => array('ro_RO.UTF-8', 'ro_RO', 'ron', 'rum', 'ro', 'romanian', 'ro_RO.ISO_8859-2', 'ro_RO.ISO_8859-16', 'Romanian_Romania.1250'),
-        'ru-ru' => array('ru_RU.UTF-8', 'ru_RU', 'ru', 'rus', 'russian', 'ru_RU.ISO_8859-5', 'Russian_Russia.1251'),
-        'sk-sk' => array('sk_SK.UTF-8', 'sk_SK', 'sk', 'slo', 'slk', 'slovak', 'sk_SK.ISO_8859-1', 'Slovak_Slovakia.1250'),
-        'sr-rs' => array('sr-RS.UTF-8', 'sr_RS', 'sr', 'sp', 'srb', 'serbian', 'Serbian (Cyrillic)_Serbia and Montenegro.1251'),
-        'sr-sp' => array('sr-SP.UTF-8', 'sr_SP', 'sr', 'sp', 'srb', 'serbian', 'Serbian (Cyrillic)_Serbia and Montenegro.1251'),
-        'sv-se' => array('sv_SE.UTF-8', 'sv_SE', 'sv', 'swe', 'sve', 'swedish', 'sv_SE.ISO_8859-1', 'Swedish_Sweden.1252'),
-        'th-th' => array('th_TH.UTF-8', 'th_TH', 'th', 'tha', 'thai', 'th_TH.ISO_8859-11', 'Thai_Thailand.874'),
-        'tr-tr' => array('tr_TR.UTF-8', 'tr_TR', 'tr', 'tur', 'turkish', 'tr_TR.ISO_8859-3', 'tr_TR.ISO_8859-9', 'Turkish_Turkey.1254'),
-        'uk-ua' => array('uk_UA.UTF-8', 'uk_UA', 'uk', 'ukr', 'ukrainian', 'uk_UA.ISO_8859-5', 'Ukrainian_Ukraine.1251'),
+        'gl-es' => array('gl_ES.UTF-8', 'gl_ES.ISO_8859-1', 'Galician_Spain.1252', 'gl_ES', 'gle', 'gl', 'galician', 'galleco'),
+        'he-il' => array('he_IL.UTF-8', 'he_IL.ISO_8859-8', 'Hebrew_Israel.1255', 'he_IL', 'heb', 'he', 'hebrew'),
+        'hr-hr' => array('hr_HR.UTF-8', 'hr_HR.ISO_8859-2', 'hr_HR.ISO_8859-16', 'Croatian_Croatia.1250', 'hr_HR', 'hr', 'hrv', 'croatian'),
+        'hu-hu' => array('hu_HU.UTF-8', 'hu_HU.ISO_8859-2', 'hu_HU.ISO_8859-16', 'Hungarian_Hungary.1250', 'hu_HU', 'hun', 'hu', 'hungarian'),
+        'id-id' => array('id_ID.UTF-8', 'id_ID.ISO_8859-1', 'Indonesian_indonesia.1252', 'id_ID', 'id', 'ind', 'indonesian'),
+        'is-is' => array('is_IS.UTF-8', 'is_IS.ISO_8859-1', 'Icelandic_Iceland.1252', 'is_IS', 'is', 'ice', 'isl', 'icelandic'),
+        'it-it' => array('it_IT.UTF-8', 'it_IT.ISO_8859-1', 'it_IT.ISO_8859-16', 'Italian_Italy.1252', 'it_IT', 'it', 'ita', 'italian'),
+        'ja-jp' => array('ja_JP.UTF-8', 'Japanese_Japan.932', 'ja_JP', 'ja', 'jpn', 'japanese'),
+        'ko-kr' => array('ko_KR.UTF-8', 'Korean_Korea.949', 'ko_KR', 'ko', 'kor', 'korean'),
+        'lt-lt' => array('lt_LT.UTF-8', 'lt_LT.ISO_8859-4', 'Lithuanian_Lithuania.1257', 'lt_LT', 'lt', 'lit', 'lithuanian'),
+        'lv-lv' => array('lv_LV.UTF-8', 'lv_LV.ISO_8859-4', 'Latvian_Latvia.1257', 'lv_LV', 'lv', 'lav', 'latvian'),
+        'nl-nl' => array('nl_NL.UTF-8', 'nl_NL.ISO_8859-1', 'Dutch_Netherlands.1252', 'nl_NL', 'dut', 'nla', 'nl', 'nld', 'dutch'),
+        'nn-no' => array('nn_NO.UTF-8', 'no_NO.ISO_8859-1', 'Norwegian_Norway.1252', 'nn_NO', 'no', 'nn', 'nor', 'nno', 'nb', 'nob', 'norwegian'),
+        'no-no' => array('no_NO.UTF-8', 'no_NO.ISO_8859-1', 'Norwegian_Norway.1252', 'no_NO', 'no', 'nor', 'norwegian'),
+        'pl-pl' => array('pl_PL.UTF-8', 'po_PO.ISO_8859-2', 'Polish_Poland.1250', 'pl_PL', 'pl', 'pol', 'polish'),
+        'pt-br' => array('pt_BR.UTF-8', 'Portuguese_Brazil.1252', 'pt_BR', 'pt', 'ptb', 'portuguese-brazil'),
+        'pt-pt' => array('pt_PT.UTF-8', 'pt_PT.ISO_8859-1', 'Portuguese_Portugal.1252', 'pt_PT', 'por', 'portuguese'),
+        'ro-ro' => array('ro_RO.UTF-8', 'ro_RO.ISO_8859-2', 'ro_RO.ISO_8859-16', 'Romanian_Romania.1250', 'ro_RO', 'ron', 'rum', 'ro', 'romanian'),
+        'ru-ru' => array('ru_RU.UTF-8', 'ru_RU.ISO_8859-5', 'Russian_Russia.1251', 'ru_RU', 'ru', 'rus', 'russian'),
+        'sk-sk' => array('sk_SK.UTF-8', 'sk_SK.ISO_8859-1', 'Slovak_Slovakia.1250', 'sk_SK', 'sk', 'slo', 'slk', 'slovak'),
+        'sr-rs' => array('sr-RS.UTF-8', 'Serbian (Cyrillic)_Serbia and Montenegro.1251', 'sr_RS', 'sr', 'sp', 'srb', 'serbian'),
+        'sr-sp' => array('sr-SP.UTF-8', 'Serbian (Cyrillic)_Serbia and Montenegro.1251', 'sr_SP', 'sr', 'sp', 'srb', 'serbian'),
+        'sv-se' => array('sv_SE.UTF-8', 'sv_SE.ISO_8859-1', 'Swedish_Sweden.1252', 'sv_SE', 'sv', 'swe', 'sve', 'swedish'),
+        'th-th' => array('th_TH.UTF-8', 'th_TH.ISO_8859-11', 'Thai_Thailand.874', 'th_TH', 'th', 'tha', 'thai'),
+        'tr-tr' => array('tr_TR.UTF-8', 'tr_TR.ISO_8859-3', 'tr_TR.ISO_8859-9', 'Turkish_Turkey.1254', 'tr_TR', 'tr', 'tur', 'turkish'),
+        'uk-ua' => array('uk_UA.UTF-8', 'uk_UA.ISO_8859-5', 'Ukrainian_Ukraine.1251', 'uk_UA', 'uk', 'ukr', 'ukrainian'),
         'ur-in' => array('ur_IN.UTF-8', 'ur_IN', 'ur', 'urd', 'urdu'),
-        'vi-vn' => array('vi_VN.UTF-8', 'vi_VN', 'vi', 'vie', 'vietnamese', 'Vietnamese_Viet Nam.1258'),
-        'zh-cn' => array('zh_CN.UTF-8', 'zh_CN', 'chinese-simplified', 'Chinese_China.936'),
-        'zh-tw' => array('zh_TW.UTF-8', 'zh_TW', 'chinese-traditional', 'Chinese_Taiwan.950'),
+        'vi-vn' => array('vi_VN.UTF-8', 'Vietnamese_Viet Nam.1258', 'vi_VN', 'vi', 'vie', 'vietnamese'),
+        'zh-cn' => array('zh_CN.UTF-8', 'Chinese_China.936', 'zh_CN', 'chinese-simplified'),
+        'zh-tw' => array('zh_TW.UTF-8', 'Chinese_Taiwan.950', 'zh_TW', 'chinese-traditional'),
     );
 
     /**
@@ -247,19 +247,24 @@ class Locale
      * @return string|bool The character set, or FALSE on failure
      */
 
-    public function getCharset($category = LC_ALL)
+    public function getCharset($category = LC_ALL, $default = false)
     {
-        if (($locale = $this->getLocale($category)) && strpos($locale, '.')) {
+        if (!($locale = $this->getLocale($category))) {
+            $charset = false;
+        } elseif (is_callable('nl_langinfo')) {
+            $oldLocale = $this->getLocale(LC_CTYPE);
+            $this->setLocale(LC_CTYPE, $locale);
+            $charset = nl_langinfo(CODESET);
+            $this->setLocale(LC_CTYPE, $oldLocale);
+        } elseif (strpos($locale, '.')) {
             list($language, $charset) = explode('.', $locale);
 
             if (IS_WIN && is_numeric($charset)) {
-                return 'Windows-'.$charset;
+                $charset = 'Windows-'.$charset;
             }
-
-            return $charset;
         }
 
-        return false;
+        return isset($charset) ? $charset : $default;
     }
 
     /**
