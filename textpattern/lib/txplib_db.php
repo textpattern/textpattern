@@ -513,6 +513,7 @@ function safe_upsert($table, $set, $where, $debug = false)
     if ($r and (mysqli_affected_rows($DB->link) or safe_count($table, $where, $debug))) {
         return $r;
     } else {
+        $where = implode(', ', (preg_split( "/ (AND|OR) /", $where)));
         return safe_insert($table, join(', ', array($where, $set)), $debug);
     }
 }
