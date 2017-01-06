@@ -195,7 +195,7 @@ Txp::get('\Textpattern\Tag\Registry')
 
 function page_title($atts)
 {
-    global $parentid, $thisarticle, $id, $q, $c, $author, $context, $s, $pg, $sitename;
+    global $parentid, $thisarticle, $q, $c, $author, $context, $s, $pg, $sitename;
 
     extract(lAtts(array(
         'separator' => ' | ',
@@ -1941,6 +1941,35 @@ function posted($atts)
 
 // -------------------------------------------------------------
 
+function modified($atts)
+{
+    global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
+
+    assert_article();
+
+    extract(lAtts(array(
+        'class'   => '',
+        'format'  => '',
+        'gmt'     => '',
+        'lang'    => '',
+        'wraptag' => '',
+    ), $atts));
+
+    if ($format) {
+        $out = safe_strftime($format, $thisarticle['modified'], $gmt, $lang);
+    } else {
+        if ($id or $c or $pg) {
+            $out = safe_strftime($archive_dateformat, $thisarticle['modified'], $gmt, $lang);
+        } else {
+            $out = safe_strftime($dateformat, $thisarticle['modified'], $gmt, $lang);
+        }
+    }
+
+    return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
+}
+
+// -------------------------------------------------------------
+
 function expires($atts)
 {
     global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
@@ -1994,35 +2023,6 @@ function if_expired($atts, $thing = null)
 
     $x = !empty($thisarticle['expires']) && ($thisarticle['expires'] <= time());
     return isset($thing) ? parse($thing, $x) : $x;
-}
-
-// -------------------------------------------------------------
-
-function modified($atts)
-{
-    global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
-
-    assert_article();
-
-    extract(lAtts(array(
-        'class'   => '',
-        'format'  => '',
-        'gmt'     => '',
-        'lang'    => '',
-        'wraptag' => '',
-    ), $atts));
-
-    if ($format) {
-        $out = safe_strftime($format, $thisarticle['modified'], $gmt, $lang);
-    } else {
-        if ($id or $c or $pg) {
-            $out = safe_strftime($archive_dateformat, $thisarticle['modified'], $gmt, $lang);
-        } else {
-            $out = safe_strftime($dateformat, $thisarticle['modified'], $gmt, $lang);
-        }
-    }
-
-    return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 }
 
 // -------------------------------------------------------------
@@ -3293,7 +3293,7 @@ function search_result_count($atts)
 
 function image_index($atts)
 {
-    global $s, $c, $p, $path_to_site;
+    global $s, $c;
 
     extract(lAtts(array(
         'label'    => '',
@@ -3354,7 +3354,7 @@ function image_display($atts)
         extract($atts);
     }
 
-    global $s, $c, $p;
+    global $p;
 
     if ($p) {
         $rs = safe_row("*", 'txp_image', "id=".intval($p)." LIMIT 1");
@@ -3372,7 +3372,7 @@ function image_display($atts)
 
 function images($atts, $thing = null)
 {
-    global $s, $c, $context, $p, $path_to_site, $thisimage, $thisarticle, $thispage, $pretext;
+    global $s, $c, $context, $thisimage, $thisarticle, $thispage, $pretext;
 
     extract(lAtts(array(
         'name'        => '',
