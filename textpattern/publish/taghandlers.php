@@ -3849,8 +3849,6 @@ function meta_keywords($atts)
 
 function meta_description($atts)
 {
-    global $thisarticle, $thiscategory, $thissection, $s, $c, $context;
-
     extract(lAtts(array(
         'escape' => 'html',
         'format' => 'meta', // or empty for raw value
@@ -3883,8 +3881,6 @@ function meta_description($atts)
 
 function if_description($atts, $thing = null)
 {
-    global $thisarticle, $thiscategory, $thissection, $s, $c, $context;
-
     extract(lAtts(array(
         'type' => null,
     ), $atts));
