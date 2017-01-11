@@ -2057,9 +2057,7 @@ function article_partial_comments($rs)
         }
 
         if ($comments_expired) {
-            $invite = graf(gTxt('expired'), array(
-                'class' => 'comment-annotate'
-            ));
+            $invite = graf(gTxt('expired'), array('class' => 'comment-annotate-expired'));
         } else {
             $invite = n.tag(
                     onoffRadio('Annotate', $Annotate),
