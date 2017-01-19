@@ -2861,56 +2861,26 @@ function excerpt()
 
 function category1($atts, $thing = null)
 {
-    global $thisarticle, $s, $permlink_mode;
-
-    assert_article();
-
-    extract(lAtts(array(
-        'class'        => '',
-        'link'         => 0,
-        'title'        => 0,
-        'section'      => '',
-        'this_section' => 0,
-        'wraptag'      => '',
-    ), $atts));
-
-    if ($thisarticle['category1']) {
-        $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
-        $category = $thisarticle['category1'];
-
-        $label = txpspecialchars(($title) ? fetch_category_title($category) : $category);
-
-        if ($thing) {
-            $out = href(
-                parse($thing),
-                pagelinkurl(array('s' => $section, 'c' => $category)),
-                (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-                ($title ? ' title="'.$label.'"' : '').
-                ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
-            );
-        } elseif ($link) {
-            $out = href(
-                $label,
-                pagelinkurl(array('s' => $section, 'c' => $category)),
-                ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
-            );
-        } else {
-            $out = $label;
-        }
-
-        return doTag($out, $wraptag, $class);
-    }
+    return article_category(array('number' => 1) + $atts, $thing);
 }
 
 // -------------------------------------------------------------
 
 function category2($atts, $thing = null)
 {
+    return article_category(array('number' => 2) + $atts, $thing);
+}
+
+// -------------------------------------------------------------
+
+function article_category($atts, $thing = null)
+{
     global $thisarticle, $s, $permlink_mode;
 
     assert_article();
 
     extract(lAtts(array(
+        'number'       => 1,
         'class'        => '',
         'link'         => 0,
         'title'        => 0,
@@ -2919,9 +2889,11 @@ function category2($atts, $thing = null)
         'wraptag'      => '',
     ), $atts));
 
-    if ($thisarticle['category2']) {
+    $cat = 'category'.intval($number);
+
+    if ($thisarticle[$cat]) {
         $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
-        $category = $thisarticle['category2'];
+        $category = $thisarticle[$cat];
 
         $label = txpspecialchars(($title) ? fetch_category_title($category) : $category);
 
@@ -3067,15 +3039,23 @@ function section($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function keywords()
+function keywords($atts)
 {
     global $thisarticle;
 
     assert_article();
 
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+    extract(lAtts(array(
+        'class'   => '',
+        'break'     => ',',
+        'wraptag' => ''
+    ), $atts));
 
-    return txpspecialchars($thisarticle['keywords']);
+    $out = do_list_unique(txpspecialchars($thisarticle['keywords']));
+
+//    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+
+    return doWrap($out, $wraptag, $break, $class);
 }
 
 // -------------------------------------------------------------
