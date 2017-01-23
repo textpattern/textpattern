@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -32,6 +32,7 @@ use Textpattern\Validator\CategoryConstraint;
 use Textpattern\Validator\SectionConstraint;
 use Textpattern\Validator\Validator;
 use Textpattern\Search\Filter;
+use Textpattern\Admin\Customiser;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -274,6 +275,27 @@ function list_list($message = '', $post = '')
         return;
     }
 
+    $show_authors = !has_single_author('textpattern', 'AuthorID');
+
+    $headers = array(
+        'title' => 'title',
+        'posted' => 'posted',
+        'lastmod' => 'article_modified',
+        'expires' => 'expires',
+        'section' => 'section',
+        'category1' => 'category1',
+        'category2' => 'category2',
+        'status' => 'status'
+    );
+
+    if ($show_authors) {
+        $headers['author'] = 'author';
+    }
+
+    if ($use_comments) {
+        $headers['comments'] = 'comments';
+    }
+
     $paginator = new \Textpattern\Admin\Paginator($event, 'article');
     $limit = $paginator->getLimit();
 
@@ -298,11 +320,36 @@ function list_list($message = '', $post = '')
     );
 
     if ($rs) {
-        $show_authors = !has_single_author('textpattern', 'AuthorID');
+        $common_atts = array(
+            'event' => 'list',
+            'step'  => 'list',
+            'is_link' => true,
+            'dir'   => $switch_dir,
+            'crit'  => $crit,
+            'method'=> $search_method
+        );
 
-        echo n.tag(
-                toggle_box('articles_detail'), 'div', array('class' => 'txp-list-options')).
-            n.tag_start('form', array(
+        $dates = array('posted', 'lastmod', 'expires');
+
+        $head_row = hCell(
+            fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                '', 'class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+        ).column_head(array(
+            'options' => array('class' => trim('txp-list-col-id'.('id' == $sort ? " $dir" : ''))),
+            'value' => 'ID',
+            'sort'  => 'id'
+        ) + $common_atts);
+
+        foreach ($headers as $header => $column_head) {
+            $head_row .= column_head(array(
+                    'options' => array(
+                        'class' => trim('txp-list-col-'.$header.($header == $sort ? " $dir" : '').(in_array($header, $dates) ? ' date' : ''))),
+                    'value' => $column_head,
+                    'sort'  => $header
+                ) + $common_atts);
+        }
+
+        echo n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'articles_form',
                 'name'   => 'longform',
@@ -312,60 +359,7 @@ function list_list($message = '', $post = '')
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
             n.tag_start('thead').
-            tr(
-                hCell(
-                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
-                ).
-                column_head(
-                    'ID', 'id', 'list', true, $switch_dir, $crit, $search_method,
-                        (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
-                ).
-                column_head(
-                    'title', 'title', 'list', true, $switch_dir, $crit, $search_method,
-                        (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
-                ).
-                column_head(
-                    'posted', 'posted', 'list', true, $switch_dir, $crit, $search_method,
-                        (('posted' == $sort) ? "$dir " : '').'txp-list-col-created date'
-                ).
-                column_head(
-                    'article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method,
-                        (('lastmod' == $sort) ? "$dir " : '').'txp-list-col-lastmod date articles_detail'
-                ).
-                column_head(
-                    'expires', 'expires', 'list', true, $switch_dir, $crit, $search_method,
-                        (('expires' == $sort) ? "$dir " : '').'txp-list-col-expires date articles_detail'
-                ).
-                column_head(
-                    'section', 'section', 'list', true, $switch_dir, $crit, $search_method,
-                        (('section' == $sort) ? "$dir " : '').'txp-list-col-section'
-                ).
-                column_head(
-                    'category1', 'category1', 'list', true, $switch_dir, $crit, $search_method,
-                        (('category1' == $sort) ? "$dir " : '').'txp-list-col-category1 category articles_detail'
-                ).
-                column_head(
-                    'category2', 'category2', 'list', true, $switch_dir, $crit, $search_method,
-                        (('category2' == $sort) ? "$dir " : '').'txp-list-col-category2 category articles_detail'
-                ).
-                column_head(
-                    'status', 'status', 'list', true, $switch_dir, $crit, $search_method,
-                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
-                ).
-                (
-                    $show_authors
-                    ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method,
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
-                    : ''
-                ).
-                (
-                    $use_comments == 1
-                    ? column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method,
-                        (('comments' == $sort) ? "$dir " : '').'txp-list-col-comments articles_detail')
-                    : ''
-                )
-            ).
+            tr($head_row).
             n.tag_end('thead');
 
         include_once txpath.'/publish/taghandlers.php';
@@ -450,9 +444,9 @@ function list_list($message = '', $post = '')
                     span(
                         sp.span('&#124;', array('role' => 'separator')).
                         sp.href(gTxt('view'), $view_url, array('target' => '_blank')),
-                        array('class' => 'txp-option-link articles_detail')
+                        array('class' => 'txp-option-link')
                     ), '', array(
-                        'class' => 'txp-list-col-id',
+                        'class' => '',
                         'scope' => 'row',
                     )
                 ).
@@ -460,22 +454,22 @@ function list_list($message = '', $post = '')
                     $Title, '', 'txp-list-col-title'
                 ).
                 td(
-                    gTime($posted), '', 'txp-list-col-created date'.($posted < time() ? '' : ' unpublished')
+                    gTime($posted), '', 'txp-list-col-posted date'.($posted < time() ? '' : ' unpublished')
                 ).
                 td(
-                    gTime($lastmod), '', 'txp-list-col-lastmod date articles_detail'.($posted === $lastmod ? ' not-modified' : '')
+                    gTime($lastmod), '', 'txp-list-col-lastmod date'.($posted === $lastmod ? ' not-modified' : '')
                 ).
                 td(
-                    ($expires ? gTime($expires) : ''), '', 'txp-list-col-expires date articles_detail'
+                    ($expires ? gTime($expires) : ''), '', 'txp-list-col-expires date'
                 ).
                 td(
-                    span(txpspecialchars($section_title), array('title' => $Section)), '', 'txp-list-col-section'.$vs
+                    span(txpspecialchars($section_title), array('title' => $Section)), '','txp-list-col-section'.$vs
                 ).
                 td(
-                    $Category1, '', 'txp-list-col-category1 category articles_detail'.$vc[1]
+                    $Category1, '', 'txp-list-col-category1 category'.$vc[1]
                 ).
                 td(
-                    $Category2, '', 'txp-list-col-category2 category articles_detail'.$vc[2]
+                    $Category2, '', 'txp-list-col-category2 category'.$vc[2]
                 ).
                 td(
                     href($Status, $view_url, join_atts(array(
@@ -490,7 +484,7 @@ function list_list($message = '', $post = '')
                 ).
                 (
                     $use_comments
-                    ? td($comments, '', 'txp-list-col-comments articles_detail')
+                    ? td($comments, '', 'txp-list-col-comments')
                     : ''
                 )
             );
