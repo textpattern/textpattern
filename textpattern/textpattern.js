@@ -2,7 +2,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -563,7 +563,6 @@ function getElementsByClass(classname, node)
 function toggleColumn(sel, $sel, vis)
 {
 //    $sel = $(sel);
-
     if ($sel.length) {
         if (!!vis) {
             $sel.show();
@@ -801,8 +800,10 @@ textpattern.storage =
     clean : function (obj) {
         Object.keys(obj).forEach(function(key) {
             if (obj[key] && typeof obj[key] === 'object') {
-                textpattern.storage.clean(obj[key])
-            } else if (obj[key] === null) delete obj[key]
+                textpattern.storage.clean(obj[key]);
+            } else if (obj[key] === null) {
+                delete obj[key];
+            }
         });
         return obj;
     }
@@ -1606,7 +1607,9 @@ function txp_columniser()
 {
     var $tables = $('table.txp-list');
 
-    if (!$tables.length) return;
+    if (!$tables.length) {
+        return;
+    }
 
     $tables.each(function(tabind) {
         var $table = $(this),
@@ -1616,15 +1619,19 @@ function txp_columniser()
         $menu.html($('<li><div role="menuitem"><input class="checkbox active" id="opt-col-all'+tabind+'" name="select_all" checked="checked" type="checkbox"><label for="opt-col-all'+tabind+'">'+textpattern.gTxt('toggle_all_selected')+'</label></div></li>'));
 
         $headers.each(function(index) {
-
             var $this = $(this), $title = $this.text().trim(), $id = $this.data('col');
 
-            if (!$title) return;
+            if (!$title) {
+                return;
+            }
 
-            if ($id == undefined)
+            if ($id == undefined) {
                 if ($id = this.className.match(/\btxp-list-col-([\w\-]+)\b/)) {
                     $id = $id[1];
-                } else return;
+                } else {
+                    return;
+                }
+            }
 
             var disabled = $this.hasClass('asc') || $this.hasClass('desc') ? ' disabled="disabled"' : '';
             $menu.append($('<li><div role="menuitem"><input class="checkbox active" id="opt-col-'+index+'-'+tabind+'" name="list_options[]" checked="checked" value="'+$id+'" data-index="'+index+'" type="checkbox"'+disabled+'><label for="opt-col-'+index+'-'+tabind+'">'+$title+'</label></div></li>'));
@@ -1664,13 +1671,17 @@ function txp_columniser()
             var n = me.data('index')+1;
             var $target = $table.find('tr>*:nth-child('+n+')');
 
-            if (stored) try {
-                if (textpattern.storage.data[textpattern.event]['columns'][target] == false) {
-                    selectAll = false;
-                    $target.hide();
-                    me.prop('checked', false)
+            if (stored) {
+                try {
+                    if (textpattern.storage.data[textpattern.event]['columns'][target] == false) {
+                        selectAll = false;
+                        $target.hide();
+                        me.prop('checked', false)
+                    }
+                } catch(e) {
+                    stored = false;
                 }
-            } catch(e){stored = false}
+            }
 
             me.on('change', function(ev) {
                 toggleColumn(target, $target, me.prop('checked'));
@@ -1751,7 +1762,9 @@ jQuery.fn.restorePanes = function ()
                     $elm.parent(".txp-summary").addClass("expanded");
                     $region.show();
                 }
-            } catch(e) {stored = false}
+            } catch(e) {
+                stored = false;
+            }
 
             var vis = $region.is(':visible').toString();
             $elm.attr('aria-controls', region).attr('aria-pressed', vis);

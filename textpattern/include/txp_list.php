@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -463,7 +463,7 @@ function list_list($message = '', $post = '')
                     ($expires ? gTime($expires) : ''), '', 'txp-list-col-expires date'
                 ).
                 td(
-                    span(txpspecialchars($section_title), array('title' => $Section)), '','txp-list-col-section'.$vs
+                    span(txpspecialchars($section_title), array('title' => $Section)), '', 'txp-list-col-section'.$vs
                 ).
                 td(
                     $Category1, '', 'txp-list-col-category1 category'.$vc[1]
