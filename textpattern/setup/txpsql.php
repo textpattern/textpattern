@@ -75,7 +75,9 @@ foreach (get_files_content($structuredir, 'json') as $key=>$data) {
 
 // Create core prefs
 foreach (get_prefs_default() as $name => $p) {
-    @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
+    if (empty($p['private'])) {
+        @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
+    }
 }
 $prefs = get_prefs();
 $txp_user = $_SESSION['name'];
