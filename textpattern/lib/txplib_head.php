@@ -119,10 +119,11 @@ function pagetop($pagetitle, $message = '')
     // Mandatory un-themable Textpattern core styles ?>
 <style>
 .not-ready .doc-ready,
+.not-ready table.txp-list,
 .not-ready form.async input[type="submit"],
 .not-ready a.async
 {
-    opacity: 0;
+    visibility: hidden;
 }
 </style>
 <?php
@@ -136,7 +137,7 @@ echo $theme->html_head();
     echo pluggable_ui('admin_side', 'header', $theme->header());
     callback_event('admin_side', 'pagetop_end');
     echo n.'</header><!-- /txp-header -->'.
-        n.'<main class="txp-body doc-ready" aria-label="'.gTxt('main_content').'">'.
+        n.'<main class="txp-body" aria-label="'.gTxt('main_content').'">'.
         n.'<div id="messagepane">'.$theme->announce($message).'</div>';
     callback_event('admin_side', 'main_content');
 }
