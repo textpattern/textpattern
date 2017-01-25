@@ -858,7 +858,7 @@ function langs()
         'zh-tw' => '中文(繁體)',
     );
 
-    $default = (!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'en-gb');
+    $default = (!empty($_SESSION['lang']) ? $_SESSION['lang'] : TEXTPATTERN_DEFAULT_LANG);
 
     $out = n.'<div class="txp-form-field">'.
         n.'<div class="txp-form-field-label">'.
@@ -884,14 +884,14 @@ function langs()
 
 function setup_load_lang($lang)
 {
-    global $en_gb_strings;
+    global $en_gb_strings, $language;
 
     require_once txpath.'/setup/setup-langs.php';
-    $en_gb_strings = $langs['en-gb'];
-    $lang = (isset($langs[$lang]) && !empty($langs[$lang])) ? $lang : 'en-gb';
-    define('LANG', $lang);
+    $en_gb_strings = $langs[TEXTPATTERN_DEFAULT_LANG];
+    $language = empty($langs[$lang]) ? TEXTPATTERN_DEFAULT_LANG : $lang;
+    define('LANG', $language);
 
-    return $langs[LANG];
+    return $langs[$language];
 }
 
 // -------------------------------------------------------------

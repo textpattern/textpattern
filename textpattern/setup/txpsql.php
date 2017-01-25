@@ -73,6 +73,8 @@ foreach (get_files_content($structuredir, 'json') as $key=>$data) {
     }
 }
 
+setup_txp_lang();
+
 // Create core prefs
 foreach (get_prefs_default() as $name => $p) {
     if (empty($p['private'])) {
@@ -83,8 +85,6 @@ $prefs = get_prefs();
 $txp_user = $_SESSION['name'];
 
 create_user($txp_user, $_SESSION['email'], $_SESSION['pass'], $_SESSION['realname'], 1);
-
-setup_txp_lang(LANG);
 
 // Theme setup
 
@@ -230,36 +230,17 @@ function article_import($dir)
     }
 }
 
-function setup_txp_lang($lang)
+function setup_txp_lang()
 {
-    global $blog_uid;
+    global $blog_uid, $language;
     require_once txpath.'/lib/IXRClass.php';
     $client = new IXR_Client('http://rpc.textpattern.com');
 
-    if (!$client->query('tups.getLanguage', $blog_uid, $lang)) {
+    if (!$client->query('tups.getLanguage', $blog_uid, $language)) {
         // If cannot install from lang file, setup the English lang.
-        if (!install_language_from_file($lang)) {
-            $lang = 'en-gb';
-            include_once txpath.'/setup/en-gb.php';
-
-            if (!@$lastmod) {
-                $lastmod = '1970-01-01 00:00:00';
-            }
-
-            foreach ($en_gb_lang as $evt_name => $evt_strings) {
-                foreach ($evt_strings as $lang_key => $lang_val) {
-                    $lang_val = doSlash($lang_val);
-
-                    if (@$lang_val) {
-                        safe_insert('txp_lang', "
-                            lang    = 'en-gb',
-                            name    = '".$lang_key."',
-                            event   = '".$evt_name."',
-                            data    = '".$lang_val."',
-                            lastmod = '".$lastmod."'");
-                    }
-                }
-            }
+        if (!install_language_from_file($language)) {
+            $language = TEXTPATTERN_DEFAULT_LANG;
+            install_language_from_file($language);
         }
     } else {
         $response = $client->getResponse();
@@ -269,7 +250,7 @@ function setup_txp_lang($lang)
             $item = doSlash($item);
 
             safe_insert('txp_lang', "
-                lang    = '{$lang}',
+                lang    = '{$language}',
                 name    = '{$item['name']}',
                 event   = '{$item['event']}',
                 data    = '{$item['data']}',

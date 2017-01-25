@@ -6767,18 +6767,17 @@ function get_files_content($dir, $ext)
 
 function get_prefs_default()
 {
-    global $permlink_mode, $siteurl, $blog_uid, $theme_name, $pref;
+    global $permlink_mode, $siteurl, $blog_uid, $theme_name, $pref, $language;
 
     $out = @json_decode(file_get_contents(txpath.'/update/structure/core.prefs'), true);
     if (empty($out)) {
         return array();
     }
 
-    $language = LANG;
     if (empty($language)) {
         $language = safe_field('lang', 'txp_lang', '1=1 GROUP BY lang ORDER BY COUNT(*) DESC');
         if (empty($language)) {
-            $language = 'en-gb';
+            $language = TEXTPATTERN_DEFAULT_LANG;
         }
     }
 
