@@ -122,7 +122,7 @@ function pagetop($pagetitle, $message = '')
 .not-ready form.async input[type="submit"],
 .not-ready a.async
 {
-    visibility: hidden;
+    opacity: 0;
 }
 </style>
 <?php
