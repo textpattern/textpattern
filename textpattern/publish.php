@@ -636,13 +636,26 @@ function output_file_download($filename)
         $fullpath = build_file_path($file_base_path, $filename);
 
         if (is_file($fullpath)) {
+            $headers = array();
+
+            foreach (headers_list() as $header) {
+                $headers[] = strtolower(strtok($header, ':'));
+            }
+
             // Discard any error PHP messages.
             ob_clean();
             $filesize = filesize($fullpath);
             $sent = 0;
             header('Content-Description: File Download');
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename="'.$filename.'"; size = "'.$filesize.'"');
+            header("Content-Length: $filesize");
+
+            if (!in_array('content-type', $headers)) {
+                header('Content-Type: application/octet-stream');
+            }
+
+            if (!in_array('content-disposition', $headers)) {
+                header('Content-Disposition: attachment; filename="'.$filename.'"');
+            }
 
             // Fix for IE6 PDF bug on servers configured to send cache headers.
             header('Cache-Control: private');
@@ -877,6 +890,9 @@ function doArticles($atts, $iscustom, $thing = null)
     if (!isset($time) || $time === 'any') {
         $time = ($month ? " AND Posted LIKE '".doSlash($month)."%'" : '').
         ($time ? '' : " AND Posted <= ".now('posted'));
+    } elseif (strpos($time, '%') !== false) {
+        $month = $month ? strtotime($month) : time();
+        $time = " AND Posted LIKE '".doSlash(strftime($time, $month))."%'";
     } else {
         $start = $month ? strtotime($month) : false;
 
@@ -895,7 +911,7 @@ function doArticles($atts, $iscustom, $thing = null)
                 $time = " AND Posted <= $from";
                 break;
             default:
-                $stop = strtotime($time, $start) or time();
+                $stop = strtotime($time, $start) or $stop = time();
 
                 if ($start > $stop) {
                     list($start, $stop) = array($stop, $start);

@@ -830,7 +830,7 @@ class TXP_Wrapper
 
         if ($r) {
             // Update the last access time.
-            $safe_user = addslashes($user);
+            $safe_user = doSlash($user);
             safe_update('txp_users', "last_access = NOW()", "name = '$safe_user'");
 
             return true;

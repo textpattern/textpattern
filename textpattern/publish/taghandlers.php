@@ -195,7 +195,7 @@ Txp::get('\Textpattern\Tag\Registry')
 
 function page_title($atts)
 {
-    global $parentid, $thisarticle, $id, $q, $c, $author, $context, $s, $pg, $sitename;
+    global $parentid, $thisarticle, $q, $c, $author, $context, $s, $pg, $sitename;
 
     extract(lAtts(array(
         'separator' => ' | ',
@@ -1942,6 +1942,35 @@ function posted($atts)
 
 // -------------------------------------------------------------
 
+function modified($atts)
+{
+    global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
+
+    assert_article();
+
+    extract(lAtts(array(
+        'class'   => '',
+        'format'  => '',
+        'gmt'     => '',
+        'lang'    => '',
+        'wraptag' => '',
+    ), $atts));
+
+    if ($format) {
+        $out = safe_strftime($format, $thisarticle['modified'], $gmt, $lang);
+    } else {
+        if ($id or $c or $pg) {
+            $out = safe_strftime($archive_dateformat, $thisarticle['modified'], $gmt, $lang);
+        } else {
+            $out = safe_strftime($dateformat, $thisarticle['modified'], $gmt, $lang);
+        }
+    }
+
+    return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
+}
+
+// -------------------------------------------------------------
+
 function expires($atts)
 {
     global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
@@ -1995,35 +2024,6 @@ function if_expired($atts, $thing = null)
 
     $x = !empty($thisarticle['expires']) && ($thisarticle['expires'] <= time());
     return isset($thing) ? parse($thing, $x) : $x;
-}
-
-// -------------------------------------------------------------
-
-function modified($atts)
-{
-    global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
-
-    assert_article();
-
-    extract(lAtts(array(
-        'class'   => '',
-        'format'  => '',
-        'gmt'     => '',
-        'lang'    => '',
-        'wraptag' => '',
-    ), $atts));
-
-    if ($format) {
-        $out = safe_strftime($format, $thisarticle['modified'], $gmt, $lang);
-    } else {
-        if ($id or $c or $pg) {
-            $out = safe_strftime($archive_dateformat, $thisarticle['modified'], $gmt, $lang);
-        } else {
-            $out = safe_strftime($dateformat, $thisarticle['modified'], $gmt, $lang);
-        }
-    }
-
-    return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 }
 
 // -------------------------------------------------------------
@@ -2862,56 +2862,26 @@ function excerpt()
 
 function category1($atts, $thing = null)
 {
-    global $thisarticle, $s, $permlink_mode;
-
-    assert_article();
-
-    extract(lAtts(array(
-        'class'        => '',
-        'link'         => 0,
-        'title'        => 0,
-        'section'      => '',
-        'this_section' => 0,
-        'wraptag'      => '',
-    ), $atts));
-
-    if ($thisarticle['category1']) {
-        $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
-        $category = $thisarticle['category1'];
-
-        $label = txpspecialchars(($title) ? fetch_category_title($category) : $category);
-
-        if ($thing) {
-            $out = href(
-                parse($thing),
-                pagelinkurl(array('s' => $section, 'c' => $category)),
-                (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-                ($title ? ' title="'.$label.'"' : '').
-                ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
-            );
-        } elseif ($link) {
-            $out = href(
-                $label,
-                pagelinkurl(array('s' => $section, 'c' => $category)),
-                ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
-            );
-        } else {
-            $out = $label;
-        }
-
-        return doTag($out, $wraptag, $class);
-    }
+    return article_category(array('number' => 1) + $atts, $thing);
 }
 
 // -------------------------------------------------------------
 
 function category2($atts, $thing = null)
 {
+    return article_category(array('number' => 2) + $atts, $thing);
+}
+
+// -------------------------------------------------------------
+
+function article_category($atts, $thing = null)
+{
     global $thisarticle, $s, $permlink_mode;
 
     assert_article();
 
     extract(lAtts(array(
+        'number'       => 1,
         'class'        => '',
         'link'         => 0,
         'title'        => 0,
@@ -2920,9 +2890,11 @@ function category2($atts, $thing = null)
         'wraptag'      => '',
     ), $atts));
 
-    if ($thisarticle['category2']) {
+    $cat = 'category'.intval($number);
+
+    if ($thisarticle[$cat]) {
         $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
-        $category = $thisarticle['category2'];
+        $category = $thisarticle[$cat];
 
         $label = txpspecialchars(($title) ? fetch_category_title($category) : $category);
 
@@ -3068,15 +3040,23 @@ function section($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function keywords()
+function keywords($atts)
 {
     global $thisarticle;
 
     assert_article();
 
-    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+    extract(lAtts(array(
+        'class'   => '',
+        'break'     => ',',
+        'wraptag' => ''
+    ), $atts));
 
-    return txpspecialchars($thisarticle['keywords']);
+    $out = do_list_unique(txpspecialchars($thisarticle['keywords']));
+
+//    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+
+    return doWrap($out, $wraptag, $break, $class);
 }
 
 // -------------------------------------------------------------
@@ -3294,7 +3274,7 @@ function search_result_count($atts)
 
 function image_index($atts)
 {
-    global $s, $c, $p, $path_to_site;
+    global $s, $c;
 
     extract(lAtts(array(
         'label'    => '',
@@ -3355,7 +3335,7 @@ function image_display($atts)
         extract($atts);
     }
 
-    global $s, $c, $p;
+    global $p;
 
     if ($p) {
         $rs = safe_row("*", 'txp_image', "id=".intval($p)." LIMIT 1");
@@ -3373,7 +3353,7 @@ function image_display($atts)
 
 function images($atts, $thing = null)
 {
-    global $s, $c, $context, $p, $path_to_site, $thisimage, $thisarticle, $thispage, $pretext;
+    global $s, $c, $context, $thisimage, $thisarticle, $thispage, $pretext;
 
     extract(lAtts(array(
         'name'        => '',
@@ -3850,8 +3830,6 @@ function meta_keywords($atts)
 
 function meta_description($atts)
 {
-    global $thisarticle, $thiscategory, $thissection, $s, $c, $context;
-
     extract(lAtts(array(
         'escape' => 'html',
         'format' => 'meta', // or empty for raw value
@@ -3884,8 +3862,6 @@ function meta_description($atts)
 
 function if_description($atts, $thing = null)
 {
-    global $thisarticle, $thiscategory, $thissection, $s, $c, $context;
-
     extract(lAtts(array(
         'type' => null,
     ), $atts));

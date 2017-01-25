@@ -126,7 +126,13 @@ function end_page()
 
 function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', $crit = '', $method = '', $class = '', $step = 'list')
 {
-    return column_multi_head(array(array(
+    if (is_array($value)) {
+        extract($value);
+    }
+
+    $options = (isset($options) ? (array) $options : array()) + array('class' => $class, 'data-col' => $sort);
+
+    $head_items = array(
         'value'   => $value,
         'sort'    => $sort,
         'event'   => $event,
@@ -135,7 +141,9 @@ function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', 
         'dir'     => $dir,
         'crit'    => $crit,
         'method'  => $method,
-    )), $class);
+    );
+
+    return column_multi_head(array($head_items), $options);
 }
 
 /**
@@ -184,9 +192,10 @@ function column_multi_head($head_items, $class = '')
         }
     }
 
-    return hCell($o, '', array(
-        'class' => $class,
-        'scope' => 'col',
+    $extra_atts = is_array($class) ? $class : array('class' => $class);
+
+    return hCell($o, '', $extra_atts + array(
+        'scope' => 'col'
     ));
 }
 
@@ -740,6 +749,8 @@ function td($content = '', $width = null, $class = '', $id = '')
 
     if (is_numeric($width)) {
         $opts['width'] = (int) $width;
+    } elseif (is_array($width)) {
+        $opts = array_merge($opts, $width);
     }
 
     return tda($content, $opts);
@@ -1624,6 +1635,7 @@ function script_js($js, $flags = '', $route = array())
 
 /**
  * Renders a "Details" toggle checkbox.
+ * TODO: remove this and related js functions in favour of txp_columniser
  *
  * @param  string $classname Unique identfier. The cookie's name will be derived from this value
  * @param  bool   $form      Create as a stand-along &lt;form&gt; element
@@ -1632,6 +1644,8 @@ function script_js($js, $flags = '', $route = array())
 
 function toggle_box($classname, $form = false)
 {
+    return '';
+
     $name = 'cb_toggle_'.$classname;
     $id = escape_js($name);
     $class = escape_js($classname);
