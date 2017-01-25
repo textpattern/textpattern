@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -119,6 +119,7 @@ function pagetop($pagetitle, $message = '')
     // Mandatory un-themable Textpattern core styles ?>
 <style>
 .not-ready .doc-ready,
+.not-ready table.txp-list,
 .not-ready form.async input[type="submit"],
 .not-ready a.async
 {

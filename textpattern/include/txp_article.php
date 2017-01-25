@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -2057,10 +2057,7 @@ function article_partial_comments($rs)
         }
 
         if ($comments_expired) {
-            $invite = graf(gTxt('expired'), array(
-                'class' => 'comment-annotate',
-                'id'    => 'write-comments',
-            ));
+            $invite = graf(gTxt('expired'), array('class' => 'comment-annotate-expired'));
         } else {
             $invite = n.tag(
                     onoffRadio('Annotate', $Annotate),
