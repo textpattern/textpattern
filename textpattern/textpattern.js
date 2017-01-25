@@ -553,7 +553,36 @@ function getElementsByClass(classname, node)
 }
 
 /**
- * Toggles panel's visibility and saves the state to the server.
+ * Toggles column's visibility and saves the state.
+ *
+ * @param  {string}  sel The column selector object
+ * @return {boolean} Returns FALSE
+ * @since  4.7.0
+ */
+
+function toggleColumn(sel, $sel, vis)
+{
+//    $sel = $(sel);
+    if ($sel.length) {
+        if (!!vis) {
+            $sel.show();
+        } else {
+            $sel.hide();
+        }
+
+        // Send state of toggle pane to localStorage.
+        var data = new Object;
+
+        data[textpattern.event] = {'columns':{}};
+        data[textpattern.event]['columns'][sel] = !!vis ? null : false;
+        textpattern.storage.update(data);
+    }
+
+    return false;
+}
+
+/**
+ * Toggles panel's visibility and saves the state.
  *
  * @param  {string}  id The element ID
  * @return {boolean} Returns FALSE
@@ -570,7 +599,9 @@ function toggleDisplay(id)
         var pane = $(this).data('txp-pane') || obj.attr('id');
         var data = new Object;
 
-        data[pane] = obj.is(':visible');
+        data[textpattern.event] = {'panes':{}};
+        data[textpattern.event]['panes'][pane] = obj.is(':visible') ? true : null;
+//        data[pane] = obj.is(':visible');
         textpattern.storage.update(data);
     }
 
@@ -761,9 +792,20 @@ textpattern.storage =
         }
 
         if (data) {
-            $.extend(textpattern.storage.data, data);
-            window.localStorage.setItem("textpattern", JSON.stringify(textpattern.storage.data));
+            $.extend(true, textpattern.storage.data, data);
+            window.localStorage.setItem("textpattern", JSON.stringify(textpattern.storage.clean(textpattern.storage.data)));
         }
+    },
+
+    clean : function (obj) {
+        Object.keys(obj).forEach(function(key) {
+            if (obj[key] && typeof obj[key] === 'object') {
+                textpattern.storage.clean(obj[key]);
+            } else if (obj[key] === null) {
+                delete obj[key];
+            }
+        });
+        return obj;
     }
 };
 
@@ -1556,6 +1598,110 @@ function txp_search()
 }
 
 /**
+ * Column manipulation tool.
+ *
+ * @since 4.7.0
+ */
+
+function txp_columniser()
+{
+    var $tables = $('table.txp-list');
+
+    if (!$tables.length) {
+        return;
+    }
+
+    $tables.each(function(tabind) {
+        var $table = $(this),
+            $headers = $table.find('thead tr>th');
+
+        var $menu = $('<ul class="txp-dropdown" role="menu" />');
+        $menu.html($('<li><div role="menuitem"><input class="checkbox active" id="opt-col-all'+tabind+'" name="select_all" checked="checked" type="checkbox"><label for="opt-col-all'+tabind+'">'+textpattern.gTxt('toggle_all_selected')+'</label></div></li>'));
+
+        $headers.each(function(index) {
+            var $this = $(this), $title = $this.text().trim(), $id = $this.data('col');
+
+            if (!$title) {
+                return;
+            }
+
+            if ($id == undefined) {
+                if ($id = this.className.match(/\btxp-list-col-([\w\-]+)\b/)) {
+                    $id = $id[1];
+                } else {
+                    return;
+                }
+            }
+
+            var disabled = $this.hasClass('asc') || $this.hasClass('desc') ? ' disabled="disabled"' : '';
+            $menu.append($('<li><div role="menuitem"><input class="checkbox active" id="opt-col-'+index+'-'+tabind+'" name="list_options[]" checked="checked" value="'+$id+'" data-index="'+index+'" type="checkbox"'+disabled+'><label for="opt-col-'+index+'-'+tabind+'">'+$title+'</label></div></li>'));
+        });
+
+        var $ui = $('<form class="txp-list-options"><a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span>list_options</a></form>');
+
+        $ui.append($menu);
+
+        $ui.find('.txp-list-options-button').on('click', function(e)
+        {
+            var dir = (langdir == 'rtl' ? 'left' : 'right');
+            var menu = $ui.find('.txp-dropdown').toggle().position(
+            {
+                my: dir+" top",
+                at: dir+" bottom",
+                of: this
+            });
+
+            $(document).one('click blur', function()
+            {
+                menu.hide();
+            });
+
+            return false;
+        });
+
+        $ui.find('.txp-dropdown').hide().menu().click(function(e) {
+            e.stopPropagation();
+        });
+
+        var selectAll = true, stored = true;
+
+        $ui.find('input[name="list_options[]"][type=checkbox]').each(function() {
+            var me = $(this);
+            var target = me.val();
+            var n = me.data('index')+1;
+            var $target = $table.find('tr>*:nth-child('+n+')');
+
+            if (stored) {
+                try {
+                    if (textpattern.storage.data[textpattern.event]['columns'][target] == false) {
+                        selectAll = false;
+                        $target.hide();
+                        me.prop('checked', false)
+                    }
+                } catch(e) {
+                    stored = false;
+                }
+            }
+
+            me.on('change', function(ev) {
+                toggleColumn(target, $target, me.prop('checked'));
+            });
+        });
+
+        $ui.find('input[name="select_all"][type=checkbox]').prop('checked', selectAll);
+
+        $ui.txpMultiEditForm({
+            'checkbox'    : 'input:not(:disabled)[name="list_options[]"][type=checkbox]',
+            'row'         : '.txp-dropdown li',
+            'highlighted' : '.txp-dropdown li',
+            'confirmation': false
+        });
+
+        $(this).closest('form').before($ui);
+    });
+}
+
+/**
  * Set expanded/collapsed nature of all twisty boxes in a panel.
  *
  * The direction can either be 'expand' or 'collapse', passed
@@ -1605,20 +1751,19 @@ jQuery.fn.restorePanes = function ()
             var $region = $this.find(region);
             region = region.substr(1);
 
-            var pane = $elm.data("txp-pane");
+            var pane = $elm.data("txp-pane"), stored = true;
 
             if (pane === undefined) {
                 pane = region;
             }
 
-            if (textpattern.storage.data[pane] !== undefined) {
-                if (textpattern.storage.data[pane]) {
+            if (stored) try {
+                if (textpattern.storage.data[textpattern.event]['panes'][pane] == true) {
                     $elm.parent(".txp-summary").addClass("expanded");
                     $region.show();
-                } /*else {
-                    $elm.parent(".txp-summary").removeClass("expanded");
-                    $region.hide();
-                }*/
+                }
+            } catch(e) {
+                stored = false;
             }
 
             var vis = $region.is(':visible').toString();
@@ -1849,6 +1994,8 @@ textpattern.Route.add('image', function ()
 
 textpattern.Route.add('', function ()
 {
+    txp_columniser();
+
     // Pane states
     var prefsGroup = $('form:has(.switcher-list li a[data-txp-pane])');
 
@@ -1865,16 +2012,17 @@ textpattern.Route.add('', function ()
         var me = $(this).children('a[data-txp-pane]');
         var data = new Object;
 
-        data[textpattern.event] = me.data('txp-pane');
+        data[textpattern.event] = {'tab':me.data('txp-pane')};
+//        data[textpattern.event] = me.data('txp-pane');
         textpattern.storage.update(data);
     });
 
     if ($section.length) {
         selectedTab = $section.index();
         $switchers.eq(selectedTab).click();
-    } else if (textpattern.storage.data[textpattern.event] !== undefined) {
+    } else if (textpattern.storage.data[textpattern.event] !== undefined && textpattern.storage.data[textpattern.event]['tab'] !== undefined) {
         $switchers.each(function (i, elm) {
-            if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]) {
+            if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]['tab']) {
                 selectedTab = i;
             }
         });
@@ -2021,5 +2169,5 @@ $(document).ready(function ()
     textpattern.Route.init();
 
     // Arm UI.
-    $('body').removeClass('not-ready');
+    $('.not-ready').removeClass('not-ready');
 });

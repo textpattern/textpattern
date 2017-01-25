@@ -19,7 +19,7 @@
         <time datetime="<txp:posted format="iso8601" />" itemprop="datePublished">
             <txp:posted />
         </time>
-        <meta itemprop="dateModified" content="<txp:posted format="iso8601" />" />
+        <meta itemprop="dateModified" content="<txp:modified format="iso8601" />" />
 
         <!-- only display comments count if comments posted, or if new comments allowed -->
         <txp:if_comments>
