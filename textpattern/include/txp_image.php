@@ -405,7 +405,12 @@ function image_list($message = '')
                     $can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;', '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    ($can_edit ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id), '', array(
+                    ($can_edit ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id).
+                    span(
+                        sp.span('&#124;', array('role' => 'separator')).
+                        sp.href(gTxt('view'), imagesrcurl($id, $ext), array('target' => '_blank')),
+                        array('class' => 'txp-option-link images_detail')
+                    ), '', array(
                         'class' => 'txp-list-col-id',
                         'scope' => 'row',
                     )
