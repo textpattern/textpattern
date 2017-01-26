@@ -247,11 +247,12 @@ class Lang
                 }
 
                 $where = "lang = '".doSlash($lang)."' AND name = '".doSlash($name)."'";
+                $lastmod = empty($lastmod) ? '2006-05-04' : date('YmdHis', $lastmod);
 
                 if (safe_count('txp_lang', $where)) {
                     $r = safe_update(
                         'txp_lang',
-                        "lastmod = '".date('YmdHis', $lastmod)."',
+                        "lastmod = '{$lastmod}',
                         data = '".doSlash($data)."',
                         event = '".doSlash($event)."',
                         owner = '".doSlash($owner)."'",
@@ -260,7 +261,7 @@ class Lang
                 } else {
                     $r = safe_insert(
                         'txp_lang',
-                        "lastmod = '".date('YmdHis', $lastmod)."',
+                        "lastmod = '{$lastmod}',
                         data = '".doSlash($data)."',
                         event = '".doSlash($event)."',
                         owner = '".doSlash($owner)."',
