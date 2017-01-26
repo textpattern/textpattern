@@ -205,6 +205,7 @@ internal_error => Lỗi nội bộ
 last_modified => Lần sửa cuối
 links => Liên kết
 link_category => Thể loại
+list_options =>
 logged_in_as => Đăng nhập dưới tên
 login => Đăng nhập
 login_to_textpattern => Đăng nhập vào Textpattern

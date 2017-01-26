@@ -205,6 +205,7 @@ internal_error => Внутрішня помилка
 last_modified => Остання зміна
 links => Посилання
 link_category => Категорія посилання
+list_options =>
 logged_in_as => Ви увійшли як
 login => Логін
 login_to_textpattern => Увійти в Textpattern

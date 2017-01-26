@@ -205,6 +205,7 @@ internal_error =>
 last_modified =>
 links => ลิงก์
 link_category => หมวดหมู่ลิงก์
+list_options =>
 logged_in_as => ล็อกอินในชื่อ
 login => ล็อกอิน
 login_to_textpattern => เข้าสู่ Textpattern

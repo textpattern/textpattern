@@ -205,6 +205,7 @@ internal_error => خطای داخلی
 last_modified => آخرین ویرایش
 links => لینک‌ها
 link_category => رده
+list_options =>
 logged_in_as => ورود به عنوان
 login => ورود
 login_to_textpattern => ورود به Textpattern

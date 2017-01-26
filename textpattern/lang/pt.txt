@@ -205,6 +205,7 @@ internal_error => Erro interno
 last_modified => Última modificação
 links => Ligações
 link_category => Categoria
+list_options =>
 logged_in_as => Registado como
 login => Nome de registo
 login_to_textpattern => Entrar no Textpattern

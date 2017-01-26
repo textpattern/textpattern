@@ -205,6 +205,7 @@ internal_error => Erreur interne
 last_modified => Dernière modification
 links => Liens
 link_category => Catégorie du lien
+list_options =>
 logged_in_as => Connecté en tant que
 login => Identifiant
 login_to_textpattern => Connexion à Textpattern CMS
@@ -344,7 +345,7 @@ mysql_table_errors => Les erreurs suivantes ont été détectées dans vos table
 no_temp_dir => Aucun répertoire temp défini
 old_placeholder => Un vieux fichier d’émulation de section existe et gène le bon fonctionnement
 os_version => Système d’exploitation du serveur
-path_to_site_inacc => <code>path_to_site</code> est inaccessible.
+path_to_site_inacc => <code>path_to_site</code> ne correspond pas.
 php_extensions => Extensions PHP
 php_sapi_mode => API PHP du serveur
 php_version => Version de PHP
@@ -466,7 +467,7 @@ upload_image => Envoyer une image
 upload_thumbnail => Envoyer une miniature
 #@lang
 active_language => Langue par défaut active :
-active_language_ui =>
+active_language_ui => Langue individuelle active :
 #@link
 add_new_link => Ajout d’un lien
 edit_link => Édition du lien

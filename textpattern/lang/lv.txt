@@ -205,6 +205,7 @@ internal_error => Iekšēja kļūda
 last_modified => Pēdējoreiz mainīts
 links => Saites
 link_category => Saišu kategorija
+list_options =>
 logged_in_as => Ierakstījies kā
 login => Pieslēgties
 login_to_textpattern => Ierakstīties Textpattern

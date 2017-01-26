@@ -205,6 +205,7 @@ internal_error => Interne fout
 last_modified => Voor het laatst gewijzigd
 links => Links
 link_category => Linkcategorie
+list_options =>
 logged_in_as => Ingelogd als
 login => Login
 login_to_textpattern => Inloggen in Textpattern

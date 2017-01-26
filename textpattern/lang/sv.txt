@@ -205,6 +205,7 @@ internal_error => Internt fel
 last_modified => Senast ändrad
 links => Länkar
 link_category => Länk-kategori
+list_options =>
 logged_in_as => Inloggad som
 login => Logga in
 login_to_textpattern => Logga in i Textpattern

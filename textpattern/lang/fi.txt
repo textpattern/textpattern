@@ -205,6 +205,7 @@ internal_error => Sisäinen virhe
 last_modified => Viimeksi muutettu
 links => Linkit
 link_category => Linkkikategoria
+list_options =>
 logged_in_as => Kirjautuneena nimellä
 login => Kirjaudu
 login_to_textpattern => Kirjaudu Textpatterniin

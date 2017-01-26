@@ -205,6 +205,7 @@ internal_error => Interná chyba
 last_modified => Naposledy upravené
 links => Odkazy
 link_category => Kategória odkazu
+list_options =>
 logged_in_as => Prihlásený(á) ako
 login => Prihlásenie
 login_to_textpattern => Prihlásiť sa do Textpatternu

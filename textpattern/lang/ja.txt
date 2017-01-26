@@ -205,6 +205,7 @@ internal_error => 内部エラー
 last_modified => 最終更新日
 links => リンク
 link_category => カテゴリ
+list_options =>
 logged_in_as => ユーザ
 login => ログイン
 login_to_textpattern => Textpatternにログインする

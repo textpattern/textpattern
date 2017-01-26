@@ -205,6 +205,7 @@ internal_error => Eroare interna
 last_modified => Ultima modificare
 links => Link-uri
 link_category => Categoria
+list_options =>
 logged_in_as => Autentificat ca
 login => Autentificare
 login_to_textpattern => Autentificare Textpattern

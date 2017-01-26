@@ -205,6 +205,7 @@ internal_error =>
 last_modified =>
 links => Enllaços
 link_category => Categoria
+list_options =>
 logged_in_as => Registrat com
 login => Login
 login_to_textpattern => Entra a Textpattern

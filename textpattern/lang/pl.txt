@@ -205,6 +205,7 @@ internal_error => Błąd wewnętrzny
 last_modified => Ostatnio zmieniono
 links => Odsyłacze
 link_category => Kategoria odsyłaczy
+list_options =>
 logged_in_as => Zalogowany(a) jako
 login => Login
 login_to_textpattern => Logowanie do Textpattern

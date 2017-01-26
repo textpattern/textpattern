@@ -205,6 +205,7 @@ internal_error => Εσωτερικό σφάλμα
 last_modified => Τελευταία τροποποίηση
 links => Συνδέσεις
 link_category => Κατηγορία συνδέσεων
+list_options =>
 logged_in_as => Πρόσβαση με όνομα χρήστη
 login => Όνομα χρήστη
 login_to_textpattern => Πρόσβαση στη διαχείριση του Textpattern

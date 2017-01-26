@@ -205,6 +205,7 @@ internal_error => Error interno
 last_modified => Última modificación
 links => Enlaces
 link_category => Categoría
+list_options =>
 logged_in_as => Has entrado como
 login => Acceso
 login_to_textpattern => Entrar a Textpattern

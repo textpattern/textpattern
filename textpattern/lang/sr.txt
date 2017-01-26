@@ -205,6 +205,7 @@ internal_error => Interna greška
 last_modified => Poslednja izmena
 links => Linkovi
 link_category => Kategorija
+list_options =>
 logged_in_as => Prijavljen kao
 login => Prijava
 login_to_textpattern => Prijava u Textpattern

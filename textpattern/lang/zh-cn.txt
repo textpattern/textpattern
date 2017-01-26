@@ -205,6 +205,7 @@ internal_error => 内部错误
 last_modified => 最后的修改
 links => 链接
 link_category => 链接分类
+list_options =>
 logged_in_as => 登录用户
 login => 登录
 login_to_textpattern => 登录 Textpattern
