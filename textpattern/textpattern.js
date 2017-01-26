@@ -1611,11 +1611,9 @@ function txp_columniser()
     }
 
     $tables.each(function(tabind) {
-        var $table = $(this),
-            $headers = $table.find('thead tr>th');
-
-        var $menu = $('<ul class="txp-dropdown" role="menu" />');
-        $menu.html($('<li><div role="menuitem"><input class="checkbox active" id="opt-col-all'+tabind+'" name="select_all" checked="checked" type="checkbox"><label for="opt-col-all'+tabind+'">'+textpattern.gTxt('toggle_all_selected')+'</label></div></li>'));
+        var $table = $(this), items = 0,
+            $headers = $table.find('thead tr>th'),
+            $menu = $('<ul class="txp-dropdown" role="menu" />');
 
         $headers.each(function(index) {
             var $this = $(this), $title = $this.text().trim(), $id = $this.data('col');
@@ -1634,7 +1632,14 @@ function txp_columniser()
 
             var disabled = $this.hasClass('asc') || $this.hasClass('desc') ? ' disabled="disabled"' : '';
             $menu.append($('<li><div role="menuitem"><input class="checkbox active" id="opt-col-'+index+'-'+tabind+'" name="list_options[]" checked="checked" value="'+$id+'" data-index="'+index+'" type="checkbox"'+disabled+'><label for="opt-col-'+index+'-'+tabind+'">'+$title+'</label></div></li>'));
+            items++;
         });
+
+        if (!items) {
+            return;
+        }
+
+        $menu.prepend($('<li><div role="menuitem"><input class="checkbox active" id="opt-col-all'+tabind+'" name="select_all" checked="checked" type="checkbox"><label for="opt-col-all'+tabind+'">'+textpattern.gTxt('toggle_all_selected')+'</label></div></li>'));
 
         var $ui = $('<form class="txp-list-options"><a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> '+textpattern.gTxt('list_options')+'</a></form>');
 
@@ -1738,7 +1743,7 @@ function txp_expand_collapse_all(ev) {
  */
 jQuery.fn.restorePanes = function ()
 {
-    var $this = $(this);
+    var $this = $(this), stored = true;
     // Initialize dynamic WAI-ARIA attributes.
     $this.find('.txp-summary a').each(function (i, elm)
     {
@@ -1750,7 +1755,7 @@ jQuery.fn.restorePanes = function ()
             var $region = $this.find(region);
             region = region.substr(1);
 
-            var pane = $elm.data("txp-pane"), stored = true;
+            var pane = $elm.data("txp-pane");
 
             if (pane === undefined) {
                 pane = region;
