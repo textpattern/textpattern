@@ -677,8 +677,6 @@ function createTxp()
     }
 
     define('TXP_INSTALL', 1);
-
-    include_once txpath.'/lib/txplib_update.php';
     include txpath.'/setup/txpsql.php';
 
     echo fbCreate();
