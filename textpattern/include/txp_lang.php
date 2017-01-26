@@ -32,6 +32,8 @@ if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
+include_once txpath.'/lib/txplib_update.php';
+
 if ($event == 'lang') {
     require_privs('lang');
 

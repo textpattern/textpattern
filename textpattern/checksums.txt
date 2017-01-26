@@ -40,6 +40,7 @@
 /lib/txplib_misc.php: 44e673f4994eee5a65552e496ae1c578
 /lib/txplib_publish.php: b5707fa079d073cb8f2ba138c09c0d70
 /lib/txplib_theme.php: 6de524114ee36d72ce424a77b92051ed
+/lib/txplib_update.php: 477518d6ecc2ab603ffa9439df4b3720
 /lib/txplib_validator.php: 7bf016bf3449424b84c15dfe3544e329
 /lib/txplib_wrapper.php: be2a8ee0e5a16a67cfb366802d5d0176
 /publish.php: 805fd06782ecd44b3ed42fabc54a954c

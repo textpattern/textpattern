@@ -238,10 +238,10 @@ function setup_txp_lang()
     $client = new IXR_Client('http://rpc.textpattern.com');
 
     if (!$client->query('tups.getLanguage', $blog_uid, $language)) {
-        if (!install_language_from_file($language)) {
+        if (!Txp::get('\Textpattern\L10n\Lang')->install_file($language)) {
             // If cannot install from lang file, setup the Default lang. `language` pref changed too.
             $language = TEXTPATTERN_DEFAULT_LANG;
-            install_language_from_file($language);
+            Txp::get('\Textpattern\L10n\Lang')->install_file($language);
         }
     } else {
         $response = $client->getResponse();
