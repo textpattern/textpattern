@@ -28,7 +28,7 @@ if (!defined('TXP_INSTALL')) {
 @ignore_user_abort(1);
 @set_time_limit(0);
 
-global $DB, $prefs, $txp_user;
+global $DB, $prefs, $txp_user, $txp_groups;
 global $permlink_mode, $siteurl, $blog_uid, $theme_name;
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/admin_config.php';
