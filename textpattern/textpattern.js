@@ -1637,7 +1637,7 @@ function txp_columniser()
             $menu.append($('<li><div role="menuitem"><input class="checkbox active" id="opt-col-'+index+'-'+tabind+'" name="list_options[]" checked="checked" value="'+$id+'" data-index="'+index+'" type="checkbox"'+disabled+'><label for="opt-col-'+index+'-'+tabind+'">'+$title+'</label></div></li>'));
         });
 
-        var $ui = $('<form class="txp-list-options"><a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> list_options</a></form>');
+        var $ui = $('<form class="txp-list-options"><a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> '+textpattern.gTxt('list_options')+'</a></form>');
 
         $ui.append($menu);
 
