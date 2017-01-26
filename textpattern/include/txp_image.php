@@ -697,9 +697,7 @@ function image_edit($message = '', $id = '')
                         'image-details',
                         inputLabel(
                             'id',
-                            $id.
-                            sp.span('&#124;', array('role' => 'separator')).
-                            sp.href(gTxt('view'), imagesrcurl($id, $ext), array('target' => '_blank')),
+                            $id,
                             'id', '', array('class' => 'txp-form-field edit-image-id')
                         ).
                         inputLabel(
