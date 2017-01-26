@@ -1905,7 +1905,7 @@ textpattern.Route.add('page, form, file, image', function ()
         $('#txp-tagbuilder-output').select();
     });
 
-    $('#tagbuild_links, .files_detail, .images_detail').on('click', '.txp-tagbuilder-link', function(ev) {
+    $('#tagbuild_links, .txp-list-col-tag-build').on('click', '.txp-tagbuilder-link', function(ev) {
         txpAsyncLink(ev);
     });
 
