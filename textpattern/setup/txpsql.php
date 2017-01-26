@@ -28,12 +28,13 @@ if (!defined('TXP_INSTALL')) {
 @ignore_user_abort(1);
 @set_time_limit(0);
 
-global $DB, $txp_groups, $prefs, $txp_user;
+global $DB, $prefs, $txp_user;
 global $permlink_mode, $siteurl, $blog_uid, $theme_name;
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/admin_config.php';
 
 // Variable set
+$blog_uid = md5(uniqid(rand(), true));
 $siteurl = str_replace("http://", '', $_SESSION['siteurl']);
 $siteurl = str_replace(' ', '%20', rtrim($siteurl, "/"));
 $theme_name = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
