@@ -289,9 +289,7 @@ function image_list($message = '')
     if ($rs && numRows($rs)) {
         $show_authors = !has_single_author('txp_image');
 
-        echo n.tag(
-                toggle_box('images_detail'), 'div', array('class' => 'txp-list-options')).
-            n.tag_start('form', array(
+        echo n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'images_form',
                 'name'   => 'longform',
@@ -316,14 +314,14 @@ function image_list($message = '')
                 ).
                 column_head(
                     'date', 'date', 'image', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date images_detail'
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
                 ).
                 column_head(
                     'thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method,
                         (('thumbnail' == $sort) ? "$dir " : '').'txp-list-col-thumbnail'
                 ).
                 hCell(
-                    gTxt('tags'), '', ' class="txp-list-col-tag-build images_detail" scope="col"'
+                    gTxt('tags'), '', ' class="txp-list-col-tag-build" scope="col"'
                 ).
                 column_head(
                     'image_category', 'category', 'image', true, $switch_dir, $crit, $search_method,
@@ -421,13 +419,13 @@ function image_list($message = '')
                     ($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name'
                 ).
                 td(
-                    gTime($uDate), '', 'txp-list-col-created date images_detail'
+                    gTime($uDate), '', 'txp-list-col-created date'
                 ).
                 td(
                     pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a), '', 'txp-list-col-thumbnail'.($thumbexists ? ' has-thumbnail' : '')
                 ).
                 td(
-                    $tagbuilder, '', 'txp-list-col-tag-build images_detail'
+                    $tagbuilder, '', 'txp-list-col-tag-build'
                 ).
                 td(
                     $category, '', 'txp-list-col-category category'.$vc

@@ -299,9 +299,7 @@ function file_list($message = '')
     if ($rs && numRows($rs)) {
         $show_authors = !has_single_author('txp_file');
 
-        echo n.tag(
-                toggle_box('files_detail'), 'div', array('class' => 'txp-list-options')).
-            n.tag_start('form', array(
+        echo n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'files_form',
                 'name'   => 'longform',
@@ -326,18 +324,18 @@ function file_list($message = '')
                 ).
                 column_head(
                     'title', 'title', 'file', true, $switch_dir, $crit, $search_method,
-                        (('title' == $sort) ? "$dir " : '').'txp-list-col-title files_detail'
+                        (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
                 ).
                 column_head(
                     'date', 'date', 'image', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date files_detail'
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
                 ).
                 column_head(
                     'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method,
                         (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                 ).
                 hCell(gTxt(
-                    'tags'), '', ' class="txp-list-col-tag-build files_detail" scope="col"'
+                    'tags'), '', ' class="txp-list-col-tag-build" scope="col"'
                 ).
                 hCell(gTxt(
                     'status'), '', ' class="txp-list-col-status" scope="col"'
@@ -423,7 +421,7 @@ function file_list($message = '')
                 $id_column .= span(
                     sp.span('&#124;', array('role' => 'separator')).
                     sp.make_download_link($id, gTxt('download'), $filename),
-                    array('class' => 'txp-option-link files_detail')
+                    array('class' => 'txp-option-link')
                 );
             }
 
@@ -447,10 +445,10 @@ function file_list($message = '')
                     $name, '', 'txp-list-col-filename'
                 ).
                 td(
-                    txpspecialchars($title), '', 'txp-list-col-title files_detail'
+                    txpspecialchars($title), '', 'txp-list-col-title'
                 ).
                 td(
-                    gTime($uDate), '', 'txp-list-col-created date files_detail'
+                    gTime($uDate), '', 'txp-list-col-created date'
                 ).
                 td(
                     $category, '', 'txp-list-col-category category'.$vc
@@ -460,7 +458,7 @@ function file_list($message = '')
                     sp.span('&#124;', array('role' => 'separator')).
                     sp.popTag($tagName, 'Textpattern', array('type' => 'textpattern') + $tag_url).
                     sp.span('&#124;', array('role' => 'separator')).
-                    sp.popTag($tagName, 'HTML', array('type' => 'html') + $tag_url), '', 'txp-list-col-tag-build files_detail').
+                    sp.popTag($tagName, 'HTML', array('type' => 'html') + $tag_url), '', 'txp-list-col-tag-build').
                 td(
                     $status, '', 'txp-list-col-status'
                 ).
