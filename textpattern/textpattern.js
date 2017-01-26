@@ -601,7 +601,6 @@ function toggleDisplay(id)
 
         data[textpattern.event] = {'panes':{}};
         data[textpattern.event]['panes'][pane] = obj.is(':visible') ? true : null;
-//        data[pane] = obj.is(':visible');
         textpattern.storage.update(data);
     }
 
@@ -1744,7 +1743,7 @@ jQuery.fn.restorePanes = function ()
     $this.find('.txp-summary a').each(function (i, elm)
     {
         // Get id of toggled <section> region.
-        var $elm = $(elm), region = $elm.attr('href');
+        var $elm = $(elm), region = this.hash;
 
         if (region) {
 
