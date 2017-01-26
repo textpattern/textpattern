@@ -288,16 +288,16 @@ function link_list($message = '')
                         (('description' == $sort) ? "$dir " : '').'txp-list-col-description'
                 ).
                 column_head(
+                    'date', 'date', 'link', true, $switch_dir, $crit, $search_method,
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
+                ).
+                column_head(
                     'link_category', 'category', 'link', true, $switch_dir, $crit, $search_method,
                         (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                 ).
                 column_head(
                     'url', 'url', 'link', true, $switch_dir, $crit, $search_method,
                         (('url' == $sort) ? "$dir " : '').'txp-list-col-url'
-                ).
-                column_head(
-                    'date', 'date', 'link', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
                 ).
                 (
                     $show_authors
@@ -349,13 +349,13 @@ function link_list($message = '')
                     txpspecialchars($link_description), '', 'txp-list-col-description'
                 ).
                 td(
+                    gTime($link_uDate), '', 'txp-list-col-created date'
+                ).
+                td(
                     $link_category, '', 'txp-list-col-category category'.$vc
                 ).
                 td(
                     href($view_url, $view_url, ' rel="external" target="_blank"'), '', 'txp-list-col-url'
-                ).
-                td(
-                    gTime($link_uDate), '', 'txp-list-col-created date'
                 ).
                 (
                     $show_authors
