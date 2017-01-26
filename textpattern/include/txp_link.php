@@ -260,9 +260,7 @@ function link_list($message = '')
     if ($rs && numRows($rs)) {
         $show_authors = !has_single_author('txp_link');
 
-        echo n.tag(
-                toggle_box('links_detail'), 'div', array('class' => 'txp-list-options')).
-            n.tag_start('form', array(
+        echo n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'links_form',
                 'name'   => 'longform',
@@ -287,7 +285,7 @@ function link_list($message = '')
                 ).
                 column_head(
                     'description', 'description', 'link', true, $switch_dir, $crit, $search_method,
-                        (('description' == $sort) ? "$dir " : '').'txp-list-col-description links_detail'
+                        (('description' == $sort) ? "$dir " : '').'txp-list-col-description'
                 ).
                 column_head(
                     'link_category', 'category', 'link', true, $switch_dir, $crit, $search_method,
@@ -299,7 +297,7 @@ function link_list($message = '')
                 ).
                 column_head(
                     'date', 'date', 'link', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date links_detail'
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
                 ).
                 (
                     $show_authors
@@ -348,7 +346,7 @@ function link_list($message = '')
                     ($can_edit ? href(txpspecialchars($link_linkname), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($link_linkname)), '', 'txp-list-col-name'
                 ).
                 td(
-                    txpspecialchars($link_description), '', 'txp-list-col-description links_detail'
+                    txpspecialchars($link_description), '', 'txp-list-col-description'
                 ).
                 td(
                     $link_category, '', 'txp-list-col-category category'.$vc
@@ -357,7 +355,7 @@ function link_list($message = '')
                     href($view_url, $view_url, ' rel="external" target="_blank"'), '', 'txp-list-col-url'
                 ).
                 td(
-                    gTime($link_uDate), '', 'txp-list-col-created date links_detail'
+                    gTime($link_uDate), '', 'txp-list-col-created date'
                 ).
                 (
                     $show_authors
