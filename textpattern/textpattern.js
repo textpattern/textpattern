@@ -774,7 +774,7 @@ textpattern.storage =
      * Textpattern localStorage data.
      */
 
-    data : (window.localStorage ? JSON.parse(window.localStorage.getItem("textpattern")) : null) || {},
+    data : (typeof(Storage) === 'undefined' ? null : JSON.parse(window.localStorage.getItem("textpattern."+textpattern._txp_uid))) || {},
 
     /**
      * Updates data.
@@ -785,14 +785,11 @@ textpattern.storage =
      */
 
     update : function (data) {
+        $.extend(true, textpattern.storage.data, data);
+        textpattern.storage.clean(textpattern.storage.data);
 
-        if (!window.localStorage) {
-            return;
-        }
-
-        if (data) {
-            $.extend(true, textpattern.storage.data, data);
-            window.localStorage.setItem("textpattern", JSON.stringify(textpattern.storage.clean(textpattern.storage.data)));
+        if (typeof(Storage) !== 'undefined') {
+            window.localStorage.setItem("textpattern."+textpattern._txp_uid, JSON.stringify(textpattern.storage.data));
         }
     },
 
@@ -804,7 +801,6 @@ textpattern.storage =
                 delete obj[key];
             }
         });
-        return obj;
     }
 };
 
@@ -1604,16 +1600,15 @@ function txp_search()
 
 function txp_columniser()
 {
-    var $tables = $('table.txp-list');
+    var $tables = $('table.txp-list'), stored = true;
 
     if (!$tables.length) {
         return;
     }
 
     $tables.each(function(tabind) {
-        var $table = $(this), items = 0,
-            $headers = $table.find('thead tr>th'),
-            $menu = $('<ul class="txp-dropdown" role="menu" />');
+        var $table = $(this), items = [], selectAll = true,
+            $headers = $table.find('thead tr>th');
 
         $headers.each(function(index) {
             var $this = $(this), $title = $this.text().trim(), $id = $this.data('col');
@@ -1631,17 +1626,35 @@ function txp_columniser()
             }
 
             var disabled = $this.hasClass('asc') || $this.hasClass('desc') ? ' disabled="disabled"' : '';
-            $menu.append($('<li><div role="menuitem"><input class="checkbox active" id="opt-col-'+index+'-'+tabind+'" name="list_options[]" checked="checked" value="'+$id+'" data-index="'+index+'" type="checkbox"'+disabled+'><label for="opt-col-'+index+'-'+tabind+'">'+$title+'</label></div></li>'));
-            items++;
+            var $li =$('<li><div role="menuitem"><input class="checkbox active" id="opt-col-'+index+'-'+tabind+'" name="list_options[]" checked="checked" value="'+$id+'" data-index="'+index+'" type="checkbox"'+disabled+'><label for="opt-col-'+index+'-'+tabind+'">'+$title+'</label></div></li>');
+            var $target = $table.find('tr>*:nth-child('+(index+1)+')');
+            var me = $li.find('#opt-col-'+index+'-'+tabind).on('change', function(ev) {
+                toggleColumn($id, $target, $(this).prop('checked'));
+            });
+
+            if (stored) {
+                try {
+                    if (textpattern.storage.data[textpattern.event]['columns'][$id] == false) {
+                        selectAll = false;
+                        $target.hide();
+                        me.prop('checked', false)
+                    }
+                } catch(e) {
+                    stored = false;
+                }
+            }
+
+            items.push($li);
         });
 
-        if (!items) {
+        if (!items.length) {
             return;
         }
 
-        $menu.prepend($('<li><div role="menuitem"><input class="checkbox active" id="opt-col-all'+tabind+'" name="select_all" checked="checked" type="checkbox"><label for="opt-col-all'+tabind+'">'+textpattern.gTxt('toggle_all_selected')+'</label></div></li>'));
-
         var $ui = $('<form class="txp-list-options"><a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> '+textpattern.gTxt('list_options')+'</a></form>');
+        var $menu = $('<ul class="txp-dropdown" role="menu" />');
+
+        $menu.html($('<li><div role="menuitem"><input class="checkbox active" id="opt-col-all'+tabind+'" name="select_all" type="checkbox"'+(selectAll ? 'checked="checked"' : '')+'><label for="opt-col-all'+tabind+'">'+textpattern.gTxt('toggle_all_selected')+'</label></div></li>')).append(items);
 
         $ui.append($menu);
 
@@ -1666,33 +1679,6 @@ function txp_columniser()
         $ui.find('.txp-dropdown').hide().menu().click(function(e) {
             e.stopPropagation();
         });
-
-        var selectAll = true, stored = true;
-
-        $ui.find('input[name="list_options[]"][type=checkbox]').each(function() {
-            var me = $(this);
-            var target = me.val();
-            var n = me.data('index')+1;
-            var $target = $table.find('tr>*:nth-child('+n+')');
-
-            if (stored) {
-                try {
-                    if (textpattern.storage.data[textpattern.event]['columns'][target] == false) {
-                        selectAll = false;
-                        $target.hide();
-                        me.prop('checked', false)
-                    }
-                } catch(e) {
-                    stored = false;
-                }
-            }
-
-            me.on('change', function(ev) {
-                toggleColumn(target, $target, me.prop('checked'));
-            });
-        });
-
-        $ui.find('input[name="select_all"][type=checkbox]').prop('checked', selectAll);
 
         $ui.txpMultiEditForm({
             'checkbox'    : 'input:not(:disabled)[name="list_options[]"][type=checkbox]',
