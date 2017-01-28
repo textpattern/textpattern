@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<articles>
 <article>
     <title>Welcome to your site</title>
     <category>hope-for-the-future</category>
@@ -57,5 +58,6 @@ This is a Textpattern article excerpt. Article excerpts are optional but can be 
         <message><![CDATA[<p>Second article Comment.</p>]]></message>
     </comment>
 </article>
+</articles>
 
 </resources>

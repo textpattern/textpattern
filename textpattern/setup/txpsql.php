@@ -65,14 +65,11 @@ foreach (get_files_content($structuredir, 'table') as $key=>$data) {
 }
 
 // Initial mandatory data
-foreach (get_files_content($structuredir, 'json') as $key=>$data) {
-    $json = json_decode($data, true);
-    if (is_array($json)) {
-        foreach ($json as $j) {
-            safe_insert($key, make_sql_set($j));
-        }
-    }
+foreach (get_files_content($structuredir, 'xml') as $key=>$data) {
+    import_txp_xml($data, $key);
 }
+
+
 
 setup_txp_lang();
 
@@ -90,13 +87,8 @@ create_user($txp_user, $_SESSION['email'], $_SESSION['pass'], $_SESSION['realnam
 // Theme setup
 
 // Load theme /data, /styles, /forms, /pages
-foreach (get_files_content($themedir.'/data', 'json') as $key=>$data) {
-    $json = json_decode($data, true);
-    if (is_array($json)) {
-        foreach ($json as $j) {
-            safe_insert($key, make_sql_set($j));
-        }
-    }
+foreach (get_files_content($themedir.'/data', 'xml') as $key=>$data) {
+    import_txp_xml($data, $key);
 }
 
 foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
@@ -148,6 +140,29 @@ rebuild_tree_full('file');
 
 
 /**
+ * Import data to 'category', 'section', 'link' tables
+ * ToDo (maybe): css, form, page, users
+ */
+
+function import_txp_xml($data, $key = '')
+{
+    $allowed_tables = array('category', 'section', 'link');
+
+    if ($xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA)) {
+        foreach ((array)$xml->children() as $key => $b) {
+            if (! in_array($key, $allowed_tables)) {
+                continue;
+            }
+
+            foreach ($b->item as $item) {
+                safe_insert('txp_'.$key, make_sql_set($item));
+            }
+        }
+    }
+}
+
+
+/**
  * Import articles with comment from xml files
  *
  */
@@ -166,7 +181,7 @@ function article_import($dir)
         $data = str_replace('siteurl', $urlpath, $data);
 
         $xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA);
-        foreach ($xml->article as $a) {
+        foreach ($xml->articles->article as $a) {
             $article = array();
             $article['section']   = $section;
             $article['status'] = STATUS_LIVE;
