@@ -252,13 +252,7 @@ function setup_txp_lang()
     require_once txpath.'/lib/IXRClass.php';
     $client = new IXR_Client('http://rpc.textpattern.com');
 
-    if (!$client->query('tups.getLanguage', $blog_uid, $language)) {
-        if (!Txp::get('\Textpattern\L10n\Lang')->install_file($language)) {
-            // If cannot install from lang file, setup the Default lang. `language` pref changed too.
-            $language = TEXTPATTERN_DEFAULT_LANG;
-            Txp::get('\Textpattern\L10n\Lang')->install_file($language);
-        }
-    } else {
+    if (true && $client->query('tups.getLanguage', $blog_uid, $language)) {
         $response = $client->getResponse();
         $lang_struct = unserialize($response);
 
@@ -272,5 +266,13 @@ function setup_txp_lang()
                 data    = '{$item['data']}',
                 lastmod = '".strftime('%Y%m%d%H%M%S', $item['uLastmod'])."'");
         }
+
+        return;
+    }
+
+    if (!Txp::get('\Textpattern\L10n\Lang')->install_file($language)) {
+        // If cannot install from lang file, setup the Default lang. `language` pref changed too.
+        $language = TEXTPATTERN_DEFAULT_LANG;
+        Txp::get('\Textpattern\L10n\Lang')->install_file($language);
     }
 }

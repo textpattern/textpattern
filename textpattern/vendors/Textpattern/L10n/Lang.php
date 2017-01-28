@@ -240,33 +240,26 @@ class Lang
             }
 
             foreach ($textpack as $translation) {
-                extract($translation);
+                extract(doSlash($translation));
 
                 if ($event == 'setup') {
                     continue;
                 }
 
-                $where = "lang = '".doSlash($lang)."' AND name = '".doSlash($name)."'";
+                $where = "lang = '{$lang}' AND name = '{$name}'";
                 $lastmod = empty($lastmod) ? '2006-05-04' : date('YmdHis', $lastmod);
 
                 if (safe_count('txp_lang', $where)) {
                     $r = safe_update(
                         'txp_lang',
-                        "lastmod = '{$lastmod}',
-                        data = '".doSlash($data)."',
-                        event = '".doSlash($event)."',
-                        owner = '".doSlash($owner)."'",
+                        "lastmod = '{$lastmod}', data = '{$data}', event = '{$event}', owner = '{$owner}'",
                         $where
                     );
                 } else {
                     $r = safe_insert(
                         'txp_lang',
-                        "lastmod = '{$lastmod}',
-                        data = '".doSlash($data)."',
-                        event = '".doSlash($event)."',
-                        owner = '".doSlash($owner)."',
-                        lang = '".doSlash($lang)."',
-                        name = '".doSlash($name)."'"
+                        "lastmod = '{$lastmod}', data = '{$data}', event = '{$event}', owner = '{$owner}',
+                        lang = '{$lang}', name = '{$name}'"
                     );
                 }
             }
