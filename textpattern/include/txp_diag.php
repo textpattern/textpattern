@@ -54,6 +54,13 @@ if (!$files) {
     $files = array_keys($files);
 }
 
+
+$dd = Txp::get('\Textpattern\DB\Core')->getPrefsDefault();
+
+echo "<pre>";
+print_r($dd);
+echo "</pre>";
+
 if ($event == 'diag') {
     require_privs('diag');
 

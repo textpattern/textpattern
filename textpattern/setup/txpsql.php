@@ -64,17 +64,14 @@ $setup = new \Textpattern\DB\Core();
 $setup->createAllTables();
 
 // Initial mandatory data
-$setup->importData();
+$setup->initData();
 
 
 setup_txp_lang();
 
 // Create core prefs
-foreach (get_prefs_default() as $name => $p) {
-    if (empty($p['private'])) {
-        @create_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
-    }
-}
+$setup->initPrefs();
+
 $prefs = get_prefs();
 $txp_user = $_SESSION['name'];
 
