@@ -39,7 +39,6 @@ $siteurl = str_replace("http://", '', $_SESSION['siteurl']);
 $siteurl = str_replace(' ', '%20', rtrim($siteurl, "/"));
 $theme_name = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
 $themedir = txpath.DS.'setup';
-$structuredir = txpath.'/update/structure';
 
 // Default to messy URLs if we know clean ones won't work.
 $permlink_mode = 'section_title';
@@ -59,16 +58,13 @@ if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
     die("Textpattern database table already exists. Can't run setup.");
 }
 
+$setup = new \Textpattern\DB\Core();
+
 // Create tables
-foreach (get_files_content($structuredir, 'table') as $key=>$data) {
-    safe_create($key, $data);
-}
+$setup->createAllTables();
 
 // Initial mandatory data
-foreach (get_files_content($structuredir, 'xml') as $key=>$data) {
-    import_txp_xml($data, $key);
-}
-
+$setup->importData();
 
 
 setup_txp_lang();
