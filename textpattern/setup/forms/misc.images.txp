@@ -5,18 +5,19 @@
 <txp:if_variable name="caption" value="">
 
     <!-- image - overriding the width and height to let the image scale to fit parent container -->
-    <p itemprop="image">
-        <txp:image width="0" height="0" />
+    <p itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+        <img itemprop="url" src="<txp:image_url link='0' />" alt="<txp:image_info type='alt' />">
+        <meta itemprop="width" content="<txp:image_info type="w" />">
+        <meta itemprop="height" content="<txp:image_info type="h" />">
     </p>
 
 <txp:else />
 
     <figure itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
 
-        <!-- image - overriding the width and height to let the image scale to fit parent container -->
-        <span itemprop="contentUrl">
-            <txp:image width="0" height="0" />
-        </span>
+        <img itemprop="url" src="<txp:image_url link='0' />" alt="<txp:image_info type='alt' />">
+        <meta itemprop="width" content="<txp:image_info type="w" />">
+        <meta itemprop="height" content="<txp:image_info type="h" />">
 
         <!-- you do not need to specify the attribute type="caption" as that is the default setting for <txp:image_info /> tag -->
         <figcaption itemprop="caption">
