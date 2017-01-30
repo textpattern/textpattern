@@ -54,11 +54,18 @@ class Core
         $this->data_dir = dirname(__FILE__).DS.'Data';
     }
 
-    private function getStructure()
+    /**
+     * getStructure
+     *
+     */
+
+    public function getStructure()
     {
         if (empty($this->tables_structure)) {
             $this->tables_structure = get_files_content($this->tables_dir, 'table');
         }
+        
+        return $this->tables_structure;
     }
 
     /**
@@ -68,8 +75,7 @@ class Core
 
     public function createAllTables()
     {
-        $this->getStructure();
-        foreach ($this->tables_structure as $key=>$data) {
+        foreach ($this->getStructure() as $key=>$data) {
             safe_create($key, $data);
         }
     }
@@ -105,9 +111,8 @@ class Core
 
     public function getTablesName()
     {
-        $this->getStructure();
 
-        return array_keys($this->tables_structure);
+        return array_keys($this->getStructure());
     }
 
     /**
