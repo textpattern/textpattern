@@ -3,6 +3,7 @@
 <articles>
 <article>
     <title>Welcome to your site</title>
+    <section>articles</section>
     <category>hope-for-the-future</category>
     <category>meaningful-labor</category>
     <body format="textile"><![CDATA[
@@ -44,6 +45,7 @@ This is a Textpattern article excerpt. Article excerpts are optional but can be 
 
 <article>
     <title>Second article</title>
+    <section>articles</section>
     <category>hope-for-the-future</category>
     <body><![CDATA[
 <h3>HTML body content</h3>
