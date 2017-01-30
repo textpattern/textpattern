@@ -33,7 +33,7 @@ namespace Textpattern\Import;
 class TxpXML
 {
     /**
-     * Default allow import all data types
+     * Default allow import all data types.
      * ToDo (maybe): css, form, page, users
      *
      * @var array
@@ -41,6 +41,14 @@ class TxpXML
 
     protected $importAllow = array('articles', 'category', 'section', 'link');
 
+    /**
+     * articleOptionalFields
+     *
+     * @var array
+     */
+
+    protected $articleOptionalFields = array('status', 'keywords', 'description', 'annotate', 'annotateinvite',
+        'custom_1', 'custom_2', 'custom_3', 'custom_4', 'custom_5', 'custom_6', 'custom_7', 'custom_8', 'custom_9', 'custom_10');
 
     /**
      * Constructor.
@@ -54,15 +62,28 @@ class TxpXML
     }
 
     /**
-     *
+     * setImportAllow
      *
      * @param string
      */
 
-    private function setImportAllow($importAllow)
+    public function setImportAllow($importAllow)
     {
         if (!empty($importAllow)) {
             $this->importAllow = do_list($importAllow);
+        }
+    }
+
+    /**
+     * setArticleOptionalFields
+     *
+     * @param string
+     */
+
+    public function setArticleOptionalFields($articleOptionalFields)
+    {
+        if (!empty($articleOptionalFields)) {
+            $this->articleOptionalFields = do_list($articleOptionalFields);
         }
     }
 
@@ -71,7 +92,7 @@ class TxpXML
      *
      */
 
-    public function importXml($data, $importAllow='')
+    public function importXml($data, $importAllow = '')
     {
         $importAllow = empty($importAllow) ? $this->importAllow : do_list($importAllow);
 
@@ -100,11 +121,87 @@ class TxpXML
      *
      */
 
-    public function importXmlArticles($data)
+    private function importXmlArticles($xml)
     {
-        // ToDo
+        global $prefs, $txp_user;
+
+        $textile = new \Netcarver\Textile\Parser();
+
+        foreach ($xml->article as $a) {
+            $article = array();
+            $article['status'] = STATUS_LIVE;
+            $article['annotate'] = 1;
+            $article['annotateinvite'] = $prefs['comments_default_invite'];
+
+            foreach ($this->articleOptionalFields as $field) {
+                if (!empty($a->$field)) {
+                    $article[$field] = $a->$field;
+                }
+            }
+
+            $article['Title']     = trim($a->title);
+            $article['url_title'] = stripSpace($article['Title'], 1);
+            $article['section']   = @$a->section;
+            $article['Category1'] = @$a->category[0];
+            $article['Category2'] = @$a->category[1];
+
+            $article['Body'] = @trim($this->replaceSiteurl($a->body));
+            $format = $a->body->attributes()->format;
+            if ($format == 'textile') {
+                $article['Body_html']       = $textile->textileThis($article['Body']);
+                $article['textile_body']    = 1;
+            } else {
+                $article['Body_html']       = $article['Body'];
+                $article['textile_body']    = 0;
+            }
+
+            $article['Excerpt'] = @trim($this->replaceSiteurl($a->excerpt));
+            $format = $a->excerpt->attributes()->format;
+            if ($format == 'textile') {
+                $article['Excerpt_html']    = $textile->textileThis($article['Excerpt']);
+                $article['textile_excerpt'] = 1;
+            } else {
+                $article['Excerpt_html']    = $article['Excerpt'];
+                $article['textile_excerpt'] = 0;
+            }
+
+            $article['AuthorID'] = $txp_user;
+            $article['Posted'] = $article['LastMod'] = $article['feed_time'] = 'NOW()';
+            $article['uid'] = md5(uniqid(rand(), true));
+
+            $id = safe_insert('textpattern', make_sql_set($article));
+
+            if ($id && !empty($a->comment)) {
+                foreach ($a->comment as $c) {
+                    $name = empty($c->name) ? $txp_user : $c->name;
+                    $email = empty($c->email) ? stripSpace($name, 1).'@example.com' : $c->email;
+                    safe_insert('txp_discuss', "
+                        parentid        = '$id',
+                        name            = '".doSlash($name)."',
+                        email           = '".doSlash($email)."',
+                        web             = '".doSlash($c->web)."',
+                        message         = '".doSlash($c->message)."',
+                        posted          = NOW(),
+                        ip              = '127.0.0.1',
+                        visible         = 1"
+                    );
+                }
+                update_comments_count($id);
+            }
+        }
     }
 
+    /**
+     * replaceSiteurl
+     * Used in importXmlArticles()
+     *
+     */
 
+    private function replaceSiteurl($txt)
+    {
+        global $siteurl;
+        $urlpath = preg_replace('#^[^/]+#', '', $siteurl);
 
+        return str_replace('siteurl', $urlpath, $txt);
+    }
 }
