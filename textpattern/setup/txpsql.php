@@ -77,12 +77,10 @@ $txp_user = $_SESSION['name'];
 
 create_user($txp_user, $_SESSION['email'], $_SESSION['pass'], $_SESSION['realname'], 1);
 
-// Theme setup
 
+
+// --- Theme setup
 // Load theme /data, /styles, /forms, /pages
-foreach (get_files_content($themedir.'/data', 'xml') as $key=>$data) {
-    import_txp_xml($data, $key);
-}
 
 foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
     safe_query("INSERT INTO `".PFX."txp_css`(name, css) VALUES('".doSlash($key)."', '".doSlash($data)."')");
@@ -115,8 +113,18 @@ foreach (get_files_content($themedir.'/data', 'prefs') as $key=>$data) {
 }
 
 
+$import = new \Textpattern\Import\TxpXML();
+
+foreach (get_files_content($themedir.'/data', 'xml') as $key=>$data) {
+    $import->importXml($data);
+}
+
 // Load articles
 article_import($themedir.'/articles');
+
+// --- Theme setup end
+
+
 
 
 // FIXME: Need some check
@@ -130,29 +138,6 @@ rebuild_tree_full('article');
 rebuild_tree_full('link');
 rebuild_tree_full('image');
 rebuild_tree_full('file');
-
-
-/**
- * Import data to 'category', 'section', 'link' tables
- * ToDo (maybe): css, form, page, users
- */
-
-function import_txp_xml($data, $key = '')
-{
-    $allowed_tables = array('category', 'section', 'link');
-
-    if ($xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA)) {
-        foreach ((array)$xml->children() as $key => $b) {
-            if (! in_array($key, $allowed_tables)) {
-                continue;
-            }
-
-            foreach ($b->item as $item) {
-                safe_insert('txp_'.$key, make_sql_set($item));
-            }
-        }
-    }
-}
 
 
 /**

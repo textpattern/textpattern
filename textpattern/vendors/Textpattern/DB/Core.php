@@ -81,8 +81,9 @@ class Core
 
     public function initData()
     {
+        $import = new \Textpattern\Import\TxpXML();
         foreach (get_files_content($this->data_dir, 'xml') as $key=>$data) {
-            import_txp_xml($data, $key);
+            $import->importXml($data);
         }
     }
 
