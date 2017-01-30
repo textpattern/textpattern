@@ -98,6 +98,7 @@ function pagetop($pagetitle, $message = '')
     script_js(
         'var textpattern = '.json_encode(
             array(
+                '_txp_uid' => get_pref('blog_uid'),
                 'event' => $event,
                 'step' => $step,
                 '_txp_token' => form_token(),

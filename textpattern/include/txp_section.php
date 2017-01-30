@@ -145,6 +145,10 @@ function sec_section_list($message = '')
                 'column' => 'txp_section.css',
                 'label'  => gTxt('css'),
             ),
+            'description' => array(
+                'column' => 'txp_section.description',
+                'label'  => gTxt('description'),
+            ),
             'on_frontpage' => array(
                 'column' => 'txp_section.on_frontpage',
                 'label'  => gTxt('on_front_page'),

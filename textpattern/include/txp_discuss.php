@@ -367,16 +367,16 @@ function discuss_list($message = '')
                         (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
-                    'date', 'date', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
-                ).
-                column_head(
                     'name', 'name', 'discuss', true, $switch_dir, $crit, $search_method,
                         (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
                     'message', 'message', 'discuss', true, $switch_dir, $crit, $search_method,
                         (('message' == $sort) ? "$dir " : 'txp-list-col-message')
+                ).
+                column_head(
+                    'date', 'date', 'discuss', true, $switch_dir, $crit, $search_method,
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
                 ).
                 column_head(
                     'email', 'email', 'discuss', true, $switch_dir, $crit, $search_method,
@@ -465,13 +465,13 @@ function discuss_list($message = '')
                     href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' class="txp-list-col-id" scope="row"'
                 ).
                 td(
-                    gTime($uPosted), '', 'txp-list-col-created date'
-                ).
-                td(
                     txpspecialchars(soft_wrap($name, 15)), '', 'txp-list-col-name'
                 ).
                 td(
                     short_preview($dmessage), '', 'txp-list-col-message'
+                ).
+                td(
+                    gTime($uPosted), '', 'txp-list-col-created date'
                 ).
                 td(
                     txpspecialchars(soft_wrap($email, 15)), '', 'txp-list-col-email'
