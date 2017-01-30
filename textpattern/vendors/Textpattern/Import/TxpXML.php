@@ -34,12 +34,11 @@ class TxpXML
 {
     /**
      * Default allow import all data types.
-     * ToDo (maybe): css, form, page, users
      *
      * @var array
      */
 
-    protected $importAllow = array('articles', 'category', 'section', 'link');
+    protected $importAllow = array('articles', 'category', 'section', 'link', 'css', 'form', 'page');
 
     /**
      * articleOptionalFields
@@ -90,6 +89,9 @@ class TxpXML
     /**
      * importXml
      *
+     * Allowed a mix of different data types in one xml file.
+     * Import articles after the creation of all categories and sections.
+     *
      */
 
     public function importXml($data, $importAllow = '')
@@ -97,19 +99,23 @@ class TxpXML
         $importAllow = empty($importAllow) ? $this->importAllow : do_list($importAllow);
 
         if ($xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA)) {
+            $articles = array();
             foreach ((array)$xml->children() as $key => $children) {
                 if (! in_array($key, $importAllow)) {
                     continue;
                 }
 
                 if ($key == 'articles') {
-                    $this->importXmlArticles($children);
+                    $articles[] = $children;
                     continue;
                 }
 
                 foreach ($children->item as $item) {
-                    safe_insert('txp_'.$key, make_sql_set($item));
+                    safe_insert('txp_'.$key, $this->makeSqlSet($item));
                 }
+            }
+            foreach ($articles as $a) {
+                $this->importXmlArticles($a);
             }
         } else {
             // error XML
@@ -169,7 +175,7 @@ class TxpXML
             $article['Posted'] = $article['LastMod'] = $article['feed_time'] = 'NOW()';
             $article['uid'] = md5(uniqid(rand(), true));
 
-            $id = safe_insert('textpattern', make_sql_set($article));
+            $id = safe_insert('textpattern', $this->makeSqlSet($article));
 
             if ($id && !empty($a->comment)) {
                 foreach ($a->comment as $c) {
@@ -203,5 +209,24 @@ class TxpXML
         $urlpath = preg_replace('#^[^/]+#', '', $siteurl);
 
         return str_replace('siteurl', $urlpath, $txt);
+    }
+
+    /**
+     * Make sql set string from array
+     *
+     */
+
+    public function makeSqlSet($array)
+    {
+        $out = array();
+        foreach (doSlash((array)$array) as $field=>$data) {
+            if (in_array(trim($data), array('NOW()', 'NULL'), true)) {
+                $out[]="`{$field}`=".trim($data);
+            } else {
+                $out[]="`{$field}`='$data'";
+            }
+        }
+
+        return implode(', ', $out);
     }
 }

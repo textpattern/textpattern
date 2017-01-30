@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<articles>
+<article>
+    <title>MixType test article</title>
+    <section>articles</section>
+    <category>hope-for-the-future</category>
+    <body><![CDATA[
+<h3>HTML body content</h3>
+]]></body>
+    <excerpt><![CDATA[
+<h3>HTML excerpt content</h3>
+]]></excerpt>
+    <comment>
+        <name>Donald Mix</name>
+        <web>http://forum.textpattern.com/</web>
+        <message><![CDATA[<p>Mix article Comment.</p>]]></message>
+    </comment>
+</article>
+</articles>
+
+    <section>
+        <item>
+            <name>articles2</name>
+            <page>archive</page>
+            <css>default</css>
+            <description></description>
+            <in_rss>1</in_rss>
+            <on_frontpage>1</on_frontpage>
+            <searchable>1</searchable>
+            <title>Articles2</title>
+        </item>
+    </section>
+
+    <category>
+        <item>
+            <name>hope-for-the-future22</name>
+            <type>article</type>
+            <parent>root</parent>
+            <title>Hope for the future22</title>
+            <description></description>
+        </item>
+        <item>
+            <name>meaningful-labor33</name>
+            <type>article</type>
+            <parent>root</parent>
+            <title>Meaningful labor33</title>
+            <description></description>
+        </item>
+    </category>
+
+    <link>
+        <item>
+            <date>NOW()</date>
+            <category>textpattern</category>
+            <url>http://textpattern.com/</url>
+            <linkname>Textpattern Website22</linkname>
+            <linksort>11</linksort>
+            <description></description>
+            <author></author>
+        </item>
+    </link>
+
+    <css>
+        <item>
+            <name>mixtype_css</name>
+            <css><![CDATA[/* some css here */]]></css>
+        </item>
+        <item>
+            <name>mixtype_css2</name>
+            <css><![CDATA[/* some css here 2 */]]></css>
+        </item>
+    </css>
+
+    <form>
+        <item>
+            <name>mixtype_form</name>
+            <type>misc</type>
+            <form><![CDATA[<!-- mixtype_form -->
+<txp:title />
+]]></form>
+        </item>
+        <item>
+            <name>mixtype_form2</name>
+            <type>misc</type>
+            <form><![CDATA[<!-- mixtype_form 2 -->]]></form>
+        </item>
+    </form>
+
+    <page>
+        <item>
+            <name>mixtype_page</name>
+            <user_html><![CDATA[<!-- mixtype_page -->]]></user_html>
+        </item>
+    </page>
+
+
+</resources>
