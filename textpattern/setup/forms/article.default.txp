@@ -1,4 +1,5 @@
 <article class="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <meta itemprop="mainEntityOfPage" content="<txp:permlink />">
 
     <txp:if_individual_article>
         <h1 itemprop="name headline">
