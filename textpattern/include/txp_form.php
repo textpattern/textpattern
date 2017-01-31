@@ -304,7 +304,7 @@ function form_edit($message = '', $refresh_partials = false)
     $class = 'async';
 
     if ($step == 'form_delete' || empty($name) && $step != 'form_create' && !$savenew) {
-        $name = 'default';
+        $name = get_pref('last_form_saved', 'default');
     } elseif ((($copy || $savenew) && $newname) && !$save_error) {
         $name = $newname;
     } elseif ((($newname && ($newname != $name)) || $step === 'form_create') && !$save_error) {
@@ -515,6 +515,7 @@ function form_save()
     if ($save_error === true) {
         $_POST['save_error'] = '1';
     } else {
+        set_pref('last_form_saved', $newname, 'form', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
         callback_event('form_saved', '', 0, $name, $newname);
     }
 
@@ -530,10 +531,13 @@ function form_save()
 
 function form_delete($name)
 {
-    global $essential_forms;
+    global $prefs, $essential_forms;
 
     if (in_array($name, $essential_forms)) {
         return false;
+    } elseif ($name === get_pref('last_form_saved')) {
+        unset($prefs['last_form_saved']);
+        remove_pref('last_form_saved', 'form', PREF_PRIVATE);
     }
 
     $name = doSlash($name);
