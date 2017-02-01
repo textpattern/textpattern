@@ -70,7 +70,8 @@ If you use GitHub for Textpattern-related development please consider adding som
 * `textpattern`
 * `textpattern-plugin`
 * `textpattern-theme`
-* `textpattern-website`
+* `textpattern-website` (for websites built with Textpattern)
+* `textpattern-development` (for development resources)
 
 ## Legal
 
