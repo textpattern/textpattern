@@ -63,6 +63,15 @@ Textpattern also has social network presences on
 
 Want to help out with the development of Textpattern CMS? Please refer to the [Contributing documentation](http://docs.textpattern.io/development/contributing) for full details.
 
+## GitHub topic tags
+
+If you use GitHub for Textpattern-related development please consider adding some of the following [topic](https://help.github.com/articles/about-topics/) keywords to your public project repositories, so we can build a network of discoverable resources:
+
+* `textpattern`
+* `textpattern-plugin`
+* `textpattern-theme`
+* `textpattern-website`
+
 ## Legal
 
 Released under the GNU General Public License. See
