@@ -317,8 +317,9 @@ function form_edit($message = '', $refresh_partials = false)
     $Form = gps('Form');
 
     if (!$save_error) {
-        $rs = safe_row("*", 'txp_form', "name = '".doSlash($name)."'");
-        extract($rs);
+        if (!extract(safe_row("*", 'txp_form', "name = '".doSlash($name)."'"))) {
+            $name = '';
+        }
     }
 
     $actionsExtras = '';
@@ -537,7 +538,7 @@ function form_delete($name)
         return false;
     } elseif ($name === get_pref('last_form_saved')) {
         unset($prefs['last_form_saved']);
-        remove_pref('last_form_saved', 'form', PREF_PRIVATE);
+        remove_pref('last_form_saved', 'form');
     }
 
     $name = doSlash($name);

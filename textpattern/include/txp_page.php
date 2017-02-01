@@ -124,7 +124,7 @@ function page_edit($message = '', $refresh_partials = false)
     $class = 'async';
 
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
-        $name = $default_name;
+        $name = get_pref('last_page_saved', $default_name);
     } elseif ((($copy || $savenew) && $newname) && !$save_error) {
         $name = $newname;
     } elseif ((($newname && ($newname != $name)) || $step === 'page_new') && !$save_error) {
@@ -274,6 +274,8 @@ function page_list($current)
 
 function page_delete()
 {
+    global $prefs;
+
     $name = ps('name');
     $count = safe_count('txp_section', "page = '".doSlash($name)."'");
     $message = '';
@@ -288,6 +290,10 @@ function page_delete()
         if (safe_delete('txp_page', "name = '".doSlash($name)."'")) {
             callback_event('page_deleted', '', 0, $name);
             $message = gTxt('page_deleted', array('{name}' => $name));
+            if ($name === get_pref('last_page_saved')) {
+                unset($prefs['last_page_saved']);
+                remove_pref('last_page_saved', 'page');
+            }
         }
     }
 
@@ -337,6 +343,7 @@ function page_save()
             if ($savenew or $copy) {
                 if ($newname) {
                     if (safe_insert('txp_page', "name = '".doSlash($newname)."', user_html = '$html'")) {
+                        set_pref('last_page_saved', $newname, 'page', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                         update_lastmod('page_created', compact('newname', 'name', 'html'));
                         $message = gTxt('page_created', array('{name}' => $newname));
                     } else {
@@ -349,6 +356,7 @@ function page_save()
                 }
             } else {
                 if (safe_update('txp_page', "user_html = '$html', name = '".doSlash($newname)."'", "name = '".doSlash($name)."'")) {
+                    set_pref('last_page_saved', $newname, 'page', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                     safe_update('txp_section', "page = '".doSlash($newname)."'", "page = '".doSlash($name)."'");
                     update_lastmod('page_saved', compact('newname', 'name', 'html'));
                     $message = gTxt('page_updated', array('{name}' => $newname));
