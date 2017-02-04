@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -1829,8 +1829,9 @@ function article_partial_article_view($rs)
     }
 
     return n.href('<span class="ui-icon ui-icon-notice"></span> '.gTxt('view'), $url, array(
-        'class' => 'txp-article-view',
-        'id'    => 'article_partial_article_view',
+        'class'  => 'txp-article-view',
+        'id'     => 'article_partial_article_view',
+        'target' => '_blank',
     ));
 }
 
@@ -2056,10 +2057,7 @@ function article_partial_comments($rs)
         }
 
         if ($comments_expired) {
-            $invite = graf(gTxt('expired'), array(
-                'class' => 'comment-annotate',
-                'id'    => 'write-comments',
-            ));
+            $invite = graf(gTxt('expired'), array('class' => 'comment-annotate-expired'));
         } else {
             $invite = n.tag(
                     onoffRadio('Annotate', $Annotate),

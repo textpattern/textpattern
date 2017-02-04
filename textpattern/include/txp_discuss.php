@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -345,8 +345,7 @@ function discuss_list($message = '')
 
     if ($rs) {
         echo n.tag(
-                cookie_box('show_spam').
-                toggle_box('discuss_detail'),
+                cookie_box('show_spam'),
                 'div', array('class' => 'txp-list-options')).
             n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
@@ -368,10 +367,6 @@ function discuss_list($message = '')
                         (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
-                    'date', 'date', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
-                ).
-                column_head(
                     'name', 'name', 'discuss', true, $switch_dir, $crit, $search_method,
                         (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
@@ -380,16 +375,20 @@ function discuss_list($message = '')
                         (('message' == $sort) ? "$dir " : 'txp-list-col-message')
                 ).
                 column_head(
+                    'date', 'date', 'discuss', true, $switch_dir, $crit, $search_method,
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
+                ).
+                column_head(
                     'email', 'email', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('email' == $sort) ? "$dir " : '').'txp-list-col-email discuss_detail'
+                        (('email' == $sort) ? "$dir " : '').'txp-list-col-email'
                 ).
                 column_head(
                     'website', 'website', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('website' == $sort) ? "$dir " : '').'txp-list-col-website discuss_detail'
+                        (('website' == $sort) ? "$dir " : '').'txp-list-col-website'
                 ).
                 column_head(
                     'IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip discuss_detail'
+                        (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip'
                 ).
                 column_head(
                     'status', 'status', 'discuss', true, $switch_dir, $crit, $search_method,
@@ -446,7 +445,10 @@ function discuss_list($message = '')
             } else {
                 $parent_title = empty($title) ? '<em>'.gTxt('untitled').'</em>' : escape_title($title);
 
-                $parent = href($parent_title, '?event=article'.a.'step=edit'.a.'ID='.$parentid);
+                $parent = href(
+                    span(gTxt('search'), array('class' => 'ui-icon ui-icon-search')),
+                    '?event=discuss'.a.'step=discuss_list'.a.'search_method=parent'.a.'crit='.$parentid).sp.
+                    href($parent_title, '?event=article'.a.'step=edit'.a.'ID='.$parentid);
 
                 $view = $comment_status;
 
@@ -463,25 +465,25 @@ function discuss_list($message = '')
                     href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' class="txp-list-col-id" scope="row"'
                 ).
                 td(
-                    gTime($uPosted), '', 'txp-list-col-created date'
-                ).
-                td(
                     txpspecialchars(soft_wrap($name, 15)), '', 'txp-list-col-name'
                 ).
                 td(
                     short_preview($dmessage), '', 'txp-list-col-message'
                 ).
                 td(
-                    txpspecialchars(soft_wrap($email, 15)), '', 'txp-list-col-email discuss_detail'
+                    gTime($uPosted), '', 'txp-list-col-created date'
                 ).
                 td(
-                    txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website discuss_detail'
+                    txpspecialchars(soft_wrap($email, 15)), '', 'txp-list-col-email'
+                ).
+                td(
+                    txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website'
                 ).
                 td(
                     href(txpspecialchars($ip), 'https://whois.domaintools.com/'.rawurlencode($ip), array(
                         'rel'    => 'external',
                         'target' => '_blank',
-                    )), '', 'txp-list-col-ip discuss_detail'
+                    )), '', 'txp-list-col-ip'
                 ).
                 td(
                     $view, '', 'txp-list-col-status'

@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -91,22 +91,22 @@ function rss()
         'limit'    => $limit,
     )).'" rel="self" type="application/rss+xml" />';
     $out[] = tag(doSpecial($site_slogan), 'description');
-    $last = fetch("UNIX_TIMESTAMP(val)", 'txp_prefs', 'name', 'lastmod');
-    $out[] = tag(safe_strftime('rfc822', $last), 'pubDate');
+    $out[] = tag(safe_strftime('rfc822', strtotime($lastmod)), 'pubDate');
     $out[] = callback_event('rss_head');
 
     // Feed items.
     $articles = array();
     $section = doSlash($section);
     $category = doSlash($category);
+    $limit = ($limit) ? $limit : $rss_how_many;
+    $limit = intval(min($limit, max(100, $rss_how_many)));
 
     if (!$area or $area == 'article') {
         $sfilter = (!empty($section)) ? "AND Section IN ('".join("','", $section)."')" : '';
         $cfilter = (!empty($category)) ? "AND (Category1 IN ('".join("','", $category)."') OR Category2 IN ('".join("','", $category)."'))" : '';
-        $limit = ($limit) ? $limit : $rss_how_many;
-        $limit = intval(min($limit, max(100, $rss_how_many)));
 
         $frs = safe_column("name", 'txp_section', "in_rss != '1'");
+        $query = array();
 
         if ($frs) {
             foreach ($frs as $f) {
@@ -119,10 +119,14 @@ function rss()
 
         $expired = ($publish_expired_articles) ? " " : " AND (".now('expires')." <= Expires OR Expires IS NULL) ";
         $rs = safe_rows_start(
-            "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(LastMod) AS uLastMod, UNIX_TIMESTAMP(Expires) AS uExpires, ID AS thisid",
+            "*,
+            ID AS thisid,
+            UNIX_TIMESTAMP(Posted) AS uPosted,
+            UNIX_TIMESTAMP(Expires) AS uExpires,
+            UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            "Status = 4 ".join(' ', $query).
-            "AND Posted < ".now('posted').$expired." ORDER BY Posted DESC LIMIT $limit"
+            "Status = 4 AND Posted <= ".now('posted').$expired.join(' ', $query).
+            "ORDER BY Posted DESC LIMIT $limit"
         );
 
         if ($rs) {
@@ -137,6 +141,12 @@ function rss()
                 $a['posted'] = $uPosted;
                 $a['expires'] = $uExpires;
 
+                if ($show_comment_count_in_feed) {
+                    $count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
+                } else {
+                    $count = '';
+                }
+
                 $permlink = permlinkurl($a);
                 $summary = trim(replace_relative_urls(parse($thisarticle['excerpt']), $permlink));
                 $content = trim(replace_relative_urls(parse($thisarticle['body']), $permlink));
@@ -148,12 +158,6 @@ function rss()
                     }
 
                     $content = '';
-                }
-
-                if ($show_comment_count_in_feed) {
-                    $count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
-                } else {
-                    $count = '';
                 }
 
                 $Title = escape_title(preg_replace("/&(?![#a-z0-9]+;)/i", "&amp;", html_entity_decode(strip_tags($Title), ENT_QUOTES, 'UTF-8'))).$count;
@@ -175,11 +179,9 @@ function rss()
             }
         }
     } elseif ($area == 'link') {
-        $cfilter = ($category) ? "category IN ('".join("','", $category)."')"  : '1';
-        $limit = ($limit) ? $limit : $rss_how_many;
-        $limit = intval(min($limit, max(100, $rss_how_many)));
+        $cfilter = ($category) ? "category IN ('".join("','", $category)."')" : '1';
 
-        $rs = safe_rows_start("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_link', "$cfilter ORDER BY date DESC LIMIT $limit");
+        $rs = safe_rows_start("*", 'txp_link', "$cfilter ORDER BY date DESC, id DESC LIMIT $limit");
 
         if ($rs) {
             while ($a = nextRow($rs)) {
@@ -188,7 +190,7 @@ function rss()
                     tag(doSpecial($linkname), 'title').n.
                     tag(doSpecial($description), 'description').n.
                     tag(doSpecial($url), 'link').n.
-                    tag(safe_strftime('rfc822', $uDate), 'pubDate');
+                    tag(safe_strftime('rfc822', strtotime($date)), 'pubDate');
                 $articles[$id] = tag($item, 'item');
 
                 $dates[$id] = $uLastMod;
@@ -263,7 +265,7 @@ function rss()
 
     $out = array_merge($out, $articles);
 
-    header("Content-Type: application/rss+xml; charset=utf-8");
+    header('Content-Type: application/rss+xml; charset=utf-8');
 
     return
         '<?xml version="1.0" encoding="utf-8"?>'.n.

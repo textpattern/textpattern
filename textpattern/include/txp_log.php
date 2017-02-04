@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -220,9 +220,7 @@ function log_list($message = '')
     );
 
     if ($rs) {
-        echo n.tag(
-                toggle_box('log_detail'), 'div', array('class' => 'txp-list-options')).
-            n.tag_start('form', array(
+        echo n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'log_form',
                 'name'   => 'longform',
@@ -247,7 +245,7 @@ function log_list($message = '')
                 ).
                 column_head(
                     'host', 'host', 'log', true, $switch_dir, $crit, $search_method,
-                        (('host' == $sort) ? "$dir " : '').'txp-list-col-host log_detail'
+                        (('host' == $sort) ? "$dir " : '').'txp-list-col-host'
                 ).
                 column_head(
                     'page', 'page', 'log', true, $switch_dir, $crit, $search_method,
@@ -259,11 +257,11 @@ function log_list($message = '')
                 ).
                 column_head(
                     'method', 'method', 'log', true, $switch_dir, $crit, $search_method,
-                        (('method' == $sort) ? "$dir " : '').'txp-list-col-method log_detail'
+                        (('method' == $sort) ? "$dir " : '').'txp-list-col-method'
                 ).
                 column_head(
                     'status', 'status', 'log', true, $switch_dir, $crit, $search_method,
-                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status log_detail'
+                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
                 )
             ).
             n.tag_end('thead').
@@ -301,7 +299,7 @@ function log_list($message = '')
                     )), '', 'txp-list-col-ip'
                 ).
                 td(
-                    txpspecialchars($log_host), '', 'txp-list-col-host log_detail'
+                    txpspecialchars($log_host), '', 'txp-list-col-host'
                 ).
                 td(
                     $log_page, '', 'txp-list-col-page'
@@ -310,10 +308,10 @@ function log_list($message = '')
                     $log_refer, '', 'txp-list-col-refer'
                 ).
                 td(
-                    txpspecialchars($log_method), '', 'txp-list-col-method log_detail'
+                    txpspecialchars($log_method), '', 'txp-list-col-method'
                 ).
                 td(
-                    $log_status, '', 'txp-list-col-status log_detail'
+                    $log_status, '', 'txp-list-col-status'
                 )
             );
         }

@@ -29,7 +29,7 @@
 <txp:article class="article-list" wraptag="ul">
 
     <li class="article" itemscope itemtype="http://schema.org/Article">
-        <h4 itemprop="name headline">
+        <h4 itemprop="headline">
             <a href="<txp:permlink />" itemprop="url">
                 <txp:title />
             </a>
@@ -51,7 +51,7 @@
             <time datetime="<txp:posted format="iso8601" />" itemprop="datePublished">
                 <txp:posted />
             </time>
-            <meta itemprop="dateModified" content="<txp:posted format="iso8601" />" />
+            <meta itemprop="dateModified" content="<txp:modified format="iso8601" />" />
             &#183;
             <txp:text item="author" />
             <span itemprop="author" itemscope itemtype="http://schema.org/Person">

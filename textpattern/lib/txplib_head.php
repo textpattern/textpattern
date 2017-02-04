@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -98,6 +98,7 @@ function pagetop($pagetitle, $message = '')
     script_js(
         'var textpattern = '.json_encode(
             array(
+                '_txp_uid' => get_pref('blog_uid'),
                 'event' => $event,
                 'step' => $step,
                 '_txp_token' => form_token(),
@@ -115,13 +116,22 @@ function pagetop($pagetitle, $message = '')
         ).';'
     ).
     script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
-    gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled', 'ok', 'save', 'publish'));
+    gTxtScript(array(
+        'are_you_sure',
+        'cookies_must_be_enabled',
+        'form_submission_error',
+        'list_options',
+        'ok',
+        'publish',
+        'save',
+        'toggle_all_selected',
+    ));
     // Mandatory un-themable Textpattern core styles ?>
 <style>
 .not-ready .doc-ready,
+.not-ready table.txp-list,
 .not-ready form.async input[type="submit"],
-.not-ready a.async
-{
+.not-ready a.async {
     visibility: hidden;
 }
 </style>

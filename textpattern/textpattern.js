@@ -2,7 +2,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -553,7 +553,36 @@ function getElementsByClass(classname, node)
 }
 
 /**
- * Toggles panel's visibility and saves the state to the server.
+ * Toggles column's visibility and saves the state.
+ *
+ * @param  {string}  sel The column selector object
+ * @return {boolean} Returns FALSE
+ * @since  4.7.0
+ */
+
+function toggleColumn(sel, $sel, vis)
+{
+//    $sel = $(sel);
+    if ($sel.length) {
+        if (!!vis) {
+            $sel.show();
+        } else {
+            $sel.hide();
+        }
+
+        // Send state of toggle pane to localStorage.
+        var data = new Object;
+
+        data[textpattern.event] = {'columns':{}};
+        data[textpattern.event]['columns'][sel] = !!vis ? null : false;
+        textpattern.storage.update(data);
+    }
+
+    return false;
+}
+
+/**
+ * Toggles panel's visibility and saves the state.
  *
  * @param  {string}  id The element ID
  * @return {boolean} Returns FALSE
@@ -570,7 +599,8 @@ function toggleDisplay(id)
         var pane = $(this).data('txp-pane') || obj.attr('id');
         var data = new Object;
 
-        data[pane] = obj.is(':visible');
+        data[textpattern.event] = {'panes':{}};
+        data[textpattern.event]['panes'][pane] = obj.is(':visible') ? true : null;
         textpattern.storage.update(data);
     }
 
@@ -744,7 +774,7 @@ textpattern.storage =
      * Textpattern localStorage data.
      */
 
-    data : (window.localStorage ? JSON.parse(window.localStorage.getItem("textpattern")) : null) || {},
+    data : (typeof(Storage) === 'undefined' ? null : JSON.parse(window.localStorage.getItem("textpattern."+textpattern._txp_uid))) || {},
 
     /**
      * Updates data.
@@ -755,15 +785,22 @@ textpattern.storage =
      */
 
     update : function (data) {
+        $.extend(true, textpattern.storage.data, data);
+        textpattern.storage.clean(textpattern.storage.data);
 
-        if (!window.localStorage) {
-            return;
+        if (typeof(Storage) !== 'undefined') {
+            window.localStorage.setItem("textpattern."+textpattern._txp_uid, JSON.stringify(textpattern.storage.data));
         }
+    },
 
-        if (data) {
-            $.extend(textpattern.storage.data, data);
-            window.localStorage.setItem("textpattern", JSON.stringify(textpattern.storage.data));
-        }
+    clean : function (obj) {
+        Object.keys(obj).forEach(function(key) {
+            if (obj[key] && typeof obj[key] === 'object') {
+                textpattern.storage.clean(obj[key]);
+            } else if (obj[key] === null) {
+                delete obj[key];
+            }
+        });
     }
 };
 
@@ -1556,6 +1593,105 @@ function txp_search()
 }
 
 /**
+ * Column manipulation tool.
+ *
+ * @since 4.7.0
+ */
+
+function txp_columniser()
+{
+    var $tables = $('table.txp-list'), stored = true;
+
+    if (!$tables.length) {
+        return;
+    }
+
+    $tables.each(function(tabind) {
+        var $table = $(this), items = [], selectAll = true,
+            $headers = $table.find('thead tr>th');
+
+        $headers.each(function(index) {
+            var $this = $(this), $title = $this.text().trim(), $id = $this.data('col');
+
+            if (!$title) {
+                return;
+            }
+
+            if ($id == undefined) {
+                if ($id = this.className.match(/\btxp-list-col-([\w\-]+)\b/)) {
+                    $id = $id[1];
+                } else {
+                    return;
+                }
+            }
+
+            var disabled = $this.hasClass('asc') || $this.hasClass('desc') ? ' disabled="disabled"' : '';
+            var $li =$('<li><div role="menuitem"><input class="checkbox active" id="opt-col-'+index+'-'+tabind+'" name="list_options[]" checked="checked" value="'+$id+'" data-index="'+index+'" type="checkbox"'+disabled+'><label for="opt-col-'+index+'-'+tabind+'">'+$title+'</label></div></li>');
+            var $target = $table.find('tr>*:nth-child('+(index+1)+')');
+            var me = $li.find('#opt-col-'+index+'-'+tabind).on('change', function(ev) {
+                toggleColumn($id, $target, $(this).prop('checked'));
+            });
+
+            if (stored) {
+                try {
+                    if (textpattern.storage.data[textpattern.event]['columns'][$id] == false) {
+                        selectAll = false;
+                        $target.hide();
+                        me.prop('checked', false)
+                    }
+                } catch(e) {
+                    stored = false;
+                }
+            }
+
+            items.push($li);
+        });
+
+        if (!items.length) {
+            return;
+        }
+
+        var $ui = $('<form class="txp-list-options"><a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> '+textpattern.gTxt('list_options')+'</a></form>');
+        var $menu = $('<ul class="txp-dropdown" role="menu" />');
+
+        $menu.html($('<li><div role="menuitem"><input class="checkbox active" id="opt-col-all'+tabind+'" name="select_all" type="checkbox"'+(selectAll ? 'checked="checked"' : '')+'><label for="opt-col-all'+tabind+'">'+textpattern.gTxt('toggle_all_selected')+'</label></div></li>')).append(items);
+
+        $ui.append($menu);
+
+        $ui.find('.txp-list-options-button').on('click', function(e)
+        {
+            var dir = (langdir == 'rtl' ? 'left' : 'right');
+            var menu = $ui.find('.txp-dropdown').toggle().position(
+            {
+                my: dir+" top",
+                at: dir+" bottom",
+                of: this
+            });
+
+            $(document).one('click blur', function()
+            {
+                menu.hide();
+            });
+
+            return false;
+        });
+
+        $ui.find('.txp-dropdown').hide().menu().click(function(e) {
+            e.stopPropagation();
+        });
+
+        $ui.txpMultiEditForm({
+            'checkbox'    : 'input:not(:disabled)[name="list_options[]"][type=checkbox]',
+            'row'         : '.txp-dropdown li',
+            'highlighted' : '.txp-dropdown li',
+            'confirmation': false
+        });
+
+        $(this).closest('form').before($ui);
+    });
+}
+
+/**
  * Set expanded/collapsed nature of all twisty boxes in a panel.
  *
  * The direction can either be 'expand' or 'collapse', passed
@@ -1593,12 +1729,12 @@ function txp_expand_collapse_all(ev) {
  */
 jQuery.fn.restorePanes = function ()
 {
-    var $this = $(this);
+    var $this = $(this), stored = true;
     // Initialize dynamic WAI-ARIA attributes.
     $this.find('.txp-summary a').each(function (i, elm)
     {
         // Get id of toggled <section> region.
-        var $elm = $(elm), region = $elm.attr('href');
+        var $elm = $(elm), region = this.hash;
 
         if (region) {
 
@@ -1611,14 +1747,13 @@ jQuery.fn.restorePanes = function ()
                 pane = region;
             }
 
-            if (textpattern.storage.data[pane] !== undefined) {
-                if (textpattern.storage.data[pane]) {
+            if (stored) try {
+                if (textpattern.storage.data[textpattern.event]['panes'][pane] == true) {
                     $elm.parent(".txp-summary").addClass("expanded");
                     $region.show();
-                } /*else {
-                    $elm.parent(".txp-summary").removeClass("expanded");
-                    $region.hide();
-                }*/
+                }
+            } catch(e) {
+                stored = false;
             }
 
             var vis = $region.is(':visible').toString();
@@ -1760,7 +1895,7 @@ textpattern.Route.add('page, form, file, image', function ()
         $('#txp-tagbuilder-output').select();
     });
 
-    $('#tagbuild_links, .files_detail, .images_detail').on('click', '.txp-tagbuilder-link', function(ev) {
+    $('#tagbuild_links, .txp-list-col-tag-build').on('click', '.txp-tagbuilder-link', function(ev) {
         txpAsyncLink(ev);
     });
 
@@ -1827,10 +1962,30 @@ textpattern.Route.add('plugin', function ()
     });
 });
 
+// Images edit panel.
+
+textpattern.Route.add('image', function ()
+{
+    $('.thumbnail-swap-size').button({
+        showLabel: false,
+        icon: 'ui-icon-transfer-e-w'
+    }).on('click', function (ev)
+    {
+        var $w = $('#width');
+        var $h = $('#height');
+        var width = $w.val();
+        var height = $h.val();
+        $w.val(height);
+        $h.val(width);
+    });
+});
+
 // All panels?
 
 textpattern.Route.add('', function ()
 {
+    txp_columniser();
+
     // Pane states
     var prefsGroup = $('form:has(.switcher-list li a[data-txp-pane])');
 
@@ -1847,22 +2002,23 @@ textpattern.Route.add('', function ()
         var me = $(this).children('a[data-txp-pane]');
         var data = new Object;
 
-        data[textpattern.event] = me.data('txp-pane');
+        data[textpattern.event] = {'tab':me.data('txp-pane')};
+//        data[textpattern.event] = me.data('txp-pane');
         textpattern.storage.update(data);
     });
 
     if ($section.length) {
         selectedTab = $section.index();
         $switchers.eq(selectedTab).click();
-    } else if (textpattern.storage.data[textpattern.event] !== undefined) {
+    } else if (textpattern.storage.data[textpattern.event] !== undefined && textpattern.storage.data[textpattern.event]['tab'] !== undefined) {
         $switchers.each(function (i, elm) {
-            if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]) {
+            if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]['tab']) {
                 selectedTab = i;
             }
         });
     }
 
-    if (selectedTab === undefined) {
+    if (typeof selectedTab === 'undefined') {
         selectedTab = 0;
     }
 
@@ -2003,5 +2159,5 @@ $(document).ready(function ()
     textpattern.Route.init();
 
     // Arm UI.
-    $('body').removeClass('not-ready');
+    $('.not-ready').removeClass('not-ready');
 });

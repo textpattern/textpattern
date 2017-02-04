@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -3018,7 +3018,7 @@ function tz_offset($timestamp = null)
 
 function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 {
-    global $locale;
+    static $charsets = array();
 
     if (!$time) {
         $time = time();
@@ -3055,13 +3055,11 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
         $str = strftime($format, $time + tz_offset($time));
     }
 
-    @list($lang, $charset) = explode('.', $locale);
-
-    if (empty($charset)) {
-        $charset = 'ISO-8859-1';
-    } elseif (IS_WIN and is_numeric($charset)) {
-        $charset = 'Windows-'.$charset;
+    if (!isset($charsets[$override_locale])) {
+        $charsets[$override_locale] = Txp::get('\Textpattern\L10n\Locale')->getCharset(LC_TIME, IS_WIN ? 'Windows-1252' : 'ISO-8859-1');
     }
+
+    $charset = $charsets[$override_locale];
 
     if ($charset != 'UTF-8' and $format != 'since') {
         $new = '';
@@ -4653,7 +4651,7 @@ function set_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html = 't
     }
 
     if (pref_exists($name, $user_name)) {
-        return update_pref($name, (string) $val, null, null, null, null, $user_name);
+        return update_pref($name, $val, null, null, null, null, $user_name);
     }
 
     return create_pref($name, $val, $event, $type, $html, $position, $user_name);
@@ -4838,6 +4836,8 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
         return true;
     }
 
+    $val = is_scalar($val) ? (string)$val : json_encode($val);
+
     if (
         safe_insert(
             'txp_prefs',
@@ -4902,6 +4902,10 @@ function update_pref($name, $val = null, $event = null, $type = null, $html = nu
 
     if ($user_name !== null) {
         $where[] = "user_name = '".doSlash((string) $user_name)."'";
+    }
+
+    if (isset($val)) {
+        $val = is_scalar($val) ? (string)$val : json_encode($val);
     }
 
     foreach (array('val', 'event', 'type', 'html', 'position') as $field) {
@@ -6422,7 +6426,7 @@ class timezone
 function install_textpack($textpack, $add_new_langs = false)
 {
     $parser = new \Textpattern\Textpack\Parser();
-    $parser->setLanguage(get_pref('language', TEXTPATTERN_DEFAULT_LANG));
+    $parser->setLanguage(get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG));
     $textpack = $parser->parse($textpack);
 
     if (!$textpack) {

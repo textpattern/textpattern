@@ -504,15 +504,27 @@ button {
  * <strong class="error">
  */
   .success {
+    background: #dff0d8;
+  }
+  .success:not(li) {
     color: #238c23;
   }
   .warning {
+    background: #f7eedb;
+  }
+  .warning:not(li) {
     color: #cc8c00;
   }
   .error {
+    background: #f2dede;
+  }
+  .error:not(li) {
     color: #9d261d;
   }
   .information {
+    background: #e7f6fc;
+  }
+  .information:not(li) {
     color: #3a87ad;
   }
   /**
@@ -653,7 +665,7 @@ button {
  */
   h3.txp-summary a {
     padding: 0 0 0 0.8em;
-    background: url("../img/expand-collapse.svg") no-repeat 0 4px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='100' viewBox='0 0 7 100'%3E%3Cpath fill='%23963' d='M1 7V0l4 3.5M0 96h7l-3.5 4'/%3E%3C/svg%3E") no-repeat 0 4px;
   }
   h3.txp-summary.expanded a {
     background-position: 0 -90px;
@@ -861,7 +873,7 @@ button {
     font-family: Helvetica, Arial, sans-serif;
     /* 3 */
     font-size: 12px;
-    line-height: 1.5em;
+    line-height: 1.666666666666667em;
     vertical-align: baseline;
     box-sizing: border-box;
   }
@@ -904,7 +916,7 @@ button {
   [type="week"],
   select,
   textarea {
-    height: 2.1666667em;
+    height: 2.333333333333333em;
     padding: 0.25em;
     border: 1px solid;
     border-radius: 0;
@@ -984,7 +996,7 @@ button {
  */
   select {
     padding-right: 1.3333333em;
-    background: #f7f7f7 url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMXB4JyBoZWlnaHQ9JzRweCcgdmlld0JveD0nMCAwIDExIDQnPjxwb2x5Z29uIGZpbGw9JyMzMzMnIHBvaW50cz0nMy41LDQgMCwwIDcsMCcvPjwvc3ZnPg==") right center no-repeat;
+    background: #f7f7f7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='4' viewBox='0 0 11 4'%3E%3Cpolygon fill='%23333' points='3.5,4 0,0 7,0'/%3E%3C/svg%3E") right center no-repeat;
     background-size: 0.9166667em 0.3333333;
     text-transform: none;
   }
@@ -1024,7 +1036,7 @@ button {
  */
   select[size="0"],
   select[size="1"] {
-    height: 2.1666667em;
+    height: 2.333333333333333em;
     vertical-align: baseline;
   }
   /**
@@ -1202,7 +1214,7 @@ button {
   .navlink-active {
     display: inline-block;
     width: auto;
-    height: 2.1666667em;
+    height: 2.333333333333333em;
     padding: 0.25em 0.75em;
     border: 1px solid;
     border-color: #dddddd #c7c7c7 #c7c7c7 #dddddd;
@@ -1245,7 +1257,7 @@ button {
   .navlink-active:active {
     border-color: #cccccc #b7b7b7 #b7b7b7 #cccccc;
     background-color: #dddddd;
-    color: #1a1a1a;
+    color: #1a1919;
     text-decoration: none;
   }
   button:focus,
@@ -1330,7 +1342,7 @@ button {
  */
   .navlink-disabled {
     display: inline-block;
-    height: 2.1666667em;
+    height: 2.333333333333333em;
     padding: 0.25em 0.75em;
     border: 1px solid;
     background-clip: padding-box;
@@ -1656,7 +1668,7 @@ button {
   .txp-list thead th.desc a {
     margin-right: 0;
     padding-right: 14px;
-    background: url("../img/arrow-up-down.svg") no-repeat;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='48' viewBox='0 0 9 48'%3E%3Cpath fill='%23fabc2b' d='M4.5 0L0 5h2v4h5V5h2M4.5 48L9 43H7v-4H2v4H0'/%3E%3C/svg%3E") no-repeat;
   }
   [dir="rtl"] .txp-list thead th.asc a, [dir="rtl"]
   .txp-list thead th.desc a {
@@ -1809,21 +1821,49 @@ button {
  *         Content
  *     </div>
  * </div>
+ *
+ * <ul class="txp-grid">
+ *     <li>
+ *         Content
+ *     </li>
+ *     <li>
+ *         Content
+ *     </li>
+ *     <li>
+ *         Content
+ *     </li>
+ * </ul>
  */
   .txp-grid {
     display: -ms-inline-flexbox;
     display: inline-flex;
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
-    -ms-flex-pack: center;
-        justify-content: center;
+    width: 100%;
     margin: -2px;
+    padding: 0;
+    clear: both;
+    list-style: none;
+  }
+  .txp-grid > * {
+    position: relative;
+    margin: 2px;
   }
   .txp-grid-cell {
-    margin: 2px;
     padding: 0 1em;
     border: 1px solid #cccccc;
     box-sizing: border-box;
+  }
+  .txp-grid-multi-edit {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    padding: 3px 6px;
+    border: 1px solid #d4d4d4;
+    border-top: 0;
+    border-left: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 2;
   }
   /* Header
    ========================================================================== */
@@ -1866,8 +1906,8 @@ button {
     width: 6.75em;
     height: 1.5em;
     margin: 0.25em 0;
-    background: url("../img/sprite.svg") no-repeat 0 0;
-    background-size: 11.25em 1.5em;
+    background: url("../img/textpattern.svg") no-repeat 0 0;
+    background-size: 9em 1.5em;
     font-size: 16px;
   }
   .navpop {
@@ -1966,7 +2006,8 @@ button {
   /* Globally shared layout
    ========================================================================== */
   /**
- * 1. Prevent text size adjust after mobile device orientation change.
+ * 1. Prevent adjustments of font size after orientation changes in
+ *    IE on Windows Phone and in iOS.
  */
   html {
     /* 1 */
@@ -2014,10 +2055,41 @@ button {
     left: auto;
   }
   /**
- * Ensure dropdowns are hidden at page load (prevents content 'jumping').
+ * Drop down lists.
+ *
+ * 1. Ensure dropdowns are hidden at page load (prevents content 'jumping').
+ *
+ * <ul class="txp-dropdown">
+ *     <li>
+ *         <div>
+ *             <input class="checkbox" type="checkbox">
+ *             <label>Search all</label>
+ *         </div>
+ *     </li>
+ *     <li>
+ *         <div>
+ *             <input class="checkbox active" type="checkbox">
+ *             <label>ID#</label>
+ *         </div>
+ *     </li>
+ * </ul>
  */
   .txp-dropdown {
+    /* 1 */
     display: none;
+    position: absolute;
+    width: 18em;
+    z-index: 100;
+  }
+  .txp-dropdown .checkbox {
+    vertical-align: -0.25em;
+  }
+  .txp-dropdown .checkbox + label {
+    display: inline-block;
+    width: 85%;
+    padding: 0.25em;
+    cursor: pointer;
+    vertical-align: text-top;
   }
   /**
  * Search widget at top of lists.
@@ -2053,15 +2125,8 @@ button {
     -ms-flex-wrap: nowrap;
         flex-wrap: nowrap;
   }
-  .txp-search .txp-dropdown input {
-    vertical-align: -0.23076923076923em;
-  }
-  .txp-search .txp-dropdown label {
-    display: inline-block;
-    width: 85%;
-    padding: 0.23076923076923em 0.30769230769231em;
-    cursor: pointer;
-    vertical-align: text-top;
+  .txp-search .txp-dropdown {
+    z-index: 101;
   }
   .txp-search-clear {
     -ms-flex: 1;
@@ -2487,6 +2552,7 @@ button {
  */
   .txp-form-field {
     margin: 1em 0;
+    vertical-align: top;
   }
   /**
  * Label/value form field pairings.
@@ -2819,8 +2885,8 @@ button {
   }
   /* Admin -> Languages panel - additional layout
    ========================================================================== */
-  #page-lang .txp-list .modified {
-    margin-left: 0.75em;
+  #page-lang .txp-grid-cell {
+    min-width: 20.75em;
   }
   /* Admin -> Plugins panel - additional layout
    ========================================================================== */
@@ -4040,7 +4106,7 @@ button {
   .ui-button {
     display: inline-block;
     position: relative;
-    height: 2.1666667em;
+    height: 2.333333333333333em;
     margin: 0 0.1em 0 0;
     padding: 0.25em 0.75em;
     border: 1px solid;
@@ -4051,7 +4117,7 @@ button {
     font-family: Helvetica, Arial, sans-serif;
     /* 1 */
     font-size: 12px;
-    line-height: 1.5em;
+    line-height: 1.666666666666667em;
     text-align: center;
     /* 2 */
     cursor: pointer;
@@ -4077,7 +4143,7 @@ button {
   .ui-button:active {
     border-color: #cccccc #b7b7b7 #b7b7b7 #cccccc;
     background-color: #dddddd;
-    color: #1a1a1a;
+    color: #1a1919;
     text-decoration: none;
   }
   .ui-button:focus {
@@ -4706,7 +4772,7 @@ button {
     outline: 0;
     /* 1 */
     font-size: 12px;
-    line-height: 1.5em;
+    line-height: 1.666666666666667em;
     list-style: none;
     box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   }
@@ -4795,20 +4861,9 @@ button {
     overflow: hidden;
   }
   .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar.gif");
-    background-size: 16px 16px;
-    height: 16px;
+    height: 8px;
     background-color: #c7dbfa;
   }
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 1.25), screen and (min-resolution: 1.25dppx), screen and (min-resolution: 120dpi) {
-  .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar@2x.gif");
-  }
-}
-
-@media screen {
   /**
  * Progressbar with indeterminate value.
  *
@@ -4821,19 +4876,8 @@ button {
  * </div>
  */
   .ui-progressbar-indeterminate .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar-indeterminate.gif");
-    background-size: 16px 16px;
     background-color: #cccccc;
   }
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 1.25), screen and (min-resolution: 1.25dppx), screen and (min-resolution: 120dpi) {
-  .ui-progressbar-indeterminate .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar-indeterminate@2x.gif");
-  }
-}
-
-@media screen {
   /* Selectmenu
    ========================================================================== */
   /**

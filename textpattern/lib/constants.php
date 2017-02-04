@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -861,6 +861,16 @@ if (!defined('TEXTPATTERN_DEFAULT_LANG')) {
 
     define('TEXTPATTERN_DEFAULT_LANG', 'en-gb');
 }
+
+/**
+ * Language flags;
+ *
+ * @since    4.7.0
+ * @package  L10n
+ */
+define('TEXTPATTERN_LANG_ACTIVE', 0x1);
+define('TEXTPATTERN_LANG_INSTALLED', 0x2);
+define('TEXTPATTERN_LANG_AVAILABLE', 0x4);
 
 /**
  * Strip empty values.

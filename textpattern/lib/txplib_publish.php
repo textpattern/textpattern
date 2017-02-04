@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -404,7 +404,7 @@ function parse($thing, $condition = null)
         $count   = array(-1);
         $level   = 0;
 
-        $f = '@(</?(?:'.$pattern.'):\w+(?:\s+#?\w+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+        $f = '@(</?(?:'.$pattern.'):\w+(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
         $t = '@^</?('.$pattern.'):(\w+)(.*?)/?\>$@s';
 
         $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -798,13 +798,11 @@ function filterAtts($atts = null)
     if (is_array($atts)) {
         if (empty($out)) {
             $out = lAtts(array(
-                'sort'          => 'Posted desc',
-                'sortby'        => '',
-                'sortdir'        => '',
-                'keywords'      => '',
-                'expired'       => $prefs['publish_expired_articles'],
-                'id'            => '',
-                'time'          => 'past',
+                'sort'     => 'Posted desc',
+                'keywords' => '',
+                'expired'  => $prefs['publish_expired_articles'],
+                'id'       => '',
+                'time'     => 'past',
             ), $atts, 0);
             $trace->log('[filterAtts accepted]');
         } else {

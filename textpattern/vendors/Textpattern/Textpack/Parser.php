@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -107,8 +107,8 @@ class Parser
         foreach ($lines as $line) {
             $line = trim($line);
 
-            // A comment line.
-            if (preg_match('/^#[^@]/', $line, $m)) {
+            // A blank/comment line.
+            if ($line === '' || preg_match('/^#[^@]/', $line, $m)) {
                 continue;
             }
 

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -220,7 +220,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_discuss` (
     INDEX parentid (parentid)
 ) $tabletype ";
 
-$create_sql[] = "INSERT INTO `".PFX."txp_discuss` VALUES (000001, 1, 'Donald Swain', 'donald.swain@example.com', 'example.com', '127.0.0.1', NOW(), '<p>I enjoy your site very much.</p>', 1)";
+$create_sql[] = "INSERT INTO `".PFX."txp_discuss` VALUES (000001, 1, 'Donald Swain', 'donald.swain@example.com', 'http://example.com', '127.0.0.1', NOW(), '<p>I enjoy your site very much.</p>', 1)";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_discuss_nonce` (
     issue_time DATETIME     NOT NULL,

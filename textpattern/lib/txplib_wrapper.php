@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -830,7 +830,7 @@ class TXP_Wrapper
 
         if ($r) {
             // Update the last access time.
-            $safe_user = addslashes($user);
+            $safe_user = doSlash($user);
             safe_update('txp_users', "last_access = NOW()", "name = '$safe_user'");
 
             return true;

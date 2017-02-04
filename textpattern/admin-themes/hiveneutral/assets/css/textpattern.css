@@ -112,10 +112,20 @@ button {
  */
   .pophelp,
   .pophelpsubtle {
-    padding: 0 0.4em;
+    display: inline-block;
+    width: 1.230769230769231em;
     border: 1px solid #e0e0e0;
     border-radius: 50%;
     font-weight: normal;
+    line-height: 1.230769230769231em;
+    text-align: center;
+  }
+  .pophelp:hover, .pophelp:active,
+  .pophelpsubtle:hover,
+  .pophelpsubtle:active {
+    border-color: #2283d9;
+    background-color: #fff9e1;
+    text-decoration: none;
   }
   .pophelp:focus,
   .pophelpsubtle:focus {
@@ -488,6 +498,13 @@ button {
   a:focus .content-image {
     border-color: #0066ff;
   }
+  .img-preview:focus {
+    outline: 0;
+  }
+  .img-preview img {
+    width: 120px;
+    height: 120px;
+  }
   /* Messages
    ========================================================================== */
   /**
@@ -500,27 +517,35 @@ button {
  * <strong class="success">
  * <strong class="error">
  */
-  .success,
-  .warning,
-  .error,
-  .information {
+  .success:not(li),
+  .warning:not(li),
+  .error:not(li),
+  .information:not(li) {
     padding: 1px 0.23076923076923em;
     border-radius: 0.15em;
   }
   .success {
     background: #dff0d8;
+  }
+  .success:not(li) {
     color: #238c23;
   }
   .warning {
     background: #f7eedb;
+  }
+  .warning:not(li) {
     color: #cc8c00;
   }
   .error {
     background: #f2dede;
+  }
+  .error:not(li) {
     color: #9d261d;
   }
   .information {
     background: #e7f6fc;
+  }
+  .information:not(li) {
     color: #3a87ad;
   }
   /**
@@ -546,21 +571,21 @@ button {
  * <p class="alert-block success">
  * <p class="alert-block error">
  */
-  .alert-block {
+  .alert-block:not(li) {
     padding: 0.53846153846154em 1em;
     clear: both;
     border: 1px solid;
   }
-  .alert-block.success {
+  .alert-block:not(li).success {
     border-color: #a3d48e;
   }
-  .alert-block.warning {
+  .alert-block:not(li).warning {
     border-color: #e4c788;
   }
-  .alert-block.error {
+  .alert-block:not(li).error {
     border-color: #e1b2b2;
   }
-  .alert-block.information {
+  .alert-block:not(li).information {
     border-color: #b1e2f5;
   }
   /**
@@ -1035,7 +1060,7 @@ button {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     /* 3 */
     font-size: 13px;
-    line-height: 1.38461538461538em;
+    line-height: 20px;
     vertical-align: baseline;
     box-sizing: border-box;
   }
@@ -1078,7 +1103,7 @@ button {
   [type="week"],
   select,
   textarea {
-    height: 2.15384615384615em;
+    height: 2.307692307692308em;
     padding: 0.30769230769231em;
     border: 1px solid #cccccc;
     border-radius: 0;
@@ -1157,7 +1182,7 @@ button {
  */
   select {
     padding-right: 1.30769230769231em;
-    background: #ffffff url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxM3B4JyBoZWlnaHQ9JzRweCcgdmlld0JveD0nMCAwIDEzIDQnPjxwb2x5Z29uIGZpbGw9JyMzMzMnIHBvaW50cz0nMy41LDQgMCwwIDcsMCcvPjwvc3ZnPg==") right center no-repeat;
+    background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='4' viewBox='0 0 13 4'%3E%3Cpolygon fill='%23333' points='3.5,4 0,0 7,0'/%3E%3C/svg%3E") right center no-repeat;
     background-size: 1em 0.30769230769231em;
     text-transform: none;
   }
@@ -1197,7 +1222,7 @@ button {
  */
   select[size="0"],
   select[size="1"] {
-    height: 2.15384615384615em;
+    height: 2.307692307692308em;
     vertical-align: baseline;
   }
   /**
@@ -1375,7 +1400,7 @@ button {
     background-color: #5ba4e5;
     display: inline-block;
     width: auto;
-    height: 2.15384615384615em;
+    height: 2.307692307692308em;
     padding: 0.30769230769231em 0.61538461538462em;
     border: 1px solid #3c93e0;
     border-radius: 0.3em;
@@ -1417,7 +1442,7 @@ button {
   .navlink-active:active {
     background-color: #4e9de3;
     border-color: #1e72bc;
-    color: #e6e6e6;
+    color: #e6e5e5;
     text-decoration: none;
   }
   button:focus,
@@ -1504,7 +1529,7 @@ button {
  */
   .navlink-disabled {
     display: inline-block;
-    height: 2.15384615384615em;
+    height: 2.307692307692308em;
     padding: 0.30769230769231em 0.61538461538462em;
     border: 1px solid;
     border-radius: 0.3em;
@@ -1967,7 +1992,7 @@ button {
     -ms-flex-positive: 1;
         flex-grow: 1;
     width: 100%;
-    max-width: 116em;
+    max-width: 116.3076923em;
     margin: 0 auto;
   }
   /* Layout grid
@@ -2051,21 +2076,49 @@ button {
  *         Content
  *     </div>
  * </div>
+ *
+ * <ul class="txp-grid">
+ *     <li>
+ *         Content
+ *     </li>
+ *     <li>
+ *         Content
+ *     </li>
+ *     <li>
+ *         Content
+ *     </li>
+ * </ul>
  */
   .txp-grid {
     display: -ms-inline-flexbox;
     display: inline-flex;
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
-    -ms-flex-pack: center;
-        justify-content: center;
+    width: 100%;
     margin: -2px;
+    padding: 0;
+    clear: both;
+    list-style: none;
+  }
+  .txp-grid > * {
+    position: relative;
+    margin: 2px;
   }
   .txp-grid-cell {
-    margin: 2px;
     padding: 0 1em;
     border: 1px solid #cccccc;
     box-sizing: border-box;
+  }
+  .txp-grid-multi-edit {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    padding: 3px 6px;
+    border: 1px solid #d4d4d4;
+    border-top: 0;
+    border-left: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 2;
   }
   /* Header
    ========================================================================== */
@@ -2497,7 +2550,8 @@ button {
   /* Globally shared layout
    ========================================================================== */
   /**
- * 1. Prevent text size adjust after mobile device orientation change.
+ * 1. Prevent adjustments of font size after orientation changes in
+ *    IE on Windows Phone and in iOS.
  */
   html {
     /* 1 */
@@ -2545,10 +2599,41 @@ button {
     left: auto;
   }
   /**
- * Ensure dropdowns are hidden at page load (prevents content 'jumping').
+ * Drop down lists.
+ *
+ * 1. Ensure dropdowns are hidden at page load (prevents content 'jumping').
+ *
+ * <ul class="txp-dropdown">
+ *     <li>
+ *         <div>
+ *             <input class="checkbox" type="checkbox">
+ *             <label>Search all</label>
+ *         </div>
+ *     </li>
+ *     <li>
+ *         <div>
+ *             <input class="checkbox active" type="checkbox">
+ *             <label>ID#</label>
+ *         </div>
+ *     </li>
+ * </ul>
  */
   .txp-dropdown {
+    /* 1 */
     display: none;
+    position: absolute;
+    width: 18em;
+    z-index: 100;
+  }
+  .txp-dropdown .checkbox {
+    vertical-align: -0.23076923076923em;
+  }
+  .txp-dropdown .checkbox + label {
+    display: inline-block;
+    width: 85%;
+    padding: 0.23076923076923em 0.30769230769231em;
+    cursor: pointer;
+    vertical-align: text-top;
   }
   /**
  * Search widget at top of lists.
@@ -2575,24 +2660,12 @@ button {
         justify-content: flex-end;
     margin: 1em 0;
   }
-  .txp-search .ui-menu {
-    position: absolute;
-    width: 18em;
-    z-index: 100;
-  }
   .txp-search .ui-controlgroup {
     -ms-flex-wrap: nowrap;
         flex-wrap: nowrap;
   }
-  .txp-search .txp-dropdown input {
-    vertical-align: -0.23076923076923em;
-  }
-  .txp-search .txp-dropdown label {
-    display: inline-block;
-    width: 85%;
-    padding: 0.23076923076923em 0.30769230769231em;
-    cursor: pointer;
-    vertical-align: text-top;
+  .txp-search .txp-dropdown {
+    z-index: 101;
   }
   .txp-search-clear {
     -ms-flex: 1;
@@ -2660,7 +2733,7 @@ button {
     margin: 0.46153846153846em 0 1em;
     float: right;
   }
-  .txp-list-options > * {
+  .txp-list-options > *:not(ul) {
     margin: 0 0 0 1em;
   }
   .txp-list-options form {
@@ -3015,6 +3088,7 @@ button {
  */
   .txp-form-field {
     margin: 1em 0;
+    vertical-align: top;
   }
   /**
  * Label/value form field pairings.
@@ -3065,7 +3139,7 @@ button {
   .setup:not(.welcome) .txp-form-field-value {
     -ms-flex: 1 1 0%;
         flex: 1 1 0%;
-    min-height: 2.15384615384615em;
+    min-height: 2.307692307692308em;
   }
   /**
  * Don't inline or constrain form fields for textareas.
@@ -3297,9 +3371,6 @@ button {
   }
   /* Content -> Images panel - additional layout
    ========================================================================== */
-  .has-thumbnail a:focus {
-    outline: 0;
-  }
   .thumbnail-alter input {
     margin: 0 0.30769230769231em 0 0;
   }
@@ -3371,8 +3442,8 @@ button {
   }
   /* Admin -> Languages panel - additional layout
    ========================================================================== */
-  #page-lang .txp-list .modified {
-    margin-left: 0.6em;
+  #page-lang .txp-grid-cell {
+    min-width: 19em;
   }
   /* Admin -> Plugins panel - additional layout
    ========================================================================== */
@@ -4594,7 +4665,7 @@ button {
     background-color: #5ba4e5;
     display: inline-block;
     position: relative;
-    height: 2.1538462em;
+    height: 2.307692307692308em;
     margin: 0 0.1em 0 0;
     padding: 0.30769230769231em 0.61538461538462em;
     border: 1px solid #3c93e0;
@@ -4603,7 +4674,7 @@ button {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     /* 1 */
     font-size: 13px;
-    line-height: 1.3846154em;
+    line-height: 20px;
     text-align: center;
     /* 2 */
     cursor: pointer;
@@ -4629,7 +4700,7 @@ button {
   .ui-button:active {
     background-color: #4e9de3;
     border-color: #1e72bc;
-    color: #e6e6e6;
+    color: #e6e5e5;
     text-decoration: none;
   }
   .ui-button:focus {
@@ -5272,7 +5343,7 @@ button {
     outline: 0;
     /* 1 */
     font-size: 13px;
-    line-height: 1.38461538461538em;
+    line-height: 20px;
     list-style: none;
   }
   .ui-menu .ui-menu {
@@ -5356,24 +5427,17 @@ button {
  */
   .ui-progressbar {
     margin-bottom: 1em;
+    border-radius: 4px;
     text-align: left;
     overflow: hidden;
   }
   .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar.gif");
-    background-size: 16px 16px;
-    height: 16px;
-    background-color: #d4e7f8;
+    height: 8px;
+    background-color: #c7e0f6;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+    background-size: 24px 24px;
+    animation: progressbar-stripes linear 4s infinite;
   }
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 1.25), screen and (min-resolution: 1.25dppx), screen and (min-resolution: 120dpi) {
-  .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar@2x.gif");
-  }
-}
-
-@media screen {
   /**
  * Progressbar with indeterminate value.
  *
@@ -5386,19 +5450,8 @@ button {
  * </div>
  */
   .ui-progressbar-indeterminate .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar-indeterminate.gif");
-    background-size: 16px 16px;
     background-color: #cccccc;
   }
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 1.25), screen and (min-resolution: 1.25dppx), screen and (min-resolution: 120dpi) {
-  .ui-progressbar-indeterminate .ui-progressbar-value {
-    background-image: url("../img/ui-progressbar-indeterminate@2x.gif");
-  }
-}
-
-@media screen {
   /* Selectmenu
    ========================================================================== */
   /**
@@ -6141,6 +6194,15 @@ button {
   50%,
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes progressbar-stripes {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 48px 0;
   }
 }
 
