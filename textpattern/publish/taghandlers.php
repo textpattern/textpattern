@@ -3949,6 +3949,7 @@ function lang()
 function breadcrumb($atts, $thing = null)
 {
     global $c, $s, $sitename, $thiscategory;
+    static $cache = array();
 
     extract(lAtts(array(
         'category'  => $c,
@@ -3986,8 +3987,15 @@ function breadcrumb($atts, $thing = null)
             : $section_title_html;
     }
 
-    $catpath = getTreePath($category, 'article');
-    array_shift($catpath);
+    if (!$category) {
+        $catpath = array();
+    } elseif (isset($cache[$category])) {
+        $catpath = $cache[$category];
+    } else {
+        $catpath = getTreePath($category, 'article');
+        array_shift($catpath);
+        $cache[$category] = $catpath;
+    }
 
     if ($limit || $offset) {
         $catpath = array_slice($catpath, (int)$offset, isset($limit) ? (int)$limit : null);
