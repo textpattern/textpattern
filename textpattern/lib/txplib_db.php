@@ -1359,6 +1359,8 @@ function getTreePath($target, $type, $tbl = 'txp_category')
             'id' => $id,
             'name' => $name,
             'title' => $title,
+            'description' => $description,
+            'type' => $type,
             'level' => count($right),
             'children' => ($rgt - $lft - 1) / 2,
         );

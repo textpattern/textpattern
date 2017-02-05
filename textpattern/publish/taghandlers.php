@@ -1292,27 +1292,31 @@ function category_list($atts, $thing = null)
         }
 
         if ($exclude) {
-            $exclude = do_list_unique($exclude);
+            $exclude = $exc = do_list_unique($exclude);
             $exclude = join("','", doSlash($exclude));
             $exclude = "AND name NOT IN ('$exclude')";
         }
 
         if ($parent) {
-            $qs = safe_rows("lft, rgt", 'txp_category', "type = '".doSlash($type)."' AND name IN ($parents)");
+            $between = $children ? array() : array(1);
 
-            if ($qs) {
-                $between = array();
+            if ($children) {
+                $qs = safe_rows("name, lft, rgt", 'txp_category', "type = '".doSlash($type)."' AND name IN ($parents)");
 
-                foreach ($qs as $a) {
-                    extract($a);
-                    $between[] = "(lft BETWEEN $lft AND $rgt)";
+                if ($qs) {
+                    foreach ($qs as $a) {
+                        extract($a);
+
+                        if (empty($exc) || $rgt - $lft > 1 || !in_array($name, $exc)) {
+                            $between[] = "(lft BETWEEN $lft AND $rgt)";
+                        }
+                    }
                 }
-
-                $rs = safe_rows_start("name, title, description", 'txp_category',
-                    "(".join(" OR ", $between).") AND type = '".doSlash($type)."' AND name != 'default' $exclude $shallow ORDER BY ".($sort ? $sort : "lft ASC").$sql_limit);
-            } else {
-                $rs = array();
             }
+
+            $rs = empty($between) ? array() : safe_rows_start("name, title, description", 'txp_category',
+                "(".join(" OR ", $between).") AND type = '".doSlash($type)."' AND name != 'default' $exclude $shallow ORDER BY ".($sort ? $sort : "lft ASC").$sql_limit);
+
         } else {
             $rs = safe_rows_start("name, title, description", 'txp_category',
                 "type = '".doSlash($type)."' AND name NOT IN ('default','root') $exclude $shallow ORDER BY ".($sort ? $sort : "name ASC").$sql_limit);
@@ -3942,13 +3946,17 @@ function lang()
 
 // -------------------------------------------------------------
 
-function breadcrumb($atts)
+function breadcrumb($atts, $thing = null)
 {
-    global $pretext, $sitename;
+    global $c, $s, $sitename, $thiscategory;
 
     extract(lAtts(array(
+        'category'  => $c,
+        'section'   => $s,
         'wraptag'   => 'p',
         'separator' => '&#160;&#187;&#160;',
+        'limit'     => null,
+        'offset'    => 0,
         'link'      => 1,
         'label'     => $sitename,
         'title'     => '',
@@ -3957,47 +3965,48 @@ function breadcrumb($atts)
     ), $atts));
 
     // For BC, get rid of in crockery.
-    if ($link == 'y') {
-        $linked = true;
-    } elseif ($link == 'n') {
+    if ($link == 'n') {
         $linked = false;
     } else {
         $linked = $link;
     }
 
+    $content = array();
     $label = txpspecialchars($label);
 
-    if ($linked) {
+    if ($linked && $label) {
         $label = doTag($label, 'a', $linkclass, ' href="'.hu.'"');
     }
 
-    $content = array();
-    extract($pretext);
-
-    if (!empty($s) && $s != 'default') {
-        $section_title = ($title) ? fetch_section_title($s) : $s;
+    if (!empty($section) && $section != 'default') {
+        $section_title = ($title) ? fetch_section_title($section) : $section;
         $section_title_html = escape_title($section_title);
         $content[] = ($linked)
             ? (doTag($section_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('s' => $s)).'"'))
             : $section_title_html;
     }
 
-    $category = empty($c) ? '' : $c;
+    $catpath = getTreePath($category, 'article');
+    array_shift($catpath);
 
-    foreach (getTreePath($category, 'article') as $cat) {
-        if ($cat['name'] != 'root') {
-            $category_title_html = $title ? escape_title($cat['title']) : $cat['name'];
-            $content[] = ($linked)
-                ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('c' => $cat['name'])).'"')
-                : $category_title_html;
-        }
+    if ($limit || $offset) {
+        $catpath = array_slice($catpath, (int)$offset, isset($limit) ? (int)$limit : null);
     }
+
+    $oldcategory = isset($thiscategory) ? $thiscategory : null;
+
+    foreach ($catpath as $thiscategory) {
+        $category_title_html = isset($thing) ? parse($thing) : ($title ? escape_title($thiscategory['title']) : $thiscategory['name']);
+        $content[] = ($linked)
+            ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('c' => $thiscategory['name'])).'"')
+            : $category_title_html;
+    }
+
+    $thiscategory = isset($oldcategory) ? $oldcategory : null;
 
     // Add the label at the end, to prevent breadcrumb for homepage.
     if ($content) {
-        $content = array_merge(array($label), $content);
-
-        return doTag(join($separator, $content), $wraptag, $class);
+        return doWrap($label ? array_merge(array($label), $content) : $content, $wraptag, $separator, $class);
     }
 }
 
