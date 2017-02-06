@@ -3,8 +3,8 @@ Changes in 4.7.0 (upcoming)
 * Textile v3.6.
 * Added: Pages, Forms and Styles panels save some changes without page refreshes
   (Ajax). Last used Page/Form/Stylesheet remembered.
-* Added: User selectable column list options in tables replaces 'Toggle details'
-  checkboxes. Settings remembered per device.
+* Added: User selectable column list options in tables replaces 'Show more
+  detail' checkboxes. Settings remembered per device.
 * Added: Valueless attributes.
 * Added: Short tags.
 * Added: <txp:evaluate /> tag.
@@ -16,6 +16,7 @@ Changes in 4.7.0 (upcoming)
 * Added: One-click comment searches by parent article (thanks, makss).
 * Changed: <txp:page_title /> tag SEO - site name renders after page name,
   default separator changed from ': ' to ' | ', page numbers added.
+* Changed: <txp:breadcrumb /> can be used as a container tag.
 * Changed: Reinstate <txp:keywords> tag and add wraptag/class/break attributes.
 * Changed: Upgrades land on Diagnostics panel, with suitable message.
 * Changed: Enable HTTP 226 responses (thanks, da2x).
