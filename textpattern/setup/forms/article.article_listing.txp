@@ -1,6 +1,6 @@
 <li class="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-    <h4 itemprop="name headline">
-        <a href="<txp:permlink />" itemprop="url">
+    <h4 itemprop="headline">
+        <a href="<txp:permlink />" itemprop="url mainEntityOfPage">
             <txp:title />
         </a>
     </h4>

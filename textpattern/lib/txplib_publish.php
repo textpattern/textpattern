@@ -538,14 +538,29 @@ function maybe_tag($tag)
 function processTags($tag, $atts, $thing = null)
 {
     global $production_status, $txp_current_tag, $txp_current_form, $trace;
-    static $registry = null;
+    static $registry = null, $depth = 1;
+    static $txp_parser = array('tag' => '', 'atts' => '', 'thing' => null);
 
     if (empty($tag)) {
         return;
     }
 
+    if ($tag === 'this') {
+        $attr = splat($atts);
+
+        if ($depth >= (isset($attr['depth']) ? intval($attr['depth']) : 10)) {
+            return;
+        }
+
+        unset($attr['depth']);
+        $depth++;
+        extract($txp_parser);
+    }
+
+    $old_parser = $txp_parser;
+    $txp_parser = compact('tag', 'atts', 'thing');
+
     if ($production_status !== 'live') {
-        $old_tag = $txp_current_tag;
         $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
         $trace->start($txp_current_tag);
     }
@@ -554,7 +569,7 @@ function processTags($tag, $atts, $thing = null)
         $registry = Txp::get('\Textpattern\Tag\Registry');
     }
 
-    $split = splat($atts);
+    $split = !empty($attr) ? $attr + splat($atts) : splat($atts);
     $out = $registry->process($tag, $split, $thing);
 
     if ($out === false) {
@@ -569,8 +584,15 @@ function processTags($tag, $atts, $thing = null)
 
     if ($production_status !== 'live') {
         $trace->stop(isset($thing) ? "</txp:{$tag}>" : null);
-        $txp_current_tag = $old_tag;
+        extract($old_parser);
+        $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
     }
+
+    if (isset($attr)) {
+        $depth--;
+    }
+
+    $txp_parser = $old_parser;
 
     return $out;
 }

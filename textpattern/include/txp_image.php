@@ -76,11 +76,10 @@ if ($event == 'image') {
 
 function image_list($message = '')
 {
-    global $txpcfg, $extensions, $img_dir, $file_max_upload_size, $txp_user, $event;
+    global $file_max_upload_size, $txp_user, $event;
 
     pagetop(gTxt('tab_image'), $message);
 
-    extract($txpcfg);
     extract(gpsa(array(
         'page',
         'sort',
@@ -405,7 +404,12 @@ function image_list($message = '')
                     $can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;', '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    ($can_edit ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id), '', array(
+                    ($can_edit ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id).
+                    span(
+                        sp.span('&#124;', array('role' => 'separator')).
+                        sp.href(gTxt('view'), imagesrcurl($id, $ext), array('target' => '_blank')),
+                        array('class' => 'txp-option-link images_detail')
+                    ), '', array(
                         'class' => 'txp-list-col-id',
                         'scope' => 'row',
                     )
@@ -461,7 +465,16 @@ function image_list($message = '')
         n.'</div>'; // End of .txp-layout.
 }
 
-// -------------------------------------------------------------
+/**
+ * Renders a multi-edit form widget for images.
+ *
+ * @param  int    $page          The page number
+ * @param  string $sort          The current sort value
+ * @param  string $dir           The current sort direction
+ * @param  string $crit          The current search criteria
+ * @param  string $search_method The current search method
+ * @return string HTML
+ */
 
 function image_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
@@ -491,7 +504,9 @@ function image_multiedit_form($page, $sort, $dir, $crit, $search_method)
     return multi_edit($methods, 'image', 'image_multi_edit', $page, $sort, $dir, $crit, $search_method);
 }
 
-// -------------------------------------------------------------
+/**
+ * Processes multi-edit actions.
+ */
 
 function image_multi_edit()
 {
@@ -571,7 +586,7 @@ function image_multi_edit()
 
 function image_edit($message = '', $id = '')
 {
-    global $prefs, $file_max_upload_size, $txp_user, $event, $all_image_cats;
+    global $file_max_upload_size, $txp_user, $event, $all_image_cats;
 
     if (!$id) {
         $id = gps('id');
@@ -660,7 +675,7 @@ function image_edit($message = '', $id = '')
                         n.'<label for="height">'.gTxt('thumb_height').'</label>'.
                         fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').
                         n.'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.
-                        checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop').
+                        checkbox('crop', 1, get_pref('thumb_crop'), '', 'crop').
                         fInput('submit', '', gTxt('create')), ' class="edit-alter-thumbnail"'
                     ).
                     hInput('id', $id).
@@ -746,19 +761,17 @@ function image_edit($message = '', $id = '')
     }
 }
 
-// -------------------------------------------------------------
+/**
+ * Creates a new image from an upload.
+ */
 
 function image_insert()
 {
-    global $txpcfg, $extensions, $txp_user;
-
     if (!has_privs('image.edit.own')) {
         image_list(gTxt('restricted_area'));
 
         return;
     }
-
-    extract($txpcfg);
 
     $meta = gpsa(array('caption', 'alt', 'category'));
 
@@ -773,12 +786,13 @@ function image_insert()
     }
 }
 
-// -------------------------------------------------------------
+/**
+ * Replaces an image with one from an upload.
+ */
 
 function image_replace()
 {
-    global $txpcfg, $extensions, $txp_user;
-    extract($txpcfg);
+    global $txp_user;
 
     $id = assert_int(gps('id'));
     $rs = safe_row("*", 'txp_image', "id = $id");
@@ -806,12 +820,14 @@ function image_replace()
     }
 }
 
-// -------------------------------------------------------------
+/**
+ * Creates a new thumbnail from an upload.
+ */
 
 function thumbnail_insert()
 {
-    global $txpcfg, $extensions, $txp_user, $img_dir, $path_to_site;
-    extract($txpcfg);
+    global $extensions, $txp_user;
+
     $id = assert_int(gps('id'));
     $author = fetch('author', 'txp_image', 'id', $id);
 
@@ -857,7 +873,9 @@ function thumbnail_insert()
     }
 }
 
-// -------------------------------------------------------------
+/**
+ * Saves image meta data.
+ */
 
 function image_save()
 {
@@ -897,7 +915,11 @@ function image_save()
     image_list($message);
 }
 
-// -------------------------------------------------------------
+/**
+ * Deletes the given image(s) from the database and filesystem.
+ *
+ * @param array $ids List of image IDs to delete
+ */
 
 function image_delete($ids = array())
 {
@@ -953,7 +975,9 @@ function image_delete($ids = array())
     image_list($message);
 }
 
-// -------------------------------------------------------------
+/**
+ * Saves pageby value for the image list.
+ */
 
 function image_change_pageby()
 {
@@ -961,7 +985,9 @@ function image_change_pageby()
     image_list();
 }
 
-// -------------------------------------------------------------
+/**
+ * Creates a new thumbnail from an existing image.
+ */
 
 function thumbnail_create()
 {
@@ -1023,7 +1049,9 @@ function thumbnail_create()
     }
 }
 
-// -------------------------------------------------------------
+/**
+ * Delete a thumbnail.
+ */
 
 function thumbnail_delete()
 {
