@@ -863,6 +863,16 @@ if (!defined('TEXTPATTERN_DEFAULT_LANG')) {
 }
 
 /**
+ * Language flags;
+ *
+ * @since    4.7.0
+ * @package  L10n
+ */
+define('TEXTPATTERN_LANG_ACTIVE', 0x1);
+define('TEXTPATTERN_LANG_INSTALLED', 0x2);
+define('TEXTPATTERN_LANG_AVAILABLE', 0x4);
+
+/**
  * Strip empty values.
  *
  * @since   4.6.0

@@ -2,7 +2,9 @@ Changes in 4.7.0 (upcoming)
 
 * Textile v3.6.
 * Added: Pages, Forms and Styles panels save some changes without page refreshes
-  (Ajax).
+  (Ajax). Last used Page/Form/Stylesheet remembered.
+* Added: User selectable column list options in tables replaces 'Show more
+  detail' checkboxes. Settings remembered per device.
 * Added: Valueless attributes.
 * Added: Short tags.
 * Added: <txp:evaluate /> tag.
@@ -10,18 +12,24 @@ Changes in 4.7.0 (upcoming)
 * Added: Per-user admin panel language preference (decoupled from site language
   preference).
 * Added: Button to swap width/height values on image edit thumbnail generator.
+* Added: Section searches by description.
+* Added: One-click comment searches by parent article (thanks, makss).
 * Changed: <txp:page_title /> tag SEO - site name renders after page name,
-  default separator changed from ': ' to ' | '.
+  default separator changed from ': ' to ' | ', page numbers added.
+* Changed: <txp:breadcrumb /> can be used as a container tag.
+* Changed: Reinstate <txp:keywords> tag and add wraptag/class/break attributes.
 * Changed: Upgrades land on Diagnostics panel, with suitable message.
 * Changed: Enable HTTP 226 responses (thanks, da2x).
 * Changed: Make pref panels fully printable (thanks, Philippe).
 * Changed: Pane states stored only client-side (localStorage).
 * Changed: pluggable_ui() behaves more intelligently when chaining.
 * Changed: Pagination steps are more grid friendly: 12/24/48/96.
+* Changed: More locale-aware date handling in safe_strftime().
 * Changed: Deprecated support for uploading .swf images (support will be removed
   entirely at Textpattern 4.8.0).
 * Changed: Extensive admin theme image optimizations.
-* zxcvbn 4.4.1.
+* Fixed: Only update db version string if using release version.
+* zxcvbn 4.4.2.
 
 Changes in 4.6.2
 

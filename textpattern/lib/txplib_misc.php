@@ -4651,7 +4651,7 @@ function set_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html = 't
     }
 
     if (pref_exists($name, $user_name)) {
-        return update_pref($name, (string) $val, null, null, null, null, $user_name);
+        return update_pref($name, $val, null, null, null, null, $user_name);
     }
 
     return create_pref($name, $val, $event, $type, $html, $position, $user_name);
@@ -4836,6 +4836,8 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
         return true;
     }
 
+    $val = is_scalar($val) ? (string)$val : json_encode($val);
+
     if (
         safe_insert(
             'txp_prefs',
@@ -4900,6 +4902,10 @@ function update_pref($name, $val = null, $event = null, $type = null, $html = nu
 
     if ($user_name !== null) {
         $where[] = "user_name = '".doSlash((string) $user_name)."'";
+    }
+
+    if (isset($val)) {
+        $val = is_scalar($val) ? (string)$val : json_encode($val);
     }
 
     foreach (array('val', 'event', 'type', 'html', 'position') as $field) {

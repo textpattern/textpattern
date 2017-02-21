@@ -440,12 +440,7 @@ function list_list($message = '', $post = '')
                     ), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    eLink('article', 'edit', 'ID', $ID, $ID).
-                    span(
-                        sp.span('&#124;', array('role' => 'separator')).
-                        sp.href(gTxt('view'), $view_url, array('target' => '_blank')),
-                        array('class' => 'txp-option-link')
-                    ), '', array(
+                    eLink('article', 'edit', 'ID', $ID, $ID), '', array(
                         'class' => '',
                         'scope' => 'row',
                     )
