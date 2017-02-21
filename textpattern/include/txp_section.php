@@ -157,6 +157,10 @@ function sec_section_list($message = '')
                 'column' => 'txp_section.css',
                 'label'  => gTxt('css'),
             ),
+            'description' => array(
+                'column' => 'txp_section.description',
+                'label'  => gTxt('description'),
+            ),
             'on_frontpage' => array(
                 'column' => 'txp_section.on_frontpage',
                 'label'  => gTxt('on_front_page'),
@@ -265,9 +269,7 @@ function sec_section_list($message = '')
     );
 
     if ($rs) {
-        echo n.tag(
-                toggle_box('section_detail'), 'div', array('class' => 'txp-list-options')).
-            n.tag_start('form', array(
+        echo n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'section_form',
                 'name'   => 'longform',
@@ -304,19 +306,19 @@ function sec_section_list($message = '')
                 ).
                 column_head(
                     'on_front_page', 'on_frontpage', 'section', true, $switch_dir, $crit, $search_method,
-                        (('on_frontpage' == $sort) ? "$dir " : '').'txp-list-col-frontpage section_detail'
+                        (('on_frontpage' == $sort) ? "$dir " : '').'txp-list-col-frontpage'
                 ).
                 column_head(
                     'syndicate', 'in_rss', 'section', true, $switch_dir, $crit, $search_method,
-                        (('in_rss' == $sort) ? "$dir " : '').'txp-list-col-syndicate section_detail'
+                        (('in_rss' == $sort) ? "$dir " : '').'txp-list-col-syndicate'
                 ).
                 column_head(
                     'include_in_search', 'searchable', 'section', true, $switch_dir, $crit, $search_method,
-                        (('searchable' == $sort) ? "$dir " : '').'txp-list-col-searchable section_detail'
+                        (('searchable' == $sort) ? "$dir " : '').'txp-list-col-searchable'
                 ).
                 column_head(
                     'articles', 'article_count', 'section', true, $switch_dir, $crit, $search_method,
-                        (('article_count' == $sort) ? "$dir " : '').'txp-list-col-article_count section_detail'
+                        (('article_count' == $sort) ? "$dir " : '').'txp-list-col-article_count'
                 )
             ).
             n.tag_end('thead').
@@ -391,7 +393,7 @@ function sec_section_list($message = '')
                     span(
                         sp.span('&#124;', array('role' => 'separator')).
                         sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name))),
-                        array('class' => 'txp-option-link section_detail')
+                        array('class' => 'txp-option-link')
                     ), '', array(
                         'class' => 'txp-list-col-name',
                         'scope' => 'row',
@@ -410,16 +412,16 @@ function sec_section_list($message = '')
                     $sec_css, '', 'txp-list-col-style'
                 ).
                 td(
-                    $sec_on_frontpage, '', 'txp-list-col-frontpage section_detail'
+                    $sec_on_frontpage, '', 'txp-list-col-frontpage'
                 ).
                 td(
-                    $sec_in_rss, '', 'txp-list-col-syndicate section_detail'
+                    $sec_in_rss, '', 'txp-list-col-syndicate'
                 ).
                 td(
-                    $sec_searchable, '', 'txp-list-col-searchable section_detail'
+                    $sec_searchable, '', 'txp-list-col-searchable'
                 ).
                 td(
-                    $articles, '', 'txp-list-col-article_count section_detail'
+                    $articles, '', 'txp-list-col-article_count'
                 ),
                 array('id' => 'txp_section_'.$sec_name)
             );

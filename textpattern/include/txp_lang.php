@@ -241,7 +241,7 @@ function list_languages($message = '')
                     'class' => 'date '.($file_updated ? 'created' : 'modified'),
                 ))
                 : ''
-            : '-', ' class="lang-value languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"'
+            : '-', ' class="lang-value'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"'
         );
 
         $list .= tr(
@@ -253,7 +253,7 @@ function list_languages($message = '')
                 ).
             n.$rpc_install.
             n.$lang_file.
-            tda(((has_privs('lang.edit') && in_array($langname, $installed_lang)) ? dLink('lang', 'remove_language', 'lang_code', $langname, 1) : '-'), ' class="languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"')
+            tda(((has_privs('lang.edit') && in_array($langname, $installed_lang)) ? dLink('lang', 'remove_language', 'lang_code', $langname, 1) : '-'), ((isset($langdat['db_lastmod']) && $rpc_updated) ? ' class="highlight"' : ''))
         ).n;
     }
 
@@ -275,8 +275,6 @@ function list_languages($message = '')
     }
 
     echo $lang_form,
-        n.tag(
-            toggle_box('languages_detail'), 'div', array('class' => 'txp-list-options')).
         n.tag_start('div', array('class' => 'txp-listtables')).
         n.tag_start('table', array('class' => 'txp-list')).
         n.tag_start('thead').
@@ -288,10 +286,10 @@ function list_languages($message = '')
                 gTxt('from_server').popHelp('install_lang_from_server'), '', ' scope="col"'
             ).
             hCell(
-                gTxt('from_file').popHelp('install_lang_from_file'), '', ' class="languages_detail" scope="col"'
+                gTxt('from_file').popHelp('install_lang_from_file'), '', ' scope="col"'
             ).
             hCell(
-                gTxt('remove_lang').popHelp('remove_lang'), '', ' class="languages_detail" scope="col"'
+                gTxt('remove_lang').popHelp('remove_lang'), '', ' scope="col"'
             )
         ).
         n.tag_end('thead').

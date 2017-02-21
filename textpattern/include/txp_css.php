@@ -172,7 +172,7 @@ function css_edit($message = '', $refresh_partials = false)
     $skin_list = get_skin_list();
 
     if ($step == 'css_delete' || empty($name) && $step != 'pour' && !$savenew) {
-        $name = $default_name;
+        $name = get_pref('last_css_saved', $default_name);
     } elseif ((($copy || $savenew) && $newname) && !$save_error) {
         $name = $newname;
     } elseif ((($newname && ($newname != $name)) || $step === 'pour') && !$save_error) {
@@ -331,6 +331,7 @@ function css_save()
             if ($savenew or $copy) {
                 if ($newname) {
                     if (safe_insert('txp_css', "name = '$safe_newname', css = '$css', skin = '$safe_skin'")) {
+                        set_pref('last_css_saved', $newname, 'css', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                         update_lastmod('css_created', compact('newname', 'name', 'css'));
                         $message = gTxt('css_created', array('{name}' => $newname));
                     } else {
@@ -346,6 +347,7 @@ function css_save()
                         "css = '$css', name = '$safe_newname', skin = '$safe_skin'",
                         "name = '$safe_name' AND skin = '$safe_skin'")) {
                     safe_update('txp_section', "css = '$safe_newname'", "css='$safe_name'");
+                    set_pref('last_css_saved', $newname, 'css', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                     update_lastmod('css_saved', compact('newname', 'name', 'css'));
                     $message = gTxt('css_updated', array('{name}' => $newname));
                 } else {
@@ -371,6 +373,8 @@ function css_save()
 
 function css_delete()
 {
+    global $prefs;
+
     $name = ps('name');
     $skin = get_pref('skin_editing', 'default');
     $count = safe_count('txp_section', "css = '".doSlash($name)."'");
@@ -382,6 +386,10 @@ function css_delete()
         if (safe_delete('txp_css', "name = '".doSlash($name)."' AND skin='".doSlash($skin)."'")) {
             callback_event('css_deleted', '', 0, compact('name', 'skin'));
             $message = gTxt('css_deleted', array('{name}' => $name));
+            if ($name === get_pref('last_css_saved')) {
+                unset($prefs['last_css_saved']);
+                remove_pref('last_css_saved', 'css');
+            }
         }
     }
     css_edit($message);

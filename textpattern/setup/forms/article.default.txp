@@ -1,11 +1,12 @@
 <article class="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+    <meta itemprop="mainEntityOfPage" content="<txp:permlink />">
 
     <txp:if_individual_article>
-        <h1 itemprop="name headline">
+        <h1 itemprop="headline">
             <txp:title />
         </h1>
     <txp:else />
-        <h1 itemprop="name headline">
+        <h1 itemprop="headline">
             <a href="<txp:permlink />" itemprop="url">
                 <txp:title />
             </a>
@@ -28,23 +29,23 @@
                 <txp:text item="comments" />
             </strong>
             <a href="<txp:permlink />#comments-head" title="<txp:text item="view" />" itemprop="discussionUrl">
-                <txp:comments_count />
+                <span itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+                    <meta itemprop="interactionType" content="http://schema.org/CommentAction" />
+                    <span itemprop="userInteractionCount"><txp:comments_count /></span>
+                </span>
             </a>
-            <span itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
-                <meta itemprop="interactionType" content="http://schema.org/CommentAction" />
-                <meta itemprop="userInteractionCount" content="<txp:comments_count />" />
-            </span>
         <txp:else />
             <txp:if_comments_allowed>
                 <br>
                 <strong>
                     <txp:text item="comments" />
                 </strong>
-                <a href="<txp:permlink />#comments-head" title="<txp:text item="view" />" itemprop="discussionUrl">0</a>
-                <span itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
-                    <meta itemprop="interactionType" content="http://schema.org/CommentAction" />
-                    <meta itemprop="userInteractionCount" content="0" />
-                </span>
+                <a href="<txp:permlink />#comments-head" title="<txp:text item="view" />" itemprop="discussionUrl">
+                    <span itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+                        <meta itemprop="interactionType" content="http://schema.org/CommentAction" />
+                        <span itemprop="userInteractionCount">0</span>
+                    </span>
+                </a>
             </txp:if_comments_allowed>
         </txp:if_comments>
     </p>

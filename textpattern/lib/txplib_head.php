@@ -98,6 +98,7 @@ function pagetop($pagetitle, $message = '')
     script_js(
         'var textpattern = '.json_encode(
             array(
+                '_txp_uid' => get_pref('blog_uid'),
                 'event' => $event,
                 'step' => $step,
                 '_txp_token' => form_token(),
@@ -115,13 +116,22 @@ function pagetop($pagetitle, $message = '')
         ).';'
     ).
     script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
-    gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled', 'ok', 'save', 'publish'));
+    gTxtScript(array(
+        'are_you_sure',
+        'cookies_must_be_enabled',
+        'form_submission_error',
+        'list_options',
+        'ok',
+        'publish',
+        'save',
+        'toggle_all_selected',
+    ));
     // Mandatory un-themable Textpattern core styles ?>
 <style>
 .not-ready .doc-ready,
+.not-ready table.txp-list,
 .not-ready form.async input[type="submit"],
-.not-ready a.async
-{
+.not-ready a.async {
     visibility: hidden;
 }
 </style>
@@ -136,7 +146,7 @@ echo $theme->html_head();
     echo pluggable_ui('admin_side', 'header', $theme->header());
     callback_event('admin_side', 'pagetop_end');
     echo n.'</header><!-- /txp-header -->'.
-        n.'<main class="txp-body doc-ready" aria-label="'.gTxt('main_content').'">'.
+        n.'<main class="txp-body" aria-label="'.gTxt('main_content').'">'.
         n.'<div id="messagepane">'.$theme->announce($message).'</div>';
     callback_event('admin_side', 'main_content');
 }

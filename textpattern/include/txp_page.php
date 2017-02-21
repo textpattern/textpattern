@@ -134,7 +134,7 @@ function page_edit($message = '', $refresh_partials = false)
     $skin_list = get_skin_list();
 
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
-        $name = $default_name;
+        $name = get_pref('last_page_saved', $default_name);
     } elseif ((($copy || $savenew) && $newname) && !$save_error) {
         $name = $newname;
     } elseif ((($newname && ($newname != $name)) || $step === 'page_new') && !$save_error) {
@@ -300,6 +300,8 @@ function page_list($current)
 
 function page_delete()
 {
+    global $prefs;
+
     $name = ps('name');
     $skin = get_pref('skin_editing', 'default');
     $count = safe_count('txp_section', "page = '".doSlash($name)."'");
@@ -315,6 +317,10 @@ function page_delete()
         if (safe_delete('txp_page', "name = '".doSlash($name)."' AND skin='".doSlash($skin)."'")) {
             callback_event('page_deleted', '', 0, compact('name', 'skin'));
             $message = gTxt('page_deleted', array('{name}' => $name));
+            if ($name === get_pref('last_page_saved')) {
+                unset($prefs['last_page_saved']);
+                remove_pref('last_page_saved', 'page');
+            }
         }
     }
 
@@ -370,7 +376,9 @@ function page_save()
         } else {
             if ($savenew or $copy) {
                 if ($newname) {
+
                     if (safe_insert('txp_page', "name = '$safe_newname', user_html = '$html', skin = '$safe_skin'")) {
+                        set_pref('last_page_saved', $newname, 'page', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                         update_lastmod('page_created', compact('newname', 'name', 'html'));
                         $message = gTxt('page_created', array('{name}' => $newname));
                     } else {
@@ -386,6 +394,7 @@ function page_save()
                         "user_html = '$html', name = '$safe_newname', skin = '$safe_skin'",
                         "name = '$safe_name' AND skin = '$safe_skin'")) {
                     safe_update('txp_section', "page = '$safe_newname'", "page='$safe_name'");
+                    set_pref('last_page_saved', $newname, 'page', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                     update_lastmod('page_saved', compact('newname', 'name', 'html'));
                     $message = gTxt('page_updated', array('{name}' => $newname));
                 } else {
