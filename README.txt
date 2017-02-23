@@ -20,7 +20,7 @@ system. Textpattern is both free and open source.
 
 * The Textpattern FAQ is available at http://textpattern.com/faq/
 * In-depth documentation and a comprehensive tag index is available in the
-  Textpattern user documentation at http://docs.textpattern.io
+  Textpattern user documentation at https://docs.textpattern.io
 * You can get support and information via:
    Forum:    https://forum.textpattern.io/
    Twitter:  http://textpattern.com/@textpattern
@@ -111,5 +111,5 @@ system. Textpattern is both free and open source.
 == Contributing ==
 
 Want to help out with the development of Textpattern CMS? Please refer to the
-Contributing documentation http://docs.textpattern.io/development/contributing
+Contributing documentation https://docs.textpattern.io/development/contributing
 for full details.

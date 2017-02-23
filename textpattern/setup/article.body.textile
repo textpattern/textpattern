@@ -14,6 +14,6 @@ h3. What do you want to do next?
 
 There is a host of "Frequently Asked Questions":http://textpattern.com/faq/ to help you get started.
 
-"Textpattern tags":http://docs.textpattern.io/tags/, their attributes and values are explained and sampled within the "Textpattern User Documentation":http://docs.textpattern.io/, where you will also find valuable tips and tutorials.
+"Textpattern tags":https://docs.textpattern.io/tags/, their attributes and values are explained and sampled within the "Textpattern User Documentation":https://docs.textpattern.io/, where you will also find valuable tips and tutorials.
 
 There's also a crowd of friendly, helpful people over at the "Textpattern support forum":https://forum.textpattern.io/. Come and pay a visit!
