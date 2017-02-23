@@ -61,7 +61,7 @@ Textpattern also has social network presences on
 
 ## Contributing
 
-Want to help out with the development of Textpattern CMS? Please refer to the [Contributing documentation](http://docs.textpattern.io/development/contributing) for full details.
+Want to help out with the development of Textpattern CMS? Please refer to the [Contributing documentation](https://docs.textpattern.io/development/contributing) for full details.
 
 ## GitHub topic tags
 
