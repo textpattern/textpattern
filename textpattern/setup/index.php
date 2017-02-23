@@ -348,7 +348,7 @@ function printConfig()
         exit;
     }
 
-// TODO: @see http://forum.textpattern.com/viewtopic.php?pid=263205#p263205
+// TODO: @see https://forum.textpattern.io/viewtopic.php?pid=263205#p263205
 //    if ('' === $_SESSION['dhost'] || '' === $_SESSION['duser'] || '' === $_SESSION['ddb']) {
 //        echo graf(
 //                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.

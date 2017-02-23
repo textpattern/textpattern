@@ -16,4 +16,4 @@ There is a host of "Frequently Asked Questions":http://textpattern.com/faq/ to h
 
 "Textpattern tags":http://docs.textpattern.io/tags/, their attributes and values are explained and sampled within the "Textpattern User Documentation":http://docs.textpattern.io/, where you will also find valuable tips and tutorials.
 
-There's also a crowd of friendly, helpful people over at the "Textpattern support forum":http://forum.textpattern.com/. Come and pay a visit!
+There's also a crowd of friendly, helpful people over at the "Textpattern support forum":https://forum.textpattern.io/. Come and pay a visit!
