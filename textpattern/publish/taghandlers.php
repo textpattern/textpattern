@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -5015,16 +5015,14 @@ function if_variable($atts, $thing = null)
 
 function txp_eval($atts, $thing = null)
 {
-    global $txp_parsed, $txp_else, $txp_parser;
-    static $xpath = null, $functions = null, $level = 0;
+    global $txp_parsed, $txp_else;
+    static $xpath = null, $functions = null;
 
     $own = array(
         'query' => null,
-        'test'	=> !isset($atts['query']),
-        'this' => null
+        'test'	=> !isset($atts['query'])
     );
-
-    extract(lAtts($own, isset($atts['this']) ? array_intersect_key($atts, $own) : $atts));
+    extract(lAtts($own, array_intersect_key($atts, $own)));
 
     if (!isset($query)) {
         $x = true;
@@ -5058,61 +5056,47 @@ function txp_eval($atts, $thing = null)
     }
 
     if (!isset($thing)) {
-        $result = $x;
+        return $x;
     } elseif (empty($x)) {
-        $result = parse($thing, false);
-    } else {
-        $hash = sha1($thing);
+        return parse($thing, false);
+    }
 
-        if (empty($txp_parsed[$hash]) || empty($txp_else[$hash])) {
-            $result = $thing;
+    $hash = sha1($thing);
+
+    if (empty($txp_parsed[$hash]) || empty($txp_else[$hash])) {
+        return $thing;
+    }
+
+    $test = trim($test);
+    $isempty = !empty($test);
+    $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
+    $tag = $txp_parsed[$hash];
+    $nr = $txp_else[$hash][0] - 2;
+    $out = array($tag[0]);
+
+    for ($tags = array(), $n = 1; $n <= $nr; $n++) {
+        $t = $tag[$n];
+
+        if ($test && !in_array($t[1], $test)) {
+            $out[] = $t;
+            $tags[] = $n;
         } else {
-            $test = trim($test);
-            $isempty = !empty($test);
-            $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
-            $tag = $txp_parsed[$hash];
-            $nr = $txp_else[$hash][0] - 2;
-            $out = array($tag[0]);
-
-            for ($tags = array(), $n = 1; $n <= $nr; $n++) {
-                $t = $tag[$n];
-
-                if ($test && !in_array($t[1], $test)) {
-                    $out[] = $t;
-                    $tags[] = $n;
-                } else {
-                    $nextag = processTags($t[1], $t[2], $t[3]);
-                    $out[] = $nextag;
-                    $isempty &= trim($nextag) === '';
-                }
-
-                $out[] = $tag[++$n];
-            }
-
-            if ($isempty) {
-                return parse($thing, false);
-            }
-
-            foreach ($tags as $n) {
-                $t = $out[$n];
-                $out[$n] = processTags($t[1], $t[2], $t[3]);
-            }
+            $nextag = processTags($t[1], $t[2], $t[3]);
+            $out[] = $nextag;
+            $isempty &= trim($nextag) === '';
         }
 
-        $result = implode('', $out);
+        $out[] = $tag[++$n];
     }
 
-    if (!isset($atts['this'])) return $result;
-
-    if (empty($result) || $level >= ($this !== true ? intval($this) : 10)) {
-        return;
+    if ($isempty) {
+        return parse($thing, false);
     }
 
-    $level++;
-    extract($txp_parser);
-    unset($atts['this'], $atts['query'], $atts['test']);
-    $result = processTags($tag, $atts + $split, $thing);
-    $level--;
+    foreach ($tags as $n) {
+        $t = $out[$n];
+        $out[$n] = processTags($t[1], $t[2], $t[3]);
+    }
 
-    return $result;
+    return implode('', $out);
 }

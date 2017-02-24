@@ -59,7 +59,6 @@ ob_start();
 
 $txp_current_tag = '';
 $txp_parsed      = array();
-$txp_parser      = array('tag' => '', 'split' => array(), 'thing' => null);
 
 // Get all prefs as an array.
 $prefs = get_prefs();
