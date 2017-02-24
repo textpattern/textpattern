@@ -1280,7 +1280,7 @@ function category_list($atts, $thing = null)
     $exclude = $exclude ? ($exclude === true ? $roots : do_list_unique($exclude)) : array();
     $sql_exclude = $exclude && $sql_limit ? " and name not in(".implode(',', quote_list($exclude)).")" : '';
     $nocache = !$children || $sql_limit || $children == $level;
-    $hash = $nocache ? uniqid() : md5($sql_query);
+    $hash = md5($nocache ? uniqid() : $sql_query);
 
     if (!isset($cache[$hash])) {
         $cache[$hash] = array();
@@ -1353,7 +1353,7 @@ function category_list($atts, $thing = null)
                     (($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
                     ' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'context' => $type)).'"'
                 ).(
-                    $children > $level && count($cache[$hash][$name]) > 1
+                    isset($cache[$hash][$name]) && $children > $level && count($cache[$hash][$name]) > 1
                     ? category_list(array('parent' => $name, 'exclude' => implode(',', array_merge($exclude, array($name))), 'label' => '', 'html_id' => '') + $atts)
                     : ''
                 );
@@ -5015,13 +5015,16 @@ function if_variable($atts, $thing = null)
 
 function txp_eval($atts, $thing = null)
 {
-    global $txp_parsed, $txp_else;
-    static $xpath = null, $functions = null;
+    global $txp_parsed, $txp_else, $txp_parser;
+    static $xpath = null, $functions = null, $level = 0;
 
-    extract(lAtts(array(
+    $own = array(
         'query' => null,
-        'test'	=> !isset($atts['query'])
-    ), $atts));
+        'test'	=> !isset($atts['query']),
+        'this' => null
+    );
+
+    extract(lAtts($own, isset($atts['this']) ? array_intersect_key($atts, $own) : $atts));
 
     if (!isset($query)) {
         $x = true;
@@ -5055,47 +5058,61 @@ function txp_eval($atts, $thing = null)
     }
 
     if (!isset($thing)) {
-        return $x;
+        $result = $x;
     } elseif (empty($x)) {
-        return parse($thing, false);
-    }
+        $result = parse($thing, false);
+    } else {
+        $hash = sha1($thing);
 
-    $hash = sha1($thing);
-
-    if (empty($txp_parsed[$hash]) || empty($txp_else[$hash])) {
-        return $thing;
-    }
-
-    $test = trim($test);
-    $isempty = !empty($test);
-    $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
-    $tag = $txp_parsed[$hash];
-    $nr = $txp_else[$hash][0] - 2;
-    $out = array($tag[0]);
-
-    for ($tags = array(), $n = 1; $n <= $nr; $n++) {
-        $t = $tag[$n];
-
-        if ($test && !in_array($t[1], $test)) {
-            $out[] = $t;
-            $tags[] = $n;
+        if (empty($txp_parsed[$hash]) || empty($txp_else[$hash])) {
+            $result = $thing;
         } else {
-            $nextag = processTags($t[1], $t[2], $t[3]);
-            $out[] = $nextag;
-            $isempty &= trim($nextag) === '';
+            $test = trim($test);
+            $isempty = !empty($test);
+            $test = !$isempty || is_numeric($test) ? false : do_list_unique($test);
+            $tag = $txp_parsed[$hash];
+            $nr = $txp_else[$hash][0] - 2;
+            $out = array($tag[0]);
+
+            for ($tags = array(), $n = 1; $n <= $nr; $n++) {
+                $t = $tag[$n];
+
+                if ($test && !in_array($t[1], $test)) {
+                    $out[] = $t;
+                    $tags[] = $n;
+                } else {
+                    $nextag = processTags($t[1], $t[2], $t[3]);
+                    $out[] = $nextag;
+                    $isempty &= trim($nextag) === '';
+                }
+
+                $out[] = $tag[++$n];
+            }
+
+            if ($isempty) {
+                return parse($thing, false);
+            }
+
+            foreach ($tags as $n) {
+                $t = $out[$n];
+                $out[$n] = processTags($t[1], $t[2], $t[3]);
+            }
         }
 
-        $out[] = $tag[++$n];
+        $result = implode('', $out);
     }
 
-    if ($isempty) {
-        return parse($thing, false);
+    if (!isset($atts['this'])) return $result;
+
+    if (empty($result) || $level >= ($this !== true ? intval($this) : 10)) {
+        return;
     }
 
-    foreach ($tags as $n) {
-        $t = $out[$n];
-        $out[$n] = processTags($t[1], $t[2], $t[3]);
-    }
+    $level++;
+    extract($txp_parser);
+    unset($atts['this'], $atts['query'], $atts['test']);
+    $result = processTags($tag, $atts + $split, $thing);
+    $level--;
 
-    return implode('', $out);
+    return $result;
 }

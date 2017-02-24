@@ -883,6 +883,7 @@ define('TEXTPATTERN_LANG_AVAILABLE', 0x4);
 define('TEXTPATTERN_STRIP_NONE', 0);
 define('TEXTPATTERN_STRIP_EMPTY', 0x1);
 define('TEXTPATTERN_STRIP_EMPTY_STRING', 0x2);
+define('TEXTPATTERN_STRIP_TXP', 0x4);
 
 /**
  * Sends an adaptive announcement.

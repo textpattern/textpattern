@@ -5203,11 +5203,12 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
     }
 
     $list = array();
+    $txp = $flags & TEXTPATTERN_STRIP_TXP;
 
     foreach ($atts as $name => $value) {
-        if (($flags & TEXTPATTERN_STRIP_EMPTY && !$value) || ($value === false)) {
+        if (($flags & TEXTPATTERN_STRIP_EMPTY && !$value) || ($value === false) || ($txp && $value === null)) {
             continue;
-        } elseif ($value === null) {
+        } elseif ($value === null || $txp && $value === true) {
             $list[] = $name;
             continue;
         } elseif (is_array($value)) {
