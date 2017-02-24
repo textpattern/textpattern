@@ -23,9 +23,9 @@ system. Textpattern is both free and open source.
   Textpattern user documentation at https://docs.textpattern.io
 * You can get support and information via:
    Forum:    https://forum.textpattern.io/
-   Twitter:  http://textpattern.com/@textpattern
-   Google+:  http://textpattern.com/+
-   Facebook: http://textpattern.com/facebook
+   Twitter:  https://textpattern.io/@textpattern
+   Google+:  https://textpattern.io/+
+   Facebook: https://textpattern.io/facebook
 
 
 == Installation ==
@@ -38,7 +38,7 @@ system. Textpattern is both free and open source.
   clients and IDEs have an option to show these hidden files. Otherwise, you can
   temporarily show hidden files in OS X/macOS by using the Terminal.app - follow
   these instructions:
-    http://textpattern.com/hidden-files-osx
+    https://textpattern.io/hidden-files-osx
 * Create or verify the existence of a working MySQL database with valid username
   and password. From Textpattern 4.6.0, the MySQL database user requires INDEX
   permissions in addition to standard SELECT, CREATE, UPDATE, ALTER, etc
@@ -105,7 +105,7 @@ system. Textpattern is both free and open source.
 
 * There are additional resources for the default front-side theme, such as
   Sass preprocessor files, available at:
-    http://textpattern.com/default-theme/tree/master/
+    https://github.com/textpattern/textpattern-default-theme/tree/master/
 
 
 == Contributing ==
