@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * http://textpattern.com
  *
  * Copyright (C) 2004 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -24,7 +24,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -98,7 +98,7 @@ function file_list($message = '')
     if ($sort === '') {
         $sort = get_pref('file_sort_column', 'filename');
     } else {
-        if (!in_array($sort, array('id', 'description', 'category', 'title', 'date', 'downloads', 'author'))) {
+        if (!in_array($sort, array('id', 'description', 'category', 'title', 'downloads', 'author'))) {
             $sort = 'filename';
         }
 
@@ -125,9 +125,6 @@ function file_list($message = '')
         case 'title':
             $sort_sql = "txp_file.title $dir, txp_file.filename DESC";
             break;
-        case 'date':
-            $sort_sql = "txp_file.created $dir, txp_file.filename DESC";
-            break;        
         case 'downloads':
             $sort_sql = "txp_file.downloads $dir, txp_file.filename DESC";
             break;
@@ -330,7 +327,7 @@ function file_list($message = '')
                         (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
                 ).
                 column_head(
-                    'date', 'date', 'file', true, $switch_dir, $crit, $search_method,
+                    'date', 'date', 'image', true, $switch_dir, $crit, $search_method,
                         (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
                 ).
                 column_head(

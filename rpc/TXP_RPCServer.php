@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * http://textpattern.com
  *
  * XML-RPC Server for Textpattern 4.0.x
  * http://web.archive.org/web/20150119065246/http://txp.kusor.com/rpc-api
@@ -22,7 +22,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
 if (!defined('txpath')) {

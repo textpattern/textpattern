@@ -52,7 +52,7 @@ for details on upgrading Textpattern.
 
 ## Help and support
 
-The [Textpattern support forum](https://forum.textpattern.io) is home to
+The [Textpattern support forum](http://forum.textpattern.com) is home to
 a friendly and helpful community of Textpattern users and experts.
 Textpattern also has social network presences on
 [Twitter](http://textpattern.com/@textpattern),
@@ -61,7 +61,7 @@ Textpattern also has social network presences on
 
 ## Contributing
 
-Want to help out with the development of Textpattern CMS? Please refer to the [Contributing documentation](https://docs.textpattern.io/development/contributing) for full details.
+Want to help out with the development of Textpattern CMS? Please refer to the [Contributing documentation](http://docs.textpattern.io/development/contributing) for full details.
 
 ## GitHub topic tags
 

@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * http://textpattern.com
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -102,7 +102,7 @@ class BuilderTags
                 hed(gTxt('tag_'.$this->tagname), 2).
                 href(
                     gTxt('documentation').sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')),
-                    'https://docs.textpattern.io/tags/'.$this->tagname,
+                    'http://docs.textpattern.io/tags/'.$this->tagname,
                     array(
                         'class'  => 'txp-tagbuilder-docs-link',
                         'rel'    => 'external',
@@ -1915,9 +1915,6 @@ class BuilderTags
             hInput('caption', $caption).
             $this->endform
         );
-
-        $alt = urldecode($alt);
-        $caption = urldecode($caption);
 
         if ($step === 'build') {
             $url = imagesrcurl($id, $ext);

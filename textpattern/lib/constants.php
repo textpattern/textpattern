@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * http://textpattern.com
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -883,7 +883,6 @@ define('TEXTPATTERN_LANG_AVAILABLE', 0x4);
 define('TEXTPATTERN_STRIP_NONE', 0);
 define('TEXTPATTERN_STRIP_EMPTY', 0x1);
 define('TEXTPATTERN_STRIP_EMPTY_STRING', 0x2);
-define('TEXTPATTERN_STRIP_TXP', 0x4);
 
 /**
  * Sends an adaptive announcement.
