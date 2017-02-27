@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -103,7 +103,7 @@ $txpcfg['client_flags'] = 0;
 
 /*
  * Optional, advanced: http address of the site serving images
- * see http://forum.textpattern.com/viewtopic.php?id=34493
+ * see https://forum.textpattern.io/viewtopic.php?id=34493
  */
 
 // define('ihu', 'http://static.example.com/');
