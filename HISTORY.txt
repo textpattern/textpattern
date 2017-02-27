@@ -29,7 +29,7 @@ Changes in 4.7.0 (upcoming)
   entirely at Textpattern 4.8.0).
 * Changed: Extensive admin theme image optimizations.
 * Fixed: Only update db version string if using release version.
-* zxcvbn 4.4.1.
+* zxcvbn 4.4.2.
 
 Changes in 4.6.2
 
@@ -264,7 +264,7 @@ Changes in 4.5.0
 * Minimum system requirement: PHP 5.2.
 * Modern default site theme (responsive, HTML5, CSS3).
 * Choice of HTML5 or XHTML document type as a preference.
-* Textile 2.4.1. See full changelog at http://textpattern.com/textile-changelog.
+* Textile 2.4.1. See full changelog at https://textpattern.io/textile-changelog.
 * User interface realignment and clean-up.
 * Additional admin theme (Hive).
 * Beautified setup process.
@@ -478,9 +478,9 @@ Changes in 4.2.0
   gAtt(), and input() functions. These will be removed in next release.
 * Developer: Plugins can flag their interest in lifecycle events (install,
   uninstall, activate, deactivate). @see
-  http://svn.textpattern.com/development/4.x-plugin-template/.
+  https://github.com/textpattern/textpattern-plugin-template.
 * Developer: Optional capability to jump to a plugin's options from the plugin
-  tab. @see http://svn.textpattern.com/development/4.x-plugin-template/.
+  tab. @see https://github.com/textpattern/textpattern-plugin-template.
 * jQuery 1.3.2.
 
 Changes in 4.1.0

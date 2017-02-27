@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -5166,11 +5166,12 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
     }
 
     $list = array();
+    $txp = $flags & TEXTPATTERN_STRIP_TXP;
 
     foreach ($atts as $name => $value) {
-        if (($flags & TEXTPATTERN_STRIP_EMPTY && !$value) || ($value === false)) {
+        if (($flags & TEXTPATTERN_STRIP_EMPTY && !$value) || ($value === false) || ($txp && $value === null)) {
             continue;
-        } elseif ($value === null) {
+        } elseif ($value === null || $txp && $value === true) {
             $list[] = $name;
             continue;
         } elseif (is_array($value)) {
