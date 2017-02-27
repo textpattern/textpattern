@@ -1916,6 +1916,9 @@ class BuilderTags
             $this->endform
         );
 
+        $alt = urldecode($alt);
+        $caption = urldecode($caption);
+
         if ($step === 'build') {
             $url = imagesrcurl($id, $ext);
 
