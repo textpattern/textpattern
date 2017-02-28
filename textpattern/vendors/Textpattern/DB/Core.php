@@ -57,19 +57,24 @@ class Core
     /**
      * getStructure
      *
+     * @param  table name or empty
      */
 
-    public function getStructure()
+    public function getStructure($table='')
     {
         if (empty($this->tables_structure)) {
             $this->tables_structure = get_files_content($this->tables_dir, 'table');
+        }
+        if (!empty($table)) {
+
+            return @$this->tables_structure[$table];
         }
         
         return $this->tables_structure;
     }
 
     /**
-     * Create tables
+     * Create All Tables
      *
      */
 
@@ -77,6 +82,19 @@ class Core
     {
         foreach ($this->getStructure() as $key=>$data) {
             safe_create($key, $data);
+        }
+    }
+
+    /**
+     * Create Table
+     *
+     * @param  table name
+     */
+
+    public function createTable($table)
+    {
+        if ($data = $this->getStructure($table)) {
+            safe_create($table, $data);
         }
     }
 
@@ -107,7 +125,11 @@ class Core
         }
     }
 
-
+    /**
+     * Get Textpattern tables name
+     *
+     * @return array
+     */
 
     public function getTablesName()
     {
@@ -118,6 +140,7 @@ class Core
     /**
      * Get default core prefs
      *
+     * @return array
      */
 
     public function getPrefsDefault()
@@ -210,6 +233,5 @@ class Core
 
         $prefs = get_prefs();
     }
-
 
 }
