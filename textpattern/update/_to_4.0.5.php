@@ -99,6 +99,3 @@ safe_update('textpattern', "Keywords = TRIM(BOTH ',' FROM
     )",
     "Keywords != ''"
 );
-
-// 'Textile links' feature removed due to unclear specs.
-safe_delete('txp_prefs', "event = 'link' AND name = 'textile_links'");

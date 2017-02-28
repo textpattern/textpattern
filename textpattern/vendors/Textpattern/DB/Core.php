@@ -174,6 +174,11 @@ class Core
     {
         global $prefs, $txp_user;
 
+        // Delete old prefs
+        if ($deleted = @json_decode(file_get_contents($this->data_dir.DS.'deleted.prefs'), true)) {
+            safe_delete('txp_prefs', "name in ('".join("','", doSlash($deleted))."')");
+        }
+
         $prefs_check = array_merge(
             get_prefs_theme(),
             $this->getPrefsDefault()

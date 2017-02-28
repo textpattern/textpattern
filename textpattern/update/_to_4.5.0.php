@@ -25,11 +25,6 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-// Goodbye raw ?php support.
-if (safe_field("name", 'txp_prefs', "name = 'allow_raw_php_scripting'")) {
-    safe_delete('txp_prefs', "name = 'allow_raw_php_scripting'");
-}
-
 safe_alter('txp_users', "MODIFY RealName VARCHAR(255) NOT NULL DEFAULT ''");
 safe_alter('txp_users', "MODIFY email    VARCHAR(254) NOT NULL DEFAULT ''");
 

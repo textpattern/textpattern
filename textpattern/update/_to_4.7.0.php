@@ -42,5 +42,4 @@ if (in_array('prefs_id', $cols)) {
     safe_drop_index('txp_prefs', 'prefs_idx');
     safe_alter('txp_prefs', "ADD UNIQUE prefs_idx (name(185), user_name)");
     safe_alter('txp_prefs', "DROP prefs_id");
-    safe_delete('txp_prefs', "name = 'prefs_id'");
 }

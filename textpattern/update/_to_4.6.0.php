@@ -103,10 +103,6 @@ if (!in_array('description', $cols)) {
     safe_alter('txp_section', "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER css");
 }
 
-// Remove textpattern.com ping and lastmod_keepalive prefs.
-safe_delete('txp_prefs', "name = 'ping_textpattern_com'");
-safe_delete('txp_prefs', "name = 'lastmod_keepalive'");
-
 // Remove broken import functionality.
 if (is_writable(txpath.DS.'include') && file_exists(txpath.DS.'include'.DS.'txp_import.php')) {
     $import_files = array(
