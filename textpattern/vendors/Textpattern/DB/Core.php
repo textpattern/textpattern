@@ -174,9 +174,13 @@ class Core
     {
         global $prefs, $txp_user;
 
-        // Delete old prefs
-        if ($deleted = @json_decode(file_get_contents($this->data_dir.DS.'deleted.prefs'), true)) {
-            safe_delete('txp_prefs', "name in ('".join("','", doSlash($deleted))."')");
+        // Delete old Global/Private prefs
+        $deleted = @json_decode(file_get_contents($this->data_dir.DS.'deleted.prefs'), true);
+        if (!empty($deleted['global'])) {
+            safe_delete('txp_prefs', "name in ('".join("','", doSlash($deleted['global']))."') AND user_name = ''");
+        }
+        if (!empty($deleted['private'])) {
+            safe_delete('txp_prefs', "name in ('".join("','", doSlash($deleted['private']))."') AND user_name != ''");
         }
 
         $prefs_check = array_merge(

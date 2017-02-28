@@ -32,9 +32,6 @@ if (!in_array('user_name', $cols)) {
     safe_create_index('txp_prefs', 'user_name', 'user_name');
 }
 
-// Remove a few global prefs in favour of future private ones.
-safe_delete('txp_prefs', "user_name = '' AND name IN ('article_list_pageby', 'author_list_pageby', 'comment_list_pageby', 'file_list_pageby', 'image_list_pageby', 'link_list_pageby', 'log_list_pageby')");
-
 // Add columns for thumbnail dimensions.
 $cols = getThings("DESCRIBE `".PFX."txp_image`");
 
