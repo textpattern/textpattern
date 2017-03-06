@@ -267,9 +267,6 @@ function css($atts)
 
 function image($atts)
 {
-    global $thisimage;
-    static $cache = array();
-
     extract(lAtts(array(
         'class'   => '',
         'escape'  => 'html',
@@ -282,38 +279,8 @@ function image($atts)
         'wraptag' => '',
     ), $atts));
 
-    if ($name) {
-        if (isset($cache['n'][$name])) {
-            $rs = $cache['n'][$name];
-        } else {
-            $name = doSlash($name);
-
-            $rs = safe_row("*", 'txp_image', "name = '$name' LIMIT 1");
-
-            $cache['n'][$name] = $rs;
-        }
-    } elseif ($id) {
-        if (isset($cache['i'][$id])) {
-            $rs = $cache['i'][$id];
-        } else {
-            $id = (int) $id;
-
-            $rs = safe_row("*", 'txp_image', "id = $id LIMIT 1");
-
-            $cache['i'][$id] = $rs;
-        }
-    } elseif ($thisimage) {
-        $id = (int) $thisimage['id'];
-        $rs = $thisimage;
-        $cache['i'][$id] = $rs;
-    } else {
-        trigger_error(gTxt('unknown_image'));
-
-        return;
-    }
-
-    if ($rs) {
-        extract($rs);
+    if ($imageData = imageFetchInfo($id, $name)) {
+        extract($imageData);
 
         if ($escape == 'html') {
             $alt = txpspecialchars($alt);
@@ -358,16 +325,12 @@ function image($atts)
 
         return $out;
     }
-
-    trigger_error(gTxt('unknown_image'));
 }
 
 // -------------------------------------------------------------
 
 function thumbnail($atts)
 {
-    global $thisimage;
-
     extract(lAtts(array(
         'class'    => '',
         'escape'   => 'html',
@@ -383,25 +346,8 @@ function thumbnail($atts)
         'width'    => '',
     ), $atts));
 
-    if ($name) {
-        $name = doSlash($name);
-
-        $rs = safe_row("*", 'txp_image', "name = '$name' LIMIT 1");
-    } elseif ($id) {
-        $id = (int) $id;
-
-        $rs = safe_row("*", 'txp_image', "id = $id LIMIT 1");
-    } elseif ($thisimage) {
-        $id = (int) $thisimage['id'];
-        $rs = $thisimage;
-    } else {
-        trigger_error(gTxt('unknown_image'));
-
-        return;
-    }
-
-    if ($rs) {
-        extract($rs);
+    if ($imageData = imageFetchInfo($id, $name)) {
+        extract($imageData);
 
         if ($thumbnail) {
             if ($escape == 'html') {
@@ -462,8 +408,6 @@ function thumbnail($atts)
             return $out;
         }
     }
-
-    trigger_error(gTxt('unknown_image'));
 }
 
 // -------------------------------------------------------------
