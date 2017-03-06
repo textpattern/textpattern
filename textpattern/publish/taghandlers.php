@@ -3580,8 +3580,6 @@ function images($atts, $thing = null)
 
 function image_info($atts)
 {
-    global $thisimage;
-
     extract(lAtts(array(
         'name'       => '',
         'id'         => '',
@@ -3600,32 +3598,19 @@ function image_info($atts)
     $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'author', 'w', 'h', 'thumb_w', 'thumb_h', 'date');
     $type = do_list($type);
 
-    $from_form = false;
-
-    if ($id) {
-        $thisimage = imageFetchInfo('id = '.intval($id));
-    } elseif ($name) {
-        $thisimage = imageFetchInfo("name = '".doSlash($name)."'");
-    } else {
-        assert_image();
-        $from_form = true;
-    }
-
     $out = array();
-    if ($thisimage) {
-        $thisimage['category_title'] = fetch_category_title($thisimage['category'], 'image');
+    if ($imageData = imageFetchInfo($id, $name)) {
+        $imageData['category_title'] = fetch_category_title($imageData['category'], 'image');
 
         foreach ($type as $item) {
             if (in_array($item, $validItems)) {
-                if (isset($thisimage[$item])) {
+                if (isset($imageData[$item])) {
                     $out[] = ($escape == 'html') ?
-                        txpspecialchars($thisimage[$item]) : $thisimage[$item];
+                        txpspecialchars($imageData[$item]) : $imageData[$item];
                 }
+            } else {
+                trigger_error(gTxt('invalid_attribute_value', array('{name}' => $item)), E_USER_NOTICE);
             }
-        }
-
-        if (!$from_form) {
-            $thisimage = '';
         }
     }
 
@@ -3636,8 +3621,6 @@ function image_info($atts)
 
 function image_url($atts, $thing = null)
 {
-    global $thisimage;
-
     extract(lAtts(array(
         'name'      => '',
         'id'        => '',
@@ -3645,28 +3628,11 @@ function image_url($atts, $thing = null)
         'link'      => 'auto',
     ), $atts));
 
-    $from_form = false;
-
-    if ($id) {
-        $thisimage = imageFetchInfo('id = '.intval($id));
-    } elseif ($name) {
-        $thisimage = imageFetchInfo("name = '".doSlash($name)."'");
-    } else {
-        assert_image();
-        $from_form = true;
-    }
-
-    if ($thisimage) {
-        $url = imagesrcurl($thisimage['id'], $thisimage['ext'], $thumbnail);
+    if ($imageData = imageFetchInfo($id, $name)) {
+        $url = imagesrcurl($imageData['id'], $imageData['ext'], $thumbnail);
         $link = ($link == 'auto') ? (($thing) ? 1 : 0) : $link;
         $out = ($thing) ? parse($thing) : $url;
-        $out = ($link) ? href($out, $url) : $out;
-
-        if (!$from_form) {
-            $thisimage = '';
-        }
-
-        return $out;
+        return ($link) ? href($out, $url) : $out;
     }
 
     return '';
@@ -3706,35 +3672,18 @@ function image_author($atts)
 
 function image_date($atts)
 {
-    global $thisimage;
-
     extract(lAtts(array(
         'name'   => '',
         'id'     => '',
         'format' => '',
     ), $atts));
 
-    $from_form = false;
-
-    if ($id) {
-        $thisimage = imageFetchInfo('id = '.intval($id));
-    } elseif ($name) {
-        $thisimage = imageFetchInfo("name = '".doSlash($name)."'");
-    } else {
-        assert_image();
-        $from_form = true;
-    }
-
-    if (isset($thisimage['date'])) {
+    if ($imageData = imageFetchInfo($id, $name)) {
         // Not a typo: use fileDownloadFormatTime() since it's fit for purpose.
         $out = fileDownloadFormatTime(array(
-            'ftime'  => $thisimage['date'],
+            'ftime'  => $imageData['date'],
             'format' => $format,
         ));
-
-        if (!$from_form) {
-            $thisimage = '';
-        }
 
         return $out;
     }
