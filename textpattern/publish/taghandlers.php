@@ -3642,10 +3642,11 @@ function image_url($atts, $thing = null)
 
 function image_author($atts)
 {
-    global $thisimage, $s;
-    assert_image();
+    global $s;
 
     extract(lAtts(array(
+        'name'         => '',
+        'id'           => '',
         'class'        => '',
         'link'         => 0,
         'title'        => 1,
@@ -3654,9 +3655,9 @@ function image_author($atts)
         'wraptag'      => '',
     ), $atts));
 
-    if ($thisimage['author']) {
-        $author_name = get_author_name($thisimage['author']);
-        $display_name = txpspecialchars(($title) ? $author_name : $thisimage['author']);
+    if ($imageData = imageFetchInfo($id, $name)) {
+        $author_name = get_author_name($imageData['author']);
+        $display_name = txpspecialchars(($title) ? $author_name : $imageData['author']);
 
         $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
