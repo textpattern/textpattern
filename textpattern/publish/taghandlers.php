@@ -3250,7 +3250,7 @@ function image_index($atts)
     
     global $c;
 
-    extract(lAtts(array(
+    lAtts(array(
         'label'    => '',
         'break'    => br,
         'wraptag'  => '',
@@ -3260,7 +3260,7 @@ function image_index($atts)
         'limit'    => 0,
         'offset'   => 0,
         'sort'     => 'name ASC',
-    ), $atts));
+    ), $atts);
 
     if (!isset($atts['category'])) {
         $atts['category'] = $c;
@@ -3544,15 +3544,24 @@ function image_url($atts, $thing = null)
         'thumbnail' => 0,
         'link'      => 'auto',
     ), $atts));
-
-    if ($imageData = imageFetchInfo($id, $name)) {
-        $url = imagesrcurl($imageData['id'], $imageData['ext'], $thumbnail);
-        $link = ($link == 'auto') ? (($thing) ? 1 : 0) : $link;
-        $out = ($thing) ? parse($thing) : $url;
-        return ($link) ? href($out, $url) : $out;
+    
+    if (($name || $id) && $thing) {
+        global $thisimage;
+        $stash = $thisimage;
     }
 
-    return '';
+    if ($thisimage = imageFetchInfo($id, $name)) {
+        $url = imagesrcurl($thisimage['id'], $thisimage['ext'], $thumbnail);
+        $link = ($link == 'auto') ? (($thing) ? 1 : 0) : $link;
+        $out = ($thing) ? parse($thing) : $url;
+        $out = ($link) ? href($out, $url) : $out;
+    }
+
+    if (isset($stash)) {
+        $thisimage = $stash;
+    }
+    
+    return isset($out) ? $out : '';
 }
 
 // -------------------------------------------------------------
