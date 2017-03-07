@@ -3248,7 +3248,7 @@ function image_index($atts)
 {
     trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
     
-    global $s, $c;
+    global $c;
 
     extract(lAtts(array(
         'label'    => '',
