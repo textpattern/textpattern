@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('txpath')) {
@@ -260,6 +260,7 @@ function preText($s, $prefs)
     $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
 
     $is_404 = ($out['status'] == '404');
+    $title = null;
 
     // If messy vars exist, bypass URL parsing.
     if (!$out['id'] && !$out['s'] && !(txpinterface == 'css') && ! (txpinterface == 'admin')) {
@@ -285,8 +286,7 @@ function preText($s, $prefs)
                 // only way to make it multibyte-safe without breaking
                 // backwards-compatibility.
                 case urldecode(strtolower(urlencode(gTxt('section')))):
-                    $out['s'] = (ckEx('section', $u2)) ? $u2 : '';
-                    $is_404 = empty($out['s']);
+                    $out['s'] = $u2;
                     break;
 
                 case urldecode(strtolower(urlencode(gTxt('category')))):
@@ -297,8 +297,6 @@ function preText($s, $prefs)
                         $out['context'] = 'article';
                         $out['c'] = $u2;
                     }
-                    $out['c'] = (ckCat($out['context'], $out['c'])) ? $out['c'] : '';
-                    $is_404 = empty($out['c']);
                     break;
 
                 case urldecode(strtolower(urlencode(gTxt('author')))):
@@ -324,101 +322,57 @@ function preText($s, $prefs)
                     // Then see if the prefs-defined permlink scheme is usable.
                     switch ($permlink_mode) {
                         case 'section_id_title':
-                            if (empty($u2)) {
-                                $out['s'] = (ckEx('section', $u1)) ? $u1 : '';
-                                $is_404 = empty($out['s']);
-                            } else {
-                                $rs = lookupByIDSection($u2, $u1);
-                                $out['s'] = @$rs['Section'];
-                                $out['id'] = @$rs['ID'];
-                                $is_404 = (empty($out['s']) or empty($out['id']));
-                            }
+                            $out['s'] = $u1;
+                            $out['id'] = (!empty($u2)) ? $u2 : '';
 
                             break;
 
                         case 'year_month_day_title':
                             if (empty($u2)) {
-                                $out['s'] = (ckEx('section', $u1)) ? $u1 : '';
-                                $is_404 = empty($out['s']);
-                            } elseif (empty($u4)) {
-                                $month = "$u1-$u2";
-
-                                if (!empty($u3)) {
-                                    $month .= "-$u3";
-                                }
-
-                                if (preg_match('/\d+-\d+(?:-\d+)?/', $month)) {
-                                    $out['month'] = $month;
-                                    $out['s'] = 'default';
-                                } else {
-                                    $is_404 = 1;
-                                }
+                                $out['s'] = $u1;
                             } else {
-                                $when = "$u1-$u2-$u3";
-                                $rs = lookupByDateTitle($when, $u4);
-                                $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-                                $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
-                                $is_404 = (empty($out['s']) or empty($out['id']));
+                                $out['month'] = "$u1-$u2".(empty($u3) ? '' : "-$u3");
+                                $title = empty($u4) ? null : $u4;
                             }
 
                             break;
 
                         case 'section_title':
-                            if (empty($u2)) {
-                                $out['s'] = (ckEx('section', $u1)) ? $u1 : '';
-                                $is_404 = empty($out['s']);
-                            } else {
-                                $rs = lookupByTitleSection($u2, $u1);
-                                $out['id'] = isset($rs['ID']) ? $rs['ID'] : '';
-                                $out['s'] = isset($rs['Section']) ? $rs['Section'] : '';
-                                $is_404 = (empty($out['s']) or empty($out['id']));
-                            }
+                            $out['s'] = $u1;
+                            $title = empty($u2) ? null : $u2;
 
                             break;
 
                         case 'title_only':
-                            $rs = lookupByTitle($u1);
-                            $out['id'] = @$rs['ID'];
-                            $out['s'] = (empty($rs['Section']) ? ckEx('section', $u1) :
-                                    $rs['Section']);
-                            $is_404 = empty($out['s']);
+                            $title = $u1;
 
                             break;
 
                         case 'id_title':
-                            if (is_numeric($u1) && ckExID($u1)) {
-                                $rs = lookupByID($u1);
-                                $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-                                $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
-                                $is_404 = (empty($out['s']) or empty($out['id']));
+                            if (is_numeric($u1)) {
+                                $out['id'] = $u1;
                             } else {
                                 // We don't want to miss the /section/ pages.
-                                $out['s'] = ckEx('section', $u1) ? $u1 : '';
-                                $is_404 = empty($out['s']);
+                                $out['s'] = $u1;
                             }
 
                             break;
                     }
-
-                    if (!$is_404) {
-                        $out['context'] = validContext($out['context']);
-                    }
-
-                    break; // Prefs-defined permlink scheme case.
             }
         } else {
             $out['s'] = 'default';
-            $out['context'] = validContext($out['context']);
         }
-    } else {
-        // Messy mode, but prevent to get the id for file_downloads.
-        $out['context'] = validContext($out['context']);
+    }
 
-        if ($out['context'] == 'article' && $out['id'] && $out['s'] != 'file_download') {
-            $rs = lookupByID($out['id']);
-            $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-            $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
-            $is_404 = (empty($out['s']) or empty($out['id']));
+    $out['context'] = validContext($out['context']);
+
+    // Validate dates
+    if ($out['month']) {
+        list($y, $m, $d) = explode('-', $out['month']) + array(1, 1, 1);
+
+        if (@!checkdate($m, $d, $y)) {
+            $out['month'] = '';
+            $is_404 = true;
         }
     }
 
@@ -432,8 +386,6 @@ function preText($s, $prefs)
 
     // Resolve AuthorID from Authorname.
     if ($out['author']) {
-        $name = urldecode(strtolower(urlencode($out['author'])));
-
         $name = safe_field('name', 'txp_users', "RealName LIKE '".doSlash($out['author'])."'");
 
         if ($name) {
@@ -442,6 +394,22 @@ function preText($s, $prefs)
             $out['author'] = '';
             $is_404 = true;
         }
+    }
+
+    // Prevent to get the id for file_downloads.
+    if ($out['s'] == 'file_download') {
+        if (is_numeric($out['id'])) {
+            // Undo the double-encoding workaround for .gz files;
+            // @see filedownloadurl().
+            if (!empty($out['filename'])) {
+                $out['filename'] = preg_replace('/gz&$/i', 'gz', $out['filename']);
+            }
+
+            $fn = empty($out['filename']) ? '' : " AND filename = '".doSlash($out['filename'])."'";
+            $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE." AND created <= ".now('created').$fn);
+        }
+
+        return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404);
     }
 
     // Allow article preview.
@@ -462,28 +430,27 @@ function preText($s, $prefs)
             $is_404 = false;
             $out = array_merge($out, $rs);
         }
+    } elseif ($out['context'] == 'article') {
+        if (!empty($out['id']) || !empty($title)) {
+            if (empty($out['s']) || $out['s'] === 'default') {
+                $rs = !empty($out['id']) ? lookupByID($out['id']) : lookupByDateTitle($out['month'], $title);
+            } else {
+                $rs = !empty($out['id']) ? lookupByIDSection($out['id'], $out['s']) : lookupByTitleSection($title, $out['s']);
+            }
+
+            $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
+            $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
+            $is_404 = $is_404 || (empty($out['s']) || empty($out['id']));
+        } elseif (!empty($out['s']) && $out['s'] !== 'default') {
+            $out['s'] = (ckEx('section', $out['s'])) ? $out['s'] : '';
+            $is_404 = $is_404 || empty($out['s']);
+        }
     }
 
     // Stats: found or not.
     $out['status'] = ($is_404 ? '404' : '200');
-
     $out['pg'] = is_numeric($out['pg']) ? intval($out['pg']) : '';
     $out['id'] = is_numeric($out['id']) ? intval($out['id']) : '';
-
-    if ($out['s'] == 'file_download') {
-        if (is_numeric($out['id'])) {
-            // Undo the double-encoding workaround for .gz files;
-            // @see filedownloadurl().
-            if (!empty($out['filename'])) {
-                $out['filename'] = preg_replace('/gz&$/i', 'gz', $out['filename']);
-            }
-
-            $fn = empty($out['filename']) ? '' : " AND filename = '".doSlash($out['filename'])."'";
-            $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE." AND created <= ".now('created').$fn);
-        }
-
-        return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404);
-    }
 
     if (!$is_404) {
         $out['s'] = (empty($out['s'])) ? 'default' : $out['s'];
@@ -493,18 +460,12 @@ function preText($s, $prefs)
 
     // Hackish.
     global $is_article_list;
+
     if (empty($id)) {
         $is_article_list = true;
     }
 
-    // By this point we should know the section, so grab its page and CSS.
-    if (txpinterface != 'css') {
-        $rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
-        $out['page'] = isset($rs['page']) ? $rs['page'] : '';
-        $out['css'] = isset($rs['css']) ? $rs['css'] : '';
-    }
-
-    if (is_numeric($id) and !$is_404) {
+    if (!$is_404 && $id) {
         $a = safe_row(
             "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
@@ -518,10 +479,17 @@ function preText($s, $prefs)
 
             $uExpires = $a['uExpires'];
 
-            if ($uExpires and time() > $uExpires and !$publish_expired_articles) {
+            if (!$publish_expired_articles && $uExpires && time() > $uExpires) {
                 $out['status'] = '410';
             }
         }
+    }
+
+    // By this point we should know the section, so grab its page and CSS.
+    if (txpinterface != 'css') {
+        $rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
+        $out['page'] = isset($rs['page']) ? $rs['page'] : '';
+        $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
 
     // These are deprecated as of Textpattern v1.0 - leaving them here for
@@ -573,8 +541,7 @@ function textpattern()
     }
 
     restore_error_handler();
-
-    header("Content-Type: text/html; charset=utf-8");
+    set_headers();
     echo $html;
 
     callback_event('textpattern_end');
@@ -622,29 +589,20 @@ function output_file_download($filename)
         $fullpath = build_file_path($file_base_path, $filename);
 
         if (is_file($fullpath)) {
-            $headers = array();
-
-            foreach (headers_list() as $header) {
-                $headers[] = strtolower(strtok($header, ':'));
-            }
-
             // Discard any error PHP messages.
             ob_clean();
             $filesize = filesize($fullpath);
             $sent = 0;
-            header('Content-Description: File Download');
-            header("Content-Length: $filesize");
 
-            if (!in_array('content-type', $headers)) {
-                header('Content-Type: application/octet-stream');
-            }
+            set_headers(array(
+                'content-type' => 'application/octet-stream',
+                'content-disposition' => 'attachment; filename="'.$filename.'"',
+                'content-description' => 'File Download',
+                'content-length' => $filesize,
+                // Fix for IE6 PDF bug on servers configured to send cache headers.
+                'cache-control' => 'private'
+            ));
 
-            if (!in_array('content-disposition', $headers)) {
-                header('Content-Disposition: attachment; filename="'.$filename.'"');
-            }
-
-            // Fix for IE6 PDF bug on servers configured to send cache headers.
-            header('Cache-Control: private');
             @ini_set("zlib.output_compression", "Off");
             @set_time_limit(0);
             @ignore_user_abort(true);

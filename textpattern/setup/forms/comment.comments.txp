@@ -2,13 +2,13 @@
      then check the comment email variable against article author email variable, and if it matches add 'comments-author' class -->
 <txp:variable name="this_comment" value='<txp:comment_email />' />
 <txp:if_variable name="this_comment" value='<txp:author_email />'>
-    <article class="comments comments-author" itemscope itemtype="http://schema.org/Comment">
+    <article class="comments comments-author" itemscope itemtype="https://schema.org/Comment">
 <txp:else />
-    <article class="comments" itemscope itemtype="http://schema.org/Comment">
+    <article class="comments" itemscope itemtype="https://schema.org/Comment">
 </txp:if_variable>
 
     <h4>
-        <span class="comment-author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="comment-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
             <span itemprop="name">
                 <txp:comment_name />
             </span>

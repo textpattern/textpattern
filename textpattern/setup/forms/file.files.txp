@@ -1,4 +1,4 @@
-<div itemscope itemtype="http://schema.org/DataDownload">
+<div itemscope itemtype="https://schema.org/DataDownload">
 
     <!-- ...if exists, use the file title, otherwise use file name -->
     <a href="<txp:file_download_link />" itemprop="url">
@@ -34,7 +34,7 @@
         <strong>
             <txp:text item="author" />
         </strong>
-        <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="author" itemscope itemtype="https://schema.org/Person">
             <span itemprop="name">
                 <txp:file_download_author link="1" />
             </span>
@@ -57,8 +57,8 @@
         <strong>
             <txp:text item="download_count" />
         </strong>
-        <span itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
-            <meta itemprop="interactionType" content="http://schema.org/DownloadAction" />
+        <span itemprop="interactionStatistic" itemscope itemtype="https://schema.org/InteractionCounter">
+            <meta itemprop="interactionType" content="https://schema.org/DownloadAction" />
             <span itemprop="userInteractionCount">
                 <txp:file_download_downloads />
             </span>

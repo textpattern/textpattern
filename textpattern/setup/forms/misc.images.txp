@@ -5,7 +5,7 @@
 <txp:if_variable name="caption" value="">
 
     <!-- image - overriding the width and height to let the image scale to fit parent container -->
-    <p itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+    <p itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
         <img itemprop="url" src="<txp:image_url link='0' />" alt="<txp:image_info type='alt' />">
         <meta itemprop="width" content="<txp:image_info type="w" />">
         <meta itemprop="height" content="<txp:image_info type="h" />">
@@ -13,7 +13,7 @@
 
 <txp:else />
 
-    <figure itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+    <figure itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
 
         <img itemprop="url" src="<txp:image_url link='0' />" alt="<txp:image_info type='alt' />">
         <meta itemprop="width" content="<txp:image_info type="w" />">

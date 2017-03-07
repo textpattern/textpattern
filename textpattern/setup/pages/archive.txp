@@ -39,9 +39,9 @@
 </head>
 
 <txp:if_article_list>
-    <body class="<txp:section />-page" itemscope itemtype="http://schema.org/CollectionPage">
+    <body class="<txp:section />-page" itemscope itemtype="https://schema.org/CollectionPage">
 <txp:else />
-    <body class="<txp:section />-page" itemscope itemtype="http://schema.org/WebPage">
+    <body class="<txp:section />-page" itemscope itemtype="https://schema.org/WebPage">
 </txp:if_article_list>
 
     <!-- header -->
@@ -57,7 +57,7 @@
     </header>
 
     <!-- navigation -->
-    <nav class="site-navigation" aria-label="<txp:text item="navigation" />" itemscope itemtype="http://schema.org/SiteNavigationElement">
+    <nav class="site-navigation" aria-label="<txp:text item="navigation" />" itemscope itemtype="https://schema.org/SiteNavigationElement">
         <div>
             <txp:section_list default_title='<txp:text item="home" />' include_default="1" wraptag="ul" break="">
                 <li<txp:if_section name='<txp:section />'> class="active"</txp:if_section>>
@@ -76,7 +76,7 @@
         <div class="container">
 
             <!-- Main content -->
-            <main aria-label="<txp:text item="main_content" />" itemscope itemtype="http://schema.org/Blog">
+            <main aria-label="<txp:text item="main_content" />" itemscope itemtype="https://schema.org/Blog">
 
                 <txp:if_article_list>
 
@@ -160,7 +160,7 @@
         <p>
             <small>
                 <txp:text item="published_with" />
-                <a rel="external nofollow" href="http://textpattern.com" title="<txp:text item="go_txp_com" />">Textpattern CMS</a>
+                <a rel="external nofollow" href="https://textpattern.io/" title="<txp:text item="go_txp_com" />">Textpattern CMS</a>
             </small>
         </p>
     </footer>
