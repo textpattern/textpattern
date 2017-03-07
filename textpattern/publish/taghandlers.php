@@ -340,11 +340,15 @@ function thumbnail($atts)
         'link'     => 0,
         'link_rel' => '',
         'name'     => '',
-        'poplink'  => 0, // Is this used?
+        'poplink'  => 0, // Deprecated, 4.7
         'style'    => '',
         'wraptag'  => '',
         'width'    => '',
     ), $atts));
+
+    if (isset($atts['poplink'])) {
+        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'poplink')), E_USER_NOTICE);
+    }
 
     if ($imageData = imageFetchInfo($id, $name)) {
         extract($imageData);
