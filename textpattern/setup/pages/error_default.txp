@@ -24,7 +24,7 @@
     <txp:feed_link flavor="rss" format="link" label="RSS" />
 </head>
 
-<body class="error-page" itemscope itemtype="http://schema.org/WebPage">
+<body class="error-page" itemscope itemtype="https://schema.org/WebPage">
 
     <!-- header -->
     <header class="site-header">
@@ -39,7 +39,7 @@
     </header>
 
     <!-- navigation -->
-    <nav class="site-navigation" aria-label="<txp:text item="navigation" />" itemscope itemtype="http://schema.org/SiteNavigationElement">
+    <nav class="site-navigation" aria-label="<txp:text item="navigation" />" itemscope itemtype="https://schema.org/SiteNavigationElement">
         <div>
             <txp:section_list default_title='<txp:text item="home" />' include_default="1" wraptag="ul" break="">
                 <li<txp:if_section name='<txp:section />'> class="active"</txp:if_section>>
@@ -99,7 +99,7 @@
         <p>
             <small>
                 <txp:text item="published_with" />
-                <a rel="external nofollow" href="http://textpattern.com" title="<txp:text item="go_txp_com" />">Textpattern CMS</a>
+                <a rel="external nofollow" href="https://textpattern.io/" title="<txp:text item="go_txp_com" />">Textpattern CMS</a>
             </small>
         </p>
     </footer>

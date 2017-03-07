@@ -1,4 +1,4 @@
-<article class="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+<article class="article" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
     <meta itemprop="mainEntityOfPage" content="<txp:permlink />">
 
     <txp:if_individual_article>
@@ -29,8 +29,8 @@
                 <txp:text item="comments" />
             </strong>
             <a href="<txp:permlink />#comments-head" title="<txp:text item="view" />" itemprop="discussionUrl">
-                <span itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
-                    <meta itemprop="interactionType" content="http://schema.org/CommentAction" />
+                <span itemprop="interactionStatistic" itemscope itemtype="https://schema.org/InteractionCounter">
+                    <meta itemprop="interactionType" content="https://schema.org/CommentAction" />
                     <span itemprop="userInteractionCount"><txp:comments_count /></span>
                 </span>
             </a>
@@ -41,8 +41,8 @@
                     <txp:text item="comments" />
                 </strong>
                 <a href="<txp:permlink />#comments-head" title="<txp:text item="view" />" itemprop="discussionUrl">
-                    <span itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
-                        <meta itemprop="interactionType" content="http://schema.org/CommentAction" />
+                    <span itemprop="interactionStatistic" itemscope itemtype="https://schema.org/InteractionCounter">
+                        <meta itemprop="interactionType" content="https://schema.org/CommentAction" />
                         <span itemprop="userInteractionCount">0</span>
                     </span>
                 </a>
@@ -62,7 +62,7 @@
         <strong>
             <txp:text item="author" />
         </strong>
-        <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="author" itemscope itemtype="https://schema.org/Person">
             <span itemprop="name">
                 <txp:author link="1" this_section="1" />
             </span>
