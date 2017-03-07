@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 # install en-gb without XML-RPC requirements
@@ -1133,7 +1133,7 @@ $en_gb_lang = array(
         'db_must_exist' => 'Note that the database you specify must already exist, Textpattern will not create it.',
         'did_it' => 'I did it',
         'email_required' => 'Please provide a valid email address.',
-        'errors_during_install' => 'There were <strong>{num}</strong> errors during the installation. You can ask for help in the <a href="http://forum.textpattern.com/" rel="external">Textpattern Support Forum</a>.',
+        'errors_during_install' => 'There were <strong>{num}</strong> errors during the installation. You can ask for help in the <a href="https://forum.textpattern.io/" rel="external">Textpattern Support Forum</a>.',
         'get_started' => 'Go!',
         'go_to_login' => 'Log in now',
         'installation_postamble' => 'For security, you should now remove the <code>setup</code> directory from your <code>/textpattern/</code> directory. Please check the Admin Diagnostics panel from time to time for update announcements or troubleshooting hints.',
