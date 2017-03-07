@@ -4534,6 +4534,26 @@ function get_lastmod($unix_ts = null)
 }
 
 /**
+ * Sets headers.
+ *
+ * @param   array $headers    'lower-case' => 'Lower-Case: header-value'
+ * @param   bool  $rewrite    If TRUE, rewrites existing headers
+ */
+
+function set_headers($headers = array('content-type' => 'Content-Type: text/html; charset=utf-8'), $rewrite = false)
+{
+    if ($rewrite) {
+        foreach (headers_list() as $header) {
+            unset($headers[strtolower(trim(strtok($header, ':')))]);
+        }
+    }
+
+    foreach ((array)$headers as $header) {
+        header($header);
+    }
+}
+
+/**
  * Sends and handles a lastmod header.
  *
  * @param   int|null $unix_ts The last modification date as a UNIX timestamp

@@ -364,22 +364,6 @@ function preText($s, $prefs)
         }
     }
 
-    // Prevent to get the id for file_downloads.
-    if ($out['s'] == 'file_download') {
-        if (is_numeric($out['id'])) {
-            // Undo the double-encoding workaround for .gz files;
-            // @see filedownloadurl().
-            if (!empty($out['filename'])) {
-                $out['filename'] = preg_replace('/gz&$/i', 'gz', $out['filename']);
-            }
-
-            $fn = empty($out['filename']) ? '' : " AND filename = '".doSlash($out['filename'])."'";
-            $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE." AND created <= ".now('created').$fn);
-        }
-
-        return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404);
-    }
-
     $out['context'] = validContext($out['context']);
 
     // Validate dates
@@ -410,6 +394,22 @@ function preText($s, $prefs)
             $out['author'] = '';
             $is_404 = true;
         }
+    }
+
+    // Prevent to get the id for file_downloads.
+    if ($out['s'] == 'file_download') {
+        if (is_numeric($out['id'])) {
+            // Undo the double-encoding workaround for .gz files;
+            // @see filedownloadurl().
+            if (!empty($out['filename'])) {
+                $out['filename'] = preg_replace('/gz&$/i', 'gz', $out['filename']);
+            }
+
+            $fn = empty($out['filename']) ? '' : " AND filename = '".doSlash($out['filename'])."'";
+            $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE." AND created <= ".now('created').$fn);
+        }
+
+        return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404);
     }
 
     // Allow article preview.
@@ -541,8 +541,7 @@ function textpattern()
     }
 
     restore_error_handler();
-
-    header("Content-Type: text/html; charset=utf-8");
+    set_headers();
     echo $html;
 
     callback_event('textpattern_end');
@@ -590,29 +589,20 @@ function output_file_download($filename)
         $fullpath = build_file_path($file_base_path, $filename);
 
         if (is_file($fullpath)) {
-            $headers = array();
-
-            foreach (headers_list() as $header) {
-                $headers[] = strtolower(strtok($header, ':'));
-            }
-
             // Discard any error PHP messages.
             ob_clean();
             $filesize = filesize($fullpath);
             $sent = 0;
-            header('Content-Description: File Download');
-            header("Content-Length: $filesize");
 
-            if (!in_array('content-type', $headers)) {
-                header('Content-Type: application/octet-stream');
-            }
+            set_headers(array(
+                'content-type' => 'Content-Type: application/octet-stream',
+                'content-disposition' => 'Content-Disposition: attachment; filename="'.$filename.'"',
+                'content-description' => 'Content-Description: File Download',
+                'content-length' => "Content-Length: $filesize",
+                // Fix for IE6 PDF bug on servers configured to send cache headers.
+                'cache-control' => 'Cache-Control: private'
+            ));
 
-            if (!in_array('content-disposition', $headers)) {
-                header('Content-Disposition: attachment; filename="'.$filename.'"');
-            }
-
-            // Fix for IE6 PDF bug on servers configured to send cache headers.
-            header('Cache-Control: private');
             @ini_set("zlib.output_compression", "Off");
             @set_time_limit(0);
             @ignore_user_abort(true);
