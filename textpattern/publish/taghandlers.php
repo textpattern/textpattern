@@ -3242,6 +3242,8 @@ function search_result_count($atts)
 
 function image_index($atts)
 {
+    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+    
     global $s, $c;
 
     extract(lAtts(array(
@@ -3256,42 +3258,18 @@ function image_index($atts)
         'sort'     => 'name ASC',
     ), $atts));
 
-    if (isset($atts['category'])) {
-        // Override the global.
-        $c = $category;
+    if (!isset($atts['category'])) {
+        $atts['category'] = $c;
     }
 
-    $qparts = array(
-        "category = '".doSlash($c)."' AND thumbnail = 1",
-        "ORDER BY ".doSlash($sort),
-        ($limit) ? "LIMIT ".intval($offset).", ".intval($limit) : '',
-    );
-
-    $rs = safe_rows_start("*", 'txp_image',  join(' ', $qparts));
-
-    if ($rs) {
-        $out = array();
-
-        while ($a = nextRow($rs)) {
-            extract($a);
-            $dims = ($thumb_h ? " height=\"$thumb_h\"" : '').($thumb_w ? " width=\"$thumb_w\"" : '');
-            $url = pagelinkurl(array(
-                'c'       => $c,
-                'context' => 'image',
-                's'       => $s,
-                'p'       => $id,
-            ));
-            $out[] = href(
-                '<img src="'.imagesrcurl($id, $ext, true).'"'.$dims.' alt="'.txpspecialchars($alt).'" />',
-                $url
-            );
-        }
-
-        if (count($out)) {
-            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-        }
+    if (!isset($atts['class'])) {
+        $atts['class'] = __FUNCTION__;
     }
-
+    
+    if ($atts['category']) {
+        return images($atts);
+    }
+    
     return '';
 }
 
@@ -3299,21 +3277,12 @@ function image_index($atts)
 
 function image_display($atts)
 {
-    if (is_array($atts)) {
-        extract($atts);
-    }
-
+    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+    
     global $p;
 
     if ($p) {
-        $rs = safe_row("*", 'txp_image', "id=".intval($p)." LIMIT 1");
-
-        if ($rs) {
-            extract($rs);
-
-            return '<img src="'.imagesrcurl($id, $ext).
-                '" style="height:'.$h.'px;width:'.$w.'px" alt="'.txpspecialchars($alt).'" />';
-        }
+        return image(array('id' => $p));
     }
 }
 
