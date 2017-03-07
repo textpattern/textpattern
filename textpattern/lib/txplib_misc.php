@@ -4536,20 +4536,24 @@ function get_lastmod($unix_ts = null)
 /**
  * Sets headers.
  *
- * @param   array $headers    'lower-case' => 'Lower-Case: header-value'
+ * @param   array $headers    'lower-case-name' => 'value'
  * @param   bool  $rewrite    If TRUE, rewrites existing headers
  */
 
-function set_headers($headers = array('content-type' => 'Content-Type: text/html; charset=utf-8'), $rewrite = false)
+function set_headers($headers = array('content-type' => 'text/html; charset=utf-8'), $rewrite = false)
 {
-    if ($rewrite) {
+    if (!$rewrite) {
         foreach (headers_list() as $header) {
             unset($headers[strtolower(trim(strtok($header, ':')))]);
         }
     }
 
-    foreach ((array)$headers as $header) {
-        header($header);
+    foreach ((array)$headers as $name => $header) {
+        if ($header) {
+            header($name.':'.$header);
+        } else {
+            header_remove($name);
+        }
     }
 }
 

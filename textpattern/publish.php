@@ -595,12 +595,12 @@ function output_file_download($filename)
             $sent = 0;
 
             set_headers(array(
-                'content-type' => 'Content-Type: application/octet-stream',
-                'content-disposition' => 'Content-Disposition: attachment; filename="'.$filename.'"',
-                'content-description' => 'Content-Description: File Download',
-                'content-length' => "Content-Length: $filesize",
+                'content-type' => 'application/octet-stream',
+                'content-disposition' => 'attachment; filename="'.$filename.'"',
+                'content-description' => 'File Download',
+                'content-length' => $filesize,
                 // Fix for IE6 PDF bug on servers configured to send cache headers.
-                'cache-control' => 'Cache-Control: private'
+                'cache-control' => 'private'
             ));
 
             @ini_set("zlib.output_compression", "Off");
