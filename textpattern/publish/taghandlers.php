@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -1281,7 +1281,7 @@ function category_list($atts, $thing = null)
     $exclude = $exclude ? ($exclude === true ? $roots : do_list_unique($exclude)) : array();
     $sql_exclude = $exclude && $sql_limit ? " and name not in(".implode(',', quote_list($exclude)).")" : '';
     $nocache = !$children || $sql_limit || $children == $level;
-    $hash = $nocache ? uniqid() : md5($sql_query);
+    $hash = md5($nocache ? uniqid() : $sql_query);
 
     if (!isset($cache[$hash])) {
         $cache[$hash] = array();
@@ -1354,7 +1354,7 @@ function category_list($atts, $thing = null)
                     (($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
                     ' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'context' => $type)).'"'
                 ).(
-                    $children > $level && count($cache[$hash][$name]) > 1
+                    isset($cache[$hash][$name]) && $children > $level && count($cache[$hash][$name]) > 1
                     ? category_list(array('parent' => $name, 'exclude' => implode(',', array_merge($exclude, array($name))), 'label' => '', 'html_id' => '') + $atts)
                     : ''
                 );
@@ -1381,6 +1381,10 @@ function category_list($atts, $thing = null)
     $thiscategory = $oldcategory;
     $level--;
 
+    if ($level <= 0) {
+        unset($cache[$hash]);
+    }
+ 
     return $out ? ($label ? doLabel($label, $labeltag) : '').doWrap($out, $wraptag, $break, $class, '', '', '', $html_id) : '';
 }
 
@@ -3276,11 +3280,17 @@ function search_result_count($atts)
         return '';
     }
 
-    $t = @$thispage['grand_total'];
-
     extract(lAtts(array(
-        'text' => ($t == 1 ? gTxt('article_found') : gTxt('articles_found')),
+        'text' => null,
+        'pageby' => 1
     ), $atts));
+
+    $by = (int)$pageby or $by = 1;
+    $t = ceil(@$thispage[$pageby === true ? 'numPages' : 'grand_total']/$by);
+
+    if (!isset($text)) {
+        $text = $pageby === true || $by > 1 ? gTxt($t == 1 ? 'page' : 'pages') : gTxt($t == 1 ? 'article_found' : 'articles_found');
+    }
 
     return $t.($text ? ' '.$text : '');
 }
@@ -3941,10 +3951,13 @@ function permlink($atts, $thing = null)
             return $url;
         }
 
-        return tag(parse($thing), 'a', ' rel="bookmark" href="'.$url.'"'.
-            ($title ? ' title="'.txpspecialchars($title).'"' : '').
-            ($style ? ' style="'.txpspecialchars($style).'"' : '').
-            ($class ? ' class="'.txpspecialchars($class).'"' : '')
+        return tag(parse($thing), 'a', array(
+            'rel' => 'bookmark',
+            'href' => $url,
+            'title' => $title,
+            'style' => $style,
+            'class' => $class
+            )
         );
     }
 }
@@ -5019,10 +5032,11 @@ function txp_eval($atts, $thing = null)
     global $txp_parsed, $txp_else;
     static $xpath = null, $functions = null;
 
-    extract(lAtts(array(
+    $own = array(
         'query' => null,
         'test'	=> !isset($atts['query'])
-    ), $atts));
+    );
+    extract(lAtts($own, array_intersect_key($atts, $own)));
 
     if (!isset($query)) {
         $x = true;

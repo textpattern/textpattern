@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -538,29 +538,15 @@ function maybe_tag($tag)
 function processTags($tag, $atts, $thing = null)
 {
     global $production_status, $txp_current_tag, $txp_current_form, $trace;
-    static $registry = null, $depth = 1;
-    static $txp_parser = array('tag' => '', 'atts' => '', 'thing' => null);
+    static $registry = null, $level = 0, $txp_parser = array('tag' => '', 'atts' => '', 'thing' => null);
 
     if (empty($tag)) {
         return;
     }
 
-    if ($tag === 'this') {
-        $attr = splat($atts);
-
-        if ($depth >= (isset($attr['depth']) ? intval($attr['depth']) : 10)) {
-            return;
-        }
-
-        unset($attr['depth']);
-        $depth++;
-        extract($txp_parser);
-    }
-
-    $old_parser = $txp_parser;
-    $txp_parser = compact('tag', 'atts', 'thing');
-
     if ($production_status !== 'live') {
+        $old_tag = $txp_current_tag;
+        $tag_stop = isset($thing) ? "</txp:{$tag}>" : null;
         $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
         $trace->start($txp_current_tag);
     }
@@ -569,8 +555,20 @@ function processTags($tag, $atts, $thing = null)
         $registry = Txp::get('\Textpattern\Tag\Registry');
     }
 
-    $split = !empty($attr) ? $attr + splat($atts) : splat($atts);
-    $out = $registry->process($tag, $split, $thing);
+    $old_parser = $txp_parser;
+    $split = splat($atts);
+    $out = '';
+
+    if ($tag !== 'evaluate' || !isset($split['this'])) {
+        $txp_parser = array('tag' => $tag, 'atts' => $atts, 'thing' => $thing);
+        $out = $registry->process($tag, $split, $thing);
+    } elseif ($level < ($split['this'] === true ? 10 : intval($split['this'])) && $registry->process($tag, $split, $thing)) {
+        $level++;
+        extract($txp_parser);
+        unset($split['this'], $split['query'], $split['test']);
+        $out = $registry->process($tag, $split + splat($atts), $thing);
+        $level--;
+    }
 
     if ($out === false) {
         if (maybe_tag($tag)) { // Deprecated in 4.6.0.
@@ -582,17 +580,12 @@ function processTags($tag, $atts, $thing = null)
         }
     }
 
-    if ($production_status !== 'live') {
-        $trace->stop(isset($thing) ? "</txp:{$tag}>" : null);
-        extract($old_parser);
-        $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
-    }
-
-    if (isset($attr)) {
-        $depth--;
-    }
-
     $txp_parser = $old_parser;
+
+    if ($production_status !== 'live') {
+        $txp_current_tag = $old_tag;
+        $trace->stop($tag_stop);
+    }
 
     return $out;
 }
@@ -782,22 +775,14 @@ function lookupByDateTitle($when, $title, $debug = false)
 
 function chopUrl($req)
 {
-    $req = strtolower($req);
-
-    // Strip off query_string, if present.
-    $qs = strpos($req, '?');
-
-    if ($qs) {
-        $req = substr($req, 0, $qs);
-    }
-
+    $req = strtolower(strtok($req, '?'));
     $req = preg_replace('/index\.php$/', '', $req);
     $r = array_map('urldecode', explode('/', $req));
-    $o['u0'] = (isset($r[0])) ? $r[0] : '';
-    $o['u1'] = (isset($r[1])) ? $r[1] : '';
-    $o['u2'] = (isset($r[2])) ? $r[2] : '';
-    $o['u3'] = (isset($r[3])) ? $r[3] : '';
-    $o['u4'] = (isset($r[4])) ? $r[4] : '';
+    $n = max(4, count($r));
+
+    for ($i = 0; $i < $n; $i++) {
+        $o['u'.$i] = (isset($r[$i])) ? $r[$i] : '';
+    }
 
     return $o;
 }

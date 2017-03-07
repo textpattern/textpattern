@@ -491,6 +491,23 @@ button {
   a:focus .content-image {
     border-color: #5b9dd9;
   }
+  /**
+ * Limit vertical height of fullsize images.
+ */
+  .fullsize-image .content-image {
+    max-height: 85vh;
+    object-fit: contain;
+  }
+  /**
+ * Admin-side image preview thumbnails.
+ */
+  .img-preview:focus {
+    outline: 0;
+  }
+  .img-preview img {
+    width: 120px;
+    height: 120px;
+  }
   /* Messages
    ========================================================================== */
   /**
