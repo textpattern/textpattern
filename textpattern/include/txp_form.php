@@ -168,8 +168,9 @@ function form_list($current)
         $out = tag(implode('', $out), 'div', array('id' => 'allforms_form_sections', 'role' => 'region'));
 
         $methods = array(
+            'reset'      => gTxt('update'),
             'changetype' => array('label' => gTxt('changetype'), 'html' => formTypes('', false, 'changetype')),
-            'delete'     => gTxt('delete'),
+            'delete'     => gTxt('delete')
         );
 
         $out .= multi_edit($methods, 'form', 'form_multi_edit');
@@ -187,6 +188,7 @@ function form_multi_edit()
     $method = ps('edit_method');
     $forms = ps('selected_forms');
     $affected = array();
+    $message = null;
 
     if ($forms && is_array($forms)) {
         if ($method == 'delete') {
@@ -197,10 +199,9 @@ function form_multi_edit()
             }
 
             callback_event('forms_deleted', '', 0, $affected);
+            update_lastmod('form_deleted', $affected);
 
             $message = gTxt('forms_deleted', array('{list}' => join(', ', $affected)));
-
-            form_edit($message);
         }
 
         if ($method == 'changetype') {
@@ -212,13 +213,21 @@ function form_multi_edit()
                 }
             }
 
-            $message = gTxt('forms_updated', array('{list}' => join(', ', $affected)));
-
-            form_edit($message);
+            $message = gTxt('form_updated', array('{list}' => join(', ', $affected)));
         }
-    } else {
-        form_edit();
+
+        if ($method == 'reset') {
+            foreach ($forms as $name) {
+                if (form_reset($name)) {
+                    $affected[] = $name;
+                }
+            }
+
+            $message = gTxt('form_updated', array('{list}' => join(', ', $affected)));
+        }
     }
+
+    form_edit($message);
 }
 
 /**
@@ -499,6 +508,8 @@ function form_save()
                         'txp_form',
                         "Form = '$Form',
                         type = '$type',
+                        cached = NULL,
+                        cache = NULL,
                         name = '".doSlash($newname)."'",
                         "name = '".doSlash($name)."'"
                     )) {
@@ -566,6 +577,20 @@ function form_set_type($name, $type)
     $type = doSlash($type);
 
     return safe_update('txp_form', "type = '$type'", "name = '$name'");
+}
+
+/**
+ * Resets the cache of a form template with the given name.
+ *
+ * @param  string $name The form template
+ * @return bool FALSE on error
+ */
+
+function form_reset($name)
+{
+    $name = doSlash($name);
+
+    return safe_update('txp_form', 'cached = NULL, cache = NULL', "name = '$name'");
 }
 
 /**

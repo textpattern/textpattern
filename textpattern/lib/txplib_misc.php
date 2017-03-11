@@ -4230,35 +4230,46 @@ function EvalElse($thing, $condition)
  * @package TagParser
  */
 
-function fetch_form($name)
+function fetch_form($name, $time = 0)
 {
     global $production_status, $trace;
 
     static $forms = array();
 
     $name = (string) $name;
+    $time = (float) $time;
 
-    if (!isset($forms[$name])) {
+    if (!isset($forms[$name]) || $time) {
         if (has_handler('form.fetch')) {
             $form = callback_event('form.fetch', '', false, compact('name'));
         } else {
-            $form = safe_field("Form", 'txp_form', "name = '".doSlash($name)."'");
+            if ($time) {
+                $form = safe_row('Form, cache, UNIX_TIMESTAMP(cached) AS time', 'txp_form', "name = '".doSlash($name)."'");
+
+                if (empty($form)) {
+                    $form = false;
+                } elseif ($form['time'] < $time) {
+                    $form['cache'] = false;
+                }
+            } else {
+                $form = safe_field('Form', 'txp_form', "name = '".doSlash($name)."'");
+            }
         }
 
         if ($form === false) {
             trigger_error(gTxt('form_not_found').' '.$name);
 
-            return '';
+            return false;
         }
 
-        $forms[$name] = $form;
+        $forms[$name] = is_array($form) ? $form['Form'] : $form;
     }
 
     if ($production_status === 'debug') {
         $trace->log("[Form: '$name']");
     }
 
-    return $forms[$name];
+    return $time ? $form : $forms[$name];
 }
 
 /**
@@ -4269,14 +4280,14 @@ function fetch_form($name)
  * @package TagParser
  */
 
-function parse_form($name)
+function parse_form($name, $thing = null, $time = 0)
 {
-    global $production_status, $txp_current_form, $trace;
+    global $production_status, $txp_current_form, $trace, $yield;
     static $stack = array();
 
     $out = '';
     $name = (string) $name;
-    $f = fetch_form($name);
+    $f = fetch_form($name, $time);
 
     if ($f) {
         if (in_array($name, $stack, true)) {
@@ -4285,12 +4296,26 @@ function parse_form($name)
             return '';
         }
 
+        $is_array = is_array($f);
         $old_form = $txp_current_form;
         $txp_current_form = $stack[] = $name;
+
         if ($production_status === 'debug') {
             $trace->log("[Nesting forms: '".join("' / '", $stack)."']");
         }
-        $out = parse($f);
+
+        if ($is_array && $f['cache'] !== false) {
+            $out = $f['cache'];
+        } else {
+            $yield[] = isset($thing) ? parse($thing) : null;
+            $out = parse($is_array ? $f['Form'] : $f);
+            array_pop($yield);
+
+            if ($is_array) {
+                safe_update('txp_form', "cached = NOW(), cache = '".doSlash($out)."'", "name = '".doSlash($name)."'");
+            }
+        }
+
         $txp_current_form = $old_form;
         array_pop($stack);
     }
@@ -5180,9 +5205,10 @@ eod;
  * echo join_qs(array('param1' => 'value1', 'param2' => 'value2'));
  */
 
-function join_qs($q)
+function join_qs($q, $sep = '&amp;')
 {
     $qs = array();
+    $sql = $sep !== '&amp;';
 
     foreach ($q as $k => $v) {
         if (is_array($v)) {
@@ -5190,13 +5216,17 @@ function join_qs($q)
         }
 
         if ($k && (string) $v !== '') {
-            $qs[$k] = urlencode($k).'='.urlencode($v);
+            $qs[$k] = $sql ? "$k = $v" : urlencode($k).'='.urlencode($v);
         }
     }
 
-    $str = join('&amp;', $qs);
+    if (!isset($sep)) {
+        return $qs;
+    }
 
-    return ($str ? '?'.$str : '');
+    $str = join($sep, $qs);
+
+    return  $str ? ($sql ? '' : '?').$str : '';
 }
 
 /**
