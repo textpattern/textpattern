@@ -42,24 +42,6 @@ This is a Textpattern article excerpt. Article excerpts are optional but can be 
         <message><![CDATA[<p>Welcome article - Second comment</p>]]></message>
     </comment>
 </article>
-
-<article>
-    <title>Second article</title>
-    <section>articles</section>
-    <category>hope-for-the-future</category>
-    <body><![CDATA[
-<h3>HTML body content</h3>
-]]></body>
-    <excerpt><![CDATA[
-<h3>HTML excerpt content</h3>
-]]></excerpt>
-    <comment>
-        <name>Donald Swain</name>
-        <email>donald-swain@example.com</email>
-        <web>http://forum.textpattern.com/</web>
-        <message><![CDATA[<p>Second article Comment.</p>]]></message>
-    </comment>
-</article>
 </articles>
 
 </resources>
