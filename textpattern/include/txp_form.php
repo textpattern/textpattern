@@ -168,7 +168,6 @@ function form_list($current)
         $out = tag(implode('', $out), 'div', array('id' => 'allforms_form_sections', 'role' => 'region'));
 
         $methods = array(
-            'reset'      => gTxt('update'),
             'changetype' => array('label' => gTxt('changetype'), 'html' => formTypes('', false, 'changetype')),
             'delete'     => gTxt('delete')
         );
@@ -209,16 +208,6 @@ function form_multi_edit()
 
             foreach ($forms as $name) {
                 if (form_set_type($name, $new_type)) {
-                    $affected[] = $name;
-                }
-            }
-
-            $message = gTxt('form_updated', array('{list}' => join(', ', $affected)));
-        }
-
-        if ($method == 'reset') {
-            foreach ($forms as $name) {
-                if (form_reset($name)) {
                     $affected[] = $name;
                 }
             }
@@ -508,8 +497,6 @@ function form_save()
                         'txp_form',
                         "Form = '$Form',
                         type = '$type',
-                        cached = NULL,
-                        cache = NULL,
                         name = '".doSlash($newname)."'",
                         "name = '".doSlash($name)."'"
                     )) {
@@ -577,20 +564,6 @@ function form_set_type($name, $type)
     $type = doSlash($type);
 
     return safe_update('txp_form', "type = '$type'", "name = '$name'");
-}
-
-/**
- * Resets the cache of a form template with the given name.
- *
- * @param  string $name The form template
- * @return bool FALSE on error
- */
-
-function form_reset($name)
-{
-    $name = doSlash($name);
-
-    return safe_update('txp_form', 'cached = NULL, cache = NULL', "name = '$name'");
 }
 
 /**

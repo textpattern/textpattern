@@ -470,53 +470,14 @@ function thumbnail($atts)
 
 function output_form($atts, $thing = null)
 {
-    global $prefs;
-    static $lastmod = null, $times = array();
-
     extract(lAtts(array(
-        'form' => '',
-        'cache' => null
+        'form' => ''
     ), $atts));
-
-    if (!isset($lastmod)) {
-        $lastmod = strtotime($prefs['lastmod']);
-    }
-
-    if (empty($cache)) {
-        $time = 0;
-    } elseif ($cache === true) {
-        $time = $lastmod; 
-    } elseif (!isset($times[$cache = (string)$cache])) {
-        $now = time();
-        $time = is_numeric($cache) ? $now + (float)$cache : (int)strtotime($cache, $now);
-
-        if ($time > $now) {
-            if ($future = !is_numeric($cache)) {
-                $future = false;
-                $date = date_parse($cache);
-
-                foreach (array('year', 'month', 'day', 'hour', 'minute', 'second', 'fraction') as $key) {
-                    if ($date[$key] !== false) {
-                        $future = true;
-                        break;
-                    }
-                }
-            }
-
-            $time = $future ? 0 : max(2*$now - $time, $lastmod);
-        }
-
-        $times[$cache] = $time;
-    } else {
-        $time = $times[$cache];
-    }
 
     if (!$form) {
         trigger_error(gTxt('form_not_specified'));
     } else {
-        $out = parse_form($form, $thing, $time);
-
-        return $out;
+        return parse_form($form, $thing);
     }
 }
 

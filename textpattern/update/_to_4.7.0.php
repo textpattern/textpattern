@@ -35,14 +35,3 @@ if (is_writable(txpath.DS.'..')) {
         }
     }
 }
-
-// Add cache to forms.
-$cols = getThings("DESCRIBE `".PFX."txp_form`");
-
-if (!in_array('cached', $cols)) {
-    safe_alter('txp_form', "ADD cached DATETIME DEFAULT NULL AFTER type");
-}
-
-if (!in_array('cache', $cols)) {
-    safe_alter('txp_form', "ADD cache MEDIUMTEXT AFTER Form");
-}
