@@ -470,20 +470,14 @@ function thumbnail($atts)
 
 function output_form($atts, $thing = null)
 {
-    global $yield;
-
     extract(lAtts(array(
-        'form' => '',
+        'form' => ''
     ), $atts));
 
     if (!$form) {
         trigger_error(gTxt('form_not_specified'));
     } else {
-        $yield[] = $thing !== null ? parse($thing) : null;
-        $out = parse_form($form);
-        array_pop($yield);
-
-        return $out;
+        return parse_form($form, $thing);
     }
 }
 
@@ -1380,6 +1374,10 @@ function category_list($atts, $thing = null)
     $thiscategory = $oldcategory;
     $level--;
 
+    if ($level <= 0) {
+        unset($cache[$hash]);
+    }
+ 
     return $out ? ($label ? doLabel($label, $labeltag) : '').doWrap($out, $wraptag, $break, $class, '', '', '', $html_id) : '';
 }
 
@@ -3275,11 +3273,17 @@ function search_result_count($atts)
         return '';
     }
 
-    $t = @$thispage['grand_total'];
-
     extract(lAtts(array(
-        'text' => ($t == 1 ? gTxt('article_found') : gTxt('articles_found')),
+        'text' => null,
+        'pageby' => 1
     ), $atts));
+
+    $by = (int)$pageby or $by = 1;
+    $t = ceil(@$thispage[$pageby === true ? 'numPages' : 'grand_total']/$by);
+
+    if (!isset($text)) {
+        $text = $pageby === true || $by > 1 ? gTxt($t == 1 ? 'page' : 'pages') : gTxt($t == 1 ? 'article_found' : 'articles_found');
+    }
 
     return $t.($text ? ' '.$text : '');
 }
@@ -3940,10 +3944,13 @@ function permlink($atts, $thing = null)
             return $url;
         }
 
-        return tag(parse($thing), 'a', ' rel="bookmark" href="'.$url.'"'.
-            ($title ? ' title="'.txpspecialchars($title).'"' : '').
-            ($style ? ' style="'.txpspecialchars($style).'"' : '').
-            ($class ? ' class="'.txpspecialchars($class).'"' : '')
+        return tag(parse($thing), 'a', array(
+            'rel' => 'bookmark',
+            'href' => $url,
+            'title' => $title,
+            'style' => $style,
+            'class' => $class
+            )
         );
     }
 }

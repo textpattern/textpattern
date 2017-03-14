@@ -4206,13 +4206,13 @@ function fetch_form($name)
         if (has_handler('form.fetch')) {
             $form = callback_event('form.fetch', '', false, compact('name'));
         } else {
-            $form = safe_field("Form", 'txp_form', "name = '".doSlash($name)."'");
+            $form = safe_field('Form', 'txp_form', "name = '".doSlash($name)."'");
         }
 
         if ($form === false) {
             trigger_error(gTxt('form_not_found').' '.$name);
 
-            return '';
+            return false;
         }
 
         $forms[$name] = $form;
@@ -4233,9 +4233,9 @@ function fetch_form($name)
  * @package TagParser
  */
 
-function parse_form($name)
+function parse_form($name, $thing = null)
 {
-    global $production_status, $txp_current_form, $trace;
+    global $production_status, $txp_current_form, $trace, $yield;
     static $stack = array();
 
     $out = '';
@@ -4251,10 +4251,15 @@ function parse_form($name)
 
         $old_form = $txp_current_form;
         $txp_current_form = $stack[] = $name;
+
         if ($production_status === 'debug') {
             $trace->log("[Nesting forms: '".join("' / '", $stack)."']");
         }
+
+        $yield[] = isset($thing) ? parse($thing) : null;
         $out = parse($f);
+        array_pop($yield);
+
         $txp_current_form = $old_form;
         array_pop($stack);
     }
@@ -4495,6 +4500,30 @@ function get_lastmod($unix_ts = null)
     }
 
     return $unix_ts;
+}
+
+/**
+ * Sets headers.
+ *
+ * @param   array $headers    'lower-case-name' => 'value'
+ * @param   bool  $rewrite    If TRUE, rewrites existing headers
+ */
+
+function set_headers($headers = array('content-type' => 'text/html; charset=utf-8'), $rewrite = false)
+{
+    if (!$rewrite) {
+        foreach (headers_list() as $header) {
+            unset($headers[strtolower(trim(strtok($header, ':')))]);
+        }
+    }
+
+    foreach ((array)$headers as $name => $header) {
+        if ($header) {
+            header($name.':'.$header);
+        } else {
+            header_remove($name);
+        }
+    }
 }
 
 /**
@@ -5119,9 +5148,10 @@ eod;
  * echo join_qs(array('param1' => 'value1', 'param2' => 'value2'));
  */
 
-function join_qs($q)
+function join_qs($q, $sep = '&amp;')
 {
     $qs = array();
+    $sql = $sep !== '&amp;';
 
     foreach ($q as $k => $v) {
         if (is_array($v)) {
@@ -5129,13 +5159,17 @@ function join_qs($q)
         }
 
         if ($k && (string) $v !== '') {
-            $qs[$k] = urlencode($k).'='.urlencode($v);
+            $qs[$k] = $sql ? "$k = $v" : urlencode($k).'='.urlencode($v);
         }
     }
 
-    $str = join('&amp;', $qs);
+    if (!isset($sep)) {
+        return $qs;
+    }
 
-    return ($str ? '?'.$str : '');
+    $str = join($sep, $qs);
+
+    return  $str ? ($sql ? '' : '?').$str : '';
 }
 
 /**

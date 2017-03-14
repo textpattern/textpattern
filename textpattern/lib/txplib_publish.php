@@ -775,22 +775,14 @@ function lookupByDateTitle($when, $title, $debug = false)
 
 function chopUrl($req)
 {
-    $req = strtolower($req);
-
-    // Strip off query_string, if present.
-    $qs = strpos($req, '?');
-
-    if ($qs) {
-        $req = substr($req, 0, $qs);
-    }
-
+    $req = strtolower(strtok($req, '?'));
     $req = preg_replace('/index\.php$/', '', $req);
     $r = array_map('urldecode', explode('/', $req));
-    $o['u0'] = (isset($r[0])) ? $r[0] : '';
-    $o['u1'] = (isset($r[1])) ? $r[1] : '';
-    $o['u2'] = (isset($r[2])) ? $r[2] : '';
-    $o['u3'] = (isset($r[3])) ? $r[3] : '';
-    $o['u4'] = (isset($r[4])) ? $r[4] : '';
+    $n = max(4, count($r));
+
+    for ($i = 0; $i < $n; $i++) {
+        $o['u'.$i] = (isset($r[$i])) ? $r[$i] : '';
+    }
 
     return $o;
 }
