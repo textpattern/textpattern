@@ -1,0 +1,6 @@
+issue_time DATETIME     NOT NULL,
+nonce      VARCHAR(255) NOT NULL DEFAULT '',
+used       TINYINT      NOT NULL DEFAULT '0',
+secret     VARCHAR(255) NOT NULL DEFAULT '',
+
+PRIMARY KEY (nonce(250))

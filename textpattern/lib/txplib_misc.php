@@ -3754,32 +3754,6 @@ function assign_user_assets($owner, $new_owner)
 }
 
 /**
- * Return private preferences required to be set for the given (new) user.
- *
- * The returned structure comprises a nested array. Each row is an
- * array, with key being the pref event, and array made up of:
- *  -> pref type
- *  -> position
- *  -> html control
- *  -> name (gTxt)
- *  -> value
- *  -> user name
- *
- * @param   string $user_name The user name against which to assign the prefs
- * @since   4.6.0
- * @package Pref
- */
-
-function new_user_prefs($user_name)
-{
-    return array(
-        'publish' => array(
-            array(PREF_CORE, 15, 'defaultPublishStatus', 'default_publish_status', STATUS_LIVE, $user_name),
-        ),
-    );
-}
-
-/**
  * Creates a user account.
  *
  * On a successful run, will trigger a 'user.create > done' callback event.
@@ -3822,14 +3796,6 @@ function create_user($name, $email, $password, $realname = '', $group = 0)
         ) === false
     ) {
         return false;
-    }
-
-    $privatePrefs = new_user_prefs($name);
-
-    foreach ($privatePrefs as $event => $event_prefs) {
-        foreach ($event_prefs as $p) {
-            create_pref($p[3], $p[4], $event, $p[0], $p[2], $p[1], $p[5]);
-        }
     }
 
     callback_event('user.create', 'done', 0, compact('name', 'email', 'password', 'realname', 'group', 'nonce', 'hash'));
@@ -4097,8 +4063,6 @@ function change_user_group($user, $group)
 
 function txp_validate($user, $password, $log = true)
 {
-    global $DB;
-
     $safe_user = doSlash($user);
     $name = false;
 
@@ -4670,7 +4634,7 @@ function handle_lastmod($unix_ts = null, $exit = true)
 function get_prefs($user = '')
 {
     $out = array();
-    $r = safe_rows_start("name, val", 'txp_prefs', "prefs_id = 1 AND user_name = '".doSlash($user)."'");
+    $r = safe_rows_start("name, val", 'txp_prefs', "user_name = '".doSlash($user)."'");
 
     if ($r) {
         while ($a = nextRow($r)) {
@@ -4899,8 +4863,7 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
     if (
         safe_insert(
             'txp_prefs',
-            "prefs_id = 1,
-            name = '".doSlash($name)."',
+            "name = '".doSlash($name)."',
             val = '".doSlash($val)."',
             event = '".doSlash($event)."',
             html = '".doSlash($html)."',
@@ -6814,4 +6777,37 @@ function check_file_integrity($flags = INTEGRITY_STATUS)
     }
 
     return $return;
+}
+
+/**
+ * Returns the contents of the found files as an array.
+ *
+ */
+
+function get_files_content($dir, $ext)
+{
+    $result = array();
+    foreach (scandir($dir) as $file) {
+        if (preg_match('/^(.+)\.'.$ext.'$/', $file, $match)) {
+            $result[$match[1]] = file_get_contents("$dir/$file");
+        }
+    }
+
+    return $result;
+}
+
+/**
+ * Get Theme prefs
+ * Now Textpatern does not support themes. If the setup folder is deleted, it will return an empty array.
+ */
+
+function get_prefs_theme()
+{
+    $out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true);
+    if (empty($out)) {
+
+        return array();
+    }
+
+    return $out;
 }
