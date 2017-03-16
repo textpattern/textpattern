@@ -351,7 +351,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
 
 function lastMod()
 {
-    $last = safe_field("UNIX_TIMESTAMP(val)", 'txp_prefs', "name = 'lastmod' AND prefs_id = 1");
+    $last = safe_field("UNIX_TIMESTAMP(val)", 'txp_prefs', "name = 'lastmod'");
 
     return gmdate("D, d M Y H:i:s \G\M\T", $last);
 }

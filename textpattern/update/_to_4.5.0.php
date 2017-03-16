@@ -25,20 +25,6 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-// Doctype prefs.
-if (!safe_field("name", 'txp_prefs', "name = 'doctype'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'doctype', val = 'xhtml', type = '0', event = 'publish', html = 'doctypes', position = '190'");
-}
-
-// Publisher's email address.
-if (!safe_field("name", 'txp_prefs', "name = 'publisher_email'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'publisher_email', val = '', type = 1, event = 'admin', position = 115");
-}
-// Goodbye raw ?php support.
-if (safe_field("name", 'txp_prefs', "name = 'allow_raw_php_scripting'")) {
-    safe_delete('txp_prefs', "name = 'allow_raw_php_scripting'");
-}
-
 safe_alter('txp_users', "MODIFY RealName VARCHAR(255) NOT NULL DEFAULT ''");
 safe_alter('txp_users', "MODIFY email    VARCHAR(254) NOT NULL DEFAULT ''");
 
@@ -52,12 +38,8 @@ $cols = getThings("DESCRIBE `".PFX."txp_section`");
 if (!safe_field("name", 'txp_prefs', "name = 'default_section'")) {
     if (in_array('is_default', $cols)) {
         $current_default_section = safe_field("name", 'txp_section', "is_default = 1");
-    } else {
-        // Nothing we can do. Pick first one.
-        $current_default_section = safe_field("name", 'txp_section', "1 LIMIT 1");
+        safe_insert('txp_prefs', "name = 'default_section', val = '".doSlash($current_default_section)."', type = '2', event = 'section', html = 'text_input', position = '0'");
     }
-
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'default_section', val = '".doSlash($current_default_section)."', type = '2', event = 'section', html = 'text_input', position = '0'");
 }
 
 if (in_array('is_default', $cols)) {

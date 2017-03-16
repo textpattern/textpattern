@@ -100,7 +100,7 @@ try {
 
     // Keep track of updates for SVN users.
     safe_delete('txp_prefs', "name = 'dbupdatetime'");
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'dbupdatetime', val = '".max(newest_file(), time())."', type = '2'");
+    safe_insert('txp_prefs', "name = 'dbupdatetime', val = '".max(newest_file(), time())."', type = '2'");
 } catch (Exception $e) {
     // Nothing to do here, the goal was just to abort the update scripts
     // Error message already communicated via updateErrorHandler

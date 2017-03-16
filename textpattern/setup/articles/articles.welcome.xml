@@ -1,3 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<articles>
+<article>
+    <title>Welcome to your site</title>
+    <section>articles</section>
+    <category>hope-for-the-future</category>
+    <category>meaningful-labor</category>
+    <body format="textile"><![CDATA[
 h3. What do you want to do next?
 
 * Modify or delete this article? The "article list":siteurl/textpattern/index.php?event=list is the place to start.
@@ -14,6 +23,25 @@ h3. What do you want to do next?
 
 There is a host of "Frequently Asked Questions":http://textpattern.com/faq/ to help you get started.
 
-"Textpattern tags":https://docs.textpattern.io/tags/, their attributes and values are explained and sampled within the "Textpattern User Documentation":https://docs.textpattern.io/, where you will also find valuable tips and tutorials.
+"Textpattern tags":http://docs.textpattern.io/tags/, their attributes and values are explained and sampled within the "Textpattern User Documentation":http://docs.textpattern.io/, where you will also find valuable tips and tutorials.
 
-There's also a crowd of friendly, helpful people over at the "Textpattern support forum":https://forum.textpattern.io/. Come and pay a visit!
+There's also a crowd of friendly, helpful people over at the "Textpattern support forum":http://forum.textpattern.com/. Come and pay a visit!
+]]></body>
+    <excerpt format="textile"><![CDATA[
+This is a Textpattern article excerpt. Article excerpts are optional but can be used effectively to summarise an article's content, for example with Textpattern's built-in article syndication and with the @<txp:excerpt />@ tag.
+]]></excerpt>
+    <comment>
+        <name>Donald Swain</name>
+        <email>donald-swain@example.com</email>
+        <web>http://forum.textpattern.com/</web>
+        <message><![CDATA[<p>I enjoy your site very much.</p>]]></message>
+    </comment>
+    <comment>
+        <name>Angry Birds</name>
+        <web>http://forum.textpattern.com/viewforum.php?id=5</web>
+        <message><![CDATA[<p>Welcome article - Second comment</p>]]></message>
+    </comment>
+</article>
+</articles>
+
+</resources>

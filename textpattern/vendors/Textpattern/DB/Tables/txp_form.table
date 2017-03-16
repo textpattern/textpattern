@@ -1,0 +1,5 @@
+name VARCHAR(255) NOT NULL DEFAULT '',
+type VARCHAR(28)  NOT NULL DEFAULT '',
+Form TEXT         NOT NULL,
+
+PRIMARY KEY (name(250))

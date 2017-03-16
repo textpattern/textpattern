@@ -1,0 +1,12 @@
+id     INT          NOT NULL AUTO_INCREMENT,
+time   DATETIME     NOT NULL,
+host   VARCHAR(255) NOT NULL DEFAULT '',
+page   VARCHAR(255) NOT NULL DEFAULT '',
+refer  MEDIUMTEXT   NOT NULL,
+status INT          NOT NULL DEFAULT '200',
+method VARCHAR(16)  NOT NULL DEFAULT 'GET',
+ip     VARCHAR(45)  NOT NULL DEFAULT '',
+
+PRIMARY KEY (id),
+INDEX time  (time),
+INDEX ip    (ip)
