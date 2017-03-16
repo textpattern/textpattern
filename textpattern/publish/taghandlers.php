@@ -267,9 +267,6 @@ function css($atts)
 
 function image($atts)
 {
-    global $thisimage;
-    static $cache = array();
-
     extract(lAtts(array(
         'class'   => '',
         'escape'  => 'html',
@@ -282,38 +279,8 @@ function image($atts)
         'wraptag' => '',
     ), $atts));
 
-    if ($name) {
-        if (isset($cache['n'][$name])) {
-            $rs = $cache['n'][$name];
-        } else {
-            $name = doSlash($name);
-
-            $rs = safe_row("*", 'txp_image', "name = '$name' LIMIT 1");
-
-            $cache['n'][$name] = $rs;
-        }
-    } elseif ($id) {
-        if (isset($cache['i'][$id])) {
-            $rs = $cache['i'][$id];
-        } else {
-            $id = (int) $id;
-
-            $rs = safe_row("*", 'txp_image', "id = $id LIMIT 1");
-
-            $cache['i'][$id] = $rs;
-        }
-    } elseif ($thisimage) {
-        $id = (int) $thisimage['id'];
-        $rs = $thisimage;
-        $cache['i'][$id] = $rs;
-    } else {
-        trigger_error(gTxt('unknown_image'));
-
-        return;
-    }
-
-    if ($rs) {
-        extract($rs);
+    if ($imageData = imageFetchInfo($id, $name)) {
+        extract($imageData);
 
         if ($escape == 'html') {
             $alt = txpspecialchars($alt);
@@ -358,16 +325,12 @@ function image($atts)
 
         return $out;
     }
-
-    trigger_error(gTxt('unknown_image'));
 }
 
 // -------------------------------------------------------------
 
 function thumbnail($atts)
 {
-    global $thisimage;
-
     extract(lAtts(array(
         'class'    => '',
         'escape'   => 'html',
@@ -377,31 +340,18 @@ function thumbnail($atts)
         'link'     => 0,
         'link_rel' => '',
         'name'     => '',
-        'poplink'  => 0, // Is this used?
+        'poplink'  => 0, // Deprecated, 4.7
         'style'    => '',
         'wraptag'  => '',
         'width'    => '',
     ), $atts));
 
-    if ($name) {
-        $name = doSlash($name);
-
-        $rs = safe_row("*", 'txp_image', "name = '$name' LIMIT 1");
-    } elseif ($id) {
-        $id = (int) $id;
-
-        $rs = safe_row("*", 'txp_image', "id = $id LIMIT 1");
-    } elseif ($thisimage) {
-        $id = (int) $thisimage['id'];
-        $rs = $thisimage;
-    } else {
-        trigger_error(gTxt('unknown_image'));
-
-        return;
+    if (isset($atts['poplink'])) {
+        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'poplink')), E_USER_NOTICE);
     }
 
-    if ($rs) {
-        extract($rs);
+    if ($imageData = imageFetchInfo($id, $name)) {
+        extract($imageData);
 
         if ($thumbnail) {
             if ($escape == 'html') {
@@ -462,8 +412,6 @@ function thumbnail($atts)
             return $out;
         }
     }
-
-    trigger_error(gTxt('unknown_image'));
 }
 
 // -------------------------------------------------------------
@@ -3292,9 +3240,11 @@ function search_result_count($atts)
 
 function image_index($atts)
 {
-    global $s, $c;
+    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+    
+    global $c;
 
-    extract(lAtts(array(
+    lAtts(array(
         'label'    => '',
         'break'    => br,
         'wraptag'  => '',
@@ -3304,44 +3254,20 @@ function image_index($atts)
         'limit'    => 0,
         'offset'   => 0,
         'sort'     => 'name ASC',
-    ), $atts));
+    ), $atts);
 
-    if (isset($atts['category'])) {
-        // Override the global.
-        $c = $category;
+    if (!isset($atts['category'])) {
+        $atts['category'] = $c;
     }
 
-    $qparts = array(
-        "category = '".doSlash($c)."' AND thumbnail = 1",
-        "ORDER BY ".doSlash($sort),
-        ($limit) ? "LIMIT ".intval($offset).", ".intval($limit) : '',
-    );
-
-    $rs = safe_rows_start("*", 'txp_image',  join(' ', $qparts));
-
-    if ($rs) {
-        $out = array();
-
-        while ($a = nextRow($rs)) {
-            extract($a);
-            $dims = ($thumb_h ? " height=\"$thumb_h\"" : '').($thumb_w ? " width=\"$thumb_w\"" : '');
-            $url = pagelinkurl(array(
-                'c'       => $c,
-                'context' => 'image',
-                's'       => $s,
-                'p'       => $id,
-            ));
-            $out[] = href(
-                '<img src="'.imagesrcurl($id, $ext, true).'"'.$dims.' alt="'.txpspecialchars($alt).'" />',
-                $url
-            );
-        }
-
-        if (count($out)) {
-            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-        }
+    if (!isset($atts['class'])) {
+        $atts['class'] = __FUNCTION__;
     }
-
+    
+    if ($atts['category']) {
+        return images($atts);
+    }
+    
     return '';
 }
 
@@ -3349,21 +3275,12 @@ function image_index($atts)
 
 function image_display($atts)
 {
-    if (is_array($atts)) {
-        extract($atts);
-    }
-
+    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+    
     global $p;
 
     if ($p) {
-        $rs = safe_row("*", 'txp_image', "id=".intval($p)." LIMIT 1");
-
-        if ($rs) {
-            extract($rs);
-
-            return '<img src="'.imagesrcurl($id, $ext).
-                '" style="height:'.$h.'px;width:'.$w.'px" alt="'.txpspecialchars($alt).'" />';
-        }
+        return image(array('id' => $p));
     }
 }
 
@@ -3574,8 +3491,6 @@ function images($atts, $thing = null)
 
 function image_info($atts)
 {
-    global $thisimage;
-
     extract(lAtts(array(
         'name'       => '',
         'id'         => '',
@@ -3594,32 +3509,19 @@ function image_info($atts)
     $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'author', 'w', 'h', 'thumb_w', 'thumb_h', 'date');
     $type = do_list($type);
 
-    $from_form = false;
-
-    if ($id) {
-        $thisimage = imageFetchInfo('id = '.intval($id));
-    } elseif ($name) {
-        $thisimage = imageFetchInfo("name = '".doSlash($name)."'");
-    } else {
-        assert_image();
-        $from_form = true;
-    }
-
     $out = array();
-    if ($thisimage) {
-        $thisimage['category_title'] = fetch_category_title($thisimage['category'], 'image');
+    if ($imageData = imageFetchInfo($id, $name)) {
+        $imageData['category_title'] = fetch_category_title($imageData['category'], 'image');
 
         foreach ($type as $item) {
             if (in_array($item, $validItems)) {
-                if (isset($thisimage[$item])) {
+                if (isset($imageData[$item])) {
                     $out[] = ($escape == 'html') ?
-                        txpspecialchars($thisimage[$item]) : $thisimage[$item];
+                        txpspecialchars($imageData[$item]) : $imageData[$item];
                 }
+            } else {
+                trigger_error(gTxt('invalid_attribute_value', array('{name}' => $item)), E_USER_NOTICE);
             }
-        }
-
-        if (!$from_form) {
-            $thisimage = '';
         }
     }
 
@@ -3630,50 +3532,41 @@ function image_info($atts)
 
 function image_url($atts, $thing = null)
 {
-    global $thisimage;
-
     extract(lAtts(array(
         'name'      => '',
         'id'        => '',
         'thumbnail' => 0,
         'link'      => 'auto',
     ), $atts));
-
-    $from_form = false;
-
-    if ($id) {
-        $thisimage = imageFetchInfo('id = '.intval($id));
-    } elseif ($name) {
-        $thisimage = imageFetchInfo("name = '".doSlash($name)."'");
-    } else {
-        assert_image();
-        $from_form = true;
+    
+    if (($name || $id) && $thing) {
+        global $thisimage;
+        $stash = $thisimage;
     }
 
-    if ($thisimage) {
+    if ($thisimage = imageFetchInfo($id, $name)) {
         $url = imagesrcurl($thisimage['id'], $thisimage['ext'], $thumbnail);
         $link = ($link == 'auto') ? (($thing) ? 1 : 0) : $link;
         $out = ($thing) ? parse($thing) : $url;
         $out = ($link) ? href($out, $url) : $out;
-
-        if (!$from_form) {
-            $thisimage = '';
-        }
-
-        return $out;
     }
 
-    return '';
+    if (isset($stash)) {
+        $thisimage = $stash;
+    }
+    
+    return isset($out) ? $out : '';
 }
 
 // -------------------------------------------------------------
 
 function image_author($atts)
 {
-    global $thisimage, $s;
-    assert_image();
+    global $s;
 
     extract(lAtts(array(
+        'name'         => '',
+        'id'           => '',
         'class'        => '',
         'link'         => 0,
         'title'        => 1,
@@ -3682,9 +3575,9 @@ function image_author($atts)
         'wraptag'      => '',
     ), $atts));
 
-    if ($thisimage['author']) {
-        $author_name = get_author_name($thisimage['author']);
-        $display_name = txpspecialchars(($title) ? $author_name : $thisimage['author']);
+    if ($imageData = imageFetchInfo($id, $name)) {
+        $author_name = get_author_name($imageData['author']);
+        $display_name = txpspecialchars(($title) ? $author_name : $imageData['author']);
 
         $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
@@ -3700,35 +3593,18 @@ function image_author($atts)
 
 function image_date($atts)
 {
-    global $thisimage;
-
     extract(lAtts(array(
         'name'   => '',
         'id'     => '',
         'format' => '',
     ), $atts));
 
-    $from_form = false;
-
-    if ($id) {
-        $thisimage = imageFetchInfo('id = '.intval($id));
-    } elseif ($name) {
-        $thisimage = imageFetchInfo("name = '".doSlash($name)."'");
-    } else {
-        assert_image();
-        $from_form = true;
-    }
-
-    if (isset($thisimage['date'])) {
+    if ($imageData = imageFetchInfo($id, $name)) {
         // Not a typo: use fileDownloadFormatTime() since it's fit for purpose.
         $out = fileDownloadFormatTime(array(
-            'ftime'  => $thisimage['date'],
+            'ftime'  => $imageData['date'],
             'format' => $format,
         ));
-
-        if (!$from_form) {
-            $thisimage = '';
-        }
 
         return $out;
     }
