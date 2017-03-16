@@ -954,22 +954,55 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
 /**
  * Gets an image as an array.
  *
- * @param   string $where SQL where clause
- * @return  array|bool An image data, or FALSE on failure
+ * @param   int $id image ID
+ * @param   string $name image name
+ * @return  array|bool An image data array, or FALSE on failure
  * @package Image
  * @example
- * if ($image = fileDownloadFetchInfo('id = 1'))
+ * if ($image = imageFetchInfo($id))
  * {
  *     print_r($image);
  * }
  */
 
-function imageFetchInfo($where)
+function imageFetchInfo($id = "", $name = "")
 {
+    global $thisimage, $p;
+    static $cache = array();
+    
+    if ($id) {
+        if (isset($cache['i'][$id])) {
+            return $cache['i'][$id];
+        } else {
+            $where = 'id = '.intval($id).' LIMIT 1';
+        }
+    } elseif ($name) {
+        if (isset($cache['n'][$name])) {
+            return $cache['n'][$name];
+        } else {
+            $where = "name = '".doSlash($name)."' LIMIT 1";
+        }
+    } elseif ($thisimage) {
+        $id = (int) $thisimage['id'];
+        return $cache['i'][$id] = $thisimage;
+    } elseif ($p) {
+        if (isset($cache['i'][$p])) {
+            return $cache['i'][$p];
+        } else {
+            $where = 'id = '.intval($p).' LIMIT 1';
+        }
+    } else {
+        assert_image();
+        return false;
+    }
+    
     $rs = safe_row("*", 'txp_image', $where);
 
     if ($rs) {
-        return image_format_info($rs);
+        $id = (int) $rs['id'];
+        return $cache['i'][$id] = image_format_info($rs);
+    } else {
+        trigger_error(gTxt('unknown_image'));
     }
 
     return false;
