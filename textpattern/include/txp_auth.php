@@ -302,6 +302,7 @@ function doTxpValidate()
 
             // Login is good, create $txp_user.
             $txp_user = $name;
+            Txp::get('\Textpattern\DB\Core')->checkPrefsIntegrity();
 
             return '';
         } else {

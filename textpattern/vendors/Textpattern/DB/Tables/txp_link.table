@@ -1,0 +1,11 @@
+id          INT          NOT NULL AUTO_INCREMENT,
+date        DATETIME     NOT NULL,
+category    VARCHAR(64)  NOT NULL DEFAULT '',
+url         TEXT         NOT NULL,
+linkname    VARCHAR(255) NOT NULL DEFAULT '',
+linksort    VARCHAR(128) NOT NULL DEFAULT '',
+description TEXT         NOT NULL,
+author      VARCHAR(64)  NOT NULL DEFAULT '',
+
+PRIMARY KEY      (id),
+INDEX author_idx (author)

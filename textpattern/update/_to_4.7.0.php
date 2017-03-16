@@ -35,3 +35,11 @@ if (is_writable(txpath.DS.'..')) {
         }
     }
 }
+
+// Drop the prefs_id column in txp_prefs
+$cols = getThings("DESCRIBE `".PFX."txp_prefs`");
+if (in_array('prefs_id', $cols)) {
+    safe_drop_index('txp_prefs', 'prefs_idx');
+    safe_alter('txp_prefs', "ADD UNIQUE prefs_idx (name(185), user_name)");
+    safe_alter('txp_prefs', "DROP prefs_id");
+}
