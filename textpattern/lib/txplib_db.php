@@ -508,18 +508,12 @@ function safe_upsert($table, $set, $where, $debug = false)
 {
     global $DB;
 
-    if (is_array($where)) {
-        $whereset = array();
-        $where = doSlash($where);
-
-        foreach ($where as $key => $val) {
-            $whereset[] = "$key = '$val'";
-        }
-
-        $where = implode(' AND ', $whereset);
-    } else {
-        $whereset = array($where);
+    if (is_array($set)) {
+        $set = join_qs(quote_list($set), ',');
     }
+
+    $whereset = is_array($where) ? join_qs(quote_list($where), null) : array($where);
+    $where = implode(' AND ', $whereset);
 
     // FIXME: lock the table so this is atomic?
     $r = safe_update($table, $set, $where, $debug);

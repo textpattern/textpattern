@@ -126,5 +126,3 @@ if (!$exists) {
 if (!get_pref('skin_base_path')) {
     set_pref('skin_base_path', dirname(txpath).DS.'themes', 'admin', PREF_CORE, 'text_input', 70);
 }
-
-

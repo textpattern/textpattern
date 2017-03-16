@@ -179,7 +179,7 @@ function form_list($current)
 
         $methods = array(
             'changetype' => array('label' => gTxt('changetype'), 'html' => formTypes('', false, 'changetype')),
-            'delete'     => gTxt('delete'),
+            'delete'     => gTxt('delete')
         );
 
         $out .= multi_edit($methods, 'form', 'form_multi_edit');
@@ -198,6 +198,7 @@ function form_multi_edit()
     $forms = ps('selected_forms');
     $skin = ps('skin');
     $affected = array();
+    $message = null;
 
     form_set_skin($skin);
 
@@ -210,10 +211,9 @@ function form_multi_edit()
             }
 
             callback_event('forms_deleted', '', 0, compact('affected', 'skin'));
+            update_lastmod('form_deleted', $affected);
 
             $message = gTxt('forms_deleted', array('{list}' => join(', ', $affected)));
-
-            form_edit($message);
         }
 
         if ($method == 'changetype') {
@@ -225,13 +225,11 @@ function form_multi_edit()
                 }
             }
 
-            $message = gTxt('forms_updated', array('{list}' => join(', ', $affected)));
-
-            form_edit($message);
+            $message = gTxt('form_updated', array('{list}' => join(', ', $affected)));
         }
-    } else {
-        form_edit();
     }
+
+    form_edit($message);
 }
 
 /**
