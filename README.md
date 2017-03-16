@@ -1,6 +1,6 @@
 # Textpattern CMS
 
-[![Textpattern Logo](http://textpattern.com/assets/img/branding/carver/carver-128px.svg)](http://textpattern.com/)
+[![Textpattern Logo](https://textpattern.io/assets/img/branding/carver/carver-128px.svg)](http://textpattern.com/)
 
 **A flexible, elegant and easy-to-use content management system.**
 
@@ -61,11 +61,16 @@ Textpattern also has social network presences on
 
 ## Contributing
 
-Want to help out with the development of Textpattern CMS? Please refer to the [Contributing documentation](https://docs.textpattern.io/development/contributing) for full details.
+Want to help out with the development of Textpattern CMS? Please refer to the
+[Contributing documentation](https://docs.textpattern.io/development/contributing)
+for full details.
 
 ## GitHub topic tags
 
-If you use GitHub for Textpattern-related development please consider adding some of the following [topic](https://help.github.com/articles/about-topics/) keywords to your public project repositories, so we can build a network of discoverable resources:
+If you use GitHub for Textpattern-related development please consider adding
+some of the following [topic](https://help.github.com/articles/about-topics/)
+keywords to your public project repositories, so we can build a network of
+discoverable resources:
 
 * `textpattern`
 * `textpattern-plugin`

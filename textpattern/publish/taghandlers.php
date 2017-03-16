@@ -470,20 +470,14 @@ function thumbnail($atts)
 
 function output_form($atts, $thing = null)
 {
-    global $yield;
-
     extract(lAtts(array(
-        'form' => '',
+        'form' => ''
     ), $atts));
 
     if (!$form) {
         trigger_error(gTxt('form_not_specified'));
     } else {
-        $yield[] = $thing !== null ? parse($thing) : null;
-        $out = parse_form($form);
-        array_pop($yield);
-
-        return $out;
+        return parse_form($form, $thing);
     }
 }
 
