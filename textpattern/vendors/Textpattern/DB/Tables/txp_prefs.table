@@ -1,0 +1,11 @@
+name      VARCHAR(255)      NOT NULL DEFAULT '',
+val       TEXT              NOT NULL,
+type      SMALLINT UNSIGNED NOT NULL DEFAULT '2',
+event     VARCHAR(255)      NOT NULL DEFAULT 'publish',
+html      VARCHAR(255)      NOT NULL DEFAULT 'text_input',
+position  SMALLINT UNSIGNED NOT NULL DEFAULT '0',
+user_name VARCHAR(64)       NOT NULL DEFAULT '',
+
+UNIQUE prefs_idx (name(185), user_name),
+INDEX  name      (name(250)),
+INDEX  user_name (user_name)

@@ -1,0 +1,4 @@
+name      VARCHAR(255) NOT NULL DEFAULT '',
+user_html TEXT         NOT NULL,
+
+PRIMARY KEY (name(250))
