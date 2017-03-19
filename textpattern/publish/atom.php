@@ -148,6 +148,7 @@ function atom()
 
     // Feed items.
     $articles = array();
+    $dates = array();
     $section = doSlash($section);
     $category = doSlash($category);
     $limit = ($limit) ? $limit : $rss_how_many;
@@ -245,7 +246,7 @@ function atom()
     } elseif ($area == 'link') {
         $cfilter = ($category) ? "category IN ('".join("','", $category)."')" : '1';
 
-        $rs = safe_rows_start("*", 'txp_link', "$cfilter ORDER BY date DESC, id DESC LIMIT $limit");
+        $rs = safe_rows_start("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_link', "$cfilter ORDER BY date DESC, id DESC LIMIT $limit");
 
         if ($rs) {
             while ($a = nextRow($rs)) {
@@ -259,13 +260,13 @@ function atom()
                 $url = preg_replace("/&((?U).*)=/", "&amp;\\1=", $url);
                 $e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$url.'" />';
 
-                $e['issued'] = tag(safe_strftime('w3cdtf', strtotime($date)), 'published');
-                $e['modified'] = tag(safe_strftime('w3cdtf', strtotime($date)), 'updated');
-                $e['id'] = tag('tag:'.$mail_or_domain.','.safe_strftime('%Y-%m-%d', strtotime($date)).':'.$blog_uid.'/'.$id, 'id');
+                $e['issued'] = tag(safe_strftime('w3cdtf', $uDate), 'published');
+                $e['modified'] = tag(safe_strftime('w3cdtf', $uDate), 'updated');
+                $e['id'] = tag('tag:'.$mail_or_domain.','.safe_strftime('%Y-%m-%d', $uDate).':'.$blog_uid.'/'.$id, 'id');
 
                 $articles[$id] = tag(n.t.t.join(n.t.t, $e).n, 'entry');
 
-                $dates[$id] = $date;
+                $dates[$id] = $uDate;
             }
         }
     }
