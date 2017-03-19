@@ -96,6 +96,7 @@ function rss()
 
     // Feed items.
     $articles = array();
+    $dates = array();
     $section = doSlash($section);
     $category = doSlash($category);
     $limit = ($limit) ? $limit : $rss_how_many;
@@ -181,7 +182,7 @@ function rss()
     } elseif ($area == 'link') {
         $cfilter = ($category) ? "category IN ('".join("','", $category)."')" : '1';
 
-        $rs = safe_rows_start("*", 'txp_link', "$cfilter ORDER BY date DESC, id DESC LIMIT $limit");
+        $rs = safe_rows_start("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_link', "$cfilter ORDER BY date DESC, id DESC LIMIT $limit");
 
         if ($rs) {
             while ($a = nextRow($rs)) {
@@ -190,10 +191,10 @@ function rss()
                     tag(doSpecial($linkname), 'title').n.
                     tag(doSpecial($description), 'description').n.
                     tag(doSpecial($url), 'link').n.
-                    tag(safe_strftime('rfc822', strtotime($date)), 'pubDate');
+                    tag(safe_strftime('rfc822', $uDate), 'pubDate');
                 $articles[$id] = tag($item, 'item');
 
-                $dates[$id] = $uLastMod;
+                $dates[$id] = $uDate;
             }
         }
     }
