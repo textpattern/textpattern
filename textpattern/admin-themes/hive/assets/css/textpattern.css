@@ -3220,18 +3220,18 @@ button {
     max-width: 56em;
   }
   /**
- * Tag builder link on Forms panel and Pages panel.
+ * Options for specific textareas.
  */
-  .txp-tagbuilder-dialog {
+  .txp-textarea-options {
     position: relative;
     margin: 0 1px;
     float: right;
     z-index: 2;
   }
   /**
- * Swap alignment of tag builder link in RTL languages.
+ * Swap alignment of textarea options in RTL languages.
  */
-  [dir="rtl"] .txp-tagbuilder-dialog {
+  [dir="rtl"] .txp-textarea-options {
     float: left;
   }
   /**
@@ -3391,6 +3391,8 @@ button {
     font-weight: bold;
   }
   #main_content .author {
+    display: block;
+    margin-top: -1em;
     color: #777777;
   }
   /* Content -> Articles panel - additional layout
