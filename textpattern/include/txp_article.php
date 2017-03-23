@@ -561,6 +561,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'selector' => '#title',
             'cb'       => 'article_partial_title_value',
         ),
+        // 'Author' region.
+        'author' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => 'small.author',
+            'cb'       => 'article_partial_author',
+        ),
         // 'Body' region.
         'body' => array(
             'mode'     => PARTIAL_STATIC,
@@ -572,12 +578,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'mode'     => PARTIAL_STATIC,
             'selector' => 'div.excerpt',
             'cb'       => 'article_partial_excerpt',
-        ),
-        // 'Author' region.
-        'author' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => 'p.author',
-            'cb'       => 'article_partial_author',
         ),
         // 'Posted' value.
         'sPosted' => array(
@@ -947,6 +947,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo n.'<div class="text">'.$partials['title']['html'];
     }
 
+    // Author.
+    if ($view == "text" && $step != "create") {
+        echo $partials['author']['html'];
+    }
+
     // Body.
     if ($view == 'preview') {
         echo n.'<div class="body">'.
@@ -989,11 +994,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     echo hInput('from_view', $view),
         n.'</div>';
-
-    // Author.
-    if ($view == "text" && $step != "create") {
-        echo $partials['author']['html'];
-    }
 
     echo n.'</div>'.// End of #main_content.
         n.'</div>'; // End of .txp-layout-4col-3span.
@@ -1578,13 +1578,13 @@ function article_partial_title_value($rs)
 function article_partial_author($rs)
 {
     extract($rs);
-    $out = n.'<p class="author"><small>'.gTxt('posted_by').' '.txpspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X', $sPosted);
+    $out = n.'<small class="author">'.gTxt('posted_by').' '.txpspecialchars($AuthorID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sPosted);
 
     if ($sPosted != $sLastMod) {
-        $out .= br.gTxt('modified_by').' '.txpspecialchars($LastModID).' &#183; '.safe_strftime('%d %b %Y &#183; %X', $sLastMod);
+        $out .= sp.span('&#124;', array('role' => 'separator')).sp.gTxt('modified_by').' '.txpspecialchars($LastModID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sLastMod);
     }
 
-    $out .= '</small></p>';
+    $out .= '</small>';
 
     return pluggable_ui('article_ui', 'author', $out, $rs);
 }
