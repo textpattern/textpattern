@@ -733,7 +733,10 @@ function form_partial_template($rs)
         '<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($rs['form']).'</textarea>',
         array(
             'form_code',
-            n.href('<span class="ui-icon ui-extra-icon-code"></span> '.gTxt('tagbuilder'), '#', array('class' => 'txp-tagbuilder-dialog')),
+            n.span(
+                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.gTxt('tagbuilder'), '#', array('class' => 'txp-tagbuilder-dialog')),
+                array('class' => 'txp-textarea-options')
+            )
         ),
         array('', 'instructions_form_code'),
         array('class' => 'txp-form-field template'),
