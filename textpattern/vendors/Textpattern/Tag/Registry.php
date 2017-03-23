@@ -79,7 +79,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
 
     public function process($tag, array $atts = null, $thing = null)
     {
-        if ($this->isRegistered($tag)) {
+        if (isset($this->tags[$tag]) && is_callable($this->tags[$tag])) {
             return (string) call_user_func($this->tags[$tag], (array)$atts, $thing);
         } else {
             return false;
