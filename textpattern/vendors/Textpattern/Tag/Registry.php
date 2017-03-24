@@ -33,12 +33,13 @@ namespace Textpattern\Tag;
 class Registry implements \Textpattern\Container\ReusableInterface
 {
     /**
-     * Stores registered tags.
+     * Stores registered tags and attributes.
      *
      * @var array
      */
 
     private $tags = array();
+    private $atts = array();
 
     /**
      * Registers a tag.
@@ -49,10 +50,11 @@ class Registry implements \Textpattern\Container\ReusableInterface
      *
      * @param  callback    $callback The tag callback
      * @param  string|null $tag      The tag name
+     * @param  bool        $is_attr  tag or attr?
      * @return \Textpattern\Tag\Registry
      */
 
-    public function register($callback, $tag = null)
+    public function register($callback, $tag = null, $is_attr = false)
     {
         // is_callable only checks syntax here to avoid autoloading
         if (is_callable($callback, true)) {
@@ -61,7 +63,11 @@ class Registry implements \Textpattern\Container\ReusableInterface
             }
 
             if ($tag) {
-                $this->tags[$tag] = $callback;
+                if ($is_attr) {
+                    $this->atts[$tag] = $callback;
+                } else {
+                    $this->tags[$tag] = $callback;
+                }
             }
         }
 
@@ -87,6 +93,24 @@ class Registry implements \Textpattern\Container\ReusableInterface
     }
 
     /**
+     * Processes an attribute by name.
+     *
+     * @param  string      $tag   The attribute
+     * @param  string|null $atts  The value of attribute
+     * @param  string|null $thing The processed statement
+     * @return string|bool The tag's results (string) or FALSE on unknown tags
+     */
+
+    public function processAtt($tag, $atts = null, $thing = null)
+    {
+        if ($this->isRegisteredAtt($tag)) {
+            return (string) call_user_func($this->atts[$tag], $atts, $thing);
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Checks if a tag is registered.
      *
      * @param  string $tag The tag
@@ -99,13 +123,26 @@ class Registry implements \Textpattern\Container\ReusableInterface
     }
 
     /**
+     * Checks if an attribute is registered.
+     *
+     * @param  string $tag The tag
+     * @return bool TRUE if the tag exists
+     */
+
+    public function isRegisteredAtt($tag)
+    {
+        return isset($this->atts[$tag]) && is_callable($this->atts[$tag]);
+    }
+
+    /**
      * Lists registered tags.
      *
+     * @param  bool $is_attr  tag or attr?
      * @return array
      */
 
-    public function getRegistered()
+    public function getRegistered($is_attr = false)
     {
-        return $this->tags;
+        return $is_attr ? $this->atts : $this->tags;
     }
 }

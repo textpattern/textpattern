@@ -2158,12 +2158,18 @@ function pluggable_ui($event, $element, $default = '')
 
 function lAtts($pairs, $atts, $warn = true)
 {
-    global $production_status;
+    global $production_status, $txp_atts;
+    static $attributes = null;
+
+    if (!isset($attributes)) {
+        $attributes = array_keys(Txp::get('\Textpattern\Tag\Registry')->getRegistered(true));
+    }
 
     foreach ($atts as $name => $value) {
         if (array_key_exists($name, $pairs)) {
             $pairs[$name] = $value;
-        } elseif ($warn and $production_status != 'live') {
+            unset($txp_atts[$name]);
+        } elseif ($warn && $production_status != 'live' && !in_array($name, $attributes)) {
             trigger_error(gTxt('unknown_attribute', array('{att}' => $name)));
         }
     }

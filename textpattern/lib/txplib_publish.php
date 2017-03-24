@@ -190,6 +190,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     extract($atts);
     $expired = ($expired && ($prefs['publish_expired_articles']));
+    $status = isset($status) && intval($status) == STATUS_STICKY ? STATUS_STICKY : STATUS_LIVE;
     $customFields = getCustomFields();
     $thisid = isset($thisid) ? intval($thisid) : 0;
 
@@ -259,7 +260,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         $time,
         $custom,
         $keywords,
-        "AND Status = 4",
+        "AND Status = $status",
         "ORDER BY $sortby",
         ($type == '<') ? "DESC" : "ASC",
         ', ID '.($type == '<' ? 'DESC' : 'ASC'),
@@ -537,8 +538,8 @@ function maybe_tag($tag)
 
 function processTags($tag, $atts, $thing = null)
 {
-    global $production_status, $txp_current_tag, $txp_current_form, $trace;
-    static $registry = null, $level = 0, $txp_parser = array('tag' => '', 'atts' => '', 'thing' => null);
+    global $production_status, $txp_current_tag, $txp_current_form, $txp_atts, $trace;
+    static $registry = null, $attributes = null, $level = 0, $txp_parser = array('tag' => '', 'atts' => '', 'thing' => null);
 
     if (empty($tag)) {
         return;
@@ -553,10 +554,12 @@ function processTags($tag, $atts, $thing = null)
 
     if ($registry === null) {
         $registry = Txp::get('\Textpattern\Tag\Registry');
+        $attributes = array_keys($registry->getRegistered(true));
     }
 
     $old_parser = $txp_parser;
-    $split = splat($atts);
+    $old_atts = isset($txp_atts) ? $txp_atts : null;
+    $split = $txp_atts = splat($atts);
     $out = '';
 
     if ($tag !== 'evaluate' || !isset($split['this'])) {
@@ -580,7 +583,14 @@ function processTags($tag, $atts, $thing = null)
         }
     }
 
+    foreach ($attributes as $attr) {
+        if (isset($txp_atts[$attr])) {
+            $out = $registry->processAtt($attr, $txp_atts[$attr], $out);
+        }
+    }
+
     $txp_parser = $old_parser;
+    $txp_atts = $old_atts;
 
     if ($production_status !== 'live') {
         $txp_current_tag = $old_tag;

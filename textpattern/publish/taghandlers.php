@@ -191,6 +191,12 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_preview')
     ->register('comment_submit');
 
+// Global attributes registry
+
+    Txp::get('\Textpattern\Tag\Registry')
+    ->register('txp_escape', 'escape', true)
+    ->register('txp_wraptag', 'wraptag', true);
+
 // -------------------------------------------------------------
 
 function page_title($atts)
@@ -4964,4 +4970,39 @@ function txp_eval($atts, $thing = null)
     }
 
     return implode('', $out);
+}
+
+// -------------------------------------------------------------
+
+function txp_escape($atts, $thing = '')
+{
+    if (empty($atts) || empty($thing)) {
+        return '';
+    }
+
+    foreach (do_list((string)$atts) as $attr) {
+        switch ($attr) {
+            case 'html':
+                $thing = txpspecialchars($thing);
+                break;
+            case 'json':
+                $thing = json_encode($thing);
+                break;
+        }
+    }
+
+    return $thing;
+}
+
+// -------------------------------------------------------------
+
+function txp_wraptag($atts, $thing = '')
+{
+    global $txp_atts;
+
+    if (!trim($thing)) {
+        return '';
+    }
+
+    return $atts ? doWrap((array)$thing, $atts, '', isset($txp_atts['class']) ? $txp_atts['class'] : '') : $thing;
 }
