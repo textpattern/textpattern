@@ -4982,8 +4982,8 @@ function txp_escape($atts, $thing = '')
         return '';
     }
 
-    foreach (do_list((string)$atts) as $attr) {
-        switch ($attr) {
+    foreach (do_list($atts) as $attr) {
+        switch (trim($attr)) {
             case 'html':
                 $thing = txpspecialchars($thing);
                 break;
@@ -5006,5 +5006,5 @@ function txp_wraptag($atts, $thing = '')
         return '';
     }
 
-    return $atts ? doWrap((array)$thing, $atts, '', isset($txp_atts['class']) ? $txp_atts['class'] : '') : $thing;
+    return $atts ? doWrap((array)$thing, $atts, '', isset($txp_atts['class']) ? $txp_atts['class'] : '', '', isset($txp_atts['atts']) ? $txp_atts['atts'] : '', '', isset($txp_atts['html_id']) ? $txp_atts['html_id'] : '') : $thing;
 }
