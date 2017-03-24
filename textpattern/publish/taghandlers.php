@@ -4976,7 +4976,9 @@ function txp_eval($atts, $thing = null)
 
 function txp_escape($atts, $thing = '')
 {
-    if (empty($atts) || empty($thing)) {
+    $thing = (string)$thing;
+
+    if (empty($atts) || $thing === '') {
         return '';
     }
 
@@ -4986,7 +4988,7 @@ function txp_escape($atts, $thing = '')
                 $thing = txpspecialchars($thing);
                 break;
             case 'json':
-                $thing = json_encode($thing);
+                $thing = substr(json_encode($thing), 1, -1);
                 break;
         }
     }
