@@ -539,7 +539,7 @@ function maybe_tag($tag)
 function processTags($tag, $atts, $thing = null)
 {
     global $production_status, $txp_current_tag, $txp_current_form, $txp_atts, $trace;
-    static $registry = null, $attributes = null, $level = 0, $txp_parser = array('tag' => '', 'atts' => '', 'thing' => null);
+    static $registry = null, $attributes = null, $globals = null, $level = 0, $txp_parser = array('tag' => '', 'atts' => '', 'thing' => null);
 
     if (empty($tag)) {
         return;
@@ -554,12 +554,14 @@ function processTags($tag, $atts, $thing = null)
 
     if ($registry === null) {
         $registry = Txp::get('\Textpattern\Tag\Registry');
-        $attributes = array_keys($registry->getRegistered(true));
+        $globals = $registry->getRegistered(true);
+        $attributes = array_keys(array_filter($globals));
     }
 
     $old_parser = $txp_parser;
     $old_atts = isset($txp_atts) ? $txp_atts : null;
-    $split = $txp_atts = splat($atts);
+    $split = splat($atts);
+    $txp_atts = array_intersect_key($split, $globals);
     $out = '';
 
     if ($tag !== 'evaluate' || !isset($split['this'])) {
@@ -583,9 +585,11 @@ function processTags($tag, $atts, $thing = null)
         }
     }
 
-    foreach ($attributes as $attr) {
-        if (isset($txp_atts[$attr])) {
-            $out = $registry->processAtt($attr, $txp_atts[$attr], $out);
+    if ((string)$out > '') {
+        foreach ($attributes as $attr) {
+            if (isset($txp_atts[$attr])) {
+                $out = $registry->processAtt($attr, $txp_atts[$attr], $out);
+            }
         }
     }
 

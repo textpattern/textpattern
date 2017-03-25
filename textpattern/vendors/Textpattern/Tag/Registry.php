@@ -50,11 +50,10 @@ class Registry implements \Textpattern\Container\ReusableInterface
      *
      * @param  callback    $callback The tag callback
      * @param  string|null $tag      The tag name
-     * @param  bool        $is_attr  tag or attr?
      * @return \Textpattern\Tag\Registry
      */
 
-    public function register($callback, $tag = null, $is_attr = false)
+    public function register($callback, $tag = null)
     {
         // is_callable only checks syntax here to avoid autoloading
         if (is_callable($callback, true)) {
@@ -63,10 +62,43 @@ class Registry implements \Textpattern\Container\ReusableInterface
             }
 
             if ($tag) {
-                if ($is_attr) {
-                    $this->atts[$tag] = $callback;
+                $this->tags[$tag] = $callback;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Registers an attribute.
+     *
+     * <code>
+     * Txp::get('\Textpattern\Tag\Registry')->registerAtt(array('class', 'method'), 'tag');
+     * </code>
+     *
+     * @param  callback    $callback The attribute callback
+     * @param  string|null $tag      The attribute name
+     * @param  bool        $prepend  The order
+     * @return \Textpattern\Tag\Registry
+     */
+
+    public function registerAtt($callback, $tag = null, $prepend = false)
+    {
+        // is_callable only checks syntax here to avoid autoloading
+        if (!$callback) {
+            foreach (do_list_unique($tag) as $tag) {
+                $this->atts[$tag] = false;
+            }
+        } elseif (is_callable($callback, true)) {
+            if ($tag === null && is_string($callback)) {
+                $tag = $callback;
+            }
+
+            if ($tag) {
+                if ($prepend) {
+                    $this->atts = array($tag => $callback) + $this->atts;
                 } else {
-                    $this->tags[$tag] = $callback;
+                    $this->atts[$tag] = $callback;
                 }
             }
         }
@@ -131,7 +163,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
 
     public function isRegisteredAtt($tag)
     {
-        return isset($this->atts[$tag]) && is_callable($this->atts[$tag]);
+        return !empty($this->atts[$tag]) && is_callable($this->atts[$tag]);
     }
 
     /**

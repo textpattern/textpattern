@@ -191,11 +191,13 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_preview')
     ->register('comment_submit');
 
-// Global attributes registry
+// Global attributes: mind the order!
 
     Txp::get('\Textpattern\Tag\Registry')
-    ->register('txp_escape', 'escape', true)
-    ->register('txp_wraptag', 'wraptag', true);
+    ->registerAtt(false, 'atts, class, html_id, labeltag')
+    ->registerAtt('txp_escape', 'escape')
+    ->registerAtt('txp_wraptag', 'wraptag')
+    ->registerAtt('txp_label', 'label');
 
 // -------------------------------------------------------------
 
@@ -1058,7 +1060,7 @@ function related_articles($atts, $thing = null)
         'no_widow' => @$prefs['title_no_widow'],
         'section'  => '',
         'sort'     => 'Posted DESC',
-        'wraptag'  => '',
+//        'wraptag'  => '',
     ), $atts);
 
     $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category1', 'category2', 'author', 'keywords'), getCustomFields()));
@@ -4990,6 +4992,12 @@ function txp_escape($atts, $thing = '')
             case 'json':
                 $thing = substr(json_encode($thing), 1, -1);
                 break;
+            case 'strip':
+                $thing = strip_tags($thing);
+                break;
+            case 'trim':
+                $thing = trim($thing);
+                break;
         }
     }
 
@@ -5002,9 +5010,14 @@ function txp_wraptag($atts, $thing = '')
 {
     global $txp_atts;
 
-    if (!trim($thing)) {
-        return '';
-    }
+    return $atts && trim($thing) !== '' ? doWrap((array)$thing, $atts, '', isset($txp_atts['class']) ? $txp_atts['class'] : '', '', isset($txp_atts['atts']) ? $txp_atts['atts'] : '', '', isset($txp_atts['html_id']) ? $txp_atts['html_id'] : '') : $thing;
+}
 
-    return $atts ? doWrap((array)$thing, $atts, '', isset($txp_atts['class']) ? $txp_atts['class'] : '', '', isset($txp_atts['atts']) ? $txp_atts['atts'] : '', '', isset($txp_atts['html_id']) ? $txp_atts['html_id'] : '') : $thing;
+// -------------------------------------------------------------
+
+function txp_label($atts, $thing = '')
+{
+    global $txp_atts;
+
+    return $atts && trim($thing) !== '' ? doLabel($atts, isset($txp_atts['labeltag']) ? $txp_atts['labeltag'] : '').n.$thing : $thing;
 }

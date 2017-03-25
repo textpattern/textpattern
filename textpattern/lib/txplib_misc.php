@@ -2159,17 +2159,24 @@ function pluggable_ui($event, $element, $default = '')
 function lAtts($pairs, $atts, $warn = true)
 {
     global $production_status, $txp_atts;
-    static $attributes = null;
+    static $globals = null;
 
-    if (!isset($attributes)) {
-        $attributes = array_keys(Txp::get('\Textpattern\Tag\Registry')->getRegistered(true));
+    if (!isset($globals)) {
+        $globals = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
+    }
+
+    if (!empty($txp_atts)) {
+        $txp_atts += array_intersect_key($pairs, $globals);
     }
 
     foreach ($atts as $name => $value) {
         if (array_key_exists($name, $pairs)) {
             $pairs[$name] = $value;
-            unset($txp_atts[$name]);
-        } elseif ($warn && $production_status != 'live' && !in_array($name, $attributes)) {
+
+            if (!empty($globals[$name])) {
+                unset($txp_atts[$name]);
+            }
+        } elseif ($warn && $production_status != 'live' && !isset($globals[$name])) {
             trigger_error(gTxt('unknown_attribute', array('{att}' => $name)));
         }
     }
