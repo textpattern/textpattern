@@ -2159,14 +2159,15 @@ function pluggable_ui($event, $element, $default = '')
 function lAtts($pairs, $atts, $warn = true)
 {
     global $production_status, $txp_atts;
-    static $globals = null;
+    static $globals = null, $attributes = null;
 
     if (!isset($globals)) {
         $globals = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
+        $attributes = array_diff_key($globals, array_filter($globals));
     }
 
     if (!empty($txp_atts)) {
-        $txp_atts += array_intersect_key($pairs, $globals);
+        $txp_atts += array_intersect_key($pairs, $attributes);
     }
 
     foreach ($atts as $name => $value) {
