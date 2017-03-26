@@ -4196,7 +4196,7 @@ function generate_user_token($ref, $type, $expiryTimestamp, $pass, $nonce)
  * @param   bool    $condition TRUE to return if statement, FALSE to else
  * @return  string             Either if or else statement
  * @deprecated in 4.6.0
- * @see     parse_else
+ * @see     parse
  * @package TagParser
  * @example
  * echo parse(EvalElse('true &lt;txp:else /&gt; false', 1 === 1));
@@ -4204,7 +4204,9 @@ function generate_user_token($ref, $type, $expiryTimestamp, $pass, $nonce)
 
 function EvalElse($thing, $condition)
 {
-    global $txp_parsed, $txp_else;
+    global $txp_parsed, $txp_else, $txp_atts;
+
+    $txp_atts[0] = empty($condition);
 
     if (strpos($thing, ':else') === false || empty($txp_parsed[$hash = sha1($thing)])) {
         return $condition ? $thing : '';

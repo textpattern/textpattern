@@ -368,7 +368,7 @@ function lastMod()
 
 function parse($thing, $condition = null)
 {
-    global $production_status, $trace, $txp_parsed, $txp_else;
+    global $production_status, $trace, $txp_parsed, $txp_else, $txp_atts;
 
     // Replace null with a pref to enable <abc::tags />.
     static $pattern, $short_tags = null;
@@ -382,6 +382,8 @@ function parse($thing, $condition = null)
         if ($production_status === 'debug') {
             $trace->log('['.($condition ? 'true' : 'false').']');
         }
+
+        $txp_atts[0] = empty($condition);
     } else {
         $condition = true;
     }
@@ -585,7 +587,7 @@ function processTags($tag, $atts, $thing = null)
         }
     }
 
-    if ((string)$out > '') {
+    if (empty($txp_atts[0]) && (string)$out > '') {
         foreach ($attributes as $attr) {
             if (isset($txp_atts[$attr])) {
                 $out = $registry->processAtt($attr, $txp_atts[$attr], $out);
