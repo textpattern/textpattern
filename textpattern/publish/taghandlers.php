@@ -1315,14 +1315,10 @@ function category_list($atts, $thing = null)
         }
     }
 
-    if ($nocache) {
-        unset($cache[$hash]);
-    }
-
     $thiscategory = $oldcategory;
     $level--;
 
-    if ($level <= 0) {
+    if ($nocache || $level <= 0) {
         unset($cache[$hash]);
     }
  
@@ -1526,35 +1522,45 @@ function search_term($atts)
 
 // -------------------------------------------------------------
 
-// Link to next article, if it exists.
-function link_to_next($atts, $thing = null)
+// Link to next/prev article, if it exists.
+function link_to($atts, $thing = null, $target = null)
 {
     global $thisarticle;
+
+    if (!in_array($target, array('next', 'prev'))) {
+        return;
+    }
 
     assert_article();
 
     extract(lAtts(array(
+        'form' => '',
+        'link' => 1,
         'showalways' => 0,
     ), $atts));
 
     if (is_array($thisarticle)) {
-        if (!isset($thisarticle['next'])) {
+        if (!isset($thisarticle[$target])) {
             $thisarticle = $thisarticle + getNextPrev();
         }
 
-        if ($thisarticle['next'] !== false) {
-            $url = permlinkurl($thisarticle['next']);
+        if ($thisarticle[$target] !== false) {
+            $url = permlinkurl($thisarticle[$target]);
 
-            if ($thing) {
-                $thing = parse($thing);
-                $next_title = escape_title($thisarticle['next']['title']);
+            if ($form || $thing !== null) {
+                $oldarticle = $thisarticle;
+                populateArticleData($thisarticle[$target]);
+                $thisarticle['is_first'] = $thisarticle['is_last'] = true;
+                $thing = $form ? parse_form($form, $thing) : parse($thing);
+                $target_title = escape_title($thisarticle[$target]['Title']);
+                $thisarticle = $oldarticle;
 
-                return href(
+                return $link ? href(
                     $thing,
                     $url,
-                    ($next_title != $thing ? ' title="'.$next_title.'"' : '').
-                    ' rel="next"'
-                );
+                    ($target_title != $thing ? ' title="'.$target_title.'"' : '').
+                    ' rel="'.$target.'"'
+                ) : $thing;
             }
 
             return $url;
@@ -1566,42 +1572,18 @@ function link_to_next($atts, $thing = null)
 
 // -------------------------------------------------------------
 
+// Link to next article, if it exists.
+function link_to_next($atts, $thing = null)
+{
+    return link_to($atts, $thing, 'next');
+}
+
+// -------------------------------------------------------------
+
 // Link to previous article, if it exists.
 function link_to_prev($atts, $thing = null)
 {
-    global $thisarticle;
-
-    assert_article();
-
-    extract(lAtts(array(
-        'showalways' => 0,
-    ), $atts));
-
-    if (is_array($thisarticle)) {
-        if (!isset($thisarticle['prev'])) {
-            $thisarticle = $thisarticle + getNextPrev();
-        }
-
-        if ($thisarticle['prev'] !== false) {
-            $url = permlinkurl($thisarticle['prev']);
-
-            if ($thing) {
-                $thing = parse($thing);
-                $prev_title = escape_title($thisarticle['prev']['title']);
-
-                return href(
-                    $thing,
-                    $url,
-                    ($prev_title != $thing ? ' title="'.$prev_title.'"' : '').
-                    ' rel="prev"'
-                );
-            }
-
-            return $url;
-        }
-    }
-
-    return ($showalways) ? parse($thing) : '';
+    return link_to($atts, $thing, 'prev');
 }
 
 // -------------------------------------------------------------
@@ -1621,7 +1603,7 @@ function next_title()
     }
 
     if ($thisarticle['next'] !== false) {
-        return escape_title($thisarticle['next']['title']);
+        return escape_title($thisarticle['next']['Title']);
     } else {
         return '';
     }
@@ -1644,7 +1626,7 @@ function prev_title()
     }
 
     if ($thisarticle['prev'] !== false) {
-        return escape_title($thisarticle['prev']['title']);
+        return escape_title($thisarticle['prev']['Title']);
     } else {
         return '';
     }
