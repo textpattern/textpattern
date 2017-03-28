@@ -257,7 +257,7 @@ button {
     border-left: 3px solid #cccccc;
   }
   /**
- * 1. Remove the bottom border in Firefox.
+ * 1. Remove the bottom border in Chrome 57- and Firefox 39-.
  * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
  */
   abbr[title] {
@@ -267,12 +267,6 @@ button {
     text-decoration: underline;
     /* 2 */
     text-decoration: underline dotted;
-  }
-  /**
- * Add the correct font style.
- */
-  dfn {
-    font-style: italic;
   }
   /**
  * Consistent styling for `mark` and `var` tags.
