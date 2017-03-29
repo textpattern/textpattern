@@ -384,12 +384,14 @@ nav ol::after,
     text-align: center;
   }
   /**
- * Address styling not present in Safari and Chrome.
+ * 1. Remove the bottom border in Chrome 57- and Firefox 39-.
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
  */
-  abbr[title],
-  dfn[title] {
-    text-decoration: dotted underline;
-    cursor: help;
+  abbr[title] {
+    /* 1 */
+    border-bottom: 0;
+    /* 2 */
+    text-decoration: underline dotted;
   }
   /**
  * Consistent styling for `mark` and `var` tags.
