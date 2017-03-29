@@ -1034,11 +1034,25 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
         echo n.'<div role="region" id="supporting_content">';
 
+        // 'Override form' selection.
+        $form_pop = $allow_form_override ? form_pop($override_form, 'override-form') : '';
+        $html_override = $form_pop
+            ? pluggable_ui('article_ui', 'override',
+                inputLabel(
+                    'override-form',
+                    $form_pop,
+                    'override_default_form',
+                    array('override_form', 'instructions_override_form'),
+                    array('class' => 'txp-form-field override-form')
+                ),
+                $rs)
+            : '';
+
         // 'Sort and display' section.
         echo pluggable_ui(
             'article_ui',
             'sort_display',
-            wrapRegion('txp-write-sort-group', $partials['status']['html'].$partials['section']['html'].$partials['categories']['html'], '', gTxt('sort_display')),
+            wrapRegion('txp-write-sort-group', $partials['status']['html'].$partials['section']['html'].$html_override, '', gTxt('sort_display')),
             $rs
         );
 
@@ -1054,7 +1068,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         );
 
         // 'Date and time' collapsible section.
-
         if ($step == "create" and empty($GLOBALS['ID'])) {
             // Timestamp.
             // Avoiding modified date to disappear.
@@ -1102,7 +1115,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             );
 
             // Expires.
-
             if (!empty($store_out['exp_year'])) {
                 $persist_timestamp = safe_strtotime(
                     $store_out['exp_year'].'-'.$store_out['exp_month'].'-'.$store_out['exp_day'].' '.
@@ -1148,6 +1160,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         }
 
         echo wrapRegion('txp-dates-group', $posted_block.$expires_block, 'txp-dates-group-content', 'date_settings', 'article_dates');
+
+        // 'Categories' section.
+        $html_categories = pluggable_ui('article_ui', 'categories', $partials['categories']['html'], $rs);
+        echo wrapRegion('txp-categories-group', $html_categories, 'txp-categories-group-content', 'categories', 'categories');
 
         // 'Meta' collapsible section.
 
@@ -1196,21 +1212,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
         $html_markup = pluggable_ui('article_ui', 'markup', $html_markup, $rs);
 
-        // 'Override form' selection.
-        $form_pop = $allow_form_override ? form_pop($override_form, 'override-form') : '';
-        $html_override = $form_pop
-            ? pluggable_ui('article_ui', 'override',
-                inputLabel(
-                    'override-form',
-                    $form_pop,
-                    'override_default_form',
-                    array('override_form', 'instructions_override_form'),
-                    array('class' => 'txp-form-field override-form')
-                ),
-                $rs)
-            : '';
-
-        echo wrapRegion('txp-advanced-group', $html_markup.$html_override, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
+        echo wrapRegion('txp-advanced-group', $html_markup, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
 
         // Custom menu entries.
         echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
