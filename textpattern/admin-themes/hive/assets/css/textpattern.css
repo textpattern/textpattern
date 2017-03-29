@@ -1530,8 +1530,7 @@ button {
   button.destroy:hover .ui-icon,
   button.destroy:active .ui-icon,
   button.destroy:focus .ui-icon {
-    -webkit-filter: brightness(0.66);
-            filter: brightness(0.66);
+    filter: brightness(0.66);
   }
   /**
  * Grey-out disabled navlinks (but keep them in button style).
@@ -3739,8 +3738,7 @@ button {
  * TODO: Use `mask` in future.
  */
   .ui-state-default .ui-icon {
-    -webkit-filter: brightness(1.6666667);
-            filter: brightness(1.6666667);
+    filter: brightness(1.6666667);
   }
   /**
  * Weighted content icons and interaction state icons.
@@ -3752,8 +3750,7 @@ button {
   .ui-state-hover .ui-icon,
   .ui-state-focus .ui-icon,
   .ui-state-active .ui-icon {
-    -webkit-filter: none;
-            filter: none;
+    filter: none;
   }
   /**
  * 'Succes' state icons.
