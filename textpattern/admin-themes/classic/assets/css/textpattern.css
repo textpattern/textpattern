@@ -5152,10 +5152,6 @@ button {
  * Some classes and HTML elements generally added via JavaScript, more info -
  * https://jqueryui.com/tabs/
  *
- * 1. `position: relative` prevents IE scroll bug (elements with
- *    `position: relative` inside a parent container with `overflow: auto`
- *    appear as "fixed")
- *
  * Example HTML:
  *
  * <div class="ui-tabs>
@@ -5182,20 +5178,17 @@ button {
  * </div>
  */
   .ui-tabs:not(.ui-tabs-vertical) {
-    /* 1 */
-    position: relative;
     border: 0;
   }
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav {
+    height: 22px;
     margin: 0;
     padding: 0;
     background: none;
   }
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
-    position: relative;
-    top: 0;
-    margin-right: 2px;
-    float: left;
+    display: inline-block;
+    height: 21px;
     border-bottom-width: 0;
     border-top-left-radius: 0.75em 2em;
     border-top-right-radius: 0.75em 2em;
@@ -5220,8 +5213,8 @@ button {
     cursor: text;
   }
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
+    display: block;
     padding: 0.1666667em 1.5em;
-    float: left;
     color: #333333;
     text-decoration: none;
   }
@@ -5237,17 +5230,6 @@ button {
  */
   .ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor {
     cursor: pointer;
-  }
-  /**
- * Tabs RTL support.
- */
-  [dir="rtl"] .ui-tabs .ui-tabs-nav li {
-    margin-right: 0;
-    margin-left: 2px;
-    float: right;
-  }
-  [dir="rtl"] .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
-    float: right;
   }
   /**
  * Additonal styling for tabs vertical.
