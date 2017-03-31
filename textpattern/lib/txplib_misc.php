@@ -2168,8 +2168,11 @@ function lAtts($pairs, $atts, $warn = true)
 
     foreach ($atts as $name => $value) {
         if (array_key_exists($name, $pairs)) {
+            if ($pairs[$name] !== null) {
+                unset($txp_atts[$name]);
+            }
+
             $pairs[$name] = $value;
-            unset($txp_atts[$name]);
         } elseif ($warn && $production_status !== 'live' && !array_key_exists($name, $globals)) {
             trigger_error(gTxt('unknown_attribute', array('{att}' => $name)));
         }

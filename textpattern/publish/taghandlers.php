@@ -734,10 +734,10 @@ function link_name($atts)
     assert_link();
 
     extract(lAtts(array(
-        'escape' => 'html',
+        'escape' => null,
     ), $atts));
 
-    return ($escape == 'html')
+    return ($escape === null)
         ? txpspecialchars($thislink['linkname'])
         : $thislink['linkname'];
 }
@@ -791,11 +791,11 @@ function link_description($atts)
     assert_link();
 
     extract(lAtts(array(
-        'escape'   => 'html'
+        'escape'   => null
     ), $atts));
 
     if ($thislink['description']) {
-        $description = ($escape == 'html') ?
+        $description = ($escape === null) ?
             txpspecialchars($thislink['description']) :
             $thislink['description'];
 
@@ -2714,12 +2714,13 @@ function title($atts)
     assert_article();
 
     extract(lAtts(array(
-        'no_widow' => @$prefs['title_no_widow'],
+        'escape' => null,
+        'no_widow' => @$prefs['title_no_widow']
     ), $atts));
 
-    $t = escape_title($thisarticle['title']);
+    $t = $escape === null ? escape_title($thisarticle['title']) : $thisarticle['title'];
 
-    if ($no_widow) {
+    if ($no_widow && $escape === null) {
         $t = noWidow($t);
     }
 
@@ -3607,7 +3608,7 @@ function meta_keywords($atts)
     global $id_keywords;
 
     extract(lAtts(array(
-        'escape'    => 'html',
+        'escape'    => null,
         'format'    => 'meta', // or empty for raw value
         'separator' => '',
     ), $atts));
@@ -3615,7 +3616,7 @@ function meta_keywords($atts)
     $out = '';
 
     if ($id_keywords) {
-        $content = ($escape === 'html') ? txpspecialchars($id_keywords) : $id_keywords;
+        $content = ($escape === null) ? txpspecialchars($id_keywords) : $id_keywords;
 
         if ($separator !== '') {
             $content = implode($separator, do_list($content));
@@ -3642,7 +3643,7 @@ function meta_keywords($atts)
 function meta_description($atts)
 {
     extract(lAtts(array(
-        'escape' => 'html',
+        'escape' => null,
         'format' => 'meta', // or empty for raw value
         'type'   => null,
     ), $atts));
@@ -3651,7 +3652,7 @@ function meta_description($atts)
     $content = getMetaDescription($type);
 
     if ($content) {
-        $content = ($escape === 'html' ? txpspecialchars($content) : $content);
+        $content = ($escape === null ? txpspecialchars($content) : $content);
 
         if ($format === 'meta') {
             $out = '<meta name="description" content="'.$content.'" />';
@@ -3691,7 +3692,7 @@ function meta_author($atts)
     global $id_author;
 
     extract(lAtts(array(
-        'escape' => 'html',
+        'escape' => null,
         'format' => 'meta', // or empty for raw value
         'title'  => 0,
     ), $atts));
@@ -3700,7 +3701,7 @@ function meta_author($atts)
 
     if ($id_author) {
         $display_name = ($title) ? get_author_name($id_author) : $id_author;
-        $display_name = ($escape === 'html') ? txpspecialchars($display_name) : $display_name;
+        $display_name = ($escape === null) ? txpspecialchars($display_name) : $display_name;
 
         if ($format === 'meta') {
             // Can't use tag_void() since it escapes its content.
@@ -4067,7 +4068,7 @@ function custom_field($atts)
 
     extract(lAtts(array(
         'name'    => get_pref('custom_1_set'),
-        'escape'  => 'html',
+        'escape'  => null,
         'default' => '',
     ), $atts));
 
@@ -4087,7 +4088,7 @@ function custom_field($atts)
 
     $was_article_body = $is_article_body;
     $is_article_body = 1;
-    $out = ($escape == 'html' ? txpspecialchars($out) : parse($out));
+    $out = ($escape === null ? txpspecialchars($out) : parse($out));
     $is_article_body = $was_article_body;
 
     return $out;
@@ -4684,11 +4685,11 @@ function file_download_description($atts)
     assert_file();
 
     extract(lAtts(array(
-        'escape'  => 'html'
+        'escape'  => null
     ), $atts));
 
     if ($thisfile['description']) {
-        $description = ($escape == 'html')
+        $description = ($escape === null)
             ? txpspecialchars($thisfile['description'])
             : $thisfile['description'];
 
@@ -4896,10 +4897,12 @@ function txp_eval($atts, $thing = null)
 
 function txp_escape($atts, $thing = '')
 {
+    static $textile = null;
+
     $thing = (string)$thing;
 
-    if (empty($atts) || $thing === '') {
-        return '';
+    if (empty($atts)) {
+        return $thing;
     }
 
     foreach (do_list($atts) as $attr) {
@@ -4916,6 +4919,15 @@ function txp_escape($atts, $thing = '')
             case 'trim':
                 $thing = trim($thing);
                 break;
+/*
+            case 'textile':
+                if ($textile === null) {
+                    $textile = Txp::get('\Textpattern\Textile\Parser');
+                }
+
+                $thing = $textile->TextileThis($thing);
+                break;
+*/
         }
     }
 
