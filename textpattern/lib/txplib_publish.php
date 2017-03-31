@@ -382,18 +382,23 @@ function parse($thing, $condition = null)
         if ($production_status === 'debug') {
             $trace->log('['.($condition ? 'true' : 'false').']');
         }
-
-        $txp_atts[0] = empty($condition);
     } else {
         $condition = true;
     }
 
+    if (!empty($txp_atts['not'])) {
+        $condition = empty($condition);
+        unset($txp_atts['not']);
+    }
+
+    if (empty($condition)) $txp_atts[0] = true;
+
     if (!$short_tags) {
         if (false === strpos($thing, "<{$pattern}:")) {
-            return $condition ? $thing : '';
+            return $condition ? $thing : ($thing ? '' : '1');
         }
     } elseif (!preg_match("@<(?:{$pattern}):@", $thing)) {
-        return $condition ? $thing : '';
+        return $condition ? $thing : ($thing ? '' : '1');
     }
 
     $hash = sha1($thing);
@@ -430,7 +435,7 @@ function parse($thing, $condition = null)
                         trigger_error(txpspecialchars(gTxt('ambiguous_tag').' '.$chunk));
                     }
 
-                    $tags[$level][] = array($chunk, $tag[$level][2], $tag[$level][3], null, null);
+                    $tags[$level][] = array($chunk, $tag[$level][2], trim($tag[$level][3]), null, null);
                     $inside[$level] .= $chunk;
                 } elseif ($chunk[1] !== '/') {
                     // Opening tag.
@@ -457,7 +462,7 @@ function parse($thing, $condition = null)
                     $txp_parsed[$sha] = $count[$level] > 2 ? $tags[$level] : false;
                     $txp_else[$sha] = array($else[$level] > 0 ? $else[$level] : $count[$level], $count[$level] - 2);
                     $level--;
-                    $tags[$level][] = array($outside[$level+1], $tag[$level][2], $tag[$level][3], $inside[$level+1], $chunk);
+                    $tags[$level][] = array($outside[$level+1], $tag[$level][2], trim($tag[$level][3]), $inside[$level+1], $chunk);
                     $inside[$level] .= $inside[$level+1].$chunk;
                 }
             } else {
@@ -477,7 +482,7 @@ function parse($thing, $condition = null)
             }
             trigger_error(txpspecialchars(gTxt('unclosed_tag').n.$outside[$level].$inside[$level].n));
             $level--;
-            $tags[$level][] = array($outside[$level+1], $tag[$level][2], $tag[$level][3], $inside[$level+1], '');
+            $tags[$level][] = array($outside[$level+1], $tag[$level][2], trim($tag[$level][3]), $inside[$level+1], '');
             $inside[$level] .= $inside[$level+1];
             $tags[$level][] = '';
         }
@@ -486,7 +491,7 @@ function parse($thing, $condition = null)
     $tag = $txp_parsed[$hash];
 
     if (empty($tag)) {
-        return $condition ? $thing : '';
+        return $condition ? $thing : ($thing ? '' : '1');
     }
 
     list($first, $last) = $txp_else[$hash];
@@ -497,7 +502,7 @@ function parse($thing, $condition = null)
     } elseif ($first <= $last) {
         $first  += 2;
     } else {
-        return '';
+        return ($thing ? '' : '1');
     }
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
@@ -538,7 +543,7 @@ function maybe_tag($tag)
  * @package TagParser
  */
 
-function processTags($tag, $atts, $thing = null)
+function processTags($tag, $atts = '', $thing = null)
 {
     global $production_status, $txp_current_tag, $txp_current_form, $txp_atts, $trace;
     static $registry = null, $attributes = null, $globals = null, $level = 0, $txp_parser = array('tag' => '', 'atts' => '', 'thing' => null);
@@ -550,7 +555,7 @@ function processTags($tag, $atts, $thing = null)
     if ($production_status !== 'live') {
         $old_tag = $txp_current_tag;
         $tag_stop = isset($thing) ? "</txp:{$tag}>" : null;
-        $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
+        $txp_current_tag = '<txp:'.$tag.($atts ? " $atts" : '').(isset($thing) ? '>' : ' />');
         $trace->start($txp_current_tag);
     }
 
@@ -561,9 +566,16 @@ function processTags($tag, $atts, $thing = null)
     }
 
     $old_parser = $txp_parser;
-    $old_atts = isset($txp_atts) ? $txp_atts : null;
-    $split = splat($atts);
-    $txp_atts = array_intersect_key($split, $globals);
+    $old_atts = $txp_atts;
+
+    if ($atts) {
+        //$txp_atts is set by splat();
+        $split = splat($atts);
+    } else {
+        $txp_atts = null;
+        $split = array();
+    }
+
     $out = '';
 
     if ($tag !== 'evaluate' || !isset($split['this'])) {
@@ -573,7 +585,7 @@ function processTags($tag, $atts, $thing = null)
         $level++;
         extract($txp_parser);
         unset($split['this'], $split['query'], $split['test']);
-        $out = $registry->process($tag, $split + splat($atts), $thing);
+        $out = $registry->process($tag, $atts ? $split + splat($atts) : $split, $thing);
         $level--;
     }
 
@@ -587,7 +599,11 @@ function processTags($tag, $atts, $thing = null)
         }
     }
 
-    if (empty($txp_atts[0]) && (string)$out > '') {
+    if ($thing === null && !empty($txp_atts['not'])) {
+        $out = $out ? '' : '1';
+    }
+
+    if ($txp_atts && empty($txp_atts[0]) && (string)$out > '') {
         foreach ($attributes as $attr) {
             if (isset($txp_atts[$attr])) {
                 $out = $registry->processAtt($attr, $txp_atts[$attr], $out);

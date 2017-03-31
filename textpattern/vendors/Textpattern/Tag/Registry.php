@@ -85,9 +85,9 @@ class Registry implements \Textpattern\Container\ReusableInterface
     public function registerAtt($callback, $tag = null, $prepend = false)
     {
         // is_callable only checks syntax here to avoid autoloading
-        if (!$callback) {
+        if (is_bool($callback)) {
             foreach (do_list_unique($tag) as $tag) {
-                $this->atts[$tag] = false;
+                $this->atts[$tag] = $callback;
             }
         } elseif (is_callable($callback, true)) {
             if ($tag === null && is_string($callback)) {

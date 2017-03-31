@@ -2159,27 +2159,24 @@ function pluggable_ui($event, $element, $default = '')
 function lAtts($pairs, $atts, $warn = true)
 {
     global $production_status, $txp_atts;
-    static $globals = null, $attributes = null;
+    static $globals = null, $args = null;
 
     if (!isset($globals)) {
         $globals = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
-        $attributes = array_diff_key($globals, array_filter($globals));
-    }
-
-    if (!empty($txp_atts)) {
-        $txp_atts += array_intersect_key($pairs, $attributes);
+        $args = array_diff_key($globals, array_filter($globals));
     }
 
     foreach ($atts as $name => $value) {
         if (array_key_exists($name, $pairs)) {
             $pairs[$name] = $value;
-
-            if (!empty($globals[$name])) {
-                unset($txp_atts[$name]);
-            }
-        } elseif ($warn && $production_status != 'live' && !isset($globals[$name])) {
+            unset($txp_atts[$name]);
+        } elseif ($warn && $production_status !== 'live' && !array_key_exists($name, $globals)) {
             trigger_error(gTxt('unknown_attribute', array('{att}' => $name)));
         }
+    }
+
+    if (!empty($txp_atts) && array_diff_key($txp_atts, $args)) {
+        $txp_atts += array_intersect_key($pairs, $args);
     }
 
     return ($pairs) ? $pairs : false;
@@ -2538,11 +2535,11 @@ function updateSitePath($here)
 
 function splat($text)
 {
-    static $stack, $parse;
-    global $production_status, $trace;
+    static $stack = array(), $parse = array(), $global_atts = array(), $globals = null;
+    global $production_status, $trace, $txp_atts;
 
-    if (strlen($text) < 3) {
-        return array();
+    if ($globals === null) {
+        $globals = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
     }
 
     $sha = sha1($text);
@@ -2553,6 +2550,8 @@ function splat($text)
 
         if (preg_match_all('@(\w+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
             foreach ($match as $m) {
+                $name = strtolower($m[1]);
+
                 switch (count($m)) {
                     case 2:
                         $val = true;
@@ -2564,7 +2563,7 @@ function splat($text)
                         $val = str_replace("''", "'", $m[3]);
 
                         if (strpos($m[3], ':') !== false) {
-                            $parse[$sha][] = strtolower($m[1]);
+                            $parse[$sha][] = $name;
                         }
 
                         break;
@@ -2574,30 +2573,39 @@ function splat($text)
                         break;
                 }
 
-                $stack[$sha][strtolower($m[1])] = $val;
+                $stack[$sha][$name] = $val;
             }
         }
+
+        $global_atts[$sha] = array_intersect_key($stack[$sha], $globals);
     }
 
-    if (empty($parse[$sha])) {
-        return $stack[$sha];
-    } else {
-        $atts = $stack[$sha];
+    $atts = $stack[$sha];
+    $txp_atts = $global_atts[$sha];
 
+    if (!empty($parse[$sha])) {
         if ($production_status !== 'live') {
             foreach ($parse[$sha] as $p) {
                 $trace->start("[attribute '".$p."']");
                 $atts[$p] = parse($atts[$p]);
                 $trace->stop('[/attribute]');
+
+                if (isset($global_atts[$sha][$p])) {
+                    $txp_atts[$p] = $atts[$p];
+                }
             }
         } else {
             foreach ($parse[$sha] as $p) {
                 $atts[$p] = parse($atts[$p]);
+
+                if (isset($global_atts[$sha][$p])) {
+                    $txp_atts[$p] = $atts[$p];
+                }
             }
         }
-
-        return $atts;
     }
+
+    return $atts;
 }
 
 /**
@@ -4206,10 +4214,15 @@ function EvalElse($thing, $condition)
 {
     global $txp_parsed, $txp_else, $txp_atts;
 
-    $txp_atts[0] = empty($condition);
+    if (!empty($txp_atts['not'])) {
+        $condition = empty($condition);
+        unset($txp_atts['not']);
+    }
+
+    if (empty($condition)) $txp_atts[0] = true;
 
     if (strpos($thing, ':else') === false || empty($txp_parsed[$hash = sha1($thing)])) {
-        return $condition ? $thing : '';
+        return $condition ? $thing : ($thing ? '' : '1');
     }
 
     $tag = $txp_parsed[$hash];
@@ -4221,7 +4234,7 @@ function EvalElse($thing, $condition)
     } elseif ($first <= $last) {
         $first  += 2;
     } else {
-        return '';
+        return ($thing ? '' : '1');
     }
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
