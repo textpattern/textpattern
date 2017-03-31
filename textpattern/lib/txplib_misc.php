@@ -4222,7 +4222,7 @@ function EvalElse($thing, $condition)
     if (empty($condition)) $txp_atts[0] = true;
 
     if (strpos($thing, ':else') === false || empty($txp_parsed[$hash = sha1($thing)])) {
-        return $condition ? $thing : ($thing ? '' : '1');
+        return $condition ? $thing : '';
     }
 
     $tag = $txp_parsed[$hash];
@@ -4234,7 +4234,7 @@ function EvalElse($thing, $condition)
     } elseif ($first <= $last) {
         $first  += 2;
     } else {
-        return ($thing ? '' : '1');
+        return '';
     }
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
