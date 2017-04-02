@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('TXP_UPDATE')) {
@@ -39,23 +39,6 @@ safe_alter('txp_prefs', "MODIFY html  VARCHAR(255) NOT NULL DEFAULT 'text_input'
 // 2) Remove basic/advanced distinction.
 safe_update('txp_prefs', "type = '".PREF_CORE."'", "type = '".PREF_PLUGIN."' AND event IN ($core_ev)");
 
-// 3) Consolidate existing prefs into better groups.
-safe_update('txp_prefs', "event = 'site'", "name IN ('sitename', 'siteurl', 'site_slogan', 'production_status', 'gmtoffset', 'auto_dst', 'is_dst', 'dateformat', 'archive_dateformat', 'permlink_mode', 'doctype', 'logging', 'use_comments', 'expire_logs_after')");
-
-// 4) Reorder existing prefs into a more logical progression.
-safe_update('txp_prefs', "position = '110'", "name = 'gmtoffset'");
-safe_update('txp_prefs', "position = '230'", "name = 'expire_logs_after'");
-safe_update('txp_prefs', "position = '340'", "name = 'max_url_len'");
-safe_update('txp_prefs', "position = '160'", "name = 'comments_sendmail'");
-safe_update('txp_prefs', "position = '180'", "name = 'comments_are_ol'");
-safe_update('txp_prefs', "position = '200'", "name = 'comment_means_site_updated'");
-safe_update('txp_prefs', "position = '220'", "name = 'comments_require_name'");
-safe_update('txp_prefs', "position = '240'", "name = 'comments_require_email'");
-safe_update('txp_prefs', "position = '260'", "name = 'never_display_email'");
-safe_update('txp_prefs', "position = '280'", "name = 'comment_nofollow'");
-safe_update('txp_prefs', "position = '300'", "name = 'comments_disallow_images'");
-safe_update('txp_prefs', "position = '320'", "name = 'comments_use_fat_textile'");
-safe_update('txp_prefs', "position = '340'", "name = 'spam_blacklists'");
 safe_update('txp_prefs', "name = 'permlink_format', html = 'permlink_format'", "name = 'permalink_title_format'");
 
 // Support for l10n string owners.
@@ -120,22 +103,6 @@ if (!in_array('description', $cols)) {
     safe_alter('txp_section', "ADD description VARCHAR(255) NOT NULL DEFAULT '' AFTER css");
 }
 
-// Remove textpattern.com ping and lastmod_keepalive prefs.
-safe_delete('txp_prefs', "name = 'ping_textpattern_com'");
-safe_delete('txp_prefs', "name = 'lastmod_keepalive'");
-
-// Add default publishing status pref.
-if (!get_pref('default_publish_status')) {
-    set_pref('default_publish_status', STATUS_LIVE, 'publish', PREF_CORE, 'defaultPublishStatus', 15, PREF_PRIVATE);
-}
-
-// Add prefs to allow query caching when now() is used.
-if (!get_pref('sql_now_posted')) {
-    set_pref('sql_now_posted', time(), 'publish', PREF_HIDDEN);
-    set_pref('sql_now_expires', time(), 'publish', PREF_HIDDEN);
-    set_pref('sql_now_created', time(), 'publish', PREF_HIDDEN);
-}
-
 // Remove broken import functionality.
 if (is_writable(txpath.DS.'include') && file_exists(txpath.DS.'include'.DS.'txp_import.php')) {
     $import_files = array(
@@ -175,7 +142,6 @@ safe_drop_index('txp_file',    "filename");
 safe_drop_index('txp_form',    "PRIMARY");
 safe_drop_index('txp_page',    "PRIMARY");
 safe_drop_index('txp_section', "PRIMARY");
-safe_drop_index('txp_prefs',   "prefs_idx");
 safe_drop_index('txp_prefs',   "name");
 safe_drop_index('textpattern', "section_status_idx");
 safe_drop_index('textpattern', "url_title_idx");
@@ -185,7 +151,6 @@ safe_alter('txp_file',    "ADD UNIQUE filename (filename(250))");
 safe_alter('txp_form',    "ADD PRIMARY KEY (name(250))");
 safe_alter('txp_page',    "ADD PRIMARY KEY (name(250))");
 safe_alter('txp_section', "ADD PRIMARY KEY (name(250))");
-safe_alter('txp_prefs',   "ADD UNIQUE prefs_idx (prefs_id, name(185), user_name)");
 safe_alter('txp_prefs',   "ADD INDEX name (name(250))");
 safe_alter('textpattern', "ADD INDEX section_status_idx (Section(249), Status)");
 safe_alter('textpattern', "ADD INDEX url_title_idx (url_title(250))");
@@ -193,15 +158,6 @@ safe_alter('textpattern', "ADD INDEX url_title_idx (url_title(250))");
 // so it has to be done in two separate steps.
 safe_drop_index('txp_discuss_nonce', "PRIMARY");
 safe_alter('txp_discuss_nonce', "ADD PRIMARY KEY (nonce(250))");
-
-// Fix typo: textinput should be text_input.
-safe_update('txp_prefs', "html = 'text_input'", "name = 'timezone_key'");
-
-// Fix typo: position 40 should be 0 (because it's a hidden pref).
-safe_update('txp_prefs', "position = 0", "name = 'language'");
-
-// Fix typo: position should be 60 instead of 30 (so it appears just below the site name).
-safe_update('txp_prefs', "position = 60", "name = 'site_slogan'");
 
 // Enforce some table changes that happened after 4.0.3 but weren't part of
 // update scripts until now.

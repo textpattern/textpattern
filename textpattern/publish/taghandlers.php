@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -267,9 +267,6 @@ function css($atts)
 
 function image($atts)
 {
-    global $thisimage;
-    static $cache = array();
-
     extract(lAtts(array(
         'class'   => '',
         'escape'  => 'html',
@@ -282,38 +279,8 @@ function image($atts)
         'wraptag' => '',
     ), $atts));
 
-    if ($name) {
-        if (isset($cache['n'][$name])) {
-            $rs = $cache['n'][$name];
-        } else {
-            $name = doSlash($name);
-
-            $rs = safe_row("*", 'txp_image', "name = '$name' LIMIT 1");
-
-            $cache['n'][$name] = $rs;
-        }
-    } elseif ($id) {
-        if (isset($cache['i'][$id])) {
-            $rs = $cache['i'][$id];
-        } else {
-            $id = (int) $id;
-
-            $rs = safe_row("*", 'txp_image', "id = $id LIMIT 1");
-
-            $cache['i'][$id] = $rs;
-        }
-    } elseif ($thisimage) {
-        $id = (int) $thisimage['id'];
-        $rs = $thisimage;
-        $cache['i'][$id] = $rs;
-    } else {
-        trigger_error(gTxt('unknown_image'));
-
-        return;
-    }
-
-    if ($rs) {
-        extract($rs);
+    if ($imageData = imageFetchInfo($id, $name)) {
+        extract($imageData);
 
         if ($escape == 'html') {
             $alt = txpspecialchars($alt);
@@ -358,16 +325,12 @@ function image($atts)
 
         return $out;
     }
-
-    trigger_error(gTxt('unknown_image'));
 }
 
 // -------------------------------------------------------------
 
 function thumbnail($atts)
 {
-    global $thisimage;
-
     extract(lAtts(array(
         'class'    => '',
         'escape'   => 'html',
@@ -377,31 +340,18 @@ function thumbnail($atts)
         'link'     => 0,
         'link_rel' => '',
         'name'     => '',
-        'poplink'  => 0, // Is this used?
+        'poplink'  => 0, // Deprecated, 4.7
         'style'    => '',
         'wraptag'  => '',
         'width'    => '',
     ), $atts));
 
-    if ($name) {
-        $name = doSlash($name);
-
-        $rs = safe_row("*", 'txp_image', "name = '$name' LIMIT 1");
-    } elseif ($id) {
-        $id = (int) $id;
-
-        $rs = safe_row("*", 'txp_image', "id = $id LIMIT 1");
-    } elseif ($thisimage) {
-        $id = (int) $thisimage['id'];
-        $rs = $thisimage;
-    } else {
-        trigger_error(gTxt('unknown_image'));
-
-        return;
+    if (isset($atts['poplink'])) {
+        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'poplink')), E_USER_NOTICE);
     }
 
-    if ($rs) {
-        extract($rs);
+    if ($imageData = imageFetchInfo($id, $name)) {
+        extract($imageData);
 
         if ($thumbnail) {
             if ($escape == 'html') {
@@ -462,28 +412,20 @@ function thumbnail($atts)
             return $out;
         }
     }
-
-    trigger_error(gTxt('unknown_image'));
 }
 
 // -------------------------------------------------------------
 
 function output_form($atts, $thing = null)
 {
-    global $yield;
-
     extract(lAtts(array(
-        'form' => '',
+        'form' => ''
     ), $atts));
 
     if (!$form) {
         trigger_error(gTxt('form_not_specified'));
     } else {
-        $yield[] = $thing !== null ? parse($thing) : null;
-        $out = parse_form($form);
-        array_pop($yield);
-
-        return $out;
+        return parse_form($form, $thing);
     }
 }
 
@@ -1251,6 +1193,7 @@ function popup($atts)
 function category_list($atts, $thing = null)
 {
     global $s, $c, $thiscategory;
+    static $cache = array(), $level = 0;
 
     extract(lAtts(array(
         'active_class' => '',
@@ -1264,7 +1207,7 @@ function category_list($atts, $thing = null)
         'labeltag'     => '',
         'parent'       => '',
         'section'      => '',
-        'children'     => '1',
+        'children'     => 1,
         'sort'         => '',
         'this_section' => 0,
         'type'         => 'article',
@@ -1273,107 +1216,121 @@ function category_list($atts, $thing = null)
         'offset'       => '',
     ), $atts));
 
-    $sort = doSlash($sort);
-    $sql_limit = '';
+    $categories = $categories === true ? array(isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root')) : do_list_unique($categories);
 
-    if ($limit !== '' || $offset) {
-        $sql_limit = " LIMIT ".intval($offset).", ".($limit === '' ? PHP_INT_MAX : intval($limit));
+    $roots = ($parent === true ? array(isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root')) : do_list_unique($parent)) or $roots = $categories or $roots = array('root');
+
+    $level++;
+    $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
+    $multiple = count($roots) > 1;
+    $root = implode(',', $roots);
+    $children = (int) $children;
+    $sql_query = "type = '".doSlash($type)."'".($sort ? ' order by '.doSlash($sort) : ($categories ? " order by FIELD(name, ".implode(',', quote_list($categories)).")": ''));
+    $sql_limit = $limit !== '' || $offset ? "LIMIT ".intval($offset).", ".($limit === '' || $limit === true ? PHP_INT_MAX : intval($limit)) : '';
+    $exclude = $exclude ? ($exclude === true ? $roots : do_list_unique($exclude)) : array();
+    $sql_exclude = $exclude && $sql_limit ? " and name not in(".implode(',', quote_list($exclude)).")" : '';
+    $nocache = !$children || $sql_limit || $children == $level;
+    $hash = md5($nocache ? uniqid() : $sql_query);
+
+    if (!isset($cache[$hash])) {
+        $cache[$hash] = array();
     }
 
-    if ($categories) {
-        $categories = do_list_unique($categories);
-        $categories = join("','", doSlash($categories));
+    if (!isset($cache[$hash][$root]) || !$multiple && $root != 'root' && empty($cache[$hash][$root][$root])) {
+        $cache[$hash][$root] = array();
 
-        $rs = safe_rows_start("name, title, description", 'txp_category',
-            "type = '".doSlash($type)."' AND name IN ('$categories') ORDER BY ".($sort ? $sort : "FIELD(name, '$categories')").$sql_limit);
-    } else {
-        if ($parent) {
-            $parents = join(',', quote_list(do_list_unique($parent)));
-        }
+        if (!$children || !in_array('root',  $roots)) {
+            $cats = safe_rows('name, parent, title, description, lft, rgt', 'txp_category', "name IN (".implode(',', quote_list($roots)).") and $sql_query") or $cats = array();
 
-        if ($children) {
-            $shallow = '';
+            $retrieve = false;
+            $between = array();
+
+            foreach ($cats as $cat) {
+                extract($cat);
+                $name = doSlash($name);
+                $between[] = $children ? "lft>=$lft and rgt<=$rgt" : "name='$name' or parent='$name'";
+
+                if ($rgt - $lft > 1) {
+                    $retrieve = true;
+                }
+            }
+
+            $cats = $retrieve ? safe_rows('name, parent, title, description', 'txp_category', "name!='root' $sql_exclude and (".implode(' or ', $between).") and $sql_query $sql_limit") : $cats;
         } else {
-            // Descend only one level from either 'parent' or 'root', plus
-            // parent category.
-            $shallow = ($parent) ? "AND (parent IN ($parents) OR name IN ($parents))" : "AND parent = 'root'";
+            $cats = safe_rows('name, parent, title, description', 'txp_category', "name !='root' $sql_exclude and $sql_query $sql_limit");
         }
 
-        if ($exclude) {
-            $exclude = do_list_unique($exclude);
-            $exclude = join("','", doSlash($exclude));
-            $exclude = "AND name NOT IN ('$exclude')";
-        }
+        foreach($cats as $cat) {
+            extract($cat);
+            $node = $children == $level ? $root : $name;
 
-        if ($parent) {
-            $qs = safe_rows("lft, rgt", 'txp_category', "type = '".doSlash($type)."' AND name IN ($parents)");
+            if (!isset($cache[$hash][$node])) {
+                $cache[$hash][$node] = array();
+            }
 
-            if ($qs) {
-                $between = array();
+            $cache[$hash][$node][$name] = $cat;
 
-                foreach ($qs as $a) {
-                    extract($a);
-                    $between[] = "(lft BETWEEN $lft AND $rgt)";
+            if ($children != $level) {
+                if ($multiple && in_array($name, $roots)) {
+                    $cache[$hash][$root][$name] = $cat;
                 }
 
-                $rs = safe_rows_start("name, title, description", 'txp_category',
-                    "(".join(" OR ", $between).") AND type = '".doSlash($type)."' AND name != 'default' $exclude $shallow ORDER BY ".($sort ? $sort : "lft ASC").$sql_limit);
+                if (!isset($cache[$hash][$parent])) {
+                    $cache[$hash][$parent] = array();
+                }
+
+                $cache[$hash][$parent][$name] = $cat;
+
+                if ($multiple && in_array($parent, $roots)) {
+                    $cache[$hash][$root][$name] = $cat;
+                }
+            }
+        }
+    }
+
+    $oldcategory = isset($thiscategory) ? $thiscategory : null;
+    $out = array();
+    $count = 0;
+    $last = count($cache[$hash][$root]);
+
+    foreach ($cache[$hash][$root] as $name => $thiscategory) {
+        if (!in_array($name, $exclude) && (!$categories || in_array($name, $categories))) {
+            $count++;
+
+            if (!isset($thing) && !$form) {
+                extract($thiscategory);
+                $out[] = tag(txpspecialchars($title), 'a',
+                    (($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
+                    ' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'context' => $type)).'"'
+                ).(
+                    isset($cache[$hash][$name]) && $children > $level && count($cache[$hash][$name]) > 1
+                    ? category_list(array('parent' => $name, 'exclude' => implode(',', array_merge($exclude, array($name))), 'label' => '', 'html_id' => '') + $atts)
+                    : ''
+                );
             } else {
-                $rs = array();
+                $thiscategory['type'] = $type;
+                $thiscategory['is_first'] = ($count == 1);
+                $thiscategory['is_last'] = ($count == $last);
+
+                if (isset($atts['section'])) {
+                    $thiscategory['section'] = $section;
+                }
+
+                $out[] = $form ? parse_form($form) : parse($thing);
             }
         } else {
-            $rs = safe_rows_start("name, title, description", 'txp_category',
-                "type = '".doSlash($type)."' AND name NOT IN ('default','root') $exclude $shallow ORDER BY ".($sort ? $sort : "name ASC").$sql_limit);
+            $last--;
         }
     }
 
-    if ($rs) {
-        $out = array();
-        $count = 0;
-        $last = numRows($rs);
+    $thiscategory = $oldcategory;
+    $level--;
 
-        if (isset($thiscategory)) {
-            $old_category = $thiscategory;
-        }
-
-        while ($a = nextRow($rs)) {
-            ++$count;
-            extract($a);
-
-            if ($name) {
-                $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
-
-                if ($form === '' && $thing === null) {
-                    $out[] = tag(txpspecialchars($title), 'a',
-                        (($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
-                        ' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'context' => $type)).'"'
-                    );
-                } else {
-                    $thiscategory = array('name' => $name, 'title' => $title, 'type' => $type, 'description' => $description);
-                    $thiscategory['is_first'] = ($count == 1);
-                    $thiscategory['is_last'] = ($count == $last);
-
-                    if (isset($atts['section'])) {
-                        $thiscategory['section'] = $section;
-                    }
-
-                    if ($thing === null && $form !== '') {
-                        $out[] = parse_form($form);
-                    } else {
-                        $out[] = parse($thing);
-                    }
-                }
-            }
-        }
-
-        $thiscategory = (isset($old_category) ? $old_category : null);
-
-        if ($out) {
-            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class, '', '', '', $html_id);
-        }
+    if ($nocache || $level <= 0) {
+        unset($cache[$hash]);
     }
-
-    return '';
+ 
+    return $out ? ($label ? doLabel($label, $labeltag) : '').doWrap($out, $wraptag, $break, $class, '', '', '', $html_id) : '';
 }
 
 // -------------------------------------------------------------
@@ -1573,35 +1530,45 @@ function search_term($atts)
 
 // -------------------------------------------------------------
 
-// Link to next article, if it exists.
-function link_to_next($atts, $thing = null)
+// Link to next/prev article, if it exists.
+function link_to($atts, $thing = null, $target = null)
 {
     global $thisarticle;
+
+    if (!in_array($target, array('next', 'prev'))) {
+        return;
+    }
 
     assert_article();
 
     extract(lAtts(array(
+        'form' => '',
+        'link' => 1,
         'showalways' => 0,
     ), $atts));
 
     if (is_array($thisarticle)) {
-        if (!isset($thisarticle['next'])) {
+        if (!isset($thisarticle[$target])) {
             $thisarticle = $thisarticle + getNextPrev();
         }
 
-        if ($thisarticle['next'] !== false) {
-            $url = permlinkurl($thisarticle['next']);
+        if ($thisarticle[$target] !== false) {
+            $url = permlinkurl($thisarticle[$target]);
 
-            if ($thing) {
-                $thing = parse($thing);
-                $next_title = escape_title($thisarticle['next']['title']);
+            if ($form || $thing !== null) {
+                $oldarticle = $thisarticle;
+                populateArticleData($thisarticle[$target]);
+                $thisarticle['is_first'] = $thisarticle['is_last'] = true;
+                $thing = $form ? parse_form($form, $thing) : parse($thing);
+                $target_title = escape_title($thisarticle[$target]['Title']);
+                $thisarticle = $oldarticle;
 
-                return href(
+                return $link ? href(
                     $thing,
                     $url,
-                    ($next_title != $thing ? ' title="'.$next_title.'"' : '').
-                    ' rel="next"'
-                );
+                    ($target_title != $thing ? ' title="'.$target_title.'"' : '').
+                    ' rel="'.$target.'"'
+                ) : $thing;
             }
 
             return $url;
@@ -1613,42 +1580,18 @@ function link_to_next($atts, $thing = null)
 
 // -------------------------------------------------------------
 
+// Link to next article, if it exists.
+function link_to_next($atts, $thing = null)
+{
+    return link_to($atts, $thing, 'next');
+}
+
+// -------------------------------------------------------------
+
 // Link to previous article, if it exists.
 function link_to_prev($atts, $thing = null)
 {
-    global $thisarticle;
-
-    assert_article();
-
-    extract(lAtts(array(
-        'showalways' => 0,
-    ), $atts));
-
-    if (is_array($thisarticle)) {
-        if (!isset($thisarticle['prev'])) {
-            $thisarticle = $thisarticle + getNextPrev();
-        }
-
-        if ($thisarticle['prev'] !== false) {
-            $url = permlinkurl($thisarticle['prev']);
-
-            if ($thing) {
-                $thing = parse($thing);
-                $prev_title = escape_title($thisarticle['prev']['title']);
-
-                return href(
-                    $thing,
-                    $url,
-                    ($prev_title != $thing ? ' title="'.$prev_title.'"' : '').
-                    ' rel="prev"'
-                );
-            }
-
-            return $url;
-        }
-    }
-
-    return ($showalways) ? parse($thing) : '';
+    return link_to($atts, $thing, 'prev');
 }
 
 // -------------------------------------------------------------
@@ -1668,7 +1611,7 @@ function next_title()
     }
 
     if ($thisarticle['next'] !== false) {
-        return escape_title($thisarticle['next']['title']);
+        return escape_title($thisarticle['next']['Title']);
     } else {
         return '';
     }
@@ -1691,7 +1634,7 @@ function prev_title()
     }
 
     if ($thisarticle['prev'] !== false) {
-        return escape_title($thisarticle['prev']['title']);
+        return escape_title($thisarticle['prev']['Title']);
     } else {
         return '';
     }
@@ -3268,11 +3211,17 @@ function search_result_count($atts)
         return '';
     }
 
-    $t = @$thispage['grand_total'];
-
     extract(lAtts(array(
-        'text' => ($t == 1 ? gTxt('article_found') : gTxt('articles_found')),
+        'text' => null,
+        'pageby' => 1
     ), $atts));
+
+    $by = (int)$pageby or $by = 1;
+    $t = ceil(@$thispage[$pageby === true ? 'numPages' : 'grand_total']/$by);
+
+    if (!isset($text)) {
+        $text = $pageby === true || $by > 1 ? gTxt($t == 1 ? 'page' : 'pages') : gTxt($t == 1 ? 'article_found' : 'articles_found');
+    }
 
     return $t.($text ? ' '.$text : '');
 }
@@ -3281,9 +3230,11 @@ function search_result_count($atts)
 
 function image_index($atts)
 {
-    global $s, $c;
+    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+    
+    global $c;
 
-    extract(lAtts(array(
+    lAtts(array(
         'label'    => '',
         'break'    => br,
         'wraptag'  => '',
@@ -3293,44 +3244,20 @@ function image_index($atts)
         'limit'    => 0,
         'offset'   => 0,
         'sort'     => 'name ASC',
-    ), $atts));
+    ), $atts);
 
-    if (isset($atts['category'])) {
-        // Override the global.
-        $c = $category;
+    if (!isset($atts['category'])) {
+        $atts['category'] = $c;
     }
 
-    $qparts = array(
-        "category = '".doSlash($c)."' AND thumbnail = 1",
-        "ORDER BY ".doSlash($sort),
-        ($limit) ? "LIMIT ".intval($offset).", ".intval($limit) : '',
-    );
-
-    $rs = safe_rows_start("*", 'txp_image',  join(' ', $qparts));
-
-    if ($rs) {
-        $out = array();
-
-        while ($a = nextRow($rs)) {
-            extract($a);
-            $dims = ($thumb_h ? " height=\"$thumb_h\"" : '').($thumb_w ? " width=\"$thumb_w\"" : '');
-            $url = pagelinkurl(array(
-                'c'       => $c,
-                'context' => 'image',
-                's'       => $s,
-                'p'       => $id,
-            ));
-            $out[] = href(
-                '<img src="'.imagesrcurl($id, $ext, true).'"'.$dims.' alt="'.txpspecialchars($alt).'" />',
-                $url
-            );
-        }
-
-        if (count($out)) {
-            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-        }
+    if (!isset($atts['class'])) {
+        $atts['class'] = __FUNCTION__;
     }
-
+    
+    if ($atts['category']) {
+        return images($atts);
+    }
+    
     return '';
 }
 
@@ -3338,21 +3265,12 @@ function image_index($atts)
 
 function image_display($atts)
 {
-    if (is_array($atts)) {
-        extract($atts);
-    }
-
+    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+    
     global $p;
 
     if ($p) {
-        $rs = safe_row("*", 'txp_image', "id=".intval($p)." LIMIT 1");
-
-        if ($rs) {
-            extract($rs);
-
-            return '<img src="'.imagesrcurl($id, $ext).
-                '" style="height:'.$h.'px;width:'.$w.'px" alt="'.txpspecialchars($alt).'" />';
-        }
+        return image(array('id' => $p));
     }
 }
 
@@ -3563,8 +3481,6 @@ function images($atts, $thing = null)
 
 function image_info($atts)
 {
-    global $thisimage;
-
     extract(lAtts(array(
         'name'       => '',
         'id'         => '',
@@ -3583,32 +3499,19 @@ function image_info($atts)
     $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'author', 'w', 'h', 'thumb_w', 'thumb_h', 'date');
     $type = do_list($type);
 
-    $from_form = false;
-
-    if ($id) {
-        $thisimage = imageFetchInfo('id = '.intval($id));
-    } elseif ($name) {
-        $thisimage = imageFetchInfo("name = '".doSlash($name)."'");
-    } else {
-        assert_image();
-        $from_form = true;
-    }
-
     $out = array();
-    if ($thisimage) {
-        $thisimage['category_title'] = fetch_category_title($thisimage['category'], 'image');
+    if ($imageData = imageFetchInfo($id, $name)) {
+        $imageData['category_title'] = fetch_category_title($imageData['category'], 'image');
 
         foreach ($type as $item) {
             if (in_array($item, $validItems)) {
-                if (isset($thisimage[$item])) {
+                if (isset($imageData[$item])) {
                     $out[] = ($escape == 'html') ?
-                        txpspecialchars($thisimage[$item]) : $thisimage[$item];
+                        txpspecialchars($imageData[$item]) : $imageData[$item];
                 }
+            } else {
+                trigger_error(gTxt('invalid_attribute_value', array('{name}' => $item)), E_USER_NOTICE);
             }
-        }
-
-        if (!$from_form) {
-            $thisimage = '';
         }
     }
 
@@ -3619,50 +3522,41 @@ function image_info($atts)
 
 function image_url($atts, $thing = null)
 {
-    global $thisimage;
-
     extract(lAtts(array(
         'name'      => '',
         'id'        => '',
         'thumbnail' => 0,
         'link'      => 'auto',
     ), $atts));
-
-    $from_form = false;
-
-    if ($id) {
-        $thisimage = imageFetchInfo('id = '.intval($id));
-    } elseif ($name) {
-        $thisimage = imageFetchInfo("name = '".doSlash($name)."'");
-    } else {
-        assert_image();
-        $from_form = true;
+    
+    if (($name || $id) && $thing) {
+        global $thisimage;
+        $stash = $thisimage;
     }
 
-    if ($thisimage) {
+    if ($thisimage = imageFetchInfo($id, $name)) {
         $url = imagesrcurl($thisimage['id'], $thisimage['ext'], $thumbnail);
         $link = ($link == 'auto') ? (($thing) ? 1 : 0) : $link;
         $out = ($thing) ? parse($thing) : $url;
         $out = ($link) ? href($out, $url) : $out;
-
-        if (!$from_form) {
-            $thisimage = '';
-        }
-
-        return $out;
     }
 
-    return '';
+    if (isset($stash)) {
+        $thisimage = $stash;
+    }
+    
+    return isset($out) ? $out : '';
 }
 
 // -------------------------------------------------------------
 
 function image_author($atts)
 {
-    global $thisimage, $s;
-    assert_image();
+    global $s;
 
     extract(lAtts(array(
+        'name'         => '',
+        'id'           => '',
         'class'        => '',
         'link'         => 0,
         'title'        => 1,
@@ -3671,9 +3565,9 @@ function image_author($atts)
         'wraptag'      => '',
     ), $atts));
 
-    if ($thisimage['author']) {
-        $author_name = get_author_name($thisimage['author']);
-        $display_name = txpspecialchars(($title) ? $author_name : $thisimage['author']);
+    if ($imageData = imageFetchInfo($id, $name)) {
+        $author_name = get_author_name($imageData['author']);
+        $display_name = txpspecialchars(($title) ? $author_name : $imageData['author']);
 
         $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
@@ -3689,35 +3583,18 @@ function image_author($atts)
 
 function image_date($atts)
 {
-    global $thisimage;
-
     extract(lAtts(array(
         'name'   => '',
         'id'     => '',
         'format' => '',
     ), $atts));
 
-    $from_form = false;
-
-    if ($id) {
-        $thisimage = imageFetchInfo('id = '.intval($id));
-    } elseif ($name) {
-        $thisimage = imageFetchInfo("name = '".doSlash($name)."'");
-    } else {
-        assert_image();
-        $from_form = true;
-    }
-
-    if (isset($thisimage['date'])) {
+    if ($imageData = imageFetchInfo($id, $name)) {
         // Not a typo: use fileDownloadFormatTime() since it's fit for purpose.
         $out = fileDownloadFormatTime(array(
-            'ftime'  => $thisimage['date'],
+            'ftime'  => $imageData['date'],
             'format' => $format,
         ));
-
-        if (!$from_form) {
-            $thisimage = '';
-        }
 
         return $out;
     }
@@ -3933,10 +3810,13 @@ function permlink($atts, $thing = null)
             return $url;
         }
 
-        return tag(parse($thing), 'a', ' rel="bookmark" href="'.$url.'"'.
-            ($title ? ' title="'.txpspecialchars($title).'"' : '').
-            ($style ? ' style="'.txpspecialchars($style).'"' : '').
-            ($class ? ' class="'.txpspecialchars($class).'"' : '')
+        return tag(parse($thing), 'a', array(
+            'rel' => 'bookmark',
+            'href' => $url,
+            'title' => $title,
+            'style' => $style,
+            'class' => $class
+            )
         );
     }
 }
@@ -3950,13 +3830,18 @@ function lang()
 
 // -------------------------------------------------------------
 
-function breadcrumb($atts)
+function breadcrumb($atts, $thing = null)
 {
-    global $pretext, $sitename;
+    global $c, $s, $sitename, $thiscategory;
+    static $cache = array();
 
     extract(lAtts(array(
+        'category'  => $c,
+        'section'   => $s,
         'wraptag'   => 'p',
         'separator' => '&#160;&#187;&#160;',
+        'limit'     => null,
+        'offset'    => 0,
         'link'      => 1,
         'label'     => $sitename,
         'title'     => '',
@@ -3965,47 +3850,55 @@ function breadcrumb($atts)
     ), $atts));
 
     // For BC, get rid of in crockery.
-    if ($link == 'y') {
-        $linked = true;
-    } elseif ($link == 'n') {
+    if ($link == 'n') {
         $linked = false;
     } else {
         $linked = $link;
     }
 
+    $content = array();
     $label = txpspecialchars($label);
 
-    if ($linked) {
+    if ($linked && $label) {
         $label = doTag($label, 'a', $linkclass, ' href="'.hu.'"');
     }
 
-    $content = array();
-    extract($pretext);
-
-    if (!empty($s) && $s != 'default') {
-        $section_title = ($title) ? fetch_section_title($s) : $s;
+    if (!empty($section) && $section != 'default') {
+        $section_title = ($title) ? fetch_section_title($section) : $section;
         $section_title_html = escape_title($section_title);
         $content[] = ($linked)
             ? (doTag($section_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('s' => $s)).'"'))
             : $section_title_html;
     }
 
-    $category = empty($c) ? '' : $c;
-
-    foreach (getTreePath($category, 'article') as $cat) {
-        if ($cat['name'] != 'root') {
-            $category_title_html = $title ? escape_title($cat['title']) : $cat['name'];
-            $content[] = ($linked)
-                ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('c' => $cat['name'])).'"')
-                : $category_title_html;
-        }
+    if (!$category) {
+        $catpath = array();
+    } elseif (isset($cache[$category])) {
+        $catpath = $cache[$category];
+    } else {
+        $catpath = getTreePath($category, 'article');
+        array_shift($catpath);
+        $cache[$category] = $catpath;
     }
+
+    if ($limit || $offset) {
+        $catpath = array_slice($catpath, (int)$offset, isset($limit) ? (int)$limit : null);
+    }
+
+    $oldcategory = isset($thiscategory) ? $thiscategory : null;
+
+    foreach ($catpath as $thiscategory) {
+        $category_title_html = isset($thing) ? parse($thing) : ($title ? escape_title($thiscategory['title']) : $thiscategory['name']);
+        $content[] = ($linked)
+            ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('c' => $thiscategory['name'])).'"')
+            : $category_title_html;
+    }
+
+    $thiscategory = isset($oldcategory) ? $oldcategory : null;
 
     // Add the label at the end, to prevent breadcrumb for homepage.
     if ($content) {
-        $content = array_merge(array($label), $content);
-
-        return doTag(join($separator, $content), $wraptag, $class);
+        return doWrap($label ? array_merge(array($label), $content) : $content, $wraptag, $separator, $class);
     }
 }
 
@@ -5005,10 +4898,11 @@ function txp_eval($atts, $thing = null)
     global $txp_parsed, $txp_else;
     static $xpath = null, $functions = null;
 
-    extract(lAtts(array(
+    $own = array(
         'query' => null,
         'test'	=> !isset($atts['query'])
-    ), $atts));
+    );
+    extract(lAtts($own, array_intersect_key($atts, $own)));
 
     if (!isset($query)) {
         $x = true;

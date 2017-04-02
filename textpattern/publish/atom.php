@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -143,11 +143,12 @@ function atom()
     $auth[] = ($include_email_atom) ? tag(eE($pub['email']), 'email') : '';
     $auth[] = tag(hu, 'uri');
 
-    $out[] = tag(n.t.t.join(n.t.t, $auth).n, 'author');
+    $out[] = tag(n.t.t.join(n.t.t, $auth).n.t, 'author');
     $out[] = callback_event('atom_head');
 
     // Feed items.
     $articles = array();
+    $dates = array();
     $section = doSlash($section);
     $category = doSlash($category);
     $limit = ($limit) ? $limit : $rss_how_many;
@@ -230,14 +231,14 @@ function atom()
                 }
 
                 if (trim($content)) {
-                    $e['content'] = tag(n.escape_cdata($content).n, 'content', t_html);
+                    $e['content'] = tag(escape_cdata($content), 'content', t_html);
                 }
 
                 if (trim($summary)) {
-                    $e['summary'] = tag(n.escape_cdata($summary).n, 'summary', t_html);
+                    $e['summary'] = tag(escape_cdata($summary), 'summary', t_html);
                 }
 
-                $articles[$ID] = tag(n.t.t.join(n.t.t, $e).n.$cb, 'entry');
+                $articles[$ID] = tag(n.t.t.join(n.t.t, $e).n.t.$cb, 'entry');
 
                 $dates[$ID] = $uLastMod;
             }
@@ -245,7 +246,7 @@ function atom()
     } elseif ($area == 'link') {
         $cfilter = ($category) ? "category IN ('".join("','", $category)."')" : '1';
 
-        $rs = safe_rows_start("*", 'txp_link', "$cfilter ORDER BY date DESC, id DESC LIMIT $limit");
+        $rs = safe_rows_start("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_link', "$cfilter ORDER BY date DESC, id DESC LIMIT $limit");
 
         if ($rs) {
             while ($a = nextRow($rs)) {
@@ -253,19 +254,19 @@ function atom()
                 $e = array();
 
                 $e['title'] = tag(htmlspecialchars($linkname), 'title', t_html);
-                $e['content'] = tag(n.htmlspecialchars($description).n, 'content', t_html);
+                $e['content'] = tag(escape_cdata($description), 'content', t_html);
 
                 $url = (preg_replace("/^\/(.*)/", "https?://$siteurl/$1", $url));
                 $url = preg_replace("/&((?U).*)=/", "&amp;\\1=", $url);
                 $e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$url.'" />';
 
-                $e['issued'] = tag(safe_strftime('w3cdtf', strtotime($date)), 'published');
-                $e['modified'] = tag(safe_strftime('w3cdtf', strtotime($date)), 'updated');
-                $e['id'] = tag('tag:'.$mail_or_domain.','.safe_strftime('%Y-%m-%d', strtotime($date)).':'.$blog_uid.'/'.$id, 'id');
+                $e['issued'] = tag(safe_strftime('w3cdtf', $uDate), 'published');
+                $e['modified'] = tag(safe_strftime('w3cdtf', $uDate), 'updated');
+                $e['id'] = tag('tag:'.$mail_or_domain.','.safe_strftime('%Y-%m-%d', $uDate).':'.$blog_uid.'/'.$id, 'id');
 
-                $articles[$id] = tag(n.t.t.join(n.t.t, $e).n, 'entry');
+                $articles[$id] = tag(n.t.t.join(n.t.t, $e).n.t, 'entry');
 
-                $dates[$id] = $date;
+                $dates[$id] = $uDate;
             }
         }
     }
@@ -341,7 +342,7 @@ function atom()
 
     return
         '<?xml version="1.0" encoding="UTF-8"?>'.n.
-        '<feed xml:lang="'.txpspecialchars($language).'" xmlns="http://www.w3.org/2005/Atom">'.n.
-        join(n, $out).n.
+        '<feed xml:lang="'.txpspecialchars($language).'" xmlns="http://www.w3.org/2005/Atom">'.n.t.
+        join(n.t, $out).n.
         '</feed>';
 }

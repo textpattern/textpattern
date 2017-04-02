@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('TXP_UPDATE')) {
@@ -99,122 +99,3 @@ safe_update('textpattern', "Keywords = TRIM(BOTH ',' FROM
     )",
     "Keywords != ''"
 );
-
-// Shift preferences to more intuitive spots.
-// Give positions, leave enough room for later additions.
-
-safe_update('txp_prefs', "position = 20", "name IN(
-    'sitename',
-    'comments_on_default',
-    'img_dir',
-    'comments_require_name',
-    'syndicate_body_or_excerpt',
-    'title_no_widow'
-)");
-
-safe_update('txp_prefs', "position = 40", "name IN(
-    'siteurl',
-    'comments_default_invite',
-    'file_base_path',
-    'comments_require_email',
-    'rss_how_many',
-    'articles_use_excerpts'
-)");
-
-safe_update('txp_prefs', "position = 60", "name IN(
-    'site_slogan',
-    'comments_moderate',
-    'never_display_email',
-    'file_max_upload_size',
-    'show_comment_count_in_feed',
-    'allow_form_override'
-)");
-
-safe_update('txp_prefs', "position = 80", "name IN(
-    'production_status',
-    'comments_disabled_after',
-    'tempdir',
-    'comment_nofollow',
-    'include_email_atom',
-    'attach_titles_to_permalinks'
-)");
-
-safe_update('txp_prefs', "position = 100", "name IN(
-    'gmtoffset',
-    'comments_auto_append',
-    'plugin_cache_dir',
-    'permlink_format',
-    'use_mail_on_feeds_id'
-)");
-
-safe_update('txp_prefs', "position = 120", "name IN(
-    'is_dst',
-    'comments_mode',
-    'override_emailcharset'
-)");
-
-safe_update('txp_prefs', "position = 120, event = 'publish'", "name = 'send_lastmod'");
-
-safe_update('txp_prefs', "position = 140", "name IN(
-    'dateformat',
-    'comments_dateformat',
-    'spam_blacklists'
-)");
-
-safe_update('txp_prefs', "position = 160", "name IN(
-    'archive_dateformat',
-    'comments_are_ol',
-    'comment_means_site_updated',
-    'ping_weblogsdotcom'
-)");
-
-safe_update('txp_prefs', "position = 180", "name IN(
-    'permlink_mode',
-    'comments_sendmail',
-    'ping_textpattern_com'
-)");
-
-safe_update('txp_prefs', "position = 200", "name IN(
-    'use_textile',
-    'expire_logs_after'
-)");
-
-safe_update('txp_prefs', "position = 220", "name IN(
-    'logging',
-    'use_dns'
-)");
-
-safe_update('txp_prefs', "position = 240", "name IN(
-    'use_comments',
-    'max_url_len'
-)");
-
-safe_update('txp_prefs', "position = 260", "name = 'use_plugins'");
-safe_update('txp_prefs', "position = 280", "name = 'admin_side_plugins'");
-safe_update('txp_prefs', "position = 300", "name = 'allow_page_php_scripting'");
-safe_update('txp_prefs', "position = 320", "name = 'allow_article_php_scripting'");
-safe_update('txp_prefs', "position = 340", "name = 'allow_raw_php_scripting'");
-safe_update('txp_prefs', "position = 120, type = 1", "name = 'comments_disallow_images'");
-
-safe_update('txp_prefs', "event = 'comments'", "name IN(
-    'never_display_email',
-    'comment_nofollow',
-    'spam_blacklists',
-    'comment_means_site_updated'
-)");
-
-safe_update('txp_prefs', "event = 'feeds'", "name IN(
-    'syndicate_body_or_excerpt',
-    'rss_how_many',
-    'show_comment_count_in_feed',
-    'include_email_atom',
-    'use_mail_on_feeds_id'
-)");
-
-// 'Textile links' feature removed due to unclear specs.
-safe_delete('txp_prefs', "event = 'link' AND name = 'textile_links'");
-
-// Use TextileRestricted lite/fat in comments?
-if (!safe_field("name", 'txp_prefs', "name = 'comments_use_fat_textile'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'comments_use_fat_textile', val = '0', type = '1', event = 'comments', html = 'yesnoradio', position = '130'");
-}

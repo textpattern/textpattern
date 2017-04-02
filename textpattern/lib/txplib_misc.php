@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -954,22 +954,55 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
 /**
  * Gets an image as an array.
  *
- * @param   string $where SQL where clause
- * @return  array|bool An image data, or FALSE on failure
+ * @param   int $id image ID
+ * @param   string $name image name
+ * @return  array|bool An image data array, or FALSE on failure
  * @package Image
  * @example
- * if ($image = fileDownloadFetchInfo('id = 1'))
+ * if ($image = imageFetchInfo($id))
  * {
  *     print_r($image);
  * }
  */
 
-function imageFetchInfo($where)
+function imageFetchInfo($id = "", $name = "")
 {
+    global $thisimage, $p;
+    static $cache = array();
+    
+    if ($id) {
+        if (isset($cache['i'][$id])) {
+            return $cache['i'][$id];
+        } else {
+            $where = 'id = '.intval($id).' LIMIT 1';
+        }
+    } elseif ($name) {
+        if (isset($cache['n'][$name])) {
+            return $cache['n'][$name];
+        } else {
+            $where = "name = '".doSlash($name)."' LIMIT 1";
+        }
+    } elseif ($thisimage) {
+        $id = (int) $thisimage['id'];
+        return $cache['i'][$id] = $thisimage;
+    } elseif ($p) {
+        if (isset($cache['i'][$p])) {
+            return $cache['i'][$p];
+        } else {
+            $where = 'id = '.intval($p).' LIMIT 1';
+        }
+    } else {
+        assert_image();
+        return false;
+    }
+    
     $rs = safe_row("*", 'txp_image', $where);
 
     if ($rs) {
-        return image_format_info($rs);
+        $id = (int) $rs['id'];
+        return $cache['i'][$id] = image_format_info($rs);
+    } else {
+        trigger_error(gTxt('unknown_image'));
     }
 
     return false;
@@ -3729,32 +3762,6 @@ function assign_user_assets($owner, $new_owner)
 }
 
 /**
- * Return private preferences required to be set for the given (new) user.
- *
- * The returned structure comprises a nested array. Each row is an
- * array, with key being the pref event, and array made up of:
- *  -> pref type
- *  -> position
- *  -> html control
- *  -> name (gTxt)
- *  -> value
- *  -> user name
- *
- * @param   string $user_name The user name against which to assign the prefs
- * @since   4.6.0
- * @package Pref
- */
-
-function new_user_prefs($user_name)
-{
-    return array(
-        'publish' => array(
-            array(PREF_CORE, 15, 'defaultPublishStatus', 'default_publish_status', STATUS_LIVE, $user_name),
-        ),
-    );
-}
-
-/**
  * Creates a user account.
  *
  * On a successful run, will trigger a 'user.create > done' callback event.
@@ -3797,14 +3804,6 @@ function create_user($name, $email, $password, $realname = '', $group = 0)
         ) === false
     ) {
         return false;
-    }
-
-    $privatePrefs = new_user_prefs($name);
-
-    foreach ($privatePrefs as $event => $event_prefs) {
-        foreach ($event_prefs as $p) {
-            create_pref($p[3], $p[4], $event, $p[0], $p[2], $p[1], $p[5]);
-        }
     }
 
     callback_event('user.create', 'done', 0, compact('name', 'email', 'password', 'realname', 'group', 'nonce', 'hash'));
@@ -4072,8 +4071,6 @@ function change_user_group($user, $group)
 
 function txp_validate($user, $password, $log = true)
 {
-    global $DB;
-
     $safe_user = doSlash($user);
     $name = false;
 
@@ -4242,13 +4239,13 @@ function fetch_form($name)
         if (has_handler('form.fetch')) {
             $form = callback_event('form.fetch', '', false, compact('name'));
         } else {
-            $form = safe_field("Form", 'txp_form', "name = '".doSlash($name)."'");
+            $form = safe_field('Form', 'txp_form', "name = '".doSlash($name)."'");
         }
 
         if ($form === false) {
             trigger_error(gTxt('form_not_found').' '.$name);
 
-            return '';
+            return false;
         }
 
         $forms[$name] = $form;
@@ -4269,9 +4266,9 @@ function fetch_form($name)
  * @package TagParser
  */
 
-function parse_form($name)
+function parse_form($name, $thing = null)
 {
-    global $production_status, $txp_current_form, $trace;
+    global $production_status, $txp_current_form, $trace, $yield;
     static $stack = array();
 
     $out = '';
@@ -4287,10 +4284,15 @@ function parse_form($name)
 
         $old_form = $txp_current_form;
         $txp_current_form = $stack[] = $name;
+
         if ($production_status === 'debug') {
             $trace->log("[Nesting forms: '".join("' / '", $stack)."']");
         }
+
+        $yield[] = isset($thing) ? parse($thing) : null;
         $out = parse($f);
+        array_pop($yield);
+
         $txp_current_form = $old_form;
         array_pop($stack);
     }
@@ -4534,6 +4536,30 @@ function get_lastmod($unix_ts = null)
 }
 
 /**
+ * Sets headers.
+ *
+ * @param   array $headers    'lower-case-name' => 'value'
+ * @param   bool  $rewrite    If TRUE, rewrites existing headers
+ */
+
+function set_headers($headers = array('content-type' => 'text/html; charset=utf-8'), $rewrite = false)
+{
+    if (!$rewrite) {
+        foreach (headers_list() as $header) {
+            unset($headers[strtolower(trim(strtok($header, ':')))]);
+        }
+    }
+
+    foreach ((array)$headers as $name => $header) {
+        if ($header) {
+            header($name.':'.$header);
+        } else {
+            header_remove($name);
+        }
+    }
+}
+
+/**
  * Sends and handles a lastmod header.
  *
  * @param   int|null $unix_ts The last modification date as a UNIX timestamp
@@ -4612,7 +4638,7 @@ function handle_lastmod($unix_ts = null, $exit = true)
 function get_prefs($user = '')
 {
     $out = array();
-    $r = safe_rows_start("name, val", 'txp_prefs', "prefs_id = 1 AND user_name = '".doSlash($user)."'");
+    $r = safe_rows_start("name, val", 'txp_prefs', "user_name = '".doSlash($user)."'");
 
     if ($r) {
         while ($a = nextRow($r)) {
@@ -4841,8 +4867,7 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
     if (
         safe_insert(
             'txp_prefs',
-            "prefs_id = 1,
-            name = '".doSlash($name)."',
+            "name = '".doSlash($name)."',
             val = '".doSlash($val)."',
             event = '".doSlash($event)."',
             html = '".doSlash($html)."',
@@ -5189,9 +5214,10 @@ eod;
  * echo join_qs(array('param1' => 'value1', 'param2' => 'value2'));
  */
 
-function join_qs($q)
+function join_qs($q, $sep = '&amp;')
 {
     $qs = array();
+    $sql = $sep !== '&amp;';
 
     foreach ($q as $k => $v) {
         if (is_array($v)) {
@@ -5199,13 +5225,17 @@ function join_qs($q)
         }
 
         if ($k && (string) $v !== '') {
-            $qs[$k] = urlencode($k).'='.urlencode($v);
+            $qs[$k] = $sql ? "$k = $v" : urlencode($k).'='.urlencode($v);
         }
     }
 
-    $str = join('&amp;', $qs);
+    if (!isset($sep)) {
+        return $qs;
+    }
 
-    return ($str ? '?'.$str : '');
+    $str = join($sep, $qs);
+
+    return  $str ? ($sql ? '' : '?').$str : '';
 }
 
 /**
@@ -5236,11 +5266,12 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
     }
 
     $list = array();
+    $txp = $flags & TEXTPATTERN_STRIP_TXP;
 
     foreach ($atts as $name => $value) {
-        if (($flags & TEXTPATTERN_STRIP_EMPTY && !$value) || ($value === false)) {
+        if (($flags & TEXTPATTERN_STRIP_EMPTY && !$value) || ($value === false) || ($txp && $value === null)) {
             continue;
-        } elseif ($value === null) {
+        } elseif ($value === null || $txp && $value === true) {
             $list[] = $name;
             continue;
         } elseif (is_array($value)) {
@@ -6783,4 +6814,37 @@ function check_file_integrity($flags = INTEGRITY_STATUS)
     }
 
     return $return;
+}
+
+/**
+ * Returns the contents of the found files as an array.
+ *
+ */
+
+function get_files_content($dir, $ext)
+{
+    $result = array();
+    foreach (scandir($dir) as $file) {
+        if (preg_match('/^(.+)\.'.$ext.'$/', $file, $match)) {
+            $result[$match[1]] = file_get_contents("$dir/$file");
+        }
+    }
+
+    return $result;
+}
+
+/**
+ * Get Theme prefs
+ * Now Textpatern does not support themes. If the setup folder is deleted, it will return an empty array.
+ */
+
+function get_prefs_theme()
+{
+    $out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true);
+    if (empty($out)) {
+
+        return array();
+    }
+
+    return $out;
 }

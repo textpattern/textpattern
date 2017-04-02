@@ -1,0 +1,10 @@
+name         VARCHAR(255) NOT NULL DEFAULT '',
+page         VARCHAR(255) NOT NULL DEFAULT '',
+css          VARCHAR(255) NOT NULL DEFAULT '',
+description  VARCHAR(255) NOT NULL DEFAULT '',
+in_rss       INT          NOT NULL DEFAULT '1',
+on_frontpage INT          NOT NULL DEFAULT '1',
+searchable   INT          NOT NULL DEFAULT '1',
+title        VARCHAR(255) NOT NULL DEFAULT '',
+
+PRIMARY KEY (name(250))

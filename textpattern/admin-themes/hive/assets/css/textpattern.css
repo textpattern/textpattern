@@ -257,7 +257,7 @@ button {
     border-left: 3px solid #cccccc;
   }
   /**
- * 1. Remove the bottom border in Firefox.
+ * 1. Remove the bottom border in Chrome 57- and Firefox 39-.
  * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
  */
   abbr[title] {
@@ -267,12 +267,6 @@ button {
     text-decoration: underline;
     /* 2 */
     text-decoration: underline dotted;
-  }
-  /**
- * Add the correct font style.
- */
-  dfn {
-    font-style: italic;
   }
   /**
  * Consistent styling for `mark` and `var` tags.
@@ -499,6 +493,16 @@ button {
   a:focus .content-image {
     border-color: #0066ff;
   }
+  /**
+ * Limit vertical height of fullsize images.
+ */
+  .fullsize-image .content-image {
+    max-height: 85vh;
+    object-fit: contain;
+  }
+  /**
+ * Admin-side image preview thumbnails.
+ */
   .img-preview:focus {
     outline: 0;
   }
@@ -1526,8 +1530,7 @@ button {
   button.destroy:hover .ui-icon,
   button.destroy:active .ui-icon,
   button.destroy:focus .ui-icon {
-    -webkit-filter: brightness(0.66);
-            filter: brightness(0.66);
+    filter: brightness(0.66);
   }
   /**
  * Grey-out disabled navlinks (but keep them in button style).
@@ -3210,18 +3213,18 @@ button {
     max-width: 56em;
   }
   /**
- * Tag builder link on Forms panel and Pages panel.
+ * Options for specific textareas.
  */
-  .txp-tagbuilder-dialog {
+  .txp-textarea-options {
     position: relative;
     margin: 0 1px;
     float: right;
     z-index: 2;
   }
   /**
- * Swap alignment of tag builder link in RTL languages.
+ * Swap alignment of textarea options in RTL languages.
  */
-  [dir="rtl"] .txp-tagbuilder-dialog {
+  [dir="rtl"] .txp-textarea-options {
     float: left;
   }
   /**
@@ -3381,6 +3384,8 @@ button {
     font-weight: bold;
   }
   #main_content .author {
+    display: block;
+    margin-top: -1em;
     color: #777777;
   }
   /* Content -> Articles panel - additional layout
@@ -3733,8 +3738,7 @@ button {
  * TODO: Use `mask` in future.
  */
   .ui-state-default .ui-icon {
-    -webkit-filter: brightness(1.6666667);
-            filter: brightness(1.6666667);
+    filter: brightness(1.6666667);
   }
   /**
  * Weighted content icons and interaction state icons.
@@ -3746,8 +3750,7 @@ button {
   .ui-state-hover .ui-icon,
   .ui-state-focus .ui-icon,
   .ui-state-active .ui-icon {
-    -webkit-filter: none;
-            filter: none;
+    filter: none;
   }
   /**
  * 'Succes' state icons.
@@ -5750,10 +5753,6 @@ button {
  * Some classes and HTML elements generally added via JavaScript, more info -
  * https://jqueryui.com/tabs/
  *
- * 1. `position: relative` prevents IE scroll bug (elements with
- *    `position: relative` inside a parent container with `overflow: auto`
- *    appear as "fixed")
- *
  * Example HTML:
  *
  * <div class="ui-tabs>
@@ -5780,20 +5779,17 @@ button {
  * </div>
  */
   .ui-tabs:not(.ui-tabs-vertical) {
-    /* 1 */
-    position: relative;
     border: 0;
   }
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav {
+    height: 34px;
     margin: 0;
     padding: 0;
     background: none;
   }
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
-    position: relative;
-    top: 0;
-    margin-right: 2px;
-    float: left;
+    display: inline-block;
+    height: 33px;
     border-bottom-width: 0;
     list-style: none;
     white-space: nowrap;
@@ -5810,8 +5806,8 @@ button {
     cursor: text;
   }
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
+    display: block;
     padding: 0.5em 1em;
-    float: left;
     color: #333333;
     text-decoration: none;
   }
@@ -5827,17 +5823,6 @@ button {
  */
   .ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor {
     cursor: pointer;
-  }
-  /**
- * Tabs RTL support.
- */
-  [dir="rtl"] .ui-tabs .ui-tabs-nav li {
-    margin-right: 0;
-    margin-left: 2px;
-    float: right;
-  }
-  [dir="rtl"] .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
-    float: right;
   }
   /**
  * Additonal styling for tabs vertical.
@@ -6177,9 +6162,12 @@ button {
   /**
      * Collapse jQuery UI tabs responsively.
      */
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav {
+    height: auto;
+  }
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
-    margin: 0;
-    float: none;
+    display: block;
+    height: auto;
     border-bottom-width: 1px;
     box-shadow: none;
   }
@@ -6187,20 +6175,10 @@ button {
     margin-bottom: 0;
     padding-bottom: 0;
   }
-  [dir="rtl"] .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
-    float: none;
-  }
-  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
-    display: block;
-    float: none;
-  }
-  [dir="rtl"] .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
-    float: none;
-  }
   /**
      * Remove top border from jQuery UI tabs panel.
      */
-  .ui-tabs .ui-tabs-panel {
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-panel {
     border-top-width: 0;
   }
   /**

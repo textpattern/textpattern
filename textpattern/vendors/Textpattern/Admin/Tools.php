@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -63,7 +63,7 @@ class Tools
 
     public static function removeFiles($root, $files = null)
     {
-        if(!is_dir($root) || !is_writable($root)) {
+        if (!is_dir($root) || !is_writable($root)) {
             return false;
         } elseif (!isset($files)) {
             $files = array_diff(scandir($root), array('.', '..'));

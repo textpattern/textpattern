@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <link>
+        <item>
+            <date>NOW()</date>
+            <category>textpattern</category>
+            <url>http://textpattern.com/</url>
+            <linkname>Textpattern Website</linkname>
+            <linksort>10</linksort>
+            <description></description>
+            <author></author>
+        </item>
+        <item>
+            <date>NOW()</date>
+            <category>textpattern</category>
+            <url>https://docs.textpattern.io/</url>
+            <linkname>Textpattern User Documentation</linkname>
+            <linksort>20</linksort>
+            <description></description>
+            <author></author>
+        </item>
+        <item>
+            <date>NOW()</date>
+            <category>textpattern</category>
+            <url>http://textpattern.org/</url>
+            <linkname>Textpattern Resources</linkname>
+            <linksort>30</linksort>
+            <description></description>
+            <author></author>
+        </item>
+        <item>
+            <date>NOW()</date>
+            <category>textpattern</category>
+            <url>http://textpattern.com/@textpattern</url>
+            <linkname>@textpattern</linkname>
+            <linksort>40</linksort>
+            <description></description>
+            <author></author>
+        </item>
+        <item>
+            <date>NOW()</date>
+            <category>textpattern</category>
+            <url>http://textpattern.com/+</url>
+            <linkname>+Textpattern CMS</linkname>
+            <linksort>50</linksort>
+            <description></description>
+            <author></author>
+        </item>
+        <item>
+            <date>NOW()</date>
+            <category>textpattern</category>
+            <url>http://textpattern.com/facebook</url>
+            <linkname>Textpattern Facebook Group</linkname>
+            <linksort>60</linksort>
+            <description></description>
+            <author></author>
+        </item>
+    </link>
+</resources>

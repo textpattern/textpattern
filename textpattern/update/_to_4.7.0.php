@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('TXP_UPDATE')) {
@@ -34,4 +34,12 @@ if (is_writable(txpath.DS.'..')) {
             unlink($file);
         }
     }
+}
+
+// Drop the prefs_id column in txp_prefs
+$cols = getThings("DESCRIBE `".PFX."txp_prefs`");
+if (in_array('prefs_id', $cols)) {
+    safe_drop_index('txp_prefs', 'prefs_idx');
+    safe_alter('txp_prefs', "ADD UNIQUE prefs_idx (name(185), user_name)");
+    safe_alter('txp_prefs', "DROP prefs_id");
 }

@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('TXP_UPDATE')) {
@@ -37,6 +37,5 @@ safe_alter('textpattern', "MODIFY Section VARCHAR(255) NOT NULL DEFAULT ''");
 // Ensure all memory-mappable columns have defaults
 safe_alter('txp_form',    "MODIFY name     VARCHAR(64)  NOT NULL DEFAULT ''");
 safe_alter('txp_page',    "MODIFY name     VARCHAR(128) NOT NULL DEFAULT ''");
-safe_alter('txp_prefs',   "MODIFY prefs_id INT          NOT NULL DEFAULT '1'");
 safe_alter('txp_prefs',   "MODIFY name     VARCHAR(255) NOT NULL DEFAULT ''");
 safe_alter('txp_section', "MODIFY name     VARCHAR(128) NOT NULL DEFAULT ''");

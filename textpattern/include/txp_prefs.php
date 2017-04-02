@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -65,7 +65,7 @@ function prefs_save()
     set_pref('max_custom_fields', $max_custom_fields, 'publish', 2);
 
     $sql = array();
-    $sql[] = "prefs_id = 1 AND event != '' AND type IN (".PREF_CORE.", ".PREF_PLUGIN.", ".PREF_HIDDEN.")";
+    $sql[] = "event != '' AND type IN (".PREF_CORE.", ".PREF_PLUGIN.", ".PREF_HIDDEN.")";
     $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
             SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
         )))";
@@ -172,7 +172,7 @@ function prefs_list($message = '')
     $joined_core = join(',', quote_list($core_events));
 
     $sql = array();
-    $sql[] = 'prefs_id = 1 and event != "" and type in('.PREF_CORE.', '.PREF_PLUGIN.')';
+    $sql[] = 'event != "" AND type IN('.PREF_CORE.', '.PREF_PLUGIN.')';
     $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
             SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
         )))";
@@ -301,7 +301,6 @@ function prefs_list($message = '')
             n.tag_end('div'). // End of .txp-layout-4col-3span.
             sInput('prefs_save').
             eInput('prefs').
-            hInput('prefs_id', '1').
             tInput();
     }
 

@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('txpath')) {
@@ -348,7 +348,7 @@ function printConfig()
         exit;
     }
 
-// TODO: @see http://forum.textpattern.com/viewtopic.php?pid=263205#p263205
+// TODO: @see https://forum.textpattern.io/viewtopic.php?pid=263205#p263205
 //    if ('' === $_SESSION['dhost'] || '' === $_SESSION['duser'] || '' === $_SESSION['ddb']) {
 //        echo graf(
 //                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
@@ -677,8 +677,6 @@ function createTxp()
     }
 
     define('TXP_INSTALL', 1);
-
-    include_once txpath.'/lib/txplib_update.php';
     include txpath.'/setup/txpsql.php';
 
     echo fbCreate();
@@ -858,7 +856,7 @@ function langs()
         'zh-tw' => '中文(繁體)',
     );
 
-    $default = (!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'en-gb');
+    $default = (!empty($_SESSION['lang']) ? $_SESSION['lang'] : TEXTPATTERN_DEFAULT_LANG);
 
     $out = n.'<div class="txp-form-field">'.
         n.'<div class="txp-form-field-label">'.
@@ -884,14 +882,14 @@ function langs()
 
 function setup_load_lang($lang)
 {
-    global $en_gb_strings;
+    global $en_gb_strings, $language;
 
     require_once txpath.'/setup/setup-langs.php';
-    $en_gb_strings = $langs['en-gb'];
-    $lang = (isset($langs[$lang]) && !empty($langs[$lang])) ? $lang : 'en-gb';
-    define('LANG', $lang);
+    $en_gb_strings = $langs[TEXTPATTERN_DEFAULT_LANG];
+    $language = empty($langs[$lang]) ? TEXTPATTERN_DEFAULT_LANG : $lang;
+    define('LANG', $language);
 
-    return $langs[LANG];
+    return $langs[$language];
 }
 
 // -------------------------------------------------------------

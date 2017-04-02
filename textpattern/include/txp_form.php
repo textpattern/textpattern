@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -169,7 +169,7 @@ function form_list($current)
 
         $methods = array(
             'changetype' => array('label' => gTxt('changetype'), 'html' => formTypes('', false, 'changetype')),
-            'delete'     => gTxt('delete'),
+            'delete'     => gTxt('delete')
         );
 
         $out .= multi_edit($methods, 'form', 'form_multi_edit');
@@ -187,6 +187,7 @@ function form_multi_edit()
     $method = ps('edit_method');
     $forms = ps('selected_forms');
     $affected = array();
+    $message = null;
 
     if ($forms && is_array($forms)) {
         if ($method == 'delete') {
@@ -197,10 +198,9 @@ function form_multi_edit()
             }
 
             callback_event('forms_deleted', '', 0, $affected);
+            update_lastmod('form_deleted', $affected);
 
             $message = gTxt('forms_deleted', array('{list}' => join(', ', $affected)));
-
-            form_edit($message);
         }
 
         if ($method == 'changetype') {
@@ -212,13 +212,11 @@ function form_multi_edit()
                 }
             }
 
-            $message = gTxt('forms_updated', array('{list}' => join(', ', $affected)));
-
-            form_edit($message);
+            $message = gTxt('form_updated', array('{list}' => join(', ', $affected)));
         }
-    } else {
-        form_edit();
     }
+
+    form_edit($message);
 }
 
 /**
@@ -735,7 +733,10 @@ function form_partial_template($rs)
         '<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($rs['form']).'</textarea>',
         array(
             'form_code',
-            n.href('<span class="ui-icon ui-extra-icon-code"></span> '.gTxt('tagbuilder'), '#', array('class' => 'txp-tagbuilder-dialog')),
+            n.span(
+                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.gTxt('tagbuilder'), '#', array('class' => 'txp-tagbuilder-dialog')),
+                array('class' => 'txp-textarea-options')
+            )
         ),
         array('', 'instructions_form_code'),
         array('class' => 'txp-form-field template'),

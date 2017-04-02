@@ -1,0 +1,11 @@
+user_id     INT          NOT NULL AUTO_INCREMENT,
+name        VARCHAR(64)  NOT NULL DEFAULT '',
+pass        VARCHAR(128) NOT NULL,
+RealName    VARCHAR(255) NOT NULL DEFAULT '',
+email       VARCHAR(254) NOT NULL DEFAULT '',
+privs       TINYINT      NOT NULL DEFAULT '1',
+last_access DATETIME         NULL DEFAULT NULL,
+nonce       VARCHAR(64)  NOT NULL DEFAULT '',
+
+PRIMARY KEY (user_id),
+UNIQUE name (name)

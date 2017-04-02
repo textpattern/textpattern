@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -18,15 +18,12 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
-
-// Raw CSS is now the only option.
-safe_delete('txp_prefs', "event = 'css' AND name = 'edit_raw_css_by_default'");
 
 $rs = getRows("SELECT name, css FROM `".PFX."txp_css`");
 foreach ($rs as $row) {

@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('TXP_UPDATE')) {
@@ -29,35 +29,7 @@ if (!defined('TXP_UPDATE')) {
 $cols = getThings("DESCRIBE `".PFX."txp_prefs`");
 if (!in_array('user_name', $cols)) {
     safe_alter('txp_prefs', "ADD user_name VARCHAR(64) NOT NULL DEFAULT ''");
-    safe_drop_index('txp_prefs', 'prefs_idx');
-    safe_alter('txp_prefs', "ADD UNIQUE prefs_idx (prefs_id, name, user_name)");
     safe_create_index('txp_prefs', 'user_name', 'user_name');
-}
-
-// Remove a few global prefs in favour of future private ones.
-safe_delete('txp_prefs', "user_name = '' AND name IN ('article_list_pageby', 'author_list_pageby', 'comment_list_pageby', 'file_list_pageby', 'image_list_pageby', 'link_list_pageby', 'log_list_pageby')");
-
-// Use dedicated prefs function for setting custom fields.
-safe_update('txp_prefs', "html = 'custom_set'", "name IN ('custom_1_set', 'custom_2_set', 'custom_3_set', 'custom_4_set', 'custom_5_set', 'custom_6_set', 'custom_7_set', 'custom_8_set', 'custom_9_set', 'custom_10_set') AND html = 'text_input'");
-
-// Send comments prefs.
-safe_update('txp_prefs', "html = 'commentsendmail'", "name = 'comments_sendmail' AND html = 'yesnoradio'");
-
-// Timezone prefs.
-safe_update('txp_prefs', "html = 'is_dst'", "name = 'is_dst' AND html = 'yesnoradio'");
-
-if (!safe_field("name", 'txp_prefs', "name = 'auto_dst'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'auto_dst', val = '0', type = '0', event = 'publish', html = 'yesnoradio', position = '115'");
-}
-
-if (!safe_field("name", 'txp_prefs', "name = 'timezone_key'")) {
-    $tz = (($identifiers = Txp::get('\Textpattern\Date\Timezone')->getOffsetIdentifiers($gmtoffset)) ? $identifiers[0] : '');
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'timezone_key', val = '$tz', type = '2', event = 'publish', html = 'textinput', position = '0'");
-}
-
-// Default event admin pref.
-if (!safe_field("name", 'txp_prefs', "name = 'default_event'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'default_event', val = 'article', type = '1', event = 'admin', html = 'default_event', position = '150'");
 }
 
 // Add columns for thumbnail dimensions.
@@ -76,11 +48,6 @@ $cols = getThings('DESCRIBE `'.PFX.'txp_plugin`');
 
 if (!in_array('flags', $cols)) {
     safe_alter('txp_plugin', "ADD flags SMALLINT UNSIGNED NOT NULL DEFAULT 0");
-}
-
-// Default theme.
-if (!safe_field("name", 'txp_prefs', "name = 'theme_name'")) {
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'theme_name', val = 'classic', type = '1', event = 'admin', html = 'themename', position = '160'");
 }
 
 safe_alter('txp_plugin', "MODIFY code         MEDIUMTEXT NOT NULL");

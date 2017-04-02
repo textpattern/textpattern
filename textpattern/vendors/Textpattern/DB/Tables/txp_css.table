@@ -1,0 +1,4 @@
+name VARCHAR(255) NOT NULL,
+css  MEDIUMTEXT   NOT NULL,
+
+UNIQUE name (name(250))

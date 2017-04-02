@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -508,18 +508,12 @@ function safe_upsert($table, $set, $where, $debug = false)
 {
     global $DB;
 
-    if (is_array($where)) {
-        $whereset = array();
-        $where = doSlash($where);
-
-        foreach ($where as $key => $val) {
-            $whereset[] = "$key = '$val'";
-        }
-
-        $where = implode(' AND ', $whereset);
-    } else {
-        $whereset = array($where);
+    if (is_array($set)) {
+        $set = join_qs(quote_list($set), ',');
     }
+
+    $whereset = is_array($where) ? join_qs(quote_list($where), null) : array($where);
+    $where = implode(' AND ', $whereset);
 
     // FIXME: lock the table so this is atomic?
     $r = safe_update($table, $set, $where, $debug);
@@ -1359,6 +1353,8 @@ function getTreePath($target, $type, $tbl = 'txp_category')
             'id' => $id,
             'name' => $name,
             'title' => $title,
+            'description' => $description,
+            'type' => $type,
             'level' => count($right),
             'children' => ($rgt - $lft - 1) / 2,
         );

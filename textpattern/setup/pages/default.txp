@@ -50,20 +50,20 @@
 
 <txp:if_section name="">
     <txp:if_search>
-        <body class="search-page" itemscope itemtype="http://schema.org/SearchResultsPage">
+        <body class="search-page" itemscope itemtype="https://schema.org/SearchResultsPage">
     <txp:else />
         <txp:if_category>
-            <body class="listing-page" itemscope itemtype="http://schema.org/CollectionPage">
+            <body class="listing-page" itemscope itemtype="https://schema.org/CollectionPage">
         <txp:else />
             <txp:if_author>
-                <body class="listing-page" itemscope itemtype="http://schema.org/CollectionPage">
+                <body class="listing-page" itemscope itemtype="https://schema.org/CollectionPage">
             <txp:else />
-                <body class="front-page" itemscope itemtype="http://schema.org/WebPage">
+                <body class="front-page" itemscope itemtype="https://schema.org/WebPage">
             </txp:if_author>
         </txp:if_category>
     </txp:if_search>
 <txp:else />
-    <body class="<txp:section />-page" itemscope itemtype="http://schema.org/WebPage">
+    <body class="<txp:section />-page" itemscope itemtype="https://schema.org/WebPage">
 </txp:if_section>
 
     <!-- header -->
@@ -79,7 +79,7 @@
     </header>
 
     <!-- navigation -->
-    <nav class="site-navigation" aria-label="<txp:text item="navigation" />" itemscope itemtype="http://schema.org/SiteNavigationElement">
+    <nav class="site-navigation" aria-label="<txp:text item="navigation" />" itemscope itemtype="https://schema.org/SiteNavigationElement">
         <div>
             <txp:section_list default_title='<txp:text item="home" />' include_default="1" wraptag="ul" break="">
                 <li<txp:if_section name='<txp:section />'> class="active"</txp:if_section>>
@@ -98,7 +98,7 @@
         <div class="container">
 
             <!-- Main content -->
-            <main aria-label="<txp:text item="main_content" />" itemscope itemtype="http://schema.org/Blog">
+            <main aria-label="<txp:text item="main_content" />" itemscope itemtype="https://schema.org/Blog">
 
                 <!-- is this the search result page? also omits the pagination links below (uses pagination format within search_results.article.txp instead) -->
                 <txp:if_search>
@@ -192,7 +192,7 @@
         <p>
             <small>
                 <txp:text item="published_with" />
-                <a rel="external nofollow" href="http://textpattern.com" title="<txp:text item="go_txp_com" />">Textpattern CMS</a>
+                <a rel="external nofollow" href="https://textpattern.io/" title="<txp:text item="go_txp_com" />">Textpattern CMS</a>
             </small>
         </p>
     </footer>

@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.io/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -96,6 +96,7 @@ function rss()
 
     // Feed items.
     $articles = array();
+    $dates = array();
     $section = doSlash($section);
     $category = doSlash($category);
     $limit = ($limit) ? $limit : $rss_how_many;
@@ -164,16 +165,17 @@ function rss()
 
                 $thisauthor = get_author_name($AuthorID);
 
-                $item = tag($Title, 'title').n.
-                    (trim($summary) ? tag(n.escape_cdata($summary).n, 'description').n : '').
-                    (trim($content) ? tag(n.escape_cdata($content).n, 'content:encoded').n : '').
-                    tag($permlink, 'link').n.
-                    tag(safe_strftime('rfc822', $a['posted']), 'pubDate').n.
-                    tag(htmlspecialchars($thisauthor), 'dc:creator').n.
-                    tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid, 'guid', ' isPermaLink="false"').n.
+                $item =
+                    n.t.t.tag($Title, 'title').
+                    (trim($summary) ? n.t.t.tag(escape_cdata($summary), 'description') : '').
+                    (trim($content) ? n.t.t.tag(escape_cdata($content).n, 'content:encoded') : '').
+                    n.t.t.tag($permlink, 'link').
+                    n.t.t.tag(safe_strftime('rfc822', $a['posted']), 'pubDate').
+                    n.t.t.tag(htmlspecialchars($thisauthor), 'dc:creator').
+                    n.t.t.tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid, 'guid', ' isPermaLink="false"').n.
                     $cb;
 
-                $articles[$ID] = tag($item, 'item');
+                $articles[$ID] = tag($item.t, 'item');
 
                 $dates[$ID] = $uLastMod;
             }
@@ -181,19 +183,19 @@ function rss()
     } elseif ($area == 'link') {
         $cfilter = ($category) ? "category IN ('".join("','", $category)."')" : '1';
 
-        $rs = safe_rows_start("*", 'txp_link', "$cfilter ORDER BY date DESC, id DESC LIMIT $limit");
+        $rs = safe_rows_start("*, UNIX_TIMESTAMP(date) AS uDate", 'txp_link', "$cfilter ORDER BY date DESC, id DESC LIMIT $limit");
 
         if ($rs) {
             while ($a = nextRow($rs)) {
                 extract($a);
                 $item =
-                    tag(doSpecial($linkname), 'title').n.
-                    tag(doSpecial($description), 'description').n.
-                    tag(doSpecial($url), 'link').n.
-                    tag(safe_strftime('rfc822', strtotime($date)), 'pubDate');
-                $articles[$id] = tag($item, 'item');
+                    n.t.t.tag(doSpecial($linkname), 'title').
+                    (trim($description) ? n.t.t.tag(doSpecial($description), 'description') : '').
+                    n.t.t.tag(doSpecial($url), 'link').
+                    n.t.t.tag(safe_strftime('rfc822', $uDate), 'pubDate').n;
+                $articles[$id] = tag($item.t, 'item');
 
-                $dates[$id] = $uLastMod;
+                $dates[$id] = $uDate;
             }
         }
     }
@@ -270,6 +272,6 @@ function rss()
     return
         '<?xml version="1.0" encoding="utf-8"?>'.n.
         '<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">'.n.
-        tag(join(n, $out), 'channel').n.
+        tag(n.t.join(n.t, $out).n, 'channel').n.
         '</rss>';
 }
