@@ -4810,11 +4810,8 @@ function txp_eval($atts, $thing = null)
     global $txp_parsed, $txp_else;
     static $xpath = null, $functions = null;
 
-    $own = array(
-        'query' => null,
-        'test'	=> !isset($atts['query'])
-    );
-    extract(lAtts($own, array_intersect_key($atts, $own)));
+    $query = isset($atts['query']) ? $atts['query'] : null;
+    $test = isset($atts['test']) ? $atts['test'] : $query === null;
 
     if (!isset($query)) {
         $x = true;
