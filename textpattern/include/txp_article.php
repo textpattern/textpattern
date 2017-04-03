@@ -1193,31 +1193,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo wrapRegion('txp-custom-field-group', $partials['custom_fields']['html'], 'txp-custom-field-group-content', 'custom', 'article_custom_field');
 
         // 'Advanced options' collapsible section.
+        // Unused by core, but leaving the placeholder for legacy plugin support.
+        $html_advanced = pluggable_ui('article_ui', 'markup', '', $rs);
 
-        // 'Article markup'/'Excerpt markup' selection.
-        if (has_privs('article.set_markup')) {
-            $html_markup =
-                inputLabel(
-                    'markup-body',
-                    pref_text('textile_body', $textile_body, 'markup-body'),
-                    'article_markup',
-                    array('', 'instructions_textile_body'),
-                    array('class' => 'txp-form-field markup markup-body')
-                ).
-                inputLabel(
-                    'markup-excerpt',
-                    pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt'),
-                    'excerpt_markup',
-                    array('', 'instructions_textile_excerpt'),
-                    array('class' => 'txp-form-field markup markup-excerpt')
-                );
-        } else {
-            $html_markup = '';
+        if ($html_advanced) {
+            echo wrapRegion('txp-advanced-group', $html_advanced, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
         }
-
-        $html_markup = pluggable_ui('article_ui', 'markup', $html_markup, $rs);
-
-        echo wrapRegion('txp-advanced-group', $html_markup, 'txp-advanced-group-content', 'advanced_options', 'article_advanced');
 
         // Custom menu entries.
         echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
@@ -1854,10 +1835,24 @@ function article_partial_article_view($rs)
 
 function article_partial_body($rs)
 {
+    $textarea_options = 'body';
+
+    // Article markup selection.
+    if (has_privs('article.set_markup')) {
+        // Markup help.
+//        $help = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($rs['textile_body']);
+        $html_markup = pref_text('textile_body', $rs['textile_body'], 'markup-body');
+        $textarea_options = array($textarea_options,
+            n.span(
+                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.gTxt('article_markup'), '#', array('class' => 'txp-textfilter-dialog')).' '.$html_markup.popHelp('markup_body'),
+                array('class' => 'txp-textarea-options')
+            ));
+    }
+
     $out = inputLabel(
         'body',
         '<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'">'.txpspecialchars($rs['Body']).'</textarea>',
-        'body',
+        $textarea_options,
         array('body', 'instructions_body'),
         array('class' => 'txp-form-field txp-form-field-textarea body')
     );
@@ -1877,10 +1872,24 @@ function article_partial_body($rs)
 
 function article_partial_excerpt($rs)
 {
+    $textarea_options = 'excerpt';
+
+    // Article markup selection.
+    if (has_privs('article.set_markup')) {
+        // Markup help.
+//        $help = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($rs['textile_excerpt']);
+        $html_markup = pref_text('textile_excerpt', $rs['textile_excerpt'], 'markup-excerpt');
+        $textarea_options = array($textarea_options,
+            n.span(
+                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.gTxt('excerpt_markup'), '#', array('class' => 'txp-textfilter-dialog')).' '.$html_markup.popHelp('markup_excerpt'),
+                array('class' => 'txp-textarea-options')
+            ));
+    }
+
     $out = inputLabel(
         'excerpt',
         '<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>',
-        'excerpt',
+        $textarea_options,
         array('excerpt', 'instructions_excerpt'),
         array('class' => 'txp-form-field txp-form-field-textarea excerpt')
     );
@@ -2002,8 +2011,7 @@ function article_partial_section($rs)
 
 function article_partial_categories($rs)
 {
-    $out = n.'<div id="categories_group">'.
-        inputLabel(
+    $out = inputLabel(
             'category-1',
             category_popup('Category1', $rs['Category1'], 'category-1').
             n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
@@ -2017,8 +2025,7 @@ function article_partial_categories($rs)
             'category2',
             array('', 'instructions_category2'),
             array('class' => 'txp-form-field category category-2')
-        ).
-        n.'</div>';
+        );
 
     return pluggable_ui('article_ui', 'categories', $out, $rs);
 }
