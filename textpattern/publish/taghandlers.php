@@ -1037,6 +1037,7 @@ function recent_comments($atts, $thing = null)
 function related_articles($atts, $thing = null)
 {
     global $thisarticle, $prefs;
+    static $fields = null;
 
     assert_article();
 
@@ -1055,7 +1056,12 @@ function related_articles($atts, $thing = null)
         'wraptag'  => '',
     ), $atts);
 
-    $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category1', 'category2', 'author', 'keywords'), getCustomFields()));
+    if (!isset($fields)) {
+        $fields = array_merge(array('category1', 'category2', 'author', 'keywords'), getCustomFields());
+    }
+
+    $match = do_list_unique(strtolower($atts['match']));
+    $matches = array_intersect($match, $fields);
     $categories = $cats = array();
 
     foreach ($match as $cf) {
@@ -1072,6 +1078,8 @@ function related_articles($atts, $thing = null)
                 $atts['author'] = $thisarticle['authorid'];
                 break;
             default:
+                $cf = strtok($cf, '[');
+
                 if (empty($thisarticle[$cf])) {
                     return;
                 }
@@ -1087,7 +1095,7 @@ function related_articles($atts, $thing = null)
         return;
     }
 
-    $atts['match'] = implode(',', $categories);
+    $atts['match'] = implode(',', array_merge(array_diff($match, $fields), $categories));
     $atts['exclude'] = $thisarticle['thisid'];
 
     if ($atts['form'] === '' && $thing === null) {
@@ -4132,6 +4140,7 @@ function custom_field($atts)
 
     extract(lAtts(array(
         'name'    => get_pref('custom_1_set'),
+        'item'  => null,
         'escape'  => 'html',
         'default' => '',
     ), $atts));
@@ -4154,6 +4163,12 @@ function custom_field($atts)
     $is_article_body = 1;
     $out = ($escape == 'html' ? txpspecialchars($out) : parse($out));
     $is_article_body = $was_article_body;
+
+    if (isset($item)) {
+        $item = intval($item) - 1;
+        $out = do_list($out);
+        $out = isset($out[$item]) ? $out[$item] : false;
+    }
 
     return $out;
 }
