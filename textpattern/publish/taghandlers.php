@@ -494,6 +494,7 @@ function link_feed_link($atts)
         'format'   => 'a',
         'label'    => '',
         'title'    => gTxt('rss_feed_title'),
+        'wraptag'  => '',
         'class'    => __FUNCTION__
     ), $atts));
 
@@ -520,7 +521,7 @@ function link_feed_link($atts)
         'title' => $title,
     ));
 
-    return $out;
+    return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 }
 
 // -------------------------------------------------------------
@@ -541,7 +542,8 @@ function linklist($atts, $thing = null)
         'pageby'      => '',
         'limit'       => 0,
         'offset'      => 0,
-        'sort'        => 'linksort asc'
+        'sort'        => 'linksort asc',
+        'wraptag'     => '',
     ), $atts));
 
     $where = array();
@@ -941,6 +943,7 @@ function recent_articles($atts)
         'offset'   => 0,
         'section'  => '',
         'sort'     => 'Posted DESC',
+        'wraptag'  => '',
         'no_widow' => @$prefs['title_no_widow'],
     ), $atts);
 
@@ -963,7 +966,8 @@ function recent_comments($atts, $thing = null)
         'form'     => '',
         'limit'    => 10,
         'offset'   => 0,
-        'sort'     => 'posted DESC'
+        'sort'     => 'posted DESC',
+        'wraptag'  => '',
     ), $atts));
 
     $sort = preg_replace('/\bposted\b/', 'd.posted', $sort);
@@ -1013,7 +1017,7 @@ function recent_comments($atts, $thing = null)
             unset($GLOBALS['thiscomment']);
             $thisarticle = $old_article;
 
-            return doWrap($out, '', $break);
+            return doWrap($out, $wraptag, $break, $class);
         }
     }
 
@@ -1037,7 +1041,8 @@ function related_articles($atts, $thing = null)
         'match'    => 'Category1,Category2',
         'no_widow' => @$prefs['title_no_widow'],
         'section'  => '',
-        'sort'     => 'Posted DESC'
+        'sort'     => 'Posted DESC',
+        'wraptag'  => '',
     ), $atts);
 
     $match = array_intersect(do_list_unique(strtolower($atts['match'])), array_merge(array('category1', 'category2', 'author', 'keywords'), getCustomFields()));
@@ -1299,9 +1304,11 @@ function section_list($atts, $thing = null)
         'default_title'   => $sitename,
         'exclude'         => '',
         'form'            => '',
+        'html_id'         => '',
         'include_default' => '',
         'sections'        => '',
         'sort'            => '',
+        'wraptag'         => '',
         'offset'          => '',
         'limit'           => '',
     ), $atts));
@@ -1394,7 +1401,7 @@ function section_list($atts, $thing = null)
         $thissection = isset($old_section) ? $old_section : null;
 
         if ($out) {
-            return doWrap($out, '', $break);
+            return doWrap($out, $wraptag, $break, $class, '', '', '', $html_id);
         }
     }
 
@@ -1826,7 +1833,7 @@ function posted($atts)
     if ($format) {
         $out = safe_strftime($format, $thisarticle['posted'], $gmt, $lang);
     } else {
-        if ($id or $c or $pg) {
+        if ($id || $c || $pg) {
             $out = safe_strftime($archive_dateformat, $thisarticle['posted'], $gmt, $lang);
         } else {
             $out = safe_strftime($dateformat, $thisarticle['posted'], $gmt, $lang);
@@ -1853,7 +1860,7 @@ function modified($atts)
     if ($format) {
         $out = safe_strftime($format, $thisarticle['modified'], $gmt, $lang);
     } else {
-        if ($id or $c or $pg) {
+        if ($id || $c || $pg) {
             $out = safe_strftime($archive_dateformat, $thisarticle['modified'], $gmt, $lang);
         } else {
             $out = safe_strftime($dateformat, $thisarticle['modified'], $gmt, $lang);
@@ -1884,7 +1891,7 @@ function expires($atts)
     if ($format) {
         $out = safe_strftime($format, $thisarticle['expires'], $gmt, $lang);
     } else {
-        if ($id or $c or $pg) {
+        if ($id || $c || $pg) {
             $out = safe_strftime($archive_dateformat, $thisarticle['expires'], $gmt, $lang);
         } else {
             $out = safe_strftime($dateformat, $thisarticle['expires'], $gmt, $lang);
@@ -1949,11 +1956,12 @@ function comments_invite($atts)
         'showcount'  => true,
         'textonly'   => false,
         'showalways' => false,  // FIXME in crockery. This is only for BC.
+        'wraptag'    => '',
     ), $atts));
 
     $invite_return = '';
 
-    if (($annotate or $comments_count) && ($showalways or $is_article_list)) {
+    if (($annotate || $comments_count) && ($showalways || $is_article_list)) {
         $comments_invite = txpspecialchars($comments_invite);
         $ccount = ($comments_count && $showcount) ?  ' ['.$comments_count.']' : '';
 
@@ -1965,6 +1973,10 @@ function comments_invite($atts)
             } else {
                 $invite_return = "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"".(($class) ? ' class="'.txpspecialchars($class).'"' : '').'>'.$comments_invite.'</a> '.$ccount;
             }
+        }
+
+        if ($wraptag) {
+            $invite_return = doTag($invite_return, $wraptag, $class);
         }
     }
 
@@ -2021,6 +2033,7 @@ function comments_form($atts, $thing = null)
         'msgrows'       => '5',
         'msgstyle'      => '',
         'show_preview'  => empty($has_comments_preview),
+        'wraptag'       => '',
         'previewlabel'  => gTxt('preview'),
         'submitlabel'   => gTxt('submit'),
         'rememberlabel' => gTxt('remember'),
@@ -2085,7 +2098,7 @@ function comments_form($atts, $thing = null)
             n.'</form>';
     }
 
-    return $out;
+    return (!$wraptag ? $out : doTag($out, $wraptag, $class));
 }
 
 // -------------------------------------------------------------
@@ -2374,6 +2387,7 @@ function comments_preview($atts, $thing = null)
 
     extract(lAtts(array(
         'form'    => 'comments',
+        'wraptag' => '',
         'class'   => __FUNCTION__,
     ), $atts));
 
@@ -2398,12 +2412,13 @@ function comments_preview($atts, $thing = null)
     $GLOBALS['thiscomment'] = $preview;
     $comments = ($thing === null ? parse_form($form) : parse($thing)).n;
     unset($GLOBALS['thiscomment']);
+    $out = doTag($comments, $wraptag, $class);
 
     // Set a flag to tell the comments_form tag that it doesn't have to show
     // a preview.
     $has_comments_preview = true;
 
-    return $comments;
+    return $out;
 }
 
 // -------------------------------------------------------------
@@ -2932,14 +2947,16 @@ function keywords($atts)
     assert_article();
 
     extract(lAtts(array(
-        'break'     => ','
+        'class'   => '',
+        'break'     => ',',
+        'wraptag' => ''
     ), $atts));
 
     $out = do_list_unique(txpspecialchars($thisarticle['keywords']));
 
 //    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
 
-    return doWrap($out, '', $break);
+    return doWrap($out, $wraptag, $break, $class);
 }
 
 // -------------------------------------------------------------
@@ -3169,6 +3186,7 @@ function image_index($atts)
 
     lAtts(array(
         'break'    => br,
+        'wraptag'  => '',
         'class'    => __FUNCTION__,
         'category' => $c,
         'limit'    => 0,
@@ -3219,12 +3237,10 @@ function images($atts, $thing = null)
         'extension'   => '',
         'thumbnail'   => '',
         'auto_detect' => 'article, category, author',
-        'label'       => '',
         'break'       => br,
         'wraptag'     => '',
         'class'       => __FUNCTION__,
         'html_id'     => '',
-        'labeltag'    => '',
         'form'        => '',
         'pageby'      => '',
         'limit'       => 0,
@@ -3400,7 +3416,7 @@ function images($atts, $thing = null)
         $thisimage = (isset($old_image) ? $old_image : null);
 
         if ($out) {
-            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class, '', '', '', $html_id);
+            return doWrap($out, $wraptag, $break, $class, '', '', '', $html_id);
         }
     }
 
@@ -4247,7 +4263,7 @@ function if_different($atts, $thing)
     $key = md5($thing);
     $out = parse($thing, 1);
 
-    if (empty($last[$key]) or $out != $last[$key]) {
+    if (empty($last[$key]) || $out != $last[$key]) {
         return $last[$key] = $out;
     } else {
         return parse($thing, 0);
@@ -4312,6 +4328,7 @@ function file_download_list($atts, $thing = null)
         'limit'       => 10,
         'offset'      => 0,
         'sort'        => 'filename asc',
+        'wraptag'     => '',
         'status'      => STATUS_LIVE,
     ), $atts));
 
@@ -4439,7 +4456,7 @@ function file_download_list($atts, $thing = null)
         }
 
         if ($out) {
-            return doWrap($out, '', $break);
+            return doWrap($out, $wraptag, $break, $class);
         }
     }
 
@@ -4898,11 +4915,7 @@ function txp_escape($atts, $thing = '')
 
     $thing = (string)$thing;
 
-    if (empty($atts)) {
-        return $thing;
-    }
-
-    foreach (do_list($atts) as $attr) {
+    foreach (do_list($atts['escape']) as $attr) {
         switch (trim($attr)) {
             case 'html':
                 $thing = txpspecialchars($thing);
@@ -4935,16 +4948,12 @@ function txp_escape($atts, $thing = '')
 
 function txp_wraptag($atts, $thing = '')
 {
-    global $txp_atts;
-
-    return $atts && trim($thing) !== '' ? doTag($thing, $atts, isset($txp_atts['class']) ? $txp_atts['class'] : '', isset($txp_atts['atts']) ? $txp_atts['atts'] : '', '', isset($txp_atts['html_id']) ? $txp_atts['html_id'] : '') : $thing;
+    return trim($thing) !== '' ? doTag($thing, $atts['wraptag'], isset($atts['class']) ? $atts['class'] : '', isset($atts['atts']) ? $atts['atts'] : '', '', isset($atts['html_id']) ? $atts['html_id'] : '') : $thing;
 }
 
 // -------------------------------------------------------------
 
 function txp_label($atts, $thing = '')
 {
-    global $txp_atts;
-
-    return $atts && trim($thing) !== '' ? doLabel($atts, isset($txp_atts['labeltag']) ? $txp_atts['labeltag'] : '').n.$thing : $thing;
+    return trim($thing) !== '' ? doLabel($atts['label'], isset($atts['labeltag']) ? $atts['labeltag'] : '').n.$thing : $thing;
 }

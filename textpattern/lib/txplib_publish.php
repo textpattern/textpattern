@@ -370,7 +370,7 @@ function parse($thing, $condition = null)
 {
     global $production_status, $trace, $txp_parsed, $txp_else, $txp_atts;
 
-    // Replace null with a pref to enable <abc::tags />.
+    // Replace null with a pref to enable <short::tags />.
     static $pattern, $short_tags = null;
 
     if (!isset($short_tags)) {
@@ -535,7 +535,7 @@ function maybe_tag($tag)
 function processTags($tag, $atts = '', $thing = null)
 {
     global $production_status, $txp_current_tag, $txp_current_form, $txp_atts, $trace;
-    static $registry = null, $attributes = null, $globals = null, $level = 0, $txp_parser = array('tag' => '', 'atts' => '', 'thing' => null);
+    static $registry = null, $global_atts = null, $level = 0, $txp_parser = array('tag' => '', 'atts' => '', 'thing' => null);
 
     if (empty($tag)) {
         return;
@@ -550,22 +550,18 @@ function processTags($tag, $atts = '', $thing = null)
 
     if ($registry === null) {
         $registry = Txp::get('\Textpattern\Tag\Registry');
-        $globals = $registry->getRegistered(true);
-        $attributes = array_keys(array_filter($globals));
+        $global_atts = array_keys(array_filter($registry->getRegistered(true)));
     }
 
     $old_parser = $txp_parser;
     $old_atts = $txp_atts;
 
     if ($atts) {
-        //$txp_atts is set by splat();
         $split = splat($atts);
     } else {
         $txp_atts = null;
         $split = array();
     }
-
-    $out = '';
 
     if ($tag !== 'evaluate' || !isset($split['this'])) {
         $txp_parser = array('tag' => $tag, 'atts' => $atts, 'thing' => $thing);
@@ -576,6 +572,8 @@ function processTags($tag, $atts = '', $thing = null)
         unset($split['this'], $split['query'], $split['test']);
         $out = $registry->process($tag, $atts ? $split + splat($atts) : $split, $thing);
         $level--;
+    } else {
+        $out = '';
     }
 
     if ($out === false) {
@@ -590,12 +588,13 @@ function processTags($tag, $atts = '', $thing = null)
 
     if ($thing === null && !empty($txp_atts['not'])) {
         $out = $out ? '' : '1';
+        unset($txp_atts['not']);
     }
 
     if ($txp_atts && empty($txp_atts[0]) && (string)$out > '') {
-        foreach ($attributes as $attr) {
-            if (isset($txp_atts[$attr])) {
-                $out = $registry->processAtt($attr, $txp_atts[$attr], $out);
+        foreach ($global_atts as $attr) {
+            if (!empty($txp_atts[$attr])) {
+                $out = $registry->processAtt($attr, $txp_atts, $out);
             }
         }
     }

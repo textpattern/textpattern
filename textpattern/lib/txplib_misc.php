@@ -2159,11 +2159,10 @@ function pluggable_ui($event, $element, $default = '')
 function lAtts($pairs, $atts, $warn = true)
 {
     global $production_status, $txp_atts;
-    static $globals = null, $args = null;
+    static $globals = null;
 
-    if (!isset($globals)) {
+    if ($globals === null) {
         $globals = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
-        $args = array_diff_key($globals, array_filter($globals));
     }
 
     foreach ($atts as $name => $value) {
@@ -2178,11 +2177,7 @@ function lAtts($pairs, $atts, $warn = true)
         }
     }
 
-    if (!empty($txp_atts) && array_diff_key($txp_atts, $args)) {
-        $txp_atts += array_intersect_key($pairs, $args);
-    }
-
-    return ($pairs) ? $pairs : false;
+    return $pairs ? $pairs : false;
 }
 
 /**
@@ -2580,30 +2575,33 @@ function splat($text)
             }
         }
 
-        $global_atts[$sha] = array_intersect_key($stack[$sha], $globals);
+        $global_atts[$sha] = array_intersect_key($stack[$sha], $globals) or $global_atts[$sha] = null;
+    }
+
+    $txp_atts = $global_atts[$sha];
+
+    if (empty($parse[$sha])) {
+        return $stack[$sha];
     }
 
     $atts = $stack[$sha];
-    $txp_atts = $global_atts[$sha];
 
-    if (!empty($parse[$sha])) {
-        if ($production_status !== 'live') {
-            foreach ($parse[$sha] as $p) {
-                $trace->start("[attribute '".$p."']");
-                $atts[$p] = parse($atts[$p]);
-                $trace->stop('[/attribute]');
+    if ($production_status !== 'live') {
+        foreach ($parse[$sha] as $p) {
+            $trace->start("[attribute '".$p."']");
+            $atts[$p] = parse($atts[$p]);
+            $trace->stop('[/attribute]');
 
-                if (isset($global_atts[$sha][$p])) {
-                    $txp_atts[$p] = $atts[$p];
-                }
+            if (isset($global_atts[$sha][$p])) {
+                $txp_atts[$p] = $atts[$p];
             }
-        } else {
-            foreach ($parse[$sha] as $p) {
-                $atts[$p] = parse($atts[$p]);
+        }
+    } else {
+        foreach ($parse[$sha] as $p) {
+            $atts[$p] = parse($atts[$p]);
 
-                if (isset($global_atts[$sha][$p])) {
-                    $txp_atts[$p] = $atts[$p];
-                }
+            if (isset($global_atts[$sha][$p])) {
+                $txp_atts[$p] = $atts[$p];
             }
         }
     }
