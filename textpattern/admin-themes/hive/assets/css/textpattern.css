@@ -5753,10 +5753,6 @@ button {
  * Some classes and HTML elements generally added via JavaScript, more info -
  * https://jqueryui.com/tabs/
  *
- * 1. `position: relative` prevents IE scroll bug (elements with
- *    `position: relative` inside a parent container with `overflow: auto`
- *    appear as "fixed")
- *
  * Example HTML:
  *
  * <div class="ui-tabs>
@@ -5783,20 +5779,17 @@ button {
  * </div>
  */
   .ui-tabs:not(.ui-tabs-vertical) {
-    /* 1 */
-    position: relative;
     border: 0;
   }
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav {
+    height: 34px;
     margin: 0;
     padding: 0;
     background: none;
   }
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
-    position: relative;
-    top: 0;
-    margin-right: 2px;
-    float: left;
+    display: inline-block;
+    height: 33px;
     border-bottom-width: 0;
     list-style: none;
     white-space: nowrap;
@@ -5813,8 +5806,8 @@ button {
     cursor: text;
   }
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
+    display: block;
     padding: 0.5em 1em;
-    float: left;
     color: #333333;
     text-decoration: none;
   }
@@ -5830,17 +5823,6 @@ button {
  */
   .ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor {
     cursor: pointer;
-  }
-  /**
- * Tabs RTL support.
- */
-  [dir="rtl"] .ui-tabs .ui-tabs-nav li {
-    margin-right: 0;
-    margin-left: 2px;
-    float: right;
-  }
-  [dir="rtl"] .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
-    float: right;
   }
   /**
  * Additonal styling for tabs vertical.
@@ -6180,9 +6162,12 @@ button {
   /**
      * Collapse jQuery UI tabs responsively.
      */
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav {
+    height: auto;
+  }
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
-    margin: 0;
-    float: none;
+    display: block;
+    height: auto;
     border-bottom-width: 1px;
     box-shadow: none;
   }
@@ -6190,20 +6175,10 @@ button {
     margin-bottom: 0;
     padding-bottom: 0;
   }
-  [dir="rtl"] .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li {
-    float: none;
-  }
-  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
-    display: block;
-    float: none;
-  }
-  [dir="rtl"] .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav .ui-tabs-anchor {
-    float: none;
-  }
   /**
      * Remove top border from jQuery UI tabs panel.
      */
-  .ui-tabs .ui-tabs-panel {
+  .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-panel {
     border-top-width: 0;
   }
   /**
