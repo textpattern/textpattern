@@ -2158,17 +2158,26 @@ function pluggable_ui($event, $element, $default = '')
 
 function lAtts($pairs, $atts, $warn = true)
 {
-    global $production_status;
+    global $production_status, $txp_atts;
+    static $globals = null;
+
+    if ($globals === null) {
+        $globals = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
+    }
 
     foreach ($atts as $name => $value) {
         if (array_key_exists($name, $pairs)) {
+            if ($pairs[$name] !== null) {
+                unset($txp_atts[$name]);
+            }
+
             $pairs[$name] = $value;
-        } elseif ($warn and $production_status != 'live') {
+        } elseif ($warn && $production_status !== 'live' && !array_key_exists($name, $globals)) {
             trigger_error(gTxt('unknown_attribute', array('{att}' => $name)));
         }
     }
 
-    return ($pairs) ? $pairs : false;
+    return $pairs ? $pairs : false;
 }
 
 /**
@@ -2524,11 +2533,11 @@ function updateSitePath($here)
 
 function splat($text)
 {
-    static $stack, $parse;
-    global $production_status, $trace;
+    static $stack = array(), $parse = array(), $global_atts = array(), $globals = null;
+    global $production_status, $trace, $txp_atts;
 
-    if (strlen($text) < 3) {
-        return array();
+    if ($globals === null) {
+        $globals = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
     }
 
     $sha = sha1($text);
@@ -2539,6 +2548,8 @@ function splat($text)
 
         if (preg_match_all('@(\w+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
             foreach ($match as $m) {
+                $name = strtolower($m[1]);
+
                 switch (count($m)) {
                     case 2:
                         $val = true;
@@ -2550,7 +2561,7 @@ function splat($text)
                         $val = str_replace("''", "'", $m[3]);
 
                         if (strpos($m[3], ':') !== false) {
-                            $parse[$sha][] = strtolower($m[1]);
+                            $parse[$sha][] = $name;
                         }
 
                         break;
@@ -2560,30 +2571,42 @@ function splat($text)
                         break;
                 }
 
-                $stack[$sha][strtolower($m[1])] = $val;
+                $stack[$sha][$name] = $val;
             }
         }
+
+        $global_atts[$sha] = array_intersect_key($stack[$sha], $globals) or $global_atts[$sha] = null;
     }
+
+    $txp_atts = $global_atts[$sha];
 
     if (empty($parse[$sha])) {
         return $stack[$sha];
-    } else {
-        $atts = $stack[$sha];
+    }
 
-        if ($production_status !== 'live') {
-            foreach ($parse[$sha] as $p) {
-                $trace->start("[attribute '".$p."']");
-                $atts[$p] = parse($atts[$p]);
-                $trace->stop('[/attribute]');
-            }
-        } else {
-            foreach ($parse[$sha] as $p) {
-                $atts[$p] = parse($atts[$p]);
+    $atts = $stack[$sha];
+
+    if ($production_status !== 'live') {
+        foreach ($parse[$sha] as $p) {
+            $trace->start("[attribute '".$p."']");
+            $atts[$p] = parse($atts[$p]);
+            $trace->stop('[/attribute]');
+
+            if (isset($global_atts[$sha][$p])) {
+                $txp_atts[$p] = $atts[$p];
             }
         }
+    } else {
+        foreach ($parse[$sha] as $p) {
+            $atts[$p] = parse($atts[$p]);
 
-        return $atts;
+            if (isset($global_atts[$sha][$p])) {
+                $txp_atts[$p] = $atts[$p];
+            }
+        }
     }
+
+    return $atts;
 }
 
 /**
@@ -4207,7 +4230,7 @@ function generate_user_token($ref, $type, $expiryTimestamp, $pass, $nonce)
  * @param   bool    $condition TRUE to return if statement, FALSE to else
  * @return  string             Either if or else statement
  * @deprecated in 4.6.0
- * @see     parse_else
+ * @see     parse
  * @package TagParser
  * @example
  * echo parse(EvalElse('true &lt;txp:else /&gt; false', 1 === 1));
@@ -4215,7 +4238,16 @@ function generate_user_token($ref, $type, $expiryTimestamp, $pass, $nonce)
 
 function EvalElse($thing, $condition)
 {
-    global $txp_parsed, $txp_else;
+    global $txp_parsed, $txp_else, $txp_atts;
+
+    if (!empty($txp_atts['not'])) {
+        $condition = empty($condition);
+        unset($txp_atts['not']);
+    }
+
+    if (empty($condition)) {
+        $txp_atts[0] = true;
+    }
 
     if (strpos($thing, ':else') === false || empty($txp_parsed[$hash = sha1($thing)])) {
         return $condition ? $thing : '';
@@ -4602,9 +4634,7 @@ function handle_lastmod($unix_ts = null, $exit = true)
     // Disable caching when not in production
     if (get_pref('production_status') != 'live') {
         header('Cache-Control: no-cache, no-store, max-age=0');
-    }
-
-    elseif (get_pref('send_lastmod') && get_pref('production_status') == 'live') {
+    } elseif (get_pref('send_lastmod') && get_pref('production_status') == 'live') {
         $unix_ts = get_lastmod($unix_ts);
 
         // Make sure lastmod isn't in the future.
@@ -6838,7 +6868,6 @@ function get_prefs_theme()
 {
     $out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true);
     if (empty($out)) {
-
         return array();
     }
 

@@ -17,7 +17,11 @@ Changes in 4.7.0 (upcoming)
 * Changed: <txp:page_title /> tag SEO - site name renders after page name,
   default separator changed from ': ' to ' | ', page numbers added.
 * Changed: <txp:breadcrumb /> can be used as a container tag.
+* Changed: <txp:image_author /> tag now accepts 'id' and 'name' attributes.
 * Changed: Reinstate <txp:keywords> tag and add wraptag/class/break attributes.
+* Changed: Deprecated the 'poplink' attribute on <txp:thumbnail /> tag.
+* Changed: Deprecated <txp:image_display /> and <txp:image_index /> tags, use
+  <txp:image /> and <txp:images />, respectively, instead.
 * Changed: Upgrades land on Diagnostics panel, with suitable message.
 * Changed: Enable HTTP 226 responses (thanks, da2x).
 * Changed: Make pref panels fully printable (thanks, Philippe).
@@ -29,6 +33,7 @@ Changes in 4.7.0 (upcoming)
   entirely at Textpattern 4.8.0).
 * Changed: Extensive admin theme image optimizations.
 * Fixed: Only update db version string if using release version.
+* jQuery 3.2.1.
 * zxcvbn 4.4.2.
 
 Changes in 4.6.2
