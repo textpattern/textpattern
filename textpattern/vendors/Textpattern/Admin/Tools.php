@@ -96,5 +96,4 @@ class Tools
     {
         return $this->warnings;
     }
-
 }

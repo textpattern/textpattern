@@ -310,7 +310,7 @@ function atom()
         }
 
         if (isset($imsd) || isset($inmd)) {
-          $clfd = max(intval($imsd), intval($inmd));
+            $clfd = max(intval($imsd), intval($inmd));
         }
 
         $cutarticles = false;

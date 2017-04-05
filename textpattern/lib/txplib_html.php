@@ -1867,16 +1867,16 @@ function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = 
 
 function doTag($content, $tag, $class = '', $atts = '', $id = '')
 {
+    if (!$tag) {
+        return $content;
+    }
+
     if ($id) {
         $atts .= ' id="'.txpspecialchars($id).'"';
     }
 
     if ($class) {
         $atts .= ' class="'.txpspecialchars($class).'"';
-    }
-
-    if (!$tag) {
-        return $content;
     }
 
     return ($content) ? tag($content, $tag, $atts) : "<$tag $atts />";
