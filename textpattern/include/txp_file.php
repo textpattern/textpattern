@@ -127,7 +127,7 @@ function file_list($message = '')
             break;
         case 'date':
             $sort_sql = "txp_file.created $dir, txp_file.filename DESC";
-            break;        
+            break;
         case 'downloads':
             $sort_sql = "txp_file.downloads $dir, txp_file.filename DESC";
             break;

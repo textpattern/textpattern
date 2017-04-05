@@ -66,7 +66,6 @@ class Core
             $this->tables_structure = get_files_content($this->tables_dir, 'table');
         }
         if (!empty($table)) {
-
             return @$this->tables_structure[$table];
         }
         
@@ -133,7 +132,6 @@ class Core
 
     public function getTablesName()
     {
-
         return array_keys($this->getStructure());
     }
 
@@ -233,5 +231,4 @@ class Core
 
         $prefs = get_prefs();
     }
-
 }

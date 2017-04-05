@@ -76,8 +76,6 @@ button {
  * 2. Remove default underline style from non-hover state links.
  * 3. Interrupt the decoration line to let the shape of the text show through
  *    in supported browsers.
- * 4. Expanded CSS level 3 `text-decoration` property in supported browsers,
- *    older browsers will fallback to legacy `text-decoration` property.
  * 5. Hide `.busy` class links when processing AJAX.
  */
   a {
@@ -86,21 +84,19 @@ button {
     /* 2 */
     text-decoration: none;
     /* 3 */
-    -webkit-text-decoration-skip: ink edges;
-            text-decoration-skip: ink edges;
+    -webkit-text-decoration-skip: ink;
+            text-decoration-skip: ink;
   }
   a:hover, a:active {
     outline: 0;
     color: #b16f2e;
     text-decoration: underline;
-    /* 4 */
-    text-decoration: #996633 solid underline;
   }
   a:focus {
     outline: thin solid #5b9dd9;
   }
   a.busy {
-    /* 5 */
+    /* 4 */
     visibility: hidden;
   }
   /**
