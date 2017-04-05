@@ -1214,7 +1214,7 @@ function category_list($atts, $thing = null)
     }
     if (!isset($cache[$hash][$root]) || !$multiple && $root != 'root' && empty($cache[$hash][$root][$root])) {
         $cache[$hash][$root] = array();
-        if (!$children || !in_array('root',  $roots)) {
+        if (!$children || !in_array('root', $roots)) {
             $cats = safe_rows('name, parent, title, description, lft, rgt', 'txp_category', "name IN (".implode(',', quote_list($roots)).") and $sql_query") or $cats = array();
             $retrieve = false;
             $between = array();
@@ -1230,7 +1230,7 @@ function category_list($atts, $thing = null)
         } else {
             $cats = safe_rows('name, parent, title, description', 'txp_category', "name !='root' $sql_exclude and $sql_query $sql_limit");
         }
-        foreach($cats as $cat) {
+        foreach ($cats as $cat) {
             extract($cat);
             $node = $children == $level ? $root : $name;
             if (!isset($cache[$hash][$node])) {
@@ -1286,7 +1286,7 @@ function category_list($atts, $thing = null)
     if ($nocache || $level <= 0) {
         unset($cache[$hash]);
     }
- 
+
     return $out ? ($label ? doLabel($label, $labeltag) : '').doWrap($out, $wraptag, $break, $class, '', '', '', $html_id) : '';
 }
 
@@ -3181,7 +3181,7 @@ function search_result_count($atts)
 function image_index($atts)
 {
     trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-    
+
     global $c;
 
     lAtts(array(
@@ -3201,11 +3201,11 @@ function image_index($atts)
     if (!isset($atts['class'])) {
         $atts['class'] = __FUNCTION__;
     }
-    
+
     if ($atts['category']) {
         return images($atts);
     }
-    
+
     return '';
 }
 
@@ -3214,7 +3214,7 @@ function image_index($atts)
 function image_display($atts)
 {
     trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-    
+
     global $p;
 
     if ($p) {
@@ -3474,7 +3474,7 @@ function image_url($atts, $thing = null)
         'thumbnail' => 0,
         'link'      => 'auto',
     ), $atts));
-    
+
     if (($name || $id) && $thing) {
         global $thisimage;
         $stash = $thisimage;
@@ -3490,7 +3490,7 @@ function image_url($atts, $thing = null)
     if (isset($stash)) {
         $thisimage = $stash;
     }
-    
+
     return isset($out) ? $out : '';
 }
 
@@ -3697,7 +3697,7 @@ function if_description($atts, $thing = null)
     $content = getMetaDescription($type);
     $x = !empty($content);
 
-    return isset($thing) ? parse($thing, $x) : $x;;
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 
@@ -4722,9 +4722,7 @@ function hide($atts = array(), $thing = null)
         return '';
     }
 
-    extract(lAtts(array(
-        'process'	=> null
-    ), $atts));
+    extract(lAtts(array('process' => null), $atts));
 
     global $txp_parsed, $txp_else;
 
@@ -4839,7 +4837,7 @@ function txp_eval($atts, $thing = null)
             $xpath = new DOMXpath(new DOMDocument);
             $functions = do_list_unique(get_pref('txp_functions'));
 
-            if($functions) {
+            if ($functions) {
                 $xpath->registerNamespace('php', 'http://php.net/xpath');
                 $xpath->registerPHPFunctions($functions);
             }
@@ -4848,12 +4846,12 @@ function txp_eval($atts, $thing = null)
         }
 
         if ($functions) {
-                $query = preg_replace('/\b('.$functions.')\s*\(/', "php:function('$1',", $query);
+            $query = preg_replace('/\b('.$functions.')\s*\(/', "php:function('$1',", $query);
         }
 
         $x = $xpath->evaluate($query);
 
-        if($x instanceOf DOMNodeList) {
+        if ($x instanceof DOMNodeList) {
             $x = $x->length;
         }
     } else {

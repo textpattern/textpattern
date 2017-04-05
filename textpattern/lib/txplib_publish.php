@@ -391,7 +391,9 @@ function parse($thing, $condition = null)
         unset($txp_atts['not']);
     }
 
-    if (empty($condition)) $txp_atts[0] = true;
+    if (empty($condition)) {
+        $txp_atts[0] = true;
+    }
 
     if (!$short_tags) {
         if (false === strpos($thing, "<{$pattern}:")) {

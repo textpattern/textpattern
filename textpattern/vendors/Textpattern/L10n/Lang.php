@@ -61,7 +61,8 @@ class Lang
      * @return array Available language codes
      */
 
-    public function installed() {
+    public function installed()
+    {
         static $installed_langs = null;
 
         if (!$installed_langs) {
@@ -90,7 +91,7 @@ class Lang
 
     /**
      * Fetch available languages.
-     * 
+     *
      * Depending on the flags, the returned array can contain active,
      * installed or available language metadata.
      *
@@ -235,7 +236,6 @@ class Lang
             $textpack = $parser->parse($textpack);
 
             if (empty($textpack)) {
-
                 return false;
             }
 

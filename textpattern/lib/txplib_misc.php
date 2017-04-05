@@ -4220,7 +4220,9 @@ function EvalElse($thing, $condition)
         unset($txp_atts['not']);
     }
 
-    if (empty($condition)) $txp_atts[0] = true;
+    if (empty($condition)) {
+        $txp_atts[0] = true;
+    }
 
     if (strpos($thing, ':else') === false || empty($txp_parsed[$hash = sha1($thing)])) {
         return $condition ? $thing : '';
@@ -4603,9 +4605,7 @@ function handle_lastmod($unix_ts = null, $exit = true)
     // Disable caching when not in production
     if (get_pref('production_status') != 'live') {
         header('Cache-Control: no-cache, no-store, max-age=0');
-    }
-
-    elseif (get_pref('send_lastmod') && get_pref('production_status') == 'live') {
+    } elseif (get_pref('send_lastmod') && get_pref('production_status') == 'live') {
         $unix_ts = get_lastmod($unix_ts);
 
         // Make sure lastmod isn't in the future.
@@ -6839,7 +6839,6 @@ function get_prefs_theme()
 {
     $out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true);
     if (empty($out)) {
-
         return array();
     }
 
