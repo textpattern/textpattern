@@ -537,7 +537,7 @@ function maybe_tag($tag)
 function processTags($tag, $atts = '', $thing = null)
 {
     global $production_status, $txp_current_tag, $txp_current_form, $txp_atts, $trace;
-    static $registry = null, $global_atts = null, $level = 0, $txp_parser = array('tag' => '', 'atts' => '', 'thing' => null);
+    static $registry = null, $global_atts = null;
 
     if (empty($tag)) {
         return;
@@ -555,7 +555,6 @@ function processTags($tag, $atts = '', $thing = null)
         $global_atts = array_keys(array_filter($registry->getRegistered(true)));
     }
 
-    $old_parser = $txp_parser;
     $old_atts = $txp_atts;
 
     if ($atts) {
@@ -565,18 +564,7 @@ function processTags($tag, $atts = '', $thing = null)
         $split = array();
     }
 
-    if ($tag !== 'evaluate' || !isset($split['this'])) {
-        $txp_parser = array('tag' => $tag, 'atts' => $atts, 'thing' => $thing);
-        $out = $registry->process($tag, $split, $thing);
-    } elseif ($level < ($split['this'] === true ? 10 : intval($split['this'])) && $registry->process($tag, $split, $thing)) {
-        $level++;
-        extract($txp_parser);
-        unset($split['this'], $split['query'], $split['test']);
-        $out = $registry->process($tag, $atts ? $split + splat($atts) : $split, $thing);
-        $level--;
-    } else {
-        $out = '';
-    }
+    $out = $registry->process($tag, $split, $thing);
 
     if ($out === false) {
         if (maybe_tag($tag)) { // Deprecated in 4.6.0.
@@ -596,12 +584,11 @@ function processTags($tag, $atts = '', $thing = null)
     if ($txp_atts && empty($txp_atts[0]) && (string)$out > '') {
         foreach ($global_atts as $attr) {
             if (!empty($txp_atts[$attr])) {
-                $out = $registry->processAtt($attr, $txp_atts, $out);
+                $out = $registry->processAttr($attr, $txp_atts, $out);
             }
         }
     }
 
-    $txp_parser = $old_parser;
     $txp_atts = $old_atts;
 
     if ($production_status !== 'live') {
