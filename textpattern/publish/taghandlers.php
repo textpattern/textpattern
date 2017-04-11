@@ -665,7 +665,7 @@ function linklist($atts, $thing = null)
         }
 
         if ($out) {
-            return doWrap($out, '', $break);
+            return doWrap($out, $wraptag, $break, $class);
         }
     }
 
