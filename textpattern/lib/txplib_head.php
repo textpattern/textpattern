@@ -124,6 +124,7 @@ function pagetop($pagetitle, $message = '')
         'ok',
         'publish',
         'save',
+        'textfilter',
         'toggle_all_selected',
     ));
     // Mandatory un-themable Textpattern core styles ?>
