@@ -82,7 +82,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
      * @return \Textpattern\Tag\Registry
      */
 
-    public function registerAtt($callback, $tag = null, $prepend = false)
+    public function registerAttr($callback, $tag = null, $prepend = false)
     {
         // is_callable only checks syntax here to avoid autoloading
         if (is_bool($callback)) {
@@ -133,9 +133,9 @@ class Registry implements \Textpattern\Container\ReusableInterface
      * @return string|bool The tag's results (string) or FALSE on unknown tags
      */
 
-    public function processAtt($tag, $atts = null, $thing = null)
+    public function processAttr($tag, $atts = null, $thing = null)
     {
-        if ($this->isRegisteredAtt($tag)) {
+        if ($this->isRegisteredAttr($tag)) {
             return (string) call_user_func($this->atts[$tag], $atts, $thing);
         } else {
             return false;
@@ -161,7 +161,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
      * @return bool TRUE if the tag exists
      */
 
-    public function isRegisteredAtt($tag)
+    public function isRegisteredAttr($tag)
     {
         return !empty($this->atts[$tag]) && is_callable($this->atts[$tag]);
     }

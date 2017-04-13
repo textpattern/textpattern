@@ -4298,35 +4298,41 @@ function fetch_form($name)
  * @package TagParser
  */
 
-function parse_form($name, $thing = null)
+function parse_form($name)
 {
-    global $production_status, $txp_current_form, $trace, $yield;
-    static $stack = array();
+    global $production_status, $txp_current_form, $trace;
+    static $stack = array(), $depth = null;
+
+    if ($depth === null) {
+        $depth = get_pref('form_circular_depth') or $depth = 10;
+    }
 
     $out = '';
     $name = (string) $name;
     $f = fetch_form($name);
 
     if ($f) {
-        if (in_array($name, $stack, true)) {
+        if (!isset($stack[$name])) {
+            $stack[$name] = 1;
+        } elseif ($stack[$name] >= $depth) {
             trigger_error(gTxt('form_circular_reference', array('{name}' => $name)));
 
             return '';
+        } else {
+            $stack[$name]++;
         }
 
         $old_form = $txp_current_form;
-        $txp_current_form = $stack[] = $name;
+        $txp_current_form = $name;
 
         if ($production_status === 'debug') {
-            $trace->log("[Nesting forms: '".join("' / '", $stack)."']");
+            $trace->log("[Nesting forms: '".join("' / '", array_keys(array_filter($stack)))."'".($stack[$name] > 1 ? '('.$stack[$name].')' : '')."]");
         }
 
-        $yield[] = isset($thing) ? parse($thing) : null;
         $out = parse($f);
-        array_pop($yield);
 
         $txp_current_form = $old_form;
-        array_pop($stack);
+        $stack[$name]--;
     }
 
     return $out;
@@ -5159,13 +5165,12 @@ function txp_die($msg, $status = '503', $url = '')
         die('<html><head><meta http-equiv="refresh" content="0;URL='.txpspecialchars($url).'"></head><body><p>Document has <a href="'.txpspecialchars($url).'">moved here</a>.</p></body></html>');
     }
 
+    $out = false;
     if ($connected && @txpinterface == 'public') {
-        $out = safe_field("user_html", 'txp_page', "name = 'error_".doSlash($code)."'");
+        $out = safe_field('user_html', 'txp_page', "name IN('error_{$code}', 'error_default') ORDER BY name LIMIT 1");
+    }
 
-        if ($out === false) {
-            $out = safe_field("user_html", 'txp_page', "name = 'error_default'");
-        }
-    } else {
+    if ($out === false) {
         $out = <<<eod
 <!DOCTYPE html>
 <html lang="en">
