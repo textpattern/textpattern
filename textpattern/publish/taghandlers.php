@@ -194,10 +194,10 @@ Txp::get('\Textpattern\Tag\Registry')
 // Global attributes: mind the order!
 
     Txp::get('\Textpattern\Tag\Registry')
-    ->registerAtt(false, 'atts, class, html_id, labeltag, not')
-    ->registerAtt('txp_escape', 'escape')
-    ->registerAtt('txp_wraptag', 'wraptag')
-    ->registerAtt('txp_label', 'label');
+    ->registerAttr(false, 'atts, class, html_id, labeltag, not')
+    ->registerAttr('txp_escape', 'escape')
+    ->registerAttr('txp_wraptag', 'wraptag')
+    ->registerAttr('txp_label', 'label');
 
 // -------------------------------------------------------------
 
@@ -427,15 +427,22 @@ function thumbnail($atts)
 
 function output_form($atts, $thing = null)
 {
+    global $yield;
+
     extract(lAtts(array(
         'form' => ''
     ), $atts));
 
     if (!$form) {
         trigger_error(gTxt('form_not_specified'));
+        $out = '';
     } else {
-        return parse_form($form, $thing);
+        $yield[] = isset($thing) ? parse($thing) : null;
+        $out = parse_form($form);
+        array_pop($yield);
     }
+
+    return $out;
 }
 
 // -------------------------------------------------------------
@@ -659,7 +666,7 @@ function linklist($atts, $thing = null)
         }
 
         if ($out) {
-            return doWrap($out, '', $break);
+            return doWrap($out, $wraptag, $break, $class);
         }
     }
 
@@ -1515,7 +1522,7 @@ function link_to($atts, $thing = null, $target = null)
                 $oldarticle = $thisarticle;
                 populateArticleData($thisarticle[$target]);
                 $thisarticle['is_first'] = $thisarticle['is_last'] = true;
-                $thing = $form ? parse_form($form, $thing) : parse($thing);
+                $thing = $form ? parse_form($form) : parse($thing);
                 $target_title = escape_title($thisarticle[$target]['Title']);
                 $thisarticle = $oldarticle;
 
@@ -4826,8 +4833,10 @@ function txp_eval($atts, $thing = null)
     global $txp_parsed, $txp_else;
     static $xpath = null, $functions = null;
 
-    $query = isset($atts['query']) ? $atts['query'] : null;
-    $test = isset($atts['test']) ? $atts['test'] : $query === null;
+    extract(lAtts(array(
+        'query' => null,
+        'test'  => !isset($atts['query'])
+    ), $atts));
 
     if (!isset($query)) {
         $x = true;
