@@ -1836,12 +1836,23 @@ function article_partial_body($rs)
     if (has_privs('article.set_markup')) {
         // Markup help.
 //        $help = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($rs['textile_body']);
-        $html_markup = pref_text('textile_body', $rs['textile_body'], 'markup-body');
+        $textfilter_opts = Txp::get('\Textpattern\Textfilter\Registry')->getMap();
+        $selected = $textfilter_opts[$rs['textile_body']];
+
+        $html_markup = array();
+
+        foreach ($textfilter_opts as $filter_key => $filter_name) {
+            $html_markup[] = tag($filter_name, 'li', array('data-id' => $filter_key));
+        }
+
+        $html_markup = tag(implode(n, $html_markup),
+            'ul',
+            array('class' => 'txp-list-options-list txp-dropdown'))
+            .fInput('hidden', 'textile_body', $rs['textile_body'], array('class' => 'textfilter_value'));
         $textarea_options = array($textarea_options,
-            n.span(
-                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.gTxt('article_markup'), '#', array('class' => 'txp-textfilter-dialog')).' '.$html_markup.popHelp('markup_body'),
-                array('class' => 'txp-textarea-options')
-            ));
+            n.'<div class="txp-textarea-options">'.
+                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter_chosen')), '#', array('class' => 'txp-list-options-button')).n.popHelp('markup_body').$html_markup.'</div>'
+            );
     }
 
     $out = inputLabel(
@@ -1869,16 +1880,27 @@ function article_partial_excerpt($rs)
 {
     $textarea_options = 'excerpt';
 
-    // Article markup selection.
+    // Excerpt markup selection.
     if (has_privs('article.set_markup')) {
         // Markup help.
 //        $help = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($rs['textile_excerpt']);
-        $html_markup = pref_text('textile_excerpt', $rs['textile_excerpt'], 'markup-excerpt');
+        $textfilter_opts = Txp::get('\Textpattern\Textfilter\Registry')->getMap();
+        $selected = $textfilter_opts[$rs['textile_excerpt']];
+
+        $html_markup = array();
+
+        foreach ($textfilter_opts as $filter_key => $filter_name) {
+            $html_markup[] = tag($filter_name, 'li', array('data-id' => $filter_key));
+        }
+
+        $html_markup = tag(implode(n, $html_markup),
+            'ul',
+            array('class' => 'txp-list-options-list txp-dropdown'))
+            .fInput('hidden', 'textile_excerpt', $rs['textile_excerpt'], array('class' => 'textfilter_value'));
         $textarea_options = array($textarea_options,
-            n.span(
-                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.gTxt('excerpt_markup'), '#', array('class' => 'txp-textfilter-dialog')).' '.$html_markup.popHelp('markup_excerpt'),
-                array('class' => 'txp-textarea-options')
-            ));
+            n.'<div class="txp-textarea-options">'.
+                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter_chosen')), '#', array('class' => 'txp-list-options-button')).n.popHelp('markup_excerpt').$html_markup.'</div>'
+            );
     }
 
     $out = inputLabel(
