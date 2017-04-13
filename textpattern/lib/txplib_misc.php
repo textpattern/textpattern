@@ -5165,13 +5165,12 @@ function txp_die($msg, $status = '503', $url = '')
         die('<html><head><meta http-equiv="refresh" content="0;URL='.txpspecialchars($url).'"></head><body><p>Document has <a href="'.txpspecialchars($url).'">moved here</a>.</p></body></html>');
     }
 
+    $out = false;
     if ($connected && @txpinterface == 'public') {
-        $out = safe_field("user_html", 'txp_page', "name = 'error_".doSlash($code)."'");
+        $out = safe_field('user_html', 'txp_page', "name IN('error_{$code}', 'error_default') ORDER BY name LIMIT 1");
+    }
 
-        if ($out === false) {
-            $out = safe_field("user_html", 'txp_page', "name = 'error_default'");
-        }
-    } else {
+    if ($out === false) {
         $out = <<<eod
 <!DOCTYPE html>
 <html lang="en">
