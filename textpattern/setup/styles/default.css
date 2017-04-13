@@ -242,8 +242,8 @@ nav ol::after,
     /* 2 */
     text-decoration: none;
     /* 3 */
-    -webkit-text-decoration-skip: ink edges;
-            text-decoration-skip: ink edges;
+    -webkit-text-decoration-skip: ink;
+            text-decoration-skip: ink;
   }
   a:hover, a:active {
     outline: 0;
@@ -253,29 +253,26 @@ nav ol::after,
   a:focus {
     outline: thin solid #0066ff;
   }
-  a:visited {
-    color: #003380;
-  }
   /**
- * Additional styling for `h1` heading links.
+ * Additional styling for h1-h3 heading links.
+ *
+ * 1. Expanded CSS level 3 `text-decoration-color` property in supported
+ *    browsers, older browsers ignore this addition.
  */
-  h1 a {
-    border-radius: 0.125em;
+  h1 a,
+  h2 a,
+  h3 a {
     color: #333333;
   }
-  h1 a:visited {
+  h1 a:hover, h1 a:active,
+  h2 a:hover,
+  h2 a:active,
+  h3 a:hover,
+  h3 a:active {
     color: #333333;
-  }
-  h1 a:hover, h1 a:active {
-    background-color: #f7f7f7;
-    color: #333333;
-    text-decoration: none;
-  }
-  /**
- * Additional styling for child links within site header.
- */
-  .site-header h1 a:hover, .site-header h1 a:active {
-    background-color: #e8e8e8;
+    -webkit-text-decoration-color: rgba(51, 51, 51, 0.5);
+            text-decoration-color: rgba(51, 51, 51, 0.5);
+    /* 1 */
   }
   /**
  * Paginator (prev/next) navigation links on articles/article lists.

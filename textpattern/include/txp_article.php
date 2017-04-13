@@ -1588,7 +1588,7 @@ function article_partial_custom_field($rs, $key)
     $custom_x_set = "custom_{$m[1]}_set";
     $custom_x = "custom_{$m[1]}";
 
-    return ($$custom_x_set !== '' ? custField($m[1], $$custom_x_set,  $rs[$custom_x]) : '');
+    return ($$custom_x_set !== '' ? custField($m[1], $$custom_x_set, $rs[$custom_x]) : '');
 }
 
 /**

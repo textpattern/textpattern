@@ -194,10 +194,10 @@ Txp::get('\Textpattern\Tag\Registry')
 // Global attributes: mind the order!
 
     Txp::get('\Textpattern\Tag\Registry')
-    ->registerAtt(false, 'atts, class, html_id, labeltag, not')
-    ->registerAtt('txp_escape', 'escape')
-    ->registerAtt('txp_wraptag', 'wraptag')
-    ->registerAtt('txp_label', 'label');
+    ->registerAttr(false, 'atts, class, html_id, labeltag, not')
+    ->registerAttr('txp_escape', 'escape')
+    ->registerAttr('txp_wraptag', 'wraptag')
+    ->registerAttr('txp_label', 'label');
 
 // -------------------------------------------------------------
 
@@ -426,15 +426,22 @@ function thumbnail($atts)
 
 function output_form($atts, $thing = null)
 {
+    global $yield;
+
     extract(lAtts(array(
         'form' => ''
     ), $atts));
 
     if (!$form) {
         trigger_error(gTxt('form_not_specified'));
+        $out = '';
     } else {
-        return parse_form($form, $thing);
+        $yield[] = isset($thing) ? parse($thing) : null;
+        $out = parse_form($form);
+        array_pop($yield);
     }
+
+    return $out;
 }
 
 // -------------------------------------------------------------
@@ -658,7 +665,7 @@ function linklist($atts, $thing = null)
         }
 
         if ($out) {
-            return doWrap($out, '', $break);
+            return doWrap($out, $wraptag, $break, $class);
         }
     }
 
@@ -1214,7 +1221,7 @@ function category_list($atts, $thing = null)
     }
     if (!isset($cache[$hash][$root]) || !$multiple && $root != 'root' && empty($cache[$hash][$root][$root])) {
         $cache[$hash][$root] = array();
-        if (!$children || !in_array('root',  $roots)) {
+        if (!$children || !in_array('root', $roots)) {
             $cats = safe_rows('name, parent, title, description, lft, rgt', 'txp_category', "name IN (".implode(',', quote_list($roots)).") and $sql_query") or $cats = array();
             $retrieve = false;
             $between = array();
@@ -1230,7 +1237,7 @@ function category_list($atts, $thing = null)
         } else {
             $cats = safe_rows('name, parent, title, description', 'txp_category', "name !='root' $sql_exclude and $sql_query $sql_limit");
         }
-        foreach($cats as $cat) {
+        foreach ($cats as $cat) {
             extract($cat);
             $node = $children == $level ? $root : $name;
             if (!isset($cache[$hash][$node])) {
@@ -1286,7 +1293,7 @@ function category_list($atts, $thing = null)
     if ($nocache || $level <= 0) {
         unset($cache[$hash]);
     }
- 
+
     return $out ? ($label ? doLabel($label, $labeltag) : '').doWrap($out, $wraptag, $break, $class, '', '', '', $html_id) : '';
 }
 
@@ -1514,7 +1521,7 @@ function link_to($atts, $thing = null, $target = null)
                 $oldarticle = $thisarticle;
                 populateArticleData($thisarticle[$target]);
                 $thisarticle['is_first'] = $thisarticle['is_last'] = true;
-                $thing = $form ? parse_form($form, $thing) : parse($thing);
+                $thing = $form ? parse_form($form) : parse($thing);
                 $target_title = escape_title($thisarticle[$target]['Title']);
                 $thisarticle = $oldarticle;
 
@@ -3181,7 +3188,7 @@ function search_result_count($atts)
 function image_index($atts)
 {
     trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-    
+
     global $c;
 
     lAtts(array(
@@ -3201,11 +3208,11 @@ function image_index($atts)
     if (!isset($atts['class'])) {
         $atts['class'] = __FUNCTION__;
     }
-    
+
     if ($atts['category']) {
         return images($atts);
     }
-    
+
     return '';
 }
 
@@ -3214,7 +3221,7 @@ function image_index($atts)
 function image_display($atts)
 {
     trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-    
+
     global $p;
 
     if ($p) {
@@ -3474,7 +3481,7 @@ function image_url($atts, $thing = null)
         'thumbnail' => 0,
         'link'      => 'auto',
     ), $atts));
-    
+
     if (($name || $id) && $thing) {
         global $thisimage;
         $stash = $thisimage;
@@ -3490,7 +3497,7 @@ function image_url($atts, $thing = null)
     if (isset($stash)) {
         $thisimage = $stash;
     }
-    
+
     return isset($out) ? $out : '';
 }
 
@@ -3697,7 +3704,7 @@ function if_description($atts, $thing = null)
     $content = getMetaDescription($type);
     $x = !empty($content);
 
-    return isset($thing) ? parse($thing, $x) : $x;;
+    return isset($thing) ? parse($thing, $x) : $x;
 }
 
 
@@ -4722,9 +4729,7 @@ function hide($atts = array(), $thing = null)
         return '';
     }
 
-    extract(lAtts(array(
-        'process'	=> null
-    ), $atts));
+    extract(lAtts(array('process' => null), $atts));
 
     global $txp_parsed, $txp_else;
 
@@ -4827,8 +4832,10 @@ function txp_eval($atts, $thing = null)
     global $txp_parsed, $txp_else;
     static $xpath = null, $functions = null;
 
-    $query = isset($atts['query']) ? $atts['query'] : null;
-    $test = isset($atts['test']) ? $atts['test'] : $query === null;
+    extract(lAtts(array(
+        'query' => null,
+        'test'  => !isset($atts['query'])
+    ), $atts));
 
     if (!isset($query)) {
         $x = true;
@@ -4839,7 +4846,7 @@ function txp_eval($atts, $thing = null)
             $xpath = new DOMXpath(new DOMDocument);
             $functions = do_list_unique(get_pref('txp_functions'));
 
-            if($functions) {
+            if ($functions) {
                 $xpath->registerNamespace('php', 'http://php.net/xpath');
                 $xpath->registerPHPFunctions($functions);
             }
@@ -4848,12 +4855,12 @@ function txp_eval($atts, $thing = null)
         }
 
         if ($functions) {
-                $query = preg_replace('/\b('.$functions.')\s*\(/', "php:function('$1',", $query);
+            $query = preg_replace('/\b('.$functions.')\s*\(/', "php:function('$1',", $query);
         }
 
         $x = $xpath->evaluate($query);
 
-        if($x instanceOf DOMNodeList) {
+        if ($x instanceof DOMNodeList) {
             $x = $x->length;
         }
     } else {
