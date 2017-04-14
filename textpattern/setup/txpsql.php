@@ -33,26 +33,27 @@ global $permlink_mode, $siteurl, $blog_uid, $theme_name;
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/admin_config.php';
 
-// Variable set
-$blog_uid = md5(uniqid(rand(), true));
-$siteurl = str_replace("http://", '', $_SESSION['siteurl']);
-$siteurl = str_replace(' ', '%20', rtrim($siteurl, "/"));
-$theme_name = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
-$themedir = txpath.DS.'setup';
+$siteurl = rtrim($_SESSION['siteurl'], '/');
+if (! preg_match('%^https?://%', $siteurl)) {
+    $siteurl = 'http://'.$siteurl;
+}
 
-// Default to messy URLs if we know clean ones won't work.
-$permlink_mode = 'section_title';
-
-if (is_callable('apache_get_modules')) {
-    $modules = @apache_get_modules();
-
-    if (!is_array($modules) || !in_array('mod_rewrite', $modules)) {
-        $permlink_mode = 'messy';
-    }
-} elseif (!stristr(serverSet('SERVER_SOFTWARE'), 'Apache')) {
+// Determining the mode of permanent links
+ini_set('default_socket_timeout', 10);
+$s = md5(uniqid(rand(), true));
+$pretext_data = @file("{$siteurl}/{$s}/?txpcleantest=1");
+if (trim(@$pretext_data[0]) == md5("/{$s}/?txpcleantest=1")) {
+    $permlink_mode = 'section_title';
+} else {
     $permlink_mode = 'messy';
 }
 
+// Variable set
+$blog_uid = md5(uniqid(rand(), true));
+$siteurl = preg_replace('%^https?://%', '', $siteurl);
+$siteurl = str_replace(' ', '%20', $siteurl);
+$theme_name = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
+$themedir = txpath.DS.'setup';
 
 if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
     die("Textpattern database table already exists. Can't run setup.");
