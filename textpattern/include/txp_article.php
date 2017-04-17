@@ -1004,7 +1004,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
         // 'Publish/Save' button.
         if ($step == 'create' and empty($GLOBALS['ID'])) {
-            if (has_privs('article.publish')) {
+            if (has_privs('article.publish') && get_pref('default_publish_status', STATUS_LIVE) >= STATUS_LIVE) {
                 $push_button = fInput('submit', 'publish', gTxt('publish'), 'publish');
             } else {
                 $push_button = fInput('submit', 'publish', gTxt('save'), 'publish');
