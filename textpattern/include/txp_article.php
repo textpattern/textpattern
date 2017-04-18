@@ -1855,7 +1855,7 @@ function article_partial_body($rs)
             .fInput('hidden', 'textile_body', $rs['textile_body'], array('class' => 'textfilter-value'));
         $textarea_options = array($textarea_options,
             n.'<div class="txp-textarea-options txp-textfilter-options">'.
-                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter-chosen')), '#', array('class' => 'txp-textfilter-options-button')).n.popHelp('markup_body').$html_markup.'</div>'
+                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter-chosen')), '#', array('class' => 'txp-textfilter-options-button')).popHelp('markup_body').$html_markup.'</div>'
             );
     }
 
@@ -1907,7 +1907,7 @@ function article_partial_excerpt($rs)
             .fInput('hidden', 'textile_excerpt', $rs['textile_excerpt'], array('class' => 'textfilter-value'));
         $textarea_options = array($textarea_options,
             n.'<div class="txp-textarea-options txp-textfilter-options">'.
-                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter-chosen')), '#', array('class' => 'txp-textfilter-options-button')).n.popHelp('markup_excerpt').$html_markup.'</div>'
+                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter-chosen')), '#', array('class' => 'txp-textfilter-options-button')).popHelp('markup_excerpt').$html_markup.'</div>'
             );
     }
 
