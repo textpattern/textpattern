@@ -1858,12 +1858,12 @@ textpattern.Route.add('article', function ()
     );
 
     // Handle Textfilter options.
-    var $listoptions_trigger = $('.txp-list-options-button');
-    var $listoptions = $('.txp-list-options-list');
+    var $listoptions_trigger = $('.txp-textfilter-options-button');
+    var $listoptions = $('.txp-textfilter-options-list');
 
     $listoptions_trigger.click(function (e)
     {
-        var $target = $(this).parent().find('.txp-list-options-list');
+        var $target = $(this).parent().find('.txp-textfilter-options-list');
 
         if (langdir === 'rtl') {
             var $menu = $target.toggle().position({
@@ -1889,10 +1889,10 @@ textpattern.Route.add('article', function ()
 
     $listoptions.on('click', 'li', function(e) {
         var chosen = $(e.target);
-        var wrapper = chosen.closest('.txp-textarea-options');
+        var wrapper = chosen.closest('.txp-textfilter-options');
 
-        wrapper.find('.textfilter_value').val(chosen.data('id'));
-        wrapper.find('.textfilter_chosen').text(textpattern.gTxt('textfilter', {'{filter}' : chosen.text()}));
+        wrapper.find('.textfilter-value').val(chosen.data('id'));
+        wrapper.find('.textfilter-chosen').text(textpattern.gTxt('textfilter', {'{filter}' : chosen.text()}));
     });
 
     $listoptions.hide().menu();

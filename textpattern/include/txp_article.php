@@ -1842,16 +1842,20 @@ function article_partial_body($rs)
         $html_markup = array();
 
         foreach ($textfilter_opts as $filter_key => $filter_name) {
-            $html_markup[] = tag($filter_name, 'li', array('data-id' => $filter_key));
+            $html_markup[] = tag(
+                tag(
+                    $filter_name, 'div', array('data-id' => $filter_key)
+                ), 'li'
+            );
         }
 
         $html_markup = tag(implode(n, $html_markup),
             'ul',
-            array('class' => 'txp-list-options-list txp-dropdown'))
-            .fInput('hidden', 'textile_body', $rs['textile_body'], array('class' => 'textfilter_value'));
+            array('class' => 'txp-textfilter-options-list txp-dropdown'))
+            .fInput('hidden', 'textile_body', $rs['textile_body'], array('class' => 'textfilter-value'));
         $textarea_options = array($textarea_options,
-            n.'<div class="txp-textarea-options">'.
-                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter_chosen')), '#', array('class' => 'txp-list-options-button')).n.popHelp('markup_body').$html_markup.'</div>'
+            n.'<div class="txp-textarea-options txp-textfilter-options">'.
+                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter-chosen')), '#', array('class' => 'txp-textfilter-options-button')).n.popHelp('markup_body').$html_markup.'</div>'
             );
     }
 
@@ -1890,16 +1894,20 @@ function article_partial_excerpt($rs)
         $html_markup = array();
 
         foreach ($textfilter_opts as $filter_key => $filter_name) {
-            $html_markup[] = tag($filter_name, 'li', array('data-id' => $filter_key));
+            $html_markup[] = tag(
+                tag(
+                    $filter_name, 'div', array('data-id' => $filter_key)
+                ), 'li'
+            );
         }
 
         $html_markup = tag(implode(n, $html_markup),
             'ul',
-            array('class' => 'txp-list-options-list txp-dropdown'))
-            .fInput('hidden', 'textile_excerpt', $rs['textile_excerpt'], array('class' => 'textfilter_value'));
+            array('class' => 'txp-textfilter-options-list txp-dropdown'))
+            .fInput('hidden', 'textile_excerpt', $rs['textile_excerpt'], array('class' => 'textfilter-value'));
         $textarea_options = array($textarea_options,
-            n.'<div class="txp-textarea-options">'.
-                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter_chosen')), '#', array('class' => 'txp-list-options-button')).n.popHelp('markup_excerpt').$html_markup.'</div>'
+            n.'<div class="txp-textarea-options txp-textfilter-options">'.
+                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter-chosen')), '#', array('class' => 'txp-textfilter-options-button')).n.popHelp('markup_excerpt').$html_markup.'</div>'
             );
     }
 
