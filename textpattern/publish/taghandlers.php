@@ -428,11 +428,7 @@ function output_form($atts, $thing = null)
 {
     global $yield;
 
-    $atts = lAtts($atts + array(
-        'form' => ''
-    ), $atts);
-
-    if (!$atts['form']) {
+    if (empty($atts['form'])) {
         trigger_error(gTxt('form_not_specified'));
 
         return '';
@@ -4788,7 +4784,7 @@ function variable($atts, $thing = null)
 
     extract(lAtts(array(
         'name'  => '',
-        'value' => $thing !== null ? parse($thing) : null,
+        'value' => $thing ? parse($thing) : $thing,
     ), $atts));
 
     if (empty($name)) {

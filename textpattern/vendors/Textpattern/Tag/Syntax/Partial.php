@@ -42,10 +42,11 @@ class Partial
         global $yield;
 
         extract(lAtts(array(
-            'name' => ''
+            'name' => '',
+            'value' => $thing ? parse($thing) : $thing
         ), $atts));
 
-        $inner = !empty($yield[$name]) ? end($yield[$name]) : (isset($thing) ? parse($thing) : null);
+        $inner = !empty($yield[$name]) ? end($yield[$name]) : $value;
 
         return isset($inner) ? $inner : '';
     }
