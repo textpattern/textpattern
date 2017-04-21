@@ -2546,7 +2546,7 @@ function splat($text)
         $stack[$sha] = array();
         $parse[$sha] = array();
 
-        if (preg_match_all('@(\w+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
+        if (preg_match_all('@([\w\-]+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
             foreach ($match as $m) {
                 $name = strtolower($m[1]);
 
@@ -4220,8 +4220,8 @@ function EvalElse($thing, $condition)
         unset($txp_atts['not']);
     }
 
-    if (empty($condition)) {
-        $txp_atts[0] = true;
+    if (empty($condition) && $txp_atts) {
+        $txp_atts = null;
     }
 
     if (strpos($thing, ':else') === false || empty($txp_parsed[$hash = sha1($thing)])) {
@@ -4304,7 +4304,7 @@ function parse_form($name)
     static $stack = array(), $depth = null;
 
     if ($depth === null) {
-        $depth = get_pref('form_circular_depth') or $depth = 10;
+        $depth = get_pref('form_circular_depth', 31);
     }
 
     $out = '';

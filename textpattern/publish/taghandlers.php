@@ -221,7 +221,7 @@ function page_title($atts)
         $out = gTxt('search_results').' '.gTxt('txt_quote_double_open').txpspecialchars($q).gTxt('txt_quote_double_close').$pageStr.$appending;
     } elseif ($c) {
         $out = txpspecialchars(fetch_category_title($c, $context)).$pageStr.$appending;
-    } elseif ($s and $s != 'default') {
+    } elseif ($s && $s != 'default') {
         $out = txpspecialchars(fetch_section_title($s)).$pageStr.$appending;
     } elseif ($author) {
         $out = txpspecialchars(get_author_name($author)).$pageStr.$appending;
@@ -305,11 +305,11 @@ function image($atts)
 
         $out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"';
 
-        if ($html_id and !$wraptag) {
+        if ($html_id && !$wraptag) {
             $out .= ' id="'.txpspecialchars($html_id).'"';
         }
 
-        if ($class and !$wraptag) {
+        if ($class && !$wraptag) {
             $out .= ' class="'.txpspecialchars($class).'"';
         }
 
@@ -377,11 +377,11 @@ function thumbnail($atts)
 
             $out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"';
 
-            if ($html_id and !$wraptag) {
+            if ($html_id && !$wraptag) {
                 $out .= ' id="'.txpspecialchars($html_id).'"';
             }
 
-            if ($class and !$wraptag) {
+            if ($class && !$wraptag) {
                 $out .= ' class="'.txpspecialchars($class).'"';
             }
 
@@ -428,17 +428,32 @@ function output_form($atts, $thing = null)
 {
     global $yield;
 
-    extract(lAtts(array(
+    $atts = lAtts($atts + array(
         'form' => ''
-    ), $atts));
+    ), $atts);
 
-    if (!$form) {
+    if (!$atts['form']) {
         trigger_error(gTxt('form_not_specified'));
-        $out = '';
-    } else {
-        $yield[] = isset($thing) ? parse($thing) : null;
-        $out = parse_form($form);
-        array_pop($yield);
+
+        return '';
+    }
+
+    $form = $atts['form'];
+    unset($atts['form']);
+    $atts += array('' => $thing ? parse($thing) : $thing);
+
+    foreach ($atts as $name => $value) {
+        if (!isset($yield[$name])) {
+            $yield[$name] = array();
+        }
+
+        $yield[$name][] = $value;
+    }
+
+    $out = parse_form($form);
+
+    foreach ($atts as $name => $value) {
+        array_pop($yield[$name]);
     }
 
     return $out;
@@ -1268,7 +1283,7 @@ function category_list($atts, $thing = null)
             if (!isset($thing) && !$form) {
                 extract($thiscategory);
                 $out[] = tag(txpspecialchars($title), 'a',
-                    (($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
+                    (($active_class && (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
                     ' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'context' => $type)).'"'
                 ).(
                     isset($cache[$hash][$name]) && $children > $level && count($cache[$hash][$name]) > 1
@@ -1385,7 +1400,7 @@ function section_list($atts, $thing = null)
                 $url = pagelinkurl(array('s' => $name));
 
                 $out[] = tag(txpspecialchars($title), 'a',
-                    (($active_class and (0 == strcasecmp($s, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
+                    (($active_class && (0 == strcasecmp($s, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
                     ' href="'.$url.'"'
                 );
             } else {
@@ -1434,7 +1449,7 @@ function search_input($atts)
         'match'   => 'exact',
     ), $atts));
 
-    if ($form and !array_diff_key($atts, array('form' => true))) {
+    if ($form && !array_diff_key($atts, array('form' => true))) {
         $rs = fetch_form($form);
 
         if ($rs) {
@@ -1661,7 +1676,7 @@ function newer($atts, $thing = null)
     $numPages = $thispage['numPages'];
     $pg = $thispage['pg'];
 
-    if ($numPages > 1 and $pg > 1 and $pg <= $numPages) {
+    if ($numPages > 1 && $pg > 1 && $pg <= $numPages) {
         $nextpg = ($pg - 1 == 1) ? '' : ($pg - 1);
 
         // Author URLs should use RealName, rather than username.
@@ -1719,7 +1734,7 @@ function older($atts, $thing = null)
     $numPages = $thispage['numPages'];
     $pg = $thispage['pg'];
 
-    if ($numPages > 1 and $pg > 0 and $pg < $numPages) {
+    if ($numPages > 1 && $pg > 0 && $pg < $numPages) {
         $nextpg = $pg + 1;
 
         // Author URLs should use RealName, rather than username.
@@ -2073,7 +2088,7 @@ function comments_form($atts, $thing = null)
         $out = graf($out, ' id="txpCommentInputForm"');
     } else {
         // Display a comment preview if required.
-        if (ps('preview') and $show_preview) {
+        if (ps('preview') && $show_preview) {
             $out = comments_preview(array());
         }
 
@@ -2092,7 +2107,7 @@ function comments_form($atts, $thing = null)
 
         // Experimental clean URLs with only 404-error-document on Apache possibly
         // requires messy URLs for POST requests.
-        if (defined('PARTLY_MESSY') and (PARTLY_MESSY)) {
+        if (defined('PARTLY_MESSY') && (PARTLY_MESSY)) {
             $url = hu.'?id='.intval($parentid);
         }
 
@@ -2205,8 +2220,8 @@ function comment_message_input($atts)
     }
 
     $required = ($prefs['doctype'] == 'html5') ? ' required' : '';
-    $cols = ($cols and is_numeric($cols)) ? ' cols="'.intval($cols).'"' : '';
-    $rows = ($rows and is_numeric($rows)) ? ' rows="'.intval($rows).'"' : '';
+    $cols = ($cols && is_numeric($cols)) ? ' cols="'.intval($cols).'"' : '';
+    $rows = ($rows && is_numeric($rows)) ? ' rows="'.intval($rows).'"' : '';
     $style = ($style ? ' style="'.$style.'"' : '');
 
     return '<textarea class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"').
@@ -2809,7 +2824,7 @@ function article_category($atts, $thing = null)
             $out = href(
                 parse($thing),
                 pagelinkurl(array('s' => $section, 'c' => $category)),
-                (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
+                (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
                 ($title ? ' title="'.$label.'"' : '').
                 ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
             );
@@ -2873,14 +2888,14 @@ function category($atts, $thing = null)
             $out = href(
                 parse($thing),
                 $href,
-                (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
+                (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
                 ($title ? ' title="'.$label.'"' : '')
             );
         } elseif ($link) {
             $out = href(
                 $label,
                 $href,
-                ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : ''
+                ($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : ''
             );
         } elseif ($url) {
             $out = $href;
@@ -2926,14 +2941,14 @@ function section($atts, $thing = null)
             $out = href(
                 parse($thing),
                 $href,
-                (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
+                (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
                 ($title ? ' title="'.$label.'"' : '')
             );
         } elseif ($link) {
             $out = href(
                 $label,
                 $href,
-                ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : ''
+                ($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : ''
             );
         } elseif ($url) {
             $out = $href;
@@ -3040,8 +3055,8 @@ function article_image($atts)
                     }
 
                     $out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"'.
-                        (($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
-                        (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
+                        (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
+                        (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
                         ($style ? ' style="'.txpspecialchars($style).'"' : '').
                         ($width ? ' width="'.(int) $width.'"' : '').
                         ($height ? ' height="'.(int) $height.'"' : '').
@@ -3058,8 +3073,8 @@ function article_image($atts)
                 }
 
                 $out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"'.
-                    (($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
-                    (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
+                    (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
+                    (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
                     ($style ? ' style="'.txpspecialchars($style).'"' : '').
                     ($width ? ' width="'.(int) $width.'"' : '').
                     ($height ? ' height="'.(int) $height.'"' : '').
@@ -3072,8 +3087,8 @@ function article_image($atts)
         }
     } else {
         $out = '<img src="'.txpspecialchars($image).'" alt=""'.
-            (($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
-            (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
+            (($html_id && !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
+            (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
             ($style ? ' style="'.txpspecialchars($style).'"' : '').
             ($width ? ' width="'.(int) $width.'"' : '').
             ($height ? ' height="'.(int) $height.'"' : '').
@@ -4254,7 +4269,7 @@ function page_url($atts)
         'type' => 'request_uri',
     ), $atts));
 
-    if ($type == 'pg' and $pretext['pg'] == '') {
+    if ($type == 'pg' && $pretext['pg'] == '') {
         return '1';
     }
 
@@ -4558,7 +4573,7 @@ function file_download_size($atts)
         'format'   => '',
     ), $atts));
 
-    if (is_numeric($decimals) and $decimals >= 0) {
+    if (is_numeric($decimals) && $decimals >= 0) {
         $decimals = intval($decimals);
     } else {
         $decimals = 2;
