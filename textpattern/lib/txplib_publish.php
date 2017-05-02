@@ -188,6 +188,8 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         return $cache[$key];
     }
 
+    $expired = $id = $time = $keywords = $sortdir = '';
+
     extract($atts);
     $expired = ($expired && ($prefs['publish_expired_articles']));
     $status = isset($status) && intval($status) == STATUS_STICKY ? STATUS_STICKY : STATUS_LIVE;
