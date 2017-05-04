@@ -1,0 +1,8 @@
+<% if @manage_package_repo and (scope.function_versioncmp([@version.to_s, '9.1']) >= 0) -%>
+.include /lib/systemd/system/postgresql-<%= @version %>.service
+<% else -%>
+.include /lib/systemd/system/postgresql.service
+<% end -%>
+[Service]
+Environment=PGPORT=<%= @port %>
+Environment=PGDATA=<%= @datadir %>

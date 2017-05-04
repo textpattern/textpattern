@@ -1,0 +1,20 @@
+---
+HOSTS:
+  czriitzephrrlzw:
+    roles:
+    - master
+    - database
+    - dashboard
+    - agent
+    - default
+    platform: sles-12-x86_64
+    template: sles-12-x86_64
+    hypervisor: vcloud
+CONFIG:
+  nfs_server: none
+  consoleport: 443
+  datastore: instance0
+  folder: Delivery/Quality Assurance/Enterprise/Dynamic
+  resourcepool: delivery/Quality Assurance/Enterprise/Dynamic
+  pooling_api: http://vcloud.delivery.puppetlabs.net/
+  pe_dir: http://enterprise.delivery.puppetlabs.net/3.4/preview

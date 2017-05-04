@@ -1,0 +1,29 @@
+h1. Vagrant Box for Testing and Development
+
+There's a Vagrant box configuration that you can use to spin up a local virtual machine for testing and development.
+
+h2. Default Specs
+
+* CentOS 6 x64
+* PHP 5.6
+* Mysql 5.6
+** User @root@ with password @root@ by default
+** Database @databasename@ created by default (as it's named in @textpattern/config-deist.php@)
+* "Composer":https://getcomposer.org/
+* "Xdebug":https://xdebug.org/
+* "Selenuim Server":http://www.seleniumhq.org/ with FireFox for automated browser testing
+
+
+h2. Requirements
+
+* "Vagrant 1.8.x":https://www.vagrantup.com/downloads.html
+* "VirtualBox 5":https://www.virtualbox.org/wiki/Downloads
+* Create a duplicate of @puphpet/config-dist.yaml@ to @puphpet/config.yaml@ and update any information needed
+
+Once both Vagrant and Virtual box are installed you can run @vagrant up@ from the project root.
+
+h2. Notes
+
+* If you are feeling daring you can update the vagrant box config to whatever you need. The online GUI "Puphpet":https://puphpet.com/#frontpage was used to create the base configuration. You can drag and drop the @puphpet/config.yaml@ file onto the Puphpet GUI to change any part of the configuration or just edit the file itself. Any update will require a @vagrant provision@ to be applied.
+* You will need to add a entry to your host file to bring up this virtual machine in your browser, by default is @192.168.56.101 textpattern.local@, then you can browse to http://textpattern.local to view your site in the vagrant box.
+* You can interact with the Selenium server inside the vagrant box to run automated headless browser tests. More on that coming.

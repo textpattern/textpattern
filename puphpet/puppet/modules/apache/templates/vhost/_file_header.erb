@@ -1,0 +1,10 @@
+# ************************************
+# Vhost template in module puppetlabs-apache
+# Managed by Puppet
+# ************************************
+
+<VirtualHost <%= [@nvh_addr_port].flatten.compact.join(' ') %>>
+  ServerName <%= @servername %>
+<% if @serveradmin -%>
+  ServerAdmin <%= @serveradmin %>
+<% end -%>

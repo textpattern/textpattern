@@ -9,6 +9,10 @@
 Icon?
 ehthumbs.db
 Thumbs.db
-/vendor
-/composer.lock
-*~
+composer.lock
+.idea/*
+vendor/*
+puphpet/config.yaml
+.vagrant/*
+textpattern/config.php
+puphpet/files/dot/*

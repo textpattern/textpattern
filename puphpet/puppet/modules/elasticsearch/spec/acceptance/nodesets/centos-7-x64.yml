@@ -1,0 +1,15 @@
+HOSTS:
+  centos-7-x64:
+    roles:
+      - master
+      - database
+      - dashboard
+    platform: el-7-x86_64
+    image: electrical/centos:7
+    hypervisor: docker
+    docker_cmd: '["/usr/sbin/init"]'
+    docker_image_commands:
+      - 'yum install -y wget ntpdate rubygems ruby-devel augeas-devel ruby-augeas tar'
+    docker_preserve_image: true
+CONFIG:
+  type: foss
