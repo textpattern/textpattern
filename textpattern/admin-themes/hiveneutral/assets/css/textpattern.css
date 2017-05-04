@@ -1540,8 +1540,6 @@ button {
  *
  * Anchor elements kept to one line to prevent space between buttons.
  *
- * TODO: check if this would be better via flexbox instead?
- *
  * Example HTML:
  *
  * <p class="nav-tertiary">
@@ -1591,19 +1589,23 @@ button {
  *     <a class="navlink-active">Page 1</a><a class="navlink">Page 2</a>
  * </p>
  */
-  .nav-tertiary .navlink-active {
+  .nav-tertiary .navlink-active,
+  .filtered button.ui-corner-right {
     background-color: #9dc8ef;
     border-color: #6faee7;
   }
-  .nav-tertiary .navlink-active:hover {
+  .nav-tertiary .navlink-active:hover,
+  .filtered button.ui-corner-right:hover {
     background-color: #a6cdf0;
     border-color: #2d89dd;
   }
-  .nav-tertiary .navlink-active:active {
+  .nav-tertiary .navlink-active:active,
+  .filtered button.ui-corner-right:active {
     background-color: #87bceb;
     border-color: #2d89dd;
   }
-  .nav-tertiary .navlink-active:focus {
+  .nav-tertiary .navlink-active:focus,
+  .filtered button.ui-corner-right:focus {
     border-color: #0066ff;
   }
   /**
@@ -5579,7 +5581,7 @@ button {
     height: 20px;
     border-radius: 50%;
     background-color: #f7f7f7;
-    cursor: default;
+    cursor: pointer;
     z-index: 2;
     -ms-touch-action: none;
         touch-action: none;

@@ -1552,8 +1552,6 @@ button {
  *
  * Anchor elements kept to one line to prevent space between buttons.
  *
- * TODO: check if this would be better via flexbox instead?
- *
  * Example HTML:
  *
  * <p class="nav-tertiary">
@@ -1603,22 +1601,26 @@ button {
  *     <a class="navlink-active">Page 1</a><a class="navlink">Page 2</a>
  * </p>
  */
-  .nav-tertiary .navlink-active {
+  .nav-tertiary .navlink-active,
+  .filtered button.ui-corner-right {
     background-color: #cce0ff;
     background-image: linear-gradient(#e6f0ff, #cce0ff);
     border-color: #96bfff;
   }
-  .nav-tertiary .navlink-active:hover {
+  .nav-tertiary .navlink-active:hover,
+  .filtered button.ui-corner-right:hover {
     background-color: #d6e6ff;
     background-image: linear-gradient(#f0f6ff, #d6e6ff);
     border-color: #4a91ff;
   }
-  .nav-tertiary .navlink-active:active {
+  .nav-tertiary .navlink-active:active,
+  .filtered button.ui-corner-right:active {
     background-color: #b3d1ff;
     background-image: linear-gradient(#cde1ff, #b3d1ff);
     border-color: #4a91ff;
   }
-  .nav-tertiary .navlink-active:focus {
+  .nav-tertiary .navlink-active:focus,
+  .filtered button.ui-corner-right:focus {
     border-color: #0066ff;
   }
   /**
@@ -5614,7 +5616,7 @@ button {
     border-radius: 50%;
     background-color: #ffffff;
     box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-    cursor: default;
+    cursor: pointer;
     z-index: 2;
     -ms-touch-action: none;
         touch-action: none;

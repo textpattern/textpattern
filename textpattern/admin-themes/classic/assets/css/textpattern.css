@@ -1375,13 +1375,16 @@ button {
   [dir="rtl"] ul.nav-tertiary {
     padding: 0;
   }
-  .navlink-active {
+  .navlink-active,
+  .filtered button.ui-corner-right {
     background-color: #fff8dd;
   }
-  .navlink-active:hover {
+  .navlink-active:hover,
+  .filtered button.ui-corner-right:hover {
     background-color: #fffdf7;
   }
-  .navlink-active:active {
+  .navlink-active:active,
+  .filtered button.ui-corner-right:active {
     background-color: #fff0b4;
   }
   /**
