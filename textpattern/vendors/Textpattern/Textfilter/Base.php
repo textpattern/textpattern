@@ -133,7 +133,7 @@ class Base implements TextfilterInterface
     }
 
     /**
-     * Gets this filter's help.
+     * Gets this filter's help URL.
      *
      * @return string
      */

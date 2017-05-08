@@ -1890,9 +1890,12 @@ textpattern.Route.add('article', function ()
     $listoptions.on('click', 'li', function(e) {
         var chosen = $(e.target);
         var wrapper = chosen.closest('.txp-textfilter-options');
+        var thisHelp = chosen.data('help');
+        var renderHelp = (typeof thisHelp === 'undefined') ? '' : thisHelp;
 
         wrapper.find('.textfilter-value').val(chosen.data('id'));
         wrapper.find('.textfilter-chosen').text(textpattern.gTxt('textfilter', {'{filter}' : chosen.text()}));
+        wrapper.find('.textfilter-help').html(renderHelp);
     });
 
     $listoptions.hide().menu();
