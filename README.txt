@@ -23,9 +23,9 @@ system. Textpattern is both free and open source.
   Textpattern user documentation at https://docs.textpattern.io
 * You can get support and information via:
    Forum:    https://forum.textpattern.io/
-   Twitter:  https://textpattern.io/@textpattern
+   GitHub:   https://textpattern.io/github
    Google+:  https://textpattern.io/+
-   Facebook: https://textpattern.io/facebook
+   Twitter:  https://textpattern.io/@textpattern
 
 
 == Installation ==
