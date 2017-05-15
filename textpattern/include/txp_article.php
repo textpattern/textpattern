@@ -1835,8 +1835,8 @@ function article_partial_body($rs)
             array('class' => 'txp-textfilter-options-list txp-dropdown'))
             .fInput('hidden', 'textile_body', $rs['textile_body'], array('class' => 'textfilter-value'));
         $textarea_options = array($textarea_options,
-            n.'<div class="txp-textarea-options txp-textfilter-options">'.
-                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter-chosen')), '#', array('class' => 'txp-textfilter-options-button')).'<span class="textfilter-help">'.$help.'</span>'.$html_markup.'</div>'
+            n.'<div class="txp-textarea-options txp-textfilter-options no-ui-button">'.
+                href(span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter-chosen')), '#', array('class' => 'txp-textfilter-options-button')).'<span class="textfilter-help">'.$help.'</span>'.$html_markup.'</div>'
             );
     }
 
@@ -1898,8 +1898,8 @@ function article_partial_excerpt($rs)
             array('class' => 'txp-textfilter-options-list txp-dropdown'))
             .fInput('hidden', 'textile_excerpt', $rs['textile_excerpt'], array('class' => 'textfilter-value'));
         $textarea_options = array($textarea_options,
-            n.'<div class="txp-textarea-options txp-textfilter-options">'.
-                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter-chosen')), '#', array('class' => 'txp-textfilter-options-button')).'<span class="textfilter-help">'.$help.'</span>'.$html_markup.'</div>'
+            n.'<div class="txp-textarea-options txp-textfilter-options no-ui-button">'.
+                href(span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter-chosen')), '#', array('class' => 'txp-textfilter-options-button')).'<span class="textfilter-help">'.$help.'</span>'.$html_markup.'</div>'
             );
     }
 
