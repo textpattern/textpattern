@@ -611,7 +611,7 @@ button {
   }
   #messagepane span.success, #messagepane span.warning, #messagepane span.error {
     display: inline-block;
-    max-width: 53.1538461538em;
+    max-width: 58.1538461538em;
     margin: 0 auto;
     padding: 0.53846153846154em 2.84615384615385em 0.53846153846154em 1em;
     border-radius: 0.3em 0.3em 0 0;
@@ -1292,7 +1292,7 @@ button {
  */
   input[size="32"] {
     width: 100%;
-    max-width: 28em;
+    max-width: 30em;
   }
   input.input-large {
     width: 100%;
@@ -2063,7 +2063,7 @@ button {
  * <div class="txp-layout-textbox">
  */
   .txp-layout-textbox {
-    max-width: 57em;
+    max-width: 62em;
     margin: 0 auto;
   }
   /* Inline grids
@@ -3040,7 +3040,7 @@ button {
  * 2. Remove margin above `h2` within panels.
  */
   .txp-edit {
-    max-width: 55em;
+    max-width: 60em;
     margin: 0 auto 1em;
     padding: 1em 1em 1px;
     /* 1 */
@@ -3123,7 +3123,7 @@ button {
  */
   .txp-form-field-label,
   .txp-form-field-value {
-    max-width: 29em;
+    max-width: 31em;
   }
   /**
  * Inline form field pairings on edit panels, preferences group panels and
@@ -3456,7 +3456,7 @@ button {
   /* Admin -> Preferences panel - additional layout
    ========================================================================== */
   .txp-prefs-group {
-    max-width: 60em;
+    max-width: 62em;
   }
   /* Admin -> Languages panel - additional layout
    ========================================================================== */
