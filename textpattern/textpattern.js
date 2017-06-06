@@ -100,8 +100,7 @@ function verify(msg)
  * @since  4.5.0
  */
 
-jQuery.fn.txpMultiEditForm = function (method, opt)
-{
+jQuery.fn.txpMultiEditForm = function (method, opt) {
     var args = {};
 
     var defaults = {
@@ -124,8 +123,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
         args = opt;
     }
 
-    this.closest('form').each(function ()
-    {
+    this.closest('form').each(function () {
         var $this = $(this), form = {}, methods = {}, lib = {};
 
         if ($this.data('_txpMultiEdit')) {
@@ -151,8 +149,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
          * @return {object} methods
          */
 
-        methods.addOption = function (options)
-        {
+        methods.addOption = function (options) {
             var settings = $.extend({
                 'label' : null,
                 'value' : null,
@@ -163,8 +160,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
                 return methods;
             }
 
-            var option = form.editMethod.find('option').filter(function ()
-            {
+            var option = form.editMethod.find('option').filter(function () {
                 return $(this).val() === settings.value;
             });
 
@@ -207,8 +203,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
          * @return {object}  methods
          */
 
-        methods.select = function (options)
-        {
+        methods.select = function (options) {
             var settings = $.extend({
                 'index'   : null,
                 'range'   : null,
@@ -219,13 +214,11 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
             var obj = $this.find(form.boxes);
 
             if (settings.value !== null) {
-                obj = obj.filter(function ()
-                {
+                obj = obj.filter(function () {
                     return $.inArray($(this).val(), settings.value) !== -1;
                 });
             } else if (settings.index !== null) {
-                obj = obj.filter(function (index)
-                {
+                obj = obj.filter(function (index) {
                     return $.inArray(index, settings.index) !== -1;
                 });
             } else if (settings.range !== null) {
@@ -243,8 +236,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
          * @return {object} lib
          */
 
-        lib.highlight = function ()
-        {
+        lib.highlight = function () {
             var element = $this.find(form.boxes);
             element.filter(':checked').closest(opt.highlighted).addClass(opt.selectedClass);
             element.filter(':not(:checked)').closest(opt.highlighted).removeClass(opt.selectedClass);
@@ -257,16 +249,14 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
          * @return {object} lib
          */
 
-        lib.extendedClick = function ()
-        {
+        lib.extendedClick = function () {
             if (opt.rowClick) {
                 var selector = opt.row;
             } else {
                 var selector = form.boxes;
             }
 
-            $this.on('click', selector, function (e)
-            {
+            $this.on('click', selector, function (e) {
                 var self = ($(e.target).is(form.boxes) || $(this).is(form.boxes));
 
                 if (!self && (e.target != this || $(this).is('a, :input') || $(e.target).is('a, :input'))) {
@@ -318,10 +308,8 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
          * @return {object} lib
          */
 
-        lib.checked = function ()
-        {
-            $this.on('change', form.boxes, function (e)
-            {
+        lib.checked = function () {
+            $this.on('change', form.boxes, function (e) {
                 var box = $(this);
                 var boxes = $this.find(form.boxes);
 
@@ -343,12 +331,10 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
          * @return {object} lib
          */
 
-        lib.changeMethod = function ()
-        {
+        lib.changeMethod = function () {
             form.button.hide();
 
-            form.editMethod.val('').change(function (e)
-            {
+            form.editMethod.val('').change(function (e) {
                 var selected = $(this).find('option:selected');
                 $this.find('.multi-step').remove();
 
@@ -375,10 +361,8 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
          * @return {object} lib
          */
 
-        lib.sendForm = function ()
-        {
-            $this.submit(function ()
-            {
+        lib.sendForm = function () {
+            $this.submit(function () {
                 if (opt.confirmation !== false && verify(opt.confirmation) === false) {
                     form.editMethod.val('').change();
 
@@ -392,16 +376,13 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
         if (!$this.data('_txpMultiEdit')) {
             lib.highlight().extendedClick().checked().changeMethod().sendForm();
 
-            (function ()
-            {
+            (function () {
                 var multiOptions = $this.find('.multi-option:not(.multi-step)');
 
-                form.editMethod.find('option[value!=""]').each(function ()
-                {
+                form.editMethod.find('option[value!=""]').each(function () {
                     var value = $(this).val();
 
-                    var option = multiOptions.filter(function ()
-                    {
+                    var option = multiOptions.filter(function () {
                         return $(this).data('multi-option') === value;
                     });
 
@@ -417,8 +398,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
                 multiOptions.remove();
             })();
 
-            $this.on('change', opt.selectAll, function (e)
-            {
+            $this.on('change', opt.selectAll, function (e) {
                 methods.select({
                     'checked' : $(this).prop('checked')
                 });
@@ -687,7 +667,7 @@ function setClassRemember(className, force)
  * @see    http://api.jquery.com/jQuery.post/
  */
 
-function sendAsyncEvent (data, fn, format)
+function sendAsyncEvent(data, fn, format)
 {
     var formdata = false;
     if ($.type(data) === 'string' && data.length > 0) {
@@ -735,8 +715,7 @@ textpattern.Relay =
      * textpattern.Relay.callback('newEvent', {'name1' : 'value1', 'name2' : 'value2'});
      */
 
-    callback: function (event, data)
-    {
+    callback: function (event, data) {
         return $(this).trigger(event, data);
     },
 
@@ -755,8 +734,7 @@ textpattern.Relay =
      * );
      */
 
-    register: function (event, fn)
-    {
+    register: function (event, fn) {
         $(this).on(event, fn);
         return this;
     }
@@ -794,7 +772,7 @@ textpattern.storage =
     },
 
     clean : function (obj) {
-        Object.keys(obj).forEach(function(key) {
+        Object.keys(obj).forEach(function (key) {
             if (obj[key] && typeof obj[key] === 'object') {
                 textpattern.storage.clean(obj[key]);
             } else if (obj[key] === null) {
@@ -827,8 +805,7 @@ textpattern.Console =
      * textpattern.Console.log('Some message');
      */
 
-    log : function (message)
-    {
+    log : function (message) {
         if (textpattern.production_status === 'debug') {
             textpattern.Console.history.push(message);
 
@@ -850,8 +827,7 @@ textpattern.Console =
  * Uses a namespaced 'txpConsoleLog.ConsoleAPI' event.
  */
 
-textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data)
-{
+textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
     if ($.type(console) === 'object' && $.type(console.log) === 'function') {
         console.log(data.message);
     }
@@ -878,10 +854,8 @@ textpattern.Route =
      * @param {object} fn    The callback
      */
 
-    add : function (pages, fn)
-    {
-        $.each(pages.split(','), function (index, page)
-        {
+    add : function (pages, fn) {
+        $.each(pages.split(','), function (index, page) {
             textpattern.Route.attached.push({
                 'page' : $.trim(page),
                 'fn'   : fn
@@ -897,15 +871,13 @@ textpattern.Route =
      * @param {string} options.step  The step
      */
 
-    init : function (options)
-    {
+    init : function (options) {
         var options = $.extend({
             'event' : textpattern.event,
             'step'  : textpattern.step
         }, options);
 
-        $.each(textpattern.Route.attached, function (index, data)
-        {
+        $.each(textpattern.Route.attached, function (index, data) {
             if (data.page === '' || data.page === options.event || data.page === options.event + '.' + options.step) {
                 data.fn({
                     'event' : options.event,
@@ -928,8 +900,7 @@ textpattern.Route =
  * @since  4.5.0
  */
 
-jQuery.fn.txpAsyncForm = function (options)
-{
+jQuery.fn.txpAsyncForm = function (options) {
     options = $.extend({
         dataType : 'script',
         success  : null,
@@ -937,8 +908,7 @@ jQuery.fn.txpAsyncForm = function (options)
     }, options);
 
     // Send form data to application, process response as script.
-    this.on('submit.txpAsyncForm', function (event)
-    {
+    this.on('submit.txpAsyncForm', function (event) {
         event.preventDefault();
 
         var $this = $(this);
@@ -960,16 +930,16 @@ jQuery.fn.txpAsyncForm = function (options)
 
         form.button.attr('disabled', true).after(form.spinner);
 
-        if (form.data)
+        if (form.data) {
             if ( form.data instanceof FormData ) {
                 form.data.append(form.button.attr('name') || '_txp_submit' , form.button.val() || '_txp_submit');
             } else {
                 form.data += '&' + (form.button.attr('name') || '_txp_submit') + '=' + (form.button.val() || '_txp_submit');
             }
+        }
 
         sendAsyncEvent(form.data, function () {}, options.dataType)
-            .done(function (data, textStatus, jqXHR)
-            {
+            .done(function (data, textStatus, jqXHR) {
                 if (options.success) {
                     options.success($this, event, data, textStatus, jqXHR);
                 }
@@ -982,8 +952,7 @@ jQuery.fn.txpAsyncForm = function (options)
                     'jqXHR'      : jqXHR
                 });
             })
-            .fail(function (jqXHR, textStatus, errorThrown)
-            {
+            .fail(function (jqXHR, textStatus, errorThrown) {
                 if (options.error) {
                     options.error($this, event, jqXHR, $.ajaxSetup(), errorThrown);
                 }
@@ -996,8 +965,7 @@ jQuery.fn.txpAsyncForm = function (options)
                     'thrownError'  : errorThrown
                 });
             })
-            .always(function ()
-            {
+            .always(function () {
                 $this.removeClass('busy');
                 form.button.removeAttr('disabled');
                 form.spinner.remove();
@@ -1019,16 +987,14 @@ jQuery.fn.txpAsyncForm = function (options)
  * @since  4.5.0
  */
 
-jQuery.fn.txpAsyncHref = function (options)
-{
+jQuery.fn.txpAsyncHref = function (options) {
     options = $.extend({
         dataType : 'text',
         success  : null,
         error    : null
     }, options);
 
-    this.on('click.txpAsyncHref', function (event)
-    {
+    this.on('click.txpAsyncHref', function (event) {
         event.preventDefault();
         var $this = $(this);
         var url = this.search.replace('?', '') + '&' + $.param({value : $this.text()});
@@ -1038,8 +1004,7 @@ jQuery.fn.txpAsyncHref = function (options)
         $('body').addClass('busy');
 
         sendAsyncEvent(url, function () {}, options.dataType)
-            .done(function (data, textStatus, jqXHR)
-            {
+            .done(function (data, textStatus, jqXHR) {
                 if (options.dataType === 'text') {
                     $this.html(data);
                 }
@@ -1056,8 +1021,7 @@ jQuery.fn.txpAsyncHref = function (options)
                     'jqXHR'      : jqXHR
                 });
             })
-            .fail(function (jqXHR, textStatus, errorThrown)
-            {
+            .fail(function (jqXHR, textStatus, errorThrown) {
                 if (options.error) {
                     options.error($this, event, jqXHR, $.ajaxSetup(), errorThrown);
                 }
@@ -1070,8 +1034,7 @@ jQuery.fn.txpAsyncHref = function (options)
                     'thrownError'  : errorThrown
                 });
             })
-            .always(function ()
-            {
+            .always(function () {
                 $this.removeClass('busy');
                 $('body').removeClass('busy');
             });
@@ -1102,8 +1065,7 @@ function txpAsyncLink(event)
     $('body').addClass('busy');
 
     sendAsyncEvent(url, function () {}, 'html')
-        .done(function (data, textStatus, jqXHR)
-        {
+        .done(function (data, textStatus, jqXHR) {
             textpattern.Relay.callback('txpAsyncLink.success', {
                 'this'       : $this,
                 'event'      : event,
@@ -1112,8 +1074,7 @@ function txpAsyncLink(event)
                 'jqXHR'      : jqXHR
             });
         })
-        .fail(function (jqXHR, textStatus, errorThrown)
-        {
+        .fail(function (jqXHR, textStatus, errorThrown) {
             textpattern.Relay.callback('txpAsyncLink.error', {
                 'this'         : $this,
                 'event'        : event,
@@ -1122,8 +1083,7 @@ function txpAsyncLink(event)
                 'thrownError'  : errorThrown
             });
         })
-        .always(function ()
-        {
+        .always(function () {
             $this.removeClass('busy');
             $('body').removeClass('busy');
         });
@@ -1139,15 +1099,13 @@ function txpAsyncLink(event)
  * @since  4.6.0
  */
 
-jQuery.fn.txpDialog = function (options)
-{
+jQuery.fn.txpDialog = function (options) {
     options = $.extend({
         autoOpen : false,
         buttons  : [
             {
                 text  : textpattern.gTxt('ok'),
-                click : function ()
-                {
+                click : function () {
                     // callbacks?
 
                     if ($(this).is('form')) {
@@ -1156,7 +1114,7 @@ jQuery.fn.txpDialog = function (options)
 
                     $(this).dialog('close');
                 }
-            }
+        }
         ]
     }, options);
 
@@ -1173,8 +1131,7 @@ jQuery.fn.txpDialog = function (options)
  * @since  4.6.0
  */
 
-jQuery.fn.txpDatepicker = function (options)
-{
+jQuery.fn.txpDatepicker = function (options) {
     // TODO $.datepicker.regional[ "en" ];
     // TODO support from RTL languages
     this.datepicker(options);
@@ -1202,8 +1159,7 @@ jQuery.fn.txpDatepicker = function (options)
  * @since  4.6.0
  */
 
-jQuery.fn.txpSortable = function (options)
-{
+jQuery.fn.txpSortable = function (options) {
     options = $.extend({
         dataType : 'script',
         success  : null,
@@ -1222,12 +1178,10 @@ jQuery.fn.txpSortable = function (options)
          * Sends updated order to the server.
          */
 
-        update : function ()
-        {
+        update : function () {
             var ids = [], $this = $(this);
 
-            $this.children('[data-txp-sortable-id]').each(function ()
-            {
+            $this.children('[data-txp-sortable-id]').each(function () {
                 ids.push($(this).data('txp-sortable-id'));
             });
 
@@ -1237,8 +1191,7 @@ jQuery.fn.txpSortable = function (options)
                     step  : options.step,
                     order : ids
                 }, function () {}, options.dataType)
-                    .done(function (data, textStatus, jqXHR)
-                    {
+                    .done(function (data, textStatus, jqXHR) {
                         if (options.success) {
                             options.success.call($this, data, textStatus, jqXHR);
                         }
@@ -1250,8 +1203,7 @@ jQuery.fn.txpSortable = function (options)
                             'jqXHR'      : jqXHR
                         });
                     })
-                    .fail(function (jqXHR, textStatus, errorThrown)
-                    {
+                    .fail(function (jqXHR, textStatus, errorThrown) {
                         if (options.error) {
                             options.error.call($this, jqXHR, $.ajaxSetup(), errorThrown);
                         }
@@ -1286,9 +1238,8 @@ jQuery.fn.txpSortable = function (options)
  * @todo  Pass in name/email via 'options' to be injected in user_inputs[]
  */
 
-textpattern.passwordStrength = function (options)
-{
-    jQuery('form').on('keyup', 'input.txp-strength-hint', function() {
+textpattern.passwordStrength = function (options) {
+    jQuery('form').on('keyup', 'input.txp-strength-hint', function () {
         var settings = $.extend({
             'gtxt_prefix' : ''
         }, options);
@@ -1335,9 +1286,8 @@ textpattern.passwordStrength = function (options)
  * @since  4.6.0
  */
 
-textpattern.passwordMask = function()
-{
-    $('form').on('click', '#show_password', function() {
+textpattern.passwordMask = function () {
+    $('form').on('click', '#show_password', function () {
         var inputBox = $(this).closest('form').find('input.txp-maskable');
         var newType = (inputBox.attr('type') === 'password') ? 'text' : 'password';
         textpattern.changeType(inputBox, newType);
@@ -1354,8 +1304,7 @@ textpattern.passwordMask = function()
  * @since  4.6.0
  */
 
-textpattern.changeType = function(elem, type)
-{
+textpattern.changeType = function (elem, type) {
     if (elem.prop('type') === type) {
         // Already the correct type.
         return elem;
@@ -1364,7 +1313,7 @@ textpattern.changeType = function(elem, type)
     try {
         // May fail if browser prevents it.
         return elem.prop('type', type);
-    } catch(e) {
+    } catch (e) {
         // Create the element by hand.
         // Clone it via a div (jQuery has no html() method for an element).
         var html = $("<div>").append(elem.clone()).html();
@@ -1380,13 +1329,13 @@ textpattern.changeType = function(elem, type)
         // Copy data from old element.
         tmp.data('type', elem.data('type'));
         var events = elem.data('events');
-        var cb = function(events) {
-            return function() {
+        var cb = function (events) {
+            return function () {
                 // Re-bind all prior events.
-                for(var idx in events) {
+                for (var idx in events) {
                     var ydx = events[idx];
 
-                    for(var jdx in ydx) {
+                    for (var jdx in ydx) {
                         tmp.bind(idx, ydx[jdx].handler);
                     }
                 }
@@ -1410,8 +1359,7 @@ textpattern.changeType = function(elem, type)
  * @since  4.6.0
  */
 
-textpattern.encodeHTML = function (string)
-{
+textpattern.encodeHTML = function (string) {
     return $('<div/>').text(string).html();
 };
 
@@ -1426,15 +1374,13 @@ textpattern.encodeHTML = function (string)
  * textpattern.tr('hello world, and bye!', {'hello' : 'bye', 'bye' : 'hello'});
  */
 
-textpattern.tr = function (string, replacements)
-{
+textpattern.tr = function (string, replacements) {
     var match, position, output = '', replacement;
 
     for (position = 0; position < string.length; position++) {
         match = false;
 
-        $.each(replacements, function (from, to)
-        {
+        $.each(replacements, function (from, to) {
             if (string.substr(position, from.length) === from) {
                 match = true;
                 replacement = to;
@@ -1465,8 +1411,7 @@ textpattern.tr = function (string, replacements)
  * textpattern.gTxt('string', {'{name}' : 'example'}, true);
  */
 
-textpattern.gTxt = function (i18n, atts, escape)
-{
+textpattern.gTxt = function (i18n, atts, escape) {
     var tags = atts || {};
     var string = i18n;
     var name = string.toLowerCase();
@@ -1478,8 +1423,7 @@ textpattern.gTxt = function (i18n, atts, escape)
     if (escape !== false) {
         string = textpattern.encodeHTML(string);
 
-        $.each(tags, function (key, value)
-        {
+        $.each(tags, function (key, value) {
             tags[key] = textpattern.encodeHTML(value);
         });
     }
@@ -1506,8 +1450,7 @@ textpattern.gTxt = function (i18n, atts, escape)
  * $('p').gTxt('string').class('alert-block warning');
  */
 
-jQuery.fn.gTxt = function (opts, tags, escape)
-{
+jQuery.fn.gTxt = function (opts, tags, escape) {
     var options = $.extend({
         'string' : opts,
         'tags'   : tags,
@@ -1525,8 +1468,7 @@ jQuery.fn.gTxt = function (opts, tags, escape)
  * @since 4.5.0
  */
 
-$(document).keyup(function (e)
-{
+$(document).keyup(function (e) {
     if (e.keyCode == 27) {
         $('.close').parent().remove();
     }
@@ -1545,16 +1487,14 @@ function txp_search()
     $ui.find('.txp-search-button').button({
         showLabel: false,
         icon: 'ui-icon-search'
-    }).click(function ()
-    {
+    }).click(function () {
         $ui.submit();
     });
 
     $ui.find('.txp-search-options').button({
         showLabel: false,
         icon: 'ui-icon-triangle-1-s'
-    }).on('click', function (e)
-    {
+    }).on('click', function (e) {
         if (langdir === 'rtl') {
             var menu = $ui.find('.txp-dropdown').toggle().position(
             {
@@ -1571,8 +1511,7 @@ function txp_search()
             });
         };
 
-        $(document).one('click blur', function ()
-        {
+        $(document).one('click blur', function () {
             menu.hide();
         });
 
@@ -1606,11 +1545,11 @@ function txp_columniser()
         return;
     }
 
-    $tables.each(function(tabind) {
+    $tables.each(function (tabind) {
         var $table = $(this), items = [], selectAll = true,
             $headers = $table.find('thead tr>th');
 
-        $headers.each(function(index) {
+        $headers.each(function (index) {
             var $this = $(this), $title = $this.text().trim(), $id = $this.data('col');
 
             if (!$title) {
@@ -1628,7 +1567,7 @@ function txp_columniser()
             var disabled = $this.hasClass('asc') || $this.hasClass('desc') ? ' disabled="disabled"' : '';
             var $li =$('<li><div role="menuitem"><input class="checkbox active" id="opt-col-'+index+'-'+tabind+'" name="list_options[]" checked="checked" value="'+$id+'" data-index="'+index+'" type="checkbox"'+disabled+'><label for="opt-col-'+index+'-'+tabind+'">'+$title+'</label></div></li>');
             var $target = $table.find('tr>*:nth-child('+(index+1)+')');
-            var me = $li.find('#opt-col-'+index+'-'+tabind).on('change', function(ev) {
+            var me = $li.find('#opt-col-'+index+'-'+tabind).on('change', function (ev) {
                 toggleColumn($id, $target, $(this).prop('checked'));
             });
 
@@ -1639,7 +1578,7 @@ function txp_columniser()
                         $target.hide();
                         me.prop('checked', false)
                     }
-                } catch(e) {
+                } catch (e) {
                     stored = false;
                 }
             }
@@ -1658,8 +1597,7 @@ function txp_columniser()
 
         $ui.append($menu);
 
-        $ui.find('.txp-list-options-button').on('click', function(e)
-        {
+        $ui.find('.txp-list-options-button').on('click', function (e) {
             var dir = (langdir == 'rtl' ? 'left' : 'right');
             var menu = $ui.find('.txp-dropdown').toggle().position(
             {
@@ -1668,15 +1606,14 @@ function txp_columniser()
                 of: this
             });
 
-            $(document).one('click blur', function()
-            {
+            $(document).one('click blur', function () {
                 menu.hide();
             });
 
             return false;
         });
 
-        $ui.find('.txp-dropdown').hide().menu().click(function(e) {
+        $ui.find('.txp-dropdown').hide().menu().click(function (e) {
             e.stopPropagation();
         });
 
@@ -1701,7 +1638,8 @@ function txp_columniser()
  * @since  4.6.0
  */
 
-function txp_expand_collapse_all(ev) {
+function txp_expand_collapse_all(ev)
+{
     ev.preventDefault();
 
     var direction = ev.data.direction,
@@ -1727,17 +1665,14 @@ function txp_expand_collapse_all(ev) {
  *
  * @return {[type]} [description]
  */
-jQuery.fn.restorePanes = function ()
-{
+jQuery.fn.restorePanes = function () {
     var $this = $(this), stored = true;
     // Initialize dynamic WAI-ARIA attributes.
-    $this.find('.txp-summary a').each(function (i, elm)
-    {
+    $this.find('.txp-summary a').each(function (i, elm) {
         // Get id of toggled <section> region.
         var $elm = $(elm), region = this.hash;
 
         if (region) {
-
             var $region = $this.find(region);
             region = region.substr(1);
 
@@ -1747,13 +1682,15 @@ jQuery.fn.restorePanes = function ()
                 pane = region;
             }
 
-            if (stored) try {
-                if (textpattern.storage.data[textpattern.event]['panes'][pane] == true) {
-                    $elm.parent(".txp-summary").addClass("expanded");
-                    $region.show();
+            if (stored) {
+                try {
+                    if (textpattern.storage.data[textpattern.event]['panes'][pane] == true) {
+                        $elm.parent(".txp-summary").addClass("expanded");
+                        $region.show();
+                    }
+                } catch (e) {
+                    stored = false;
                 }
-            } catch(e) {
-                stored = false;
             }
 
             var vis = $region.is(':visible').toString();
@@ -1775,8 +1712,7 @@ var cookieEnabled = true;
 
 // Setup panel.
 
-textpattern.Route.add('setup', function ()
-{
+textpattern.Route.add('setup', function () {
     textpattern.passwordMask();
     textpattern.passwordStrength({
         'gtxt_prefix' : 'setup_'
@@ -1785,8 +1721,7 @@ textpattern.Route.add('setup', function ()
 
 // Login panel.
 
-textpattern.Route.add('login', function ()
-{
+textpattern.Route.add('login', function () {
     // Check cookies.
     if (!checkCookies()) {
         cookieEnabled = false;
@@ -1794,7 +1729,7 @@ textpattern.Route.add('login', function ()
     }
 
     // Focus on either username or password when empty.
-    $('#login_form input').each(function() {
+    $('#login_form input').each(function () {
         if (this.value === '') {
             this.focus();
             return false;
@@ -1807,8 +1742,7 @@ textpattern.Route.add('login', function ()
 
 // Write panel.
 
-textpattern.Route.add('article', function ()
-{
+textpattern.Route.add('article', function () {
     // Assume users would not change the timestamp if they wanted to
     // 'publish now'/'reset time'.
     $(document).on('change',
@@ -1818,8 +1752,7 @@ textpattern.Route.add('article', function ()
         '#write-timestamp input.hour,' +
         '#write-timestamp input.minute,' +
         '#write-timestamp input.second',
-        function ()
-        {
+        function () {
             $('#publish_now').prop('checked', false);
             $('#reset_time').prop('checked', false);
         }
@@ -1827,8 +1760,7 @@ textpattern.Route.add('article', function ()
 
     var status = $('select[name=Status]'), form = status.parents('form'), submitButton = form.find('input[type=submit]');
 
-    status.change(function ()
-    {
+    status.change(function () {
         if (!form.hasClass('published')) {
             if ($(this).val() < 4) {
                 submitButton.val(textpattern.gTxt('save'));
@@ -1838,8 +1770,7 @@ textpattern.Route.add('article', function ()
         }
     });
 
-    $('.txp-actions').on('click', '.txp-clone', function (e)
-    {
+    $('.txp-actions').on('click', '.txp-clone', function (e) {
         e.preventDefault();
         form.append('<input type="hidden" name="copy" value="1" />'+
             '<input type="hidden" name="publish" value="1" />');
@@ -1849,8 +1780,7 @@ textpattern.Route.add('article', function ()
     // Switch to Text/HTML/Preview mode.
     $(document).on('click',
         '[data-view-mode]',
-        function (e)
-        {
+        function (e) {
             e.preventDefault();
             $('input[name="view"]').val($(this).data('view-mode'));
             document.article_form.submit();
@@ -1861,8 +1791,7 @@ textpattern.Route.add('article', function ()
     var $listoptions_trigger = $('.txp-textfilter-options-button');
     var $listoptions = $('.txp-textfilter-options-list');
 
-    $listoptions_trigger.click(function (e)
-    {
+    $listoptions_trigger.click(function (e) {
         var $target = $(this).parent().find('.txp-textfilter-options-list');
 
         if (langdir === 'rtl') {
@@ -1879,15 +1808,14 @@ textpattern.Route.add('article', function ()
             });
         };
 
-        $(document).one('click blur', function ()
-        {
+        $(document).one('click blur', function () {
             $menu.hide();
         });
 
         return false;
     });
 
-    $listoptions.on('click', 'li', function(e) {
+    $listoptions.on('click', 'li', function (e) {
         var chosen = $(e.target);
         var wrapper = chosen.closest('.txp-textfilter-options');
         var thisHelp = chosen.data('help');
@@ -1903,20 +1831,16 @@ textpattern.Route.add('article', function ()
 
 // Uncheck reset on timestamp change.
 
-textpattern.Route.add('article, file', function ()
-{
-    $(document).on('change', '.posted input', function (e)
-    {
+textpattern.Route.add('article, file', function () {
+    $(document).on('change', '.posted input', function (e) {
         $('#publish_now, #reset_time').prop('checked', false);
     });
 });
 
 // 'Clone' button on Pages, Forms, Styles panels.
 
-textpattern.Route.add('css, page, form', function ()
-{
-    $('.txp-clone').click(function (e)
-    {
+textpattern.Route.add('css, page, form', function () {
+    $('.txp-clone').click(function (e) {
         e.preventDefault();
         var target = $(this).data('form');
         if (target) {
@@ -1929,28 +1853,26 @@ textpattern.Route.add('css, page, form', function ()
 
 // Tagbuilder.
 
-textpattern.Route.add('page, form, file, image', function ()
-{
+textpattern.Route.add('page, form, file, image', function () {
     // Set up asynchronous tag builder links.
-    textpattern.Relay.register('txpAsyncLink.success', function (event, data)
-    {
+    textpattern.Relay.register('txpAsyncLink.success', function (event, data) {
         $('#tagbuild_links').dialog('close').html($(data['data'])).dialog('open').restorePanes();
         $('#txp-tagbuilder-output').select();
     });
 
-    $('#tagbuild_links, .txp-list-col-tag-build').on('click', '.txp-tagbuilder-link', function(ev) {
+    $('#tagbuild_links, .txp-list-col-tag-build').on('click', '.txp-tagbuilder-link', function (ev) {
         txpAsyncLink(ev);
     });
 
     $('#tagbuild_links').dialog({
         dialogClass: 'txp-tagbuilder-container',
         autoOpen: false,
-        focus: function(ev, ui) {
+        focus: function (ev, ui) {
             $(ev.target).closest('.ui-dialog').focus();
         }
     });
 
-    $('.txp-tagbuilder-dialog').on('click', function(ev) {
+    $('.txp-tagbuilder-dialog').on('click', function (ev) {
         ev.preventDefault();
         if ($("#tagbuild_links").dialog('isOpen')) {
             $("#tagbuild_links").dialog('close');
@@ -1960,15 +1882,13 @@ textpattern.Route.add('page, form, file, image', function ()
     });
 
     // Set up delegated asynchronous tagbuilder form submission.
-    $('#tagbuild_links').on('click', 'form.asynchtml input[type="submit"]', function(ev) {
+    $('#tagbuild_links').on('click', 'form.asynchtml input[type="submit"]', function (ev) {
         $(this).closest('form.asynchtml').txpAsyncForm({
             dataType: 'html',
-            error: function ()
-            {
+            error: function () {
                 window.alert(textpattern.gTxt('form_submission_error'));
             },
-            success: function($this, event, data)
-            {
+            success: function ($this, event, data) {
                 $('#tagbuild_links').html(data);
                 $('#txp-tagbuilder-output').select();
             }
@@ -1978,8 +1898,7 @@ textpattern.Route.add('page, form, file, image', function ()
 
 // Forms panel.
 
-textpattern.Route.add('form', function ()
-{
+textpattern.Route.add('form', function () {
     $('#allforms_form').txpMultiEditForm({
         'checkbox'    : 'input[name="selected_forms[]"][type=checkbox]',
         'row'         : '.switcher-list li, .form-list-name',
@@ -1989,31 +1908,26 @@ textpattern.Route.add('form', function ()
 
 // Admin panel.
 
-textpattern.Route.add('admin', function ()
-{
+textpattern.Route.add('admin', function () {
     textpattern.passwordMask();
     textpattern.passwordStrength();
 });
 
 // Plugins panel.
 
-textpattern.Route.add('plugin', function ()
-{
-    textpattern.Relay.register('txpAsyncHref.success', function (event, data)
-    {
+textpattern.Route.add('plugin', function () {
+    textpattern.Relay.register('txpAsyncHref.success', function (event, data) {
         $(data['this']).closest('tr').toggleClass('active');
     });
 });
 
 // Images edit panel.
 
-textpattern.Route.add('image', function ()
-{
+textpattern.Route.add('image', function () {
     $('.thumbnail-swap-size').button({
         showLabel: false,
         icon: 'ui-icon-transfer-e-w'
-    }).on('click', function (ev)
-    {
+    }).on('click', function (ev) {
         var $w = $('#width');
         var $h = $('#height');
         var width = $w.val();
@@ -2025,8 +1939,7 @@ textpattern.Route.add('image', function ()
 
 // All panels?
 
-textpattern.Route.add('', function ()
-{
+textpattern.Route.add('', function () {
     txp_columniser();
 
     // Pane states
@@ -2040,8 +1953,7 @@ textpattern.Route.add('', function ()
     var $switchers = prefTabs.children('a[data-txp-pane]');
     var $section = window.location.hash ? prefsGroup.find($(window.location.hash).closest('section')) : [];
 
-    prefTabs.on('click focus', function(ev)
-    {
+    prefTabs.on('click focus', function (ev) {
         var me = $(this).children('a[data-txp-pane]');
         var data = new Object;
 
@@ -2073,8 +1985,7 @@ textpattern.Route.add('', function ()
 
 // Initialize JavaScript.
 
-$(document).ready(function ()
-{
+$(document).ready(function () {
     $('body').restorePanes();
 
     // Collapse/Expand all support.
@@ -2082,13 +1993,11 @@ $(document).ready(function ()
         .on('click', '.txp-expand-all', {direction: 'expand'}, txp_expand_collapse_all);
 
     // Confirmation dialogs.
-    $(document).on('click.txpVerify', 'a[data-verify]', function (e)
-    {
+    $(document).on('click.txpVerify', 'a[data-verify]', function (e) {
         return verify($(this).data('verify'));
     });
 
-    $(document).on('submit.txpVerify', 'form[data-verify]', function (e)
-    {
+    $(document).on('submit.txpVerify', 'form[data-verify]', function (e) {
         return verify($(this).data('verify'));
     });
 
@@ -2119,31 +2028,27 @@ $(document).ready(function ()
 
     // Set up asynchronous forms.
     $('form.async').txpAsyncForm({
-        error: function ()
-        {
+        error: function () {
             window.alert(textpattern.gTxt('form_submission_error'));
         }
     });
 
     // Set up asynchronous links.
     $('a.async:not(.script)').txpAsyncHref({
-        error: function ()
-        {
+        error: function () {
             window.alert(textpattern.gTxt('form_submission_error'));
         }
     });
 
     $('a.async.script').txpAsyncHref({
         dataType : 'script',
-        error    : function ()
-        {
+        error    : function () {
             window.alert(textpattern.gTxt('form_submission_error'));
         }
     });
 
     // Close button on the announce pane.
-    $(document).on('click', '.close', function (e)
-    {
+    $(document).on('click', '.close', function (e) {
         e.preventDefault();
         $(this).parent().remove();
     });
@@ -2152,15 +2057,14 @@ $(document).ready(function ()
     $('.txp-dropdown').hide();
 
     // Event handling and automation.
-    $(document).on('change.txpAutoSubmit', 'form [data-submit-on="change"]', function (e)
-    {
+    $(document).on('change.txpAutoSubmit', 'form [data-submit-on="change"]', function (e) {
         $(this).parents('form').submit();
     });
 
     // Polyfills.
     // Add support for form attribute in submit buttons.
     if ($('html').hasClass('no-formattribute')) {
-        $('.txp-save input[form]').click(function(e) {
+        $('.txp-save input[form]').click(function (e) {
             var targetForm = $(this).attr('form');
             $('form[id='+targetForm+']').submit();
         });
@@ -2192,8 +2096,7 @@ $(document).ready(function ()
 
 
     // Find and open associated dialogs.
-    $(document).on('click.txpDialog', '[data-txp-dialog]', function (e)
-    {
+    $(document).on('click.txpDialog', '[data-txp-dialog]', function (e) {
         $($(this).data('txp-dialog')).dialog('open');
         e.preventDefault();
     });
