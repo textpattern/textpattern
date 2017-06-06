@@ -11,4 +11,8 @@ ehthumbs.db
 Thumbs.db
 /vendor
 /composer.lock
+/images/*
+/images/!.gitignore
+/files/*
+/files/!.htaccess-dist
 *~
