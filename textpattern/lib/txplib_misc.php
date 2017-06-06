@@ -969,7 +969,7 @@ function imageFetchInfo($id = "", $name = "")
 {
     global $thisimage, $p;
     static $cache = array();
-    
+
     if ($id) {
         if (isset($cache['i'][$id])) {
             return $cache['i'][$id];
@@ -995,7 +995,7 @@ function imageFetchInfo($id = "", $name = "")
         assert_image();
         return false;
     }
-    
+
     $rs = safe_row("*", 'txp_image', $where);
 
     if ($rs) {
@@ -3506,7 +3506,7 @@ function format_filesize($bytes, $decimals = 2, $format = '')
     $sep_dec = isset($separators['decimal_point']) ? $separators['decimal_point'] : '.';
     $sep_thous = isset($separators['thousands_sep']) ? $separators['thousands_sep'] : ',';
 
-    return number_format($bytes, $decimals, $sep_dec, $sep_thous).gTxt('units_'.$units[$pow]);
+    return number_format($bytes, $decimals, $sep_dec, $sep_thous).sp.gTxt('units_'.$units[$pow]);
 }
 
 /**
