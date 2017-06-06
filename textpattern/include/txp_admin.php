@@ -727,7 +727,6 @@ function admin_multi_edit()
 
     switch ($method) {
         case 'delete':
-
             $assign_assets = ps('assign_assets');
 
             if (!$assign_assets) {
@@ -743,7 +742,6 @@ function admin_multi_edit()
             break;
 
         case 'changeprivilege':
-
             if (change_user_group($names, ps('privs'))) {
                 $changed = $names;
                 $msg = 'author_updated';
@@ -752,7 +750,6 @@ function admin_multi_edit()
             break;
 
         case 'resetpassword':
-
             foreach ($names as $name) {
                 send_reset_confirmation_request($name);
                 $changed[] = $name;
@@ -762,7 +759,6 @@ function admin_multi_edit()
             break;
 
         case 'resendactivation':
-
             foreach ($names as $name) {
                 send_account_activation($name);
                 $changed[] = $name;
