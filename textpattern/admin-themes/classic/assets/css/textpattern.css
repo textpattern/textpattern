@@ -176,13 +176,10 @@ button {
     font-size: 12px;
   }
   /**
- * Omit margin below heading on image edit, pages, forms, styles, prefs panels.
+ * Omit margin below heading on some special panels (e.g. image edit, page, css,
+ * form, prefs).
  */
-  #page-image .txp-heading,
-  #page-form .txp-heading,
-  #page-page .txp-heading,
-  #page-css .txp-heading,
-  #page-prefs .txp-heading {
+  .txp-heading-tight {
     margin-bottom: 0;
   }
   /**
