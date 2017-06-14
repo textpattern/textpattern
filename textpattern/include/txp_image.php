@@ -703,7 +703,7 @@ function image_edit($message = '', $id = '')
 
         echo n.'<div class="txp-layout">'.
             n.tag(
-                hed(gTxt('edit_image'), 1, array('class' => 'txp-heading')),
+                hed(gTxt('edit_image'), 1, array('class' => 'txp-heading txp-heading-tight')),
                 'div', array('class' => 'txp-layout-1col')
             ).
             n.tag(

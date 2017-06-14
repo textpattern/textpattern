@@ -693,12 +693,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'selector' => array('#txp-custom-field-group-content .txp-container', '.txp-container'),
             'cb'       => 'article_partial_custom_fields',
         ),
-        // 'Text formatting help' section.
-        'sidehelp' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => 'ul.textile',
-            'cb'       => 'article_partial_sidehelp',
-        ),
         // 'Recent articles' values.
         'recent_articles' => array(
             'mode'     => PARTIAL_VOLATILE,
@@ -1004,7 +998,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
         // 'Publish/Save' button.
         if ($step == 'create' and empty($GLOBALS['ID'])) {
-            if (has_privs('article.publish')) {
+            if (has_privs('article.publish') && get_pref('default_publish_status', STATUS_LIVE) >= STATUS_LIVE) {
                 $push_button = fInput('submit', 'publish', gTxt('publish'), 'publish');
             } else {
                 $push_button = fInput('submit', 'publish', gTxt('save'), 'publish');
@@ -1197,9 +1191,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
         // Custom menu entries.
         echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
-
-        // 'Text formatting help' collapsible section.
-        echo wrapRegion('txp-textfilter-group', $partials['sidehelp']['html'], 'txp-textfilter-group-content', 'textfilter_help', 'article_textfilter_help');
 
         // 'Recent articles' collapsible section.
         echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
@@ -1489,27 +1480,6 @@ function do_pings()
 function article_partial_html_title($rs)
 {
     return tag(admin_title($rs['Title']), 'title');
-}
-
-/**
- * Renders article formatting tips.
- *
- * The rendered widget can be customised via the 'article_ui > sidehelp'
- * pluggable UI callback event.
- *
- * @param array $rs Article data
- */
-
-function article_partial_sidehelp($rs)
-{
-    // Show markup help for both body and excerpt if they are different.
-    $help = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($rs['textile_body']);
-
-    if ($rs['textile_body'] != $rs['textile_excerpt']) {
-        $help .= Txp::get('\Textpattern\Textfilter\Registry')->getHelp($rs['textile_excerpt']);
-    }
-
-    return pluggable_ui('article_ui', 'sidehelp', $help, $rs);
 }
 
 /**
@@ -1835,23 +1805,38 @@ function article_partial_body($rs)
     // Article markup selection.
     if (has_privs('article.set_markup')) {
         // Markup help.
-//        $help = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($rs['textile_body']);
+        $help = '';
         $textfilter_opts = Txp::get('\Textpattern\Textfilter\Registry')->getMap();
         $selected = $textfilter_opts[$rs['textile_body']];
 
         $html_markup = array();
 
         foreach ($textfilter_opts as $filter_key => $filter_name) {
-            $html_markup[] = tag($filter_name, 'li', array('data-id' => $filter_key));
+            $thisHelp = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($filter_key);
+            $renderHelp = ($thisHelp) ? popHelp($thisHelp) : '';
+
+            $html_markup[] = tag(
+                tag(
+                    $filter_name, 'div', array(
+                        'data-id' => $filter_key,
+                        'data-help' => $renderHelp,
+                    )
+                ), 'li'
+            );
+
+            if ($filter_key == $rs['textile_body']) {
+                $help = $renderHelp;
+            }
         }
 
+        // Note: not using span() for the textfilter help, because it doesn't render empty content.
         $html_markup = tag(implode(n, $html_markup),
             'ul',
-            array('class' => 'txp-list-options-list txp-dropdown'))
-            .fInput('hidden', 'textile_body', $rs['textile_body'], array('class' => 'textfilter_value'));
+            array('class' => 'txp-textfilter-options-list txp-dropdown'))
+            .fInput('hidden', 'textile_body', $rs['textile_body'], array('class' => 'textfilter-value'));
         $textarea_options = array($textarea_options,
-            n.'<div class="txp-textarea-options">'.
-                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter_chosen')), '#', array('class' => 'txp-list-options-button')).n.popHelp('markup_body').$html_markup.'</div>'
+            n.'<div class="txp-textarea-options txp-textfilter-options no-ui-button">'.
+                href(span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter-chosen')), '#', array('class' => 'txp-textfilter-options-button')).'<span class="textfilter-help">'.$help.'</span>'.$html_markup.'</div>'
             );
     }
 
@@ -1883,23 +1868,38 @@ function article_partial_excerpt($rs)
     // Excerpt markup selection.
     if (has_privs('article.set_markup')) {
         // Markup help.
-//        $help = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($rs['textile_excerpt']);
+        $help = '';
         $textfilter_opts = Txp::get('\Textpattern\Textfilter\Registry')->getMap();
         $selected = $textfilter_opts[$rs['textile_excerpt']];
 
         $html_markup = array();
 
         foreach ($textfilter_opts as $filter_key => $filter_name) {
-            $html_markup[] = tag($filter_name, 'li', array('data-id' => $filter_key));
+            $thisHelp = Txp::get('\Textpattern\Textfilter\Registry')->getHelp($filter_key);
+            $renderHelp = ($thisHelp) ? popHelp($thisHelp) : '';
+
+            $html_markup[] = tag(
+                tag(
+                    $filter_name, 'div', array(
+                        'data-id' => $filter_key,
+                        'data-help' => $renderHelp,
+                    )
+                ), 'li'
+            );
+
+            if ($filter_key == $rs['textile_excerpt']) {
+                $help = $renderHelp;
+            }
         }
 
+        // Note: not using span() for the textfilter help, because it doesn't render empty content.
         $html_markup = tag(implode(n, $html_markup),
             'ul',
-            array('class' => 'txp-list-options-list txp-dropdown'))
-            .fInput('hidden', 'textile_excerpt', $rs['textile_excerpt'], array('class' => 'textfilter_value'));
+            array('class' => 'txp-textfilter-options-list txp-dropdown'))
+            .fInput('hidden', 'textile_excerpt', $rs['textile_excerpt'], array('class' => 'textfilter-value'));
         $textarea_options = array($textarea_options,
-            n.'<div class="txp-textarea-options">'.
-                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter_chosen')), '#', array('class' => 'txp-list-options-button')).n.popHelp('markup_excerpt').$html_markup.'</div>'
+            n.'<div class="txp-textarea-options txp-textfilter-options no-ui-button">'.
+                href(span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter-chosen')), '#', array('class' => 'txp-textfilter-options-button')).'<span class="textfilter-help">'.$help.'</span>'.$html_markup.'</div>'
             );
     }
 

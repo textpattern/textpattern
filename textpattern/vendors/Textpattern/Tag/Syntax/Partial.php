@@ -37,11 +37,16 @@ class Partial
      * @return string
      */
 
-    public static function renderYield()
+    public static function renderYield($atts, $thing = null)
     {
         global $yield;
 
-        $inner = end($yield);
+        extract(lAtts(array(
+            'name' => '',
+            'value' => $thing ? parse($thing) : $thing
+        ), $atts));
+
+        $inner = !empty($yield[$name]) ? end($yield[$name]) : $value;
 
         return isset($inner) ? $inner : '';
     }
@@ -54,15 +59,16 @@ class Partial
      * @return string
      */
 
-    public static function renderIfYield($atts, $thing)
+    public static function renderIfYield($atts, $thing = null)
     {
         global $yield;
 
         extract(lAtts(array(
-            'value' => null,
+            'name'  => '',
+            'value' => null
         ), $atts));
 
-        $inner = end($yield);
+        $inner = isset($yield[$name]) ? end($yield[$name]) : null;
 
         return parse($thing, $inner !== null && ($value === null || (string)$inner === (string)$value));
     }

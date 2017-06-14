@@ -8,7 +8,7 @@
     </title>
     <meta name="generator" content="Textpattern CMS">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="robots" content="noindex, follow, noodp, noydir">
+    <meta name="robots" content="noindex, follow">
 
     <!-- Google font API -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic">
