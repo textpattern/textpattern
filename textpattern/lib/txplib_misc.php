@@ -4220,7 +4220,7 @@ function EvalElse($thing, $condition)
         unset($txp_atts['not']);
     }
 
-    if (empty($condition) && $txp_atts) {
+    if (empty($condition)) {
         $txp_atts = null;
     }
 

@@ -426,7 +426,7 @@ function thumbnail($atts)
 
 function output_form($atts, $thing = null)
 {
-    global $yield;
+    global $txp_atts, $yield;
 
     if (empty($atts['form'])) {
         trigger_error(gTxt('form_not_specified'));
@@ -434,6 +434,7 @@ function output_form($atts, $thing = null)
         return '';
     }
 
+    $txp_atts = null;
     $form = $atts['form'];
     unset($atts['form']);
     $atts += array('' => $thing ? parse($thing) : $thing);

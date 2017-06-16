@@ -385,7 +385,7 @@ function parse($thing, $condition = true)
     }
 
     if (!isset($short_tags)) {
-        $short_tags = get_pref('enable_short_tags');
+        $short_tags = get_pref('enable_short_tags', true);
         $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp';
     }
 
@@ -425,7 +425,12 @@ function parse($thing, $condition = true)
                 $else[$level] = $count[$level];
             } elseif ($short_tags && $tag[$level][1] !== 'txp') {
                 // Handle <short::tags />.
-                $tag[$level][2] = rtrim($tag[$level][1], ':').'_'.$tag[$level][2];
+                if ($tag[$level][1] == 'txp:') {
+                    $tag[$level][3] = "form='".$tag[$level][2]."'".$tag[$level][3];
+                    $tag[$level][2] = 'output_form';
+                } else {
+                    $tag[$level][2] = rtrim($tag[$level][1], ':').'_'.$tag[$level][2];
+                }
             }
 
             if ($chunk[strlen($chunk) - 2] === '/') {

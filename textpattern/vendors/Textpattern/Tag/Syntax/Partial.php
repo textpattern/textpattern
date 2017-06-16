@@ -34,6 +34,8 @@ class Partial
     /**
      * Returns the inner content of the enclosing &lt;txp:output_form /&gt; tag.
      *
+     * @param  array  $atts
+     * @param  string $thing
      * @return string
      */
 
@@ -43,10 +45,15 @@ class Partial
 
         extract(lAtts(array(
             'name' => '',
+            'reset' => false,
             'value' => $thing ? parse($thing) : $thing
         ), $atts));
 
         $inner = !empty($yield[$name]) ? end($yield[$name]) : $value;
+
+        if ($reset) {
+            unset($yield[$name]);
+        }
 
         return isset($inner) ? $inner : '';
     }
