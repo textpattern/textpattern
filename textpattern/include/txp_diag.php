@@ -394,7 +394,7 @@ function doDiagnostics()
     }
 
     $active_plugins = array();
-    if ($rows = safe_rows("name, version, code_md5, MD5(code) AS md5", 'txp_plugin', "status > 0")) {
+    if ($rows = safe_rows("name, version, code_md5, MD5(code) AS md5", 'txp_plugin', "status > 0 ORDER BY name")) {
         foreach ($rows as $row) {
             $n = $row['name'].'-'.$row['version'];
 
@@ -553,7 +553,7 @@ function doDiagnostics()
 
             gTxt('os_version').cs.php_uname('s').' '.php_uname('r').n,
 
-            ($active_plugins ? gTxt('active_plugins').cs.join(', ', $active_plugins).n : ''),
+            ($active_plugins ? gTxt('active_plugins').cs.n.t.join(n.t, $active_plugins).n : ''),
 
             gTxt('theme_name').cs.$theme_name.sp.$theme_manifest['version'].n,
 
