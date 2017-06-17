@@ -399,7 +399,7 @@ function doDiagnostics()
             $n = $row['name'].'-'.$row['version'];
 
             if (strtolower($row['md5']) != strtolower($row['code_md5'])) {
-                $n .= 'm';
+                $n .= ' ('.gTxt('modified').')';
             }
 
             $active_plugins[] = $n;
