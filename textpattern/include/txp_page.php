@@ -212,7 +212,7 @@ function page_edit($message = '', $refresh_partials = false)
 
     echo n.'<div class="txp-layout">'.
         n.tag(
-            hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading')),
+            hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading txp-heading-tight')),
             'div', array('class' => ($skinBlock ? 'txp-layout-4col-alt': 'txp-layout-1col'))
         ).$skinBlock;
 

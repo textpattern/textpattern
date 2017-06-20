@@ -969,7 +969,7 @@ function imageFetchInfo($id = "", $name = "")
 {
     global $thisimage, $p;
     static $cache = array();
-    
+
     if ($id) {
         if (isset($cache['i'][$id])) {
             return $cache['i'][$id];
@@ -995,7 +995,7 @@ function imageFetchInfo($id = "", $name = "")
         assert_image();
         return false;
     }
-    
+
     $rs = safe_row("*", 'txp_image', $where);
 
     if ($rs) {
@@ -2546,7 +2546,7 @@ function splat($text)
         $stack[$sha] = array();
         $parse[$sha] = array();
 
-        if (preg_match_all('@(\w+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
+        if (preg_match_all('@([\w\-]+)(?:\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+)))?@s', $text, $match, PREG_SET_ORDER)) {
             foreach ($match as $m) {
                 $name = strtolower($m[1]);
 
@@ -3531,7 +3531,7 @@ function format_filesize($bytes, $decimals = 2, $format = '')
     $sep_dec = isset($separators['decimal_point']) ? $separators['decimal_point'] : '.';
     $sep_thous = isset($separators['thousands_sep']) ? $separators['thousands_sep'] : ',';
 
-    return number_format($bytes, $decimals, $sep_dec, $sep_thous).gTxt('units_'.$units[$pow]);
+    return number_format($bytes, $decimals, $sep_dec, $sep_thous).sp.gTxt('units_'.$units[$pow]);
 }
 
 /**
@@ -4246,7 +4246,7 @@ function EvalElse($thing, $condition)
     }
 
     if (empty($condition)) {
-        $txp_atts[0] = true;
+        $txp_atts = null;
     }
 
     if (strpos($thing, ':else') === false || empty($txp_parsed[$hash = sha1($thing)])) {
@@ -4331,7 +4331,7 @@ function parse_form($name)
     static $stack = array(), $depth = null;
 
     if ($depth === null) {
-        $depth = get_pref('form_circular_depth') or $depth = 10;
+        $depth = get_pref('form_circular_depth', 31);
     }
 
     $out = '';
