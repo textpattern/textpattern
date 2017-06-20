@@ -281,7 +281,7 @@ function prefs_list($message = '')
 
         echo n.'<div class="txp-layout">'.
             n.tag(
-                hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')),
+                hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading txp-heading-tight')),
                 'div', array('class' => 'txp-layout-1col')
             ).
             n.tag_start('div', array('class' => 'txp-layout-4col-alt')).

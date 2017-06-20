@@ -4,8 +4,8 @@
         <item>
             <date>NOW()</date>
             <category>textpattern</category>
-            <url>http://textpattern.com/</url>
-            <linkname>Textpattern Website</linkname>
+            <url>https://textpattern.io/</url>
+            <linkname>Textpattern website</linkname>
             <linksort>10</linksort>
             <description></description>
             <author></author>
@@ -14,7 +14,7 @@
             <date>NOW()</date>
             <category>textpattern</category>
             <url>https://docs.textpattern.io/</url>
-            <linkname>Textpattern User Documentation</linkname>
+            <linkname>Textpattern user documentation</linkname>
             <linksort>20</linksort>
             <description></description>
             <author></author>
@@ -23,7 +23,7 @@
             <date>NOW()</date>
             <category>textpattern</category>
             <url>http://textpattern.org/</url>
-            <linkname>Textpattern Resources</linkname>
+            <linkname>Textpattern resources</linkname>
             <linksort>30</linksort>
             <description></description>
             <author></author>
@@ -31,8 +31,8 @@
         <item>
             <date>NOW()</date>
             <category>textpattern</category>
-            <url>http://textpattern.com/@textpattern</url>
-            <linkname>@textpattern</linkname>
+            <url>https://textpattern.io/github</url>
+            <linkname>+Textpattern on GitHub</linkname>
             <linksort>40</linksort>
             <description></description>
             <author></author>
@@ -40,8 +40,8 @@
         <item>
             <date>NOW()</date>
             <category>textpattern</category>
-            <url>http://textpattern.com/+</url>
-            <linkname>+Textpattern CMS</linkname>
+            <url>https://textpattern.io/+</url>
+            <linkname>Textpattern on Google+</linkname>
             <linksort>50</linksort>
             <description></description>
             <author></author>
@@ -49,8 +49,8 @@
         <item>
             <date>NOW()</date>
             <category>textpattern</category>
-            <url>http://textpattern.com/facebook</url>
-            <linkname>Textpattern Facebook Group</linkname>
+            <url>https://textpattern.io/@textpattern</url>
+            <linkname>Textpattern on Twitter</linkname>
             <linksort>60</linksort>
             <description></description>
             <author></author>

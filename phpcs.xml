@@ -2,6 +2,7 @@
 <ruleset>
     <rule ref="PSR2">
         <exclude name="Generic.Files.LineEndings.InvalidEOLChar" />
+        <exclude name="Generic.Files.LineLength" />
     </rule>
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
         <severity>0</severity>

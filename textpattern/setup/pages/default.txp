@@ -28,12 +28,12 @@
         <meta name="robots" content="none">
     <txp:else />
         <txp:if_category>
-            <meta name="robots" content="noindex, follow, noodp, noydir">
+            <meta name="robots" content="noindex, follow">
         <txp:else />
             <txp:if_author>
-                <meta name="robots" content="noindex, follow, noodp, noydir">
+                <meta name="robots" content="noindex, follow">
             <txp:else />
-                <meta name="robots" content="index, follow, noodp, noydir">
+                <meta name="robots" content="index, follow">
             </txp:if_author>
         </txp:if_category>
         <txp:if_section name="">

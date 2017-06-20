@@ -123,10 +123,10 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
     }
 
     /**
-     * Get help text for a certain Textfilter.
+     * Get help URL for a certain Textfilter.
      *
      * @param  string $key The Textfilter's key
-     * @return string HTML for human-readable help
+     * @return string URL endpoint for human-readable help
      */
 
     public function getHelp($key)

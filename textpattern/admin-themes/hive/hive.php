@@ -95,8 +95,9 @@ class hive_theme extends \Textpattern\Admin\Theme
 
                     foreach ($tab['items'] as $item) {
                         $class = ($item['active']) ? ' class="selected"' : '';
+                        $ariacurrent = ($item['active']) ? ' aria-current="page"' : '';
                         $out[] = '<li'.$class.' role="presentation">'.
-                            href($item['label'], array('event' => $item['event']), ' role="menuitem" tabindex="-1"').
+                            href($item['label'], array('event' => $item['event']), ' role="menuitem"'.$ariacurrent.' tabindex="-1"').
                             '</li>';
                     }
 
