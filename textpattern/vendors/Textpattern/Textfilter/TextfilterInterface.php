@@ -47,11 +47,10 @@ interface TextfilterInterface
     /**
      * Gets filter-specific help.
      *
-     * Help can be used to set and offer HTML formatted instructions,
-     * examples and formatting tips. These instructions will be presented to
-     * the user.
+     * A help URL containing usage information that will be
+     * presented to the user.
      *
-     * @return string HTML for filter-specific help
+     * @return string Filter-specific help
      */
 
     public function getHelp();

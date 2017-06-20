@@ -366,36 +366,32 @@ function lastMod()
  * @package TagParser
  */
 
-function parse($thing, $condition = null)
+function parse($thing, $condition = true)
 {
     global $production_status, $trace, $txp_parsed, $txp_else, $txp_atts;
-
-    // Replace null with a pref to enable <short::tags />.
     static $pattern, $short_tags = null;
-
-    if (!isset($short_tags)) {
-        $short_tags = get_pref('enable_short_tags');
-        $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp';
-    }
-
-    if (isset($condition)) {
-        if ($production_status === 'debug') {
-            $trace->log('['.($condition ? 'true' : 'false').']');
-        }
-    } else {
-        $condition = true;
-    }
 
     if (!empty($txp_atts['not'])) {
         $condition = empty($condition);
         unset($txp_atts['not']);
     }
 
-    if (empty($condition)) {
-        $txp_atts[0] = true;
+    if ($production_status === 'debug') {
+        $trace->log('['.($condition ? 'true' : 'false').']');
     }
 
-    if (!$short_tags) {
+    if (!$condition) {
+        $txp_atts = null;
+    }
+
+    if (!isset($short_tags)) {
+        $short_tags = get_pref('enable_short_tags', true);
+        $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp';
+    }
+
+    if ($thing === null) {
+        return $condition ? '1' : '';
+    } elseif (!$short_tags) {
         if (false === strpos($thing, "<{$pattern}:")) {
             return $condition ? $thing : ($thing ? '' : '1');
         }
@@ -412,7 +408,7 @@ function parse($thing, $condition = null)
         $count   = array(-1);
         $level   = 0;
 
-        $f = '@(</?(?:'.$pattern.'):\w+(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
+        $f = '@(</?(?:'.$pattern.'):\w+(?:\s+[\w\-]+(?:\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))?)*\s*/?\>)@s';
         $t = '@^</?('.$pattern.'):(\w+)(.*?)/?\>$@s';
 
         $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -429,7 +425,12 @@ function parse($thing, $condition = null)
                 $else[$level] = $count[$level];
             } elseif ($short_tags && $tag[$level][1] !== 'txp') {
                 // Handle <short::tags />.
-                $tag[$level][2] = rtrim($tag[$level][1], ':').'_'.$tag[$level][2];
+                if ($tag[$level][1] == 'txp:') {
+                    $tag[$level][3] = "form='".$tag[$level][2]."'".$tag[$level][3];
+                    $tag[$level][2] = 'output_form';
+                } else {
+                    $tag[$level][2] = rtrim($tag[$level][1], ':').'_'.$tag[$level][2];
+                }
             }
 
             if ($chunk[strlen($chunk) - 2] === '/') {
@@ -581,7 +582,7 @@ function processTags($tag, $atts = '', $thing = null)
         unset($txp_atts['not']);
     }
 
-    if ($txp_atts && empty($txp_atts[0]) && (string)$out > '') {
+    if ($txp_atts && (string)$out > '') {
         foreach ($global_atts as $attr) {
             if (!empty($txp_atts[$attr])) {
                 $out = $registry->processAttr($attr, $txp_atts, $out);

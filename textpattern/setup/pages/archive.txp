@@ -25,11 +25,11 @@
 
     <!-- specify canonical and author -->
     <txp:if_individual_article>
-        <meta name="robots" content="<txp:if_expires>unavailable_after: <txp:expires gmt="1" format="%d-%b-%y %T" /> GMT<txp:else />index, follow, noodp, noydir</txp:if_expires>">
+        <meta name="robots" content="<txp:if_expires>unavailable_after: <txp:expires gmt="1" format="%d-%b-%y %T" /> GMT<txp:else />index, follow</txp:if_expires>">
         <link rel="canonical" href="<txp:permlink />">
         <txp:meta_author title="1" />
     <txp:else />
-        <meta name="robots" content="noindex, follow, noodp, noydir">
+        <meta name="robots" content="noindex, follow">
         <link rel="canonical" href="<txp:section url="1" />">
     </txp:if_individual_article>
 

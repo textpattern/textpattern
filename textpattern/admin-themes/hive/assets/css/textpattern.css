@@ -41,8 +41,7 @@ template {
 a,
 input,
 button {
-  -ms-touch-action: none;
-      touch-action: none;
+  touch-action: none;
 }
 
 /* Float clearing
@@ -186,13 +185,10 @@ button {
     font-size: 13px;
   }
   /**
- * Omit margin below heading on image edit, pages, forms, styles, prefs panels.
+ * Omit margin below heading on some special panels (e.g. image edit, page, css,
+ * form, prefs).
  */
-  #page-image .txp-heading,
-  #page-form .txp-heading,
-  #page-page .txp-heading,
-  #page-css .txp-heading,
-  #page-prefs .txp-heading {
+  .txp-heading-tight {
     margin-bottom: 0;
   }
   /**
@@ -311,6 +307,7 @@ button {
     overflow-x: auto;
     /* 3 */
     -moz-tab-size: 4;
+      -o-tab-size: 4;
          tab-size: 4;
   }
   /**
@@ -481,7 +478,8 @@ button {
   .content-image {
     border: solid 1px #cccccc;
     background: #ffffff;
-    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   }
   a:hover .content-image {
     border-color: #0066ff;
@@ -494,7 +492,8 @@ button {
  */
   .fullsize-image .content-image {
     max-height: 85vh;
-    object-fit: contain;
+    -o-object-fit: contain;
+       object-fit: contain;
   }
   /**
  * Admin-side image preview thumbnails.
@@ -604,18 +603,20 @@ button {
     position: fixed;
     bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
     text-align: center;
     z-index: 1000;
   }
   #messagepane span.success, #messagepane span.warning, #messagepane span.error {
     display: inline-block;
-    max-width: 53.1538461538em;
+    max-width: 58.1538461538em;
     margin: 0 auto;
     padding: 0.53846153846154em 2.84615384615385em 0.53846153846154em 1em;
     border-radius: 0.5em 0.5em 0 0;
     color: #ffffff;
-    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   }
   #messagepane span.success {
     background: #238c23;
@@ -651,7 +652,8 @@ button {
  * Flash the alert message using CSS animation.
  */
   .messageflash {
-    animation: messageflash 1s;
+    -webkit-animation: messageflash 1s;
+            animation: messageflash 1s;
   }
   /* Twisties
    ========================================================================== */
@@ -691,6 +693,7 @@ button {
   h3.txp-summary,
   .txp-details > h3 {
     background-color: #dddddd;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
     background-image: linear-gradient(#eeeeee, #dddddd);
     position: relative;
     height: 2em;
@@ -788,6 +791,7 @@ button {
   }
   .progress-meter li {
     background-color: #dddddd;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
     background-image: linear-gradient(#eeeeee, #dddddd);
     display: inline-block;
     position: relative;
@@ -800,6 +804,7 @@ button {
   }
   .progress-meter li.active {
     background-color: #f7c600;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffda44), to(#f7c600));
     background-image: linear-gradient(#ffda44, #f7c600);
     border: 1px solid #f7c600;
     border-bottom-color: #d8ad00;
@@ -888,7 +893,8 @@ button {
     max-width: 28em;
     height: 1.38461538461538em;
     background-color: #a3a3a3;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
   }
   .strength-meter:empty {
     background-color: transparent;
@@ -1040,7 +1046,8 @@ button {
     /* 1 */
     white-space: normal;
     /* 1 */
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
   }
   /**
  * 1. Prevent elements from spilling out of their parent.
@@ -1067,7 +1074,8 @@ button {
     font-size: 13px;
     line-height: 20px;
     vertical-align: baseline;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
   }
   /**
  * Remove the inner border and padding in Firefox.
@@ -1291,7 +1299,7 @@ button {
  */
   input[size="32"] {
     width: 100%;
-    max-width: 28em;
+    max-width: 30em;
   }
   input.input-large {
     width: 100%;
@@ -1356,7 +1364,8 @@ button {
   select:focus:invalid,
   textarea:focus:invalid {
     border-color: #9d261d;
-    box-shadow: none;
+    -webkit-box-shadow: none;
+            box-shadow: none;
   }
   /**
  * Styling for Firefox-specfic form field validation.
@@ -1403,6 +1412,7 @@ button {
   .navlink,
   .navlink-active {
     background-color: #dddddd;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
     background-image: linear-gradient(#eeeeee, #dddddd);
     display: inline-block;
     width: auto;
@@ -1434,6 +1444,7 @@ button {
   .navlink:hover,
   .navlink-active:hover {
     background-color: #e8e8e8;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#e8e8e8));
     background-image: linear-gradient(#f8f8f8, #e8e8e8);
     border-color: #aaaaaa;
     color: #333333;
@@ -1448,11 +1459,13 @@ button {
   .navlink:active,
   .navlink-active:active {
     background-color: #d6d6d6;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#e6e6e6), to(#d6d6d6));
     background-image: linear-gradient(#e6e6e6, #d6d6d6);
     border-color: #aaaaaa;
     color: #1a1919;
     text-decoration: none;
-    box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+            box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   }
   button:focus,
   [type="reset"]:focus,
@@ -1476,6 +1489,7 @@ button {
   button.publish,
   a.publish {
     background-color: #ffd21b;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffe168), to(#ffd21b));
     background-image: linear-gradient(#ffe168, #ffd21b);
     height: 2.76923076923077em;
     padding: 0.61538461538462em 1em;
@@ -1486,6 +1500,7 @@ button {
   button.publish:hover,
   a.publish:hover {
     background-color: #ffd93f;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffe88b), to(#ffd93f));
     background-image: linear-gradient(#ffe88b, #ffd93f);
     border: 1px solid #c49d00;
   }
@@ -1493,6 +1508,7 @@ button {
   button.publish:active,
   a.publish:active {
     background-color: #ffcd02;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffdc4e), to(#ffcd02));
     background-image: linear-gradient(#ffdc4e, #ffcd02);
     border: 1px solid #c49d00;
   }
@@ -1526,7 +1542,8 @@ button {
   button.destroy:hover .ui-icon,
   button.destroy:active .ui-icon,
   button.destroy:focus .ui-icon {
-    filter: brightness(0.66);
+    -webkit-filter: brightness(0.66);
+            filter: brightness(0.66);
   }
   /**
  * Grey-out disabled navlinks (but keep them in button style).
@@ -1545,14 +1562,13 @@ button {
     border: 1px solid;
     border-radius: 0.5em;
     background-clip: padding-box;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
   }
   /**
  * Tertiary button sets.
  *
  * Anchor elements kept to one line to prevent space between buttons.
- *
- * TODO: check if this would be better via flexbox instead?
  *
  * Example HTML:
  *
@@ -1603,22 +1619,29 @@ button {
  *     <a class="navlink-active">Page 1</a><a class="navlink">Page 2</a>
  * </p>
  */
-  .nav-tertiary .navlink-active {
+  .nav-tertiary .navlink-active,
+  .filtered button.ui-corner-right {
     background-color: #cce0ff;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#e6f0ff), to(#cce0ff));
     background-image: linear-gradient(#e6f0ff, #cce0ff);
     border-color: #96bfff;
   }
-  .nav-tertiary .navlink-active:hover {
+  .nav-tertiary .navlink-active:hover,
+  .filtered button.ui-corner-right:hover {
     background-color: #d6e6ff;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f0f6ff), to(#d6e6ff));
     background-image: linear-gradient(#f0f6ff, #d6e6ff);
     border-color: #4a91ff;
   }
-  .nav-tertiary .navlink-active:active {
+  .nav-tertiary .navlink-active:active,
+  .filtered button.ui-corner-right:active {
     background-color: #b3d1ff;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#cde1ff), to(#b3d1ff));
     background-image: linear-gradient(#cde1ff, #b3d1ff);
     border-color: #4a91ff;
   }
-  .nav-tertiary .navlink-active:focus {
+  .nav-tertiary .navlink-active:focus,
+  .filtered button.ui-corner-right:focus {
     border-color: #0066ff;
   }
   /**
@@ -1891,6 +1914,7 @@ button {
   }
   .txp-list thead th {
     background-color: #dddddd;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
     background-image: linear-gradient(#eeeeee, #dddddd);
     border-top: 1px solid #dddddd;
     border-right: 1px solid #d1d1d1;
@@ -1921,6 +1945,7 @@ button {
  */
   .txp-list thead th.asc, .txp-list thead th.desc {
     background-color: #e4e4e4;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(lightgray), to(#e4e4e4));
     background-image: linear-gradient(lightgray, #e4e4e4);
   }
   .txp-list thead th.asc a::after, .txp-list thead th.desc a::after {
@@ -1977,19 +2002,21 @@ button {
  * 2. Remove default margin.
  */
   body {
-    display: -ms-flexbox;
+    display: -webkit-box;
     display: flex;
     /* 1 */
     position: relative;
-    -ms-flex-direction: column;
-        flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+            flex-direction: column;
     min-height: 100vh;
     /* 2 */
     margin: 0;
     padding: 4em 2.75% 0;
     background: #ffffff;
     color: #333333;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
   }
   /**
  * Main content area.
@@ -2005,8 +2032,8 @@ button {
  * </body>
  */
   .txp-body {
-    -ms-flex-positive: 1;
-        flex-grow: 1;
+    -webkit-box-flex: 1;
+            flex-grow: 1;
     width: 100%;
     max-width: 116.3076923em;
     margin: 0 auto;
@@ -2017,16 +2044,16 @@ button {
  * Flex container.
  */
   .txp-layout {
-    display: -ms-flexbox;
+    display: -webkit-box;
     display: flex;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
+    flex-wrap: wrap;
     margin: 0 -1em;
   }
   .txp-layout > * {
     min-width: 0;
     padding: 0 1em;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
   }
   /**
  * Generate sizes all for grid column cells.
@@ -2067,7 +2094,7 @@ button {
  * <div class="txp-layout-textbox">
  */
   .txp-layout-textbox {
-    max-width: 57em;
+    max-width: 62em;
     margin: 0 auto;
   }
   /* Inline grids
@@ -2106,10 +2133,9 @@ button {
  * </ul>
  */
   .txp-grid {
-    display: -ms-inline-flexbox;
+    display: -webkit-inline-box;
     display: inline-flex;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
+    flex-wrap: wrap;
     width: 100%;
     margin: -2px;
     padding: 0;
@@ -2123,7 +2149,8 @@ button {
   .txp-grid-cell {
     padding: 0 1em;
     border: 1px solid #cccccc;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
   }
   .txp-grid-multi-edit {
     position: absolute;
@@ -2153,8 +2180,9 @@ button {
  */
   .txp-header {
     background-color: #f7c600;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffda44), to(#f7c600));
     background-image: linear-gradient(#ffda44, #f7c600);
-    display: -ms-flexbox;
+    display: -webkit-box;
     display: flex;
     position: fixed;
     top: 0;
@@ -2164,7 +2192,8 @@ button {
     padding: 0 2.75%;
     border-top: 1px solid #f7c600;
     border-bottom: 1px solid #d8ad00;
-    box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+            box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
     z-index: 1000;
   }
   /**
@@ -2190,8 +2219,8 @@ button {
  *     </h1>
  */
   .txp-header h1 {
-    -ms-flex: none;
-        flex: none;
+    -webkit-box-flex: 0;
+            flex: none;
     width: 8.125em;
     height: 2em;
     margin: 0.0625em 0.5em 0 0;
@@ -2229,8 +2258,8 @@ button {
  * </p>
  */
   .txp-view-site {
-    -ms-flex: 1;
-        flex: 1;
+    -webkit-box-flex: 1;
+            flex: 1;
     margin: 0 1em;
     padding: 0 1px;
     line-height: 2.69230769230769em;
@@ -2252,8 +2281,8 @@ button {
   .txp-logout {
     position: relative;
     top: -0.76923076923077em;
-    -ms-flex: none;
-        flex: none;
+    -webkit-box-flex: 0;
+            flex: none;
   }
   /* Footer
    ========================================================================== */
@@ -2271,10 +2300,10 @@ button {
  * </body>
  */
   .txp-footer {
-    display: -ms-flexbox;
+    display: -webkit-box;
     display: flex;
-    -ms-flex-pack: justify;
-        justify-content: space-between;
+    -webkit-box-pack: justify;
+            justify-content: space-between;
   }
   /* Navigation
    ========================================================================== */
@@ -2296,8 +2325,8 @@ button {
  * <nav class="txp-nav">
  */
   .txp-nav {
-    -ms-flex: none;
-        flex: none;
+    -webkit-box-flex: 0;
+            flex: none;
     margin: 0;
     list-style: none;
   }
@@ -2307,7 +2336,7 @@ button {
     list-style: none;
   }
   .txp-nav > ul {
-    display: -ms-flexbox;
+    display: -webkit-box;
     display: flex;
   }
   .txp-nav a {
@@ -2494,15 +2523,16 @@ button {
     position: absolute;
     top: 3em;
     left: 0;
-    -ms-flex: none;
-        flex: none;
+    -webkit-box-flex: 0;
+            flex: none;
     min-width: 12em;
     border: 1px solid;
     border-radius: 0 0.5em 0.5em;
     background: #fff9e1;
     border-top: 0;
     border-color: #d4d4d4;
-    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
     z-index: 20000;
   }
   .dropdown-menu li:first-child {
@@ -2576,6 +2606,7 @@ button {
   html {
     /* 1 */
     -webkit-text-size-adjust: 100%;
+       -moz-text-size-adjust: 100%;
         -ms-text-size-adjust: 100%;
             text-size-adjust: 100%;
   }
@@ -2593,7 +2624,8 @@ button {
     /* 2 */
     overflow: visible;
     /* 1 */
-    box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+            box-sizing: content-box;
   }
   /**
  * Hide text but still allow screen reader access.
@@ -2674,22 +2706,21 @@ button {
  * </form>
  */
   .txp-search {
-    display: -ms-flexbox;
+    display: -webkit-box;
     display: flex;
-    -ms-flex-pack: end;
-        justify-content: flex-end;
+    -webkit-box-pack: end;
+            justify-content: flex-end;
     margin: 1em 0;
   }
   .txp-search .ui-controlgroup {
-    -ms-flex-wrap: nowrap;
-        flex-wrap: nowrap;
+    flex-wrap: nowrap;
   }
   .txp-search .txp-dropdown {
     z-index: 101;
   }
   .txp-search-clear {
-    -ms-flex: 1;
-        flex: 1;
+    -webkit-box-flex: 1;
+            flex: 1;
     margin: auto 0.5em;
     text-align: right;
   }
@@ -2841,7 +2872,8 @@ button {
     border-top-color: #333333;
     border-bottom-color: #333333;
     vertical-align: middle;
-    animation: spinning linear 1s infinite;
+    -webkit-animation: spinning linear 1s infinite;
+            animation: spinning linear 1s infinite;
   }
   /**
  * Parent container for multi-edit `select` widget at bottom of listings.
@@ -2868,7 +2900,8 @@ button {
     margin: 1em 0 0;
     padding: 0.3076923em 0;
     background: #ffffff;
-    box-shadow: 0 -1em 1em -0.5em #ffffff;
+    -webkit-box-shadow: 0 -1em 1em -0.5em #ffffff;
+            box-shadow: 0 -1em 1em -0.5em #ffffff;
     z-index: 20;
   }
   /**
@@ -3045,7 +3078,7 @@ button {
  * 2. Remove margin above `h2` within panels.
  */
   .txp-edit {
-    max-width: 55em;
+    max-width: 60em;
     margin: 0 auto 1em;
     padding: 1em 1em 1px;
     /* 1 */
@@ -3128,7 +3161,7 @@ button {
  */
   .txp-form-field-label,
   .txp-form-field-value {
-    max-width: 29em;
+    max-width: 31em;
   }
   /**
  * Inline form field pairings on edit panels, preferences group panels and
@@ -3146,10 +3179,10 @@ button {
   .txp-edit .txp-form-field:not(.txp-form-field-textarea),
   .txp-prefs-group .txp-form-field:not(.txp-form-field-textarea),
   .setup:not(.welcome) .txp-form-field:not(.txp-form-field-textarea) {
-    display: -ms-flexbox;
+    display: -webkit-box;
     display: flex;
-    -ms-flex-align: baseline;
-        align-items: baseline;
+    -webkit-box-align: baseline;
+            align-items: baseline;
   }
   .txp-edit .txp-form-field-label,
   .txp-edit .txp-form-field-value,
@@ -3157,8 +3190,8 @@ button {
   .txp-prefs-group .txp-form-field-value,
   .setup:not(.welcome) .txp-form-field-label,
   .setup:not(.welcome) .txp-form-field-value {
-    -ms-flex: 1 1 0%;
-        flex: 1 1 0%;
+    -webkit-box-flex: 1;
+            flex: 1 1 0%;
     min-height: 2.307692307692308em;
   }
   /**
@@ -3177,8 +3210,8 @@ button {
  */
   .txp-form-field-textarea .txp-form-field-label,
   .txp-form-field-textarea .txp-form-field-value {
-    -ms-flex: none;
-        flex: none;
+    -webkit-box-flex: 0;
+            flex: none;
     max-width: inherit;
     min-height: inherit;
   }
@@ -3228,22 +3261,23 @@ button {
  */
   .txp-dialog-container,
   .txp-tagbuilder-container {
-    display: -ms-flexbox;
+    display: -webkit-box;
     display: flex;
-    -ms-flex-flow: column;
-        flex-flow: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+            flex-flow: column;
     max-height: 90vh;
     overflow: hidden;
   }
   .txp-dialog-container .ui-dialog-titlebar,
   .txp-tagbuilder-container .ui-dialog-titlebar {
-    -ms-flex: none;
-        flex: none;
+    -webkit-box-flex: 0;
+            flex: none;
   }
   .txp-dialog-content,
   .txp-tagbuilder-content {
-    -ms-flex: 1 1 auto;
-        flex: 1 1 auto;
+    -webkit-box-flex: 1;
+            flex: 1 1 auto;
     overflow: scroll;
   }
   /* Setup and login panels - additional layout
@@ -3341,7 +3375,8 @@ button {
     background-color: #f2f2f2;
     color: #333333;
     text-decoration: none;
-    box-shadow: inset 0 -0.25em 0.5em rgba(102, 102, 102, 0.15);
+    -webkit-box-shadow: inset 0 -0.25em 0.5em rgba(102, 102, 102, 0.15);
+            box-shadow: inset 0 -0.25em 0.5em rgba(102, 102, 102, 0.15);
   }
   #view_modes ul a:hover {
     border-color: #aaaaaa;
@@ -3354,7 +3389,8 @@ button {
   #view_modes ul .active a {
     border-bottom-color: #ffffff;
     background-color: white;
-    box-shadow: none;
+    -webkit-box-shadow: none;
+            box-shadow: none;
   }
   #view_modes ul .active a:focus {
     border-color: #0066ff;
@@ -3462,7 +3498,7 @@ button {
   /* Admin -> Preferences panel - additional layout
    ========================================================================== */
   .txp-prefs-group {
-    max-width: 60em;
+    max-width: 62em;
   }
   /* Admin -> Languages panel - additional layout
    ========================================================================== */
@@ -3485,7 +3521,8 @@ button {
     padding: 0.15384615384615em 0.38461538461538em;
     border: 1px solid #cccccc;
     overflow: auto;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
   }
   /* Layout helpers
    ========================================================================== */
@@ -3567,6 +3604,7 @@ button {
  */
   .ui-widget-header {
     background-color: #dddddd;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
     background-image: linear-gradient(#eeeeee, #dddddd);
     font-weight: bold;
   }
@@ -3693,7 +3731,8 @@ button {
  * <div class="ui-widget-shadow"></div>
  */
   .ui-widget-shadow {
-    box-shadow: 0 0 5px #666666;
+    -webkit-box-shadow: 0 0 5px #666666;
+            box-shadow: 0 0 5px #666666;
   }
   /* Icons
    ========================================================================== */
@@ -3734,7 +3773,8 @@ button {
  * TODO: Use `mask` in future.
  */
   .ui-state-default .ui-icon {
-    filter: brightness(1.6666667);
+    -webkit-filter: brightness(1.6666667);
+            filter: brightness(1.6666667);
   }
   /**
  * Weighted content icons and interaction state icons.
@@ -3746,7 +3786,8 @@ button {
   .ui-state-hover .ui-icon,
   .ui-state-focus .ui-icon,
   .ui-state-active .ui-icon {
-    filter: none;
+    -webkit-filter: none;
+            filter: none;
   }
   /**
  * 'Succes' state icons.
@@ -4410,17 +4451,20 @@ button {
  * </div>
  */
   .ui-draggable {
+    -webkit-transition: -webkit-box-shadow 0.1s linear;
+    transition: -webkit-box-shadow 0.1s linear;
     transition: box-shadow 0.1s linear;
+    transition: box-shadow 0.1s linear, -webkit-box-shadow 0.1s linear;
   }
   .ui-draggable-handle {
-    -ms-touch-action: none;
-        touch-action: none;
+    touch-action: none;
   }
   /**
  * Class added when element is actively being dragged.
  */
   .ui-draggable-dragging {
-    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
     z-index: 1000;
   }
   /* Resizable
@@ -4446,8 +4490,7 @@ button {
     display: block;
     position: absolute;
     font-size: 0.1px;
-    -ms-touch-action: none;
-        touch-action: none;
+    touch-action: none;
   }
   /**
  * Disabled or auto-hidden resizables.
@@ -4533,8 +4576,7 @@ button {
  * </ol>
  */
   .ui-selectable {
-    -ms-touch-action: none;
-        touch-action: none;
+    touch-action: none;
   }
   /**
  * Drag to select.
@@ -4568,11 +4610,11 @@ button {
  * </ul>
  */
   .ui-sortable-helper {
-    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   }
   .ui-sortable-handle {
-    -ms-touch-action: none;
-        touch-action: none;
+    touch-action: none;
   }
   .ui-sortable-placeholder {
     border: 1px dotted #004cbf;
@@ -4686,6 +4728,7 @@ button {
  */
   .ui-button {
     background-color: #dddddd;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
     background-image: linear-gradient(#eeeeee, #dddddd);
     display: inline-block;
     position: relative;
@@ -4705,7 +4748,8 @@ button {
     /* 3 */
     overflow: visible;
     vertical-align: baseline;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
     /* 4 */
     -webkit-appearance: none;
        -moz-appearance: none;
@@ -4717,6 +4761,7 @@ button {
   }
   .ui-button:hover {
     background-color: #e8e8e8;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#e8e8e8));
     background-image: linear-gradient(#f8f8f8, #e8e8e8);
     border-color: #aaaaaa;
     color: #333333;
@@ -4724,11 +4769,13 @@ button {
   }
   .ui-button:active {
     background-color: #d6d6d6;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#e6e6e6), to(#d6d6d6));
     background-image: linear-gradient(#e6e6e6, #d6d6d6);
     border-color: #aaaaaa;
     color: #1a1919;
     text-decoration: none;
-    box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+            box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   }
   .ui-button:focus {
     border-color: #0066ff;
@@ -4760,7 +4807,8 @@ button {
     width: 2.1538462em;
     text-indent: -9999px;
     white-space: nowrap;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
   }
   /**
  * No icon support for input elements.
@@ -4826,7 +4874,8 @@ button {
   .ui-checkboxradio-label .ui-icon-background {
     border: 0;
     border-radius: 0.12em;
-    box-shadow: inset 1px 1px 1px #cccccc;
+    -webkit-box-shadow: inset 1px 1px 1px #cccccc;
+            box-shadow: inset 1px 1px 1px #cccccc;
   }
   .ui-checkboxradio-radio-label .ui-icon-background {
     width: 16px;
@@ -4855,16 +4904,19 @@ button {
  */
   .ui-checkboxradio-checked.ui-button {
     background-color: #cce0ff;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#e6f0ff), to(#cce0ff));
     background-image: linear-gradient(#e6f0ff, #cce0ff);
     border-color: #96bfff;
   }
   .ui-checkboxradio-checked.ui-button:hover {
     background-color: #d6e6ff;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f5f9ff), to(#d6e6ff));
     background-image: linear-gradient(#f5f9ff, #d6e6ff);
     border-color: #4a91ff;
   }
   .ui-checkboxradio-checked.ui-button:active {
     background-color: #b3d1ff;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#cde1ff), to(#b3d1ff));
     background-image: linear-gradient(#cde1ff, #b3d1ff);
     border-color: #4a91ff;
   }
@@ -4891,10 +4943,11 @@ button {
  * </fieldset>
  */
   .ui-controlgroup {
-    display: -ms-inline-flexbox;
+    display: -webkit-inline-box;
     display: inline-flex;
-    -ms-flex-flow: row wrap;
-        flex-flow: row wrap;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+            flex-flow: row wrap;
   }
   .ui-controlgroup .ui-controlgroup-item {
     margin-right: 0;
@@ -4920,8 +4973,9 @@ button {
     border-right: 0;
   }
   .ui-controlgroup-vertical {
-    -ms-flex-flow: column;
-        flex-flow: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+            flex-flow: column;
   }
   .ui-controlgroup-vertical .ui-controlgroup-item {
     display: block;
@@ -4929,7 +4983,8 @@ button {
     margin-top: 0;
     margin-bottom: 0;
     text-align: left;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
   }
   [dir="rtl"] .ui-controlgroup-vertical .ui-controlgroup-item {
     text-align: right;
@@ -5031,7 +5086,8 @@ button {
     display: none;
     width: 17em;
     padding: 0.2em 0.2em 0;
-    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   }
   .ui-datepicker .ui-datepicker-header {
     position: relative;
@@ -5242,7 +5298,8 @@ button {
     left: 0;
     padding: 0.2em;
     outline: 0;
-    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
     z-index: 1002;
   }
   .ui-dialog .ui-dialog-titlebar {
@@ -5377,7 +5434,8 @@ button {
     font-size: 13px;
     line-height: 20px;
     list-style: none;
-    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   }
   .ui-menu .ui-menu {
     position: absolute;
@@ -5469,7 +5527,8 @@ button {
     background-color: #f7c600;
     background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
     background-size: 24px 24px;
-    animation: progressbar-stripes linear 4s infinite;
+    -webkit-animation: progressbar-stripes linear 4s infinite;
+            animation: progressbar-stripes linear 4s infinite;
   }
   /**
  * Progressbar with indeterminate value.
@@ -5522,7 +5581,7 @@ button {
  * </div>
  */
   .ui-selectmenu-button {
-    display: -ms-inline-flexbox;
+    display: -webkit-inline-box;
     display: inline-flex;
   }
   .ui-selectmenu-button:not(.ui-controlgroup-item) {
@@ -5535,10 +5594,10 @@ button {
     border-radius: 0.5em 0 0 0.5em;
   }
   .ui-selectmenu-icon {
-    -ms-flex: none;
-        flex: none;
-    -ms-flex-order: 2;
-        order: 2;
+    -webkit-box-flex: 0;
+            flex: none;
+    -webkit-box-ordinal-group: 3;
+            order: 2;
     margin: 0 -0.25em 0 0.25em;
   }
   .ui-selectmenu-text {
@@ -5587,6 +5646,36 @@ button {
   [dir="rtl"] .ui-selectmenu-icon {
     margin: 0 0.25em 0 -0.25em;
   }
+  /**
+ * Selectmenu plain buttons.
+ */
+  .no-ui-button .ui-selectmenu-button {
+    height: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #004cbf;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    cursor: hand;
+    -webkit-user-select: auto;
+       -moz-user-select: auto;
+        -ms-user-select: auto;
+            user-select: auto;
+  }
+  .no-ui-button .ui-selectmenu-button:hover, .no-ui-button .ui-selectmenu-button:active {
+    background: transparent;
+    color: #0066ff;
+    text-decoration: underline;
+    -webkit-box-shadow: none;
+            box-shadow: none;
+  }
+  .no-ui-button .ui-selectmenu-button:focus {
+    outline: thin solid #0066ff;
+  }
+  .no-ui-button .ui-selectmenu-icon {
+    margin: 0;
+  }
   /* Slider
    ========================================================================== */
   /**
@@ -5613,11 +5702,11 @@ button {
     height: 20px;
     border-radius: 50%;
     background-color: #ffffff;
-    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-    cursor: default;
+    -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+    cursor: pointer;
     z-index: 2;
-    -ms-touch-action: none;
-        touch-action: none;
+    touch-action: none;
   }
   .ui-slider .ui-slider-range {
     display: block;
@@ -5789,12 +5878,14 @@ button {
     border-bottom-width: 0;
     list-style: none;
     white-space: nowrap;
-    box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
+    -webkit-box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
+            box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
   }
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-active {
     margin-bottom: -1px;
     padding-bottom: 1px;
-    box-shadow: none;
+    -webkit-box-shadow: none;
+            box-shadow: none;
   }
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor,
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor,
@@ -5850,7 +5941,8 @@ button {
     position: absolute;
     max-width: 22em;
     padding: 0.5em 1em;
-    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
     z-index: 9999;
   }
 }
@@ -5934,18 +6026,17 @@ button {
      */
   .txp-search,
   [dir="rtl"] .txp-search {
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-    -ms-flex-pack: start;
-        justify-content: flex-start;
+    flex-wrap: wrap;
+    -webkit-box-pack: start;
+            justify-content: flex-start;
     margin-top: 0;
   }
   /**
      * Reposition search clearer.
      */
   .txp-search-clear {
-    -ms-flex: 1 0 auto;
-        flex: 1 0 auto;
+    -webkit-box-flex: 1;
+            flex: 1 0 auto;
     width: 100%;
     margin: 0 0 0.5em;
     text-align: left;
@@ -6032,7 +6123,8 @@ button {
     right: 0;
     left: 0;
     background: #fff9e1;
-    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
   }
   .txp-nav.in .data-dropdown::before {
     position: absolute;
@@ -6081,7 +6173,8 @@ button {
     min-width: 0;
     border: 0;
     border-radius: 0;
-    box-shadow: none;
+    -webkit-box-shadow: none;
+            box-shadow: none;
   }
   .dropdown-menu a {
     padding: 0.5em 2em 0.5em 3em;
@@ -6108,8 +6201,8 @@ button {
   .txp-edit .txp-form-field-value,
   .txp-prefs-group .txp-form-field-label,
   .txp-prefs-group .txp-form-field-value {
-    -ms-flex: none;
-        flex: none;
+    -webkit-box-flex: 0;
+            flex: none;
     min-height: inherit;
   }
   /**
@@ -6165,7 +6258,8 @@ button {
     display: block;
     height: auto;
     border-bottom-width: 1px;
-    box-shadow: none;
+    -webkit-box-shadow: none;
+            box-shadow: none;
   }
   .ui-tabs:not(.ui-tabs-vertical) .ui-tabs-nav li.ui-tabs-active {
     margin-bottom: 0;
@@ -6190,12 +6284,37 @@ button {
 /* ==========================================================================
    Animation `keyframes` need to appear outside of `screen` rules
    ========================================================================== */
-@keyframes spinning {
+@-webkit-keyframes spinning {
   from {
-    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
   }
   to {
-    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+@keyframes spinning {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes messageflash {
+  0% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 0.5;
+  }
+  50%,
+  100% {
+    opacity: 1;
   }
 }
 
@@ -6209,6 +6328,15 @@ button {
   50%,
   100% {
     opacity: 1;
+  }
+}
+
+@-webkit-keyframes progressbar-stripes {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 48px 0;
   }
 }
 
@@ -6239,7 +6367,8 @@ button {
     background: transparent !important;
     color: #000000 !important;
     text-shadow: none !important;
-    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+            box-shadow: none !important;
   }
   /**
  * Use a print-friendly font and size.
