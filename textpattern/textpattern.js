@@ -313,7 +313,6 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             $this.on('change', form.boxes, function (e) {
                 var box = $(this);
                 var boxes = $this.find(form.boxes);
-                var self = typeof(e.originalEvent) != 'undefined';
 
                 if (box.prop('checked')) {
                     $(this).closest(opt.highlighted).addClass(opt.selectedClass);
@@ -321,8 +320,8 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                     $(this).closest(opt.highlighted).removeClass(opt.selectedClass);
                 }
 
-                if (self) {
-                    form.selectAll.prop('checked', boxes.filter(':checked').length === boxes.length).trigger('filter');
+                if (typeof(e.originalEvent) != 'undefined') {
+                    form.selectAll.prop('checked', box.prop('checked') && boxes.filter(':checked').length === boxes.length).change();
                 }
             });
 
@@ -403,13 +402,14 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             })();
 
             form.selectAll.on('change', function (e) {
-                methods.select({
-                    'checked': $(this).trigger('filter').prop('checked')
-                });
-            }).on('filter', function (e) {
-                if ($(this).prop('checked')) $this.removeClass(opt.filteredClass);
-                else $this.addClass(opt.filteredClass);
-            }).trigger('filter');
+                if (typeof(e.originalEvent) != 'undefined') {
+                    methods.select({
+                        'checked': $(this).prop('checked')
+                    });
+                }
+
+                $this.toggleClass(opt.filteredClass, !$(this).prop('checked'));
+            }).change();
         }
 
         if (method && methods[method]) {
