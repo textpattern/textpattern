@@ -107,6 +107,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
         'checkbox'     : 'input[name="selected[]"][type=checkbox]',
         'row'          : 'tbody td',
         'highlighted'  : 'tr',
+        'filteredClass': 'filtered',
         'selectedClass': 'selected',
         'actions'      : 'select[name=edit_method]',
         'submitButton' : '.multi-edit input[type=submit]',
@@ -312,13 +313,16 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             $this.on('change', form.boxes, function (e) {
                 var box = $(this);
                 var boxes = $this.find(form.boxes);
+                var self = typeof(e.originalEvent) != 'undefined';
 
                 if (box.prop('checked')) {
                     $(this).closest(opt.highlighted).addClass(opt.selectedClass);
-                    $this.find(opt.selectAll).prop('checked', boxes.filter(':checked').length === boxes.length);
                 } else {
                     $(this).closest(opt.highlighted).removeClass(opt.selectedClass);
-                    $this.find(opt.selectAll).prop('checked', false);
+                }
+
+                if (self) {
+                    form.selectAll.prop('checked', boxes.filter(':checked').length === boxes.length).trigger('filter');
                 }
             });
 
@@ -398,11 +402,14 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                 multiOptions.remove();
             })();
 
-            $this.on('change', opt.selectAll, function (e) {
+            form.selectAll.on('change', function (e) {
                 methods.select({
-                    'checked': $(this).prop('checked')
+                    'checked': $(this).trigger('filter').prop('checked')
                 });
-            });
+            }).on('filter', function (e) {
+                if ($(this).prop('checked')) $this.removeClass(opt.filteredClass);
+                else $this.addClass(opt.filteredClass);
+            }).trigger('filter');
         }
 
         if (method && methods[method]) {
