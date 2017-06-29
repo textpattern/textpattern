@@ -215,7 +215,7 @@ class Core
                 if ($def = @$prefs_check[$name]) {
                     $private = empty($def['private']) ? PREF_GLOBAL : PREF_PRIVATE;
                     unset($def['val'], $def['private']);
-                    if ($def != $row) {
+                    if ($def['event'] != 'custom' && $def != $row) {
                         @update_pref($name, null, $def['event'], $def['type'], $def['html'], $def['position'], $private);
                     }
                     unset($prefs_check[$name]);
