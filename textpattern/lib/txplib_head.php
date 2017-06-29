@@ -129,10 +129,7 @@ function pagetop($pagetitle, $message = '')
     ));
     // Mandatory un-themable Textpattern core styles ?>
 <style>
-.not-ready .doc-ready,
-.not-ready table.txp-list,
-.not-ready form.async input[type="submit"],
-.not-ready a.async {
+.not-ready main {
     visibility: hidden;
 }
 </style>
