@@ -499,7 +499,7 @@ function author_edit_buttons()
 /**
  * Renders the user edit panel.
  *
- * @param bool $fullEdit Determines additional UI elements
+ * @param string|array $message  The activity message
  * @param bool         $fullEdit Whether the user has full edit permissions or not
  */
 
