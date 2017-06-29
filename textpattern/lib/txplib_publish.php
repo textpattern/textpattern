@@ -188,6 +188,9 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         return $cache[$key];
     }
 
+    $atts += array('expired' => true, 'sortdir' => 'desc');
+    $id = $time = $keywords = $custom = '';
+
     extract($atts);
     $expired = ($expired && ($prefs['publish_expired_articles']));
     $status = isset($status) && intval($status) == STATUS_STICKY ? STATUS_STICKY : STATUS_LIVE;
@@ -195,8 +198,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     $thisid = isset($thisid) ? intval($thisid) : 0;
 
     // Building query parts; lifted from publish.php.
-    $ids = array_map('intval', do_list($id));
-    $id = (!$id) ? '' : " AND ID IN (".join(',', $ids).")";
+    $id = (!$id) ? '' : " AND ID IN (".join(',', array_map('intval', do_list($id))).")";
     switch ($time) {
         case 'any':
             $time = "";
@@ -211,8 +213,6 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     if (!$expired) {
         $time .= " AND (".now('expires')." <= Expires OR Expires IS NULL)";
     }
-
-    $custom = '';
 
     if ($customFields) {
         foreach ($customFields as $cField) {
