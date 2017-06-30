@@ -130,7 +130,7 @@ function pagetop($pagetitle, $message = '')
     // Mandatory un-themable Textpattern core styles ?>
 <style>
 .not-ready main {
-    visibility: hidden;
+    opacity: 0;
 }
 </style>
 <?php
