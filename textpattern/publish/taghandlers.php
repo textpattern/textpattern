@@ -1663,7 +1663,7 @@ function newer($atts, $thing = null)
     global $thispage, $pretext, $m;
 
     if (empty($thispage)) {
-        return '';
+        return null;
     }
 
     extract(lAtts(array(
@@ -1721,7 +1721,7 @@ function older($atts, $thing = null)
     global $thispage, $pretext, $m;
 
     if (empty($thispage)) {
-        return '';
+        return null;
     }
 
     extract(lAtts(array(
