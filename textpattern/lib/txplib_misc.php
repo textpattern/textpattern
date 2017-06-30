@@ -1063,10 +1063,8 @@ function link_format_info($link)
  * }
  */
 
-function gps($thing)
+function gps($thing, $default = '')
 {
-    $out = '';
-
     if (isset($_GET[$thing])) {
         if (MAGIC_QUOTES_GPC) {
             $out = doStrip($_GET[$thing]);
@@ -1081,6 +1079,8 @@ function gps($thing)
         } else {
             $out = $_POST[$thing];
         }
+    } else {
+        $out = $default;
     }
 
     $out = doArray($out, 'deNull');
@@ -4220,7 +4220,7 @@ function EvalElse($thing, $condition)
         unset($txp_atts['not']);
     }
 
-    if (empty($condition) && $txp_atts) {
+    if (empty($condition)) {
         $txp_atts = null;
     }
 

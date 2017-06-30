@@ -188,6 +188,9 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         return $cache[$key];
     }
 
+    $atts += array('expired' => true, 'sortdir' => 'desc');
+    $id = $time = $keywords = $custom = '';
+
     extract($atts);
     $expired = ($expired && ($prefs['publish_expired_articles']));
     $status = isset($status) && intval($status) == STATUS_STICKY ? STATUS_STICKY : STATUS_LIVE;
@@ -195,8 +198,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     $thisid = isset($thisid) ? intval($thisid) : 0;
 
     // Building query parts; lifted from publish.php.
-    $ids = array_map('intval', do_list($id));
-    $id = (!$id) ? '' : " AND ID IN (".join(',', $ids).")";
+    $id = (!$id) ? '' : " AND ID IN (".join(',', array_map('intval', do_list($id))).")";
     switch ($time) {
         case 'any':
             $time = "";
@@ -211,8 +213,6 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     if (!$expired) {
         $time .= " AND (".now('expires')." <= Expires OR Expires IS NULL)";
     }
-
-    $custom = '';
 
     if ($customFields) {
         foreach ($customFields as $cField) {
@@ -385,7 +385,7 @@ function parse($thing, $condition = true)
     }
 
     if (!isset($short_tags)) {
-        $short_tags = get_pref('enable_short_tags');
+        $short_tags = get_pref('enable_short_tags', true);
         $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp';
     }
 
@@ -425,7 +425,12 @@ function parse($thing, $condition = true)
                 $else[$level] = $count[$level];
             } elseif ($short_tags && $tag[$level][1] !== 'txp') {
                 // Handle <short::tags />.
-                $tag[$level][2] = rtrim($tag[$level][1], ':').'_'.$tag[$level][2];
+                if ($tag[$level][1] == 'txp:') {
+                    $tag[$level][3] = "form='".$tag[$level][2]."'".$tag[$level][3];
+                    $tag[$level][2] = 'output_form';
+                } else {
+                    $tag[$level][2] = rtrim($tag[$level][1], ':').'_'.$tag[$level][2];
+                }
             }
 
             if ($chunk[strlen($chunk) - 2] === '/') {
