@@ -1548,10 +1548,6 @@ function txp_columniser()
 {
     var $tables = $('table.txp-list'), stored = true;
 
-    if (!$tables.length) {
-        return;
-    }
-
     $tables.each(function (tabind) {
         var $table = $(this), items = [], selectAll = true,
             $headers = $table.find('thead tr>th');
@@ -1736,12 +1732,9 @@ textpattern.Route.add('login', function () {
     }
 
     // Focus on either username or password when empty.
-    $('#login_form input').each(function () {
-        if (this.value === '') {
-            this.focus();
-            return false;
-        }
-    });
+    $('#login_form input').filter(function(){
+        return !this.value;
+    }).first().focus();
 
     textpattern.passwordMask();
     textpattern.passwordStrength();
