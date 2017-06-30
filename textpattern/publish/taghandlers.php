@@ -1507,13 +1507,15 @@ function search_term($atts)
 // Link to next/prev article, if it exists.
 function link_to($atts, $thing = null, $target = null)
 {
-    global $thisarticle;
+    global $thisarticle, $is_article_list;
 
     if (!in_array($target, array('next', 'prev'))) {
-        return;
+        return '';
     }
 
-    assert_article();
+    if (!assert_article()) {
+        return $is_article_list ? '' : null;
+    }
 
     extract(lAtts(array(
         'form' => '',
@@ -3177,7 +3179,7 @@ function search_result_count($atts)
     global $thispage;
 
     if (empty($thispage)) {
-        return '';
+        return null;
     }
 
     extract(lAtts(array(
@@ -4744,17 +4746,21 @@ function file_download_description($atts)
 
 function hide($atts = array(), $thing = null)
 {
-    if (empty($atts) || empty($thing)) {
+    if (empty($atts)) {
         return '';
     }
 
+    global $pretext, $txp_parsed, $txp_else;
+
     extract(lAtts(array('process' => null), $atts));
 
-    if ((string)$process === '2') {
-        return $thing;
+    if (is_numeric($process)) {
+        if (intval($process) > $pretext['secondpass'] + 1) {
+            return null;
+        } else {
+            return $process ? parse($thing) : '';
+        }
     }
-
-    global $txp_parsed, $txp_else;
 
     $hash = sha1($thing);
     $tag = $txp_parsed[$hash];
@@ -4766,7 +4772,7 @@ function hide($atts = array(), $thing = null)
     $nr = $txp_else[$hash][0] - 2;
     $process = is_numeric($process) ? true : do_list_unique($process);
 
-    for ($n = 1; $n <= $nr; $n+=2) {
+    for ($n = 1; $n <= $nr; $n += 2) {
         $t = $tag[$n];
 
         if ($process === true || in_array($t[1], $process)) {

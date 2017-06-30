@@ -118,7 +118,9 @@ class Registry implements \Textpattern\Container\ReusableInterface
     public function process($tag, array $atts = null, $thing = null)
     {
         if ($this->isRegistered($tag)) {
-            return (string) call_user_func($this->tags[$tag], (array)$atts, $thing);
+            $out = call_user_func($this->tags[$tag], (array)$atts, $thing);
+
+            return $out === null ? null : (string) $out;
         } else {
             return false;
         }
@@ -136,7 +138,9 @@ class Registry implements \Textpattern\Container\ReusableInterface
     public function processAttr($tag, $atts = null, $thing = null)
     {
         if ($this->isRegisteredAttr($tag)) {
-            return (string) call_user_func($this->atts[$tag], $atts, $thing);
+            $out = call_user_func($this->atts[$tag], $atts, $thing);
+
+            return $out === null ? null : (string) $out;
         } else {
             return false;
         }
