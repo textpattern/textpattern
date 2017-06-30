@@ -713,7 +713,7 @@ function tpt_link($atts)
     if (!$rs) {
         trigger_error(gTxt('unknown_link'));
 
-        return;
+        return '';
     }
 
     return tag(
@@ -1082,7 +1082,7 @@ function related_articles($atts, $thing = null)
                 break;
             default:
                 if (empty($thisarticle[$cf])) {
-                    return;
+                    return '';
                 }
 
                 $atts[$cf] = $thisarticle[$cf];
@@ -1093,7 +1093,7 @@ function related_articles($atts, $thing = null)
     if (!empty($cats)) {
         $atts['category'] = implode(',', $cats);
     } elseif ($categories) {
-        return;
+        return '';
     }
 
     $atts['match'] = implode(',', $categories);
@@ -1782,7 +1782,7 @@ function text($atts)
     ), $atts, false));
 
     if (!$item) {
-        return;
+        return '';
     }
 
     unset(
@@ -1900,7 +1900,7 @@ function expires($atts)
     assert_article();
 
     if ($thisarticle['expires'] == 0) {
-        return;
+        return '';
     }
 
     extract(lAtts(array(
@@ -2403,7 +2403,7 @@ function comments_preview($atts, $thing = null)
     global $has_comments_preview;
 
     if (!ps('preview')) {
-        return;
+        return '';
     }
 
     extract(lAtts(array(
@@ -3034,7 +3034,7 @@ function article_image($atts)
     if ($thisarticle['article_image']) {
         $image = $thisarticle['article_image'];
     } else {
-        return;
+        return '';
     }
 
     if (intval($image)) {
@@ -3082,7 +3082,7 @@ function article_image($atts)
         } else {
             trigger_error(gTxt('unknown_image'));
 
-            return;
+            return '';
         }
     } else {
         $out = '<img src="'.txpspecialchars($image).'" alt=""'.
@@ -4807,21 +4807,17 @@ function variable($atts, $thing = null)
 
     if (empty($name)) {
         trigger_error(gTxt('variable_name_empty'));
-
-        return;
-    }
-
-    if (!isset($atts['value']) && is_null($thing)) {
+    } elseif (!isset($atts['value']) && is_null($thing)) {
         if (isset($variable[$name])) {
             return $variable[$name];
         } else {
             $trace->log("[<txp:variable>: Unknown variable '$name']");
-
-            return '';
         }
     } else {
         $variable[$name] = $value;
     }
+
+    return '';
 }
 
 // -------------------------------------------------------------
@@ -4838,7 +4834,7 @@ function if_variable($atts, $thing = null)
     if (empty($name)) {
         trigger_error(gTxt('variable_name_empty'));
 
-        return;
+        return '';
     }
 
     if (isset($variable[$name])) {
@@ -4894,7 +4890,7 @@ function txp_eval($atts, $thing = null)
         }
     } else {
         trigger_error('PHP DOM extension '.gTxt('gd_unavailable'));
-        return;
+        return '';
     }
 
     if (!isset($thing)) {
