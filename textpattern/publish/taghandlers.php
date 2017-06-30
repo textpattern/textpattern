@@ -1660,10 +1660,10 @@ function link_to_home($atts, $thing = null)
 
 function newer($atts, $thing = null)
 {
-    global $thispage, $pretext, $m;
+    global $thispage, $pretext, $m, $is_article_list;
 
     if (empty($thispage)) {
-        return null;
+        return $is_article_list ? null : '';
     }
 
     extract(lAtts(array(
@@ -1718,10 +1718,10 @@ function newer($atts, $thing = null)
 
 function older($atts, $thing = null)
 {
-    global $thispage, $pretext, $m;
+    global $thispage, $pretext, $m, $is_article_list;
 
     if (empty($thispage)) {
-        return null;
+        return $is_article_list ? null : '';
     }
 
     extract(lAtts(array(
