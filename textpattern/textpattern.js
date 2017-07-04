@@ -107,6 +107,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
         'checkbox'     : 'input[name="selected[]"][type=checkbox]',
         'row'          : 'tbody td',
         'highlighted'  : 'tr',
+        'filteredClass': 'filtered',
         'selectedClass': 'selected',
         'actions'      : 'select[name=edit_method]',
         'submitButton' : '.multi-edit input[type=submit]',
@@ -315,10 +316,12 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
 
                 if (box.prop('checked')) {
                     $(this).closest(opt.highlighted).addClass(opt.selectedClass);
-                    $this.find(opt.selectAll).prop('checked', boxes.filter(':checked').length === boxes.length);
                 } else {
                     $(this).closest(opt.highlighted).removeClass(opt.selectedClass);
-                    $this.find(opt.selectAll).prop('checked', false);
+                }
+
+                if (typeof(e.originalEvent) != 'undefined') {
+                    form.selectAll.prop('checked', box.prop('checked') && boxes.filter(':checked').length === boxes.length).change();
                 }
             });
 
@@ -398,11 +401,15 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                 multiOptions.remove();
             })();
 
-            $this.on('change', opt.selectAll, function (e) {
-                methods.select({
-                    'checked': $(this).prop('checked')
-                });
-            });
+            form.selectAll.on('change', function (e) {
+                if (typeof(e.originalEvent) != 'undefined') {
+                    methods.select({
+                        'checked': $(this).prop('checked')
+                    });
+                }
+
+                $this.toggleClass(opt.filteredClass, !$(this).prop('checked'));
+            }).change();
         }
 
         if (method && methods[method]) {
@@ -1541,10 +1548,6 @@ function txp_columniser()
 {
     var $tables = $('table.txp-list'), stored = true;
 
-    if (!$tables.length) {
-        return;
-    }
-
     $tables.each(function (tabind) {
         var $table = $(this), items = [], selectAll = true,
             $headers = $table.find('thead tr>th');
@@ -1729,12 +1732,9 @@ textpattern.Route.add('login', function () {
     }
 
     // Focus on either username or password when empty.
-    $('#login_form input').each(function () {
-        if (this.value === '') {
-            this.focus();
-            return false;
-        }
-    });
+    $('#login_form input').filter(function(){
+        return !this.value;
+    }).first().focus();
 
     textpattern.passwordMask();
     textpattern.passwordStrength();

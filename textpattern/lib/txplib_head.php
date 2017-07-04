@@ -129,11 +129,8 @@ function pagetop($pagetitle, $message = '')
     ));
     // Mandatory un-themable Textpattern core styles ?>
 <style>
-.not-ready .doc-ready,
-.not-ready table.txp-list,
-.not-ready form.async input[type="submit"],
-.not-ready a.async {
-    visibility: hidden;
+.not-ready main {
+    opacity: 0;
 }
 </style>
 <?php
@@ -264,6 +261,8 @@ function areas()
 {
     global $plugin_areas;
 
+    $adminString = gTxt(has_privs('admin.list') ? 'tab_site_admin' : 'tab_site_account');
+
     $areas['start'] = array(
     );
 
@@ -288,7 +287,7 @@ function areas()
         gTxt('tab_diagnostics') => 'diag',
         gTxt('tab_preferences') => 'prefs',
         gTxt('tab_languages')   => 'lang',
-        gTxt('tab_site_admin')  => 'admin',
+        $adminString            => 'admin',
         gTxt('tab_plugins')     => 'plugin',
     );
 

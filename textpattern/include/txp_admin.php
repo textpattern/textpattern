@@ -48,8 +48,6 @@ if ($event == 'admin') {
         'author_edit'         => false,
         'author_save'         => true,
         'author_save_new'     => true,
-        'change_email'        => true,
-        'change_email_form'   => false,
         'change_pass'         => true,
         'new_pass_form'       => false,
     );
@@ -62,33 +60,6 @@ if ($event == 'admin') {
 }
 
 /**
- * Changes an email address.
- */
-
-function change_email()
-{
-    global $txp_user;
-
-    $new_email = ps('new_email');
-
-    if (!is_valid_email($new_email)) {
-        change_email_form(array(gTxt('email_required'), E_ERROR));
-
-        return;
-    }
-
-    $rs = update_user($txp_user, $new_email);
-
-    if ($rs) {
-        author_list(gTxt('email_changed', array('{email}' => $new_email)));
-
-        return;
-    }
-
-    change_email_form(array(gTxt('author_save_failed'), E_ERROR));
-}
-
-/**
  * Updates a user.
  */
 
@@ -96,7 +67,7 @@ function author_save()
 {
     global $txp_user;
 
-    require_privs('admin.edit');
+    require_privs('admin.edit.own');
 
     extract(psa(array(
         'privs',
@@ -108,20 +79,29 @@ function author_save()
     $privs = assert_int($privs);
 
     if (!is_valid_email($email)) {
-        author_edit(array(gTxt('email_required'), E_ERROR));
+        $fullEdit = has_privs('admin.list') ? false : true;
+        author_edit(array(gTxt('email_required'), E_ERROR), $fullEdit);
 
         return;
     }
 
     $rs = update_user($name, $email, $RealName);
 
-    if ($rs && ($txp_user === $name || change_user_group($name, $privs))) {
+    if (has_privs('admin.edit') && $rs && ($txp_user === $name || change_user_group($name, $privs))) {
         author_list(gTxt('author_updated', array('{name}' => $RealName)));
 
         return;
+    } elseif ($rs && has_privs('admin.edit.own')) {
+        $msg = gTxt('author_updated', array('{name}' => $RealName));
+    } else {
+        $msg = array(gTxt('author_save_failed'), E_ERROR);
     }
 
-    author_edit(array(gTxt('author_save_failed'), E_ERROR));
+    if (has_privs('admin.edit')) {
+        author_edit($msg);
+    } elseif (has_privs('admin.edit.own')) {
+        author_list($msg);
+    }
 }
 
 /**
@@ -258,37 +238,6 @@ function new_pass_form($message = '')
 }
 
 /**
- * Email changing form.
- *
- * @param string|array $message The activity message
- */
-
-function change_email_form($message = '')
-{
-    global $txp_user;
-
-    pagetop(gTxt('tab_site_admin'), $message);
-
-    $email = fetch('email', 'txp_users', 'name', $txp_user);
-
-    echo form(
-        hed(gTxt('change_email_address'), 2).
-        inputLabel(
-            'new_email',
-            fInput('email', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'),
-            'new_email', '', array('class' => 'txp-form-field edit-admin-new-email')
-        ).
-        graf(
-            sLink('admin', '', gTxt('cancel'), 'txp-button').
-            fInput('submit', 'change_email', gTxt('submit'), 'publish'),
-            array('class' => 'txp-edit-actions')
-        ).
-        eInput('admin').
-        sInput('change_email'),
-    '', '', 'post', 'txp-edit', '', 'change_email');
-}
-
-/**
  * The main panel listing all authors.
  *
  * @param string|array $message The activity message
@@ -298,31 +247,19 @@ function author_list($message = '')
 {
     global $event, $txp_user, $levels;
 
-    pagetop(gTxt('tab_site_admin'), $message);
-
-    if (is_disabled('mail')) {
-        echo graf(
-            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-            gTxt('warn_mail_unavailable'),
-            array('class' => 'alert-block warning')
-        );
-    }
-
-    $buttons = array();
-
-    // Change password button.
-    $buttons[] = sLink('admin', 'new_pass_form', gTxt('change_password'), 'txp-button');
-
-    if (!has_privs('admin.edit')) {
-        // Change email address button.
-        $buttons[] = sLink('admin', 'change_email_form', gTxt('change_email_address'), 'txp-button');
-    } else {
-        // New author button.
-        $buttons[] = sLink('admin', 'author_edit', gTxt('add_new_author'), 'txp-button');
-    }
+    $buttons = author_edit_buttons();
 
     // User list.
     if (has_privs('admin.list')) {
+        pagetop(gTxt('tab_site_admin'), $message);
+
+        if (is_disabled('mail')) {
+            echo graf(
+                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+                gTxt('warn_mail_unavailable'),
+                array('class' => 'alert-block warning')
+            );
+        }
         extract(gpsa(array(
             'page',
             'sort',
@@ -492,10 +429,10 @@ function author_list($message = '')
 
                 echo tr(
                     td(
-                        ((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'txp-list-col-multi-edit'
+                        ((has_privs('admin.edit') && $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'txp-list-col-multi-edit'
                     ).
                     hCell(
-                        ((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' class="txp-list-col-login-name name" scope="row"'
+                        ((has_privs('admin.edit') || (has_privs('admin.edit.own') && $txp_user === $a['name'])) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' class="txp-list-col-login-name name" scope="row"'
                     ).
                     td(
                         $RealName, '', 'txp-list-col-real-name name'
@@ -532,33 +469,45 @@ function author_list($message = '')
                 n.tag_end('div');
         }
 
-        echo n.tag_end('div'); // End of .txp-layout-1col.
+        echo n.tag_end('div'). // End of .txp-layout-1col.
+            n.'</div>'; // End of .txp-layout.
+    } elseif (has_privs('admin.edit.own')) {
+        echo author_edit('', true);
     } else {
-        echo
-            n.tag_start('div', array(
-                'class' => 'txp-layout-1col',
-                'id'    => 'users_container',
-            )).
-            n.tag(implode(n, $buttons), 'div', array('class' => 'txp-control-panel')).
-            n.tag_end('div'); // End of .txp-layout-1col.
+        require_privs('admin.edit');
     }
-
-    echo n.'</div>'; // End of .txp-layout.
 }
 
 /**
- * Renders and outputs the user editor panel.
+ * Create additional UI buttons.
+ */
+function author_edit_buttons()
+{
+    $buttons = array();
+
+    // Change password button.
+    $buttons[] = sLink('admin', 'new_pass_form', gTxt('change_password'), 'txp-button');
+
+    // New author button.
+    if (has_privs('admin.edit')) {
+        $buttons[] = sLink('admin', 'author_edit', gTxt('add_new_author'), 'txp-button');
+    }
+
+    return $buttons;
+}
+
+/**
+ * Renders the user edit panel.
  *
- * Accessing requires 'admin.edit' privileges.
- *
- * @param string|array $message The activity message
+ * @param string|array $message  The activity message
+ * @param bool         $fullEdit Whether the user has full edit permissions or not
  */
 
-function author_edit($message = '')
+function author_edit($message = '', $fullEdit = false)
 {
     global $step, $txp_user;
 
-    require_privs('admin.edit');
+    require_privs('admin.edit.own');
 
     pagetop(gTxt('tab_site_admin'), $message);
 
@@ -568,18 +517,26 @@ function author_edit($message = '')
 
     extract(gpsa($vars));
 
-    $is_edit = ($user_id && $step == 'author_edit');
+    if (has_privs('admin.edit')) {
+        if ($user_id) {
+            $user_id = assert_int($user_id);
+            $rs = safe_row("*", 'txp_users', "user_id = $user_id");
 
-    if ($is_edit) {
-        $user_id = assert_int($user_id);
-        $rs = safe_row("*", 'txp_users', "user_id = $user_id");
+            extract($rs);
+            $is_edit = true;
+        } else {
+            $is_edit = false;
+        }
+    } else {
+        $rs = safe_row("*", 'txp_users', "name = '".doSlash($txp_user)."'");
         extract($rs);
+        $is_edit = true;
     }
 
-    if ($is_edit) {
-        $out[] = hed(gTxt('edit_author'), 2);
-    } else {
+    if (has_privs('admin.edit') && !$is_edit) {
         $out[] = hed(gTxt('add_new_author'), 2);
+    } elseif (has_privs('admin.edit')) {
+        $out[] = hed(gTxt('edit_author'), 2);
     }
 
     if ($is_edit) {
@@ -588,7 +545,7 @@ function author_edit($message = '')
             strong(txpspecialchars($name)),
             '', '', array('class' => 'txp-form-field edit-admin-login-name')
         );
-    } else {
+    } elseif (has_privs('admin.edit')) {
         $out[] = inputLabel(
             'login_name',
             fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
@@ -607,7 +564,7 @@ function author_edit($message = '')
             'email', '', array('class' => 'txp-form-field edit-admin-email')
         );
 
-    if ($txp_user != $name) {
+    if (has_privs('admin.edit') && $txp_user != $name) {
         $out[] = inputLabel(
             'privileges',
             privs($privs),
@@ -624,13 +581,13 @@ function author_edit($message = '')
 
     $out[] = pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
         graf(
-            sLink('admin', '', gTxt('cancel'), 'txp-button').
+            ($fullEdit ? '' : sLink('admin', '', gTxt('cancel'), 'txp-button')).
             fInput('submit', '', gTxt('save'), 'publish'),
             array('class' => 'txp-edit-actions')
         ).
         eInput('admin');
 
-    if ($user_id) {
+    if ($is_edit) {
         $out[] = hInput('user_id', $user_id).
             hInput('name', $name).
             sInput('author_save');
@@ -638,7 +595,21 @@ function author_edit($message = '')
         $out[] = sInput('author_save_new');
     }
 
-    echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'user_edit');
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_site_account'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-1col')
+        ).
+        n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => 'users_container',
+        )).
+        ($fullEdit
+            ?n.tag(implode(n, author_edit_buttons()), 'div', array('class' => 'txp-control-panel'))
+            :'').
+        form(join('', $out), '', '', 'post', 'txp-edit', '', 'user_edit').
+            n.tag_end('div'). // End of .txp-layout-1col.
+            n.'</div>'; // End of .txp-layout.
 }
 
 /**

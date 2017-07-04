@@ -262,11 +262,7 @@ function doDiagnostics()
         $fail['dir_not_writable'] = join(n, $not_readable);
     }
 
-    if ($permlink_mode != 'messy' && !$is_apache) {
-        $fail['cleanurl_only_apache'] = diag_msg_wrap(gTxt('cleanurl_only_apache'), 'information');
-    }
-
-    if ($permlink_mode != 'messy' and !@is_readable($path_to_site.'/.htaccess')) {
+    if ($permlink_mode != 'messy' && $is_apache && !@is_readable($path_to_site.'/.htaccess')) {
         $fail['htaccess_missing'] = diag_msg_wrap(gTxt('htaccess_missing'));
     }
 
@@ -553,15 +549,15 @@ function doDiagnostics()
 
             gTxt('os_version').cs.php_uname('s').' '.php_uname('r').n,
 
-            ($active_plugins ? gTxt('active_plugins').cs.n.t.join(n.t, $active_plugins).n : ''),
-
             gTxt('theme_name').cs.$theme_name.sp.$theme_manifest['version'].n,
+
+            ($active_plugins ? gTxt('active_plugins').cs.n.t.join(n.t, $active_plugins).n : ''),
 
             $fail
             ? n.gTxt('preflight_check').cs.n.ln.join("\n", doStripTags($fail)).n.ln
             : '',
 
-            (is_readable($path_to_site.'/.htaccess'))
+            ($is_apache && is_readable($path_to_site.'/.htaccess'))
             ?    n.gTxt('htaccess_contents').cs.n.ln.txpspecialchars(join('', file($path_to_site.'/.htaccess'))).n.ln
             :    '',
         );

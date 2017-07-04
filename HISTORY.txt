@@ -1,6 +1,7 @@
 Changes in 4.7.0 (upcoming)
 
 * Textile v3.6.
+* Added: Support for installation on nginx servers.
 * Added: Pages, Forms and Styles panels save some changes without page refreshes
   (Ajax). Last used Page/Form/Stylesheet remembered.
 * Added: User selectable column list options in tables replaces 'Show more
@@ -14,6 +15,9 @@ Changes in 4.7.0 (upcoming)
 * Added: Button to swap width/height values on image edit thumbnail generator.
 * Added: Section searches by description.
 * Added: One-click comment searches by parent article (thanks, makss).
+* Changed: <txp:yield> tag now accepts 'default' attribute.
+* Changed: <txp:output_form /> tag supports user-defined attributes, coupled
+  with <txp:yield> changes above this allows for 'shortcode'-like tags.
 * Changed: <txp:page_title /> tag SEO - site name renders after page name,
   default separator changed from ': ' to ' | ', page numbers added.
 * Changed: <txp:breadcrumb /> can be used as a container tag.
@@ -32,6 +36,7 @@ Changes in 4.7.0 (upcoming)
 * Changed: Deprecated support for uploading .swf images (support will be removed
   entirely at Textpattern 4.8.0).
 * Changed: Extensive admin theme image optimizations.
+* Changed: Admin theme accessibility improvements.
 * Fixed: Only update db version string if using release version.
 * jQuery 3.2.1.
 * zxcvbn 4.4.2.

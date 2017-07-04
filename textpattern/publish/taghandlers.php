@@ -4265,13 +4265,20 @@ function page_url($atts)
 
     extract(lAtts(array(
         'type' => 'request_uri',
+        'default' => '',
     ), $atts));
 
     if ($type == 'pg' && $pretext['pg'] == '') {
         return '1';
     }
 
-    return @txpspecialchars($pretext[$type]);
+    if (isset($pretext[$type])) {
+        return txpspecialchars($pretext[$type]);
+    }
+
+    $out = gps($type, $default);
+
+    return txpspecialchars(is_array($out) ? implode(',', $out) : $out);
 }
 
 // -------------------------------------------------------------
@@ -4743,6 +4750,10 @@ function hide($atts = array(), $thing = null)
     }
 
     extract(lAtts(array('process' => null), $atts));
+
+    if ((string)$process === '2') {
+        return $thing;
+    }
 
     global $txp_parsed, $txp_else;
 

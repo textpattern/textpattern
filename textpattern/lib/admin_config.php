@@ -36,6 +36,7 @@
 $txp_permissions = array(
     'admin'                       => '1,2,3,4,5,6',
     'admin.edit'                  => '1',
+    'admin.edit.own'              => '1,2,3,4,5,6',
     'admin.list'                  => '1,2,3',
     'article.delete.own'          => '1,2,3,4',
     'article.delete'              => '1,2',

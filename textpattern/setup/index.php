@@ -240,13 +240,24 @@ function getDbInfo()
         exit;
     }
 
+    if (!defined('PROTOCOL')) {
+        switch (serverSet('HTTPS')) {
+            case '':
+            case 'off': // ISAPI with IIS.
+                define('PROTOCOL', 'http://');
+                break;
+            default:
+                define('PROTOCOL', 'https://');
+                break;
+        }
+    }
+
     if (isset($_SESSION['siteurl'])) {
         $guess_siteurl = $_SESSION['siteurl'];
     } elseif (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST'])) {
-        $guess_siteurl = (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
-        $guess_siteurl .= $GLOBALS['rel_siteurl'];
+        $guess_siteurl = PROTOCOL.((@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']).$GLOBALS['rel_siteurl'];
     } else {
-        $guess_siteurl = 'mysite.com';
+        $guess_siteurl = PROTOCOL.'mysite.com';
     }
 
     echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
@@ -285,13 +296,10 @@ function getDbInfo()
         hed(
             setup_gTxt('site_url'), 2
         ).
-        graf(
-            setup_gTxt('please_enter_url')
-        ).
         inputLabel(
             'setup_site_url',
             fInput('text', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
-            'http(s)://', 'siteurl', array('class' => 'txp-form-field')
+            setup_gTxt('please_enter_url'), '', array('class' => 'txp-form-field')
         );
 
     if (is_disabled('mail')) {
