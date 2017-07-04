@@ -3172,9 +3172,10 @@ function search_result_date($atts)
 
 function search_result_count($atts)
 {
-    global $thispage;
+    global $pretext, $thispage, $txp_atts;
 
     if (empty($thispage)) {
+        if (!isset($txp_atts['process'])) $txp_atts['process'] = $pretext['secondpass'] + 2;
         return '';
     }
 
