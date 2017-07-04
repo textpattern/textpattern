@@ -82,8 +82,4 @@ Sure, we break our own rules sometimes. But, as a rule, we err on the side of si
 
 ## Code of conduct
 
-As contributors and maintainers of this project, and in the interest of fostering an open and welcoming community, we pledge to respect all people who contribute through reporting issues, posting feature requests, updating documentation, submitting pull requests or patches, and other activities.
-
-We are committed to making participation in this project a harassment-free experience for everyone, regardless of level of experience, gender, gender identity and expression, sexual orientation, disability, personal appearance, body size, race, ethnicity, age, religion, or nationality.
-
-Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, documentation edits, issues, and other contributions that are not aligned to this code of conduct, or to ban temporarily or permanently any contributor for other behaviours that they deem inappropriate, threatening, offensive, or harmful.
+Please read the [contributor covenant code of conduct](https://github.com/textpattern/textpattern/blob/dev/CODE_OF_CONDUCT.md).
