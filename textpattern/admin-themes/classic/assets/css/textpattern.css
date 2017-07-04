@@ -87,7 +87,6 @@ button {
             text-decoration-skip: ink;
   }
   a:hover, a:active {
-    outline: 0;
     color: #b16f2e;
     text-decoration: underline;
   }
@@ -116,7 +115,7 @@ button {
   .pophelp:focus,
   .pophelpsubtle:focus {
     border-color: #5b9dd9;
-    outline: 0;
+    outline: 2px solid transparent;
   }
   /**
  * Additional styling for popup help links in table headers.
@@ -490,7 +489,7 @@ button {
  * Admin-side image preview thumbnails.
  */
   .img-preview:focus {
-    outline: 0;
+    outline: 2px solid transparent;
   }
   .img-preview img {
     width: 120px;
@@ -955,7 +954,7 @@ button {
   select:focus,
   textarea:focus {
     border-color: #5b9dd9;
-    outline: 0;
+    outline: 2px solid transparent;
   }
   /**
  * Fix vertical alignment of `color` fields with their label.
@@ -1281,7 +1280,7 @@ button {
   .navlink:focus,
   .navlink-active:focus {
     border-color: #5b9dd9;
-    outline: 0;
+    outline: 2px solid transparent;
   }
   /**
  * Additional styling for primary buttons.
@@ -2015,7 +2014,7 @@ button {
   }
   .nav-tabs a:focus {
     border-color: #5b9dd9;
-    outline: none;
+    outline: 0;
   }
   .nav-tabs .active a {
     border-bottom-color: #ffffff;
@@ -2795,7 +2794,7 @@ button {
   }
   #view_modes ul a:focus {
     border-color: #5b9dd9;
-    outline: none;
+    outline: 0;
   }
   #view_modes ul .active a {
     border-bottom-color: #ffffff;
@@ -4182,7 +4181,7 @@ button {
   }
   .ui-button:focus {
     border-color: #5b9dd9;
-    outline: 0;
+    outline: 2px solid transparent;
   }
   /**
  * Focus styling for buttons.
