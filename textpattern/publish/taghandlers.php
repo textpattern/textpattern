@@ -3171,7 +3171,7 @@ function search_result_date($atts)
 // -------------------------------------------------------------
 
 function search_result_count($atts)
-{
+{return 'xyz';
     global $pretext, $thispage, $txp_atts;
 
     if (empty($thispage)) {
