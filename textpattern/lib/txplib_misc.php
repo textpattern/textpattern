@@ -4391,7 +4391,7 @@ function parse_page($name)
     $pretext['secondpass'] = 0;
 
     if ($page !== false) {
-        while ($pretext['secondpass'] <= get_pref('max_pass', 9) && strpos($page, '<txp:') !== false) {
+        while ($pretext['secondpass'] <= get_pref('secondpass', 1) && strpos($page, '<txp:') !== false) {
             $page = parse($page);
             $pretext['secondpass']++;
             $trace->log('[ ~~~ secondpass ('.$pretext['secondpass'].') ~~~ ]');
