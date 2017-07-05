@@ -368,7 +368,7 @@ function lastMod()
 
 function parse($thing, $condition = true)
 {
-    global $production_status, $trace, $txp_parsed, $txp_else, $txp_atts;
+    global $production_status, $trace, $txp_parsed, $txp_else, $txp_atts, $txp_tag;
     static $pattern, $short_tags = null;
 
     if (!empty($txp_atts['not'])) {
@@ -498,9 +498,11 @@ function parse($thing, $condition = true)
     }
 
     for ($out = $tag[$first - 1]; $first <= $last; $first++) {
-        $t = $tag[$first];
-        $out .= processTags($t[1], $t[2], $t[3]).$tag[++$first];
+        $txp_tag = $tag[$first];
+        $out .= processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]).$tag[++$first];
     }
+
+    $txp_tag = null;
 
     return $out;
 }
@@ -537,23 +539,25 @@ function maybe_tag($tag)
 
 function processTags($tag, $atts = '', $thing = null)
 {
-    global $production_status, $txp_current_tag, $txp_current_form, $txp_atts, $trace;
-    static $registry = null, $global_atts = null;
+    global $pretext, $production_status, $txp_current_tag, $txp_current_form, $txp_atts, $txp_tag, $trace;
+    static $registry = null, $global_atts = null, $max_pass = null;
 
     if (empty($tag)) {
         return;
     }
 
+    $old_tag = $txp_current_tag;
+    $txp_current_tag = $txp_tag[0].$txp_tag[3].$txp_tag[4];
+
     if ($production_status !== 'live') {
-        $old_tag = $txp_current_tag;
-        $tag_stop = isset($thing) ? "</txp:{$tag}>" : null;
-        $txp_current_tag = '<txp:'.$tag.($atts ? " $atts" : '').(isset($thing) ? '>' : ' />');
+        $tag_stop = $txp_tag[4];
         $trace->start($txp_current_tag);
     }
 
     if ($registry === null) {
         $registry = Txp::get('\Textpattern\Tag\Registry');
         $global_atts = array_keys(array_filter($registry->getRegistered(true)));
+        $max_pass = get_pref('secondpass', 1);
     }
 
     $old_atts = $txp_atts;
@@ -565,7 +569,7 @@ function processTags($tag, $atts = '', $thing = null)
         $split = array();
     }
 
-    $out = $registry->process($tag, $split, $thing);
+    $out = !isset($txp_atts['process']) || intval($txp_atts['process']) <= $pretext['secondpass'] + 1 ? $registry->process($tag, $split, $thing) : null;
 
     if ($out === false) {
         if (maybe_tag($tag)) { // Deprecated in 4.6.0.
@@ -577,23 +581,29 @@ function processTags($tag, $atts = '', $thing = null)
         }
     }
 
-    if ($thing === null && !empty($txp_atts['not'])) {
-        $out = $out ? '' : '1';
-        unset($txp_atts['not']);
-    }
+    if ($out === null) {
+        $out = $pretext['secondpass'] < $max_pass ? $txp_current_tag : '';
+    } else {
+        unset($txp_atts['process']);
 
-    if ($txp_atts && (string)$out > '') {
-        foreach ($global_atts as $attr) {
-            if (!empty($txp_atts[$attr])) {
-                $out = $registry->processAttr($attr, $txp_atts, $out);
+        if ($thing === null && !empty($txp_atts['not'])) {
+            $out = $out ? '' : '1';
+            unset($txp_atts['not']);
+        }
+
+        if ($txp_atts && (string)$out > '') {
+            foreach ($global_atts as $attr) {
+                if (!empty($txp_atts[$attr])) {
+                    $out = $registry->processAttr($attr, $txp_atts, $out);
+                }
             }
         }
     }
 
     $txp_atts = $old_atts;
+    $txp_current_tag = $old_tag;
 
     if ($production_status !== 'live') {
-        $txp_current_tag = $old_tag;
         $trace->stop($tag_stop);
     }
 
