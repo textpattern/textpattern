@@ -1832,7 +1832,7 @@ function article_partial_body($rs)
         $html_markup = tag(implode(n, $html_markup),
             'select',
             array('class' => 'jquery-ui-selectmenu'))
-            .hInput('textile_body', $rs['textile_body'], array('class' => 'textfilter-value'));
+            .fInput('hidden', 'textile_body', $rs['textile_body'], array('class' => 'textfilter-value'));
         $textarea_options = array($textarea_options,
             n.'<div class="txp-textarea-options txp-textfilter-options no-ui-button"><label>'.gTxt('textfilter').n.$html_markup.'</label>'.
                 '<span class="textfilter-help">'.$help.'</span></div>'
@@ -1894,7 +1894,7 @@ function article_partial_excerpt($rs)
         $html_markup = tag(implode(n, $html_markup),
             'select',
             array('class' => 'jquery-ui-selectmenu'))
-            .hInput('textile_excerpt', $rs['textile_excerpt'], array('class' => 'textfilter-value'));
+            .fInput('hidden', 'textile_excerpt', $rs['textile_excerpt'], array('class' => 'textfilter-value'));
         $textarea_options = array($textarea_options,
             n.'<div class="txp-textarea-options txp-textfilter-options no-ui-button"><label>'.gTxt('textfilter').n.$html_markup.'</label>'.
                 '<span class="textfilter-help">'.$help.'</span></div>'
