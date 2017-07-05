@@ -569,7 +569,12 @@ function processTags($tag, $atts = '', $thing = null)
         $split = array();
     }
 
-    $out = !isset($txp_atts['process']) || intval($txp_atts['process']) <= $pretext['secondpass'] + 1 ? $registry->process($tag, $split, $thing) : null;
+    if (!isset($txp_atts['process'])) {
+        $out = $registry->process($tag, $split, $thing);
+    } else {
+        $out = empty($txp_atts['process']) ? '' : (intval($txp_atts['process']) <= $pretext['secondpass'] + 1 ? $registry->process($tag, $split, $thing) : null);
+        unset($txp_atts['process']);
+    }
 
     if ($out === false) {
         if (maybe_tag($tag)) { // Deprecated in 4.6.0.
@@ -581,11 +586,10 @@ function processTags($tag, $atts = '', $thing = null)
         }
     }
 
-    if ($out === null) {
+    if ($out === null || isset($txp_atts['process']) && intval($txp_atts['process']) > $pretext['secondpass'] + 1) {
         $out = $pretext['secondpass'] < $max_pass ? $txp_current_tag : '';
-    } else {
         unset($txp_atts['process']);
-
+    } else {
         if ($thing === null && !empty($txp_atts['not'])) {
             $out = $out ? '' : '1';
             unset($txp_atts['not']);
@@ -843,4 +847,20 @@ function filterAtts($atts = null)
     }
 
     return $out;
+}
+
+/**
+ * Set a flag to postpone tag processing.
+ *
+ * @param   int $pass
+ * @return  null
+ * @since   4.7.0
+ * @package TagParser
+ */
+
+function postpone_process($pass = null)
+{
+    global $pretext, $txp_atts;
+
+    $txp_atts['process'] = intval($pass === null ? $pretext['secondpass'] + 2 : $pass);
 }

@@ -1656,10 +1656,10 @@ function link_to_home($atts, $thing = null)
 
 function newer($atts, $thing = null)
 {
-    global $thispage, $pretext, $m;
+    global $thispage, $pretext, $m, $is_article_list;
 
     if (empty($thispage)) {
-        return '';
+        return $is_article_list ? postpone_process() : '';
     }
 
     extract(lAtts(array(
@@ -1714,10 +1714,10 @@ function newer($atts, $thing = null)
 
 function older($atts, $thing = null)
 {
-    global $thispage, $pretext, $m;
+    global $thispage, $pretext, $m, $is_article_list;
 
     if (empty($thispage)) {
-        return '';
+        return $is_article_list ? postpone_process() : '';
     }
 
     extract(lAtts(array(
@@ -3171,12 +3171,11 @@ function search_result_date($atts)
 // -------------------------------------------------------------
 
 function search_result_count($atts)
-{return 'xyz';
-    global $pretext, $thispage, $txp_atts;
+{
+    global $thispage;
 
     if (empty($thispage)) {
-        if (!isset($txp_atts['process'])) $txp_atts['process'] = $pretext['secondpass'] + 2;
-        return '';
+        return postpone_process();
     }
 
     extract(lAtts(array(
@@ -3892,10 +3891,10 @@ function if_search($atts, $thing = null)
 
 function if_search_results($atts, $thing = null)
 {
-    global $pretext, $thispage;
+    global $pretext, $thispage, $is_article_list;
 
     if (empty($pretext['q']) || empty($thispage)) {
-        return '';
+        return $is_article_list ? postpone_process() : '';
     }
 
     extract(lAtts(array(
