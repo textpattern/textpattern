@@ -1816,12 +1816,11 @@ function article_partial_body($rs)
             $renderHelp = ($thisHelp) ? popHelp($thisHelp) : '';
 
             $html_markup[] = tag(
-                tag(
-                    $filter_name, 'div', array(
-                        'data-id' => $filter_key,
-                        'data-help' => $renderHelp,
-                    )
-                ), 'li'
+                $filter_name, 'option', array(
+                    'data-id'   => $filter_key,
+                    'data-help' => $renderHelp,
+                    'selected'  => ($filter_key == $rs['textile_body']),
+                )
             );
 
             if ($filter_key == $rs['textile_body']) {
@@ -1831,12 +1830,12 @@ function article_partial_body($rs)
 
         // Note: not using span() for the textfilter help, because it doesn't render empty content.
         $html_markup = tag(implode(n, $html_markup),
-            'ul',
-            array('class' => 'txp-textfilter-options-list txp-dropdown'))
+            'select',
+            array('class' => 'jquery-ui-selectmenu'))
             .fInput('hidden', 'textile_body', $rs['textile_body'], array('class' => 'textfilter-value'));
         $textarea_options = array($textarea_options,
-            n.'<div class="txp-textarea-options txp-textfilter-options no-ui-button">'.
-                href(span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter-chosen')), '#', array('class' => 'txp-textfilter-options-button')).'<span class="textfilter-help">'.$help.'</span>'.$html_markup.'</div>'
+            n.'<div class="txp-textarea-options txp-textfilter-options no-ui-button"><label>'.gTxt('textfilter').n.$html_markup.'</label>'.
+                '<span class="textfilter-help">'.$help.'</span></div>'
             );
     }
 
@@ -1879,12 +1878,11 @@ function article_partial_excerpt($rs)
             $renderHelp = ($thisHelp) ? popHelp($thisHelp) : '';
 
             $html_markup[] = tag(
-                tag(
-                    $filter_name, 'div', array(
-                        'data-id' => $filter_key,
-                        'data-help' => $renderHelp,
-                    )
-                ), 'li'
+                $filter_name, 'option', array(
+                    'data-id'   => $filter_key,
+                    'data-help' => $renderHelp,
+                    'selected'  => ($filter_key == $rs['textile_excerpt']),
+                )
             );
 
             if ($filter_key == $rs['textile_excerpt']) {
@@ -1894,12 +1892,12 @@ function article_partial_excerpt($rs)
 
         // Note: not using span() for the textfilter help, because it doesn't render empty content.
         $html_markup = tag(implode(n, $html_markup),
-            'ul',
-            array('class' => 'txp-textfilter-options-list txp-dropdown'))
+            'select',
+            array('class' => 'jquery-ui-selectmenu'))
             .fInput('hidden', 'textile_excerpt', $rs['textile_excerpt'], array('class' => 'textfilter-value'));
         $textarea_options = array($textarea_options,
-            n.'<div class="txp-textarea-options txp-textfilter-options no-ui-button">'.
-                href(span(gTxt('textfilter', array('{filter}' => $selected)), array('class' => 'textfilter-chosen')), '#', array('class' => 'txp-textfilter-options-button')).'<span class="textfilter-help">'.$help.'</span>'.$html_markup.'</div>'
+            n.'<div class="txp-textarea-options txp-textfilter-options no-ui-button"><label>'.gTxt('textfilter').n.$html_markup.'</label>'.
+                '<span class="textfilter-help">'.$help.'</span></div>'
             );
     }
 

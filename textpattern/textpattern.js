@@ -1788,41 +1788,16 @@ textpattern.Route.add('article', function () {
     );
 
     // Handle Textfilter options.
-    var $listoptions_trigger = $('.txp-textfilter-options-button');
-    var $listoptions = $('.txp-textfilter-options-list');
+    var $listoptions = $('.txp-textfilter-options .jquery-ui-selectmenu');
 
-    $listoptions_trigger.click(function (e) {
-        var $target = $(this).parent().find('.txp-textfilter-options-list');
+    $listoptions.on('selectmenuchange', function (e) {
+        var me = $("option:selected", this)
 
-        if (langdir === 'rtl') {
-            var $menu = $target.toggle().position({
-                my: 'left top',
-                at: 'left bottom',
-                of: this
-            });
-        } else {
-            var $menu = $target.toggle().position({
-                my: 'right top',
-                at: 'right bottom',
-                of: this
-            });
-        };
-
-        $(document).one('click blur', function () {
-            $menu.hide();
-        });
-
-        return false;
-    });
-
-    $listoptions.on('click', 'li', function (e) {
-        var chosen = $(e.target);
-        var wrapper = chosen.closest('.txp-textfilter-options');
-        var thisHelp = chosen.data('help');
+        var wrapper = me.closest('.txp-textfilter-options');
+        var thisHelp = me.data('help');
         var renderHelp = (typeof thisHelp === 'undefined') ? '' : thisHelp;
 
-        wrapper.find('.textfilter-value').val(chosen.data('id'));
-        wrapper.find('.textfilter-chosen').text(textpattern.gTxt('textfilter', {'{filter}': chosen.text()}));
+        wrapper.find('.textfilter-value').val(me.data('id'));
         wrapper.find('.textfilter-help').html(renderHelp);
     });
 
