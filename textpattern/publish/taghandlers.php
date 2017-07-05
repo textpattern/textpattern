@@ -1459,7 +1459,7 @@ function search_input($atts)
     $id =  (!empty($html_id)) ? ' id="'.txpspecialchars($html_id).'"' : '';
     $out = fInput($h5 ? 'search' : 'text', 'q', $q, '', '', '', $size, '', '', false, $h5);
     $out = (!empty($label)) ? txpspecialchars($label).br.$out.$sub : $out.$sub;
-    $out = ($match === 'exact') ? $out : fInput('hidden', 'm', txpspecialchars($match)).$out;
+    $out = ($match === 'exact') ? $out : hInput('m', txpspecialchars($match)).$out;
     $out = ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 
     if (!$section) {
