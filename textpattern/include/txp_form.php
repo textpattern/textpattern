@@ -497,10 +497,11 @@ function form_save()
                 $_POST['newname'] = $newname;
             }
 
-            $exists = safe_field("name", 'txp_form', "name = '".doSlash($newname)."'");
+            $exists = safe_field("name", 'txp_form', "name = '".doSlash($newname)."' AND skin = '".doSlash($skin)."'");
 
             if ($newname !== $name && $exists !== false) {
                 $message = array(gTxt('form_already_exists', array('{name}' => $newname)), E_ERROR);
+
                 if ($savenew) {
                     $_POST['newname'] = '';
                 }
