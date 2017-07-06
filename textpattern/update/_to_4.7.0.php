@@ -55,7 +55,7 @@ safe_create('txp_skin',
     `author` varchar(255) default '',
     `website` varchar(255) default '',
     `lastmod` timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`name`)"
+    PRIMARY KEY (`name`(50))"
 );
 
 // Add theme support to Pages...
