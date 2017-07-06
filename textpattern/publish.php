@@ -502,7 +502,7 @@ function preText($s, $prefs)
                 "name = 'skin_editing' AND (user_name = '".doSlash($userInfo['name'])."')");
         }
 
-        $out['skin'] = ($skin !== '' ? $skin : (isset($rs['skin']) ? $rs['skin'] : ''));
+        $out['skin'] = (!empty($skin) ? $skin : (isset($rs['skin']) ? $rs['skin'] : ''));
         $out['page'] = isset($rs['page']) ? $rs['page'] : '';
         $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
