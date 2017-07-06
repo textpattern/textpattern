@@ -487,7 +487,7 @@ if (!defined('X_FRAME_OPTIONS')) {
     define('X_FRAME_OPTIONS', 'SAMEORIGIN');
 }
 
-if (!defined('CONTENT-SECURITY-POLICY')) {
+if (!defined('CONTENT_SECURITY_POLICY')) {
     /**
      * Sets Content-Security-Policy HTTP header's value.
      * 
@@ -497,7 +497,7 @@ if (!defined('CONTENT-SECURITY-POLICY')) {
      * @package CSRF
      */
 
-    define('CONTENT-SECURITY-POLICY', "frame-ancestors 'self'");
+    define('CONTENT_SECURITY_POLICY', "frame-ancestors 'self'");
 }
 
 if (!defined('X_UA_COMPATIBLE')) {
