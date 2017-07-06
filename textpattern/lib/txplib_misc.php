@@ -4417,13 +4417,14 @@ function parse_page($name, $theme)
     global $pretext, $trace;
 
     $page = fetch_page($name, $theme);
+    $pretext['secondpass'] = 0;
 
     if ($page !== false) {
-        $pretext['secondpass'] = false;
-        $page = parse($page);
-        $pretext['secondpass'] = true;
-        $trace->log('[ ~~~ secondpass ~~~ ]');
-        $page = parse($page);
+        while ($pretext['secondpass'] <= get_pref('secondpass', 1) && strpos($page, '<txp:') !== false) {
+            $page = parse($page);
+            $pretext['secondpass']++;
+            $trace->log('[ ~~~ secondpass ('.$pretext['secondpass'].') ~~~ ]');
+        }
     }
 
     return $page;
@@ -5907,7 +5908,11 @@ function assert_article()
 
     if (empty($thisarticle)) {
         trigger_error(gTxt('error_article_context'));
+
+        return false;
     }
+
+    return true;
 }
 
 /**

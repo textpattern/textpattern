@@ -194,7 +194,7 @@ Txp::get('\Textpattern\Tag\Registry')
 // Global attributes: mind the order!
 
     Txp::get('\Textpattern\Tag\Registry')
-    ->registerAttr(false, 'atts, class, html_id, labeltag, not')
+    ->registerAttr(false, 'atts, class, html_id, labeltag, not, process')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag')
     ->registerAttr('txp_label', 'label');
@@ -714,7 +714,7 @@ function tpt_link($atts)
     if (!$rs) {
         trigger_error(gTxt('unknown_link'));
 
-        return;
+        return '';
     }
 
     return tag(
@@ -1083,7 +1083,7 @@ function related_articles($atts, $thing = null)
                 break;
             default:
                 if (empty($thisarticle[$cf])) {
-                    return;
+                    return '';
                 }
 
                 $atts[$cf] = $thisarticle[$cf];
@@ -1094,7 +1094,7 @@ function related_articles($atts, $thing = null)
     if (!empty($cats)) {
         $atts['category'] = implode(',', $cats);
     } elseif ($categories) {
-        return;
+        return '';
     }
 
     $atts['match'] = implode(',', $categories);
@@ -1460,7 +1460,7 @@ function search_input($atts)
     $id =  (!empty($html_id)) ? ' id="'.txpspecialchars($html_id).'"' : '';
     $out = fInput($h5 ? 'search' : 'text', 'q', $q, '', '', '', $size, '', '', false, $h5);
     $out = (!empty($label)) ? txpspecialchars($label).br.$out.$sub : $out.$sub;
-    $out = ($match === 'exact') ? $out : fInput('hidden', 'm', txpspecialchars($match)).$out;
+    $out = ($match === 'exact') ? $out : hInput('m', txpspecialchars($match)).$out;
     $out = ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 
     if (!$section) {
@@ -1511,10 +1511,12 @@ function link_to($atts, $thing = null, $target = null)
     global $thisarticle;
 
     if (!in_array($target, array('next', 'prev'))) {
-        return;
+        return '';
     }
 
-    assert_article();
+    if (!assert_article()) {
+        return '';
+    }
 
     extract(lAtts(array(
         'form' => '',
@@ -1573,12 +1575,10 @@ function link_to_prev($atts, $thing = null)
 
 function next_title()
 {
-    global $thisarticle;
+    global $thisarticle, $is_article_list;
 
-    assert_article();
-
-    if (!is_array($thisarticle)) {
-        return '';
+    if (!assert_article()) {
+        return $is_article_list ? '' : null;
     }
 
     if (!isset($thisarticle['next'])) {
@@ -1596,12 +1596,10 @@ function next_title()
 
 function prev_title()
 {
-    global $thisarticle;
+    global $thisarticle, $is_article_list;
 
-    assert_article();
-
-    if (!is_array($thisarticle)) {
-        return '';
+    if (!assert_article()) {
+        return $is_article_list ? '' : null;
     }
 
     if (!isset($thisarticle['prev'])) {
@@ -1659,10 +1657,10 @@ function link_to_home($atts, $thing = null)
 
 function newer($atts, $thing = null)
 {
-    global $thispage, $pretext, $m;
+    global $thispage, $pretext, $m, $is_article_list;
 
     if (empty($thispage)) {
-        return '';
+        return $is_article_list ? postpone_process() : '';
     }
 
     extract(lAtts(array(
@@ -1717,10 +1715,10 @@ function newer($atts, $thing = null)
 
 function older($atts, $thing = null)
 {
-    global $thispage, $pretext, $m;
+    global $thispage, $pretext, $m, $is_article_list;
 
     if (empty($thispage)) {
-        return '';
+        return $is_article_list ? postpone_process() : '';
     }
 
     extract(lAtts(array(
@@ -1781,7 +1779,7 @@ function text($atts)
     ), $atts, false));
 
     if (!$item) {
-        return;
+        return '';
     }
 
     unset(
@@ -1899,7 +1897,7 @@ function expires($atts)
     assert_article();
 
     if ($thisarticle['expires'] == 0) {
-        return;
+        return '';
     }
 
     extract(lAtts(array(
@@ -2402,7 +2400,7 @@ function comments_preview($atts, $thing = null)
     global $has_comments_preview;
 
     if (!ps('preview')) {
-        return;
+        return '';
     }
 
     extract(lAtts(array(
@@ -3033,7 +3031,7 @@ function article_image($atts)
     if ($thisarticle['article_image']) {
         $image = $thisarticle['article_image'];
     } else {
-        return;
+        return '';
     }
 
     if (intval($image)) {
@@ -3081,7 +3079,7 @@ function article_image($atts)
         } else {
             trigger_error(gTxt('unknown_image'));
 
-            return;
+            return '';
         }
     } else {
         $out = '<img src="'.txpspecialchars($image).'" alt=""'.
@@ -3178,7 +3176,7 @@ function search_result_count($atts)
     global $thispage;
 
     if (empty($thispage)) {
-        return '';
+        return postpone_process();
     }
 
     extract(lAtts(array(
@@ -3894,10 +3892,10 @@ function if_search($atts, $thing = null)
 
 function if_search_results($atts, $thing = null)
 {
-    global $pretext, $thispage;
+    global $pretext, $thispage, $is_article_list;
 
     if (empty($pretext['q']) || empty($thispage)) {
-        return '';
+        return $is_article_list ? postpone_process() : '';
     }
 
     extract(lAtts(array(
@@ -4745,34 +4743,22 @@ function file_download_description($atts)
 
 function hide($atts = array(), $thing = null)
 {
-    if (empty($atts) || empty($thing)) {
+    if (empty($atts)) {
         return '';
     }
+
+    global $pretext;
 
     extract(lAtts(array('process' => null), $atts));
 
-    if ((string)$process === '2') {
-        return $thing;
-    }
-
-    global $txp_parsed, $txp_else;
-
-    $hash = sha1($thing);
-    $tag = $txp_parsed[$hash];
-
-    if (empty($tag) || empty($txp_else[$hash]) || !($process = trim($process))) {
-        return '';
-    }
-
-    $nr = $txp_else[$hash][0] - 2;
-    $process = is_numeric($process) ? true : do_list_unique($process);
-
-    for ($n = 1; $n <= $nr; $n+=2) {
-        $t = $tag[$n];
-
-        if ($process === true || in_array($t[1], $process)) {
-            processTags($t[1], $t[2], $t[3]);
+    if (is_numeric($process)) {
+        if (intval($process) > $pretext['secondpass'] + 1) {
+            return null;
+        } else {
+            return $process ? parse($thing) : '';
         }
+    } elseif ($process) {
+        parse($thing);
     }
 
     return '';
@@ -4802,21 +4788,17 @@ function variable($atts, $thing = null)
 
     if (empty($name)) {
         trigger_error(gTxt('variable_name_empty'));
-
-        return;
-    }
-
-    if (!isset($atts['value']) && is_null($thing)) {
+    } elseif (!isset($atts['value']) && is_null($thing)) {
         if (isset($variable[$name])) {
             return $variable[$name];
         } else {
             $trace->log("[<txp:variable>: Unknown variable '$name']");
-
-            return '';
         }
     } else {
         $variable[$name] = $value;
     }
+
+    return '';
 }
 
 // -------------------------------------------------------------
@@ -4833,7 +4815,7 @@ function if_variable($atts, $thing = null)
     if (empty($name)) {
         trigger_error(gTxt('variable_name_empty'));
 
-        return;
+        return '';
     }
 
     if (isset($variable[$name])) {
@@ -4853,7 +4835,7 @@ function if_variable($atts, $thing = null)
 
 function txp_eval($atts, $thing = null)
 {
-    global $txp_parsed, $txp_else;
+    global $txp_parsed, $txp_else, $txp_tag;
     static $xpath = null, $functions = null;
 
     extract(lAtts(array(
@@ -4889,7 +4871,7 @@ function txp_eval($atts, $thing = null)
         }
     } else {
         trigger_error('PHP DOM extension '.gTxt('gd_unavailable'));
-        return;
+        return '';
     }
 
     if (!isset($thing)) {
@@ -4912,13 +4894,13 @@ function txp_eval($atts, $thing = null)
     $out = array($tag[0]);
 
     for ($tags = array(), $n = 1; $n <= $nr; $n++) {
-        $t = $tag[$n];
+        $txp_tag = $tag[$n];
 
-        if ($test && !in_array($t[1], $test)) {
-            $out[] = $t;
+        if ($test && !in_array($txp_tag[1], $test)) {
+            $out[] = $txp_tag;
             $tags[] = $n;
         } else {
-            $nextag = processTags($t[1], $t[2], $t[3]);
+            $nextag = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
             $out[] = $nextag;
             $isempty &= trim($nextag) === '';
         }
@@ -4931,8 +4913,8 @@ function txp_eval($atts, $thing = null)
     }
 
     foreach ($tags as $n) {
-        $t = $out[$n];
-        $out[$n] = processTags($t[1], $t[2], $t[3]);
+        $txp_tag = $out[$n];
+        $out[$n] = processTags($txp_tag[1], $txp_tag[2], $txp_tag[3]);
     }
 
     return implode('', $out);

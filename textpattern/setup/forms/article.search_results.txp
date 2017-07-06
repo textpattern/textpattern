@@ -1,6 +1,3 @@
-<!-- count how many results return -->
-<txp:article pgonly="1" />
-
 <txp:if_search_results>
 
     <!-- if search result count greater than 200 then display excessive results message, otherwise show search result count -->
