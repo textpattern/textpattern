@@ -487,6 +487,19 @@ if (!defined('X_FRAME_OPTIONS')) {
     define('X_FRAME_OPTIONS', 'SAMEORIGIN');
 }
 
+if (!defined('CONTENT-SECURITY-POLICY')) {
+    /**
+     * Sets Content-Security-Policy HTTP header's value.
+     * 
+     * This constant can be overridden from the config.php.
+     * 
+     * @since   4.7.0
+     * @package CSRF
+     */
+
+    define('CONTENT-SECURITY-POLICY', "frame-ancestors 'self'");
+}
+
 if (!defined('X_UA_COMPATIBLE')) {
     /**
      * Sets X-UA-Compatible HTTP header's value.
