@@ -38,7 +38,7 @@ class TxpXML
      * @var array
      */
 
-    protected $importAllow = array('articles', 'category', 'section', 'link', 'css', 'form', 'page');
+    protected $importAllow = array('articles', 'category', 'section', 'link', 'skin', 'css', 'form', 'page');
 
     /**
      * articleOptionalFields

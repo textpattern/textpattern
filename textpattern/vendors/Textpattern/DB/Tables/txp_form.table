@@ -1,5 +1,7 @@
-name VARCHAR(255) NOT NULL DEFAULT '',
-type VARCHAR(28)  NOT NULL DEFAULT '',
-Form TEXT         NOT NULL,
+name    VARCHAR(255) NOT NULL DEFAULT '',
+type    VARCHAR(28)  NOT NULL DEFAULT '',
+Form    TEXT         NOT NULL,
+skin    VARCHAR(255) NOT NULL DEFAULT 'default',
+lastmod DATETIME         NULL DEFAULT NULL,
 
-PRIMARY KEY (name(250))
+UNIQUE name_skin (name(200), skin(50))

@@ -1,4 +1,6 @@
 name      VARCHAR(255) NOT NULL DEFAULT '',
 user_html TEXT         NOT NULL,
+skin      VARCHAR(255) NOT NULL DEFAULT 'default',
+lastmod   DATETIME         NULL DEFAULT NULL,
 
-PRIMARY KEY (name(250))
+UNIQUE name_skin (name(200), skin(50))

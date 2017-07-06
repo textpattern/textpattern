@@ -48,22 +48,23 @@ if (in_array('prefs_id', $cols)) {
 // referred to as Themes, internally they're known as skins because
 // "theme" has already been hijacked by admin-side themes. This
 // convention avoids potential name clashes.
-safe_create('txp_skin',
-    "`name` varchar(255) default 'default',
-    `title` varchar(255) default 'Default',
-    `version` varchar(255) default '1.0',
-    `author` varchar(255) default '',
-    `website` varchar(255) default '',
-    `lastmod` timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`name`(50))"
-);
+safe_create('txp_skin', "
+    name    VARCHAR(255) NOT NULL DEFAULT 'default',
+    title   VARCHAR(255) NOT NULL DEFAULT 'Default',
+    version VARCHAR(255)     NULL DEFAULT '1.0',
+    author  VARCHAR(255)     NULL DEFAULT '',
+    website VARCHAR(255)     NULL DEFAULT '',
+    lastmod DATETIME         NULL DEFAULT NULL,
+
+    PRIMARY KEY (`name`(50))
+");
 
 // Add theme support to Pages...
 $cols = getThings('describe `'.PFX.'txp_page`');
 
 if (!in_array('lastmod', $cols)) {
     safe_alter('txp_page',
-        "ADD lastmod TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER user_html");
+        "ADD lastmod DATETIME DEFAULT NULL AFTER user_html");
 }
 
 if (!in_array('skin', $cols)) {
@@ -72,14 +73,14 @@ if (!in_array('skin', $cols)) {
 }
 
 safe_drop_index('txp_page', 'primary');
-safe_create_index('txp_page', 'name(50), skin(50)', 'name_skin', 'unique');
+safe_create_index('txp_page', 'name(200), skin(50)', 'name_skin', 'unique');
 
 // ... Forms...
 $cols = getThings('describe `'.PFX.'txp_form`');
 
 if (!in_array('lastmod', $cols)) {
     safe_alter('txp_form',
-        "ADD lastmod TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER Form");
+        "ADD lastmod DATETIME DEFAULT NULL AFTER Form");
 }
 
 if (!in_array('skin', $cols)) {
@@ -88,14 +89,14 @@ if (!in_array('skin', $cols)) {
 }
 
 safe_drop_index('txp_form', 'primary');
-safe_create_index('txp_form', 'name(50), skin(50)', 'name_skin', 'unique');
+safe_create_index('txp_form', 'name(200), skin(50)', 'name_skin', 'unique');
 
 // ... Stylesheets...
 $cols = getThings('describe `'.PFX.'txp_css`');
 
 if (!in_array('lastmod', $cols)) {
     safe_alter('txp_css',
-        "ADD lastmod TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER css");
+        "ADD lastmod DATETIME DEFAULT NULL AFTER css");
 }
 
 if (!in_array('skin', $cols)) {
@@ -104,7 +105,7 @@ if (!in_array('skin', $cols)) {
 }
 
 safe_drop_index('txp_css', 'name');
-safe_create_index('txp_css', 'name(50), skin(50)', 'name_skin', 'unique');
+safe_create_index('txp_css', 'name(200), skin(50)', 'name_skin', 'unique');
 
 // ... and Sections...
 $cols = getThings('describe `'.PFX.'txp_section`');
@@ -122,11 +123,11 @@ $exists = safe_row('name', 'txp_skin', "1=1");
 
 if (!$exists) {
     safe_insert('txp_skin',
-        "name='default',
-        title='default',
-        version='".txp_version."',
-        author='Team Textpattern',
-        website='http://textpattern.com/'"
+        "name = 'default',
+        title = 'Default',
+        version = '".txp_version."',
+        author = 'Team Textpattern',
+        website = 'http://textpattern.com/'"
     );
 }
 

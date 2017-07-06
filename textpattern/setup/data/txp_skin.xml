@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <skin>
+        <item>
+            <name>default</name>
+            <title>Default</title>
+            <version>4.7.0</version>
+            <author>Team Textpattern</author>
+            <website>https://textpattern.io/</website>
+        </item>
+    </skin>
+</resources>

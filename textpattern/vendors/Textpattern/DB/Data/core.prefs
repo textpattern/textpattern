@@ -20,6 +20,13 @@
         "html": "text_input",
         "position": "60"
     },
+    "skin_base_path": {
+        "val": "",
+        "type": "0",
+        "event": "admin",
+        "html": "text_input",
+        "position": "70"
+    },
     "tempdir": {
         "val": "",
         "type": "0",
