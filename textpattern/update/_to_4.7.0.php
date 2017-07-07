@@ -49,12 +49,13 @@ if (in_array('prefs_id', $cols)) {
 // "theme" has already been hijacked by admin-side themes. This
 // convention avoids potential name clashes.
 safe_create('txp_skin', "
-    name    VARCHAR(255) NOT NULL DEFAULT 'default',
-    title   VARCHAR(255) NOT NULL DEFAULT 'Default',
-    version VARCHAR(255)     NULL DEFAULT '1.0',
-    author  VARCHAR(255)     NULL DEFAULT '',
-    website VARCHAR(255)     NULL DEFAULT '',
-    lastmod DATETIME         NULL DEFAULT NULL,
+    name        VARCHAR(255)   NOT NULL DEFAULT 'default',
+    title       VARCHAR(255)   NOT NULL DEFAULT 'Default',
+    version     VARCHAR(255)       NULL DEFAULT '1.0',
+    description VARCHAR(16383)     NULL DEFAULT '',
+    author      VARCHAR(255)       NULL DEFAULT '',
+    website     VARCHAR(255)       NULL DEFAULT '',
+    lastmod     DATETIME           NULL DEFAULT NULL,
 
     PRIMARY KEY (`name`(50))
 ");

@@ -5,6 +5,7 @@
             <name>default</name>
             <title>Default</title>
             <version>4.7.0</version>
+            <description>Textpattern default theme.</description>
             <author>Team Textpattern</author>
             <website>https://textpattern.io/</website>
         </item>

@@ -416,7 +416,7 @@ function skin_edit()
 
         $caption = gTxt('edit_skin');
     } else {
-        $rs['name'] = $rs['title'] = $rs['version'] = $rs['author'] = $rs['website'] = '';
+        $rs['name'] = $rs['title'] = $rs['version'] = $rs['description'] = $rs['author'] = $rs['website'] = '';
     }
 
     if (!$rs) {
@@ -431,14 +431,16 @@ function skin_edit()
     $out = array();
 
     $out[] = hed($caption, 2);
-    $fields = array('name', 'title', 'version', 'author', 'website');
+    $fields = array('name', 'title', 'version', 'description', 'author', 'website');
 
     foreach ($fields as $field) {
         $current = ${"skin_".$field};
 
         $out[] = inputLabel(
             "skin_$field",
-            fInput('text', $field, $current, '', '', '', INPUT_REGULAR, '', "skin_$field"),
+            ($field === 'description'
+                ? text_area($field, 0, 0, $current, "skin_$field")
+                : fInput('text', $field, $current, '', '', '', INPUT_REGULAR, '', "skin_$field")),
             "skin_$field"
         );
     }
@@ -472,6 +474,7 @@ function skin_save()
         'title',
         'old_name',
         'version',
+        'description',
         'author',
         'website',
     )));
@@ -502,11 +505,12 @@ function skin_save()
     if ($name) {
         if ($safe_old_name) {
             $ok = safe_update('txp_skin', "
-                name    = '$safe_name',
-                title   = '$safe_title',
-                version = '$safe_version',
-                author  = '$safe_author',
-                website = '$safe_website'
+                name        = '$safe_name',
+                title       = '$safe_title',
+                version     = '$safe_version',
+                description = '$safe_description',
+                author      = '$safe_author',
+                website     = '$safe_website'
                 ", "name = '$safe_old_name'");
 
             // Manually maintain referential integrity.
@@ -517,11 +521,12 @@ function skin_save()
             }
         } else {
             $ok = safe_insert('txp_skin', "
-                name    = '$safe_name',
-                title   = '$safe_title',
-                version = '$safe_version',
-                author  = '$safe_author',
-                website = '$safe_website'");
+                name        = '$safe_name',
+                title       = '$safe_title',
+                version     = '$safe_version',
+                description = '$safe_description',
+                author      = '$safe_author',
+                website     = '$safe_website'");
 
             if ($ok) {
                 // Set up blank assets for the skin using the default names.
