@@ -173,7 +173,7 @@ function page_edit($message = '', $refresh_partials = false)
                 inputLabel('skin', selectInput('skin', $skin_list, $skin, false, 1, 'skin'), 'skin').
                 eInput('page').
                 sInput('page_skin_change')
-            , '', '', 'post', 'txp-layout-4col-3span');
+            , '', '', 'post');
     }
 
     $buttons = graf(
@@ -213,12 +213,12 @@ function page_edit($message = '', $refresh_partials = false)
     echo n.'<div class="txp-layout">'.
         n.tag(
             hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading txp-heading-tight')),
-            'div', array('class' => ($skinBlock ? 'txp-layout-4col-alt': 'txp-layout-1col'))
-        ).$skinBlock;
+            'div', array('class' => 'txp-layout-1col')
+        );
 
     // Pages create/switcher column.
     echo n.tag(
-        $partials['list']['html'].n,
+        $skinBlock.$partials['list']['html'].n,
         'div', array(
             'class' => 'txp-layout-4col-alt',
             'id'    => 'content_switcher',

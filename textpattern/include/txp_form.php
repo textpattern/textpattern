@@ -361,7 +361,7 @@ function form_edit($message = '', $refresh_partials = false)
                 inputLabel('skin', selectInput('skin', $skin_list, $skin, false, 1, 'skin'), 'skin').
                 eInput('form').
                 sInput('form_skin_change')
-            , '', '', 'post', 'txp-layout-4col-3span');
+            , '', '', 'post');
     }
 
     $buttons = graf(
@@ -412,12 +412,12 @@ function form_edit($message = '', $refresh_partials = false)
     echo n.'<div class="txp-layout">'.
         n.tag(
             hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading txp-heading-tight')),
-            'div', array('class' => ($skinBlock ? 'txp-layout-4col-alt' : 'txp-layout-1col'))
-        ).$skinBlock;
+            'div', array('class' => 'txp-layout-1col')
+        );
 
     // Forms create/switcher column.
     echo n.tag(
-        $listActions.n.
+        $skinBlock.$listActions.n.
         $partials['list']['html'].n,
         'div', array(
             'class' => 'txp-layout-4col-alt',
