@@ -255,7 +255,8 @@ button {
     /* 2 */
     text-decoration: underline;
     /* 2 */
-    text-decoration: underline dotted;
+    -webkit-text-decoration: underline dotted;
+            text-decoration: underline dotted;
   }
   /**
  * Consistent styling for `mark` and `var` tags.
@@ -507,25 +508,25 @@ button {
  * <strong class="success">
  * <strong class="error">
  */
-  .success {
+  li.success {
     background: #dff0d8;
   }
   .success:not(li) {
     color: #238c23;
   }
-  .warning {
+  li.warning {
     background: #f7eedb;
   }
   .warning:not(li) {
     color: #cc8c00;
   }
-  .error {
+  li.error {
     background: #f2dede;
   }
   .error:not(li) {
     color: #9d261d;
   }
-  .information {
+  li.information {
     background: #e7f6fc;
   }
   .information:not(li) {
@@ -1338,8 +1339,8 @@ button {
   button.destroy:hover .ui-icon,
   button.destroy:active .ui-icon,
   button.destroy:focus .ui-icon {
-    -webkit-filter: brightness(0.66);
-            filter: brightness(0.66);
+    -webkit-filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(80%);
+            filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(80%);
   }
   /**
  * Grey-out disabled navlinks (but keep them in button style).
@@ -3156,9 +3157,6 @@ button {
  * <span class="ui-icon ui-icon-caret-1-n"></span>
  * <span class="ui-icon ui-icon-folder-collapsed"></span>
  * <span class="ui-icon ui-icon-play"></span>
- *
- * TODO: Use `mask` in future (http://caniuse.com/#search=mask), instead of
- * `filter` or dedicated image.
  */
   .ui-icon {
     display: inline-block;
@@ -3179,8 +3177,6 @@ button {
   }
   /**
  * Default state icons.
- *
- * TODO: Use `mask` in future.
  */
   .ui-state-default .ui-icon {
     -webkit-filter: brightness(1.6666667);
@@ -3188,8 +3184,6 @@ button {
   }
   /**
  * Weighted content icons and interaction state icons.
- *
- * TODO: Use `mask` in future.
  */
   .ui-widget-content .ui-icon,
   .ui-widget-header .ui-icon,
@@ -3208,11 +3202,11 @@ button {
  *     <span class="ui-icon ui-icon-check"></span>
  *     Success!
  * </p>
- *
- * TODO: Use `mask` in future.
  */
-  .success .ui-icon {
-    background-image: url("../img/ui-icon-sprite-success.svg");
+  .success .ui-icon,
+  .success.ui-icon {
+    -webkit-filter: brightness(2) sepia(1) hue-rotate(82deg) saturate(250%) brightness(90%);
+            filter: brightness(2) sepia(1) hue-rotate(82deg) saturate(250%) brightness(90%);
   }
   /**
  * 'Warning' state icons.
@@ -3223,12 +3217,12 @@ button {
  *     <span class="ui-icon ui-icon-alert"></span>
  *     Warning!
  * </p>
- *
- * TODO: Use `mask` in future.
  */
   .ui-state-highlight .ui-icon,
-  .warning .ui-icon {
-    background-image: url("../img/ui-icon-sprite-warning.svg");
+  .warning .ui-icon,
+  .warning.ui-icon {
+    -webkit-filter: brightness(2) sepia(1) hue-rotate(4deg) saturate(500%) brightness(112%);
+            filter: brightness(2) sepia(1) hue-rotate(4deg) saturate(500%) brightness(112%);
   }
   /**
  * 'Error' state icons.
@@ -3239,14 +3233,14 @@ button {
  *     <span class="ui-icon ui-icon-alert"></span>
  *     Error!
  * </p>
- *
- * TODO: Use `mask` in future.
  */
   .ui-state-error .ui-icon,
   .ui-state-error-text .ui-icon,
   .error .ui-icon,
+  .error.ui-icon,
   .destroy .ui-icon {
-    background-image: url("../img/ui-icon-sprite-error.svg");
+    -webkit-filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(65%);
+            filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(65%);
   }
   /**
  * 'Information' state icons.
@@ -3257,24 +3251,20 @@ button {
  *     <span class="ui-icon ui-icon-info"></span>
  *     Content
  * </p>
- *
- * TODO: Use `mask` in future.
  */
-  .information .ui-icon {
-    background-image: url("../img/ui-icon-sprite-info.svg");
+  .information .ui-icon,
+  .information.ui-icon {
+    -webkit-filter: brightness(2) sepia(1) hue-rotate(150deg) saturate(600%) brightness(80%);
+            filter: brightness(2) sepia(1) hue-rotate(150deg) saturate(600%) brightness(80%);
   }
   /**
  * Icons within Textpattern system message panes.
- *
- * TODO: Use `mask` in future.
  */
   #messagepane .ui-icon {
     background-image: url("../img/ui-icon-sprite-ffffff.svg");
   }
   /**
  * Icon sprite positionings.
- *
- * TODO: Use `mask` in future.
  */
   .ui-icon-blank {
     background-position: 16px 16px;
@@ -3807,8 +3797,6 @@ button {
  *
  * <span class="ui-icon ui-extra-icon-code"></span>
  * <span class="ui-icon ui-extra-icon-download"></span>
- *
- * TODO: Use `mask` in future.
  */
   .ui-extra-icon-code {
     background-position: 0 -256px;
