@@ -21,7 +21,7 @@
  * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Generated: 18 Oct 2016, 10:00:10 GMT
+// Generated: 10 Jul 2017, 11:39:58 GMT
 
 $langs = array(
     'ar-dz' => array(
@@ -761,7 +761,7 @@ $langs = array(
         'db_must_exist' => 'Veuillez noter que la base de données que vous indiquez doit exister. Textpattern ne la créera pas pour vous.',
         'did_it' => 'C’est fait',
         'email_required' => 'Merci de fournir une adresse email valide.',
-        'errors_during_install' => 'Il s’est malheureusement produit <strong>{num}</strong> erreurs durant l’installation. Vous pouvez demander de l’aide dans les <a href="https://forum.textpattern.io/viewforum.php?id=16">forums Textpattern</a>.',
+        'errors_during_install' => 'Il s’est malheureusement produit <strong>{num}</strong> erreurs durant l’installation. Vous pouvez demander de l’aide dans les <a href="https://forum.textpattern.io/">forums Textpattern</a>.',
         'get_started' => 'C’est parti !',
         'go_to_login' => 'Connectez-vous',
         'installation_postamble' => 'Pour plus de sécurité, vous devriez supprimer, sur votre serveur, le dossier <code>setup</code> de votre installation de Textpattern. Veuillez consulter régulièrement la page Administration Diagnostics pour connaître les offres de mises à jour.',
@@ -1300,6 +1300,7 @@ $langs = array(
         'next_step' => 'Nākamais',
         'pass_required' => 'Lūdzu, ievadiet sarežģītu paroli.',
         'please_enter_url' => 'Lūdzu, norādiet adresi, pēc kuras lapa būs sasniedzama.',
+        'please_go_back' => 'Lūdzu, atgriezieties, salabojiet nepareizo informāciju un mēģiniet procesu vēlreiz.',
         'populate_db' => 'Aizpildiet datubāzi',
         'prefix_bad_characters' => 'Tabulu priedēklis {dbprefix} satur simbolus, kas nav atļauti. Pirmajam simbolam ir jābūt latīņu burtam no <strong>a-zA-Z_</strong> (ieskaitot mazos burtus) un turpmāki simboli bez latīņu burtiem drīkst saturēt arī ciparus <strong>a-zA-Z0-9_</strong>.',
         'prefix_warning' => '(Izmantojiet priedēkli TIKAI gadījumā, ja lietojat datubāzi dažādiem mērķiem)',
@@ -1487,7 +1488,7 @@ $langs = array(
         'about_to_create' => 'Agora vamos criar e configurar as tabelas da base de dados.',
         'add_config_file' => 'Arquivo de configuração',
         'admin_theme' => 'Tema da administração',
-        'already_installed' => 'Parece que o Textpattern já está instalado. Se quiser fazer uma instalação de nova (limpa), remova o arquivo <code>config.php</code> da sua directoria <code>/textpattern/</code> e tente de novo.',
+        'already_installed' => 'Parece que o Textpattern já está instalado. Se quiser fazer uma instalação de nova (limpa), remova o arquivo <code>config.php</code> do seu diretório <code>/textpattern/</code> e tente de novo.',
         'back' => 'Voltar',
         'before_you_proceed' => 'Antes de continuar:',
         'checking_database' => 'Verificando conexão com base de dados',
@@ -1519,7 +1520,7 @@ $langs = array(
         'next_step' => 'Próximo',
         'pass_required' => 'Por favor, forneça uma senha mais forte.',
         'please_enter_url' => 'Por favor, informe o endereço web do seu site',
-        'please_go_back' => 'Por favor volte, corrija quaisquer dados incorrectos e tente o processo novamente.',
+        'please_go_back' => 'Por favor volte, corrija quaisquer dados incorretos e tente o processo novamente.',
         'populate_db' => 'Populando banco de dados',
         'prefix_bad_characters' => 'O prefixo <strong>{dbprefix}</strong> da tabela contem caracteres não autorizados. O primeiro caracter deverá pertencer ao conjunto <strong>a-zA-Z_</strong> e todos os seguintes deverão pertencer ao conjunto <strong>a-zA-Z0-9_</strong>.',
         'prefix_warning' => '(Usar <strong>somente</strong> se precisar de múltiplas instalações numa única base de dados)',
@@ -1744,7 +1745,7 @@ $langs = array(
         'db_must_exist' => 'Upozornenie: uvedená databáza musí existovať. Textpattern ju nevytvorí za vás.',
         'did_it' => 'Vykonal som to',
         'email_required' => 'Zadaj platnú emailovú adresu.',
-        'errors_during_install' => 'Počas inštalácie sa vyskytlo <strong>{num}</strong> chýb. Môžete požiadať o pomoc na <a href="https://forum.textpattern.io" rel="external">fóre Textpattern</a>.',
+        'errors_during_install' => 'Počas inštalácie sa vyskytlo <strong>{num}</strong> chýb. Môžete požiadať o pomoc na <a href="https://forum.textpattern.io/" rel="external">fóre Textpattern</a>.',
         'get_started' => 'Začať!',
         'go_to_login' => 'Prihlásiť sa',
         'installation_postamble' => 'Z dôvodu bezpečnosti doporučujeme zmazať zložku <code>setup</code> z adresára <code>/textpattern/</code>. Čas od času spustite diagnostiku na záložke Správa pre kontrolu aktualizácií a vyhľadanie problémov.',
@@ -1835,7 +1836,7 @@ $langs = array(
         'before_you_proceed' => 'Пре почетка:',
         'checking_database' => 'Проверавам конекцију према бази',
         'choose_password' => 'Одаберите лозинку',
-        'create_config' => 'Креирајте датотеку са именом <code>config.php</code> у  <code>/textpattern/</code> direktorijumu и paste-ујте следећи код у исту:',
+        'create_config' => 'Креирајте датотеку са именом <code>config.php</code> у <code>/textpattern/</code> direktorijumu и paste-ујте следећи код у исту:',
         'db_cant_connect' => 'Не могу се спојити са базом',
         'db_connected' => 'Спојен',
         'db_doesnt_exist' => 'База <strong>{dbname}</strong> не постоји или предложени корисник нема потребне привилегије.',
