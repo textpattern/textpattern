@@ -130,9 +130,9 @@ button {
  * Additional styling for popup help links in table headers.
  */
   .txp-list thead th a.pophelp {
-    display: inline;
+    display: inline-block;
     margin: 0;
-    padding: 0 0.4em;
+    padding: 0;
     border-color: #cccccc;
     color: #004cbf;
   }
