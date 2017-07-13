@@ -95,6 +95,7 @@ reset_time => Ustaw na aktualny czas
 search_articles => Szukaj artykułów
 set_to_now => Aktualny czas jako czas publikacji
 sort_display => Przynależność
+textfilter =>
 textfilter_help => Pomoc edytora tekstu
 timestamp => Data publikacji
 url_title => Adres URL

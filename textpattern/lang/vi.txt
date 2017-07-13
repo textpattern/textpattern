@@ -95,6 +95,7 @@ reset_time => Đặt lại thời gian về hiện tại
 search_articles =>
 set_to_now => Chỉnh mốc thời gian về hiện tại
 sort_display => Sắp xếp và Hiển thị
+textfilter =>
 textfilter_help => Trợ giúp về định dạng văn bản
 timestamp => Mốc thời gian
 url_title => Tiêu đề dạng URL

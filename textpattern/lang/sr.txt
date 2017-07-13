@@ -95,6 +95,7 @@ reset_time => Resetuj vreme za trenutno
 search_articles => Pretraži članke
 set_to_now => Postavi vreme (timestamp) za trenutno
 sort_display => Sortiranje i prikaz
+textfilter =>
 textfilter_help => Pomoć pri formatiranju teksta
 timestamp => Vremenski žig (timestamp)
 url_title => Naslov samo za URL adresu

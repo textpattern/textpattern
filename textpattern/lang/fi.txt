@@ -95,6 +95,7 @@ reset_time => Aseta ajaksi tämä hetki
 search_articles => Etsi artikkeleita
 set_to_now => Aseta julkaisuhetkeksi nyt
 sort_display => Järjestä ja näytä
+textfilter =>
 textfilter_help => Tekstin muotoilu -ohje
 timestamp => Aikaleima
 url_title => URL-otsikko

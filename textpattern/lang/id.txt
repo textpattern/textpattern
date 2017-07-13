@@ -95,6 +95,7 @@ reset_time => Reset waktu ke sekarang
 search_articles =>
 set_to_now => Atur timestamp ke sekarang
 sort_display =>
+textfilter =>
 textfilter_help =>
 timestamp =>
 url_title => Judul URL-saja

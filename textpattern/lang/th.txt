@@ -95,6 +95,7 @@ reset_time => ตั้งเวลาใหม่ให้เป็นปัจ
 search_articles =>
 set_to_now => ตั้งเวลาโพสต์เป็นปัจจุบัน
 sort_display => จัดระเบียบ
+textfilter =>
 textfilter_help =>
 timestamp => ตราเวลา
 url_title => ชื่อใน URL

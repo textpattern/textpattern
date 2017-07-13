@@ -95,6 +95,7 @@ reset_time => تغییر زمان به حال
 search_articles =>
 set_to_now => زمان و تاریخ رو به اکنون تغییر بده
 sort_display => مرتب‌سازی و نمایش
+textfilter =>
 textfilter_help => راهنمای فرمت بندی متن
 timestamp => الگوی زمان و تاریخ
 url_title => عنوان مختص نشانی نوشته

@@ -95,6 +95,7 @@ reset_time => Встановити поточну дату
 search_articles => Пошук статей
 set_to_now => Встановити поточний час
 sort_display => Сортувати та показати
+textfilter =>
 textfilter_help => Допомога щодо форматування тексту
 timestamp => Час і дата
 url_title => Заголовок для URL

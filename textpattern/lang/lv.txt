@@ -95,6 +95,7 @@ reset_time => Publicēt ar šī brīža laiku
 search_articles => Meklēt rakstus
 set_to_now => Ierakstīt ar šī brīža laiku
 sort_display => Kategorizēšana
+textfilter =>
 textfilter_help => Teksta formatēšanas palīdzība
 timestamp => Ieraksta laiks
 url_title => URL virsraksts

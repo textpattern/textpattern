@@ -95,6 +95,7 @@ reset_time => Postavi vrijeme na sada…
 search_articles =>
 set_to_now => Postavi vremenski pečat na sada…
 sort_display => Sortiraj i prikaži
+textfilter =>
 textfilter_help =>
 timestamp => Vremenski pečat
 url_title => Naslov samo URL

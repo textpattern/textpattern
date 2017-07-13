@@ -95,6 +95,7 @@ reset_time => ضبط الساعة حسب التوقيت الحالي
 search_articles => البحث في المقالات
 set_to_now => ضبط التاريخ والساعة حسب التوقيت الحالي
 sort_display => تخصيص المقالة
+textfilter =>
 textfilter_help => تعليمات كتابة النص
 timestamp => تاريخ النشر
 url_title => النص الخاص بعنوان الموقع

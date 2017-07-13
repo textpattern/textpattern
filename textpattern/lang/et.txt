@@ -95,6 +95,7 @@ reset_time => Määra hetkeaeg
 search_articles =>
 set_to_now => Määra praegune aeg
 sort_display =>
+textfilter =>
 textfilter_help =>
 timestamp =>
 url_title => URL-i tekst

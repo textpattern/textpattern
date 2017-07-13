@@ -95,6 +95,7 @@ reset_time => Nastavit nynější čas
 search_articles => Hledat články
 set_to_now => Nastavit nynější čas
 sort_display => Řazení a zobrazení
+textfilter =>
 textfilter_help => Nápověda formátování textu
 timestamp => Datum/čas
 url_title => Název do odkazů

@@ -95,6 +95,7 @@ reset_time => Endursetja tímastimplil til núverandi tíma
 search_articles =>
 set_to_now => Breyta tímastimpli til núverandi tíma
 sort_display =>
+textfilter =>
 textfilter_help =>
 timestamp =>
 url_title => Slóðar titill

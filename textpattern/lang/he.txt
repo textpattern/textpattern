@@ -95,6 +95,7 @@ reset_time => אפס את הזמן לעכשיו
 search_articles =>
 set_to_now => קבע את חתימת הזמן לעכשיו
 sort_display => מיין והצג
+textfilter =>
 textfilter_help =>
 timestamp => חתימת זמן
 url_title => כותרת-הכתובת

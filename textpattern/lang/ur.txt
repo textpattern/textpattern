@@ -95,6 +95,7 @@ reset_time => حالیہ وقت پر پھر سیٹ کریں
 search_articles =>
 set_to_now => حالیہ وقت پر پھر سیٹ کریں
 sort_display => ‏چھانٹنا‏ اور ‏نمائش
+textfilter =>
 textfilter_help =>
 timestamp => وقت سٹیمپ
 url_title => URL-‏انوکھا‏ عنوان

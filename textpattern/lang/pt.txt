@@ -95,6 +95,7 @@ reset_time => Usar a hora actual
 search_articles =>
 set_to_now => Utilizar data/hora actual
 sort_display => Classificação
+textfilter =>
 textfilter_help => Ajuda à formatação de texto
 timestamp => Data de publicação
 url_title => Texto do URL

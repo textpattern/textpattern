@@ -95,6 +95,7 @@ reset_time => 現時刻にリセット…
 search_articles =>
 set_to_now => タイムスタンプを現時刻にする…
 sort_display => 分類
+textfilter =>
 textfilter_help => テキスト整形のヘルプ
 timestamp => タイムスタンプ
 url_title => URLを指定する

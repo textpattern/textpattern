@@ -95,6 +95,7 @@ reset_time => 重设时间到此刻……
 search_articles => 搜索文章
 set_to_now => 以当前时间发表……
 sort_display => 分类和显示
+textfilter =>
 textfilter_help => 文本格式提示
 timestamp => 时间戳
 url_title => URL 标题

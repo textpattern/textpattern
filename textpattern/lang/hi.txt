@@ -1,4 +1,4 @@
-#@version 4.5.4;1361790486
+#@version 4.7.0
 #@common
 lang_name => हिन्दी
 lang_code => hi
@@ -95,6 +95,7 @@ reset_time =>
 search_articles =>
 set_to_now =>
 sort_display =>
+textfilter =>
 textfilter_help =>
 timestamp =>
 url_title =>

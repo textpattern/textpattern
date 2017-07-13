@@ -95,6 +95,7 @@ reset_time => Zamanı sıfırla
 search_articles =>
 set_to_now => Tarih Bilgisini ayarla
 sort_display => Biçim ve görünüm
+textfilter =>
 textfilter_help =>
 timestamp => Tarih Bilgisi
 url_title => URL-sadece başlık

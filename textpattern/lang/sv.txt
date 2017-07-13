@@ -95,6 +95,7 @@ reset_time => Nollställ till nutid…
 search_articles => Sök artiklar
 set_to_now => Publicera nu…
 sort_display => Sortera och visa
+textfilter =>
 textfilter_help => Textformatering hjälp
 timestamp => Tidsstämpel
 url_title => URL-rubrik

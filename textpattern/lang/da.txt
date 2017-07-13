@@ -95,6 +95,7 @@ reset_time => Nulstil tid til nu…
 search_articles =>
 set_to_now => Sæt tidsstempel til nu…
 sort_display => Sorter og vis
+textfilter =>
 textfilter_help =>
 timestamp => Tidsstempel
 url_title => URL-specifik titel

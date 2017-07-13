@@ -95,6 +95,7 @@ reset_time => Huidige datum en tijd gebruiken
 search_articles => Artikelen doorzoeken
 set_to_now => Huidige datum en tijd
 sort_display => Sorteren en weergave
+textfilter =>
 textfilter_help => Uitleg bij de tekstvormgeving
 timestamp => Artikeldatering
 url_title => Eigen titel voor URL

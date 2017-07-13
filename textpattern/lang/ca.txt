@@ -95,6 +95,7 @@ reset_time => Utilitzar la hora actual
 search_articles =>
 set_to_now => Utilitzar data/hora actual
 sort_display => Ordena i mostra
+textfilter =>
 textfilter_help =>
 timestamp => Marca horària
 url_title => Títol només per URL

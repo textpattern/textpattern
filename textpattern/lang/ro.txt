@@ -95,6 +95,7 @@ reset_time => Reseteaza timpul la ora curenta
 search_articles =>
 set_to_now => Seteaza timpul la ora si data curenta
 sort_display => Aranjeaza si afiseaza
+textfilter =>
 textfilter_help =>
 timestamp => Data si ora
 url_title => Titlu-URL

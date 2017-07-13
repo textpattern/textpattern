@@ -95,6 +95,7 @@ reset_time => Auf aktuelle Zeit setzen
 search_articles => Artikel suchen
 set_to_now => Aktuelle Zeit verwenden
 sort_display => Sortierung und Anzeige
+textfilter =>
 textfilter_help => Hilfe zur Textformatierung
 timestamp => Zeitstempel
 url_title => benutzerdefinierte URL

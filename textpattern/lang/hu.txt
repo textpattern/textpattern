@@ -95,6 +95,7 @@ reset_time => Megjelenés időpontja legyen most
 search_articles =>
 set_to_now => Időpont beállítása a jelenlegi időpontra
 sort_display => Csoportosítás
+textfilter =>
 textfilter_help =>
 timestamp => Időpont
 url_title => csak-URL cím

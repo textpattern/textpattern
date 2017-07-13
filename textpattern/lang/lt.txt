@@ -95,6 +95,7 @@ reset_time => Pakeisti laiką į dabartinį
 search_articles =>
 set_to_now => Pakeisti laiką ir datą į dabartinį
 sort_display => Rūšiuoti ir rodyti
+textfilter =>
 textfilter_help =>
 timestamp => Laikas ir data
 url_title => URL pavadinimas

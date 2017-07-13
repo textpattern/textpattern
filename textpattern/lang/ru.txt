@@ -95,6 +95,7 @@ reset_time => Сбросить время на текущее
 search_articles => Поиск статей
 set_to_now => Обновить время текущим
 sort_display => Сортировать и отобразить
+textfilter =>
 textfilter_help => Помощь по форматированию текста
 timestamp => Время
 url_title => Заголовок только для URL
