@@ -78,6 +78,7 @@ function pagetop($pagetitle, $message = '')
         $body_id = 'page-'.txpspecialchars($event);
     }
 
+    header('Content-Security-Policy: '.CONTENT_SECURITY_POLICY);
     header('X-Frame-Options: '.X_FRAME_OPTIONS);
     header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 

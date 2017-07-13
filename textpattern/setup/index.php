@@ -212,9 +212,7 @@ function getDbInfo()
 {
     $lang = ps('lang');
 
-    if ($lang) {
-        $_SESSION['lang'] = $lang;
-    }
+    $_SESSION['lang'] = ($lang) ? $lang : TEXTPATTERN_DEFAULT_LANG;
 
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
 
@@ -332,6 +330,7 @@ function printConfig()
     $_SESSION['dhost'] = ps('dhost');
     $_SESSION['dprefix'] = ps('dprefix');
     $_SESSION['siteurl'] = ps('siteurl');
+    $_SESSION['lang'] = empty($_SESSION['lang']) ? TEXTPATTERN_DEFAULT_LANG : $_SESSION['lang'];
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
 
     global $txpcfg, $step;
@@ -485,6 +484,7 @@ function printConfig()
 
 function getTxpLogin()
 {
+    $_SESSION['lang'] = empty($_SESSION['lang']) ? TEXTPATTERN_DEFAULT_LANG : $_SESSION['lang'];
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
 
     global $txpcfg, $step;
@@ -600,6 +600,7 @@ function getTxpLogin()
 function createTxp()
 {
     global $link, $step;
+    $_SESSION['lang'] = empty($_SESSION['lang']) ? TEXTPATTERN_DEFAULT_LANG : $_SESSION['lang'];
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
 
     echo preamble($step);
@@ -864,7 +865,7 @@ function langs()
         'zh-tw' => '中文(繁體)',
     );
 
-    $default = (!empty($_SESSION['lang']) ? $_SESSION['lang'] : TEXTPATTERN_DEFAULT_LANG);
+    $default = (empty($_SESSION['lang']) ? TEXTPATTERN_DEFAULT_LANG : $_SESSION['lang']);
 
     $out = n.'<div class="txp-form-field">'.
         n.'<div class="txp-form-field-label">'.
