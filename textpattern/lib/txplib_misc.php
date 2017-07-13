@@ -6058,6 +6058,7 @@ function replace_relative_urls($html, $permalink = '')
 
 function show_clean_test($pretext)
 {
+    ob_clean();
     if (is_array($pretext) && isset($pretext['req'])) {
         echo md5($pretext['req']).n;
     }
