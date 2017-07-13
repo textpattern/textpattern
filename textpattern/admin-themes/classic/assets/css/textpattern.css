@@ -121,7 +121,7 @@ button {
  * Additional styling for popup help links in table headers.
  */
   .txp-list thead th a.pophelp {
-    display: inline;
+    display: inline-block;
     color: #996633;
   }
   .txp-list thead th a.pophelp:hover {
