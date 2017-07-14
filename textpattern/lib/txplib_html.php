@@ -347,7 +347,7 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
                 'crit'          => $crit,
                 'search_method' => $search_method,
             ), array(
-                'class'       => 'dlink destroy',
+                'class'       => 'destroy',
                 'title'       => gTxt('delete'),
                 'data-verify' => $verify,
             ));
@@ -360,7 +360,7 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
             $thing2         => $thing2val,
             '_txp_token'    => form_token(),
         ), array(
-            'class'       => 'dlink destroy',
+            'class'       => 'destroy',
             'title'       => gTxt('delete'),
             'data-verify' => $verify,
         ));
