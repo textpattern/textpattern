@@ -1798,6 +1798,7 @@ button {
   table {
     border-collapse: collapse;
     border-spacing: 0;
+    background-color: #f7f7f7;
   }
   /**
  * Styling of table captions.
