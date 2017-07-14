@@ -676,6 +676,7 @@ button {
     margin: 1em 0;
     border-right: 1px solid #cccccc;
     border-left: 1px solid #cccccc;
+    clear: both;
     background: #f7f7f7;
   }
   .txp-details > div {
