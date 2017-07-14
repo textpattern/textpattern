@@ -286,10 +286,6 @@ function doDiagnostics()
         $fail['warn_mail_unavailable'] = diag_msg_wrap(gTxt('warn_mail_unavailable'), 'warning');
     }
 
-    if ($is_register_globals) {
-        $fail['warn_register_globals_or_update'] = diag_msg_wrap(gTxt('warn_register_globals_or_update'), 'warning');
-    }
-
     if ($permlink_mode != 'messy') {
         $rs = safe_column("name", 'txp_section', "1 = 1");
 
