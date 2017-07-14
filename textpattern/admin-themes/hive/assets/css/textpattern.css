@@ -1534,6 +1534,8 @@ button {
   }
   button.destroy:hover, button.destroy:active {
     background: none;
+    -webkit-box-shadow: none;
+            box-shadow: none;
   }
   button.destroy:focus {
     outline: thin solid #0066ff;
