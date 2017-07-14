@@ -352,7 +352,6 @@ php_sapi_mode => API PHP διακομιστή
 php_version => Έκδοση PHP
 php_version_required => Το Textpattern απαιτεί τουλάχιστον PHP {version} για να εγκατασταθεί στον server σας
 preflight_check => Προκαταρκτικός έλεγχος
-register_globals => Register globals (PHP)
 rfc2616_headers => Επικεφαλίδες RFC 2616
 server => Διακομιστής
 server_time => Τοπική ώρα διακομιστή
@@ -364,7 +363,6 @@ textpattern_update_available => Η νέα έκδοση του Textpattern {versi
 tmp_plugin_paths_match => Οι φάκελοι για το cache των αρθρωμάτων και ο προσωρινός φάκελος <strong>δεν</strong> πρέπει να είναι οι ίδιοι.
 txp_path => Διαδρομή Textpattern
 txp_version => Έκδοση Textpattern
-warn_register_globals_or_update => Η έκδοση του PHP που έχετε πάσχει από προβλήματα ασφαλείας. Παρακαλούμε απενεργοποιήστε την επιλογή <code>register_globals</code> ή αναβαθμίστε σε νεώτερη έκδοση.
 web_domain => URL ιστοτόπου
 #@discuss
 article_deleted => Το άρθρο διαγράφηκε!

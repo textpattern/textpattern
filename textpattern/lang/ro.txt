@@ -352,7 +352,6 @@ php_sapi_mode => PHP Server API
 php_version => Versiunea PHP
 php_version_required => Textpattern are nevoie de PHP {version}.
 preflight_check => Verificari initiale
-register_globals => Globale de registru
 rfc2616_headers => Headere RFC 2616
 server => Server
 server_time => Ora locala a server-ului
@@ -364,7 +363,6 @@ textpattern_update_available =>
 tmp_plugin_paths_match => Directorul temporar si directorul de cache pentru plugin-uri <strong>nu</strong> trebuie sa fie acelesi.
 txp_path => Calea Textpattern-ului
 txp_version => Versiunea Textpattern-ului
-warn_register_globals_or_update => Versiunea ta de PHP prezinta riscuri pentru securitate. Te rog dezactiveaza globalele de registru (<code>register_globals</code> off) sau update-uieste-ti PHP-ul.
 web_domain => URL-ul site-ului
 #@discuss
 article_deleted => Articol sters.

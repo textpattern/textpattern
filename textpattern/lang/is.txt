@@ -352,7 +352,6 @@ php_sapi_mode =>
 php_version => PHP version
 php_version_required =>
 preflight_check => Kerfis og umhverfisskoðun
-register_globals => Register globals
 rfc2616_headers =>
 server => Server
 server_time =>
@@ -364,7 +363,6 @@ textpattern_update_available =>
 tmp_plugin_paths_match =>
 txp_path => Textpattern slóð
 txp_version => Textpattern version
-warn_register_globals_or_update =>
 web_domain => Síðu slóð
 #@discuss
 article_deleted => Grein eytt!

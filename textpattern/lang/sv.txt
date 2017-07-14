@@ -352,7 +352,6 @@ php_sapi_mode => Server-API för PHP
 php_version => PHP-version
 php_version_required => Textpattern CMS kräver att åtminstone PHP-version {version} är installerad på servern
 preflight_check => Förkontroll
-register_globals => Register globals
 rfc2616_headers => RFC 2616-headers
 server => Server
 server_time => Serverns klocka
@@ -364,7 +363,6 @@ textpattern_update_available => Ny Textpattern-version {version} <a href="http:/
 tmp_plugin_paths_match => Sökvägen för tillfällig mapp och plugin-cache-mappen får <strong>inte</strong> vara densamma.
 txp_path => Textpattern-sökväg
 txp_version => Textpattern-version
-warn_register_globals_or_update => Din version av PHP har säkerhetsrelaterade brister. Var god stäng av register_globals eller uppdatera till en nyare PHP-version.
 web_domain => Webbplatsens URL
 #@discuss
 article_deleted => Artikeln borttagen.

@@ -352,7 +352,6 @@ php_sapi_mode => PHP Server API
 php_version => גירסת PHP
 php_version_required => מערכת Textpattern דורשת ש-PHP מגירסה {version} יהיה מותקן בשרת שלך.
 preflight_check => בדיקה לפני הרצה
-register_globals => Register globals
 rfc2616_headers => RFC 2616 headers
 server => שרת
 server_time => זמן המקומי של השרת
@@ -364,7 +363,6 @@ textpattern_update_available => גירסה חדשה של מערכת Textpattern 
 tmp_plugin_paths_match => הספרייה הזמנית ספריית מטמון התוספים אינם יכולים להיות זהות.
 txp_path => מסלול Textpattern
 txp_version => גירסת Textpattern
-warn_register_globals_or_update => לגירסת ה-PHP שלך יש בעיות אבטחה.אנא בטל את <code dir="ltr">register_globals</code> off או עדכן לגירסת PHP חדשה.
 web_domain => כתובת האתר
 #@discuss
 article_deleted => המאמר נמחק!

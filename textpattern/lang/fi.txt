@@ -352,7 +352,6 @@ php_sapi_mode => PHP palvelimen API
 php_version => PHP:n versio
 php_version_required => Textpattern CMS vaatii minimissään palvelimelta PHP-version {version}
 preflight_check => Ennakkotestaus
-register_globals => Register globals
 rfc2616_headers => RFC 2616 HTTP-otsakkeet
 server => Palvelin
 server_time => Palvelimen paikallinen aika
@@ -364,7 +363,6 @@ textpattern_update_available => Uusi Textpattern CMS versio {version} <a href="h
 tmp_plugin_paths_match => Väliaikais- ja liitännäiskätkö -hakemisto eivät saa olla samat.
 txp_path => Polku Textpatterniin
 txp_version => Textpatternin versio
-warn_register_globals_or_update => Käyttämääsi PHP:n versioon sisältyy turvallisuusriskejä. Aseta <code>register_globals</code> pois päältä tai päivitä PHP uudempaan versioon.
 web_domain => Sivuston URL
 #@discuss
 article_deleted => Artikkeli poistettu!

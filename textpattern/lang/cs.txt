@@ -352,7 +352,6 @@ php_sapi_mode => API pro PHP na serveru
 php_version => Verze PHP
 php_version_required => Textpattern vyžaduje minimálně PHP ve verzi {version}.
 preflight_check => Poslední kontrola před odletem
-register_globals => Globální proměnné
 rfc2616_headers => Hlavičky podle RFC 2616
 server => Server
 server_time => Místní čas na serveru
@@ -364,7 +363,6 @@ textpattern_update_available => Nová verze Textpattern {version} <a href="http:
 tmp_plugin_paths_match => Adresář pro dočasné soubory a pluginy by neměl být tentýž.
 txp_path => Cesta k Textpattern
 txp_version => Verze Textpattern
-warn_register_globals_or_update => Tvoje verze PHP má některé bezpečnostní slabiny. Určitě vypni register_globals, nebo nainstaluj novější verzi.
 web_domain => Adresa serveru
 #@discuss
 article_deleted => Článek odstraněn!

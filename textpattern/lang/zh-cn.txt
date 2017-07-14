@@ -352,7 +352,6 @@ php_sapi_mode => PHP 服务器 API
 php_version => PHP 版本
 php_version_required => Textpattern CMS 需要你的服务器 PHP 版本至少是 {version}
 preflight_check => 预检
-register_globals => Register globals
 rfc2616_headers => RFC 2616 headers
 server => 服务器
 server_time => 服务器本地时间
@@ -364,7 +363,6 @@ textpattern_update_available => 新的 Textpattern CMS 版本 {version} <a href=
 tmp_plugin_paths_match => 临时文件目录和插件储存目录路径不应相同。
 txp_path => Textpattern 路径
 txp_version => Textpattern 版本
-warn_register_globals_or_update => 您的 PHP 版本有安全漏洞，请关闭 <code>register_globals</code> 或者升级到较新的版本。
 web_domain => 网站 URL
 #@discuss
 article_deleted => 文章已删除！

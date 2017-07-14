@@ -352,7 +352,6 @@ php_sapi_mode => PHP Server API
 php_version => PHP版本
 php_version_required =>
 preflight_check => 網站運作檢測
-register_globals => Register globals
 rfc2616_headers => RFC 2616 headers
 server => 伺服器
 server_time => 伺服器時間
@@ -364,7 +363,6 @@ textpattern_update_available =>
 tmp_plugin_paths_match => 暫存資料夾及外掛快取資料夾<strong>不</strong>能相同。
 txp_path => Textpattern路徑
 txp_version => Textpattern版本
-warn_register_globals_or_update => 你的 PHP 版本存在相當大的安全性風險.
 web_domain => 網站網址
 #@discuss
 article_deleted => 文章已刪除!

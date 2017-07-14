@@ -352,7 +352,6 @@ php_sapi_mode => PHP serverio API sąsaja
 php_version => PHP versija
 php_version_required => Textpattern TVS reikia, kad bent PHP {version} versija būtų įdiegta jūsų serveryje
 preflight_check => Patikrinimas
-register_globals => Globalūs kintamieji
 rfc2616_headers => RFC 2616 antraštės
 server => Serveris
 server_time => Server lokalus laikas
@@ -364,7 +363,6 @@ textpattern_update_available => Nauja Textpattern TVS versija {version} <a href=
 tmp_plugin_paths_match => Laikino katalogo kelias ir Papildinių spartinančios atmintinės katalogo kelias turi <strong>ne</strong>sutapti.
 txp_path => Textpattern kelias
 txp_version => Textpattern versija
-warn_register_globals_or_update => Jūsų PHP versija turi saugumo susietų pavojų. Prašome išjungti <code>register_globals</code> arba atnaujinti.
 web_domain => Svetainės URL
 #@discuss
 article_deleted => Straipsnis pašalintas.

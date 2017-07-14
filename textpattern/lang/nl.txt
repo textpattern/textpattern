@@ -352,7 +352,6 @@ php_sapi_mode => PHP server API
 php_version => PHP versie
 php_version_required => Textpattern CMS heeft minstens versie {version} van PHP nodig op de server
 preflight_check => Pre-flight controle
-register_globals => Register globals
 rfc2616_headers => RFC 2616 headers
 server => Server
 server_time => Lokale servertijd
@@ -364,7 +363,6 @@ textpattern_update_available => Nieuwe textpattern versie {version} <a href="htt
 tmp_plugin_paths_match => Het pad naar de tijdelijke bestanden map en de map voor de plugin cache mogen <strong>niet</strong> identiek zijn.
 txp_path => Pad naar textpattern
 txp_version => Textpattern versie
-warn_register_globals_or_update => De PHP versie die je gebruikt kan een veiligheids risico veroorzaken. Zet <code>register_globals</code> uit of gebruik een nieuwere versie van PHP.
 web_domain => URL van de site
 #@discuss
 article_deleted => Artikel verwijderd.

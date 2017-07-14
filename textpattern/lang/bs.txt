@@ -352,7 +352,6 @@ php_sapi_mode => PHP server API
 php_version => PHP verzija
 php_version_required =>
 preflight_check => Kontrolni pregled
-register_globals => Registracija globalnih
 rfc2616_headers => RFC 2616 zaglavlja
 server => Server
 server_time => Lokalno vrijeme servera
@@ -364,7 +363,6 @@ textpattern_update_available =>
 tmp_plugin_paths_match => Putanja do privremene mape i privremena memorija za dodatke (Plugin cache) <strong>not</strong> treba da se podudaraju.
 txp_path => Textpattern putanja
 txp_version => Textpattern verzija
-warn_register_globals_or_update => Vaša verzija PHPa ima sigurnosnih rizika. Molimo isključite <code>register_globals</code> ili pređite na noviju verziju PHPa.
 web_domain => URL sajta
 #@discuss
 article_deleted => Članak obrisan!

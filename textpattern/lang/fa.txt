@@ -352,7 +352,6 @@ php_sapi_mode => PHP Server API
 php_version => نسخه PHP
 php_version_required => سیستم مدیریت محتوای Textpattern برای نصب روی سرور شما به نسخه‌ی PHP {version} به بالا نیازمند است.
 preflight_check => آزمون
-register_globals => Register globals
 rfc2616_headers => سرآیندهای RFC 2616
 server => سرور
 server_time => زمان محلی سرور
@@ -364,7 +363,6 @@ textpattern_update_available => نسخه‌ی جدید سیستم مدیریت �
 tmp_plugin_paths_match => مسیر پوشه‌ی فایل‌های موقت و مسیر کش پلاگین‌ها <strong>نباید</strong> یکی باشند.
 txp_path => مسیر Textpattern
 txp_version => نسخه Textpattern
-warn_register_globals_or_update => نسخه‌ی PHP شما دارای مشکلات امنیتی است. لطفا <code dir="ltr">register_globals</code> را خاموش یا نسخه‌ی PHP خود را بهنگام کنید.
 web_domain => نشانی سایت
 #@discuss
 article_deleted => نوشته پاک شد!

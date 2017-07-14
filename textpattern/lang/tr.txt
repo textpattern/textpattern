@@ -352,7 +352,6 @@ php_sapi_mode => PHP server API
 php_version => PHP sürümü
 php_version_required =>
 preflight_check => Önyükleme denetimi
-register_globals => Register globals
 rfc2616_headers => RFC 2616 headers
 server => Sunucu
 server_time => Sunucu yerel saati
@@ -364,7 +363,6 @@ textpattern_update_available =>
 tmp_plugin_paths_match => Geçici dosyalara ait klasör ile eklenti önbellek klasörü <strong>aynı olmamalıdır</strong>.
 txp_path => Textpattern klasörü
 txp_version => Textpattern sürümü
-warn_register_globals_or_update => PHP sürümünüz güvenlik açıkları içeriyor olabilir. Lütfen <code>register_globals</code> etkisiz hale getirin veya PHP sürümünüzü yükseltin.
 web_domain =>
 #@discuss
 article_deleted => Makale silindi!

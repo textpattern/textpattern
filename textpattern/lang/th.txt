@@ -352,7 +352,6 @@ php_sapi_mode =>
 php_version =>
 php_version_required =>
 preflight_check =>
-register_globals =>
 rfc2616_headers =>
 server =>
 server_time =>
@@ -364,7 +363,6 @@ textpattern_update_available =>
 tmp_plugin_paths_match =>
 txp_path =>
 txp_version =>
-warn_register_globals_or_update =>
 web_domain =>
 #@discuss
 article_deleted => ลบบทความแล้ว!

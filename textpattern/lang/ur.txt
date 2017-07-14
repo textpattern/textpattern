@@ -352,7 +352,6 @@ php_sapi_mode => PHP سرور API موڈ
 php_version => PHP ورژن
 php_version_required =>
 preflight_check =>
-register_globals => Register globals موڈ
 rfc2616_headers => RFC 2616 headers موڈ
 server => سرور
 server_time => سرور کا مقامی وقت
@@ -364,7 +363,6 @@ textpattern_update_available =>
 tmp_plugin_paths_match => عارضی پوشہ کی راہ اور پلگ ان کے پوشہ کی راہ مشابہ <strong>نہیں</strong> ہونا چاہئے
 txp_path => Textpattern کا پتہ
 txp_version => Textpattern ورژن
-warn_register_globals_or_update => آپ کے حلیہ PHP کے ورژن میں سلامتی کے خطرے ہیں، بارہ کرم <code dir="ltr">register_globals</code> آپ کے کو بند کریں یا PHP کو تجدید کریں
 web_domain => سائٹ کا URL پتہ
 #@discuss
 article_deleted => یہ مضمون حذف ہے

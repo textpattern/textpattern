@@ -352,7 +352,6 @@ php_sapi_mode => PHP server API
 php_version => PHP version
 php_version_required => Textpattern requires at least version {version} of PHP to be installed on your server
 preflight_check => Pre-flight check
-register_globals => Register globals
 rfc2616_headers => RFC 2616 headers
 server => Server
 server_time => Server local time
@@ -364,7 +363,6 @@ textpattern_update_available => New Textpattern version {version} <a href="http:
 tmp_plugin_paths_match => Temporary directory path and plugin cache directory path should <strong>not</strong> match.
 txp_path => Textpattern path
 txp_version => Textpattern version
-warn_register_globals_or_update => Your version of PHP has known security vulnerabilities. Please turn <code>register_globals</code> off or update to a newer PHP version.
 web_domain => Site URL
 #@discuss
 article_deleted => Article deleted.

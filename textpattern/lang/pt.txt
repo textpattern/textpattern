@@ -352,7 +352,6 @@ php_sapi_mode => API do servidor de PHP
 php_version => Versão do PHP
 php_version_required => Textpattern CMS requer pelo menos a versão {version} do PHP para ser instalado no seu servidor
 preflight_check => Comprovação prévia
-register_globals => Registar variáveis globais
 rfc2616_headers => Cabeçalhos RFC 2616
 server => Servidor
 server_time => Hora local do servidor
@@ -364,7 +363,6 @@ textpattern_update_available => Uma novo versão do Textpattern {version} <a hre
 tmp_plugin_paths_match => O Caminho para o directório temporário e o da cache de plugins <strong>não</strong> devem ser idênticos.
 txp_path => Localização do Textpattern
 txp_version => Versão do Textpattern
-warn_register_globals_or_update => A sua versão do PHP tem sérios riscos de segurança. Desligue a opção <code>register_globals</code> ou actualize o PHP para uma versão mais recente.
 web_domain => Domínio web
 #@discuss
 article_deleted => Artigo apagado.

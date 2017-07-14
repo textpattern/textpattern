@@ -352,7 +352,6 @@ php_sapi_mode => PHP Server API
 php_version => Версия PHP
 php_version_required => Textpattern CMS требует как минимум {version} версию PHP, которая должна быть установлена на вашем сервере
 preflight_check => Предварительная проверка
-register_globals => Register globals
 rfc2616_headers => Заголовки RFC 2616
 server => Сервер
 server_time => Локальное время на сервере
@@ -364,7 +363,6 @@ textpattern_update_available => Новая версия CMS Textpattern {version
 tmp_plugin_paths_match => Директории для временных файлов и кэша плагинов <strong>не должны совпадать</strong>.
 txp_path => Путь к Textpattern
 txp_version => Версия Textpattern
-warn_register_globals_or_update => Ваша версия PHP имеет уязвимости в безопасности. Установите <code>register_globals</code> off или обновите версию PHP.
 web_domain => URL сайта
 #@discuss
 article_deleted => Статья удалена!

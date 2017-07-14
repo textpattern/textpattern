@@ -352,7 +352,6 @@ php_sapi_mode => PHP 서버 API
 php_version => PHP 버전
 php_version_required =>
 preflight_check => 점검해보기
-register_globals => 글로벌 변수 등록기능
 rfc2616_headers => RFC 2616 헤더
 server => 서버
 server_time => 서버 로컬 시간
@@ -364,7 +363,6 @@ textpattern_update_available =>
 tmp_plugin_paths_match => 임시 디렉토리 경로와 확장기능 캐시 디렉토리 경로가 <strong>일치하지 않습니다</strong>.
 txp_path => 텍스트패턴 경로
 txp_version => 텍스트패턴 버전
-warn_register_globals_or_update => 사용중인 PHP 버전은 보안상 위험이 있습니다. 글로벌 변수 등록기능 옵션을 끄거나 새로운 PHP 버전으로 갱신하세요.
 web_domain => 사이트 URL
 #@discuss
 article_deleted => 게시물을 지웠습니다!
