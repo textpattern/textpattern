@@ -671,6 +671,9 @@ button {
  *     </div>
  * </section>
  */
+  .txp-details {
+    clear: both;
+  }
   h3.txp-summary a {
     padding: 0 0 0 0.8em;
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='100' viewBox='0 0 7 100'%3E%3Cpath fill='%23963' d='M1 7V0l4 3.5M0 96h7l-3.5 4'/%3E%3C/svg%3E") no-repeat 0 4px;
