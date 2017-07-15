@@ -52,7 +52,7 @@ class Textpattern_Admin_Help
 
     public function pophelp_load($lang)
     {
-        $file = "lang/{$lang}_help.xml";
+        $file = txpath."/lang/{$lang}_pophelp.xml";
         if (!file_exists($file)) {
             return false;
         }
