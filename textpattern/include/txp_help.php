@@ -78,7 +78,8 @@ class Textpattern_Admin_Help
             $xml = $this->pophelp_load($lang_ui);
         }
 
-        if (!$x = $xml->xpath("//item[@id='{$item}']") && $lang_ui != TEXTPATTERN_DEFAULT_LANG) {
+        $x = $xml->xpath("//item[@id='{$item}']");
+        if (!$x && $lang_ui != TEXTPATTERN_DEFAULT_LANG) {
             $xml = $this->pophelp_load(TEXTPATTERN_DEFAULT_LANG);
             $x = $xml->xpath("//item[@id='{$item}']");
         }
