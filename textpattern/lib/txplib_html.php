@@ -1223,11 +1223,10 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
         return '';
     }
 
-    $lang_ui = get_pref('language_ui', LANG);
     $url = filter_var($help_var, FILTER_VALIDATE_URL);
 
     if ($url === false) {
-        $destination = HELP_URL.'?item='.urlencode($help_var).'&language='.urlencode($lang_ui);
+        $destination = '?event=help&step=pophelp&item='.urlencode($help_var);
     } else {
         $destination = $url;
     }
