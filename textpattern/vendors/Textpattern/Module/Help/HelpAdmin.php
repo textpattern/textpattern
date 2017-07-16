@@ -77,6 +77,8 @@ class HelpAdmin
 
     public static function pophelp()
     {
+        global $app_mode;
+
         $item = gps('item');
         if (empty($item) || preg_match('/[^\w]/i', $item)) {
             exit;
@@ -106,6 +108,12 @@ class HelpAdmin
             } else {
                 $out .= $pophelp.n;
             }
+        }
+
+        if ($app_mode == 'async') {
+            pagetop('');
+            echo tag($out, 'div', array('id' => 'pophelp-event'));
+            return;
         }
 
         // Temporary code, it will be deleted in the next step.
