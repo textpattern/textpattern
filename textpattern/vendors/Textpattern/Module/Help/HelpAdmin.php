@@ -4,6 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.io/
  *
+ * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
@@ -21,36 +22,47 @@
  * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
-if (!defined('txpinterface')) {
-    die('txpinterface is undefined.');
-}
-
 /**
  * Help subsystem.
  *
  * @package Admin\Help
  */
 
-class Textpattern_Admin_Help
+namespace Textpattern\Module\Help;
+
+class HelpAdmin
 {
+    private static $available_steps = array(
+        'pophelp'   => false,
+    );
+
     /**
      * Constructor.
+     *
      */
 
-    public function __construct()
+//    public function __construct()
+    public static function init()
     {
+        require_privs('help');
+
         global $step;
 
-        $steps = array(
-            'pophelp'    => false,
-        );
-
-        if ($step && bouncer($step, $steps)) {
-            $this->$step();
+        if ($step && bouncer($step, self::$available_steps)) {
+            self::$step();
+        } else {
+//            self::dashboard();
         }
     }
 
-    public function pophelp_load($lang)
+
+    /**
+     * Load pophelp.xml
+     *
+     * @param string    $lang
+     */
+
+    private static function pophelp_load($lang)
     {
         $file = txpath."/lang/{$lang}_pophelp.xml";
         if (!file_exists($file)) {
@@ -60,11 +72,12 @@ class Textpattern_Admin_Help
         return simplexml_load_file($file, "SimpleXMLElement", LIBXML_NOCDATA);
     }
 
+
     /**
      * pophelp.
      */
 
-    public function pophelp()
+    public static function pophelp()
     {
         $item = gps('item');
         if (empty($item) || preg_match('/[^\w]/i', $item)) {
@@ -73,21 +86,21 @@ class Textpattern_Admin_Help
 
         $lang_ui = get_pref('language_ui', LANG);
 
-        if (!$xml = $this->pophelp_load($lang_ui)) {
+        if (!$xml = self::pophelp_load($lang_ui)) {
             $lang_ui = TEXTPATTERN_DEFAULT_LANG;
-            $xml = $this->pophelp_load($lang_ui);
+            $xml = self::pophelp_load($lang_ui);
         }
 
         $x = $xml->xpath("//item[@id='{$item}']");
         if (!$x && $lang_ui != TEXTPATTERN_DEFAULT_LANG) {
-            $xml = $this->pophelp_load(TEXTPATTERN_DEFAULT_LANG);
+            $xml = self::pophelp_load(TEXTPATTERN_DEFAULT_LANG);
             $x = $xml->xpath("//item[@id='{$item}']");
         }
 
         $out = $title = '';
         if ($x) {
             $pophelp = trim($x[0]);
-            $title = $x[0]->attributes()->title;
+            $title = txpspecialchars($x[0]->attributes()->title);
             $format = $x[0]->attributes()->format;
             if ($format == 'textile') {
                 $textile = new \Netcarver\Textile\Parser();
@@ -116,6 +129,5 @@ EOF;
 
         exit;
     }
-}
 
-new Textpattern_Admin_Help();
+}
