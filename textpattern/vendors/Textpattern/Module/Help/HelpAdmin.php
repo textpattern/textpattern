@@ -4,7 +4,6 @@
  * Textpattern Content Management System
  * https://textpattern.io/
  *
- * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
@@ -25,6 +24,7 @@
 /**
  * Help subsystem.
  *
+ * @since   4.7.0
  * @package Admin\Help
  */
 
@@ -41,17 +41,15 @@ class HelpAdmin
      *
      */
 
-//    public function __construct()
     public static function init()
     {
-        require_privs('help');
-
         global $step;
+        require_privs('help');
 
         if ($step && bouncer($step, self::$available_steps)) {
             self::$step();
         } else {
-//            self::dashboard();
+            // self::dashboard();
         }
     }
 
@@ -129,5 +127,4 @@ EOF;
 
         exit;
     }
-
 }
