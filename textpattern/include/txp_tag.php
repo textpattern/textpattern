@@ -34,14 +34,12 @@ if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
-header('Content-Security-Policy: '.CONTENT_SECURITY_POLICY);
-header('X-Frame-Options: '.X_FRAME_OPTIONS);
-header('X-UA-Compatible: '.X_UA_COMPATIBLE);
+pagetop();
 
-?><div id="tag-event">
-<?php echo \Txp::get('\Textpattern\Tag\BuilderTags')->renderTagHelp(gps('tag_name'), gps('panel')); ?>
-</div>
-<?php
+echo tag(
+    \Txp::get('\Textpattern\Tag\BuilderTags')->renderTagHelp(gps('tag_name'), gps('panel')),
+    'div', array('id' => 'tag-event')
+);
 
 /**
  * Collection of tag builder functions.
