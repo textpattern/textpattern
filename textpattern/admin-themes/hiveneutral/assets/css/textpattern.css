@@ -760,7 +760,7 @@ button {
   /**
  * Tables within summary/details boxes.
  */
-  .txp-details .txp-list--no-options {
+  .txp-details .txp-listtables {
     margin: 1em 0;
   }
   /* Progress meter (only used in core for setup panels)
