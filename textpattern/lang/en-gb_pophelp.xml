@@ -470,7 +470,7 @@
         ]]></item>
     </group>
 
-    <group id="plugin">
+    <group id="plugin" title="Plugin panel">
         <item id="install_plugin" title="Install plugin"><![CDATA[
 <h2>Install plugin</h2>
 <p>Paste the contents of the plugin text file here, then use ‘Upload’ to begin installation. Any plugin you upload with the same name as one you have previously installed will be overwritten with the uploaded version.</p>
