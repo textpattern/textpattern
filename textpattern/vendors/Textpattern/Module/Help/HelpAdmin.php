@@ -215,31 +215,32 @@ EOF;
             if (!empty($help->toc)) {
                 $out .= self::render_item($help->toc, $class='help-toc-static');
             }
+            $out2 = '';
             foreach ($help->children() as $key => $children) {
                 if ($key == 'group') {
                     $id = (string)$children->attributes()->id;
                     $title = (string)$children->attributes()->title;
 
-                    $out .= "<a id='group-{$id}'></a><div class='help-group'><h1>{$title}</h1>";
+                    $out2 .= "<div id='group-{$id}' class='help-group'><h1>{$title}</h1>";
                     $items = array();
                     foreach ($children->item as $item) {
                         $items[] = self::render_item($item);
                     }
-                    $out .= doWrap($items, '', '')."</div>";
+                    $out2 .= doWrap($items, '', '')."</div>";
                     $menu[] = tag($title, 'a', array('href' => "#group-{$id}") );
                 }
                 if ($key == 'item') {
-                    $out .= self::render_item($children);
+                    $out2 .= self::render_item($children);
                 }
             }
             $out .= "<div class='help-toc'>".doWrap($menu, 'ul', 'li')."</div>";
 
             if (!empty($xml->js)) {
-                $out .= '<script>'.n.trim($xml->js).n.'</script>'.n;
+                $out2 .= '<script>'.n.trim($xml->js).n.'</script>'.n;
             }
         }
 
-        return $out;
+        return $out.$out2;
     }
 
     public static function render_item($item , $class='help-item')
@@ -264,22 +265,38 @@ function hardcode_css_test()
 {
     return <<<EOF
 <style>
+@media screen and (min-width: 500px) {
 .help-toc {
-    max-width: 300px;
-    border: 1px solid #f9f3c0;
-    max-width: 300px;
-    padding-right: 10px;
-    position: fixed;
-    right: 0;
     top: 50px;
-    text-align: right;
+    position: fixed;
     width: 200px;
-    border-radius: 70px 0 0 70px;
+}
+.help-group {
+    margin-right: 200px;
+
+}
+}
+
+.help-toc {
+    padding-right: 10px;
+    right: 0;
+    text-align: right;
+    border-radius: 50px 0 0 0px;
     box-shadow: -120px 20px 50px #f9f3c0 inset;
+    border: 1px solid #f9f3c0;
 }
 .help-toc a {
     color: #333;
 }
+.help-group:target > h1 {
+    color: red;
+    margin-top: 40px;
+}
+
+.help-group:target {
+    display: block;
+}
+
 .help-toc ul {
     list-style-type: none;
 }
@@ -287,8 +304,9 @@ function hardcode_css_test()
 .help-group {
     border-top: 1px dotted blue;
     border-left: 1px dotted blue;
-    margin-top: 30px;
     padding-left: 10px;
+    display: none;
+    background-color: #fafafa;
 }
 
 .help-item {
