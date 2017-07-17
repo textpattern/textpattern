@@ -57,7 +57,6 @@ include_once txpath.'/include/txp_auth.php';
 assert_system_requirements();
 
 header("Content-Type: text/html; charset=utf-8");
-header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 
 // Drop trailing cruft.
 $_SERVER['PHP_SELF'] = preg_replace('#^(.*index.php).*$#i', '$1', $_SERVER['PHP_SELF']);

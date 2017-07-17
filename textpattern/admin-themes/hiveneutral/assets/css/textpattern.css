@@ -757,6 +757,12 @@ button {
   .txp-details > div {
     padding: 0 1em;
   }
+  /**
+ * Tables within summary/details boxes.
+ */
+  .txp-details .txp-listtables {
+    margin: 1em 0;
+  }
   /* Progress meter (only used in core for setup panels)
    ========================================================================== */
   /**
@@ -1798,9 +1804,9 @@ button {
  * Consistent tables.
  */
   table {
+    background-color: #f7f7f7;
     border-collapse: collapse;
     border-spacing: 0;
-    background-color: #f7f7f7;
   }
   /**
  * Styling of table captions.
@@ -1872,36 +1878,44 @@ button {
  *     </tbody>
  * </table>
  */
-  .txp-list {
+  .txp-list,
+  .txp-list--no-options {
     width: 100%;
   }
-  .txp-list tbody tr:nth-child(even) {
+  .txp-list tbody tr:nth-child(even),
+  .txp-list--no-options tbody tr:nth-child(even) {
     background: #f7f7f7;
   }
-  .txp-list tbody tr.selected {
+  .txp-list tbody tr.selected,
+  .txp-list--no-options tbody tr.selected {
     background: #eaf3fc;
   }
-  .txp-list tbody th {
+  .txp-list tbody th,
+  .txp-list--no-options tbody th {
     font-weight: normal;
   }
-  .txp-list thead th {
+  .txp-list thead th,
+  .txp-list--no-options thead th {
     background-color: #eeeeee;
     border-top: 1px solid #eeeeee;
     border-right: 1px solid #e1e1e1;
     border-bottom: 1px solid gainsboro;
     border-left: 0;
   }
-  .txp-list thead th:first-child {
+  .txp-list thead th:first-child,
+  .txp-list--no-options thead th:first-child {
     border-left: 1px solid #eeeeee;
   }
-  .txp-list thead th a {
+  .txp-list thead th a,
+  .txp-list--no-options thead th a {
     display: block;
     position: relative;
     margin: -0.38461538461538em -1em;
     padding: 0.38461538461538em 1em;
     color: #333333;
   }
-  .txp-list thead th a:hover {
+  .txp-list thead th a:hover,
+  .txp-list--no-options thead th a:hover {
     color: #333333;
     text-decoration: none;
   }
@@ -1913,10 +1927,14 @@ button {
  * <th class="asc scope="col"><a></a></th>
  * <th class="desc scope="col"><a></a></th>
  */
-  .txp-list thead th.asc, .txp-list thead th.desc {
+  .txp-list thead th.asc, .txp-list thead th.desc,
+  .txp-list--no-options thead th.asc,
+  .txp-list--no-options thead th.desc {
     background-color: #e4e4e4;
   }
-  .txp-list thead th.asc a::after, .txp-list thead th.desc a::after {
+  .txp-list thead th.asc a::after, .txp-list thead th.desc a::after,
+  .txp-list--no-options thead th.asc a::after,
+  .txp-list--no-options thead th.desc a::after {
     text-indent: 110%;
     text-transform: capitalize;
     white-space: nowrap;
@@ -1931,20 +1949,26 @@ button {
     opacity: 0.5;
     z-index: 10;
   }
-  [dir="rtl"] .txp-list thead th.asc a::after, [dir="rtl"] .txp-list thead th.desc a::after {
+  [dir="rtl"] .txp-list thead th.asc a::after, [dir="rtl"] .txp-list thead th.desc a::after, [dir="rtl"]
+  .txp-list--no-options thead th.asc a::after, [dir="rtl"]
+  .txp-list--no-options thead th.desc a::after {
     right: auto;
     left: 0.3125em;
   }
-  .txp-list thead th.asc a:hover::after, .txp-list thead th.desc a:hover::after {
+  .txp-list thead th.asc a:hover::after, .txp-list thead th.desc a:hover::after,
+  .txp-list--no-options thead th.asc a:hover::after,
+  .txp-list--no-options thead th.desc a:hover::after {
     opacity: 1;
   }
-  .txp-list thead th.desc a::after {
+  .txp-list thead th.desc a::after,
+  .txp-list--no-options thead th.desc a::after {
     border: 0 solid transparent;
     border-width: 0.25em 0.25em 0;
     border-top-color: #333333;
     content: "\2193";
   }
-  .txp-list thead th.asc a::after {
+  .txp-list thead th.asc a::after,
+  .txp-list--no-options thead th.asc a::after {
     border: 0 solid transparent;
     border-width: 0 0.25em 0.25em;
     border-bottom-color: #333333;
@@ -6265,12 +6289,7 @@ button {
  */
   *,
   *::before,
-  *::after,
-  *::first-letter,
-  p::first-line,
-  div::first-line,
-  blockquote::first-line,
-  li::first-line {
+  *::after {
     background: transparent !important;
     color: #000000 !important;
     text-shadow: none !important;
