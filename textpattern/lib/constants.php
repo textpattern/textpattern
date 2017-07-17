@@ -500,21 +500,6 @@ if (!defined('CONTENT_SECURITY_POLICY')) {
     define('CONTENT_SECURITY_POLICY', "frame-ancestors 'self'");
 }
 
-if (!defined('X_UA_COMPATIBLE')) {
-    /**
-     * Sets X-UA-Compatible HTTP header's value.
-     *
-     * This constant can be overridden from the config.php.
-     *
-     * @since   4.6.0
-     * @package HTML
-     * @example
-     * define('X_UA_COMPATIBLE', 'ie=ie9');
-     */
-
-    define('X_UA_COMPATIBLE', 'ie=edge');
-}
-
 if (!defined('AJAX_TIMEOUT')) {
     /**
      * AJAX timeout in seconds.
