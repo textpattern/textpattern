@@ -1286,6 +1286,8 @@ button {
     border-color: #d4d4d4 !important;
     background: #eeeeee !important;
     color: #aaaaaa !important;
+    -webkit-box-shadow: none !important;
+            box-shadow: none !important;
     /* 1 */
     cursor: default !important;
     /* 2 */
