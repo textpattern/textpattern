@@ -156,7 +156,7 @@ EOF;
     public static function custom()
     {
         $name = gps('name');
-        if (empty($name) || preg_match('/[^\w]/i', $item)) {
+        if (empty($name) || preg_match('/[^\w\-]/i', $name)) {
             exit;
         }
         $file = txpath."/lang/{$name}.xml";
