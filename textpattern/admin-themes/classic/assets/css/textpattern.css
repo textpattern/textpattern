@@ -5378,12 +5378,7 @@ button {
  */
   *,
   *::before,
-  *::after,
-  *::first-letter,
-  p::first-line,
-  div::first-line,
-  blockquote::first-line,
-  li::first-line {
+  *::after {
     background: transparent !important;
     color: #000000 !important;
     text-shadow: none !important;
