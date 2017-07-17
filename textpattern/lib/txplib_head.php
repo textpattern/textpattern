@@ -52,6 +52,7 @@ function pagetop($pagetitle = '', $message = '')
 
     header('Content-Security-Policy: '.CONTENT_SECURITY_POLICY);
     header('X-Frame-Options: '.X_FRAME_OPTIONS);
+    header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 
     if ($app_mode == 'async') {
         return;
