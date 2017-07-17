@@ -34,7 +34,11 @@ class HelpAdmin
 {
     private static $available_steps = array(
         'pophelp'   => false,
+        'custom'    => false,
+        'dashboard' => false,
     );
+
+    private static $textile;
 
     /**
      * Constructor.
@@ -49,7 +53,7 @@ class HelpAdmin
         if ($step && bouncer($step, self::$available_steps)) {
             self::$step();
         } else {
-            // self::dashboard();
+            self::dashboard();
         }
     }
 
@@ -135,4 +139,162 @@ EOF;
 
         exit;
     }
+
+    public static function dashboard()
+    {
+        pagetop('dashboard');
+        echo <<<EOF
+            <h2>Display some minimal Textpattern help from <code>/lang/{current-UI-language}_help.xml</code> or index help files</h2>
+            <ul>
+                <li><a href="?event=help&step=custom&name=en-gb_pophelp">Test render long page en-gb_pophelp.xml, auto-build TOC</a></li>
+            </ul>
+EOF;
+
+    }
+
+
+    public static function custom()
+    {
+        $name = gps('name');
+        if (empty($name) || preg_match('/[^\w]/i', $item)) {
+            exit;
+        }
+        $file = txpath."/lang/{$name}.xml";
+
+        pagetop('Custom help');
+        if ($data = @file_get_contents($file)) {
+            echo hardcode_css_test();
+            echo self::render_xml($data, "", "?event=help&step=custom&name={$name}&lang=");
+        } else {
+            echo "Help file: `{$name}` not found";
+        }
+    }
+
+
+    /**
+     * render_xml - xml2html
+     *
+     * @param string        $data   Raw XML
+     * @param string/array? $option Allow or not css/js/toc blocks
+     * @param string        $href   Link for lang menu
+     *
+     */
+
+    public static function render_xml($data='', $option='', $hreflang='')
+    {
+        $out = '';
+        if ($xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA)) {
+            if (!empty($xml->css)) {
+                $out .= '<style type="text/css">'.n.trim($xml->css).n.'</style>'.n;
+            }
+
+            // Multilang part, If the file contains more than one language.
+            $langs = array();
+            foreach ($xml->help as $help) {
+                $key = $help->attributes()->lang ? (string)$help->attributes()->lang : 'default';
+                $langs[$key] = $help;
+            }
+            $lang_available = array_keys($langs);
+
+            // detect language
+            $lang = gps('lang') ? gps('lang') : get_pref('language_ui', LANG);
+            $help = !empty($langs[$lang]) ? $langs[$lang] : array_shift($langs);
+
+            if (count($lang_available) > 1 && !empty($hreflang)) {
+                //FIXME: UI, build some language dropdown menu.
+                $out .= '<div class="help-menu-lang"><ul>';
+                foreach ($lang_available as $lng) {
+                    $out .= "<li><a href='{$hreflang}{$lng}'>{$lng}</a></li>";
+                }
+                $out .= '</ul></div>';
+            }
+
+
+            $menu = array();
+            self::$textile = new \Netcarver\Textile\Parser();
+            if (!empty($help->toc)) {
+                $out .= self::render_item($help->toc, $class='help-toc-static');
+            }
+            foreach ($help->children() as $key => $children) {
+                if ($key == 'group') {
+                    $id = (string)$children->attributes()->id;
+                    $title = (string)$children->attributes()->title;
+
+                    $out .= "<a id='group-{$id}'></a><div class='help-group'><h1>{$title}</h1>";
+                    $items = array();
+                    foreach ($children->item as $item) {
+                        $items[] = self::render_item($item);
+                    }
+                    $out .= doWrap($items, '', '')."</div>";
+                    $menu[] = tag($title, 'a', array('href' => "#group-{$id}") );
+                }
+                if ($key == 'item') {
+                    $out .= self::render_item($children);
+                }
+            }
+            $out .= "<div class='help-toc'>".doWrap($menu, 'ul', 'li')."</div>";
+
+            if (!empty($xml->js)) {
+                $out .= '<script>'.n.trim($xml->js).n.'</script>'.n;
+            }
+        }
+
+        return $out;
+    }
+
+    public static function render_item($item , $class='help-item')
+    {
+        $id = $item->attributes()->id;
+        $format = $item->attributes()->format;
+        $item = trim($item);
+        if ($format == 'textile') {
+            $out = self::$textile->textileThis($item);
+        } else {
+            $out = $item;
+        }
+
+//        return tag($out, 'div', array('class' => $class, 'id' => $id));
+        return "<div class='{$class}'".(empty($id) ? "" : " id='{$id}'").">$out</div>\n";
+    }
+}
+
+
+// Temporary code, it will be deleted.
+function hardcode_css_test()
+{
+    return <<<EOF
+<style>
+.help-toc {
+    max-width: 300px;
+    border: 1px solid #f9f3c0;
+    max-width: 300px;
+    padding-right: 10px;
+    position: fixed;
+    right: 0;
+    top: 50px;
+    text-align: right;
+    width: 200px;
+    border-radius: 70px 0 0 70px;
+    box-shadow: -120px 20px 50px #f9f3c0 inset;
+}
+.help-toc a {
+    color: #333;
+}
+.help-toc ul {
+    list-style-type: none;
+}
+
+.help-group {
+    border-top: 1px dotted blue;
+    border-left: 1px dotted blue;
+    margin-top: 30px;
+    padding-left: 10px;
+}
+
+.help-item {
+    border-bottom: 1px dotted blue;
+    margin: 10px;
+}
+</style>
+EOF;
 }
