@@ -46,9 +46,13 @@
  * echo 'My page contents.';
  */
 
-function pagetop($pagetitle, $message = '')
+function pagetop($pagetitle = '', $message = '')
 {
     global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme;
+
+    header('Content-Security-Policy: '.CONTENT_SECURITY_POLICY);
+    header('X-Frame-Options: '.X_FRAME_OPTIONS);
+    header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 
     if ($app_mode == 'async') {
         return;
@@ -77,10 +81,6 @@ function pagetop($pagetitle, $message = '')
     } else {
         $body_id = 'page-'.txpspecialchars($event);
     }
-
-    header('Content-Security-Policy: '.CONTENT_SECURITY_POLICY);
-    header('X-Frame-Options: '.X_FRAME_OPTIONS);
-    header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 
     $lang_direction = gTxt('lang_dir');
     $lang_ui = get_pref('language_ui', LANG);
