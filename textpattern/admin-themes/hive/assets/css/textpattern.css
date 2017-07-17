@@ -763,6 +763,12 @@ button {
   .txp-details > div {
     padding: 0 1em;
   }
+  /**
+ * Tables within summary/details boxes.
+ */
+  .txp-details .txp-list--no-options {
+    margin: 1em 0;
+  }
   /* Progress meter (only used in core for setup panels)
    ========================================================================== */
   /**

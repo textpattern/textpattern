@@ -681,6 +681,12 @@ button {
   h3.txp-summary.expanded a {
     background-position: 0 -90px;
   }
+  /**
+ * Tables within summary/details boxes.
+ */
+  .txp-details .txp-list--no-options {
+    margin: 1em 0;
+  }
   /* Password strength meter (via zxcvbn.js)
    ========================================================================== */
   /**
