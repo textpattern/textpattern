@@ -152,7 +152,7 @@
     <help group="category" title="Categories panel">
         <item id="article_category" title="Articles"><![CDATA[
 <h2>Articles</h2>
-<p>Unlike sections, which define the navigational structure of a site, article categories allow organization of articles by their subject matter. Once categories are assigned, lists of articles belonging to particular categories can be browsed.</p>
+<p>Unlike sections, which define the navigational structure of a site, article categories allow organisation of articles by their subject matter. Once categories are assigned, lists of articles belonging to particular categories can be browsed.</p>
 <p>For example, likely article categories on a site about food might be:</p>
 <ul>
     <li>raw ingredients</li>
@@ -174,7 +174,7 @@
         ]]></item>
         <item id="image_category" title="Images"><![CDATA[
 <h2>Categories: Images</h2>
-<p>Image categories are useful both for internal organization, and for defining image sets that can be displayed using the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> tags.</p>
+<p>Image categories are useful both for internal organisation, and for defining image sets that can be displayed using the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> tags.</p>
         ]]></item>
         <item id="link_category" title="Links"><![CDATA[
 <h2>Links</h2>
@@ -430,7 +430,7 @@
 <h2>Install Textpack</h2>
 <p>Paste additional language strings for your site into this box and select ‘Upload’ to install them.</p>
 <p>The strings will often come in the form of a downloadable Textpack, distributed with a plugin to permit the plugin’s language strings to be used natively within Textpattern.</p>
-<p>International authors may then translate these packs as necessary and redistribute the localized content to the community.</p>
+<p>International authors may then translate these packs as necessary and redistribute the localised content to the community.</p>
         ]]></item>
         <item id="install_lang_from_file" title="Install from file"><![CDATA[
 <h2>Install from file</h2>
@@ -698,7 +698,7 @@
         <item id="permlink_mode" title="URL pattern"><![CDATA[
 <h2>URL pattern</h2>
 <p>This defines the method by which individual articles are reached via the URL displayed using the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
-<p>‘?=messy’ mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimization (SEO). In this mode URLs for articles on your site would look like this:</p>
+<p>‘?=messy’ mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimisation (SEO). In this mode URLs for articles on your site would look like this:</p>
 <pre><code>http://example.com/index.php?id=123</code></pre>
 <p>All other modes require the Apache <code>mod_rewrite</code> module to be installed and enabled on your server. If your server does not support <code>mod_rewrite</code> either contact your web host or use the ‘?=messy’ mode outlined above.</p>
         ]]></item>
