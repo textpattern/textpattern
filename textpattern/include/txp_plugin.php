@@ -306,11 +306,15 @@ function plugin_help()
 
     pagetop(gTxt('plugin_help'));
     $help = ($name) ? safe_field('help', 'txp_plugin', "name = '".doSlash($name)."'") : '';
-    $helpArray = do_list($help, n);
 
-    if (preg_match('/^#@language\s+(.+)$/', $helpArray[0], $m)) {
-        $lang_plugin = $m[1];
-        $help = implode(n, array_slice($helpArray, 1));
+    if (preg_match('/^<\?xml/', $help)) {
+        $help = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->render_xml($help, "", "?event=plugin&step=plugin_help&name={$name}&lang=");
+    } else {
+        $helpArray = do_list($help, n);
+        if (preg_match('/^#@language\s+(.+)$/', $helpArray[0], $m)) {
+            $lang_plugin = $m[1];
+            $help = implode(n, array_slice($helpArray, 1));
+        }
     }
 
     if ($lang_plugin !== $default_lang) {
