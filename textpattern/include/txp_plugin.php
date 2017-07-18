@@ -306,11 +306,15 @@ function plugin_help()
 
     pagetop(gTxt('plugin_help'));
     $help = ($name) ? safe_field('help', 'txp_plugin', "name = '".doSlash($name)."'") : '';
-    $helpArray = do_list($help, n);
 
-    if (preg_match('/^#@language\s+(.+)$/', $helpArray[0], $m)) {
-        $lang_plugin = $m[1];
-        $help = implode(n, array_slice($helpArray, 1));
+    if (preg_match('/^<\?xml/', $help)) {
+        $help = plugin_help_render($help, "?event=plugin&step=plugin_help&name={$name}&lang=");
+    } else {
+        $helpArray = do_list($help, n);
+        if (preg_match('/^#@language\s+(.+)$/', $helpArray[0], $m)) {
+            $lang_plugin = $m[1];
+            $help = implode(n, array_slice($helpArray, 1));
+        }
     }
 
     if ($lang_plugin !== $default_lang) {
@@ -326,6 +330,53 @@ function plugin_help()
         'lang'  => $lang_plugin,
         'dir'   => $direction,
     ));
+}
+
+
+function plugin_help_render($data, $href='')
+{
+    $out = '';
+    $langs = array();
+    if ($xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA)) {
+        if (!empty($xml->css)) {
+            $out .= '<style type="text/css">'.n.trim($xml->css).n.'</style>'.n;
+        }
+
+        foreach ($xml->help as $help) {
+            $key = $help->attributes()->lang ? (string)$help->attributes()->lang : 'default';
+            $langs[$key] = $help;
+        }
+        $lang_available = array_keys($langs);
+
+        // detect language
+        $lang = gps('lang') ? gps('lang') : get_pref('language_ui', get_pref('language'));
+        $help = !empty($langs[$lang]) ? $langs[$lang] : array_shift($langs);
+
+        if (count($lang_available) > 1 && !empty($href)) {
+            //FIXME: UI, build some language dropdown menu.
+        $out .= '<div class="lang-menu"><b>language_menu</b><ul>';
+            foreach ($lang_available as $lng) {
+                $out .= "<li><a href='{$href}{$lng}'>{$lng}</a></li>";
+            }
+            $out .= '</ul></div>';
+        }
+
+        $textile = new \Netcarver\Textile\Parser();
+        foreach ($help->item as $item) {
+            $format = $item->attributes()->format;
+            $item = trim($item);
+            if ($format == 'textile') {
+                $out .= $textile->textileThis($item).n;
+            } else {
+                $out .= $item.n;
+            }
+        }
+        if (!empty($xml->js)) {
+            $out .= '<script>'.n.trim($xml->js).n.'</script>'.n;
+        }
+    }
+
+    return $out;
 }
 
 /**
