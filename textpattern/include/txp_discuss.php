@@ -189,7 +189,7 @@ function discuss_list($message = '')
         array(
             'id' => array(
                 'column' => 'txp_discuss.discussid',
-                'label'  => gTxt('ID'),
+                'label'  => gTxt('id'),
                 'type'   => 'integer',
             ),
             'parent' => array(
@@ -214,7 +214,7 @@ function discuss_list($message = '')
             ),
             'ip' => array(
                 'column' => 'txp_discuss.ip',
-                'label'  => gTxt('IP'),
+                'label'  => 'IP',
             ),
             'visible' => array(
                 'column' => 'txp_discuss.visible',
