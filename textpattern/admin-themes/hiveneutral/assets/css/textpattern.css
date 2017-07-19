@@ -1525,8 +1525,11 @@ button {
     outline: thin solid #0066ff;
   }
   button.destroy:hover .ui-icon,
-  button.destroy:active .ui-icon,
-  button.destroy:focus .ui-icon {
+  button.destroy:active .ui-icon {
+    -webkit-filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(80%);
+            filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(80%);
+  }
+  a.destroy:hover, a.destroy:active {
     -webkit-filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(80%);
             filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(80%);
   }
@@ -3808,7 +3811,8 @@ button {
   .ui-state-error-text .ui-icon,
   .error .ui-icon,
   .error.ui-icon,
-  .destroy .ui-icon {
+  .destroy .ui-icon,
+  .destroy.ui-icon {
     -webkit-filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(65%);
             filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(65%);
   }
