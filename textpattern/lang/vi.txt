@@ -201,6 +201,7 @@ general_error => Lỗi chung
 get_off_my_lawn => Tôi rất tiếc. Tôi e rằng mình không thể làm vậy; <code>{event}</code> <code>{step}</code> là một thao tác không an toàn.
 greeting => Kính gửi
 hidden => Ẩn
+id => Mã số
 image_category => Thể loại
 internal_error => Lỗi nội bộ
 last_modified => Lần sửa cuối
@@ -962,7 +963,9 @@ you_can_access => Bạn có thể truy cập <a href="index.php">giao diện ch�
 #@skin
 create_skin =>
 edit_skin =>
+search_skins =>
 skin_author =>
+skin_description =>
 skin_name =>
 skin_title =>
 skin_version =>
@@ -995,7 +998,6 @@ has_excerpt => Có phần trích
 hilight => Tô sáng thẻ
 hilight_limit => Tô sáng bao nhiêu minh dụ?
 html_id => Thuộc tính <code>id</code> của HTML
-id => Mã số
 include_default => Bao gồm mục mặc định?
 inline_style => Kiểu chèn (CSS)
 input_size => Cỡ đầu vào

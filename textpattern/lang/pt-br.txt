@@ -201,6 +201,7 @@ general_error => Erro geral
 get_off_my_lawn => Sinto muito. Isso me da medo. Eu não posso fazer isso. Acho que <code>{event}</code> <code>{step}</code> não é uma operação segura.
 greeting => Estimado
 hidden => Oculto
+id => ID#
 image_category => Categoria
 internal_error => Erro interno
 last_modified => Última alteração
@@ -962,7 +963,9 @@ you_can_access => Você poderá acessar a <a href="index.php">área administrati
 #@skin
 create_skin => Criar tema
 edit_skin => Editar tema
+search_skins =>
 skin_author => Autor do tema
+skin_description =>
 skin_name => Nome do tema
 skin_title => Titulo do tema
 skin_version => Versão do tema
@@ -995,7 +998,6 @@ has_excerpt => Contém resumo
 hilight => Destacar tag
 hilight_limit => Destacar quantos exemplos?
 html_id => Atributo HTML <code>id</code>
-id => ID#
 include_default => Incluir seção padrão?
 inline_style => Estilo CSS em linha (inline)
 input_size => Tamanho do campo

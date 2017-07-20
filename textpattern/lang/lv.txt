@@ -201,6 +201,7 @@ general_error => Vispārēja kļūda
 get_off_my_lawn => Atvainojos. Baidos ka es to nevaru izdarīt. Es domāju, ka <code>{event}</code> <code>{step}</code> šobrīd nebūtu drošā darbība.
 greeting => Cien.
 hidden => Slēpts
+id => ID#
 image_category => Bilžu kategorija
 internal_error => Iekšēja kļūda
 last_modified => Pēdējoreiz mainīts
@@ -962,7 +963,9 @@ you_can_access => Jums atliek ierakstīties <a href="index.php">administrācijas
 #@skin
 create_skin => Izveidot apdari
 edit_skin => Labot apdari
+search_skins =>
 skin_author => Apdares autors
+skin_description =>
 skin_name => Apdares nosaukums
 skin_title => Apdares virsraksts
 skin_version => Apdares versija
@@ -995,7 +998,6 @@ has_excerpt => Satur ievadtekstu
 hilight => Iekrāsošanas iezīme
 hilight_limit => Iekrāsot cik instances?
 html_id => <code>id</code> HTML atribūts
-id => ID#
 include_default => Iekļaut noklusēto sadaļu?
 inline_style => Iekļaut stilā (CSS)
 input_size => Ievades lauka garums

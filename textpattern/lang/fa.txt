@@ -201,6 +201,7 @@ general_error => خطای عمومی
 get_off_my_lawn => متأسفم! ترسیدم و نمی تونم اینو انجامش بدم! <code dir="ltr">{event}</code> <code dir="ltr">{step}</code> یک عمل ناامن است.
 greeting => عزیز
 hidden => مخفی
+id => شناسه نوشته
 image_category => رده
 internal_error => خطای داخلی
 last_modified => آخرین ویرایش
@@ -962,7 +963,9 @@ you_can_access => شما از این پس امکان ورود به <a href="inde
 #@skin
 create_skin =>
 edit_skin =>
+search_skins =>
 skin_author =>
+skin_description =>
 skin_name =>
 skin_title =>
 skin_version =>
@@ -995,7 +998,6 @@ has_excerpt => دارای منتخب
 hilight => تگ برجستگی
 hilight_limit => چه تعداد برجسته شود؟
 html_id => صفت شناسه در HTML
-id => شناسه نوشته
 include_default => شامل بخش پیش‌فرض باشد؟
 inline_style => استایل درون‌خطی
 input_size => اندازه ورودی

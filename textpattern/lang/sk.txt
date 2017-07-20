@@ -201,6 +201,7 @@ general_error => Všeobecná chyba
 get_off_my_lawn => Bohužiaľ, nebolo by bezpečné práve teraz vykonať požadovanú operáciu <code>{event}</code> <code>{step}</code>.
 greeting => Milá(ý)
 hidden => Skrytý
+id => ID#
 image_category => Kategória obrázku
 internal_error => Interná chyba
 last_modified => Naposledy upravené
@@ -962,7 +963,9 @@ you_can_access => <a href="index.php">Hlavné rozhranie</a> by malo byť dostupn
 #@skin
 create_skin => Vytvoriť skin
 edit_skin => Upraviť skin
+search_skins =>
 skin_author => Autor skinu
+skin_description =>
 skin_name => Meno skinu
 skin_title => Názov skinu
 skin_version => Verzia skinu
@@ -995,7 +998,6 @@ has_excerpt => Použiť anotáciu
 hilight => Zvýrazniť
 hilight_limit => Počet zvýraznených prvkov?
 html_id => HTML atribut <code>id</code>
-id => ID#
 include_default => Zahrnúť východziu rubriku?
 inline_style => Vložené štýly
 input_size => Veľkosť poľa

@@ -201,6 +201,7 @@ general_error => Eroare generala
 get_off_my_lawn => Imi pare rau, din pacate nu pot face asta. Consider ca <code>{event}</code> <code>{step}</code> nu este o operatiune sigura in acest moment.
 greeting => Draga
 hidden => Ascuns
+id => ID#
 image_category => Categorie
 internal_error => Eroare interna
 last_modified => Ultima modificare
@@ -962,7 +963,9 @@ you_can_access => Ar trebui sa poti accesa <a href="index.php">partea de adminis
 #@skin
 create_skin =>
 edit_skin =>
+search_skins =>
 skin_author =>
+skin_description =>
 skin_name =>
 skin_title =>
 skin_version =>
@@ -995,7 +998,6 @@ has_excerpt => Include rezumat
 hilight => Scoate in evidenta tag-ul
 hilight_limit => Cata instante vrei sa scoti in evidenta?
 html_id => Atributul <code>id</code> HTML
-id => ID#
 include_default => Include sectiunea de inceput?
 inline_style => Stiluri in pagina (CSS)
 input_size => Marimea input-ului

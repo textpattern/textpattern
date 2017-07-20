@@ -201,6 +201,7 @@ general_error => Yleinen virhe
 get_off_my_lawn => Valitettavasti pyydettyä pyyntöä <code>{event}</code> <code>{step}</code> ei pystytä suorittamaan turvallisesti.
 greeting => Hyvä
 hidden => Piilotettu
+id => ID#
 image_category => Kategoria
 internal_error => Sisäinen virhe
 last_modified => Viimeksi muutettu
@@ -962,7 +963,9 @@ you_can_access => Sinun pitäisi nyt päästä <a href="index.php">pääkäyttö
 #@skin
 create_skin => Luo ulkoasu
 edit_skin => Muokkaa ulkoasua
+search_skins =>
 skin_author => Ulkoasun tekijä
+skin_description =>
 skin_name => Ulkoasun nimi
 skin_title => Ulkoasun otsikko
 skin_version => Ulkoasun versio
@@ -995,7 +998,6 @@ has_excerpt => Johdanto löytyy
 hilight => Korostustagi
 hilight_limit => Kuinka monta korostetaan?
 html_id => <code>id</code> (HTML attribuutti)
-id => ID#
 include_default => Sisällytä oletusosio
 inline_style => Inline-tyyli (CSS)
 input_size => Kentän koko

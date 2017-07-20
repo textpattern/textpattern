@@ -201,6 +201,7 @@ general_error => Obecná chyba
 get_off_my_lawn => Bohužel, nebylo by bezpečné právě teď provést operaci <code>{event}</code> <code>{step}</code>.
 greeting => Milý(á)
 hidden => Skrytý
+id => ID#
 image_category => Kategorie obrázku
 internal_error => Vnitřní chyba
 last_modified => Naposledy upraveno
@@ -962,7 +963,9 @@ you_can_access => Nyní můžeš vstoupit do <a href="index.php">uživatelského
 #@skin
 create_skin => Vytvořit skin
 edit_skin => Upravit skin
+search_skins =>
 skin_author => Autor skinu
+skin_description =>
 skin_name => Jméno skinu
 skin_title => Název skinu
 skin_version => Verze skinu
@@ -995,7 +998,6 @@ has_excerpt => Musí mít anotaci
 hilight => Zvýraznit
 hilight_limit => Počet zvýraznězných prvků?
 html_id => <code>id</code> podle HTML
-id => ID#
 include_default => Zahrnout výchozí rubriku?
 inline_style => Vložené styly
 input_size => Délka pole

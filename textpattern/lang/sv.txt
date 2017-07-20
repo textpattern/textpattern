@@ -201,6 +201,7 @@ general_error => Allmänt fel
 get_off_my_lawn => Ledsen, kan inte göra det där. Antar att <code>{event}</code> <code>{step}</code> inte är nåt som är säkert just nu.
 greeting => Hej
 hidden => Gömd
+id => ID#
 image_category => Kategori
 internal_error => Internt fel
 last_modified => Senast ändrad
@@ -962,7 +963,9 @@ you_can_access => Du ska nu kunna nå <a href="index.php">startsidan</a> med det
 #@skin
 create_skin => Skapa skal
 edit_skin => Redigera skal
+search_skins =>
 skin_author => Skalskapare
+skin_description =>
 skin_name => Skalnamn
 skin_title => Skalrubrik
 skin_version => Skalversion
@@ -995,7 +998,6 @@ has_excerpt => Har ingress
 hilight => Framhäv tagg
 hilight_limit => Framhäv hur många förekomster?
 html_id => Id-attribut
-id => ID#
 include_default => Inkludera förvald avdelning?
 inline_style => Inline-stil (CSS)
 input_size => Fältstorlek

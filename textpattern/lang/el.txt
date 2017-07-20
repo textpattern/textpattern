@@ -201,6 +201,7 @@ general_error => Γενικό σφάλμα
 get_off_my_lawn => Συγγνώμη. Φοβάμαι πως δεν μπορώ να το κάνω αυτό. Το <strong>{event}</strong> <strong>{step}</strong> δεν είναι μια ασφαλής λειτουργία.
 greeting => Αγαπητέ/ή
 hidden => Κρυφό
+id => ΑΑ#
 image_category => Κατηγορία
 internal_error => Εσωτερικό σφάλμα
 last_modified => Τελευταία τροποποίηση
@@ -962,7 +963,9 @@ you_can_access => Λογικά, έχετε πρόσβαση <a href="index.php">
 #@skin
 create_skin => Δημιουργία νέου skin
 edit_skin => Επεξεργασία του skin
+search_skins =>
 skin_author => Δημιουργός του skin
+skin_description =>
 skin_name => Όνομα του skin
 skin_title => Τίτλος του skin
 skin_version => Έκδοση του skin
@@ -995,7 +998,6 @@ has_excerpt => Έχει απόσπασμα
 hilight => Τονισμός του Tag
 hilight_limit => Πόσα αντικείμενα να τονίζονται;
 html_id => Ιδιότητα <code>id</code> HTML
-id => ΑΑ#
 include_default => Να συμπεριλαμβάνεται ο προκαθορισμένος τομέας;
 inline_style => Κλάση CSS «inline»
 input_size => Μέγεθος πεδίου εισαγωγής

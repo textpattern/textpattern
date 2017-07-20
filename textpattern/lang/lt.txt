@@ -201,6 +201,7 @@ general_error => Bendra klaida
 get_off_my_lawn => Aš atsiprašau. Aš bijau, kad negaliu to padaryti, nes manau, kad <code>{event}</code> <code>{step}</code> šiuo metu nėra saugi operacija.
 greeting => Brangus
 hidden => Nerodomas
+id => ID#
 image_category => Kategorija
 internal_error => Vidinė klaida
 last_modified => Paskutinių keitimų data
@@ -962,7 +963,9 @@ you_can_access => Jūs turite sugebėti gauti prieigą prie <a href="index.php">
 #@skin
 create_skin =>
 edit_skin =>
+search_skins =>
 skin_author =>
+skin_description =>
 skin_name =>
 skin_title =>
 skin_version =>
@@ -995,7 +998,6 @@ has_excerpt => Turi ištrauką
 hilight => Paryškinyi žymę
 hilight_limit => Kiek daug pavyzdžių išskirti?
 html_id => <code>id</code> HTML atributas
-id => ID#
 include_default => Įtraukti numatytąją sekciją?
 inline_style => Įterptasis stilius (CSS)
 input_size => Įvedimo dydis

@@ -201,6 +201,7 @@ general_error => 一般エラー
 get_off_my_lawn => 申し訳ないことに、オペレーションを続行できません。恐らく、 <code>{event}</code> <code>{step}</code> を現在実行するのは安全でありません。
 greeting => 拝啓
 hidden => 非公開
+id => ID#
 image_category => カテゴリ
 internal_error => 内部エラー
 last_modified => 最終更新日
@@ -962,7 +963,9 @@ you_can_access => <a href="index.php">メイン画面</a>より、先程指定�
 #@skin
 create_skin =>
 edit_skin =>
+search_skins =>
 skin_author =>
+skin_description =>
 skin_name =>
 skin_title =>
 skin_version =>
@@ -995,7 +998,6 @@ has_excerpt =>
 hilight => タグハイライト
 hilight_limit => いくつのインスタンスをハイライトしますか？
 html_id => <code>id</code> HTML 属性
-id => ID#
 include_default =>
 inline_style => インラインスタイル (CSS)
 input_size => 入力サイズ

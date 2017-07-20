@@ -201,6 +201,7 @@ general_error => Erreur générale
 get_off_my_lawn => Je suis désolé, mais je crains de ne pouvoir continuer : <code>{event}</code> <code>{step}</code> est une opération à risques.
 greeting => Salutation
 hidden => Masqué
+id => ID#
 image_category => Catégorie
 internal_error => Erreur interne
 last_modified => Dernière modification
@@ -962,7 +963,9 @@ you_can_access => Vous devriez normalement avoir accès à <a href="index.php">l
 #@skin
 create_skin => Créer un thème
 edit_skin => Éditer le thème
+search_skins => Recherche de thèmes
 skin_author => Auteur du thème
+skin_description => Descriptif du thème
 skin_name => Nom du thème
 skin_title => Titre du thème
 skin_version => Version du thème
@@ -995,7 +998,6 @@ has_excerpt => Dispose d’un résumé
 hilight => Balise de surlignage
 hilight_limit => Combien de cas à surligner ?
 html_id => Attribut HTML <code>id</code>
-id => ID#
 include_default => Inclure la section par défaut ?
 inline_style => Style CSS dans le code HTML (inline style)
 input_size => Taille du masque de saisie

@@ -201,6 +201,7 @@ general_error =>
 get_off_my_lawn =>
 greeting => 안녕하세요.
 hidden => 숨김
+id => ID#
 image_category => 분류
 internal_error =>
 last_modified =>
@@ -962,7 +963,9 @@ you_can_access => 설정한 로그인 아이디와 비밀번호로 <a href="inde
 #@skin
 create_skin =>
 edit_skin =>
+search_skins =>
 skin_author =>
+skin_description =>
 skin_name =>
 skin_title =>
 skin_version =>
@@ -995,7 +998,6 @@ has_excerpt => 요약
 hilight => 하이라이트 태그
 hilight_limit => 몇개의 인스턴스를 하이라이트할지
 html_id => <code>id</code> HTML 속성
-id => ID#
 include_default => 기본섹션을 포함
 inline_style => 인라인 스타일 (CSS)
 input_size => 입력내용 크기

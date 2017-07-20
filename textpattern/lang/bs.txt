@@ -201,6 +201,7 @@ general_error =>
 get_off_my_lawn =>
 greeting => Dragi
 hidden => Skriveno
+id => ID#
 image_category => Kategorija
 internal_error =>
 last_modified =>
@@ -962,7 +963,9 @@ you_can_access => Trebalo bi da možete pristupiti <a href="index.php">main inte
 #@skin
 create_skin =>
 edit_skin =>
+search_skins =>
 skin_author =>
+skin_description =>
 skin_name =>
 skin_title =>
 skin_version =>
@@ -995,7 +998,6 @@ has_excerpt => Ima odsječak
 hilight => Naznači oznaku
 hilight_limit => Naznači koliko instanci?
 html_id => <code>id</code> HTML atribut
-id => ID#
 include_default => Uključi podrazumijevanu sekciju?
 inline_style => Stil u liniji (CSS)
 input_size => Ulazna veličina
