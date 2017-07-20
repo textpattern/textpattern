@@ -335,7 +335,7 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
         }
 
         if ($remember) {
-            return href('×', array(
+            return href(gTxt('delete'), array(
                 'event'         => $event,
                 'step'          => $step,
                 $thing          => $value,
@@ -347,20 +347,20 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
                 'crit'          => $crit,
                 'search_method' => $search_method,
             ), array(
-                'class'       => 'destroy',
+                'class'       => 'destroy ui-icon ui-icon-close',
                 'title'       => gTxt('delete'),
                 'data-verify' => $verify,
             ));
         }
 
-        return href('×', array(
+        return href(gTxt('delete'), array(
             'event'         => $event,
             'step'          => $step,
             $thing          => $value,
             $thing2         => $thing2val,
             '_txp_token'    => form_token(),
         ), array(
-            'class'       => 'destroy',
+            'class'       => 'destroy ui-icon ui-icon-close',
             'title'       => gTxt('delete'),
             'data-verify' => $verify,
         ));

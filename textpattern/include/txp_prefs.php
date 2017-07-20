@@ -751,8 +751,8 @@ function themename($name, $val)
 function doctypes($name, $val)
 {
     $vals = array(
-        'xhtml' => gTxt('XHTML'),
-        'html5' => gTxt('HTML5'),
+        'xhtml' => 'XHTML',
+        'html5' => 'HTML5',
     );
 
     return selectInput($name, $vals, $val, '', '', $name);

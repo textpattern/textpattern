@@ -126,7 +126,7 @@ function log_list($message = '')
         array(
             'ip' => array(
                 'column' => 'txp_log.ip',
-                'label'  => gTxt('IP'),
+                'label'  => 'IP',
             ),
             'host' => array(
                 'column' => 'txp_log.host',
