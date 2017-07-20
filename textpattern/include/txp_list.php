@@ -145,7 +145,7 @@ function list_list($message = '', $post = '')
         array(
             'id' => array(
                 'column' => 'textpattern.ID',
-                'label'  => gTxt('ID'),
+                'label'  => gTxt('id'),
                 'type'   => 'integer',
             ),
             'title_body_excerpt' => array(

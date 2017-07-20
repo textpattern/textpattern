@@ -1536,7 +1536,7 @@ function article_partial_title_value($rs)
 function article_partial_author($rs)
 {
     extract($rs);
-    $out = n.'<small class="author">'.gTxt('ID').' '.txpspecialchars($ID).sp.span('&#183;', array('role' => 'separator')).sp.gTxt('posted_by').' '.txpspecialchars($AuthorID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sPosted);
+    $out = n.'<small class="author">'.gTxt('id').' '.txpspecialchars($ID).sp.span('&#183;', array('role' => 'separator')).sp.gTxt('posted_by').' '.txpspecialchars($AuthorID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sPosted);
 
     if ($sPosted != $sLastMod) {
         $out .= sp.span('&#124;', array('role' => 'separator')).sp.gTxt('modified_by').' '.txpspecialchars($LastModID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sLastMod);

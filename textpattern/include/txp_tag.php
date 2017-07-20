@@ -2535,8 +2535,8 @@ class BuilderTags
         extract($atts);
 
         $types = array(
-            'c' => gTxt('Category'),
-            's' => gTxt('Section'),
+            'c' => gTxt('category'),
+            's' => gTxt('section'),
         );
 
         $out = $this->tagbuildForm(
