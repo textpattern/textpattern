@@ -1612,13 +1612,13 @@ button {
     border-bottom: 1px solid #cccccc;
   }
   /**
- * Make table cells align top and left by default.
+ * Make table cells align centred and left by default.
  */
   th,
   td {
     padding: 0.3em 1em 0.3em 0;
     text-align: left;
-    vertical-align: top;
+    vertical-align: middle;
   }
   td:last-child {
     padding: 0.3em 0;
