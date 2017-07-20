@@ -133,7 +133,7 @@ function image_list($message = '')
         array(
             'id' => array(
                 'column' => 'txp_image.id',
-                'label'  => gTxt('ID'),
+                'label'  => gTxt('id'),
                 'type'   => 'integer',
             ),
             'name' => array(
@@ -352,7 +352,7 @@ function image_list($message = '')
                 'crit'          => $crit,
             );
 
-            $name = empty($name) ? gTxt('unnamed') : txpspecialchars($name);
+            $name = empty($name) ? 'unnamed' : txpspecialchars($name);
 
             if ($thumbnail) {
                 if ($ext != '.swf') {

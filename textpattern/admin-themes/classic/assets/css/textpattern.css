@@ -681,6 +681,12 @@ button {
   h3.txp-summary.expanded a {
     background-position: 0 -90px;
   }
+  /**
+ * Tables within summary/details boxes.
+ */
+  .txp-details .txp-listtables {
+    margin: 1em 0;
+  }
   /* Password strength meter (via zxcvbn.js)
    ========================================================================== */
   /**
@@ -1096,6 +1102,8 @@ button {
     border-color: #d4d4d4 !important;
     background: #eeeeee !important;
     color: #aaaaaa !important;
+    -webkit-box-shadow: none !important;
+            box-shadow: none !important;
     /* 1 */
     cursor: default !important;
     /* 2 */
@@ -1340,8 +1348,11 @@ button {
     outline: thin solid #5b9dd9;
   }
   button.destroy:hover .ui-icon,
-  button.destroy:active .ui-icon,
-  button.destroy:focus .ui-icon {
+  button.destroy:active .ui-icon {
+    -webkit-filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(80%);
+            filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(80%);
+  }
+  a.destroy:hover, a.destroy:active {
     -webkit-filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(80%);
             filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(80%);
   }
@@ -1659,13 +1670,16 @@ button {
  *     </tbody>
  * </table>
  */
-  .txp-list {
+  .txp-list,
+  .txp-list--no-options {
     width: 100%;
   }
-  .txp-list tbody tr.selected {
+  .txp-list tbody tr.selected,
+  .txp-list--no-options tbody tr.selected {
     background: #e3edfc;
   }
-  .txp-list tbody th {
+  .txp-list tbody th,
+  .txp-list--no-options tbody th {
     font-weight: normal;
   }
   /**
@@ -1676,35 +1690,45 @@ button {
  * <th class="asc scope="col"><a></a></th>
  * <th class="desc scope="col"><a></a></th>
  */
-  .txp-list thead th a {
+  .txp-list thead th a,
+  .txp-list--no-options thead th a {
     margin-right: 14px;
   }
-  [dir="rtl"] .txp-list thead th a {
+  [dir="rtl"] .txp-list thead th a, [dir="rtl"]
+  .txp-list--no-options thead th a {
     margin-right: 0;
     margin-left: 14px;
   }
   .txp-list thead th.asc a,
-  .txp-list thead th.desc a {
+  .txp-list thead th.desc a,
+  .txp-list--no-options thead th.asc a,
+  .txp-list--no-options thead th.desc a {
     margin-right: 0;
     padding-right: 14px;
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='48' viewBox='0 0 9 48'%3E%3Cpath fill='%23fabc2b' d='M4.5 0L0 5h2v4h5V5h2M4.5 48L9 43H7v-4H2v4H0'/%3E%3C/svg%3E") no-repeat;
   }
   [dir="rtl"] .txp-list thead th.asc a, [dir="rtl"]
-  .txp-list thead th.desc a {
+  .txp-list thead th.desc a, [dir="rtl"]
+  .txp-list--no-options thead th.asc a, [dir="rtl"]
+  .txp-list--no-options thead th.desc a {
     margin-left: 0;
     padding-right: 0;
     padding-left: 14px;
   }
-  .txp-list thead th.asc a {
+  .txp-list thead th.asc a,
+  .txp-list--no-options thead th.asc a {
     background-position: right 2px;
   }
-  [dir="rtl"] .txp-list thead th.asc a {
+  [dir="rtl"] .txp-list thead th.asc a, [dir="rtl"]
+  .txp-list--no-options thead th.asc a {
     background-position: left 2px;
   }
-  .txp-list thead th.desc a {
+  .txp-list thead th.desc a,
+  .txp-list--no-options thead th.desc a {
     background-position: right -36px;
   }
-  [dir="rtl"] .txp-list thead th.desc a {
+  [dir="rtl"] .txp-list thead th.desc a, [dir="rtl"]
+  .txp-list--no-options thead th.desc a {
     background-position: left -36px;
   }
   /**
@@ -3241,7 +3265,8 @@ button {
   .ui-state-error-text .ui-icon,
   .error .ui-icon,
   .error.ui-icon,
-  .destroy .ui-icon {
+  .destroy .ui-icon,
+  .destroy.ui-icon {
     -webkit-filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(65%);
             filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(65%);
   }
@@ -5378,12 +5403,7 @@ button {
  */
   *,
   *::before,
-  *::after,
-  *::first-letter,
-  p::first-line,
-  div::first-line,
-  blockquote::first-line,
-  li::first-line {
+  *::after {
     background: transparent !important;
     color: #000000 !important;
     text-shadow: none !important;
