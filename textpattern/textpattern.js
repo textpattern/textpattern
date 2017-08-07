@@ -915,7 +915,7 @@ jQuery.fn.txpAsyncForm = function (options) {
     }, options);
 
     // Send form data to application, process response as script.
-    this.on('submit.txpAsyncForm', function (event) {
+    this.on('submit.txpAsyncForm', function (event, extra) {
         event.preventDefault();
 
         var $this = $(this);
@@ -923,8 +923,12 @@ jQuery.fn.txpAsyncForm = function (options) {
         {
             button : $this.find('input[type="submit"]:focus').eq(0),
             data   : ( window.FormData === undefined ? $this.serialize() : new FormData(this) ),
+            extra  : new Object,
             spinner: $('<span />').addClass('spinner')
         };
+
+        form.extra[form.button.attr('name') || '_txp_submit'] = form.button.val() || '_txp_submit';
+        $.extend(true, form.extra, extra);
 
         // Show feedback while processing.
         $this.addClass('busy');
@@ -939,9 +943,13 @@ jQuery.fn.txpAsyncForm = function (options) {
 
         if (form.data) {
             if ( form.data instanceof FormData ) {
-                form.data.append(form.button.attr('name') || '_txp_submit' , form.button.val() || '_txp_submit');
+                $.each(form.extra, function(key, val) {
+                    form.data.append(key, val);
+                });
             } else {
-                form.data += '&' + (form.button.attr('name') || '_txp_submit') + '=' + (form.button.val() || '_txp_submit');
+                $.each(form.extra, function(key, val) {
+                    form.data += '&'+key+'='+val;
+                });
             }
         }
 
@@ -1770,11 +1778,9 @@ textpattern.Route.add('article', function () {
         }
     });
 
-    $('.txp-actions').on('click', '.txp-clone', function (e) {
+    $('#article_form').on('click', '.txp-clone', function (e) {
         e.preventDefault();
-        form.append('<input type="hidden" name="copy" value="1" />' +
-            '<input type="hidden" name="publish" value="1" />');
-        form.off('submit.txpAsyncForm').trigger('submit');
+        form.trigger('submit', {copy:1, publish:1});
     });
 
     // Switch to Text/HTML/Preview mode.

@@ -92,7 +92,7 @@ foreach ($cfs as $i => $cf_name) {
 
 $statuses = status_list();
 
-if (!empty($event) and $event == 'article') {
+if (!empty($event) && $event == 'article') {
     require_privs('article');
 
     $save = gps('save');
@@ -104,11 +104,11 @@ if (!empty($event) and $event == 'article') {
     $publish = gps('publish');
 
     if ($publish) {
-        $step = 'publish';
+        $step = 'save';
     }
 
     if (empty($step)) {
-        $step = 'create';
+        $step = 'edit';
     }
 
     bouncer($step, array(
@@ -120,14 +120,10 @@ if (!empty($event) and $event == 'article') {
 
     switch ($step) {
         case 'create':
-            article_edit();
-            break;
-        case 'publish':
-            article_post();
-            break;
         case 'edit':
             article_edit();
             break;
+        case 'publish':
         case 'save':
             article_save();
             break;
@@ -135,7 +131,7 @@ if (!empty($event) and $event == 'article') {
 }
 
 /**
- * Processes sent forms and saves new articles.
+ * Processes sent forms and saves new articles. Deprecated by article_save().
  */
 
 function article_post()
@@ -331,28 +327,47 @@ function article_save()
     extract($prefs);
 
     $incoming = array_map('assert_string', psa($vars));
+    $is_clone = ps('copy');
 
-    $oldArticle = safe_row("Status, url_title, Title, textile_body, textile_excerpt,
-        UNIX_TIMESTAMP(LastMod) AS sLastMod, LastModID,
-        UNIX_TIMESTAMP(Posted) AS sPosted,
-        UNIX_TIMESTAMP(Expires) AS sExpires",
-        'textpattern', "ID = ".(int) $incoming['ID']);
-
-    if (!(($oldArticle['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
-        or ($oldArticle['Status'] >= STATUS_LIVE and $incoming['AuthorID'] === $txp_user and has_privs('article.edit.own.published'))
-        or ($oldArticle['Status'] < STATUS_LIVE and has_privs('article.edit'))
-        or ($oldArticle['Status'] < STATUS_LIVE and $incoming['AuthorID'] === $txp_user and has_privs('article.edit.own')))) {
-        // Not allowed, you silly rabbit, you shouldn't even be here.
-        // Show default editing screen.
-        article_edit();
-
-        return;
+    if ($is_clone) {
+        $incoming['ID'] = $incoming['url_title'] = '';
+        $incoming['Status'] = STATUS_DRAFT;
     }
 
-    if ($oldArticle['sLastMod'] != $incoming['sLastMod']) {
-        article_edit(array(gTxt('concurrent_edit_by', array('{author}' => txpspecialchars($oldArticle['LastModID']))), E_ERROR), true, true);
+    if ($incoming['ID']) {
+        $oldArticle = safe_row("Status, url_title, Title, textile_body, textile_excerpt,
+            UNIX_TIMESTAMP(LastMod) AS sLastMod, LastModID,
+            UNIX_TIMESTAMP(Posted) AS sPosted,
+            UNIX_TIMESTAMP(Expires) AS sExpires",
+            'textpattern', "ID = ".(int) $incoming['ID']);
 
-        return;
+        if (!($oldArticle['Status'] >= STATUS_LIVE && has_privs('article.edit.published')
+            || $oldArticle['Status'] >= STATUS_LIVE && $incoming['AuthorID'] === $txp_user && has_privs('article.edit.own.published')
+            || $oldArticle['Status'] < STATUS_LIVE && has_privs('article.edit')
+            || $oldArticle['Status'] < STATUS_LIVE && $incoming['AuthorID'] === $txp_user && has_privs('article.edit.own'))) {
+            // Not allowed, you silly rabbit, you shouldn't even be here.
+            // Show default editing screen.
+            article_edit();
+
+            return;
+        }
+
+        if ($oldArticle['sLastMod'] != $incoming['sLastMod']) {
+            article_edit(array(gTxt('concurrent_edit_by', array('{author}' => txpspecialchars($oldArticle['LastModID']))), E_ERROR), true, true);
+
+            return;
+        }
+    } else {
+        $oldArticle = array('Status' => STATUS_PENDING,
+            'url_title' => '',
+            'Title' => '',
+            'textile_body' => $use_textile,
+            'textile_excerpt' => $use_textile,
+            'sLastMod' => null,
+            'LastModID' => $txp_user,
+            'sPosted' => time(),
+            'sExpires' => null
+        );
     }
 
     if (!has_privs('article.set_markup')) {
@@ -363,18 +378,19 @@ function article_save()
     $incoming = textile_main_fields($incoming);
 
     extract(doSlash($incoming));
-    extract(array_map('assert_int', psa(array('ID', 'Status'))));
-
-    // Comments may be on, off, or disabled.
-    $Annotate = (int) $Annotate;
+    $ID = intval($ID);
+    assert_int($Status);
 
     if (!has_privs('article.publish') && $Status >= STATUS_LIVE) {
         $Status = STATUS_PENDING;
     }
 
+    // Comments may be on, off, or disabled.
+    $Annotate = (int) $Annotate;
+
     // Set and validate article timestamp.
     if ($reset_time) {
-        $whenposted = "Posted = NOW()";
+        $whenposted = "NOW()";
         $when_ts = time();
     } else {
         if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour) || !is_numeric($minute) || !is_numeric($second)) {
@@ -390,7 +406,7 @@ function article_save()
             $when = $when_ts = $ts - tz_offset($ts);
         }
 
-        $whenposted = "Posted = FROM_UNIXTIME($when)";
+        $whenposted = "FROM_UNIXTIME($when)";
     }
 
     // Set and validate expiry timestamp.
@@ -433,9 +449,9 @@ function article_save()
     }
 
     if ($expires) {
-        $whenexpires = "Expires = FROM_UNIXTIME($expires)";
+        $whenexpires = "FROM_UNIXTIME($expires)";
     } else {
-        $whenexpires = "Expires = NULL";
+        $whenexpires = "NULL";
     }
 
     // Auto-update custom-titles according to Title, as long as unpublished and
@@ -464,7 +480,7 @@ function article_save()
 
     $rs = compact($vars);
     if (article_validate($rs, $msg)) {
-        if (safe_update('textpattern',
+        $set = 
            "Title           = '$Title',
             Body            = '$Body',
             Body_html       = '$Body_html',
@@ -474,6 +490,8 @@ function article_save()
             description     = '$description',
             Image           = '$Image',
             Status          =  $Status,
+            Posted          =  $whenposted,
+            Expires         =  $whenexpires,
             LastMod         =  NOW(),
             LastModID       = '$user',
             Section         = '$Section',
@@ -484,23 +502,36 @@ function article_save()
             textile_excerpt = '$textile_excerpt',
             override_form   = '$override_form',
             url_title       = '$url_title',
-            AnnotateInvite  = '$AnnotateInvite',"
-            .(($cfs) ? $cfq.',' : '').
-            "$whenposted,
-            $whenexpires",
-            "ID = $ID"
-        )) {
-            if ($Status >= STATUS_LIVE && $oldArticle['Status'] < STATUS_LIVE) {
-                do_pings();
+            AnnotateInvite  = '$AnnotateInvite'"
+            .(($cfs) ? ', '.$cfq : '')
+            .(!empty($ID) ? '' : 
+            ", AuthorID        = '$user',
+            uid            = '".md5(uniqid(rand(), true))."',
+            feed_time       = NOW()");
+
+        if ($ID && safe_update('textpattern', $set, "ID = $ID")
+            || !$ID && $rs['ID'] = $GLOBALS['ID'] = safe_insert('textpattern', $set)
+        ) {
+            if ($is_clone) {
+                safe_update(
+                    'textpattern',
+                    "Title = CONCAT(Title, ' (', ".$rs['ID'].", ')'),
+                    url_title = CONCAT(url_title, '-', ".$rs['ID'].")",
+                    "ID = ".$rs['ID']
+                );
             }
 
-            if ($Status >= STATUS_LIVE || $oldArticle['Status'] >= STATUS_LIVE) {
-                update_lastmod('article_saved', $rs);
+            if ($Status >= STATUS_LIVE) {
+                if ($oldArticle['Status'] < STATUS_LIVE) {
+                    do_pings();
+                } else {
+                    update_lastmod($ID ? 'article_saved' : 'article_posted', $rs);
+                }
             }
 
             now('posted', true);
             now('expires', true);
-            callback_event('article_saved', '', false, $rs);
+            callback_event($ID ? 'article_saved' : 'article_posted', '', false, $rs);
 
             if (empty($msg)) {
                 $s = check_url_title($url_title);
@@ -510,6 +541,7 @@ function article_save()
             $msg = array(gTxt('article_save_failed'), E_ERROR);
         }
     }
+
     article_edit($msg, false, true);
 }
 
@@ -537,6 +569,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     )
     */
     $partials = array(
+        // Hidden 'ID'.
+        'ID'   => array(
+            'mode'     => PARTIAL_VOLATILE_VALUE,
+            'selector' => 'input[name=ID]',
+            'cb'       => 'article_partial_value',
+        ),
         // HTML 'Title' field (in <head>).
         'html_title'   => array(
             'mode'     => PARTIAL_VOLATILE,
@@ -566,6 +604,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'mode'     => PARTIAL_VOLATILE,
             'selector' => 'small.author',
             'cb'       => 'article_partial_author',
+        ),
+        // 'Actions' region.
+        'actions' => array(
+            'mode'     => PARTIAL_VOLATILE,
+            'selector' => '#txp-article-actions',
+            'cb'       => 'article_partial_actions',
         ),
         // 'Body' region.
         'body' => array(
@@ -738,7 +782,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     }
 
     if (!$step) {
-        $step = "create";
+        $step = "edit";
     }
 
     if ($step == "edit"
@@ -845,7 +889,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     $GLOBALS['step'] = $step;
 
-    if ($step != 'create' && isset($sPosted)) {
+    if ($ID && isset($sPosted)) {
         // Previous record?
         $rs['prev_id'] = checkIfNeighbour('prev', $sPosted, $ID);
 
@@ -928,6 +972,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     // View mode tabs.
     echo $partials['view_modes']['html'];
 
+    // Author.
+    if ($view == "text") {
+        echo $partials['author']['html'];
+    }
+
     // Title input.
     if ($view == 'preview') {
         echo n.'<div class="preview">'.
@@ -939,11 +988,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             hed(txpspecialchars($Title), 1, ' class="title"');
     } elseif ($view == 'text') {
         echo n.'<div class="text">'.$partials['title']['html'];
-    }
-
-    // Author.
-    if ($view == "text" && $step != "create") {
-        echo $partials['author']['html'];
     }
 
     // Body.
@@ -997,7 +1041,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo n.'<div class="txp-layout-4col-alt">';
 
         // 'Publish/Save' button.
-        if ($step == 'create' and empty($GLOBALS['ID'])) {
+        if (empty($ID)) {
             if (has_privs('article.publish') && get_pref('default_publish_status', STATUS_LIVE) >= STATUS_LIVE) {
                 $push_button = fInput('submit', 'publish', gTxt('publish'), 'publish');
             } else {
@@ -1014,17 +1058,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             echo graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
         }
 
-        // View/Duplicate/Create new article links.
-        $an_cb = href('<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new'), 'index.php?event=article', array('class' => 'txp-new'));
-        $ac_cb = $rs['partials_meta']['article_clone']['cb'];
-        $av_cb = $rs['partials_meta']['article_view']['cb'];
-
-        echo($step != 'create' ? graf($an_cb.$ac_cb($rs).$av_cb($rs), array('class' => 'txp-actions')) : '');
+        echo $partials['actions']['html'];
 
         // Prev/next article links.
-        if ($step != 'create' and ($rs['prev_id'] or $rs['next_id'])) {
-            echo $partials['article_nav']['html'];
-        }
+        echo $partials['article_nav']['html'];
 
         echo n.'<div role="region" id="supporting_content">';
 
@@ -1062,7 +1099,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         );
 
         // 'Date and time' collapsible section.
-        if ($step == "create" and empty($GLOBALS['ID'])) {
+        if (empty($ID)) {
             // Timestamp.
             // Avoiding modified date to disappear.
 
@@ -1199,7 +1236,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             n.'</div>'; // End of .txp-layout-4col-alt.
     }
 
-    echo tInput().
+    echo //tInput().
         n.'</div>'. // End of .txp-layout.
         n.'</form>';
 }
@@ -1493,8 +1530,6 @@ function article_partial_html_title($rs)
 
 function article_partial_title($rs)
 {
-    global $step;
-
     $out = inputLabel(
         'title',
         fInput('text', 'Title', preg_replace("/&amp;(?![#a-z0-9]+;)/i", "&", $rs['Title']), '', '', '', INPUT_LARGE, '', 'title', false, true),
@@ -1531,15 +1566,29 @@ function article_partial_title_value($rs)
 function article_partial_author($rs)
 {
     extract($rs);
-    $out = n.'<small class="author">'.gTxt('id').' '.txpspecialchars($ID).sp.span('&#183;', array('role' => 'separator')).sp.gTxt('posted_by').' '.txpspecialchars($AuthorID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sPosted);
+    $out = n.'<small class="author">';
 
-    if ($sPosted != $sLastMod) {
-        $out .= sp.span('&#124;', array('role' => 'separator')).sp.gTxt('modified_by').' '.txpspecialchars($LastModID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sLastMod);
+    if (!empty($ID)) {
+        $out .= gTxt('id').' '.txpspecialchars($ID).sp.span('&#183;', array('role' => 'separator')).sp.gTxt('posted_by').' '.txpspecialchars($AuthorID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sPosted);
+
+        if ($sPosted != $sLastMod) {
+            $out .= sp.span('&#124;', array('role' => 'separator')).sp.gTxt('modified_by').' '.txpspecialchars($LastModID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sLastMod);
+        }
     }
 
     $out .= '</small>';
 
     return pluggable_ui('article_ui', 'author', $out, $rs);
+}
+
+function article_partial_actions($rs)
+{
+        // View/Duplicate/Create new article links.
+        $an_cb = href('<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new'), 'index.php?event=article', array('class' => 'txp-new'));
+        $ac_cb = $rs['partials_meta']['article_clone']['cb'];
+        $av_cb = $rs['partials_meta']['article_view']['cb'];
+
+        return graf($rs['ID'] ? $an_cb.$ac_cb($rs).$av_cb($rs) : gTxt('add_new_article'), array('class' => 'txp-actions', 'id' => 'txp-article-actions'));
 }
 
 /**
@@ -1934,9 +1983,9 @@ function article_partial_excerpt($rs)
 
 function article_partial_view_modes($rs)
 {
-    global $step, $view, $use_textile;
+    global $view, $use_textile;
 
-    if ($step == "create") {
+    if (empty($rs['ID'])) {
         $hasfilter = ($use_textile !== LEAVE_TEXT_UNTOUCHED);
     } else {
         $hasfilter = ($rs['textile_body'] !== LEAVE_TEXT_UNTOUCHED || $rs['textile_excerpt'] !== LEAVE_TEXT_UNTOUCHED);
@@ -2071,7 +2120,7 @@ function article_partial_comments($rs)
 
     extract($rs);
 
-    if ($step == "create") {
+    if (empty($ID)) {
         // Avoid invite disappearing when previewing.
 
         if (!empty($store_out['AnnotateInvite'])) {
@@ -2086,7 +2135,7 @@ function article_partial_comments($rs)
     if ($use_comments == 1) {
         $comments_expired = false;
 
-        if ($step != 'create' && $comments_disabled_after) {
+        if (!empty($ID) && $comments_disabled_after) {
             $lifespan = $comments_disabled_after * 86400;
             $time_since = time() - $sPosted;
 
