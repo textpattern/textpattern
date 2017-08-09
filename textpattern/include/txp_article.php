@@ -389,7 +389,7 @@ function article_save()
     $Annotate = (int) $Annotate;
 
     // Set and validate article timestamp.
-    if ($reset_time) {
+    if ($publish_now || $reset_time) {
         $whenposted = "NOW()";
         $when_ts = time();
     } else {
@@ -635,7 +635,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'selector' => '[name=sLastMod]',
             'cb'       => 'article_partial_value',
         ),
-        // 'Duplicate' link.
+/*        // 'Duplicate' link.
         'article_clone' => array(
             'mode'     => PARTIAL_VOLATILE,
             'selector' => '#article_partial_article_clone',
@@ -647,7 +647,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'selector' => '#article_partial_article_view',
             'cb'       => 'article_partial_article_view',
         ),
-        // 'Previous/Next' article links region.
+*/        // 'Previous/Next' article links region.
         'article_nav' => array(
             'mode'     => PARTIAL_VOLATILE,
             'selector' => 'nav.nav-tertiary',
@@ -1581,14 +1581,20 @@ function article_partial_author($rs)
     return pluggable_ui('article_ui', 'author', $out, $rs);
 }
 
+/* View/Duplicate/Create new article links.
+ *
+ * @param  array $rs Article data
+ * @return string HTML
+ */
+
 function article_partial_actions($rs)
 {
-        // View/Duplicate/Create new article links.
-        $an_cb = href('<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new'), 'index.php?event=article', array('class' => 'txp-new'));
-        $ac_cb = $rs['partials_meta']['article_clone']['cb'];
-        $av_cb = $rs['partials_meta']['article_view']['cb'];
-
-        return graf($rs['ID'] ? $an_cb.$ac_cb($rs).$av_cb($rs) : gTxt('add_new_article'), array('class' => 'txp-actions', 'id' => 'txp-article-actions'));
+    return graf($rs['ID']
+        ? href('<span class="ui-icon ui-extra-icon-new-document"></span> '.gTxt('create_new'), 'index.php?event=article', array('class' => 'txp-new'))
+        .article_partial_article_clone($rs)
+        .article_partial_article_view($rs)
+        : gTxt('add_new_article'),
+        array('class' => 'txp-actions', 'id' => 'txp-article-actions'));
 }
 
 /**
