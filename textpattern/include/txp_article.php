@@ -972,11 +972,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     // View mode tabs.
     echo $partials['view_modes']['html'];
 
-    // Author.
-    if ($view == "text") {
-        echo $partials['author']['html'];
-    }
-
     // Title input.
     if ($view == 'preview') {
         echo n.'<div class="preview">'.
@@ -988,6 +983,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             hed(txpspecialchars($Title), 1, ' class="title"');
     } elseif ($view == 'text') {
         echo n.'<div class="text">'.$partials['title']['html'];
+    }
+
+    // Author.
+    if ($view == "text") {
+        echo $partials['author']['html'];
     }
 
     // Body.

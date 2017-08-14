@@ -3449,6 +3449,7 @@ button {
   #main_content .author {
     display: block;
     color: #777777;
+    margin-top: -1em;
   }
   /* Content -> Articles panel - additional layout
    ========================================================================== */

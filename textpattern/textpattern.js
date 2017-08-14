@@ -927,19 +927,19 @@ jQuery.fn.txpAsyncForm = function (options) {
             spinner: $('<span />').addClass('spinner')
         };
 
-        form.extra[form.button.attr('name') || '_txp_submit'] = form.button.val() || '_txp_submit';
-        $.extend(true, form.extra, extra);
-
-        // Show feedback while processing.
-        $this.addClass('busy');
-        $('body').addClass('busy');
-
         // WebKit does not set :focus on button-click: use first submit input as a fallback.
         if (!form.button.length) {
             form.button = $this.find('input[type="submit"]').eq(0);
         }
 
         form.button.attr('disabled', true).after(form.spinner);
+
+        form.extra[form.button.attr('name') || '_txp_submit'] = form.button.val() || '_txp_submit';
+        $.extend(true, form.extra, extra);
+
+        // Show feedback while processing.
+        $this.addClass('busy');
+        $('body').addClass('busy');
 
         if (form.data) {
             if ( form.data instanceof FormData ) {
@@ -1780,7 +1780,7 @@ textpattern.Route.add('article', function () {
 
     $('#article_form').on('click', '.txp-clone', function (e) {
         e.preventDefault();
-        form.trigger('submit', {copy:1, publish:1});
+        form.trigger('submit.txpAsyncForm', {copy:1, publish:1});
     });
 
     // Switch to Text/HTML/Preview mode.
