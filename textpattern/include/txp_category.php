@@ -385,7 +385,7 @@ function cat_event_category_list($event)
                 : ''
             ).
             graf(
-                fInput('submit', '', gTxt('Create')).
+                fInput('submit', '', gTxt('create')).
                 eInput('category').
                 sInput('cat_'.$event.'_create')
             ), '', '', 'post', $event);

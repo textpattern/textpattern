@@ -146,7 +146,7 @@ function file_list($message = '')
         array(
             'id' => array(
                 'column' => 'txp_file.id',
-                'label'  => gTxt('ID'),
+                'label'  => gTxt('id'),
                 'type'   => 'integer',
             ),
             'filename' => array(
@@ -236,7 +236,7 @@ function file_list($message = '')
                     sInput('file_create').
                     tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
                     selectInput('filename', $existing_files, '', 1, '', 'file-existing').
-                    fInput('submit', '', gTxt('Create')),
+                    fInput('submit', '', gTxt('create')),
                 '', '', 'post', 'assign-existing-form', '', 'assign_file');
         }
 

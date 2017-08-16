@@ -1286,6 +1286,8 @@ button {
     border-color: #d4d4d4 !important;
     background: #eeeeee !important;
     color: #aaaaaa !important;
+    -webkit-box-shadow: none !important;
+            box-shadow: none !important;
     /* 1 */
     cursor: default !important;
     /* 2 */
@@ -1547,8 +1549,11 @@ button {
     outline: thin solid #0066ff;
   }
   button.destroy:hover .ui-icon,
-  button.destroy:active .ui-icon,
-  button.destroy:focus .ui-icon {
+  button.destroy:active .ui-icon {
+    -webkit-filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(80%);
+            filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(80%);
+  }
+  a.destroy:hover, a.destroy:active {
     -webkit-filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(80%);
             filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(80%);
   }
@@ -1861,13 +1866,13 @@ button {
     background-color: #eeeeee;
   }
   /**
- * Make table cells align top and left by default.
+ * Make table cells align centred and left by default.
  */
   th,
   td {
     padding: 0.38461538461538em 1em;
     text-align: left;
-    vertical-align: top;
+    vertical-align: middle;
   }
   /**
  * Swap table cell text alignments in RTL languages.
@@ -3443,8 +3448,8 @@ button {
   }
   #main_content .author {
     display: block;
-    margin-top: -1em;
     color: #777777;
+    margin-top: -1em;
   }
   /* Content -> Articles panel - additional layout
    ========================================================================== */
@@ -3853,7 +3858,8 @@ button {
   .ui-state-error-text .ui-icon,
   .error .ui-icon,
   .error.ui-icon,
-  .destroy .ui-icon {
+  .destroy .ui-icon,
+  .destroy.ui-icon {
     -webkit-filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(65%);
             filter: brightness(2) sepia(1) hue-rotate(-62deg) saturate(750%) brightness(65%);
   }
