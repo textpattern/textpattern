@@ -480,7 +480,7 @@ function article_save()
 
     $rs = compact($vars);
     if (article_validate($rs, $msg)) {
-        $set = 
+        $set =
            "Title           = '$Title',
             Body            = '$Body',
             Body_html       = '$Body_html',
@@ -504,7 +504,7 @@ function article_save()
             url_title       = '$url_title',
             AnnotateInvite  = '$AnnotateInvite'"
             .(($cfs) ? ', '.$cfq : '')
-            .(!empty($ID) ? '' : 
+            .(!empty($ID) ? '' :
             ", AuthorID        = '$user',
             uid            = '".md5(uniqid(rand(), true))."',
             feed_time       = NOW()");
@@ -1566,17 +1566,17 @@ function article_partial_title_value($rs)
 function article_partial_author($rs)
 {
     extract($rs);
-    $out = n.'<small class="author">';
 
     if (!empty($ID)) {
+        $out = n.'<small class="author">';
         $out .= gTxt('id').' '.txpspecialchars($ID).sp.span('&#183;', array('role' => 'separator')).sp.gTxt('posted_by').' '.txpspecialchars($AuthorID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sPosted);
 
         if ($sPosted != $sLastMod) {
             $out .= sp.span('&#124;', array('role' => 'separator')).sp.gTxt('modified_by').' '.txpspecialchars($LastModID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sLastMod);
         }
-    }
 
-    $out .= '</small>';
+        $out .= '</small>';
+    }
 
     return pluggable_ui('article_ui', 'author', $out, $rs);
 }
