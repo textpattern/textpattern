@@ -1576,6 +1576,8 @@ function article_partial_author($rs)
         }
 
         $out .= '</small>';
+    } else {
+        $out = '';
     }
 
     return pluggable_ui('article_ui', 'author', $out, $rs);
