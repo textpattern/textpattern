@@ -1578,8 +1578,6 @@ function article_partial_author($rs)
         }
 
         $out .= '</small>';
-    } else {
-        $out = '';
     }
 
     $out .= '</span>';
