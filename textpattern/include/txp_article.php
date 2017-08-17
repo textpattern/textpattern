@@ -1567,8 +1567,10 @@ function article_partial_author($rs)
 {
     extract($rs);
 
+    $out = n.'<span class="author">';
+
     if (!empty($ID)) {
-        $out = n.'<small class="author">';
+        $out .= '<small>';
         $out .= gTxt('id').' '.txpspecialchars($ID).sp.span('&#183;', array('role' => 'separator')).sp.gTxt('posted_by').' '.txpspecialchars($AuthorID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sPosted);
 
         if ($sPosted != $sLastMod) {
@@ -1577,6 +1579,8 @@ function article_partial_author($rs)
 
         $out .= '</small>';
     }
+
+    $out .= '</span>';
 
     return pluggable_ui('article_ui', 'author', $out, $rs);
 }

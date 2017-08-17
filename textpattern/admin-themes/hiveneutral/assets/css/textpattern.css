@@ -3401,7 +3401,7 @@ button {
     font-size: 20px;
     font-weight: bold;
   }
-  #main_content .author {
+  #main_content .author small {
     display: block;
     margin-top: -1em;
     color: #777777;

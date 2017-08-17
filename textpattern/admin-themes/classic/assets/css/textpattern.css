@@ -2852,7 +2852,7 @@ button {
   #main_content .text .title input {
     font-weight: bold;
   }
-  #main_content .author {
+  #main_content .author small {
     display: block;
     margin-top: -1em;
     color: #777777;
