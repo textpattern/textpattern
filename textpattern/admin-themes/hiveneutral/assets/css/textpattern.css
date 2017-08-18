@@ -3420,7 +3420,7 @@ button {
     position: -webkit-sticky;
     position: sticky;
     top: 2.75em;
-    margin: -1.25em 0 1em;
+    margin: -1.25em 0 1.75em;
     padding: 1px 1em 0;
     border: 1px solid #d4d4d4;
     border-top: 0;

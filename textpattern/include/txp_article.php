@@ -885,9 +885,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         echo $partials['actions']['html'].
             n.'</div>';
 
-        // Prev/next article links.
-        echo $partials['article_nav']['html'];
-
         echo n.'<div role="region" id="supporting_content">';
 
         // 'Override form' selection.
@@ -1057,8 +1054,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Recent articles' collapsible section.
         echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
 
-        echo n.'</div>'. // End of #supporting_content.
-            n.'</div>'; // End of .txp-layout-4col-alt.
+        echo n.'</div>'; // End of #supporting_content.
+
+        // Prev/next article links.
+        echo $partials['article_nav']['html'];
+
+        echo n.'</div>'; // End of .txp-layout-4col-alt.
     }
 
     echo //tInput().
