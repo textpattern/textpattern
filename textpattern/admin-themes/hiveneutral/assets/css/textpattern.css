@@ -3406,6 +3406,30 @@ button {
     margin-top: -1em;
     color: #777777;
   }
+  /**
+ * Sticky save button region.
+ *
+ * Example HTML:
+ *
+ * <div class="txp-save-zone">
+ *     <p class="txp-save"></p>
+ *     <p class="txp-actions"></p>
+ * </div>
+ */
+  .txp-save-zone {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 2.75em;
+    margin: -1.25em 0 1em;
+    padding: 1px 1em 0;
+    border: 1px solid #d4d4d4;
+    border-top: 0;
+    background: #f7f7f7;
+    z-index: 999;
+  }
+  .txp-save-zone .txp-actions {
+    margin-bottom: 0.5em;
+  }
   /* Content -> Articles panel - additional layout
    ========================================================================== */
   /**
@@ -5998,6 +6022,18 @@ button {
   #page-form .txp-actions a {
     margin-top: 0.5em;
   }
+  /**
+     * Unsticky save button region.
+     */
+  .txp-save-zone {
+    position: inherit;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .txp-save-zone .txp-actions {
+    margin-bottom: 1em;
+  }
 }
 
 /* ==========================================================================
@@ -6440,9 +6476,9 @@ button {
   .dropdown-menu li.selected {
     background: #d4e7f8;
   }
-  table,
-  .switcher-list,
-  .ui-menu {
+  .ui-menu,
+  .switcher-list li.active,
+  .ui-tabs-vertical .ui-tabs-nav .ui-tabs-active {
     background: #ffffff;
   }
 }

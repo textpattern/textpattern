@@ -861,7 +861,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     // Sidebar column (only shown if in text editing view).
     if ($view == 'text') {
-        echo n.'<div class="txp-layout-4col-alt">';
+        echo n.'<div class="txp-layout-4col-alt">'.
+            n.'<div class="txp-save-zone">';
 
         // 'Publish/Save' button.
         if (empty($ID)) {
@@ -881,7 +882,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             echo graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
         }
 
-        echo $partials['actions']['html'];
+        echo $partials['actions']['html'].
+            n.'</div>';
 
         // Prev/next article links.
         echo $partials['article_nav']['html'];
