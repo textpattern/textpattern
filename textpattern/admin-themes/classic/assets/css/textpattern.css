@@ -106,11 +106,13 @@ button {
  */
   .pophelp,
   .pophelpsubtle {
-    padding: 0 0.41666666666667em;
+    width: 1em;
     border: 1px solid;
     border-radius: 50%;
     border-color: #dddddd #bbbbbb #bbbbbb #dddddd;
     font-weight: normal;
+    line-height: 1;
+    text-align: center;
   }
   .pophelp:focus,
   .pophelpsubtle:focus {

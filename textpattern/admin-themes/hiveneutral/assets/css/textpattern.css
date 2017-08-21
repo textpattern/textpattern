@@ -107,11 +107,11 @@ button {
   .pophelp,
   .pophelpsubtle {
     display: inline-block;
-    width: 1.230769230769231em;
+    width: 1em;
     border: 1px solid #e0e0e0;
     border-radius: 50%;
     font-weight: normal;
-    line-height: 1.230769230769231em;
+    line-height: 1em;
     text-align: center;
   }
   .pophelp:hover, .pophelp:active,
