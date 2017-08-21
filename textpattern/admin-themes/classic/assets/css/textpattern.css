@@ -106,11 +106,13 @@ button {
  */
   .pophelp,
   .pophelpsubtle {
-    padding: 0 0.41666666666667em;
+    width: 1em;
     border: 1px solid;
     border-radius: 50%;
     border-color: #dddddd #bbbbbb #bbbbbb #dddddd;
     font-weight: normal;
+    line-height: 1;
+    text-align: center;
   }
   .pophelp:focus,
   .pophelpsubtle:focus {
@@ -1612,13 +1614,13 @@ button {
     border-bottom: 1px solid #cccccc;
   }
   /**
- * Make table cells align top and left by default.
+ * Make table cells align centred and left by default.
  */
   th,
   td {
     padding: 0.3em 1em 0.3em 0;
     text-align: left;
-    vertical-align: top;
+    vertical-align: middle;
   }
   td:last-child {
     padding: 0.3em 0;
@@ -2852,7 +2854,13 @@ button {
   #main_content .text .title input {
     font-weight: bold;
   }
-  #main_content .author {
+  #main_content .text .body textarea {
+    height: 48vh;
+  }
+  #main_content .text .excerpt textarea {
+    height: 12vh;
+  }
+  #main_content .author small {
     display: block;
     margin-top: -1em;
     color: #777777;
