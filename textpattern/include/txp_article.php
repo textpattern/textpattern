@@ -1311,26 +1311,19 @@ function textile_main_fields($incoming)
 }
 
 /**
- * Pings Ping-O-Matic when an article is published.
+ * Raises a ping callback so plugins can take action when an article is published.
  */
 
 function do_pings()
 {
-    global $prefs, $production_status;
+    global $production_status;
 
     // Only ping for Live sites.
     if ($production_status !== 'live') {
         return;
     }
 
-    include_once txpath.'/lib/IXRClass.php';
-
     callback_event('ping');
-
-    if ($prefs['ping_weblogsdotcom'] == 1) {
-        $wl_client = new IXR_Client('http://rpc.pingomatic.com/');
-        $wl_client->query('weblogUpdates.ping', $prefs['sitename'], hu);
-    }
 }
 
 /**
