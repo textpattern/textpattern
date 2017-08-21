@@ -1393,7 +1393,7 @@ function article_partial_author($rs)
 {
     extract($rs);
 
-    $out = n.'<span class="author">';
+    $out = n.'<div class="author">';
 
     if (!empty($ID)) {
         $out .= '<small>';
@@ -1406,7 +1406,7 @@ function article_partial_author($rs)
         $out .= '</small>';
     }
 
-    $out .= '</span>';
+    $out .= '</div>';
 
     return pluggable_ui('article_ui', 'author', $out, $rs);
 }
