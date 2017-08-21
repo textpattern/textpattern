@@ -425,7 +425,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Author' region.
         'author' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => 'span.author',
+            'selector' => 'div.author',
             'cb'       => 'article_partial_author',
         ),
         // 'Actions' region.
