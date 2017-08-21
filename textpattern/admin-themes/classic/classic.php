@@ -48,7 +48,6 @@ class classic_theme extends \Textpattern\Admin\Theme
 
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
-        $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
 
         // Custom JavaScript (see theme README for usage instructions).
         if (defined('admin_custom_js')) {
