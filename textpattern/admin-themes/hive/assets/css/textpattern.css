@@ -107,11 +107,12 @@ button {
   .pophelp,
   .pophelpsubtle {
     display: inline-block;
-    width: 1em;
+    width: 1.1538461em;
     border: 1px solid #e0e0e0;
     border-radius: 50%;
+    font-family: "Cambria Math", "Apple Symbols";
     font-weight: normal;
-    line-height: 1em;
+    line-height: 1.1538461em;
     text-align: center;
   }
   .pophelp:hover, .pophelp:active,
