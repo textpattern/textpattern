@@ -702,10 +702,6 @@
 <pre><code>http://example.com/index.php?id=123</code></pre>
 <p>All other modes require the Apache <code>mod_rewrite</code> module to be installed and enabled on your server. If your server does not support <code>mod_rewrite</code> either contact your web host or use the ‘?=messy’ mode outlined above.</p>
         ]]></item>
-        <item id="ping_weblogsdotcom" title="Ping pingomatic.com (Ping-O-Matic)?"><![CDATA[
-<h2>Ping pingomatic.com (Ping-O-Matic)?</h2>
-<p>This will send a <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Ping_(blogging)">ping <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> to <a rel="external" target="_blank" href="https://pingomatic.com">Ping-O-Matic <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> whenever you publish a new article. Ping-O-Matic is a aggregation service to notify listed websites that your website has been updated.</p>
-        ]]></item>
         <item id="plugin_cache_dir" title="Plugin cache directory path"><![CDATA[
 <h2>Plugin cache directory path</h2>
 <p>This setting is mainly used for plugin developers. When specified, you can put the plugin source file (not compiled) in this directory and Textpattern will load it automatically, so you can easily edit the plugin and immediately see the effect it has without having to install/activate the plugin. <strong>Beware</strong> though that by using this method, a broken plugin (which fails to compile) may also break Textpattern!</p>
