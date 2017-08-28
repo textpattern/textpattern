@@ -131,189 +131,12 @@ if (!empty($event) && $event == 'article') {
 }
 
 /**
- * Processes sent forms and saves new articles. Deprecated by article_save().
+ * Processes sent forms and saves new articles. Deprecated in 4.7 by article_save().
  */
 
 function article_post()
 {
-    global $txp_user, $vars, $prefs;
-
-    extract($prefs);
-
-    $incoming = array_map('assert_string', psa($vars));
-
-    if (!has_privs('article.set_markup')) {
-        $incoming['textile_body'] = $incoming['textile_excerpt'] = $use_textile;
-    }
-
-    $incoming = doSlash(textile_main_fields($incoming));
-    extract($incoming);
-
-    $msg = '';
-    if ($Title or $Body or $Excerpt) {
-        $is_clone = (ps('copy'));
-
-        $Status = assert_int(ps('Status'));
-
-        // Comments may be on, off, or disabled.
-        $Annotate = (int) $Annotate;
-
-        // Set and validate article timestamp.
-        if ($publish_now == 1 || $reset_time == 1) {
-            $when = "NOW()";
-            $when_ts = time();
-        } else {
-            if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour) || !is_numeric($minute) || !is_numeric($second)) {
-                $ts = false;
-            } else {
-                $ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
-            }
-
-            // Tracking the PHP meanders on how to return an error.
-            if ($ts === false || $ts < 0) {
-                article_edit(array(gTxt('invalid_postdate'), E_ERROR));
-
-                return;
-            }
-
-            $when_ts = $ts - tz_offset($ts);
-            $when = "FROM_UNIXTIME($when_ts)";
-        }
-
-        // Set and validate expiry timestamp.
-        if (empty($exp_year)) {
-            $expires = 0;
-        } else {
-            if (empty($exp_month)) {
-                $exp_month = 1;
-            }
-
-            if (empty($exp_day)) {
-                $exp_day = 1;
-            }
-
-            if (empty($exp_hour)) {
-                $exp_hour = 0;
-            }
-
-            if (empty($exp_minute)) {
-                $exp_minute = 0;
-            }
-
-            if (empty($exp_second)) {
-                $exp_second = 0;
-            }
-
-            $ts = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second);
-            if ($ts === false || $ts < 0) {
-                article_edit(array(gTxt('invalid_expirydate'), E_ERROR));
-
-                return;
-            } else {
-                $expires = $ts - tz_offset($ts);
-            }
-        }
-
-        if ($expires && ($expires <= $when_ts)) {
-            article_edit(array(gTxt('article_expires_before_postdate'), E_ERROR));
-
-            return;
-        }
-
-        if ($expires) {
-            $whenexpires = "FROM_UNIXTIME($expires)";
-        } else {
-            $whenexpires = "NULL";
-        }
-
-        $user = doSlash($txp_user);
-        $Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
-        $msg = '';
-
-        if (!has_privs('article.publish') && $Status >= STATUS_LIVE) {
-            $Status = STATUS_PENDING;
-        }
-
-        if ($is_clone && $Status >= STATUS_LIVE) {
-            $Status = STATUS_DRAFT;
-            $url_title = '';
-        }
-
-        if (empty($url_title)) {
-            $url_title = stripSpace($Title_plain, 1);
-        }
-
-        $cfq = array();
-        $cfs = getCustomFields();
-
-        foreach ($cfs as $i => $cf_name) {
-            $custom_x = "custom_{$i}";
-            $cfq[] = "custom_$i = '".$$custom_x."'";
-        }
-
-        $cfq = join(', ', $cfq);
-
-        $rs = compact($vars);
-        if (article_validate($rs, $msg)) {
-            $ok = safe_insert(
-               'textpattern',
-               "Title           = '$Title',
-                Body            = '$Body',
-                Body_html       = '$Body_html',
-                Excerpt         = '$Excerpt',
-                Excerpt_html    = '$Excerpt_html',
-                Image           = '$Image',
-                Keywords        = '$Keywords',
-                description     = '$description',
-                Status          =  $Status,
-                Posted          =  $when,
-                Expires         =  $whenexpires,
-                AuthorID        = '$user',
-                LastMod         = NOW(),
-                LastModID       = '$user',
-                Section         = '$Section',
-                Category1       = '$Category1',
-                Category2       = '$Category2',
-                textile_body    = '$textile_body',
-                textile_excerpt = '$textile_excerpt',
-                Annotate        =  $Annotate,
-                override_form   = '$override_form',
-                url_title       = '$url_title',
-                AnnotateInvite  = '$AnnotateInvite',"
-                .(($cfs) ? $cfq.',' : '').
-                "uid            = '".md5(uniqid(rand(), true))."',
-                feed_time       = NOW()"
-            );
-
-            if ($ok) {
-                $rs['ID'] = $GLOBALS['ID'] = $ok;
-
-                if ($is_clone) {
-                    safe_update(
-                        'textpattern',
-                        "Title = CONCAT(Title, ' (', $ok, ')'),
-                        url_title = CONCAT(url_title, '-', $ok)",
-                        "ID = $ok"
-                    );
-                }
-
-                if ($Status >= STATUS_LIVE) {
-                    do_pings();
-                    update_lastmod('article_posted', $rs);
-                    now('posted', true);
-                    now('expires', true);
-                }
-
-                callback_event('article_posted', '', false, $rs);
-                $s = check_url_title($url_title);
-                $msg = array(get_status_message($Status).' '.$s, ($s ? E_WARNING : 0));
-            } else {
-                unset($GLOBALS['ID']);
-                $msg = array(gTxt('article_save_failed'), E_ERROR);
-            }
-        }
-    }
-    article_edit($msg);
+    article_save();
 }
 
 /**
@@ -602,7 +425,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Author' region.
         'author' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => 'small.author',
+            'selector' => 'div.author',
             'cb'       => 'article_partial_author',
         ),
         // 'Actions' region.
@@ -1038,7 +861,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
 
     // Sidebar column (only shown if in text editing view).
     if ($view == 'text') {
-        echo n.'<div class="txp-layout-4col-alt">';
+        echo n.'<div class="txp-layout-4col-alt">'.
+            n.'<div class="txp-save-zone">';
 
         // 'Publish/Save' button.
         if (empty($ID)) {
@@ -1058,10 +882,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             echo graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('class' => 'txp-save'));
         }
 
-        echo $partials['actions']['html'];
-
-        // Prev/next article links.
-        echo $partials['article_nav']['html'];
+        echo $partials['actions']['html'].
+            n.'</div>';
 
         echo n.'<div role="region" id="supporting_content">';
 
@@ -1232,8 +1054,12 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Recent articles' collapsible section.
         echo wrapRegion('txp-recent-group', $partials['recent_articles']['html'], 'txp-recent-group-content', 'recent_articles', 'article_recent');
 
-        echo n.'</div>'. // End of #supporting_content.
-            n.'</div>'; // End of .txp-layout-4col-alt.
+        echo n.'</div>'; // End of #supporting_content.
+
+        // Prev/next article links.
+        echo $partials['article_nav']['html'];
+
+        echo n.'</div>'; // End of .txp-layout-4col-alt.
     }
 
     echo //tInput().
@@ -1485,26 +1311,19 @@ function textile_main_fields($incoming)
 }
 
 /**
- * Pings Ping-O-Matic when an article is published.
+ * Raises a ping callback so plugins can take action when an article is published.
  */
 
 function do_pings()
 {
-    global $prefs, $production_status;
+    global $production_status;
 
     // Only ping for Live sites.
     if ($production_status !== 'live') {
         return;
     }
 
-    include_once txpath.'/lib/IXRClass.php';
-
     callback_event('ping');
-
-    if ($prefs['ping_weblogsdotcom'] == 1) {
-        $wl_client = new IXR_Client('http://rpc.pingomatic.com/');
-        $wl_client->query('weblogUpdates.ping', $prefs['sitename'], hu);
-    }
 }
 
 /**
@@ -1567,8 +1386,10 @@ function article_partial_author($rs)
 {
     extract($rs);
 
+    $out = n.'<div class="author">';
+
     if (!empty($ID)) {
-        $out = n.'<small class="author">';
+        $out .= '<small>';
         $out .= gTxt('id').' '.txpspecialchars($ID).sp.span('&#183;', array('role' => 'separator')).sp.gTxt('posted_by').' '.txpspecialchars($AuthorID).sp.span('&#183;', array('role' => 'separator')).sp.safe_strftime('%d %b %Y %X', $sPosted);
 
         if ($sPosted != $sLastMod) {
@@ -1577,6 +1398,8 @@ function article_partial_author($rs)
 
         $out .= '</small>';
     }
+
+    $out .= '</div>';
 
     return pluggable_ui('article_ui', 'author', $out, $rs);
 }

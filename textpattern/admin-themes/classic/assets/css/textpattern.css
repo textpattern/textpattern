@@ -106,11 +106,15 @@ button {
  */
   .pophelp,
   .pophelpsubtle {
-    padding: 0 0.41666666666667em;
+    display: inline-block;
+    width: 1.1666667em;
     border: 1px solid;
     border-radius: 50%;
     border-color: #dddddd #bbbbbb #bbbbbb #dddddd;
+    font-family: "Cambria Math", "Apple Symbols";
     font-weight: normal;
+    line-height: 1.1666667em;
+    text-align: center;
   }
   .pophelp:focus,
   .pophelpsubtle:focus {
@@ -2852,7 +2856,13 @@ button {
   #main_content .text .title input {
     font-weight: bold;
   }
-  #main_content .author {
+  #main_content .text .body textarea {
+    height: 48vh;
+  }
+  #main_content .text .excerpt textarea {
+    height: 12vh;
+  }
+  #main_content .author small {
     display: block;
     margin-top: -1em;
     color: #777777;

@@ -356,13 +356,6 @@
         "html": "yesnoradio",
         "position": "130"
     },
-    "ping_weblogsdotcom": {
-        "val": "0",
-        "type": "0",
-        "event": "publish",
-        "html": "yesnoradio",
-        "position": "160"
-    },
     "use_textile": {
         "val": "1",
         "type": "0",

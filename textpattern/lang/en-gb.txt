@@ -775,7 +775,6 @@ permlink_hyphenated => Hyphenated (title-like-this)
 permlink_intercapped => Intercapped (TitleLikeThis)
 permlink_mode => Article URL pattern
 ping_textpattern_com => Ping textpattern.com?
-ping_weblogsdotcom => Ping pingomatic.com?
 plugin_cache_dir => Plugin cache directory path
 preferences_saved => Preferences saved
 prefs => Prefs

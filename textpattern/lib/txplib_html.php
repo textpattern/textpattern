@@ -1231,7 +1231,7 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
         $destination = $url;
     }
 
-    $ui = sp.href('i', $destination, array(
+    $ui = sp.href('&#8505;', $destination, array(
         'class'      => $class,
         'rel'        => 'help',
         'target'     => '_blank',
