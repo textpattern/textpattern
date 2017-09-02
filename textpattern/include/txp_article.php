@@ -260,7 +260,7 @@ function article_save()
 
         if ($ts === false || $ts < 0) {
             $expires = $oldArticle['sExpires'];
-            $msg = array(gTxt('invalid_expirydate'), E_ERROR);
+            $msg = array(gTxt('invalid_expiredate'), E_ERROR);
         } else {
             $expires = $ts - tz_offset($ts);
         }
