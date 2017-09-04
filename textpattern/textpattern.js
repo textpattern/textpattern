@@ -1780,7 +1780,7 @@ textpattern.Route.add('article', function () {
 
     $('#article_form').on('click', '.txp-clone', function (e) {
         e.preventDefault();
-        form.trigger('submit.txpAsyncForm', {copy:1, publish:1});
+        form.trigger('submit', {copy:1, publish:1});
     });
 
     // Switch to Text/HTML/Preview mode.

@@ -458,19 +458,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'selector' => '[name=sLastMod]',
             'cb'       => 'article_partial_value',
         ),
-/*        // 'Duplicate' link.
-        'article_clone' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#article_partial_article_clone',
-            'cb'       => 'article_partial_article_clone',
-        ),
-        // 'View' link.
-        'article_view' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#article_partial_article_view',
-            'cb'       => 'article_partial_article_view',
-        ),
-*/        // 'Previous/Next' article links region.
+        // 'Previous/Next' article links region.
         'article_nav' => array(
             'mode'     => PARTIAL_VOLATILE,
             'selector' => 'nav.nav-tertiary',
@@ -740,6 +728,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         }
 
         $response = array_merge($response, updateVolatilePartials($partials));
+
+        if (!empty($GLOBALS['ID'])) {
+            $response[] = "if (typeof window.history.pushState == 'function') {history.replaceState({}, '', '?event=article&step=edit&ID=$ID')}";
+        }
+
         send_script_response(join(";\n", $response));
 
         // Bail out.
