@@ -727,12 +727,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             $response[] = '$("#article_form").addClass("published").removeClass("saved")';
         }
 
-        $response = array_merge($response, updateVolatilePartials($partials));
-
         if (!empty($GLOBALS['ID'])) {
-            $response[] = "if (typeof window.history.pushState == 'function') {history.replaceState({}, '', '?event=article&step=edit&ID=$ID')}";
+            $response[] = "if (typeof window.history.replaceState == 'function') {history.replaceState({}, '', '?event=article&ID=$ID')}";
         }
 
+        $response = array_merge($response, updateVolatilePartials($partials));
         send_script_response(join(";\n", $response));
 
         // Bail out.
