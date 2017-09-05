@@ -159,7 +159,7 @@
         <p>
             <small>
                 <txp:text item="published_with" />
-                <a rel="external nofollow" href="https://textpattern.io/" title="<txp:text item="go_txp_com" />">Textpattern CMS</a>
+                <a rel="external nofollow" href="https://textpattern.com/" title="<txp:text item="go_txp_com" />">Textpattern CMS</a>
             </small>
         </p>
     </footer>

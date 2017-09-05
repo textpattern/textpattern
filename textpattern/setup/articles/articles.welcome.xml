@@ -11,9 +11,9 @@ h3. What do you want to do next?
 
 * Modify or delete this article? The "article list":siteurl/textpattern/index.php?event=list is the place to start.
 * Change this site's name, or modify the style of the URLs? It's all up to your "preferences":siteurl/textpattern/index.php?event=prefs.
-* Get yourself acquainted with Textile, the humane markup generator which comes with Textpattern? The basics are "simple":http://textpattern.com/textile-sandbox. If you want to learn more, you can dig into an "extensive manual":http://textpattern.com/textile-reference-manual later.
-* Be guided through your "Textpattern first steps":http://textpattern.com/textpattern-first-steps by completing some basic tasks?
-* Study the "Textpattern Semantic Model?":http://textpattern.com/textpattern-semantic-model
+* Get yourself acquainted with Textile, the humane markup generator which comes with Textpattern? The basics are "simple":https://textpattern.com/textile-sandbox. If you want to learn more, you can dig into an "extensive manual":https://textpattern.com/textile-reference-manual later.
+* Be guided through your "Textpattern first steps":https://textpattern.com/textpattern-first-steps by completing some basic tasks?
+* Study the "Textpattern Semantic Model?":https://textpattern.com/textpattern-semantic-model
 * Add "another user":siteurl/textpattern/index.php?event=admin, or extend the capabilities with "third party plugins":siteurl/textpattern/index.php?event=plugin you discovered from the central plugin directory at "Textpattern Resources":http://textpattern.org/?
 * Dive in and learn by trial and error? Then please note:
 ** When you "write":siteurl/textpattern/index.php?event=article an article you assign it to a section of your site.
@@ -21,7 +21,7 @@ h3. What do you want to do next?
 ** Page templates use HTML(HyperText Markup Language) and Textpattern tags (like this: @<txp:article />@) to build the markup.
 ** Some Textpattern tags use "forms":siteurl/textpattern/index.php?event=form, which are building blocks for reusable snippets of code and markup you may build and use at your discretion.
 
-There is a host of "Frequently Asked Questions":http://textpattern.com/faq/ to help you get started.
+There is a host of "Frequently Asked Questions":https://textpattern.com/faq/ to help you get started.
 
 "Textpattern tags":https://docs.textpattern.io/tags/, their attributes and values are explained and sampled within the "Textpattern User Documentation":https://docs.textpattern.io/, where you will also find valuable tips and tutorials.
 

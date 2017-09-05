@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -89,6 +89,6 @@ class Textile extends Base implements TextfilterInterface
 
     public function getHelp()
     {
-        return 'https://textpattern.io/textile-sandbox';
+        return 'https://textpattern.com/textile-sandbox';
     }
 }
