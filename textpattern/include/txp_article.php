@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -425,7 +425,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         // 'Author' region.
         'author' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => 'span.author',
+            'selector' => 'div.author',
             'cb'       => 'article_partial_author',
         ),
         // 'Actions' region.
@@ -458,19 +458,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'selector' => '[name=sLastMod]',
             'cb'       => 'article_partial_value',
         ),
-/*        // 'Duplicate' link.
-        'article_clone' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#article_partial_article_clone',
-            'cb'       => 'article_partial_article_clone',
-        ),
-        // 'View' link.
-        'article_view' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#article_partial_article_view',
-            'cb'       => 'article_partial_article_view',
-        ),
-*/        // 'Previous/Next' article links region.
+        // 'Previous/Next' article links region.
         'article_nav' => array(
             'mode'     => PARTIAL_VOLATILE,
             'selector' => 'nav.nav-tertiary',
@@ -737,6 +725,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             $response[] = '$("#article_form").addClass("saved").removeClass("published")';
         } else {
             $response[] = '$("#article_form").addClass("published").removeClass("saved")';
+        }
+
+        if (!empty($GLOBALS['ID'])) {
+            $response[] = "if (typeof window.history.replaceState == 'function') {history.replaceState({}, '', '?event=article&ID=$ID')}";
         }
 
         $response = array_merge($response, updateVolatilePartials($partials));
@@ -1311,26 +1303,19 @@ function textile_main_fields($incoming)
 }
 
 /**
- * Pings Ping-O-Matic when an article is published.
+ * Raises a ping callback so plugins can take action when an article is published.
  */
 
 function do_pings()
 {
-    global $prefs, $production_status;
+    global $production_status;
 
     // Only ping for Live sites.
     if ($production_status !== 'live') {
         return;
     }
 
-    include_once txpath.'/lib/IXRClass.php';
-
     callback_event('ping');
-
-    if ($prefs['ping_weblogsdotcom'] == 1) {
-        $wl_client = new IXR_Client('http://rpc.pingomatic.com/');
-        $wl_client->query('weblogUpdates.ping', $prefs['sitename'], hu);
-    }
 }
 
 /**

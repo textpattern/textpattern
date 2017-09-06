@@ -586,7 +586,7 @@
         ]]></item>
         <item id="comments_use_fat_textile" title="Allow more Textile markup in comments?"><![CDATA[
 <h2>Allow more Textile markup in comments?</h2>
-<p>When set to ‘Yes’, comments may contain <a rel="external" target="_blank" href="http://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> elements which would otherwise be treated as plain text, such as:</p>
+<p>When set to ‘Yes’, comments may contain <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> elements which would otherwise be treated as plain text, such as:</p>
 <ul>
     <li>headings</li>
     <li>ordered and unordered lists</li>
@@ -701,10 +701,6 @@
 <p>‘?=messy’ mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimisation (SEO). In this mode URLs for articles on your site would look like this:</p>
 <pre><code>http://example.com/index.php?id=123</code></pre>
 <p>All other modes require the Apache <code>mod_rewrite</code> module to be installed and enabled on your server. If your server does not support <code>mod_rewrite</code> either contact your web host or use the ‘?=messy’ mode outlined above.</p>
-        ]]></item>
-        <item id="ping_weblogsdotcom" title="Ping pingomatic.com (Ping-O-Matic)?"><![CDATA[
-<h2>Ping pingomatic.com (Ping-O-Matic)?</h2>
-<p>This will send a <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/Ping_(blogging)">ping <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> to <a rel="external" target="_blank" href="https://pingomatic.com">Ping-O-Matic <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> whenever you publish a new article. Ping-O-Matic is a aggregation service to notify listed websites that your website has been updated.</p>
         ]]></item>
         <item id="plugin_cache_dir" title="Plugin cache directory path"><![CDATA[
 <h2>Plugin cache directory path</h2>
@@ -829,7 +825,7 @@
         ]]></item>
         <item id="use_textile" title="Use Textile?"><![CDATA[
 <h2>Use Textile?</h2>
-<p><a rel="external" target="_blank" href="http://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> is a utility intended to simplify the conversion of plain text to HTML. When enabled, Textile will process the body text of articles and return structurally sound HTML.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> is a utility intended to simplify the conversion of plain text to HTML. When enabled, Textile will process the body text of articles and return structurally sound HTML.</p>
 <p>Textile also offers a powerful but easy-to-learn set of commands with which to format text, define structures such as lists, headers and blockquotes, and insert links and images.</p>
 <p>The setting you choose here becomes the default for excerpt and body markup on the ‘Write’ administration panel. You can choose to allow complete Textile processing, to convert line breaks into HTML paragraph markers or not convert any text at all.</p>
         ]]></item>

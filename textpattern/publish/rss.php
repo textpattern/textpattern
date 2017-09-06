@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -80,7 +80,7 @@ function rss()
     $mail_or_domain = ($use_mail_on_feeds_id) ? eE($blog_mail_uid) : $dn[0];
 
     // Feed header.
-    $out[] = tag('http://textpattern.com/?v='.$version, 'generator');
+    $out[] = tag('https://textpattern.com/?v='.$version, 'generator');
     $out[] = tag(doSpecial($sitename), 'title');
     $out[] = tag(hu, 'link');
     $out[] = '<atom:link href="'.pagelinkurl(array(

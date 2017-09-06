@@ -106,12 +106,14 @@ button {
  */
   .pophelp,
   .pophelpsubtle {
-    width: 1em;
+    display: inline-block;
+    width: 1.1666667em;
     border: 1px solid;
     border-radius: 50%;
     border-color: #dddddd #bbbbbb #bbbbbb #dddddd;
+    font-family: "Segoe UI Symbol", "Cambria Math", "Apple Symbols";
     font-weight: normal;
-    line-height: 1;
+    line-height: 1.1666667em;
     text-align: center;
   }
   .pophelp:focus,
@@ -2094,19 +2096,16 @@ button {
  */
   .txp-accessibility {
     position: absolute;
-    left: -1000em;
     width: 1px;
     height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    white-space: nowrap;
     overflow: hidden;
-  }
-  /**
- * Swap absolute positions in RTL languages.
- *
- * This avoids browser scrollbar displaying incorrectly.
- */
-  [dir="rtl"] .txp-accessibility {
-    right: -1000em;
-    left: auto;
+    clip: rect(0 0 0 0);
+    -webkit-clip-path: inset(50%);
+            clip-path: inset(50%);
   }
   /**
  * Drop down lists.
@@ -2981,7 +2980,7 @@ button {
     display: none;
   }
   /**
- * Hide jQuery UI  text but still allow screen reader access.
+ * Hide jQuery UI text but still allow screen reader access.
  */
   .ui-helper-hidden-accessible {
     position: absolute;
@@ -2990,8 +2989,11 @@ button {
     margin: -1px;
     padding: 0;
     border: 0;
+    white-space: nowrap;
     overflow: hidden;
     clip: rect(0 0 0 0);
+    -webkit-clip-path: inset(50%);
+            clip-path: inset(50%);
   }
   /**
  * Normalize various rules to avoid style inheritance.
