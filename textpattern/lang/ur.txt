@@ -10,6 +10,7 @@ add_new_author => ایک نۓ مصنف کو شامل کریں
 assign_assets_to => صارف کے اشیا یہاں تفویض کریں
 author_already_exists =>
 author_deleted => مصنف <strong>{name}</strong> کو حذف کیا گیا
+author_save_failed =>
 author_updated => مصنف <strong>{name}</strong> کا تازہ کاری کیا گ
 cannot_assign_assets_to_deletee =>
 changeprivilege => استہقاق تبدیل کریں
@@ -23,7 +24,9 @@ designer => ڈیزائنر
 edit_author => مصنف کے معلومات تدوین کریں
 email_changed => ای میل کا پتہ <strong>{email}</strong> کو بدلہ گیا
 error_adding_new_author => نۓ مصنف کو شامل کرنے میں نقص !
+from_or_to_address_missing =>
 freelancer => مصنف آزاد
+invalid_token =>
 last_login => پچھلا لاگ ان
 link_expires =>
 login_name => نام صارف
@@ -60,9 +63,11 @@ resend_activation =>
 resend_activation_request_sent =>
 resetpassword => ‏پاس ورڈ‏ پھر سیٹ کریں
 search_users =>
+sending_failed =>
 set_password =>
 show_password =>
 staff_writer => اندرونی مصنف
+token_expired =>
 unknown_author => نامعلوم مصنف: <strong>{name}</strong>
 your_login_info => آپ کے لاگ ان معلومات
 your_login_is => آپ کا لاگ ان نام
@@ -204,6 +209,7 @@ hidden => پوشیدہ
 id => ID#
 image_category => تصویر زمرہ
 internal_error =>
+invalid_argument =>
 last_modified =>
 links => روابط
 link_category => ربط زمرہ
@@ -225,6 +231,7 @@ published_with =>
 publish_date =>
 publish_time =>
 range => وسعت
+reset => پھر سیٹ کریں
 restricted_area => ممنوع حصّہ
 salutation =>
 save_new => محفوظ کریں بطور
@@ -257,6 +264,7 @@ tab_plugins => پلگ ان
 tab_preferences => ترجیحات
 tab_presentation => پیشکش
 tab_sections => Sections صیغہ
+tab_site_account =>
 tab_site_admin => صارفین
 tab_skins =>
 tab_start =>
@@ -286,6 +294,7 @@ units_t => TB
 units_y => YB
 units_z => ZB
 unmoderated => تفتیش نہ کیا
+updated => تازہ کیا
 upload_err_cant_write => ڈسک پر فائل محفوظ کرنے میں ناکامی
 upload_err_extension => فائل کا اپ لوڈ ایک PHP سے روکا گیا اضافی
 upload_err_form_size => فائل کی سائز Textpattern کے ترجیحات میں تخصیص کردہ سائز کو تجاوز کرتی ہے
@@ -383,6 +392,7 @@ no_comments_recorded => کوئی تبصرہ دستیاب نہیں
 search_comments =>
 show => نمودار کریں
 show_spam => spam تبصرے نمائش کریں
+unknown_spam_estimate =>
 #@file
 condition => حالت
 download => ڈاؤن لوڈ کریں
@@ -416,7 +426,6 @@ permissions => اجازتیں
 private => نجی
 public => ظاہر
 replace_file => فائل بدل دیں
-reset => پھر سیٹ کریں
 reset_download_count =>
 search_files =>
 #@form
@@ -457,6 +466,7 @@ only_graphic_files_allowed => صرف .jpg, .gif, .png فائل کے قسمیں �
 replace_image => تصویر بدلیں
 search_images =>
 swap_values =>
+thumbnail_delete_failed =>
 thumbnail_deleted => تصویر صغیر حذف کیا
 thumbnail_not_saved => تصویر صغیر <strong>{id}</strong> محفوظ نہیں
 thumbnail_saved => تصویر صغیر <strong>{id}</strong> محفوظ کیا
@@ -611,7 +621,6 @@ permlink_format =>
 permlink_hyphenated =>
 permlink_intercapped =>
 permlink_mode => مستقل ربط کی وضع
-ping_weblogsdotcom => اشاعت کرتے pingomatic.com کو بھی اطلاع کریں
 plugin_cache_dir => پلگ ان کیسہ کے پوشہ کی راہ
 preferences_saved => ترجیحات محفوظ کیا
 prefs => ترجیحات
@@ -642,7 +651,6 @@ timeoffset => وقت آفسیٹ (گھنٹے میں)
 title_no_widow => مضامین کے عنوان میں ‏الفاظ‏ کے بیوہ ہونے سے روکے
 title_only => /title
 tz_timezone => وقت کا علاقہ
-updated => تازہ کیا
 update_languages => زبان کی فائل تازہ کریں
 up_to_date =>
 url_mode => URL موڈ
@@ -719,6 +727,7 @@ deprecated_configuration =>
 deprecated_function =>
 deprecated_function_with =>
 deprecated_tag =>
+disabled_function =>
 documentation =>
 download_count =>
 edit => تدوین کریں
@@ -804,6 +813,9 @@ pages => صفحات
 paragraph => پیرا‏
 permanent_link => اس مضمون لا ‏مستقل‏ ربط
 permlink => مستقل‏ ربط
+php_code_disabled_article =>
+php_code_disabled_page =>
+php_code_forbidden_user =>
 plugin_load_error => پلگ ان نصب کرنے میں نقص
 plugin_load_error_above => اپر نقائص کا سبب یہ پلگ ان ہے:
 popup => برخیزہ میں
@@ -821,6 +833,7 @@ recent_articles => حالیہ مضامین
 recent_comments =>
 recent_posts => حالیہ مسودے
 related_articles =>
+reload =>
 remember => میرے معلومات یاد رکھو
 required =>
 revert => ‏پچھلی حالت پر واپس لائیں
@@ -855,9 +868,11 @@ too_common_search_term =>
 type => قسم
 unclosed_tag =>
 undefined => غیر واضع
+unknown =>
 unknown_attribute =>
 unknown_callback_function =>
 unknown_image => نامعلوم تصویر
+unknown_link =>
 unknown_section => نامعلوم صیغہ
 unknown_tag =>
 unregistered_tag =>
@@ -874,10 +889,12 @@ week => ہفتہ
 weeks => ہفتے
 while_parsing_page_form =>
 yes => ہاں
+your_ip_is_blacklisted_by => تمہارا IPپتہ اس ‏'Blocklist' میں شامل ہے
 yyyy-mm => yyyy-mm
 #@section
 article_count =>
 create_section =>
+default_section_updated =>
 default_write_section =>
 delete_section_confirmation => صیغہ حذف کرنے کی تصدیق کریں
 edit_default_section =>
@@ -889,6 +906,7 @@ search_sections =>
 section => صیغہ
 sections => صیغہ
 section_created => صیغہ <strong>{name}</strong> بنا ہوا
+section_delete_failure =>
 section_deleted => صیغہ <strong>{name}</strong> حذف کیا
 section_head => سائٹ کے صیغہ
 section_longtitle => صیغہ کا عنوان

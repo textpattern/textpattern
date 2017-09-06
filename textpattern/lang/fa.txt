@@ -10,6 +10,7 @@ add_new_author => افزودن نویسنده جدید
 assign_assets_to => انتصاب محتوای کاربر به
 author_already_exists => نویسنده با نام <strong>{name}</strong> از پیش موجود است.
 author_deleted => نویسنده با نام <strong>{name}</strong> پاک شد.
+author_save_failed =>
 author_updated => مشخصات نویسنده با نام <strong>{name}</strong> بهنگام شد.
 cannot_assign_assets_to_deletee => شما نمی‌توانید به حساب کاربری پاک شده چیزی را منتصب کنید
 changeprivilege => تغییر سطح کاربر
@@ -23,7 +24,9 @@ designer => طراح
 edit_author => تغییر مشخصات نویسنده
 email_changed => نشانی ایمیل به <strong>{email}</strong> تغییر یافت.
 error_adding_new_author => خطا در افزودن نویسنده جدید.
+from_or_to_address_missing =>
 freelancer => نویسنده آزاد
+invalid_token =>
 last_login => آخرین ورود
 link_expires =>
 login_name => نام کاربری
@@ -60,9 +63,11 @@ resend_activation =>
 resend_activation_request_sent =>
 resetpassword => بازیابی گذرواژه
 search_users =>
+sending_failed =>
 set_password =>
 show_password =>
 staff_writer => عضو تحریریه
+token_expired =>
 unknown_author => نویسنده ناشناس : <strong>{name}</strong>
 your_login_info => اطلاعات ورود شما
 your_login_is => مشخصات ورود شما
@@ -204,6 +209,7 @@ hidden => مخفی
 id => شناسه نوشته
 image_category => رده
 internal_error => خطای داخلی
+invalid_argument =>
 last_modified => آخرین ویرایش
 links => لینک‌ها
 link_category => رده
@@ -225,6 +231,7 @@ published_with => انتشار یافته توسط
 publish_date =>
 publish_time =>
 range => محدوده
+reset => بازنشانی
 restricted_area => منطقه ممنوعه
 salutation =>
 save_new => ایجاد
@@ -257,6 +264,7 @@ tab_plugins => پلاگین‌ها
 tab_preferences => تنظیمات
 tab_presentation => نمایش
 tab_sections => بخش‌ها
+tab_site_account =>
 tab_site_admin => کاربران
 tab_skins =>
 tab_start => خانه
@@ -286,6 +294,7 @@ units_t => TB
 units_y => YB
 units_z => ZB
 unmoderated => تأیید نشده
+updated => بهنگام شده
 upload_err_cant_write => ناتوانی در نوشتن فایل بر روی دیسک
 upload_err_extension => آپلود فایل توسط افزونه PHP متوقف شد.
 upload_err_form_size => حجم فایل از حداکثر اندازه تعریف شده در تنظیمات Textpattern بیشتر است.
@@ -360,7 +369,7 @@ site_trailing_slash => آدرس سایت یک / در انتها دارد
 site_url_mismatch => مرجع آدرس سایت ممکن است نادرست باشد
 some_php_functions_disabled => این توابع PHP (که برای راه‌اندازی Textpattern ضروری‌اند) بر روی سرور شما غیر فعال‌اند.
 still_exists => همچنان وجود دارد
-textpattern_update_available => نسخه‌ی جدید سیستم مدیریت محتوای Textpattern {version} <a href="http://textpattern.com/download" rel="external" title="رفتن به بخش دانلود">برای دریافت آماده است</a>
+textpattern_update_available => نسخه‌ی جدید سیستم مدیریت محتوای Textpattern {version} <a href="https://textpattern.com/download" rel="external" title="رفتن به بخش دانلود">برای دریافت آماده است</a>
 tmp_plugin_paths_match => مسیر پوشه‌ی فایل‌های موقت و مسیر کش پلاگین‌ها <strong>نباید</strong> یکی باشند.
 txp_path => مسیر Textpattern
 txp_version => نسخه Textpattern
@@ -383,6 +392,7 @@ no_comments_recorded => هیچ نظری ثبت نشده است
 search_comments =>
 show => نمایش
 show_spam => نمایش اسپم
+unknown_spam_estimate =>
 #@file
 condition => شرایط
 download => دانلود
@@ -416,7 +426,6 @@ permissions => اجازه‌ها
 private => خصوصی
 public => عمومی
 replace_file => جایگیزینی فایل
-reset => بازنشانی
 reset_download_count => بازنشانی شمارنده‌ی دانود
 search_files =>
 #@form
@@ -457,6 +466,7 @@ only_graphic_files_allowed => تنها فایل‌های jpg. یا gif. یا png
 replace_image => جایگزینی تصویر
 search_images =>
 swap_values =>
+thumbnail_delete_failed =>
 thumbnail_deleted => تصویر کوچک پاک شد.
 thumbnail_not_saved => تصویر کوچک <strong>{id}</strong> ذخیره <em>نشد</em>!
 thumbnail_saved => تصویر <strong>{id}</strong> ذخیره شد.
@@ -611,7 +621,6 @@ permlink_format =>
 permlink_hyphenated =>
 permlink_intercapped =>
 permlink_mode => حالت لینک دائم
-ping_weblogsdotcom => به pingomatic.com پینگ شود؟
 plugin_cache_dir => مسیر پوشه کش پلاگین‌ها
 preferences_saved => تنظیمات ذخیره شد
 prefs => منابع
@@ -642,7 +651,6 @@ timeoffset => انحراف زمانی (ساعت)
 title_no_widow => ممانعت از ورود لغات ناقص در عنوان مقالات؟
 title_only => /title
 tz_timezone => منطقه زمانی
-updated => بهنگام شده
 update_languages => بهنگام‌سازی زبان‌ها
 up_to_date => به روز
 url_mode => سبک URL
@@ -719,6 +727,7 @@ deprecated_configuration => انتخاب تنظیم توصیه شده : <strong>
 deprecated_function => تابع <strong>{name}</strong> نامناسب است
 deprecated_function_with => تابع <strong>{name}</strong> نامناسب است : به جای آن از <strong>{with}</strong> استفاده کنید
 deprecated_tag => تگ نامناسب است
+disabled_function =>
 documentation =>
 download_count => شمارنده دانلود
 edit => ویرایش
@@ -804,6 +813,9 @@ pages => صفحات
 paragraph => پاراگراف
 permanent_link => لینک دائمی به این نوشته
 permlink => لینک دائمی
+php_code_disabled_article =>
+php_code_disabled_page =>
+php_code_forbidden_user =>
 plugin_load_error => هنگام بارگذاری پلاگین مشکلی رخ داده است:
 plugin_load_error_above => این اشکالات توسط پلاگین به وجود آمده است
 popup => پنجره ی بالاپر
@@ -821,6 +833,7 @@ recent_articles => آخرین نوشته‌ها
 recent_comments => آخرین نظرها
 recent_posts => آخرین ارسال‌ها
 related_articles => نوشته‌های مرتبط
+reload =>
 remember => به یادآوری
 required => ضروری
 revert => برگشت
@@ -855,9 +868,11 @@ too_common_search_term => به نظر می رسد شما به دنبال جست�
 type => نوع
 unclosed_tag =>
 undefined => تعریف‌نشده
+unknown =>
 unknown_attribute => صفت ناشناخته {att}:
 unknown_callback_function => تابع بازگشتی ناشناخته: {function}.
 unknown_image => تصویر نامعلوم
+unknown_link =>
 unknown_section => بخش نامعلوم
 unknown_tag => تگ موجود نیست
 unregistered_tag =>
@@ -874,10 +889,12 @@ week => هفته
 weeks => هفته
 while_parsing_page_form => هنگام تجزیه و تحلیل کردن فرم <strong>{form}</strong> در صفحه <strong>{page}</strong>
 yes => بله
+your_ip_is_blacklisted_by => نشانی IP شما در لیست سیاه قرار گرفته است توسط
 yyyy-mm => yyyy-mm
 #@section
 article_count => {num} نوشته در این بخش موجود است. برای لیست کردن آن‌ها کلیک کنید
 create_section => ساخت بخش
+default_section_updated =>
 default_write_section => بخش انتشار پیش‌فرض
 delete_section_confirmation => تأیید پاک کردن بخش
 edit_default_section => ویرایش بخش پیش‌فرض
@@ -889,6 +906,7 @@ search_sections =>
 section => بخش
 sections => بخش‌ها
 section_created => بخش <strong><a href="#section-{name}">{name}</a></strong> ساخته شد.
+section_delete_failure =>
 section_deleted => بخش <strong>{name}</strong> پاک شد.
 section_head => بخش‌های سایت
 section_longtitle => عنوان بخش

@@ -10,6 +10,7 @@ add_new_author => إضافة مؤلف
 assign_assets_to => تحويل ملكية محتوى المستخدم إلى
 author_already_exists => المؤلف <strong>{name}</strong> موجود مسبقا
 author_deleted => المؤلف <strong>{name}</strong> محذوف
+author_save_failed =>
 author_updated => تم تحديث المؤلف <strong>{name}</strong>
 cannot_assign_assets_to_deletee => لا يمكن ربط أي محتوى مع حساب محذوف
 changeprivilege => تغيير الإمتيازات
@@ -23,7 +24,9 @@ designer => مصمم
 edit_author => تعديل مؤلف
 email_changed => غير البريد الإلكتروني إلى <strong>{email}</strong>
 error_adding_new_author => حدث خطأ عند إضافة مؤلف جديد
+from_or_to_address_missing =>
 freelancer => محرر عادي
+invalid_token =>
 last_login => آخر تسجيل الدخول
 link_expires => لديك حتى {day} {month} {year}، {time} للرد قبل انتهاء صلاحية هذا الرابط.
 login_name => اسم تسجيل الدخول
@@ -60,9 +63,11 @@ resend_activation => إعادة إرسال رابط التنشيط
 resend_activation_request_sent =>
 resetpassword => إعادة تعيين كلمة السر
 search_users => البحث عن المستخدمين
+sending_failed =>
 set_password => تعيين كلمة السر
 show_password => إظهار كلمة السر
 staff_writer => محرر متقدم
+token_expired =>
 unknown_author => مؤلف مجهول :{name}
 your_login_info => معلوماتكم الخاصة بالاتصال
 your_login_is => اسم الاتصال الخاص بكم هو
@@ -204,6 +209,7 @@ hidden => مخفي
 id =>
 image_category => فئة الصور
 internal_error =>
+invalid_argument =>
 last_modified =>
 links => الروابط
 link_category => فئة الرابط
@@ -225,6 +231,7 @@ published_with =>
 publish_date =>
 publish_time =>
 range => تعيين
+reset => العودة إلى الأصل
 restricted_area => منطقة محظورة
 salutation =>
 save_new => تسجيل الجديد
@@ -257,6 +264,7 @@ tab_plugins => ملحقات
 tab_preferences => تفضيلات
 tab_presentation => عرض
 tab_sections => أقسام
+tab_site_account =>
 tab_site_admin => مؤلفون
 tab_skins =>
 tab_start => الصفحة الرئيسية
@@ -286,6 +294,7 @@ units_t => TB
 units_y => YB
 units_z => ZB
 unmoderated =>
+updated => محدث
 upload_err_cant_write => فشلت كتاب الملف في القرص
 upload_err_extension => خطأ في التحميل بسبب نوع الملف
 upload_err_form_size => الملف يتجاوز الحجم المرخص من قبل المسير
@@ -383,6 +392,7 @@ no_comments_recorded => لم يسجل تعليق بعد
 search_comments =>
 show =>
 show_spam =>
+unknown_spam_estimate =>
 #@file
 condition => شرط
 download => حمل
@@ -416,7 +426,6 @@ permissions => ترخيصات
 private => خاص
 public => عام
 replace_file => استبدال ملف
-reset => العودة إلى الأصل
 reset_download_count =>
 search_files =>
 #@form
@@ -457,6 +466,7 @@ only_graphic_files_allowed => .jpg, .gif, .png الملفات المقبولة �
 replace_image => استبدال الصورة
 search_images =>
 swap_values =>
+thumbnail_delete_failed =>
 thumbnail_deleted =>
 thumbnail_not_saved =>
 thumbnail_saved =>
@@ -611,7 +621,6 @@ permlink_format =>
 permlink_hyphenated =>
 permlink_intercapped =>
 permlink_mode => حجم عناوين المواقع
-ping_weblogsdotcom => pingomatic.com إعلام
 plugin_cache_dir =>
 preferences_saved => تفضيلات مسجلة
 prefs => تفضيلات
@@ -642,7 +651,6 @@ timeoffset => الفارق الزمني
 title_no_widow =>
 title_only => عنوان/
 tz_timezone =>
-updated => محدث
 update_languages => تحديث اللغات
 up_to_date => محدث
 url_mode => صنف عنوان الموقع
@@ -719,6 +727,7 @@ deprecated_configuration =>
 deprecated_function =>
 deprecated_function_with =>
 deprecated_tag =>
+disabled_function =>
 documentation =>
 download_count =>
 edit => تغيير
@@ -804,6 +813,9 @@ pages =>
 paragraph => فقرة
 permanent_link =>
 permlink =>
+php_code_disabled_article =>
+php_code_disabled_page =>
+php_code_forbidden_user =>
 plugin_load_error => حدث خطأ خلال التحميل لـ البلوغين
 plugin_load_error_above =>
 popup =>
@@ -821,6 +833,7 @@ recent_articles => مقالات منشورة مؤخرا
 recent_comments => التعليقات الأخيرة
 recent_posts => نشر مؤخرا
 related_articles => المقالات حول نفس الموضوع
+reload =>
 remember => حفظ المعلومات المستلمة
 required =>
 revert => العودة إلى الوراء
@@ -855,9 +868,11 @@ too_common_search_term =>
 type => صنف
 unclosed_tag =>
 undefined => اسم معين
+unknown =>
 unknown_attribute =>
 unknown_callback_function =>
 unknown_image =>
+unknown_link =>
 unknown_section => قسم مجهول
 unknown_tag =>
 unregistered_tag =>
@@ -874,10 +889,12 @@ week => أسبوع
 weeks => أسابيع
 while_parsing_page_form =>
 yes => نعم
+your_ip_is_blacklisted_by => تم إلغاؤكم من طرف
 yyyy-mm => aaaa-mm
 #@section
 article_count =>
 create_section =>
+default_section_updated =>
 default_write_section =>
 delete_section_confirmation => إثبات إلغاء القسم
 edit_default_section =>
@@ -889,6 +906,7 @@ search_sections =>
 section => قسم
 sections => أقسام
 section_created =>
+section_delete_failure =>
 section_deleted =>
 section_head => أقسام الموقع
 section_longtitle => عنوان القسم
