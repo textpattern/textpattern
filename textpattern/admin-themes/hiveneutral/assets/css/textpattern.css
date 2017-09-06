@@ -2626,7 +2626,7 @@ button {
  * <h1 class="txp-accessibility">
  */
   .txp-accessibility {
-    display: inline-block;
+    position: absolute;
     width: 1px;
     height: 1px;
     margin: -1px;
@@ -2634,6 +2634,7 @@ button {
     border: 0;
     white-space: nowrap;
     overflow: hidden;
+    clip: rect(0 0 0 0);
     -webkit-clip-path: inset(50%);
             clip-path: inset(50%);
   }
@@ -3543,7 +3544,7 @@ button {
  * Hide jQuery UI text but still allow screen reader access.
  */
   .ui-helper-hidden-accessible {
-    display: inline-block;
+    position: absolute;
     width: 1px;
     height: 1px;
     margin: -1px;
@@ -3551,6 +3552,7 @@ button {
     border: 0;
     white-space: nowrap;
     overflow: hidden;
+    clip: rect(0 0 0 0);
     -webkit-clip-path: inset(50%);
             clip-path: inset(50%);
   }
