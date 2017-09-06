@@ -454,7 +454,7 @@ site_trailing_slash => Site URL has a trailing slash
 site_url_mismatch => Site URL preference might be incorrect
 some_php_functions_disabled => The following PHP functions (which may be necessary to run Textpattern) are disabled on your server
 still_exists => still exists
-textpattern_update_available => New Textpattern version {version} <a href="http://textpattern.com/download" rel="external" title="Go to the Textpattern download area">available for download</a>.
+textpattern_update_available => New Textpattern version {version} <a href="https://textpattern.com/download" rel="external" title="Go to the Textpattern download area">available for download</a>.
 tmp_plugin_paths_match => Temporary directory path and plugin cache directory path should <strong>not</strong> match.
 txp_path => Textpattern path
 txp_version => Textpattern version
@@ -763,7 +763,7 @@ max_url_len => Maximum URL length (in characters)
 mentions => Mentions
 messy => ?=messy
 never_display_email => Hide commenter email address?
-new_textpattern_version_available => There is a new Textpattern version available. Do you want to <a href="http://textpattern.com/download" rel="external" title="Go to the Textpattern website download area">download it</a>?
+new_textpattern_version_available => There is a new Textpattern version available. Do you want to <a href="https://textpattern.com/download" rel="external" title="Go to the Textpattern website download area">download it</a>?
 no_popup => current window
 no_preferences => No preferences available.
 override_emailcharset => Use ISO-8859-1 encoding in emails (default is UTF-8)?
@@ -775,7 +775,6 @@ permlink_hyphenated => Hyphenated (title-like-this)
 permlink_intercapped => Intercapped (TitleLikeThis)
 permlink_mode => Article URL pattern
 ping_textpattern_com => Ping textpattern.com?
-ping_weblogsdotcom => Ping pingomatic.com?
 plugin_cache_dir => Plugin cache directory path
 preferences_saved => Preferences saved
 prefs => Prefs
@@ -809,7 +808,7 @@ timeoffset => Time offset (hours)
 title_no_widow => Prevent widowed words in article titles?
 title_only => /title
 updated => updated
-updated_branch_version_available => There is an update for this Textpattern version series available. Do you want to <a href="http://textpattern.com/download" rel="external" title="Go to the Textpattern website download area">download it</a>?
+updated_branch_version_available => There is an update for this Textpattern version series available. Do you want to <a href="https://textpattern.com/download" rel="external" title="Go to the Textpattern website download area">download it</a>?
 update_languages => Update languages
 up_to_date => Up-to-date
 urls_to_ping => URLs to ping (comma-separated)

@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * XML-RPC Server for Textpattern 4.0.x
  * http://web.archive.org/web/20150119065246/http://txp.kusor.com/rpc-api
@@ -332,7 +332,7 @@ EOD;
                 tag(
                     n.tag(
                         n.tag('Textpattern', 'engineName').
-                        n.tag('http://textpattern.com/', 'engineLink').
+                        n.tag('https://textpattern.com/', 'engineLink').
                         n.tag(hu, 'homePageLink').
                         n.tag(
                             n.'<api name="Movable Type" blogID="" preferred="true" apiLink="'.txrpcpath.'" />'.

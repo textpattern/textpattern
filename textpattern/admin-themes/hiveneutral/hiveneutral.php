@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -124,7 +124,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
     function footer()
     {
         $out[] = graf(
-            href('Textpattern CMS'.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), 'https://textpattern.io/', array(
+            href('Textpattern CMS'.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), 'https://textpattern.com/', array(
                 'rel'    => 'external',
                 'target' => '_blank',
             )).

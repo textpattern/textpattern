@@ -1,6 +1,6 @@
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -1479,13 +1479,25 @@ jQuery.fn.gTxt = function (opts, tags, escape) {
 
 /**
  * ESC button closes alert messages.
+ * CTRL+S triggers Save buttons click.
  *
- * @since 4.5.0
+ * @since 4.7
  */
 
-$(document).keyup(function (e) {
-    if (e.keyCode == 27) {
+$(document).keydown(function (e) {
+    var key = e.which || e.keyCode;
+
+    if (key === 27) {
         $('.close').parent().remove();
+    } else if (key === 19 || (String.fromCharCode(key).toLowerCase() === 's' && (e.metaKey || e.ctrlKey)))
+    {
+        var obj = $('input.publish');
+
+        if (obj.length)
+        {
+            e.preventDefault();
+            obj.eq(0).click();
+        }
     }
 });
 
@@ -1780,7 +1792,7 @@ textpattern.Route.add('article', function () {
 
     $('#article_form').on('click', '.txp-clone', function (e) {
         e.preventDefault();
-        form.trigger('submit.txpAsyncForm', {copy:1, publish:1});
+        form.trigger('submit', {copy:1, publish:1});
     });
 
     // Switch to Text/HTML/Preview mode.
