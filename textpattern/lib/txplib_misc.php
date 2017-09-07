@@ -4376,7 +4376,7 @@ function fetch_page($name)
  * Parses a page template.
  *
  * @param   string $name The template name
- * @param   string $page or content
+ * @param   string $page or default content
  * @return  string|bool The parsed page template, or FALSE on error
  * @since   4.6.0
  * @package TagParser

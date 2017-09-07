@@ -8,9 +8,10 @@ Changes in 4.7.0 (upcoming)
   detail' checkboxes. Settings remembered per device.
 * Added: Valueless attributes.
 * Added: Short tags.
-* Added: Tag global attributes: atts, class, escape, html_id, wraptag.
+* Added: Tag global attributes: atts, class, escape, html_id, wraptag, not, process.
 * Added: <txp:evaluate /> tag.
-* Added: <txp:article_custom /> tag can count pages.
+* Added: <txp:header /> tag.
+* Added: <txp:article_custom /> tag can count pages. Enhanced 'month' and 'time' attributes.
 * Added: XML and JSON file support. Completely overhauled setup procedure to
   centralise and verify/delete prefs on upgrade. Table structure and preferences
   defined in files for easier maintenance (thanks, makss).
@@ -21,7 +22,7 @@ Changes in 4.7.0 (upcoming)
 * Added: Section searches by description.
 * Added: Visual indicator that a subset of search fields are in use.
 * Added: One-click comment searches by parent article (thanks, makss).
-* Changed: <txp:yield> tag now accepts 'default' attribute.
+* Changed: <txp:yield> tag now accepts 'name' and 'default' attributes.
 * Changed: <txp:output_form /> tag supports user-defined attributes, coupled
   with <txp:yield> changes above this allows for 'shortcode'-like tags.
 * Changed: <txp:page_title /> tag SEO - site name renders after page name,

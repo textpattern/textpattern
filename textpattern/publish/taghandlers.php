@@ -817,11 +817,9 @@ function link_description($atts)
     ), $atts));
 
     if ($thislink['description']) {
-        $description = ($escape === null) ?
+        return ($escape === null) ?
             txpspecialchars($thislink['description']) :
             $thislink['description'];
-
-        return $description;
     }
 }
 
@@ -4281,8 +4279,9 @@ function page_url($atts)
     global $pretext;
 
     extract(lAtts(array(
-        'type' => 'request_uri',
+        'type'    => 'request_uri',
         'default' => '',
+        'escape'  => null
     ), $atts));
 
     if ($type == 'pg' && $pretext['pg'] == '') {
@@ -4290,12 +4289,13 @@ function page_url($atts)
     }
 
     if (isset($pretext[$type])) {
-        return txpspecialchars($pretext[$type]);
+        $out = $pretext[$type];
+    } else {
+        $out = gps($type, $default);
+        $out = is_array($out) ? implode(',', $out) : $out;
     }
 
-    $out = gps($type, $default);
-
-    return txpspecialchars(is_array($out) ? implode(',', $out) : $out);
+    return $escape === null ? txpspecialchars($out) : $out;
 }
 
 // -------------------------------------------------------------
@@ -4750,11 +4750,9 @@ function file_download_description($atts)
     ), $atts));
 
     if ($thisfile['description']) {
-        $description = ($escape === null)
+        return ($escape === null)
             ? txpspecialchars($thisfile['description'])
             : $thisfile['description'];
-
-        return $description;
     }
 }
 
