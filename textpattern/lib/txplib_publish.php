@@ -572,8 +572,9 @@ function processTags($tag, $atts = '', $thing = null)
     if (!isset($txp_atts['process'])) {
         $out = $registry->process($tag, $split, $thing);
     } else {
-        $out = empty($txp_atts['process']) ? '' : (intval($txp_atts['process']) <= $pretext['secondpass'] + 1 ? $registry->process($tag, $split, $thing) : null);
+        $process = empty($txp_atts['process']) ? 0 : (is_numeric($txp_atts['process']) ? (int) $txp_atts['process'] : 1);
         unset($txp_atts['process']);
+        $out = !$process ? '' : ($process <= $pretext['secondpass'] + 1 ? $registry->process($tag, $split, $thing) : null);
     }
 
     if ($out === false) {
@@ -586,16 +587,16 @@ function processTags($tag, $atts = '', $thing = null)
         }
     }
 
-    if ($out === null || isset($txp_atts['process']) && intval($txp_atts['process']) > $pretext['secondpass'] + 1) {
+    if ($out === null || isset($txp_atts['process']) && $txp_atts['process'] > $pretext['secondpass'] + 1) {
         $out = $pretext['secondpass'] < $max_pass ? $txp_current_tag : '';
-        unset($txp_atts['process']);
     } else {
         if ($thing === null && !empty($txp_atts['not'])) {
             $out = $out ? '' : '1';
-            unset($txp_atts['not']);
         }
 
-        if ($txp_atts && (string)$out > '') {
+        unset($txp_atts['process'], $txp_atts['not']);
+
+        if ($txp_atts && $out > '') {
             foreach ($global_atts as $attr) {
                 if (!empty($txp_atts[$attr])) {
                     $out = $registry->processAttr($attr, $txp_atts, $out);
