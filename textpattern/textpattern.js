@@ -1481,15 +1481,15 @@ jQuery.fn.gTxt = function (opts, tags, escape) {
  * ESC button closes alert messages.
  * CTRL+S triggers Save buttons click.
  *
- * @since 4.7
+ * @since 4.7.0
  */
 
 $(document).keydown(function (e) {
-    var key = e.which || e.keyCode;
+    var key = e.which;
 
     if (key === 27) {
         $('.close').parent().remove();
-    } else if (key === 19 || (String.fromCharCode(key).toLowerCase() === 's' && (e.metaKey || e.ctrlKey)))
+    } else if (key === 19 || ((e.metaKey || e.ctrlKey) && String.fromCharCode(key).toLowerCase() === 's'))
     {
         var obj = $('input.publish');
 
