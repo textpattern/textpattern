@@ -178,6 +178,7 @@ $pretext = !isset($pretext) ? array() : $pretext;
 $pretext = array_merge($pretext, pretext($s, $prefs));
 callback_event('pretext_end');
 extract($pretext);
+$pretext['secondpass'] = 0;
 
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
@@ -410,7 +411,7 @@ function preText($s, $prefs)
             $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE." AND created <= ".now('created').$fn);
         }
 
-        return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404);
+        return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404, 'status' => 404);
     }
 
     // Allow article preview.
@@ -526,7 +527,7 @@ function preText($s, $prefs)
 
 function textpattern()
 {
-    global $pretext, $prefs, $production_status, $siteurl, $has_article_tag;
+    global $pretext, $production_status, $has_article_tag;
 
     $has_article_tag = false;
 
@@ -551,7 +552,7 @@ function textpattern()
     }
 
     // Make sure the page has an article tag if necessary.
-    if (!$has_article_tag and $production_status != 'live' and $pretext['context'] == 'article' and (!empty($pretext['id']) or !empty($pretext['c']) or !empty($pretext['q']) or !empty($pretext['pg']))) {
+    if (!$has_article_tag && $production_status != 'live' && $pretext['context'] == 'article' && (!empty($pretext['id']) || !empty($pretext['c']) || !empty($pretext['q']) || !empty($pretext['pg']))) {
         trigger_error(gTxt('missing_article_tag', array('{page}' => $pretext['page'])));
     }
 
@@ -588,7 +589,9 @@ function output_css($s = '', $n = '', $t = '')
 
     if (!empty($cssname)) {
         $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$order));
-        echo $css;
+        set_error_handler('tagErrorHandler');
+        echo parse_page(null, $css);
+        restore_error_handler();
     }
 }
 

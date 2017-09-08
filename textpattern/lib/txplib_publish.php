@@ -385,14 +385,14 @@ function parse($thing, $condition = true)
     }
 
     if (!isset($short_tags)) {
-        $short_tags = get_pref('enable_short_tags', true);
-        $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp';
+        $short_tags = get_pref('enable_short_tags', false);
+        $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp:?';
     }
 
     if ($thing === null) {
         return $condition ? '1' : '';
     } elseif (!$short_tags) {
-        if (false === strpos($thing, "<{$pattern}:")) {
+        if (false === strpos($thing, '<txp:')) {
             return $condition ? $thing : ($thing ? '' : '1');
         }
     } elseif (!preg_match("@<(?:{$pattern}):@", $thing)) {
@@ -423,14 +423,13 @@ function parse($thing, $condition = true)
 
             if ($tag[$level][2] === 'else') {
                 $else[$level] = $count[$level];
+            } elseif ($tag[$level][1] === 'txp:') {
+                // Handle <txp::shortcode />.
+                $tag[$level][3] = "form='".$tag[$level][2]."'".$tag[$level][3];
+                $tag[$level][2] = 'output_form';
             } elseif ($short_tags && $tag[$level][1] !== 'txp') {
                 // Handle <short::tags />.
-                if ($tag[$level][1] == 'txp:') {
-                    $tag[$level][3] = "form='".$tag[$level][2]."'".$tag[$level][3];
-                    $tag[$level][2] = 'output_form';
-                } else {
-                    $tag[$level][2] = rtrim($tag[$level][1], ':').'_'.$tag[$level][2];
-                }
+                $tag[$level][2] = rtrim($tag[$level][1], ':').'_'.$tag[$level][2];
             }
 
             if ($chunk[strlen($chunk) - 2] === '/') {
