@@ -149,6 +149,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('if_first_section')
     ->register('if_last_section')
     ->register('php')
+    ->register('txp_header', 'header')
     ->register('custom_field')
     ->register('if_custom_field')
     ->register('site_url')
@@ -816,11 +817,9 @@ function link_description($atts)
     ), $atts));
 
     if ($thislink['description']) {
-        $description = ($escape === null) ?
+        return ($escape === null) ?
             txpspecialchars($thislink['description']) :
             $thislink['description'];
-
-        return $description;
     }
 }
 
@@ -4093,6 +4092,25 @@ function php($atts, $thing)
 
 // -------------------------------------------------------------
 
+function txp_header($atts)
+{
+    if (php(null, 'echo 1;') !== '1') {
+        return;
+    }
+
+    extract(lAtts(array(
+        'name'    => 'Content-Type',
+        'replace' => true,
+        'value'   => 'text/html; charset=utf-8'
+    ), $atts));
+
+    if ($name) {
+        set_headers(array(strtolower($name) => $value), !empty($replace));
+    }
+}
+
+// -------------------------------------------------------------
+
 function custom_field($atts)
 {
     global $is_article_body, $thisarticle;
@@ -4261,8 +4279,9 @@ function page_url($atts)
     global $pretext;
 
     extract(lAtts(array(
-        'type' => 'request_uri',
+        'type'    => 'request_uri',
         'default' => '',
+        'escape'  => null
     ), $atts));
 
     if ($type == 'pg' && $pretext['pg'] == '') {
@@ -4270,12 +4289,13 @@ function page_url($atts)
     }
 
     if (isset($pretext[$type])) {
-        return txpspecialchars($pretext[$type]);
+        $out = $pretext[$type];
+    } else {
+        $out = gps($type, $default);
+        $out = is_array($out) ? implode(',', $out) : $out;
     }
 
-    $out = gps($type, $default);
-
-    return txpspecialchars(is_array($out) ? implode(',', $out) : $out);
+    return $escape === null ? txpspecialchars($out) : $out;
 }
 
 // -------------------------------------------------------------
@@ -4730,11 +4750,9 @@ function file_download_description($atts)
     ), $atts));
 
     if ($thisfile['description']) {
-        $description = ($escape === null)
+        return ($escape === null)
             ? txpspecialchars($thisfile['description'])
             : $thisfile['description'];
-
-        return $description;
     }
 }
 
@@ -4928,20 +4946,22 @@ function txp_escape($atts, $thing = '')
     $thing = (string)$thing;
 
     foreach (do_list($atts['escape']) as $attr) {
-        switch (trim($attr)) {
+        switch ($attr = trim($attr)) {
             case 'html':
                 $thing = txpspecialchars($thing);
                 break;
             case 'json':
                 $thing = substr(json_encode($thing), 1, -1);
                 break;
+            case 'number':
+                $thing = floatval($thing);
+                break;
             case 'strip':
                 $thing = strip_tags($thing);
                 break;
-            case 'trim':
-                $thing = trim($thing);
+            case 'trim': case 'ltrim' : case 'rtrim' : case 'intval' :
+                $thing = $attr($thing);
                 break;
-/*
             case 'textile':
                 if ($textile === null) {
                     $textile = Txp::get('\Textpattern\Textile\Parser');
@@ -4949,7 +4969,6 @@ function txp_escape($atts, $thing = '')
 
                 $thing = $textile->TextileThis($thing);
                 break;
-*/
         }
     }
 
