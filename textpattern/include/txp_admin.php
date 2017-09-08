@@ -472,7 +472,7 @@ function author_list($message = '')
         echo n.tag_end('div'). // End of .txp-layout-1col.
             n.'</div>'; // End of .txp-layout.
     } elseif (has_privs('admin.edit.own')) {
-        echo author_edit('', true);
+        echo author_edit($message, true);
     } else {
         require_privs('admin.edit');
     }
