@@ -272,7 +272,7 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
                 .(!empty($subcity) ? '/'.gTxt(str_replace('_', ' ', $subcity)) : '').t
                 /*."($abbr)"*/;
 
-            $out[] = n.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').'>'.$where.' ('.$offset.')'.'</option>';
+            $out[] = n.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').'>'.$where.'</option>';
         }
 
         $out[] = n.'</optgroup>';
