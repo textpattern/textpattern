@@ -1804,20 +1804,9 @@ function article_partial_excerpt($rs)
 
 function article_partial_view_modes($rs)
 {
-    global $view, $use_textile;
+    global $view;
 
-    if (empty($rs['ID'])) {
-        $hasfilter = ($use_textile !== LEAVE_TEXT_UNTOUCHED);
-    } else {
-        $hasfilter = ($rs['textile_body'] !== LEAVE_TEXT_UNTOUCHED || $rs['textile_excerpt'] !== LEAVE_TEXT_UNTOUCHED);
-    }
-
-    if ($hasfilter) {
-        $out = n.tag((tab('text', $view).tab('html', $view).tab('preview', $view)), 'ul');
-    } else {
-        $out = '&#160;';
-    }
-
+    $out = n.tag((tab('text', $view).tab('html', $view).tab('preview', $view)), 'ul');
     $out = pluggable_ui('article_ui', 'view', $out, $rs);
 
     return n.tag($out.n, 'div', array('id' => 'view_modes'));
