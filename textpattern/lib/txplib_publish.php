@@ -595,7 +595,7 @@ function processTags($tag, $atts = '', $thing = null)
 
         unset($txp_atts['process'], $txp_atts['not']);
 
-        if ($txp_atts && $out > '') {
+        if ($txp_atts) {
             foreach ($global_atts as $attr) {
                 if (!empty($txp_atts[$attr])) {
                     $out = $registry->processAttr($attr, $txp_atts, $out);
