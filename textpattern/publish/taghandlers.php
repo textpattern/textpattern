@@ -4059,42 +4059,46 @@ function if_last_section($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function php($atts, $thing)
+function php($atts = null, $thing = null)
 {
     global $is_article_body, $thisarticle, $prefs;
 
-    if (assert_array($prefs) === false) {
-        return '';
-    }
-
-    ob_start();
+    $error = null;
 
     if (empty($is_article_body)) {
-        if (!empty($prefs['allow_page_php_scripting'])) {
-            eval($thing);
-        } else {
-            trigger_error(gTxt('php_code_disabled_page'));
+        if (empty($prefs['allow_page_php_scripting'])) {
+            $error = 'php_code_disabled_page';
         }
     } else {
         if (!empty($prefs['allow_article_php_scripting'])) {
-            if (has_privs('article.php', $thisarticle['authorid'])) {
-                eval($thing);
-            } else {
-                trigger_error(gTxt('php_code_forbidden_user'));
+            if (!has_privs('article.php', $thisarticle['authorid'])) {
+                $error = 'php_code_forbidden_user';
             }
         } else {
-            trigger_error(gTxt('php_code_disabled_article'));
+            $error = 'php_code_disabled_article';
         }
     }
 
-    return ob_get_clean();
+    if ($thing !== null) {
+        ob_start();
+
+        if ($error) {
+            trigger_error(gTxt($error));
+        } else {
+            eval($thing);
+        }
+
+        return ob_get_clean();
+    }
+
+    return empty($error);
 }
 
 // -------------------------------------------------------------
 
 function txp_header($atts)
 {
-    if (php(null, 'echo 1;') !== '1') {
+    if (!php()) {
         return;
     }
 

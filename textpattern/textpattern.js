@@ -921,23 +921,28 @@ jQuery.fn.txpAsyncForm = function (options) {
         var $this = $(this);
         var form =
         {
-            button : $this.find('input[type="submit"]:focus').eq(0),
-            data   : ( window.FormData === undefined ? $this.serialize() : new FormData(this) ),
+            data   : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
             extra  : new Object,
             spinner: $('<span />').addClass('spinner')
         };
 
-        // WebKit does not set :focus on button-click: use first submit input as a fallback.
-        if (!form.button.length) {
-            form.button = $this.find('input[type="submit"]').eq(0);
-        }
+        if (!!extra && typeof extra['_txp_submit'] !== 'undefined') {
+            form.button = $this.find(extra['_txp_submit']).eq(0);
+            delete extra['_txp_submit'];
+        } else {
+            form.button = $this.find('input[type="submit"]:focus').eq(0);
 
-        form.button.attr('disabled', true).after(form.spinner);
+            // WebKit does not set :focus on button-click: use first submit input as a fallback.
+            if (!form.button.length) {
+                form.button = $this.find('input[type="submit"]').eq(0);
+            }
+        }
 
         form.extra[form.button.attr('name') || '_txp_submit'] = form.button.val() || '_txp_submit';
         $.extend(true, form.extra, extra);
 
         // Show feedback while processing.
+        form.button.attr('disabled', true).after(form.spinner);
         $this.addClass('busy');
         $('body').addClass('busy');
 
