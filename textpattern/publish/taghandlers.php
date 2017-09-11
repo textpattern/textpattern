@@ -4967,12 +4967,13 @@ function txp_escape($atts, $thing = '')
                 $thing = $attr($thing);
                 break;
             case 'textile':
-                if ($textile === null) {
-                    $textile = Txp::get('\Textpattern\Textile\Parser');
-                }
+                if (php()) {
+                    if ($textile === null) {
+                        $textile = Txp::get('\Textpattern\Textile\Parser');
+                    }
 
-                $thing = $textile->TextileThis($thing);
-                break;
+                    $thing = $textile->TextileThis($thing);
+                }
         }
     }
 
