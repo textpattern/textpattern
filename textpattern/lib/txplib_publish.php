@@ -425,7 +425,7 @@ function parse($thing, $condition = true)
                 $else[$level] = $count[$level];
             } elseif ($tag[$level][1] === 'txp:') {
                 // Handle <txp::shortcode />.
-                $tag[$level][3] = "form='".$tag[$level][2]."'".$tag[$level][3];
+                $tag[$level][3] = "txp-yield form='".$tag[$level][2]."'".$tag[$level][3];
                 $tag[$level][2] = 'output_form';
             } elseif ($short_tags && $tag[$level][1] !== 'txp') {
                 // Handle <short::tags />.
@@ -568,11 +568,11 @@ function processTags($tag, $atts = '', $thing = null)
         $split = array();
     }
 
-    if (!isset($txp_atts['process'])) {
+    if (!isset($txp_atts['txp-process'])) {
         $out = $registry->process($tag, $split, $thing);
     } else {
-        $process = empty($txp_atts['process']) ? 0 : (is_numeric($txp_atts['process']) ? (int) $txp_atts['process'] : 1);
-        unset($txp_atts['process']);
+        $process = empty($txp_atts['txp-process']) ? 0 : (is_numeric($txp_atts['txp-process']) ? (int) $txp_atts['txp-process'] : 1);
+        unset($txp_atts['txp-process']);
         $out = !$process ? '' : ($process <= $pretext['secondpass'] + 1 ? $registry->process($tag, $split, $thing) : null);
     }
 
@@ -586,14 +586,14 @@ function processTags($tag, $atts = '', $thing = null)
         }
     }
 
-    if ($out === null || isset($txp_atts['process']) && $txp_atts['process'] > $pretext['secondpass'] + 1) {
+    if ($out === null || isset($txp_atts['txp-process']) && $txp_atts['txp-process'] > $pretext['secondpass'] + 1) {
         $out = $pretext['secondpass'] < $max_pass ? $txp_current_tag : '';
     } else {
         if ($thing === null && !empty($txp_atts['not'])) {
             $out = $out ? '' : '1';
         }
 
-        unset($txp_atts['process'], $txp_atts['not']);
+        unset($txp_atts['txp-process'], $txp_atts['not']);
 
         if ($txp_atts) {
             foreach ($txp_atts as $attr => &$val) {
@@ -862,5 +862,5 @@ function postpone_process($pass = null)
 {
     global $pretext, $txp_atts;
 
-    $txp_atts['process'] = intval($pass === null ? $pretext['secondpass'] + 2 : $pass);
+    $txp_atts['txp-process'] = intval($pass === null ? $pretext['secondpass'] + 2 : $pass);
 }
