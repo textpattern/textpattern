@@ -195,7 +195,7 @@ Txp::get('\Textpattern\Tag\Registry')
 // Global attributes: mind the order!
 
     Txp::get('\Textpattern\Tag\Registry')
-    ->registerAttr(false, 'atts, class, html_id, labeltag, not, process')
+    ->registerAttr(false, 'atts, class, html_id, labeltag, not, txp-process')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag')
     ->registerAttr('txp_label', 'label');
@@ -435,9 +435,19 @@ function output_form($atts, $thing = null)
         return '';
     }
 
-    $txp_atts = null;
     $form = $atts['form'];
-    unset($atts['form']);
+
+    if (!empty($atts['txp-yield'])) {
+        $txp_atts = null;
+    } else {
+        lAtts(array(
+            'form' => '',
+            'txp-yield' => ''
+        ), $atts);
+        $atts = array();
+    }
+
+    unset($atts['form'], $atts['txp-yield']);
     $atts += array('' => $thing ? parse($thing) : $thing);
 
     foreach ($atts as $name => $value) {
@@ -4770,7 +4780,8 @@ function hide($atts = array(), $thing = null)
 
     global $pretext;
 
-    extract(lAtts(array('process' => null), $atts));
+    $atts = lAtts(array('txp-process' => null), $atts);
+    $process = $atts['txp-process'];
 
     if (is_numeric($process)) {
         if (intval($process) > $pretext['secondpass'] + 1) {
@@ -4967,12 +4978,13 @@ function txp_escape($atts, $thing = '')
                 $thing = $attr($thing);
                 break;
             case 'textile':
-                if ($textile === null) {
-                    $textile = Txp::get('\Textpattern\Textile\Parser');
-                }
+                if (php()) {
+                    if ($textile === null) {
+                        $textile = Txp::get('\Textpattern\Textile\Parser');
+                    }
 
-                $thing = $textile->TextileThis($thing);
-                break;
+                    $thing = $textile->TextileThis($thing);
+                }
         }
     }
 
