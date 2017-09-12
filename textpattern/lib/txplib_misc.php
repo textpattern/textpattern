@@ -4249,7 +4249,7 @@ function EvalElse($thing, $condition)
         $txp_atts = null;
     }
 
-    if (strpos($thing, ':else') === false || empty($txp_parsed[$hash = sha1($thing)])) {
+    if (!$thing || strpos($thing, ':else') === false || empty($txp_parsed[$hash = sha1($thing)])) {
         return $condition ? $thing : '';
     }
 
