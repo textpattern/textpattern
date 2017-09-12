@@ -4978,13 +4978,12 @@ function txp_escape($atts, $thing = '')
                 $thing = $attr($thing);
                 break;
             case 'textile':
-                if (php()) {
-                    if ($textile === null) {
-                        $textile = Txp::get('\Textpattern\Textile\Parser');
-                    }
-
-                    $thing = $textile->TextileThis($thing);
+                if ($textile === null) {
+                    $textile = Txp::get('\Textpattern\Textile\Parser');
                 }
+
+                $thing = $textile->TextileThis($thing);
+                break;
         }
     }
 
