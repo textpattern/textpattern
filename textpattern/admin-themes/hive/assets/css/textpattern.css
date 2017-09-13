@@ -110,7 +110,7 @@ button {
     width: 1.1538461em;
     border: 1px solid #e0e0e0;
     border-radius: 50%;
-    font-family: "Cambria Math", "Apple Symbols";
+    font-family: "Segoe UI Symbol", "Cambria Math", "Apple Symbols";
     font-weight: normal;
     line-height: 1.1538461em;
     text-align: center;
@@ -2668,19 +2668,16 @@ button {
  */
   .txp-accessibility {
     position: absolute;
-    left: -1000em;
     width: 1px;
     height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    white-space: nowrap;
     overflow: hidden;
-  }
-  /**
- * Swap absolute positions in RTL languages.
- *
- * This avoids browser scrollbar displaying incorrectly.
- */
-  [dir="rtl"] .txp-accessibility {
-    right: -1000em;
-    left: auto;
+    clip: rect(0 0 0 0);
+    -webkit-clip-path: inset(50%);
+            clip-path: inset(50%);
   }
   /**
  * Drop down lists.
@@ -3591,7 +3588,7 @@ button {
     display: none;
   }
   /**
- * Hide jQuery UI  text but still allow screen reader access.
+ * Hide jQuery UI text but still allow screen reader access.
  */
   .ui-helper-hidden-accessible {
     position: absolute;
@@ -3600,8 +3597,11 @@ button {
     margin: -1px;
     padding: 0;
     border: 0;
+    white-space: nowrap;
     overflow: hidden;
     clip: rect(0 0 0 0);
+    -webkit-clip-path: inset(50%);
+            clip-path: inset(50%);
   }
   /**
  * Normalize various rules to avoid style inheritance.
@@ -5991,6 +5991,81 @@ button {
             box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
     z-index: 9999;
   }
+  /* Multi-select menu
+   ========================================================================== */
+  /**
+ * jQuery UI MultiSelect Widget (a jQuery UI plugin)
+ *
+ * Some classes and HTML elements generally added via JavaScript, more info -
+ * https://github.com/ehynds/jquery-ui-multiselect-widget
+ *
+ * Example HTML:
+ *
+ * TODO
+ */
+  .ui-multiselect {
+    padding: 2px 0 2px 4px;
+    text-align: left;
+  }
+  .ui-multiselect span.ui-icon {
+    float: right;
+  }
+  .ui-multiselect-single .ui-multiselect-checkboxes input {
+    position: absolute !important;
+    top: auto !important;
+    left: -9999px;
+  }
+  .ui-multiselect-single .ui-multiselect-checkboxes label {
+    padding: 5px !important;
+  }
+  .ui-multiselect-menu {
+    display: none;
+    position: absolute;
+    padding: 3px;
+    text-align: left;
+  }
+  .ui-multiselect-checkboxes {
+    position: relative;
+    overflow-y: auto;
+  }
+  .ui-multiselect-checkboxes label {
+    display: block;
+    padding: 3px 1px;
+    border: 1px solid transparent;
+    cursor: default;
+  }
+  .ui-multiselect-checkboxes label input {
+    position: relative;
+    top: 1px;
+  }
+  .ui-multiselect-checkboxes label img {
+    height: 30px;
+    padding-right: 3px;
+    vertical-align: middle;
+  }
+  .ui-multiselect-checkboxes li {
+    padding-right: 3px;
+    clear: both;
+    font-size: 0.9em;
+    list-style: none;
+  }
+  .ui-multiselect-checkboxes .ui-multiselect-optgroup {
+    padding: 3px;
+  }
+  .ui-multiselect-columns {
+    display: inline-block;
+    vertical-align: top;
+  }
+  .ui-multiselect-checkboxes .ui-multiselect-optgroup a {
+    display: block;
+    margin: 1px 0;
+    padding: 3px;
+    border-bottom: 1px solid;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+  }
 }
 
 /* ==========================================================================
@@ -6541,5 +6616,11 @@ button {
  */
   .txp-prefs-group.ui-tabs-panel {
     display: block !important;
+  }
+  /**
+ * Don't print jQuery UI multi-select menus.
+ */
+  .ui-multiselect-menu {
+    display: none;
   }
 }

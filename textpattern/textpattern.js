@@ -1,6 +1,6 @@
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -921,23 +921,28 @@ jQuery.fn.txpAsyncForm = function (options) {
         var $this = $(this);
         var form =
         {
-            button : $this.find('input[type="submit"]:focus').eq(0),
-            data   : ( window.FormData === undefined ? $this.serialize() : new FormData(this) ),
+            data   : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
             extra  : new Object,
             spinner: $('<span />').addClass('spinner')
         };
 
-        // WebKit does not set :focus on button-click: use first submit input as a fallback.
-        if (!form.button.length) {
-            form.button = $this.find('input[type="submit"]').eq(0);
-        }
+        if (!!extra && typeof extra['_txp_submit'] !== 'undefined') {
+            form.button = $this.find(extra['_txp_submit']).eq(0);
+            delete extra['_txp_submit'];
+        } else {
+            form.button = $this.find('input[type="submit"]:focus').eq(0);
 
-        form.button.attr('disabled', true).after(form.spinner);
+            // WebKit does not set :focus on button-click: use first submit input as a fallback.
+            if (!form.button.length) {
+                form.button = $this.find('input[type="submit"]').eq(0);
+            }
+        }
 
         form.extra[form.button.attr('name') || '_txp_submit'] = form.button.val() || '_txp_submit';
         $.extend(true, form.extra, extra);
 
         // Show feedback while processing.
+        form.button.attr('disabled', true).after(form.spinner);
         $this.addClass('busy');
         $('body').addClass('busy');
 
@@ -1479,13 +1484,25 @@ jQuery.fn.gTxt = function (opts, tags, escape) {
 
 /**
  * ESC button closes alert messages.
+ * CTRL+S triggers Save buttons click.
  *
- * @since 4.5.0
+ * @since 4.7.0
  */
 
-$(document).keyup(function (e) {
-    if (e.keyCode == 27) {
+$(document).keydown(function (e) {
+    var key = e.which;
+
+    if (key === 27) {
         $('.close').parent().remove();
+    } else if (key === 19 || ((e.metaKey || e.ctrlKey) && String.fromCharCode(key).toLowerCase() === 's'))
+    {
+        var obj = $('input.publish');
+
+        if (obj.length)
+        {
+            e.preventDefault();
+            obj.eq(0).click();
+        }
     }
 });
 
@@ -1780,7 +1797,7 @@ textpattern.Route.add('article', function () {
 
     $('#article_form').on('click', '.txp-clone', function (e) {
         e.preventDefault();
-        form.trigger('submit.txpAsyncForm', {copy:1, publish:1});
+        form.trigger('submit', {copy:1, publish:1});
     });
 
     // Switch to Text/HTML/Preview mode.
@@ -1884,6 +1901,10 @@ textpattern.Route.add('form', function () {
         'checkbox'   : 'input[name="selected_forms[]"][type=checkbox]',
         'row'        : '.switcher-list li, .form-list-name',
         'highlighted': '.switcher-list li'
+    });
+
+    textpattern.Relay.register('txpAsyncForm.success', function () {
+        $('#allforms_form_sections').restorePanes();
     });
 });
 

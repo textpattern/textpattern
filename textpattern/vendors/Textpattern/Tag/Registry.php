@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -78,11 +78,10 @@ class Registry implements \Textpattern\Container\ReusableInterface
      *
      * @param  callback    $callback The attribute callback
      * @param  string|null $tag      The attribute name
-     * @param  bool        $prepend  The order
      * @return \Textpattern\Tag\Registry
      */
 
-    public function registerAttr($callback, $tag = null, $prepend = false)
+    public function registerAttr($callback, $tag = null)
     {
         // is_callable only checks syntax here to avoid autoloading
         if (is_bool($callback)) {
@@ -95,11 +94,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
             }
 
             if ($tag) {
-                if ($prepend) {
-                    $this->atts = array($tag => $callback) + $this->atts;
-                } else {
-                    $this->atts[$tag] = $callback;
-                }
+                $this->atts[$tag] = $callback;
             }
         }
 

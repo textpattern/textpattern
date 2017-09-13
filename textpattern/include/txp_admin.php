@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -472,7 +472,7 @@ function author_list($message = '')
         echo n.tag_end('div'). // End of .txp-layout-1col.
             n.'</div>'; // End of .txp-layout.
     } elseif (has_privs('admin.edit.own')) {
-        echo author_edit('', true);
+        echo author_edit($message, true);
     } else {
         require_privs('admin.edit');
     }

@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -412,14 +412,14 @@ function updateVolatilePartials($partials)
             trigger_error("Empty selector for partial '$k'", E_USER_ERROR);
         } else {
             // Build response script.
-            list($selector, $fragment, $script) = (array)$p['selector'] + array(null, null, '');
+            list($selector, $fragment) = (array)$p['selector'] + array(null, null);
 
             if ($p['mode'] == PARTIAL_VOLATILE) {
                 // Volatile partials replace *all* of the existing HTML
                 // fragment for their selector with the new one.
                 $selector = do_list($selector);
                 $fragment = isset($fragment) ? do_list($fragment) + $selector : $selector;
-                $response[] = 'var $html = $("<div>'.escape_js($p['html']).'</div>")'.$script;
+                $response[] = 'var $html = $("<div>'.escape_js($p['html']).'</div>")';
 
                 foreach ($selector as $i => $sel) {
                     $response[] = '$("'.$sel.'").replaceWith($html.find("'.$fragment[$i].'"))';
@@ -4224,7 +4224,7 @@ function EvalElse($thing, $condition)
         $txp_atts = null;
     }
 
-    if (strpos($thing, ':else') === false || empty($txp_parsed[$hash = sha1($thing)])) {
+    if (!$thing || strpos($thing, ':else') === false || empty($txp_parsed[$hash = sha1($thing)])) {
         return $condition ? $thing : '';
     }
 
@@ -4375,7 +4375,8 @@ function fetch_page($name)
 /**
  * Parses a page template.
  *
- * @param   string $name The template
+ * @param   string $name The template name
+ * @param   string $page or default content
  * @return  string|bool The parsed page template, or FALSE on error
  * @since   4.6.0
  * @package TagParser
@@ -4383,12 +4384,13 @@ function fetch_page($name)
  * echo parse_page('default');
  */
 
-function parse_page($name)
+function parse_page($name, $page = false)
 {
     global $pretext, $trace;
 
-    $page = fetch_page($name);
-    $pretext['secondpass'] = 0;
+    if ($name) {
+        $page = fetch_page($name);
+    }
 
     if ($page !== false) {
         while ($pretext['secondpass'] <= get_pref('secondpass', 1) && strpos($page, '<txp:') !== false) {

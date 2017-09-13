@@ -1,6 +1,6 @@
 # Textpattern CMS
 
-[![Textpattern Logo](https://textpattern.io/assets/img/branding/carver/carver-128px.svg)](http://textpattern.com/)
+[![Textpattern Logo](https://textpattern.io/assets/img/branding/carver/carver-128px.svg)](https://textpattern.com/)
 
 **A flexible, elegant and easy-to-use content management system.**
 
@@ -19,7 +19,7 @@ Textpattern is [free and open source](#legal) software.
 Textpattern is installed to a web server with PHP and MySQL.
 
 Ensure the server meets or exceeds the
-[system requirements](http://textpattern.com/about/119/system-requirements)
+[system requirements](https://textpattern.com/about/119/system-requirements)
 before you continue.
 
 ## Download Textpattern
@@ -28,8 +28,8 @@ before you continue.
 
 The current production release is version 4.6.2. It can be downloaded from the
 Textpattern website as a
-[.zip](http://textpattern.com/latest.zip) or
-[.tar.gz](http://textpattern.com/latest.tar.gz) archive.
+[.zip](https://textpattern.com/latest.zip) or
+[.tar.gz](https://textpattern.com/latest.tar.gz) archive.
 
 ### Development version
 
@@ -55,7 +55,7 @@ for details on upgrading Textpattern.
 The [Textpattern support forum](https://forum.textpattern.io) is home to
 a friendly and helpful community of Textpattern users and experts.
 Textpattern also has social network presences on
-[Google+](http://textpattern.com/+) and [Twitter](http://textpattern.com/@textpattern).
+[Google+](https://textpattern.com/+) and [Twitter](https://textpattern.com/@textpattern).
 
 ## Contributing
 

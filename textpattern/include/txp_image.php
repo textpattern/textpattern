@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -599,7 +599,7 @@ function image_edit($message = '', $id = '')
         extract($rs);
 
         if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own'))) {
-            image_list(gTxt('restricted_area'));
+            require_privs('image.edit');
 
             return;
         }
@@ -758,6 +758,8 @@ function image_edit($message = '', $id = '')
                 'div', array('class' => 'txp-layout-4col-3span')
             ).
             n.'</div>'; // End of .txp-layout.
+    } else {
+        image_list(array(gTxt('unknown_image'), E_ERROR));
     }
 }
 
@@ -768,7 +770,7 @@ function image_edit($message = '', $id = '')
 function image_insert()
 {
     if (!has_privs('image.edit.own')) {
-        image_list(gTxt('restricted_area'));
+        require_privs('image.edit.own');
 
         return;
     }
@@ -798,7 +800,7 @@ function image_replace()
     $rs = safe_row("*", 'txp_image', "id = $id");
 
     if (!has_privs('image.edit') && !($rs['author'] === $txp_user && has_privs('image.edit.own'))) {
-        image_list(gTxt('restricted_area'));
+        require_privs('image.edit');
 
         return;
     }
@@ -832,7 +834,7 @@ function thumbnail_insert()
     $author = fetch('author', 'txp_image', 'id', $id);
 
     if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own'))) {
-        image_list(gTxt('restricted_area'));
+        require_privs('image.edit');
 
         return;
     }
@@ -887,7 +889,7 @@ function image_save()
     $author = fetch('author', 'txp_image', 'id', $id);
 
     if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own'))) {
-        image_list(gTxt('restricted_area'));
+        require_privs('image.edit');
 
         return;
     }
@@ -998,7 +1000,7 @@ function thumbnail_create()
     $author = fetch('author', 'txp_image', 'id', $id);
 
     if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own'))) {
-        image_list(gTxt('restricted_area'));
+        require_privs('image.edit');
 
         return;
     }
@@ -1061,7 +1063,7 @@ function thumbnail_delete()
     $author = fetch('author', 'txp_image', 'id', $id);
 
     if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own'))) {
-        image_list(gTxt('restricted_area'));
+        require_privs('image.edit');
 
         return;
     }

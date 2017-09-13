@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -255,7 +255,7 @@ function form_edit($message = '', $refresh_partials = false)
         // Form list.
         'list' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => array('#allforms_form_sections', null, '.restorePanes()'),
+            'selector' => '#allforms_form_sections',
             'cb'       => 'form_list',
         ),
         // Name field.

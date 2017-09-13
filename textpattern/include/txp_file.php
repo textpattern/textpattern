@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2004 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team

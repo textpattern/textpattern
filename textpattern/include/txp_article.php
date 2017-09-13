@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -260,7 +260,7 @@ function article_save()
 
         if ($ts === false || $ts < 0) {
             $expires = $oldArticle['sExpires'];
-            $msg = array(gTxt('invalid_expirydate'), E_ERROR);
+            $msg = array(gTxt('invalid_expiredate'), E_ERROR);
         } else {
             $expires = $ts - tz_offset($ts);
         }
@@ -458,19 +458,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             'selector' => '[name=sLastMod]',
             'cb'       => 'article_partial_value',
         ),
-/*        // 'Duplicate' link.
-        'article_clone' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#article_partial_article_clone',
-            'cb'       => 'article_partial_article_clone',
-        ),
-        // 'View' link.
-        'article_view' => array(
-            'mode'     => PARTIAL_VOLATILE,
-            'selector' => '#article_partial_article_view',
-            'cb'       => 'article_partial_article_view',
-        ),
-*/        // 'Previous/Next' article links region.
+        // 'Previous/Next' article links region.
         'article_nav' => array(
             'mode'     => PARTIAL_VOLATILE,
             'selector' => 'nav.nav-tertiary',
@@ -737,6 +725,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             $response[] = '$("#article_form").addClass("saved").removeClass("published")';
         } else {
             $response[] = '$("#article_form").addClass("published").removeClass("saved")';
+        }
+
+        if (!empty($GLOBALS['ID'])) {
+            $response[] = "if (typeof window.history.replaceState == 'function') {history.replaceState({}, '', '?event=article&ID=$ID')}";
         }
 
         $response = array_merge($response, updateVolatilePartials($partials));
@@ -1812,20 +1804,9 @@ function article_partial_excerpt($rs)
 
 function article_partial_view_modes($rs)
 {
-    global $view, $use_textile;
+    global $view;
 
-    if (empty($rs['ID'])) {
-        $hasfilter = ($use_textile !== LEAVE_TEXT_UNTOUCHED);
-    } else {
-        $hasfilter = ($rs['textile_body'] !== LEAVE_TEXT_UNTOUCHED || $rs['textile_excerpt'] !== LEAVE_TEXT_UNTOUCHED);
-    }
-
-    if ($hasfilter) {
-        $out = n.tag((tab('text', $view).tab('html', $view).tab('preview', $view)), 'ul');
-    } else {
-        $out = '&#160;';
-    }
-
+    $out = n.tag((tab('text', $view).tab('html', $view).tab('preview', $view)), 'ul');
     $out = pluggable_ui('article_ui', 'view', $out, $rs);
 
     return n.tag($out.n, 'div', array('id' => 'view_modes'));

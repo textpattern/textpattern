@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -44,18 +44,13 @@ class Partial
         global $yield;
 
         extract(lAtts(array(
-            'name' => '',
-            'reset' => false,
-            'value' => $thing ? parse($thing) : $thing
+            'name'    => '',
+            'default' => null
         ), $atts));
 
-        $inner = !empty($yield[$name]) ? end($yield[$name]) : $value;
+        $inner = isset($yield[$name]) ? end($yield[$name]) : (isset($default) ? $default : ($thing ? parse($thing) : $thing));
 
-        if ($reset) {
-            unset($yield[$name]);
-        }
-
-        return isset($inner) ? $inner : '';
+        return $inner;
     }
 
     /**

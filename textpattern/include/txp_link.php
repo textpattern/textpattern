@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
  * Copyright (C) 2017 The Textpattern Development Team
@@ -411,10 +411,12 @@ function link_edit($message = '')
             extract($rs);
 
             if (!has_privs('link.edit') && !($author === $txp_user && has_privs('link.edit.own'))) {
-                link_list(gTxt('restricted_area'));
+                require_privs('link.edit');
 
                 return;
             }
+        } else {
+            link_list(array(gTxt('unknown_link'), E_ERROR));
         }
     }
 
@@ -498,8 +500,9 @@ function link_save()
     }
 
     $author = fetch('author', 'txp_link', 'id', $id);
+
     if (!has_privs('link.edit') && !($author === $txp_user && has_privs('link.edit.own'))) {
-        link_list(gTxt('restricted_area'));
+        require_privs('link.edit');
 
         return;
     }

@@ -18,14 +18,14 @@ system. Textpattern is both free and open source.
 
 == Getting Started ==
 
-* The Textpattern FAQ is available at http://textpattern.com/faq/
+* The Textpattern FAQ is available at https://textpattern.com/faq/
 * In-depth documentation and a comprehensive tag index is available in the
   Textpattern user documentation at https://docs.textpattern.io
 * You can get support and information via:
    Forum:    https://forum.textpattern.io/
-   GitHub:   https://textpattern.io/github
-   Google+:  https://textpattern.io/+
-   Twitter:  https://textpattern.io/@textpattern
+   GitHub:   https://textpattern.com/github
+   Google+:  https://textpattern.com/+
+   Twitter:  https://textpattern.com/@textpattern
 
 
 == Installation ==
@@ -38,12 +38,12 @@ system. Textpattern is both free and open source.
   clients and IDEs have an option to show these hidden files. Otherwise, you can
   temporarily show hidden files in OS X/macOS by using the Terminal.app - follow
   these instructions:
-    https://textpattern.io/hidden-files-osx
+    https://textpattern.com/hidden-files-osx
 * Create or verify the existence of a working MySQL database with valid username
   and password. From Textpattern 4.6.0, the MySQL database user requires INDEX
   permissions in addition to standard SELECT, CREATE, UPDATE, ALTER, etc
   permissions. See the system requirements for a complete list:
-    http://textpattern.com/system-requirements
+    https://textpattern.com/system-requirements
 * Load /textpattern/setup/ (or /subdirectory/textpattern/setup/) in your
   browser to start the installation process and follow the directions.
 * When the installation is complete, remove the /textpattern/setup/ directory
@@ -59,7 +59,7 @@ system. Textpattern is both free and open source.
 
 == IMPORTANT ==
 
-* Check back regularly at http://textpattern.com/ to see if an update is
+* Check back regularly at https://textpattern.com/ to see if an update is
   available. Updates are as painless as possible, often fixing important bugs
   and/or security-related issues as well as offering additional features and
   functionality.
@@ -68,7 +68,7 @@ system. Textpattern is both free and open source.
 == Upgrading ==
 
 * Confirm your web server meets or exceeds the Textpattern system requirements:
-    http://textpattern.com/system-requirements
+    https://textpattern.com/system-requirements
 * Log out of the Textpattern admin-side.
 * Verify the existence of a known-good Textpattern database and file backup.
 * Ensure your MySQL database user has INDEX permissions in addition to any
