@@ -1907,10 +1907,11 @@ textpattern.Route.add('', function () {
             return false;
         });
 
-        $('body').append('<div id="pophelp_dialog" title="Help"></div>');
+        $('body').append('<div id="pophelp_dialog"></div>');
         $('#pophelp_dialog').dialog({
             dialogClass: 'txp-tagbuilder-container',    // FIXME: UI, need pophelp-class
             autoOpen: false,
+            title: textpattern.gTxt('help'),
             focus: function (ev, ui) {
                 $(ev.target).closest('.ui-dialog').focus();
             }
