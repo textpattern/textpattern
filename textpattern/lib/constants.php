@@ -929,11 +929,13 @@ define('TEXTPATTERN_ANNOUNCE_ASYNC', 0x4);
 define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
 
 /**
- * Avoid warnings for php 5.3
+ * Define the default JSON option for json_encode()
  *
  * @since   4.7.0
  */
 
-if( !defined('JSON_UNESCAPED_UNICODE') ){
-    define('JSON_UNESCAPED_UNICODE', 0);
+if (defined('JSON_UNESCAPED_UNICODE')) {
+    define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE);
+} else {
+    define('TEXTPATTERN_JSON', 0);    
 }

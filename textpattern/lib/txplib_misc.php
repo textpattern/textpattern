@@ -4901,7 +4901,7 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
         return true;
     }
 
-    $val = is_scalar($val) ? (string)$val : json_encode($val);
+    $val = is_scalar($val) ? (string)$val : json_encode($val, TEXTPATTERN_JSON);
 
     if (
         safe_insert(
@@ -4969,7 +4969,7 @@ function update_pref($name, $val = null, $event = null, $type = null, $html = nu
     }
 
     if (isset($val)) {
-        $val = is_scalar($val) ? (string)$val : json_encode($val);
+        $val = is_scalar($val) ? (string)$val : json_encode($val, TEXTPATTERN_JSON);
     }
 
     foreach (array('val', 'event', 'type', 'html', 'position') as $field) {
@@ -6246,7 +6246,7 @@ function send_json_response($out = '')
     }
 
     if (!is_string($out)) {
-        $out = json_encode($out);
+        $out = json_encode($out, TEXTPATTERN_JSON);
     }
 
     echo $out;

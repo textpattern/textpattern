@@ -136,7 +136,7 @@ eod;
                 'event'         => 'setup',
                 'step'          => $step,
                 'textarray'     => (object) $textarray_script,
-                )).';').
+                ), TEXTPATTERN_JSON).';').
         script_js('../textpattern.js', TEXTPATTERN_SCRIPT_URL);
 
     $out[] = <<<eod

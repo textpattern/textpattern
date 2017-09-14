@@ -4967,7 +4967,7 @@ function txp_escape($atts, $thing = '')
                 $thing = txpspecialchars($thing);
                 break;
             case 'json':
-                $thing = substr(json_encode($thing), 1, -1);
+                $thing = substr(json_encode($thing, TEXTPATTERN_JSON), 1, -1);
                 break;
             case 'number':
                 $thing = floatval($thing);
