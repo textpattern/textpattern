@@ -158,7 +158,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
 
     public function isRegisteredAttr($tag)
     {
-        return !empty($this->atts[$tag]) && is_callable($this->atts[$tag]);
+        return !is_bool($this->atts[$tag]) && is_callable($this->atts[$tag]);
     }
 
     /**

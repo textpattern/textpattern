@@ -539,7 +539,7 @@ function maybe_tag($tag)
 function processTags($tag, $atts = '', $thing = null)
 {
     global $pretext, $production_status, $txp_current_tag, $txp_current_form, $txp_atts, $txp_tag, $trace;
-    static $registry = null, $global_atts = null, $max_pass = null;
+    static $registry = null, $max_pass = null;
 
     if (empty($tag)) {
         return;
@@ -555,7 +555,6 @@ function processTags($tag, $atts = '', $thing = null)
 
     if ($registry === null) {
         $registry = Txp::get('\Textpattern\Tag\Registry');
-        $global_atts = array_filter($registry->getRegistered(true));
         $max_pass = get_pref('secondpass', 1);
     }
 
@@ -597,8 +596,8 @@ function processTags($tag, $atts = '', $thing = null)
 
         if ($txp_atts) {
             foreach ($txp_atts as $attr => &$val) {
-                if (isset($val) && !empty($global_atts[$attr])) {
-                    $out = $registry->processAttr($attr, $txp_atts, $out);
+                if (isset($val)) {
+                    $out = $registry->processAttr($attr, $split, $out);
                 }
             }
         }
