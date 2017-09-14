@@ -195,7 +195,8 @@ Txp::get('\Textpattern\Tag\Registry')
 // Global attributes: mind the order!
 
     Txp::get('\Textpattern\Tag\Registry')
-    ->registerAttr(false, 'atts, class, html_id, labeltag, not, txp-process')
+    ->registerAttr(false, 'atts, class, html_id, labeltag')
+    ->registerAttr(true, 'not, txp-process')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag')
     ->registerAttr('txp_label', 'label');
@@ -4994,12 +4995,24 @@ function txp_escape($atts, $thing = '')
 
 function txp_wraptag($atts, $thing = '')
 {
-    return trim($thing) !== '' ? doTag($thing, $atts['wraptag'], isset($atts['class']) ? $atts['class'] : '', isset($atts['atts']) ? $atts['atts'] : '', '', isset($atts['html_id']) ? $atts['html_id'] : '') : $thing;
+    extract(lAtts(array(
+        'wraptag' => '',
+        'class'   => '',
+        'atts'    => '',
+        'html_id' => ''
+    ), $atts, false));
+
+    return trim($thing) !== '' ? doTag($thing, $wraptag, $class, $atts, '', $html_id) : $thing;
 }
 
 // -------------------------------------------------------------
 
 function txp_label($atts, $thing = '')
 {
-    return trim($thing) !== '' ? doLabel($atts['label'], isset($atts['labeltag']) ? $atts['labeltag'] : '').n.$thing : $thing;
+    extract(lAtts(array(
+        'label'    => '',
+        'labeltag' => ''
+    ), $atts, false));
+
+    return trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
 }
