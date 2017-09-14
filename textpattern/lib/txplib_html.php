@@ -1229,6 +1229,7 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
         $destination = '?event=help&step=pophelp&item='.urlencode($help_var);
     } else {
         $destination = $url;
+        $class = 'ui-icon ui-icon-extlink';
     }
 
     $ui = sp.href('&#8505;', $destination, array(
@@ -1238,7 +1239,6 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
         'title'      => gTxt('help'),
         'aria-label' => gTxt('help'),
         'role'       => 'button',
-        'onclick'    => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
     ));
 
     return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));

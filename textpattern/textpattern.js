@@ -1074,7 +1074,7 @@ jQuery.fn.txpAsyncHref = function (options) {
  * @since  4.6.0
  */
 
-function txpAsyncLink(event)
+function txpAsyncLink(event, txpEvent)
 {
     event.preventDefault();
     var $this = $(event.target);
@@ -1086,7 +1086,7 @@ function txpAsyncLink(event)
 
     sendAsyncEvent(url, function () {}, 'html')
         .done(function (data, textStatus, jqXHR) {
-            textpattern.Relay.callback('txpAsyncLink.success', {
+            textpattern.Relay.callback('txpAsyncLink.'+txpEvent+'.success', {
                 'this'      : $this,
                 'event'     : event,
                 'data'      : data,
@@ -1095,7 +1095,7 @@ function txpAsyncLink(event)
             });
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
-            textpattern.Relay.callback('txpAsyncLink.error', {
+            textpattern.Relay.callback('txpAsyncLink.'+txpEvent+'.error', {
                 'this'        : $this,
                 'event'       : event,
                 'jqXHR'       : jqXHR,
@@ -1853,13 +1853,13 @@ textpattern.Route.add('css, page, form', function () {
 
 textpattern.Route.add('page, form, file, image', function () {
     // Set up asynchronous tag builder links.
-    textpattern.Relay.register('txpAsyncLink.success', function (event, data) {
+    textpattern.Relay.register('txpAsyncLink.tag.success', function (event, data) {
         $('#tagbuild_links').dialog('close').html($(data['data'])).dialog('open').restorePanes();
         $('#txp-tagbuilder-output').select();
     });
 
     $('#tagbuild_links, .txp-list-col-tag-build').on('click', '.txp-tagbuilder-link', function (ev) {
-        txpAsyncLink(ev);
+        txpAsyncLink(ev, 'tag');
     });
 
     $('#tagbuild_links').dialog({
@@ -1892,6 +1892,30 @@ textpattern.Route.add('page, form, file, image', function () {
             }
         });
     });
+});
+
+// popHelp.
+
+textpattern.Route.add('', function () {
+    if ( $('.pophelp' ).length ) {
+        textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
+            $('#pophelp_dialog').dialog('close').html($(data['data'])).dialog('open').restorePanes();
+        });
+
+        $('.pophelp').on('click', function (ev) {
+            txpAsyncLink(ev, 'pophelp');
+            return false;
+        });
+
+        $('body').append('<div id="pophelp_dialog" title="Help"></div>');
+        $('#pophelp_dialog').dialog({
+            dialogClass: 'txp-tagbuilder-container',    // FIXME: UI, need pophelp-class
+            autoOpen: false,
+            focus: function (ev, ui) {
+                $(ev.target).closest('.ui-dialog').focus();
+            }
+        });
+    }
 });
 
 // Forms panel.
