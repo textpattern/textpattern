@@ -1,0 +1,13 @@
+#@version 4.7.0
+#@admin
+import_skin => Import a new skin:
+no_new_skin_to_import => No new skin to import.
+skin_not_found => Skin not found: <strong>{skin}</strong>.
+invalid_skin_json_file => Invalid JSON skin file: <strong>{file}</strong>.
+skin_step_succeeded => Skin(s) {step}:
+unable_to_create_skin_directory: {$directory} => Unable to create the <strong>{$directory}</strong> skin directory.
+unable_to_remove_skin_directory: {$directory} => Unable to create the <strong>{$directory}</strong> skin directory.
+skin_step_failed => Skin(s) {step} failed for: <strong>{skins}</strong>.  
+unable_to_delete_skin_in_use => Unable to delete skin in use: <strong>{skin}</strong>.
+skin_step_failed_for_templates => {skin} {asset} {step} failed for: <strong>{templates}</strong>.
+skin_step_failed_for_duplicated_templates => {skin} {asset} {step} failed for: <strong>{templates}</strong> (duplicated forms).
