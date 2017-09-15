@@ -550,7 +550,7 @@ function processTags($tag, $atts = '', $thing = null)
 
     if ($production_status !== 'live') {
         $tag_stop = $txp_tag[4];
-        $trace->start($txp_current_tag);
+        $trace->start($txp_tag[0]);
     }
 
     if ($registry === null) {

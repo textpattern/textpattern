@@ -113,7 +113,8 @@ function pagetop($pagetitle = '', $message = '')
                     '#page-link #link-title, #page-link #link-description'
                 ),
                 'production_status' => get_pref('production_status'),
-            )
+            ),
+            TEXTPATTERN_JSON
         ).';'
     ).
     script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;

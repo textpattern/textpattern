@@ -4959,15 +4959,19 @@ function txp_escape($atts, $thing = '')
 {
     static $textile = null;
 
-    $thing = (string)$thing;
+    extract(lAtts(array(
+        'escape'    => ''
+    ), $atts, false));
 
-    foreach (do_list($atts['escape']) as $attr) {
+    $escape = $escape === true ? array('html') : do_list($escape);
+
+    foreach ($escape as $attr) {
         switch ($attr = trim($attr)) {
             case 'html':
                 $thing = txpspecialchars($thing);
                 break;
             case 'json':
-                $thing = substr(json_encode($thing), 1, -1);
+                $thing = substr(json_encode($thing, TEXTPATTERN_JSON), 1, -1);
                 break;
             case 'number':
                 $thing = floatval($thing);
