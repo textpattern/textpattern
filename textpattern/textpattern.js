@@ -1899,11 +1899,17 @@ textpattern.Route.add('page, form, file, image', function () {
 textpattern.Route.add('', function () {
     if ( $('.pophelp' ).length ) {
         textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
-            $('#pophelp_dialog').dialog('close').html($(data['data'])).dialog('open').restorePanes();
+            $(data.event.target).attr("data-item", encodeURIComponent(data.data) );
+            $('#pophelp_dialog').dialog('close').html(data.data).dialog('open').restorePanes();
         });
 
         $('.pophelp').on('click', function (ev) {
-            txpAsyncLink(ev, 'pophelp');
+            var item = $(ev.target).attr('data-item');
+            if (item === undefined ) {
+                txpAsyncLink(ev, 'pophelp');
+            } else {
+                $('#pophelp_dialog').dialog('close').html(decodeURIComponent(item)).dialog('open').restorePanes();
+            }
             return false;
         });
 
