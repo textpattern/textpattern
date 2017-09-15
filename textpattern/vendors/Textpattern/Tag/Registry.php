@@ -88,13 +88,13 @@ class Registry implements \Textpattern\Container\ReusableInterface
             foreach (do_list_unique($tag) as $tag) {
                 $this->atts[$tag] = $callback;
             }
-        } elseif (is_callable($callback, true)) {
+        } elseif ($callback && is_callable($callback, true)) {
             if ($tag === null && is_string($callback)) {
-                $tag = $callback;
-            }
-
-            if ($tag) {
-                $this->atts[$tag] = $callback;
+                $this->atts[$callback] = $callback;
+            } else {
+                foreach (do_list_unique($tag) as $tag) {
+                    $this->atts[$tag] = $callback;
+                }
             }
         }
 
