@@ -4959,9 +4959,13 @@ function txp_escape($atts, $thing = '')
 {
     static $textile = null;
 
-    $thing = (string)$thing;
+    extract(lAtts(array(
+        'escape'    => ''
+    ), $atts, false));
 
-    foreach (do_list($atts['escape']) as $attr) {
+    $escape = $escape === true ? array('html') : do_list($escape);
+
+    foreach ($escape as $attr) {
         switch ($attr = trim($attr)) {
             case 'html':
                 $thing = txpspecialchars($thing);

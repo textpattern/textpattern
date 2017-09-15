@@ -706,20 +706,22 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
 
     if ($datevar == '%d' || $name == 'day' || $name == 'exp_day') {
         $class = 'input-day';
-        $pattern = '(0[1-9]|1[0-9]|2[0-9]|3[01])';
+        $pattern = '([0-2][1-9]|3[01])';
     }
 
     if ($datevar == '%H' || $name == 'hour' || $name == 'exp_hour') {
         $class = 'input-hour';
-        $pattern = '(0[0-9]|1[0-9]|2[0-3])';
+        $pattern = '([0-1][0-9]|2[0-3])';
     }
 
     if ($datevar == '%M' || $name == 'minute' || $name == 'exp_minute') {
         $class = 'input-minute';
+        $pattern = '([0-5][0-9])';
     }
 
     if ($datevar == '%S' || $name == 'second' || $name == 'exp_second') {
         $class = 'input-second';
+        $pattern = '([0-5][0-9])';
     }
 
     return n.tag_void('input', array(
