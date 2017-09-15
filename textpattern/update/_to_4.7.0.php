@@ -128,7 +128,7 @@ if (!$exists) {
         title = 'Default',
         version = '".txp_version."',
         author = 'Team Textpattern',
-        website = 'http://textpattern.com/'"
+        website = 'https://textpattern.com/'"
     );
 }
 

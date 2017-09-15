@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -33,7 +33,7 @@
  * @since   4.7.0
  * @package Skin
  */
- 
+
 namespace Textpattern\Skin {
 
     class Skin extends SkinBase implements SkinInterface
@@ -653,7 +653,7 @@ namespace Textpattern\Skin {
                     'SELECT p.name, f.name, c.name
                      FROM '.safe_pfx('txp_page').' p,
                           '.safe_pfx('txp_form').' f,
-                          '.safe_pfx('txp_css').' c 
+                          '.safe_pfx('txp_css').' c
                      WHERE p.skin = "'.doSlash($this->skin).'" AND
                            f.skin = "'.doSlash($this->skin).'" AND
                            c.skin = "'.doSlash($this->skin).'"
