@@ -218,7 +218,7 @@ namespace Textpattern\Skin {
                         );
                     }
                 } else {
-                    throw new \Exception('duplicted_skin');
+                    throw new \Exception('duplicated_skin');
                 }
             } else {
                 throw new \Exception('unknown_skin');
