@@ -767,7 +767,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         n.'<div class="txp-layout">';
 
     if (!empty($store_out)) {
-        echo hInput('store', base64_encode(json_encode($store_out)));
+        echo hInput('store', base64_encode(json_encode($store_out, TEXTPATTERN_JSON)));
     }
 
     echo hInput('ID', $ID).
