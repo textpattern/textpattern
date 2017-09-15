@@ -266,7 +266,6 @@ namespace Textpattern\Skin {
 
         public function insertTemplates($fields, $values, $update = false)
         {
-
             if ($update) {
                 $updates = array();
 
