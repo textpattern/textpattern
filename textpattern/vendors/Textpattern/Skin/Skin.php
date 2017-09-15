@@ -179,7 +179,7 @@ namespace Textpattern\Skin {
         public function edit()
         {
             if ($this->skinIsInstalled()) {
-                if (!self::isInstalled($this->infos['new_name'])) {
+                if ($this->skin === $this->infos['new_name'] || !self::isInstalled($this->infos['new_name'])) {
                     $sections = $this->isInUse();
                     $callback_extra = array(
                         'skin'   => $this->skin,
