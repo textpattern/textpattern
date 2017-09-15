@@ -586,7 +586,10 @@ namespace Textpattern\Skin {
                 if ($this->hasAssets()) {
                     throw new \Exception('unable_to_delete_non_empty_skin');
                 } elseif ($this->deleteSkin()) {
-                    static::$installed = array_splice(static::$installed, $this->skin, 1);
+                    static::$installed = array_diff_key(
+                        static::$installed,
+                        array($this->skin => '')
+                    );
 
                     self::getCurrent() === $this->skin ? self::setCurrent($this->skin) : '';
 
