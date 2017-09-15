@@ -412,14 +412,14 @@ function updateVolatilePartials($partials)
             trigger_error("Empty selector for partial '$k'", E_USER_ERROR);
         } else {
             // Build response script.
-            list($selector, $fragment, $script) = (array)$p['selector'] + array(null, null, '');
+            list($selector, $fragment) = (array)$p['selector'] + array(null, null);
 
             if ($p['mode'] == PARTIAL_VOLATILE) {
                 // Volatile partials replace *all* of the existing HTML
                 // fragment for their selector with the new one.
                 $selector = do_list($selector);
                 $fragment = isset($fragment) ? do_list($fragment) + $selector : $selector;
-                $response[] = 'var $html = $("<div>'.escape_js($p['html']).'</div>")'.$script;
+                $response[] = 'var $html = $("<div>'.escape_js($p['html']).'</div>")';
 
                 foreach ($selector as $i => $sel) {
                     $response[] = '$("'.$sel.'").replaceWith($html.find("'.$fragment[$i].'"))';
@@ -2140,7 +2140,7 @@ function pluggable_ui($event, $element, $default = '')
     // Custom user interface, anyone?
     // Signature for called functions:
     // string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
-    $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => trim((string)$default) === '' ? 0 : array(0, 0)) + $argv);
+    $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => (string) $default === '' ? 0 : array(0, 0)) + $argv);
 
     // Either plugins provided a user interface, or we render our own.
     return ($ui === '') ? $default : $ui;
@@ -2537,7 +2537,7 @@ function splat($text)
     global $production_status, $trace, $txp_atts;
 
     if ($globals === null) {
-        $globals = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
+        $globals = array_filter(Txp::get('\Textpattern\Tag\Registry')->getRegistered(true));
     }
 
     $sha = sha1($text);

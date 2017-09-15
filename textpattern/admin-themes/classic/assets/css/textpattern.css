@@ -4555,12 +4555,8 @@ button {
     padding: 0.25em;
     text-align: center;
   }
-  .ui-datepicker td a.ui-state-active {
-    background-color: #fff8dd;
-  }
   .ui-datepicker td a.ui-state-highlight {
     border-color: #cccccc;
-    background-color: #dff0d8;
   }
   .ui-datepicker td a.ui-state-highlight:hover {
     background-color: #eef7ea;
@@ -4571,6 +4567,12 @@ button {
   .ui-datepicker td.ui-datepicker-week-col {
     padding: 0.32em 0;
     text-align: center;
+  }
+  .ui-datepicker td.ui-datepicker-today a {
+    background-color: #dff0d8;
+  }
+  .ui-datepicker td.ui-datepicker-current-day a {
+    background-color: #fff8dd;
   }
   .ui-datepicker .ui-datepicker-buttonpane {
     margin: 0.7em 0 0;
