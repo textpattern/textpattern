@@ -189,10 +189,13 @@ namespace Textpattern\Skin {
                     callback_event('skin', 'edit', 0, $callback_extra);
 
                     if ($this->editSkin()) {
+                        $new = strtolower(sanitizeForUrl($this->infos['new_name']));
+                        rename($this->getPath(), self::getBasePath().'/'.$new);
+
                         if ($sections) {
                             safe_update(
                                 'txp_section',
-                                "skin = '".doSlash(strtolower(sanitizeForUrl($this->infos['new_name'])))."'",
+                                "skin = '".doSlash($new)."'",
                                 "skin = '".doSlash($this->skin)."'"
                             );
                         }
