@@ -255,7 +255,7 @@ function form_edit($message = '', $refresh_partials = false)
         // Form list.
         'list' => array(
             'mode'     => PARTIAL_VOLATILE,
-            'selector' => array('#allforms_form_sections', null, '.restorePanes()'),
+            'selector' => '#allforms_form_sections',
             'cb'       => 'form_list',
         ),
         // Name field.
