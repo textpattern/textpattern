@@ -4499,9 +4499,10 @@ button {
   .ui-datepicker .ui-datepicker-prev,
   .ui-datepicker .ui-datepicker-next {
     position: absolute;
-    top: 0.25em;
+    top: 50%;
     width: 1.8em;
     height: 1.8em;
+    margin-top: -0.9em;
     border-radius: 0.5em;
     background-color: transparent;
   }
