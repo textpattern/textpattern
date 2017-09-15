@@ -1219,27 +1219,36 @@ function assHead()
 
 function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
 {
+    global $txp_user;
+
     if (!$help_var) {
         return '';
     }
 
     $url = filter_var($help_var, FILTER_VALIDATE_URL);
 
-    if ($url === false) {
-        $destination = '?event=help&step=pophelp&item='.urlencode($help_var);
-    } else {
-        $destination = $url;
-        $class = 'ui-icon ui-icon-extlink';
-    }
-
-    $ui = sp.href('&#8505;', $destination, array(
+    $atts = array(
         'class'      => $class,
         'rel'        => 'help',
         'target'     => '_blank',
         'title'      => gTxt('help'),
         'aria-label' => gTxt('help'),
         'role'       => 'button',
-    ));
+    );
+
+    if ($url === false) {
+        // Use inline pophelp, if unauthorized user or setup stage
+        if (empty($txp_user)) {
+            $url = '#';
+            $atts['data-item'] = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp($help_var);
+        } else {
+            $url = '?event=help&step=pophelp&item='.urlencode($help_var);
+        }
+    } else {
+        $atts['class'] = 'ui-icon ui-icon-extlink';
+    }
+
+    $ui = sp.href('&#8505;', $url, $atts);
 
     return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
 }

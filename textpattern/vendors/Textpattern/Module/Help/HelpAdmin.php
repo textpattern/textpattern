@@ -39,6 +39,7 @@ class HelpAdmin
     );
 
     private static $textile;
+    protected static $pophelp_xml;
 
     /**
      * Constructor.
@@ -70,8 +71,11 @@ class HelpAdmin
         if (!file_exists($file)) {
             return false;
         }
+        if (empty(self::$pophelp_xml)) {
+            self::$pophelp_xml = simplexml_load_file($file, "SimpleXMLElement", LIBXML_NOCDATA);
+        }
 
-        return simplexml_load_file($file, "SimpleXMLElement", LIBXML_NOCDATA);
+        return self::$pophelp_xml;
     }
 
 
@@ -79,11 +83,11 @@ class HelpAdmin
      * pophelp.
      */
 
-    public static function pophelp()
+    public static function pophelp($string = '')
     {
         global $app_mode;
 
-        $item = gps('item');
+        $item = empty($string) ? gps('item') : $string;
         if (empty($item) || preg_match('/[^\w]/i', $item)) {
             exit;
         }
@@ -114,30 +118,14 @@ class HelpAdmin
             }
         }
 
+        $out = tag($out, 'div', array('id' => 'pophelp-event'));
+
         if ($app_mode == 'async') {
             pagetop('');
-            echo tag($out, 'div', array('id' => 'pophelp-event'));
-            return;
+            exit($out);
         }
 
-        // Temporary code, it will be deleted in the next step.
-        echo <<<EOF
-<!DOCTYPE html>
-<html lang="en-gb" class="no-js">
-<head>
-    <meta charset="utf-8">
-    <title>{$title}</title>
-    <meta name="robots" content="noindex, follow, noodp, noydir">
-</head>
-<body>
-    <hr />
-    {$out}
-    <hr />
-</body>
-</html>
-EOF;
-
-        exit;
+        return $out;
     }
 
     public static function dashboard()
