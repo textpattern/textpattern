@@ -536,7 +536,7 @@ namespace Textpattern\Skin {
 
             if ($author) {
                 $authors = explode(', ', $author);
-                $contents['authors'] ?: $contents['authors'] = array();
+                $contents['authors'] = array();
 
                 for ($i = 0, $count = count($authors); $i < $count; $i++) {
                     $contents['authors'][$i]['name'] = $authors[$i];
