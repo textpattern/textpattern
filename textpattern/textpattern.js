@@ -1946,6 +1946,10 @@ textpattern.Route.add('form', function () {
         'row'        : '.switcher-list li, .form-list-name',
         'highlighted': '.switcher-list li'
     });
+
+    textpattern.Relay.register('txpAsyncForm.success', function () {
+        $('#allforms_form_sections').restorePanes();
+    });
 });
 
 // Admin panel.

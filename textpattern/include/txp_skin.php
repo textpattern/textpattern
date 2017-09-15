@@ -2,10 +2,10 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2015 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -453,7 +453,7 @@ function skin_save()
 }
 
 /**
- * Changes and saves the pageby value.
+ * Changes and saves the 'pageby' value.
  */
 
 function skin_change_pageby()
@@ -516,7 +516,7 @@ function skin_multi_edit()
 }
 
 /**
- * Imports an upload skin into the db.
+ * Imports an uploaded skin into the database.
  */
 
 function skin_import()

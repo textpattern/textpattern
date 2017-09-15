@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -29,7 +29,7 @@
  * @since   4.7.0
  * @package Skin
  */
- 
+
 namespace Textpattern\Skin {
 
     abstract class SkinBase extends MainBase implements SkinInterface

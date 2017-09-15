@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -266,7 +266,6 @@ namespace Textpattern\Skin {
 
         public function insertTemplates($fields, $values, $update = false)
         {
-
             if ($update) {
                 $updates = array();
 
