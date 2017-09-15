@@ -453,7 +453,7 @@ function skin_save()
 }
 
 /**
- * Changes and saves the pageby value.
+ * Changes and saves the 'pageby' value.
  */
 
 function skin_change_pageby()
@@ -516,7 +516,7 @@ function skin_multi_edit()
 }
 
 /**
- * Imports an upload skin into the db.
+ * Imports an uploaded skin into the database.
  */
 
 function skin_import()
