@@ -1828,6 +1828,10 @@ function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = 
         return '';
     }
 
+    if (is_array($break)) {
+        extract($break);
+    }
+
     if ($id) {
         $atts .= ' id="'.txpspecialchars($id).'"';
     }
@@ -1840,13 +1844,27 @@ function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = 
         $breakatts .= ' class="'.txpspecialchars($breakclass).'"';
     }
 
+    if ($break && !empty($breakby) && (int) $breakby != 1) {
+        $breakby = array_filter(array_map('intval', do_list($breakby)));
+        $count = count($breakby);
+        if ($count == 1 && $breakby[0] > 1) {
+            $list = array_map('implode', array_chunk($list, $breakby[0]));
+        } elseif ($count) {
+            $newlist = array();
+            for ($i = 0; count($list); $i = ($i+1)%$count) {
+                $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
+            }
+            $list = array_map('implode', $newlist);
+        }
+    }
+
     // Non-enclosing breaks.
-    if (!preg_match('/^\w+$/', $break) or $break == 'br' or $break == 'hr') {
-        if ($break == 'br' or $break == 'hr') {
+    if ($break == 'br' || $break == 'hr' || !preg_match('/^\w+$/', $break)) {
+        if ($break == 'br' || $break == 'hr') {
             $break = "<$break $breakatts/>".n;
         }
 
-        return ($wraptag) ?    tag(join($break, $list), $wraptag, $atts) :    join($break, $list);
+        return ($wraptag) ? tag(join($break, $list), $wraptag, $atts) : join($break, $list);
     }
 
     return ($wraptag)
