@@ -1824,8 +1824,17 @@ function asyncHref($item, $parms, $atts = '')
 
 function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '', $breakatts = '', $id = '')
 {
+    global $txp_atts;
+    static $import = array('breakby', 'breakclass');
+
     if (!$list) {
         return '';
+    }
+
+    foreach($import as $global) {
+        if (isset($txp_atts[$global])) {
+            $$global = $txp_atts[$global];
+        }
     }
 
     if (is_array($break)) {
@@ -1844,17 +1853,27 @@ function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = 
         $breakatts .= ' class="'.txpspecialchars($breakclass).'"';
     }
 
-    if ($break && !empty($breakby) && (int) $breakby != 1) {
+    if ($break && !empty($breakby)) {
         $breakby = array_filter(array_map('intval', do_list($breakby)));
-        $count = count($breakby);
-        if ($count == 1 && $breakby[0] > 1) {
-            $list = array_map('implode', array_chunk($list, $breakby[0]));
-        } elseif ($count) {
-            $newlist = array();
-            for ($i = 0; count($list); $i = ($i+1)%$count) {
-                $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
-            }
-            $list = array_map('implode', $newlist);
+
+        switch ($count = count($breakby)) {
+            case 0:
+                break;
+            case 1:
+                if ($breakby[0] > 1) {
+                    $list = array_map('implode', array_chunk($list, $breakby[0]));
+                    break;
+                } elseif ($breakby[0] == 1) {
+                    break;
+                }
+             default:
+                $newlist = array();
+
+                for ($i = 0; count($list); $i = ($i + 1)%$count) {
+                    $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
+                }
+
+                $list = array_map('implode', $newlist);
         }
     }
 

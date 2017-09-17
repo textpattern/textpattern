@@ -190,16 +190,12 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_message_input')
     ->register('comment_remember')
     ->register('comment_preview')
-    ->register('comment_submit');
-
-// Global attributes: mind the order!
-
-    Txp::get('\Textpattern\Tag\Registry')
+    ->register('comment_submit')
+// Global attributes (if false, just removes unknown attribute warning)
     ->registerAttr(false, 'atts, class, html_id, labeltag')
-    ->registerAttr(true, 'not, txp-process')
+    ->registerAttr(true, 'not, txp-process, breakby, breakclass')
     ->registerAttr('txp_escape', 'escape')
-    ->registerAttr('txp_wraptag', 'wraptag')
-    ->registerAttr('txp_label', 'label');
+    ->registerAttr('txp_wraptag', 'wraptag, label');
 
 // -------------------------------------------------------------
 
@@ -5000,23 +4996,15 @@ function txp_escape($atts, $thing = '')
 function txp_wraptag($atts, $thing = '')
 {
     extract(lAtts(array(
+        'label'    => '',
+        'labeltag' => '',
         'wraptag' => '',
         'class'   => '',
         'atts'    => '',
         'html_id' => ''
-    ), $atts, false));
+    ), $atts));
 
-    return trim($thing) !== '' ? doTag($thing, $wraptag, $class, $atts, '', $html_id) : $thing;
-}
+    $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, $atts, '', $html_id) : $thing;
 
-// -------------------------------------------------------------
-
-function txp_label($atts, $thing = '')
-{
-    extract(lAtts(array(
-        'label'    => '',
-        'labeltag' => ''
-    ), $atts, false));
-
-    return trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
+    return $label ? doLabel($label, $labeltag).n.$thing : $thing;
 }

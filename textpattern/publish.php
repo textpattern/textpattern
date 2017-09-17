@@ -178,7 +178,7 @@ $pretext = !isset($pretext) ? array() : $pretext;
 $pretext = array_merge($pretext, pretext($s, $prefs));
 callback_event('pretext_end');
 extract($pretext);
-$pretext['secondpass'] = 0;
+$pretext += array('secondpass' => 0, 'parse_atts' => false);
 
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
