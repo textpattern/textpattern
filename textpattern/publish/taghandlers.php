@@ -4004,8 +4004,7 @@ function if_last_category($atts, $thing = null)
 
 function if_section($atts, $thing = null)
 {
-    global $pretext;
-    extract($pretext);
+    global $s;
 
     extract(lAtts(array(
         'name' => false,
@@ -5006,5 +5005,5 @@ function txp_wraptag($atts, $thing = '')
 
     $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, $atts, '', $html_id) : $thing;
 
-    return $label ? doLabel($label, $labeltag).n.$thing : $thing;
+    return $label && trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
 }

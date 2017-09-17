@@ -1822,7 +1822,7 @@ function asyncHref($item, $parms, $atts = '')
  * echo doWrap(array('item1', 'item2'), 'div', 'p');
  */
 
-function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '', $breakatts = '', $id = '')
+function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '', $breakatts = '', $html_id = '')
 {
     global $txp_atts;
     static $import = array('breakby', 'breakclass');
@@ -1832,17 +1832,17 @@ function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = 
     }
 
     foreach($import as $global) {
-        if (isset($txp_atts[$global])) {
+        if (isset($txp_atts[$global]) && empty($$global)) {
             $$global = $txp_atts[$global];
         }
     }
 
     if (is_array($break)) {
-        extract($break);
+        extract($break + array('break' => ''));
     }
 
-    if ($id) {
-        $atts .= ' id="'.txpspecialchars($id).'"';
+    if ($html_id) {
+        $atts .= ' id="'.txpspecialchars($html_id).'"';
     }
 
     if ($class) {
@@ -1854,19 +1854,17 @@ function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = 
     }
 
     if ($break && !empty($breakby)) {
-        $breakby = array_filter(array_map('intval', do_list($breakby)));
+        $breakby = array_merge(array(), array_filter(array_map('intval', do_list($breakby))));
 
         switch ($count = count($breakby)) {
             case 0:
                 break;
             case 1:
-                if ($breakby[0] > 1) {
-                    $list = array_map('implode', array_chunk($list, $breakby[0]));
-                    break;
-                } elseif ($breakby[0] == 1) {
+                if ($breakby[0] > 0) {
+                    $breakby[0] == 1 or $list = array();
                     break;
                 }
-             default:
+            default:
                 $newlist = array();
 
                 for ($i = 0; count($list); $i = ($i + 1)%$count) {
