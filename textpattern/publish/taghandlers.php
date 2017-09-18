@@ -191,8 +191,8 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_remember')
     ->register('comment_preview')
     ->register('comment_submit')
-// Global attributes (if false, just removes unknown attribute warning)
-    ->registerAttr(false, 'atts, class, html_id, labeltag')
+// Global attributes (false just removes unknown attribute warning)
+    ->registerAttr(false, 'class, html_id, labeltag')
     ->registerAttr(true, 'not, txp-process, breakby, breakclass')
     ->registerAttr('txp_escape', 'escape')
     ->registerAttr('txp_wraptag', 'wraptag, label');
@@ -1313,7 +1313,7 @@ function category_list($atts, $thing = null)
         unset($cache[$hash]);
     }
 
-    return $out ? ($label ? doLabel($label, $labeltag) : '').doWrap($out, $wraptag, $break, $class, '', '', '', $html_id) : '';
+    return $out ? ($label ? doLabel($label, $labeltag) : '').doWrap($out, $wraptag, compact('break', 'class', 'html_id')) : '';
 }
 
 // -------------------------------------------------------------
@@ -1427,7 +1427,7 @@ function section_list($atts, $thing = null)
         $thissection = isset($old_section) ? $old_section : null;
 
         if ($out) {
-            return doWrap($out, $wraptag, $break, $class, '', '', '', $html_id);
+            return doWrap($out, $wraptag, compact('break', 'class', 'html_id'));
         }
     }
 
@@ -3440,7 +3440,7 @@ function images($atts, $thing = null)
         $thisimage = (isset($old_image) ? $old_image : null);
 
         if ($out) {
-            return doWrap($out, $wraptag, $break, $class, '', '', '', $html_id);
+            return doWrap($out, $wraptag, compact('break', 'class', 'html_id'));
         }
     }
 
@@ -4777,12 +4777,11 @@ function hide($atts = array(), $thing = null)
 
     global $pretext;
 
-    $atts = lAtts(array('txp-process' => null), $atts);
-    $process = $atts['txp-process'];
+    extract(lAtts(array('process' => null), $atts));
 
     if (is_numeric($process)) {
         if (intval($process) > $pretext['secondpass'] + 1) {
-            return null;
+            return postpone_process($process);
         } else {
             return $process ? parse($thing) : '';
         }
@@ -5000,11 +4999,10 @@ function txp_wraptag($atts, $thing = '')
         'labeltag' => '',
         'wraptag' => '',
         'class'   => '',
-        'atts'    => '',
         'html_id' => ''
     ), $atts));
 
-    $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, $atts, '', $html_id) : $thing;
+    $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
 
     return $label && trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
 }
