@@ -183,7 +183,7 @@ function doLoginForm($message)
         join('', $out), '', '', 'post', 'txp-login', '', 'login_form').
 
     script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('textpattern.textarray = '.json_encode($textarray_script)).
+    script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON)).
     n.'</main><!-- /txp-body -->'.n.'</body>'.n.'</html>';
 
     exit(0);

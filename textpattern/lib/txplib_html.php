@@ -104,7 +104,7 @@ function end_page()
 
         echo script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL, array(array('admin', 'admin'), array('new_pass_form', 'change_pass'))).
             script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL).
-            script_js('textpattern.textarray = '.json_encode($textarray_script)).
+            script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON)).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }
 }
@@ -1822,14 +1822,27 @@ function asyncHref($item, $parms, $atts = '')
  * echo doWrap(array('item1', 'item2'), 'div', 'p');
  */
 
-function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '', $breakatts = '', $id = '')
+function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '', $breakatts = '', $html_id = '')
 {
+    global $txp_atts;
+    static $import = array('breakby', 'breakclass');
+
     if (!$list) {
         return '';
     }
 
-    if ($id) {
-        $atts .= ' id="'.txpspecialchars($id).'"';
+    foreach($import as $global) {
+        if (isset($txp_atts[$global]) && empty($$global)) {
+            $$global = $txp_atts[$global];
+        }
+    }
+
+    if (is_array($break)) {
+        extract($break + array('break' => ''));
+    }
+
+    if ($html_id) {
+        $atts .= ' id="'.txpspecialchars($html_id).'"';
     }
 
     if ($class) {
@@ -1840,13 +1853,35 @@ function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = 
         $breakatts .= ' class="'.txpspecialchars($breakclass).'"';
     }
 
+    if ($break && !empty($breakby)) {
+        $breakby = array_merge(array(), array_filter(array_map('intval', do_list($breakby))));
+
+        switch ($count = count($breakby)) {
+            case 0:
+                break;
+            case 1:
+                if ($breakby[0] > 0) {
+                    $breakby[0] == 1 or $list = array();
+                    break;
+                }
+            default:
+                $newlist = array();
+
+                for ($i = 0; count($list); $i = ($i + 1)%$count) {
+                    $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
+                }
+
+                $list = array_map('implode', $newlist);
+        }
+    }
+
     // Non-enclosing breaks.
-    if (!preg_match('/^\w+$/', $break) or $break == 'br' or $break == 'hr') {
-        if ($break == 'br' or $break == 'hr') {
+    if ($break == 'br' || $break == 'hr' || !preg_match('/^\w+$/', $break)) {
+        if ($break == 'br' || $break == 'hr') {
             $break = "<$break $breakatts/>".n;
         }
 
-        return ($wraptag) ?    tag(join($break, $list), $wraptag, $atts) :    join($break, $list);
+        return ($wraptag) ? tag(join($break, $list), $wraptag, $atts) : join($break, $list);
     }
 
     return ($wraptag)

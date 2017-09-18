@@ -8,7 +8,8 @@ Changes in 4.7.0 (upcoming)
   detail' checkboxes. Settings remembered per device.
 * Added: Valueless attributes.
 * Added: Short tags.
-* Added: Tag global attributes: atts, class, escape, html_id, wraptag, not, txp-process.
+* Added: Tag global attributes: 'atts', 'breakby', 'breakclass', 'class',
+  'escape', 'html_id', 'not', 'txp-process' and 'wraptag'.
 * Added: <txp:evaluate /> tag.
 * Added: <txp:header /> tag.
 * Added: <txp:article_custom /> tag can count pages. Enhanced 'month' and 'time' attributes.
@@ -54,7 +55,7 @@ Changes in 4.7.0 (upcoming)
 * Fixed: Only update database version string if using release version.
 * jQuery 3.2.1.
 * zxcvbn 4.4.2.
-* PrismJS 1.7.0.
+* PrismJS 1.8.1.
 * PHPass 0.5.
 
 Changes in 4.6.2
