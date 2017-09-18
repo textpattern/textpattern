@@ -327,7 +327,7 @@ namespace Textpattern\Skin {
         {
             extract($this->getJSONInfos());
 
-            if ($authors) {
+            if (isset($authors)) {
                 $author_list = array();
 
                 foreach ($authors as $author) {
@@ -337,11 +337,11 @@ namespace Textpattern\Skin {
 
             return (bool) safe_upsert(
                 self::$table,
-                "title = '".doSlash($name)."',
-                 version = '".doSlash($version)."',
-                 description = '".doSlash($description)."',
-                 author = '".doSlash(implode(', ', $author_list))."',
-                 website = '".doSlash($homepage)."'
+                "title = '".doSlash(isset($name) ? $name : $this->skin)."',
+                 version = '".doSlash(isset($version) ? $version : '')."',
+                 description = '".doSlash(isset($description) ? $description : '')."',
+                 author = '".doSlash(isset($author_list) ? implode(', ', $author_list) : '')."',
+                 website = '".doSlash(isset($homepage) ? $homepage : '')."'
                 ",
                 "name = '".doSlash($this->skin)."'"
             );
