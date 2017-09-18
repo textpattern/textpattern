@@ -1825,7 +1825,7 @@ function asyncHref($item, $parms, $atts = '')
 function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $atts = null, $breakatts = null, $html_id = null)
 {
     global $txp_atts;
-    static $import = array('atts', 'breakby', 'breakclass');
+    static $import = array('breakby', 'breakclass');
 
     if (!$list) {
         return '';

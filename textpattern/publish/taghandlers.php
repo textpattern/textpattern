@@ -191,7 +191,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_remember')
     ->register('comment_preview')
     ->register('comment_submit')
-// Global attributes (if false, just removes unknown attribute warning)
+// Global attributes (false just removes unknown attribute warning)
     ->registerAttr(false, 'class, html_id, labeltag')
     ->registerAttr(true, 'not, txp-process, breakby, breakclass')
     ->registerAttr('txp_escape', 'escape')
@@ -4776,12 +4776,11 @@ function hide($atts = array(), $thing = null)
 
     global $pretext;
 
-    $atts = lAtts(array('txp-process' => null), $atts);
-    $process = $atts['txp-process'];
+    extract(lAtts(array('process' => null), $atts));
 
     if (is_numeric($process)) {
         if (intval($process) > $pretext['secondpass'] + 1) {
-            return null;
+            return postpone_process($process);
         } else {
             return $process ? parse($thing) : '';
         }
