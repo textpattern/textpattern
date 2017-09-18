@@ -190,7 +190,10 @@ namespace Textpattern\Skin {
 
                     if ($this->editSkin()) {
                         $new = strtolower(sanitizeForUrl($this->infos['new_name']));
-                        rename($this->getPath(), self::getBasePath().'/'.$new);
+
+                        if (file_exists($path = $this->getPath())) {
+                            rename($path, self::getBasePath().'/'.$new);
+                        }
 
                         if ($sections) {
                             safe_update(
