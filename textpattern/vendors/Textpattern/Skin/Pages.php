@@ -82,7 +82,7 @@ namespace Textpattern\Skin {
 
             return (bool) file_put_contents(
                 $this->getPath(static::$dir.'/'.$name.'.'.static::$extension),
-                $user_html
+                $user_html ? $user_html : '// Empty page.'
             );
         }
     }
