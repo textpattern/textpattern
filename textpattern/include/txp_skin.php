@@ -394,7 +394,8 @@ function skin_edit($message = null)
             $input = text_area($field, 0, 0, $current, "skin_$field");
         } else {
             $required = ($field === 'name') ? true : false;
-            $input = fInput('text', $field, $current, '', '', '', INPUT_REGULAR, '', "skin_$field", false, $required);
+            $type = ($field === 'website') ? 'url' : 'text';
+            $input = fInput($type, $field, $current, '', '', '', INPUT_REGULAR, '', "skin_$field", false, $required);
         }
 
         $out[] = inputLabel("skin_$field", $input, "skin_$field");
