@@ -178,7 +178,7 @@ $pretext = !isset($pretext) ? array() : $pretext;
 $pretext = array_merge($pretext, pretext($s, $prefs));
 callback_event('pretext_end');
 extract($pretext);
-$pretext['secondpass'] = 0;
+$pretext += array('secondpass' => 0, 'parse_atts' => false);
 
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
@@ -722,6 +722,8 @@ function doArticles($atts, $iscustom, $thing = null)
         'pgonly'        => 0,
         'wraptag'       => '',
         'break'         => '',
+        'breakby'       => '',
+        'breakclass'    => '',
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
@@ -998,7 +1000,7 @@ function doArticles($atts, $iscustom, $thing = null)
             unset($GLOBALS['thisarticle']);
         }
 
-        return doLabel($label, $labeltag).doWrap($articles, $wraptag, $break, $class);
+        return doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class'));
     }
 }
 

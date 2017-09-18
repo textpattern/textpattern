@@ -539,7 +539,7 @@ function maybe_tag($tag)
 function processTags($tag, $atts = '', $thing = null)
 {
     global $pretext, $production_status, $txp_current_tag, $txp_current_form, $txp_atts, $txp_tag, $trace;
-    static $registry = null, $max_pass = null;
+    static $registry = null, $max_pass, $globals;
 
     if (empty($tag)) {
         return;
@@ -550,11 +550,12 @@ function processTags($tag, $atts = '', $thing = null)
 
     if ($production_status !== 'live') {
         $tag_stop = $txp_tag[4];
-        $trace->start($txp_current_tag);
+        $trace->start($txp_tag[0]);
     }
 
     if ($registry === null) {
         $registry = Txp::get('\Textpattern\Tag\Registry');
+        $globals = array_filter(Txp::get('\Textpattern\Tag\Registry')->getRegistered(true));
         $max_pass = get_pref('secondpass', 1);
     }
 
@@ -595,11 +596,15 @@ function processTags($tag, $atts = '', $thing = null)
         unset($txp_atts['txp-process'], $txp_atts['not']);
 
         if ($txp_atts) {
+            $pretext['parse_atts'] = true;
+
             foreach ($txp_atts as $attr => &$val) {
-                if (isset($val)) {
+                if (isset($val) && $globals[$attr] !== true) {
                     $out = $registry->processAttr($attr, $split, $out);
                 }
             }
+
+            $pretext['parse_atts'] = false;
         }
     }
 

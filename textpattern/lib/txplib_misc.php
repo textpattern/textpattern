@@ -2158,22 +2158,32 @@ function pluggable_ui($event, $element, $default = '')
 
 function lAtts($pairs, $atts, $warn = true)
 {
-    global $production_status, $txp_atts;
-    static $globals = null;
+    global $pretext, $production_status, $txp_atts;
+    static $globals = null, $global_atts;
 
     if ($globals === null) {
-        $globals = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
+        $global_atts = Txp::get('\Textpattern\Tag\Registry')->getRegistered(true);
+        $globals = array_filter($global_atts);
     }
 
-    foreach ($atts as $name => $value) {
-        if (array_key_exists($name, $pairs)) {
-            if ($pairs[$name] !== null) {
+    if (empty($pretext['parse_atts'])) {
+        foreach ($atts as $name => $value) {
+            if (array_key_exists($name, $pairs)) {
+                if ($pairs[$name] !== null) {
+                    unset($txp_atts[$name]);
+                }
+
+                $pairs[$name] = $value;
+            } elseif ($warn && $production_status !== 'live' && !array_key_exists($name, $global_atts)) {
+                trigger_error(gTxt('unknown_attribute', array('{att}' => $name)));
+            }
+        }
+    } else { // don't import unset globals
+        foreach ($atts as $name => $value) {
+            if (array_key_exists($name, $pairs) && (!isset($globals[$name]) || isset($txp_atts[$name]))) {
+                $pairs[$name] = $value;
                 unset($txp_atts[$name]);
             }
-
-            $pairs[$name] = $value;
-        } elseif ($warn && $production_status !== 'live' && !array_key_exists($name, $globals)) {
-            trigger_error(gTxt('unknown_attribute', array('{att}' => $name)));
         }
     }
 
@@ -4901,7 +4911,7 @@ function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html =
         return true;
     }
 
-    $val = is_scalar($val) ? (string)$val : json_encode($val);
+    $val = is_scalar($val) ? (string)$val : json_encode($val, TEXTPATTERN_JSON);
 
     if (
         safe_insert(
@@ -4969,7 +4979,7 @@ function update_pref($name, $val = null, $event = null, $type = null, $html = nu
     }
 
     if (isset($val)) {
-        $val = is_scalar($val) ? (string)$val : json_encode($val);
+        $val = is_scalar($val) ? (string)$val : json_encode($val, TEXTPATTERN_JSON);
     }
 
     foreach (array('val', 'event', 'type', 'html', 'position') as $field) {
@@ -6246,7 +6256,7 @@ function send_json_response($out = '')
     }
 
     if (!is_string($out)) {
-        $out = json_encode($out);
+        $out = json_encode($out, TEXTPATTERN_JSON);
     }
 
     echo $out;

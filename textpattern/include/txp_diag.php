@@ -216,7 +216,7 @@ function doDiagnostics()
             $updates = checkUpdates();
             $updateInfo->msg = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
             $updateInfo->when = $now;
-            set_pref('last_update_check', json_encode($updateInfo), 'publish', PREF_HIDDEN, 'text_input');
+            set_pref('last_update_check', json_encode($updateInfo, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');
         }
 
         if (!empty($updateInfo->msg)) {
