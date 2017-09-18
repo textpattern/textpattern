@@ -338,7 +338,7 @@ namespace Textpattern\Skin {
                     foreach ($rows as $row) {
                         $templates[] = $row['name'];
                         $row['skin'] = strtolower(sanitizeForUrl($row['skin'].$this->stamp));
-                        $sql_fields ?: $sql_fields = array_keys($row);
+                        isset($sql_fields) ?: $sql_fields = array_keys($row);
                         $sql_values[] = "('".implode("', '", array_map('doSlash', $row))."')";
                     }
 
