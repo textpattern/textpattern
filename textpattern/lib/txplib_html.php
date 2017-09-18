@@ -1822,23 +1822,23 @@ function asyncHref($item, $parms, $atts = '')
  * echo doWrap(array('item1', 'item2'), 'div', 'p');
  */
 
-function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '', $breakatts = '', $html_id = '')
+function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $atts = null, $breakatts = null, $html_id = null)
 {
     global $txp_atts;
-    static $import = array('breakby', 'breakclass');
+    static $import = array('atts', 'breakby', 'breakclass');
 
     if (!$list) {
         return '';
     }
 
-    foreach($import as $global) {
-        if (isset($txp_atts[$global]) && empty($$global)) {
-            $$global = $txp_atts[$global];
-        }
-    }
-
     if (is_array($break)) {
         extract($break + array('break' => ''));
+    }
+
+    foreach($import as $global) {
+        if (!isset($$global) && isset($txp_atts[$global])) {
+            $$global = $txp_atts[$global];
+        }
     }
 
     if ($html_id) {
@@ -1853,7 +1853,7 @@ function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = 
         $breakatts .= ' class="'.txpspecialchars($breakclass).'"';
     }
 
-    if ($break && !empty($breakby)) {
+    if ($break && !empty($breakby)) { // array_merge to reindex
         $breakby = array_merge(array(), array_filter(array_map('intval', do_list($breakby))));
 
         switch ($count = count($breakby)) {
