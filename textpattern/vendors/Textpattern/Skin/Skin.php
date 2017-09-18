@@ -53,7 +53,7 @@ namespace Textpattern\Skin {
          * @var array
          */
 
-        protected static $file = 'composer.json';
+        protected static $file = 'manifest.json';
 
         /**
          * Caches an associative array of assets and their related class instance.
@@ -295,7 +295,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Get and decodes the Composer file contents.
+         * Get and decodes the Manifest file contents.
          *
          * @return array
          * @throws \Exception
@@ -318,7 +318,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Imports the skin into the database from the Composer file contents.
+         * Imports the skin into the database from the Manifest file contents.
          *
          * @return bool False on error
          */
@@ -327,21 +327,13 @@ namespace Textpattern\Skin {
         {
             extract($this->getJSONInfos());
 
-            if (isset($authors)) {
-                $author_list = array();
-
-                foreach ($authors as $author) {
-                    $author_list[] = $author['name'];
-                }
-            }
-
             return (bool) safe_upsert(
                 self::$table,
                 "title = '".doSlash(isset($name) ? $name : $this->skin)."',
                  version = '".doSlash(isset($version) ? $version : '')."',
                  description = '".doSlash(isset($description) ? $description : '')."',
-                 author = '".doSlash(isset($author_list) ? implode(', ', $author_list) : '')."',
-                 website = '".doSlash(isset($homepage) ? $homepage : '')."'
+                 author = '".doSlash(isset($author) ? $author : '')."',
+                 website = '".doSlash(isset($homepage_url) ? $homepage_url : '')."'
                 ",
                 "name = '".doSlash($this->skin)."'"
             );
@@ -517,7 +509,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Exports the skin row by creating or editing the Composer file contents.
+         * Exports the skin row by creating or editing the Manifest file contents.
          *
          * @param  array $row Skin row as an associative array
          * @return bool  False on error
@@ -529,27 +521,19 @@ namespace Textpattern\Skin {
 
             $contents = $this->isWritable(static::$file) ? $this->getJSONInfos() : array();
 
-            $contents['name'] = ($title ? $title : $name).' '.$this->stamp;
+            $contents['name'] = ($title ? $title : $name).$this->stamp;
             $description ? $contents['description'] = $description : '';
             $version ? $contents['version'] = $version : '';
-            $website ? $contents['homepage'] = $website : '';
-
-            if ($author) {
-                $authors = explode(', ', $author);
-                $contents['authors'] = array();
-
-                for ($i = 0, $count = count($authors); $i < $count; $i++) {
-                    $contents['authors'][$i]['name'] = $authors[$i];
-                }
-            }
+            $website ? $contents['homepage_url'] = $website : '';
+            $author ? $contents['author'] = $author : '';
 
             return (bool) $this->filePutJsonContents($contents);
         }
 
         /**
-         * Creates/overrides the Composer file.
+         * Creates/overrides the Manifest file.
          *
-         * @param  array $contents The composer file contents;
+         * @param  array $contents The manifest file contents;
          * @return bool  False on error.
          */
 
