@@ -253,10 +253,9 @@ namespace Textpattern\Skin {
         public static function getRecDirIterator()
         {
             return new RecIteratorIterator(
-                new RecFilterIterator(
+                new RecRegexIterator(
                     new RecDirIterator(get_pref('skin_base_path')),
-                    'json',
-                    'manifest'
+                    '/^manifest\.json/i'
                 ),
                 1
             );

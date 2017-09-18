@@ -53,7 +53,7 @@ namespace Textpattern\Skin {
          * @param int $depth Sets the MaxDepth property.
          */
 
-        public function __construct(RecFilterIterator $iterator, $depth)
+        public function __construct(RecRegexIterator $iterator, $depth)
         {
             parent::__construct($iterator);
             parent::setMaxDepth($depth);

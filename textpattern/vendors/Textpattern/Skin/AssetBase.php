@@ -241,11 +241,22 @@ namespace Textpattern\Skin {
 
         public function getRecDirIterator()
         {
+            if ($this->templates) {
+                $templates = '('.implode('|', $this->templates).')';
+            } else {
+                $templates = '[a-z][a-z0-9_\-\.]{0,63}';
+            }
+
+            if (static::$extension === 'txp') {
+                $extension = '(txp|html)';
+            } else {
+                $extension = static::$extension;
+            }
+
             return new RecIteratorIterator(
-                new RecFilterIterator(
+                new RecRegexIterator(
                     new RecDirIterator($this->getPath(static::$dir)),
-                    static::$extension,
-                    $this->templates
+                    '/^'.$templates.'\.'.$extension.'$/i'
                 ),
                 static::$depth
             );
