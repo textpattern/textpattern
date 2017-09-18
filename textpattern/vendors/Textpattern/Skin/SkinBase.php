@@ -128,7 +128,7 @@ namespace Textpattern\Skin {
             if (static::$installed === null) {
                 return (bool) safe_field('name', 'txp_skin', "name ='".doSlash($skin)."'");
             } else {
-                return in_array($skin, $installed);
+                return array_key_exists($skin, static::$installed);
             }
         }
 
