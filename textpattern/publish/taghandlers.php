@@ -4809,21 +4809,26 @@ function variable($atts, $thing = null)
 {
     global $variable, $trace;
 
+    $set = isset($atts['value']) || isset($thing) ? '' : null;
+
     extract(lAtts(array(
-        'name'  => '',
-        'value' => $thing ? parse($thing) : $thing,
+        'escape' => $set,
+        'name'   => '',
+        'value'  => $thing ? parse($thing) : $thing,
     ), $atts));
 
     if (empty($name)) {
         trigger_error(gTxt('variable_name_empty'));
-    } elseif (!isset($atts['value']) && is_null($thing)) {
+    } elseif ($set === null) {
         if (isset($variable[$name])) {
             return $variable[$name];
         } else {
             $trace->log("[<txp:variable>: Unknown variable '$name']");
         }
     } else {
-        $variable[$name] = $value;
+        $variable[$name] = $escape
+            ? txp_escape(array('escape' => $escape === true ? 'trim' : $escape), $value)
+            : $value;
     }
 
     return '';
@@ -4956,12 +4961,12 @@ function txp_escape($atts, $thing = '')
 
     extract(lAtts(array(
         'escape'    => ''
-    ), $atts, false));
+    ), $atts));
 
     $escape = $escape === true ? array('html') : do_list($escape);
 
     foreach ($escape as $attr) {
-        switch ($attr = trim($attr)) {
+        switch ($attr = strtolower(trim($attr))) {
             case 'html':
                 $thing = txpspecialchars($thing);
                 break;
@@ -4973,6 +4978,10 @@ function txp_escape($atts, $thing = '')
                 break;
             case 'strip':
                 $thing = strip_tags($thing);
+                break;
+            case 'upper': case 'lower':
+                $function = function_exists('mb_strto'.$attr) ? 'mb_strto'.$attr : 'strto'.$attr;
+                $thing = $function($thing);
                 break;
             case 'trim': case 'ltrim' : case 'rtrim' : case 'intval' :
                 $thing = $attr($thing);
