@@ -281,7 +281,9 @@ namespace Textpattern\Skin {
                 $updates = array();
 
                 foreach ($fields as $field) {
-                    $updates[] = $field.'=VALUES('.$field.')';
+                    if ($field !== 'name' && $field !== 'name') {
+                        $updates[] = $field.'=VALUES('.$field.')';
+                    }
                 }
 
                 $update = 'ON DUPLICATE KEY UPDATE '.implode(', ', $updates);
@@ -303,10 +305,10 @@ namespace Textpattern\Skin {
 
         public function dropRemovedFiles($not)
         {
+            $where = "skin = '".doSlash($this->skin)."'";
+
             if ($not) {
-                $where = "name not in ('".implode("', '", array_map('doSlash', $not))."')";
-            } else {
-                $where = '1 = 1';
+                $where .= " AND name NOT IN ('".implode("', '", array_map('doSlash', $not))."')";
             }
 
             if ($drop = (bool) safe_delete(static::$table, $where)) {
