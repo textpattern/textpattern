@@ -102,38 +102,17 @@ button {
  *
  * Example HTML:
  *
- * <a class="pophelp">i</a>
+ * <a class="pophelp"><span class="ui-icon ui-icon-info">Help</span></a>
  */
   .pophelp,
   .pophelpsubtle {
     display: inline-block;
-    width: 1.1666667em;
-    border: 1px solid;
-    border-radius: 50%;
-    border-color: #dddddd #bbbbbb #bbbbbb #dddddd;
-    font-family: "Segoe UI Symbol", "Cambria Math", "Apple Symbols";
-    font-weight: normal;
-    line-height: 1.1666667em;
-    text-align: center;
-  }
-  .pophelp:focus,
-  .pophelpsubtle:focus {
-    border-color: #5b9dd9;
-    outline: 2px solid transparent;
   }
   /**
  * Additional styling for popup help links in table headers.
  */
   .txp-list thead th a.pophelp {
     display: inline-block;
-    color: #996633;
-  }
-  .txp-list thead th a.pophelp:hover {
-    color: #b16f2e;
-    text-decoration: underline;
-  }
-  .txp-list thead th a.pophelp:focus {
-    border-color: #5b9dd9;
   }
   /**
  * Reduce risk of render glitches in links on RTL languages.
@@ -164,7 +143,7 @@ button {
  * <h1>Heading</h1>
  * <h1>
  *     Heading
- *     <a class="pophelp">i</a>
+ *     <a class="pophelp"><span class="ui-icon ui-icon-info">Help</span></a>
  * </h1>
  */
   h1 {
@@ -193,7 +172,7 @@ button {
  * <h2>Heading</h2>
  * <h2>
  *     Heading
- *     <a class="pophelp">i</a>
+ *     <a class="pophelp"><span class="ui-icon ui-icon-info">Help</span></a>
  * </h2>
  */
   h2 {
@@ -2584,7 +2563,7 @@ button {
  *
  * <div class="txp-form-field">
  *     <div class="txp-form-field-label">
- *         <label> <a class="pophelp">i</a></label>
+ *         <label> <a class="pophelp"><span class="ui-icon ui-icon-info">Help</span></a></label>
  *     </div>
  *     <div class="txp-form-field-value">
  *         <input>
@@ -2593,7 +2572,7 @@ button {
  *
  * <div class="txp-form-field">
  *     <div class="txp-form-field-label">
- *         <label> <a class="pophelp">i</a></label>
+ *         <label> <a class="pophelp"><span class="ui-icon ui-icon-info">Help</span></a></label>
  *     </div>
  *     <div class="txp-form-field-instructions">
  *         <p>(Optional) intructions on how to fill out this form field.</p>
@@ -2616,7 +2595,7 @@ button {
  *
  * <div class="txp-form-field">
  *     <div class="txp-form-field-label">
- *         <label>Label <a class="pophelp">i</a></label>
+ *         <label>Label <a class="pophelp"><span class="ui-icon ui-icon-info">Help</span></a></label>
  *     </div>
  *     <div class="txp-form-field-value">
  *         <input type="text" size="32">
@@ -2665,7 +2644,7 @@ button {
  *
  * <div class="txp-form-field txp-form-field-textarea">
  *     <div class="txp-form-field-label">
- *         <label>Label <a class="pophelp">i</a></label>
+ *         <label>Label <a class="pophelp"><span class="ui-icon ui-icon-info">Help</span></a></label>
  *     </div>
  *     <div class="txp-form-field-value">
  *         <textarea></textarea>
@@ -3211,6 +3190,18 @@ button {
     display: block;
     left: 50%;
     margin-left: -8px;
+  }
+  a.ui-icon,
+  a .ui-icon {
+    opacity: 0.66;
+  }
+  a:hover.ui-icon,
+  a:hover .ui-icon,
+  a:active.ui-icon,
+  a:active .ui-icon,
+  a:focus.ui-icon,
+  a:focus .ui-icon {
+    opacity: 1;
   }
   /**
  * Default state icons.
