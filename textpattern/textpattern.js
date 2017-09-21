@@ -1078,6 +1078,9 @@ function txpAsyncLink(event, txpEvent)
 {
     event.preventDefault();
     var $this = $(event.target);
+    if ($this.attr('href') === undefined) {
+        $this = $this.parent();
+    }
     var url = $this.attr('href').replace('?', '');
 
     // Show feedback while processing.
@@ -1899,12 +1902,12 @@ textpattern.Route.add('page, form, file, image', function () {
 textpattern.Route.add('', function () {
     if ( $('.pophelp' ).length ) {
         textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
-            $(data.event.target).attr("data-item", encodeURIComponent(data.data) );
+            $(data.event.target).parent().attr("data-item", encodeURIComponent(data.data) );
             $('#pophelp_dialog').dialog('close').html(data.data).dialog('open').restorePanes();
         });
 
         $('.pophelp').on('click', function (ev) {
-            var item = $(ev.target).attr('data-item');
+            var item = $(ev.target).parent().attr('data-item');
             if (item === undefined ) {
                 txpAsyncLink(ev, 'pophelp');
             } else {
