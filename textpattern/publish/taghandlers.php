@@ -3919,19 +3919,45 @@ function if_search_results($atts, $thing = null)
 
 function if_category($atts, $thing = null)
 {
-    global $c, $context;
+    global $c, $context, $thiscategory;
+    static $cache = array();
 
     extract(lAtts(array(
-        'type' => 'article',
-        'name' => false,
+        'category' => false,
+        'type'     => false,
+        'name'     => false,
+        'parent'   => 0
     ), $atts));
 
-    $theType = ($type) ? $type == $context : true;
-
-    if ($name === false) {
-        $x = ($theType && !empty($c));
+    if ($category === false) {
+        $category = $c;
+        $theType = $context;
+    } elseif ($category === true) {
+        $category = empty($thiscategory['name']) ? $c : $thiscategory['name'];
+        $theType = empty($thiscategory['type']) ? $context : $thiscategory['type'];
     } else {
-        $x = ($theType && in_list($c, $name));
+        $theType = $type && $type !== true ? validContext($type) : $context;
+        ($parent || $type === false) or $parent = true;
+    }
+
+    if ($type && $theType !== $type) {
+        $x = false;
+    } elseif (!$parent || !$category) {
+        $x = $name === false ? !empty($category) : in_list($category, $name);
+    } else {
+        if (!isset($cache[$theType.$category])) {
+            $cache[$theType.$category] = array_reverse(array_slice(array_column(getTreePath($category, $theType), 'name'), 1));
+        }
+
+        $path = $cache[$theType.$category];
+        $names = do_list_unique($name);
+
+        if ($parent === true) {
+            $x = $path && ($name === false || array_intersect($path, $names));
+        } else {
+            ($parent = (int)$parent) >= 0 or $parent = count($path) + $parent - 1;
+            $x = isset($path[$parent]) && ($name === false || in_array($path[$parent], $names));
+        }
     }
 
     return isset($thing) ? parse($thing, $x) : $x;
