@@ -1228,7 +1228,6 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
     $url = filter_var($help_var, FILTER_VALIDATE_URL);
 
     $atts = array(
-        'class'      => $class,
         'rel'        => 'help',
         'target'     => '_blank',
         'title'      => gTxt('help'),
@@ -1236,6 +1235,7 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
     );
 
     if ($url === false) {
+        $atts['class'] = $class;
         // Use inline pophelp, if unauthorized user or setup stage
         if (empty($txp_user)) {
             $url = '#';
@@ -1243,11 +1243,10 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
         } else {
             $url = '?event=help&step=pophelp&item='.urlencode($help_var);
         }
+        $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-help')), $url, $atts);
     } else {
-        $atts['class'] = 'ui-icon ui-icon-extlink';
+        $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-extlink')), $url, $atts);
     }
-
-    $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-help')), $url, $atts);
 
     return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
 }
