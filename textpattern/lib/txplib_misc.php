@@ -2166,7 +2166,7 @@ function lAtts($pairs, $atts, $warn = true)
         $globals = array_filter($global_atts);
     }
 
-    if (empty($pretext['parse_atts'])) {
+    if (empty($pretext['_txp_atts'])) {
         foreach ($atts as $name => $value) {
             if (array_key_exists($name, $pairs)) {
                 if ($pairs[$name] !== null) {

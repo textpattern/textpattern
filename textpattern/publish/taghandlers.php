@@ -3849,7 +3849,8 @@ function breadcrumb($atts, $thing = null)
     }
 
     if ($limit || $offset) {
-        $catpath = array_slice($catpath, (int)$offset, isset($limit) ? (int)$limit : null);
+        $offset = (int)$offset < 0 ? (int)$offset - 1 : (int)$offset;
+        $catpath = array_slice($catpath, $offset, isset($limit) ? (int)$limit : null);
     }
 
     $oldcategory = isset($thiscategory) ? $thiscategory : null;
@@ -4826,7 +4827,7 @@ function variable($atts, $thing = null)
         }
     } else {
         $variable[$name] = $escape
-            ? txp_escape(array('escape' => $escape === true ? 'trim' : $escape), $value)
+            ? txp_escape(array('escape' => $escape), $value)
             : $value;
     }
 
