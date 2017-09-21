@@ -1232,7 +1232,7 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
         $destination = $url;
     }
 
-    $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-info')), $destination, array(
+    $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-help')), $destination, array(
         'class'      => $class,
         'rel'        => 'help',
         'target'     => '_blank',
