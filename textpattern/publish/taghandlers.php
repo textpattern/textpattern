@@ -190,16 +190,12 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('comment_message_input')
     ->register('comment_remember')
     ->register('comment_preview')
-    ->register('comment_submit');
-
-// Global attributes: mind the order!
-
-    Txp::get('\Textpattern\Tag\Registry')
-    ->registerAttr(false, 'atts, class, html_id, labeltag')
-    ->registerAttr(true, 'not, txp-process')
+    ->register('comment_submit')
+// Global attributes (false just removes unknown attribute warning)
+    ->registerAttr(false, 'class, html_id, labeltag')
+    ->registerAttr(true, 'not, txp-process, breakby, breakclass')
     ->registerAttr('txp_escape', 'escape')
-    ->registerAttr('txp_wraptag', 'wraptag')
-    ->registerAttr('txp_label', 'label');
+    ->registerAttr('txp_wraptag', 'wraptag, label');
 
 // -------------------------------------------------------------
 
@@ -1316,7 +1312,7 @@ function category_list($atts, $thing = null)
         unset($cache[$hash]);
     }
 
-    return $out ? ($label ? doLabel($label, $labeltag) : '').doWrap($out, $wraptag, $break, $class, '', '', '', $html_id) : '';
+    return $out ? ($label ? doLabel($label, $labeltag) : '').doWrap($out, $wraptag, compact('break', 'class', 'html_id')) : '';
 }
 
 // -------------------------------------------------------------
@@ -1430,7 +1426,7 @@ function section_list($atts, $thing = null)
         $thissection = isset($old_section) ? $old_section : null;
 
         if ($out) {
-            return doWrap($out, $wraptag, $break, $class, '', '', '', $html_id);
+            return doWrap($out, $wraptag, compact('break', 'class', 'html_id'));
         }
     }
 
@@ -3443,7 +3439,7 @@ function images($atts, $thing = null)
         $thisimage = (isset($old_image) ? $old_image : null);
 
         if ($out) {
-            return doWrap($out, $wraptag, $break, $class, '', '', '', $html_id);
+            return doWrap($out, $wraptag, compact('break', 'class', 'html_id'));
         }
     }
 
@@ -3853,7 +3849,8 @@ function breadcrumb($atts, $thing = null)
     }
 
     if ($limit || $offset) {
-        $catpath = array_slice($catpath, (int)$offset, isset($limit) ? (int)$limit : null);
+        $offset = (int)$offset < 0 ? (int)$offset - 1 : (int)$offset;
+        $catpath = array_slice($catpath, $offset, isset($limit) ? (int)$limit : null);
     }
 
     $oldcategory = isset($thiscategory) ? $thiscategory : null;
@@ -4008,8 +4005,7 @@ function if_last_category($atts, $thing = null)
 
 function if_section($atts, $thing = null)
 {
-    global $pretext;
-    extract($pretext);
+    global $s;
 
     extract(lAtts(array(
         'name' => false,
@@ -4781,12 +4777,11 @@ function hide($atts = array(), $thing = null)
 
     global $pretext;
 
-    $atts = lAtts(array('txp-process' => null), $atts);
-    $process = $atts['txp-process'];
+    extract(lAtts(array('process' => null), $atts));
 
     if (is_numeric($process)) {
         if (intval($process) > $pretext['secondpass'] + 1) {
-            return null;
+            return postpone_process($process);
         } else {
             return $process ? parse($thing) : '';
         }
@@ -4814,21 +4809,26 @@ function variable($atts, $thing = null)
 {
     global $variable, $trace;
 
+    $set = isset($atts['value']) || isset($thing) ? '' : null;
+
     extract(lAtts(array(
-        'name'  => '',
-        'value' => $thing ? parse($thing) : $thing,
+        'escape' => $set,
+        'name'   => '',
+        'value'  => $thing ? parse($thing) : $thing,
     ), $atts));
 
     if (empty($name)) {
         trigger_error(gTxt('variable_name_empty'));
-    } elseif (!isset($atts['value']) && is_null($thing)) {
+    } elseif ($set === null) {
         if (isset($variable[$name])) {
             return $variable[$name];
         } else {
             $trace->log("[<txp:variable>: Unknown variable '$name']");
         }
     } else {
-        $variable[$name] = $value;
+        $variable[$name] = $escape
+            ? txp_escape(array('escape' => $escape), $value)
+            : $value;
     }
 
     return '';
@@ -4961,12 +4961,12 @@ function txp_escape($atts, $thing = '')
 
     extract(lAtts(array(
         'escape'    => ''
-    ), $atts, false));
+    ), $atts));
 
     $escape = $escape === true ? array('html') : do_list($escape);
 
     foreach ($escape as $attr) {
-        switch ($attr = trim($attr)) {
+        switch ($attr = strtolower(trim($attr))) {
             case 'html':
                 $thing = txpspecialchars($thing);
                 break;
@@ -4978,6 +4978,10 @@ function txp_escape($atts, $thing = '')
                 break;
             case 'strip':
                 $thing = strip_tags($thing);
+                break;
+            case 'upper': case 'lower':
+                $function = function_exists('mb_strto'.$attr) ? 'mb_strto'.$attr : 'strto'.$attr;
+                $thing = $function($thing);
                 break;
             case 'trim': case 'ltrim' : case 'rtrim' : case 'intval' :
                 $thing = $attr($thing);
@@ -5000,23 +5004,14 @@ function txp_escape($atts, $thing = '')
 function txp_wraptag($atts, $thing = '')
 {
     extract(lAtts(array(
+        'label'    => '',
+        'labeltag' => '',
         'wraptag' => '',
         'class'   => '',
-        'atts'    => '',
         'html_id' => ''
-    ), $atts, false));
+    ), $atts));
 
-    return trim($thing) !== '' ? doTag($thing, $wraptag, $class, $atts, '', $html_id) : $thing;
-}
+    $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
 
-// -------------------------------------------------------------
-
-function txp_label($atts, $thing = '')
-{
-    extract(lAtts(array(
-        'label'    => '',
-        'labeltag' => ''
-    ), $atts, false));
-
-    return trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
+    return $label && trim($thing) !== '' ? doLabel($label, $labeltag).n.$thing : $thing;
 }

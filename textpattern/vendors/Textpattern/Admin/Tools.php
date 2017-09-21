@@ -78,7 +78,7 @@ class Tools
 
             if (is_file($file)) {
                 $result &= unlink($file);
-            } elseif ($result &= Tools::removeFiles($file)) {
+            } elseif ($result &= self::removeFiles($file)) {
                 $result &= rmdir($file);
             }
         }
