@@ -886,8 +886,6 @@ function file_insert()
     global $txp_user, $file_base_path, $file_max_upload_size;
 
     $files = file_refactor($_FILES['thefile']);
-    $ids = array();
-    $success = $errors = array();
 
     if ($files === false) {
         // Could not get uploaded files.
@@ -897,6 +895,8 @@ function file_insert()
     }
 
     require_privs('file.edit.own');
+    $ids = array();
+    $success = $errors = array();
 
     extract(doSlash(array_map('assert_string', gpsa(array(
         'category',

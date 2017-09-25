@@ -751,11 +751,12 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
 
 function file_refactor(&$file)
 {
-    if (empty($file['name'])) {
+    $is_array = is_array($file['name']);
+
+    if (empty($file['name']) || $is_array && empty($file['name'][0])) {
         return false;
     }
 
-    $is_array = is_array($file['name']);
     $file_array = array();
     $file_count = $is_array ? count($file['name']) : 1;
     $file_keys = array_keys($file);
