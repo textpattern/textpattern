@@ -740,3 +740,33 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
         'value'       => $value,
     ));
 }
+
+/**
+ * Transforms a multiple $_FILES entry into int-indexed array.
+ *
+ * @param  array $file        The file
+ * @return array of files
+ */
+
+
+function file_refactor(&$file)
+{
+    if (empty($file['name'])) {
+        return false;
+    }
+
+    $is_array = is_array($file['name']);
+    $file_array = array();
+    $file_count = $is_array ? count($file['name']) : 1;
+    $file_keys = array_keys($file);
+
+    for ($i=0; $i<$file_count; $i++) {
+        $file_array[$i] = array();
+
+        foreach ($file_keys as $key) {
+            $file_array[$i][$key] = $is_array ? $file[$key][$i] : $file[$key];
+        }
+    }
+
+    return $file_array;
+}

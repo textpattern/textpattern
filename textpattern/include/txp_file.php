@@ -81,7 +81,7 @@ if ($event == 'file') {
  * @param string|array $message The activity message
  */
 
-function file_list($message = '')
+function file_list($message = '', $ids = array())
 {
     global $file_base_path, $file_statuses, $txp_user, $event;
 
@@ -225,7 +225,7 @@ function file_list($message = '')
     } elseif (has_privs('file.edit.own')) {
         $createBlock[] =
             n.tag_start('div', array('class' => 'txp-control-panel')).
-            n.file_upload_form('upload_file', 'upload', 'file_insert', '', '', '', '');
+            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', '', '');
 
         $existing_files = get_filenames();
 
@@ -414,7 +414,7 @@ function file_list($message = '')
 
             if ($can_edit) {
                 $id_column = href($id, $edit_url, array('title' => gTxt('edit')));
-                $multi_edit = fInput('checkbox', 'selected[]', $id);
+                $multi_edit = checkbox('selected[]', $id, in_array($id, $ids));
             } else {
                 $id_column = $id;
                 $multi_edit = '';
@@ -829,7 +829,7 @@ function file_db_add($filename, $category, $permissions, $description, $size, $t
 
     if ($rs) {
         $GLOBALS['ID'] = $rs;
-        now('created', true);
+//        now('created', true);
 
         return $GLOBALS['ID'];
     }
@@ -885,6 +885,17 @@ function file_insert()
 {
     global $txp_user, $file_base_path, $file_max_upload_size;
 
+    $files = file_refactor($_FILES['thefile']);
+    $ids = array();
+    $success = $errors = array();
+
+    if ($files === false) {
+        // Could not get uploaded files.
+        file_list(array(gTxt('file_upload_failed'), E_ERROR));
+
+        return;
+    }
+
     require_privs('file.edit.own');
 
     extract(doSlash(array_map('assert_string', gpsa(array(
@@ -894,54 +905,54 @@ function file_insert()
         'description',
     )))));
 
-    $name = file_get_uploaded_name();
-    $file = file_get_uploaded();
+    foreach ($files as $file) {
+        extract($file);
 
-    if ($file === false) {
-        // Could not get uploaded file.
-        file_list(array(gTxt('file_upload_failed')." $name - ".upload_get_errormsg($_FILES['thefile']['error']), E_ERROR));
-
-        return;
-    }
-
-    $size = filesize($file);
-    if ($file_max_upload_size < $size) {
-        unlink($file);
-        file_list(array(gTxt('file_upload_failed')." $name - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE), E_ERROR));
-
-        return;
-    }
-
-    $newname = sanitizeForFile($name);
-    $newpath = build_file_path($file_base_path, $newname);
-
-    if (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
-        $id = file_db_add(doSlash($newname), $category, $permissions, $description, $size, $title);
-
-        if (!$id) {
-            file_list(array(gTxt('file_upload_failed').' (db_add)', E_ERROR));
-        } else {
-            $id = assert_int($id);
-
-            if (!shift_uploaded_file($file, $newpath)) {
-                safe_delete('txp_file', "id = $id");
-                safe_alter('txp_file', "auto_increment = $id");
-
-                if (isset($GLOBALS['ID'])) {
-                    unset($GLOBALS['ID']);
-                }
-
-                file_list(array($newpath.' '.gTxt('upload_dir_perms'), E_ERROR));
-                // Clean up file.
-            } else {
-                file_set_perm($newpath);
-                update_lastmod('file_uploaded', compact('id', 'newname', 'title', 'category', 'description'));
-                now('created', true);
-                file_edit(gTxt('file_uploaded', array('{name}' => $newname)), $id);
-            }
+        if ($file_max_upload_size < $size) {
+            unlink($tmp_name);
+            $errors[] = gTxt('file_upload_failed')." $name - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
         }
+
+        $newname = sanitizeForFile($name);
+        $newpath = build_file_path($file_base_path, $newname);
+
+        if (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
+            $id = file_db_add(doSlash($newname), $category, $permissions, $description, $size, $title);
+
+            if (!$id) {
+                $errors[] = gTxt('file_upload_failed').' (db_add)';
+            } else {
+                $id = assert_int($id);
+
+                if (!shift_uploaded_file($tmp_name, $newpath)) {
+                    safe_delete('txp_file', "id = $id");
+                    safe_alter('txp_file', "auto_increment = $id");
+                    $errors[] = $newpath.' '.gTxt('upload_dir_perms');
+                    // Clean up file.
+                } else {
+                    file_set_perm($newpath);
+                    $ids[] = $GLOBALS['ID'] = $id;
+                    $success[] = gTxt('file_uploaded', array('{name}' => $newname));
+                }
+            }
+        } else {
+            $errors[] = gTxt('file_already_exists', array('{name}' => $newname));
+        }
+    }
+
+    $message = implode(br, array_merge($success, $errors));
+    $status = $success ? ($errors ? E_WARNING : 0) : E_ERROR;
+
+    if ($ids) {
+        update_lastmod('file_uploaded', compact('ids', 'title', 'category', 'description'));
+        now('created', true);
+    }
+
+    if ($ids && count($files) == 1) {
+        file_edit(array($message, $status), $ids[0]);
     } else {
-        file_list(array(gTxt('file_already_exists', array('{name}' => $newname)), E_ERROR));
+        unset($GLOBALS['ID']);
+        file_list(array($message, $status), $ids);
     }
 }
 

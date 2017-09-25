@@ -1476,6 +1476,13 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
         $wraptag_class = 'inline-file-uploader';
     }
 
+    if (preg_match('/^.+\[\]$/', $step)) {
+        $step = substr($step, 0, -2);
+        $name = 'name="thefile[]" multiple="multiple"';
+    } else {
+        $name = 'name="thefile"';
+    }
+
     $argv = func_get_args();
 
     return pluggable_ui(
@@ -1493,7 +1500,8 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
             hInput('crit', $crit).
             inputLabel(
                 $label_id,
-                fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
+//                fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
+                '<input type="file" '.$name.' id="'.txpspecialchars($label_id).'" />'.
                 fInput('submit', '', gTxt('upload')),
                 $label,
                 array($pophelp, 'instructions_'.$pophelp),
