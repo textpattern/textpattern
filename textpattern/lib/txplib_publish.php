@@ -557,7 +557,7 @@ function processTags($tag, $atts = '', $thing = null)
         $max_pass = get_pref('secondpass', 1);
         $registry = Txp::get('\Textpattern\Tag\Registry');
         $globals = array_filter(
-            Txp::get('\Textpattern\Tag\Registry')->getRegistered(true),
+            $registry->getRegistered(true),
              function($v) {return !is_bool($v);}
          );
     }
@@ -605,7 +605,7 @@ function processTags($tag, $atts = '', $thing = null)
         unset($txp_atts['txp-process'], $txp_atts['not']);
 
         if ($txp_atts) {
-            $pretext['parse_atts'] = true;
+            $pretext['_txp_atts'] = true;
 
             foreach ($txp_atts as $attr => &$val) {
                 if (isset($val) && isset($globals[$attr])) {
@@ -613,7 +613,7 @@ function processTags($tag, $atts = '', $thing = null)
                 }
             }
 
-            $pretext['parse_atts'] = false;
+            $pretext['_txp_atts'] = false;
         }
     }
 
