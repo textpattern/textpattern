@@ -49,6 +49,20 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
+        $out[] = script_js('vendors/Dropzone/dropzone/dropzone.js', TEXTPATTERN_SCRIPT_URL).n;
+
+        $js = <<< EOS
+$(document).ready(function ()
+{
+    var dropform = $('.upload-form');
+    dropform.find('.inline-file-uploader').remove();
+    dropform.addClass('dropzone').dropzone({
+        paramName: 'thefile',
+        queuecomplete: function() {dropform.submit()}
+    });
+});
+EOS;
+        $out[] = script_js($js);
 
         // Custom JavaScript (see theme README for usage instructions).
         if (defined('admin_custom_js')) {
