@@ -52,13 +52,15 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = script_js('vendors/enyo/dropzone/dropzone.js', TEXTPATTERN_SCRIPT_URL).n;
 
         $js = <<< EOS
-$(document).ready(function ()
-{
+textpattern.Route.add('file., image.', function () {
     var dropform = $('.upload-form');
     dropform.find('.inline-file-uploader').remove();
     dropform.addClass('dropzone').dropzone({
         paramName: 'thefile',
-        queuecomplete: function() {dropform.submit()}
+        queuecomplete: function() {
+            this.removeAllFiles();
+            $('form[name=longform]').load('?event='+textpattern.event+' form[name=longform]>*')
+        }
     });
 });
 EOS;
