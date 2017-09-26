@@ -1202,6 +1202,7 @@ function category_list($atts, $thing = null)
 {
     global $s, $c, $thiscategory;
     static $cache = array(), $level = 0;
+
     extract(lAtts(array(
         'active_class' => '',
         'break'        => br,
@@ -1222,68 +1223,85 @@ function category_list($atts, $thing = null)
         'limit'        => '',
         'offset'       => '',
     ), $atts));
+
     $categories = $categories === true ? array(isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root')) : do_list_unique($categories);
     $roots = ($parent === true ? array(isset($thiscategory['name']) ? $thiscategory['name'] : ($c ? $c : 'root')) : do_list_unique($parent)) or $roots = $categories or $roots = array('root');
     $level++;
     $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
     $multiple = count($roots) > 1;
     $root = implode(',', $roots);
-    $children = (int) $children;
+    $children = $children === true ? PHP_INT_MAX : intval(is_numeric($children) ? $children : !empty($children));
     $sql_query = "type = '".doSlash($type)."'".($sort ? ' order by '.doSlash($sort) : ($categories ? " order by FIELD(name, ".implode(',', quote_list($categories)).")": ''));
     $sql_limit = $limit !== '' || $offset ? "LIMIT ".intval($offset).", ".($limit === '' || $limit === true ? PHP_INT_MAX : intval($limit)) : '';
     $exclude = $exclude ? ($exclude === true ? $roots : do_list_unique($exclude)) : array();
     $sql_exclude = $exclude && $sql_limit ? " and name not in(".implode(',', quote_list($exclude)).")" : '';
     $nocache = !$children || $sql_limit || $children == $level;
     $hash = md5($nocache ? uniqid() : $sql_query);
+
     if (!isset($cache[$hash])) {
         $cache[$hash] = array();
     }
+
     if (!isset($cache[$hash][$root]) || !$multiple && $root != 'root' && empty($cache[$hash][$root][$root])) {
         $cache[$hash][$root] = array();
+
         if (!$children || !in_array('root', $roots)) {
             $cats = safe_rows('name, parent, title, description, lft, rgt', 'txp_category', "name IN (".implode(',', quote_list($roots)).") and $sql_query") or $cats = array();
             $retrieve = false;
             $between = array();
+
             foreach ($cats as $cat) {
                 extract($cat);
                 $name = doSlash($name);
                 $between[] = $children ? "lft>=$lft and rgt<=$rgt" : "name='$name' or parent='$name'";
+
                 if ($rgt - $lft > 1) {
                     $retrieve = true;
                 }
             }
+
             $cats = $retrieve ? safe_rows('name, parent, title, description', 'txp_category', "name!='root' $sql_exclude and (".implode(' or ', $between).") and $sql_query $sql_limit") : $cats;
         } else {
             $cats = safe_rows('name, parent, title, description', 'txp_category', "name !='root' $sql_exclude and $sql_query $sql_limit");
         }
+
         foreach ($cats as $cat) {
             extract($cat);
             $node = $children == $level ? $root : $name;
+
             if (!isset($cache[$hash][$node])) {
                 $cache[$hash][$node] = array();
             }
+
             $cache[$hash][$node][$name] = $cat;
+
             if ($children != $level) {
                 if ($multiple && in_array($name, $roots)) {
                     $cache[$hash][$root][$name] = $cat;
                 }
+
                 if (!isset($cache[$hash][$parent])) {
                     $cache[$hash][$parent] = array();
                 }
+
                 $cache[$hash][$parent][$name] = $cat;
+
                 if ($multiple && in_array($parent, $roots)) {
                     $cache[$hash][$root][$name] = $cat;
                 }
             }
         }
     }
+
     $oldcategory = isset($thiscategory) ? $thiscategory : null;
     $out = array();
     $count = 0;
     $last = count($cache[$hash][$root]);
+
     foreach ($cache[$hash][$root] as $name => $thiscategory) {
         if (!in_array($name, $exclude) && (!$categories || in_array($name, $categories))) {
             $count++;
+
             if (!isset($thing) && !$form) {
                 extract($thiscategory);
                 $out[] = tag(txpspecialchars($title), 'a',
@@ -1298,17 +1316,21 @@ function category_list($atts, $thing = null)
                 $thiscategory['type'] = $type;
                 $thiscategory['is_first'] = ($count == 1);
                 $thiscategory['is_last'] = ($count == $last);
+
                 if (isset($atts['section'])) {
                     $thiscategory['section'] = $section;
                 }
+
                 $out[] = $form ? parse_form($form) : parse($thing);
             }
         } else {
             $last--;
         }
     }
+
     $thiscategory = $oldcategory;
     $level--;
+
     if ($nocache || $level <= 0) {
         unset($cache[$hash]);
     }
@@ -3850,7 +3872,8 @@ function breadcrumb($atts, $thing = null)
     }
 
     if ($limit || $offset) {
-        $catpath = array_slice($catpath, (int)$offset, isset($limit) ? (int)$limit : null);
+        $offset = (int)$offset < 0 ? (int)$offset - 1 : (int)$offset;
+        $catpath = array_slice($catpath, $offset, isset($limit) ? (int)$limit : null);
     }
 
     $oldcategory = isset($thiscategory) ? $thiscategory : null;
@@ -3919,19 +3942,45 @@ function if_search_results($atts, $thing = null)
 
 function if_category($atts, $thing = null)
 {
-    global $c, $context;
+    global $c, $context, $thiscategory;
+    static $cache = array();
 
     extract(lAtts(array(
-        'type' => 'article',
-        'name' => false,
+        'category' => false,
+        'type'     => false,
+        'name'     => false,
+        'parent'   => 0
     ), $atts));
 
-    $theType = ($type) ? $type == $context : true;
-
-    if ($name === false) {
-        $x = ($theType && !empty($c));
+    if ($category === false) {
+        $category = $c;
+        $theType = $context;
+    } elseif ($category === true) {
+        $category = empty($thiscategory['name']) ? $c : $thiscategory['name'];
+        $theType = empty($thiscategory['type']) ? $context : $thiscategory['type'];
     } else {
-        $x = ($theType && in_list($c, $name));
+        $theType = $type && $type !== true ? validContext($type) : $context;
+        ($parent || $type === false) or $parent = true;
+    }
+
+    if ($type && $theType !== $type) {
+        $x = false;
+    } elseif (!$parent || !$category) {
+        $x = $name === false ? !empty($category) : in_list($category, $name);
+    } else {
+        if (!isset($cache[$theType.$category])) {
+            $cache[$theType.$category] = array_reverse(array_slice(array_column(getTreePath($category, $theType), 'name'), 1));
+        }
+
+        $path = $cache[$theType.$category];
+        $names = do_list_unique($name);
+
+        if ($parent === true) {
+            $x = $path && ($name === false || array_intersect($path, $names));
+        } else {
+            ($parent = (int)$parent) >= 0 or $parent = count($path) + $parent - 1;
+            $x = isset($path[$parent]) && ($name === false || in_array($path[$parent], $names));
+        }
     }
 
     return isset($thing) ? parse($thing, $x) : $x;
@@ -4827,7 +4876,7 @@ function variable($atts, $thing = null)
         }
     } else {
         $variable[$name] = $escape
-            ? txp_escape(array('escape' => $escape === true ? 'trim' : $escape), $value)
+            ? txp_escape(array('escape' => $escape), $value)
             : $value;
     }
 

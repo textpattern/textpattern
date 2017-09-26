@@ -1232,7 +1232,7 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
         $destination = $url;
     }
 
-    $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-info')), $destination, array(
+    $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-help')), $destination, array(
         'class'      => $class,
         'rel'        => 'help',
         'target'     => '_blank',
@@ -1476,6 +1476,11 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
         $wraptag_class = 'inline-file-uploader';
     }
 
+    if ($multiple = (bool) preg_match('/^.+\[\]$/', $step)) {
+        $step = substr($step, 0, -2);
+    }
+
+    $name = 'thefile'.($multiple ? '[]' : '');
     $argv = func_get_args();
 
     return pluggable_ui(
@@ -1493,7 +1498,7 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
             hInput('crit', $crit).
             inputLabel(
                 $label_id,
-                fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
+                tag_void('input', array('name' => $name, 'type' => 'file', 'required' => true, 'id' => $label_id, 'multiple' => $multiple)).
                 fInput('submit', '', gTxt('upload')),
                 $label,
                 array($pophelp, 'instructions_'.$pophelp),

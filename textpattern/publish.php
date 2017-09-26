@@ -178,7 +178,7 @@ $pretext = !isset($pretext) ? array() : $pretext;
 $pretext = array_merge($pretext, pretext($s, $prefs));
 callback_event('pretext_end');
 extract($pretext);
-$pretext += array('secondpass' => 0, 'parse_atts' => false);
+$pretext += array('secondpass' => 0, '_txp_atts' => false);
 
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
@@ -1142,8 +1142,12 @@ function makeOut()
 
 function validContext($context)
 {
-    foreach (array('article', 'image', 'file', 'link') as $type) {
-        $valid[gTxt($type.'_context')] = $type;
+    static $valid = null;
+
+    if (empty($valid)) {
+        foreach (array('article', 'image', 'file', 'link') as $type) {
+            $valid[gTxt($type.'_context')] = $type;
+        }
     }
 
     return isset($valid[$context]) ? $valid[$context] : 'article';
