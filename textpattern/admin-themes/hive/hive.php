@@ -49,7 +49,7 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
-        $out[] = script_js('vendors/Dropzone/dropzone/dropzone.js', TEXTPATTERN_SCRIPT_URL).n;
+        $out[] = script_js('vendors/enyo/dropzone/dropzone.js', TEXTPATTERN_SCRIPT_URL).n;
 
         $js = <<< EOS
 $(document).ready(function ()
