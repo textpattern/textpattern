@@ -4839,6 +4839,7 @@ button {
     position: absolute;
   }
   .ui-menu .ui-menu-item {
+    display: block;
     margin: 0;
     cursor: pointer;
     /* 2 */
