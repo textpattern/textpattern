@@ -52,7 +52,7 @@ safe_create('txp_skin', "
     name        VARCHAR(255)   NOT NULL DEFAULT 'default',
     title       VARCHAR(255)   NOT NULL DEFAULT 'Default',
     version     VARCHAR(255)       NULL DEFAULT '1.0',
-    description VARCHAR(16383)     NULL DEFAULT '',
+    description VARCHAR(10240)     NULL DEFAULT '',
     author      VARCHAR(255)       NULL DEFAULT '',
     website     VARCHAR(255)       NULL DEFAULT '',
     lastmod     DATETIME           NULL DEFAULT NULL,
