@@ -87,9 +87,13 @@ foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
     safe_query("INSERT INTO `".PFX."txp_css`(name, css) VALUES('".doSlash($key)."', '".doSlash($data)."')");
 }
 
-foreach (get_files_content($themedir.'/forms', 'txp') as $key=>$data) {
-    list($type, $name) = explode('.', $key);
-    safe_query("INSERT INTO `".PFX."txp_form`(type, name, Form) VALUES('".doSlash($type)."', '".doSlash($name)."', '".doSlash($data)."')");
+if ($files = glob("{$themedir}/forms/*/*\.txp")) {
+    foreach  ($files as $file) {
+        if (preg_match('%/forms/(\w+)/(\w+)\.txp$%', $file, $mm)) {
+            $data = @file_get_contents($file);
+            safe_query("INSERT INTO `".PFX."txp_form`(type, name, Form) VALUES('".doSlash($mm[1])."', '".doSlash($mm[2])."', '".doSlash($data)."')");
+        }
+    }
 }
 
 foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
