@@ -375,11 +375,13 @@ function sec_section_list($message = '')
             $sec_page = href(txpspecialchars($sec_page), array(
                 'event' => 'page',
                 'name'  => $sec_page,
+                'skin'  => $sec_skin,
             ), array('title' => gTxt('edit')));
 
             $sec_css = href(txpspecialchars($sec_css), array(
                 'event' => 'css',
                 'name'  => $sec_css,
+                'skin'  => $sec_skin,
             ), array('title' => gTxt('edit')));
 
             echo tr(
