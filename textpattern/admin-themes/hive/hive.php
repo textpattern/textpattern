@@ -64,8 +64,10 @@ textpattern.Route.add('file', function () {
         return;
     }
 
-    reset = $('<input type="reset" />').hide()
-    dropform.off('submit')
+    var reset = $('<input type="reset" />').hide()
+    var previews = $('<div class="dropzone dropzone-previews" />').hide()
+    dropform.off('submit.txpAsyncForm')
+        .append(previews)
         .find('.inline-file-uploader')
         .append(reset)
         .find('input[type=file]').remove()
@@ -76,21 +78,24 @@ textpattern.Route.add('file', function () {
         parallelUploads: $max_files,
         maxFiles: $max_files,
         maxFilesize: $max_file_size,
+        previewsContainer: previews[0],
+        clickable: previews[0],
         autoProcessQueue: false,
         addRemoveLinks: true,
-        queuecomplete: function() {
+        successmultiple: function() {
             reset.click();
-//            longform.load('?event='+textpattern.event+' form[name=longform]>*');
+//            longform.find('table.txp-list>tbody').load('?event='+textpattern.event+' form[name=longform] table.txp-list>tbody>*', txp_columniser);
+//            dropform.off('submit').submit();
         },
         init: function() {
             var dz = this;
             dz.on('addedfile', function(file) {
-                dropform.addClass('dropzone')
+                previews.show()
                 reset.show()
             })
             reset.on('click', function() {
                 dz.removeAllFiles()
-                dropform.removeClass('dropzone')
+                previews.hide()
                 reset.hide()
             })
             dropform.on('submit', function(e) {
@@ -98,7 +103,7 @@ textpattern.Route.add('file', function () {
                 if (dz.files.length) {
                     dz.processQueue()
                 } else {
-                    dropform.click()
+                    previews.click()
                 }
             });
         },

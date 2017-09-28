@@ -1507,7 +1507,7 @@ $(document).keydown(function (e) {
     var key = e.which;
 
     if (key === 27) {
-        $('.close').parent().remove();
+        $('.close').parent().toggle();
     } else if (key === 19 || ((e.metaKey || e.ctrlKey) && String.fromCharCode(key).toLowerCase() === 's'))
     {
         var obj = $('input.publish');
@@ -1847,15 +1847,6 @@ textpattern.Route.add('article, file', function () {
     $(document).on('change', '.posted input', function (e) {
         $('#publish_now, #reset_time').prop('checked', false);
     });
-
-/*
-    // uncomment for drop-upload
-    $('.upload-form').on('drop', function(e) {
-        $(this).one('change', function() {
-            $(this).submit()
-        });
-    });
-*/
 });
 
 // 'Clone' button on Pages, Forms, Styles panels.
