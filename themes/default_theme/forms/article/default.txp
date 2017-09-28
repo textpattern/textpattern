@@ -1,0 +1,97 @@
+<article class="article" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <meta itemprop="mainEntityOfPage" content="<txp:permlink />">
+
+    <txp:if_individual_article>
+        <h1 itemprop="headline">
+            <txp:title />
+        </h1>
+    <txp:else />
+        <h1 itemprop="headline">
+            <a href="<txp:permlink />" itemprop="url">
+                <txp:title />
+            </a>
+        </h1>
+    </txp:if_individual_article>
+
+    <p>
+        <strong>
+            <txp:text item="posted" />
+        </strong>
+        <time datetime="<txp:posted format="iso8601" />" itemprop="datePublished">
+            <txp:posted />
+        </time>
+        <meta itemprop="dateModified" content="<txp:modified format="iso8601" />" />
+
+        <!-- only display comments count if comments posted, or if new comments allowed -->
+        <txp:if_comments>
+            <br>
+            <strong>
+                <txp:text item="comments" />
+            </strong>
+            <a href="<txp:permlink />#comments-head" title="<txp:text item="view" />" itemprop="discussionUrl">
+                <span itemprop="interactionStatistic" itemscope itemtype="https://schema.org/InteractionCounter">
+                    <meta itemprop="interactionType" content="https://schema.org/CommentAction" />
+                    <span itemprop="userInteractionCount"><txp:comments_count /></span>
+                </span>
+            </a>
+        <txp:else />
+            <txp:if_comments_allowed>
+                <br>
+                <strong>
+                    <txp:text item="comments" />
+                </strong>
+                <a href="<txp:permlink />#comments-head" title="<txp:text item="view" />" itemprop="discussionUrl">
+                    <span itemprop="interactionStatistic" itemscope itemtype="https://schema.org/InteractionCounter">
+                        <meta itemprop="interactionType" content="https://schema.org/CommentAction" />
+                        <span itemprop="userInteractionCount">0</span>
+                    </span>
+                </a>
+            </txp:if_comments_allowed>
+        </txp:if_comments>
+    </p>
+
+    <txp:if_article_image>
+        <txp:images form="images" />
+    </txp:if_article_image>
+
+    <div itemprop="articleBody">
+        <txp:body />
+    </div>
+
+    <p>
+        <strong>
+            <txp:text item="author" />
+        </strong>
+        <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <txp:author link="1" this_section="1" />
+            </span>
+        </span>
+
+        <!-- only display categories if they are actually set for an article, otherwise omit -->
+        <txp:if_article_category>
+            <br>
+            <strong>
+                <txp:text item="categories" />
+            </strong>
+            <span itemprop="keywords">
+                <txp:if_article_category number="1">
+                    <txp:if_article_category number="2">
+                        <txp:category1 title="1" link="1" />,
+                        <txp:category2 title="1" link="1" />
+                    <txp:else />
+                        <txp:category1 title="1" link="1" />
+                    </txp:if_article_category>
+                <txp:else />
+                    <txp:category2 title="1" link="1" />
+                </txp:if_article_category>
+            </span>
+        </txp:if_article_category>
+    </p>
+
+    <!-- if this is an individual article then add the comments section via form: comments_display.article.txp -->
+    <txp:if_individual_article>
+        <txp:output_form form="comments_display" />
+    </txp:if_individual_article>
+
+</article>
