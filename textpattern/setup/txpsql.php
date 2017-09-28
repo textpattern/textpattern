@@ -80,7 +80,7 @@ create_user($txp_user, $_SESSION['email'], $_SESSION['pass'], $_SESSION['realnam
 
 
 
-// --- Theme setup
+// --- Theme setup.
 // Load theme /data, /styles, /forms, /pages
 
 foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
