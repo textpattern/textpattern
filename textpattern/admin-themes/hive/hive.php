@@ -29,6 +29,10 @@ class hive_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
     {
+        global $file_max_upload_size;
+
+        $max_file_size = $file_max_upload_size ? $file_max_upload_size/1000000 : 2;
+        $max_files = Txp::get('\Textpattern\Admin\Paginator')->getLimit();
         $cssPath = 'assets'.DS.'css';
         $jsPath = 'assets'.DS.'js';
 
@@ -49,22 +53,57 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
+        $out[] = '<link rel="stylesheet" href="vendors/enyo/dropzone/dropzone.css">';
         $out[] = script_js('vendors/enyo/dropzone/dropzone.js', TEXTPATTERN_SCRIPT_URL).n;
 
         $js = <<< EOS
-textpattern.Route.add('file, image', function () {
+textpattern.Route.add('file', function () {
     var dropform = $('.upload-form'), longform = $('form[name=longform]');
 
     if (!longform.length) {
         return;
     }
 
-    dropform.find('.inline-file-uploader').remove();
-    dropform.addClass('dropzone').dropzone({
+    reset = $('<input type="reset" />').hide()
+    dropform.off('submit')
+        .find('.inline-file-uploader')
+        .append(reset)
+        .find('input[type=file]').remove()
+    dropform.dropzone({
         paramName: 'thefile',
+        params: {app_mode: 'async'},
+        uploadMultiple: true,
+        parallelUploads: $max_files,
+        maxFiles: $max_files,
+        maxFilesize: $max_file_size,
+        autoProcessQueue: false,
+        addRemoveLinks: true,
         queuecomplete: function() {
-            this.removeAllFiles();
-            longform.load('?event='+textpattern.event+' form[name=longform]>*')
+            reset.click();
+//            longform.load('?event='+textpattern.event+' form[name=longform]>*');
+        },
+        init: function() {
+            var dz = this;
+            dz.on('addedfile', function(file) {
+                dropform.addClass('dropzone')
+                reset.show()
+            })
+            reset.on('click', function() {
+                dz.removeAllFiles()
+                dropform.removeClass('dropzone')
+                reset.hide()
+            })
+            dropform.on('submit', function(e) {
+                e.preventDefault()
+                if (dz.files.length) {
+                    dz.processQueue()
+                } else {
+                    dropform.click()
+                }
+            });
+        },
+        success: function(file, response) {
+            eval(response)
         }
     });
 });

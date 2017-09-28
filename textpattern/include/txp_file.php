@@ -223,9 +223,10 @@ function file_list($message = '', $ids = array())
                 array('class' => 'alert-block warning')
             );
     } elseif (has_privs('file.edit.own')) {
+        $categories = event_category_popup('file', '', 'file_category');
         $createBlock[] =
             n.tag_start('div', array('class' => 'txp-control-panel')).
-            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', '', '');
+            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? gTxt('file_category').$categories : '')));
 
         $existing_files = get_filenames();
 
@@ -885,18 +886,10 @@ function file_insert()
 {
     global $txp_user, $file_base_path, $file_max_upload_size;
 
-    $files = file_refactor($_FILES['thefile']);
-
-    if ($files === false) {
-        // Could not get uploaded files.
-        file_list(array(gTxt('file_upload_failed'), E_ERROR));
-
-        return;
-    }
-
     require_privs('file.edit.own');
     $ids = array();
     $success = $errors = array();
+    $files = file_refactor($_FILES['thefile']) or $files = array();
 
     extract(doSlash(array_map('assert_string', gpsa(array(
         'category',
@@ -907,16 +900,12 @@ function file_insert()
 
     foreach ($files as $file) {
         extract($file);
-
-        if ($file_max_upload_size < $size) {
-            unlink($tmp_name);
-            $errors[] = gTxt('file_upload_failed')." $name - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
-        }
-
         $newname = sanitizeForFile($name);
         $newpath = build_file_path($file_base_path, $newname);
 
-        if (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
+        if ($file_max_upload_size < $size) {
+            $errors[] = gTxt('file_upload_failed')." $name - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
+        } elseif (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
             $id = file_db_add(doSlash($newname), $category, $permissions, $description, $size, $title);
 
             if (!$id) {
@@ -932,7 +921,7 @@ function file_insert()
                 } else {
                     file_set_perm($newpath);
                     $ids[] = $GLOBALS['ID'] = $id;
-                    $success[] = gTxt('file_uploaded', array('{name}' => $newname));
+                    $success[] = gTxt('file_uploaded', array('{name}' => href(txpspecialchars($newname), '?event=file&step=file_edit&id='.$id, array('title' => gTxt('edit')))), false);
                 }
             }
         } else {
@@ -947,6 +936,17 @@ function file_insert()
         update_lastmod('file_uploaded', compact('ids', 'title', 'category', 'description'));
         now('created', true);
     }
+
+    if (gps('app_mode') == 'async') {
+        $response[] = '$("input[type=file]").val("")';
+        $response[] = announce($message, $status);
+        send_script_response(join(";\n", $response));
+
+        // Bail out.
+        return;
+    }
+
+
 
     if ($ids && count($files) == 1) {
         file_edit(array($message, $status), $ids[0]);
@@ -1228,7 +1228,7 @@ function file_set_perm($file)
  * @return string HTML
  */
 
-function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $class = '', $wraptag_val = array('div', 'div'))
+function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $class = '', $wraptag_val = array('div', 'div'), $extra = null)
 {
     global $file_max_upload_size;
 
@@ -1238,7 +1238,7 @@ function file_upload_form($label, $pophelp, $step, $id = '', $label_id = '', $cl
 
     $max_file_size = (intval($file_max_upload_size) == 0) ? '' : intval($file_max_upload_size);
 
-    return upload_form($label, $pophelp, $step, 'file', $id, $max_file_size, $label_id, $class, $wraptag_val);
+    return upload_form($label, $pophelp, $step, 'file', $id, $max_file_size, $label_id, $class, $wraptag_val, $extra);
 }
 
 // -------------------------------------------------------------

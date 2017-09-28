@@ -674,7 +674,7 @@ function setClassRemember(className, force)
  * @see    http://api.jquery.com/jQuery.post/
  */
 
-function sendAsyncEvent(data, fn, format)
+function sendAsyncEvent(data, fn, format, progress)
 {
     var formdata = false;
     if ($.type(data) === 'string' && data.length > 0) {
@@ -699,7 +699,21 @@ function sendAsyncEvent(data, fn, format)
             success: fn,
             dataType: format,
             processData: false,
-            contentType: false
+            contentType: false,
+            xhr: function () {
+                var xhr = $.ajaxSettings.xhr();
+
+                if (typeof progress !== 'undefined') {
+                    xhr.upload.onprogress = function (e) {
+                        // For uploads
+                        if (e.lengthComputable) {
+                            progress.val(e.loaded / e.total)
+                        }
+                    };
+                }
+
+                return xhr;
+            }
         }) :
         $.post('index.php', data, fn, format);
 }
@@ -918,17 +932,18 @@ jQuery.fn.txpAsyncForm = function (options) {
     this.on('submit.txpAsyncForm', function (event, extra) {
         event.preventDefault();
 
+        if (typeof extra === 'undefined') extra = new Object;
+
         var $this = $(this);
         var form =
         {
             data   : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
             extra  : new Object,
-            spinner: $('<span />').addClass('spinner')
+            spinner: typeof extra['_txp_spinner'] !== 'undefined' ? $(extra['_txp_spinner']) : ($this.hasClass('upload-form') ? $('<progress />').addClass('upload-progress') : $('<span />').addClass('spinner'))
         };
 
-        if (!!extra && typeof extra['_txp_submit'] !== 'undefined') {
+        if (typeof extra['_txp_submit'] !== 'undefined') {
             form.button = $this.find(extra['_txp_submit']).eq(0);
-            delete extra['_txp_submit'];
         } else {
             form.button = $this.find('input[type="submit"]:focus').eq(0);
 
@@ -939,10 +954,9 @@ jQuery.fn.txpAsyncForm = function (options) {
         }
 
         form.extra[form.button.attr('name') || '_txp_submit'] = form.button.val() || '_txp_submit';
-        $.extend(true, form.extra, extra);
-
+        $.extend(true, form.extra, extra.data);
         // Show feedback while processing.
-        form.button.attr('disabled', true).after(form.spinner);
+        form.button.attr('disabled', true).after(form.spinner.val(0));
         $this.addClass('busy');
         $('body').addClass('busy');
 
@@ -958,7 +972,7 @@ jQuery.fn.txpAsyncForm = function (options) {
             }
         }
 
-        sendAsyncEvent(form.data, function () {}, options.dataType)
+        sendAsyncEvent(form.data, function () {}, options.dataType, form.spinner)
             .done(function (data, textStatus, jqXHR) {
                 if (options.success) {
                     options.success($this, event, data, textStatus, jqXHR);
@@ -1797,7 +1811,7 @@ textpattern.Route.add('article', function () {
 
     $('#article_form').on('click', '.txp-clone', function (e) {
         e.preventDefault();
-        form.trigger('submit', {copy:1, publish:1});
+        form.trigger('submit', {data: {copy:1, publish:1}});
     });
 
     // Switch to Text/HTML/Preview mode.
@@ -1833,6 +1847,7 @@ textpattern.Route.add('article, file', function () {
     $(document).on('change', '.posted input', function (e) {
         $('#publish_now, #reset_time').prop('checked', false);
     });
+
 /*
     // uncomment for drop-upload
     $('.upload-form').on('drop', function(e) {
