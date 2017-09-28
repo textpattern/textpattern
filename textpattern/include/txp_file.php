@@ -946,13 +946,11 @@ function file_insert()
         return;
     }
 
-
-
     if ($ids && count($files) == 1) {
         file_edit(array($message, $status), $ids[0]);
     } else {
         unset($GLOBALS['ID']);
-        file_list(array($message, $status), $ids);
+        file_list($files ? array($message, $status) : '', $ids);
     }
 }
 

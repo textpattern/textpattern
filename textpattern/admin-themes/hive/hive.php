@@ -64,7 +64,7 @@ textpattern.Route.add('file', function () {
         return;
     }
 
-    var reset = $('<input type="reset" />').hide()
+    var upload = dropform.find('input[type=submit]'), reset = $('<input type="reset" />').hide(), uploadText = upload.val(), selectText = textpattern.gTxt('select')
     var previews = $('<div class="dropzone dropzone-previews" />').hide()
     dropform.off('submit.txpAsyncForm')
         .append(previews)
@@ -92,12 +92,14 @@ textpattern.Route.add('file', function () {
             dz.on('addedfile', function(file) {
                 previews.show()
                 reset.show()
+                upload.val(uploadText)
             })
             reset.on('click', function() {
                 dz.removeAllFiles()
                 previews.hide()
                 reset.hide()
-            })
+                upload.val(selectText)
+            }).click()
             dropform.on('submit', function(e) {
                 e.preventDefault()
                 if (dz.files.length) {
