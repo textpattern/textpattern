@@ -41,51 +41,8 @@
 
 namespace Textpattern\Skin {
 
-    class RecFilterIterator extends \RecursiveFilterIterator
+    class RecRegexIterator extends \RecursiveRegexIterator
     {
-
-        /**
-         * Default regular expression pattern used
-         * to validate template filenames.
-         *
-         * @var string
-         */
-
-        protected static $filePattern = '/^[a-z][a-z0-9_\-\.]{0,63}\.(txp|html)$/i';
-
-        /**
-         * Array of template names used
-         * to validate template filenames.
-         *
-         * @var array
-         */
-
-        protected $templates = array();
-
-        /**
-         * Constructor
-         *
-         * @param RecDirIterator $iterator
-         * @param string        $extension
-         * @param string|array  $templates
-         */
-
-        public function __construct(
-            RecDirIterator $iterator,
-            $extension = null,
-            $templates = null
-        ) {
-            parent::__construct($iterator);
-
-            if (!empty($templates)) {
-                $this->templates = $templates;
-            }
-
-            if ($extension !== null && $extension !== 'txp') {
-                static::$filePattern = '/^[a-z][a-z0-9_\-\.]{0,63}\.('.$extension.')$/i';
-            }
-        }
-
         /**
          * {@inheritdoc}
          */
@@ -107,13 +64,9 @@ namespace Textpattern\Skin {
 
             if (!$this->isDot() && $this->isReadable() && ($this->isFile() || $this->isLink())) {
                 $isValid = (bool) preg_match(
-                    static::$filePattern,
+                    self::getRegex(),
                     $this->getFilename()
                 );
-
-                if ($isValid && $this->templates) {
-                    $isValid = in_array($this->getTemplateName(), $this->templates);
-                }
             }
 
             return $isValid;

@@ -95,7 +95,7 @@ namespace Textpattern\Skin {
             if ($this->isWritable($path) || $this->mkDir($path)) {
                 return (bool) file_put_contents(
                     $this->getPath($path.'/'.$name.'.'.static::$extension),
-                    $Form
+                    $Form ? $Form : '// Empty form.'
                 );
             }
         }

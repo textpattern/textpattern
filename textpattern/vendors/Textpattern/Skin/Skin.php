@@ -53,7 +53,7 @@ namespace Textpattern\Skin {
          * @var array
          */
 
-        protected static $file = 'composer.json';
+        protected static $file = 'manifest.json';
 
         /**
          * Caches an associative array of assets and their related class instance.
@@ -179,7 +179,7 @@ namespace Textpattern\Skin {
         public function edit()
         {
             if ($this->skinIsInstalled()) {
-                if (!self::isInstalled($this->infos['new_name'])) {
+                if ($this->skin === $this->infos['new_name'] || !self::isInstalled($this->infos['new_name'])) {
                     $sections = $this->isInUse();
                     $callback_extra = array(
                         'skin'   => $this->skin,
@@ -189,10 +189,16 @@ namespace Textpattern\Skin {
                     callback_event('skin', 'edit', 0, $callback_extra);
 
                     if ($this->editSkin()) {
+                        $new = strtolower(sanitizeForUrl($this->infos['new_name']));
+
+                        if (file_exists($path = $this->getPath())) {
+                            rename($path, self::getBasePath().'/'.$new);
+                        }
+
                         if ($sections) {
                             safe_update(
                                 'txp_section',
-                                "skin = '".doSlash(strtolower(sanitizeForUrl($this->infos['new_name'])))."'",
+                                "skin = '".doSlash($new)."'",
                                 "skin = '".doSlash($this->skin)."'"
                             );
                         }
@@ -215,7 +221,7 @@ namespace Textpattern\Skin {
                         );
                     }
                 } else {
-                    throw new \Exception('duplicted_skin');
+                    throw new \Exception('duplicated_skin');
                 }
             } else {
                 throw new \Exception('unknown_skin');
@@ -292,7 +298,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Get and decodes the Composer file contents.
+         * Get and decodes the Manifest file contents.
          *
          * @return array
          * @throws \Exception
@@ -315,7 +321,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Imports the skin into the database from the Composer file contents.
+         * Imports the skin into the database from the Manifest file contents.
          *
          * @return bool False on error
          */
@@ -324,21 +330,13 @@ namespace Textpattern\Skin {
         {
             extract($this->getJSONInfos());
 
-            if ($authors) {
-                $author_list = array();
-
-                foreach ($authors as $author) {
-                    $author_list[] = $author['name'];
-                }
-            }
-
             return (bool) safe_upsert(
                 self::$table,
-                "title = '".doSlash($name)."',
-                 version = '".doSlash($version)."',
-                 description = '".doSlash($description)."',
-                 author = '".doSlash(implode(', ', $author_list))."',
-                 website = '".doSlash($homepage)."'
+                "title = '".doSlash(isset($name) ? $name : $this->skin)."',
+                 version = '".doSlash(isset($version) ? $version : '')."',
+                 description = '".doSlash(isset($description) ? $description : '')."',
+                 author = '".doSlash(isset($author) ? $author : '')."',
+                 website = '".doSlash(isset($homepage_url) ? $homepage_url : '')."'
                 ",
                 "name = '".doSlash($this->skin)."'"
             );
@@ -514,7 +512,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Exports the skin row by creating or editing the Composer file contents.
+         * Exports the skin row by creating or editing the Manifest file contents.
          *
          * @param  array $row Skin row as an associative array
          * @return bool  False on error
@@ -526,27 +524,19 @@ namespace Textpattern\Skin {
 
             $contents = $this->isWritable(static::$file) ? $this->getJSONInfos() : array();
 
-            $contents['name'] = ($title ? $title : $name).' '.$this->stamp;
+            $contents['name'] = ($title ? $title : $name).$this->stamp;
             $description ? $contents['description'] = $description : '';
             $version ? $contents['version'] = $version : '';
-            $website ? $contents['homepage'] = $website : '';
-
-            if ($author) {
-                $authors = explode(', ', $author);
-                $contents['authors'] ?: $contents['authors'] = array();
-
-                for ($i = 0, $count = count($authors); $i < $count; $i++) {
-                    $contents['authors'][$i]['name'] = $authors[$i];
-                }
-            }
+            $website ? $contents['homepage_url'] = $website : '';
+            $author ? $contents['author'] = $author : '';
 
             return (bool) $this->filePutJsonContents($contents);
         }
 
         /**
-         * Creates/overrides the Composer file.
+         * Creates/overrides the Manifest file.
          *
-         * @param  array $contents The composer file contents;
+         * @param  array $contents The manifest file contents;
          * @return bool  False on error.
          */
 
@@ -583,7 +573,10 @@ namespace Textpattern\Skin {
                 if ($this->hasAssets()) {
                     throw new \Exception('unable_to_delete_non_empty_skin');
                 } elseif ($this->deleteSkin()) {
-                    static::$installed = array_splice(static::$installed, $this->skin, 1);
+                    static::$installed = array_diff_key(
+                        static::$installed,
+                        array($this->skin => '')
+                    );
 
                     self::getCurrent() === $this->skin ? self::setCurrent($this->skin) : '';
 

@@ -221,7 +221,7 @@ namespace Textpattern\Skin {
          *
          * Skin directories name must be in lower cases
          * and sanitized for URL to appears in the select list.
-         * Theses directories also need to contain a composer.json file
+         * Theses directories also need to contain a manifest.json file
          * to get the skin title from the 'name' JSON field.
          *
          * @return array Associative array of skin names and their related title.
@@ -253,10 +253,9 @@ namespace Textpattern\Skin {
         public static function getRecDirIterator()
         {
             return new RecIteratorIterator(
-                new RecFilterIterator(
+                new RecRegexIterator(
                     new RecDirIterator(get_pref('skin_base_path')),
-                    'json',
-                    'composer'
+                    '/^manifest\.json/i'
                 ),
                 1
             );

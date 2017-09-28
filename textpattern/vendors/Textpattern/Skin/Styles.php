@@ -51,7 +51,7 @@ namespace Textpattern\Skin {
 
             return (bool) file_put_contents(
                 $this->getPath(static::$dir.'/'.$name.'.'.static::$extension),
-                $css
+                $css ? $css : '// Empty style.'
             );
         }
     }

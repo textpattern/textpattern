@@ -241,11 +241,22 @@ namespace Textpattern\Skin {
 
         public function getRecDirIterator()
         {
+            if ($this->templates) {
+                $templates = '('.implode('|', $this->templates).')';
+            } else {
+                $templates = '[a-z][a-z0-9_\-\.]{0,63}';
+            }
+
+            if (static::$extension === 'txp') {
+                $extension = '(txp|html)';
+            } else {
+                $extension = static::$extension;
+            }
+
             return new RecIteratorIterator(
-                new RecFilterIterator(
+                new RecRegexIterator(
                     new RecDirIterator($this->getPath(static::$dir)),
-                    static::$extension,
-                    $this->templates
+                    '/^'.$templates.'\.'.$extension.'$/i'
                 ),
                 static::$depth
             );
@@ -270,7 +281,9 @@ namespace Textpattern\Skin {
                 $updates = array();
 
                 foreach ($fields as $field) {
-                    $updates[] = $field.'=VALUES('.$field.')';
+                    if ($field !== 'name' && $field !== 'name') {
+                        $updates[] = $field.'=VALUES('.$field.')';
+                    }
                 }
 
                 $update = 'ON DUPLICATE KEY UPDATE '.implode(', ', $updates);
@@ -292,10 +305,10 @@ namespace Textpattern\Skin {
 
         public function dropRemovedFiles($not)
         {
+            $where = "skin = '".doSlash($this->skin)."'";
+
             if ($not) {
-                $where = "name not in ('".implode("', '", array_map('doSlash', $not))."')";
-            } else {
-                $where = '1 = 1';
+                $where .= " AND name NOT IN ('".implode("', '", array_map('doSlash', $not))."')";
             }
 
             if ($drop = (bool) safe_delete(static::$table, $where)) {
@@ -327,7 +340,7 @@ namespace Textpattern\Skin {
                     foreach ($rows as $row) {
                         $templates[] = $row['name'];
                         $row['skin'] = strtolower(sanitizeForUrl($row['skin'].$this->stamp));
-                        $sql_fields ?: $sql_fields = array_keys($row);
+                        isset($sql_fields) ?: $sql_fields = array_keys($row);
                         $sql_values[] = "('".implode("', '", array_map('doSlash', $row))."')";
                     }
 
