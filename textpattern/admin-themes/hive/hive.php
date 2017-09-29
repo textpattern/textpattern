@@ -57,7 +57,7 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = script_js('vendors/enyo/dropzone/dropzone.js', TEXTPATTERN_SCRIPT_URL).n;
 
         $js = <<< EOS
-textpattern.Route.add('file', function () {
+function txp_dropzone() {
     var dropform = $('.upload-form'), longform = $('form[name=longform]');
 
     if (!longform.length) {
@@ -83,9 +83,12 @@ textpattern.Route.add('file', function () {
         autoProcessQueue: false,
         addRemoveLinks: true,
         successmultiple: function() {
-            reset.click();
-//            longform.find('table.txp-list>tbody').load('?event='+textpattern.event+' form[name=longform] table.txp-list>tbody>*', txp_columniser);
-//            dropform.off('submit').submit();
+//            reset.click();
+            $('#file_container').load('index.php #file_container>*', dropform.serializeArray(), function() {
+                txp_dropzone()
+                $('.multi_edit_form').txpMultiEditForm()
+                txp_columniser()
+            });
         },
         init: function() {
             var dz = this;
@@ -113,7 +116,9 @@ textpattern.Route.add('file', function () {
             eval(response)
         }
     });
-});
+}
+
+textpattern.Route.add('file', txp_dropzone);
 EOS;
         $out[] = script_js($js);
 

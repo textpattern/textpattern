@@ -226,7 +226,7 @@ function file_list($message = '', $ids = array())
         $categories = event_category_popup('file', '', 'file_category');
         $createBlock[] =
             n.tag_start('div', array('class' => 'txp-control-panel')).
-            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? gTxt('file_category').$categories : '')));
+            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? tag(gTxt('file_category'), 'label', array('for' => 'file_category')).$categories : '')));
 
         $existing_files = get_filenames();
 
