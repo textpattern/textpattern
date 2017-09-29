@@ -1836,6 +1836,12 @@ textpattern.Route.add('article, file', function () {
     $(document).on('change', '.posted input', function (e) {
         $('#publish_now, #reset_time').prop('checked', false);
     });
+
+    $('.upload-form').on('drop', function(e) {
+        $(this).one('change', function() {
+            $(this).submit()
+        });
+    });
 });
 
 // 'Clone' button on Pages, Forms, Styles panels.

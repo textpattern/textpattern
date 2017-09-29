@@ -29,7 +29,7 @@ if (!defined('TXP_INSTALL')) {
 @set_time_limit(0);
 
 global $DB, $prefs, $txp_user, $txp_groups;
-global $permlink_mode, $siteurl, $blog_uid, $theme_name;
+global $permlink_mode, $siteurl, $blog_uid, $theme_name, $public_themes;
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/admin_config.php';
 
@@ -53,7 +53,10 @@ $blog_uid = md5(uniqid(rand(), true));
 $siteurl = preg_replace('%^https?://%', '', $siteurl);
 $siteurl = str_replace(' ', '%20', $siteurl);
 $theme_name = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
-$themedir = txpath.DS.'setup';
+
+get_public_themes_list();
+$setupdir = txpath.DS.'setup';
+$public_theme = empty($public_themes[$_SESSION['public_theme']]['themedir']) ? 'setup' : $_SESSION['public_theme'];
 
 if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
     die("Textpattern database table already exists. Can't run setup.");
@@ -79,31 +82,13 @@ $txp_user = $_SESSION['name'];
 create_user($txp_user, $_SESSION['email'], $_SESSION['pass'], $_SESSION['realname'], 1);
 
 
-
-// --- Theme setup
-// Load theme /data, /styles, /forms, /pages
-
-foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
-    safe_query("INSERT INTO `".PFX."txp_css`(name, css) VALUES('".doSlash($key)."', '".doSlash($data)."')");
-}
-
-foreach (get_files_content($themedir.'/forms', 'txp') as $key=>$data) {
-    list($type, $name) = explode('.', $key);
-    safe_query("INSERT INTO `".PFX."txp_form`(type, name, Form) VALUES('".doSlash($type)."', '".doSlash($name)."', '".doSlash($data)."')");
-}
-
-foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
-    safe_query("INSERT INTO `".PFX."txp_page`(name, user_html) VALUES('".doSlash($key)."', '".doSlash($data)."')");
-}
-
-
 /*  Load theme prefs:
         /data/core.prefs    - Allow override some core prefs. Used only in setup theme.
         /data/theme.prefs   - Theme global and private prefs.
                                 global  - Used in setup and for AutoCreate missing prefs.
                                 private - Will be created after user login
 */
-foreach (get_files_content($themedir.'/data', 'prefs') as $key=>$data) {
+foreach (get_files_content($setupdir.'/data', 'prefs') as $key=>$data) {
     if ($out = @json_decode($data, true)) {
         foreach ($out as $name => $p) {
             if (empty($p['private'])) {
@@ -116,12 +101,40 @@ foreach (get_files_content($themedir.'/data', 'prefs') as $key=>$data) {
 
 $import = new \Textpattern\Import\TxpXML();
 
-foreach (get_files_content($themedir.'/data', 'xml') as $key=>$data) {
+foreach (get_files_content($setupdir.'/data', 'xml') as $key=>$data) {
     $import->importXml($data);
 }
 
-foreach (get_files_content($themedir.'/articles', 'xml') as $key=>$data) {
+foreach (get_files_content($setupdir.'/articles', 'xml') as $key=>$data) {
     $import->importXml($data);
+}
+
+
+// --- Theme setup.
+// Load theme /data, /styles, /forms, /pages
+
+if (class_exists('\Textpattern\Skin\Main') && $public_theme != 'setup') {
+        Txp::get('\Textpattern\Skin\Main', array($public_theme => array()))->import();
+        safe_update('txp_section', 'skin = "'.doSlash($public_theme).'"', '1=1');
+} else {
+    $themedir = $public_themes[$public_theme]['themedir'];
+
+    foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
+        safe_query("INSERT INTO `".PFX."txp_css`(name, css) VALUES('".doSlash($key)."', '".doSlash($data)."')");
+    }
+
+    if ($files = glob("{$themedir}/forms/*/*\.txp")) {
+        foreach  ($files as $file) {
+            if (preg_match('%/forms/(\w+)/(\w+)\.txp$%', $file, $mm)) {
+                $data = @file_get_contents($file);
+                safe_query("INSERT INTO `".PFX."txp_form`(type, name, Form) VALUES('".doSlash($mm[1])."', '".doSlash($mm[2])."', '".doSlash($data)."')");
+            }
+        }
+    }
+
+    foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
+        safe_query("INSERT INTO `".PFX."txp_page`(name, user_html) VALUES('".doSlash($key)."', '".doSlash($data)."')");
+    }
 }
 
 // --- Theme setup end

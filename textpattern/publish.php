@@ -1128,8 +1128,12 @@ function makeOut()
 
 function validContext($context)
 {
-    foreach (array('article', 'image', 'file', 'link') as $type) {
-        $valid[gTxt($type.'_context')] = $type;
+    static $valid = null;
+
+    if (empty($valid)) {
+        foreach (array('article', 'image', 'file', 'link') as $type) {
+            $valid[gTxt($type.'_context')] = $type;
+        }
     }
 
     return isset($valid[$context]) ? $valid[$context] : 'article';
