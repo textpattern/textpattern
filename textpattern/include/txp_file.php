@@ -938,7 +938,11 @@ function file_insert()
     }
 
     if (gps('app_mode') == 'async') {
-        $response[] = '$("input[type=file]").val("")';
+        $response[] = 'var form = $(".upload-form")';
+        $response[] = 'form.find("input[type=file]").attr("disabled", "disabled")';
+        $response[] = '$("#file_container").load("index.php #file_container>*", form.serializeArray(), function() {
+                textpattern.Route.init({step:"txp-listtables"})
+            })';
         $response[] = announce($message, $status);
         send_script_response(join(";\n", $response));
 

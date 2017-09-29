@@ -66,7 +66,7 @@ function txp_dropzone() {
 
     var upload = dropform.find('input[type=submit]'), reset = $('<input type="reset" />').hide(), uploadText = upload.val(), selectText = textpattern.gTxt('select')
     var previews = $('<div class="dropzone dropzone-previews" />').hide()
-    dropform.off('submit.txpAsyncForm')
+    dropform.off('submit')
         .append(previews)
         .find('.inline-file-uploader')
         .append(reset)
@@ -82,14 +82,9 @@ function txp_dropzone() {
         clickable: previews[0],
         autoProcessQueue: false,
         addRemoveLinks: true,
-        successmultiple: function() {
-//            reset.click();
-            $('#file_container').load('index.php #file_container>*', dropform.serializeArray(), function() {
-                txp_dropzone()
-                $('.multi_edit_form').txpMultiEditForm()
-                txp_columniser()
-            });
-        },
+/*        successmultiple: function() {
+            reset.click();
+        },*/
         init: function() {
             var dz = this;
             dz.on('addedfile', function(file) {
@@ -118,7 +113,7 @@ function txp_dropzone() {
     });
 }
 
-textpattern.Route.add('file', txp_dropzone);
+textpattern.Route.add('file.txp-listtables', txp_dropzone);
 EOS;
         $out[] = script_js($js);
 

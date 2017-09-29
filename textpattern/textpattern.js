@@ -899,7 +899,7 @@ textpattern.Route =
         }, options);
 
         $.each(textpattern.Route.attached, function (index, data) {
-            if (data.page === '' || data.page === options.event || data.page === options.event + '.' + options.step) {
+            if (data.page === '' || data.page === options.event || data.page === '.' + options.step || data.page === options.event + '.' + options.step) {
                 data.fn({
                     'event': options.event,
                     'step' : options.step,
@@ -1752,6 +1752,11 @@ jQuery.fn.restorePanes = function () {
 
 var cookieEnabled = true;
 
+textpattern.Route.add('.txp-listtables', function () {
+    txp_columniser()
+    $('.multi_edit_form').txpMultiEditForm()
+});
+
 // Setup panel.
 
 textpattern.Route.add('setup', function () {
@@ -1956,8 +1961,6 @@ textpattern.Route.add('image', function () {
 // All panels?
 
 textpattern.Route.add('', function () {
-    txp_columniser();
-
     // Pane states
     var prefsGroup = $('form:has(.switcher-list li a[data-txp-pane])');
 
@@ -1974,7 +1977,6 @@ textpattern.Route.add('', function () {
         var data = new Object;
 
         data[textpattern.event] = {'tab':me.data('txp-pane')};
-//        data[textpattern.event] = me.data('txp-pane');
         textpattern.storage.update(data);
     });
 
@@ -2034,9 +2036,6 @@ $(document).ready(function () {
     // Attach toggle behaviours.
     $(document).on('click', '.txp-summary a[class!=pophelp]', toggleDisplayHref);
 
-    // Attach multi-edit form.
-    $('.multi_edit_form').txpMultiEditForm();
-
     // Establish AJAX timeout from prefs.
     if ($.ajaxSetup().timeout === undefined) {
         $.ajaxSetup({timeout: textpattern.ajax_timeout});
@@ -2069,9 +2068,6 @@ $(document).ready(function () {
         $(this).parent().remove();
     });
 
-    // Hide popup elements.
-    $('.txp-dropdown').hide();
-
     // Event handling and automation.
     $(document).on('change.txpAutoSubmit', 'form [data-submit-on="change"]', function (e) {
         $(this).parents('form').submit();
@@ -2087,6 +2083,7 @@ $(document).ready(function () {
     }
 
     // Establish UI defaults.
+    $('.txp-dropdown').hide();
     $('.txp-dialog').txpDialog();
     $('.txp-dialog.modal').dialog('option', 'modal', true);
     $('.txp-datepicker').txpDatepicker();
@@ -2119,6 +2116,10 @@ $(document).ready(function () {
 
     // Initialize panel specific JavaScript.
     textpattern.Route.init();
+
+    // Attach multi-edit form.
+//    $('.multi_edit_form').txpMultiEditForm();
+    textpattern.Route.init({step:'txp-listtables'})
 
     // Arm UI.
     $('.not-ready').removeClass('not-ready');
