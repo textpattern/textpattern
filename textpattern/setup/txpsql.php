@@ -53,6 +53,9 @@ $blog_uid = md5(uniqid(rand(), true));
 $siteurl = preg_replace('%^https?://%', '', $siteurl);
 $siteurl = str_replace(' ', '%20', $siteurl);
 $theme_name = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
+
+$theme_public = $_SESSION['theme_public'] ? $_SESSION['theme_public'] : 'setup';
+
 $themedir = txpath.DS.'setup';
 
 if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {

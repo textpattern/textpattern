@@ -542,6 +542,10 @@ function getTxpLogin()
 
     $theme_chooser = selectInput('theme', $vals, (isset($_SESSION['theme']) ? txpspecialchars($_SESSION['theme']) : 'hive'), '', '', 'setup_admin_theme');
 
+    $vals = array();
+    $vals['setup'] = "Theme from setup folder";
+    $public_theme_chooser = selectInput('public_theme', $vals, (isset($_SESSION['public_theme']) ? txpspecialchars($_SESSION['public_theme']) : ''), '', '', 'setup_public_theme');
+
     echo txp_setup_progress_meter(3).
         n.'<div class="txp-setup">'.
         n.'<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
@@ -584,6 +588,11 @@ function getTxpLogin()
             $theme_chooser,
             'admin_theme', 'theme_name', array('class' => 'txp-form-field')
         ).
+        inputLabel(
+            'setup_public_theme',
+            $public_theme_chooser,
+            'public_theme', 'public_theme_name', array('class' => 'txp-form-field')
+        ).
         graf(
             fInput('submit', 'Submit', setup_gTxt('next_step'), 'publish')
         ).
@@ -609,6 +618,7 @@ function createTxp()
     $_SESSION['pass'] = ps('pass');
     $_SESSION['email'] = ps('email');
     $_SESSION['theme'] = ps('theme');
+    $_SESSION['public_theme'] = ps('public_theme');
 
     if ($_SESSION['name'] == '') {
         echo txp_setup_progress_meter(3).
