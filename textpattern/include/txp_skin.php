@@ -188,10 +188,10 @@ function skin_list($message = '')
 
     $rs = safe_rows_start(
         '*,
-            (SELECT COUNT(*) FROM '.safe_pfx_j('txp_section').' s WHERE s.skin = txp_skin.name) section_count,
-            (SELECT COUNT(*) FROM '.safe_pfx_j('txp_page').' p WHERE p.skin = txp_skin.name) page_count,
-            (SELECT COUNT(*) FROM '.safe_pfx_j('txp_form').' f WHERE f.skin = txp_skin.name) form_count,
-            (SELECT COUNT(*) FROM '.safe_pfx_j('txp_css').' c WHERE c.skin = txp_skin.name) css_count',
+            (SELECT COUNT(*) FROM '.safe_pfx_j('txp_section').' WHERE txp_section.skin = txp_skin.name) section_count,
+            (SELECT COUNT(*) FROM '.safe_pfx_j('txp_page').' WHERE txp_page.skin = txp_skin.name) page_count,
+            (SELECT COUNT(*) FROM '.safe_pfx_j('txp_form').' WHERE txp_form.skin = txp_skin.name) form_count,
+            (SELECT COUNT(*) FROM '.safe_pfx_j('txp_css').' WHERE txp_css.skin = txp_skin.name) css_count',
         'txp_skin',
         "{$criteria} order by {$sort_sql} limit {$offset}, {$limit}"
     );
