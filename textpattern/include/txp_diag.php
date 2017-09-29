@@ -198,29 +198,19 @@ function doDiagnostics()
         }
 
         // Check for Textpattern updates, at most once every 24 hours.
-        // For legacy reasons, attempt an unserialize() first and if it fails,
-        // try the more recent json_decode().
-        // @todo Entirely remove unserialize() in some future version.
-        $lastCheck = get_pref('last_update_check', '');
-        $updateInfo = json_decode($lastCheck);
+        $lastCheck = json_decode(get_pref('last_update_check', ''), true);
 
-        if ($updateInfo === null && $lastCheck) {
-            $updateInfo = (object) unserialize($lastCheck);
-        }
-
-        if (!$updateInfo || ($now > ($updateInfo->when + (60 * 60 * 24)))) {
-            if (!$updateInfo) {
-                $updateInfo = new \StdClass();
-            }
-
+        if ($now > (@(int)$lastCheck['when'] + (60 * 60 * 24))) {
             $updates = checkUpdates();
-            $updateInfo->msg = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
-            $updateInfo->when = $now;
-            set_pref('last_update_check', json_encode($updateInfo, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');
+            $lastCheck = array(
+                'when'  => $now,
+                'msg'   => (empty($updates) ? '' : gTxt($updates['msg'], array('{version}' => $updates['version']))),
+            );
+            set_pref('last_update_check', json_encode($lastCheck, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');
         }
 
-        if (!empty($updateInfo->msg)) {
-            $fail['textpattern_version_update'] = diag_msg_wrap($updateInfo->msg, 'information');
+        if (!empty($lastCheck['msg'])) {
+            $fail['textpattern_version_update'] = diag_msg_wrap($lastCheck['msg'], 'information');
         }
     }
 
@@ -559,6 +549,11 @@ function doDiagnostics()
         );
 
         if ($step == 'high') {
+            $lastCheck = json_decode(get_pref('last_update_check', ''), true);
+            if (!empty($lastCheck['msg'])) {
+                $out[] = 'Last update check: '.strftime('%Y-%m-%d %H:%M:%S', $lastCheck['when']).', '.strip_tags($lastCheck['msg']).n;
+            }
+
             $out[] = n.'Charset (default/config)'.cs.$DB->default_charset.'/'.$DB->charset.n;
 
             $result = safe_query("SHOW variables LIKE 'character_se%'");
