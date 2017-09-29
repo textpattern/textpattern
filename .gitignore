@@ -15,4 +15,7 @@ Thumbs.db
 /images/!.gitignore
 /files/*
 /files/!.htaccess-dist
+/themes/*
+/themes/!.htaccess-dist
+!/themes/default/
 *~
