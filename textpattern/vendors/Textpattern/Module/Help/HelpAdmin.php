@@ -105,17 +105,19 @@ class HelpAdmin
             $x = $xml->xpath("//item[@id='{$item}']");
         }
 
-        $out = $title = '';
+        $title = '';
         if ($x) {
             $pophelp = trim($x[0]);
             $title = txpspecialchars($x[0]->attributes()->title);
             $format = $x[0]->attributes()->format;
             if ($format == 'textile') {
                 $textile = new \Netcarver\Textile\Parser();
-                $out .= $textile->textileThis($pophelp).n;
+                $out = $textile->textileThis($pophelp).n;
             } else {
-                $out .= $pophelp.n;
+                $out = $pophelp.n;
             }
+        } else {
+            $out = gTxt('help_missing');
         }
 
         $out = tag($out, 'div', array('id' => 'pophelp-event'));
