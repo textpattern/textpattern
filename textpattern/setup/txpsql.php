@@ -29,7 +29,7 @@ if (!defined('TXP_INSTALL')) {
 @set_time_limit(0);
 
 global $DB, $prefs, $txp_user, $txp_groups;
-global $permlink_mode, $siteurl, $blog_uid, $theme_name;
+global $permlink_mode, $siteurl, $blog_uid, $theme_name, $public_themes;
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/admin_config.php';
 
@@ -54,9 +54,9 @@ $siteurl = preg_replace('%^https?://%', '', $siteurl);
 $siteurl = str_replace(' ', '%20', $siteurl);
 $theme_name = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
 
-$theme_public = $_SESSION['theme_public'] ? $_SESSION['theme_public'] : 'setup';
-
-$themedir = txpath.DS.'setup';
+get_public_themes_list();
+$setupdir = txpath.DS.'setup';
+$themedir = empty($public_themes[$_SESSION['public_theme']]['themedir']) ? $setupdir : $public_themes[$_SESSION['public_theme']]['themedir'];
 
 if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
     die("Textpattern database table already exists. Can't run setup.");
@@ -110,7 +110,7 @@ foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
                                 global  - Used in setup and for AutoCreate missing prefs.
                                 private - Will be created after user login
 */
-foreach (get_files_content($themedir.'/data', 'prefs') as $key=>$data) {
+foreach (get_files_content($setupdir.'/data', 'prefs') as $key=>$data) {
     if ($out = @json_decode($data, true)) {
         foreach ($out as $name => $p) {
             if (empty($p['private'])) {
@@ -123,11 +123,11 @@ foreach (get_files_content($themedir.'/data', 'prefs') as $key=>$data) {
 
 $import = new \Textpattern\Import\TxpXML();
 
-foreach (get_files_content($themedir.'/data', 'xml') as $key=>$data) {
+foreach (get_files_content($setupdir.'/data', 'xml') as $key=>$data) {
     $import->importXml($data);
 }
 
-foreach (get_files_content($themedir.'/articles', 'xml') as $key=>$data) {
+foreach (get_files_content($setupdir.'/articles', 'xml') as $key=>$data) {
     $import->importXml($data);
 }
 

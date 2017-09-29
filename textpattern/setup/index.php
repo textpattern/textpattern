@@ -542,8 +542,7 @@ function getTxpLogin()
 
     $theme_chooser = selectInput('theme', $vals, (isset($_SESSION['theme']) ? txpspecialchars($_SESSION['theme']) : 'hive'), '', '', 'setup_admin_theme');
 
-    $vals = array();
-    $vals['setup'] = "Theme from setup folder";
+    $vals = get_public_themes_list();
     $public_theme_chooser = selectInput('public_theme', $vals, (isset($_SESSION['public_theme']) ? txpspecialchars($_SESSION['public_theme']) : ''), '', '', 'setup_public_theme');
 
     echo txp_setup_progress_meter(3).
@@ -945,4 +944,26 @@ function setup_gTxt($var, $atts = array(), $escape = 'html')
     }
 
     return $xlate;
+}
+
+// -------------------------------------------------------------
+
+function get_public_themes_list()
+{
+    global $public_themes;
+
+    $public_themes = $out = array();
+
+    if ($files = glob(txpath."/{setup,../themes/*}/manifest\.json", GLOB_BRACE)) {
+        foreach  ($files as $file) {
+            $file = realpath($file);
+            if (preg_match('%^(.*/(\w+))/manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
+                $public_themes[$mm[2]] = $manifest;
+                $public_themes[$mm[2]]['themedir'] = $mm[1];
+                $out[$mm[2]] = empty($manifest['name']) ? $mm[2] : $manifest['name'];
+            }
+        }
+    }
+
+    return $out;
 }
