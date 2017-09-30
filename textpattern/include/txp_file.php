@@ -236,7 +236,7 @@ function file_list($message = '', $ids = array())
                     eInput('file').
                     sInput('file_create').
                     tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
-                    selectInput('filename', $existing_files, '', 1, '', 'file-existing').
+                    selectInput('filename', $existing_files, array(), false, '', 'file-existing').
                     fInput('submit', '', gTxt('create')),
                 '', '', 'post', 'assign-existing-form', '', 'assign_file');
         }
@@ -847,37 +847,56 @@ function file_create()
     require_privs('file.edit.own');
 
     extract(doSlash(array_map('assert_string', gpsa(array(
-        'filename',
         'title',
         'category',
         'permissions',
         'description',
     )))));
 
-    $safe_filename = sanitizeForFile($filename);
-    if ($safe_filename != $filename) {
-        file_list(array(gTxt('invalid_filename'), E_ERROR));
+    $filename = array_filter((array) gps('filename'));
 
-        return;
-    }
+    $success = $errors = $ids = $filenames = array();
 
-    $size = filesize(build_file_path($file_base_path, $safe_filename));
-    $id = file_db_add($safe_filename, $category, $permissions, $description, $size, $title);
+    foreach ($filename as $file) {
+        $safe_filename = sanitizeForFile($file);
+        if ($safe_filename != $file) {
+            $errors[] = gTxt('invalid_filename').txpspecialchars($file);
+            continue;
+    /*
+            file_list(array(gTxt('invalid_filename'), E_ERROR));
 
-    if ($id === false) {
-        file_list(array(gTxt('file_upload_failed').' (db_add)', E_ERROR));
-    } else {
-        $newpath = build_file_path($file_base_path, $safe_filename);
+            return;
+    */
+        }
 
-        if (is_file($newpath)) {
-            file_set_perm($newpath);
-            update_lastmod('file_created', compact('id', 'safe_filename', 'title', 'category', 'description'));
-            now('created', true);
-            file_list(gTxt('linked_to_file').' '.$safe_filename);
+        $size = filesize(build_file_path($file_base_path, $safe_filename));
+        $id = file_db_add($safe_filename, $category, $permissions, $description, $size, $title);
+
+        if ($id === false) {
+            $errors[] = gTxt('file_upload_failed').$safe_filename.' (db_add)';
+//            file_list(array(gTxt('file_upload_failed').' (db_add)', E_ERROR));
         } else {
-            file_list(gTxt('file_not_found').' '.$safe_filename);
+            $newpath = build_file_path($file_base_path, $safe_filename);
+
+            if (is_file($newpath)) {
+                file_set_perm($newpath);
+                $ids[] = $id;
+                $filenames[] = $safe_filename;
+                $success[] = gTxt('linked_to_file').' '.$safe_filename;
+//                file_list(gTxt('linked_to_file').' '.$safe_filename);
+            } else {
+                $errors[] = gTxt('file_not_found').' '.$safe_filename;
+//                file_list(gTxt('file_not_found').' '.$safe_filename);
+            }
         }
     }
+
+    if ($ids) {
+        now('created', true);
+        update_lastmod('file_created', compact('ids', 'filenames', 'title', 'category', 'description'));
+    }
+
+    file_list(array(implode(br, array_merge($success, $errors)), $success ? ($errors ? E_WARNING : 0) : E_ERROR));
 }
 
 // -------------------------------------------------------------
@@ -887,8 +906,7 @@ function file_insert()
     global $txp_user, $file_base_path, $file_max_upload_size;
 
     require_privs('file.edit.own');
-    $ids = array();
-    $success = $errors = array();
+    $success = $errors = $ids = array();
     $files = file_refactor($_FILES['thefile']) or $files = array();
 
     extract(doSlash(array_map('assert_string', gpsa(array(
@@ -938,13 +956,17 @@ function file_insert()
     }
 
     if (gps('app_mode') == 'async') {
-        $response[] = 'var form = $(".upload-form")';
-        $response[] = 'form.find("input[type=file]").attr("disabled", "disabled")';
-        $response[] = '$("#file_container").load("index.php #file_container>*", form.serializeArray(), function() {
-                textpattern.Route.init({step:"txp-container"})
-            })';
         $response[] = announce($message, $status);
-        send_script_response(join(";\n", $response));
+
+        if ($success) {
+            $response[] = 'var form = $(".upload-form")'.n.
+                'form.find("input[type=file]").attr("disabled", "disabled")'.n.
+                '$("#file_container").load("index.php #file_container>*", form.serializeArray(), function() {
+                    textpattern.Route.init({step:"txp-container"})
+                })';
+        }
+
+        send_script_response(join("\n", $response));
 
         // Bail out.
         return;
