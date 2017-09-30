@@ -2784,12 +2784,12 @@ function stripPHP($in)
  * @package Form
  */
 
-function event_category_popup($name, $cat = '', $id = '')
+function event_category_popup($name, $cat = '', $id = '', $atts = array())
 {
     $rs = getTree('root', $name);
 
     if ($rs) {
-        return treeSelectInput('category', $rs, $cat, $id);
+        return treeSelectInput('category', $rs, $cat, $id, 0, $atts);
     }
 
     return false;

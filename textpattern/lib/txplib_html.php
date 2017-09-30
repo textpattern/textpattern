@@ -382,11 +382,7 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
         sInput($step),
         hInput($thing, $value),
         ($thing2) ? hInput($thing2, $thing2val) : '',
-        ($remember) ? hInput('page', $page) : '',
-        ($remember) ? hInput('sort', $sort) : '',
-        ($remember) ? hInput('dir', $dir) : '',
-        ($remember) ? hInput('crit', $crit) : '',
-        ($remember) ? hInput('search_method', $search_method) : '',
+        ($remember) ? hInput(comact('page', 'sort', 'dir', 'crit', 'search_method')) : '',
         tInput(),
         n.'</form>',
     ));
@@ -563,10 +559,7 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
             n.gTxt('of').
             n.span($numPages, array('class' => 'total-pages')).
             eInput($event).
-            hInput('sort', $sort).
-            hInput('dir', $dir).
-            hInput('crit', $crit).
-            hInput('search_method', $search_method),
+            hInput(compact('sort', 'dir', 'crit', 'search_method')),
             '',
             '',
             'get'
@@ -1490,12 +1483,7 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
             (!empty($max_file_size) ? hInput('MAX_FILE_SIZE', $max_file_size) : '').
             eInput($event).
             sInput($step).
-            hInput('id', $id).
-            hInput('sort', $sort).
-            hInput('dir', $dir).
-            hInput('page', $page).
-            hInput('search_method', $search_method).
-            hInput('crit', $crit).
+            hInput(compact('id', 'sort', 'dir', 'page', 'search_method','crit')).
             inputLabel(
                 $label_id,
                 tag_void('input', array('name' => $name, 'type' => 'file', 'required' => true, 'id' => $label_id, 'multiple' => $multiple)).

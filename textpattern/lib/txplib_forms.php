@@ -188,7 +188,7 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
  * @see    getTree()
  */
 
-function treeSelectInput($select_name = '', $array = array(), $value = '', $select_id = '', $truncate = 0)
+function treeSelectInput($select_name = '', $array = array(), $value = '', $select_id = '', $truncate = 0, $atts = array())
 {
     $out = array();
 
@@ -230,7 +230,7 @@ function treeSelectInput($select_name = '', $array = array(), $value = '', $sele
     return n.tag(n.join(n, $out).n, 'select', array(
         'id'   => $select_id,
         'name' => $select_name,
-    ));
+    ) + $atts);
 }
 
 /**
@@ -334,16 +334,22 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
 /**
  * Hidden form input.
  *
- * @param  string $name  The name
- * @param  string $value The value
- * @return string HTML input
+ * @param  string/array $name  The name
+ * @param  string       $value The value
+ * @return string       HTML input
  * @example
  * echo hInput('myInput', 'hidden value');
  */
 
-function hInput($name, $value)
+function hInput($name, $value = null)
 {
-    return fInput('hidden', $name, $value);
+    if (!is_array($name)) {
+        return fInput('hidden', $name, $value);
+    }
+
+    return array_walk($name, function(&$v, $n) {
+        $v = fInput('hidden', $n, $v);
+    }) ? implode($name) : false;
 }
 
 /**

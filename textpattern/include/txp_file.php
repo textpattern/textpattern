@@ -787,20 +787,12 @@ function file_edit($message = '', $id = '')
                         fInput('submit', '', gTxt('save'), 'publish'),
                         array('class' => 'txp-edit-actions')
                     ).
-                    hInput('category', $category).
                     hInput('perms', ($permissions == '-1') ? '' : $permissions).
-                    hInput('title', $title).
-                    hInput('description', $description).
-                    hInput('status', $status)
+                    hInput(compact('category', 'title', 'description', 'status'))
                 ).
                 eInput('file').
                 sInput('file_save').
-                hInput('id', $id).
-                hInput('sort', $sort).
-                hInput('dir', $dir).
-                hInput('page', $page).
-                hInput('crit', $crit).
-                hInput('search_method', $search_method),
+                hInput(compact('id', 'sort', 'dir', 'page', 'search_method','crit')),
             '', '', 'post', 'file-detail '.(($file_exists) ? '' : 'not-').'exists', '', (($file_exists) ? 'file_details' : 'assign_file')).
             n.tag_end('div');
     }
@@ -816,23 +808,14 @@ function file_db_add($filename, $category, $permissions, $description, $size, $t
         return false;
     }
 
-    $rs = safe_insert('txp_file',
-        "filename = '$filename',
-         title = '$title',
-         category = '$category',
-         permissions = '$permissions',
-         description = '$description',
-         size = '$size',
-         created = NOW(),
-         modified = NOW(),
-         author = '".doSlash($txp_user)."'
-    ");
+    $qs = quote_list(
+        array('author' => $txp_user) + compact('filename', 'title', 'category', 'permissions', 'description', 'size')
+    ) + array('created' => 'NOW()', 'modified' => 'NOW()');
+
+    $rs = safe_insert('txp_file', join_qs($qs, ','));
 
     if ($rs) {
-        $GLOBALS['ID'] = $rs;
-//        now('created', true);
-
-        return $GLOBALS['ID'];
+        return $GLOBALS['ID'] = $rs;
     }
 
     return false;
@@ -846,12 +829,12 @@ function file_create()
 
     require_privs('file.edit.own');
 
-    extract(doSlash(array_map('assert_string', gpsa(array(
+    extract(array_map('assert_string', gpsa(array(
         'title',
         'category',
         'permissions',
         'description',
-    )))));
+    ))));
 
     $filename = array_filter((array) gps('filename'));
 
@@ -862,11 +845,6 @@ function file_create()
         if ($safe_filename != $file) {
             $errors[] = gTxt('invalid_filename').txpspecialchars($file);
             continue;
-    /*
-            file_list(array(gTxt('invalid_filename'), E_ERROR));
-
-            return;
-    */
         }
 
         $size = filesize(build_file_path($file_base_path, $safe_filename));
@@ -874,7 +852,6 @@ function file_create()
 
         if ($id === false) {
             $errors[] = gTxt('file_upload_failed').$safe_filename.' (db_add)';
-//            file_list(array(gTxt('file_upload_failed').' (db_add)', E_ERROR));
         } else {
             $newpath = build_file_path($file_base_path, $safe_filename);
 
@@ -883,10 +860,8 @@ function file_create()
                 $ids[] = $id;
                 $filenames[] = $safe_filename;
                 $success[] = gTxt('linked_to_file').' '.$safe_filename;
-//                file_list(gTxt('linked_to_file').' '.$safe_filename);
             } else {
                 $errors[] = gTxt('file_not_found').' '.$safe_filename;
-//                file_list(gTxt('file_not_found').' '.$safe_filename);
             }
         }
     }
@@ -909,12 +884,12 @@ function file_insert()
     $success = $errors = $ids = array();
     $files = file_refactor($_FILES['thefile']) or $files = array();
 
-    extract(doSlash(array_map('assert_string', gpsa(array(
+    extract(array_map('assert_string', gpsa(array(
         'category',
         'title',
         'permissions',
         'description',
-    )))));
+    ))));
 
     foreach ($files as $file) {
         extract($file);
@@ -924,7 +899,7 @@ function file_insert()
         if ($file_max_upload_size < $size) {
             $errors[] = gTxt('file_upload_failed')." $name - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
         } elseif (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
-            $id = file_db_add(doSlash($newname), $category, $permissions, $description, $size, $title);
+            $id = file_db_add($newname, $category, $permissions, $description, $size, $title);
 
             if (!$id) {
                 $errors[] = gTxt('file_upload_failed').' (db_add)';
