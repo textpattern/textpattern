@@ -226,7 +226,7 @@ function file_list($message = '', $ids = array())
         $categories = event_category_popup('file', '', 'file_category');
         $createBlock[] =
             n.tag_start('div', array('class' => 'txp-control-panel')).
-            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? tag(gTxt('file_category'), 'label', array('for' => 'file_category')).$categories : '')));
+            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('file_category'), 'label', array('for' => 'file_category')).$categories : '')));
 
         $existing_files = get_filenames();
 
@@ -941,7 +941,7 @@ function file_insert()
         $response[] = 'var form = $(".upload-form")';
         $response[] = 'form.find("input[type=file]").attr("disabled", "disabled")';
         $response[] = '$("#file_container").load("index.php #file_container>*", form.serializeArray(), function() {
-                textpattern.Route.init({step:"txp-listtables"})
+                textpattern.Route.init({step:"txp-container"})
             })';
         $response[] = announce($message, $status);
         send_script_response(join(";\n", $response));

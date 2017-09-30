@@ -53,69 +53,23 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
-        $out[] = '<link rel="stylesheet" href="vendors/enyo/dropzone/dropzone.css">';
-        $out[] = script_js('vendors/enyo/dropzone/dropzone.js', TEXTPATTERN_SCRIPT_URL).n;
 
-        $js = <<< EOS
-function txp_dropzone() {
-    var dropform = $('.upload-form'), longform = $('form[name=longform]');
-
-    if (!longform.length) {
-        return;
+        // Dropzone
+        $out[] = '<link rel="stylesheet" href="vendors/enyo/dropzone/dropzone.css">'.n.
+            script_js('vendors/enyo/dropzone/dropzone.js', TEXTPATTERN_SCRIPT_URL).n.
+            script_js('vendors/enyo/dropzone/txpDropzone.js', TEXTPATTERN_SCRIPT_URL).n.
+            script_js(
+<<< EOS
+textpattern.Route.add('file.txp-container', function() {
+    if ($('form[name=longform]').length) {
+        jQuery('.upload-form').append('<div class="dropzone dropzone-previews" />').txpDropzone({
+            maxFiles: $max_files,
+            maxFilesize: $max_file_size
+        })
     }
-
-    var upload = dropform.find('input[type=submit]'), reset = $('<input type="reset" />').hide(), uploadText = upload.val(), selectText = textpattern.gTxt('select')
-    var previews = $('<div class="dropzone dropzone-previews" />').hide()
-    dropform.off('submit')
-        .append(previews)
-        .find('.inline-file-uploader')
-        .append(reset)
-        .find('input[type=file]').remove()
-    dropform.dropzone({
-        paramName: 'thefile',
-        params: {app_mode: 'async'},
-        uploadMultiple: true,
-        parallelUploads: $max_files,
-        maxFiles: $max_files,
-        maxFilesize: $max_file_size,
-        previewsContainer: previews[0],
-        clickable: previews[0],
-        autoProcessQueue: false,
-        addRemoveLinks: true,
-/*        successmultiple: function() {
-            reset.click();
-        },*/
-        init: function() {
-            var dz = this;
-            dz.on('addedfile', function(file) {
-                previews.show()
-                reset.show()
-                upload.val(uploadText)
-            })
-            reset.on('click', function() {
-                dz.removeAllFiles()
-                previews.hide()
-                reset.hide()
-                upload.val(selectText)
-            }).click()
-            dropform.on('submit', function(e) {
-                e.preventDefault()
-                if (dz.files.length) {
-                    dz.processQueue()
-                } else {
-                    previews.click()
-                }
-            });
-        },
-        success: function(file, response) {
-            eval(response)
-        }
-    });
-}
-
-textpattern.Route.add('file.txp-listtables', txp_dropzone);
-EOS;
-        $out[] = script_js($js);
+});
+EOS
+);
 
         // Custom JavaScript (see theme README for usage instructions).
         if (defined('admin_custom_js')) {

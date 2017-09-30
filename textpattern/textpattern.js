@@ -1741,7 +1741,7 @@ jQuery.fn.restorePanes = function () {
         }
     });
 
-    return $(this);
+    return $this;
 }
 
 /**
@@ -1752,7 +1752,7 @@ jQuery.fn.restorePanes = function () {
 
 var cookieEnabled = true;
 
-textpattern.Route.add('.txp-listtables', function () {
+textpattern.Route.add('.txp-container', function () {
     txp_columniser()
     $('.multi_edit_form').txpMultiEditForm()
 });
@@ -2119,7 +2119,7 @@ $(document).ready(function () {
 
     // Attach multi-edit form.
 //    $('.multi_edit_form').txpMultiEditForm();
-    textpattern.Route.init({step:'txp-listtables'})
+    textpattern.Route.init({step:'txp-container'})
 
     // Arm UI.
     $('.not-ready').removeClass('not-ready');
