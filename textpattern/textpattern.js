@@ -674,7 +674,7 @@ function setClassRemember(className, force)
  * @see    http://api.jquery.com/jQuery.post/
  */
 
-function sendAsyncEvent(data, fn, format, progress)
+function sendAsyncEvent(data, fn, format)
 {
     var formdata = false;
     if ($.type(data) === 'string' && data.length > 0) {
@@ -702,15 +702,18 @@ function sendAsyncEvent(data, fn, format, progress)
             contentType: false,
             xhr: function () {
                 var xhr = $.ajaxSettings.xhr();
-
-                if (typeof progress !== 'undefined') {
-                    xhr.upload.onprogress = function (e) {
-                        // For uploads
-                        if (e.lengthComputable) {
-                            progress.val(e.loaded / e.total)
-                        }
-                    };
-                }
+                // For uploads
+                xhr.upload.onprogress = function (e) {
+                    if (e.lengthComputable) {
+                        textpattern.Relay.callback('uploadProgress', e)
+                    }
+                };
+                xhr.upload.onloadstart = function (e) {
+                    textpattern.Relay.callback('uploadStart', e)
+                };
+                xhr.upload.onloadend = function (e) {
+                    textpattern.Relay.callback('uploadEnd', e)
+                };
 
                 return xhr;
             }
@@ -736,8 +739,20 @@ textpattern.Relay =
      * textpattern.Relay.callback('newEvent', {'name1': 'value1', 'name2': 'value2'});
      */
 
-    callback: function (event, data) {
-        return $(this).trigger(event, data);
+    callback: function (event, data, timeout) {
+        clearTimeout(textpattern.Relay.timeouts[event])
+
+        timeout = !timeout ? 0 : parseInt(timeout, 10) 
+        if (!timeout || isNaN(timeout)) {
+            return $(this).trigger(event, data)
+        }
+
+        textpattern.Relay.timeouts[event] = setTimeout(
+            $.proxy(function() {
+                return textpattern.Relay.callback(event, data)
+            }, this),
+            parseInt(timeout, 10)
+        )
     },
 
     /**
@@ -758,7 +773,9 @@ textpattern.Relay =
     register: function (event, fn) {
         $(this).on(event, fn);
         return this;
-    }
+    },
+
+    timeouts: {}
 };
 
 /**
@@ -852,6 +869,21 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
     if ($.type(console) === 'object' && $.type(console.log) === 'function') {
         console.log(data.message);
     }
+}).register('uploadProgress', function (event, data) {
+    $('progress.upload-progress').val(data.loaded / data.total)
+}).register('uploadStart', function (event, data) {
+    $('progress.upload-progress').val(0).show()
+}).register('uploadEnd', function (event, data) {
+    $('progress.upload-progress').hide()
+}).register('updateList', function (event, data) {
+    var list = data.list || '.txp-list-container', url = data.url || 'index.php'
+    $(list).load(url+" "+list+">*", data.data, function() {
+        txp_columniser()
+        $('.multi_edit_form').txpMultiEditForm()
+        $('.txp-list-col-tag-build').on('click', '.txp-tagbuilder-link', function (ev) {
+            txpAsyncLink(ev);
+        });
+    })
 });
 
 /**
@@ -939,7 +971,7 @@ jQuery.fn.txpAsyncForm = function (options) {
         {
             data   : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
             extra  : new Object,
-            spinner: typeof extra['_txp_spinner'] !== 'undefined' ? $(extra['_txp_spinner']) : ($this.hasClass('upload-form') ? $('<progress />').addClass('upload-progress') : $('<span />').addClass('spinner'))
+            spinner: typeof extra['_txp_spinner'] !== 'undefined' ? $(extra['_txp_spinner']) : $('<span />').addClass('spinner')
         };
 
         if (typeof extra['_txp_submit'] !== 'undefined') {
@@ -972,7 +1004,7 @@ jQuery.fn.txpAsyncForm = function (options) {
             }
         }
 
-        sendAsyncEvent(form.data, function () {}, options.dataType, form.spinner)
+        sendAsyncEvent(form.data, function () {}, options.dataType)
             .done(function (data, textStatus, jqXHR) {
                 if (options.success) {
                     options.success($this, event, data, textStatus, jqXHR);
@@ -1752,11 +1784,6 @@ jQuery.fn.restorePanes = function () {
 
 var cookieEnabled = true;
 
-textpattern.Route.add('.txp-container', function () {
-    txp_columniser()
-    $('.multi_edit_form').txpMultiEditForm()
-});
-
 // Setup panel.
 
 textpattern.Route.add('setup', function () {
@@ -1851,7 +1878,29 @@ textpattern.Route.add('article', function () {
 textpattern.Route.add('article, file', function () {
     $(document).on('change', '.posted input', function (e) {
         $('#publish_now, #reset_time').prop('checked', false);
-    });
+    })
+/*
+    $('input[type="file"][multiple]').on('change', function (e) {
+        if (!!window.FileReader && this.files && this.files[0]) {
+          var previews = $(this).parent().children('.upload-previews').empty();
+          
+          $(this.files).each(function () {
+            var preview = $("<div class='upload-preview' style=' height:128px;width:128px;float:left;overflow:hidden;margin:1em;border:1px solid gray' />")
+            if (this.type.match(/^image\//)) {
+                var reader = new FileReader(), name = this.name;
+                reader.readAsDataURL(this);
+                reader.onload = function (e) {
+                    preview.append("<img src='" + e.target.result + "' title='"+name+"' />");
+                }
+            } else {
+                preview.text(this.name+' ('+this.size+' B)')
+            }
+            
+            previews.append(preview)
+          });
+        }
+    }).parent().append('<div class="upload-previews" />')
+*/
 });
 
 // 'Clone' button on Pages, Forms, Styles panels.
@@ -2114,12 +2163,12 @@ $(document).ready(function () {
         e.preventDefault();
     });
 
+    // Attach multi-edit form.
+    $('.multi_edit_form').txpMultiEditForm()
+    txp_columniser()
+
     // Initialize panel specific JavaScript.
     textpattern.Route.init();
-
-    // Attach multi-edit form.
-//    $('.multi_edit_form').txpMultiEditForm();
-    textpattern.Route.init({step:'txp-container'})
 
     // Arm UI.
     $('.not-ready').removeClass('not-ready');

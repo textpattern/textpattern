@@ -226,7 +226,8 @@ function file_list($message = '', $ids = array())
         $categories = event_category_popup('file', '', 'file_category');
         $createBlock[] =
             n.tag_start('div', array('class' => 'txp-control-panel')).
-            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('file_category'), 'label', array('for' => 'file_category')).$categories : '')));
+            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('file_category'), 'label', array('for' => 'file_category')).$categories : ''))).
+            n.tag('*', 'progress', array('class' => 'upload-progress', 'value' => '0', 'style' => 'display:none'));
 
         $existing_files = get_filenames();
 
@@ -303,7 +304,10 @@ function file_list($message = '', $ids = array())
     if ($rs && numRows($rs)) {
         $show_authors = !has_single_author('txp_file');
 
-        echo n.tag_start('form', array(
+        echo n.tag_start('div', array(
+                'class' => 'txp-list-container'
+            )).
+            n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'files_form',
                 'name'   => 'longform',
@@ -493,7 +497,8 @@ function file_list($message = '', $ids = array())
             )).
             $paginator->render().
             nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div');
+            n.tag_end('div').
+            n.tag_end('div'); // End of .txp-list-container
     }
 
     echo n.tag_end('div'). // End of .txp-layout-1col.
@@ -883,6 +888,7 @@ function file_insert()
     require_privs('file.edit.own');
     $success = $errors = $ids = array();
     $files = file_refactor($_FILES['thefile']) or $files = array();
+    $tmpdir = ini_get('upload_tmp_dir') or $tmpdir = sys_get_temp_dir();
 
     extract(array_map('assert_string', gpsa(array(
         'category',
@@ -893,8 +899,33 @@ function file_insert()
 
     foreach ($files as $file) {
         extract($file);
+
         $newname = sanitizeForFile($name);
         $newpath = build_file_path($file_base_path, $newname);
+
+
+        // Chuncked upload, anyone?
+        if (!empty($_SERVER['HTTP_CONTENT_RANGE']) && isset($_SERVER['CONTENT_LENGTH']) && is_numeric($_SERVER['CONTENT_LENGTH'])) {
+
+            // Get the size of the file uploaded from the client (real, final size)
+            $filesize = intval(substr($_SERVER['HTTP_CONTENT_RANGE'], strpos($_SERVER['HTTP_CONTENT_RANGE'], '/') + 1));
+            $tmpfile = $tmpdir.DS.md5($txp_user.':'.$newname).'.part';
+            
+            if (is_file($tmpfile)) {
+                file_put_contents($tmpfile, fopen($tmp_name, 'r'), FILE_APPEND);
+                unlink($tmp_name);
+
+                // Stop here if the file is not completely loaded
+                if (filesize($tmpfile) < $filesize) {
+                    exit;
+                } else {
+                    $tmp_name = $tmpfile;
+                }
+            } else {
+                shift_uploaded_file($tmp_name, $tmpfile);
+                exit;
+            }
+        }
 
         if ($file_max_upload_size < $size) {
             $errors[] = gTxt('file_upload_failed')." $name - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
@@ -934,11 +965,9 @@ function file_insert()
         $response[] = announce($message, $status);
 
         if ($success) {
-            $response[] = 'var form = $(".upload-form")'.n.
-                'form.find("input[type=file]").attr("disabled", "disabled")'.n.
-                '$("#file_container").load("index.php #file_container>*", form.serializeArray(), function() {
-                    textpattern.Route.init({step:"txp-container"})
-                })';
+            $response[] = 'var form = $(".upload-form"), fileinput = form.find("input[type=file]").attr("disabled", "disabled")'.n
+            .'textpattern.Relay.callback("updateList", {list: ".txp-list-container", data: form.serializeArray()}, 200)'.n
+            .'fileinput.val("").attr("disabled", null)';
         }
 
         send_script_response(join("\n", $response));

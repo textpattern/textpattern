@@ -55,13 +55,13 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
 
         // Dropzone
-        $out[] = '<link rel="stylesheet" href="vendors/enyo/dropzone/dropzone.css">'.n.
-            script_js('vendors/enyo/dropzone/dropzone.js', TEXTPATTERN_SCRIPT_URL).n.
+        $out[] = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/dropzone.min.css" integrity="sha256-e47xOkXs1JXFbjjpoRr1/LhVcqSzRmGmPqsrUQeVs+g=" crossorigin="anonymous" />'.n.
+            '<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/dropzone.min.js" integrity="sha256-0dCrNKhVyiX4bBpScyU5PT/iZpxzlxjn2oyaR7GQutE=" crossorigin="anonymous"></script>'.n.
             script_js('vendors/enyo/dropzone/txpDropzone.js', TEXTPATTERN_SCRIPT_URL).n.
             script_js(
 <<< EOS
-textpattern.Route.add('file.txp-container', function() {
-    if ($('form[name=longform]').length) {
+textpattern.Route.add('file', function() {
+    if ($('.txp-list-container').length) {
         jQuery('.upload-form').append('<div class="dropzone dropzone-previews" />').txpDropzone({
             maxFiles: $max_files,
             maxFilesize: $max_file_size

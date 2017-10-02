@@ -50,6 +50,21 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
 
+        // Dropzone
+        global $file_max_upload_size;
+
+        $out[] = '<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.1/js/jquery.fileupload.min.js" integrity="sha256-xoEL7+UoSsbauvpImf1v+EkJclYUX+cLu3rKHjnJaOU=" crossorigin="anonymous"></script>'.n.
+            script_js('vendors/enyo/dropzone/txpFileupload.js', TEXTPATTERN_SCRIPT_URL).n.
+            script_js(
+<<< EOS
+textpattern.Route.add('file', function() {
+    if ($('.txp-list-container').length) {
+        jQuery('.upload-form').txpFileupload({maxChunkSize: $file_max_upload_size});
+    }
+});
+EOS
+);
+
         // Custom JavaScript (see theme README for usage instructions).
         if (defined('admin_custom_js')) {
             $custom_js = admin_custom_js;

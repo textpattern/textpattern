@@ -1,4 +1,6 @@
 jQuery.fn.txpDropzone = function (options) {
+    if (!jQuery.fn.dropzone) return this
+
     options = $.extend({
         params : {app_mode: 'async'},
         maxFiles: 12,
