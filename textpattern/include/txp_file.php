@@ -253,24 +253,16 @@ function file_list($message = '', $ids = array())
     $createBlock = implode(n, $createBlock);
 
     if ($total < 1) {
-        if ($criteria != 1) {
-            echo $searchBlock.
-                $contentBlockStart.
-                $createBlock.
-                graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_results_found'),
-                    array('class' => 'alert-block information')
-                );
-        } else {
-            echo $contentBlockStart.
-                $createBlock.
-                graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_files_recorded'),
-                    array('class' => 'alert-block information')
-                );
-        }
+        echo $searchBlock.
+            $contentBlockStart.
+            $createBlock.
+            tag(graf(
+                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                gTxt($criteria != 1 ? 'no_results_found': 'no_files_recorded'),
+                array('class' => 'alert-block information')
+            ), 'div', array(
+                'class' => 'txp-list-container'
+            ));
 
         echo n.tag_end('div'). // End of .txp-layout-1col.
             n.'</div>'; // End of .txp-layout.
@@ -883,12 +875,12 @@ function file_create()
 
 function file_insert()
 {
-    global $txp_user, $file_base_path, $file_max_upload_size;
+    global $txp_user, $file_base_path, $file_max_upload_size, $tempdir;
 
     require_privs('file.edit.own');
     $success = $errors = $ids = array();
     $files = file_refactor($_FILES['thefile']) or $files = array();
-    $tmpdir = ini_get('upload_tmp_dir') or $tmpdir = sys_get_temp_dir();
+    $tmpdir = $tempdir;//ini_get('upload_tmp_dir') or $tmpdir = sys_get_temp_dir();
 
     extract(array_map('assert_string', gpsa(array(
         'category',
@@ -909,7 +901,7 @@ function file_insert()
 
             // Get the size of the file uploaded from the client (real, final size)
             $filesize = intval(substr($_SERVER['HTTP_CONTENT_RANGE'], strpos($_SERVER['HTTP_CONTENT_RANGE'], '/') + 1));
-            $tmpfile = $tmpdir.DS.md5($txp_user.':'.$newname).'.part';
+            $tmpfile = build_file_path($tmpdir, md5($txp_user.':'.$name).'.part');
             
             if (is_file($tmpfile)) {
                 file_put_contents($tmpfile, fopen($tmp_name, 'r'), FILE_APPEND);
