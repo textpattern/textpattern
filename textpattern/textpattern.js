@@ -1882,22 +1882,30 @@ textpattern.Route.add('article, file', function () {
 /*
     $('input[type="file"][multiple]').on('change', function (e) {
         if (!!window.FileReader && this.files && this.files[0]) {
-          var previews = $(this).parent().children('.upload-previews').empty();
-          
-          $(this.files).each(function () {
-            var preview = $("<div class='upload-preview' style=' height:128px;width:128px;float:left;overflow:hidden;margin:1em;border:1px solid gray' />")
-            if (this.type.match(/^image\//)) {
-                var reader = new FileReader(), name = this.name;
-                reader.readAsDataURL(this);
-                reader.onload = function (e) {
-                    preview.append("<img src='" + e.target.result + "' title='"+name+"' />");
-                }
-            } else {
-                preview.text(this.name+' ('+this.size+' B)')
-            }
+            var previews = $(this).parent().children('.upload-previews').empty();
             
-            previews.append(preview)
-          });
+            $(this.files).each(function () {
+                var name = this.name, type = this.type, mime = type.split('/');
+                var preview = $("<div class='upload-preview' style=' float:left;overflow:hidden;height:128px;width:128px' />").text(name)
+                if (mime[0] == 'image' || mime[0] == 'audio') {
+                    switch (mime[0]) {
+                        case 'image':
+                            var onload = function (e) {
+                              preview.append("<img src='" + e.target.result + "' />");
+                            }
+                            break
+                        case 'audio':
+                            var onload = function (e) {
+                              preview.append("<audio controls src='" + e.target.result + "' />");
+                            }
+                            break
+                    }
+                    var reader = new FileReader()
+                    reader.onload = onload
+                    reader.readAsDataURL(this)
+                }
+                previews.append(preview)
+            });
         }
     }).parent().append('<div class="upload-previews" />')
 */

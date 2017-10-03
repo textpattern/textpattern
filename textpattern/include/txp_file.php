@@ -98,7 +98,7 @@ function file_list($message = '', $ids = array())
     if ($sort === '') {
         $sort = get_pref('file_sort_column', 'filename');
     } else {
-        if (!in_array($sort, array('id', 'description', 'category', 'title', 'date', 'downloads', 'author'))) {
+        if (!in_array($sort, array('id', 'category', 'title', 'date', 'downloads', 'author', 'size'))) {
             $sort = 'filename';
         }
 
@@ -125,8 +125,8 @@ function file_list($message = '', $ids = array())
         case 'title':
             $sort_sql = "txp_file.title $dir, txp_file.filename DESC";
             break;
-        case 'date':
-            $sort_sql = "txp_file.created $dir, txp_file.filename DESC";
+        case 'size':
+            $sort_sql = "txp_file.size $dir, txp_file.id ASC";
             break;
         case 'downloads':
             $sort_sql = "txp_file.downloads $dir, txp_file.filename DESC";
@@ -288,6 +288,7 @@ function file_list($message = '', $ids = array())
             txp_file.downloads,
             txp_file.status,
             txp_file.author,
+            txp_file.size,
             txp_users.RealName AS realname,
             txp_category.Title AS category_title
         FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
@@ -342,6 +343,10 @@ function file_list($message = '', $ids = array())
                 ).
                 hCell(gTxt(
                     'condition'), '', ' class="txp-list-col-condition" scope="col"'
+                ).
+                column_head(
+                    'file_size', 'size', 'file', true, $switch_dir, $crit, $search_method,
+                        (('size' == $sort) ? "$dir " : '').'txp-list-col-filesize'
                 ).
                 column_head(
                     'downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method,
@@ -464,6 +469,9 @@ function file_list($message = '', $ids = array())
                 ).
                 td(
                     $condition, '', 'txp-list-col-condition'
+                ).
+                td(
+                    format_filesize($size), '', 'txp-list-col-filesize'
                 ).
                 td(
                     $downloads, '', 'txp-list-col-downloads'
@@ -875,12 +883,12 @@ function file_create()
 
 function file_insert()
 {
-    global $txp_user, $file_base_path, $file_max_upload_size, $tempdir;
+    global $txp_user, $file_base_path, $file_max_upload_size;
 
     require_privs('file.edit.own');
     $success = $errors = $ids = array();
     $files = file_refactor($_FILES['thefile']) or $files = array();
-    $tmpdir = $tempdir;//ini_get('upload_tmp_dir') or $tmpdir = sys_get_temp_dir();
+    $tmpdir = $file_base_path;//ini_get('upload_tmp_dir') or $tmpdir = sys_get_temp_dir();
 
     extract(array_map('assert_string', gpsa(array(
         'category',
@@ -901,7 +909,7 @@ function file_insert()
 
             // Get the size of the file uploaded from the client (real, final size)
             $filesize = intval(substr($_SERVER['HTTP_CONTENT_RANGE'], strpos($_SERVER['HTTP_CONTENT_RANGE'], '/') + 1));
-            $tmpfile = build_file_path($tmpdir, md5($txp_user.':'.$name).'.part');
+            $tmpfile = build_file_path($tmpdir, '.'.md5($txp_user.':'.$name).'.part');
             
             if (is_file($tmpfile)) {
                 file_put_contents($tmpfile, fopen($tmp_name, 'r'), FILE_APPEND);
@@ -912,6 +920,7 @@ function file_insert()
                     exit;
                 } else {
                     $tmp_name = $tmpfile;
+                    $size = filesize($tmp_name);
                 }
             } else {
                 shift_uploaded_file($tmp_name, $tmpfile);
@@ -919,8 +928,8 @@ function file_insert()
             }
         }
 
-        if ($file_max_upload_size < $size) {
-            $errors[] = gTxt('file_upload_failed')." $name - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
+        if ($file_max_upload_size < $size && empty($tmpfile)) {
+            $errors[$tmp_name] = gTxt('file_upload_failed')." $name - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
         } elseif (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
             $id = file_db_add($newname, $category, $permissions, $description, $size, $title);
 
@@ -933,7 +942,6 @@ function file_insert()
                     safe_delete('txp_file', "id = $id");
                     safe_alter('txp_file', "auto_increment = $id");
                     $errors[] = $newpath.' '.gTxt('upload_dir_perms');
-                    // Clean up file.
                 } else {
                     file_set_perm($newpath);
                     $ids[] = $GLOBALS['ID'] = $id;
@@ -943,6 +951,9 @@ function file_insert()
         } else {
             $errors[] = gTxt('file_already_exists', array('{name}' => $newname));
         }
+
+        // Clean up file.
+        @unlink($tmp_name);
     }
 
     $message = implode(br, array_merge($success, $errors));
@@ -956,11 +967,13 @@ function file_insert()
     if (gps('app_mode') == 'async') {
         $response[] = announce($message, $status);
 
+        $response[] = 'var form = $(".upload-form"), fileinput = form.find("input[type=file]").attr("disabled", "disabled")'.n;
+
         if ($success) {
-            $response[] = 'var form = $(".upload-form"), fileinput = form.find("input[type=file]").attr("disabled", "disabled")'.n
-            .'textpattern.Relay.callback("updateList", {list: ".txp-list-container", data: form.serializeArray()}, 200)'.n
-            .'fileinput.val("").attr("disabled", null)';
+            $response[] = 'textpattern.Relay.callback("updateList", {list: ".txp-list-container", data: form.serializeArray()}, 200)'.n;
         }
+
+        $response[] = 'fileinput.val("").attr("disabled", null)'.n;
 
         send_script_response(join("\n", $response));
 
