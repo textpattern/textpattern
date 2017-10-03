@@ -888,16 +888,16 @@ function file_insert()
     require_privs('file.edit.own');
     $success = $errors = $ids = array();
     $files = file_refactor($_FILES['thefile']) or $files = array();
+    $titles = gps('title');
     $tmpdir = $file_base_path;//ini_get('upload_tmp_dir') or $tmpdir = sys_get_temp_dir();
 
     extract(array_map('assert_string', gpsa(array(
         'category',
-        'title',
         'permissions',
         'description',
     ))));
 
-    foreach ($files as $file) {
+    foreach ($files as $i => $file) {
         extract($file);
 
         $newname = sanitizeForFile($name);
@@ -934,6 +934,7 @@ function file_insert()
         if ($file_max_upload_size < $size && empty($tmpfile)) {
             $errors[] = gTxt('file_upload_failed')." $newname - ".upload_get_errormsg(isset($tmpfile) ? UPLOAD_ERR_PARTIAL : UPLOAD_ERR_FORM_SIZE);
         } elseif (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
+            $title = !empty($titles[$i]) ? $titles[$i] : '';
             $id = file_db_add($newname, $category, $permissions, $description, $size, $title);
 
             if (!$id) {

@@ -874,7 +874,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 }).register('uploadStart', function (event, data) {
     $('progress.upload-progress').val(0).show()
 }).register('uploadEnd', function (event, data) {
-    $('progress.upload-progress').hide()
+    $('progress.upload-progress, .upload-previews').empty().hide()
 }).register('updateList', function (event, data) {
     var list = data.list || '.txp-list-container', url = data.url || 'index.php'
     $(list).load(url+" "+list+">*", data.data, function() {
@@ -1873,20 +1873,16 @@ textpattern.Route.add('article', function () {
     $listoptions.hide().menu();
 });
 
-// Uncheck reset on timestamp change.
-
-textpattern.Route.add('article, file', function () {
-    $(document).on('change', '.posted input', function (e) {
-        $('#publish_now, #reset_time').prop('checked', false);
-    })
-/*
+// TEST FILEUPLOAD ONLY!!
+textpattern.Route.add('file', function () {
     $('input[type="file"][multiple]').on('change', function (e) {
         if (!!window.FileReader && this.files && this.files[0]) {
             var previews = $(this).parent().children('.upload-previews').empty();
             
             $(this.files).each(function () {
-                var name = this.name, type = this.type, mime = type.split('/');
-                var preview = $("<div class='upload-preview' style=' float:left;overflow:hidden;height:128px;width:128px' />").text(name)
+                var name = this.name.replace(/\.[^\.]*$/, ''), mime = this.type.split('/');
+                var preview = $("<div class='upload-preview' style=' float:left;overflow:hidden;height:128px;width:128px;margin-right:1em;border:1px solid lightgrey' />")
+                preview.append($('<input name=title[] />').val(name))
                 if (mime[0] == 'image' || mime[0] == 'audio') {
                     switch (mime[0]) {
                         case 'image':
@@ -1903,12 +1899,22 @@ textpattern.Route.add('article, file', function () {
                     var reader = new FileReader()
                     reader.onload = onload
                     reader.readAsDataURL(this)
+                } else {
+                    preview.append($('<div />').text(this.type+' ('+this.size+' B)'))
                 }
-                previews.append(preview)
+                previews.append(preview).show()
             });
         }
     }).parent().append('<div class="upload-previews" />')
-*/
+})
+// ENDTEST FILEUPLOAD
+
+// Uncheck reset on timestamp change.
+
+textpattern.Route.add('article, file', function () {
+    $(document).on('change', '.posted input', function (e) {
+        $('#publish_now, #reset_time').prop('checked', false);
+    })
 });
 
 // 'Clone' button on Pages, Forms, Styles panels.
