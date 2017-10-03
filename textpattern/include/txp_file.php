@@ -903,7 +903,6 @@ function file_insert()
         $newname = sanitizeForFile($name);
         $newpath = build_file_path($file_base_path, $newname);
 
-
         // Chuncked upload, anyone?
         if (!empty($_SERVER['HTTP_CONTENT_RANGE']) && isset($_SERVER['CONTENT_LENGTH']) && is_numeric($_SERVER['CONTENT_LENGTH'])) {
 
@@ -911,7 +910,7 @@ function file_insert()
             $filesize = intval(substr($_SERVER['HTTP_CONTENT_RANGE'], strpos($_SERVER['HTTP_CONTENT_RANGE'], '/') + 1));
             $tmpfile = build_file_path($tmpdir, '.'.md5($txp_user.':'.$name).'.part');
             
-            if (is_file($tmpfile)) {
+            if (is_file($tmpfile) && filesize($tmpfile) < $filesize) {
                 file_put_contents($tmpfile, fopen($tmp_name, 'r'), FILE_APPEND);
                 unlink($tmp_name);
 
