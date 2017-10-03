@@ -904,31 +904,34 @@ function file_insert()
         $newpath = build_file_path($file_base_path, $newname);
 
         // Chuncked upload, anyone?
-        if (!empty($_SERVER['HTTP_CONTENT_RANGE']) && isset($_SERVER['CONTENT_LENGTH']) && is_numeric($_SERVER['CONTENT_LENGTH'])) {
-
-            // Get the size of the file uploaded from the client (real, final size)
-            $filesize = intval(substr($_SERVER['HTTP_CONTENT_RANGE'], strpos($_SERVER['HTTP_CONTENT_RANGE'], '/') + 1));
+        if (!empty($_SERVER['HTTP_CONTENT_RANGE']) && isset($_SERVER['CONTENT_LENGTH']) && is_numeric($_SERVER['CONTENT_LENGTH']) && preg_match('/\b(\d+)\-(\d+)\/(\d+)\b/', $_SERVER['HTTP_CONTENT_RANGE'], $match)) {
             $tmpfile = build_file_path($tmpdir, '.'.md5($txp_user.':'.$name).'.part');
+
+            // Get the range of the file uploaded from the client
+            list($range, $begin, $end, $filesize) = $match;
             
-            if (is_file($tmpfile) && filesize($tmpfile) < $filesize) {
+            if (is_file($tmpfile) && filesize($tmpfile) == $begin) {
                 file_put_contents($tmpfile, fopen($tmp_name, 'r'), FILE_APPEND);
                 unlink($tmp_name);
 
                 // Stop here if the file is not completely loaded
-                if (filesize($tmpfile) < $filesize) {
+                if ($end + 1 < $filesize) {
                     exit;
                 } else {
                     $tmp_name = $tmpfile;
                     $size = filesize($tmp_name);
                 }
-            } else {
+            } elseif ($begin == 0) {
                 shift_uploaded_file($tmp_name, $tmpfile);
                 exit;
+            } else { // chunk error
+                $tmpfile = null;
+                $size = $file_max_upload_size + 1;
             }
         }
 
         if ($file_max_upload_size < $size && empty($tmpfile)) {
-            $errors[$tmp_name] = gTxt('file_upload_failed')." $name - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
+            $errors[] = gTxt('file_upload_failed')." $newname - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
         } elseif (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
             $id = file_db_add($newname, $category, $permissions, $description, $size, $title);
 
