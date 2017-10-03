@@ -912,7 +912,7 @@ function file_insert()
             
             if (is_file($tmpfile) && filesize($tmpfile) == $begin) {
                 file_put_contents($tmpfile, fopen($tmp_name, 'r'), FILE_APPEND);
-                unlink($tmp_name);
+                @unlink($tmp_name);
 
                 // Stop here if the file is not completely loaded
                 if ($end + 1 < $filesize) {
@@ -924,14 +924,15 @@ function file_insert()
             } elseif ($begin == 0) {
                 shift_uploaded_file($tmp_name, $tmpfile);
                 exit;
-            } else { // chunk error
-                $tmpfile = null;
+            } else { // Chunk error, clean up
+                @unlink($tmpfile);
+                $tmpfile = false;
                 $size = $file_max_upload_size + 1;
             }
         }
 
         if ($file_max_upload_size < $size && empty($tmpfile)) {
-            $errors[] = gTxt('file_upload_failed')." $newname - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
+            $errors[] = gTxt('file_upload_failed')." $newname - ".upload_get_errormsg(isset($tmpfile) ? UPLOAD_ERR_PARTIAL : UPLOAD_ERR_FORM_SIZE);
         } elseif (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
             $id = file_db_add($newname, $category, $permissions, $description, $size, $title);
 
