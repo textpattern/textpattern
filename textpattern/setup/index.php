@@ -958,9 +958,11 @@ function get_public_themes_list()
         foreach  ($files as $file) {
             $file = realpath($file);
             if (preg_match('%^(.*/(\w+))/manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
-                $public_themes[$mm[2]] = $manifest;
-                $public_themes[$mm[2]]['themedir'] = $mm[1];
-                $out[$mm[2]] = empty($manifest['name']) ? $mm[2] : $manifest['name'];
+                if (@$manifest['txp-type'] == 'textpattern-theme') {
+                    $public_themes[$mm[2]] = $manifest;
+                    $public_themes[$mm[2]]['themedir'] = $mm[1];
+                    $out[$mm[2]] = empty($manifest['name']) ? $mm[2] : $manifest['name'];
+                }
             }
         }
     }
