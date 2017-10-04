@@ -206,13 +206,12 @@ namespace Textpattern\Skin {
                     )).
                     tag(gTxt('import_skin'), 'label', array('for' => 'skin_import')).
                     popHelp('skin_import').
-                    selectInput('skins', $new, '', true, true, 'skins').
+                    selectInput('skins', $new, '', true, false, 'skins').
                     eInput('skin').
                     sInput('import').
+                    fInput('submit', '', gtxt('upload')).
                     n.
                     tag_end('form');
-            } else {
-                return '<span>'.gtxt('no_new_skin_to_import').'</span>';
             }
         }
 

@@ -476,11 +476,15 @@ function skin_change_pageby()
 
 function skin_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
+    $copy = tag(gtxt('export_as_a_copy'), 'label', array('for' => 'copy')).
+            checkbox('copy', 1, false);
+    $clean = tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean')).
+             checkbox('clean', 1, true);
+
     $methods = array(
-        'update'      => gTxt('update'),
+        'update'      => array('label' => gTxt('update'), 'html' => $clean),
         'duplicate'   => gTxt('duplicate'),
-        'export'      => gTxt('export'),
-        'export_copy' => gTxt('export_copy'),
+        'export'      => array('label' => gTxt('export'), 'html' => $clean.$copy),
         'delete'      => gTxt('delete'),
     );
 
@@ -496,6 +500,8 @@ function skin_multi_edit()
     extract(psa(array(
         'edit_method',
         'selected',
+        'copy',
+        'clean',
     )));
 
     if (!$selected || !is_array($selected)) {
@@ -507,8 +513,10 @@ function skin_multi_edit()
         array_fill_keys(ps('selected'), array())
     );
 
-    if ($edit_method === 'export_copy') {
-        $edit = $instance->export(true, true);
+    if ($edit_method === 'export') {
+        $edit = $instance->export($clean, $copy);
+    } elseif ($edit_method === 'update') {
+        $edit = $instance->update($clean);
     } else {
         $edit = $instance->$edit_method();
     }
