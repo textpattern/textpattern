@@ -875,8 +875,8 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
     $('progress.upload-progress').val(0).show()
     $('.upload-container').show()
 }).register('uploadEnd', function (event, data) {
-    $('.upload-previews').empty()
-    $('.upload-container, progress.upload-progress').hide()
+//    $('.upload-previews').empty()
+//    $('.upload-container, progress.upload-progress').hide()
 }).register('updateList', function (event, data) {
     var list = data.list || '.txp-list-container', url = data.url || 'index.php'
     $(list).load(url+" "+list+">*", data.data, function() {
@@ -1877,10 +1877,24 @@ textpattern.Route.add('article', function () {
 
 // TEST FILEUPLOAD ONLY!!
 textpattern.Route.add('file', function () {
+    $('.txp-list-container').on('click', '.txp-list th a, .txp-navigation a', function(e) {
+        e.preventDefault();
+        textpattern.Relay.callback('updateList', {list: '.txp-list-container', url: $(this).attr('href')})
+    }).on('submit', 'form[name="longform"]', function(e) {
+        e.preventDefault();
+        textpattern.Relay.callback('updateList', {list: '.txp-list-container', data: $(this).serializeArray()})
+    })
+
+
     var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL
     var uploadContainer = $('<div class="upload-container" />').hide().append('<div class="upload-previews" />').append('<progress class="upload-progress" value="0" style="display:none;width:100%" />')
+    var form = $('form.async.upload-form').append(uploadContainer)
 
-    $('input[type="file"][multiple]').on('change', function (e) {
+    form.find('input[type="reset"]').on('click', function (e) {
+        uploadContainer.hide().children('.upload-previews').empty()
+    })
+
+    form.find('input[type="file"][multiple]').on('change', function (e) {
         var previews = uploadContainer.show().children('.upload-previews').empty();
         
         $(this.files).each(function () {
@@ -1902,7 +1916,7 @@ textpattern.Route.add('file', function () {
             preview.append($('<span />').text(this.type+' ('+this.size+' B)'))
             previews.append(preview)
         });
-    }).parent().append(uploadContainer)
+    })
 })
 // ENDTEST FILEUPLOAD
 

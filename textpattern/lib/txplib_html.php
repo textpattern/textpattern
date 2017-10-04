@@ -1488,7 +1488,8 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
                 $label_id,
                 tag_void('input', array('name' => $name, 'type' => 'file', 'required' => true, 'id' => $label_id, 'multiple' => $multiple)).
                 (isset($extra['postinput']) ? $extra['postinput'] : '').
-                fInput('submit', '', gTxt('upload')),
+                fInput('submit', '', gTxt('upload')).
+                fInput('reset', '', gTxt('reset')),
                 $label,
                 array($pophelp, 'instructions_'.$pophelp),
                 $wraptag_class,
