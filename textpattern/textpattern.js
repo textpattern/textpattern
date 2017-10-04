@@ -873,8 +873,10 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
     $('progress.upload-progress').val(data.loaded / data.total)
 }).register('uploadStart', function (event, data) {
     $('progress.upload-progress').val(0).show()
+    $('.upload-container').show()
 }).register('uploadEnd', function (event, data) {
-    $('progress.upload-progress, .upload-previews').empty().hide()
+    $('.upload-previews').empty()
+    $('.upload-container, progress.upload-progress').hide()
 }).register('updateList', function (event, data) {
     var list = data.list || '.txp-list-container', url = data.url || 'index.php'
     $(list).load(url+" "+list+">*", data.data, function() {
@@ -1875,37 +1877,32 @@ textpattern.Route.add('article', function () {
 
 // TEST FILEUPLOAD ONLY!!
 textpattern.Route.add('file', function () {
+    var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL
+    var uploadContainer = $('<div class="upload-container" />').hide().append('<div class="upload-previews" />').append('<progress class="upload-progress" value="0" style="display:none;width:100%" />')
+
     $('input[type="file"][multiple]').on('change', function (e) {
-        if (!!window.FileReader && this.files && this.files[0]) {
-            var previews = $(this).parent().children('.upload-previews').empty();
-            
-            $(this.files).each(function () {
-                var name = this.name.replace(/\.[^\.]*$/, ''), mime = this.type.split('/');
-                var preview = $("<div class='upload-preview' style=' float:left;overflow:hidden;height:128px;width:128px;margin-right:1em;border:1px solid lightgrey' />")
-                preview.append($('<input name=title[] />').val(name))
-                if (mime[0] == 'image' || mime[0] == 'audio') {
-                    switch (mime[0]) {
-                        case 'image':
-                            var onload = function (e) {
-                              preview.append("<img src='" + e.target.result + "' />");
-                            }
-                            break
-                        case 'audio':
-                            var onload = function (e) {
-                              preview.append("<audio controls src='" + e.target.result + "' />");
-                            }
-                            break
-                    }
-                    var reader = new FileReader()
-                    reader.onload = onload
-                    reader.readAsDataURL(this)
-                } else {
-                    preview.append($('<div />').text(this.type+' ('+this.size+' B)'))
+        var previews = uploadContainer.show().children('.upload-previews').empty();
+        
+        $(this.files).each(function () {
+            var name = this.name.replace(/\.[^\.]*$/, ''), mime = this.type.split('/'), hash = md5(this.name);
+            var preview = $("<div class='upload-preview' style=' position:relative;float:left;overflow:hidden;height:128px;width:128px;margin:1em;border:1px solid lightgrey' />")
+            preview.append($('<input name=title['+hash+'] style="position:absolute;bottom:0;z-index:100" />').val(name))
+            if (createObjectURL && (mime[0] == 'image' || mime[0] == 'audio')) {
+                switch (mime[0]) {
+                    case 'image':
+                          preview.append("<img src='" + createObjectURL(this) + "' />");
+                        break
+                    case 'audio':
+                          preview.append("<audio controls src='" + createObjectURL(this) + "' />");
+                        break
                 }
-                previews.append(preview).show()
-            });
-        }
-    }).parent().append('<div class="upload-previews" />')
+            } else {
+//                      preview.append("<object data='" + URL.createObjectURL(this) + "' />");
+            }
+            preview.append($('<span />').text(this.type+' ('+this.size+' B)'))
+            previews.append(preview)
+        });
+    }).parent().append(uploadContainer)
 })
 // ENDTEST FILEUPLOAD
 

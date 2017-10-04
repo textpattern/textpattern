@@ -8,6 +8,7 @@ jQuery.fn.txpFileupload = function (options) {
         dataType: 'html',
 //        autoUpload: false,
         maxChunkSize: maxChunkSize,
+        formData: null,
         fileInput: null,
         done: function (e, data) {
             textpattern.Relay.callback('uploadEnd', data)
@@ -22,6 +23,7 @@ jQuery.fn.txpFileupload = function (options) {
     }, options)).off('submit').submit(function (e) {
         e.preventDefault();
         form.fileupload('add', {
+            formData: form.serializeArray(),
             fileInput: $(fileInput)
         })
     })

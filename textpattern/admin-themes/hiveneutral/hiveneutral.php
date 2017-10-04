@@ -54,6 +54,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
         global $file_max_upload_size;
 
         $out[] = '<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.1/js/jquery.fileupload.min.js" integrity="sha256-xoEL7+UoSsbauvpImf1v+EkJclYUX+cLu3rKHjnJaOU=" crossorigin="anonymous"></script>'.n.
+            '<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.10.0/js/md5.min.js" integrity="sha256-J9IhvkIJb0diRVJOyu+Ndtg41RibFkF8eaA60jdjtB8=" crossorigin="anonymous"></script>'.n.
             script_js('vendors/enyo/dropzone/txpFileupload.js', TEXTPATTERN_SCRIPT_URL).n.
             script_js(
 <<< EOS

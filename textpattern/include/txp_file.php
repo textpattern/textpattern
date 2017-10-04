@@ -226,8 +226,7 @@ function file_list($message = '', $ids = array())
         $categories = event_category_popup('file', '', 'file_category');
         $createBlock[] =
             n.tag_start('div', array('class' => 'txp-control-panel')).
-            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('file_category'), 'label', array('for' => 'file_category')).$categories : ''))).
-            n.tag('*', 'progress', array('class' => 'upload-progress', 'value' => '0', 'style' => 'display:none'));
+            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('file_category'), 'label', array('for' => 'file_category')).$categories : '')));
 
         $existing_files = get_filenames();
 
@@ -897,7 +896,7 @@ function file_insert()
         'description',
     ))));
 
-    foreach ($files as $i => $file) {
+    foreach ($files as $file) {
         extract($file);
 
         $newname = sanitizeForFile($name);
@@ -926,15 +925,15 @@ function file_insert()
                 exit;
             } else { // Chunk error, clean up
                 @unlink($tmpfile);
-                $tmpfile = false;
-                $size = $file_max_upload_size + 1;
+                $size = 0;
             }
         }
 
-        if ($file_max_upload_size < $size && empty($tmpfile)) {
+        if (!$size || $file_max_upload_size < $size && empty($tmpfile)) {
             $errors[] = gTxt('file_upload_failed')." $newname - ".upload_get_errormsg(isset($tmpfile) ? UPLOAD_ERR_PARTIAL : UPLOAD_ERR_FORM_SIZE);
         } elseif (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
-            $title = !empty($titles[$i]) ? $titles[$i] : '';
+            $hash = md5($name);
+            $title = !empty($titles[$hash]) ? $titles[$hash] : '';
             $id = file_db_add($newname, $category, $permissions, $description, $size, $title);
 
             if (!$id) {
@@ -974,7 +973,7 @@ function file_insert()
         $response[] = 'var form = $(".upload-form"), fileinput = form.find("input[type=file]").attr("disabled", "disabled")'.n;
 
         if ($success) {
-            $response[] = 'textpattern.Relay.callback("updateList", {list: ".txp-list-container", data: form.serializeArray()}, 200)'.n;
+            $response[] = 'textpattern.Relay.callback("updateList", {list: ".txp-list-container", data: form.serializeArray()}, 100)'.n;
         }
 
         $response[] = 'fileinput.val("").attr("disabled", null)'.n;
