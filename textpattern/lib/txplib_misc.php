@@ -4413,8 +4413,9 @@ function fetch_page($name, $theme)
 /**
  * Parses a page template.
  *
- * @param   string      $name  The template
+ * @param   string      $name  The template to parse
  * @param   string      $theme The public theme
+ * @param   string      $page  Default content to parse
  * @return  string|bool The parsed page template, or FALSE on error
  * @since   4.6.0
  * @package TagParser
@@ -4422,12 +4423,13 @@ function fetch_page($name, $theme)
  * echo parse_page('default');
  */
 
-function parse_page($name, $theme)
+function parse_page($name, $theme, $page = '')
 {
     global $pretext, $trace;
 
-    $page = fetch_page($name, $theme);
-    $pretext['secondpass'] = 0;
+    if (!$page) {
+        $page = fetch_page($name, $theme);
+    }
 
     if ($page !== false) {
         while ($pretext['secondpass'] <= get_pref('secondpass', 1) && strpos($page, '<txp:') !== false) {

@@ -254,7 +254,7 @@ function css($atts)
     if (has_handler('css.url')) {
         $url = callback_event('css.url', '', false, compact('name', 'theme'));
     } else {
-        $url = hu.'css.php?n='.urlencode($name).a.'t='.urlencode($theme);
+        $url = hu.'css.php?n='.urlencode($name).'&t='.urlencode($theme);
     }
 
     if ($format == 'link') {

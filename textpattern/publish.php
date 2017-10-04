@@ -567,6 +567,7 @@ function textpattern()
 function output_css($s = '', $n = '', $t = '')
 {
     $order = '';
+    $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
 
     if ($n) {
         if (!is_scalar($n)) {
@@ -588,9 +589,9 @@ function output_css($s = '', $n = '', $t = '')
     }
 
     if (!empty($cssname)) {
-        $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$order));
+        $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$skinquery.$order));
         set_error_handler('tagErrorHandler');
-        echo parse_page(null, $css);
+        echo parse_page(null, null, $css);
         restore_error_handler();
     }
 }
