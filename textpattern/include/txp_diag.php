@@ -550,6 +550,7 @@ function doDiagnostics()
 
         if ($step == 'high') {
             $lastCheck = json_decode(get_pref('last_update_check', ''), true);
+
             if (!empty($lastCheck['msg'])) {
                 $out[] = 'Last update check: '.strftime('%Y-%m-%d %H:%M:%S', $lastCheck['when']).', '.strip_tags($lastCheck['msg']).n;
             }
@@ -577,6 +578,7 @@ function doDiagnostics()
 
             foreach ($table_names as $table) {
                 $ctr = safe_query("SHOW CREATE TABLE $table");
+
                 if (!$ctr) {
                     unset($table_names[$table]);
                     continue;
@@ -584,12 +586,14 @@ function doDiagnostics()
 
                 $row = mysqli_fetch_assoc($ctr);
                 $ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is', '\\1', $row['Create Table']);
+
                 if (isset($conn_char) && !stristr($ctcharset, 'CREATE') && ($conn_char != $ctcharset)) {
                     $table_msg[] = "$table is $ctcharset";
                 }
 
                 $ctr = safe_query("CHECK TABLE $table");
                 $row = mysqli_fetch_assoc($ctr);
+
                 if (in_array($row['Msg_type'], array('error', 'warning'))) {
                     $table_msg[] = $table.cs.$row['Msg_Text'];
                 }
