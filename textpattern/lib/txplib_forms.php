@@ -341,15 +341,15 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
  * echo hInput('myInput', 'hidden value');
  */
 
-function hInput($name, $value = null)
+function hInput($name, $value = null, $glue = ',')
 {
     if (!is_array($name)) {
         return fInput('hidden', $name, $value);
     }
 
-    return array_walk($name, function(&$v, $n) {
-        $v = fInput('hidden', $n, $v);
-    }) ? implode($name) : false;
+    return array_walk($name, function(&$v, $n, $glue) {
+        $v = fInput('hidden', $n, is_array($v) ? implode($glue, $v) : $v);
+    }, $glue) ? implode($name) : false;
 }
 
 /**

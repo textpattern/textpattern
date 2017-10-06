@@ -271,11 +271,9 @@ class Filter
         // call per panel that requires search, instead of auto-adding it when invoked here.
         return form(
             (
-                $this->crit
-                    ? span(
-                        href(gTxt('search_clear'), array('event' => $event)),
-                        array('class' => 'txp-search-clear'))
-                    : ''
+                span(
+                    href(gTxt('search_clear'), array('event' => $event)),
+                    array('class' => 'txp-search-clear', 'style' => $this->crit ? '' : 'display:none'))
             ).
             fInput('search', 'crit', $this->crit, 'txp-search-input', '', '', 24, 0, '', false, false, gTxt($placeholder)).
             eInput($event).

@@ -1,10 +1,10 @@
 jQuery.fn.txpFileupload = function (options) {
     if (!jQuery.fn.fileupload) return this
 
-    var form = this, fileInput = this.find('input[type="file"]'), maxChunkSize = options.maxChunkSize || 2000000
+    var form = this, fileInput = this.find('input[type="file"]'), paramName = fileInput.attr('name'), maxChunkSize = options.maxChunkSize || 2000000
 
     form.fileupload($.extend({
-        url: form.attr('action')+'?app_mode=async',
+        url: form.attr('action')/*+'?app_mode=async'*/,
         dataType: 'html',
 //        autoUpload: false,
         maxChunkSize: maxChunkSize,
@@ -12,7 +12,8 @@ jQuery.fn.txpFileupload = function (options) {
         fileInput: null,
         done: function (e, data) {
             textpattern.Relay.callback('uploadEnd', data)
-            eval(data.result)
+            textpattern.Relay.callback('updateList', {html: data.result}, 100)
+//            eval(data.result)
         },
         progressall: function (e, data) {
             textpattern.Relay.callback('uploadProgress', data)
@@ -21,9 +22,21 @@ jQuery.fn.txpFileupload = function (options) {
             textpattern.Relay.callback('uploadStart', data)
         }
     }, options)).off('submit').submit(function (e) {
-        e.preventDefault();
+        e.preventDefault()
+        var formData = new FormData($(options.extraForm).toArray()[0]),
+            sendData = []
+
+        for (var pair of form.serializeArray()) {
+          formData.delete(pair['name'])
+          formData.append(pair['name'],  pair['value'])
+        }
+
+        for (var pair of formData) {
+          sendData.push({name: pair[0], value: pair[1]})
+        }
+        
         form.fileupload('add', {
-            formData: form.serializeArray(),
+            formData: sendData,
             fileInput: $(fileInput)
         })
     })
@@ -37,6 +50,7 @@ jQuery.fn.txpFileupload = function (options) {
             }
         })
 
+        textpattern.Relay.data.chunked = singleFileUploads
         form.fileupload('option', 'singleFileUploads', singleFileUploads)
     })
 

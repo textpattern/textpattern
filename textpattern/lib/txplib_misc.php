@@ -5274,7 +5274,7 @@ function join_qs($q, $sep = '&amp;')
  * echo join_atts(array('class' => 'myClass', 'disabled' => true));
  */
 
-function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
+function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
 {
     if (!is_array($atts)) {
         return $atts ? ' '.trim($atts) : '';
@@ -5293,7 +5293,7 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
             if ($name == 'href' || $name == 'src') {
                 $value = join_qs($value);
             } else {
-                $value = txpspecialchars(join(' ', $value));
+                $value = txpspecialchars(join($glue, $value));
             }
         } else {
             $value = txpspecialchars($value === true ? $name : $value);

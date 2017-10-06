@@ -210,6 +210,7 @@ function file_list($message = '', $ids = array())
             'div', array(
                 'class' => 'txp-layout-4col-3span',
                 'id'    => $event.'_control',
+                'style' => $total || $criteria == 1 ? false : 'display:none'
             )
         );
 
@@ -260,7 +261,7 @@ function file_list($message = '', $ids = array())
                 gTxt($criteria != 1 ? 'no_results_found': 'no_files_recorded'),
                 array('class' => 'alert-block information')
             ), 'div', array(
-                'class' => 'txp-list-container'
+                'id' => 'txp-list-container'
             ));
 
         echo n.tag_end('div'). // End of .txp-layout-1col.
@@ -297,7 +298,7 @@ function file_list($message = '', $ids = array())
         $show_authors = !has_single_author('txp_file');
 
         echo n.tag_start('div', array(
-                'class' => 'txp-list-container'
+                'id' => 'txp-list-container'
             )).
             n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
@@ -497,7 +498,7 @@ function file_list($message = '', $ids = array())
             $paginator->render().
             nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div').
-            n.tag_end('div'); // End of .txp-list-container
+            n.tag_end('div'); // End of #txp-list-container
     }
 
     echo n.tag_end('div'). // End of .txp-layout-1col.
@@ -882,13 +883,13 @@ function file_create()
 
 function file_insert()
 {
-    global $txp_user, $file_base_path, $file_max_upload_size;
+    global $txp_user, $file_base_path, $file_max_upload_size, $tempdir;
 
     require_privs('file.edit.own');
     $success = $errors = $ids = array();
     $files = file_refactor($_FILES['thefile']) or $files = array();
     $titles = gps('title');
-    $tmpdir = $file_base_path;//ini_get('upload_tmp_dir') or $tmpdir = sys_get_temp_dir();
+    $tmpdir = $tempdir;//ini_get('upload_tmp_dir') or $tmpdir = sys_get_temp_dir();
 
     extract(array_map('assert_string', gpsa(array(
         'category',
@@ -896,7 +897,7 @@ function file_insert()
         'description',
     ))));
 
-    foreach ($files as $file) {
+    foreach ($files as $i => $file) {
         extract($file);
 
         $newname = sanitizeForFile($name);
@@ -904,7 +905,7 @@ function file_insert()
 
         // Chuncked upload, anyone?
         if (!empty($_SERVER['HTTP_CONTENT_RANGE']) && isset($_SERVER['CONTENT_LENGTH']) && is_numeric($_SERVER['CONTENT_LENGTH']) && preg_match('/\b(\d+)\-(\d+)\/(\d+)\b/', $_SERVER['HTTP_CONTENT_RANGE'], $match)) {
-            $tmpfile = build_file_path($tmpdir, '.'.md5($txp_user.':'.$name).'.part');
+            $tmpfile = build_file_path($tmpdir, md5($txp_user.':'.$name).'.part');
 
             // Get the range of the file uploaded from the client
             list($range, $begin, $end, $filesize) = $match;
@@ -932,8 +933,8 @@ function file_insert()
         if (!$size || $file_max_upload_size < $size && empty($tmpfile)) {
             $errors[] = gTxt('file_upload_failed')." $newname - ".upload_get_errormsg(isset($tmpfile) ? UPLOAD_ERR_PARTIAL : UPLOAD_ERR_FORM_SIZE);
         } elseif (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
-            $hash = md5($name);
-            $title = !empty($titles[$hash]) ? $titles[$hash] : '';
+            $hash = isset($titles[$i]) ? $i : md5($name);
+            $title = isset($titles[$hash]) ? $titles[$hash] : '';
             $id = file_db_add($newname, $category, $permissions, $description, $size, $title);
 
             if (!$id) {
@@ -970,13 +971,10 @@ function file_insert()
     if (gps('app_mode') == 'async') {
         $response[] = announce($message, $status);
 
-        $response[] = 'var form = $(".upload-form"), fileinput = form.find("input[type=file]").attr("disabled", "disabled")'.n;
-
         if ($success) {
-            $response[] = 'textpattern.Relay.callback("updateList", {list: ".txp-list-container", data: form.serializeArray()}, 100)'.n;
+        $response[] = '$("nav.prev-next input[name=page], form.txp-search input[name=crit]").val("")';
+            $response[] = 'textpattern.Relay.callback("updateList", {list: "#txp-list-container", data: $.extend([{name:"event", value: "file"}], $("form.txp-search").serializeArray())}, 100)';
         }
-
-        $response[] = 'fileinput.val("").attr("disabled", null)'.n;
 
         send_script_response(join("\n", $response));
 
@@ -984,7 +982,7 @@ function file_insert()
         return;
     }
 
-    if ($ids && count($files) == 1) {
+    if (false/*$ids && count($files) == 1*/) {
         file_edit(array($message, $status), $ids[0]);
     } else {
         unset($GLOBALS['ID']);

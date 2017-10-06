@@ -498,7 +498,7 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
 {
     $out = array();
 
-    if ($crit != '' && $total > 1) {
+    if ($crit != '') {
         $out[] = announce(
             gTxt('showing_search_results', array(
                 '{from}'  => (($page - 1) * $limit) + 1,
@@ -509,12 +509,10 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
         );
     }
 
-    if ($numPages > 1) {
+//    if ($numPages > 1) {
         $nav = array();
         $list--;
         $page = max(min($page, $numPages), 1);
-        $start = max(1, min($numPages - $list, $page - floor($list/2)));
-        $end = min($numPages, $start + $list);
 
         $parameters = array(
             'event'         => $event,
@@ -581,8 +579,8 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
             );
         }
 
-        $out[] = n.tag(join($nav).n, 'nav', array('class' => 'prev-next'));
-    }
+        $out[] = n.tag(join($nav).n, 'nav', array('class' => 'prev-next', 'style' => ($numPages > 1 ? false : 'display:none')));
+//    }
 
     return join('', $out);
 }
@@ -1483,7 +1481,8 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
             (!empty($max_file_size) ? hInput('MAX_FILE_SIZE', $max_file_size) : '').
             eInput($event).
             sInput($step).
-            hInput(compact('id', 'sort', 'dir', 'page', 'search_method','crit')).
+            hInput('id', $id).
+//            hInput(compact('id', 'sort', 'dir', 'page', 'search_method','crit')).
             inputLabel(
                 $label_id,
                 tag_void('input', array('name' => $name, 'type' => 'file', 'required' => true, 'id' => $label_id, 'multiple' => $multiple)).

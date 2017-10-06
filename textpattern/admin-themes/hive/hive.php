@@ -61,7 +61,7 @@ class hive_theme extends \Textpattern\Admin\Theme
             script_js(
 <<< EOS
 textpattern.Route.add('file', function() {
-    if ($('.txp-list-container').length) {
+    if ($('#txp-list-container').length) {
         jQuery('.upload-form').append('<div class="dropzone dropzone-previews" />').txpDropzone({
             maxFiles: $max_files,
             maxFilesize: $max_file_size

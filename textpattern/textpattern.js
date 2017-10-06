@@ -775,7 +775,8 @@ textpattern.Relay =
         return this;
     },
 
-    timeouts: {}
+    timeouts: {},
+    data: {}
 };
 
 /**
@@ -873,19 +874,34 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
     $('progress.upload-progress').val(data.loaded / data.total)
 }).register('uploadStart', function (event, data) {
     $('progress.upload-progress').val(0).show()
-    $('.upload-container').show()
 }).register('uploadEnd', function (event, data) {
 //    $('.upload-previews').empty()
-//    $('.upload-container, progress.upload-progress').hide()
+    $('progress.upload-progress').hide()
 }).register('updateList', function (event, data) {
-    var list = data.list || '.txp-list-container', url = data.url || 'index.php'
-    $(list).load(url+" "+list+">*", data.data, function() {
+    var list = data.list || '#txp-list-container, #messagepane', url = data.url || 'index.php'
+    $(list).addClass('disabled')
+    
+    if (typeof data.html == 'undefined') {
+        $('<html />').load(url, data.data, function() {
+            var $html = $(this)
+            $.each(list.split(','), function(index, value) {
+                $(value).empty().append($html.find(value).children()).removeClass('disabled')
+            })
+
+            $(this).remove()
+            txp_columniser()
+            $('.multi_edit_form').txpMultiEditForm()
+        })
+    } else if (data.html) {
+        var $html = $(data.html)
+        $.each(list.split(','), function(index, value) {
+            $(value).empty().append($html.find(value).children()).removeClass('disabled')
+        })
+
+        $html.remove()
         txp_columniser()
         $('.multi_edit_form').txpMultiEditForm()
-        $('.txp-list-col-tag-build').on('click', '.txp-tagbuilder-link', function (ev) {
-            txpAsyncLink(ev);
-        });
-    })
+    }
 });
 
 /**
@@ -1567,8 +1583,9 @@ function txp_search()
     $ui.find('.txp-search-button').button({
         showLabel: false,
         icon: 'ui-icon-search'
-    }).click(function () {
-        $ui.submit();
+    }).click(function (e) {
+        e.preventDefault()
+        $ui.submit()
     });
 
     $ui.find('.txp-search-options').button({
@@ -1877,13 +1894,24 @@ textpattern.Route.add('article', function () {
 
 // TEST FILEUPLOAD ONLY!!
 textpattern.Route.add('file', function () {
-    $('.txp-list-container').on('click', '.txp-list th a, .txp-navigation a', function(e) {
-        e.preventDefault();
-        textpattern.Relay.callback('updateList', {list: '.txp-list-container', url: $(this).attr('href')})
-    }).on('submit', 'form[name="longform"]', function(e) {
-        e.preventDefault();
-        textpattern.Relay.callback('updateList', {list: '.txp-list-container', data: $(this).serializeArray()})
+
+    if ($('#txp-list-container').length && $.fn.txpFileupload) {
+        $('.upload-form').txpFileupload({maxChunkSize: 2000000, extraForm: 'nav.prev-next form'});
+    }
+
+    $('form.txp-search').on('submit', function(e) {
+        e.preventDefault()
+        if ($(this).find('input[name="crit"]').val()) $(this).find('.txp-search-clear').show()
+        else $(this).find('.txp-search-clear').hide()
+        textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
+    }).find('.txp-search-clear').click(function(e) {
+        e.preventDefault()
+        var searchform = $(this).closest('form.txp-search')
+        searchform.find('input[name="crit"]').val('')
+        searchform.submit()
     })
+
+
 
 
     var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL
@@ -1895,10 +1923,11 @@ textpattern.Route.add('file', function () {
     })
 
     form.find('input[type="file"][multiple]').on('change', function (e) {
+        uploadContainer.children('progress.upload-progress').hide().val(0)
         var previews = uploadContainer.show().children('.upload-previews').empty();
         
-        $(this.files).each(function () {
-            var name = this.name.replace(/\.[^\.]*$/, ''), mime = this.type.split('/'), hash = md5(this.name);
+        $(this.files).each(function (index) {
+            var name = this.name.replace(/\.[^\.]*$/, ''), mime = this.type.split('/'), hash = textpattern.Relay.data.chunked && typeof(md5) == 'function' ? md5(this.name) : index;
             var preview = $("<div class='upload-preview' style=' position:relative;float:left;overflow:hidden;height:128px;width:128px;margin:1em;border:1px solid lightgrey' />")
             preview.append($('<input name=title['+hash+'] style="position:absolute;bottom:0;z-index:100" />').val(name))
             if (createObjectURL && (mime[0] == 'image' || mime[0] == 'audio')) {
@@ -1951,7 +1980,7 @@ textpattern.Route.add('page, form, file, image', function () {
         $('#txp-tagbuilder-output').select();
     });
 
-    $('#tagbuild_links, .txp-list-col-tag-build').on('click', '.txp-tagbuilder-link', function (ev) {
+    $('#tagbuild_links, .txp-list-col-tag-build, #txp-list-container').on('click', '.txp-tagbuilder-link', function (ev) {
         txpAsyncLink(ev);
     });
 
@@ -2180,6 +2209,13 @@ $(document).ready(function () {
 
     // TODO: end integrate jQuery UI stuff properly ----------------------------
 
+    $('#txp-list-container').on('click', '.txp-list thead th a, .txp-navigation a', function(e) {
+        e.preventDefault();
+        textpattern.Relay.callback('updateList', {url: $(this).attr('href'), data: $('form.txp-search').serializeArray()})
+    }).on('submit', 'form[name="longform"]', function(e) {
+        e.preventDefault();
+        textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
+    })
 
 
     // Find and open associated dialogs.
