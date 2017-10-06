@@ -198,29 +198,19 @@ function doDiagnostics()
         }
 
         // Check for Textpattern updates, at most once every 24 hours.
-        // For legacy reasons, attempt an unserialize() first and if it fails,
-        // try the more recent json_decode().
-        // @todo Entirely remove unserialize() in some future version.
-        $lastCheck = get_pref('last_update_check', '');
-        $updateInfo = json_decode($lastCheck);
+        $lastCheck = json_decode(get_pref('last_update_check', ''), true);
 
-        if ($updateInfo === null && $lastCheck) {
-            $updateInfo = (object) unserialize($lastCheck);
-        }
-
-        if (!$updateInfo || ($now > ($updateInfo->when + (60 * 60 * 24)))) {
-            if (!$updateInfo) {
-                $updateInfo = new \StdClass();
-            }
-
+        if ($now > (@(int)$lastCheck['when'] + (60 * 60 * 24))) {
             $updates = checkUpdates();
-            $updateInfo->msg = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
-            $updateInfo->when = $now;
-            set_pref('last_update_check', json_encode($updateInfo, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');
+            $lastCheck = array(
+                'when'  => $now,
+                'msg'   => (empty($updates) ? '' : gTxt($updates['msg'], array('{version}' => $updates['version']))),
+            );
+            set_pref('last_update_check', json_encode($lastCheck, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');
         }
 
-        if (!empty($updateInfo->msg)) {
-            $fail['textpattern_version_update'] = diag_msg_wrap($updateInfo->msg, 'information');
+        if (!empty($lastCheck['msg'])) {
+            $fail['textpattern_version_update'] = diag_msg_wrap($lastCheck['msg'], 'information');
         }
     }
 
@@ -527,7 +517,7 @@ function doDiagnostics()
             strip_tags(gTxt('auto_dst')).cs.$auto_dst.n,
             strip_tags(gTxt('gmtoffset')).cs.$timezone_key.sp."($gmtoffset)".n,
 
-            'MySQL'.cs.mysqli_get_server_info($DB->link).n,
+            'MySQL'.cs.$DB->version.n,
             gTxt('db_server_time').cs.$db_server_time.n,
             gTxt('db_server_timeoffset').cs.$db_server_timeoffset.' s'.n,
             gTxt('db_global_timezone').cs.$db_global_timezone.n,
@@ -559,6 +549,12 @@ function doDiagnostics()
         );
 
         if ($step == 'high') {
+            $lastCheck = json_decode(get_pref('last_update_check', ''), true);
+
+            if (!empty($lastCheck['msg'])) {
+                $out[] = 'Last update check: '.strftime('%Y-%m-%d %H:%M:%S', $lastCheck['when']).', '.strip_tags($lastCheck['msg']).n;
+            }
+
             $out[] = n.'Charset (default/config)'.cs.$DB->default_charset.'/'.$DB->charset.n;
 
             $result = safe_query("SHOW variables LIKE 'character_se%'");
@@ -582,6 +578,7 @@ function doDiagnostics()
 
             foreach ($table_names as $table) {
                 $ctr = safe_query("SHOW CREATE TABLE $table");
+
                 if (!$ctr) {
                     unset($table_names[$table]);
                     continue;
@@ -589,12 +586,14 @@ function doDiagnostics()
 
                 $row = mysqli_fetch_assoc($ctr);
                 $ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is', '\\1', $row['Create Table']);
+
                 if (isset($conn_char) && !stristr($ctcharset, 'CREATE') && ($conn_char != $ctcharset)) {
                     $table_msg[] = "$table is $ctcharset";
                 }
 
                 $ctr = safe_query("CHECK TABLE $table");
                 $row = mysqli_fetch_assoc($ctr);
+
                 if (in_array($row['Msg_type'], array('error', 'warning'))) {
                     $table_msg[] = $table.cs.$row['Msg_Text'];
                 }
@@ -651,13 +650,6 @@ function doDiagnostics()
 /**
  * Checks for Textpattern updates.
  *
- * This function uses XML-RPC to do an active remote connection to
- * rpc.textpattern.com. Created connections are not cached, scheduled or
- * delayed, and each subsequent call to the function creates a new connection.
- *
- * These connections do not transmit any identifiable information. Just an
- * anonymous UID assigned for the installation on the first run.
- *
  * @return  array|null When updates are found returns an array consisting keys 'version', 'msg'
  * @example
  * if ($updates = checkUpdates())
@@ -668,28 +660,14 @@ function doDiagnostics()
 
 function checkUpdates()
 {
-    require_once txpath.'/lib/IXRClass.php';
-    $client = new IXR_Client('http://rpc.textpattern.com');
+    $response = @json_decode(file_get_contents('https://textpattern.io/version.json'), true);
+    $release = @$response['textpattern-version']['release'];
+    $version = get_pref('version');
 
-    if (!$client->query('tups.getTXPVersion', get_pref('blog_uid'))) {
+    if (empty($release)) {
         return array('version' => 0, 'msg' => 'problem_connecting_rpc_server');
-    } else {
-        $out = array();
-        $response = $client->getResponse();
-
-        if (is_array($response)) {
-            ksort($response);
-            $version = get_pref('version');
-
-            // Go through each available branch (x.y), but only return the
-            // _highest_ version.
-            foreach ($response as $key => $val) {
-                if (version_compare($version, $val) < 0) {
-                    $out = array('version' => $val, 'msg' => 'textpattern_update_available');
-                }
-            }
-
-            return $out;
-        }
+    } elseif (version_compare($version, $release) < 0) {
+        return array('version' => $release, 'msg' => 'textpattern_update_available');
     }
+    return array();
 }
