@@ -23,16 +23,21 @@ jQuery.fn.txpFileupload = function (options) {
         }
     }, options)).off('submit').submit(function (e) {
         e.preventDefault()
-        var formData = new FormData($(options.extraForm).toArray()[0]),
-            sendData = []
+        var formData = new FormData($(options.extraForm).toArray()[0])
 
-        for (var pair of form.serializeArray()) {
-          formData.delete(pair['name'])
-          formData.append(pair['name'],  pair['value'])
-        }
+        if (typeof formData.delete !== 'undefined') {
+            var sendData = []
 
-        for (var pair of formData) {
-          sendData.push({name: pair[0], value: pair[1]})
+            for (var pair of form.serializeArray()) {
+              formData.delete(pair['name'])
+              formData.append(pair['name'],  pair['value'])
+            }
+
+            for (var pair of formData) {
+              sendData.push({name: pair[0], value: pair[1]})
+            }
+        } else {
+            var sendData = form.serializeArray()
         }
         
         form.fileupload('add', {
