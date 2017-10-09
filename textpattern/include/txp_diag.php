@@ -549,7 +549,7 @@ function doDiagnostics()
 
         if ($step == 'high') {
             $lastCheck = json_decode(get_pref('last_update_check', ''), true);
-            if (!empty($lastCheck['msg']) || !empty($lastCheck['msg'])) {
+            if (!empty($lastCheck['msg']) || !empty($lastCheck['msg2'])) {
                 $out[] = 'Last update check: '.strftime('%Y-%m-%d %H:%M:%S', $lastCheck['when']).', '.strip_tags($lastCheck['msg']).' '.strip_tags($lastCheck['msg2']).n;
             }
 
