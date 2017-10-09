@@ -256,13 +256,11 @@ function file_list($message = '', $ids = array())
         echo $searchBlock.
             $contentBlockStart.
             $createBlock.
-            tag(graf(
+            graf(
                 span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                 gTxt($criteria != 1 ? 'no_results_found': 'no_files_recorded'),
                 array('class' => 'alert-block information')
-            ), 'div', array(
-                'id' => 'txp-list-container'
-            ));
+            );
 
         echo n.tag_end('div'). // End of .txp-layout-1col.
             n.'</div>'; // End of .txp-layout.
@@ -297,10 +295,7 @@ function file_list($message = '', $ids = array())
     if ($rs && numRows($rs)) {
         $show_authors = !has_single_author('txp_file');
 
-        echo n.tag_start('div', array(
-                'id' => 'txp-list-container'
-            )).
-            n.tag_start('form', array(
+        echo n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'files_form',
                 'name'   => 'longform',
@@ -497,8 +492,7 @@ function file_list($message = '', $ids = array())
             )).
             $paginator->render().
             nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div').
-            n.tag_end('div'); // End of #txp-list-container
+            n.tag_end('div');
     }
 
     echo n.tag_end('div'). // End of .txp-layout-1col.
@@ -886,7 +880,7 @@ function file_insert()
     global $txp_user, $file_base_path, $file_max_upload_size, $tempdir;
 
     require_privs('file.edit.own');
-    $success = $errors = $ids = array();
+    $messages = $ids = array();
     $files = file_refactor($_FILES['thefile']) or $files = array();
     $titles = gps('title');
     $tmpdir = $tempdir;//ini_get('upload_tmp_dir') or $tmpdir = sys_get_temp_dir();
@@ -931,62 +925,48 @@ function file_insert()
         }
 
         if (!$size || $file_max_upload_size < $size && empty($tmpfile)) {
-            $errors[] = gTxt('file_upload_failed')." $newname - ".upload_get_errormsg(isset($tmpfile) ? UPLOAD_ERR_PARTIAL : UPLOAD_ERR_FORM_SIZE);
+            $messages[] = gTxt('file_upload_failed')." $newname - ".upload_get_errormsg(isset($tmpfile) ? UPLOAD_ERR_PARTIAL : UPLOAD_ERR_FORM_SIZE);
         } elseif (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
             $hash = isset($titles[$i]) ? $i : md5($name);
             $title = isset($titles[$hash]) ? $titles[$hash] : '';
             $id = file_db_add($newname, $category, $permissions, $description, $size, $title);
 
             if (!$id) {
-                $errors[] = gTxt('file_upload_failed').' (db_add)';
+                $messages[] = gTxt('file_upload_failed').' (db_add)';
             } else {
                 $id = assert_int($id);
 
                 if (!shift_uploaded_file($tmp_name, $newpath)) {
                     safe_delete('txp_file', "id = $id");
                     safe_alter('txp_file', "auto_increment = $id");
-                    $errors[] = $newpath.' '.gTxt('upload_dir_perms');
+                    $messages[] = $newpath.' '.gTxt('upload_dir_perms');
                 } else {
                     file_set_perm($newpath);
                     $ids[] = $GLOBALS['ID'] = $id;
-                    $success[] = gTxt('file_uploaded', array('{name}' => href(txpspecialchars($newname), '?event=file&step=file_edit&id='.$id, array('title' => gTxt('edit')))), false);
+                    $messages[] = gTxt('file_uploaded', array('{name}' => href(txpspecialchars($newname), '?event=file&step=file_edit&id='.$id, array('title' => gTxt('edit')))), false);
                 }
             }
         } else {
-            $errors[] = gTxt('file_already_exists', array('{name}' => $newname));
+            $messages[] = gTxt('file_already_exists', array('{name}' => $newname));
         }
 
         // Clean up file.
         @unlink($tmp_name);
     }
 
-    $message = implode(br, array_merge($success, $errors));
-    $status = $success ? ($errors ? E_WARNING : 0) : E_ERROR;
+    $status = $ids ? (count($ids) < count($messages) ? E_WARNING : 0) : E_ERROR;
+    $messages = implode(br, $messages);
 
     if ($ids) {
         update_lastmod('file_uploaded', compact('ids', 'title', 'category', 'description'));
         now('created', true);
     }
 
-    if (gps('app_mode') == 'async') {
-        $response[] = announce($message, $status);
-
-        if ($success) {
-        $response[] = '$("nav.prev-next input[name=page], form.txp-search input[name=crit]").val("")';
-            $response[] = 'textpattern.Relay.callback("updateList", {list: "#txp-list-container", data: $.extend([{name:"event", value: "file"}], $("form.txp-search").serializeArray())}, 100)';
-        }
-
-        send_script_response(join("\n", $response));
-
-        // Bail out.
-        return;
-    }
-
     if (false/*$ids && count($files) == 1*/) {
-        file_edit(array($message, $status), $ids[0]);
+        file_edit(array($messages, $status), $ids[0]);
     } else {
         unset($GLOBALS['ID']);
-        file_list($files ? array($message, $status) : '', $ids);
+        file_list($files ? array($messages, $status) : '', $ids);
     }
 }
 

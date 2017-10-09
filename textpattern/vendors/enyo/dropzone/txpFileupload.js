@@ -4,16 +4,15 @@ jQuery.fn.txpFileupload = function (options) {
     var form = this, fileInput = this.find('input[type="file"]'), paramName = fileInput.attr('name'), maxChunkSize = options.maxChunkSize || 2000000
 
     form.fileupload($.extend({
-        url: form.attr('action')/*+'?app_mode=async'*/,
-        dataType: 'html',
+        url: form.attr('action'),
+        dataType: 'html',//script?
 //        autoUpload: false,
         maxChunkSize: maxChunkSize,
         formData: null,
         fileInput: null,
         done: function (e, data) {
+            textpattern.Relay.callback('txpAsyncForm.success', {data: data.result})
             textpattern.Relay.callback('uploadEnd', data)
-            textpattern.Relay.callback('updateList', {html: data.result}, 100)
-//            eval(data.result)
         },
         progressall: function (e, data) {
             textpattern.Relay.callback('uploadProgress', data)
@@ -23,25 +22,11 @@ jQuery.fn.txpFileupload = function (options) {
         }
     }, options)).off('submit').submit(function (e) {
         e.preventDefault()
-        var formData = new FormData($(options.extraForm).toArray()[0])
-
-        if (typeof formData.delete !== 'undefined') {
-            var sendData = []
-
-            for (var pair of form.serializeArray()) {
-              formData.delete(pair['name'])
-              formData.append(pair['name'],  pair['value'])
-            }
-
-            for (var pair of formData) {
-              sendData.push({name: pair[0], value: pair[1]})
-            }
-        } else {
-            var sendData = form.serializeArray()
-        }
+        var formData = $(options.extraForm).serializeArray()
+        $.merge(formData, form.serializeArray())
         
         form.fileupload('add', {
-            formData: sendData,
+            formData: formData,
             fileInput: $(fileInput)
         })
     })
