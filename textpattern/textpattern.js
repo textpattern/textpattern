@@ -1936,7 +1936,7 @@ textpattern.Route.add('section', function ()
     // Invoke the handler now to set things on initial page load.
     $('#section_skin').change();
 
-    $('select[name=edit_method').change(function() {
+    $('select[name=edit_method]').change(function() {
         if ($(this).val() === 'changepagestyle') {
             var theSkin = $('#multiedit_skin').val();
             section_theme_hide(theSkin);
