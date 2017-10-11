@@ -5031,7 +5031,7 @@ function txp_escape($atts, $thing = '')
                 $function = function_exists('mb_strto'.$attr) ? 'mb_strto'.$attr : 'strto'.$attr;
                 $thing = $function($thing);
                 break;
-            case 'trim': case 'ltrim' : case 'rtrim' : case 'intval' :
+            case 'trim': case 'ltrim': case 'rtrim': case 'intval':
                 $thing = $attr($thing);
                 break;
             case 'textile':

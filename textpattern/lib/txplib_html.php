@@ -1826,7 +1826,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
         extract($break + array('break' => ''));
     }
 
-    foreach($import as $global) {
+    foreach ($import as $global) {
         if (!isset($$global) && isset($txp_atts[$global])) {
             $$global = $txp_atts[$global];
         }

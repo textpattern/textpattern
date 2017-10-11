@@ -114,8 +114,8 @@ foreach (get_files_content($setupdir.'/articles', 'xml') as $key=>$data) {
 // Load theme /data, /styles, /forms, /pages
 
 if (class_exists('\Textpattern\Skin\Main') && $public_theme != 'setup') {
-        Txp::get('\Textpattern\Skin\Main', array($public_theme => array()))->import();
-        safe_update('txp_section', 'skin = "'.doSlash($public_theme).'"', '1=1');
+    Txp::get('\Textpattern\Skin\Main', array($public_theme => array()))->import();
+    safe_update('txp_section', 'skin = "'.doSlash($public_theme).'"', '1=1');
 } else {
     $themedir = $public_themes[$public_theme]['themedir'];
 
@@ -124,7 +124,7 @@ if (class_exists('\Textpattern\Skin\Main') && $public_theme != 'setup') {
     }
 
     if ($files = glob("{$themedir}/forms/*/*\.txp")) {
-        foreach  ($files as $file) {
+        foreach ($files as $file) {
             if (preg_match('%/forms/(\w+)/(\w+)\.txp$%', $file, $mm)) {
                 $data = @file_get_contents($file);
                 safe_query("INSERT INTO `".PFX."txp_form`(type, name, Form) VALUES('".doSlash($mm[1])."', '".doSlash($mm[2])."', '".doSlash($data)."')");

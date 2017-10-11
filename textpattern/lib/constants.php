@@ -490,9 +490,9 @@ if (!defined('X_FRAME_OPTIONS')) {
 if (!defined('CONTENT_SECURITY_POLICY')) {
     /**
      * Sets Content-Security-Policy HTTP header's value.
-     * 
+     *
      * This constant can be overridden from the config.php.
-     * 
+     *
      * @since   4.7.0
      * @package CSRF
      */
@@ -937,5 +937,5 @@ define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
 if (defined('JSON_UNESCAPED_UNICODE')) {
     define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE);
 } else {
-    define('TEXTPATTERN_JSON', 0);    
+    define('TEXTPATTERN_JSON', 0);
 }
