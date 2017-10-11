@@ -271,7 +271,7 @@ function skin_list($message = '')
                         'event' => 'page',
                         'skin'  => $skin_name,
                     ),
-                    array('title' => gTxt('page_count', array('{num}' => $skin_page_count)))
+                    array('title' => gTxt('skin_count_page', array('{num}' => $skin_page_count)))
                 );
             } else {
                 $pageLink = 0;
@@ -284,7 +284,7 @@ function skin_list($message = '')
                         'event' => 'css',
                         'skin'  => $skin_name,
                     ),
-                    array('title' => gTxt('css_count', array('{num}' => $skin_css_count)))
+                    array('title' => gTxt('skin_count_css', array('{num}' => $skin_css_count)))
                 );
             } else {
                 $cssLink = 0;
@@ -297,7 +297,7 @@ function skin_list($message = '')
                         'event' => 'form',
                         'skin'  => $skin_name,
                     ),
-                    array('title' => gTxt('form_count', array('{num}' => $skin_form_count)))
+                    array('title' => gTxt('skin_count_form', array('{num}' => $skin_form_count)))
                 );
             } else {
                 $formLink = 0;
