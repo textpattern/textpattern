@@ -197,8 +197,7 @@ function skin_list($message = '')
     );
 
     if ($rs) {
-        echo n.tag(toggle_box('skin_detail'), 'div', array('class' => 'txp-list-options')).
-            n.tag_start('form', array(
+        echo n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'skin_form',
                 'name'   => 'longform',
@@ -315,10 +314,10 @@ function skin_list($message = '')
                 td(txpspecialchars($skin_title), '', 'txp-list-col-title').
                 td(txpspecialchars($skin_version), '', 'txp-list-col-version').
                 td($author, '', 'txp-list-col-author').
-                td($sectionLink, '', 'txp-list-col-section_count skin_detail').
-                td($pageLink, '', 'txp-list-col-page_count skin_detail').
-                td($formLink, '', 'txp-list-col-form_count skin_detail').
-                td($cssLink, '', 'txp-list-col-css_count skin_detail');
+                td($sectionLink, '', 'txp-list-col-section_count').
+                td($pageLink, '', 'txp-list-col-page_count').
+                td($formLink, '', 'txp-list-col-form_count').
+                td($cssLink, '', 'txp-list-col-css_count');
 
             echo tr($tds, array('id' => 'txp_skin_'.$skin_name));
         }
