@@ -646,18 +646,6 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             }
         }
 
-        // Use preferred Textfilter as default and fallback.
-        $hasfilter = new \Textpattern\Textfilter\Constraint(null);
-        $validator = new Validator();
-
-        foreach (array('textile_body', 'textile_excerpt') as $k) {
-            $hasfilter->setValue($store_out[$k]);
-            $validator->setConstraints($hasfilter);
-            if (!$validator->validate()) {
-                $store_out[$k] = $use_textile;
-            }
-        }
-
         $rs = textile_main_fields($store_out);
 
         if (!empty($rs['exp_year'])) {
@@ -1281,6 +1269,18 @@ function get_status_message($Status)
 
 function textile_main_fields($incoming)
 {
+    // Use preferred Textfilter as default and fallback.
+    $hasfilter = new \Textpattern\Textfilter\Constraint(null);
+    $validator = new Validator();
+
+    foreach (array('textile_body', 'textile_excerpt') as $k) {
+        $hasfilter->setValue($incoming[$k]);
+        $validator->setConstraints($hasfilter);
+        if (!$validator->validate()) {
+            $incoming[$k] = get_pref('use_textile');
+        }
+    }
+
     $textile = new \Textpattern\Textile\Parser();
 
     $incoming['Title_plain'] = trim($incoming['Title']);

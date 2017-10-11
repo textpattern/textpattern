@@ -955,7 +955,7 @@ function get_public_themes_list()
     $public_themes = $out = array();
 
     if ($files = glob(txpath."/{setup,../themes/*}/manifest\.json", GLOB_BRACE)) {
-        foreach  ($files as $file) {
+        foreach ($files as $file) {
             $file = realpath($file);
             if (preg_match('%^(.*/(\w+))/manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
                 if (@$manifest['txp-type'] == 'textpattern-theme') {
