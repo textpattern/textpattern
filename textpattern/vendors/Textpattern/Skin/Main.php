@@ -79,9 +79,9 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function duplicate()
+        public function duplicate($as)
         {
-            return $this->callSkinsMethod(__FUNCTION__);
+            return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }
 
         /**
@@ -106,7 +106,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function export($clean = true, $copy = false)
+        public function export($clean = true, $as = null)
         {
             return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }

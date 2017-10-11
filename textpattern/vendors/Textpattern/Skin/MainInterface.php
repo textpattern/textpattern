@@ -51,12 +51,13 @@ namespace Textpattern\Skin {
         public function edit();
 
         /**
-         * Creates a time stamped copy of the skin(s) and/or its asset related template rows.
+         * Creates a copy of the skin(s) and/or its asset related template rows.
          *
+         * @param  string $as The title of the copy.
          * @throws \Exception
          */
 
-        public function duplicate();
+        public function duplicate($as);
 
         /**
          * Imports the skin(s) and/or its asset related templates from the related directory(ies).
@@ -79,12 +80,12 @@ namespace Textpattern\Skin {
         /**
          * Exports the skin(s) and/or its asset related templates from the database.
          *
-         * @param  bool $clean whether to remove obsolete files or not.
-         * @param  bool $copy whether to time stamped the exported directory or not.
+         * @param  bool   $clean whether to remove obsolete files or not.
+         * @param  string $as    An optional skin title to export the current skin as a copy.
          * @throws \Exception
          */
 
-        public function export($clean = true, $copy = false);
+        public function export($clean = true, $as = false);
 
         /**
          * Deletes The skin and/or its asset related templates.

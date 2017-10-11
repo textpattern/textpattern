@@ -39,7 +39,7 @@ namespace Textpattern\Skin {
          * Constructor
          *
          * @param string       $skin      The asset related skin name (set the related parent property)
-         * @param string       $stamp     The asset related skin infos (set the related parent property)
+         * @param string       $infos     The asset related skin infos (set the related parent property)
          * @param string|array $templates Restricts import to provided template name(s)
          */
 

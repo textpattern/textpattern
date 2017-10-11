@@ -68,7 +68,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        abstract public function duplicate();
+        abstract public function duplicate($as);
 
         /**
          * {@inheritdoc}
@@ -86,7 +86,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        abstract public function export($clean = true, $copy = false);
+        abstract public function export($clean = true, $as = null);
 
         /**
          * {@inheritdoc}

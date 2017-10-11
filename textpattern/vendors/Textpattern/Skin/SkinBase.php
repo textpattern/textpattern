@@ -70,13 +70,12 @@ namespace Textpattern\Skin {
         protected $locked = false;
 
         /**
-         * The timestamp used for copies.
+         * The skin copy title.
          *
          * @var string
-         * @see Skin::setStamp();
          */
 
-        protected $stamp;
+        protected $copy;
 
         /**
          * The skin infos to work with as an associative array.
@@ -107,7 +106,7 @@ namespace Textpattern\Skin {
         {
             if ($this->skin) {
                 if ($this->isInstalled === null) {
-                    $name = strtolower(sanitizeForUrl($this->skin.($copy ? $this->stamp : '')));
+                    $name = strtolower(sanitizeForUrl($this->copy ? $this->copy : $this->skin));
                     $this->isInstalled = self::isInstalled($name);
                 }
 
@@ -118,13 +117,15 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Whether a skin rox exists or not.
+         * Whether a skin row exists or not.
          *
          * @return bool
          */
 
         public static function isInstalled($skin)
         {
+            $skin = strtolower(sanitizeForUrl($skin));
+
             if (static::$installed === null) {
                 return (bool) safe_field('name', 'txp_skin', "name ='".doSlash($skin)."'");
             } else {
@@ -149,8 +150,8 @@ namespace Textpattern\Skin {
          * Checks if the Skin directory exists and is writable;
          * if not, creates it.
          *
-         * @param  string      $stamp the previously generated timestamp.
-         * @return string|bool        path or false
+         * @param  string      $path See getPath().
+         * @return string|bool path or false
          */
 
         public function isWritable($path = null)
@@ -265,7 +266,7 @@ namespace Textpattern\Skin {
         public function getPath($path = null)
         {
             return self::getBasePath().'/'.
-                sanitizeForUrl($this->skin.$this->stamp).
+                strtolower(sanitizeForUrl($this->copy ? $this->copy : $this->skin)).
                 ($path ? '/'.$path : '');
         }
     }
