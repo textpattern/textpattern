@@ -128,7 +128,7 @@ function skin_list($message = '')
 
     echo n.'<div class="txp-layout">'.
         n.tag(
-            hed(gTxt('tab_skins').popHelp('skin_category'), 1, array('class' => 'txp-heading')),
+            hed(gTxt('tab_skins'), 1, array('class' => 'txp-heading')),
             'div',
             array('class' => 'txp-layout-4col-alt')
         );
