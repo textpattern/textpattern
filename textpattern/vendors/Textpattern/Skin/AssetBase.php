@@ -331,7 +331,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function duplicate()
+        public function duplicate($as)
         {
             if ($this->skinIsInstalled(true)) {
                 if ($rows = $this->getTemplateRows()) {
@@ -339,7 +339,7 @@ namespace Textpattern\Skin {
 
                     foreach ($rows as $row) {
                         $templates[] = $row['name'];
-                        $row['skin'] = strtolower(sanitizeForUrl($row['skin'].$this->stamp));
+                        $row['skin'] = strtolower(sanitizeForUrl($this->copy));
                         isset($sql_fields) ?: $sql_fields = array_keys($row);
                         $sql_values[] = "('".implode("', '", array_map('doSlash', $row))."')";
                     }
@@ -396,7 +396,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function export($clean = true, $copy = false)
+        public function export($clean = true, $as = null)
         {
             if ($rows = $this->getTemplateRows()) {
                 $was_locked = $this->locked;

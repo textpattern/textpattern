@@ -390,39 +390,65 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function duplicate()
+        public function duplicate($as)
         {
-            if ($row = $this->getRow()) {
-                $this->setStamp();
+            $this->copy = $as;
 
-                $callback_extra = array(
-                    'skin'   => $this->skin,
-                    'stamp'  => $this->stamp,
-                    'assets' => $this->assets,
-                );
-
-                callback_event('skin', 'duplication', 0, $callback_extra);
-
-                if ($this->duplicateSkin($row)) {
-                    $this->assets ? $this->callAssetsMethod(__FUNCTION__) : '';
-
-                    callback_event('skin', 'duplicated', 0, $callback_extra);
-                } else {
-                    callback_event('skin', 'duplication_failed', 0, $callback_extra);
-
-                    throw new \Exception(
-                        gtxt(
-                            'skin_step_failed',
-                            array(
-                                '{skin}' => $this->skin,
-                                '{step}' => 'duplication',
-                            )
-                        )
+            if (!$this->skinIsInstalled(true) && $this->copyIndexIsSafe()) {
+                if ($row = $this->getRow()) {
+                    $callback_extra = array(
+                        'skin'   => $this->skin,
+                        'copy'   => $this->copy,
+                        'assets' => $this->assets,
                     );
+
+                    callback_event('skin', 'duplication', 0, $callback_extra);
+
+                    if ($this->duplicateSkin($row)) {
+                        static::$installed[strtolower(sanitizeForUrl($this->copy))] = $this->copy;
+
+                        $this->assets ? $this->callAssetsMethod(__FUNCTION__, func_get_args()) : '';
+
+                        callback_event('skin', 'duplicated', 0, $callback_extra);
+                    } else {
+                        callback_event('skin', 'duplication_failed', 0, $callback_extra);
+
+                        throw new \Exception(
+                            gtxt(
+                                'skin_step_failed',
+                                array(
+                                    '{skin}' => $this->skin,
+                                    '{step}' => 'duplication',
+                                )
+                            )
+                        );
+                    }
+                } else {
+                    throw new \Exception('Unknown_skin');
                 }
             } else {
-                throw new \Exception('Unknown_skin');
+                throw new \Exception('Duplicated_skin');
             }
+        }
+
+        /**
+         * Whether a skin copy name is safe to use in the name_skin index.
+         *
+         * @throws \Exception
+         * @return bool true
+         */
+
+        private function copyIndexIsSafe()
+        {
+            $index = strtolower(sanitizeForUrl(substr($this->copy, 0, 50)));
+
+            foreach (Main::getInstalled() as $name => $title) {
+                if (substr($name, 0, 50) === $index) {
+                    throw new \Exception('unsafe_skin_index');
+                }
+            }
+
+            return true;
         }
 
         /**
@@ -455,9 +481,9 @@ namespace Textpattern\Skin {
 
             foreach ($row as $col => $value) {
                 if ($col === 'name') {
-                    $value = sanitizeForUrl($value.$this->stamp);
+                    $value = strtolower(sanitizeForUrl($this->copy));
                 } elseif ($col === 'title') {
-                    $value = $value.$this->stamp;
+                    $value = $this->copy;
                 }
 
                 $sql[] = $col." = '".doSlash($value)."'";
@@ -470,14 +496,14 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function export($clean = true, $copy = false)
+        public function export($clean = true, $as = null)
         {
             if ($row = $this->getRow()) {
-                $copy ? $this->setStamp() : '';
+                $as ? $this->copy = $as : '';
 
                 $callback_extra = array(
                     'skin'   => $this->skin,
-                    'stamp'  => $this->stamp,
+                    'copy'   => $this->copy,
                     'assets' => $this->assets,
                 );
 
@@ -524,7 +550,7 @@ namespace Textpattern\Skin {
 
             $contents = $this->isWritable(static::$file) ? $this->getJSONInfos() : array();
 
-            $contents['name'] = ($title ? $title : $name).$this->stamp;
+            $contents['name'] = $this->copy ? $this->copy : ($title ? $title : $name);
             $description ? $contents['description'] = $description : '';
             $version ? $contents['version'] = $version : '';
             $website ? $contents['homepage_url'] = $website : '';
@@ -687,15 +713,6 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Sets the stamp property used for copies as skin name/title suffix.
-         */
-
-        private function setStamp()
-        {
-            $this->stamp = ' '.date('Y/m/d H:i:s');
-        }
-
-        /**
          * Calls an asset class instance method.
          *
          * @param string $method An asset class related method;
@@ -709,7 +726,7 @@ namespace Textpattern\Skin {
 
             foreach ($this->assets as $asset => $instance) {
                 try {
-                    $instance->stamp = $this->stamp;
+                    $instance->copy = $this->copy;
                     $instance->locked = $this->locked;
                     call_user_func_array(array($instance, $method), $args);
                 } catch (\Exception $e) {
@@ -721,7 +738,7 @@ namespace Textpattern\Skin {
                 $this->locked ? $this->unlockSkin() : '';
 
                 foreach ($this->assets as $asset => $instance) {
-                    $instance->stamp = $this->stamp;
+                    $instance->copy = $this->copy;
                     $instance->locked = $this->locked;
                 }
 
