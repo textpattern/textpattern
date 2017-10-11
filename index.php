@@ -107,11 +107,11 @@ if (!empty($txpcfg['pre_publish_script'])) {
 include txpath.'/publish.php';
 
 switch (txpinterface) {
-    case 'css' :
+    case 'css':
         $n = gps('n');
         output_css($s, $n);
         break;
-    default :
+    default:
         textpattern();
 
         if ($production_status !== 'live') {

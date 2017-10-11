@@ -399,8 +399,8 @@ function doDiagnostics()
             $gd_support[] = 'GIF';
         }
 
-         // Aside: In PHP 5.3, they chose to add a previously unemployed capital
-         // "E" to the array key.
+        // Aside: In PHP 5.3, they chose to add a previously unemployed capital
+        // "E" to the array key.
         if (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support'])) {
             $gd_support[] = 'JPG';
         }
@@ -670,7 +670,6 @@ function checkUpdates()
     );
 
     if (!empty($release)) {
-
         if (version_compare($version, $release) < 0) {
             $lastCheck['msg'] = gTxt('textpattern_update_available', array('{version}' => $release));
         }

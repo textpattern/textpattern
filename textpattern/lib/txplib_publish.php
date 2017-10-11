@@ -558,7 +558,9 @@ function processTags($tag, $atts = '', $thing = null)
         $registry = Txp::get('\Textpattern\Tag\Registry');
         $globals = array_filter(
             $registry->getRegistered(true),
-             function($v) {return !is_bool($v);}
+             function ($v) {
+                 return !is_bool($v);
+             }
          );
     }
 
