@@ -256,11 +256,11 @@ function file_list($message = '', $ids = array())
         echo $searchBlock.
             $contentBlockStart.
             $createBlock.
-            graf(
+            tag(graf(
                 span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                 gTxt($criteria != 1 ? 'no_results_found': 'no_files_recorded'),
                 array('class' => 'alert-block information')
-            );
+            ), 'div', array('id' => 'txp-list-container'));
 
         echo n.tag_end('div'). // End of .txp-layout-1col.
             n.'</div>'; // End of .txp-layout.
@@ -273,7 +273,8 @@ function file_list($message = '', $ids = array())
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $searchBlock.$contentBlockStart.$createBlock;
+    echo $searchBlock.$contentBlockStart.$createBlock.
+        n.tag_start('div', array('id' => 'txp-list-container'));
 
     $rs = safe_query(
         "SELECT
@@ -495,7 +496,8 @@ function file_list($message = '', $ids = array())
             n.tag_end('div');
     }
 
-    echo n.tag_end('div'). // End of .txp-layout-1col.
+    echo n.'</div>'. //End of #txp-list-container
+        n.'</div>'.  // End of .txp-layout-1col.
         n.tag(
         null,
         'div', array(

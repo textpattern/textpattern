@@ -1,7 +1,10 @@
 jQuery.fn.txpFileupload = function (options) {
     if (!jQuery.fn.fileupload) return this
 
-    var form = this, fileInput = this.find('input[type="file"]'), paramName = fileInput.attr('name'), maxChunkSize = options.maxChunkSize || 2000000
+    var form = this, fileInput = this.find('input[type="file"]'),
+        paramName = fileInput.attr('name'),
+        maxChunkSize = options.maxChunkSize || 2000000,
+        result = null, messagepane = null, message = [], paneClass = ''
 
     form.fileupload($.extend({
         url: form.attr('action'),
@@ -11,14 +14,27 @@ jQuery.fn.txpFileupload = function (options) {
         formData: null,
         fileInput: null,
         done: function (e, data) {
-            textpattern.Relay.callback('txpAsyncForm.success', {data: data.result})
-            textpattern.Relay.callback('uploadEnd', data)
+            result = $(data.result)
+            messagepane = $(result.find('#messagepane noscript').html())
+            message.push(messagepane.html())
+            if (!paneClass) paneClass = messagepane.hasClass('error') ? 'error' : (messagepane.hasClass('warning') ? 'warning' : 'success')
+            else if (paneClass == 'success' && messagepane.hasClass('error') ||
+                paneClass == 'error' && messagepane.hasClass('success'))
+                paneClass = 'warning'
+//            $('#messagepane').html(messagepane.html(message.join('<br />')))
         },
         progressall: function (e, data) {
             textpattern.Relay.callback('uploadProgress', data)
         },
-        start: function (e, data) {
-            textpattern.Relay.callback('uploadStart', data)
+        start: function (e) {
+            textpattern.Relay.callback('uploadStart', e)
+            message = []
+            paneClass = ''
+        },
+        stop: function (e) {
+            result.find('#messagepane').html(messagepane.removeClass('success error warning').addClass(paneClass).html(message.join('<br />')))
+            textpattern.Relay.callback('uploadEnd', e)
+            textpattern.Relay.callback('txpAsyncForm.success', {data: result})
         }
     }, options)).off('submit').submit(function (e) {
         e.preventDefault()
