@@ -879,7 +879,7 @@ function file_create()
 
 function file_insert()
 {
-    global $txp_user, $file_base_path, $file_max_upload_size, $tempdir;
+    global $txp_user, $file_base_path, $file_max_upload_size, $tempdir, $app_mode;
 
     require_privs('file.edit.own');
     $messages = $ids = array();
@@ -927,44 +927,57 @@ function file_insert()
         }
 
         if (!$size || $file_max_upload_size < $size && empty($tmpfile)) {
-            $messages[] = gTxt('file_upload_failed')." $newname - ".upload_get_errormsg(isset($tmpfile) ? UPLOAD_ERR_PARTIAL : UPLOAD_ERR_FORM_SIZE);
+            $messages[] = array(gTxt('file_upload_failed')." $newname - ".upload_get_errormsg(isset($tmpfile) ? UPLOAD_ERR_PARTIAL : UPLOAD_ERR_FORM_SIZE), E_ERROR);
         } elseif (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
             $hash = isset($titles[$i]) ? $i : md5($name);
             $title = isset($titles[$hash]) ? $titles[$hash] : '';
             $id = file_db_add($newname, $category, $permissions, $description, $size, $title);
 
             if (!$id) {
-                $messages[] = gTxt('file_upload_failed').' (db_add)';
+                $messages[] = array(gTxt('file_upload_failed').' (db_add)', E_ERROR);
             } else {
                 $id = assert_int($id);
 
                 if (!shift_uploaded_file($tmp_name, $newpath)) {
                     safe_delete('txp_file', "id = $id");
                     safe_alter('txp_file', "auto_increment = $id");
-                    $messages[] = $newpath.' '.gTxt('upload_dir_perms');
+                    $messages[] = array($newpath.' '.gTxt('upload_dir_perms'), E_ERROR);
                 } else {
                     file_set_perm($newpath);
                     $ids[] = $GLOBALS['ID'] = $id;
-                    $messages[] = gTxt('file_uploaded', array('{name}' => href(txpspecialchars($newname), '?event=file&step=file_edit&id='.$id, array('title' => gTxt('edit')))), false);
+                    $messages[] = array(gTxt('file_uploaded', array('{name}' => href(txpspecialchars($newname), '?event=file&step=file_edit&id='.$id, array('title' => gTxt('edit')))), false), 0);
                 }
             }
         } else {
-            $messages[] = gTxt('file_already_exists', array('{name}' => $newname));
+            $messages[] = array(gTxt('file_already_exists', array('{name}' => $newname)), E_WARNING);
         }
 
         // Clean up file.
         @unlink($tmp_name);
     }
 
-    $status = $ids ? (count($ids) < count($messages) ? E_WARNING : 0) : E_ERROR;
-    $messages = implode(br, $messages);
-
     if ($ids) {
         update_lastmod('file_uploaded', compact('ids', 'title', 'category', 'description'));
         now('created', true);
     }
 
-    if (false/*$ids && count($files) == 1*/) {
+    if ($app_mode == 'async') {
+        $response = $ids ? 'textpattern.Relay.data.fileid = ["'.implode('","', $ids).'"].concat(textpattern.Relay.data.fileid || []);'.n : '';
+
+        foreach ($messages as $message) {
+            $response .= 'textpattern.Console.addMessage('.json_encode($message).', "uploadEnd");'.n;
+        }
+
+        send_script_response($response);
+
+        // Bail out.
+        return;
+    }
+
+    $status = $ids ? (count($ids) < count($messages) ? E_WARNING : 0) : E_ERROR;
+    $messages = implode(br, array_column($messages, 0));
+
+    if ($ids && count($files) == 1) {
         file_edit(array($messages, $status), $ids[0]);
     } else {
         unset($GLOBALS['ID']);

@@ -48,7 +48,7 @@
 
 function pagetop($pagetitle = '', $message = '')
 {
-    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme;
+    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $textarray_script;
 
     header('Content-Security-Policy: '.CONTENT_SECURITY_POLICY);
     header('X-Frame-Options: '.X_FRAME_OPTIONS);
@@ -80,6 +80,19 @@ function pagetop($pagetitle = '', $message = '')
     } else {
         $body_id = 'page-'.txpspecialchars($event);
     }
+
+    gTxtScript(array(
+        'are_you_sure',
+        'cookies_must_be_enabled',
+        'form_submission_error',
+        'list_options',
+        'ok',
+        'publish',
+        'save',
+        'toggle_all_selected',
+        'select',
+        'close'
+    ));
 
     $lang_direction = gTxt('lang_dir');
     $lang_ui = get_pref('language_ui', LANG);
@@ -118,17 +131,7 @@ function pagetop($pagetitle = '', $message = '')
         ).';'
     ).
     script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
-    gTxtScript(array(
-        'are_you_sure',
-        'cookies_must_be_enabled',
-        'form_submission_error',
-        'list_options',
-        'ok',
-        'publish',
-        'save',
-        'toggle_all_selected',
-        'select'
-    ));
+
     // Mandatory un-themable Textpattern core styles ?>
 <style>
 .not-ready main {

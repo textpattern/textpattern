@@ -498,7 +498,7 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
 {
     $out = array();
 
-    if ($crit != '') {
+    if ($numPages > 1) {
         $out[] = announce(
             gTxt('showing_search_results', array(
                 '{from}'  => (($page - 1) * $limit) + 1,
