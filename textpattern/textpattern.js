@@ -1978,12 +1978,14 @@ textpattern.Route.add('file', function () {
             event: event.type
         }, textpattern.Relay.data.fileid.length ? {} : {html: null}))
         textpattern.Relay.data.selected = textpattern.Relay.data.fileid
+    }).register('uploadStart', function(event) {
         textpattern.Relay.data.fileid = []
     })
 
     var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL
     var uploadContainer = $('<div class="upload-container" />').hide().append('<div class="upload-previews" />').append('<progress class="upload-progress" value="0" style="display:none;width:100%" />')
-    var form = $('form.upload-form').append(uploadContainer)
+    var form = $('form.upload-form')
+    form.find('.inline-file-uploader').append(uploadContainer)
 
     form.find('input[type="reset"]').on('click', function (e) {
         uploadContainer.hide().children('.upload-previews').empty()
@@ -1995,7 +1997,7 @@ textpattern.Route.add('file', function () {
         
         $(this.files).each(function (index) {
             var name = this.name.replace(/\.[^\.]*$/, ''), mime = this.type.split('/'), hash = typeof(md5) == 'function' ? md5(this.name) : index;
-            var preview = $("<div class='upload-preview' style=' position:relative;float:left;overflow:hidden;height:128px;width:128px;margin:1em;border:1px solid lightgrey' />")
+            var preview = $("<div class='upload-preview' style=' display:inline-block;position:relative;overflow:hidden;height:128px;width:128px;margin:1em;border:1px solid lightgrey' />")
             preview.append($('<input name=title['+hash+'] style="position:absolute;bottom:0;z-index:100" />').val(name))
 
             if (createObjectURL) {
@@ -2013,10 +2015,14 @@ textpattern.Route.add('file', function () {
             preview.append($('<span />').text(this.type+' ('+this.size+' B)'))
             previews.append(preview)
         });
+    }).on('dragover', function() {
+        $(this).css('outline', '1px solid lightgrey')
+    }).on('drop dragexit', function() {
+        $(this).css('outline', 'none')
     })
 
     if ($.fn.txpFileupload) {
-        $('.upload-form.async').txpFileupload({maxChunkSize: 2000000, extraForm: 'nav.prev-next form'})
+        $('.upload-form.async').txpFileupload({maxChunkSize: 2000000, formData: [{name: "app_mode", value: "async"}]})
     }
 })
 // ENDTEST FILEUPLOAD

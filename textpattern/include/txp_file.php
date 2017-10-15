@@ -252,249 +252,243 @@ function file_list($message = '', $ids = array())
 
     $createBlock = implode(n, $createBlock);
 
-    if ($total < 1) {
-        echo $searchBlock.
-            $contentBlockStart.
-            $createBlock.
-            tag(graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                gTxt($criteria != 1 ? 'no_results_found': 'no_files_recorded'),
-                array('class' => 'alert-block information')
-            ), 'div', array('id' => 'txp-list-container'));
-
-        echo n.tag_end('div'). // End of .txp-layout-1col.
-            n.'</div>'; // End of .txp-layout.
-
-        return;
-    }
+    echo $searchBlock.$contentBlockStart.$createBlock.
+        n.tag_start('div', array('id' => 'txp-list-container'));
 
     $paginator = new \Textpattern\Admin\Paginator();
     $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $searchBlock.$contentBlockStart.$createBlock.
-        n.tag_start('div', array('id' => 'txp-list-container'));
-
-    $rs = safe_query(
-        "SELECT
-            txp_file.id,
-            txp_file.filename,
-            txp_file.title,
-            txp_file.category,
-            txp_file.description,
-            UNIX_TIMESTAMP(txp_file.created) AS uDate,
-            txp_file.downloads,
-            txp_file.status,
-            txp_file.author,
-            txp_file.size,
-            txp_users.RealName AS realname,
-            txp_category.Title AS category_title
-        FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
-    );
-
-    if ($rs && numRows($rs)) {
-        $show_authors = !has_single_author('txp_file');
-
-        echo n.tag_start('form', array(
-                'class'  => 'multi_edit_form',
-                'id'     => 'files_form',
-                'name'   => 'longform',
-                'method' => 'post',
-                'action' => 'index.php',
-            )).
-            n.tag_start('div', array('class' => 'txp-listtables')).
-            n.tag_start('table', array('class' => 'txp-list')).
-            n.tag_start('thead').
-            tr(
-                hCell(
-                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
-                ).
-                column_head(
-                    'ID', 'id', 'file', true, $switch_dir, $crit, $search_method,
-                        (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
-                ).
-                column_head(
-                    'file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method,
-                        (('filename' == $sort) ? "$dir " : '').'txp-list-col-filename'
-                ).
-                column_head(
-                    'title', 'title', 'file', true, $switch_dir, $crit, $search_method,
-                        (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
-                ).
-                column_head(
-                    'date', 'date', 'file', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
-                ).
-                column_head(
-                    'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method,
-                        (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
-                ).
-                hCell(gTxt(
-                    'tags'), '', ' class="txp-list-col-tag-build" scope="col"'
-                ).
-                hCell(gTxt(
-                    'status'), '', ' class="txp-list-col-status" scope="col"'
-                ).
-                hCell(gTxt(
-                    'condition'), '', ' class="txp-list-col-condition" scope="col"'
-                ).
-                column_head(
-                    'file_size', 'size', 'file', true, $switch_dir, $crit, $search_method,
-                        (('size' == $sort) ? "$dir " : '').'txp-list-col-filesize'
-                ).
-                column_head(
-                    'downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method,
-                        (('downloads' == $sort) ? "$dir " : '').'txp-list-col-downloads'
-                ).
-                (
-                    $show_authors
-                    ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method,
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
-                    : ''
-                )
-            ).
-            n.tag_end('thead').
-            n.tag_start('tbody');
-
-        $validator = new Validator();
-
-        while ($a = nextRow($rs)) {
-            extract($a);
-            $filename = sanitizeForFile($filename);
-
-            $edit_url = array(
-                'event'         => 'file',
-                'step'          => 'file_edit',
-                'id'            => $id,
-                'sort'          => $sort,
-                'dir'           => $dir,
-                'page'          => $page,
-                'search_method' => $search_method,
-                'crit'          => $crit,
+    if ($total < 1) {
+            echo graf(
+                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                gTxt($criteria != 1 ? 'no_results_found': 'no_files_recorded'),
+                array('class' => 'alert-block information')
             );
+    } else {
+        $rs = safe_query(
+            "SELECT
+                txp_file.id,
+                txp_file.filename,
+                txp_file.title,
+                txp_file.category,
+                txp_file.description,
+                UNIX_TIMESTAMP(txp_file.created) AS uDate,
+                txp_file.downloads,
+                txp_file.status,
+                txp_file.author,
+                txp_file.size,
+                txp_users.RealName AS realname,
+                txp_category.Title AS category_title
+            FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
+        );
 
-            $tagName = 'file_download_link';
-            $tag_url = array(
-                'id'          => $id,
-                'description' => $description,
-                'filename'    => $filename,
-                'step'        => 'build',
-            );
+        if ($rs && numRows($rs)) {
+            $show_authors = !has_single_author('txp_file');
 
-            $file_exists = file_exists(build_file_path($file_base_path, $filename));
-            $can_edit = has_privs('file.edit') || ($author === $txp_user && has_privs('file.edit.own'));
-            $validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'file'))));
+            echo n.tag_start('form', array(
+                    'class'  => 'multi_edit_form',
+                    'id'     => 'files_form',
+                    'name'   => 'longform',
+                    'method' => 'post',
+                    'action' => 'index.php',
+                )).
+                n.tag_start('div', array('class' => 'txp-listtables')).
+                n.tag_start('table', array('class' => 'txp-list')).
+                n.tag_start('thead').
+                tr(
+                    hCell(
+                        fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                            '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                    ).
+                    column_head(
+                        'ID', 'id', 'file', true, $switch_dir, $crit, $search_method,
+                            (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
+                    ).
+                    column_head(
+                        'file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method,
+                            (('filename' == $sort) ? "$dir " : '').'txp-list-col-filename'
+                    ).
+                    column_head(
+                        'title', 'title', 'file', true, $switch_dir, $crit, $search_method,
+                            (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
+                    ).
+                    column_head(
+                        'date', 'date', 'file', true, $switch_dir, $crit, $search_method,
+                            (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
+                    ).
+                    column_head(
+                        'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method,
+                            (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
+                    ).
+                    hCell(gTxt(
+                        'tags'), '', ' class="txp-list-col-tag-build" scope="col"'
+                    ).
+                    hCell(gTxt(
+                        'status'), '', ' class="txp-list-col-status" scope="col"'
+                    ).
+                    hCell(gTxt(
+                        'condition'), '', ' class="txp-list-col-condition" scope="col"'
+                    ).
+                    column_head(
+                        'file_size', 'size', 'file', true, $switch_dir, $crit, $search_method,
+                            (('size' == $sort) ? "$dir " : '').'txp-list-col-filesize'
+                    ).
+                    column_head(
+                        'downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method,
+                            (('downloads' == $sort) ? "$dir " : '').'txp-list-col-downloads'
+                    ).
+                    (
+                        $show_authors
+                        ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method,
+                            (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
+                        : ''
+                    )
+                ).
+                n.tag_end('thead').
+                n.tag_start('tbody');
 
-            if ($validator->validate()) {
-                $vc = '';
-            } else {
-                $vc = ' error';
-            }
+            $validator = new Validator();
 
-            if ($file_exists) {
-                $downloads = make_download_link($id, $downloads, $filename);
-                $condition = span(gTxt('file_status_ok'), array('class' => 'success'));
-            } else {
-                $condition = span(gTxt('file_status_missing'), array('class' => 'error'));
-            }
+            while ($a = nextRow($rs)) {
+                extract($a);
+                $filename = sanitizeForFile($filename);
 
-            if ($category) {
-                $category = span(txpspecialchars($category_title), array('title' => $category));
-            }
+                $edit_url = array(
+                    'event'         => 'file',
+                    'step'          => 'file_edit',
+                    'id'            => $id,
+                    'sort'          => $sort,
+                    'dir'           => $dir,
+                    'page'          => $page,
+                    'search_method' => $search_method,
+                    'crit'          => $crit,
+                );
 
-            if ($can_edit) {
-                $name = href(txpspecialchars($filename), $edit_url, array('title' => gTxt('edit')));
-            } else {
-                $name = txpspecialchars($filename);
-            }
+                $tagName = 'file_download_link';
+                $tag_url = array(
+                    'id'          => $id,
+                    'description' => $description,
+                    'filename'    => $filename,
+                    'step'        => 'build',
+                );
 
-            if ($can_edit) {
-                $id_column = href($id, $edit_url, array('title' => gTxt('edit')));
-                $multi_edit = checkbox('selected[]', $id, in_array($id, $ids));
-            } else {
-                $id_column = $id;
-                $multi_edit = '';
-            }
+                $file_exists = file_exists(build_file_path($file_base_path, $filename));
+                $can_edit = has_privs('file.edit') || ($author === $txp_user && has_privs('file.edit.own'));
+                $validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'file'))));
 
-            if ($file_exists) {
-                $id_column .= span(
-                    sp.span('&#124;', array('role' => 'separator')).
-                    sp.make_download_link($id, gTxt('download'), $filename),
-                    array('class' => 'txp-option-link')
+                if ($validator->validate()) {
+                    $vc = '';
+                } else {
+                    $vc = ' error';
+                }
+
+                if ($file_exists) {
+                    $downloads = make_download_link($id, $downloads, $filename);
+                    $condition = span(gTxt('file_status_ok'), array('class' => 'success'));
+                } else {
+                    $condition = span(gTxt('file_status_missing'), array('class' => 'error'));
+                }
+
+                if ($category) {
+                    $category = span(txpspecialchars($category_title), array('title' => $category));
+                }
+
+                if ($can_edit) {
+                    $name = href(txpspecialchars($filename), $edit_url, array('title' => gTxt('edit')));
+                } else {
+                    $name = txpspecialchars($filename);
+                }
+
+                if ($can_edit) {
+                    $id_column = href($id, $edit_url, array('title' => gTxt('edit')));
+                    $multi_edit = checkbox('selected[]', $id, in_array($id, $ids));
+                } else {
+                    $id_column = $id;
+                    $multi_edit = '';
+                }
+
+                if ($file_exists) {
+                    $id_column .= span(
+                        sp.span('&#124;', array('role' => 'separator')).
+                        sp.make_download_link($id, gTxt('download'), $filename),
+                        array('class' => 'txp-option-link')
+                    );
+                }
+
+                if (isset($file_statuses[$status])) {
+                    $status = $file_statuses[$status];
+                } else {
+                    $status = span(gTxt('none'), array('class' => 'error'));
+                }
+
+                echo tr(
+                    td(
+                        $multi_edit, '', 'txp-list-col-multi-edit'
+                    ).
+                    hCell(
+                        $id_column, '', array(
+                            'class' => 'txp-list-col-id',
+                            'scope' => 'row',
+                        )
+                    ).
+                    td(
+                        $name, '', 'txp-list-col-filename'
+                    ).
+                    td(
+                        txpspecialchars($title), '', 'txp-list-col-title'
+                    ).
+                    td(
+                        gTime($uDate), '', 'txp-list-col-created date'
+                    ).
+                    td(
+                        $category, '', 'txp-list-col-category category'.$vc
+                    ).
+                    td(
+                        popTag($tagName, 'Textile', array('type' => 'textile') + $tag_url).
+                        sp.span('&#124;', array('role' => 'separator')).
+                        sp.popTag($tagName, 'Textpattern', array('type' => 'textpattern') + $tag_url).
+                        sp.span('&#124;', array('role' => 'separator')).
+                        sp.popTag($tagName, 'HTML', array('type' => 'html') + $tag_url), '', 'txp-list-col-tag-build').
+                    td(
+                        $status, '', 'txp-list-col-status'
+                    ).
+                    td(
+                        $condition, '', 'txp-list-col-condition'
+                    ).
+                    td(
+                        format_filesize($size), '', 'txp-list-col-filesize'
+                    ).
+                    td(
+                        $downloads, '', 'txp-list-col-downloads'
+                    ).
+                    (
+                        $show_authors
+                        ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name')
+                        : ''
+                    )
                 );
             }
 
-            if (isset($file_statuses[$status])) {
-                $status = $file_statuses[$status];
-            } else {
-                $status = span(gTxt('none'), array('class' => 'error'));
-            }
-
-            echo tr(
-                td(
-                    $multi_edit, '', 'txp-list-col-multi-edit'
-                ).
-                hCell(
-                    $id_column, '', array(
-                        'class' => 'txp-list-col-id',
-                        'scope' => 'row',
-                    )
-                ).
-                td(
-                    $name, '', 'txp-list-col-filename'
-                ).
-                td(
-                    txpspecialchars($title), '', 'txp-list-col-title'
-                ).
-                td(
-                    gTime($uDate), '', 'txp-list-col-created date'
-                ).
-                td(
-                    $category, '', 'txp-list-col-category category'.$vc
-                ).
-                td(
-                    popTag($tagName, 'Textile', array('type' => 'textile') + $tag_url).
-                    sp.span('&#124;', array('role' => 'separator')).
-                    sp.popTag($tagName, 'Textpattern', array('type' => 'textpattern') + $tag_url).
-                    sp.span('&#124;', array('role' => 'separator')).
-                    sp.popTag($tagName, 'HTML', array('type' => 'html') + $tag_url), '', 'txp-list-col-tag-build').
-                td(
-                    $status, '', 'txp-list-col-status'
-                ).
-                td(
-                    $condition, '', 'txp-list-col-condition'
-                ).
-                td(
-                    format_filesize($size), '', 'txp-list-col-filesize'
-                ).
-                td(
-                    $downloads, '', 'txp-list-col-downloads'
-                ).
-                (
-                    $show_authors
-                    ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name')
-                    : ''
-                )
-            );
+            echo
+                n.tag_end('tbody').
+                n.tag_end('table').
+                n.tag_end('div'). // End of .txp-listtables.
+                file_multiedit_form($page, $sort, $dir, $crit, $search_method).
+                tInput().
+                n.tag_end('form');
         }
-
-        echo
-            n.tag_end('tbody').
-            n.tag_end('table').
-            n.tag_end('div'). // End of .txp-listtables.
-            file_multiedit_form($page, $sort, $dir, $crit, $search_method).
-            tInput().
-            n.tag_end('form').
-            n.tag_start('div', array(
-                'class' => 'txp-navigation',
-                'id'    => $event.'_navigation',
-            )).
-            $paginator->render().
-            nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div');
     }
+
+    echo n.tag_start('div', array(
+        'class' => 'txp-navigation',
+        'id'    => $event.'_navigation',
+        'style' => $total < 1 ? 'display:none' : false
+    )).
+    $paginator->render().
+    nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+    n.tag_end('div');
 
     echo n.'</div>'. //End of #txp-list-container
         n.'</div>'.  // End of .txp-layout-1col.

@@ -2,18 +2,23 @@ jQuery.fn.txpFileupload = function (options) {
     if (!jQuery.fn.fileupload) return this
 
     var form = this, fileInput = this.find('input[type="file"]'),
-        paramName = fileInput.attr('name'),
         maxChunkSize = options.maxChunkSize || 2000000
 
     form.fileupload($.extend({
-        url: form.attr('action'),
+        paramName: fileInput.attr('name'),
+//        url: form.attr('action'),
         dataType: 'script',
 //        autoUpload: false,
         maxChunkSize: maxChunkSize,
         formData: null,
         fileInput: null,
-        done: function (e, data) {
-//            result = data.result
+        dropZone: null,
+        replaceFileInput: false,
+/*        add: function (e, data) {
+            data.submit()
+        },
+*/        done: function (e, data) {
+//            console.log(data)
         },
         progressall: function (e, data) {
             textpattern.Relay.callback('uploadProgress', data)
@@ -26,15 +31,15 @@ jQuery.fn.txpFileupload = function (options) {
         }
     }, options)).off('submit').submit(function (e) {
         e.preventDefault()
-        var formData = [{name: "app_mode", value: "async"}]
-        $.merge(formData, $(options.extraForm).serializeArray())
-        $.merge(formData, form.serializeArray())
         
         form.fileupload('add', {
-            formData: formData,
-            fileInput: $(fileInput)
+            files: fileInput.prop('files')
         })
-    })
+    }).bind('fileuploadsubmit', function (e, data) {
+        var formData = [{name: "app_mode", value: "async"}]
+        $.merge(formData, form.serializeArray())
+        data.formData = formData;
+    });
 
     fileInput.on('change', function(e) {
         var singleFileUploads = false
