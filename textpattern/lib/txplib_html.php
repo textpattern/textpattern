@@ -382,7 +382,7 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
         sInput($step),
         hInput($thing, $value),
         ($thing2) ? hInput($thing2, $thing2val) : '',
-        ($remember) ? hInput(comact('page', 'sort', 'dir', 'crit', 'search_method')) : '',
+        ($remember) ? hInput(compact('page', 'sort', 'dir', 'crit', 'search_method')) : '',
         tInput(),
         n.'</form>',
     ));

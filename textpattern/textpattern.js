@@ -2017,7 +2017,7 @@ textpattern.Route.add('file', function () {
         });
     }).on('dragover', function() {
         $(this).css('outline', '1px solid lightgrey')
-    }).on('drop dragexit', function() {
+    }).on('drop dragexit dragend', function() {
         $(this).css('outline', 'none')
     })
 
@@ -2288,7 +2288,10 @@ $(document).ready(function () {
     // TODO: end integrate jQuery UI stuff properly ----------------------------
 
     // Async lists navigation
-    $('#txp-list-container').parent().on('click', '.txp-navigation a', function(e) {
+    $('#txp-list-container').parent().on('submit', 'nav.prev-next form', function(e) {
+        e.preventDefault();
+        textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
+    }).on('click', '.txp-navigation a', function(e) {
         e.preventDefault();
         textpattern.Relay.callback('updateList', {url: $(this).attr('href'), data: $('nav.prev-next form').serializeArray()})
     }).on('click', '.txp-list thead th a', function(e) {

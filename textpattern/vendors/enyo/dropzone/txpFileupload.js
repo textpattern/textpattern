@@ -36,7 +36,7 @@ jQuery.fn.txpFileupload = function (options) {
             files: fileInput.prop('files')
         })
     }).bind('fileuploadsubmit', function (e, data) {
-        var formData = [{name: "app_mode", value: "async"}]
+        var formData = options.formData || []
         $.merge(formData, form.serializeArray())
         data.formData = formData;
     });
