@@ -551,10 +551,11 @@ namespace Textpattern\Skin {
             $contents = $this->isWritable(static::$file) ? $this->getJSONInfos() : array();
 
             $contents['name'] = $this->copy ? $this->copy : ($title ? $title : $name);
-            $description ? $contents['description'] = $description : '';
+            $contents['txp-type'] = 'textpattern-theme';
             $version ? $contents['version'] = $version : '';
-            $website ? $contents['homepage_url'] = $website : '';
+            $description ? $contents['description'] = $description : '';
             $author ? $contents['author'] = $author : '';
+            $website ? $contents['homepage_url'] = $website : '';
 
             return (bool) $this->filePutJsonContents($contents);
         }
