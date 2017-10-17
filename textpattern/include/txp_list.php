@@ -486,14 +486,15 @@ function list_list($message = '', $post = '')
     }
 
     echo n.tag_start('div', array(
-                'class' => 'txp-navigation',
-                'id'    => $event.'_navigation',
-                'style' => $total < 1 ? 'display:none' : false
-            )).
-            $paginator->render().
-            nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div').
-            n.'</div>'.n.tag_end('div'). // End of .txp-layout-1col.
+            'class' => 'txp-navigation',
+            'id'    => $event.'_navigation',
+            'style' => $total < 1 ? 'display:none' : false
+        )).
+        $paginator->render().
+        nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+        n.tag_end('div').
+        n.'</div>'. // End of #txp-list-container.
+        n.tag_end('div'). // End of .txp-layout-1col.
         n.'</div>'; // End of .txp-layout.
 }
 

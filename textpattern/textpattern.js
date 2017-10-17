@@ -841,7 +841,7 @@ textpattern.Console =
      */
 
     addMessage: function (message, event) {
-        event = event || 'default'
+        event = event || textpattern.event
 
         if (typeof textpattern.Console.messages[event] === 'undefined') {
             textpattern.Console.messages[event] = []
@@ -861,7 +861,7 @@ textpattern.Console =
 
     announce: function (event) {
         var c = 0, message = []
-        event = event || 'default'
+        event = event || textpattern.event
         if (!textpattern.Console.messages[event] || !textpattern.Console.messages[event].length) return this
 
         textpattern.Console.messages[event].forEach (function(pair) {
