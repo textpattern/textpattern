@@ -488,6 +488,8 @@ function doDiagnostics()
 
             gTxt('last_update').cs.gmstrftime($fmt_date, $dbupdatetime).'/'.gmstrftime($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
 
+            gTxt('web_domain').cs.$siteurl.n,
+
             gTxt('document_root').cs.@$_SERVER['DOCUMENT_ROOT'].(($real_doc_root != @$_SERVER['DOCUMENT_ROOT']) ? ' ('.$real_doc_root.')' : '').n,
 
             '$path_to_site'.cs.$path_to_site.n,
@@ -501,8 +503,6 @@ function doDiagnostics()
             (ini_get('upload_tmp_dir')) ? 'upload_tmp_dir: '.ini_get('upload_tmp_dir').n : '',
 
             gTxt('tempdir').cs.$tempdir.n,
-
-            gTxt('web_domain').cs.$siteurl.n,
 
             gTxt('php_version').cs.phpversion().n,
 
