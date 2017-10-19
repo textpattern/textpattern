@@ -126,9 +126,9 @@ if ($datadir) {
 }
 
 // --- Theme setup.
-// Load theme /data, /styles, /forms, /pages
+// Load theme /styles, /forms, /pages
 
-$public_theme = preg_replace('/^.*?-/', '', $public_theme);
+$public_theme = preg_replace('/\-.*/', '', $public_theme);
 
 //FIXME: Need add support /setup/themes dir for Skin->import() function
 if (class_exists('\Textpattern\Skin\Main') && !preg_match('%/setup/themes/%', $themedir)) {
