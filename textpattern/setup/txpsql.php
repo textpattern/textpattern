@@ -55,7 +55,7 @@ $siteurl = str_replace(' ', '%20', $siteurl);
 $theme_name = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
 
 get_public_themes_list();
-$setupdir = txpath.DS.'setup';
+$datadir = txpath.DS.'setup';
 $public_theme = empty($public_themes[$_SESSION['public_theme']]['themedir']) ? current(array_keys($public_themes)) : $_SESSION['public_theme'];
 
 if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
@@ -88,7 +88,7 @@ create_user($txp_user, $_SESSION['email'], $_SESSION['pass'], $_SESSION['realnam
                                 global  - Used in setup and for AutoCreate missing prefs.
                                 private - Will be created after user login
 */
-foreach (get_files_content($setupdir.'/data', 'prefs') as $key=>$data) {
+foreach (get_files_content($datadir.'/data', 'prefs') as $key=>$data) {
     if ($out = @json_decode($data, true)) {
         foreach ($out as $name => $p) {
             if (empty($p['private'])) {
@@ -101,11 +101,11 @@ foreach (get_files_content($setupdir.'/data', 'prefs') as $key=>$data) {
 
 $import = new \Textpattern\Import\TxpXML();
 
-foreach (get_files_content($setupdir.'/data', 'xml') as $key=>$data) {
+foreach (get_files_content($datadir.'/data', 'xml') as $key=>$data) {
     $import->importXml($data);
 }
 
-foreach (get_files_content($setupdir.'/articles', 'xml') as $key=>$data) {
+foreach (get_files_content($datadir.'/articles', 'xml') as $key=>$data) {
     $import->importXml($data);
 }
 
