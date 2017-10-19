@@ -56,7 +56,7 @@ $theme_name = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
 
 get_public_themes_list();
 $setupdir = txpath.DS.'setup';
-$public_theme = empty($public_themes[$_SESSION['public_theme']]['themedir']) ? 'setup' : $_SESSION['public_theme'];
+$public_theme = empty($public_themes[$_SESSION['public_theme']]['themedir']) ? current(array_keys($public_themes)) : $_SESSION['public_theme'];
 
 if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
     die("Textpattern database table already exists. Can't run setup.");
@@ -113,11 +113,14 @@ foreach (get_files_content($setupdir.'/articles', 'xml') as $key=>$data) {
 // --- Theme setup.
 // Load theme /data, /styles, /forms, /pages
 
-if (class_exists('\Textpattern\Skin\Main') && $public_theme != 'setup') {
+$themedir = $public_themes[$public_theme]['themedir'];
+$public_theme = preg_replace('/^.*?-/', '', $public_theme);
+
+//FIXME: Need add support /setup/themes dir for Skin->import() function
+if (class_exists('\Textpattern\Skin\Main') && !preg_match('%/setup/themes/%', $themedir)) {
     Txp::get('\Textpattern\Skin\Main', array($public_theme => array()))->import();
     safe_update('txp_section', 'skin = "'.doSlash($public_theme).'"', '1=1');
 } else {
-    $themedir = $public_themes[$public_theme]['themedir'];
 
     foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
         safe_query("INSERT INTO `".PFX."txp_css`(name, css) VALUES('".doSlash($key)."', '".doSlash($data)."')");
