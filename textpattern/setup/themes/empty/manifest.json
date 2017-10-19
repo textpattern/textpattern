@@ -1,0 +1,9 @@
+{
+  "name": "Empty theme",
+  "description": "The empty theme that ships as standard with Textpattern CMS.",
+  "version": "4.7.0-dev",
+  "txp-type":"textpattern-theme",
+  "txp-data": "none",
+  "homepage": "https://github.com/textpattern/textpattern-empty-theme",
+  "author": "Team Textpattern"
+}
