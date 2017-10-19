@@ -107,35 +107,35 @@ function list_list($message = '', $post = '')
             $sort_sql = "textpattern.ID $dir";
             break;
         case 'title':
-            $sort_sql = "textpattern.Title $dir, textpattern.Posted DESC";
+            $sort_sql = "textpattern.Title $dir, textpattern.ID DESC";
             break;
         case 'expires':
-            $sort_sql = "textpattern.Expires $dir";
+            $sort_sql = "textpattern.Expires $dir, textpattern.ID DESC";
             break;
         case 'section':
-            $sort_sql = "section.title $dir, textpattern.Posted DESC";
+            $sort_sql = "section.title $dir, textpattern.ID DESC";
             break;
         case 'category1':
-            $sort_sql = "category1.title $dir, textpattern.Posted DESC";
+            $sort_sql = "category1.title $dir, textpattern.ID DESC";
             break;
         case 'category2':
-            $sort_sql = "category2.title $dir, textpattern.Posted DESC";
+            $sort_sql = "category2.title $dir, textpattern.ID DESC";
             break;
         case 'status':
-            $sort_sql = "textpattern.Status $dir, textpattern.Posted DESC";
+            $sort_sql = "textpattern.Status $dir, textpattern.ID DESC";
             break;
         case 'author':
-            $sort_sql = "user.RealName $dir, textpattern.Posted DESC";
+            $sort_sql = "user.RealName $dir, textpattern.ID DESC";
             break;
         case 'comments':
-            $sort_sql = "textpattern.comments_count $dir, textpattern.Posted DESC";
+            $sort_sql = "total_comments $dir, textpattern.ID DESC";
             break;
         case 'lastmod':
-            $sort_sql = "textpattern.LastMod $dir, textpattern.Posted DESC";
+            $sort_sql = "textpattern.LastMod $dir, textpattern.ID DESC";
             break;
         default:
             $sort = 'posted';
-            $sort_sql = "textpattern.Posted $dir";
+            $sort_sql = "textpattern.Posted $dir, textpattern.ID DESC";
             break;
     }
 

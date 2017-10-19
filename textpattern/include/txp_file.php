@@ -890,9 +890,6 @@ function file_insert()
     foreach ($files as $i => $file) {
         extract($file);
 
-        $newname = sanitizeForFile($name);
-        $newpath = build_file_path($file_base_path, $newname);
-
         // Chuncked upload, anyone?
         if (!empty($_SERVER['HTTP_CONTENT_RANGE']) && isset($_SERVER['CONTENT_LENGTH']) && is_numeric($_SERVER['CONTENT_LENGTH']) && preg_match('/\b(\d+)\-(\d+)\/(\d+)\b/', $_SERVER['HTTP_CONTENT_RANGE'], $match)) {
             $tmpfile = build_file_path($tmpdir, md5($txp_user.':'.$name).'.part');
@@ -919,6 +916,9 @@ function file_insert()
                 $size = 0;
             }
         }
+
+        $newname = sanitizeForFile($name);
+        $newpath = build_file_path($file_base_path, $newname);
 
         if (!$size || $file_max_upload_size < $size && empty($tmpfile)) {
             $messages[] = array(gTxt('file_upload_failed')." $newname - ".upload_get_errormsg(isset($tmpfile) ? UPLOAD_ERR_PARTIAL : UPLOAD_ERR_FORM_SIZE), E_ERROR);
