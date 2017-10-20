@@ -3748,7 +3748,7 @@ button {
     margin-left: -8px;
   }
   a.ui-icon,
-  a .ui-icon {
+  a:not(.ui-button) .ui-icon {
     opacity: 0.66;
   }
   a:hover.ui-icon,
