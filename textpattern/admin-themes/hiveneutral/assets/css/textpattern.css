@@ -3025,10 +3025,12 @@ button {
     float: left;
   }
   [dir="rtl"] .prev-next .ui-icon-arrowthick-1-w {
-    background-position: -32px -48px;
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
   }
   [dir="rtl"] .prev-next .ui-icon-arrowthick-1-e {
-    background-position: -96px -48px;
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
   }
   /* Panes
    ========================================================================== */
@@ -3746,7 +3748,7 @@ button {
     margin-left: -8px;
   }
   a.ui-icon,
-  a .ui-icon {
+  a:not(.ui-button) .ui-icon {
     opacity: 0.66;
   }
   a:hover.ui-icon,
@@ -5193,14 +5195,16 @@ button {
     left: auto;
   }
   [dir="rtl"] .ui-datepicker-prev span {
-    background-position: -48px -192px;
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
   }
   [dir="rtl"] .ui-datepicker-next {
     right: auto;
     left: 0.2em;
   }
   [dir="rtl"] .ui-datepicker-next span {
-    background-position: -80px -192px;
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
   }
   [dir="rtl"] .ui-datepicker-buttonpane {
     clear: right;
@@ -5662,7 +5666,6 @@ button {
     display: block;
     position: absolute;
     border: 0;
-    background-position: 0 0;
     font-size: 0.7em;
     z-index: 1;
   }
@@ -5817,6 +5820,7 @@ button {
     border: 0;
   }
   .ui-tabs .ui-tabs-nav {
+    padding: 0;
     background: none;
   }
   .ui-tabs .ui-tabs-nav:not(.switcher-list) .ui-tabs-anchor {
