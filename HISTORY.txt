@@ -57,7 +57,7 @@ Changes in 4.7.0 (upcoming)
 * Fixed: Only update database version string if using release version.
 * jQuery 3.2.1.
 * zxcvbn 4.4.2.
-* PrismJS 1.8.1.
+* PrismJS 1.8.3.
 * PHPass 0.5.
 
 Changes in 4.6.2
