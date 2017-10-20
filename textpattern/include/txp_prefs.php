@@ -798,8 +798,8 @@ function real_max_upload_size($user_max)
                         ini_get('upload_max_filesize'), );
     $real_max = null;
     foreach ($candidates as $item) {
-        $val = trim($item);
-        $modifier = strtolower(substr($val, -1));
+        $val = floatval($item);
+        $modifier = strtolower(substr(trim($item), -1));
         switch ($modifier) {
             // The 'G' modifier is available since PHP 5.1.0
             case 'g':
