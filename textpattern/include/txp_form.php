@@ -520,7 +520,10 @@ function form_save()
                             name = '".doSlash($newname)."'"
                         )) {
                             update_lastmod('form_created', compact('newname', 'name', 'type', 'Form'));
+
                             $message = gTxt('form_created', array('{name}' => $newname));
+
+                            callback_event($copy ? 'form_duplicated' : 'form_created', '', 0, $name, $newname);
                         } else {
                             $message = array(gTxt('form_save_failed'), E_ERROR);
                             $save_error = true;
@@ -539,7 +542,10 @@ function form_save()
                         "name = '".doSlash($name)."' AND skin = '$safe_skin'"
                     )) {
                         update_lastmod('form_saved', compact('newname', 'name', 'type', 'Form'));
+
                         $message = gTxt('form_updated', array('{name}' => $newname));
+
+                        callback_event('form_updated', '', 0, $name, $newname);
                     } else {
                         $message = array(gTxt('form_save_failed'), E_ERROR);
                         $save_error = true;
