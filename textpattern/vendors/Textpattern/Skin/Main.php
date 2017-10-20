@@ -283,7 +283,8 @@ namespace Textpattern\Skin {
         public static function getInstalled()
         {
             if (static::$installed === null) {
-                if (!empty($skins = safe_rows('name, title', 'txp_skin', "1=1"))) {
+                $skins = safe_rows('name, title', 'txp_skin', "1=1");
+                if (!empty($skins)) {
                     static::$installed = array();
 
                     foreach ($skins as $skin) {
