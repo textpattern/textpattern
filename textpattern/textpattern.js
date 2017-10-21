@@ -923,7 +923,7 @@ jQuery.fn.txpAsyncForm = function (options) {
         {
             data   : ( typeof window.FormData === 'undefined' ? $this.serialize() : new FormData(this) ),
             extra  : new Object,
-            spinner: $('<span />').addClass('spinner')
+            spinner: $('<span />').addClass('spinner ui-icon ui-icon-refresh')
         };
 
         if (!!extra && typeof extra['_txp_submit'] !== 'undefined') {

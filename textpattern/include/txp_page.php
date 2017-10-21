@@ -345,7 +345,10 @@ function page_save()
                     if (safe_insert('txp_page', "name = '".doSlash($newname)."', user_html = '$html'")) {
                         set_pref('last_page_saved', $newname, 'page', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                         update_lastmod('page_created', compact('newname', 'name', 'html'));
+
                         $message = gTxt('page_created', array('{name}' => $newname));
+
+                        callback_event($copy ? 'page_duplicated' : 'page_created', '', 0, $name, $newname);
                     } else {
                         $message = array(gTxt('page_save_failed'), E_ERROR);
                         $save_error = true;
@@ -359,7 +362,10 @@ function page_save()
                     set_pref('last_page_saved', $newname, 'page', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                     safe_update('txp_section', "page = '".doSlash($newname)."'", "page = '".doSlash($name)."'");
                     update_lastmod('page_saved', compact('newname', 'name', 'html'));
+
                     $message = gTxt('page_updated', array('{name}' => $newname));
+
+                    callback_event('page_updated', '', 0, $name, $newname);
                 } else {
                     $message = array(gTxt('page_save_failed'), E_ERROR);
                     $save_error = true;

@@ -201,16 +201,15 @@ function doDiagnostics()
         $lastCheck = json_decode(get_pref('last_update_check', ''), true);
 
         if ($now > (@(int)$lastCheck['when'] + (60 * 60 * 24))) {
-            $updates = checkUpdates();
-            $lastCheck = array(
-                'when'  => $now,
-                'msg'   => (empty($updates) ? '' : gTxt($updates['msg'], array('{version}' => $updates['version']))),
-            );
-            set_pref('last_update_check', json_encode($lastCheck, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');
+            $lastCheck = checkUpdates();
         }
 
         if (!empty($lastCheck['msg'])) {
             $fail['textpattern_version_update'] = diag_msg_wrap($lastCheck['msg'], 'information');
+        }
+
+        if (!empty($lastCheck['msg2'])) {
+            $fail['textpattern_version_update_beta'] = diag_msg_wrap($lastCheck['msg2'], 'information');
         }
     }
 
@@ -400,8 +399,8 @@ function doDiagnostics()
             $gd_support[] = 'GIF';
         }
 
-         // Aside: In PHP 5.3, they chose to add a previously unemployed capital
-         // "E" to the array key.
+        // Aside: In PHP 5.3, they chose to add a previously unemployed capital
+        // "E" to the array key.
         if (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support'])) {
             $gd_support[] = 'JPG';
         }
@@ -550,8 +549,8 @@ function doDiagnostics()
 
         if ($step == 'high') {
             $lastCheck = json_decode(get_pref('last_update_check', ''), true);
-            if (!empty($lastCheck['msg'])) {
-                $out[] = 'Last update check: '.strftime('%Y-%m-%d %H:%M:%S', $lastCheck['when']).', '.strip_tags($lastCheck['msg']).n;
+            if (!empty($lastCheck['msg']) || !empty($lastCheck['msg2'])) {
+                $out[] = 'Last update check: '.strftime('%Y-%m-%d %H:%M:%S', $lastCheck['when']).', '.strip_tags($lastCheck['msg']).' '.strip_tags($lastCheck['msg2']).n;
             }
 
             $out[] = n.'Charset (default/config)'.cs.$DB->default_charset.'/'.$DB->charset.n;
@@ -577,6 +576,7 @@ function doDiagnostics()
 
             foreach ($table_names as $table) {
                 $ctr = safe_query("SHOW CREATE TABLE $table");
+
                 if (!$ctr) {
                     unset($table_names[$table]);
                     continue;
@@ -584,12 +584,14 @@ function doDiagnostics()
 
                 $row = mysqli_fetch_assoc($ctr);
                 $ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is', '\\1', $row['Create Table']);
+
                 if (isset($conn_char) && !stristr($ctcharset, 'CREATE') && ($conn_char != $ctcharset)) {
                     $table_msg[] = "$table is $ctcharset";
                 }
 
                 $ctr = safe_query("CHECK TABLE $table");
                 $row = mysqli_fetch_assoc($ctr);
+
                 if (in_array($row['Msg_type'], array('error', 'warning'))) {
                     $table_msg[] = $table.cs.$row['Msg_Text'];
                 }
@@ -658,12 +660,27 @@ function checkUpdates()
 {
     $response = @json_decode(file_get_contents('https://textpattern.io/version.json'), true);
     $release = @$response['textpattern-version']['release'];
+    $prerelease = @$response['textpattern-version']['prerelease'];
     $version = get_pref('version');
 
-    if (empty($release)) {
-        return array('version' => 0, 'msg' => 'problem_connecting_rpc_server');
-    } elseif (version_compare($version, $release) < 0) {
-        return array('version' => $release, 'msg' => 'textpattern_update_available');
+    $lastCheck = array(
+        'when'  => time(),
+        'msg'   => '',
+        'msg2'  => '',
+    );
+
+    if (!empty($release)) {
+        if (version_compare($version, $release) < 0) {
+            $lastCheck['msg'] = gTxt('textpattern_update_available', array('{version}' => $release));
+        }
+
+        if (version_compare($version, $prerelease) < 0) {
+            $lastCheck['msg2'] = gTxt('textpattern_update_available_beta', array('{version}' => $prerelease));
+        }
+    } else {
+        $lastCheck['msg'] = gTxt('problem_connecting_rpc_server');
     }
-    return array();
+    set_pref('last_update_check', json_encode($lastCheck, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');
+
+    return $lastCheck;
 }
