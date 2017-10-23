@@ -161,16 +161,13 @@ namespace Textpattern\Skin {
         public static function getUIMessage($results)
         {
             $out = array();
-            $status = null;
+
+            $success = false;
+            $failure = false;
 
             foreach ($results as $skin => $result) {
-                if (array_key_exists('error', $result) || $status === 'E_ERROR') {
-                    if ($status && array_key_exists('success', $result)) {
-                        $status = 'E_WARNING';
-                    } else {
-                        $status = 'E_ERROR';
-                    }
-                }
+                $success ?: $success = array_key_exists('success', $result);
+                $failure ?: $failure = array_key_exists('failure', $result);
 
                 foreach ($result as $severity => $messages) {
                     foreach ($messages as $message) {
@@ -183,9 +180,15 @@ namespace Textpattern\Skin {
                 }
             }
 
+            if ($success) {
+                $failure ? $status = 'E_WARNING' : '';
+            } else {
+                $status = 'E_ERROR';
+            }
+
             $out = implode('<br>', $out);
 
-            return $status ? array($out, constant($status)) : $out;
+            return isset($status) ? array($out, constant($status)) : $out;
         }
 
         /**
