@@ -237,7 +237,7 @@ namespace Textpattern\Skin {
 
                     if ($name === strtolower(sanitizeForUrl($name))) {
                         $infos = $skin->getTemplateJSONContents();
-                        static::$directories[$name] = $infos['name'];
+                        static::$directories[$name] = $infos['title'];
                     }
                 }
             }

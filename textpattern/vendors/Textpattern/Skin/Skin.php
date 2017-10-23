@@ -166,7 +166,7 @@ namespace Textpattern\Skin {
                  version = '".doSlash($version ? $version : '0.0.1')."',
                  description = '".doSlash($description)."',
                  author = '".doSlash($author ? $author : substr(cs('txp_login_public'), 10))."',
-                 website = '".doSlash($website)."',
+                 author_uri = '".doSlash($author_uri)."',
                  name = '".doSlash(strtolower(sanitizeForUrl($this->skin)))."'
                 "
             );
@@ -245,7 +245,7 @@ namespace Textpattern\Skin {
                  version = '".doSlash($version)."',
                  description = '".doSlash($description)."',
                  author = '".doSlash($author)."',
-                 website = '".doSlash($website)."'
+                 author_uri = '".doSlash($author_uri)."'
                 ",
                 "name = '".doSlash($this->skin)."'"
             );
@@ -332,11 +332,11 @@ namespace Textpattern\Skin {
 
             return (bool) safe_upsert(
                 self::$table,
-                "title = '".doSlash(isset($name) ? $name : $this->skin)."',
+                "title = '".doSlash(isset($title) ? $title : $this->skin)."',
                  version = '".doSlash(isset($version) ? $version : '')."',
                  description = '".doSlash(isset($description) ? $description : '')."',
                  author = '".doSlash(isset($author) ? $author : '')."',
-                 website = '".doSlash(isset($homepage_url) ? $homepage_url : '')."'
+                 author_uri = '".doSlash(isset($author_uri) ? $author_uri : '')."'
                 ",
                 "name = '".doSlash($this->skin)."'"
             );
@@ -550,12 +550,12 @@ namespace Textpattern\Skin {
 
             $contents = $this->isWritable(static::$file) ? $this->getJSONInfos() : array();
 
-            $contents['name'] = $this->copy ? $this->copy : ($title ? $title : $name);
+            $contents['title'] = $this->copy ? $this->copy : ($title ? $title : $name);
             $contents['txp-type'] = 'textpattern-theme';
             $version ? $contents['version'] = $version : '';
             $description ? $contents['description'] = $description : '';
             $author ? $contents['author'] = $author : '';
-            $website ? $contents['homepage_url'] = $website : '';
+            $author_uri ? $contents['author_uri'] = $author_uri : '';
 
             return (bool) $this->filePutJsonContents($contents);
         }

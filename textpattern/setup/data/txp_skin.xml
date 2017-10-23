@@ -7,7 +7,7 @@
             <version>4.7.0</version>
             <description>Textpattern default theme.</description>
             <author>Team Textpattern</author>
-            <website>https://textpattern.com/</website>
+            <author_uri>https://textpattern.com/</author_uri>
         </item>
     </skin>
 </resources>
