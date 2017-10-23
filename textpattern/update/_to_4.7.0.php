@@ -54,7 +54,7 @@ safe_create('txp_skin', "
     version     VARCHAR(255)       NULL DEFAULT '1.0',
     description VARCHAR(10240)     NULL DEFAULT '',
     author      VARCHAR(255)       NULL DEFAULT '',
-    website     VARCHAR(255)       NULL DEFAULT '',
+    author_uri  VARCHAR(255)       NULL DEFAULT '',
     lastmod     DATETIME           NULL DEFAULT NULL,
 
     PRIMARY KEY (`name`(50))
@@ -128,7 +128,7 @@ if (!$exists) {
         title = 'Default',
         version = '".txp_version."',
         author = 'Team Textpattern',
-        website = 'https://textpattern.com/'"
+        author_uri = 'https://textpattern.com/'"
     );
 }
 

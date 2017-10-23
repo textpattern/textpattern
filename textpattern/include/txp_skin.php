@@ -247,7 +247,7 @@ function skin_list($message = '')
                 'crit'          => $crit,
             );
 
-            $author = ($skin_website) ? href(txpspecialchars($skin_author), $skin_website) : txpspecialchars($skin_author);
+            $author = ($skin_author_uri) ? href(txpspecialchars($skin_author), $skin_author_uri) : txpspecialchars($skin_author);
 
             if ($skin_section_count > 0) {
                 $sectionLink = href(
@@ -365,7 +365,7 @@ function skin_edit($message = null)
         'name',
     )));
 
-    $fields = array('name', 'title', 'version', 'description', 'author', 'website');
+    $fields = array('name', 'title', 'version', 'description', 'author', 'author_uri');
 
     if ($name && $step == 'edit') {
         try {
@@ -393,7 +393,7 @@ function skin_edit($message = null)
             $input = text_area($field, 0, 0, $current, "skin_$field");
         } else {
             $required = ($field === 'name') ? true : false;
-            $type = ($field === 'website') ? 'url' : 'text';
+            $type = ($field === 'author_uri') ? 'url' : 'text';
             $input = fInput($type, $field, $current, '', '', '', INPUT_REGULAR, '', "skin_$field", false, $required);
         }
 
@@ -431,7 +431,7 @@ function skin_save()
         'version',
         'description',
         'author',
-        'website',
+        'author_uri',
     )));
 
     if ($skin = $infos['old_name']) {
