@@ -190,8 +190,9 @@ namespace Textpattern\Skin {
 
                     if ($this->editSkin()) {
                         $new = strtolower(sanitizeForUrl($this->infos['new_name']));
+                        $path = $this->getPath();
 
-                        if (file_exists($path = $this->getPath())) {
+                        if (file_exists($path)) {
                             rename($path, self::getBasePath().'/'.$new);
                         }
 
@@ -459,7 +460,9 @@ namespace Textpattern\Skin {
 
         public function getRow()
         {
-            if ($row = safe_row('*', self::$table, 'name = "'.doSlash($this->skin).'"')) {
+            $row = safe_row('*', self::$table, 'name = "'.doSlash($this->skin).'"');
+
+            if ($row) {
                 return $row;
             }
 
@@ -498,7 +501,9 @@ namespace Textpattern\Skin {
 
         public function export($clean = true, $as = null)
         {
-            if ($row = $this->getRow()) {
+            $row = $this->getRow();
+
+            if ($row) {
                 $as ? $this->copy = $as : '';
 
                 $callback_extra = array(

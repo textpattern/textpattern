@@ -206,8 +206,10 @@ namespace Textpattern\Skin {
 
         final public function mkDir($path = null)
         {
-            if (($path = $this->getPath($path)) && $created = @mkdir($path)) {
-                return $created;
+            $path = $this->getPath($path);
+
+            if (@mkdir($path)) {
+                return true;
             }
 
             throw new \Exception(
@@ -224,9 +226,11 @@ namespace Textpattern\Skin {
 
         final public function unlockSkin()
         {
-            if ($unlocked = $this->rmDir('lock')) {
+            $unlocked = $this->rmDir('lock');
+
+            if ($unlocked) {
                 $this->locked = false;
-                return $unlocked;
+                return true;
             }
 
             throw new \Exception("unable_to_unlock_the_skin_directory");
@@ -238,8 +242,10 @@ namespace Textpattern\Skin {
 
         final public function rmDir($path = null)
         {
-            if (($path = $this->getPath($path)) && $removed = @rmdir($path)) {
-                return $removed;
+            $path = $this->getPath($path);
+
+            if (@rmdir($path)) {
+                return true;
             }
 
             throw new \Exception(
