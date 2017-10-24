@@ -311,7 +311,9 @@ namespace Textpattern\Skin {
                 $where .= " AND name NOT IN ('".implode("', '", array_map('doSlash', $not))."')";
             }
 
-            if ($drop = (bool) safe_delete(static::$table, $where)) {
+            $drop = (bool) safe_delete(static::$table, $where);
+
+            if ($drop) {
                 return $drop;
             }
 
@@ -334,7 +336,9 @@ namespace Textpattern\Skin {
         public function duplicate($as)
         {
             if ($this->skinIsInstalled(true)) {
-                if ($rows = $this->getTemplateRows()) {
+                $rows = $this->getTemplateRows();
+
+                if ($rows) {
                     $templates = $sql_values = array();
 
                     foreach ($rows as $row) {
@@ -398,7 +402,9 @@ namespace Textpattern\Skin {
 
         public function export($clean = true, $as = null)
         {
-            if ($rows = $this->getTemplateRows()) {
+            $rows = $this->getTemplateRows();
+
+            if ($rows) {
                 $was_locked = $this->locked;
 
                 if ($this->lockSkin() && ($this->isWritable(static::$dir) || $this->mkDir(static::$dir))) {
@@ -471,7 +477,9 @@ namespace Textpattern\Skin {
 
         public function delete()
         {
-            if ($rows = $this->getTemplateRows()) {
+            $rows = $this->getTemplateRows();
+
+            if ($rows) {
                 $templates = array();
 
                 foreach ($rows as $row) {

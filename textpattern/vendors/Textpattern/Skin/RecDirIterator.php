@@ -70,7 +70,9 @@ namespace Textpattern\Skin {
 
         public function getTemplateContents()
         {
-            if (($contents = file_get_contents($this->getPathname())) !== false) {
+            $contents = file_get_contents($this->getPathname());
+
+            if ($contents !== false) {
                 return preg_replace('/[\r|\n]+$/', '', $contents);
             }
 
@@ -86,9 +88,12 @@ namespace Textpattern\Skin {
 
         public function getTemplateJSONContents()
         {
-            if (($file = $this->getTemplateContents()) && $file = @json_decode($file, true)) {
-                return $file;
+            $contents = @json_decode($this->getTemplateContents(), true);
+
+            if ($contents) {
+                return $contents;
             }
+
             throw new Exception('Invalid JSON file.');
         }
 

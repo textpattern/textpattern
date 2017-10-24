@@ -199,7 +199,9 @@ namespace Textpattern\Skin {
 
         public static function renderImportForm()
         {
-            if ($new = self::getNewDirectories()) {
+            $new = self::getNewDirectories();
+
+            if ($new) {
                 return n.
                     tag_start('form', array(
                         'id'     => 'skin_import_form',
@@ -287,6 +289,7 @@ namespace Textpattern\Skin {
         {
             if (static::$installed === null) {
                 $skins = safe_rows('name, title', 'txp_skin', "1=1");
+
                 if (!empty($skins)) {
                     static::$installed = array();
 
