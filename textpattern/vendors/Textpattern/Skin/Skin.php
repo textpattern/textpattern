@@ -571,7 +571,7 @@ namespace Textpattern\Skin {
         {
             return (bool) file_put_contents(
                 $this->getPath(static::$file),
-                $this->JSONPrettyPrint(json_encode($contents, TEXTPATTERN_JSON)) // PHP 5.4+ => json_encode($contents, JSON_PRETTY_PRINT)
+                $this->JSONPrettyPrint(json_encode($contents, TEXTPATTERN_JSON))
             );
         }
 
