@@ -706,7 +706,7 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
 
     if ($datevar == '%d' || $name == 'day' || $name == 'exp_day') {
         $class = 'input-day';
-        $pattern = '([0-2][1-9]|3[01])';
+        $pattern = '(0[1-9]|[1-2][0-9]|3[01])';
     }
 
     if ($datevar == '%H' || $name == 'hour' || $name == 'exp_hour') {

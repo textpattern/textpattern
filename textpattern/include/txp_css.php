@@ -304,7 +304,10 @@ function css_save()
                     if (safe_insert('txp_css', "name = '".doSlash($newname)."', css = '$css'")) {
                         set_pref('last_css_saved', $newname, 'css', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                         update_lastmod('css_created', compact('newname', 'name', 'css'));
+
                         $message = gTxt('css_created', array('{name}' => $newname));
+
+                        callback_event($copy ? 'css_duplicated' : 'css_created', '', 0, $name, $newname);
                     } else {
                         $message = array(gTxt('css_save_failed'), E_ERROR);
                         $save_error = true;
@@ -318,7 +321,10 @@ function css_save()
                     set_pref('last_css_saved', $newname, 'css', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                     safe_update('txp_section', "css = '".doSlash($newname)."'", "css='".doSlash($name)."'");
                     update_lastmod('css_saved', compact('newname', 'name', 'css'));
+
                     $message = gTxt('css_updated', array('{name}' => $newname));
+
+                    callback_event('css_updated', '', 0, $name, $newname);
                 } else {
                     $message = array(gTxt('css_save_failed'), E_ERROR);
                     $save_error = true;
