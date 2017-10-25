@@ -33,25 +33,52 @@
 
 namespace Textpattern\Skin {
 
-    interface AssetInterface extends MainInterface
+    interface AssetInterface
     {
         /**
          * Constructor
          *
-         * @param string       $skin      The asset related skin name (set the related parent property)
-         * @param string       $infos     The asset related skin infos (set the related parent property)
-         * @param string|array $templates Restricts import to provided template name(s)
+         * @param string $skin The asset related skin name (set the related parent property)
          */
 
-        public function __construct($skin = null, $infos = null, $templates = null);
+        public function __construct($skin = null);
 
         /**
-         * Get the essential/default templates.
+         * Gets the essential/default templates.
          *
          * @return array Template names (or names => type for forms).
          */
 
         public static function getEssential();
+
+        /**
+         * Creates skin templates
+         *
+         * @param array $templates Template names.
+         * @throws \Exception
+         */
+
+        public function create($templates = null);
+
+        /**
+         * Changes templates related skin
+         *
+         * @param string $name      The new skin name.
+         * @param array  $templates Template names.
+         * @throws \Exception
+         */
+
+        public function edit($name, $templates = null);
+
+        /**
+         * Import the skin related templates.
+         *
+         * @param string $clean     Whether to remove extra templates or not.
+         * @param array  $templates Template names.
+         * @throws \Exception
+         */
+
+        public function import($clean = true, $templates = null);
 
         /**
          * Gets a new asset iterator instance.
@@ -82,12 +109,47 @@ namespace Textpattern\Skin {
         public function dropRemovedFiles($not);
 
         /**
+         * Re-imports the skin related templates.
+         *
+         * @param string $clean     Whether to remove extra templates or not.
+         * @param array  $templates Template names.
+         * @throws \Exception
+         */
+
+        public function update($clean = true, $templates = null);
+
+        /**
+         * Duplicates the skin related templates.
+         *
+         * @param array $templates Template names.
+         * @throws \Exception
+         */
+
+        public function duplicate($templates = null);
+
+        /**
          * Get skin asset related templates rows.
          *
          * @throws \Exception
          */
 
-        public function getTemplateRows();
+        public function getTemplateRows($templates);
+
+        /**
+         * {@inheritdoc}
+         */
+
+        public function getWhereClause($templates = null);
+
+        /**
+         * Exports the skin related templates.
+         *
+         * @param string $clean     Whether to remove extra templates or not.
+         * @param array  $templates Template names.
+         * @throws \Exception
+         */
+
+        public function export($clean = true, $templates = null);
 
         /**
          * Exports a skin asset related template row.
@@ -106,6 +168,15 @@ namespace Textpattern\Skin {
          */
 
         public function unlinkRemovedRows($not);
+
+        /**
+         * Deletes the skin related templates.
+         *
+         * @param array $templates Template names.
+         * @throws \Exception
+         */
+
+        public function delete($templates = null);
 
         /**
          * Deletes skin asset related template rows.

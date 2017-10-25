@@ -24,7 +24,7 @@
 /**
  * Main Interface
  *
- * Implemented by Main and SkinInterface.
+ * Implemented by Main and Skin.
  *
  * @since   4.7.0
  * @package Skin
@@ -35,60 +35,102 @@ namespace Textpattern\Skin {
     interface MainInterface
     {
         /**
-         * Creates the skin(s) and/or its asset related templates.
+         * Creates a skin and its assets.
          *
+         * @param string $title       The skin title;
+         * @param string $version     The skin version;
+         * @param string $description The skin description;
+         * @param string $author      The skin author;
+         * @param string $author_uri  The skin author URL;
+         * @param mixed  $assets      The skin assets to create.
          * @throws \Exception
          */
 
-        public function create();
+        public function create(
+            $title = null,
+            $version = null,
+            $description = null,
+            $author = null,
+            $author_uri = null,
+            $assets = null
+        );
 
         /**
-         * Edits the skin(s) and/or its asset related templates.
+         * Edits a skin and its assets.
          *
+         * @param string $name        The skin new name;
+         * @param string $title       The skin new title;
+         * @param string $version     The skin new version;
+         * @param string $description The skin new description;
+         * @param string $author      The skin new author;
+         * @param string $author_uri  The skin new author URL;
          * @throws \Exception
          */
 
-        public function edit();
+        public function edit(
+            $name = null,
+            $title = null,
+            $version = null,
+            $description = null,
+            $author = null,
+            $author_uri = null
+        );
 
         /**
-         * Creates a copy of the skin(s) and/or its asset related template rows.
+         * Duplicates a skin and its assets.
          *
-         * @param  string $as The title of the copy.
+         * @param string $name        The skin copy name;
+         * @param string $title       The skin copy title;
+         * @param string $version     The skin copy version;
+         * @param string $description The skin copy description;
+         * @param string $author      The skin copy author;
+         * @param string $author_uri  The skin copy author URL;
+         * @param mixed  $assets      The skin assets to duplicate.
          * @throws \Exception
          */
 
-        public function duplicate($as);
+        public function duplicate(
+            $name = null,
+            $title = null,
+            $version = null,
+            $description = null,
+            $author = null,
+            $author_uri = null,
+            $assets = null
+        );
 
         /**
-         * Imports the skin(s) and/or its asset related templates from the related directory(ies).
+         * Edits a skin and its assets.
          *
-         * @param  bool $clean whether to remove obsolete files or not.
+         * @param bool  $clean  Whether to remove extra templates or not;
+         * @param mixed $assets The skin assets to import;
          * @throws \Exception
          */
 
-        public function import($clean = true);
+        public function import($clean = true, $assets = null);
 
         /**
-         * Updates/overrides the skin(s) and/or its asset related templates from the related directory(ies).
+         * Updates a skin from its related directory.
          *
-         * @param  bool $clean whether to remove obsolete files or not.
+         * @param bool  $clean  Whether to remove extra templates or not;
+         * @param mixed $assets The skin assets to import;
          * @throws \Exception
          */
 
-        public function update($clean = true);
+        public function update($clean = true, $assets = null);
 
         /**
-         * Exports the skin(s) and/or its asset related templates from the database.
+         * Exports a skin and its assets.
          *
-         * @param  bool   $clean whether to remove obsolete files or not.
-         * @param  string $as    An optional skin title to export the current skin as a copy.
+         * @param bool  $clean  Whether to remove extra templates or not;
+         * @param mixed $assets The skin assets to import;
          * @throws \Exception
          */
 
-        public function export($clean = true, $as = false);
+        public function export($clean = true, $assets = null);
 
         /**
-         * Deletes The skin and/or its asset related templates.
+         * Deletes a skin and its assets.
          *
          * @throws \Exception
          */

@@ -70,20 +70,12 @@ namespace Textpattern\Skin {
         protected $locked = false;
 
         /**
-         * The skin copy title.
+         * The skin copy name.
          *
          * @var string
          */
 
         protected $copy;
-
-        /**
-         * The skin infos to work with as an associative array.
-         *
-         * @var array
-         */
-
-        protected $infos;
 
         /**
          * Constructor.
@@ -92,10 +84,9 @@ namespace Textpattern\Skin {
          * @param array  $infos Skin infos (set the related property).
          */
 
-        public function __construct($skin = null, $infos = null)
+        public function __construct($skin = null)
         {
             $skin ? $this->skin = $skin : '';
-            $infos ? $this->infos = $infos : '';
         }
 
         /**

@@ -22,7 +22,7 @@
  */
 
 /**
- * Main Interface
+ * Skin Interface
  *
  * Implemented by SkinBase.
  *
@@ -41,7 +41,7 @@ namespace Textpattern\Skin {
          * @param  array  $infos Skin infos;
          */
 
-        public function __construct($skin = null, $infos = null);
+        public function __construct($skin = null);
 
         /**
          * Tells whether the skin row exists or not.

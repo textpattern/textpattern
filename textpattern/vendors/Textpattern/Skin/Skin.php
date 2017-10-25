@@ -36,7 +36,7 @@
 
 namespace Textpattern\Skin {
 
-    class Skin extends SkinBase implements SkinInterface
+    class Skin extends SkinBase implements MainInterface
     {
 
         /**
@@ -56,42 +56,26 @@ namespace Textpattern\Skin {
         protected static $file = 'manifest.json';
 
         /**
-         * Caches an associative array of assets and their related class instance.
+         * Default skin assets.
          *
          * @var array
          */
 
-        private $assets;
+        protected static $assets = array(
+            'pages'  => array(),
+            'forms'  => array(),
+            'styles' => array(),
+        );
 
         /**
          * Constructor.
          *
-         * @param string       $skin   The skin name (set the related parent property);
-         * @param array        $infos  Skin infos (set the related parent property).
-         * @param string|array $assets Asset, array of assets or associative array of asset(s)
-         *                             and its/their related template(s) to work with
-         *                             (Set the related property by caching the related instances).
+         * @param string $skin The skin name (set the related parent property);
          */
 
-        public function __construct(
-            $skin = null,
-            $infos = null,
-            $assets = array('pages', 'forms', 'styles')
-        ) {
-            parent::__construct($skin, $infos);
-
-            if ($assets) {
-                $assets = $this->parseAssets($assets);
-
-                foreach ($assets as $asset => $templates) {
-                    $this->assets[$asset] = \Txp::get(
-                        'Textpattern\Skin\\'.ucfirst($asset),
-                        $skin,
-                        $infos,
-                        $templates
-                    );
-                }
-            }
+        public function __construct($skin = null)
+        {
+            parent::__construct($skin);
         }
 
         /**
@@ -101,12 +85,18 @@ namespace Textpattern\Skin {
          * @return array Associative array of assets and their relative templates.
          */
 
-        private function parseAssets($assets)
+        private function parseAssets($assets = null)
         {
-            if (!is_array($assets)) {
-                $assets = array($assets);
-            } elseif (isset($assets[0])) {
-                $assets = array_fill_keys($assets, array());
+            if ($assets === null) {
+                $assets = static::$assets;
+            } else {
+                if (!is_array($assets)) {
+                    $assets = array($assets);
+                }
+                
+                if (isset($assets[0])) {
+                    $assets = array_fill_keys($assets, array());
+                }
             }
 
             return $assets;
@@ -116,20 +106,28 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function create()
-        {
+        public function create(
+            $title = null,
+            $version = null,
+            $description = null,
+            $author = null,
+            $author_uri = null,
+            $assets = null
+        ) {
             if (!$this->skinIsInstalled()) {
                 $callback_extra = array(
                     'skin'   => $this->skin,
-                    'assets' => $this->assets,
+                    'assets' => $assets,
                 );
 
                 callback_event('skin', 'creation', 0, $callback_extra);
 
-                if ($this->createSkin()) {
+                if ($this->upsertSkin($this->skin, $title, $version, $description, $author, $author_uri)) {
                     $this->isInstalled = true;
 
-                    $this->assets ? $this->callAssetsMethod(__FUNCTION__) : '';
+                    $assets = $this->parseAssets($assets);
+
+                    $assets ? $this->callAssetsMethod($assets, __FUNCTION__) : '';
 
                     callback_event('skin', 'created', 0, $callback_extra);
                 } else {
@@ -151,61 +149,47 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Creates the skin row from $this->infos and some default values.
-         *
-         * @return bool False on error
-         */
-
-        public function createSkin()
-        {
-            extract($this->infos);
-
-            return (bool) safe_insert(
-                self::$table,
-                "title = '".doSlash($title ? $title : $this->skin)."',
-                 version = '".doSlash($version ? $version : '0.0.1')."',
-                 description = '".doSlash($description)."',
-                 author = '".doSlash($author ? $author : substr(cs('txp_login_public'), 10))."',
-                 author_uri = '".doSlash($author_uri)."',
-                 name = '".doSlash(strtolower(sanitizeForUrl($this->skin)))."'
-                "
-            );
-        }
-
-        /**
          * {@inheritdoc}
          */
 
-        public function edit()
-        {
+        public function edit(
+            $name = null,
+            $title = null,
+            $version = null,
+            $description = null,
+            $author = null,
+            $author_uri = null
+        ) {
             if ($this->skinIsInstalled()) {
-                if ($this->skin === $this->infos['new_name'] || !self::isInstalled($this->infos['new_name'])) {
+                if ($this->skin === $name || !self::isInstalled($name)) {
                     $sections = $this->isInUse();
                     $callback_extra = array(
                         'skin'   => $this->skin,
-                        'assets' => $this->assets,
+                        'assets' => $assets,
                     );
 
                     callback_event('skin', 'edit', 0, $callback_extra);
 
-                    if ($this->editSkin()) {
-                        $new = strtolower(sanitizeForUrl($this->infos['new_name']));
+                    if ($this->updateSkin($name, $title, $version, $description, $author, $author_uri)) {
                         $path = $this->getPath();
 
                         if (file_exists($path)) {
-                            rename($path, self::getBasePath().'/'.$new);
+                            rename($path, self::getBasePath().'/'.$name);
                         }
 
                         if ($sections) {
                             safe_update(
                                 'txp_section',
-                                "skin = '".doSlash($new)."'",
+                                "skin = '".doSlash($name)."'",
                                 "skin = '".doSlash($this->skin)."'"
                             );
                         }
 
-                        $this->assets ? $this->callAssetsMethod(__FUNCTION__) : '';
-                        $this->skin = $this->infos['new_name'];
+                        $assets = $this->parseAssets();
+
+                        $assets ? $this->callAssetsMethod($assets, __FUNCTION__, $name) : '';
+
+                        $this->skin = $name;
 
                         callback_event('skin', 'edited', 0, $callback_extra);
                     } else {
@@ -216,7 +200,7 @@ namespace Textpattern\Skin {
                                 'skin_step_failed',
                                 array(
                                     '{skin}' => $this->skin,
-                                    '{step}' => 'import',
+                                    '{step}' => 'edit',
                                 )
                             )
                         );
@@ -230,19 +214,23 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Updates the skin row from $this->infos.
+         * Updates or update the skin row.
          *
-         * @return bool False on error
+         * @param string $name        The skin name;
+         * @param string $title       The skin title;
+         * @param string $version     The skin version;
+         * @param string $description The skin description;
+         * @param string $author      The skin author;
+         * @param string $author_uri  The skin author URL;
+         * @return bool
          */
 
-        public function editSkin()
+        public function updateSkin($name, $title, $version, $description, $author, $author_uri)
         {
-            extract($this->infos);
-
-            $update = (bool) safe_update(
+            return (bool) safe_update(
                 self::$table,
-                "name = '".doSlash(strtolower(sanitizeForUrl($new_name)))."',
-                 title = '".doSlash($title ? $title : $new_name)."',
+                "name = '".doSlash($name)."',
+                 title = '".doSlash($title)."',
                  version = '".doSlash($version)."',
                  description = '".doSlash($description)."',
                  author = '".doSlash($author)."',
@@ -250,29 +238,30 @@ namespace Textpattern\Skin {
                 ",
                 "name = '".doSlash($this->skin)."'"
             );
-
-            return $update;
         }
 
         /**
          * {@inheritdoc}
          */
 
-        public function import($clean = true)
-        {
+        public function import($clean = true, $assets = null) {
             if (!$this->skinIsInstalled()) {
                 if ($this->isReadable(static::$file) && $this->lockSkin()) {
                     $callback_extra = array(
                         'skin'   => $this->skin,
-                        'assets' => $this->assets,
+                        'assets' => $assets,
                     );
 
                     callback_event('skin', 'import', 0, $callback_extra);
 
-                    if ($this->importSkin()) {
+                    extract($this->getJSONInfos());
+
+                    if ($this->upsertSkin($this->skin, $title, $version, $description, $author, $author_uri)) {
                         $this->isInstalled = true;
 
-                        $this->assets ? $this->callAssetsMethod(__FUNCTION__, func_get_args()) : '';
+                        $assets = $this->parseAssets($assets);
+
+                        $assets ? $this->callAssetsMethod($assets, __FUNCTION__, $clean) : '';
 
                         $this->unlockSkin();
 
@@ -307,13 +296,21 @@ namespace Textpattern\Skin {
 
         public function getJSONInfos()
         {
+            $default = array(
+                'title'       => $this->Skin,
+                'version'     => '',
+                'description' => '',
+                'author'      => '',
+                'author_uri'  => '',
+            );
+
             $infos = @json_decode(
                 file_get_contents($this->getPath(static::$file)),
                 true
             );
 
             if ($infos) {
-                return $infos;
+                return array_merge($default, $infos);
             }
 
             throw new \Exception(
@@ -322,24 +319,28 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Imports the skin into the database from the Manifest file contents.
+         * Insert or update the skin row.
          *
-         * @return bool False on error
+         * @param string $name        The skin name;
+         * @param string $title       The skin title;
+         * @param string $version     The skin version;
+         * @param string $description The skin description;
+         * @param string $author      The skin author;
+         * @param string $author_uri  The skin author URL;
+         * @return bool
          */
 
-        public function importSkin()
+        public function upsertSkin($name, $title, $version, $description, $author, $author_uri)
         {
-            extract($this->getJSONInfos());
-
             return (bool) safe_upsert(
                 self::$table,
-                "title = '".doSlash(isset($title) ? $title : $this->skin)."',
-                 version = '".doSlash(isset($version) ? $version : '')."',
-                 description = '".doSlash(isset($description) ? $description : '')."',
-                 author = '".doSlash(isset($author) ? $author : '')."',
-                 author_uri = '".doSlash(isset($author_uri) ? $author_uri : '')."'
+                "title = '".doSlash($title)."',
+                 version = '".doSlash($version)."',
+                 description = '".doSlash($description)."',
+                 author = '".doSlash($author)."',
+                 author_uri = '".doSlash($author_uri)."'
                 ",
-                "name = '".doSlash($this->skin)."'"
+                "name = '".doSlash($name)."'"
             );
         }
 
@@ -347,19 +348,23 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function update($clean = true)
+        public function update($clean = true, $assets = null)
         {
             if ($this->skinIsInstalled()) {
                 if ($this->isReadable(static::$file) && $this->lockSkin()) {
                     $callback_extra = array(
                         'skin'   => $this->skin,
-                        'assets' => $this->assets,
+                        'assets' => $assets,
                     );
 
                     callback_event('skin', 'update', 0, $callback_extra);
 
-                    if ($this->importSkin()) {
-                        $this->assets ? $this->callAssetsMethod(__FUNCTION__, func_get_args()) : '';
+                    extract($this->getJSONInfos());
+
+                    if ($this->upsertSkin($this->skin, $title, $description, $version, $author, $author_uri)) {
+                        $assets = $this->parseAssets($assets);
+
+                        $assets ? $this->callAssetsMethod($assets, __FUNCTION__, $clean) : '';
 
                         $this->unlockSkin();
 
@@ -391,24 +396,41 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function duplicate($as)
-        {
-            $this->copy = $as;
+        public function duplicate(
+            $name = null,
+            $title = null,
+            $version = null,
+            $description = null,
+            $author = null,
+            $author_uri = null,
+            $assets = null
+        ) {
+            if (!$name) {
+                $row = $this->getRow();
 
-            if (!$this->skinIsInstalled(true) && $this->copyIndexIsSafe()) {
-                if ($row = $this->getRow()) {
+                extract($row);
+
+                $name .= '_copy';
+                $title .= ' (copy)';
+            }
+
+            $this->copy = $name;
+
+            if (!self::isInstalled($name) && $this->copyIndexIsSafe()) {
+                if ($this->copy) {
                     $callback_extra = array(
                         'skin'   => $this->skin,
                         'copy'   => $this->copy,
-                        'assets' => $this->assets,
+                        'assets' => $assets,
                     );
 
                     callback_event('skin', 'duplication', 0, $callback_extra);
 
-                    if ($this->duplicateSkin($row)) {
-                        static::$installed[strtolower(sanitizeForUrl($this->copy))] = $this->copy;
+                    if ($this->duplicateSkin($name, $title, $version, $description, $author, $author_uri)) {
+                        static::$installed[$this->copy] = $this->copy;
+                        $assets = $this->parseAssets($assets);
 
-                        $this->assets ? $this->callAssetsMethod(__FUNCTION__, func_get_args()) : '';
+                        $assets ? $this->callAssetsMethod($assets, __FUNCTION__) : '';
 
                         callback_event('skin', 'duplicated', 0, $callback_extra);
                     } else {
@@ -441,7 +463,7 @@ namespace Textpattern\Skin {
 
         private function copyIndexIsSafe()
         {
-            $index = strtolower(sanitizeForUrl(substr($this->copy, 0, 50)));
+            $index = substr($this->copy, 0, 50);
 
             foreach (Main::getInstalled() as $name => $title) {
                 if (substr($name, 0, 50) === $index) {
@@ -474,49 +496,57 @@ namespace Textpattern\Skin {
         /**
          * Duplicates the skin row.
          *
-         * @param  array $row Skin row as an associative array
-         * @return bool  False on error
+         * @param string $name        The skin copy name;
+         * @param string $title       The skin copy title;
+         * @param string $version     The skin copy version;
+         * @param string $description The skin copy description;
+         * @param string $author      The skin copy author;
+         * @param string $author_uri  The skin copy author URL;
+         * @return bool
          */
 
-        public function duplicateSkin($row)
-        {
-            $sql = array();
-
-            foreach ($row as $col => $value) {
-                if ($col === 'name') {
-                    $value = strtolower(sanitizeForUrl($this->copy));
-                } elseif ($col === 'title') {
-                    $value = $this->copy;
-                }
-
-                $sql[] = $col." = '".doSlash($value)."'";
-            }
-
-            return (bool) safe_insert(self::$table, implode(', ', $sql));
+        public function duplicateSkin(
+            $name,
+            $title,
+            $version,
+            $description,
+            $author,
+            $author_uri
+        ) {
+            return (bool) safe_insert(
+                self::$table,
+                "title = '".doSlash($title)."',
+                 version = '".doSlash($version)."',
+                 description = '".doSlash($description)."',
+                 author = '".doSlash($author)."',
+                 author_uri = '".doSlash($author_uri)."',
+                 name = '".doSlash($name)."'
+                "
+            );
         }
 
         /**
          * {@inheritdoc}
          */
 
-        public function export($clean = true, $as = null)
+        public function export($clean = true, $assets = null)
         {
             $row = $this->getRow();
 
             if ($row) {
-                $as ? $this->copy = $as : '';
-
                 $callback_extra = array(
                     'skin'   => $this->skin,
                     'copy'   => $this->copy,
-                    'assets' => $this->assets,
+                    'assets' => $assets,
                 );
 
                 callback_event('skin', 'export', 0, $callback_extra);
 
                 if (($this->isWritable() || $this->mkDir()) && $this->lockSkin()) {
                     if ($this->exportSkin($row)) {
-                        $this->assets ? $this->callAssetsMethod(__FUNCTION__, func_get_args()) : '';
+                        $assets = $this->parseAssets($assets);
+
+                        $assets ? $this->callAssetsMethod($assets, __FUNCTION__, $clean) : '';
 
                         $this->unlockSkin();
 
@@ -667,12 +697,14 @@ namespace Textpattern\Skin {
             } else {
                 $callback_extra = array(
                     'skin'   => $this->skin,
-                    'assets' => $this->assets,
+                    'assets' => $assets,
                 );
 
                 callback_event('skin', 'deletion', 0, $callback_extra);
 
-                $this->assets ? $this->callAssetsMethod(__FUNCTION__) : '';
+                $assets = $this->parseAssets($assets);
+
+                $assets ? $this->callAssetsMethod($assets, __FUNCTION__) : '';
 
                 if ($this->hasAssets()) {
                     throw new \Exception('unable_to_delete_non_empty_skin');
@@ -798,15 +830,27 @@ namespace Textpattern\Skin {
          * @throws \Exception
          */
 
-        private function callAssetsMethod($method, $args = array())
+        private function callAssetsMethod($assets, $method, $extra = null)
         {
             $exceptions = array();
 
-            foreach ($this->assets as $asset => $instance) {
+            foreach ($assets as $asset => $templates) {
                 try {
+                    $instance = \Txp::get('Textpattern\Skin\\'.ucfirst($asset), $this->skin);
                     $instance->copy = $this->copy;
                     $instance->locked = $this->locked;
-                    call_user_func_array(array($instance, $method), $args);
+
+                    if ($extra) {
+                        call_user_func_array(
+                            array($instance, $method),
+                            array($extra, $templates)
+                        );
+                    } else {
+                        call_user_func_array(
+                            array($instance, $method),
+                            array($templates)
+                        );
+                    }
                 } catch (\Exception $e) {
                     $exceptions[] = $e->getMessage();
                 }
@@ -815,7 +859,8 @@ namespace Textpattern\Skin {
             if ($exceptions) {
                 $this->locked ? $this->unlockSkin() : '';
 
-                foreach ($this->assets as $asset => $instance) {
+                foreach ($assets as $asset => $templates) {
+                    $instance = \Txp::get('Textpattern\Skin\\'.ucfirst($asset), $this->skin);
                     $instance->copy = $this->copy;
                     $instance->locked = $this->locked;
                 }

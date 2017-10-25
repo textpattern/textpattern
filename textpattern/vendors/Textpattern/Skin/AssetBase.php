@@ -33,7 +33,7 @@
 
 namespace Textpattern\Skin {
 
-    abstract class AssetBase extends SkinBase implements SkinInterface
+    abstract class AssetBase extends SkinBase implements AssetInterface
     {
         /**
          * The asset related table.
@@ -87,19 +87,18 @@ namespace Textpattern\Skin {
 
         protected $templates = array();
 
-
         /**
          * {@inheritdoc}
          */
 
-        public function __construct($skin = null, $infos = null, $templates = null)
+        public function __construct($skin = null)
         {
-            parent::__construct($skin, $infos);
-
-            if ($templates) {
-                $this->templates = is_array($templates) ? $templates : array($templates);
-            }
+            parent::__construct($skin);
         }
+
+        /**
+         * {@inheritdoc}
+         */
 
         public static function getEssential()
         {
@@ -110,10 +109,10 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function create()
+        public function create($templates = null)
         {
             if ($this->skinIsInstalled()) {
-                $templates = $this->templates ? $this->templates : static::$essential;
+                $templates ?: $templates = static::$essential;
                 $sql_values = $this->getCreationSQLValues($templates);
 
                 $callback_extra = array(
@@ -128,7 +127,7 @@ namespace Textpattern\Skin {
                 } else {
                     callback_event(static::$dir, 'creation_failed', 0, $callback_extra);
 
-                    throw new \Exception($this->getFailureMessage('creation', $this->templates));
+                    throw new \Exception($this->getFailureMessage('creation', $templates));
                 }
             } else {
                 throw new \Exception('unknown_skin');
@@ -147,18 +146,19 @@ namespace Textpattern\Skin {
         /**
          * {@inheritdoc}
          */
-        public function edit()
+
+        public function edit($name, $templates = null)
         {
             $callback_extra = array(
                 'skin'      => $this->skin,
-                'templates' => $this->templates,
+                'templates' => $templates,
             );
 
             callback_event(static::$dir, 'import', 0, $callback_extra);
 
             $updated = (bool) safe_update(
                 static::$table,
-                "skin = '".doSlash(strtolower(sanitizeForUrl($this->infos['new_name'])))."'",
+                "skin = '".doSlash($name)."'",
                 "skin = '".doSlash($this->skin)."'"
             );
 
@@ -177,13 +177,13 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function import($clean = true)
+        public function import($clean = true, $templates = null)
         {
             if ($this->skinIsInstalled()) {
                 $was_locked = $this->locked;
 
                 if ($this->isReadable(static::$dir) && $this->lockSkin()) {
-                    $files = $this->getRecDirIterator();
+                    $files = $this->getRecDirIterator($templates);
                     $passed = $failed = $sql_values = array();
 
                     foreach ($files as $file) {
@@ -239,10 +239,10 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function getRecDirIterator()
+        public function getRecDirIterator($templates = null)
         {
-            if ($this->templates) {
-                $templates = '('.implode('|', $this->templates).')';
+            if ($templates) {
+                $templates = '('.implode('|', $templates).')';
             } else {
                 $templates = '[a-z][a-z0-9_\-\.]{0,63}';
             }
@@ -324,19 +324,19 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function update($clean = true)
+        public function update($clean = true, $templates = null)
         {
-            return $this->import($clean);
+            return $this->import($clean, $templates);
         }
 
         /**
          * {@inheritdoc}
          */
 
-        public function duplicate($as)
+        public function duplicate($templates = null)
         {
             if ($this->skinIsInstalled(true)) {
-                $rows = $this->getTemplateRows();
+                $rows = $this->getTemplateRows($templates);
 
                 if ($rows) {
                     $templates = $sql_values = array();
@@ -376,21 +376,21 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function getTemplateRows()
+        public function getTemplateRows($templates)
         {
-            return safe_rows('*', static::$table, $this->getWhereClause());
+            return safe_rows('*', static::$table, $this->getWhereClause($templates));
         }
 
         /**
          * {@inheritdoc}
          */
 
-        public function getWhereClause()
+        public function getWhereClause($templates = null)
         {
             $where = "skin = '".doSlash($this->skin)."'";
 
-            if ($this->templates) {
-                $where .= ' AND name in ("'.implode('", "', array_map('doSlash', $this->templates)).'")';
+            if ($templates) {
+                $where .= ' AND name in ("'.implode('", "', array_map('doSlash', $templates)).'")';
             }
 
             return $where;
@@ -400,9 +400,9 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function export($clean = true, $as = null)
+        public function export($clean = true, $templates = null)
         {
-            $rows = $this->getTemplateRows();
+            $rows = $this->getTemplateRows($templates);
 
             if ($rows) {
                 $was_locked = $this->locked;
@@ -410,7 +410,7 @@ namespace Textpattern\Skin {
                 if ($this->lockSkin() && ($this->isWritable(static::$dir) || $this->mkDir(static::$dir))) {
                     $callback_extra = array(
                         'skin'      => $this->skin,
-                        'templates' => $this->templates,
+                        'templates' => $templates,
                     );
 
                     callback_event(static::$dir, 'export', 0, $callback_extra);
@@ -475,9 +475,9 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function delete()
+        public function delete($templates = null)
         {
-            $rows = $this->getTemplateRows();
+            $rows = $this->getTemplateRows($templates);
 
             if ($rows) {
                 $templates = array();

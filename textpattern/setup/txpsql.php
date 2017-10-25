@@ -114,7 +114,7 @@ foreach (get_files_content($setupdir.'/articles', 'xml') as $key=>$data) {
 // Load theme /data, /styles, /forms, /pages
 
 if (class_exists('\Textpattern\Skin\Main') && $public_theme != 'setup') {
-    Txp::get('\Textpattern\Skin\Main', array($public_theme => array()))->import();
+    Txp::get('\Textpattern\Skin\Main', $public_theme)->import();
     safe_update('txp_section', 'skin = "'.doSlash($public_theme).'"', '1=1');
 } else {
     $themedir = $public_themes[$public_theme]['themedir'];

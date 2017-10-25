@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin {
 
-    abstract class MainBase implements MainInterface
+    abstract class MainBase
     {
         /**
          * Caches the installed skins.
@@ -51,47 +51,5 @@ namespace Textpattern\Skin {
          */
 
         protected static $directories = null;
-
-        /**
-         * {@inheritdoc}
-         */
-
-        abstract public function create();
-
-        /**
-         * {@inheritdoc}
-         */
-
-        abstract public function edit();
-
-        /**
-         * {@inheritdoc}
-         */
-
-        abstract public function duplicate($as);
-
-        /**
-         * {@inheritdoc}
-         */
-
-        abstract public function import($clean = true);
-
-        /**
-         * {@inheritdoc}
-         */
-
-        abstract public function update($clean = true);
-
-        /**
-         * {@inheritdoc}
-         */
-
-        abstract public function export($clean = true, $as = null);
-
-        /**
-         * {@inheritdoc}
-         */
-
-        abstract public function delete();
     }
 }

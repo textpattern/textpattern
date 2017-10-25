@@ -402,6 +402,10 @@ function skin_edit($message = null)
 
     $out[] = pluggable_ui('skin_ui', 'extend_detail_form', '', $rs).
         graf(
+            href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
+                'class'     => 'txp-clone',
+                'data-form' => 'skin_form',
+            )).
             sLink('skin', '', gTxt('cancel'), 'txp-button').
             fInput('submit', '', gTxt('save'), 'publish'),
             array('class' => 'txp-edit-actions')
@@ -409,13 +413,14 @@ function skin_edit($message = null)
         eInput('skin').
         sInput('save').
         hInput('old_name', $skin_name).
+        hInput('old_title', $skin_title).
         hInput('search_method', $search_method).
         hInput('crit', $crit).
         hInput('page', $page).
         hInput('sort', $sort).
         hInput('dir', $dir);
 
-    echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'skin_details');
+    echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'skin_form');
 }
 
 /**
@@ -428,28 +433,38 @@ function skin_save()
         'name',
         'title',
         'old_name',
+        'old_title',
         'version',
         'description',
         'author',
         'author_uri',
+        'copy',
     )));
 
-    if ($skin = $infos['old_name']) {
-        $infos['new_name'] = $infos['name'];
-        $method = 'edit';
+    extract($infos);
+
+    if ($old_name) {
+        $instance = Txp::get('\Textpattern\Skin\Main', $old_name);
+        $name = strtolower(sanitizeForUrl($name));
+
+        if ($copy) {
+            $name === $old_name ? $name .= '_copy' : '';
+            $title === $old_title ? $title .= ' (copy)' : '';
+
+            $result = $instance->duplicate($name, $title, $version, $description, $author, $author_uri);
+        } else {
+            $result = $instance->edit($name, $title, $version, $description, $author, $author_uri);
+        }
     } else {
-        $skin = $infos['name'];
-        $method = 'create';
+        $title ?: $title = $name;
+        $author ?: $author = substr(cs('txp_login_public'), 10);
+        $version ?: $version = '0.0.1';
+
+        $result = Txp::get('\Textpattern\Skin\Main', strtolower(sanitizeForUrl($name)))
+            ->create($title, $version, $description, $author, $author_uri);
     }
 
-    unset($infos['name'], $infos['old_name']);
-
-    skin_list(
-        Txp::get(
-            '\Textpattern\Skin\Main',
-            array($skin => $infos)
-        )->$method()
-    );
+    skin_list($result);
 }
 
 /**
@@ -475,17 +490,14 @@ function skin_change_pageby()
 
 function skin_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
-    $copy = tag(gtxt('copy_title'), 'label', array('for' => 'copy')).
-            fInput('text', 'copy', '', '', '', '', '', '', '', false, true);
     $clean = tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean')).
              popHelp('remove_extra_templates').
              checkbox('clean', 1, true);
 
     $methods = array(
         'update'      => array('label' => gTxt('update'), 'html' => $clean),
-        'duplicate'   => array('label' => gTxt('duplicate'), 'html' => $copy),
+        'duplicate'   => gTxt('duplicate'),
         'export'      => array('label' => gTxt('export'), 'html' => $clean),
-        'export_copy' => array('label' => gTxt('export_copy'), 'html' => $copy),
         'delete'      => gTxt('delete'),
     );
 
@@ -501,7 +513,6 @@ function skin_multi_edit()
     extract(psa(array(
         'edit_method',
         'selected',
-        'copy',
         'clean',
     )));
 
@@ -509,25 +520,19 @@ function skin_multi_edit()
         return skin_list();
     }
 
-    $instance = Txp::get(
-        '\Textpattern\Skin\Main',
-        array_fill_keys(ps('selected'), array())
-    );
+    $instance = Txp::get('\Textpattern\Skin\Main', ps('selected'));
 
     switch ($edit_method) {
         case 'export':
-            $edit = $instance->export($clean, $copy);
-            break;
-        case 'export_copy':
-            $edit = $instance->export(false, $copy);
+            $edit = $instance->export($clean);
             break;
         case 'duplicate':
-            $edit = $instance->duplicate($copy);
+            $edit = $instance->duplicate();
             break;
         case 'update':
             $edit = $instance->update($clean);
             break;
-        default:
+        default: // delete.
             $edit = $instance->$edit_method();
             break;
     }
@@ -541,10 +546,5 @@ function skin_multi_edit()
 
 function skin_import()
 {
-    skin_list(
-        Txp::get(
-            '\Textpattern\Skin\Main',
-            array(ps('skins') => array())
-        )->import()
-    );
+    skin_list(Txp::get('\Textpattern\Skin\Main', ps('skins'))->import());
 }

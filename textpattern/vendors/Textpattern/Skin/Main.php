@@ -35,51 +35,73 @@ namespace Textpattern\Skin {
     class Main extends MainBase implements MainInterface
     {
         /**
-         * Stores skin(s) instances.
-         *
-         * @var array
+         * {@inheritdoc}
          */
 
-        protected $skins = array();
+        protected $skins;
 
         /**
          * Constructor.
          *
-         * @param array        $skins  Associative array of the skin(s) and their related edit infos.
-         * @param string|array $assets Asset, array of assets or associative array of asset(s)
-         *                             and its/their related template(s) to work with.
+         * @param mixed $skins  Skin(s) names.
          */
 
-        public function __construct($skins, $assets = array('pages', 'forms', 'styles'))
+        public function __construct($skins)
         {
-            foreach ($skins as $skin => $infos) {
-                $this->skins[$skin] = \Txp::get('Textpattern\Skin\Skin', $skin, $infos, $assets);
-            }
+            $this->skins = is_array($skins) ? $skins : array($skins);
         }
 
         /**
          * {@inheritdoc}
          */
 
-        public function create()
-        {
-            return $this->callSkinsMethod(__FUNCTION__);
+        public function create(
+            $title = null,
+            $version = null,
+            $description = null,
+            $author = null,
+            $author_uri = null,
+            $assets = null
+        ) {
+            return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }
 
         /**
          * {@inheritdoc}
          */
 
-        public function edit()
-        {
-            return $this->callSkinsMethod(__FUNCTION__);
+        public function edit(
+            $name = null,
+            $title = null,
+            $version = null,
+            $description = null,
+            $author = null,
+            $author_uri = null
+        ) {
+            return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }
 
         /**
          * {@inheritdoc}
          */
 
-        public function duplicate($as)
+        public function duplicate(
+            $name = null,
+            $title = null,
+            $version = null,
+            $description = null,
+            $author = null,
+            $author_uri = null,
+            $assets = null
+        ) {
+            return $this->callSkinsMethod(__FUNCTION__, func_get_args());
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+
+        public function import($clean = true, $assets = null)
         {
             return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }
@@ -88,7 +110,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function import($clean = true)
+        public function update($clean = true, $assets = null)
         {
             return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }
@@ -97,16 +119,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function update($clean = true)
-        {
-            return $this->callSkinsMethod(__FUNCTION__, func_get_args());
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function export($clean = true, $as = null)
+        public function export($clean = true, $assets = null)
         {
             return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }
@@ -133,8 +146,10 @@ namespace Textpattern\Skin {
             $done = substr($method, -1) === 'e' ? 'd' : 'ed';
             $results = array();
 
-            foreach ($this->skins as $skin => $instance) {
+            foreach ($this->skins as $skin) {
                 try {
+                    $instance = \Txp::get('Textpattern\Skin\Skin', $skin);
+
                     call_user_func_array(array($instance, $method), $args);
 
                     $results[$skin]['success'][] = gtxt(
@@ -142,7 +157,7 @@ namespace Textpattern\Skin {
                         array('{step}' => $method.$done)
                     );
                 } catch (\Exception $e) {
-                    $results[$skin]['error'][] = $e->getMessage();
+                    $results[$skin]['failure'][] = $e->getMessage();
                 }
             }
 
