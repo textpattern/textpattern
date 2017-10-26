@@ -396,10 +396,11 @@ function skin_edit($message = null)
 
         if ($field === 'description') {
             $input = text_area($field, 0, 0, $current, "skin_$field");
+        } elseif ($field === 'name') {
+            $input = '<input type="text" value="'.$current.'" id="skin_'.$field.'" name="'.$field.'" size="'.INPUT_REGULAR.'" maxlength="63" required />';
         } else {
-            $required = ($field === 'name') ? true : false;
             $type = ($field === 'author_uri') ? 'url' : 'text';
-            $input = fInput($type, $field, $current, '', '', '', INPUT_REGULAR, '', "skin_$field", false, $required);
+            $input = fInput($type, $field, $current, '', '', '', INPUT_REGULAR, '', "skin_$field");
         }
 
         $out[] = inputLabel("skin_$field", $input, "skin_$field");
