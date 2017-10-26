@@ -43,7 +43,14 @@ namespace Textpattern\Skin {
          * @param string $description The skin description;
          * @param string $author      The skin author;
          * @param string $author_uri  The skin author URL;
-         * @param mixed  $assets      The skin assets to create.
+         * @param mixed  $assets      The skin assets to duplicate (all if not set).
+         *        bool                false // none
+         *        string              'pages'|'forms'|'styles'
+         *        array               array('pages', 'forms') // skips styles
+         *        array               array(
+         *                                'pages'  => array('default', 'error_default'),
+         *                                'forms'  => array(), // all forms
+         *                            ) // skips styles
          * @throws \Exception
          */
 
@@ -81,7 +88,14 @@ namespace Textpattern\Skin {
         /**
          * Duplicates a skin and its assets.
          *
-         * @param mixed $assets The skin assets to duplicate.
+         * @param mixed $assets The skin assets to duplicate (all if not set).
+         *        bool          false // none
+         *        string        'pages'|'forms'|'styles'
+         *        array         array('pages', 'forms') // skips styles
+         *        array         array(
+         *                          'pages'  => array('default', 'error_default'),
+         *                          'forms'  => array(), // all forms
+         *                      ) // skips styles
          * @throws \Exception
          */
 
@@ -96,7 +110,14 @@ namespace Textpattern\Skin {
          * @param string $description The skin copy description;
          * @param string $author      The skin copy author;
          * @param string $author_uri  The skin copy author URL;
-         * @param mixed  $assets      The skin assets to duplicate.
+         * @param mixed  $assets      The skin assets to duplicate (all if not set).
+         *        bool                false // none
+         *        string              'pages'|'forms'|'styles'
+         *        array               array('pages', 'forms') // skips styles
+         *        array               array(
+         *                                'pages'  => array('default', 'error_default'),
+         *                                'forms'  => array(), // all forms
+         *                            ) // skips styles
          * @throws \Exception
          */
 
@@ -113,8 +134,15 @@ namespace Textpattern\Skin {
         /**
          * Edits a skin and its assets.
          *
-         * @param bool  $clean  Whether to remove extra templates or not;
-         * @param mixed $assets The skin assets to import;
+         * @param bool  $clean   Whether to remove extra templates or not;
+         * @param mixed $assets The skin assets to import (all if not set).
+         *        bool           false // none
+         *        string         'pages'|'forms'|'styles'
+         *        array          array('pages', 'forms') // skips styles
+         *        array          array(
+         *                           'pages'  => array('default', 'error_default'),
+         *                           'forms'  => array(), // all forms
+         *                       ) // skips styles
          * @throws \Exception
          */
 
@@ -124,7 +152,14 @@ namespace Textpattern\Skin {
          * Updates a skin from its related directory.
          *
          * @param bool  $clean  Whether to remove extra templates or not;
-         * @param mixed $assets The skin assets to import;
+         * @param mixed $assets The skin assets to update (all if not set).
+         *        bool          false // none
+         *        string        'pages'|'forms'|'styles'
+         *        array         array('pages', 'forms') // skips styles
+         *        array         array(
+         *                          'pages'  => array('default', 'error_default'),
+         *                          'forms'  => array(), // all forms
+         *                      ) // skips styles
          * @throws \Exception
          */
 
@@ -134,7 +169,14 @@ namespace Textpattern\Skin {
          * Exports a skin and its assets.
          *
          * @param bool  $clean  Whether to remove extra templates or not;
-         * @param mixed $assets The skin assets to import;
+         * @param mixed $assets The skin assets to export (all if not set).
+         *        bool          false // none
+         *        string        'pages'|'forms'|'styles'
+         *        array         array('pages', 'forms') // skips styles
+         *        array         array(
+         *                          'pages'  => array('default', 'error_default'),
+         *                          'forms'  => array(), // all forms
+         *                      ) // skips styles
          * @throws \Exception
          */
 
