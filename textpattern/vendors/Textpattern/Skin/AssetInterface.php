@@ -83,10 +83,11 @@ namespace Textpattern\Skin {
         /**
          * Gets a new asset iterator instance.
          *
+         * @param mixed $templates Template name(s).
          * @return RecursiveIteratorIterator
          */
 
-        public function getRecDirIterator();
+        public function getRecDirIterator($templates = null);
 
         /**
          * Inserts or updates all asset related templates at once.

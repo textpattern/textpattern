@@ -242,6 +242,8 @@ namespace Textpattern\Skin {
         public function getRecDirIterator($templates = null)
         {
             if ($templates) {
+                is_array($templates) ?: $templates = array($templates);
+
                 $templates = '('.implode('|', $templates).')';
             } else {
                 $templates = '[a-z][a-z0-9_\-\.]{0,63}';
