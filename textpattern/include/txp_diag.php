@@ -44,6 +44,12 @@ define("cs", ': ');
 
 define("ln", str_repeat('-', 24).n);
 
+/**
+ * @ignore
+ */
+
+define("priv", '=== ');
+
 global $files;
 
 $files = check_file_integrity();
@@ -479,20 +485,31 @@ function doDiagnostics()
                     '',
                     array('class' => 'txp-form-field diagnostic-details-level'),
                     ''
+                ).
+                inputLabel(
+                    'diag_clear_private',
+                    checkbox('diag_clear_private', 1, false, 0, 'diag_clear_private'),
+                    'diag_clear_private', 'diag_clear_private', array('class' => 'txp-form-field'),
+                    ''
                 )
             ),
 
             '<textarea class="code" id="diagnostics-detail" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr" readonly>',
+            '</textarea>',
+
+            '<textarea style="display:none;" id="diagnostics-data" data-txproot="'.dirname(txpath).'">',
 
             gTxt('txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
 
             gTxt('last_update').cs.gmstrftime($fmt_date, $dbupdatetime).'/'.gmstrftime($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
 
-            gTxt('document_root').cs.@$_SERVER['DOCUMENT_ROOT'].(($real_doc_root != @$_SERVER['DOCUMENT_ROOT']) ? ' ('.$real_doc_root.')' : '').n,
+            priv.gTxt('web_domain').cs.$siteurl.n,
 
-            '$path_to_site'.cs.$path_to_site.n,
+            priv.gTxt('document_root').cs.@$_SERVER['DOCUMENT_ROOT'].(($real_doc_root != @$_SERVER['DOCUMENT_ROOT']) ? ' ('.$real_doc_root.')' : '').n,
 
-            gTxt('txp_path').cs.txpath.n,
+            priv.'$path_to_site'.cs.$path_to_site.n,
+
+            priv.gTxt('txp_path').cs.txpath.n,
 
             gTxt('permlink_mode').cs.$permlink_mode.n,
 
@@ -501,8 +518,6 @@ function doDiagnostics()
             (ini_get('upload_tmp_dir')) ? 'upload_tmp_dir: '.ini_get('upload_tmp_dir').n : '',
 
             gTxt('tempdir').cs.$tempdir.n,
-
-            gTxt('web_domain').cs.$siteurl.n,
 
             gTxt('php_version').cs.phpversion().n,
 
