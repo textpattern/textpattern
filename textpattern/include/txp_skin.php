@@ -375,9 +375,14 @@ function skin_edit($message = null)
         }
 
         $caption = gTxt('edit_skin');
+        $extra_action = href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
+            'class'     => 'txp-clone',
+            'data-form' => 'skin_form',
+        ));
     } else {
         $rs = array_fill_keys($fields, '');
         $caption = gTxt('create_skin');
+        $extra_action = '';
     }
 
     extract($rs, EXTR_PREFIX_ALL, 'skin');
@@ -402,10 +407,7 @@ function skin_edit($message = null)
 
     $out[] = pluggable_ui('skin_ui', 'extend_detail_form', '', $rs).
         graf(
-            href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
-                'class'     => 'txp-clone',
-                'data-form' => 'skin_form',
-            )).
+            $extra_action.
             sLink('skin', '', gTxt('cancel'), 'txp-button').
             fInput('submit', '', gTxt('save'), 'publish'),
             array('class' => 'txp-edit-actions')
