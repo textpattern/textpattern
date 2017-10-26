@@ -322,7 +322,7 @@ namespace Textpattern\Skin {
             }
 
             throw new \Exception(
-                gtxt('invalid_json_file', array('{file}' => self::$file))
+                gtxt('invalid_json_file', array('{name}' => self::$file))
             );
         }
 
