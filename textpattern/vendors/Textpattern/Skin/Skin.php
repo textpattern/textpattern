@@ -135,7 +135,7 @@ namespace Textpattern\Skin {
 
                     throw new \Exception(
                         gtxt(
-                            'skin_step_failed',
+                            'skin_step_failure',
                             array(
                                 '{skin}' => $this->skin,
                                 '{step}' => 'import',
@@ -144,7 +144,9 @@ namespace Textpattern\Skin {
                     );
                 }
             } else {
-                throw new \Exception('duplicated_skin');
+                throw new \Exception(
+                    gtxt('skin_already_exists', array('{name}' => $this->skin))
+                );
             }
         }
 
@@ -197,7 +199,7 @@ namespace Textpattern\Skin {
 
                         throw new \Exception(
                             gtxt(
-                                'skin_step_failed',
+                                'skin_step_failure',
                                 array(
                                     '{skin}' => $this->skin,
                                     '{step}' => 'edit',
@@ -206,10 +208,14 @@ namespace Textpattern\Skin {
                         );
                     }
                 } else {
-                    throw new \Exception('duplicated_skin');
+                    throw new \Exception(
+                        gtxt('skin_already_exists', array('{name}' => $this->skin))
+                    );
                 }
             } else {
-                throw new \Exception('unknown_skin');
+                throw new \Exception(
+                    gtxt('unknown_skin', array('{name}' => $this->skin))
+                );
             }
         }
 
@@ -273,7 +279,7 @@ namespace Textpattern\Skin {
 
                         throw new \Exception(
                             gtxt(
-                                'skin_step_failed',
+                                'skin_step_failure',
                                 array(
                                     '{skin}' => $this->skin,
                                     '{step}' => 'import',
@@ -283,7 +289,9 @@ namespace Textpattern\Skin {
                     }
                 }
             } else {
-                throw new \Exception('Unknown_skin');
+                throw new \Exception(
+                    gtxt('unknown_skin', array('{name}' => $this->skin))
+                );
             }
         }
 
@@ -314,7 +322,7 @@ namespace Textpattern\Skin {
             }
 
             throw new \Exception(
-                gtxt('invalid_skin_json_file', array('{file}' => self::$file))
+                gtxt('invalid_json_file', array('{file}' => self::$file))
             );
         }
 
@@ -376,7 +384,7 @@ namespace Textpattern\Skin {
 
                         throw new \Exception(
                             gtxt(
-                                'skin_step_failed',
+                                'skin_step_failure',
                                 array(
                                     '{skin}' => $this->skin,
                                     '{step}' => 'update',
@@ -385,10 +393,14 @@ namespace Textpattern\Skin {
                         );
                     }
                 } else {
-                    throw new \Exception('Unknown_directory');
+                    throw new \Exception(
+                        gtxt('unknown_directory', array('{name}' => $this->skin))
+                    );
                 }
             } else {
-                throw new \Exception('Unknown_skin');
+                throw new \Exception(
+                    gtxt('unknown_skin', array('{name}' => $this->skin))
+                );
             }
         }
 
@@ -438,7 +450,7 @@ namespace Textpattern\Skin {
 
                         throw new \Exception(
                             gtxt(
-                                'skin_step_failed',
+                                'skin_step_failure',
                                 array(
                                     '{skin}' => $this->skin,
                                     '{step}' => 'duplication',
@@ -447,10 +459,14 @@ namespace Textpattern\Skin {
                         );
                     }
                 } else {
-                    throw new \Exception('Unknown_skin');
+                    throw new \Exception(
+                        gtxt('unknown_skin', array('{name}' => $this->skin))
+                    );
                 }
             } else {
-                throw new \Exception('Duplicated_skin');
+                throw new \Exception(
+                    gtxt('skin_already_exists', array('{name}' => $this->skin))
+                );
             }
         }
 
@@ -489,7 +505,7 @@ namespace Textpattern\Skin {
             }
 
             throw new \Exception(
-                gtxt('skin_not_found', array('{skin}' => $this->skin))
+                gtxt('skin_data_not_found', array('{name}' => $this->skin))
             );
         }
 
@@ -558,7 +574,7 @@ namespace Textpattern\Skin {
 
                         throw new \Exception(
                             gtxt(
-                                'skin_step_failed',
+                                'skin_step_failure',
                                 array(
                                     '{skin}' => $this->skin,
                                     '{step}' => 'export',
@@ -568,7 +584,9 @@ namespace Textpattern\Skin {
                     }
                 }
             } else {
-                throw new \Exception('Unknown_skin');
+                throw new \Exception(
+                    gtxt('unknown_skin', array('{name}' => $this->skin))
+                );
             }
         }
 
@@ -689,11 +707,29 @@ namespace Textpattern\Skin {
         public function delete()
         {
             if (!$this->skinIsInstalled()) {
-                throw new \Exception('Unknown_skin');
+                throw new \Exception(
+                    gtxt('unknown_skin', array('{name}' => $this->skin))
+                );
             } elseif ($this->isInUse()) {
-                throw new \Exception(gtxt('unable_to_delete_skin_in_use', array('{skin}' => $this->skin)));
+                throw new \Exception(
+                    gtxt(
+                        'skin_delete_failure',
+                        array(
+                            '{name}' => $this->skin,
+                            '{clue}' => 'skin in use.',
+                        )
+                    )
+                );
             } elseif (count(Main::getInstalled()) < 1) {
-                throw new \Exception('unable_to_delete_the_only_skin');
+                throw new \Exception(
+                    gtxt(
+                        'skin_delete_failure',
+                        array(
+                            '{name}' => $this->skin,
+                            '{clue}' => 'last skin.',
+                        )
+                    )
+                );
             } else {
                 $callback_extra = array(
                     'skin'   => $this->skin,
@@ -707,7 +743,15 @@ namespace Textpattern\Skin {
                 $assets ? $this->callAssetsMethod($assets, __FUNCTION__) : '';
 
                 if ($this->hasAssets()) {
-                    throw new \Exception('unable_to_delete_non_empty_skin');
+                    throw new \Exception(
+                        gtxt(
+                            'skin_delete_failure',
+                            array(
+                                '{name}' => $this->skin,
+                                '{clue}' => 'still contains assets.',
+                            )
+                        )
+                    );
                 } elseif ($this->deleteSkin()) {
                     static::$installed = array_diff_key(
                         static::$installed,
@@ -722,7 +766,7 @@ namespace Textpattern\Skin {
 
                     throw new \Exception(
                         gtxt(
-                            'skin_step_failed',
+                            'skin_step_failure',
                             array(
                                 '{skin}' => $this->skin,
                                 '{step}' => 'deletion',

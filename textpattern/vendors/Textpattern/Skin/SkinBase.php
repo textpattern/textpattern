@@ -205,8 +205,8 @@ namespace Textpattern\Skin {
 
             throw new \Exception(
                 gtxt(
-                    'unable_to_create_skin_directory',
-                    array('{directory}' => basename($path))
+                    'directory_creation_failure',
+                    array('{name}' => basename($path))
                 )
             );
         }
@@ -241,8 +241,8 @@ namespace Textpattern\Skin {
 
             throw new \Exception(
                 gtxt(
-                    'unable_to_remove_skin_directory',
-                    array('{directory}' => basename($path))
+                    'directory_deletion_failure',
+                    array('{name}' => basename($path))
                 )
             );
         }

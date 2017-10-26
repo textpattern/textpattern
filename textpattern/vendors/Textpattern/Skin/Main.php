@@ -153,7 +153,7 @@ namespace Textpattern\Skin {
                     call_user_func_array(array($instance, $method), $args);
 
                     $results[$skin]['success'][] = gtxt(
-                        'skin_step_succeeded',
+                        'skin_step_success',
                         array('{step}' => $method.$done)
                     );
                 } catch (\Exception $e) {

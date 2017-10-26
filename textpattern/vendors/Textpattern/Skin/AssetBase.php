@@ -217,7 +217,7 @@ namespace Textpattern\Skin {
                                     $this->getFailureMessage(
                                         'import',
                                         $failed,
-                                        'skin_step_failed_for_duplicated_templates'
+                                        'skin_step_failure_for_duplicated_templates'
                                     )
                                 );
                             }
@@ -519,7 +519,7 @@ namespace Textpattern\Skin {
         private function getFailureMessage(
             $process,
             $templates,
-            $message = 'skin_step_failed_for_templates'
+            $message = 'skin_step_failure_for_templates'
         ) {
             return gtxt(
                 $message,
