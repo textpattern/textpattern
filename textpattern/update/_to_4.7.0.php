@@ -49,7 +49,7 @@ if (in_array('prefs_id', $cols)) {
 // "theme" has already been hijacked by admin-side themes. This
 // convention avoids potential name clashes.
 safe_create('txp_skin', "
-    name        VARCHAR(255)   NOT NULL DEFAULT 'default',
+    name        VARCHAR(63)    NOT NULL DEFAULT 'default',
     title       VARCHAR(255)   NOT NULL DEFAULT 'Default',
     version     VARCHAR(255)       NULL DEFAULT '1.0',
     description VARCHAR(10240)     NULL DEFAULT '',
@@ -57,7 +57,7 @@ safe_create('txp_skin', "
     author_uri  VARCHAR(255)       NULL DEFAULT '',
     lastmod     DATETIME           NULL DEFAULT NULL,
 
-    PRIMARY KEY (`name`(50))
+    PRIMARY KEY (`name`(63))
 ");
 
 // Add theme support to Pages...
@@ -70,11 +70,11 @@ if (!in_array('lastmod', $cols)) {
 
 if (!in_array('skin', $cols)) {
     safe_alter('txp_page',
-        "ADD skin VARCHAR(255) NOT NULL DEFAULT 'default' AFTER user_html");
+        "ADD skin VARCHAR(63) NOT NULL DEFAULT 'default' AFTER user_html");
 }
 
 safe_drop_index('txp_page', 'primary');
-safe_create_index('txp_page', 'name(200), skin(50)', 'name_skin', 'unique');
+safe_create_index('txp_page', 'name(187), skin(63)', 'name_skin', 'unique');
 
 // ... Forms...
 $cols = getThings('describe `'.PFX.'txp_form`');
@@ -86,11 +86,11 @@ if (!in_array('lastmod', $cols)) {
 
 if (!in_array('skin', $cols)) {
     safe_alter('txp_form',
-        "ADD skin VARCHAR(255) NOT NULL DEFAULT 'default' AFTER Form");
+        "ADD skin VARCHAR(63) NOT NULL DEFAULT 'default' AFTER Form");
 }
 
 safe_drop_index('txp_form', 'primary');
-safe_create_index('txp_form', 'name(200), skin(50)', 'name_skin', 'unique');
+safe_create_index('txp_form', 'name(187), skin(63)', 'name_skin', 'unique');
 
 // ... Stylesheets...
 $cols = getThings('describe `'.PFX.'txp_css`');
@@ -102,23 +102,23 @@ if (!in_array('lastmod', $cols)) {
 
 if (!in_array('skin', $cols)) {
     safe_alter('txp_css',
-        "ADD skin VARCHAR(255) NOT NULL DEFAULT 'default' AFTER css");
+        "ADD skin VARCHAR(63) NOT NULL DEFAULT 'default' AFTER css");
 }
 
 safe_drop_index('txp_css', 'name');
-safe_create_index('txp_css', 'name(200), skin(50)', 'name_skin', 'unique');
+safe_create_index('txp_css', 'name(187), skin(63)', 'name_skin', 'unique');
 
 // ... and Sections...
 $cols = getThings('describe `'.PFX.'txp_section`');
 
 if (!in_array('skin', $cols)) {
     safe_alter('txp_section',
-        "ADD skin VARCHAR(255) NOT NULL DEFAULT 'default' AFTER name");
+        "ADD skin VARCHAR(63) NOT NULL DEFAULT 'default' AFTER name");
 }
 
 safe_drop_index('txp_section', 'primary');
-safe_create_index('txp_section', 'page(50), skin(50)', 'page_skin');
-safe_create_index('txp_section', 'css(50), skin(50)', 'css_skin');
+safe_create_index('txp_section', 'page(50), skin(63)', 'page_skin');
+safe_create_index('txp_section', 'css(50), skin(63)', 'css_skin');
 
 $exists = safe_row('name', 'txp_skin', "1=1");
 
