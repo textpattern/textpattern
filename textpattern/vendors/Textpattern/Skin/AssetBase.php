@@ -420,7 +420,7 @@ namespace Textpattern\Skin {
                     $passed = $failed = array();
 
                     foreach ($rows as $row) {
-                        if ($this->exportTemplate($row)) {
+                        if (preg_match('#^[a-z][a-z0-9_\-\.]{0,63}$#', $row['name']) && $this->exportTemplate($row)) {
                             $passed[] = $row['name'];
                         } else {
                             $failed[] = $row['name'];
