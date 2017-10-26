@@ -440,7 +440,7 @@ namespace Textpattern\Skin {
         ) {
             $this->copy = $name;
 
-            if (!self::isInstalled($name) && $this->copyIndexIsSafe()) {
+            if (!self::isInstalled($name)) {
                 $title ?: $title = $name;
 
                 if ($this->copy) {
@@ -482,26 +482,6 @@ namespace Textpattern\Skin {
                     gtxt('skin_already_exists', array('{name}' => $this->copy))
                 );
             }
-        }
-
-        /**
-         * Whether a skin copy name is safe to use in the name_skin index.
-         *
-         * @throws \Exception
-         * @return bool true
-         */
-
-        private function copyIndexIsSafe()
-        {
-            $index = substr($this->copy, 0, 50);
-
-            foreach (Main::getInstalled() as $name => $title) {
-                if (substr($name, 0, 50) === $index) {
-                    throw new \Exception('unsafe_skin_index');
-                }
-            }
-
-            return true;
         }
 
         /**
