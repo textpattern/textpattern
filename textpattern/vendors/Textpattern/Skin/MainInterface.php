@@ -37,6 +37,7 @@ namespace Textpattern\Skin {
         /**
          * Creates a skin and its assets.
          *
+         * @param string $name        The skin name;
          * @param string $title       The skin title;
          * @param string $version     The skin version;
          * @param string $description The skin description;
@@ -47,6 +48,7 @@ namespace Textpattern\Skin {
          */
 
         public function create(
+            $name,
             $title = null,
             $version = null,
             $description = null,
@@ -99,7 +101,7 @@ namespace Textpattern\Skin {
          */
 
         public function duplicate_as(
-            $name = null,
+            $name,
             $title = null,
             $version = null,
             $description = null,

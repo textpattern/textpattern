@@ -460,8 +460,14 @@ function skin_save()
         $author ?: $author = substr(cs('txp_login_public'), 10);
         $version ?: $version = '0.0.1';
 
-        $result = Txp::get('\Textpattern\Skin\Main', strtolower(sanitizeForUrl($name)))
-            ->create($title, $version, $description, $author, $author_uri);
+        $result = Txp::get('\Textpattern\Skin\Main')->create(
+            strtolower(sanitizeForUrl($name)),
+            $title,
+            $version,
+            $description,
+            $author,
+            $author_uri
+        );
     }
 
     skin_list($result);

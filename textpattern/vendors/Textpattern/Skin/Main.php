@@ -46,9 +46,11 @@ namespace Textpattern\Skin {
          * @param mixed $skins  Skin(s) names.
          */
 
-        public function __construct($skins)
+        public function __construct($skins = null)
         {
-            $this->skins = is_array($skins) ? $skins : array($skins);
+            if ($skins) {
+                $this->skins = is_array($skins) ? $skins : array($skins);
+            }
         }
 
         /**
@@ -56,6 +58,7 @@ namespace Textpattern\Skin {
          */
 
         public function create(
+            $name,
             $title = null,
             $version = null,
             $description = null,
@@ -63,6 +66,8 @@ namespace Textpattern\Skin {
             $author_uri = null,
             $assets = null
         ) {
+            $this->skins = array($name);
+
             return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }
 

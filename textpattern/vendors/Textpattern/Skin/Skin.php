@@ -107,6 +107,7 @@ namespace Textpattern\Skin {
          */
 
         public function create(
+            $name,
             $title = null,
             $version = null,
             $description = null,
@@ -114,6 +115,8 @@ namespace Textpattern\Skin {
             $author_uri = null,
             $assets = null
         ) {
+            $this->skin = $name;
+
             if (!$this->skinIsInstalled()) {
                 $callback_extra = array(
                     'skin'   => $this->skin,
@@ -122,7 +125,7 @@ namespace Textpattern\Skin {
 
                 callback_event('skin', 'creation', 0, $callback_extra);
 
-                if ($this->upsertSkin($this->skin, $title, $version, $description, $author, $author_uri)) {
+                if ($this->upsertSkin($name, $title, $version, $description, $author, $author_uri)) {
                     $this->isInstalled = true;
 
                     $assets = $this->parseAssets($assets);
@@ -425,7 +428,7 @@ namespace Textpattern\Skin {
          */
 
         public function duplicate_as(
-            $name = null,
+            $name,
             $title = null,
             $version = null,
             $description = null,
