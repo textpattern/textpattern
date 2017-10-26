@@ -89,7 +89,7 @@ namespace Textpattern\Skin {
         {
             if ($assets === null) {
                 $assets = static::$assets;
-            } else {
+            } elseif ($assets) {
                 if (!is_array($assets)) {
                     $assets = array($assets);
                 }
