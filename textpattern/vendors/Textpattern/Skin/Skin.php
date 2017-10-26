@@ -118,6 +118,8 @@ namespace Textpattern\Skin {
             $this->skin = $name;
 
             if (!$this->skinIsInstalled()) {
+                $title ?: $title = $name;
+
                 $callback_extra = array(
                     'skin'   => $this->skin,
                     'assets' => $assets,
@@ -439,6 +441,8 @@ namespace Textpattern\Skin {
             $this->copy = $name;
 
             if (!self::isInstalled($name) && $this->copyIndexIsSafe()) {
+                $title ?: $title = $name;
+
                 if ($this->copy) {
                     $callback_extra = array(
                         'skin'   => $this->skin,
