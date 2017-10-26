@@ -269,7 +269,7 @@ namespace Textpattern\Skin {
                 foreach ($skins as $skin) {
                     $name = basename($skin->getPath());
 
-                    if ($name === strtolower(sanitizeForUrl($name))) {
+                    if (preg_match('#^[a-z][a-z0-9_\-\.]{0,63}$#', $name)) {
                         $infos = $skin->getTemplateJSONContents();
                         static::$directories[$name] = $infos['title'];
                     }
