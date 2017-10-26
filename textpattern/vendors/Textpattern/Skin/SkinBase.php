@@ -204,10 +204,7 @@ namespace Textpattern\Skin {
             }
 
             throw new \Exception(
-                gtxt(
-                    'directory_creation_failure',
-                    array('{name}' => basename($path))
-                )
+                gtxt('directory_creation_failure', array('{name}' => basename($path)))
             );
         }
 
@@ -240,10 +237,7 @@ namespace Textpattern\Skin {
             }
 
             throw new \Exception(
-                gtxt(
-                    'directory_deletion_failure',
-                    array('{name}' => basename($path))
-                )
+                gtxt('directory_deletion_failure', array('{name}' => basename($path)))
             );
         }
 

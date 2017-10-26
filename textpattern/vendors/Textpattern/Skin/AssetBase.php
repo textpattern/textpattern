@@ -523,15 +523,12 @@ namespace Textpattern\Skin {
             $templates,
             $message = 'skin_step_failure_for_templates'
         ) {
-            return gtxt(
-                $message,
-                array(
-                    '{skin}'      => $this->skin,
-                    '{asset}'     => static::$dir,
-                    '{step}'      => $process,
-                    '{templates}' => implode(', ', $templates),
-                )
-            );
+            return gtxt($message, array(
+                '{skin}'      => $this->skin,
+                '{asset}'     => static::$dir,
+                '{step}'      => $process,
+                '{templates}' => implode(', ', $templates),
+            ));
         }
     }
 }

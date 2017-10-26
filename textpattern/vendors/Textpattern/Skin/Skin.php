@@ -139,13 +139,10 @@ namespace Textpattern\Skin {
                     callback_event('skin', 'creation_failed', 0, $callback_extra);
 
                     throw new \Exception(
-                        gtxt(
-                            'skin_step_failure',
-                            array(
-                                '{skin}' => $this->skin,
-                                '{step}' => 'import',
-                            )
-                        )
+                        gtxt('skin_step_failure', array(
+                            '{skin}' => $this->skin,
+                            '{step}' => 'import',
+                        ))
                     );
                 }
             } else {
@@ -203,13 +200,10 @@ namespace Textpattern\Skin {
                         callback_event('skin', 'edit_failed', 0, $callback_extra);
 
                         throw new \Exception(
-                            gtxt(
-                                'skin_step_failure',
-                                array(
-                                    '{skin}' => $this->skin,
-                                    '{step}' => 'edit',
-                                )
-                            )
+                            gtxt('skin_step_failure', array(
+                                '{skin}' => $this->skin,
+                                '{step}' => 'edit',
+                            ))
                         );
                     }
                 } else {
@@ -283,13 +277,10 @@ namespace Textpattern\Skin {
                         callback_event('skin', 'import_failed', 0, $callback_extra);
 
                         throw new \Exception(
-                            gtxt(
-                                'skin_step_failure',
-                                array(
-                                    '{skin}' => $this->skin,
-                                    '{step}' => 'import',
-                                )
-                            )
+                            gtxt('skin_step_failure', array(
+                                '{skin}' => $this->skin,
+                                '{step}' => 'import',
+                            ))
                         );
                     }
                 }
@@ -388,13 +379,10 @@ namespace Textpattern\Skin {
                         callback_event('skin', 'update_failed', 0, $callback_extra);
 
                         throw new \Exception(
-                            gtxt(
-                                'skin_step_failure',
-                                array(
-                                    '{skin}' => $this->skin,
-                                    '{step}' => 'update',
-                                )
-                            )
+                            gtxt('skin_step_failure', array(
+                                '{skin}' => $this->skin,
+                                '{step}' => 'update',
+                            ))
                         );
                     }
                 } else {
@@ -463,13 +451,10 @@ namespace Textpattern\Skin {
                         callback_event('skin', 'duplication_failed', 0, $callback_extra);
 
                         throw new \Exception(
-                            gtxt(
-                                'skin_step_failure',
-                                array(
-                                    '{skin}' => $this->skin,
-                                    '{step}' => 'duplication',
-                                )
-                            )
+                            gtxt('skin_step_failure', array(
+                                '{skin}' => $this->skin,
+                                '{step}' => 'duplication',
+                            ))
                         );
                     }
                 } else {
@@ -567,13 +552,10 @@ namespace Textpattern\Skin {
                         callback_event('skin', 'export_failed', 0, $callback_extra);
 
                         throw new \Exception(
-                            gtxt(
-                                'skin_step_failure',
-                                array(
-                                    '{skin}' => $this->skin,
-                                    '{step}' => 'export',
-                                )
-                            )
+                            gtxt('skin_step_failure', array(
+                                '{skin}' => $this->skin,
+                                '{step}' => 'export',
+                            ))
                         );
                     }
                 }
@@ -706,23 +688,17 @@ namespace Textpattern\Skin {
                 );
             } elseif ($this->isInUse()) {
                 throw new \Exception(
-                    gtxt(
-                        'skin_delete_failure',
-                        array(
-                            '{name}' => $this->skin,
-                            '{clue}' => 'skin in use.',
-                        )
-                    )
+                    gtxt('skin_delete_failure', array(
+                        '{name}' => $this->skin,
+                        '{clue}' => 'skin in use.',
+                    ))
                 );
             } elseif (count(Main::getInstalled()) < 1) {
                 throw new \Exception(
-                    gtxt(
-                        'skin_delete_failure',
-                        array(
-                            '{name}' => $this->skin,
-                            '{clue}' => 'last skin.',
-                        )
-                    )
+                    gtxt('skin_delete_failure', array(
+                        '{name}' => $this->skin,
+                        '{clue}' => 'last skin.',
+                    ))
                 );
             } else {
                 $callback_extra = array(
@@ -738,13 +714,10 @@ namespace Textpattern\Skin {
 
                 if ($this->hasAssets()) {
                     throw new \Exception(
-                        gtxt(
-                            'skin_delete_failure',
-                            array(
-                                '{name}' => $this->skin,
-                                '{clue}' => 'still contains assets.',
-                            )
-                        )
+                        gtxt('skin_delete_failure', array(
+                            '{name}' => $this->skin,
+                            '{clue}' => 'still contains assets.',
+                        ))
                     );
                 } elseif ($this->deleteSkin()) {
                     static::$installed = array_diff_key(
@@ -759,13 +732,10 @@ namespace Textpattern\Skin {
                     callback_event('skin', 'deletion_failed', 0, $callback_extra);
 
                     throw new \Exception(
-                        gtxt(
-                            'skin_step_failure',
-                            array(
-                                '{skin}' => $this->skin,
-                                '{step}' => 'deletion',
-                            )
-                        )
+                        gtxt('skin_step_failure', array(
+                            '{skin}' => $this->skin,
+                            '{step}' => 'deletion',
+                        ))
                     );
                 }
             }
