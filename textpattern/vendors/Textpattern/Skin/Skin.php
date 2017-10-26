@@ -472,7 +472,7 @@ namespace Textpattern\Skin {
                 }
             } else {
                 throw new \Exception(
-                    gtxt('skin_already_exists', array('{name}' => $this->skin))
+                    gtxt('skin_already_exists', array('{name}' => $this->copy))
                 );
             }
         }
