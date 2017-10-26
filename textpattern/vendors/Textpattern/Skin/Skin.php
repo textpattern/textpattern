@@ -426,22 +426,21 @@ namespace Textpattern\Skin {
             $author_uri = null,
             $assets = null
         ) {
-            $this->copy = $name;
-
             if (!self::isInstalled($name)) {
+                $this->copy = $name;
                 $title ?: $title = $name;
 
                 if ($this->copy) {
                     $callback_extra = array(
                         'skin'   => $this->skin,
-                        'copy'   => $this->copy,
+                        'copy'   => $name,
                         'assets' => $assets,
                     );
 
                     callback_event('skin', 'duplication', 0, $callback_extra);
 
                     if ($this->duplicateSkin($name, $title, $version, $description, $author, $author_uri)) {
-                        static::$installed[$this->copy] = $this->copy;
+                        static::$installed[$name] = $name;
                         $assets = $this->parseAssets($assets);
 
                         $assets ? $this->callAssetsMethod($assets, 'duplicate') : '';
@@ -464,7 +463,7 @@ namespace Textpattern\Skin {
                 }
             } else {
                 throw new \Exception(
-                    gtxt('skin_already_exists', array('{name}' => $this->copy))
+                    gtxt('skin_already_exists', array('{name}' => $name))
                 );
             }
         }
@@ -531,7 +530,6 @@ namespace Textpattern\Skin {
             if ($row) {
                 $callback_extra = array(
                     'skin'   => $this->skin,
-                    'copy'   => $this->copy,
                     'assets' => $assets,
                 );
 
@@ -579,7 +577,7 @@ namespace Textpattern\Skin {
 
             $contents = $this->isWritable(static::$file) ? $this->getJSONInfos() : array();
 
-            $contents['title'] = $this->copy ? $this->copy : ($title ? $title : $name);
+            $contents['title'] = $title ? $title : $name;
             $contents['txp-type'] = 'textpattern-theme';
             $version ? $contents['version'] = $version : '';
             $description ? $contents['description'] = $description : '';
