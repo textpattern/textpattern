@@ -79,6 +79,15 @@ namespace Textpattern\Skin {
         /**
          * Duplicates a skin and its assets.
          *
+         * @param mixed $assets The skin assets to duplicate.
+         * @throws \Exception
+         */
+
+        public function duplicate($assets = null);
+
+        /**
+         * Duplicates a skin and its assets from new skin data.
+         *
          * @param string $name        The skin copy name;
          * @param string $title       The skin copy title;
          * @param string $version     The skin copy version;
@@ -89,7 +98,7 @@ namespace Textpattern\Skin {
          * @throws \Exception
          */
 
-        public function duplicate(
+        public function duplicate_as(
             $name = null,
             $title = null,
             $version = null,

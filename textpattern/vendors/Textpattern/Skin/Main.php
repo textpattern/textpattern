@@ -85,7 +85,16 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function duplicate(
+        public function duplicate($assets = null)
+        {
+            return $this->callSkinsMethod(__FUNCTION__, func_get_args());
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+
+        public function duplicate_as(
             $name = null,
             $title = null,
             $version = null,

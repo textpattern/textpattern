@@ -408,7 +408,23 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function duplicate(
+        public function duplicate($assets = null)
+        {
+            $row = $this->getRow();
+
+            extract($row);
+
+            $name .= '_copy';
+            $title .= ' (copy)';
+
+            $this->duplicate_as($name, $title, $version, $description, $author, $author_uri, $assets);
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+
+        public function duplicate_as(
             $name = null,
             $title = null,
             $version = null,
@@ -417,15 +433,6 @@ namespace Textpattern\Skin {
             $author_uri = null,
             $assets = null
         ) {
-            if (!$name) {
-                $row = $this->getRow();
-
-                extract($row);
-
-                $name .= '_copy';
-                $title .= ' (copy)';
-            }
-
             $this->copy = $name;
 
             if (!self::isInstalled($name) && $this->copyIndexIsSafe()) {
@@ -442,7 +449,7 @@ namespace Textpattern\Skin {
                         static::$installed[$this->copy] = $this->copy;
                         $assets = $this->parseAssets($assets);
 
-                        $assets ? $this->callAssetsMethod($assets, __FUNCTION__) : '';
+                        $assets ? $this->callAssetsMethod($assets, 'duplicate') : '';
 
                         callback_event('skin', 'duplicated', 0, $callback_extra);
                     } else {
