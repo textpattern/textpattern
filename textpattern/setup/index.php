@@ -962,7 +962,7 @@ function get_public_themes_list()
                     $key = $mm[2].'-'.md5($file);
                     $public_themes[$key] = $manifest;
                     $public_themes[$key]['themedir'] = $mm[1];
-                    $out[$key] = empty($manifest['name']) ? $mm[2] : $manifest['name']." (".$manifest['version'] .') '.str_replace(txpath, '', $mm[1]);
+                    $out[$key] = empty($manifest['title']) ? $mm[2] : $manifest['title']." (".$manifest['version'] .') '.str_replace(txpath, '', $mm[1]);
                 }
             }
         }
