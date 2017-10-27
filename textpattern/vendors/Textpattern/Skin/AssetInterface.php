@@ -126,7 +126,7 @@ namespace Textpattern\Skin {
          * @throws \Exception
          */
 
-        public function duplicate($templates = null);
+        public function duplicate($to, $templates = null);
 
         /**
          * Get skin asset related templates rows.

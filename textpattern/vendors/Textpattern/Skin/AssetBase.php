@@ -335,9 +335,9 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function duplicate($templates = null)
+        public function duplicate($to, $templates = null)
         {
-            if ($this->skinIsInstalled(true)) {
+            if (Skin::isInstalled($to)) {
                 $rows = $this->getTemplateRows($templates);
 
                 if ($rows) {
@@ -345,7 +345,7 @@ namespace Textpattern\Skin {
 
                     foreach ($rows as $row) {
                         $templates[] = $row['name'];
-                        $row['skin'] = strtolower(sanitizeForUrl($this->copy));
+                        $row['skin'] = strtolower(sanitizeForUrl($to));
                         isset($sql_fields) ?: $sql_fields = array_keys($row);
                         $sql_values[] = "('".implode("', '", array_map('doSlash', $row))."')";
                     }

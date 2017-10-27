@@ -49,7 +49,7 @@ namespace Textpattern\Skin {
          * @return bool
          */
 
-        public function skinIsInstalled($copy = false);
+        public function skinIsInstalled();
 
         /**
          * Pseudo locks the skin directory by adding a 'lock' directory

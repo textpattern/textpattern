@@ -427,10 +427,9 @@ namespace Textpattern\Skin {
             $assets = null
         ) {
             if (!self::isInstalled($name)) {
-                $this->copy = $name;
                 $title ?: $title = $name;
 
-                if ($this->copy) {
+                if ($this->skinIsInstalled()) {
                     $callback_extra = array(
                         'skin'   => $this->skin,
                         'copy'   => $name,
@@ -443,7 +442,7 @@ namespace Textpattern\Skin {
                         static::$installed[$name] = $name;
                         $assets = $this->parseAssets($assets);
 
-                        $assets ? $this->callAssetsMethod($assets, 'duplicate') : '';
+                        $assets ? $this->callAssetsMethod($assets, 'duplicate', $name) : '';
 
                         callback_event('skin', 'duplicated', 0, $callback_extra);
                     } else {
@@ -843,7 +842,6 @@ namespace Textpattern\Skin {
             foreach ($assets as $asset => $templates) {
                 try {
                     $instance = \Txp::get('Textpattern\Skin\\'.ucfirst($asset), $this->skin);
-                    $instance->copy = $this->copy;
                     $instance->locked = $this->locked;
 
                     if ($extra) {
@@ -867,7 +865,6 @@ namespace Textpattern\Skin {
 
                 foreach ($assets as $asset => $templates) {
                     $instance = \Txp::get('Textpattern\Skin\\'.ucfirst($asset), $this->skin);
-                    $instance->copy = $this->copy;
                     $instance->locked = $this->locked;
                 }
 

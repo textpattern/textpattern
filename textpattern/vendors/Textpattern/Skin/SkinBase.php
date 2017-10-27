@@ -70,14 +70,6 @@ namespace Textpattern\Skin {
         protected $locked = false;
 
         /**
-         * The skin copy name.
-         *
-         * @var string
-         */
-
-        protected $copy;
-
-        /**
          * Constructor.
          *
          * @param string $skin  The skin name (set the related property);
@@ -93,11 +85,11 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        final public function skinIsInstalled($copy = false)
+        final public function skinIsInstalled()
         {
             if ($this->skin) {
                 if ($this->isInstalled === null) {
-                    $name = strtolower(sanitizeForUrl($this->copy ? $this->copy : $this->skin));
+                    $name = strtolower(sanitizeForUrl($this->skin));
                     $this->isInstalled = self::isInstalled($name);
                 }
 
@@ -257,7 +249,7 @@ namespace Textpattern\Skin {
         public function getPath($path = null)
         {
             return self::getBasePath().'/'.
-                strtolower(sanitizeForUrl($this->copy ? $this->copy : $this->skin)).
+                strtolower(sanitizeForUrl($this->skin)).
                 ($path ? '/'.$path : '');
         }
     }
