@@ -1,6 +1,7 @@
 {
   "name": "textpattern",
   "title": "Textpattern CMS",
+  "version": "4.7.0-dev",
   "description": "Textpattern is a flexible, elegant and easy-to-use CMS.",
   "author": "Team Textpattern",
   "homepage": "https://textpattern.com/",
@@ -24,6 +25,7 @@
   "devDependencies": {
   },
   "scripts": {
+    "get-default-theme": "rm -rf textpattern/setup/themes/default/* && curl https://codeload.github.com/textpattern/textpattern-default-theme/tar.gz/master | tar xz --strip=3 --directory=textpattern/setup/themes/default textpattern-default-theme-master/dist/default_theme"
   },
   "license": "GPL-2.0"
 }
