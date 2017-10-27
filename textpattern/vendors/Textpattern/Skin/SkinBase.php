@@ -78,7 +78,7 @@ namespace Textpattern\Skin {
 
         public function __construct($skin = null)
         {
-            $skin ? $this->skin = strtolower(sanitizeForUrl($this->skin)) : '';
+            $skin ? $this->skin = strtolower(sanitizeForUrl($skin)) : '';
         }
 
         /**
