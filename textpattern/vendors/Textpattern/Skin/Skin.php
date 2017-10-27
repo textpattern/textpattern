@@ -389,7 +389,13 @@ namespace Textpattern\Skin {
             $name .= '_copy';
             $title .= ' (copy)';
 
-            $this->duplicate_as($name, $title, $version, $description, $author, $author_uri, $assets);
+            if (strlen($name) <= 63) {
+                $this->duplicate_as($name, $title, $version, $description, $author, $author_uri, $assets);
+            } else {
+                throw new \Exception(
+                    gtxt('skin_name_would_be_too_long', array('{name}' => $name))
+                );
+            }
         }
 
         /**
