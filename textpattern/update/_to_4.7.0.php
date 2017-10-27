@@ -74,7 +74,7 @@ if (!in_array('skin', $cols)) {
 }
 
 safe_drop_index('txp_page', 'primary');
-safe_create_index('txp_page', 'name(187), skin(63)', 'name_skin', 'unique');
+safe_create_index('txp_page', 'name(63), skin(63)', 'name_skin', 'unique');
 
 // ... Forms...
 $cols = getThings('describe `'.PFX.'txp_form`');
@@ -90,7 +90,7 @@ if (!in_array('skin', $cols)) {
 }
 
 safe_drop_index('txp_form', 'primary');
-safe_create_index('txp_form', 'name(187), skin(63)', 'name_skin', 'unique');
+safe_create_index('txp_form', 'name(63), skin(63)', 'name_skin', 'unique');
 
 // ... Stylesheets...
 $cols = getThings('describe `'.PFX.'txp_css`');
@@ -106,7 +106,7 @@ if (!in_array('skin', $cols)) {
 }
 
 safe_drop_index('txp_css', 'name');
-safe_create_index('txp_css', 'name(187), skin(63)', 'name_skin', 'unique');
+safe_create_index('txp_css', 'name(63), skin(63)', 'name_skin', 'unique');
 
 // ... and Sections...
 $cols = getThings('describe `'.PFX.'txp_section`');
