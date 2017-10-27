@@ -168,7 +168,7 @@ namespace Textpattern\Skin {
 
                     $results[$skin]['success'][] = gtxt(
                         'skin_step_success',
-                        array('{step}' => $method.$done)
+                        array('{step}' => ($method === 'duplicate_as' ? 'duplicated' : $method.$done))
                     );
                 } catch (\Exception $e) {
                     $results[$skin]['failure'][] = $e->getMessage();
