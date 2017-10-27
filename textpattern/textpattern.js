@@ -1745,6 +1745,8 @@ textpattern.Route.add('setup', function () {
     textpattern.passwordStrength({
         'gtxt_prefix': 'setup_'
     });
+    $('#setup_admin_theme').prop('required',true);
+    $('#setup_public_theme').prop('required',true);
 });
 
 // Login panel.
