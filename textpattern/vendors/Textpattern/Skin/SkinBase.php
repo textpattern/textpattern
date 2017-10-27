@@ -106,8 +106,6 @@ namespace Textpattern\Skin {
 
         public static function isInstalled($skin)
         {
-            $skin = strtolower(sanitizeForUrl($skin));
-
             if (static::$installed === null) {
                 return (bool) safe_field('name', 'txp_skin', "name ='".doSlash($skin)."'");
             } else {
