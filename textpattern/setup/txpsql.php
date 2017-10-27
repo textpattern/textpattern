@@ -73,6 +73,11 @@ if (@$public_themes[$public_theme]['txp-data'] == 'theme') {
     $datadir = txpath.DS.'setup';
 }
 
+//FIXME: We are doing nothing, waiting for the further development of branch `themes`.
+if (class_exists('\Textpattern\Skin\Main')) {
+    $datadir = '';
+}
+
 if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
     die("Textpattern database table already exists. Can't run setup.");
 }
@@ -130,10 +135,11 @@ if ($datadir) {
 
 $public_theme = preg_replace('/\-.*/', '', $public_theme);
 
+//FIXME: We are doing nothing, waiting for the further development of branch `themes`.
 //FIXME: Need add support /setup/themes dir for Skin->import() function
-if (class_exists('\Textpattern\Skin\Main') && !preg_match('%/setup/themes/%', $themedir)) {
-    Txp::get('\Textpattern\Skin\Main', array($public_theme => array()))->import();
-    safe_update('txp_section', 'skin = "'.doSlash($public_theme).'"', '1=1');
+if (class_exists('\Textpattern\Skin\Main') /*&& !preg_match('%/setup/themes/%', $themedir) */ ) {
+    //    Txp::get('\Textpattern\Skin\Main', array($public_theme => array()))->import();
+    //    safe_update('txp_section', 'skin = "'.doSlash($public_theme).'"', '1=1');
 } else {
 
     foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
