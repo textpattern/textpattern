@@ -78,7 +78,7 @@ namespace Textpattern\Skin {
 
         public function __construct($skin = null)
         {
-            $skin ? $this->skin = $skin : '';
+            $skin ? $this->skin = strtolower(sanitizeForUrl($this->skin)) : '';
         }
 
         /**
@@ -89,8 +89,7 @@ namespace Textpattern\Skin {
         {
             if ($this->skin) {
                 if ($this->isInstalled === null) {
-                    $name = strtolower(sanitizeForUrl($this->skin));
-                    $this->isInstalled = self::isInstalled($name);
+                    $this->isInstalled = self::isInstalled($this->skin);
                 }
 
                 return $this->isInstalled;
@@ -248,9 +247,7 @@ namespace Textpattern\Skin {
 
         public function getPath($path = null)
         {
-            return self::getBasePath().'/'.
-                strtolower(sanitizeForUrl($this->skin)).
-                ($path ? '/'.$path : '');
+            return self::getBasePath().'/'.$this->skin.($path ? '/'.$path : '');
         }
     }
 }

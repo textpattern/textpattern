@@ -58,7 +58,7 @@ namespace Textpattern\Skin {
 
             foreach ($templates as $name => $type) {
                 $sql[] = "("
-                  ."'".doSlash(strtolower(sanitizeForUrl($this->skin)))."', "
+                  ."'".doSlash($this->skin)."', "
                   ."'".doSlash($name)."', "
                   ."'".doSlash($type)."', "
                   ."''"

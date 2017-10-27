@@ -116,7 +116,7 @@ namespace Textpattern\Skin {
                 $sql_values = $this->getCreationSQLValues($templates);
 
                 $callback_extra = array(
-                    'skin'      => strtolower(sanitizeForUrl($this->skin)),
+                    'skin'      => $this->skin,
                     'templates' => $templates,
                 );
 
