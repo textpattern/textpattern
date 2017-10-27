@@ -127,7 +127,7 @@ namespace Textpattern\Skin {
 
                 callback_event('skin', 'creation', 0, $callback_extra);
 
-                if ($this->upsertSkin($name, $title, $version, $description, $author, $author_uri)) {
+                if ($this->doSkin('insert', $name, $title, $version, $description, $author, $author_uri)) {
                     $this->isInstalled = true;
 
                     $assets = $this->parseAssets($assets);
@@ -174,7 +174,7 @@ namespace Textpattern\Skin {
 
                     callback_event('skin', 'edit', 0, $callback_extra);
 
-                    if ($this->updateSkin($name, $title, $version, $description, $author, $author_uri)) {
+                    if ($this->doSkin('update', $name, $title, $version, $description, $author, $author_uri)) {
                         $path = $this->getPath();
 
                         if (file_exists($path)) {
@@ -219,33 +219,6 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Updates or update the skin row.
-         *
-         * @param string $name        The skin name;
-         * @param string $title       The skin title;
-         * @param string $version     The skin version;
-         * @param string $description The skin description;
-         * @param string $author      The skin author;
-         * @param string $author_uri  The skin author URL;
-         * @return bool
-         */
-
-        public function updateSkin($name, $title, $version, $description, $author, $author_uri)
-        {
-            return (bool) safe_update(
-                self::$table,
-                "name = '".doSlash($name)."',
-                 title = '".doSlash($title)."',
-                 version = '".doSlash($version)."',
-                 description = '".doSlash($description)."',
-                 author = '".doSlash($author)."',
-                 author_uri = '".doSlash($author_uri)."'
-                ",
-                "name = '".doSlash($this->skin)."'"
-            );
-        }
-
-        /**
          * {@inheritdoc}
          */
 
@@ -261,7 +234,7 @@ namespace Textpattern\Skin {
 
                     extract($this->getJSONInfos());
 
-                    if ($this->upsertSkin($this->skin, $title, $version, $description, $author, $author_uri)) {
+                    if ($this->doSkin('insert', $this->skin, $title, $version, $description, $author, $author_uri)) {
                         $this->isInstalled = true;
 
                         $assets = $this->parseAssets($assets);
@@ -323,9 +296,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Insert or update the skin row.
+         * Inserts or updates a skin row.
          *
-         * @param string $name        The skin name;
+         * @param string $method      'insert'|'update';
+         * @param string $name        The URL safe skin name;
          * @param string $title       The skin title;
          * @param string $version     The skin version;
          * @param string $description The skin description;
@@ -334,18 +308,23 @@ namespace Textpattern\Skin {
          * @return bool
          */
 
-        public function upsertSkin($name, $title, $version, $description, $author, $author_uri)
+        public function doSkin($method, $name, $title, $version, $description, $author, $author_uri)
         {
-            return (bool) safe_upsert(
-                self::$table,
-                "title = '".doSlash($title)."',
-                 version = '".doSlash($version)."',
-                 description = '".doSlash($description)."',
-                 author = '".doSlash($author)."',
-                 author_uri = '".doSlash($author_uri)."'
-                ",
-                "name = '".doSlash($name)."'"
-            );
+            $set = "name = '".doSlash($name)."',
+                    title = '".doSlash($title)."',
+                    version = '".doSlash($version)."',
+                    description = '".doSlash($description)."',
+                    author = '".doSlash($author)."',
+                    author_uri = '".doSlash($author_uri)."'
+                   ";
+
+            if ($method === 'update') {
+                $out = safe_update(self::$table, $set, "name = '".doSlash($this->skin)."'");
+            } else {
+                $out = safe_insert(self::$table, $set);
+            }
+
+            return (bool) $out;
         }
 
         /**
@@ -365,7 +344,7 @@ namespace Textpattern\Skin {
 
                     extract($this->getJSONInfos());
 
-                    if ($this->upsertSkin($this->skin, $title, $description, $version, $author, $author_uri)) {
+                    if ($this->doSkin('update', $this->skin, $title, $description, $version, $author, $author_uri)) {
                         $assets = $this->parseAssets($assets);
 
                         $assets ? $this->callAssetsMethod($assets, __FUNCTION__, $clean) : '';
