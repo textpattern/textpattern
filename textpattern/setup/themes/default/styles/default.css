@@ -214,7 +214,7 @@ nav ol::after,
     text-decoration: none;
   }
   .site-navigation a:active {
-    color: #1a1919;
+    color: #1a1a1a;
     text-decoration: none;
   }
   /**
@@ -1138,7 +1138,7 @@ nav ol::after,
     background-image: -webkit-gradient(linear, left top, left bottom, from(#e6e6e6), to(#d6d6d6));
     background-image: linear-gradient(#e6e6e6, #d6d6d6);
     border-color: #aaaaaa;
-    color: #1a1919;
+    color: #1a1a1a;
     text-decoration: none;
     -webkit-box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
             box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
