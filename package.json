@@ -23,8 +23,10 @@
     "url": "https://github.com/textpattern/textpattern/issues"
   },
   "devDependencies": {
+    "phplint": "1.7.4"
   },
   "scripts": {
+    "phplint": "phplint '**/*.php' '!node_modules/**'",
     "get-classic-admin-theme": "rm -rf textpattern/admin-themes/classic/* && curl https://codeload.github.com/philwareham/textpattern-classic-admin-theme/tar.gz/master | tar xz --strip=3 --directory=textpattern/admin-themes/classic textpattern-classic-admin-theme-master/dist/classic",
     "get-hive-admin-theme": "rm -rf textpattern/admin-themes/hive* && curl https://codeload.github.com/philwareham/textpattern-hive-admin-theme/tar.gz/master | tar xz --strip=2 --directory=textpattern/admin-themes textpattern-hive-admin-theme-master/dist",
     "get-default-theme": "rm -rf textpattern/setup/themes/default/* && curl https://codeload.github.com/textpattern/textpattern-default-theme/tar.gz/master | tar xz --strip=3 --directory=textpattern/setup/themes/default textpattern-default-theme-master/dist/default_theme"
