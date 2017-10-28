@@ -6889,6 +6889,9 @@ function get_files_content($dir, $ext)
 
 function get_prefs_theme()
 {
+    //FIXME: After merge 'themes' branch
+
+    return array();
     $out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true);
     if (empty($out)) {
         return array();

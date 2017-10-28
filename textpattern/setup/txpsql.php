@@ -55,8 +55,28 @@ $siteurl = str_replace(' ', '%20', $siteurl);
 $theme_name = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
 
 get_public_themes_list();
-$setupdir = txpath.DS.'setup';
-$public_theme = empty($public_themes[$_SESSION['public_theme']]['themedir']) ? 'setup' : $_SESSION['public_theme'];
+$public_theme = empty($public_themes[$_SESSION['public_theme']]['themedir']) ? current(array_keys($public_themes)) : $_SESSION['public_theme'];
+
+$themedir = $public_themes[$public_theme]['themedir'];
+
+/*  Option 'txp-data' in manifest.json:
+    <default>           - Import /articles and /data from setup dir
+    txp-data == 'theme' - Import /articles and /data from theme dir
+    txp-data == 'none'  - Nothing to import.
+*/
+
+if (@$public_themes[$public_theme]['txp-data'] == 'theme') {
+    $datadir = $themedir;
+} elseif (@$public_themes[$public_theme]['txp-data'] == 'none') {
+    $datadir = '';
+} else {
+    $datadir = txpath.DS.'setup';
+}
+
+//FIXME: We are doing nothing, waiting for the further development of branch `themes`.
+if (class_exists('\Textpattern\Skin\Main')) {
+    $datadir = '';
+}
 
 if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
     die("Textpattern database table already exists. Can't run setup.");
@@ -81,43 +101,45 @@ $txp_user = $_SESSION['name'];
 
 create_user($txp_user, $_SESSION['email'], $_SESSION['pass'], $_SESSION['realname'], 1);
 
-
-/*  Load theme prefs:
-        /data/core.prefs    - Allow override some core prefs. Used only in setup theme.
-        /data/theme.prefs   - Theme global and private prefs.
-                                global  - Used in setup and for AutoCreate missing prefs.
-                                private - Will be created after user login
-*/
-foreach (get_files_content($setupdir.'/data', 'prefs') as $key=>$data) {
-    if ($out = @json_decode($data, true)) {
-        foreach ($out as $name => $p) {
-            if (empty($p['private'])) {
-                @set_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
+if ($datadir) {
+    /*  Load theme prefs:
+            /data/core.prefs    - Allow override some core prefs. Used only in setup theme.
+            /data/theme.prefs   - Theme global and private prefs.
+                                    global  - Used in setup and for AutoCreate missing prefs.
+                                    private - Will be created after user login
+    */
+    foreach (get_files_content($datadir.'/data', 'prefs') as $key=>$data) {
+        if ($out = @json_decode($data, true)) {
+            foreach ($out as $name => $p) {
+                if (empty($p['private'])) {
+                    @set_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
+                }
             }
         }
     }
+
+
+    $import = new \Textpattern\Import\TxpXML();
+
+    foreach (get_files_content($datadir.'/data', 'xml') as $key=>$data) {
+        $import->importXml($data);
+    }
+
+    foreach (get_files_content($datadir.'/articles', 'xml') as $key=>$data) {
+        $import->importXml($data);
+    }
 }
-
-
-$import = new \Textpattern\Import\TxpXML();
-
-foreach (get_files_content($setupdir.'/data', 'xml') as $key=>$data) {
-    $import->importXml($data);
-}
-
-foreach (get_files_content($setupdir.'/articles', 'xml') as $key=>$data) {
-    $import->importXml($data);
-}
-
 
 // --- Theme setup.
-// Load theme /data, /styles, /forms, /pages
+// Load theme /styles, /forms, /pages
+
+$public_theme = preg_replace('/\-.*/', '', $public_theme);
 
 if (class_exists('\Textpattern\Skin\Main') && $public_theme != 'setup') {
     Txp::get('\Textpattern\Skin\Main', $public_theme)->import();
     safe_update('txp_section', 'skin = "'.doSlash($public_theme).'"', '1=1');
+
 } else {
-    $themedir = $public_themes[$public_theme]['themedir'];
 
     foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
         safe_query("INSERT INTO `".PFX."txp_css`(name, css) VALUES('".doSlash($key)."', '".doSlash($data)."')");

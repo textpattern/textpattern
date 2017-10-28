@@ -1745,6 +1745,8 @@ textpattern.Route.add('setup', function () {
     textpattern.passwordStrength({
         'gtxt_prefix': 'setup_'
     });
+    $('#setup_admin_theme').prop('required',true);
+    $('#setup_public_theme').prop('required',true);
 });
 
 // Login panel.
@@ -1971,6 +1973,22 @@ textpattern.Route.add('plugin', function () {
     textpattern.Relay.register('txpAsyncHref.success', function (event, data) {
         $(data['this']).closest('tr').toggleClass('active');
     });
+});
+
+// Diag panel.
+
+textpattern.Route.add('diag', function () {
+    $('#diag_clear_private').change(function () {
+        var diag_data = $('#diagnostics-data').val();
+        if ($('#diag_clear_private').is(":checked")) {
+            var regex = new RegExp($('#diagnostics-data').attr("data-txproot"), "g");
+            diag_data = diag_data.replace(/^===.*\s/gm, '').replace(regex, '__TXP-ROOT');
+        } else {
+            diag_data = diag_data.replace(/^=== +/gm, '');
+        }
+        $('#diagnostics-detail').val(diag_data);
+    });
+    $('#diag_clear_private').change();
 });
 
 // Images edit panel.

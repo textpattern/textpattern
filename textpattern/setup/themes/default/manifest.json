@@ -1,6 +1,6 @@
 {
   "title": "Default theme",
-  "txp-type":"textpattern-theme",
+  "txp-type": "textpattern-theme",
   "version": "4.7.0-dev",
   "description": "The default theme that ships as standard with Textpattern CMS.",
   "author": "Team Textpattern",
