@@ -62,6 +62,7 @@ $vars = array(
     'AnnotateInvite',
     'publish_now',
     'reset_time',
+    'expire_now',
     'AuthorID',
     'sPosted',
     'LastModID',
@@ -233,7 +234,10 @@ function article_save()
     }
 
     // Set and validate expiry timestamp.
-    if (empty($exp_year)) {
+    if ($expire_now) {
+        $ts = time();
+        $expires = $ts - tz_offset($ts);
+    } elseif (empty($exp_year)) {
         $expires = 0;
     } else {
         if (empty($exp_month)) {
@@ -981,6 +985,11 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     'expire_time',
                     array('', 'instructions_expire_time'),
                     array('class' => 'txp-form-field time expires')
+                ).
+                n.tag(
+                    checkbox('expire_now', '1', false, '', 'expire_now').
+                    n.tag(gTxt('expire_now'), 'label', array('for' => 'expire_now')),
+                    'div', array('class' => 'expire-now')
                 ),
                 $rs
             );
@@ -2060,6 +2069,11 @@ function article_partial_expires($rs)
             'expire_time',
             array('', 'instructions_expire_time'),
             array('class' => 'txp-form-field time expires')
+        ).
+        n.tag(
+            checkbox('expire_now', '1', $expire_now, '', 'expire_now').
+            n.tag(gTxt('expire_now'), 'label', array('for' => 'expire_now')),
+            'div', array('class' => 'expire-now')
         ).
         hInput('sExpires', $sExpires);
 
