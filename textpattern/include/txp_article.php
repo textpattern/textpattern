@@ -918,7 +918,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 $persist_timestamp = time();
             }
 
-            $posted_block = pluggable_ui(
+            $posted_block = tag(pluggable_ui(
                 'article_ui',
                 'timestamp',
                 inputLabel(
@@ -949,7 +949,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     'div', array('class' => 'posted-now')
                 ),
                 array('sPosted' => $persist_timestamp) + $rs
-            );
+            ), 'div', array('id' => 'publish-datetime-group'));
 
             // Expires.
             if (!empty($store_out['exp_year'])) {
@@ -961,7 +961,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 $persist_timestamp = 0;
             }
 
-            $expires_block = pluggable_ui(
+            $expires_block = tag(pluggable_ui(
                 'article_ui',
                 'expires',
                 inputLabel(
@@ -992,7 +992,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     'div', array('class' => 'expire-now')
                 ),
                 $rs
-            );
+            ), 'div', array('id' => 'expires-datetime-group'));
         } else {
             // Timestamp.
             $posted_block = $partials['posted']['html'];
