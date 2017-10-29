@@ -621,7 +621,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             return;
         }
 
-        $rs['reset_time'] = $rs['publish_now'] = false;
+        $rs['reset_time'] = $rs['publish_now'] = $rs['expire_now'] = false;
     } else {
         $pull = false; // Assume they came from post.
 
