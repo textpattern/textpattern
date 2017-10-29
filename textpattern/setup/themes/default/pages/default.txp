@@ -4,9 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>
-        <txp:page_title />
-    </title>
+    <title><txp:page_title /></title>
 
     <!-- Google font API -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic">
@@ -188,15 +186,8 @@
 
     <!-- footer -->
     <footer class="site-footer">
-        <p>
-            <small>
-                <txp:text item="published_with" />
-                <a rel="external nofollow" href="https://textpattern.com/" title="<txp:text item="go_txp_com" />">Textpattern CMS</a>
-            </small>
-        </p>
+        <p><small><txp:text item="published_with" /> <a rel="external" href="https://textpattern.com/" title="<txp:text item="go_txp_com" />">Textpattern CMS</a></small></p>
     </footer>
-
-    <!-- add your own JavaScript here -->
 
 </body>
 </html>
