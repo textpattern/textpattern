@@ -492,37 +492,6 @@ function deleteCookie(name)
 }
 
 /**
- * Gets element by class.
- *
- * See jQuery before trying to use this.
- *
- * @param  {string} classname The HTML class
- * @param  {object} node      The node, defaults to the document
- * @return {object} Matching nodes
- * @see    http://www.snook.ca/archives/javascript/your_favourite_1/
- */
-
-function getElementsByClass(classname, node)
-{
-    var a = [];
-    var re = new RegExp('(^|\\s)' + classname + '(\\s|$)');
-
-    if (node == null) {
-        node = document;
-    }
-
-    var els = node.getElementsByTagName("*");
-
-    for (var i = 0, j = els.length; i < j; i++) {
-        if (re.test(els[i].className)) {
-            a.push(els[i]);
-        }
-    }
-
-    return a;
-}
-
-/**
  * Toggles column's visibility and saves the state.
  *
  * @param  {string}  sel The column selector object
@@ -859,10 +828,14 @@ textpattern.Console =
      * @return textpattern.Console
      */
 
-    announce: function (event) {
+    announce: function (event, container) {
         var c = 0, message = []
         event = event || textpattern.event
-        if (!textpattern.Console.messages[event] || !textpattern.Console.messages[event].length) return this
+        container = container || '<span class="messageflash {paneClass}" role="alert" aria-live="assertive">{messages}<a class="close" role="button" title="{close}" aria-label="{close}" href="#close">&#215;</a></span>'
+
+        if (!textpattern.Console.messages[event] || !textpattern.Console.messages[event].length) {
+            return this
+        }
 
         textpattern.Console.messages[event].forEach (function(pair) {
             var iconClass = 'ui-icon ui-icon-'+(pair[1] != 1 && pair[1] != 2 ? 'check' : 'alert')
@@ -870,9 +843,8 @@ textpattern.Console =
             c += 2*(pair[1] == 1) + 1*(pair[1] == 2)
         })
 
-
         var paneClass = !c ? 'success' : (c == 2*textpattern.Console.messages[event].length ? 'error' : 'warning')
-        var span = '<span class="messageflash '+paneClass+'" role="alert" aria-live="assertive">'+message.join('<br />')+'<a class="close" role="button" title="'+textpattern.gTxt('close')+'" aria-label="'+textpattern.gTxt('close')+'" href="#close">&#215;</a></span>'
+        var span = textpattern.mustache(container, {messages: message.join('<br />'), paneClass: paneClass, close: textpattern.gTxt('close')})
         textpattern.Console.messages[event] = []
 
         $(document).ready(function() {
@@ -926,38 +898,34 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 }).register('updateList', function (event, data) {
     var list = data.list || '#txp-list-container',
         url = data.url || 'index.php',
-        callback = data.callback || function(event) {}
+        callback = data.callback || function(event) {},
+        handle = function(html) {
+            if (html) {
+                $html = $(html)
+                $.each(list.split(','), function(index, value) {
+                    $(value).replaceWith($html.find(value)).remove()
+                    $(value).trigger('updateList')
+                })
+
+                $html.remove()
+                callback(data.event)
+            }
+
+            if (data.event) textpattern.Console.announce(data.event)
+            else $('#messagepane').empty()
+        }
     
     if (typeof data.html == 'undefined') {
         $(list).addClass('disabled')
         $('<html />').load(url, data.data, function(responseText, textStatus, jqXHR) {
-            var $html = $(this)
-            $.each(list.split(','), function(index, value) {
-                $(value).replaceWith($html.find(value)).remove()
-                $(value).trigger('updateList')
-            })
-
-            $html.remove()
-            callback(data.event)
-
-            if (data.event) textpattern.Console.announce(data.event)
-            else $('#messagepane').empty()
+            handle(this)
         })
     } else {
         if (data.html) {
             $(list).addClass('disabled')
-            var $html = $(data.html)
-            $.each(list.split(','), function(index, value) {
-                $(value).replaceWith($html.find(value)).remove()
-                $(value).trigger('updateList')
-            })
-
-            $html.remove()
-            callback(data.event)
         }
 
-        if (data.event) textpattern.Console.announce(data.event)
-        else $('#messagepane').empty()
+        handle(data.html)
     }
 });
 
@@ -1507,6 +1475,24 @@ textpattern.encodeHTML = function (string) {
 /**
  * Translates given substrings.
  *
+ * @param  {string} string        The mustached string
+ * @param  {object} replacements  Translated substrings
+ * @return string   Translated string
+ * @since  4.7.0
+ * @example
+ * textpattern.mustache('{hello} world, and {bye|thanks}!', {hello: 'bye'});
+ */
+
+textpattern.mustache = function(string, replacements)
+{
+    return string.replace(/\{([^\{\|\}]+)(\|[^\{\}]*)?\}/g, function(match, p1, p2) {
+        return typeof replacements[p1] != 'undefined' ? replacements[p1] : (typeof p2 == 'undefined' ? match : p2.replace('|', ''))
+    })
+}
+
+/**
+ * Translates given substrings.
+ *
  * @param  {string} string       The string being translated
  * @param  {object} replacements Translated substrings
  * @return string   Translated string
@@ -1825,6 +1811,7 @@ function txp_expand_collapse_all(ev)
  *
  * @return {[type]} [description]
  */
+
 jQuery.fn.restorePanes = function () {
     var $this = $(this), stored = true;
     // Initialize dynamic WAI-ARIA attributes.
@@ -1861,6 +1848,47 @@ jQuery.fn.restorePanes = function () {
 
     return $this;
 }
+
+/**
+ * Manage upload preview.
+ *
+ * @since 4.7.0
+ */
+
+jQuery.fn.txpUploadPreview = function(template) {
+    var form = $(this), last = form.children(':last-child')
+    var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL
+
+    form.find('input[type="reset"]').on('click', function (e) {
+        last.nextAll().remove()
+    })
+
+    form.find('input[type="file"]').on('change', function (e) {
+        last.nextAll().remove()
+        
+        $(this.files).each(function (index) {
+            var preview = '', mime = this.type.split('/'), hash = typeof(md5) == 'function' ? md5(this.name) : index;
+
+            if (createObjectURL) {
+                switch (mime[0]) {
+                    case 'image':
+                          preview = '<img src="' + createObjectURL(this) + '" />'
+                        break
+                    case 'audio':
+                    case 'video':
+                          preview = '<'+mime[0]+' controls src="' + createObjectURL(this) + '" />'
+                        break
+                }
+            }
+
+            preview = textpattern.mustache(template, $.extend(this, {hash: hash, preview: preview, title: this.name.replace(/\.[^\.]*$/, '')}))
+            form.append(preview)
+        });
+    })
+
+    return this
+}
+
 
 /**
  * Cookie status.
@@ -1960,7 +1988,12 @@ textpattern.Route.add('article', function () {
 });
 
 // TEST FILEUPLOAD ONLY!!
-textpattern.Route.add('file', function () {
+textpattern.Route.add('file, image', function () {
+    $('input[type="file"]').on('dragover', function() {
+        $(this).css('outline', '1px solid lightgrey')
+    }).on('drop dragexit dragend', function() {
+        $(this).css('outline', 'none')
+    })
 
     if (!$('#txp-list-container').length) return
 
@@ -1982,44 +2015,7 @@ textpattern.Route.add('file', function () {
         textpattern.Relay.data.fileid = []
     })
 
-    var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL
-    var uploadContainer = $('<div class="upload-container" />').hide().append('<div class="upload-previews" />').append('<progress class="upload-progress" value="0" style="display:none;width:100%" />')
-    var form = $('form.upload-form')
-    form.append(uploadContainer)
-
-    form.find('input[type="reset"]').on('click', function (e) {
-        uploadContainer.hide().children('.upload-previews').empty()
-    })
-
-    form.find('input[type="file"][multiple]').on('change', function (e) {
-        uploadContainer.children('progress.upload-progress').hide().val(0)
-        var previews = uploadContainer.show().children('.upload-previews').empty();
-        
-        $(this.files).each(function (index) {
-            var name = this.name.replace(/\.[^\.]*$/, ''), mime = this.type.split('/'), hash = typeof(md5) == 'function' ? md5(this.name) : index;
-            var preview = $("<div class='upload-preview' style=' display:inline-block;position:relative;overflow:hidden;height:128px;width:128px;margin:2px;border:1px solid #cccccc;box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);' />")
-            preview.append($('<input name=title['+hash+'] style="position:absolute;bottom:0;z-index:100" />').val(name))
-
-            if (createObjectURL) {
-                switch (mime[0]) {
-                    case 'image':
-                          preview.append("<img src='" + createObjectURL(this) + "' />");
-                        break
-                    case 'audio':
-                    case 'video':
-                          preview.append("<"+mime[0]+" controls src='" + createObjectURL(this) + "' />");
-                        break
-                }
-            }
-
-            preview.append($('<span />').text(this.type+' ('+this.size+' B)'))
-            previews.append(preview)
-        });
-    }).on('dragover', function() {
-        $(this).css('outline', '1px solid lightgrey')
-    }).on('drop dragexit dragend', function() {
-        $(this).css('outline', 'none')
-    })
+    $('form.upload-form').txpUploadPreview("<div style=' display:inline-block;position:relative;overflow:hidden;height:128px;width:128px;margin:2px;border:1px solid #cccccc;'><input name='title[{hash}]' style='position:absolute;bottom:0;z-index:100' value='{title}' />{preview}<span >{type} ({size} B)</span></div>")
 
     if ($.fn.txpFileupload) {
         $('.upload-form.async').txpFileupload({maxChunkSize: 2000000, formData: [{name: "app_mode", value: "async"}]})

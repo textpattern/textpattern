@@ -873,13 +873,13 @@ function file_create()
 
 function file_insert()
 {
-    global $txp_user, $file_base_path, $file_max_upload_size, $tempdir, $app_mode;
+    global $txp_user, $file_base_path, $file_max_upload_size, $app_mode;
 
     require_privs('file.edit.own');
     $messages = $ids = array();
-    $files = file_refactor($_FILES['thefile']) or $files = array();
+    $fileshandler = Txp::get('Textpattern\Server\Files');
+    $files = $fileshandler->refactor($_FILES['thefile']);
     $titles = gps('title');
-    $tmpdir = $tempdir;//ini_get('upload_tmp_dir') or $tmpdir = sys_get_temp_dir();
 
     extract(array_map('assert_string', gpsa(array(
         'category',
@@ -888,40 +888,13 @@ function file_insert()
     ))));
 
     foreach ($files as $i => $file) {
+        $chunked = $fileshandler->dechunk($file);
         extract($file);
-
-        // Chuncked upload, anyone?
-        if (!empty($_SERVER['HTTP_CONTENT_RANGE']) && isset($_SERVER['CONTENT_LENGTH']) && is_numeric($_SERVER['CONTENT_LENGTH']) && preg_match('/\b(\d+)\-(\d+)\/(\d+)\b/', $_SERVER['HTTP_CONTENT_RANGE'], $match)) {
-            $tmpfile = build_file_path($tmpdir, md5($txp_user.':'.$name).'.part');
-
-            // Get the range of the file uploaded from the client
-            list($range, $begin, $end, $filesize) = $match;
-            
-            if (is_file($tmpfile) && filesize($tmpfile) == $begin) {
-                file_put_contents($tmpfile, fopen($tmp_name, 'r'), FILE_APPEND);
-                @unlink($tmp_name);
-
-                // Stop here if the file is not completely loaded
-                if ($end + 1 < $filesize) {
-                    exit;
-                } else {
-                    $tmp_name = $tmpfile;
-                    $size = filesize($tmp_name);
-                }
-            } elseif ($begin == 0) {
-                shift_uploaded_file($tmp_name, $tmpfile);
-                exit;
-            } else { // Chunk error, clean up
-                @unlink($tmpfile);
-                $size = 0;
-            }
-        }
-
         $newname = sanitizeForFile($name);
         $newpath = build_file_path($file_base_path, $newname);
 
-        if (!$size || $file_max_upload_size < $size && empty($tmpfile)) {
-            $messages[] = array(gTxt('file_upload_failed')." $newname - ".upload_get_errormsg(isset($tmpfile) ? UPLOAD_ERR_PARTIAL : UPLOAD_ERR_FORM_SIZE), E_ERROR);
+        if (!$size || !$chunked && $file_max_upload_size < $size) {
+            $messages[] = array(gTxt('file_upload_failed')." $newname - ".upload_get_errormsg($chunked ? UPLOAD_ERR_PARTIAL : UPLOAD_ERR_FORM_SIZE), E_ERROR);
         } elseif (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'")) {
             $hash = isset($titles[$i]) ? $i : md5($name);
             $title = isset($titles[$hash]) ? $titles[$hash] : '';
