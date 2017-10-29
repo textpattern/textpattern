@@ -1,8 +1,0 @@
-{
-  "name": "Theme from setup folder",
-  "description": "The default theme that ships as standard with Textpattern CMS.",
-  "version": "4.7.0-dev",
-  "txp-type":"textpattern-theme",
-  "homepage": "https://github.com/textpattern/textpattern-default-theme",
-  "author": "Team Textpattern"
-}

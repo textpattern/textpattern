@@ -16,3 +16,10 @@ Thumbs.db
 /files/*
 /files/!.htaccess-dist
 *~
+
+# Development files  #
+######################
+/node_modules
+/npm-debug.log
+/yarn.lock
+/yarn-error.log
