@@ -1219,9 +1219,9 @@ function assHead()
 
 function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
 {
-    global $txp_user;
+    global $txp_user, $prefs;
 
-    if (!$help_var) {
+    if (empty($help_var) || empty($prefs['enable_admin_pophelp'])) {
         return '';
     }
 
