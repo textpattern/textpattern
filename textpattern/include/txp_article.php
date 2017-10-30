@@ -988,7 +988,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 ).
                 n.tag(
                     checkbox('expire_now', '1', false, '', 'expire_now').
-                    n.tag(gTxt('expire_now'), 'label', array('for' => 'expire_now')),
+                    n.tag(gTxt('set_expire_now'), 'label', array('for' => 'expire_now')),
                     'div', array('class' => 'expire-now')
                 ),
                 $rs
@@ -2072,7 +2072,7 @@ function article_partial_expires($rs)
         ).
         n.tag(
             checkbox('expire_now', '1', $expire_now, '', 'expire_now').
-            n.tag(gTxt('expire_now'), 'label', array('for' => 'expire_now')),
+            n.tag(gTxt('set_expire_now'), 'label', array('for' => 'expire_now')),
             'div', array('class' => 'expire-now')
         ).
         hInput('sExpires', $sExpires);
