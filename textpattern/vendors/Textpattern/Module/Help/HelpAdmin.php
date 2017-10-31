@@ -137,7 +137,7 @@ class HelpAdmin
                 $out = $pophelp.n;
             }
         } else {
-            $out = gTxt('help_missing');
+            $out = gTxt('help_missing', array('{item}' => $item));
         }
 
         $out = tag($out, 'div', array('id' => 'pophelp-event'));
