@@ -231,6 +231,11 @@ function image_list($message = '')
 
     $createBlock = implode(n, $createBlock);
 
+    $paginator = new \Textpattern\Admin\Paginator();
+    $limit = $paginator->getLimit();
+
+    list($page, $offset, $numPages) = pager($total, $limit, $page);
+
     echo $searchBlock.$contentBlockStart.$createBlock.n
         .tag_start('div', array('id' => 'txp-list-container'));
 
@@ -241,11 +246,6 @@ function image_list($message = '')
                     array('class' => 'alert-block information')
                 );
     } else {
-        $paginator = new \Textpattern\Admin\Paginator();
-        $limit = $paginator->getLimit();
-
-        list($page, $offset, $numPages) = pager($total, $limit, $page);
-
         $rs = safe_query(
             "SELECT
                 txp_image.id,

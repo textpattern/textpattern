@@ -48,7 +48,7 @@
 
 function pagetop($pagetitle = '', $message = '')
 {
-    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $textarray_script;
+    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $textarray_script, $file_max_upload_size;
 
     header('Content-Security-Policy: '.CONTENT_SECURITY_POLICY);
     header('X-Frame-Options: '.X_FRAME_OPTIONS);
@@ -117,15 +117,18 @@ function pagetop($pagetitle = '', $message = '')
                 'step' => $step,
                 '_txp_token' => form_token(),
                 'ajax_timeout' => (int) AJAX_TIMEOUT,
-                'textarray' => (object) null,
-                'do_spellcheck' => get_pref(
-                    'do_spellcheck',
-                    '#page-article #body, #page-article #title,'.
-                    '#page-image #alt-text, #page-image #caption,'.
-                    '#page-file #description,'.
-                    '#page-link #link-title, #page-link #link-description'
+                'prefs' => array(
+                    'max_upload_size' => (int) $file_max_upload_size,
+                    'production_status' => get_pref('production_status'),
+                    'do_spellcheck' => get_pref(
+                        'do_spellcheck',
+                        '#page-article #body, #page-article #title,'.
+                        '#page-image #image_alt_text, #page-image #caption,'.
+                        '#page-file #description,'.
+                        '#page-link #link-title, #page-link #link-description'
+                    )
                 ),
-                'production_status' => get_pref('production_status'),
+                'textarray' => (object) null,
             ),
             TEXTPATTERN_JSON
         ).';'

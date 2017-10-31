@@ -2,11 +2,10 @@ jQuery.fn.txpFileupload = function (options) {
     if (!jQuery.fn.fileupload) return this
 
     var form = this, fileInput = this.find('input[type="file"]'),
-        maxChunkSize = options.maxChunkSize || 2000000
+        maxChunkSize = options.maxChunkSize || 1000000
 
     form.fileupload($.extend({
         paramName: fileInput.attr('name'),
-//        url: form.attr('action'),
         dataType: 'script',
 //        autoUpload: false,
         maxChunkSize: maxChunkSize,
@@ -17,9 +16,9 @@ jQuery.fn.txpFileupload = function (options) {
 /*        add: function (e, data) {
             data.submit()
         },
-*/        done: function (e, data) {
-//            console.log(data)
-        },
+        done: function (e, data) {
+            console.log(data)
+        },*/
         progressall: function (e, data) {
             textpattern.Relay.callback('uploadProgress', data)
         },
@@ -51,7 +50,7 @@ jQuery.fn.txpFileupload = function (options) {
         })
 
         form.fileupload('option', 'singleFileUploads', singleFileUploads)
-    }).change()
+    })
 
     return this
 }

@@ -50,24 +50,6 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
 
-        // Dropzone
-        global $file_max_upload_size;
-
-        $out[] = /*'<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.1/js/jquery.fileupload.min.js" integrity="sha256-xoEL7+UoSsbauvpImf1v+EkJclYUX+cLu3rKHjnJaOU=" crossorigin="anonymous"></script>'.n.
-            '<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.10.0/js/md5.min.js" integrity="sha256-J9IhvkIJb0diRVJOyu+Ndtg41RibFkF8eaA60jdjtB8=" crossorigin="anonymous"></script>'.n.*/
-            script_js('vendors/enyo/dropzone/jquery.fileupload.min.js', TEXTPATTERN_SCRIPT_URL).n.
-            script_js('vendors/enyo/dropzone/md5.min.js', TEXTPATTERN_SCRIPT_URL).n.
-            script_js('vendors/enyo/dropzone/txpFileupload.js', TEXTPATTERN_SCRIPT_URL).n/*.
-            script_js(
-<<< EOS
-textpattern.Route.add('file', function() {
-    if ($('#txp-list-container').length) {
-        jQuery('.upload-form').txpFileupload({maxChunkSize: $file_max_upload_size});
-    }
-});
-EOS
-)*/;
-
         // Custom JavaScript (see theme README for usage instructions).
         if (defined('admin_custom_js')) {
             $custom_js = admin_custom_js;
@@ -78,6 +60,23 @@ EOS
         if (file_exists(txpath.DS.THEME.$this->name.DS.$jsPath.DS.$custom_js)) {
             $out[] = '<script src="'.$this->url.'assets/js/'.$custom_js.'"></script>'.n;
         }
+
+        // Dropzone
+        global $event;
+
+        if (in_array($event, array('file', 'image'))) {
+            $out[] = '<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.1/js/jquery.fileupload.min.js" integrity="sha256-xoEL7+UoSsbauvpImf1v+EkJclYUX+cLu3rKHjnJaOU=" crossorigin="anonymous"></script>'.n.
+                '<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.10.0/js/md5.min.js" integrity="sha256-J9IhvkIJb0diRVJOyu+Ndtg41RibFkF8eaA60jdjtB8=" crossorigin="anonymous"></script>'.n./*
+                script_js('vendors/enyo/dropzone/jquery.fileupload.min.js', TEXTPATTERN_SCRIPT_URL).n.
+                script_js('vendors/enyo/dropzone/md5.min.js', TEXTPATTERN_SCRIPT_URL).n.*/
+                script_js('vendors/enyo/dropzone/txpFileupload.js', TEXTPATTERN_SCRIPT_URL).n.
+                script_js(<<< EOS
+    textpattern.prefs.uploadPreview = '<div style="display:inline-block;position:relative;overflow:hidden;height:128px;width:128px;margin:2px;border:1px solid #cccccc;"><input name="title[{hash}]" style="position:absolute;bottom:0;z-index:100" value="{title}" />{preview}<span >{type} ({size} B)</span></div>'
+    textpattern.prefs.messagePane = '<span class="messageflash {paneClass}" role="alert" aria-live="assertive">{messages}<a class="close" role="button" title="{close}" aria-label="{close}" href="#close">&#215;</a></span>'
+EOS
+);
+        }
+        // End dropzone
 
         return join(n, $out);
     }

@@ -799,7 +799,7 @@ textpattern.Console =
      * Stores an array of messages to announce.
      */
 
-    messages: [],
+    messages: {},
 
     /**
      * Add message to announce.
@@ -828,27 +828,31 @@ textpattern.Console =
      * @return textpattern.Console
      */
 
-    announce: function (event, container) {
-        var c = 0, message = []
-        event = event || textpattern.event
-        container = container || '<span class="messageflash {paneClass}" role="alert" aria-live="assertive">{messages}<a class="close" role="button" title="{close}" aria-label="{close}" href="#close">&#215;</a></span>'
-
-        if (!textpattern.Console.messages[event] || !textpattern.Console.messages[event].length) {
+    announce: function (event) {
+        if (event === false) {
+            textpattern.Relay.callback('announce', false)
             return this
         }
 
-        textpattern.Console.messages[event].forEach (function(pair) {
-            var iconClass = 'ui-icon ui-icon-'+(pair[1] != 1 && pair[1] != 2 ? 'check' : 'alert')
-            message.push('<span class="'+iconClass+'"></span> '+pair[0])
-            c += 2*(pair[1] == 1) + 1*(pair[1] == 2)
-        })
-
-        var paneClass = !c ? 'success' : (c == 2*textpattern.Console.messages[event].length ? 'error' : 'warning')
-        var span = textpattern.mustache(container, {messages: message.join('<br />'), paneClass: paneClass, close: textpattern.gTxt('close')})
-        textpattern.Console.messages[event] = []
-
         $(document).ready(function() {
-            $('#messagepane').html(span)
+            var c = 0, message = []
+            event = event || textpattern.event
+            container = textpattern.prefs.messagePane || '<span class="messageflash {paneClass}" role="alert" aria-live="assertive">{messages}<a class="close" role="button" title="{close}" aria-label="{close}" href="#close">&#215;</a></span>'
+
+            if (!textpattern.Console.messages[event] || !textpattern.Console.messages[event].length) {
+                return this
+            }
+
+            textpattern.Console.messages[event].forEach (function(pair) {
+                var iconClass = 'ui-icon ui-icon-'+(pair[1] != 1 && pair[1] != 2 ? 'check' : 'alert')
+                message.push('<span class="'+iconClass+'"></span> '+pair[0])
+                c += 2*(pair[1] == 1) + 1*(pair[1] == 2)
+            })
+
+            var paneClass = !c ? 'success' : (c == 2*textpattern.Console.messages[event].length ? 'error' : 'warning')
+            message = textpattern.mustache(container, {messages: message.join('<br />'), paneClass: paneClass, close: textpattern.gTxt('close')})
+            textpattern.Console.messages[event] = []
+            textpattern.Relay.callback('announce', message)
         })
 
         return this
@@ -864,7 +868,7 @@ textpattern.Console =
      */
 
     log: function (message) {
-        if (textpattern.production_status === 'debug') {
+        if (textpattern.prefs.production_status === 'debug') {
             textpattern.Console.history.push(message);
 
             textpattern.Relay.callback('txpConsoleLog', {
@@ -898,7 +902,9 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 }).register('updateList', function (event, data) {
     var list = data.list || '#txp-list-container',
         url = data.url || 'index.php',
-        callback = data.callback || function(event) {},
+        callback = data.callback || function(event) {
+            textpattern.Console.announce(data.event ? data.event : false)
+        },
         handle = function(html) {
             if (html) {
                 $html = $(html)
@@ -908,11 +914,9 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
                 })
 
                 $html.remove()
-                callback(data.event)
             }
 
-            if (data.event) textpattern.Console.announce(data.event)
-            else $('#messagepane').empty()
+            callback(data.event)
         }
     
     if (typeof data.html == 'undefined') {
@@ -927,6 +931,9 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 
         handle(data.html)
     }
+}).register('announce', function(event, message) {
+    if (message) $('#messagepane').html(message)
+    else $('#messagepane').empty()
 });
 
 /**
@@ -1856,6 +1863,8 @@ jQuery.fn.restorePanes = function () {
  */
 
 jQuery.fn.txpUploadPreview = function(template) {
+    if (typeof template == 'undefined') return this
+
     var form = $(this), last = form.children(':last-child')
     var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL
 
@@ -1884,7 +1893,7 @@ jQuery.fn.txpUploadPreview = function(template) {
             preview = textpattern.mustache(template, $.extend(this, {hash: hash, preview: preview, title: this.name.replace(/\.[^\.]*$/, '')}))
             form.append(preview)
         });
-    })
+    }).change()
 
     return this
 }
@@ -2007,20 +2016,22 @@ textpattern.Route.add('file, image', function () {
     })
 
     textpattern.Relay.register('uploadEnd', function(event) {
-        textpattern.Relay.callback('updateList', $.extend({
-            data: $('nav.prev-next form').serializeArray(),
-            list: '#txp-list-container',
-            event: event.type
-        }, textpattern.Relay.data.fileid.length ? {} : {html: null}))
-        textpattern.Relay.data.selected = textpattern.Relay.data.fileid
+        $(document).ready(function() {
+            textpattern.Relay.data.selected = textpattern.Relay.data.fileid
+            textpattern.Relay.callback('updateList', $.extend({
+                data: $('nav.prev-next form').serializeArray(),
+                list: '#txp-list-container',
+                event: event.type
+            }, textpattern.Relay.data.fileid.length ? {} : {html: null}))
+        })
     }).register('uploadStart', function(event) {
         textpattern.Relay.data.fileid = []
     })
 
-    $('form.upload-form').txpUploadPreview("<div style=' display:inline-block;position:relative;overflow:hidden;height:128px;width:128px;margin:2px;border:1px solid #cccccc;'><input name='title[{hash}]' style='position:absolute;bottom:0;z-index:100' value='{title}' />{preview}<span >{type} ({size} B)</span></div>")
+    $('form.upload-form').txpUploadPreview(textpattern.prefs.uploadPreview)
 
     if ($.fn.txpFileupload) {
-        $('.upload-form.async').txpFileupload({maxChunkSize: 2000000, formData: [{name: "app_mode", value: "async"}]})
+        $('.upload-form.async').txpFileupload({maxChunkSize: textpattern.prefs.max_upload_size, formData: [{name: "app_mode", value: "async"}]})
     }
 })
 // ENDTEST FILEUPLOAD
@@ -2221,12 +2232,11 @@ $(document).ready(function () {
         $(".code").prop("spellcheck", false);
     }
 
-    // Enable spellcheck for all elements mentioned in textpattern.do_spellcheck.
-    c = $(textpattern.do_spellcheck)[0];
-
-    if (c && "spellcheck" in c) {
-        $(textpattern.do_spellcheck).prop("spellcheck", true);
-    }
+    // Enable spellcheck for all elements mentioned in textpattern.prefs.do_spellcheck.
+    $(textpattern.prefs.do_spellcheck).each(function(i, c) {
+    if ("spellcheck" in c) {
+        $(c).prop("spellcheck", true);
+    }})
 
     // Attach toggle behaviours.
     $(document).on('click', '.txp-summary a[class!=pophelp]', toggleDisplayHref);

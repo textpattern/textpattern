@@ -28,7 +28,7 @@
  * Txp::get('Textpattern\Server\Files')->refactor($_FILES['thefile']);
  * </code>
  *
- * @since   4.6.0
+ * @since   4.7.0
  * @package Server
  */
 
