@@ -946,7 +946,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 n.tag(
                     checkbox('publish_now', '1', true, '', 'publish_now').
                     n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
-                    'div', array('class' => 'posted-now')
+                    'div', array('class' => 'txp-form-field posted-now')
                 ),
                 array('sPosted' => $persist_timestamp) + $rs
             ), 'div', array('id' => 'publish-datetime-group'));
@@ -988,8 +988,8 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 ).
                 n.tag(
                     checkbox('expire_now', '1', false, '', 'expire_now').
-                    n.tag(gTxt('expire_now'), 'label', array('for' => 'expire_now')),
-                    'div', array('class' => 'expire-now')
+                    n.tag(gTxt('set_expire_now'), 'label', array('for' => 'expire_now')),
+                    'div', array('class' => 'txp-form-field expire-now')
                 ),
                 $rs
             ), 'div', array('id' => 'expires-datetime-group'));
@@ -2025,7 +2025,7 @@ function article_partial_posted($rs)
         n.tag(
             checkbox('reset_time', '1', $reset_time, '', 'reset_time').
             n.tag(gTxt('reset_time'), 'label', array('for' => 'reset_time')),
-            'div', array('class' => 'reset-time')
+            'div', array('class' => 'txp-form-field reset-time')
         );
 
     return n.tag_start('div', array('id' => 'publish-datetime-group')).
@@ -2072,8 +2072,8 @@ function article_partial_expires($rs)
         ).
         n.tag(
             checkbox('expire_now', '1', $expire_now, '', 'expire_now').
-            n.tag(gTxt('expire_now'), 'label', array('for' => 'expire_now')),
-            'div', array('class' => 'expire-now')
+            n.tag(gTxt('set_expire_now'), 'label', array('for' => 'expire_now')),
+            'div', array('class' => 'txp-form-field expire-now')
         ).
         hInput('sExpires', $sExpires);
 
