@@ -78,6 +78,26 @@ class HelpAdmin
         return self::$pophelp_xml;
     }
 
+    /**
+     * Get pophelp group keys
+     *
+     * @param string    $group
+     */
+
+    public static function pophelp_keys($group)
+    {
+        $xml = self::pophelp_load(TEXTPATTERN_DEFAULT_LANG);
+        $array = $xml->xpath("//group[@id='{$group}']/item");
+
+        $keys = array();
+        foreach ($array as $item) {
+            if ($item->attributes()->id) {
+                $keys[] = (string)$item->attributes()->id;
+            }
+        }
+
+        return $keys;
+    }
 
     /**
      * pophelp.
