@@ -78,7 +78,7 @@ discoverable resources:
 
 ## Additional development tools
 
-Various components used in Textpattern CMS (such as the bundled themes and
+Various components used within Textpattern CMS (such as the bundled themes and
 language translations) are maintained in standalone repositories. We have a
 simple development toolset built on [Node.js](https://nodejs.org/) to pull the
 distribution files of those repositories into the core as required.
