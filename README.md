@@ -76,6 +76,32 @@ discoverable resources:
 * `textpattern-website` (for websites built with Textpattern)
 * `textpattern-development` (for development resources)
 
+## Additional development tools
+
+Various components used within Textpattern CMS (such as the bundled themes and
+language translations) are maintained in standalone repositories. We have a
+simple development toolset built on [Node.js](https://nodejs.org/) to pull the
+distribution files of those repositories into the core as required.
+
+You can install Node.js using the [installer](https://nodejs.org/en/download/)
+or [package manager](https://nodejs.org/en/download/package-manager/).
+
+You can then pull the following components from the CLI, like so:
+
+```ShellSession
+npm run get-default-theme
+npm run get-classic-admin-theme
+npm run get-hive-admin-theme
+npm run get-textpacks
+```
+
+You can verify PHP code via a PHP linter from the CLI, like so:
+
+```ShellSession
+npm install
+npm run phplint
+```
+
 ## Legal
 
 Released under the GNU General Public License. See
