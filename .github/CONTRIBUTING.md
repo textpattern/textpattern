@@ -14,7 +14,7 @@ To make corrections to existing translations, or to add new ones, [please follow
 
 ### Write documentation
 
-The page you're reading now is part of the documentation project. Spot any errors? Want to add more documents or fix others? Want to convert and clean up our Textile docs to Markdown so they can be served from here? Then please [clone the documentation repo](https://github.com/textpattern/textpattern.github.io), make changes and submit a Pull Request.
+Want to get involved in the Textpattern CMS user documentation project? Spot any errors? Want to add more documents or fix others? Then [please follow these instructions](https://github.com/textpattern/textpattern.github.io/blob/master/README.md).
 
 ### Contribute code
 
