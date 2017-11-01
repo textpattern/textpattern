@@ -87,7 +87,7 @@ function prefs_save()
     }
 
     if (!empty($post['file_max_upload_size'])) {
-        $post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size']);
+        $post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size'], false);
     }
 
     if (isset($post['auto_dst'])) {
@@ -770,46 +770,4 @@ function doctypes($name, $val)
 function defaultPublishStatus($name, $val)
 {
     return selectInput($name, status_list(), $val, '', '', $name);
-}
-
-/**
- * Gets the maximum allowed file upload size.
- *
- * Computes the maximum acceptable file size to the application if the
- * user-selected value is larger than the maximum allowed by the current PHP
- * configuration.
- *
- * @param  int $user_max Desired upload size supplied by the administrator
- * @return int Actual value; the lower of user-supplied value or system-defined value
- */
-
-function real_max_upload_size($user_max)
-{
-    // The minimum of the candidates, is the real max. possible size
-    $candidates = array($user_max,
-                        ini_get('post_max_size'),
-                        ini_get('upload_max_filesize'), );
-    $real_max = null;
-    foreach ($candidates as $item) {
-        $val = floatval($item);
-        $modifier = strtolower(substr(trim($item), -1));
-        switch ($modifier) {
-            // The 'G' modifier is available since PHP 5.1.0
-            case 'g':
-                $val *= 1024;
-            case 'm':
-                $val *= 1024;
-            case 'k':
-                $val *= 1024;
-        }
-        if ($val > 1) {
-            if (is_null($real_max)) {
-                $real_max = $val;
-            } elseif ($val < $real_max) {
-                $real_max = $val;
-            }
-        }
-    }
-
-    return $real_max;
 }

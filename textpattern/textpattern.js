@@ -829,15 +829,9 @@ textpattern.Console =
      */
 
     announce: function (event) {
-        if (event === false) {
-            textpattern.Relay.callback('announce', false)
-            return this
-        }
-
         $(document).ready(function() {
             var c = 0, message = []
             event = event || textpattern.event
-            container = textpattern.prefs.messagePane || '<span class="messageflash {paneClass}" role="alert" aria-live="assertive">{messages}<a class="close" role="button" title="{close}" aria-label="{close}" href="#close">&#215;</a></span>'
 
             if (!textpattern.Console.messages[event] || !textpattern.Console.messages[event].length) {
                 return this
@@ -849,10 +843,9 @@ textpattern.Console =
                 c += 2*(pair[1] == 1) + 1*(pair[1] == 2)
             })
 
-            var paneClass = !c ? 'success' : (c == 2*textpattern.Console.messages[event].length ? 'error' : 'warning')
-            message = textpattern.mustache(container, {messages: message.join('<br />'), paneClass: paneClass, close: textpattern.gTxt('close')})
+            var status = !c ? 'success' : (c == 2*textpattern.Console.messages[event].length ? 'error' : 'warning')
             textpattern.Console.messages[event] = []
-            textpattern.Relay.callback('announce', message)
+            textpattern.Relay.callback('announce', {message: message, status: status})
         })
 
         return this
@@ -900,11 +893,9 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 }).register('uploadEnd', function (event, data) {
     $('progress.upload-progress').hide()
 }).register('updateList', function (event, data) {
-    var list = data.list || '#txp-list-container',
+    var list = data.list || '#txp-list-container, #messagepane',
         url = data.url || 'index.php',
-        callback = data.callback || function(event) {
-            textpattern.Console.announce(data.event ? data.event : false)
-        },
+        callback = data.callback || function(event) {},
         handle = function(html) {
             if (html) {
                 $html = $(html)
@@ -918,21 +909,22 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 
             callback(data.event)
         }
+ 
+    $(list).addClass('disabled')
     
     if (typeof data.html == 'undefined') {
-        $(list).addClass('disabled')
         $('<html />').load(url, data.data, function(responseText, textStatus, jqXHR) {
             handle(this)
         })
     } else {
-        if (data.html) {
-            $(list).addClass('disabled')
-        }
-
         handle(data.html)
     }
-}).register('announce', function(event, message) {
-    if (message) $('#messagepane').html(message)
+}).register('announce', function(event, data) {
+    if (data.message.length) {
+        container = textpattern.prefs.messagePane || '<span class="messageflash {status}" role="alert" aria-live="assertive">{messages}<a class="close" role="button" title="{close}" aria-label="{close}" href="#close">&#215;</a></span>'
+        message = textpattern.mustache(container, {messages: data.message.join('<br />'), status: data.status, close: textpattern.gTxt('close')})
+        $('#messagepane').html(message)
+    }
     else $('#messagepane').empty()
 });
 
@@ -1857,13 +1849,70 @@ jQuery.fn.restorePanes = function () {
 }
 
 /**
- * Manage upload preview.
+ * Manage file uploads.
  *
  * @since 4.7.0
  */
+jQuery.fn.txpFileupload = function (options) {
+    if (!jQuery.fn.fileupload) return this
+
+    var form = this, fileInput = this.find('input[type="file"]'),
+        maxChunkSize = options.maxChunkSize || textpattern.prefs.max_upload_size || 1000000
+
+    form.fileupload($.extend({
+        paramName: fileInput.attr('name'),
+        dataType: 'script',
+        maxChunkSize: maxChunkSize,
+        formData: null,
+        fileInput: null,
+        dropZone: null,
+        replaceFileInput: false,
+/*        add: function (e, data) {
+            data.submit()
+        },
+        done: function (e, data) {
+            console.log(data)
+        },*/
+        progressall: function (e, data) {
+            textpattern.Relay.callback('uploadProgress', data)
+        },
+        start: function (e) {
+            textpattern.Relay.callback('uploadStart', e)
+        },
+        stop: function (e) {
+            textpattern.Relay.callback('uploadEnd', e)
+        }
+    }, options)).off('submit').submit(function (e) {
+        e.preventDefault()
+        
+        form.fileupload('add', {
+            files: fileInput.prop('files')
+        })
+    }).bind('fileuploadsubmit', function (e, data) {
+        var formData = options.formData || []
+        $.merge(formData, form.serializeArray())
+        data.formData = formData;
+    });
+
+    fileInput.on('change', function(e) {
+        var singleFileUploads = false
+
+        $(this.files).each(function () {
+            if (this.size > maxChunkSize) {
+                singleFileUploads = true
+            }
+        })
+
+        form.fileupload('option', 'singleFileUploads', singleFileUploads)
+    })
+
+    return this
+}
 
 jQuery.fn.txpUploadPreview = function(template) {
-    if (typeof template == 'undefined') return this
+    if (!(template = template || textpattern.prefs.uploadPreview)) {
+        return this
+    }
 
     var form = $(this), last = form.children(':last-child')
     var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL
@@ -1999,13 +2048,7 @@ textpattern.Route.add('article', function () {
 });
 
 // TEST FILEUPLOAD ONLY!!
-textpattern.Route.add('file, image', function () {
-    $('input[type="file"]').on('dragover', function() {
-        $(this).css('outline', '1px solid lightgrey')
-    }).on('drop dragexit dragend', function() {
-        $(this).css('outline', 'none')
-    })
-
+textpattern.Route.add('list, file, image', function () {
     if (!$('#txp-list-container').length) return
 
     $('form.txp-search').on('submit', function(e) {
@@ -2015,24 +2058,30 @@ textpattern.Route.add('file, image', function () {
         textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
     })
 
-    textpattern.Relay.register('uploadEnd', function(event) {
-        $(document).ready(function() {
-            textpattern.Relay.data.selected = textpattern.Relay.data.fileid
-            textpattern.Relay.callback('updateList', $.extend({
-                data: $('nav.prev-next form').serializeArray(),
-                list: '#txp-list-container',
-                event: event.type
-            }, textpattern.Relay.data.fileid.length ? {} : {html: null}))
-        })
-    }).register('uploadStart', function(event) {
+    textpattern.Relay.register('uploadStart', function(event) {
         textpattern.Relay.data.fileid = []
+    }).register('uploadEnd', function(event) {
+        var callback = function() {
+            textpattern.Console.announce(event.type)
+        }
+
+        $(document).ready(function() {
+            $.merge(textpattern.Relay.data.selected, textpattern.Relay.data.fileid)
+
+            if (textpattern.Relay.data.fileid.length) {
+                textpattern.Relay.callback('updateList', {
+                    data: $('nav.prev-next form').serializeArray(),
+                    list: '#txp-list-container',
+                    event: event.type,
+                    callback: callback
+                })
+            } else {
+                callback()
+            }
+        })
     })
 
-    $('form.upload-form').txpUploadPreview(textpattern.prefs.uploadPreview)
-
-    if ($.fn.txpFileupload) {
-        $('.upload-form.async').txpFileupload({maxChunkSize: textpattern.prefs.max_upload_size, formData: [{name: "app_mode", value: "async"}]})
-    }
+    $('form.upload-form.async').txpFileupload({formData: [{name: "app_mode", value: "async"}]}).txpUploadPreview()
 })
 // ENDTEST FILEUPLOAD
 

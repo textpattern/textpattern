@@ -29,10 +29,6 @@ class hive_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
     {
-        global $file_max_upload_size;
-
-        $max_file_size = $file_max_upload_size ? $file_max_upload_size/1000000 : 2;
-        $max_files = Txp::get('\Textpattern\Admin\Paginator')->getLimit();
         $cssPath = 'assets'.DS.'css';
         $jsPath = 'assets'.DS.'js';
 
@@ -53,23 +49,6 @@ class hive_theme extends \Textpattern\Admin\Theme
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
-
-        // Dropzone
-        $out[] = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/dropzone.min.css" integrity="sha256-e47xOkXs1JXFbjjpoRr1/LhVcqSzRmGmPqsrUQeVs+g=" crossorigin="anonymous" />'.n.
-            '<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/dropzone.min.js" integrity="sha256-0dCrNKhVyiX4bBpScyU5PT/iZpxzlxjn2oyaR7GQutE=" crossorigin="anonymous"></script>'.n.
-            script_js('vendors/enyo/dropzone/txpDropzone.js', TEXTPATTERN_SCRIPT_URL).n.
-            script_js(
-<<< EOS
-textpattern.Route.add('file', function() {
-    if ($('div.txp-navigation').length) {
-        jQuery('.upload-form').append('<div class="dropzone dropzone-previews" />').txpDropzone({
-            maxFiles: $max_files,
-            maxFilesize: $max_file_size
-        })
-    }
-});
-EOS
-);
 
         // Custom JavaScript (see theme README for usage instructions).
         if (defined('admin_custom_js')) {

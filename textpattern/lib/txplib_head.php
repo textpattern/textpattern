@@ -109,6 +109,8 @@ function pagetop($pagetitle = '', $message = '')
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/ehynds/jquery-ui-multiselect-widget/jquery.multiselect.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('vendors/blueimp/md5/md5.min.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('vendors/blueimp/fileupload/jquery.fileupload.min.js', TEXTPATTERN_SCRIPT_URL).
     script_js(
         'var textpattern = '.json_encode(
             array(
@@ -118,7 +120,7 @@ function pagetop($pagetitle = '', $message = '')
                 '_txp_token' => form_token(),
                 'ajax_timeout' => (int) AJAX_TIMEOUT,
                 'prefs' => array(
-                    'max_upload_size' => (int) $file_max_upload_size,
+                    'max_upload_size' => real_max_upload_size($file_max_upload_size),
                     'production_status' => get_pref('production_status'),
                     'do_spellcheck' => get_pref(
                         'do_spellcheck',

@@ -60,6 +60,13 @@ class classic_theme extends \Textpattern\Admin\Theme
             $out[] = '<script src="'.$this->url.'assets/js/'.$custom_js.'"></script>'.n;
         }
 
+        // Fileupload
+        $out[] = script_js(<<< EOS
+    textpattern.prefs.uploadPreview = '<div style="display:inline-block;position:relative;overflow:hidden;height:128px;width:128px;margin:2px;border:1px solid #cccccc;"><input name="title[{hash}]" style="position:absolute;bottom:0;z-index:100" value="{title}" />{preview}<span >{type} ({size} B)</span></div>'
+EOS
+);
+        // End fileupload
+
         return join(n, $out);
     }
 
