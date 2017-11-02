@@ -86,6 +86,12 @@ distribution files of those repositories into the core as required.
 You can install Node.js using the [installer](https://nodejs.org/en/download/)
 or [package manager](https://nodejs.org/en/download/package-manager/).
 
+Install required dev tools:
+
+```ShellSession
+npm install
+```
+
 You can then pull the following components from the CLI, like so:
 
 ```ShellSession
@@ -93,12 +99,12 @@ npm run get-default-theme
 npm run get-classic-admin-theme
 npm run get-hive-admin-theme
 npm run get-textpacks
+npm run get-dependencies
 ```
 
 You can verify PHP code via a PHP linter from the CLI, like so:
 
 ```ShellSession
-npm install
 npm run phplint
 ```
 

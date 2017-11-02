@@ -857,16 +857,16 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
         }
 
         $file = get_uploaded_file($file);
-
-        if (get_pref('file_max_upload_size') < filesize($file)) {
-            unlink($file);
-
-            return upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
-        }
     }
 
     if (empty($file)) {
         return upload_get_errormsg(UPLOAD_ERR_NO_FILE);
+    }
+
+    if (get_pref('file_max_upload_size') < filesize($file)) {
+        unlink($file);
+
+        return upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
     }
 
     list($w, $h, $extension) = getimagesize($file);
@@ -2784,12 +2784,12 @@ function stripPHP($in)
  * @package Form
  */
 
-function event_category_popup($name, $cat = '', $id = '')
+function event_category_popup($name, $cat = '', $id = '', $atts = array())
 {
     $rs = getTree('root', $name);
 
     if ($rs) {
-        return treeSelectInput('category', $rs, $cat, $id);
+        return treeSelectInput('category', $rs, $cat, $id, 0, $atts);
     }
 
     return false;
@@ -5274,7 +5274,7 @@ function join_qs($q, $sep = '&amp;')
  * echo join_atts(array('class' => 'myClass', 'disabled' => true));
  */
 
-function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
+function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
 {
     if (!is_array($atts)) {
         return $atts ? ' '.trim($atts) : '';
@@ -5293,7 +5293,7 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
             if ($name == 'href' || $name == 'src') {
                 $value = join_qs($value);
             } else {
-                $value = txpspecialchars(join(' ', $value));
+                $value = txpspecialchars(join($glue, $value));
             }
         } else {
             $value = txpspecialchars($value === true ? $name : $value);
@@ -6824,4 +6824,48 @@ function get_prefs_theme()
     }
 
     return $out;
+}
+
+/**
+ * Gets the maximum allowed file upload size.
+ *
+ * Computes the maximum acceptable file size to the application if the
+ * user-selected value is larger than the maximum allowed by the current PHP
+ * configuration.
+ *
+ * @param  int $user_max Desired upload size supplied by the administrator
+ * @return int Actual value; the lower of user-supplied value or system-defined value
+ */
+
+function real_max_upload_size($user_max, $php = true)
+{
+    // The minimum of the candidates, is the real max. possible size
+    $candidates = $php ? array($user_max,
+        ini_get('post_max_size'),
+        ini_get('upload_max_filesize')
+    ) : array($user_max);
+    $real_max = null;
+
+    foreach ($candidates as $item) {
+        $val = floatval($item);
+        $modifier = strtolower(substr(trim($item), -1));
+
+        switch ($modifier) {
+            // The 'G' modifier is available since PHP 5.1.0
+            case 'g':
+                $val *= 1024;
+            case 'm':
+                $val *= 1024;
+            case 'k':
+                $val *= 1024;
+        }
+
+        if ($val >= 1) {
+            if (is_null($real_max) || $val < $real_max) {
+                $real_max = floor($val);
+            }
+        }
+    }
+
+    return $real_max;
 }

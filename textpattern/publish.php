@@ -965,10 +965,8 @@ function doArticles($atts, $iscustom, $thing = null)
         $fname = (!empty($listform) ? $listform : $form);
     }
 
-    if ($rs) {
+    if ($rs && $last = numRows($rs)) {
         $count = 0;
-        $last = numRows($rs);
-
         $articles = array();
 
         while ($a = nextRow($rs)) {
@@ -1001,6 +999,8 @@ function doArticles($atts, $iscustom, $thing = null)
         }
 
         return doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class'));
+    } else {
+        return parse($thing, false);
     }
 }
 
@@ -1079,6 +1079,8 @@ function doArticle($atts, $thing = null)
         unset($GLOBALS['thisarticle']);
 
         return $article;
+    } else {
+        return parse($thing, false);
     }
 }
 
