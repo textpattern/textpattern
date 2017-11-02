@@ -147,7 +147,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function edit($name, $templates = null)
+        public function adopt($from, $templates = null)
         {
             $callback_extra = array(
                 'skin'      => $this->skin,
@@ -158,8 +158,8 @@ namespace Textpattern\Skin {
 
             $updated = (bool) safe_update(
                 static::$table,
-                "skin = '".doSlash($name)."'",
-                "skin = '".doSlash($this->skin)."'"
+                "skin = '".doSlash($this->skin)."'",
+                "skin = '".doSlash($from)."'"
             );
 
             if ($updated) {

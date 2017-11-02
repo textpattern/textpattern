@@ -63,12 +63,12 @@ namespace Textpattern\Skin {
         /**
          * Changes templates related skin
          *
-         * @param string $name      The new skin name.
+         * @param string $from      The skin name from which templates are adopted.
          * @param array  $templates Template names.
          * @throws \Exception
          */
 
-        public function edit($name, $templates = null);
+        public function adopt($from, $templates = null);
 
         /**
          * Import the skin related templates.

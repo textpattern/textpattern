@@ -175,25 +175,28 @@ namespace Textpattern\Skin {
                     callback_event('skin', 'edit', 0, $callback_extra);
 
                     if ($this->doSkin('update', $name, $title, $version, $description, $author, $author_uri)) {
-                        $path = $this->getPath();
+                        if ($name !== $this->skin) {
+                            $path = $this->getPath();
 
-                        if (file_exists($path)) {
-                            rename($path, self::getBasePath().'/'.$name);
+                            if (file_exists($path)) {
+                                rename($path, self::getBasePath().'/'.$name);
+                            }
+
+                            $old_name = $this->skin;
+                            $this->skin = $name;
+
+                            if ($sections) {
+                                safe_update(
+                                    'txp_section',
+                                    "skin = '".doSlash($this->skin)."'",
+                                    "skin = '".doSlash($old_name)."'"
+                                );
+                            }
+
+                            $assets = $this->parseAssets();
+
+                            $assets ? $this->callAssetsMethod($assets, 'adopt', $old_name) : '';
                         }
-
-                        if ($sections) {
-                            safe_update(
-                                'txp_section',
-                                "skin = '".doSlash($name)."'",
-                                "skin = '".doSlash($this->skin)."'"
-                            );
-                        }
-
-                        $assets = $this->parseAssets();
-
-                        $assets ? $this->callAssetsMethod($assets, __FUNCTION__, $name) : '';
-
-                        $this->skin = $name;
 
                         callback_event('skin', 'edited', 0, $callback_extra);
                     } else {
