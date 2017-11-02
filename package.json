@@ -30,6 +30,7 @@
     "copy:jquery": "rimraf textpattern/vendors/jquery/jquery/jquery.js && cp node_modules/jquery/dist/jquery.min.js textpattern/vendors/jquery/jquery/jquery.js",
     "copy:zxcvbn": "rimraf textpattern/vendors/dropbox/zxcvbn/zxcvbn.js && cp node_modules/zxcvbn/dist/zxcvbn.js textpattern/vendors/dropbox/zxcvbn/zxcvbn.js",
     "get-dependencies": "npm run copy:jquery && npm run copy:zxcvbn",
+    "get-checksums": "php .github/get-checksums.php",
     "get-textpacks": "sh .github/get-textpacks.sh",
     "get-classic-admin-theme": "sh .github/get-classic-admin-theme.sh",
     "get-hive-admin-theme": "sh .github/get-hive-admin-theme.sh",

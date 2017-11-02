@@ -117,6 +117,12 @@ You can verify PHP code via a PHP linter from the CLI, like so:
 npm run phplint
 ```
 
+Release tools:
+
+```ShellSession
+npm run get-checksums
+```
+
 ## Legal
 
 Released under the GNU General Public License. See
