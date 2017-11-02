@@ -1,3 +1,11 @@
 # Exclude files and folders from export repository
 
-.* export-ignore
+.gitignore export-ignore
+
+/.github export-ignore
+
+/.phpstorm.meta.php export-ignore
+/README.md export-ignore
+/composer.json export-ignore
+/package.json export-ignore
+/phpcs.xml export-ignore
