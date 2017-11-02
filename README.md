@@ -102,11 +102,12 @@ npm run get-textpacks
 npm run get-dependencies
 ```
 
-Request some branch or tag:
+To request a specific branch or tag:
 
 ```ShellSession
-npm run get-classic-admin-theme 4.6.x
+npm run get-default-theme 4.7.0
 npm run get-classic-admin-theme 4.6.1
+npm run get-classic-admin-theme 4.6.x
 npm run get-hive-admin-theme 4.6.x
 npm run get-textpacks 4.6.x
 ```
