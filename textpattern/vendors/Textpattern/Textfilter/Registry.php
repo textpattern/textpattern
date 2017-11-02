@@ -113,7 +113,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
         if (isset($this[$key])) {
             $thing = $this[$key]->filter($thing, $context['options']);
         } else {
-            throw new Exception(gTxt('invalid_argument', array('{name}' => 'key')));
+            throw new \Exception(gTxt('invalid_argument', array('{name}' => 'key')));
         }
 
         // Postprocessing, anyone?
