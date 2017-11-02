@@ -52,22 +52,24 @@ class Attribute
      * Default attribute properties.
      *
      * Array options:
-     *   format:    The data type of the attribute to cast (string, int, ...)
-     *   flag:      How to treat the value if empty, undefined, etc
-     *   mandatory: true if the attribute is a required component
-     *   multiple:  true to make the attribute accept multiple[] values
+     *   format:   The data type of the attribute to cast (string, int, ...)
+     *   flag:     How to treat the value if empty, undefined, etc
+     *   required: true if the attribute is a required component
      * @var array
      */
 
     protected $defaultProperties = array(
-        'format'    => 'string',
-        'flag'      => TEXTPATTERN_STRIP_EMPTY,
-        'mandatory' => false,
-        'multiple'  => false,
+        'format'   => 'string',
+        'flag'     => TEXTPATTERN_STRIP_EMPTY,
+        'required' => false,
     );
 
     /**
      * General constructor for the attribute.
+     *
+     * @param  string $key   The attribute identifier
+     * @param  string $value The attribute value
+     * @param  string $props The attribute properties, such as format, required, and flag
      */
 
     public function __construct($key = null, $value = null, $props = array())
@@ -76,11 +78,11 @@ class Attribute
     }
 
     /**
-     * Sets the attribute parameters. Chainable.
+     * Set the attribute parameters. Chainable.
      *
      * @param  string $key   The attribute identifier
      * @param  string $value The attribute value
-     * @param  string $props The attribute properties, such as format, mandatory, and flag
+     * @param  string $props The attribute properties, such as format, required, and flag
      * @return this
      */
 
@@ -100,7 +102,7 @@ class Attribute
     }
 
     /**
-     * Sets the attribute value. Chainable.
+     * Set an attribute value. Chainable.
      *
      * @param  string $key   The attribute identifier
      * @param  string $value The attribute value
@@ -115,7 +117,7 @@ class Attribute
     }
 
     /**
-     * Sets the given property(ies), merging them with what's stored already,
+     * Set the given property(ies), merging them with what's stored already,
      * or the defaults. Chainable.
      *
      * @param  string $key   The attribute identifier
@@ -124,7 +126,8 @@ class Attribute
      * @return this
      */
 
-    public function setProperty($key, $prop, $value = null) {
+    public function setProperty($key, $prop, $value = null)
+    {
         $key = (string)$key;
 
         if (array_key_exists($key, $this->values)) {
@@ -151,7 +154,51 @@ class Attribute
     }
 
     /**
-     * Returns the given attribute(s) as name="value" pairs according to their defined properties.
+     * Fetch an attribute value by its key. Chainable.
+     *
+     * @param  string $key The attribute identifier
+     * @return mixed
+     */
+
+    public function getValue($key)
+    {
+        $key = (string)$key;
+        $val = null;
+
+        if (array_key_exists($key, $this->values)) {
+            $val = $this->values[$key];
+        }
+
+        return $val;
+    }
+
+    /**
+     * Permit multiple values to be sent by the tag. Chainable.
+     */
+
+    public function setMultiple()
+    {
+        // Add the 'multiple' boolean attribute.
+        $this->setAttribute('multiple', true, array(
+            'format' => 'bool',
+            'flag'   => TEXTPATTERN_STRIP_TXP,
+        ));
+
+        $val = $this->getValue('name');
+
+        // Append square brackets to the 'name' field if not already done.
+        if ($val !== null) {
+            if (strpos($val, '[]') === false) {
+                $val .= '[]';
+                $this->setValue('name', $val);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Return the given attribute(s) as name="value" pairs according to their defined properties.
      *
      * @return string HTML represdentation
      */

@@ -30,7 +30,7 @@
 
 namespace Textpattern\Widget;
 
-class Tag implements WidgetInterface
+class Tag implements \Textpattern\Widget\WidgetInterface
 {
     /**
      * The tag name.
@@ -57,19 +57,25 @@ class Tag implements WidgetInterface
     protected $atts = null;
 
     /**
+     * The tag properties, keyed via their index.
+     *
+     * @var array
+     */
+
+    protected $properties = array();
+
+    /**
      * General constructor for the tag.
      */
 
-    public function __construct($tag = null)
+    public function __construct($tag)
     {
-        if ($tag !== null) {
-            $this->setTag($tag);
-            $this->atts = new \Textpattern\Widget\Attribute();
-        }
+        $this->setTag($tag);
+        $this->atts = new \Textpattern\Widget\Attribute();
     }
 
     /**
-     * Sets the tag to use. Chainable.
+     * Set the tag to use. Chainable.
      *
      * @param  string $tag The tag name
      * @return this
@@ -83,7 +89,7 @@ class Tag implements WidgetInterface
     }
 
     /**
-     * Sets the tag's contained content. Chainable.
+     * Set the tag's contained content. Chainable.
      *
      * @param  array $content Thew content to put between the opening/closing tags
      * @return this
@@ -97,7 +103,7 @@ class Tag implements WidgetInterface
     }
 
     /**
-     * Sets the given attributes. Chainable.
+     * Set the given attributes. Chainable.
      *
      * @param  array $atts  Name-value attributes
      * @param  array $props Name-value attribute options
@@ -107,10 +113,6 @@ class Tag implements WidgetInterface
     public function setAtts($atts, $props = array())
     {
         foreach ($atts as $key => $value) {
-            if ($this->atts === null) {
-                $this->atts = new \Textpattern\Widget\Attribute();
-            }
-
             $this->atts->setAttribute($key, $value, $props);
         }
 
@@ -118,7 +120,7 @@ class Tag implements WidgetInterface
     }
 
     /**
-     * Sets the given attributes. Chainable.
+     * Set the given attributes. Chainable.
      *
      * @param  string|array $keys (List of) keys to set as boolean attributes
      * @return this
@@ -131,10 +133,6 @@ class Tag implements WidgetInterface
         }
 
         foreach ($keys as $key) {
-            if ($this->atts === null) {
-                $this->atts = new \Textpattern\Widget\Attribute();
-            }
-
             $this->atts->setAttribute($key, true, array(
                 'format' => 'bool',
                 'flag'   => TEXTPATTERN_STRIP_TXP,
@@ -145,39 +143,50 @@ class Tag implements WidgetInterface
     }
 
     /**
-     * Renders the given content as an XML element.
+     * Permit multiple values to be sent by the tag. Chainable.
+     */
+
+    public function setMultiple()
+    {
+        $this->atts->setMultiple();
+
+        return $this;
+    }
+
+    /**
+     * Render the given content as an XML element.
      *
-     * @param  array $option To affect the flavour of tag returned - container, self-closing, start, end
+     * @param  array $option To affect the flavour of tag returned - complete, self-closing, open, close, content
      * @return string HTML
      */
 
     public function render($option = null)
     {
-        // @todo Check for mandatory atts.
+        // @todo Check for required atts?
         if ($option === null) {
             if (empty($this->tag) || $this->content === '') {
-                $option = 'raw';
+                $option = 'content';
             } elseif ($this->content) {
-                $option = 'full';
+                $option = 'complete';
             } else {
-                $option = 'void';
+                $option = 'self-closing';
             }
         }
 
         switch ($option) {
-            case 'full':
+            case 'complete':
                 $out = '<'.$this->tag.$this->atts->render().'>'.$this->content.'</'.$this->tag.'>';
                 break;
-            case 'void':
+            case 'self-closing':
                 $out = '<'.$this->tag.$this->atts->render().' />';
                 break;
-            case 'start':
+            case 'open':
                 $out = '<'.$this->tag.$this->atts->render().'>';
                 break;
-            case 'end':
+            case 'close':
                 $out = '</'.$this->tag.'>';
                 break;
-            case 'raw':
+            case 'content':
             default:
                 $out = $this->content;
                 break;

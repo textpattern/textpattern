@@ -30,16 +30,16 @@
 
 namespace Textpattern\Widget;
 
-class Textbox extends Tag implements WidgetInterface
+class Textbox extends Tag implements \Textpattern\Widget\WidgetInterface
 {
-    public function __construct($name = null, $value = null)
+    public function __construct($name, $value = null)
     {
         parent::__construct('input');
         $this->setAtts(array(
                 'type' => 'text',
                 'name' => $name,
             ), array(
-                'mandatory' => true,
+                'required' => true,
             ))
             ->setAtts(array(
                 'value' => $value,
