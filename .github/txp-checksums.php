@@ -27,7 +27,6 @@ if (php_sapi_name() !== 'cli') {
     die('command line only');
 }
 
-
 define('txpath', 'textpattern');
 define('n', "\n");
 
@@ -59,7 +58,11 @@ foreach ($files as $file => $val) {
     }
 }
 if ($out) {
-    echo "New files without checksums:\n".$out;
+    echo "New files without checksums:".n.$out.n;
+    if (count($argv) > 1) {
+        echo "Add new files to checksums.txt before release.".n.n;
+        exit(127);
+    }
 }
 
 exit;
