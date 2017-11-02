@@ -91,7 +91,8 @@ function pagetop($pagetitle = '', $message = '')
         'save',
         'toggle_all_selected',
         'select',
-        'close'
+        'close',
+        'upload_err_form_size'
     ));
 
     $lang_direction = gTxt('lang_dir');
@@ -120,7 +121,8 @@ function pagetop($pagetitle = '', $message = '')
                 '_txp_token' => form_token(),
                 'ajax_timeout' => (int) AJAX_TIMEOUT,
                 'prefs' => array(
-                    'max_upload_size' => real_max_upload_size($file_max_upload_size),
+                    'max_file_size' => (float) $file_max_upload_size,
+                    'max_upload_size' => real_max_upload_size(0),
                     'production_status' => get_pref('production_status'),
                     'do_spellcheck' => get_pref(
                         'do_spellcheck',

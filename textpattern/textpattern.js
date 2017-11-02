@@ -1857,19 +1857,34 @@ jQuery.fn.txpFileupload = function (options) {
     if (!jQuery.fn.fileupload) return this
 
     var form = this, fileInput = this.find('input[type="file"]'),
-        maxChunkSize = options.maxChunkSize || textpattern.prefs.max_upload_size || 1000000
+        maxChunkSize = textpattern.prefs.max_upload_size || 1000000,
+        maxFileSize = textpattern.prefs.max_file_size || 1000000
 
     form.fileupload($.extend({
         paramName: fileInput.attr('name'),
         dataType: 'script',
+        maxFileSize: maxFileSize,
         maxChunkSize: maxChunkSize,
+        singleFileUploads: true,
         formData: null,
         fileInput: null,
         dropZone: null,
         replaceFileInput: false,
-/*        add: function (e, data) {
-            data.submit()
-        },
+        add: function (e, data) {
+            var file = data.files[0], uploadErrors = [];
+/*            var acceptFileTypes = /^image\/(gif|jpe?g|png)$/i;
+            if(data.files[0]['type'] && !acceptFileTypes.test(data.files[0]['type'])) {
+                uploadErrors.push('Not an accepted file type');
+            }*/
+            if(file['size'] && file['size'] > maxFileSize) {
+                uploadErrors.push('Filesize is too big')
+                textpattern.Console.addMessage(['<strong>'+file['name']+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd')
+            }
+
+            if(!uploadErrors.length) {
+                data.submit()
+            }
+        },/*
         done: function (e, data) {
             console.log(data)
         },*/
@@ -1893,7 +1908,7 @@ jQuery.fn.txpFileupload = function (options) {
         $.merge(formData, form.serializeArray())
         data.formData = formData;
     });
-
+/*
     fileInput.on('change', function(e) {
         var singleFileUploads = false
 
@@ -1905,7 +1920,7 @@ jQuery.fn.txpFileupload = function (options) {
 
         form.fileupload('option', 'singleFileUploads', singleFileUploads)
     })
-
+*/
     return this
 }
 
@@ -1914,7 +1929,7 @@ jQuery.fn.txpUploadPreview = function(template) {
         return this
     }
 
-    var form = $(this), last = form.children(':last-child')
+    var form = $(this), last = form.children(':last-child'), maxSize = textpattern.prefs.max_file_size
     var createObjectURL = (window.URL || window.webkitURL || {}).createObjectURL
 
     form.find('input[type="reset"]').on('click', function (e) {
@@ -1925,7 +1940,7 @@ jQuery.fn.txpUploadPreview = function(template) {
         last.nextAll().remove()
         
         $(this.files).each(function (index) {
-            var preview = '', mime = this.type.split('/'), hash = typeof(md5) == 'function' ? md5(this.name) : index;
+            var preview = '', mime = this.type.split('/'), hash = typeof(md5) == 'function' ? md5(this.name) : index, status = this.size > maxSize ? 'alert' : '';
 
             if (createObjectURL) {
                 switch (mime[0]) {
@@ -1939,7 +1954,7 @@ jQuery.fn.txpUploadPreview = function(template) {
                 }
             }
 
-            preview = textpattern.mustache(template, $.extend(this, {hash: hash, preview: preview, title: this.name.replace(/\.[^\.]*$/, '')}))
+            preview = textpattern.mustache(template, $.extend(this, {hash: hash, preview: preview, status: status, title: this.name.replace(/\.[^\.]*$/, '')}))
             form.append(preview)
         });
     }).change()
@@ -2051,13 +2066,6 @@ textpattern.Route.add('article', function () {
 textpattern.Route.add('list, file, image', function () {
     if (!$('#txp-list-container').length) return
 
-    $('form.txp-search').on('submit', function(e) {
-        e.preventDefault()
-        if ($(this).find('input[name="crit"]').val()) $(this).find('.txp-search-clear').show()
-        else $(this).find('.txp-search-clear').hide()
-        textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
-    })
-
     textpattern.Relay.register('uploadStart', function(event) {
         textpattern.Relay.data.fileid = []
     }).register('uploadEnd', function(event) {
@@ -2081,7 +2089,8 @@ textpattern.Route.add('list, file, image', function () {
         })
     })
 
-    $('form.upload-form.async').txpFileupload({formData: [{name: "app_mode", value: "async"}]}).txpUploadPreview()
+    $('form.upload-form.async').txpUploadPreview()
+        .txpFileupload({formData: [{name: "app_mode", value: "async"}]})
 })
 // ENDTEST FILEUPLOAD
 
@@ -2361,7 +2370,7 @@ $(document).ready(function () {
     // TODO: end integrate jQuery UI stuff properly ----------------------------
 
     // Async lists navigation
-    $('#txp-list-container').parent().on('submit', 'nav.prev-next form', function(e) {
+    $('#txp-list-container').closest('main').on('submit', 'nav.prev-next form', function(e) {
         e.preventDefault();
         textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
     }).on('click', '.txp-navigation a', function(e) {
@@ -2373,9 +2382,15 @@ $(document).ready(function () {
     }).on('submit', 'form[name="longform"]', function(e) {
         e.preventDefault();
         textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
+    }).on('submit', 'form.txp-search', function(e) {
+        e.preventDefault()
+        if ($(this).find('input[name="crit"]').val()) $(this).find('.txp-search-clear').show()
+        else $(this).find('.txp-search-clear').hide()
+        textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
     }).on('updateList', '#txp-list-container', function() {
         $(this).find('.multi_edit_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected}).find('table.txp-list').txpColumnize()
     })
+
 
     // Find and open associated dialogs.
     $(document).on('click.txpDialog', '[data-txp-dialog]', function (e) {

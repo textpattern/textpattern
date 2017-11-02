@@ -6907,7 +6907,7 @@ function real_max_upload_size($user_max, $php = true)
 
         if ($val >= 1) {
             if (is_null($real_max) || $val < $real_max) {
-                $real_max = $val;
+                $real_max = floor($val);
             }
         }
     }
