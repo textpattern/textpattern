@@ -21,12 +21,19 @@
   "devDependencies": {
     "phplint": "1.7.4"
   },
+  "dependencies": {
+    "jquery": "3.2.1",
+    "zxcvbn": "4.4.2"
+  },
   "scripts": {
     "phplint": "phplint '**/*.php' '!node_modules/**'",
-    "get-textpacks": "rm -rf textpattern/lang/*.txt && curl https://codeload.github.com/textpattern/textpacks/tar.gz/master | tar xz --strip=2 --directory=textpattern/lang textpacks-master/textpacks",
-    "get-classic-admin-theme": "rm -rf textpattern/admin-themes/classic/* && curl https://codeload.github.com/philwareham/textpattern-classic-admin-theme/tar.gz/master | tar xz --strip=3 --directory=textpattern/admin-themes/classic textpattern-classic-admin-theme-master/dist/classic",
-    "get-hive-admin-theme": "rm -rf textpattern/admin-themes/hive* && curl https://codeload.github.com/philwareham/textpattern-hive-admin-theme/tar.gz/master | tar xz --strip=2 --directory=textpattern/admin-themes textpattern-hive-admin-theme-master/dist",
-    "get-default-theme": "rm -rf textpattern/setup/themes/default/* && curl https://codeload.github.com/textpattern/textpattern-default-theme/tar.gz/master | tar xz --strip=3 --directory=textpattern/setup/themes/default textpattern-default-theme-master/dist/default_theme"
+    "copy:jquery": "rimraf textpattern/vendors/jquery/jquery/jquery.js && cp node_modules/jquery/dist/jquery.min.js textpattern/vendors/jquery/jquery/jquery.js",
+    "copy:zxcvbn": "rimraf textpattern/vendors/dropbox/zxcvbn/zxcvbn.js && cp node_modules/zxcvbn/dist/zxcvbn.js textpattern/vendors/dropbox/zxcvbn/zxcvbn.js",
+    "get-dependencies": "npm run copy:jquery && npm run copy:zxcvbn",
+    "get-textpacks": "rimraf textpattern/lang/*.txt && curl https://codeload.github.com/textpattern/textpacks/tar.gz/master | tar xz --strip=2 --directory=textpattern/lang textpacks-master/textpacks",
+    "get-classic-admin-theme": "rimraf textpattern/admin-themes/classic/* && curl https://codeload.github.com/philwareham/textpattern-classic-admin-theme/tar.gz/master | tar xz --strip=3 --directory=textpattern/admin-themes/classic textpattern-classic-admin-theme-master/dist/classic",
+    "get-hive-admin-theme": "rimraf textpattern/admin-themes/hive* && curl https://codeload.github.com/philwareham/textpattern-hive-admin-theme/tar.gz/master | tar xz --strip=2 --directory=textpattern/admin-themes textpattern-hive-admin-theme-master/dist",
+    "get-default-theme": "rimraf textpattern/setup/themes/default/* && curl https://codeload.github.com/textpattern/textpattern-default-theme/tar.gz/master | tar xz --strip=3 --directory=textpattern/setup/themes/default textpattern-default-theme-master/dist/default_theme"
   },
   "license": "GPL-2.0"
 }
