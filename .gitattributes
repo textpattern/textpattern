@@ -1,0 +1,3 @@
+# Exclude files and folders from export repository
+
+.* export-ignore
