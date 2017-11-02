@@ -228,6 +228,7 @@ class Lang
     public function install_file($lang)
     {
         $lang_files = glob(txpath.'/lang/'.$lang.'.{txt,textpack}', GLOB_BRACE);
+        $now = date('YmdHis');
 
         if ($textpack = @file_get_contents($lang_files[0])) {
             $parser = new \Textpattern\Textpack\Parser();
@@ -247,7 +248,7 @@ class Lang
                 }
 
                 $where = "lang = '{$lang}' AND name = '{$name}'";
-                $lastmod = empty($lastmod) ? '2006-05-04' : date('YmdHis', $lastmod);
+                $lastmod = empty($lastmod) ? $now : date('YmdHis', $lastmod);
 
                 if (safe_count('txp_lang', $where)) {
                     $r = safe_update(

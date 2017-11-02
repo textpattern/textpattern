@@ -121,65 +121,69 @@ function list_languages($message = '')
     $done = array();
 
     // Create the widget components.
-    foreach ($represented_lang + $available_lang as $langname => $langdat) {
+    foreach ($represented_lang + $available_lang as $langname => $langdata) {
         if (in_array($langname, $done)) {
             continue;
         }
 
-        $file_updated = (isset($langdat['db_lastmod']) && @$langdat['file_lastmod'] > $langdat['db_lastmod']);
+        $file_updated = (isset($langdata['db_lastmod']) && $langdata['file_lastmod'] > $langdata['db_lastmod']);
 
         if (array_key_exists($langname, $represented_lang)) {
             if ($file_updated) {
                 $cellclass = 'warning';
                 $icon = 'ui-icon-alert';
-                $state = gTxt('update_available');
-                $btnClass = (has_privs('lang.edit') ? '' : 'disabled');
+                $disabled = (has_privs('lang.edit') ? '' : 'disabled');
             } else {
                 $cellclass = 'success';
                 $icon = 'ui-icon-check';
-                $state = gTxt('installed');
-                $btnClass = 'disabled';
+                $disabled = 'disabled';
             }
 
-            $btnText = gTxt('update');
-            $btnUrl = '#';
+            $btnText = escape_title(gTxt('update'));
+            $removeLink = href(escape_title(gTxt('remove')), array(
+                'event'      => 'lang',
+                'step'       => 'remove_language',
+                'lang_code'  => $langname,
+                '_txp_token' => form_token(),
+            ), array(
+                'class' => 'txp-button'
+            ));
+
             $btnRemove = (
                 array_key_exists($langname, $active_lang)
                     ? ''
                     : (has_privs('lang.edit')
-                        ? href(gTxt('remove'), '#', array('class' => 'txp-button'))
+                        ? $removeLink
                         : '')
             );
         } else {
             $cellclass = $icon = '';
-            $state = gTxt('not_installed');
-            $btnText = gTxt('install');
-            $icon = '';
-            $btnUrl = '#';
-            $btnClass = '';
-            $btnRemove = '';
+            $btnText = escape_title(gTxt('install'));
+            $disabled = $btnRemove = '';
         }
+
+        $installLink = ($disabled
+            ? span($btnText, array(
+                'class'    => 'txp-button',
+                'disabled' => true,
+            ))
+            : href($btnText, array(
+                'event'      => 'lang',
+                'step'       => 'get_language',
+                'lang_code'  => $langname,
+                '_txp_token' => form_token(),
+            ), array(
+                'class' => 'txp-button',
+            )));
 
         $grid .= tag(
             graf(
-                tag(gTxt($langdat['name']), 'strong').n.
-                href('i', '#', array(
-                    'class'      => 'pophelp',
-                    'rel'        => 'help',
-                    'target'     => '_blank',
-                    'title'      => gTxt('help'),
-                    'aria-label' => gTxt('help'),
-                    'role'       => 'button',
-                    'onclick'    => 'popWin(this.href, 0, 0); return false;',
-                ))
-            ).
-            graf(
                 ($icon ? '<span class="ui-icon '.$icon.'"></span>' : '').n.
-                $state
+                tag(gTxt($langdata['name']), 'strong')
             ).
             graf(
                 (has_privs('lang.edit')
-                    ? href($btnText, $btnUrl, array('class' => 'txp-button' . ($btnClass ? ' '.$btnClass : '')))
+                    ? $installLink
                     : '')
                 .n. $btnRemove
             ),
@@ -383,7 +387,7 @@ function remove_language()
 {
     require_privs('lang.edit');
 
-    $lang_code = ps('lang_code');
+    $lang_code = gps('lang_code');
     $ret = safe_delete('txp_lang', "lang = '".doSlash($lang_code)."'");
 
     if ($ret) {

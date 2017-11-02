@@ -112,10 +112,11 @@ class Parser
                 continue;
             }
 
-            // Sets version and lastmod timestamp.
+            // Sets version. The lastmod timestamp after the ';' in the regex
+            // remains for reading legacy files, but is no longer used.
             if (preg_match('/^#@version\s+([^;\n]+);?([0-9]*)$/', $line, $m)) {
                 $version = $m[1];
-                $lastmod = $m[2] !== false ? $m[2] : $lastmod;
+//                $lastmod = $m[2] !== false ? $m[2] : $lastmod;
                 continue;
             }
 
