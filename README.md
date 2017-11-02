@@ -102,6 +102,15 @@ npm run get-textpacks
 npm run get-dependencies
 ```
 
+Request some branch or tag:
+
+```ShellSession
+npm run get-classic-admin-theme 4.6.x
+npm run get-classic-admin-theme 4.6.1
+npm run get-hive-admin-theme 4.6.x
+npm run get-textpacks 4.6.x
+```
+
 You can verify PHP code via a PHP linter from the CLI, like so:
 
 ```ShellSession
