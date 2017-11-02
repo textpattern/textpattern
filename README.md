@@ -102,7 +102,7 @@ npm run get-textpacks
 npm run get-dependencies
 ```
 
-To request a specific branch or tag:
+To request a specific tag or branch:
 
 ```ShellSession
 npm run get-default-theme 4.7.0
