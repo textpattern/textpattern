@@ -120,9 +120,28 @@ function preamble($step = null)
         )
     );
 
+    if (isset($_SESSION['lang']) && !isset($_SESSION['direction'])) {
+        $files = Txp::get('\Textpattern\L10n\Lang')->files();
+        $langs = array();
+
+        if (is_array($files) && !empty($files)) {
+            foreach ($files as $file) {
+                $pathinfo = pathinfo($file);
+
+                if ($pathinfo['filename'] === $_SESSION['lang']) {
+                    $meta = setup_lang_meta($file);
+                    $_SESSION['direction'] = $meta['direction'];
+                    break;
+                }
+            }
+        }
+    }
+
+    $textDirection = (isset($_SESSION['direction'])) ? ' dir="'.$_SESSION['direction'].'"' : 'ltr';
+
     $out[] = <<<eod
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="en"{$textDirection}>
     <head>
     <meta charset="utf-8">
     <meta name="robots" content="noindex, nofollow">
@@ -826,54 +845,16 @@ function setup_back_button($current = null)
 
 function langs()
 {
-    $langs = array(
-        'ar-dz' => 'جزائري عربي',
-        'bg-bg' => 'Български',
-        'bs-ba' => 'Bosanski (Bosna i Hercegovina)',
-        'ca-es' => 'Català',
-        'cs-cz' => 'Čeština',
-        'da-dk' => 'Dansk',
-        'de-de' => 'Deutsch',
-        'el-gr' => 'Ελληνικά',
-        'en-gb' => 'English (Great Britain)',
-        'en-us' => 'English (United States)',
-        'es-es' => 'Español',
-        'et-ee' => 'Eesti',
-        'fa-ir' => 'Persian (پارسی)',
-        'fi-fi' => 'Suomi',
-        'fr-fr' => 'Français',
-        'gl-gz' => 'Galego',
-        'he-il' => 'עברית',
-        'hr-hr' => 'Hrvatski',
-        'hu-hu' => 'Magyar',
-        'id-id' => 'Bahasa Indonesia',
-        'is-is' => 'Íslenska',
-        'it-it' => 'Italiano',
-        'ja-jp' => '日本語',
-        'ko-kr' => '한국말 (대한민국)',
-        'lt-lt' => 'Lietuvių',
-        'lv-lv' => 'Latviešu',
-        'nl-nl' => 'Nederlands',
-        'no-no' => 'Norsk',
-        'pl-pl' => 'Polski',
-        'pt-br' => 'Português (Brasil)',
-        'pt-pt' => 'Português (Portugal)',
-        'ro-ro' => 'Română',
-        'ru-ru' => 'Русский',
-        'sk-sk' => 'Slovenčina',
-        'sp-rs' => 'Srpski',
-        'sr-rs' => 'Српски',
-        'sv-se' => 'Svenska',
-        'th-th' => 'ไทย',
-        'tr-tr' => 'Türkçe',
-        'uk-ua' => 'Українська',
-        'ur-in' => 'اردو (بھارت',
-        'vi-vn' => 'Tiếng Việt (Việt Nam)',
-        'zh-cn' => '中文(简体)',
-        'zh-tw' => '中文(繁體)',
-    );
-
     $default = (empty($_SESSION['lang']) ? TEXTPATTERN_DEFAULT_LANG : $_SESSION['lang']);
+    $files = Txp::get('\Textpattern\L10n\Lang')->files();
+    $langs = array();
+
+    if (is_array($files) && !empty($files)) {
+        foreach ($files as $file) {
+            $meta = setup_lang_meta($file);
+            $langs[$meta['code']] = $meta['name'];
+        }
+    }
 
     $out = n.'<div class="txp-form-field">'.
         n.'<div class="txp-form-field-label">'.
@@ -893,6 +874,40 @@ function langs()
         n.'</div>';
 
     return $out;
+}
+
+// -------------------------------------------------------------
+
+function setup_lang_meta($file)
+{
+    $numMetaRows = 5;
+    $separator = '=>';
+    $filename = basename($file);
+    $meta = array();
+
+    if ($fp = @fopen($file, 'r')) {
+        $name = preg_replace('/\.(txt|textpack)$/i', '', $filename);
+
+        for ($idx = 0; $idx < $numMetaRows; $idx++) {
+            $meta[] = fgets($fp, 1024);
+        }
+
+        fclose($fp);
+
+        $langName = do_list($meta[2], $separator);
+        $langCode = do_list($meta[3], $separator);
+        $langDirection = do_list($meta[4], $separator);
+
+        $fname = (isset($langName[1])) ? $langName[1] : $name;
+        $fcode = (isset($langCode[1])) ? strtolower($langCode[1]) : $name;
+        $fdirection = (isset($langDirection[1])) ? strtolower($langDirection[1]) : 'ltr';
+
+        $meta['code'] = $fcode;
+        $meta['name'] = $fname;
+        $meta['direction'] = $fdirection;
+    }
+
+    return $meta;
 }
 
 // -------------------------------------------------------------
