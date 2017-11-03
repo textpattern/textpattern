@@ -133,7 +133,7 @@ function page_edit($message = '', $refresh_partials = false)
     $skin = ($skin !== '') ? $skin : Skin::getCurrent();
     $class = 'async';
 
-    page_set_skin($skin);
+    Skin::setCurrent($skin);
 
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
         $name = get_pref('last_page_saved', $default_name);
@@ -338,7 +338,7 @@ function page_save()
     $name = sanitizeForPage(assert_string(ps('name')));
     $newname = sanitizeForPage(assert_string(ps('newname')));
 
-    page_set_skin($skin);
+    Skin::setCurrent($skin);
 
     $save_error = false;
     $message = '';
@@ -439,23 +439,10 @@ function page_skin_change($skin = null)
     }
 
     if ($skin) {
-        page_set_skin($skin);
+        Skin::setCurrent($skin);
     }
 
     return true;
-}
-
-/**
- * Set the current skin so it persists across panels.
- *
- * @param  string $skin The skin name to store
- * @todo   Generalise this elsewhere?
- * @return string HTML
- */
-
-function page_set_skin($skin)
-{
-    set_pref('skin_editing', $skin, 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
 }
 
 /**

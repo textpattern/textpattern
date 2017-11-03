@@ -203,7 +203,7 @@ function form_multi_edit()
     $affected = array();
     $message = null;
 
-    form_set_skin($skin);
+    Skin::setCurrent($skin);
 
     if ($forms && is_array($forms)) {
         if ($method == 'delete') {
@@ -319,7 +319,7 @@ function form_edit($message = '', $refresh_partials = false)
     $skin = ($skin !== '') ? $skin : Skin::getCurrent();
     $class = 'async';
 
-    form_set_skin($skin);
+    Skin::setCurrent($skin);
 
     if ($step == 'form_delete' || empty($name) && $step != 'form_create' && !$savenew) {
         $name = get_pref('last_form_saved', 'default');
@@ -466,7 +466,7 @@ function form_save()
     $name = sanitizeForPage(assert_string(ps('name')));
     $newname = sanitizeForPage(assert_string(ps('newname')));
 
-    form_set_skin($skin);
+    Skin::setCurrent($skin);
 
     $save_error = false;
     $message = '';
@@ -621,23 +621,10 @@ function form_skin_change($skin = null)
     }
 
     if ($skin) {
-        form_set_skin($skin);
+        Skin::setCurrent($skin);
     }
 
     return true;
-}
-
-/**
- * Set the current skin so it persists across panels.
- *
- * @param  string $skin The skin name to store
- * @todo   Generalise this elsewhere?
- * @return string HTML
- */
-
-function form_set_skin($skin)
-{
-    set_pref('skin_editing', $skin, 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
 }
 
 /**
