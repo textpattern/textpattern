@@ -2936,30 +2936,6 @@ function get_essential_forms()
     return $essential;
 }
 
-
-/**
- * Gets a list of skins in use.
- *
- * @return  array An array of skin names
- * @since   4.6.0
- * @package Skin
- */
-
-function get_skin_list()
-{
-    static $skins = null;
-
-    if ($skins === null) {
-        $skinList = safe_rows('name, title', 'txp_skin', '1=1');
-
-        foreach ($skinList as $skinDef) {
-            $skins[$skinDef['name']] = $skinDef['title'];
-        }
-    }
-
-    return $skins;
-}
-
 /**
  * Updates a list's per page number.
  *
