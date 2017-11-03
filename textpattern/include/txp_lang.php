@@ -363,8 +363,6 @@ function install_lang_key(&$value, $key)
  * Installs a Textpack.
  *
  * The Textpack to load is fed by a 'textpack' HTTP POST parameter.
- *
- * @see install_textpack()
  */
 
 function get_textpack()
@@ -372,7 +370,7 @@ function get_textpack()
     require_privs('lang.edit');
 
     $textpack = ps('textpack');
-    $n = install_textpack($textpack, true);
+    $n = Txp::get('\Textpattern\L10n\Lang')->install_textpack($textpack, true);
     list_languages(gTxt('textpack_strings_installed', array('{count}' => $n)));
 }
 
