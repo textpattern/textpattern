@@ -58,7 +58,7 @@ $langs = array(
         'your_full_name' => 'اسمك الحقيقي بالكامل',
         'you_can_access' => 'بإمكانكم من الآن على الأرجح الدخول إلى صفحة التسيير عن طريق اسم الاتصال وكلمة السر المختارين',
     ),
-    'bg-bg' => array(
+    'bg' => array(
         'about_to_create' => 'Сега ще бъдат създадени и попълнени таблиците в базата данни.',
         'add_config_file' => 'Прибави конфигурационен файл',
         'admin_theme' => 'Тема на админ. панела',
@@ -116,7 +116,7 @@ $langs = array(
         'your_full_name' => 'Пълното ви име',
         'you_can_access' => 'Може да влезете в <a href="index.php">основния интерфейс</a> с вашия псевдоним и парола.',
     ),
-    'bs-ba' => array(
+    'bs' => array(
         'about_to_create' => 'Spremate se da kreirate i popunite tabele u bazi podatak.',
         'already_installed' => 'Izgleda kao da je Textpattern već postavljen. Ako želite čistu instalaciju, molim uklonite <code>config.php</code> iz Vaše <code>/textpattern/</code> mape i pokušajte ponovo.',
         'before_you_proceed' => 'Prije nego što nastavite',
@@ -153,7 +153,7 @@ $langs = array(
         'your_full_name' => 'vaše puno ime',
         'you_can_access' => 'Trebalo bi da možete pristupiti <a href="index.php">main interface</a> sa prijavom i lozinkom koju odaberete.',
     ),
-    'ca-es' => array(
+    'ca' => array(
         'about_to_create' => 'Ara es crearàn i omplenaràn les taules de la base de dades.',
         'already_installed' => 'Sembla que Textpattern ja és instal·lat. Si vols realitzar una instal·lació neta, esborra <code>config.php</code> del directori <code>/textpattern</code> i torna a començar.',
         'before_you_proceed' => 'Abans de començar:',
@@ -191,7 +191,7 @@ $langs = array(
         'your_full_name' => 'El teu nom complet',
         'you_can_access' => 'Ara ja hauries de poder accedir a <a href="index.php">l’àrea d’administració</a> amb el nom d’usuari i la contrasenya que has escollit.',
     ),
-    'cs-cz' => array(
+    'cs' => array(
         'about_to_create' => 'Nyní lze vytvořit a naplnit tabulky databáze.',
         'add_config_file' => 'Přidat soubor s nastavením',
         'admin_theme' => 'Vzhled administrace',
@@ -255,11 +255,11 @@ $langs = array(
         'your_full_name' => 'Tvoje celé jméno',
         'you_can_access' => 'Nyní můžeš vstoupit do <a href="index.php">uživatelského prostředí</a> s přihlašovacím jménem a heslem, které jsi zvolil.',
     ),
-    'da-dk' => array(
+    'da' => array(
         'email_required' => 'Angiv venligst en gyldig email adresse.',
         'set_temp_dir_prefs' => 'Beklageligvis har det ikke været muligt at finde en mappe til midlertidige filer. Besøg venligst »Indstillinger« og indstil en sti i feltet »Midlertidig mappe«.',
     ),
-    'de-de' => array(
+    'de' => array(
         'about_to_create' => 'Datenbank-Tabellen werden angelegt und mit ersten Inhalten gefüllt.',
         'add_config_file' => 'Konfigurationsdatei anlegen',
         'admin_theme' => 'Admin-Oberfläche',
@@ -323,7 +323,7 @@ $langs = array(
         'your_full_name' => 'Ihr vollständiger Name',
         'you_can_access' => 'Mit dem gewählten Benutzernamen und Passwort sollte jetzt die <a href="index.php">Administration</a> zugänglich sein.',
     ),
-    'el-gr' => array(
+    'el' => array(
         'about_to_create' => 'Πρόκειται να δημιουργήσετε και να γεμίσετε με περιεχόμενο πίνακες της βάσης δεδομένων. Σε αυτό το στάδιο θα πρέπει επίσης να δημιουργήσετε ένα λογαριασμό διαχειριστή.',
         'add_config_file' => 'Προσθέστε το αρχείο config',
         'admin_theme' => 'Θέμα εμφάνισης πλευράς διαχείρισης',
@@ -515,7 +515,7 @@ $langs = array(
         'your_full_name' => 'Your full name',
         'you_can_access' => 'Textpattern database tables were created and populated. You should be able to access the <a href="index.php">main interface</a> with the login and password you chose.',
     ),
-    'es-es' => array(
+    'es' => array(
         'about_to_create' => 'Vas a crear la base de datos e introducir valores en ella.',
         'add_config_file' => 'Añadir archivo de configuración',
         'admin_theme' => 'Tema de interfaz de administración',
@@ -579,7 +579,7 @@ $langs = array(
         'your_full_name' => 'Tu nombre completo',
         'you_can_access' => 'Las tablas de la base de datos de Textpattern se han creado y rellenado. Deberías poder acceder a la <a href="index.php">interfaz principal</a> con el nombre de acceso y la contraseña elegidos.',
     ),
-    'et-ee' => array(
+    'et' => array(
         'about_to_create' => 'Sa oled loomas ja täitmas andmebaasi tabelit.',
         'already_installed' => 'Tundub, et Textpattern on juba installeeritud. Kui sa soovid teha uut installi, siis palun eemalda <code>config.php</code> oma <code>/textpattern/</code> kataloogist ja proovi uuesti.',
         'back' => 'Tagasi',
@@ -618,7 +618,7 @@ $langs = array(
         'your_full_name' => 'Sinu täisnimi',
         'you_can_access' => 'Sa peaksid nüüd ligi pääsema <a href="index.php">põhi-kasutajaliidesele</a> oma valitud kasutajanime ja parooliga.',
     ),
-    'fa-ir' => array(
+    'fa' => array(
         'about_to_create' => 'شما در حال ایجاد جدول‌های پایگاه داده هستید.',
         'add_config_file' => 'افزودن فایل پیکربندی',
         'admin_theme' => 'قالب سمت مدیر',
@@ -676,7 +676,7 @@ $langs = array(
         'your_full_name' => 'نام کامل شما',
         'you_can_access' => 'شما از این پس امکان ورود به <a href="index.php">واسط اصلی</a> با نام کاربری و گذرواژه انتخابی خود را دارید.',
     ),
-    'fi-fi' => array(
+    'fi' => array(
         'about_to_create' => 'Seuraavaksi luodaan ja täytetään tietokannan taulut.',
         'add_config_file' => 'Lisää konfiguraatiotiedosto',
         'admin_theme' => 'Hallintapaneelin teema',
@@ -740,7 +740,7 @@ $langs = array(
         'your_full_name' => 'Koko nimesi',
         'you_can_access' => 'Sinun pitäisi nyt päästä <a href="index.php">pääkäyttöliittymään</a> valitsemallasi kirjautumisnimellä ja salasanalla.',
     ),
-    'fr-fr' => array(
+    'fr' => array(
         'about_to_create' => 'Vous êtes sur le point de créer et de remplir les tables de la base de données.',
         'add_config_file' => 'Ajout de la configuration',
         'admin_theme' => 'Thème de l’administration',
@@ -804,7 +804,7 @@ $langs = array(
         'your_full_name' => 'Votre nom complet réel',
         'you_can_access' => 'Vous devriez normalement avoir accès à <a href="index.php">l’interface de gestion</a> avec le nom de connexion (login) et le mot de passe choisis.',
     ),
-    'gl-gz' => array(
+    'gl' => array(
         'about_to_create' => 'Vas a crear e introducir os valores nas táboas da B.D.',
         'add_config_file' => 'Engadir arquivo de configuración',
         'admin_theme' => 'Tema de interfaz de administración',
@@ -862,7 +862,7 @@ $langs = array(
         'your_full_name' => 'O teu nome completo',
         'you_can_access' => 'Tes que ser capaz de acceder á <a href="index.php">interface principal</a> co nome de rexistro e o contrasinal escollidos.',
     ),
-    'he-il' => array(
+    'he' => array(
         'about_to_create' => 'אתה עומד ליצור טבלאות ולמלא אותם בנתונים.',
         'already_installed' => 'נראה כי Textpattern כבר מותקנת. אם ברצונך להתקין אותה מחדש, אנא מחק <code dir="ltr">config.php</code> מספרייה <code dir="ltr">/textpattern/</code> ונסה שוב.',
         'before_you_proceed' => 'לפני שתמשיך',
@@ -900,7 +900,7 @@ $langs = array(
         'your_full_name' => 'השם המלא שלך',
         'you_can_access' => 'תוכל לגשת אל <a href="index.php">הממשק הראשי</a> עם שם המשתמש והסיסמה שבחרת.',
     ),
-    'hr-hr' => array(
+    'hr' => array(
         'about_to_create' => 'Upravo će te kreirati i napuniti tablice baze.',
         'already_installed' => 'Izgleda da je Textpattern već instaliran. Ako želite čistu instalaciju, molimo maknite <code>config.php</code> iz vašeg <code>/textpattern/</code> direktorija i pokušajte ponovno.',
         'before_you_proceed' => 'Prije početka',
@@ -933,7 +933,7 @@ $langs = array(
         'your_full_name' => 'Vaše puno ime',
         'you_can_access' => 'Sad bi trebali imati pristup <a href="index.php">glavnom sučelju</a> sa prijavom i lozinkom koje ste odabrali.',
     ),
-    'hu-hu' => array(
+    'hu' => array(
         'about_to_create' => 'Most tudod létrehozni és feltölteni az adatbázis táblákat.',
         'already_installed' => 'Úgy fest, a Textpattern már installálva van. Ha egy tiszta szerkezetet szeretnél, kérlek töröld a <code>config.php</code> nevű állományt a <code>/textpattern/</code> könyvtárból és próbáld újra.',
         'before_you_proceed' => 'Mielőtt tovább mennél:',
@@ -971,7 +971,7 @@ $langs = array(
         'your_full_name' => 'Teljes neved',
         'you_can_access' => 'A választott névvel és jelszóval el kell tudnod érni a <a href="index.php">központi felületet</a>.',
     ),
-    'id-id' => array(
+    'id' => array(
         'about_to_create' => 'Anda akan membuat dan menempatkan tabel basis data.',
         'already_installed' => 'Sepertinya Textpattern sudah terinstal. Jika Anda ingin membuat instalasi baru, silakan hapus <code>config.php</code> dari direktori <code>/textpattern/</code> Anda dan coba lagi.',
         'before_you_proceed' => 'Sebelum Anda memproses:',
@@ -1012,7 +1012,7 @@ $langs = array(
         'your_full_name' => 'Nama lengkap Anda',
         'you_can_access' => 'Anda seharusnya dapat mengakses <a href="index.php"> antarmuka utama</a> dengan log masuk dan sandi lewat yang Anda pilih.',
     ),
-    'is-is' => array(
+    'is' => array(
         'about_to_create' => 'Þú ert um það bil að fara að setja upp töflur í gagnagrunn.',
         'already_installed' => 'Lítur út fyrir það að Textpattern sé uppsett fyrir. Ef þú vilt setja inn hreina uppsettningu, vinsamlegast fjarlægðu <code>config.php</code> úr <code>/textpattern/</code> möppunni og reyndu aftur.',
         'checking_database' => 'Athuga tengingu við gagnagrunn',
@@ -1047,7 +1047,7 @@ $langs = array(
         'your_full_name' => 'Fullt nafn',
         'you_can_access' => 'Nú ættir þú að geta tengst <a href="index.php">stjórnborði</a> Textpattern með þínu innskráningarnafni og aðgangsorði.',
     ),
-    'it-it' => array(
+    'it' => array(
         'about_to_create' => 'Stai per creare e popolare le tabelle del database. In questa fase è anche necessario impostare un account utente amministratore.',
         'add_config_file' => 'Aggiungi il config file',
         'admin_theme' => 'Tema Interfaccia Amministrazione',
@@ -1111,7 +1111,7 @@ $langs = array(
         'your_full_name' => 'Il tuo nome completo',
         'you_can_access' => 'Le tabelle del database di Textpattern CMS sono state create e popolate. Dovresti essere in grado di accedere all’<a href="index.php">interfaccia principale</a> con il nome utente e la password scelti.',
     ),
-    'ja-jp' => array(
+    'ja' => array(
         'about_to_create' => 'あなたはこれからデータベーステーブルの作成と構築します。',
         'add_config_file' => '設定ファイルの追加',
         'admin_theme' => '管理ページのテーマ',
@@ -1169,7 +1169,7 @@ $langs = array(
         'your_full_name' => 'あなたの氏名',
         'you_can_access' => '<a href="index.php">メイン画面</a>より、先程指定したログイン情報よりアクセス可能です。',
     ),
-    'ko-kr' => array(
+    'ko' => array(
         'about_to_create' => '지금 데이터베이스 테이블을 만들고 채워야 합니다. ',
         'already_installed' => 'Textpattern이 이미 설치되어 있습니다. 새롭게 설치하려면 <code>/textpattern/</code>에 있는 <code>config.php</code> 를 지우고 다시 해보세요.',
         'before_you_proceed' => '진행하기 전에',
@@ -1207,7 +1207,7 @@ $langs = array(
         'your_full_name' => '전체 이름',
         'you_can_access' => '설정한 로그인 아이디와 비밀번호로 <a href="index.php">관리자 페이지</a>에 접속할 수 있습니다',
     ),
-    'lt-lt' => array(
+    'lt' => array(
         'about_to_create' => 'Jūs ketinate sukurti ir užpildyti lentelės duomenų bazės.',
         'add_config_file' => 'Įdėti konfirūracijos failą',
         'admin_theme' => 'Administratoriaus svetainės tema',
@@ -1264,7 +1264,7 @@ $langs = array(
         'your_full_name' => 'Jūsų vardas, pavardė',
         'you_can_access' => 'Jūs turite sugebėti gauti prieigą prie <a href="index.php">pagrindinės sąsajos</a> su registracijos vardu ir slaptažodžiu, kurį jūs pasirinkote.',
     ),
-    'lv-lv' => array(
+    'lv' => array(
         'about_to_create' => 'Atliek izveidot un aizpildīt datubāzes tabulas.',
         'add_config_file' => 'Pievienot konfigurācijas failu',
         'admin_theme' => 'Administrācijas paneļa motīvs',
@@ -1327,7 +1327,36 @@ $langs = array(
         'your_full_name' => 'Jūsu pilnais vārds',
         'you_can_access' => 'Jums atliek ierakstīties <a href="index.php">administrācijas lapā</a> ar jūsu izvēlēto lietotāja vārdu un paroli.',
     ),
-    'nl-nl' => array(
+    'nb' => array(
+        'about_to_create' => 'Du er i ferd med å opprette og fyle inn database-tabeller.',
+        'before_you_proceed' => 'Før du fortsetter:',
+        'checking_database' => 'Sjekker tilkopling til databasen',
+        'choose_password' => 'Velg et passord',
+        'create_config' => 'Lag en fil kalt <code>config.php</code> i <code>/textpattern/</code> mappen, og lim inn følgende…',
+        'db_cant_connect' => 'Kan ikke koble til databasen',
+        'db_connected' => 'Tilkoblet',
+        'db_doesnt_exist' => 'Databasen <strong>{dbname}</strong> finnes ikke, eller brukeren du spesifiserte har ikke tilgang til den.',
+        'db_must_exist' => 'Merk at databasen du spesifiserer må eksistere. Textpattern vil ikke opprette den for deg.',
+        'email_required' => 'Vennligst skriv inn en gyldig epostadresse.',
+        'errors_during_install' => 'Det oppstod <strong>{num}</strong> feil under installasjonen. Du kan spørre om hjelp i <a href="https://forum.textpattern.io/" rel="external">Textpattern-forumet</a>.',
+        'mysql_database' => 'MySQL database',
+        'mysql_login' => 'MySQL brukernavn',
+        'mysql_password' => 'MySQL passord',
+        'mysql_server' => 'MySQL-server',
+        'my_site' => 'Min side',
+        'my_slogan' => 'Mitt flotte slagord',
+        'please_enter_url' => 'Vennligst skriv inn internettadressen til siden din.',
+        'prefix_bad_characters' => 'Tabellprefikset {dbprefix} inneholder ulovlige tegn. Det første tegnet må være blandt <strong>a-zA-Z_</strong> og alle andre tegn må være blandt <strong>a-zA-Z0-9_</strong>.',
+        'prefix_warning' => '(bruk dette feltet <strong>kun</strong> hvis du trenger flere installasjoner i én database)',
+        'thanks_for_interest' => 'Takk for din interesse i Textpattern',
+        'that_went_well' => 'Det gikk bra! Databasetabeller ble opprettet og fylt inn.',
+        'using_db' => 'Bruker {dbname}.',
+        'warn_mail_unavailable' => 'Din installasjon av PHP mangler <code>mail()</code>-funksjonen. Ingen e-post kan sendes fra textpattern, noe som begrenser visse funskjoner.',
+        'welcome_to_textpattern' => 'Velkommen til Textpattern',
+        'your_email' => 'Din epostadresse',
+        'your_full_name' => 'Ditt fulle navn',
+    ),
+    'nl' => array(
         'about_to_create' => 'De database tabellen kunnen worden aangemaakt en gevuld. Op dit moment worden ook de gegevens voor het beheersaccount vastgelegd.',
         'add_config_file' => 'Voeg een config bestand toe',
         'admin_theme' => 'Vormgevingsthema voor het beheer',
@@ -1391,36 +1420,7 @@ $langs = array(
         'your_full_name' => 'Je volledige naam',
         'you_can_access' => 'De Textpattern database tabellen zijn aangemaakt en gevuld. Je kunt nu inloggen via de <a href="index.php">centrale login</a> met de loginnaam en het wachtwoord dat je hebt gekozen.',
     ),
-    'no-no' => array(
-        'about_to_create' => 'Du er i ferd med å opprette og fyle inn database-tabeller.',
-        'before_you_proceed' => 'Før du fortsetter:',
-        'checking_database' => 'Sjekker tilkopling til databasen',
-        'choose_password' => 'Velg et passord',
-        'create_config' => 'Lag en fil kalt <code>config.php</code> i <code>/textpattern/</code> mappen, og lim inn følgende…',
-        'db_cant_connect' => 'Kan ikke koble til databasen',
-        'db_connected' => 'Tilkoblet',
-        'db_doesnt_exist' => 'Databasen <strong>{dbname}</strong> finnes ikke, eller brukeren du spesifiserte har ikke tilgang til den.',
-        'db_must_exist' => 'Merk at databasen du spesifiserer må eksistere. Textpattern vil ikke opprette den for deg.',
-        'email_required' => 'Vennligst skriv inn en gyldig epostadresse.',
-        'errors_during_install' => 'Det oppstod <strong>{num}</strong> feil under installasjonen. Du kan spørre om hjelp i <a href="https://forum.textpattern.io/" rel="external">Textpattern-forumet</a>.',
-        'mysql_database' => 'MySQL database',
-        'mysql_login' => 'MySQL brukernavn',
-        'mysql_password' => 'MySQL passord',
-        'mysql_server' => 'MySQL-server',
-        'my_site' => 'Min side',
-        'my_slogan' => 'Mitt flotte slagord',
-        'please_enter_url' => 'Vennligst skriv inn internettadressen til siden din.',
-        'prefix_bad_characters' => 'Tabellprefikset {dbprefix} inneholder ulovlige tegn. Det første tegnet må være blandt <strong>a-zA-Z_</strong> og alle andre tegn må være blandt <strong>a-zA-Z0-9_</strong>.',
-        'prefix_warning' => '(bruk dette feltet <strong>kun</strong> hvis du trenger flere installasjoner i én database)',
-        'thanks_for_interest' => 'Takk for din interesse i Textpattern',
-        'that_went_well' => 'Det gikk bra! Databasetabeller ble opprettet og fylt inn.',
-        'using_db' => 'Bruker {dbname}.',
-        'warn_mail_unavailable' => 'Din installasjon av PHP mangler <code>mail()</code>-funksjonen. Ingen e-post kan sendes fra textpattern, noe som begrenser visse funskjoner.',
-        'welcome_to_textpattern' => 'Velkommen til Textpattern',
-        'your_email' => 'Din epostadresse',
-        'your_full_name' => 'Ditt fulle navn',
-    ),
-    'pl-pl' => array(
+    'pl' => array(
         'about_to_create' => 'Zaraz zostaną utworzone i wypełnione wartościami początkowymi tabele bazy danych.',
         'add_config_file' => 'Dodaj plik konfiguracyjny',
         'admin_theme' => 'Szablon panelu administracyjnego',
@@ -1548,7 +1548,7 @@ $langs = array(
         'your_full_name' => 'O seu nome completo',
         'you_can_access' => 'Você poderá acessar a <a href="index.php">área administratival</a> com o seu nome de acesso e a sua senha.',
     ),
-    'pt-pt' => array(
+    'pt' => array(
         'about_to_create' => 'Está prestes a criar e a configurar as tabelas da base de dados.',
         'add_config_file' => 'Junta ficheiro de config',
         'admin_theme' => 'Tema da Administração',
@@ -1606,7 +1606,7 @@ $langs = array(
         'your_full_name' => 'O seu nome completo',
         'you_can_access' => 'Deverá poder aceder ao <a href="index.php">interface principal</a> com o seu nome de acesso e a sua senha.',
     ),
-    'ro-ro' => array(
+    'ro' => array(
         'about_to_create' => 'Esti pe cale de a crea si popula tabelele in baza de date.',
         'add_config_file' => 'Adauga fisier de configurare',
         'admin_theme' => 'Tema administrare',
@@ -1660,7 +1660,7 @@ $langs = array(
         'your_full_name' => 'Numele tau complet',
         'you_can_access' => 'Ar trebui sa poti accesa <a href="index.php">partea de administrare</a> cu numele de utilizator si parola care le-ai ales.',
     ),
-    'ru-ru' => array(
+    'ru' => array(
         'about_to_create' => 'Сейчас в базе данных будут созданы и заполнены таблицы.',
         'add_config_file' => 'Добавить файл конфигурации',
         'admin_theme' => 'Тема для админки',
@@ -1724,7 +1724,7 @@ $langs = array(
         'your_full_name' => 'Ваше полное имя',
         'you_can_access' => 'Теперь вам доступен <a href="index.php">основной интерфейс</a>. Используйте логин и пароль, которые вы выбрали.',
     ),
-    'sk-sk' => array(
+    'sk' => array(
         'about_to_create' => 'Chystáte sa vytvoriť a naplniť databázové tabuľky.',
         'add_config_file' => 'Pridať súbor s nastavením',
         'admin_theme' => 'Vzhľad administrácie',
@@ -1788,7 +1788,7 @@ $langs = array(
         'your_full_name' => 'Vaše celé meno',
         'you_can_access' => '<a href="index.php">Hlavné rozhranie</a> by malo byť dostupné so zadaným loginom a heslom.',
     ),
-    'sp-rs' => array(
+    'sr-cs' => array(
         'about_to_create' => 'Upravo ćete kreirati i napuniti tablice baze.',
         'already_installed' => 'Izgleda da je Textpattern već instaliran. Ako želite čistu instalaciju, molimo uklonite <code>config.php</code> iz Vašeg <code>/textpattern/</code> direktorijuma i pokušajte ponovo.',
         'before_you_proceed' => 'Pre početka:',
@@ -1830,7 +1830,7 @@ $langs = array(
         'your_full_name' => 'Vaše puno ime',
         'you_can_access' => 'Sada bi trebali imati pristup <a href="index.php">glavnom sučelju</a> sa imenom i lozinkom koje ste odabrali.',
     ),
-    'sr-rs' => array(
+    'sr' => array(
         'about_to_create' => 'Управо ћете креирати и напунити таблице базе.',
         'already_installed' => 'Изгледа да је Textpattern већ инсталиран. Ако желите чисту инсталацију, молимо уклоните <code>config.php</code> из Вашег <code>/textpattern/</code> директоријума и пок',
         'before_you_proceed' => 'Пре почетка:',
@@ -1865,7 +1865,7 @@ $langs = array(
         'your_full_name' => 'Ваше пуно име',
         'you_can_access' => 'Сад би требали имати приступ <a href="index.php">главном сучељу</a> са пријавом и лозинком које сте одабрали.',
     ),
-    'sv-se' => array(
+    'sv' => array(
         'about_to_create' => 'Du kommer nu att skapa och bygga upp databastabeller.',
         'add_config_file' => 'Lägg till konfigurationsfil',
         'admin_theme' => 'Tema för administratörssidor',
@@ -1929,7 +1929,7 @@ $langs = array(
         'your_full_name' => 'Ditt fullständiga namn',
         'you_can_access' => 'Du ska nu kunna nå <a href="index.php">startsidan</a> med det inloggningsnamn och lösenord du valt.',
     ),
-    'th-th' => array(
+    'th' => array(
         'about_to_create' => 'คุณกำลังจะสร้างและเติมข้อมูลลงในตารางฐานข้อมูล',
         'already_installed' => 'ดูเหมือนกับว่า Textpattern ติดตั้งเรียบร้อยแล้ว ถ้าคุณต้องการติดตั้งใหม่ ให้ลบแฟ้ม <code>config.php</code> จากไ',
         'before_you_proceed' => 'ก่อนที่คุณจะทำอะไรต่อ',
@@ -1964,7 +1964,7 @@ $langs = array(
         'your_full_name' => 'ชื่อเต็มของคุณ',
         'you_can_access' => 'ตอนนี้คุณน่าจะเข้าไปยัง <a href="index.php">หน้าจัดการ</a> ด้วยชื่อเข้าใช้และรหัสผ่านที่คณเลือกไว้',
     ),
-    'tr-tr' => array(
+    'tr' => array(
         'about_to_create' => 'Database oluşturmak üzeresiniz.',
         'already_installed' => 'Textpattern yüklü olarak görünüyor. Temiz bir kurulum yapmak istiyorsanız, lütfen <code>config.php</code> dosyasını <code>/textpattern/</code> klasörünün içersinde silerek tekrar deneyin.',
         'before_you_proceed' => 'Devam etmeden önce:',
@@ -1996,7 +1996,7 @@ $langs = array(
         'your_email' => 'E-posta adresiniz',
         'your_full_name' => 'İsim Soyisim',
     ),
-    'uk-ua' => array(
+    'uk' => array(
         'about_to_create' => 'Зараз в базі даних будуть створені й заповнені таблиці.',
         'add_config_file' => 'Додати файл конфігурації',
         'admin_theme' => 'Тема адмінки',
@@ -2060,7 +2060,7 @@ $langs = array(
         'your_full_name' => 'Ваше повне ім\'я',
         'you_can_access' => 'Тепер вам повинен бути доступний <a href="index.php">основний інтерфейс</a>. Використовуйте логін і пароль, які ви вибрали.',
     ),
-    'ur-in' => array(
+    'ur' => array(
         'about_to_create' => 'اب ڈیٹابیس کے جدول بھریں جاینگے',
         'already_installed' => 'Textpattern لگتا ہے کی کو نصب کرنا چاہتے ہیں تو Textpattern اگر آپ پھر تازہ پوشہ سے حذف کرے <code dir="ltr">Textpattern</code> فائل کو <code dir="ltr">config.php</code> اور پھر کوشس کریں',
         'before_you_proceed' => 'آگے جانے سے پہلے',
@@ -2098,7 +2098,7 @@ $langs = array(
         'your_full_name' => 'آپ کا پورا نام',
         'you_can_access' => 'میں انتخاب کردہ لاگ ان معلومات کے ساتھ داخل ہو سکتے ہیں <a href="index.php">انتظامیہ</a> اب آپ',
     ),
-    'vi-vn' => array(
+    'vi' => array(
         'about_to_create' => 'Bạn chuẩn bị tạo nội dung trong cơ sở dữ liệu.',
         'add_config_file' => 'thêm tập tin cấu hình',
         'admin_theme' => 'Chủ đề phần quản trị',
