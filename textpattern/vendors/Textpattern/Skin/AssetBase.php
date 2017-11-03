@@ -79,15 +79,6 @@ namespace Textpattern\Skin {
         protected static $extension = 'txp';
 
         /**
-         * The asset related template names to work with
-         * (all templates by default).
-         *
-         * @var array
-         */
-
-        protected $templates = array();
-
-        /**
          * {@inheritdoc}
          */
 
