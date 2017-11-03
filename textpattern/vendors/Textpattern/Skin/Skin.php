@@ -771,7 +771,7 @@ namespace Textpattern\Skin {
 
         public static function getCurrent()
         {
-            return get_pref('skin_editing', 'default');
+            return get_pref('skin_editing', 'default', true);
         }
 
         /**

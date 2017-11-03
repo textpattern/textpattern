@@ -28,7 +28,8 @@
  * @package Admin\Form
  */
 
- use Textpattern\Skin\Main as Skins;
+use Textpattern\Skin\Main as Skins;
+use Textpattern\Skin\Skin;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -315,7 +316,7 @@ function form_edit($message = '', $refresh_partials = false)
     $name = sanitizeForPage(assert_string(gps('name')));
     $type = assert_string(gps('type'));
     $newname = sanitizeForPage(assert_string(gps('newname')));
-    $skin = ($skin !== '') ? $skin : get_pref('skin_editing', 'default', true);
+    $skin = ($skin !== '') ? $skin : Skin::getCurrent();
     $class = 'async';
 
     form_set_skin($skin);
