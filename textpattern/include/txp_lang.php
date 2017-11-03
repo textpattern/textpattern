@@ -62,18 +62,18 @@ if ($event == 'lang') {
 
 function languages($name, $val)
 {
-    $installed_langs = Txp::get('\Textpattern\L10n\Lang')->installed();
+    $installed_langs = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED);
     $vals = array();
 
-    foreach ($installed_langs as $lang) {
-        $vals[$lang] = safe_field("data", 'txp_lang', "name = '".doSlash($lang)."' AND lang = '".doSlash($lang)."'");
+    foreach ($installed_langs as $lang => $langdata) {
+        $vals[$lang] = $langdata['name'];
 
         if (trim($vals[$lang]) == '') {
             $vals[$lang] = $lang;
         }
     }
 
-    asort($vals);
+    ksort($vals);
     reset($vals);
 
     return selectInput($name, $vals, $val, false, true, $name);
