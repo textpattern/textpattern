@@ -393,7 +393,7 @@ namespace Textpattern\Skin {
             $title .= ' (copy)';
 
             if (strlen($name) <= 63) {
-                $this->duplicate_as($name, $title, $version, $description, $author, $author_uri, $assets);
+                $this->duplicateAs($name, $title, $version, $description, $author, $author_uri, $assets);
             } else {
                 throw new \Exception(
                     gtxt('skin_name_would_be_too_long', array('{name}' => $name))
@@ -405,7 +405,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function duplicate_as(
+        public function duplicateAs(
             $name,
             $title = null,
             $version = null,

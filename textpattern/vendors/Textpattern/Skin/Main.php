@@ -99,7 +99,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function duplicate_as(
+        public function duplicateAs(
             $name = null,
             $title = null,
             $version = null,
@@ -168,7 +168,7 @@ namespace Textpattern\Skin {
 
                     $results[$skin]['success'][] = gtxt(
                         'skin_step_success',
-                        array('{step}' => ($method === 'duplicate_as' ? 'duplicated' : $method.$done))
+                        array('{step}' => ($method === 'duplicateAs' ? 'duplicated' : $method.$done))
                     );
                 } catch (\Exception $e) {
                     $results[$skin]['failure'][] = $e->getMessage();

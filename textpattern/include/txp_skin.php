@@ -454,7 +454,7 @@ function skin_save()
             $name === $old_name ? $name .= '_copy' : '';
             $title === $old_title ? $title .= ' (copy)' : '';
 
-            $result = $instance->duplicate_as($name, $title, $version, $description, $author, $author_uri);
+            $result = $instance->duplicateAs($name, $title, $version, $description, $author, $author_uri);
         } else {
             $result = $instance->edit($name, $title, $version, $description, $author, $author_uri);
         }

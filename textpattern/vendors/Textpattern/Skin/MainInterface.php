@@ -107,7 +107,7 @@ namespace Textpattern\Skin {
          * @throws \Exception
          */
 
-        public function duplicate_as(
+        public function duplicateAs(
             $name,
             $title = null,
             $version = null,
