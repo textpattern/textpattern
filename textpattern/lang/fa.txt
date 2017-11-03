@@ -7,6 +7,7 @@ lang_dir => rtl
 account_activation =>
 account_activation_confirmation =>
 add_new_author => افزودن نویسنده جدید
+alias_is_taken =>
 assign_assets_to => انتصاب محتوای کاربر به
 author_already_exists => نویسنده با نام <strong>{name}</strong> از پیش موجود است.
 author_deleted => نویسنده با نام <strong>{name}</strong> پاک شد.
@@ -26,6 +27,7 @@ email_changed => نشانی ایمیل به <strong>{email}</strong> تغییر 
 error_adding_new_author => خطا در افزودن نویسنده جدید.
 from_or_to_address_missing =>
 freelancer => نویسنده آزاد
+invalid_header =>
 invalid_token =>
 last_login => آخرین ورود
 link_expires =>
@@ -91,6 +93,7 @@ concurrent_edit_by => نوشته ذخیره نشد. {author} نوشته را ه�
 date_settings => تاریخ و زمان
 excerpt_markup => در کد منتخب
 expires => انقضا
+invalid_expiredate =>
 invalid_postdate =>
 linktext => linktext
 meta => متاتگ
@@ -98,6 +101,7 @@ no_articles_recorded => هیچ نوشته‌ای ثبت نشده است.
 override_default_form => تحریف فرم با
 reset_time => تغییر زمان به حال
 search_articles =>
+set_expire_now =>
 set_to_now => زمان و تاریخ رو به اکنون تغییر بده
 sort_display => مرتب‌سازی و نمایش
 textfilter =>
@@ -327,7 +331,6 @@ active_plugins => پلاگین‌های فعال
 all_checks_passed => تمام آزمون‌ها موفق بود!
 apache_modules => ماژول‌های آپاچی
 apache_version => نسخه آپاچی
-cleanurl_only_apache => Clean URL تنها در Apache پشتیبانی می‌شود. با مسئولیت خود از آن استفاده کنید.
 clean_url_data_failed => تست داده‌های Clean URL ناموفق بود
 clean_url_test_failed => تست Clean URL ناموفق بود.
 db_global_timezone =>
@@ -348,6 +351,7 @@ htaccess_contents => محتویات فایل .htaaccess
 htaccess_missing => فایل .htaccess موجود نیست
 is_inaccessible => دسترس‌پذیر نیست
 last_update => آخرین بهنگام‌سازی
+last_update_check =>
 low => کم
 missing_files => فایل های یافت نشده
 modified_files => برخی از فایل‌های Textpattern نغییر یافته‌اند
@@ -362,6 +366,7 @@ php_sapi_mode => PHP Server API
 php_version => نسخه PHP
 php_version_required => سیستم مدیریت محتوای Textpattern برای نصب روی سرور شما به نسخه‌ی PHP {version} به بالا نیازمند است.
 preflight_check => آزمون
+pretext_data =>
 rfc2616_headers => سرآیندهای RFC 2616
 server => سرور
 server_time => زمان محلی سرور
@@ -370,6 +375,7 @@ site_url_mismatch => مرجع آدرس سایت ممکن است نادرست ب�
 some_php_functions_disabled => این توابع PHP (که برای راه‌اندازی Textpattern ضروری‌اند) بر روی سرور شما غیر فعال‌اند.
 still_exists => همچنان وجود دارد
 textpattern_update_available => نسخه‌ی جدید سیستم مدیریت محتوای Textpattern {version} <a href="https://textpattern.com/download" rel="external" title="رفتن به بخش دانلود">برای دریافت آماده است</a>
+textpattern_update_available_beta =>
 tmp_plugin_paths_match => مسیر پوشه‌ی فایل‌های موقت و مسیر کش پلاگین‌ها <strong>نباید</strong> یکی باشند.
 txp_path => مسیر Textpattern
 txp_version => نسخه Textpattern
@@ -406,6 +412,7 @@ file_category => رده
 file_deleted => فایل(های) <strong>{name}</strong> پاک شد(ند).
 file_delete_failed => ناتوانی در حذف فایل(ها)
 file_dir_not_writeable => هشدار: امکان نوشتن روی پوشه‌ی فایل <code dir="ltr">{filedir}</code> وجود ندارد.
+file_download =>
 file_download_count => دفعات دانلود
 file_name => نام
 file_not_found => فایل یافت نشد
@@ -613,7 +620,6 @@ markup_default => کد پیش‌فرض
 max_url_len => حداکثر طول نشانی (به کاراکتر)
 messy => ?=آشفته
 never_display_email => مخفی‌کردن نشانی ایمیل؟
-new_textpattern_version_available => نسخه کاملاً جدیدی از Textpattern موجود است. می‌خواهید امتحان کنید؟
 no_preferences =>
 override_emailcharset => در ایمیل‌های ارسالی از رمزگذاری ISO-8859-1 استفاده شود (پیش‌فرض UTF-8 است)؟
 path_from_root => پوشه زیرمجموعه (اگر موجود است)
@@ -673,6 +679,7 @@ articles => نوشته‌ها
 articles_found => نوشته یافت شد
 article_context => مقاله
 article_found => نوشته یافت شد
+article_tag_illegal_body =>
 atom_feed_title => فید اتم
 attribute_values_must_be_quoted => مقادیر صفت باید در ”” قرار بگیرند.
 author => نویسنده
@@ -882,6 +889,7 @@ upload => آپلود
 uploaded => آپلود شد
 url => URL
 value => ارزش
+variable_name_empty =>
 version => نسخه
 view => نمایش
 website => وب‌سایت
@@ -956,6 +964,7 @@ please_go_back => لطفاً به عقب برگردید، جزئیات ناصح�
 populate_db => ساکن سازی پایگاه داده
 prefix_bad_characters => پیش‌وند جدول {dbprefix} دارای کاراکترهای غیرمجاز است. نخستین کاراکتر باید یکی از گزینه‌های <strong>a-zA-Z_</strong> و مابقی می‌توانند از کاراکترهای محدوده
 progress_steps => چهار گام جهت فرایند نصب وجود دارد:
+public_theme =>
 setup_comment_invite => نظر بدهید
 setup_login => یک نام کاربری انتخاب کنید (لطفاً صرفاً از کارکترهای اصلی و خط فاصله استفاده کنید)
 setup_password_strength_0 =>
@@ -981,13 +990,14 @@ you_can_access => شما از این پس امکان ورود به <a href="inde
 #@skin
 create_skin =>
 edit_skin =>
+import_skin =>
 search_skins =>
 skin_author =>
+skin_author_uri =>
 skin_description =>
 skin_name =>
 skin_title =>
 skin_version =>
-skin_website =>
 #@tag
 active_class => کلاس CSS برای آیتم فعال
 allowoverride => فرم را بتوان تحریف کرد؟

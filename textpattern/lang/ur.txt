@@ -7,6 +7,7 @@ lang_dir => rtl
 account_activation =>
 account_activation_confirmation =>
 add_new_author => ایک نۓ مصنف کو شامل کریں
+alias_is_taken =>
 assign_assets_to => صارف کے اشیا یہاں تفویض کریں
 author_already_exists =>
 author_deleted => مصنف <strong>{name}</strong> کو حذف کیا گیا
@@ -26,6 +27,7 @@ email_changed => ای میل کا پتہ <strong>{email}</strong> کو بدلہ 
 error_adding_new_author => نۓ مصنف کو شامل کرنے میں نقص !
 from_or_to_address_missing =>
 freelancer => مصنف آزاد
+invalid_header =>
 invalid_token =>
 last_login => پچھلا لاگ ان
 link_expires =>
@@ -91,6 +93,7 @@ concurrent_edit_by => مضمون محفوظ نہیں کیا، {author} مضمو�
 date_settings =>
 excerpt_markup => اختصار وضع
 expires => خاتمہ مدت
+invalid_expiredate =>
 invalid_postdate =>
 linktext => ربطی متن
 meta => Meta
@@ -98,6 +101,7 @@ no_articles_recorded => کوئی مضمون دستیاب نہیں
 override_default_form => فارم زیر کریں
 reset_time => حالیہ وقت پر پھر سیٹ کریں
 search_articles =>
+set_expire_now =>
 set_to_now => حالیہ وقت پر پھر سیٹ کریں
 sort_display => ‏چھانٹنا‏ اور ‏نمائش
 textfilter =>
@@ -327,7 +331,6 @@ active_plugins => فعال‏ پلگ ان
 all_checks_passed => تمام ‏تجزیہ پاس ہوئے !
 apache_modules => Apache ماڈیول
 apache_version => Apache ورژن
-cleanurl_only_apache => صفاکار URLs کو صرف Apache معاونت کرتا ہے، اپنے تقدیر سے استمعال کریں
 clean_url_data_failed =>
 clean_url_test_failed => سافکار URL کے جانچ کرنے میں میں ناکامی
 db_global_timezone =>
@@ -348,6 +351,7 @@ htaccess_contents => .htaccess فائل کی متن
 htaccess_missing => .htaccess فائل موجود نہیں
 is_inaccessible => کی رسائی نا پذیری ہے
 last_update => پچھلا تازہ کاری
+last_update_check =>
 low => پست
 missing_files => غائب‏ فائل
 modified_files => کچھ Textpattern کے فائل ترمیم کیے گئے ہیں
@@ -362,6 +366,7 @@ php_sapi_mode => PHP سرور API موڈ
 php_version => PHP ورژن
 php_version_required =>
 preflight_check =>
+pretext_data =>
 rfc2616_headers => RFC 2616 headers موڈ
 server => سرور
 server_time => سرور کا مقامی وقت
@@ -370,6 +375,7 @@ site_url_mismatch => سائٹ کے URL کی اختیارات شاید غیر ص�
 some_php_functions_disabled => مندرجہ ذیل PHP functions (جو شاید Textpattern کا چلت کریں میں اہم ہونگے) اس سرور پر نا اہل ہے
 still_exists => اب بھی موجود ہے
 textpattern_update_available =>
+textpattern_update_available_beta =>
 tmp_plugin_paths_match => عارضی پوشہ کی راہ اور پلگ ان کے پوشہ کی راہ مشابہ <strong>نہیں</strong> ہونا چاہئے
 txp_path => Textpattern کا پتہ
 txp_version => Textpattern ورژن
@@ -406,6 +412,7 @@ file_category => زمرہ
 file_deleted => فائل <strong>{name}</strong> کو حذف کیا
 file_delete_failed => فائل کو حذف کرنے میں ناکام
 file_dir_not_writeable => تنبیہ: یہ پوشا قابل تحریر نہیں <code dir="ltr">{filedir}</code>
+file_download =>
 file_download_count => ڈاؤن لوڈ ‏گنتی
 file_name => نام
 file_not_found => فائل(یں) ملا نہیں
@@ -613,7 +620,6 @@ markup_default =>
 max_url_len => URL کی زیادہ سے زیادہ‏ لمبائی (حروف میں)
 messy => ?=messy
 never_display_email => کیا تبصرہ نگار کا‏ ای میل پتہ پوشیدہ رکھیں ؟
-new_textpattern_version_available =>
 no_preferences =>
 override_emailcharset => کیا مرسلہ ای میل میں ISO-8859-1 ضابطہ بندی استمعال کریں ؟ (خودکار طور پر UTF-8 استمعال کیا جاۓ گا)
 path_from_root =>
@@ -673,6 +679,7 @@ articles => مضامین
 articles_found => مضامین ملے
 article_context =>
 article_found => مضمون ملا
+article_tag_illegal_body =>
 atom_feed_title => آٹوم فیڈ
 attribute_values_must_be_quoted =>
 author => مصنف
@@ -882,6 +889,7 @@ upload => اپ لوڈ کریں
 uploaded => اپ لوڈ کردہ
 url => URL
 value => ویلو
+variable_name_empty =>
 version => ورژن
 view => دیکھیں
 website => ویب سائٹ
@@ -956,6 +964,7 @@ please_go_back =>
 populate_db =>
 prefix_bad_characters => میں کئی حروف ہیں جس کی اجازت نہیں {dbprefix} جدول سابقہ کے ساتھ مشابہ ہونا چاہئے <strong>a-zA-Z_</strong> کے ساتھ مشابہ ہونا چاہئے اور بقیہ حروف کسی بھی <strong>a-zA</strong>
 progress_steps =>
+public_theme =>
 setup_comment_invite => تبصرہ
 setup_login => (ایک نام صارف انتخاب کریں (بارہ مہربانی، صرف اساسی حروف اور وقفہ داخل کریں
 setup_password_strength_0 =>
@@ -981,13 +990,14 @@ you_can_access => میں انتخاب کردہ لاگ ان معلومات کے �
 #@skin
 create_skin =>
 edit_skin =>
+import_skin =>
 search_skins =>
 skin_author =>
+skin_author_uri =>
 skin_description =>
 skin_name =>
 skin_title =>
 skin_version =>
-skin_website =>
 #@tag
 active_class =>
 allowoverride =>
