@@ -857,7 +857,7 @@ if (!defined('TEXTPATTERN_DEFAULT_LANG')) {
      * @package L10n
      */
 
-    define('TEXTPATTERN_DEFAULT_LANG', 'en-gb');
+    define('TEXTPATTERN_DEFAULT_LANG', 'en');
 }
 
 /**
