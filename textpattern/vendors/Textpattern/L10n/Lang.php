@@ -355,4 +355,35 @@ class Lang
 
         return $closest;
     }
+
+    /**
+     * Generate a &lt;select&gt; element of languages.
+     *
+     * @param  string $name  The HTML name and ID to assign to the select control
+     * @param  string $val   The currently active language identifier (en-gb, fr, de, ...)
+     * @param  int    $flags Logical OR list of flags indiacting the type of list to return:
+     *                       TEXTPATTERN_LANG_ACTIVE: the active language
+     *                       TEXTPATTERN_LANG_INSTALLED: all installed languages
+     *                       TEXTPATTERN_LANG_AVAILABLE: all available languages in the file system
+     * @return string HTML
+     */
+
+    public function languageSelect($name, $val, $flags = TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED)
+    {
+        $installed_langs = $this->available((int)$flags);
+        $vals = array();
+
+        foreach ($installed_langs as $lang => $langdata) {
+            $vals[$lang] = $langdata['name'];
+
+            if (trim($vals[$lang]) == '') {
+                $vals[$lang] = $lang;
+            }
+        }
+
+        ksort($vals);
+        reset($vals);
+
+        return selectInput($name, $vals, $val, false, true, $name);
+    }
 }

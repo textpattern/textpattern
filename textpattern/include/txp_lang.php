@@ -52,34 +52,6 @@ if ($event == 'lang') {
 }
 
 /**
- * Generate a &lt;select&gt; element of installed languages.
- *
- * @param  string $name The HTML name and ID to assign to the select control
- * @param  string $val  The currently active language identifier (en-gb, fr-fr, ...)
- * @return string HTML
- * @todo   Move this to a central location so it can also be used by install_textpack, etc
- */
-
-function languages($name, $val)
-{
-    $installed_langs = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED);
-    $vals = array();
-
-    foreach ($installed_langs as $lang => $langdata) {
-        $vals[$lang] = $langdata['name'];
-
-        if (trim($vals[$lang]) == '') {
-            $vals[$lang] = $lang;
-        }
-    }
-
-    ksort($vals);
-    reset($vals);
-
-    return selectInput($name, $vals, $val, false, true, $name);
-}
-
-/**
  * Generates a grid of every language that Textpattern supports.
  *
  * @param string|array $message The activity message
@@ -92,19 +64,21 @@ function list_languages($message = '')
     $cpanel = '';
 
     if (has_privs('lang.edit')) {
+        $langList = Txp::get('\Textpattern\L10n\Lang')->languageSelect('language', $active_lang);
         $cpanel .= form(
             tag(gTxt('active_language'), 'label', array('for' => 'language')).
-            languages('language', $active_lang).
+            $langList.
             eInput('lang').
             sInput('save_language')
         );
     }
 
+    $langList = Txp::get('\Textpattern\L10n\Lang')->languageSelect('language_ui', $active_ui_lang);
     $lang_form = tag(
         $cpanel.
         form(
             tag(gTxt('active_language_ui'), 'label', array('for' => 'language_ui')).
-            languages('language_ui', $active_ui_lang).
+            $langList.
             eInput('lang').
             sInput('save_language_ui')
         ), 'div', array(
