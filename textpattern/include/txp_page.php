@@ -28,6 +28,8 @@
  * @package Admin\Page
  */
 
+use Textpattern\Skin\Main as Skins;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -131,7 +133,6 @@ function page_edit($message = '', $refresh_partials = false)
     $class = 'async';
 
     page_set_skin($skin);
-    $skin_list = get_skin_list();
 
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
         $name = get_pref('last_page_saved', $default_name);
@@ -165,16 +166,7 @@ function page_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = '';
-
-    if (count($skin_list) > 1) {
-        $skinBlock =
-            n.form(
-                inputLabel('skin', selectInput('skin', $skin_list, $skin, false, 1, 'skin'), 'skin').
-                eInput('page').
-                sInput('page_skin_change')
-            , '', '', 'post');
-    }
+    $skinBlock = n.Skins::renderSwitchForm('page', 'page_skin_change', $skin);
 
     $buttons = graf(
         tag_void('input', array(

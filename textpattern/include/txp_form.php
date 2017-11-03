@@ -28,6 +28,8 @@
  * @package Admin\Form
  */
 
+ use Textpattern\Skin\Main as Skins;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -317,7 +319,6 @@ function form_edit($message = '', $refresh_partials = false)
     $class = 'async';
 
     form_set_skin($skin);
-    $skin_list = get_skin_list();
 
     if ($step == 'form_delete' || empty($name) && $step != 'form_create' && !$savenew) {
         $name = get_pref('last_form_saved', 'default');
@@ -353,16 +354,7 @@ function form_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = '';
-
-    if (count($skin_list) > 1) {
-        $skinBlock =
-            n.form(
-                inputLabel('skin', selectInput('skin', $skin_list, $skin, false, 1, 'skin'), 'skin').
-                eInput('form').
-                sInput('form_skin_change')
-            , '', '', 'post');
-    }
+    $skinBlock = n.Skins::renderSwitchForm('form', 'form_skin_change', $skin);
 
     $buttons = graf(
         tag_void('input', array(
