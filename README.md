@@ -127,7 +127,7 @@ Usage: npm run txp-gitdist <version> [dest-dir]
 
 ```ShellSession
 npm run txp-checksums
-npm run txp-gitdist 1.2.3 ../my-dist-dir
+npm run txp-gitdist 1.2.3 ../my-dest-dir
 ```
 
 ## Legal

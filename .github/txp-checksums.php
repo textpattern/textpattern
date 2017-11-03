@@ -21,8 +21,6 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('txpinterface', 'cli');
-
 if (php_sapi_name() !== 'cli') {
     die('command line only');
 }
@@ -35,20 +33,18 @@ $files = glob_recursive('textpattern/*\.{php,js}', GLOB_BRACE);
 $files = preg_replace('%^textpattern%', '', $files);
 $files = array_flip($files);
 
-
-
-$event = '';
-$prefs['enable_xmlrpc_server'] = true;
-require_once(txpath.'/lib/constants.php');
-require_once(txpath.'/lib/txplib_misc.php');
-
-$out = '';
-foreach (check_file_integrity(INTEGRITY_MD5) as $file => $md5) {
-    $out .= "$file: $md5".n;
-    unset($files[$file]);
+$cs = @file_get_contents(txpath.'/checksums.txt');
+if (preg_match_all('%^(\S+):\s+([\da-f]+)%im', $cs, $mm)) {
+    $out = '';
+    foreach ($mm[1] as $key => $file) {
+        $md5 = md5_file(txpath.$file);
+        $out .= "$file: $md5".n;
+        unset($files[$file]);
+    }
+    file_put_contents(txpath.'/checksums.txt', $out);
+    echo "Checksums updated.\n\n";
 }
-file_put_contents(txpath.'/checksums.txt', $out);
-echo "Checksums updated.\n\n";
+
 
 // New files
 $out = '';
@@ -59,10 +55,7 @@ foreach ($files as $file => $val) {
 }
 if ($out) {
     echo "New files without checksums:".n.$out.n;
-    if (count($argv) > 1) {
-        echo "Add new files to checksums.txt before release.".n.n;
-        exit(127);
-    }
+    echo "Add new files to 'checksums.txt' before release.".n.n;
 }
 
 exit;

@@ -23,45 +23,57 @@
 # */
 
 if [ $# -lt 1 ]; then
-    echo 1>&2 Usage: npm run txp-gitdist '<version> [dest-dir]'
+    echo 1>&2 Usage: npm run txp-gitdist '<version> [dest-dir]';
     echo 1>&2 ' dest-dir defaults to a temporary location';
-    exit 127
+    exit 127;
 fi
-
-VER=$1
-DESTDIR=`mktemp -d "${TMPDIR:-/tmp}/txp.XXXXXXXXX"`
-OLDDIR=`pwd`
 
 if [ $# -eq 2 ]; then
-    DESTDIR=$2
+    DESTDIR=$2;
+else
+    DESTDIR=`mktemp -d "${TMPDIR:-/tmp}/txp.XXXXXXXXX"`;
 fi
 
+VER=$1;
+OLDDIR=`pwd`;
 
+rm -rf $DESTDIR/textpattern-$VER;
 # Export repo to destination -- trailing slash is important!
 git checkout-index -a -f --prefix=$DESTDIR/textpattern-$VER/
 
-cd $DESTDIR
+# Check actual checksums. Add '-badchecksum' suffix, if error
+cmp --silent textpattern/checksums.txt $DESTDIR/textpattern-$VER/textpattern/checksums.txt;
+if [ $? -eq 0 ] ; then
+    SUFFIX="";
+else
+    echo "BAD CHECKSUM! Commit file 'checksums.txt' before release.";
+    SUFFIX="-badchecksum";
+fi
 
+
+cd $DESTDIR
 rm -f textpattern-$VER.tar.gz
+rm -f textpattern-$VER-badchecksum.tar.gz
 rm -f textpattern-$VER.zip
-rm textpattern-$VER/composer.json
-rm textpattern-$VER/package.json
-rm textpattern-$VER/.gitattributes
-rm textpattern-$VER/.gitignore
-rm textpattern-$VER/images/.gitignore
-rm textpattern-$VER/textpattern/.gitignore
-rm textpattern-$VER/textpattern/tmp/.gitignore
-rm textpattern-$VER/phpcs.xml
-rm textpattern-$VER/.phpstorm.meta.php
-rm textpattern-$VER/README.md
+rm -f textpattern-$VER-badchecksum.zip
+rm -f textpattern-$VER/composer.json
+rm -f textpattern-$VER/package.json
+rm -f textpattern-$VER/.gitattributes
+rm -f textpattern-$VER/.gitignore
+rm -f textpattern-$VER/images/.gitignore
+rm -f textpattern-$VER/textpattern/.gitignore
+rm -f textpattern-$VER/textpattern/tmp/.gitignore
+rm -f textpattern-$VER/phpcs.xml
+rm -f textpattern-$VER/.phpstorm.meta.php
+rm -f textpattern-$VER/README.md
 rm -rf textpattern-$VER/.github
 
-tar cfz textpattern-$VER.tar.gz textpattern-$VER
-shasum -a 256 textpattern-$VER.tar.gz > textpattern-$VER.tar.gz.SHA256SUM
+tar cfz textpattern-$VER$SUFFIX.tar.gz textpattern-$VER
+shasum -a 256 textpattern-$VER$SUFFIX.tar.gz > textpattern-$VER$SUFFIX.tar.gz.SHA256SUM
 
-zip -r textpattern-$VER.zip textpattern-$VER --exclude textpattern-$VER/sites/\*
-shasum -a 256 textpattern-$VER.zip > textpattern-$VER.zip.SHA256SUM
+zip -q -r textpattern-$VER$SUFFIX.zip textpattern-$VER --exclude textpattern-$VER/sites/\*
+shasum -a 256 textpattern-$VER$SUFFIX.zip > textpattern-$VER$SUFFIX.zip.SHA256SUM
 
 cd $OLDDIR
-
-echo Textpattern v$VER built in $DESTDIR
+echo Textpattern v$VER$SUFFIX built in $DESTDIR
+echo "";

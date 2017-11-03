@@ -36,7 +36,7 @@
     "get-hive-admin-theme": "sh .github/get-hive-admin-theme.sh",
     "get-default-theme": "sh .github/get-default-theme.sh",
     "txp-checksums": "php .github/txp-checksums.php",
-    "txp-gitdist": "npm run txp-checksums gitdist && sh .github/txp-gitdist.sh"
+    "txp-gitdist": "npm run txp-checksums && sh .github/txp-gitdist.sh"
   },
   "license": "GPL-2.0"
 }
