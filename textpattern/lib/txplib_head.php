@@ -127,7 +127,6 @@ function pagetop($pagetitle = '', $message = '')
         'publish',
         'save',
         'toggle_all_selected',
-        'help',
     ));
     // Mandatory un-themable Textpattern core styles ?>
 <style>
