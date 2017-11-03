@@ -296,6 +296,7 @@ class Lang
 
         $installed_langs = $this->installed();
         $done = 0;
+        $now = date('YmdHis');
 
         foreach ($textpack as $translation) {
             extract($translation);
@@ -309,7 +310,7 @@ class Lang
             if (safe_count('txp_lang', $where)) {
                 $r = safe_update(
                     'txp_lang',
-                    "lastmod = '2005-08-14',
+                    "lastmod = '".doSlash($now)."',
                     data = '".doSlash($data)."',
                     event = '".doSlash($event)."',
                     owner = '".doSlash($owner)."'",
@@ -318,7 +319,7 @@ class Lang
             } else {
                 $r = safe_insert(
                     'txp_lang',
-                    "lastmod = '2005-08-14',
+                    "lastmod = '".doSlash($now)."',
                     data = '".doSlash($data)."',
                     event = '".doSlash($event)."',
                     owner = '".doSlash($owner)."',
