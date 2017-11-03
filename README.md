@@ -76,6 +76,58 @@ discoverable resources:
 * `textpattern-website` (for websites built with Textpattern)
 * `textpattern-development` (for development resources)
 
+## Additional development tools
+
+Various components used within Textpattern CMS (such as the bundled themes and
+language translations) are maintained in standalone repositories. We have a
+simple development toolset built on [Node.js](https://nodejs.org/) to pull the
+distribution files of those repositories into the core as required.
+
+You can install Node.js using the [installer](https://nodejs.org/en/download/)
+or [package manager](https://nodejs.org/en/download/package-manager/).
+
+Install required dev tools:
+
+```ShellSession
+npm install
+```
+
+You can then pull the following components from the CLI, like so:
+
+```ShellSession
+npm run get-default-theme
+npm run get-classic-admin-theme
+npm run get-hive-admin-theme
+npm run get-textpacks
+npm run get-dependencies
+```
+
+To request a specific tag or branch:
+
+```ShellSession
+npm run get-default-theme 4.7.0
+npm run get-classic-admin-theme 4.6.1
+npm run get-classic-admin-theme 4.6.x
+npm run get-hive-admin-theme 4.6.x
+npm run get-textpacks 4.6.x
+```
+
+You can verify PHP code via a PHP linter from the CLI, like so:
+
+```ShellSession
+npm run phplint
+```
+
+Release tools:
+
+Usage: `npm run txp-gitdist <version> [dest-dir]` (`dest-dir` defaults to a
+temporary location).
+
+```ShellSession
+npm run txp-checksums
+npm run txp-gitdist 1.2.3 ../my-dest-dir
+```
+
 ## Legal
 
 Released under the GNU General Public License. See

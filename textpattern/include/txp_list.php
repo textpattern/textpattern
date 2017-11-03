@@ -107,35 +107,35 @@ function list_list($message = '', $post = '')
             $sort_sql = "textpattern.ID $dir";
             break;
         case 'title':
-            $sort_sql = "textpattern.Title $dir, textpattern.Posted DESC";
+            $sort_sql = "textpattern.Title $dir, textpattern.ID DESC";
             break;
         case 'expires':
-            $sort_sql = "textpattern.Expires $dir";
+            $sort_sql = "textpattern.Expires $dir, textpattern.ID DESC";
             break;
         case 'section':
-            $sort_sql = "section.title $dir, textpattern.Posted DESC";
+            $sort_sql = "section.title $dir, textpattern.ID DESC";
             break;
         case 'category1':
-            $sort_sql = "category1.title $dir, textpattern.Posted DESC";
+            $sort_sql = "category1.title $dir, textpattern.ID DESC";
             break;
         case 'category2':
-            $sort_sql = "category2.title $dir, textpattern.Posted DESC";
+            $sort_sql = "category2.title $dir, textpattern.ID DESC";
             break;
         case 'status':
-            $sort_sql = "textpattern.Status $dir, textpattern.Posted DESC";
+            $sort_sql = "textpattern.Status $dir, textpattern.ID DESC";
             break;
         case 'author':
-            $sort_sql = "user.RealName $dir, textpattern.Posted DESC";
+            $sort_sql = "user.RealName $dir, textpattern.ID DESC";
             break;
         case 'comments':
-            $sort_sql = "textpattern.comments_count $dir, textpattern.Posted DESC";
+            $sort_sql = "total_comments $dir, textpattern.ID DESC";
             break;
         case 'lastmod':
-            $sort_sql = "textpattern.LastMod $dir, textpattern.Posted DESC";
+            $sort_sql = "textpattern.LastMod $dir, textpattern.ID DESC";
             break;
         default:
             $sort = 'posted';
-            $sort_sql = "textpattern.Posted $dir";
+            $sort_sql = "textpattern.Posted $dir, textpattern.ID DESC";
             break;
     }
 
@@ -245,56 +245,11 @@ function list_list($message = '', $post = '')
     $contentBlockStart = n.tag_start('div', array(
             'class' => 'txp-layout-1col',
             'id'    => $event.'_container',
+        )).n.tag_start('div', array(
+            'id'    => 'txp-list-container',
         ));
 
     $createBlock = implode(n, $createBlock);
-
-    if ($total < 1) {
-        if ($criteria != 1) {
-            echo $searchBlock.
-                $contentBlockStart.
-                $createBlock.
-                graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_results_found'),
-                    array('class' => 'alert-block information')
-                );
-        } else {
-            echo $contentBlockStart.
-                $createBlock.
-                graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_articles_recorded'),
-                    array('class' => 'alert-block information')
-                );
-        }
-
-        echo n.tag_end('div'). // End of .txp-layout-1col.
-            n.'</div>'; // End of .txp-layout.
-
-        return;
-    }
-
-    $show_authors = !has_single_author('textpattern', 'AuthorID');
-
-    $headers = array(
-        'title' => 'title',
-        'posted' => 'posted',
-        'lastmod' => 'article_modified',
-        'expires' => 'expires',
-        'section' => 'section',
-        'category1' => 'category1',
-        'category2' => 'category2',
-        'status' => 'status'
-    );
-
-    if ($show_authors) {
-        $headers['author'] = 'author';
-    }
-
-    if ($use_comments) {
-        $headers['comments'] = 'comments';
-    }
 
     $paginator = new \Textpattern\Admin\Paginator($event, 'article');
     $limit = $paginator->getLimit();
@@ -303,204 +258,243 @@ function list_list($message = '', $post = '')
 
     echo $searchBlock.$contentBlockStart.$createBlock;
 
-    $rs = safe_query(
-        "SELECT
-            textpattern.ID, textpattern.Title, textpattern.url_title, textpattern.Section,
-            textpattern.Category1, textpattern.Category2,
-            textpattern.Status, textpattern.Annotate, textpattern.AuthorID,
-            UNIX_TIMESTAMP(textpattern.Posted) AS posted,
-            UNIX_TIMESTAMP(textpattern.LastMod) AS lastmod,
-            UNIX_TIMESTAMP(textpattern.Expires) AS expires,
-            category1.title AS category1_title,
-            category2.title AS category2_title,
-            section.title AS section_title,
-            user.RealName AS RealName,
-            (SELECT COUNT(*) FROM ".safe_pfx('txp_discuss')." WHERE parentid = textpattern.ID) AS total_comments
-        FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
-    );
+    if ($total < 1) {
+        if ($criteria != 1) {
+            echo graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_results_found'),
+                    array('class' => 'alert-block information')
+                );
+        } else {
+            echo graf(
+                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                    gTxt('no_articles_recorded'),
+                    array('class' => 'alert-block information')
+                );
+        }
+    } else {
+        $show_authors = !has_single_author('textpattern', 'AuthorID');
 
-    if ($rs) {
-        $common_atts = array(
-            'event' => 'list',
-            'step'  => 'list',
-            'is_link' => true,
-            'dir'   => $switch_dir,
-            'crit'  => $crit,
-            'method'=> $search_method
+        $headers = array(
+            'title' => 'title',
+            'posted' => 'posted',
+            'lastmod' => 'article_modified',
+            'expires' => 'expires',
+            'section' => 'section',
+            'category1' => 'category1',
+            'category2' => 'category2',
+            'status' => 'status'
         );
 
-        $dates = array('posted', 'lastmod', 'expires');
-
-        $head_row = hCell(
-            fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                '', 'class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
-        ).column_head(array(
-            'options' => array('class' => trim('txp-list-col-id'.('id' == $sort ? " $dir" : ''))),
-            'value' => 'ID',
-            'sort'  => 'id'
-        ) + $common_atts);
-
-        foreach ($headers as $header => $column_head) {
-            $head_row .= column_head(array(
-                    'options' => array(
-                        'class' => trim('txp-list-col-'.$header.($header == $sort ? " $dir" : '').(in_array($header, $dates) ? ' date' : ''))),
-                    'value' => $column_head,
-                    'sort'  => $header
-                ) + $common_atts);
+        if ($show_authors) {
+            $headers['author'] = 'author';
         }
 
-        echo n.tag_start('form', array(
-                'class'  => 'multi_edit_form',
-                'id'     => 'articles_form',
-                'name'   => 'longform',
-                'method' => 'post',
-                'action' => 'index.php',
-            )).
-            n.tag_start('div', array('class' => 'txp-listtables')).
-            n.tag_start('table', array('class' => 'txp-list')).
-            n.tag_start('thead').
-            tr($head_row).
-            n.tag_end('thead');
+        if ($use_comments) {
+            $headers['comments'] = 'comments';
+        }
 
-        include_once txpath.'/publish/taghandlers.php';
+        $rs = safe_query(
+            "SELECT
+                textpattern.ID, textpattern.Title, textpattern.url_title, textpattern.Section,
+                textpattern.Category1, textpattern.Category2,
+                textpattern.Status, textpattern.Annotate, textpattern.AuthorID,
+                UNIX_TIMESTAMP(textpattern.Posted) AS posted,
+                UNIX_TIMESTAMP(textpattern.LastMod) AS lastmod,
+                UNIX_TIMESTAMP(textpattern.Expires) AS expires,
+                category1.title AS category1_title,
+                category2.title AS category2_title,
+                section.title AS section_title,
+                user.RealName AS RealName,
+                (SELECT COUNT(*) FROM ".safe_pfx('txp_discuss')." WHERE parentid = textpattern.ID) AS total_comments
+            FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
+        );
 
-        echo n.tag_start('tbody');
-
-        $validator = new Validator();
-
-        while ($a = nextRow($rs)) {
-            extract($a);
-
-            if ($Title === '') {
-                $Title = '<em>'.eLink('article', 'edit', 'ID', $ID, gTxt('untitled')).'</em>';
-            } else {
-                $Title = eLink('article', 'edit', 'ID', $ID, $Title);
-            }
-
-            // Valid section and categories?
-            $validator->setConstraints(array(new SectionConstraint($Section)));
-            $vs = $validator->validate() ? '' : ' error';
-
-            $validator->setConstraints(array(new CategoryConstraint($Category1, array('type' => 'article'))));
-            $vc[1] = $validator->validate() ? '' : ' error';
-
-            $validator->setConstraints(array(new CategoryConstraint($Category2, array('type' => 'article'))));
-            $vc[2] = $validator->validate() ? '' : ' error';
-
-            $Category1 = ($Category1) ? span(txpspecialchars($category1_title), array('title' => $Category1)) : '';
-            $Category2 = ($Category2) ? span(txpspecialchars($category2_title), array('title' => $Category2)) : '';
-
-            if ($Status != STATUS_LIVE and $Status != STATUS_STICKY) {
-                $view_url = '?txpreview='.intval($ID).'.'.time();
-            } else {
-                $view_url = permlinkurl($a);
-            }
-
-            if (isset($statuses[$Status])) {
-                $Status = $statuses[$Status];
-            }
-
-            $comments = '('.$total_comments.')';
-
-            if ($total_comments) {
-                $comments = href($comments, array(
-                    'event'         => 'discuss',
-                    'step'          => 'discuss_list',
-                    'search_method' => 'parent',
-                    'crit'          => $ID,
-                ), array('title' => gTxt('manage')));
-            }
-
-            $comment_status = ($Annotate) ? gTxt('on') : gTxt('off');
-
-            if ($comments_disabled_after) {
-                $lifespan = $comments_disabled_after * 86400;
-                $time_since = time() - $posted;
-
-                if ($time_since > $lifespan) {
-                    $comment_status = gTxt('expired');
-                }
-            }
-
-            $comments =
-                tag($comment_status, 'span', array('class' => 'comments-status')).' '.
-                tag($comments, 'span', array('class' => 'comments-manage'));
-
-            echo tr(
-                td(
-                    (
-                        (
-                            ($a['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
-                            or ($a['Status'] >= STATUS_LIVE and $AuthorID === $txp_user and has_privs('article.edit.own.published'))
-                            or ($a['Status'] < STATUS_LIVE and has_privs('article.edit'))
-                            or ($a['Status'] < STATUS_LIVE and $AuthorID === $txp_user and has_privs('article.edit.own'))
-                        )
-                    ? fInput('checkbox', 'selected[]', $ID, 'checkbox')
-                    : ''
-                    ), '', 'txp-list-col-multi-edit'
-                ).
-                hCell(
-                    eLink('article', 'edit', 'ID', $ID, $ID), '', array(
-                        'class' => '',
-                        'scope' => 'row',
-                    )
-                ).
-                td(
-                    $Title, '', 'txp-list-col-title'
-                ).
-                td(
-                    gTime($posted), '', 'txp-list-col-posted date'.($posted < time() ? '' : ' unpublished')
-                ).
-                td(
-                    gTime($lastmod), '', 'txp-list-col-lastmod date'.($posted === $lastmod ? ' not-modified' : '')
-                ).
-                td(
-                    ($expires ? gTime($expires) : ''), '', 'txp-list-col-expires date'
-                ).
-                td(
-                    span(txpspecialchars($section_title), array('title' => $Section)), '', 'txp-list-col-section'.$vs
-                ).
-                td(
-                    $Category1, '', 'txp-list-col-category1 category'.$vc[1]
-                ).
-                td(
-                    $Category2, '', 'txp-list-col-category2 category'.$vc[2]
-                ).
-                td(
-                    href($Status, $view_url, join_atts(array(
-                        'target' => '_blank',
-                        'title'  => gTxt('view'),
-                    ), TEXTPATTERN_STRIP_EMPTY)), '', 'txp-list-col-status'
-                ).
-                (
-                    $show_authors
-                    ? td(span(txpspecialchars($RealName), array('title' => $AuthorID)), '', 'txp-list-col-author name')
-                    : ''
-                ).
-                (
-                    $use_comments
-                    ? td($comments, '', 'txp-list-col-comments')
-                    : ''
-                )
+        if ($rs) {
+            $common_atts = array(
+                'event' => 'list',
+                'step'  => 'list',
+                'is_link' => true,
+                'dir'   => $switch_dir,
+                'crit'  => $crit,
+                'method'=> $search_method
             );
-        }
 
-        echo n.tag_end('tbody').
-            n.tag_end('table').
-            n.tag_end('div'). // End of .txp-listtables.
-            list_multiedit_form($page, $sort, $dir, $crit, $search_method).
-            tInput().
-            n.tag_end('form').
-            n.tag_start('div', array(
-                'class' => 'txp-navigation',
-                'id'    => $event.'_navigation',
-            )).
-            $paginator->render().
-            nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div');
+            $dates = array('posted', 'lastmod', 'expires');
+
+            $head_row = hCell(
+                fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                    '', 'class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+            ).column_head(array(
+                'options' => array('class' => trim('txp-list-col-id'.('id' == $sort ? " $dir" : ''))),
+                'value' => 'ID',
+                'sort'  => 'id'
+            ) + $common_atts);
+
+            foreach ($headers as $header => $column_head) {
+                $head_row .= column_head(array(
+                        'options' => array(
+                            'class' => trim('txp-list-col-'.$header.($header == $sort ? " $dir" : '').(in_array($header, $dates) ? ' date' : ''))),
+                        'value' => $column_head,
+                        'sort'  => $header
+                    ) + $common_atts);
+            }
+
+            echo n.tag_start('form', array(
+                    'class'  => 'multi_edit_form',
+                    'id'     => 'articles_form',
+                    'name'   => 'longform',
+                    'method' => 'post',
+                    'action' => 'index.php',
+                )).
+                n.tag_start('div', array('class' => 'txp-listtables')).
+                n.tag_start('table', array('class' => 'txp-list')).
+                n.tag_start('thead').
+                tr($head_row).
+                n.tag_end('thead');
+
+            include_once txpath.'/publish/taghandlers.php';
+
+            echo n.tag_start('tbody');
+
+            $validator = new Validator();
+
+            while ($a = nextRow($rs)) {
+                extract($a);
+
+                if ($Title === '') {
+                    $Title = '<em>'.eLink('article', 'edit', 'ID', $ID, gTxt('untitled')).'</em>';
+                } else {
+                    $Title = eLink('article', 'edit', 'ID', $ID, $Title);
+                }
+
+                // Valid section and categories?
+                $validator->setConstraints(array(new SectionConstraint($Section)));
+                $vs = $validator->validate() ? '' : ' error';
+
+                $validator->setConstraints(array(new CategoryConstraint($Category1, array('type' => 'article'))));
+                $vc[1] = $validator->validate() ? '' : ' error';
+
+                $validator->setConstraints(array(new CategoryConstraint($Category2, array('type' => 'article'))));
+                $vc[2] = $validator->validate() ? '' : ' error';
+
+                $Category1 = ($Category1) ? span(txpspecialchars($category1_title), array('title' => $Category1)) : '';
+                $Category2 = ($Category2) ? span(txpspecialchars($category2_title), array('title' => $Category2)) : '';
+
+                if ($Status != STATUS_LIVE and $Status != STATUS_STICKY) {
+                    $view_url = '?txpreview='.intval($ID).'.'.time();
+                } else {
+                    $view_url = permlinkurl($a);
+                }
+
+                if (isset($statuses[$Status])) {
+                    $Status = $statuses[$Status];
+                }
+
+                $comments = '('.$total_comments.')';
+
+                if ($total_comments) {
+                    $comments = href($comments, array(
+                        'event'         => 'discuss',
+                        'step'          => 'discuss_list',
+                        'search_method' => 'parent',
+                        'crit'          => $ID,
+                    ), array('title' => gTxt('manage')));
+                }
+
+                $comment_status = ($Annotate) ? gTxt('on') : gTxt('off');
+
+                if ($comments_disabled_after) {
+                    $lifespan = $comments_disabled_after * 86400;
+                    $time_since = time() - $posted;
+
+                    if ($time_since > $lifespan) {
+                        $comment_status = gTxt('expired');
+                    }
+                }
+
+                $comments =
+                    tag($comment_status, 'span', array('class' => 'comments-status')).' '.
+                    tag($comments, 'span', array('class' => 'comments-manage'));
+
+                echo tr(
+                    td(
+                        (
+                            (
+                                ($a['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
+                                or ($a['Status'] >= STATUS_LIVE and $AuthorID === $txp_user and has_privs('article.edit.own.published'))
+                                or ($a['Status'] < STATUS_LIVE and has_privs('article.edit'))
+                                or ($a['Status'] < STATUS_LIVE and $AuthorID === $txp_user and has_privs('article.edit.own'))
+                            )
+                        ? fInput('checkbox', 'selected[]', $ID, 'checkbox')
+                        : ''
+                        ), '', 'txp-list-col-multi-edit'
+                    ).
+                    hCell(
+                        eLink('article', 'edit', 'ID', $ID, $ID), '', array(
+                            'class' => '',
+                            'scope' => 'row',
+                        )
+                    ).
+                    td(
+                        $Title, '', 'txp-list-col-title'
+                    ).
+                    td(
+                        gTime($posted), '', 'txp-list-col-posted date'.($posted < time() ? '' : ' unpublished')
+                    ).
+                    td(
+                        gTime($lastmod), '', 'txp-list-col-lastmod date'.($posted === $lastmod ? ' not-modified' : '')
+                    ).
+                    td(
+                        ($expires ? gTime($expires) : ''), '', 'txp-list-col-expires date'
+                    ).
+                    td(
+                        span(txpspecialchars($section_title), array('title' => $Section)), '', 'txp-list-col-section'.$vs
+                    ).
+                    td(
+                        $Category1, '', 'txp-list-col-category1 category'.$vc[1]
+                    ).
+                    td(
+                        $Category2, '', 'txp-list-col-category2 category'.$vc[2]
+                    ).
+                    td(
+                        href($Status, $view_url, join_atts(array(
+                            'target' => '_blank',
+                            'title'  => gTxt('view'),
+                        ), TEXTPATTERN_STRIP_EMPTY)), '', 'txp-list-col-status'
+                    ).
+                    (
+                        $show_authors
+                        ? td(span(txpspecialchars($RealName), array('title' => $AuthorID)), '', 'txp-list-col-author name')
+                        : ''
+                    ).
+                    (
+                        $use_comments
+                        ? td($comments, '', 'txp-list-col-comments')
+                        : ''
+                    )
+                );
+            }
+
+            echo n.tag_end('tbody').
+                n.tag_end('table').
+                n.tag_end('div'). // End of .txp-listtables.
+                list_multiedit_form($page, $sort, $dir, $crit, $search_method).
+                tInput().
+                n.tag_end('form');
+        }
     }
 
-    echo n.tag_end('div'). // End of .txp-layout-1col.
+    echo n.tag_start('div', array(
+            'class' => 'txp-navigation',
+            'id'    => $event.'_navigation',
+            'style' => $total < 1 ? 'display:none' : false
+        )).
+        $paginator->render().
+        nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+        n.tag_end('div').
+        n.'</div>'. // End of #txp-list-container.
+        n.tag_end('div'). // End of .txp-layout-1col.
         n.'</div>'; // End of .txp-layout.
 }
 
