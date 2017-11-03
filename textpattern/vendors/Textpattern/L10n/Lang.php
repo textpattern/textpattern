@@ -274,10 +274,6 @@ class Lang
     /**
      * Installs localisation strings from a Textpack.
      *
-     * Created strings get a well-known static modification date set in the past.
-     * This is done to avoid tampering with lastmod dates used for RPC server
-     * interactions, caching and update checks.
-     *
      * @param   string $textpack      The Textpack to install
      * @param   bool   $add_new_langs If TRUE, installs strings for any included language
      * @return  int Number of installed strings
