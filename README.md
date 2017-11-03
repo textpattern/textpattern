@@ -120,10 +120,8 @@ npm run phplint
 
 Release tools:
 
-```
-Usage: npm run txp-gitdist <version> [dest-dir]
- dest-dir defaults to a temporary location
-```
+Usage: `npm run txp-gitdist <version> [dest-dir]` (`dest-dir` defaults to a
+temporary location.
 
 ```ShellSession
 npm run txp-checksums
