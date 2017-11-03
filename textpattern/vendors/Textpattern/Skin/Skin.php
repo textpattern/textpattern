@@ -106,15 +106,10 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function create(
-            $name,
-            $title = null,
-            $version = null,
-            $description = null,
-            $author = null,
-            $author_uri = null,
-            $assets = null
-        ) {
+        public function create($row, $assets = null)
+        {
+            extract($row);
+
             $this->skin = $name;
 
             if (!$this->skinIsInstalled()) {
@@ -156,14 +151,10 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function edit(
-            $name = null,
-            $title = null,
-            $version = null,
-            $description = null,
-            $author = null,
-            $author_uri = null
-        ) {
+        public function edit($row)
+        {
+            extract($row);
+
             if ($this->skinIsInstalled()) {
                 if ($this->skin === $name || !self::isInstalled($name)) {
                     $sections = $this->isInUse();
@@ -387,13 +378,11 @@ namespace Textpattern\Skin {
         {
             $row = $this->getRow();
 
-            extract($row);
+            $row['name'] .= '_copy';
+            $row['title'] .= ' (copy)';
 
-            $name .= '_copy';
-            $title .= ' (copy)';
-
-            if (strlen($name) <= 63) {
-                $this->duplicateAs($name, $title, $version, $description, $author, $author_uri, $assets);
+            if (strlen($row['name']) <= 63) {
+                $this->duplicateAs($row);
             } else {
                 throw new \Exception(
                     gtxt('skin_name_would_be_too_long', array('{name}' => $name))
@@ -405,15 +394,10 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function duplicateAs(
-            $name,
-            $title = null,
-            $version = null,
-            $description = null,
-            $author = null,
-            $author_uri = null,
-            $assets = null
-        ) {
+        public function duplicateAs($row, $assets = null)
+        {
+            extract($row);
+
             if (!self::isInstalled($name)) {
                 $title ?: $title = $name;
 

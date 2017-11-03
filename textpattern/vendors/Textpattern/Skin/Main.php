@@ -57,16 +57,9 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function create(
-            $name,
-            $title = null,
-            $version = null,
-            $description = null,
-            $author = null,
-            $author_uri = null,
-            $assets = null
-        ) {
-            $this->skins = array($name);
+        public function create($row, $assets = null)
+        {
+            $this->skins = array($row['name']);
 
             return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }
@@ -75,14 +68,8 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function edit(
-            $name = null,
-            $title = null,
-            $version = null,
-            $description = null,
-            $author = null,
-            $author_uri = null
-        ) {
+        public function edit($row)
+        {
             return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }
 
@@ -99,15 +86,8 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function duplicateAs(
-            $name = null,
-            $title = null,
-            $version = null,
-            $description = null,
-            $author = null,
-            $author_uri = null,
-            $assets = null
-        ) {
+        public function duplicateAs($row, $assets = null)
+        {
             return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }
 

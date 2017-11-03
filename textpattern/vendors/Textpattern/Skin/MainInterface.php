@@ -37,12 +37,8 @@ namespace Textpattern\Skin {
         /**
          * Creates a skin and its assets.
          *
-         * @param string $name        The skin name;
-         * @param string $title       The skin title;
-         * @param string $version     The skin version;
-         * @param string $description The skin description;
-         * @param string $author      The skin author;
-         * @param string $author_uri  The skin author URL;
+         * @param array  $row         Associative array of the txp_skin table related fields
+         *                            ('name', 'title', 'version', 'description', 'author', 'author_uri');
          * @param mixed  $assets      The skin assets to duplicate (all if not set).
          *        bool                false // none
          *        string              'pages'|'forms'|'styles'
@@ -54,36 +50,17 @@ namespace Textpattern\Skin {
          * @throws \Exception
          */
 
-        public function create(
-            $name,
-            $title = null,
-            $version = null,
-            $description = null,
-            $author = null,
-            $author_uri = null,
-            $assets = null
-        );
+        public function create($row, $assets = null);
 
         /**
          * Edits a skin and its assets.
          *
-         * @param string $name        The skin new name;
-         * @param string $title       The skin new title;
-         * @param string $version     The skin new version;
-         * @param string $description The skin new description;
-         * @param string $author      The skin new author;
-         * @param string $author_uri  The skin new author URL;
+         * @param array $row Associative array of the txp_skin table related fields
+         *                   ('name', 'title', 'version', 'description', 'author', 'author_uri');
          * @throws \Exception
          */
 
-        public function edit(
-            $name = null,
-            $title = null,
-            $version = null,
-            $description = null,
-            $author = null,
-            $author_uri = null
-        );
+        public function edit($row);
 
         /**
          * Duplicates a skin and its assets.
@@ -97,25 +74,13 @@ namespace Textpattern\Skin {
         /**
          * Duplicates a skin and its assets from new skin data.
          *
-         * @param string $name        The skin copy name;
-         * @param string $title       The skin copy title;
-         * @param string $version     The skin copy version;
-         * @param string $description The skin copy description;
-         * @param string $author      The skin copy author;
-         * @param string $author_uri  The skin copy author URL;
-         * @param mixed  $assets      The skin assets to duplicate (see create(), all if not set).
+         * @param array  $row    Associative array of the txp_skin table related fields
+         *                       ('name', 'title', 'version', 'description', 'author', 'author_uri');
+         * @param mixed  $assets The skin assets to duplicate (see create(), all if not set).
          * @throws \Exception
          */
 
-        public function duplicateAs(
-            $name,
-            $title = null,
-            $version = null,
-            $description = null,
-            $author = null,
-            $author_uri = null,
-            $assets = null
-        );
+        public function duplicateAs($row, $assets = null);
 
         /**
          * Edits a skin and its assets.

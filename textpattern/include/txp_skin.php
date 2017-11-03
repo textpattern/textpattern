@@ -453,24 +453,20 @@ function skin_save()
         if ($copy) {
             $name === $old_name ? $name .= '_copy' : '';
             $title === $old_title ? $title .= ' (copy)' : '';
-
-            $result = $instance->duplicateAs($name, $title, $version, $description, $author, $author_uri);
+            $row = compact('name', 'title', 'version', 'description', 'author', 'author_uri');
+            $result = $instance->duplicateAs($row);
         } else {
-            $result = $instance->edit($name, $title, $version, $description, $author, $author_uri);
+            $row = compact('name', 'title', 'version', 'description', 'author', 'author_uri');
+            $result = $instance->edit($row);
         }
     } else {
         $title ?: $title = $name;
+        $name = strtolower(sanitizeForUrl($name));
         $author ?: $author = substr(cs('txp_login_public'), 10);
         $version ?: $version = '0.0.1';
+        $row = compact('name', 'title', 'version', 'description', 'author', 'author_uri');
 
-        $result = Txp::get('\Textpattern\Skin\Main')->create(
-            strtolower(sanitizeForUrl($name)),
-            $title,
-            $version,
-            $description,
-            $author,
-            $author_uri
-        );
+        $result = Txp::get('\Textpattern\Skin\Main')->create($row);
     }
 
     skin_list($result);
