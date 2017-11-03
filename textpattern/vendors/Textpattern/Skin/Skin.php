@@ -399,7 +399,7 @@ namespace Textpattern\Skin {
             extract($row);
 
             if (!self::isInstalled($name)) {
-                $title ?: $title = $name;
+                $title ?: $title = $row['title'] = $name;
 
                 if ($this->skinIsInstalled()) {
                     $callback_extra = array(
@@ -410,7 +410,7 @@ namespace Textpattern\Skin {
 
                     callback_event('skin', 'duplication', 0, $callback_extra);
 
-                    if ($this->duplicateSkin($name, $title, $version, $description, $author, $author_uri)) {
+                    if ($this->duplicateSkin($row)) {
                         static::$installed[$name] = $name;
                         $assets = $this->parseAssets($assets);
 
@@ -461,23 +461,14 @@ namespace Textpattern\Skin {
         /**
          * Duplicates the skin row.
          *
-         * @param string $name        The skin copy name;
-         * @param string $title       The skin copy title;
-         * @param string $version     The skin copy version;
-         * @param string $description The skin copy description;
-         * @param string $author      The skin copy author;
-         * @param string $author_uri  The skin copy author URL;
+         * @param string $row Associative array of the skin row fields related values.
          * @return bool
          */
 
-        public function duplicateSkin(
-            $name,
-            $title,
-            $version,
-            $description,
-            $author,
-            $author_uri
-        ) {
+        public function duplicateSkin($row)
+        {
+            extract($row);
+
             return (bool) safe_insert(
                 self::$table,
                 "title = '".doSlash($title)."',
