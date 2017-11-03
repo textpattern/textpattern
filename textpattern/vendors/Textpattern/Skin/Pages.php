@@ -37,7 +37,6 @@ namespace Textpattern\Skin {
     {
         protected static $dir = 'pages';
         protected static $table = 'txp_page';
-        protected static $columns = array('skin', 'name', 'user_html');
         protected static $essential = array('default', 'error_default');
 
         /**
@@ -50,9 +49,9 @@ namespace Textpattern\Skin {
 
             foreach ($templates as $name) {
                 $sql[] = "("
-                    ."'".doSlash($this->skin)."', "
                     ."'".doSlash($name)."', "
-                    ."''"
+                    ."'', "
+                    ."'".doSlash($this->skin)."'"
                     .")";
             }
 

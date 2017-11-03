@@ -97,6 +97,29 @@ namespace Textpattern\Skin {
         }
 
         /**
+         * Gets the asset table related column names.
+         *
+         * @param  array $exclude Column names.
+         * @return array Column names
+         */
+
+        public function getColumns($exclude = array('lastmod'))
+        {
+            $query = safe_query('SHOW COLUMNS FROM '.static::$table);
+            $columns = array();
+
+            while ($row = $query->fetch_assoc()) {
+                $columns[] = $row['Field'];
+            }
+
+            foreach ($exclude as $column) {
+                unset($columns[array_search($column, $columns)]);
+            }
+
+            return $columns;
+        }
+
+        /**
          * {@inheritdoc}
          */
 
@@ -122,7 +145,7 @@ namespace Textpattern\Skin {
 
                 callback_event(static::$dir, 'create', 0, $callback_extra);
 
-                if ($this->insertTemplates(static::$columns, $sql_values)) {
+                if ($this->insertTemplates($this->getColumns(), $sql_values)) {
                     callback_event(static::$dir, 'created', 0, $callback_extra);
                 } else {
                     callback_event(static::$dir, 'creation_failed', 0, $callback_extra);
@@ -207,7 +230,7 @@ namespace Textpattern\Skin {
                     callback_event(static::$dir, 'import', 0, $callback_extra);
 
                     if ($sql_values) {
-                        if ($this->insertTemplates(static::$columns, $sql_values, true)) {
+                        if ($this->insertTemplates($this->getColumns(), $sql_values, true)) {
                             callback_event(static::$dir, 'imported', 0, $callback_extra);
 
                             $clean ? $this->dropRemovedFiles($passed) : '';

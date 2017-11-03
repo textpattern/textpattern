@@ -37,7 +37,6 @@ namespace Textpattern\Skin {
     {
         protected static $dir = 'styles';
         protected static $table = 'txp_css';
-        protected static $columns = array('skin', 'name', 'css');
         protected static $extension = 'css';
         protected static $essential = array('default');
 
