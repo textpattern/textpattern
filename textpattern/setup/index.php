@@ -134,6 +134,7 @@ eod;
         script_js('../vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL).
         script_js(
             'var textpattern = '.json_encode(array(
+                'prefs'         => (object) null,
                 'event'         => 'setup',
                 'step'          => $step,
                 'textarray'     => (object) $textarray_script,
