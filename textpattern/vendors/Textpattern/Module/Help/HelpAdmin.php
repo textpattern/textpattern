@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
  * Copyright (C) 2017 The Textpattern Development Team
  *
@@ -137,7 +137,7 @@ class HelpAdmin
                 $out = $pophelp.n;
             }
         } else {
-            $out = gTxt('help_missing', array('{item}' => $item));
+            $out = gTxt('pophelp_missing', array('{item}' => $item));
         }
 
         $out = tag($out, 'div', array('id' => 'pophelp-event'));
@@ -150,28 +150,27 @@ class HelpAdmin
         return $out;
     }
 
+    /**
+     * tab_help and custom help
+     *
+     */
+
     public static function dashboard()
     {
-        pagetop('dashboard');
-        echo <<<EOF
-            <h2>Display some minimal Textpattern help from <code>/lang/{current-UI-language}_help.xml</code> or index help files</h2>
-            <ul>
-                <li><a href="?event=help&step=custom&name=en-gb_pophelp">Test render long page en-gb_pophelp.xml, auto-build TOC</a></li>
-            </ul>
-EOF;
-
+//        pagetop(gTxt('tab_help'));
+        //TODO: Autodetect LANG and User Role, show relevant help, allow override it
+        self::custom('en-gb_pophelp');
     }
 
-
-    public static function custom()
+    public static function custom($name='')
     {
-        $name = gps('name');
+        $name = empty($name) ? gps('name') : $name;
         if (empty($name) || preg_match('/[^\w\-]/i', $name)) {
             exit;
         }
         $file = txpath."/lang/{$name}.xml";
 
-        pagetop('Custom help');
+        pagetop(gTxt('help_custom'));
         if ($data = @file_get_contents($file)) {
             echo hardcode_css_test();
             echo self::render_xml($data, "", "?event=help&step=custom&name={$name}&lang=");
