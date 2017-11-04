@@ -89,9 +89,9 @@ class Attribute
     public function setAttribute($key, $value = null, $props = array())
     {
         if ($key) {
+
             if ($value === true) {
                 $props['format'] = 'bool';
-                $props['flag'] = TEXTPATTERN_STRIP_TXP;
             }
 
             $this->setValue($key, $value);
