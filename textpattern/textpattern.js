@@ -53,32 +53,6 @@ function checkCookies()
 }
 
 /**
- * Spawns a centred popup window.
- *
- * @param {string}  url     The location
- * @param {integer} width   The width
- * @param {integer} height  The height
- * @param {string}  options A list of options
- */
-
-function popWin(url, width, height, options)
-{
-    var w = (width) ? width : 400;
-    var h = (height) ? height : 400;
-
-    var t = (screen.height) ? (screen.height - h) / 2 : 0;
-    var l = (screen.width) ? (screen.width - w) / 2 : 0;
-
-    var opt = (options) ? options : 'toolbar = no, location = no, directories = no, ' +
-        'status = yes, menubar = no, scrollbars = yes, copyhistory = no, resizable = yes';
-
-    var popped = window.open(url, 'popupwindow',
-        'top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h + ',' + opt);
-
-    popped.focus();
-}
-
-/**
  * Basic confirmation for potentially powerful choices (like deletion,
  * for example).
  *
@@ -1162,10 +1136,13 @@ jQuery.fn.txpAsyncHref = function (options) {
  * @since  4.6.0
  */
 
-function txpAsyncLink(event)
+function txpAsyncLink(event, txpEvent)
 {
     event.preventDefault();
     var $this = $(event.target);
+    if ($this.attr('href') === undefined) {
+        $this = $this.parent();
+    }
     var url = $this.attr('href').replace('?', '');
 
     // Show feedback while processing.
@@ -1174,7 +1151,7 @@ function txpAsyncLink(event)
 
     sendAsyncEvent(url, function () {}, 'html')
         .done(function (data, textStatus, jqXHR) {
-            textpattern.Relay.callback('txpAsyncLink.success', {
+            textpattern.Relay.callback('txpAsyncLink.'+txpEvent+'.success', {
                 'this'      : $this,
                 'event'     : event,
                 'data'      : data,
@@ -1183,7 +1160,7 @@ function txpAsyncLink(event)
             });
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
-            textpattern.Relay.callback('txpAsyncLink.error', {
+            textpattern.Relay.callback('txpAsyncLink.'+txpEvent+'.error', {
                 'this'        : $this,
                 'event'       : event,
                 'jqXHR'       : jqXHR,
@@ -2120,13 +2097,13 @@ textpattern.Route.add('css, page, form', function () {
 
 textpattern.Route.add('page, form, file, image', function () {
     // Set up asynchronous tag builder links.
-    textpattern.Relay.register('txpAsyncLink.success', function (event, data) {
+    textpattern.Relay.register('txpAsyncLink.tag.success', function (event, data) {
         $('#tagbuild_links').dialog('close').html($(data['data'])).dialog('open').restorePanes();
         $('#txp-tagbuilder-output').select();
     });
 
     $('#tagbuild_links, .txp-list-col-tag-build').on('click', '.txp-tagbuilder-link', function (ev) {
-        txpAsyncLink(ev);
+        txpAsyncLink(ev, 'tag');
     });
 
     $('#tagbuild_links').dialog({
@@ -2159,6 +2136,37 @@ textpattern.Route.add('page, form, file, image', function () {
             }
         });
     });
+});
+
+// popHelp.
+
+textpattern.Route.add('', function () {
+    if ( $('.pophelp' ).length ) {
+        textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
+            $(data.event.target).parent().attr("data-item", encodeURIComponent(data.data) );
+            $('#pophelp_dialog').dialog('close').html(data.data).dialog('open').restorePanes();
+        });
+
+        $('.pophelp').on('click', function (ev) {
+            var item = $(ev.target).parent().attr('data-item');
+            if (item === undefined ) {
+                txpAsyncLink(ev, 'pophelp');
+            } else {
+                $('#pophelp_dialog').dialog('close').html(decodeURIComponent(item)).dialog('open').restorePanes();
+            }
+            return false;
+        });
+
+        $('body').append('<div id="pophelp_dialog"></div>');
+        $('#pophelp_dialog').dialog({
+            dialogClass: 'txp-tagbuilder-container',    // FIXME: UI, need pophelp-class
+            autoOpen: false,
+            title: textpattern.gTxt('help'),
+            focus: function (ev, ui) {
+                $(ev.target).closest('.ui-dialog').focus();
+            }
+        });
+    }
 });
 
 // Forms panel.

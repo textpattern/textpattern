@@ -72,6 +72,8 @@ if (count($txpdir) > 3) {
     $txpdir = '/';
 }
 
+$prefs = array();
+$prefs['enable_admin_pophelp'] = 1;
 $step = ps('step');
 $rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i", '$1', $_SERVER['PHP_SELF']);
 $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
@@ -92,11 +94,8 @@ switch ($step) {
     case 'createTxp':
         createTxp();
 }
-?>
-</main>
-</body>
-</html>
-<?php
+exit("</main>\n</body>\n</html>");
+
 
 /**
  * Return the top of page furniture.

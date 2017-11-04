@@ -140,6 +140,7 @@ function prefs_save()
     }
 
     update_lastmod('preferences_saved');
+    $prefs = get_prefs();
 
     prefs_list(gTxt('preferences_saved'));
 }
@@ -193,6 +194,8 @@ function prefs_list($message = '')
     $groupOut = array();
 
     if (numRows($rs)) {
+        $pophelp_keys = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp_keys('prefs');
+
         while ($a = nextRow($rs)) {
             if (!has_privs('prefs.'.$a['event'])) {
                 continue;
@@ -229,11 +232,7 @@ function prefs_list($message = '')
                 $label = $a['name'];
             }
 
-            // TODO: remove exception when custom fields move to meta store.
-            $help = '';
-            if (strpos($a['name'], 'custom_') === false) {
-                $help = $a['name'];
-            }
+            $help = in_array($a['name'], $pophelp_keys, true) ? $a['name'] : '';
 
             if ($a['html'] == 'text_input') {
                 $size = INPUT_REGULAR;
