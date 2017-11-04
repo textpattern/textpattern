@@ -178,7 +178,8 @@ class Tag implements \Textpattern\Widget\WidgetInterface
                 $out = '<'.$this->tag.$this->atts->render().'>'.$this->content.'</'.$this->tag.'>';
                 break;
             case 'self-closing':
-                $out = '<'.$this->tag.$this->atts->render().' />';
+                $doctype = get_pref('doctype');
+                $out = '<'.$this->tag.$this->atts->render().($doctype === 'xhtml' ? ' />' : '>');
                 break;
             case 'open':
                 $out = '<'.$this->tag.$this->atts->render().'>';
