@@ -2903,7 +2903,8 @@ function get_form_types()
 /**
  * Gets a list of essential form templates.
  *
- * These forms can not be deleted or renamed.
+ * These forms can not be deleted or renamed. The array keys hold
+ * the form names, the array values their group.
  *
  * The list forms can be extended with a 'form.essential > forms'
  * callback event. Callback functions get passed three arguments: '$event',
@@ -2921,18 +2922,42 @@ function get_essential_forms()
 
     if ($essential === null) {
         $essential = array(
-            'comments',
-            'comments_display',
-            'comment_form',
-            'default',
-            'plainlinks',
-            'files',
+            'comments'         => 'comment',
+            'comments_display' => 'comment',
+            'comment_form'     => 'comment',
+            'default'          => 'article',
+            'plainlinks'       => 'link',
+            'files'            => 'file',
         );
 
         callback_event_ref('form.essential', 'forms', 0, $essential);
     }
 
     return $essential;
+}
+
+
+/**
+ * Gets a list of skins in use.
+ *
+ * @return  array An array of skin names
+ * @since   4.6.0
+ * @package Skin
+ */
+
+function get_skin_list()
+{
+    static $skins = null;
+
+    if ($skins === null) {
+        $skinList = safe_rows('name, title', 'txp_skin', '1=1');
+
+        foreach ($skinList as $skinDef) {
+            $skins[$skinDef['name']] = $skinDef['title'];
+        }
+    }
+
+    return $skins;
 }
 
 /**
@@ -4274,14 +4299,16 @@ function fetch_form($name)
     global $production_status, $trace;
 
     static $forms = array();
+    global $pretext;
 
     $name = (string) $name;
+    $skin = $pretext['skin'];
 
     if (!isset($forms[$name])) {
         if (has_handler('form.fetch')) {
-            $form = callback_event('form.fetch', '', false, compact('name'));
+            $form = callback_event('form.fetch', '', false, compact('name', 'skin'));
         } else {
-            $form = safe_field('Form', 'txp_form', "name = '".doSlash($name)."'");
+            $form = safe_field('Form', 'txp_form', "name = '".doSlash($name)."' AND skin = '".doSlash($skin)."'");
         }
 
         if ($form === false) {
@@ -4294,7 +4321,7 @@ function fetch_form($name)
     }
 
     if ($production_status === 'debug') {
-        $trace->log("[Form: '$name']");
+        $trace->log("[Form: '$skin.$name']");
     }
 
     return $forms[$name];
@@ -4355,7 +4382,8 @@ function parse_form($name)
  * to a 'page.fetch' callback event. Any value returned by the callback function
  * will be used as the template markup.
  *
- * @param   string $name The template
+ * @param   string      $name The template
+ * @param   string      $theme The public theme
  * @return  string|bool The page template, or FALSE on error
  * @package TagParser
  * @since   4.6.0
@@ -4363,21 +4391,21 @@ function parse_form($name)
  * echo fetch_page('default');
  */
 
-function fetch_page($name)
+function fetch_page($name, $theme)
 {
     global $trace;
 
     if (has_handler('page.fetch')) {
-        $page = callback_event('page.fetch', '', false, compact('name'));
+        $page = callback_event('page.fetch', '', false, compact('name', 'theme'));
     } else {
-        $page = safe_field("user_html", 'txp_page', "name = '".doSlash($name)."'");
+        $page = safe_field('user_html', 'txp_page', "name = '".doSlash($name)."' AND skin = '".doSlash($theme)."'");
     }
 
     if ($page === false) {
         return false;
     }
 
-    $trace->log("[Page: '$name']");
+    $trace->log("[Page: '$theme.$name']");
 
     return $page;
 }
@@ -4385,8 +4413,9 @@ function fetch_page($name)
 /**
  * Parses a page template.
  *
- * @param   string $name The template name
- * @param   string $page or default content
+ * @param   string      $name  The template to parse
+ * @param   string      $theme The public theme
+ * @param   string      $page  Default content to parse
  * @return  string|bool The parsed page template, or FALSE on error
  * @since   4.6.0
  * @package TagParser
@@ -4394,12 +4423,12 @@ function fetch_page($name)
  * echo parse_page('default');
  */
 
-function parse_page($name, $page = false)
+function parse_page($name, $theme, $page = '')
 {
     global $pretext, $trace;
 
-    if ($name) {
-        $page = fetch_page($name);
+    if (!$page) {
+        $page = fetch_page($name, $theme);
     }
 
     if ($page !== false) {

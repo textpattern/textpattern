@@ -109,7 +109,8 @@ include txpath.'/publish.php';
 switch (txpinterface) {
     case 'css':
         $n = gps('n');
-        output_css($s, $n);
+        $t = gps('t');
+        output_css($s, $n, $t);
         break;
     default:
         textpattern();

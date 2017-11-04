@@ -289,6 +289,7 @@ function areas()
     );
 
     $areas['presentation'] = array(
+        gTxt('tab_skins')    => 'skin',
         gTxt('tab_sections') => 'section',
         gTxt('tab_pages')    => 'page',
         gTxt('tab_forms')    => 'form',

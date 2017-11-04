@@ -67,12 +67,13 @@ if ($event == 'form') {
     require_privs('form');
 
     bouncer($step, array(
-        'form_edit'       => false,
-        'form_create'     => false,
-        'form_delete'     => true,
-        'form_multi_edit' => true,
-        'form_save'       => true,
-        'tagbuild'        => false,
+        'form_edit'        => false,
+        'form_create'      => false,
+        'form_delete'      => true,
+        'form_multi_edit'  => true,
+        'form_save'        => true,
+        'form_skin_change' => true,
+        'tagbuild'         => false,
     ));
 
     switch (strtolower($step)) {
@@ -94,6 +95,10 @@ if ($event == 'form') {
         case 'form_save':
             form_save();
             break;
+        case "form_skin_change":
+            form_skin_change();
+            form_edit();
+            break;
         case 'tagbuild':
             echo form_tagbuild();
             break;
@@ -114,7 +119,7 @@ function form_list($current)
 {
     global $essential_forms, $form_types;
 
-    $criteria = 1;
+    $criteria = "skin = '" . doSlash($current['skin']) . "'";
     $criteria .= callback_event('admin_criteria', 'form_list', 0, $criteria);
 
     $rs = safe_rows_start(
@@ -125,6 +130,11 @@ function form_list($current)
 
     if ($rs) {
         $prev_type = null;
+
+        // Add a hidden field, in case only one skin is in use and mult-edit is the
+        // first action performed. This way, the value is propagated and saved, even
+        // if the skin select list is not rendered or a Form is not saved first.
+        $out[] = hInput('skin', $current['skin']);
 
         while ($a = nextRow($rs)) {
             extract($a);
@@ -186,18 +196,21 @@ function form_multi_edit()
 {
     $method = ps('edit_method');
     $forms = ps('selected_forms');
+    $skin = ps('skin');
     $affected = array();
     $message = null;
+
+    form_set_skin($skin);
 
     if ($forms && is_array($forms)) {
         if ($method == 'delete') {
             foreach ($forms as $name) {
-                if (form_delete($name)) {
+                if (form_delete($name, $skin)) {
                     $affected[] = $name;
                 }
             }
 
-            callback_event('forms_deleted', '', 0, $affected);
+            callback_event('forms_deleted', '', 0, compact('affected', 'skin'));
             update_lastmod('form_deleted', $affected);
 
             $message = gTxt('forms_deleted', array('{list}' => join(', ', $affected)));
@@ -279,7 +292,7 @@ function form_edit($message = '', $refresh_partials = false)
         // Type value.
         'type_value' => array(
             'mode'     => PARTIAL_VOLATILE_VALUE,
-            'selector' => 'input[name=type]',
+            'selector' => '[name=type]',
             'cb'       => 'form_partial_type_value',
         ),
         // Textarea.
@@ -294,12 +307,17 @@ function form_edit($message = '', $refresh_partials = false)
         'copy',
         'save_error',
         'savenew',
+        'skin',
     ))));
 
     $name = sanitizeForPage(assert_string(gps('name')));
     $type = assert_string(gps('type'));
     $newname = sanitizeForPage(assert_string(gps('newname')));
+    $skin = ($skin !== '') ? $skin : get_pref('skin_editing', 'default', true);
     $class = 'async';
+
+    form_set_skin($skin);
+    $skin_list = get_skin_list();
 
     if ($step == 'form_delete' || empty($name) && $step != 'form_create' && !$savenew) {
         $name = get_pref('last_form_saved', 'default');
@@ -315,7 +333,7 @@ function form_edit($message = '', $refresh_partials = false)
     $Form = gps('Form');
 
     if (!$save_error) {
-        if (!extract(safe_row("*", 'txp_form', "name = '".doSlash($name)."'"))) {
+        if (!extract(safe_row('*', 'txp_form', "name = '".doSlash($name)."' AND skin = '" . doSlash($skin) . "'"))) {
             $name = '';
         }
     }
@@ -334,6 +352,17 @@ function form_edit($message = '', $refresh_partials = false)
         $actionsExtras,
         array('class' => 'txp-actions txp-actions-inline')
     );
+
+    $skinBlock = '';
+
+    if (count($skin_list) > 1) {
+        $skinBlock =
+            n.form(
+                inputLabel('skin', selectInput('skin', $skin_list, $skin, false, 1, 'skin'), 'skin').
+                eInput('form').
+                sInput('form_skin_change')
+            , '', '', 'post');
+    }
 
     $buttons = graf(
         tag_void('input', array(
@@ -359,6 +388,7 @@ function form_edit($message = '', $refresh_partials = false)
         'name'    => $name,
         'newname' => $newname,
         'type'    => $type,
+        'skin'    => $skin,
         'form'    => $Form,
         );
 
@@ -387,7 +417,7 @@ function form_edit($message = '', $refresh_partials = false)
 
     // Forms create/switcher column.
     echo n.tag(
-        $listActions.n.
+        $skinBlock.$listActions.n.
         $partials['list']['html'].n,
         'div', array(
             'class' => 'txp-layout-4col-alt',
@@ -437,17 +467,20 @@ function form_save()
         'Form',
         'type',
         'copy',
+        'skin',
     )))));
 
     $name = sanitizeForPage(assert_string(ps('name')));
     $newname = sanitizeForPage(assert_string(ps('newname')));
+
+    form_set_skin($skin);
 
     $save_error = false;
     $message = '';
 
     if (in_array($name, $essential_forms)) {
         $newname = $name;
-        $type = fetch('type', 'txp_form', 'name', $newname);
+        $type = safe_field('type', 'txp_form', "name = '".doSlash($newname)."' AND skin = '".doSlash($skin)."'");
         $_POST['newname'] = $newname;
     }
 
@@ -464,22 +497,26 @@ function form_save()
                 $_POST['newname'] = $newname;
             }
 
-            $exists = safe_field("name", 'txp_form', "name = '".doSlash($newname)."'");
+            $exists = safe_field("name", 'txp_form', "name = '".doSlash($newname)."' AND skin = '".doSlash($skin)."'");
 
             if ($newname !== $name && $exists !== false) {
                 $message = array(gTxt('form_already_exists', array('{name}' => $newname)), E_ERROR);
+
                 if ($savenew) {
                     $_POST['newname'] = '';
                 }
 
                 $save_error = true;
             } else {
+                $safe_skin = doSlash($skin);
+
                 if ($savenew or $copy) {
                     if ($newname) {
                         if (safe_insert(
                             'txp_form',
                             "Form = '$Form',
                             type = '$type',
+                            skin = '$safe_skin',
                             name = '".doSlash($newname)."'"
                         )) {
                             update_lastmod('form_created', compact('newname', 'name', 'type', 'Form'));
@@ -500,8 +537,9 @@ function form_save()
                         'txp_form',
                         "Form = '$Form',
                         type = '$type',
+                        skin = '$safe_skin',
                         name = '".doSlash($newname)."'",
-                        "name = '".doSlash($name)."'"
+                        "name = '".doSlash($name)."' AND skin = '$safe_skin'"
                     )) {
                         update_lastmod('form_saved', compact('newname', 'name', 'type', 'Form'));
 
@@ -531,10 +569,11 @@ function form_save()
  * Deletes a form template with the given name.
  *
  * @param  string $name The form template
+ * @param  string $skin The form skin in use
  * @return bool FALSE on error
  */
 
-function form_delete($name)
+function form_delete($name, $skin)
 {
     global $prefs, $essential_forms;
 
@@ -546,8 +585,9 @@ function form_delete($name)
     }
 
     $name = doSlash($name);
+    $skin = doSlash($skin);
 
-    return safe_delete('txp_form', "name = '$name'");
+    return safe_delete("txp_form", "name = '$name' AND skin = '$skin'");
 }
 
 /**
@@ -568,8 +608,43 @@ function form_set_type($name, $type)
 
     $name = doSlash($name);
     $type = doSlash($type);
+    $skin = doSlash(get_pref('skin_editing', 'default'));
 
-    return safe_update('txp_form', "type = '$type'", "name = '$name'");
+    return safe_update('txp_form', "type = '$type'", "name = '$name' AND skin = '$skin'");
+}
+
+/**
+ * Changes the skin in which forms are being edited.
+ *
+ * Keeps track of which skin is being edited from panel to panel.
+ *
+ * @param  string $skin Optional skin name. Read from GET/POST otherwise
+ */
+
+function form_skin_change($skin = null)
+{
+    if ($skin === null) {
+        $skin = gps('skin');
+    }
+
+    if ($skin) {
+        form_set_skin($skin);
+    }
+
+    return true;
+}
+
+/**
+ * Set the current skin so it persists across panels.
+ *
+ * @param  string $skin The skin name to store
+ * @todo   Generalise this elsewhere?
+ * @return string HTML
+ */
+
+function form_set_skin($skin)
+{
+    set_pref('skin_editing', $skin, 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
 }
 
 /**
@@ -644,6 +719,7 @@ function form_partial_name($rs)
     global $essential_forms;
 
     $name = $rs['name'];
+    $skin = $rs['skin'];
 
     if (in_array($name, $essential_forms)) {
         $nameInput = fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', true);
@@ -665,7 +741,8 @@ function form_partial_name($rs)
         $name_widgets .= hInput('name', $name);
     }
 
-    $name_widgets .= eInput('form').sInput('form_save');
+    $name_widgets .= hInput('skin', $skin).
+        eInput('form').sInput('form_save');
 
     return $name_widgets;
 }
@@ -683,14 +760,16 @@ function form_partial_type($rs)
 
     $name = $rs['name'];
     $type = $rs['type'];
+    $type_widgets = '';
 
     if (in_array($name, $essential_forms)) {
         $typeInput = formTypes($type, false, 'type', true);
+        $type_widgets .= hInput('type', $type);
     } else {
         $typeInput = formTypes($type, false);
     }
 
-    $type_widgets = inputLabel(
+    $type_widgets .= inputLabel(
         'type',
         $typeInput,
         'form_type',

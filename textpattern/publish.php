@@ -488,8 +488,22 @@ function preText($s, $prefs)
     }
 
     // By this point we should know the section, so grab its page and CSS.
+    // Logged-in users with enough privs use the skin they're currently editing.
     if (txpinterface != 'css') {
-        $rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
+        $rs = safe_row("skin, page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
+
+        $userInfo = is_logged_in();
+        $skin = '';
+
+        if (isset($userInfo['name']) && has_privs('skin', $userInfo['name'])) {
+            // Can't use get_pref() because it assumes $txp_user, which is not set on public site.
+            $skin = safe_field(
+                "val",
+                "txp_prefs",
+                "name = 'skin_editing' AND (user_name = '".doSlash($userInfo['name'])."')");
+        }
+
+        $out['skin'] = (!empty($skin) ? $skin : (isset($rs['skin']) ? $rs['skin'] : ''));
         $out['page'] = isset($rs['page']) ? $rs['page'] : '';
         $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
@@ -531,7 +545,7 @@ function textpattern()
     txp_status_header('200 OK');
 
     set_error_handler('tagErrorHandler');
-    $html = parse_page($pretext['page']);
+    $html = parse_page($pretext['page'], $pretext['skin']);
 
     if ($html === false) {
         txp_die(gTxt('unknown_section'), '404');
@@ -550,9 +564,10 @@ function textpattern()
 }
 
 // -------------------------------------------------------------
-function output_css($s = '', $n = '')
+function output_css($s = '', $n = '', $t = '')
 {
     $order = '';
+    $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
 
     if ($n) {
         if (!is_scalar($n)) {
@@ -570,13 +585,13 @@ function output_css($s = '', $n = '')
             txp_die('Not Found', 404);
         }
 
-        $cssname = safe_field('css', 'txp_section', "name = '".doSlash($s)."'");
+        $cssname = safe_field('css', 'txp_section', "name='".doSlash($s)."' AND skin='".doSlash($t)."'");
     }
 
     if (!empty($cssname)) {
-        $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$order));
+        $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$skinquery.$order));
         set_error_handler('tagErrorHandler');
-        echo parse_page(null, $css);
+        echo parse_page(null, null, $css);
         restore_error_handler();
     }
 }
