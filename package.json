@@ -31,6 +31,7 @@
     "copy:zxcvbn": "rimraf textpattern/vendors/dropbox/zxcvbn/zxcvbn.js && cp node_modules/zxcvbn/dist/zxcvbn.js textpattern/vendors/dropbox/zxcvbn/zxcvbn.js",
     "copy:textile": "sh .github/copy-textile.sh",
     "get-dependencies": "npm run copy:jquery && npm run copy:zxcvbn && npm run copy:textile",
+    "get-pophelp": "sh .github/get-pophelp.sh",
     "get-textpacks": "sh .github/get-textpacks.sh",
     "get-classic-admin-theme": "sh .github/get-classic-admin-theme.sh",
     "get-hive-admin-theme": "sh .github/get-hive-admin-theme.sh",
