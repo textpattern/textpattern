@@ -98,6 +98,7 @@ You can then pull the following components from the CLI, like so:
 npm run get-default-theme
 npm run get-classic-admin-theme
 npm run get-hive-admin-theme
+npm run get-pophelp
 npm run get-textpacks
 npm run get-dependencies
 ```
