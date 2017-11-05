@@ -81,7 +81,8 @@ class Tag implements \Textpattern\Widget\WidgetInterface
     public function __construct($tag)
     {
         if (self::$flags === null) {
-            self::$flags['output'] = 'html5';
+            self::$flags['boolean'] = 'html5';
+            self::$flags['self-closing'] = 'html5';
         }
 
         $this->setTag($tag);
@@ -148,7 +149,7 @@ class Tag implements \Textpattern\Widget\WidgetInterface
 
         $props = array('format' => 'bool');
 
-        if (self::$flags['output'] === 'html5') {
+        if (self::$flags['boolean'] === 'html5') {
             $props['flag'] = TEXTPATTERN_STRIP_TXP;
         }
 
@@ -173,13 +174,14 @@ class Tag implements \Textpattern\Widget\WidgetInterface
     /**
      * Define the output scheme from this point forward in all tags. Chainable.
      *
-     * @param  string $scheme Either 'html5' or 'xhtml'.
+     * @param  string $flag   The name of the flag to set. Either 'self-closing' or 'boolean'
+     * @param  string $scheme The scheme to set the flag to. Either 'html5' or 'xhtml'
      */
 
-    public function setOutput($scheme)
+    public function setFlag($flag, $scheme)
     {
         if (in_array($scheme, array('html5', 'xhtml'))) {
-            self::$flags['output'] = $scheme;
+            self::$flags[$flag] = $scheme;
         }
 
         return $this;
@@ -210,7 +212,7 @@ class Tag implements \Textpattern\Widget\WidgetInterface
                 $out = '<'.$this->tag.$this->atts->render().'>'.$this->content.'</'.$this->tag.'>';
                 break;
             case 'self-closing':
-                $out = '<'.$this->tag.$this->atts->render().(self::$flags['output'] === 'html5' ? '>' : ' />');
+                $out = '<'.$this->tag.$this->atts->render().(self::$flags['self-closing'] === 'html5' ? '>' : ' />');
                 break;
             case 'open':
                 $out = '<'.$this->tag.$this->atts->render().'>';
