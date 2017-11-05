@@ -301,6 +301,7 @@ function areas()
         gTxt('tab_languages')   => 'lang',
         $adminString            => 'admin',
         gTxt('tab_plugins')     => 'plugin',
+        gTxt('tab_help')        => 'help',
     );
 
     $areas['extensions'] = array(
