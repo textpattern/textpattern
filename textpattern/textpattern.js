@@ -2161,50 +2161,6 @@ textpattern.Route.add('page, form, file, image', function () {
     });
 });
 
-// Sections panel. Used for edit panel and multiedit change of page+style.
-// This can probably be cleaned up / optimised.
-
-textpattern.Route.add('section', function ()
-{
-    /**
-     * Show/hide assets base on the selected theme.
-     *
-     * @param  string skin The theme name from which to show assets
-     */
-    function section_theme_hide(skin) {
-        $('#section_page, #section_css, #multiedit_page, #multiedit_css').each(function() {
-            var $options = $(this).find('option'),
-                $selected = $options.filter(':selected'),
-                $current = $options.filter('[data-skin="'+skin+'"]');
-
-            $options.hide().filter('[data-skin="'+$selected.data('skin')+'"]').removeAttr("selected");
-            $selected.attr('selected', 'selected');
-            $selected = $current.filter('[selected]');
-
-            if (!$selected.length) {
-                $selected = $current.first();
-            }
-
-            $selected.prop('selected', true).attr('selected', 'selected');
-            $current.show()
-        });
-    }
-
-    $('#section_details, .multi_edit_form').on('change', '#section_skin, #multiedit_skin', function() {
-        section_theme_hide($(this).val());
-    });
-
-    // Invoke the handler now to set things on initial page load.
-    $('#section_skin').change();
-
-    $('select[name=edit_method]').change(function() {
-        if ($(this).val() === 'changepagestyle') {
-            var theSkin = $('#multiedit_skin').val();
-            section_theme_hide(theSkin);
-        }
-    });
-});
-
 // Forms panel.
 
 textpattern.Route.add('form', function () {
@@ -2263,6 +2219,50 @@ textpattern.Route.add('image', function () {
         var height = $h.val();
         $w.val(height);
         $h.val(width);
+    });
+});
+
+// Sections panel. Used for edit panel and multiedit change of page+style.
+// This can probably be cleaned up / optimised.
+
+textpattern.Route.add('section', function ()
+{
+    /**
+     * Show/hide assets base on the selected theme.
+     *
+     * @param  string skin The theme name from which to show assets
+     */
+    function section_theme_hide(skin) {
+        $('#section_page, #section_css, #multiedit_page, #multiedit_css').each(function() {
+            var $options = $(this).find('option'),
+                $selected = $options.filter(':selected'),
+                $current = $options.filter('[data-skin="'+skin+'"]');
+
+            $options.hide().filter('[data-skin="'+$selected.data('skin')+'"]').removeAttr("selected");
+            $selected.attr('selected', 'selected');
+            $selected = $current.filter('[selected]');
+
+            if (!$selected.length) {
+                $selected = $current.first();
+            }
+
+            $selected.prop('selected', true).attr('selected', 'selected');
+            $current.show()
+        });
+    }
+
+    $('#section_details, .multi_edit_form').on('change', '#section_skin, #multiedit_skin', function() {
+        section_theme_hide($(this).val());
+    });
+
+    // Invoke the handler now to set things on initial page load.
+    $('#section_skin').change();
+
+    $('select[name=edit_method]').change(function() {
+        if ($(this).val() === 'changepagestyle') {
+            var theSkin = $('#multiedit_skin').val();
+            section_theme_hide(theSkin);
+        }
     });
 });
 
