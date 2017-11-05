@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,14 +18,14 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-global $thisversion, $dbversion, $txp_using_svn, $dbupdatetime;
+global $thisversion, $dbversion, $txp_is_dev, $dbupdatetime;
 
 $dbupdates = array(
     '1.0.0',
@@ -33,7 +33,8 @@ $dbupdates = array(
     '4.2.0',
     '4.3.0',
     '4.5.0', '4.5.7',
-    '4.6.0'
+    '4.6.0',
+    '4.7.0',
 );
 
 function newest_file()
@@ -58,10 +59,10 @@ if (($dbversion == '') ||
     $dbversion = '0.9.9';
 }
 
-$dbversion_target = $dbupdates[sizeof($dbupdates) - 1];
+$dbversion_target = $thisversion;
 
 if ($dbversion == $dbversion_target ||
-    ($txp_using_svn && (newest_file() <= $dbupdatetime))) {
+    ($txp_is_dev && (newest_file() <= $dbupdatetime))) {
     return;
 }
 
@@ -78,14 +79,20 @@ safe_delete('txp_prefs', "name = 'last_update_check'");
 
 set_error_handler("updateErrorHandler");
 
+$updates = array_fill_keys($dbupdates, true);
+
+if (!isset($updates[$dbversion_target])) {
+    $updates[$dbversion_target] = false;
+}
+
 try {
-    foreach($dbupdates as $dbupdate) {
+    foreach ($updates as $dbupdate => $update) {
         if (version_compare($dbversion, $dbupdate, '<')) {
-            if ((include txpath.DS.'update'.DS.'_to_'.$dbupdate.'.php') === false) {
+            if ($update && (include txpath.DS.'update'.DS.'_to_'.$dbupdate.'.php') === false) {
                 trigger_error('Something bad happened. Not sure what exactly', E_USER_ERROR);
             }
 
-            if (!($txp_using_svn && $dbversion_target == $dbupdate)) {
+            if (!($txp_is_dev && $dbversion_target == $dbupdate)) {
                 $dbversion = $dbupdate;
             }
         }
@@ -93,22 +100,23 @@ try {
 
     // Keep track of updates for SVN users.
     safe_delete('txp_prefs', "name = 'dbupdatetime'");
-    safe_insert('txp_prefs', "prefs_id = 1, name = 'dbupdatetime', val = '".max(newest_file(), time())."', type = '2'");
-}
-catch(Exception $e) {
+    safe_insert('txp_prefs', "name = 'dbupdatetime', val = '".max(newest_file(), time())."', type = '2'");
+} catch (Exception $e) {
     // Nothing to do here, the goal was just to abort the update scripts
     // Error message already communicated via updateErrorHandler
 }
 
 restore_error_handler();
 
-// Update version.
-safe_delete('txp_prefs', "name = 'version'");
-safe_insert('txp_prefs', "prefs_id = 1, name = 'version', val = '$dbversion', type = '2'");
+// Update version if not dev.
+if (!$txp_is_dev) {
+    remove_pref('version', 'publish');
+    create_pref('version', $dbversion, 'publish', PREF_HIDDEN);
+}
 
 // Invite optional third parties to the update experience
 // Convention: Put custom code into file(s) at textpattern/update/custom/post-update-abc-foo.php
-// where 'abc' is the third party's reserved prefix (@see http://textpattern.net/wiki/index.php?title=Reserved_Plugin_Prefixes)
+// where 'abc' is the third party's reserved prefix (@see https://docs.textpattern.io/development/plugin-developer-prefixes)
 // and 'foo' is whatever. The execution order among all files is undefined.
 $files = glob(txpath.'/update/custom/post-update*.php');
 
@@ -118,10 +126,10 @@ if (is_array($files)) {
     }
 }
 
-// Updated, baby. So let's get the fresh prefs and send them to languages.
+// Updated, baby. So let's get the fresh prefs and send them to Diagnostics.
 define('TXP_UPDATE_DONE', 1);
-$event = 'lang';
-$step = 'list_languages';
+$event = 'diag';
+$step = 'update';
 
 $prefs = get_prefs();
 

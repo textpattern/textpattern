@@ -2,10 +2,10 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -119,7 +119,7 @@ function short_preview($message)
 
 function discuss_list($message = '')
 {
-    global $event, $comment_list_pageby;
+    global $event;
 
     pagetop(gTxt('list_discussions'), $message);
 
@@ -189,7 +189,7 @@ function discuss_list($message = '')
         array(
             'id' => array(
                 'column' => 'txp_discuss.discussid',
-                'label'  => gTxt('ID'),
+                'label'  => gTxt('id'),
                 'type'   => 'integer',
             ),
             'parent' => array(
@@ -214,7 +214,7 @@ function discuss_list($message = '')
             ),
             'ip' => array(
                 'column' => 'txp_discuss.ip',
-                'label'  => gTxt('IP'),
+                'label'  => 'IP',
             ),
             'visible' => array(
                 'column' => 'txp_discuss.visible',
@@ -265,15 +265,17 @@ function discuss_list($message = '')
     // Grand total comment count.
     $total = $count[SPAM] + $count[MODERATE] + $count[VISIBLE];
 
-    echo n.tag(
-        hed(gTxt('list_discussions'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1'));
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('list_discussions'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-4col-alt')
+        );
 
     $searchBlock =
         n.tag(
             $search->renderForm('discuss_list', $search_render_options),
             'div', array(
-                'class' => 'txp-layout-2col-cell-2',
+                'class' => 'txp-layout-4col-3span',
                 'id'    => $event.'_control',
             )
         );
@@ -301,7 +303,8 @@ function discuss_list($message = '')
                 );
         }
 
-        echo n.tag_end('div');
+        echo n.tag_end('div'). // End of .txp-layout-1col.
+            n.'</div>'; // End of .txp-layout.
 
         return;
     }
@@ -311,7 +314,8 @@ function discuss_list($message = '')
         $criteria = 'visible != '.intval(SPAM).' and '.$criteria;
     }
 
-    $limit = max($comment_list_pageby, 15);
+    $paginator = new \Textpattern\Admin\Paginator($event, 'comment');
+    $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -341,8 +345,7 @@ function discuss_list($message = '')
 
     if ($rs) {
         echo n.tag(
-                cookie_box('show_spam').
-                toggle_box('discuss_detail'),
+                cookie_box('show_spam'),
                 'div', array('class' => 'txp-list-options')).
             n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
@@ -364,10 +367,6 @@ function discuss_list($message = '')
                         (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
-                    'date', 'date', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
-                ).
-                column_head(
                     'name', 'name', 'discuss', true, $switch_dir, $crit, $search_method,
                         (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
@@ -376,16 +375,20 @@ function discuss_list($message = '')
                         (('message' == $sort) ? "$dir " : 'txp-list-col-message')
                 ).
                 column_head(
+                    'date', 'date', 'discuss', true, $switch_dir, $crit, $search_method,
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
+                ).
+                column_head(
                     'email', 'email', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('email' == $sort) ? "$dir " : '').'txp-list-col-email discuss_detail'
+                        (('email' == $sort) ? "$dir " : '').'txp-list-col-email'
                 ).
                 column_head(
                     'website', 'website', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('website' == $sort) ? "$dir " : '').'txp-list-col-website discuss_detail'
+                        (('website' == $sort) ? "$dir " : '').'txp-list-col-website'
                 ).
                 column_head(
                     'IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip discuss_detail'
+                        (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip'
                 ).
                 column_head(
                     'status', 'status', 'discuss', true, $switch_dir, $crit, $search_method,
@@ -442,7 +445,10 @@ function discuss_list($message = '')
             } else {
                 $parent_title = empty($title) ? '<em>'.gTxt('untitled').'</em>' : escape_title($title);
 
-                $parent = href($parent_title, '?event=article'.a.'step=edit'.a.'ID='.$parentid);
+                $parent = href(
+                    span(gTxt('search'), array('class' => 'ui-icon ui-icon-search')),
+                    '?event=discuss'.a.'step=discuss_list'.a.'search_method=parent'.a.'crit='.$parentid).sp.
+                    href($parent_title, '?event=article'.a.'step=edit'.a.'ID='.$parentid);
 
                 $view = $comment_status;
 
@@ -459,25 +465,25 @@ function discuss_list($message = '')
                     href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' class="txp-list-col-id" scope="row"'
                 ).
                 td(
-                    gTime($uPosted), '', 'txp-list-col-created date'
-                ).
-                td(
                     txpspecialchars(soft_wrap($name, 15)), '', 'txp-list-col-name'
                 ).
                 td(
                     short_preview($dmessage), '', 'txp-list-col-message'
                 ).
                 td(
-                    txpspecialchars(soft_wrap($email, 15)), '', 'txp-list-col-email discuss_detail'
+                    gTime($uPosted), '', 'txp-list-col-created date'
                 ).
                 td(
-                    txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website discuss_detail'
+                    txpspecialchars(soft_wrap($email, 15)), '', 'txp-list-col-email'
+                ).
+                td(
+                    txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website'
                 ).
                 td(
                     href(txpspecialchars($ip), 'https://whois.domaintools.com/'.rawurlencode($ip), array(
                         'rel'    => 'external',
                         'target' => '_blank',
-                    )), '', 'txp-list-col-ip discuss_detail'
+                    )), '', 'txp-list-col-ip'
                 ).
                 td(
                     $view, '', 'txp-list-col-status'
@@ -494,7 +500,7 @@ function discuss_list($message = '')
 
         echo n.tag_end('tbody').
             n.tag_end('table').
-            n.tag_end('div').
+            n.tag_end('div'). // End of .txp-listtables.
             discuss_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
@@ -502,12 +508,13 @@ function discuss_list($message = '')
                 'class' => 'txp-navigation',
                 'id'    => $event.'_navigation',
             )).
-            pageby_form('discuss', $comment_list_pageby).
+            $paginator->render().
             nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div');
     }
 
-    echo n.tag_end('div');
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.
 }
 
 /**
@@ -620,7 +627,9 @@ function discuss_edit()
 
 function discuss_change_pageby()
 {
-    event_change_pageby('comment');
+    global $event;
+
+    Txp::get('\Textpattern\Admin\Paginator', $event, 'comment')->change();
     discuss_list();
 }
 

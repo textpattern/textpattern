@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -46,9 +46,12 @@
  * echo 'My page contents.';
  */
 
-function pagetop($pagetitle, $message = '')
+function pagetop($pagetitle = '', $message = '')
 {
-    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme;
+    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $textarray_script, $file_max_upload_size;
+
+    header('Content-Security-Policy: '.CONTENT_SECURITY_POLICY);
+    header('X-Frame-Options: '.X_FRAME_OPTIONS);
 
     if ($app_mode == 'async') {
         return;
@@ -78,59 +81,76 @@ function pagetop($pagetitle, $message = '')
         $body_id = 'page-'.txpspecialchars($event);
     }
 
-    header('X-Frame-Options: '.X_FRAME_OPTIONS);
-    header('X-UA-Compatible: '.X_UA_COMPATIBLE);
+    gTxtScript(array(
+        'are_you_sure',
+        'cookies_must_be_enabled',
+        'form_submission_error',
+        'list_options',
+        'ok',
+        'publish',
+        'save',
+        'toggle_all_selected',
+        'select',
+        'close',
+        'help',
+        'upload_err_form_size'
+    ));
 
     $lang_direction = gTxt('lang_dir');
+    $lang_ui = get_pref('language_ui', LANG);
 
     if (!in_array($lang_direction, array('ltr', 'rtl'))) {
         // Apply biased default for missing translations.
         $lang_direction = 'ltr';
-    }
-
-    ?><!DOCTYPE html>
-<html lang="<?php echo txpspecialchars(LANG);
-    ?>" dir="<?php echo $lang_direction;
-    ?>">
+    } ?><!DOCTYPE html>
+<html lang="<?php echo txpspecialchars($lang_ui); ?>" dir="<?php echo $lang_direction; ?>">
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <title><?php echo admin_title($pagetitle)?></title><?php echo
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('vendors/ehynds/jquery-ui-multiselect-widget/jquery.multiselect.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('vendors/blueimp/md5/md5.min.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('vendors/blueimp/fileupload/jquery.fileupload.min.js', TEXTPATTERN_SCRIPT_URL).
     script_js(
-        'var textpattern = '.json_encode(array(
-            'event' => $event,
-            'step' => $step,
-            '_txp_token' => form_token(),
-            'ajax_timeout' => (int) AJAX_TIMEOUT,
-            'textarray' => (object) null,
-            'do_spellcheck' => get_pref('do_spellcheck',
-                '#page-article #body, #page-article #title,'.
-                '#page-image #alt-text, #page-image #caption,'.
-                '#page-file #description,'.
-                '#page-link #link-title, #page-link #link-description'),
-            'production_status' => get_pref('production_status'),
-        )).';').
+        'var textpattern = '.json_encode(
+            array(
+                '_txp_uid' => get_pref('blog_uid'),
+                'event' => $event,
+                'step' => $step,
+                '_txp_token' => form_token(),
+                'ajax_timeout' => (int) AJAX_TIMEOUT,
+                'prefs' => array(
+                    'max_file_size' => (float) $file_max_upload_size,
+                    'max_upload_size' => real_max_upload_size(0),
+                    'production_status' => get_pref('production_status'),
+                    'do_spellcheck' => get_pref(
+                        'do_spellcheck',
+                        '#page-article #body, #page-article #title,'.
+                        '#page-image #image_alt_text, #page-image #caption,'.
+                        '#page-file #description,'.
+                        '#page-link #link-title, #page-link #link-description'
+                    )
+                ),
+                'textarray' => (object) null,
+            ),
+            TEXTPATTERN_JSON
+        ).';'
+    ).
     script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
-    gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled', 'ok', 'save', 'publish'));
+
     // Mandatory un-themable Textpattern core styles ?>
 <style>
-.not-ready .doc-ready,
-.not-ready form.async input[type="submit"],
-.not-ready a.async
-{
-    visibility: hidden;
+.not-ready main {
+    opacity: 0;
 }
 </style>
 <?php
 echo $theme->html_head();
-    callback_event('admin_side', 'head_end');
-    ?>
+    callback_event('admin_side', 'head_end'); ?>
 </head>
-<body class="not-ready <?php echo $area;
-    ?>" id="<?php echo $body_id;
-    ?>">
+<body class="not-ready <?php echo $area; ?>" id="<?php echo $body_id; ?>">
 <header class="txp-header">
 <?php callback_event('admin_side', 'pagetop');
     $theme->set_state($area, $event, $bm, $message);
@@ -254,6 +274,8 @@ function areas()
 {
     global $plugin_areas;
 
+    $adminString = gTxt(has_privs('admin.list') ? 'tab_site_admin' : 'tab_site_account');
+
     $areas['start'] = array(
     );
 
@@ -277,7 +299,7 @@ function areas()
         gTxt('tab_diagnostics') => 'diag',
         gTxt('tab_preferences') => 'prefs',
         gTxt('tab_languages')   => 'lang',
-        gTxt('tab_site_admin')  => 'admin',
+        $adminString            => 'admin',
         gTxt('tab_plugins')     => 'plugin',
     );
 

@@ -2,10 +2,10 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -68,27 +68,32 @@ if ($event == 'category') {
 function cat_category_list($message = "")
 {
     pagetop(gTxt('categories'), $message);
-    $out = array(hed(gTxt('tab_organise'), 1, 'class="txp-heading"'),
+    $out = array(n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_organise'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-1col')
+        ),
         n.tag(cat_article_list(), 'section', array(
-                'class' => 'txp-layout-4col-cell-1',
+                'class' => 'txp-layout-4col',
                 'id'    => 'categories_article',
             )
         ),
         n.tag(cat_image_list(), 'section', array(
-                'class' => 'txp-layout-4col-cell-2',
+                'class' => 'txp-layout-4col',
                 'id'    => 'categories_image',
             )
         ),
         n.tag(cat_file_list(), 'section', array(
-                'class' => 'txp-layout-4col-cell-3',
+                'class' => 'txp-layout-4col',
                 'id'    => 'categories_file',
             )
         ),
         n.tag(cat_link_list(), 'section', array(
-                'class' => 'txp-layout-4col-cell-4',
+                'class' => 'txp-layout-4col',
                 'id'    => 'categories_link',
             )
         ),
+        n.'</div>', // End of .txp-layout.
         script_js(<<<EOS
             $(document).ready(function ()
             {
@@ -372,7 +377,7 @@ function cat_event_category_list($event)
         form(
             graf(
                 tag(gTxt('create_new_category'), 'label', array('for' => $event.'_category_new')).br.
-                fInput('text', 'title', '', '', '', '', INPUT_REGULAR, '', $event.'_category_new')
+                fInput('text', 'title', '', '', '', '', INPUT_REGULAR, '', $event.'_category_new', false, true)
             ).
             (($rs)
                 ? graf('<label'.$for.'>'.gTxt('parent').'</label>'.br.
@@ -380,7 +385,7 @@ function cat_event_category_list($event)
                 : ''
             ).
             graf(
-                fInput('submit', '', gTxt('Create')).
+                fInput('submit', '', gTxt('create')).
                 eInput('category').
                 sInput('cat_'.$event.'_create')
             ), '', '', 'post', $event);
@@ -534,7 +539,7 @@ function cat_event_category_edit($evname, $message = '')
         $out = hed(gTxt('edit_category'), 2).
             inputLabel(
                 'category_name',
-                fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'),
+                fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name', false, true),
                 $evname.'_category_name', '', array('class' => 'txp-form-field edit-category-name')
             ).
             inputLabel(

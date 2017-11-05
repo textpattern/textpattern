@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -214,7 +214,7 @@ class DB
         $connected = true;
 
         // Be backwards compatible.
-        if ($this->charset && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version))) {
+        if ($this->charset && (version_compare($version, '5') >= 0 || preg_match('#^4\.[1-9]#', $version))) {
             mysqli_query($this->link, "SET NAMES ".$this->charset);
             $this->table_options['charset'] = $this->charset;
 
@@ -228,7 +228,7 @@ class DB
         $this->default_charset = mysqli_character_set_name($this->link);
 
         // Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2).
-        if (intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $version)) {
+        if (version_compare($version, '5') >= 0 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $version)) {
             $this->table_options['engine'] = 'MyISAM';
             unset($this->table_options['type']);
         }
@@ -380,7 +380,7 @@ function safe_escape_like($in = '')
 
 function safe_query($q = '', $debug = false, $unbuf = false)
 {
-    global $DB, $txpcfg, $trace, $production_status;
+    global $DB, $trace, $production_status;
     $method = ($unbuf) ? MYSQLI_USE_RESULT : MYSQLI_STORE_RESULT;
 
     if (!$q) {
@@ -394,11 +394,15 @@ function safe_query($q = '', $debug = false, $unbuf = false)
     if ($production_status !== 'live') {
         $trace->start("[SQL: $q ]", true);
     }
-    
+
     $result = mysqli_query($DB->link, $q, $method);
-    
+
     if ($production_status !== 'live') {
-        $trace->stop();
+        if (is_bool($result)) {
+            $trace->stop();
+        } else {
+            $trace->stop("[Rows: ".intval(@mysqli_num_rows($result))."]");
+        }
     }
 
     if ($result === false) {
@@ -488,10 +492,10 @@ function safe_insert($table, $set, $debug = false)
 /**
  * Inserts a new row, or updates an existing if a matching row is found.
  *
- * @param  string $table The table
- * @param  string $set   The set clause
- * @param  string $where The where clause
- * @param  bool   $debug Dump query
+ * @param  string       $table The table
+ * @param  string       $set   The set clause
+ * @param  string|array $where The where clause
+ * @param  bool         $debug Dump query
  * @return int|bool The last generated ID or FALSE on error. If the ID is 0, returns TRUE
  * @example
  * if ($r = safe_upsert('myTable', "data = 'foobar'", "name = 'example'"))
@@ -503,13 +507,21 @@ function safe_insert($table, $set, $debug = false)
 function safe_upsert($table, $set, $where, $debug = false)
 {
     global $DB;
+
+    if (is_array($set)) {
+        $set = join_qs(quote_list($set), ',');
+    }
+
+    $whereset = is_array($where) ? join_qs(quote_list($where), null) : array($where);
+    $where = implode(' AND ', $whereset);
+
     // FIXME: lock the table so this is atomic?
     $r = safe_update($table, $set, $where, $debug);
 
     if ($r and (mysqli_affected_rows($DB->link) or safe_count($table, $where, $debug))) {
         return $r;
     } else {
-        return safe_insert($table, join(', ', array($where, $set)), $debug);
+        return safe_insert($table, join(', ', array(implode(', ', $whereset), $set)), $debug);
     }
 }
 
@@ -1040,6 +1052,7 @@ function fetch($col, $table, $key, $val, $debug = false)
         if (mysqli_num_rows($r) > 0) {
             $row = mysqli_fetch_row($r);
             mysqli_free_result($r);
+
             return $row[0];
         }
 
@@ -1340,6 +1353,8 @@ function getTreePath($target, $type, $tbl = 'txp_category')
             'id' => $id,
             'name' => $name,
             'title' => $title,
+            'description' => $description,
+            'type' => $type,
             'level' => count($right),
             'children' => ($rgt - $lft - 1) / 2,
         );
@@ -1370,8 +1385,11 @@ function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
     $parent = doSlash($parent);
     $type = doSlash($type);
 
-    $result = safe_column("name", $tbl,
-        "parent = '$parent' AND type = '$type' ORDER BY name");
+    $result = safe_column(
+        "name",
+        $tbl,
+        "parent = '$parent' AND type = '$type' ORDER BY name"
+    );
 
     foreach ($result as $row) {
         $right = rebuild_tree($row, $right, $type, $tbl);
@@ -1432,6 +1450,7 @@ function db_down()
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="robots" content="noindex">
     <title>Database unavailable</title>
 </head>
 <body>
@@ -1452,11 +1471,12 @@ eod;
  * the txp_file table.
  *
  * @param  string $type   Column name, lower case (one of 'posted', 'expires', 'created')
- * @param  bool   $update Force update 
+ * @param  bool   $update Force update
  * @return string SQL query string partial
  */
 
-function now($type, $update = false) {
+function now($type, $update = false)
+{
     static $nows = array();
     static $time = null;
 
@@ -1478,7 +1498,7 @@ function now($type, $update = false) {
             $table = ($type === 'created') ? 'txp_file' : 'textpattern';
             $where = '1=1 having utime > '.$time.' order by utime asc limit 1';
             $now = safe_field('unix_timestamp('.$type.') as utime', $table, $where);
-            $now = ($now === false) ? 2147483647 : intval($now) - 1; 
+            $now = ($now === false) ? 2147483647 : intval($now) - 1;
             update_pref($pref, $now);
             $nows[$type] = $now;
         }

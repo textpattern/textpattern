@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -135,7 +135,7 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
 
     $selected = false;
     $multiple = is_array($value) ? ' multiple="multiple"' : '';
-    
+
     if ($multiple) {
         $name .= '[]';
     } else {
@@ -188,7 +188,7 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
  * @see    getTree()
  */
 
-function treeSelectInput($select_name = '', $array = array(), $value = '', $select_id = '', $truncate = 0)
+function treeSelectInput($select_name = '', $array = array(), $value = '', $select_id = '', $truncate = 0, $atts = array())
 {
     $out = array();
 
@@ -230,7 +230,62 @@ function treeSelectInput($select_name = '', $array = array(), $value = '', $sele
     return n.tag(n.join(n, $out).n, 'select', array(
         'id'   => $select_id,
         'name' => $select_name,
-    ));
+    ) + $atts);
+}
+
+/**
+ * Render HTML &lt;select&gt; element for choosing a timezone.
+ *
+ * @param  string      $name        Element name
+ * @param  string      $value       Selected timezone
+ * @param  bool        $blank_first Add empty first option
+ * @param  bool|string $onchange
+ * @param  string      $select_id   HTML id attribute
+ * @return string HTML markup
+ * @since  4.7.0
+ * @todo   Might be a better way of doing this, perhaps introducing optgroup to selectInput()
+ */
+
+function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
+{
+    if ($details = Txp::get('\Textpattern\Date\Timezone')->getTimeZones()) {
+        $thiscontinent = '';
+        $selected = false;
+
+        foreach ($details as $timezone_id => $tz) {
+            extract($tz);
+
+            if ($value == $timezone_id) {
+                $selected = true;
+            }
+
+            if ($continent !== $thiscontinent) {
+                if ($thiscontinent !== '') {
+                    $out[] = n.'</optgroup>';
+                }
+
+                $out[] = n.'<optgroup label="'.gTxt($continent).'">';
+                $thiscontinent = $continent;
+            }
+
+            $where = gTxt(str_replace('_', ' ', $city))
+                .(!empty($subcity) ? '/'.gTxt(str_replace('_', ' ', $subcity)) : '').t
+                /*."($abbr)"*/;
+
+            $out[] = n.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').'>'.$where.' ('.$offset.')'.'</option>';
+        }
+
+        $out[] = n.'</optgroup>';
+
+        return n.'<select'.($select_id ? ' id="'.$select_id.'"' : '').' name="'.$name.'"'.
+            ($onchange == 1 ? ' onchange="submit(this.form);"' : $onchange).
+            '>'.
+            ($blank_first ? n.'<option value=""'.($selected == false ? ' selected="selected"' : '').'>&#160;</option>' : '').
+            join('', $out).
+            n.'</select>';
+    }
+
+    return '';
 }
 
 /**
@@ -277,34 +332,24 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
 }
 
 /**
- * Sanitises a page title.
- *
- * @param      string $text The input string
- * @return     string
- * @deprecated in 4.2.0
- * @see        escape_title()
- */
-
-function cleanfInput($text)
-{
-    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'escape_title')), E_USER_NOTICE);
-
-    return escape_title($text);
-}
-
-/**
  * Hidden form input.
  *
- * @param  string $name  The name
- * @param  string $value The value
- * @return string HTML input
+ * @param  string/array $name  The name
+ * @param  string       $value The value
+ * @return string       HTML input
  * @example
  * echo hInput('myInput', 'hidden value');
  */
 
-function hInput($name, $value)
+function hInput($name, $value = null, $glue = ',')
 {
-    return fInput('hidden', $name, $value);
+    if (!is_array($name)) {
+        return fInput('hidden', $name, $value);
+    }
+
+    return array_walk($name, function(&$v, $n, $glue) {
+        $v = fInput('hidden', $n, is_array($v) ? implode($glue, $v) : $v);
+    }, $glue) ? implode($name) : false;
 }
 
 /**
@@ -609,7 +654,8 @@ function radio_list($name, $values, $current_val = '', $hilight_val = '', $atts 
         $out[] = tag(
             radio($name, $value, ((string) $current_val === (string) $value), $id).
             n.tag($label, 'label', array('for' => $id)),
-            'li', array('class' => $class)
+            'li',
+            array('class' => $class)
         );
     }
 
@@ -666,20 +712,22 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
 
     if ($datevar == '%d' || $name == 'day' || $name == 'exp_day') {
         $class = 'input-day';
-        $pattern = '(0[1-9]|1[0-9]|2[0-9]|3[01])';
+        $pattern = '(0[1-9]|[12][0-9]|3[01])';
     }
 
     if ($datevar == '%H' || $name == 'hour' || $name == 'exp_hour') {
         $class = 'input-hour';
-        $pattern = '(0[0-9]|1[0-9]|2[0-3])';
+        $pattern = '([0-1][0-9]|2[0-3])';
     }
 
     if ($datevar == '%M' || $name == 'minute' || $name == 'exp_minute') {
         $class = 'input-minute';
+        $pattern = '([0-5][0-9])';
     }
 
     if ($datevar == '%S' || $name == 'second' || $name == 'exp_second') {
         $class = 'input-second';
+        $pattern = '([0-5][0-9])';
     }
 
     return n.tag_void('input', array(

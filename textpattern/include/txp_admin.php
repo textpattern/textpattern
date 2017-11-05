@@ -2,10 +2,10 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -48,8 +48,6 @@ if ($event == 'admin') {
         'author_edit'         => false,
         'author_save'         => true,
         'author_save_new'     => true,
-        'change_email'        => true,
-        'change_email_form'   => false,
         'change_pass'         => true,
         'new_pass_form'       => false,
     );
@@ -62,33 +60,6 @@ if ($event == 'admin') {
 }
 
 /**
- * Changes an email address.
- */
-
-function change_email()
-{
-    global $txp_user;
-
-    $new_email = ps('new_email');
-
-    if (!is_valid_email($new_email)) {
-        change_email_form(array(gTxt('email_required'), E_ERROR));
-
-        return;
-    }
-
-    $rs = update_user($txp_user, $new_email);
-
-    if ($rs) {
-        author_list(gTxt('email_changed', array('{email}' => $new_email)));
-
-        return;
-    }
-
-    change_email_form(array(gTxt('author_save_failed'), E_ERROR));
-}
-
-/**
  * Updates a user.
  */
 
@@ -96,7 +67,7 @@ function author_save()
 {
     global $txp_user;
 
-    require_privs('admin.edit');
+    require_privs('admin.edit.own');
 
     extract(psa(array(
         'privs',
@@ -108,20 +79,29 @@ function author_save()
     $privs = assert_int($privs);
 
     if (!is_valid_email($email)) {
-        author_edit(array(gTxt('email_required'), E_ERROR));
+        $fullEdit = has_privs('admin.list') ? false : true;
+        author_edit(array(gTxt('email_required'), E_ERROR), $fullEdit);
 
         return;
     }
 
     $rs = update_user($name, $email, $RealName);
 
-    if ($rs && ($txp_user === $name || change_user_group($name, $privs))) {
+    if (has_privs('admin.edit') && $rs && ($txp_user === $name || change_user_group($name, $privs))) {
         author_list(gTxt('author_updated', array('{name}' => $RealName)));
 
         return;
+    } elseif ($rs && has_privs('admin.edit.own')) {
+        $msg = gTxt('author_updated', array('{name}' => $RealName));
+    } else {
+        $msg = array(gTxt('author_save_failed'), E_ERROR);
     }
 
-    author_edit(array(gTxt('author_save_failed'), E_ERROR));
+    if (has_privs('admin.edit')) {
+        author_edit($msg);
+    } elseif (has_privs('admin.edit.own')) {
+        author_list($msg);
+    }
 }
 
 /**
@@ -234,12 +214,12 @@ function new_pass_form($message = '')
         hed(gTxt('change_password'), 2).
         inputLabel(
             'current_pass',
-            fInput('password', 'current_pass', '', '', '', '', INPUT_REGULAR, '', 'current_pass'),
+            fInput('password', 'current_pass', '', '', '', '', INPUT_REGULAR, '', 'current_pass', false, true),
             'current_password', '', array('class' => 'txp-form-field edit-admin-current-password')
         ).
         inputLabel(
             'new_pass',
-            fInput('password', 'new_pass', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'new_pass').
+            fInput('password', 'new_pass', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'new_pass', false, true).
             n.tag(null, 'div', array('class' => 'strength-meter')).
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
@@ -258,37 +238,6 @@ function new_pass_form($message = '')
 }
 
 /**
- * Email changing form.
- *
- * @param string|array $message The activity message
- */
-
-function change_email_form($message = '')
-{
-    global $txp_user;
-
-    pagetop(gTxt('tab_site_admin'), $message);
-
-    $email = fetch('email', 'txp_users', 'name', $txp_user);
-
-    echo form(
-        hed(gTxt('change_email_address'), 2).
-        inputLabel(
-            'new_email',
-            fInput('text', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'),
-            'new_email', '', array('class' => 'txp-form-field edit-admin-new-email')
-        ).
-        graf(
-            sLink('admin', '', gTxt('cancel'), 'txp-button').
-            fInput('submit', 'change_email', gTxt('submit'), 'publish'),
-            array('class' => 'txp-edit-actions')
-        ).
-        eInput('admin').
-        sInput('change_email'),
-    '', '', 'post', 'txp-edit', '', 'change_email');
-}
-
-/**
  * The main panel listing all authors.
  *
  * @param string|array $message The activity message
@@ -296,33 +245,21 @@ function change_email_form($message = '')
 
 function author_list($message = '')
 {
-    global $event, $txp_user, $author_list_pageby, $levels;
+    global $event, $txp_user, $levels;
 
-    pagetop(gTxt('tab_site_admin'), $message);
-
-    if (is_disabled('mail')) {
-        echo graf(
-            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-            gTxt('warn_mail_unavailable'),
-            array('class' => 'alert-block warning')
-        );
-    }
-
-    $buttons = array();
-
-    // Change password button.
-    $buttons[] = sLink('admin', 'new_pass_form', gTxt('change_password'), 'txp-button');
-
-    if (!has_privs('admin.edit')) {
-        // Change email address button.
-        $buttons[] = sLink('admin', 'change_email_form', gTxt('change_email_address'), 'txp-button');
-    } else {
-        // New author button.
-        $buttons[] = sLink('admin', 'author_edit', gTxt('add_new_author'), 'txp-button');
-    }
+    $buttons = author_edit_buttons();
 
     // User list.
     if (has_privs('admin.list')) {
+        pagetop(gTxt('tab_site_admin'), $message);
+
+        if (is_disabled('mail')) {
+            echo graf(
+                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+                gTxt('warn_mail_unavailable'),
+                array('class' => 'alert-block warning')
+            );
+        }
         extract(gpsa(array(
             'page',
             'sort',
@@ -384,15 +321,17 @@ function author_list($message = '')
 
         $total = getCount('txp_users', $criteria);
 
-        echo n.tag(
-            hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-2col-cell-1'));
+        echo n.'<div class="txp-layout">'.
+            n.tag(
+                hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading')),
+                'div', array('class' => 'txp-layout-4col-alt')
+            );
 
         $searchBlock =
             n.tag(
                 $search->renderForm('author_list', $search_render_options),
                 'div', array(
-                    'class' => 'txp-layout-2col-cell-2',
+                    'class' => 'txp-layout-4col-3span',
                     'id'    => 'users_control',
                 )
             );
@@ -417,13 +356,16 @@ function author_list($message = '')
                         span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                         gTxt('no_results_found'),
                         array('class' => 'alert-block information')
-                    ).n.tag_end('div');
+                    ).
+                    n.tag_end('div'). // End of .txp-layout-1col.
+                    n.'</div>'; // End of .txp-layout.
             }
 
             return;
         }
 
-        $limit = max($author_list_pageby, 15);
+        $paginator = new \Textpattern\Admin\Paginator($event, 'author');
+        $limit = $paginator->getLimit();
 
         list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -487,10 +429,10 @@ function author_list($message = '')
 
                 echo tr(
                     td(
-                        ((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'txp-list-col-multi-edit'
+                        ((has_privs('admin.edit') && $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'txp-list-col-multi-edit'
                     ).
                     hCell(
-                        ((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' class="txp-list-col-login-name name" scope="row"'
+                        ((has_privs('admin.edit') || (has_privs('admin.edit.own') && $txp_user === $a['name'])) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' class="txp-list-col-login-name name" scope="row"'
                     ).
                     td(
                         $RealName, '', 'txp-list-col-real-name name'
@@ -510,7 +452,7 @@ function author_list($message = '')
             echo
                 n.tag_end('tbody').
                 n.tag_end('table').
-                n.tag_end('div').
+                n.tag_end('div'). // End of .txp-listtables.
                 (
                     ($use_multi_edit)
                     ? author_multiedit_form($page, $sort, $dir, $crit, $search_method)
@@ -522,35 +464,50 @@ function author_list($message = '')
                     'class' => 'txp-navigation',
                     'id'    => 'users_navigation',
                 )).
-                pageby_form('admin', $author_list_pageby).
+                $paginator->render().
                 nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
                 n.tag_end('div');
         }
 
-        echo n.tag_end('div');
+        echo n.tag_end('div'). // End of .txp-layout-1col.
+            n.'</div>'; // End of .txp-layout.
+    } elseif (has_privs('admin.edit.own')) {
+        echo author_edit($message, true);
     } else {
-        echo
-            n.tag_start('div', array(
-                'class' => 'txp-layout-1col',
-                'id'    => 'users_container',)).
-            n.tag(implode(n, $buttons), 'div', array('class' => 'txp-control-panel')).
-            n.tag_end('div');
+        require_privs('admin.edit');
     }
 }
 
 /**
- * Renders and outputs the user editor panel.
+ * Create additional UI buttons.
+ */
+function author_edit_buttons()
+{
+    $buttons = array();
+
+    // Change password button.
+    $buttons[] = sLink('admin', 'new_pass_form', gTxt('change_password'), 'txp-button');
+
+    // New author button.
+    if (has_privs('admin.edit')) {
+        $buttons[] = sLink('admin', 'author_edit', gTxt('add_new_author'), 'txp-button');
+    }
+
+    return $buttons;
+}
+
+/**
+ * Renders the user edit panel.
  *
- * Accessing requires 'admin.edit' privileges.
- *
- * @param string|array $message The activity message
+ * @param string|array $message  The activity message
+ * @param bool         $fullEdit Whether the user has full edit permissions or not
  */
 
-function author_edit($message = '')
+function author_edit($message = '', $fullEdit = false)
 {
     global $step, $txp_user;
 
-    require_privs('admin.edit');
+    require_privs('admin.edit.own');
 
     pagetop(gTxt('tab_site_admin'), $message);
 
@@ -560,18 +517,26 @@ function author_edit($message = '')
 
     extract(gpsa($vars));
 
-    $is_edit = ($user_id && $step == 'author_edit');
+    if (has_privs('admin.edit')) {
+        if ($user_id) {
+            $user_id = assert_int($user_id);
+            $rs = safe_row("*", 'txp_users', "user_id = $user_id");
 
-    if ($is_edit) {
-        $user_id = assert_int($user_id);
-        $rs = safe_row("*", 'txp_users', "user_id = $user_id");
+            extract($rs);
+            $is_edit = true;
+        } else {
+            $is_edit = false;
+        }
+    } else {
+        $rs = safe_row("*", 'txp_users', "name = '".doSlash($txp_user)."'");
         extract($rs);
+        $is_edit = true;
     }
 
-    if ($is_edit) {
-        $out[] = hed(gTxt('edit_author'), 2);
-    } else {
+    if (has_privs('admin.edit') && !$is_edit) {
         $out[] = hed(gTxt('add_new_author'), 2);
+    } elseif (has_privs('admin.edit')) {
+        $out[] = hed(gTxt('edit_author'), 2);
     }
 
     if ($is_edit) {
@@ -580,10 +545,10 @@ function author_edit($message = '')
             strong(txpspecialchars($name)),
             '', '', array('class' => 'txp-form-field edit-admin-login-name')
         );
-    } else {
+    } elseif (has_privs('admin.edit')) {
         $out[] = inputLabel(
             'login_name',
-            fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name'),
+            fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
             'login_name', 'add_new_author', array('class' => 'txp-form-field edit-admin-login-name')
         );
     }
@@ -595,11 +560,11 @@ function author_edit($message = '')
         ).
         inputLabel(
             'login_email',
-            fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'),
+            fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email', false, true),
             'email', '', array('class' => 'txp-form-field edit-admin-email')
         );
 
-    if ($txp_user != $name) {
+    if (has_privs('admin.edit') && $txp_user != $name) {
         $out[] = inputLabel(
             'privileges',
             privs($privs),
@@ -616,13 +581,13 @@ function author_edit($message = '')
 
     $out[] = pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
         graf(
-            sLink('admin', '', gTxt('cancel'), 'txp-button').
+            ($fullEdit ? '' : sLink('admin', '', gTxt('cancel'), 'txp-button')).
             fInput('submit', '', gTxt('save'), 'publish'),
             array('class' => 'txp-edit-actions')
         ).
         eInput('admin');
 
-    if ($user_id) {
+    if ($is_edit) {
         $out[] = hInput('user_id', $user_id).
             hInput('name', $name).
             sInput('author_save');
@@ -630,7 +595,21 @@ function author_edit($message = '')
         $out[] = sInput('author_save_new');
     }
 
-    echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'user_edit');
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_site_account'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-1col')
+        ).
+        n.tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => 'users_container',
+        )).
+        ($fullEdit
+            ?n.tag(implode(n, author_edit_buttons()), 'div', array('class' => 'txp-control-panel'))
+            :'').
+        form(join('', $out), '', '', 'post', 'txp-edit', '', 'user_edit').
+            n.tag_end('div'). // End of .txp-layout-1col.
+            n.'</div>'; // End of .txp-layout.
 }
 
 /**
@@ -639,7 +618,9 @@ function author_edit($message = '')
 
 function admin_change_pageby()
 {
-    event_change_pageby('author');
+    global $event;
+
+    Txp::get('\Textpattern\Admin\Paginator', $event, 'author')->change();
     author_list();
 }
 
@@ -717,7 +698,6 @@ function admin_multi_edit()
 
     switch ($method) {
         case 'delete':
-
             $assign_assets = ps('assign_assets');
 
             if (!$assign_assets) {
@@ -733,7 +713,6 @@ function admin_multi_edit()
             break;
 
         case 'changeprivilege':
-
             if (change_user_group($names, ps('privs'))) {
                 $changed = $names;
                 $msg = 'author_updated';
@@ -742,7 +721,6 @@ function admin_multi_edit()
             break;
 
         case 'resetpassword':
-
             foreach ($names as $name) {
                 send_reset_confirmation_request($name);
                 $changed[] = $name;
@@ -752,7 +730,6 @@ function admin_multi_edit()
             break;
 
         case 'resendactivation':
-
             foreach ($names as $name) {
                 send_account_activation($name);
                 $changed[] = $name;
@@ -767,16 +744,4 @@ function admin_multi_edit()
     }
 
     author_list($msg);
-}
-
-/**
- * Legacy panel.
- *
- * @param      string|array $message
- * @deprecated in 4.2.0
- */
-
-function admin($message = '')
-{
-    author_list($message);
 }

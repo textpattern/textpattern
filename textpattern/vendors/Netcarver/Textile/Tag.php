@@ -6,10 +6,8 @@
  * @link https://github.com/textile/php-textile
  */
 
-namespace Netcarver\Textile;
-
 /*
- * Copyright (c) 2013, Netcarver https://github.com/netcarver
+ * Copyright (c) 2014, Netcarver https://github.com/netcarver
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -38,6 +36,8 @@ namespace Netcarver\Textile;
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace Netcarver\Textile;
+
 /**
  * Renders HTML elements.
  *
@@ -46,11 +46,11 @@ namespace Netcarver\Textile;
  * used to construct tags with nice object oriented
  * syntax.
  *
- * <code>
- * use Netcarver\Textile\Tag;
+ * bc. use Netcarver\Textile\Tag;
  * $img = new Tag('img');
  * echo (string) $img->class('big blue')->src('images/elephant.jpg');
- * </code>
+ *
+ * @internal
  */
 
 class Tag extends DataBag
@@ -89,11 +89,9 @@ class Tag extends DataBag
     /**
      * Returns the tag as HTML.
      *
-     * <code>
-     * $img = new Tag('img');
+     * bc. $img = new Tag('img');
      * $img->src('images/example.jpg')->alt('Example image');
      * echo (string) $img;
-     * </code>
      *
      * @return string A HTML element
      */

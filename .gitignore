@@ -11,4 +11,16 @@ ehthumbs.db
 Thumbs.db
 /vendor
 /composer.lock
+/images/*
+/images/!.gitignore
+/files/*
+/files/!.htaccess-dist
 *~
+
+# Development files  #
+######################
+/node_modules
+/package-lock.json
+/npm-debug.log
+/yarn.lock
+/yarn-error.log

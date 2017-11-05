@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 // Make sure we display all errors that occur during initialisation.
@@ -38,7 +38,8 @@ if (@ini_get('register_globals')) {
         (array) $_POST,
         (array) $_COOKIE,
         (array) $_FILES,
-        (array) $_SERVER);
+        (array) $_SERVER
+    );
 
     // As the deliberate awkwardly-named local variable $_txpfoo MUST NOT be
     // unset to avoid notices further down, we must remove any potential
@@ -62,7 +63,9 @@ if (@ini_get('register_globals')) {
     }
 }
 
-define("txpinterface", "public");
+if (!defined('txpinterface')) {
+    define('txpinterface', 'public');
+}
 
 if (!defined('txpath')) {
     define("txpath", dirname(__FILE__).'/textpattern');
@@ -102,12 +105,20 @@ if (!empty($txpcfg['pre_publish_script'])) {
 }
 
 include txpath.'/publish.php';
-textpattern();
 
-if ($production_status !== 'live') {
-    echo $trace->summary();
+switch (txpinterface) {
+    case 'css':
+        $n = gps('n');
+        output_css($s, $n);
+        break;
+    default:
+        textpattern();
 
-    if ($production_status === 'debug') {
-        echo $trace->result();
-    }
+        if ($production_status !== 'live') {
+            echo $trace->summary();
+        }
+}
+
+if ($production_status === 'debug') {
+    echo txpinterface === 'css' ? n.'/*'.$trace->result().n.'*/'.n : $trace->result();
 }

@@ -1,0 +1,16 @@
+id        INT          NOT NULL AUTO_INCREMENT,
+name      VARCHAR(255) NOT NULL DEFAULT '',
+category  VARCHAR(64)  NOT NULL DEFAULT '',
+ext       VARCHAR(20)  NOT NULL DEFAULT '',
+w         INT          NOT NULL DEFAULT '0',
+h         INT          NOT NULL DEFAULT '0',
+alt       VARCHAR(255) NOT NULL DEFAULT '',
+caption   TEXT         NOT NULL,
+date      DATETIME     NOT NULL,
+author    VARCHAR(64)  NOT NULL DEFAULT '',
+thumbnail INT          NOT NULL DEFAULT '0',
+thumb_w   INT          NOT NULL DEFAULT '0',
+thumb_h   INT          NOT NULL DEFAULT '0',
+
+PRIMARY KEY      (id),
+INDEX author_idx (author)

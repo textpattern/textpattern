@@ -1852,7 +1852,7 @@ $langs = array(
         'create_config' => 'Креирајте датотеку са именом <code>config.php</code> у  <code>{configpath}</code> direktorijumu и paste-ујте следећи код у исту:',
         'db_cant_connect' => 'Не могу се спојити са базом',
         'db_connected' => 'Спојен',
-        'db_doesnt_exist' => 'База {dbname} не постоји или предложени корисник нема потребне привилегије.',
+        'db_doesnt_exist' => 'База <strong>{dbname}</strong> не постоји или предложени корисник нема потребне привилегије.',
         'db_must_exist' => 'Запамтите да морате претходно сами направити базу података, Textpattern је неће направити.',
         'did_it' => 'Урадио сам то',
         'email_required' => 'Молимо упишите исправну еmail адресу.',
@@ -1944,7 +1944,7 @@ $langs = array(
     ),
     'th-th' => array(
         'about_to_create' => 'คุณกำลังจะสร้างและเติมข้อมูลลงในตารางฐานข้อมูล',
-        'already_installed' => 'ดูเหมือนกับว่า Textpattern ติดตั้งเรียบร้อยแล้ว  ถ้าคุณต้องการติดตั้งใหม่ ให้ลบแฟ้ม <code>config.php</code> จากไ',
+        'already_installed' => 'ดูเหมือนกับว่า Textpattern ติดตั้งเรียบร้อยแล้ว ถ้าคุณต้องการติดตั้งใหม่ ให้ลบแฟ้ม <code>config.php</code> จากไ',
         'before_you_proceed' => 'ก่อนที่คุณจะทำอะไรต่อ',
         'checking_database' => 'กำลังตรวจสอบการติดต่อฐานข้อมูล',
         'choose_password' => 'เลือกรหัสผ่าน',

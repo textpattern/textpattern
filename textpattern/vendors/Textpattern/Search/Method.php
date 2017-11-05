@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -127,7 +127,7 @@ class Method
      * Valid options are:
      *  -> always_like: treat the criteria as SQL LIKE, regardless if it is "in quotes".
      *  -> can_list: the criteria can be a comma-separated list of values to retrieve.
-     *  -> case_sensitive: the criteria is case sensitive. Currently not implemented
+     *  -> case_sensitive: the criteria is case sensitive.
      *
      * @param array $options Array of options
      */
@@ -259,6 +259,10 @@ class Method
 
                     $search_term = join(',', $terms);
                 }
+            }
+
+            if ($this->options['case_sensitive']) {
+                $column = 'BINARY '.$column;
             }
 
             if ($this->options['can_list']) {

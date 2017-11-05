@@ -2,10 +2,10 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -69,7 +69,7 @@ if ($event == 'section') {
 
 function sec_section_list($message = '')
 {
-    global $event, $section_list_pageby;
+    global $event;
 
     pagetop(gTxt('tab_sections'), $message);
 
@@ -145,6 +145,10 @@ function sec_section_list($message = '')
                 'column' => 'txp_section.css',
                 'label'  => gTxt('css'),
             ),
+            'description' => array(
+                'column' => 'txp_section.description',
+                'label'  => gTxt('description'),
+            ),
             'on_frontpage' => array(
                 'column' => 'txp_section.on_frontpage',
                 'label'  => gTxt('on_front_page'),
@@ -177,15 +181,17 @@ function sec_section_list($message = '')
 
     $total = safe_count('txp_section', $criteria);
 
-    echo n.tag(
-        hed(gTxt('tab_sections'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1'));
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_sections'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-4col-alt')
+        );
 
     $searchBlock =
         n.tag(
             $search->renderForm('sec_section', $search_render_options),
             'div', array(
-                'class' => 'txp-layout-2col-cell-2',
+                'class' => 'txp-layout-4col-3span',
                 'id'    => $event.'_control',
             )
         );
@@ -230,13 +236,15 @@ function sec_section_list($message = '')
                     gTxt('no_results_found'),
                     array('class' => 'alert-block information')
                 ).
-                n.tag_end('div');
+                n.tag_end('div'). // End of .txp-layout-1col.
+                n.'</div>'; // End of .txp-layout.
         }
 
         return;
     }
 
-    $limit = max($section_list_pageby, 15);
+    $paginator = new \Textpattern\Admin\Paginator();
+    $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -249,9 +257,7 @@ function sec_section_list($message = '')
     );
 
     if ($rs) {
-        echo n.tag(
-                toggle_box('section_detail'), 'div', array('class' => 'txp-list-options')).
-            n.tag_start('form', array(
+        echo n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'section_form',
                 'name'   => 'longform',
@@ -284,19 +290,19 @@ function sec_section_list($message = '')
                 ).
                 column_head(
                     'on_front_page', 'on_frontpage', 'section', true, $switch_dir, $crit, $search_method,
-                        (('on_frontpage' == $sort) ? "$dir " : '').'txp-list-col-frontpage section_detail'
+                        (('on_frontpage' == $sort) ? "$dir " : '').'txp-list-col-frontpage'
                 ).
                 column_head(
                     'syndicate', 'in_rss', 'section', true, $switch_dir, $crit, $search_method,
-                        (('in_rss' == $sort) ? "$dir " : '').'txp-list-col-syndicate section_detail'
+                        (('in_rss' == $sort) ? "$dir " : '').'txp-list-col-syndicate'
                 ).
                 column_head(
                     'include_in_search', 'searchable', 'section', true, $switch_dir, $crit, $search_method,
-                        (('searchable' == $sort) ? "$dir " : '').'txp-list-col-searchable section_detail'
+                        (('searchable' == $sort) ? "$dir " : '').'txp-list-col-searchable'
                 ).
                 column_head(
                     'articles', 'article_count', 'section', true, $switch_dir, $crit, $search_method,
-                        (('article_count' == $sort) ? "$dir " : '').'txp-list-col-article_count section_detail'
+                        (('article_count' == $sort) ? "$dir " : '').'txp-list-col-article_count'
                 )
             ).
             n.tag_end('thead').
@@ -371,7 +377,7 @@ function sec_section_list($message = '')
                     span(
                         sp.span('&#124;', array('role' => 'separator')).
                         sp.href(gTxt('view'), pagelinkurl(array('s' => $sec_name))),
-                        array('class' => 'txp-option-link section_detail')
+                        array('class' => 'txp-option-link')
                     ), '', array(
                         'class' => 'txp-list-col-name',
                         'scope' => 'row',
@@ -387,16 +393,16 @@ function sec_section_list($message = '')
                     $sec_css, '', 'txp-list-col-style'
                 ).
                 td(
-                    $sec_on_frontpage, '', 'txp-list-col-frontpage section_detail'
+                    $sec_on_frontpage, '', 'txp-list-col-frontpage'
                 ).
                 td(
-                    $sec_in_rss, '', 'txp-list-col-syndicate section_detail'
+                    $sec_in_rss, '', 'txp-list-col-syndicate'
                 ).
                 td(
-                    $sec_searchable, '', 'txp-list-col-searchable section_detail'
+                    $sec_searchable, '', 'txp-list-col-searchable'
                 ).
                 td(
-                    $articles, '', 'txp-list-col-article_count section_detail'
+                    $articles, '', 'txp-list-col-article_count'
                 ),
                 array('id' => 'txp_section_'.$sec_name)
             );
@@ -404,7 +410,7 @@ function sec_section_list($message = '')
 
         echo n.tag_end('tbody').
             n.tag_end('table').
-            n.tag_end('div').
+            n.tag_end('div'). // End of .txp-listtables.
             section_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
@@ -412,12 +418,13 @@ function sec_section_list($message = '')
                 'class' => 'txp-navigation',
                 'id'    => $event.'_navigation',
             )).
-            pageby_form('section', $section_list_pageby).
+            $paginator->render().
             nav_form('section', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div');
     }
 
-    echo n.tag_end('div');
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.
 }
 
 /**
@@ -487,7 +494,7 @@ function section_edit()
     } else {
         $out[] = inputLabel(
                 'section_name',
-                fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name'),
+                fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name', false, true),
                 'section_name', '', array('class' => 'txp-form-field edit-section-name')
             ).
             inputLabel(
@@ -641,7 +648,7 @@ function section_save()
 
 function section_change_pageby()
 {
-    event_change_pageby('section');
+    Txp::get('\Textpattern\Admin\Paginator')->change();
     sec_section_list();
 }
 
@@ -744,7 +751,7 @@ function section_delete()
 
     if ($sectionsNotDeleted) {
         $severity = ($message) ? E_WARNING : E_ERROR;
-        $message = array(($message ? $message.n : '') . gTxt('section_delete_failure', array('{name}' => join(', ', $sectionsNotDeleted))), $severity);
+        $message = array(($message ? $message.n : '').gTxt('section_delete_failure', array('{name}' => join(', ', $sectionsNotDeleted))), $severity);
     }
 
     sec_section_list($message);

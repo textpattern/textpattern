@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('txpinterface')) {
@@ -32,6 +32,7 @@ class hive_theme extends \Textpattern\Admin\Theme
         $cssPath = 'assets'.DS.'css';
         $jsPath = 'assets'.DS.'js';
 
+        $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">';
         $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.min.css">';
 
         // Custom CSS (see theme README for usage instructions).
@@ -46,12 +47,7 @@ class hive_theme extends \Textpattern\Admin\Theme
         }
 
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
-        $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
-        $out[] = '<meta name="theme-color" content="#ffda44">';
-        $out[] = '<meta name="application-name" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
-        $out[] = '<meta name="apple-mobile-web-app-capable" content="yes">';
-        $out[] = '<meta name="apple-mobile-web-app-title" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
 
         // Custom JavaScript (see theme README for usage instructions).
@@ -71,7 +67,15 @@ class hive_theme extends \Textpattern\Admin\Theme
     function header()
     {
         global $txp_user;
-        $out[] = hed(htmlspecialchars($GLOBALS["prefs"]["sitename"]), 1);
+
+        $default_event = get_pref('default_event');
+        $homelink = span('Textpattern');
+
+        if (!empty($default_event) && has_privs($default_event)) {
+            $homelink = href($homelink, array('event' => $default_event));
+        }
+
+        $out[] = hed($homelink, 1);
 
         if ($txp_user) {
             $out[] = '<button class="txp-nav-toggle collapsed" type="button" data-toggle="collapse" data-target="#txp-nav" aria-expanded="false" aria-controls="txp-nav"><span class="txp-accessibility">'.gTxt('navigation').'</span></button>';
@@ -91,8 +95,9 @@ class hive_theme extends \Textpattern\Admin\Theme
 
                     foreach ($tab['items'] as $item) {
                         $class = ($item['active']) ? ' class="selected"' : '';
+                        $ariacurrent = ($item['active']) ? ' aria-current="page"' : '';
                         $out[] = '<li'.$class.' role="presentation">'.
-                            href($item["label"], array('event' => $item['event']), ' role="menuitem" tabindex="-1"').
+                            href($item['label'], array('event' => $item['event']), ' role="menuitem"'.$ariacurrent.' tabindex="-1"').
                             '</li>';
                     }
 
@@ -105,8 +110,7 @@ class hive_theme extends \Textpattern\Admin\Theme
             $out[] = '</ul>';
             $out[] = '</nav>';
             $out[] = graf(
-                href(span(htmlspecialchars($GLOBALS["prefs"]["sitename"]), array('class' => 'txp-view-site-name')), hu, array(
-                    'rel'    => 'external',
+                href(span(htmlspecialchars($GLOBALS['prefs']['sitename']), array('class' => 'txp-view-site-name')), hu, array(
                     'target' => '_blank',
                     'title'  => gTxt('tab_view_site'),
                 )), array('class' => 'txp-view-site'));
@@ -120,10 +124,9 @@ class hive_theme extends \Textpattern\Admin\Theme
     function footer()
     {
         $out[] = graf(
-            href('Textpattern CMS', 'http://textpattern.com', array(
+            href('Textpattern CMS'.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), 'https://textpattern.com/', array(
                 'rel'    => 'external',
                 'target' => '_blank',
-                'title'  => gTxt('go_txp_com'),
             )).
             ' (v'.txp_version.')', array('class' => 'mothership'));
 
@@ -207,11 +210,10 @@ EOS;
 
         return array(
             'title'       => 'Hive',
-            'description' => 'Textpattern Hive admin theme (Classic Yellow)',
-            'version'     => '4.6.0-beta',
+            'description' => 'Textpattern CMS Hive admin theme (Classic Yellow).',
+            'version'     => '4.7.0-dev',
             'author'      => 'Phil Wareham',
-            'author_uri'  => 'https://github.com/philwareham',
-            'help'        => 'https://github.com/philwareham/textpattern-hive-admin-theme',
+            'author_uri'  => 'https://github.com/philwareham/textpattern-hive-admin-theme',
         );
     }
 }

@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -38,11 +38,12 @@ if ($event == 'lang') {
     require_privs('lang');
 
     $available_steps = array(
-        'get_language'    => true,
-        'get_textpack'    => true,
-        'remove_language' => true,
-        'save_language'   => true,
-        'list_languages'  => false,
+        'get_language'     => true,
+        'get_textpack'     => true,
+        'remove_language'  => true,
+        'save_language'    => true,
+        'save_language_ui' => true,
+        'list_languages'   => false,
     );
 
     if ($step && bouncer($step, $available_steps)) {
@@ -58,11 +59,16 @@ if ($event == 'lang') {
  * @param  string $name The HTML name and ID to assign to the select control
  * @param  string $val  The currently active language identifier (en-gb, fr-fr, ...)
  * @return string HTML
+ * @todo   Move this to a central location so it can also be used by install_textpack, etc
  */
 
 function languages($name, $val)
 {
-    $installed_langs = safe_column("lang", 'txp_lang', "1 = 1 GROUP BY lang");
+    static $installed_langs = null;
+
+    if (!$installed_langs) {
+        $installed_langs = safe_column("lang", 'txp_lang', "1 = 1 GROUP BY lang");
+    }
 
     $vals = array();
 
@@ -93,14 +99,26 @@ function list_languages($message = '')
 {
     require_once txpath.'/lib/IXRClass.php';
 
-    $active_lang = safe_field("val", 'txp_prefs', "name = 'language'");
+    $active_lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG, true);
+    $active_ui_lang = get_pref('language_ui', $active_lang, true);
+    $cpanel = '';
 
-    $lang_form = tag(
-        form(
+    if (has_privs('lang.edit')) {
+        $cpanel .= form(
             tag(gTxt('active_language'), 'label', array('for' => 'language')).
             languages('language', $active_lang).
             eInput('lang').
             sInput('save_language')
+        );
+    }
+
+    $lang_form = tag(
+        $cpanel.
+        form(
+            tag(gTxt('active_language_ui'), 'label', array('for' => 'language_ui')).
+            languages('language_ui', $active_ui_lang).
+            eInput('lang').
+            sInput('save_language_ui')
         ), 'div', array(
             'class' => 'txp-control-panel',
         )
@@ -170,22 +188,23 @@ function list_languages($message = '')
 
         $rpc_install = tda(
             ($rpc_updated)
-            ? strong(
-                eLink(
-                    'lang',
-                    'get_language',
-                    'lang_code',
-                    $langname,
-                    (isset($langdat['db_lastmod'])
-                        ? gTxt('update')
-                        : gTxt('install')
-                    ),
-                    'updating',
-                    isset($langdat['db_lastmod']),
-                    ''
-                )
-            ).
-            n.span(safe_strftime('%d %b %Y %X', @$langdat['rpc_lastmod']), array('class' => 'date modified'))
+            ? (has_privs('lang.edit'))
+                ? strong(
+                    eLink(
+                        'lang',
+                        'get_language',
+                        'lang_code',
+                        $langname,
+                        (isset($langdat['db_lastmod'])
+                            ? gTxt('update')
+                            : gTxt('install')
+                        ),
+                        'updating',
+                        isset($langdat['db_lastmod']),
+                        ''
+                    )
+                ).n.span(safe_strftime('%d %b %Y %X', @$langdat['rpc_lastmod']), array('class' => 'date modified'))
+                : ''
             : (
                 (isset($langdat['rpc_lastmod'])
                     ? gTxt('up_to_date')
@@ -202,26 +221,27 @@ function list_languages($message = '')
 
         $lang_file = tda(
             (isset($langdat['file_lastmod']))
-            ? strong(
-                eLink(
-                    'lang',
-                    'get_language',
-                    'lang_code',
-                    $langname,
-                    (
-                        ($file_updated)
-                        ? gTxt('update')
-                        : gTxt('install')
-                    ),
-                    'force',
-                    'file',
-                    ''
-                )
-            ).
-            n.span(safe_strftime(get_pref('archive_dateformat'), $langdat['file_lastmod']), array(
-                'class' => 'date '.($file_updated ? 'created' : 'modified'),
-            ))
-            : '-', ' class="lang-value languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"'
+            ? (has_privs('lang.edit'))
+                ? strong(
+                    eLink(
+                        'lang',
+                        'get_language',
+                        'lang_code',
+                        $langname,
+                        (
+                            ($file_updated)
+                            ? gTxt('update')
+                            : gTxt('install')
+                        ),
+                        'force',
+                        'file',
+                        ''
+                    )
+                ).n.span(safe_strftime(get_pref('archive_dateformat'), $langdat['file_lastmod']), array(
+                    'class' => 'date '.($file_updated ? 'created' : 'modified'),
+                ))
+                : ''
+            : '-', ' class="lang-value'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"'
         );
 
         $list .= tr(
@@ -233,16 +253,18 @@ function list_languages($message = '')
                 ).
             n.$rpc_install.
             n.$lang_file.
-            tda((in_array($langname, $installed_lang) ? dLink('lang', 'remove_language', 'lang_code', $langname, 1) : '-'), ' class="languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"')
+            tda(((has_privs('lang.edit') && in_array($langname, $installed_lang)) ? dLink('lang', 'remove_language', 'lang_code', $langname, 1) : '-'), ((isset($langdat['db_lastmod']) && $rpc_updated) ? ' class="highlight"' : ''))
         ).n;
     }
 
     // Output table and content.
     pagetop(gTxt('tab_languages'), $message);
 
-    echo n.tag(
-        hed(gTxt('tab_languages'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_languages'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-1col')
+        ).
         n.tag_start('div', array(
             'class' => 'txp-layout-1col',
             'id'    => 'language_container',
@@ -253,8 +275,6 @@ function list_languages($message = '')
     }
 
     echo $lang_form,
-        n.tag(
-            toggle_box('languages_detail'), 'div', array('class' => 'txp-list-options')).
         n.tag_start('div', array('class' => 'txp-listtables')).
         n.tag_start('table', array('class' => 'txp-list')).
         n.tag_start('thead').
@@ -266,10 +286,10 @@ function list_languages($message = '')
                 gTxt('from_server').popHelp('install_lang_from_server'), '', ' scope="col"'
             ).
             hCell(
-                gTxt('from_file').popHelp('install_lang_from_file'), '', ' class="languages_detail" scope="col"'
+                gTxt('from_file').popHelp('install_lang_from_file'), '', ' scope="col"'
             ).
             hCell(
-                gTxt('remove_lang').popHelp('remove_lang'), '', ' class="languages_detail" scope="col"'
+                gTxt('remove_lang').popHelp('remove_lang'), '', ' scope="col"'
             )
         ).
         n.tag_end('thead').
@@ -277,20 +297,22 @@ function list_languages($message = '')
         $list.
         n.tag_end('tbody').
         n.tag_end('table').
-        n.tag_end('div').
+        n.tag_end('div'). // End of .txp-listtables.
 
-        hed(gTxt('install_from_textpack'), 2).
-        n.tag(
-            form(
-                '<label for="textpack-install">'.gTxt('install_textpack').'</label>'.popHelp('get_textpack').
-                n.'<textarea class="code" id="textpack-install" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'.
-                fInput('submit', 'install_new', gTxt('upload')).
-                eInput('lang').
-                sInput('get_textpack')
-                , '', '', 'post', '', '', 'text_uploader'
-            ), 'div', array('class' => 'txp-control-panel')).
+        ((has_privs('lang.edit'))
+            ? hed(gTxt('install_from_textpack'), 2).
+                n.tag(
+                    form(
+                        '<label for="textpack-install">'.gTxt('install_textpack').'</label>'.popHelp('get_textpack').
+                        n.'<textarea class="code" id="textpack-install" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
+                        fInput('submit', 'install_new', gTxt('upload')).
+                        eInput('lang').
+                        sInput('get_textpack'), '', '', 'post', '', '', 'text_uploader'
+                    ), 'div', array('class' => 'txp-control-panel'))
+            : '');
 
-        n.tag_end('div');
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.;
 }
 
 /**
@@ -299,7 +321,9 @@ function list_languages($message = '')
 
 function save_language()
 {
-    global $textarray, $locale;
+    global $locale;
+
+    require_privs('lang.edit');
 
     extract(psa(array(
         'language',
@@ -315,7 +339,6 @@ function save_language()
             $msg = array(gTxt('locale_not_available_for_language', array('{name}' => $language)), E_WARNING);
         }
         set_pref('language', $language);
-        $textarray = load_lang($language);
         list_languages($msg);
 
         return;
@@ -325,20 +348,51 @@ function save_language()
 }
 
 /**
+ * Saves the active admin-side language.
+ */
+
+function save_language_ui()
+{
+    global $textarray, $locale;
+
+    extract(psa(array(
+        'language_ui',
+    )));
+
+    if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language_ui)."' LIMIT 1")) {
+        $locale = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language_ui);
+
+        if ($locale) {
+            $msg = gTxt('preferences_saved');
+            set_pref('language_ui', $language_ui, 'admin', PREF_CORE, 'text_input', 0, PREF_PRIVATE);
+            $textarray = load_lang($language_ui);
+        } else {
+            $msg = array(gTxt('locale_not_available_for_language', array('{name}' => $language_ui)), E_WARNING);
+        }
+
+        list_languages($msg);
+
+        return;
+    }
+
+    list_languages(array(gTxt('language_not_installed', array('{name}' => $language_ui)), E_ERROR));
+}
+
+/**
  * Installs a language from the RPC server or from a file.
  *
  * This function fetches language strings for the given language code from
  * either the RPC server or a file.
  *
  * Action is taken based on three HTTP POST parameters: 'lang_code', 'force' and
- * 'updating'. The 'lang_code' is the installed langauge, e.g. 'en-gb', 'fi-fi'.
+ * 'updating'. The 'lang_code' is the installed language, e.g. 'en-gb', 'fi-fi'.
  * The 'force' when set to 'file' can be used force an installation from a local
  * file. The 'updating' specifies whether only to install (0) or to update (1).
  */
 
 function get_language()
 {
-    global $prefs, $textarray;
+    global $prefs;
     require_once txpath.'/lib/IXRClass.php';
     $lang_code = gps('lang_code');
 
@@ -348,10 +402,6 @@ function get_language()
     @set_time_limit(90); // TODO: 90 seconds: seriously?
     if (gps('force') == 'file' || !$client->query('tups.getLanguage', $prefs['blog_uid'], $lang_code)) {
         if ((gps('force') == 'file' || gps('updating') !== '1') && install_language_from_file($lang_code)) {
-            if (defined('LANG')) {
-                $textarray = load_lang(LANG);
-            }
-
             callback_event('lang_installed', 'file', false, $lang_code);
 
             return list_languages(gTxt($lang_code).sp.gTxt('updated'));
@@ -372,10 +422,6 @@ function get_language()
 
             for ($i = 0; $i < $size; $i++) {
                 $errors += (!$lang_struct[$i]['ok']);
-            }
-
-            if (defined('LANG')) {
-                $textarray = load_lang(LANG);
             }
         }
 
@@ -439,13 +485,15 @@ function install_lang_key(&$value, $key)
 /**
  * Installs a Textpack.
  *
- * The Textpack is feeded by a 'textpack' HTTP POST parameter.
+ * The Textpack to load is fed by a 'textpack' HTTP POST parameter.
  *
  * @see install_textpack()
  */
 
 function get_textpack()
 {
+    require_privs('lang.edit');
+
     $textpack = ps('textpack');
     $n = install_textpack($textpack, true);
     list_languages(gTxt('textpack_strings_installed', array('{count}' => $n)));
@@ -460,6 +508,8 @@ function get_textpack()
 
 function remove_language()
 {
+    require_privs('lang.edit');
+
     $lang_code = ps('lang_code');
     $ret = safe_delete('txp_lang', "lang = '".doSlash($lang_code)."'");
 

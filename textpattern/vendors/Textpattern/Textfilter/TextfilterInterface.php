@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -47,11 +47,10 @@ interface TextfilterInterface
     /**
      * Gets filter-specific help.
      *
-     * Help can be used to set and offer HTML formatted instructions,
-     * examples and formatting tips. These instructions will be presented to
-     * the user.
+     * A help URL containing usage information that will be
+     * presented to the user.
      *
-     * @return string HTML for filter-specific help
+     * @return string Filter-specific help
      */
 
     public function getHelp();

@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -54,7 +54,7 @@ class Parser
 
     public function __construct()
     {
-        $this->language = get_pref('language', 'en-gb');
+        $this->language = get_pref('language', TEXTPATTERN_DEFAULT_LANG);
         $this->owner = TEXTPATTERN_LANG_OWNER_SITE;
     }
 
@@ -107,8 +107,8 @@ class Parser
         foreach ($lines as $line) {
             $line = trim($line);
 
-            // A comment line.
-            if (preg_match('/^#[^@]/', $line, $m)) {
+            // A blank/comment line.
+            if ($line === '' || preg_match('/^#[^@]/', $line, $m)) {
                 continue;
             }
 

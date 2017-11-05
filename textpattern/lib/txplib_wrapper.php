@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -34,7 +34,7 @@
  *
  * @link      http://web.archive.org/web/20141201035729/http://txp.kusor.com/wrapper
  * @author    Pedro Palazón
- * @copyright 2005-2008 The Textpattern Development Team - http://textpattern.com
+ * @copyright 2005-2008 The Textpattern Development Team - https://textpattern.io
  */
 
 if (!defined('txpath')) {
@@ -387,7 +387,7 @@ class TXP_Wrapper
      * $wrapper = new TXP_wrapper('username', 'password');
      * if ($sections = $wrapper->getSectionsList())
      * {
-     *     foreach($sections as $section)
+     *     foreach ($sections as $section)
      *     {
      *         echo $section['title'];
      *     }
@@ -439,7 +439,7 @@ class TXP_Wrapper
      * $wrapper = new TXP_wrapper('username', 'password');
      * if ($categories = $wrapper->getCategoryList())
      * {
-     *     foreach($categories as $category)
+     *     foreach ($categories as $category)
      *     {
      *         echo $category['title'];
      *     }
@@ -802,7 +802,6 @@ class TXP_Wrapper
 
             if (($incoming['Status'] >= 4 && !$article_id) || ($oldstatus != 4 && $article_id)) {
                 safe_update('txp_prefs', "val = NOW()", "name = 'lastmod'");
-                //@$this->_sendPings();
             }
 
             return $article_id;
@@ -830,34 +829,13 @@ class TXP_Wrapper
 
         if ($r) {
             // Update the last access time.
-            $safe_user = addslashes($user);
+            $safe_user = doSlash($user);
             safe_update('txp_users', "last_access = NOW()", "name = '$safe_user'");
 
             return true;
         }
 
         return false;
-    }
-
-    /**
-     * Pings Ping-O-Matic when an article is published.
-     *
-     * This is duplicated code from txp_article.php.
-     *
-     * @access private
-     */
-
-    public function _sendPings()
-    {
-        global $prefs, $txpcfg;
-        extract($prefs);
-
-        include_once txpath.'/lib/IXRClass.php';
-
-        if ($ping_weblogsdotcom == 1) {
-            $wl_client = new IXR_Client('http://rpc.pingomatic.com/');
-            $wl_client->query('weblogUpdates.ping', $sitename, hu);
-        }
     }
 
     /**

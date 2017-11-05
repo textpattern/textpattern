@@ -2,10 +2,10 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -65,7 +65,7 @@ function prefs_save()
     set_pref('max_custom_fields', $max_custom_fields, 'publish', 2);
 
     $sql = array();
-    $sql[] = "prefs_id = 1 AND event != '' AND type IN (".PREF_CORE.", ".PREF_PLUGIN.", ".PREF_HIDDEN.")";
+    $sql[] = "event != '' AND type IN (".PREF_CORE.", ".PREF_PLUGIN.", ".PREF_HIDDEN.")";
     $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
             SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
         )))";
@@ -87,7 +87,7 @@ function prefs_save()
     }
 
     if (!empty($post['file_max_upload_size'])) {
-        $post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size']);
+        $post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size'], false);
     }
 
     if (isset($post['auto_dst'])) {
@@ -123,7 +123,7 @@ function prefs_save()
         if (!isset($post[$name]) || !has_privs('prefs.'.$event)) {
             continue;
         }
-        
+
         if (is_array($post[$name])) {
             $post[$name] = implode(',', array_diff($post[$name], array('')));
         }
@@ -140,6 +140,7 @@ function prefs_save()
     }
 
     update_lastmod('preferences_saved');
+    $prefs = get_prefs();
 
     prefs_list(gTxt('preferences_saved'));
 }
@@ -172,7 +173,7 @@ function prefs_list($message = '')
     $joined_core = join(',', quote_list($core_events));
 
     $sql = array();
-    $sql[] = 'prefs_id = 1 and event != "" and type in('.PREF_CORE.', '.PREF_PLUGIN.')';
+    $sql[] = 'event != "" AND type IN('.PREF_CORE.', '.PREF_PLUGIN.')';
     $sql[] = "(user_name = '' OR (user_name = '".doSlash($txp_user)."' AND name NOT IN (
             SELECT name FROM ".safe_pfx('txp_prefs')." WHERE user_name = ''
         )))";
@@ -191,10 +192,10 @@ function prefs_list($message = '')
     $out = array();
     $build = array();
     $groupOut = array();
-    $tabCount = $tabActive = 0;
-    $selected = get_pref('pane_prefs_visible');
 
     if (numRows($rs)) {
+        $pophelp_keys = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp_keys('prefs');
+
         while ($a = nextRow($rs)) {
             if (!has_privs('prefs.'.$a['event'])) {
                 continue;
@@ -204,8 +205,7 @@ function prefs_list($message = '')
                 if ($last_event !== null) {
                     $build[] = tag(
                         hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
-                        join(n, $out)
-                        , 'section', array(
+                        join(n, $out), 'section', array(
                             'class'           => 'txp-prefs-group',
                             'id'              => 'prefs_group_'.$last_event,
                             'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
@@ -219,18 +219,11 @@ function prefs_list($message = '')
                                 'data-txp-pane'  => $last_event,
                                 'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
                             )),
-                        'li', array(
-                            'class' => (($last_event === $selected) ? 'ui-tabs-active ui-state-active' : '')
-                            ));
-                }
-
-                if ($last_event === $selected) {
-                    $tabActive = $tabCount - 1;
+                        'li');
                 }
 
                 $last_event = $a['event'];
                 $out = array();
-                $tabCount++;
             }
 
             $label = '';
@@ -239,11 +232,7 @@ function prefs_list($message = '')
                 $label = $a['name'];
             }
 
-            // TODO: remove exception when custom fields move to meta store.
-            $help = '';
-            if (strpos($a['name'], 'custom_') === false) {
-                $help = $a['name'];
-            }
+            $help = in_array($a['name'], $pophelp_keys, true) ? $a['name'] : '';
 
             if ($a['html'] == 'text_input') {
                 $size = INPUT_REGULAR;
@@ -265,12 +254,15 @@ function prefs_list($message = '')
     }
 
     if ($last_event === null) {
-        echo graf(gTxt('no_preferences'));
+        echo graf(
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt('no_preferences'),
+            array('class' => 'alert-block information')
+        );
     } else {
         $build[] = tag(
             hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
-            join(n, $out)
-            , 'section', array(
+            join(n, $out), 'section', array(
                 'class'           => 'txp-prefs-group',
                 'id'              => 'prefs_group_'.$last_event,
                 'aria-labelledby' => 'prefs_group_'.$last_event.'-label',
@@ -284,16 +276,14 @@ function prefs_list($message = '')
                     'data-txp-pane'  => $last_event,
                     'data-txp-token' => md5($last_event.'prefs'.form_token().get_pref('blog_uid')),
                 )),
-            'li', array(
-                'class' => (($last_event === $selected) ? 'ui-tabs-active ui-state-active' : '')
-                )).n;
+            'li').n;
 
-        if ($last_event === $selected) {
-            $tabActive = $tabCount - 1;
-        }
-
-        echo hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading')).
-            n.'<div class="txp-layout-4col-cell-1alt">'.
+        echo n.'<div class="txp-layout">'.
+            n.tag(
+                hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading txp-heading-tight')),
+                'div', array('class' => 'txp-layout-1col')
+            ).
+            n.tag_start('div', array('class' => 'txp-layout-4col-alt')).
             wrapGroup(
                 'all_preferences',
                 n.tag(join($groupOut), 'ul', array('class' => 'switcher-list')),
@@ -304,18 +294,17 @@ function prefs_list($message = '')
             echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'), array('class' => 'txp-save'));
         }
 
-        echo n.'</div>'.
-            n.'<div class="txp-layout-4col-cell-2-3-4">'.
+        echo n.tag_end('div'). // End of .txp-layout-4col-alt.
+            n.tag_start('div', array('class' => 'txp-layout-4col-3span')).
             join(n, $build).
-            n.'</div>'.
+            n.tag_end('div'). // End of .txp-layout-4col-3span.
             sInput('prefs_save').
             eInput('prefs').
-            hInput('prefs_id', '1').
             tInput();
     }
 
-    echo n.'</form>'.
-        script_js('var selectedTab = "' . $tabActive . '";');
+    echo n.'</div>'. // End of .txp-layout.
+        n.'</form>';
 }
 
 /**
@@ -405,8 +394,7 @@ function gmtoffset_select($name, $val)
         $key = (string) Txp::get('\Textpattern\Date\Timezone')->getTimezone();
     }
 
-    $tz = new timezone;
-    $ui = $tz->selectInput('timezone_key', $key, false, '', 'gmtoffset');
+    $ui = timezoneSelectInput('timezone_key', $key, false, '', 'gmtoffset');
 
     return pluggable_ui('prefs_ui', 'gmtoffset', $ui, $name, $val);
 }
@@ -762,8 +750,8 @@ function themename($name, $val)
 function doctypes($name, $val)
 {
     $vals = array(
-        'xhtml' => gTxt('XHTML'),
-        'html5' => gTxt('HTML5'),
+        'xhtml' => 'XHTML',
+        'html5' => 'HTML5',
     );
 
     return selectInput($name, $vals, $val, '', '', $name);
@@ -781,46 +769,4 @@ function doctypes($name, $val)
 function defaultPublishStatus($name, $val)
 {
     return selectInput($name, status_list(), $val, '', '', $name);
-}
-
-/**
- * Gets the maximum allowed file upload size.
- *
- * Computes the maximum acceptable file size to the application if the
- * user-selected value is larger than the maximum allowed by the current PHP
- * configuration.
- *
- * @param  int $user_max Desired upload size supplied by the administrator
- * @return int Actual value; the lower of user-supplied value or system-defined value
- */
-
-function real_max_upload_size($user_max)
-{
-    // The minimum of the candidates, is the real max. possible size
-    $candidates = array($user_max,
-                        ini_get('post_max_size'),
-                        ini_get('upload_max_filesize'), );
-    $real_max = null;
-    foreach ($candidates as $item) {
-        $val = trim($item);
-        $modifier = strtolower(substr($val, -1));
-        switch ($modifier) {
-            // The 'G' modifier is available since PHP 5.1.0
-            case 'g':
-                $val *= 1024;
-            case 'm':
-                $val *= 1024;
-            case 'k':
-                $val *= 1024;
-        }
-        if ($val > 1) {
-            if (is_null($real_max)) {
-                $real_max = $val;
-            } elseif ($val < $real_max) {
-                $real_max = $val;
-            }
-        }
-    }
-
-    return $real_max;
 }

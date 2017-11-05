@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -270,6 +270,11 @@ class Filter
         // TODO: consider moving Route.add() to textpattern.js, but that involves adding one
         // call per panel that requires search, instead of auto-adding it when invoked here.
         return form(
+            (
+                span(
+                    href(gTxt('search_clear'), array('event' => $event)),
+                    array('class' => 'txp-search-clear', 'style' => $this->crit ? '' : 'display:none'))
+            ).
             fInput('search', 'crit', $this->crit, 'txp-search-input', '', '', 24, 0, '', false, false, gTxt($placeholder)).
             eInput($event).
             sInput($step).
@@ -326,6 +331,7 @@ EOJS
         assert_string($this->event);
         $this->search_method = array_filter(do_list(get_pref('search_options_'.$this->event)));
         $this->search_method = array_intersect($this->search_method, array_keys($this->methods));
+
         return $this->search_method;
     }
 

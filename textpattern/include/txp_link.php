@@ -2,10 +2,10 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -69,7 +69,7 @@ if ($event == 'link') {
 
 function link_list($message = '')
 {
-    global $event, $step, $link_list_pageby, $txp_user;
+    global $event, $step, $txp_user;
 
     pagetop(gTxt('tab_link'), $message);
 
@@ -129,7 +129,7 @@ function link_list($message = '')
         array(
             'id' => array(
                 'column' => 'txp_link.id',
-                'label'  => gTxt('ID'),
+                'label'  => gTxt('id'),
                 'type'   => 'integer',
             ),
             'name' => array(
@@ -178,15 +178,17 @@ function link_list($message = '')
         $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
 
-    echo n.tag(
-        hed(gTxt('tab_link'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1'));
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_link'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-4col-alt')
+        );
 
     $searchBlock =
         n.tag(
             $search->renderForm('link_list', $search_render_options),
             'div', array(
-                'class' => 'txp-layout-2col-cell-2',
+                'class' => 'txp-layout-4col-3span',
                 'id'    => $event.'_control',
             )
         );
@@ -228,12 +230,14 @@ function link_list($message = '')
                 );
         }
 
-        echo n.tag_end('div');
+        echo n.tag_end('div'). // End of .txp-layout-1col.
+            n.'</div>'; // End of .txp-layout.;
 
         return;
     }
 
-    $limit = max($link_list_pageby, 15);
+    $paginator = new \Textpattern\Admin\Paginator();
+    $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -256,9 +260,7 @@ function link_list($message = '')
     if ($rs && numRows($rs)) {
         $show_authors = !has_single_author('txp_link');
 
-        echo n.tag(
-                toggle_box('links_detail'), 'div', array('class' => 'txp-list-options')).
-            n.tag_start('form', array(
+        echo n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'links_form',
                 'name'   => 'longform',
@@ -283,7 +285,11 @@ function link_list($message = '')
                 ).
                 column_head(
                     'description', 'description', 'link', true, $switch_dir, $crit, $search_method,
-                        (('description' == $sort) ? "$dir " : '').'txp-list-col-description links_detail'
+                        (('description' == $sort) ? "$dir " : '').'txp-list-col-description'
+                ).
+                column_head(
+                    'date', 'date', 'link', true, $switch_dir, $crit, $search_method,
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
                 ).
                 column_head(
                     'link_category', 'category', 'link', true, $switch_dir, $crit, $search_method,
@@ -292,10 +298,6 @@ function link_list($message = '')
                 column_head(
                     'url', 'url', 'link', true, $switch_dir, $crit, $search_method,
                         (('url' == $sort) ? "$dir " : '').'txp-list-col-url'
-                ).
-                column_head(
-                    'date', 'date', 'link', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date links_detail'
                 ).
                 (
                     $show_authors
@@ -344,16 +346,16 @@ function link_list($message = '')
                     ($can_edit ? href(txpspecialchars($link_linkname), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($link_linkname)), '', 'txp-list-col-name'
                 ).
                 td(
-                    txpspecialchars($link_description), '', 'txp-list-col-description links_detail'
+                    txpspecialchars($link_description), '', 'txp-list-col-description'
+                ).
+                td(
+                    gTime($link_uDate), '', 'txp-list-col-created date'
                 ).
                 td(
                     $link_category, '', 'txp-list-col-category category'.$vc
                 ).
                 td(
                     href($view_url, $view_url, ' rel="external" target="_blank"'), '', 'txp-list-col-url'
-                ).
-                td(
-                    gTime($link_uDate), '', 'txp-list-col-created date links_detail'
                 ).
                 (
                     $show_authors
@@ -374,12 +376,13 @@ function link_list($message = '')
                 'class' => 'txp-navigation',
                 'id'    => $event.'_navigation',
             )).
-            pageby_form('link', $link_list_pageby).
+            $paginator->render().
             nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div');
     }
 
-    echo n.tag_end('div');
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.
 }
 
 /**
@@ -408,10 +411,12 @@ function link_edit($message = '')
             extract($rs);
 
             if (!has_privs('link.edit') && !($author === $txp_user && has_privs('link.edit.own'))) {
-                link_list(gTxt('restricted_area'));
+                require_privs('link.edit');
 
                 return;
             }
+        } else {
+            link_list(array(gTxt('unknown_link'), E_ERROR));
         }
     }
 
@@ -422,7 +427,7 @@ function link_edit($message = '')
             hed($caption, 2).
             inputLabel(
                 'link_name',
-                fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'link_name'),
+                fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'link_name', false, true),
                 'title', '', array('class' => 'txp-form-field edit-link-name')
             ).
             inputLabel(
@@ -433,7 +438,7 @@ function link_edit($message = '')
             // TODO: maybe use type="url" once browsers are less strict.
             inputLabel(
                 'link_url',
-                fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'link_url'),
+                fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'link_url', false, true),
                 'url', 'link_url', array('class' => 'txp-form-field edit-link-url')
             ).
             inputLabel(
@@ -495,8 +500,9 @@ function link_save()
     }
 
     $author = fetch('author', 'txp_link', 'id', $id);
+
     if (!has_privs('link.edit') && !($author === $txp_user && has_privs('link.edit.own'))) {
-        link_list(gTxt('restricted_area'));
+        require_privs('link.edit');
 
         return;
     }
@@ -556,7 +562,7 @@ function link_save()
 
 function link_change_pageby()
 {
-    event_change_pageby('link');
+    Txp::get('\Textpattern\Admin\Paginator')->change();
     link_list();
 }
 
@@ -579,7 +585,7 @@ function link_multiedit_form($page, $sort, $dir, $crit, $search_method)
         unset($methods['changecategory']);
     }
 
-    if (has_single_author('txp_link')) {
+    if (has_single_author('txp_link') || !has_privs('link.edit')) {
         unset($methods['changeauthor']);
     }
 
@@ -617,7 +623,7 @@ function link_multi_edit()
     $key = '';
 
     switch ($method) {
-        case 'delete' :
+        case 'delete':
             if (!has_privs('link.delete')) {
                 if (has_privs('link.delete.own')) {
                     $selected = safe_column("id", 'txp_link', "id IN (".join(',', $selected).") AND author = '".doSlash($txp_user)."'");
@@ -645,7 +651,7 @@ function link_multi_edit()
             break;
         case 'changeauthor':
             $val = ps('author');
-            if (in_array($val, $all_link_authors)) {
+            if (has_privs('link.edit') && in_array($val, $all_link_authors)) {
                 $key = 'author';
             }
             break;
@@ -653,6 +659,14 @@ function link_multi_edit()
             $key = '';
             $val = '';
             break;
+    }
+
+    if (!has_privs('link.edit')) {
+        if (has_privs('link.edit.own')) {
+            $selected = safe_column("id", 'txp_link', "id IN (".join(',', $selected).") AND author = '".doSlash($txp_user)."'");
+        } else {
+            $selected = array();
+        }
     }
 
     if ($selected and $key) {

@@ -2,10 +2,10 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -62,7 +62,7 @@ if ($event == 'log') {
 
 function log_list($message = '')
 {
-    global $event, $log_list_pageby, $expire_logs_after;
+    global $event, $expire_logs_after;
 
     pagetop(gTxt('tab_logs'), $message);
 
@@ -126,7 +126,7 @@ function log_list($message = '')
         array(
             'ip' => array(
                 'column' => 'txp_log.ip',
-                'label'  => gTxt('IP'),
+                'label'  => 'IP',
             ),
             'host' => array(
                 'column' => 'txp_log.host',
@@ -162,15 +162,17 @@ function log_list($message = '')
 
     $total = safe_count('txp_log', "$criteria");
 
-    echo n.tag(
-        hed(gTxt('tab_logs'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1'));
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_logs'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-4col-alt')
+        );
 
     $searchBlock =
         n.tag(
             $search->renderForm('log_list', $search_render_options),
             'div', array(
-                'class' => 'txp-layout-2col-cell-2',
+                'class' => 'txp-layout-4col-3span',
                 'id'    => $event.'_control',
             )
         );
@@ -198,12 +200,14 @@ function log_list($message = '')
                 );
         }
 
-        echo n.tag_end('div');
+        echo n.tag_end('div'). // End of .txp-layout-1col.
+            n.'</div>'; // End of .txp-layout.
 
         return;
     }
 
-    $limit = max($log_list_pageby, 15);
+    $paginator = new \Textpattern\Admin\Paginator();
+    $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -216,9 +220,7 @@ function log_list($message = '')
     );
 
     if ($rs) {
-        echo n.tag(
-                toggle_box('log_detail'), 'div', array('class' => 'txp-list-options')).
-            n.tag_start('form', array(
+        echo n.tag_start('form', array(
                 'class'  => 'multi_edit_form',
                 'id'     => 'log_form',
                 'name'   => 'longform',
@@ -243,7 +245,7 @@ function log_list($message = '')
                 ).
                 column_head(
                     'host', 'host', 'log', true, $switch_dir, $crit, $search_method,
-                        (('host' == $sort) ? "$dir " : '').'txp-list-col-host log_detail'
+                        (('host' == $sort) ? "$dir " : '').'txp-list-col-host'
                 ).
                 column_head(
                     'page', 'page', 'log', true, $switch_dir, $crit, $search_method,
@@ -255,11 +257,11 @@ function log_list($message = '')
                 ).
                 column_head(
                     'method', 'method', 'log', true, $switch_dir, $crit, $search_method,
-                        (('method' == $sort) ? "$dir " : '').'txp-list-col-method log_detail'
+                        (('method' == $sort) ? "$dir " : '').'txp-list-col-method'
                 ).
                 column_head(
                     'status', 'status', 'log', true, $switch_dir, $crit, $search_method,
-                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status log_detail'
+                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
                 )
             ).
             n.tag_end('thead').
@@ -297,7 +299,7 @@ function log_list($message = '')
                     )), '', 'txp-list-col-ip'
                 ).
                 td(
-                    txpspecialchars($log_host), '', 'txp-list-col-host log_detail'
+                    txpspecialchars($log_host), '', 'txp-list-col-host'
                 ).
                 td(
                     $log_page, '', 'txp-list-col-page'
@@ -306,10 +308,10 @@ function log_list($message = '')
                     $log_refer, '', 'txp-list-col-refer'
                 ).
                 td(
-                    txpspecialchars($log_method), '', 'txp-list-col-method log_detail'
+                    txpspecialchars($log_method), '', 'txp-list-col-method'
                 ).
                 td(
-                    $log_status, '', 'txp-list-col-status log_detail'
+                    $log_status, '', 'txp-list-col-status'
                 )
             );
         }
@@ -317,7 +319,7 @@ function log_list($message = '')
         echo
             n.tag_end('tbody').
             n.tag_end('table').
-            n.tag_end('div').
+            n.tag_end('div'). // End of .txp-listtables.
             log_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
@@ -325,12 +327,13 @@ function log_list($message = '')
                 'class' => 'txp-navigation',
                 'id'    => $event.'_navigation',
             )).
-            pageby_form('log', $log_list_pageby).
+            $paginator->render().
             nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div');
     }
 
-    echo n.tag_end('div');
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.
 }
 
 /**
@@ -339,7 +342,7 @@ function log_list($message = '')
 
 function log_change_pageby()
 {
-    event_change_pageby('log');
+    Txp::get('\Textpattern\Admin\Paginator')->change();
     log_list();
 }
 

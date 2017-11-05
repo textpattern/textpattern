@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -487,19 +487,17 @@ if (!defined('X_FRAME_OPTIONS')) {
     define('X_FRAME_OPTIONS', 'SAMEORIGIN');
 }
 
-if (!defined('X_UA_COMPATIBLE')) {
+if (!defined('CONTENT_SECURITY_POLICY')) {
     /**
-     * Sets X-UA-Compatible HTTP header's value.
+     * Sets Content-Security-Policy HTTP header's value.
      *
      * This constant can be overridden from the config.php.
      *
-     * @since   4.6.0
-     * @package HTML
-     * @example
-     * define('X_UA_COMPATIBLE', 'IE=IE9');
+     * @since   4.7.0
+     * @package CSRF
      */
 
-    define('X_UA_COMPATIBLE', 'IE=edge,chrome=1');
+    define('CONTENT_SECURITY_POLICY', "frame-ancestors 'self'");
 }
 
 if (!defined('AJAX_TIMEOUT')) {
@@ -851,6 +849,27 @@ define('TEXTPATTERN_LANG_OWNER_SYSTEM', '');
 
 define('TEXTPATTERN_LANG_OWNER_SITE', 'site');
 
+if (!defined('TEXTPATTERN_DEFAULT_LANG')) {
+    /**
+     * The default/fallback language identifier.
+     *
+     * @since   4.7.0
+     * @package L10n
+     */
+
+    define('TEXTPATTERN_DEFAULT_LANG', 'en-gb');
+}
+
+/**
+ * Language flags;
+ *
+ * @since    4.7.0
+ * @package  L10n
+ */
+define('TEXTPATTERN_LANG_ACTIVE', 0x1);
+define('TEXTPATTERN_LANG_INSTALLED', 0x2);
+define('TEXTPATTERN_LANG_AVAILABLE', 0x4);
+
 /**
  * Strip empty values.
  *
@@ -859,9 +878,10 @@ define('TEXTPATTERN_LANG_OWNER_SITE', 'site');
  * @see     join_atts(), do_list_unique()
  */
 
-define('TEXTPATTERN_STRIP_NONE',         0);
-define('TEXTPATTERN_STRIP_EMPTY',        0x1);
+define('TEXTPATTERN_STRIP_NONE', 0);
+define('TEXTPATTERN_STRIP_EMPTY', 0x1);
 define('TEXTPATTERN_STRIP_EMPTY_STRING', 0x2);
+define('TEXTPATTERN_STRIP_TXP', 0x4);
 
 /**
  * Sends an adaptive announcement.
@@ -907,3 +927,15 @@ define('TEXTPATTERN_ANNOUNCE_ASYNC', 0x4);
  */
 
 define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
+
+/**
+ * Define the default JSON option for json_encode()
+ *
+ * @since   4.7.0
+ */
+
+if (defined('JSON_UNESCAPED_UNICODE')) {
+    define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+} else {
+    define('TEXTPATTERN_JSON', 0);
+}

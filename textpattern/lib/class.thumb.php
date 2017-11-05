@@ -222,7 +222,7 @@ class wet_thumb
         $this->_SRC['file']       = $infile;
         $this->_SRC['width']      = $temp[0];
         $this->_SRC['height']     = $temp[1];
-        $this->_SRC['type']       = $temp[2]; // 1=GIF, 2=JPG, 3=PNG, SWF=4.
+        $this->_SRC['type']       = $temp[2]; // 1=GIF, 2=JPG, 3=PNG.
         $this->_SRC['string']     = $temp[3];
         $this->_SRC['filename']   = basename($infile);
         //$this->_SRC['modified'] = filemtime($infile);
@@ -235,16 +235,16 @@ class wet_thumb
         }
 
         // Get destination image info.
-        if (is_numeric($this->width) AND empty($this->height)) {
+        if (is_numeric($this->width) and empty($this->height)) {
             $this->_DST['width']  = $this->width;
             $this->_DST['height'] = round($this->width/($this->_SRC['width']/$this->_SRC['height']));
-        } elseif (is_numeric($this->height) AND empty($this->width)) {
+        } elseif (is_numeric($this->height) and empty($this->width)) {
             $this->_DST['height'] = $this->height;
             $this->_DST['width']  = round($this->height/($this->_SRC['height']/$this->_SRC['width']));
-        } elseif (is_numeric($this->width) AND is_numeric($this->height)) {
+        } elseif (is_numeric($this->width) and is_numeric($this->height)) {
             $this->_DST['width']  = $this->width;
             $this->_DST['height'] = $this->height;
-        } elseif (is_numeric($this->longside) AND empty($this->shortside)) {
+        } elseif (is_numeric($this->longside) and empty($this->shortside)) {
             // Preserve aspect ratio based on provided height.
             if ($this->_SRC['format'] == 'portrait') {
                 $this->_DST['height'] = $this->longside;

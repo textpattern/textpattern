@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 namespace Textpattern\Textfilter;
@@ -113,7 +113,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
         if (isset($this[$key])) {
             $thing = $this[$key]->filter($thing, $context['options']);
         } else {
-            throw new Exception(gTxt('invalid_argument', array('{name}' => 'key')));
+            throw new \Exception(gTxt('invalid_argument', array('{name}' => 'key')));
         }
 
         // Postprocessing, anyone?
@@ -123,10 +123,10 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
     }
 
     /**
-     * Get help text for a certain Textfilter.
+     * Get help URL for a certain Textfilter.
      *
      * @param  string $key The Textfilter's key
-     * @return string HTML for human-readable help
+     * @return string URL endpoint for human-readable help
      */
 
     public function getHelp($key)

@@ -2,10 +2,10 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -91,9 +91,11 @@ function plugin_list($message = '')
 
     $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-    echo n.tag(
-        hed(gTxt('tab_plugins'), 1, array('class' => 'txp-heading')),
-        'div', array('class' => 'txp-layout-2col-cell-1')).
+    echo n.'<div class="txp-layout">'.
+        n.tag(
+            hed(gTxt('tab_plugins'), 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-1col')
+        ).
         n.tag_start('div', array(
             'class' => 'txp-layout-1col',
             'id'    => $event.'_container',
@@ -151,7 +153,7 @@ function plugin_list($message = '')
                         (('load_order' == $sort) ? "$dir " : '').'txp-list-col-load-order'
                 ).
                 hCell(
-                    gTxt('manage'), '',  ' class="txp-list-col-manage" scope="col"'
+                    gTxt('manage'), '', ' class="txp-list-col-manage" scope="col"'
                 )
             ).
             n.tag_end('thead').
@@ -245,13 +247,14 @@ function plugin_list($message = '')
         echo
             n.tag_end('tbody').
             n.tag_end('table').
-            n.tag_end('div').
+            n.tag_end('div'). // End of .txp-listtables.
             plugin_multiedit_form('', $sort, $dir, '', '').
             tInput().
             n.tag_end('form');
     }
 
-    echo n.tag_end('div');
+    echo n.tag_end('div'). // End of .txp-layout-1col.
+        n.'</div>'; // End of .txp-layout.
 }
 
 /**
@@ -296,9 +299,33 @@ function plugin_help()
     global $event;
 
     $name = gps('name');
+
+    // Note that TEXTPATTERN_DEFAULT_LANG is not used here.
+    // The assumption is that plugin help is in English, unless otherwise stated.
+    $default_lang = $lang_plugin = 'en-gb';
+
     pagetop(gTxt('plugin_help'));
     $help = ($name) ? safe_field('help', 'txp_plugin', "name = '".doSlash($name)."'") : '';
-    echo n.tag($help, 'div', array('class' => 'txp-layout-textbox'));
+    $helpArray = do_list($help, n);
+
+    if (preg_match('/^#@language\s+(.+)$/', $helpArray[0], $m)) {
+        $lang_plugin = $m[1];
+        $help = implode(n, array_slice($helpArray, 1));
+    }
+
+    if ($lang_plugin !== $default_lang) {
+        $direction = safe_field('data', 'txp_lang', "lang = '".doSlash($lang_plugin)."' AND name='lang_dir'");
+    }
+
+    if (empty($direction) || !in_array($direction, array('ltr', 'rtl'))) {
+        $direction = 'ltr';
+    }
+
+    echo n.tag($help, 'div', array(
+        'class' => 'txp-layout-textbox',
+        'lang'  => $lang_plugin,
+        'dir'   => $direction,
+    ));
 }
 
 /**
@@ -382,7 +409,7 @@ function plugin_verify()
     // Check for pre-4.0 style plugin.
     if (strpos($plugin, '$plugin=\'') !== false) {
         // Try to increase PCRE's backtrack limit in PHP 5.2+ to accommodate to
-        // x-large plugins. See http://bugs.php.net/bug.php?id=40846.
+        // x-large plugins. See https://bugs.php.net/bug.php?id=40846.
         @ini_set('pcre.backtrack_limit', '1000000');
         $plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
         // Have we hit yet another PCRE restriction?
@@ -570,11 +597,10 @@ function plugin_form()
 {
     return form(
         tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
-        '<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'.
+        '<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr" required="required"></textarea>'.
         fInput('submit', 'install_new', gTxt('upload')).
         eInput('plugin').
-        sInput('plugin_verify')
-        , '', '', 'post', 'plugin-data', '', 'plugin_install_form');
+        sInput('plugin_verify'), '', '', 'post', 'plugin-data', '', 'plugin_install_form');
 }
 
 /**

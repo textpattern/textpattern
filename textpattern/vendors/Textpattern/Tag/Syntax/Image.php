@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -45,7 +45,7 @@ class Image
 
         assert_image();
 
-        return parse(EvalElse($thing, !empty($thisimage['is_first'])));
+        return parse($thing, !empty($thisimage['is_first']));
     }
 
     /**
@@ -62,6 +62,6 @@ class Image
 
         assert_image();
 
-        return parse(EvalElse($thing, !empty($thisimage['is_last'])));
+        return parse($thing, !empty($thisimage['is_last']));
     }
 }

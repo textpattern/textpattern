@@ -1,0 +1,12 @@
+discussid INT(6) ZEROFILL NOT NULL AUTO_INCREMENT,
+parentid  INT             NOT NULL DEFAULT '0',
+name      VARCHAR(255)    NOT NULL DEFAULT '',
+email     VARCHAR(254)    NOT NULL DEFAULT '',
+web       VARCHAR(255)    NOT NULL DEFAULT '',
+ip        VARCHAR(100)    NOT NULL DEFAULT '',
+posted    DATETIME        NOT NULL,
+message   TEXT            NOT NULL,
+visible   TINYINT         NOT NULL DEFAULT '1',
+
+PRIMARY KEY    (discussid),
+INDEX parentid (parentid)

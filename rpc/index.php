@@ -2,7 +2,7 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * XML-RPC Server for Textpattern 4.0.x
  * http://web.archive.org/web/20150119065246/http://txp.kusor.com/rpc-api
@@ -22,7 +22,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 // TODO: change error reporting to E_ALL, including E_NOTICE to detect subtle bugs?
@@ -44,7 +44,8 @@ if (@ini_get('register_globals')) {
         (array) $_POST,
         (array) $_COOKIE,
         (array) $_FILES,
-        (array) $_SERVER);
+        (array) $_SERVER
+    );
 
     // As the deliberate awkwardly-named local variable $_txpfoo MUST NOT be
     // unset to avoid notices further down, we must remove any potential
@@ -72,6 +73,10 @@ define('txpath', dirname(dirname(__FILE__)).'/textpattern');
 define('txpinterface', 'xmlrpc');
 
 require_once txpath.'/config.php';
+require_once txpath.'/lib/class.trace.php';
+
+$trace = new Trace();
+
 require_once txpath.'/lib/txplib_db.php';
 require_once txpath.'/lib/txplib_misc.php';
 require_once txpath.'/lib/admin_config.php';

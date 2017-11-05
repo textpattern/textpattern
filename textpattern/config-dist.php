@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -96,14 +96,14 @@ $txpcfg['dbcharset'] = 'utf8';
  * MYSQL_CLIENT_IGNORE_SPACE, MYSQL_CLIENT_INTERACTIVE
  *
  * @global int $txpcfg['client_flags']
- * @link   http://www.php.net/manual/function.mysql-connect.php
+ * @link   https://secure.php.net/manual/en/mysqli.real-connect.php
  */
 
 $txpcfg['client_flags'] = 0;
 
 /*
  * Optional, advanced: http address of the site serving images.
- * see http://forum.textpattern.com/viewtopic.php?id=34493
+ * see https://forum.textpattern.io/viewtopic.php?id=34493
  */
 
 // define('ihu', 'http://static.example.com/');

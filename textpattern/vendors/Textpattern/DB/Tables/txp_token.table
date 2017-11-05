@@ -1,0 +1,9 @@
+id           INT          NOT NULL AUTO_INCREMENT,
+reference_id INT          NOT NULL,
+type         VARCHAR(255) NOT NULL,
+selector     VARCHAR(12)  NOT NULL DEFAULT '',
+token        VARCHAR(255) NOT NULL,
+expires      DATETIME         NULL DEFAULT NULL,
+
+PRIMARY KEY (id),
+UNIQUE ref_type (reference_id, type(50))
