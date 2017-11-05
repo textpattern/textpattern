@@ -55,21 +55,21 @@ class Radio extends Tag implements \Textpattern\Widget\WidgetInterface
         $this->key = ($value) ? $name.'-'.$value : $name;
         $class = 'radio';
 
-        if ((bool)$checked === true) {
-            $this->setBool('checked');
-            $class .= ' active';
-        }
-
         $this->setAtts(array(
-                'type'  => 'radio',
-                'name'  => $name,
-                'id'    => $this->key,
                 'class' => $class,
+                'id'    => $this->key,
+                'name'  => $name,
+                'type'  => 'radio',
             ))->setAtts(array(
                 'value' => $value,
             ), array(
                 'flag' => TEXTPATTERN_STRIP_NONE,
             ));
+
+        if ((bool)$checked === true) {
+            $this->setBool('checked');
+            $class .= ' active';
+        }
     }
 
     /**

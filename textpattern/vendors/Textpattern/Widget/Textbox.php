@@ -36,8 +36,8 @@ class Textbox extends Tag implements \Textpattern\Widget\WidgetInterface
     {
         parent::__construct('input');
         $this->setAtts(array(
-                'type' => 'text',
                 'name' => $name,
+                'type' => 'text',
             ), array(
                 'required' => true,
             ))
