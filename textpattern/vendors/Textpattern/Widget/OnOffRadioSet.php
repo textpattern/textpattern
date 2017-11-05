@@ -22,7 +22,7 @@
  */
 
 /**
- * &lt;input type="radio" /&gt; tag set with on/off options.
+ * An &lt;input type="radio" /&gt; tag set with on/off options.
  *
  * @since   4.7.0
  * @package Widget

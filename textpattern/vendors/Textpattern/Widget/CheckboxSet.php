@@ -22,7 +22,7 @@
  */
 
 /**
- * &lt;input type="checkbox" /&gt; tag set.
+ * An &lt;input type="checkbox" /&gt; tag set.
  *
  * @since   4.7.0
  * @package Widget

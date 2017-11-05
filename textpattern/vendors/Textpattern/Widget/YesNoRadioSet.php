@@ -22,7 +22,7 @@
  */
 
 /**
- * &lt;input type="radio" /&gt; tag set with yes/no options.
+ * An &lt;input type="radio" /&gt; tag set with yes/no options.
  *
  * @since   4.7.0
  * @package Widget
