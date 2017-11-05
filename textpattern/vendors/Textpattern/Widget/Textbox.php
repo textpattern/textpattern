@@ -22,7 +22,7 @@
  */
 
 /**
- * &lt;input /&gt; tag.
+ * An &lt;input /&gt; tag.
  *
  * @since   4.7.0
  * @package Widget
@@ -32,19 +32,53 @@ namespace Textpattern\Widget;
 
 class Textbox extends Tag implements \Textpattern\Widget\WidgetInterface
 {
-    public function __construct($name, $value = null)
+    /**
+     * The key (id) used in the tag.
+     *
+     * @var null
+     */
+
+    protected $key = null;
+
+    /**
+     * Construct a single text input widget.
+     *
+     * @param string $name  The text input key (HTML name attribute)
+     * @param string $type  The HTML type attribute
+     * @param string $value The default value to assign
+     */
+
+    public function __construct($name, $type = null, $value = null)
     {
+        if ($type === null) {
+            $type = 'text';
+        }
+
+        $this->key = $name;
+
         parent::__construct('input');
         $this->setAtts(array(
-                'name' => $name,
-                'type' => 'text',
-            ), array(
-                'required' => true,
-            ))
-            ->setAtts(array(
-                'value' => $value,
-            ), array(
-                'flag' => TEXTPATTERN_STRIP_NONE,
+                'name' => $this->key,
+                'type' => $type,
             ));
+
+        if ($value !== null) {
+            $this->setAtts(array(
+                    'value' => $value,
+                ), array(
+                    'flag' => TEXTPATTERN_STRIP_NONE,
+                ));
+        }
+    }
+
+    /**
+     * Fetch the key (id) in use by this text input.
+     *
+     * @return string
+     */
+
+    public function getKey()
+    {
+        return $this->key;
     }
 }
