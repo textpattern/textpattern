@@ -33,6 +33,14 @@ namespace Textpattern\Widget;
 class Tag implements \Textpattern\Widget\WidgetInterface
 {
     /**
+     * Global control over tag output.
+     *
+     * @var array
+     */
+
+    static $flags = null;
+
+    /**
      * The tag name.
      *
      * @var string
@@ -66,10 +74,16 @@ class Tag implements \Textpattern\Widget\WidgetInterface
 
     /**
      * General constructor for the tag.
+     *
+     * @param  string $tag The tag name
      */
 
     public function __construct($tag)
     {
+        if (self::$flags === null) {
+            self::$flags['output'] = 'html5';
+        }
+
         $this->setTag($tag);
         $this->atts = new \Textpattern\Widget\Attribute();
     }
@@ -132,11 +146,14 @@ class Tag implements \Textpattern\Widget\WidgetInterface
             $keys = (array)$keys;
         }
 
+        $props = array('format' => 'bool');
+
+        if (self::$flags['output'] === 'html5') {
+            $props['flag'] = TEXTPATTERN_STRIP_TXP;
+        }
+
         foreach ($keys as $key) {
-            $this->atts->setAttribute($key, true, array(
-                'format' => 'bool',
-                'flag'   => TEXTPATTERN_STRIP_TXP,
-            ));
+            $this->atts->setAttribute($key, true, $props);
         }
 
         return $this;
@@ -149,6 +166,21 @@ class Tag implements \Textpattern\Widget\WidgetInterface
     public function setMultiple()
     {
         $this->atts->setMultiple();
+
+        return $this;
+    }
+
+    /**
+     * Define the output scheme from this point forward in all tags. Chainable.
+     *
+     * @param  string $scheme Either 'html5' or 'xhtml'.
+     */
+
+    public function setOutput($scheme)
+    {
+        if (in_array($scheme, array('html5', 'xhtml'))) {
+            self::$flags['output'] = $scheme;
+        }
 
         return $this;
     }
@@ -178,8 +210,7 @@ class Tag implements \Textpattern\Widget\WidgetInterface
                 $out = '<'.$this->tag.$this->atts->render().'>'.$this->content.'</'.$this->tag.'>';
                 break;
             case 'self-closing':
-                $doctype = get_pref('doctype');
-                $out = '<'.$this->tag.$this->atts->render().($doctype === 'xhtml' ? ' />' : '>');
+                $out = '<'.$this->tag.$this->atts->render().(self::$flags['output'] === 'html5' ? '>' : ' />');
                 break;
             case 'open':
                 $out = '<'.$this->tag.$this->atts->render().'>';
