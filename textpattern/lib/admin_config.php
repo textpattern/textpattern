@@ -97,6 +97,7 @@ $txp_permissions = array(
     'tab.extensions'              => '1,2',
     'tab.presentation'            => '1,2,3,    6',
     'tag'                         => '1,2,3,4,5,6',
+    'help'                        => '1,2,3,4,5,6',
 );
 
 /**

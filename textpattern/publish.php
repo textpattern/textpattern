@@ -854,7 +854,9 @@ function doArticles($atts, $iscustom, $thing = null)
 
     if (!isset($time) || $time === 'any') {
         $time = ($month ? " AND Posted LIKE '".doSlash($month)."%'" : '').
-        ($time ? '' : " AND Posted <= ".now('posted'));
+            ($time ? '' : " AND Posted <= ".now('posted'));
+    } elseif (empty($time) || $time === true) {
+        $time = $time ? " AND Posted <= ".now('posted') : '';
     } elseif (strpos($time, '%') !== false) {
         $month = $month ? strtotime($month) : time();
         $time = " AND Posted LIKE '".doSlash(strftime($time, $month))."%'";
@@ -888,6 +890,10 @@ function doArticles($atts, $iscustom, $thing = null)
 
     if (!$expired) {
         $time .= " AND (".now('expires')." <= Expires OR Expires IS NULL)";
+    } elseif ((int)$expired !== 1) {
+        $start = strtotime($month) or $start = time();
+        $expires = strtotime($expired, $start);
+        $time .= $expires === false ? " AND Expires LIKE '".doSlash($expired)."%'" : " AND (FROM_UNIXTIME($expires) <= Expires OR Expires IS NULL)";
     }
 
     $custom = '';

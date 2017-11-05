@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <help group="admin" title="Users panel">
+<help lang="en">
+    <group id="admin" title="Users panel">
         <item id="about_privileges" title="About roles"><![CDATA[
 <h2>About roles</h2>
 <h3>Publisher</h3>
@@ -79,9 +79,9 @@
 <h2>Add new author</h2>
 <p>A password, welcome message and login instructions will be emailed to the new author.</p>
         ]]></item>
-    </help>
+    </group>
 
-    <help group="article" title="Write panel">
+    <group id="article" title="Write panel">
         <item id="article_image" title="Article image"><![CDATA[
 <h2>Article image</h2>
 <p>If you would like to associate a single image with this article, place one of the following here:</p>
@@ -147,12 +147,12 @@
 <p>If you would like to have a specific title attached to the permalink URL for your article, enter it here. If it is left blank, the URL title will be automatically generated from the article title.</p>
 <p>This is particularly useful if the title of your article uses non-ASCII characters.</p>
         ]]></item>
-    </help>
+    </group>
 
-    <help group="category" title="Categories panel">
+    <group id="category" title="Categories panel">
         <item id="article_category" title="Articles"><![CDATA[
 <h2>Articles</h2>
-<p>Unlike sections, which define the navigational structure of a site, article categories allow organisation of articles by their subject matter. Once categories are assigned, lists of articles belonging to particular categories can be browsed.</p>
+<p>Unlike sections, which define the navigational structure of a site, article categories allow organization of articles by their subject matter. Once categories are assigned, lists of articles belonging to particular categories can be browsed.</p>
 <p>For example, likely article categories on a site about food might be:</p>
 <ul>
     <li>raw ingredients</li>
@@ -174,7 +174,7 @@
         ]]></item>
         <item id="image_category" title="Images"><![CDATA[
 <h2>Categories: Images</h2>
-<p>Image categories are useful both for internal organisation, and for defining image sets that can be displayed using the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> tags.</p>
+<p>Image categories are useful both for internal organization, and for defining image sets that can be displayed using the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> tags.</p>
         ]]></item>
         <item id="link_category" title="Links"><![CDATA[
 <h2>Links</h2>
@@ -182,9 +182,9 @@
 <p>Selective link lists such as these are output with the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/linklist"><code>&lt;txp:linklist /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> like so:</p>
 <pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
         ]]></item>
-    </help>
+    </group>
 
-    <help group="diag" title="Diagnostics panel">
+    <group id="diag" title="Diagnostics panel">
         <item id="clean_url_data_failed" title="Clean URL data failed"><![CDATA[
 <h2>Clean URL data failed</h2>
 <p>It appears that either your site URLs (<code>http://example.com/section/article</code>) are currently not working or your server does not support the test procedure to determine if clean URLs work or not; if clean URLs on your site work, you can safely ignore this message.</p>
@@ -365,9 +365,9 @@
 <h2>Your PHP installation is missing the mail() function</h2>
 <p>PHP’s <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> function is disabled. Therefore, Textpattern cannot send emails and some functionality will not be available. For example, email notifications for new comments will not be sent, and new users will not receive a welcome email. Users can still be added, however.</p>
         ]]></item>
-    </help>
+    </group>
 
-    <help group="file" title="Files panel">
+    <group id="file" title="Files panel">
         <item id="file_reassign" title="Reassign file"><![CDATA[
 <h2>Reassign file</h2>
 <p>When you upload a file in place of one that is labelled ‘Missing’, your chosen file is uploaded to the server and linked to the original file information in the database. This means the file name of the original file will remain, as will all other associated information such as download count and category. The file size will, however, be updated to reflect the new file.</p>
@@ -381,9 +381,9 @@
 <p>Use this form to upload files or images to your server.</p>
 <p>Use the Textile code to render graphics within articles, the Textpattern code to place graphics on your page templates, or HTML code to place the graphics elsewhere.</p>
         ]]></item>
-    </help>
+    </group>
 
-    <help group="form" title="Forms panel">
+    <group id="form" title="Forms panel">
         <item id="forms_overview" title="Introduction to Forms"><![CDATA[
 <h2>Introduction to Forms</h2>
 <p>In Textpattern, a form is a snippet or chunk of text, HTML, and Textpattern tags that can be reused to display content.</p>
@@ -401,9 +401,9 @@
 <pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
 <p>A form can be up to 64KB in size. An example for a footer might include headings, paragraphs, links, conditional tags, and references to other forms such as <code>ordinary_list</code>.</p>
         ]]></item>
-    </help>
+    </group>
 
-    <help group="image" title="Images panel">
+    <group id="image" title="Images panel">
         <item id="create_thumbnail" title="Create thumbnail"><![CDATA[
 <h2>Create thumbnail</h2>
 <p>Allows you to (re)create a thumbnail of the specified dimensions from the full size image.</p>
@@ -423,14 +423,14 @@
 <p>Full size images can be assigned their own thumbnails. These are useful for linking to - and the indexing of - full size images.</p>
 <p>A reference to the thumbnail is exactly the same as the reference to the full size image, with <code>t</code> appended to the file name. For example, to reference a thumbnail associated with a full size image stored at <code>/images/12.jpg</code> you would use <code>/images/12t.jpg</code>.</p>
         ]]></item>
-    </help>
+    </group>
 
-    <help group="lang" title="Languages panel">
+    <group id="lang" title="Languages panel">
         <item id="get_textpack" title="Install Textpack"><![CDATA[
 <h2>Install Textpack</h2>
 <p>Paste additional language strings for your site into this box and select ‘Upload’ to install them.</p>
 <p>The strings will often come in the form of a downloadable Textpack, distributed with a plugin to permit the plugin’s language strings to be used natively within Textpattern.</p>
-<p>International authors may then translate these packs as necessary and redistribute the localised content to the community.</p>
+<p>International authors may then translate these packs as necessary and redistribute the localized content to the community.</p>
         ]]></item>
         <item id="install_lang_from_file" title="Install from file"><![CDATA[
 <h2>Install from file</h2>
@@ -445,9 +445,9 @@
 <p>You can remove this language completely and thus free the database resources that are associated with it.</p>
 <p>If you inadvertently remove a language you can re-install it.</p>
         ]]></item>
-    </help>
+    </group>
 
-    <help group="link" title="Links panel">
+    <group id="link" title="Links panel">
         <item id="link_description" title="Description"><![CDATA[
 <h2>Description</h2>
 <p>Descriptions for links are optional, and are useful for captioning links, for creating <code>title=""</code> (tooltip) attributes for links, or simply keeping your own internal documentation.</p>
@@ -460,25 +460,25 @@
 <h2>URL</h2>
 <p>The address of the link. If the link points to a different site, then it must be preceded by <code>http://</code> or <code>https://</code>.</p>
         ]]></item>
-    </help>
+    </group>
 
-    <help group="login" title="Login panel">
+    <group id="login" title="Login panel">
         <item id="remember_login" title="Remember login"><![CDATA[
 <h2>Remember login</h2>
 <p>When checked, you will remain logged in to your Textpattern account with the current web browser, until you choose to log out. If left unchecked, you will be automatically logged out after a period of inactivity.</p>
 <p>Requires cookies to be enabled in your browser.</p>
         ]]></item>
-    </help>
+    </group>
 
-    <help group="plugin">
+    <group id="plugin" title="Plugin panel">
         <item id="install_plugin" title="Install plugin"><![CDATA[
 <h2>Install plugin</h2>
 <p>Paste the contents of the plugin text file here, then use ‘Upload’ to begin installation. Any plugin you upload with the same name as one you have previously installed will be overwritten with the uploaded version.</p>
 <p>The plugin text you paste here is <strong>not</strong> the raw PHP code but Base64-encoded text, usually preceded by a header containing plugin information (such as plugin name, version and description, author name, etc).</p>
         ]]></item>
-    </help>
+    </group>
 
-    <help group="prefs" title="Preferences panel">
+    <group id="prefs" title="Preferences panel">
         <item id="admin_side_plugins" title="Use admin-side plugins?"><![CDATA[
 <h1>Use admin-side plugins?</h1>
 <p>Admin-side plugins can change the operation of the administration interface. They might hook into already existing actions, like editing or publishing articles, or they might add new panels for added/extended functionality.</p>
@@ -698,7 +698,7 @@
         <item id="permlink_mode" title="URL pattern"><![CDATA[
 <h2>URL pattern</h2>
 <p>This defines the method by which individual articles are reached via the URL displayed using the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
-<p>‘?=messy’ mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimisation (SEO). In this mode URLs for articles on your site would look like this:</p>
+<p>‘?=messy’ mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimization (SEO). In this mode URLs for articles on your site would look like this:</p>
 <pre><code>http://example.com/index.php?id=123</code></pre>
 <p>All other modes require the Apache <code>mod_rewrite</code> module to be installed and enabled on your server. If your server does not support <code>mod_rewrite</code> either contact your web host or use the ‘?=messy’ mode outlined above.</p>
         ]]></item>
@@ -829,9 +829,9 @@
 <p>Textile also offers a powerful but easy-to-learn set of commands with which to format text, define structures such as lists, headers and blockquotes, and insert links and images.</p>
 <p>The setting you choose here becomes the default for excerpt and body markup on the ‘Write’ administration panel. You can choose to allow complete Textile processing, to convert line breaks into HTML paragraph markers or not convert any text at all.</p>
         ]]></item>
-    </help>
+    </group>
 
-    <help group="section" title="Sections panel">
+    <group id="section" title="Sections panel">
         <item id="section_category" title="Introduction"><![CDATA[
 <h2>Introduction</h2>
 <p>Sections in Textpattern are best thought of as analogous to sections in a newspaper; each belong to the same publication, but each might feature a different layout, or a different style of article, and so on.</p>
@@ -877,9 +877,9 @@
 <h2>Uses page</h2>
 <p>In Textpattern, sections are married to page templates. It’s kind of sweet, really…</p>
         ]]></item>
-    </help>
+    </group>
 
-    <help group="setup" title="Setup panel">
+    <group id="setup" title="Setup panel">
         <item id="setup_user_login" title="User login"><![CDATA[
 <h2>User login</h2>
 <p>The login name of the administrator (‘Publisher’) account that you will use for administering of your site.</p>
@@ -907,10 +907,10 @@
     <li><strong>Subsequent characters:</strong> can only be a-z, A-Z, 0-9, or underscore</li>
 </ul>
         ]]></item>
-    </help>
+    </group>
 
-    <help group="skin" title="Themes panel">
+    <group id="skin" title="Themes panel">
 
-    </help>
-
+    </group>
+</help>
 </resources>

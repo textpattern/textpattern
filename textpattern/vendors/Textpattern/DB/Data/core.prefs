@@ -83,6 +83,13 @@
         "html": "themename",
         "position": "160"
     },
+    "enable_admin_pophelp": {
+        "val": "1",
+        "type": "0",
+        "event": "admin",
+        "html": "yesnoradio",
+        "position": "170"
+    },
     "show_article_category_count": {
         "val": "1",
         "type": "2",

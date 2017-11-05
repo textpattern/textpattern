@@ -92,6 +92,7 @@ function pagetop($pagetitle = '', $message = '')
         'toggle_all_selected',
         'select',
         'close',
+        'help',
         'upload_err_form_size'
     ));
 
