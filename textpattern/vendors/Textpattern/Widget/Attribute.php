@@ -174,23 +174,32 @@ class Attribute
 
     /**
      * Permit multiple values to be sent by the tag. Chainable.
+     *
+     * @param string $flavour The type of mulitple to assign: 'all', 'name', or 'attribute'
      */
 
-    public function setMultiple()
+    public function setMultiple($flavour = 'all')
     {
+        $addAttr = (in_array($flavour, array('all', 'attribute')));
+        $addName = (in_array($flavour, array('all', 'name')));
+
         // Add the 'multiple' boolean attribute.
-        $this->setAttribute('multiple', true, array(
-            'format' => 'bool',
-            'flag'   => TEXTPATTERN_STRIP_TXP,
-        ));
+        if ($addAttr) {
+            $this->setAttribute('multiple', true, array(
+                'format' => 'bool',
+                'flag'   => TEXTPATTERN_STRIP_TXP,
+            ));
+        }
 
-        $val = $this->getValue('name');
+        if ($addName) {
+            $val = $this->getValue('name');
 
-        // Append square brackets to the 'name' field if not already done.
-        if ($val !== null) {
-            if (strpos($val, '[]') === false) {
-                $val .= '[]';
-                $this->setValue('name', $val);
+            // Append square brackets to the 'name' field if not already done.
+            if ($val !== null) {
+                if (strpos($val, '[]') === false) {
+                    $val .= '[]';
+                    $this->setValue('name', $val);
+                }
             }
         }
 

@@ -162,17 +162,19 @@ class Tag implements \Textpattern\Widget\WidgetInterface
 
     /**
      * Permit multiple values to be sent by the tag. Chainable.
+     *
+     * @param string $flavour The type of mulitple to assign: 'all', 'name', or 'attribute'
      */
 
-    public function setMultiple()
+    public function setMultiple($flavour = 'all')
     {
-        $this->atts->setMultiple();
+        $this->atts->setMultiple($flavour);
 
         return $this;
     }
 
     /**
-     * Define the output scheme from this point forward in all tags. Chainable.
+     * Define the global tag options from this point forward. Chainable.
      *
      * @param  string $flag   The name of the flag to set. Either 'self-closing' or 'boolean'
      * @param  string $scheme The scheme to set the flag to. Either 'html5' or 'xhtml'
