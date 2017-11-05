@@ -30,7 +30,7 @@
 
 namespace Textpattern\Widget;
 
-class TagCollection implements \Textpattern\Widget\WidgetCollectionInterface
+class TagCollection implements \IteratorAggregate, \Textpattern\Widget\WidgetCollectionInterface
 {
     /**
      * The object store for each widget.
@@ -150,5 +150,17 @@ class TagCollection implements \Textpattern\Widget\WidgetCollectionInterface
     public function __toString()
     {
         return $this->render();
+    }
+
+    /**
+     * IteratorAggregate interface.
+     *
+     * @return ArrayIterator
+     * @see    IteratorAggregate
+     */
+
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->items);
     }
 }
