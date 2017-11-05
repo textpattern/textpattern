@@ -36,17 +36,20 @@ class RadioSet extends TagCollection implements \Textpattern\Widget\WidgetCollec
      * Construct a set of radio widgets.
      *
      * @param string $name    The RadioSet key (HTML name attribute)
-     * @param array  $values  Value->Label pairs
-     * @param string $default The key from the $values array to set as selected
+     * @param array  $options Key => Label pairs
+     * @param string $default The key from the $options array to set as selected
      */
 
-    public function __construct($name, $values, $default = null)
+    public function __construct($name, $options, $default = null)
     {
-        foreach ((array) $values as $key => $label) {
-            $checked = ($key === (string) $default);
+        foreach ((array) $options as $key => $label) {
+            $key = (string)$key;
+            $checked = ($key === (string)$default);
+
             $radio = new \Textpattern\Widget\Radio($name, $key, $checked);
             $id = $radio->getKey();
             $label = new \Textpattern\Widget\Label($label, $id);
+
             $this->addWidget($radio, 'radio-'.$id);
             $this->addWidget($label, 'label-'.$id);
         }

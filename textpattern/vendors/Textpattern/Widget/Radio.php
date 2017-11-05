@@ -51,25 +51,24 @@ class Radio extends Tag implements \Textpattern\Widget\WidgetInterface
     public function __construct($name, $value = null, $checked = true)
     {
         parent::__construct('input');
-
+        $type = $class = 'radio';
         $this->key = ($value) ? $name.'-'.$value : $name;
-        $class = 'radio';
-
-        $this->setAtts(array(
-                'class' => $class,
-                'id'    => $this->key,
-                'name'  => $name,
-                'type'  => 'radio',
-            ))->setAtts(array(
-                'value' => $value,
-            ), array(
-                'flag' => TEXTPATTERN_STRIP_NONE,
-            ));
 
         if ((bool)$checked === true) {
             $this->setBool('checked');
             $class .= ' active';
         }
+
+        $this->setAtts(array(
+                'class' => $class,
+                'id'    => $this->key,
+                'name'  => $name,
+                'type'  => $type,
+            ))->setAtts(array(
+                'value' => $value,
+            ), array(
+                'flag' => TEXTPATTERN_STRIP_NONE,
+            ));
     }
 
     /**
