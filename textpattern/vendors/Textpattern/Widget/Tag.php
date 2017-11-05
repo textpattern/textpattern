@@ -198,7 +198,6 @@ class Tag implements \Textpattern\Widget\WidgetInterface
 
     public function render($option = null)
     {
-        // @todo Check for required atts?
         if ($option === null) {
             if (empty($this->tag) || $this->content === '') {
                 $option = 'content';

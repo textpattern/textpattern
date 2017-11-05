@@ -54,14 +54,13 @@ class Attribute
      * Array options:
      *   format:   The data type of the attribute to cast (string, int, ...)
      *   flag:     How to treat the value if empty, undefined, etc
-     *   required: true if the attribute is a required component
+     *
      * @var array
      */
 
     protected $defaultProperties = array(
         'format'   => 'string',
         'flag'     => TEXTPATTERN_STRIP_EMPTY,
-        'required' => false,
     );
 
     /**
@@ -69,7 +68,7 @@ class Attribute
      *
      * @param  string $key   The attribute identifier
      * @param  string $value The attribute value
-     * @param  string $props The attribute properties, such as format, required, and flag
+     * @param  string $props The attribute properties, such as format and flag
      */
 
     public function __construct($key = null, $value = null, $props = array())
@@ -82,7 +81,7 @@ class Attribute
      *
      * @param  string $key   The attribute identifier
      * @param  string $value The attribute value
-     * @param  string $props The attribute properties, such as format, required, and flag
+     * @param  string $props The attribute properties, such as format and flag
      * @return this
      */
 
