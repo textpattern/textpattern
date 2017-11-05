@@ -2,10 +2,10 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (@ini_get('register_globals')) {
@@ -35,7 +35,8 @@ if (@ini_get('register_globals')) {
         (array) $_POST,
         (array) $_COOKIE,
         (array) $_FILES,
-        (array) $_SERVER);
+        (array) $_SERVER
+    );
 
     // As the deliberately awkward-named local variable $_txpfoo MUST NOT be unset to avoid notices further
     // down, we must remove any potentially identical-named global from the list of global names here.
@@ -63,8 +64,9 @@ if (!defined('txpath')) {
 
 define("txpinterface", "admin");
 
-$thisversion = '4.6.0-beta.3';
-$txp_using_svn = true; // Set false for releases.
+$thisversion = '4.7.0-dev';
+// $txp_using_svn deprecated in 4.7.0.
+$txp_using_svn = $txp_is_dev = true; // Set false for releases.
 
 ob_start(null, 2048);
 
@@ -76,7 +78,7 @@ if (!isset($txpcfg['table_prefix']) && !@include './config.php') {
     ob_end_clean();
 }
 
-header("Content-type: text/html; charset=utf-8");
+header("Content-Type: text/html; charset=utf-8");
 
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
@@ -106,8 +108,6 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     // Global site preferences.
     $prefs = get_prefs();
     extract($prefs);
-
-    $dbversion = $version;
 
     if (empty($siteurl)) {
         $httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);
@@ -145,10 +145,20 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
 
     // HTTP address of Textpattern admin URL.
     if (!defined('ahu')) {
-        define('ahu', hu.'textpattern/');
-    } else {
-        $adminurl = rtrim(preg_replace('|^https?://|', '', ahu), '/');
-        define('ahu', PROTOCOL.$adminurl.'/');
+        if (empty($txpcfg['admin_url'])) {
+            $adminurl = hu.'textpattern/';
+        } else {
+            $adminurl = PROTOCOL.rtrim(preg_replace('|^https?://|', '', $txpcfg['admin_url']), '/').'/';
+        }
+        define('ahu', $adminurl);
+    }
+
+    // shared admin and public cookie_domain when using multisite admin URL
+    if (!defined('cookie_domain')) {
+        if (!isset($txpcfg['cookie_domain'])) {
+          $txpcfg['cookie_domain'] = '';
+        }
+        define('cookie_domain', $txpcfg['cookie_domain']);
     }
 
     if (!empty($locale)) {
@@ -167,6 +177,17 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     $prefs = array_merge(get_prefs($txp_user), $prefs);
     extract($prefs);
 
+    $dbversion = $version;
+
+    // Reload string pack using per-user language.
+    $lang_ui = (empty($language_ui)) ? $language : $language_ui;
+
+    // Loading langs twice is expensive, so only do it when necessary.
+    // @todo Optimisations to language loader will help here.
+    if ($lang_ui !== $language) {
+        $textarray = load_lang($lang_ui);
+    }
+
     /**
      * @ignore
      */
@@ -183,7 +204,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     $step = trim(gps('step'));
     $app_mode = trim(gps('app_mode'));
 
-    if (!$dbversion or ($dbversion != $thisversion) or $txp_using_svn) {
+    if (!$dbversion or ($dbversion != $thisversion) or $txp_is_dev) {
         define('TXP_UPDATE', 1);
         include txpath.'/update/_update.php';
     }
@@ -196,6 +217,9 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         textpattern();
         exit;
     }
+
+    // Register modules
+    register_callback(array('\Textpattern\Module\Help\HelpAdmin', 'init'), 'help');
 
     if (!empty($admin_side_plugins) and gps('event') != 'plugin') {
         load_plugins(1);
@@ -232,6 +256,8 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         }
     }
 } else {
-    txp_die('Database connection was successful, but the <code>textpattern</code> table was not found.',
-        '503 Service Unavailable');
+    txp_die(
+        'Database connection was successful, but the <code>textpattern</code> table was not found.',
+        '503 Service Unavailable'
+    );
 }

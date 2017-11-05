@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -26,6 +26,132 @@
  *
  * @package User
  */
+
+/**
+ * Emails a new user with account details and requests they set a password.
+ *
+ * @param  string $name     The login name
+ * @return bool FALSE on error.
+ */
+
+function send_account_activation($name)
+{
+    global $sitename;
+
+    require_privs('admin.edit');
+
+    $rs = safe_row("user_id, email, nonce, RealName, pass", 'txp_users', "name = '".doSlash($name)."'");
+
+    if ($rs) {
+        extract($rs);
+
+        $expiryTimestamp = time() + (60 * 60 * ACTIVATION_EXPIRY_HOURS);
+
+        $activation_code = generate_user_token($user_id, 'account_activation', $expiryTimestamp, $pass, $nonce);
+
+        $expiryYear = safe_strftime('%Y', $expiryTimestamp);
+        $expiryMonth = safe_strftime('%B', $expiryTimestamp);
+        $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
+        $expiryTime = safe_strftime('%H:%M %Z', $expiryTimestamp);
+
+        $message = gTxt('salutation', array('{name}' => $RealName)).
+            n.n.gTxt('you_have_been_registered').' '.$sitename.
+
+            n.n.gTxt('your_login_is').' '.$name.
+            n.n.gTxt('account_activation_confirmation').
+            n.ahu.'index.php?activate='.$activation_code.
+            n.n.gTxt('link_expires', array(
+                '{year}'  => $expiryYear,
+                '{month}' => $expiryMonth,
+                '{day}'   => $expiryDay,
+                '{time}'  => $expiryTime,
+            ));
+
+        if (txpMail($email, "[$sitename] ".gTxt('account_activation'), $message)) {
+            return gTxt('login_sent_to', array('{email}' => $email));
+        } else {
+            return array(gTxt('could_not_mail'), E_ERROR);
+        }
+    }
+}
+
+/**
+ * Sends a password reset link to a user's email address.
+ *
+ * This function will return a success message even when the specified user
+ * doesn't exist. Though an error message could be thrown when a user isn't
+ * found, security best practice prevents leaking existing account names.
+ *
+ * @param  string $name The login name
+ * @return string A localized message string
+ * @see    send_new_password()
+ * @see    reset_author_pass()
+ * @example
+ * echo send_reset_confirmation_request('username');
+ */
+
+function send_reset_confirmation_request($name)
+{
+    global $sitename;
+
+    $expiryTimestamp = time() + (60 * RESET_EXPIRY_MINUTES);
+
+    $rs = safe_query(
+        "SELECT
+            txp_users.user_id, txp_users.email,
+            txp_users.nonce, txp_users.pass,
+            txp_token.expires
+        FROM ".safe_pfx('txp_users')." txp_users
+        LEFT JOIN ".safe_pfx('txp_token')." txp_token
+        ON txp_users.user_id = txp_token.reference_id
+        AND txp_token.type = 'password_reset'
+        WHERE txp_users.name = '".doSlash($name)."'"
+    );
+
+    $row = nextRow($rs);
+
+    if ($row) {
+        extract($row);
+
+        // Rate limit the reset requests.
+        if ($expires) {
+            $originalExpiry = strtotime($expires);
+
+            if (($expiryTimestamp - $originalExpiry) < (60 * RESET_RATE_LIMIT_MINUTES)) {
+                return gTxt('password_reset_confirmation_request_sent');
+            }
+        }
+
+        $confirm = generate_user_token($user_id, 'password_reset', $expiryTimestamp, $pass, $nonce);
+
+        $expiryYear = safe_strftime('%Y', $expiryTimestamp);
+        $expiryMonth = safe_strftime('%B', $expiryTimestamp);
+        $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
+        $expiryTime = safe_strftime('%H:%M %Z', $expiryTimestamp);
+
+        $message = gTxt('salutation', array('{name}' => $name)).
+            n.n.gTxt('password_reset_confirmation').
+            n.ahu.'index.php?confirm='.$confirm.
+            n.n.gTxt('link_expires', array(
+                '{year}'  => $expiryYear,
+                '{month}' => $expiryMonth,
+                '{day}'   => $expiryDay,
+                '{time}'  => $expiryTime,
+            ));
+        if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message)) {
+            return gTxt('password_reset_confirmation_request_sent');
+        } else {
+            return array(gTxt('could_not_mail'), E_ERROR);
+        }
+    } else {
+        // Though 'unknown_author' could be thrown, send generic 'request_sent'
+        // message instead so that (non-)existence of account names are not leaked.
+        // Since this is a short circuit, there's a possibility of a timing attack
+        // revealing the existence of an account, which we could defend against
+        // to some degree.
+        return gTxt('password_reset_confirmation_request_sent');
+    }
+}
 
 /**
  * Emails a new user with login details.
@@ -60,84 +186,12 @@ function send_password($RealName, $name, $email, $password)
 
         n.n.gTxt('you_have_been_registered').' '.$sitename.
 
-        n.n.gTxt('your_login_is').': '.$name.
-        n.gTxt('your_password_is').': '.$password.
+        n.n.gTxt('your_login_is').' '.$name.
+        n.gTxt('your_password_is').' '.$password.
 
-        n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
+        n.n.gTxt('log_in_at').' '.ahu.'index.php';
 
     return txpMail($email, "[$sitename] ".gTxt('your_login_info'), $message);
-}
-
-/**
- * Emails a new user with account details and requests they set a password.
- *
- * @param  string $name     The login name
- * @return bool FALSE on error.
- */
-
-function send_account_activation($name)
-{
-    global $sitename;
-
-    require_privs('admin.edit');
-
-    $rs = safe_row("user_id, email, nonce, RealName, pass", 'txp_users', "name = '".doSlash($name)."'");
-
-    if ($rs) {
-        extract($rs);
-
-        $uid = assert_int($user_id);
-
-        // The selector becomes an indirect reference to the txp_users row,
-        // which does not leak information.
-        $selector = Txp::get('\Textpattern\Password\Random')->generate(12);
-        $expiryTimestamp = time() + (60 * 60 * ACTIVATION_EXPIRY_HOURS);
-        $expiryYear = safe_strftime('%Y', $expiryTimestamp);
-        $expiryMonth = safe_strftime('%B', $expiryTimestamp);
-        $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
-        $expiryTime = safe_strftime('%H:%M %Z', $expiryTimestamp);
-
-        $expiry = strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
-
-        // Use a hash of the nonce, selector and (temporary, already discarded) password.
-        // This ensures that activation requests expire automatically when:
-        //  a) The person logs in, or
-        //  b) They successfully set their password
-        // Using the selector in the hash just injects randomness, otherwise two requests
-        // back-to-back would generate the same activation code.
-        // Old activation tokens for the same user id are purged when password is set.
-        $token = bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $nonce . $selector . $pass), 0, SALT_LENGTH)));
-        $activation_code = $token.$selector;
-
-        // Remove any previous activation tokens and insert the new one.
-        safe_delete("txp_token", "reference_id = $uid AND type = 'account_activation'");
-        safe_insert("txp_token",
-                "reference_id = $uid,
-                type = 'account_activation',
-                selector = '".doSlash($selector)."',
-                token = '".doSlash($token)."',
-                expires = '".doSlash($expiry)."'
-            ");
-
-        $message = gTxt('salutation', array('{name}' => $RealName)).
-            n.n.gTxt('you_have_been_registered').' '.$sitename.
-
-            n.n.gTxt('your_login_is').': '.$name.
-            n.n.gTxt('account_activation_confirmation').
-            n.ahu.'index.php?activate='.$activation_code.
-            n.n.gTxt('link_expires', array(
-                '{year}'  => $expiryYear,
-                '{month}' => $expiryMonth,
-                '{day}'   => $expiryDay,
-                '{time}'  => $expiryTime,
-            ));
-
-        if (txpMail($email, "[$sitename] ".gTxt('account_activation'), $message)) {
-            return gTxt('login_sent_to', array('{email}' => $email));
-        } else {
-            return array(gTxt('could_not_mail'), E_ERROR);
-        }
-    }
 }
 
 /**
@@ -174,112 +228,11 @@ function send_new_password($password, $email, $name)
 
     $message = gTxt('salutation', array('{name}' => $name)).
 
-        n.n.gTxt('your_password_is').': '.$password.
+        n.n.gTxt('your_password_is').' '.$password.
 
-        n.n.gTxt('log_in_at').': '.ahu.'index.php';
+        n.n.gTxt('log_in_at').' '.ahu.'index.php';
 
     return txpMail($email, "[$sitename] ".gTxt('your_new_password'), $message);
-}
-
-/**
- * Sends a password reset link to a user's email address.
- *
- * This function will return a success message even when the specified user
- * doesn't exist. Though an error message could be thrown when a user isn't
- * found, security best practice prevents leaking existing account names.
- *
- * @param  string $name The login name
- * @return string A localized message string
- * @see    send_new_password()
- * @see    reset_author_pass()
- * @example
- * echo send_reset_confirmation_request('username');
- */
-
-function send_reset_confirmation_request($name)
-{
-    global $sitename;
-
-    $expiryTimestamp = time() + (60 * RESET_EXPIRY_MINUTES);
-    $expiry = strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
-
-    $rs = safe_query(
-        "SELECT
-            txp_users.user_id, txp_users.email,
-            txp_users.nonce, txp_users.pass,
-            txp_token.expires
-        FROM ".safe_pfx('txp_users')." txp_users
-        LEFT JOIN ".safe_pfx('txp_token')." txp_token
-        ON txp_users.user_id = txp_token.reference_id
-        AND txp_token.type = 'password_reset'
-        WHERE txp_users.name = '".doSlash($name)."'");
-
-    $row = nextRow($rs);
-
-    if ($row) {
-        extract($row);
-
-        $uid = assert_int($user_id);
-
-        // Rate limit the reset requests.
-        if ($expires) {
-            $originalExpiry = strtotime($expires);
-
-            if (($expiryTimestamp - $originalExpiry) < (60 * RESET_RATE_LIMIT_MINUTES)) {
-                return gTxt('password_reset_confirmation_request_sent');
-            }
-        }
-
-        // The selector becomes an indirect reference to the txp_users row,
-        // which does not leak information.
-        $selector = Txp::get('\Textpattern\Password\Random')->generate(12);
-        $expiryYear = safe_strftime('%Y', $expiryTimestamp);
-        $expiryMonth = safe_strftime('%B', $expiryTimestamp);
-        $expiryDay = safe_strftime('%Oe', $expiryTimestamp);
-        $expiryTime = safe_strftime('%H:%M %Z', $expiryTimestamp);
-
-        // Use a hash of the nonce, selector and password.
-        // This ensures that confirmation requests expire automatically when:
-        //  a) The person next logs in, or
-        //  b) They successfully change their password (usually as a result of this reset request)
-        // Using the selector in the hash just injects randomness, otherwise two requests
-        // back-to-back would generate the same confirmation code.
-        // Old requests for the same user id are purged every time a new request is made.
-        $token = bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $nonce . $selector . $pass), 0, SALT_LENGTH)));
-        $confirm = $token.$selector;
-
-        // Remove any previous reset tokens and insert the new one.
-        safe_delete("txp_token", "reference_id = $uid AND type = 'password_reset'");
-        safe_insert("txp_token",
-                "reference_id = $uid,
-                type = 'password_reset',
-                selector = '".doSlash($selector)."',
-                token = '".doSlash($token)."',
-                expires = '".doSlash($expiry)."'
-            ");
-
-        $message = gTxt('salutation', array('{name}' => $name)).
-            n.n.gTxt('password_reset_confirmation').
-            n.ahu.'index.php?confirm='.$confirm.
-            n.n.gTxt('link_expires', array(
-                '{year}'  => $expiryYear,
-                '{month}' => $expiryMonth,
-                '{day}'   => $expiryDay,
-                '{time}'  => $expiryTime,
-            ));
-        if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message)) {
-            return gTxt('password_reset_confirmation_request_sent');
-        } else {
-            return array(gTxt('could_not_mail'), E_ERROR);
-        }
-    } else {
-        // Though 'unknown_author' could be thrown, send generic 'request_sent'
-        // message instead so that (non-)existence of account names are not leaked.
-        // Since this is a short circuit, there's a possibility of a timing attack
-        // revealing the existence of an account, which we could defend against
-        // to some degree.
-        return gTxt('password_reset_confirmation_request_sent');
-    }
 }
 
 /**

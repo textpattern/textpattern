@@ -2,10 +2,10 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -53,7 +53,7 @@ function doAuth()
     if (!$txp_user) {
         if (trim(ps('app_mode')) == 'async') {
             echo script_js(
-                'alert("'.escape_js(gTxt('login_to_textpattern')).'"); 
+                'alert("'.escape_js(gTxt('login_to_textpattern')).'");
                 window.location.assign("index.php")'
             );
             exit();
@@ -105,7 +105,7 @@ function doLoginForm($message)
         $out[] = hed(gTxt('password_reset'), 1, array('id' => 'txp-login-heading')).
             inputLabel(
                 'login_name',
-                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'),
+                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
                 'name', '', array('class' => 'txp-form-field login-name')
             ).
             graf(
@@ -143,12 +143,12 @@ function doLoginForm($message)
         $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')).
             inputLabel(
                 'login_name',
-                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'),
+                fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name', false, true),
                 'name', '', array('class' => 'txp-form-field login-name')
             ).
             inputLabel(
                 'login_password',
-                fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password'),
+                fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password', false, true),
                 'password', '', array('class' => 'txp-form-field login-password')
             ).
             graf(
@@ -183,7 +183,7 @@ function doLoginForm($message)
         join('', $out), '', '', 'post', 'txp-login', '', 'login_form').
 
     script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('textpattern.textarray = '.json_encode($textarray_script)).
+    script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON)).
     n.'</main><!-- /txp-body -->'.n.'</body>'.n.'</html>';
 
     exit(0);
@@ -304,6 +304,7 @@ function doTxpValidate()
 
             // Login is good, create $txp_user.
             $txp_user = $name;
+            Txp::get('\Textpattern\DB\Core')->checkPrefsIntegrity();
 
             return '';
         } else {
@@ -344,7 +345,7 @@ function doTxpValidate()
                     if ($row && $row['nonce'] && ($hash === bin2hex(pack('H*', substr(hash(HASHING_ALGORITHM, $row['nonce'].$selector.$row['old_pass']), 0, SALT_LENGTH))).$selector)) {
                         if (change_user_password($row['name'], $pass)) {
                             $body = gTxt('salutation', array('{name}' => $row['name'])).
-                                n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation').n.n.gTxt('log_in_at').': http://'.ahu.'/index.php');
+                                n.n.($p_alter ? gTxt('password_change_confirmation') : gTxt('password_set_confirmation').n.n.gTxt('log_in_at').' '.ahu.'index.php');
                             $message = ($p_alter) ? gTxt('password_changed') : gTxt('password_set');
                             txpMail($row['email'], "[$sitename] ".$message, $body);
 

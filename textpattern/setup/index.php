@@ -2,10 +2,10 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('txpath')) {
@@ -56,8 +56,7 @@ include_once txpath.'/include/txp_auth.php';
 
 assert_system_requirements();
 
-header("Content-type: text/html; charset=utf-8");
-header('X-UA-Compatible: '.X_UA_COMPATIBLE);
+header("Content-Type: text/html; charset=utf-8");
 
 // Drop trailing cruft.
 $_SERVER['PHP_SELF'] = preg_replace('#^(.*index.php).*$#i', '$1', $_SERVER['PHP_SELF']);
@@ -73,6 +72,8 @@ if (count($txpdir) > 3) {
     $txpdir = '/';
 }
 
+$prefs = array();
+$prefs['enable_admin_pophelp'] = 1;
 $step = ps('step');
 $rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i", '$1', $_SERVER['PHP_SELF']);
 $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
@@ -93,11 +94,8 @@ switch ($step) {
     case 'createTxp':
         createTxp();
 }
-?>
-</main>
-</body>
-</html>
-<?php
+exit("</main>\n</body>\n</html>");
+
 
 /**
  * Return the top of page furniture.
@@ -135,10 +133,11 @@ eod;
         script_js('../vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL).
         script_js(
             'var textpattern = '.json_encode(array(
+                'prefs'         => (object) null,
                 'event'         => 'setup',
                 'step'          => $step,
                 'textarray'     => (object) $textarray_script,
-                )).';').
+                ), TEXTPATTERN_JSON).';').
         script_js('../textpattern.js', TEXTPATTERN_SCRIPT_URL);
 
     $out[] = <<<eod
@@ -212,9 +211,7 @@ function getDbInfo()
 {
     $lang = ps('lang');
 
-    if ($lang) {
-        $_SESSION['lang'] = $lang;
-    }
+    $_SESSION['lang'] = ($lang) ? $lang : TEXTPATTERN_DEFAULT_LANG;
 
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
 
@@ -242,17 +239,28 @@ function getDbInfo()
         exit;
     }
 
+    if (!defined('PROTOCOL')) {
+        switch (serverSet('HTTPS')) {
+            case '':
+            case 'off': // ISAPI with IIS.
+                define('PROTOCOL', 'http://');
+                break;
+            default:
+                define('PROTOCOL', 'https://');
+                break;
+        }
+    }
+
     if (isset($_SESSION['siteurl'])) {
         $guess_siteurl = $_SESSION['siteurl'];
     } elseif (defined('is_multisite')) {
-        $guess_adminurl = (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+        $guess_adminurl = PROTOCOL.(@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
         $guess_cookiedomain = substr($guess_adminurl, strpos($guess_adminurl, '.') + 1);
-        $guess_siteurl = 'www.'.$guess_cookiedomain;
+        $guess_siteurl = PROTOCOL.'www.'.$guess_cookiedomain;
     } elseif (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST'])) {
-        $guess_siteurl = (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
-        $guess_siteurl .= $GLOBALS['rel_siteurl'];
+        $guess_siteurl = PROTOCOL.((@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']).$GLOBALS['rel_siteurl'];
     } else {
-        $guess_siteurl = 'mysite.com';
+        $guess_siteurl = PROTOCOL.'mysite.com';
     }
 
     if (isset($_SESSION['adminurl'])) {
@@ -269,12 +277,12 @@ function getDbInfo()
         graf(setup_gTxt('db_must_exist')).
         inputLabel(
             'setup_mysql_login',
-            fInput('text', 'duser', (isset($_SESSION['duser']) ? txpspecialchars($_SESSION['duser']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'),
+            fInput('text', 'duser', (isset($_SESSION['duser']) ? $_SESSION['duser'] : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'),
             'mysql_login', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_mysql_pass',
-            fInput('password', 'dpass', (isset($_SESSION['dpass']) ? txpspecialchars($_SESSION['dpass']) : ''), 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_mysql_pass').
+            fInput('password', 'dpass', (isset($_SESSION['dpass']) ? $_SESSION['dpass'] : ''), 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_mysql_pass').
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
                 n.tag(gTxt('setup_show_password'), 'label', array('for' => 'show_password')),
@@ -283,29 +291,26 @@ function getDbInfo()
         ).
         inputLabel(
             'setup_mysql_server',
-            fInput('text', 'dhost', (isset($_SESSION['dhost']) ? txpspecialchars($_SESSION['dhost']) : 'localhost'), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true),
+            fInput('text', 'dhost', (isset($_SESSION['dhost']) ? $_SESSION['dhost'] : 'localhost'), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true),
             'mysql_server', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_mysql_db',
-            fInput('text', 'ddb', (isset($_SESSION['ddb']) ? txpspecialchars($_SESSION['ddb']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true),
+            fInput('text', 'ddb', (isset($_SESSION['ddb']) ? $_SESSION['ddb'] : ''), '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true),
             'mysql_database', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_table_prefix',
-            fInput('text', 'dprefix', (isset($_SESSION['dprefix']) ? txpspecialchars($_SESSION['dprefix']) : ''), 'input-medium', '', '', INPUT_MEDIUM, '', 'setup_table_prefix'),
+            fInput('text', 'dprefix', (isset($_SESSION['dprefix']) ? $_SESSION['dprefix'] : ''), 'input-medium', '', '', INPUT_MEDIUM, '', 'setup_table_prefix'),
             'table_prefix', 'table_prefix', array('class' => 'txp-form-field')
         ).
         hed(
             setup_gTxt('site_url'), 2
         ).
-        graf(
-            setup_gTxt('please_enter_url')
-        ).
         inputLabel(
             'setup_site_url',
-            fInput('text', 'siteurl', txpspecialchars($guess_siteurl), '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
-            'http(s)://', 'siteurl', array('class' => 'txp-form-field')
+            fInput('text', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
+            setup_gTxt('please_enter_url'), '', array('class' => 'txp-form-field')
         );
 
     if (defined('is_multisite')) {
@@ -363,11 +368,12 @@ function printConfig()
     $_SESSION['dhost'] = ps('dhost');
     $_SESSION['dprefix'] = ps('dprefix');
     $_SESSION['siteurl'] = ps('siteurl');
+    $_SESSION['lang'] = empty($_SESSION['lang']) ? TEXTPATTERN_DEFAULT_LANG : $_SESSION['lang'];
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
 
     if (defined('is_multisite')) {
-        $_SESSION['adminurl'] = ps('adminurl'); 
-        $_SESSION['cookiedomain'] = ps('cookiedomain');    
+        $_SESSION['adminurl'] = ps('adminurl');
+        $_SESSION['cookiedomain'] = ps('cookiedomain');
     }
 
     global $txpcfg, $step;
@@ -392,7 +398,7 @@ function printConfig()
         exit;
     }
 
-// TODO: @see http://forum.textpattern.com/viewtopic.php?pid=263205#p263205
+// TODO: @see https://forum.textpattern.io/viewtopic.php?pid=263205#p263205
 //    if ('' === $_SESSION['dhost'] || '' === $_SESSION['duser'] || '' === $_SESSION['ddb']) {
 //        echo graf(
 //                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
@@ -521,6 +527,7 @@ function printConfig()
 
 function getTxpLogin()
 {
+    $_SESSION['lang'] = empty($_SESSION['lang']) ? TEXTPATTERN_DEFAULT_LANG : $_SESSION['lang'];
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
 
     global $txpcfg, $step;
@@ -579,6 +586,9 @@ function getTxpLogin()
 
     $theme_chooser = selectInput('theme', $vals, (isset($_SESSION['theme']) ? txpspecialchars($_SESSION['theme']) : 'hive'), '', '', 'setup_admin_theme');
 
+    $vals = get_public_themes_list();
+    $public_theme_chooser = selectInput('public_theme', $vals, (isset($_SESSION['public_theme']) ? txpspecialchars($_SESSION['public_theme']) : ''), '', '', 'setup_public_theme');
+
     echo txp_setup_progress_meter(3).
         n.'<div class="txp-setup">'.
         n.'<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
@@ -590,22 +600,22 @@ function getTxpLogin()
         ).
         inputLabel(
             'setup_user_realname',
-            fInput('text', 'RealName', (isset($_SESSION['realname']) ? txpspecialchars($_SESSION['realname']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true),
+            fInput('text', 'RealName', (isset($_SESSION['realname']) ? $_SESSION['realname'] : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true),
             'your_full_name', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_user_email',
-            fInput('text', 'email', (isset($_SESSION['email']) ? txpspecialchars($_SESSION['email']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true),
+            fInput('email', 'email', (isset($_SESSION['email']) ? $_SESSION['email'] : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true),
             'your_email', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_user_login',
-            fInput('text', 'name', (isset($_SESSION['name']) ? txpspecialchars($_SESSION['name']) : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true),
+            fInput('text', 'name', (isset($_SESSION['name']) ? $_SESSION['name'] : ''), '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true),
             'setup_login', 'setup_user_login', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_user_pass',
-            fInput('password', 'pass', (isset($_SESSION['pass']) ? txpspecialchars($_SESSION['pass']) : ''), 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).
+            fInput('password', 'pass', (isset($_SESSION['pass']) ? $_SESSION['pass'] : ''), 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).
             n.tag(null, 'div', array('class' => 'strength-meter')).
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
@@ -620,6 +630,11 @@ function getTxpLogin()
             'setup_admin_theme',
             $theme_chooser,
             'admin_theme', 'theme_name', array('class' => 'txp-form-field')
+        ).
+        inputLabel(
+            'setup_public_theme',
+            $public_theme_chooser,
+            'public_theme', 'public_theme_name', array('class' => 'txp-form-field')
         ).
         graf(
             fInput('submit', 'Submit', setup_gTxt('next_step'), 'publish')
@@ -636,6 +651,7 @@ function getTxpLogin()
 function createTxp()
 {
     global $link, $step;
+    $_SESSION['lang'] = empty($_SESSION['lang']) ? TEXTPATTERN_DEFAULT_LANG : $_SESSION['lang'];
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
 
     echo preamble($step);
@@ -645,6 +661,7 @@ function createTxp()
     $_SESSION['pass'] = ps('pass');
     $_SESSION['email'] = ps('email');
     $_SESSION['theme'] = ps('theme');
+    $_SESSION['public_theme'] = ps('public_theme');
 
     if ($_SESSION['name'] == '') {
         echo txp_setup_progress_meter(3).
@@ -721,8 +738,6 @@ function createTxp()
     }
 
     define('TXP_INSTALL', 1);
-
-    include_once txpath.'/lib/txplib_update.php';
     include txpath.'/setup/txpsql.php';
 
     echo fbCreate();
@@ -754,14 +769,14 @@ function makeConfig()
     .o.'host'.m.$_SESSION['dhost'].nl
     .($_SESSION['dclient_flags'] ? o.'client_flags'."'] = ".$_SESSION['dclient_flags'].";\n" : '')
     .o.'table_prefix'.m.$_SESSION['dprefix'].nl
-    .o.'dbcharset'.m.$_SESSION['dbcharset'].nl
-    .o.'txpath'.m.txpath.nl;
+    .o.'txpath'.m.txpath.nl
+    .o.'dbcharset'.m.$_SESSION['dbcharset'].nl;
 
     if (defined('is_multisite')) {
-      $config_details .= 
-        o.'multisite_root_path'.m.multisite_root_path.nl
-        .($_SESSION['adminurl'] ? 'define(\'ahu\', \''.$_SESSION['adminurl']."');\n" : '')
-        .($_SESSION['cookiedomain'] ? 'define(\'cookie_domain\', \''.$_SESSION['cookiedomain']."');\n" : '')
+      $config_details .=
+         o.'multisite_root_path'.m.multisite_root_path.nl
+        .o.'admin_url'.m.$_SESSION['adminurl'].nl
+        .o.'cookie_domain'.m.$_SESSION['cookiedomain'].nl
         .'if (!defined(\'txpath\')) { define(\'txpath\', $txpcfg[\'txpath\']); }'."\n";
     }
 
@@ -806,7 +821,7 @@ function fbCreate()
         );
 
         $setup_path = (defined('is_multisite')) ? multisite_root_path.'/public/ & '.multisite_root_path.'/admin/' : '/'.basename(txpath).'/';
-        
+
         $login_url = (defined('is_multisite')) ? $multisite_login_url.'index.php' : $GLOBALS['rel_txpurl'].'/index.php';
 
         return hed(setup_gTxt('that_went_well'), 1).
@@ -832,7 +847,7 @@ function fbCreate()
 function setup_config_contents()
 {
     $config_path = (defined('is_multisite')) ? multisite_root_path.'/private/' : '/'.basename(txpath).'/';
-    
+
     return hed(setup_gTxt('creating_config'), 2).
         graf(
             strong(setup_gTxt('before_you_proceed')).' '.
@@ -919,7 +934,7 @@ function langs()
         'zh-tw' => '中文(繁體)',
     );
 
-    $default = (!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'en-gb');
+    $default = (empty($_SESSION['lang']) ? TEXTPATTERN_DEFAULT_LANG : $_SESSION['lang']);
 
     $out = n.'<div class="txp-form-field">'.
         n.'<div class="txp-form-field-label">'.
@@ -945,14 +960,14 @@ function langs()
 
 function setup_load_lang($lang)
 {
-    global $en_gb_strings;
+    global $en_gb_strings, $language;
 
     require_once txpath.'/setup/setup-langs.php';
-    $en_gb_strings = $langs['en-gb'];
-    $lang = (isset($langs[$lang]) && !empty($langs[$lang])) ? $lang : 'en-gb';
-    define('LANG', $lang);
+    $en_gb_strings = $langs[TEXTPATTERN_DEFAULT_LANG];
+    $language = empty($langs[$lang]) ? TEXTPATTERN_DEFAULT_LANG : $lang;
+    define('LANG', $language);
 
-    return $langs[LANG];
+    return $langs[$language];
 }
 
 // -------------------------------------------------------------
@@ -990,4 +1005,29 @@ function setup_gTxt($var, $atts = array(), $escape = 'html')
     }
 
     return $xlate;
+}
+
+// -------------------------------------------------------------
+
+function get_public_themes_list()
+{
+    global $public_themes;
+
+    $public_themes = $out = array();
+
+    if ($files = glob(txpath."/{setup/themes,../themes}/*/manifest\.json", GLOB_BRACE)) {
+        foreach ($files as $file) {
+            $file = realpath($file);
+            if (preg_match('%^(.*/(\w+))/manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
+                if (@$manifest['txp-type'] == 'textpattern-theme') {
+                    $key = $mm[2].'-'.md5($file);
+                    $public_themes[$key] = $manifest;
+                    $public_themes[$key]['themedir'] = $mm[1];
+                    $out[$key] = empty($manifest['title']) ? $mm[2] : $manifest['title']." (".$manifest['version'] .') '.str_replace(txpath, '', $mm[1]);
+                }
+            }
+        }
+    }
+
+    return $out;
 }

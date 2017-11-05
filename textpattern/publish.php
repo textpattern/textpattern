@@ -2,10 +2,10 @@
 
 /*
  * Textpattern Content Management System
- * http://textpattern.com
+ * https://textpattern.com/
  *
  * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 if (!defined('txpath')) {
@@ -58,7 +58,8 @@ set_error_handler('publicErrorHandler', error_reporting());
 ob_start();
 
 $txp_current_tag = '';
-$txp_parsed      = array();
+$txp_parsed = $txp_else = array();
+$txp_atts = null;
 
 // Get all prefs as an array.
 $prefs = get_prefs();
@@ -116,10 +117,20 @@ if (!defined('ihu')) {
 
 // HTTP address of Textpattern admin URL.
 if (!defined('ahu')) {
-    define('ahu', hu.'textpattern/');
-} else {
-    $adminurl = rtrim(preg_replace('|^https?://|', '', ahu), '/');
-    define('ahu', PROTOCOL.$adminurl.'/');
+    if (empty($txpcfg['admin_url'])) {
+        $adminurl = hu.'textpattern/';
+    } else {
+        $adminurl = PROTOCOL.rtrim(preg_replace('|^https?://|', '', $txpcfg['admin_url']), '/').'/';
+    }
+    define('ahu', $adminurl);
+}
+
+// shared admin and public cookie_domain when using multisite admin URL
+if (!defined('cookie_domain')) {
+    if (!isset($txpcfg['cookie_domain'])) {
+      $txpcfg['cookie_domain'] = '';
+    }
+    define('cookie_domain', $txpcfg['cookie_domain']);
 }
 
 if (!defined('SITE_HOST')) {
@@ -185,6 +196,7 @@ $pretext = !isset($pretext) ? array() : $pretext;
 $pretext = array_merge($pretext, pretext($s, $prefs));
 callback_event('pretext_end');
 extract($pretext);
+$pretext += array('secondpass' => 0, '_txp_atts' => false);
 
 // Now that everything is initialised, we can crank down error reporting.
 set_error_level($production_status);
@@ -211,7 +223,7 @@ if (gps('parentid')) {
         checkCommentRequired(getComment());
     } elseif ($comments_mode == 1) {
         // Popup comments?
-        header("Content-type: text/html; charset=utf-8");
+        header("Content-Type: text/html; charset=utf-8");
         exit(parse_form('popup_comments'));
     }
 }
@@ -268,6 +280,7 @@ function preText($s, $prefs)
     $out['req'] = $req = preg_replace("/^$subpath/i", "/", $out['request_uri']);
 
     $is_404 = ($out['status'] == '404');
+    $title = null;
 
     // If messy vars exist, bypass URL parsing.
     if (!$out['id'] && !$out['s'] && !(txpinterface == 'css') && ! (txpinterface == 'admin')) {
@@ -293,7 +306,7 @@ function preText($s, $prefs)
                 // only way to make it multibyte-safe without breaking
                 // backwards-compatibility.
                 case urldecode(strtolower(urlencode(gTxt('section')))):
-                    $out['s'] = (ckEx('section', $u2)) ? $u2 : ''; $is_404 = empty($out['s']);
+                    $out['s'] = $u2;
                     break;
 
                 case urldecode(strtolower(urlencode(gTxt('category')))):
@@ -304,8 +317,6 @@ function preText($s, $prefs)
                         $out['context'] = 'article';
                         $out['c'] = $u2;
                     }
-                    $out['c'] = (ckCat($out['context'], $out['c'])) ? $out['c'] : '';
-                    $is_404 = empty($out['c']);
                     break;
 
                 case urldecode(strtolower(urlencode(gTxt('author')))):
@@ -330,103 +341,58 @@ function preText($s, $prefs)
                 default:
                     // Then see if the prefs-defined permlink scheme is usable.
                     switch ($permlink_mode) {
-
                         case 'section_id_title':
-                            if (empty($u2)) {
-                                $out['s'] = (ckEx('section', $u1)) ? $u1 : '';
-                                $is_404 = empty($out['s']);
-                            } else {
-                                $rs = lookupByIDSection($u2, $u1);
-                                $out['s'] = @$rs['Section'];
-                                $out['id'] = @$rs['ID'];
-                                $is_404 = (empty($out['s']) or empty($out['id']));
-                            }
+                            $out['s'] = $u1;
+                            $out['id'] = (!empty($u2)) ? $u2 : '';
 
                             break;
 
                         case 'year_month_day_title':
                             if (empty($u2)) {
-                                $out['s'] = (ckEx('section', $u1)) ? $u1 : '';
-                                $is_404 = empty($out['s']);
-                            } elseif (empty($u4)) {
-                                $month = "$u1-$u2";
-
-                                if (!empty($u3)) {
-                                    $month .= "-$u3";
-                                }
-
-                                if (preg_match('/\d+-\d+(?:-\d+)?/', $month)) {
-                                    $out['month'] = $month;
-                                    $out['s'] = 'default';
-                                } else {
-                                    $is_404 = 1;
-                                }
+                                $out['s'] = $u1;
                             } else {
-                                $when = "$u1-$u2-$u3";
-                                $rs = lookupByDateTitle($when, $u4);
-                                $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-                                $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
-                                $is_404 = (empty($out['s']) or empty($out['id']));
+                                $out['month'] = "$u1-$u2".(empty($u3) ? '' : "-$u3");
+                                $title = empty($u4) ? null : $u4;
                             }
 
                             break;
 
                         case 'section_title':
-                            if (empty($u2)) {
-                                $out['s'] = (ckEx('section', $u1)) ? $u1 : '';
-                                $is_404 = empty($out['s']);
-                            } else {
-                                $rs = lookupByTitleSection($u2, $u1);
-                                $out['id'] = isset($rs['ID']) ? $rs['ID'] : '';
-                                $out['s'] = isset($rs['Section']) ? $rs['Section'] : '';
-                                $is_404 = (empty($out['s']) or empty($out['id']));
-                            }
+                            $out['s'] = $u1;
+                            $title = empty($u2) ? null : $u2;
 
                             break;
 
                         case 'title_only':
-                            $rs = lookupByTitle($u1);
-                            $out['id'] = @$rs['ID'];
-                            $out['s'] = (empty($rs['Section']) ? ckEx('section', $u1) :
-                                    $rs['Section']);
-                            $is_404 = empty($out['s']);
+                            $title = $u1;
 
                             break;
 
                         case 'id_title':
-                            if (is_numeric($u1) && ckExID($u1)) {
-                                $rs = lookupByID($u1);
-                                $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-                                $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
-                                $is_404 = (empty($out['s']) or empty($out['id']));
+                            if (is_numeric($u1)) {
+                                $out['id'] = $u1;
                             } else {
                                 // We don't want to miss the /section/ pages.
-                                $out['s'] = ckEx('section', $u1) ? $u1 : '';
-                                $is_404 = empty($out['s']);
+                                $out['s'] = $u1;
                             }
 
                             break;
                     }
-
-                    if (!$is_404) {
-                        $out['context'] = validContext($out['context']);
-                    }
-
-                    break; // Prefs-defined permlink scheme case.
             }
         } else {
             $out['s'] = 'default';
-            $out['context'] = validContext($out['context']);
         }
-    } else {
-        // Messy mode, but prevent to get the id for file_downloads.
-        $out['context'] = validContext($out['context']);
+    }
 
-        if ($out['context'] == 'article' && $out['id'] && $out['s'] != 'file_download') {
-            $rs = lookupByID($out['id']);
-            $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-            $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
-            $is_404 = (empty($out['s']) or empty($out['id']));
+    $out['context'] = validContext($out['context']);
+
+    // Validate dates
+    if ($out['month']) {
+        list($y, $m, $d) = explode('-', $out['month']) + array(1, 1, 1);
+
+        if (@!checkdate($m, $d, $y)) {
+            $out['month'] = '';
+            $is_404 = true;
         }
     }
 
@@ -440,8 +406,6 @@ function preText($s, $prefs)
 
     // Resolve AuthorID from Authorname.
     if ($out['author']) {
-        $name = urldecode(strtolower(urlencode($out['author'])));
-
         $name = safe_field('name', 'txp_users', "RealName LIKE '".doSlash($out['author'])."'");
 
         if ($name) {
@@ -450,6 +414,22 @@ function preText($s, $prefs)
             $out['author'] = '';
             $is_404 = true;
         }
+    }
+
+    // Prevent to get the id for file_downloads.
+    if ($out['s'] == 'file_download') {
+        if (is_numeric($out['id'])) {
+            // Undo the double-encoding workaround for .gz files;
+            // @see filedownloadurl().
+            if (!empty($out['filename'])) {
+                $out['filename'] = preg_replace('/gz&$/i', 'gz', $out['filename']);
+            }
+
+            $fn = empty($out['filename']) ? '' : " AND filename = '".doSlash($out['filename'])."'";
+            $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE." AND created <= ".now('created').$fn);
+        }
+
+        return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404, 'status' => 404);
     }
 
     // Allow article preview.
@@ -470,28 +450,27 @@ function preText($s, $prefs)
             $is_404 = false;
             $out = array_merge($out, $rs);
         }
+    } elseif ($out['context'] == 'article') {
+        if (!empty($out['id']) || !empty($title)) {
+            if (empty($out['s']) || $out['s'] === 'default') {
+                $rs = !empty($out['id']) ? lookupByID($out['id']) : lookupByDateTitle($out['month'], $title);
+            } else {
+                $rs = !empty($out['id']) ? lookupByIDSection($out['id'], $out['s']) : lookupByTitleSection($title, $out['s']);
+            }
+
+            $out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
+            $out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
+            $is_404 = $is_404 || (empty($out['s']) || empty($out['id']));
+        } elseif (!empty($out['s']) && $out['s'] !== 'default') {
+            $out['s'] = (ckEx('section', $out['s'])) ? $out['s'] : '';
+            $is_404 = $is_404 || empty($out['s']);
+        }
     }
 
     // Stats: found or not.
     $out['status'] = ($is_404 ? '404' : '200');
-
     $out['pg'] = is_numeric($out['pg']) ? intval($out['pg']) : '';
     $out['id'] = is_numeric($out['id']) ? intval($out['id']) : '';
-
-    if ($out['s'] == 'file_download') {
-        if (is_numeric($out['id'])) {
-            // Undo the double-encoding workaround for .gz files;
-            // @see filedownloadurl().
-            if (!empty($out['filename'])) {
-                $out['filename'] = preg_replace('/gz&$/i', 'gz', $out['filename']);
-            }
-
-            $fn = empty($out['filename']) ? '' : " AND filename = '".doSlash($out['filename'])."'";
-            $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE." AND created <= ".now('created').$fn);
-        }
-
-        return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404);
-    }
 
     if (!$is_404) {
         $out['s'] = (empty($out['s'])) ? 'default' : $out['s'];
@@ -501,21 +480,17 @@ function preText($s, $prefs)
 
     // Hackish.
     global $is_article_list;
+
     if (empty($id)) {
         $is_article_list = true;
     }
 
-    // By this point we should know the section, so grab its page and CSS.
-    if (txpinterface != 'css') {
-        $rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
-        $out['page'] = isset($rs['page']) ? $rs['page'] : '';
-        $out['css'] = isset($rs['css']) ? $rs['css'] : '';
-    }
-
-    if (is_numeric($id) and !$is_404) {
-        $a = safe_row("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+    if (!$is_404 && $id) {
+        $a = safe_row(
+            "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            "ID = ".intval($id).(gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")"));
+            "ID = $id".(gps('txpreview') ? '' : " AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")")
+        );
 
         if ($a) {
             $out['id_keywords'] = $a['Keywords'];
@@ -524,10 +499,17 @@ function preText($s, $prefs)
 
             $uExpires = $a['uExpires'];
 
-            if ($uExpires and time() > $uExpires and !$publish_expired_articles) {
+            if (!$publish_expired_articles && $uExpires && time() > $uExpires) {
                 $out['status'] = '410';
             }
         }
+    }
+
+    // By this point we should know the section, so grab its page and CSS.
+    if (txpinterface != 'css') {
+        $rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
+        $out['page'] = isset($rs['page']) ? $rs['page'] : '';
+        $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
 
     // These are deprecated as of Textpattern v1.0 - leaving them here for
@@ -549,7 +531,7 @@ function preText($s, $prefs)
 
 function textpattern()
 {
-    global $pretext, $prefs, $production_status, $siteurl, $has_article_tag;
+    global $pretext, $production_status, $has_article_tag;
 
     $has_article_tag = false;
 
@@ -574,13 +556,12 @@ function textpattern()
     }
 
     // Make sure the page has an article tag if necessary.
-    if (!$has_article_tag and $production_status != 'live' and $pretext['context'] == 'article' and (!empty($pretext['id']) or !empty($pretext['c']) or !empty($pretext['q']) or !empty($pretext['pg']))) {
+    if (!$has_article_tag && $production_status != 'live' && $pretext['context'] == 'article' && (!empty($pretext['id']) || !empty($pretext['c']) || !empty($pretext['q']) || !empty($pretext['pg']))) {
         trigger_error(gTxt('missing_article_tag', array('{page}' => $pretext['page'])));
     }
 
     restore_error_handler();
-
-    header("Content-type: text/html; charset=utf-8");
+    set_headers();
     echo $html;
 
     callback_event('textpattern_end');
@@ -612,7 +593,9 @@ function output_css($s = '', $n = '')
 
     if (!empty($cssname)) {
         $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$order));
-        echo $css;
+        set_error_handler('tagErrorHandler');
+        echo parse_page(null, $css);
+        restore_error_handler();
     }
 }
 
@@ -632,12 +615,16 @@ function output_file_download($filename)
             ob_clean();
             $filesize = filesize($fullpath);
             $sent = 0;
-            header('Content-Description: File Download');
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename="'.$filename.'"; size = "'.$filesize.'"');
 
-            // Fix for IE6 PDF bug on servers configured to send cache headers.
-            header('Cache-Control: private');
+            set_headers(array(
+                'content-type' => 'application/octet-stream',
+                'content-disposition' => 'attachment; filename="'.$filename.'"',
+                'content-description' => 'File Download',
+                'content-length' => $filesize,
+                // Fix for IE6 PDF bug on servers configured to send cache headers.
+                'cache-control' => 'private'
+            ));
+
             @ini_set("zlib.output_compression", "Off");
             @set_time_limit(0);
             @ignore_user_abort(true);
@@ -671,15 +658,15 @@ function output_file_download($filename)
     // Deal with error.
     if (isset($file_error)) {
         switch ($file_error) {
-        case 403:
-            txp_die(gTxt('403_forbidden'), '403');
-            break;
-        case 404:
-            txp_die(gTxt('404_not_found'), '404');
-            break;
-        default:
-            txp_die(gTxt('500_internal_server_error'), '500');
-            break;
+            case 403:
+                txp_die(gTxt('403_forbidden'), '403');
+                break;
+            case 404:
+                txp_die(gTxt('404_not_found'), '404');
+                break;
+            default:
+                txp_die(gTxt('500_internal_server_error'), '500');
+                break;
         }
     }
 }
@@ -708,14 +695,13 @@ function article($atts, $thing = null)
 
 function doArticles($atts, $iscustom, $thing = null)
 {
-    global $pretext, $prefs;
+    global $pretext, $prefs, $thispage;
     extract($pretext);
     extract($prefs);
     $customFields = getCustomFields();
     $customlAtts = array_null(array_flip($customFields));
 
     if ($iscustom) {
-
         // Custom articles must not render search results.
         $q = '';
 
@@ -735,8 +721,6 @@ function doArticles($atts, $iscustom, $thing = null)
             'searchform'   => '',
             'searchall'    => 1,
             'searchsticky' => 0,
-            'pageby'       => '',
-            'pgonly'       => 0,
         );
     }
 
@@ -745,17 +729,19 @@ function doArticles($atts, $iscustom, $thing = null)
         'form'          => 'default',
         'limit'         => 10,
         'sort'          => '',
-        'sortby'        => '', // Deprecated in 4.0.4.
-        'sortdir'       => '', // Deprecated in 4.0.4.
         'keywords'      => '',
-        'time'          => 'past',
+        'time'          => null,
         'status'        => STATUS_LIVE,
         'allowoverride' => !$iscustom,
         'frontpage'     => !$iscustom,
         'match'         => 'Category1,Category2',
         'offset'        => 0,
+        'pageby'        => '',
+        'pgonly'        => 0,
         'wraptag'       => '',
         'break'         => '',
+        'breakby'       => '',
+        'breakclass'    => '',
         'label'         => '',
         'labeltag'      => '',
         'class'         => '',
@@ -845,22 +831,6 @@ function doArticles($atts, $iscustom, $thing = null)
         }
     }
 
-    // For backwards compatibility. sortby and sortdir are deprecated.
-    if ($sortby) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortby')), E_USER_NOTICE);
-
-        if (!$sortdir) {
-            $sortdir = "DESC";
-        } else {
-            trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
-        }
-
-        $sort = "$sortby $sortdir";
-    } elseif ($sortdir) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
-        $sort = "Posted $sortdir";
-    }
-
     // Building query parts.
     $frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';
     $category  = join("','", doSlash(do_list_unique($category)));
@@ -880,25 +850,53 @@ function doArticles($atts, $iscustom, $thing = null)
     $section   = (!$section)   ? '' : " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')";
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
     $author    = (!$author)    ? '' : " AND AuthorID IN ('".join("','", doSlash(do_list_unique($author)))."')";
-    $month     = (!$month)     ? '' : " AND Posted LIKE '".doSlash($month)."%'";
     $ids = $id ? array_map('intval', do_list_unique($id)) : array();
     $exclude = $exclude ? array_map('intval', do_list_unique($exclude)) : array();
     $id        = ((!$id)        ? '' : " AND ID IN (".join(',', $ids).")")
         .((!$exclude)   ? '' : " AND ID NOT IN (".join(',', $exclude).")");
 
-    switch ($time) {
-        case 'any':
-            $time = "";
-            break;
-        case 'future':
-            $time = " AND Posted > ".now('posted');
-            break;
-        default:
-            $time = " AND Posted <= ".now('posted');
+    if (!isset($time) || $time === 'any') {
+        $time = ($month ? " AND Posted LIKE '".doSlash($month)."%'" : '').
+            ($time ? '' : " AND Posted <= ".now('posted'));
+    } elseif (empty($time) || $time === true) {
+        $time = $time ? " AND Posted <= ".now('posted') : '';
+    } elseif (strpos($time, '%') !== false) {
+        $month = $month ? strtotime($month) : time();
+        $time = " AND Posted LIKE '".doSlash(strftime($time, $month))."%'";
+    } else {
+        $start = $month ? strtotime($month) : false;
+
+        if ($start === false) {
+            $from = $month ? "'".doSlash($month)."'" : now('posted');
+            $start = time();
+        } else {
+            $from = "FROM_UNIXTIME($start)";
+        }
+
+        switch ($time) {
+            case 'future':
+                $time = " AND Posted > $from";
+                break;
+            case 'past':
+                $time = " AND Posted <= $from";
+                break;
+            default:
+                $stop = strtotime($time, $start) or $stop = time();
+
+                if ($start > $stop) {
+                    list($start, $stop) = array($stop, $start);
+                }
+
+                $time = " AND Posted BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)";
+        }
     }
 
     if (!$expired) {
         $time .= " AND (".now('expires')." <= Expires OR Expires IS NULL)";
+    } elseif ((int)$expired !== 1) {
+        $start = strtotime($month) or $start = time();
+        $expires = strtotime($expired, $start);
+        $time .= $expires === false ? " AND Expires LIKE '".doSlash($expired)."%'" : " AND (FROM_UNIXTIME($expires) <= Expires OR Expires IS NULL)";
     }
 
     $custom = '';
@@ -935,35 +933,39 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     $where = "1 = 1".$statusq.$time.
-        $search.$id.$category.$section.$excerpted.$month.$author.$keywords.$custom.$frontpage;
+        $search.$id.$category.$section.$excerpted.$author.$keywords.$custom.$frontpage;
 
     // Do not paginate if we are on a custom list.
     if (!$iscustom and !$issticky) {
-        $grand_total = safe_count('textpattern', $where);
-        $total = $grand_total - $offset;
-        $numPages = ceil($total / $pageby);
         $pg = (!$pg) ? 1 : $pg;
         $pgoffset = $offset + (($pg - 1) * $pageby);
 
-        // Send paging info to txp:newer and txp:older.
-        $pageout['pg']          = $pg;
-        $pageout['numPages']    = $numPages;
-        $pageout['s']           = $s;
-        $pageout['c']           = $c;
-        $pageout['context']     = 'article';
-        $pageout['grand_total'] = $grand_total;
-        $pageout['total']       = $total;
-
-        global $thispage;
-
         if (empty($thispage)) {
-            $thispage = $pageout;
+            $grand_total = safe_count('textpattern', $where);
+            $total = $grand_total - $offset;
+            $numPages = ceil($total / $pageby);
+
+            // Send paging info to txp:newer and txp:older.
+            $thispage = array(
+                'pg'          => $pg,
+                'numPages'    => $numPages,
+                's'           => $s,
+                'c'           => $c,
+                'context'     => 'article',
+                'grand_total' => $grand_total,
+                'total'       => $total
+            );
         }
 
         if ($pgonly) {
             return;
         }
     } else {
+        if ($pgonly) {
+            $total = safe_count('textpattern', $where) - $offset;
+            return ceil($total / $pageby);
+        }
+
         $pgoffset = $offset;
     }
 
@@ -974,9 +976,11 @@ function doArticles($atts, $iscustom, $thing = null)
         $safe_sort = doSlash($sort);
     }
 
-    $rs = safe_rows_start("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$score,
+    $rs = safe_rows_start(
+        "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod".$score,
         'textpattern',
-        "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit));
+        "$where ORDER BY $safe_sort LIMIT ".intval($pgoffset).", ".intval($limit)
+    );
 
     // Get the form name.
     if ($q && !$issticky) {
@@ -985,10 +989,8 @@ function doArticles($atts, $iscustom, $thing = null)
         $fname = (!empty($listform) ? $listform : $form);
     }
 
-    if ($rs) {
+    if ($rs && $last = numRows($rs)) {
         $count = 0;
-        $last = numRows($rs);
-
         $articles = array();
 
         while ($a = nextRow($rs)) {
@@ -1020,7 +1022,9 @@ function doArticles($atts, $iscustom, $thing = null)
             unset($GLOBALS['thisarticle']);
         }
 
-        return doLabel($label, $labeltag).doWrap($articles, $wraptag, $break, $class);
+        return doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class'));
+    } else {
+        return parse($thing, false);
     }
 }
 
@@ -1069,9 +1073,11 @@ function doArticle($atts, $thing = null)
 
         $q_status = ($status ? "AND Status = ".intval($status) : "AND Status IN (".STATUS_LIVE.",".STATUS_STICKY.")");
 
-        $rs = safe_row("*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
+        $rs = safe_row(
+            "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
-            "ID = $id $q_status LIMIT 1");
+            "ID = $id $q_status LIMIT 1"
+        );
 
         if ($rs) {
             extract($rs);
@@ -1097,6 +1103,8 @@ function doArticle($atts, $thing = null)
         unset($GLOBALS['thisarticle']);
 
         return $article;
+    } else {
+        return parse($thing, false);
     }
 }
 
@@ -1146,8 +1154,12 @@ function makeOut()
 
 function validContext($context)
 {
-    foreach (array('article', 'image', 'file', 'link') as $type) {
-        $valid[gTxt($type.'_context')] = $type;
+    static $valid = null;
+
+    if (empty($valid)) {
+        foreach (array('article', 'image', 'file', 'link') as $type) {
+            $valid[gTxt($type.'_context')] = $type;
+        }
     }
 
     return isset($valid[$context]) ? $valid[$context] : 'article';
