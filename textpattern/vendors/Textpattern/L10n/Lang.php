@@ -368,8 +368,12 @@ class Lang
      * @return string HTML
      */
 
-    public function languageSelect($name, $val, $flags = TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED)
+    public function languageSelect($name, $val, $flags = null)
     {
+        if ($flags === null) {
+            $flags = TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED;
+        }
+
         $installed_langs = $this->available((int)$flags);
         $vals = array();
 
