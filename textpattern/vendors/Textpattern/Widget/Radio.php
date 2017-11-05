@@ -52,7 +52,7 @@ class Radio extends Tag implements \Textpattern\Widget\WidgetInterface
     {
         parent::__construct('input');
         $type = $class = 'radio';
-        $this->key = ($value) ? $name.'-'.$value : $name;
+        $this->key = ($value !== null) ? $name.'-'.$value : $name;
 
         if ((bool)$checked === true) {
             $this->setBool('checked');

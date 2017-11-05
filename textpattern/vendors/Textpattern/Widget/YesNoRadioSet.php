@@ -36,7 +36,7 @@ class YesNoRadioSet extends RadioSet implements \Textpattern\Widget\WidgetCollec
      * Construct a yes/no pair of radio widgets.
      *
      * @param string $name    The RadioSet key (HTML name attribute)
-     * @param string $default The key from the $values array to set as selected
+     * @param string $default The key from the $options array to set as selected
      */
 
     public function __construct($name, $default = null)
