@@ -5517,6 +5517,7 @@ function permlinkurl($article_array)
         'section'   => null,
         'posted'    => null,
         'expires'   => null,
+        'uexpires'   => null,
     ), array_change_key_case($article_array, CASE_LOWER), false));
 
     if (empty($thisid)) {
@@ -5531,9 +5532,9 @@ function permlinkurl($article_array)
 
     if (empty($prefs['publish_expired_articles']) &&
         !empty($expires) &&
-        $expires < time() &&
         $production_status != 'live' &&
-        txpinterface == 'public'
+        txpinterface == 'public' &&
+        $uexpires < time()
     ) {
         trigger_error(gTxt('permlink_to_expired_article', array('{id}' => $thisid)), E_USER_NOTICE);
     }
