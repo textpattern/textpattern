@@ -73,7 +73,7 @@ if (count($txpdir) > 3) {
 }
 
 $prefs = array();
-$prefs['enable_admin_pophelp'] = 1;
+$prefs['module_pophelp'] = 1;
 $step = ps('step');
 $rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i", '$1', $_SERVER['PHP_SELF']);
 $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
