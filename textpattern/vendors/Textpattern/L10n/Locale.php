@@ -60,6 +60,7 @@ class Locale
         'fr' => array('fr_FR.UTF-8', 'fr_FR.ISO_8859-1', 'fr_FR.ISO-8859-15', 'fr_FR.ISO_8859-16', 'French_France.1252', 'fr_FR', 'fra', 'fre', 'fr', 'french'),
         'gl' => array('gl_ES.UTF-8', 'gl_ES.ISO_8859-1', 'Galician_Spain.1252', 'gl_ES', 'gle', 'gl', 'galician', 'galleco'),
         'he' => array('he_IL.UTF-8', 'he_IL.ISO_8859-8', 'Hebrew_Israel.1255', 'he_IL', 'heb', 'he', 'hebrew'),
+        'hi' => array('hi_IN.UTF-8', 'Hindi.65001', 'hi_IN', 'hi', 'hin', 'hindi-india'),
         'hr' => array('hr_HR.UTF-8', 'hr_HR.ISO_8859-2', 'hr_HR.ISO_8859-16', 'Croatian_Croatia.1250', 'hr_HR', 'hr', 'hrv', 'croatian'),
         'hu' => array('hu_HU.UTF-8', 'hu_HU.ISO_8859-2', 'hu_HU.ISO_8859-16', 'Hungarian_Hungary.1250', 'hu_HU', 'hun', 'hu', 'hungarian'),
         'id' => array('id_ID.UTF-8', 'id_ID.ISO_8859-1', 'Indonesian_indonesia.1252', 'id_ID', 'id', 'ind', 'indonesian'),
