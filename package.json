@@ -23,14 +23,16 @@
   },
   "dependencies": {
     "jquery": "3.2.1",
+    "jquery-ui-multiselect-widget": "2.0.1",
     "zxcvbn": "4.4.2"
   },
   "scripts": {
     "phplint": "phplint '**/*.php' '!node_modules/**'",
     "copy:jquery": "rimraf textpattern/vendors/jquery/jquery/jquery.js && cp node_modules/jquery/dist/jquery.min.js textpattern/vendors/jquery/jquery/jquery.js",
+    "copy:jquery-ui-multiselect-widget": "rimraf textpattern/vendors/ehynds/jquery-ui-multiselect-widget/jquery.multiselect.js && cp node_modules/jquery-ui-multiselect-widget/src/jquery.multiselect.min.js textpattern/vendors/ehynds/jquery-ui-multiselect-widget/jquery.multiselect.js",
     "copy:zxcvbn": "rimraf textpattern/vendors/dropbox/zxcvbn/zxcvbn.js && cp node_modules/zxcvbn/dist/zxcvbn.js textpattern/vendors/dropbox/zxcvbn/zxcvbn.js",
     "copy:textile": "sh .github/copy-textile.sh",
-    "get-dependencies": "npm run copy:jquery && npm run copy:zxcvbn && npm run copy:textile",
+    "get-dependencies": "npm run copy:jquery && npm run copy:zxcvbn && npm run copy:textile v3.6.0",
     "get-pophelp": "sh .github/get-pophelp.sh",
     "get-textpacks": "sh .github/get-textpacks.sh",
     "get-classic-admin-theme": "sh .github/get-classic-admin-theme.sh",
