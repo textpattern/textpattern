@@ -1210,7 +1210,7 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
 {
     global $txp_user, $prefs;
 
-    if (empty($help_var) || empty($prefs['enable_admin_pophelp'])) {
+    if (empty($help_var) || empty($prefs['module_pophelp'])) {
         return '';
     }
 
