@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="en-gb">
+    <group id="index" title="index page">
+        <item id="qqq" title="qqq"><![CDATA[
+12345
+        ]]></item>
+    </group>
+
+    <group id="admin" title="Users panel">
+        <item id="about_privileges" title="About roles"><![CDATA[
+<h2>About roles</h2>
+<h3>Publisher</h3>
+<ul>
+    <li>can manage articles, comments and links</li>
+    <li>can use PHP in articles if admin preference ‘Allow PHP in articles?’ is set to ‘Yes’</li>
+    <li>can manage images and files</li>
+    <li>can manage sections and categories</li>
+    <li>can manage pages, forms and style</li>
+    <li>can view diagnostic information</li>
+    <li>can manage site preferences</li>
+    <li>can manage users</li>
+    <li>can manage visitor logs</li>
+    <li>can manage plugins</li>
+    <li>can import data</li>
+</ul>
+<h3>Managing Editor</h3>
+<ul>
+    <li>can manage articles, comments and links</li>
+    <li>can use PHP in articles if admin preference ‘Allow PHP in articles?’ is set to ‘Yes’</li>
+    <li>can manage images and files</li>
+    <li>can manage sections and categories</li>
+    <li>can manage pages, forms and style</li>
+    <li>can view diagnostic information</li>
+    <li>can manage site preferences</li>
+    <li>can view users</li>
+    <li>can manage visitor logs</li>
+    <li>can manage plugins</li>
+    <li>can import data</li>
+</ul>
+<h3>Copy Editor</h3>
+<ul>
+    <li>can manage articles with one limitation:
+        <ul>
+            <li>cannot delete those belonging to other users</li>
+        </ul>
+    </li>
+    <li>can manage comments and links</li>
+    <li>can manage images and files</li>
+    <li>can manage categories</li>
+    <li>can manage pages and forms</li>
+    <li>can view users</li>
+    <li>can manage visitor logs</li>
+</ul>
+<h3>Staff Writer</h3>
+<ul>
+    <li>can manage own articles, view other users’ articles</li>
+    <li>can manage images and files</li>
+</ul>
+<h3>Freelancer</h3>
+<ul>
+    <li>can manage own articles in a limited sense:
+        <ul>
+            <li>can only modify article until is published</li>
+            <li>can apply status of <em>only</em> Draft, Hidden or Pending</li>
+        </ul>
+    </li>
+    <li>can view other users’ articles</li>
+</ul>
+<h3>Designer</h3>
+<ul>
+    <li>can manage own articles in a limited sense:
+        <ul>
+            <li>can only modify article until is published</li>
+            <li>can apply status of <em>only</em> Draft, Hidden or Pending</li>
+        </ul>
+    </li>
+    <li>can view other users’ articles</li>
+    <li>can manage images</li>
+    <li>can manage sections</li>
+    <li>can manage pages, forms and style</li>
+</ul>
+        ]]></item>
+        <item id="add_new_author" title="Add new author"><![CDATA[
+<h2>Add new author</h2>
+<p>A password, welcome message and login instructions will be emailed to the new author.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Write panel">
+        <item id="article_image" title="Article image"><![CDATA[
+<h2>Article image</h2>
+<p>If you would like to associate a single image with this article, place one of the following here:</p>
+<ol>
+    <li>a Textpattern image ID</li>
+    <li>a relative URL to the image (e.g. <code>/images/my_pic.jpg</code>)</li>
+    <li>a fully-qualified URL (e.g. <code>http://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>The image can be displayed by placing a <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> inside an article form. It will output a complete HTML <code>&lt;img&gt;</code> tag to your chosen image.</p>
+        ]]></item>
+        <item id="body" title="Body"><![CDATA[
+<h2>Body</h2>
+<p>The main content of an article is contained within the article body.</p>
+<p>When composing or preparing articles for publication in Textpattern, you can switch between three views of the article: plain text, HTML markup (the code with which a web browser renders the article), and a rendered preview.</p>
+        ]]></item>
+        <item id="description" title="Description"><![CDATA[
+<h2>Description</h2>
+<p>The article description is an optional component that can help search engines and website crawlers better identify and sort content.</p>
+<p>The article description is limited to a maximum of 255 characters. Note that some search engines place character limits on the length of a page’s <code>meta description</code> for practicality of display in search engine results pages (SERPs) and this may be less than the 255 character limit in Textpattern.</p>
+<p>Note that the article description differs from the article excerpt, though they both accept similar content. The article description should be primarily intended for use with search engines and crawlers, whereas the the article excerpt is more suited for a human-readable article summary where desired.</p>
+        ]]></item>
+        <item id="excerpt" title="Excerpt"><![CDATA[
+<h2>Excerpt</h2>
+<p>Article excerpts are optional. Excerpts could be used as a short summary of the article that is displayed as part of a table of contents, used in place of the full article body in the site’s RSS/Atom feeds, or a number of other uses.</p>
+        ]]></item>
+        <item id="expire_date" title="Expire date"><![CDATA[
+<h2>Expire date</h2>
+<p>The time an article is labelled as expired. The time is optional and can be set to an arbitrary time in the past or future.</p>
+<p>The boxes correspond to the following information:</p>
+<ul>
+    <li>Year / Month / Day</li>
+    <li>Hour (24-hour format) : Minute : Second</li>
+</ul>
+<p>When the time arrives, or in the case where a time in the past is provided, the article expires.</p>
+<p>If the option to display expired articles is enabled, the article remains visible. If the option to display expired articles is disabled, visitors to the article page will be served an HTTP 410 error in place of the article content.</p>
+        ]]></item>
+        <item id="keywords" title="Keywords"><![CDATA[
+<h2>Keywords</h2>
+<p>Keywords are useful for refining the relationships between articles beyond those provided by categories.</p>
+<p>Keywords must be individual words separated by commas.</p>
+        ]]></item>
+        <item id="override_form" title="Override form"><![CDATA[
+<h2>Override form</h2>
+<p>If you wish for an article to use a form different from that assigned by default - for example if you want to show only an article excerpt with <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> where you normally show the entire article with <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> - this can be set here.</p>
+        ]]></item>
+        <item id="publish_date"><![CDATA[
+<h2>Publish date</h2>
+<p>The time an article or file is published or most-recently revised. The time can be set to the moment the item is published, or to an arbitrary time in the past or future.</p>
+<p>The boxes correspond to the following information:</p>
+<ul>
+    <li>Year / Month / Day</li>
+    <li>Hour (24-hour format) : Minute : Second</li>
+</ul>
+<p>An item with a timestamp greater than the current time (i.e. in the future) will not appear on the front end and the RSS/Atom feeds until that time arrives.</p>
+        ]]></item>
+        <item id="title" title="Title"><![CDATA[
+<h2>Title</h2>
+<p>Add an appropriate title for this article.</p>
+<p>An article title is limited to a maximum of 255 characters.</p>
+        ]]></item>
+        <item id="url_title" title="URL-only title"><![CDATA[
+<h2>URL-only title</h2>
+<p>If you would like to have a specific title attached to the permalink URL for your article, enter it here. If it is left blank, the URL title will be automatically generated from the article title.</p>
+<p>This is particularly useful if the title of your article uses non-ASCII characters.</p>
+        ]]></item>
+    </group>
+</help>
+
+<css><![CDATA[
+/* custom css */
+
+]]></css>
+
+<js><![CDATA[
+/* custom js */
+    alert('123');
+]]></js>
+
+</resources>

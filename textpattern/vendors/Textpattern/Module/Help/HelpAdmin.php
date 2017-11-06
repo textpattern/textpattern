@@ -159,7 +159,7 @@ class HelpAdmin
     {
 //        pagetop(gTxt('tab_help'));
         //TODO: Autodetect LANG and User Role, show relevant help, allow override it
-        self::custom('en-gb_pophelp');
+        self::custom('en-gb_help');
     }
 
     public static function custom($name='')
