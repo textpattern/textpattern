@@ -84,6 +84,7 @@ class Locale
         'th' => array('th_TH.UTF-8', 'th_TH.ISO_8859-11', 'Thai_Thailand.874', 'th_TH', 'th', 'tha', 'thai'),
         'tr' => array('tr_TR.UTF-8', 'tr_TR.ISO_8859-3', 'tr_TR.ISO_8859-9', 'Turkish_Turkey.1254', 'tr_TR', 'tr', 'tur', 'turkish'),
         'uk' => array('uk_UA.UTF-8', 'uk_UA.ISO_8859-5', 'Ukrainian_Ukraine.1251', 'uk_UA', 'uk', 'ukr', 'ukrainian'),
+        'ur-pk' => array('ur_PK.UTF-8', 'Urdu_Islamic Republic of Pakistan.1256', 'ur_PK', 'ur', 'urd', 'urdu-pakistan'),
         'ur' => array('ur_IN.UTF-8', 'ur_IN', 'ur', 'urd', 'urdu'),
         'vi' => array('vi_VN.UTF-8', 'Vietnamese_Viet Nam.1258', 'vi_VN', 'vi', 'vie', 'vietnamese'),
         'zh-cn' => array('zh_CN.UTF-8', 'Chinese_China.936', 'zh_CN', 'chinese-simplified'),
