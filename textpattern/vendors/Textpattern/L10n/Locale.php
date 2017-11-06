@@ -73,6 +73,7 @@ class Locale
         'nb' => array('nb_NO.UTF-8', 'nb_NO.ISO_8859-1', 'Norwegian_Norway.1252', 'nb_NO', 'no', 'nb', 'nob', 'norwegian'),
         'nl' => array('nl_NL.UTF-8', 'nl_NL.ISO_8859-1', 'Dutch_Netherlands.1252', 'nl_NL', 'dut', 'nla', 'nl', 'nld', 'dutch'),
         'nn' => array('nn_NO.UTF-8', 'nn_NO.ISO_8859-1', 'Norwegian-Nynorsk_Norway.1252', 'nn_NO', 'nno', 'nn', 'nynorsk'),
+        'pa' => array('pa_IN.UTF-8', 'pa_IN', 'pa', 'pan', 'punjabi'),
         'pl' => array('pl_PL.UTF-8', 'pl_PL.ISO_8859-2', 'Polish_Poland.1250', 'pl_PL', 'pl', 'pol', 'polish'),
         'pt-br' => array('pt_BR.UTF-8', 'Portuguese_Brazil.1252', 'pt_BR', 'pt', 'ptb', 'portuguese-brazil'),
         'pt' => array('pt_PT.UTF-8', 'pt_PT.ISO_8859-1', 'Portuguese_Portugal.1252', 'pt_PT', 'por', 'portuguese'),
