@@ -4314,7 +4314,7 @@ function parse_form($name)
     static $stack = array(), $depth = null;
 
     if ($depth === null) {
-        $depth = get_pref('form_circular_depth', 31);
+        $depth = get_pref('form_circular_depth', 15);
     }
 
     $out = '';
@@ -5390,8 +5390,8 @@ function pagelinkurl($parts, $inherit = array())
     $keys = array_merge($inherit, $parts);
 
     if (isset($prefs['custom_url_func'])
-        and is_callable($prefs['custom_url_func'])
-        and ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== false) {
+        && is_callable($prefs['custom_url_func'])
+        && ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== false) {
         return $url;
     }
 
@@ -5441,7 +5441,7 @@ function pagelinkurl($parts, $inherit = array())
             unset($keys['c'], $keys['context']);
         }
 
-        return rtrim($url, '/').join_qs($keys);
+        return (empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
     }
 }
 
