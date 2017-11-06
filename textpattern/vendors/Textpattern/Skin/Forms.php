@@ -74,10 +74,10 @@ namespace Textpattern\Skin {
         protected function getImportSQLValue(RecDirIterator $file)
         {
             return "("
-                ."'".doSlash($this->skin)."', "
                 ."'".doSlash($file->getTemplateName())."', "
                 ."'".doSlash($file->getTemplateType())."', "
-                ."'".doSlash($file->getTemplateContents())."'"
+                ."'".doSlash($file->getTemplateContents())."', "
+                ."'".doSlash($this->skin)."'"
                 .")";
         }
 
