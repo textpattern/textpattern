@@ -1,7 +1,7 @@
 #@version 4.7.0
 #@common
 lang_name => Српски
-lang_code => sr-CS
+lang_code => sr-RS
 lang_dir => ltr
 #@admin
 account_activation =>
@@ -333,6 +333,7 @@ apache_modules => Apache модули
 apache_version => Apache верзија
 clean_url_data_failed =>
 clean_url_test_failed => Тест за чисте URL адресе није успео.
+diag_clear_private =>
 db_global_timezone =>
 db_server_time =>
 db_server_timeoffset =>
@@ -591,6 +592,7 @@ custom_9_set => Посебно поље 9
 default_event =>
 default_publish_status =>
 doctype => Doctype
+enable_admin_pophelp =>
 enable_xmlrpc_server =>
 expire_logs_after => Након колико дана истичу логови?
 feeds => Feed-ови
