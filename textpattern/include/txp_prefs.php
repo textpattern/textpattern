@@ -770,3 +770,21 @@ function defaultPublishStatus($name, $val)
 {
     return selectInput($name, status_list(), $val, '', '', $name);
 }
+
+/**
+ * Renders a HTML &lt;select&gt; list of module_pophelp options.
+ *
+ * @param  string $name HTML name and id of the list
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function module_pophelp($name, $val)
+{
+    $vals = array(
+        '0'  => gTxt('none'),
+        '1'  => gTxt('pophelp'),
+    );
+
+    return selectInput($name, $vals, $val, '', '', $name);
+}

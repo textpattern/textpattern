@@ -14,4 +14,4 @@ fi
 echo "Get repo: $REPO :: $TAG";
 echo "-------------------------------------------------------------------------------";
 rm -rf $EXTRACT/*.php;
-curl $URL/$AUTHOR/$REPO/tar.gz/$TAG | tar xz --strip=4 --directory=$EXTRACT $REPO-$TAG/src/Netcarver/Textile
+curl $URL/$AUTHOR/$REPO/tar.gz/$TAG | tar xz --strip=4 --directory=$EXTRACT $REPO-*/src/Netcarver/Textile

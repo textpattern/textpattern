@@ -4341,7 +4341,7 @@ function parse_form($name)
     static $stack = array(), $depth = null;
 
     if ($depth === null) {
-        $depth = get_pref('form_circular_depth', 31);
+        $depth = get_pref('form_circular_depth', 15);
     }
 
     $out = '';
@@ -5128,6 +5128,66 @@ function buildCustomSql($custom, $pairs)
 }
 
 /**
+ * Build a query qualifier to filter time fields from the
+ * result set.
+ *
+ * @param   string $month A starting time point
+ * @param   string $time  A time offset
+ * @param   string $field The field to filter
+ * @return  string An SQL qualifier for a query's 'WHERE' part
+ */
+
+function buildTimeSql($month, $time, $field = 'Posted')
+{
+    $safe_field = '`'.doSlash($field).'`';
+    $timeq = '';
+
+    if ($month === 'past' || $month === 'any' || $month === 'future') {
+        if ($month === 'past') {
+            $timeq = " AND $safe_field <= ".now($field);
+        } elseif ($month === 'future') {
+            $timeq = " AND $safe_field > ".now($field);
+        }
+    } elseif ($time === 'past' || $time === 'any' || $time === 'future') {
+        if ($time === 'past') {
+            $timeq = " AND $safe_field <= ".now($field);
+        } elseif ($time === 'future') {
+            $timeq = " AND $safe_field > ".now($field);
+        }
+
+        $timeq .= ($month ? " AND $safe_field LIKE '".doSlash($month)."%'" : '');
+    } elseif (strpos($time, '%') !== false) {
+        $start = $month ? strtotime($month) : time() or $start = time();
+        $timeq = " AND $safe_field LIKE '".doSlash(strftime($time, $start))."%'";
+    } else {
+        $start = $month ? strtotime($month) : false;
+
+        if ($start === false) {
+            $from = $month ? "'".doSlash($month)."'" : now($field);
+            $start = time();
+        } else {
+            $from = "FROM_UNIXTIME($start)";
+        }
+
+        if ($time === 'since') {
+            $timeq = " AND $safe_field > $from";
+        } elseif ($time === 'until') {
+            $timeq = " AND $safe_field <= $from";
+        } else {
+            $stop = strtotime($time, $start) or $stop = time();
+
+            if ($start > $stop) {
+                list($start, $stop) = array($stop, $start);
+            }
+
+            $timeq = " AND ".($start == $stop ? "0" : "$safe_field BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)");
+        }
+    }
+
+    return $timeq;
+}
+
+/**
  * Sends a HTTP status header.
  *
  * @param   string $status The HTTP status code
@@ -5359,8 +5419,8 @@ function pagelinkurl($parts, $inherit = array())
     $keys = array_merge($inherit, $parts);
 
     if (isset($prefs['custom_url_func'])
-        and is_callable($prefs['custom_url_func'])
-        and ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== false) {
+        && is_callable($prefs['custom_url_func'])
+        && ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== false) {
         return $url;
     }
 
@@ -5410,7 +5470,7 @@ function pagelinkurl($parts, $inherit = array())
             unset($keys['c'], $keys['context']);
         }
 
-        return rtrim($url, '/').join_qs($keys);
+        return (empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
     }
 }
 
