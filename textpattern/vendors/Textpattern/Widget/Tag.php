@@ -73,6 +73,17 @@ class Tag implements \Textpattern\Widget\WidgetInterface
     protected $properties = array();
 
     /**
+     * The available schemes that can be used for tag output.
+     *
+     * @var array
+     */
+
+    protected $schemes = array(
+        'xhtml',
+        'html5',
+    );
+
+    /**
      * General constructor for the tag.
      *
      * @param  string $tag The tag name
@@ -182,8 +193,28 @@ class Tag implements \Textpattern\Widget\WidgetInterface
 
     public function setFlag($flag, $scheme)
     {
-        if (in_array($scheme, array('html5', 'xhtml'))) {
+        if (in_array($scheme, $this->schemes)) {
             self::$flags[$flag] = $scheme;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the tag scheme to xhtml or html5 for all flags at once. Chainable.
+     *
+     * Just a shortcut for:
+     *   setFlag('self-closing', $scheme);
+     *   setFlag('boolean', $scheme);
+     *
+     * @param string $scheme The scheme to set all the output control flags to. Either 'html5' or 'xhtml'
+     */
+
+    public function setScheme($scheme)
+    {
+        if (in_array($scheme, $this->schemes)) {
+            $this->setFlag('self-closing', $scheme);
+            $this->setFlag('boolean', $scheme);
         }
 
         return $this;
