@@ -40,7 +40,7 @@ namespace Textpattern\Skin {
     {
 
         /**
-         * Skin infos as an associative array.
+         * Skin table name.
          *
          * @var array
          */
@@ -48,7 +48,15 @@ namespace Textpattern\Skin {
         protected static $table = 'txp_skin';
 
         /**
-         * Skin infos file.
+         * Skin asset related table names.
+         *
+         * @var array
+         */
+
+        protected static $assetTables = array('txp_page', 'txp_form', 'txp_css');
+
+        /**
+         * Skin main file.
          *
          * @var array
          */
@@ -61,7 +69,7 @@ namespace Textpattern\Skin {
          * @var array
          */
 
-        protected static $assets = array(
+        protected static $defaultAssets = array(
             'pages'  => array(),
             'forms'  => array(),
             'styles' => array(),
@@ -88,7 +96,7 @@ namespace Textpattern\Skin {
         private function parseAssets($assets = null)
         {
             if ($assets === null) {
-                $assets = static::$assets;
+                $assets = static::$defaultAssets;
             } elseif ($assets) {
                 if (!is_array($assets)) {
                     $assets = array($assets);
@@ -307,29 +315,40 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Inserts or updates a skin row.
+         * Inserts, updates or deletes a skin row.
          *
-         * @param string $method 'insert'|'update';
+         * @param string $method 'insert'|'update'|'delete';
          * @param string $row    The skin related DB row as an associative array;
          * @return bool
          */
 
-        public function doSkin($method, $row)
+        public function doSkin($method, $row = null)
         {
-            extract($row);
+            if ($row) {
+                extract($row);
 
-            $set = "name = '".doSlash($name)."',
-                    title = '".doSlash($title)."',
-                    version = '".doSlash($version)."',
-                    description = '".doSlash($description)."',
-                    author = '".doSlash($author)."',
-                    author_uri = '".doSlash($author_uri)."'
-                   ";
+                $set = "name = '".doSlash($name)."',
+                        title = '".doSlash($title)."',
+                        version = '".doSlash($version)."',
+                        description = '".doSlash($description)."',
+                        author = '".doSlash($author)."',
+                        author_uri = '".doSlash($author_uri)."'
+                       ";
+            }
 
-            if ($method === 'update') {
-                $out = safe_update(self::$table, $set, "name = '".doSlash($this->skin)."'");
-            } else {
-                $out = safe_insert(self::$table, $set);
+            switch ($method) {
+                case 'insert':
+                    $out = safe_insert(self::$table, $set);
+                    break;
+                case 'update':
+                    $out = safe_update(self::$table, $set, "name = '".doSlash($this->skin)."'");
+                    break;
+                case 'delete':
+                    $out = safe_delete(self::$table, "name = '".doSlash($this->skin)."'");
+                    break;
+                default:
+                    throw new \Exception('unknown_method');
+                    break;
             }
 
             return (bool) $out;
@@ -656,68 +675,60 @@ namespace Textpattern\Skin {
                 throw new \Exception(
                     gtxt('unknown_skin', array('{name}' => $this->skin))
                 );
-            } elseif ($this->isInUse()) {
-                throw new \Exception(
-                    gtxt('skin_delete_failure', array(
-                        '{name}' => $this->skin,
-                        '{clue}' => 'skin in use.',
-                    ))
-                );
-            } elseif (count(Main::getInstalled()) < 1) {
-                throw new \Exception(
-                    gtxt('skin_delete_failure', array(
-                        '{name}' => $this->skin,
-                        '{clue}' => 'last skin.',
-                    ))
-                );
-            } else {
-                $callback_extra = $this->skin;
-
-                callback_event('skin', 'deletion', 0, $callback_extra);
-
-                $this->callAssetsMethod($this->parseAssets(), 'delete');
-
-                if ($this->hasAssets()) {
-                    throw new \Exception(
-                        gtxt('skin_delete_failure', array(
-                            '{name}' => $this->skin,
-                            '{clue}' => 'still contains assets.',
-                        ))
-                    );
-                } elseif ($this->deleteSkin()) {
-                    static::$installed = array_diff_key(
-                        static::$installed,
-                        array($this->skin => '')
-                    );
-
-                    self::getCurrent() === $this->skin ? self::setCurrent($this->skin) : '';
-
-                    callback_event('skin', 'deleted', 0, $callback_extra);
-                } else {
-                    callback_event('skin', 'deletion_failed', 0, $callback_extra);
-
-                    throw new \Exception(
-                        gtxt('skin_step_failure', array(
-                            '{skin}' => $this->skin,
-                            '{step}' => 'deletion',
-                        ))
-                    );
-                }
             }
-        }
 
-        /**
-         * Deletes the skin row.
-         *
-         * @return bool  False on error.
-         */
+            if ($this->isInUse()) {
+                throw new \Exception(
+                    gtxt('skin_delete_failure', array(
+                        '{name}' => $this->skin,
+                        '{clue}' => 'skin in use',
+                    ))
+                );
+            }
 
-        public function deleteSkin()
-        {
-            return (bool) safe_delete(
-                doSlash(self::$table),
-                "name = '".doSlash($this->skin)."'"
-            );
+            if (count(Main::getInstalled()) < 1) {
+                throw new \Exception(
+                    gtxt('skin_delete_failure', array(
+                        '{name}' => $this->skin,
+                        '{clue}' => 'last skin',
+                    ))
+                );
+            }
+
+            $callback_extra = $this->skin;
+
+            callback_event('skin', 'deletion', 0, $callback_extra);
+
+            $this->callAssetsMethod($this->parseAssets(), 'delete');
+
+            if ($this->hasAssets()) {
+                throw new \Exception(
+                    gtxt('skin_delete_failure', array(
+                        '{name}' => $this->skin,
+                        '{clue}' => 'still contains assets.',
+                    ))
+                );
+            }
+
+            if ($this->doSkin('delete')) {
+                static::$installed = array_diff_key(
+                    static::$installed,
+                    array($this->skin => '')
+                );
+
+                self::setCurrent();
+
+                callback_event('skin', 'deleted', 0, $callback_extra);
+            } else {
+                callback_event('skin', 'deletion_failed', 0, $callback_extra);
+
+                throw new \Exception(
+                    gtxt('skin_step_failure', array(
+                        '{skin}' => $this->skin,
+                        '{step}' => 'deletion',
+                    ))
+                );
+            }
         }
 
         /**
@@ -726,19 +737,15 @@ namespace Textpattern\Skin {
 
         public function isInUse()
         {
-            if ($this->skin) {
-                if ($this->isInUse === null) {
-                    $this->isInUse = safe_column(
-                        "name",
-                        'txp_section',
-                        "skin ='".doSlash($this->skin)."'"
-                    );
-                }
-
-                return $this->isInUse;
+            if ($this->isInUse === null) {
+                $this->isInUse = safe_column(
+                    "name",
+                    'txp_section',
+                    "skin ='".doSlash($this->skin)."'"
+                );
             }
 
-            throw new \Exception('undefined_skin');
+            return $this->isInUse;
         }
 
         /**
@@ -750,22 +757,17 @@ namespace Textpattern\Skin {
 
         public function hasAssets()
         {
-            if ($this->skin) {
-                $assets = safe_query(
-                    'SELECT p.name, f.name, c.name
-                     FROM '.safe_pfx('txp_page').' p,
-                          '.safe_pfx('txp_form').' f,
-                          '.safe_pfx('txp_css').' c
-                     WHERE p.skin = "'.doSlash($this->skin).'" AND
-                           f.skin = "'.doSlash($this->skin).'" AND
-                           c.skin = "'.doSlash($this->skin).'"
-                    '
-                );
+            $select = 'SELECT '.implode('.name, ', static::$assetTables).'.name';
+            $from = ' FROM '.implode(', ', array_map('safe_pfx', static::$assetTables));
+            $where = ' WHERE '
+                     .implode(
+                         '.skin = "'.doSlash($this->skin).'" AND ',
+                         static::$assetTables
+                     ).'.skin = "'.doSlash($this->skin).'"';
 
-                return @mysqli_num_rows($assets) > 0 ? true : false;
-            }
+            $assets = safe_query($select.$from.$where);
 
-            throw new \Exception('undefined_skin');
+            return @mysqli_num_rows($assets) > 0 ? true : false;
         }
 
         /**
@@ -818,10 +820,7 @@ namespace Textpattern\Skin {
                             array($extra, $templates)
                         );
                     } else {
-                        call_user_func_array(
-                            array($instance, $method),
-                            array($templates)
-                        );
+                        call_user_func(array($instance, $method), $templates);
                     }
                 } catch (\Exception $e) {
                     $exceptions[] = $e->getMessage();

@@ -87,15 +87,11 @@ namespace Textpattern\Skin {
 
         final public function skinIsInstalled()
         {
-            if ($this->skin) {
-                if ($this->isInstalled === null) {
-                    $this->isInstalled = self::isInstalled($this->skin);
-                }
-
-                return $this->isInstalled;
+            if ($this->isInstalled === null) {
+                $this->isInstalled = self::isInstalled($this->skin);
             }
 
-            throw new \Exception('undefined_skin');
+            return $this->isInstalled;
         }
 
         /**
@@ -116,7 +112,7 @@ namespace Textpattern\Skin {
         /**
          * Checks if a skin directory exists and is readable.
          *
-         * @return string|bool path or false
+         * @return bool
          */
 
         public function isReadable($path = null)
@@ -130,8 +126,8 @@ namespace Textpattern\Skin {
          * Checks if the Skin directory exists and is writable;
          * if not, creates it.
          *
-         * @param  string      $path See getPath().
-         * @return string|bool path or false
+         * @param  string $path See getPath().
+         * @return bool
          */
 
         public function isWritable($path = null)
@@ -144,7 +140,7 @@ namespace Textpattern\Skin {
         /**
          * Checks if a directory or file exists.
          *
-         * @return string|bool path or false
+         * @return bool
          */
 
         public static function isType($path)

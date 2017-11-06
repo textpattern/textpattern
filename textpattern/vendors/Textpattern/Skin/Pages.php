@@ -48,11 +48,7 @@ namespace Textpattern\Skin {
             $sql = array();
 
             foreach ($templates as $name) {
-                $sql[] = "("
-                    ."'".doSlash($name)."', "
-                    ."'', "
-                    ."'".doSlash($this->skin)."'"
-                    .")";
+                $sql[] = "('".doSlash($name)."', '', '".doSlash($this->skin)."')";
             }
 
             return $sql;
@@ -64,11 +60,9 @@ namespace Textpattern\Skin {
 
         protected function getImportSQLValue(RecDirIterator $file)
         {
-            return "("
-                ."'".doSlash($file->getTemplateName())."', "
-                ."'".doSlash($file->getTemplateContents())."', "
-                ."'".doSlash($this->skin)."'"
-                .")";
+            return "('".doSlash($file->getTemplateName())."', "
+                   ."'".doSlash($file->getTemplateContents())."', "
+                   ."'".doSlash($this->skin)."')";
         }
 
         /**

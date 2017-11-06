@@ -321,7 +321,7 @@ namespace Textpattern\Skin {
 
         public static function renderSwitchForm($event, $step, $current)
         {
-            return n.form(
+            return form(
                 inputLabel('skin', selectInput('skin', self::getInstalled(), $current, false, 1, 'skin'), 'skin').
                 eInput($event).
                 sInput($step),
