@@ -882,7 +882,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $statusq = " AND Status = ".intval($status);
     }
 
-    $where = "1 = 1".$statusq.$time.
+    $where = "1 = 1".$statusq.$timeq.
         $search.$id.$category.$section.$excerpted.$author.$keywords.$custom.$frontpage;
 
     // Do not paginate if we are on a custom list.
