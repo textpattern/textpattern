@@ -165,19 +165,19 @@ namespace Textpattern\Skin {
 
             if ($this->locked) {
                 return true;
-            } else {
-                while (!($locked = $this->mkDir('lock')) && $time < 3) {
-                    sleep(0.5);
-                    $time = microtime(true) - $time_start;
-                }
-
-                if ($locked) {
-                    $this->locked = true;
-                    return $locked;
-                }
-
-                throw new \Exception("unable_to_create_the_skin_lock_directory");
             }
+
+            while (!($locked = $this->mkDir('lock')) && $time < 3) {
+                sleep(0.5);
+                $time = microtime(true) - $time_start;
+            }
+
+            if ($locked) {
+                $this->locked = true;
+                return $locked;
+            }
+
+            throw new \Exception(gtxt('unable_to_lock_skin'));
         }
 
         /**

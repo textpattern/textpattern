@@ -125,26 +125,29 @@ namespace Textpattern\Skin {
 
         public function create($templates = null)
         {
-            if ($this->skinIsInstalled()) {
-                $templates ?: $templates = static::$essential;
-                $sql_values = $this->getCreationSQLValues($templates);
-
-                $callback_extra = array(
-                    'skin'      => $this->skin,
-                    'templates' => $templates,
+            if (!$this->skinIsInstalled()) {
+                throw new \Exception(
+                    gtxt('unknown_skin', array('{name}' => $this->skin))
                 );
+            }
 
-                callback_event(static::$dir, 'create', 0, $callback_extra);
+            $templates ?: $templates = static::$essential;
 
-                if ($this->insertTemplates($this->getColumns(), $sql_values)) {
-                    callback_event(static::$dir, 'created', 0, $callback_extra);
-                } else {
-                    callback_event(static::$dir, 'creation_failed', 0, $callback_extra);
+            $callback_extra = array(
+                'skin'      => $this->skin,
+                'templates' => $templates,
+            );
 
-                    throw new \Exception($this->getFailureMessage('creation', $templates));
-                }
+            callback_event(static::$dir, 'create', 0, $callback_extra);
+
+            $sql_values = $this->getCreationSQLValues($templates);
+
+            if ($this->insertTemplates($this->getColumns(), $sql_values)) {
+                callback_event(static::$dir, 'created', 0, $callback_extra);
             } else {
-                throw new \Exception('unknown_skin');
+                callback_event(static::$dir, 'creation_failed', 0, $callback_extra);
+
+                throw new \Exception($this->getFailureMessage('creation', $templates));
             }
         }
 
@@ -164,27 +167,34 @@ namespace Textpattern\Skin {
         public function adopt($from, $templates = null)
         {
             $callback_extra = array(
-                'skin'      => $this->skin,
-                'templates' => $templates,
+                'skin' => $this->skin,
+                'from' => $from,
             );
 
             callback_event(static::$dir, 'import', 0, $callback_extra);
 
-            $updated = (bool) safe_update(
+            if ($this->adoptTemplates($from)) {
+                callback_event(static::$dir, 'edited', 0, $callback_extra);
+            } else {
+                callback_event(static::$dir, 'edit_failed', 0, $callback_extra);
+
+                throw new \Exception($this->getFailureMessage('edit', $failed));
+            }
+        }
+
+        /**
+         * Adopt templates from another skin.
+         *
+         * @param string $from The skin from which you want to adopt the templates.
+         */
+
+        public function adoptTemplates($from)
+        {
+            return (bool) safe_update(
                 static::$table,
                 "skin = '".doSlash($this->skin)."'",
                 "skin = '".doSlash($from)."'"
             );
-
-            if ($updated) {
-                callback_event(static::$dir, 'edited', 0, $callback_extra);
-
-                return;
-            }
-
-            callback_event(static::$dir, 'edit_failed', 0, $callback_extra);
-
-            throw new \Exception($this->getFailureMessage('edit', $failed));
         }
 
         /**
@@ -193,59 +203,64 @@ namespace Textpattern\Skin {
 
         public function import($clean = true, $templates = null)
         {
-            if ($this->skinIsInstalled()) {
-                $was_locked = $this->locked;
+            if (!$this->skinIsInstalled()) {
+                throw new \Exception(
+                    gtxt('unknown_skin', array('{name}' => $this->skin))
+                );
+            }
 
-                if ($this->isReadable(static::$dir) && $this->lockSkin()) {
-                    $files = $this->getRecDirIterator($templates);
-                    $passed = $failed = $sql_values = array();
+            $was_locked = $this->locked;
 
-                    foreach ($files as $file) {
-                        $name = $file->getTemplateName();
+            if ($this->isReadable(static::$dir)) {
+                $this->lockSkin();
 
-                        if (!in_array($name, $passed)) {
-                            $passed[] = $name;
-                            $sql_values[] = $this->getImportSQLValue($file);
-                        } else {
-                            $failed[] = $name; // Duplicated form.
-                        }
-                    }
+                $files = $this->getRecDirIterator($templates);
+                $passed = $failed = $sql_values = array();
 
-                    $was_locked ?: $this->unlockSkin();
+                foreach ($files as $file) {
+                    $name = $file->getTemplateName();
 
-                    $callback_extra = array(
-                        'skin'      => $this->skin,
-                        'templates' => $passed,
-                    );
-
-                    callback_event(static::$dir, 'import', 0, $callback_extra);
-
-                    if ($sql_values) {
-                        if ($this->insertTemplates($this->getColumns(), $sql_values, true)) {
-                            callback_event(static::$dir, 'imported', 0, $callback_extra);
-
-                            $clean ? $this->dropRemovedFiles($passed) : '';
-
-                            if ($failed) {
-                                throw new \Exception(
-                                    $this->getFailureMessage(
-                                        'import',
-                                        $failed,
-                                        'skin_step_failure_for_duplicated_templates'
-                                    )
-                                );
-                            }
-                        } else {
-                            callback_event(static::$dir, 'import_failed', 0, $callback_extra);
-
-                            throw new \Exception(
-                                $this->getFailureMessage('import', $passed)
-                            );
-                        }
+                    if (!in_array($name, $passed)) {
+                        $passed[] = $name;
+                        $sql_values[] = $this->getImportSQLValue($file);
+                    } else {
+                        $failed[] = $name; // Duplicated form.
                     }
                 }
-            } else {
-                throw new \Exception('unknown_skin');
+
+                $was_locked ?: $this->unlockSkin();
+
+                $callback_extra = array(
+                    'skin'      => $this->skin,
+                    'clean'     => $clean,
+                    'templates' => $passed,
+                );
+
+                callback_event(static::$dir, 'import', 0, $callback_extra);
+
+                if ($sql_values) {
+                    if ($this->insertTemplates($this->getColumns(), $sql_values, true)) {
+                        callback_event(static::$dir, 'imported', 0, $callback_extra);
+
+                        $clean ? $this->dropRemovedFiles($passed) : '';
+
+                        if ($failed) {
+                            throw new \Exception(
+                                $this->getFailureMessage(
+                                    'import',
+                                    $failed,
+                                    'skin_step_failure_for_duplicated_templates'
+                                )
+                            );
+                        }
+                    } else {
+                        callback_event(static::$dir, 'import_failed', 0, $callback_extra);
+
+                        throw new \Exception(
+                            $this->getFailureMessage('import', $passed)
+                        );
+                    }
+                }
             }
         }
 
@@ -333,7 +348,7 @@ namespace Textpattern\Skin {
                 return $drop;
             }
 
-            throw new \Exception('unable_to_delete_obsolete_skin_templates');
+            throw new \Exception(gtxt('unable_to_delete_obsolete_skin_templates'));
         }
 
         /**
@@ -351,40 +366,43 @@ namespace Textpattern\Skin {
 
         public function duplicate($to, $templates = null)
         {
-            if (Skin::isInstalled($to)) {
-                $rows = $this->getTemplateRows($templates);
+            if (!Skin::isInstalled($to)) {
+                throw new \Exception(
+                    gtxt('unknown_skin', array('{name}' => $this->skin))
+                );
+            }
 
-                if ($rows) {
-                    $templates = $sql_values = array();
+            $rows = $this->getTemplateRows($templates);
 
-                    foreach ($rows as $row) {
-                        $templates[] = $row['name'];
-                        $row['skin'] = strtolower(sanitizeForUrl($to));
-                        isset($sql_fields) ?: $sql_fields = array_keys($row);
-                        $sql_values[] = "('".implode("', '", array_map('doSlash', $row))."')";
-                    }
+            if ($rows) {
+                $templates = $sql_values = array();
 
-                    $callback_extra = array(
-                        'skin'      => $this->skin,
-                        'templates' => $templates,
-                    );
+                foreach ($rows as $row) {
+                    $templates[] = $row['name'];
+                    $row['skin'] = strtolower(sanitizeForUrl($to));
+                    isset($sql_fields) ?: $sql_fields = array_keys($row);
+                    $sql_values[] = "('".implode("', '", array_map('doSlash', $row))."')";
+                }
 
-                    callback_event(static::$dir, 'duplicate', 0, $templates);
+                $callback_extra = array(
+                    'skin'      => $this->skin,
+                    'to'        => $to,
+                    'templates' => $templates,
+                );
 
-                    if ($sql_fields && $sql_values) {
-                        if ($this->insertTemplates($sql_fields, $sql_values)) {
-                            callback_event(static::$dir, 'duplicated', 0, $callback_extra);
-                        } else {
-                            callback_event(static::$dir, 'duplication_failed', 0, $callback_extra);
+                callback_event(static::$dir, 'duplicate', 0, $templates);
 
-                            throw new \Exception(
-                                $this->getFailureMessage('duplication', $templates)
-                            );
-                        }
+                if ($sql_fields && $sql_values) {
+                    if ($this->insertTemplates($sql_fields, $sql_values)) {
+                        callback_event(static::$dir, 'duplicated', 0, $callback_extra);
+                    } else {
+                        callback_event(static::$dir, 'duplication_failed', 0, $callback_extra);
+
+                        throw new \Exception(
+                            $this->getFailureMessage('duplication', $templates)
+                        );
                     }
                 }
-            } else {
-                throw new \Exception('unknown_skin');
             }
         }
 
@@ -418,48 +436,58 @@ namespace Textpattern\Skin {
 
         public function export($clean = true, $templates = null)
         {
+            $callback_extra = array(
+                'skin'      => $this->skin,
+                'clean'     => $clean,
+                'templates' => $templates,
+            );
+
+            callback_event(static::$dir, 'export', 0, $callback_extra);
+
             $rows = $this->getTemplateRows($templates);
 
             if ($rows) {
                 $was_locked = $this->locked;
 
-                if ($this->lockSkin() && ($this->isWritable(static::$dir) || $this->mkDir(static::$dir))) {
-                    $callback_extra = array(
-                        'skin'      => $this->skin,
-                        'templates' => $templates,
+                if (!$this->isWritable(static::$dir) && !$this->mkDir(static::$dir)) {
+                    throw new Exception(
+                        gtxt(
+                            'unable_to_write_or_create_skin_directory',
+                            array('{name}' => $this->skin)
+                        )
                     );
+                }
 
-                    callback_event(static::$dir, 'export', 0, $callback_extra);
+                $this->lockSkin();
 
-                    $passed = $failed = array();
+                $passed = $failed = array();
 
-                    foreach ($rows as $row) {
-                        if (preg_match('#^[a-z][a-z0-9_\-\.]{0,63}$#', $row['name']) && $this->exportTemplate($row)) {
-                            $passed[] = $row['name'];
-                        } else {
-                            $failed[] = $row['name'];
-                        }
+                foreach ($rows as $row) {
+                    if (preg_match('#^[a-z][a-z0-9_\-\.]{0,63}$#', $row['name']) && $this->exportTemplate($row)) {
+                        $passed[] = $row['name'];
+                    } else {
+                        $failed[] = $row['name'];
                     }
+                }
 
-                    $was_locked ?: $this->unlockSkin();
+                $was_locked ?: $this->unlockSkin();
 
-                    if ($passed) {
-                        $callback_extra['templates'] = $passed;
+                if ($passed) {
+                    $callback_extra['templates'] = $passed;
 
-                        callback_event(static::$dir, 'exported', 0, $callback_extra);
+                    callback_event(static::$dir, 'exported', 0, $callback_extra);
 
-                        $clean ? $this->unlinkRemovedRows($passed) : '';
-                    }
+                    $clean ? $this->unlinkRemovedRows($passed) : '';
+                }
 
-                    if ($failed) {
-                        $callback_extra['templates'] = $failed;
+                if ($failed) {
+                    $callback_extra['templates'] = $failed;
 
-                        callback_event(static::$dir, 'export_failed', 0, $callback_extra);
+                    callback_event(static::$dir, 'export_failed', 0, $callback_extra);
 
-                        throw new \Exception(
-                            $this->getFailureMessage('export', $failed)
-                        );
-                    }
+                    throw new \Exception(
+                        $this->getFailureMessage('export', $failed)
+                    );
                 }
             }
         }

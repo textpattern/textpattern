@@ -93,7 +93,7 @@ namespace Textpattern\Skin {
                 if (!is_array($assets)) {
                     $assets = array($assets);
                 }
-                
+
                 if (isset($assets[0])) {
                     $assets = array_fill_keys($assets, array());
                 }
@@ -108,41 +108,39 @@ namespace Textpattern\Skin {
 
         public function create($row, $assets = null)
         {
-            extract($row);
+            $assets = $this->parseAssets($assets);
 
-            $this->skin = $name;
+            $callback_extra = array(
+                'row'    => $row,
+                'assets' => $assets,
+            );
 
-            if (!$this->skinIsInstalled()) {
-                $title ?: $title = $name;
+            callback_event('skin', 'creation', 0, $callback_extra);
 
-                $callback_extra = array(
-                    'skin'   => $this->skin,
-                    'assets' => $assets,
-                );
+            $this->skin = $row['name'];
 
-                callback_event('skin', 'creation', 0, $callback_extra);
-
-                if ($this->doSkin('insert', $name, $title, $version, $description, $author, $author_uri)) {
-                    $this->isInstalled = true;
-
-                    $assets = $this->parseAssets($assets);
-
-                    $assets ? $this->callAssetsMethod($assets, __FUNCTION__) : '';
-
-                    callback_event('skin', 'created', 0, $callback_extra);
-                } else {
-                    callback_event('skin', 'creation_failed', 0, $callback_extra);
-
-                    throw new \Exception(
-                        gtxt('skin_step_failure', array(
-                            '{skin}' => $this->skin,
-                            '{step}' => 'import',
-                        ))
-                    );
-                }
-            } else {
+            if ($this->skinIsInstalled()) {
                 throw new \Exception(
                     gtxt('skin_already_exists', array('{name}' => $this->skin))
+                );
+            }
+
+            $row['title'] ?: $row['title'] = $row['name'];
+
+            if ($this->doSkin('insert', $row)) {
+                $this->isInstalled = true;
+
+                $assets ? $this->callAssetsMethod($assets, 'create') : '';
+
+                callback_event('skin', 'created', 0, $callback_extra);
+            } else {
+                callback_event('skin', 'creation_failed', 0, $callback_extra);
+
+                throw new \Exception(
+                    gtxt('skin_step_failure', array(
+                        '{skin}' => $this->skin,
+                        '{step}' => 'import',
+                    ))
                 );
             }
         }
@@ -153,113 +151,132 @@ namespace Textpattern\Skin {
 
         public function edit($row)
         {
-            extract($row);
+            $callback_extra = array(
+                'skin'   => $this->skin,
+                'row'    => $row,
+            );
 
-            if ($this->skinIsInstalled()) {
-                if ($this->skin === $name || !self::isInstalled($name)) {
-                    $sections = $this->isInUse();
-                    $callback_extra = array(
-                        'skin'   => $this->skin,
-                        'assets' => $assets,
-                    );
+            callback_event('skin', 'edit', 0, $callback_extra);
 
-                    callback_event('skin', 'edit', 0, $callback_extra);
-
-                    if ($this->doSkin('update', $name, $title, $version, $description, $author, $author_uri)) {
-                        if ($name !== $this->skin) {
-                            $path = $this->getPath();
-
-                            if (file_exists($path)) {
-                                rename($path, self::getBasePath().'/'.$name);
-                            }
-
-                            $old_name = $this->skin;
-                            $this->skin = $name;
-
-                            if ($sections) {
-                                safe_update(
-                                    'txp_section',
-                                    "skin = '".doSlash($this->skin)."'",
-                                    "skin = '".doSlash($old_name)."'"
-                                );
-                            }
-
-                            $assets = $this->parseAssets();
-
-                            $assets ? $this->callAssetsMethod($assets, 'adopt', $old_name) : '';
-                        }
-
-                        callback_event('skin', 'edited', 0, $callback_extra);
-                    } else {
-                        callback_event('skin', 'edit_failed', 0, $callback_extra);
-
-                        throw new \Exception(
-                            gtxt('skin_step_failure', array(
-                                '{skin}' => $this->skin,
-                                '{step}' => 'edit',
-                            ))
-                        );
-                    }
-                } else {
-                    throw new \Exception(
-                        gtxt('skin_already_exists', array('{name}' => $this->skin))
-                    );
-                }
-            } else {
+            if (!$this->skinIsInstalled()) {
                 throw new \Exception(
                     gtxt('unknown_skin', array('{name}' => $this->skin))
                 );
             }
+
+            if ($this->skin !== $row['name'] && self::isInstalled($row['name'])) {
+                throw new \Exception(
+                    gtxt('skin_already_exists', array('{name}' => $this->skin))
+                );
+            }
+
+            if ($this->doSkin('update', $row)) {
+                if ($row['name'] !== $this->skin) {
+                    $path = $this->getPath();
+
+                    if (file_exists($path)) {
+                        rename($path, self::getBasePath().'/'.$row['name']);
+                    }
+
+                    $old_name = $this->skin;
+                    $this->skin = $row['name'];
+
+                    $this->isInUse() ? $this->updateSkinInUse($old_name) : '';
+
+                    $this->callAssetsMethod($this->parseAssets(), 'adopt', $old_name);
+                }
+
+                callback_event('skin', 'edited', 0, $callback_extra);
+            } else {
+                callback_event('skin', 'edit_failed', 0, $callback_extra);
+
+                throw new \Exception(
+                    gtxt('skin_step_failure', array(
+                        '{skin}' => $this->skin,
+                        '{step}' => 'edit',
+                    ))
+                );
+            }
+        }
+
+        /**
+         * Updates a skin name in use.
+         *
+         * @param string $from the skin name in use.
+         */
+
+        public function updateSkinInUse($from)
+        {
+            return safe_update(
+                'txp_section',
+                "skin = '".doSlash($this->skin)."'",
+                "skin = '".doSlash($from)."'"
+            );
         }
 
         /**
          * {@inheritdoc}
          */
 
-        public function import($clean = true, $assets = null) {
-            if (!$this->skinIsInstalled()) {
-                if ($this->isReadable(static::$file) && $this->lockSkin()) {
-                    $callback_extra = array(
-                        'skin'   => $this->skin,
-                        'assets' => $assets,
-                    );
+        public function import($clean = true, $assets = null)
+        {
+            $assets = $this->parseAssets($assets);
 
-                    callback_event('skin', 'import', 0, $callback_extra);
+            $callback_extra = array(
+                'skin'   => $this->skin,
+                'clean'  => $clean,
+                'assets' => $assets,
+            );
 
-                    extract($this->getJSONInfos());
+            callback_event('skin', 'import', 0, $callback_extra);
 
-                    if ($this->doSkin('insert', $this->skin, $title, $version, $description, $author, $author_uri)) {
-                        $this->isInstalled = true;
-
-                        $assets = $this->parseAssets($assets);
-
-                        $assets ? $this->callAssetsMethod($assets, __FUNCTION__, $clean) : '';
-
-                        $this->unlockSkin();
-
-                        callback_event('skin', 'imported', 0, $callback_extra);
-                    } else {
-                        $this->unlockSkin();
-
-                        callback_event('skin', 'import_failed', 0, $callback_extra);
-
-                        throw new \Exception(
-                            gtxt('skin_step_failure', array(
-                                '{skin}' => $this->skin,
-                                '{step}' => 'import',
-                            ))
-                        );
-                    }
-                }
-            } else {
+            if ($this->skinIsInstalled()) {
                 throw new \Exception(
                     gtxt('unknown_skin', array('{name}' => $this->skin))
+                );
+            }
+
+            if (!$this->isWritable()) {
+                throw new Exception(
+                    gtxt('skin_dir_must_be_writable', array('{name}' => $this->skin))
+                );
+            }
+
+            if (!$this->isReadable(static::$file)) {
+                throw new Exception(
+                    gtxt('unredable_skin_file', array('{name}' => static::$file))
+                );
+            }
+
+            $this->lockSkin();
+
+            $row = $this->getJSONInfos();
+            $row['name'] = $this->skin;
+
+            if ($this->doSkin('insert', $row)) {
+                $this->isInstalled = true;
+
+                $assets ? $this->callAssetsMethod($assets, 'import', $clean) : '';
+
+                $this->unlockSkin();
+
+                callback_event('skin', 'imported', 0, $callback_extra);
+            } else {
+                $this->unlockSkin();
+
+                callback_event('skin', 'import_failed', 0, $callback_extra);
+
+                throw new \Exception(
+                    gtxt('skin_step_failure', array(
+                        '{skin}' => $this->skin,
+                        '{step}' => 'import',
+                    ))
                 );
             }
         }
 
         /**
-         * Get and decodes the Manifest file contents.
+         * Gets and decodes the Manifest file contents.
          *
          * @return array
          * @throws \Exception
@@ -292,18 +309,15 @@ namespace Textpattern\Skin {
         /**
          * Inserts or updates a skin row.
          *
-         * @param string $method      'insert'|'update';
-         * @param string $name        The URL safe skin name;
-         * @param string $title       The skin title;
-         * @param string $version     The skin version;
-         * @param string $description The skin description;
-         * @param string $author      The skin author;
-         * @param string $author_uri  The skin author URL;
+         * @param string $method 'insert'|'update';
+         * @param string $row    The skin related DB row as an associative array;
          * @return bool
          */
 
-        public function doSkin($method, $name, $title, $version, $description, $author, $author_uri)
+        public function doSkin($method, $row)
         {
+            extract($row);
+
             $set = "name = '".doSlash($name)."',
                     title = '".doSlash($title)."',
                     version = '".doSlash($version)."',
@@ -327,45 +341,55 @@ namespace Textpattern\Skin {
 
         public function update($clean = true, $assets = null)
         {
-            if ($this->skinIsInstalled()) {
-                if ($this->isReadable(static::$file) && $this->lockSkin()) {
-                    $callback_extra = array(
-                        'skin'   => $this->skin,
-                        'assets' => $assets,
-                    );
+            $assets = $this->parseAssets($assets);
 
-                    callback_event('skin', 'update', 0, $callback_extra);
+            $callback_extra = array(
+                'skin'   => $this->skin,
+                'clean'  => $clean,
+                'assets' => $assets,
+            );
 
-                    extract($this->getJSONInfos());
+            callback_event('skin', 'update', 0, $callback_extra);
 
-                    if ($this->doSkin('update', $this->skin, $title, $description, $version, $author, $author_uri)) {
-                        $assets = $this->parseAssets($assets);
-
-                        $assets ? $this->callAssetsMethod($assets, __FUNCTION__, $clean) : '';
-
-                        $this->unlockSkin();
-
-                        callback_event('skin', 'updated', 0, $callback_extra);
-                    } else {
-                        $this->unlockSkin();
-
-                        callback_event('skin', 'update_failed', 0, $callback_extra);
-
-                        throw new \Exception(
-                            gtxt('skin_step_failure', array(
-                                '{skin}' => $this->skin,
-                                '{step}' => 'update',
-                            ))
-                        );
-                    }
-                } else {
-                    throw new \Exception(
-                        gtxt('unknown_directory', array('{name}' => $this->skin))
-                    );
-                }
-            } else {
+            if (!$this->skinIsInstalled()) {
                 throw new \Exception(
                     gtxt('unknown_skin', array('{name}' => $this->skin))
+                );
+            }
+
+            if (!$this->isWritable()) {
+                throw new Exception(
+                    gtxt('skin_dir_must_be_writable', array('{name}' => $this->skin))
+                );
+            }
+
+            if (!$this->isReadable(static::$file)) {
+                throw new Exception(
+                    gtxt('unredable_skin_file', array('{name}' => static::$file))
+                );
+            }
+
+            $this->lockSkin();
+
+            $row = $this->getJSONInfos();
+            $row['name'] = $this->skin;
+
+            if ($this->doSkin('update', $row)) {
+                $assets ? $this->callAssetsMethod($assets, 'update', $clean) : '';
+
+                $this->unlockSkin();
+
+                callback_event('skin', 'updated', 0, $callback_extra);
+            } else {
+                $this->unlockSkin();
+
+                callback_event('skin', 'update_failed', 0, $callback_extra);
+
+                throw new \Exception(
+                    gtxt('skin_step_failure', array(
+                        '{skin}' => $this->skin,
+                        '{step}' => 'update',
+                    ))
                 );
             }
         }
@@ -396,45 +420,44 @@ namespace Textpattern\Skin {
 
         public function duplicateAs($row, $assets = null)
         {
-            extract($row);
+            $assets = $this->parseAssets($assets);
 
-            if (!self::isInstalled($name)) {
-                $title ?: $title = $row['title'] = $name;
+            $callback_extra = array(
+                'skin'   => $this->skin,
+                'row'    => $row,
+                'assets' => $assets,
+            );
 
-                if ($this->skinIsInstalled()) {
-                    $callback_extra = array(
-                        'skin'   => $this->skin,
-                        'copy'   => $name,
-                        'assets' => $assets,
-                    );
+            callback_event('skin', 'duplication', 0, $callback_extra);
 
-                    callback_event('skin', 'duplication', 0, $callback_extra);
-
-                    if ($this->duplicateSkin($row)) {
-                        static::$installed[$name] = $name;
-                        $assets = $this->parseAssets($assets);
-
-                        $assets ? $this->callAssetsMethod($assets, 'duplicate', $name) : '';
-
-                        callback_event('skin', 'duplicated', 0, $callback_extra);
-                    } else {
-                        callback_event('skin', 'duplication_failed', 0, $callback_extra);
-
-                        throw new \Exception(
-                            gtxt('skin_step_failure', array(
-                                '{skin}' => $this->skin,
-                                '{step}' => 'duplication',
-                            ))
-                        );
-                    }
-                } else {
-                    throw new \Exception(
-                        gtxt('unknown_skin', array('{name}' => $this->skin))
-                    );
-                }
-            } else {
+            if (self::isInstalled($row['name'])) {
                 throw new \Exception(
-                    gtxt('skin_already_exists', array('{name}' => $name))
+                    gtxt('skin_already_exists', array('{name}' => $row['name']))
+                );
+            }
+
+            $row['title'] ?: $row['title'] = $row['name'];
+
+            if (!$this->skinIsInstalled()) {
+                throw new \Exception(
+                    gtxt('unknown_skin', array('{name}' => $this->skin))
+                );
+            }
+
+            if ($this->doSkin('insert', $row)) {
+                static::$installed[$row['name']] = $row['name'];
+
+                $assets ? $this->callAssetsMethod($assets, 'duplicate', $row['name']) : '';
+
+                callback_event('skin', 'duplicated', 0, $callback_extra);
+            } else {
+                callback_event('skin', 'duplication_failed', 0, $callback_extra);
+
+                throw new \Exception(
+                    gtxt('skin_step_failure', array(
+                        '{skin}' => $this->skin,
+                        '{step}' => 'duplication',
+                    ))
                 );
             }
         }
@@ -459,69 +482,56 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Duplicates the skin row.
-         *
-         * @param string $row Associative array of the skin row fields related values.
-         * @return bool
-         */
-
-        public function duplicateSkin($row)
-        {
-            extract($row);
-
-            return (bool) safe_insert(
-                self::$table,
-                "title = '".doSlash($title)."',
-                 version = '".doSlash($version)."',
-                 description = '".doSlash($description)."',
-                 author = '".doSlash($author)."',
-                 author_uri = '".doSlash($author_uri)."',
-                 name = '".doSlash($name)."'
-                "
-            );
-        }
-
-        /**
          * {@inheritdoc}
          */
 
         public function export($clean = true, $assets = null)
         {
+            $assets = $this->parseAssets($assets);
+
+            $callback_extra = array(
+                'skin'   => $this->skin,
+                'clean'  => $clean,
+                'assets' => $assets,
+            );
+
+            callback_event('skin', 'export', 0, $callback_extra);
+
             $row = $this->getRow();
 
-            if ($row) {
-                $callback_extra = array(
-                    'skin'   => $this->skin,
-                    'assets' => $assets,
-                );
-
-                callback_event('skin', 'export', 0, $callback_extra);
-
-                if (($this->isWritable() || $this->mkDir()) && $this->lockSkin()) {
-                    if ($this->exportSkin($row)) {
-                        $assets = $this->parseAssets($assets);
-
-                        $assets ? $this->callAssetsMethod($assets, __FUNCTION__, $clean) : '';
-
-                        $this->unlockSkin();
-
-                        callback_event('skin', 'exported', 0, $callback_extra);
-                    } else {
-                        $this->unlockSkin();
-
-                        callback_event('skin', 'export_failed', 0, $callback_extra);
-
-                        throw new \Exception(
-                            gtxt('skin_step_failure', array(
-                                '{skin}' => $this->skin,
-                                '{step}' => 'export',
-                            ))
-                        );
-                    }
-                }
-            } else {
+            if (!$row) {
                 throw new \Exception(
                     gtxt('unknown_skin', array('{name}' => $this->skin))
+                );
+            }
+
+            if (!$this->isWritable() && !$this->mkDir()) {
+                throw new Exception(
+                    gtxt(
+                        'unable_to_write_or_create_skin_directory',
+                        array('{name}' => $this->skin)
+                    )
+                );
+            }
+
+            $this->lockSkin();
+
+            if ($this->exportSkin($row)) {
+                $assets ? $this->callAssetsMethod($assets, 'export', $clean) : '';
+
+                $this->unlockSkin();
+
+                callback_event('skin', 'exported', 0, $callback_extra);
+            } else {
+                $this->unlockSkin();
+
+                callback_event('skin', 'export_failed', 0, $callback_extra);
+
+                throw new \Exception(
+                    gtxt('skin_step_failure', array(
+                        '{skin}' => $this->skin,
+                        '{step}' => 'export',
+                    ))
                 );
             }
         }
@@ -661,16 +671,11 @@ namespace Textpattern\Skin {
                     ))
                 );
             } else {
-                $callback_extra = array(
-                    'skin'   => $this->skin,
-                    'assets' => $assets,
-                );
+                $callback_extra = $this->skin;
 
                 callback_event('skin', 'deletion', 0, $callback_extra);
 
-                $assets = $this->parseAssets($assets);
-
-                $assets ? $this->callAssetsMethod($assets, __FUNCTION__) : '';
+                $this->callAssetsMethod($this->parseAssets(), 'delete');
 
                 if ($this->hasAssets()) {
                     throw new \Exception(
