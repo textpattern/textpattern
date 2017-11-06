@@ -1852,7 +1852,7 @@ $langs = array(
         'your_full_name' => 'Vaše celé meno',
         'you_can_access' => '<a href="index.php">Hlavné rozhranie</a> by malo byť dostupné so zadaným loginom a heslom.',
     ),
-    'sr-cs' => array(
+    'sr' => array(
         'about_to_create' => 'Upravo ćete kreirati i napuniti tablice baze.',
         'already_installed' => 'Izgleda da je Textpattern već instaliran. Ako želite čistu instalaciju, molimo uklonite <code>config.php</code> iz Vašeg <code>/textpattern/</code> direktorijuma i pokušajte ponovo.',
         'before_you_proceed' => 'Pre početka:',
@@ -1894,7 +1894,7 @@ $langs = array(
         'your_full_name' => 'Vaše puno ime',
         'you_can_access' => 'Sada bi trebali imati pristup <a href="index.php">glavnom sučelju</a> sa imenom i lozinkom koje ste odabrali.',
     ),
-    'sr' => array(
+    'sr-rs' => array(
         'about_to_create' => 'Управо ћете креирати и напунити таблице базе.',
         'already_installed' => 'Изгледа да је Textpattern већ инсталиран. Ако желите чисту инсталацију, молимо уклоните <code>config.php</code> из Вашег <code>/textpattern/</code> директоријума и пок',
         'before_you_proceed' => 'Пре почетка:',
