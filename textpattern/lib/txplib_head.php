@@ -48,7 +48,7 @@
 
 function pagetop($pagetitle = '', $message = '')
 {
-    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme;
+    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $textarray_script, $file_max_upload_size;
 
     header('Content-Security-Policy: '.CONTENT_SECURITY_POLICY);
     header('X-Frame-Options: '.X_FRAME_OPTIONS);
@@ -81,6 +81,21 @@ function pagetop($pagetitle = '', $message = '')
         $body_id = 'page-'.txpspecialchars($event);
     }
 
+    gTxtScript(array(
+        'are_you_sure',
+        'cookies_must_be_enabled',
+        'form_submission_error',
+        'list_options',
+        'ok',
+        'publish',
+        'save',
+        'toggle_all_selected',
+        'select',
+        'close',
+        'help',
+        'upload_err_form_size'
+    ));
+
     $lang_direction = gTxt('lang_dir');
     $lang_ui = get_pref('language_ui', LANG);
 
@@ -96,6 +111,8 @@ function pagetop($pagetitle = '', $message = '')
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/ehynds/jquery-ui-multiselect-widget/jquery.multiselect.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('vendors/blueimp/md5/md5.min.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('vendors/blueimp/fileupload/jquery.fileupload.min.js', TEXTPATTERN_SCRIPT_URL).
     script_js(
         'var textpattern = '.json_encode(
             array(
@@ -104,30 +121,25 @@ function pagetop($pagetitle = '', $message = '')
                 'step' => $step,
                 '_txp_token' => form_token(),
                 'ajax_timeout' => (int) AJAX_TIMEOUT,
-                'textarray' => (object) null,
-                'do_spellcheck' => get_pref(
-                    'do_spellcheck',
-                    '#page-article #body, #page-article #title,'.
-                    '#page-image #alt-text, #page-image #caption,'.
-                    '#page-file #description,'.
-                    '#page-link #link-title, #page-link #link-description'
+                'prefs' => array(
+                    'max_file_size' => (float) $file_max_upload_size,
+                    'max_upload_size' => real_max_upload_size(0),
+                    'production_status' => get_pref('production_status'),
+                    'do_spellcheck' => get_pref(
+                        'do_spellcheck',
+                        '#page-article #body, #page-article #title,'.
+                        '#page-image #image_alt_text, #page-image #caption,'.
+                        '#page-file #description,'.
+                        '#page-link #link-title, #page-link #link-description'
+                    )
                 ),
-                'production_status' => get_pref('production_status'),
+                'textarray' => (object) null,
             ),
             TEXTPATTERN_JSON
         ).';'
     ).
     script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
-    gTxtScript(array(
-        'are_you_sure',
-        'cookies_must_be_enabled',
-        'form_submission_error',
-        'list_options',
-        'ok',
-        'publish',
-        'save',
-        'toggle_all_selected',
-    ));
+
     // Mandatory un-themable Textpattern core styles ?>
 <style>
 .not-ready main {

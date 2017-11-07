@@ -188,7 +188,7 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
  * @see    getTree()
  */
 
-function treeSelectInput($select_name = '', $array = array(), $value = '', $select_id = '', $truncate = 0)
+function treeSelectInput($select_name = '', $array = array(), $value = '', $select_id = '', $truncate = 0, $atts = array())
 {
     $out = array();
 
@@ -230,7 +230,7 @@ function treeSelectInput($select_name = '', $array = array(), $value = '', $sele
     return n.tag(n.join(n, $out).n, 'select', array(
         'id'   => $select_id,
         'name' => $select_name,
-    ));
+    ) + $atts);
 }
 
 /**
@@ -334,16 +334,22 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
 /**
  * Hidden form input.
  *
- * @param  string $name  The name
- * @param  string $value The value
- * @return string HTML input
+ * @param  string/array $name  The name
+ * @param  string       $value The value
+ * @return string       HTML input
  * @example
  * echo hInput('myInput', 'hidden value');
  */
 
-function hInput($name, $value)
+function hInput($name, $value = null, $glue = ',')
 {
-    return fInput('hidden', $name, $value);
+    if (!is_array($name)) {
+        return fInput('hidden', $name, $value);
+    }
+
+    return array_walk($name, function(&$v, $n, $glue) {
+        $v = fInput('hidden', $n, is_array($v) ? implode($glue, $v) : $v);
+    }, $glue) ? implode($name) : false;
 }
 
 /**
@@ -706,7 +712,7 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
 
     if ($datevar == '%d' || $name == 'day' || $name == 'exp_day') {
         $class = 'input-day';
-        $pattern = '(0[1-9]|[1-2][0-9]|3[01])';
+        $pattern = '(0[1-9]|[12][0-9]|3[01])';
     }
 
     if ($datevar == '%H' || $name == 'hour' || $name == 'exp_hour') {
@@ -739,35 +745,4 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
         'tabindex'    => (int) $tab,
         'value'       => $value,
     ));
-}
-
-/**
- * Transforms a multiple $_FILES entry into int-indexed array.
- *
- * @param  array $file        The file
- * @return array of files
- */
-
-
-function file_refactor(&$file)
-{
-    $is_array = is_array($file['name']);
-
-    if (empty($file['name']) || $is_array && empty($file['name'][0])) {
-        return false;
-    }
-
-    $file_array = array();
-    $file_count = $is_array ? count($file['name']) : 1;
-    $file_keys = array_keys($file);
-
-    for ($i=0; $i<$file_count; $i++) {
-        $file_array[$i] = array();
-
-        foreach ($file_keys as $key) {
-            $file_array[$i][$key] = $is_array ? $file[$key][$i] : $file[$key];
-        }
-    }
-
-    return $file_array;
 }

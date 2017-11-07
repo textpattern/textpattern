@@ -200,6 +200,9 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         exit;
     }
 
+    // Register modules
+    register_callback(array('\Textpattern\Module\Help\HelpAdmin', 'init'), 'help');
+
     if (!empty($admin_side_plugins) and gps('event') != 'plugin') {
         load_plugins(1);
     }

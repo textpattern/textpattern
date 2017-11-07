@@ -602,9 +602,10 @@ function section_edit()
 
 function selectInputData($name = '', $array = array(), $value = '', $select_id = null)
 {
-    $select_id = ($select_id === null) ? $name : $select_id;
+    $out = array();
 
-    $out[] = '<select name="'.$name.'" id="'.$select_id.'">';
+    $select_id = ($select_id === null) ? $name : $select_id;
+    $selected = false;
 
     foreach ($array as $row) {
         $avalue = $alabel = $row['name'];
@@ -620,9 +621,14 @@ function selectInputData($name = '', $array = array(), $value = '', $select_id =
         $out[] = '<option data-skin="'.$askin.'" value="'.txpspecialchars($askin.'.'.$avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
     }
 
+    $atts = join_atts(array(
+        'id'       => $select_id,
+        'name'     => $name,
+    ), TEXTPATTERN_STRIP_EMPTY);
+
     $out[]= '</select>';
 
-    return implode(n, $out);
+    return n.'<select'.$atts.'>'.n.implode(n, $out).n.'</select>';
 }
 
 /**
@@ -847,7 +853,7 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
     global $all_skins, $all_pages, $all_styles;
 
-    $themeSelect = selectInput('skin', $all_skins, '', '', '', 'multiedit_skin');
+    $themeSelect = selectInput('skin', $all_skins, '', false, '', 'multiedit_skin');
     $pageSelect = selectInputData('section_page', $all_pages, '', 'multiedit_page');
     $styleSelect = selectInputData('css', $all_styles, '', 'multiedit_css');
 

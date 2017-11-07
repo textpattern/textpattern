@@ -382,11 +382,7 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
         sInput($step),
         hInput($thing, $value),
         ($thing2) ? hInput($thing2, $thing2val) : '',
-        ($remember) ? hInput('page', $page) : '',
-        ($remember) ? hInput('sort', $sort) : '',
-        ($remember) ? hInput('dir', $dir) : '',
-        ($remember) ? hInput('crit', $crit) : '',
-        ($remember) ? hInput('search_method', $search_method) : '',
+        ($remember) ? hInput(compact('page', 'sort', 'dir', 'crit', 'search_method')) : '',
         tInput(),
         n.'</form>',
     ));
@@ -502,7 +498,7 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
 {
     $out = array();
 
-    if ($crit != '' && $total > 1) {
+    if ($numPages > 1) {
         $out[] = announce(
             gTxt('showing_search_results', array(
                 '{from}'  => (($page - 1) * $limit) + 1,
@@ -513,83 +509,76 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
         );
     }
 
-    if ($numPages > 1) {
-        $nav = array();
-        $list--;
-        $page = max(min($page, $numPages), 1);
-        $start = max(1, min($numPages - $list, $page - floor($list/2)));
-        $end = min($numPages, $start + $list);
+    $nav = array();
+    $list--;
+    $page = max(min($page, $numPages), 1);
 
-        $parameters = array(
-            'event'         => $event,
-            'step'          => $step,
-            'dir'           => $dir,
-            'crit'          => $crit,
-            'search_method' => $search_method,
+    $parameters = array(
+        'event'         => $event,
+        'step'          => $step,
+        'dir'           => $dir,
+        'crit'          => $crit,
+        'search_method' => $search_method,
+    );
+
+    // Previous page.
+    if ($page > 1) {
+        $nav[] = n.PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step);
+    } else {
+        $nav[] = n.span(
+            span(gTxt('prev'), array(
+                'class' => 'ui-icon ui-icon-arrowthick-1-w',
+            )),
+            array(
+                'class'         => 'disabled',
+                'aria-disabled' => 'true',
+                'aria-label'    => gTxt('prev'),
+            )
         );
-
-        // Previous page.
-        if ($page > 1) {
-            $nav[] = n.PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step);
-        } else {
-            $nav[] = n.span(
-                span(gTxt('prev'), array(
-                    'class' => 'ui-icon ui-icon-arrowthick-1-w',
-                )),
-                array(
-                    'class'         => 'disabled',
-                    'aria-disabled' => 'true',
-                    'aria-label'    => gTxt('prev'),
-                )
-            );
-        }
-
-
-        $nav[] = form(
-            n.tag(gTxt('page'), 'label', array(
-                    'for' => 'current-page',
-                )
-            ).
-            n.tag_void('input', array(
-                'class'     => 'current-page',
-                'id'        => 'current-page',
-                'name'      => 'page',
-                'type'      => 'text',
-                'size'      => INPUT_XSMALL,
-                'inputmode' => 'numeric',
-                'pattern'   => '[0-9]+',
-                'value'     => $page,
-            )).
-            n.gTxt('of').
-            n.span($numPages, array('class' => 'total-pages')).
-            eInput($event).
-            hInput('sort', $sort).
-            hInput('dir', $dir).
-            hInput('crit', $crit).
-            hInput('search_method', $search_method),
-            '',
-            '',
-            'get'
-        );
-
-        // Next page.
-        if ($page < $numPages) {
-            $nav[] = n.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step);
-        } else {
-            $nav[] = n.span(
-                span(gTxt('next'), array(
-                    'class' => 'ui-icon ui-icon-arrowthick-1-e',
-                )),
-                array(
-                    'class'         => 'disabled',
-                    'aria-disabled' => 'true',
-                    'aria-label'    => gTxt('next'),
-                )
-            );
-        }
-
-        $out[] = n.tag(join($nav).n, 'nav', array('class' => 'prev-next'));
     }
+
+
+    $nav[] = form(
+        n.tag(gTxt('page'), 'label', array(
+                'for' => 'current-page',
+            )
+        ).
+        n.tag_void('input', array(
+            'class'     => 'current-page',
+            'id'        => 'current-page',
+            'name'      => 'page',
+            'type'      => 'text',
+            'size'      => INPUT_XSMALL,
+            'inputmode' => 'numeric',
+            'pattern'   => '[0-9]+',
+            'value'     => $page,
+        )).
+        n.gTxt('of').
+        n.span($numPages, array('class' => 'total-pages')).
+        eInput($event).
+        hInput(compact('sort', 'dir', 'crit', 'search_method')),
+        '',
+        '',
+        'get'
+    );
+
+    // Next page.
+    if ($page < $numPages) {
+        $nav[] = n.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step);
+    } else {
+        $nav[] = n.span(
+            span(gTxt('next'), array(
+                'class' => 'ui-icon ui-icon-arrowthick-1-e',
+            )),
+            array(
+                'class'         => 'disabled',
+                'aria-disabled' => 'true',
+                'aria-label'    => gTxt('next'),
+            )
+        );
+    }
+
+    $out[] = n.tag(join($nav).n, 'nav', array('class' => 'prev-next', 'style' => ($numPages > 1 ? false : 'display:none')));
 
     return join('', $out);
 }
@@ -1219,27 +1208,34 @@ function assHead()
 
 function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
 {
-    if (!$help_var) {
+    global $txp_user, $prefs;
+
+    if (empty($help_var) || empty($prefs['module_pophelp'])) {
         return '';
     }
 
-    $lang_ui = get_pref('language_ui', LANG);
     $url = filter_var($help_var, FILTER_VALIDATE_URL);
 
-    if ($url === false) {
-        $destination = HELP_URL.'?item='.urlencode($help_var).'&language='.urlencode($lang_ui);
-    } else {
-        $destination = $url;
-    }
-
-    $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-help')), $destination, array(
-        'class'      => $class,
+    $atts = array(
         'rel'        => 'help',
         'target'     => '_blank',
         'title'      => gTxt('help'),
         'role'       => 'button',
-        'onclick'    => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
-    ));
+    );
+
+    if ($url === false) {
+        $atts['class'] = $class;
+        // Use inline pophelp, if unauthorized user or setup stage
+        if (empty($txp_user)) {
+            $url = '#';
+            $atts['data-item'] = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp($help_var);
+        } else {
+            $url = '?event=help&step=pophelp&item='.urlencode($help_var);
+        }
+        $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-help')), $url, $atts);
+    } else {
+        $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-extlink')), $url, $atts);
+    }
 
     return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
 }
@@ -1452,7 +1448,7 @@ function pageby_form($event, $val, $step = null)
  * @return string HTML
  */
 
-function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = '', $wraptag_val = array('div', 'div'))
+function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = '', $wraptag_val = array('div', 'div'), $extra = null)
 {
     extract(gpsa(array(
         'page',
@@ -1491,26 +1487,28 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
             eInput($event).
             sInput($step).
             hInput('id', $id).
-            hInput('sort', $sort).
-            hInput('dir', $dir).
-            hInput('page', $page).
-            hInput('search_method', $search_method).
-            hInput('crit', $crit).
+//            hInput(compact('id', 'sort', 'dir', 'page', 'search_method','crit')).
+            tInput().n.
             inputLabel(
                 $label_id,
                 tag_void('input', array('name' => $name, 'type' => 'file', 'required' => true, 'id' => $label_id, 'multiple' => $multiple)).
+                (isset($extra['postinput']) ? $extra['postinput'] : '').
+                fInput('reset', '', gTxt('reset')).
                 fInput('submit', '', gTxt('upload')),
                 $label,
                 array($pophelp, 'instructions_'.$pophelp),
                 $wraptag_class,
                 $wraptag_val
             ).
-            tInput().n,
+            tag(null, 'progress', array(
+                'class' => 'upload-progress',
+                'style' =>  'display:none; height:2px; width:100%; position:absolute; z-index:100')),
             'form', array(
                 'class'   => 'upload-form'.($class ? ' '.trim($class) : ''),
                 'method'  => 'post',
                 'enctype' => 'multipart/form-data',
-                'action'  => 'index.php',
+                'action'  => "index.php?event=$event&step=$step",
+                'style'   => 'position: relative'
             )
         ),
         $argv

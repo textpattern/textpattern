@@ -852,42 +852,16 @@ function doArticles($atts, $iscustom, $thing = null)
     $id        = ((!$id)        ? '' : " AND ID IN (".join(',', $ids).")")
         .((!$exclude)   ? '' : " AND ID NOT IN (".join(',', $exclude).")");
 
-    if (!isset($time) || $time === 'any') {
-        $time = ($month ? " AND Posted LIKE '".doSlash($month)."%'" : '').
-        ($time ? '' : " AND Posted <= ".now('posted'));
-    } elseif (strpos($time, '%') !== false) {
-        $month = $month ? strtotime($month) : time();
-        $time = " AND Posted LIKE '".doSlash(strftime($time, $month))."%'";
-    } else {
-        $start = $month ? strtotime($month) : false;
+    $timeq = '';
 
-        if ($start === false) {
-            $from = $month ? "'".doSlash($month)."'" : now('posted');
-            $start = time();
-        } else {
-            $from = "FROM_UNIXTIME($start)";
-        }
-
-        switch ($time) {
-            case 'future':
-                $time = " AND Posted > $from";
-                break;
-            case 'past':
-                $time = " AND Posted <= $from";
-                break;
-            default:
-                $stop = strtotime($time, $start) or $stop = time();
-
-                if ($start > $stop) {
-                    list($start, $stop) = array($stop, $start);
-                }
-
-                $time = " AND Posted BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)";
-        }
+    if ($time === null || $month || !$expired || $expired == '1') {
+        $timeq .= buildTimeSql($month, $time === null ? 'past' : $time);
     }
 
-    if (!$expired) {
-        $time .= " AND (".now('expires')." <= Expires OR Expires IS NULL)";
+    if ($expired && $expired != '1') {
+        $timeq .= buildTimeSql($expired, $time === null && !strtotime($expired) ? 'any' : $time, 'Expires');
+    } elseif (!$expired) {
+        $timeq .= " AND (".now('expires')." <= Expires OR Expires IS NULL)";
     }
 
     $custom = '';
@@ -923,7 +897,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $statusq = " AND Status = ".intval($status);
     }
 
-    $where = "1 = 1".$statusq.$time.
+    $where = "1 = 1".$statusq.$timeq.
         $search.$id.$category.$section.$excerpted.$author.$keywords.$custom.$frontpage;
 
     // Do not paginate if we are on a custom list.
@@ -980,10 +954,8 @@ function doArticles($atts, $iscustom, $thing = null)
         $fname = (!empty($listform) ? $listform : $form);
     }
 
-    if ($rs) {
+    if ($rs && $last = numRows($rs)) {
         $count = 0;
-        $last = numRows($rs);
-
         $articles = array();
 
         while ($a = nextRow($rs)) {
@@ -1016,6 +988,8 @@ function doArticles($atts, $iscustom, $thing = null)
         }
 
         return doLabel($label, $labeltag).doWrap($articles, $wraptag, compact('break', 'breakby', 'breakclass', 'class'));
+    } else {
+        return parse($thing, false);
     }
 }
 
@@ -1094,6 +1068,8 @@ function doArticle($atts, $thing = null)
         unset($GLOBALS['thisarticle']);
 
         return $article;
+    } else {
+        return parse($thing, false);
     }
 }
 
