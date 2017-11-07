@@ -130,7 +130,7 @@ eod;
 
     $out[] = script_js('../vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
         script_js('../vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
-        script_js('../vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL).
+//        script_js('../vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL).
         script_js(
             'var textpattern = '.json_encode(array(
                 'prefs'         => (object) null,
