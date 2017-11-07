@@ -81,7 +81,7 @@ EOS
     {
         $out[] = '<div class="txp-masthead">';
         $out[] = hed('Textpattern', 1, ' class="txp-branding"');
-        $out[] = hed(htmlspecialchars($GLOBALS["prefs"]["sitename"]), 2, ' class="txp-accessibility"');
+        $out[] = hed(htmlspecialchars(get_pref('sitename')), 2, ' class="txp-accessibility"');
         $out[] = navPop(1);
         $out[] = '</div>';
 
