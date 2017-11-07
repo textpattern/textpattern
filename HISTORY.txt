@@ -7,12 +7,13 @@ Changes in 4.7.0 (upcoming)
 * Added: User-selectable column list options in tables replaces 'Show more
   detail' checkboxes. Settings remembered per device.
 * Added: Valueless attributes.
-* Added: Short tags.
+* Added: Optional short tags.
 * Added: Tag global attributes: 'breakby', 'breakclass', 'class', 'escape', 'html_id',
   'not' and 'wraptag'.
 * Added: <txp:evaluate /> tag.
-* Added: <txp:header /> tag.
-* Added: <txp:article_custom /> tag can count pages. Enhanced 'month' and 'time' attributes.
+* Added: <txp:header /> tag allows to set HTML headers for page output.
+* Added: <txp:article_custom /> tag can count pages. Enhanced 'month', 'expired' and
+  'time' attributes.
 * Added: XML and JSON file support. Completely overhauled setup procedure to
   centralise and verify/delete prefs on upgrade. Table structure and preferences
   defined in files for easier maintenance (thanks, makss).
@@ -20,15 +21,21 @@ Changes in 4.7.0 (upcoming)
   preference).
 * Added: All users can administer their own key biographical info.
 * Added: Button to swap width/height values on image edit thumbnail generator.
+* Added: Multiple files upload with progress meter.
 * Added: Section searches by description.
 * Added: Visual indicator that a subset of search fields are in use.
 * Added: One-click comment searches by parent article (thanks, makss).
 * Changed: <txp:yield> tag now accepts 'name' and 'default' attributes.
+* Changed: Forms can recursively (up to depth 15) call themselves.
 * Changed: <txp:output_form txp-yield /> tag supports user-defined attributes, coupled
   with <txp:yield> changes above this allows for '<txp::shortcode />'-like tags.
 * Changed: <txp:page_title /> tag SEO - site name renders after page name,
   default separator changed from ': ' to ' | ', page numbers added.
 * Changed: <txp:breadcrumb /> can be used as a container tag.
+* Changed: <txp:category_list /> can output nested lists.
+* Changed: <txp:if_category /> accepts 'parent' attribute.
+* Changed: Pagination tags (like <txp:newer /> and <txp:older />) can be placed
+  before <txp:article /> tag.
 * Changed: <txp:image_author /> tag now accepts 'id' and 'name' attributes.
 * Changed: Reinstate <txp:keywords> tag and add wraptag/class/break attributes.
 * Changed: Deprecated the 'poplink' attribute on <txp:thumbnail /> tag.
@@ -40,8 +47,10 @@ Changes in 4.7.0 (upcoming)
   Override Form (if used) moved to Sort & Display subpanel. 'Advanced' twisty
   and its callback removed.
 * Changed: Upgrades land on Diagnostics panel, with suitable message.
-* Changed: Use JSON file to check for new releases/pre-releases instead of old
+* Changed: Use JSON file to check for new releases/pre-releases instead of legacy
   RPC server (thanks, makss).
+* Changed: Use local inline help files instead of legacy RPC server
+  (thanks, makss).
 * Changed: Clearer plugin list on Diagnostics panel.
 * Changed: Article posted/modified info and ID moved below Title field.
 * Changed: Enable HTTP 226 responses (thanks, da2x).
@@ -59,6 +68,7 @@ Changes in 4.7.0 (upcoming)
 * zxcvbn 4.4.2.
 * PrismJS 1.8.4.
 * PHPass 0.5.
+* Blueimp-fileupload 9.19.1.
 
 Changes in 4.6.2
 

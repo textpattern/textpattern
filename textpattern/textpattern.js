@@ -1313,7 +1313,6 @@ jQuery.fn.txpSortable = function (options) {
     });
 };
 
-
 /**
  * Password strength meter.
  *
@@ -1324,44 +1323,52 @@ jQuery.fn.txpSortable = function (options) {
  */
 
 textpattern.passwordStrength = function (options) {
-    jQuery('form').on('keyup', 'input.txp-strength-hint', function () {
-        var settings = $.extend({
-            'gtxt_prefix': ''
-        }, options);
+    jQuery.ajax({
+        type: 'GET',
+        url: 'https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js',
+        dataType: 'script',
+        cache: true,
+        success: function() {
+            jQuery('form').on('keyup', 'input.txp-strength-hint', function () {
+                var settings = $.extend({
+                    'gtxt_prefix': ''
+                }, options);
 
-        var me = jQuery(this);
-        var pass = me.val();
-        var passResult = zxcvbn(pass, user_inputs=[]);
-        var strengthMap = {
-            "0": {
-                "width": "5"
-            },
-            "1": {
-                "width": "28"
-            },
-            "2": {
-                "width": "50"
-            },
-            "3": {
-                "width": "75"
-            },
-            "4": {
-                "width": "100"
-            }
-        };
+                var me = jQuery(this);
+                var pass = me.val();
+                var passResult = zxcvbn(pass, user_inputs=[]);
+                var strengthMap = {
+                    "0": {
+                        "width": "5"
+                    },
+                    "1": {
+                        "width": "28"
+                    },
+                    "2": {
+                        "width": "50"
+                    },
+                    "3": {
+                        "width": "75"
+                    },
+                    "4": {
+                        "width": "100"
+                    }
+                };
 
-        var offset = strengthMap[passResult.score];
-        var meter = me.siblings('.strength-meter');
-        meter.empty();
+                var offset = strengthMap[passResult.score];
+                var meter = me.siblings('.strength-meter');
+                meter.empty();
 
-        if (pass.length > 0) {
-            meter.append('<div class="bar"></div><div class="indicator">' + textpattern.gTxt(settings.gtxt_prefix + 'password_strength_' + passResult.score) + '</div>');
+                if (pass.length > 0) {
+                    meter.append('<div class="bar"></div><div class="indicator">' + textpattern.gTxt(settings.gtxt_prefix + 'password_strength_' + passResult.score) + '</div>');
+                }
+
+                meter
+                    .find('.bar')
+                    .attr('class', 'bar password-strength-' + passResult.score)
+                    .css('width', offset.width+'%');
+            });
         }
-
-        meter
-            .find('.bar')
-            .attr('class', 'bar password-strength-' + passResult.score)
-            .css('width', offset.width+'%');
     });
 }
 
@@ -1849,10 +1856,7 @@ jQuery.fn.txpFileupload = function (options) {
         replaceFileInput: false,
         add: function (e, data) {
             var file = data.files[0], uploadErrors = [];
-/*            var acceptFileTypes = /^image\/(gif|jpe?g|png)$/i;
-            if(data.files[0]['type'] && !acceptFileTypes.test(data.files[0]['type'])) {
-                uploadErrors.push('Not an accepted file type');
-            }*/
+
             if(file['size'] && file['size'] > maxFileSize) {
                 uploadErrors.push('Filesize is too big')
                 textpattern.Console.addMessage(['<strong>'+file['name']+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd')
@@ -1876,7 +1880,7 @@ jQuery.fn.txpFileupload = function (options) {
         }
     }, options)).off('submit').submit(function (e) {
         e.preventDefault()
-        
+        textpattern.Console.announce('uploadEnd')
         form.fileupload('add', {
             files: fileInput.prop('files')
         })
