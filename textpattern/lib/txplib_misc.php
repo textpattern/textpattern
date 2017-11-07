@@ -5498,6 +5498,7 @@ function permlinkurl_id($id)
 function permlinkurl($article_array)
 {
     global $permlink_mode, $prefs, $permlinks, $production_status;
+    static $now = null;
 
     if (!$article_array || !is_array($article_array)) {
         return;
@@ -5517,6 +5518,7 @@ function permlinkurl($article_array)
         'section'   => null,
         'posted'    => null,
         'expires'   => null,
+        'uexpires'   => null,
     ), array_change_key_case($article_array, CASE_LOWER), false));
 
     if (empty($thisid)) {
@@ -5529,11 +5531,18 @@ function permlinkurl($article_array)
         return $permlinks[$thisid];
     }
 
+    if (!isset($now)) {
+        $now = strftime('%F %T');
+    }
+
     if (empty($prefs['publish_expired_articles']) &&
         !empty($expires) &&
-        $expires < time() &&
         $production_status != 'live' &&
-        txpinterface == 'public'
+        txpinterface == 'public' &&
+        (is_numeric($expires) ? $expires < time()
+            : (isset($uexpires) ? $uexpires < time()
+            : $expires < $now)
+        )
     ) {
         trigger_error(gTxt('permlink_to_expired_article', array('{id}' => $thisid)), E_USER_NOTICE);
     }
