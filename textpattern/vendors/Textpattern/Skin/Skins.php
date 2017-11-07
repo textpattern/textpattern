@@ -22,7 +22,7 @@
  */
 
 /**
- * Main
+ * Skins
  *
  * Manages the Skin admin tab features.
  *
@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin {
 
-    class Main extends MainBase implements MainInterface
+    class Skins extends SkinsBase implements SkinsInterface
     {
         /**
          * {@inheritdoc}
@@ -57,45 +57,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function create($row, $assets = null)
-        {
-            $this->skins = array($row['name']);
-
-            return $this->callSkinsMethod(__FUNCTION__, func_get_args());
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function edit($row)
-        {
-            return $this->callSkinsMethod(__FUNCTION__, func_get_args());
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
         public function duplicate($assets = null)
-        {
-            return $this->callSkinsMethod(__FUNCTION__, func_get_args());
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function duplicateAs($row, $assets = null)
-        {
-            return $this->callSkinsMethod(__FUNCTION__, func_get_args());
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function import($clean = true, $assets = null)
         {
             return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }
@@ -137,67 +99,14 @@ namespace Textpattern\Skin {
 
         private function callSkinsMethod($method, $args = array())
         {
-            $done = substr($method, -1) === 'e' ? 'd' : 'ed';
-            $results = array();
+            $instance = \Txp::get('Textpattern\Skin\Skin');
 
             foreach ($this->skins as $skin) {
-                try {
-                    $instance = \Txp::get('Textpattern\Skin\Skin', $skin);
-
-                    call_user_func_array(array($instance, $method), $args);
-
-                    $results[$skin]['success'][] = gtxt(
-                        'skin_step_success',
-                        array('{step}' => ($method === 'duplicateAs' ? 'duplicated' : $method.$done))
-                    );
-                } catch (\Exception $e) {
-                    $results[$skin]['failure'][] = $e->getMessage();
-                }
+                $instance->setSkin($skin);
+                call_user_func_array(array($instance, $method), $args);
             }
 
-            return self::getUIMessage($results);
-        }
-
-        /**
-         * Builds the UI message to display.
-         *
-         * @param  array  $results Associative array of the skin(s)
-         *                         and their success/failure messages.
-         * @return string The UI message to display.
-         * @see callSkinsMethod().
-         */
-
-        public static function getUIMessage($results)
-        {
-            $out = array();
-
-            $success = false;
-            $failure = false;
-
-            foreach ($results as $skin => $result) {
-                $success ?: $success = array_key_exists('success', $result);
-                $failure ?: $failure = array_key_exists('failure', $result);
-
-                foreach ($result as $severity => $messages) {
-                    foreach ($messages as $message) {
-                        if (array_key_exists($message, $out) && $severity === 'success') {
-                            $out[$message] .= ', '.$skin;
-                        } else {
-                            $out[$message] = $message.($severity === 'success' ? ' '.$skin : '');
-                        }
-                    }
-                }
-            }
-
-            if ($success) {
-                $failure ? $status = 'E_WARNING' : '';
-            } else {
-                $status = 'E_ERROR';
-            }
-
-            $out = implode('<br>', $out);
-
-            return isset($status) ? array($out, constant($status)) : $out;
+            $this->results = $instance->results;
         }
 
         /**

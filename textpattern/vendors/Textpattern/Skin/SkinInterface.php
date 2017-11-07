@@ -22,7 +22,7 @@
  */
 
 /**
- * Skin Interface
+ * Skin only Interface
  *
  * Implemented by SkinBase.
  *
@@ -35,69 +35,54 @@ namespace Textpattern\Skin {
     interface SkinInterface
     {
         /**
-         * Constructor
+         * Creates a skin and its assets.
+         * Sets the skin property from the $row['name'] value.
          *
-         * @param  string $skin  Skin name;
-         * @param  array  $infos Skin infos;
+         * @param  array  $row         Associative array of the txp_skin table related fields
+         *                             ('name', 'title', 'version', 'description', 'author', 'author_uri');
+         * @param  mixed  $assets      The skin assets to duplicate (all if not set).
+         *         bool                false // none
+         *         string              'pages'|'forms'|'styles'
+         *         array               array('pages', 'forms') // skips styles
+         *         array               array(
+         *                                 'pages'  => array('default', 'error_default'),
+         *                                 'forms'  => array(), // all forms
+         *                             ) // skips styles
+         * @return false on error.
          */
 
-        public function __construct($skin = null);
+        public function create($row, $assets = null);
 
         /**
-         * Tells whether the skin row exists or not.
+         * Edits a skin and its assets.
+         * Changes the skin property to the $row['name'] value once the skin row updated.
          *
-         * @return bool
+         * @param  array $row Associative array of the txp_skin table related fields
+         *                   ('name', 'title', 'version', 'description', 'author', 'author_uri');
+         * @return false on error.
          */
 
-        public function skinIsInstalled();
+        public function edit($row);
 
         /**
-         * Pseudo locks the skin directory by adding a 'lock' directory
-         * and setting the $locked property.
+         * Duplicates a skin and its assets from new skin data.
          *
-         * @return bool
+         * @param  array  $row    Associative array of the txp_skin table related fields
+         *                        ('name', 'title', 'version', 'description', 'author', 'author_uri');
+         * @param  mixed  $assets The skin assets to duplicate (see create(), all if not set).
+         * @return false on error.
          */
 
-        public function lockSkin();
+        public function duplicateAs($row, $assets = null);
 
         /**
-         * Creates a directory.
+         * Edits a skin and its assets.
          *
-         * @throws \Exception
+         * @param  bool  $clean   Whether to remove extra templates or not;
+         * @param  mixed $assets The skin assets to import (see create(), all if not set).
+         * @return false on error.
          */
 
-        public function mkDir($path = null);
-
-        /**
-         * Pseudo unlocks the skin directory by emoving the 'lock' directory
-         * and resetting the $locked property.
-         *
-         * @return bool
-         */
-
-        public function unlockSkin();
-
-        /**
-         * Removes a directory.
-         *
-         * @throws \Exception
-         */
-
-        public function rmDir($path = null);
-
-        /**
-         * Gets the skin or asset related directory path.
-         *
-         * @param  string $basename String to add to the skin path ($dir property by default);
-         * @return string           The path
-         */
-
-        public function getPath($basename = null);
-
-        /**
-         * Creates the skin and/or its asset related templates.
-         *
-         * @throws \Exception
-         */
+        public function import($clean = true, $assets = null);
     }
 }

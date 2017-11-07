@@ -28,7 +28,7 @@
  *
  * @since   4.7.0
  * @package Skin
- * @see     MainInterface
+ * @see     SkinsInterface
  */
 
 namespace Textpattern\Skin {
@@ -54,8 +54,8 @@ namespace Textpattern\Skin {
         /**
          * Creates skin templates
          *
-         * @param array $templates Template names.
-         * @throws \Exception
+         * @param  array $templates Template names.
+         * @return false on error.
          */
 
         public function create($templates = null);
@@ -63,9 +63,9 @@ namespace Textpattern\Skin {
         /**
          * Changes templates related skin
          *
-         * @param string $from      The skin name from which templates are adopted.
-         * @param array  $templates Template names.
-         * @throws \Exception
+         * @param  string $from      The skin name from which templates are adopted.
+         * @param  array  $templates Template names.
+         * @return false  on error.
          */
 
         public function adopt($from, $templates = null);
@@ -73,9 +73,9 @@ namespace Textpattern\Skin {
         /**
          * Import the skin related templates.
          *
-         * @param string $clean     Whether to remove extra templates or not.
-         * @param array  $templates Template names.
-         * @throws \Exception
+         * @param  string $clean     Whether to remove extra templates or not.
+         * @param  array  $templates Template names.
+         * @return false  on error.
          */
 
         public function import($clean = true, $templates = null);
@@ -112,9 +112,9 @@ namespace Textpattern\Skin {
         /**
          * Re-imports the skin related templates.
          *
-         * @param string $clean     Whether to remove extra templates or not.
-         * @param array  $templates Template names.
-         * @throws \Exception
+         * @param  string $clean     Whether to remove extra templates or not.
+         * @param  array  $templates Template names.
+         * @return false  on error.
          */
 
         public function update($clean = true, $templates = null);
@@ -122,8 +122,8 @@ namespace Textpattern\Skin {
         /**
          * Duplicates the skin related templates.
          *
-         * @param array $templates Template names.
-         * @throws \Exception
+         * @param  array $templates Template names.
+         * @return false on error.
          */
 
         public function duplicate($to, $templates = null);
@@ -145,9 +145,9 @@ namespace Textpattern\Skin {
         /**
          * Exports the skin related templates.
          *
-         * @param string $clean     Whether to remove extra templates or not.
-         * @param array  $templates Template names.
-         * @throws \Exception
+         * @param  string $clean     Whether to remove extra templates or not.
+         * @param  array  $templates Template names.
+         * @return false  on error.
          */
 
         public function export($clean = true, $templates = null);
@@ -173,8 +173,8 @@ namespace Textpattern\Skin {
         /**
          * Deletes the skin related templates.
          *
-         * @param array $templates Template names.
-         * @throws \Exception
+         * @param  array $templates Template names.
+         * @return false on error.
          */
 
         public function delete($templates = null);

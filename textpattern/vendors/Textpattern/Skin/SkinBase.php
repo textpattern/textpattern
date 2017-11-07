@@ -32,12 +32,13 @@
 
 namespace Textpattern\Skin {
 
-    abstract class SkinBase extends MainBase implements SkinInterface
+    abstract class SkinBase extends SkinsBase implements SkinAssetInterface
     {
         /**
          * The skin to work with.
          *
          * @var string
+         * @see setSkin()
          */
 
         protected $skin;
@@ -78,7 +79,18 @@ namespace Textpattern\Skin {
 
         public function __construct($skin = null)
         {
-            $skin ? $this->skin = strtolower(sanitizeForUrl($skin)) : '';
+            $skin ? $this->setSkin($skin) : '';
+        }
+
+        /**
+         * Set the skin property
+         */
+
+        public function setSkin($skin)
+        {
+            $this->skin = strtolower(sanitizeForUrl($skin));
+            $this->isInstalled = null;
+            $this->isInUse = null;
         }
 
         /**
@@ -102,10 +114,12 @@ namespace Textpattern\Skin {
 
         public static function isInstalled($skin)
         {
-            if (static::$installed === null) {
-                return (bool) safe_field('name', 'txp_skin', "name ='".doSlash($skin)."'");
+            $inInstalled = static::$installed ? array_key_exists($skin, static::$installed) : false;
+
+            if ($inInstalled) {
+                return $inInstalled;
             } else {
-                return array_key_exists($skin, static::$installed);
+                return (bool) safe_field('name', 'txp_skin', "name ='".doSlash($skin)."'");
             }
         }
 
@@ -173,7 +187,7 @@ namespace Textpattern\Skin {
                 return $locked;
             }
 
-            throw new \Exception(gtxt('unable_to_lock_skin'));
+            $this->setResults(gtxt('unable_to_lock_skin'));
         }
 
         /**
@@ -188,7 +202,7 @@ namespace Textpattern\Skin {
                 return true;
             }
 
-            throw new \Exception(
+            $this->setResults(
                 gtxt('directory_creation_failure', array('{name}' => basename($path)))
             );
         }
@@ -206,7 +220,7 @@ namespace Textpattern\Skin {
                 return true;
             }
 
-            throw new \Exception("unable_to_unlock_the_skin_directory");
+            $this->setResults(gtxt("unable_to_unlock_the_skin_directory"));
         }
 
         /**
@@ -221,7 +235,7 @@ namespace Textpattern\Skin {
                 return true;
             }
 
-            throw new \Exception(
+            $this->setResults(
                 gtxt('directory_deletion_failure', array('{name}' => basename($path)))
             );
         }

@@ -126,9 +126,13 @@ namespace Textpattern\Skin {
         public function create($templates = null)
         {
             if (!$this->skinIsInstalled()) {
-                throw new \Exception(
+                $this->setResults(
                     gtxt('unknown_skin', array('{name}' => $this->skin))
                 );
+
+                callback_event(static::$dir, 'creation_failed', 0, $callback_extra);
+
+                return false;
             }
 
             $templates ?: $templates = static::$essential;
@@ -142,13 +146,17 @@ namespace Textpattern\Skin {
 
             $sql_values = $this->getCreationSQLValues($templates);
 
-            if ($this->insertTemplates($this->getColumns(), $sql_values)) {
-                callback_event(static::$dir, 'created', 0, $callback_extra);
-            } else {
+            if (!$this->insertTemplates($this->getColumns(), $sql_values)) {
                 callback_event(static::$dir, 'creation_failed', 0, $callback_extra);
 
-                throw new \Exception($this->getFailureMessage('creation', $templates));
+                $this->setResults($this->getFailureMessage('creation', $templates));
+
+                return false;
             }
+
+            callback_event(static::$dir, 'created', 0, $callback_extra);
+
+            $this->setResults(gtxt(static::$dir.'_created'), false);
         }
 
         /**
@@ -173,13 +181,17 @@ namespace Textpattern\Skin {
 
             callback_event(static::$dir, 'import', 0, $callback_extra);
 
-            if ($this->adoptTemplates($from)) {
-                callback_event(static::$dir, 'edited', 0, $callback_extra);
-            } else {
+            if (!$this->adoptTemplates($from)) {
                 callback_event(static::$dir, 'edit_failed', 0, $callback_extra);
 
-                throw new \Exception($this->getFailureMessage('edit', $failed));
+                $this->setResults($this->getFailureMessage('edit', $failed));
+
+                return false;
             }
+
+            callback_event(static::$dir, 'adopted', 0, $callback_extra);
+
+            $this->setResults(gtxt(static::$dir.'_adopted'), false);
         }
 
         /**
@@ -204,9 +216,13 @@ namespace Textpattern\Skin {
         public function import($clean = true, $templates = null)
         {
             if (!$this->skinIsInstalled()) {
-                throw new \Exception(
+                $this->setResults(
                     gtxt('unknown_skin', array('{name}' => $this->skin))
                 );
+
+                callback_event(static::$dir, 'import_failed', 0, $callback_extra);
+
+                return false;
             }
 
             $was_locked = $this->locked;
@@ -245,20 +261,28 @@ namespace Textpattern\Skin {
                         $clean ? $this->dropRemovedFiles($passed) : '';
 
                         if ($failed) {
-                            throw new \Exception(
+                            $this->setResults(
                                 $this->getFailureMessage(
                                     'import',
                                     $failed,
                                     'skin_step_failure_for_duplicated_templates'
                                 )
                             );
-                        }
-                    } else {
-                        callback_event(static::$dir, 'import_failed', 0, $callback_extra);
 
-                        throw new \Exception(
+                            callback_event(static::$dir, 'import_failed', 0, $callback_extra);
+
+                            return false;
+                        }
+                        
+                        $this->setResults(gtxt(static::$dir.'_imported'), false);
+                    } else {
+                        $this->setResults(
                             $this->getFailureMessage('import', $passed)
                         );
+
+                        callback_event(static::$dir, 'import_failed', 0, $callback_extra);
+
+                        return false;
                     }
                 }
             }
@@ -348,7 +372,9 @@ namespace Textpattern\Skin {
                 return $drop;
             }
 
-            throw new \Exception(gtxt('unable_to_delete_obsolete_skin_templates'));
+            $this->setResults(gtxt('unable_to_delete_obsolete_skin_templates'));
+
+            return false;
         }
 
         /**
@@ -367,9 +393,13 @@ namespace Textpattern\Skin {
         public function duplicate($to, $templates = null)
         {
             if (!Skin::isInstalled($to)) {
-                throw new \Exception(
+                $this->setResults(
                     gtxt('unknown_skin', array('{name}' => $this->skin))
                 );
+
+                callback_event(static::$dir, 'duplication_failed', 0, $callback_extra);
+
+                return false;
             }
 
             $rows = $this->getTemplateRows($templates);
@@ -393,15 +423,19 @@ namespace Textpattern\Skin {
                 callback_event(static::$dir, 'duplicate', 0, $templates);
 
                 if ($sql_fields && $sql_values) {
-                    if ($this->insertTemplates($sql_fields, $sql_values)) {
-                        callback_event(static::$dir, 'duplicated', 0, $callback_extra);
-                    } else {
-                        callback_event(static::$dir, 'duplication_failed', 0, $callback_extra);
-
-                        throw new \Exception(
+                    if (!$this->insertTemplates($sql_fields, $sql_values)) {
+                        $this->setResults(
                             $this->getFailureMessage('duplication', $templates)
                         );
+
+                        callback_event(static::$dir, 'duplication_failed', 0, $callback_extra);
+
+                        return false;
                     }
+
+                    callback_event(static::$dir, 'duplicated', 0, $callback_extra);
+
+                    $this->setResults(gtxt(static::$dir.'_duplicated'), false);
                 }
             }
         }
@@ -450,12 +484,16 @@ namespace Textpattern\Skin {
                 $was_locked = $this->locked;
 
                 if (!$this->isWritable(static::$dir) && !$this->mkDir(static::$dir)) {
-                    throw new Exception(
+                    $this->setResults(
                         gtxt(
                             'unable_to_write_or_create_skin_directory',
                             array('{name}' => $this->skin)
                         )
                     );
+
+                    callback_event(static::$dir, 'export_failed', 0, $callback_extra);
+
+                    return false;
                 }
 
                 $this->lockSkin();
@@ -483,11 +521,13 @@ namespace Textpattern\Skin {
                 if ($failed) {
                     $callback_extra['templates'] = $failed;
 
-                    callback_event(static::$dir, 'export_failed', 0, $callback_extra);
-
-                    throw new \Exception(
+                    $this->setResults(
                         $this->getFailureMessage('export', $failed)
                     );
+
+                    callback_event(static::$dir, 'export_failed', 0, $callback_extra);
+
+                    return false;
                 }
             }
         }
@@ -537,13 +577,17 @@ namespace Textpattern\Skin {
 
                 callback_event(static::$dir, 'delete', 0, $callback_extra);
 
-                if ($this->deleteTemplates()) {
-                    callback_event(static::$dir, 'deleted', 0, $callback_extra);
-                } else {
+                if (!$this->deleteTemplates()) {
+                    $this->setResults($this->getFailureMessage('deletion', $templates));
+
                     callback_event(static::$dir, 'deletion_failed', 0, $callback_extra);
 
-                    throw new \Exception($this->getFailureMessage('deletion', $templates));
+                    return false;
                 }
+
+                $this->setResults(gtxt(static::$dir.'_deleted'), false);
+
+                callback_event(static::$dir, 'deleted', 0, $callback_extra);
             }
         }
 
