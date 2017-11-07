@@ -347,7 +347,7 @@ abstract class Theme
 
     public function announce($thing = array('', 0), $modal = false)
     {
-        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
+        return $this->_announce($thing, false, $modal);
     }
 
     /**
@@ -366,7 +366,71 @@ abstract class Theme
 
     public function announce_async($thing = array('', 0), $modal = false)
     {
-        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
+        return $this->_announce($thing, true, $modal);
+    }
+
+    /**
+     * Output notification message for synchronous HTML and asynchronous JavaScript views.
+     *
+     */
+
+    private function _announce($thing, $async, $modal)
+    {
+        // $thing[0]: message text.
+        // $thing[1]: message type, defaults to "success" unless empty or a different flag is set.
+
+        if ($thing === '') {
+            return '';
+        }
+
+        if (!is_array($thing) || !isset($thing[1])) {
+            $thing = array($thing, 0);
+        }
+
+        switch ($thing[1]) {
+            case E_ERROR:
+                $class = 'error';
+                $icon = 'ui-icon-alert';
+                break;
+            case E_WARNING:
+                $class = 'warning';
+                $icon = 'ui-icon-alert';
+                break;
+            default:
+                $class = 'success';
+                $icon = 'ui-icon-check';
+                break;
+        }
+
+        if ($modal) {
+            $html = ''; // TODO: Say what?
+            $js = 'window.alert("'.escape_js(strip_tags($thing[0])).'")';
+        } else {
+            $html = span(
+                span(null, array('class' => 'ui-icon '.$icon)).' '.gTxt($thing[0]).
+                sp.href('&#215;', '#close', ' class="close" role="button" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"'),
+                array(
+                    'class'     => 'messageflash '.$class,
+                    'role'      => 'alert',
+                    'aria-live' => 'assertive',
+                )
+            );
+
+            // Try to inject $html into the message pane no matter when _announce()'s output is printed.
+            $js = escape_js($html);
+            $js = <<< EOS
+                $(document).ready(function ()
+                {
+                    $("#messagepane").html("{$js}");
+                });
+EOS;
+        }
+
+        if ($async) {
+            return $js;
+        } else {
+            return script_js(str_replace('</', '<\/', $js), $html);
+        }
     }
 
     /**
