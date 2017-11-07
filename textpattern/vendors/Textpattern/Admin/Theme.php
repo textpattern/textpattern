@@ -69,6 +69,9 @@ abstract class Theme
 
     public $url;
 
+    public $cssPath;
+    public $jsPath;
+
     /**
      * Just a popup window.
      *
@@ -100,6 +103,9 @@ abstract class Theme
         $this->url = THEME.rawurlencode($name).'/';
         $this->is_popup = false;
         $this->message = '';
+        $this->cssPath = 'assets'.DS.'css';
+        $this->jsPath = 'assets'.DS.'js';
+
     }
 
     /**
@@ -317,6 +323,37 @@ abstract class Theme
      */
 
     abstract public function html_head();
+
+    /**
+     * HTML &lt;head&gt; custom section.
+     *
+     */
+
+    public function html_head_custom()
+    {
+        $out = '';
+        // Custom CSS (see theme README for usage instructions).
+        if (defined('admin_custom_css')) {
+            $custom_css = admin_custom_css;
+        } else {
+            $custom_css = 'custom.css';
+        }
+        if (file_exists(txpath.DS.THEME.$this->name.DS.$this->cssPath.DS.$custom_css)) {
+            $out .= '<link rel="stylesheet" href="'.$this->url.'assets/css/'.$custom_css.'">'.n;
+        }
+
+        // Custom JavaScript (see theme README for usage instructions).
+        if (defined('admin_custom_js')) {
+            $custom_js = admin_custom_js;
+        } else {
+            $custom_js = 'custom.js';
+        }
+        if (file_exists(txpath.DS.THEME.$this->name.DS.$this->jsPath.DS.$custom_js)) {
+            $out .= '<script src="'.$this->url.'assets/js/'.$custom_js.'"></script>'.n;
+        }
+
+        return $out;
+    }
 
     /**
      * Draw the theme's header.

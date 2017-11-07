@@ -29,37 +29,11 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
     {
-        $cssPath = 'assets'.DS.'css';
-        $jsPath = 'assets'.DS.'js';
-
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">';
         $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.min.css">';
-
-        // Custom CSS (see theme README for usage instructions).
-        if (defined('admin_custom_css')) {
-            $custom_css = admin_custom_css;
-        } else {
-            $custom_css = 'custom.css';
-        }
-
-        if (file_exists(txpath.DS.THEME.$this->name.DS.$cssPath.DS.$custom_css)) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/'.$custom_css.'">';
-        }
-
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
         $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
-
-        // Custom JavaScript (see theme README for usage instructions).
-        if (defined('admin_custom_js')) {
-            $custom_js = admin_custom_js;
-        } else {
-            $custom_js = 'custom.js';
-        }
-
-        if (file_exists(txpath.DS.THEME.$this->name.DS.$jsPath.DS.$custom_js)) {
-            $out[] = '<script src="'.$this->url.'assets/js/'.$custom_js.'"></script>'.n;
-        }
 
         return join(n, $out);
     }
