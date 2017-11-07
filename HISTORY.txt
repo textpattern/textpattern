@@ -47,7 +47,7 @@ Changes in 4.7.0 (upcoming)
   Override Form (if used) moved to Sort & Display subpanel. 'Advanced' twisty
   and its callback removed.
 * Changed: Upgrades land on Diagnostics panel, with suitable message.
-* Changed: Use JSON file to check for new releases/pre-releases instead of old
+* Changed: Use JSON file to check for new releases/pre-releases instead of legacy
   RPC server (thanks, makss).
 * Changed: Use local inline help files instead of old RPC server (thanks, makss).
 * Changed: Clearer plugin list on Diagnostics panel.
