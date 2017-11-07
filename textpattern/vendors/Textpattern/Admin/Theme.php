@@ -174,31 +174,36 @@ abstract class Theme
     /**
      * Get a list of all theme names.
      *
-     * @return array Alphabetically sorted array of all available theme names
+     * @param  int $format 
+     *   0 - names
+     *   1 - name => title              Used for selectInput
+     *   2 - name => manifest(array)    Now not used, reserved
+     *
+     * @return array of all available theme names
      */
 
-    public static function names()
+    public static function names($format = 0)
     {
-        $dirs = glob(txpath.DS.THEME.'*');
-
-        if (is_array($dirs)) {
-            foreach ($dirs as $d) {
-                // Extract trailing directory name.
-                preg_match('#(.*)[\\/]+(.*)$#', $d, $m);
-                $name = $m[2];
-
-                // Accept directories containing an equally named .php file.
-                if (is_dir($d) && ($d != '.') && ($d != '..') && isset($name) && is_file($d.DS.$name.'.php')) {
-                    $out[] = $name;
+        $out = array();
+        if ($files = glob(txpath.DS.THEME.'*'.DS.'manifest\.json')) {
+            foreach ($files as $file) {
+                $file = realpath($file);
+                if (preg_match('%^(.*/(\w+))/manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
+                    if (@$manifest['txp-type'] == 'textpattern-admin-theme' && is_file($mm[1].DS.$mm[2].'.php')) {
+                        $manifest['title'] = empty($manifest['title']) ? ucwords($mm[2]) : $manifest['title'];
+                        if ($format == 1) {
+                            $out[$mm[2]] = $manifest['title'];
+                        } elseif ($format == 2) {
+                            $out[$mm[2]] = $manifest;
+                        } else {
+                            $out[] = $mm[2];
+                        }
+                    }
                 }
             }
-
-            sort($out, SORT_STRING);
-
-            return $out;
         }
 
-        return array();
+        return $out;
     }
 
     /**
@@ -365,7 +370,7 @@ abstract class Theme
     }
 
     /**
-     * Define bureaucratic details of this theme.
+     * Return details of this theme.
      *
      * All returned items are optional.
      *
@@ -374,13 +379,7 @@ abstract class Theme
 
     public function manifest()
     {
-        return array(
-            'title'       => '', // Human-readable title of this theme. No HTML, keep it short.
-            'author'      => '', // Name(s) of this theme's creator(s).
-            'author_uri'  => '', // URI of the theme's site. Decent vanity is accepted.
-            'version'     => '', // Version numbering. Mind version_compare().
-            'description' => '', // Human readable short description. No HTML.
-            'help'        => '', // URI of the theme's help and docs. Strictly optional.
-        );
+
+        return @json_decode(file_get_contents($this->url.'manifest.json'), true);
     }
 }

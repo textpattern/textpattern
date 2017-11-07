@@ -203,17 +203,4 @@ EOS;
             return script_js(str_replace('</', '<\/', $js), $html);
         }
     }
-
-    function manifest()
-    {
-        global $prefs;
-
-        return array(
-            'title'       => 'Hive (Flat Neutral)',
-            'description' => 'Textpattern CMS Hive admin theme (Flat Neutral)',
-            'version'     => '4.7.0-dev',
-            'author'      => 'Phil Wareham',
-            'author_uri'  => 'https://github.com/philwareham/textpattern-hive-admin-theme',
-        );
-    }
 }
