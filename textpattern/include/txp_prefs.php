@@ -87,7 +87,7 @@ function prefs_save()
     }
 
     if (!empty($post['file_max_upload_size'])) {
-        $post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size']);
+        $post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size'], false);
     }
 
     if (isset($post['auto_dst'])) {
@@ -140,6 +140,7 @@ function prefs_save()
     }
 
     update_lastmod('preferences_saved');
+    $prefs = get_prefs();
 
     prefs_list(gTxt('preferences_saved'));
 }
@@ -193,6 +194,8 @@ function prefs_list($message = '')
     $groupOut = array();
 
     if (numRows($rs)) {
+        $pophelp_keys = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp_keys('prefs');
+
         while ($a = nextRow($rs)) {
             if (!has_privs('prefs.'.$a['event'])) {
                 continue;
@@ -229,11 +232,7 @@ function prefs_list($message = '')
                 $label = $a['name'];
             }
 
-            // TODO: remove exception when custom fields move to meta store.
-            $help = '';
-            if (strpos($a['name'], 'custom_') === false) {
-                $help = $a['name'];
-            }
+            $help = in_array($a['name'], $pophelp_keys, true) ? $a['name'] : '';
 
             if ($a['html'] == 'text_input') {
                 $size = INPUT_REGULAR;
@@ -773,43 +772,19 @@ function defaultPublishStatus($name, $val)
 }
 
 /**
- * Gets the maximum allowed file upload size.
+ * Renders a HTML &lt;select&gt; list of module_pophelp options.
  *
- * Computes the maximum acceptable file size to the application if the
- * user-selected value is larger than the maximum allowed by the current PHP
- * configuration.
- *
- * @param  int $user_max Desired upload size supplied by the administrator
- * @return int Actual value; the lower of user-supplied value or system-defined value
+ * @param  string $name HTML name and id of the list
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
  */
 
-function real_max_upload_size($user_max)
+function module_pophelp($name, $val)
 {
-    // The minimum of the candidates, is the real max. possible size
-    $candidates = array($user_max,
-                        ini_get('post_max_size'),
-                        ini_get('upload_max_filesize'), );
-    $real_max = null;
-    foreach ($candidates as $item) {
-        $val = floatval($item);
-        $modifier = strtolower(substr(trim($item), -1));
-        switch ($modifier) {
-            // The 'G' modifier is available since PHP 5.1.0
-            case 'g':
-                $val *= 1024;
-            case 'm':
-                $val *= 1024;
-            case 'k':
-                $val *= 1024;
-        }
-        if ($val > 1) {
-            if (is_null($real_max)) {
-                $real_max = $val;
-            } elseif ($val < $real_max) {
-                $real_max = $val;
-            }
-        }
-    }
+    $vals = array(
+        '0'  => gTxt('none'),
+        '1'  => gTxt('pophelp'),
+    );
 
-    return $real_max;
+    return selectInput($name, $vals, $val, '', '', $name);
 }

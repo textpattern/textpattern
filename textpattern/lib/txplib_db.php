@@ -1480,7 +1480,7 @@ function now($type, $update = false)
     static $nows = array();
     static $time = null;
 
-    if (!in_array($type, array('posted', 'expires', 'created'))) {
+    if (!in_array($type = strtolower($type), array('posted', 'expires', 'created'))) {
         return false;
     }
 

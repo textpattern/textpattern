@@ -62,6 +62,7 @@ $vars = array(
     'AnnotateInvite',
     'publish_now',
     'reset_time',
+    'expire_now',
     'AuthorID',
     'sPosted',
     'LastModID',
@@ -233,7 +234,10 @@ function article_save()
     }
 
     // Set and validate expiry timestamp.
-    if (empty($exp_year)) {
+    if ($expire_now) {
+        $ts = time();
+        $expires = $ts - tz_offset($ts);
+    } elseif (empty($exp_year)) {
         $expires = 0;
     } else {
         if (empty($exp_month)) {
@@ -617,7 +621,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
             return;
         }
 
-        $rs['reset_time'] = $rs['publish_now'] = false;
+        $rs['reset_time'] = $rs['publish_now'] = $rs['expire_now'] = false;
     } else {
         $pull = false; // Assume they came from post.
 
@@ -914,7 +918,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 $persist_timestamp = time();
             }
 
-            $posted_block = pluggable_ui(
+            $posted_block = tag(pluggable_ui(
                 'article_ui',
                 'timestamp',
                 inputLabel(
@@ -942,10 +946,10 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 n.tag(
                     checkbox('publish_now', '1', true, '', 'publish_now').
                     n.tag(gTxt('set_to_now'), 'label', array('for' => 'publish_now')),
-                    'div', array('class' => 'posted-now')
+                    'div', array('class' => 'txp-form-field posted-now')
                 ),
                 array('sPosted' => $persist_timestamp) + $rs
-            );
+            ), 'div', array('id' => 'publish-datetime-group'));
 
             // Expires.
             if (!empty($store_out['exp_year'])) {
@@ -957,7 +961,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                 $persist_timestamp = 0;
             }
 
-            $expires_block = pluggable_ui(
+            $expires_block = tag(pluggable_ui(
                 'article_ui',
                 'expires',
                 inputLabel(
@@ -981,9 +985,14 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
                     'expire_time',
                     array('', 'instructions_expire_time'),
                     array('class' => 'txp-form-field time expires')
+                ).
+                n.tag(
+                    checkbox('expire_now', '1', false, '', 'expire_now').
+                    n.tag(gTxt('set_expire_now'), 'label', array('for' => 'expire_now')),
+                    'div', array('class' => 'txp-form-field expire-now')
                 ),
                 $rs
-            );
+            ), 'div', array('id' => 'expires-datetime-group'));
         } else {
             // Timestamp.
             $posted_block = $partials['posted']['html'];
@@ -2016,7 +2025,7 @@ function article_partial_posted($rs)
         n.tag(
             checkbox('reset_time', '1', $reset_time, '', 'reset_time').
             n.tag(gTxt('reset_time'), 'label', array('for' => 'reset_time')),
-            'div', array('class' => 'reset-time')
+            'div', array('class' => 'txp-form-field reset-time')
         );
 
     return n.tag_start('div', array('id' => 'publish-datetime-group')).
@@ -2060,6 +2069,11 @@ function article_partial_expires($rs)
             'expire_time',
             array('', 'instructions_expire_time'),
             array('class' => 'txp-form-field time expires')
+        ).
+        n.tag(
+            checkbox('expire_now', '1', $expire_now, '', 'expire_now').
+            n.tag(gTxt('set_expire_now'), 'label', array('for' => 'expire_now')),
+            'div', array('class' => 'txp-form-field expire-now')
         ).
         hInput('sExpires', $sExpires);
 

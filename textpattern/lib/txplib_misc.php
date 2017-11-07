@@ -857,16 +857,16 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
         }
 
         $file = get_uploaded_file($file);
-
-        if (get_pref('file_max_upload_size') < filesize($file)) {
-            unlink($file);
-
-            return upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
-        }
     }
 
     if (empty($file)) {
         return upload_get_errormsg(UPLOAD_ERR_NO_FILE);
+    }
+
+    if (get_pref('file_max_upload_size') < filesize($file)) {
+        unlink($file);
+
+        return upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
     }
 
     list($w, $h, $extension) = getimagesize($file);
@@ -2784,12 +2784,12 @@ function stripPHP($in)
  * @package Form
  */
 
-function event_category_popup($name, $cat = '', $id = '')
+function event_category_popup($name, $cat = '', $id = '', $atts = array())
 {
     $rs = getTree('root', $name);
 
     if ($rs) {
-        return treeSelectInput('category', $rs, $cat, $id);
+        return treeSelectInput('category', $rs, $cat, $id, 0, $atts);
     }
 
     return false;
@@ -4317,7 +4317,7 @@ function parse_form($name)
     static $stack = array(), $depth = null;
 
     if ($depth === null) {
-        $depth = get_pref('form_circular_depth', 31);
+        $depth = get_pref('form_circular_depth', 15);
     }
 
     $out = '';
@@ -5104,6 +5104,66 @@ function buildCustomSql($custom, $pairs)
 }
 
 /**
+ * Build a query qualifier to filter time fields from the
+ * result set.
+ *
+ * @param   string $month A starting time point
+ * @param   string $time  A time offset
+ * @param   string $field The field to filter
+ * @return  string An SQL qualifier for a query's 'WHERE' part
+ */
+
+function buildTimeSql($month, $time, $field = 'Posted')
+{
+    $safe_field = '`'.doSlash($field).'`';
+    $timeq = '';
+
+    if ($month === 'past' || $month === 'any' || $month === 'future') {
+        if ($month === 'past') {
+            $timeq = " AND $safe_field <= ".now($field);
+        } elseif ($month === 'future') {
+            $timeq = " AND $safe_field > ".now($field);
+        }
+    } elseif ($time === 'past' || $time === 'any' || $time === 'future') {
+        if ($time === 'past') {
+            $timeq = " AND $safe_field <= ".now($field);
+        } elseif ($time === 'future') {
+            $timeq = " AND $safe_field > ".now($field);
+        }
+
+        $timeq .= ($month ? " AND $safe_field LIKE '".doSlash($month)."%'" : '');
+    } elseif (strpos($time, '%') !== false) {
+        $start = $month ? strtotime($month) : time() or $start = time();
+        $timeq = " AND $safe_field LIKE '".doSlash(strftime($time, $start))."%'";
+    } else {
+        $start = $month ? strtotime($month) : false;
+
+        if ($start === false) {
+            $from = $month ? "'".doSlash($month)."'" : now($field);
+            $start = time();
+        } else {
+            $from = "FROM_UNIXTIME($start)";
+        }
+
+        if ($time === 'since') {
+            $timeq = " AND $safe_field > $from";
+        } elseif ($time === 'until') {
+            $timeq = " AND $safe_field <= $from";
+        } else {
+            $stop = strtotime($time, $start) or $stop = time();
+
+            if ($start > $stop) {
+                list($start, $stop) = array($stop, $start);
+            }
+
+            $timeq = " AND ".($start == $stop ? "0" : "$safe_field BETWEEN FROM_UNIXTIME($start) AND FROM_UNIXTIME($stop)");
+        }
+    }
+
+    return $timeq;
+}
+
+/**
  * Sends a HTTP status header.
  *
  * @param   string $status The HTTP status code
@@ -5279,7 +5339,7 @@ function join_qs($q, $sep = '&amp;')
  * echo join_atts(array('class' => 'myClass', 'disabled' => true));
  */
 
-function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
+function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING, $glue = ' ')
 {
     if (!is_array($atts)) {
         return $atts ? ' '.trim($atts) : '';
@@ -5298,7 +5358,7 @@ function join_atts($atts, $flags = TEXTPATTERN_STRIP_EMPTY_STRING)
             if ($name == 'href' || $name == 'src') {
                 $value = join_qs($value);
             } else {
-                $value = txpspecialchars(join(' ', $value));
+                $value = txpspecialchars(join($glue, $value));
             }
         } else {
             $value = txpspecialchars($value === true ? $name : $value);
@@ -5335,8 +5395,8 @@ function pagelinkurl($parts, $inherit = array())
     $keys = array_merge($inherit, $parts);
 
     if (isset($prefs['custom_url_func'])
-        and is_callable($prefs['custom_url_func'])
-        and ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== false) {
+        && is_callable($prefs['custom_url_func'])
+        && ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== false) {
         return $url;
     }
 
@@ -5386,7 +5446,7 @@ function pagelinkurl($parts, $inherit = array())
             unset($keys['c'], $keys['context']);
         }
 
-        return rtrim($url, '/').join_qs($keys);
+        return (empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
     }
 }
 
@@ -6946,4 +7006,47 @@ function JSONPrettyPrint($json)
     }
 
     return $result;
+}
+
+/* Gets the maximum allowed file upload size.
+ *
+ * Computes the maximum acceptable file size to the application if the
+ * user-selected value is larger than the maximum allowed by the current PHP
+ * configuration.
+ *
+ * @param  int $user_max Desired upload size supplied by the administrator
+ * @return int Actual value; the lower of user-supplied value or system-defined value
+ */
+
+function real_max_upload_size($user_max, $php = true)
+{
+    // The minimum of the candidates, is the real max. possible size
+    $candidates = $php ? array($user_max,
+        ini_get('post_max_size'),
+        ini_get('upload_max_filesize')
+    ) : array($user_max);
+    $real_max = null;
+
+    foreach ($candidates as $item) {
+        $val = floatval($item);
+        $modifier = strtolower(substr(trim($item), -1));
+
+        switch ($modifier) {
+            // The 'G' modifier is available since PHP 5.1.0
+            case 'g':
+                $val *= 1024;
+            case 'm':
+                $val *= 1024;
+            case 'k':
+                $val *= 1024;
+        }
+
+        if ($val >= 1) {
+            if (is_null($real_max) || $val < $real_max) {
+                $real_max = floor($val);
+            }
+        }
+    }
+
+    return $real_max;
 }
