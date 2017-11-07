@@ -5534,7 +5534,7 @@ function permlinkurl($article_array)
         !empty($expires) &&
         $production_status != 'live' &&
         txpinterface == 'public' &&
-        $uexpires < time()
+        (is_numeric($expires) ? $expires : $uexpires) < time()
     ) {
         trigger_error(gTxt('permlink_to_expired_article', array('{id}' => $thisid)), E_USER_NOTICE);
     }
