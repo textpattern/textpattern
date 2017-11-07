@@ -102,8 +102,7 @@ function end_page()
             )
         );
 
-        echo /*script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL, array(array('admin', 'admin'), array('new_pass_form', 'change_pass'))).*/
-            script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL).
+        echo script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL).
             script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON)).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }
