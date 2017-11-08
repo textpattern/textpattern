@@ -549,7 +549,7 @@ function doDiagnostics()
 
             gTxt('os_version').cs.php_uname('s').' '.php_uname('r').n,
 
-            gTxt('theme_name').cs.$theme_name.sp.$theme_manifest['version'].n,
+            gTxt('theme_name').cs.$theme_name.sp.@$theme_manifest['version'].n,
 
             ($active_plugins ? gTxt('active_plugins').cs.n.t.join(n.t, $active_plugins).n : ''),
 

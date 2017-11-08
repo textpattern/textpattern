@@ -524,17 +524,10 @@ function getTxpLogin()
     // Default theme selector.
     $core_themes = array('hive', 'hiveneutral');
 
-    $themes = \Textpattern\Admin\Theme::names();
+    $vals = \Textpattern\Admin\Theme::names(1);
 
-    foreach ($themes as $t) {
-        $theme = \Textpattern\Admin\Theme::factory($t);
-
-        if ($theme) {
-            $m = $theme->manifest();
-            $title = empty($m['title']) ? ucwords($theme->name) : $m['title'];
-            $vals[$t] = (in_array($t, $core_themes) ? setup_gTxt('core_theme', array('{theme}' => $title)) : $title);
-            unset($theme);
-        }
+    foreach ($vals as $key => $title) {
+        $vals[$key] = (in_array($key, $core_themes) ? setup_gTxt('core_theme', array('{theme}' => $title)) : $title);
     }
 
     asort($vals, SORT_STRING);

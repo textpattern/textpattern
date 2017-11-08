@@ -148,6 +148,7 @@ function pagetop($pagetitle = '', $message = '')
 </style>
 <?php
 echo $theme->html_head();
+echo $theme->html_head_custom();
     callback_event('admin_side', 'head_end'); ?>
 </head>
 <body class="not-ready <?php echo $area; ?>" id="<?php echo $body_id; ?>">

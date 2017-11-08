@@ -1856,10 +1856,7 @@ jQuery.fn.txpFileupload = function (options) {
         replaceFileInput: false,
         add: function (e, data) {
             var file = data.files[0], uploadErrors = [];
-/*            var acceptFileTypes = /^image\/(gif|jpe?g|png)$/i;
-            if(data.files[0]['type'] && !acceptFileTypes.test(data.files[0]['type'])) {
-                uploadErrors.push('Not an accepted file type');
-            }*/
+
             if(file['size'] && file['size'] > maxFileSize) {
                 uploadErrors.push('Filesize is too big')
                 textpattern.Console.addMessage(['<strong>'+file['name']+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd')
@@ -1883,7 +1880,7 @@ jQuery.fn.txpFileupload = function (options) {
         }
     }, options)).off('submit').submit(function (e) {
         e.preventDefault()
-        
+        textpattern.Console.announce('uploadEnd')
         form.fileupload('add', {
             files: fileInput.prop('files')
         })
