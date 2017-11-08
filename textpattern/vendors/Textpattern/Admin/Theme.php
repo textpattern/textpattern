@@ -180,7 +180,7 @@ abstract class Theme
     /**
      * Get a list of all theme names.
      *
-     * @param  int $format 
+     * @param  int $format
      *   0 - names
      *   1 - name => title              Used for selectInput
      *   2 - name => manifest(array)    Now not used, reserved
@@ -338,8 +338,10 @@ abstract class Theme
         } else {
             $custom_css = 'custom.css';
         }
-        if (file_exists(txpath.DS.THEME.$this->name.DS.$this->cssPath.DS.$custom_css)) {
-            $out .= '<link rel="stylesheet" href="'.$this->url.'assets/css/'.$custom_css.'">'.n;
+
+        $custom = empty($this->cssPath) ? $custom_css : $this->cssPath.DS.$custom_css;
+        if (file_exists(txpath.DS.THEME.$this->name.DS.$custom)) {
+            $out .= '<link rel="stylesheet" href="'.$this->url.$custom.'">'.n;
         }
 
         // Custom JavaScript (see theme README for usage instructions).
@@ -348,8 +350,10 @@ abstract class Theme
         } else {
             $custom_js = 'custom.js';
         }
-        if (file_exists(txpath.DS.THEME.$this->name.DS.$this->jsPath.DS.$custom_js)) {
-            $out .= '<script src="'.$this->url.'assets/js/'.$custom_js.'"></script>'.n;
+
+        $custom = empty($this->jsPath) ? $custom_js : $this->jsPath.DS.$custom_js;
+        if (file_exists(txpath.DS.THEME.$this->name.DS.$custom)) {
+            $out .= '<script src="'.$this->url.$custom.'"></script>'.n;
         }
 
         return $out;
