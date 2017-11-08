@@ -74,25 +74,13 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Renders results through a defined function.
-         *
-         * @param  string $via The function to call;
-         * @return mixed  Result of the function called.
-         */
-
-        public function renderResults($via = 'skin_list')
-        {
-            return call_user_func($via, $this->getResults());
-        }
-
-        /**
          * Builds the UI message to display from the results property.
          *
          * @return string The UI message to display.
          * @see renderResults().
          */
 
-        public function getResults()
+        public function getResults($use_status = true)
         {
             $out = array();
 
@@ -114,10 +102,12 @@ namespace Textpattern\Skin {
                 }
             }
 
-            if ($success) {
-                $failure ? $status = 'E_WARNING' : '';
-            } else {
-                $status = 'E_ERROR';
+            if ($use_status) {
+                if ($success) {
+                    $failure ? $status = 'E_WARNING' : '';
+                } else {
+                    $status = 'E_ERROR';
+                }
             }
 
             $out = implode('<br>', $out);
