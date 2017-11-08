@@ -352,6 +352,7 @@ htaccess_missing => .htaccess dosyası mevcut değil
 is_inaccessible => erişilebilir değil
 last_update => Son güncelleme
 last_update_check =>
+locale => Yerel
 low => Düşük
 missing_files => Kayıp dosyalar
 modified_files => Bazı Textpattern dosyaları değişitirilmiş
@@ -487,6 +488,7 @@ active_language => Etkin dil
 active_language_ui =>
 install_from_textpack =>
 install_textpack =>
+locale_not_available_for_language =>
 #@link
 add_new_link =>
 edit_link =>
@@ -609,8 +611,6 @@ is_dst => <abbr title="Günışığından Faydalanma">DST</abbr> etkinleştirils
 language => Dil
 leave_text_untouched => Metine müdahale etme
 link => Bağlantılar
-locale => Yerel
-locale_not_available_for_language =>
 logging => Kayıt tutma
 logs_expire => Kayıtlar kaç gün sonra silinsin?
 markup_default => Varsayılan biçim

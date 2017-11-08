@@ -352,6 +352,7 @@ htaccess_missing => فایل .htaccess موجود نیست
 is_inaccessible => دسترس‌پذیر نیست
 last_update => آخرین بهنگام‌سازی
 last_update_check =>
+locale => منطقه
 low => کم
 missing_files => فایل های یافت نشده
 modified_files => برخی از فایل‌های Textpattern نغییر یافته‌اند
@@ -487,6 +488,7 @@ active_language => زبان فعال
 active_language_ui =>
 install_from_textpack => نصب از Textpack
 install_textpack => نصب Textpack
+locale_not_available_for_language =>
 #@link
 add_new_link => افزودن لینک نو
 edit_link => ویرایش لینک
@@ -609,8 +611,6 @@ is_dst => <abbr title="زمان شبانه روزی">DST</abbr> فعال است�
 language => زبان
 leave_text_untouched => متن را دستکاری نکن
 link => لینک‌ها
-locale => منطقه
-locale_not_available_for_language =>
 logging => ورود
 logs_expire => گزارش‌ها پس از چند روز منقضی گردند؟
 markup_default => کد پیش‌فرض

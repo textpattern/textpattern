@@ -352,6 +352,7 @@ htaccess_missing => .htaccess فائل موجود نہیں
 is_inaccessible => کی رسائی نا پذیری ہے
 last_update => پچھلا تازہ کاری
 last_update_check =>
+locale => مقامیت
 low => پست
 missing_files => غائب‏ فائل
 modified_files => کچھ Textpattern کے فائل ترمیم کیے گئے ہیں
@@ -487,6 +488,7 @@ active_language => فعال زبان
 active_language_ui =>
 install_from_textpack =>
 install_textpack =>
+locale_not_available_for_language =>
 #@link
 add_new_link =>
 edit_link =>
@@ -609,8 +611,6 @@ is_dst => کیا <abbr title="Daylight Saving Time">DST</abbr> اہل بنا ہ�
 language => زبان
 leave_text_untouched =>
 link => روابط
-locale => مقامیت
-locale_not_available_for_language =>
 logging => سرگمی
 logs_expire => سرگامی کتنے دیں بعد حذف کریں ؟
 markup_default =>

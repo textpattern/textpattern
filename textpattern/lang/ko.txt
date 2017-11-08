@@ -352,6 +352,7 @@ htaccess_missing => .htaccess 파일이 존재하지 않음
 is_inaccessible => 접근할 수 없음
 last_update => 최종 갱신
 last_update_check =>
+locale => 언어 환경
 low => 간단히
 missing_files => 찾을 수 없는 파일들
 modified_files => 몇몀 텍스트패턴 파일이 수정됨
@@ -487,6 +488,7 @@ active_language => 현재 사용중인 언어
 active_language_ui =>
 install_from_textpack =>
 install_textpack =>
+locale_not_available_for_language =>
 #@link
 add_new_link =>
 edit_link =>
@@ -609,8 +611,6 @@ is_dst => <abbr title="Daylight Saving Time">일광절약</abbr>을 활성화합
 language => 언어
 leave_text_untouched => 텍스트를 그대로 사용
 link => 링크
-locale => 언어 환경
-locale_not_available_for_language =>
 logging => 로그 기록
 logs_expire => 며칠뒤에 로그를 삭제합니까?
 markup_default => 기본 마크업

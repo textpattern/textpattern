@@ -352,6 +352,7 @@ htaccess_missing => Thiếu tập tin .htaccess
 is_inaccessible => không thể truy cập
 last_update => Cập nhật lần cuối
 last_update_check =>
+locale => Bản địa hóa
 low => Thấp
 missing_files => tập tin bị thiếu
 modified_files => Một số tập tin Textpattern đã bị chỉnh sửa
@@ -487,6 +488,7 @@ active_language => Ngôn ngữ đang sử dụng:
 active_language_ui =>
 install_from_textpack => Cài từ Textpack
 install_textpack => Cài Textpack
+locale_not_available_for_language =>
 #@link
 add_new_link => Thêm liên kết mới
 edit_link => Sửa liên kết
@@ -609,8 +611,6 @@ is_dst => Bật tính năng Giờ mùa hè (<abbr title="Daylight Saving Time">D
 language => Ngôn ngữ
 leave_text_untouched => Giữ nguyên
 link => Liên kết
-locale => Bản địa hóa
-locale_not_available_for_language =>
 logging => Nhật ký
 logs_expire => Xóa nhật ký sau bao nhiêu ngày?
 markup_default => Định dạng mặc định

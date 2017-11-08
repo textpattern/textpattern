@@ -352,6 +352,7 @@ htaccess_missing => .htaccess fajl nedostaje
 is_inaccessible => je nedostupan/na
 last_update => Poslednji put osvežen
 last_update_check =>
+locale =>
 low => Nisko
 missing_files => Nedostaju datoteke
 modified_files => Neki Textpattern fajlovi su izmenjeni
@@ -487,6 +488,7 @@ active_language => Trenutno aktivni jezik
 active_language_ui =>
 install_from_textpack =>
 install_textpack =>
+locale_not_available_for_language =>
 #@link
 add_new_link =>
 edit_link =>
@@ -609,8 +611,6 @@ is_dst => <abbr title="Daylight Saving Time">DST</abbr> dozvoljen?
 language => Jezik
 leave_text_untouched => Ostavi tekst nedirnut
 link => Linkovi
-locale =>
-locale_not_available_for_language =>
 logging => Logovanje
 logs_expire => Nakon koliko vremena ističu logovi?
 markup_default => Default Markup

@@ -352,6 +352,7 @@ htaccess_missing => trūksta .htaccess rinkmenos
 is_inaccessible => yra nepasiekiamas
 last_update => Paskutinis atnaujinimas
 last_update_check =>
+locale => Lokalė
 low => Žemas
 missing_files => Trūkstamos rinkmenos
 modified_files => Kai kurios Textpattern rinkmenos buvo pakeistos
@@ -487,6 +488,7 @@ active_language => Šiuo metu aktyvi kalba
 active_language_ui =>
 install_from_textpack => Įdiegti iš Textpack
 install_textpack => Įdiegti Textpack
+locale_not_available_for_language =>
 #@link
 add_new_link => Įdėti naują nuorodą
 edit_link => Keisti nuorodą
@@ -609,8 +611,6 @@ is_dst => <abbr title="Daylight Saving Time">DST</abbr> įjungtas?
 language => Kalba
 leave_text_untouched => Palikti tekstą nepaliestą
 link => Nuorodos
-locale => Lokalė
-locale_not_available_for_language =>
 logging => Žurnalų kūrimas
 logs_expire => Po kiek dienų nebegalios žurnalai?
 markup_default => Numatytasis žymėjimas

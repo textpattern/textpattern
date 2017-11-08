@@ -352,6 +352,7 @@ htaccess_missing => berkas .htaccess tidak ketemu
 is_inaccessible => tidak dapat diakses
 last_update =>
 last_update_check =>
+locale => Lokal
 low => Rendah
 missing_files => Berkas-berkas hilang
 modified_files =>
@@ -487,6 +488,7 @@ active_language => Bahasa yang sedang aktif
 active_language_ui =>
 install_from_textpack =>
 install_textpack => Pasang paket-teks
+locale_not_available_for_language =>
 #@link
 add_new_link =>
 edit_link =>
@@ -609,8 +611,6 @@ is_dst => <abbr title="Daylight Saving Time">DST</abbr> diaktifkan?
 language => Bahasa
 leave_text_untouched => Biarkan teks apa adanya
 link =>
-locale => Lokal
-locale_not_available_for_language =>
 logging => Pencatatan
 logs_expire => Catatan kadaluwarsa setelah berapa hari?
 markup_default =>
