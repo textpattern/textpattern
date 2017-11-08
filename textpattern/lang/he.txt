@@ -209,6 +209,7 @@ gd_unavailable => לא זמין
 general_error => שגיאה כללית
 get_off_my_lawn => אני מצטער. איני יכול להצע סאת. אני חושב <code dir="ltr">{event}</code> <code dir="ltr">{step}</code> אינו בטוח ברגע זה.
 greeting => שלום
+help => עזרה
 hidden => נסתר
 id => מזהה
 image_category => קטגורייה
@@ -538,7 +539,6 @@ bad_plugin_code => קוד תוסף שגוי או ריק.
 changeorder => שנה סדר
 edit_plugin => ערןך תוסף <strong>{name}</strong>
 edit_plugins => ערוך תוספים
-help => עזרה
 install => התקן
 install_plugin => התקן תוסף
 order => סדר
