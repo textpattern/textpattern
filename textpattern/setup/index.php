@@ -218,7 +218,11 @@ function getDbInfo()
 {
     $lang = ps('lang');
 
-    $_SESSION['lang'] = empty($_SESSION['lang']) ? (($lang) ? $lang : TEXTPATTERN_DEFAULT_LANG) : $_SESSION['lang'];
+    if (!empty($lang)) {
+        $_SESSION['lang'] = $lang;
+    } elseif (empty($_SESSION['lang'])) {
+        $_SESSION['lang'] = TEXTPATTERN_DEFAULT_LANG;
+    }
 
     $GLOBALS['textarray'] = setup_load_lang($_SESSION['lang']);
 
