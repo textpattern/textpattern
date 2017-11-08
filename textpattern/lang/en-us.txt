@@ -1,4 +1,3 @@
-#@version 4.7.0
 #@common
 lang_name => English (American)
 lang_code => en-US
@@ -589,7 +588,7 @@ custom_6_set => Custom field 6 name
 custom_7_set => Custom field 7 name
 custom_8_set => Custom field 8 name
 custom_9_set => Custom field 9 name
-default_event => Default administration panel
+default_event => Default panel
 default_publish_status => Default publishing status
 doctype => Doctype
 module_pophelp => Display admin-side inline help links?
@@ -970,7 +969,7 @@ setup_password_strength_3 => Good
 setup_password_strength_4 => Strong
 setup_show_password => Show password
 set_db_details => Set database details
-set_temp_dir_prefs => Sorry, but Textpattern failed to find a writable directory to hold temporary files. Please visit the <strong>Preferences</strong> administration panel and adjust the <strong>Temporary directory path</strong> setting to suit your needs.
+set_temp_dir_prefs => Sorry, but Textpattern failed to find a writable directory to hold temporary files. Please visit the <strong>Preferences</strong> panel and adjust the <strong>Temporary directory path</strong> setting to suit your needs.
 site_config => Site configuration
 site_url => Site URL
 tables_exist => It appears the tables in <strong>{dbname}</strong> already exist. If you wish to continue setup, either delete the existing tables, or choose a different table prefix.

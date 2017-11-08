@@ -128,15 +128,15 @@ class Lang
      * Read the meta info from the top of the given language file.
      *
      * @param  string $file The filename to read
-     * @return array        Meta info such as language code, name, direction and last modified time
+     * @return array        Meta info such as language name, language code, language direction and last modified time
      */
 
-    public function fetchMeta($file) 
+    public function fetchMeta($file)
     {
         $meta = array();
 
         if (is_file($file) && is_readable($file)) {
-            $numMetaRows = 5;
+            $numMetaRows = 4;
             $separator = '=>';
             $filename = basename($file);
             $name = preg_replace('/\.(txt|textpack)$/i', '', $filename);
@@ -149,9 +149,9 @@ class Lang
 
                 fclose($fp);
 
-                $langName = do_list($rows[2], $separator);
-                $langCode = do_list($rows[3], $separator);
-                $langDirection = do_list($rows[4], $separator);
+                $langName = do_list($rows[1], $separator);
+                $langCode = do_list($rows[2], $separator);
+                $langDirection = do_list($rows[3], $separator);
 
                 $meta['name'] = (isset($langName[1])) ? $langName[1] : $name;
                 $meta['code'] = (isset($langCode[1])) ? strtolower($langCode[1]) : $name;
