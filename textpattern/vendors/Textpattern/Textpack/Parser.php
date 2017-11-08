@@ -90,12 +90,19 @@ class Parser
      * );
      * </code>
      *
-     * @param  string $textpack The Textpack
+     * @param  string       $textpack The Textpack
+     * @param  string|array $group    Only return strings with the given event(s)
      * @return array An array of translations
      */
 
-    public function parse($textpack)
+    public function parse($textpack, $group = null)
     {
+        if ($group && !is_array($group)) {
+            $group = do_list($group);
+        } else {
+            $group = (array)$group;
+        }
+
         $lines = explode(n, (string)$textpack);
         $out = array();
         $version = false;
@@ -140,7 +147,7 @@ class Parser
 
             // Translation.
             if (preg_match('/^([\w\-]+)\s*=>\s*(.+)$/', $line, $m)) {
-                if (!empty($m[1]) && !empty($m[2])) {
+                if (!empty($m[1]) && !empty($m[2]) && (empty($group) || in_array($event, $group))) {
                     $out[] = array(
                         'name'    => $m[1],
                         'lang'    => $language,
