@@ -29,7 +29,7 @@
  */
 
 use Textpattern\Search\Filter;
-use Textpattern\Skin\Main as Skins;
+use Textpattern\Skin\Skins;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -446,8 +446,10 @@ function skin_save()
 
     extract($infos);
 
+    $instance = Txp::get('\Textpattern\Skin\Skin');
+
     if ($old_name) {
-        $instance = Txp::get('\Textpattern\Skin\Main', $old_name);
+        $instance->setSkin($old_name);
         $name = strtolower(sanitizeForUrl($name));
 
         if ($copy) {
@@ -466,10 +468,10 @@ function skin_save()
         $version ?: $version = '0.0.1';
         $row = compact('name', 'title', 'version', 'description', 'author', 'author_uri');
 
-        $result = Txp::get('\Textpattern\Skin\Main')->create($row);
+        $instance->create($row);
     }
 
-    skin_list($result);
+    skin_list($instance->getResults());
 }
 
 /**
@@ -525,24 +527,24 @@ function skin_multi_edit()
         return skin_list();
     }
 
-    $instance = Txp::get('\Textpattern\Skin\Main', ps('selected'));
+    $instance = Txp::get('\Textpattern\Skin\Skins', ps('selected'));
 
     switch ($edit_method) {
         case 'export':
-            $edit = $instance->export($clean);
+            $instance->export($clean);
             break;
         case 'duplicate':
-            $edit = $instance->duplicate();
+            $instance->duplicate();
             break;
         case 'update':
-            $edit = $instance->update($clean);
+            $instance->update($clean);
             break;
         default: // delete.
-            $edit = $instance->$edit_method();
+            $instance->$edit_method();
             break;
     }
 
-    skin_list($edit);
+    skin_list($instance->getResults());
 }
 
 /**
@@ -551,5 +553,9 @@ function skin_multi_edit()
 
 function skin_import()
 {
-    skin_list(Txp::get('\Textpattern\Skin\Main', ps('skins'))->import());
+    $instance = Txp::get('\Textpattern\Skin\Skin', ps('skins'));
+
+    $instance->import();
+
+    skin_list($instance->getResults());
 }
