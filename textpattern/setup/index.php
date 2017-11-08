@@ -116,6 +116,7 @@ function preamble($step = null)
         'setup_password_strength_2',
         'setup_password_strength_3',
         'setup_password_strength_4',
+        'help',
         )
     );
 
