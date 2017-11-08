@@ -28,7 +28,7 @@
  * @package Admin\Page
  */
 
-use Textpattern\Skin\Main as Skins;
+use Textpattern\Skin\Skins;
 use Textpattern\Skin\Skin;
 
 if (!defined('txpinterface')) {
