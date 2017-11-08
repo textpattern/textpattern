@@ -120,20 +120,9 @@ function preamble($step = null)
     );
 
     if (isset($_SESSION['lang']) && !isset($_SESSION['direction'])) {
-        $files = Txp::get('\Textpattern\L10n\Lang')->files();
-        $langs = array();
-
-        if (is_array($files) && !empty($files)) {
-            foreach ($files as $file) {
-                $pathinfo = pathinfo($file);
-
-                if ($pathinfo['filename'] === $_SESSION['lang']) {
-                    $meta = setup_lang_meta($file);
-                    $_SESSION['direction'] = $meta['direction'];
-                    break;
-                }
-            }
-        }
+        $file = Txp::get('\Textpattern\L10n\Lang')->findFilename($_SESSION['lang']);
+        $meta = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($file);
+        $_SESSION['direction'] = isset($meta['direction']) ? $meta['direction'] : 'ltr';
     }
 
     $textDirection = (isset($_SESSION['direction'])) ? ' dir="'.$_SESSION['direction'].'"' : 'ltr';
@@ -850,7 +839,7 @@ function langs()
 
     if (is_array($files) && !empty($files)) {
         foreach ($files as $file) {
-            $meta = setup_lang_meta($file);
+            $meta = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($file);
             $langs[$meta['code']] = $meta['name'];
         }
     }
@@ -873,40 +862,6 @@ function langs()
         n.'</div>';
 
     return $out;
-}
-
-// -------------------------------------------------------------
-
-function setup_lang_meta($file)
-{
-    $numMetaRows = 5;
-    $separator = '=>';
-    $filename = basename($file);
-    $meta = array();
-
-    if ($fp = @fopen($file, 'r')) {
-        $name = preg_replace('/\.(txt|textpack)$/i', '', $filename);
-
-        for ($idx = 0; $idx < $numMetaRows; $idx++) {
-            $meta[] = fgets($fp, 1024);
-        }
-
-        fclose($fp);
-
-        $langName = do_list($meta[2], $separator);
-        $langCode = do_list($meta[3], $separator);
-        $langDirection = do_list($meta[4], $separator);
-
-        $fname = (isset($langName[1])) ? $langName[1] : $name;
-        $fcode = (isset($langCode[1])) ? strtolower($langCode[1]) : $name;
-        $fdirection = (isset($langDirection[1])) ? strtolower($langDirection[1]) : 'ltr';
-
-        $meta['code'] = $fcode;
-        $meta['name'] = $fname;
-        $meta['direction'] = $fdirection;
-    }
-
-    return $meta;
 }
 
 // -------------------------------------------------------------
