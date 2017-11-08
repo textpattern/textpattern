@@ -29,36 +29,10 @@ class classic_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
     {
-        $cssPath = 'assets'.DS.'css';
-        $jsPath = 'assets'.DS.'js';
-
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">';
         $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.min.css">';
-
-        // Custom CSS (see theme README for usage instructions).
-        if (defined('admin_custom_css')) {
-            $custom_css = admin_custom_css;
-        } else {
-            $custom_css = 'custom.css';
-        }
-
-        if (file_exists(txpath.DS.THEME.$this->name.DS.$cssPath.DS.$custom_css)) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/'.$custom_css.'">';
-        }
-
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
-
-        // Custom JavaScript (see theme README for usage instructions).
-        if (defined('admin_custom_js')) {
-            $custom_js = admin_custom_js;
-        } else {
-            $custom_js = 'custom.js';
-        }
-
-        if (file_exists(txpath.DS.THEME.$this->name.DS.$jsPath.DS.$custom_js)) {
-            $out[] = '<script src="'.$this->url.'assets/js/'.$custom_js.'"></script>'.n;
-        }
 
         // Fileupload
         $out[] = script_js(<<< EOS
@@ -81,7 +55,7 @@ EOS
     {
         $out[] = '<div class="txp-masthead">';
         $out[] = hed('Textpattern', 1, ' class="txp-branding"');
-        $out[] = hed(htmlspecialchars($GLOBALS["prefs"]["sitename"]), 2, ' class="txp-accessibility"');
+        $out[] = hed(htmlspecialchars(get_pref('sitename')), 2, ' class="txp-accessibility"');
         $out[] = navPop(1);
         $out[] = '</div>';
 
@@ -150,88 +124,5 @@ EOS
         }
 
         return join(n, $out);
-    }
-
-    function announce($thing = array('', 0), $modal = false)
-    {
-        return $this->_announce($thing, false, $modal);
-    }
-
-    function announce_async($thing = array('', 0), $modal = false)
-    {
-        return $this->_announce($thing, true, $modal);
-    }
-
-    private function _announce($thing, $async, $modal)
-    {
-        // $thing[0]: message text.
-        // $thing[1]: message type, defaults to "success" unless empty or a different flag is set.
-
-        if ($thing === '') {
-            return '';
-        }
-
-        if (!is_array($thing) || !isset($thing[1])) {
-            $thing = array($thing, 0);
-        }
-
-        switch ($thing[1]) {
-            case E_ERROR:
-                $class = 'error';
-                $icon = 'ui-icon-alert';
-                break;
-            case E_WARNING:
-                $class = 'warning';
-                $icon = 'ui-icon-alert';
-                break;
-            default:
-                $class = 'success';
-                $icon = 'ui-icon-check';
-                break;
-        }
-
-        if ($modal) {
-            $html = ''; // TODO: Say what?
-            $js = 'window.alert("'.escape_js(strip_tags($thing[0])).'")';
-        } else {
-            $html = span(
-                span(null, array('class' => 'ui-icon '.$icon)).' '.gTxt($thing[0]).
-                sp.href('&#215;', '#close', ' class="close" role="button" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"'),
-                array(
-                    'class'     => 'messageflash '.$class,
-                    'role'      => 'alert',
-                    'aria-live' => 'assertive',
-                )
-            );
-
-            // Try to inject $html into the message pane no matter when _announce()'s output is printed.
-            $js = escape_js($html);
-            $js = <<< EOS
-                $(document).ready(function ()
-                {
-                    $("#messagepane").html("{$js}");
-                    $('#message.success, #message.warning, #message.error').fadeOut('fast').fadeIn('fast');
-                });
-EOS;
-        }
-
-        if ($async) {
-            return $js;
-        } else {
-            return script_js(str_replace('</', '<\/', $js), $html);
-        }
-    }
-
-    function manifest()
-    {
-        global $prefs;
-
-        return array(
-            'title'       => 'Classic',
-            'description' => 'Textpattern CMS Classic admin theme',
-            'version'     => '4.7.0-dev',
-            'author'      => 'Phil Wareham',
-            'author_uri'  => 'https://github.com/philwareham/textpattern-classic-admin-theme',
-        );
     }
 }
