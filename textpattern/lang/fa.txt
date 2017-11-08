@@ -209,6 +209,7 @@ gd_unavailable => دسترس ناپذیر
 general_error => خطای عمومی
 get_off_my_lawn => متأسفم! ترسیدم و نمی تونم اینو انجامش بدم! <code dir="ltr">{event}</code> <code dir="ltr">{step}</code> یک عمل ناامن است.
 greeting => عزیز
+help => راهنمایی
 hidden => مخفی
 id => شناسه نوشته
 image_category => رده
@@ -538,7 +539,6 @@ bad_plugin_code => کد پلاگین بدساختار یا خالی است.
 changeorder => تغییر اولویت
 edit_plugin => ویرایش پلاگین <strong>{name}</strong>
 edit_plugins => پلاگین‌ها
-help => راهنمایی
 install => نصب
 install_plugin => نصب پلاگین
 order => اولویت
