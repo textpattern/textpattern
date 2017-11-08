@@ -41,6 +41,14 @@ class Lang
     protected $lang_dir = null;
 
     /**
+     * List of files in the $lang_dir.
+     *
+     * @var array
+     */
+
+    protected static $files = array();
+
+    /**
      * Constructor.
      *
      * @param string $lang_dir Language directory to use
@@ -53,6 +61,10 @@ class Lang
         }
 
         $this->lang_dir = $lang_dir;
+
+        if (!self::$files) {
+            self::$files = $this->files();
+        }
     }
 
     /**
@@ -90,6 +102,68 @@ class Lang
     }
 
     /**
+     * Locate a file in the lang directory based on a language code.
+     *
+     * @param  string $lang_code The language code to look up
+     * @return string|null       The matching filename
+     */
+
+    public function findFilename($lang_code)
+    {
+        $out = null;
+
+        foreach (self::$files as $file) {
+            $pathinfo = pathinfo($file);
+
+            if ($pathinfo['filename'] === $lang_code) {
+                $out = $file;
+                break;
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Read the meta info from the top of the given language file.
+     *
+     * @param  string $file The filename to read
+     * @return array        Meta info such as language code, name, direction and last modified time
+     */
+
+    public function fetchMeta($file) 
+    {
+        $meta = array();
+
+        if (is_file($file) && is_readable($file)) {
+            $numMetaRows = 5;
+            $separator = '=>';
+            $filename = basename($file);
+            $name = preg_replace('/\.(txt|textpack)$/i', '', $filename);
+            $meta['filename'] = $name;
+
+            if ($fp = @fopen($file, 'r')) {
+                for ($idx = 0; $idx < $numMetaRows; $idx++) {
+                    $rows[] = fgets($fp, 1024);
+                }
+
+                fclose($fp);
+
+                $langName = do_list($rows[2], $separator);
+                $langCode = do_list($rows[3], $separator);
+                $langDirection = do_list($rows[4], $separator);
+
+                $meta['name'] = (isset($langName[1])) ? $langName[1] : $name;
+                $meta['code'] = (isset($langCode[1])) ? strtolower($langCode[1]) : $name;
+                $meta['direction'] = (isset($langDirection[1])) ? strtolower($langDirection[1]) : 'ltr';
+                $meta['time'] = filemtime($file);
+            }
+        }
+
+        return $meta;
+    }
+
+    /**
      * Fetch available languages.
      *
      * Depending on the flags, the returned array can contain active,
@@ -102,7 +176,6 @@ class Lang
     {
         static $active_lang = null;
         static $in_db = array();
-        static $in_fs = array();
         static $allLangs = array();
 
         if ($active_lang === null) {
@@ -137,61 +210,26 @@ class Lang
                 }
             }
 
-            if (!$in_fs) {
-                $in_fs = $this->files();
-            }
-
             // Get items from filesystem.
-            if (is_array($in_fs) && !empty($in_fs)) {
-                $numMetaRows = 5;
-                $separator = '=>';
+            if (!empty(self::$files)) {
+                foreach (self::$files as $file) {
+                    $meta = $this->fetchMeta($file);
+                    $name = $meta['filename'];
 
-                foreach ($in_fs as $file) {
-                    $filename = basename($file);
-                    $meta = array();
-
-                    if ($fp = @fopen($file, 'r')) {
-                        $name = preg_replace('/\.(txt|textpack)$/i', '', $filename);
-
-                        for ($idx = 0; $idx < $numMetaRows; $idx++) {
-                            $meta[] = fgets($fp, 1024);
-                        }
-
-                        fclose($fp);
-
-                        $langVersion = $meta[0];
-                        $langGroup = trim($meta[1]);
-                        $langName = do_list($meta[2], $separator);
-                        $langCode = do_list($meta[3], $separator);
-                        $langDirection = do_list($meta[4], $separator);
-
-                        $fname = (isset($langName[1])) ? $langName[1] : $name;
-                        $fcode = (isset($langCode[1])) ? strtolower($langCode[1]) : $name;
-                        $fdirection = (isset($langDirection[1])) ? strtolower($langDirection[1]) : 'ltr';
-
-                        if (strpos($langVersion, '#@version') !== false) {
-                            $fversion = trim(substr($langVersion, strpos($langVersion, ' ', 1)));
-                            $ftime = filemtime($file);
-                        } else {
-                            $fversion = $ftime = 0;
-                        }
-
-                        if (array_key_exists($name, $currently_lang)) {
-                            $currently_lang[$name]['name'] = $fname;
-                            $currently_lang[$name]['direction'] = $fdirection;
-                            $currently_lang[$name]['file_lastmod'] = $ftime;
-                        } elseif (array_key_exists($name, $installed_lang)) {
-                            $installed_lang[$name]['name'] = $fname;
-                            $installed_lang[$name]['direction'] = $fdirection;
-                            $installed_lang[$name]['file_lastmod'] = $ftime;
-                        }
-
-                        $available_lang[$name]['file_note'] = $fversion;
-                        $available_lang[$name]['file_lastmod'] = $ftime;
-                        $available_lang[$name]['name'] = $fname;
-                        $available_lang[$name]['direction'] = $fdirection;
-                        $available_lang[$name]['type'] = 'available';
+                    if (array_key_exists($name, $currently_lang)) {
+                        $currently_lang[$name]['name'] = $meta['name'];
+                        $currently_lang[$name]['direction'] = $meta['direction'];
+                        $currently_lang[$name]['file_lastmod'] = $meta['time'];
+                    } elseif (array_key_exists($name, $installed_lang)) {
+                        $installed_lang[$name]['name'] = $meta['name'];
+                        $installed_lang[$name]['direction'] = $meta['direction'];
+                        $installed_lang[$name]['file_lastmod'] = $meta['time'];
                     }
+
+                    $available_lang[$name]['file_lastmod'] = $meta['time'];
+                    $available_lang[$name]['name'] = $meta['name'];
+                    $available_lang[$name]['direction'] = $meta['direction'];
+                    $available_lang[$name]['type'] = 'available';
                 }
             }
 

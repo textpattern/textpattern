@@ -59,12 +59,17 @@ if ($event == 'lang') {
 
 function list_languages($message = '')
 {
-    $active_lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG, true);
-    $active_ui_lang = get_pref('language_ui', $active_lang, true);
+    $available_lang = Txp::get('\Textpattern\L10n\Lang')->available();
+    $installed_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_INSTALLED);
+    $active_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_ACTIVE);
+    $represented_lang = array_merge($active_lang, $installed_lang);
+
+    $site_lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG, true);
+    $ui_lang = get_pref('language_ui', $site_lang, true);
     $cpanel = '';
 
     if (has_privs('lang.edit')) {
-        $langList = Txp::get('\Textpattern\L10n\Lang')->languageSelect('language', $active_lang);
+        $langList = Txp::get('\Textpattern\L10n\Lang')->languageSelect('language', $site_lang);
         $cpanel .= form(
             tag(gTxt('active_language'), 'label', array('for' => 'language')).
             $langList.
@@ -73,7 +78,7 @@ function list_languages($message = '')
         );
     }
 
-    $langList = Txp::get('\Textpattern\L10n\Lang')->languageSelect('language_ui', $active_ui_lang);
+    $langList = Txp::get('\Textpattern\L10n\Lang')->languageSelect('language_ui', $ui_lang);
     $lang_form = tag(
         $cpanel.
         form(
@@ -85,11 +90,6 @@ function list_languages($message = '')
             'class' => 'txp-control-panel',
         )
     );
-
-    $available_lang = Txp::get('\Textpattern\L10n\Lang')->available();
-    $installed_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_INSTALLED);
-    $active_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_ACTIVE);
-    $represented_lang = array_merge($active_lang, $installed_lang);
 
     $grid = '';
     $done = array();
@@ -220,22 +220,28 @@ function save_language()
         'language',
     )));
 
+    $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($language);
+    $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
+    $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $language;
+
     if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language)."' LIMIT 1")) {
         $locale = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language);
         $new_locale = $prefs['locale'] = Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_ALL, array($language, 'C'))->getLocale();
         set_pref('locale', $new_locale);
+
         if ($new_locale == $locale) {
             $msg = gTxt('preferences_saved');
         } else {
-            $msg = array(gTxt('locale_not_available_for_language', array('{name}' => $language)), E_WARNING);
+            $msg = array(gTxt('locale_not_available_for_language', array('{name}' => $langName)), E_WARNING);
         }
+
         set_pref('language', $language);
         list_languages($msg);
 
         return;
     }
 
-    list_languages(array(gTxt('language_not_installed', array('{name}' => $language)), E_ERROR));
+    list_languages(array(gTxt('language_not_installed', array('{name}' => $langName)), E_ERROR));
 }
 
 /**
@@ -250,6 +256,10 @@ function save_language_ui()
         'language_ui',
     )));
 
+    $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($language_ui);
+    $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
+    $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $language_ui;
+
     if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language_ui)."' LIMIT 1")) {
         $locale = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language_ui);
 
@@ -258,7 +268,7 @@ function save_language_ui()
             set_pref('language_ui', $language_ui, 'admin', PREF_CORE, 'text_input', 0, PREF_PRIVATE);
             $textarray = load_lang($language_ui);
         } else {
-            $msg = array(gTxt('locale_not_available_for_language', array('{name}' => $language_ui)), E_WARNING);
+            $msg = array(gTxt('locale_not_available_for_language', array('{name}' => $langName)), E_WARNING);
         }
 
         list_languages($msg);
@@ -266,14 +276,14 @@ function save_language_ui()
         return;
     }
 
-    list_languages(array(gTxt('language_not_installed', array('{name}' => $language_ui)), E_ERROR));
+    list_languages(array(gTxt('language_not_installed', array('{name}' => $langName)), E_ERROR));
 }
 
 /**
  * Installs a language from a file.
  *
  * The HTTP POST parameter 'lang_code' is the installed language,
- * e.g. 'en-gb', 'fi-fi'.
+ * e.g. 'en-gb', 'fi'.
  */
 
 function get_language()
@@ -283,8 +293,11 @@ function get_language()
     if (Txp::get('\Textpattern\L10n\Lang')->install_file($lang_code)) {
         callback_event('lang_installed', 'file', false, $lang_code);
 
-        // @todo Better i18n.
-        return list_languages(gTxt($lang_code).sp.gTxt('updated'));
+        $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($lang_code);
+        $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
+        $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $lang_code;
+
+        return list_languages(gTxt('language_updated', array('{name}' => $langName)));
     }
 }
 
@@ -357,16 +370,29 @@ function get_textpack()
 
 function remove_language()
 {
+    global $textarray;
+
     require_privs('lang.edit');
 
     $lang_code = gps('lang_code');
+    $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($lang_code);
+    $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
+    $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $lang_code;
+
     $ret = safe_delete('txp_lang', "lang = '".doSlash($lang_code)."'");
 
     if ($ret) {
         callback_event('lang_deleted', '', 0, $lang_code);
-        $msg = gTxt($lang_code).sp.gTxt('deleted');
+        $msg = gTxt('language_deleted', array('{name}' => $langName));
+        $represented_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED);
+
+        $site_lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG, true);
+        $ui_lang = get_pref('language_ui', $site_lang, true);
+        $ui_lang = (array_key_exists($ui_lang, $represented_lang)) ? $ui_lang : $site_lang;
+        set_pref('language_ui', $ui_lang, 'admin', PREF_CORE, 'text_input', 0, PREF_PRIVATE);
+        $textarray = load_lang($ui_lang);
     } else {
-        $msg = gTxt('cannot_delete', array('{thing}' => $lang_code));
+        $msg = gTxt('cannot_delete', array('{thing}' => $langName));
     }
 
     list_languages($msg);
