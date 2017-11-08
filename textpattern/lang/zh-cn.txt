@@ -1,4 +1,3 @@
-#@version 4.7.0
 #@common
 lang_name => 中文(简体)
 lang_code => zh-CN

@@ -729,16 +729,7 @@ function custom_set($name, $val)
 
 function themename($name, $val)
 {
-    $themes = \Textpattern\Admin\Theme::names();
-    foreach ($themes as $t) {
-        $theme = \Textpattern\Admin\Theme::factory($t);
-        if ($theme) {
-            $m = $theme->manifest();
-            $title = empty($m['title']) ? ucwords($theme->name) : $m['title'];
-            $vals[$t] = $title;
-            unset($theme);
-        }
-    }
+    $vals = \Textpattern\Admin\Theme::names(1);
     asort($vals, SORT_STRING);
 
     return pluggable_ui('prefs_ui', 'theme_name',

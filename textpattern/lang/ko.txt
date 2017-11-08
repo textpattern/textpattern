@@ -1,4 +1,3 @@
-#@version 4.7.0
 #@common
 lang_name => 한국말 (대한민국)
 lang_code => ko

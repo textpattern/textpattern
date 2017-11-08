@@ -1,4 +1,3 @@
-#@version 4.7.0
 #@common
 lang_name => Íslenska
 lang_code => is
