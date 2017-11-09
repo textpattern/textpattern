@@ -103,7 +103,8 @@ function end_page()
         );
 
         echo script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL).
-            script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON)).
+            script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON).
+            n.'textpattern.Console.announce()').
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }
 }
