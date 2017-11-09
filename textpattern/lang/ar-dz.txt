@@ -604,8 +604,6 @@ expire_logs_after => صحف النشاطات تبطل صلاحيتها بعد
 feeds =>
 file_base_path => مصنف الملفات المحمملة
 file_max_upload_size => أكبر حجم للملف المرسل في الموزع
-from_file => تنزيل عن طريق ملف
-from_server => تنزيل عن طريق موزع
 gmtoffset => <abbr title="Greenwich Mean Time">GMT</abbr> توقيت
 ham =>
 hours_days_ago =>
