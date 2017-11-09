@@ -335,6 +335,13 @@ abstract class Theme
     public function html_head_custom()
     {
         $out = '';
+        $prefs = $this->manifest('prefs');
+
+        if (!empty($prefs['textpattern'])) {
+            $prefs = json_encode($prefs['textpattern']);
+            $out .= script_js("textpattern.prefs = jQuery.extend(textpattern.prefs, {$prefs})");
+        }
+
         // Custom CSS (see theme README for usage instructions).
         if (defined('admin_custom_css')) {
             $custom_css = admin_custom_css;
@@ -450,9 +457,9 @@ abstract class Theme
      * @return array
      */
 
-    public function manifest()
+    public function manifest($type = 'manifest')
     {
 
-        return @json_decode(file_get_contents($this->url.'manifest.json'), true);
+        return @json_decode(file_get_contents($this->url.$type.'.json'), true);
     }
 }

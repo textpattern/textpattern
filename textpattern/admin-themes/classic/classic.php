@@ -35,14 +35,10 @@ class classic_theme extends \Textpattern\Admin\Theme
         $out[] = '<meta name="generator" content="Textpattern CMS">';
 
         // Fileupload
-        $out[] = script_js(<<< EOS
-    textpattern.prefs.uploadPreview = '<div class="preview"><input name="title[{hash}]" value="{title}" /><div class="info {status}">{type} ({size} B)</div>{preview}</div>'
-EOS
-).
-'<style>
+        $out[] = '<style>
     .preview {display:inline-block;position:relative;overflow:hidden;height:128px;width:128px;margin:2px;border:1px solid #cccccc;}
     .preview input {position:absolute;bottom:0;z-index:100;width:100%}
-    .preview .info {position:absolute;z-index:100;background:#eeeeee;opacity:0.75}
+    .preview .info {position:absolute;z-index:100;background:white;opacity:0.5}
     .preview:hover .info {display:none}
     .preview .alert {color:red}
 </style>';

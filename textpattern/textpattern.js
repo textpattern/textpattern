@@ -628,24 +628,7 @@ function sendAsyncEvent(data, fn, format)
             success: fn,
             dataType: format,
             processData: false,
-            contentType: false,
-            xhr: function () {
-                var xhr = $.ajaxSettings.xhr();
-                // For uploads
-                xhr.upload.onprogress = function (e) {
-                    if (e.lengthComputable) {
-                        textpattern.Relay.callback('uploadProgress', e)
-                    }
-                };
-                xhr.upload.onloadstart = function (e) {
-                    textpattern.Relay.callback('uploadStart', e)
-                };
-                xhr.upload.onloadend = function (e) {
-                    textpattern.Relay.callback('uploadEnd', e)
-                };
-
-                return xhr;
-            }
+            contentType: false
         }) :
         $.post('index.php', data, fn, format);
 }
@@ -778,6 +761,21 @@ textpattern.Console =
     queue: {},
 
     /**
+     * Clear.
+     *
+     * @param  {string} The event
+     * @return textpattern.Console
+     */
+
+    clear: function (event) {
+        event = event || textpattern.event
+        textpattern.Console.messages[event] = []
+        textpattern.Console.queue[event] = false
+
+        return this
+    },
+
+    /**
      * Add message to announce.
      *
      * @param  {string} The event
@@ -804,11 +802,15 @@ textpattern.Console =
      * @return textpattern.Console
      */
 
-    announce: function (event) {
+    announce: function (event, options) {
         event = event || textpattern.event
 
-        if (!!textpattern.Console.queue[event]) return this
-        else textpattern.Console.queue[event] = true
+        if (!!textpattern.Console.queue[event]) {
+            textpattern.Console.queue[event] = $.extend(textpattern.Console.queue[event], options)
+            return this
+        } else {
+            textpattern.Console.queue[event] = $.extend({empty: true}, options)
+        }
 
         $(document).ready(function() {
             var c = 0, message = [], status = 0
@@ -825,11 +827,13 @@ textpattern.Console =
                 })
 
                 status = !c ? 'success' : (c == 2*textpattern.Console.messages[event].length ? 'error' : 'warning')
-                textpattern.Console.messages[event] = []
             }
 
-            textpattern.Console.queue[event] = false
-            textpattern.Relay.callback('announce', {message: message, status: status})
+            if (message.length || !!textpattern.Console.queue[event].empty) {
+                textpattern.Relay.callback('announce', {event: event, message: message, status: status})
+            }
+
+            textpattern.Console.clear(event)
         })
 
         return this
@@ -1066,7 +1070,7 @@ jQuery.fn.txpAsyncForm = function (options) {
                 form.button.removeAttr('disabled');
                 form.spinner.remove();
                 $('body').removeClass('busy');
-                textpattern.Console.announce()
+                textpattern.Console.announce(null, {empty: false})
             });
     });
 
@@ -2058,15 +2062,14 @@ textpattern.Route.add('article', function () {
     $listoptions.hide().menu();
 });
 
-// TEST FILEUPLOAD ONLY!!
-textpattern.Route.add('list, file, image', function () {
+textpattern.Route.add('file, image', function () {
     if (!$('#txp-list-container').length) return
 
     textpattern.Relay.register('uploadStart', function(event) {
         textpattern.Relay.data.fileid = []
     }).register('uploadEnd', function(event) {
         var callback = function() {
-            textpattern.Console.announce(textpattern.event).announce(event.type)
+            textpattern.Console.clear().announce(event.type)
         }
 
         $(document).ready(function() {
@@ -2088,7 +2091,6 @@ textpattern.Route.add('list, file, image', function () {
     $('form.upload-form.async').txpUploadPreview()
         .txpFileupload({formData: [{name: "app_mode", value: "async"}]})
 })
-// ENDTEST FILEUPLOAD
 
 // Uncheck reset on timestamp change.
 
@@ -2419,7 +2421,6 @@ $(document).ready(function () {
     }).on('updateList', '#txp-list-container', function() {
         $(this).find('.multi_edit_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected}).find('table.txp-list').txpColumnize()
     })
-
 
     // Find and open associated dialogs.
     $(document).on('click.txpDialog', '[data-txp-dialog]', function (e) {
