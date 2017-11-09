@@ -2154,6 +2154,9 @@ textpattern.Route.add('', function () {
         $('.pophelp').on('click', function (ev) {
             var item = $(ev.target).parent().attr('data-item');
             if (item === undefined ) {
+                item = $(ev.target).attr('data-item');
+            }
+            if (item === undefined ) {
                 txpAsyncLink(ev, 'pophelp');
             } else {
                 $('#pophelp_dialog').dialog('close').html(decodeURIComponent(item)).dialog('open').restorePanes();
