@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => 확장기능 로드 중 문제 발생:
 plugin_load_error_above => 위의 오류를 발생시킨 확장기능:
+pophelp =>
 popup => 팝업
 post => 등록
 posted => 날짜

@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Það kom upp vandamál við uppsettningu viðbótar:
 plugin_load_error_above => Villur sem komu upp vegna viðbótar að ofan:
+pophelp =>
 popup => popup
 post => Póstur
 posted => Skrifað

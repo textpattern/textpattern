@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Se ha producido un error al cargar el plugin:
 plugin_load_error_above => Los errores anteriores los ha causado el plugin:
+pophelp =>
 popup => ventana emergente
 post => Publicar
 posted => Publicado

@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => พบปัญหาระหว่างการโหลดตัวต่อเติม:
 plugin_load_error_above => ปัญหาข้างต้นเกิดจากตัวต่อเติม:
+pophelp =>
 popup => ป็อปอัพ
 post => โพสต์
 posted => โพสต์เมื่อ

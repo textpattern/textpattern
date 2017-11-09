@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => プラグインの読込中に問題が発生しました：
 plugin_load_error_above => 上記のエラーは次のプラグインによって引き起こされました：
+pophelp =>
 popup => ポップアップ
 post => 投稿
 posted => 投稿済

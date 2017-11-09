@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => При загрузке плагина произошла ошибка:
 plugin_load_error_above => Вышеперечисленные ошибки произошли из-за плагина:
+pophelp =>
 popup => всплывающее окно
 post => Опубликовать
 posted => Опубликовано

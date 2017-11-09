@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Настао је проблем приликом учитавања plugin-a:
 plugin_load_error_above => Горње грешке је направио plugin:
+pophelp =>
 popup => popup
 post => Објави
 posted => Објављено

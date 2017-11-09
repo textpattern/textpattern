@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Plugina laadimisel esines probleem:
 plugin_load_error_above => Ülalolevad probleemid põhjustas plugin:
+pophelp =>
 popup => hüpikaknas
 post => Postita
 posted => Postitatud

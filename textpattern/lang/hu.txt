@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Az alábbi plugin betöltése hibát okozott:
 plugin_load_error_above => Az alábbi hibákat ez a plugin okozta:
+pophelp =>
 popup => felpattanó
 post => Poszt
 posted => Beküldve

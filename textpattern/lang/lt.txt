@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Įvyko klaida papildinio leidimo metu:
 plugin_load_error_above => Žemiau nurodytos klaidos įvyko dėl papildinio:
+pophelp =>
 popup => iškylantysis langas
 post => Siųsti
 posted => Paskelbtas

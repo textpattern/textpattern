@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Wystąpił błąd podczas wczytywania pluginu:
 plugin_load_error_above => Powyższe błędy spowodowane były przez plugin:
+pophelp =>
 popup => wyskakujące okno
 post => Wyślij
 posted => Opublikowany

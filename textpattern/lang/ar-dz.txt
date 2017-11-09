@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => حدث خطأ خلال التحميل لـ البلوغين
 plugin_load_error_above =>
+pophelp =>
 popup =>
 post => إرسال
 posted => منشور

@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Er is een probleem bij het laden van plugin:
 plugin_load_error_above => Bovenstaande problemen zijn ontstaan bij het laden van de plugin:
+pophelp =>
 popup => popup
 post => Publiceren
 posted => Publicatiedatum

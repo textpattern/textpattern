@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Възникна проблем при зареждането на приставката:
 plugin_load_error_above => Следните грешки са породени от приставка:
+pophelp =>
 popup => изкачащ прозорец
 post => Публикация
 posted => Публикувано

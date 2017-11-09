@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => 装载插件时出现一个问题：
 plugin_load_error_above => 上述错误由这个插件引起：
+pophelp =>
 popup => 弹出窗口
 post => 发表
 posted => 发表时间

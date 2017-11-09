@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Při spouštění pluginu došlo k chybě:
 plugin_load_error_above => K výše uvedeným chybám došlo při spouštění pluginu:
+pophelp =>
 popup => do okna
 post => Odeslat
 posted => Vydáno

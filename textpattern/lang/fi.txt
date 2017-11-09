@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Virhe ladattaessa liitännäistä:
 plugin_load_error_above => Ylläolevat virheet johtuvat liitännäisestä:
+pophelp =>
 popup => ponnahdusikkuna
 post => Julkaisu
 posted => Julkaistu

@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Am intampinat o problema in timp ce incercam sa incarcam plugin-ul:
 plugin_load_error_above => Erorile de mai sus au fost cauzate de urmatorul plug-in:
+pophelp =>
 popup => popup
 post => Posteaza
 posted => Postat

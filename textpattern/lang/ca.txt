@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Error en carregar el plugin:
 plugin_load_error_above => Error en carregar el plugin indicat:
+pophelp =>
 popup => finestra emergent
 post => Publica
 posted => Publicat

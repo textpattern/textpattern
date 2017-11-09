@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => 安裝外掛發生錯誤:
 plugin_load_error_above => 安裝外掛引起上述錯誤:
+pophelp =>
 popup => 使用彈出視窗
 post => 發表
 posted => 發表時間

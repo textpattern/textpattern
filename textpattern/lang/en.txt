@@ -824,6 +824,7 @@ php_code_disabled_page => PHP code is disabled for pages.
 php_code_forbidden_user => Author is not permitted to use PHP code.
 plugin_load_error => A problem occurred while loading the plugin:
 plugin_load_error_above => The above errors were caused by the plugin:
+pophelp => Pop up help links
 popup => popup window
 post => Post
 posted => Posted

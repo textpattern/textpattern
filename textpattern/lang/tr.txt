@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Eklenti etkinleştirmesi sırasına bir hata ile oluştu:
 plugin_load_error_above => Eklenti yükarıda yazan hatala neden oldu:
+pophelp =>
 popup => popup
 post => Post
 posted => Yayınlandı

@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Pluginen kunde inte laddas pga ett fel:
 plugin_load_error_above => Ovanstående fel orsakades av pluginen:
+pophelp =>
 popup => poppupp
 post => Skicka
 posted => Skickad

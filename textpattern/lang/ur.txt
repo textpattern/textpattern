@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => پلگ ان نصب کرنے میں نقص
 plugin_load_error_above => اپر نقائص کا سبب یہ پلگ ان ہے:
+pophelp =>
 popup => برخیزہ میں
 post =>
 posted => تاریخ اشاعت

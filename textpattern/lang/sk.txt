@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Počas načítania pluginy sa vyskytol problém:
 plugin_load_error_above => Hore uvedené chyby spôsobil plugin:
+pophelp =>
 popup => vyskakovacie okno
 post => Odoslať
 posted => Vydané

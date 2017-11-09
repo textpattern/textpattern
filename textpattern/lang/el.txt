@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Προέκυψε πρόβλημα κατά την φόρτωση του αρθρώματος:
 plugin_load_error_above => Τα παραπάνω σφάλματα προκλήθηκαν από το άρθρωμα:
+pophelp =>
 popup => «popup»
 post => Δημοσίευση
 posted => Ημ/νία

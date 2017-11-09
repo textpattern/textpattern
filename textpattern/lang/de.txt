@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Ein Fehler trat auf beim Laden des Plugins:
 plugin_load_error_above => Die obigen Fehler verursachte das Plugin:
+pophelp =>
 popup => Pop-up-Fenster
 post => Eintrag
 posted => Datum

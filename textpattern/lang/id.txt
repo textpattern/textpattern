@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => Sebuah masalah terjadi ketika memanggil plugin:
 plugin_load_error_above => Masalah di atas disebabkan oleh plugin:
+pophelp =>
 popup => popup
 post => Muat
 posted => Dimuat

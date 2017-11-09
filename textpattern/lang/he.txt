@@ -824,6 +824,7 @@ php_code_disabled_page =>
 php_code_forbidden_user =>
 plugin_load_error => שגיאה התרחשה בעת העלאת התוסף:
 plugin_load_error_above => השגיאות שלמעלה נגרמו על ידיח התוסף:
+pophelp =>
 popup => חלון קופץ
 post => שלח
 posted => נשלח
