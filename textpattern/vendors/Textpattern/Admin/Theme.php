@@ -431,50 +431,15 @@ abstract class Theme
             $thing = array($thing, 0);
         }
 
-        switch ($thing[1]) {
-            case E_ERROR:
-                $class = 'error';
-                $icon = 'ui-icon-alert';
-                break;
-            case E_WARNING:
-                $class = 'warning';
-                $icon = 'ui-icon-alert';
-                break;
-            default:
-                $class = 'success';
-                $icon = 'ui-icon-check';
-                break;
-        }
-
         if ($modal) {
-            $html = ''; // TODO: Say what?
             $js = 'window.alert("'.escape_js(strip_tags($thing[0])).'")';
         } else {
-            $html = span(
-                span(null, array('class' => 'ui-icon '.$icon)).' '.gTxt($thing[0]).
-                sp.href('&#215;', '#close', ' class="close" role="button" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"'),
-                array(
-                    'class'     => 'messageflash '.$class,
-                    'role'      => 'alert',
-                    'aria-live' => 'assertive',
-                )
-            );
-
             // Try to inject $html into the message pane no matter when _announce()'s output is printed.
-            $js = escape_js($html);
-            $js = <<< EOS
-                $(document).ready(function ()
-                {
-                    $("#messagepane").html("{$js}");
-                });
-EOS;
+            $thing = json_encode($thing);
+            $js = "textpattern.Console.addMessage({$thing});";
         }
 
-        if ($async) {
-            return $js;
-        } else {
-            return script_js(str_replace('</', '<\/', $js), $html);
-        }
+        return $async ? $js : script_js(str_replace('</', '<\/', $js));
     }
 
     /**

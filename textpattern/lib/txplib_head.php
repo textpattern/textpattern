@@ -131,7 +131,11 @@ function pagetop($pagetitle = '', $message = '')
                         '#page-image #image_alt_text, #page-image #caption,'.
                         '#page-file #description,'.
                         '#page-link #link-title, #page-link #link-description'
-                    )
+                    ),
+                    'message' => '<span class="ui-icon ui-icon-{status}"></span> {message}',
+                    'messagePane' => '<span class="messageflash {status}" role="alert" aria-live="assertive">
+    {message}<a class="close" role="button" title="{close}" aria-label="{close}" href="#close">&#215;</a>
+</span>'
                 ),
                 'textarray' => (object) null,
             ),
