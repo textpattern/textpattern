@@ -775,6 +775,8 @@ textpattern.Console =
 
     messages: {},
 
+    queue: {},
+
     /**
      * Add message to announce.
      *
@@ -803,22 +805,30 @@ textpattern.Console =
      */
 
     announce: function (event) {
-        $(document).ready(function() {
-            var c = 0, message = []
-            event = event || textpattern.event
+        event = event || textpattern.event
 
-            if (!textpattern.Console.messages[event] || !textpattern.Console.messages[event].length) {
-                return this
+        if (!!textpattern.Console.queue[event]) return this
+        else textpattern.Console.queue[event] = true
+
+        $(document).ready(function() {
+            var c = 0, message = [], status = 0
+
+            if (textpattern.Console.messages[event] && textpattern.Console.messages[event].length) {
+                var container = textpattern.prefs.message || '{message}'
+
+                textpattern.Console.messages[event].forEach (function(pair) {
+                    message.push(textpattern.mustache(container, {
+                        status: pair[1] != 1 && pair[1] != 2 ? 'check' : 'alert',
+                        message: pair[0]
+                    }))
+                    c += 2*(pair[1] == 1) + 1*(pair[1] == 2)
+                })
+
+                status = !c ? 'success' : (c == 2*textpattern.Console.messages[event].length ? 'error' : 'warning')
+                textpattern.Console.messages[event] = []
             }
 
-            textpattern.Console.messages[event].forEach (function(pair) {
-                var iconClass = 'ui-icon ui-icon-'+(pair[1] != 1 && pair[1] != 2 ? 'check' : 'alert')
-                message.push('<span class="'+iconClass+'"></span> '+pair[0])
-                c += 2*(pair[1] == 1) + 1*(pair[1] == 2)
-            })
-
-            var status = !c ? 'success' : (c == 2*textpattern.Console.messages[event].length ? 'error' : 'warning')
-            textpattern.Console.messages[event] = []
+            textpattern.Console.queue[event] = false
             textpattern.Relay.callback('announce', {message: message, status: status})
         })
 
@@ -867,9 +877,11 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 }).register('uploadEnd', function (event, data) {
     $('progress.upload-progress').hide()
 }).register('updateList', function (event, data) {
-    var list = data.list || '#txp-list-container, #messagepane',
+    var list = data.list || '#messagepane, #txp-list-container',
         url = data.url || 'index.php',
-        callback = data.callback || function(event) {},
+        callback = data.callback || function(event) {
+            textpattern.Console.announce(event)
+        },
         handle = function(html) {
             if (html) {
                 $html = $(html)
@@ -894,12 +906,14 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         handle(data.html)
     }
 }).register('announce', function(event, data) {
-    if (data.message.length) {
-        container = textpattern.prefs.messagePane || '<span class="messageflash {status}" role="alert" aria-live="assertive">{messages}<a class="close" role="button" title="{close}" aria-label="{close}" href="#close">&#215;</a></span>'
-        message = textpattern.mustache(container, {messages: data.message.join('<br />'), status: data.status, close: textpattern.gTxt('close')})
+    var container = textpattern.prefs.messagePane || '',
+        message = container && data.message.length ? textpattern.mustache(container, {message: data.message.join('<br />'), status: data.status, close: textpattern.gTxt('close')}) : ''
+
+    if (message) {
         $('#messagepane').html(message)
+    } else {
+        $('#messagepane').empty()
     }
-    else $('#messagepane').empty()
 });
 
 /**
@@ -1052,6 +1066,7 @@ jQuery.fn.txpAsyncForm = function (options) {
                 form.button.removeAttr('disabled');
                 form.spinner.remove();
                 $('body').removeClass('busy');
+                textpattern.Console.announce()
             });
     });
 
@@ -1859,7 +1874,7 @@ jQuery.fn.txpFileupload = function (options) {
 
             if(file['size'] && file['size'] > maxFileSize) {
                 uploadErrors.push('Filesize is too big')
-                textpattern.Console.addMessage(['<strong>'+file['name']+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd')
+                textpattern.Console.addMessage(['<strong>'+file['name']+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadStart')
             }
 
             if(!uploadErrors.length) {
@@ -1880,7 +1895,7 @@ jQuery.fn.txpFileupload = function (options) {
         }
     }, options)).off('submit').submit(function (e) {
         e.preventDefault()
-        textpattern.Console.announce('uploadEnd')
+        textpattern.Console.announce('uploadStart')
         form.fileupload('add', {
             files: fileInput.prop('files')
         })
@@ -2051,7 +2066,7 @@ textpattern.Route.add('list, file, image', function () {
         textpattern.Relay.data.fileid = []
     }).register('uploadEnd', function(event) {
         var callback = function() {
-            textpattern.Console.announce(event.type)
+            textpattern.Console.announce(textpattern.event).announce(event.type)
         }
 
         $(document).ready(function() {
@@ -2325,7 +2340,6 @@ textpattern.Route.add('', function () {
 });
 
 // Initialize JavaScript.
-
 $(document).ready(function () {
     $('body').restorePanes();
 
