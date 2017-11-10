@@ -518,26 +518,7 @@ function plugin_install()
                     $help = $textile->textileRestricted($help_raw, 0, 0);
                 }
 
-                if ($exists) {
-                    $rs = safe_update(
-                       'txp_plugin',
-                        "type        = $type,
-                        author       = '".doSlash($author)."',
-                        author_uri   = '".doSlash($author_uri)."',
-                        version      = '".doSlash($version)."',
-                        description  = '".doSlash($description)."',
-                        help         = '".doSlash($help)."',
-                        code         = '".doSlash($code)."',
-                        code_restore = '".doSlash($code)."',
-                        code_md5     = '".doSlash($md5)."',
-                        flags        = $flags",
-                        "name        = '".doSlash($name)."'"
-                    );
-                } else {
-                    $rs = safe_insert(
-                       'txp_plugin',
-                       "name         = '".doSlash($name)."',
-                        status       = 0,
+                $fields = "
                         type         = $type,
                         author       = '".doSlash($author)."',
                         author_uri   = '".doSlash($author_uri)."',
@@ -547,8 +528,22 @@ function plugin_install()
                         code         = '".doSlash($code)."',
                         code_restore = '".doSlash($code)."',
                         code_md5     = '".doSlash($md5)."',
-                        load_order   = '".$order."',
-                        flags        = $flags"
+                        flags        = $flags
+                ";
+
+                if ($exists) {
+                    $rs = safe_update(
+                       'txp_plugin',
+                        $fields,
+                        "name        = '".doSlash($name)."'"
+                    );
+                } else {
+                    $rs = safe_insert(
+                       'txp_plugin',
+                       "name         = '".doSlash($name)."',
+                        status       = 0,
+                        load_order   = '".$order."',".
+                        $fields
                     );
                 }
 
