@@ -603,22 +603,20 @@ function setClassRemember(className, force)
 function sendAsyncEvent(data, fn, format)
 {
     var formdata = false;
-    format = format.split('.')
-    $.merge(format, ['async'])
 
     if ($.type(data) === 'string' && data.length > 0) {
         // Got serialized data.
-        data = data + '&app_mode='+format[1]+'&_txp_token=' + textpattern._txp_token;
+        data = data + '&app_mode=async&_txp_token=' + textpattern._txp_token;
     } else if (data instanceof FormData) {
         formdata = true;
-        data.append("app_mode", format[1]);
+        data.append("app_mode", "async");
         data.append("_txp_token", textpattern._txp_token);
     } else {
-        data.app_mode = format[1];
+        data.app_mode = "async";
         data._txp_token = textpattern._txp_token;
     }
 
-    format = format[0] || 'xml';
+    format = format || 'xml';
 
     return formdata ?
         $.ajax({
@@ -767,10 +765,13 @@ textpattern.Console =
      * @return textpattern.Console
      */
 
-    clear: function (event) {
+    clear: function (event, reset) {
         event = event || textpattern.event
         textpattern.Console.messages[event] = []
-        textpattern.Console.queue[event] = false
+
+        if (!!reset) {
+            textpattern.Console.queue[event] = false
+        }
 
         return this
     },
@@ -806,10 +807,9 @@ textpattern.Console =
         event = event || textpattern.event
 
         if (!!textpattern.Console.queue[event]) {
-            textpattern.Console.queue[event] = $.extend(textpattern.Console.queue[event], options)
             return this
         } else {
-            textpattern.Console.queue[event] = $.extend({empty: true}, options)
+            textpattern.Console.queue[event] = true
         }
 
         $(document).ready(function() {
@@ -829,11 +829,8 @@ textpattern.Console =
                 status = !c ? 'success' : (c == 2*textpattern.Console.messages[event].length ? 'error' : 'warning')
             }
 
-            if (message.length || !!textpattern.Console.queue[event].empty) {
-                textpattern.Relay.callback('announce', {event: event, message: message, status: status})
-            }
-
-            textpattern.Console.clear(event)
+            textpattern.Relay.callback('announce', {event: event, message: message, status: status})
+            textpattern.Console.clear(event, true)
         })
 
         return this
@@ -915,9 +912,9 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 
     if (message) {
         $('#messagepane').html(message)
-    } else {
+    } /*else {
         $('#messagepane').empty()
-    }
+    }*/
 });
 
 /**
@@ -1070,7 +1067,7 @@ jQuery.fn.txpAsyncForm = function (options) {
                 form.button.removeAttr('disabled');
                 form.spinner.remove();
                 $('body').removeClass('busy');
-                textpattern.Console.announce(null, {empty: false})
+                textpattern.Console.announce()
             });
     });
 
@@ -2123,7 +2120,7 @@ textpattern.Route.add('page, form, file, image', function () {
         $('#txp-tagbuilder-output').select();
     });
 
-    $('main').on('click', '.txp-tagbuilder-link', function (ev) {
+    $(document).on('click', '.txp-tagbuilder-link', function (ev) {
         txpAsyncLink(ev, 'tag');
     });
 

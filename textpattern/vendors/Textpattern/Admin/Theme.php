@@ -338,8 +338,13 @@ abstract class Theme
         $prefs = $this->manifest('prefs');
 
         if (!empty($prefs['textpattern'])) {
-            $prefs = json_encode($prefs['textpattern']);
-            $out .= script_js("textpattern.prefs = jQuery.extend(textpattern.prefs, {$prefs})");
+            $content = json_encode($prefs['textpattern']);
+            $out .= script_js("textpattern.prefs = jQuery.extend(textpattern.prefs, {$content})").n;
+        }
+
+        if (!empty($prefs['style'])) {
+            $content = $prefs['style'];
+            $out .= "<style>\n{$content}\n</style>".n;
         }
 
         // Custom CSS (see theme README for usage instructions).

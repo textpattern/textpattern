@@ -1,5 +1,6 @@
 {
   "textpattern": {
     "uploadPreview": "<div class='preview'><input name='title[{hash}]' value='{title}' \/><div class='info {status}'>{type} ({size} B)<\/div>{preview}<\/div>"
-  }
+  },
+  "style": "div.preview {display:inline-block;position:relative;overflow:hidden;height:128px;width:128px;margin:2px;border:1px solid #cccccc;}div.preview input {position:absolute;bottom:0;z-index:100;width:100%}div.preview .info {position:absolute;z-index:100;background:white;opacity:0.5}div.preview:hover .info {display:none}div.preview .alert {color:red}"
 }
