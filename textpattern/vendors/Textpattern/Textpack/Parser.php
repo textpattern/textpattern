@@ -145,7 +145,11 @@ class Parser
                 continue;
             }
 
-            // Translation.
+            // Translation. Note that the array is numerically indexed.
+            // Indexing by name seems attractive because it means merging default
+            // strings is simpler. But doing so means that installing combined
+            // textpacks (such as those from plugins with multiple languages
+            // in one file) results in only the last pack being available.
             if (preg_match('/^([\w\-]+)\s*=>\s*(.+)$/', $line, $m)) {
                 if (!empty($m[1]) && !empty($m[2]) && (empty($group) || in_array($event, $group))) {
                     $out[] = array(

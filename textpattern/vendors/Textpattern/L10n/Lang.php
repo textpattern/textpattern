@@ -266,6 +266,12 @@ class Lang
     public function install_file($lang)
     {
         $lang_files = glob(txpath.'/lang/'.$lang.'.{txt,textpack}', GLOB_BRACE);
+        $fallback_files = null;
+
+        if ($lang !== TEXTPATTERN_DEFAULT_LANG) {
+            $fallback_files = glob(txpath.'/lang/'.TEXTPATTERN_DEFAULT_LANG.'.{txt,textpack}', GLOB_BRACE);
+        }
+
         $now = date('YmdHis');
 
         if ($textpack = @file_get_contents($lang_files[0])) {
@@ -274,11 +280,40 @@ class Lang
             $parser->setLanguage($lang);
             $textpack = $parser->parse($textpack);
 
+            // Reindex the pack so it can be merged.
+            $langpack = array();
+            $fallpack = array();
+
+            foreach ($textpack as $translation) {
+                $langpack[$translation['name']] = $translation;
+            }
+
+            // Load the fallback strings so we're not left with untranslated strings.
+            // Note that the language is overridden to match the to-be-installed lang.
+            if ($fallback_files === null) {
+                $fallback = array();
+            } else {
+                if ($fallback = @file_get_contents($fallback_files[0])) {
+                    $parser = new \Textpattern\Textpack\Parser();
+                    $parser->setOwner('');
+                    $parser->setLanguage($lang);
+                    $fallback = $parser->parse($fallback);
+
+                    // Reindex the pack so it can be merged.
+                    foreach ($fallback as $translation) {
+                        $fallpack[$translation['name']] = $translation;
+                    }
+                }
+            }
+
             if (empty($textpack)) {
                 return false;
             }
 
-            foreach ($textpack as $translation) {
+            // Merge the packs, using the fallback strings to supply empties.
+            $fullpack = $langpack + $fallpack;
+
+            foreach ($fullpack as $translation) {
                 extract(doSlash($translation));
 
                 if ($event == 'setup') {
@@ -287,18 +322,18 @@ class Lang
 
                 $where = "lang = '{$lang}' AND name = '{$name}'";
                 $lastmod = empty($lastmod) ? $now : date('YmdHis', $lastmod);
+                $fields = "lastmod = '{$lastmod}', data = '{$data}', event = '{$event}', owner = '{$owner}'";
 
                 if (safe_count('txp_lang', $where)) {
                     $r = safe_update(
                         'txp_lang',
-                        "lastmod = '{$lastmod}', data = '{$data}', event = '{$event}', owner = '{$owner}'",
+                        $fields,
                         $where
                     );
                 } else {
                     $r = safe_insert(
                         'txp_lang',
-                        "lastmod = '{$lastmod}', data = '{$data}', event = '{$event}', owner = '{$owner}',
-                        lang = '{$lang}', name = '{$name}'"
+                        $fields .", lang = '{$lang}', name = '{$name}'"
                     );
                 }
             }
