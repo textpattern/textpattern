@@ -370,19 +370,9 @@ class Lang
         foreach ($textpack as $translation) {
             extract($translation);
 
-            //FIXME: Need recode old lang codes here or in Textpack\Parser()
-            if (!in_array($lang, $installed_langs)) {
-                $lang2 = mb_substr($lang, 0, 2, 'UTF-8');
-                if (in_array($lang2, $installed_langs)) {
-                    $lang = $lang2;
-                } elseif (!$add_new_langs) {
-                    continue;
-                }
+            if (!$add_new_langs && !in_array($lang, $installed_langs)) {
+                continue;
             }
-
-//            if (!$add_new_langs && !in_array($lang, $installed_langs)) {
-//                continue;
-//            }
 
             $where = "lang = '".doSlash($lang)."' AND name = '".doSlash($name)."'";
 
