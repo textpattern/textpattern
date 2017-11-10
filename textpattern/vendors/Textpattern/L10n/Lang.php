@@ -415,7 +415,13 @@ class Lang
 
     public function install_textpack_plugin($name)
     {
-        $textpack = fetch('textpack', 'txp_plugin', 'name', $name);
+
+        if (has_handler('textpack.fetch')) {
+            $textpack = callback_event('textpack.fetch', '', false, compact('name'));
+        } else {
+            $textpack = safe_field('textpack', 'txp_plugin', "name = '".doSlash($name)."'");
+        }
+
         if (!empty($textpack)) {
             $textpack = "#@owner {$name}".n.$textpack;
 
