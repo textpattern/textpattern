@@ -57,3 +57,11 @@ foreach ($installed_keys as $key) {
         safe_update('txp_lang', "lang='".doSlash($newKey)."'", "lang='".doSlash($key)."'");
     }
 }
+
+// Plugin Textpack
+$cols = getThings("DESCRIBE `".PFX."txp_plugin`");
+if (! in_array('textpack', $cols)) {
+    safe_alter('txp_plugin', "ADD textpack MEDIUMTEXT NOT NULL AFTER code_md5");
+    safe_alter('txp_plugin', "ADD data MEDIUMTEXT NOT NULL AFTER textpack");
+    safe_alter('txp_plugin', "MODIFY help MEDIUMTEXT NOT NULL");
+}

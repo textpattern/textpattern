@@ -518,6 +518,18 @@ function plugin_install()
                     $help = $textile->textileRestricted($help_raw, 0, 0);
                 }
 
+//  START dev_hardcode, will be deleted
+
+// Move to /update/_to_4.7.0.php
+$cols = getThings("DESCRIBE `".PFX."txp_plugin`");
+if (! in_array('textpack', $cols)) {
+    safe_alter('txp_plugin', "ADD textpack MEDIUMTEXT NOT NULL AFTER code_md5");
+    safe_alter('txp_plugin', "ADD data MEDIUMTEXT NOT NULL AFTER textpack");
+    safe_alter('txp_plugin', "MODIFY help MEDIUMTEXT NOT NULL");
+}
+
+//  END dev_hardcode
+
                 $fields = "
                         type         = $type,
                         author       = '".doSlash($author)."',
@@ -528,6 +540,8 @@ function plugin_install()
                         code         = '".doSlash($code)."',
                         code_restore = '".doSlash($code)."',
                         code_md5     = '".doSlash($md5)."',
+                        textpack     = '".@doSlash($textpack)."',
+                        data         = '".@doSlash($data)."',
                         flags        = $flags
                 ";
 
@@ -548,12 +562,7 @@ function plugin_install()
                 }
 
                 if ($rs and $code) {
-                    if (!empty($textpack)) {
-                        // Plugins tag their Textpack by plugin name.
-                        // The ownership may be overridden in the Textpack itself.
-                        $textpack = "#@owner {$name}".n.$textpack;
-                        install_textpack($textpack, false);
-                    }
+                    Txp::get('\Textpattern\L10n\Lang')->install_textpack_plugin($name);
 
                     if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
                         load_plugin($name, true);

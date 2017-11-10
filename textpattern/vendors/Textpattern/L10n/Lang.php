@@ -335,9 +335,19 @@ class Lang
         foreach ($textpack as $translation) {
             extract($translation);
 
-            if (!$add_new_langs && !in_array($lang, $installed_langs)) {
-                continue;
+            //FIXME: Need recode old lang codes here or in Textpack\Parser()
+            if (!in_array($lang, $installed_langs)) {
+                $lang2 = mb_substr($lang, 0, 2, 'UTF-8');
+                if (in_array($lang2, $installed_langs)) {
+                    $lang = $lang2;
+                } elseif (!$add_new_langs) {
+                    continue;
+                }
             }
+
+//            if (!$add_new_langs && !in_array($lang, $installed_langs)) {
+//                continue;
+//            }
 
             $where = "lang = '".doSlash($lang)."' AND name = '".doSlash($name)."'";
 
@@ -368,6 +378,41 @@ class Lang
         }
 
         return $done;
+    }
+
+    /**
+     * Install/Update plugin Textpack.
+     *
+     * @param   string $name      Plugin name
+     * @return  int Number of installed strings
+     * @package L10n
+     */
+
+    public function install_textpack_plugin($name)
+    {
+        $textpack = fetch('textpack', 'txp_plugin', 'name', $name);
+        if (!empty($textpack)) {
+            $textpack = "#@owner {$name}".n.$textpack;
+
+            return $this->install_textpack($textpack, false);
+        }
+
+        return 0;
+    }
+
+    /**
+     * Install/Update ALL plugin Textpack. Used when a new language is added.
+     *
+     * @package L10n
+     */
+
+    public function install_textpack_plugins()
+    {
+        if ($plugins = safe_column_num('name', 'txp_plugin', "textpack !='' ORDER BY load_order")) {
+            foreach ($plugins as $name) {
+                $this->install_textpack_plugin($name);
+            }
+        }
     }
 
     /**
