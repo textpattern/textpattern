@@ -22,7 +22,7 @@ could_not_update_author => يتعذر ضبط المؤلف
 current_password => كلمة السر الحالية
 designer => مصمم
 edit_author => تعديل مؤلف
-email_changed => غير البريد الإلكتروني إلى <strong>{email}</strong>
+email_changed => غير البريد الإلكتروني إلى <bdi dir="ltr">{email}</bdi>
 error_adding_new_author => حدث خطأ عند إضافة مؤلف جديد
 from_or_to_address_missing =>
 freelancer => محرر عادي
@@ -31,7 +31,7 @@ invalid_token =>
 last_login => آخر تسجيل الدخول
 link_expires => لديك حتى {day} {month} {year}، {time} للرد قبل انتهاء صلاحية هذا الرابط.
 login_name => اسم تسجيل الدخول
-login_sent_to => كلمة المرور أرسلت إلى {email}.
+login_sent_to => كلمة المرور أرسلت إلى <bdi dir="ltr">{email}</bdi>.
 log_in_at => لتسجيل الدخول إذهب إلى
 managing_editor => نائب المدير
 must_reassign_assets => الرجاء إعادة تحويل ملكية محتوى المستخدم
@@ -69,6 +69,9 @@ set_password => تعيين كلمة السر
 show_password => إظهار كلمة السر
 staff_writer => محرر متقدم
 token_expired =>
+unable_retrieve_template =>
+unable_retrieve_user =>
+unable_set_template =>
 unknown_author => مؤلف مجهول :{name}
 your_login_info => معلوماتكم الخاصة بالاتصال
 your_login_is => اسم الاتصال الخاص بكم هو
@@ -98,6 +101,16 @@ linktext => نص الرابط
 meta => بيانات ميتا
 no_articles_recorded => لا توجد مقالة مسجلة
 override_default_form => تجاوز الشكل الحالي
+problem_creating_article =>
+problem_deleting_article =>
+problem_getting_articles =>
+problem_retrieving_article =>
+problem_retrieving_article_categories =>
+problem_retrieving_categories =>
+problem_retrieving_category_info =>
+problem_retrieving_sections =>
+problem_saving_article_categories =>
+problem_updating_article =>
 reset_time => ضبط الساعة حسب التوقيت الحالي
 search_articles => البحث في المقالات
 set_expire_now =>
@@ -106,11 +119,12 @@ sort_display => تخصيص المقالة
 textfilter =>
 textfilter_help => تعليمات كتابة النص
 timestamp => تاريخ النشر
+trying_to_assign_unexisting_category_to_the_article =>
 url_title => النص الخاص بعنوان الموقع
 url_title_is_blank => نص عنوان الموقع غير موجود
 url_title_is_multiple => نص عنوان الموقع موجود
-view_html => عرض <span dir="ltr">HTML</span>
-view_html_short => <span dir="ltr">HTML</span>
+view_html => عرض HTML
+view_html_short => <bdi dir="ltr">HTML</bdi>
 view_preview => لمحة على المقال
 view_preview_short => لمحة
 view_text => تحرير نص المقال
@@ -168,6 +182,7 @@ ascending => ترتيب تصاعدي
 auth_required => رخصة مطلوبة
 back_to_login =>
 bad_cookie => الكوكي غير صحيح
+bad_login =>
 body => النص الأساسي
 cancel => إلغاء
 cannot_delete =>
@@ -215,13 +230,14 @@ id =>
 image_category => فئة الصور
 internal_error =>
 invalid_argument =>
+invalid_article_id =>
 last_modified =>
 links => الروابط
 link_category => فئة الرابط
 list_options =>
 logged_in_as => متصل كـ
 login => دخول
-login_to_textpattern => الاتصال إلى txp
+login_to_textpattern => الاتصال إلى Textpattern
 logout => إلغاء الاتصال
 log_in_button => اتصل
 method =>
@@ -257,6 +273,7 @@ tab_diagnostics => تشخيصات
 tab_extensions => امتدادات
 tab_file => ملفات
 tab_forms => أشكال
+tab_help =>
 tab_image => صور
 tab_import => واردات
 tab_languages =>
@@ -283,21 +300,21 @@ toggle_all_selected =>
 txpnl2br =>
 txprawxhtml => الخام HTML
 txpstriptags =>
-txptextile => <span dir="ltr">Textile</span>
-txptextilelite => <span dir="ltr">Textile Lite</span>
+txptextile => <bdi dir="ltr">Textile</bdi>
+txptextilelite => <bdi dir="ltr">Textile Lite</bdi>
 txt_quote_double_close => “
 txt_quote_double_open => ”
 txt_quote_single_close =>
 txt_quote_single_open =>
-units_b => B
-units_e => EB
-units_g => GB
-units_k => kB
-units_m => MB
-units_p => PB
-units_t => TB
-units_y => YB
-units_z => ZB
+units_b => <bdi dir="ltr">B</bdi>
+units_e => <bdi dir="ltr">EB</bdi>
+units_g => <bdi dir="ltr">GB</bdi>
+units_k => <bdi dir="ltr">kB</bdi>
+units_m => <bdi dir="ltr">MB</bdi>
+units_p => <bdi dir="ltr">PB</bdi>
+units_t => <bdi dir="ltr">TB</bdi>
+units_y => <bdi dir="ltr">YB</bdi>
+units_z => <bdi dir="ltr">ZB</bdi>
 unmoderated =>
 updated => محدث
 upload_err_cant_write => فشلت كتاب الملف في القرص
@@ -308,7 +325,7 @@ upload_err_no_file => لم يتم تعيين أي ملف
 upload_err_partial => لم يرسل الملف إلا جزئيا
 upload_err_tmp_dir =>
 upload_file => إرسال ملف
-use_textile => استعمال Textile
+use_textile => استعمال <bdi dir="ltr">Textile</bdi>
 viewsite => الإطلاع على الموقع
 view_per_page =>
 visible => ظاهر
@@ -332,6 +349,7 @@ active_plugins =>
 all_checks_passed => كل التصحيحات موثوقة
 apache_modules =>
 apache_version => Apache صيغة
+cgi_header_config =>
 clean_url_data_failed =>
 clean_url_test_failed =>
 diag_clear_private =>
@@ -343,14 +361,14 @@ detail => تفاصيل
 dev_version_live =>
 diagnostic_info => معلومات عن التشخيص
 dir_not_writable => {dirtype} الموزع لا يمكنه الكتابة في
-dns_lookup_fails => لاسم الميدان DNS فشل الأثر عن طريق
+dns_lookup_fails => لاسم الميدان <bdi dir="ltr">DNS</bdi> فشل الأثر عن طريق
 document_root => الملف الأصلي
 file_uploads_disabled => تحميل الملفلت في الموزع لا يعمل
 gd_info =>
-gd_library => GD Graphics Library
+gd_library => <bdi dir="ltr">GD Graphics Library</bdi>
 high => أقصى حد
 htaccess_contents => .htaccess محتوى الملف
-htaccess_missing => غير موجود .htaccess الملف
+htaccess_missing => غير موجود <code dir="ltr">.htaccess</code> الملف
 is_inaccessible => يتعذر الدخول
 last_update =>
 last_update_check =>
@@ -363,10 +381,10 @@ mysql_table_errors =>
 no_temp_dir =>
 old_placeholder =>
 os_version =>
-path_to_site_inacc => path_to_site تعذر الوصول إلى
-php_extensions => PHP إمتدادات
-php_sapi_mode =>
-php_version => PHP صيغة
+path_to_site_inacc => <code dir="ltr">path_to_site</code> تعذر الوصول إلى
+php_extensions => <bdi dir="ltr">PHP</bdi> إمتدادات
+php_sapi_mode => <bdi dir="ltr">PHP Server API</bdi>
+php_version => <bdi dir="ltr">PHP</bdi> صيغة
 php_version_required =>
 preflight_check => مراجعات
 pretext_data =>
@@ -380,8 +398,8 @@ still_exists => لا يزال موجودا
 textpattern_update_available =>
 textpattern_update_available_beta =>
 tmp_plugin_paths_match =>
-txp_path => Textpattern مفاتيح الدخول إلى
-txp_version => Textpattern ضيغة
+txp_path => <bdi dir="ltr">Textpattern</bdi> مفاتيح الدخول إلى
+txp_version => <bdi dir="ltr">Textpattern</bdi> ضيغة
 web_domain => عنوان الموقع
 #@discuss
 article_deleted => مقال محذوف
@@ -472,7 +490,7 @@ img_dir_not_writeable => حذار: لا يمكن تسجيل الصورة داخ�
 invalid_width_or_height => أحجام غير صحيحة
 keep_square_pixels => تقليص
 no_images_recorded =>
-only_graphic_files_allowed => .jpg, .gif, .png الملفات المقبولة هي فقط
+only_graphic_files_allowed => <code dir="ltr">.jpg</code> <code dir="ltr">.gif</code> <code dir="ltr">.png</code> الملفات المقبولة هي فقط
 replace_image => استبدال الصورة
 search_images =>
 swap_values =>
@@ -556,9 +574,9 @@ previewing_plugin => Plugin : عرض
 verify_plugin =>
 #@prefs
 admin_side_plugins => استخدام مجموعة البلوغين الإدارية؟
-allow_article_php_scripting => (PHP) ترخيص نظام .. في المقالات؟
-allow_form_override => (Form) ترخيص استعمال ؟ في المقال الواحد؟
-allow_page_php_scripting => (PHP) ترخيص نظام .. في ؟؟؟
+allow_article_php_scripting => <bdi dir="ltr">PHP</bdi> ترخيص نظام .. في المقالات؟
+allow_form_override => ترخيص استعمال ؟ في المقال الواحد؟
+allow_page_php_scripting => <bdi dir="ltr">PHP</bdi> ترخيص نظام .. في ؟؟؟
 all_hits => جميع الطلبات
 all_preferences =>
 archive_dateformat => حجم تاريخ الأرشيف
@@ -604,12 +622,12 @@ expire_logs_after => صحف النشاطات تبطل صلاحيتها بعد
 feeds =>
 file_base_path => مصنف الملفات المحمملة
 file_max_upload_size => أكبر حجم للملف المرسل في الموزع
-gmtoffset => <abbr title="Greenwich Mean Time">GMT</abbr> توقيت
+gmtoffset => <abbr title="Greenwich Mean Time"><bdi dir="ltr">GMT</bdi></abbr> توقيت
 ham =>
 hours_days_ago =>
 id_title => /id/title
 img_dir => مصنف الصور
-include_email_atom => Atom إدخال عنوان البريد الغلكتروني ضمن تدفق آتوم؟
+include_email_atom => <bdi dir="ltr">Atom</bdi> إدخال عنوان البريد الغلكتروني ضمن تدفق آتوم؟
 is_dst => ضبط التوقيت الصيفي المستخدم
 language => لغة
 leave_text_untouched => ترك النص كما هو
@@ -621,7 +639,7 @@ max_url_len => الحجم الأكبر لعنوان الموقع
 messy =>
 never_display_email => لا تستعرض أبدا عنوان البريد الإلكتروني؟
 no_preferences =>
-override_emailcharset => Latin 1 (ISO-8859-1) تحويل رسا~ل البريد الإلكتروني إلى الغة اللاتينية
+override_emailcharset => <bdi dir="ltr">Latin 1 (ISO-8859-1)</bdi> تحويل رسا~ل البريد الإلكتروني إلى الغة اللاتينية
 path_from_root => ملف فرعي إن كان متوفرا
 permlink_format =>
 permlink_hyphenated =>
@@ -630,7 +648,7 @@ permlink_mode => حجم عناوين المواقع
 plugin_cache_dir =>
 preferences_saved => تفضيلات مسجلة
 prefs => تفضيلات
-problem_connecting_update_server => RPC يتعذر الدخول عبر الموزع
+problem_connecting_update_server => يتعذر الدخول عبر الموزع
 production_debug => في ضبط
 production_live =>
 production_status =>
@@ -638,16 +656,16 @@ production_test => تحت التجربة
 publisher_email =>
 publish_expired_articles =>
 referrers_only =>
-rss_how_many => XML (RSS) كم من المقالات تمر عبر تدفق
+rss_how_many => <bdi dir="ltr">RSS</bdi> كم من المقالات تمر عبر تدفق
 section_id_title => /section/id/title
 section_title => /section/titre
 send_lastmod => إرسال عنوان التغيير الأخير
 show_article_category_count => عرض عدد المقالات مصنفة في فئات
-show_comment_count_in_feed => (XML) عرض عدد التعليقات عبر تدفق
+show_comment_count_in_feed => عرض عدد التعليقات عبر تدفق
 skin_base_path =>
 smtp_from =>
-spam_blacklists => anti spam القائمة السوداء المضادة لـ {متقطعة بفاصلة}
-syndicate_body_or_excerpt => XML ?عرض الملخص مكان المقال في تدفق
+spam_blacklists => <bdi dir="ltr">anti spam</bdi> القائمة السوداء المضادة لـ {متقطعة بفاصلة}
+syndicate_body_or_excerpt => عرض الملخص مكان المقال في تدفق
 tempdir => مصنف مؤقت
 textpack_strings_installed =>
 theme_name =>
@@ -659,12 +677,12 @@ up_to_date => محدث
 url_mode => صنف عنوان الموقع
 use_comments => تقبل التعليقات
 use_dns => DNS استخدام
-use_mail_on_feeds_id => XML ?أستخدام البريد للتعرف على التدفقات
+use_mail_on_feeds_id => أستخدام البريد للتعرف على التدفقات
 use_plugins => استخدام البلوغين
 year_month_day_title => السنة/الشهر/اليوم/العنوان
 #@public
 403_forbidden =>
-404_not_found => (error 404).لم يتيسر العثور على الصفحة المطلوبة
+404_not_found => <bdi dir="ltr">(error 404)</bdi> لم يتيسر العثور على الصفحة المطلوبة
 410_gone =>
 500_internal_server_error =>
 ago => من قبل
@@ -708,8 +726,8 @@ comment_moderated => تعليقك ينتظر الإثبات.سيظهر بعد أ
 comment_name => صاحب التعليق
 comment_name_required => الرجاء إدخال الاسم الخاص
 comment_posted => تم نشر التعليثق. شكرا على مشاركتكم
-comment_received => [{site}] {title} تم استلام التعليق
-comment_recorded => «{title}» كتب في الحين تعليق جديد على مقالكم
+comment_received => {site} {title} تم استلام التعليق
+comment_recorded => {title} كتب في الحين تعليق جديد على مقالكم
 comment_required => الرجاء إدخال تعليق
 comment_web => موقع على الأنترنت
 contact => الاتصال بالمؤلف
@@ -737,7 +755,7 @@ download_count =>
 edit => تغيير
 email => عنوان البريد
 email_address => عنوان البريد
-emphasis => emphase مغالاة
+emphasis => مغالاة
 enter_comment_here =>
 error_article_context =>
 error_category_context =>
@@ -862,7 +880,7 @@ subscript => إشارة
 superscript =>
 tag_error =>
 tag_mismatch =>
-textile_help => Textile مساعد
+textile_help => <bdi dir="ltr">Textile</bdi> مساعد
 textile_lite_help =>
 text_conversion => تحويل النص
 text_handling => تسيير النص
@@ -948,10 +966,11 @@ email_required =>
 get_started =>
 go_to_login =>
 installation_postamble =>
-mysql_database => MySQL بنك المعلومات
-mysql_login => (login) MySQL اسم المستخدم لوقين
-mysql_password => MySQL كلمة السر
-mysql_server => MySQL الموزع
+missing_db_details =>
+mysql_database => <bdi dir="ltr">MySQL</bdi> بنك المعلومات
+mysql_login => <bdi dir="ltr">MySQL (login)</bdi> اسم المستخدم لوقين
+mysql_password => <bdi dir="ltr">MySQL</bdi> كلمة السر
+mysql_server => <bdi dir="ltr">MySQL</bdi> الموزع
 my_site => موقعي
 my_slogan => شعاري الصغير
 name_required =>
@@ -978,11 +997,11 @@ site_config =>
 site_url =>
 tables_exist =>
 table_prefix =>
-thanks_for_interest => Textpattern. شكرا على الاهتمام الذي تولونه لتكست بترن
+thanks_for_interest => <bdi dir="ltr">Textpattern</bdi> شكرا على الاهتمام الذي تولونه لتكست بترن
 that_went_well => كل شيء على ما يرام. طاولات قد تم أنشاؤها وملؤها
 using_db => <code dir="ltr">{dbname}</code>في مرحلة الاستعمال
 warn_mail_unavailable =>
-welcome_to_textpattern => Textpattern مرحبا بك في
+welcome_to_textpattern => <bdi dir="ltr">Textpattern</bdi> مرحبا بك في
 your_email => عنوانك البريدي
 your_full_name => اسمك الحقيقي بالكامل
 you_can_access => بإمكانكم من الآن على الأرجح الدخول إلى صفحة التسيير عن طريق اسم الاتصال وكلمة السر المختارين
@@ -1084,7 +1103,7 @@ tag_comment_message =>
 tag_comment_message_input => كتابة الرسالة
 tag_comment_name => اسم التعليق
 tag_comment_name_input => كتابة الاسم
-tag_comment_permlink => URI دائمة
+tag_comment_permlink => <bdi dir="ltr">URI</bdi> دائمة
 tag_comment_preview => زر العرض
 tag_comment_remember => “خانة للإشارة”تذكر التفاصيل
 tag_comment_submit => زر التسجيل
