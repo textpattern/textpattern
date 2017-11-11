@@ -1339,6 +1339,12 @@ jQuery.fn.txpSortable = function (options) {
  */
 
 textpattern.passwordStrength = function (options) {
+    if (typeof zxcvbn !== 'function') {
+        zxcvbn = function(s) {
+            return {score: Math.min(Math.max(Math.floor(Math.log2(1+s.length))-1, 0), 4)}
+        }
+    }
+
     $('<script />', {
         src: 'https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js',
         async: 'async',
@@ -1346,7 +1352,6 @@ textpattern.passwordStrength = function (options) {
         crossorigin: 'anonymous',
         onload: function() {
             jQuery('form').on('input', 'input.txp-strength-hint', function () {
-                if (typeof zxcvbn !== 'function') return
 
                 var settings = $.extend({
                     'gtxt_prefix': ''
@@ -1354,7 +1359,7 @@ textpattern.passwordStrength = function (options) {
 
                 var me = jQuery(this);
                 var pass = me.val();
-                var passResult = zxcvbn(pass, user_inputs=[]);
+                var passResult =  zxcvbn(pass, user_inputs=[]);
                 var strengthMap = {
                     "0": {
                         "width": "5"
@@ -1401,7 +1406,8 @@ textpattern.passwordMask = function () {
         var inputBox = $(this).closest('form').find('input.txp-maskable');
         var newType = (inputBox.attr('type') === 'password') ? 'text' : 'password';
         textpattern.changeType(inputBox, newType);
-    });
+        $(this).attr('checked', newType === 'text' ? 'checked' : null).prop('checked', newType === 'text')
+    }).find('#show_password').prop('checked', false)
 }
 
 /**
