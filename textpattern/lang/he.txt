@@ -7,6 +7,10 @@ account_activation =>
 account_activation_confirmation =>
 add_new_author => הוסף כותב חדש
 alias_is_taken =>
+assert_callable =>
+assert_length =>
+assert_pattern =>
+assert_string =>
 assign_assets_to => שייך תוכן משתמש אל
 author_already_exists => הכותב <strong>{name}</strong> כבר קיים.
 author_deleted => הכותב <strong>{name}</strong> נמחק.
@@ -659,7 +663,7 @@ referrers_only => מפנים בלבד
 rss_how_many => כמה מאמרים ב-RSS?
 section_id_title => /section/id/title
 section_title => /section/title
-send_lastmod => שלח <code dir="ltr">Last-Modified</code"> כּוֹתֶרֶת?
+send_lastmod => שלח <code dir="ltr">Last-Modified</code> כּוֹתֶרֶת?
 show_article_category_count => להציג מספר המאמרים בקטגוריות?
 show_comment_count_in_feed => להציג מספר תגובות במזינים?
 skin_base_path =>

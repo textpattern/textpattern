@@ -7,6 +7,10 @@ account_activation =>
 account_activation_confirmation =>
 add_new_author => افزودن نویسنده جدید
 alias_is_taken =>
+assert_callable =>
+assert_length =>
+assert_pattern =>
+assert_string =>
 assign_assets_to => انتصاب محتوای کاربر به
 author_already_exists => نویسنده با نام <strong>{name}</strong> از پیش موجود است.
 author_deleted => نویسنده با نام <strong>{name}</strong> پاک شد.
@@ -582,7 +586,7 @@ all_preferences =>
 archive_dateformat => فرمت تاریخ بایگانی
 articles_use_excerpts => نوشته‌ها دارای بخش منتخب هستند؟
 attach_titles_to_permalinks => به لینک دائمی، عنوان هم افزوده گردد؟
-auto_dst => تنظیم خودکار تغییر زمان ><abbr title="Daylight Saving Time"><bdi dir="ltr"DST<bdi></abbr>؟
+auto_dst => تنظیم خودکار تغییر زمان <abbr title="Daylight Saving Time"><bdi dir="ltr">DST</bdi></abbr>؟
 category_subcategory => /category/subcategory
 clean => /clean/
 comments_are_ol => نمایش نظرات در قالب لیست شماره‌ای؟
