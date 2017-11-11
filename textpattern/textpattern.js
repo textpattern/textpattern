@@ -1339,13 +1339,15 @@ jQuery.fn.txpSortable = function (options) {
  */
 
 textpattern.passwordStrength = function (options) {
-    jQuery.ajax({
-        type: 'GET',
-        url: 'https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js',
-        dataType: 'script',
-        cache: true,
-        success: function() {
-            jQuery('form').on('keyup', 'input.txp-strength-hint', function () {
+    $('<script />', {
+        src: 'https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js',
+        async: 'async',
+        integrity: 'sha256-Znf8FdJF85f1LV0JmPOob5qudSrns8pLPZ6qkd/+F0o=',
+        crossorigin: 'anonymous',
+        onload: function() {
+            jQuery('form').on('input', 'input.txp-strength-hint', function () {
+                if (typeof zxcvbn !== 'function') return
+
                 var settings = $.extend({
                     'gtxt_prefix': ''
                 }, options);
@@ -1385,7 +1387,7 @@ textpattern.passwordStrength = function (options) {
                     .css('width', offset.width+'%');
             });
         }
-    });
+    }).appendTo('head');
 }
 
 /**
@@ -1945,7 +1947,7 @@ jQuery.fn.txpUploadPreview = function(template) {
                           preview = '<img src="' + createObjectURL(this) + '" />'
                         break
                     case 'audio':
-                    case 'video':
+//                    case 'video':
                           preview = '<'+mime[0]+' controls src="' + createObjectURL(this) + '" />'
                         break
                 }
@@ -2340,18 +2342,11 @@ $(document).ready(function () {
     });
 
     // Set up asynchronous links.
-    $('a.async:not(.script)').txpAsyncHref({
+    $('a.async').txpAsyncHref($.extend({
         error: function () {
             window.alert(textpattern.gTxt('form_submission_error'));
         }
-    });
-
-    $('a.async.script').txpAsyncHref({
-        dataType: 'script',
-        error   : function () {
-            window.alert(textpattern.gTxt('form_submission_error'));
-        }
-    });
+    }, $(this).hasClass('script') ? {dataType: 'script'} : {}));
 
     // Close button on the announce pane.
     $(document).on('click', '.close', function (e) {
