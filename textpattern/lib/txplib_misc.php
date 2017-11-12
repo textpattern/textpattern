@@ -309,33 +309,7 @@ function escape_cdata($str)
 
 function gTxt($var, $atts = array(), $escape = 'html')
 {
-    global $textarray;
-
-    if (!is_array($atts)) {
-        $atts = array();
-    }
-
-    if ($escape == 'html') {
-        foreach ($atts as $key => $value) {
-            $atts[$key] = txpspecialchars($value);
-        }
-    }
-
-    $v = strtolower($var);
-
-    if (isset($textarray[$v])) {
-        $out = $textarray[$v];
-
-        if ($out !== '') {
-            return strtr($out, $atts);
-        }
-    }
-
-    if ($atts) {
-        return $var.': '.join(', ', $atts);
-    }
-
-    return $var;
+    return Txp::get('\Textpattern\L10n\Lang')->txt($var, $atts, $escape);
 }
 
 /**
@@ -519,31 +493,7 @@ function dmp()
 
 function load_lang($lang, $events = null)
 {
-    if ($events === null && txpinterface != 'admin') {
-        $events = array('public', 'common');
-    }
-
-    $where = " AND name != ''";
-
-    if ($events) {
-        $where .= " AND event IN (".join(',', quote_list((array) $events)).")";
-    }
-
-    $out = array();
-
-    foreach (array($lang, TEXTPATTERN_DEFAULT_LANG) as $lang_code) {
-        $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang_code)."'".$where);
-
-        if (!empty($rs)) {
-            while ($a = nextRow($rs)) {
-                $out[$a['name']] = $a['data'];
-            }
-
-            return $out;
-        }
-    }
-
-    return $out;
+    return Txp::get('\Textpattern\L10n\Lang')->load($lang, $events);
 }
 
 /**
