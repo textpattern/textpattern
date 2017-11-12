@@ -265,16 +265,16 @@ class Lang
 
     public function install_file($lang)
     {
-        $lang_files = glob(txpath.'/lang/'.$lang.'.{txt,textpack}', GLOB_BRACE);
-        $fallback_files = null;
+        $lang_file = $this->findFilename($lang);
+        $fallback_file = null;
 
         if ($lang !== TEXTPATTERN_DEFAULT_LANG) {
-            $fallback_files = glob(txpath.'/lang/'.TEXTPATTERN_DEFAULT_LANG.'.{txt,textpack}', GLOB_BRACE);
+            $fallback_file = $this->findFilename(TEXTPATTERN_DEFAULT_LANG);
         }
 
         $now = date('YmdHis');
 
-        if ($textpack = @file_get_contents($lang_files[0])) {
+        if ($textpack = @file_get_contents($lang_file)) {
             $parser = new \Textpattern\Textpack\Parser();
             $parser->setOwner('');
             $parser->setLanguage($lang);
@@ -290,10 +290,10 @@ class Lang
 
             // Load the fallback strings so we're not left with untranslated strings.
             // Note that the language is overridden to match the to-be-installed lang.
-            if ($fallback_files === null) {
+            if ($fallback_file === null) {
                 $fallback = array();
             } else {
-                if ($fallback = @file_get_contents($fallback_files[0])) {
+                if ($fallback = @file_get_contents($fallback_file)) {
                     $parser = new \Textpattern\Textpack\Parser();
                     $parser->setOwner('');
                     $parser->setLanguage($lang);
@@ -406,44 +406,88 @@ class Lang
     }
 
     /**
-     * Install/Update plugin Textpack.
+     * Fetches the given language's strings from the database as an array.
      *
-     * @param   string $name      Plugin name
-     * @return  int Number of installed strings
-     * @package L10n
+     * If no $events is specified, only appropriate strings for the current context
+     * are returned. If 'txpinterface' constant equals 'admin' all strings are
+     * returned. Otherwise, only strings from events 'common' and 'public'.
+     *
+     * If $events is FALSE, returns all strings.
+     *
+     * Note the returned array inlcudes the language if the fallback has been used.
+     * This ensures (as far as possible) a full complement of strings, regardless of
+     * the degree of translation that's taken place in the desired $lang code.
+     * Any holes can be mopped up by the default language.
+     *
+     * @param   string            $lang   The language code
+     * @param   array|string|bool $events An array of loaded events
+     * @return  array
      */
 
-    public function install_textpack_plugin($name)
+    public function load($lang, $events = null)
     {
-
-        if (has_handler('textpack.fetch')) {
-            $textpack = callback_event('textpack.fetch', '', false, compact('name'));
-        } else {
-            $textpack = safe_field('textpack', 'txp_plugin', "name = '".doSlash($name)."'");
+        if ($events === null && txpinterface !== 'admin') {
+            $events = array('public', 'common');
         }
 
-        if (!empty($textpack)) {
-            $textpack = "#@owner {$name}".n.$textpack;
+        $where = " AND name != ''";
 
-            return $this->install_textpack($textpack, false);
+        if ($events) {
+            $where .= " AND event IN (".join(',', quote_list((array) $events)).")";
         }
 
-        return 0;
+        $out = array();
+
+        $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang)."'".$where);
+
+        if (!empty($rs)) {
+            while ($a = nextRow($rs)) {
+                $out[$a['name']] = $a['data'];
+            }
+        }
+
+        return $out;
     }
 
     /**
-     * Install/Update ALL plugin Textpack. Used when a new language is added.
+     * Returns a localisation string.
      *
+     * @param   string $var    String name
+     * @param   array  $atts   Replacement pairs
+     * @param   string $escape Convert special characters to HTML entities. Either "html" or ""
+     * @return  string A localisation string
      * @package L10n
      */
 
-    public function install_textpack_plugins()
+    public function txt($var, $atts = array(), $escape = 'html')
     {
-        if ($plugins = safe_column_num('name', 'txp_plugin', "textpack !='' ORDER BY load_order")) {
-            foreach ($plugins as $name) {
-                $this->install_textpack_plugin($name);
+        global $textarray;
+
+        if (!is_array($atts)) {
+            $atts = array();
+        }
+
+        if ($escape == 'html') {
+            foreach ($atts as $key => $value) {
+                $atts[$key] = txpspecialchars($value);
             }
         }
+
+        $v = strtolower($var);
+
+        if (isset($textarray[$v])) {
+            $out = $textarray[$v];
+
+            if ($out !== '') {
+                return strtr($out, $atts);
+            }
+        }
+
+        if ($atts) {
+            return $var.': '.join(', ', $atts);
+        }
+
+        return $var;
     }
 
     /**
