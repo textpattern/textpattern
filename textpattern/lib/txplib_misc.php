@@ -309,7 +309,13 @@ function escape_cdata($str)
 
 function gTxt($var, $atts = array(), $escape = 'html')
 {
-    return Txp::get('\Textpattern\L10n\Lang')->txt($var, $atts, $escape);
+    static $txpLang = null;
+
+    if ($txpLang === null) {
+        $txpLang = Txp::get('\Textpattern\L10n\Lang');
+    }
+
+    return $txpLang->txt($var, $atts, $escape);
 }
 
 /**
@@ -3034,14 +3040,18 @@ function tz_offset($timestamp = null)
 
 function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 {
-    static $charsets = array();
+    static $charsets = array(), $txpLocale = null;
 
     if (!$time) {
         $time = time();
     }
 
+    if ($txpLocale === null) {
+        $txpLocale = Txp::get('\Textpattern\L10n\Locale');
+    }
+
     // We could add some other formats here.
-    if ($format == 'iso8601' or $format == 'w3cdtf') {
+    if ($format == 'iso8601' || $format == 'w3cdtf') {
         $format = '%Y-%m-%dT%H:%M:%SZ';
         $gmt = true;
     } elseif ($format == 'rfc822') {
@@ -3051,14 +3061,14 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     }
 
     if ($override_locale) {
-        $oldLocale = Txp::get('\Textpattern\L10n\Locale')->getLocale(LC_TIME);
+        $oldLocale = $txpLocale->getLocale(LC_TIME);
 
         try {
-            Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, $override_locale);
+            $txpLocale->setLocale(LC_TIME, $override_locale);
         } catch (\Exception $e) {
             // Revert to original locale on error and signal that the
             // later revert isn't necessary
-            Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, $oldLocale);
+            $txpLocale->setLocale(LC_TIME, $oldLocale);
             $oldLocale = false;
         }
     }
@@ -3072,12 +3082,12 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     }
 
     if (!isset($charsets[$override_locale])) {
-        $charsets[$override_locale] = Txp::get('\Textpattern\L10n\Locale')->getCharset(LC_TIME, IS_WIN ? 'Windows-1252' : 'ISO-8859-1');
+        $charsets[$override_locale] = $txpLocale->getCharset(LC_TIME, IS_WIN ? 'Windows-1252' : 'ISO-8859-1');
     }
 
     $charset = $charsets[$override_locale];
 
-    if ($charset != 'UTF-8' and $format != 'since') {
+    if ($charset != 'UTF-8' && $format != 'since') {
         $new = '';
         if (is_callable('iconv')) {
             $new = @iconv($charset, 'UTF-8', $str);
@@ -3092,7 +3102,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 
     // Revert to the old locale.
     if ($override_locale && $oldLocale) {
-        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, $oldLocale);
+        $txpLocale->setLocale(LC_TIME, $oldLocale);
     }
 
     return $str;
