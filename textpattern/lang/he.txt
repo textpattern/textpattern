@@ -7,6 +7,10 @@ account_activation =>
 account_activation_confirmation =>
 add_new_author => הוסף כותב חדש
 alias_is_taken =>
+assert_callable =>
+assert_length =>
+assert_pattern =>
+assert_string =>
 assign_assets_to => שייך תוכן משתמש אל
 author_already_exists => הכותב <strong>{name}</strong> כבר קיים.
 author_deleted => הכותב <strong>{name}</strong> נמחק.
@@ -22,7 +26,7 @@ could_not_update_author => לא יכול לעדכן כותב.
 current_password =>
 designer => מעצב
 edit_author => ערוך כותב
-email_changed => כתובת הדואל שונתה לכתובת <strong>{email}</strong>.
+email_changed => כתובת הדואל שונתה לכתובת <bdi dir="ltr">{email}</bdi>.
 error_adding_new_author => שגיאה בעת הוספת כותב חדש.
 from_or_to_address_missing =>
 freelancer => עצמאי
@@ -69,6 +73,9 @@ set_password =>
 show_password =>
 staff_writer => צוות הכותבים
 token_expired =>
+unable_retrieve_template =>
+unable_retrieve_user =>
+unable_set_template =>
 unknown_author => כותב לא ידוע: <strong>{name}</strong>.
 your_login_info => מידע ההתחברות שלך
 your_login_is => שם המשתמש שלך הוא
@@ -98,6 +105,16 @@ linktext => טקסט-הקישור
 meta => Meta
 no_articles_recorded => לא נשמרו מאמרים.
 override_default_form => דרוס תבנית
+problem_creating_article =>
+problem_deleting_article =>
+problem_getting_articles =>
+problem_retrieving_article =>
+problem_retrieving_article_categories =>
+problem_retrieving_categories =>
+problem_retrieving_category_info =>
+problem_retrieving_sections =>
+problem_saving_article_categories =>
+problem_updating_article =>
 reset_time => אפס את הזמן לעכשיו
 search_articles =>
 set_expire_now =>
@@ -106,11 +123,12 @@ sort_display => מיין והצג
 textfilter =>
 textfilter_help =>
 timestamp => חתימת זמן
+trying_to_assign_unexisting_category_to_the_article =>
 url_title => כותרת-הכתובת
 url_title_is_blank => כותרת-הכתובת הושארה ריקה.
-url_title_is_multiple => (באותה כותרת-הכתובת נעשה שימוש ב-{count} מאמרים שונים).
+url_title_is_multiple => באותה כותרת-הכתובת נעשה שימוש ב-{count} מאמרים שונים.
 view_html => צפה ב-HTML
-view_html_short => HTML
+view_html_short => <bdi dir="ltr">HTML</bdi>
 view_preview => תצוגה מקדימה של המאמר
 view_preview_short =>
 view_text => ערוך את טקסט המאמר
@@ -166,8 +184,9 @@ are_you_sure => האם אתה בטוח ?
 article => מאמר
 ascending => בסדר יורד
 auth_required => נדרשת הרשאה
-back_to_login => חזור אל התחברות Textpattern
+back_to_login => חזור אל התחברות <bdi dir="ltr">Textpattern</bdi>
 bad_cookie => העוגייה אינה תקינה. אנא רשום את פרטי ההתחברות.
+bad_login =>
 body => גוף
 cancel =>
 cannot_delete =>
@@ -186,7 +205,7 @@ collapse_all =>
 comment => תגובה
 comments_expired => לא ניתן להגיב עוד למאמר זה.
 confirm_delete_popup => האם אתה בטוח שברצונך למחוק?
-cookies_must_be_enabled => עוגיות בדפדפן חייבות להיות מאופשרות כדי להשתמש ב-Textpattern.
+cookies_must_be_enabled => עוגיות בדפדפן חייבות להיות מאופשרות כדי להשתמש ב-<bdi dir="ltr">Textpattern</bdi>.
 could_not_log_in => לא יכול להתחבר עם צירוף שם/סיסמה הזה.
 date_added => התאריך נוסף
 deleteforce => מחק בכוח
@@ -215,6 +234,7 @@ id => מזהה
 image_category => קטגורייה
 internal_error => שגיאה פנימית
 invalid_argument =>
+invalid_article_id =>
 last_modified => עודכן לאחרונה
 links => קישורים
 link_category => קטגוריית הקישור
@@ -257,6 +277,7 @@ tab_diagnostics => בדיקת המערכת
 tab_extensions => הרחבות
 tab_file => קבצים
 tab_forms => תבניות
+tab_help =>
 tab_image => תמונות
 tab_import => ייצא
 tab_languages =>
@@ -283,25 +304,25 @@ toggle_all_selected => שנה בחירה
 txpnl2br => שבירת שורות בלבד
 txprawxhtml => HTML נקי
 txpstriptags => סנן תוויות
-txptextile => Textile
-txptextilelite => Textile Lite
+txptextile => <bdi dir="ltr">Textile</bdi>
+txptextilelite => <bdi dir="ltr">Textile Lite</bdi>
 txt_quote_double_close => ”
 txt_quote_double_open => „
 txt_quote_single_close => ’
 txt_quote_single_open => ‚
-units_b => B
-units_e => EB
-units_g => GB
-units_k => kB
-units_m => MB
-units_p => PB
-units_t => TB
-units_y => YB
-units_z => ZB
+units_b => <bdi dir="ltr">B</bdi>
+units_e => <bdi dir="ltr">EB</bdi>
+units_g => <bdi dir="ltr">GB</bdi>
+units_k => <bdi dir="ltr">kB</bdi>
+units_m => <bdi dir="ltr">MB</bdi>
+units_p => <bdi dir="ltr">PB</bdi>
+units_t => <bdi dir="ltr">TB</bdi>
+units_y => <bdi dir="ltr">YB</bdi>
+units_z => <bdi dir="ltr">ZB</bdi>
 unmoderated => לא עבר ביקורת
 updated => עודכן
 upload_err_cant_write => נכשל בכתיבת הקובץ לדחסק.
-upload_err_extension => העלאת הקובץ נעצרה על ידי תוספת PHP.
+upload_err_extension => העלאת הקובץ נעצרה על ידי תוספת <bdi dir="ltr">PHP</bdi>.
 upload_err_form_size => הקובץ גדול מהגודל המקסימלי המותר כפי שהוגדר בהגדרות המערכת.
 upload_err_ini_size => הקובץ גדול יותר מהגודל <code dir="ltr">upload_max_filesize</code> בקובץ <code dir="ltr">php.ini</code>.
 upload_err_no_file => שום קובץ לא צויין.
@@ -330,8 +351,9 @@ edit_css => ערוך סגנון
 #@diag
 active_plugins => תוספים פעילים
 all_checks_passed => כל הבדיקות עברו בהצלחה!
-apache_modules => רכיבי Apache
-apache_version => גירסת Apache
+apache_modules => רכיבי <bdi dir="ltr">Apache</bdi>
+apache_version => גירסת <bdi dir="ltr">Apache</bdi>
+cgi_header_config =>
 clean_url_data_failed => בדיקה כתובות נקיות נכשלה
 clean_url_test_failed => בדיקת כתובות נקיות נכשלה.
 diag_clear_private =>
@@ -347,41 +369,41 @@ dns_lookup_fails => החיפוש ב-DNS נכשל
 document_root => ספריית השורש
 file_uploads_disabled => העלאת קבצים בוטלה
 gd_info => {version}; פורמטים נתמכים: {supported}.
-gd_library => GD Graphics Library
+gd_library => <bdi dir="ltr">GD Graphics Library</bdi>
 high => גבוה
-htaccess_contents => תוכן קובץ .htaccess
-htaccess_missing => קובץ .htaccess חסר
+htaccess_contents => תוכן קובץ <code dir="ltr">.htaccess</code>
+htaccess_missing => קובץ <code dir="ltr">.htaccess</code> חסר
 is_inaccessible => אינו נגיש
 last_update => עודכן לאחרונה
 last_update_check =>
-locale => Locale
+locale => <bdi dir="ltr">Locale</bdi>
 low => נמוך
 missing_files => קבצים חסרים
-modified_files => מספר קבצי Textpattern שונו
+modified_files => מספר קבצי <bdi dir="ltr">Textpattern</bdi> שונו
 mod_rewrite_missing => רכיב Apache <code dir="ltr">mod_rewrite</code> לא מותקן
 mysql_table_errors => השגיאות הבאות זוהו בטבלאות MySQL שלך
-no_temp_dir => לא הוגדרה ספריית קבציפ זמניים(temp)
+no_temp_dir => לא הוגדרה ספריית קבציפ זמניים
 old_placeholder => קובץ שומר מקום ישן מפריע
 os_version => גירסת מערכת ההפעלה
 path_to_site_inacc => המסלול לאתר איננה נגישה.
-php_extensions => רכיבי PHP
-php_sapi_mode => PHP Server API
-php_version => גירסת PHP
-php_version_required => מערכת Textpattern דורשת ש-PHP מגירסה {version} יהיה מותקן בשרת שלך.
+php_extensions => רכיבי <bdi dir="ltr">PHP</bdi>
+php_sapi_mode => <bdi dir="ltr">PHP Server API</bdi>
+php_version => גירסת <bdi dir="ltr">PHP</bdi>
+php_version_required => מערכת <bdi dir="ltr">Textpattern</bdi> דורשת ש-<bdi dir="ltr">PHP</bdi> מגירסה {version} יהיה מותקן בשרת שלך.
 preflight_check => בדיקה לפני הרצה
 pretext_data =>
-rfc2616_headers => RFC 2616 headers
+rfc2616_headers => <bdi dir="ltr">RFC 2616 headers</bdi>
 server => שרת
 server_time => זמן המקומי של השרת
 site_trailing_slash => בכתובת האתר יש / בסוף
 site_url_mismatch => ייתכן כי הגדרת כתובת האתר שגוייה
-some_php_functions_disabled => פונקציות ה-PHP הבאות( הנחוצות ל-Textpattern) מבוטלות בשרת שלך:
+some_php_functions_disabled => פונקציות ה-<bdi dir="ltr">PHP</bdi> הבאות( הנחוצות ל-<bdi dir="ltr">Textpattern</bdi>) מבוטלות בשרת שלך:
 still_exists => עדייו קיים
-textpattern_update_available => גירסה חדשה של מערכת Textpattern ({version}) <a href="https://textpattern.com/download" rel="external" title="הורד את מאיזור ההורדות של Textpattern">זמינה להורדה</a>.
+textpattern_update_available => גירסה חדשה של מערכת <bdi dir="ltr">Textpattern</bdi> ({version}) <a href="https://textpattern.com/download" rel="external">זמינה להורדה</a>.
 textpattern_update_available_beta =>
 tmp_plugin_paths_match => הספרייה הזמנית ספריית מטמון התוספים אינם יכולים להיות זהות.
-txp_path => מסלול Textpattern
-txp_version => גירסת Textpattern
+txp_path => מסלול <bdi dir="ltr">Textpattern</bdi>
+txp_version => גירסת <bdi dir="ltr">Textpattern</bdi>
 web_domain => כתובת האתר
 #@discuss
 article_deleted => המאמר נמחק!
@@ -472,7 +494,7 @@ img_dir_not_writeable => אזהרה לא יכול לכתוב לספריית הת
 invalid_width_or_height => רוחב או גובה לא תקינים.
 keep_square_pixels => חתוך
 no_images_recorded => לא נשמרו תמונות.
-only_graphic_files_allowed => קבצי הגרפיקה המותרים .jpg, .gif או .png
+only_graphic_files_allowed => קבצי הגרפיקה המותרים <code dir="ltr">.jpg</code> <code dir="ltr">.gif</code> או <code dir="ltr">.png</code>
 replace_image => שנה תמונה
 search_images =>
 swap_values =>
@@ -488,8 +510,8 @@ upload_thumbnail => העלה תמונה מוקטנת
 #@lang
 active_language => השפה הפעילה כרגע
 active_language_ui =>
-install_from_textpack => התקן מ-Textpack
-install_textpack => התקן Textpack
+install_from_textpack => התקן מ-<bdi dir="ltr">Textpack</bdi>
+install_textpack => התקן <bdi dir="ltr">Textpack</bdi>
 language_deleted =>
 language_installed =>
 language_not_installed =>
@@ -533,7 +555,7 @@ page_nav_hed => ניווט האתר
 page_save_failed =>
 page_updated => הדף <strong>{name}</strong> עודכן.
 page_used_by_section => הדף <strong>{name}</strong> לא נמחק. נעשה בו שימוש על ידי {count} איזורים.
-page_xml_hed => מזיני XML
+page_xml_hed => מזיני <bdi dir="ltr">XML</bdi>
 #@plugin
 bad_plugin_code => קוד תוסף שגוי או ריק.
 changeorder => שנה סדר
@@ -556,15 +578,15 @@ previewing_plugin => תצוגה מקדימה של התוסף:
 verify_plugin => אמת תוסף
 #@prefs
 admin_side_plugins => להשתמש בתוספי של צד המנהל?
-allow_article_php_scripting => לאפשר PHP במאמרים?
+allow_article_php_scripting => לאפשר <bdi dir="ltr">PHP</bdi> במאמרים?
 allow_form_override => לאפשר דריסת טפסים?
-allow_page_php_scripting => לאפשר PHP בעמודים?
+allow_page_php_scripting => לאפשר <bdi dir="ltr">PHP</bdi> בעמודים?
 all_hits => כל הלחיצות
 all_preferences =>
 archive_dateformat => מבנה תאריך הארכיון
 articles_use_excerpts => מאמרים משתמשים בפתיחים?
 attach_titles_to_permalinks => לשייך כותרות לקישורים-קבועים?
-auto_dst => האם לעדכן אוטומטית את הגדרות שעון הקיץ (DST)?
+auto_dst => האם לעדכן אוטומטית את הגדרות שעון הקיץ <bdi dir="ltr">(DST)</bdi>?
 category_subcategory => /category/subcategory
 clean => /clean/
 comments_are_ol => להציג את התגובות כרשימה ממוספרת?
@@ -579,11 +601,11 @@ comments_on_default => מופעל כברירת מחדל?
 comments_require_email => דואל המשתמש נחוץ לתגובות?
 comments_require_name => שם המשתמש נחוץ לתגובות?
 comments_sendmail => שלח תגובות לכותב?
-comments_use_fat_textile => לאפשר עוד שפת Textile?
+comments_use_fat_textile => לאפשר עוד שפת <bdi dir="ltr">Textile</bdi>?
 comment_means_site_updated => תגובה חדשה פירושה עדכון האתר?
 comment_nofollow => השתמש ב-<code dir="ltr">rel="nofollow"</code> בתגובות?
 convert_linebreaks => הפוך מעברי שורה
-css => css
+css => <bdi dir="ltr">CSS</bdi>
 custom => מותאם אישית
 custom_10_set => שם שדה מותאם אישית 10
 custom_1_set => שם שדה מותאם אישית 1
@@ -599,7 +621,7 @@ default_event => לשונית ברירת המחדל
 default_publish_status =>
 doctype => Doctype
 module_pophelp =>
-enable_xmlrpc_server => לאפשר שרת XML-RPC?
+enable_xmlrpc_server => לאפשר שרת <bdi dir="ltr">XML-RPC</bdi>?
 expire_logs_after => דוחות מסתיימים אחרי?
 feeds => מזינים
 file_base_path => מסלול להעלאת הקבצים
@@ -609,7 +631,7 @@ ham => הכל מלבד ספאם
 hours_days_ago => שעות/ימים שעברו
 id_title => /id/title
 img_dir => ספריית התמונות
-include_email_atom => לכלול דואל במזיני Atom?
+include_email_atom => לכלול דואל במזיני <bdi dir="ltr">Atom</bdi>?
 is_dst => שעון קייץ
 language => שפה
 leave_text_untouched => השאר את הטקסט ללא שינוי
@@ -621,7 +643,7 @@ max_url_len => אורך מקסימלי של כתובת
 messy => ?=messy
 never_display_email => לעולם לא להציג דואל?
 no_preferences =>
-override_emailcharset => להשתמש בקידוד ISO-8859-1 לדואל? (ברירת המחדל היא UTF-8)?
+override_emailcharset => להשתמש בקידוד <bdi dir="ltr">ISO-8859-1</bdi> לדואל? (ברירת המחדל היא <bdi dir="ltr">UTF-8</bdi>)?
 path_from_root => תת ספרייה (אם קיימת)
 permlink_format =>
 permlink_hyphenated =>
@@ -641,15 +663,15 @@ referrers_only => מפנים בלבד
 rss_how_many => כמה מאמרים ב-RSS?
 section_id_title => /section/id/title
 section_title => /section/title
-send_lastmod => שלח "Last-Modified" header?
+send_lastmod => שלח <code dir="ltr">Last-Modified</code> כּוֹתֶרֶת?
 show_article_category_count => להציג מספר המאמרים בקטגוריות?
 show_comment_count_in_feed => להציג מספר תגובות במזינים?
 skin_base_path =>
-smtp_from => כתובת השולח (SMTP envelope)
+smtp_from => כתובת השולח (<bdi dir="ltr">SMTP</bdi>)
 spam_blacklists => רשימה שחורה של ספאמרים(מופרדים בפסיק)
 syndicate_body_or_excerpt => לשלוח גם תוכן קשור? (ברירת מחדל היא הגוף)?
 tempdir => שדה קבצים זמניים
-textpack_strings_installed => {count} מחרוזות הותקנן מ-Textpack
+textpack_strings_installed => {count} מחרוזות הותקנן מ-<bdi dir="ltr">Textpack</bdi>
 theme_name => עיצוב איזור הניהול
 timeoffset => איזור הזמן(בשעות)
 title_no_widow => לא לאפשר מילים בודדות ככותרות המאמר?
@@ -664,7 +686,7 @@ use_plugins => להשתמש בתוספים?
 year_month_day_title => /year/month/day/title
 #@public
 403_forbidden => לא רשאי.
-404_not_found => 404 - העמוד שביקשת לא נמצא.
+404_not_found => 404 העמוד שביקשת לא נמצא.
 410_gone => הדף שבוקש אינו קיים יותר.
 500_internal_server_error => שגיאה פנימית של השרת.
 ago => לפני
@@ -708,7 +730,7 @@ comment_moderated => התגובה שלך ממתינה לביקורת. היא ת�
 comment_name => שם
 comment_name_required => אנא רשום את שמך.
 comment_posted => תודה שהגבת.
-comment_received => [{site}] תגובה התקבלה: {title}
+comment_received => {site} תגובה התקבלה: {title}
 comment_recorded => תגובה במאמר שלך „{title}” נשמרה.
 comment_required => עליך לרשום תגובה.
 comment_web => אתר
@@ -793,7 +815,7 @@ message_preview => תצוגה מקדימה של ההודעה
 message_saved => ההודעה נשמרה
 minute => דקה
 minutes => דקות
-missing_article_tag => תבנית הדף <strong>{page}</strong> לא מכילה txp:article.
+missing_article_tag => תבנית הדף <strong>{page}</strong> לא מכילה <code dir="ltr">txp:article</code>
 modified_by => שונה בפעם האחרונה על ידי
 month => חודש
 more => עוד
@@ -832,7 +854,7 @@ prev => הקודם
 preview => תצוגה מקדימה
 publish => פרסם
 published_at => פורסם בתאריך
-raw_php_deprecated => תגי PHP נקי מועמדים לביטול
+raw_php_deprecated => תגי <bdi dir="ltr">PHP</bdi> נקי מועמדים לביטול
 recently => לאחרונה
 recent_articles => מאמרים אחרונים
 recent_comments => תגובות אחרונות
@@ -862,8 +884,8 @@ subscript => תחתי
 superscript => עילי
 tag_error => שגיאת התג:
 tag_mismatch =>
-textile_help => עזרה Textile
-textile_lite_help => עזרה של Textile Lite
+textile_help => עזרה <bdi dir="ltr">Textile</bdi>
+textile_lite_help => עזרה של <bdi dir="ltr">Textile Lite</bdi>
 text_conversion => הפיכת טקסט
 text_handling => טיפול בטקסט
 time => זמן
@@ -928,7 +950,7 @@ uses_style => משתמש בסגנון
 about_to_create => אתה עומד ליצור טבלאות ולמלא אותם בנתונים.
 add_config_file =>
 admin_theme =>
-already_installed => נראה כי Textpattern כבר מותקנת. אם ברצונך להתקין אותה מחדש, אנא מחק <code dir="ltr">config.php</code> מספרייה <code dir="ltr">/textpattern/</code> ונסה שוב.
+already_installed => נראה כי <bdi dir="ltr">Textpattern</bdi> כבר מותקנת. אם ברצונך להתקין אותה מחדש, אנא מחק <code dir="ltr">config.php</code> מספרייה <code dir="ltr">/textpattern/</code> ונסה שוב.
 back =>
 before_you_proceed => לפני שתמשיך
 checking_database => בודק קשר עם בסיס הנתונים
@@ -942,16 +964,17 @@ creating_db_tables =>
 db_cant_connect => לא יכול להתחבר לבסיס הנתונים
 db_connected => מחובר
 db_doesnt_exist => בסיס הנתונים <strong>{dbname}</strong> אינו קיים.
-db_must_exist => שים לב שבסיס הנתונים שציינת חייב להיות קיים; Textpattern לא תיצור אותו בשבילך.
+db_must_exist => שים לב שבסיס הנתונים שציינת חייב להיות קיים; <bdi dir="ltr">Textpattern</bdi> לא תיצור אותו בשבילך.
 did_it => ביצעתי זאת
 email_required => אנא ספק כתובת דואל תקינה.
 get_started =>
 go_to_login =>
 installation_postamble =>
-mysql_database => בסיס הנתונים MySQL
-mysql_login => משתמש MySQL
-mysql_password => סיסמת MySQL
-mysql_server => שרת MySQL
+missing_db_details =>
+mysql_database => בסיס הנתונים <bdi dir="ltr">MySQL</bdi>
+mysql_login => משתמש <bdi dir="ltr">MySQL</bdi>
+mysql_password => סיסמת <bdi dir="ltr">MySQL</bdi>
+mysql_server => שרת <bdi dir="ltr">MySQL</bdi>
 my_site => האתר שלי
 my_slogan => הסלוגן התמציתי שלי
 name_required =>
@@ -978,11 +1001,11 @@ site_config =>
 site_url => כתובת האתר
 tables_exist =>
 table_prefix => תחילית הטבלה
-thanks_for_interest => תודה שהבעת עניין ב-Textpattern.
+thanks_for_interest => תודה שהבעת עניין ב-<bdi dir="ltr">Textpattern</bdi>.
 that_went_well => זה הצליח. טבלאות בסיס הנתונים נוצרו ומולאו בנתונים.
 using_db => משתמש בבסיס הנתונים: {dbname}.
-warn_mail_unavailable => התקנת ה-PHP שלך חסרה את פונקציית <code dir="ltr">mail()</code>. ולכן לא יישלחו דואלים מהמערכת. זה מגביל את תפקודיות המערכת.
-welcome_to_textpattern => ברוך הבא אל Textpattern
+warn_mail_unavailable => התקנת ה-<bdi dir="ltr">PHP</bdi> שלך חסרה את פונקציית <code dir="ltr">mail()</code>. ולכן לא יישלחו דואלים מהמערכת. זה מגביל את תפקודיות המערכת.
+welcome_to_textpattern => ברוך הבא אל <bdi dir="ltr">Textpattern</bdi>
 your_email => כתובת הדואל שלך
 your_full_name => השם המלא שלך
 you_can_access => תוכל לגשת אל <a href="index.php">הממשק הראשי</a> עם שם המשתמש והסיסמה שבחרת.
@@ -1008,7 +1031,7 @@ build => בנה תג
 button_text => טקסט הכפתור
 category_list_section => לקשר אל איזור מסוים ?
 category_tags => קטגורייה
-class => מחלקת CSS
+class => מחלקת <bdi dir="ltr">CSS</bdi>
 comments_form => תבנית תגובות
 comment_form => תבנית תגובה
 comment_name_link => לקשר אל כתובת הדואל/האתר של המגיב?
@@ -1020,24 +1043,24 @@ filename => שם
 file_download_tags => הורדות קבצים
 flavor => מבנה העדכון
 format => סגנן
-gmt => מבנה לפי זמן <abbr title="Greenwich Mean Time">GMT</abbr>?
+gmt => מבנה לפי זמן <abbr title="Greenwich Mean Time"><bdi dir="ltr">GMT</bdi></abbr>?
 has_excerpt => בעל פתיח
 hilight => תג הארה
 hilight_limit => כמה מופעים להאיר
 html_id => תכונת HTML <code dir="ltr">id</code>
 include_default => לכלול איזור ברירת מחדל
-inline_style => סגנון משולב(CSS)
+inline_style => סגנון משולב(<bdi dir="ltr">CSS</bdi>)
 input_size => גודל הקלט
-labeltag => תג HTML עבור תווית
+labeltag => תג <bdi dir="ltr">HTML</bdi> עבור תווית
 limit => הגבל
-linkclass => מחלקת CSS עבור קישורים
+linkclass => מחלקת <bdi dir="ltr">CSS</bdi> עבור קישורים
 link_to_this_author => לקשר אל רשימת מאמרים אחרים של כותבזה?
 link_to_this_category => לקשר אל מאמרים אחרים בקטגורייה זו?
 link_to_this_section => לקשר אל רשימה של מאמרים אחרים באיזור זה?
 listform => טופס רשימה
 match => כיצד הם קשורים?
 match_type =>
-media => תכונת HTML <code dir="ltr">media</code>
+media => תכונת <bdi dir="ltr">HTML</bdi> <code dir="ltr">media</code>
 msgcols => עמודות תיבת הטקסט של ההודעה
 msgrows => שורות תיבת הטקסט של ההודעה
 no_categories_available => .אין קטגוריות
@@ -1048,7 +1071,7 @@ pageby => עמד לפי
 page_file_hed => הורדות קבצים
 pgonly => ספור מאמרים, אבל אל תציג אותם
 random => אקראי
-rel => תכונת HTML <code dir="ltr">rel</code>
+rel => תכונת <bdi dir="ltr">HTML</bdi> <code dir="ltr">rel</code>
 searchall => לחפש בכל האיזורים ?
 searchsticky => לחפש מאמרים דביקים ?
 search_input_form => קלט החיפוש
@@ -1091,7 +1114,7 @@ tag_comment_submit => כפתור שליחה
 tag_comment_time => זמן
 tag_comment_web => אתר
 tag_comment_web_input => קלט אתר
-tag_css => קישור CSS (<code dir="ltr">head</code>)
+tag_css => קישור <bdi dir="ltr">CSS</bdi> (<code dir="ltr">head</code>)
 tag_email => קישור דואל (חסין ספאם)
 tag_excerpt => תוכן נוסף
 tag_feed_link => הזן מאמרים

@@ -7,6 +7,10 @@ account_activation =>
 account_activation_confirmation =>
 add_new_author => ایک نۓ مصنف کو شامل کریں
 alias_is_taken =>
+assert_callable =>
+assert_length =>
+assert_pattern =>
+assert_string =>
 assign_assets_to => صارف کے اشیا یہاں تفویض کریں
 author_already_exists =>
 author_deleted => مصنف <strong>{name}</strong> کو حذف کیا گیا
@@ -22,7 +26,7 @@ could_not_update_author => مصنف کے معلومات تازہ کرنے میں
 current_password =>
 designer => ڈیزائنر
 edit_author => مصنف کے معلومات تدوین کریں
-email_changed => ای میل کا پتہ <strong>{email}</strong> کو بدلہ گیا
+email_changed => ای میل کا پتہ <bdi dir="ltr">{email}</bdi> کو بدلہ گیا
 error_adding_new_author => نۓ مصنف کو شامل کرنے میں نقص !
 from_or_to_address_missing =>
 freelancer => مصنف آزاد
@@ -69,6 +73,9 @@ set_password =>
 show_password =>
 staff_writer => اندرونی مصنف
 token_expired =>
+unable_retrieve_template =>
+unable_retrieve_user =>
+unable_set_template =>
 unknown_author => نامعلوم مصنف: <strong>{name}</strong>
 your_login_info => آپ کے لاگ ان معلومات
 your_login_is => آپ کا لاگ ان نام
@@ -98,6 +105,16 @@ linktext => ربطی متن
 meta => Meta
 no_articles_recorded => کوئی مضمون دستیاب نہیں
 override_default_form => فارم زیر کریں
+problem_creating_article =>
+problem_deleting_article =>
+problem_getting_articles =>
+problem_retrieving_article =>
+problem_retrieving_article_categories =>
+problem_retrieving_categories =>
+problem_retrieving_category_info =>
+problem_retrieving_sections =>
+problem_saving_article_categories =>
+problem_updating_article =>
 reset_time => حالیہ وقت پر پھر سیٹ کریں
 search_articles =>
 set_expire_now =>
@@ -106,11 +123,12 @@ sort_display => ‏چھانٹنا‏ اور ‏نمائش
 textfilter =>
 textfilter_help =>
 timestamp => وقت سٹیمپ
+trying_to_assign_unexisting_category_to_the_article =>
 url_title => URL-‏انوکھا‏ عنوان
-url_title_is_blank => URL-انوکھا عنوان خانہ خالی تھا
-url_title_is_multiple => یکسن URL-انوکھا عنوان {count} اور مضامین سے استمعال کیا جا رہا ہے
+url_title_is_blank => <bdi dir="ltr">URL</bdi>-انوکھا عنوان خانہ خالی تھا
+url_title_is_multiple => یکسن <bdi dir="ltr">URL</bdi>-انوکھا عنوان {count} اور مضامین سے استمعال کیا جا رہا ہے
 view_html =>
-view_html_short => HTML
+view_html_short => <bdi dir="ltr">HTML</bdi>
 view_preview =>
 view_preview_short =>
 view_text =>
@@ -168,10 +186,11 @@ ascending => صعودی
 auth_required => منظوری‏ ضروری ہے
 back_to_login =>
 bad_cookie => اس نشست کی مدّت ختم ہوی، بارہ کرم دو بارہ لاگ ان کریں
+bad_login =>
 body => بیان
 cancel =>
 cannot_delete =>
-cannot_instantiate_theme => خیالیہ <strong>{name}</strong> ({class}) صحیح طرح سے {path} سے لوڈ نہیں ہوا، اس لیے اب Classic خیلیہ استمعال کیا جاۓ گا
+cannot_instantiate_theme => خیالیہ <strong>{name}</strong> ({class}) صحیح طرح سے {path} سے لوڈ نہیں ہوا، اس لیے اب <bdi dir="ltr">Hive</bdi> خیلیہ استمعال کیا جاۓ گا
 category => زمرہ
 changeauthor => مصنف تبدیل کریں
 changecategory => زمرہ تبدیل کریں
@@ -186,7 +205,7 @@ collapse_all =>
 comment => تبصرہ
 comments_expired =>
 confirm_delete_popup => واقعی حذف کریں ؟
-cookies_must_be_enabled => Textpattern استمعال کرنے کے لیے، براؤزر کی کوکی اہل بنانا لازمی ہے
+cookies_must_be_enabled => <bdi dir="ltr">Textpattern</bdi> استمعال کرنے کے لیے، براؤزر کی کوکی اہل بنانا لازمی ہے
 could_not_log_in => اس نام یا پاسورڈ سے لاگ ان نہیں ہو سکا
 date_added =>
 deleteforce =>
@@ -202,8 +221,8 @@ expired => زائدالمدت
 expire_date =>
 expire_time =>
 external_links =>
-form_not_found => فارم (Form) نہیں ملا
-form_not_specified => کوئی فارم (Form) تخصیص نہیں کیا
+form_not_found => فارم نہیں ملا
+form_not_specified => کوئی فارم تخصیص نہیں کیا
 form_submission_error =>
 gd_unavailable => دستیاب نہیں
 general_error =>
@@ -215,6 +234,7 @@ id => ID#
 image_category => تصویر زمرہ
 internal_error =>
 invalid_argument =>
+invalid_article_id =>
 last_modified =>
 links => روابط
 link_category => ربط زمرہ
@@ -257,6 +277,7 @@ tab_diagnostics => فن تشخیص
 tab_extensions => اضافی‏ ترجیحات
 tab_file => فائلیں
 tab_forms => Forms فارم
+tab_help =>
 tab_image => تصاویر
 tab_import => درآمد
 tab_languages =>
@@ -283,32 +304,32 @@ toggle_all_selected =>
 txpnl2br => صرف نئی لائیں
 txprawxhtml => خام HTML
 txpstriptags => ٹیگ نکالیں
-txptextile => Textile
-txptextilelite => Textile Lite
+txptextile => <bdi dir="ltr">Textile</bdi>
+txptextilelite => <bdi dir="ltr">Textile Lite</bdi>
 txt_quote_double_close => “
 txt_quote_double_open => ”
 txt_quote_single_close => ‘
 txt_quote_single_open => ’
-units_b => B
-units_e => EB
-units_g => GB
-units_k => kB
-units_m => MB
-units_p => PB
-units_t => TB
-units_y => YB
-units_z => ZB
+units_b => <bdi dir="ltr">B</bdi>
+units_e => <bdi dir="ltr">EB</bdi>
+units_g => <bdi dir="ltr">GB</bdi>
+units_k => <bdi dir="ltr">kB</bdi>
+units_m => <bdi dir="ltr">MB</bdi>
+units_p => <bdi dir="ltr">PB</bdi>
+units_t => <bdi dir="ltr">TB</bdi>
+units_y => <bdi dir="ltr">YB</bdi>
+units_z => <bdi dir="ltr">ZB</bdi>
 unmoderated => تفتیش نہ کیا
 updated => تازہ کیا
 upload_err_cant_write => ڈسک پر فائل محفوظ کرنے میں ناکامی
-upload_err_extension => فائل کا اپ لوڈ ایک PHP سے روکا گیا اضافی
-upload_err_form_size => فائل کی سائز Textpattern کے ترجیحات میں تخصیص کردہ سائز کو تجاوز کرتی ہے
+upload_err_extension => فائل کا اپ لوڈ ایک <bdi dir="ltr">PHP</bdi> سے روکا گیا اضافی
+upload_err_form_size => فائل کی سائز <bdi dir="ltr">Textpattern</bdi> کے ترجیحات میں تخصیص کردہ سائز کو تجاوز کرتی ہے
 upload_err_ini_size => فائل کی سائز <code dir="ltr">php.ini</code> میں <code dir="ltr">upload_max_filesize</code> کی ہدایت کو تجاوز کرتی ہے
 upload_err_no_file => کوئی فائل ‏تخصیص نہیں کیا
 upload_err_partial => فائل کا اپ لوڈ ادھورا رہ گیا
-upload_err_tmp_dir => ایک عارضی پوشہ موجود نہیں، اس پوشہ میں PHP اپ لوڈ کردہ فائل ذخیرہ کرتا ہے، بارہ کرم آپ کے ویب-میزبان سے مشورہ کریں
+upload_err_tmp_dir => ایک عارضی پوشہ موجود نہیں، اس پوشہ میں <bdi dir="ltr">PHP</bdi> اپ لوڈ کردہ فائل ذخیرہ کرتا ہے، بارہ کرم آپ کے ویب-میزبان سے مشورہ کریں
 upload_file => فائل اپ لوڈ کریں
-use_textile => Use Textile
+use_textile =>
 viewsite => سائٹ کا نظارہ لو
 view_per_page => ایک صفہ پر {page} کی منظر لیں
 visible => نمودار
@@ -330,10 +351,11 @@ edit_css => سٹائل
 #@diag
 active_plugins => فعال‏ پلگ ان
 all_checks_passed => تمام ‏تجزیہ پاس ہوئے !
-apache_modules => Apache ماڈیول
-apache_version => Apache ورژن
+apache_modules => <bdi dir="ltr">Apache</bdi> ماڈیول
+apache_version => <bdi dir="ltr">Apache</bdi> ورژن
+cgi_header_config =>
 clean_url_data_failed =>
-clean_url_test_failed => سافکار URL کے جانچ کرنے میں میں ناکامی
+clean_url_test_failed => سافکار <bdi dir="ltr">URL کے جانچ کرنے میں میں ناکامی
 diag_clear_private =>
 db_global_timezone =>
 db_server_time =>
@@ -343,50 +365,50 @@ detail => تفصیل
 dev_version_live => آپ اس نشریہ سرور پر تکمیل کردہ فائل استمعال کر رہے ہیں
 diagnostic_info => فن تشخیص معلومات
 dir_not_writable => {dirtype} قبل تحریر نہیں
-dns_lookup_fails => Web Domain DNS lookup میں ناکامی
+dns_lookup_fails => <bdi dir="ltr">DNS lookup</bdi> میں ناکامی
 document_root => اساسی پوشہ کا پتہ
 file_uploads_disabled => فائل کے اپ لوڈ کرنا نا اہل ہے
 gd_info => {version} کی معاونت شدہ قسمیں: {supported}
-gd_library => GD Graphics Library
+gd_library => <bdi dir="ltr">GD Graphics Library</bdi>
 high => اعلٰی
-htaccess_contents => .htaccess فائل کی متن
-htaccess_missing => .htaccess فائل موجود نہیں
+htaccess_contents => <code dir="ltr">.htaccess</code> فائل کی متن
+htaccess_missing => <code dir="ltr">.htaccess</code> فائل موجود نہیں
 is_inaccessible => کی رسائی نا پذیری ہے
 last_update => پچھلا تازہ کاری
 last_update_check =>
 locale => مقامیت
 low => پست
 missing_files => غائب‏ فائل
-modified_files => کچھ Textpattern کے فائل ترمیم کیے گئے ہیں
-mod_rewrite_missing => Apache module <code dir="ltr">mod_rewrite</code> نسب نہیں
+modified_files => کچھ <bdi dir="ltr">Textpattern</bdi> کے فائل ترمیم کیے گئے ہیں
+mod_rewrite_missing => <bdi dir="ltr">Apache module</bdi> <code dir="ltr">mod_rewrite</code> نسب نہیں
 mysql_table_errors =>
 no_temp_dir =>
 old_placeholder => پرانی جگہ دار فائل اب بھی موجود ہے
 os_version => سرور کا نظام عمل
 path_to_site_inacc => <code dir="ltr">$path_to_site</code> نا پذیری ہے
-php_extensions => PHP اضافی
-php_sapi_mode => PHP سرور API موڈ
-php_version => PHP ورژن
+php_extensions => <bdi dir="ltr">PHP</bdi> اضافی
+php_sapi_mode => <bdi dir="ltr">PHP Server API</bdi>
+php_version => <bdi dir="ltr">PHP</bdi> ورژن
 php_version_required =>
 preflight_check =>
 pretext_data =>
-rfc2616_headers => RFC 2616 headers موڈ
+rfc2616_headers => <bdi dir="ltr">RFC 2616 headers</bdi> موڈ
 server => سرور
 server_time => سرور کا مقامی وقت
-site_trailing_slash => سائٹ کے URL میں پشت بندی سلیش '/' ہے
-site_url_mismatch => سائٹ کے URL کی اختیارات شاید غیر صحیح ہے
-some_php_functions_disabled => مندرجہ ذیل PHP functions (جو شاید Textpattern کا چلت کریں میں اہم ہونگے) اس سرور پر نا اہل ہے
+site_trailing_slash => سائٹ کے <bdi dir="ltr">URL</bdi> میں پشت بندی سلیش '/' ہے
+site_url_mismatch => سائٹ کے <bdi dir="ltr">URL</bdi> کی اختیارات شاید غیر صحیح ہے
+some_php_functions_disabled => مندرجہ ذیل <bdi dir="ltr">PHP functions</bdi> (جو شاید <bdi dir="ltr">Textpattern</bdi> کا چلت کریں میں اہم ہونگے) اس سرور پر نا اہل ہے
 still_exists => اب بھی موجود ہے
 textpattern_update_available =>
 textpattern_update_available_beta =>
 tmp_plugin_paths_match => عارضی پوشہ کی راہ اور پلگ ان کے پوشہ کی راہ مشابہ <strong>نہیں</strong> ہونا چاہئے
-txp_path => Textpattern کا پتہ
-txp_version => Textpattern ورژن
-web_domain => سائٹ کا URL پتہ
+txp_path => <bdi dir="ltr">Textpattern</bdi> کا پتہ
+txp_version => <bdi dir="ltr">Textpattern</bdi> ورژن
+web_domain => سائٹ کا <bdi dir="ltr">URL</bdi> پتہ
 #@discuss
 article_deleted => یہ مضمون حذف ہے
 comments_deleted => تبصرہ حذف کیا: <strong>{list}</strong>
-comments_marked_spam => تبصرے کو پوشیدہ کیا اور ان پر 'spam' کا نشان لگایا: <strong>{list}</strong>
+comments_marked_spam => تبصرے کو پوشیدہ کیا اور ان پر <bdi dir="ltr">'spam'</bdi> کا نشان لگایا: <strong>{list}</strong>
 comments_marked_unmoderated => تبصرے کو پوشیدہ کیا اور ان پر 'تفتیش نہ کیا' کا نشان لگایا: <strong>{list}</strong>
 comments_marked_visible => تبصرے کو نمودار کیا: <strong>{list}</strong>
 comment_not_found => یہ تبصرہ موجود نہیں، شاید حذف کیا ہوگا
@@ -429,7 +451,7 @@ file_updated => فائل <strong>{name}</strong> کو تازہ کیا
 file_uploaded => فائل <strong>{name}</strong> کو اپ لوڈ کیا
 file_upload_failed => فائل اپ لوڈ کرنے میں ناکامی
 invalid_filename => ناجائز نام فائل
-invalid_id => ناجائز ID
+invalid_id => ناجائز <bdi dir="ltr">ID</bdi>
 linked_to_file =>
 no_files_recorded => کوئی فائل یہاں دستیاب نہیں
 permissions => اجازتیں
@@ -472,7 +494,7 @@ img_dir_not_writeable => تنبیہ: تصویر کے پوشہ میں محفوظ 
 invalid_width_or_height => چوڑائی یا اونچائی غیر معتبر
 keep_square_pixels => قطع کریں
 no_images_recorded => کوئی تصویر دستیاب نہیں
-only_graphic_files_allowed => صرف .jpg, .gif, .png فائل کے قسمیں کی اجازت ہے
+only_graphic_files_allowed => صرف <code dir="ltr">.jpg</code> <code dir="ltr">.gif</code> <code dir="ltr">.png</code> فائل کے قسمیں کی اجازت ہے
 replace_image => تصویر بدلیں
 search_images =>
 swap_values =>
@@ -555,16 +577,16 @@ plugin_updated => پلگ ان <strong>{name}</strong> تازہ کیا
 previewing_plugin => پلگ ان کا پیش منظر:
 verify_plugin =>
 #@prefs
-admin_side_plugins => کیا انتظامی پلگ ان (admin-plugins) استمعال کریں ؟
-allow_article_php_scripting => کیا مضامین میں PHP کی اجازت ہے ؟
-allow_form_override => کیا فارم (Form) زیر کرنے کی اجازت ہے ؟
-allow_page_php_scripting => کیا صفحات (Pages) میں PHP کی اجازت ہے ؟
+admin_side_plugins => کیا انتظامی پلگ ان <bdi dir="ltr">(admin-plugins)</bdi> استمعال کریں ؟
+allow_article_php_scripting => کیا مضامین میں <bdi dir="ltr">PHP</bdi> کی اجازت ہے ؟
+allow_form_override => کیا فارم زیر کرنے کی اجازت ہے ؟
+allow_page_php_scripting => کیا صفحات میں <bdi dir="ltr">PHP</bdi> کی اجازت ہے ؟
 all_hits => تمام ‏سرگرمی
 all_preferences =>
 archive_dateformat => تاریخ محفوظہ کی وضع
 articles_use_excerpts => کیا مضامین میں اختصار استمعال کریں ؟
 attach_titles_to_permalinks => کیا مضامین کے عنوان مستقل روابط میں استمعال کریں ؟
-auto_dst => کیا <abbr title="Daylight Saving Time">DST</abbr> سیٹنگ خودکار طور پر نباہ کیا جاۓ ؟
+auto_dst => کیا <abbr title="Daylight Saving Time"><bdi dir="ltr">DST</bdi></abbr> سیٹنگ خودکار طور پر نباہ کیا جاۓ ؟
 category_subcategory => /category/subcategory
 clean => /clean/
 comments_are_ol => کیا تبصرے عدد وار فہرست <code dir="ltr">ol</code> میں پیش کیا جاۓ ؟
@@ -579,7 +601,7 @@ comments_on_default => تبصرہ کرنا خودکار طور پر 'آن' ؟
 comments_require_email => کیا تبصرہ نگار کا ای میل پتہ ضروری ہے ؟
 comments_require_name => کیا تبصرہ نگار کا نام ضروری ہے ؟
 comments_sendmail => کیا نۓ تبصرے مضمون کا مصنف کو ای میل کیا جاۓ ؟
-comments_use_fat_textile => کی اضافی Textile کی اجازت ہے ؟
+comments_use_fat_textile => کی اضافی <bdi dir="ltr">Textile</bdi> کی اجازت ہے ؟
 comment_means_site_updated => کیا نیا تبصرہ داخل ہونے پر یہ مطلب ہوگا کی پورا سائٹ تازہ کیا ؟
 comment_nofollow => کیا تبصرے میں <code dir="ltr">rel="nofollow"</code> لگایا جاۓ ؟
 convert_linebreaks =>
@@ -603,14 +625,14 @@ enable_xmlrpc_server => کیا XML-RPC server کا استمعال کریں ؟
 expire_logs_after => سرگامی کتنے دیں بعد حذف کریں ؟
 feeds => سندیکت
 file_base_path => فائل کے پوشہ کی راہ
-file_max_upload_size => بڑے سے بڑا فائل کی سائز (bytes میں)
+file_max_upload_size => بڑے سے بڑا فائل کی سائز (<bdi dir="ltr">bytes</bdi> میں)
 gmtoffset => وقت کا علاقہ
 ham => تمام سوائی 'spam' کے
 hours_days_ago => گھنٹے\دن پہلے
 id_title => /id/title
 img_dir => تصاویر کا پوشہ
 include_email_atom => کیا آٹوم فیڈ میں مصنف کا ای میل پتہ شامل کریں ؟
-is_dst => کیا <abbr title="Daylight Saving Time">DST</abbr> اہل بنا ہے ؟
+is_dst => کیا <abbr title="Daylight Saving Time"><bdi dir="ltr">DST</bdi></abbr> اہل بنا ہے ؟
 language => زبان
 leave_text_untouched =>
 link => روابط
@@ -621,7 +643,7 @@ max_url_len => URL کی زیادہ سے زیادہ‏ لمبائی (حروف م�
 messy => ?=messy
 never_display_email => کیا تبصرہ نگار کا‏ ای میل پتہ پوشیدہ رکھیں ؟
 no_preferences =>
-override_emailcharset => کیا مرسلہ ای میل میں ISO-8859-1 ضابطہ بندی استمعال کریں ؟ (خودکار طور پر UTF-8 استمعال کیا جاۓ گا)
+override_emailcharset => کیا مرسلہ ای میل میں <bdi dir="ltr">ISO-8859-1</bdi> ضابطہ بندی استمعال کریں ؟ (خودکار طور پر <bdi dir="ltr">UTF-8</bdi> استمعال کیا جاۓ گا)
 path_from_root =>
 permlink_format =>
 permlink_hyphenated =>
@@ -630,7 +652,7 @@ permlink_mode => مستقل ربط کی وضع
 plugin_cache_dir => پلگ ان کیسہ کے پوشہ کی راہ
 preferences_saved => ترجیحات محفوظ کیا
 prefs => ترجیحات
-problem_connecting_update_server => RPC server سے ربط کرنے میں نقص، پھر کبھی دوبارہ کوشس کریں
+problem_connecting_update_server => سے ربط کرنے میں نقص، پھر کبھی دوبارہ کوشس کریں
 production_debug => ‏مرمت کاری
 production_live => نشریہ
 production_status => سائٹ کا صورت حال
@@ -641,12 +663,12 @@ referrers_only => صرف کہاں سے آئے
 rss_how_many => اسس فیڈ میں کتنے مضامین نمائش کریں ؟
 section_id_title => /section/id/title
 section_title => /section/title
-send_lastmod => سائٹ کے نظریں کو "Last-Modified" بھیجیں ؟
+send_lastmod => سائٹ کے نظریں کو <code dir="ltr">Last-Modified</code> بھیجیں ؟
 show_article_category_count => کیا زمرہ بندی کے ٹیب پر مضامین کی گنتی بتایں ؟
 show_comment_count_in_feed => کیا اسس فیڈ میں تبصرے کی گنتی شامل کریں ؟
 skin_base_path =>
 smtp_from => SMTP بزریے ای میل بھیجنے کے لیے مرسل کا ای میل کا پتہ
-spam_blacklists => بیکار تبصرے (spam) کے فہرست (comma-separated)
+spam_blacklists => بیکار تبصرے (<bdi dir="ltr">spam</bdi>) کے فہرست (<bdi dir="ltr">comma-separated</bdi>)
 syndicate_body_or_excerpt => کیا <strong>صرف</strong> اختصار سندیکت کریں ؟
 tempdir => عارضی پوشہ کی راہ
 textpack_strings_installed =>
@@ -658,8 +680,8 @@ tz_timezone => وقت کا علاقہ
 up_to_date =>
 url_mode => URL موڈ
 use_comments => کیا تبصرہ کرنے کی اجازت ہے ؟
-use_dns => سرگمی کے لیے DNS کا نظر کریں ؟
-use_mail_on_feeds_id => کیا فیڈ ID بنانے کے لیے ای میل پتہ استمعال کریں ؟ (‏خودکار طور پر‏ سائٹ کا URL استمعال کیا جاتا ہے)
+use_dns => سرگمی کے لیے <bdi dir="ltr">DNS</bdi> کا نظر کریں ؟
+use_mail_on_feeds_id => کیا فیڈ <bdi dir="ltr">ID</bdi> بنانے کے لیے ای میل پتہ استمعال کریں ؟ (‏خودکار طور پر‏ سائٹ کا <bdi dir="ltr">URL</bdi> استمعال کیا جاتا ہے)
 use_plugins => کیا پلگ ان استمعال کریں ؟
 year_month_day_title => /year/month/day/title
 #@public
@@ -708,8 +730,8 @@ comment_moderated => آپ کا تبصرہ منتظم کار کے منظوری پ
 comment_name => نام
 comment_name_required => بارہ مہربانی ، آپ کا نام داخل کریں
 comment_posted => آپ کا تبصرہ عنایات کرنے پر آپ کا بہت شکریہ
-comment_received => [{site}] موصولہ تبصرہ: {title}
-comment_recorded => آپ کا مضمون "{title}" پر ایک تبصرہ شامل کیا گیا
+comment_received => {site} موصولہ تبصرہ: {title}
+comment_recorded => آپ کا مضمون {title} پر ایک تبصرہ شامل کیا گیا
 comment_required => بارہ مہربانی، تبصرہ تو لکھے
 comment_web => ویب سائٹ
 contact => رابطہ
@@ -751,8 +773,8 @@ extensions =>
 file_context =>
 file_size =>
 forget => میرے معلومات بھول جاؤ
-form => فارم Form
-forms => فارم Forms
+form => فارم <bdi dir="ltr">Form</bdi>
+forms => فارم <bdi dir="ltr">Forms</bdi>
 go => جائیں
 go_back =>
 go_content =>
@@ -768,7 +790,7 @@ hours => گھنتیں
 hr => افقی لکیر
 hyperlink => بالا ربط
 image => تصویر
-imageurl => تصویر کا URL
+imageurl => تصویر کا <bdi dir="ltr">URL</bdi>
 image_context =>
 inserted_text => داخل کردہ متن
 invalid_attribute_value =>
@@ -853,17 +875,17 @@ select => منتخب کریں
 selected => منتخب شدہ
 site => سائٹ
 sitename => سائٹ کا نام
-siteurl => سائٹ کا URL
+siteurl => سائٹ کا <bdi dir="ltr">URL</bdi>
 skip_to_main_content =>
 status => ‏صورت حال‏
 strong => جلی
 submit => بھیجیں
 subscript => ذیلی تحریر
 superscript => بالائی تحریر
-tag_error => Tag error:
+tag_error =>
 tag_mismatch =>
-textile_help => Textile مدد
-textile_lite_help => Textile Lite مدد
+textile_help => <bdi dir="ltr">Textile</bdi> مدد
+textile_lite_help => <bdi dir="ltr">Textile Lite</bdi> مدد
 text_conversion =>
 text_handling =>
 time => وقت
@@ -896,7 +918,7 @@ week => ہفتہ
 weeks => ہفتے
 while_parsing_page_form =>
 yes => ہاں
-your_ip_is_blacklisted_by => تمہارا IPپتہ اس ‏'Blocklist' میں شامل ہے
+your_ip_is_blacklisted_by => تمہارا <bdi dir="ltr">IP</bdi>پتہ اس ‏'<bdi dir="ltr">Blocklist</bdi>' میں شامل ہے
 yyyy-mm => yyyy-mm
 #@section
 article_count =>
@@ -928,7 +950,7 @@ uses_style => یہ سٹائل استمعال کریں
 about_to_create => اب ڈیٹابیس کے جدول بھریں جاینگے
 add_config_file =>
 admin_theme =>
-already_installed => Textpattern لگتا ہے کی کو نصب کرنا چاہتے ہیں تو Textpattern اگر آپ پھر تازہ پوشہ سے حذف کرے <code dir="ltr">Textpattern</code> فائل کو <code dir="ltr">config.php</code> اور پھر کوشس کریں
+already_installed => <bdi dir="ltr">Textpattern</bdi> لگتا ہے کی کو نصب کرنا چاہتے ہیں تو <bdi dir="ltr">Textpattern</bdi> اگر آپ پھر تازہ پوشہ سے حذف کرے <code dir="ltr">Textpattern</code> فائل کو <code dir="ltr">config.php</code> اور پھر کوشس کریں
 back =>
 before_you_proceed => آگے جانے سے پہلے
 checking_database => ڈیٹابیس مع ربط کر رہا ہے
@@ -942,16 +964,17 @@ creating_db_tables =>
 db_cant_connect => ڈیٹابیس مع ربط نہیں ہو سکا
 db_connected => ڈیٹابیس مع مربوط ہوا
 db_doesnt_exist => دستیاب نہیں یا آپ کا اختصاصی صارف کو اس سے رسائی کرنے کی اجازت نہیں <strong>{dbname}</strong> ڈیٹابیس
-db_must_exist => اسے نہیں بناۓ گا Textpattern آپکا انتخاب کردہ ڈیٹابیس پہلے سے ہی موجود ہونا چاہیے
+db_must_exist => اسے نہیں بناۓ گا <bdi dir="ltr">Textpattern</bdi> آپکا انتخاب کردہ ڈیٹابیس پہلے سے ہی موجود ہونا چاہیے
 did_it => عمل مکمل
 email_required => بارہ کرم، ایک جائز ای میل پتہ داخل کریں
 get_started =>
 go_to_login =>
 installation_postamble =>
-mysql_database => ڈیٹابیس MySQL
-mysql_login => نام صارف MySQL
-mysql_password => پاسورڈ MySQL
-mysql_server => سرور MySQL
+missing_db_details =>
+mysql_database => ڈیٹابیس <bdi dir="ltr">MySQL</bdi>
+mysql_login => نام صارف <bdi dir="ltr">MySQL</bdi>
+mysql_password => پاسورڈ <bdi dir="ltr">MySQL</bdi>
+mysql_server => سرور <bdi dir="ltr">MySQL</bdi>
 my_site => میری ویب سائٹ
 my_slogan => میرا مختصر سا نعرہ
 name_required =>
@@ -961,7 +984,7 @@ pass_required =>
 please_enter_url => بارہ کرم آپ کی سائٹ کا ویب پہنچنا پتہ داخل کریں
 please_go_back =>
 populate_db =>
-prefix_bad_characters => میں کئی حروف ہیں جس کی اجازت نہیں {dbprefix} جدول سابقہ کے ساتھ مشابہ ہونا چاہئے <strong>a-zA-Z_</strong> کے ساتھ مشابہ ہونا چاہئے اور بقیہ حروف کسی بھی <strong>a-zA</strong>
+prefix_bad_characters => میں کئی حروف ہیں جس کی اجازت نہیں {dbprefix} جدول سابقہ کے ساتھ مشابہ ہونا چاہئے <strong><bdi dir="ltr">a-zA-Z_</bdi></strong> کے ساتھ مشابہ ہونا چاہئے اور بقیہ حروف کسی بھی <strong>a-zA</strong>
 progress_steps =>
 public_theme =>
 setup_comment_invite => تبصرہ
@@ -978,11 +1001,11 @@ site_config =>
 site_url => URL ویب سائٹ کا
 tables_exist =>
 table_prefix => جدول سابقہ
-thanks_for_interest => میں دلچسپی لینے کے لئے آپ کا شکریہ Textpattern
+thanks_for_interest => میں دلچسپی لینے کے لئے آپ کا شکریہ <bdi dir="ltr">Textpattern</bdi>
 that_went_well => ہر کام کامیابی سے مکممل! - ڈیٹابیس کے جدول کی بناوٹ اور بھرائی مکمل
 using_db => استمعال کیا جا رہا ہے {dbname}
-warn_mail_unavailable => سے کوئی ای میل نہیں بھیجے جاینگے Textpattern دستیاب نہیں، اس لیے <code dir="ltr">mail()</code> میں PHP آپ کے
-welcome_to_textpattern => میں خوش آمدید Textpattern
+warn_mail_unavailable => سے کوئی ای میل نہیں بھیجے جاینگے <bdi dir="ltr">Textpattern</bdi> دستیاب نہیں، اس لیے <code dir="ltr">mail()</code> میں <bdi dir="ltr">PHP</bdi> آپ کے
+welcome_to_textpattern => میں خوش آمدید <bdi dir="ltr">Textpattern</bdi>
 your_email => آپکا ای میل پتہ
 your_full_name => آپ کا پورا نام
 you_can_access => میں انتخاب کردہ لاگ ان معلومات کے ساتھ داخل ہو سکتے ہیں <a href="index.php">انتظامیہ</a> اب آپ

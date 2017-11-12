@@ -7,6 +7,10 @@ account_activation =>
 account_activation_confirmation =>
 add_new_author => افزودن نویسنده جدید
 alias_is_taken =>
+assert_callable =>
+assert_length =>
+assert_pattern =>
+assert_string =>
 assign_assets_to => انتصاب محتوای کاربر به
 author_already_exists => نویسنده با نام <strong>{name}</strong> از پیش موجود است.
 author_deleted => نویسنده با نام <strong>{name}</strong> پاک شد.
@@ -22,7 +26,7 @@ could_not_update_author => ناتوانی در بهنگام‌سازی مشخص�
 current_password =>
 designer => طراح
 edit_author => تغییر مشخصات نویسنده
-email_changed => نشانی ایمیل به <strong>{email}</strong> تغییر یافت.
+email_changed => نشانی ایمیل به <bdi dir="ltr">{email}</bdi> تغییر یافت.
 error_adding_new_author => خطا در افزودن نویسنده جدید.
 from_or_to_address_missing =>
 freelancer => نویسنده آزاد
@@ -69,6 +73,9 @@ set_password =>
 show_password =>
 staff_writer => عضو تحریریه
 token_expired =>
+unable_retrieve_template =>
+unable_retrieve_user =>
+unable_set_template =>
 unknown_author => نویسنده ناشناس : <strong>{name}</strong>
 your_login_info => اطلاعات ورود شما
 your_login_is => مشخصات ورود شما
@@ -98,6 +105,16 @@ linktext => linktext
 meta => متاتگ
 no_articles_recorded => هیچ نوشته‌ای ثبت نشده است.
 override_default_form => تحریف فرم با
+problem_creating_article =>
+problem_deleting_article =>
+problem_getting_articles =>
+problem_retrieving_article =>
+problem_retrieving_article_categories =>
+problem_retrieving_categories =>
+problem_retrieving_category_info =>
+problem_retrieving_sections =>
+problem_saving_article_categories =>
+problem_updating_article =>
 reset_time => تغییر زمان به حال
 search_articles =>
 set_expire_now =>
@@ -106,11 +123,12 @@ sort_display => مرتب‌سازی و نمایش
 textfilter =>
 textfilter_help => راهنمای فرمت بندی متن
 timestamp => الگوی زمان و تاریخ
+trying_to_assign_unexisting_category_to_the_article =>
 url_title => عنوان مختص نشانی نوشته
 url_title_is_blank => فیلد عنوان مختص نشانی خالی گذاشته شد.
 url_title_is_multiple => یک نشانی مختص نوشته برای {count} نوشته دیگر نیز استفاده شده است.
 view_html => نمایش کدهای HTML
-view_html_short => HTML
+view_html_short => <bdi dir="ltr">HTML</bdi>
 view_preview => پیش‌نمایش نوشته
 view_preview_short => پیش‌نمایش
 view_text => ویرایش محتوای نوشته
@@ -168,10 +186,11 @@ ascending => صعودی
 auth_required => احراز هویت ضروری است.
 back_to_login => بازگشت به صفحه ورود ←
 bad_cookie => لطفاً مجدداً وارد سیستم شوید.
+bad_login =>
 body => بدنه
 cancel =>
 cannot_delete =>
-cannot_instantiate_theme => بارگزاری تم <strong>{name}</strong> از مسیر {path} ناموفق بود. از تم Classic به عنوان جایگزین استفاده خواهد شد.
+cannot_instantiate_theme => بارگزاری تم <strong>{name}</strong> از مسیر {path} ناموفق بود. از تم <bdi dir="ltr">Hive</bdi> به عنوان جایگزین استفاده خواهد شد.
 category => رده
 changeauthor => تغییر نویسنده
 changecategory => تغییر رده
@@ -215,6 +234,7 @@ id => شناسه نوشته
 image_category => رده
 internal_error => خطای داخلی
 invalid_argument =>
+invalid_article_id =>
 last_modified => آخرین ویرایش
 links => لینک‌ها
 link_category => رده
@@ -257,6 +277,7 @@ tab_diagnostics => عیب‌یابی
 tab_extensions => افزونه‌ها
 tab_file => فایل‌ها
 tab_forms => فرم‌ها
+tab_help =>
 tab_image => تصاویر
 tab_import => وارد کردن
 tab_languages => زبان‌ها
@@ -281,34 +302,34 @@ title_body => عنوان و بدنه
 title_body_excerpt => عنوان، بدنه و منتخب
 toggle_all_selected => حلقه کردن همه / هیچ یک از انتخاب شده ها
 txpnl2br => تنها شکست خط
-txprawxhtml => کد خام HTML
+txprawxhtml => کد خام <bdi dir="ltr">HTML</bdi>
 txpstriptags => برداشتن برچسب ها
-txptextile => بافت
-txptextilelite => بافت سبک
+txptextile => <bdi dir="ltr">Textile</bdi>
+txptextilelite => <bdi dir="ltr">Textile Lite</bdi>
 txt_quote_double_close => «
 txt_quote_double_open => »
 txt_quote_single_close => “
 txt_quote_single_open => ”
-units_b => B
-units_e => EB
-units_g => GB
-units_k => kB
-units_m => MB
-units_p => PB
-units_t => TB
-units_y => YB
-units_z => ZB
+units_b => <bdi dir="ltr">B</bdi>
+units_e => <bdi dir="ltr">EB</bdi>
+units_g => <bdi dir="ltr">GB</bdi>
+units_k => <bdi dir="ltr">kB</bdi>
+units_m => <bdi dir="ltr">MB</bdi>
+units_p => <bdi dir="ltr">PB</bdi>
+units_t => <bdi dir="ltr">TB</bdi>
+units_y => <bdi dir="ltr">YB</bdi>
+units_z => <bdi dir="ltr">ZB</bdi>
 unmoderated => تأیید نشده
 updated => بهنگام شده
 upload_err_cant_write => ناتوانی در نوشتن فایل بر روی دیسک
-upload_err_extension => آپلود فایل توسط افزونه PHP متوقف شد.
-upload_err_form_size => حجم فایل از حداکثر اندازه تعریف شده در تنظیمات Textpattern بیشتر است.
-upload_err_ini_size => حجم فایل از اندازه تعریف شده در متغیر <code dir="ltr">upload_max_filesize</code> در فایل php.ini بیشتر است.
+upload_err_extension => آپلود فایل توسط افزونه <bdi dir="ltr">PHP</bdi> متوقف شد.
+upload_err_form_size => حجم فایل از حداکثر اندازه تعریف شده در تنظیمات <bdi dir="ltr">Textpattern</bdi> بیشتر است.
+upload_err_ini_size => حجم فایل از اندازه تعریف شده در متغیر <code dir="ltr">upload_max_filesize</code> در فایل <code dir="ltr">php.ini</code> بیشتر است.
 upload_err_no_file => هیچ فایلی مشخص نشده است
 upload_err_partial => تنها بخش‌هایی از فایل اپلود شده است.
-upload_err_tmp_dir => پوشه فایل‌های موقت که PHP از آن برای ذخیره فایل‌های آپلودی استفاده می‌کند موجود نیست. لطفاً با میزبان خود تماس بگیرید.
+upload_err_tmp_dir => پوشه فایل‌های موقت که <bdi dir="ltr">PHP</bdi> از آن برای ذخیره فایل‌های آپلودی استفاده می‌کند موجود نیست. لطفاً با میزبان خود تماس بگیرید.
 upload_file => آپلود فایل
-use_textile => استفاده از Textile (بافت)
+use_textile => استفاده از <bdi dir="ltr">Textile</bdi> (بافت)
 viewsite => نمایش سایت
 view_per_page => نمایش {page} در هر صفحه
 visible => نمایان
@@ -332,6 +353,7 @@ active_plugins => پلاگین‌های فعال
 all_checks_passed => تمام آزمون‌ها موفق بود!
 apache_modules => ماژول‌های آپاچی
 apache_version => نسخه آپاچی
+cgi_header_config =>
 clean_url_data_failed => تست داده‌های Clean URL ناموفق بود
 clean_url_test_failed => تست Clean URL ناموفق بود.
 diag_clear_private =>
@@ -347,41 +369,41 @@ dns_lookup_fails => جستجوی DNS با مشکل مواجه شد
 document_root => ریشه اصلی اسناد
 file_uploads_disabled => امکان آپلود فایل غیرفعال شد.
 gd_info => {version}; فرمت های پشتیبانی شده: {supported}
-gd_library => کتابخانه گرافیکی GD
+gd_library => <bdi dir="ltr">GD Graphics Library</bdi>
 high => زیاد
-htaccess_contents => محتویات فایل .htaaccess
-htaccess_missing => فایل .htaccess موجود نیست
+htaccess_contents => محتویات فایل <code dir="ltr">.htaaccess</code>
+htaccess_missing => فایل <bdi dir="ltr">.htaccess</code> موجود نیست
 is_inaccessible => دسترس‌پذیر نیست
 last_update => آخرین بهنگام‌سازی
 last_update_check =>
 locale => منطقه
 low => کم
 missing_files => فایل های یافت نشده
-modified_files => برخی از فایل‌های Textpattern نغییر یافته‌اند
+modified_files => برخی از فایل‌های <bdi dir="ltr">Textpattern</bdi> نغییر یافته‌اند
 mod_rewrite_missing => ماژول <code dir="ltr">mod_rewrite</code> بر روی آپاچی نصب نیست
-mysql_table_errors => این اشکالات در جدول‌های MySQL شما یافت شد
+mysql_table_errors => این اشکالات در جدول‌های <bdi dir="ltr">MySQL</bdi> شما یافت شد
 no_temp_dir => هیچ پوشه‌ای برای فایل‌های موقت تعریف نشده است
 old_placeholder => فایل جایگزین مناسب در راه است
 os_version => سیستم‌عامل سرور
 path_to_site_inacc => <code dir="ltr">$path_to_site</code> دسترس‌پذیر نیست.
-php_extensions => افزونه‌های PHP
-php_sapi_mode => PHP Server API
-php_version => نسخه PHP
-php_version_required => سیستم مدیریت محتوای Textpattern برای نصب روی سرور شما به نسخه‌ی PHP {version} به بالا نیازمند است.
+php_extensions => افزونه‌های <bdi dir="ltr">PHP</bdi>
+php_sapi_mode => <bdi dir="ltr">PHP Server API</bdi>
+php_version => نسخه <bdi dir="ltr">PHP</bdi>
+php_version_required => سیستم مدیریت محتوای <bdi dir="ltr">Textpattern</bdi> برای نصب روی سرور شما به نسخه‌ی <bdi dir="ltr">PHP {version}</bdi> به بالا نیازمند است.
 preflight_check => آزمون
 pretext_data =>
-rfc2616_headers => سرآیندهای RFC 2616
+rfc2616_headers => سرآیندهای <bdi dir="ltr">RFC 2616</bdi>
 server => سرور
 server_time => زمان محلی سرور
 site_trailing_slash => آدرس سایت یک / در انتها دارد
 site_url_mismatch => مرجع آدرس سایت ممکن است نادرست باشد
-some_php_functions_disabled => این توابع PHP (که برای راه‌اندازی Textpattern ضروری‌اند) بر روی سرور شما غیر فعال‌اند.
+some_php_functions_disabled => این توابع <bdi dir="ltr">PHP</bdi> (که برای راه‌اندازی <bdi dir="ltr">Textpattern</bdi> ضروری‌اند) بر روی سرور شما غیر فعال‌اند.
 still_exists => همچنان وجود دارد
-textpattern_update_available => نسخه‌ی جدید سیستم مدیریت محتوای Textpattern {version} <a href="https://textpattern.com/download" rel="external" title="رفتن به بخش دانلود">برای دریافت آماده است</a>
+textpattern_update_available => نسخه‌ی جدید سیستم مدیریت محتوای <bdi dir="ltr">Textpattern</bdi> {version} <a href="https://textpattern.com/download" rel="external" title="رفتن به بخش دانلود">برای دریافت آماده است</a>
 textpattern_update_available_beta =>
 tmp_plugin_paths_match => مسیر پوشه‌ی فایل‌های موقت و مسیر کش پلاگین‌ها <strong>نباید</strong> یکی باشند.
-txp_path => مسیر Textpattern
-txp_version => نسخه Textpattern
+txp_path => مسیر <bdi dir="ltr">Textpattern</bdi>
+txp_version => نسخه <bdi dir="ltr">Textpattern</bdi>
 web_domain => نشانی سایت
 #@discuss
 article_deleted => نوشته پاک شد!
@@ -419,7 +441,7 @@ file_download =>
 file_download_count => دفعات دانلود
 file_name => نام
 file_not_found => فایل یافت نشد
-file_not_updated => فایل <strong>{name}</strong> بهنگام <em>نشد</em>!
+file_not_updated => فایل <strong>{name}</strong> بهنگام نشد
 file_relink => آپلود یا انتصاب فایل
 file_status => وضعیت فایل
 file_status_missing => مفقود است
@@ -472,14 +494,14 @@ img_dir_not_writeable => خطا: ناتوانی در نوشتن بر روی پو
 invalid_width_or_height => طول یا عرض نامعتبر
 keep_square_pixels => بریدن
 no_images_recorded => هیچ تصویری یافت نشد.
-only_graphic_files_allowed => تنها فایل‌های jpg. یا gif. یا png. مجازند.
+only_graphic_files_allowed => تنها فایل‌های <code dir="ltr">.jpg</code> یا <code dir="ltr">.gif</code> یا <code dir="ltr">.png</code> مجازند.
 replace_image => جایگزینی تصویر
 search_images =>
 swap_values =>
 thumbnail_delete_failed =>
 thumbnail_deleted => تصویر کوچک پاک شد.
-thumbnail_not_saved => تصویر کوچک <strong>{id}</strong> ذخیره <em>نشد</em>!
-thumbnail_saved => تصویر <strong>{id}</strong> ذخیره شد.
+thumbnail_not_saved => تصویر کوچک <strong>{id}</strong> ذخیره نشد
+thumbnail_saved => تصویر <strong>{id}</strong> ذخیره شد
 thumb_height => طول
 thumb_width => عرض
 upload_dir_perms => نیاز به چک کردن مجوزهای پوشه
@@ -488,8 +510,8 @@ upload_thumbnail => آپلود تصویر کوچک
 #@lang
 active_language => زبان فعال
 active_language_ui =>
-install_from_textpack => نصب از Textpack
-install_textpack => نصب Textpack
+install_from_textpack => نصب از <bdi dir="ltr">Textpack</bdi>
+install_textpack => نصب <bdi dir="ltr">Textpack</bdi>
 language_deleted =>
 language_installed =>
 language_not_installed =>
@@ -498,7 +520,7 @@ locale_not_available_for_language =>
 #@link
 add_new_link => افزودن لینک نو
 edit_link => ویرایش لینک
-links_deleted => Link(s) deleted: <strong>{list}</strong>.
+links_deleted =>
 link_created => لینک <strong>{name}</strong> ساخته شد.
 link_empty => لینک‌ها نباید خالی باشند
 link_name => نام
@@ -547,7 +569,7 @@ plugin_compression_unsupported => بازکردن بسته ی پلاگین ها �
 plugin_deleted => پلاگین <strong>{name}</strong> پاک شد.
 plugin_help => راهنمای پلاگین
 plugin_installed => پلاگین <strong>{name}</strong> نصب شد.
-plugin_install_failed => پلاگین <strong>{name}</strong> نصب <em>نشد</em>!
+plugin_install_failed => پلاگین <strong>{name}</strong> نصب نشد
 plugin_modified => تغییر یافته
 plugin_prefs => تنظیمات
 plugin_saved => پلاگین <strong>{name}</strong> بهنگام شد.
@@ -556,15 +578,15 @@ previewing_plugin => پیش‌نمایش پلاگین
 verify_plugin => تایید پلاگین
 #@prefs
 admin_side_plugins => از پلاگین‌های سمت مدیر استفاده شود؟
-allow_article_php_scripting => استفاده از PHP در نوشته‌ها مجاز باشد؟
+allow_article_php_scripting => استفاده از <bdi dir="ltr">PHP</bdi> در نوشته‌ها مجاز باشد؟
 allow_form_override => تحریف فرم مجاز باشد؟
-allow_page_php_scripting => استفاده از PHP در صفحات مجاز باشد؟
+allow_page_php_scripting => استفاده از <bdi dir="ltr">PHP</bdi> در صفحات مجاز باشد؟
 all_hits => همه بازدیدها
 all_preferences =>
 archive_dateformat => فرمت تاریخ بایگانی
 articles_use_excerpts => نوشته‌ها دارای بخش منتخب هستند؟
 attach_titles_to_permalinks => به لینک دائمی، عنوان هم افزوده گردد؟
-auto_dst => تنظیم خودکار تغییر زمان <abbr title="Daylight Saving Time">DST</abbr>؟
+auto_dst => تنظیم خودکار تغییر زمان <abbr title="Daylight Saving Time"><bdi dir="ltr">DST</bdi></abbr>؟
 category_subcategory => /category/subcategory
 clean => /clean/
 comments_are_ol => نمایش نظرات در قالب لیست شماره‌ای؟
@@ -579,7 +601,7 @@ comments_on_default => نظردهی به‌طور پیش‌فرض فعال با�
 comments_require_email => نشانی ایمیل کاربر ضروری است؟
 comments_require_name => نام کاربر ضروری است؟
 comments_sendmail => نظرات برای نویسنده فرستاده شود؟
-comments_use_fat_textile => استفاده از کدهای بیشتر Texttile مجاز باشد؟
+comments_use_fat_textile => استفاده از کدهای بیشتر <bdi dir="ltr">Textile</bdi> مجاز باشد؟
 comment_means_site_updated => نظر جدید به معنای بهنگام‌شدن سایت باشد؟
 comment_nofollow => افزودن <code dir="ltr">rel="nofollow"</code> به نظرات؟
 convert_linebreaks => تبدیل شکست خطوط
@@ -599,7 +621,7 @@ default_event => تب پیش‌فرض نمایش برای مدیر
 default_publish_status =>
 doctype => Doctype
 module_pophelp =>
-enable_xmlrpc_server => سرور XML-RPC فعال باشد؟
+enable_xmlrpc_server => سرور <bdi dir="ltr">XML-RPC</bdi> فعال باشد؟
 expire_logs_after => گزارش‌ها پس از چند روز منقضی گردند؟
 feeds => فیدها
 file_base_path => مسیر پوشه فایل
@@ -610,7 +632,7 @@ hours_days_ago => ساعت/روز پیش
 id_title => /id/title
 img_dir => پوشه تصاویر
 include_email_atom => قراردادن ایمیل در فید اتم
-is_dst => <abbr title="زمان شبانه روزی">DST</abbr> فعال است؟
+is_dst => <abbr title="زمان شبانه روزی"><bdi dir="ltr">DST</bdi></abbr> فعال است؟
 language => زبان
 leave_text_untouched => متن را دستکاری نکن
 link => لینک‌ها
@@ -621,7 +643,7 @@ max_url_len => حداکثر طول نشانی (به کاراکتر)
 messy => ?=آشفته
 never_display_email => مخفی‌کردن نشانی ایمیل؟
 no_preferences =>
-override_emailcharset => در ایمیل‌های ارسالی از رمزگذاری ISO-8859-1 استفاده شود (پیش‌فرض UTF-8 است)؟
+override_emailcharset => در ایمیل‌های ارسالی از رمزگذاری <bdi dir="ltr">ISO-8859-1</bdi> استفاده شود (پیش‌فرض <bdi dir="ltr">UTF-8</bdi> است)؟
 path_from_root => پوشه زیرمجموعه (اگر موجود است)
 permlink_format =>
 permlink_hyphenated =>
@@ -630,7 +652,7 @@ permlink_mode => حالت لینک دائم
 plugin_cache_dir => مسیر پوشه کش پلاگین‌ها
 preferences_saved => تنظیمات ذخیره شد
 prefs => منابع
-problem_connecting_update_server => مشکلی در اتصال به سرور RPC رخ داده است. لطفاً پس از مدتی مجدداً تلاش کنید.
+problem_connecting_update_server => مشکلی در اتصال به سرور رخ داده است. لطفاً پس از مدتی مجدداً تلاش کنید.
 production_debug => رفع اشکال
 production_live => فعال
 production_status => وضعیت سایت
@@ -641,11 +663,11 @@ referrers_only => تنها ارجاع‌دهندگان
 rss_how_many => چه تعداد نوشته در فید باشد؟
 section_id_title => /section/id/title
 section_title => /section/title
-send_lastmod => سرایند “Last-Modified” ارسال شود؟
+send_lastmod => سرایند <code dir="ltr">Last-Modified</code> ارسال شود؟
 show_article_category_count => نمایش تعداد نوشته‌ها در تب رده‌ها؟
 show_comment_count_in_feed => نمایش تعداد نظرها در فید؟
 skin_base_path =>
-smtp_from => آدرس ارسال بسته SMTP
+smtp_from => آدرس ارسال بسته <bdi dir="ltr">SMTP</bdi>
 spam_blacklists => لیست سیاه اسپم‌ها (با کاما جدا کنید)
 syndicate_body_or_excerpt => <strong>تنها</strong> منتخب نوشته‌ها در فیدها قرار گیرد؟
 tempdir => مسیر پوشه موقت
@@ -656,9 +678,9 @@ title_no_widow => ممانعت از ورود لغات ناقص در عنوان �
 title_only => /title
 tz_timezone => منطقه زمانی
 up_to_date => به روز
-url_mode => سبک URL
+url_mode => سبک <bdi dir="ltr">URL</bdi>
 use_comments => پذیرش نظرات؟
-use_dns => استفاده از مراجعه به DNS در گزارش بازدیدکنندگان؟
+use_dns => استفاده از مراجعه به <bdi dir="ltr">DNS</bdi> در گزارش بازدیدکنندگان؟
 use_mail_on_feeds_id => از نشانی ایمیل به عنوان شناسه فیدها استفاده شود (پیش‌فرض نشانی سایت است)؟
 use_plugins => استفاده از پلاگین‌ها؟
 year_month_day_title => /year/month/day/title
@@ -678,7 +700,7 @@ article_context => مقاله
 article_found => نوشته یافت شد
 article_tag_illegal_body =>
 atom_feed_title => فید اتم
-attribute_values_must_be_quoted => مقادیر صفت باید در ”” قرار بگیرند.
+attribute_values_must_be_quoted => مقادیر صفت باید در "" قرار بگیرند.
 author => نویسنده
 authors => نویسندگان
 a_few_seconds => چند لحظه پیش
@@ -708,8 +730,8 @@ comment_moderated => نظر شما پس از تأیید مدیر سایت نما
 comment_name => نام
 comment_name_required => لطفاً نام خود را وارد کنید.
 comment_posted => از نظردهی شما متشکریم.
-comment_received => [{site}] نظر دریافت شد : {title}
-comment_recorded => نظری برای نوشته "{title}" ثبت شده است.
+comment_received => {site} نظر دریافت شد : {title}
+comment_recorded => نظری برای نوشته {title} ثبت شده است.
 comment_required => لطفاً نظرتان را بنویسید.
 comment_web => وب‌سایت
 contact => تماس
@@ -738,7 +760,7 @@ edit => ویرایش
 email => ایمیل
 email_address => ایمیل
 emphasis => تأکید
-enter_comment_here => <strong> نظر خود را در زیر وارد نمایید. </strong> فیلدهای نشانه دار <b class="required">*</b> ضروری هستند. شما باید یکبار نظر خود را پیش از ارسال مرور کنید.
+enter_comment_here => <strong>نظر خود را در زیر وارد نمایید.</strong> فیلدهای نشانه دار <b class="required">*</b> ضروری هستند. شما باید یکبار نظر خود را پیش از ارسال مرور کنید.
 error_article_context => تگ‌های مربوط به نوشته در خارج از محدوده مربوط به نوشته قابل استفاده نیستند
 error_category_context => برچسب های دسته خارج از زمینه دسته نمی توانند مورد استفاده قرار گیرند.
 error_comment_context => تگ‌های مربوط به نظرات در خارج از محدوده مربوط به نظرات قابل استفاده نیستند
@@ -793,7 +815,7 @@ message_preview => پیش‌نمایش پیام
 message_saved => پیام ذخیره شد
 minute => دقیقه
 minutes => دقیقه
-missing_article_tag => الگوی صفحه <strong>{page}</strong> فاقد تگ txp:article است.
+missing_article_tag => الگوی صفحه <strong>{page}</strong> فاقد تگ <code dir="ltr">txp:article</code> است.
 modified_by => آخرین تغییر بوسیله
 month => ماه
 more => بیشتر
@@ -832,7 +854,7 @@ prev => پیشین
 preview => پیش‌نمایش
 publish => انتشار
 published_at => منتشر شده در
-raw_php_deprecated => کد های خام PHP ممنوع شناخته می شود
+raw_php_deprecated => کد های خام <bdi dir="ltr">PHP</bdi> ممنوع شناخته می شود
 recently => اخیراً
 recent_articles => آخرین نوشته‌ها
 recent_comments => آخرین نظرها
@@ -843,7 +865,7 @@ remember => به یادآوری
 remove => برداشتن
 required => ضروری
 revert => برگشت
-rss_feed_title => فید RSS
+rss_feed_title => فید <bdi dir="ltr">RSS</bdi>
 save => ذخیره
 saved => ذخیره شد
 save_button => ذخیره
@@ -862,8 +884,8 @@ subscript => زیرنویس
 superscript => بالانویس
 tag_error => اشکال در تگ:
 tag_mismatch =>
-textile_help => راهنمای Textile (بافت)
-textile_lite_help => راهنمای Textile Lite (بافت سبک)
+textile_help => راهنمای <bdi dir="ltr">Textile</bdi> (بافت)
+textile_lite_help => راهنمای <bdi dir="ltr">Textile Lite</bdi> (بافت سبک)
 text_conversion => تبدیل متن
 text_handling => دستکاری متن
 time => زمان
@@ -875,8 +897,8 @@ type => نوع
 unclosed_tag =>
 undefined => تعریف‌نشده
 unknown =>
-unknown_attribute => صفت ناشناخته {att}:
-unknown_callback_function => تابع بازگشتی ناشناخته: {function}.
+unknown_attribute => صفت ناشناخته {att}
+unknown_callback_function => تابع بازگشتی ناشناخته {function}.
 unknown_image => تصویر نامعلوم
 unknown_link =>
 unknown_section => بخش نامعلوم
@@ -896,7 +918,7 @@ week => هفته
 weeks => هفته
 while_parsing_page_form => هنگام تجزیه و تحلیل کردن فرم <strong>{form}</strong> در صفحه <strong>{page}</strong>
 yes => بله
-your_ip_is_blacklisted_by => نشانی IP شما در لیست سیاه قرار گرفته است توسط
+your_ip_is_blacklisted_by => نشانی <bdi dir="ltr">IP</bdi> شما در لیست سیاه قرار گرفته است توسط
 yyyy-mm => yyyy-mm
 #@section
 article_count => {num} نوشته در این بخش موجود است. برای لیست کردن آن‌ها کلیک کنید
@@ -912,15 +934,15 @@ on_front_page => در صفحه اصلی
 search_sections =>
 section => بخش
 sections => بخش‌ها
-section_created => بخش <strong><a href="#section-{name}">{name}</a></strong> ساخته شد.
+section_created => بخش <strong>{name}</strong> ساخته شد.
 section_delete_failure =>
 section_deleted => بخش <strong>{name}</strong> پاک شد.
 section_head => بخش‌های سایت
 section_longtitle => عنوان بخش
 section_name => نام بخش
-section_name_already_exists => بخش <strong><a href="#section-{name}">{name}</a></strong> از پیش موجود است.
+section_name_already_exists => بخش <strong>{name}</strong> از پیش موجود است.
 section_save_failed => بخش به دلیل بروز خطا ذخیره نشد. لطفا دوباره تلاش کنید.
-section_updated => بخش <strong><a href="#section-{name}">{name}</a></strong> بهنگام شد.
+section_updated => بخش <strong>{name}</strong> بهنگام شد.
 syndicate => یکپارچه سازی مقاله ها در این بخش؟
 uses_page => استفاده از صفحه
 uses_style => استفاده از استایل
@@ -928,7 +950,7 @@ uses_style => استفاده از استایل
 about_to_create => شما در حال ایجاد جدول‌های پایگاه داده هستید.
 add_config_file => افزودن فایل پیکربندی
 admin_theme => قالب سمت مدیر
-already_installed => به نظر می‌رسد که Textpattern پیش از این هم نصب شده است. اگر می‌خواهید یک نصب مجدد و نو داشته باشد لطفاً فایل <code dir="ltr">config.php</code> را از پوشه <code dir="ltr">/textpattern/</code>
+already_installed => به نظر می‌رسد که <bdi dir="ltr">Textpattern</bdi> پیش از این هم نصب شده است. اگر می‌خواهید یک نصب مجدد و نو داشته باشد لطفاً فایل <code dir="ltr">config.php</code> را از پوشه <code dir="ltr">/textpattern/</code>
 back => بازگشت
 before_you_proceed => پیش از آنکه ادامه دهید
 checking_database => در حال تست ارتباط با پایگاه داده
@@ -937,21 +959,22 @@ config_php_does_not_match_input => محتوای <code dir="ltr">config.php</code
 config_php_not_found => فایل تنظیمات در موقعیت مورد نظر <strong>{file}</strong> یافت نشد. لطفاْ وجود آن را مجدد بررسی نمایید.
 core_theme => هسته : {theme}
 create_config => فایلی به نام <code dir="ltr">config.php</code> در مسیر <code dir="ltr">/textpattern/</code> درست کرده و محتویات زیر را در آن کپی کنید:
-creating_config => ساخت فایل <span dir="ltr">config.php</span>
+creating_config => ساخت فایل <bdi dir="ltr">config.php</bdi>
 creating_db_tables => ساخت جدول‌های پایگاه داده
 db_cant_connect => ناتوانی در اتصال به پایگاه داده
 db_connected => وصل شد
 db_doesnt_exist => پایگاه‌داده {dbname} موجود نیست و یا کاربری که تعیین کرده‌اید اجازه دسترسی به آن را ندارد.
-db_must_exist => توجه داشته باشید پایگاه داده‌ای که مشخص می‌کنید باید از پیش موجود باشد. Textpattern قادر به ساخت آن نیست.
+db_must_exist => توجه داشته باشید پایگاه داده‌ای که مشخص می‌کنید باید از پیش موجود باشد. <bdi dir="ltr">Textpattern</bdi> قادر به ساخت آن نیست.
 did_it => انجام دادم
 email_required => لطفاً یک ایمیل معتبر وارد کنید
 get_started => برو!
 go_to_login => وارد شوید
 installation_postamble => جهت رعایت امنیت شما باید پوشه <code dir="ltr">setup</code> را از مسیر نصب سات خود حذف کنید. لطفاً هر از چندگاهی به پنل تشخیصی در قسمت مدیریت سایت بروید و هشدارها و اعلان های جدید را مطالعه فرمایید.
-mysql_database => پایگاه داده MySQL
-mysql_login => نام کاربری MySQL
-mysql_password => گذرواژه MySQL
-mysql_server => سرور MySQL
+missing_db_details =>
+mysql_database => پایگاه داده <bdi dir="ltr">MySQL</bdi>
+mysql_login => نام کاربری <bdi dir="ltr">MySQL</bdi>
+mysql_password => گذرواژه <bdi dir="ltr">MySQL</bdi>
+mysql_server => سرور <bdi dir="ltr">MySQL</bdi>
 my_site => سایت من
 my_slogan => شعار من
 name_required => لطفا یک نام کاربری معتبر وارد کنید.
@@ -961,7 +984,7 @@ pass_required => لطفا یک گذرواژه قوی‌تر انتخاب کنی�
 please_enter_url => لطفاً یک نشانی قابل دستیابی از طریق وب را برای سایت خود وارد کنید.
 please_go_back => لطفاً به عقب برگردید، جزئیات ناصحیح را اصلاح کنید و فرآیند را مجدد تکرار کنید.
 populate_db => ساکن سازی پایگاه داده
-prefix_bad_characters => پیش‌وند جدول {dbprefix} دارای کاراکترهای غیرمجاز است. نخستین کاراکتر باید یکی از گزینه‌های <strong>a-zA-Z_</strong> و مابقی می‌توانند از کاراکترهای محدوده
+prefix_bad_characters => پیش‌وند جدول {dbprefix} دارای کاراکترهای غیرمجاز است. نخستین کاراکتر باید یکی از گزینه‌های <bdi dir="ltr"><strong>a-zA-Z_</strong></bdi> و مابقی می‌توانند از کاراکترهای محدوده
 progress_steps => چهار گام جهت فرایند نصب وجود دارد:
 public_theme =>
 setup_comment_invite => نظر بدهید
@@ -978,11 +1001,11 @@ site_config => پیکربندی سایت
 site_url => نشانی سایت
 tables_exist => به نظر می رسد جداول از قبل در <strong>{dbname}</strong> وجود دارد. اگر میخواهید نصب خود را ادامه دهید یا جداول موجود را حذف کنید و یا از پیشوند جدول دیگری استفاده کنید.
 table_prefix => پیش‌وند جدول
-thanks_for_interest => از توجهتان به Textpattern سپاسگزاریم.
+thanks_for_interest => از توجهتان به <bdi dir="ltr">Textpattern</bdi> سپاسگزاریم.
 that_went_well => به خوبی انجام شد. جدول‌های پایگاه داده ساخته و پرداخته شدند.
 using_db => استفاده از {dbname}
-warn_mail_unavailable => در PHP نصب شده روی سرور شما تابع <code dir="ltr">mail()</code> وجود ندارد. بنابراین Textpattern امکان ارسال هیچ ایمیلی را ندارد که این محدودیتی بر برخی کارکردها خواهد گذاشت.
-welcome_to_textpattern => به Textpattern خوش آمدید
+warn_mail_unavailable => در <bdi dir="ltr">PHP</bdi> نصب شده روی سرور شما تابع <code dir="ltr">mail()</code> وجود ندارد. بنابراین <bdi dir="ltr">Textpattern</bdi> امکان ارسال هیچ ایمیلی را ندارد که این محدودیتی بر برخی کارکردها خواهد گذاشت.
+welcome_to_textpattern => به <bdi dir="ltr">Textpattern</bdi> خوش آمدید
 your_email => نشانی ایمیل شما
 your_full_name => نام کامل شما
 you_can_access => شما از این پس امکان ورود به <a href="index.php">واسط اصلی</a> با نام کاربری و گذرواژه انتخابی خود را دارید.
@@ -998,12 +1021,12 @@ skin_name =>
 skin_title =>
 skin_version =>
 #@tag
-active_class => کلاس CSS برای آیتم فعال
+active_class => کلاس <bdi dir="ltr">CSS</bdi> برای آیتم فعال
 allowoverride => فرم را بتوان تحریف کرد؟
 breadcrumb_linked => لینک به خرده نان ها؟
 breadcrumb_separator => جداکننده خرده نان ها
 break => برچسب شکست لیست
-breakclass => کلاس CSS جهت برچسب شکست لیست
+breakclass => کلاس <bdi dir="ltr">CSS</bdi> جهت برچسب شکست لیست
 build => تگ را بساز
 button_text => متن دکمه
 category_list_section => لینک به یک بخش مشخص؟
@@ -1024,20 +1047,20 @@ gmt => فرمت بر طبق زمان گرینویچ باشد؟
 has_excerpt => دارای منتخب
 hilight => تگ برجستگی
 hilight_limit => چه تعداد برجسته شود؟
-html_id => صفت شناسه در HTML
+html_id => صفت شناسه در <bdi dir="ltr">HTML</bdi>
 include_default => شامل بخش پیش‌فرض باشد؟
 inline_style => استایل درون‌خطی
 input_size => اندازه ورودی
-labeltag => تگ label
+labeltag => تگ <bdi dir="ltr">label</bdi>
 limit => چندبار نمایش داده شود؟
-linkclass => کلاس CSS مورد استفاده برای لینک‌ها
+linkclass => کلاس <bdi dir="ltr">CSS</bdi> مورد استفاده برای لینک‌ها
 link_to_this_author => به لسیت دیگر نوشته‌های این نویسنده لینک شود؟
 link_to_this_category => به لیست دیگر نوشته‌های این رده لینک شود؟
 link_to_this_section => به لیست دیگر نوشته‌های این بخش لینک شود؟
 listform => فرم لیست
 match => چگونه مرتبطند؟
 match_type => نوع جستجو
-media => <code dir="ltr">media</code> HTML صفت
+media => <code dir="ltr">media</code> <bdi dir="ltr">HTML</bdi> صفت
 msgcols => ستون‌های (طول) ورودی پیام
 msgrows => سطرهای (ارتفاع) ورودی پیام
 no_categories_available => هیچ رده‌ای موجود نیست.
@@ -1048,7 +1071,7 @@ pageby => صفحه بندی با
 page_file_hed => دانلود فایل
 pgonly => نوشته‌ها را بشمار اما چیزی نشان نده
 random => تصادفی
-rel => <code dir="ltr">rel</code> HTML صفت
+rel => <code dir="ltr">rel</code> <bdi dir="ltr">HTML</bdi> صفت
 searchall => جستجو در تمام بخش‌ها؟
 searchsticky => جستجو در نوشته‌های دائم؟
 search_input_form => ورودی جستجو
@@ -1091,7 +1114,7 @@ tag_comment_submit => دکمه ارسال نظر
 tag_comment_time => زمان نظر
 tag_comment_web => وب‌سایت نظردهنده
 tag_comment_web_input => ورودی وب‌سایت نظردهنده
-tag_css => لینک CSS (<code dir="ltr">head</code>)
+tag_css => لینک <bdi dir="ltr">CSS</bdi> (<code dir="ltr">head</code>)
 tag_email => لینک ایمیل (محافظ در برابر اسپم)
 tag_excerpt => منتخب
 tag_feed_link => لینک فید نوشته‌ها
@@ -1107,8 +1130,8 @@ tag_file_download_modified => زمان تغییر در فایل
 tag_file_download_name => نام فایل
 tag_file_download_size => حجم فایل
 tag_home => خانه
-tag_if_category => دسته شرطی If
-tag_if_section => بخش شرطی If
+tag_if_category => دسته شرطی <bdi dir="ltr">if</bdi>
+tag_if_section => بخش شرطی <bdi dir="ltr">if</bdi>
 tag_image => تصویر
 tag_lang => زبان
 tag_link => لینک
@@ -1157,4 +1180,4 @@ time_future => آینده
 time_past => گذشته
 title_separator => جداکننده ی نام سایت و مقاله ی مجزا
 use_thumbnail => استفاده از تصاویر کوچک؟
-wraptag => برچسب Wrap
+wraptag => برچسب <bdi dir="ltr">wrap</bdi>
