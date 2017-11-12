@@ -603,22 +603,20 @@ function setClassRemember(className, force)
 function sendAsyncEvent(data, fn, format)
 {
     var formdata = false;
-    format = format.split('.')
-    $.merge(format, ['async'])
 
     if ($.type(data) === 'string' && data.length > 0) {
         // Got serialized data.
-        data = data + '&app_mode='+format[1]+'&_txp_token=' + textpattern._txp_token;
+        data = data + '&app_mode=async&_txp_token=' + textpattern._txp_token;
     } else if (data instanceof FormData) {
         formdata = true;
-        data.append("app_mode", format[1]);
+        data.append("app_mode", "async");
         data.append("_txp_token", textpattern._txp_token);
     } else {
-        data.app_mode = format[1];
+        data.app_mode = "async";
         data._txp_token = textpattern._txp_token;
     }
 
-    format = format[0] || 'xml';
+    format = format || 'xml';
 
     return formdata ?
         $.ajax({
@@ -628,24 +626,7 @@ function sendAsyncEvent(data, fn, format)
             success: fn,
             dataType: format,
             processData: false,
-            contentType: false,
-            xhr: function () {
-                var xhr = $.ajaxSettings.xhr();
-                // For uploads
-                xhr.upload.onprogress = function (e) {
-                    if (e.lengthComputable) {
-                        textpattern.Relay.callback('uploadProgress', e)
-                    }
-                };
-                xhr.upload.onloadstart = function (e) {
-                    textpattern.Relay.callback('uploadStart', e)
-                };
-                xhr.upload.onloadend = function (e) {
-                    textpattern.Relay.callback('uploadEnd', e)
-                };
-
-                return xhr;
-            }
+            contentType: false
         }) :
         $.post('index.php', data, fn, format);
 }
@@ -778,6 +759,24 @@ textpattern.Console =
     queue: {},
 
     /**
+     * Clear.
+     *
+     * @param  {string} The event
+     * @return textpattern.Console
+     */
+
+    clear: function (event, reset) {
+        event = event || textpattern.event
+        textpattern.Console.messages[event] = []
+
+        if (!!reset) {
+            textpattern.Console.queue[event] = false
+        }
+
+        return this
+    },
+
+    /**
      * Add message to announce.
      *
      * @param  {string} The event
@@ -804,11 +803,14 @@ textpattern.Console =
      * @return textpattern.Console
      */
 
-    announce: function (event) {
+    announce: function (event, options) {
         event = event || textpattern.event
 
-        if (!!textpattern.Console.queue[event]) return this
-        else textpattern.Console.queue[event] = true
+        if (!!textpattern.Console.queue[event]) {
+            return this
+        } else {
+            textpattern.Console.queue[event] = true
+        }
 
         $(document).ready(function() {
             var c = 0, message = [], status = 0
@@ -825,11 +827,10 @@ textpattern.Console =
                 })
 
                 status = !c ? 'success' : (c == 2*textpattern.Console.messages[event].length ? 'error' : 'warning')
-                textpattern.Console.messages[event] = []
             }
 
-            textpattern.Console.queue[event] = false
-            textpattern.Relay.callback('announce', {message: message, status: status})
+            textpattern.Relay.callback('announce', {event: event, message: message, status: status})
+            textpattern.Console.clear(event, true)
         })
 
         return this
@@ -911,9 +912,9 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 
     if (message) {
         $('#messagepane').html(message)
-    } else {
+    } /*else {
         $('#messagepane').empty()
-    }
+    }*/
 });
 
 /**
@@ -1338,20 +1339,27 @@ jQuery.fn.txpSortable = function (options) {
  */
 
 textpattern.passwordStrength = function (options) {
-    jQuery.ajax({
-        type: 'GET',
-        url: 'https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js',
-        dataType: 'script',
-        cache: true,
-        success: function() {
-            jQuery('form').on('keyup', 'input.txp-strength-hint', function () {
+    if (typeof zxcvbn !== 'function') {
+        zxcvbn = function(s) {
+            return {score: Math.min(Math.max(Math.floor(Math.log2(1+s.length))-1, 0), 4)}
+        }
+    }
+
+    $('<script />', {
+        src: 'https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js',
+        async: 'async',
+        integrity: 'sha256-Znf8FdJF85f1LV0JmPOob5qudSrns8pLPZ6qkd/+F0o=',
+        crossorigin: 'anonymous',
+        onload: function() {
+            jQuery('form').on('input', 'input.txp-strength-hint', function () {
+
                 var settings = $.extend({
                     'gtxt_prefix': ''
                 }, options);
 
                 var me = jQuery(this);
                 var pass = me.val();
-                var passResult = zxcvbn(pass, user_inputs=[]);
+                var passResult =  zxcvbn(pass, user_inputs=[]);
                 var strengthMap = {
                     "0": {
                         "width": "5"
@@ -1384,7 +1392,7 @@ textpattern.passwordStrength = function (options) {
                     .css('width', offset.width+'%');
             });
         }
-    });
+    }).appendTo('head');
 }
 
 /**
@@ -1398,7 +1406,8 @@ textpattern.passwordMask = function () {
         var inputBox = $(this).closest('form').find('input.txp-maskable');
         var newType = (inputBox.attr('type') === 'password') ? 'text' : 'password';
         textpattern.changeType(inputBox, newType);
-    });
+        $(this).attr('checked', newType === 'text' ? 'checked' : null).prop('checked', newType === 'text')
+    }).find('#show_password').prop('checked', false)
 }
 
 /**
@@ -1944,7 +1953,7 @@ jQuery.fn.txpUploadPreview = function(template) {
                           preview = '<img src="' + createObjectURL(this) + '" />'
                         break
                     case 'audio':
-                    case 'video':
+//                    case 'video':
                           preview = '<'+mime[0]+' controls src="' + createObjectURL(this) + '" />'
                         break
                 }
@@ -2058,15 +2067,14 @@ textpattern.Route.add('article', function () {
     $listoptions.hide().menu();
 });
 
-// TEST FILEUPLOAD ONLY!!
-textpattern.Route.add('list, file, image', function () {
+textpattern.Route.add('file, image', function () {
     if (!$('#txp-list-container').length) return
 
     textpattern.Relay.register('uploadStart', function(event) {
         textpattern.Relay.data.fileid = []
     }).register('uploadEnd', function(event) {
         var callback = function() {
-            textpattern.Console.announce(textpattern.event).announce(event.type)
+            textpattern.Console.clear().announce(event.type)
         }
 
         $(document).ready(function() {
@@ -2088,7 +2096,6 @@ textpattern.Route.add('list, file, image', function () {
     $('form.upload-form.async').txpUploadPreview()
         .txpFileupload({formData: [{name: "app_mode", value: "async"}]})
 })
-// ENDTEST FILEUPLOAD
 
 // Uncheck reset on timestamp change.
 
@@ -2121,7 +2128,7 @@ textpattern.Route.add('page, form, file, image', function () {
         $('#txp-tagbuilder-output').select();
     });
 
-    $('#tagbuild_links, .txp-list-col-tag-build').on('click', '.txp-tagbuilder-link', function (ev) {
+    $(document).on('click', '.txp-tagbuilder-link', function (ev) {
         txpAsyncLink(ev, 'tag');
     });
 
@@ -2385,18 +2392,11 @@ $(document).ready(function () {
     });
 
     // Set up asynchronous links.
-    $('a.async:not(.script)').txpAsyncHref({
+    $('a.async').txpAsyncHref($.extend({
         error: function () {
             window.alert(textpattern.gTxt('form_submission_error'));
         }
-    });
-
-    $('a.async.script').txpAsyncHref({
-        dataType: 'script',
-        error   : function () {
-            window.alert(textpattern.gTxt('form_submission_error'));
-        }
-    });
+    }, $(this).hasClass('script') ? {dataType: 'script'} : {}));
 
     // Close button on the announce pane.
     $(document).on('click', '.close', function (e) {
@@ -2463,7 +2463,6 @@ $(document).ready(function () {
     }).on('updateList', '#txp-list-container', function() {
         $(this).find('.multi_edit_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected}).find('table.txp-list').txpColumnize()
     })
-
 
     // Find and open associated dialogs.
     $(document).on('click.txpDialog', '[data-txp-dialog]', function (e) {

@@ -302,7 +302,7 @@ function plugin_help()
 
     // Note that TEXTPATTERN_DEFAULT_LANG is not used here.
     // The assumption is that plugin help is in English, unless otherwise stated.
-    $default_lang = $lang_plugin = 'en-gb';
+    $default_lang = $lang_plugin = 'en';
 
     pagetop(gTxt('plugin_help'));
     $help = ($name) ? safe_field('help', 'txp_plugin', "name = '".doSlash($name)."'") : '';

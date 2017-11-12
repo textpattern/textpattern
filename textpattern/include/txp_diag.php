@@ -693,7 +693,7 @@ function checkUpdates()
             $lastCheck['msg2'] = gTxt('textpattern_update_available_beta', array('{version}' => $prerelease));
         }
     } else {
-        $lastCheck['msg'] = gTxt('problem_connecting_rpc_server');
+        $lastCheck['msg'] = gTxt('problem_connecting_update_server');
     }
     set_pref('last_update_check', json_encode($lastCheck, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');
 
