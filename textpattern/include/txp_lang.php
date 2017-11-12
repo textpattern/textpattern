@@ -138,8 +138,7 @@ function list_languages($message = '')
 
         $installLink = ($disabled
             ? span($btnText, array(
-                'class'    => 'txp-button',
-                'disabled' => true,
+                'class'    => 'txp-button disabled',
             ))
             : href($btnText, array(
                 'event'      => 'lang',
@@ -153,7 +152,7 @@ function list_languages($message = '')
         $grid .= tag(
             graf(
                 ($icon ? '<span class="ui-icon '.$icon.'"></span>' : '').n.
-                tag(gTxt($langdata['name']), 'strong')
+                tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto'))
             ).
             graf(
                 (has_privs('lang.edit')
