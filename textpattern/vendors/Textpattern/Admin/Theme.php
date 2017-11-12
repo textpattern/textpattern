@@ -335,6 +335,18 @@ abstract class Theme
     public function html_head_custom()
     {
         $out = '';
+        $prefs = $this->manifest('prefs');
+
+        if (!empty($prefs['textpattern'])) {
+            $content = json_encode($prefs['textpattern']);
+            $out .= script_js("textpattern.prefs = jQuery.extend(textpattern.prefs, {$content})").n;
+        }
+
+        if (!empty($prefs['style'])) {
+            $content = $prefs['style'];
+            $out .= "<style>\n{$content}\n</style>".n;
+        }
+
         // Custom CSS (see theme README for usage instructions).
         if (defined('admin_custom_css')) {
             $custom_css = admin_custom_css;
@@ -436,7 +448,7 @@ abstract class Theme
         } else {
             // Try to inject $html into the message pane no matter when _announce()'s output is printed.
             $thing = json_encode($thing);
-            $js = "textpattern.Console.addMessage({$thing});";
+            $js = "textpattern.Console.addMessage({$thing}).announce();";
         }
 
         return $async ? $js : script_js(str_replace('</', '<\/', $js));
@@ -450,9 +462,9 @@ abstract class Theme
      * @return array
      */
 
-    public function manifest()
+    public function manifest($type = 'manifest')
     {
 
-        return @json_decode(file_get_contents($this->url.'manifest.json'), true);
+        return @json_decode(file_get_contents($this->url.$type.'.json'), true);
     }
 }
