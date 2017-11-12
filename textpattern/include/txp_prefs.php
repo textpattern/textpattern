@@ -140,6 +140,7 @@ function prefs_save()
     }
 
     update_lastmod('preferences_saved');
+    $prefs = get_prefs();
 
     prefs_list(gTxt('preferences_saved'));
 }
@@ -193,6 +194,8 @@ function prefs_list($message = '')
     $groupOut = array();
 
     if (numRows($rs)) {
+        $pophelp_keys = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp_keys('prefs');
+
         while ($a = nextRow($rs)) {
             if (!has_privs('prefs.'.$a['event'])) {
                 continue;
@@ -223,17 +226,20 @@ function prefs_list($message = '')
                 $out = array();
             }
 
-            $label = '';
-
-            if (!in_array($a['html'], array('yesnoradio', 'is_dst'))) {
-                $label = $a['name'];
+            switch ($a['html']) {
+                case 'yesnoradio':
+                case 'is_dst':
+                    $label = '';
+                    break;
+                case 'gmtoffset_select':
+                    $label = 'tz_timezone';
+                    break;
+                default:
+                    $label = $a['name'];
+                    break;
             }
 
-            // TODO: remove exception when custom fields move to meta store.
-            $help = '';
-            if (strpos($a['name'], 'custom_') === false) {
-                $help = $a['name'];
-            }
+            $help = in_array($a['name'], $pophelp_keys, true) ? $a['name'] : '';
 
             if ($a['html'] == 'text_input') {
                 $size = INPUT_REGULAR;
@@ -723,16 +729,7 @@ function custom_set($name, $val)
 
 function themename($name, $val)
 {
-    $themes = \Textpattern\Admin\Theme::names();
-    foreach ($themes as $t) {
-        $theme = \Textpattern\Admin\Theme::factory($t);
-        if ($theme) {
-            $m = $theme->manifest();
-            $title = empty($m['title']) ? ucwords($theme->name) : $m['title'];
-            $vals[$t] = $title;
-            unset($theme);
-        }
-    }
+    $vals = \Textpattern\Admin\Theme::names(1);
     asort($vals, SORT_STRING);
 
     return pluggable_ui('prefs_ui', 'theme_name',
@@ -770,4 +767,22 @@ function doctypes($name, $val)
 function defaultPublishStatus($name, $val)
 {
     return selectInput($name, status_list(), $val, '', '', $name);
+}
+
+/**
+ * Renders a HTML &lt;select&gt; list of module_pophelp options.
+ *
+ * @param  string $name HTML name and id of the list
+ * @param  string $val  Initial (or current) selected item
+ * @return string HTML
+ */
+
+function module_pophelp($name, $val)
+{
+    $vals = array(
+        '0'  => gTxt('none'),
+        '1'  => gTxt('pophelp'),
+    );
+
+    return selectInput($name, $vals, $val, '', '', $name);
 }

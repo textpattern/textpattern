@@ -76,6 +76,13 @@
         "html": "themename",
         "position": "160"
     },
+    "module_pophelp": {
+        "val": "1",
+        "type": "0",
+        "event": "admin",
+        "html": "module_pophelp",
+        "position": "170"
+    },
     "show_article_category_count": {
         "val": "1",
         "type": "2",

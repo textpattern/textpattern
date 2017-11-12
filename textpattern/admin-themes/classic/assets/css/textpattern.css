@@ -373,6 +373,14 @@ button {
   html[lang="zh-tw"] {
     font-family: PMingLiU, sans-serif;
   }
+  /**
+ * Suppress `text-decoration` in some RTL languages for better legibility.
+ */
+  [lang|="ar"] a:hover,
+  [lang|="fa"] a:hover,
+  [lang|="ur"] a:hover {
+    text-decoration: none;
+  }
   /* Embedded content
    ========================================================================== */
   /**
@@ -692,7 +700,7 @@ button {
   .strength-meter {
     position: relative;
     width: 100%;
-    max-width: 28em;
+    max-width: 30em;
     height: 1.5em;
     background-color: #a3a3a3;
     -webkit-box-sizing: border-box;

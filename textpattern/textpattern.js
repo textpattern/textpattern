@@ -53,32 +53,6 @@ function checkCookies()
 }
 
 /**
- * Spawns a centred popup window.
- *
- * @param {string}  url     The location
- * @param {integer} width   The width
- * @param {integer} height  The height
- * @param {string}  options A list of options
- */
-
-function popWin(url, width, height, options)
-{
-    var w = (width) ? width : 400;
-    var h = (height) ? height : 400;
-
-    var t = (screen.height) ? (screen.height - h) / 2 : 0;
-    var l = (screen.width) ? (screen.width - w) / 2 : 0;
-
-    var opt = (options) ? options : 'toolbar = no, location = no, directories = no, ' +
-        'status = yes, menubar = no, scrollbars = yes, copyhistory = no, resizable = yes';
-
-    var popped = window.open(url, 'popupwindow',
-        'top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h + ',' + opt);
-
-    popped.focus();
-}
-
-/**
  * Basic confirmation for potentially powerful choices (like deletion,
  * for example).
  *
@@ -629,22 +603,20 @@ function setClassRemember(className, force)
 function sendAsyncEvent(data, fn, format)
 {
     var formdata = false;
-    format = format.split('.')
-    $.merge(format, ['async'])
 
     if ($.type(data) === 'string' && data.length > 0) {
         // Got serialized data.
-        data = data + '&app_mode='+format[1]+'&_txp_token=' + textpattern._txp_token;
+        data = data + '&app_mode=async&_txp_token=' + textpattern._txp_token;
     } else if (data instanceof FormData) {
         formdata = true;
-        data.append("app_mode", format[1]);
+        data.append("app_mode", "async");
         data.append("_txp_token", textpattern._txp_token);
     } else {
-        data.app_mode = format[1];
+        data.app_mode = "async";
         data._txp_token = textpattern._txp_token;
     }
 
-    format = format[0] || 'xml';
+    format = format || 'xml';
 
     return formdata ?
         $.ajax({
@@ -654,24 +626,7 @@ function sendAsyncEvent(data, fn, format)
             success: fn,
             dataType: format,
             processData: false,
-            contentType: false,
-            xhr: function () {
-                var xhr = $.ajaxSettings.xhr();
-                // For uploads
-                xhr.upload.onprogress = function (e) {
-                    if (e.lengthComputable) {
-                        textpattern.Relay.callback('uploadProgress', e)
-                    }
-                };
-                xhr.upload.onloadstart = function (e) {
-                    textpattern.Relay.callback('uploadStart', e)
-                };
-                xhr.upload.onloadend = function (e) {
-                    textpattern.Relay.callback('uploadEnd', e)
-                };
-
-                return xhr;
-            }
+            contentType: false
         }) :
         $.post('index.php', data, fn, format);
 }
@@ -801,6 +756,26 @@ textpattern.Console =
 
     messages: {},
 
+    queue: {},
+
+    /**
+     * Clear.
+     *
+     * @param  {string} The event
+     * @return textpattern.Console
+     */
+
+    clear: function (event, reset) {
+        event = event || textpattern.event
+        textpattern.Console.messages[event] = []
+
+        if (!!reset) {
+            textpattern.Console.queue[event] = false
+        }
+
+        return this
+    },
+
     /**
      * Add message to announce.
      *
@@ -828,24 +803,34 @@ textpattern.Console =
      * @return textpattern.Console
      */
 
-    announce: function (event) {
-        $(document).ready(function() {
-            var c = 0, message = []
-            event = event || textpattern.event
+    announce: function (event, options) {
+        event = event || textpattern.event
 
-            if (!textpattern.Console.messages[event] || !textpattern.Console.messages[event].length) {
-                return this
+        if (!!textpattern.Console.queue[event]) {
+            return this
+        } else {
+            textpattern.Console.queue[event] = true
+        }
+
+        $(document).ready(function() {
+            var c = 0, message = [], status = 0
+
+            if (textpattern.Console.messages[event] && textpattern.Console.messages[event].length) {
+                var container = textpattern.prefs.message || '{message}'
+
+                textpattern.Console.messages[event].forEach (function(pair) {
+                    message.push(textpattern.mustache(container, {
+                        status: pair[1] != 1 && pair[1] != 2 ? 'check' : 'alert',
+                        message: pair[0]
+                    }))
+                    c += 2*(pair[1] == 1) + 1*(pair[1] == 2)
+                })
+
+                status = !c ? 'success' : (c == 2*textpattern.Console.messages[event].length ? 'error' : 'warning')
             }
 
-            textpattern.Console.messages[event].forEach (function(pair) {
-                var iconClass = 'ui-icon ui-icon-'+(pair[1] != 1 && pair[1] != 2 ? 'check' : 'alert')
-                message.push('<span class="'+iconClass+'"></span> '+pair[0])
-                c += 2*(pair[1] == 1) + 1*(pair[1] == 2)
-            })
-
-            var status = !c ? 'success' : (c == 2*textpattern.Console.messages[event].length ? 'error' : 'warning')
-            textpattern.Console.messages[event] = []
-            textpattern.Relay.callback('announce', {message: message, status: status})
+            textpattern.Relay.callback('announce', {event: event, message: message, status: status})
+            textpattern.Console.clear(event, true)
         })
 
         return this
@@ -893,9 +878,11 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 }).register('uploadEnd', function (event, data) {
     $('progress.upload-progress').hide()
 }).register('updateList', function (event, data) {
-    var list = data.list || '#txp-list-container, #messagepane',
+    var list = data.list || '#messagepane, #txp-list-container',
         url = data.url || 'index.php',
-        callback = data.callback || function(event) {},
+        callback = data.callback || function(event) {
+            textpattern.Console.announce(event)
+        },
         handle = function(html) {
             if (html) {
                 $html = $(html)
@@ -920,12 +907,14 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         handle(data.html)
     }
 }).register('announce', function(event, data) {
-    if (data.message.length) {
-        container = textpattern.prefs.messagePane || '<span class="messageflash {status}" role="alert" aria-live="assertive">{messages}<a class="close" role="button" title="{close}" aria-label="{close}" href="#close">&#215;</a></span>'
-        message = textpattern.mustache(container, {messages: data.message.join('<br />'), status: data.status, close: textpattern.gTxt('close')})
+    var container = textpattern.prefs.messagePane || '',
+        message = container && data.message.length ? textpattern.mustache(container, {message: data.message.join('<br />'), status: data.status, close: textpattern.gTxt('close')}) : ''
+
+    if (message) {
         $('#messagepane').html(message)
-    }
-    else $('#messagepane').empty()
+    } /*else {
+        $('#messagepane').empty()
+    }*/
 });
 
 /**
@@ -1078,6 +1067,7 @@ jQuery.fn.txpAsyncForm = function (options) {
                 form.button.removeAttr('disabled');
                 form.spinner.remove();
                 $('body').removeClass('busy');
+                textpattern.Console.announce()
             });
     });
 
@@ -1162,10 +1152,13 @@ jQuery.fn.txpAsyncHref = function (options) {
  * @since  4.6.0
  */
 
-function txpAsyncLink(event)
+function txpAsyncLink(event, txpEvent)
 {
     event.preventDefault();
     var $this = $(event.target);
+    if ($this.attr('href') === undefined) {
+        $this = $this.parent();
+    }
     var url = $this.attr('href').replace('?', '');
 
     // Show feedback while processing.
@@ -1174,7 +1167,7 @@ function txpAsyncLink(event)
 
     sendAsyncEvent(url, function () {}, 'html')
         .done(function (data, textStatus, jqXHR) {
-            textpattern.Relay.callback('txpAsyncLink.success', {
+            textpattern.Relay.callback('txpAsyncLink.'+txpEvent+'.success', {
                 'this'      : $this,
                 'event'     : event,
                 'data'      : data,
@@ -1183,7 +1176,7 @@ function txpAsyncLink(event)
             });
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
-            textpattern.Relay.callback('txpAsyncLink.error', {
+            textpattern.Relay.callback('txpAsyncLink.'+txpEvent+'.error', {
                 'this'        : $this,
                 'event'       : event,
                 'jqXHR'       : jqXHR,
@@ -1336,7 +1329,6 @@ jQuery.fn.txpSortable = function (options) {
     });
 };
 
-
 /**
  * Password strength meter.
  *
@@ -1347,45 +1339,60 @@ jQuery.fn.txpSortable = function (options) {
  */
 
 textpattern.passwordStrength = function (options) {
-    jQuery('form').on('keyup', 'input.txp-strength-hint', function () {
-        var settings = $.extend({
-            'gtxt_prefix': ''
-        }, options);
-
-        var me = jQuery(this);
-        var pass = me.val();
-        var passResult = zxcvbn(pass, user_inputs=[]);
-        var strengthMap = {
-            "0": {
-                "width": "5"
-            },
-            "1": {
-                "width": "28"
-            },
-            "2": {
-                "width": "50"
-            },
-            "3": {
-                "width": "75"
-            },
-            "4": {
-                "width": "100"
-            }
-        };
-
-        var offset = strengthMap[passResult.score];
-        var meter = me.siblings('.strength-meter');
-        meter.empty();
-
-        if (pass.length > 0) {
-            meter.append('<div class="bar"></div><div class="indicator">' + textpattern.gTxt(settings.gtxt_prefix + 'password_strength_' + passResult.score) + '</div>');
+    if (typeof zxcvbn !== 'function') {
+        zxcvbn = function(s) {
+            return {score: Math.min(Math.max(Math.floor(Math.log2(1+s.length))-1, 0), 4)}
         }
+    }
 
-        meter
-            .find('.bar')
-            .attr('class', 'bar password-strength-' + passResult.score)
-            .css('width', offset.width+'%');
-    });
+    $('<script />', {
+        src: 'https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js',
+        async: 'async',
+        integrity: 'sha256-Znf8FdJF85f1LV0JmPOob5qudSrns8pLPZ6qkd/+F0o=',
+        crossorigin: 'anonymous',
+        onload: function() {
+            jQuery('form').on('input', 'input.txp-strength-hint', function () {
+
+                var settings = $.extend({
+                    'gtxt_prefix': ''
+                }, options);
+
+                var me = jQuery(this);
+                var pass = me.val();
+                var passResult =  zxcvbn(pass, user_inputs=[]);
+                var strengthMap = {
+                    "0": {
+                        "width": "5"
+                    },
+                    "1": {
+                        "width": "28"
+                    },
+                    "2": {
+                        "width": "50"
+                    },
+                    "3": {
+                        "width": "75"
+                    },
+                    "4": {
+                        "width": "100"
+                    }
+                };
+
+                var offset = strengthMap[passResult.score];
+                var meter = me.siblings('.strength-meter');
+                meter.empty();
+
+                if (pass.length > 0) {
+                    meter.append('<div class="bar"></div><div class="indicator">' + textpattern.gTxt(settings.gtxt_prefix + 'password_strength_' + passResult.score) + '</div>');
+                }
+
+                meter
+                    .find('.bar')
+                    .attr('class', 'bar password-strength-' + passResult.score)
+                    .css('width', offset.width+'%');
+            });
+        }
+    }).appendTo('head');
 }
 
 /**
@@ -1399,7 +1406,8 @@ textpattern.passwordMask = function () {
         var inputBox = $(this).closest('form').find('input.txp-maskable');
         var newType = (inputBox.attr('type') === 'password') ? 'text' : 'password';
         textpattern.changeType(inputBox, newType);
-    });
+        $(this).attr('checked', newType === 'text' ? 'checked' : null).prop('checked', newType === 'text')
+    }).find('#show_password').prop('checked', false)
 }
 
 /**
@@ -1872,13 +1880,10 @@ jQuery.fn.txpFileupload = function (options) {
         replaceFileInput: false,
         add: function (e, data) {
             var file = data.files[0], uploadErrors = [];
-/*            var acceptFileTypes = /^image\/(gif|jpe?g|png)$/i;
-            if(data.files[0]['type'] && !acceptFileTypes.test(data.files[0]['type'])) {
-                uploadErrors.push('Not an accepted file type');
-            }*/
+
             if(file['size'] && file['size'] > maxFileSize) {
                 uploadErrors.push('Filesize is too big')
-                textpattern.Console.addMessage(['<strong>'+file['name']+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadEnd')
+                textpattern.Console.addMessage(['<strong>'+file['name']+'</strong> - '+textpattern.gTxt('upload_err_form_size'), 1], 'uploadStart')
             }
 
             if(!uploadErrors.length) {
@@ -1899,7 +1904,7 @@ jQuery.fn.txpFileupload = function (options) {
         }
     }, options)).off('submit').submit(function (e) {
         e.preventDefault()
-        
+        textpattern.Console.announce('uploadStart')
         form.fileupload('add', {
             files: fileInput.prop('files')
         })
@@ -1948,7 +1953,7 @@ jQuery.fn.txpUploadPreview = function(template) {
                           preview = '<img src="' + createObjectURL(this) + '" />'
                         break
                     case 'audio':
-                    case 'video':
+//                    case 'video':
                           preview = '<'+mime[0]+' controls src="' + createObjectURL(this) + '" />'
                         break
                 }
@@ -2062,15 +2067,14 @@ textpattern.Route.add('article', function () {
     $listoptions.hide().menu();
 });
 
-// TEST FILEUPLOAD ONLY!!
-textpattern.Route.add('list, file, image', function () {
+textpattern.Route.add('file, image', function () {
     if (!$('#txp-list-container').length) return
 
     textpattern.Relay.register('uploadStart', function(event) {
         textpattern.Relay.data.fileid = []
     }).register('uploadEnd', function(event) {
         var callback = function() {
-            textpattern.Console.announce(event.type)
+            textpattern.Console.clear().announce(event.type)
         }
 
         $(document).ready(function() {
@@ -2092,7 +2096,6 @@ textpattern.Route.add('list, file, image', function () {
     $('form.upload-form.async').txpUploadPreview()
         .txpFileupload({formData: [{name: "app_mode", value: "async"}]})
 })
-// ENDTEST FILEUPLOAD
 
 // Uncheck reset on timestamp change.
 
@@ -2120,13 +2123,13 @@ textpattern.Route.add('css, page, form', function () {
 
 textpattern.Route.add('page, form, file, image', function () {
     // Set up asynchronous tag builder links.
-    textpattern.Relay.register('txpAsyncLink.success', function (event, data) {
+    textpattern.Relay.register('txpAsyncLink.tag.success', function (event, data) {
         $('#tagbuild_links').dialog('close').html($(data['data'])).dialog('open').restorePanes();
         $('#txp-tagbuilder-output').select();
     });
 
-    $('#tagbuild_links, .txp-list-col-tag-build').on('click', '.txp-tagbuilder-link', function (ev) {
-        txpAsyncLink(ev);
+    $(document).on('click', '.txp-tagbuilder-link', function (ev) {
+        txpAsyncLink(ev, 'tag');
     });
 
     $('#tagbuild_links').dialog({
@@ -2159,6 +2162,40 @@ textpattern.Route.add('page, form, file, image', function () {
             }
         });
     });
+});
+
+// popHelp.
+
+textpattern.Route.add('', function () {
+    if ( $('.pophelp' ).length ) {
+        textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
+            $(data.event.target).parent().attr("data-item", encodeURIComponent(data.data) );
+            $('#pophelp_dialog').dialog('close').html(data.data).dialog('open').restorePanes();
+        });
+
+        $('.pophelp').on('click', function (ev) {
+            var item = $(ev.target).parent().attr('data-item');
+            if (item === undefined ) {
+                item = $(ev.target).attr('data-item');
+            }
+            if (item === undefined ) {
+                txpAsyncLink(ev, 'pophelp');
+            } else {
+                $('#pophelp_dialog').dialog('close').html(decodeURIComponent(item)).dialog('open').restorePanes();
+            }
+            return false;
+        });
+
+        $('body').append('<div id="pophelp_dialog"></div>');
+        $('#pophelp_dialog').dialog({
+            dialogClass: 'txp-tagbuilder-container',    // FIXME: UI, need pophelp-class
+            autoOpen: false,
+            title: textpattern.gTxt('help'),
+            focus: function (ev, ui) {
+                $(ev.target).closest('.ui-dialog').focus();
+            }
+        });
+    }
 });
 
 // Forms panel.
@@ -2266,7 +2303,6 @@ textpattern.Route.add('', function () {
 });
 
 // Initialize JavaScript.
-
 $(document).ready(function () {
     $('body').restorePanes();
 
@@ -2312,18 +2348,11 @@ $(document).ready(function () {
     });
 
     // Set up asynchronous links.
-    $('a.async:not(.script)').txpAsyncHref({
+    $('a.async').txpAsyncHref($.extend({
         error: function () {
             window.alert(textpattern.gTxt('form_submission_error'));
         }
-    });
-
-    $('a.async.script').txpAsyncHref({
-        dataType: 'script',
-        error   : function () {
-            window.alert(textpattern.gTxt('form_submission_error'));
-        }
-    });
+    }, $(this).hasClass('script') ? {dataType: 'script'} : {}));
 
     // Close button on the announce pane.
     $(document).on('click', '.close', function (e) {
@@ -2390,7 +2419,6 @@ $(document).ready(function () {
     }).on('updateList', '#txp-list-container', function() {
         $(this).find('.multi_edit_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected}).find('table.txp-list').txpColumnize()
     })
-
 
     // Find and open associated dialogs.
     $(document).on('click.txpDialog', '[data-txp-dialog]', function (e) {

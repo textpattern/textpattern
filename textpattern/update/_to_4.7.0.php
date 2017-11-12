@@ -43,3 +43,17 @@ if (in_array('prefs_id', $cols)) {
     safe_alter('txp_prefs', "ADD UNIQUE prefs_idx (name(185), user_name)");
     safe_alter('txp_prefs', "DROP prefs_id");
 }
+
+// Correct the language designators to become less opinionated.
+$available_lang = Txp::get('\Textpattern\L10n\Lang')->available();
+$available_keys = array_keys($available_lang);
+$installed_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED);
+$installed_keys = array_keys($installed_lang);
+
+foreach ($installed_keys as $key) {
+    if (!in_array($key, $available_keys) && strlen($key) > 2) {
+        // Chop the designator to the first two characters for a better match.
+        $newKey = Txp::get('\Textpattern\L10n\Lang')->closest(substr($key, 0, 2), $available_keys);
+        safe_update('txp_lang', "lang='".doSlash($newKey)."'", "lang='".doSlash($key)."'");
+    }
+}

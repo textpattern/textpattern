@@ -182,27 +182,7 @@ rebuild_tree_full('file');
 
 function setup_txp_lang()
 {
-    global $blog_uid, $language;
-    require_once txpath.'/lib/IXRClass.php';
-    $client = new IXR_Client('http://rpc.textpattern.com');
-
-    if (true && $client->query('tups.getLanguage', $blog_uid, $language)) {
-        $response = $client->getResponse();
-        $lang_struct = unserialize($response);
-
-        foreach ($lang_struct as $item) {
-            $item = doSlash($item);
-
-            safe_insert('txp_lang', "
-                lang    = '{$language}',
-                name    = '{$item['name']}',
-                event   = '{$item['event']}',
-                data    = '{$item['data']}',
-                lastmod = '".strftime('%Y%m%d%H%M%S', $item['uLastmod'])."'");
-        }
-
-        return;
-    }
+    global $language;
 
     if (!Txp::get('\Textpattern\L10n\Lang')->install_file($language)) {
         // If cannot install from lang file, setup the Default lang. `language` pref changed too.

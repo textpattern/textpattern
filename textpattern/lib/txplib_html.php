@@ -102,8 +102,7 @@ function end_page()
             )
         );
 
-        echo script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL, array(array('admin', 'admin'), array('new_pass_form', 'change_pass'))).
-            script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL).
+        echo script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL).
             script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON)).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }
@@ -1208,27 +1207,34 @@ function assHead()
 
 function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
 {
-    if (!$help_var) {
+    global $txp_user, $prefs;
+
+    if (empty($help_var) || empty($prefs['module_pophelp'])) {
         return '';
     }
 
-    $lang_ui = get_pref('language_ui', LANG);
     $url = filter_var($help_var, FILTER_VALIDATE_URL);
 
-    if ($url === false) {
-        $destination = HELP_URL.'?item='.urlencode($help_var).'&language='.urlencode($lang_ui);
-    } else {
-        $destination = $url;
-    }
-
-    $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-help')), $destination, array(
-        'class'      => $class,
+    $atts = array(
         'rel'        => 'help',
         'target'     => '_blank',
         'title'      => gTxt('help'),
         'role'       => 'button',
-        'onclick'    => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
-    ));
+    );
+
+    if ($url === false) {
+        $atts['class'] = $class;
+        // Use inline pophelp, if unauthorized user or setup stage
+        if (empty($txp_user)) {
+            $url = '#';
+            $atts['data-item'] = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp($help_var);
+        } else {
+            $url = '?event=help&step=pophelp&item='.urlencode($help_var);
+        }
+        $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-help')), $url, $atts);
+    } else {
+        $ui = sp.href(span(gTxt('help'), array('class' => 'ui-icon ui-icon-extlink')), $url, $atts);
+    }
 
     return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
 }

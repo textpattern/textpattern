@@ -92,6 +92,7 @@ function pagetop($pagetitle = '', $message = '')
         'toggle_all_selected',
         'select',
         'close',
+        'help',
         'upload_err_form_size'
     ));
 
@@ -130,7 +131,11 @@ function pagetop($pagetitle = '', $message = '')
                         '#page-image #image_alt_text, #page-image #caption,'.
                         '#page-file #description,'.
                         '#page-link #link-title, #page-link #link-description'
-                    )
+                    ),
+                    'message' => '<span class="ui-icon ui-icon-{status}"></span> {message}',
+                    'messagePane' => '<span class="messageflash {status}" role="alert" aria-live="assertive">
+    {message}<a class="close" role="button" title="{close}" aria-label="{close}" href="#close">&#215;</a>
+</span>'
                 ),
                 'textarray' => (object) null,
             ),
@@ -147,6 +152,7 @@ function pagetop($pagetitle = '', $message = '')
 </style>
 <?php
 echo $theme->html_head();
+echo $theme->html_head_custom();
     callback_event('admin_side', 'head_end'); ?>
 </head>
 <body class="not-ready <?php echo $area; ?>" id="<?php echo $body_id; ?>">
