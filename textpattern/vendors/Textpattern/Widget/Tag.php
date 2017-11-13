@@ -148,14 +148,14 @@ class Tag implements \Textpattern\Widget\WidgetInterface
     /**
      * Set the given attributes. Chainable.
      *
-     * @param  string|array $keys (List of) keys to set as boolean attributes
+     * @param  string|array $keys One or more keys to set as boolean attributes
      * @return this
      */
 
     public function setBool($keys)
     {
         if (!is_array($keys)) {
-            $keys = (array)$keys;
+            $keys = do_list($keys);
         }
 
         $props = array('format' => 'bool');
@@ -223,7 +223,7 @@ class Tag implements \Textpattern\Widget\WidgetInterface
     /**
      * Render the given content as an XML element.
      *
-     * @param  array $option To affect the flavour of tag returned - complete, self-closing, open, close, content
+     * @param  string $option To affect the flavour of tag returned - complete, self-closing, open, close, content
      * @return string HTML
      */
 
