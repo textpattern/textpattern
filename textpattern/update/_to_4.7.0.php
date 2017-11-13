@@ -57,7 +57,7 @@ foreach ($installed_keys as $key) {
     }
 }
 
-// Plugin Textpack
+// New fields in the plugin table.
 $cols = getThings("DESCRIBE `".PFX."txp_plugin`");
 if (! in_array('textpack', $cols)) {
     safe_alter('txp_plugin', "ADD textpack MEDIUMTEXT NOT NULL AFTER code_md5");

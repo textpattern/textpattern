@@ -1415,7 +1415,7 @@ function include_plugin($name)
 /**
  * Load a plugin data field.
  *
- * Used in plugins to get the field `data`, using a callback, you can return data from the file system.
+ * Used in plugins to get the field `data`, using a callback, can return data from the file system.
  *
  * @param  string $name The plugin
  * @return string
