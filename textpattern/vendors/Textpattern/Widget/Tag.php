@@ -230,9 +230,9 @@ class Tag implements \Textpattern\Widget\WidgetInterface
     public function render($option = null)
     {
         if ($option === null) {
-            if (empty($this->tag) || $this->content === '') {
+            if (empty($this->tag)) {
                 $option = 'content';
-            } elseif ($this->content) {
+            } elseif ($this->content !== null) {
                 $option = 'complete';
             } else {
                 $option = 'self-closing';
