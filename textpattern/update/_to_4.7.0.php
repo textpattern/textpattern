@@ -51,9 +51,8 @@ $installed_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG
 $installed_keys = array_keys($installed_lang);
 
 foreach ($installed_keys as $key) {
-    if (!in_array($key, $available_keys) && strlen($key) > 2) {
-        // Chop the designator to the first two characters for a better match.
-        $newKey = Txp::get('\Textpattern\L10n\Lang')->closest(substr($key, 0, 2), $available_keys);
+    if (!in_array($key, $available_keys)) {
+        $newKey = Txp::get('\Textpattern\L10n\Locale')->validLocale($key);
         safe_update('txp_lang', "lang='".doSlash($newKey)."'", "lang='".doSlash($key)."'");
     }
 }
