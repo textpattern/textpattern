@@ -499,7 +499,18 @@ function dmp()
 
 function load_lang($lang, $events = null)
 {
-    return Txp::get('\Textpattern\L10n\Lang')->load($lang, $events);
+    global $production_status;
+
+    $textarray = Txp::get('\Textpattern\L10n\Lang')->load($lang, $events);
+
+    if ($lang == LANG
+        && $production_status !== 'live'
+        && @$debug = parse_ini_file(txpath.DS.'config.ini')
+    ) {
+        $textarray += $debug;
+    }
+
+    return $textarray;
 }
 
 /**
