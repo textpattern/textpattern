@@ -1330,72 +1330,6 @@ jQuery.fn.txpSortable = function (options) {
 };
 
 /**
- * Password strength meter.
- *
- * @since 4.6.0
- * @param  {object}  options
- * @param  {array}   options.gtxt_prefix  gTxt() string prefix
- * @todo  Pass in name/email via 'options' to be injected in user_inputs[]
- */
-
-textpattern.passwordStrength = function (options) {
-    if (typeof zxcvbn !== 'function') {
-        zxcvbn = function(s) {
-            return {score: Math.min(Math.max(Math.floor(Math.log2(1+s.length))-1, 0), 4)}
-        }
-    }
-
-    $('<script />', {
-        src: 'https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js',
-        async: 'async',
-        integrity: 'sha256-Znf8FdJF85f1LV0JmPOob5qudSrns8pLPZ6qkd/+F0o=',
-        crossorigin: 'anonymous',
-        onload: function() {
-            jQuery('form').on('input', 'input.txp-strength-hint', function () {
-
-                var settings = $.extend({
-                    'gtxt_prefix': ''
-                }, options);
-
-                var me = jQuery(this);
-                var pass = me.val();
-                var passResult =  zxcvbn(pass, user_inputs=[]);
-                var strengthMap = {
-                    "0": {
-                        "width": "5"
-                    },
-                    "1": {
-                        "width": "28"
-                    },
-                    "2": {
-                        "width": "50"
-                    },
-                    "3": {
-                        "width": "75"
-                    },
-                    "4": {
-                        "width": "100"
-                    }
-                };
-
-                var offset = strengthMap[passResult.score];
-                var meter = me.siblings('.strength-meter');
-                meter.empty();
-
-                if (pass.length > 0) {
-                    meter.append('<div class="bar"></div><div class="indicator">' + textpattern.gTxt(settings.gtxt_prefix + 'password_strength_' + passResult.score) + '</div>');
-                }
-
-                meter
-                    .find('.bar')
-                    .attr('class', 'bar password-strength-' + passResult.score)
-                    .css('width', offset.width+'%');
-            });
-        }
-    }).appendTo('head');
-}
-
-/**
  * Mask/unmask password input field.
  *
  * @since  4.6.0
@@ -1980,9 +1914,6 @@ var cookieEnabled = true;
 
 textpattern.Route.add('setup', function () {
     textpattern.passwordMask();
-    textpattern.passwordStrength({
-        'gtxt_prefix': 'setup_'
-    });
     $('#setup_admin_theme').prop('required',true);
     $('#setup_public_theme').prop('required',true);
 });
@@ -2002,7 +1933,6 @@ textpattern.Route.add('login', function () {
     }).first().focus();
 
     textpattern.passwordMask();
-    textpattern.passwordStrength();
 });
 
 // Write panel.
@@ -2216,7 +2146,6 @@ textpattern.Route.add('form', function () {
 
 textpattern.Route.add('admin', function () {
     textpattern.passwordMask();
-    textpattern.passwordStrength();
 });
 
 // Plugins panel.

@@ -110,15 +110,6 @@ function preamble($step = null)
 
     $out = array();
     $bodyclass = ($step == '') ? ' welcome' : '';
-    gTxtScript(array(
-        'setup_password_strength_0',
-        'setup_password_strength_1',
-        'setup_password_strength_2',
-        'setup_password_strength_3',
-        'setup_password_strength_4',
-        'help',
-        )
-    );
 
     if (isset($_SESSION['lang']) && !isset($_SESSION['direction'])) {
         $file = Txp::get('\Textpattern\L10n\Lang')->findFilename($_SESSION['lang']);
@@ -576,8 +567,7 @@ function getTxpLogin()
         ).
         inputLabel(
             'setup_user_pass',
-            fInput('password', 'pass', (isset($_SESSION['pass']) ? $_SESSION['pass'] : ''), 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).
-            n.tag(null, 'div', array('class' => 'strength-meter')).
+            fInput('password', 'pass', (isset($_SESSION['pass']) ? $_SESSION['pass'] : ''), 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
                 n.tag(gTxt('setup_show_password'), 'label', array('for' => 'show_password')),
