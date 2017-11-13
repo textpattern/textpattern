@@ -1413,6 +1413,26 @@ function include_plugin($name)
 }
 
 /**
+ * Load a plugin data field.
+ *
+ * Used in plugins to get the field `data`, using a callback, you can return data from the file system.
+ *
+ * @param  string $name The plugin
+ * @return string
+ */
+
+function load_plugin_data($name)
+{
+    if (has_handler('plugin_data.fetch')) {
+        $data = callback_event('plugin_data.fetch', '', false, compact('name'));
+    } else {
+        $data = safe_field('data', 'txp_plugin', "name = '".doSlash($name)."'");
+    }
+
+    return $data;
+}
+
+/**
  * Error handler for plugins.
  *
  * @param   int    $errno
