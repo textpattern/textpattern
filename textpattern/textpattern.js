@@ -1806,7 +1806,7 @@ jQuery.fn.txpFileupload = function (options) {
         paramName: fileInput.attr('name'),
         dataType: 'script',
         maxFileSize: maxFileSize,
-        maxChunkSize: maxChunkSize,
+        maxChunkSize: maxChunkSize - 1000000, // test!!!
         singleFileUploads: true,
         formData: null,
         fileInput: null,
