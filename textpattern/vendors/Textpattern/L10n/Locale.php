@@ -378,9 +378,9 @@ class Locale
 
         return false;
     }
+
     /**
      * Return valid locale, if possible.
-     *
      */
 
     public function validLocale($code)

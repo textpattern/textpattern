@@ -406,11 +406,10 @@ class Lang
     }
 
     /**
-     * Install/Update plugin Textpack.
+     * Install/Update a plugin Textpack.
      *
-     * @param   string $name      Plugin name
-     * @return  int Number of installed strings
-     * @package L10n
+     * @param   string $name Plugin name
+     * @return  int          Number of installed strings
      */
 
     public function install_textpack_plugin($name)
@@ -431,14 +430,12 @@ class Lang
     }
 
     /**
-     * Install/Update ALL plugin Textpack. Used when a new language is added.
-     *
-     * @package L10n
+     * Install/update ALL plugin Textpacks. Used when a new language is added.
      */
 
     public function install_textpack_plugins()
     {
-        if ($plugins = safe_column_num('name', 'txp_plugin', "textpack !='' ORDER BY load_order")) {
+        if ($plugins = safe_column_num('name', 'txp_plugin', "textpack != '' ORDER BY load_order")) {
             foreach ($plugins as $name) {
                 $this->install_textpack_plugin($name);
             }
