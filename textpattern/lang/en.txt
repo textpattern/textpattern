@@ -67,7 +67,6 @@ token_expired => Password reset security token has expired.
 unable_retrieve_template => Unable to retrieve template.
 unable_retrieve_user => Unable to retrieve user.
 unable_set_template => Unable to set template.
-unknown_author => Unknown author: <strong>{name}</strong>.
 your_login_info => Your login info
 your_login_is => Your login is
 your_new_password => Your new password
