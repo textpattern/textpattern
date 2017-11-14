@@ -129,7 +129,7 @@ class Parser
 
             // Sets language.
             if (preg_match('/^#@language\s+(.+)$/', $line, $m)) {
-                $language = $m[1];
+                $language = \Txp::get('\Textpattern\L10n\Locale')->validLocale($m[1]);
                 continue;
             }
 
