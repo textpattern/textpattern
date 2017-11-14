@@ -370,7 +370,7 @@ function printConfig()
 //        exit;
 //    }
 
-    echo hed(gTxt("checking_database"), 2);
+    echo hed(gTxt('checking_database'), 2);
 
     if (strpos($_SESSION['dhost'], ':') === false) {
         $dhost = $_SESSION['dhost'];
