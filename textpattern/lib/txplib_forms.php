@@ -150,7 +150,7 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
             $sel = '';
         }
 
-        $out[] = '<option value="'.txpspecialchars($avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
+        $out[] = '<option value="'.txpspecialchars($avalue).'"'.$sel.' dir="auto">'.txpspecialchars($alabel).'</option>';
     }
 
     if ($blank_first) {
@@ -222,7 +222,7 @@ function treeSelectInput($select_name = '', $array = array(), $value = '', $sele
             $data_level = ' data-level="'.$a['level'].'"';
         }
 
-        $out[] = '<option value="'.txpspecialchars($a['name']).'"'.$htmltitle.$sel.$data_level.'>'.$sp.txpspecialchars($a['title']).$hellip.'</option>';
+        $out[] = '<option value="'.txpspecialchars($a['name']).'"'.$htmltitle.$sel.$data_level.' dir="auto">'.$sp.txpspecialchars($a['title']).$hellip.'</option>';
     }
 
     array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'>&#160;</option>');
@@ -272,7 +272,7 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
                 .(!empty($subcity) ? '/'.gTxt(str_replace('_', ' ', $subcity)) : '').t
                 /*."($abbr)"*/;
 
-            $out[] = n.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').'>'.$where.' ('.$offset.')'.'</option>';
+            $out[] = n.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').' dir="auto">'.$where.'</option>';
         }
 
         $out[] = n.'</optgroup>';

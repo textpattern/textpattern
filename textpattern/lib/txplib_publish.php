@@ -435,7 +435,7 @@ function parse($thing, $condition = true)
             if ($chunk[strlen($chunk) - 2] === '/') {
                 // Self closed tag.
                 if ($chunk[1] === '/') {
-                    $trace->log("Ambiguous tag $chunk");
+                    trigger_error("Ambiguous tag format: ".n.txpspecialchars($chunk).n, E_USER_WARNING);
                 }
 
                 $tags[$level][] = array($chunk, $tag[$level][2], trim($tag[$level][3]), null, null);
@@ -451,14 +451,14 @@ function parse($thing, $condition = true)
             } else {
                 // Closing tag.
                 if ($level < 1) {
-                    $trace->log("Lone closing tag $chunk");
+                    trigger_error("Closing tag without corresponding opening tag: ".n.txpspecialchars($chunk).n, E_USER_WARNING);
                     $tags[$level][] = array($chunk, null, '', null, null);
                     $inside[$level] .= $chunk;
                 } else {
                     if ($i >= $last) {
-                        $trace->log('Unclosed tag'.n.$outside[$level].$inside[$level].n);
+                        trigger_error('Opening tag without corresponding closing tag:'.n.txpspecialchars($outside[$level]).n, E_USER_WARNING);
                     } elseif ($tag[$level-1][2] != $tag[$level][2]) {
-                        $trace->log('Tags mismatch '.$outside[$level].$inside[$level].$chunk);
+                        trigger_error('Tag opening/closing mismatch: '.n.txpspecialchars($outside[$level]).'&hellip;'.txpspecialchars($chunk).n, E_USER_WARNING);
                     }
 
                     $sha = sha1($inside[$level]);

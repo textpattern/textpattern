@@ -309,33 +309,13 @@ function escape_cdata($str)
 
 function gTxt($var, $atts = array(), $escape = 'html')
 {
-    global $textarray;
+    static $txpLang = null;
 
-    if (!is_array($atts)) {
-        $atts = array();
+    if ($txpLang === null) {
+        $txpLang = Txp::get('\Textpattern\L10n\Lang');
     }
 
-    if ($escape == 'html') {
-        foreach ($atts as $key => $value) {
-            $atts[$key] = txpspecialchars($value);
-        }
-    }
-
-    $v = strtolower($var);
-
-    if (isset($textarray[$v])) {
-        $out = $textarray[$v];
-
-        if ($out !== '') {
-            return strtr($out, $atts);
-        }
-    }
-
-    if ($atts) {
-        return $var.': '.join(', ', $atts);
-    }
-
-    return $var;
+    return $txpLang->txt($var, $atts, $escape);
 }
 
 /**
@@ -519,31 +499,18 @@ function dmp()
 
 function load_lang($lang, $events = null)
 {
-    if ($events === null && txpinterface != 'admin') {
-        $events = array('public', 'common');
+    global $production_status;
+
+    $textarray = Txp::get('\Textpattern\L10n\Lang')->load($lang, $events);
+
+    if ($lang == LANG
+        && $production_status !== 'live'
+        && @$debug = parse_ini_file(txpath.DS.'config.ini')
+    ) {
+        $textarray += $debug;
     }
 
-    $where = " AND name != ''";
-
-    if ($events) {
-        $where .= " AND event IN (".join(',', quote_list((array) $events)).")";
-    }
-
-    $out = array();
-
-    foreach (array($lang, TEXTPATTERN_DEFAULT_LANG) as $lang_code) {
-        $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang_code)."'".$where);
-
-        if (!empty($rs)) {
-            while ($a = nextRow($rs)) {
-                $out[$a['name']] = $a['data'];
-            }
-
-            return $out;
-        }
-    }
-
-    return $out;
+    return $textarray;
 }
 
 /**
@@ -1454,6 +1421,26 @@ function include_plugin($name)
     }
 
     return true;
+}
+
+/**
+ * Load a plugin data field.
+ *
+ * Used in plugins to get the field `data`, using a callback, can return data from the file system.
+ *
+ * @param  string $name The plugin
+ * @return string
+ */
+
+function load_plugin_data($name)
+{
+    if (has_handler('plugin_data.fetch')) {
+        $data = callback_event('plugin_data.fetch', '', false, compact('name'));
+    } else {
+        $data = safe_field('data', 'txp_plugin', "name = '".doSlash($name)."'");
+    }
+
+    return $data;
 }
 
 /**
@@ -3084,14 +3071,18 @@ function tz_offset($timestamp = null)
 
 function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 {
-    static $charsets = array();
+    static $charsets = array(), $txpLocale = null;
 
     if (!$time) {
         $time = time();
     }
 
+    if ($txpLocale === null) {
+        $txpLocale = Txp::get('\Textpattern\L10n\Locale');
+    }
+
     // We could add some other formats here.
-    if ($format == 'iso8601' or $format == 'w3cdtf') {
+    if ($format == 'iso8601' || $format == 'w3cdtf') {
         $format = '%Y-%m-%dT%H:%M:%SZ';
         $gmt = true;
     } elseif ($format == 'rfc822') {
@@ -3101,14 +3092,14 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     }
 
     if ($override_locale) {
-        $oldLocale = Txp::get('\Textpattern\L10n\Locale')->getLocale(LC_TIME);
+        $oldLocale = $txpLocale->getLocale(LC_TIME);
 
         try {
-            Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, $override_locale);
+            $txpLocale->setLocale(LC_TIME, $override_locale);
         } catch (\Exception $e) {
             // Revert to original locale on error and signal that the
             // later revert isn't necessary
-            Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, $oldLocale);
+            $txpLocale->setLocale(LC_TIME, $oldLocale);
             $oldLocale = false;
         }
     }
@@ -3122,12 +3113,12 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
     }
 
     if (!isset($charsets[$override_locale])) {
-        $charsets[$override_locale] = Txp::get('\Textpattern\L10n\Locale')->getCharset(LC_TIME, IS_WIN ? 'Windows-1252' : 'ISO-8859-1');
+        $charsets[$override_locale] = $txpLocale->getCharset(LC_TIME, IS_WIN ? 'Windows-1252' : 'ISO-8859-1');
     }
 
     $charset = $charsets[$override_locale];
 
-    if ($charset != 'UTF-8' and $format != 'since') {
+    if ($charset != 'UTF-8' && $format != 'since') {
         $new = '';
         if (is_callable('iconv')) {
             $new = @iconv($charset, 'UTF-8', $str);
@@ -3142,7 +3133,7 @@ function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 
     // Revert to the old locale.
     if ($override_locale && $oldLocale) {
-        Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_TIME, $oldLocale);
+        $txpLocale->setLocale(LC_TIME, $oldLocale);
     }
 
     return $str;
@@ -4314,7 +4305,7 @@ function parse_form($name)
     static $stack = array(), $depth = null;
 
     if ($depth === null) {
-        $depth = get_pref('form_circular_depth', 31);
+        $depth = get_pref('form_circular_depth', 15);
     }
 
     $out = '';
@@ -5390,8 +5381,8 @@ function pagelinkurl($parts, $inherit = array())
     $keys = array_merge($inherit, $parts);
 
     if (isset($prefs['custom_url_func'])
-        and is_callable($prefs['custom_url_func'])
-        and ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== false) {
+        && is_callable($prefs['custom_url_func'])
+        && ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== false) {
         return $url;
     }
 
@@ -5441,7 +5432,7 @@ function pagelinkurl($parts, $inherit = array())
             unset($keys['c'], $keys['context']);
         }
 
-        return rtrim($url, '/').join_qs($keys);
+        return (empty($prefs['no_trailing_slash']) ? $url : rtrim($url, '/')).join_qs($keys);
     }
 }
 
@@ -5498,6 +5489,7 @@ function permlinkurl_id($id)
 function permlinkurl($article_array)
 {
     global $permlink_mode, $prefs, $permlinks, $production_status;
+    static $now = null;
 
     if (!$article_array || !is_array($article_array)) {
         return;
@@ -5517,6 +5509,7 @@ function permlinkurl($article_array)
         'section'   => null,
         'posted'    => null,
         'expires'   => null,
+        'uexpires'   => null,
     ), array_change_key_case($article_array, CASE_LOWER), false));
 
     if (empty($thisid)) {
@@ -5529,11 +5522,18 @@ function permlinkurl($article_array)
         return $permlinks[$thisid];
     }
 
+    if (!isset($now)) {
+        $now = strftime('%F %T');
+    }
+
     if (empty($prefs['publish_expired_articles']) &&
         !empty($expires) &&
-        $expires < time() &&
         $production_status != 'live' &&
-        txpinterface == 'public'
+        txpinterface == 'public' &&
+        (is_numeric($expires) ? $expires < time()
+            : (isset($uexpires) ? $uexpires < time()
+            : $expires < $now)
+        )
     ) {
         trigger_error(gTxt('permlink_to_expired_article', array('{id}' => $thisid)), E_USER_NOTICE);
     }
@@ -6524,65 +6524,16 @@ class timezone
 /**
  * Installs localisation strings from a Textpack.
  *
- * Created strings get a well-known static modifcation date set in the past.
- * This is done to avoid tampering with lastmod dates used for RPC server
- * interactions, caching and update checks.
- *
- * @param   string $textpack      The Textpack to install
- * @param   bool   $add_new_langs If TRUE, installs strings for any included language
- * @return  int Number of installed strings
- * @package L10n
+ * @param      string $textpack      The Textpack to install
+ * @param      bool   $add_new_langs If TRUE, installs strings for any included language
+ * @return     int Number of installed strings
+ * @package    L10n
+ * @deprecated in 4.7.0
  */
 
 function install_textpack($textpack, $add_new_langs = false)
 {
-    $parser = new \Textpattern\Textpack\Parser();
-    $parser->setLanguage(get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG));
-    $textpack = $parser->parse($textpack);
-
-    if (!$textpack) {
-        return 0;
-    }
-
-    $installed_langs = safe_column("lang", 'txp_lang', "1 = 1 GROUP BY lang");
-    $done = 0;
-
-    foreach ($textpack as $translation) {
-        extract($translation);
-
-        if (!$add_new_langs && !in_array($lang, $installed_langs)) {
-            continue;
-        }
-
-        $where = "lang = '".doSlash($lang)."' AND name = '".doSlash($name)."'";
-
-        if (safe_count('txp_lang', $where)) {
-            $r = safe_update(
-                'txp_lang',
-                "lastmod = '2005-08-14',
-                data = '".doSlash($data)."',
-                event = '".doSlash($event)."',
-                owner = '".doSlash($owner)."'",
-                $where
-            );
-        } else {
-            $r = safe_insert(
-                'txp_lang',
-                "lastmod = '2005-08-14',
-                data = '".doSlash($data)."',
-                event = '".doSlash($event)."',
-                owner = '".doSlash($owner)."',
-                lang = '".doSlash($lang)."',
-                name = '".doSlash($name)."'"
-            );
-        }
-
-        if ($r) {
-            $done++;
-        }
-    }
-
-    return $done;
+    return Txp::get('\Textpattern\L10n\Lang')->install_textpack($textpack, $add_new_langs);
 }
 
 /**

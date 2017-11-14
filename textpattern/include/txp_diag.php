@@ -549,7 +549,7 @@ function doDiagnostics()
 
             gTxt('os_version').cs.php_uname('s').' '.php_uname('r').n,
 
-            gTxt('theme_name').cs.$theme_name.sp.$theme_manifest['version'].n,
+            gTxt('theme_name').cs.$theme_name.sp.@$theme_manifest['version'].n,
 
             ($active_plugins ? gTxt('active_plugins').cs.n.t.join(n.t, $active_plugins).n : ''),
 
@@ -693,7 +693,7 @@ function checkUpdates()
             $lastCheck['msg2'] = gTxt('textpattern_update_available_beta', array('{version}' => $prerelease));
         }
     } else {
-        $lastCheck['msg'] = gTxt('problem_connecting_rpc_server');
+        $lastCheck['msg'] = gTxt('problem_connecting_update_server');
     }
     set_pref('last_update_check', json_encode($lastCheck, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');
 

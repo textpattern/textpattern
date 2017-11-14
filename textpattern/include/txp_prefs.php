@@ -226,10 +226,17 @@ function prefs_list($message = '')
                 $out = array();
             }
 
-            $label = '';
-
-            if (!in_array($a['html'], array('yesnoradio', 'is_dst'))) {
-                $label = $a['name'];
+            switch ($a['html']) {
+                case 'yesnoradio':
+                case 'is_dst':
+                    $label = '';
+                    break;
+                case 'gmtoffset_select':
+                    $label = 'tz_timezone';
+                    break;
+                default:
+                    $label = $a['name'];
+                    break;
             }
 
             $help = in_array($a['name'], $pophelp_keys, true) ? $a['name'] : '';
@@ -722,16 +729,7 @@ function custom_set($name, $val)
 
 function themename($name, $val)
 {
-    $themes = \Textpattern\Admin\Theme::names();
-    foreach ($themes as $t) {
-        $theme = \Textpattern\Admin\Theme::factory($t);
-        if ($theme) {
-            $m = $theme->manifest();
-            $title = empty($m['title']) ? ucwords($theme->name) : $m['title'];
-            $vals[$t] = $title;
-            unset($theme);
-        }
-    }
+    $vals = \Textpattern\Admin\Theme::names(1);
     asort($vals, SORT_STRING);
 
     return pluggable_ui('prefs_ui', 'theme_name',

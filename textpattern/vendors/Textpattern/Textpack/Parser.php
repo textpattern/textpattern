@@ -90,12 +90,19 @@ class Parser
      * );
      * </code>
      *
-     * @param  string $textpack The Textpack
+     * @param  string       $textpack The Textpack
+     * @param  string|array $group    Only return strings with the given event(s)
      * @return array An array of translations
      */
 
-    public function parse($textpack)
+    public function parse($textpack, $group = null)
     {
+        if ($group && !is_array($group)) {
+            $group = do_list($group);
+        } else {
+            $group = (array)$group;
+        }
+
         $lines = explode(n, (string)$textpack);
         $out = array();
         $version = false;
@@ -112,16 +119,17 @@ class Parser
                 continue;
             }
 
-            // Sets version and lastmod timestamp.
+            // Sets version. The lastmod timestamp after the ';' in the regex
+            // remains for reading legacy files, but is no longer used.
             if (preg_match('/^#@version\s+([^;\n]+);?([0-9]*)$/', $line, $m)) {
                 $version = $m[1];
-                $lastmod = $m[2] !== false ? $m[2] : $lastmod;
+//                $lastmod = $m[2] !== false ? $m[2] : $lastmod;
                 continue;
             }
 
             // Sets language.
             if (preg_match('/^#@language\s+(.+)$/', $line, $m)) {
-                $language = $m[1];
+                $language = \Txp::get('\Textpattern\L10n\Locale')->validLocale($m[1]);
                 continue;
             }
 
@@ -137,9 +145,13 @@ class Parser
                 continue;
             }
 
-            // Translation.
+            // Translation. Note that the array is numerically indexed.
+            // Indexing by name seems attractive because it means merging default
+            // strings is simpler. But doing so means that installing combined
+            // textpacks (such as those from plugins with multiple languages
+            // in one file) results in only the last pack being available.
             if (preg_match('/^([\w\-]+)\s*=>\s*(.+)$/', $line, $m)) {
-                if (!empty($m[1]) && !empty($m[2])) {
+                if (!empty($m[1]) && !empty($m[2]) && (empty($group) || in_array($event, $group))) {
                     $out[] = array(
                         'name'    => $m[1],
                         'lang'    => $language,
