@@ -1799,8 +1799,8 @@ jQuery.fn.txpFileupload = function (options) {
     if (!jQuery.fn.fileupload) return this
 
     var form = this, fileInput = this.find('input[type="file"]'),
-        maxChunkSize = textpattern.prefs.max_upload_size || 1000000,
-        maxFileSize = textpattern.prefs.max_file_size || 1000000
+        maxChunkSize = Math.min(parseFloat(textpattern.prefs.max_upload_size || 1000000), Number.MAX_SAFE_INTEGER)
+        maxFileSize = Math.min(parseFloat(textpattern.prefs.max_file_size || 1000000), Number.MAX_SAFE_INTEGER)
 
     form.fileupload($.extend({
         paramName: fileInput.attr('name'),

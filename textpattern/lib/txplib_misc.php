@@ -6923,5 +6923,6 @@ function real_max_upload_size($user_max, $php = true)
         }
     }
 
-    return $real_max;
+    // 2^53 - 1 is max safe Javascript integer, let 8192Tb
+    return number_format(min($real_max, pow(2, 53) - 1), 0, '.', '');
 }
