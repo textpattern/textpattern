@@ -41,12 +41,22 @@ class TagCollection implements \IteratorAggregate, \Textpattern\Widget\WidgetCol
     protected $items = array();
 
     /**
+     * The collection properties, keyed via their index.
+     *
+     * @var array
+     */
+
+    protected $properties = array();
+
+    /**
      * General constructor for the collection.
      */
 
-    public function __construct($widget, $key = null)
+    public function __construct($widget = null, $key = null)
     {
-        $this->addWidget($widget, $key);
+        if (!empty($widget)) {
+            $this->addWidget($widget, $key);
+        }
     }
 
     /**
@@ -126,6 +136,39 @@ class TagCollection implements \IteratorAggregate, \Textpattern\Widget\WidgetCol
     }
 
     /**
+     * Define one or more local properties for the collection. Chainable.
+     *
+     * @param string|array $prop  The name of the property to set or an array of property=>value pairs
+     * @param string|null  $value The value of the property
+     */
+
+    public function setProperty($prop, $value)
+    {
+        if (!is_array($prop)) {
+            $prop = array($prop => $value);
+        }
+
+        foreach ($prop as $key => $val) {
+            $this->properties[$key] = $val;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the break string to use after the tag has been output. Chainable.
+     *
+     * @param string $break The break tag to use
+     */
+
+    public function setBreak($break = br)
+    {
+        $this->setProperty('break', $break);
+
+        return $this;
+    }
+
+    /**
      * Render the content as a bunch of XML elements.
      *
      * @return string HTML
@@ -135,11 +178,13 @@ class TagCollection implements \IteratorAggregate, \Textpattern\Widget\WidgetCol
     {
         $out = array();
 
+        $break = (array_key_exists('break', $this->properties)) ? $this->properties['break'] : '';
+
         foreach ($this->items as $widget) {
             $out[] = $widget->render();
         }
 
-        return join(n, $out);
+        return join(n, $out).$break;
     }
 
     /**

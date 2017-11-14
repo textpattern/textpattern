@@ -94,6 +94,8 @@ class Tag implements \Textpattern\Widget\WidgetInterface
         if (self::$flags === null) {
             self::$flags['boolean'] = 'html5';
             self::$flags['self-closing'] = 'html5';
+            self::$flags['break'] = '';
+            self::$flags['break-on'] = '';
         }
 
         $this->setTag($tag);
@@ -185,16 +187,20 @@ class Tag implements \Textpattern\Widget\WidgetInterface
     }
 
     /**
-     * Define the global tag options from this point forward. Chainable.
+     * Define one more more global tag options from this point forward. Chainable.
      *
-     * @param  string $flag   The name of the flag to set. Either 'self-closing' or 'boolean'
-     * @param  string $scheme The scheme to set the flag to. Either 'html5' or 'xhtml'
+     * @param string|array $flag  The name of the flag to set or an array of flag=>value pairs
+     * @param string|null  $value The value of the flag
      */
 
-    public function setFlag($flag, $scheme)
+    public function setFlag($flag, $value = null)
     {
-        if (in_array($scheme, $this->schemes)) {
-            self::$flags[$flag] = $scheme;
+        if (!is_array($flag)) {
+            $flag = array($flag => $value);
+        }
+
+        foreach ($flag as $key => $val) {
+            self::$flags[$key] = $val;
         }
 
         return $this;
@@ -213,11 +219,62 @@ class Tag implements \Textpattern\Widget\WidgetInterface
     public function setScheme($scheme)
     {
         if (in_array($scheme, $this->schemes)) {
-            $this->setFlag('self-closing', $scheme);
-            $this->setFlag('boolean', $scheme);
+            $this->setFlag(array(
+                'self-closing' => $scheme,
+                'boolean'      => $scheme,
+            ));
         }
 
         return $this;
+    }
+
+    /**
+     * Define one or more local tag properties. Chainable.
+     *
+     * @param string|array $prop  The name of the property to set or an array of property=>value pairs
+     * @param string|null  $value The value of the property
+     */
+
+    public function setProperty($prop, $value)
+    {
+        if (!is_array($prop)) {
+            $prop = array($prop => $value);
+        }
+
+        foreach ($prop as $key => $val) {
+            $this->properties[$key] = $val;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the break string to use after the tag has been output. Chainable.
+     *
+     * @param string $break The break tag to use
+     */
+
+    public function setBreak($break = br)
+    {
+        $this->setProperty('break', $break);
+
+        return $this;
+    }
+
+    /**
+     * Get the break string to use after the tag has been output.
+     *
+     * The global break flag is set first, then the break-on list is checked.
+     * Finally, the local break may override it.
+     */
+
+    public function getBreak()
+    {
+        $breaklist = (empty(self::$flags['break-on'])) ? array() : do_list(self::$flags['break-on']);
+        $break = (empty($breaklist) || in_array($this->tag, $breaklist)) ? self::$flags['break'] : '';
+        $break = (array_key_exists('break', $this->properties)) ? $this->properties['break'] : $break;
+
+        return $break;
     }
 
     /**
@@ -239,18 +296,20 @@ class Tag implements \Textpattern\Widget\WidgetInterface
             }
         }
 
+        $break = $this->getBreak();
+
         switch ($option) {
             case 'complete':
-                $out = '<'.$this->tag.$this->atts->render().'>'.$this->content.'</'.$this->tag.'>';
+                $out = '<'.$this->tag.$this->atts->render().'>'.$this->content.'</'.$this->tag.'>'.$break;
                 break;
             case 'self-closing':
-                $out = '<'.$this->tag.$this->atts->render().(self::$flags['self-closing'] === 'html5' ? '>' : ' />');
+                $out = '<'.$this->tag.$this->atts->render().(self::$flags['self-closing'] === 'html5' ? '>' : ' />').$break;
                 break;
             case 'open':
                 $out = '<'.$this->tag.$this->atts->render().'>';
                 break;
             case 'close':
-                $out = '</'.$this->tag.'>';
+                $out = '</'.$this->tag.'>'.$break;
                 break;
             case 'content':
             default:
