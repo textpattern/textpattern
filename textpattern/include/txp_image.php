@@ -749,6 +749,21 @@ function image_edit($message = '', $id = '')
                             'caption', '', array('class' => 'txp-form-field txp-form-field-textarea edit-image-caption')
                         ).
                         pluggable_ui('image_ui', 'extend_detail_form', '', $rs).
+                        graf(
+                            href(gTxt('go_back'), array(
+                                'event'         => 'image',
+                                'sort'          => $sort,
+                                'dir'           => $dir,
+                                'page'          => $page,
+                                'search_method' => $search_method,
+                                'crit'          => $crit,
+                            ), array('class' => 'txp-button')).
+                            ($can_edit
+                                ? fInput('submit', '', gTxt('save'), 'publish')
+                                : ''
+                            ),
+                            array('class' => 'txp-edit-actions')
+                        ).
                         hInput('id', $id).
                         eInput('image').
                         sInput('image_save').
@@ -758,21 +773,6 @@ function image_edit($message = '', $id = '')
                         hInput('search_method', $search_method).
                         hInput('crit', $crit),
                         'image_details'
-                    ).
-                    graf(
-                        href(gTxt('go_back'), array(
-                            'event'         => 'image',
-                            'sort'          => $sort,
-                            'dir'           => $dir,
-                            'page'          => $page,
-                            'search_method' => $search_method,
-                            'crit'          => $crit,
-                        ), array('class' => 'txp-button')).
-                        ($can_edit
-                            ? fInput('submit', '', gTxt('save'), 'publish')
-                            : ''
-                        ),
-                        array('class' => 'txp-edit-actions')
                     ),
                     '', '', 'post', '', '', 'image_details_form'),
                 'div', array('class' => 'txp-layout-4col-alt')
