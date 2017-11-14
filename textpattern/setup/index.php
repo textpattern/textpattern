@@ -110,6 +110,7 @@ function preamble($step = null)
 
     $out = array();
     $bodyclass = ($step == '') ? ' welcome' : '';
+    gTxtScript(array('help'));
 
     if (isset($_SESSION['lang']) && !isset($_SESSION['direction'])) {
         $file = Txp::get('\Textpattern\L10n\Lang')->findFilename($_SESSION['lang']);
