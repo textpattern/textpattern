@@ -7,10 +7,6 @@ account_activation =>
 account_activation_confirmation =>
 add_new_author => افزودن نویسنده جدید
 alias_is_taken =>
-assert_callable =>
-assert_length =>
-assert_pattern =>
-assert_string =>
 assign_assets_to => انتصاب محتوای کاربر به
 author_already_exists => نویسنده با نام <strong>{name}</strong> از پیش موجود است.
 author_deleted => نویسنده با نام <strong>{name}</strong> پاک شد.
@@ -55,11 +51,6 @@ password_reset_confirmation_request_sent => پیام تاییدی به ایمی�
 password_sent_to => گذرواژه ارسال شد به
 password_set =>
 password_set_confirmation =>
-password_strength_0 =>
-password_strength_1 =>
-password_strength_2 =>
-password_strength_3 =>
-password_strength_4 =>
 privileges => سطح کاربری
 privs_none => هیچ
 publisher => ناشر
@@ -76,7 +67,6 @@ token_expired =>
 unable_retrieve_template =>
 unable_retrieve_user =>
 unable_set_template =>
-unknown_author => نویسنده ناشناس : <strong>{name}</strong>
 your_login_info => اطلاعات ورود شما
 your_login_is => مشخصات ورود شما
 your_new_password => گذرواژه جدید شما
@@ -220,14 +210,10 @@ expand_all =>
 expired => منقضی شده
 expire_date =>
 expire_time =>
-external_links => لینک‌های خارجی
-form_not_found => فرم یافت نشد
-form_not_specified => فرمی مشخص نشده است.
 form_submission_error => متاسفانه ارسال فرم امکان‌پذیر نیست. لطفا دوباره تلاش کنید.
 gd_unavailable => دسترس ناپذیر
 general_error => خطای عمومی
 get_off_my_lawn => متأسفم! ترسیدم و نمی تونم اینو انجامش بدم! <code dir="ltr">{event}</code> <code dir="ltr">{step}</code> یک عمل ناامن است.
-greeting => عزیز
 help => راهنمایی
 hidden => مخفی
 id => شناسه نوشته
@@ -301,11 +287,6 @@ thumbnail => تصویر کوچک
 title_body => عنوان و بدنه
 title_body_excerpt => عنوان، بدنه و منتخب
 toggle_all_selected => حلقه کردن همه / هیچ یک از انتخاب شده ها
-txpnl2br => تنها شکست خط
-txprawxhtml => کد خام <bdi dir="ltr">HTML</bdi>
-txpstriptags => برداشتن برچسب ها
-txptextile => <bdi dir="ltr">Textile</bdi>
-txptextilelite => <bdi dir="ltr">Textile Lite</bdi>
 txt_quote_double_close => «
 txt_quote_double_open => »
 txt_quote_single_close => “
@@ -423,7 +404,6 @@ no_comments_recorded => هیچ نظری ثبت نشده است
 search_comments =>
 show => نمایش
 show_spam => نمایش اسپم
-unknown_spam_estimate =>
 #@file
 condition => شرایط
 download => دانلود
@@ -692,15 +672,12 @@ year_month_day_title => /year/month/day/title
 ago => پیش
 all => همه
 already_exists => از پیش موجود است
-ambiguous_tag =>
 any => هر وقت
 articles => نوشته‌ها
 articles_found => نوشته یافت شد
 article_context => مقاله
 article_found => نوشته یافت شد
-article_tag_illegal_body =>
 atom_feed_title => فید اتم
-attribute_values_must_be_quoted => مقادیر صفت باید در "" قرار بگیرند.
 author => نویسنده
 authors => نویسندگان
 a_few_seconds => چند لحظه پیش
@@ -748,12 +725,6 @@ definition_list => لیست تعریف
 delete => پاک کن
 deleted => پاک شده
 deleted_text => متن پاک شده
-deprecated_attribute => صفت <strong>{name}</strong> نامناسب است
-deprecated_configuration => انتخاب تنظیم توصیه شده : <strong>{name}</strong>.
-deprecated_function => تابع <strong>{name}</strong> نامناسب است
-deprecated_function_with => تابع <strong>{name}</strong> نامناسب است : به جای آن از <strong>{with}</strong> استفاده کنید
-deprecated_tag => تگ نامناسب است
-disabled_function =>
 documentation =>
 download_count => شمارنده دانلود
 edit => ویرایش
@@ -761,13 +732,6 @@ email => ایمیل
 email_address => ایمیل
 emphasis => تأکید
 enter_comment_here => <strong>نظر خود را در زیر وارد نمایید.</strong> فیلدهای نشانه دار <b class="required">*</b> ضروری هستند. شما باید یکبار نظر خود را پیش از ارسال مرور کنید.
-error_article_context => تگ‌های مربوط به نوشته در خارج از محدوده مربوط به نوشته قابل استفاده نیستند
-error_category_context => برچسب های دسته خارج از زمینه دسته نمی توانند مورد استفاده قرار گیرند.
-error_comment_context => تگ‌های مربوط به نظرات در خارج از محدوده مربوط به نظرات قابل استفاده نیستند
-error_file_context => تگ‌های مربوط به فایل‌ها در خارج از محدوده مربوط به فایل‌ها قابل استفاده نیستند
-error_image_context => تگ‌های مربوط به تصاویر در خارج از محدوده مربوط به تصاویر قابل استفاده نیستند
-error_link_context => تگ‌های مربوط به لینک‌ها در خارج از محدوده مربوط به لینک‌ها قابل استفاده نیستند
-error_section_context => برچسب های بخش نمی توانند خارج از زمینه بخش مورد استفاده قرار گیرند.
 exact => دقیق
 extensions => افزونه‌ها
 file_context => فایل
@@ -793,7 +757,6 @@ image => تصویر
 imageurl => نشانی تصویر
 image_context => تصویر
 inserted_text => متن درج‌شده
-invalid_attribute_value => مقدار <strong>{name}</strong> برای صفت مناسب نیست
 keywords => کلیدواژه‌ها
 label => برچسب
 last_modification => آخرین تغییر
@@ -804,7 +767,6 @@ list_articles => لیست نوشته‌ها
 list_categories => لیست رده‌ها
 list_links => لیست لینک‌ها
 live => زنده
-lonely_closing_tag =>
 lowercase => حروف کوچک
 main_content => محتوای اصلی
 manual => دستی
@@ -815,7 +777,6 @@ message_preview => پیش‌نمایش پیام
 message_saved => پیام ذخیره شد
 minute => دقیقه
 minutes => دقیقه
-missing_article_tag => الگوی صفحه <strong>{page}</strong> فاقد تگ <code dir="ltr">txp:article</code> است.
 modified_by => آخرین تغییر بوسیله
 month => ماه
 more => بیشتر
@@ -839,11 +800,6 @@ pages => صفحات
 paragraph => پاراگراف
 permanent_link => لینک دائمی به این نوشته
 permlink => لینک دائمی
-php_code_disabled_article =>
-php_code_disabled_page =>
-php_code_forbidden_user =>
-plugin_load_error => هنگام بارگذاری پلاگین مشکلی رخ داده است:
-plugin_load_error_above => این اشکالات توسط پلاگین به وجود آمده است
 pophelp =>
 popup => پنجره ی بالاپر
 post => ارسال
@@ -854,7 +810,6 @@ prev => پیشین
 preview => پیش‌نمایش
 publish => انتشار
 published_at => منتشر شده در
-raw_php_deprecated => کد های خام <bdi dir="ltr">PHP</bdi> ممنوع شناخته می شود
 recently => اخیراً
 recent_articles => آخرین نوشته‌ها
 recent_comments => آخرین نظرها
@@ -882,41 +837,26 @@ strong => پررنگ
 submit => بفرست
 subscript => زیرنویس
 superscript => بالانویس
-tag_error => اشکال در تگ:
-tag_mismatch =>
 textile_help => راهنمای <bdi dir="ltr">Textile</bdi> (بافت)
-textile_lite_help => راهنمای <bdi dir="ltr">Textile Lite</bdi> (بافت سبک)
-text_conversion => تبدیل متن
-text_handling => دستکاری متن
 time => زمان
 time_ago => {time} پیش
 title => عنوان
 tooltip => لینک نکات
 too_common_search_term => به نظر می رسد شما به دنبال جستجوی عبارت بسیار رایجی هستید. اگر امکان دارد عبارت معین تری را امتحان نمایید.
 type => نوع
-unclosed_tag =>
 undefined => تعریف‌نشده
 unknown =>
-unknown_attribute => صفت ناشناخته {att}
-unknown_callback_function => تابع بازگشتی ناشناخته {function}.
-unknown_image => تصویر نامعلوم
-unknown_link =>
-unknown_section => بخش نامعلوم
-unknown_tag => تگ موجود نیست
-unregistered_tag =>
 untitled => بدون عنوان
 update => بهنگام‌سازی
 upload => آپلود
 uploaded => آپلود شد
 url => URL
 value => ارزش
-variable_name_empty =>
 version => نسخه
 view => نمایش
 website => وب‌سایت
 week => هفته
 weeks => هفته
-while_parsing_page_form => هنگام تجزیه و تحلیل کردن فرم <strong>{form}</strong> در صفحه <strong>{page}</strong>
 yes => بله
 your_ip_is_blacklisted_by => نشانی <bdi dir="ltr">IP</bdi> شما در لیست سیاه قرار گرفته است توسط
 yyyy-mm => yyyy-mm
@@ -989,11 +929,6 @@ progress_steps => چهار گام جهت فرایند نصب وجود دارد:
 public_theme =>
 setup_comment_invite => نظر بدهید
 setup_login => یک نام کاربری انتخاب کنید (لطفاً صرفاً از کارکترهای اصلی و خط فاصله استفاده کنید)
-setup_password_strength_0 =>
-setup_password_strength_1 =>
-setup_password_strength_2 =>
-setup_password_strength_3 =>
-setup_password_strength_4 =>
 setup_show_password =>
 set_db_details => تنظیم جزئیات پایگاه داده
 set_temp_dir_prefs => متأسفانه هیچ پوشه قابل نوشتنی برای فایل‌های موقت پیدا نکردیم. لطفاً در بخش “تنظیمات پیشرفته” گزینه “مسیر پوشه موقت” را متناس
