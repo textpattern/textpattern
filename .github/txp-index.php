@@ -8,9 +8,7 @@ $outdir = '.github/index';
     index_code('callback_event');
     index_code('callback_event_ref');
 
-
 exit;
-
 
 function index_code($search)
 {
@@ -36,9 +34,11 @@ function index_code($search)
 function index_get_branch()
 {
     $txt = @file_get_contents('.git/HEAD');
+
     if (preg_match('%refs/heads/(.*)$%m', $txt, $mm)) {
         return $mm[1];
     }
+
     return '';
 }
 
