@@ -41,17 +41,20 @@ $outdir = '.github/index';
         }
     }
 
-
-    // Ignore 'tag_'
+    // Unset some strings
     foreach (array_keys($lang_gtxt) as $key) {
-        if (preg_match('%^tag_%', $key)
+        if (preg_match('%^(tag_|units|tab_|view_)%', $key)
             || preg_match('%^(article|file|image|link)_category_%', $key)
-            || preg_match('%categories_deleted$%', $key)
+            || preg_match('%(categories_deleted|_context|_hed)$%', $key)
         ) {
             unset($lang_gtxt[$key]);
         }
     }
     ksort($lang_gtxt);
+
+    // Use this file safety, not all gTxt strings can be parsed.
+    // For example not parsed attribute 'label' in function inputLabel(),
+    // function wrapRegion()
     index_file_save('gtxt_lang_not_used', array_keys($lang_gtxt));
 
 
@@ -76,8 +79,11 @@ function index_code_gtxt($files)
         $txt = file_get_contents($file);
         if (preg_match_all('%gTxt\((?:\s+)?(.*?)[\)\,]%s', $txt, $mm)) {
             foreach ($mm[1] as $m) {
-                if (preg_match('%^\'(\w+)\'$%', trim($m), $nn)) {
+                if (preg_match('%^[\'\"]([\w\-]+)[\'\"]$%', trim($m), $nn)) {
                     @$gtxt_ok[$nn[1]]++;
+                } elseif (preg_match("% \? '([\w\-]+)' : '([\w\-]+)'%", trim($m), $nn)) {
+                    @$gtxt_ok[$nn[1]]++;
+                    @$gtxt_ok[$nn[2]]++;
                 } else {
                     $gtxt_bad[$m] = $file;
                 }
