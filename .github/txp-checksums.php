@@ -28,7 +28,7 @@ if (php_sapi_name() !== 'cli') {
 define('txpath', 'textpattern');
 define('n', "\n");
 
-// Find `.php` and `.js` files in `textpattern` directory,
+// Find `.php` and `.js` files in `textpattern` directory.
 $files = glob_recursive('textpattern/*\.{php,js}', GLOB_BRACE);
 $files = preg_replace('%^textpattern%', '', $files);
 $files = array_flip($files);
