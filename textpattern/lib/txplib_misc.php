@@ -5757,7 +5757,7 @@ function trace_add($msg, $level = 0, $dummy = null)
         $trace->log($msg);
     }
 
-    // Uncomment this to trigger deprecated warning in a version (or two).
+    // TODO: Uncomment this to trigger deprecated warning in a version (or two).
     // Due to the radical changes under the hood, plugin authors will probably
     // support dual 4.5/4.6 plugins for the short term. Deprecating this
     // immediately causes unnecessary pain for developers.
