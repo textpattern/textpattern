@@ -417,14 +417,13 @@ function image_list($message = '')
                 );
             }
 
-            echo
-                n.tag_end('tbody').
+            echo n.tag_end('tbody').
                 n.tag_end('table').
                 n.tag_end('div'). // End of .txp-listtables.
                 image_multiedit_form($page, $sort, $dir, $crit, $search_method).
                 tInput().
                 n.tag_end('form');
-            }
+        }
     }
 
     echo n.tag_start('div', array(

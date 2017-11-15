@@ -137,11 +137,10 @@ $public_theme = preg_replace('/\-.*/', '', $public_theme);
 
 //FIXME: We are doing nothing, waiting for the further development of branch `themes`.
 //FIXME: Need add support /setup/themes dir for Skin->import() function
-if (class_exists('\Textpattern\Skin\Main') /*&& !preg_match('%/setup/themes/%', $themedir) */ ) {
+if (class_exists('\Textpattern\Skin\Main') /*&& !preg_match('%/setup/themes/%', $themedir) */) {
     //    Txp::get('\Textpattern\Skin\Main', array($public_theme => array()))->import();
     //    safe_update('txp_section', 'skin = "'.doSlash($public_theme).'"', '1=1');
 } else {
-
     foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
         safe_query("INSERT INTO `".PFX."txp_css`(name, css) VALUES('".doSlash($key)."', '".doSlash($data)."')");
     }
