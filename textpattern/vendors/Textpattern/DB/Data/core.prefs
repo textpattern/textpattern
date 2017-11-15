@@ -451,7 +451,7 @@
         "val": "",
         "type": "2",
         "event": "publish",
-        "html": "languages",
+        "html": "text_input",
         "position": "0"
     },
     "lastmod": {
@@ -663,6 +663,14 @@
         "event": "site",
         "html": "yesnoradio",
         "position": "240"
+    },
+    "language_ui": {
+        "val": "",
+        "type": "2",
+        "event": "admin",
+        "html": "text_input",
+        "position": "0",
+        "private": "1"
     },
     "default_publish_status": {
         "val": "4",

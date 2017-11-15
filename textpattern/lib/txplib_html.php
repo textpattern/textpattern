@@ -86,22 +86,6 @@ function end_page()
         echo n.'</main><!-- /txp-body -->'.n.'<footer class="txp-footer">';
         echo pluggable_ui('admin_side', 'footer', $theme->footer());
         callback_event('admin_side', 'body_end');
-
-        gTxtScript(
-            array(
-                'password_strength_0',
-                'password_strength_1',
-                'password_strength_2',
-                'password_strength_3',
-                'password_strength_4',
-            ),
-            array(),
-            array(
-                array('admin', 'admin'),
-                array('new_pass_form', 'change_pass')
-            )
-        );
-
         echo script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL).
             script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON)).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';

@@ -499,7 +499,18 @@ function dmp()
 
 function load_lang($lang, $events = null)
 {
-    return Txp::get('\Textpattern\L10n\Lang')->load($lang, $events);
+    global $production_status;
+
+    $textarray = Txp::get('\Textpattern\L10n\Lang')->load($lang, $events);
+
+    if ($lang == LANG
+        && $production_status !== 'live'
+        && @$debug = parse_ini_file(txpath.DS.'config.ini')
+    ) {
+        $textarray += $debug;
+    }
+
+    return $textarray;
 }
 
 /**
@@ -1410,6 +1421,26 @@ function include_plugin($name)
     }
 
     return true;
+}
+
+/**
+ * Load a plugin data field.
+ *
+ * Used in plugins to get the field `data`, using a callback, can return data from the file system.
+ *
+ * @param  string $name The plugin
+ * @return string
+ */
+
+function load_plugin_data($name)
+{
+    if (has_handler('plugin_data.fetch')) {
+        $data = callback_event('plugin_data.fetch', '', false, compact('name'));
+    } else {
+        $data = safe_field('data', 'txp_plugin', "name = '".doSlash($name)."'");
+    }
+
+    return $data;
 }
 
 /**
@@ -6921,5 +6952,6 @@ function real_max_upload_size($user_max, $php = true)
         }
     }
 
-    return $real_max;
+    // 2^53 - 1 is max safe Javascript integer, let 8192Tb
+    return number_format(min($real_max, pow(2, 53) - 1), 0, '.', '');
 }

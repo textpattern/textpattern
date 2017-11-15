@@ -167,6 +167,7 @@ class Core
         $pf['blog_mail_uid']  = empty($_SESSION['email']) ? md5(rand()).'blog@gmail.com' : $_SESSION['email'];
         $pf['blog_uid']       = empty($blog_uid) ? md5(uniqid(rand(), true)) : $blog_uid;
         $pf['language']       = $language;
+        $pf['language_ui']    = $language;
         $pf['locale']         = getlocale($language);
         $pf['sitename']       = gTxt('my_site');
         $pf['site_slogan']    = gTxt('my_slogan');

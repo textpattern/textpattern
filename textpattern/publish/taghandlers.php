@@ -2099,14 +2099,14 @@ function comments_form($atts, $thing = null)
     $blacklisted = is_blacklisted($ip);
 
     if (!checkCommentsAllowed($thisid)) {
-        $out = graf(gTxt("comments_closed"), ' id="comments_closed"');
+        $out = graf(gTxt('comments_closed'), ' id="comments_closed"');
     } elseif ($blacklisted) {
         $out = graf(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), ' id="comments_blacklisted"');
     } elseif (gps('commented') !== '') {
-        $out = gTxt("comment_posted");
+        $out = gTxt('comment_posted');
 
         if (gps('commented') === '0') {
-            $out .= " ".gTxt("comment_moderated");
+            $out .= " ".gTxt('comment_moderated');
         }
 
         $out = graf($out, ' id="txpCommentInputForm"');
