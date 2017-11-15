@@ -528,30 +528,6 @@ class Lang
     }
 
     /**
-     * Find closest matching language to the given code in the given list.
-     *
-     * @param  string $lang Language code to match
-     * @param  array  $list List of officially supported language codes
-     * @return string       Closest matching language identifier
-     */
-    public function closest($lang, $list)
-    {
-        $closest = $lang;
-        $shortest = PHP_INT_MAX;
-
-        foreach ($list as $currLang) {
-            $distance = levenshtein($lang, $currLang);
-
-            if ($distance < $shortest) {
-                $shortest = $distance;
-                $closest = $currLang;
-            }
-        }
-
-        return $closest;
-    }
-
-    /**
      * Generate a &lt;select&gt; element of languages.
      *
      * @param  string $name  The HTML name and ID to assign to the select control
