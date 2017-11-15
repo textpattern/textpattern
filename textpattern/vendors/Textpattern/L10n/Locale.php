@@ -94,6 +94,55 @@ class Locale
     );
 
     /**
+     * Used in function validLocale()
+     *
+     * @var array
+     */
+
+    protected $recodeLocale = array(
+        'bg-bg' => 'bg',
+        'bs-ba' => 'bs',
+        'ca-es' => 'ca',
+        'cs-cz' => 'cs',
+        'da-dk' => 'da',
+        'de-de' => 'de',
+        'el-gr' => 'el',
+        'es-es' => 'es',
+        'et-ee' => 'et',
+        'fa-ir' => 'fa',
+        'fi-fi' => 'fi',
+        'fr-fr' => 'fr',
+        'gl-gz' => 'gl',
+        'gl-es' => 'gl',
+        'he-il' => 'he',
+        'hr-hr' => 'hr',
+        'hu-hu' => 'hu',
+        'id-id' => 'id',
+        'is-is' => 'is',
+        'it-it' => 'it',
+        'ja-jp' => 'ja',
+        'ko-kr' => 'ko',
+        'lt-lt' => 'lt',
+        'lv-lv' => 'lv',
+        'nl-nl' => 'nl',
+        'nn-no' => 'nn',
+        'no-no' => 'nb',
+        'pl-pl' => 'pl',
+        'pt-pt' => 'pt',
+        'ro-ro' => 'ro',
+        'ru-ru' => 'ru',
+        'sk-sk' => 'sk',
+        'sr-sp' => 'sr',
+        'sv-se' => 'sv',
+        'th-th' => 'th',
+        'tr-tr' => 'tr',
+        'uk-ua' => 'uk',
+        'ur-in' => 'ur',
+        'vi-vn' => 'vi',
+    );
+
+
+    /**
      * Sets the locale.
      *
      * This method wraps around system setlocale. It takes an IETF language code
@@ -328,5 +377,20 @@ class Locale
         }
 
         return false;
+    }
+
+    /**
+     * Return valid locale, if possible.
+     */
+
+    public function validLocale($code)
+    {
+        if (empty($this->locales[$code])) {
+            if (!empty($this->recodeLocale[$code])) {
+                $code = $this->recodeLocale[$code];
+            }
+        }
+
+        return $code;
     }
 }

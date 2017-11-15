@@ -144,11 +144,10 @@ function send_reset_confirmation_request($name)
             return array(gTxt('could_not_mail'), E_ERROR);
         }
     } else {
-        // Though 'unknown_author' could be thrown, send generic 'request_sent'
-        // message instead so that (non-)existence of account names are not leaked.
-        // Since this is a short circuit, there's a possibility of a timing attack
-        // revealing the existence of an account, which we could defend against
-        // to some degree.
+        // Send generic 'request_sent' message so that (non-)existence of
+        // account names are not leaked. Since this is a short circuit, there's
+        // a possibility of a timing attack revealing the existence of an
+        // account, which we could defend against to some degree.
         return gTxt('password_reset_confirmation_request_sent');
     }
 }

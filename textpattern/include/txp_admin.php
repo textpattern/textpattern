@@ -219,8 +219,7 @@ function new_pass_form($message = '')
         ).
         inputLabel(
             'new_pass',
-            fInput('password', 'new_pass', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'new_pass', false, true).
-            n.tag(null, 'div', array('class' => 'strength-meter')).
+            fInput('password', 'new_pass', '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'new_pass', false, true).
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
                 n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),

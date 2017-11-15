@@ -836,68 +836,6 @@ button {
     border-right-color: #cccccc;
     content: "\2190";
   }
-  /* Password strength meter (via zxcvbn.js)
-   ========================================================================== */
-  /**
- * Strength meter bar area and text area.
- *
- * Example HTML:
- *
- * <div class="txp-form-field-value">
- *     <input class="txp-maskable" type="password">
- *     <div class="strength-meter">
- *         <div class="bar password-strength-1" style="width:28%;"></div>
- *         <div class="indicator">Strength: poor</div>
- *     </div>
- *     <div class="edit-admin-show-password">
- *         <input class="checkbox" type="checkbox">
- *         <label>Show password</label>
- *     </div>
- * </div>
- */
-  .strength-meter {
-    position: relative;
-    width: 100%;
-    max-width: 28em;
-    height: 1.38461538461538em;
-    background-color: #a3a3a3;
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-  }
-  .strength-meter:empty {
-    background-color: transparent;
-  }
-  .strength-meter .bar {
-    position: absolute;
-    left: 0;
-    height: 1.38461538461538em;
-    z-index: 2;
-  }
-  .strength-meter .indicator {
-    position: absolute;
-    padding: 0.15384615384615em 0.38461538461538em;
-    color: #ffffff;
-    line-height: 1;
-    z-index: 3;
-  }
-  /**
- * Strength level colours.
- */
-  .password-strength-0 {
-    background-color: #9d261d;
-  }
-  .password-strength-1 {
-    background-color: #b5590f;
-  }
-  .password-strength-2 {
-    background-color: #cc8c00;
-  }
-  .password-strength-3 {
-    background-color: #788c12;
-  }
-  .password-strength-4 {
-    background-color: #238c23;
-  }
   /* Code highlighting (via Prism.js)
    ========================================================================== */
   code[class*="language-"],

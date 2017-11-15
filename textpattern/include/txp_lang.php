@@ -264,7 +264,7 @@ function save_language_ui()
 
         if ($locale) {
             $msg = gTxt('preferences_saved');
-            set_pref('language_ui', $language_ui, 'admin', PREF_CORE, 'text_input', 0, PREF_PRIVATE);
+            set_pref('language_ui', $language_ui);
             $textarray = load_lang($language_ui);
         } else {
             $msg = array(gTxt('locale_not_available_for_language', array('{name}' => $langName)), E_WARNING);
@@ -291,6 +291,8 @@ function get_language()
 
     if (Txp::get('\Textpattern\L10n\Lang')->install_file($lang_code)) {
         callback_event('lang_installed', 'file', false, $lang_code);
+
+        Txp::get('\Textpattern\L10n\Lang')->install_textpack_plugins();
 
         $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($lang_code);
         $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
@@ -388,7 +390,7 @@ function remove_language()
         $site_lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG, true);
         $ui_lang = get_pref('language_ui', $site_lang, true);
         $ui_lang = (array_key_exists($ui_lang, $represented_lang)) ? $ui_lang : $site_lang;
-        set_pref('language_ui', $ui_lang, 'admin', PREF_CORE, 'text_input', 0, PREF_PRIVATE);
+        set_pref('language_ui', $ui_lang);
         $textarray = load_lang($ui_lang);
     } else {
         $msg = gTxt('cannot_delete', array('{thing}' => $langName));

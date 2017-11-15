@@ -380,25 +380,22 @@ function image_list($message = '')
                     $category = span(txpspecialchars($category_title), array('title' => $category));
                 }
 
-                $can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
+                $can_view = has_privs('image.edit.own');
+                $can_edit = has_privs('image.edit') || ($author === $txp_user && $can_view);
 
                 echo tr(
                     td(
                         $can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;', '', 'txp-list-col-multi-edit'
                     ).
                     hCell(
-                        ($can_edit ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id).
-                        span(
-                            sp.span('&#124;', array('role' => 'separator')).
-                            sp.href(gTxt('view'), imagesrcurl($id, $ext), array('target' => '_blank')),
-                            array('class' => 'txp-option-link images_detail')
-                        ), '', array(
+                        ($can_view ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id)
+                        , '', array(
                             'class' => 'txp-list-col-id',
                             'scope' => 'row',
                         )
                     ).
                     td(
-                        ($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name'
+                        ($can_view ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name'
                     ).
                     td(
                         gTime($uDate), '', 'txp-list-col-created date'
@@ -584,7 +581,7 @@ function image_edit($message = '', $id = '')
     if ($rs) {
         extract($rs);
 
-        if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own'))) {
+        if (!has_privs('image.edit') && !has_privs('image.edit.own')) {
             require_privs('image.edit');
 
             return;
@@ -625,13 +622,16 @@ function image_edit($message = '', $id = '')
 
         $imageBlock = array();
         $thumbBlock = array();
+        $can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
 
-        $imageBlock[] = pluggable_ui(
+        $imageBlock[] = ($can_edit
+            ? pluggable_ui(
                 'image_ui',
                 'image_edit',
                 upload_form('replace_image', 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-upload', ' image-replace'),
-                $rs
-            );
+                $rs)
+            : ''
+        );
 
         $imageBlock[] = pluggable_ui(
                 'image_ui',
@@ -640,39 +640,46 @@ function image_edit($message = '', $id = '')
                 $rs
             );
 
-        $thumbBlock[] = hed(gTxt('create_thumbnail').popHelp('create_thumbnail'), 3);
+        $thumbBlock[] = ($can_edit
+            ? hed(gTxt('create_thumbnail').popHelp('create_thumbnail'), 3)
+            : hed(gTxt('thumbnail'), 3)
+        );
 
-        $thumbBlock[] = pluggable_ui(
+        $thumbBlock[] = ($can_edit
+            ? pluggable_ui(
             'image_ui',
             'thumbnail_edit',
             upload_form('upload_thumbnail', 'upload_thumbnail', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'thumbnail-upload', ' thumbnail-upload'),
-            $rs
+            $rs)
+            : ''
         );
 
         $thumbBlock[] = (check_gd($ext))
-            ? pluggable_ui(
-                'image_ui',
-                'thumbnail_create',
-                form(
-                    graf(
-                        n.'<label for="width">'.gTxt('thumb_width').'</label>'.
-                        fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width').
-                        n.'<a class="thumbnail-swap-size">'.gTxt('swap_values').'</a>'.
-                        n.'<label for="height">'.gTxt('thumb_height').'</label>'.
-                        fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').
-                        n.'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.
-                        checkbox('crop', 1, get_pref('thumb_crop'), '', 'crop').
-                        fInput('submit', '', gTxt('create')), ' class="edit-alter-thumbnail"'
-                    ).
-                    hInput('id', $id).
-                    eInput('image').
-                    sInput('thumbnail_create').
-                    hInput('sort', $sort).
-                    hInput('dir', $dir).
-                    hInput('page', $page).
-                    hInput('search_method', $search_method).
-                    hInput('crit', $crit), '', '', 'post', '', '', 'thumbnail_alter_form'),
-                $rs
+            ? ($can_edit
+                ? pluggable_ui(
+                    'image_ui',
+                    'thumbnail_create',
+                    form(
+                        graf(
+                            n.'<label for="width">'.gTxt('thumb_width').'</label>'.
+                            fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width').
+                            n.'<a class="thumbnail-swap-size">'.gTxt('swap_values').'</a>'.
+                            n.'<label for="height">'.gTxt('thumb_height').'</label>'.
+                            fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').
+                            n.'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.
+                            checkbox('crop', 1, get_pref('thumb_crop'), '', 'crop').
+                            fInput('submit', '', gTxt('create')), ' class="edit-alter-thumbnail"'
+                        ).
+                        hInput('id', $id).
+                        eInput('image').
+                        sInput('thumbnail_create').
+                        hInput('sort', $sort).
+                        hInput('dir', $dir).
+                        hInput('page', $page).
+                        hInput('search_method', $search_method).
+                        hInput('crit', $crit), '', '', 'post', '', '', 'thumbnail_alter_form'),
+                    $rs)
+                : ''
             )
             : '';
 
@@ -681,7 +688,9 @@ function image_edit($message = '', $id = '')
             'thumbnail_image',
             '<div class="thumbnail-image">'.
             (($thumbnail)
-                ? $thumb.n.dLink('image', 'thumbnail_delete', 'id', $id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
+                ? $thumb.n.($can_edit
+                    ? dLink('image', 'thumbnail_delete', 'id', $id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
+                    :'')
                 : '').
             '</div>',
             $rs
@@ -703,26 +712,58 @@ function image_edit($message = '', $id = '')
                         ).
                         inputLabel(
                             'image_name',
-                            fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'),
+                            tag_void('input', array(
+                                'id'       => 'image_name',
+                                'name'     => 'name',
+                                'size'     => INPUT_REGULAR,
+                                'value'    => $name,
+                                'type'     => 'text',
+                                'readonly' => !$can_edit,
+                            )),
                             'image_name', '', array('class' => 'txp-form-field edit-image-name')
                         ).
                         inputLabel(
                             'image_category',
-                            event_category_popup('image', $category, 'image_category').
-                            n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
+                            ($can_edit
+                                ? event_category_popup('image', $category, 'image_category').
+                                    n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link')
+                                : (($category !== '') ? fetch_category_title($category, 'image') : gTxt('none'))
+                            ),
                             'image_category', '', array('class' => 'txp-form-field edit-image-category')
                         ).
                         inputLabel(
                             'image_alt_text',
-                            fInput('text', 'alt', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'),
+                            tag_void('input', array(
+                                'id'       => 'image_alt_text',
+                                'name'     => 'alt',
+                                'size'     => INPUT_REGULAR,
+                                'value'    => $alt,
+                                'type'     => 'text',
+                                'readonly' => !$can_edit,
+                            )),
                             'alt_text', '', array('class' => 'txp-form-field edit-image-alt-text')
                         ).
                         inputLabel(
                             'image_caption',
-                            '<textarea id="image_caption" name="caption" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.htmlspecialchars($caption, ENT_NOQUOTES).'</textarea>',
+                            '<textarea id="image_caption" name="caption" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'"'.($can_edit ? '' : ' readonly="readonly"').'>'.htmlspecialchars($caption, ENT_NOQUOTES).'</textarea>',
                             'caption', '', array('class' => 'txp-form-field txp-form-field-textarea edit-image-caption')
                         ).
                         pluggable_ui('image_ui', 'extend_detail_form', '', $rs).
+                        graf(
+                            href(gTxt('go_back'), array(
+                                'event'         => 'image',
+                                'sort'          => $sort,
+                                'dir'           => $dir,
+                                'page'          => $page,
+                                'search_method' => $search_method,
+                                'crit'          => $crit,
+                            ), array('class' => 'txp-button')).
+                            ($can_edit
+                                ? fInput('submit', '', gTxt('save'), 'publish')
+                                : ''
+                            ),
+                            array('class' => 'txp-edit-actions')
+                        ).
                         hInput('id', $id).
                         eInput('image').
                         sInput('image_save').
@@ -732,8 +773,7 @@ function image_edit($message = '', $id = '')
                         hInput('search_method', $search_method).
                         hInput('crit', $crit),
                         'image_details'
-                    ).
-                    graf(fInput('submit', '', gTxt('save'), 'publish'), array('class' => 'txp-save')),
+                    ),
                     '', '', 'post', '', '', 'image_details_form'),
                 'div', array('class' => 'txp-layout-4col-alt')
             ).
