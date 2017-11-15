@@ -2999,8 +2999,6 @@ function keywords($atts)
 
     $out = do_list_unique(txpspecialchars($thisarticle['keywords']));
 
-//    trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
     return doWrap($out, $wraptag, $break, $class);
 }
 
