@@ -300,7 +300,7 @@ function getDbInfo()
         inputLabel(
             'setup_site_url',
             fInput('text', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
-            gTxt('please_enter_url'), '', array('class' => 'txp-form-field')
+            'please_enter_url', '', array('class' => 'txp-form-field')
         );
 
     if (is_disabled('mail')) {
