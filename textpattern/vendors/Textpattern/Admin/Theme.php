@@ -105,7 +105,6 @@ abstract class Theme
         $this->message = '';
         $this->cssPath = 'assets'.DS.'css';
         $this->jsPath = 'assets'.DS.'js';
-
     }
 
     /**
@@ -464,7 +463,6 @@ abstract class Theme
 
     public function manifest($type = 'manifest')
     {
-
         return @json_decode(file_get_contents($this->url.$type.'.json'), true);
     }
 }

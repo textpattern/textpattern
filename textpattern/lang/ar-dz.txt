@@ -7,10 +7,6 @@ account_activation => الرجاء تنشيط حسابك
 account_activation_confirmation => الرجاء استخدام الرابط أدناه لتنشيط حسابك وقم بإعداد كلمة السر.
 add_new_author => إضافة مؤلف
 alias_is_taken =>
-assert_callable =>
-assert_length =>
-assert_pattern =>
-assert_string =>
 assign_assets_to => تحويل ملكية محتوى المستخدم إلى
 author_already_exists => المؤلف <strong>{name}</strong> موجود مسبقا
 author_deleted => المؤلف <strong>{name}</strong> محذوف
@@ -55,11 +51,6 @@ password_reset_confirmation_request_sent => تم إرسال رسالة تأكي�
 password_sent_to => تم إرسال كلمة السر إلى
 password_set => تم تعيين كلمة السر
 password_set_confirmation => تم تعيين كلمة السر. إذا كنت لم تطلب ذلك، اتصل بمسؤول الموقع.
-password_strength_0 => فقير
-password_strength_1 => ضعيف
-password_strength_2 => عادل
-password_strength_3 => جيد
-password_strength_4 => قوي
 privileges => امتيازات
 privs_none => بدون إمتياز
 publisher => مسير
@@ -76,7 +67,6 @@ token_expired =>
 unable_retrieve_template =>
 unable_retrieve_user =>
 unable_set_template =>
-unknown_author => مؤلف مجهول :{name}
 your_login_info => معلوماتكم الخاصة بالاتصال
 your_login_is => اسم الاتصال الخاص بكم هو
 your_new_password => كلمة السر الجديدة الخاصة بكم
@@ -220,14 +210,10 @@ expand_all =>
 expired =>
 expire_date =>
 expire_time =>
-external_links =>
-form_not_found =>
-form_not_specified =>
 form_submission_error =>
 gd_unavailable =>
 general_error =>
 get_off_my_lawn =>
-greeting => عزيز
 help =>
 hidden => مخفي
 id =>
@@ -301,11 +287,6 @@ thumbnail => صورة مصغرة
 title_body => الخط الرئيسى للنص
 title_body_excerpt => الخط الرئيسى لمقتطف النص
 toggle_all_selected =>
-txpnl2br =>
-txprawxhtml => الخام HTML
-txpstriptags =>
-txptextile => <bdi dir="ltr">Textile</bdi>
-txptextilelite => <bdi dir="ltr">Textile Lite</bdi>
 txt_quote_double_close => “
 txt_quote_double_open => ”
 txt_quote_single_close =>
@@ -423,7 +404,6 @@ no_comments_recorded => لم يسجل تعليق بعد
 search_comments =>
 show =>
 show_spam =>
-unknown_spam_estimate =>
 #@file
 condition => شرط
 download => حمل
@@ -692,15 +672,12 @@ year_month_day_title => السنة/الشهر/اليوم/العنوان
 ago => من قبل
 all => كل
 already_exists => موجود مسبقا
-ambiguous_tag =>
 any =>
 articles => مقالات
 articles_found => مقالات عثر عليها
 article_context =>
 article_found => مقال عثر عليه
-article_tag_illegal_body =>
 atom_feed_title =>
-attribute_values_must_be_quoted =>
 author => مؤلف
 authors => مؤلفون
 a_few_seconds => بضعة ثواني
@@ -748,12 +725,6 @@ definition_list =>
 delete => إلغاء
 deleted => ملغى
 deleted_text => نص ملغى
-deprecated_attribute =>
-deprecated_configuration =>
-deprecated_function =>
-deprecated_function_with =>
-deprecated_tag =>
-disabled_function =>
 documentation =>
 download_count =>
 edit => تغيير
@@ -761,13 +732,6 @@ email => عنوان البريد
 email_address => عنوان البريد
 emphasis => مغالاة
 enter_comment_here =>
-error_article_context =>
-error_category_context =>
-error_comment_context =>
-error_file_context =>
-error_image_context =>
-error_link_context =>
-error_section_context =>
 exact =>
 extensions => امتدادات
 file_context =>
@@ -793,7 +757,6 @@ image => صورة
 imageurl => عنوان موقع الصورة
 image_context =>
 inserted_text => نص مدرج
-invalid_attribute_value =>
 keywords => الكلمات المفاتييح
 label =>
 last_modification => التغيير الاخير
@@ -804,7 +767,6 @@ list_articles => عرض المقالات
 list_categories => عرض الفئات
 list_links => عرض الروابط
 live => منشور
-lonely_closing_tag =>
 lowercase =>
 main_content =>
 manual => موجز
@@ -815,7 +777,6 @@ message_preview => إعادة استعراض اللاسالة
 message_saved => رسالة مسجلة
 minute => دقيقة
 minutes => دقائق
-missing_article_tag =>
 modified_by => آخر تغيير عن طريق
 month => شهر
 more => المزيد
@@ -839,11 +800,6 @@ pages =>
 paragraph => فقرة
 permanent_link =>
 permlink =>
-php_code_disabled_article =>
-php_code_disabled_page =>
-php_code_forbidden_user =>
-plugin_load_error => حدث خطأ خلال التحميل لـ البلوغين
-plugin_load_error_above =>
 pophelp =>
 popup =>
 post => إرسال
@@ -854,7 +810,6 @@ prev => السابق
 preview => اطلاع مسبق
 publish => نشر
 published_at => نشر يوم
-raw_php_deprecated =>
 recently => مؤخرا
 recent_articles => مقالات منشورة مؤخرا
 recent_comments => التعليقات الأخيرة
@@ -882,41 +837,26 @@ strong => مغالاة كبيرة
 submit => إرسال
 subscript => إشارة
 superscript =>
-tag_error =>
-tag_mismatch =>
 textile_help => <bdi dir="ltr">Textile</bdi> مساعد
-textile_lite_help =>
-text_conversion => تحويل النص
-text_handling => تسيير النص
 time => متى؟
 time_ago =>
 title => عنوان
 tooltip => إضافة عنوان للرابط
 too_common_search_term =>
 type => صنف
-unclosed_tag =>
 undefined => اسم معين
 unknown =>
-unknown_attribute =>
-unknown_callback_function =>
-unknown_image =>
-unknown_link =>
-unknown_section => قسم مجهول
-unknown_tag =>
-unregistered_tag =>
 untitled => بدون عنوان
 update => تحديث
 upload => إرسال
 uploaded => مرسل
 url => URL
 value => قيمة
-variable_name_empty =>
 version => صيغة
 view => رِؤية
 website => موقع
 week => أسبوع
 weeks => أسابيع
-while_parsing_page_form =>
 yes => نعم
 your_ip_is_blacklisted_by => تم إلغاؤكم من طرف
 yyyy-mm => aaaa-mm
@@ -989,11 +929,6 @@ progress_steps =>
 public_theme =>
 setup_comment_invite => تعليق
 setup_login =>
-setup_password_strength_0 => فقير
-setup_password_strength_1 => ضعيف
-setup_password_strength_2 => عادل
-setup_password_strength_3 => جيد
-setup_password_strength_4 => قوي
 setup_show_password => إظهار كلمة السر
 set_db_details =>
 set_temp_dir_prefs =>

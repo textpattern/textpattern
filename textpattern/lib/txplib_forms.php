@@ -347,7 +347,7 @@ function hInput($name, $value = null, $glue = ',')
         return fInput('hidden', $name, $value);
     }
 
-    return array_walk($name, function(&$v, $n, $glue) {
+    return array_walk($name, function (&$v, $n, $glue) {
         $v = fInput('hidden', $n, is_array($v) ? implode($glue, $v) : $v);
     }, $glue) ? implode($name) : false;
 }
