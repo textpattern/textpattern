@@ -1806,7 +1806,7 @@ jQuery.fn.txpFileupload = function (options) {
         paramName: fileInput.attr('name'),
         dataType: 'script',
         maxFileSize: maxFileSize,
-        maxChunkSize: maxChunkSize - 1000000, // test!!!
+        maxChunkSize: maxChunkSize,
         singleFileUploads: true,
         formData: null,
         fileInput: null,
@@ -1843,9 +1843,15 @@ jQuery.fn.txpFileupload = function (options) {
             files: fileInput.prop('files')
         })
     }).bind('fileuploadsubmit', function (e, data) {
-        var formData = options.formData || []
-        $.merge(formData, form.serializeArray())
-        data.formData = formData;
+        data.formData = $.merge([], options.formData)
+        $.merge(data.formData, form.serializeArray())
+
+        // Reduce maxChunkSize by extra data size (?)
+        var res = Array.from(data.formData.entries(), ([key, prop]) =>
+            prop.name.length + prop.value.length
+        ).reduce((a, b) => a + b + 2, 0)
+
+        form.fileupload('option', 'maxChunkSize', maxChunkSize - 8*(res + 255))
     });
 /*
     fileInput.on('change', function(e) {
