@@ -29,6 +29,7 @@ Changes in 4.7.0 (upcoming)
 * Changed: Forms can recursively (up to depth 15) call themselves.
 * Changed: <txp:output_form txp-yield /> tag supports user-defined attributes, coupled
   with <txp:yield> changes above this allows for '<txp::shortcode />'-like tags.
+* Changed: <txp:page_url /> tag accepts URL variables in 'type' attribute.
 * Changed: <txp:page_title /> tag SEO - site name renders after page name,
   default separator changed from ': ' to ' | ', page numbers added.
 * Changed: <txp:breadcrumb /> can be used as a container tag.

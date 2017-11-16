@@ -267,8 +267,6 @@ class Filter
         // So the search can be used multiple times on a page without id clashes.
         $id_counter++;
 
-        // TODO: consider moving Route.add() to textpattern.js, but that involves adding one
-        // call per panel that requires search, instead of auto-adding it when invoked here.
         return form(
             (
                 span(
@@ -281,10 +279,7 @@ class Filter
             $buttons.
             n.tag(join(n, $method_list), 'ul', array('class' => 'txp-dropdown')), '', '', $submit_as, 'txp-search'.($class ? ' '.$class : ''), '', '', 'search'
             ).
-            script_js(<<<EOJS
-textpattern.Route.add('{$event}', txp_search);
-EOJS
-            );
+            script_js("textpattern.Route.add('{$event}', txp_search);", false);
     }
 
     /**

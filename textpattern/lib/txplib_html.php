@@ -87,7 +87,7 @@ function end_page()
         echo pluggable_ui('admin_side', 'footer', $theme->footer());
         callback_event('admin_side', 'body_end');
         echo script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL).
-            script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON)).
+            script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON), true).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }
 }
@@ -1579,7 +1579,7 @@ EOF;
  * its content if the event / step match.
  *
  * @param  string     $js    JavaScript code
- * @param  int|string $flags Flags TEXTPATTERN_SCRIPT_URL | TEXTPATTERN_SCRIPT_ATTACH_VERSION, or noscript alternative if a string
+ * @param  int|string $flags Flags TEXTPATTERN_SCRIPT_URL | TEXTPATTERN_SCRIPT_ATTACH_VERSION, or boolean or noscript alternative if a string
  * @param  array      $route Optional events/steps upon which to add the script
  * @return string HTML with embedded script element
  * @example
@@ -1588,6 +1588,7 @@ EOF;
 
 function script_js($js, $flags = '', $route = array())
 {
+    static $store = '';
     global $event, $step;
 
     $targetEvent = empty($route[0]) ? null : (array)$route[0];
@@ -1613,9 +1614,20 @@ function script_js($js, $flags = '', $route = array())
 
         $js = preg_replace('#<(/?)(script)#i', '\\x3c$1$2', $js);
 
+        if (is_bool($flags)) {
+            if (!$flags) {
+                $store .= n.$js;
+
+                return;
+            } else {
+                $js = $store.n.$js;
+                $store = '';
+            }
+        }
+
         $out = n.tag(n.trim($js).n, 'script');
 
-        if ($flags) {
+        if ($flags && $flags !== true) {
             $out .= n.tag(n.trim($flags).n, 'noscript');
         }
 
