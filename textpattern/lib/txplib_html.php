@@ -1641,8 +1641,8 @@ function script_js($js, $flags = '', $route = array())
  * Renders a "Details" toggle checkbox.
  * TODO: remove this and related js functions in favour of txp_columniser
  *
- * @param  string $classname Unique identfier. The cookie's name will be derived from this value
- * @param  bool   $form      Create as a stand-along &lt;form&gt; element
+ * @param  string $classname Unique identifier. The cookie's name will be derived from this value
+ * @param  bool   $form      Create as a standalone &lt;form&gt; element
  * @return string HTML
  */
 
