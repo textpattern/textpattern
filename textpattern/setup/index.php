@@ -300,7 +300,7 @@ function getDbInfo()
         inputLabel(
             'setup_site_url',
             fInput('text', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
-            gTxt('please_enter_url'), '', array('class' => 'txp-form-field')
+            'please_enter_url', '', array('class' => 'txp-form-field')
         );
 
     if (is_disabled('mail')) {
@@ -357,19 +357,6 @@ function printConfig()
 
         exit;
     }
-
-// TODO: @see https://forum.textpattern.io/viewtopic.php?pid=263205#p263205
-//    if ('' === $_SESSION['dhost'] || '' === $_SESSION['duser'] || '' === $_SESSION['ddb']) {
-//        echo graf(
-//                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-//                gTxt('missing_db_details'),
-//                array('class' => 'alert-block warning')
-//            ).
-//            n.setup_back_button(__FUNCTION__).
-//            n.'</div>';
-//
-//        exit;
-//    }
 
     echo hed(gTxt('checking_database'), 2);
 

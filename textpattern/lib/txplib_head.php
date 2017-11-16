@@ -279,7 +279,7 @@ function areas()
 {
     global $plugin_areas;
 
-    $adminString = gTxt(has_privs('admin.list') ? 'tab_site_admin' : 'tab_site_account');
+    $adminString = has_privs('admin.list') ? gTxt('tab_site_admin') : gTxt('tab_site_account');
 
     $areas['start'] = array(
     );

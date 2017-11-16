@@ -28,7 +28,7 @@ if (php_sapi_name() !== 'cli') {
 define('txpath', 'textpattern');
 define('n', "\n");
 
-// Find .php and .js files in `textpattern` dir
+// Find `.php` and `.js` files in `textpattern` directory.
 $files = glob_recursive('textpattern/*\.{php,js}', GLOB_BRACE);
 $files = preg_replace('%^textpattern%', '', $files);
 $files = array_flip($files);
@@ -36,23 +36,26 @@ $files = array_flip($files);
 $cs = @file_get_contents(txpath.'/checksums.txt');
 if (preg_match_all('%^(\S+):\s+([\da-f]+)%im', $cs, $mm)) {
     $out = '';
+
     foreach ($mm[1] as $key => $file) {
         $md5 = md5_file(txpath.$file);
         $out .= "$file: $md5".n;
         unset($files[$file]);
     }
+
     file_put_contents(txpath.'/checksums.txt', $out);
     echo "Checksums updated.\n\n";
 }
 
-
-// New files
+// New files.
 $out = '';
+
 foreach ($files as $file => $val) {
     if (! preg_match('%^/(config-dist\.php|setup)%', $file)) {
         $out .= "$file: ".md5_file(txpath.'/'.$file).n;
     }
 }
+
 if ($out) {
     echo "New files without checksums:".n.$out.n;
     echo "Add new files to 'checksums.txt' before release.".n.n;
@@ -60,12 +63,13 @@ if ($out) {
 
 exit;
 
-
 function glob_recursive($pattern, $flags = 0)
 {
     $files = glob($pattern, $flags);
+
     foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
         $files = array_merge($files, glob_recursive($dir.'/'.basename($pattern), $flags));
     }
+
     return $files;
 }

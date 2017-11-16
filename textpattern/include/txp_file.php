@@ -263,7 +263,7 @@ function file_list($message = '', $ids = array())
     if ($total < 1) {
         echo graf(
             span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-            gTxt($criteria != 1 ? 'no_results_found': 'no_files_recorded'),
+            gTxt($criteria != 1 ? 'no_results_found' : 'no_files_recorded'),
             array('class' => 'alert-block information')
         );
     } else {
@@ -932,7 +932,7 @@ function file_insert()
         $response = $ids ? 'textpattern.Relay.data.fileid = ["'.implode('","', $ids).'"].concat(textpattern.Relay.data.fileid || []);'.n : '';
 
         foreach ($messages as $message) {
-            $response .= 'textpattern.Console.addMessage('.json_encode($message).', "uploadEnd");'.n;
+            $response .= 'textpattern.Console.addMessage('.json_encode($message, TEXTPATTERN_JSON).', "uploadEnd");'.n;
         }
 
         send_script_response($response);

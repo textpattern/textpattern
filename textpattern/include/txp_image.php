@@ -824,7 +824,7 @@ function image_insert()
         $response = !empty($ids) ? 'textpattern.Relay.data.fileid = ["'.implode('","', $ids).'"].concat(textpattern.Relay.data.fileid || []);'.n : '';
 
         foreach ($messages as $message) {
-            $response .= 'textpattern.Console.addMessage('.json_encode((array) $message).', "uploadEnd");'.n;
+            $response .= 'textpattern.Console.addMessage('.json_encode((array) $message, TEXTPATTERN_JSON).', "uploadEnd");'.n;
         }
 
         send_script_response($response);
