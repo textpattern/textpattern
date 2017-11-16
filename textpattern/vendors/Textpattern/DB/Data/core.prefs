@@ -83,13 +83,6 @@
         "html": "module_pophelp",
         "position": "170"
     },
-    "show_article_category_count": {
-        "val": "1",
-        "type": "2",
-        "event": "category",
-        "html": "yesnoradio",
-        "position": "0"
-    },
     "comments_on_default": {
         "val": "0",
         "type": "0",
