@@ -29,7 +29,7 @@ if (!defined('TXP_INSTALL')) {
 @set_time_limit(0);
 
 global $DB, $prefs, $txp_user, $txp_groups;
-global $permlink_mode, $siteurl, $blog_uid, $theme_name, $public_themes;
+global $permlink_mode, $siteurl, $theme_name, $public_themes;
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/admin_config.php';
 
@@ -49,7 +49,6 @@ if (trim(@$pretext_data[0]) == md5("/{$s}/?txpcleantest=1")) {
 }
 
 // Variable set
-$blog_uid = md5(uniqid(rand(), true));
 $siteurl = preg_replace('%^https?://%', '', $siteurl);
 $siteurl = str_replace(' ', '%20', $siteurl);
 $theme_name = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
