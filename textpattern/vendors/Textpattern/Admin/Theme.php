@@ -337,7 +337,7 @@ abstract class Theme
         $prefs = $this->manifest('prefs');
 
         if (!empty($prefs['textpattern'])) {
-            $content = json_encode($prefs['textpattern']);
+            $content = json_encode($prefs['textpattern'], TEXTPATTERN_JSON);
             $out .= script_js("textpattern.prefs = jQuery.extend(textpattern.prefs, {$content})").n;
         }
 
@@ -446,7 +446,7 @@ abstract class Theme
             $js = 'window.alert("'.escape_js(strip_tags($thing[0])).'")';
         } else {
             // Try to inject $html into the message pane no matter when _announce()'s output is printed.
-            $thing = json_encode($thing);
+            $thing = json_encode($thing, TEXTPATTERN_JSON);
             $js = "textpattern.Console.addMessage({$thing}).announce();";
         }
 

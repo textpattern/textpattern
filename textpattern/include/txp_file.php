@@ -932,7 +932,7 @@ function file_insert()
         $response = $ids ? 'textpattern.Relay.data.fileid = ["'.implode('","', $ids).'"].concat(textpattern.Relay.data.fileid || []);'.n : '';
 
         foreach ($messages as $message) {
-            $response .= 'textpattern.Console.addMessage('.json_encode($message).', "uploadEnd");'.n;
+            $response .= 'textpattern.Console.addMessage('.json_encode($message, TEXTPATTERN_JSON).', "uploadEnd");'.n;
         }
 
         send_script_response($response);
