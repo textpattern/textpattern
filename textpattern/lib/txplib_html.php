@@ -1638,51 +1638,6 @@ function script_js($js, $flags = '', $route = array())
 }
 
 /**
- * Renders a "Details" toggle checkbox.
- * TODO: remove this and related js functions in favour of txp_columniser
- *
- * @param  string $classname Unique identifier. The cookie's name will be derived from this value
- * @param  bool   $form      Create as a standalone &lt;form&gt; element
- * @return string HTML
- */
-
-function toggle_box($classname, $form = false)
-{
-    return '';
-
-    $name = 'cb_toggle_'.$classname;
-    $id = escape_js($name);
-    $class = escape_js($classname);
-
-    $out = checkbox($name, 1, cs('toggle_'.$classname), 0, $name).
-        n.tag(gTxt('detail_toggle'), 'label', array('for' => $name));
-
-    $js = <<<EOF
-        $(function ()
-        {
-            $('input')
-                .filter(function () {
-                    if ($(this).attr('id') === '{$id}') {
-                        setClassDisplay('{$class}', $(this).is(':checked'));
-                        return true;
-                    }
-                })
-                .change(function () {
-                    toggleClassRemember('{$class}');
-                });
-        });
-EOF;
-
-    $out .= script_js($js);
-
-    if ($form) {
-        return form($out);
-    }
-
-    return $out;
-}
-
-/**
  * Renders a checkbox to set/unset a browser cookie.
  *
  * @param  string $classname Label text. The cookie's name will be derived from this value
