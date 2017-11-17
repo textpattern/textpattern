@@ -103,13 +103,40 @@ class Parser
             $group = (array)$group;
         }
 
-        $lines = explode(n, (string)$textpack);
         $out = array();
         $version = false;
         $lastmod = false;
         $event = false;
         $language = $this->language;
         $owner = $this->owner;
+
+        if (strpos($textpack, '=>') === false 
+            && $sections = parse_ini_string($textpack, true))
+        {
+            foreach ($sections as $event => $strings) {
+                $event = $event == 'meta' ? 'common' : trim($event, ' _');
+
+                if (!empty($group) && !in_array($event, $group)) {
+                    continue;
+                } else {
+                    foreach ($strings as $name => $data) {
+                        $out[] = array(
+                            'name'    => $name,
+                            'lang'    => $language,
+                            'data'    => $data,
+                            'event'   => $event,
+                            'owner'   => $owner,
+                            'version' => $version,
+                            'lastmod' => $lastmod,
+                        );
+                    }
+                }
+            }
+
+            return $out;
+        }
+
+        $lines = explode(n, (string)$textpack);
 
         foreach ($lines as $line) {
             $line = trim($line);
