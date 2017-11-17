@@ -147,9 +147,9 @@ exit("</main>\n</body>\n</html>");
  * @return HTML
  */
 
-function preamble($step = null)
+function preamble()
 {
-    global $textarray_script, $cfg;
+    global $textarray_script, $cfg, $step;
 
     $out = array();
     $bodyclass = ($step == '') ? ' welcome' : '';
@@ -251,13 +251,12 @@ function txp_setup_progress_meter($stage = 1)
 function step_getDbInfo()
 {
     global $cfg;
-    global $txpcfg, $step;
 
-    echo preamble($step);
+    echo preamble();
     echo txp_setup_progress_meter(1),
         n.'<div class="txp-setup">';
 
-    check_config_txp2();
+    check_config_txp2(__FUNCTION__);
 
     echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         hed(gTxt('need_details'), 1).
@@ -294,11 +293,7 @@ function step_getDbInfo()
         );
 
     if (is_disabled('mail')) {
-        echo graf(
-            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-            gTxt('warn_mail_unavailable'),
-            array('class' => 'alert-block warning')
-        );
+        echo msg(gTxt('warn_mail_unavailable'), MSG_ALERT);
     }
 
     echo graf(
@@ -325,13 +320,11 @@ function step_printConfig()
     $cfg['mysql']['db'] = ps('ddb');
     $cfg['mysql']['table_prefix'] = ps('dprefix');
 
-    global $txpcfg, $step;
-
-    echo preamble($step);
+    echo preamble();
     echo txp_setup_progress_meter(2).
         n.'<div class="txp-setup">';
 
-    check_config_txp2();
+    check_config_txp2(__FUNCTION__);
 
     echo hed(gTxt('checking_database'), 2);
 
@@ -398,12 +391,8 @@ function step_printConfig()
         }
     }
 
-    echo graf(
-        span(null, array('class' => 'ui-icon ui-icon-check')).' '.
-        gTxt('using_db', array(
-            '{dbname}' => strong(txpspecialchars($cfg['mysql']['db'])), ), 'raw').' ('.$cfg['mysql']['dbcharset'].')',
-        array('class' => 'alert-block success')
-    );
+    echo msg(gTxt('using_db', array(
+        '{dbname}' => strong(txpspecialchars($cfg['mysql']['db'])), ), 'raw').' ('.$cfg['mysql']['dbcharset'].')');
 
     echo setup_config_contents().
         n.'</div>';
@@ -417,11 +406,10 @@ function step_printConfig()
 function step_getTxpLogin()
 {
     global $cfg;
-    global $step;
 
     $problems = array();
 
-    echo preamble($step);
+    echo preamble();
     check_config_txp(2);
 
     // Default theme selector.
@@ -506,7 +494,6 @@ function step_getTxpLogin()
 function step_createTxp()
 {
     global $cfg;
-    global $step;
 
     $cfg['user']['realname'] = ps('RealName');
     $cfg['user']['name'] = ps('name');
@@ -517,7 +504,7 @@ function step_createTxp()
     $cfg['site']['theme'] = ps('theme');
     $cfg['site']['public_theme'] = ps('public_theme');
 
-    echo preamble($step);
+    echo preamble();
 
 /*
     if ($_SESSION['name'] == '') {
@@ -612,7 +599,7 @@ function makeConfig()
 
 function step_fbCreate()
 {
-    global $cfg;
+    global $cfg, $txp_install_fail;
 
     unset($cfg['mysql']['dclient_flags']);
     unset($cfg['mysql']['dbcharset']);
@@ -623,27 +610,21 @@ function step_fbCreate()
     echo txp_setup_progress_meter(4).
         n.'<div class="txp-setup">';
 
-    if (@$GLOBALS['txp_install_successful'] === false) {
-        return graf(
-                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                gTxt('config_php_not_found', array(
-                    '{num}' => $GLOBALS['txp_err_count']
+    if (! empty($txp_install_fail)) {
+        return msg(gTxt('config_php_not_found', array(
+                    '{file}' => '' //$GLOBALS['txp_err_count']
                 )),
-                array('class' => 'alert-block error')
+                MSG_ERROR
             ).
             n.'<ol>'.
-            $GLOBALS['txp_err_html'].
+            @$GLOBALS['txp_err_html'].
             n.'</ol>'.
             n.'</div>';
     } else {
         // Clear the session so no data is leaked.
         $_SESSION = $cfg = array();
 
-        $warnings = @find_temp_dir() ? '' : graf(
-            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-            gTxt('set_temp_dir_prefs'),
-            array('class' => 'alert-block warning')
-        );
+        $warnings = @find_temp_dir() ? '' : msg(gTxt('set_temp_dir_prefs'), MSG_ALERT);
 
         $login_url = $GLOBALS['rel_txpurl'].'/index.php';
 
@@ -846,13 +827,9 @@ function check_config_txp($meter)
     global $txpcfg, $cfg;
     if (!isset($txpcfg['db'])) {
         if (!is_readable(txpath.'/config.php')) {
-            $problems[] = graf(
-                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                gTxt('config_php_not_found', array(
+            $problems[] = msg(gTxt('config_php_not_found', array(
                     '{file}' => txpspecialchars(txpath.'/config.php')
-                ), 'raw'),
-                array('class' => 'alert-block error')
-            );
+                ), 'raw'), MSG_ERROR);
         } else {
             @include txpath.'/config.php';
         }
@@ -862,11 +839,7 @@ function check_config_txp($meter)
         || ($txpcfg['db'] != $cfg['mysql']['db'])
         || ($txpcfg['table_prefix'] != $cfg['mysql']['table_prefix'])
     ) {
-        $problems[] = graf(
-            span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-            gTxt('config_php_does_not_match_input', '', 'raw'),
-            array('class' => 'alert-block error')
-        );
+        $problems[] = msg(gTxt('config_php_does_not_match_input', '', 'raw'), MSG_ERROR);
 
         echo txp_setup_progress_meter($meter).
             n.'<div class="txp-setup">'.
@@ -879,7 +852,7 @@ function check_config_txp($meter)
 }
 
 
-function check_config_txp2()
+function check_config_txp2($back='')
 {
     global $txpcfg;
 
@@ -888,15 +861,7 @@ function check_config_txp2()
     }
 
     if (!empty($txpcfg['db22'])) {
-        echo graf(
-                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                gTxt('already_installed', array('{txpath}' => basename(txpath))),
-                array('class' => 'alert-block warning')
-            ).
-            setup_back_button(__FUNCTION__).
-            n.'</div>';
-
-        exit;
+        echo msg(gTxt('already_installed', array('{txpath}' => basename(txpath))), MSG_ALERT, $back);
     }
 }
 
