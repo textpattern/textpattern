@@ -435,14 +435,14 @@ function is_dst($name, $val)
             var dstOn = $("#auto_dst-1");
             var dstOff = $("#auto_dst-0");
 
-            if (radio) {
+            if (radio.length) {
                 if (dstOn.prop("checked")) {
                     radioInput.prop("disabled", "disabled");
                     radioLabel.addClass('disabled');
                 }
 
                 dstOff.click(function () {
-                    radioInput.removeProp("disabled");
+                    radioInput.prop("disabled", null);
                     radioLabel.removeClass('disabled');
                 });
 
@@ -453,7 +453,7 @@ function is_dst($name, $val)
             }
         });
 EOS
-    );
+    , false);
 
     return pluggable_ui('prefs_ui', 'is_dst', $ui, $name, $val);
 }
