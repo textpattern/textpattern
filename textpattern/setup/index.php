@@ -553,7 +553,7 @@ function step_createTxp()
     check_config_txp(3);
 
     define('TXP_INSTALL', 1);
-//    include txpath.'/setup/txpsql.php';
+    include txpath.'/setup/txpsql.php';
 
     echo step_fbCreate();
 }
@@ -611,14 +611,12 @@ function step_fbCreate()
         n.'<div class="txp-setup">';
 
     if (! empty($txp_install_fail)) {
+        // FIXME: some message txp_install_fail
         return msg(gTxt('config_php_not_found', array(
-                    '{file}' => '' //$GLOBALS['txp_err_count']
+                    '{file}' => ''
                 )),
                 MSG_ERROR
             ).
-            n.'<ol>'.
-            @$GLOBALS['txp_err_html'].
-            n.'</ol>'.
             n.'</div>';
     } else {
         // Clear the session so no data is leaked.

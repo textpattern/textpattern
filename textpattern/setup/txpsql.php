@@ -28,12 +28,16 @@ if (!defined('TXP_INSTALL')) {
 @ignore_user_abort(1);
 @set_time_limit(0);
 
+global $cfg, $txpcfg;
 global $DB, $prefs, $txp_user, $txp_groups;
 global $permlink_mode, $siteurl, $theme_name, $public_themes;
 include txpath.'/lib/txplib_db.php';
 include txpath.'/lib/admin_config.php';
 
-$siteurl = rtrim($_SESSION['siteurl'], '/');
+// FIXME: Need check $cfg
+
+
+$siteurl = rtrim(@$cfg['site']['siteurl'], '/');
 if (! preg_match('%^https?://%', $siteurl)) {
     $siteurl = 'http://'.$siteurl;
 }
@@ -51,10 +55,10 @@ if (trim(@$pretext_data[0]) == md5("/{$s}/?txpcleantest=1")) {
 // Variable set
 $siteurl = preg_replace('%^https?://%', '', $siteurl);
 $siteurl = str_replace(' ', '%20', $siteurl);
-$theme_name = $_SESSION['theme'] ? $_SESSION['theme'] : 'hive';
+$theme_name = empty($cfg['site']['theme']) ? 'hive' : $cfg['site']['theme'];
 
 get_public_themes_list();
-$public_theme = empty($public_themes[$_SESSION['public_theme']]['themedir']) ? current(array_keys($public_themes)) : $_SESSION['public_theme'];
+$public_theme = empty($public_themes[$cfg['site']['public_theme']]['themedir']) ? current(array_keys($public_themes)) : $cfg['site']['public_theme'];
 
 $themedir = $public_themes[$public_theme]['themedir'];
 
@@ -96,9 +100,9 @@ setup_txp_lang();
 $setup->initPrefs();
 
 $prefs = get_prefs();
-$txp_user = $_SESSION['name'];
+$txp_user = $cfg['user']['name'];
 
-create_user($txp_user, $_SESSION['email'], $_SESSION['pass'], $_SESSION['realname'], 1);
+create_user($txp_user, $cfg['user']['email'], $cfg['user']['pass'], $cfg['user']['realname'], 1);
 
 if ($datadir) {
     /*  Load theme prefs:
@@ -164,9 +168,8 @@ if (class_exists('\Textpattern\Skin\Main') /*&& !preg_match('%/setup/themes/%', 
 
 
 // FIXME: Need some check
-$GLOBALS['txp_install_successful'] = true;
-$GLOBALS['txp_err_count'] = 0;
-$GLOBALS['txp_err_html'] = '';
+//$GLOBALS['txp_install_fail'] = 1;
+
 
 
 // Final rebuild category trees
