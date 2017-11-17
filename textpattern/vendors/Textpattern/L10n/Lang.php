@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2016 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -138,9 +138,12 @@ class Lang
         if (is_file($file) && is_readable($file)) {
             $numMetaRows = 4;
             $separator = '=>';
-            $filename = basename($file);
-            $name = preg_replace('/\.(txt|textpack)$/i', '', $filename);
-            $meta['filename'] = $name;
+            extract(pathinfo($file));
+//            $filename = basename($file);
+            $filename = preg_replace('/\.(txt|textpack|ini)$/i', '', $basename);
+            $ini = strtolower($extension) == 'ini';
+
+            $meta['filename'] = $filename;
 
             if ($fp = @fopen($file, 'r')) {
                 for ($idx = 0; $idx < $numMetaRows; $idx++) {
@@ -148,15 +151,22 @@ class Lang
                 }
 
                 fclose($fp);
-
-                $langName = do_list($rows[1], $separator);
-                $langCode = do_list($rows[2], $separator);
-                $langDirection = do_list($rows[3], $separator);
-
-                $meta['name'] = (isset($langName[1])) ? $langName[1] : $name;
-                $meta['code'] = (isset($langCode[1])) ? strtolower($langCode[1]) : $name;
-                $meta['direction'] = (isset($langDirection[1])) ? strtolower($langDirection[1]) : 'ltr';
                 $meta['time'] = filemtime($file);
+
+                if ($ini) {
+                    $langInfo = parse_ini_string(join($rows));
+                    $meta['name'] = (!empty($langInfo['lang_name'])) ? $langInfo['lang_name'] : $filename;
+                    $meta['code'] = (!empty($langCode['lang_code'])) ? strtolower($langInfo['lang_code']) : $filename;
+                    $meta['direction'] = (!empty($langInfo['lang_dir'])) ? strtolower($langInfo['lang_dir']) : 'ltr';
+                } else {
+                    $langName = do_list($rows[1], $separator);
+                    $langCode = do_list($rows[2], $separator);
+                    $langDirection = do_list($rows[3], $separator);
+
+                    $meta['name'] = (isset($langName[1])) ? $langName[1] : $filename;
+                    $meta['code'] = (isset($langCode[1])) ? strtolower($langCode[1]) : $filename;
+                    $meta['direction'] = (isset($langDirection[1])) ? strtolower($langDirection[1]) : 'ltr';
+                }
             }
         }
 
