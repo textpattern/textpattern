@@ -23,12 +23,15 @@
 
 function setup_db($cfg = '')
 {
+    global $language;
+
     // FIXME: Need check $cfg
     if (empty($cfg)) {
         exit('No setup config');
     }
 
     @define('LANG', $cfg['site']['lang']);
+    $language = @$cfg['site']['lang'];
 
 
     global $txpcfg, $DB, $prefs, $txp_user, $txp_groups;

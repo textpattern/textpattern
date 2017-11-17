@@ -25,8 +25,8 @@ if (@php_sapi_name() != 'cli') {
     exit;
 }
 
-$options = getopt('', array('config:'));
-if (! $file = @$options['config']) {
+$params = getopt('', array('config:', 'debug::'));
+if (! $file = @$params['config']) {
     exit("Usage:\nphp setup.php --config=\"my-setup-config.json\"\n\n");
 }
 
@@ -65,3 +65,8 @@ assert_system_requirements();
 @include txpath.'/config.php';
 
 setup_db($cfg);
+
+if (isset($params['debug'])) {
+    echo $trace->summary();
+    echo $trace->result();
+}
