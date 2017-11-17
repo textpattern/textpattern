@@ -301,14 +301,6 @@ function getDbInfo()
             'setup_table_prefix',
             fInput('text', 'dprefix', @$cfg['mysql']['table_prefix'], 'input-medium', '', '', INPUT_MEDIUM, '', 'setup_table_prefix'),
             'table_prefix', 'table_prefix', array('class' => 'txp-form-field')
-        ).
-        hed(
-            gTxt('site_url'), 2
-        ).
-        inputLabel(
-            'setup_site_url',
-            fInput('text', 'siteurl', @$cfg['site']['siteurl'], '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
-            'please_enter_url', '', array('class' => 'txp-form-field')
         );
 
     if (is_disabled('mail')) {
@@ -342,7 +334,6 @@ function printConfig()
     $cfg['mysql']['host'] = ps('dhost');
     $cfg['mysql']['db'] = ps('ddb');
     $cfg['mysql']['table_prefix'] = ps('dprefix');
-    $cfg['site']['siteurl'] = ps('siteurl');
 
     global $txpcfg, $step;
 
@@ -514,6 +505,11 @@ function getTxpLogin()
             gTxt('site_config'), 2
         ).
         inputLabel(
+            'setup_site_url',
+            fInput('text', 'siteurl', @$cfg['site']['siteurl'], '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
+            'please_enter_url', 'setup_site_url', array('class' => 'txp-form-field')
+        ).
+        inputLabel(
             'setup_admin_theme',
             $theme_chooser,
             'admin_theme', 'theme_name', array('class' => 'txp-form-field')
@@ -544,6 +540,8 @@ function createTxp()
     $cfg['user']['name'] = ps('name');
     $cfg['user']['pass'] = ps('pass');
     $cfg['user']['email'] = ps('email');
+
+    $cfg['site']['siteurl'] = ps('siteurl');
     $cfg['site']['theme'] = ps('theme');
     $cfg['site']['public_theme'] = ps('public_theme');
 
