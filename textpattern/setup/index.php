@@ -34,11 +34,11 @@ define('MSG_OK', 'alert-block success');
 define('MSG_ALERT', 'alert-block warning');
 define('MSG_ERROR', 'alert-block error');
 
-include txpath.'/lib/class.trace.php';
+include_once txpath.'/lib/class.trace.php';
 $trace = new Trace();
 include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_misc.php';
-include txpath.'/vendors/Textpattern/Loader.php';
+include_once txpath.'/vendors/Textpattern/Loader.php';
 
 $loader = new \Textpattern\Loader(txpath.'/vendors');
 $loader->register();
@@ -57,6 +57,7 @@ if (!isset($_SESSION)) {
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
 include_once txpath.'/include/txp_auth.php';
+include_once txpath.'/setup/setup_db.php';
 
 assert_system_requirements();
 
@@ -551,10 +552,7 @@ function step_createTxp()
 */
 
     check_config_txp(3);
-
-    define('TXP_INSTALL', 1);
-    include txpath.'/setup/txpsql.php';
-
+    setup_db($cfg);
     echo step_fbCreate();
 }
 
