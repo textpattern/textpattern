@@ -122,19 +122,19 @@ if (empty($cfg['site']['siteurl'])) {
 
 switch ($step) {
     case '':
-        chooseLang();
+        step_chooseLang();
         break;
-    case 'getDbInfo':
-        getDbInfo();
+    case 'step_getDbInfo':
+        step_getDbInfo();
         break;
-    case 'getTxpLogin':
-        getTxpLogin();
+    case 'step_getTxpLogin':
+        step_getTxpLogin();
         break;
-    case 'printConfig':
-        printConfig();
+    case 'step_printConfig':
+        step_printConfig();
         break;
-    case 'createTxp':
-        createTxp();
+    case 'step_createTxp':
+        step_createTxp();
 }
 $_SESSION['cfg'] = $cfg;
 exit("</main>\n</body>\n</html>");
@@ -198,7 +198,7 @@ eod;
  * Renders stage 0: welcome/choose language panel.
  */
 
-function chooseLang()
+function step_chooseLang()
 {
     echo preamble();
     echo n.'<div class="txp-setup">',
@@ -206,7 +206,7 @@ function chooseLang()
         n.'<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">',
         langs(),
         graf(fInput('submit', 'Submit', 'Submit', 'publish')),
-        sInput('getDbInfo'),
+        sInput('step_getDbInfo'),
         n.'</form>',
         n.'</div>';
 }
@@ -248,7 +248,7 @@ function txp_setup_progress_meter($stage = 1)
  * Renders stage 1: database details panel.
  */
 
-function getDbInfo()
+function step_getDbInfo()
 {
     global $cfg;
     global $txpcfg, $step;
@@ -305,7 +305,7 @@ function getDbInfo()
         fInput('submit', 'Submit', gTxt('next_step', '', 'raw'), 'publish')
     );
 
-    echo sInput('printConfig').
+    echo sInput('step_printConfig').
         n.'</form>'.
         n.'</div>';
 }
@@ -315,7 +315,7 @@ function getDbInfo()
  * error message (on fail).
  */
 
-function printConfig()
+function step_printConfig()
 {
     global $cfg;
 
@@ -414,7 +414,7 @@ function printConfig()
  * config details error message (on fail).
  */
 
-function getTxpLogin()
+function step_getTxpLogin()
 {
     global $cfg;
     global $step;
@@ -494,7 +494,7 @@ function getTxpLogin()
         graf(
             fInput('submit', 'Submit', gTxt('next_step'), 'publish')
         ).
-        sInput('createTxp').
+        sInput('step_createTxp').
         n.'</form>'.
         n.'</div>';
 }
@@ -503,7 +503,7 @@ function getTxpLogin()
  * Re-renders stage 3: admin user details panel, due to user input errors.
  */
 
-function createTxp()
+function step_createTxp()
 {
     global $cfg;
     global $step;
@@ -568,7 +568,7 @@ function createTxp()
     define('TXP_INSTALL', 1);
 //    include txpath.'/setup/txpsql.php';
 
-    echo fbCreate();
+    echo step_fbCreate();
 }
 
 /**
@@ -610,7 +610,7 @@ function makeConfig()
  * installation error message (fail).
  */
 
-function fbCreate()
+function step_fbCreate()
 {
     global $cfg;
 
@@ -685,7 +685,7 @@ function setup_config_contents()
         n.'</textarea>'.
         n.'<form method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
             graf(fInput('submit', 'submit', gTxt('did_it'), 'publish')).
-            sInput('getTxpLogin').
+            sInput('step_getTxpLogin').
         n.'</form>';
 }
 
@@ -700,11 +700,11 @@ function setup_config_contents()
 function setup_back_button($current = null)
 {
     $prevSteps = array(
-        'getDbInfo'   => '',
-        'getTxpLogin' => 'getDbInfo',
-        'printConfig' => 'getDbInfo',
-        'createTxp'   => 'getTxpLogin',
-        'fbCreate'    => 'createTxp',
+        'step_getDbInfo'   => '',
+        'step_getTxpLogin' => 'step_getDbInfo',
+        'step_printConfig' => 'step_getDbInfo',
+        'step_createTxp'   => 'step_getTxpLogin',
+        'step_fbCreate'    => 'step_createTxp',
     );
 
     $prev = isset($prevSteps[$current]) ? $prevSteps[$current] : '';
