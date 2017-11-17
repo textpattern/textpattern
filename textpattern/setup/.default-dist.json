@@ -1,0 +1,21 @@
+{
+    "mysql": {
+        "user": "",
+        "pass": "",
+        "host": "localhost",
+        "db": "",
+        "table_prefix": ""
+    },
+    "user": {
+        "realname": "",
+        "email": "",
+        "name": "",
+        "pass": ""
+    },
+    "site": {
+        "lang": "en",
+        "theme": "",
+        "public_theme": "",
+        "siteurl": ""
+    }
+}
