@@ -30,6 +30,10 @@ define("txpinterface", "admin");
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
 
+define('MSG_OK', 'alert-block success');
+define('MSG_ALERT', 'alert-block warning');
+define('MSG_ERROR', 'alert-block error');
+
 include txpath.'/lib/class.trace.php';
 $trace = new Trace();
 include_once txpath.'/lib/constants.php';
@@ -253,21 +257,7 @@ function getDbInfo()
     echo txp_setup_progress_meter(1),
         n.'<div class="txp-setup">';
 
-    if (!isset($txpcfg['db'])) {
-        @include txpath.'/config.php';
-    }
-
-    if (!empty($txpcfg['db22'])) {
-        echo graf(
-                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                gTxt('already_installed', array('{txpath}' => basename(txpath))),
-                array('class' => 'alert-block warning')
-            ).
-            setup_back_button(__FUNCTION__).
-            n.'</div>';
-
-        exit;
-    }
+    check_config_txp2();
 
     echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         hed(gTxt('need_details'), 1).
@@ -341,21 +331,7 @@ function printConfig()
     echo txp_setup_progress_meter(2).
         n.'<div class="txp-setup">';
 
-    if (!isset($txpcfg['db'])) {
-        @include txpath.'/config.php';
-    }
-
-    if (!empty($txpcfg['db22'])) {
-        echo graf(
-                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                gTxt('already_installed', array('{txpath}' => basename(txpath))),
-                array('class' => 'alert-block warning')
-            ).
-            setup_back_button(__FUNCTION__).
-            n.'</div>';
-
-        exit;
-    }
+    check_config_txp2();
 
     echo hed(gTxt('checking_database'), 2);
 
@@ -376,34 +352,30 @@ function printConfig()
     } elseif (@mysqli_real_connect($mylink, $dhost, $cfg['mysql']['user'], $cfg['mysql']['pass'], '', $dport, $dsocket, MYSQLI_CLIENT_SSL)) {
         $cfg['mysql']['dclient_flags'] = 'MYSQLI_CLIENT_SSL';
     } else {
-        msg_error(gTxt('db_cant_connect'), __FUNCTION__);
+        msg(gTxt('db_cant_connect'), MSG_ERROR, __FUNCTION__);
     }
 
-    echo graf(
-        span(null, array('class' => 'ui-icon ui-icon-check')).' '.
-        gTxt('db_connected'),
-        array('class' => 'alert-block success')
-    );
+    echo msg(gTxt('db_connected'), MSG_OK);
 
     if (!($cfg['mysql']['table_prefix'] == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $cfg['mysql']['table_prefix']))) {
-        msg_error(gTxt('prefix_bad_characters',
+        msg(gTxt('prefix_bad_characters',
             array('{dbprefix}' => strong(txpspecialchars($cfg['mysql']['table_prefix']))), 'raw'),
-            __FUNCTION__
+            MSG_ERROR, __FUNCTION__
         );
     }
 
     if (!$mydb = mysqli_select_db($mylink, $cfg['mysql']['db'])) {
-        msg_error(gTxt('db_doesnt_exist',
+        msg(gTxt('db_doesnt_exist',
             array('{dbname}' => strong(txpspecialchars($cfg['mysql']['db']))), 'raw'),
-            __FUNCTION__
+            MSG_ERROR, __FUNCTION__
         );
     }
 
     $tables_exist = mysqli_query($mylink, "DESCRIBE `".$cfg['mysql']['table_prefix']."textpattern`");
     if ($tables_exist) {
-        msg_error(gTxt('tables_exist',
+        msg(gTxt('tables_exist',
             array('{dbname}' => strong(txpspecialchars($cfg['mysql']['db']))), 'raw'),
-            __FUNCTION__
+            MSG_ERROR, __FUNCTION__
         );
     }
 
@@ -907,13 +879,40 @@ function check_config_txp($meter)
 }
 
 
-function msg_error($msg, $back='')
+function check_config_txp2()
+{
+    global $txpcfg;
+
+    if (!isset($txpcfg['db'])) {
+        @include txpath.'/config.php';
+    }
+
+    if (!empty($txpcfg['db22'])) {
+        echo graf(
+                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+                gTxt('already_installed', array('{txpath}' => basename(txpath))),
+                array('class' => 'alert-block warning')
+            ).
+            setup_back_button(__FUNCTION__).
+            n.'</div>';
+
+        exit;
+    }
+}
+
+
+
+
+
+function msg($msg, $class = MSG_OK, $back='')
 {
     global $cfg;
+
+    $icon = ($class == MSG_OK) ? 'ui-icon ui-icon-check' : 'ui-icon ui-icon-alert';
     $out = graf(
-        span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+        span(null, array('class' => $icon)).' '.
         $msg,
-        array('class' => 'alert-block error')
+        array('class' => $class)
     );
 
     if (empty($back)) {
