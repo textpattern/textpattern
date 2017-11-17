@@ -103,7 +103,7 @@ function cat_category_list($message = "")
                 });
             });
 EOS
-        ),
+        , false),
     );
     echo join(n, $out);
 }
