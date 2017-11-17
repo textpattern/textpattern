@@ -28,6 +28,9 @@ function setup_db($cfg = '')
         exit('No setup config');
     }
 
+    @define('LANG', $cfg['site']['lang']);
+
+
     global $txpcfg, $DB, $prefs, $txp_user, $txp_groups;
     global $permlink_mode, $siteurl, $theme_name, $public_themes;
     include_once txpath.'/lib/txplib_db.php';
@@ -186,4 +189,34 @@ function setup_txp_lang()
         $language = TEXTPATTERN_DEFAULT_LANG;
         Txp::get('\Textpattern\L10n\Lang')->install_file($language);
     }
+}
+
+/**
+ * Fetch the list of available public themes.
+ *
+ * @return array
+ */
+
+function get_public_themes_list()
+{
+    global $public_themes;
+
+    $public_themes = $out = array();
+
+    if ($files = glob(txpath."/{setup/themes,../themes}/*/manifest\.json", GLOB_BRACE)) {
+        foreach ($files as $file) {
+            $file = realpath($file);
+
+            if (preg_match('%^(.*/(\w+))/manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
+                if (@$manifest['txp-type'] == 'textpattern-theme') {
+                    $key = $mm[2].'-'.md5($file);
+                    $public_themes[$key] = $manifest;
+                    $public_themes[$key]['themedir'] = $mm[1];
+                    $out[$key] = empty($manifest['title']) ? $mm[2] : $manifest['title']." (".$manifest['version'] .') '.str_replace(txpath, '', $mm[1]);
+                }
+            }
+        }
+    }
+
+    return $out;
 }

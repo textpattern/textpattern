@@ -57,7 +57,7 @@ if (!isset($_SESSION)) {
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
 include_once txpath.'/include/txp_auth.php';
-include_once txpath.'/setup/setup_db.php';
+include_once txpath.'/setup/setup_lib.php';
 
 assert_system_requirements();
 
@@ -785,36 +785,6 @@ function setup_load_lang($lang)
     }
 
     return $strings;
-}
-
-/**
- * Fetch the list of available public themes.
- *
- * @return array
- */
-
-function get_public_themes_list()
-{
-    global $public_themes;
-
-    $public_themes = $out = array();
-
-    if ($files = glob(txpath."/{setup/themes,../themes}/*/manifest\.json", GLOB_BRACE)) {
-        foreach ($files as $file) {
-            $file = realpath($file);
-
-            if (preg_match('%^(.*/(\w+))/manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
-                if (@$manifest['txp-type'] == 'textpattern-theme') {
-                    $key = $mm[2].'-'.md5($file);
-                    $public_themes[$key] = $manifest;
-                    $public_themes[$key]['themedir'] = $mm[1];
-                    $out[$key] = empty($manifest['title']) ? $mm[2] : $manifest['title']." (".$manifest['version'] .') '.str_replace(txpath, '', $mm[1]);
-                }
-            }
-        }
-    }
-
-    return $out;
 }
 
 
