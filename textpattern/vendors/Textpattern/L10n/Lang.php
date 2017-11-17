@@ -323,6 +323,7 @@ class Lang
             // Merge the packs, using the fallback strings to supply empties.
             $fullpack = $langpack + $fallpack;
 
+            $exist = safe_column('name', 'txp_lang', "lang='{$lang}'");
             foreach ($fullpack as $translation) {
                 extract(doSlash($translation));
 
@@ -334,7 +335,7 @@ class Lang
                 $lastmod = empty($lastmod) ? $now : date('YmdHis', $lastmod);
                 $fields = "lastmod = '{$lastmod}', data = '{$data}', event = '{$event}', owner = '{$owner}'";
 
-                if (safe_count('txp_lang', $where)) {
+                if (! empty($exist[$name])) {
                     $r = safe_update(
                         'txp_lang',
                         $fields,
