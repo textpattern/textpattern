@@ -97,6 +97,17 @@ class Parser
 
     public function parse($textpack, $group = null)
     {
+        static $replacements = array(
+            n."null" => n."_null",
+            n."yes" => n."_yes",
+            n."no" => n."_no",
+            n."true" => n."_true",
+            n."false" => n."_false",
+            n."on" => n."_on",
+            n."off" => n."_off",
+            n."none" => n."_none"
+        );
+
         if ($group && !is_array($group)) {
             $group = do_list($group);
         } else {
@@ -111,7 +122,7 @@ class Parser
         $owner = $this->owner;
 
         if (strpos($textpack, '=>') === false 
-            && $sections = parse_ini_string($textpack, true))
+            && $sections = parse_ini_string(strtr($textpack, $replacements), true, INI_SCANNER_RAW))
         {
             foreach ($sections as $event => $strings) {
                 $event = $event == 'meta' ? 'common' : trim($event, ' _');
@@ -121,7 +132,7 @@ class Parser
                 } else {
                     foreach ($strings as $name => $data) {
                         $out[] = array(
-                            'name'    => $name,
+                            'name'    => ltrim($name, '_'),
                             'lang'    => $language,
                             'data'    => $data,
                             'event'   => $event,
