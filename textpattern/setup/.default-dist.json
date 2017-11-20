@@ -1,4 +1,11 @@
 {
+    "site": {
+        "lang": "en",
+        "siteurl": "",
+        "theme": "",
+        "public_theme": "",
+        "datadir": ""
+    },
     "mysql": {
         "user": "",
         "pass": "",
@@ -11,11 +18,5 @@
         "email": "",
         "name": "",
         "pass": ""
-    },
-    "site": {
-        "lang": "en",
-        "theme": "",
-        "public_theme": "",
-        "siteurl": ""
     }
 }

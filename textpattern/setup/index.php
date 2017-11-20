@@ -420,9 +420,9 @@ function step_createTxp()
     global $cfg;
 
     $cfg['user']['realname'] = ps('RealName');
+    $cfg['user']['email'] = ps('email');
     $cfg['user']['name'] = ps('name');
     $cfg['user']['pass'] = ps('pass');
-    $cfg['user']['email'] = ps('email');
 
     $cfg['site']['siteurl'] = ps('siteurl');
     $cfg['site']['theme'] = ps('theme');
