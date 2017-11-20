@@ -329,68 +329,7 @@ function step_printConfig()
 
     echo hed(gTxt('checking_database'), 2);
 
-    if (strpos($cfg['mysql']['host'], ':') === false) {
-        $dhost = $cfg['mysql']['host'];
-        $dport = ini_get("mysqli.default_port");
-    } else {
-        list($dhost, $dport) = explode(':', $cfg['mysql']['host'], 2);
-        $dport = intval($dport);
-    }
-
-    $dsocket = ini_get("mysqli.default_socket");
-
-    $mylink = mysqli_init();
-
-    if (@mysqli_real_connect($mylink, $dhost, $cfg['mysql']['user'], $cfg['mysql']['pass'], '', $dport, $dsocket)) {
-        $cfg['mysql']['dclient_flags'] = 0;
-    } elseif (@mysqli_real_connect($mylink, $dhost, $cfg['mysql']['user'], $cfg['mysql']['pass'], '', $dport, $dsocket, MYSQLI_CLIENT_SSL)) {
-        $cfg['mysql']['dclient_flags'] = 'MYSQLI_CLIENT_SSL';
-    } else {
-        msg(gTxt('db_cant_connect'), MSG_ERROR, __FUNCTION__);
-    }
-
-    echo msg(gTxt('db_connected'), MSG_OK);
-
-    if (!($cfg['mysql']['table_prefix'] == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $cfg['mysql']['table_prefix']))) {
-        msg(gTxt('prefix_bad_characters',
-            array('{dbprefix}' => strong(txpspecialchars($cfg['mysql']['table_prefix']))), 'raw'),
-            MSG_ERROR, __FUNCTION__
-        );
-    }
-
-    if (!$mydb = mysqli_select_db($mylink, $cfg['mysql']['db'])) {
-        msg(gTxt('db_doesnt_exist',
-            array('{dbname}' => strong(txpspecialchars($cfg['mysql']['db']))), 'raw'),
-            MSG_ERROR, __FUNCTION__
-        );
-    }
-
-    $tables_exist = mysqli_query($mylink, "DESCRIBE `".$cfg['mysql']['table_prefix']."textpattern`");
-    if ($tables_exist) {
-        msg(gTxt('tables_exist',
-            array('{dbname}' => strong(txpspecialchars($cfg['mysql']['db']))), 'raw'),
-            MSG_ERROR, __FUNCTION__
-        );
-    }
-
-    // On MySQL 5.5.3+ use real UTF-8 tables, if the client supports it.
-    $cfg['mysql']['dbcharset'] = "utf8mb4";
-    // Lower versions only support UTF-8 limited to 3 bytes per character
-    if (mysqli_get_server_version($mylink) < 50503) {
-        $cfg['mysql']['dbcharset'] = "utf8";
-    } else {
-        if (false !== strpos(mysqli_get_client_info($mylink), 'mysqlnd')) {
-            // mysqlnd 5.0.9+ required
-            if (mysqli_get_client_version($mylink) < 50009) {
-                $cfg['mysql']['dbcharset'] = "utf8";
-            }
-        } else {
-            // libmysqlclient 5.5.3+ required
-            if (mysqli_get_client_version($mylink) < 50503) {
-                $cfg['mysql']['dbcharset'] = "utf8";
-            }
-        }
-    }
+    setup_try_mysql(__FUNCTION__);
 
     echo msg(gTxt('using_db', array(
         '{dbname}' => strong(txpspecialchars($cfg['mysql']['db'])), ), 'raw').' ('.$cfg['mysql']['dbcharset'].')');
@@ -557,40 +496,6 @@ function step_createTxp()
 }
 
 /**
- * Generate a config.php file from the known info.
- */
-
-function makeConfig()
-{
-    global $cfg;
-    define("nl", "';\n");
-    define("o", '$txpcfg[\'');
-    define("m", "'] = '");
-    $open = chr(60).'?php';
-    $close = '?'.chr(62);
-
-    // Escape single quotes and backslashes in literal PHP strings.
-/*
-    foreach ($_SESSION as $k => $v) {
-        $_SESSION[$k] = addcslashes($_SESSION[$k], "'\\");
-    }
-
-    $_SESSION = doSpecial($_SESSION);
-*/
-    return
-    $open."\n"
-    .o.'db'.m.$cfg['mysql']['db'].nl
-    .o.'user'.m.$cfg['mysql']['user'].nl
-    .o.'pass'.m.$cfg['mysql']['pass'].nl
-    .o.'host'.m.$cfg['mysql']['host'].nl
-    .(empty($cfg['mysql']['dclient_flags']) ? '' : o.'client_flags'."'] = ".$cfg['mysql']['dclient_flags'].";\n")
-    .o.'table_prefix'.m.$cfg['mysql']['table_prefix'].nl
-    .o.'txpath'.m.txpath.nl
-    .o.'dbcharset'.m.$cfg['mysql']['dbcharset'].nl
-    .$close;
-}
-
-/**
  * Renders stage 4: either installation completed panel (success) or
  * installation error message (fail).
  */
@@ -652,13 +557,14 @@ function step_fbCreate()
 
 function setup_config_contents()
 {
+    global $cfg;
     return hed(gTxt('creating_config'), 2).
         graf(
             strong(gTxt('before_you_proceed')).' '.
             gTxt('create_config', array('{txpath}' => basename(txpath)))
         ).
         n.'<textarea class="code" name="config" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'" dir="ltr" readonly>'.
-            makeConfig().
+            setup_makeConfig($cfg, true).
         n.'</textarea>'.
         n.'<form method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
             graf(fInput('submit', 'submit', gTxt('did_it'), 'publish')).
