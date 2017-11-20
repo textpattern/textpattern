@@ -289,9 +289,12 @@ class Lang
             $parser->setLanguage($lang);
             $textpack = $parser->parse($textpack);
 
+            if (empty($textpack)) {
+                return false;
+            }
+
             // Reindex the pack so it can be merged.
             $langpack = array();
-            $fallpack = array();
 
             foreach ($textpack as $translation) {
                 $langpack[$translation['name']] = $translation;
@@ -310,31 +313,27 @@ class Lang
 
                     // Reindex the pack so it can be merged.
                     foreach ($fallback as $translation) {
-                        $fallpack[$translation['name']] = $translation;
+                        if (empty($langpack[$translation['name']])) {
+                            $langpack[$translation['name']] = $translation;
+                        }
                     }
                 }
             }
 
-            if (empty($textpack)) {
-                return false;
-            }
+            $exists = safe_column('name', 'txp_lang', "lang='".doSlash($lang)."'");
 
-            // Merge the packs, using the fallback strings to supply empties.
-            $fullpack = $langpack + $fallpack;
-
-            $exist = safe_column('name', 'txp_lang', "lang='{$lang}'");
-            foreach ($fullpack as $translation) {
-                extract(doSlash($translation));
-
-                if ($event == 'setup') {
+            foreach ($langpack as $translation) {
+                if ($translation['event'] == 'setup') {
                     continue;
                 }
+
+                extract(doSlash($translation));
 
                 $where = "lang = '{$lang}' AND name = '{$name}'";
                 $lastmod = empty($lastmod) ? $now : date('YmdHis', $lastmod);
                 $fields = "lastmod = '{$lastmod}', data = '{$data}', event = '{$event}', owner = '{$owner}'";
 
-                if (! empty($exist[$name])) {
+                if (! empty($exists[$name])) {
                     $r = safe_update(
                         'txp_lang',
                         $fields,
@@ -384,28 +383,16 @@ class Lang
                 continue;
             }
 
-            $where = "lang = '".doSlash($lang)."' AND name = '".doSlash($name)."'";
+            $where = array('lang' => $lang, 'name' => $name);
 
-            if (safe_count('txp_lang', $where)) {
-                $r = safe_update(
-                    'txp_lang',
-                    "lastmod = '".doSlash($now)."',
-                    data = '".doSlash($data)."',
-                    event = '".doSlash($event)."',
-                    owner = '".doSlash($owner)."'",
-                    $where
-                );
-            } else {
-                $r = safe_insert(
-                    'txp_lang',
-                    "lastmod = '".doSlash($now)."',
-                    data = '".doSlash($data)."',
-                    event = '".doSlash($event)."',
-                    owner = '".doSlash($owner)."',
-                    lang = '".doSlash($lang)."',
-                    name = '".doSlash($name)."'"
-                );
-            }
+            $r = safe_upsert(
+                'txp_lang',
+                "lastmod = '".doSlash($now)."',
+                data = '".doSlash($data)."',
+                event = '".doSlash($event)."',
+                owner = '".doSlash($owner)."'",
+                $where
+            );
 
             if ($r) {
                 $done++;

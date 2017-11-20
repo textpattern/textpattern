@@ -122,8 +122,15 @@ class Parser
         $owner = $this->owner;
 
         if (strpos($textpack, '=>') === false 
-            && $sections = parse_ini_string(strtr($textpack, $replacements), true, INI_SCANNER_RAW))
+            && $sections = parse_ini_string('[common]'.n.strtr($textpack, $replacements), true, INI_SCANNER_RAW))
         {
+            if (!empty($sections['@common'])
+                && !empty($sections['@common']['lang_code'])
+                && $sections['@common']['lang_code'] !== TEXTPATTERN_DEFAULT_LANG
+            ) {
+                $language = \Txp::get('\Textpattern\L10n\Locale')->validLocale($sections['@common']['lang_code']);
+            }
+
             foreach ($sections as $event => $strings) {
                 $event = trim($event, ' @');
 
