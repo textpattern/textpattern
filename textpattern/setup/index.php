@@ -109,18 +109,6 @@ if (empty($cfg['site']['siteurl'])) {
 }
 
 
-
-/*
-    echo "<table><tr><td><pre>";
-        print_r($cfg);
-    echo "</pre></td><td><pre>";
-        print_r($_SESSION);
-    echo "</pre></td></tr></table>";
-*/
-
-
-
-
 switch ($step) {
     case '':
         step_chooseLang();
@@ -328,11 +316,7 @@ function step_printConfig()
     check_config_txp2(__FUNCTION__);
 
     echo hed(gTxt('checking_database'), 2);
-
     setup_try_mysql(__FUNCTION__);
-
-    echo msg(gTxt('using_db', array(
-        '{dbname}' => strong(txpspecialchars($cfg['mysql']['db'])), ), 'raw').' ('.$cfg['mysql']['dbcharset'].')');
 
     echo setup_config_contents().
         n.'</div>';
@@ -446,49 +430,20 @@ function step_createTxp()
 
     echo preamble();
 
-/*
-    if ($_SESSION['name'] == '') {
-        echo txp_setup_progress_meter(3).
-            n.'<div class="txp-setup">'.
-            graf(
-                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                gTxt('name_required'),
-                array('class' => 'alert-block error')
-            ).
-            setup_back_button(__FUNCTION__).
-            n.'</div>';
-
-        exit;
+    if (empty($cfg['user']['name'])) {
+        echo txp_setup_progress_meter(3).n.'<div class="txp-setup">';
+        msg(gTxt('name_required'), MSG_ERROR, __FUNCTION__);
     }
 
-    if (!$_SESSION['pass']) {
-        echo txp_setup_progress_meter(3).
-            n.'<div class="txp-setup">'.
-            graf(
-                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                gTxt('pass_required'),
-                array('class' => 'alert-block error')
-            ).
-            setup_back_button(__FUNCTION__).
-            n.'</div>';
-
-        exit;
+    if (empty($cfg['user']['pass'])) {
+        echo txp_setup_progress_meter(3).n.'<div class="txp-setup">';
+        msg(gTxt('pass_required'), MSG_ERROR, __FUNCTION__);
     }
 
-    if (!is_valid_email($_SESSION['email'])) {
-        echo txp_setup_progress_meter(3).
-            n.'<div class="txp-setup">'.
-            graf(
-                span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                gTxt('email_required'),
-                array('class' => 'alert-block error')
-            ).
-            setup_back_button(__FUNCTION__).
-            n.'</div>';
-
-        exit;
+    if (!is_valid_email($cfg['user']['email'])) {
+        echo txp_setup_progress_meter(3).n.'<div class="txp-setup">';
+        msg(gTxt('email_required'), MSG_ERROR, __FUNCTION__);
     }
-*/
 
     check_config_txp(3);
     setup_db($cfg);
@@ -723,7 +678,6 @@ function check_config_txp($meter)
     }
 }
 
-
 function check_config_txp2($back='')
 {
     global $txpcfg;
@@ -737,9 +691,10 @@ function check_config_txp2($back='')
     }
 }
 
-
-
-
+/**
+ * Message box
+ *
+ */
 
 function msg($msg, $class = MSG_OK, $back='')
 {

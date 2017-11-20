@@ -327,6 +327,8 @@ function setup_try_mysql($back = false)
         }
     }
     @mysqli_close($mylink);
+    echo msg(gTxt('using_db', array(
+        '{dbname}' => strong(txpspecialchars($cfg['mysql']['db'])), ), 'raw').' ('.$cfg['mysql']['dbcharset'].')');
 
     return true;
 }
