@@ -113,8 +113,8 @@ function preamble($step = null)
     gTxtScript(array('help'));
 
     if (isset($_SESSION['lang']) && !isset($_SESSION['direction'])) {
-        $file = Txp::get('\Textpattern\L10n\Lang')->findFilename($_SESSION['lang']);
-        $meta = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($file);
+        $file = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->findFilename($_SESSION['lang']);
+        $meta = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->fetchMeta($file);
         $_SESSION['direction'] = isset($meta['direction']) ? $meta['direction'] : 'ltr';
     }
 
@@ -827,12 +827,12 @@ function setup_back_button($current = null)
 function langs()
 {
     $default = (empty($_SESSION['lang']) ? TEXTPATTERN_DEFAULT_LANG : $_SESSION['lang']);
-    $files = Txp::get('\Textpattern\L10n\Lang')->files();
+    $files = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->files();
     $langs = array();
 
     if (is_array($files) && !empty($files)) {
         foreach ($files as $file) {
-            $meta = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($file);
+            $meta = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->fetchMeta($file);
             $langs[$meta['code']] = $meta['name'];
         }
     }
@@ -871,7 +871,7 @@ function setup_load_lang($lang)
 {
     global $language;
 
-    $default_file = Txp::get('\Textpattern\L10n\Lang')->findFilename(TEXTPATTERN_DEFAULT_LANG);
+    $default_file = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->findFilename(TEXTPATTERN_DEFAULT_LANG);
     $default_textpack = array();
     $lang_textpack = array();
     $strings = array();
@@ -884,7 +884,7 @@ function setup_load_lang($lang)
         $default_textpack = $parser->parse($textpack, 'common, setup');
     }
 
-    $lang_file = Txp::get('\Textpattern\L10n\Lang')->findFilename($lang);
+    $lang_file = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->findFilename($lang);
 
     // Load the desired language strings.
     if ($textpack = @file_get_contents($lang_file)) {

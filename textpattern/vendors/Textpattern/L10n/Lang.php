@@ -30,7 +30,7 @@
 
 namespace Textpattern\L10n;
 
-class Lang
+class Lang implements \Textpattern\Container\ReusableInterface
 {
     /**
      * Language base directory that houses all the language files/textpacks.
@@ -46,7 +46,7 @@ class Lang
      * @var array
      */
 
-    protected static $files = array();
+    protected $files = array();
 
     /**
      * Constructor.
@@ -62,8 +62,8 @@ class Lang
 
         $this->lang_dir = $lang_dir;
 
-        if (!self::$files) {
-            self::$files = $this->files();
+        if (!$this->files) {
+            $this->files = $this->files();
         }
     }
 
@@ -112,7 +112,7 @@ class Lang
     {
         $out = null;
 
-        foreach (self::$files as $file) {
+        foreach ($this->files as $file) {
             $pathinfo = pathinfo($file);
 
             if ($pathinfo['filename'] === $lang_code) {
@@ -220,8 +220,8 @@ class Lang
             }
 
             // Get items from filesystem.
-            if (!empty(self::$files)) {
-                foreach (self::$files as $file) {
+            if (!empty($this->files)) {
+                foreach ($this->files as $file) {
                     $meta = $this->fetchMeta($file);
                     $name = $meta['filename'];
 

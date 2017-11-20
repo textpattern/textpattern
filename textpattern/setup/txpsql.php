@@ -183,6 +183,8 @@ function setup_txp_lang()
 {
     global $language;
 
+    Txp::getContainer()->remove('\Textpattern\L10n\Lang');
+
     if (!Txp::get('\Textpattern\L10n\Lang')->install_file($language)) {
         // If cannot install from lang file, setup the Default lang. `language` pref changed too.
         $language = TEXTPATTERN_DEFAULT_LANG;
