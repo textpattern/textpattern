@@ -125,7 +125,7 @@ class Parser
             && $sections = parse_ini_string(strtr($textpack, $replacements), true, INI_SCANNER_RAW))
         {
             foreach ($sections as $event => $strings) {
-                $event = trim($event, ' @');
+                $event = $event == 'meta' ? 'common' : trim($event, ' @');
 
                 if (!empty($group) && !in_array($event, $group)) {
                     continue;
