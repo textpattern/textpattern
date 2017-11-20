@@ -80,7 +80,7 @@ if (! isset($params['force']) && file_exists(txpath.'/config.php')) {
 
 setup_try_mysql();
 $cfg_php = setup_makeConfig($cfg);
-if (@file_put_contents(txpath.'/config.php', $cfg_php) === FALSE) {
+if (@file_put_contents(txpath.'/config.php', $cfg_php) === false) {
     msg("Can not write config.php file", MSG_ERROR);
 }
 

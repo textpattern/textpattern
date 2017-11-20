@@ -427,6 +427,7 @@ function step_createTxp()
     $cfg['site']['siteurl'] = ps('siteurl');
     $cfg['site']['theme'] = ps('theme');
     $cfg['site']['public_theme'] = ps('public_theme');
+    $cfg['site']['datadir'] = '';
 
     echo preamble();
 

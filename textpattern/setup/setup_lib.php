@@ -64,18 +64,22 @@ function setup_db($cfg = '')
 
     $themedir = $public_themes[$public_theme]['themedir'];
 
-    /*  Option 'txp-data' in manifest.json:
-        <default>           - Import /articles and /data from setup dir
-        txp-data == 'theme' - Import /articles and /data from theme dir
-        txp-data == 'none'  - Nothing to import.
-    */
+    if (empty($cfg['site']['datadir'])) {
+        /*  Option 'txp-data' in manifest.json:
+            <default>           - Import /articles and /data from setup dir
+            txp-data == 'theme' - Import /articles and /data from theme dir
+            txp-data == 'none'  - Nothing to import.
+        */
 
-    if (@$public_themes[$public_theme]['txp-data'] == 'theme') {
-        $datadir = $themedir;
-    } elseif (@$public_themes[$public_theme]['txp-data'] == 'none') {
-        $datadir = '';
+        if (@$public_themes[$public_theme]['txp-data'] == 'theme') {
+            $datadir = $themedir;
+        } elseif (@$public_themes[$public_theme]['txp-data'] == 'none') {
+            $datadir = '';
+        } else {
+            $datadir = txpath.DS.'setup';
+        }
     } else {
-        $datadir = txpath.DS.'setup';
+        $datadir = $cfg['site']['datadir'];
     }
 
     //FIXME: We are doing nothing, waiting for the further development of branch `themes`.
