@@ -130,7 +130,7 @@ class Parser
                 if (!empty($group) && !in_array($event, $group)) {
                     continue;
                 } else {
-                    foreach ($strings as $name => $data) {
+                    foreach (array_filter($strings) as $name => $data) {
                         $out[] = array(
                             'name'    => ltrim($name, ' @'),
                             'lang'    => $language,

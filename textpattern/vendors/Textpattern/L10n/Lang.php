@@ -139,7 +139,6 @@ class Lang
             $numMetaRows = 4;
             $separator = '=>';
             extract(pathinfo($file));
-//            $filename = basename($file);
             $filename = preg_replace('/\.(txt|textpack|ini)$/i', '', $basename);
             $ini = strtolower($extension) == 'ini';
 
