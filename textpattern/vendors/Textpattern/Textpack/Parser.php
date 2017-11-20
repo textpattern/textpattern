@@ -98,14 +98,14 @@ class Parser
     public function parse($textpack, $group = null)
     {
         static $replacements = array(
-            n."null" => n."_null",
-            n."yes" => n."_yes",
-            n."no" => n."_no",
-            n."true" => n."_true",
-            n."false" => n."_false",
-            n."on" => n."_on",
-            n."off" => n."_off",
-            n."none" => n."_none"
+            n."null" => n."@null",
+            n."yes" => n."@yes",
+            n."no" => n."@no",
+            n."true" => n."@true",
+            n."false" => n."@false",
+            n."on" => n."@on",
+            n."off" => n."@off",
+            n."none" => n."@none"
         );
 
         if ($group && !is_array($group)) {
@@ -125,14 +125,14 @@ class Parser
             && $sections = parse_ini_string(strtr($textpack, $replacements), true, INI_SCANNER_RAW))
         {
             foreach ($sections as $event => $strings) {
-                $event = $event == 'meta' ? 'common' : trim($event, ' _');
+                $event = trim($event, ' @');
 
                 if (!empty($group) && !in_array($event, $group)) {
                     continue;
                 } else {
                     foreach ($strings as $name => $data) {
                         $out[] = array(
-                            'name'    => ltrim($name, '_'),
+                            'name'    => ltrim($name, ' @'),
                             'lang'    => $language,
                             'data'    => $data,
                             'event'   => $event,
