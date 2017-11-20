@@ -897,7 +897,7 @@ function setup_load_lang($lang)
     $language = empty($lang_textpack) ? TEXTPATTERN_DEFAULT_LANG : $lang;
     define('LANG', $language);
 
-    $allStrings = $lang_textpack + $default_textpack;
+    $allStrings = array_merge($lang_textpack, $default_textpack);
 
     // Merge the arrays, using the default language to fill in the blanks.
     foreach ($allStrings as $meta) {
@@ -921,11 +921,12 @@ function get_public_themes_list()
 
     $public_themes = $out = array();
 
-    if ($files = glob(txpath."/{setup/themes,../themes}/*/manifest\.json", GLOB_BRACE)) {
+    if ($files = glob(txpath.DS.'{setup,..}'.DS.'themes'.DS.'*'.DS.'manifest.json', GLOB_BRACE)) {
         foreach ($files as $file) {
             $file = realpath($file);
+            $DS = preg_quote(DS);
 
-            if (preg_match('%^(.*/(\w+))/manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
+            if (preg_match('%^(.*'.$DS.'(\w+))'.$DS.'manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
                 if (@$manifest['txp-type'] == 'textpattern-theme') {
                     $key = $mm[2].'-'.md5($file);
                     $public_themes[$key] = $manifest;
