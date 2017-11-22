@@ -598,58 +598,6 @@ function langs()
     return $out;
 }
 
-/**
- * Merge the desired lang strings with fallbacks.
- *
- * The fallback language is guaranteed to exist, so any unknown strings
- * will be used from that pack to fill in any gaps.
- *
- * @param  string $lang The desired language code
- * @return array        The language-specific name-value pairs
- */
-
-function setup_load_lang($lang)
-{
-    global $language;
-
-    $default_file = Txp::get('\Textpattern\L10n\Lang')->findFilename(TEXTPATTERN_DEFAULT_LANG);
-    $default_textpack = array();
-    $lang_textpack = array();
-    $strings = array();
-
-    // Load the default language strings as fallbacks.
-    if ($textpack = @file_get_contents($default_file)) {
-        $parser = new \Textpattern\Textpack\Parser();
-        $parser->setOwner('');
-        $parser->setLanguage(TEXTPATTERN_DEFAULT_LANG);
-        $default_textpack = $parser->parse($textpack, 'common, setup');
-    }
-
-    $lang_file = Txp::get('\Textpattern\L10n\Lang')->findFilename($lang);
-
-    // Load the desired language strings.
-    if ($textpack = @file_get_contents($lang_file)) {
-        $parser = new \Textpattern\Textpack\Parser();
-        $parser->setOwner('');
-        $parser->setLanguage($lang);
-        $lang_textpack = $parser->parse($textpack, 'common, setup');
-    }
-
-    $language = empty($lang_textpack) ? TEXTPATTERN_DEFAULT_LANG : $lang;
-    @define('LANG', $language);
-
-    $allStrings = $lang_textpack + $default_textpack;
-
-    // Merge the arrays, using the default language to fill in the blanks.
-    foreach ($allStrings as $meta) {
-        if (empty($strings[$meta['name']])) {
-            $strings[$meta['name']] = $meta['data'];
-        }
-    }
-
-    return $strings;
-}
-
 
 function check_config_txp($meter)
 {
