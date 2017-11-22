@@ -462,7 +462,7 @@ function step_fbCreate()
 
     unset($cfg['mysql']['dclient_flags']);
     unset($cfg['mysql']['dbcharset']);
-    $setup_config = "setup_config: <pre>".
+    $setup_autoinstall_body = gTxt('setup_autoinstall_body')."<pre>".
         json_encode($cfg, defined('JSON_PRETTY_PRINT') ? TEXTPATTERN_JSON | JSON_PRETTY_PRINT : TEXTPATTERN_JSON).
         "</pre>";
 
@@ -493,13 +493,15 @@ function step_fbCreate()
                 ))
             ).
             graf(
+                gTxt('setup_autoinstall_text').popHelp('#', 0, 0, 'pophelp', $setup_autoinstall_body)
+            ).
+            graf(
                 gTxt('installation_postamble')
             ).
             hed(gTxt('thanks_for_interest'), 3).
             graf(
                 href(gTxt('go_to_login'), $login_url, ' class="navlink publish"')
             ).
-            $setup_config.
             n.'</div>';
     }
 }
