@@ -1186,10 +1186,11 @@ function assHead()
  * @param  int    $width    Popup window width
  * @param  int    $height   Popup window height
  * @param  string $class    HTML class
+ * @param  string $inline   Inline pophelp
  * @return string HTML
  */
 
-function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
+function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline = '')
 {
     global $txp_user, $prefs;
 
@@ -1208,9 +1209,11 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
 
     if ($url === false) {
         $atts['class'] = $class;
-        // Use inline pophelp, if unauthorized user or setup stage
-        if (empty($txp_user)) {
-            $url = '#';
+        $url = '#';
+        if (! empty($inline)) {
+            $atts['data-item'] = $inline;
+        }elseif (empty($txp_user)) {
+            // Use inline pophelp, if unauthorized user or setup stage
             $atts['data-item'] = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp($help_var);
         } else {
             $url = '?event=help&step=pophelp&item='.urlencode($help_var);
