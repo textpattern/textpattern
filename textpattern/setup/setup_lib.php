@@ -135,35 +135,29 @@ function setup_db($cfg = '')
     // --- Theme setup.
     // Load theme /styles, /forms, /pages
 
-    $public_theme = preg_replace('/\-.*/', '', $public_theme);
-
     //FIXME: We are doing nothing, waiting for the further development of branch `themes`.
-    //FIXME: Need add support /setup/themes dir for Skin->import() function
+    //$public_theme = preg_replace('/\-.*/', '', $public_theme);
     if (class_exists('\Textpattern\Skin\Main') /*&& !preg_match('%/setup/themes/%', $themedir) */) {
         //    Txp::get('\Textpattern\Skin\Main', array($public_theme => array()))->import();
-        //    safe_update('txp_section', 'skin = "'.doSlash($public_theme).'"', '1=1');
     } else {
         foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
-            safe_query("INSERT INTO `".PFX."txp_css`(name, css) VALUES('".doSlash($key)."', '".doSlash($data)."')");
+            safe_insert("txp_css", "name='".doSlash($key)."', css='".doSlash($data)."'");
         }
 
         if ($files = glob("{$themedir}/forms/*/*\.txp")) {
             foreach ($files as $file) {
                 if (preg_match('%/forms/(\w+)/(\w+)\.txp$%', $file, $mm)) {
                     $data = @file_get_contents($file);
-                    safe_query("INSERT INTO `".PFX."txp_form`(type, name, Form) VALUES('".doSlash($mm[1])."', '".doSlash($mm[2])."', '".doSlash($data)."')");
+                    safe_insert("txp_form", "type='".doSlash($mm[1])."', name='".doSlash($mm[2])."', Form='".doSlash($data)."'");
                 }
             }
         }
 
         foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
-            safe_query("INSERT INTO `".PFX."txp_page`(name, user_html) VALUES('".doSlash($key)."', '".doSlash($data)."')");
+            safe_insert("txp_page", "name='".doSlash($key)."', user_html='".doSlash($data)."'");
         }
     }
-
     // --- Theme setup end
-
-
 
     // Final rebuild category trees
     rebuild_tree_full('article');
@@ -171,7 +165,6 @@ function setup_db($cfg = '')
     rebuild_tree_full('image');
     rebuild_tree_full('file');
 }
-
 
 
 function setup_txp_lang()
