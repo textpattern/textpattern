@@ -448,7 +448,7 @@ function step_createTxp()
 
     check_config_txp(3);
     setup_db($cfg);
-    echo step_fbCreate();
+    step_fbCreate();
 }
 
 /**
@@ -458,7 +458,7 @@ function step_createTxp()
 
 function step_fbCreate()
 {
-    global $cfg, $txp_install_fail;
+    global $cfg;
 
     unset($cfg['mysql']['dclient_flags']);
     unset($cfg['mysql']['dbcharset']);
@@ -466,44 +466,31 @@ function step_fbCreate()
         json_encode($cfg, defined('JSON_PRETTY_PRINT') ? TEXTPATTERN_JSON | JSON_PRETTY_PRINT : TEXTPATTERN_JSON).
         "</pre>";
 
+    // Clear the session so no data is leaked.
+    $_SESSION = $cfg = array();
+    $warnings = @find_temp_dir() ? '' : msg(gTxt('set_temp_dir_prefs'), MSG_ALERT);
+    $login_url = $GLOBALS['rel_txpurl'].'/index.php';
+
     echo txp_setup_progress_meter(4).
-        n.'<div class="txp-setup">';
-
-    if (! empty($txp_install_fail)) {
-        // FIXME: some message txp_install_fail
-        return msg(gTxt('config_php_not_found', array(
-                    '{file}' => ''
-                )),
-                MSG_ERROR
-            ).
-            n.'</div>';
-    } else {
-        // Clear the session so no data is leaked.
-        $_SESSION = $cfg = array();
-
-        $warnings = @find_temp_dir() ? '' : msg(gTxt('set_temp_dir_prefs'), MSG_ALERT);
-
-        $login_url = $GLOBALS['rel_txpurl'].'/index.php';
-
-        return hed(gTxt('that_went_well'), 1).
-            $warnings.
-            graf(
-                gTxt('you_can_access', array(
-                    'index.php' => $login_url,
-                ))
-            ).
-            graf(
-                gTxt('setup_autoinstall_text').popHelp('#', 0, 0, 'pophelp', $setup_autoinstall_body)
-            ).
-            graf(
-                gTxt('installation_postamble')
-            ).
-            hed(gTxt('thanks_for_interest'), 3).
-            graf(
-                href(gTxt('go_to_login'), $login_url, ' class="navlink publish"')
-            ).
-            n.'</div>';
-    }
+        n.'<div class="txp-setup">'.
+        hed(gTxt('that_went_well'), 1).
+        $warnings.
+        graf(
+            gTxt('you_can_access', array(
+                'index.php' => $login_url,
+            ))
+        ).
+        graf(
+            gTxt('setup_autoinstall_text').popHelp('#', 0, 0, 'pophelp', $setup_autoinstall_body)
+        ).
+        graf(
+            gTxt('installation_postamble')
+        ).
+        hed(gTxt('thanks_for_interest'), 3).
+        graf(
+            href(gTxt('go_to_login'), $login_url, ' class="navlink publish"')
+        ).
+        n.'</div>';
 }
 
 

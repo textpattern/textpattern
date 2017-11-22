@@ -165,12 +165,6 @@ function setup_db($cfg = '')
 
 
 
-
-    // FIXME: Need some check
-    //$GLOBALS['txp_install_fail'] = 1;
-
-
-
     // Final rebuild category trees
     rebuild_tree_full('article');
     rebuild_tree_full('link');
