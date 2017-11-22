@@ -264,7 +264,7 @@ function setup_makeConfig($cfg, $doSpecial = false)
  * Try to connect to MySQL, check the database and the prefix of the tables.
  */
 
-function setup_try_mysql($back = false)
+function setup_try_mysql()
 {
     global $cfg;
 
@@ -285,22 +285,22 @@ function setup_try_mysql($back = false)
     } elseif (@mysqli_real_connect($mylink, $dhost, $cfg['mysql']['user'], $cfg['mysql']['pass'], '', $dport, $dsocket, MYSQLI_CLIENT_SSL)) {
         $cfg['mysql']['dclient_flags'] = 'MYSQLI_CLIENT_SSL';
     } else {
-        msg(gTxt('db_cant_connect'), MSG_ERROR, $back);
+        msg(gTxt('db_cant_connect'), MSG_ERROR, true);
     }
 
-    echo msg(gTxt('db_connected'), MSG_OK);
+    echo msg(gTxt('db_connected'));
 
     if (!($cfg['mysql']['table_prefix'] == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $cfg['mysql']['table_prefix']))) {
         msg(gTxt('prefix_bad_characters',
             array('{dbprefix}' => strong(txpspecialchars($cfg['mysql']['table_prefix']))), 'raw'),
-            MSG_ERROR, $back
+            MSG_ERROR, true
         );
     }
 
     if (!$mydb = mysqli_select_db($mylink, $cfg['mysql']['db'])) {
         msg(gTxt('db_doesnt_exist',
             array('{dbname}' => strong(txpspecialchars($cfg['mysql']['db']))), 'raw'),
-            MSG_ERROR, $back
+            MSG_ERROR, true
         );
     }
 
@@ -308,7 +308,7 @@ function setup_try_mysql($back = false)
     if ($tables_exist) {
         msg(gTxt('tables_exist',
             array('{dbname}' => strong(txpspecialchars($cfg['mysql']['db']))), 'raw'),
-            MSG_ERROR, $back
+            MSG_ERROR, true
         );
     }
 

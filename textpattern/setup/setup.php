@@ -92,7 +92,7 @@ if (isset($params['debug'])) {
     echo $trace->result();
 }
 
-function msg($msg, $class = MSG_OK, $back='')
+function msg($msg, $class = MSG_OK, $back = false)
 {
     echo "$class\t".strip_tags($msg)."\n";
     if ($class == MSG_ERROR) {

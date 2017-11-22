@@ -245,7 +245,7 @@ function step_getDbInfo()
     echo txp_setup_progress_meter(1),
         n.'<div class="txp-setup">';
 
-    check_config_txp2(__FUNCTION__);
+    check_config_txp2();
 
     echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         hed(gTxt('need_details'), 1).
@@ -313,10 +313,10 @@ function step_printConfig()
     echo txp_setup_progress_meter(2).
         n.'<div class="txp-setup">';
 
-    check_config_txp2(__FUNCTION__);
+    check_config_txp2();
 
     echo hed(gTxt('checking_database'), 2);
-    setup_try_mysql(__FUNCTION__);
+    setup_try_mysql();
 
     echo setup_config_contents().
         n.'</div>';
@@ -433,17 +433,17 @@ function step_createTxp()
 
     if (empty($cfg['user']['name'])) {
         echo txp_setup_progress_meter(3).n.'<div class="txp-setup">';
-        msg(gTxt('name_required'), MSG_ERROR, __FUNCTION__);
+        msg(gTxt('name_required'), MSG_ERROR, true);
     }
 
     if (empty($cfg['user']['pass'])) {
         echo txp_setup_progress_meter(3).n.'<div class="txp-setup">';
-        msg(gTxt('pass_required'), MSG_ERROR, __FUNCTION__);
+        msg(gTxt('pass_required'), MSG_ERROR, true);
     }
 
     if (!is_valid_email($cfg['user']['email'])) {
         echo txp_setup_progress_meter(3).n.'<div class="txp-setup">';
-        msg(gTxt('email_required'), MSG_ERROR, __FUNCTION__);
+        msg(gTxt('email_required'), MSG_ERROR, true);
     }
 
     check_config_txp(3);
@@ -532,12 +532,13 @@ function setup_config_contents()
 /**
  * Render a 'back' button that goes to the correct step.
  *
- * @param  string $current The current step in the process
  * @return HTML
  */
 
-function setup_back_button($current = null)
+function setup_back_button()
 {
+    global $step;
+
     $prevSteps = array(
         'step_getDbInfo'   => '',
         'step_getTxpLogin' => 'step_getDbInfo',
@@ -546,7 +547,7 @@ function setup_back_button($current = null)
         'step_fbCreate'    => 'step_createTxp',
     );
 
-    $prev = isset($prevSteps[$current]) ? $prevSteps[$current] : '';
+    $prev = isset($prevSteps[$step]) ? $prevSteps[$step] : '';
 
     return graf(gTxt('please_go_back')).
         n.'<form method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
@@ -677,7 +678,7 @@ function check_config_txp($meter)
     }
 }
 
-function check_config_txp2($back='')
+function check_config_txp2()
 {
     global $txpcfg;
 
@@ -686,7 +687,7 @@ function check_config_txp2($back='')
     }
 
     if (!empty($txpcfg['db22'])) {
-        echo msg(gTxt('already_installed', array('{txpath}' => basename(txpath))), MSG_ALERT, $back);
+        echo msg(gTxt('already_installed', array('{txpath}' => basename(txpath))), MSG_ALERT, true);
     }
 }
 
@@ -695,7 +696,7 @@ function check_config_txp2($back='')
  *
  */
 
-function msg($msg, $class = MSG_OK, $back='')
+function msg($msg, $class = MSG_OK, $back = false)
 {
     global $cfg;
 
@@ -706,11 +707,11 @@ function msg($msg, $class = MSG_OK, $back='')
         array('class' => $class)
     );
 
-    if (empty($back)) {
+    if (! $back) {
         return $out;
     }
 
-    echo $out . setup_back_button($back).n.'</div>';
+    echo $out . setup_back_button().n.'</div>';
     $_SESSION['cfg'] = $cfg;
     exit;
 }
