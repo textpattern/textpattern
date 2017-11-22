@@ -100,6 +100,7 @@ if (!is_valid_email($cfg['user']['email'])) {
 }
 
 setup_db($cfg);
+msg(gTxt('that_went_well'));
 
 if (isset($params['debug'])) {
     echo $trace->summary();
