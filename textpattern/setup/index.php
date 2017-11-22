@@ -570,13 +570,6 @@ function langs()
     $files = Txp::get('\Textpattern\L10n\Lang')->files();
     $langs = array();
 
-    if (is_array($files) && !empty($files)) {
-        foreach ($files as $file) {
-            $meta = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($file);
-            $langs[$meta['code']] = $meta['name'];
-        }
-    }
-
     $out = n.'<div class="txp-form-field">'.
         n.'<div class="txp-form-field-label">'.
         n.'<label for="setup_language">Please choose a language</label>'.
@@ -584,10 +577,15 @@ function langs()
         n.'<div class="txp-form-field-value">'.
         n.'<select id="setup_language" name="lang">';
 
-    foreach ($langs as $a => $b) {
-        $out .= n.'<option value="'.txpspecialchars($a).'"'.
-            (($a == $cfg['site']['lang']) ? ' selected="selected"' : '').
-            '>'.txpspecialchars($b).'</option>';
+    if (is_array($files) && !empty($files)) {
+        foreach ($files as $file) {
+            $meta = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($file);
+            if (! empty($meta['code'])) {
+                $out .= n.'<option value="'.txpspecialchars($meta['code']).'"'.
+                    (($meta['code'] == $cfg['site']['lang']) ? ' selected="selected"' : '').
+                    '>'.txpspecialchars($meta['name']).'</option>';
+            }
+        }
     }
 
     $out .= n.'</select>'.
@@ -641,7 +639,7 @@ function setup_load_lang($lang)
 
     // Merge the arrays, using the default language to fill in the blanks.
     foreach ($allStrings as $meta) {
-        if (!array_key_exists($meta['name'], $strings)) {
+        if (empty($strings[$meta['name']])) {
             $strings[$meta['name']] = $meta['data'];
         }
     }
