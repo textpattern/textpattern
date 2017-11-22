@@ -255,10 +255,11 @@ function get_public_themes_list()
 
             if (preg_match('%^(.*/(\w+))/manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
                 if (@$manifest['txp-type'] == 'textpattern-theme') {
-                    $key = $mm[2].'-'.md5($file);
+                    $key = str_replace(txpath, '', $mm[1]);
+                    $key = str_replace(dirname(txpath), '', $key);
                     $public_themes[$key] = $manifest;
                     $public_themes[$key]['themedir'] = $mm[1];
-                    $out[$key] = empty($manifest['title']) ? $mm[2] : $manifest['title']." (".$manifest['version'] .') '.str_replace(txpath, '', $mm[1]);
+                    $out[$key] = empty($manifest['title']) ? $mm[2] : $manifest['title']." (".$manifest['version'] .') '.$key;
                 }
             }
         }

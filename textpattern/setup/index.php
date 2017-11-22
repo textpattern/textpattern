@@ -623,7 +623,7 @@ function check_config_exists()
         @include txpath.'/config.php';
     }
 
-    if (!empty($txpcfg['db22'])) {
+    if (!empty($txpcfg['db'])) {
         echo msg(gTxt('already_installed', array('{txpath}' => basename(txpath))), MSG_ALERT, true);
     }
 }

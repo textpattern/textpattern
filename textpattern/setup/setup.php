@@ -30,7 +30,7 @@ if (! $file = @$params['config']) {
     exit(<<<EOF
 Usage: php setup.php --config="my-setup-config.json"
 Ohter options:
-    --force - ignore existing 'config.php' file and overwrite it.
+    --force - overwrite existing 'config.php' file.
     --debug - debug output to STDOUT.
 
 EOF
