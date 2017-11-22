@@ -97,19 +97,57 @@ class Parser
 
     public function parse($textpack, $group = null)
     {
+        static $replacements = array(
+            n."null" => n."_null",
+            n."yes" => n."_yes",
+            n."no" => n."_no",
+            n."true" => n."_true",
+            n."false" => n."_false",
+            n."on" => n."_on",
+            n."off" => n."_off",
+            n."none" => n."_none"
+        );
+
         if ($group && !is_array($group)) {
             $group = do_list($group);
         } else {
             $group = (array)$group;
         }
 
-        $lines = explode(n, (string)$textpack);
         $out = array();
         $version = false;
         $lastmod = false;
         $event = false;
         $language = $this->language;
         $owner = $this->owner;
+
+        if (strpos($textpack, '=>') === false 
+            && $sections = parse_ini_string(strtr($textpack, $replacements), true, INI_SCANNER_RAW))
+        {
+            foreach ($sections as $event => $strings) {
+                $event = $event == 'meta' ? 'common' : trim($event, ' _');
+
+                if (!empty($group) && !in_array($event, $group)) {
+                    continue;
+                } else {
+                    foreach ($strings as $name => $data) {
+                        $out[] = array(
+                            'name'    => ltrim($name, '_'),
+                            'lang'    => $language,
+                            'data'    => $data,
+                            'event'   => $event,
+                            'owner'   => $owner,
+                            'version' => $version,
+                            'lastmod' => $lastmod,
+                        );
+                    }
+                }
+            }
+
+            return $out;
+        }
+
+        $lines = explode(n, (string)$textpack);
 
         foreach ($lines as $line) {
             $line = trim($line);

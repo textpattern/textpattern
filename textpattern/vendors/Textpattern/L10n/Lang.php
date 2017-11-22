@@ -98,7 +98,7 @@ class Lang
             return array();
         }
 
-        return glob($this->lang_dir.'*.{txt,textpack}', GLOB_BRACE);
+        return glob($this->lang_dir.'*.{txt,textpack,ini}', GLOB_BRACE);
     }
 
     /**
@@ -156,7 +156,7 @@ class Lang
                 if ($ini) {
                     $langInfo = parse_ini_string(join($rows));
                     $meta['name'] = (!empty($langInfo['lang_name'])) ? $langInfo['lang_name'] : $filename;
-                    $meta['code'] = (!empty($langCode['lang_code'])) ? strtolower($langInfo['lang_code']) : $filename;
+                    $meta['code'] = (!empty($langInfo['lang_code'])) ? strtolower($langInfo['lang_code']) : $filename;
                     $meta['direction'] = (!empty($langInfo['lang_dir'])) ? strtolower($langInfo['lang_dir']) : 'ltr';
                 } else {
                     $langName = do_list($rows[1], $separator);
