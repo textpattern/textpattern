@@ -76,16 +76,29 @@ assert_system_requirements();
 $textarray = setup_load_lang(@$cfg['site']['lang']);
 
 if (! isset($params['force']) && file_exists(txpath.'/config.php')) {
-    msg("config.php already exist", MSG_ERROR);
+    msg(gTxt('already_installed'), MSG_ERROR);
 }
 
 setup_try_mysql();
 $cfg_php = setup_makeConfig($cfg);
 if (@file_put_contents(txpath.'/config.php', $cfg_php) === false) {
-    msg("Can not write config.php file", MSG_ERROR);
+    msg(gTxt('config_php_write_error'), MSG_ERROR);
 }
 
 @include txpath.'/config.php';
+
+if (empty($cfg['user']['name'])) {
+    msg(gTxt('name_required'), MSG_ERROR);
+}
+
+if (empty($cfg['user']['pass'])) {
+    msg(gTxt('pass_required'), MSG_ERROR);
+}
+
+if (!is_valid_email($cfg['user']['email'])) {
+    msg(gTxt('email_required'), MSG_ERROR);
+}
+
 setup_db($cfg);
 
 if (isset($params['debug'])) {

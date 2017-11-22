@@ -245,7 +245,7 @@ function step_getDbInfo()
     echo txp_setup_progress_meter(1),
         n.'<div class="txp-setup">';
 
-    check_config_txp2();
+    check_config_exists();
 
     echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         hed(gTxt('need_details'), 1).
@@ -313,7 +313,7 @@ function step_printConfig()
     echo txp_setup_progress_meter(2).
         n.'<div class="txp-setup">';
 
-    check_config_txp2();
+    check_config_exists();
 
     echo hed(gTxt('checking_database'), 2);
     setup_try_mysql();
@@ -628,7 +628,7 @@ function check_config_txp($meter)
     }
 }
 
-function check_config_txp2()
+function check_config_exists()
 {
     global $txpcfg;
 

@@ -23,13 +23,8 @@
 
 function setup_db($cfg = '')
 {
-    // FIXME: Need check $cfg
-    if (empty($cfg)) {
-        exit('No setup config');
-    }
-
     global $txpcfg, $DB, $prefs, $txp_user, $txp_groups;
-    global $permlink_mode, $siteurl, $theme_name, $public_themes;
+    global $permlink_mode, $siteurl, $theme_name, $public_themes, $step;
     include_once txpath.'/lib/txplib_db.php';
     include_once txpath.'/lib/admin_config.php';
 
@@ -82,7 +77,11 @@ function setup_db($cfg = '')
     }
 
     if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
-        die("Textpattern database table already exists. Can't run setup.");
+        if (! empty($step)) {
+            $step = 'step_printConfig';
+            echo txp_setup_progress_meter(4).n.'<div class="txp-setup">';
+        }
+        msg(gTxt('tables_exist', array('{dbname}' => @$txpcfg['db'])), MSG_ERROR, true);
     }
 
     $setup = new \Textpattern\DB\Core();
