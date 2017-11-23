@@ -1554,6 +1554,38 @@ $(document).keydown(function (e) {
     }
 });
 
+jQuery.fn.txpMenu = function(button) {
+    var menu = this, dir = langdir === 'rtl' ? 'left' : 'right'
+
+    menu.click(function (e) {
+        e.stopPropagation()
+    }).menu({
+        select: function( event, ui ) {
+            ui.item.find('input[type="checkbox"]').click()
+            menu.menu("focus", null, ui.item)
+        }
+    }).find('input[type="checkbox"]').keyup(function(e) {
+        e.preventDefault()
+    })
+
+    !button || button.on('click', function () {
+        menu.toggle().position(
+        {
+            my: dir+" top",
+            at: dir+" bottom",
+            of: this
+        }).focus().menu("focus", null, menu.find(".ui-menu-item:first"))
+
+        $(document).one('click blur', function () {
+            menu.hide();
+        });
+
+        return false
+    })
+
+    return this
+}
+
 /**
  * Search tool.
  *
@@ -1563,7 +1595,14 @@ $(document).keydown(function (e) {
 function txp_search()
 {
     var $ui = $('.txp-search'),
-        dir = langdir === 'rtl' ? 'left' : 'right'
+        dir = langdir === 'rtl' ? 'left' : 'right',
+        button = $ui.find('.txp-search-options').button({
+            showLabel: false,
+            icon: 'ui-icon-triangle-1-s'
+        }),
+        menu = $ui.find('.txp-dropdown')
+
+    menu.hide().txpMenu(button)
 
     $ui.find('.txp-search-button').button({
         showLabel: false,
@@ -1573,35 +1612,7 @@ function txp_search()
         $ui.submit()
     });
 
-    $ui.find('.txp-search-options').button({
-        showLabel: false,
-        icon: 'ui-icon-triangle-1-s'
-    }).on('click', function (e) {
-        var menu = $ui.find('.txp-dropdown').toggle().position(
-        {
-            my: dir+" top",
-            at: dir+" bottom",
-            of: this
-        }).focus();
-
-        menu.menu( "focus", null, menu.find( ".ui-menu-item:first" ) )
-
-        $(document).one('click blur', function () {
-            menu.hide();
-        });
-
-        return false;
-    });
-
-    $ui.find('.txp-search-buttons').controlgroup();
-    $ui.find('.txp-dropdown').hide().menu({
-        select: function( event, ui ) {
-            $(this).menu("focus", null, ui.item)
-            ui.item.find('input[type="checkbox"]').click()
-        }
-    }).click(function (e) {
-        e.stopPropagation();
-    });
+    $ui.find('.txp-search-buttons').controlgroup()
 
     $ui.find('.txp-search-clear').click(function(e) {
         e.preventDefault()
@@ -1650,7 +1661,7 @@ jQuery.fn.txpColumnize = function ()
         }
 
         var disabled = $this.hasClass('asc') || $this.hasClass('desc') ? ' disabled="disabled"' : '';
-        var $li = $('<li><div role="menuitem"><input class="checkbox active" id="opt-col-' + index + '-' + tabind + '" data-name="list_options" checked="checked" value="' + $id + '" data-index="' + index + '" type="checkbox"' + disabled + '><label for="opt-col-' + index + '-' + tabind + '">' + $title + '</label></div></li>');
+        var $li = $('<li><div role="menuitem"><input tabindex="-1" class="checkbox active" id="opt-col-' + index + '-' + tabind + '" data-name="list_options" checked="checked" value="' + $id + '" data-index="' + index + '" type="checkbox"' + disabled + '><label for="opt-col-' + index + '-' + tabind + '">' + $title + '</label></div></li>');
         var $target = $table.find('tr>*:nth-child(' + (index + 1) + ')');
         var me = $li.find('#opt-col-' + index + '-' + tabind).on('change', function (ev) {
             toggleColumn($id, $target, $(this).prop('checked'));
@@ -1676,31 +1687,12 @@ jQuery.fn.txpColumnize = function ()
     }
 
     var $ui = $('<div class="txp-list-options"><a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> ' + textpattern.gTxt('list_options') + '</a></div>');
-    var $menu = $('<ul class="txp-dropdown" role="menu" />');
+    var $menu = $('<ul class="txp-dropdown" role="menu" />')
 
-    $menu.html($('<li><div role="menuitem"><input class="checkbox active" id="opt-col-all' + tabind + '" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + '><label for="opt-col-all' + tabind + '">' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
+    $menu.html($('<li><div role="menuitem"><input tabindex="-1" class="checkbox active" id="opt-col-all' + tabind + '" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + '><label for="opt-col-all' + tabind + '">' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
 
-    $ui.append($menu);
-
-    $ui.find('.txp-list-options-button').on('click', function (e) {
-        var dir = (langdir == 'rtl' ? 'left' : 'right');
-        var menu = $ui.find('.txp-dropdown').toggle().position(
-        {
-            my: dir+" top",
-            at: dir+" bottom",
-            of: this
-        });
-
-        $(document).one('click blur', function () {
-            menu.hide();
-        });
-
-        return false;
-    });
-
-    $ui.find('.txp-dropdown').hide().menu().click(function (e) {
-        e.stopPropagation();
-    });
+    $ui.append($menu)
+    $ui.find('.txp-dropdown').hide().txpMenu($ui.find('.txp-list-options-button'))
 
     $ui.txpMultiEditForm({
         'checkbox'   : 'input:not(:disabled)[data-name="list_options"][type=checkbox]',
