@@ -1562,7 +1562,8 @@ $(document).keydown(function (e) {
 
 function txp_search()
 {
-    var $ui = $('.txp-search');
+    var $ui = $('.txp-search'),
+        dir = langdir === 'rtl' ? 'left' : 'right'
 
     $ui.find('.txp-search-button').button({
         showLabel: false,
@@ -1576,21 +1577,12 @@ function txp_search()
         showLabel: false,
         icon: 'ui-icon-triangle-1-s'
     }).on('click', function (e) {
-        if (langdir === 'rtl') {
-            var menu = $ui.find('.txp-dropdown').toggle().position(
-            {
-                my: "left top",
-                at: "left bottom",
-                of: this
-            });
-        } else {
-            var menu = $ui.find('.txp-dropdown').toggle().position(
-            {
-                my: "right top",
-                at: "right bottom",
-                of: this
-            });
-        };
+        var menu = $ui.find('.txp-dropdown').toggle().position(
+        {
+            my: dir+" top",
+            at: dir+" bottom",
+            of: this
+        });
 
         $(document).one('click blur', function () {
             menu.hide();
