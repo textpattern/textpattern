@@ -98,14 +98,14 @@ class Parser
     public function parse($textpack, $group = null)
     {
         static $replacements = array(
-            n."null" => n."_null",
-            n."yes" => n."_yes",
-            n."no" => n."_no",
-            n."true" => n."_true",
-            n."false" => n."_false",
-            n."on" => n."_on",
-            n."off" => n."_off",
-            n."none" => n."_none"
+            "\nnull" => "\n_null",
+            "\nyes" => "\n_yes",
+            "\nno" => "\n_no",
+            "\ntrue" => "\n_true",
+            "\nfalse" => "\n_false",
+            "\non" => "\n_on",
+            "\noff" => "\n_off",
+            "\nnone" => "\n_none"
         );
 
         if ($group && !is_array($group)) {
