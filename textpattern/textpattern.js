@@ -1582,7 +1582,9 @@ function txp_search()
             my: dir+" top",
             at: dir+" bottom",
             of: this
-        });
+        }).focus();
+
+        menu.menu( "focus", null, menu.find( ".ui-menu-item:first" ) )
 
         $(document).one('click blur', function () {
             menu.hide();
@@ -1592,7 +1594,12 @@ function txp_search()
     });
 
     $ui.find('.txp-search-buttons').controlgroup();
-    $ui.find('.txp-dropdown').hide().menu().click(function (e) {
+    $ui.find('.txp-dropdown').hide().menu({
+        select: function( event, ui ) {
+            $(this).menu("focus", null, ui.item)
+            ui.item.find('input[type="checkbox"]').click()
+        }
+    }).click(function (e) {
         e.stopPropagation();
     });
 
