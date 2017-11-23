@@ -249,7 +249,7 @@ class Filter
             $name = ($key === 'all') ? 'select_all' : 'search_method[]';
             $method_list[] = tag(
                 n.tag(
-                    checkbox($name, $key, ($set_all || in_array($key, $selected)), 0, 'search-'.$key.$id_counter).
+                    checkbox($name, $key, ($set_all || in_array($key, $selected)), -1, 'search-'.$key.$id_counter).
                     n.tag($value, 'label', array('for' => 'search-'.$key.$id_counter)).n,
                     'div').n,
                 'li'
