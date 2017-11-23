@@ -1,0 +1,22 @@
+{
+    "site": {
+        "lang": "en",
+        "siteurl": "",
+        "theme": "",
+        "public_theme": "",
+        "datadir": ""
+    },
+    "mysql": {
+        "user": "",
+        "pass": "",
+        "host": "localhost",
+        "db": "",
+        "table_prefix": ""
+    },
+    "user": {
+        "realname": "",
+        "email": "",
+        "name": "",
+        "pass": ""
+    }
+}

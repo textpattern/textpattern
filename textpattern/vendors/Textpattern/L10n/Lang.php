@@ -196,7 +196,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $in_db = safe_rows(
                 "lang, UNIX_TIMESTAMP(MAX(lastmod)) AS lastmod",
                 'txp_lang',
-                "1 = 1 GROUP BY lang ORDER BY lastmod DESC"
+                "owner = '' GROUP BY lang ORDER BY lastmod DESC"
             );
         }
 
