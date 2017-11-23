@@ -1643,9 +1643,11 @@ var uniqueID = (function() {
 jQuery.fn.txpColumnize = function ()
 {
     var $table = $(this), items = [], selectAll = true, stored = true,
-        $headers = $table.find('thead tr>th'), tabind = uniqueID();
+        $headers = $table.find('thead tr>th');
 
-    if ($table.closest('form').find('.txp-list-options').length) return this
+    if ($table.closest('form').find('.txp-list-options').length) {
+        return this
+    }
 
     $headers.each(function (index) {
         var $this = $(this), $title = $this.text().trim(), $id = $this.data('col');
@@ -1663,9 +1665,9 @@ jQuery.fn.txpColumnize = function ()
         }
 
         var disabled = $this.hasClass('asc') || $this.hasClass('desc') ? ' disabled="disabled"' : '';
-        var $li = $('<li><div role="menuitem"><input tabindex="-1" class="checkbox active" id="opt-col-' + index + '-' + tabind + '" data-name="list_options" checked="checked" value="' + $id + '" data-index="' + index + '" type="checkbox"' + disabled + '><label for="opt-col-' + index + '-' + tabind + '">' + $title + '</label></div></li>');
+        var $li = $('<li><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="list_options" checked="checked" value="' + $id + '" data-index="' + index + '" type="checkbox"' + disabled + ' />&nbsp;' + $title + '</label></div></li>');
         var $target = $table.find('tr>*:nth-child(' + (index + 1) + ')');
-        var me = $li.find('#opt-col-' + index + '-' + tabind).on('change', function (ev) {
+        var me = $li.find('input').on('change', function (ev) {
             toggleColumn($id, $target, $(this).prop('checked'));
         });
 
@@ -1689,12 +1691,12 @@ jQuery.fn.txpColumnize = function ()
     }
 
     var $ui = $('<div class="txp-list-options"><a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> ' + textpattern.gTxt('list_options') + '</a></div>');
-    var $menu = $('<ul class="txp-dropdown" role="menu" />')
+    var $menu = $('<ul class="txp-dropdown" role="menu" />').hide()
 
-    $menu.html($('<li><div role="menuitem"><input tabindex="-1" class="checkbox active" id="opt-col-all' + tabind + '" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + '><label for="opt-col-all' + tabind + '">' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
+    $menu.html($('<li><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + ' />&nbsp;' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
 
     $ui.append($menu)
-    $ui.find('.txp-dropdown').hide().txpMenu($ui.find('.txp-list-options-button'))
+    $menu.txpMenu($ui.find('.txp-list-options-button'))
 
     $ui.txpMultiEditForm({
         'checkbox'   : 'input:not(:disabled)[data-name="list_options"][type=checkbox]',
@@ -1705,6 +1707,7 @@ jQuery.fn.txpColumnize = function ()
     });
 
     $(this).closest('form').prepend($ui);
+
     return this
 }
 
