@@ -22,8 +22,7 @@
     "phplint": "1.7.4"
   },
   "dependencies": {
-    "jquery": "3.2.1",
-    "jquery-ui-multiselect-widget": "2.0.1"
+    "jquery": "3.2.1"
   },
   "scripts": {
     "phplint": "phplint '**/*.php' '!node_modules/**'",
