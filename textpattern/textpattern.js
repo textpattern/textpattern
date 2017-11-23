@@ -1560,9 +1560,11 @@ jQuery.fn.txpMenu = function(button) {
     menu.click(function (e) {
         e.stopPropagation()
     }).menu({
-        select: function( event, ui ) {
-            ui.item.find('input[type="checkbox"]').click()
+        select: function(e, ui) {
             menu.menu("focus", null, ui.item)
+            if (e.relatedTarget !== null) {
+                ui.item.find('input[type="checkbox"]').click()
+            }
         }
     }).find('input[type="checkbox"]').keyup(function(e) {
         e.preventDefault()
