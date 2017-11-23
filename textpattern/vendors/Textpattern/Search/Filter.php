@@ -226,7 +226,7 @@ class Filter
             'default_method' => 'all',
             'submit_as'      => 'get', // or 'post'
             'placeholder'    => '',
-            'label_all'      => 'search_all',
+            'label_all'      => 'toggle_all_selected',
             'class'          => '',
         ), (array) $options));
 
