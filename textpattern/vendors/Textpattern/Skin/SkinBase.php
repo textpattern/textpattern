@@ -32,12 +32,13 @@
 
 namespace Textpattern\Skin {
 
-    abstract class SkinBase extends MainBase implements SkinInterface
+    abstract class SkinBase extends SkinsBase implements SkinAssetInterface
     {
         /**
          * The skin to work with.
          *
          * @var string
+         * @see setSkin()
          */
 
         protected $skin;
@@ -70,50 +71,39 @@ namespace Textpattern\Skin {
         protected $locked = false;
 
         /**
-         * The skin copy title.
-         *
-         * @var string
-         */
-
-        protected $copy;
-
-        /**
-         * The skin infos to work with as an associative array.
-         *
-         * @var array
-         */
-
-        protected $infos;
-
-        /**
          * Constructor.
          *
          * @param string $skin  The skin name (set the related property);
          * @param array  $infos Skin infos (set the related property).
          */
 
-        public function __construct($skin = null, $infos = null)
+        public function __construct($skin = null)
         {
-            $skin ? $this->skin = $skin : '';
-            $infos ? $this->infos = $infos : '';
+            $skin ? $this->setSkin($skin) : '';
+        }
+
+        /**
+         * Set the skin property
+         */
+
+        public function setSkin($skin)
+        {
+            $this->skin = strtolower(sanitizeForUrl($skin));
+            $this->isInstalled = null;
+            $this->isInUse = null;
         }
 
         /**
          * {@inheritdoc}
          */
 
-        final public function skinIsInstalled($copy = false)
+        final public function skinIsInstalled()
         {
-            if ($this->skin) {
-                if ($this->isInstalled === null) {
-                    $name = strtolower(sanitizeForUrl($this->copy ? $this->copy : $this->skin));
-                    $this->isInstalled = self::isInstalled($name);
-                }
-
-                return $this->isInstalled;
+            if ($this->isInstalled === null) {
+                $this->isInstalled = self::isInstalled($this->skin);
             }
 
-            throw new \Exception('undefined_skin');
+            return $this->isInstalled;
         }
 
         /**
@@ -124,19 +114,19 @@ namespace Textpattern\Skin {
 
         public static function isInstalled($skin)
         {
-            $skin = strtolower(sanitizeForUrl($skin));
+            $inInstalled = static::$installed ? array_key_exists($skin, static::$installed) : false;
 
-            if (static::$installed === null) {
-                return (bool) safe_field('name', 'txp_skin', "name ='".doSlash($skin)."'");
+            if ($inInstalled) {
+                return $inInstalled;
             } else {
-                return array_key_exists($skin, static::$installed);
+                return (bool) safe_field('name', 'txp_skin', "name ='".doSlash($skin)."'");
             }
         }
 
         /**
          * Checks if a skin directory exists and is readable.
          *
-         * @return string|bool path or false
+         * @return bool
          */
 
         public function isReadable($path = null)
@@ -150,8 +140,8 @@ namespace Textpattern\Skin {
          * Checks if the Skin directory exists and is writable;
          * if not, creates it.
          *
-         * @param  string      $path See getPath().
-         * @return string|bool path or false
+         * @param  string $path See getPath().
+         * @return bool
          */
 
         public function isWritable($path = null)
@@ -164,7 +154,7 @@ namespace Textpattern\Skin {
         /**
          * Checks if a directory or file exists.
          *
-         * @return string|bool path or false
+         * @return bool
          */
 
         public static function isType($path)
@@ -185,19 +175,19 @@ namespace Textpattern\Skin {
 
             if ($this->locked) {
                 return true;
-            } else {
-                while (!($locked = $this->mkDir('lock')) && $time < 3) {
-                    sleep(0.5);
-                    $time = microtime(true) - $time_start;
-                }
-
-                if ($locked) {
-                    $this->locked = true;
-                    return $locked;
-                }
-
-                throw new \Exception("unable_to_create_the_skin_lock_directory");
             }
+
+            while (!($locked = $this->mkDir('lock')) && $time < 3) {
+                sleep(0.5);
+                $time = microtime(true) - $time_start;
+            }
+
+            if ($locked) {
+                $this->locked = true;
+                return $locked;
+            }
+
+            $this->setResults(gtxt('unable_to_lock_skin'));
         }
 
         /**
@@ -212,11 +202,8 @@ namespace Textpattern\Skin {
                 return true;
             }
 
-            throw new \Exception(
-                gtxt(
-                    'unable_to_create_skin_directory',
-                    array('{directory}' => basename($path))
-                )
+            $this->setResults(
+                gtxt('directory_creation_failure', array('{name}' => basename($path)))
             );
         }
 
@@ -233,7 +220,7 @@ namespace Textpattern\Skin {
                 return true;
             }
 
-            throw new \Exception("unable_to_unlock_the_skin_directory");
+            $this->setResults(gtxt("unable_to_unlock_the_skin_directory"));
         }
 
         /**
@@ -248,11 +235,8 @@ namespace Textpattern\Skin {
                 return true;
             }
 
-            throw new \Exception(
-                gtxt(
-                    'unable_to_remove_skin_directory',
-                    array('{directory}' => basename($path))
-                )
+            $this->setResults(
+                gtxt('directory_deletion_failure', array('{name}' => basename($path)))
             );
         }
 
@@ -271,9 +255,7 @@ namespace Textpattern\Skin {
 
         public function getPath($path = null)
         {
-            return self::getBasePath().'/'.
-                strtolower(sanitizeForUrl($this->copy ? $this->copy : $this->skin)).
-                ($path ? '/'.$path : '');
+            return self::getBasePath().'/'.$this->skin.($path ? '/'.$path : '');
         }
     }
 }

@@ -37,7 +37,6 @@ namespace Textpattern\Skin {
     {
         protected static $dir = 'pages';
         protected static $table = 'txp_page';
-        protected static $columns = array('skin', 'name', 'user_html');
         protected static $essential = array('default', 'error_default');
 
         /**
@@ -49,11 +48,7 @@ namespace Textpattern\Skin {
             $sql = array();
 
             foreach ($templates as $name) {
-                $sql[] = "("
-                    ."'".doSlash(strtolower(sanitizeForUrl($this->skin)))."', "
-                    ."'".doSlash($name)."', "
-                    ."''"
-                    .")";
+                $sql[] = "('".doSlash($name)."', '', '".doSlash($this->skin)."')";
             }
 
             return $sql;
@@ -65,11 +60,9 @@ namespace Textpattern\Skin {
 
         protected function getImportSQLValue(RecDirIterator $file)
         {
-            return "("
-                ."'".doSlash($this->skin)."', "
-                ."'".doSlash($file->getTemplateName())."', "
-                ."'".doSlash($file->getTemplateContents())."'"
-                .")";
+            return "('".doSlash($file->getTemplateName())."', "
+                   ."'".doSlash($file->getTemplateContents())."', "
+                   ."'".doSlash($this->skin)."')";
         }
 
         /**

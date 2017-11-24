@@ -28,6 +28,9 @@
  * @package Admin\CSS
  */
 
+use Textpattern\Skin\Skins;
+use Textpattern\Skin\Skin;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -165,11 +168,10 @@ function css_edit($message = '', $refresh_partials = false)
 
     $name = sanitizeForPage(assert_string(gps('name')));
     $newname = sanitizeForPage(assert_string(gps('newname')));
-    $skin = ($skin !== '') ? $skin : get_pref('skin_editing', 'default', true);
+    $skin = ($skin !== '') ? $skin : Skin::getCurrent();
     $class = 'async';
 
-    css_set_skin($skin);
-    $skin_list = get_skin_list();
+    Skin::setCurrent($skin);
 
     if ($step == 'css_delete' || empty($name) && $step != 'pour' && !$savenew) {
         $name = get_pref('last_css_saved', $default_name);
@@ -203,16 +205,7 @@ function css_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = '';
-
-    if (count($skin_list) > 1) {
-        $skinBlock =
-            n.form(
-                inputLabel('skin', selectInput('skin', $skin_list, $skin, false, 1, 'skin'), 'skin').
-                eInput('css').
-                sInput('css_skin_change')
-            , '', '', 'post');
-    }
+    $skinBlock = n.Skins::renderSwitchForm('css', 'css_skin_change', $skin);
 
     $buttons = graf(
         tag_void('input', array(
@@ -299,7 +292,7 @@ function css_save()
     $name = sanitizeForPage(assert_string(ps('name')));
     $newname = sanitizeForPage(assert_string(ps('newname')));
 
-    css_set_skin($skin);
+    Skin::setCurrent($skin);
 
     $save_error = false;
     $message = '';
@@ -416,23 +409,10 @@ function css_skin_change($skin = null)
     }
 
     if ($skin) {
-        css_set_skin($skin);
+        Skin::setCurrent($skin);
     }
 
     return true;
-}
-
-/**
- * Set the current skin so it persists across panels.
- *
- * @param  string $skin The skin name to store
- * @todo   Generalise this elsewhere?
- * @return string HTML
- */
-
-function css_set_skin($skin)
-{
-    set_pref('skin_editing', $skin, 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
 }
 
 /**

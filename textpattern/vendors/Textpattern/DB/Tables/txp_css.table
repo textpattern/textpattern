@@ -1,6 +1,6 @@
 name    VARCHAR(255) NOT NULL,
 css     MEDIUMTEXT   NOT NULL,
-skin    VARCHAR(255) NOT NULL DEFAULT 'default',
+skin    VARCHAR(63)  NOT NULL DEFAULT 'default',
 lastmod DATETIME         NULL DEFAULT NULL,
 
-UNIQUE name_skin (name(200), skin(50))
+UNIQUE name_skin (name(63), skin(63))

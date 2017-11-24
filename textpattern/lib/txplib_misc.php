@@ -2923,30 +2923,6 @@ function get_essential_forms()
     return $essential;
 }
 
-
-/**
- * Gets a list of skins in use.
- *
- * @return  array An array of skin names
- * @since   4.6.0
- * @package Skin
- */
-
-function get_skin_list()
-{
-    static $skins = null;
-
-    if ($skins === null) {
-        $skinList = safe_rows('name, title', 'txp_skin', '1=1');
-
-        foreach ($skinList as $skinDef) {
-            $skins[$skinDef['name']] = $skinDef['title'];
-        }
-    }
-
-    return $skins;
-}
-
 /**
  * Updates a list's per page number.
  *
@@ -6900,9 +6876,6 @@ function get_files_content($dir, $ext)
 
 function get_prefs_theme()
 {
-    //FIXME: After merge 'themes' branch
-
-    return array();
     $out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true);
     if (empty($out)) {
         return array();
@@ -6954,4 +6927,76 @@ function real_max_upload_size($user_max, $php = true)
 
     // 2^53 - 1 is max safe Javascript integer, let 8192Tb
     return number_format(min($real_max, pow(2, 53) - 1), 0, '.', '');
+}
+
+/**
+ * Replaces the JSON_PRETTY_PRINT flag in json_encode for PHP versions under 5.4.
+ *
+ * From https://stackoverflow.com/a/9776726
+ *
+ * @param  string $json The JSON contents to prettify;
+ * @return string Prettified JSON contents.
+ */
+
+function JSONPrettyPrint($json)
+{
+    $result = '';
+    $level = 0;
+    $in_quotes = false;
+    $in_escape = false;
+    $ends_line_level = null;
+    $json_length = strlen($json);
+
+    for ($i = 0; $i < $json_length; $i++) {
+        $char = $json[$i];
+        $new_line_level = null;
+        $post = "";
+
+        if ($ends_line_level !== null) {
+            $new_line_level = $ends_line_level;
+            $ends_line_level = null;
+        }
+
+        if ($in_escape) {
+            $in_escape = false;
+        } elseif ($char === '"') {
+            $in_quotes = !$in_quotes;
+        } elseif (! $in_quotes) {
+            switch ($char) {
+                case '}':
+                case ']':
+                    $level--;
+                    $ends_line_level = null;
+                    $new_line_level = $level;
+                    break;
+                case '{':
+                case '[':
+                    $level++;
+                case ',':
+                    $ends_line_level = $level;
+                    break;
+                case ':':
+                    $post = " ";
+                    break;
+                case " ":
+                case "    ":
+                case "\n":
+                case "\r":
+                    $char = "";
+                    $ends_line_level = $new_line_level;
+                    $new_line_level = null;
+                    break;
+            }
+        } elseif ($char === '\\') {
+            $in_escape = true;
+        }
+
+        if ($new_line_level !== null) {
+            $result .= "\n".str_repeat("    ", $new_line_level);
+        }
+
+        $result .= $char.$post;
+    }
+
+    return $result;
 }

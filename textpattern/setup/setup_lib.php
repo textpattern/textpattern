@@ -72,7 +72,7 @@ function setup_db($cfg = '')
     }
 
     //FIXME: We are doing nothing, waiting for the further development of branch `themes`.
-    if (class_exists('\Textpattern\Skin\Main')) {
+    if (class_exists('\Textpattern\Skin\Skin')) {
         $datadir = '';
     }
 
@@ -137,9 +137,11 @@ function setup_db($cfg = '')
 
     //FIXME: We are doing nothing, waiting for the further development of branch `themes`.
     //$public_theme = preg_replace('/\-.*/', '', $public_theme);
-    if (class_exists('\Textpattern\Skin\Main') /*&& !preg_match('%/setup/themes/%', $themedir) */) {
-        //    Txp::get('\Textpattern\Skin\Main', array($public_theme => array()))->import();
-    } else {
+    if (class_exists('\Textpattern\Skin\Skin') /*&& !preg_match('%/setup/themes/%', $themedir) */) {
+        // $Skin = Txp::get('\Textpattern\Skin\Skin', $public_theme);
+        // $Skin->import();
+        // $Skin->updateSkinInUse();    } else {
+
         foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
             safe_insert("txp_css", "name='".doSlash($key)."', css='".doSlash($data)."'");
         }
