@@ -291,7 +291,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                 if (box.prop('checked')) {
                     $(this).closest(opt.highlighted).addClass(opt.selectedClass);
 
-                    if (-1 == $.inArray(box.val(), textpattern.Relay.data.selected)) { 
+                    if (-1 == $.inArray(box.val(), textpattern.Relay.data.selected)) {
                         textpattern.Relay.data.selected.push(box.val())
                     }
                 } else {
@@ -652,7 +652,7 @@ textpattern.Relay =
     callback: function (event, data, timeout) {
         clearTimeout(textpattern.Relay.timeouts[event])
 
-        timeout = !timeout ? 0 : parseInt(timeout, 10) 
+        timeout = !timeout ? 0 : parseInt(timeout, 10)
         if (!timeout || isNaN(timeout)) {
             return $(this).trigger(event, data)
         }
@@ -896,9 +896,9 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 
             callback(data.event)
         }
- 
+
     $(list).addClass('disabled')
-    
+
     if (typeof data.html == 'undefined') {
         $('<html />').load(url, data.data, function(responseText, textStatus, jqXHR) {
             handle(this)
@@ -1693,7 +1693,7 @@ jQuery.fn.txpColumnize = function ()
     var $ui = $('<div class="txp-list-options"><a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> ' + textpattern.gTxt('list_options') + '</a></div>');
     var $menu = $('<ul class="txp-dropdown" role="menu" />').hide()
 
-    $menu.html($('<li><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + ' />&nbsp;' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
+    $menu.html($('<li class="txp-dropdown-toggle-all"><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + ' />&nbsp;' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
 
     $ui.append($menu)
     $menu.txpMenu($ui.find('.txp-list-options-button'))
@@ -1879,7 +1879,7 @@ jQuery.fn.txpUploadPreview = function(template) {
 
     form.find('input[type="file"]').on('change', function (e) {
         last.nextAll().remove()
-        
+
         $(this.files).each(function (index) {
             var preview = '', mime = this.type.split('/'), hash = typeof(md5) == 'function' ? md5(this.name) : index, status = this.size > maxSize ? 'alert' : '';
 
