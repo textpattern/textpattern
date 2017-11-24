@@ -29,6 +29,7 @@
  */
 
 use Textpattern\Search\Filter;
+use Textpattern\Skin\Skins;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -38,7 +39,7 @@ if ($event == 'section') {
     require_privs('section');
 
     global $all_skins, $all_pages, $all_styles;
-    $all_skins = safe_column('name', 'txp_skin', "1=1");
+    $all_skins = Skins::getInstalled();
     $all_pages = safe_rows('name, skin', 'txp_page', "1=1 ORDER BY name");
     $all_styles = safe_rows('name, skin', 'txp_css', "1=1 ORDER BY name");
 

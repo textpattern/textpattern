@@ -38,7 +38,6 @@ namespace Textpattern\Skin {
         protected static $dir = 'forms';
         protected static $depth = 1; // Forms stored by type in subfolders.
         protected static $table = 'txp_form';
-        protected static $columns = array('skin', 'name', 'type', 'Form');
         protected static $essential = array(
             'comments'         => 'comment',
             'comments_display' => 'comment',
@@ -57,12 +56,10 @@ namespace Textpattern\Skin {
             $sql = array();
 
             foreach ($templates as $name => $type) {
-                $sql[] = "("
-                  ."'".doSlash(strtolower(sanitizeForUrl($this->skin)))."', "
-                  ."'".doSlash($name)."', "
-                  ."'".doSlash($type)."', "
-                  ."''"
-                  .")";
+                $sql[] = "('".doSlash($name)."', "
+                         ."'".doSlash($type)."', "
+                         ."'', "
+                         ."'".doSlash($this->skin)."')";
             }
 
             return $sql;
@@ -74,12 +71,10 @@ namespace Textpattern\Skin {
 
         protected function getImportSQLValue(RecDirIterator $file)
         {
-            return "("
-                ."'".doSlash($this->skin)."', "
-                ."'".doSlash($file->getTemplateName())."', "
-                ."'".doSlash($file->getTemplateType())."', "
-                ."'".doSlash($file->getTemplateContents())."'"
-                .")";
+            return "('".doSlash($file->getTemplateName())."', "
+                   ."'".doSlash($file->getTemplateType())."', "
+                   ."'".doSlash($file->getTemplateContents())."', "
+                   ."'".doSlash($this->skin)."')";
         }
 
         /**

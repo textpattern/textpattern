@@ -22,7 +22,7 @@
  */
 
 /**
- * Main
+ * Skins
  *
  * Manages the Skin admin tab features.
  *
@@ -32,28 +32,24 @@
 
 namespace Textpattern\Skin {
 
-    class Main extends MainBase implements MainInterface
+    class Skins extends SkinsBase implements SkinsInterface
     {
         /**
-         * Stores skin(s) instances.
-         *
-         * @var array
+         * {@inheritdoc}
          */
 
-        protected $skins = array();
+        protected $skins;
 
         /**
          * Constructor.
          *
-         * @param array        $skins  Associative array of the skin(s) and their related edit infos.
-         * @param string|array $assets Asset, array of assets or associative array of asset(s)
-         *                             and its/their related template(s) to work with.
+         * @param mixed $skins  Skin(s) names.
          */
 
-        public function __construct($skins, $assets = array('pages', 'forms', 'styles'))
+        public function __construct($skins = null)
         {
-            foreach ($skins as $skin => $infos) {
-                $this->skins[$skin] = \Txp::get('Textpattern\Skin\Skin', $skin, $infos, $assets);
+            if ($skins) {
+                $this->skins = is_array($skins) ? $skins : array($skins);
             }
         }
 
@@ -61,25 +57,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function create()
-        {
-            return $this->callSkinsMethod(__FUNCTION__);
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function edit()
-        {
-            return $this->callSkinsMethod(__FUNCTION__);
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function duplicate($as)
+        public function duplicate($assets = null)
         {
             return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }
@@ -88,7 +66,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function import($clean = true)
+        public function update($clean = true, $assets = null)
         {
             return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }
@@ -97,16 +75,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function update($clean = true)
-        {
-            return $this->callSkinsMethod(__FUNCTION__, func_get_args());
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function export($clean = true, $as = null)
+        public function export($clean = true, $assets = null)
         {
             return $this->callSkinsMethod(__FUNCTION__, func_get_args());
         }
@@ -130,65 +99,14 @@ namespace Textpattern\Skin {
 
         private function callSkinsMethod($method, $args = array())
         {
-            $done = substr($method, -1) === 'e' ? 'd' : 'ed';
-            $results = array();
+            $instance = \Txp::get('Textpattern\Skin\Skin');
 
-            foreach ($this->skins as $skin => $instance) {
-                try {
-                    call_user_func_array(array($instance, $method), $args);
-
-                    $results[$skin]['success'][] = gtxt(
-                        'skin_step_succeeded',
-                        array('{step}' => $method.$done)
-                    );
-                } catch (\Exception $e) {
-                    $results[$skin]['error'][] = $e->getMessage();
-                }
+            foreach ($this->skins as $skin) {
+                $instance->setSkin($skin);
+                call_user_func_array(array($instance, $method), $args);
             }
 
-            return self::getUIMessage($results);
-        }
-
-        /**
-         * Builds the UI message to display.
-         *
-         * @param  array  $results Associative array of the skin(s)
-         *                         and their success/failure messages.
-         * @return string The UI message to display.
-         * @see callSkinsMethod().
-         */
-
-        public static function getUIMessage($results)
-        {
-            $out = array();
-
-            $success = false;
-            $failure = false;
-
-            foreach ($results as $skin => $result) {
-                $success ?: $success = array_key_exists('success', $result);
-                $failure ?: $failure = array_key_exists('failure', $result);
-
-                foreach ($result as $severity => $messages) {
-                    foreach ($messages as $message) {
-                        if (array_key_exists($message, $out) && $severity === 'success') {
-                            $out[$message] .= ', '.$skin;
-                        } else {
-                            $out[$message] = $message.($severity === 'success' ? ' '.$skin : '');
-                        }
-                    }
-                }
-            }
-
-            if ($success) {
-                $failure ? $status = 'E_WARNING' : '';
-            } else {
-                $status = 'E_ERROR';
-            }
-
-            $out = implode('<br>', $out);
-
-            return isset($status) ? array($out, constant($status)) : $out;
+            $this->results = $instance->results;
         }
 
         /**
@@ -240,7 +158,7 @@ namespace Textpattern\Skin {
                 foreach ($skins as $skin) {
                     $name = basename($skin->getPath());
 
-                    if ($name === strtolower(sanitizeForUrl($name))) {
+                    if (preg_match('#^[a-z][a-z0-9_\-\.]{0,63}$#', $name)) {
                         $infos = $skin->getTemplateJSONContents();
                         static::$directories[$name] = $infos['title'];
                     }
@@ -302,6 +220,24 @@ namespace Textpattern\Skin {
             }
 
             return static::$installed;
+        }
+
+        /**
+         * Gets an array of the installed skins.
+         *
+         * @return array Associative array of skin names and their related title.
+         */
+
+        public static function renderSwitchForm($event, $step, $current)
+        {
+            return form(
+                inputLabel('skin', selectInput('skin', self::getInstalled(), $current, false, 1, 'skin'), 'skin').
+                eInput($event).
+                sInput($step),
+                '',
+                '',
+                'post'
+            );
         }
     }
 }
