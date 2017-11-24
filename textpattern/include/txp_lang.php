@@ -292,7 +292,7 @@ function get_language()
     if (Txp::get('\Textpattern\L10n\Lang')->install_file($lang_code)) {
         callback_event('lang_installed', 'file', false, $lang_code);
 
-        Txp::get('\Textpattern\L10n\Lang')->install_textpack_plugins();
+        Txp::get('\Textpattern\Plugin\Plugin')->install_textpacks();
 
         $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($lang_code);
         $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);

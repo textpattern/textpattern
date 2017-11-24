@@ -531,7 +531,7 @@ function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
     ), 5, false);
 
     $methods = array(
-        'changestatus'  => array('label' => gTxt('changestatus'), 'html' => onoffRadio('setStatus', 1)),
+        'changestatus' => array('label' => gTxt('changestatus'), 'html' => onoffRadio('setStatus', 1)),
         'changeorder'  => array('label' => gTxt('changeorder'), 'html' => $orders),
         'delete'       => gTxt('delete'),
     );

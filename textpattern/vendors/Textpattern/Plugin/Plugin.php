@@ -119,7 +119,7 @@ class Plugin
                     }
 
                     if ($rs and $code) {
-                        \Txp::get('\Textpattern\L10n\Lang')->install_textpack_plugin($name);
+                        $this->install_textpack($name);
 
                         if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
                             load_plugin($name, true);
@@ -200,10 +200,46 @@ class Plugin
 
     public function changeorder($name, $order)
     {
-        $order = min(max(intval(ps('order')), 1), 9);
+        $order = min(max(intval($order), 1), 9);
         safe_update('txp_plugin', "load_order = $order", "name = '".doSlash($name)."'");
     }
 
+    /**
+     * Install/Update a plugin Textpack.
+     *
+     * @param   string $name Plugin name
+     * @return  int          Number of installed strings
+     */
+
+    public function install_textpack($name)
+    {
+        if (has_handler('plugin_textpack.fetch')) {
+            $textpack = callback_event('plugin_textpack.fetch', '', false, compact('name'));
+        } else {
+            $textpack = safe_field('textpack', 'txp_plugin', "name = '".doSlash($name)."'");
+        }
+
+        if (!empty($textpack)) {
+            $textpack = "#@owner {$name}".n."#@language ".TEXTPATTERN_DEFAULT_LANG.n.$textpack;
+
+            return \Txp::get('\Textpattern\L10n\Lang')->install_textpack($textpack, false);
+        }
+
+        return 0;
+    }
+
+    /**
+     * Install/update ALL plugin Textpacks. Used when a new language is added.
+     */
+
+    public function install_textpacks()
+    {
+        if ($plugins = safe_column_num('name', 'txp_plugin', "textpack != '' ORDER BY load_order")) {
+            foreach ($plugins as $name) {
+                $this->install_textpack($name);
+            }
+        }
+    }
 
 
 }
