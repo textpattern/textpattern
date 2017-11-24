@@ -78,7 +78,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         static $installed_langs = null;
 
         if (!$installed_langs) {
-            $installed_langs = safe_column("lang", 'txp_lang', "1 = 1 GROUP BY lang");
+            $installed_langs = safe_column("lang", 'txp_lang', "owner = '' GROUP BY lang");
         }
 
         return $installed_langs;
