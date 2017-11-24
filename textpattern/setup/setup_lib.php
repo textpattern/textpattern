@@ -44,6 +44,7 @@ function setup_db($cfg = '')
     }
 
     // Variable set
+    @define('hu', $siteurl.'/');
     $siteurl = preg_replace('%^https?://%', '', $siteurl);
     $siteurl = str_replace(' ', '%20', $siteurl);
     $theme_name = empty($cfg['site']['theme']) ? 'hive' : $cfg['site']['theme'];
@@ -119,10 +120,14 @@ function setup_db($cfg = '')
                 }
             }
         }
+        $prefs = get_prefs();
 
+        $plugin = new \Textpattern\Plugin\Plugin();
+        foreach (get_files_content($datadir.'/plugin', 'txt') as $key=>$data) {
+            $plugin->install($data, 1);
+        }
 
         $import = new \Textpattern\Import\TxpXML();
-
         foreach (get_files_content($datadir.'/data', 'xml') as $key=>$data) {
             $import->importXml($data);
         }
