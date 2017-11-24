@@ -266,12 +266,7 @@ function switch_status()
     extract(array_map('assert_string', gpsa(array('thing', 'value'))));
     $change = ($value == gTxt('yes')) ? 0 : 1;
 
-    safe_update('txp_plugin', "status = $change", "name = '".doSlash($thing)."'");
-
-    if (safe_field('flags', 'txp_plugin', "name = '".doSlash($thing)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
-        load_plugin($thing, true);
-        $message = callback_event("plugin_lifecycle.$thing", $change ? 'enabled' : 'disabled');
-    }
+    Txp::get('\Textpattern\Plugin\Plugin')->changestatus($thing, $change);
 
     echo gTxt($change ? 'yes' : 'no');
 }
@@ -536,7 +531,7 @@ function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
     ), 5, false);
 
     $methods = array(
-        'changestatus' => gTxt('changestatus'),
+        'changestatus'  => array('label' => gTxt('changestatus'), 'html' => onoffRadio('setStatus', 1)),
         'changeorder'  => array('label' => gTxt('changeorder'), 'html' => $orders),
         'delete'       => gTxt('delete'),
     );
@@ -557,37 +552,23 @@ function plugin_multi_edit()
         return plugin_list();
     }
 
-    $where = "name IN ('".join("','", doSlash($selected))."')";
+    $plugin = new \Textpattern\Plugin\Plugin();
 
     switch ($method) {
         case 'delete':
             foreach ($selected as $name) {
-                if (safe_field("flags", 'txp_plugin', "name = '".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
-                    load_plugin($name, true);
-                    callback_event("plugin_lifecycle.$name", 'disabled');
-                    callback_event("plugin_lifecycle.$name", 'deleted');
-                }
+                $plugin->delete($name);
             }
-            // Remove plugins.
-            safe_delete('txp_plugin', $where);
-            // Remove plugin's l10n strings.
-            safe_delete('txp_lang', "owner IN ('".join("','", doSlash($selected))."')");
             break;
         case 'changestatus':
             foreach ($selected as $name) {
-                if (safe_field("flags", 'txp_plugin', "name = '".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
-                    $status = safe_field("status", 'txp_plugin', "name = '".doSlash($name)."'");
-                    load_plugin($name, true);
-                    // Note: won't show returned messages anywhere due to
-                    // potentially overwhelming verbiage.
-                    callback_event("plugin_lifecycle.$name", $status ? 'disabled' : 'enabled');
-                }
+                $plugin->changestatus($name, ps('setStatus'));
             }
-            safe_update('txp_plugin', "status = (1 - status)", $where);
             break;
         case 'changeorder':
-            $order = min(max(intval(ps('order')), 1), 9);
-            safe_update('txp_plugin', "load_order = $order", $where);
+            foreach ($selected as $name) {
+                $plugin->changeorder($name, ps('order'));
+            }
             break;
     }
 

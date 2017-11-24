@@ -46,7 +46,7 @@ class Plugin
      * Install plugin
      *
      * @param  string       $plugin   Plugin_base64
-     * @param  int          $status   Plugin status 
+     * @param  int          $status   Plugin status
      *
      * @return string|array
      */
@@ -142,6 +142,68 @@ class Plugin
 
         return $message;
     }
+
+    /**
+     * Delete plugin
+     *
+     * @param  string       $name       Plugin name
+     */
+
+    public function delete($name)
+    {
+        if (! empty($name)) {
+            if (safe_field("flags", 'txp_plugin', "name = '".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
+                load_plugin($name, true);
+                callback_event("plugin_lifecycle.$name", 'disabled');
+                callback_event("plugin_lifecycle.$name", 'deleted');
+            }
+            safe_delete('txp_plugin', "name = '".doSlash($name)."'");
+            safe_delete('txp_lang', "owner = '".doSlash($name)."'");
+        }
+    }
+
+    /**
+     * Change plugin status
+     *
+     * @param  string       $name       Plugin name
+     * @param  int          $setStatus  Plugin status. Toggle status, if null
+     */
+
+    public function changestatus($name, $setStatus = null)
+    {
+        if ($row = safe_row("flags, status", 'txp_plugin', "name = '".doSlash($name)."'")) {
+            if ($row['flags'] & PLUGIN_LIFECYCLE_NOTIFY) {
+                load_plugin($name, true);
+                // Note: won't show returned messages anywhere due to
+                // potentially overwhelming verbiage.
+                if ($setStatus === null) {
+                    callback_event("plugin_lifecycle.$name", $row['status'] ? 'disabled' : 'enabled');
+                } else {
+                    callback_event("plugin_lifecycle.$name", $setStatus ? 'enabled' : 'disabled');
+                }
+            }
+            if ($setStatus === null) {
+                $setStatus = "status = (1 - status)";
+            } else {
+                $setStatus = "status = ". ($setStatus ? 1 : 0);
+            }
+            safe_update('txp_plugin', $setStatus, "name = '".doSlash($name)."'");
+        }
+    }
+
+    /**
+     * Change plugin load priority
+     *
+     * @param  string       $name       Plugin name
+     * @param  int          $order      Plugin load priority
+     */
+
+    public function changeorder($name, $order)
+    {
+        $order = min(max(intval(ps('order')), 1), 9);
+        safe_update('txp_plugin', "load_order = $order", "name = '".doSlash($name)."'");
+    }
+
 
 
 }
