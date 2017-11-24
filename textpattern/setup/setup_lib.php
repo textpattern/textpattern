@@ -171,6 +171,8 @@ function setup_txp_lang()
 {
     global $language;
 
+    Txp::getContainer()->remove('\Textpattern\L10n\Lang');
+
     if (!Txp::get('\Textpattern\L10n\Lang')->install_file($language)) {
         // If cannot install from lang file, setup the Default lang. `language` pref changed too.
         $language = TEXTPATTERN_DEFAULT_LANG;
@@ -192,7 +194,7 @@ function setup_load_lang($lang)
 {
     global $language;
 
-    $default_file = Txp::get('\Textpattern\L10n\Lang')->findFilename(TEXTPATTERN_DEFAULT_LANG);
+    $default_file = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->findFilename(TEXTPATTERN_DEFAULT_LANG);
     $default_textpack = array();
     $lang_textpack = array();
     $strings = array();
@@ -205,7 +207,7 @@ function setup_load_lang($lang)
         $default_textpack = $parser->parse($textpack, 'common, setup');
     }
 
-    $lang_file = Txp::get('\Textpattern\L10n\Lang')->findFilename($lang);
+    $lang_file = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->findFilename($lang);
 
     // Load the desired language strings.
     if ($textpack = @file_get_contents($lang_file)) {
@@ -218,7 +220,7 @@ function setup_load_lang($lang)
     $language = empty($lang_textpack) ? TEXTPATTERN_DEFAULT_LANG : $lang;
     @define('LANG', $language);
 
-    $allStrings = $lang_textpack + $default_textpack;
+    $allStrings = array_merge($lang_textpack, $default_textpack);
 
     // Merge the arrays, using the default language to fill in the blanks.
     foreach ($allStrings as $meta) {
@@ -242,11 +244,12 @@ function get_public_themes_list()
 
     $public_themes = $out = array();
 
-    if ($files = glob(txpath."/{setup/themes,../themes}/*/manifest\.json", GLOB_BRACE)) {
+    if ($files = glob(txpath.DS.'{setup,..}'.DS.'themes'.DS.'*'.DS.'manifest.json', GLOB_BRACE)) {
         foreach ($files as $file) {
             $file = realpath($file);
+            $DS = preg_quote(DS);
 
-            if (preg_match('%^(.*/(\w+))/manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
+            if (preg_match('%^(.*'.$DS.'(\w+))'.$DS.'manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
                 if (@$manifest['txp-type'] == 'textpattern-theme') {
                     $key = str_replace(txpath, '', $mm[1]);
                     $key = str_replace(dirname(txpath), '', $key);

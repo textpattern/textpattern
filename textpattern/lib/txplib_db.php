@@ -191,7 +191,7 @@ class DB
         if (isset($txpcfg['client_flags'])) {
             $this->client_flags = $txpcfg['client_flags'];
         } else {
-            $this->client_flags = 0;
+            $this->client_flags = MYSQLI_CLIENT_FOUND_ROWS;
         }
 
         if (isset($txpcfg['dbcharset'])) {
@@ -518,7 +518,7 @@ function safe_upsert($table, $set, $where, $debug = false)
     // FIXME: lock the table so this is atomic?
     $r = safe_update($table, $set, $where, $debug);
 
-    if ($r and (mysqli_affected_rows($DB->link) or safe_count($table, $where, $debug))) {
+    if ($r && (mysqli_affected_rows($DB->link) || safe_count($table, $where, $debug))) {
         return $r;
     } else {
         return safe_insert($table, join(', ', array(implode(', ', $whereset), $set)), $debug);
