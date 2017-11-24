@@ -1557,12 +1557,12 @@ $(document).keydown(function (e) {
 jQuery.fn.txpMenu = function(button) {
     var menu = this, dir = langdir === 'rtl' ? 'left' : 'right'
 
-    menu.click(function (e) {
+    menu.on('click focusin', function (e) {
         e.stopPropagation()
     }).menu({
         select: function(e, ui) {
             menu.menu("focus", null, ui.item)
-            if (e.relatedTarget !== null) {
+            if (e.originalEvent.type !== 'click') {
                 ui.item.find('input[type="checkbox"]').click()
             }
         }
@@ -1578,7 +1578,7 @@ jQuery.fn.txpMenu = function(button) {
             of: this
         }).focus().menu("focus", null, menu.find(".ui-menu-item:first"))
 
-        $(document).one('click blur', function () {
+        $(document).one('click blur focusin', function () {
             menu.hide();
         });
 
@@ -1843,9 +1843,11 @@ jQuery.fn.txpFileupload = function (options) {
         $.merge(data.formData, form.serializeArray())
 
         // Reduce maxChunkSize by extra data size (?)
-        var res = Array.from(data.formData.entries(), ([key, prop]) =>
-            prop.name.length + prop.value.length
-        ).reduce((a, b) => a + b + 2, 0)
+        var res = typeof data.formData.entries !== 'undefined'
+        ? Array.from(data.formData.entries(), function(prop) {
+            return prop[1].name.length + prop[1].value.length
+        }).reduce(function(a, b) {return a + b + 2}, 0)
+        : 128
 
         form.fileupload('option', 'maxChunkSize', maxChunkSize - 8*(res + 255))
     });
