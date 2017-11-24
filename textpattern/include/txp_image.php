@@ -417,14 +417,13 @@ function image_list($message = '')
                 );
             }
 
-            echo
-                n.tag_end('tbody').
+            echo n.tag_end('tbody').
                 n.tag_end('table').
                 n.tag_end('div'). // End of .txp-listtables.
                 image_multiedit_form($page, $sort, $dir, $crit, $search_method).
                 tInput().
                 n.tag_end('form');
-            }
+        }
     }
 
     echo n.tag_start('div', array(
@@ -825,7 +824,7 @@ function image_insert()
         $response = !empty($ids) ? 'textpattern.Relay.data.fileid = ["'.implode('","', $ids).'"].concat(textpattern.Relay.data.fileid || []);'.n : '';
 
         foreach ($messages as $message) {
-            $response .= 'textpattern.Console.addMessage('.json_encode((array) $message).', "uploadEnd");'.n;
+            $response .= 'textpattern.Console.addMessage('.json_encode((array) $message, TEXTPATTERN_JSON).', "uploadEnd");'.n;
         }
 
         send_script_response($response);

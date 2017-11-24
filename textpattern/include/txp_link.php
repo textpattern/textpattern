@@ -421,7 +421,7 @@ function link_edit($message = '')
     }
 
     if (has_privs('link.edit') || has_privs('link.edit.own')) {
-        $caption = gTxt(($is_edit) ? 'edit_link' : 'add_new_link');
+        $caption = gTxt($is_edit ? 'edit_link' : 'add_new_link');
 
         echo form(
             hed($caption, 2).

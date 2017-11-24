@@ -198,7 +198,7 @@ function doDiagnostics()
         if ($step === 'update' && defined('TXP_UPDATE')) {
             // @todo Gather messages from the ugrade/install scripts (perhaps via
             // a FlashMessage structure) and present them above pre-flight check.
-            $heading = gTxt('welcome_to_txp', array('{version}' => txp_version));
+            $heading = gTxt('welcome_to_textpattern', array('{version}' => txp_version));
             $isUpdate = true;
             Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
         }

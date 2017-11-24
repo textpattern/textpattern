@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -98,7 +98,7 @@ class Lang
             return array();
         }
 
-        return glob($this->lang_dir.'*.{txt,textpack}', GLOB_BRACE);
+        return glob($this->lang_dir.'*.{txt,textpack,ini}', GLOB_BRACE);
     }
 
     /**
@@ -138,9 +138,12 @@ class Lang
         if (is_file($file) && is_readable($file)) {
             $numMetaRows = 4;
             $separator = '=>';
-            $filename = basename($file);
-            $name = preg_replace('/\.(txt|textpack)$/i', '', $filename);
-            $meta['filename'] = $name;
+            extract(pathinfo($file));
+//            $filename = basename($file);
+            $filename = preg_replace('/\.(txt|textpack|ini)$/i', '', $basename);
+            $ini = strtolower($extension) == 'ini';
+
+            $meta['filename'] = $filename;
 
             if ($fp = @fopen($file, 'r')) {
                 for ($idx = 0; $idx < $numMetaRows; $idx++) {
@@ -148,15 +151,22 @@ class Lang
                 }
 
                 fclose($fp);
-
-                $langName = do_list($rows[1], $separator);
-                $langCode = do_list($rows[2], $separator);
-                $langDirection = do_list($rows[3], $separator);
-
-                $meta['name'] = (isset($langName[1])) ? $langName[1] : $name;
-                $meta['code'] = (isset($langCode[1])) ? strtolower($langCode[1]) : $name;
-                $meta['direction'] = (isset($langDirection[1])) ? strtolower($langDirection[1]) : 'ltr';
                 $meta['time'] = filemtime($file);
+
+                if ($ini) {
+                    $langInfo = parse_ini_string(join($rows));
+                    $meta['name'] = (!empty($langInfo['lang_name'])) ? $langInfo['lang_name'] : $filename;
+                    $meta['code'] = (!empty($langInfo['lang_code'])) ? strtolower($langInfo['lang_code']) : $filename;
+                    $meta['direction'] = (!empty($langInfo['lang_dir'])) ? strtolower($langInfo['lang_dir']) : 'ltr';
+                } else {
+                    $langName = do_list($rows[1], $separator);
+                    $langCode = do_list($rows[2], $separator);
+                    $langDirection = do_list($rows[3], $separator);
+
+                    $meta['name'] = (isset($langName[1])) ? $langName[1] : $filename;
+                    $meta['code'] = (isset($langCode[1])) ? strtolower($langCode[1]) : $filename;
+                    $meta['direction'] = (isset($langDirection[1])) ? strtolower($langDirection[1]) : 'ltr';
+                }
             }
         }
 
@@ -187,7 +197,7 @@ class Lang
             $in_db = safe_rows(
                 "lang, UNIX_TIMESTAMP(MAX(lastmod)) AS lastmod",
                 'txp_lang',
-                "1 = 1 GROUP BY lang ORDER BY lastmod DESC"
+                "owner = '' GROUP BY lang ORDER BY lastmod DESC"
             );
         }
 
@@ -313,6 +323,7 @@ class Lang
             // Merge the packs, using the fallback strings to supply empties.
             $fullpack = $langpack + $fallpack;
 
+            $exist = safe_column('name', 'txp_lang', "lang='{$lang}'");
             foreach ($fullpack as $translation) {
                 extract(doSlash($translation));
 
@@ -324,7 +335,7 @@ class Lang
                 $lastmod = empty($lastmod) ? $now : date('YmdHis', $lastmod);
                 $fields = "lastmod = '{$lastmod}', data = '{$data}', event = '{$event}', owner = '{$owner}'";
 
-                if (safe_count('txp_lang', $where)) {
+                if (! empty($exist[$name])) {
                     $r = safe_update(
                         'txp_lang',
                         $fields,
@@ -525,30 +536,6 @@ class Lang
         }
 
         return $var;
-    }
-
-    /**
-     * Find closest matching language to the given code in the given list.
-     *
-     * @param  string $lang Language code to match
-     * @param  array  $list List of officially supported language codes
-     * @return string       Closest matching language identifier
-     */
-    public function closest($lang, $list)
-    {
-        $closest = $lang;
-        $shortest = PHP_INT_MAX;
-
-        foreach ($list as $currLang) {
-            $distance = levenshtein($lang, $currLang);
-
-            if ($distance < $shortest) {
-                $shortest = $distance;
-                $closest = $currLang;
-            }
-        }
-
-        return $closest;
     }
 
     /**
