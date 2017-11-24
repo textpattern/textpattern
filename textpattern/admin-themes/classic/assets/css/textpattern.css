@@ -2087,12 +2087,12 @@ button {
     z-index: 100;
   }
   .txp-dropdown .checkbox {
-    vertical-align: -0.25em;
+    vertical-align: -0.083333333333333em;
   }
   .txp-dropdown .checkbox + label {
     display: inline-block;
     width: 85%;
-    padding: 0.25em;
+    padding: 0 0.25em;
     cursor: pointer;
     vertical-align: text-top;
   }
