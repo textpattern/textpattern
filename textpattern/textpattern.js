@@ -1570,7 +1570,7 @@ jQuery.fn.txpMenu = function(button) {
         e.preventDefault()
     })
 
-    !button || button.on('click', function () {
+    !button || button.on('click', function (e) {
         menu.toggle().position(
         {
             my: dir+" top",
@@ -1578,12 +1578,14 @@ jQuery.fn.txpMenu = function(button) {
             of: this
         }).focus().menu("focus", null, menu.find(".ui-menu-item:first"))
 
-        $(document).one('click blur focusin', function () {
+        $(document).one('blur click focusin', function (e) {
             menu.hide();
-        });
+        })
 
         return false
-    })
+    }).on('focusin', function(e) {
+        e.stopPropagation()
+    });
 
     return this
 }
