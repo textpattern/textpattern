@@ -98,14 +98,14 @@ class Parser
     public function parse($textpack, $group = null)
     {
         static $replacements = array(
-            "\nnull" => "\n_null",
-            "\nyes" => "\n_yes",
-            "\nno" => "\n_no",
-            "\ntrue" => "\n_true",
-            "\nfalse" => "\n_false",
-            "\non" => "\n_on",
-            "\noff" => "\n_off",
-            "\nnone" => "\n_none"
+            "\nnull" => "\n@null",
+            "\nyes" => "\n@yes",
+            "\nno" => "\n@no",
+            "\ntrue" => "\n@true",
+            "\nfalse" => "\n@false",
+            "\non" => "\n@on",
+            "\noff" => "\n@off",
+            "\nnone" => "\n@none"
         );
 
         if ($group && !is_array($group)) {
@@ -122,17 +122,24 @@ class Parser
         $owner = $this->owner;
 
         if (strpos($textpack, '=>') === false 
-            && $sections = parse_ini_string(strtr($textpack, $replacements), true, INI_SCANNER_RAW))
+            && $sections = parse_ini_string('[common]'.n.strtr($textpack, $replacements), true, INI_SCANNER_RAW))
         {
+            if (!empty($sections['@common'])
+                && !empty($sections['@common']['lang_code'])
+                && $sections['@common']['lang_code'] !== TEXTPATTERN_DEFAULT_LANG
+            ) {
+                $language = \Txp::get('\Textpattern\L10n\Locale')->validLocale($sections['@common']['lang_code']);
+            }
+
             foreach ($sections as $event => $strings) {
-                $event = $event == 'meta' ? 'common' : trim($event, ' _');
+                $event = trim($event, ' @');
 
                 if (!empty($group) && !in_array($event, $group)) {
                     continue;
                 } else {
-                    foreach ($strings as $name => $data) {
+                    foreach (array_filter($strings) as $name => $data) {
                         $out[] = array(
-                            'name'    => ltrim($name, '_'),
+                            'name'    => ltrim($name, ' @'),
                             'lang'    => $language,
                             'data'    => $data,
                             'event'   => $event,

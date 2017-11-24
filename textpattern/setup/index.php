@@ -145,8 +145,8 @@ function preamble()
     gTxtScript(array('help'));
 
     if (isset($cfg['site']['lang']) && !isset($_SESSION['direction'])) {
-        $file = Txp::get('\Textpattern\L10n\Lang')->findFilename($cfg['site']['lang']);
-        $meta = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($file);
+        $file = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->findFilename($cfg['site']['lang']);
+        $meta = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->fetchMeta($file);
         $_SESSION['direction'] = isset($meta['direction']) ? $meta['direction'] : 'ltr';
     }
 
@@ -557,7 +557,7 @@ function langs()
 {
     global $cfg;
 
-    $files = Txp::get('\Textpattern\L10n\Lang')->files();
+    $files = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->files();
     $langs = array();
 
     $out = n.'<div class="txp-form-field">'.
@@ -569,7 +569,8 @@ function langs()
 
     if (is_array($files) && !empty($files)) {
         foreach ($files as $file) {
-            $meta = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($file);
+            $meta = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->fetchMeta($file);
+
             if (! empty($meta['code'])) {
                 $out .= n.'<option value="'.txpspecialchars($meta['code']).'"'.
                     (($meta['code'] == $cfg['site']['lang']) ? ' selected="selected"' : '').
