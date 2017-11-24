@@ -13,6 +13,7 @@
         "ping_textpattern_com",
         "ping_weblogsdotcom",
         "lastmod_keepalive",
+        "show_article_category_count",
         "prefs_id"
     ],
     "private": []

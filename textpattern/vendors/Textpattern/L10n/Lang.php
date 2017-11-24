@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2016 The Textpattern Development Team
+ * Copyright (C) 2017 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -30,7 +30,7 @@
 
 namespace Textpattern\L10n;
 
-class Lang
+class Lang implements \Textpattern\Container\ReusableInterface
 {
     /**
      * Language base directory that houses all the language files/textpacks.
@@ -39,6 +39,14 @@ class Lang
      */
 
     protected $lang_dir = null;
+
+    /**
+     * List of files in the $lang_dir.
+     *
+     * @var array
+     */
+
+    protected $files = array();
 
     /**
      * Constructor.
@@ -53,6 +61,10 @@ class Lang
         }
 
         $this->lang_dir = $lang_dir;
+
+        if (!$this->files) {
+            $this->files = $this->files();
+        }
     }
 
     /**
@@ -86,7 +98,78 @@ class Lang
             return array();
         }
 
-        return glob($this->lang_dir.'*.{txt,textpack}', GLOB_BRACE);
+        return glob($this->lang_dir.'*.{txt,textpack,ini}', GLOB_BRACE);
+    }
+
+    /**
+     * Locate a file in the lang directory based on a language code.
+     *
+     * @param  string $lang_code The language code to look up
+     * @return string|null       The matching filename
+     */
+
+    public function findFilename($lang_code)
+    {
+        $out = null;
+
+        foreach ($this->files as $file) {
+            $pathinfo = pathinfo($file);
+
+            if ($pathinfo['filename'] === $lang_code) {
+                $out = $file;
+                break;
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Read the meta info from the top of the given language file.
+     *
+     * @param  string $file The filename to read
+     * @return array        Meta info such as language name, language code, language direction and last modified time
+     */
+
+    public function fetchMeta($file)
+    {
+        $meta = array();
+
+        if (is_file($file) && is_readable($file)) {
+            $numMetaRows = 4;
+            $separator = '=>';
+            extract(pathinfo($file));
+            $filename = preg_replace('/\.(txt|textpack|ini)$/i', '', $basename);
+            $ini = strtolower($extension) == 'ini';
+
+            $meta['filename'] = $filename;
+
+            if ($fp = @fopen($file, 'r')) {
+                for ($idx = 0; $idx < $numMetaRows; $idx++) {
+                    $rows[] = fgets($fp, 1024);
+                }
+
+                fclose($fp);
+                $meta['time'] = filemtime($file);
+
+                if ($ini) {
+                    $langInfo = parse_ini_string(join($rows));
+                    $meta['name'] = (!empty($langInfo['lang_name'])) ? $langInfo['lang_name'] : $filename;
+                    $meta['code'] = (!empty($langInfo['lang_code'])) ? strtolower($langInfo['lang_code']) : $filename;
+                    $meta['direction'] = (!empty($langInfo['lang_dir'])) ? strtolower($langInfo['lang_dir']) : 'ltr';
+                } else {
+                    $langName = do_list($rows[1], $separator);
+                    $langCode = do_list($rows[2], $separator);
+                    $langDirection = do_list($rows[3], $separator);
+
+                    $meta['name'] = (isset($langName[1])) ? $langName[1] : $filename;
+                    $meta['code'] = (isset($langCode[1])) ? strtolower($langCode[1]) : $filename;
+                    $meta['direction'] = (isset($langDirection[1])) ? strtolower($langDirection[1]) : 'ltr';
+                }
+            }
+        }
+
+        return $meta;
     }
 
     /**
@@ -102,7 +185,6 @@ class Lang
     {
         static $active_lang = null;
         static $in_db = array();
-        static $in_fs = array();
         static $allLangs = array();
 
         if ($active_lang === null) {
@@ -114,7 +196,7 @@ class Lang
             $in_db = safe_rows(
                 "lang, UNIX_TIMESTAMP(MAX(lastmod)) AS lastmod",
                 'txp_lang',
-                "1 = 1 GROUP BY lang ORDER BY lastmod DESC"
+                "owner = '' GROUP BY lang ORDER BY lastmod DESC"
             );
         }
 
@@ -137,61 +219,26 @@ class Lang
                 }
             }
 
-            if (!$in_fs) {
-                $in_fs = $this->files();
-            }
-
             // Get items from filesystem.
-            if (is_array($in_fs) && !empty($in_fs)) {
-                $numMetaRows = 5;
-                $separator = '=>';
+            if (!empty($this->files)) {
+                foreach ($this->files as $file) {
+                    $meta = $this->fetchMeta($file);
+                    $name = $meta['filename'];
 
-                foreach ($in_fs as $file) {
-                    $filename = basename($file);
-                    $meta = array();
-
-                    if ($fp = @fopen($file, 'r')) {
-                        $name = preg_replace('/\.(txt|textpack)$/i', '', $filename);
-
-                        for ($idx = 0; $idx < $numMetaRows; $idx++) {
-                            $meta[] = fgets($fp, 1024);
-                        }
-
-                        fclose($fp);
-
-                        $langVersion = $meta[0];
-                        $langGroup = trim($meta[1]);
-                        $langName = do_list($meta[2], $separator);
-                        $langCode = do_list($meta[3], $separator);
-                        $langDirection = do_list($meta[4], $separator);
-
-                        $fname = (isset($langName[1])) ? $langName[1] : $name;
-                        $fcode = (isset($langCode[1])) ? strtolower($langCode[1]) : $name;
-                        $fdirection = (isset($langDirection[1])) ? strtolower($langDirection[1]) : 'ltr';
-
-                        if (strpos($langVersion, '#@version') !== false) {
-                            $fversion = trim(substr($langVersion, strpos($langVersion, ' ', 1)));
-                            $ftime = filemtime($file);
-                        } else {
-                            $fversion = $ftime = 0;
-                        }
-
-                        if (array_key_exists($name, $currently_lang)) {
-                            $currently_lang[$name]['name'] = $fname;
-                            $currently_lang[$name]['direction'] = $fdirection;
-                            $currently_lang[$name]['file_lastmod'] = $ftime;
-                        } elseif (array_key_exists($name, $installed_lang)) {
-                            $installed_lang[$name]['name'] = $fname;
-                            $installed_lang[$name]['direction'] = $fdirection;
-                            $installed_lang[$name]['file_lastmod'] = $ftime;
-                        }
-
-                        $available_lang[$name]['file_note'] = $fversion;
-                        $available_lang[$name]['file_lastmod'] = $ftime;
-                        $available_lang[$name]['name'] = $fname;
-                        $available_lang[$name]['direction'] = $fdirection;
-                        $available_lang[$name]['type'] = 'available';
+                    if (array_key_exists($name, $currently_lang)) {
+                        $currently_lang[$name]['name'] = $meta['name'];
+                        $currently_lang[$name]['direction'] = $meta['direction'];
+                        $currently_lang[$name]['file_lastmod'] = $meta['time'];
+                    } elseif (array_key_exists($name, $installed_lang)) {
+                        $installed_lang[$name]['name'] = $meta['name'];
+                        $installed_lang[$name]['direction'] = $meta['direction'];
+                        $installed_lang[$name]['file_lastmod'] = $meta['time'];
                     }
+
+                    $available_lang[$name]['file_lastmod'] = $meta['time'];
+                    $available_lang[$name]['name'] = $meta['name'];
+                    $available_lang[$name]['direction'] = $meta['direction'];
+                    $available_lang[$name]['type'] = 'available';
                 }
             }
 
@@ -227,9 +274,16 @@ class Lang
 
     public function install_file($lang)
     {
-        $lang_files = glob(txpath.'/lang/'.$lang.'.{txt,textpack}', GLOB_BRACE);
+        $lang_file = $this->findFilename($lang);
+        $fallback_file = null;
 
-        if ($textpack = @file_get_contents($lang_files[0])) {
+        if ($lang !== TEXTPATTERN_DEFAULT_LANG) {
+            $fallback_file = $this->findFilename(TEXTPATTERN_DEFAULT_LANG);
+        }
+
+        $now = date('YmdHis');
+
+        if ($textpack = @file_get_contents($lang_file)) {
             $parser = new \Textpattern\Textpack\Parser();
             $parser->setOwner('');
             $parser->setLanguage($lang);
@@ -239,27 +293,56 @@ class Lang
                 return false;
             }
 
-            foreach ($textpack as $translation) {
-                extract(doSlash($translation));
+            // Reindex the pack so it can be merged.
+            $langpack = array();
 
-                if ($event == 'setup') {
+            foreach ($textpack as $translation) {
+                $langpack[$translation['name']] = $translation;
+            }
+
+            // Load the fallback strings so we're not left with untranslated strings.
+            // Note that the language is overridden to match the to-be-installed lang.
+            if ($fallback_file === null) {
+                $fallback = array();
+            } else {
+                if ($fallback = @file_get_contents($fallback_file)) {
+                    $parser = new \Textpattern\Textpack\Parser();
+                    $parser->setOwner('');
+                    $parser->setLanguage($lang);
+                    $fallback = $parser->parse($fallback);
+
+                    // Reindex the pack so it can be merged.
+                    foreach ($fallback as $translation) {
+                        if (empty($langpack[$translation['name']])) {
+                            $langpack[$translation['name']] = $translation;
+                        }
+                    }
+                }
+            }
+
+            $exists = safe_column('name', 'txp_lang', "lang='".doSlash($lang)."'");
+
+            foreach ($langpack as $translation) {
+                if ($translation['event'] == 'setup') {
                     continue;
                 }
 
-                $where = "lang = '{$lang}' AND name = '{$name}'";
-                $lastmod = empty($lastmod) ? '2006-05-04' : date('YmdHis', $lastmod);
+                extract(doSlash($translation));
 
-                if (safe_count('txp_lang', $where)) {
+                $where = "lang = '{$lang}' AND name = '{$name}'";
+                $lastmod = empty($lastmod) ? $now : date('YmdHis', $lastmod);
+                $fields = "lastmod = '{$lastmod}', data = '{$data}', event = '{$event}', owner = '{$owner}'";
+
+                if (! empty($exists[$name])) {
                     $r = safe_update(
                         'txp_lang',
-                        "lastmod = '{$lastmod}', data = '{$data}', event = '{$event}', owner = '{$owner}'",
+                        $fields,
                         $where
                     );
                 } else {
                     $r = safe_insert(
                         'txp_lang',
-                        "lastmod = '{$lastmod}', data = '{$data}', event = '{$event}', owner = '{$owner}',
-                        lang = '{$lang}', name = '{$name}'"
+                        $fields .", lang = '{$lang}', name = '{$name}'"
                     );
                 }
             }
@@ -272,10 +355,6 @@ class Lang
 
     /**
      * Installs localisation strings from a Textpack.
-     *
-     * Created strings get a well-known static modification date set in the past.
-     * This is done to avoid tampering with lastmod dates used for RPC server
-     * interactions, caching and update checks.
      *
      * @param   string $textpack      The Textpack to install
      * @param   bool   $add_new_langs If TRUE, installs strings for any included language
@@ -295,6 +374,7 @@ class Lang
 
         $installed_langs = $this->installed();
         $done = 0;
+        $now = date('YmdHis');
 
         foreach ($textpack as $translation) {
             extract($translation);
@@ -303,28 +383,16 @@ class Lang
                 continue;
             }
 
-            $where = "lang = '".doSlash($lang)."' AND name = '".doSlash($name)."'";
+            $where = array('lang' => $lang, 'name' => $name);
 
-            if (safe_count('txp_lang', $where)) {
-                $r = safe_update(
-                    'txp_lang',
-                    "lastmod = '2005-08-14',
-                    data = '".doSlash($data)."',
-                    event = '".doSlash($event)."',
-                    owner = '".doSlash($owner)."'",
-                    $where
-                );
-            } else {
-                $r = safe_insert(
-                    'txp_lang',
-                    "lastmod = '2005-08-14',
-                    data = '".doSlash($data)."',
-                    event = '".doSlash($event)."',
-                    owner = '".doSlash($owner)."',
-                    lang = '".doSlash($lang)."',
-                    name = '".doSlash($name)."'"
-                );
-            }
+            $r = safe_upsert(
+                'txp_lang',
+                "lastmod = '".doSlash($now)."',
+                data = '".doSlash($data)."',
+                event = '".doSlash($event)."',
+                owner = '".doSlash($owner)."'",
+                $where
+            );
 
             if ($r) {
                 $done++;
@@ -335,26 +403,159 @@ class Lang
     }
 
     /**
-     * Find closest matching language to the given code in the given list.
+     * Install/Update a plugin Textpack.
      *
-     * @param  string $lang Language code to match
-     * @param  array  $list List of officially supported language codes
-     * @return string       Closest matching language identifier
+     * @param   string $name Plugin name
+     * @return  int          Number of installed strings
      */
-    public function closest($lang, $list)
+
+    public function install_textpack_plugin($name)
     {
-        $closest = $lang;
-        $shortest = PHP_INT_MAX;
+        if (has_handler('plugin_textpack.fetch')) {
+            $textpack = callback_event('plugin_textpack.fetch', '', false, compact('name'));
+        } else {
+            $textpack = safe_field('textpack', 'txp_plugin', "name = '".doSlash($name)."'");
+        }
 
-        foreach ($list as $currLang) {
-            $distance = levenshtein($lang, $currLang);
+        if (!empty($textpack)) {
+            $textpack = "#@owner {$name}".n."#@language ".TEXTPATTERN_DEFAULT_LANG.n.$textpack;
 
-            if ($distance < $shortest) {
-                $shortest = $distance;
-                $closest = $currLang;
+            return $this->install_textpack($textpack, false);
+        }
+
+        return 0;
+    }
+
+    /**
+     * Install/update ALL plugin Textpacks. Used when a new language is added.
+     */
+
+    public function install_textpack_plugins()
+    {
+        if ($plugins = safe_column_num('name', 'txp_plugin', "textpack != '' ORDER BY load_order")) {
+            foreach ($plugins as $name) {
+                $this->install_textpack_plugin($name);
+            }
+        }
+    }
+
+    /**
+     * Fetches the given language's strings from the database as an array.
+     *
+     * If no $events is specified, only appropriate strings for the current context
+     * are returned. If 'txpinterface' constant equals 'admin' all strings are
+     * returned. Otherwise, only strings from events 'common' and 'public'.
+     *
+     * If $events is FALSE, returns all strings.
+     *
+     * Note the returned array inlcudes the language if the fallback has been used.
+     * This ensures (as far as possible) a full complement of strings, regardless of
+     * the degree of translation that's taken place in the desired $lang code.
+     * Any holes can be mopped up by the default language.
+     *
+     * @param   string            $lang   The language code
+     * @param   array|string|bool $events An array of loaded events
+     * @return  array
+     */
+
+    public function load($lang, $events = null)
+    {
+        if ($events === null && txpinterface !== 'admin') {
+            $events = array('public', 'common');
+        }
+
+        $where = " AND name != ''";
+
+        if ($events) {
+            $where .= " AND event IN (".join(',', quote_list((array) $events)).")";
+        }
+
+        $out = array();
+
+        $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang)."'".$where);
+
+        if (!empty($rs)) {
+            while ($a = nextRow($rs)) {
+                $out[$a['name']] = $a['data'];
             }
         }
 
-        return $closest;
+        return $out;
+    }
+
+    /**
+     * Returns a localisation string.
+     *
+     * @param   string $var    String name
+     * @param   array  $atts   Replacement pairs
+     * @param   string $escape Convert special characters to HTML entities. Either "html" or ""
+     * @return  string A localisation string
+     * @package L10n
+     */
+
+    public function txt($var, $atts = array(), $escape = 'html')
+    {
+        global $textarray;
+
+        if (!is_array($atts)) {
+            $atts = array();
+        }
+
+        if ($escape == 'html') {
+            foreach ($atts as $key => $value) {
+                $atts[$key] = txpspecialchars($value);
+            }
+        }
+
+        $v = strtolower($var);
+
+        if (isset($textarray[$v])) {
+            $out = $textarray[$v];
+
+            if ($out !== '') {
+                return strtr($out, $atts);
+            }
+        }
+
+        if ($atts) {
+            return $var.': '.join(', ', $atts);
+        }
+
+        return $var;
+    }
+
+    /**
+     * Generate a &lt;select&gt; element of languages.
+     *
+     * @param  string $name  The HTML name and ID to assign to the select control
+     * @param  string $val   The currently active language identifier (en-gb, fr, de, ...)
+     * @param  int    $flags Logical OR list of flags indiacting the type of list to return:
+     *                       TEXTPATTERN_LANG_ACTIVE: the active language
+     *                       TEXTPATTERN_LANG_INSTALLED: all installed languages
+     *                       TEXTPATTERN_LANG_AVAILABLE: all available languages in the file system
+     * @return string HTML
+     */
+
+    public function languageSelect($name, $val, $flags = null)
+    {
+        if ($flags === null) {
+            $flags = TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_INSTALLED;
+        }
+
+        $installed_langs = $this->available((int)$flags);
+        $vals = array();
+
+        foreach ($installed_langs as $lang => $langdata) {
+            $vals[$lang] = $langdata['name'];
+
+            if (trim($vals[$lang]) == '') {
+                $vals[$lang] = $lang;
+            }
+        }
+
+        ksort($vals);
+        reset($vals);
+
+        return selectInput($name, $vals, $val, false, true, $name);
     }
 }

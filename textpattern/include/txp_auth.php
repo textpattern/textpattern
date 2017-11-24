@@ -122,8 +122,7 @@ function doLoginForm($message)
         $out[] = hed($pageTitle, 1, array('id' => 'txp-'.$class.'-heading')).
             inputLabel(
                 $label,
-                fInput('password', 'p_password', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', $label, false, true).
-                n.tag(null, 'div', array('class' => 'strength-meter')).
+                fInput('password', 'p_password', '', 'txp-maskable', '', '', INPUT_REGULAR, '', $label, false, true).
                 n.tag(
                     checkbox('unmask', 1, false, 0, 'show_password').
                     n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
@@ -169,15 +168,6 @@ function doLoginForm($message)
     }
 
     pagetop($pageTitle, $message);
-
-    gTxtScript(array(
-        'password_strength_0',
-        'password_strength_1',
-        'password_strength_2',
-        'password_strength_3',
-        'password_strength_4',
-        )
-    );
 
     echo form(
         join('', $out), '', '', 'post', 'txp-login', '', 'login_form').

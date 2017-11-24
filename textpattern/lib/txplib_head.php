@@ -110,7 +110,6 @@ function pagetop($pagetitle = '', $message = '')
 <title><?php echo admin_title($pagetitle)?></title><?php echo
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('vendors/ehynds/jquery-ui-multiselect-widget/jquery.multiselect.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/blueimp/md5/md5.min.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/blueimp/fileupload/jquery.fileupload.min.js', TEXTPATTERN_SCRIPT_URL).
     script_js(
@@ -122,7 +121,7 @@ function pagetop($pagetitle = '', $message = '')
                 '_txp_token' => form_token(),
                 'ajax_timeout' => (int) AJAX_TIMEOUT,
                 'prefs' => array(
-                    'max_file_size' => (float) $file_max_upload_size,
+                    'max_file_size' => $file_max_upload_size,
                     'max_upload_size' => real_max_upload_size(0),
                     'production_status' => get_pref('production_status'),
                     'do_spellcheck' => get_pref(
@@ -131,7 +130,11 @@ function pagetop($pagetitle = '', $message = '')
                         '#page-image #image_alt_text, #page-image #caption,'.
                         '#page-file #description,'.
                         '#page-link #link-title, #page-link #link-description'
-                    )
+                    ),
+                    'message' => '<span class="ui-icon ui-icon-{status}"></span> {message}',
+                    'messagePane' => '<span class="messageflash {status}" role="alert" aria-live="assertive">
+    {message}<a class="close" role="button" title="{close}" aria-label="{close}" href="#close">&#215;</a>
+</span>'
                 ),
                 'textarray' => (object) null,
             ),
@@ -148,6 +151,7 @@ function pagetop($pagetitle = '', $message = '')
 </style>
 <?php
 echo $theme->html_head();
+echo $theme->html_head_custom();
     callback_event('admin_side', 'head_end'); ?>
 </head>
 <body class="not-ready <?php echo $area; ?>" id="<?php echo $body_id; ?>">
@@ -274,7 +278,7 @@ function areas()
 {
     global $plugin_areas;
 
-    $adminString = gTxt(has_privs('admin.list') ? 'tab_site_admin' : 'tab_site_account');
+    $adminString = has_privs('admin.list') ? gTxt('tab_site_admin') : gTxt('tab_site_account');
 
     $areas['start'] = array(
     );

@@ -350,28 +350,42 @@ button {
   /* Support for non-latin languages
    ========================================================================== */
   /**
+ * Bidirectional (bidi) text support.
+ * See: https://www.w3.org/International/articles/inline-bidi-markup/#cssshim
+ */
+  [dir="ltr"],
+  [dir="rtl"] {
+    unicode-bidi: -webkit-isolate;
+    unicode-bidi: isolate;
+  }
+  bdo[dir="ltr"],
+  bdo[dir="rtl"] {
+    unicode-bidi: isolate-override;
+  }
+  /**
  * Preferred font for Japanese language.
  */
-  html[lang="ja-jp"] {
-    font-family: "Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
+  :lang(ja) {
+    font-family: "Hiragino  Sans", "Hiragino Kaku Gothic Pro", "Meiryo UI", sans-serif;
+    font-weight: 300;
   }
   /**
  * Preferred font for Korean language.
  */
-  html[lang="ko-kr"] {
+  :lang(ko) {
     font-family: GulimChe, Gulim, sans-serif;
   }
   /**
- * Preferred font for Chinese (PRC) language.
+ * Preferred font for simplified Chinese (PRC) language.
  */
-  html[lang="zh-cn"] {
-    font-family: SimHei, sans-serif;
+  :lang(zh-cn) {
+    font-family: "PingFang SC", SimHei, sans-serif;
   }
   /**
- * Preferred font for Chinese (Taiwan) language.
+ * Preferred font for traditional Chinese (Taiwan, Hong Kong) language.
  */
-  html[lang="zh-tw"] {
-    font-family: PMingLiU, sans-serif;
+  :lang(zh-tw) {
+    font-family: "PingFang TC", PMingLiU, sans-serif;
   }
   /**
  * Suppress `text-decoration` in some RTL languages for better legibility.
@@ -677,68 +691,6 @@ button {
  */
   .txp-details .txp-listtables {
     margin: 1em 0;
-  }
-  /* Password strength meter (via zxcvbn.js)
-   ========================================================================== */
-  /**
- * Strength meter bar area and text area.
- *
- * Example HTML:
- *
- * <div class="txp-form-field-value">
- *     <input class="txp-maskable" type="password">
- *     <div class="strength-meter">
- *         <div class="bar password-strength-1" style="width:28%;"></div>
- *         <div class="indicator">Strength: poor</div>
- *     </div>
- *     <div class="edit-admin-show-password">
- *         <input class="checkbox" type="checkbox">
- *         <label>Show password</label>
- *     </div>
- * </div>
- */
-  .strength-meter {
-    position: relative;
-    width: 100%;
-    max-width: 30em;
-    height: 1.5em;
-    background-color: #a3a3a3;
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-  }
-  .strength-meter:empty {
-    background-color: transparent;
-  }
-  .strength-meter .bar {
-    position: absolute;
-    left: 0;
-    height: 1.5em;
-    z-index: 2;
-  }
-  .strength-meter .indicator {
-    position: absolute;
-    padding: 0.16666666666667em 0.41666666666667em;
-    color: #ffffff;
-    line-height: 1;
-    z-index: 3;
-  }
-  /**
- * Strength level colours.
- */
-  .password-strength-0 {
-    background-color: #9d261d;
-  }
-  .password-strength-1 {
-    background-color: #b5590f;
-  }
-  .password-strength-2 {
-    background-color: #cc8c00;
-  }
-  .password-strength-3 {
-    background-color: #788c12;
-  }
-  .password-strength-4 {
-    background-color: #238c23;
   }
   /* Code highlighting (via Prism.js)
    ========================================================================== */
@@ -1202,6 +1154,13 @@ button {
     /* 2 */
     vertical-align: baseline;
   }
+  /**
+ * Reverse the progress direction in RTL languages.
+ */
+  [dir="rtl"] progress {
+    -webkit-animation-direction: reverse;
+            animation-direction: reverse;
+  }
   /* Buttons
    ========================================================================== */
   /**
@@ -1275,14 +1234,21 @@ button {
     color: #1a1919;
     text-decoration: none;
   }
-  button:focus,
+  button:focus, button.ui-state-active,
   [type="reset"]:focus,
+  [type="reset"].ui-state-active,
   [type="submit"]:focus,
+  [type="submit"].ui-state-active,
   input[type="button"]:focus,
+  input[type="button"].ui-state-active,
   .txp-button:focus,
+  .txp-button.ui-state-active,
   .txp-logout a:focus,
+  .txp-logout a.ui-state-active,
   .navlink:focus,
-  .navlink-active:focus {
+  .navlink.ui-state-active,
+  .navlink-active:focus,
+  .navlink-active.ui-state-active {
     border-color: #5b9dd9;
     outline: 2px solid transparent;
   }
@@ -2099,16 +2065,14 @@ button {
  * 1. Ensure dropdowns are hidden at page load (prevents content 'jumping').
  *
  * <ul class="txp-dropdown">
- *     <li>
+ *     <li class="txp-dropdown-toggle-all">
  *         <div>
- *             <input class="checkbox" type="checkbox">
- *             <label>Search all</label>
+ *             <label><input class="checkbox" type="checkbox">&nbsp;Toggle all/none selected</label>
  *         </div>
  *     </li>
  *     <li>
  *         <div>
- *             <input class="checkbox active" type="checkbox">
- *             <label>ID#</label>
+ *             <label><input class="checkbox active" type="checkbox">&nbsp;ID#</label>
  *         </div>
  *     </li>
  * </ul>
@@ -2120,15 +2084,8 @@ button {
     width: 18em;
     z-index: 100;
   }
-  .txp-dropdown .checkbox {
-    vertical-align: -0.25em;
-  }
-  .txp-dropdown .checkbox + label {
-    display: inline-block;
-    width: 85%;
-    padding: 0.25em;
-    cursor: pointer;
-    vertical-align: text-top;
+  .txp-dropdown-toggle-all {
+    border-bottom: 1px solid #d4d4d4;
   }
   /**
  * Search widget at top of lists.
@@ -4835,7 +4792,7 @@ button {
   }
   .ui-menu .ui-menu-item-wrapper {
     position: relative;
-    padding: 0.25em 1.25em 0.25em 0.75em;
+    padding: 0.25em 0.75em;
   }
   .ui-menu .ui-menu-divider {
     height: 0;
@@ -4873,9 +4830,6 @@ button {
  */
   [dir="rtl"] .ui-menu {
     padding: 0;
-  }
-  [dir="rtl"] .ui-menu .ui-menu-item-wrapper {
-    padding: 0.25em 0.75em 0.25em 1.25em;
   }
   [dir="rtl"] .ui-menu .ui-icon {
     right: 0.25em;
@@ -4921,6 +4875,13 @@ button {
  */
   .ui-progressbar-indeterminate .ui-progressbar-value {
     background-color: #cccccc;
+  }
+  /**
+ * Reverse the progressbar direction in RTL languages.
+ */
+  [dir="rtl"] .ui-progressbar-value {
+    -webkit-animation-direction: reverse;
+            animation-direction: reverse;
   }
   /* Selectmenu
    ========================================================================== */
@@ -5035,7 +4996,7 @@ button {
     background: transparent;
     color: #996633;
     font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
-    cursor: hand;
+    cursor: pointer;
     -webkit-user-select: auto;
        -moz-user-select: auto;
         -ms-user-select: auto;
@@ -5049,8 +5010,14 @@ button {
   .no-ui-button .ui-selectmenu-button:focus {
     outline: thin solid #5b9dd9;
   }
-  .no-ui-button .ui-selectmenu-icon {
+  .no-ui-button .ui-selectmenu-button .ui-selectmenu-icon {
     margin: 0;
+    opacity: 0.66;
+  }
+  .no-ui-button .ui-selectmenu-button:hover .ui-selectmenu-icon,
+  .no-ui-button .ui-selectmenu-button:active .ui-selectmenu-icon,
+  .no-ui-button .ui-selectmenu-button:focus .ui-selectmenu-icon {
+    opacity: 1;
   }
   /* Slider
    ========================================================================== */

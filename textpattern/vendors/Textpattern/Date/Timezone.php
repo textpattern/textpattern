@@ -252,7 +252,7 @@ class Timezone
      *     (
      *         [ts] => 1396141200
      *         [time] => 2014-03-30T01:00:00+0000
-     *        [offset] => 10800
+     *         [offset] => 10800
      *         [isdst] => 1
      *         [abbr] => EEST
      *     )
