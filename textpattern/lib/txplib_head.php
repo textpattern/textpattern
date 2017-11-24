@@ -110,7 +110,6 @@ function pagetop($pagetitle = '', $message = '')
 <title><?php echo admin_title($pagetitle)?></title><?php echo
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('vendors/ehynds/jquery-ui-multiselect-widget/jquery.multiselect.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/blueimp/md5/md5.min.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/blueimp/fileupload/jquery.fileupload.min.js', TEXTPATTERN_SCRIPT_URL).
     script_js(

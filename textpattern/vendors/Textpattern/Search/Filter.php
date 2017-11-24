@@ -216,8 +216,6 @@ class Filter
 
     public function renderForm($step, $options = array())
     {
-        static $id_counter = 0;
-
         $event = $this->event;
         $methods = $this->getMethods();
         $selected = $this->search_method;
@@ -226,7 +224,7 @@ class Filter
             'default_method' => 'all',
             'submit_as'      => 'get', // or 'post'
             'placeholder'    => '',
-            'label_all'      => 'search_all',
+            'label_all'      => 'toggle_all_selected',
             'class'          => '',
         ), (array) $options));
 
@@ -248,9 +246,9 @@ class Filter
         foreach ($methods as $key => $value) {
             $name = ($key === 'all') ? 'select_all' : 'search_method[]';
             $method_list[] = tag(
-                n.tag(
-                    checkbox($name, $key, ($set_all || in_array($key, $selected)), 0, 'search-'.$key.$id_counter).
-                    n.tag($value, 'label', array('for' => 'search-'.$key.$id_counter)).n,
+                n.tag(n.tag(
+                    checkbox($name, $key, ($set_all || in_array($key, $selected)), -1).'&nbsp;'.$value
+                    , 'label').n,
                     'div').n,
                 'li'
             );
@@ -263,9 +261,6 @@ class Filter
         }
 
         $buttons = n.tag($button_set, 'span', array('class' => 'txp-search-buttons')).n;
-
-        // So the search can be used multiple times on a page without id clashes.
-        $id_counter++;
 
         return form(
             (
