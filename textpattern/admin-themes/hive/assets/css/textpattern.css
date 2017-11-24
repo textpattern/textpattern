@@ -347,28 +347,50 @@ button {
   /* Support for non-latin languages
    ========================================================================== */
   /**
+ * Bidirectional (bidi) text support.
+ * See: https://www.w3.org/International/articles/inline-bidi-markup/#cssshim
+ */
+  [dir="ltr"],
+  [dir="rtl"] {
+    unicode-bidi: -webkit-isolate;
+    unicode-bidi: isolate;
+  }
+  bdo[dir="ltr"],
+  bdo[dir="rtl"] {
+    unicode-bidi: isolate-override;
+  }
+  /**
  * Preferred font for Japanese language.
  */
-  html[lang="ja-jp"] {
-    font-family: "Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
+  :lang(ja) {
+    font-family: "Hiragino  Sans", "Hiragino Kaku Gothic Pro", "Meiryo UI", sans-serif;
+    font-weight: 300;
   }
   /**
  * Preferred font for Korean language.
  */
-  html[lang="ko-kr"] {
+  :lang(ko) {
     font-family: GulimChe, Gulim, sans-serif;
   }
   /**
- * Preferred font for Chinese (PRC) language.
+ * Preferred font for simplified Chinese (PRC) language.
  */
-  html[lang="zh-cn"] {
-    font-family: SimHei, sans-serif;
+  :lang(zh-cn) {
+    font-family: "PingFang SC", SimHei, sans-serif;
   }
   /**
- * Preferred font for Chinese (Taiwan) language.
+ * Preferred font for traditional Chinese (Taiwan, Hong Kong) language.
  */
-  html[lang="zh-tw"] {
-    font-family: PMingLiU, sans-serif;
+  :lang(zh-tw) {
+    font-family: "PingFang TC", PMingLiU, sans-serif;
+  }
+  /**
+ * Suppress `text-decoration` in some RTL languages for better legibility.
+ */
+  [lang|="ar"] a:hover,
+  [lang|="fa"] a:hover,
+  [lang|="ur"] a:hover {
+    text-decoration: none;
   }
   /* Embedded content
    ========================================================================== */
@@ -985,7 +1007,7 @@ button {
     /* 2 */
     margin: 0;
     color: #000000;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: inherit;
     /* 3 */
     font-size: 13px;
     line-height: 20px;
@@ -1305,6 +1327,13 @@ button {
     /* 2 */
     vertical-align: baseline;
   }
+  /**
+ * Reverse the progress direction in RTL languages.
+ */
+  [dir="rtl"] progress {
+    -webkit-animation-direction: reverse;
+            animation-direction: reverse;
+  }
   /* Buttons
    ========================================================================== */
   /**
@@ -1508,8 +1537,7 @@ button {
   [dir="rtl"] ul.nav-tertiary {
     padding: 0;
   }
-  .nav-tertiary a,
-  .nav-tertiary .navlink-disabled {
+  .nav-tertiary > * {
     border-radius: 0;
   }
   .nav-tertiary > :first-child,
@@ -1577,7 +1605,7 @@ button {
  *     <input class="txp-search-input" type="search" size="24">
  *     <span class="txp-search-buttons">
  *         <button class="txp-search-button">Search</button>
- *         <button class="txp-search-options">Search criteria</button>
+ *         ...
  *     </span>
  * </form>
  */
@@ -2617,12 +2645,12 @@ button {
     z-index: 100;
   }
   .txp-dropdown .checkbox {
-    vertical-align: -0.23076923076923em;
+    vertical-align: -0.076923076923077em;
   }
   .txp-dropdown .checkbox + label {
     display: inline-block;
     width: 85%;
-    padding: 0.23076923076923em 0.30769230769231em;
+    padding: 0 0.30769230769231em;
     cursor: pointer;
     vertical-align: text-top;
   }
@@ -2640,7 +2668,7 @@ button {
  *     <input class="txp-search-input" type="search" size="24">
  *     <span class="txp-search-buttons">
  *         <button class="txp-search-button">Search</button>
- *         <button class="txp-search-options">Search criteria</button>
+ *         <button class="txp-search-options">Search options</button>
  *     </span>
  * </form>
  */
@@ -2720,6 +2748,7 @@ button {
  * </div>
  */
   .txp-list-options {
+    position: relative;
     margin: 0.46153846153846em 0 1em;
     float: right;
   }
@@ -4692,12 +4721,12 @@ button {
     display: inline-block;
     position: relative;
     height: 2.307692307692308em;
-    margin: 0 0.1em 0 0;
+    margin: 0;
     padding: 0.30769230769231em 0.61538461538462em;
     border: 1px solid #cccccc;
     background-clip: padding-box;
     color: #333333;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: inherit;
     /* 1 */
     font-size: 13px;
     line-height: 20px;
@@ -5417,7 +5446,7 @@ button {
   }
   .ui-menu .ui-menu-item-wrapper {
     position: relative;
-    padding: 0.30769230769231em 1em 0.30769230769231em 0.61538461538462em;
+    padding: 0.30769230769231em 0.61538461538462em;
   }
   .ui-menu .ui-menu-divider {
     height: 0;
@@ -5455,9 +5484,6 @@ button {
  */
   [dir="rtl"] .ui-menu {
     padding: 0;
-  }
-  [dir="rtl"] .ui-menu .ui-menu-item-wrapper {
-    padding: 0.30769230769231em 0.61538461538462em 0.30769230769231em 1em;
   }
   [dir="rtl"] .ui-menu .ui-icon {
     right: 0.25em;
@@ -5508,6 +5534,13 @@ button {
  */
   .ui-progressbar-indeterminate .ui-progressbar-value {
     background-color: #cccccc;
+  }
+  /**
+ * Reverse the progressbar direction in RTL languages.
+ */
+  [dir="rtl"] .ui-progressbar-value {
+    -webkit-animation-direction: reverse;
+            animation-direction: reverse;
   }
   /* Selectmenu
    ========================================================================== */
@@ -5563,7 +5596,7 @@ button {
             flex: none;
     -webkit-box-ordinal-group: 3;
             order: 2;
-    margin: 0 -0.25em 0 0.25em;
+    margin: 0.15em -0.25em 0 0.25em;
   }
   .ui-selectmenu-text {
     display: block;
@@ -5609,7 +5642,7 @@ button {
     border-radius: 0 0.5em 0.5em 0;
   }
   [dir="rtl"] .ui-selectmenu-icon {
-    margin: 0 0.25em 0 -0.25em;
+    margin: 0.15em 0.25em 0 -0.25em;
   }
   /**
  * Selectmenu plain buttons.
@@ -5621,8 +5654,8 @@ button {
     border: 0;
     background: transparent;
     color: #004cbf;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    cursor: hand;
+    font-family: inherit;
+    cursor: pointer;
     -webkit-user-select: auto;
        -moz-user-select: auto;
         -ms-user-select: auto;
@@ -5638,8 +5671,14 @@ button {
   .no-ui-button .ui-selectmenu-button:focus {
     outline: thin solid #0066ff;
   }
-  .no-ui-button .ui-selectmenu-icon {
+  .no-ui-button .ui-selectmenu-button .ui-selectmenu-icon {
     margin: 0;
+    opacity: 0.66;
+  }
+  .no-ui-button .ui-selectmenu-button:hover .ui-selectmenu-icon,
+  .no-ui-button .ui-selectmenu-button:active .ui-selectmenu-icon,
+  .no-ui-button .ui-selectmenu-button:focus .ui-selectmenu-icon {
+    opacity: 1;
   }
   /* Slider
    ========================================================================== */
@@ -5929,81 +5968,6 @@ button {
     -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
             box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
     z-index: 9999;
-  }
-  /* Multi-select menu
-   ========================================================================== */
-  /**
- * jQuery UI MultiSelect Widget (a jQuery UI plugin)
- *
- * Some classes and HTML elements generally added via JavaScript, more info -
- * https://github.com/ehynds/jquery-ui-multiselect-widget
- *
- * Example HTML:
- *
- * TODO
- */
-  .ui-multiselect {
-    padding: 2px 0 2px 4px;
-    text-align: left;
-  }
-  .ui-multiselect span.ui-icon {
-    float: right;
-  }
-  .ui-multiselect-single .ui-multiselect-checkboxes input {
-    position: absolute !important;
-    top: auto !important;
-    left: -9999px;
-  }
-  .ui-multiselect-single .ui-multiselect-checkboxes label {
-    padding: 5px !important;
-  }
-  .ui-multiselect-menu {
-    display: none;
-    position: absolute;
-    padding: 3px;
-    text-align: left;
-  }
-  .ui-multiselect-checkboxes {
-    position: relative;
-    overflow-y: auto;
-  }
-  .ui-multiselect-checkboxes label {
-    display: block;
-    padding: 3px 1px;
-    border: 1px solid transparent;
-    cursor: default;
-  }
-  .ui-multiselect-checkboxes label input {
-    position: relative;
-    top: 1px;
-  }
-  .ui-multiselect-checkboxes label img {
-    height: 30px;
-    padding-right: 3px;
-    vertical-align: middle;
-  }
-  .ui-multiselect-checkboxes li {
-    padding-right: 3px;
-    clear: both;
-    font-size: 0.9em;
-    list-style: none;
-  }
-  .ui-multiselect-checkboxes .ui-multiselect-optgroup {
-    padding: 3px;
-  }
-  .ui-multiselect-columns {
-    display: inline-block;
-    vertical-align: top;
-  }
-  .ui-multiselect-checkboxes .ui-multiselect-optgroup a {
-    display: block;
-    margin: 1px 0;
-    padding: 3px;
-    border-bottom: 1px solid;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
   }
 }
 
@@ -6576,11 +6540,5 @@ button {
  */
   .txp-prefs-group.ui-tabs-panel {
     display: block !important;
-  }
-  /**
- * Don't print jQuery UI multi-select menus.
- */
-  .ui-multiselect-menu {
-    display: none;
   }
 }
