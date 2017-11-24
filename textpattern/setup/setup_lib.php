@@ -283,7 +283,7 @@ function setup_makeConfig($cfg, $doSpecial = false)
         $cfg['mysql'] = doSpecial($cfg['mysql']);
     }
 
-    return
+    $config_details =
     "<"."?php\n"
     .o.'db'.m.$cfg['mysql']['db'].nl
     .o.'user'.m.$cfg['mysql']['user'].nl
@@ -292,8 +292,20 @@ function setup_makeConfig($cfg, $doSpecial = false)
     .(empty($cfg['mysql']['dclient_flags']) ? '' : o.'client_flags'."'] = ".$cfg['mysql']['dclient_flags'].";\n")
     .o.'table_prefix'.m.$cfg['mysql']['table_prefix'].nl
     .o.'txpath'.m.txpath.nl
-    .o.'dbcharset'.m.$cfg['mysql']['dbcharset'].nl
-    ."?".">";
+    .o.'dbcharset'.m.$cfg['mysql']['dbcharset'].nl;
+
+    if (defined('is_multisite')) {
+        $config_details .=
+             o.'multisite_root_path'.m.multisite_root_path.nl
+            .o.'admin_url'.m.$cfg['site']['adminurl'].nl
+            .o.'cookie_domain'.m.$cfg['site']['cookiedomain'].nl
+            .'if (!defined(\'txpath\')) { define(\'txpath\', $txpcfg[\'txpath\']); }'."\n";
+    }
+
+    $config_details .=
+    "?".">";
+
+    return $config_details;
 }
 
 /**
