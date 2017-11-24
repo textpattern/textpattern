@@ -140,7 +140,8 @@ function setup_db($cfg = '')
     if (class_exists('\Textpattern\Skin\Skin') /*&& !preg_match('%/setup/themes/%', $themedir) */) {
         // $Skin = Txp::get('\Textpattern\Skin\Skin', $public_theme);
         // $Skin->import();
-        // $Skin->updateSkinInUse();    } else {
+        // $Skin->updateSkinInUse();
+    } else {
 
         foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
             safe_insert("txp_css", "name='".doSlash($key)."', css='".doSlash($data)."'");
