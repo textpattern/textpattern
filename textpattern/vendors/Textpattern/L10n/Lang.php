@@ -432,7 +432,7 @@ class Lang
         }
 
         if (!empty($textpack)) {
-            $textpack = "#@owner {$name}".n.$textpack;
+            $textpack = "#@owner {$name}".n."#@language ".TEXTPATTERN_DEFAULT_LANG.n.$textpack;
 
             return $this->install_textpack($textpack, false);
         }
