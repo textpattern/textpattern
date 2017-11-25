@@ -98,28 +98,28 @@ if (empty($cfg['site']['lang'])) {
 }
 $textarray = setup_load_lang($cfg['site']['lang']);
 
-if (empty($cfg['site']['siteurl'])) {
-    $protocol = (empty($_SERVER['HTTPS']) || @$_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
-    if (defined('is_multisite')) {
-        $cfg['site']['adminurl'] = $protocol.(@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+$protocol = (empty($_SERVER['HTTPS']) || @$_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
+if (defined('is_multisite')) {
+    if (empty($cfg['site']['adminurl'])) {
+        $cfg['site']['adminurl'] = $protocol.
+        (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+    }
+    if (empty($cfg['site']['cookiedomain'])) {
         $cfg['site']['cookiedomain'] = substr($cfg['site']['adminurl'], strpos($cfg['site']['adminurl'], '.') + 1);
+    }
+    if (empty($cfg['site']['siteurl'])) {
         $cfg['site']['siteurl'] = $protocol.'www.'.$cfg['site']['cookiedomain'];
-    } elseif (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST'])) {
+    }
+}
+if (empty($cfg['site']['siteurl'])) {
+    if (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST'])) {
         $cfg['site']['siteurl'] = $protocol.
         ((@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']).$rel_siteurl;
     } else {
         $cfg['site']['siteurl'] = $protocol.'mysite.com';
     }
 }
-//
-if (isset($cfg['site']['adminurl'])) {
-    $guess_adminurl = $cfg['site']['adminurl'];
-}
 
-if (isset($cfg['site']['cookiedomain'])) {
-    $guess_cookiedomain = $cfg['site']['cookiedomain'];
-}
-//
 
 switch ($step) {
     case '':
@@ -425,24 +425,18 @@ function step_getTxpLogin()
         echo hed(
                 gTxt('admin_url_multisite'), 2
             ).
-            graf(
-                gTxt('please_enter_admin_url')
-            ).
             inputLabel(
                 'setup_admin_url',
-                fInput('text', 'adminurl', txpspecialchars($guess_adminurl), '', '', '', INPUT_REGULAR, '', 'setup_admin_url', '', true),
-                'http(s)://', 'adminurl', array('class' => 'txp-form-field')
+                fInput('text', 'adminurl', @$cfg['site']['adminurl'], '', '', '', INPUT_REGULAR, '', 'setup_admin_url', '', true),
+                'please_enter_admin_url', 'setup_admin_url', array('class' => 'txp-form-field')
             ).
             hed(
                 setup_gTxt('cookie_domain_multisite'), 2
                 ).
-            graf(
-                setup_gTxt('please_enter_cookie_domain')
-            ).
             inputLabel(
                 'setup_cookie_domain',
-                fInput('text', 'cookiedomain', txpspecialchars($guess_cookiedomain), '', '', '', INPUT_REGULAR, '', 'setup_cookie_domain', '', true),
-                'domain name', 'cookiedomain', array('class' => 'txp-form-field')
+                fInput('text', 'cookiedomain', @$cfg['site']['cookiedomain'], '', '', '', INPUT_REGULAR, '', 'setup_cookie_domain', '', true),
+                'please_enter_cookie_domain', 'setup_cookie_domain', array('class' => 'txp-form-field')
             );
     }
 
@@ -508,15 +502,13 @@ function step_fbCreate()
     $setup_autoinstall_body = gTxt('setup_autoinstall_body')."<pre>".
         json_encode($cfg, defined('JSON_PRETTY_PRINT') ? TEXTPATTERN_JSON | JSON_PRETTY_PRINT : TEXTPATTERN_JSON).
         "</pre>";
-    if (defined('is_multisite')) {
-        $multisite_login_url = 'http://'.rtrim(preg_replace('|^https?://|', '', $cfg['site']['adminurl']), '/').'/';
-    }
+
     // Clear the session so no data is leaked.
     $_SESSION = $cfg = array();
     $warnings = @find_temp_dir() ? '' : msg(gTxt('set_temp_dir_prefs'), MSG_ALERT);
     if (defined('is_multisite')) {
-        $login_url  = $multisite_login_url.'index.php';
-        $setup_path = $multisite_root_path.'/public/ & '.multisite_root_path.'/admin/';
+        $login_url  = $cfg['site']['adminurl'].'/index.php';
+        $setup_path = multisite_root_path.'/public/ & '.multisite_root_path.'/admin/';
     } else {
         $login_url  = $GLOBALS['rel_txpurl'].'/index.php';
         $setup_path = '/'.basename(txpath).'/';
