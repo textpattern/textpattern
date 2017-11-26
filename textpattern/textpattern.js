@@ -1667,7 +1667,8 @@ jQuery.fn.txpColumnize = function ()
         }
 
         var disabled = $this.hasClass('asc') || $this.hasClass('desc') ? ' disabled="disabled"' : '';
-        var $li = $('<li><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="list_options" checked="checked" value="' + $id + '" data-index="' + index + '" type="checkbox"' + disabled + ' />&nbsp;' + $title + '</label></div></li>');
+        var $li = $('<li '+(disabled ? 'class="ui-state-disabled" ' : '')+'/>')
+        $li.html('<div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="list_options" checked="checked" value="' + $id + '" data-index="' + index + '" type="checkbox"' + disabled + ' />&nbsp;' + $title + '</label></div>');
         var $target = $table.find('tr>*:nth-child(' + (index + 1) + ')');
         var me = $li.find('input').on('change', function (ev) {
             toggleColumn($id, $target, $(this).prop('checked'));

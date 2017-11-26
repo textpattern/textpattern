@@ -677,7 +677,7 @@ function article($atts, $thing = null)
 
 function doArticles($atts, $iscustom, $thing = null)
 {
-    global $pretext, $prefs, $thisarticle, $thispage;
+    global $pretext, $prefs, $thispage;
     extract($pretext);
     extract($prefs);
     $customFields = getCustomFields();
@@ -845,7 +845,7 @@ function doArticles($atts, $iscustom, $thing = null)
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
     $not = $exclude === true || in_array('id', $exclude) ? 'NOT' : '';
     $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id))) : array();
-    $id        = ((!$id)        ? '' : " AND ID $not IN (".join(',', $ids).")")
+    $id        = ((!$ids)        ? '' : " AND ID $not IN (".join(',', $ids).")")
         .(!$excluded   ? '' : " AND ID NOT IN (".join(',', $excluded).")");
 
     $timeq = '';
@@ -932,8 +932,8 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
-    if (!empty($atts['id']) && empty($atts['sort'])) {
-        $safe_sort = "FIELD(id, ".join(',', $ids).")";
+    if (!empty($ids) && empty($atts['sort'])) {
+        $safe_sort = "FIELD(id, ".join(',', $ids)."), ".doSlash($sort);
     } else {
         $safe_sort = doSlash($sort);
     }
