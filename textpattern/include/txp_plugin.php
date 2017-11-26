@@ -550,7 +550,7 @@ function plugin_install()
                 }
 
                 if ($rs and $code) {
-                    Txp::get('\Textpattern\L10n\Lang')->install_textpack_plugin($name);
+                    Txp::get('\Textpattern\L10n\Lang')->installTextpackPlugin($name);
 
                     if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
                         load_plugin($name, true);

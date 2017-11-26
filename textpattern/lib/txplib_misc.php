@@ -6533,7 +6533,7 @@ class timezone
 
 function install_textpack($textpack, $add_new_langs = false)
 {
-    return Txp::get('\Textpattern\L10n\Lang')->install_textpack($textpack, $add_new_langs);
+    return Txp::get('\Textpattern\L10n\Lang')->installTextpack($textpack, $add_new_langs);
 }
 
 /**
