@@ -499,13 +499,15 @@ function step_fbCreate()
     $setup_autoinstall_body = gTxt('setup_autoinstall_body')."<pre>".
         json_encode($cfg, defined('JSON_PRETTY_PRINT') ? TEXTPATTERN_JSON | JSON_PRETTY_PRINT : TEXTPATTERN_JSON).
         "</pre>";
-
+    if (defined('is_multisite')) {
+        $multisite_admin_login_url = $GLOBALS['protocol'].$cfg['site']['adminurl'];
+    }
     // Clear the session so no data is leaked.
     $_SESSION = $cfg = array();
     $warnings = @find_temp_dir() ? '' : msg(gTxt('set_temp_dir_prefs'), MSG_ALERT);
     if (defined('is_multisite')) {
-        $login_url  = $cfg['site']['adminurl'].'/index.php';
-        $setup_path = multisite_root_path.'/public/ & '.multisite_root_path.'/admin/';
+        $login_url  = $multisite_admin_login_url.'/index.php';
+        $setup_path = multisite_root_path.'/admin/';
     } else {
         $login_url  = $GLOBALS['rel_txpurl'].'/index.php';
         $setup_path = '/'.basename(txpath).'/';
