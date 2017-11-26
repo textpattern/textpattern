@@ -293,6 +293,23 @@ function step_getDbInfo()
             'table_prefix', 'table_prefix', array('class' => 'txp-form-field')
         );
 
+    if (defined('is_multisite')) {
+        echo hed(
+                gTxt('multisite_config'), 2
+            ).
+            graf(gTxt('please_enter_multisite_details')).
+            inputLabel(
+                'setup_admin_url',
+                fInput('text', 'adminurl', @$cfg['site']['adminurl'], '', '', '', INPUT_REGULAR, '', 'setup_admin_url', '', true),
+                'admin_domain_multisite', 'setup_admin_url', array('class' => 'txp-form-field')
+            ).
+            inputLabel(
+                'setup_cookie_domain',
+                fInput('text', 'cookiedomain', @$cfg['site']['cookiedomain'], '', '', '', INPUT_REGULAR, '', 'setup_cookie_domain', '', true),
+                'cookie_domain_multisite', 'setup_cookie_domain', array('class' => 'txp-form-field')
+            );
+    }
+
     if (is_disabled('mail')) {
         echo msg(gTxt('warn_mail_unavailable'), MSG_ALERT);
     }
@@ -419,28 +436,8 @@ function step_getTxpLogin()
             'setup_public_theme',
             $public_theme_chooser,
             'public_theme', 'public_theme_name', array('class' => 'txp-form-field')
-        );
-
-    if (defined('is_multisite')) {
-        echo hed(
-                gTxt('admin_url_multisite'), 2
-            ).
-            inputLabel(
-                'setup_admin_url',
-                fInput('text', 'adminurl', @$cfg['site']['adminurl'], '', '', '', INPUT_REGULAR, '', 'setup_admin_url', '', true),
-                'please_enter_admin_url', 'setup_admin_url', array('class' => 'txp-form-field')
-            ).
-            hed(
-                setup_gTxt('cookie_domain_multisite'), 2
-                ).
-            inputLabel(
-                'setup_cookie_domain',
-                fInput('text', 'cookiedomain', @$cfg['site']['cookiedomain'], '', '', '', INPUT_REGULAR, '', 'setup_cookie_domain', '', true),
-                'please_enter_cookie_domain', 'setup_cookie_domain', array('class' => 'txp-form-field')
-            );
-    }
-
-    echo graf(
+        ).
+        graf(
             fInput('submit', 'Submit', gTxt('next_step'), 'publish')
         ).
         sInput('step_createTxp').
