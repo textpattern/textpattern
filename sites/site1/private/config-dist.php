@@ -102,27 +102,27 @@ $txpcfg['dbcharset'] = 'utf8';
 $txpcfg['client_flags'] = 0;
 
 /*
- * Optional, advanced: http address of the site serving images
+ * Optional, advanced: http address of the site serving images.
  * see https://forum.textpattern.io/viewtopic.php?id=34493
  */
 
 // define('ihu', 'http://static.example.com/');
 
 /*
- * Multi-Site setup: 
- *
- * Set txpath for shared txp and vendor directories
- * see https://github.com/textpattern/textpattern/blob/master/sites/README.txt#L160
+ * Optional, advanced: custom CSS rules for admin-side themes.
  */
 
-if (!defined('txpath')) {
-  define('txpath', $txpcfg['txpath']);
-}
+// define('admin_custom_css', 'your_custom_rules.css');
+
+/*
+ * Optional, advanced: custom JavaScript rules for admin-side themes.
+ */
+
+// define('admin_custom_js', 'your_custom_javascript.js');
 
 
 /**
- * Multi-Site setup: 
- *
+ * Multi-Site setup:
  * Set HTTP address of Textpattern admin URL.
  *
  */
@@ -132,7 +132,6 @@ if (!defined('txpath')) {
 
 /**
  * Multi-Site setup:
- *
  * Define top-level cookie domain for txp_login_public cookie.
  *
  */
@@ -142,10 +141,19 @@ if (!defined('txpath')) {
 
 /**
  * Multi-Site setup:
- *
  * Full server path to multi-site root directory, no slash at the end
  * This directory contains the site's /public, /private, and /admin directories.
  *
  */
 
 // $txpcfg['multisite_root_path'] = '/path/to/sites/example-site-dir';
+
+/**
+ * Multi-Site setup:
+ * Set txpath for shared txp and vendor directories
+ * see https://github.com/textpattern/textpattern/blob/master/sites/README.txt
+ */
+
+// if (!defined('txpath')) {
+//  define('txpath', $txpcfg['txpath']);
+// }
