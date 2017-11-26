@@ -464,7 +464,7 @@ function author_list($message = '')
                     'id'    => 'users_navigation',
                 )).
                 $paginator->render().
-                nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
+                nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
                 n.tag_end('div');
         }
 
