@@ -189,7 +189,9 @@ eod;
 
 function step_chooseLang()
 {
+    $_SESSION['direction'] = 'ltr';
     echo preamble();
+    unset($_SESSION['direction']);
     echo n.'<div class="txp-setup">',
         hed('Welcome to Textpattern CMS', 1),
         n.'<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">',

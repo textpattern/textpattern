@@ -816,10 +816,18 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     // Building query parts.
-    $frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';
+    if ($exclude && $exclude !== true) {
+        $exclude = array_map('strtolower', do_list_unique($exclude));
+        $excluded = array_filter($exclude, 'is_numeric');
+    } else {
+        $exclude or $exclude = array();
+        $excluded = array();
+    }
+
+    $frontpage = ($frontpage && (!$q || $issticky)) ? filterFrontPage() : '';
+    $match = do_list_unique($match);
     $category  = join("','", doSlash(do_list_unique($category)));
     $categories = array();
-    $match = do_list_unique($match);
 
     if (in_array('Category1', $match)) {
         $categories[] = "Category1 IN ('$category')";
@@ -829,15 +837,18 @@ function doArticles($atts, $iscustom, $thing = null)
         $categories[] = "Category2 IN ('$category')";
     }
 
+    $not = $exclude === true || in_array('category', $exclude) ? '!' : '';
     $categories = join(" OR ", $categories);
-    $category  = (!$category or !$categories)  ? '' : " AND ($categories)";
-    $section   = (!$section)   ? '' : " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')";
+    $category  = (!$category || !$categories)  ? '' : " AND $not($categories)";
+    $not = $exclude === true || in_array('section', $exclude) ? 'NOT' : '';
+    $section   = (!$section)   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
-    $author    = (!$author)    ? '' : " AND AuthorID IN ('".join("','", doSlash(do_list_unique($author)))."')";
-    $ids = $id ? array_map('intval', do_list_unique($id)) : array();
-    $exclude = $exclude ? array_map('intval', do_list_unique($exclude)) : array();
-    $id        = ((!$id)        ? '' : " AND ID IN (".join(',', $ids).")")
-        .((!$exclude)   ? '' : " AND ID NOT IN (".join(',', $exclude).")");
+    $not = $exclude === true || in_array('author', $exclude) ? 'NOT' : '';
+    $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
+    $not = $exclude === true || in_array('id', $exclude) ? 'NOT' : '';
+    $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id))) : array();
+    $id        = ((!$ids)        ? '' : " AND ID $not IN (".join(',', $ids).")")
+        .(!$excluded   ? '' : " AND ID NOT IN (".join(',', $excluded).")");
 
     $timeq = '';
 
@@ -867,13 +878,14 @@ function doArticles($atts, $iscustom, $thing = null)
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
     if ($keywords) {
+        $not = $exclude === true || in_array('keywords', $exclude) ? '!' : '';
         $keys = doSlash(do_list_unique($keywords));
 
         foreach ($keys as $key) {
             $keyparts[] = "FIND_IN_SET('".$key."', Keywords)";
         }
 
-        $keywords = " AND (".join(' or ', $keyparts).")";
+        $keywords = " AND $not(".join(' or ', $keyparts).")";
     }
 
     if ($q && $searchsticky) {
@@ -922,8 +934,8 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
-    if (!empty($atts['id']) && empty($atts['sort'])) {
-        $safe_sort = "FIELD(id, ".join(',', $ids).")";
+    if (!empty($ids) && empty($atts['sort'])) {
+        $safe_sort = "FIELD(id, ".join(',', $ids)."), ".doSlash($sort);
     } else {
         $safe_sort = doSlash($sort);
     }
@@ -948,7 +960,7 @@ function doArticles($atts, $iscustom, $thing = null)
         while ($a = nextRow($rs)) {
             ++$count;
             populateArticleData($a);
-            global $thisarticle, $uPosted, $limit;
+            global $thisarticle;
             $thisarticle['is_first'] = ($count == 1);
             $thisarticle['is_last'] = ($count == $last);
 
@@ -962,14 +974,11 @@ function doArticles($atts, $iscustom, $thing = null)
                 }
 
                 $articles[] = parse(gps('Form'));
-            } elseif ($allowoverride and $a['override_form']) {
+            } elseif ($allowoverride && $a['override_form']) {
                 $articles[] = parse_form($a['override_form']);
             } else {
                 $articles[] = ($thing) ? parse($thing) : parse_form($fname);
             }
-
-            // Sending these to paging_link(); Required?
-            $uPosted = $a['uPosted'];
 
             unset($GLOBALS['thisarticle']);
         }
