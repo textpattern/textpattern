@@ -263,7 +263,7 @@ function save_language_ui()
         $locale = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language_ui);
 
         if ($locale) {
-            set_pref('language_ui', $language_ui);
+            set_pref('language_ui', $language_ui, 'admin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
             load_lang($language_ui);
             $msg = gTxt('preferences_saved');
         } else {
@@ -388,7 +388,7 @@ function remove_language()
         $site_lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG, true);
         $ui_lang = get_pref('language_ui', $site_lang, true);
         $ui_lang = (array_key_exists($ui_lang, $represented_lang)) ? $ui_lang : $site_lang;
-        set_pref('language_ui', $ui_lang);
+        set_pref('language_ui', $ui_lang, 'admin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
         load_lang($ui_lang);
     } else {
         $msg = gTxt('cannot_delete', array('{thing}' => $langName));
