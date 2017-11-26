@@ -127,17 +127,15 @@ $txpcfg['client_flags'] = 0;
  *
  */
 
-// define("ahu", 'http://admin.example.com/');
-
+// $txpcfg['admin_url'] = 'admin.example.com';
 
 /**
  * Multi-Site setup:
  * Define top-level cookie domain for txp_login_public cookie.
  *
  */
- 
-// define('cookie_domain', 'example.com');
 
+// $txpcfg['cookie_domain'] = 'example.com';
 
 /**
  * Multi-Site setup:
