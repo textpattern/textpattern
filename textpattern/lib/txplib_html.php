@@ -1681,7 +1681,7 @@ function cookie_box($classname, $form = true)
         });
 EOF;
 
-    $out .= script_js($js);
+    $out .= script_js($js, false);
 
     if ($form) {
         if (serverSet('QUERY_STRING')) {

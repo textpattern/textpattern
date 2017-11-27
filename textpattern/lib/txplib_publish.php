@@ -852,7 +852,7 @@ function filterAtts($atts = null)
             ), $atts, 0);
             $trace->log('[filterAtts accepted]');
         } else {
-            // TODO: deal w/ nested txp:article[_custom] tags.
+            // TODO: deal w/ nested txp:article[_custom] tags. See https://github.com/textpattern/textpattern/issues/1009
             $trace->log('[filterAtts ignored]');
         }
     }

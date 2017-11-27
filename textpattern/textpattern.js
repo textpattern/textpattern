@@ -291,7 +291,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                 if (box.prop('checked')) {
                     $(this).closest(opt.highlighted).addClass(opt.selectedClass);
 
-                    if (-1 == $.inArray(box.val(), textpattern.Relay.data.selected)) { 
+                    if (-1 == $.inArray(box.val(), textpattern.Relay.data.selected)) {
                         textpattern.Relay.data.selected.push(box.val())
                     }
                 } else {
@@ -652,7 +652,7 @@ textpattern.Relay =
     callback: function (event, data, timeout) {
         clearTimeout(textpattern.Relay.timeouts[event])
 
-        timeout = !timeout ? 0 : parseInt(timeout, 10) 
+        timeout = !timeout ? 0 : parseInt(timeout, 10)
         if (!timeout || isNaN(timeout)) {
             return $(this).trigger(event, data)
         }
@@ -896,9 +896,9 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 
             callback(data.event)
         }
- 
+
     $(list).addClass('disabled')
-    
+
     if (typeof data.html == 'undefined') {
         $('<html />').load(url, data.data, function(responseText, textStatus, jqXHR) {
             handle(this)
@@ -1557,12 +1557,12 @@ $(document).keydown(function (e) {
 jQuery.fn.txpMenu = function(button) {
     var menu = this, dir = langdir === 'rtl' ? 'left' : 'right'
 
-    menu.click(function (e) {
+    menu.on('click focusin', function (e) {
         e.stopPropagation()
     }).menu({
         select: function(e, ui) {
             menu.menu("focus", null, ui.item)
-            if (e.relatedTarget !== null) {
+            if (e.originalEvent.type !== 'click') {
                 ui.item.find('input[type="checkbox"]').click()
             }
         }
@@ -1570,7 +1570,7 @@ jQuery.fn.txpMenu = function(button) {
         e.preventDefault()
     })
 
-    !button || button.on('click', function () {
+    !button || button.on('click', function (e) {
         menu.toggle().position(
         {
             my: dir+" top",
@@ -1578,12 +1578,14 @@ jQuery.fn.txpMenu = function(button) {
             of: this
         }).focus().menu("focus", null, menu.find(".ui-menu-item:first"))
 
-        $(document).one('click blur', function () {
+        $(document).one('blur click focusin', function (e) {
             menu.hide();
-        });
+        })
 
         return false
-    })
+    }).on('focusin', function(e) {
+        e.stopPropagation()
+    });
 
     return this
 }
@@ -1665,7 +1667,8 @@ jQuery.fn.txpColumnize = function ()
         }
 
         var disabled = $this.hasClass('asc') || $this.hasClass('desc') ? ' disabled="disabled"' : '';
-        var $li = $('<li><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="list_options" checked="checked" value="' + $id + '" data-index="' + index + '" type="checkbox"' + disabled + ' />&nbsp;' + $title + '</label></div></li>');
+        var $li = $('<li '+(disabled ? 'class="ui-state-disabled" ' : '')+'/>')
+        $li.html('<div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="list_options" checked="checked" value="' + $id + '" data-index="' + index + '" type="checkbox"' + disabled + ' />&nbsp;' + $title + '</label></div>');
         var $target = $table.find('tr>*:nth-child(' + (index + 1) + ')');
         var me = $li.find('input').on('change', function (ev) {
             toggleColumn($id, $target, $(this).prop('checked'));
@@ -1693,7 +1696,7 @@ jQuery.fn.txpColumnize = function ()
     var $ui = $('<div class="txp-list-options"><a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> ' + textpattern.gTxt('list_options') + '</a></div>');
     var $menu = $('<ul class="txp-dropdown" role="menu" />').hide()
 
-    $menu.html($('<li><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + ' />&nbsp;' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
+    $menu.html($('<li class="txp-dropdown-toggle-all"><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + ' />&nbsp;' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
 
     $ui.append($menu)
     $menu.txpMenu($ui.find('.txp-list-options-button'))
@@ -1843,9 +1846,11 @@ jQuery.fn.txpFileupload = function (options) {
         $.merge(data.formData, form.serializeArray())
 
         // Reduce maxChunkSize by extra data size (?)
-        var res = Array.from(data.formData.entries(), ([key, prop]) =>
-            prop.name.length + prop.value.length
-        ).reduce((a, b) => a + b + 2, 0)
+        var res = typeof data.formData.entries !== 'undefined'
+        ? Array.from(data.formData.entries(), function(prop) {
+            return prop[1].name.length + prop[1].value.length
+        }).reduce(function(a, b) {return a + b + 2}, 0)
+        : 128
 
         form.fileupload('option', 'maxChunkSize', maxChunkSize - 8*(res + 255))
     });
@@ -1879,7 +1884,7 @@ jQuery.fn.txpUploadPreview = function(template) {
 
     form.find('input[type="file"]').on('change', function (e) {
         last.nextAll().remove()
-        
+
         $(this.files).each(function (index) {
             var preview = '', mime = this.type.split('/'), hash = typeof(md5) == 'function' ? md5(this.name) : index, status = this.size > maxSize ? 'alert' : '';
 

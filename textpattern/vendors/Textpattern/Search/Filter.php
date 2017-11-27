@@ -250,7 +250,7 @@ class Filter
                     checkbox($name, $key, ($set_all || in_array($key, $selected)), -1).'&nbsp;'.$value
                     , 'label').n,
                     'div').n,
-                'li'
+                'li', $key === 'all' ? ' class="txp-dropdown-toggle-all"' : ''
             );
         }
 

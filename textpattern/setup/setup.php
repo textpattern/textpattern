@@ -29,7 +29,7 @@ $params = getopt('', array('config:', 'debug::', 'force::'));
 if (! $file = @$params['config']) {
     exit(<<<EOF
 Usage: php setup.php --config="my-setup-config.json"
-Ohter options:
+Other options:
     --force - overwrite existing 'config.php' file.
     --debug - debug output to STDOUT.
 

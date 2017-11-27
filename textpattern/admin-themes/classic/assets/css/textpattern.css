@@ -2065,16 +2065,14 @@ button {
  * 1. Ensure dropdowns are hidden at page load (prevents content 'jumping').
  *
  * <ul class="txp-dropdown">
- *     <li>
+ *     <li class="txp-dropdown-toggle-all">
  *         <div>
- *             <input class="checkbox" type="checkbox">
- *             <label>Search all</label>
+ *             <label><input class="checkbox" type="checkbox">&nbsp;Toggle all/none selected</label>
  *         </div>
  *     </li>
  *     <li>
  *         <div>
- *             <input class="checkbox active" type="checkbox">
- *             <label>ID#</label>
+ *             <label><input class="checkbox active" type="checkbox">&nbsp;ID#</label>
  *         </div>
  *     </li>
  * </ul>
@@ -2086,15 +2084,8 @@ button {
     width: 18em;
     z-index: 100;
   }
-  .txp-dropdown .checkbox {
-    vertical-align: -0.083333333333333em;
-  }
-  .txp-dropdown .checkbox + label {
-    display: inline-block;
-    width: 85%;
-    padding: 0 0.25em;
-    cursor: pointer;
-    vertical-align: text-top;
+  .txp-dropdown-toggle-all {
+    border-bottom: 1px solid #d4d4d4;
   }
   /**
  * Search widget at top of lists.

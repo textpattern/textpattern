@@ -505,7 +505,7 @@ function load_lang($lang, $events = null)
 
     if ($lang == LANG
         && $production_status !== 'live'
-        && @$debug = parse_ini_file(txpath.DS.'config.ini')
+        && @$debug = parse_ini_file(txpath.DS.'mode.ini')
     ) {
         $textarray += $debug;
     }
@@ -5200,6 +5200,7 @@ function txp_die($msg, $status = '503', $url = '')
         '303' => 'See Other',
         '304' => 'Not Modified',
         '307' => 'Temporary Redirect',
+        '308' => 'Permanent Redirect',
         '401' => 'Unauthorized',
         '403' => 'Forbidden',
         '404' => 'Not Found',
@@ -5223,7 +5224,7 @@ function txp_die($msg, $status = '503', $url = '')
     callback_event('txp_die', $code, 0, $url);
 
     // Redirect with status.
-    if ($url && in_array($code, array(301, 302, 303, 307))) {
+    if ($url && in_array($code, array(301, 302, 303, 307, 308))) {
         ob_end_clean();
         header("Location: $url", true, $code);
         die('<html><head><meta http-equiv="refresh" content="0;URL='.txpspecialchars($url).'"></head><body><p>Document has <a href="'.txpspecialchars($url).'">moved here</a>.</p></body></html>');
