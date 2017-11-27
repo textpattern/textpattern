@@ -208,24 +208,60 @@ class Plugin
      * Install/Update a plugin Textpack.
      *
      * @param   string $name Plugin name
-     * @return  int          Number of installed strings
      */
 
     public function install_textpack($name)
     {
+        $owner = doSlash($name);
         if (has_handler('plugin_textpack.fetch')) {
             $textpack = callback_event('plugin_textpack.fetch', '', false, compact('name'));
         } else {
-            $textpack = safe_field('textpack', 'txp_plugin', "name = '".doSlash($name)."'");
+            $textpack = safe_field('textpack', 'txp_plugin', "name = '{$owner}'");
         }
 
-        if (!empty($textpack)) {
-            $textpack = "#@owner {$name}".n."#@language ".TEXTPATTERN_DEFAULT_LANG.n.$textpack;
-
-            return \Txp::get('\Textpattern\L10n\Lang')->install_textpack($textpack, false);
+        $textpack = $this->parseTextpack($textpack);
+        if (empty($textpack)) {
+            return;
         }
 
-        return 0;
+        if (! empty($textpack[TEXTPATTERN_DEFAULT_LANG])) {
+            $fallback = TEXTPATTERN_DEFAULT_LANG;
+        } else {
+            // Get first language
+            reset($textpack);
+            $fallback = key($textpack);
+        }
+
+        $installed_langs = \Txp::get('\Textpattern\L10n\Lang')->installed();
+        foreach ($installed_langs as $lang) {
+            if (empty($textpack[$lang])) {
+                $langpack = $textpack[$fallback];
+            } else {
+                $langpack = array_merge($textpack[$fallback], $textpack[$lang]);
+            }
+
+            $lang = doSlash($lang);
+            $exists = safe_column('name', 'txp_lang', "lang='{$lang}'");
+            foreach ($langpack as $name => $item) {
+                $name = doSlash($name);
+                $event = doSlash($item['event']);
+                $data = doSlash($item['data']);
+                $fields = "lastmod = NOW(), data = '{$data}', event = '{$event}', owner = '{$owner}'";
+
+                if (! empty($exists[$name])) {
+                    safe_update(
+                        'txp_lang',
+                        $fields,
+                        "lang = '{$lang}' AND name = '{$name}'"
+                    );
+                } else {
+                    safe_insert(
+                        'txp_lang',
+                        $fields . ", lang = '{$lang}', name = '{$name}'"
+                    );
+                }
+            }
+        }
     }
 
     /**
@@ -241,5 +277,50 @@ class Plugin
         }
     }
 
+    /**
+     * Converts a Textpack to an associative array.
+     *
+     * @param  string       $textpack The Textpack
+     * @return array An array of translations
+     */
 
+    public function parseTextpack($textpack)
+    {
+        $out = array();
+        $language = TEXTPATTERN_DEFAULT_LANG;
+        $event = '';
+
+        $lines = explode(n, (string)$textpack);
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            // A blank/comment line.
+            if ($line === '' || preg_match('/^#[^@]/', $line, $m)) {
+                continue;
+            }
+
+            // Sets language.
+            if (preg_match('/^#@language\s+(.+)$/', $line, $m)) {
+                $language = \Txp::get('\Textpattern\L10n\Locale')->validLocale($m[1]);
+                continue;
+            }
+
+            // Sets event.
+            if (preg_match('/^#@([a-zA-Z0-9_-]+)$/', $line, $m)) {
+                $event = $m[1];
+                continue;
+            }
+
+            if (preg_match('/^([\w\-]+)\s*=>\s*(.+)$/', $line, $m)) {
+                if (!empty($m[1]) && !empty($m[2])) {
+                    $out[$language][$m[1]] = array(
+                        'event'   => $event,
+                        'data'    => $m[2],
+                    );
+                }
+            }
+        }
+
+        return $out;
+    }
 }
