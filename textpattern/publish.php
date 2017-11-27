@@ -824,6 +824,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
     $frontpage = ($frontpage && (!$q || $issticky)) ? filterFrontPage() : '';
     $match = do_list_unique($match);
+    $category !== true or $category = category(array());
     $category  = join("','", doSlash(do_list_unique($category)));
     $categories = array();
 
@@ -839,9 +840,11 @@ function doArticles($atts, $iscustom, $thing = null)
     $categories = join(" OR ", $categories);
     $category  = (!$category || !$categories)  ? '' : " AND $not($categories)";
     $not = $exclude === true || in_array('section', $exclude) ? 'NOT' : '';
+    $section !== true or $section = section(array());
     $section   = (!$section)   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
     $not = $exclude === true || in_array('author', $exclude) ? 'NOT' : '';
+    $author !== true or $author = author(array('escape' => false, 'title' => false));
     $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
     $not = $exclude === true || in_array('id', $exclude) ? 'NOT' : '';
     $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id))) : array();
@@ -875,7 +878,10 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
+    $keywords !== true or $keywords = keywords(array());
+
     if ($keywords) {
+        $keyparts = array();
         $not = $exclude === true || in_array('keywords', $exclude) ? '!' : '';
         $keys = doSlash(do_list_unique($keywords));
 
@@ -883,7 +889,7 @@ function doArticles($atts, $iscustom, $thing = null)
             $keyparts[] = "FIND_IN_SET('".$key."', Keywords)";
         }
 
-        $keywords = " AND $not(".join(' or ', $keyparts).")";
+        !$keyparts or $keywords = " AND $not(".join(' or ', $keyparts).")";
     }
 
     if ($q && $searchsticky) {
