@@ -94,7 +94,7 @@ function setup_db($cfg = '')
     $setup->initData();
 
 
-    setup_txp_lang();
+    setup_txp_lang($cfg['site']['lang']);
 
     // Create core prefs
     $setup->initPrefs();
@@ -171,17 +171,29 @@ function setup_db($cfg = '')
     rebuild_tree_full('file');
 }
 
+/**
+ * Installing Language Files
+ *
+ * @param  string $langs The desired language code or comma separated string
+ */
 
-function setup_txp_lang()
+function setup_txp_lang($langs)
 {
     global $language;
 
     Txp::getContainer()->remove('\Textpattern\L10n\Lang');
 
+    $langs = array_flip(do_list_unique($langs));
+    unset($langs[$language]);
+
     if (!Txp::get('\Textpattern\L10n\Lang')->install_file($language)) {
         // If cannot install from lang file, setup the Default lang. `language` pref changed too.
         $language = TEXTPATTERN_DEFAULT_LANG;
         Txp::get('\Textpattern\L10n\Lang')->install_file($language);
+        unset($langs[$language]);
+    }
+    foreach (array_flip($langs) as $lang) {
+        Txp::get('\Textpattern\L10n\Lang')->install_file($lang);
     }
 }
 
@@ -191,13 +203,16 @@ function setup_txp_lang()
  * The fallback language is guaranteed to exist, so any unknown strings
  * will be used from that pack to fill in any gaps.
  *
- * @param  string $lang The desired language code
- * @return array        The language-specific name-value pairs
+ * @param  string $langs The desired language code or comma separated string
+ * @return array         The language-specific name-value pairs
  */
 
-function setup_load_lang($lang)
+function setup_load_lang($langs)
 {
     global $language;
+
+    $langs = do_list($langs);
+    $lang = $langs[0];
 
     $default_file = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->findFilename(TEXTPATTERN_DEFAULT_LANG);
     $default_textpack = array();
