@@ -210,7 +210,7 @@ abstract class Theme
                 }
             }
         }
- 
+
         return $out;
     }
 

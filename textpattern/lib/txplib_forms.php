@@ -701,33 +701,39 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
 
     if ($datevar == '%Y' || $name == 'year' || $name == 'exp_year') {
         $class = 'input-year';
-        $size = INPUT_XSMALL;
         $pattern = '[0-9]{4}';
+        $size = INPUT_XSMALL;
+        $title = 'input_year';
     }
 
     if ($datevar == '%m' || $name == 'month' || $name == 'exp_month') {
         $class = 'input-month';
         $pattern = '(0[1-9]|1[012])';
+        $title = 'input_month';
     }
 
     if ($datevar == '%d' || $name == 'day' || $name == 'exp_day') {
         $class = 'input-day';
         $pattern = '(0[1-9]|[12][0-9]|3[01])';
+        $title = 'input_day';
     }
 
     if ($datevar == '%H' || $name == 'hour' || $name == 'exp_hour') {
         $class = 'input-hour';
         $pattern = '([0-1][0-9]|2[0-3])';
+        $title = 'input_hour';
     }
 
     if ($datevar == '%M' || $name == 'minute' || $name == 'exp_minute') {
         $class = 'input-minute';
         $pattern = '([0-5][0-9])';
+        $title = 'input_minute';
     }
 
     if ($datevar == '%S' || $name == 'second' || $name == 'exp_second') {
         $class = 'input-second';
         $pattern = '([0-5][0-9])';
+        $title = 'input_second';
     }
 
     return n.tag_void('input', array(
@@ -739,8 +745,8 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
         'pattern'     => $pattern,
         'size'        => (int) $size,
         'maxlength'   => $size,
-        'title'       => gTxt('article_'.$name),
-        'aria-label'  => gTxt('article_'.$name),
+        'title'       => gTxt($title),
+        'aria-label'  => gTxt($title),
         'placeholder' => $placeholder,
         'tabindex'    => (int) $tab,
         'value'       => $value,

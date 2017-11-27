@@ -339,7 +339,7 @@ function step_getTxpLogin()
     check_config_txp(2);
 
     // Default theme selector.
-    $core_themes = array('hive', 'hiveneutral');
+    $core_themes = array('classic', 'hive', 'hiveneutral');
 
     $vals = \Textpattern\Admin\Theme::names(1);
 
@@ -349,7 +349,9 @@ function step_getTxpLogin()
 
     asort($vals, SORT_STRING);
 
-    $theme_chooser = selectInput('theme', $vals, @$cfg['site']['theme'], '', '', 'setup_admin_theme');
+    $theme_chooser = selectInput('theme', $vals,
+        (empty($cfg['site']['theme']) ? 'hive' : $cfg['site']['theme']),
+        '', '', 'setup_admin_theme');
 
     $vals = get_public_themes_list();
     $public_theme_chooser = selectInput('public_theme', $vals, @$cfg['site']['public_theme'], '', '', 'setup_public_theme');
