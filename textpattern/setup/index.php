@@ -339,7 +339,7 @@ function step_getTxpLogin()
     check_config_txp(2);
 
     // Default theme selector.
-    $core_themes = array('hive', 'hiveneutral');
+    $core_themes = array('classic', 'hive', 'hiveneutral');
 
     $vals = \Textpattern\Admin\Theme::names(1);
 
