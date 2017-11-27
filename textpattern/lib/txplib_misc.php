@@ -505,7 +505,7 @@ function load_lang($lang, $events = null)
 
     if ($lang == LANG
         && $production_status !== 'live'
-        && @$debug = parse_ini_file(txpath.DS.'config.ini')
+        && @$debug = parse_ini_file(txpath.DS.'mode.ini')
     ) {
         $textarray += $debug;
     }
