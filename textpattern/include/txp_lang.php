@@ -59,6 +59,8 @@ if ($event == 'lang') {
 
 function list_languages($message = '')
 {
+    global $txp_user;
+
     $available_lang = Txp::get('\Textpattern\L10n\Lang')->available();
     $installed_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_INSTALLED);
     $active_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_ACTIVE);
@@ -93,6 +95,17 @@ function list_languages($message = '')
 
     $grid = '';
     $done = array();
+    $in_use_by = safe_rows('val, user_name', 'txp_prefs', "name = 'language_ui' AND val in (".join(',', quote_list(array_keys($represented_lang))).") AND user_name != '".doSlash($txp_user)."'");
+
+    $langUse = array();
+
+    foreach ($in_use_by as $row) {
+        $langUse[$row['val']][] = $row['user_name'];
+    }
+
+    foreach($langUse as $key => $row) {
+        $langUse[$key] = tag(eLink('admin', 'author_list', 'search_method', 'login', '('.count($row).')' , 'crit', join(',', doSlash($row))), 'span', array('class' => 'txp-lang-user-count'));
+    }
 
     // Create the widget components.
     foreach ($represented_lang + $available_lang as $langname => $langdata) {
@@ -152,7 +165,8 @@ function list_languages($message = '')
         $grid .= tag(
             graf(
                 ($icon ? '<span class="ui-icon '.$icon.'"></span>' : '').n.
-                tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto'))
+                tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).
+                ($btnRemove && array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
             ).
             graf(
                 (has_privs('lang.edit')
