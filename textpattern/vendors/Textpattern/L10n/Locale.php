@@ -385,6 +385,7 @@ class Locale
 
     public function validLocale($code)
     {
+        $code = strtolower($code);
         if (empty($this->locales[$code])) {
             if (!empty($this->recodeLocale[$code])) {
                 $code = $this->recodeLocale[$code];

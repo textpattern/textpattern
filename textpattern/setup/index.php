@@ -145,8 +145,8 @@ function preamble()
     gTxtScript(array('help'));
 
     if (isset($cfg['site']['lang']) && !isset($_SESSION['direction'])) {
-        $file = Txp::get('\Textpattern\L10n\Lang')->findFilename($cfg['site']['lang']);
-        $meta = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($file);
+        $file = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->findFilename($cfg['site']['lang']);
+        $meta = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->fetchMeta($file);
         $_SESSION['direction'] = isset($meta['direction']) ? $meta['direction'] : 'ltr';
     }
 
@@ -189,7 +189,9 @@ eod;
 
 function step_chooseLang()
 {
+    $_SESSION['direction'] = 'ltr';
     echo preamble();
+    unset($_SESSION['direction']);
     echo n.'<div class="txp-setup">',
         hed('Welcome to Textpattern CMS', 1),
         n.'<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">',
@@ -337,7 +339,7 @@ function step_getTxpLogin()
     check_config_txp(2);
 
     // Default theme selector.
-    $core_themes = array('hive', 'hiveneutral');
+    $core_themes = array('classic', 'hive', 'hiveneutral');
 
     $vals = \Textpattern\Admin\Theme::names(1);
 
@@ -347,7 +349,9 @@ function step_getTxpLogin()
 
     asort($vals, SORT_STRING);
 
-    $theme_chooser = selectInput('theme', $vals, @$cfg['site']['theme'], '', '', 'setup_admin_theme');
+    $theme_chooser = selectInput('theme', $vals,
+        (empty($cfg['site']['theme']) ? 'hive' : $cfg['site']['theme']),
+        '', '', 'setup_admin_theme');
 
     $vals = get_public_themes_list();
     $public_theme_chooser = selectInput('public_theme', $vals, @$cfg['site']['public_theme'], '', '', 'setup_public_theme');
@@ -557,7 +561,7 @@ function langs()
 {
     global $cfg;
 
-    $files = Txp::get('\Textpattern\L10n\Lang')->files();
+    $files = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->files();
     $langs = array();
 
     $out = n.'<div class="txp-form-field">'.
@@ -569,7 +573,8 @@ function langs()
 
     if (is_array($files) && !empty($files)) {
         foreach ($files as $file) {
-            $meta = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($file);
+            $meta = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->fetchMeta($file);
+
             if (! empty($meta['code'])) {
                 $out .= n.'<option value="'.txpspecialchars($meta['code']).'"'.
                     (($meta['code'] == $cfg['site']['lang']) ? ' selected="selected"' : '').
