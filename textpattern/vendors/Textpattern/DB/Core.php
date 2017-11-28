@@ -157,9 +157,11 @@ class Core
             }
         }
 
+        $path_to_public_site = (isset($txpcfg['multisite_root_path'])) ? $txpcfg['multisite_root_path'].DS.'public' : dirname(txpath);
+
         $pf = array();
-        $pf['file_base_path'] = dirname(txpath).DS.'files';
-        $pf['path_to_site']   = dirname(txpath);
+        $pf['file_base_path'] = $path_to_public_site.DS.'files';
+        $pf['path_to_site']   = $path_to_public_site;
         $pf['tempdir']        = find_temp_dir();
         $pf['siteurl']        = $siteurl;
         $pf['theme_name']     = empty($theme_name) ? 'hive' : $theme_name;

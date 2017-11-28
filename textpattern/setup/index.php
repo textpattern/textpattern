@@ -98,8 +98,20 @@ if (empty($cfg['site']['lang'])) {
 }
 setup_load_lang($cfg['site']['lang']);
 
+$protocol = (empty($_SERVER['HTTPS']) || @$_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
+if (defined('is_multisite')) {
+    if (empty($cfg['site']['adminurl'])) {
+        $cfg['site']['adminurl'] = $protocol.
+        (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+    }
+    if (empty($cfg['site']['cookiedomain'])) {
+        $cfg['site']['cookiedomain'] = substr($cfg['site']['adminurl'], strpos($cfg['site']['adminurl'], '.') + 1);
+    }
+    if (empty($cfg['site']['siteurl'])) {
+        $cfg['site']['siteurl'] = $protocol.'www.'.$cfg['site']['cookiedomain'];
+    }
+}
 if (empty($cfg['site']['siteurl'])) {
-    $protocol = (empty($_SERVER['HTTPS']) || @$_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
     if (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST'])) {
         $cfg['site']['siteurl'] = $protocol.
         ((@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']).$rel_siteurl;
@@ -283,6 +295,23 @@ function step_getDbInfo()
             'table_prefix', 'table_prefix', array('class' => 'txp-form-field')
         );
 
+    if (defined('is_multisite')) {
+        echo hed(
+                gTxt('multisite_config'), 2
+            ).
+            graf(gTxt('please_enter_multisite_details')).
+            inputLabel(
+                'setup_admin_url',
+                fInput('text', 'adminurl', @$cfg['site']['adminurl'], '', '', '', INPUT_REGULAR, '', 'setup_admin_url', '', true),
+                'admin_domain_multisite', 'setup_admin_url', array('class' => 'txp-form-field')
+            ).
+            inputLabel(
+                'setup_cookie_domain',
+                fInput('text', 'cookiedomain', @$cfg['site']['cookiedomain'], '', '', '', INPUT_REGULAR, '', 'setup_cookie_domain', '', true),
+                'cookie_domain_multisite', 'setup_cookie_domain', array('class' => 'txp-form-field')
+            );
+    }
+
     if (is_disabled('mail')) {
         echo msg(gTxt('warn_mail_unavailable'), MSG_ALERT);
     }
@@ -310,6 +339,11 @@ function step_printConfig()
     $cfg['mysql']['host'] = ps('dhost');
     $cfg['mysql']['db'] = ps('ddb');
     $cfg['mysql']['table_prefix'] = ps('dprefix');
+
+    if (defined('is_multisite')) {
+        $cfg['site']['adminurl'] = ps('adminurl');
+        $cfg['site']['cookiedomain'] = ps('cookiedomain');
+    }
 
     echo preamble();
     echo txp_setup_progress_meter(2).
@@ -469,11 +503,19 @@ function step_fbCreate()
     $setup_autoinstall_body = gTxt('setup_autoinstall_body')."<pre>".
         json_encode($cfg, defined('JSON_PRETTY_PRINT') ? TEXTPATTERN_JSON | JSON_PRETTY_PRINT : TEXTPATTERN_JSON).
         "</pre>";
-
+    if (defined('is_multisite')) {
+        $multisite_admin_login_url = $GLOBALS['protocol'].$cfg['site']['adminurl'];
+    }
     // Clear the session so no data is leaked.
     $_SESSION = $cfg = array();
     $warnings = @find_temp_dir() ? '' : msg(gTxt('set_temp_dir_prefs'), MSG_ALERT);
-    $login_url = $GLOBALS['rel_txpurl'].'/index.php';
+    if (defined('is_multisite')) {
+        $login_url  = $multisite_admin_login_url.'/index.php';
+        $setup_path = multisite_root_path.'/admin/';
+    } else {
+        $login_url  = $GLOBALS['rel_txpurl'].'/index.php';
+        $setup_path = '/'.basename(txpath).'/';
+    }
 
     echo txp_setup_progress_meter(4).
         n.'<div class="txp-setup">'.
@@ -488,7 +530,9 @@ function step_fbCreate()
             gTxt('setup_autoinstall_text').popHelp('#', 0, 0, 'pophelp', $setup_autoinstall_body)
         ).
         graf(
-            gTxt('installation_postamble')
+            gTxt('installation_postamble', array(
+                '{setuppath}' => $setup_path,
+            ))
         ).
         hed(gTxt('thanks_for_interest'), 3).
         graf(
@@ -507,10 +551,15 @@ function step_fbCreate()
 function setup_config_contents()
 {
     global $cfg;
+    if (defined('is_multisite')) {
+        $config_path = multisite_root_path.'/private/';
+    } else {
+        $config_path = '/'.basename(txpath).'/';
+    }
     return hed(gTxt('creating_config'), 2).
         graf(
             strong(gTxt('before_you_proceed')).' '.
-            gTxt('create_config', array('{txpath}' => basename(txpath)))
+            gTxt('create_config', array('{configpath}' => $config_path))
         ).
         n.'<textarea class="code" name="config" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'" dir="ltr" readonly>'.
             setup_makeConfig($cfg, true).
@@ -628,8 +677,14 @@ function check_config_exists()
         @include txpath.'/config.php';
     }
 
+    if (defined('is_multisite')) {
+        $config_path = multisite_root_path.'/private/';
+    } else {
+        $config_path = '/'.basename(txpath).'/';
+    }
+
     if (!empty($txpcfg['db'])) {
-        echo msg(gTxt('already_installed', array('{txpath}' => basename(txpath))), MSG_ALERT, true);
+        echo msg(gTxt('already_installed', array('{configpath}' => $config_path)), MSG_ALERT, true);
     }
 }
 

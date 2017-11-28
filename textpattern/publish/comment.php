@@ -635,7 +635,7 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
     $out .= permlinkurl_id($parentid).n;
 
     if (has_privs('discuss', $AuthorID)) {
-        $out .= hu.'textpattern/index.php?event=discuss&step=discuss_edit&discussid='.$discussid.n;
+        $out .= ahu.'index.php?event=discuss&step=discuss_edit&discussid='.$discussid.n;
     }
 
     $out .= gTxt('status').": ".$evaluator->get_result('text').'. '.implode(',', $evaluator->get_result_message()).n;

@@ -21,94 +21,24 @@
  * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Make sure we display all errors that occur during initialisation.
-error_reporting(E_ALL | E_STRICT);
-@ini_set("display_errors", "1");
-
-if (@ini_get('register_globals')) {
-    if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
-        die('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
-    }
-
-    // Collect and unset all registered variables from globals.
-    $_txpg = array_merge(
-        isset($_SESSION) ? (array) $_SESSION : array(),
-        (array) $_ENV,
-        (array) $_GET,
-        (array) $_POST,
-        (array) $_COOKIE,
-        (array) $_FILES,
-        (array) $_SERVER
-    );
-
-    // As the deliberate awkwardly-named local variable $_txpfoo MUST NOT be
-    // unset to avoid notices further down, we must remove any potential
-    // identically-named global from the list of global names here.
-    unset($_txpg['_txpfoo']);
-
-    foreach ($_txpg as $_txpfoo => $value) {
-        if (!in_array($_txpfoo, array(
-            'GLOBALS',
-            '_SERVER',
-            '_GET',
-            '_POST',
-            '_FILES',
-            '_COOKIE',
-            '_SESSION',
-            '_REQUEST',
-            '_ENV',
-        ))) {
-            unset($GLOBALS[$_txpfoo], $$_txpfoo);
-        }
-    }
-}
-
-define("txpinterface", "public");
+// Use buffering to ensure bogus whitespace is ignored.
+ob_start(null, 2048);
+@include '../private/config.php';
+ob_end_clean();
 
 if (!defined('txpath')) {
     define("txpath", realpath(dirname(__FILE__).'/../../../textpattern'));
 }
 
-// Save server path to site root.
-if (!isset($here)) {
-    $here = dirname(__FILE__);
-}
-
-// Pull in config unless configuration data has already been provided
-// (multi-headed use).
 if (!isset($txpcfg['table_prefix'])) {
-    // Use buffering to ensure bogus whitespace in config.php is ignored.
-    ob_start(null, 2048);
-    include '../private/config.php';
-    ob_end_clean();
-}
+    $this_protocol = (empty($_SERVER['HTTPS']) || @$_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
+    $this_domain   = (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+    $admin_subdomain = 'admin'; // assumed admin subdomain
+    $config_missing_setup_url = $this_protocol.$admin_subdomain.'.'.substr($this_domain, strpos($this_domain, '.') + 1).'/setup/';
 
-include txpath.'/lib/class.trace.php';
-$trace = new Trace();
-$trace->start('[PHP includes, stage 1]');
-include txpath.'/lib/constants.php';
-include txpath.'/lib/txplib_misc.php';
-$trace->stop();
+    $config_missing_setup_message = 'config.php is missing or corrupt. To install Textpattern, visit <a href="'.$config_missing_setup_url.'">'.$config_missing_setup_url.'</a> (if necessary, replace \''.$admin_subdomain.'\' with your own admin subdomain)';
 
-if (!isset($txpcfg['table_prefix'])) {
-    txp_status_header('503 Service Unavailable');
-    exit('config.php is missing or corrupt.  To install Textpattern, visit <a href="./setup/">setup/</a>');
-}
-
-// Custom caches, etc?
-if (!empty($txpcfg['pre_publish_script'])) {
-    $trace->start("[Pre Publish Script: '{$txpcfg['pre_publish_script']}']");
-    require $txpcfg['pre_publish_script'];
-    $trace->stop();
-}
-
-include txpath.'/publish.php';
-textpattern();
-
-if ($production_status !== 'live') {
-    echo $trace->summary();
-
-    if ($production_status === 'debug') {
-        echo $trace->result();
-    }
+    include txpath.'/index.php';
+} else {
+    include txpath.'/../index.php';
 }

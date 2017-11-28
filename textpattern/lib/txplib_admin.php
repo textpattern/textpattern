@@ -59,7 +59,7 @@ function send_account_activation($name)
 
             n.n.gTxt('your_login_is').' '.$name.
             n.n.gTxt('account_activation_confirmation').
-            n.hu.'textpattern/index.php?activate='.$activation_code.
+            n.ahu.'index.php?activate='.$activation_code.
             n.n.gTxt('link_expires', array(
                 '{year}'  => $expiryYear,
                 '{month}' => $expiryMonth,
@@ -131,7 +131,7 @@ function send_reset_confirmation_request($name)
 
         $message = gTxt('salutation', array('{name}' => $name)).
             n.n.gTxt('password_reset_confirmation').
-            n.hu.'textpattern/index.php?confirm='.$confirm.
+            n.ahu.'index.php?confirm='.$confirm.
             n.n.gTxt('link_expires', array(
                 '{year}'  => $expiryYear,
                 '{month}' => $expiryMonth,
@@ -188,7 +188,7 @@ function send_password($RealName, $name, $email, $password)
         n.n.gTxt('your_login_is').' '.$name.
         n.gTxt('your_password_is').' '.$password.
 
-        n.n.gTxt('log_in_at').' '.hu.'textpattern/index.php';
+        n.n.gTxt('log_in_at').' '.ahu.'index.php';
 
     return txpMail($email, "[$sitename] ".gTxt('your_login_info'), $message);
 }
@@ -229,7 +229,7 @@ function send_new_password($password, $email, $name)
 
         n.n.gTxt('your_password_is').' '.$password.
 
-        n.n.gTxt('log_in_at').' '.hu.'textpattern/index.php';
+        n.n.gTxt('log_in_at').' '.ahu.'index.php';
 
     return txpMail($email, "[$sitename] ".gTxt('your_new_password'), $message);
 }

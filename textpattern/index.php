@@ -73,7 +73,10 @@ ob_start(null, 2048);
 if (!isset($txpcfg['table_prefix']) && !@include './config.php') {
     ob_end_clean();
     header('HTTP/1.1 503 Service Unavailable');
-    exit('config.php is missing or corrupt. To install Textpattern, visit <a href="./setup/">setup</a>.');
+    if (!isset($config_missing_setup_message)) {
+        $config_missing_setup_message = 'config.php is missing or corrupt. To install Textpattern, visit <a href="./setup/">setup</a>.';
+    }
+    exit($config_missing_setup_message);
 } else {
     ob_end_clean();
 }
@@ -141,6 +144,24 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     // HTTP address of the site serving images.
     if (!defined('ihu')) {
         define('ihu', hu);
+    }
+
+    // HTTP address of Textpattern admin URL.
+    if (!defined('ahu')) {
+        if (empty($txpcfg['admin_url'])) {
+            $adminurl = hu.'textpattern/';
+        } else {
+            $adminurl = PROTOCOL.rtrim(preg_replace('|^https?://|', '', $txpcfg['admin_url']), '/').'/';
+        }
+        define('ahu', $adminurl);
+    }
+
+    // shared admin and public cookie_domain when using multisite admin URL
+    if (!defined('cookie_domain')) {
+        if (!isset($txpcfg['cookie_domain'])) {
+          $txpcfg['cookie_domain'] = '';
+        }
+        define('cookie_domain', $txpcfg['cookie_domain']);
     }
 
     if (!empty($locale)) {
