@@ -6856,7 +6856,7 @@ function check_file_integrity($flags = INTEGRITY_STATUS)
 function get_files_content($dir, $ext)
 {
     $result = array();
-    foreach (scandir($dir) as $file) {
+    foreach ((array)@scandir($dir) as $file) {
         if (preg_match('/^(.+)\.'.$ext.'$/', $file, $match)) {
             $result[$match[1]] = file_get_contents("$dir/$file");
         }

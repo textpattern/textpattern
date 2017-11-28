@@ -92,7 +92,7 @@ function setup_db($cfg = '')
 
     // Initial mandatory data
     $setup->initData();
-
+    msg(gTxt('creating_db_tables'));
 
     setup_txp_lang($cfg['site']['lang']);
 
@@ -113,6 +113,7 @@ function setup_db($cfg = '')
         */
         foreach (get_files_content($datadir.'/data', 'prefs') as $key=>$data) {
             if ($out = @json_decode($data, true)) {
+                msg("Prefs: data/{$key}");
                 foreach ($out as $name => $p) {
                     if (empty($p['private'])) {
                         @set_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
@@ -124,16 +125,19 @@ function setup_db($cfg = '')
 
         $plugin = new \Textpattern\Plugin\Plugin();
         foreach (get_files_content($datadir.'/plugin', 'txt') as $key=>$data) {
-            $plugin->install($data, 1);
+            $result = $plugin->install($data, 1);
+            msg(is_array($result) ? $result[0] : $result);
         }
 
         $import = new \Textpattern\Import\TxpXML();
         foreach (get_files_content($datadir.'/data', 'xml') as $key=>$data) {
             $import->importXml($data);
+            msg("Import: data/{$key}");
         }
 
         foreach (get_files_content($datadir.'/articles', 'xml') as $key=>$data) {
             $import->importXml($data);
+            msg("Import: articles/{$key}");
         }
     }
 
@@ -147,6 +151,7 @@ function setup_db($cfg = '')
     } else {
         foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
             safe_insert("txp_css", "name='".doSlash($key)."', css='".doSlash($data)."'");
+            msg("CSS: {$key}");
         }
 
         if ($files = glob("{$themedir}/forms/*/*\.txp")) {
@@ -154,12 +159,14 @@ function setup_db($cfg = '')
                 if (preg_match('%/forms/(\w+)/(\w+)\.txp$%', $file, $mm)) {
                     $data = @file_get_contents($file);
                     safe_insert("txp_form", "type='".doSlash($mm[1])."', name='".doSlash($mm[2])."', Form='".doSlash($data)."'");
+                    msg("Form: {$mm[1]}/{$mm[2]}");
                 }
             }
         }
 
         foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
             safe_insert("txp_page", "name='".doSlash($key)."', user_html='".doSlash($data)."'");
+            msg("Page: {$key}");
         }
     }
     // --- Theme setup end
@@ -192,8 +199,11 @@ function setup_txp_lang($langs)
         Txp::get('\Textpattern\L10n\Lang')->installFile($language);
         unset($langs[$language]);
     }
+    msg("Lang: {$language}");
+
     foreach (array_flip($langs) as $lang) {
         Txp::get('\Textpattern\L10n\Lang')->installFile($lang);
+        msg("Lang: {$lang}");
     }
 }
 
