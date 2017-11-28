@@ -26,9 +26,9 @@ Changes in 4.7.0 (upcoming)
 * Added: Section searches by description.
 * Added: Visual indicator that a subset of search fields are in use.
 * Added: One-click comment searches by parent article (thanks, makss).
-* Changed: <txp:yield> tag now accepts 'name' and 'default' attributes.
 * Changed: Forms can recursively (up to depth 15) call themselves.
-* Changed: <txp:output_form txp-yield /> tag supports user-defined attributes, coupled
+* Changed: <txp:yield> tag now accepts 'name' and 'default' attributes.
+* Changed: <txp:output_form yield /> tag supports user-defined attributes, coupled
   with <txp:yield> changes above this allows for '<txp::shortcode />'-like tags.
 * Changed: <txp:page_url /> tag accepts URL variables in 'type' attribute.
 * Changed: <txp:page_title /> tag SEO - site name renders after page name,
