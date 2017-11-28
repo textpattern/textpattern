@@ -73,7 +73,7 @@ include_once txpath.'/include/txp_auth.php';
 include_once txpath.'/setup/setup_lib.php';
 
 assert_system_requirements();
-$textarray = setup_load_lang(@$cfg['site']['lang']);
+setup_load_lang(@$cfg['site']['lang']);
 
 if (! isset($params['force']) && file_exists(txpath.'/config.php')) {
     msg(gTxt('already_installed'), MSG_ERROR);
