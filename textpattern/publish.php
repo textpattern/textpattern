@@ -160,7 +160,9 @@ if (!empty($locale)) {
 $txp_user = null;
 
 // i18n.
-$textarray = (txpinterface == 'css') ? array() : load_lang(LANG);
+if (txpinterface !== 'css') {
+    load_lang(LANG);
+}
 
 // Tidy up the site.
 janitor();

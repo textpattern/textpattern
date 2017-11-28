@@ -96,7 +96,7 @@ if (ps('lang')) {
 if (empty($cfg['site']['lang'])) {
     $cfg['site']['lang'] = TEXTPATTERN_DEFAULT_LANG;
 }
-$textarray = setup_load_lang($cfg['site']['lang']);
+setup_load_lang($cfg['site']['lang']);
 
 if (empty($cfg['site']['siteurl'])) {
     $protocol = (empty($_SERVER['HTTPS']) || @$_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';

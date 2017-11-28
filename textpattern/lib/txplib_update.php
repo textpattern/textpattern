@@ -45,5 +45,5 @@
 
 function install_language_from_file($lang)
 {
-    return Txp::get('\Textpattern\L10n\Lang')->install_file($lang);
+    return Txp::get('\Textpattern\L10n\Lang')->installFile($lang);
 }
