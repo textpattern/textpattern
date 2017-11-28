@@ -96,7 +96,7 @@ if (ps('lang')) {
 if (empty($cfg['site']['lang'])) {
     $cfg['site']['lang'] = TEXTPATTERN_DEFAULT_LANG;
 }
-$textarray = setup_load_lang($cfg['site']['lang']);
+setup_load_lang($cfg['site']['lang']);
 
 if (empty($cfg['site']['siteurl'])) {
     $protocol = (empty($_SERVER['HTTPS']) || @$_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
@@ -189,7 +189,9 @@ eod;
 
 function step_chooseLang()
 {
+    $_SESSION['direction'] = 'ltr';
     echo preamble();
+    unset($_SESSION['direction']);
     echo n.'<div class="txp-setup">',
         hed('Welcome to Textpattern CMS', 1),
         n.'<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">',
@@ -337,7 +339,7 @@ function step_getTxpLogin()
     check_config_txp(2);
 
     // Default theme selector.
-    $core_themes = array('hive', 'hiveneutral');
+    $core_themes = array('classic', 'hive', 'hiveneutral');
 
     $vals = \Textpattern\Admin\Theme::names(1);
 
@@ -347,7 +349,9 @@ function step_getTxpLogin()
 
     asort($vals, SORT_STRING);
 
-    $theme_chooser = selectInput('theme', $vals, @$cfg['site']['theme'], '', '', 'setup_admin_theme');
+    $theme_chooser = selectInput('theme', $vals,
+        (empty($cfg['site']['theme']) ? 'hive' : $cfg['site']['theme']),
+        '', '', 'setup_admin_theme');
 
     $vals = get_public_themes_list();
     $public_theme_chooser = selectInput('public_theme', $vals, @$cfg['site']['public_theme'], '', '', 'setup_public_theme');

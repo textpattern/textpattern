@@ -531,7 +531,7 @@ function doDiagnostics()
             strip_tags(gTxt('auto_dst')).cs.$auto_dst.n,
             strip_tags(gTxt('gmtoffset')).cs.$timezone_key.sp."($gmtoffset)".n,
 
-            'MySQL'.cs.$DB->version.n,
+            'MySQL'.cs.$DB->version.' ('.getThing('SELECT @@GLOBAL.version_comment').') '.n,
             gTxt('db_server_time').cs.$db_server_time.n,
             gTxt('db_server_timeoffset').cs.$db_server_timeoffset.' s'.n,
             gTxt('db_global_timezone').cs.$db_global_timezone.n,

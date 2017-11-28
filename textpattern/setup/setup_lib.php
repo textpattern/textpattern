@@ -173,10 +173,10 @@ function setup_txp_lang()
 
     Txp::getContainer()->remove('\Textpattern\L10n\Lang');
 
-    if (!Txp::get('\Textpattern\L10n\Lang')->install_file($language)) {
+    if (!Txp::get('\Textpattern\L10n\Lang')->installFile($language)) {
         // If cannot install from lang file, setup the Default lang. `language` pref changed too.
         $language = TEXTPATTERN_DEFAULT_LANG;
-        Txp::get('\Textpattern\L10n\Lang')->install_file($language);
+        Txp::get('\Textpattern\L10n\Lang')->installFile($language);
     }
 }
 
@@ -194,33 +194,18 @@ function setup_load_lang($lang)
 {
     global $language;
 
-    $default_file = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->findFilename(TEXTPATTERN_DEFAULT_LANG);
-    $default_textpack = array();
-    $lang_textpack = array();
+    $lang_path = txpath.DS.'setup'.DS.'lang'.DS;
+    $group = 'common, setup';
     $strings = array();
 
-    // Load the default language strings as fallbacks.
-    if ($textpack = @file_get_contents($default_file)) {
-        $parser = new \Textpattern\Textpack\Parser();
-        $parser->setOwner('');
-        $parser->setLanguage(TEXTPATTERN_DEFAULT_LANG);
-        $default_textpack = $parser->parse($textpack, 'common, setup');
-    }
-
-    $lang_file = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->findFilename($lang);
-
-    // Load the desired language strings.
-    if ($textpack = @file_get_contents($lang_file)) {
-        $parser = new \Textpattern\Textpack\Parser();
-        $parser->setOwner('');
-        $parser->setLanguage($lang);
-        $lang_textpack = $parser->parse($textpack, 'common, setup');
-    }
+    // Load the desired lang strings and default strings as fallbacks.
+    $default_textpack = Txp::get('\Textpattern\L10n\Lang', $lang_path)->getPack(TEXTPATTERN_DEFAULT_LANG, $group);
+    $lang_textpack = Txp::get('\Textpattern\L10n\Lang', $lang_path)->getPack($lang, $group);
 
     $language = empty($lang_textpack) ? TEXTPATTERN_DEFAULT_LANG : $lang;
     @define('LANG', $language);
 
-    $allStrings = array_merge($lang_textpack, $default_textpack);
+    $allStrings = array_merge($default_textpack, $lang_textpack);
 
     // Merge the arrays, using the default language to fill in the blanks.
     foreach ($allStrings as $meta) {
@@ -228,6 +213,8 @@ function setup_load_lang($lang)
             $strings[$meta['name']] = $meta['data'];
         }
     }
+
+    Txp::get('\Textpattern\L10n\Lang')->setPack($strings);
 
     return $strings;
 }

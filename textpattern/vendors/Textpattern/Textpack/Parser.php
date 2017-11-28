@@ -121,7 +121,7 @@ class Parser
         $language = $this->language;
         $owner = $this->owner;
 
-        if (strpos($textpack, '=>') === false 
+        if (strpos($textpack, '=>') === false
             && $sections = parse_ini_string('[common]'.n.strtr($textpack, $replacements), true))
         {
             if (!empty($sections['@common'])

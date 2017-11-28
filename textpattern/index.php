@@ -147,7 +147,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         setlocale(LC_ALL, $locale);
     }
 
-    $textarray = load_lang(LANG);
+    load_lang(LANG);
 
     // Initialise global theme.
     $theme = \Textpattern\Admin\Theme::init();
@@ -167,7 +167,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     // Loading langs twice is expensive, so only do it when necessary.
     // @todo Optimisations to language loader will help here.
     if ($lang_ui !== $language) {
-        $textarray = load_lang($lang_ui);
+        load_lang($lang_ui);
     }
 
     /**
