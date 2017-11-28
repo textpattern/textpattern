@@ -312,7 +312,9 @@ function author_list($message = '')
 
         $search->setAliases('privs', $levels);
 
-        list($criteria, $crit, $search_method) = $search->getFilter();
+        list($criteria, $crit, $search_method) = $search->getFilter(array(
+            'login' => array('can_list' => true),
+            ));
 
         $search_render_options = array(
             'placeholder' => 'search_users',
