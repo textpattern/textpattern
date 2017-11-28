@@ -49,6 +49,14 @@ class Lang implements \Textpattern\Container\ReusableInterface
     protected $files = array();
 
     /**
+     * List of strings that have been loaded.
+     *
+     * @var array
+     */
+
+    protected $strings = array();
+
+    /**
      * Constructor.
      *
      * @param string $lang_dir Language directory to use
@@ -267,73 +275,91 @@ class Lang implements \Textpattern\Container\ReusableInterface
     }
 
     /**
-     * Install a language pack from a file.
+     * Set/overwrite the language strings. Chainable.
      *
-     * @param  string $lang The lang identifier to load
+     * @param array $strings Set of strings to use
      */
 
-    public function install_file($lang)
+    public function setPack(array $strings)
     {
-        $lang_file = $this->findFilename($lang);
-        $fallback_file = null;
+        $this->strings = (array)$strings;
 
-        if ($lang !== TEXTPATTERN_DEFAULT_LANG) {
-            $fallback_file = $this->findFilename(TEXTPATTERN_DEFAULT_LANG);
+        return $this;
+    }
+
+    /**
+     * Fetch Textpack strings from the file matching the given $lang_code.
+     *
+     * A subset of the strings may be fetched by supplying a list of
+     * $group names to grab.
+     *
+     * @param  string|array $lang_code The language code to fetch, or array(lang_code, override_lang_code)
+     * @param  string|array $group     Comma-separated list or array of headings from which to extract strings
+     * @return array
+     */
+
+    public function getPack($lang_code, $group = null)
+    {
+        if (is_array($lang_code)) {
+            $lang_over = $lang_code[1];
+            $lang_code = $lang_code[0];
+        } else {
+            $lang_over = $lang_code;
         }
 
-        $now = date('YmdHis');
+        $lang_file = $this->findFilename($lang_code);
 
         if ($textpack = @file_get_contents($lang_file)) {
             $parser = new \Textpattern\Textpack\Parser();
             $parser->setOwner('');
-            $parser->setLanguage($lang);
-            $textpack = $parser->parse($textpack);
+            $parser->setLanguage($lang_over);
+            $textpack = $parser->parse($textpack, $group);
+        }
 
-            if (empty($textpack)) {
-                return false;
-            }
+        // Reindex the pack so it can be merged.
+        $langpack = array();
 
-            // Reindex the pack so it can be merged.
-            $langpack = array();
+        foreach ($textpack as $translation) {
+            $langpack[$translation['name']] = $translation;
+        }
 
-            foreach ($textpack as $translation) {
-                $langpack[$translation['name']] = $translation;
-            }
+        return $langpack;
+    }
 
+    /**
+     * Install a language pack from a file.
+     *
+     * @param  string $lang_code The lang identifier to load
+     */
+
+    public function installFile($lang_code)
+    {
+        $langpack = $this->getPack($lang_code);
+
+        if (empty($langpack)) {
+            return false;
+        }
+
+        if ($lang_code !== TEXTPATTERN_DEFAULT_LANG) {
             // Load the fallback strings so we're not left with untranslated strings.
             // Note that the language is overridden to match the to-be-installed lang.
-            if ($fallback_file === null) {
-                $fallback = array();
-            } else {
-                if ($fallback = @file_get_contents($fallback_file)) {
-                    $parser = new \Textpattern\Textpack\Parser();
-                    $parser->setOwner('');
-                    $parser->setLanguage($lang);
-                    $fallback = $parser->parse($fallback);
+            $fallpack = $this->getPack(array(TEXTPATTERN_DEFAULT_LANG, $lang_code));
+            $langpack = array_merge($fallpack, $langpack);
+        }
 
-                    // Reindex the pack so it can be merged.
-                    foreach ($fallback as $translation) {
-                        if (empty($langpack[$translation['name']])) {
-                            $langpack[$translation['name']] = $translation;
-                        }
-                    }
-                }
-            }
+        $now = date('YmdHis');
 
-            $exists = safe_column('name', 'txp_lang', "lang='".doSlash($lang)."'");
+        if ($langpack) {
+            $exists = safe_column('name', 'txp_lang', "lang='".doSlash($lang_code)."'");
 
             foreach ($langpack as $translation) {
-                if ($translation['event'] == 'setup') {
-                    continue;
-                }
-
                 extract(doSlash($translation));
 
                 $where = "lang = '{$lang}' AND name = '{$name}'";
                 $lastmod = empty($lastmod) ? $now : date('YmdHis', $lastmod);
                 $fields = "lastmod = '{$lastmod}', data = '{$data}', event = '{$event}', owner = '{$owner}'";
 
-                if (! empty($exists[$name])) {
+                if (!empty($exists[$name])) {
                     $r = safe_update(
                         'txp_lang',
                         $fields,
@@ -362,7 +388,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @package L10n
      */
 
-    public function install_textpack($textpack, $add_new_langs = false)
+    public function installTextpack($textpack, $add_new_langs = false)
     {
         $parser = new \Textpattern\Textpack\Parser();
         $parser->setLanguage(get_pref('language', TEXTPATTERN_DEFAULT_LANG));
@@ -416,12 +442,12 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * the degree of translation that's taken place in the desired $lang code.
      * Any holes can be mopped up by the default language.
      *
-     * @param   string            $lang   The language code
-     * @param   array|string|bool $events An array of loaded events
+     * @param   string            $lang_code The language code
+     * @param   array|string|bool $events    An array of loaded events
      * @return  array
      */
 
-    public function load($lang, $events = null)
+    public function load($lang_code, $events = null)
     {
         if ($events === null && txpinterface !== 'admin') {
             $events = array('public', 'common');
@@ -435,7 +461,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         $out = array();
 
-        $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang)."'".$where);
+        $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang_code)."'".$where);
 
         if (!empty($rs)) {
             while ($a = nextRow($rs)) {
@@ -443,7 +469,9 @@ class Lang implements \Textpattern\Container\ReusableInterface
             }
         }
 
-        return $out;
+        $this->strings = $out;
+
+        return $this->strings;
     }
 
     /**
@@ -458,8 +486,6 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function txt($var, $atts = array(), $escape = 'html')
     {
-        global $textarray;
-
         if (!is_array($atts)) {
             $atts = array();
         }
@@ -472,8 +498,8 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         $v = strtolower($var);
 
-        if (isset($textarray[$v])) {
-            $out = $textarray[$v];
+        if (isset($this->strings[$v])) {
+            $out = $this->strings[$v];
 
             if ($out !== '') {
                 return strtr($out, $atts);
