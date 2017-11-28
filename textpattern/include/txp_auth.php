@@ -212,7 +212,7 @@ function doTxpValidate()
     $logout     = gps('logout');
     $message    = '';
     $pub_path   = preg_replace('|//$|', '/', rhu.'/');
-    $cookie_domain = (!defined('cookie_domain')) ? '' : cookie_domain;
+    $cookie_domain = (defined('cookie_domain')) ? cookie_domain : '';
 
     if (cs('txp_login') && strpos(cs('txp_login'), ',')) {
         $txp_login = explode(',', cs('txp_login'));

@@ -153,14 +153,16 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         } else {
             $adminurl = PROTOCOL.rtrim(preg_replace('|^https?://|', '', $txpcfg['admin_url']), '/').'/';
         }
+
         define('ahu', $adminurl);
     }
 
-    // shared admin and public cookie_domain when using multisite admin URL
+    // Shared admin and public cookie_domain when using multisite admin URL.
     if (!defined('cookie_domain')) {
         if (!isset($txpcfg['cookie_domain'])) {
           $txpcfg['cookie_domain'] = '';
         }
+
         define('cookie_domain', $txpcfg['cookie_domain']);
     }
 
