@@ -102,15 +102,24 @@ if (!is_valid_email($cfg['user']['email'])) {
 setup_db($cfg);
 msg(gTxt('that_went_well'));
 
-if (isset($params['debug'])) {
-    echo $trace->summary();
-    echo $trace->result();
-}
+setup_die(0);
 
 function msg($msg, $class = MSG_OK, $back = false)
 {
     echo "$class\t".strip_tags($msg)."\n";
     if ($class == MSG_ERROR) {
-        exit(128);
+        setup_die(128);
     }
+}
+
+function setup_die($code = 0)
+{
+    global $trace, $params;
+
+    if (isset($params['debug'])) {
+        echo $trace->summary();
+        echo $trace->result();
+    }
+
+    exit((int)$code);
 }
