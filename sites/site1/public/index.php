@@ -26,10 +26,6 @@ ob_start(null, 2048);
 @include '../private/config.php';
 ob_end_clean();
 
-if (!defined('txpath')) {
-    define("txpath", realpath(dirname(__FILE__).'/../../../textpattern'));
-}
-
 if (!isset($txpcfg['table_prefix'])) {
     $this_protocol = (empty($_SERVER['HTTPS']) || @$_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
     $this_domain   = (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
@@ -38,6 +34,15 @@ if (!isset($txpcfg['table_prefix'])) {
 
     header("HTTP/1.0 503 Service Unavailable");
     exit('config.php is missing or corrupt. To install Textpattern, visit <a href="'.$config_missing_setup_url.'">'.$config_missing_setup_url.'</a> (if necessary, replace \''.$admin_subdomain.'\' with your own admin subdomain)');
+}
+
+if (!defined('txpath')) {
+    define("txpath", dirname(realpath(dirname(__FILE__).'/../admin/vendors')));
+}
+
+// Save server path to site root.
+if (!isset($here)) {
+    $here = dirname(__FILE__);
 }
 
 include txpath.'/../index.php';

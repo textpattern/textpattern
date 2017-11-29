@@ -27,8 +27,9 @@ ob_start(null, 2048);
 ob_end_clean();
 
 if (!defined('txpath')) {
-    define("txpath", realpath(dirname(__FILE__).'/../../../../textpattern'));
+    define("txpath", dirname(realpath(dirname(__FILE__).'/../vendors')));
 }
+
 define("is_multisite", true);
 define("multisite_root_path", dirname(dirname(dirname(__FILE__))));
 
