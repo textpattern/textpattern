@@ -123,7 +123,9 @@ class Plugin
 
                         if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
                             load_plugin($name, true);
+                            set_error_handler("pluginErrorHandler");
                             $message = callback_event("plugin_lifecycle.$name", 'installed');
+                            restore_error_handler();
                         }
 
                         if (empty($message)) {
@@ -154,8 +156,10 @@ class Plugin
         if (! empty($name)) {
             if (safe_field("flags", 'txp_plugin', "name = '".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
                 load_plugin($name, true);
+                set_error_handler("pluginErrorHandler");
                 callback_event("plugin_lifecycle.$name", 'disabled');
                 callback_event("plugin_lifecycle.$name", 'deleted');
+                restore_error_handler();
             }
             safe_delete('txp_plugin', "name = '".doSlash($name)."'");
             safe_delete('txp_lang', "owner = '".doSlash($name)."'");
@@ -174,13 +178,13 @@ class Plugin
         if ($row = safe_row("flags, status", 'txp_plugin', "name = '".doSlash($name)."'")) {
             if ($row['flags'] & PLUGIN_LIFECYCLE_NOTIFY) {
                 load_plugin($name, true);
-                // Note: won't show returned messages anywhere due to
-                // potentially overwhelming verbiage.
+                set_error_handler("pluginErrorHandler");
                 if ($setStatus === null) {
                     callback_event("plugin_lifecycle.$name", $row['status'] ? 'disabled' : 'enabled');
                 } else {
                     callback_event("plugin_lifecycle.$name", $setStatus ? 'enabled' : 'disabled');
                 }
+                restore_error_handler();
             }
             if ($setStatus === null) {
                 $setStatus = "status = (1 - status)";
