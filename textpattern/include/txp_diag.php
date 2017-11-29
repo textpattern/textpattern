@@ -195,12 +195,14 @@ function doDiagnostics()
     $isUpdate = false;
 
     if (!$txp_is_dev) {
-        if ($step === 'update' && defined('TXP_UPDATE')) {
+        if ($step === 'update' && defined('TXP_UPDATE_DONE')) {
             // @todo Gather messages from the ugrade/install scripts (perhaps via
             // a FlashMessage structure) and present them above pre-flight check.
             $heading = gTxt('welcome_to_textpattern', array('{version}' => txp_version));
             $isUpdate = true;
             Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
+
+            echo script_js("window.location.reload(true)");
         }
 
         // Check for Textpattern updates, at most once every 24 hours.

@@ -26,15 +26,8 @@ if (!defined('TXP_UPDATE')) {
 }
 
 // Remove a few licence files. De-clutters the root directory a tad.
-if (is_writable(txpath.DS.'..')) {
-    foreach (array('LICENSE-BSD-3', 'LICENSE-LESSER') as $v) {
-        $file = txpath.DS.'..'.DS.$v.'.txt';
-
-        if (file_exists($file)) {
-            unlink($file);
-        }
-    }
-}
+Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath.DS.'..', array('LICENSE-BSD-3.txt', 'LICENSE-LESSER.txt'));
+Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath.DS.'vendors', 'dropbox');
 
 // Drop the prefs_id column in txp_prefs
 $cols = getThings("DESCRIBE `".PFX."txp_prefs`");

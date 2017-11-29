@@ -239,10 +239,12 @@ function save_language()
     $langName = isset($langInfo['name']) ? $langInfo['name'] : $language;
 
     if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language)."' LIMIT 1")) {
+        $original = $txpLocale->getLocale();
+        $fallback = locale_get_primary_language($original) == locale_get_primary_language($language) ? $original : locale_get_default();
+        $candidates = array($language, $txpLocale->getLocaleLanguage($language), $fallback);
         $locale = $txpLocale->getLanguageLocale($language);
-        $candidates = array($language, $txpLocale->getLocaleLanguage($language), 'C');
         $new_locale = $txpLocale->setLocale(LC_ALL, array_filter($candidates))->getLocale();
-        set_pref('locale', $prefs['locale'] = $new_locale);
+        set_pref('locale', $new_locale);
 
         if ($new_locale == $locale) {
             $msg = gTxt('preferences_saved');
