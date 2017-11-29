@@ -48,7 +48,13 @@ class Partial
             'default' => null
         ), $atts));
 
-        $inner = isset($yield[$name]) ? end($yield[$name]) : (isset($default) ? $default : ($thing ? parse($thing) : $thing));
+        if (isset($yield[$name])) {
+            $inner = end($yield[$name]);
+        }
+
+        if (!isset($inner)) {
+            $inner = isset($default) ? $default : ($thing ? parse($thing) : $thing);
+        }
 
         return $inner;
     }

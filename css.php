@@ -27,7 +27,6 @@
  * @since 4.2.0
  */
 
-header('Content-Type: text/css; charset=utf-8');
 $nolog = 1;
 
 define('txpinterface', 'css');

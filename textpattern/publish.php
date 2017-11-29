@@ -598,6 +598,7 @@ function output_css($s = '', $n = '')
     if (!empty($cssname)) {
         $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$order));
         set_error_handler('tagErrorHandler');
+        @header('Content-Type: text/css; charset=utf-8');
         echo parse_page(null, $css);
         restore_error_handler();
     }
