@@ -70,7 +70,7 @@ class Plugin
             }
 
             if ($plugin = unserialize($plugin)) {
-                if (is_array($plugin)) {
+                if (is_array($plugin) && !empty($plugin['name'])) {
                     extract($plugin);
 
                     $type = empty($type) ? 0 : min(max(intval($type), 0), 5);
@@ -119,7 +119,7 @@ class Plugin
                     }
 
                     if ($rs and $code) {
-                        $this->install_textpack($name);
+                        $this->install_textpack($name, true);
 
                         if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
                             load_plugin($name, true);
@@ -210,9 +210,13 @@ class Plugin
      * @param   string $name Plugin name
      */
 
-    public function install_textpack($name)
+    public function install_textpack($name, $reset = false)
     {
         $owner = doSlash($name);
+        if ($reset) {
+            safe_delete('txp_lang', "owner = '{$owner}'");
+        }
+
         if (has_handler('plugin_textpack.fetch')) {
             $textpack = callback_event('plugin_textpack.fetch', '', false, compact('name'));
         } else {
