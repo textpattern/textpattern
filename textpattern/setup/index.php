@@ -85,7 +85,7 @@ $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
 
 
 if (empty($_SESSION['cfg'])) {
-    $cfg = @json_decode(file_get_contents('.default.json'), true);
+    $cfg = @json_decode(file_get_contents(dirname(__FILE__).'/.default.json'), true);
 } else {
     $cfg = $_SESSION['cfg'];
 }
@@ -97,6 +97,13 @@ if (empty($cfg['site']['lang'])) {
     $cfg['site']['lang'] = TEXTPATTERN_DEFAULT_LANG;
 }
 setup_load_lang($cfg['site']['lang']);
+
+if (defined('is_multisite')) {
+    $config_path = multisite_root_path.'/private';
+} else {
+    $config_path = '/'.basename(txpath);
+}
+
 
 $protocol = (empty($_SERVER['HTTPS']) || @$_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
 if (defined('is_multisite')) {
@@ -550,16 +557,12 @@ function step_fbCreate()
 
 function setup_config_contents()
 {
-    global $cfg;
-    if (defined('is_multisite')) {
-        $config_path = multisite_root_path.'/private/';
-    } else {
-        $config_path = '/'.basename(txpath).'/';
-    }
+    global $cfg, $config_path;
+
     return hed(gTxt('creating_config'), 2).
         graf(
             strong(gTxt('before_you_proceed')).' '.
-            gTxt('create_config', array('{configpath}' => $config_path))
+            gTxt('create_config', array('{configpath}' => $config_path.'/'))
         ).
         n.'<textarea class="code" name="config" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'" dir="ltr" readonly>'.
             setup_makeConfig($cfg, true).
@@ -642,14 +645,14 @@ function langs()
 
 function check_config_txp($meter)
 {
-    global $txpcfg, $cfg;
+    global $txpcfg, $cfg, $config_path;
     if (!isset($txpcfg['db'])) {
-        if (!is_readable(txpath.'/config.php')) {
+        if (!is_readable($config_path.'/config.php')) {
             $problems[] = msg(gTxt('config_php_not_found', array(
-                    '{file}' => txpspecialchars(txpath.'/config.php')
+                    '{file}' => txpspecialchars($config_path.'/config.php')
                 ), 'raw'), MSG_ERROR);
         } else {
-            @include txpath.'/config.php';
+            @include $config_path.'/config.php';
         }
     }
 
@@ -671,20 +674,14 @@ function check_config_txp($meter)
 
 function check_config_exists()
 {
-    global $txpcfg;
+    global $txpcfg, $config_path;
 
     if (!isset($txpcfg['db'])) {
-        @include txpath.'/config.php';
-    }
-
-    if (defined('is_multisite')) {
-        $config_path = multisite_root_path.'/private/';
-    } else {
-        $config_path = '/'.basename(txpath).'/';
+        @include $config_path.'/config.php';
     }
 
     if (!empty($txpcfg['db'])) {
-        echo msg(gTxt('already_installed', array('{configpath}' => $config_path)), MSG_ALERT, true);
+        echo msg(gTxt('already_installed', array('{configpath}' => $config_path.'/')), MSG_ALERT, true);
     }
 }
 
