@@ -36,9 +36,8 @@ if (!isset($txpcfg['table_prefix'])) {
     $admin_subdomain = 'admin'; // assumed admin subdomain
     $config_missing_setup_url = $this_protocol.$admin_subdomain.'.'.substr($this_domain, strpos($this_domain, '.') + 1).'/setup/';
 
-    $config_missing_setup_message = 'config.php is missing or corrupt. To install Textpattern, visit <a href="'.$config_missing_setup_url.'">'.$config_missing_setup_url.'</a> (if necessary, replace \''.$admin_subdomain.'\' with your own admin subdomain)';
-
-    include txpath.'/index.php';
-} else {
-    include txpath.'/../index.php';
+    header("HTTP/1.0 503 Service Unavailable");
+    exit('config.php is missing or corrupt. To install Textpattern, visit <a href="'.$config_missing_setup_url.'">'.$config_missing_setup_url.'</a> (if necessary, replace \''.$admin_subdomain.'\' with your own admin subdomain)');
 }
+
+include txpath.'/../index.php';

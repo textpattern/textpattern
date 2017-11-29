@@ -26,4 +26,9 @@ ob_start(null, 2048);
 @include '../private/config.php';
 ob_end_clean();
 
+if (!isset($txpcfg['table_prefix'])) {
+    header("HTTP/1.0 503 Service Unavailable");
+    exit('config.php is missing or corrupt. To install Textpattern, visit <a href="./setup/">setup</a>');
+}
+
 include txpath.'/index.php';
