@@ -435,17 +435,24 @@ function output_form($atts, $thing = null)
 
     $form = $atts['form'];
 
-    if (!empty($atts['txp-yield'])) {
-        $txp_atts = null;
+    if (!empty($atts['yield'])) {
+        $to_yield = $atts['yield'];
+        unset($atts['form'], $atts['yield']);
+
+        if ($to_yield === true) {
+            $txp_atts = null;
+        } else {
+            $to_yield = array_fill_keys(do_list_unique($to_yield), false);
+            $atts = array_intersect_key($atts, lAtts($to_yield, $atts));
+        }
     } else {
         lAtts(array(
             'form' => '',
-            'txp-yield' => ''
+            'yield' => ''
         ), $atts);
         $atts = array();
     }
 
-    unset($atts['form'], $atts['txp-yield']);
     $atts += array('' => $thing ? parse($thing) : $thing);
 
     foreach ($atts as $name => $value) {
