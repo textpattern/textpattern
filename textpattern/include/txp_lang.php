@@ -233,14 +233,16 @@ function save_language()
         'language',
     )));
 
+    $txpLocale = Txp::get('\Textpattern\L10n\Locale');
     $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($language);
     $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
-    $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $language;
+    $langName = isset($langInfo['name']) ? $langInfo['name'] : $language;
 
     if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language)."' LIMIT 1")) {
-        $locale = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language);
-        $new_locale = $prefs['locale'] = Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_ALL, array($language, 'C'))->getLocale();
-        set_pref('locale', $new_locale);
+        $locale = $txpLocale->getLanguageLocale($language);
+        $candidates = array($language, $txpLocale->getLocaleLanguage($language), 'C');
+        $new_locale = $txpLocale->setLocale(LC_ALL, array_filter($candidates))->getLocale();
+        set_pref('locale', $prefs['locale'] = $new_locale);
 
         if ($new_locale == $locale) {
             $msg = gTxt('preferences_saved');

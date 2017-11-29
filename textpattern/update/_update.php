@@ -134,3 +134,5 @@ $step = 'update';
 $prefs = get_prefs();
 
 extract($prefs);
+
+echo script_js("window.location.reload(true)");
