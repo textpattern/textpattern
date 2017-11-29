@@ -277,8 +277,6 @@ function switch_status()
 
 function plugin_edit()
 {
-    global $event;
-
     $name = gps('name');
     pagetop(gTxt('edit_plugins'));
 
@@ -291,8 +289,6 @@ function plugin_edit()
 
 function plugin_help()
 {
-    global $event;
-
     $name = gps('name');
 
     // Note that TEXTPATTERN_DEFAULT_LANG is not used here.
@@ -393,87 +389,16 @@ function status_link($status, $name, $linktext)
 
 function plugin_verify()
 {
-    global $event;
-
     if (ps('txt_plugin')) {
         $plugin = join("\n", file($_FILES['theplugin']['tmp_name']));
     } else {
         $plugin = assert_string(ps('plugin'));
     }
 
-    // Check for pre-4.0 style plugin.
-    if (strpos($plugin, '$plugin=\'') !== false) {
-        // Try to increase PCRE's backtrack limit in PHP 5.2+ to accommodate to
-        // x-large plugins. See https://bugs.php.net/bug.php?id=40846.
-        @ini_set('pcre.backtrack_limit', '1000000');
-        $plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
-        // Have we hit yet another PCRE restriction?
-        if ($plugin === null) {
-            plugin_list(array(gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())), E_ERROR));
-
-            return;
-        }
+    $message = Txp::get('\Textpattern\Plugin\Plugin')->verify($plugin);
+    if (! empty($message)) {
+        plugin_list($message);
     }
-
-    // Strip out #comment lines.
-    $plugin = preg_replace('/^#.*$/m', '', $plugin);
-
-    if ($plugin === null) {
-        plugin_list(array(gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())), E_ERROR));
-
-        return;
-    }
-
-    if (isset($plugin)) {
-        $plugin_encoded = $plugin;
-        $plugin = base64_decode($plugin);
-
-        if (strncmp($plugin, "\x1F\x8B", 2) === 0) {
-            if (function_exists('gzinflate')) {
-                $plugin = gzinflate(substr($plugin, 10));
-            } else {
-                plugin_list(array(gTxt('plugin_compression_unsupported'), E_ERROR));
-
-                return;
-            }
-        }
-
-        if ($plugin = @unserialize($plugin)) {
-            if (is_array($plugin)) {
-                $source = '';
-
-                if (isset($plugin['help_raw']) && empty($plugin['allow_html_help'])) {
-                    $textile = new \Textpattern\Textile\Parser();
-                    $help_source = $textile->textileRestricted($plugin['help_raw'], 0, 0);
-                } else {
-                    $help_source = highlight_string($plugin['help'], true);
-                }
-
-                $source .= highlight_string('<?php'.$plugin['code'].'?>', true);
-                $sub = graf(
-                    sLink('plugin', '', gTxt('cancel'), 'txp-button').
-                    fInput('submit', '', gTxt('install'), 'publish'),
-                    array('class' => 'txp-edit-actions')
-                );
-
-                pagetop(gTxt('verify_plugin'));
-                echo form(
-                    hed(gTxt('previewing_plugin'), 2).
-                    tag($source, 'div', ' class="code" id="preview-plugin" dir="ltr"').
-                    hed(gTxt('plugin_help').':', 2).
-                    tag($help_source, 'div', ' class="code" id="preview-help" dir="ltr"').
-                    $sub.
-                    sInput('plugin_install').
-                    eInput('plugin').
-                    hInput('plugin64', $plugin_encoded), '', '', 'post', 'plugin-info', '', 'plugin_preview'
-                );
-
-                return;
-            }
-        }
-    }
-
-    plugin_list(array(gTxt('bad_plugin_code'), E_ERROR));
 }
 
 /**
