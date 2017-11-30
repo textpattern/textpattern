@@ -64,6 +64,9 @@ $dbversion_target = $thisversion;
 if ($dbversion == $dbversion_target ||
     ($txp_is_dev && (newest_file() <= $dbupdatetime))) {
     return;
+} elseif ($event != 'diag' || $step != 'update') {
+    header('Location: '.hu.'textpattern/index.php?event=diag&step=update');
+    exit;
 }
 
 assert_system_requirements();
@@ -128,9 +131,6 @@ if (is_array($files)) {
 
 // Updated, baby. So let's get the fresh prefs and send them to Diagnostics.
 define('TXP_UPDATE_DONE', 1);
-$event = 'diag';
-$step = 'update';
 
 $prefs = get_prefs();
-
 extract($prefs);
