@@ -64,9 +64,6 @@ $dbversion_target = $thisversion;
 if ($dbversion == $dbversion_target ||
     ($txp_is_dev && (newest_file() <= $dbupdatetime))) {
     return;
-} elseif ($event != 'diag' || $step != 'update') {
-    header('Location: '.hu.'textpattern/index.php?event=diag&step=update');
-    exit;
 }
 
 assert_system_requirements();
@@ -134,3 +131,6 @@ define('TXP_UPDATE_DONE', 1);
 
 $prefs = get_prefs();
 extract($prefs);
+
+$event = 'diag';
+$step = 'update';
