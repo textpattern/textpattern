@@ -53,90 +53,69 @@ class Plugin
 
     public function install($plugin, $status = null)
     {
-        $plugin = assert_string($plugin);
+        if ($plugin = $this->extract($plugin)) {
+            extract($plugin);
 
-        if (strpos($plugin, '$plugin=\'') !== false) {
-            @ini_set('pcre.backtrack_limit', '1000000');
-            $plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
-        }
+            $exists = fetch('name', 'txp_plugin', 'name', $name);
 
-        $plugin = preg_replace('/^#.*$/m', '', $plugin);
-
-        if (trim($plugin)) {
-            $plugin = base64_decode($plugin);
-
-            if (strncmp($plugin, "\x1F\x8B", 2) === 0) {
-                $plugin = gzinflate(substr($plugin, 10));
+            if (isset($help_raw) && empty($plugin['allow_html_help'])) {
+                // Default: help is in Textile format.
+                $textile = new \Textpattern\Textile\Parser();
+                $help = $textile->textileRestricted($help_raw, 0, 0);
             }
 
-            if ($plugin = unserialize($plugin)) {
-                if (is_array($plugin) && !empty($plugin['name'])) {
-                    extract($plugin);
+            $fields = "
+                    type         = $type,
+                    author       = '".doSlash($author)."',
+                    author_uri   = '".doSlash($author_uri)."',
+                    version      = '".doSlash($version)."',
+                    description  = '".doSlash($description)."',
+                    help         = '".doSlash($help)."',
+                    code         = '".doSlash($code)."',
+                    code_restore = '".doSlash($code)."',
+                    code_md5     = '".doSlash($md5)."',
+                    textpack     = '".@doSlash($textpack)."',
+                    data         = '".@doSlash($data)."',
+                    flags        = $flags
+            ";
 
-                    $type = empty($type) ? 0 : min(max(intval($type), 0), 5);
-                    $order = empty($order) ? 5 : min(max(intval($order), 1), 9);
-                    $flags = empty($flags) ? 0 : intval($flags);
-                    $exists = fetch('name', 'txp_plugin', 'name', $name);
-
-                    if (isset($help_raw) && empty($plugin['allow_html_help'])) {
-                        // Default: help is in Textile format.
-                        $textile = new \Textpattern\Textile\Parser();
-                        $help = $textile->textileRestricted($help_raw, 0, 0);
-                    }
-
-                    $fields = "
-                            type         = $type,
-                            author       = '".doSlash($author)."',
-                            author_uri   = '".doSlash($author_uri)."',
-                            version      = '".doSlash($version)."',
-                            description  = '".doSlash($description)."',
-                            help         = '".doSlash($help)."',
-                            code         = '".doSlash($code)."',
-                            code_restore = '".doSlash($code)."',
-                            code_md5     = '".doSlash($md5)."',
-                            textpack     = '".@doSlash($textpack)."',
-                            data         = '".@doSlash($data)."',
-                            flags        = $flags
-                    ";
-
-                    if ($exists) {
-                        if ($status !== null) {
-                            $fields .= ", status = ".(empty($status) ? 0 : 1);
-                        }
-                        $rs = safe_update(
-                           'txp_plugin',
-                            $fields,
-                            "name        = '".doSlash($name)."'"
-                        );
-                    } else {
-                        $rs = safe_insert(
-                           'txp_plugin',
-                           "name         = '".doSlash($name)."',
-                            status       = ".(empty($status) ? 0 : 1).",
-                            load_order   = '".$order."',".
-                            $fields
-                        );
-                    }
-
-                    if ($rs and $code) {
-                        $this->install_textpack($name, true);
-
-                        if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
-                            load_plugin($name, true);
-                            set_error_handler("pluginErrorHandler");
-                            $message = callback_event("plugin_lifecycle.$name", 'installed');
-                            restore_error_handler();
-                        }
-
-                        if (empty($message)) {
-                            $message = gTxt('plugin_installed', array('{name}' => $name));
-                        }
-                    } else {
-                        $message = array(gTxt('plugin_install_failed', array('{name}' => $name)), E_ERROR);
-                    }
+            if ($exists) {
+                if ($status !== null) {
+                    $fields .= ", status = ".(empty($status) ? 0 : 1);
                 }
+                $rs = safe_update(
+                   'txp_plugin',
+                    $fields,
+                    "name        = '".doSlash($name)."'"
+                );
+            } else {
+                $rs = safe_insert(
+                   'txp_plugin',
+                   "name         = '".doSlash($name)."',
+                    status       = ".(empty($status) ? 0 : 1).",
+                    load_order   = '".$order."',".
+                    $fields
+                );
+            }
+
+            if ($rs and $code) {
+                $this->install_textpack($name, true);
+
+                if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
+                    load_plugin($name, true);
+                    set_error_handler("pluginErrorHandler");
+                    $message = callback_event("plugin_lifecycle.$name", 'installed');
+                    restore_error_handler();
+                }
+
+                if (empty($message)) {
+                    $message = gTxt('plugin_installed', array('{name}' => $name));
+                }
+            } else {
+                $message = array(gTxt('plugin_install_failed', array('{name}' => $name)), E_ERROR);
             }
         }
+
         
         if (empty($message)) {
             $message = array(gTxt('bad_plugin_code'), E_ERROR);
@@ -146,85 +125,41 @@ class Plugin
     }
 
     /**
-     * Verify plugin
+     * Plugin extract
      *
-     * @param  string       $plugin   Plugin_base64
+     * @param  string       $plugin     Plugin_base64
+     * @param  boolean      $normalize  Check/normalize some fields
      *
-     * @return string|array
+     * @return array
      */
 
-    public function verify($plugin)
+    public function extract($plugin, $normalize = true)
     {
-        // Check for pre-4.0 style plugin.
         if (strpos($plugin, '$plugin=\'') !== false) {
-            // Try to increase PCRE's backtrack limit in PHP 5.2+ to accommodate to
-            // x-large plugins. See https://bugs.php.net/bug.php?id=40846.
             @ini_set('pcre.backtrack_limit', '1000000');
             $plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
-            // Have we hit yet another PCRE restriction?
-            if ($plugin === null) {
-
-                return array(gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())), E_ERROR);
-            }
         }
 
-        // Strip out #comment lines.
         $plugin = preg_replace('/^#.*$/m', '', $plugin);
+        $plugin = base64_decode($plugin);
 
-        if ($plugin === null) {
-
-            return array(gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())), E_ERROR);
+        if (strncmp($plugin, "\x1F\x8B", 2) === 0) {
+            $plugin = @gzinflate(substr($plugin, 10));
         }
 
-        if (isset($plugin)) {
-            $plugin_encoded = $plugin;
-            $plugin = base64_decode($plugin);
+        $plugin = @unserialize($plugin);
+        if (empty($plugin['name'])) {
 
-            if (strncmp($plugin, "\x1F\x8B", 2) === 0) {
-                if (function_exists('gzinflate')) {
-                    $plugin = gzinflate(substr($plugin, 10));
-                } else {
-
-                    return array(gTxt('plugin_compression_unsupported'), E_ERROR);
-                }
-            }
-
-            if ($plugin = @unserialize($plugin)) {
-                if (is_array($plugin) && !empty($plugin['name'])) {
-                    $source = '';
-
-                    if (isset($plugin['help_raw']) && empty($plugin['allow_html_help'])) {
-                        $textile = new \Textpattern\Textile\Parser();
-                        $help_source = $textile->textileRestricted($plugin['help_raw'], 0, 0);
-                    } else {
-                        $help_source = highlight_string($plugin['help'], true);
-                    }
-
-                    $source .= highlight_string('<?php'.$plugin['code'].'?>', true);
-                    $sub = graf(
-                        sLink('plugin', '', gTxt('cancel'), 'txp-button').
-                        fInput('submit', '', gTxt('install'), 'publish'),
-                        array('class' => 'txp-edit-actions')
-                    );
-
-                    pagetop(gTxt('verify_plugin'));
-                    echo form(
-                        hed(gTxt('previewing_plugin'), 2).
-                        tag($source, 'div', ' class="code" id="preview-plugin" dir="ltr"').
-                        hed(gTxt('plugin_help').':', 2).
-                        tag($help_source, 'div', ' class="code" id="preview-help" dir="ltr"').
-                        $sub.
-                        sInput('plugin_install').
-                        eInput('plugin').
-                        hInput('plugin64', $plugin_encoded), '', '', 'post', 'plugin-info', '', 'plugin_preview'
-                    );
-
-                    return;
-                }
-            }
+            return false;
         }
 
-        return array(gTxt('bad_plugin_code'), E_ERROR);
+        if ($normalize) {
+            $plugin['type']  = empty($plugin['type'])  ? 0 : min(max(intval($plugin['type']), 0), 5);
+            $plugin['order'] = empty($plugin['order']) ? 5 : min(max(intval($plugin['order']), 1), 9);
+            $plugin['flags'] = empty($plugin['flags']) ? 0 : intval($plugin['flags']);
+        }
+
+        return $plugin;
     }
 
     /**

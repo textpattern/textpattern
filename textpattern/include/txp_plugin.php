@@ -390,15 +390,43 @@ function status_link($status, $name, $linktext)
 function plugin_verify()
 {
     if (ps('txt_plugin')) {
-        $plugin = join("\n", file($_FILES['theplugin']['tmp_name']));
+        $plugin64 = join("\n", file($_FILES['theplugin']['tmp_name']));
     } else {
-        $plugin = assert_string(ps('plugin'));
+        $plugin64 = assert_string(ps('plugin'));
     }
 
-    $message = Txp::get('\Textpattern\Plugin\Plugin')->verify($plugin);
-    if (! empty($message)) {
-        plugin_list($message);
+    if ($plugin = Txp::get('\Textpattern\Plugin\Plugin')->extract($plugin64)) {
+        $source = '';
+        if (isset($plugin['help_raw']) && empty($plugin['allow_html_help'])) {
+            $textile = new \Textpattern\Textile\Parser();
+            $help_source = $textile->textileRestricted($plugin['help_raw'], 0, 0);
+        } else {
+            $help_source = highlight_string($plugin['help'], true);
+        }
+
+        $source .= highlight_string('<?php'.$plugin['code'].'?>', true);
+        $sub = graf(
+            sLink('plugin', '', gTxt('cancel'), 'txp-button').
+            fInput('submit', '', gTxt('install'), 'publish'),
+            array('class' => 'txp-edit-actions')
+        );
+
+        pagetop(gTxt('verify_plugin'));
+        echo form(
+            hed(gTxt('previewing_plugin'), 2).
+            tag($source, 'div', ' class="code" id="preview-plugin" dir="ltr"').
+            hed(gTxt('plugin_help').':', 2).
+            tag($help_source, 'div', ' class="code" id="preview-help" dir="ltr"').
+            $sub.
+            sInput('plugin_install').
+            eInput('plugin').
+            hInput('plugin64', $plugin64), '', '', 'post', 'plugin-info', '', 'plugin_preview'
+        );
+
+        return;
     }
+
+    plugin_list(array(gTxt('bad_plugin_code'), E_ERROR));
 }
 
 /**
@@ -407,7 +435,8 @@ function plugin_verify()
 
 function plugin_install()
 {
-    $message = Txp::get('\Textpattern\Plugin\Plugin')->install(ps('plugin64'));
+    $plugin64 = assert_string(ps('plugin64'));
+    $message = Txp::get('\Textpattern\Plugin\Plugin')->install($plugin64);
 
     plugin_list($message);
 }
