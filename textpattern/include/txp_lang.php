@@ -239,9 +239,7 @@ function save_language()
     $langName = isset($langInfo['name']) ? $langInfo['name'] : $language;
 
     if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language)."' LIMIT 1")) {
-        $original = $txpLocale->getLocale();
-        $fallback = locale_get_primary_language($original) == locale_get_primary_language($language) ? $original : locale_get_default();
-        $candidates = array($language, $txpLocale->getLocaleLanguage($language), $fallback);
+        $candidates = array($language, $txpLocale->getLocaleLanguage($language), 'C');
         $locale = $txpLocale->getLanguageLocale($language);
         $new_locale = $txpLocale->setLocale(LC_ALL, array_filter($candidates))->getLocale();
         set_pref('locale', $new_locale);
