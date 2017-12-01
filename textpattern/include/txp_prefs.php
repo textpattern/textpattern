@@ -511,8 +511,8 @@ function permlinkmodes($name, $val)
 function commentmode($name, $val)
 {
     $vals = array(
-        '0' => gTxt('no_popup_window'),
-        '1' => gTxt('popup_window'),
+        '0' => gTxt('nopopup'),
+        '1' => gTxt('popup'),
     );
 
     return selectInput($name, $vals, $val, '', '', $name);
