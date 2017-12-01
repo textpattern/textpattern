@@ -151,7 +151,7 @@ function file_list($message = '', $ids = array())
             ),
             'filename' => array(
                 'column' => 'txp_file.filename',
-                'label'  => gTxt('file_name'),
+                'label'  => gTxt('name'),
             ),
             'title' => array(
                 'column' => 'txp_file.title',
@@ -163,7 +163,7 @@ function file_list($message = '', $ids = array())
             ),
             'category' => array(
                 'column' => array('txp_file.category', 'txp_category.title'),
-                'label'  => gTxt('file_category'),
+                'label'  => gTxt('category'),
             ),
             'status' => array(
                 'column' => array('txp_file.status'),
@@ -227,7 +227,7 @@ function file_list($message = '', $ids = array())
         $categories = event_category_popup('file', '', 'file_category');
         $createBlock[] =
             n.tag_start('div', array('class' => 'txp-control-panel')).
-            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('file_category'), 'label', array('for' => 'file_category')).$categories : '')));
+            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('category'), 'label', array('for' => 'file_category')).$categories : '')));
 
         $existing_files = get_filenames();
 
@@ -307,7 +307,7 @@ function file_list($message = '', $ids = array())
                             (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                     ).
                     column_head(
-                        'file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method,
+                        'name', 'filename', 'file', true, $switch_dir, $crit, $search_method,
                             (('filename' == $sort) ? "$dir " : '').'txp-list-col-filename'
                     ).
                     column_head(
@@ -319,7 +319,7 @@ function file_list($message = '', $ids = array())
                             (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
                     ).
                     column_head(
-                        'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method,
+                        'category', 'category', 'file', true, $switch_dir, $crit, $search_method,
                             (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                     ).
                     hCell(gTxt(
@@ -753,7 +753,7 @@ function file_edit($message = '', $id = '')
                         'file_category',
                         event_category_popup('file', $category, 'file_category').
                         n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
-                        'file_category', '', array('class' => 'txp-form-field edit-file-category')
+                        'category', '', array('class' => 'txp-form-field edit-file-category')
                     ).
 //                    inputLabel(
 //                        'perms',

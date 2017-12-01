@@ -121,7 +121,7 @@ function discuss_list($message = '')
 {
     global $event;
 
-    pagetop(gTxt('list_discussions'), $message);
+    pagetop(gTxt('tab_comments'), $message);
 
     extract(gpsa(array(
         'sort',
@@ -267,7 +267,7 @@ function discuss_list($message = '')
 
     echo n.'<div class="txp-layout">'.
         n.tag(
-            hed(gTxt('list_discussions'), 1, array('class' => 'txp-heading')),
+            hed(gTxt('tab_comments'), 1, array('class' => 'txp-heading')),
             'div', array('class' => 'txp-layout-4col-alt')
         );
 

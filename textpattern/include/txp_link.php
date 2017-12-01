@@ -134,7 +134,7 @@ function link_list($message = '')
             ),
             'name' => array(
                 'column' => 'txp_link.linkname',
-                'label'  => gTxt('link_name'),
+                'label'  => gTxt('name'),
             ),
             'url' => array(
                 'column' => 'txp_link.url',
@@ -146,7 +146,7 @@ function link_list($message = '')
             ),
             'category' => array(
                 'column' => array('txp_link.category', 'txp_category.title'),
-                'label'  => gTxt('link_category'),
+                'label'  => gTxt('category'),
             ),
             'author' => array(
                 'column' => array('txp_link.author', 'txp_users.RealName'),
@@ -280,7 +280,7 @@ function link_list($message = '')
                         (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
-                    'link_name', 'name', 'link', true, $switch_dir, $crit, $search_method,
+                    'name', 'name', 'link', true, $switch_dir, $crit, $search_method,
                         (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
@@ -292,7 +292,7 @@ function link_list($message = '')
                         (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
                 ).
                 column_head(
-                    'link_category', 'category', 'link', true, $switch_dir, $crit, $search_method,
+                    'category', 'category', 'link', true, $switch_dir, $crit, $search_method,
                         (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                 ).
                 column_head(
@@ -445,7 +445,7 @@ function link_edit($message = '')
                 'link_category',
                 event_category_popup('link', $category, 'link_category').
                 n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
-                'link_category', 'link_category', array('class' => 'txp-form-field edit-link-category')
+                'category', 'link_category', array('class' => 'txp-form-field edit-link-category')
             ).
             inputLabel(
                 'link_description',
