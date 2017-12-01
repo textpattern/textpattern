@@ -98,7 +98,7 @@ class BuilderTags
             }
 
             $this->startblock = $backLink.
-                hed(gTxt('tag_'.$this->tagname), 2).
+                hed(gTxt($this->tagname), 2).
                 href(
                     gTxt('documentation').sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')),
                     'https://docs.textpattern.io/tags/'.$this->tagname,
@@ -324,10 +324,10 @@ class BuilderTags
         $desc = ' ('.gTxt('descending').')';
 
         $vals = array(
-            'Title asc'      => gTxt('tag_title').$asc,
-            'Title desc'     => gTxt('tag_title').$desc,
-            'Posted asc'     => gTxt('tag_posted').$asc,
-            'Posted desc'    => gTxt('tag_posted').$desc,
+            'Title asc'      => gTxt('title').$asc,
+            'Title desc'     => gTxt('title').$desc,
+            'Posted asc'     => gTxt('posted').$asc,
+            'Posted desc'    => gTxt('posted').$desc,
             'LastMod asc'    => gTxt('last_modification').$asc,
             'LastMod desc'   => gTxt('last_modification').$desc,
             'Section asc'    => gTxt('section').$asc,
@@ -375,8 +375,8 @@ class BuilderTags
         $desc = ' ('.gTxt('descending').')';
 
         $vals = array(
-            'title asc'  => gTxt('tag_title').$asc,
-            'title desc' => gTxt('tag_title').$desc,
+            'title asc'  => gTxt('title').$asc,
+            'title desc' => gTxt('title').$desc,
             'name asc'   => gTxt('name').$asc,
             'name desc'  => gTxt('name').$desc,
         );
@@ -2694,7 +2694,7 @@ class BuilderTags
         ));
 
         if (!isset($_POST['label'])) {
-            $atts['label'] = gTxt('tag_related_articles');
+            $atts['label'] = gTxt('related_articles');
         }
 
         extract($atts);
