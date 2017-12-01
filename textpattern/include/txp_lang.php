@@ -388,6 +388,8 @@ function get_textpack()
 
 function remove_language()
 {
+    global $event;
+
     require_privs('lang.edit');
 
     $lang_code = gps('lang_code');
@@ -406,7 +408,7 @@ function remove_language()
         $ui_lang = get_pref('language_ui', $site_lang, true);
         $ui_lang = (array_key_exists($ui_lang, $represented_lang)) ? $ui_lang : $site_lang;
         set_pref('language_ui', $ui_lang, 'admin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
-        load_lang($ui_lang);
+        load_lang($ui_lang, $event);
     } else {
         $msg = gTxt('cannot_delete', array('{thing}' => $langName));
     }

@@ -161,14 +161,13 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
 
     $dbversion = $version;
 
+    $event = (gps('event') ? trim(gps('event')) : (!empty($default_event) && has_privs($default_event) ? $default_event : 'article'));
+    $step = trim(gps('step'));
+    $app_mode = trim(gps('app_mode'));
+
     // Reload string pack using per-user language.
     $lang_ui = (empty($language_ui)) ? $language : $language_ui;
-
-    // Loading langs twice is expensive, so only do it when necessary.
-    // @todo Optimisations to language loader will help here.
-    if ($lang_ui !== $language) {
-        load_lang($lang_ui);
-    }
+    load_lang($lang_ui, $event);
 
     /**
      * @ignore
@@ -181,10 +180,6 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
      */
 
     define('IMPATH', $path_to_site.DS.$img_dir.DS);
-
-    $event = (gps('event') ? trim(gps('event')) : (!empty($default_event) && has_privs($default_event) ? $default_event : 'article'));
-    $step = trim(gps('step'));
-    $app_mode = trim(gps('app_mode'));
 
     if (!$dbversion or ($dbversion != $thisversion) or $txp_is_dev) {
         define('TXP_UPDATE', 1);

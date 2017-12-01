@@ -490,6 +490,16 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $events = array('public', 'common');
         }
 
+        if (txpinterface === 'admin') {
+            $admin_events = array('admin-side', 'common');
+
+            if ($events) {
+                $admin_events = array_merge($admin_events, (array) $events);
+            }
+
+            $events = $admin_events;
+        }
+
         $where = " AND name != ''";
 
         if ($events) {
