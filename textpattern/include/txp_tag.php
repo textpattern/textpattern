@@ -98,7 +98,7 @@ class BuilderTags
             }
 
             $this->startblock = $backLink.
-                hed(gTxt($this->tagname), 2).
+                hed(gTxt('tag_'.$this->tagname), 2).
                 href(
                     gTxt('documentation').sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')),
                     'https://docs.textpattern.io/tags/'.$this->tagname,
