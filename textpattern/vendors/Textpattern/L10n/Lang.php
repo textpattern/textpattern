@@ -486,6 +486,11 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function load($lang_code, $events = null)
     {
+        $where = array(
+            "lang = '".doSlash($lang_code)."'",
+            "name != ''",
+        );
+
         if ($events === null && txpinterface !== 'admin') {
             $events = array('public', 'common');
         }
@@ -500,15 +505,18 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $events = $admin_events;
         }
 
-        $where = " AND name != ''";
-
         if ($events) {
-            $where .= " AND event IN (".join(',', quote_list((array) $events)).")";
+            // For the time being, load any non-core (plugin) strings on every
+            // page too. Core strings have no owner. Plugins installed since 4.6+
+            // will have either the 'site' owner or their own plugin name.
+            // Longer term, when all plugins have caught up with the event
+            // naming convention, the owner clause can be removed.
+            $where[] = "(event IN (".join(',', quote_list((array) $events)).") OR owner != '')";
         }
 
         $out = array();
 
-        $rs = safe_rows_start("name, data", 'txp_lang', "lang = '".doSlash($lang_code)."'".$where);
+        $rs = safe_rows_start("name, data", 'txp_lang', join(' AND ', $where));
 
         if (!empty($rs)) {
             while ($a = nextRow($rs)) {
