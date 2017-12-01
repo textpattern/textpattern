@@ -516,12 +516,12 @@ function plugin_multi_edit()
             break;
         case 'changestatus':
             foreach ($selected as $name) {
-                $plugin->changestatus($name, ps('setStatus'));
+                $plugin->changeStatus($name, ps('setStatus'));
             }
             break;
         case 'changeorder':
             foreach ($selected as $name) {
-                $plugin->changeorder($name, ps('order'));
+                $plugin->changeOrder($name, ps('order'));
             }
             break;
     }

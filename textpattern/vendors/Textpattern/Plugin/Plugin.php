@@ -34,7 +34,6 @@ class Plugin
 {
     /**
      * Constructor.
-     *
      */
 
     public function __construct()
@@ -43,10 +42,14 @@ class Plugin
     }
 
     /**
-     * Install plugin
+     * Install plugin to the database.
      *
-     * @param  string       $plugin   Plugin_base64
-     * @param  int          $status   Plugin status
+     * If the plugin has been programmed to respond to lifecycle events,
+     * the following callback is raised upon installation:
+     *   plugin_lifecycle.{plugin_name} > installed
+     *
+     * @param  string $plugin Plugin_base64
+     * @param  int    $status Plugin status
      *
      * @return string|array
      */
@@ -99,7 +102,7 @@ class Plugin
             }
 
             if ($rs and $code) {
-                $this->install_textpack($name, true);
+                $this->installTextpack($name, true);
 
                 if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
                     load_plugin($name, true);
@@ -125,11 +128,10 @@ class Plugin
     }
 
     /**
-     * Plugin extract
+     * Unpack a plugin from its base64-encoded/gzipped state.
      *
-     * @param  string       $plugin     Plugin_base64
-     * @param  boolean      $normalize  Check/normalize some fields
-     *
+     * @param  string  $plugin    Plugin_base64
+     * @param  boolean $normalize Check/normalize some fields
      * @return array
      */
 
@@ -148,6 +150,7 @@ class Plugin
         }
 
         $plugin = @unserialize($plugin);
+
         if (empty($plugin['name'])) {
 
             return false;
@@ -163,9 +166,14 @@ class Plugin
     }
 
     /**
-     * Delete plugin
+     * Delete plugin from the database.
      *
-     * @param  string       $name       Plugin name
+     * If the plugin has been programmed to respond to lifecycle events,
+     * the following callbacks are raised, in this order:
+     *   plugin_lifecycle.{plugin_name} > disabled
+     *   plugin_lifecycle.{plugin_name} > deleted
+     *
+     * @param  string $name Plugin name
      */
 
     public function delete($name)
@@ -178,74 +186,91 @@ class Plugin
                 callback_event("plugin_lifecycle.$name", 'deleted');
                 restore_error_handler();
             }
+
             safe_delete('txp_plugin', "name = '".doSlash($name)."'");
             safe_delete('txp_lang', "owner = '".doSlash($name)."'");
         }
     }
 
     /**
-     * Change plugin status
+     * Change plugin status: enabled or disabled.
      *
-     * @param  string       $name       Plugin name
-     * @param  int          $setStatus  Plugin status. Toggle status, if null
+     * If the plugin has been programmed to respond to lifecycle events,
+     * the following callbacks are raised depending on the given status:
+     *   plugin_lifecycle.{plugin_name} > disabled
+     *   plugin_lifecycle.{plugin_name} > enabled
+     *
+     * @param  string $name      Plugin name
+     * @param  int    $setStatus Plugin status. Toggle status, if null
      */
 
-    public function changestatus($name, $setStatus = null)
+    public function changeStatus($name, $setStatus = null)
     {
         if ($row = safe_row("flags, status", 'txp_plugin', "name = '".doSlash($name)."'")) {
             if ($row['flags'] & PLUGIN_LIFECYCLE_NOTIFY) {
                 load_plugin($name, true);
                 set_error_handler("pluginErrorHandler");
+
                 if ($setStatus === null) {
                     callback_event("plugin_lifecycle.$name", $row['status'] ? 'disabled' : 'enabled');
                 } else {
                     callback_event("plugin_lifecycle.$name", $setStatus ? 'enabled' : 'disabled');
                 }
+
                 restore_error_handler();
             }
+
             if ($setStatus === null) {
                 $setStatus = "status = (1 - status)";
             } else {
                 $setStatus = "status = ". ($setStatus ? 1 : 0);
             }
+
             safe_update('txp_plugin', $setStatus, "name = '".doSlash($name)."'");
         }
     }
 
     /**
-     * Change plugin load priority
+     * Change plugin load priority.
      *
-     * @param  string       $name       Plugin name
-     * @param  int          $order      Plugin load priority
+     * Plugins with a lower nunber are loaded first.
+     *
+     * @param  string $name  Plugin name
+     * @param  int    $order Plugin load priority
      */
 
-    public function changeorder($name, $order)
+    public function changeOrder($name, $order)
     {
         $order = min(max(intval($order), 1), 9);
         safe_update('txp_plugin', "load_order = $order", "name = '".doSlash($name)."'");
     }
 
     /**
-     * Install/Update a plugin Textpack.
+     * Install/update a plugin Textpack.
      *
-     * @param   string  $name   Plugin name
-     * @param   boolean $reset  Delete old strings
+     * The process may be intercepted (for example, to fetch data from the
+     * filesystem) via the "api.plugin > textpack.fetch" callback.
+     *
+     * @param  string  $name   Plugin name
+     * @param  boolean $reset  Delete old strings
      */
 
-    public function install_textpack($name, $reset = false)
+    public function installTextpack($name, $reset = false)
     {
         $owner = doSlash($name);
+
         if ($reset) {
             safe_delete('txp_lang', "owner = '{$owner}'");
         }
 
-        if (has_handler('plugin_textpack.fetch')) {
-            $textpack = callback_event('plugin_textpack.fetch', '', false, compact('name'));
+        if (has_handler('api.plugin', 'textpack.fetch')) {
+            $textpack = callback_event('api.plugin', 'textpack.fetch', false, compact('name'));
         } else {
             $textpack = safe_field('textpack', 'txp_plugin', "name = '{$owner}'");
         }
 
         $textpack = $this->parseTextpack($textpack);
+
         if (empty($textpack)) {
             return;
         }
@@ -253,12 +278,13 @@ class Plugin
         if (! empty($textpack[TEXTPATTERN_DEFAULT_LANG])) {
             $fallback = TEXTPATTERN_DEFAULT_LANG;
         } else {
-            // Get first language
+            // Get first language.
             reset($textpack);
             $fallback = key($textpack);
         }
 
         $installed_langs = \Txp::get('\Textpattern\L10n\Lang')->installed();
+
         foreach ($installed_langs as $lang) {
             if (empty($textpack[$lang])) {
                 $langpack = $textpack[$fallback];
@@ -268,6 +294,7 @@ class Plugin
 
             $lang = doSlash($lang);
             $exists = safe_column('name', 'txp_lang', "lang='{$lang}'");
+
             foreach ($langpack as $name => $item) {
                 $name = doSlash($name);
                 $event = doSlash($item['event']);
@@ -291,20 +318,22 @@ class Plugin
     }
 
     /**
-     * Install/update ALL plugin Textpacks. Used when a new language is added.
+     * Install/update ALL plugin Textpacks.
+     *
+     * Used when a new language is added.
      */
 
-    public function install_textpacks()
+    public function installTextpacks()
     {
         if ($plugins = safe_column_num('name', 'txp_plugin', "textpack != '' ORDER BY load_order")) {
             foreach ($plugins as $name) {
-                $this->install_textpack($name);
+                $this->installTextpack($name);
             }
         }
     }
 
     /**
-     * Converts a Textpack to an associative array.
+     * Convert a Textpack to an associative array.
      *
      * @param  string       $textpack The Textpack
      * @return array An array of translations
@@ -317,6 +346,7 @@ class Plugin
         $event = '';
 
         $lines = explode(n, (string)$textpack);
+
         foreach ($lines as $line) {
             $line = trim($line);
 
@@ -325,13 +355,13 @@ class Plugin
                 continue;
             }
 
-            // Sets language.
+            // Set language.
             if (preg_match('/^#@language\s+(.+)$/', $line, $m)) {
                 $language = \Txp::get('\Textpattern\L10n\Locale')->validLocale($m[1]);
                 continue;
             }
 
-            // Sets event.
+            // Set event.
             if (preg_match('/^#@([a-zA-Z0-9_-]+)$/', $line, $m)) {
                 $event = $m[1];
                 continue;
@@ -351,18 +381,19 @@ class Plugin
     }
 
     /**
-     * Fetch a plugin data field.
+     * Fetch the plugin's 'data' field.
      *
-     * Used in plugins to get the field `data`, using a callback, can return data from the file system.
+     * The call can be intercepted (for example, to fetch data from the
+     * filesystem) via the "api.plugin > data.fetch" callback.
      *
      * @param  string $name The plugin
      * @return string
      */
 
-    function fetch_data($name)
+    public function fetchData($name)
     {
-        if (has_handler('plugin_data.fetch')) {
-            $data = callback_event('plugin_data.fetch', '', false, compact('name'));
+        if (has_handler('api.plugin', 'data.fetch')) {
+            $data = callback_event('api.plugin', 'data.fetch', false, compact('name'));
         } else {
             $data = safe_field('data', 'txp_plugin', "name = '".doSlash($name)."'");
         }
