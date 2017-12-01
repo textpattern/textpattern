@@ -107,7 +107,9 @@ function pagetop($pagetitle = '', $message = '')
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
-<title><?php echo admin_title($pagetitle)?></title><?php echo
+<?php
+echo '<title>', admin_title($pagetitle), '</title>';
+echo
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/blueimp/md5/md5.min.js', TEXTPATTERN_SCRIPT_URL).
@@ -141,7 +143,20 @@ function pagetop($pagetitle = '', $message = '')
             TEXTPATTERN_JSON
         ).';'
     ).
-    script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
+    '<script src="server.php?file=textpattern.js" integrity="sha256-KVzhLacKFCL98T6V5jl2zAIIWZCYj9cSaL4aSBOIU4A=" crossorigin="anonymous"></script>'.n;
+//    script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
+
+    $txt = 'Make sure to reload the page from the server to refresh all resources.';
+    $json = json_encode(array($txt, 2));
+
+    echo script_js("
+    $(function() {
+        if (textpattern.version != '".txp_version."') {
+            if (textpattern.Console && textpattern.Console.addMessage) {
+                textpattern.Console.addMessage($json)
+            } else alert('$txt')
+        }
+    })", false).n;
 
     // Mandatory un-themable Textpattern core styles ?>
 <style>
