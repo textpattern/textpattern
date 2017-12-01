@@ -150,7 +150,7 @@ function image_list($message = '')
             ),
             'category' => array(
                 'column' => array('txp_image.category', 'txp_category.title'),
-                'label'  => gTxt('image_category'),
+                'label'  => gTxt('category'),
             ),
             'ext' => array(
                 'column' => 'txp_image.ext',
@@ -219,7 +219,7 @@ function image_list($message = '')
         $categories = event_category_popup('image', '', 'image_category');
         $createBlock[] =
             n.tag(
-                n.upload_form('upload_image', 'upload_image', 'image_insert[]', 'image', '', $file_max_upload_size, '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('image_category'), 'label', array('for' => 'image_category')).$categories : ''))),
+                n.upload_form('upload_image', 'upload_image', 'image_insert[]', 'image', '', $file_max_upload_size, '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('category'), 'label', array('for' => 'image_category')).$categories : ''))),
                 'div', array('class' => 'txp-control-panel')
             );
     }
@@ -306,7 +306,7 @@ function image_list($message = '')
                         gTxt('tags'), '', ' class="txp-list-col-tag-build" scope="col"'
                     ).
                     column_head(
-                        'image_category', 'category', 'image', true, $switch_dir, $crit, $search_method,
+                        'category', 'category', 'image', true, $switch_dir, $crit, $search_method,
                             (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                     ).
                     (
@@ -728,7 +728,7 @@ function image_edit($message = '', $id = '')
                                     n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link')
                                 : (($category !== '') ? fetch_category_title($category, 'image') : gTxt('none'))
                             ),
-                            'image_category', '', array('class' => 'txp-form-field edit-image-category')
+                            'category', '', array('class' => 'txp-form-field edit-image-category')
                         ).
                         inputLabel(
                             'image_alt_text',

@@ -138,7 +138,7 @@ function plugin_list($message = '')
                         (('version' == $sort) ? "$dir " : '').'txp-list-col-version'
                 ).
                 column_head(
-                    'plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '',
+                    'modified', 'modified', 'plugin', true, $switch_dir, '', '',
                         (('modified' == $sort) ? "$dir " : '').'txp-list-col-modified'
                 ).
                 hCell(gTxt(
@@ -190,7 +190,7 @@ function plugin_list($message = '')
             if ($flags & PLUGIN_HAS_PREFS) {
                 $plugin_prefs = span(
                     sp.span('&#124;', array('role' => 'separator')).
-                    sp.href(gTxt('plugin_prefs'), array('event' => 'plugin_prefs.'.$name)),
+                    sp.href(gTxt('options'), array('event' => 'plugin_prefs.'.$name)),
                     array('class' => 'plugin-prefs')
                 );
             } else {
