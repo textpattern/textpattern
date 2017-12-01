@@ -962,7 +962,7 @@ function file_replace()
     $rs = safe_row("filename, author", 'txp_file', "id = $id");
 
     if (!$rs) {
-        file_list(array(messenger(gTxt('invalid_id'), $id), E_ERROR));
+        file_list(array(gTxt('invalid_id', array('{id}' => $id)), E_ERROR));
 
         return;
     }
@@ -1171,7 +1171,7 @@ function file_delete($ids = array())
                 }
             }
             if ($fail) {
-                file_list(array(messenger(gTxt('file_delete_failed'), join(', ', $fail)), E_ERROR));
+                file_list(array(gTxt('file_delete_failed', array('{list}' => join(', ', $fail))), E_ERROR));
 
                 return;
             } else {
@@ -1182,7 +1182,7 @@ function file_delete($ids = array())
                 return;
             }
         } else {
-            file_list(array(messenger(gTxt('file_not_found'), join(', ', $ids), ''), E_ERROR));
+            file_list(array(gTxt('file_not_found', array('{list}' => join(', ', $ids))), E_ERROR));
 
             return;
         }

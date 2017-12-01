@@ -186,7 +186,7 @@ function list_list($message = '', $post = '')
             ),
             'lastmod' => array(
                 'column'  => array('textpattern.LastMod'),
-                'label'   => gTxt('article_modified'),
+                'label'   => gTxt('modified'),
                 'options' => array('case_sensitive' => true),
             ),
         )
@@ -278,7 +278,7 @@ function list_list($message = '', $post = '')
         $headers = array(
             'title' => 'title',
             'posted' => 'posted',
-            'lastmod' => 'article_modified',
+            'lastmod' => 'modified',
             'expires' => 'expires',
             'section' => 'section',
             'category1' => 'category1',
@@ -615,7 +615,7 @@ function list_multi_edit()
                 now('posted', true);
                 now('expires', true);
 
-                return list_list(messenger('article', join(', ', $selected), 'deleted'));
+                return list_list(gTxt('articles_deleted', array('{list}' => join(', ', $selected))));
             }
 
             return list_list();
@@ -687,7 +687,7 @@ function list_multi_edit()
     $selected = $allowed;
 
     if ($selected) {
-        $message = messenger('article', join(', ', $selected), 'modified');
+        $message = gTxt('articles_modified', array('{list}' => join(', ', $selected)));
 
         if ($edit_method === 'duplicate') {
             $rs = safe_rows_start("*", 'textpattern', "ID IN (".join(',', $selected).")");

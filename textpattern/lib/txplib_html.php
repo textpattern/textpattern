@@ -1327,6 +1327,7 @@ function popTagLinks($type)
  * @param  string $thething Predicate (strong)
  * @param  string $action   Object
  * @return string HTML
+ * @deprecated in 4.7.0
  */
 
 function messenger($thing, $thething = '', $action = '')
