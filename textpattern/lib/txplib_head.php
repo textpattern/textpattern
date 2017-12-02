@@ -108,6 +108,12 @@ function pagetop($pagetitle = '', $message = '')
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <?php
+function checksum($input) {
+    $hash = hash('sha256', $input, true);
+    $hash_base64 = base64_encode($hash);
+    return "sha256-$hash_base64";
+}
+
 echo '<title>', admin_title($pagetitle), '</title>';
 echo
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
@@ -143,7 +149,7 @@ echo
             TEXTPATTERN_JSON
         ).';'
     ).
-    '<script src="server.php?file=textpattern.js" integrity="sha256-KVzhLacKFCL98T6V5jl2zAIIWZCYj9cSaL4aSBOIU4A=" crossorigin="anonymous"></script>'.n;
+    '<script src="server.php?file=textpattern.js" integrity="'.checksum(file_get_contents('textpattern.js')).'" crossorigin="anonymous"></script>'.n;
 //    script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
 
     $txt = 'Make sure to reload the page from the server to refresh all resources.';
