@@ -304,6 +304,7 @@ function cat_category_multiedit()
                     if ($method == 'deleteforce') {
                         // Clear the deleted category names from assets.
                         $affected = join("','", $names);
+
                         if ($type === 'article') {
                             safe_update('textpattern', "category1 = ''", "category1 IN ('$affected')");
                             safe_update('textpattern', "category2 = ''", "category2 IN ('$affected')");
@@ -605,7 +606,6 @@ function cat_event_category_save($event, $table_name)
         return cat_event_category_edit($event, $message);
     }
 
-// TODO: validate parent?
     $parent = ($parent) ? $parent : 'root';
 
     $message = array(gTxt('category_save_failed'), E_ERROR);
