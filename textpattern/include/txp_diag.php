@@ -383,6 +383,7 @@ function doDiagnostics()
     }
 
     $active_plugins = array();
+
     if ($rows = safe_rows("name, version, code_md5, MD5(code) AS md5", 'txp_plugin', "status > 0 ORDER BY name")) {
         foreach ($rows as $row) {
             $n = $row['name'].'-'.$row['version'];
@@ -631,10 +632,10 @@ function doDiagnostics()
                 $extv[] = $e.(phpversion($e) ? '/'.phpversion($e) : '');
             }
 
-            $out[] = n.gTxt('php_extensions').cs.join(', ', $extv).n;
+            $out[] = n.gTxt('php_extensions').cs.n.t.join(n.t, $extv).n;
 
             if (is_callable('apache_get_modules')) {
-                $out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n;
+                $out[] = n.gTxt('apache_modules').cs.n.t.join(n.t, apache_get_modules()).n;
             }
 
             if (@is_array($pretext_data) and count($pretext_data) > 1) {
