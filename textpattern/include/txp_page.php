@@ -182,7 +182,7 @@ function page_edit($message = '', $refresh_partials = false)
     // Get content for static partials.
     $partials = updatePartials($partials, $rs, PARTIAL_STATIC);
 
-    pagetop(gTxt('edit_pages'), $message);
+    pagetop(gTxt('tab_pages'), $message);
 
     echo n.'<div class="txp-layout">'.
         n.tag(

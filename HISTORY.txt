@@ -1,10 +1,7 @@
 Changes in 4.7.0 (upcoming)
 
-* Textile v3.6.
 * Added: Support for installation on nginx servers.
 * Added: Support for automated installation.
-* Added: Pages, Forms and Styles panels save some changes without page refreshes
-  (Ajax). Last used Page/Form/Stylesheet remembered.
 * Added: User-selectable column list options in tables replaces 'Show more
   detail' checkboxes. Settings remembered per device.
 * Added: Valueless attributes.
@@ -26,9 +23,14 @@ Changes in 4.7.0 (upcoming)
 * Added: Section searches by description.
 * Added: Visual indicator that a subset of search fields are in use.
 * Added: One-click comment searches by parent article (thanks, makss).
-* Changed: <txp:yield> tag now accepts 'name' and 'default' attributes.
+* Added: Diagnostics can remove sensitive path data.
+* Added: 'Expire now' checkbox on Write panel.
+* Changed: Pages, Forms and Styles panels save some changes without page refreshes
+  (Ajax). Last used Page/Form/Stylesheet remembered.
+* Changed: Articles panel performs searches/pagination without refresh (Ajax).
 * Changed: Forms can recursively (up to depth 15) call themselves.
-* Changed: <txp:output_form txp-yield /> tag supports user-defined attributes, coupled
+* Changed: <txp:yield> tag now accepts 'name' and 'default' attributes.
+* Changed: <txp:output_form yield /> tag supports user-defined attributes, coupled
   with <txp:yield> changes above this allows for '<txp::shortcode />'-like tags.
 * Changed: <txp:page_url /> tag accepts URL variables in 'type' attribute.
 * Changed: <txp:page_title /> tag SEO - site name renders after page name,
@@ -38,21 +40,26 @@ Changes in 4.7.0 (upcoming)
 * Changed: <txp:if_category /> accepts 'parent' attribute.
 * Changed: Pagination tags (like <txp:newer /> and <txp:older />) can be placed
   before <txp:article /> tag.
-* Changed: <txp:image_author /> tag now accepts 'id' and 'name' attributes.
 * Changed: Reinstate <txp:keywords> tag and add wraptag/class/break attributes.
 * Changed: Deprecated the 'poplink' attribute on <txp:thumbnail /> tag.
+* Changed: <txp:image_author /> tag now accepts 'id' and 'name' attributes.
 * Changed: Deprecated <txp:image_display /> and <txp:image_index /> tags, use
   <txp:image /> and <txp:images />, respectively, instead.
+* Changed: Image Edit panel for all users - readonly to some (thanks, phiw13).
 * Changed: Textfilter options and help topics moved inline with their textareas.
   Write panel 'sidehelp' twisty and article>sidehelp callback removed.
 * Changed: Categories moved from Sort & Display subpanel to their own twisty.
   Override Form (if used) moved to Sort & Display subpanel. 'Advanced' twisty
   and its callback removed.
 * Changed: Upgrades land on Diagnostics panel, with suitable message.
+* Changed: Further improvements to RTL language support.
+* Changed: Language Textpacks bundled in core instead of using legacy RPC server.
+* Changed: Use local inline help files instead of legacy RPC server. Help topics
+  rendered in dialogs instead of new window (thanks, makss).
 * Changed: Use JSON file to check for new releases/pre-releases instead of legacy
   RPC server (thanks, makss).
-* Changed: Use local inline help files instead of legacy RPC server
-  (thanks, makss).
+* Changed: Plugin Textpacks stored in database and installed on demand.
+* Changed: Plugins have persistent data column available for custom storage.
 * Changed: Clearer plugin list on Diagnostics panel.
 * Changed: Article posted/modified info and ID moved below Title field.
 * Changed: Enable HTTP 226 responses (thanks, da2x).
@@ -65,8 +72,11 @@ Changes in 4.7.0 (upcoming)
   will be removed entirely at Textpattern 4.8.0).
 * Changed: Extensive admin theme image optimizations.
 * Changed: Admin theme accessibility improvements.
-* Changed: Removed zxcvbn password strength meter.
+* Fixed: Keyboard navigation on select list popups.
 * Fixed: Only update database version string if using release version.
+* Fixed: Support for other MySQL client versions (thanks, CeBe).
+* Removed: zxcvbn password strength meter.
+* Textile v3.6.
 * jQuery 3.2.1.
 * PrismJS 1.8.4.
 * PHPass 0.5.

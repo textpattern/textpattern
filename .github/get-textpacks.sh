@@ -13,5 +13,11 @@ fi
 
 echo "Get repo: $REPO :: $TAG";
 echo "-------------------------------------------------------------------------------";
-rm -rf $EXTRACT/*.txt;
-curl $URL/$AUTHOR/$REPO/tar.gz/$TAG | tar xz --strip=2 --directory=$EXTRACT $REPO-$TAG/textpacks
+rm -rf $EXTRACT/*.ini;
+curl $URL/$AUTHOR/$REPO/tar.gz/$TAG | tar xz --strip=2 --directory=$EXTRACT $REPO-$TAG/lang
+
+
+EXTRACT="textpattern/setup/lang";
+echo "-------------------------------------------------------------------------------";
+rm -rf $EXTRACT/*.ini;
+curl $URL/$AUTHOR/$REPO/tar.gz/$TAG | tar xz --strip=2 --directory=$EXTRACT $REPO-$TAG/lang-setup

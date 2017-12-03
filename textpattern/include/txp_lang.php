@@ -233,13 +233,15 @@ function save_language()
         'language',
     )));
 
+    $txpLocale = Txp::get('\Textpattern\L10n\Locale');
     $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($language);
     $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
-    $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $language;
+    $langName = isset($langInfo['name']) ? $langInfo['name'] : $language;
 
     if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language)."' LIMIT 1")) {
-        $locale = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language);
-        $new_locale = $prefs['locale'] = Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_ALL, array($language, 'C'))->getLocale();
+        $candidates = array($language, $txpLocale->getLocaleLanguage($language), 'C');
+        $locale = $txpLocale->getLanguageLocale($language);
+        $new_locale = $txpLocale->setLocale(LC_ALL, array_filter($candidates))->getLocale();
         set_pref('locale', $new_locale);
 
         if ($new_locale == $locale) {
@@ -269,27 +271,28 @@ function save_language_ui()
         'language_ui',
     )));
 
-    $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($language_ui);
-    $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
-    $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $language_ui;
+    if (get_pref('language_ui') != $language_ui) {
+        $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($language_ui);
+        $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
+        $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $language_ui;
 
-    if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language_ui)."' LIMIT 1")) {
-        $locale = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language_ui);
+        if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language_ui)."' LIMIT 1")) {
+            $locale = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language_ui);
 
-        if ($locale) {
-            set_pref('language_ui', $language_ui, 'admin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
-            load_lang($language_ui);
-            $msg = gTxt('preferences_saved');
+            if ($locale) {
+                set_pref('language_ui', $language_ui, 'admin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+                txp_die('', 307, '?event=lang');
+            } else {
+                $msg = array(gTxt('locale_not_available_for_language', array('{name}' => $langName)), E_WARNING);
+            }
         } else {
-            $msg = array(gTxt('locale_not_available_for_language', array('{name}' => $langName)), E_WARNING);
+            $msg = array(gTxt('language_not_installed', array('{name}' => $langName)), E_ERROR);
         }
-
-        list_languages($msg);
-
-        return;
+    } else {
+        $msg = gTxt('preferences_saved');
     }
 
-    list_languages(array(gTxt('language_not_installed', array('{name}' => $langName)), E_ERROR));
+    list_languages($msg);
 }
 
 /**
@@ -306,7 +309,7 @@ function get_language()
     if (Txp::get('\Textpattern\L10n\Lang')->installFile($lang_code)) {
         callback_event('lang_installed', 'file', false, $lang_code);
 
-        Txp::get('\Textpattern\L10n\Lang')->installTextpackPlugins();
+        Txp::get('\Textpattern\Plugin\Plugin')->installTextpacks();
 
         $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($lang_code);
         $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
