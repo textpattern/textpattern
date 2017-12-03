@@ -2069,20 +2069,20 @@ textpattern.Route.add('page, form, file, image', function () {
         txpAsyncLink(ev, 'tag');
     });
 
+    // Set up asynchronous tag builder launcher.
+    textpattern.Relay.register('txpAsyncLink.tagbuilder.success', function (event, data) {
+        $('#tagbuild_links').dialog('close').html($(data['data'])).dialog('open').restorePanes();
+    });
+
+    $(document).on('click', '.txp-tagbuilder-dialog', function (ev) {
+        txpAsyncLink(ev, 'tagbuilder');
+    });
+
     $('#tagbuild_links').dialog({
         dialogClass: 'txp-tagbuilder-container',
         autoOpen: false,
         focus: function (ev, ui) {
             $(ev.target).closest('.ui-dialog').focus();
-        }
-    });
-
-    $('.txp-tagbuilder-dialog').on('click', function (ev) {
-        ev.preventDefault();
-        if ($("#tagbuild_links").dialog('isOpen')) {
-            $("#tagbuild_links").dialog('close');
-        } else {
-            $("#tagbuild_links").dialog('open');
         }
     });
 

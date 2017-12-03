@@ -1297,30 +1297,6 @@ function popTag($var, $text, $atts = array())
 }
 
 /**
- * Renders a list of tag builder links.
- *
- * @param  string $type Tag type
- * @return string HTML
- */
-
-function popTagLinks($type)
-{
-    global $event;
-
-    include txpath.'/lib/taglib.php';
-
-    $arname = $type.'_tags';
-
-    $out = array();
-
-    foreach ($$arname as $a) {
-        $out[] = tag(popTag($a, gTxt('tag_'.$a), array('panel' => $event, 'step' => 'build')), 'li');
-    }
-
-    return n.tag(n.join(n, $out).n, 'ul', array('class' => 'plain-list'));
-}
-
-/**
  * Renders an admin-side message text.
  *
  * @param  string $thing    Subject

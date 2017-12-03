@@ -34,18 +34,21 @@ if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
-pagetop();
+$tagName = gps('tag_name');
+$panel = gps('panel');
 
-echo tag(
-    \Txp::get('\Textpattern\Tag\BuilderTags')->renderTagHelp(gps('tag_name'), gps('panel')),
-    'div', array('id' => 'tag-event')
-);
+if ($tagName) {
+    echo \Txp::get('\Textpattern\Tag\BuilderTags')->renderTagHelp($tagName, $panel);
+} elseif ($panel) {
+    echo \Txp::get('\Textpattern\Tag\BuilderTags')->tagbuildDialog($panel);
+}
 
 /**
  * Collection of tag builder functions.
  *
  * @package Admin\Tag
  */
+
 class BuilderTags
 {
     /**
@@ -75,7 +78,219 @@ class BuilderTags
     private $tagname;
 
     /**
-     * Returns a single tag handler instance.
+     * Return a list of tag builder tags for the given event.
+     *
+     * @param  $ev The event (type of dialog) to build: page, form
+     * @return HTML
+     */
+
+    public function tagbuildDialog($ev)
+    {
+        $listActions = graf(
+            href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
+                'class'         => 'txp-expand-all',
+                'aria-controls' => 'tagbuild_links',
+            )).
+            href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
+                'class'         => 'txp-collapse-all',
+                'aria-controls' => 'tagbuild_links',
+            )), array('class' => 'txp-actions')
+        );
+
+        $tagbuild_items = array();
+
+        // Generate the tagbuilder links.
+        // Format of each entry is popTagLink -> array ( gTxt string, class/ID ).
+        switch ($ev) {
+            case "form":
+                $tagbuild_items = array(
+                    'article'         => array('articles', 'article-tags'),
+                    'link'            => array('links', 'link-tags'),
+                    'comment'         => array('comments', 'comment-tags'),
+                    'comment_details' => array('comment_details', 'comment-detail-tags'),
+                    'comment_form'    => array('comment_form', 'comment-form-tags'),
+                    'search_result'   => array('search_results_form', 'search-result-tags'),
+                    'file_download'   => array('file_download_tags', 'file-tags'),
+                    'category'        => array('category_tags', 'category-tags'),
+                    'section'         => array('section_tags', 'section-tags'),
+                );
+                break;
+            case "page":
+                $tagbuild_items = array(
+                    'page_article'     => array('page_article_hed', 'article-tags'),
+                    'page_article_nav' => array('page_article_nav_hed', 'article-nav-tags'),
+                    'page_nav'         => array('page_nav_hed', 'nav-tags'),
+                    'page_xml'         => array('page_xml_hed', 'xml-tags'),
+                    'page_misc'        => array('page_misc_hed', 'misc-tags'),
+                    'page_file'        => array('page_file_hed', 'file-tags'),
+                );
+                break;
+        }
+
+        $tagbuild_links = '';
+
+        foreach ($tagbuild_items as $tb => $item) {
+            $tagbuild_links .= wrapRegion($item[1].'_group', $this->popTagLinks($tb, $ev), $item[1], $item[0], $item[1]);
+        }
+
+        // Tag builder dialog.
+        if ($tagbuild_links) {
+            return $listActions.$tagbuild_links;
+        }
+
+        return false;
+    }
+
+    /**
+     * List of tags in their corresponding groups.
+     *
+     * @see popTagLinks()
+     * @return array
+     */
+
+    protected function tagbuildGroups()
+    {
+        return array(
+            'article_tags' => array(
+                'permlink',
+                'posted',
+                'title',
+                'body',
+                'excerpt',
+                'section',
+                'category1',
+                'category2',
+                'article_image',
+                'comments_invite',
+                'author',
+            ),
+            'link_tags' => array(
+                'link',
+                'linkdesctitle',
+                'link_name',
+                'link_description',
+                'link_category',
+                'link_date',
+            ),
+            'comment_tags' => array(
+                'comments',
+                'comments_form',
+                'comments_preview',
+            ),
+            'comment_details_tags' => array(
+                'comment_permlink',
+                'comment_name',
+                'comment_email',
+                'comment_web',
+                'comment_time',
+                'comment_message',
+            ),
+            'comment_form_tags' => array(
+                'comment_name_input',
+                'comment_email_input',
+                'comment_web_input',
+                'comment_message_input',
+                'comment_remember',
+                'comment_preview',
+                'comment_submit',
+            ),
+            'search_result_tags' => array(
+                'search_result_title',
+                'search_result_excerpt',
+                'search_result_date',
+                'search_result_url',
+            ),
+            'file_download_tags' => array(
+                'file_download_link',
+                'file_download_name',
+                'file_download_description',
+                'file_download_category',
+                'file_download_created',
+                'file_download_modified',
+                'file_download_size',
+                'file_download_downloads',
+            ),
+            'category_tags' => array(
+                'category',
+                'if_category',
+            ),
+            'section_tags' => array(
+                'section',
+                'if_section',
+            ),
+            'page_article_tags' => array(
+                'article',
+                'article_custom',
+            ),
+            'page_article_nav_tags' => array(
+                'prev_title',
+                'next_title',
+                'link_to_prev',
+                'link_to_next',
+                'older',
+                'newer',
+            ),
+            'page_nav_tags' => array(
+                'link_to_home',
+                'section_list',
+                'category_list',
+                'popup',
+                'recent_articles',
+                'recent_comments',
+                'related_articles',
+                'search_input',
+            ),
+            'page_xml_tags' => array(
+                'feed_link',
+                'link_feed_link',
+            ),
+            'page_misc_tags' => array(
+                'page_title',
+                'css',
+                'site_name',
+                'site_slogan',
+                'breadcrumb',
+                'search_input',
+                'email',
+                'linklist',
+                'password_protect',
+                'output_form',
+                'lang',
+            ),
+            'page_file_tags' => array(
+                'file_download_list',
+                'file_download',
+                'file_download_link',
+            ),
+        );
+    }
+
+    /**
+     * Return a list of tag builder links.
+     *
+     * @param  string $type  Tag type
+     * @param  string $panel The panel (event) on which the builder is displayed
+     * @return string HTML
+     */
+
+    protected function popTagLinks($type, $panel)
+    {
+        $tagGroups = $this->tagbuildGroups();
+        $arname = $type.'_tags';
+
+        $out = array();
+
+        if (isset($tagGroups[$arname])) {
+            foreach ($tagGroups[$arname] as $a) {
+                $out[] = tag(popTag($a, gTxt('tag_'.$a), array('panel' => $panel)), 'li');
+            }
+        }
+
+        return n.tag(n.join(n, $out).n, 'ul', array('class' => 'plain-list'));
+    }
+
+    /**
+     * Return a single tag handler instance.
      *
      * @param  string $name  The tag
      * @param  string $panel The panel from which the tag was invoked
@@ -92,7 +307,11 @@ class BuilderTags
 
             if ($panel) {
                 $backLink = graf(
-                    href(gTxt('go_back'), '?event='.$panel.'&step=tagbuild', array('class' => 'txp-tagbuilder-link')),
+                    href(
+                        gTxt('go_back'),
+                        array('event' => 'tag', 'panel' => $panel),
+                        array('class' => 'txp-tagbuilder-link')
+                    ),
                     array('class' => 'txp-actions')
                 );
             }
@@ -124,7 +343,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a form tag with the given content.
+     * Render a form tag with the given content.
      *
      * @param  string $content The HTML form contents
      * @return string HTML
@@ -136,7 +355,7 @@ class BuilderTags
     }
 
     /**
-     * Renders an input widget.
+     * Render an input widget.
      *
      * @param  string $label The label reference to use (will be subject to l10n)
      * @param  string $thing Content
@@ -154,7 +373,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a set of input widgets.
+     * Render a set of input widgets.
      *
      * @param  array $widgets List of label => content pairs
      * @return string HTML
@@ -173,7 +392,7 @@ class BuilderTags
     }
 
     /**
-     * Generates a parameter-less Textpattern tag.
+     * Generate a parameter-less Textpattern tag.
      *
      * @return string &lt;txp:tag /&gt;
      */
@@ -184,7 +403,7 @@ class BuilderTags
     }
 
     /**
-     * Generates a Textpattern tag from the given attributes and content.
+     * Generate a Textpattern tag from the given attributes and content.
      *
      * @param  string $tag Tag name
      * @param  string $atts_list List of attribute => value pairs
@@ -211,7 +430,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a textarea to hold the built content.
+     * Render a textarea to hold the built content.
      *
      * @param  string $thing Content
      * @return string HTML
@@ -231,7 +450,7 @@ class BuilderTags
     }
 
     /**
-     * Assembles the tag output container.
+     * Assemble the tag output container.
      *
      * @param  array $atts Attribute key => value pairs
      * @param  string $thing Tag container content
@@ -252,7 +471,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of time ranges.
+     * Render a HTML &lt;select&gt; list of time ranges.
      *
      * @param  string $time Currently selected value
      * @return string HTML
@@ -270,7 +489,7 @@ class BuilderTags
     }
 
     /**
-     * Renders HTML boolean &lt;select&gt; options.
+     * Render HTML boolean &lt;select&gt; options.
      *
      * @param  string $name Input name/ID
      * @param  string $value Currently selected value
@@ -292,7 +511,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of article status options.
+     * Render a HTML &lt;select&gt; list of article status options.
      *
      * @param  string $value Currently selected value
      * @return string HTML
@@ -312,7 +531,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of sort options.
+     * Render a HTML &lt;select&gt; list of sort options.
      *
      * @param  string $value Currently selected value
      * @return string HTML
@@ -343,7 +562,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of comment sort options.
+     * Render a HTML &lt;select&gt; list of comment sort options.
      *
      * @param  string $value Currently selected value
      * @return string HTML
@@ -363,7 +582,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of article sort options.
+     * Render a HTML &lt;select&gt; list of article sort options.
      *
      * @param  string $value Currently selected value
      * @return string HTML
@@ -385,7 +604,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of authors/users.
+     * Render a HTML &lt;select&gt; list of authors/users.
      *
      * @param  string $value Currently selected value
      * @return string HTML
@@ -409,7 +628,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of Sections.
+     * Render a HTML &lt;select&gt; list of Sections.
      *
      * @param  string $select_name Input name/ID
      * @param  string $value Currently selected value
@@ -436,7 +655,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of Categories.
+     * Render a HTML &lt;select&gt; list of Categories.
      *
      * @param  string $value Currently selected value
      * @param  string $type Context to which the category applies
@@ -455,7 +674,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of category match options.
+     * Render a HTML &lt;select&gt; list of category match options.
      *
      * @param  string $value Currently selected value
      * @return string HTML
@@ -473,7 +692,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of pattern match types.
+     * Render a HTML &lt;select&gt; list of pattern match types.
      *
      * @param  string $value Currently selected value
      * @return string HTML
@@ -491,7 +710,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of context types.
+     * Render a HTML &lt;select&gt; list of context types.
      *
      * @param  string $value Currently selected value
      * @return string HTML
@@ -510,7 +729,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of forms.
+     * Render a HTML &lt;select&gt; list of forms.
      *
      * @param  string $select_name Input name/ID
      * @param  string $type Form type
@@ -540,7 +759,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of Stylesheets.
+     * Render a HTML &lt;select&gt; list of Stylesheets.
      *
      * @param  string $value Currently selected value
      * @return string | bool HTML | false on error
@@ -566,7 +785,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of CSS formats.
+     * Render a HTML &lt;select&gt; list of CSS formats.
      *
      * @param  string $value Currently selected value
      * @return string HTML
@@ -583,7 +802,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of escape options.
+     * Render a HTML &lt;select&gt; list of escape options.
      *
      * @param  string $value Currently selected value
      * @return string HTML
@@ -600,7 +819,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of feed flavours.
+     * Render a HTML &lt;select&gt; list of feed flavours.
      *
      * @param  string $value Currently selected value
      * @return string HTML
@@ -617,7 +836,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of feed formats.
+     * Render a HTML &lt;select&gt; list of feed formats.
      *
      * @param  string $value Currently selected value
      * @return string HTML
@@ -634,7 +853,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;select&gt; list of author formats.
+     * Render a HTML &lt;select&gt; list of author formats.
      *
      * @param  string $value Currently selected value
      * @return string HTML
@@ -651,7 +870,7 @@ class BuilderTags
     }
 
     /**
-     * Renders a HTML &lt;input&gt; tag.
+     * Render a HTML &lt;input&gt; tag.
      *
      * @param  string $name Input name
      * @param  string $value Input value
