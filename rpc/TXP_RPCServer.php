@@ -305,7 +305,7 @@ EOD;
                 $xml = mb_convert_encoding($xml, $enc, 'utf-8');
             } else {
                 // TODO: shouldn't this throw an error instead of serving non-UTF-8 content as UTF-8?
-                // If no decoding possible, serve contents as UTF-8.
+                // If no decoding possible, serve contents as UTF-8. See https://github.com/textpattern/textpattern/issues/1052
                 $enc = 'utf-8';
             }
         }
