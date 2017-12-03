@@ -447,7 +447,7 @@ abstract class Theme
         } else {
             // Try to inject $html into the message pane no matter when _announce()'s output is printed.
             $thing = json_encode($thing, TEXTPATTERN_JSON);
-            $js = "textpattern.Console.addMessage({$thing}).announce();";
+            $js = "textpattern.Console.addMessage({$thing})";
         }
 
         return $async ? $js : script_js(str_replace('</', '<\/', $js));

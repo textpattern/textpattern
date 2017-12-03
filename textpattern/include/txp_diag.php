@@ -192,17 +192,14 @@ function doDiagnostics()
     $fail = array();
     $now = time();
     $heading = gTxt('tab_diagnostics');
-    $isUpdate = false;
+    $isUpdate = $step === 'update' && defined('TXP_UPDATE_DONE');
 
     if (!$txp_is_dev) {
-        if ($step === 'update' && defined('TXP_UPDATE_DONE')) {
+        if ($isUpdate) {
             // @todo Gather messages from the ugrade/install scripts (perhaps via
             // a FlashMessage structure) and present them above pre-flight check.
             $heading = gTxt('welcome_to_textpattern', array('{version}' => txp_version));
-            $isUpdate = true;
             Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
-
-            echo script_js("window.location.reload(true)");
         }
 
         // Check for Textpattern updates, at most once every 24 hours.
@@ -439,8 +436,18 @@ function doDiagnostics()
     // Database server time.
     extract(doSpecial(getRow("SELECT @@global.time_zone AS db_global_timezone, @@session.time_zone AS db_session_timezone, NOW() AS db_server_time, UNIX_TIMESTAMP(NOW()) AS db_server_timestamp")));
     $db_server_timeoffset = $db_server_timestamp - $now;
+    $txt = 'Make sure to reload the page from the server to refresh all resources.';
+    $json = json_encode(array($txt, 2));
 
-    echo pagetop(gTxt('tab_diagnostics'), '');
+    echo pagetop(gTxt('tab_diagnostics'), $isUpdate ? gTxt('welcome_to_textpattern', array('{version}' => txp_version)) : '');
+
+    echo script_js("
+    $(function() {
+        if (textpattern.version != '".txp_version."') {
+            //textpattern.Console.addMessage($json)
+            alert('$txt')
+        }
+    })", false);
 
     echo n.'<div class="txp-layout">'.
         n.tag(
