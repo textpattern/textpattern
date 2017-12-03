@@ -109,7 +109,7 @@ function pagetop($pagetitle = '', $message = '')
 <meta name="robots" content="noindex, nofollow">
 <?php
 function checksum($input) {
-    $hash = hash('sha256', $input, true);
+    $hash = hash_file('sha256', $input, true);
     $hash_base64 = base64_encode($hash);
     return "sha256-$hash_base64";
 }
@@ -149,18 +149,18 @@ echo
             TEXTPATTERN_JSON
         ).';'
     ).
-    '<script src="server.php?file=textpattern.js" integrity="'.checksum(file_get_contents('textpattern.js')).'" crossorigin="anonymous"></script>'.n;
+    '<script src="server.php?file=textpattern.js" integrity="'.checksum('textpattern.js').'" crossorigin="anonymous"></script>'.n;
 //    script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
 
-    $txt = 'Make sure to reload the page from the server to refresh all resources.';
+    $txt = 'Make sure to upload all Textpattern resources and refresh the cache. Reload now?';
     $json = json_encode(array($txt, 2));
 
     echo script_js("
     $(function() {
         if (textpattern.version != '".txp_version."') {
-            if (textpattern.Console && textpattern.Console.addMessage) {
-                textpattern.Console.addMessage($json)
-            } else alert('$txt')
+            if (confirm('$txt')) {
+                window.location.reload(true)
+            }
         }
     })", false).n;
 
