@@ -22,13 +22,14 @@
     "phplint": "1.7.4"
   },
   "dependencies": {
+    "blueimp-file-upload": "9.19.2",
     "jquery": "3.2.1"
   },
   "scripts": {
     "phplint": "phplint '**/*.php' '!node_modules/**'",
     "copy:jquery": "rimraf textpattern/vendors/jquery/jquery/jquery.js && cp node_modules/jquery/dist/jquery.min.js textpattern/vendors/jquery/jquery/jquery.js",
     "copy:textile": "sh .github/copy-textile.sh",
-    "get-dependencies": "npm run copy:jquery && npm run copy:jquery-ui-multiselect-widget && npm run copy:textile v3.6.0",
+    "get-dependencies": "npm run copy:blueimp-file-upload && npm run copy:jquery && npm run copy:textile v3.6.0",
     "get-pophelp": "sh .github/get-pophelp.sh",
     "get-textpacks": "sh .github/get-textpacks.sh",
     "get-classic-admin-theme": "sh .github/get-classic-admin-theme.sh",
