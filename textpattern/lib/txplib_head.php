@@ -48,7 +48,7 @@
 
 function pagetop($pagetitle = '', $message = '')
 {
-    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $textarray_script, $file_max_upload_size;
+    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $textarray_script, $file_max_upload_size, $txp_is_dev;
 
     header('Content-Security-Policy: '.CONTENT_SECURITY_POLICY);
     header('X-Frame-Options: '.X_FRAME_OPTIONS);
@@ -114,6 +114,12 @@ function checksum($input) {
     return "sha256-$hash_base64";
 }
 
+if ($txp_is_dev) {
+    $checksums = array('textpattern.js' => checksum('textpattern.js'));
+} else {// a pref?
+    $checksums = json_decode(file_get_contents('checksums.json'), true);
+}
+
 echo '<title>', admin_title($pagetitle), '</title>';
 echo
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
@@ -149,11 +155,10 @@ echo
             TEXTPATTERN_JSON
         ).';'
     ).
-    '<script src="server.php?file=textpattern.js" integrity="'.checksum('textpattern.js').'" crossorigin="anonymous"></script>'.n;
+    script_js('server.php?file=textpattern.js', array('integrity' => $checksums['textpattern.js'], 'crossorigin' => 'anonymous'));
 //    script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
 
     $txt = 'Make sure to upload all Textpattern resources and refresh the cache. Reload now?';
-    $json = json_encode(array($txt, 2));
 
     echo script_js("
     $(function() {

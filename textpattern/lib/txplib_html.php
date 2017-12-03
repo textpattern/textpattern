@@ -1598,6 +1598,14 @@ function script_js($js, $flags = '', $route = array())
     $targetStep = empty($route[1]) ? null : (array)$route[1];
 
     if (($targetEvent === null || in_array($event, $targetEvent)) && ($targetStep === null || in_array($step, $targetStep))) {
+        if (is_array($flags)) {
+            $atts = $flags;
+            unset($atts['flags']);
+            $flags = isset($flags['flags']) ? $flags['flags'] : TEXTPATTERN_SCRIPT_URL;
+        } else {
+            $atts = array();
+        }
+
         if (is_int($flags)) {
             if ($flags & TEXTPATTERN_SCRIPT_URL) {
                 if ($flags & TEXTPATTERN_SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false) {
@@ -1611,7 +1619,7 @@ function script_js($js, $flags = '', $route = array())
                     $js .= '.v'.txp_version.$ext;
                 }
 
-                return n.tag(null, 'script', array('src' => $js));
+                return n.tag(null, 'script', array('src' => $js) + $atts);
             }
         }
 
@@ -1628,7 +1636,7 @@ function script_js($js, $flags = '', $route = array())
             }
         }
 
-        $out = n.tag(n.trim($js).n, 'script');
+        $out = n.tag(n.trim($js).n, 'script', $atts);
 
         if ($flags && $flags !== true) {
             $out .= n.tag(n.trim($flags).n, 'noscript');
