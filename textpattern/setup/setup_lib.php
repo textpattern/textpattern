@@ -44,6 +44,7 @@ function setup_db($cfg = '')
     }
 
     // Variable set
+    @define('hu', $siteurl.'/');
     $siteurl = preg_replace('%^https?://%', '', $siteurl);
     $siteurl = str_replace(' ', '%20', $siteurl);
     $theme_name = empty($cfg['site']['theme']) ? 'hive' : $cfg['site']['theme'];
@@ -91,9 +92,9 @@ function setup_db($cfg = '')
 
     // Initial mandatory data
     $setup->initData();
+    msg(gTxt('creating_db_tables'));
 
-
-    setup_txp_lang();
+    setup_txp_lang($cfg['site']['lang']);
 
     // Create core prefs
     $setup->initPrefs();
@@ -112,6 +113,7 @@ function setup_db($cfg = '')
         */
         foreach (get_files_content($datadir.'/data', 'prefs') as $key=>$data) {
             if ($out = @json_decode($data, true)) {
+                msg("Prefs: 'data/{$key}'");
                 foreach ($out as $name => $p) {
                     if (empty($p['private'])) {
                         @set_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
@@ -119,16 +121,23 @@ function setup_db($cfg = '')
                 }
             }
         }
+        $prefs = get_prefs();
 
+        $plugin = new \Textpattern\Plugin\Plugin();
+        foreach (get_files_content($datadir.'/plugin', 'txt') as $key=>$data) {
+            $result = $plugin->install($data, 1);
+            msg("Plugin: '{$key}' - ".(is_array($result) ? $result[0] : $result));
+        }
 
         $import = new \Textpattern\Import\TxpXML();
-
         foreach (get_files_content($datadir.'/data', 'xml') as $key=>$data) {
             $import->importXml($data);
+            msg("Import: 'data/{$key}'");
         }
 
         foreach (get_files_content($datadir.'/articles', 'xml') as $key=>$data) {
             $import->importXml($data);
+            msg("Import: 'articles/{$key}'");
         }
     }
 
@@ -142,9 +151,11 @@ function setup_db($cfg = '')
         // $Skin->import();
         // $Skin->updateSkinInUse();
     } else {
+        msg(gTxt('public_theme').": '{$public_theme}'");
 
         foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
             safe_insert("txp_css", "name='".doSlash($key)."', css='".doSlash($data)."'");
+            msg("CSS: '{$key}'");
         }
 
         if ($files = glob("{$themedir}/forms/*/*\.txp")) {
@@ -152,12 +163,14 @@ function setup_db($cfg = '')
                 if (preg_match('%/forms/(\w+)/(\w+)\.txp$%', $file, $mm)) {
                     $data = @file_get_contents($file);
                     safe_insert("txp_form", "type='".doSlash($mm[1])."', name='".doSlash($mm[2])."', Form='".doSlash($data)."'");
+                    msg("Form: '{$mm[1]}/{$mm[2]}'");
                 }
             }
         }
 
         foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
             safe_insert("txp_page", "name='".doSlash($key)."', user_html='".doSlash($data)."'");
+            msg("Page: '{$key}'");
         }
     }
     // --- Theme setup end
@@ -169,17 +182,32 @@ function setup_db($cfg = '')
     rebuild_tree_full('file');
 }
 
+/**
+ * Installing Language Files
+ *
+ * @param  string $langs The desired language code or comma separated string
+ */
 
-function setup_txp_lang()
+function setup_txp_lang($langs)
 {
     global $language;
 
     Txp::getContainer()->remove('\Textpattern\L10n\Lang');
 
+    $langs = array_flip(do_list_unique($langs));
+    unset($langs[$language]);
+
     if (!Txp::get('\Textpattern\L10n\Lang')->installFile($language)) {
         // If cannot install from lang file, setup the Default lang. `language` pref changed too.
         $language = TEXTPATTERN_DEFAULT_LANG;
         Txp::get('\Textpattern\L10n\Lang')->installFile($language);
+        unset($langs[$language]);
+    }
+    msg("Lang: '{$language}'");
+
+    foreach (array_flip($langs) as $lang) {
+        Txp::get('\Textpattern\L10n\Lang')->installFile($lang);
+        msg("Lang: '{$lang}'");
     }
 }
 
@@ -189,14 +217,16 @@ function setup_txp_lang()
  * The fallback language is guaranteed to exist, so any unknown strings
  * will be used from that pack to fill in any gaps.
  *
- * @param  string $lang The desired language code
- * @return array        The language-specific name-value pairs
+ * @param  string $langs The desired language code or comma separated string
+ * @return array         The language-specific name-value pairs
  */
 
-function setup_load_lang($lang)
+function setup_load_lang($langs)
 {
     global $language;
 
+    $langs = do_list($langs);
+    $lang = $langs[0];
     $lang_path = txpath.DS.'setup'.DS.'lang'.DS;
     $group = 'common, setup';
     $strings = array();

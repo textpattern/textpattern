@@ -23,6 +23,8 @@
  * Collection of client-side tools.
  */
 
+textpattern.version = '4.7.0-dev'
+
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.
  */
@@ -1841,6 +1843,7 @@ jQuery.fn.txpFileupload = function (options) {
         form.fileupload('add', {
             files: fileInput.prop('files')
         })
+        fileInput.val('')
     }).bind('fileuploadsubmit', function (e, data) {
         data.formData = $.merge([], options.formData)
         $.merge(data.formData, form.serializeArray())
@@ -1850,7 +1853,7 @@ jQuery.fn.txpFileupload = function (options) {
         ? Array.from(data.formData.entries(), function(prop) {
             return prop[1].name.length + prop[1].value.length
         }).reduce(function(a, b) {return a + b + 2}, 0)
-        : 128
+        : 256
 
         form.fileupload('option', 'maxChunkSize', maxChunkSize - 8*(res + 255))
     });
@@ -2415,4 +2418,5 @@ $(document).ready(function () {
 
     // Arm UI.
     $('.not-ready').removeClass('not-ready');
+    textpattern.Console.announce()
 });

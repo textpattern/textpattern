@@ -1424,26 +1424,6 @@ function include_plugin($name)
 }
 
 /**
- * Load a plugin data field.
- *
- * Used in plugins to get the field `data`, using a callback, can return data from the file system.
- *
- * @param  string $name The plugin
- * @return string
- */
-
-function load_plugin_data($name)
-{
-    if (has_handler('plugin_data.fetch')) {
-        $data = callback_event('plugin_data.fetch', '', false, compact('name'));
-    } else {
-        $data = safe_field('data', 'txp_plugin', "name = '".doSlash($name)."'");
-    }
-
-    return $data;
-}
-
-/**
  * Error handler for plugins.
  *
  * @param   int    $errno
@@ -6861,7 +6841,7 @@ function check_file_integrity($flags = INTEGRITY_STATUS)
 function get_files_content($dir, $ext)
 {
     $result = array();
-    foreach (scandir($dir) as $file) {
+    foreach ((array)@scandir($dir) as $file) {
         if (preg_match('/^(.+)\.'.$ext.'$/', $file, $match)) {
             $result[$match[1]] = file_get_contents("$dir/$file");
         }

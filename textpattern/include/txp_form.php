@@ -400,7 +400,7 @@ function form_edit($message = '', $refresh_partials = false)
     // Get content for static partials.
     $partials = updatePartials($partials, $rs, PARTIAL_STATIC);
 
-    pagetop(gTxt('edit_forms'), $message);
+    pagetop(gTxt('tab_forms'), $message);
 
     echo n.'<div class="txp-layout">'.
         n.tag(
