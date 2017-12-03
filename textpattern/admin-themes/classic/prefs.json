@@ -1,5 +1,0 @@
-{
-  "textpattern": {
-    "uploadPreview": "<div class='preview'><input name='title[{hash}]' value='{title}' \/><div class='info {status}'>{type} ({size} B)<\/div>{preview}<\/div>"
-  }
-}

@@ -186,7 +186,7 @@ function list_list($message = '', $post = '')
             ),
             'lastmod' => array(
                 'column'  => array('textpattern.LastMod'),
-                'label'   => gTxt('article_modified'),
+                'label'   => gTxt('modified'),
                 'options' => array('case_sensitive' => true),
             ),
         )
@@ -278,7 +278,7 @@ function list_list($message = '', $post = '')
         $headers = array(
             'title' => 'title',
             'posted' => 'posted',
-            'lastmod' => 'article_modified',
+            'lastmod' => 'modified',
             'expires' => 'expires',
             'section' => 'section',
             'category1' => 'category1',

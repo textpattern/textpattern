@@ -177,16 +177,11 @@ class Locale
     {
         foreach ((array)$locale as $name) {
             $code = strtolower($name);
+            $code = isset($this->locales[$code]) ? $this->locales[$code] : $name;
 
-            if (isset($this->locales[$code])) {
-                if (@setlocale($category, $this->locales[$code])) {
-                    return $this;
-                }
+            if (@setlocale($category, $code)) {
+                return $this;
             }
-        }
-
-        if (@setlocale($category, $name)) {
-            return $this;
         }
 
         throw new \Exception(gTxt('invalid_argument', array('{name}' => 'locale')));
