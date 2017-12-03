@@ -147,7 +147,7 @@ class TXP_RPCServer extends IXR_IntrospectionServer
                 'retrieves a given number of recent posts'
             );
 
-// TODO: metaWeblog.newMediaObject (blogid, username, password, struct) returns struct
+// TODO: metaWeblog.newMediaObject (blogid, username, password, struct) returns struct. See https://github.com/textpattern/textpattern/issues/1050
 
             // MovableType API[] - add as server capability.
             $this->capabilities['MovableType API'] = array(
