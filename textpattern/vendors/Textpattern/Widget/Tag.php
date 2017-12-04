@@ -278,6 +278,17 @@ class Tag implements \Textpattern\Widget\WidgetInterface
     }
 
     /**
+     * Determine if the tag has content assigned.
+     *
+     * @return boolean
+     */
+
+    public function hasContent()
+    {
+        return !empty($this->content);
+    }
+
+    /**
      * Render the given content as an XML element.
      *
      * @param  string $option To affect the flavour of tag returned - complete, self-closing, open, close, content

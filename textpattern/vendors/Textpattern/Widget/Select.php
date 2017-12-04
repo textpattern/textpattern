@@ -49,6 +49,24 @@ class Select extends Tag implements \Textpattern\Widget\WidgetInterface
     protected $options = array();
 
     /**
+     * List of option groups with corresponding option keys.
+     *
+     * @var array
+     */
+
+    protected $optGroups = array();
+
+    /**
+     * The current optGroup that is 'open'.
+     *
+     * Any options added while this is set will automatically be added to the group.
+     *
+     * @var string
+     */
+
+    protected $currentGroup = null;
+
+    /**
      * Construct a select widget with a bunch of options.
      *
      * @param string       $name    The Select key (HTML name attribute)
@@ -88,9 +106,10 @@ class Select extends Tag implements \Textpattern\Widget\WidgetInterface
      * @param string  $value   The option key (HTML value attribute)
      * @param string  $label   The option text
      * @param boolean $checked True if the option is to be selected
+     * @param string  $group   The group label to add this option to
      */
 
-    public function addOption($value, $label, $checked = false)
+    public function addOption($value, $label, $checked = false, $group = null)
     {
         $option = new \Textpattern\Widget\Option(
             txpspecialchars($value),
@@ -100,7 +119,39 @@ class Select extends Tag implements \Textpattern\Widget\WidgetInterface
 
         $option->setAtts(array('dir' => 'auto'));
 
-        $this->options[$value] = $option;
+        if ($group === null && $this->currentGroup !== null) {
+            $group = $this->currentGroup;
+        }
+
+        if ($group !== null) {
+            if (!isset($this->optGroups[$group])) {
+                $this->addOptGroup($group);
+            }
+
+            $this->optGroups[$group]->addWidget($option, $value);
+        } else {
+            $this->options[$value] = $option;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add an option group to the select. Chainable.
+     *
+     * @param string $label The optgroup label
+     */
+
+    public function addOptGroup($label)
+    {
+        $optGroup = new \Textpattern\Widget\OptGroup(
+            txpspecialchars($label)
+        );
+
+        $optGroup->setAtts(array('dir' => 'auto'));
+
+        $this->optGroups[$label] = $optGroup;
+        $this->currentGroup = $label;
 
         return $this;
     }
@@ -139,11 +190,19 @@ class Select extends Tag implements \Textpattern\Widget\WidgetInterface
     {
         $out = array();
 
-        foreach ($this->options as $option) {
-            $out[] = $option->render();
-        }
+        if (!$this->hasContent()) {
+            if ($this->optGroups) {
+                foreach ($this->optGroups as $optGroup) {
+                    $out[] = $optGroup->render();
+                }
+            } else {
+                foreach ($this->options as $option) {
+                    $out[] = $option->render();
+                }
+            }
 
-        $this->setContent(n.join(n, $out).n);
+            $this->setContent(n.join(n, $out).n);
+        }
 
         return parent::render($flavour);
     }
