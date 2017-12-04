@@ -1,11 +1,15 @@
 <?php
 if (!class_exists('FileServer')) {
     class FileServer {
-        private static $available = array('textpattern.js');
+        private static $available = null;
 
         static function output($path) {
+            if (self::$available === null) {
+                self::$available = parse_ini_file('server.ini');
+            }
+
             // Check if the file exists
-            if(!in_array($path, self::$available) || !is_file($path)) {
+            if(empty(self::$available[$path]) || !is_file($path)) {
                 header('HTTP/1.0 404 Not Found');
 
                 exit();

@@ -27,6 +27,11 @@
  * @package HTML
  */
 
+function checksum($input, $alg = 'sha256') {
+    $hash = base64_encode(hash_file($alg, $input, true));
+    return "{$alg}-{$hash}";
+}
+
 /**
  * Creates and outputs an admin-side header.
  *
@@ -108,18 +113,6 @@ function pagetop($pagetitle = '', $message = '')
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <?php
-function checksum($input) {
-    $hash = hash_file('sha256', $input, true);
-    $hash_base64 = base64_encode($hash);
-    return "sha256-$hash_base64";
-}
-
-if ($txp_is_dev) {
-    $checksums = array('textpattern.js' => checksum('textpattern.js'));
-} else {// a pref?
-    $checksums = json_decode(file_get_contents('checksums.json'), true);
-}
-
 echo '<title>', admin_title($pagetitle), '</title>';
 echo
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
@@ -154,16 +147,26 @@ echo
             ),
             TEXTPATTERN_JSON
         ).';'
-    ).
-    script_js('server.php?file=textpattern.js', array('integrity' => $checksums['textpattern.js'], 'crossorigin' => 'anonymous'));
-//    script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
+    );
 
-    $txt = 'Make sure to upload all Textpattern resources and refresh the cache. Reload now?';
+if ($checksums = @parse_ini_file('server.ini', true)) {
+    foreach ($checksums['script'] as $script => $checksum) {
+         echo script_js("server.php?file=$script", $txp_is_dev ?
+             TEXTPATTERN_SCRIPT_URL :
+             array('integrity' => $checksum, 'crossorigin' => 'anonymous')
+         );
+    }
+} else {
+     echo script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL);
+}
 
-    echo script_js("
+$reload_txt = 'Make sure to upload all Textpattern resources and refresh the cache. Reload now?';
+
+echo
+    script_js("
     $(function() {
         if (textpattern.version != '".txp_version."') {
-            if (confirm('$txt')) {
+            if (confirm('$reload_txt')) {
                 window.location.reload(true)
             }
         }
