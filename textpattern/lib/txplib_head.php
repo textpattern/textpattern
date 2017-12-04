@@ -142,6 +142,13 @@ function pagetop($pagetitle = '', $message = '')
     ).
     script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
 
+echo script_js("
+    $(function() {
+        if (!textpattern.version || !'".txp_version."'.match(textpattern.version)) {
+            alert('Please shift-reload the page from the server to refresh the cache.')
+        }
+    })", false);
+
     // Mandatory un-themable Textpattern core styles ?>
 <style>
 .not-ready main {
