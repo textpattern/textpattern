@@ -19,12 +19,12 @@
     "url": "https://github.com/textpattern/textpattern/issues"
   },
   "devDependencies": {
-    "blueimp-md5": "2.10.0",
     "phplint": "1.7.4",
     "uglify-js": "3.2.1"
   },
   "dependencies": {
     "blueimp-file-upload": "9.19.2",
+    "blueimp-md5": "2.10.0",
     "jquery": "3.2.1"
   },
   "scripts": {
