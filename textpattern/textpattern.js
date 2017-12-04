@@ -874,11 +874,11 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         console.log(data.message);
     }
 }).register('uploadProgress', function (event, data) {
-    $('progress.upload-progress').val(data.loaded / data.total)
+    $('progress.txp-upload-progress').val(data.loaded / data.total)
 }).register('uploadStart', function (event, data) {
-    $('progress.upload-progress').val(0).show()
+    $('progress.txp-upload-progress').val(0).show()
 }).register('uploadEnd', function (event, data) {
-    $('progress.upload-progress').hide()
+    $('progress.txp-upload-progress').hide()
 }).register('updateList', function (event, data) {
     var list = data.list || '#messagepane, #txp-list-container',
         url = data.url || 'index.php',
