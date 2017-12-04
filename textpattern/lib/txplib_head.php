@@ -117,7 +117,6 @@ echo '<title>', admin_title($pagetitle), '</title>';
 echo
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('vendors/blueimp/md5/md5.min.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/blueimp/fileupload/jquery.fileupload.min.js', TEXTPATTERN_SCRIPT_URL).
     script_js(
         'var textpattern = '.json_encode(

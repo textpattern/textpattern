@@ -19,16 +19,19 @@
     "url": "https://github.com/textpattern/textpattern/issues"
   },
   "devDependencies": {
-    "phplint": "1.7.4"
+    "phplint": "1.7.4",
+    "uglify-js": "3.2.1"
   },
   "dependencies": {
     "blueimp-file-upload": "9.19.2",
+    "blueimp-md5": "2.10.0",
     "jquery": "3.2.1"
   },
   "scripts": {
     "phplint": "phplint '**/*.php' '!node_modules/**'",
     "copy:jquery": "rimraf textpattern/vendors/jquery/jquery/jquery.js && cp node_modules/jquery/dist/jquery.min.js textpattern/vendors/jquery/jquery/jquery.js",
     "copy:textile": "sh .github/copy-textile.sh",
+    "copy:blueimp-file-upload": "uglifyjs -c -m -o textpattern/vendors/blueimp/fileupload/jquery.fileupload.min.js node_modules/blueimp-file-upload/js/jquery.fileupload.js node_modules/blueimp-md5/js/md5.js",
     "get-dependencies": "npm run copy:blueimp-file-upload && npm run copy:jquery && npm run copy:textile v3.6.0",
     "get-pophelp": "sh .github/get-pophelp.sh",
     "get-textpacks": "sh .github/get-textpacks.sh",

@@ -1158,8 +1158,7 @@ button {
  * Reverse the progress direction in RTL languages.
  */
   [dir="rtl"] progress {
-    -webkit-animation-direction: reverse;
-            animation-direction: reverse;
+    animation-direction: reverse;
   }
   /* Buttons
    ========================================================================== */
@@ -4880,8 +4879,7 @@ button {
  * Reverse the progressbar direction in RTL languages.
  */
   [dir="rtl"] .ui-progressbar-value {
-    -webkit-animation-direction: reverse;
-            animation-direction: reverse;
+    animation-direction: reverse;
   }
   /* Selectmenu
    ========================================================================== */

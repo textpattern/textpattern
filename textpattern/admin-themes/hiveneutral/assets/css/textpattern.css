@@ -1321,8 +1321,7 @@ button {
  * Reverse the progress direction in RTL languages.
  */
   [dir="rtl"] progress {
-    -webkit-animation-direction: reverse;
-            animation-direction: reverse;
+    animation-direction: reverse;
   }
   /* Buttons
    ========================================================================== */
@@ -2637,6 +2636,9 @@ button {
   }
   .txp-search .txp-dropdown {
     z-index: 101;
+  }
+  .txp-search-input {
+    max-width: calc(100% - 5.5rem);
   }
   .txp-search-clear {
     -webkit-box-flex: 1;
@@ -5465,8 +5467,7 @@ button {
  * Reverse the progressbar direction in RTL languages.
  */
   [dir="rtl"] .ui-progressbar-value {
-    -webkit-animation-direction: reverse;
-            animation-direction: reverse;
+    animation-direction: reverse;
   }
   /* Selectmenu
    ========================================================================== */
