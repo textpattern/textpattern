@@ -147,7 +147,7 @@ class TXP_RPCServer extends IXR_IntrospectionServer
                 'retrieves a given number of recent posts'
             );
 
-// TODO: metaWeblog.newMediaObject (blogid, username, password, struct) returns struct
+// TODO: metaWeblog.newMediaObject (blogid, username, password, struct) returns struct. See https://github.com/textpattern/textpattern/issues/1050
 
             // MovableType API[] - add as server capability.
             $this->capabilities['MovableType API'] = array(
@@ -239,7 +239,7 @@ class TXP_RPCServer extends IXR_IntrospectionServer
 
                 case 'iso-8859-1':
 // TODO: if utf8 conversion fails, throw: 32701 ---> parse error. unsupported encoding?
-// see: http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
+// see: http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php & https://github.com/textpattern/textpattern/issues/1051
                     // This will fail on parser if utf8_encode is unavailiable.
                     $data = (function_exists('utf8_encode') && is_callable('utf8_encode'))
                         ? utf8_encode($HTTP_RAW_POST_DATA)
@@ -247,7 +247,7 @@ class TXP_RPCServer extends IXR_IntrospectionServer
                     break;
 
                 default:
-// TODO: if utf8 conversion fails, throw: 32701 ---> parse error. unsupported encoding?
+// TODO: if utf8 conversion fails, throw: 32701 ---> parse error. unsupported encoding? See https://github.com/textpattern/textpattern/issues/1051
                     // This will fail on parser if mb_convert_encoding is unavailiable.
                     $data = (function_exists('mb_convert_encoding') && is_callable('mb_convert_encoding'))
                         ? mb_convert_encoding($HTTP_RAW_POST_DATA, 'utf-8', $encoding)
@@ -305,7 +305,7 @@ EOD;
                 $xml = mb_convert_encoding($xml, $enc, 'utf-8');
             } else {
                 // TODO: shouldn't this throw an error instead of serving non-UTF-8 content as UTF-8?
-                // If no decoding possible, serve contents as UTF-8.
+                // If no decoding possible, serve contents as UTF-8. See https://github.com/textpattern/textpattern/issues/1052
                 $enc = 'utf-8';
             }
         }
