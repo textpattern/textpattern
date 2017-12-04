@@ -93,7 +93,7 @@ class OptGroup extends Tag implements \Textpattern\Widget\WidgetCollectionInterf
 
         $option->setAtts(array('dir' => 'auto'));
 
-        $this->options->addWidget($option);
+        $this->options->addWidget($option, $value);
 
         return $this;
     }
