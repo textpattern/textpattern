@@ -4161,7 +4161,7 @@ function custom_field($atts)
 
     $was_article_body = $is_article_body;
     $is_article_body = 1;
-    $out = ($escape == null ? txpspecialchars($out) : parse($out));
+    $out = ($escape === null ? txpspecialchars($out) : parse($out));
     $is_article_body = $was_article_body;
 
     if (isset($item)) {
