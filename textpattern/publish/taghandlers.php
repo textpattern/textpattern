@@ -4141,7 +4141,7 @@ function custom_field($atts)
     extract(lAtts(array(
         'name'    => get_pref('custom_1_set'),
         'item'  => null,
-        'escape'  => 'html',
+        'escape'  => null,
         'default' => '',
     ), $atts));
 
@@ -4161,7 +4161,7 @@ function custom_field($atts)
 
     $was_article_body = $is_article_body;
     $is_article_body = 1;
-    $out = ($escape == 'html' ? txpspecialchars($out) : parse($out));
+    $out = ($escape == null ? txpspecialchars($out) : parse($out));
     $is_article_body = $was_article_body;
 
     if (isset($item)) {
