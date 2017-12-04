@@ -101,7 +101,7 @@ setup_load_lang($cfg['site']['lang']);
 if (defined('is_multisite')) {
     $config_path = multisite_root_path.'/private';
 } else {
-    $config_path = '/'.basename(txpath);
+    $config_path = txpath;
 }
 
 
