@@ -993,6 +993,12 @@ button {
     padding-right: 0.25em;
     background-image: none;
     vertical-align: top;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+  [dir="rtl"] select[size],
+  [dir="rtl"] select[multiple] {
+    padding-left: 0.25em;
   }
   /**
  * Override height set in rule above and restrict to one line field.
@@ -1143,22 +1149,6 @@ button {
   textarea:-moz-ui-invalid {
     border-color: #9d261d;
     box-shadow: none;
-  }
-  /**
- * 1. Add the correct display in IE 11.
- * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
- */
-  progress {
-    /* 1 */
-    display: inline-block;
-    /* 2 */
-    vertical-align: baseline;
-  }
-  /**
- * Reverse the progress direction in RTL languages.
- */
-  [dir="rtl"] progress {
-    animation-direction: reverse;
   }
   /* Buttons
    ========================================================================== */
@@ -2037,6 +2027,51 @@ button {
     /* 1 */
     -webkit-box-sizing: content-box;
             box-sizing: content-box;
+  }
+  /**
+ * 1. Add the correct display in IE 11.
+ * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+  progress {
+    /* 1 */
+    display: inline-block;
+    /* 2 */
+    vertical-align: baseline;
+  }
+  /**
+ * Reverse the progress direction in RTL languages.
+ */
+  [dir="rtl"] progress {
+    animation-direction: reverse;
+  }
+  /**
+ * Styled progress indicators.
+ *
+ * Example HTML:
+ *
+ * <progress class="txp-upload-progress"></progress>
+ */
+  .txp-upload-progress {
+    width: 100%;
+    height: 8px;
+    border: 1px solid #cccccc;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+  .txp-upload-progress::-webkit-progress-value {
+    background-color: #238c23;
+  }
+  .txp-upload-progress::-webkit-progress-bar {
+    background-color: #ffffff;
+  }
+  .txp-upload-progress:not([value])::-webkit-progress-bar {
+    background-color: #d4d4d4;
+  }
+  .txp-upload-progress::-moz-progress-bar {
+    background-color: #238c23;
   }
   /**
  * Hide text but still allow screen reader access.
@@ -4858,8 +4893,8 @@ button {
     overflow: hidden;
   }
   .ui-progressbar-value {
-    height: 8px;
-    background-color: #c7dbfa;
+    height: 6px;
+    background-color: #238c23;
   }
   /**
  * Progressbar with indeterminate value.
@@ -4873,13 +4908,7 @@ button {
  * </div>
  */
   .ui-progressbar-indeterminate .ui-progressbar-value {
-    background-color: #cccccc;
-  }
-  /**
- * Reverse the progressbar direction in RTL languages.
- */
-  [dir="rtl"] .ui-progressbar-value {
-    animation-direction: reverse;
+    background-color: #d4d4d4;
   }
   /* Selectmenu
    ========================================================================== */
