@@ -425,7 +425,7 @@ function doDiagnostics()
             '{supported}' => $gd_support,
         ));
     } else {
-        $gd = gTxt('gd_unavailable');
+        $gd = gTxt('unavailable');
     }
 
     if (realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir'])) {
