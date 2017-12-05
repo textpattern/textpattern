@@ -307,7 +307,7 @@ function file_list($message = '', $ids = array())
                     ).
                     column_head(
                         'name', 'filename', 'file', true, $switch_dir, $crit, $search_method,
-                            (('filename' == $sort) ? "$dir " : '').'txp-list-col-filename'
+                            (('filename' == $sort) ? "$dir " : '').'txp-list-col-filename txp-contain'
                     ).
                     column_head(
                         'title', 'title', 'file', true, $switch_dir, $crit, $search_method,
