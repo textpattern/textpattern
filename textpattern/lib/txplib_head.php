@@ -132,7 +132,7 @@ function pagetop($pagetitle = '', $message = '')
                     ),
                     'message' => '<span class="ui-icon ui-icon-{status}"></span> {message}',
                     'messagePane' => '<span class="messageflash {status}" role="alert" aria-live="assertive">
-    {message}<a class="close" role="button" title="{close}" aria-label="{close}" href="#close">&#215;</a>
+    {message}<a class="close" role="button" title="{close}" href="#close"><span class="ui-icon ui-icon-close">{close}</span></a>
 </span>'
                 ),
                 'textarray' => (object) null,
