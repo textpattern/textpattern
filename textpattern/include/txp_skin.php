@@ -29,17 +29,17 @@
  */
 
 use Textpattern\Search\Filter;
-use Textpattern\Skin\Skins;
+use Textpattern\Skin\Main as Skins;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
-if ($event == 'skin') {
-    require_privs('skin');
+if ($event === 'skin') {
+    require_privs($event);
 
-    $available_steps = array(
-        'change_pageby' => true,
+    $availableSteps = array(
+        'skin_change_pageby' => true, // Prefixed to make it work with the paginator…
         'list'          => false,
         'edit'          => false,
         'save'          => true,
@@ -47,8 +47,8 @@ if ($event == 'skin') {
         'multi_edit'    => true,
     );
 
-    if ($step && bouncer($step, $available_steps)) {
-        call_user_func('skin_'.$step);
+    if ($step && bouncer($step, $availableSteps)) {
+        call_user_func($event.'_'.$step);
     } else {
         skin_list();
     }
@@ -57,7 +57,7 @@ if ($event == 'skin') {
 /**
  * The main panel listing all skins.
  *
- * @param string|array $message The activity message
+ * @param mixed $message The activity message
  */
 
 function skin_list($message = '')
@@ -77,7 +77,7 @@ function skin_list($message = '')
     if ($sort === '') {
         $sort = get_pref('skin_sort_column', 'name');
     } else {
-        $sort_options = array(
+        $sortOpts = array(
             'title',
             'version',
             'author',
@@ -88,7 +88,7 @@ function skin_list($message = '')
             'name',
         );
 
-        in_array($sort, $sort_options) ? $sort = 'name' : '';
+        in_array($sort, $sortOpts) ? $sort = 'name' : '';
 
         set_pref('skin_sort_column', $sort, 'skin', 2, '', 0, PREF_PRIVATE);
     }
@@ -96,12 +96,13 @@ function skin_list($message = '')
     if ($dir === '') {
         $dir = get_pref('skin_sort_dir', 'desc');
     } else {
-        $dir = ($dir == 'asc') ? "asc" : "desc";
+        $dir = ($dir == 'asc') ? 'asc' : 'desc';
+
         set_pref('skin_sort_dir', $dir, 'skin', 2, '', 0, PREF_PRIVATE);
     }
 
-    $sort_sql = $sort.' '.$dir;
-    $switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+    $sortSQL = $sort.' '.$dir;
+    $switchDir = ($dir == 'desc') ? 'asc' : 'desc';
 
     $search = new Filter(
         $event,
@@ -121,60 +122,58 @@ function skin_list($message = '')
         )
     );
 
-    list($criteria, $crit, $search_method) = $search->getFilter();
+    list($criteria, $crit, $searchMethod) = $search->getFilter();
 
-    $search_render_options = array('placeholder' => 'search_skins');
+    $searchRenderOpts = array('placeholder' => 'search_skins');
     $total = safe_count('txp_skin', $criteria);
 
-    echo n.'<div class="txp-layout">'.
-        n.tag(
+    echo n.'<div class="txp-layout">'
+        .n.tag(
             hed(gTxt('tab_skins'), 1, array('class' => 'txp-heading')),
             'div',
             array('class' => 'txp-layout-4col-alt')
         );
 
-    $searchBlock =
-        n.tag(
-            $search->renderForm('skin', $search_render_options),
-            'div',
-            array(
-                'class' => 'txp-layout-4col-3span',
-                'id'    => $event.'_control',
-            )
-        );
+    $searchBlock = n.tag(
+        $search->renderForm('skin', $searchRenderOpts),
+        'div',
+        array(
+            'class' => 'txp-layout-4col-3span',
+            'id'    => $event.'_control',
+        )
+    );
 
-    $createBlock = array();
+    $createBlock = has_privs('skin.edit') ? Skins::renderCreateBlock() : '';
 
-    if (has_privs('skin.edit')) {
-        $createBlock[] =
-            n.tag(
-                sLink('skin', 'edit', gTxt('create_skin'), 'txp-button').
-                Skins::renderImportForm(),
-                'div',
-                array('class' => 'txp-control-panel')
-            );
-    }
-
-    $contentBlockStart = n.tag_start('div', array(
+    $contentBlockStart = n.tag_start(
+        'div',
+        array(
             'class' => 'txp-layout-1col',
             'id'    => $event.'_container',
-        ));
+        )
+    );
 
-    $createBlock = implode(n, $createBlock);
+    echo $searchBlock
+        .$contentBlockStart
+        .$createBlock;
 
     if ($total < 1) {
         if ($criteria != 1) {
-            echo $searchBlock.
-                $contentBlockStart.
-                $createBlock.
-                graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_results_found'),
-                    array('class' => 'alert-block information')
-                ).
-                n.tag_end('div'). // End of .txp-layout-1col.
-                n.'</div>'; // End of .txp-layout.
+            echo graf(
+                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                gTxt('no_results_found'),
+                array('class' => 'alert-block information')
+            );
+        } else {
+            echo graf(
+                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                gTxt('no_skin_recorded'),
+                array('class' => 'alert-block error')
+            );
         }
+
+        echo n.tag_end('div') // End of .txp-layout-1col.
+            .n.'</div>';      // End of .txp-layout.
 
         return;
     }
@@ -184,16 +183,20 @@ function skin_list($message = '')
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $searchBlock.$contentBlockStart.$createBlock;
+    $countNames = array('section', 'page', 'form', 'css');
+    $rsThings = array('*');
+
+    foreach ($countNames as $countName) {
+        $rsThings[] = '(SELECT COUNT(*) '
+                      .'FROM '.safe_pfx_j('txp_'.$countName).' '
+                      .'WHERE txp_'.$countName.'.skin = txp_skin.name) '
+                      .$countName.'_count';
+    }
 
     $rs = safe_rows_start(
-        '*,
-            (SELECT COUNT(*) FROM '.safe_pfx_j('txp_section').' WHERE txp_section.skin = txp_skin.name) section_count,
-            (SELECT COUNT(*) FROM '.safe_pfx_j('txp_page').' WHERE txp_page.skin = txp_skin.name) page_count,
-            (SELECT COUNT(*) FROM '.safe_pfx_j('txp_form').' WHERE txp_form.skin = txp_skin.name) form_count,
-            (SELECT COUNT(*) FROM '.safe_pfx_j('txp_css').' WHERE txp_css.skin = txp_skin.name) css_count',
+        implode(', ', $rsThings),
         'txp_skin',
-        "{$criteria} order by {$sort_sql} limit {$offset}, {$limit}"
+        $criteria.' order by '.$sortSQL.' limit '.$offset.', '.$limit
     );
 
     if ($rs) {
@@ -203,12 +206,18 @@ function skin_list($message = '')
                 'name'   => 'longform',
                 'method' => 'post',
                 'action' => 'index.php',
-            )).
-            n.tag_start('div', array('class' => 'txp-listtables')).
-            n.tag_start('table', array('class' => 'txp-list')).
-            n.tag_start('thead');
+            ))
+            .n.tag_start('div', array('class' => 'txp-listtables'))
+            .n.tag_start('table', array('class' => 'txp-list'))
+            .n.tag_start('thead');
 
-        $col_heads = array(
+        $ths = hCell(
+            fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+            '',
+            ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+        );
+
+        $thIds = array(
             'name'          => 'name',
             'title'         => 'title',
             'version'       => 'version',
@@ -219,129 +228,104 @@ function skin_list($message = '')
             'css_count'     => 'tab_style',
         );
 
-        $column_heads = hCell(
-            fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-            '',
-            ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
-        );
+        foreach ($thIds as $thId => $thVal) {
+            $thClass = ($thId == $sort) ? $dir.' ' : ''
+                      .'txp-list-col-'.$thId
+                      .($thVal !== $thId) ? ' skin_detail' : '';
 
-        foreach ($col_heads as $head_id => $head_value) {
-            $column_heads .= column_head($head_value, $head_id, 'skin', true, $switch_dir, $crit, $search_method, (($head_id == $sort) ? "$dir " : '').'txp-list-col-'.$head_id.($head_value !== $head_id ? ' skin_detail' : ''));
+            $ths .= column_head($thVal, $thId, 'skin', true, $switchDir, $crit, $searchMethod, $thClass);
         }
 
-        echo tr($column_heads).
-            n.tag_end('thead').
-            n.tag_start('tbody');
+        echo tr($ths)
+            .n.tag_end('thead')
+            .n.tag_start('tbody');
 
         while ($a = nextRow($rs)) {
             extract($a, EXTR_PREFIX_ALL, 'skin');
 
-            $edit_url = array(
+            $editUrl = array(
                 'event'         => 'skin',
                 'step'          => 'edit',
                 'name'          => $skin_name,
                 'sort'          => $sort,
                 'dir'           => $dir,
                 'page'          => $page,
-                'search_method' => $search_method,
+                'search_method' => $searchMethod,
                 'crit'          => $crit,
             );
 
-            $author = ($skin_author_uri) ? href(txpspecialchars($skin_author), $skin_author_uri) : txpspecialchars($skin_author);
+            $tdAuthor = txpspecialchars($skin_author);
 
-            if ($skin_section_count > 0) {
-                $sectionLink = href(
-                    $skin_section_count,
-                    array(
-                        'event'         => 'section',
-                        'search_method' => 'skin',
-                        'crit'          => '"'.$skin_name.'"',
-                    ),
-                    array('title' => gTxt('section_count', array('{num}' => $skin_section_count)))
-                );
-            } else {
-                $sectionLink = 0;
-            }
+            $skin_author_uri ? $tdAuthor = href($tdAuthor, $skin_author_uri) : '';
 
-            if ($skin_page_count > 0) {
-                $pageLink = href(
-                    $skin_page_count,
-                    array(
-                        'event' => 'page',
-                        'skin'  => $skin_name,
-                    ),
-                    array('title' => gTxt('skin_count_page', array('{num}' => $skin_page_count)))
-                );
-            } else {
-                $pageLink = 0;
-            }
-
-            if ($skin_css_count > 0) {
-                $cssLink = href(
-                    $skin_css_count,
-                    array(
-                        'event' => 'css',
-                        'skin'  => $skin_name,
-                    ),
-                    array('title' => gTxt('skin_count_css', array('{num}' => $skin_css_count)))
-                );
-            } else {
-                $cssLink = 0;
-            }
-
-            if ($skin_form_count > 0) {
-                $formLink = href(
-                    $skin_form_count,
-                    array(
-                        'event' => 'form',
-                        'skin'  => $skin_name,
-                    ),
-                    array('title' => gTxt('skin_count_form', array('{num}' => $skin_form_count)))
-                );
-            } else {
-                $formLink = 0;
-            }
-
-            $tds = td(fInput('checkbox', 'selected[]', $skin_name), '', 'txp-list-col-multi-edit').
-                hCell(
-                    href(txpspecialchars($skin_name), $edit_url, array('title' => gTxt('edit'))),
+            $tds = td(fInput('checkbox', 'selected[]', $skin_name), '', 'txp-list-col-multi-edit')
+                .hCell(
+                    href(txpspecialchars($skin_name), $editUrl, array('title' => gTxt('edit'))),
                     '',
                     array(
                         'scope' => 'row',
                         'class' => 'txp-list-col-name',
                     )
-                ).
-                td(txpspecialchars($skin_title), '', 'txp-list-col-title').
-                td(txpspecialchars($skin_version), '', 'txp-list-col-version').
-                td($author, '', 'txp-list-col-author').
-                td($sectionLink, '', 'txp-list-col-section_count').
-                td($pageLink, '', 'txp-list-col-page_count').
-                td($formLink, '', 'txp-list-col-form_count').
-                td($cssLink, '', 'txp-list-col-css_count');
+                )
+                .td(txpspecialchars($skin_title), '', 'txp-list-col-title')
+                .td(txpspecialchars($skin_version), '', 'txp-list-col-version')
+                .td($tdAuthor, '', 'txp-list-col-author');
+
+            foreach ($countNames as $name) {
+                if (${'skin_'.$name.'_count'} > 0) {
+                    if ($name === 'section') {
+                        $linkParams = array(
+                            'event'         => 'section',
+                            'search_method' => 'skin',
+                            'crit'          => '"'.$skin_name.'"',
+                        );
+                    } else {
+                        $linkParams = array(
+                            'event' => $name,
+                            'skin'  => $skin_name,
+                        );
+                    }
+
+                    $tdVal = href(
+                        ${'skin_'.$name.'_count'},
+                        $linkParams,
+                        array(
+                            'title' => gTxt(
+                                'skin_count_'.$name,
+                                array('{num}' => ${'skin_'.$name.'_count'})
+                            )
+                        )
+                    );
+                } else {
+                    $tdVal = 0;
+                }
+
+                $tds .= td($tdVal, '', 'txp-list-col-'.$name.'_count');
+            }
 
             echo tr($tds, array('id' => 'txp_skin_'.$skin_name));
         }
 
-        echo n.tag_end('tbody').
-            n.tag_end('table').
-            n.tag_end('div'). // End of .txp-listtables.
-            skin_multiedit_form($page, $sort, $dir, $crit, $search_method).
-            tInput().
-            n.tag_end('form').
-            n.tag_start(
+        echo n.tag_end('tbody')
+            .n.tag_end('table')
+            .n.tag_end('div') // End of .txp-listtables.
+            .n.skin_multiedit_form($page, $sort, $dir, $crit, $searchMethod)
+            .n.tInput()
+            .n.tag_end('form')
+            .n.tag_start(
                 'div',
                 array(
                     'class' => 'txp-navigation',
                     'id'    => $event.'_navigation',
                 )
-            ).
-            $paginator->render().
-            nav_form('skin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div');
+            )
+            .$paginator->render()
+            .nav_form('skin', $page, $numPages, $sort, $dir, $crit, $searchMethod, $total, $limit)
+            .n.tag_end('div');
     }
 
-    echo n.tag_end('div'). // End of .txp-layout-1col.
-        n.'</div>'; // End of .txp-layout.
+    echo n.tag_end('div') // End of .txp-layout-1col.
+        .n.'</div>'; // End of .txp-layout.
 }
 
 /**
@@ -365,65 +349,68 @@ function skin_edit($message = null)
         'name',
     )));
 
-    $fields = array('name', 'title', 'version', 'description', 'author', 'author_uri');
+    $fields = Skins::getTableCols();
 
     if ($name && $step == 'edit') {
-        try {
-            $rs = Txp::get('\Textpattern\Skin\Skin', $name)->getRow();
-        } catch (\Exception $e) {
-            return skin_list($e->getMessage());
+        $rs = Txp::get('\Textpattern\Skin\Main', $name)->getRows()[$name];
+
+        if (!$rs) {
+            return skin_list();
         }
 
         $caption = gTxt('edit_skin');
-        $extra_action = href('<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'), '#', array(
-            'class'     => 'txp-clone',
-            'data-form' => 'skin_form',
-        ));
+        $extraAction = href(
+            '<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'),
+            '#',
+            array(
+                'class'     => 'txp-clone',
+                'data-form' => 'skin_form',
+            )
+        );
     } else {
         $rs = array_fill_keys($fields, '');
         $caption = gTxt('create_skin');
-        $extra_action = '';
+        $extraAction = '';
     }
 
     extract($rs, EXTR_PREFIX_ALL, 'skin');
     pagetop(gTxt('tab_skins'));
 
-    $out = array();
-    $out[] = hed($caption, 2);
+    $content = hed($caption, 2);
 
     foreach ($fields as $field) {
-        $current = ${"skin_".$field};
+        $current = ${'skin_'.$field};
 
         if ($field === 'description') {
-            $input = text_area($field, 0, 0, $current, "skin_$field");
+            $input = text_area($field, 0, 0, $current, 'skin_'.$field);
         } elseif ($field === 'name') {
             $input = '<input type="text" value="'.$current.'" id="skin_'.$field.'" name="'.$field.'" size="'.INPUT_REGULAR.'" maxlength="63" required />';
         } else {
             $type = ($field === 'author_uri') ? 'url' : 'text';
-            $input = fInput($type, $field, $current, '', '', '', INPUT_REGULAR, '', "skin_$field");
+            $input = fInput($type, $field, $current, '', '', '', INPUT_REGULAR, '', 'skin_'.$field);
         }
 
-        $out[] = inputLabel("skin_$field", $input, "skin_$field");
+        $content .= inputLabel('skin_'.$field, $input, 'skin_'.$field);
     }
 
-    $out[] = pluggable_ui('skin_ui', 'extend_detail_form', '', $rs).
-        graf(
-            $extra_action.
-            sLink('skin', '', gTxt('cancel'), 'txp-button').
-            fInput('submit', '', gTxt('save'), 'publish'),
+    $content .= pluggable_ui('skin_ui', 'extend_detail_form', '', $rs)
+        .graf(
+            $extraAction.
+            sLink('skin', '', gTxt('cancel'), 'txp-button')
+            .fInput('submit', '', gTxt('save'), 'publish'),
             array('class' => 'txp-edit-actions')
-        ).
-        eInput('skin').
-        sInput('save').
-        hInput('old_name', $skin_name).
-        hInput('old_title', $skin_title).
-        hInput('search_method', $search_method).
-        hInput('crit', $crit).
-        hInput('page', $page).
-        hInput('sort', $sort).
-        hInput('dir', $dir);
+        )
+        .eInput('skin')
+        .sInput('save')
+        .hInput('old_name', $skin_name)
+        .hInput('old_title', $skin_title)
+        .hInput('search_method', $searchMethod)
+        .hInput('crit', $crit)
+        .hInput('page', $page)
+        .hInput('sort', $sort)
+        .hInput('dir', $dir);
 
-    echo form(join('', $out), '', '', 'post', 'txp-edit', '', 'skin_form');
+    echo form($content, '', '', 'post', 'txp-edit', '', 'skin_form');
 }
 
 /**
@@ -446,39 +433,37 @@ function skin_save()
 
     extract($infos);
 
-    $instance = Txp::get('\Textpattern\Skin\Skin');
+    $Skin = Txp::get('\Textpattern\Skin\Main');
 
     if ($old_name) {
-        $instance->setSkin($old_name);
-        $name = strtolower(sanitizeForUrl($name));
-
         if ($copy) {
             $name === $old_name ? $name .= '_copy' : '';
             $title === $old_title ? $title .= ' (copy)' : '';
-            $row = compact('name', 'title', 'version', 'description', 'author', 'author_uri');
-            $result = $instance->duplicateAs($row);
+
+            $Skin->setSkinsAssets($name)
+                ->create(compact('title', 'version', 'description', 'author', 'author_uri'), array($old_name));
         } else {
-            $row = compact('name', 'title', 'version', 'description', 'author', 'author_uri');
-            $result = $instance->edit($row);
+            $Skin->setSkinsAssets($old_name)
+                 ->edit(compact('name', 'title', 'version', 'description', 'author', 'author_uri'));
         }
     } else {
         $title ?: $title = $name;
-        $name = strtolower(sanitizeForUrl($name));
         $author ?: $author = substr(cs('txp_login_public'), 10);
         $version ?: $version = '0.0.1';
-        $row = compact('name', 'title', 'version', 'description', 'author', 'author_uri');
+        $row = compact('title', 'version', 'description', 'author', 'author_uri');
 
-        $instance->create($row);
+        $Skin->setSkinsAssets($name)
+             ->create($row);
     }
 
-    skin_list($instance->getResults());
+    skin_list($Skin->getResults());
 }
 
 /**
  * Changes and saves the 'pageby' value.
  */
 
-function skin_change_pageby()
+function skin_skin_change_pageby()
 {
     Txp::get('\Textpattern\Admin\Paginator')->change();
     skin_list();
@@ -487,28 +472,28 @@ function skin_change_pageby()
 /**
  * Renders a multi-edit form widget.
  *
- * @param  int    $page          The page number
- * @param  string $sort          The current sorting value
- * @param  string $dir           The current sorting direction
- * @param  string $crit          The current search criteria
- * @param  string $search_method The current search method
+ * @param  int    $page         The page number
+ * @param  string $sort         The current sorting value
+ * @param  string $dir          The current sorting direction
+ * @param  string $crit         The current search criteria
+ * @param  string $searchMethod The current search method
  * @return string HTML
  */
 
-function skin_multiedit_form($page, $sort, $dir, $crit, $search_method)
+function skin_multiedit_form($page, $sort, $dir, $crit, $searchMethod)
 {
-    $clean = tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean')).
-             popHelp('remove_extra_templates').
-             checkbox('clean', 1, true);
+    $clean = tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean'))
+            .popHelp('remove_extra_templates')
+            .checkbox('clean', 1, true);
 
     $methods = array(
-        'update'      => array('label' => gTxt('update'), 'html' => $clean),
-        'duplicate'   => gTxt('duplicate'),
-        'export'      => array('label' => gTxt('export'), 'html' => $clean),
-        'delete'      => gTxt('delete'),
+        'update'    => array('label' => gTxt('update'), 'html' => $clean),
+        'duplicate' => gTxt('duplicate'),
+        'export'    => array('label' => gTxt('export'), 'html' => $clean),
+        'delete'    => gTxt('delete'),
     );
 
-    return multi_edit($methods, 'skin', 'multi_edit', $page, $sort, $dir, $crit, $search_method);
+    return multi_edit($methods, 'skin', 'multi_edit', $page, $sort, $dir, $crit, $searchMethod);
 }
 
 /**
@@ -527,24 +512,24 @@ function skin_multi_edit()
         return skin_list();
     }
 
-    $instance = Txp::get('\Textpattern\Skin\Skins', ps('selected'));
+    $Skins = Txp::get('\Textpattern\Skin\Main', ps('selected'));
 
     switch ($edit_method) {
         case 'export':
-            $instance->export($clean);
+            $Skins->export($clean);
             break;
         case 'duplicate':
-            $instance->duplicate();
+            $Skins->duplicate();
             break;
         case 'update':
-            $instance->update($clean);
+            $Skins->import($clean, true);
             break;
         default: // delete.
-            $instance->$edit_method();
+            $Skins->$edit_method();
             break;
     }
 
-    skin_list($instance->getResults());
+    skin_list($Skins->getResults());
 }
 
 /**
@@ -553,9 +538,9 @@ function skin_multi_edit()
 
 function skin_import()
 {
-    $instance = Txp::get('\Textpattern\Skin\Skin', ps('skins'));
+    $Skin = Txp::get('\Textpattern\Skin\Main', ps('skins'));
 
-    $instance->import();
+    $Skin->import();
 
-    skin_list($instance->getResults());
+    skin_list($Skin->getResults());
 }

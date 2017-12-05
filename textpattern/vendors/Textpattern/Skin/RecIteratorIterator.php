@@ -22,25 +22,10 @@
  */
 
 /**
- * AssetIterator
- *
- * This class iterates over template files.
- *
- * <code>
- * $templates = new RecursiveIteratorIterator(
- *     new AssetFilterIterator(
- *         new TemplateIterator('/path/to/dir')
- *     )
- * );
- * foreach ($templates as $template) {
- *     $template->getTemplateName();
- *     $template->getTemplateContents();
- * }
- * </code>
+ * RecIteratorIterator
  *
  * @since   4.7.0
  * @package Skin
- * @see \RecursiveDirectoryIterator
  */
 
 namespace Textpattern\Skin {

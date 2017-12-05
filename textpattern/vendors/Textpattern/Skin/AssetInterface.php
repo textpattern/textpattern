@@ -22,7 +22,7 @@
  */
 
 /**
- * Asset Interface
+ * AssetInterface
  *
  * Implemented by AssetBase
  *
@@ -38,153 +38,115 @@ namespace Textpattern\Skin {
         /**
          * Constructor
          *
-         * @param string $skin The asset related skin name (set the related parent property)
+         * @param array $skins     Set the related parent property.
+         * @param array $templates Skins related template names (all by default).
          */
 
-        public function __construct($skin = null);
+        public function __construct($skins = null, $templates = array());
 
         /**
-         * Gets the essential/default templates.
+         * Set the $templates property according to the $skins.
          *
-         * @return array Template names (or names => type for forms).
+         * @param  array  $templates Template names as stored in the $defaultTemplates property of the class.
+         * @return object $this.
          */
 
-        public static function getEssential();
+        public function setSkinsTemplates($skins, $templates = null);
 
         /**
-         * Creates skin templates
+         * get the template names stored in the $templates property.
          *
-         * @param  array $templates Template names.
-         * @return false on error.
+         * @return array Template names.
          */
 
-        public function create($templates = null);
+        public function getTemplateNames($skin);
+
+        /**
+         * Creates skin templates.
+         *
+         * @return array Created skins.
+         */
+
+        public function create();
 
         /**
          * Changes templates related skin
          *
-         * @param  string $from      The skin name from which templates are adopted.
-         * @param  array  $templates Template names.
-         * @return false  on error.
+         * @param  string $from The skin name from which templates are adopted.
+         * @return array        Adopted skins.
          */
 
-        public function adopt($from, $templates = null);
+        public function adopt($from);
 
         /**
          * Import the skin related templates.
          *
-         * @param  string $clean     Whether to remove extra templates or not.
-         * @param  array  $templates Template names.
-         * @return false  on error.
+         * @param  string $clean Whether to remove extra templates or not.
+         * @return array         Imported skins.
          */
 
-        public function import($clean = true, $templates = null);
+        public function import($clean = true);
 
         /**
          * Gets a new asset iterator instance.
          *
-         * @param mixed $templates Template name(s).
-         * @return RecursiveIteratorIterator
+         * @param  array  $templates Template names;
+         * @param  array  $subdir    A skin subdirectory.
+         * @return object            RecursiveIteratorIterator
          */
 
-        public function getRecDirIterator($templates = null);
-
-        /**
-         * Inserts or updates all asset related templates at once.
-         *
-         * @param  array $fields The template related database fields;
-         * @param  array $values SQL VALUES as an array of group of values;
-         * @param  bool  $update Whether to update rows on duplicate keys or not;
-         * @return bool  False on error.
-         */
-
-        public function insertTemplates($fields, $values, $update = false);
+        public static function getRecDirIterator($path, $templates = null);
 
         /**
          * Drops obsolete template rows.
          *
          * @param  array $not An array of template names to NOT drop;
-         * @return bool  False on error.
+         * @return bool
          */
 
-        public function dropRemovedFiles($not);
-
-        /**
-         * Re-imports the skin related templates.
-         *
-         * @param  string $clean     Whether to remove extra templates or not.
-         * @param  array  $templates Template names.
-         * @return false  on error.
-         */
-
-        public function update($clean = true, $templates = null);
+        public static function dropRemovedFiles($not);
 
         /**
          * Duplicates the skin related templates.
          *
-         * @param  array $templates Template names.
-         * @return false on error.
+         * @return bool
          */
 
-        public function duplicate($to, $templates = null);
+        public function duplicate($to);
 
         /**
-         * Get skin asset related templates rows.
+         * Gets skins asset related templates rows.
          *
-         * @throws \Exception
+         * @return array Associative array of skins and their templates.
          */
 
-        public function getTemplateRows($templates);
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function getWhereClause($templates = null);
+        public function getRows($skins = null);
 
         /**
          * Exports the skin related templates.
          *
-         * @param  string $clean     Whether to remove extra templates or not.
-         * @param  array  $templates Template names.
-         * @return false  on error.
+         * @param  string $clean Whether to remove extra templates or not.
+         * @return array         Exported skins.
          */
 
-        public function export($clean = true, $templates = null);
-
-        /**
-         * Exports a skin asset related template row.
-         *
-         * @param  array      $row A template row as an associative array
-         * @throws \Exception
-         */
-
-        public function exportTemplate($row);
+        public function export($clean = true);
 
         /**
          * Unlinks obsolete template files.
          *
          * @param  array $not An array of template names to NOT unlink;
-         * @return bool  False on error.
+         * @return array      NOT removed templates;
+         *                    thus an empty array means everything worked as expected.
          */
 
-        public function unlinkRemovedRows($not);
+        public function unlinkRemovedRows($skin, $not);
 
         /**
          * Deletes the skin related templates.
          *
-         * @param  array $templates Template names.
-         * @return false on error.
+         * @return array Deleted skins.
          */
 
-        public function delete($templates = null);
-
-        /**
-         * Deletes skin asset related template rows.
-         *
-         * @throws \Exception
-         */
-
-        public function deleteTemplates();
+        public function delete();
     }
 }

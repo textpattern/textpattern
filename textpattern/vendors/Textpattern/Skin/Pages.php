@@ -24,59 +24,21 @@
 /**
  * Pages
  *
- * Manages skin pages directly or via the Skin class.
+ * Manages skins related pages.
  *
  * @since   4.7.0
  * @package Skin
- * @see     AssetInterface
  */
 
 namespace Textpattern\Skin {
 
     class Pages extends AssetBase
     {
+        protected static $asset = 'page';
         protected static $dir = 'pages';
         protected static $table = 'txp_page';
-        protected static $essential = array('default', 'error_default');
-
-        /**
-         * {@inheritdoc}
-         */
-
-        protected function getCreationSQLValues($templates)
-        {
-            $sql = array();
-
-            foreach ($templates as $name) {
-                $sql[] = "('".doSlash($name)."', '', '".doSlash($this->skin)."')";
-            }
-
-            return $sql;
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        protected function getImportSQLValue(RecDirIterator $file)
-        {
-            return "('".doSlash($file->getTemplateName())."', "
-                   ."'".doSlash($file->getTemplateContents())."', "
-                   ."'".doSlash($this->skin)."')";
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function exportTemplate($row)
-        {
-            extract($row);
-
-            return (bool) file_put_contents(
-                $this->getPath(static::$dir.'/'.$name.'.'.static::$extension),
-                $user_html ? $user_html : '// Empty page.'
-            );
-        }
+        protected static $tableCols;
+        protected static $contentsCol = 'user_html';
+        protected static $essential = array(array('default', 'error_default'));
     }
 }

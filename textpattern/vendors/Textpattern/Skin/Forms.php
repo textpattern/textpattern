@@ -24,74 +24,64 @@
 /**
  * Forms
  *
- * Manages skin forms directly or via the Skin class.
+ * Manages skins related forms.
  *
  * @since   4.7.0
  * @package Skin
- * @see     AssetInterface
  */
 
 namespace Textpattern\Skin {
 
-    class Forms extends Pages
+    class Forms extends AssetBase
     {
+        protected static $asset = 'form';
         protected static $dir = 'forms';
-        protected static $depth = 1; // Forms stored by type in subfolders.
         protected static $table = 'txp_form';
+        protected static $tableCols;
+        protected static $subdirCol = 'type';
+        protected static $contentsCol = 'Form';
         protected static $essential = array(
-            'comments'         => 'comment',
-            'comments_display' => 'comment',
-            'comment_form'     => 'comment',
-            'default'          => 'article',
-            'plainlinks'       => 'link',
-            'files'            => 'file',
+            'article' => array('default'),
+            'comment' => array('comments', 'comments_display', 'comment_form'),
+            'link'    => array('plainlinks'),
+            'file'    => array('files'),
         );
 
         /**
          * {@inheritdoc}
          */
 
-        protected function getCreationSQLValues($templates)
+        public static function getEssentialNames($types = null)
         {
-            $sql = array();
+            $types ?: $types = array_keys(static::$essential);
 
-            foreach ($templates as $name => $type) {
-                $sql[] = "('".doSlash($name)."', "
-                         ."'".doSlash($type)."', "
-                         ."'', "
-                         ."'".doSlash($this->skin)."')";
+            $essential = array();
+
+            foreach ($types as $type) {
+                if (array_key_exists($type, static::$essential)) {
+                    $essential = array_merge($essential, static::$essential[$type]);
+                }
             }
 
-            return $sql;
+            return $essential;
         }
 
         /**
          * {@inheritdoc}
          */
 
-        protected function getImportSQLValue(RecDirIterator $file)
+        public function unlinkRemovedRows($skin, $not)
         {
-            return "('".doSlash($file->getTemplateName())."', "
-                   ."'".doSlash($file->getTemplateType())."', "
-                   ."'".doSlash($file->getTemplateContents())."', "
-                   ."'".doSlash($this->skin)."')";
-        }
+            foreach ($not as $type => $names_not) {
+                $files = self::getRecDirIterator($skin.'/'.self::getDir().'/'.$type);
 
-        /**
-         * {@inheritdoc}
-         */
+                foreach ($files as $file) {
+                    $name = $file->getTemplateName();
 
-        public function exportTemplate($row)
-        {
-            extract($row);
-
-            $path = static::$dir.'/'.$type;
-
-            if ($this->isWritable($path) || $this->mkDir($path)) {
-                return (bool) file_put_contents(
-                    $this->getPath($path.'/'.$name.'.'.static::$extension),
-                    $Form ? $Form : '// Empty form.'
-                );
+                    if (!$names_not || ($names_not && !in_array($name, $names_not))) {
+                        unlink($file->getPathname());
+                    }
+                }
             }
         }
     }
