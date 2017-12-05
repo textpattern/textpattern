@@ -229,15 +229,14 @@ function file_list($message = '', $ids = array())
             n.tag_start('div', array('class' => 'txp-control-panel')).
             n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('category'), 'label', array('for' => 'file_category')).$categories : '')));
 
-        $existing_files = get_filenames();
-
-        if ($existing_files) {
+        if ($existing_files = get_filenames()) {
+            $selected = count($existing_files) >= 5 ? array() : null;
             $createBlock[] =
                 form(
                     eInput('file').
                     sInput('file_create').
                     tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
-                    selectInput('filename', $existing_files, array(), false, '', 'file-existing').
+                    selectInput('filename', $existing_files, $selected, false, '', 'file-existing').
                     fInput('submit', '', gTxt('create')),
                 '', '', 'post', 'assign-existing-form', '', 'assign_file');
         }
@@ -308,7 +307,7 @@ function file_list($message = '', $ids = array())
                     ).
                     column_head(
                         'name', 'filename', 'file', true, $switch_dir, $crit, $search_method,
-                            (('filename' == $sort) ? "$dir " : '').'txp-list-col-filename'
+                            (('filename' == $sort) ? "$dir " : '').'txp-list-col-filename txp-contain'
                     ).
                     column_head(
                         'title', 'title', 'file', true, $switch_dir, $crit, $search_method,
