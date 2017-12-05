@@ -2976,7 +2976,7 @@ function since($stamp)
         $since = ($days <= 1) ? "1 ".gTxt('day') : "$days ".gTxt('days');
     }
 
-    return $since.' '.gTxt('ago'); // sorry, this needs to be hacked until a truly multilingual version is done
+    return gTxt('ago', array('{since}' => $since));
 }
 
 /**
