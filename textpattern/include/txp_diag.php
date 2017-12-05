@@ -181,7 +181,7 @@ function doDiagnostics()
 
     $urlparts = parse_url(hu);
     $mydomain = $urlparts['host'];
-
+    $path_to_index = $path_to_site."/index.php";
     $is_apache = stristr(serverSet('SERVER_SOFTWARE'), 'Apache') || is_callable('apache_get_version');
     $real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 
@@ -227,15 +227,15 @@ function doDiagnostics()
     }
 
     if (!@is_dir($path_to_site)) {
-        $fail['path_to_site_inacc'] = diag_msg_wrap(gTxt('path_to_site_inacc').cs.$path_to_site);
+        $fail['path_to_site_inaccessible'] = diag_msg_wrap(gTxt('path_inaccessible', array('{path}' => $path_to_site)));
     }
 
     if (rtrim($siteurl, '/') != $siteurl) {
         $fail['site_trailing_slash'] = diag_msg_wrap(gTxt('site_trailing_slash').cs.$path_to_site, 'warning');
     }
 
-    if (!@is_file($path_to_site."/index.php") || !@is_readable($path_to_site."/index.php")) {
-        $fail['index_inaccessible'] = diag_msg_wrap("{$path_to_site}/index.php ".gTxt('is_inaccessible'));
+    if (!@is_file($path_to_index) || !@is_readable($path_to_index)) {
+        $fail['index_inaccessible'] = diag_msg_wrap(gTxt('path_inaccessible', array('{path}' => $path_to_index)));
     }
 
     $not_readable = array();
