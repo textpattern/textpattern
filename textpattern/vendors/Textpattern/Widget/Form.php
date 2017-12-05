@@ -162,9 +162,7 @@ class Form extends Tag implements \Textpattern\Widget\WidgetCollectionInterface
             $action .= '#'.$fragment;
         }
 
-        $this->setAtts(array(
-            'action' => $action,
-        ));
+        $this->setAtt('action', $action);
 
         return $this;
     }

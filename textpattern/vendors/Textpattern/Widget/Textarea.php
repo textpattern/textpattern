@@ -52,10 +52,7 @@ class Textarea extends Tag implements \Textpattern\Widget\WidgetInterface
         $this->key = $name;
 
         parent::__construct('textarea');
-        $this->setAtts(array(
-                'name' => $this->key,
-            ));
-
+        $this->setAtt('name', $this->key);
         $this->setContent(txpspecialchars($content));
     }
 

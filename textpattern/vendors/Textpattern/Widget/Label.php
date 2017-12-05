@@ -44,8 +44,6 @@ class Label extends Tag implements \Textpattern\Widget\WidgetInterface
         parent::__construct('label');
 
         $this->setContent($value)
-            ->setAtts(array(
-                'for' => $name,
-            ));
+            ->setAtt('for', $name);
     }
 }

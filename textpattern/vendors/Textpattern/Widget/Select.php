@@ -79,9 +79,7 @@ class Select extends Tag implements \Textpattern\Widget\WidgetInterface
         parent::__construct('select');
         $this->key = $name;
 
-        $this->setAtts(array(
-                'name'  => $name,
-            ));
+        $this->setAtt('name', $name);
 
         if ($default === null) {
             $default = array();
@@ -117,7 +115,7 @@ class Select extends Tag implements \Textpattern\Widget\WidgetInterface
             $checked
         );
 
-        $option->setAtts(array('dir' => 'auto'));
+        $option->setAtt('dir', 'auto');
 
         if ($group === null && $this->currentGroup !== null) {
             $group = $this->currentGroup;
@@ -148,7 +146,7 @@ class Select extends Tag implements \Textpattern\Widget\WidgetInterface
             txpspecialchars($label)
         );
 
-        $optGroup->setAtts(array('dir' => 'auto'));
+        $optGroup->setAtt('dir', 'auto');
 
         $this->optGroups[$label] = $optGroup;
         $this->currentGroup = $label;

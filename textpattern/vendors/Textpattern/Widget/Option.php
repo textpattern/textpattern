@@ -55,11 +55,7 @@ class Option extends Tag implements \Textpattern\Widget\WidgetInterface
         $this->key = $value;
 
         parent::__construct('option');
-        $this->setAtts(array(
-                'value' => $this->key,
-            ), array(
-                'flag' => TEXTPATTERN_STRIP_NONE,
-            ));
+        $this->setAtt('value', $this->key, array('flag' => TEXTPATTERN_STRIP_NONE));
 
         $this->setContent($label);
 

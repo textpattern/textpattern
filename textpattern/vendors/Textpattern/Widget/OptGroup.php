@@ -62,9 +62,7 @@ class OptGroup extends Tag implements \Textpattern\Widget\WidgetCollectionInterf
         $this->key = $label;
 
         parent::__construct('optgroup');
-        $this->setAtts(array(
-                'label' => $this->key,
-            ));
+        $this->setAtt('label', $this->key);
 
         if ($options instanceof \Textpattern\Widget\TagCollection) {
             $this->options = $options;
@@ -91,7 +89,7 @@ class OptGroup extends Tag implements \Textpattern\Widget\WidgetCollectionInterf
             $checked
         );
 
-        $option->setAtts(array('dir' => 'auto'));
+        $option->setAtt('dir', 'auto');
 
         $this->options->addWidget($option, $value);
 

@@ -64,11 +64,8 @@ class Radio extends Tag implements \Textpattern\Widget\WidgetInterface
                 'id'    => $this->key,
                 'name'  => $name,
                 'type'  => $type,
-            ))->setAtts(array(
-                'value' => $value,
-            ), array(
-                'flag' => TEXTPATTERN_STRIP_NONE,
-            ));
+            ))
+            ->setAtt('value', $value, array('flag' => TEXTPATTERN_STRIP_NONE));
     }
 
     /**

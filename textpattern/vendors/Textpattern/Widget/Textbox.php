@@ -63,11 +63,7 @@ class Textbox extends Tag implements \Textpattern\Widget\WidgetInterface
             ));
 
         if ($value !== null) {
-            $this->setAtts(array(
-                    'value' => $value,
-                ), array(
-                    'flag' => TEXTPATTERN_STRIP_NONE,
-                ));
+            $this->setAtt('value', $value, array('flag' => TEXTPATTERN_STRIP_NONE));
         }
     }
 
