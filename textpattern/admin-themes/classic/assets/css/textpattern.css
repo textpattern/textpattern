@@ -625,6 +625,9 @@ button {
     border-color: #e1b2b2;
     background: #9d261d;
   }
+  #messagepane a {
+    color: #ffffff;
+  }
   /*
  * Message close icon.
  *
@@ -636,15 +639,15 @@ button {
     position: absolute;
     top: 0.27777777777778em;
     right: 0.6666667em;
-    color: rgba(255, 255, 255, 0.6);
     font-size: 18px;
     font-weight: bold;
     text-decoration: none;
+    opacity: 0.66;
   }
   .close:hover {
-    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     cursor: pointer;
+    opacity: 1;
   }
   /*
  * Flash the alert message using CSS animation.
