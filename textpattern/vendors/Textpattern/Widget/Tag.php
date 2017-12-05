@@ -131,6 +131,22 @@ class Tag implements \Textpattern\Widget\WidgetInterface
     }
 
     /**
+     * Set the given attribute. Chainable.
+     *
+     * @param  string $key   Attribute key
+     * @param  string $value Attribute value
+     * @param  array  $props Name-value attribute options
+     * @return this
+     */
+
+    public function setAtt($key, $value = null, $props = array())
+    {
+        $this->atts->setAttribute($key, $value, $props);
+
+        return $this;
+    }
+
+    /**
      * Set the given attributes. Chainable.
      *
      * @param  array $atts  Name-value attributes
