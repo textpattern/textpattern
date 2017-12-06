@@ -1212,7 +1212,7 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline
         $url = '#';
         if (! empty($inline)) {
             $atts['data-item'] = $inline;
-        }elseif (empty($txp_user)) {
+        } elseif (empty($txp_user)) {
             // Use inline pophelp, if unauthorized user or setup stage
             $atts['data-item'] = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp($help_var);
         } else {

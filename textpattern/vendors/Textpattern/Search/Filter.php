@@ -266,7 +266,8 @@ class Filter
             (
                 span(
                     href(gTxt('search_clear'), array('event' => $event)),
-                    array('class' => 'txp-search-clear', 'style' => $this->crit ? '' : 'display:none'))
+                    array('class' => 'txp-search-clear', 'style' => $this->crit ? '' : 'display:none')
+                )
             ).
             fInput('search', 'crit', $this->crit, 'txp-search-input', '', '', 24, 0, '', false, false, gTxt($placeholder)).
             eInput($event).

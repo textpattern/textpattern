@@ -171,6 +171,11 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         setlocale(LC_ALL, $locale);
     }
 
+    // For backwards-compatibility (sort of) with plugins that expect the
+    // $textarray global to be present.
+    // Will remove in future.
+    $textarray = array();
+
     load_lang(LANG);
 
     // Initialise global theme.

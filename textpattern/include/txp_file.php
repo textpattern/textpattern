@@ -260,12 +260,18 @@ function file_list($message = '', $ids = array())
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
     if ($total < 1) {
+        if ($criteria == 1) {
+            echo script_js('$(".txp-search").hide()');
+        }
+
         echo graf(
             span(null, array('class' => 'ui-icon ui-icon-info')).' '.
             gTxt($criteria != 1 ? 'no_results_found' : 'no_files_recorded'),
             array('class' => 'alert-block information')
         );
     } else {
+        echo script_js('$(".txp-search").show()');
+
         $rs = safe_query(
             "SELECT
                 txp_file.id,

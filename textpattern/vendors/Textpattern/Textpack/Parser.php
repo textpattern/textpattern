@@ -122,8 +122,7 @@ class Parser
         $owner = $this->owner;
 
         if (strpos($textpack, '=>') === false
-            && $sections = parse_ini_string('[common]'.n.strtr($textpack, $replacements), true))
-        {
+            && $sections = parse_ini_string('[common]'.n.strtr($textpack, $replacements), true)) {
             if (!empty($sections['@common'])
                 && !empty($sections['@common']['lang_code'])
                 && $sections['@common']['lang_code'] !== TEXTPATTERN_DEFAULT_LANG
