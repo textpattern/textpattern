@@ -507,7 +507,8 @@ function load_lang($lang, $events = null)
         && $production_status !== 'live'
         && @$debug = parse_ini_file(txpath.DS.'mode.ini')
     ) {
-        $textarray += $debug;
+        $textarray += (array)$debug;
+        Txp::get('\Textpattern\L10n\Lang')->setPack($textarray);
     }
 
     return $textarray;
