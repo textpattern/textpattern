@@ -436,7 +436,7 @@ function doDiagnostics()
             '{supported}' => $gd_support,
         ));
     } else {
-        $gd = gTxt('gd_unavailable');
+        $gd = gTxt('unavailable');
     }
 
     if (realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir'])) {
@@ -446,18 +446,8 @@ function doDiagnostics()
     // Database server time.
     extract(doSpecial(getRow("SELECT @@global.time_zone AS db_global_timezone, @@session.time_zone AS db_session_timezone, NOW() AS db_server_time, UNIX_TIMESTAMP(NOW()) AS db_server_timestamp")));
     $db_server_timeoffset = $db_server_timestamp - $now;
-    $txt = 'Make sure to reload the page from the server to refresh all resources.';
-    $json = json_encode(array($txt, 2));
 
     echo pagetop(gTxt('tab_diagnostics'), $isUpdate ? gTxt('welcome_to_textpattern', array('{version}' => txp_version)) : '');
-
-    echo script_js("
-    $(function() {
-        if (textpattern.version != '".txp_version."') {
-            //textpattern.Console.addMessage($json)
-            alert('$txt')
-        }
-    })", false);
 
     echo n.'<div class="txp-layout">'.
         n.tag(
