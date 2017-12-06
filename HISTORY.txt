@@ -78,9 +78,9 @@ Changes in 4.7.0 (upcoming)
 * Removed: zxcvbn password strength meter.
 * Textile v3.6.
 * jQuery 3.2.1.
-* PrismJS 1.8.4.
+* PrismJS 1.9.0.
 * PHPass 0.5.
-* Blueimp-fileupload 9.19.1.
+* jQuery File Upload 9.19.2.
 
 Changes in 4.6.2
 
