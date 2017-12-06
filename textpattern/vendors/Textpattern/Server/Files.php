@@ -104,7 +104,7 @@ class Files
 
             // Get the range of the file uploaded from the client
             list($range, $begin, $end, $filesize) = $match;
-            
+
             if (is_file($tmpfile) && filesize($tmpfile) == $begin) {
                 file_put_contents($tmpfile, fopen($tmp_name, 'r'), FILE_APPEND);
                 @unlink($tmp_name);

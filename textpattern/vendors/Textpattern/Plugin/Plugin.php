@@ -119,7 +119,7 @@ class Plugin
             }
         }
 
-        
+
         if (empty($message)) {
             $message = array(gTxt('bad_plugin_code'), E_ERROR);
         }
@@ -152,7 +152,6 @@ class Plugin
         $plugin = @unserialize($plugin);
 
         if (empty($plugin['name'])) {
-
             return false;
         }
 
