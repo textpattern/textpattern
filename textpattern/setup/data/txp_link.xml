@@ -22,27 +22,9 @@
         <item>
             <date>NOW()</date>
             <category>textpattern</category>
-            <url>http://textpattern.org/</url>
-            <linkname>Textpattern resources</linkname>
-            <linksort>30</linksort>
-            <description></description>
-            <author></author>
-        </item>
-        <item>
-            <date>NOW()</date>
-            <category>textpattern</category>
             <url>https://textpattern.com/github</url>
-            <linkname>+Textpattern on GitHub</linkname>
-            <linksort>40</linksort>
-            <description></description>
-            <author></author>
-        </item>
-        <item>
-            <date>NOW()</date>
-            <category>textpattern</category>
-            <url>https://textpattern.com/+</url>
-            <linkname>Textpattern on Google+</linkname>
-            <linksort>50</linksort>
+            <linkname>Textpattern on GitHub</linkname>
+            <linksort>30</linksort>
             <description></description>
             <author></author>
         </item>
@@ -51,7 +33,7 @@
             <category>textpattern</category>
             <url>https://textpattern.com/@textpattern</url>
             <linkname>Textpattern on Twitter</linkname>
-            <linksort>60</linksort>
+            <linksort>40</linksort>
             <description></description>
             <author></author>
         </item>
