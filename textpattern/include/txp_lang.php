@@ -103,7 +103,7 @@ function list_languages($message = '')
         $langUse[$row['val']][] = $row['user_name'];
     }
 
-    foreach($langUse as $key => $row) {
+    foreach ($langUse as $key => $row) {
         $langUse[$key] = tag(eLink('admin', 'author_list', 'search_method', 'login', '('.count($row).')' , 'crit', join(',', doSlash($row))), 'span', array('class' => 'txp-lang-user-count'));
     }
 

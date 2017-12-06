@@ -240,12 +240,18 @@ function image_list($message = '')
         .tag_start('div', array('id' => 'txp-list-container'));
 
     if ($total < 1) {
+        if ($criteria == 1) {
+            echo script_js('$(".txp-search").hide()');
+        }
+
         echo graf(
                     span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                     gTxt($criteria != 1 ? 'no_results_found' : 'no_images_recorded'),
                     array('class' => 'alert-block information')
                 );
     } else {
+        echo script_js('$(".txp-search").show()');
+
         $rs = safe_query(
             "SELECT
                 txp_image.id,

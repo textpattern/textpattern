@@ -259,20 +259,18 @@ function list_list($message = '', $post = '')
     echo $searchBlock.$contentBlockStart.$createBlock;
 
     if ($total < 1) {
-        if ($criteria != 1) {
-            echo graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_results_found'),
-                    array('class' => 'alert-block information')
-                );
-        } else {
-            echo graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_articles_recorded'),
-                    array('class' => 'alert-block information')
-                );
+        if ($criteria == 1) {
+            echo script_js('$(".txp-search").hide()');
         }
+
+        echo graf(
+                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                gTxt($criteria != 1 ? 'no_results_found' : 'no_articles_recorded'),
+                array('class' => 'alert-block information')
+            );
     } else {
+        echo script_js('$(".txp-search").show()');
+
         $show_authors = !has_single_author('textpattern', 'AuthorID');
 
         $headers = array(
