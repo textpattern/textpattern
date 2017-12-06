@@ -389,7 +389,7 @@ function updateVolatilePartials($partials)
     foreach ($partials as $k => $p) {
         // Volatile partials need a target DOM selector.
         if (empty($p['selector']) && $p['mode'] != PARTIAL_STATIC) {
-            trigger_error("Empty selector for partial '$k'", E_USER_ERROR);
+            trigger_error(gTxt('empty_partial_selector', array('{name}' => $k)), E_USER_ERROR);
         } else {
             // Build response script.
             list($selector, $fragment) = (array)$p['selector'] + array(null, null);
@@ -507,7 +507,8 @@ function load_lang($lang, $events = null)
         && $production_status !== 'live'
         && @$debug = parse_ini_file(txpath.DS.'mode.ini')
     ) {
-        $textarray += $debug;
+        $textarray += (array)$debug;
+        Txp::get('\Textpattern\L10n\Lang')->setPack($textarray);
     }
 
     return $textarray;
@@ -1394,7 +1395,7 @@ function load_plugin($name, $force = false)
 function require_plugin($name)
 {
     if (!load_plugin($name)) {
-        trigger_error("Unable to include required plugin \"{$name}\"", E_USER_ERROR);
+        trigger_error(gTxt('plugin_include_error', array('{name}' => $name)), E_USER_ERROR);
 
         return false;
     }
@@ -1415,7 +1416,7 @@ function require_plugin($name)
 function include_plugin($name)
 {
     if (!load_plugin($name)) {
-        trigger_error("Unable to include plugin \"{$name}\"", E_USER_WARNING);
+        trigger_error(gTxt('plugin_include_error', array('{name}' => $name)), E_USER_WARNING);
 
         return false;
     }
@@ -6031,11 +6032,11 @@ function assert_category()
 
 function assert_int($myvar)
 {
-    if (is_numeric($myvar) and $myvar == intval($myvar)) {
+    if (is_numeric($myvar) && $myvar == intval($myvar)) {
         return (int) $myvar;
     }
 
-    trigger_error("'".txpspecialchars((string) $myvar)."' is not an integer", E_USER_ERROR);
+    trigger_error(gTxt('assert_int_value', array('{name}' => (string) $myvar)), E_USER_ERROR);
 
     return false;
 }
@@ -6053,7 +6054,7 @@ function assert_string($myvar)
         return $myvar;
     }
 
-    trigger_error("'".txpspecialchars((string) $myvar)."' is not a string", E_USER_ERROR);
+    trigger_error(gTxt('assert_string_value', array('{name}' => (string) $myvar)), E_USER_ERROR);
 
     return false;
 }
@@ -6071,7 +6072,7 @@ function assert_array($myvar)
         return $myvar;
     }
 
-    trigger_error("'".txpspecialchars((string) $myvar)."' is not an array", E_USER_ERROR);
+    trigger_error(gTxt('assert_array_value', array('{name}' => (string) $myvar)), E_USER_ERROR);
 
     return false;
 }
