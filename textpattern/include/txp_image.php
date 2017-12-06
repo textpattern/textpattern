@@ -911,7 +911,7 @@ function thumbnail_insert()
         $newpath = IMPATH.$id.'t'.$ext;
 
         if (shift_uploaded_file($file, $newpath) == false) {
-            image_edit(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR), $id);
+            image_edit(array(gTxt('directory_permissions', array('{path}' => $newpath)), E_ERROR), $id);
         } else {
             chmod($newpath, 0644);
             safe_update('txp_image', "thumbnail = 1, thumb_w = $w, thumb_h = $h, date = NOW()", "id = $id");

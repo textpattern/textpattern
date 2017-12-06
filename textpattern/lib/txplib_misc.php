@@ -885,7 +885,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
             unset($GLOBALS['ID']);
         }
 
-        return $newpath.sp.gTxt('upload_dir_perms');
+        return gTxt('directory_permissions', array('{path}' => $newpath));
     } elseif (empty($rs)) {
         $rs = safe_update('txp_image', $q, "id = $id");
 
