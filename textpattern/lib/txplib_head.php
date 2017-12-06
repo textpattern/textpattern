@@ -110,8 +110,7 @@ function pagetop($pagetitle = '', $message = '')
 <title><?php echo admin_title($pagetitle)?></title><?php echo
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('vendors/blueimp/md5/md5.min.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('vendors/blueimp/fileupload/jquery.fileupload.min.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('vendors/blueimp/fileupload/jquery.fileupload.js', TEXTPATTERN_SCRIPT_URL).
     script_js(
         'var textpattern = '.json_encode(
             array(
@@ -133,7 +132,7 @@ function pagetop($pagetitle = '', $message = '')
                     ),
                     'message' => '<span class="ui-icon ui-icon-{status}"></span> {message}',
                     'messagePane' => '<span class="messageflash {status}" role="alert" aria-live="assertive">
-    {message}<a class="close" role="button" title="{close}" aria-label="{close}" href="#close">&#215;</a>
+    {message}<a class="close" role="button" title="{close}" href="#close"><span class="ui-icon ui-icon-close">{close}</span></a>
 </span>'
                 ),
                 'textarray' => (object) null,
@@ -142,6 +141,13 @@ function pagetop($pagetitle = '', $message = '')
         ).';'
     ).
     script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
+
+echo script_js("
+    $(function() {
+        if (!textpattern.version || !'".txp_version."'.match(textpattern.version)) {
+            alert('Please shift-reload the page from the server to refresh the cache.')
+        }
+    })", false);
 
     // Mandatory un-themable Textpattern core styles ?>
 <style>

@@ -84,7 +84,7 @@ class Textpattern_Admin_Pane
             return;
         }
 
-        trigger_error('invalid_pane', E_USER_WARNING);
+        trigger_error(gTxt('invalid_pane'), E_USER_WARNING);
     }
 
     /**
@@ -106,7 +106,7 @@ class Textpattern_Admin_Pane
             return;
         }
 
-        trigger_error('invalid_pane', E_USER_WARNING);
+        trigger_error(gTxt('invalid_pane'), E_USER_WARNING);
     }
 }
 

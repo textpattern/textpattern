@@ -370,6 +370,13 @@
         "html": "yesnoradio",
         "position": "220"
     },
+    "enable_short_tags": {
+        "val": "0",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "230"
+    },
     "use_plugins": {
         "val": "1",
         "type": "0",
