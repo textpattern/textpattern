@@ -25,7 +25,7 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-global $thisversion, $dbversion, $txp_is_dev, $dbupdatetime;
+global $thisversion, $dbversion, $txp_is_dev, $dbupdatetime, $app_mode;
 
 $dbupdates = array(
     '1.0.0',
@@ -136,8 +136,14 @@ extract($prefs);
 $event = 'diag';
 $step = 'update';
 */
-
-script_js(<<<EOS
+if ($app_mode == 'async') {
+    send_script_response(<<<EOS
+    textpattern.Console.addMessage(["A new Textpattern version ($thisversion) has been installed.", 0])
+EOS
+    );
+} else {
+    script_js(<<<EOS
     textpattern.Console.addMessage(["A new Textpattern version ($thisversion) has been installed.", 0])
 EOS
     , false);
+}
