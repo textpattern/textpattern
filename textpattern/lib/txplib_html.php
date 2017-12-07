@@ -1629,7 +1629,8 @@ function script_js($js, $flags = '', $route = array())
             }
         }
 
-        $out = n.tag(n.trim($js).n, 'script');
+        $js = trim($js);
+        $out = $js ? n.tag(n.$js.n, 'script') : '';
 
         if ($flags && $flags !== true) {
             $out .= n.tag(n.trim($flags).n, 'noscript');

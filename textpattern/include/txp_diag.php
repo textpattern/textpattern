@@ -192,14 +192,13 @@ function doDiagnostics()
     $fail = array();
     $now = time();
     $heading = gTxt('tab_diagnostics');
-    $isUpdate = $step === 'update' && defined('TXP_UPDATE_DONE');
+    $isUpdate = defined('TXP_UPDATE_DONE');
 
     if (!$txp_is_dev) {
         if ($isUpdate) {
             // @todo Gather messages from the ugrade/install scripts (perhaps via
             // a FlashMessage structure) and present them above pre-flight check.
             $heading = gTxt('welcome_to_textpattern', array('{version}' => txp_version));
-            Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
         }
 
         // Check for Textpattern updates, at most once every 24 hours.
@@ -268,7 +267,7 @@ function doDiagnostics()
         $fail['file_uploads_disabled'] = diag_msg_wrap(gTxt('file_uploads_disabled'), 'information');
     }
 
-    if (@is_dir(txpath.DS.'setup')) {
+    if (@is_dir(txpath.DS.'setup') && ($txp_is_dev || !Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath, 'setup'))) {
         $fail['setup_still_exists'] = diag_msg_wrap(txpath.DS."setup".DS.' '.gTxt('still_exists'), 'warning');
     }
 
@@ -436,7 +435,7 @@ function doDiagnostics()
     extract(doSpecial(getRow("SELECT @@global.time_zone AS db_global_timezone, @@session.time_zone AS db_session_timezone, NOW() AS db_server_time, UNIX_TIMESTAMP(NOW()) AS db_server_timestamp")));
     $db_server_timeoffset = $db_server_timestamp - $now;
 
-    echo pagetop(gTxt('tab_diagnostics'), $isUpdate ? gTxt('welcome_to_textpattern', array('{version}' => txp_version)) : '');
+    echo pagetop(gTxt('tab_diagnostics'), '');
 
     echo n.'<div class="txp-layout">'.
         n.tag(

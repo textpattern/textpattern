@@ -112,6 +112,7 @@ restore_error_handler();
 if (!$txp_is_dev) {
     remove_pref('version', 'publish');
     create_pref('version', $dbversion, 'publish', PREF_HIDDEN);
+    Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
 }
 
 // Invite optional third parties to the update experience
@@ -131,6 +132,12 @@ define('TXP_UPDATE_DONE', 1);
 
 $prefs = get_prefs();
 extract($prefs);
-
+/*
 $event = 'diag';
 $step = 'update';
+*/
+
+script_js(<<<EOS
+    textpattern.Console.addMessage(["A new Textpattern version ($thisversion) has been installed.", 0])
+EOS
+    , false);

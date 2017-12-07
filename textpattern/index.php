@@ -191,9 +191,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     $step = trim(gps('step'));
     $app_mode = trim(gps('app_mode'));
 
-    if ($app_mode !== 'async'
-        && (!$dbversion || ($dbversion != $thisversion) || $txp_is_dev)
-    ) {
+    if (!$dbversion || ($dbversion != $thisversion) || $txp_is_dev) {
         define('TXP_UPDATE', 1);
         include txpath.'/update/_update.php';
     }
