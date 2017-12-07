@@ -64,12 +64,6 @@ $dbversion_target = $thisversion;
 if ($dbversion == $dbversion_target ||
     ($txp_is_dev && (newest_file() <= $dbupdatetime))) {
     return;
-} elseif ($event != 'diag') {
-    script_js(<<<EOS
-    textpattern.Console.addMessage(["A new Textpattern version ($thisversion) is ready to be installed. Please visit <a href=\"?event=diag\"><b>Diagnostics</b></a> to install.", 2])
-EOS
-    , false);
-    return;
 }
 
 assert_system_requirements();
