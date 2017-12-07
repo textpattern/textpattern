@@ -493,6 +493,17 @@ class Lang implements \Textpattern\Container\ReusableInterface
     }
 
     /**
+     * Fetch the language strings from the loaded language.
+     *
+     * @return array
+     */
+
+    public function getStrings()
+    {
+        return $this->strings;
+    }
+
+    /**
      * Returns a localisation string.
      *
      * @param   string $var    String name
