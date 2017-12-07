@@ -106,6 +106,20 @@ try {
     // Error message already communicated via updateErrorHandler
 }
 
+// Update any out-of-date installed languages.
+$txpLang = Txp::get('\Textpattern\L10n\Lang');
+$installed_langs = $txpLang->available(TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_ACTIVE);
+$time = time();
+
+foreach ($installed_langs as $lang_code => $info) {
+    $db_lastmod = isset($info['db_lastmod']) ? $info['db_lastmod'] : 0;
+    $file_lastmod = isset($info['file_lastmod']) ? $info['file_lastmod'] : $time;
+
+    if (($file_lastmod > $db_lastmod)) {
+        $txpLang->installFile($lang_code);
+    }
+}
+
 restore_error_handler();
 
 // Update version if not dev.
