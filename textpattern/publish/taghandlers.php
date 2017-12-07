@@ -4824,7 +4824,7 @@ function file_download_description($atts)
 
 function hide($atts = array(), $thing = null)
 {
-    if (empty($atts)) {
+    if (!isset($atts['process'])) {
         return '';
     }
 
@@ -4832,12 +4832,10 @@ function hide($atts = array(), $thing = null)
 
     extract(lAtts(array('process' => null), $atts));
 
-    if (is_numeric($process)) {
-        if (intval($process) > $pretext['secondpass'] + 1) {
-            return postpone_process($process);
-        } else {
-            return $process ? parse($thing) : '';
-        }
+    if (!$process) {
+        return $pretext['secondpass'] < get_pref('secondpass', 1) ? postpone_process() : $thing;
+    } elseif (is_numeric($process)) {
+        return $process > $pretext['secondpass'] + 1 ? postpone_process($process) : parse($thing);
     } elseif ($process) {
         parse($thing);
     }
