@@ -107,16 +107,24 @@ try {
 }
 
 // Update any out-of-date installed languages.
-$txpLang = Txp::get('\Textpattern\L10n\Lang');
-$installed_langs = $txpLang->available(TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_ACTIVE);
+// Have to refresh the cache first by reloading everything.
 $time = time();
+$txpLang = Txp::get('\Textpattern\L10n\Lang');
+$installed_langs = $txpLang->available(
+    TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_ACTIVE,
+    TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_AVAILABLE
+);
 
 foreach ($installed_langs as $lang_code => $info) {
     $db_lastmod = isset($info['db_lastmod']) ? $info['db_lastmod'] : 0;
     $file_lastmod = isset($info['file_lastmod']) ? $info['file_lastmod'] : $time;
 
+    // Reinstall any out-of-date languages and update the DB stamps in the
+    // cache, just in case we're on the Languages panel so it doesn't report
+    // the languages as being stale.
     if (($file_lastmod > $db_lastmod)) {
         $txpLang->installFile($lang_code);
+        $txpLang->available(TEXTPATTERN_LANG_AVAILABLE, TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE);
     }
 }
 
@@ -126,7 +134,7 @@ restore_error_handler();
 if (!$txp_is_dev) {
     remove_pref('version', 'publish');
     create_pref('version', $dbversion, 'publish', PREF_HIDDEN);
-    Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
+    Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
 }
 
 // Invite optional third parties to the update experience

@@ -291,28 +291,7 @@ class Plugin
                 $langpack = array_merge($textpack[$fallback], $textpack[$lang]);
             }
 
-            $lang = doSlash($lang);
-            $exists = safe_column('name', 'txp_lang', "lang='{$lang}'");
-
-            foreach ($langpack as $name => $item) {
-                $name = doSlash($name);
-                $event = doSlash($item['event']);
-                $data = doSlash($item['data']);
-                $fields = "lastmod = NOW(), data = '{$data}', event = '{$event}', owner = '{$owner}'";
-
-                if (! empty($exists[$name])) {
-                    safe_update(
-                        'txp_lang',
-                        $fields,
-                        "lang = '{$lang}' AND name = '{$name}'"
-                    );
-                } else {
-                    safe_insert(
-                        'txp_lang',
-                        $fields . ", lang = '{$lang}', name = '{$name}'"
-                    );
-                }
-            }
+            \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, $lang);
         }
     }
 
