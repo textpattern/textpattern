@@ -149,6 +149,16 @@ if (is_array($files)) {
     }
 }
 
+$js = <<<EOS
+    textpattern.Console.addMessage(["A new Textpattern version ($thisversion) has been installed.", 0])
+EOS;
+
+if ($app_mode == 'async') {
+    send_script_response($js);
+} else {
+    script_js($js, false);
+}
+
 // Updated, baby. So let's get the fresh prefs and send them to Diagnostics.
 define('TXP_UPDATE_DONE', 1);
 
@@ -158,14 +168,3 @@ extract($prefs);
 $event = 'diag';
 $step = 'update';
 */
-if ($app_mode == 'async') {
-    send_script_response(<<<EOS
-    textpattern.Console.addMessage(["A new Textpattern version ($thisversion) has been installed.", 0])
-EOS
-    );
-} else {
-    script_js(<<<EOS
-    textpattern.Console.addMessage(["A new Textpattern version ($thisversion) has been installed.", 0])
-EOS
-    , false);
-}

@@ -1818,7 +1818,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
                 break;
             case 1:
                 if ($breakby[0] > 0) {
-                    $breakby[0] == 1 or $list = array();
+                    $breakby[0] == 1 or $newlist = array_chunk($list, $breakby[0]);
                     break;
                 }
             default:
@@ -1828,8 +1828,9 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
                     $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
                 }
 
-                $list = array_map('implode', $newlist);
         }
+
+        empty($newlist) or $list = array_map('implode', $newlist);
     }
 
     // Non-enclosing breaks.
