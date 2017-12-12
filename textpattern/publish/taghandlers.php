@@ -2384,18 +2384,12 @@ function comments($atts, $thing = null)
         'wraptag'    => ($comments_are_ol ? 'ol' : ''),
         'break'      => ($comments_are_ol ? 'li' : 'div'),
         'class'      => __FUNCTION__,
-        'breakclass' => '', // Deprecated in 4.6.0
         'limit'      => 0,
         'offset'     => 0,
         'sort'       => 'posted ASC',
     ), $atts));
 
     assert_article();
-
-    if (isset($atts['breakclass'])) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'breakclass')), E_USER_NOTICE);
-    }
-
     extract($thisarticle);
 
     if (!$comments_count) {
@@ -2421,7 +2415,7 @@ function comments($atts, $thing = null)
             unset($GLOBALS['thiscomment']);
         }
 
-        $out .= doWrap($comments, $wraptag, $break, $class, $breakclass);
+        $out .= doWrap($comments, $wraptag, $break, $class);
     }
 
     return $out;
@@ -3485,12 +3479,7 @@ function image_info($atts)
         'wraptag'    => '',
         'class'      => '',
         'break'      => '',
-        'breakclass' => '', // Deprecated in 4.6.0.
     ), $atts));
-
-    if (isset($atts['breakclass'])) {
-        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'breakclass')), E_USER_NOTICE);
-    }
 
     $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'author', 'w', 'h', 'thumb_w', 'thumb_h', 'date');
     $type = do_list($type);
@@ -3511,7 +3500,7 @@ function image_info($atts)
         }
     }
 
-    return doWrap($out, $wraptag, $break, $class, $breakclass);
+    return doWrap($out, $wraptag, $break, $class);
 }
 
 // -------------------------------------------------------------
@@ -4824,7 +4813,7 @@ function file_download_description($atts)
 
 function hide($atts = array(), $thing = null)
 {
-    if (empty($atts)) {
+    if (!isset($atts['process'])) {
         return '';
     }
 
@@ -4832,12 +4821,10 @@ function hide($atts = array(), $thing = null)
 
     extract(lAtts(array('process' => null), $atts));
 
-    if (is_numeric($process)) {
-        if (intval($process) > $pretext['secondpass'] + 1) {
-            return postpone_process($process);
-        } else {
-            return $process ? parse($thing) : '';
-        }
+    if (!$process) {
+        return $pretext['secondpass'] < get_pref('secondpass', 1) ? postpone_process() : $thing;
+    } elseif (is_numeric($process)) {
+        return $process > $pretext['secondpass'] + 1 ? postpone_process($process) : parse($thing);
     } elseif ($process) {
         parse($thing);
     }

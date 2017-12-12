@@ -599,7 +599,7 @@ function output_css($s = '', $n = '')
         $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$order));
         set_error_handler('tagErrorHandler');
         @header('Content-Type: text/css; charset=utf-8');
-        echo parse_page(null, $css);
+        echo get_pref('parse_css', false) ? parse_page(null, $css) : $css;
         restore_error_handler();
     }
 }

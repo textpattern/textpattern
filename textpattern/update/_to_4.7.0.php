@@ -52,9 +52,22 @@ foreach ($installed_keys as $key) {
 }
 
 // New fields in the plugin table.
-$cols = getThings("DESCRIBE `".PFX."txp_plugin`");
+$colInfo = getRows("DESCRIBE `".PFX."txp_plugin`");
+$cols = array_map(function($el) {
+    return $el['Field'];
+}, $colInfo);
+
+if (!in_array('data', $cols)) {
+    safe_alter('txp_plugin', "ADD data MEDIUMTEXT NOT NULL AFTER code_md5");
+}
+
 if (!in_array('textpack', $cols)) {
     safe_alter('txp_plugin', "ADD textpack MEDIUMTEXT NOT NULL AFTER code_md5");
-    safe_alter('txp_plugin', "ADD data MEDIUMTEXT NOT NULL AFTER textpack");
+}
+
+// Bigger plugin help text.
+$helpCol = array_search('help', $cols);
+
+if (strtolower($colInfo[$helpCol]['Type']) !== 'mediumtext') {
     safe_alter('txp_plugin', "MODIFY help MEDIUMTEXT NOT NULL");
 }
