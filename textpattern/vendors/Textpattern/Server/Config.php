@@ -25,7 +25,7 @@
  * Access server configuration variables.
  *
  * <code>
- * Txp::get('Textpattern\Server\Config')->getVariable('REQUEST_URI');
+ * Txp::get('\Textpattern\Server\Config')->getVariable('REQUEST_URI');
  * </code>
  *
  * @since   4.6.0

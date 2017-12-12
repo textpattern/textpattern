@@ -808,7 +808,7 @@ function image_insert()
 
     global $app_mode;
     $messages = $ids = array();
-    $fileshandler = Txp::get('Textpattern\Server\Files');
+    $fileshandler = Txp::get('\Textpattern\Server\Files');
     $files = $fileshandler->refactor($_FILES['thefile']);
     $meta = gpsa(array('caption', 'alt', 'category'));
 

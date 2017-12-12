@@ -882,7 +882,7 @@ function file_insert()
 
     require_privs('file.edit.own');
     $messages = $ids = array();
-    $fileshandler = Txp::get('Textpattern\Server\Files');
+    $fileshandler = Txp::get('\Textpattern\Server\Files');
     $files = $fileshandler->refactor($_FILES['thefile']);
     $titles = gps('title');
 

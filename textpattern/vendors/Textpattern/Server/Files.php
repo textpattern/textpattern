@@ -25,7 +25,7 @@
  * Treat file uploads.
  *
  * <code>
- * Txp::get('Textpattern\Server\Files')->refactor($_FILES['thefile']);
+ * Txp::get('\Textpattern\Server\Files')->refactor($_FILES['thefile']);
  * </code>
  *
  * @since   4.7.0
