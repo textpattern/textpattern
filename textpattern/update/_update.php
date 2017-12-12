@@ -126,7 +126,11 @@ restore_error_handler();
 if (!$txp_is_dev) {
     remove_pref('version', 'publish');
     create_pref('version', $dbversion, 'publish', PREF_HIDDEN);
-    Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
+    if (isset($txpcfg['multisite_root_path'])) {
+        Txp::get('Textpattern\Admin\Tools')->removeFiles($txpcfg['multisite_root_path'].DS.'admin', 'setup');
+    } else {
+        Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
+    }
 }
 
 // Invite optional third parties to the update experience
