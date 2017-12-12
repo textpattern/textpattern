@@ -195,12 +195,6 @@ function doDiagnostics()
     $isUpdate = defined('TXP_UPDATE_DONE');
 
     if (!$txp_is_dev) {
-        if ($isUpdate) {
-            // @todo Gather messages from the ugrade/install scripts (perhaps via
-            // a FlashMessage structure) and present them above pre-flight check.
-            $heading = gTxt('welcome_to_textpattern', array('{version}' => txp_version));
-        }
-
         // Check for Textpattern updates, at most once every 24 hours.
         $lastCheck = json_decode(get_pref('last_update_check', ''), true);
 
