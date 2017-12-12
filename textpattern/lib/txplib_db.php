@@ -370,18 +370,17 @@ function safe_escape_like($in = '')
 /**
  * Executes an SQL statement.
  *
- * @param  string $q     The SQL statement to execute
- * @param  bool   $debug Dump query
- * @param  bool   $unbuf If TRUE, executes the statement without fetching and buffering the results
+ * @param  string|array $q     The SQL statement(s) to execute
+ * @param  bool         $debug Dump query
+ * @param  bool         $unbuf If TRUE, executes the statement without fetching and buffering the results
  * @return mixed
  * @example
  * echo safe_query('SELECT * FROM table');
  */
 
-function safe_query($q = '', $debug = false, $unbuf = false)
+function safe_query($q = null, $debug = false, $unbuf = false)
 {
     global $DB, $trace, $production_status;
-    $method = ($unbuf) ? MYSQLI_USE_RESULT : MYSQLI_STORE_RESULT;
 
     if (!$q) {
         return false;
@@ -392,16 +391,50 @@ function safe_query($q = '', $debug = false, $unbuf = false)
     }
 
     if ($production_status !== 'live') {
-        $trace->start("[SQL: $q ]", true);
+        $qStr = is_array($q) ? join(n, $q) : $q;
+        $trace->start("[SQL: $qStr ]", true);
     }
 
-    $result = mysqli_query($DB->link, $q, $method);
+    if (is_array($q)) {
+        $method = ($unbuf) ? 'mysqli_use_result' : 'mysqli_store_result';
+        $qStr = join('; ', $q);
+        $success = mysqli_multi_query($DB->link, $qStr);
 
-    if ($production_status !== 'live') {
-        if (is_bool($result)) {
-            $trace->stop();
-        } else {
-            $trace->stop("[Rows: ".intval(@mysqli_num_rows($result))."]");
+        $rows = 0;
+        $result = array();
+        $queryCounter = 0;
+
+        do {
+            if ($out = $method($DB->link)) {
+                while ($row = mysqli_fetch_assoc($out)) {
+                    $result[$queryCounter][] = $row;
+
+                    if ($production_status !== 'live') {
+                        $rows += mysqli_affected_rows($DB->link);
+                    }
+                }
+            }
+
+            $queryCounter++;
+        } while (mysqli_more_results($DB->link) && mysqli_next_result($DB->link));
+
+        if ($production_status !== 'live') {
+            if ($success === false) {
+                $trace->stop();
+            } else {
+                $trace->stop("[Rows: ".$rows."]");
+            }
+        }
+    } else {
+        $method = ($unbuf) ? MYSQLI_USE_RESULT : MYSQLI_STORE_RESULT;
+        $result = mysqli_query($DB->link, $q, $method);
+
+        if ($production_status !== 'live') {
+            if (is_bool($result)) {
+                $trace->stop();
+            } else {
+                $trace->stop("[Rows: ".intval(@mysqli_num_rows($result))."]");
+            }
         }
     }
 
