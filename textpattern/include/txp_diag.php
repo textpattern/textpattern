@@ -268,13 +268,13 @@ function doDiagnostics()
     }
 
     if (isset($txpcfg['multisite_root_path'])) {
-        if (@is_dir($txpcfg['multisite_root_path'].DS.'admin'.DS.'setup') && ($txp_is_dev || !Txp::get('Textpattern\Admin\Tools')->removeFiles($txpcfg['multisite_root_path'].DS.'admin', 'setup'))) {
+        if (@is_dir($txpcfg['multisite_root_path'].DS.'admin'.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles($txpcfg['multisite_root_path'].DS.'admin', 'setup'))) {
             $multisite_setup_msg['admin'] =$txpcfg['multisite_root_path'].DS.'admin'.DS."setup".DS.' '.gTxt('still_exists');
         }
         if(isset($multisite_setup_msg))
             $fail['setup_still_exists'] = diag_msg_wrap(join('<br/>', $multisite_setup_msg), 'warning');
     } else {
-        if (@is_dir(txpath.DS.'setup') && ($txp_is_dev || !Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath, 'setup'))) {
+        if (@is_dir(txpath.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup'))) {
             $fail['setup_still_exists'] = diag_msg_wrap(txpath.DS."setup".DS.' '.gTxt('still_exists'), 'warning');
         }
     }
