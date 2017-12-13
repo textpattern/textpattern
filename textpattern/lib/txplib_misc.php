@@ -2674,7 +2674,7 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
         extract($sender);
 
         try {
-            $message = Txp::get('Textpattern\Mail\Compose')
+            $message = Txp::get('\Textpattern\Mail\Compose')
                 ->from($email, $RealName)
                 ->to($to_address)
                 ->subject($subject)

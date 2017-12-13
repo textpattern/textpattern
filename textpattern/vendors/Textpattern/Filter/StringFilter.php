@@ -59,7 +59,7 @@ class StringFilter extends \Textpattern\Type\StringType
      * <code>
      * try
      * {
-     *     echo (string) Txp::get('Textpattern\Filter\StringFilter', 'Hello World!')->match('/^[^0-9]$/');
+     *     echo (string) Txp::get('\Textpattern\Filter\StringFilter', 'Hello World!')->match('/^[^0-9]$/');
      * } catch (\Textpattern\Filter\Exception $e) {
      *     echo $e->getMessage();
      * }
@@ -87,7 +87,7 @@ class StringFilter extends \Textpattern\Type\StringType
      *
      * <code>
      * try {
-     *     echo (string) Txp::get('Textpattern\Filter\StringFilter', 'Hello World!')->length(64);
+     *     echo (string) Txp::get('\Textpattern\Filter\StringFilter', 'Hello World!')->length(64);
      * } catch (\Textpattern\Filter\Exception $e) {
      *     echo $e->getMessage();
      * }

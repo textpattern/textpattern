@@ -234,9 +234,7 @@ function save_language()
     )));
 
     $txpLocale = Txp::get('\Textpattern\L10n\Locale');
-    $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($language);
-    $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
-    $langName = isset($langInfo['name']) ? $langInfo['name'] : $language;
+    $langName = fetchLangName($language);
 
     if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language)."' LIMIT 1")) {
         $candidates = array($language, $txpLocale->getLocaleLanguage($language), 'C');
@@ -272,9 +270,7 @@ function save_language_ui()
     )));
 
     if (get_pref('language_ui') != $language_ui) {
-        $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($language_ui);
-        $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
-        $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $language_ui;
+        $langName = fetchLangName($language_ui);
 
         if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language_ui)."' LIMIT 1")) {
             $locale = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language_ui);
@@ -305,18 +301,19 @@ function save_language_ui()
 function get_language()
 {
     $lang_code = gps('lang_code');
+    $langName = fetchLangName($lang_code);
+    $txpLang = Txp::get('\Textpattern\L10n\Lang');
 
-    if (Txp::get('\Textpattern\L10n\Lang')->installFile($lang_code)) {
+    if ($txpLang->installFile($lang_code)) {
         callback_event('lang_installed', 'file', false, $lang_code);
 
+        $txpLang->available(TEXTPATTERN_LANG_AVAILABLE, TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE);
         Txp::get('\Textpattern\Plugin\Plugin')->installTextpacks();
-
-        $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($lang_code);
-        $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
-        $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $lang_code;
 
         return list_languages(gTxt('language_updated', array('{name}' => $langName)));
     }
+
+    return list_languages(array(gTxt('language_not_installed', array('{name}' => $langName)), E_ERROR));
 }
 
 /**
@@ -391,9 +388,7 @@ function remove_language()
     require_privs('lang.edit');
 
     $lang_code = gps('lang_code');
-    $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($lang_code);
-    $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
-    $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $lang_code;
+    $langName = fetchLangName($lang_code);
 
     $ret = safe_delete('txp_lang', "lang = '".doSlash($lang_code)."'");
 
@@ -412,6 +407,23 @@ function remove_language()
     }
 
     list_languages($msg);
+}
+
+/**
+ * Get the lang name from the given language file.
+ *
+ * @param  string $lang_code Language designator
+ * @return string
+ */
+
+function fetchLangName($lang_code)
+{
+    $txpLang = Txp::get('\Textpattern\L10n\Lang');
+    $langFile = $txpLang->findFilename($lang_code);
+    $langInfo = $txpLang->fetchMeta($langFile);
+    $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $lang_code;
+
+    return $langName;
 }
 
 /**
