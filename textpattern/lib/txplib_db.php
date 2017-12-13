@@ -405,25 +405,15 @@ function safe_query($q = null, $debug = false, $unbuf = false)
         $queryCounter = 0;
 
         do {
-            if ($out = $method($DB->link)) {
-                while ($row = mysqli_fetch_assoc($out)) {
-                    $result[$queryCounter][] = $row;
+            $out = $method($DB->link);
 
-                    if ($production_status !== 'live') {
-                        $rows += mysqli_affected_rows($DB->link);
-                    }
-                }
+            if ($out) {
+                $result[$queryCounter++] = $out;
             }
-
-            $queryCounter++;
         } while (mysqli_more_results($DB->link) && mysqli_next_result($DB->link));
 
         if ($production_status !== 'live') {
-            if ($success === false) {
-                $trace->stop();
-            } else {
-                $trace->stop("[Rows: ".$rows."]");
-            }
+            $trace->stop();
         }
     } else {
         $method = ($unbuf) ? MYSQLI_USE_RESULT : MYSQLI_STORE_RESULT;
@@ -440,9 +430,6 @@ function safe_query($q = null, $debug = false, $unbuf = false)
 
     if ($result === false) {
         trigger_error(mysqli_error($DB->link), E_USER_ERROR);
-    }
-
-    if (!$result) {
         return false;
     }
 

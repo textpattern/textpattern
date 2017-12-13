@@ -115,10 +115,14 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function installed()
     {
-        static $installed_langs = null;
+        if (!$this->dbLangs) {
+            $this->available();
+        }
 
-        if (!$installed_langs) {
-            $installed_langs = safe_column("lang", 'txp_lang', "owner = '' GROUP BY lang");
+        $installed_langs = array();
+
+        foreach ($this->dbLangs as $row) {
+            $installed_langs[] = $row['lang'];
         }
 
         return $installed_langs;
@@ -378,7 +382,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $langpack = array_merge($fallpack, $langpack);
         }
 
-        return $this->upsertPack($langpack, $lang_code);
+        return ($this->upsertPack($langpack, $lang_code) === false) ? false : true;
     }
 
     /**
@@ -433,11 +437,13 @@ class Lang implements \Textpattern\Container\ReusableInterface
     /**
      * Insert or update a language pack.
      *
-     * @param  array $langpack The language pack to store
+     * @param  array  $langpack  The language pack to store
+     * @param  string $lang_code The language code to stro the pack against
+     * @param  string $langpack  The owner to use if not in the pack
      * @return result set
      */
 
-    public function upsertPack($langpack, $lang_code)
+    public function upsertPack($langpack, $lang_code, $owner_ref = null)
     {
         if ($langpack) {
             $now = date($this->lastmodFormat);
@@ -450,7 +456,8 @@ class Lang implements \Textpattern\Container\ReusableInterface
             foreach ($langpack as $translation) {
                 extract(doSlash($translation));
 
-                $lastmod = empty($lastmod) ? $now : date($this->lastmodFormat, $lastmod);
+                $owner = empty($owner) ? $owner_ref : $owner;
+                $lastmod = empty($lastmod) ? $now : $lastmod;
 
                 if (!empty($exists[$name])) {
                     $where = "lang = '{$lang}' AND name = '{$name}'";
@@ -466,7 +473,9 @@ class Lang implements \Textpattern\Container\ReusableInterface
                 $sql[] = "INSERT INTO ".PFX."txp_lang (lang, name, event, owner, data, lastmod) VALUES".join(', ', $inserts);
             }
 
-            return safe_query($sql);
+            $result = safe_query($sql);
+
+            return $result;
         }
 
         return false;
