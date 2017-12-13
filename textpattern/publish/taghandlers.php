@@ -4345,7 +4345,8 @@ function page_url($atts)
         $out = $pretext[$type];
     } else {
         $out = gps($type, $default);
-        $out = is_array($out) ? implode(',', $out) : $out;
+        !is_array($out) or $out = implode(',', $out);
+        ($escape === null || in_list('html', strtolower($escape))) or $out = txpspecialchars($out);
     }
 
     return $escape === null ? txpspecialchars($out) : $out;
@@ -4908,7 +4909,7 @@ function if_variable($atts, $thing = null)
 
 function txp_eval($atts, $thing = null)
 {
-    global $txp_parsed, $txp_else, $txp_tag;
+    global $prefs, $txp_parsed, $txp_else, $txp_tag;
     static $xpath = null, $functions = null;
 
     extract(lAtts(array(
@@ -4923,18 +4924,35 @@ function txp_eval($atts, $thing = null)
     } elseif (class_exists('DOMDocument')) {
         if (!isset($xpath)) {
             $xpath = new DOMXpath(new DOMDocument);
-            $functions = do_list_unique(get_pref('txp_functions'));
+            $functions = do_list_unique(get_pref('txp_evaluate_functions', 'md5, replace:preg_replace'));
+            $_functions = array();
 
-            if ($functions) {
+            foreach ($functions as $function) { 
+                list($key, $val) = explode(':', $function.':'.$function, 3);
+                $_functions[trim($key)] = trim($val);
+            }
+            
+            if ($_functions) {
+                $functions = implode('|', array_keys($_functions));
                 $xpath->registerNamespace('php', 'http://php.net/xpath');
-                $xpath->registerPHPFunctions($functions);
+                $xpath->registerPHPFunctions($_functions);
+            } else {
+                $functions = false;
             }
 
-            $functions = implode('|', $functions);
+            $prefs['_txp_evaluate_functions'] = $_functions;
         }
 
         if ($functions) {
-            $query = preg_replace('/\b('.$functions.')\s*\(/', "php:function('$1',", $query);
+            $query = preg_replace_callback('/\b('.$functions.')\s*\(/',
+                function ($match) {
+                    global $prefs;
+                    $function = empty($prefs['_txp_evaluate_functions'][$match[1]]) ? $match[1] : $prefs['_txp_evaluate_functions'][$match[1]];
+
+                    return "php:function('$function',";
+                },
+                $query
+            );
         }
 
         $x = $xpath->evaluate($query);
@@ -4997,7 +5015,8 @@ function txp_eval($atts, $thing = null)
 
 function txp_escape($atts, $thing = '')
 {
-    static $textile = null;
+    static $textile = null, 
+        $tr = array("'" => "',\"'\",'"/*, '"' => "','\"','"*/);
 
     extract(lAtts(array(
         'escape'    => ''
@@ -5020,7 +5039,7 @@ function txp_escape($atts, $thing = '')
                 $thing = strip_tags($thing);
                 break;
             case 'upper': case 'lower':
-                $function = function_exists('mb_strto'.$attr) ? 'mb_strto'.$attr : 'strto'.$attr;
+                $function = (function_exists('mb_strto'.$attr) ? 'mb_' : '').'strto'.$attr;
                 $thing = $function($thing);
                 break;
             case 'trim': case 'ltrim': case 'rtrim': case 'intval':
@@ -5032,6 +5051,9 @@ function txp_escape($atts, $thing = '')
                 }
 
                 $thing = $textile->TextileThis($thing);
+                break;
+            case 'quote':
+                $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
                 break;
         }
     }
