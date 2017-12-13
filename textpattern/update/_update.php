@@ -135,9 +135,9 @@ if (!$txp_is_dev) {
     remove_pref('version', 'publish');
     create_pref('version', $dbversion, 'publish', PREF_HIDDEN);
     if (isset($txpcfg['multisite_root_path'])) {
-        Txp::get('Textpattern\Admin\Tools')->removeFiles($txpcfg['multisite_root_path'].DS.'admin', 'setup');
+        Txp::get('\Textpattern\Admin\Tools')->removeFiles($txpcfg['multisite_root_path'].DS.'admin', 'setup');
     } else {
-    Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
+        Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
     }
 }
 
