@@ -2154,9 +2154,11 @@ button {
   .txp-search {
     display: -webkit-box;
     display: flex;
+    position: relative;
     -webkit-box-pack: end;
             justify-content: flex-end;
     margin: 1em 0;
+    float: right;
   }
   .txp-search .ui-menu {
     position: absolute;
@@ -2168,6 +2170,9 @@ button {
   }
   .txp-search .txp-dropdown {
     z-index: 101;
+  }
+  [dir="rtl"] .txp-search {
+    float: left;
   }
   .txp-search-clear {
     -webkit-box-flex: 1;
