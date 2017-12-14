@@ -207,7 +207,7 @@ namespace Textpattern\Skin {
 
         public static function getExtension()
         {
-            return static::$extension === 'txp' ? '(txp|html)' : static::$extension;
+            return static::$extension;
         }
 
         /**
@@ -569,10 +569,13 @@ namespace Textpattern\Skin {
                 $templates = self::getValidNamePattern();
             }
 
+            $extension = self::getExtension();
+            $extension === 'txp' ? $extension = '(txp|html)' : '';
+
             return new RecIteratorIterator(
                 new RecRegexIterator(
                     new RecDirIterator(self::getPath($path)),
-                    '#^'.$templates.'\.'.self::getExtension().'$#i'
+                    '#^'.$templates.'\.'.$extension.'$#i'
                 ),
                 self::getSubdirCol() ? 1 : 0
             );
