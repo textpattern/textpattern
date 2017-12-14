@@ -42,7 +42,7 @@ namespace Textpattern\Skin {
          * @param array $templates $skins parallel array of templates grouped by types.
          */
 
-        public function __construct($skins = null, $templates = null)
+        public function __construct($skins = null, $templates = null);
 
         /**
          * $skinsTemplates property setter.
@@ -60,7 +60,7 @@ namespace Textpattern\Skin {
          * @return array Associative array of skins and their related templates grouped by types.
          */
 
-        public function getSkinsTemplates()
+        public function getSkinsTemplates();
 
         /**
          * Gets the template names defined for a defined skin.
@@ -76,7 +76,7 @@ namespace Textpattern\Skin {
          * @return array Template names.
          */
 
-        public function getEssentialNames();
+        public static function getEssentialNames();
 
         /**
          * Gets the asset related essential template types from the $essential property.
@@ -85,7 +85,7 @@ namespace Textpattern\Skin {
          * @return mixed the $name related type if the arg is set or an array of all types.
          */
 
-        public function getEssentialTypes($name);
+        public static function getEssentialTypes($name);
 
         /**
          * $dir property getter.
@@ -93,7 +93,7 @@ namespace Textpattern\Skin {
          * @return string the asset related directory name.
          */
 
-        public static function getDir()
+        public static function getDir();
 
         /**
          * $subdirCol property getter.
@@ -101,7 +101,7 @@ namespace Textpattern\Skin {
          * @return string The DB column associated to subdirectories when applied.
          */
 
-        public static function getSubdirCol()
+        public static function getSubdirCol();
 
         /**
          * $contentsCol property getter.
@@ -109,10 +109,7 @@ namespace Textpattern\Skin {
          * @return string The DB column string the asset related main contents.
          */
 
-        public static function getContentsCol()
-        {
-            return static::$contentsCol;
-        }
+        public static function getContentsCol();
 
         /**
          * $asset property getter.
@@ -120,21 +117,14 @@ namespace Textpattern\Skin {
          * @return string The textpack related string used for the current asset.
          */
 
-        public static function getAsset()
-        {
-            return static::$asset;
-        }
-
+        public static function getAsset();
         /**
          * $Extension property getter.
          *
          * @return string The current asset files related extension.
          */
 
-        public static function getExtension()
-        {
-            return static::$extension;
-        }
+        public static function getExtension();
 
         /**
          * Creates skins templates.
