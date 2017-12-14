@@ -406,15 +406,18 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         $installed_langs = $this->installed();
         $done = 0;
-        $now = date($this->lastmodFormat);
+        $now = doSlash(date($this->lastmodFormat));
+        $values = array();
 
         foreach ($textpack as $translation) {
-            extract($translation);
+            extract(doSlash($translation));
 
             if (!$addNewLangs && !in_array($lang, $installed_langs)) {
                 continue;
             }
 
+            $values[] = "('$name', '$lang', '$data', '$event', '$owner', '$now')";
+/*
             $where = array('lang' => $lang, 'name' => $name);
 
             $r = safe_upsert(
@@ -429,9 +432,13 @@ class Lang implements \Textpattern\Container\ReusableInterface
             if ($r) {
                 $done++;
             }
+*/
         }
 
-        return $done;
+        $value = implode(',', $values);
+        !$value or safe_query("INSERT INTO ".PFX."txp_lang (name, lang, data, event, owner, lastmod) VALUES $value ON DUPLICATE KEY UPDATE data=VALUES(data), event=VALUES(event), owner=VALUES(owner), lastmod=VALUES(lastmod)");
+        
+        return count($values);//$done;
     }
 
     /**
@@ -445,6 +452,8 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function upsertPack($langpack, $lang_code, $owner_ref = null)
     {
+        $result = false;
+
         if ($langpack) {
             $now = date($this->lastmodFormat);
             $lang_code = doSlash($lang_code);
@@ -452,13 +461,15 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $exists = safe_column('name', 'txp_lang', "lang='".$lang_code."'");
             $sql = array();
             $inserts = array();
+            $values = array();
 
             foreach ($langpack as $translation) {
                 extract(doSlash($translation));
 
                 $owner = empty($owner) ? $owner_ref : $owner;
                 $lastmod = empty($lastmod) ? $now : $lastmod;
-
+                $values[] = "('$name', '$lang', '$data', '$event', '$owner', '$now')";
+/*
                 if (!empty($exists[$name])) {
                     $where = "lang = '{$lang}' AND name = '{$name}'";
                     $fields = "event = '{$event}', owner = '{$owner}', data = '{$data}', lastmod = '{$lastmod}'";
@@ -467,18 +478,22 @@ class Lang implements \Textpattern\Container\ReusableInterface
                     $fields = array("{$lang}", "{$name}", "{$event}", "{$owner}", "{$data}", "{$lastmod}");
                     $inserts[] = '('.join(', ', quote_list($fields)).')';
                 }
+*/
             }
-
+/*
             if ($inserts) {
                 $sql[] = "INSERT INTO ".PFX."txp_lang (lang, name, event, owner, data, lastmod) VALUES".join(', ', $inserts);
             }
 
             $result = safe_query($sql);
-
-            return $result;
+*/
+            if ($values) {
+                $value = implode(',', $values);
+                $result = safe_query("INSERT INTO ".PFX."txp_lang (name, lang, data, event, owner, lastmod) VALUES $value ON DUPLICATE KEY UPDATE data=VALUES(data), event=VALUES(event), owner=VALUES(owner), lastmod=VALUES(lastmod)");
+            }
         }
 
-        return false;
+        return $result;
     }
 
     /**
