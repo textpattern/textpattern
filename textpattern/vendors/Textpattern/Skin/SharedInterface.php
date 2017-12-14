@@ -43,7 +43,7 @@ namespace Textpattern\Skin {
         public function __construct($skins = null);
 
         /**
-         * Getter for the $table property.
+         * $table property getter.
          *
          * @return string Table name.
          */
@@ -51,27 +51,28 @@ namespace Textpattern\Skin {
         public static function getTable();
 
         /**
-         * Gets the class related table column names.
+         * $tableCols property setter.
+         * Gets the $table related column names.
          *
-         * @param  array $exclude Column names.
+         * @param  array $exclude Column names to NOT get.
          * @return array Column names
          */
 
         public static function getTableCols($exclude = array('lastmod'));
 
         /**
-         * Setter for the $installed property.
+         * Merges the the defined skins with the $installed property related array.
          *
-         * @param array Associative array of skin names and their related titles.
+         * @param array $skins Associative array of skin names and their related titles.
          */
 
         public static function setInstalled($skins);
 
         /**
-         * Getter for the $installed property.
+         * $installed property Getter/Setter.
+         * Gets the the installed skins from the DB if the $installed property is not set already. 
          *
-         * @return array Associative array of installed skin names
-         *                           and their related titles.
+         * @return array Associative array of installed skin names and their related titles.
          */
 
         public static function getInstalled();
@@ -79,14 +80,14 @@ namespace Textpattern\Skin {
         /**
          * Whether a skin is installed or not.
          *
-         * @param array A skin name.
+         * @param  string A skin name.
          * @return bool
          */
 
         public static function isInstalled($skin);
 
         /**
-         * Getter for the $validNamePattern property.
+         * $validNamePattern property getter.
          *
          * @return string Regular Expression.
          */
@@ -129,18 +130,9 @@ namespace Textpattern\Skin {
         public static function sanitize($string);
 
         /**
-         * Inserts or updates all asset related templates at once.
-         *
-         * @param  array $fields The template related database fields;
-         * @param  array $values SQL VALUES as an array of group of values;
-         * @param  bool  $update Whether to update rows on duplicate keys or not;
-         * @return bool          false on error.
-         */
-
-        public function insert($fields, $values, $update = false);
-
-        /**
          * Checks if a directory or a file exists.
+         * Choose between is_file() or is_dir() based on the presence
+         * of an extenstion at the end of the path.
          *
          * @return bool
          */

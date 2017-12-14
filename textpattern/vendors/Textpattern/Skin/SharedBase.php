@@ -210,10 +210,15 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Inserts or updates all asset related templates at once.
+         *
+         * @param  array $fields The template related database fields;
+         * @param  array $values SQL VALUES as an array of group of values;
+         * @param  bool  $update Whether to update rows on duplicate keys or not;
+         * @return bool          false on error.
          */
 
-        public function insert($fields, $values, $update = false)
+        protected function insert($fields, $values, $update = false)
         {
             if ($update) {
                 $updates = array();
