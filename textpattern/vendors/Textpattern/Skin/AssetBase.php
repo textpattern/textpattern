@@ -361,20 +361,13 @@ namespace Textpattern\Skin {
             callback_event('skin.'.self::getDir().'.adopt', '', 1, $callbackExtra);
 
             if ($this->adoptTemplates($from)) {
-                $this->setResults(
-                    self::getDir().'_updated',
-                    array('{skins}' => implode(', ', $from)),
-                    'success'
-                );
+                $this->setResults(self::getDir().'_updated', array($from), 'success');
 
                 callback_event('skin.'.self::getDir().'.adopt', 'success', 0, $callbackExtra);
 
                 $passed = $this->getSkinsTemplates();
             } else {
-                $this->setResults(
-                    self::getDir().'_update_failed',
-                    array('{skins}' => implode(', ', $from))
-                );
+                $this->setResults(self::getDir().'_update_failed', array($from));
 
                 callback_event('skin.'.self::getDir().'.adopt', 'failure', 0, $callbackExtra);
 
