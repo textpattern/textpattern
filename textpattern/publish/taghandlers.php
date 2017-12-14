@@ -4957,7 +4957,7 @@ function txp_eval($atts, $thing = null)
             $x = $x->length;
         }
     } else {
-        trigger_error('PHP DOM extension '.gTxt('gd_unavailable'));
+        trigger_error(gTxt('missing_dom_extension'));
         return '';
     }
 

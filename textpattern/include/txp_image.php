@@ -395,7 +395,7 @@ function image_list($message = '')
                         )
                     ).
                     td(
-                        ($can_view ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name'
+                        ($can_view ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name txp-contain'
                     ).
                     td(
                         gTime($uDate), '', 'txp-list-col-created date'
