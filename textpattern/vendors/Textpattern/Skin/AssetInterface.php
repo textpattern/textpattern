@@ -39,22 +39,31 @@ namespace Textpattern\Skin {
          * Constructor
          *
          * @param array $skins     Set the related parent property.
-         * @param array $templates Skins related template names (all by default).
+         * @param array $templates $skins parallel array of templates grouped by types.
          */
 
-        public function __construct($skins = null, $templates = array());
+        public function __construct($skins = null, $templates = null)
 
         /**
-         * Set the $templates property according to the $skins.
+         * $skinsTemplates property setter.
          *
-         * @param  array  $templates Template names as stored in the $defaultTemplates property of the class.
-         * @return object $this.
+         * @param  array  $skins     Set the related parent property.
+         * @param  array  $templates $skins parallel array of templates grouped by types.
+         * @return object $this
          */
 
         public function setSkinsTemplates($skins, $templates = null);
 
         /**
-         * get the template names stored in the $templates property.
+         * $skinsTemplates property getter.
+         *
+         * @return array Associative array of skins and their related templates grouped by types.
+         */
+
+        public function getSkinsTemplates()
+
+        /**
+         * Gets the template names defined for a defined skin.
          *
          * @return array Template names.
          */
@@ -62,7 +71,73 @@ namespace Textpattern\Skin {
         public function getTemplateNames($skin);
 
         /**
-         * Creates skin templates.
+         * Gets the asset related essential template names from the $essential property.
+         *
+         * @return array Template names.
+         */
+
+        public function getEssentialNames();
+
+        /**
+         * Gets the asset related essential template types from the $essential property.
+         *
+         * @param  array $name A template name.
+         * @return mixed the $name related type if the arg is set or an array of all types.
+         */
+
+        public function getEssentialTypes($name);
+
+        /**
+         * $dir property getter.
+         *
+         * @return string the asset related directory name.
+         */
+
+        public static function getDir()
+
+        /**
+         * $subdirCol property getter.
+         *
+         * @return string The DB column associated to subdirectories when applied.
+         */
+
+        public static function getSubdirCol()
+
+        /**
+         * $contentsCol property getter.
+         *
+         * @return string The DB column string the asset related main contents.
+         */
+
+        public static function getContentsCol()
+        {
+            return static::$contentsCol;
+        }
+
+        /**
+         * $asset property getter.
+         *
+         * @return string The textpack related string used for the current asset.
+         */
+
+        public static function getAsset()
+        {
+            return static::$asset;
+        }
+
+        /**
+         * $Extension property getter.
+         *
+         * @return string The current asset files related extension.
+         */
+
+        public static function getExtension()
+        {
+            return static::$extension;
+        }
+
+        /**
+         * Creates skins templates.
          *
          * @return array Created skins.
          */
@@ -70,16 +145,19 @@ namespace Textpattern\Skin {
         public function create();
 
         /**
-         * Changes templates related skin
+         * Changes the templates related skin.
+         * Fires on after a skin update to keep templates associated with the right skin.
          *
-         * @param  string $from The skin name from which templates are adopted.
-         * @return array        Adopted skins.
+         * @param  array $from The skin (old)names from which templates are adopted.
+         *                     The array must be parallel to the $skins array
+         *                     passed to the constructor or the setSkinsAssets() method.
+         * @return array       Adopted skins.
          */
 
         public function adopt($from);
 
         /**
-         * Import the skin related templates.
+         * Imports skins templates.
          *
          * @param  string $clean Whether to remove extra templates or not.
          * @return array         Imported skins.
@@ -88,61 +166,27 @@ namespace Textpattern\Skin {
         public function import($clean = true);
 
         /**
-         * Gets a new asset iterator instance.
+         * Duplicates skins templates.
          *
-         * @param  array  $templates Template names;
-         * @param  array  $subdir    A skin subdirectory.
-         * @return object            RecursiveIteratorIterator
-         */
-
-        public static function getRecDirIterator($path, $templates = null);
-
-        /**
-         * Drops obsolete template rows.
-         *
-         * @param  array $not An array of template names to NOT drop;
-         * @return bool
-         */
-
-        public static function dropRemovedFiles($not);
-
-        /**
-         * Duplicates the skin related templates.
-         *
-         * @return bool
+         * @param  array $to The skin (new)names to which templates are duplicated.
+         *                   The array must be parallel to the $skins array
+         *                   passed to the constructor or the setSkinsAssets() method.
+         * @return array     Duplicated skins.
          */
 
         public function duplicate($to);
 
         /**
-         * Gets skins asset related templates rows.
+         * Exports skins templates.
          *
-         * @return array Associative array of skins and their templates.
-         */
-
-        public function getRows($skins = null);
-
-        /**
-         * Exports the skin related templates.
-         *
-         * @param  string $clean Whether to remove extra templates or not.
+         * @param  string $clean Whether to remove extra template files or not.
          * @return array         Exported skins.
          */
 
         public function export($clean = true);
 
         /**
-         * Unlinks obsolete template files.
-         *
-         * @param  array $not An array of template names to NOT unlink;
-         * @return array      NOT removed templates;
-         *                    thus an empty array means everything worked as expected.
-         */
-
-        public function unlinkRemovedRows($skin, $not);
-
-        /**
-         * Deletes the skin related templates.
+         * Deletes skins templates.
          *
          * @return array Deleted skins.
          */

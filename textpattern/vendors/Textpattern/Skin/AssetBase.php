@@ -178,9 +178,19 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public static function getSubdirCol()
+        public static function getEssentialTypes($name = null)
         {
-            return static::$subdirCol;
+            if ($name) {
+                foreach (static::$essential as $type => $templates) {
+                    if (in_array($name, $templates)) {
+                        return $type;
+                    }
+                }
+            } else {
+                return array_keys(static::$essential);
+            }
+
+            return false;
         }
 
         /**
@@ -190,6 +200,15 @@ namespace Textpattern\Skin {
         public static function getDir()
         {
             return static::$dir;
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+
+        public static function getSubdirCol()
+        {
+            return static::$subdirCol;
         }
 
         /**
@@ -217,25 +236,6 @@ namespace Textpattern\Skin {
         public static function getContentsCol()
         {
             return static::$contentsCol;
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public static function getEssentialTypes($name = null)
-        {
-            if ($name) {
-                foreach (static::$essential as $type => $templates) {
-                    if (in_array($name, $templates)) {
-                        return $type;
-                    }
-                }
-            } else {
-                return array_keys(static::$essential);
-            }
-
-            return false;
         }
 
         /**
@@ -323,8 +323,8 @@ namespace Textpattern\Skin {
         /**
          * Gets an array of SQL VALUES sorted as the asset $tableCols property.
          *
-         * @param  array $skins     Skin names.
-         * @param  array $templates Skin related template names.
+         * @param  array $skin      A skin name.
+         * @param  array $templates The skin related template names.
          * @return array            SQL VALUES
          */
 
@@ -382,7 +382,9 @@ namespace Textpattern\Skin {
         /**
          * Adopt templates from another skin.
          *
-         * @param string $from Skins from which you want to adopt the templates.
+         * @param array $from Skins from which you want to adopt the templates.
+         *                    The array must be parallel to the $skins array
+         *                    passed to the constructor or the setSkinsAssets() method.
          */
 
         protected function adoptTemplates($from)
@@ -551,10 +553,14 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Gets files from a defined directory.
+         *
+         * @param  array  $path      A directory path.
+         * @param  array  $templates Template names to filter results;
+         * @return object            RecursiveIteratorIterator
          */
 
-        public static function getRecDirIterator($path, $templates = null)
+        protected static function getRecDirIterator($path, $templates = null)
         {
             if ($templates) {
                 $templates = '('.implode('|', $templates).')';
@@ -604,9 +610,11 @@ namespace Textpattern\Skin {
             return "('".implode("', '", array_map('doSlash', $sqlValue))."')";
         }
 
-
         /**
-         * {@inheritdoc}
+         * Drops obsolete template rows.
+         *
+         * @param  array $not An array of template names to NOT drop;
+         * @return bool
          */
 
         public static function dropRemovedFiles($not)
@@ -689,10 +697,12 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Gets skins asset related templates rows.
+         *
+         * @return array Associative array of skins and their template rows.
          */
 
-        public function getRows($skins = null)
+        protected function getRows($skins = null)
         {
             $skins === null ? $skins = $this->getSkins() : '';
 
@@ -841,10 +851,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Exports a skin asset related template row.
+         * Exports a skin template.
          *
-         * @param  array $name A template name
-         * @param  array $row  Template related data
+         * @param  array $name A template name;
+         * @param  array $row  Template row related data.
          * @return bool
          */
 
@@ -876,10 +886,13 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Unlinks obsolete template files.
+         *
+         * @param  array $not An array of template names to NOT unlink;
+         * @return array      Templates for which the unlink process FAILED;
          */
 
-        public function unlinkRemovedRows($skin, $not)
+        protected function unlinkRemovedRows($skin, $not)
         {
             $files = self::getRecDirIterator($skin.'/'.self::getDir());
             $notRemoved = array();
@@ -927,7 +940,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Deletes skin asset related template rows.
+         * Deletes skin templates.
          *
          * @return bool
          */
