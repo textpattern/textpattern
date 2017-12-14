@@ -35,6 +35,7 @@ namespace Textpattern\Skin {
     class Styles extends AssetBase
     {
         protected static $asset = 'css';
+        protected static $dir = 'styles';
         protected static $extension = 'css';
         protected static $table = 'txp_css';
         protected static $tableCols;
