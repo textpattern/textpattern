@@ -365,7 +365,7 @@ namespace Textpattern\Skin {
 
             if ($failed) {
                 if ($unknown) {
-                    $this->setResults('unknown_skin', $unknown);
+                    $this->setResults('skin_unknown', $unknown);
                 }
 
                 if ($installed) {
@@ -515,7 +515,7 @@ namespace Textpattern\Skin {
 
             if ($failed) {
                 if ($unknown) {
-                    $this->setResults('unknown_skin', $unknown);
+                    $this->setResults('skin_unknown', $unknown);
                 } elseif ($alreadyExists) {
                     $this->setResults('skin_already_exists', $alreadyExists);
                 }
@@ -671,11 +671,11 @@ namespace Textpattern\Skin {
 
             if ($failed) {
                 if ($invalid) {
-                    $this->setResults('unsafe_skin_name', $invalid);
+                    $this->setResults('skin_unsafe_name', $invalid);
                 }
 
                 if ($unknown) {
-                    $this->setResults('unknown_skin', $unknown);
+                    $this->setResults('skin_unknown', $unknown);
                 }
 
                 if ($unwritable) {
@@ -791,7 +791,7 @@ namespace Textpattern\Skin {
 
             if ($failed) {
                 if ($unknown) {
-                    $this->setResults('unknown_skin', $unknown);
+                    $this->setResults('skin_unknown', $unknown);
                 }
 
                 if ($inUse) {

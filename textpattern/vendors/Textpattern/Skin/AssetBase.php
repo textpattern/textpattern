@@ -305,7 +305,7 @@ namespace Textpattern\Skin {
 
             if ($failed) {
                 if ($unknown) {
-                    $this->setResults('unknown_skin', $unknown);
+                    $this->setResults('skin_unknown', $unknown);
                 }
 
                 if ($notCreated) {
@@ -513,7 +513,7 @@ namespace Textpattern\Skin {
 
             if ($failed) {
                 if ($unknown) {
-                    $this->setResults('unknown_skin', $unknown);
+                    $this->setResults('skin_unknown', $unknown);
                 }
 
                 if ($unreadable) {
@@ -681,7 +681,7 @@ namespace Textpattern\Skin {
 
             if ($failed) {
                 if ($unknown) {
-                    $this->setResults('unknown_skin', $unknown);
+                    $this->setResults('skin_unknown', $unknown);
                 }
 
                 if ($dbFailure) {
