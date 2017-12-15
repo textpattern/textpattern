@@ -72,7 +72,13 @@ namespace Textpattern\Skin {
          */
 
         protected $skinsAssets;
-        protected $assets;
+
+        /**
+         * Skins default assets.
+         *
+         * @var array
+         * @see       getDefaultAssets().
+         */
 
         protected static $defaultAssets = array(
             'pages'  => array(array()),
@@ -83,15 +89,13 @@ namespace Textpattern\Skin {
         /**
          * Constructor.
          *
-         * @param mixed  $skins  Skin name(s);
-         * @param mixed  $assets Skin(s) related assets to work with (all if not set).
-         *        bool           false // none
-         *        string         'pages'|'forms'|'styles'
-         *        array          array('pages', 'forms') // skips styles
-         *        array          array(
-         *                            'pages'  => array('default', 'error_default'),
-         *                            'forms'  => true, // all forms
-         *                       ) // skips styles
+         * @param mixed $skins  Skin names;
+         * @param mixed $assets $skins parallel array of skins related assets and
+         *                      their related templates grouped by types.
+         *                      If no defined type apply, just nest the templates array
+         *                      into another one which simulates a abstract group.
+         *                      All assets templates by default.
+         * @see                 getSkinsAssets(), getDefaultAssets().
          */
 
         public function __construct($skins = null, $assets = null)
@@ -100,10 +104,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Parses the $assets argument.
-         *
-         * @param  mixed  $assets See __construct()
-         * @return object         $this
+         * {@inheritdoc}
          */
 
         public function setSkinsAssets($skins, $assets = null)
@@ -175,7 +176,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        private function parseRows($rows)
+        protected function parseRows($rows)
         {
             return array_key_exists('title', $rows) ? array($rows) : $rows;
         }
@@ -387,11 +388,12 @@ namespace Textpattern\Skin {
         /**
          * Updates a skin row.
          *
-         * @param  string $set Set clause.
-         * @return bool
+         * @param  string $skin A skin name;
+         * @param  string $set  SQL set clause;
+         * @return bool         false on error.
          */
 
-        public function updateRow($skin, $set)
+        protected function updateRow($skin, $set)
         {
             return safe_update(self::$table, $set, "name = '".doSlash($skin)."'");
         }
@@ -399,10 +401,11 @@ namespace Textpattern\Skin {
         /**
          * Updates a skin name in use.
          *
-         * @param string $from the skin name in use.
+         * @param string $to   A skin newname.
+         * @param string $from A skin oldname.
          */
 
-        private function updateSkinInUse($to, $from = null)
+        protected function updateSkinInUse($to, $from = null)
         {
             $updated = safe_update(
                 'txp_section',
@@ -553,13 +556,12 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Gets and decodes the Manifest file contents.
+         * Gets and decodes a skin 'manifest.json' file contents.
          *
-         * @return array
-         * @throws \Exception
+         * @return array Associative array of skin infos.
          */
 
-        public function getJSONInfos($skin)
+        protected function getJSONInfos($skin)
         {
             return @json_decode(
                 file_get_contents(self::getPath($skin.'/'.self::getfile())),
@@ -568,12 +570,13 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Gets the skin row from the database.
+         * Gets a skin row from the DB.
          *
-         * @throws \Exception
+         * @return array Associative array of skins and their templates rows
+         *               as usual associative arrays.
          */
 
-        public function getRows($skins = null)
+        protected function getRows($skins = null)
         {
             $skins === null ? $skins = $this->getSkins() : '';
 
@@ -699,13 +702,13 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Exports the skin row by creating or editing the Manifest file contents.
+         * Exports the skin row by creating or editing the 'manifest.json' file contents.
          *
-         * @param  array $row Skin row as an associative array
-         * @return bool
+         * @param  array $row A skin row as an associative array.
+         * @return bool       false on error.
          */
 
-        public function exportSkin($row)
+        protected function exportSkin($row)
         {
             $path = $row['name'].'/'.self::getfile();
             $contents = self::isWritable($path) ? $this->getJSONInfos($row['skin']) : array();
@@ -727,11 +730,12 @@ namespace Textpattern\Skin {
         /**
          * Creates/overrides the Manifest file.
          *
-         * @param  array $contents The manifest file contents;
-         * @return bool
+         * @param  array $path     A skin directory name;
+         * @param  array $contents The 'manifest.json' file contents as an associative array.
+         * @return bool            false on error.
          */
 
-        public function filePutJsonContents($path, $contents)
+        protected function filePutJsonContents($path, $contents)
         {
             return (bool) file_put_contents(
                 self::getPath($path),
@@ -811,10 +815,13 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Deletes skin rows from the DB.
+         *
+         * @param  array $passed Skin names to delete.
+         * @return bool          false on error.
          */
 
-        public function deleteSkins($passed)
+        protected function deleteSkins($passed)
         {
             return safe_delete(
                 self::$table,
@@ -838,9 +845,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Gets the skin set as the one selected in the admin tabs.
-         *
-         * @return string The skin name
+         * {@inheritdoc}
          */
 
         public static function getCurrent()
@@ -849,10 +854,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Sets the skin as the one selected in the admin tabs.
-         *
-         * @param  string $skin A skin name.
-         * @return bool
+         * {@inheritdoc}
          */
 
         public static function setCurrent($skin = null)
@@ -872,7 +874,7 @@ namespace Textpattern\Skin {
          * @return bool
          */
 
-        private function doAssets($skins, $assets, $method, $extra = null)
+        protected function doAssets($skins, $assets, $method, $extra = null)
         {
             $out = true;
 
@@ -922,7 +924,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Gets the skin import form.
+         * Renders the skin import form.
          *
          * @return html The form or a message if no new skin directory is found.
          */
@@ -949,6 +951,12 @@ namespace Textpattern\Skin {
                     .tag_end('form');
             }
         }
+
+        /**
+         * Renders the .txp-control-panel div.
+         *
+         * @return html div containing the 'Create' button and the import form..
+         */
 
         public static function renderCreateBlock()
         {

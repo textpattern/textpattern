@@ -35,14 +35,74 @@ namespace Textpattern\Skin {
     interface MainInterface
     {
         /**
+         * $defaultAssets property getter
+         *
+         * @return array
+         */
+
+        public function getSkinsAssets();
+
+        /**
+         * $defaultAssets property getter
+         *
+         * @return array
+         */
+
+        public static function getDefaultAssets();
+
+        /**
+         * $file property getter
+         *
+         * @return string The main skins JSON filename.
+         */
+
+        public static function getfile();
+
+        /**
+         * $SkinsAssets property setter.
+         *
+         * @param  array  $skins  See __construct();
+         * @param  array  $assets See __construct();
+         * @return object         $this.
+         */
+
+        public function setSkinsAssets($skins, $assets = null);
+
+        /**
+         * Whether a skin is used by a section or not.
+         *
+         * @param  string $skin A skin name.
+         * @return bool         false on error.
+         */
+
+        public function isInUse($skin);
+
+        /**
+         * Gets the skin set as the one selected in the admin tabs.
+         *
+         * @return string The skin name
+         */
+
+        public static function getCurrent()
+
+        /**
+         * Sets the skin as the one selected in the admin tabs.
+         *
+         * @param  string $skin A skin name.
+         * @return bool   false on error.
+         */
+
+        public static function setCurrent($skin = null)
+
+        /**
          * Creates skins and their defined related assets.
          *
-         * @param  array $row Associative array of the following txp_skin table related fields:
+         * @param  array $rows Associative array of the following txp_skin table related fields:
          *                    'title', 'version', 'description', 'author', 'author_uri';
          * @return array      Created skins.
          */
 
-        public function create($row);
+        public function create($rows, $from = false);
 
         /**
          * Edits skins and their defined related assets.
