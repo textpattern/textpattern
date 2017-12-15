@@ -111,7 +111,7 @@ namespace Textpattern\Skin {
         {
             is_string($skins) ? $skins = array($skins) : '';
 
-            $skins = array_map(array($this, 'sanitize'), $skins);
+            $skins = array_map('self::sanitize', $skins);
 
             $this->inUse = array();
 

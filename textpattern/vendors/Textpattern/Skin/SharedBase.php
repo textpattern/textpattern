@@ -206,7 +206,7 @@ namespace Textpattern\Skin {
 
         public static function sanitize($string)
         {
-            return sanitizeForPage(assert_string($string));
+            return strtolower(sanitizeForPage(assert_string($string)));
         }
 
         /**
