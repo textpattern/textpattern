@@ -2887,15 +2887,13 @@ function category($atts, $thing = null)
 
     if ($name) {
         $category = $name;
+        $type = validContext($type);
     } elseif (!empty($thiscategory['name'])) {
         $category = $thiscategory['name'];
         $type = $thiscategory['type'];
     } else {
         $category = $c;
-
-        if (!isset($atts['type'])) {
-            $type = $context;
-        }
+        $type = $context;
     }
 
     if ($category) {
@@ -3820,10 +3818,11 @@ function lang()
 
 function breadcrumb($atts, $thing = null)
 {
-    global $c, $s, $sitename, $thiscategory;
+    global $c, $s, $sitename, $thiscategory, $context;
     static $cache = array();
 
     extract(lAtts(array(
+        'type'      => $context,
         'category'  => $c,
         'section'   => $s,
         'wraptag'   => 'p',
@@ -3846,6 +3845,7 @@ function breadcrumb($atts, $thing = null)
 
     $content = array();
     $label = txpspecialchars($label);
+    $type = $type === true ? $context : validContext($type);
 
     if ($linked && $label) {
         $label = doTag($label, 'a', $linkclass, ' href="'.hu.'"');
@@ -3861,12 +3861,12 @@ function breadcrumb($atts, $thing = null)
 
     if (!$category) {
         $catpath = array();
-    } elseif (isset($cache[$category])) {
-        $catpath = $cache[$category];
+    } elseif (isset($cache[$type.$category])) {
+        $catpath = $cache[$type.$category];
     } else {
-        $catpath = getTreePath($category, 'article');
+        $catpath = getTreePath($category, $type);
         array_shift($catpath);
-        $cache[$category] = $catpath;
+        $cache[$type.$category] = $catpath;
     }
 
     if ($limit || $offset) {
@@ -3879,7 +3879,7 @@ function breadcrumb($atts, $thing = null)
     foreach ($catpath as $thiscategory) {
         $category_title_html = isset($thing) ? parse($thing) : ($title ? escape_title($thiscategory['title']) : $thiscategory['name']);
         $content[] = ($linked)
-            ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('c' => $thiscategory['name'])).'"')
+            ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('c' => $thiscategory['name'], 'context' => $type)).'"')
             : $category_title_html;
     }
 
