@@ -83,7 +83,7 @@ namespace Textpattern\Skin {
          * @return string The skin name
          */
 
-        public static function getCurrent()
+        public static function getCurrent();
 
         /**
          * Sets the skin as the one selected in the admin tabs.
@@ -92,7 +92,7 @@ namespace Textpattern\Skin {
          * @return bool   false on error.
          */
 
-        public static function setCurrent($skin = null)
+        public static function setCurrent($skin = null);
 
         /**
          * Creates skins and their defined related assets.
