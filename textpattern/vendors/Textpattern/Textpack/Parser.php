@@ -163,7 +163,7 @@ class Parser
                 continue;
             }
 
-            // Sets version. The lastmod timestamp after the ';' in the regex
+            // Set version. The lastmod timestamp after the ';' in the regex
             // remains for reading legacy files, but is no longer used.
             if (preg_match('/^#@version\s+([^;\n]+);?([0-9]*)$/', $line, $m)) {
                 $version = $m[1];
@@ -171,19 +171,19 @@ class Parser
                 continue;
             }
 
-            // Sets language.
+            // Set language.
             if (preg_match('/^#@language\s+(.+)$/', $line, $m)) {
                 $language = \Txp::get('\Textpattern\L10n\Locale')->validLocale($m[1]);
                 continue;
             }
 
-            // Sets owner.
+            // Set owner.
             if (preg_match('/^#@owner\s+(.+)$/', $line, $m)) {
                 $owner = $m[1];
                 continue;
             }
 
-            // Sets event.
+            // Set event.
             if (preg_match('/^#@([a-zA-Z0-9_-]+)$/', $line, $m)) {
                 $event = $m[1];
                 continue;

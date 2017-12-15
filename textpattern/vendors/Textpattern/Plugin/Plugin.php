@@ -277,7 +277,7 @@ class Plugin
         if (!empty($textpack[TEXTPATTERN_DEFAULT_LANG])) {
             $fallback = TEXTPATTERN_DEFAULT_LANG;
         } else {
-            // Get first language.
+            // Use first language as default.
             reset($textpack);
             $fallback = key($textpack);
         }
@@ -291,7 +291,7 @@ class Plugin
                 $langpack = array_merge($textpack[$fallback], $textpack[$lang]);
             }
 
-            \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, $lang, $name);
+            \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, $name);
         }
     }
 
