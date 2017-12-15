@@ -89,7 +89,7 @@ namespace Textpattern\Skin {
         /**
          * Constructor.
          *
-         * @param mixed $skins  Skin names;
+         * @param mixed $skins  A skin name or an array of names;
          * @param mixed $assets $skins parallel array of skins related assets and
          *                      their related templates grouped by types.
          *                      If no defined type apply, just nest the templates array
@@ -188,6 +188,8 @@ namespace Textpattern\Skin {
         public function create($rows, $from = false)
         {
             callback_event('skin.create', '', 1, self::getSkinsAssets());
+
+            is_string($from) ? $from = array($from) : '';
 
             $rows = $this->parseRows($rows);
             $tableCols = self::getTableCols();
@@ -536,7 +538,7 @@ namespace Textpattern\Skin {
                 }
 
                 if ($invalid) {
-                    $this->setResults('invalid_file', $invalid);
+                    $this->setResults('invalid_json', $invalid);
                 }
 
                 if ($notImported) {
@@ -570,13 +572,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Gets a skin row from the DB.
-         *
-         * @return array Associative array of skins and their templates rows
-         *               as usual associative arrays.
+         * {@inheritdoc}
          */
 
-        protected function getRows($skins = null)
+        public function getRows($skins = null)
         {
             $skins === null ? $skins = $this->getSkins() : '';
 

@@ -38,8 +38,9 @@ namespace Textpattern\Skin {
         /**
          * Constructor
          *
-         * @param array $skins     Set the related parent property.
-         * @param array $templates $skins parallel array of templates grouped by types/subfolders.
+         * @param array $skins     A skin name or an array of names.
+         * @param array $templates A templates array or a $skins parallel
+         *                         array of templates grouped by types/subfolders.
          *                         If no type apply, just nest the templates array
          *                         into another one which simulates a abstract type.
          */
@@ -143,18 +144,6 @@ namespace Textpattern\Skin {
          */
 
         public function create();
-
-        /**
-         * Changes the templates related skin.
-         * Fires after a skin update to keep templates associated with the right skin.
-         *
-         * @param  array $from The skin (old)names from which templates are adopted.
-         *                     The array must be parallel to the $skins array
-         *                     passed to the constructor or the setSkinsAssets() method.
-         * @return array       Adopted skins.
-         */
-
-        public function adopt($from);
 
         /**
          * Imports skins templates.

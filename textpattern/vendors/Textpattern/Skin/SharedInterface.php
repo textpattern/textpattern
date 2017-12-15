@@ -70,7 +70,7 @@ namespace Textpattern\Skin {
 
         /**
          * $installed property Getter/Setter.
-         * Gets the the installed skins from the DB if the $installed property is not set already. 
+         * Gets the the installed skins from the DB if the $installed property is not set already.
          *
          * @return array Associative array of installed skin names and their related titles.
          */

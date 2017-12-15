@@ -441,7 +441,7 @@ function skin_save()
             $title === $old_title ? $title .= ' (copy)' : '';
 
             $Skin->setSkinsAssets($name)
-                ->create(compact('title', 'version', 'description', 'author', 'author_uri'), array($old_name));
+                ->create(compact('title', 'version', 'description', 'author', 'author_uri'), $old_name);
         } else {
             $Skin->setSkinsAssets($old_name)
                  ->edit(compact('name', 'title', 'version', 'description', 'author', 'author_uri'));

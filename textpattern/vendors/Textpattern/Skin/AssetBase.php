@@ -359,7 +359,13 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Changes the templates related skin.
+         * Fires after a skin update to keep templates associated with the right skin.
+         *
+         * @param  array $from The skin (old)names from which templates are adopted.
+         *                     The array must be parallel to the $skins array
+         *                     passed to the constructor or the setSkinsAssets() method.
+         * @return array       Adopted skins.
          */
 
         public function adopt($from)
@@ -395,7 +401,7 @@ namespace Textpattern\Skin {
          *
          * @param array $from Skins from which you want to adopt the templates.
          *                    The array must be parallel to the $skins array
-         *                    passed to the constructor or the setSkinsAssets() method.
+         *                    passed to the constructor or the setSkinsTemplates() method.
          */
 
         protected function adoptTemplates($from)

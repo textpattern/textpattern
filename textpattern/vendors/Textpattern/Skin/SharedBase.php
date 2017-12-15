@@ -24,7 +24,7 @@
 /**
  * SharedBase
  *
- * Extended by Skin and AssetBase.
+ * Extended by Main and AssetBase.
  *
  * @since   4.7.0
  * @package Skin

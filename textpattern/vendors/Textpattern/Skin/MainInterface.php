@@ -95,14 +95,25 @@ namespace Textpattern\Skin {
         public static function setCurrent($skin = null);
 
         /**
+         * Gets a skin row from the DB.
+         *
+         * @return array Associative array of skins and their templates rows
+         *               as usual associative arrays.
+         */
+
+        public function getRows($skins = null);
+
+        /**
          * Creates skins and their defined related assets.
          *
          * @param  array $rows Associative array of the following txp_skin table related fields:
          *                    'title', 'version', 'description', 'author', 'author_uri';
-         * @return array      Created skins.
+         * @param  mixed $from A skin name or an array of names parallel to the $skins array
+         *                     passed to the constructor or to the setSkinsAssets() method.
+         * @return array       Created skins.
          */
 
-        public function create($rows, $from = false);
+        public function create($rows, $from = null);
 
         /**
          * Edits skins and their defined related assets.
