@@ -438,9 +438,11 @@ namespace Textpattern\Skin {
                     $failed[$skin] = $unknown[$skin] = '';
                 } elseif (!$wasLocked && !$this->lock($skin)) {
                     $failed[$skin] = $unlockable[$skin] = '';
-                } elseif (!self::isReadable($skin.'/'.self::getDir())) {
-                    $failed[$skin] = $unreadable[self::getPath($skin.'/'.self::getDir())] = '';
                 } else {
+                    if (!self::isReadable($skin.'/'.self::getDir())) {
+                        $failed[$skin] = $unreadable[self::getPath($skin.'/'.self::getDir())] = '';
+                    }
+
                     $types = array_keys($typesTemplates);
                     $essentialTypes = array_filter(self::getEssentialTypes());
 
@@ -461,22 +463,25 @@ namespace Textpattern\Skin {
                         $otherEssential = static::getEssentialNames(
                             array_diff($essentialTypes, array($type))
                         );
-                        $files = self::getRecDirIterator(
-                            $skin.'/'.self::getDir().($type ? '/'.$type : ''),
-                            $templates
-                        );
 
-                        foreach ($files as $file) {
-                            $name = $file->getTemplateName();
-                            if (!array_key_exists($skin, $passed) || !in_array($name, $passed[$skin])) {
-                                if (!$type || !in_array($name, $otherEssential)) {
-                                    $passed[$skin][] = $passedInType[] = $name;
-                                    $sqlValues[] = self::getImportSQLValue($skin, $file);
+                        if (!$unreadable) {
+                            $files = self::getRecDirIterator(
+                                $skin.'/'.self::getDir().($type ? '/'.$type : ''),
+                                $templates
+                            );
+
+                            foreach ($files as $file) {
+                                $name = $file->getTemplateName();
+                                if (!array_key_exists($skin, $passed) || !in_array($name, $passed[$skin])) {
+                                    if (!$type || !in_array($name, $otherEssential)) {
+                                        $passed[$skin][] = $passedInType[] = $name;
+                                        $sqlValues[] = self::getImportSQLValue($skin, $file);
+                                    } else {
+                                        $failed[$skin][] = $wrongType[$skin][] = $name;
+                                    }
                                 } else {
-                                    $failed[$skin][] = $wrongType[$skin][] = $name;
+                                    $failed[$skin][] = $duplicated[$skin][] = $name;
                                 }
-                            } else {
-                                $failed[$skin][] = $duplicated[$skin][] = $name;
                             }
                         }
 
