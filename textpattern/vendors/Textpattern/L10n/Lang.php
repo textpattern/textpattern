@@ -235,7 +235,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         }
 
         if ($force & TEXTPATTERN_LANG_INSTALLED || !$this->dbLangs) {
-            // We need a value here for the language itself, not for each one of the rows.
+            // Need a value here for the language itself, not for each one of the rows.
             $this->dbLangs = safe_rows(
                 "lang, UNIX_TIMESTAMP(MAX(lastmod)) AS lastmod",
                 'txp_lang',
@@ -382,7 +382,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $langpack = array_merge($fallpack, $langpack);
         }
 
-        return ($this->upsertPack($langpack, $lang_code) === false) ? false : true;
+        return ($this->upsertPack($langpack) === false) ? false : true;
     }
 
     /**
@@ -405,80 +405,65 @@ class Lang implements \Textpattern\Container\ReusableInterface
         }
 
         $installed_langs = $this->installed();
-        $done = 0;
-        $now = date($this->lastmodFormat);
+        $now = doSlash(date($this->lastmodFormat));
+        $values = array();
 
         foreach ($textpack as $translation) {
-            extract($translation);
+            extract(doSlash($translation));
 
             if (!$addNewLangs && !in_array($lang, $installed_langs)) {
                 continue;
             }
 
-            $where = array('lang' => $lang, 'name' => $name);
-
-            $r = safe_upsert(
-                'txp_lang',
-                "lastmod = '".doSlash($now)."',
-                data = '".doSlash($data)."',
-                event = '".doSlash($event)."',
-                owner = '".doSlash($owner)."'",
-                $where
-            );
-
-            if ($r) {
-                $done++;
-            }
+            $values[] = "('$name', '$lang', '$data', '$event', '$owner', '$now')";
         }
 
-        return $done;
+        $value = implode(',', $values);
+
+        !$value || safe_query("INSERT INTO ".PFX."txp_lang
+            (name, lang, data, event, owner, lastmod)
+            VALUES $value
+            ON DUPLICATE KEY UPDATE
+            data=VALUES(data), event=VALUES(event), owner=VALUES(owner), lastmod=VALUES(lastmod)");
+        
+        return count($values);
     }
 
     /**
      * Insert or update a language pack.
      *
      * @param  array  $langpack  The language pack to store
-     * @param  string $lang_code The language code to stro the pack against
      * @param  string $langpack  The owner to use if not in the pack
      * @return result set
      */
 
-    public function upsertPack($langpack, $lang_code, $owner_ref = null)
+    public function upsertPack($langpack, $owner_ref = '')
     {
+        $result = false;
+
         if ($langpack) {
-            $now = date($this->lastmodFormat);
-            $lang_code = doSlash($lang_code);
+            $now = doSlash(date($this->lastmodFormat));
+            $values = array();
 
-            $exists = safe_column('name', 'txp_lang', "lang='".$lang_code."'");
-            $sql = array();
-            $inserts = array();
-
-            foreach ($langpack as $translation) {
+            foreach ($langpack as $key => $translation) {
                 extract(doSlash($translation));
 
-                $owner = empty($owner) ? $owner_ref : $owner;
+                $owner = empty($owner) ? doSlash($owner_ref) : $owner;
                 $lastmod = empty($lastmod) ? $now : $lastmod;
-
-                if (!empty($exists[$name])) {
-                    $where = "lang = '{$lang}' AND name = '{$name}'";
-                    $fields = "event = '{$event}', owner = '{$owner}', data = '{$data}', lastmod = '{$lastmod}'";
-                    $sql[] = "UPDATE ".PFX."txp_lang SET $fields WHERE $where";
-                } else {
-                    $fields = array("{$lang}", "{$name}", "{$event}", "{$owner}", "{$data}", "{$lastmod}");
-                    $inserts[] = '('.join(', ', quote_list($fields)).')';
-                }
+                $values[] = "('$name', '$lang', '$data', '$event', '$owner', '$lastmod')";
             }
 
-            if ($inserts) {
-                $sql[] = "INSERT INTO ".PFX."txp_lang (lang, name, event, owner, data, lastmod) VALUES".join(', ', $inserts);
+            if ($values) {
+                $value = implode(',', $values);
+                $result = safe_query("INSERT INTO ".PFX."txp_lang
+                    (name, lang, data, event, owner, lastmod)
+                    VALUES $value
+                    ON DUPLICATE KEY UPDATE
+                    data=VALUES(data), event=VALUES(event), owner=VALUES(owner), lastmod=VALUES(lastmod)");
             }
-
-            $result = safe_query($sql);
-
-            return $result;
         }
 
-        return false;
+        return $result;
     }
 
     /**
