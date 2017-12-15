@@ -29,7 +29,7 @@
  */
 
 use Textpattern\Search\Filter;
-use Textpattern\Skin\Skins;
+use Textpattern\Skin\Main as Skins;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
