@@ -3959,18 +3959,27 @@ function if_category($atts, $thing = null)
     } else {
         $theType = $type && $type !== true ? validContext($type) : $context;
         ($parent || $type === false) or $parent = true;
+        $category = trim($category);
     }
 
     if ($type && $theType !== $type) {
         $x = false;
-    } elseif (!$parent || !$category) {
-        $x = $name === false ? !empty($category) : in_list($category, $name);
     } else {
+        $x = $name === false ? !empty($category) : in_list($category, $name);
+    }
+
+    if ($x && $parent && $category) {
         if (!isset($cache[$theType.$category])) {
             $cache[$theType.$category] = array_reverse(array_slice(array_column(getTreePath($category, $theType), 'name'), 1));
         }
 
         $path = $cache[$theType.$category];
+
+        if (!is_numeric((string)$parent)) {
+            $name = $parent;
+            $parent = true;
+        }
+
         $names = do_list_unique($name);
 
         if ($parent === true) {
