@@ -39,7 +39,9 @@ namespace Textpattern\Skin {
          * Constructor
          *
          * @param array $skins     Set the related parent property.
-         * @param array $templates $skins parallel array of templates grouped by types.
+         * @param array $templates $skins parallel array of templates grouped by types/subfolders.
+         *                         If no type apply, just nest the templates array
+         *                         into another one which simulates a abstract type.
          */
 
         public function __construct($skins = null, $templates = null);
@@ -47,9 +49,10 @@ namespace Textpattern\Skin {
         /**
          * $skinsTemplates property setter.
          *
-         * @param  array  $skins     Set the related parent property.
-         * @param  array  $templates $skins parallel array of templates grouped by types.
+         * @param  array  $skins     See __construct().
+         * @param  array  $templates See __construct().
          * @return object $this
+         * @see           __construct()
          */
 
         public function setSkinsTemplates($skins, $templates = null);
@@ -57,21 +60,25 @@ namespace Textpattern\Skin {
         /**
          * $skinsTemplates property getter.
          *
-         * @return array Associative array of skins and their related templates grouped by types.
+         * @return array Associative array of skins and their templates
+         *               grouped by types/subfolders.
+         * @see          setSkinsTemplates()
          */
 
         public function getSkinsTemplates();
 
         /**
-         * Gets the template names defined for a defined skin.
+         * Gets the template names defined for the provided
+         * skin in the $skinsTemplates property.
          *
+         * @param string A skin name.
          * @return array Template names.
          */
 
         public function getTemplateNames($skin);
 
         /**
-         * Gets the asset related essential template names from the $essential property.
+         * Gets the asset essential template names from the $essential property.
          *
          * @return array Template names.
          */
@@ -79,10 +86,12 @@ namespace Textpattern\Skin {
         public static function getEssentialNames();
 
         /**
-         * Gets the asset related essential template types from the $essential property.
+         * Gets the asset related essential template type(s)
+         * from the $essential property.
          *
          * @param  array $name A template name.
-         * @return mixed the $name related type if the arg is set or an array of all types.
+         * @return mixed The $name related type if the arg is set
+         *               or an array of all types.
          */
 
         public static function getEssentialTypes($name);
@@ -106,7 +115,7 @@ namespace Textpattern\Skin {
         /**
          * $contentsCol property getter.
          *
-         * @return string The DB column string the asset related main contents.
+         * @return string The DB column name used to store the main contents.
          */
 
         public static function getContentsCol();
@@ -118,6 +127,7 @@ namespace Textpattern\Skin {
          */
 
         public static function getAsset();
+
         /**
          * $Extension property getter.
          *
@@ -136,7 +146,7 @@ namespace Textpattern\Skin {
 
         /**
          * Changes the templates related skin.
-         * Fires on after a skin update to keep templates associated with the right skin.
+         * Fires after a skin update to keep templates associated with the right skin.
          *
          * @param  array $from The skin (old)names from which templates are adopted.
          *                     The array must be parallel to the $skins array
@@ -149,7 +159,7 @@ namespace Textpattern\Skin {
         /**
          * Imports skins templates.
          *
-         * @param  string $clean Whether to remove extra templates or not.
+         * @param  string $clean Whether to remove extra template rows or not.
          * @return array         Imported skins.
          */
 
@@ -158,7 +168,7 @@ namespace Textpattern\Skin {
         /**
          * Duplicates skins templates.
          *
-         * @param  array $to The skin (new)names to which templates are duplicated.
+         * @param  array $to The skin (new)names to which templates need to be duplicated.
          *                   The array must be parallel to the $skins array
          *                   passed to the constructor or the setSkinsAssets() method.
          * @return array     Duplicated skins.

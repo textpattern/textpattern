@@ -36,9 +36,10 @@ namespace Textpattern\Skin {
     abstract class AssetBase extends SharedBase implements AssetInterface
     {
         /**
-         * The asset related directory.
+         * The asset related directory name.
          *
          * @var string
+         * @see        getDir().
          */
 
         protected static $dir;
@@ -47,20 +48,23 @@ namespace Textpattern\Skin {
          * The asset related textpack string.
          *
          * @var string
+         * @see        getAsset().
          */
 
         protected static $asset;
 
         /**
-         * The asset table related column used for subdirectory names.
+         * The asset table column related to the asset
+         * directory subfolder names when applied.
          *
          * @var string
+         * @see        getSubdirCol().
          */
 
         protected static $subdirCol;
 
         /**
-         * The asset related table column used to store contents.
+         * The asset table column used to store the templates main contents.
          *
          * @var string
          */
@@ -68,26 +72,33 @@ namespace Textpattern\Skin {
         protected static $contentsCol;
 
         /**
-         * The asset related default templates.
+         * The asset related default templates grouped by types/subfolders.
+         * If no defined type apply, just nest the templates array
+         * into another one which simulates a abstract group.
          *
          * @var array
+         * @see       getContentsCol().
          */
 
         protected static $essential;
 
         /**
-         * Valid asset related files extension.
+         * The asset related files extension used for import/export.
+         * If set to 'txp', 'html' is also valid on import for now.
          *
          * @var string
+         * @see        getExtension().
          */
 
         protected static $extension = 'txp';
 
         /**
-         * Parsed asset related templates.
+         * Associative array of skins and their templates grouped by types/subfolders.
+         * If no defined type apply, the templates array is just nested
+         * into another one which simulates a abstract group.
          *
          * @var array
-         * @see       setSkinsTemplates(), setSkins().
+         * @see       setSkinsTemplates(), getSkinsTemplates().
          */
 
         protected $skinsTemplates;
@@ -321,7 +332,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Gets an array of SQL VALUES sorted as the asset $tableCols property.
+         * Gets an array of SQL VALUES sorted as the $tableCols property.
          *
          * @param  array $skin      A skin name.
          * @param  array $templates The skin related template names.
@@ -380,7 +391,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Adopt templates from another skin.
+         * Updates the skins templates related 'skin' field in the DB.
          *
          * @param array $from Skins from which you want to adopt the templates.
          *                    The array must be parallel to the $skins array
@@ -494,7 +505,7 @@ namespace Textpattern\Skin {
 
             if ($sqlValues) {
                 if ($this->insert(self::getTableCols(), $sqlValues, $override)) {
-                    if ($clean && !self::dropRemovedFiles($passed)) {
+                    if ($clean && !self::cleanExtraFiles($passed)) {
                         $failed = array_merge($failed, $passed);
                         $notCleaned = $passed;
 
@@ -581,10 +592,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Gets an SQL VALUE sorted as the asset $tableCols property.
+         * Gets an SQL VALUES value sorted as the asset $tableCols property.
          *
          * @param  object $file See RecDirIterator.
-         * @return string       SQL VALUE (a VALUES item).
+         * @return string
          */
 
         protected static function getImportSQLValue($skin, RecDirIterator $file)
@@ -614,10 +625,10 @@ namespace Textpattern\Skin {
          * Drops obsolete template rows.
          *
          * @param  array $not An array of template names to NOT drop;
-         * @return bool
+         * @return bool  false on error.
          */
 
-        public static function dropRemovedFiles($not)
+        public static function cleanExtraFiles($not)
         {
             $where = '';
 
@@ -800,7 +811,7 @@ namespace Textpattern\Skin {
                         }
 
                         if (!$new && $clean) {
-                            $notUnlinked = $this->unlinkRemovedRows($skin, $passedTemplates);
+                            $notUnlinked = $this->cleanExtraRows($skin, $passedTemplates);
 
                             if ($notUnlinked) {
                                 $failed[$skin] = $notUnlinked[$skin] = $notUnlinked;
@@ -854,8 +865,8 @@ namespace Textpattern\Skin {
          * Exports a skin template.
          *
          * @param  array $name A template name;
-         * @param  array $row  Template row related data.
-         * @return bool
+         * @param  array $row  Template row as an associative array.
+         * @return bool        false on error.
          */
 
         protected static function exportTemplate($row)
@@ -889,10 +900,10 @@ namespace Textpattern\Skin {
          * Unlinks obsolete template files.
          *
          * @param  array $not An array of template names to NOT unlink;
-         * @return array      Templates for which the unlink process FAILED;
+         * @return array      !Templates for which the unlink process FAILED!;
          */
 
-        protected function unlinkRemovedRows($skin, $not)
+        protected function cleanExtraRows($skin, $not)
         {
             $files = self::getRecDirIterator($skin.'/'.self::getDir());
             $notRemoved = array();
@@ -940,9 +951,9 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Deletes skin templates.
+         * Deletes skin template rows from the DB.
          *
-         * @return bool
+         * @return bool false on error.
          */
 
         protected function deleteTemplates()
