@@ -682,7 +682,8 @@ function link_multi_edit()
 
         link_list(gTxt(
             ($method == 'delete' ? 'links_deleted' : 'link_updated'),
-            array(($method == 'delete' ? '{list}' : '{name}') => join(', ', $changed))));
+            array(($method == 'delete' ? '{list}' : '{name}') => join(', ', $changed))
+        ));
 
         return;
     }

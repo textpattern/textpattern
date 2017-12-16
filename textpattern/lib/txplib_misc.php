@@ -2674,7 +2674,7 @@ function txpMail($to_address, $subject, $body, $reply_to = null)
         extract($sender);
 
         try {
-            $message = Txp::get('Textpattern\Mail\Compose')
+            $message = Txp::get('\Textpattern\Mail\Compose')
                 ->from($email, $RealName)
                 ->to($to_address)
                 ->subject($subject)
@@ -4572,6 +4572,10 @@ function get_lastmod($unix_ts = null)
 
 function set_headers($headers = array('content-type' => 'text/html; charset=utf-8'), $rewrite = false)
 {
+    if (headers_sent()) {
+        return;
+    }
+
     if (!$rewrite) {
         foreach (headers_list() as $header) {
             unset($headers[strtolower(trim(strtok($header, ':')))]);

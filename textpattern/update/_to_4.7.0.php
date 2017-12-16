@@ -26,9 +26,9 @@ if (!defined('TXP_UPDATE')) {
 }
 
 // Remove a few licence files. De-clutters the root directory a tad.
-Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath.DS.'..', array('LICENSE-BSD-3.txt', 'LICENSE-LESSER.txt'));
-Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath.DS.'vendors', 'dropbox');
-Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath.DS.'lang', 'en-gb.txt');
+Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.DS.'..', array('LICENSE-BSD-3.txt', 'LICENSE-LESSER.txt'));
+Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.DS.'vendors', 'dropbox');
+Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.DS.'lang', 'en-gb.txt');
 
 // Drop the prefs_id column in txp_prefs
 $cols = getThings("DESCRIBE `".PFX."txp_prefs`");
@@ -52,10 +52,23 @@ foreach ($installed_keys as $key) {
 }
 
 // New fields in the plugin table.
-$cols = getThings("DESCRIBE `".PFX."txp_plugin`");
+$colInfo = getRows("DESCRIBE `".PFX."txp_plugin`");
+$cols = array_map(function($el) {
+    return $el['Field'];
+}, $colInfo);
+
+if (!in_array('data', $cols)) {
+    safe_alter('txp_plugin', "ADD data MEDIUMTEXT NOT NULL AFTER code_md5");
+}
+
 if (!in_array('textpack', $cols)) {
     safe_alter('txp_plugin', "ADD textpack MEDIUMTEXT NOT NULL AFTER code_md5");
-    safe_alter('txp_plugin', "ADD data MEDIUMTEXT NOT NULL AFTER textpack");
+}
+
+// Bigger plugin help text.
+$helpCol = array_search('help', $cols);
+
+if (strtolower($colInfo[$helpCol]['Type']) !== 'mediumtext') {
     safe_alter('txp_plugin', "MODIFY help MEDIUMTEXT NOT NULL");
 }
 

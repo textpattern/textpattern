@@ -378,7 +378,7 @@
         "position": "220"
     },
     "enable_short_tags": {
-        "val": "0",
+        "val": "1",
         "type": "0",
         "event": "publish",
         "html": "yesnoradio",

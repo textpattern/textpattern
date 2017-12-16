@@ -38,15 +38,39 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * @var string
      */
 
-    protected $lang_dir = null;
+    protected $langDirectory = null;
 
     /**
-     * List of files in the $lang_dir.
+     * List of files in the $langDirectory.
      *
      * @var array
      */
 
     protected $files = array();
+
+    /**
+     * The currently active language designator.
+     *
+     * @var string
+     */
+
+    protected $activeLang = null;
+
+    /**
+     * Metadata for languages installed in the database.
+     *
+     * @var array
+     */
+
+    protected $dbLangs = array();
+
+    /**
+     * Metadata for all available languages in the filesystem.
+     *
+     * @var array
+     */
+
+    protected $allLangs = array();
 
     /**
      * List of strings that have been loaded.
@@ -57,18 +81,26 @@ class Lang implements \Textpattern\Container\ReusableInterface
     protected $strings = array();
 
     /**
-     * Constructor.
+     * Date format to use for the lastmod column.
      *
-     * @param string $lang_dir Language directory to use
+     * @var string
      */
 
-    public function __construct($lang_dir = null)
+    protected $lastmodFormat = 'YmdHis';
+
+    /**
+     * Constructor.
+     *
+     * @param string $langDirectory Language directory to use
+     */
+
+    public function __construct($langDirectory = null)
     {
-        if ($lang_dir === null) {
-            $lang_dir = txpath.DS.'lang'.DS;
+        if ($langDirectory === null) {
+            $langDirectory = txpath.DS.'lang'.DS;
         }
 
-        $this->lang_dir = $lang_dir;
+        $this->langDirectory = $langDirectory;
 
         if (!$this->files) {
             $this->files = $this->files();
@@ -83,10 +115,14 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function installed()
     {
-        static $installed_langs = null;
+        if (!$this->dbLangs) {
+            $this->available();
+        }
 
-        if (!$installed_langs) {
-            $installed_langs = safe_column("lang", 'txp_lang', "owner = '' GROUP BY lang");
+        $installed_langs = array();
+
+        foreach ($this->dbLangs as $row) {
+            $installed_langs[] = $row['lang'];
         }
 
         return $installed_langs;
@@ -100,13 +136,13 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     public function files()
     {
-        if (!is_dir($this->lang_dir) || !is_readable($this->lang_dir)) {
-            trigger_error('Lang directory is not accessible: '.$this->lang_dir, E_USER_WARNING);
+        if (!is_dir($this->langDirectory) || !is_readable($this->langDirectory)) {
+            trigger_error('Lang directory is not accessible: '.$this->langDirectory, E_USER_WARNING);
 
             return array();
         }
 
-        return glob($this->lang_dir.'*.{txt,textpack,ini}', GLOB_BRACE);
+        return glob($this->langDirectory.'*.{txt,textpack,ini}', GLOB_BRACE);
     }
 
     /**
@@ -186,35 +222,34 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * Depending on the flags, the returned array can contain active,
      * installed or available language metadata.
      *
+     * @param  int   $flags Determine which type of information to return
+     * @param  int   $force Force update the given information, even if it's already populated
      * @return array
      */
 
-    public function available($flags = TEXTPATTERN_LANG_AVAILABLE)
+    public function available($flags = TEXTPATTERN_LANG_AVAILABLE, $force = 0)
     {
-        static $active_lang = null;
-        static $in_db = array();
-        static $allLangs = array();
-
-        if ($active_lang === null) {
-            $active_lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG, true);
+        if ($force & TEXTPATTERN_LANG_ACTIVE || $this->activeLang === null) {
+            $this->activeLang = get_pref('language', TEXTPATTERN_DEFAULT_LANG, true);
+            $this->activeLang = \Txp::get('\Textpattern\L10n\Locale')->validLocale($this->activeLang);
         }
 
-        if (!$in_db) {
-            // We need a value here for the language itself, not for each one of the rows.
-            $in_db = safe_rows(
+        if ($force & TEXTPATTERN_LANG_INSTALLED || !$this->dbLangs) {
+            // Need a value here for the language itself, not for each one of the rows.
+            $this->dbLangs = safe_rows(
                 "lang, UNIX_TIMESTAMP(MAX(lastmod)) AS lastmod",
                 'txp_lang',
                 "owner = '' GROUP BY lang ORDER BY lastmod DESC"
             );
         }
 
-        if (!$allLangs) {
+        if ($force & TEXTPATTERN_LANG_AVAILABLE || !$this->allLangs) {
             $currently_lang = array();
             $installed_lang = array();
             $available_lang = array();
 
-            foreach ($in_db as $language) {
-                if ($language['lang'] === $active_lang) {
+            foreach ($this->dbLangs as $language) {
+                if ($language['lang'] === $this->activeLang) {
                     $currently_lang[$language['lang']] = array(
                         'db_lastmod' => $language['lastmod'],
                         'type'       => 'active',
@@ -250,7 +285,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
                 }
             }
 
-            $allLangs = array(
+            $this->allLangs = array(
                 'active'    => $currently_lang,
                 'installed' => $installed_lang,
                 'available' => $available_lang,
@@ -260,15 +295,15 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $out = array();
 
         if ($flags & TEXTPATTERN_LANG_ACTIVE) {
-            $out = array_merge($out, $allLangs['active']);
+            $out = array_merge($out, $this->allLangs['active']);
         }
 
         if ($flags & TEXTPATTERN_LANG_INSTALLED) {
-            $out = array_merge($out, $allLangs['installed']);
+            $out = array_merge($out, $this->allLangs['installed']);
         }
 
         if ($flags & TEXTPATTERN_LANG_AVAILABLE) {
-            $out = array_merge($out, $allLangs['available']);
+            $out = array_merge($out, $this->allLangs['available']);
         }
 
         return $out;
@@ -347,48 +382,19 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $langpack = array_merge($fallpack, $langpack);
         }
 
-        $now = date('YmdHis');
-
-        if ($langpack) {
-            $exists = safe_column('name', 'txp_lang', "lang='".doSlash($lang_code)."'");
-
-            foreach ($langpack as $translation) {
-                extract(doSlash($translation));
-
-                $where = "lang = '{$lang}' AND name = '{$name}'";
-                $lastmod = empty($lastmod) ? $now : date('YmdHis', $lastmod);
-                $fields = "lastmod = '{$lastmod}', data = '{$data}', event = '{$event}', owner = '{$owner}'";
-
-                if (!empty($exists[$name])) {
-                    $r = safe_update(
-                        'txp_lang',
-                        $fields,
-                        $where
-                    );
-                } else {
-                    $r = safe_insert(
-                        'txp_lang',
-                        $fields .", lang = '{$lang}', name = '{$name}'"
-                    );
-                }
-            }
-
-            return true;
-        }
-
-        return false;
+        return ($this->upsertPack($langpack) === false) ? false : true;
     }
 
     /**
      * Installs localisation strings from a Textpack.
      *
      * @param   string $textpack      The Textpack to install
-     * @param   bool   $add_new_langs If TRUE, installs strings for any included language
+     * @param   bool   $addNewLangs If TRUE, installs strings for any included language
      * @return  int Number of installed strings
      * @package L10n
      */
 
-    public function installTextpack($textpack, $add_new_langs = false)
+    public function installTextpack($textpack, $addNewLangs = false)
     {
         $parser = new \Textpattern\Textpack\Parser();
         $parser->setLanguage(get_pref('language', TEXTPATTERN_DEFAULT_LANG));
@@ -399,33 +405,65 @@ class Lang implements \Textpattern\Container\ReusableInterface
         }
 
         $installed_langs = $this->installed();
-        $done = 0;
-        $now = date('YmdHis');
+        $now = doSlash(date($this->lastmodFormat));
+        $values = array();
 
         foreach ($textpack as $translation) {
-            extract($translation);
+            extract(doSlash($translation));
 
-            if (!$add_new_langs && !in_array($lang, $installed_langs)) {
+            if (!$addNewLangs && !in_array($lang, $installed_langs)) {
                 continue;
             }
 
-            $where = array('lang' => $lang, 'name' => $name);
+            $values[] = "('$name', '$lang', '$data', '$event', '$owner', '$now')";
+        }
 
-            $r = safe_upsert(
-                'txp_lang',
-                "lastmod = '".doSlash($now)."',
-                data = '".doSlash($data)."',
-                event = '".doSlash($event)."',
-                owner = '".doSlash($owner)."'",
-                $where
-            );
+        $value = implode(',', $values);
 
-            if ($r) {
-                $done++;
+        !$value || safe_query("INSERT INTO ".PFX."txp_lang
+            (name, lang, data, event, owner, lastmod)
+            VALUES $value
+            ON DUPLICATE KEY UPDATE
+            data=VALUES(data), event=VALUES(event), owner=VALUES(owner), lastmod=VALUES(lastmod)");
+        
+        return count($values);
+    }
+
+    /**
+     * Insert or update a language pack.
+     *
+     * @param  array  $langpack  The language pack to store
+     * @param  string $langpack  The owner to use if not in the pack
+     * @return result set
+     */
+
+    public function upsertPack($langpack, $owner_ref = '')
+    {
+        $result = false;
+
+        if ($langpack) {
+            $now = doSlash(date($this->lastmodFormat));
+            $values = array();
+
+            foreach ($langpack as $key => $translation) {
+                extract(doSlash($translation));
+
+                $owner = empty($owner) ? doSlash($owner_ref) : $owner;
+                $lastmod = empty($lastmod) ? $now : $lastmod;
+                $values[] = "('$name', '$lang', '$data', '$event', '$owner', '$lastmod')";
+            }
+
+            if ($values) {
+                $value = implode(',', $values);
+                $result = safe_query("INSERT INTO ".PFX."txp_lang
+                    (name, lang, data, event, owner, lastmod)
+                    VALUES $value
+                    ON DUPLICATE KEY UPDATE
+                    data=VALUES(data), event=VALUES(event), owner=VALUES(owner), lastmod=VALUES(lastmod)");
             }
         }
 
-        return $done;
+        return $result;
     }
 
     /**

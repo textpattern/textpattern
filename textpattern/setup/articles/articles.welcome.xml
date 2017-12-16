@@ -12,9 +12,9 @@ h3. What do you want to do next?
 * Modify or delete this article? The "article list":siteurl/textpattern/index.php?event=list is the place to start.
 * Change this site's name, or modify the style of the URLs? It's all up to your "preferences":siteurl/textpattern/index.php?event=prefs.
 * Get yourself acquainted with Textile, the humane markup generator which comes with Textpattern? The basics are "simple":https://textpattern.com/textile-sandbox. If you want to learn more, you can dig into an "extensive manual":https://textpattern.com/textile-reference-manual later.
-* Be guided through your "Textpattern first steps":https://docs.textpattern.io/administration/hello-world by completing some basic tasks?
-* Study the "Textpattern Semantic Model?":https://docs.textpattern.io/administration/textpattern-semantic-model
-* Add "another user":siteurl/textpattern/index.php?event=admin, or extend the capabilities with "third party plugins":siteurl/textpattern/index.php?event=plugin you discovered from the central plugin directory at "Textpattern Resources":http://textpattern.org/?
+* Be guided through your "Textpattern first steps":https://textpattern.com/textpattern-first-steps by completing some basic tasks?
+* Study the "Textpattern Semantic Model?":https://textpattern.com/textpattern-semantic-model
+* Add "another user":siteurl/textpattern/index.php?event=admin, or extend the capabilities with "third party plugins":siteurl/textpattern/index.php?event=plugin you discovered from the "Textpattern plugin directory?":https://textpattern.com/plugins
 * Dive in and learn by trial and error? Then please note:
 ** When you "write":siteurl/textpattern/index.php?event=article an article you assign it to a section of your site.
 ** Sections use a "page template":siteurl/textpattern/index.php?event=page and a "style":siteurl/textpattern/index.php?event=css as an output scaffold.
