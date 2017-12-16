@@ -1,0 +1,74 @@
+Dedicated strings
+
+Generic
+
+path_creation_or_writing_failed => Unable to create or write in files or directories: <strong>{$list}</strong>.
+path_not_readable => Unreadable files or directories: <strong>{$list}</strong>.
+path_not_writable => Not writable files or directories: <strong>{$list}</strong>. // Update dir_not_writable?
+invalid_JSON_file => Invalid JSON files: <strong>{$list}</strong>.
+path_renaming_failed => Files or directories renaming failed for: <strong>{$list}</strong>. 
+
+Skin
+
+skin_created => Themes created: <strong>{$list}</strong>.
+skin_already_exists => Themes already exist in the database or as directories and may cause conflicts: <strong>{$list}</strong>.
+skin_creation_failed => Themes creation failed for: <strong>{$list}</strong>. Please try again.
+skin_updated => Themes updated: <strong>{$list}</strong>.
+unknown_skin => Unknown themes: <strong>{$list}</strong>.
+skin_update_failed => Themes update failed for: <strong>{$list}</strong>. Please try again.
+skin_related_sections_update_failed => Themes related sections update failed for: <strong>{$list}</strong>. Please visit the <em>Sections</em> panel to update manually.
+skin_imported => Themes imported: <strong>{$list}</strong>.
+skin_locking_failed => Themes locking failed for: <strong>{$list}</strong>. Themes could be currently managed by another user; please try again.
+skin_import_failed => Themes import failed for: <strong>{$list}</strong>. Please try again.
+skin_unlocking_failed => Themes unlocking failed for: <strong>{$list}</strong>. Please browse themes related directories to manually remove the <em>lock</em> subfolder.
+unsafe_skin_name => Not exportable skin names for: <strong>{$list}</strong>. Names must match the following regular expression: '^[a-z][a-z0-9_\-\.]{0,63}$'
+skin_exported => Themes exported: <strong>{$list}</strong>.
+skin_export_failed => Themes export failed for: <strong>{$list}</strong>. Please try again.
+skin_deleted => Themes deleted: <strong>{$list}</strong>.
+skin_in_use => Deletion aborted for themes used by sections: <strong>{$list}</strong>.
+skin_deletion_failed => Theme(s) deletion failed for: <strong>{$list}</strong>.
+
+Assets (required as for now)
+
+page_creation_failed => Pages creation failed for: <strong>{$list}</strong>. Please try again.
+form_creation_failed => Forms creation failed for: <strong>{$list}</strong>. Please try again.
+css_creation_failed => Styles creation failed for: <strong>{$list}</strong>. Please try again.
+page_update_failed => Pages update failed for: <strong>{$list}</strong>. Please, try again.
+form_update_failed => Forms update failed for: <strong>{$list}</strong>. Please, try again.
+css_update_failed => Styles update failed for: <strong>{$list}</strong>. Please, try again.
+form_type_error => Form types error for: <strong>{$list}</strong>. These forms are part of the forms used by Txp tags by default and should use defined types. // ADD DOCS?
+duplicated_form => Duplicated forms import failed for: <strong>{$list}</strong>.
+no_page_found => No page found for: <strong>{$list}</strong>.
+no_form_found => No form found for: <strong>{$list}</strong>.
+no_css_found => No styles found for: <strong>{$list}</strong>.
+page_import_failed => Pages import failed for: <strong>{$list}</strong>. Please, try again.
+form_import_failed => Forms import failed for: <strong>{$list}</strong>. Please, try again.
+css_import_failed => Styles import failed for: <strong>{$list}</strong>. Please, try again.
+page_cleaning_failed => Extra pages cleaning failed for: <strong>{$list}</strong>. Please, try again or proceed manually.
+form_cleaning_failed => Extra forms cleaning failed for: <strong>{$list}</strong>. Please, try again or proceed manually.
+css_cleaning_failed => Extra styles cleaning failed for: <strong>{$list}</strong>. Please, try again or proceed manually.
+unsafe_page_name => Not exportable page names for: <strong>{$list}</strong>. Names must match the following regular expression: '^[a-z][a-z0-9_\-\.]{0,63}$'
+unsafe_form_name => Not exportable form names for: <strong>{$list}</strong>. Names must match the following regular expression: '^[a-z][a-z0-9_\-\.]{0,63}$'
+unsafe_css_name => Not exportable styles names for: <strong>{$list}</strong>. Names must match the following regular expression: '^[a-z][a-z0-9_\-\.]{0,63}$'
+page_deletion_failed => Pages deletion failed for: <strong>{$list}</strong>. Please, try again.
+form_deletion_failed => Forms deletion failed for: <strong>{$list}</strong>. Please, try again.
+css_deletion_failed => Styles deletion failed for: <strong>{$list}</strong>. Please, try again.
+
+Assets (optional as for now)
+
+page_created => Pages created: <strong>{$list}</strong>. // Needs code + textpacks update
+form_created => Forms created: <strong>{$list}</strong>. // Needs code + textpacks update
+css_created => Styles create: <strong>{$list}</strong>. // Needs code + textpacks update
+page_deleted => Pages deleted: <strong>{$list}</strong>. // Needs code + textpacks update
+form_deleted => Forms deleted: <strong>{$list}</strong>. // Needs code + textpacks update
+css_deleted => Styles deleted: <strong>{$list}</strong>. // Needs code + textpacks update
+
+page_exported => Pages exported: <strong>{$list}</strong>.
+form_exported => Form exported: <strong>{$list}</strong>.
+css_exported => Styles exported: <strong>{$list}</strong>.
+page_updated => Pages updated: <strong>{$list}</strong>.
+form_updated => Forms updated: <strong>{$list}</strong>.
+css_updated => Styles updated: <strong>{$list}</strong>.
+page_imported => Pages imported: <strong>{$list}</strong>.
+form_imported => Forms imported: <strong>{$list}</strong>.
+css_imported => Styles imported: <strong>{$list}</strong>.

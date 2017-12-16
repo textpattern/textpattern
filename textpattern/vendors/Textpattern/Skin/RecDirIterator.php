@@ -22,25 +22,10 @@
  */
 
 /**
- * AssetIterator
- *
- * This class iterates over template files.
- *
- * <code>
- * $templates = new RecursiveIteratorIterator(
- *     new AssetFilterIterator(
- *         new TemplateIterator('/path/to/dir')
- *     )
- * );
- * foreach ($templates as $template) {
- *     $template->getTemplateName();
- *     $template->getTemplateContents();
- * }
- * </code>
+ * RecDirIterator
  *
  * @since   4.7.0
  * @package Skin
- * @see \RecursiveDirectoryIterator
  */
 
 namespace Textpattern\Skin {
@@ -88,13 +73,7 @@ namespace Textpattern\Skin {
 
         public function getTemplateJSONContents()
         {
-            $contents = @json_decode($this->getTemplateContents(), true);
-
-            if ($contents) {
-                return $contents;
-            }
-
-            throw new Exception('Invalid JSON file.');
+            return @json_decode($this->getTemplateContents(), true);
         }
 
         /**
@@ -114,9 +93,9 @@ namespace Textpattern\Skin {
          * @return string
          */
 
-        public function getTemplateType()
+        public function getTemplateDir()
         {
-            $types = array_keys(\get_form_types());
+            $types = array_keys(get_form_types());
             $type = basename($this->getPath());
 
             if (in_array($type, $types)) {
@@ -124,6 +103,24 @@ namespace Textpattern\Skin {
             }
 
             return 'misc';
+        }
+
+        public function getTemplateInfo($type)
+        {
+            switch ($type) {
+                case 'name':
+                    return $this->getTemplateName();
+                    break;
+                case 'content':
+                    return $this->getTemplateContents();
+                    break;
+                case 'dir':
+                    return $this->getTemplateDir();
+                    break;
+                default:
+                    return $this->getTemplateName();
+                    break;
+            }
         }
     }
 }

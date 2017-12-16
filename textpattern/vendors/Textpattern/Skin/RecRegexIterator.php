@@ -22,21 +22,10 @@
  */
 
 /**
- * AssetFilterIterator
- *
- * Filters asset iterator results.
- *
- * This class iterates over template files.
- *
- * <code>
- * $filteredTemplates = new AssetFilterIterator(
- *    AssetIterator('/path/to/dir')
- * );
- * </code>
+ * RecRegexIterator
  *
  * @since   4.7.0
  * @package Skin
- * @see     \RecursiveAssetFilterIterator
  */
 
 namespace Textpattern\Skin {
@@ -63,10 +52,7 @@ namespace Textpattern\Skin {
             $isValid = false;
 
             if (!$this->isDot() && $this->isReadable() && ($this->isFile() || $this->isLink())) {
-                $isValid = (bool) preg_match(
-                    self::getRegex(),
-                    $this->getFilename()
-                );
+                $isValid = (bool) preg_match(self::getRegex(), $this->getFilename());
             }
 
             return $isValid;

@@ -28,8 +28,7 @@
  * @package Admin\Form
  */
 
-use Textpattern\Skin\Skins;
-use Textpattern\Skin\Skin;
+use Textpattern\Skin\Main as Skin;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -355,7 +354,7 @@ function form_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = n.Skins::renderSwitchForm('form', 'form_skin_change', $skin);
+    $skinBlock = n.Skin::renderSwitchForm('form', 'form_skin_change', $skin);
 
     $buttons = graf(
         tag_void('input', array(

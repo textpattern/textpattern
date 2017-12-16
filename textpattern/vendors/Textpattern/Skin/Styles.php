@@ -24,34 +24,22 @@
 /**
  * Styles
  *
- * Manages skin styles directly or via the Skin class.
+ * Manages skins related styles.
  *
  * @since   4.7.0
  * @package Skin
- * @see     AssetInterface
  */
 
 namespace Textpattern\Skin {
 
-    class Styles extends Pages
+    class Styles extends AssetBase
     {
+        protected static $asset = 'css';
         protected static $dir = 'styles';
-        protected static $table = 'txp_css';
         protected static $extension = 'css';
-        protected static $essential = array('default');
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function exportTemplate($row)
-        {
-            extract($row);
-
-            return (bool) file_put_contents(
-                $this->getPath(static::$dir.'/'.$name.'.'.static::$extension),
-                $css ? $css : '// Empty style.'
-            );
-        }
+        protected static $table = 'txp_css';
+        protected static $tableCols;
+        protected static $contentsCol = 'css';
+        protected static $essential = array(array('default'));
     }
 }
