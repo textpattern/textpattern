@@ -314,7 +314,7 @@ namespace Textpattern\Skin {
             $rows = $this->parseRows($rows);
             $tableCols = self::getTableCols();
 
-            $passed = $failed = $unknown = $installed = array();
+            $passed = $failed = $unknown = $installed = $notUpdated = array();
 
             foreach (self::getSkinsAssets() as $skin => $assets) {
                 $row = $rows[$this->getSkinIndex($skin)];
@@ -609,6 +609,8 @@ namespace Textpattern\Skin {
             callback_event('skin.export', '', 1, self::getSkinsAssets());
 
               $failed
+            = $invalid
+            = $unknown
             = $unwritable
             = $unlockable
             = $notExported
@@ -757,6 +759,7 @@ namespace Textpattern\Skin {
               $failed
             = $unknown
             = $inUse
+            = $notDeleted
             = $passed
             = array();
 
@@ -885,7 +888,7 @@ namespace Textpattern\Skin {
 
             foreach ($skins as $i => $skin) {
                 foreach ($assets[$i] as $asset => $templates) {
-                    $assetTemplates[$asset][$skin] = array_unique($templates);
+                    $assetTemplates[$asset][$skin] = array_unique($templates, SORT_REGULAR);
                 }
             }
 

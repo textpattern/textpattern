@@ -257,7 +257,7 @@ namespace Textpattern\Skin {
         {
             callback_event('skin.'.self::getDir().'.create', '', 1, $this->getSkinsTemplates());
 
-            $failed = $unknown = $passed = $sqlValues = array();
+            $failed = $unknown = $notCreated = $passed = $sqlValues = array();
 
             foreach ($this->getSkinsTemplates() as $skin => $typesTemplates) {
                 if (!self::isInstalled($skin)) {
@@ -777,6 +777,10 @@ namespace Textpattern\Skin {
               $failed
             = $notWritable
             = $unlockable
+            = $unknown
+            = $invalid
+            = $notUnlinked
+            = $notExported
             = $passed
             = array();
 
