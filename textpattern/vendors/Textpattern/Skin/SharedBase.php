@@ -95,7 +95,11 @@ namespace Textpattern\Skin {
          * @see       setResults(), getResults().
          */
 
-        protected $results;
+        protected $results = array(
+            'success' => array(),
+            'warning' => array(),
+            'error'   => array(),
+        );
 
         /**
          * {@inheritdoc}
@@ -314,6 +318,8 @@ namespace Textpattern\Skin {
         public function lock($skin)
         {
             $timeStart = microtime(true);
+            $locked = false;
+            $time = 0;
 
             while (!$locked && $time < 3) {
                 $locked = @mkdir(self::getPath($skin.'/lock'));
@@ -333,7 +339,7 @@ namespace Textpattern\Skin {
         public function unlock($skin)
         {
             if (@rmdir(self::getPath($skin.'/lock'))) {
-                unset($this->locked[array_search($this->skin, $this->locked)]);
+                unset($this->locked[array_search($skin, $this->locked)]);
 
                 return true;
             }
@@ -421,10 +427,10 @@ namespace Textpattern\Skin {
             if ($output === 'raw') {
                 $out = $results;
             } else {
-                if ($this->results['success']) {
-                    ($this->results['warning'] || $this->results['error']) ? $error = 'E_WARNING' : '';
-                } elseif ($this->results['warning']) {
-                    $error = ($this->results['error']) ? 'E_ERROR' : 'E_WARNING';
+                if ($results['success']) {
+                    ($results['warning'] || $results['error']) ? $error = 'E_WARNING' : '';
+                } elseif ($results['warning']) {
+                    $error = ($results['error']) ? 'E_ERROR' : 'E_WARNING';
                 } else {
                     $error = 'E_ERROR';
                 }
