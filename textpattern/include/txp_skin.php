@@ -122,7 +122,7 @@ function skin_list($message = '')
         )
     );
 
-    list($criteria, $crit, $searchMethod) = $search->getFilter();
+    list($criteria, $crit, $search_method) = $search->getFilter();
 
     $searchRenderOpts = array('placeholder' => 'search_skins');
     $total = safe_count('txp_skin', $criteria);
@@ -233,7 +233,7 @@ function skin_list($message = '')
                       .'txp-list-col-'.$thId
                       .($thVal !== $thId) ? ' skin_detail' : '';
 
-            $ths .= column_head($thVal, $thId, 'skin', true, $switchDir, $crit, $searchMethod, $thClass);
+            $ths .= column_head($thVal, $thId, 'skin', true, $switchDir, $crit, $search_method, $thClass);
         }
 
         echo tr($ths)
@@ -250,7 +250,7 @@ function skin_list($message = '')
                 'sort'          => $sort,
                 'dir'           => $dir,
                 'page'          => $page,
-                'search_method' => $searchMethod,
+                'search_method' => $search_method,
                 'crit'          => $crit,
             );
 
@@ -309,7 +309,7 @@ function skin_list($message = '')
         echo n.tag_end('tbody')
             .n.tag_end('table')
             .n.tag_end('div') // End of .txp-listtables.
-            .n.skin_multiedit_form($page, $sort, $dir, $crit, $searchMethod)
+            .n.skin_multiedit_form($page, $sort, $dir, $crit, $search_method)
             .n.tInput()
             .n.tag_end('form')
             .n.tag_start(
@@ -320,7 +320,7 @@ function skin_list($message = '')
                 )
             )
             .$paginator->render()
-            .nav_form('skin', $page, $numPages, $sort, $dir, $crit, $searchMethod, $total, $limit)
+            .nav_form('skin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit)
             .n.tag_end('div');
     }
 
@@ -404,7 +404,7 @@ function skin_edit($message = null)
         .sInput('save')
         .hInput('old_name', $skin_name)
         .hInput('old_title', $skin_title)
-        .hInput('search_method', $searchMethod)
+        .hInput('search_method', $search_method)
         .hInput('crit', $crit)
         .hInput('page', $page)
         .hInput('sort', $sort)
@@ -476,11 +476,11 @@ function skin_skin_change_pageby()
  * @param  string $sort         The current sorting value
  * @param  string $dir          The current sorting direction
  * @param  string $crit         The current search criteria
- * @param  string $searchMethod The current search method
+ * @param  string $search_method The current search method
  * @return string HTML
  */
 
-function skin_multiedit_form($page, $sort, $dir, $crit, $searchMethod)
+function skin_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
     $clean = tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean'))
             .popHelp('remove_extra_templates')
@@ -493,7 +493,7 @@ function skin_multiedit_form($page, $sort, $dir, $crit, $searchMethod)
         'delete'    => gTxt('delete'),
     );
 
-    return multi_edit($methods, 'skin', 'multi_edit', $page, $sort, $dir, $crit, $searchMethod);
+    return multi_edit($methods, 'skin', 'multi_edit', $page, $sort, $dir, $crit, $search_method);
 }
 
 /**
