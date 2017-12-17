@@ -196,6 +196,7 @@ namespace Textpattern\Skin {
 
               $failed
             = $alreadyExists
+            = $notCreated
             = $passed
             = $passedFrom
             = $set
@@ -313,7 +314,7 @@ namespace Textpattern\Skin {
             $rows = $this->parseRows($rows);
             $tableCols = self::getTableCols();
 
-            $passed = $failed = $unknown = $installed = array();
+            $passed = $failed = $unknown = $installed = $notUpdated = array();
 
             foreach (self::getSkinsAssets() as $skin => $assets) {
                 $row = $rows[$this->getSkinIndex($skin)];
@@ -442,6 +443,9 @@ namespace Textpattern\Skin {
             = $notWritable
             = $unreadable
             = $unlockable
+            = $invalid
+            = $notImported
+            = $stillLocked
             = $passed
             = $passedRows
             = $set
@@ -554,7 +558,7 @@ namespace Textpattern\Skin {
 
             callback_event('skin.import', '', 0, self::getSkinsAssets());
 
-            return $out;
+            return $passed;
         }
 
         /**
@@ -602,9 +606,11 @@ namespace Textpattern\Skin {
 
         public function export($clean = true)
         {
-            callback_event('skin.export', '', 1, $this->skins);
+            callback_event('skin.export', '', 1, self::getSkinsAssets());
 
               $failed
+            = $invalid
+            = $unknown
             = $unwritable
             = $unlockable
             = $notExported
@@ -697,7 +703,7 @@ namespace Textpattern\Skin {
 
             callback_event('skin.export', '', 0, self::getSkinsAssets());
 
-            return $out;
+            return $passed;
         }
 
         /**
@@ -710,7 +716,7 @@ namespace Textpattern\Skin {
         protected function exportSkin($row)
         {
             $path = $row['name'].'/'.self::getfile();
-            $contents = self::isWritable($path) ? $this->getJSONInfos($row['skin']) : array();
+            $contents = self::isWritable($path) ? $this->getJSONInfos($row) : array();
 
             if (array_key_exists('name', $row)) {
                 unset($row['name']);
@@ -753,6 +759,7 @@ namespace Textpattern\Skin {
               $failed
             = $unknown
             = $inUse
+            = $notDeleted
             = $passed
             = array();
 
@@ -881,7 +888,7 @@ namespace Textpattern\Skin {
 
             foreach ($skins as $i => $skin) {
                 foreach ($assets[$i] as $asset => $templates) {
-                    $assetTemplates[$asset][$skin] = array_unique($templates);
+                    $assetTemplates[$asset][$skin] = array_unique($templates, SORT_REGULAR);
                 }
             }
 

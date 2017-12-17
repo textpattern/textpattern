@@ -257,7 +257,7 @@ namespace Textpattern\Skin {
         {
             callback_event('skin.'.self::getDir().'.create', '', 1, $this->getSkinsTemplates());
 
-            $failed = $unknown = $passed = $sqlValues = array();
+            $failed = $unknown = $notCreated = $passed = $sqlValues = array();
 
             foreach ($this->getSkinsTemplates() as $skin => $typesTemplates) {
                 if (!self::isInstalled($skin)) {
@@ -348,7 +348,7 @@ namespace Textpattern\Skin {
                     $sqlValue = array();
 
                     foreach (self::getTableCols() as $col) {
-                        $sqlValue[] = $$col ? $$col : '';
+                        $sqlValue[] = isset($$col) ? $$col : '';
                     }
 
                     $sqlValues[] = "('".implode("', '", array_map('doSlash', $sqlValue))."')";
@@ -435,6 +435,10 @@ namespace Textpattern\Skin {
             = $unreadable
             = $unlockable
             = $duplicated
+            = $wrongType
+            = $empty
+            = $notCleaned
+            = $notImported
             = $passed
             = $sqlValues
             = array();
@@ -473,7 +477,7 @@ namespace Textpattern\Skin {
                         if (!$unreadable) {
                             $files = self::getRecDirIterator(
                                 $skin.'/'.self::getDir().($type ? '/'.$type : ''),
-                                $templates
+                                $this->getTemplateNames($skin)
                             );
 
                             foreach ($files as $file) {
@@ -773,6 +777,10 @@ namespace Textpattern\Skin {
               $failed
             = $notWritable
             = $unlockable
+            = $unknown
+            = $invalid
+            = $notUnlinked
+            = $notExported
             = $passed
             = array();
 
