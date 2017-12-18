@@ -785,7 +785,8 @@ namespace Textpattern\Skin {
 
                     if ($this->deleteSkins($succeededSkins)) {
                         self::unsetInstalled($succeededSkins);
-                        self::setCurrent();
+
+                        in_array(self::getCurrent(), $succeededSkins) ? self::setCurrent() : '';
 
                         $this->setResults('skin_deleted', $succeeded, 'success');
 
