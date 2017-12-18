@@ -474,7 +474,7 @@ namespace Textpattern\Skin {
                             array_diff($essentialTypes, array($type))
                         );
 
-                        if (!$unreadable) {
+                        if (!$unreadable && self::isReadable($skin.'/'.self::getDir().'/'.$type)) {
                             $files = self::getRecDirIterator(
                                 $skin.'/'.self::getDir().($type ? '/'.$type : ''),
                                 $this->getTemplateNames($skin)
@@ -906,6 +906,7 @@ namespace Textpattern\Skin {
             } else {
                 $content = '<!-- This template was empty on export. -->';
             }
+            var_dump($row);
 
             if ($writable) {
                 return (bool) file_put_contents(
