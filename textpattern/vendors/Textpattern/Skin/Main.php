@@ -350,6 +350,10 @@ namespace Textpattern\Skin {
                     $this->isInUse($skin) ? $this->updateSkinInUse($to[$this->getSkinIndex($skin)], $skin) : '';
                 }
 
+                if (in_array(self::getCurrent(), array_keys($passed))) {
+                    self::setCurrent($to[$this->getSkinIndex($skin)]);
+                }
+
                 $this->setSkinsAssets($to);
 
                 $suceeded = $this->doAssets(
