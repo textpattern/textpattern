@@ -474,7 +474,7 @@ namespace Textpattern\Skin {
                             array_diff($essentialTypes, array($type))
                         );
 
-                        if (!$unreadable && self::isReadable($skin.'/'.self::getDir().'/'.$type)) {
+                        if (!$unreadable && self::isReadable($skin.'/'.self::getDir().($type ? '/'.$type : ''))) {
                             $files = self::getRecDirIterator(
                                 $skin.'/'.self::getDir().($type ? '/'.$type : ''),
                                 $this->getTemplateNames($skin)
