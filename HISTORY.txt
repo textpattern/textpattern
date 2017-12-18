@@ -1,6 +1,6 @@
 Changes in 4.7.0 (upcoming)
 
-* Added: Support for installation on nginx servers.
+* Added: Support for installation on NGINX servers.
 * Added: Support for automated installation.
 * Added: User-selectable column list options in tables replaces 'Show more
   detail' checkboxes. Settings remembered per device.
@@ -18,7 +18,7 @@ Changes in 4.7.0 (upcoming)
 * Added: Per-user admin panel language preference (decoupled from site language
   preference).
 * Added: All users can administer their own key biographical info.
-* Added: Button to swap width/height values on image edit thumbnail generator.
+* Added: Button to swap width and height values on image edit thumbnail generator.
 * Added: Multiple files upload with progress meter.
 * Added: Section searches by description.
 * Added: Visual indicator that a subset of search fields are in use.
@@ -28,7 +28,7 @@ Changes in 4.7.0 (upcoming)
 * Changed: Pages, Forms and Styles panels save some changes without page refreshes
   (Ajax). Last used Page/Form/Stylesheet remembered.
 * Changed: Articles panel performs searches/pagination without refresh (Ajax).
-* Changed: Forms can recursively (up to depth 15) call themselves.
+* Changed: Forms can recursively (up to 15 deep) call themselves.
 * Changed: <txp:yield> tag now accepts 'name' and 'default' attributes.
 * Changed: <txp:output_form yield /> tag supports user-defined attributes, coupled
   with <txp:yield> changes above this allows for '<txp::shortcode />'-like tags.
