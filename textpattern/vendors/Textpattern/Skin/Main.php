@@ -358,7 +358,7 @@ namespace Textpattern\Skin {
 
                     $toUnlock = $dirNotRenamed ? $skin : $newName;
 
-                    if (!$this->unlock($toUnlock)) {
+                    if (self::isWritable($skin) && !$this->unlock($toUnlock)) {
                         $failed[$toUnlock] = $stillLocked[$toUnlock] = '';
                     }
                 }
