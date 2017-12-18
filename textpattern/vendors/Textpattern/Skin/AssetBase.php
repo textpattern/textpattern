@@ -906,7 +906,6 @@ namespace Textpattern\Skin {
             } else {
                 $content = '<!-- This template was empty on export. -->';
             }
-            var_dump($row);
 
             if ($writable) {
                 return (bool) file_put_contents(
