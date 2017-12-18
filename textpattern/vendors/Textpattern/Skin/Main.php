@@ -346,11 +346,11 @@ namespace Textpattern\Skin {
             }
 
             if ($passed) {
-                $this->setSkinsAssets($to);
-
                 foreach (self::getSkinsAssets() as $skin => $assets) {
-                    $this->isInUse($skin) ? $this->updateSkinInUse($skin, $passed[array_search($skin, $passed)]) : '';
+                    $this->isInUse($skin) ? $this->updateSkinInUse($to[$this->getSkinIndex($skin)], $skin) : '';
                 }
+
+                $this->setSkinsAssets($to);
 
                 $suceeded = $this->doAssets(
                     $to,
