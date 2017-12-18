@@ -5048,7 +5048,7 @@ function txp_escape($atts, $thing = '')
             case 'number':
                 $thing = floatval($thing);
                 break;
-            case 'strip':
+            case 'tags':
                 $thing = strip_tags($thing);
                 break;
             case 'upper': case 'lower':
@@ -5061,7 +5061,7 @@ function txp_escape($atts, $thing = '')
             case 'trim': case 'ltrim': case 'rtrim': case 'intval':
                 $thing = $attr($thing);
                 break;
-            case 'implode': // for textile
+            case 'gather': // for textile
                 $thing = ' '.preg_replace('/\s+/', ' ', trim($thing));
                 break;
             case 'textile':
