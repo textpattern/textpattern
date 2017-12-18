@@ -856,11 +856,11 @@ namespace Textpattern\Skin {
                     }
 
                     if ($unknown) {
-                        $this->setResults('no_'.self::getDir().'_found', $unknown);
+                        $this->setResults(self::getDir().'_not_found', $unknown);
                     }
 
                     if ($invalid) {
-                        $this->setResults('unsafe_'.self::getAsset().'_name', $invalid);
+                        $this->setResults(self::getAsset().'_name_unsafe', $invalid);
                     }
 
                     if ($notUnlinked) {
