@@ -5047,7 +5047,7 @@ function txp_escape($atts, $thing = '')
                 $thing = substr(json_encode($thing, TEXTPATTERN_JSON), 1, -1);
                 break;
             case 'number':
-                $thing = floatval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, 	FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_SCIENTIFIC) : $thing);
+                $thing = floatval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, 	FILTER_FLAG_ALLOW_FRACTION) : $thing);
                 break;
             case 'integer':
                 $thing = intval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_INT) : $thing);
