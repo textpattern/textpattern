@@ -5062,6 +5062,9 @@ function txp_escape($atts, $thing = '')
             case 'trim': case 'ltrim': case 'rtrim': case 'intval':
                 $thing = $attr($thing);
                 break;
+            case 'implode': // for textile
+                $thing = ' '.preg_replace('/\s+/', ' ', trim($thing));
+                break;
             case 'textile':
                 if ($textile === null) {
                     $textile = Txp::get('\Textpattern\Textile\Parser');
@@ -5072,6 +5075,8 @@ function txp_escape($atts, $thing = '')
             case 'quote':
                 $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
                 break;
+            default:
+                $thing = preg_replace('@(<('.$attr.')\b[^<>]*(?:(?<!/)>((?:(?!(?:<\2\b)).|(?1))*)</\2>|/>))@Usi', '$3', $thing);
         }
     }
 
