@@ -70,7 +70,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function cleanExtraRows($skin, $not)
+        public function cleanExtraFiles($skin, $not)
         {
             foreach ($not as $type => $names_not) {
                 $files = self::getRecDirIterator($skin.'/'.self::getDir().'/'.$type);

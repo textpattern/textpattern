@@ -520,7 +520,7 @@ namespace Textpattern\Skin {
 
             if ($sqlValues) {
                 if ($this->insert(self::getTableCols(), $sqlValues, $override)) {
-                    if ($clean && !self::cleanExtraFiles($passed)) {
+                    if ($clean && !self::cleanExtraRows($passed)) {
                         $failed = array_merge($failed, $passed);
                         $notCleaned = $passed;
 
@@ -643,7 +643,7 @@ namespace Textpattern\Skin {
          * @return bool  false on error.
          */
 
-        public static function cleanExtraFiles($not)
+        public static function cleanExtraRows($not)
         {
             $where = '';
 
@@ -830,7 +830,7 @@ namespace Textpattern\Skin {
                         }
 
                         if (!$new && $clean) {
-                            $notUnlinked = $this->cleanExtraRows($skin, $passedTemplates);
+                            $notUnlinked = $this->cleanExtraFiles($skin, $passedTemplates);
 
                             if ($notUnlinked) {
                                 $failed[$skin] = $notUnlinked[$skin] = $notUnlinked;
@@ -923,7 +923,7 @@ namespace Textpattern\Skin {
          * @return array      !Templates for which the unlink process FAILED!;
          */
 
-        protected function cleanExtraRows($skin, $not)
+        protected function cleanExtraFiles($skin, $not)
         {
             $files = self::getRecDirIterator($skin.'/'.self::getDir());
             $notRemoved = array();
