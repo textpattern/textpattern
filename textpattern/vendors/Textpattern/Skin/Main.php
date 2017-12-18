@@ -309,6 +309,8 @@ namespace Textpattern\Skin {
 
         public function edit($rows)
         {
+            global $prefs;
+
             callback_event('skin.edit', '', 1, self::getSkinsAssets());
 
             $rows = $this->parseRows($rows);
@@ -347,7 +349,14 @@ namespace Textpattern\Skin {
 
             if ($passed) {
                 foreach (self::getSkinsAssets() as $skin => $assets) {
-                    $this->isInUse($skin) ? $this->updateSkinInUse($to[$this->getSkinIndex($skin)], $skin) : '';
+                    $new = $to[$this->getSkinIndex($skin)];
+
+                    $this->isInUse($skin) ? $this->updateSkinInUse($new, $skin) : '';
+
+                    if (self::getCurrent() === $skin) {
+                        $prefs['skin_editing'] = $new;
+                        self::setCurrent($new);
+                    }
                 }
 
                 $this->setSkinsAssets($to);
@@ -754,6 +763,8 @@ namespace Textpattern\Skin {
 
         public function delete()
         {
+            global $prefs;
+
             callback_event('skin.delete', '', 1, self::getSkinsAssets());
 
               $failed
@@ -785,7 +796,11 @@ namespace Textpattern\Skin {
 
                     if ($this->deleteSkins($succeededSkins)) {
                         self::unsetInstalled($succeededSkins);
-                        self::setCurrent();
+
+                        if (in_array(self::getCurrent(), $succeededSkins)) {
+                            unset($prefs['skin_editing']);
+                            self::setCurrent();
+                        }
 
                         $this->setResults('skin_deleted', $succeeded, 'success');
 
