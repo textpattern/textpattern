@@ -555,7 +555,7 @@ namespace Textpattern\Skin {
                 }
 
                 if ($duplicated) {
-                    $this->setResults('duplicated_'.self::getAsset(), $duplicated);
+                    $this->setResults(self::getAsset().'_duplicate_failed', $duplicated);
                 }
 
                 if ($empty) {
