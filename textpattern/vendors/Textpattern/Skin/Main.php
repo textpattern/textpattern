@@ -316,15 +316,26 @@ namespace Textpattern\Skin {
             $rows = $this->parseRows($rows);
             $tableCols = self::getTableCols();
 
-            $passed = $failed = $unknown = $installed = $notUpdated = array();
+              $passed
+            = $failed
+            = $unknown
+            = $unlockable
+            = $installed
+            = $notUpdated
+            = $dirNotRenamed
+            = $stillLocked
+            = array();
 
             foreach (self::getSkinsAssets() as $skin => $assets) {
                 $row = $rows[$this->getSkinIndex($skin)];
+                $newName = $row['name'];
 
                 if (!self::isInstalled($skin)) {
                     $failed[$skin] = $unknown[$skin] = '';
-                } elseif ($skin !== $row['name'] && self::isInstalled($row['name'])) {
-                    $failed[$row['name']] = $installed[$row['name']] = '';
+                } elseif ($skin !== $newName && self::isInstalled($newName)) {
+                    $failed[$newName] = $installed[$newName] = '';
+                } elseif (self::isWritable($skin) && !$this->lock($skin)) {
+                    $failed[$skin] = $unlockable[$skin] = '';
                 } else {
                     $sqlVal = array();
 
@@ -335,14 +346,20 @@ namespace Textpattern\Skin {
                     if ($this->updateRow($skin, implode(', ', $sqlVal))) {
                         $path = self::getPath($skin);
 
-                        if (file_exists($path) && !@rename($path, self::getPath($row['name']))) {
-                            $this->setResults('path_renaming_failed', $skin, 'warning');
+                        if (file_exists($path) && !@rename($path, self::getPath($newName))) {
+                            $failed[] = $dirNotRenamed[] = $newName;
                         }
 
                         $passed[$skin] = $assets;
-                        $to[] = $row['name'];
+                        $to[] = $newName;
                     } else {
                         $failed[$skin] = $notUpdated[$skin] = '';
+                    }
+
+                    $toUnlock = $dirNotRenamed ? $skin : $newName;
+
+                    if (self::isWritable($toUnlock) && !$this->unlock($toUnlock)) {
+                        $failed[$toUnlock] = $stillLocked[$toUnlock] = '';
                     }
                 }
             }
@@ -385,8 +402,20 @@ namespace Textpattern\Skin {
                     $this->setResults('skin_already_exists', $installed);
                 }
 
+                if ($unlockable) {
+                    $this->setResults('skin_dir_locking_failed', $unlockable);
+                }
+
                 if ($notUpdated) {
                     $this->setResults('skin_update_failed', $notUpdated);
+                }
+
+                if ($dirNotRenamed) {
+                    $this->setResults('path_renaming_failed', $dirNotRenamed, 'warning');
+                }
+
+                if ($stillLocked) {
+                    $this->setResults('skin_unlocking_failed', $stillLocked);
                 }
 
                 callback_event('skin.edit', 'failure', 0, $failed);
@@ -623,6 +652,7 @@ namespace Textpattern\Skin {
             = $unwritable
             = $unlockable
             = $notExported
+            = $stillLocked
             = $passed
             = array();
 
@@ -705,6 +735,10 @@ namespace Textpattern\Skin {
 
                 if ($notExported) {
                     $this->setResults('skin_export_failed', $notExported);
+                }
+
+                if ($stillLocked) {
+                    $this->setResults('skin_unlocking_failed', $stillLocked);
                 }
 
                 callback_event('skin.export', 'failure', 0, $failed);
