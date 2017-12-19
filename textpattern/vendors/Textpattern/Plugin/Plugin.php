@@ -268,27 +268,34 @@ class Plugin
             $textpack = safe_field('textpack', 'txp_plugin', "name = '{$owner}'");
         }
 
-        $textpack = $this->parseTextpack($textpack);
+        $packParser = \Txp::get('\Textpattern\Textpack\Parser');
+        $packParser->parse($textpack);
+        $packLanguages = $packParser->getLanguages();
 
-        if (empty($textpack)) {
+        if (empty($packLanguages)) {
             return;
         }
 
-        if (!empty($textpack[TEXTPATTERN_DEFAULT_LANG])) {
+        $allpacks = array();
+
+        foreach ($packLanguages as $lang_code) {
+            $allpacks[$lang_code] = $packParser->getStrings($lang_code);
+        }
+
+        if (in_array(TEXTPATTERN_DEFAULT_LANG, $packLanguages)) {
             $fallback = TEXTPATTERN_DEFAULT_LANG;
         } else {
-            // Use first language as default.
-            reset($textpack);
-            $fallback = key($textpack);
+            // Use first language as default if possible.
+            $fallback = !empty($packLanguages[0]) ? $packLanguages[0] : TEXTPATTERN_DEFAULT_LANG;
         }
 
         $installed_langs = \Txp::get('\Textpattern\L10n\Lang')->installed();
 
         foreach ($installed_langs as $lang) {
-            if (empty($textpack[$lang])) {
-                $langpack = $textpack[$fallback];
+            if (!isset($allpacks[$lang])) {
+                $langpack = $allpacks[$fallback];
             } else {
-                $langpack = array_merge($textpack[$fallback], $textpack[$lang]);
+                $langpack = array_merge($allpacks[$fallback], $allpacks[$lang]);
             }
 
             \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, $name);
@@ -308,54 +315,6 @@ class Plugin
                 $this->installTextpack($name);
             }
         }
-    }
-
-    /**
-     * Convert a Textpack to an associative array.
-     *
-     * @param  string       $textpack The Textpack
-     * @return array An array of translations
-     */
-
-    public function parseTextpack($textpack)
-    {
-        $out = array();
-        $language = TEXTPATTERN_DEFAULT_LANG;
-        $event = '';
-
-        $lines = explode(n, (string)$textpack);
-
-        foreach ($lines as $line) {
-            $line = trim($line);
-
-            // A blank/comment line.
-            if ($line === '' || preg_match('/^#[^@]/', $line, $m)) {
-                continue;
-            }
-
-            // Set language.
-            if (preg_match('/^#@language\s+(.+)$/', $line, $m)) {
-                $language = \Txp::get('\Textpattern\L10n\Locale')->validLocale($m[1]);
-                continue;
-            }
-
-            // Set event.
-            if (preg_match('/^#@([a-zA-Z0-9_-]+)$/', $line, $m)) {
-                $event = $m[1];
-                continue;
-            }
-
-            if (preg_match('/^([\w\-]+)\s*=>\s*(.+)$/', $line, $m)) {
-                if (!empty($m[1]) && !empty($m[2])) {
-                    $out[$language][$m[1]] = array(
-                        'event'   => $event,
-                        'data'    => $m[2],
-                    );
-                }
-            }
-        }
-
-        return $out;
     }
 
     /**

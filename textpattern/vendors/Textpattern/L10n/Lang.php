@@ -348,7 +348,8 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $parser = new \Textpattern\Textpack\Parser();
             $parser->setOwner('');
             $parser->setLanguage($lang_over);
-            $textpack = $parser->parse($textpack, $group);
+            $parser->parse($textpack, $group);
+            $textpack = $parser->getStrings($lang_over);
         }
 
         // Reindex the pack so it can be merged.
@@ -388,9 +389,9 @@ class Lang implements \Textpattern\Container\ReusableInterface
     /**
      * Installs localisation strings from a Textpack.
      *
-     * @param   string $textpack      The Textpack to install
+     * @param   string $textpack    The Textpack to install
      * @param   bool   $addNewLangs If TRUE, installs strings for any included language
-     * @return  int Number of installed strings
+     * @return  int                 Number of installed strings
      * @package L10n
      */
 
@@ -398,17 +399,24 @@ class Lang implements \Textpattern\Container\ReusableInterface
     {
         $parser = new \Textpattern\Textpack\Parser();
         $parser->setLanguage(get_pref('language', TEXTPATTERN_DEFAULT_LANG));
-        $textpack = $parser->parse($textpack);
+        $parser->parse($textpack);
+        $packLanguages = $parser->getLanguages();
 
-        if (!$textpack) {
+        if (empty($packLanguages)) {
             return 0;
+        }
+
+        $allpacks = array();
+
+        foreach ($packLanguages as $lang_code) {
+            $allpacks = array_merge($allpacks, $parser->getStrings($lang_code));
         }
 
         $installed_langs = $this->installed();
         $now = doSlash(date($this->lastmodFormat));
         $values = array();
 
-        foreach ($textpack as $translation) {
+        foreach ($allpacks as $translation) {
             extract(doSlash($translation));
 
             if (!$addNewLangs && !in_array($lang, $installed_langs)) {
