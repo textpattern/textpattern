@@ -3290,7 +3290,7 @@ button {
  * Column width and margins of setup panels.
  */
   .txp-setup {
-    max-width: 42em;
+    max-width: 50em;
     margin: 1em auto;
   }
   .welcome .txp-setup {
