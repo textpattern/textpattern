@@ -2887,15 +2887,13 @@ function category($atts, $thing = null)
 
     if ($name) {
         $category = $name;
+        $type = validContext($type);
     } elseif (!empty($thiscategory['name'])) {
         $category = $thiscategory['name'];
         $type = $thiscategory['type'];
     } else {
         $category = $c;
-
-        if (!isset($atts['type'])) {
-            $type = $context;
-        }
+        $type = $context;
     }
 
     if ($category) {
@@ -3820,10 +3818,11 @@ function lang()
 
 function breadcrumb($atts, $thing = null)
 {
-    global $c, $s, $sitename, $thiscategory;
+    global $c, $s, $sitename, $thiscategory, $context;
     static $cache = array();
 
     extract(lAtts(array(
+        'type'      => $context,
         'category'  => $c,
         'section'   => $s,
         'wraptag'   => 'p',
@@ -3846,6 +3845,7 @@ function breadcrumb($atts, $thing = null)
 
     $content = array();
     $label = txpspecialchars($label);
+    $type = $type === true ? $context : validContext($type);
 
     if ($linked && $label) {
         $label = doTag($label, 'a', $linkclass, ' href="'.hu.'"');
@@ -3861,12 +3861,12 @@ function breadcrumb($atts, $thing = null)
 
     if (!$category) {
         $catpath = array();
-    } elseif (isset($cache[$category])) {
-        $catpath = $cache[$category];
+    } elseif (isset($cache[$type.$category])) {
+        $catpath = $cache[$type.$category];
     } else {
-        $catpath = getTreePath($category, 'article');
+        $catpath = getTreePath($category, $type);
         array_shift($catpath);
-        $cache[$category] = $catpath;
+        $cache[$type.$category] = $catpath;
     }
 
     if ($limit || $offset) {
@@ -3879,7 +3879,7 @@ function breadcrumb($atts, $thing = null)
     foreach ($catpath as $thiscategory) {
         $category_title_html = isset($thing) ? parse($thing) : ($title ? escape_title($thiscategory['title']) : $thiscategory['name']);
         $content[] = ($linked)
-            ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('c' => $thiscategory['name'])).'"')
+            ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('c' => $thiscategory['name'], 'context' => $type)).'"')
             : $category_title_html;
     }
 
@@ -3959,18 +3959,27 @@ function if_category($atts, $thing = null)
     } else {
         $theType = $type && $type !== true ? validContext($type) : $context;
         ($parent || $type === false) or $parent = true;
+        $category = trim($category);
     }
 
     if ($type && $theType !== $type) {
         $x = false;
-    } elseif (!$parent || !$category) {
-        $x = $name === false ? !empty($category) : in_list($category, $name);
     } else {
+        $x = $name === false ? !empty($category) : in_list($category, $name);
+    }
+
+    if ($x && $parent && $category) {
         if (!isset($cache[$theType.$category])) {
             $cache[$theType.$category] = array_reverse(array_slice(array_column(getTreePath($category, $theType), 'name'), 1));
         }
 
         $path = $cache[$theType.$category];
+
+        if (!is_numeric((string)$parent)) {
+            $name = $parent;
+            $parent = true;
+        }
+
         $names = do_list_unique($name);
 
         if ($parent === true) {
@@ -5021,6 +5030,7 @@ function txp_eval($atts, $thing = null)
 function txp_escape($atts, $thing = '')
 {
     static $textile = null, $tr = array("'" => "',\"'\",'");
+    $tidy = false;
 
     extract(lAtts(array(
         'escape' => true
@@ -5037,9 +5047,12 @@ function txp_escape($atts, $thing = '')
                 $thing = substr(json_encode($thing, TEXTPATTERN_JSON), 1, -1);
                 break;
             case 'number':
-                $thing = floatval($thing);
+                $thing = floatval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, 	FILTER_FLAG_ALLOW_FRACTION) : $thing);
                 break;
-            case 'strip':
+            case 'integer':
+                $thing = intval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_INT) : $thing);
+                break;
+            case 'tags':
                 $thing = strip_tags($thing);
                 break;
             case 'upper': case 'lower':
@@ -5049,19 +5062,25 @@ function txp_escape($atts, $thing = '')
             case 'title':
                 $thing = function_exists('mb_convert_case') ? mb_convert_case($thing, MB_CASE_TITLE) : ucwords($thing);
                 break;
-            case 'trim': case 'ltrim': case 'rtrim': case 'intval':
+            case 'trim': case 'ltrim': case 'rtrim':
                 $thing = $attr($thing);
+                break;
+            case 'tidy':
+                $thing = preg_replace('/\s+/', ' ', trim($thing));
+                $tidy = true;
                 break;
             case 'textile':
                 if ($textile === null) {
                     $textile = Txp::get('\Textpattern\Textile\Parser');
                 }
 
-                $thing = $textile->TextileThis($thing);
+                $thing = $textile->TextileThis($tidy ? ' '.$thing : $thing);
                 break;
             case 'quote':
                 $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";
                 break;
+            default:
+                $thing = preg_replace('@(<('.($tidy ? preg_quote($attr) : $attr).')\b[^<>]*(?:(?<!/)>((?:(?!(?:<\2\b)).|(?1))*)</\2>|/>))@Usi', '$3', $thing);
         }
     }
 
