@@ -853,9 +853,23 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
     global $all_skins, $all_pages, $all_styles;
 
-    $themeSelect = selectInput('skin', $all_skins, '', false, '', 'multiedit_skin');
-    $pageSelect = selectInputData('section_page', $all_pages, '', 'multiedit_page');
-    $styleSelect = selectInputData('css', $all_styles, '', 'multiedit_css');
+    $themeSelect = inputLabel(
+        'multiedit_skin',
+        selectInput('skin', $all_skins, '', false, '', 'multiedit_skin'),
+        'skin', '', array('class' => 'multi-option multi-step'), ''
+    );
+
+    $pageSelect = inputLabel(
+        'multiedit_page',
+        selectInputData('section_page', $all_pages, '', 'multiedit_page'),
+        'page', '', array('class' => 'multi-option multi-step'), ''
+    );
+
+    $styleSelect = inputLabel(
+        'multiedit_css',
+        selectInputData('css', $all_styles, '', 'multiedit_css'),
+        'css', '', array('class' => 'multi-option multi-step'), ''
+    );
 
     $methods = array(
         'changepagestyle' => array(
