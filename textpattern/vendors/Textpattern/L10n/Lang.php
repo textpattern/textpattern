@@ -130,11 +130,12 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     /**
      * Return all language files in the lang directory.
+     * @param array $extensions Language files extensions
      *
      * @return array Available language filenames
      */
 
-    public function files()
+    public function files($extensions = array('txt', 'textpack', 'ini'))
     {
         if (!is_dir($this->langDirectory) || !is_readable($this->langDirectory)) {
             trigger_error('Lang directory is not accessible: '.$this->langDirectory, E_USER_WARNING);
@@ -142,7 +143,17 @@ class Lang implements \Textpattern\Container\ReusableInterface
             return array();
         }
 
-        return glob($this->langDirectory.'*.{txt,textpack,ini}', GLOB_BRACE);
+        if (defined('GLOB_BRACE')) {
+            return glob($this->langDirectory.'*.{'.implode(',', $extensions).'}', GLOB_BRACE);
+        }
+
+        $files = array();
+
+        foreach ($extensions as $ext) {
+            $files = array_merge($files, (array) glob($this->langDirectory.'*.'.$ext));
+        }
+
+        return $files;
     }
 
     /**
