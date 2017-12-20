@@ -130,11 +130,12 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     /**
      * Return all language files in the lang directory.
+     * @param array $extensions Language files extensions
      *
      * @return array Available language filenames
      */
 
-    public function files()
+    public function files($extensions = array('txt', 'textpack', 'ini'))
     {
         if (!is_dir($this->langDirectory) || !is_readable($this->langDirectory)) {
             trigger_error('Lang directory is not accessible: '.$this->langDirectory, E_USER_WARNING);
@@ -142,7 +143,17 @@ class Lang implements \Textpattern\Container\ReusableInterface
             return array();
         }
 
-        return glob($this->langDirectory.'*.{txt,textpack,ini}', GLOB_BRACE);
+        if (defined('GLOB_BRACE')) {
+            return glob($this->langDirectory.'*.{'.implode(',', $extensions).'}', GLOB_BRACE);
+        }
+
+        $files = array();
+
+        foreach ($extensions as $ext) {
+            $files = array_merge($files, (array) glob($this->langDirectory.'*.'.$ext));
+        }
+
+        return $files;
     }
 
     /**
@@ -348,7 +359,8 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $parser = new \Textpattern\Textpack\Parser();
             $parser->setOwner('');
             $parser->setLanguage($lang_over);
-            $textpack = $parser->parse($textpack, $group);
+            $parser->parse($textpack, $group);
+            $textpack = $parser->getStrings($lang_over);
         }
 
         // Reindex the pack so it can be merged.
@@ -388,9 +400,9 @@ class Lang implements \Textpattern\Container\ReusableInterface
     /**
      * Installs localisation strings from a Textpack.
      *
-     * @param   string $textpack      The Textpack to install
+     * @param   string $textpack    The Textpack to install
      * @param   bool   $addNewLangs If TRUE, installs strings for any included language
-     * @return  int Number of installed strings
+     * @return  int                 Number of installed strings
      * @package L10n
      */
 
@@ -398,17 +410,24 @@ class Lang implements \Textpattern\Container\ReusableInterface
     {
         $parser = new \Textpattern\Textpack\Parser();
         $parser->setLanguage(get_pref('language', TEXTPATTERN_DEFAULT_LANG));
-        $textpack = $parser->parse($textpack);
+        $parser->parse($textpack);
+        $packLanguages = $parser->getLanguages();
 
-        if (!$textpack) {
+        if (empty($packLanguages)) {
             return 0;
+        }
+
+        $allpacks = array();
+
+        foreach ($packLanguages as $lang_code) {
+            $allpacks = array_merge($allpacks, $parser->getStrings($lang_code));
         }
 
         $installed_langs = $this->installed();
         $now = doSlash(date($this->lastmodFormat));
         $values = array();
 
-        foreach ($textpack as $translation) {
+        foreach ($allpacks as $translation) {
             extract(doSlash($translation));
 
             if (!$addNewLangs && !in_array($lang, $installed_langs)) {
