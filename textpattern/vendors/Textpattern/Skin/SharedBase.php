@@ -119,7 +119,7 @@ namespace Textpattern\Skin {
             if (static::$tableCols) {
                 return static::$tableCols;
             } else {
-                $query = safe_query('SHOW COLUMNS FROM '.static::$table);
+                $query = safe_query('SHOW COLUMNS FROM '.safe_pfx(static::$table));
                 static::$tableCols = array();
 
                 while ($row = $query->fetch_assoc()) {
