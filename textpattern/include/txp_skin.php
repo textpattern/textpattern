@@ -482,12 +482,12 @@ function skin_skin_change_pageby()
 
 function skin_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
-    $clean = checkbox('clean', 1, true)
+    $clean = checkbox('clean', 1, true, 0, 'clean')
             .tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean'))
             .popHelp('remove_extra_templates');
 
     $methods = array(
-        'update'    => array('label' => gTxt('update'), 'html' => $clean),
+        'import'    => array('label' => gTxt('import'), 'html' => $clean),
         'duplicate' => gTxt('duplicate'),
         'export'    => array('label' => gTxt('export'), 'html' => $clean),
         'delete'    => gTxt('delete'),
@@ -521,7 +521,7 @@ function skin_multi_edit()
         case 'duplicate':
             $Skins->duplicate();
             break;
-        case 'update':
+        case 'import':
             $Skins->import($clean, true);
             break;
         default: // delete.

@@ -527,7 +527,6 @@ function section_edit()
     }
 
     // Need to build by hand as selectInput() doesn't support data- elements.
-    // @todo Make this function a more generic version of selectInput in txplib_form.php.
     $pageSelect = selectInputData('section_page', $all_pages, $sec_page, 'section_page');
     $styleSelect = selectInputData('css', $all_styles, $sec_css, 'section_css');
 
