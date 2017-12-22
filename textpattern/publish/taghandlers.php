@@ -5050,7 +5050,7 @@ function txp_escape($atts, $thing = '')
             case 'number': case 'float':
                 $thing = floatval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, 	FILTER_FLAG_ALLOW_FRACTION) : $thing);
 
-                if ($attr === 'number') {
+                if ($attr === 'number' && class_exists('NumberFormatter')) {
                     $format !== null or $format = new NumberFormatter($locale, NumberFormatter::DECIMAL);
                     $thing = $format->format($thing);
                 } else {
