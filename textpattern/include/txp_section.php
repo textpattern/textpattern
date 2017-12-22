@@ -526,9 +526,10 @@ function section_edit()
             );
     }
 
-    // Need to build by hand as selectInput() doesn't support data- elements.
-    $pageSelect = selectInputData('section_page', $all_pages, $sec_page, 'section_page');
-    $styleSelect = selectInputData('css', $all_styles, $sec_css, 'section_css');
+    $pageSelect = selectInput('section_page', array(), '', '', '', 'section_page');
+    $styleSelect = selectInput('css', array(), '', '', '', 'section_css');
+    $json_page = json_encode($all_pages, TEXTPATTERN_JSON);
+    $json_style = json_encode($all_styles, TEXTPATTERN_JSON);
 
     $out[] =
         inputLabel(
@@ -551,6 +552,12 @@ function section_edit()
             'uses_style',
             'section_uses_css',
             array('class' => 'txp-form-field edit-section-uses-css')
+        ).script_js(<<<EOJS
+var skin_page = {$json_page};
+var skin_style = {$json_style};
+var page_sel = '{$sec_page}';
+var style_sel = '{$sec_css}';
+EOJS
         );
 
     if (!$is_default_section) {
@@ -596,41 +603,6 @@ function section_edit()
 }
 
 /**
- * Creates a &lt;select&gt; list with data elements.
- */
-
-function selectInputData($name = '', $array = array(), $value = '', $select_id = null)
-{
-    $out = array();
-
-    $select_id = ($select_id === null) ? $name : $select_id;
-    $selected = false;
-
-    foreach ($array as $row) {
-        $avalue = $alabel = $row['name'];
-        $askin = $row['skin'];
-
-        if ($value === (string) $avalue) {
-            $sel = ' selected="selected"';
-            $selected = true;
-        } else {
-            $sel = '';
-        }
-
-        $out[] = '<option data-skin="'.$askin.'" value="'.txpspecialchars($askin.'.'.$avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
-    }
-
-    $atts = join_atts(array(
-        'id'       => $select_id,
-        'name'     => $name,
-    ), TEXTPATTERN_STRIP_EMPTY);
-
-    $out[]= '</select>';
-
-    return n.'<select'.$atts.'>'.n.implode(n, $out).n.'</select>';
-}
-
-/**
  * Saves a section.
  */
 
@@ -657,9 +629,6 @@ function section_save()
 
     $in = doSlash($in);
     extract($in, EXTR_PREFIX_ALL, 'safe');
-
-    $safe_section_page = implode('', array_slice(explode('.', $safe_section_page), 1));
-    $safe_css = implode('', array_slice(explode('.', $safe_css), 1));
 
     if ($name != strtolower($old_name)) {
         if (safe_field("name", 'txp_section', "name = '$safe_name'")) {
@@ -852,21 +821,30 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
     global $all_skins, $all_pages, $all_styles;
 
+    $json_page = json_encode($all_pages, TEXTPATTERN_JSON);
+    $json_style = json_encode($all_styles, TEXTPATTERN_JSON);
+
     $themeSelect = inputLabel(
         'multiedit_skin',
         selectInput('skin', $all_skins, '', false, '', 'multiedit_skin'),
         'skin', '', array('class' => 'multi-option multi-step'), ''
+    ).script_js(<<<EOJS
+var skin_page = {$json_page};
+var skin_style = {$json_style};
+var page_sel = '';
+var style_sel = '';
+EOJS
     );
 
     $pageSelect = inputLabel(
         'multiedit_page',
-        selectInputData('section_page', $all_pages, '', 'multiedit_page'),
+        selectInput('section_page', array(), '', '', '', 'multiedit_page'),
         'page', '', array('class' => 'multi-option multi-step'), ''
     );
 
     $styleSelect = inputLabel(
         'multiedit_css',
-        selectInputData('css', $all_styles, '', 'multiedit_css'),
+        selectInput('css', array(), '', '', '', 'multiedit_css'),
         'css', '', array('class' => 'multi-option multi-step'), ''
     );
 
@@ -917,13 +895,10 @@ function section_multi_edit()
             return section_delete();
             break;
         case 'changepagestyle':
-            $safe_page = implode('', array_slice(explode('.', ps('section_page')), 1));
-            $safe_css = implode('', array_slice(explode('.', ps('css')), 1));
-
             $nameVal = array(
                 'skin' => ps('skin'),
-                'page' => $safe_page,
-                'css'  => $safe_css,
+                'page' => ps('section_page'),
+                'css'  => ps('css'),
             );
             break;
         case 'changeonfrontpage':

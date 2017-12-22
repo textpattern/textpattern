@@ -2204,31 +2204,32 @@ textpattern.Route.add('image', function () {
 textpattern.Route.add('section', function ()
 {
     /**
-     * Show/hide assets base on the selected theme.
+     * Display assets based on the selected theme.
      *
      * @param  string skin The theme name from which to show assets
      */
-    function section_theme_hide(skin) {
-        $('#section_page, #section_css, #multiedit_page, #multiedit_css').each(function() {
-            var $options = $(this).find('option'),
-                $selected = $options.filter(':selected'),
-                $current = $options.filter('[data-skin="'+skin+'"]');
+    function section_theme_show(skin) {
+        $('#section_page, #section_css, #multiedit_page, #multiedit_css').empty();
+        $pageSelect = $('[name=section_page]');
+        $styleSelect = $('[name=css]');
 
-            $options.hide().filter('[data-skin="'+$selected.data('skin')+'"]').removeAttr("selected");
-            $selected.attr('selected', 'selected');
-            $selected = $current.filter('[selected]');
-
-            if (!$selected.length) {
-                $selected = $current.first();
+        $.each(skin_page, function(key, items) {
+            if (items.skin == skin) {
+                var isSelected = (items.name == page_sel) ? ' selected' : '';
+                $pageSelect.append('<option'+isSelected+'>'+items.name+'</option>');
             }
+        });
 
-            $selected.prop('selected', true).attr('selected', 'selected');
-            $current.show()
+        $.each(skin_style, function(key, items) {
+            if (items.skin == skin) {
+                var isSelected = (items.name == style_sel) ? ' selected' : '';
+                $styleSelect.append('<option'+isSelected+'>'+items.name+'</option>');
+            }
         });
     }
 
     $('#section_details, .multi_edit_form').on('change', '#section_skin, #multiedit_skin', function() {
-        section_theme_hide($(this).val());
+        section_theme_show($(this).val());
     });
 
     // Invoke the handler now to set things on initial page load.
@@ -2237,7 +2238,7 @@ textpattern.Route.add('section', function ()
     $('select[name=edit_method]').change(function() {
         if ($(this).val() === 'changepagestyle') {
             var theSkin = $('#multiedit_skin').val();
-            section_theme_hide(theSkin);
+            section_theme_show(theSkin);
         }
     });
 });
