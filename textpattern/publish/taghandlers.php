@@ -5029,7 +5029,8 @@ function txp_eval($atts, $thing = null)
 
 function txp_escape($atts, $thing = '')
 {
-    static $textile = null, $tr = array("'" => "',\"'\",'");
+    global $locale;
+    static $textile = null, $format = null, $tr = array("'" => "',\"'\",'");
     $tidy = false;
 
     extract(lAtts(array(
@@ -5046,11 +5047,19 @@ function txp_escape($atts, $thing = '')
             case 'json':
                 $thing = substr(json_encode($thing, TEXTPATTERN_JSON), 1, -1);
                 break;
-            case 'number':
+            case 'number': case 'float':
                 $thing = floatval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, 	FILTER_FLAG_ALLOW_FRACTION) : $thing);
+
+                if ($attr === 'number' && class_exists('NumberFormatter')) {
+                    $format !== null or $format = new NumberFormatter($locale, NumberFormatter::DECIMAL);
+                    $thing = $format->format($thing);
+                } else {
+                    $thing = str_replace(',', '.', $thing);
+                }
+
                 break;
             case 'integer':
-                $thing = intval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_INT) : $thing);
+                $thing = intval($tidy ? preg_replace('/[^\d\+\-\.]/', '', $thing) : $thing);
                 break;
             case 'tags':
                 $thing = strip_tags($thing);

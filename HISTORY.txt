@@ -35,7 +35,8 @@ Changes in 4.7.0 (upcoming)
 * Changed: <txp:page_url /> tag accepts URL variables in 'type' attribute.
 * Changed: <txp:page_title /> tag SEO - site name renders after page name,
   default separator changed from ': ' to ' | ', page numbers added.
-* Changed: <txp:breadcrumb /> can be used as a container tag.
+* Changed: <txp:breadcrumb /> can be used as a container tag, and accepts 'type'
+  attribute.
 * Changed: <txp:category_list /> can output nested lists.
 * Changed: <txp:if_category /> accepts 'parent' attribute.
 * Changed: Pagination tags (like <txp:newer /> and <txp:older />) can be placed
@@ -51,7 +52,7 @@ Changes in 4.7.0 (upcoming)
 * Changed: Categories moved from Sort & Display subpanel to their own twisty.
   Override Form (if used) moved to Sort & Display subpanel. 'Advanced' twisty
   and its callback removed.
-* Changed: Upgrades land on Diagnostics panel, with suitable message.
+* Changed: Seamless upgrades: languages also updated automatically.
 * Changed: Further improvements to RTL language support.
 * Changed: Language Textpacks bundled in core instead of using legacy RPC server.
 * Changed: Use local inline help files instead of legacy RPC server. Help topics
