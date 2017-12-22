@@ -196,7 +196,7 @@ function form_multi_edit()
             callback_event('forms_deleted', '', 0, $affected);
             update_lastmod('form_deleted', $affected);
 
-            $message = gTxt('forms_deleted', array('{list}' => join(', ', $affected)));
+            $message = gTxt('form_deleted', array('{list}' => join(', ', $affected)));
         }
 
         if ($method == 'changetype') {
