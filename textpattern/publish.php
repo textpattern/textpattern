@@ -695,9 +695,8 @@ function article($atts, $thing = null)
 
 function doArticles($atts, $iscustom, $thing = null)
 {
-    global $pretext, $prefs, $thispage;
+    global $pretext, $thispage;
     extract($pretext);
-    extract($prefs);
     $customFields = getCustomFields();
     $customlAtts = array_null(array_flip($customFields));
 
@@ -711,7 +710,7 @@ function doArticles($atts, $iscustom, $thing = null)
             'excerpted' => '',
             'author'    => '',
             'month'     => '',
-            'expired'   => $publish_expired_articles,
+            'expired'   => get_pref('publish_expired_articles'),
             'id'        => '',
             'exclude'   => '',
         );
@@ -757,7 +756,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $theAtts['frontpage'] = ($theAtts['frontpage'] && $s && $s == 'default');
         $theAtts['excerpted'] = 0;
         $theAtts['exclude'] = 0;
-        $theAtts['expired'] = $publish_expired_articles;
+        $theAtts['expired'] = get_pref('publish_expired_articles');
 
         filterAtts($theAtts);
     }
@@ -786,7 +785,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
         // Searchable article fields are limited to the columns of the
         // textpattern table and a matching fulltext index must exist.
-        $cols = do_list_unique($searchable_article_fields);
+        $cols = do_list_unique(get_pref('searchable_article_fields'));
 
         if (empty($cols) or $cols[0] == '') {
             $cols = array('Title', 'Body');
@@ -1015,8 +1014,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
 function doArticle($atts, $thing = null)
 {
-    global $pretext, $prefs, $thisarticle;
-    extract($prefs);
+    global $pretext, $thisarticle;
     extract($pretext);
 
     extract(gpsa(array(
@@ -1068,18 +1066,18 @@ function doArticle($atts, $thing = null)
         }
     }
 
-    if (!empty($thisarticle) and ($thisarticle['status'] == $status or gps('txpreview'))) {
+    if (!empty($thisarticle) && ($thisarticle['status'] == $status || gps('txpreview'))) {
         extract($thisarticle);
         $thisarticle['is_first'] = 1;
         $thisarticle['is_last'] = 1;
 
-        if ($allowoverride and $override_form) {
+        if ($allowoverride && $override_form) {
             $article = parse_form($override_form);
         } else {
             $article = ($thing) ? parse($thing) : parse_form($form);
         }
 
-        if ($use_comments and $comments_auto_append) {
+        if (get_pref('use_comments') && get_pref('comments_auto_append')) {
             $article .= parse_form('comments_display');
         }
 

@@ -5051,9 +5051,11 @@ function txp_escape($atts, $thing = '')
             case 'number': case 'float':
                 $thing = floatval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, 	FILTER_FLAG_ALLOW_FRACTION) : $thing);
 
-                if ($attr === 'number' && class_exists('NumberFormatter')) {
-                    $format !== null or $format = new NumberFormatter($locale, NumberFormatter::DECIMAL);
-                    $thing = $format->format($thing);
+                if ($attr === 'number') {
+                    $format !== null
+                        or !($format = class_exists('NumberFormatter'))
+                        or $format = new NumberFormatter($locale, NumberFormatter::DECIMAL);
+                    !$format or $thing = $format->format($thing);
                 } else {
                     $thing = str_replace(',', '.', $thing);
                 }
