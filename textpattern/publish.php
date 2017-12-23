@@ -594,7 +594,7 @@ function output_css($s = '', $n = '', $t = '')
         $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$skinquery.$order));
         set_error_handler('tagErrorHandler');
         @header('Content-Type: text/css; charset=utf-8');
-        echo get_pref('parse_css', false) ? parse_page(null, $css) : $css;
+        echo get_pref('parse_css', false) ? parse_page(null, null, $css) : $css;
         restore_error_handler();
     }
 }
