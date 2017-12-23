@@ -88,7 +88,7 @@ function skin_list($message = '')
             'name',
         );
 
-        in_array($sort, $sortOpts) ? $sort = 'name' : '';
+        in_array($sort, $sortOpts) or $sort = 'name';
 
         set_pref('skin_sort_column', $sort, 'skin', 2, '', 0, PREF_PRIVATE);
     }
@@ -229,9 +229,9 @@ function skin_list($message = '')
         );
 
         foreach ($thIds as $thId => $thVal) {
-            $thClass = ($thId == $sort) ? $dir.' ' : ''
-                      .'txp-list-col-'.$thId
-                      .($thVal !== $thId) ? ' skin_detail' : '';
+            $thClass = 'txp-list-col-'.$thId
+                      .($thId == $sort ? ' '.$dir : '')
+                      .($thVal !== $thId ? ' skin_detail' : '');
 
             $ths .= column_head($thVal, $thId, 'skin', true, $switchDir, $crit, $search_method, $thClass);
         }
