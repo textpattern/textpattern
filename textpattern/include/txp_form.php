@@ -312,9 +312,9 @@ function form_edit($message = '', $refresh_partials = false)
         'skin',
     ))));
 
-    $name = sanitizeForPage(assert_string(gps('name')));
+    $name = sanitizeForTheme(assert_string(gps('name')));
     $type = assert_string(gps('type'));
-    $newname = sanitizeForPage(assert_string(gps('newname')));
+    $newname = sanitizeForTheme(assert_string(gps('newname')));
     $skin = ($skin !== '') ? $skin : Skin::getCurrent();
     $class = 'async';
 
@@ -462,8 +462,8 @@ function form_save()
         'skin',
     )))));
 
-    $name = sanitizeForPage(assert_string(ps('name')));
-    $newname = sanitizeForPage(assert_string(ps('newname')));
+    $name = sanitizeForTheme(assert_string(ps('name')));
+    $newname = sanitizeForTheme(assert_string(ps('newname')));
 
     Skin::setCurrent($skin);
 

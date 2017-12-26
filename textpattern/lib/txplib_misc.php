@@ -2256,6 +2256,23 @@ function sanitizeForPage($text)
 }
 
 /**
+ * Sanitises a string for use in a theme template's name.
+ *
+ * Just runs sanitizeForPage() followed by sanitizeForFile(), then limits
+ * the number of characters to 63.
+ *
+ * @param   string $text The string
+ * @return  string
+ * @package Filter
+ * @access  private
+ */
+
+function sanitizeForTheme($text)
+{
+    return mb_substr(sanitizeForFile(sanitizeForPage($text)), 0, 63);
+}
+
+/**
  * Transliterates a string to ASCII.
  *
  * Used to generate RFC 3986 compliant and pretty ASCII-only URLs.
@@ -5170,7 +5187,7 @@ function txp_status_header($status = '200 OK')
 
 function txp_die($msg, $status = '503', $url = '')
 {
-    global $connected, $txp_error_message, $txp_error_status, $txp_error_code;
+    global $connected, $txp_error_message, $txp_error_status, $txp_error_code, $pretext;
 
     // Make it possible to call this function as a tag, e.g. in an article
     // <txp:txp_die status="410" />.
@@ -5221,8 +5238,19 @@ function txp_die($msg, $status = '503', $url = '')
     }
 
     $out = false;
+
     if ($connected && @txpinterface == 'public') {
-        $out = safe_field('user_html', 'txp_page', "name IN('error_{$code}', 'error_default') ORDER BY name LIMIT 1");
+        if ($pretext['skin']) {
+            $skin = $pretext['skin'];
+        } else {
+            $skin = safe_field('skin', 'txp_section', "name = 'default'");
+        }
+
+        $out = safe_field(
+            'user_html',
+            'txp_page',
+            "name IN('error_{$code}', 'error_default') AND skin='".doSlash($skin)."' ORDER BY name LIMIT 1"
+        );
     }
 
     if ($out === false) {
@@ -5255,6 +5283,7 @@ eod;
             array($status, $msg),
             $out
         );
+
         die($out);
     }
 }

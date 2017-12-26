@@ -165,8 +165,8 @@ function css_edit($message = '', $refresh_partials = false)
 
     $default_name = safe_field("css", 'txp_section', "name = 'default'");
 
-    $name = sanitizeForPage(assert_string(gps('name')));
-    $newname = sanitizeForPage(assert_string(gps('newname')));
+    $name = sanitizeForTheme(assert_string(gps('name')));
+    $newname = sanitizeForTheme(assert_string(gps('newname')));
     $skin = ($skin !== '') ? $skin : Skin::getCurrent();
     $class = 'async';
 
@@ -288,8 +288,8 @@ function css_save()
         'skin',
     )))));
 
-    $name = sanitizeForPage(assert_string(ps('name')));
-    $newname = sanitizeForPage(assert_string(ps('newname')));
+    $name = sanitizeForTheme(assert_string(ps('name')));
+    $newname = sanitizeForTheme(assert_string(ps('newname')));
 
     Skin::setCurrent($skin);
 
