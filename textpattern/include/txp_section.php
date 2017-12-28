@@ -86,7 +86,7 @@ function sec_section_list($message = '')
     if ($sort === '') {
         $sort = get_pref('section_sort_column', 'name');
     } else {
-        if (!in_array($sort, array('title', 'page', 'css', 'in_rss', 'on_frontpage', 'searchable', 'article_count'))) {
+        if (!in_array($sort, array('title', 'skin', 'page', 'css', 'in_rss', 'on_frontpage', 'searchable', 'article_count'))) {
             $sort = 'name';
         }
 
