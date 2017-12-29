@@ -194,7 +194,7 @@ namespace Textpattern\Skin {
             $rows = $this->parseRows($rows);
             $tableCols = self::getTableCols();
 
-              $failed
+            $failed
             = $alreadyExists
             = $notCreated
             = $passed
@@ -208,7 +208,7 @@ namespace Textpattern\Skin {
             foreach (self::getSkinsAssets() as $skin => $assets) {
                 if (self::isInstalled($skin)) {
                     $failed[$skin] = $alreadyExists[$skin] = '';
-                } elseif (in_array($skin, array_keys(self::getDirectories()))) {
+                } elseif (in_array($skin, array_keys(self::getDirectories()), true)) {
                     $failed[$skin] = $alreadyExists[self::getPath($skin)] = '';
                 } else {
                     $passed[$skin] = array_merge_recursive($assets, self::getDefaultAssets());
@@ -319,6 +319,7 @@ namespace Textpattern\Skin {
               $passed
             = $failed
             = $unknown
+            = $invalid
             = $unlockable
             = $installed
             = $notUpdated
@@ -327,10 +328,13 @@ namespace Textpattern\Skin {
             = array();
 
             foreach (self::getSkinsAssets() as $skin => $assets) {
+                $skin = (string) $skin;
                 $row = $rows[$this->getSkinIndex($skin)];
                 $newName = $row['name'];
 
-                if (!self::isInstalled($skin)) {
+                if (!$newName) {
+                    $failed[$skin] = $invalid[$newName] = '';
+                } elseif (!self::isInstalled($skin)) {
                     $failed[$skin] = $unknown[$skin] = '';
                 } elseif ($skin !== $newName && self::isInstalled($newName)) {
                     $failed[$newName] = $installed[$newName] = '';
@@ -396,6 +400,10 @@ namespace Textpattern\Skin {
             if ($failed) {
                 if ($unknown) {
                     $this->setResults('skin_unknown', $unknown);
+                }
+
+                if ($invalid) {
+                    $this->setResults('skin_name_invalid', $invalid);
                 }
 
                 if ($installed) {
@@ -760,16 +768,15 @@ namespace Textpattern\Skin {
         {
             $path = $row['name'].'/'.self::getfile();
             $contents = self::isWritable($path) ? $this->getJSONInfos($row) : array();
+            $contents['title'] = $row['title'] !== '' ? $row['title'] : $row['name'];
+            $contents['txp-type'] = 'textpattern-theme';
 
             if (array_key_exists('name', $row)) {
                 unset($row['name']);
             }
 
-            $contents['title'] = $row['title'] ? $row['title'] : $row['name'];
-            $contents['txp-type'] = 'textpattern-theme';
-
             foreach ($row as $field => $value) {
-                $value ? $contents[$field] = $value : '';
+                $value !== '' ? $contents[$field] = $value : '';
             }
 
             return $this->filePutJsonContents($path, $contents);

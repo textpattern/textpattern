@@ -351,7 +351,7 @@ function skin_edit($message = null)
 
     $fields = Skins::getTableCols();
 
-    if ($name && $step == 'edit') {
+    if ($name) {
         $rs = Txp::get('\Textpattern\Skin\Main', $name)->getRows()[$name];
 
         if (!$rs) {
@@ -433,6 +433,11 @@ function skin_save()
 
     extract($infos);
 
+    if (empty($name)) {
+        skin_list(array(gTxt('skin_name_invalid'), E_ERROR));
+        return;
+    }
+
     $Skin = Txp::get('\Textpattern\Skin\Main');
 
     if ($old_name) {
@@ -447,9 +452,9 @@ function skin_save()
                  ->edit(compact('name', 'title', 'version', 'description', 'author', 'author_uri'));
         }
     } else {
-        $title ?: $title = $name;
-        $author ?: $author = substr(cs('txp_login_public'), 10);
-        $version ?: $version = '0.0.1';
+        $title !== '' ?: $title = $name;
+        $author !== '' ?: $author = substr(cs('txp_login_public'), 10);
+        $version !== '' ?: $version = '0.0.1';
         $row = compact('title', 'version', 'description', 'author', 'author_uri');
 
         $Skin->setSkinsAssets($name)

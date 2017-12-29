@@ -77,7 +77,7 @@ namespace Textpattern\Skin {
          * @see        getValidNamePattern(), isValidName().
          */
 
-        protected static $validNamePattern = '[a-zA-Z0-9_\-\.]{0,63}';
+        protected static $validNamePattern = '[a-zA-Z0-9_\-\.]{1,63}';
 
         /**
          * Caches uploaded skin directories.
@@ -210,7 +210,9 @@ namespace Textpattern\Skin {
 
         public static function sanitize($string)
         {
-            return strtolower(sanitizeForPage(assert_string($string)));
+            $string = (string) $string;
+
+            return strtolower(sanitizeForTheme($string));
         }
 
         /**
