@@ -1,4 +1,5 @@
 name         VARCHAR(255) NOT NULL DEFAULT '',
+skin         VARCHAR(63)  NOT NULL DEFAULT 'default',
 page         VARCHAR(255) NOT NULL DEFAULT '',
 css          VARCHAR(255) NOT NULL DEFAULT '',
 description  VARCHAR(255) NOT NULL DEFAULT '',
@@ -7,4 +8,5 @@ on_frontpage INT          NOT NULL DEFAULT '1',
 searchable   INT          NOT NULL DEFAULT '1',
 title        VARCHAR(255) NOT NULL DEFAULT '',
 
-PRIMARY KEY (name(250))
+INDEX page_skin (page(50), skin(63)),
+INDEX css_skin (css(50), skin(63))

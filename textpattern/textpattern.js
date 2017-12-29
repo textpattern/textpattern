@@ -23,6 +23,8 @@
  * Collection of client-side tools.
  */
 
+textpattern.version = '4.7.0'
+
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.
  */
@@ -291,7 +293,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
                 if (box.prop('checked')) {
                     $(this).closest(opt.highlighted).addClass(opt.selectedClass);
 
-                    if (-1 == $.inArray(box.val(), textpattern.Relay.data.selected)) { 
+                    if (-1 == $.inArray(box.val(), textpattern.Relay.data.selected)) {
                         textpattern.Relay.data.selected.push(box.val())
                     }
                 } else {
@@ -652,7 +654,7 @@ textpattern.Relay =
     callback: function (event, data, timeout) {
         clearTimeout(textpattern.Relay.timeouts[event])
 
-        timeout = !timeout ? 0 : parseInt(timeout, 10) 
+        timeout = !timeout ? 0 : parseInt(timeout, 10)
         if (!timeout || isNaN(timeout)) {
             return $(this).trigger(event, data)
         }
@@ -872,11 +874,11 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         console.log(data.message);
     }
 }).register('uploadProgress', function (event, data) {
-    $('progress.upload-progress').val(data.loaded / data.total)
+    $('progress.txp-upload-progress').val(data.loaded / data.total)
 }).register('uploadStart', function (event, data) {
-    $('progress.upload-progress').val(0).show()
+    $('progress.txp-upload-progress').val(0).show()
 }).register('uploadEnd', function (event, data) {
-    $('progress.upload-progress').hide()
+    $('progress.txp-upload-progress').hide()
 }).register('updateList', function (event, data) {
     var list = data.list || '#messagepane, #txp-list-container',
         url = data.url || 'index.php',
@@ -896,9 +898,9 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
 
             callback(data.event)
         }
- 
+
     $(list).addClass('disabled')
-    
+
     if (typeof data.html == 'undefined') {
         $('<html />').load(url, data.data, function(responseText, textStatus, jqXHR) {
             handle(this)
@@ -1554,6 +1556,42 @@ $(document).keydown(function (e) {
     }
 });
 
+jQuery.fn.txpMenu = function(button) {
+    var menu = this, dir = langdir === 'rtl' ? 'left' : 'right'
+
+    menu.on('click focusin', function (e) {
+        e.stopPropagation()
+    }).menu({
+        select: function(e, ui) {
+            menu.menu("focus", null, ui.item)
+            if (e.originalEvent.type !== 'click') {
+                ui.item.find('input[type="checkbox"]').click()
+            }
+        }
+    }).find('input[type="checkbox"]').keyup(function(e) {
+        e.preventDefault()
+    })
+
+    !button || button.on('click', function (e) {
+        menu.toggle().position(
+        {
+            my: dir+" top",
+            at: dir+" bottom",
+            of: this
+        }).focus().menu("focus", null, menu.find(".ui-menu-item:first"))
+
+        $(document).one('blur click focusin', function (e) {
+            menu.hide();
+        })
+
+        return false
+    }).on('focusin', function(e) {
+        e.stopPropagation()
+    });
+
+    return this
+}
+
 /**
  * Search tool.
  *
@@ -1562,7 +1600,15 @@ $(document).keydown(function (e) {
 
 function txp_search()
 {
-    var $ui = $('.txp-search');
+    var $ui = $('.txp-search'),
+        dir = langdir === 'rtl' ? 'left' : 'right',
+        button = $ui.find('.txp-search-options').button({
+            showLabel: false,
+            icon: 'ui-icon-triangle-1-s'
+        }),
+        menu = $ui.find('.txp-dropdown')
+
+    menu.hide().txpMenu(button)
 
     $ui.find('.txp-search-button').button({
         showLabel: false,
@@ -1572,37 +1618,7 @@ function txp_search()
         $ui.submit()
     });
 
-    $ui.find('.txp-search-options').button({
-        showLabel: false,
-        icon: 'ui-icon-triangle-1-s'
-    }).on('click', function (e) {
-        if (langdir === 'rtl') {
-            var menu = $ui.find('.txp-dropdown').toggle().position(
-            {
-                my: "left top",
-                at: "left bottom",
-                of: this
-            });
-        } else {
-            var menu = $ui.find('.txp-dropdown').toggle().position(
-            {
-                my: "right top",
-                at: "right bottom",
-                of: this
-            });
-        };
-
-        $(document).one('click blur', function () {
-            menu.hide();
-        });
-
-        return false;
-    });
-
-    $ui.find('.txp-search-buttons').controlgroup();
-    $ui.find('.txp-dropdown').hide().menu().click(function (e) {
-        e.stopPropagation();
-    });
+    $ui.find('.txp-search-buttons').controlgroup()
 
     $ui.find('.txp-search-clear').click(function(e) {
         e.preventDefault()
@@ -1631,9 +1647,11 @@ var uniqueID = (function() {
 jQuery.fn.txpColumnize = function ()
 {
     var $table = $(this), items = [], selectAll = true, stored = true,
-        $headers = $table.find('thead tr>th'), tabind = uniqueID();
+        $headers = $table.find('thead tr>th');
 
-    if ($table.closest('form').find('.txp-list-options').length) return this
+    if ($table.closest('form').find('.txp-list-options').length) {
+        return this
+    }
 
     $headers.each(function (index) {
         var $this = $(this), $title = $this.text().trim(), $id = $this.data('col');
@@ -1651,9 +1669,10 @@ jQuery.fn.txpColumnize = function ()
         }
 
         var disabled = $this.hasClass('asc') || $this.hasClass('desc') ? ' disabled="disabled"' : '';
-        var $li = $('<li><div role="menuitem"><input class="checkbox active" id="opt-col-' + index + '-' + tabind + '" data-name="list_options" checked="checked" value="' + $id + '" data-index="' + index + '" type="checkbox"' + disabled + '><label for="opt-col-' + index + '-' + tabind + '">' + $title + '</label></div></li>');
+        var $li = $('<li '+(disabled ? 'class="ui-state-disabled" ' : '')+'/>')
+        $li.html('<div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="list_options" checked="checked" value="' + $id + '" data-index="' + index + '" type="checkbox"' + disabled + ' />&nbsp;' + $title + '</label></div>');
         var $target = $table.find('tr>*:nth-child(' + (index + 1) + ')');
-        var me = $li.find('#opt-col-' + index + '-' + tabind).on('change', function (ev) {
+        var me = $li.find('input').on('change', function (ev) {
             toggleColumn($id, $target, $(this).prop('checked'));
         });
 
@@ -1677,31 +1696,12 @@ jQuery.fn.txpColumnize = function ()
     }
 
     var $ui = $('<div class="txp-list-options"><a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> ' + textpattern.gTxt('list_options') + '</a></div>');
-    var $menu = $('<ul class="txp-dropdown" role="menu" />');
+    var $menu = $('<ul class="txp-dropdown" role="menu" />').hide()
 
-    $menu.html($('<li><div role="menuitem"><input class="checkbox active" id="opt-col-all' + tabind + '" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + '><label for="opt-col-all' + tabind + '">' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
+    $menu.html($('<li class="txp-dropdown-toggle-all"><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + ' />&nbsp;' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
 
-    $ui.append($menu);
-
-    $ui.find('.txp-list-options-button').on('click', function (e) {
-        var dir = (langdir == 'rtl' ? 'left' : 'right');
-        var menu = $ui.find('.txp-dropdown').toggle().position(
-        {
-            my: dir+" top",
-            at: dir+" bottom",
-            of: this
-        });
-
-        $(document).one('click blur', function () {
-            menu.hide();
-        });
-
-        return false;
-    });
-
-    $ui.find('.txp-dropdown').hide().menu().click(function (e) {
-        e.stopPropagation();
-    });
+    $ui.append($menu)
+    $menu.txpMenu($ui.find('.txp-list-options-button'))
 
     $ui.txpMultiEditForm({
         'checkbox'   : 'input:not(:disabled)[data-name="list_options"][type=checkbox]',
@@ -1712,6 +1712,7 @@ jQuery.fn.txpColumnize = function ()
     });
 
     $(this).closest('form').prepend($ui);
+
     return this
 }
 
@@ -1799,8 +1800,8 @@ jQuery.fn.txpFileupload = function (options) {
     if (!jQuery.fn.fileupload) return this
 
     var form = this, fileInput = this.find('input[type="file"]'),
-        maxChunkSize = textpattern.prefs.max_upload_size || 1000000,
-        maxFileSize = textpattern.prefs.max_file_size || 1000000
+        maxChunkSize = Math.min(parseFloat(textpattern.prefs.max_upload_size || 1000000), Number.MAX_SAFE_INTEGER)
+        maxFileSize = Math.min(parseFloat(textpattern.prefs.max_file_size || 1000000), Number.MAX_SAFE_INTEGER)
 
     form.fileupload($.extend({
         paramName: fileInput.attr('name'),
@@ -1842,10 +1843,19 @@ jQuery.fn.txpFileupload = function (options) {
         form.fileupload('add', {
             files: fileInput.prop('files')
         })
+        fileInput.val('')
     }).bind('fileuploadsubmit', function (e, data) {
-        var formData = options.formData || []
-        $.merge(formData, form.serializeArray())
-        data.formData = formData;
+        data.formData = $.merge([], options.formData)
+        $.merge(data.formData, form.serializeArray())
+
+        // Reduce maxChunkSize by extra data size (?)
+        var res = typeof data.formData.entries !== 'undefined'
+        ? Array.from(data.formData.entries(), function(prop) {
+            return prop[1].name.length + prop[1].value.length
+        }).reduce(function(a, b) {return a + b + 2}, 0)
+        : 256
+
+        form.fileupload('option', 'maxChunkSize', maxChunkSize - 8*(res + 255))
     });
 /*
     fileInput.on('change', function(e) {
@@ -1877,7 +1887,7 @@ jQuery.fn.txpUploadPreview = function(template) {
 
     form.find('input[type="file"]').on('change', function (e) {
         last.nextAll().remove()
-        
+
         $(this.files).each(function (index) {
             var preview = '', mime = this.type.split('/'), hash = typeof(md5) == 'function' ? md5(this.name) : index, status = this.size > maxSize ? 'alert' : '';
 
@@ -2037,7 +2047,7 @@ textpattern.Route.add('article, file', function () {
 
 // 'Clone' button on Pages, Forms, Styles panels.
 
-textpattern.Route.add('css, page, form', function () {
+textpattern.Route.add('skin, css, page, form', function () {
     $('.txp-clone').click(function (e) {
         e.preventDefault();
         var target = $(this).data('form');
@@ -2185,6 +2195,51 @@ textpattern.Route.add('image', function () {
         var height = $h.val();
         $w.val(height);
         $h.val(width);
+    });
+});
+
+// Sections panel. Used for edit panel and multiedit change of page+style.
+// This can probably be cleaned up / optimised.
+
+textpattern.Route.add('section', function ()
+{
+    /**
+     * Display assets based on the selected theme.
+     *
+     * @param  string skin The theme name from which to show assets
+     */
+    function section_theme_show(skin) {
+        $('#section_page, #section_css, #multiedit_page, #multiedit_css').empty();
+        $pageSelect = $('[name=section_page]');
+        $styleSelect = $('[name=css]');
+
+        $.each(skin_page, function(key, items) {
+            if (items.skin == skin) {
+                var isSelected = (items.name == page_sel) ? ' selected' : '';
+                $pageSelect.append('<option'+isSelected+'>'+items.name+'</option>');
+            }
+        });
+
+        $.each(skin_style, function(key, items) {
+            if (items.skin == skin) {
+                var isSelected = (items.name == style_sel) ? ' selected' : '';
+                $styleSelect.append('<option'+isSelected+'>'+items.name+'</option>');
+            }
+        });
+    }
+
+    $('#section_details, .multi_edit_form').on('change', '#section_skin, #multiedit_skin', function() {
+        section_theme_show($(this).val());
+    });
+
+    // Invoke the handler now to set things on initial page load.
+    $('#section_skin').change();
+
+    $('select[name=edit_method]').change(function() {
+        if ($(this).val() === 'changepagestyle') {
+            var theSkin = $('#multiedit_skin').val();
+            section_theme_show(theSkin);
+        }
     });
 });
 
@@ -2364,4 +2419,5 @@ $(document).ready(function () {
 
     // Arm UI.
     $('.not-ready').removeClass('not-ready');
+    textpattern.Console.announce()
 });

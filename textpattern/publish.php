@@ -160,7 +160,9 @@ if (!empty($locale)) {
 $txp_user = null;
 
 // i18n.
-$textarray = (txpinterface == 'css') ? array() : load_lang(LANG);
+if (txpinterface !== 'css') {
+    load_lang(LANG);
+}
 
 // Tidy up the site.
 janitor();
@@ -488,8 +490,22 @@ function preText($s, $prefs)
     }
 
     // By this point we should know the section, so grab its page and CSS.
+    // Logged-in users with enough privs use the skin they're currently editing.
     if (txpinterface != 'css') {
-        $rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
+        $rs = safe_row("skin, page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
+
+        $userInfo = is_logged_in();
+        $skin = '';
+
+        if (isset($userInfo['name']) && has_privs('skin', $userInfo['name'])) {
+            // Can't use get_pref() because it assumes $txp_user, which is not set on public site.
+            $skin = safe_field(
+                "val",
+                "txp_prefs",
+                "name = 'skin_editing' AND (user_name = '".doSlash($userInfo['name'])."')");
+        }
+
+        $out['skin'] = (!empty($skin) ? $skin : (isset($rs['skin']) ? $rs['skin'] : ''));
         $out['page'] = isset($rs['page']) ? $rs['page'] : '';
         $out['css'] = isset($rs['css']) ? $rs['css'] : '';
     }
@@ -531,7 +547,7 @@ function textpattern()
     txp_status_header('200 OK');
 
     set_error_handler('tagErrorHandler');
-    $html = parse_page($pretext['page']);
+    $html = parse_page($pretext['page'], $pretext['skin']);
 
     if ($html === false) {
         txp_die(gTxt('unknown_section'), '404');
@@ -550,9 +566,10 @@ function textpattern()
 }
 
 // -------------------------------------------------------------
-function output_css($s = '', $n = '')
+function output_css($s = '', $n = '', $t = '')
 {
     $order = '';
+    $skinquery = $t ? " AND skin='".doSlash($t)."'" : '';
 
     if ($n) {
         if (!is_scalar($n)) {
@@ -570,13 +587,14 @@ function output_css($s = '', $n = '')
             txp_die('Not Found', 404);
         }
 
-        $cssname = safe_field('css', 'txp_section', "name = '".doSlash($s)."'");
+        $cssname = safe_field('css', 'txp_section', "name='".doSlash($s)."' AND skin='".doSlash($t)."'");
     }
 
     if (!empty($cssname)) {
-        $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$order));
+        $css = join(n, safe_column_num('css', 'txp_css', "name IN ('$cssname')".$skinquery.$order));
         set_error_handler('tagErrorHandler');
-        echo parse_page(null, $css);
+        @header('Content-Type: text/css; charset=utf-8');
+        echo get_pref('parse_css', false) ? parse_page(null, null, $css) : $css;
         restore_error_handler();
     }
 }
@@ -677,9 +695,8 @@ function article($atts, $thing = null)
 
 function doArticles($atts, $iscustom, $thing = null)
 {
-    global $pretext, $prefs, $thispage;
+    global $pretext, $thispage;
     extract($pretext);
-    extract($prefs);
     $customFields = getCustomFields();
     $customlAtts = array_null(array_flip($customFields));
 
@@ -693,7 +710,7 @@ function doArticles($atts, $iscustom, $thing = null)
             'excerpted' => '',
             'author'    => '',
             'month'     => '',
-            'expired'   => $publish_expired_articles,
+            'expired'   => get_pref('publish_expired_articles'),
             'id'        => '',
             'exclude'   => '',
         );
@@ -739,7 +756,7 @@ function doArticles($atts, $iscustom, $thing = null)
         $theAtts['frontpage'] = ($theAtts['frontpage'] && $s && $s == 'default');
         $theAtts['excerpted'] = 0;
         $theAtts['exclude'] = 0;
-        $theAtts['expired'] = $publish_expired_articles;
+        $theAtts['expired'] = get_pref('publish_expired_articles');
 
         filterAtts($theAtts);
     }
@@ -768,7 +785,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
         // Searchable article fields are limited to the columns of the
         // textpattern table and a matching fulltext index must exist.
-        $cols = do_list_unique($searchable_article_fields);
+        $cols = do_list_unique(get_pref('searchable_article_fields'));
 
         if (empty($cols) or $cols[0] == '') {
             $cols = array('Title', 'Body');
@@ -814,10 +831,19 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     // Building query parts.
-    $frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';
+    if ($exclude && $exclude !== true) {
+        $exclude = array_map('strtolower', do_list_unique($exclude));
+        $excluded = array_filter($exclude, 'is_numeric');
+    } else {
+        $exclude or $exclude = array();
+        $excluded = array();
+    }
+
+    $frontpage = ($frontpage && (!$q || $issticky)) ? filterFrontPage() : '';
+    $match = do_list_unique($match);
+    $category !== true or $category = category(array());
     $category  = join("','", doSlash(do_list_unique($category)));
     $categories = array();
-    $match = do_list_unique($match);
 
     if (in_array('Category1', $match)) {
         $categories[] = "Category1 IN ('$category')";
@@ -827,15 +853,20 @@ function doArticles($atts, $iscustom, $thing = null)
         $categories[] = "Category2 IN ('$category')";
     }
 
+    $not = $exclude === true || in_array('category', $exclude) ? '!' : '';
     $categories = join(" OR ", $categories);
-    $category  = (!$category or !$categories)  ? '' : " AND ($categories)";
-    $section   = (!$section)   ? '' : " AND Section IN ('".join("','", doSlash(do_list_unique($section)))."')";
+    $category  = (!$category || !$categories)  ? '' : " AND $not($categories)";
+    $not = $exclude === true || in_array('section', $exclude) ? 'NOT' : '';
+    $section !== true or $section = section(array());
+    $section   = (!$section)   ? '' : " AND Section $not IN ('".join("','", doSlash(do_list_unique($section)))."')";
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
-    $author    = (!$author)    ? '' : " AND AuthorID IN ('".join("','", doSlash(do_list_unique($author)))."')";
-    $ids = $id ? array_map('intval', do_list_unique($id)) : array();
-    $exclude = $exclude ? array_map('intval', do_list_unique($exclude)) : array();
-    $id        = ((!$id)        ? '' : " AND ID IN (".join(',', $ids).")")
-        .((!$exclude)   ? '' : " AND ID NOT IN (".join(',', $exclude).")");
+    $not = $exclude === true || in_array('author', $exclude) ? 'NOT' : '';
+    $author !== true or $author = author(array('escape' => false, 'title' => false));
+    $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
+    $not = $exclude === true || in_array('id', $exclude) ? 'NOT' : '';
+    $ids = $id ? ($id === true ? array(article_id()) : array_map('intval', do_list_unique($id))) : array();
+    $id        = ((!$ids)        ? '' : " AND ID $not IN (".join(',', $ids).")")
+        .(!$excluded   ? '' : " AND ID NOT IN (".join(',', $excluded).")");
 
     $timeq = '';
 
@@ -864,14 +895,18 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     // Allow keywords for no-custom articles. That tagging mode, you know.
+    $keywords !== true or $keywords = keywords(array());
+
     if ($keywords) {
+        $keyparts = array();
+        $not = $exclude === true || in_array('keywords', $exclude) ? '!' : '';
         $keys = doSlash(do_list_unique($keywords));
 
         foreach ($keys as $key) {
             $keyparts[] = "FIND_IN_SET('".$key."', Keywords)";
         }
 
-        $keywords = " AND (".join(' or ', $keyparts).")";
+        !$keyparts or $keywords = " AND $not(".join(' or ', $keyparts).")";
     }
 
     if ($q && $searchsticky) {
@@ -920,8 +955,8 @@ function doArticles($atts, $iscustom, $thing = null)
     }
 
     // Preserve order of custom article ids unless 'sort' attribute is set.
-    if (!empty($atts['id']) && empty($atts['sort'])) {
-        $safe_sort = "FIELD(id, ".join(',', $ids).")";
+    if (!empty($ids) && empty($atts['sort'])) {
+        $safe_sort = "FIELD(id, ".join(',', $ids)."), ".doSlash($sort);
     } else {
         $safe_sort = doSlash($sort);
     }
@@ -946,7 +981,7 @@ function doArticles($atts, $iscustom, $thing = null)
         while ($a = nextRow($rs)) {
             ++$count;
             populateArticleData($a);
-            global $thisarticle, $uPosted, $limit;
+            global $thisarticle;
             $thisarticle['is_first'] = ($count == 1);
             $thisarticle['is_last'] = ($count == $last);
 
@@ -960,14 +995,11 @@ function doArticles($atts, $iscustom, $thing = null)
                 }
 
                 $articles[] = parse(gps('Form'));
-            } elseif ($allowoverride and $a['override_form']) {
+            } elseif ($allowoverride && $a['override_form']) {
                 $articles[] = parse_form($a['override_form']);
             } else {
                 $articles[] = ($thing) ? parse($thing) : parse_form($fname);
             }
-
-            // Sending these to paging_link(); Required?
-            $uPosted = $a['uPosted'];
 
             unset($GLOBALS['thisarticle']);
         }
@@ -982,8 +1014,7 @@ function doArticles($atts, $iscustom, $thing = null)
 
 function doArticle($atts, $thing = null)
 {
-    global $pretext, $prefs, $thisarticle;
-    extract($prefs);
+    global $pretext, $thisarticle;
     extract($pretext);
 
     extract(gpsa(array(
@@ -1035,18 +1066,18 @@ function doArticle($atts, $thing = null)
         }
     }
 
-    if (!empty($thisarticle) and ($thisarticle['status'] == $status or gps('txpreview'))) {
+    if (!empty($thisarticle) && ($thisarticle['status'] == $status || gps('txpreview'))) {
         extract($thisarticle);
         $thisarticle['is_first'] = 1;
         $thisarticle['is_last'] = 1;
 
-        if ($allowoverride and $override_form) {
+        if ($allowoverride && $override_form) {
             $article = parse_form($override_form);
         } else {
             $article = ($thing) ? parse($thing) : parse_form($form);
         }
 
-        if ($use_comments and $comments_auto_append) {
+        if (get_pref('use_comments') && get_pref('comments_auto_append')) {
             $article .= parse_form('comments_display');
         }
 

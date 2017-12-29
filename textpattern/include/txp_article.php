@@ -1259,11 +1259,11 @@ function get_status_message($Status)
 {
     switch ($Status) {
         case STATUS_PENDING:
-            return gTxt("article_saved_pending");
+            return gTxt('article_saved_pending');
         case STATUS_HIDDEN:
-            return gTxt("article_saved_hidden");
+            return gTxt('article_saved_hidden');
         case STATUS_DRAFT:
-            return gTxt("article_saved_draft");
+            return gTxt('article_saved_draft');
         default:
             return gTxt('article_posted');
     }

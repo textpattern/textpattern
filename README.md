@@ -1,5 +1,8 @@
 # Textpattern CMS
 
+[![Dependencies Status](https://david-dm.org/textpattern/textpattern/status.svg)](https://david-dm.org/textpattern/textpattern)
+[![devDependencies Status](https://david-dm.org/textpattern/textpattern/dev-status.svg)](https://david-dm.org/textpattern/textpattern?type=dev)
+
 [![Textpattern Logo](https://textpattern.io/assets/img/branding/carver/carver-128px.svg)](https://textpattern.com/)
 
 **A flexible, elegant and easy-to-use content management system.**
@@ -125,6 +128,7 @@ Usage: `npm run txp-gitdist <version> [dest-dir]` (`dest-dir` defaults to a
 temporary location).
 
 ```ShellSession
+npm run txp-index
 npm run txp-checksums
 npm run txp-gitdist 1.2.3 ../my-dest-dir
 ```

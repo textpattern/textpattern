@@ -186,7 +186,7 @@ function list_list($message = '', $post = '')
             ),
             'lastmod' => array(
                 'column'  => array('textpattern.LastMod'),
-                'label'   => gTxt('article_modified'),
+                'label'   => gTxt('modified'),
                 'options' => array('case_sensitive' => true),
             ),
         )
@@ -217,12 +217,6 @@ function list_list($message = '', $post = '')
         $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
 
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_list'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-4col-alt')
-        );
-
     $searchBlock =
         n.tag(
             $search->renderForm('list', $search_render_options),
@@ -242,43 +236,26 @@ function list_list($message = '', $post = '')
             );
     }
 
-    $contentBlockStart = n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        )).n.tag_start('div', array(
-            'id'    => 'txp-list-container',
-        ));
-
     $createBlock = implode(n, $createBlock);
+    $contentBlock = '';
 
     $paginator = new \Textpattern\Admin\Paginator($event, 'article');
     $limit = $paginator->getLimit();
-
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $searchBlock.$contentBlockStart.$createBlock;
-
     if ($total < 1) {
-        if ($criteria != 1) {
-            echo graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_results_found'),
-                    array('class' => 'alert-block information')
-                );
-        } else {
-            echo graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_articles_recorded'),
-                    array('class' => 'alert-block information')
-                );
-        }
+        $contentBlock .= graf(
+                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+                gTxt($criteria != 1 ? 'no_results_found' : 'no_articles_recorded'),
+                array('class' => 'alert-block information')
+            );
     } else {
         $show_authors = !has_single_author('textpattern', 'AuthorID');
 
         $headers = array(
             'title' => 'title',
             'posted' => 'posted',
-            'lastmod' => 'article_modified',
+            'lastmod' => 'modified',
             'expires' => 'expires',
             'section' => 'section',
             'category1' => 'category1',
@@ -340,7 +317,7 @@ function list_list($message = '', $post = '')
                     ) + $common_atts);
             }
 
-            echo n.tag_start('form', array(
+            $contentBlock .= n.tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'articles_form',
                     'name'   => 'longform',
@@ -355,7 +332,7 @@ function list_list($message = '', $post = '')
 
             include_once txpath.'/publish/taghandlers.php';
 
-            echo n.tag_start('tbody');
+            $contentBlock .= n.tag_start('tbody');
 
             $validator = new Validator();
 
@@ -417,7 +394,7 @@ function list_list($message = '', $post = '')
                     tag($comment_status, 'span', array('class' => 'comments-status')).' '.
                     tag($comments, 'span', array('class' => 'comments-manage'));
 
-                echo tr(
+                $contentBlock .= tr(
                     td(
                         (
                             (
@@ -476,7 +453,7 @@ function list_list($message = '', $post = '')
                 );
             }
 
-            echo n.tag_end('tbody').
+            $contentBlock .= n.tag_end('tbody').
                 n.tag_end('table').
                 n.tag_end('div'). // End of .txp-listtables.
                 list_multiedit_form($page, $sort, $dir, $crit, $search_method).
@@ -485,17 +462,11 @@ function list_list($message = '', $post = '')
         }
     }
 
-    echo n.tag_start('div', array(
-            'class' => 'txp-navigation',
-            'id'    => $event.'_navigation',
-            'style' => $total < 1 ? 'display:none' : false
-        )).
-        $paginator->render().
-        nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-        n.tag_end('div').
-        n.'</div>'. // End of #txp-list-container.
-        n.tag_end('div'). // End of .txp-layout-1col.
-        n.'</div>'; // End of .txp-layout.
+    $pageBlock = $paginator->render().
+        nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
+
+    $table = new \Textpattern\Admin\Table($event);
+    echo $table->render(compact('total', 'criteria'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
 }
 
 /**

@@ -347,28 +347,50 @@ button {
   /* Support for non-latin languages
    ========================================================================== */
   /**
+ * Bidirectional (bidi) text support.
+ * See: https://www.w3.org/International/articles/inline-bidi-markup/#cssshim
+ */
+  [dir="ltr"],
+  [dir="rtl"] {
+    unicode-bidi: -webkit-isolate;
+    unicode-bidi: isolate;
+  }
+  bdo[dir="ltr"],
+  bdo[dir="rtl"] {
+    unicode-bidi: isolate-override;
+  }
+  /**
  * Preferred font for Japanese language.
  */
-  html[lang="ja-jp"] {
-    font-family: "Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
+  :lang(ja) {
+    font-family: "Hiragino  Sans", "Hiragino Kaku Gothic Pro", "Meiryo UI", sans-serif;
+    font-weight: 300;
   }
   /**
  * Preferred font for Korean language.
  */
-  html[lang="ko-kr"] {
+  :lang(ko) {
     font-family: GulimChe, Gulim, sans-serif;
   }
   /**
- * Preferred font for Chinese (PRC) language.
+ * Preferred font for simplified Chinese (PRC) language.
  */
-  html[lang="zh-cn"] {
-    font-family: SimHei, sans-serif;
+  :lang(zh-cn) {
+    font-family: "PingFang SC", SimHei, sans-serif;
   }
   /**
- * Preferred font for Chinese (Taiwan) language.
+ * Preferred font for traditional Chinese (Taiwan, Hong Kong) language.
  */
-  html[lang="zh-tw"] {
-    font-family: PMingLiU, sans-serif;
+  :lang(zh-tw) {
+    font-family: "PingFang TC", PMingLiU, sans-serif;
+  }
+  /**
+ * Suppress `text-decoration` in some RTL languages for better legibility.
+ */
+  [lang|="ar"] a:hover,
+  [lang|="fa"] a:hover,
+  [lang|="ur"] a:hover {
+    text-decoration: none;
   }
   /* Embedded content
    ========================================================================== */
@@ -598,6 +620,9 @@ button {
   #messagepane span.error {
     background: #9d261d;
   }
+  #messagepane a {
+    color: #ffffff;
+  }
   /*
  * Message close icon.
  *
@@ -609,15 +634,15 @@ button {
     position: absolute;
     top: 0.27777777777778em;
     right: 0.72222222222222em;
-    color: rgba(255, 255, 255, 0.6);
     font-size: 18px;
     font-weight: bold;
     text-decoration: none;
+    opacity: 0.66;
   }
   .close:hover {
-    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     cursor: pointer;
+    opacity: 1;
   }
   /*
  * Flash the alert message using CSS animation.
@@ -985,7 +1010,7 @@ button {
     /* 2 */
     margin: 0;
     color: #000000;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: inherit;
     /* 3 */
     font-size: 13px;
     line-height: 20px;
@@ -1145,6 +1170,12 @@ button {
     padding-right: 0.30769230769231em;
     background-image: none;
     vertical-align: top;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+  [dir="rtl"] select[size],
+  [dir="rtl"] select[multiple] {
+    padding-left: 0.30769230769231em;
   }
   /**
  * Override height set in rule above and restrict to one line field.
@@ -1294,16 +1325,6 @@ button {
   textarea:-moz-ui-invalid {
     border-color: #9d261d;
     box-shadow: none;
-  }
-  /**
- * 1. Add the correct display in IE 11.
- * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
- */
-  progress {
-    /* 1 */
-    display: inline-block;
-    /* 2 */
-    vertical-align: baseline;
   }
   /* Buttons
    ========================================================================== */
@@ -1508,8 +1529,7 @@ button {
   [dir="rtl"] ul.nav-tertiary {
     padding: 0;
   }
-  .nav-tertiary a,
-  .nav-tertiary .navlink-disabled {
+  .nav-tertiary > * {
     border-radius: 0;
   }
   .nav-tertiary > :first-child,
@@ -1577,7 +1597,7 @@ button {
  *     <input class="txp-search-input" type="search" size="24">
  *     <span class="txp-search-buttons">
  *         <button class="txp-search-button">Search</button>
- *         <button class="txp-search-options">Search criteria</button>
+ *         ...
  *     </span>
  * </form>
  */
@@ -2570,6 +2590,63 @@ button {
             box-sizing: content-box;
   }
   /**
+ * 1. Add the correct display in IE 11.
+ * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+  progress {
+    /* 1 */
+    display: inline-block;
+    /* 2 */
+    vertical-align: baseline;
+  }
+  /**
+ * Styled progress indicators.
+ *
+ * Example HTML:
+ *
+ * <progress class="txp-upload-progress"></progress>
+ */
+  .txp-upload-progress {
+    width: 100%;
+    height: 8px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+  .txp-upload-progress::-webkit-progress-value {
+    background-color: #f7c600;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+    background-size: 24px 24px;
+    -webkit-animation: progressbar-stripes linear 4s infinite;
+            animation: progressbar-stripes linear 4s infinite;
+  }
+  .txp-upload-progress::-webkit-progress-bar {
+    background-color: #e7e7e7;
+  }
+  .txp-upload-progress:not([value])::-webkit-progress-bar {
+    background-color: #cccccc;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+    background-size: 24px 24px;
+    -webkit-animation: progressbar-stripes linear 4s infinite;
+            animation: progressbar-stripes linear 4s infinite;
+  }
+  .txp-upload-progress::-moz-progress-bar {
+    background-color: #f7c600;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
+    background-size: 24px 24px;
+    animation: progressbar-stripes linear 4s infinite;
+  }
+  /**
+ * Reverse the progress direction in RTL languages.
+ */
+  [dir="rtl"] progress {
+    animation-direction: reverse;
+  }
+  /**
  * Hide text but still allow screen reader access.
  *
  * Example HTML:
@@ -2590,21 +2667,28 @@ button {
             clip-path: inset(50%);
   }
   /**
+ * Contain width of user-definable content, to avoid potential layout breakage.
+ */
+  .txp-contain {
+    max-width: 30em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  /**
  * Drop down lists.
  *
  * 1. Ensure dropdowns are hidden at page load (prevents content 'jumping').
  *
  * <ul class="txp-dropdown">
- *     <li>
+ *     <li class="txp-dropdown-toggle-all">
  *         <div>
- *             <input class="checkbox" type="checkbox">
- *             <label>Search all</label>
+ *             <label><input class="checkbox" type="checkbox">&nbsp;Toggle all/none selected</label>
  *         </div>
  *     </li>
  *     <li>
  *         <div>
- *             <input class="checkbox active" type="checkbox">
- *             <label>ID#</label>
+ *             <label><input class="checkbox active" type="checkbox">&nbsp;ID#</label>
  *         </div>
  *     </li>
  * </ul>
@@ -2617,14 +2701,10 @@ button {
     z-index: 100;
   }
   .txp-dropdown .checkbox {
-    vertical-align: -0.23076923076923em;
+    margin: 0.153846153846154em;
   }
-  .txp-dropdown .checkbox + label {
-    display: inline-block;
-    width: 85%;
-    padding: 0.23076923076923em 0.30769230769231em;
-    cursor: pointer;
-    vertical-align: text-top;
+  .txp-dropdown-toggle-all {
+    border-bottom: 1px solid #d4d4d4;
   }
   /**
  * Search widget at top of lists.
@@ -2640,22 +2720,30 @@ button {
  *     <input class="txp-search-input" type="search" size="24">
  *     <span class="txp-search-buttons">
  *         <button class="txp-search-button">Search</button>
- *         <button class="txp-search-options">Search criteria</button>
+ *         <button class="txp-search-options">Search options</button>
  *     </span>
  * </form>
  */
   .txp-search {
     display: -webkit-box;
     display: flex;
+    position: relative;
     -webkit-box-pack: end;
             justify-content: flex-end;
     margin: 1em 0;
+    float: right;
   }
   .txp-search .ui-controlgroup {
     flex-wrap: nowrap;
   }
   .txp-search .txp-dropdown {
     z-index: 101;
+  }
+  [dir="rtl"] .txp-search {
+    float: left;
+  }
+  .txp-search-input {
+    max-width: calc(100% - 5.5rem);
   }
   .txp-search-clear {
     -webkit-box-flex: 1;
@@ -2720,6 +2808,7 @@ button {
  * </div>
  */
   .txp-list-options {
+    position: relative;
     margin: 0.46153846153846em 0 1em;
     float: right;
   }
@@ -3242,7 +3331,7 @@ button {
  * Column width and margins of setup panels.
  */
   .txp-setup {
-    max-width: 42em;
+    max-width: 50em;
     margin: 1em auto;
   }
   .welcome .txp-setup {
@@ -3383,8 +3472,8 @@ button {
     border: 1px solid #d4d4d4;
     border-top: 0;
     background: #ffffff;
-    -webkit-box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
-            box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 0.1em 0.125em rgba(0, 0, 0, 0.15);
+            box-shadow: 0 0.1em 0.125em rgba(0, 0, 0, 0.15);
     z-index: 999;
   }
   .txp-save-zone .txp-actions {
@@ -4692,12 +4781,12 @@ button {
     display: inline-block;
     position: relative;
     height: 2.307692307692308em;
-    margin: 0 0.1em 0 0;
+    margin: 0;
     padding: 0.30769230769231em 0.61538461538462em;
     border: 1px solid #cccccc;
     background-clip: padding-box;
     color: #333333;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: inherit;
     /* 1 */
     font-size: 13px;
     line-height: 20px;
@@ -5417,7 +5506,7 @@ button {
   }
   .ui-menu .ui-menu-item-wrapper {
     position: relative;
-    padding: 0.30769230769231em 1em 0.30769230769231em 0.61538461538462em;
+    padding: 0.30769230769231em 0.61538461538462em;
   }
   .ui-menu .ui-menu-divider {
     height: 0;
@@ -5456,9 +5545,6 @@ button {
   [dir="rtl"] .ui-menu {
     padding: 0;
   }
-  [dir="rtl"] .ui-menu .ui-menu-item-wrapper {
-    padding: 0.30769230769231em 0.61538461538462em 0.30769230769231em 1em;
-  }
   [dir="rtl"] .ui-menu .ui-icon {
     right: 0.25em;
     left: auto;
@@ -5484,11 +5570,12 @@ button {
   .ui-progressbar {
     margin-bottom: 1em;
     border-radius: 4px;
+    background-color: #e7e7e7;
     text-align: left;
     overflow: hidden;
   }
   .ui-progressbar-value {
-    height: 8px;
+    height: 6px;
     background-color: #f7c600;
     background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%, transparent);
     background-size: 24px 24px;
@@ -5508,6 +5595,12 @@ button {
  */
   .ui-progressbar-indeterminate .ui-progressbar-value {
     background-color: #cccccc;
+  }
+  /**
+ * Reverse the progressbar direction in RTL languages.
+ */
+  [dir="rtl"] .ui-progressbar-value {
+    animation-direction: reverse;
   }
   /* Selectmenu
    ========================================================================== */
@@ -5563,7 +5656,7 @@ button {
             flex: none;
     -webkit-box-ordinal-group: 3;
             order: 2;
-    margin: 0 -0.25em 0 0.25em;
+    margin: 0.15em -0.25em 0 0.25em;
   }
   .ui-selectmenu-text {
     display: block;
@@ -5609,7 +5702,7 @@ button {
     border-radius: 0 0.5em 0.5em 0;
   }
   [dir="rtl"] .ui-selectmenu-icon {
-    margin: 0 0.25em 0 -0.25em;
+    margin: 0.15em 0.25em 0 -0.25em;
   }
   /**
  * Selectmenu plain buttons.
@@ -5621,8 +5714,8 @@ button {
     border: 0;
     background: transparent;
     color: #004cbf;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    cursor: hand;
+    font-family: inherit;
+    cursor: pointer;
     -webkit-user-select: auto;
        -moz-user-select: auto;
         -ms-user-select: auto;
@@ -5638,8 +5731,14 @@ button {
   .no-ui-button .ui-selectmenu-button:focus {
     outline: thin solid #0066ff;
   }
-  .no-ui-button .ui-selectmenu-icon {
+  .no-ui-button .ui-selectmenu-button .ui-selectmenu-icon {
     margin: 0;
+    opacity: 0.66;
+  }
+  .no-ui-button .ui-selectmenu-button:hover .ui-selectmenu-icon,
+  .no-ui-button .ui-selectmenu-button:active .ui-selectmenu-icon,
+  .no-ui-button .ui-selectmenu-button:focus .ui-selectmenu-icon {
+    opacity: 1;
   }
   /* Slider
    ========================================================================== */
@@ -5930,81 +6029,6 @@ button {
             box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
     z-index: 9999;
   }
-  /* Multi-select menu
-   ========================================================================== */
-  /**
- * jQuery UI MultiSelect Widget (a jQuery UI plugin)
- *
- * Some classes and HTML elements generally added via JavaScript, more info -
- * https://github.com/ehynds/jquery-ui-multiselect-widget
- *
- * Example HTML:
- *
- * TODO
- */
-  .ui-multiselect {
-    padding: 2px 0 2px 4px;
-    text-align: left;
-  }
-  .ui-multiselect span.ui-icon {
-    float: right;
-  }
-  .ui-multiselect-single .ui-multiselect-checkboxes input {
-    position: absolute !important;
-    top: auto !important;
-    left: -9999px;
-  }
-  .ui-multiselect-single .ui-multiselect-checkboxes label {
-    padding: 5px !important;
-  }
-  .ui-multiselect-menu {
-    display: none;
-    position: absolute;
-    padding: 3px;
-    text-align: left;
-  }
-  .ui-multiselect-checkboxes {
-    position: relative;
-    overflow-y: auto;
-  }
-  .ui-multiselect-checkboxes label {
-    display: block;
-    padding: 3px 1px;
-    border: 1px solid transparent;
-    cursor: default;
-  }
-  .ui-multiselect-checkboxes label input {
-    position: relative;
-    top: 1px;
-  }
-  .ui-multiselect-checkboxes label img {
-    height: 30px;
-    padding-right: 3px;
-    vertical-align: middle;
-  }
-  .ui-multiselect-checkboxes li {
-    padding-right: 3px;
-    clear: both;
-    font-size: 0.9em;
-    list-style: none;
-  }
-  .ui-multiselect-checkboxes .ui-multiselect-optgroup {
-    padding: 3px;
-  }
-  .ui-multiselect-columns {
-    display: inline-block;
-    vertical-align: top;
-  }
-  .ui-multiselect-checkboxes .ui-multiselect-optgroup a {
-    display: block;
-    margin: 1px 0;
-    padding: 3px;
-    border-bottom: 1px solid;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-  }
 }
 
 /* ==========================================================================
@@ -6090,6 +6114,7 @@ button {
     -webkit-box-pack: start;
             justify-content: flex-start;
     margin-top: 0;
+    float: none;
   }
   /**
      * Reposition search clearer.
@@ -6128,6 +6153,22 @@ button {
   }
   .txp-save-zone .txp-actions {
     margin-bottom: 1em;
+  }
+  /**
+     * Restrict width of multiselect to avoid layout breakage.
+     */
+  select[size],
+  select[multiple] {
+    max-width: 22em;
+  }
+  select[size] option,
+  select[multiple] option {
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
   }
 }
 
@@ -6576,11 +6617,5 @@ button {
  */
   .txp-prefs-group.ui-tabs-panel {
     display: block !important;
-  }
-  /**
- * Don't print jQuery UI multi-select menus.
- */
-  .ui-multiselect-menu {
-    display: none;
   }
 }

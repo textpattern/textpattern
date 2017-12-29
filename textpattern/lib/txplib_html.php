@@ -87,7 +87,7 @@ function end_page()
         echo pluggable_ui('admin_side', 'footer', $theme->footer());
         callback_event('admin_side', 'body_end');
         echo script_js('vendors/PrismJS/prism/prism.js', TEXTPATTERN_SCRIPT_URL).
-            script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON)).
+            script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON), true).
             n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
     }
 }
@@ -916,7 +916,7 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
 
     $inlineHelp = (isset($help[1])) ? $help[1] : '';
 
-    if ($label) {
+    if ($label !== '') {
         $labelContent = tag(gTxt($label).popHelp($help[0]), 'label', array('for' => $name)).$tools;
     } else {
         $labelContent = gTxt($name).popHelp($help[0]).$tools;
@@ -1186,10 +1186,11 @@ function assHead()
  * @param  int    $width    Popup window width
  * @param  int    $height   Popup window height
  * @param  string $class    HTML class
+ * @param  string $inline   Inline pophelp
  * @return string HTML
  */
 
-function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
+function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline = '')
 {
     global $txp_user, $prefs;
 
@@ -1208,9 +1209,11 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
 
     if ($url === false) {
         $atts['class'] = $class;
-        // Use inline pophelp, if unauthorized user or setup stage
-        if (empty($txp_user)) {
-            $url = '#';
+        $url = '#';
+        if (! empty($inline)) {
+            $atts['data-item'] = $inline;
+        } elseif (empty($txp_user)) {
+            // Use inline pophelp, if unauthorized user or setup stage
             $atts['data-item'] = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp($help_var);
         } else {
             $url = '?event=help&step=pophelp&item='.urlencode($help_var);
@@ -1484,8 +1487,9 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
                 $wraptag_val
             ).
             tag(null, 'progress', array(
-                'class' => 'upload-progress',
-                'style' =>  'display:none; height:2px; width:100%; position:absolute; z-index:100')),
+                'class' => 'txp-upload-progress',
+                'style' =>  'display:none;'
+            )),
             'form', array(
                 'class'   => 'upload-form'.($class ? ' '.trim($class) : ''),
                 'method'  => 'post',
@@ -1579,7 +1583,7 @@ EOF;
  * its content if the event / step match.
  *
  * @param  string     $js    JavaScript code
- * @param  int|string $flags Flags TEXTPATTERN_SCRIPT_URL | TEXTPATTERN_SCRIPT_ATTACH_VERSION, or noscript alternative if a string
+ * @param  int|string $flags Flags TEXTPATTERN_SCRIPT_URL | TEXTPATTERN_SCRIPT_ATTACH_VERSION, or boolean or noscript alternative if a string
  * @param  array      $route Optional events/steps upon which to add the script
  * @return string HTML with embedded script element
  * @example
@@ -1588,6 +1592,7 @@ EOF;
 
 function script_js($js, $flags = '', $route = array())
 {
+    static $store = '';
     global $event, $step;
 
     $targetEvent = empty($route[0]) ? null : (array)$route[0];
@@ -1613,9 +1618,21 @@ function script_js($js, $flags = '', $route = array())
 
         $js = preg_replace('#<(/?)(script)#i', '\\x3c$1$2', $js);
 
-        $out = n.tag(n.trim($js).n, 'script');
+        if (is_bool($flags)) {
+            if (!$flags) {
+                $store .= n.$js;
 
-        if ($flags) {
+                return;
+            } else {
+                $js = $store.n.$js;
+                $store = '';
+            }
+        }
+
+        $js = trim($js);
+        $out = $js ? n.tag(n.$js.n, 'script') : '';
+
+        if ($flags && $flags !== true) {
             $out .= n.tag(n.trim($flags).n, 'noscript');
         }
 
@@ -1623,51 +1640,6 @@ function script_js($js, $flags = '', $route = array())
     }
 
     return '';
-}
-
-/**
- * Renders a "Details" toggle checkbox.
- * TODO: remove this and related js functions in favour of txp_columniser
- *
- * @param  string $classname Unique identfier. The cookie's name will be derived from this value
- * @param  bool   $form      Create as a stand-along &lt;form&gt; element
- * @return string HTML
- */
-
-function toggle_box($classname, $form = false)
-{
-    return '';
-
-    $name = 'cb_toggle_'.$classname;
-    $id = escape_js($name);
-    $class = escape_js($classname);
-
-    $out = checkbox($name, 1, cs('toggle_'.$classname), 0, $name).
-        n.tag(gTxt('detail_toggle'), 'label', array('for' => $name));
-
-    $js = <<<EOF
-        $(function ()
-        {
-            $('input')
-                .filter(function () {
-                    if ($(this).attr('id') === '{$id}') {
-                        setClassDisplay('{$class}', $(this).is(':checked'));
-                        return true;
-                    }
-                })
-                .change(function () {
-                    toggleClassRemember('{$class}');
-                });
-        });
-EOF;
-
-    $out .= script_js($js);
-
-    if ($form) {
-        return form($out);
-    }
-
-    return $out;
 }
 
 /**
@@ -1846,7 +1818,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
                 break;
             case 1:
                 if ($breakby[0] > 0) {
-                    $breakby[0] == 1 or $list = array();
+                    $breakby[0] == 1 or $newlist = array_chunk($list, $breakby[0]);
                     break;
                 }
             default:
@@ -1856,8 +1828,9 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
                     $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
                 }
 
-                $list = array_map('implode', $newlist);
         }
+
+        empty($newlist) or $list = array_map('implode', $newlist);
     }
 
     // Non-enclosing breaks.

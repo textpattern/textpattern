@@ -151,7 +151,7 @@ function file_list($message = '', $ids = array())
             ),
             'filename' => array(
                 'column' => 'txp_file.filename',
-                'label'  => gTxt('file_name'),
+                'label'  => gTxt('name'),
             ),
             'title' => array(
                 'column' => 'txp_file.title',
@@ -163,7 +163,7 @@ function file_list($message = '', $ids = array())
             ),
             'category' => array(
                 'column' => array('txp_file.category', 'txp_category.title'),
-                'label'  => gTxt('file_category'),
+                'label'  => gTxt('category'),
             ),
             'status' => array(
                 'column' => array('txp_file.status'),
@@ -198,12 +198,6 @@ function file_list($message = '', $ids = array())
         $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
 
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_file'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-4col-alt')
-        );
-
     $searchBlock =
         n.tag(
             $search->renderForm('file_list', $search_render_options),
@@ -227,17 +221,16 @@ function file_list($message = '', $ids = array())
         $categories = event_category_popup('file', '', 'file_category');
         $createBlock[] =
             n.tag_start('div', array('class' => 'txp-control-panel')).
-            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('file_category'), 'label', array('for' => 'file_category')).$categories : '')));
+            n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('category'), 'label', array('for' => 'file_category')).$categories : '')));
 
-        $existing_files = get_filenames();
-
-        if ($existing_files) {
+        if ($existing_files = get_filenames()) {
+            $selected = count($existing_files) >= 5 ? array() : null;
             $createBlock[] =
                 form(
                     eInput('file').
                     sInput('file_create').
                     tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
-                    selectInput('filename', $existing_files, array(), false, '', 'file-existing').
+                    selectInput('filename', $existing_files, $selected, false, '', 'file-existing').
                     fInput('submit', '', gTxt('create')),
                 '', '', 'post', 'assign-existing-form', '', 'assign_file');
         }
@@ -245,15 +238,8 @@ function file_list($message = '', $ids = array())
         $createBlock[] = tag_end('div');
     }
 
-    $contentBlockStart = n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        ));
-
     $createBlock = implode(n, $createBlock);
-
-    echo $searchBlock.$contentBlockStart.$createBlock.
-        n.tag_start('div', array('id' => 'txp-list-container'));
+    $contentBlock = '';
 
     $paginator = new \Textpattern\Admin\Paginator();
     $limit = $paginator->getLimit();
@@ -261,11 +247,11 @@ function file_list($message = '', $ids = array())
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
     if ($total < 1) {
-            echo graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                gTxt($criteria != 1 ? 'no_results_found': 'no_files_recorded'),
-                array('class' => 'alert-block information')
-            );
+        $contentBlock .= graf(
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt($criteria != 1 ? 'no_results_found' : 'no_files_recorded'),
+            array('class' => 'alert-block information')
+        );
     } else {
         $rs = safe_query(
             "SELECT
@@ -287,7 +273,7 @@ function file_list($message = '', $ids = array())
         if ($rs && numRows($rs)) {
             $show_authors = !has_single_author('txp_file');
 
-            echo n.tag_start('form', array(
+            $contentBlock .= n.tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'files_form',
                     'name'   => 'longform',
@@ -307,7 +293,7 @@ function file_list($message = '', $ids = array())
                             (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                     ).
                     column_head(
-                        'file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method,
+                        'name', 'filename', 'file', true, $switch_dir, $crit, $search_method,
                             (('filename' == $sort) ? "$dir " : '').'txp-list-col-filename'
                     ).
                     column_head(
@@ -319,7 +305,7 @@ function file_list($message = '', $ids = array())
                             (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
                     ).
                     column_head(
-                        'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method,
+                        'category', 'category', 'file', true, $switch_dir, $crit, $search_method,
                             (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                     ).
                     hCell(gTxt(
@@ -423,7 +409,7 @@ function file_list($message = '', $ids = array())
                     $status = span(gTxt('none'), array('class' => 'error'));
                 }
 
-                echo tr(
+                $contentBlock .= tr(
                     td(
                         $multi_edit, '', 'txp-list-col-multi-edit'
                     ).
@@ -434,7 +420,7 @@ function file_list($message = '', $ids = array())
                         )
                     ).
                     td(
-                        $name, '', 'txp-list-col-filename'
+                        $name, '', 'txp-list-col-filename txp-contain'
                     ).
                     td(
                         txpspecialchars($title), '', 'txp-list-col-title'
@@ -471,7 +457,7 @@ function file_list($message = '', $ids = array())
                 );
             }
 
-            echo
+            $contentBlock .= 
                 n.tag_end('tbody').
                 n.tag_end('table').
                 n.tag_end('div'). // End of .txp-listtables.
@@ -481,17 +467,11 @@ function file_list($message = '', $ids = array())
         }
     }
 
-    echo n.tag_start('div', array(
-        'class' => 'txp-navigation',
-        'id'    => $event.'_navigation',
-        'style' => $total < 1 ? 'display:none' : false
-    )).
-    $paginator->render().
-    nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-    n.tag_end('div');
+    $pageBlock = $paginator->render().
+        nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
-    echo n.'</div>'. //End of #txp-list-container
-        n.'</div>'.  // End of .txp-layout-1col.
+    $table = new \Textpattern\Admin\Table($event);
+    echo $table->render(compact('total', 'criteria'), $searchBlock, $createBlock, $contentBlock, $pageBlock).
         n.tag(
         null,
         'div', array(
@@ -499,8 +479,7 @@ function file_list($message = '', $ids = array())
             'id'         => 'tagbuild_links',
             'aria-label' => gTxt('tagbuilder'),
             'title'      => gTxt('tagbuilder'),
-        )).
-        n.'</div>'; // End of .txp-layout.
+        ));
 }
 
 // -------------------------------------------------------------
@@ -753,7 +732,7 @@ function file_edit($message = '', $id = '')
                         'file_category',
                         event_category_popup('file', $category, 'file_category').
                         n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link'),
-                        'file_category', '', array('class' => 'txp-form-field edit-file-category')
+                        'category', '', array('class' => 'txp-form-field edit-file-category')
                     ).
 //                    inputLabel(
 //                        'perms',
@@ -877,7 +856,7 @@ function file_insert()
 
     require_privs('file.edit.own');
     $messages = $ids = array();
-    $fileshandler = Txp::get('Textpattern\Server\Files');
+    $fileshandler = Txp::get('\Textpattern\Server\Files');
     $files = $fileshandler->refactor($_FILES['thefile']);
     $titles = gps('title');
 
@@ -932,7 +911,7 @@ function file_insert()
         $response = $ids ? 'textpattern.Relay.data.fileid = ["'.implode('","', $ids).'"].concat(textpattern.Relay.data.fileid || []);'.n : '';
 
         foreach ($messages as $message) {
-            $response .= 'textpattern.Console.addMessage('.json_encode($message).', "uploadEnd");'.n;
+            $response .= 'textpattern.Console.addMessage('.json_encode($message, TEXTPATTERN_JSON).', "uploadEnd");'.n;
         }
 
         send_script_response($response);

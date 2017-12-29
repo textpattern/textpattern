@@ -59,6 +59,8 @@ if ($event == 'lang') {
 
 function list_languages($message = '')
 {
+    global $txp_user;
+
     $available_lang = Txp::get('\Textpattern\L10n\Lang')->available();
     $installed_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_INSTALLED);
     $active_lang = Txp::get('\Textpattern\L10n\Lang')->available(TEXTPATTERN_LANG_ACTIVE);
@@ -93,6 +95,17 @@ function list_languages($message = '')
 
     $grid = '';
     $done = array();
+    $in_use_by = safe_rows('val, user_name', 'txp_prefs', "name = 'language_ui' AND val in (".join(',', quote_list(array_keys($represented_lang))).") AND user_name != '".doSlash($txp_user)."'");
+
+    $langUse = array();
+
+    foreach ($in_use_by as $row) {
+        $langUse[$row['val']][] = $row['user_name'];
+    }
+
+    foreach ($langUse as $key => $row) {
+        $langUse[$key] = tag(eLink('admin', 'author_list', 'search_method', 'login', '('.count($row).')' , 'crit', join(',', doSlash($row))), 'span', array('class' => 'txp-lang-user-count'));
+    }
 
     // Create the widget components.
     foreach ($represented_lang + $available_lang as $langname => $langdata) {
@@ -152,7 +165,8 @@ function list_languages($message = '')
         $grid .= tag(
             graf(
                 ($icon ? '<span class="ui-icon '.$icon.'"></span>' : '').n.
-                tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto'))
+                tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).
+                ($btnRemove && array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
             ).
             graf(
                 (has_privs('lang.edit')
@@ -219,13 +233,13 @@ function save_language()
         'language',
     )));
 
-    $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($language);
-    $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
-    $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $language;
+    $txpLocale = Txp::get('\Textpattern\L10n\Locale');
+    $langName = fetchLangName($language);
 
     if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language)."' LIMIT 1")) {
-        $locale = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language);
-        $new_locale = $prefs['locale'] = Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_ALL, array($language, 'C'))->getLocale();
+        $candidates = array($language, $txpLocale->getLocaleLanguage($language), 'C');
+        $locale = $txpLocale->getLanguageLocale($language);
+        $new_locale = $txpLocale->setLocale(LC_ALL, array_filter($candidates))->getLocale();
         set_pref('locale', $new_locale);
 
         if ($new_locale == $locale) {
@@ -249,33 +263,32 @@ function save_language()
 
 function save_language_ui()
 {
-    global $textarray, $locale;
+    global $locale;
 
     extract(psa(array(
         'language_ui',
     )));
 
-    $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($language_ui);
-    $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
-    $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $language_ui;
+    if (get_pref('language_ui') != $language_ui) {
+        $langName = fetchLangName($language_ui);
 
-    if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language_ui)."' LIMIT 1")) {
-        $locale = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language_ui);
+        if (safe_field("lang", 'txp_lang', "lang = '".doSlash($language_ui)."' LIMIT 1")) {
+            $locale = Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale($language_ui);
 
-        if ($locale) {
-            $msg = gTxt('preferences_saved');
-            set_pref('language_ui', $language_ui, 'admin', PREF_CORE, 'text_input', 0, PREF_PRIVATE);
-            $textarray = load_lang($language_ui);
+            if ($locale) {
+                set_pref('language_ui', $language_ui, 'admin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+                txp_die('', 307, '?event=lang');
+            } else {
+                $msg = array(gTxt('locale_not_available_for_language', array('{name}' => $langName)), E_WARNING);
+            }
         } else {
-            $msg = array(gTxt('locale_not_available_for_language', array('{name}' => $langName)), E_WARNING);
+            $msg = array(gTxt('language_not_installed', array('{name}' => $langName)), E_ERROR);
         }
-
-        list_languages($msg);
-
-        return;
+    } else {
+        $msg = gTxt('preferences_saved');
     }
 
-    list_languages(array(gTxt('language_not_installed', array('{name}' => $langName)), E_ERROR));
+    list_languages($msg);
 }
 
 /**
@@ -288,18 +301,19 @@ function save_language_ui()
 function get_language()
 {
     $lang_code = gps('lang_code');
+    $langName = fetchLangName($lang_code);
+    $txpLang = Txp::get('\Textpattern\L10n\Lang');
 
-    if (Txp::get('\Textpattern\L10n\Lang')->install_file($lang_code)) {
+    if ($txpLang->installFile($lang_code)) {
         callback_event('lang_installed', 'file', false, $lang_code);
 
-        Txp::get('\Textpattern\L10n\Lang')->install_textpack_plugins();
-
-        $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($lang_code);
-        $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
-        $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $lang_code;
+        $txpLang->available(TEXTPATTERN_LANG_AVAILABLE, TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE);
+        Txp::get('\Textpattern\Plugin\Plugin')->installTextpacks();
 
         return list_languages(gTxt('language_updated', array('{name}' => $langName)));
     }
+
+    return list_languages(array(gTxt('language_not_installed', array('{name}' => $langName)), E_ERROR));
 }
 
 /**
@@ -358,7 +372,7 @@ function get_textpack()
     require_privs('lang.edit');
 
     $textpack = ps('textpack');
-    $n = Txp::get('\Textpattern\L10n\Lang')->install_textpack($textpack, true);
+    $n = Txp::get('\Textpattern\L10n\Lang')->installTextpack($textpack, true);
     list_languages(gTxt('textpack_strings_installed', array('{count}' => $n)));
 }
 
@@ -371,14 +385,10 @@ function get_textpack()
 
 function remove_language()
 {
-    global $textarray;
-
     require_privs('lang.edit');
 
     $lang_code = gps('lang_code');
-    $langFile = Txp::get('\Textpattern\L10n\Lang')->findFilename($lang_code);
-    $langInfo = Txp::get('\Textpattern\L10n\Lang')->fetchMeta($langFile);
-    $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $lang_code;
+    $langName = fetchLangName($lang_code);
 
     $ret = safe_delete('txp_lang', "lang = '".doSlash($lang_code)."'");
 
@@ -390,13 +400,30 @@ function remove_language()
         $site_lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG, true);
         $ui_lang = get_pref('language_ui', $site_lang, true);
         $ui_lang = (array_key_exists($ui_lang, $represented_lang)) ? $ui_lang : $site_lang;
-        set_pref('language_ui', $ui_lang, 'admin', PREF_CORE, 'text_input', 0, PREF_PRIVATE);
-        $textarray = load_lang($ui_lang);
+        set_pref('language_ui', $ui_lang, 'admin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+        load_lang($ui_lang);
     } else {
         $msg = gTxt('cannot_delete', array('{thing}' => $langName));
     }
 
     list_languages($msg);
+}
+
+/**
+ * Get the lang name from the given language file.
+ *
+ * @param  string $lang_code Language designator
+ * @return string
+ */
+
+function fetchLangName($lang_code)
+{
+    $txpLang = Txp::get('\Textpattern\L10n\Lang');
+    $langFile = $txpLang->findFilename($lang_code);
+    $langInfo = $txpLang->fetchMeta($langFile);
+    $langName = (isset($langInfo['name'])) ? $langInfo['name'] : $lang_code;
+
+    return $langName;
 }
 
 /**

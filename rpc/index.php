@@ -7,7 +7,7 @@
  * XML-RPC Server for Textpattern 4.0.x
  * http://web.archive.org/web/20150119065246/http://txp.kusor.com/rpc-api
  *
- * Copyright (C) 2005-2006, 2016 The Textpattern Development Team
+ * Copyright (C) 2005-2006, 2017 The Textpattern Development Team
  * Author: Pedro Palazón
  *
  * This file is part of Textpattern.
@@ -25,10 +25,10 @@
  * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
-// TODO: change error reporting to E_ALL, including E_NOTICE to detect subtle bugs?
+// TODO: change error reporting to E_ALL, including E_NOTICE to detect subtle bugs? See https://github.com/textpattern/textpattern/issues/1012
 error_reporting(E_ALL & ~E_NOTICE);
 
-// TODO: if display_errors is set to 0... who will ever see errors?
+// TODO: if display_errors is set to 0... who will ever see errors? See https://github.com/textpattern/textpattern/issues/1012
 ini_set("display_errors", "0");
 
 if (@ini_get('register_globals')) {

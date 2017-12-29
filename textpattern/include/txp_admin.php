@@ -312,7 +312,9 @@ function author_list($message = '')
 
         $search->setAliases('privs', $levels);
 
-        list($criteria, $crit, $search_method) = $search->getFilter();
+        list($criteria, $crit, $search_method) = $search->getFilter(array(
+            'login' => array('can_list' => true),
+            ));
 
         $search_render_options = array(
             'placeholder' => 'search_users',
@@ -464,7 +466,7 @@ function author_list($message = '')
                     'id'    => 'users_navigation',
                 )).
                 $paginator->render().
-                nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
+                nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
                 n.tag_end('div');
         }
 

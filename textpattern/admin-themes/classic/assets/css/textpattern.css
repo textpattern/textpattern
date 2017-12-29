@@ -350,28 +350,42 @@ button {
   /* Support for non-latin languages
    ========================================================================== */
   /**
+ * Bidirectional (bidi) text support.
+ * See: https://www.w3.org/International/articles/inline-bidi-markup/#cssshim
+ */
+  [dir="ltr"],
+  [dir="rtl"] {
+    unicode-bidi: -webkit-isolate;
+    unicode-bidi: isolate;
+  }
+  bdo[dir="ltr"],
+  bdo[dir="rtl"] {
+    unicode-bidi: isolate-override;
+  }
+  /**
  * Preferred font for Japanese language.
  */
-  html[lang="ja-jp"] {
-    font-family: "Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
+  :lang(ja) {
+    font-family: "Hiragino  Sans", "Hiragino Kaku Gothic Pro", "Meiryo UI", sans-serif;
+    font-weight: 300;
   }
   /**
  * Preferred font for Korean language.
  */
-  html[lang="ko-kr"] {
+  :lang(ko) {
     font-family: GulimChe, Gulim, sans-serif;
   }
   /**
- * Preferred font for Chinese (PRC) language.
+ * Preferred font for simplified Chinese (PRC) language.
  */
-  html[lang="zh-cn"] {
-    font-family: SimHei, sans-serif;
+  :lang(zh-cn) {
+    font-family: "PingFang SC", SimHei, sans-serif;
   }
   /**
- * Preferred font for Chinese (Taiwan) language.
+ * Preferred font for traditional Chinese (Taiwan, Hong Kong) language.
  */
-  html[lang="zh-tw"] {
-    font-family: PMingLiU, sans-serif;
+  :lang(zh-tw) {
+    font-family: "PingFang TC", PMingLiU, sans-serif;
   }
   /**
  * Suppress `text-decoration` in some RTL languages for better legibility.
@@ -611,6 +625,9 @@ button {
     border-color: #e1b2b2;
     background: #9d261d;
   }
+  #messagepane a {
+    color: #ffffff;
+  }
   /*
  * Message close icon.
  *
@@ -622,15 +639,15 @@ button {
     position: absolute;
     top: 0.27777777777778em;
     right: 0.6666667em;
-    color: rgba(255, 255, 255, 0.6);
     font-size: 18px;
     font-weight: bold;
     text-decoration: none;
+    opacity: 0.66;
   }
   .close:hover {
-    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     cursor: pointer;
+    opacity: 1;
   }
   /*
  * Flash the alert message using CSS animation.
@@ -979,6 +996,12 @@ button {
     padding-right: 0.25em;
     background-image: none;
     vertical-align: top;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+  [dir="rtl"] select[size],
+  [dir="rtl"] select[multiple] {
+    padding-left: 0.25em;
   }
   /**
  * Override height set in rule above and restrict to one line field.
@@ -1130,16 +1153,6 @@ button {
     border-color: #9d261d;
     box-shadow: none;
   }
-  /**
- * 1. Add the correct display in IE 11.
- * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
- */
-  progress {
-    /* 1 */
-    display: inline-block;
-    /* 2 */
-    vertical-align: baseline;
-  }
   /* Buttons
    ========================================================================== */
   /**
@@ -1213,14 +1226,21 @@ button {
     color: #1a1919;
     text-decoration: none;
   }
-  button:focus,
+  button:focus, button.ui-state-active,
   [type="reset"]:focus,
+  [type="reset"].ui-state-active,
   [type="submit"]:focus,
+  [type="submit"].ui-state-active,
   input[type="button"]:focus,
+  input[type="button"].ui-state-active,
   .txp-button:focus,
+  .txp-button.ui-state-active,
   .txp-logout a:focus,
+  .txp-logout a.ui-state-active,
   .navlink:focus,
-  .navlink-active:focus {
+  .navlink.ui-state-active,
+  .navlink-active:focus,
+  .navlink-active.ui-state-active {
     border-color: #5b9dd9;
     outline: 2px solid transparent;
   }
@@ -2012,6 +2032,51 @@ button {
             box-sizing: content-box;
   }
   /**
+ * 1. Add the correct display in IE 11.
+ * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+  progress {
+    /* 1 */
+    display: inline-block;
+    /* 2 */
+    vertical-align: baseline;
+  }
+  /**
+ * Reverse the progress direction in RTL languages.
+ */
+  [dir="rtl"] progress {
+    animation-direction: reverse;
+  }
+  /**
+ * Styled progress indicators.
+ *
+ * Example HTML:
+ *
+ * <progress class="txp-upload-progress"></progress>
+ */
+  .txp-upload-progress {
+    width: 100%;
+    height: 8px;
+    border: 1px solid #cccccc;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+  .txp-upload-progress::-webkit-progress-value {
+    background-color: #238c23;
+  }
+  .txp-upload-progress::-webkit-progress-bar {
+    background-color: #ffffff;
+  }
+  .txp-upload-progress:not([value])::-webkit-progress-bar {
+    background-color: #d4d4d4;
+  }
+  .txp-upload-progress::-moz-progress-bar {
+    background-color: #238c23;
+  }
+  /**
  * Hide text but still allow screen reader access.
  *
  * Example HTML:
@@ -2032,21 +2097,28 @@ button {
             clip-path: inset(50%);
   }
   /**
+ * Contain width of user-definable content, to avoid potential layout breakage.
+ */
+  .txp-contain {
+    max-width: 30em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  /**
  * Drop down lists.
  *
  * 1. Ensure dropdowns are hidden at page load (prevents content 'jumping').
  *
  * <ul class="txp-dropdown">
- *     <li>
+ *     <li class="txp-dropdown-toggle-all">
  *         <div>
- *             <input class="checkbox" type="checkbox">
- *             <label>Search all</label>
+ *             <label><input class="checkbox" type="checkbox">&nbsp;Toggle all/none selected</label>
  *         </div>
  *     </li>
  *     <li>
  *         <div>
- *             <input class="checkbox active" type="checkbox">
- *             <label>ID#</label>
+ *             <label><input class="checkbox active" type="checkbox">&nbsp;ID#</label>
  *         </div>
  *     </li>
  * </ul>
@@ -2058,15 +2130,8 @@ button {
     width: 18em;
     z-index: 100;
   }
-  .txp-dropdown .checkbox {
-    vertical-align: -0.25em;
-  }
-  .txp-dropdown .checkbox + label {
-    display: inline-block;
-    width: 85%;
-    padding: 0.25em;
-    cursor: pointer;
-    vertical-align: text-top;
+  .txp-dropdown-toggle-all {
+    border-bottom: 1px solid #d4d4d4;
   }
   /**
  * Search widget at top of lists.
@@ -2089,9 +2154,11 @@ button {
   .txp-search {
     display: -webkit-box;
     display: flex;
+    position: relative;
     -webkit-box-pack: end;
             justify-content: flex-end;
     margin: 1em 0;
+    float: right;
   }
   .txp-search .ui-menu {
     position: absolute;
@@ -2103,6 +2170,9 @@ button {
   }
   .txp-search .txp-dropdown {
     z-index: 101;
+  }
+  [dir="rtl"] .txp-search {
+    float: left;
   }
   .txp-search-clear {
     -webkit-box-flex: 1;
@@ -4773,7 +4843,7 @@ button {
   }
   .ui-menu .ui-menu-item-wrapper {
     position: relative;
-    padding: 0.25em 1.25em 0.25em 0.75em;
+    padding: 0.25em 0.75em;
   }
   .ui-menu .ui-menu-divider {
     height: 0;
@@ -4812,9 +4882,6 @@ button {
   [dir="rtl"] .ui-menu {
     padding: 0;
   }
-  [dir="rtl"] .ui-menu .ui-menu-item-wrapper {
-    padding: 0.25em 0.75em 0.25em 1.25em;
-  }
   [dir="rtl"] .ui-menu .ui-icon {
     right: 0.25em;
     left: auto;
@@ -4843,8 +4910,8 @@ button {
     overflow: hidden;
   }
   .ui-progressbar-value {
-    height: 8px;
-    background-color: #c7dbfa;
+    height: 6px;
+    background-color: #238c23;
   }
   /**
  * Progressbar with indeterminate value.
@@ -4858,7 +4925,7 @@ button {
  * </div>
  */
   .ui-progressbar-indeterminate .ui-progressbar-value {
-    background-color: #cccccc;
+    background-color: #d4d4d4;
   }
   /* Selectmenu
    ========================================================================== */
@@ -4973,7 +5040,7 @@ button {
     background: transparent;
     color: #996633;
     font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
-    cursor: hand;
+    cursor: pointer;
     -webkit-user-select: auto;
        -moz-user-select: auto;
         -ms-user-select: auto;
@@ -4987,8 +5054,14 @@ button {
   .no-ui-button .ui-selectmenu-button:focus {
     outline: thin solid #5b9dd9;
   }
-  .no-ui-button .ui-selectmenu-icon {
+  .no-ui-button .ui-selectmenu-button .ui-selectmenu-icon {
     margin: 0;
+    opacity: 0.66;
+  }
+  .no-ui-button .ui-selectmenu-button:hover .ui-selectmenu-icon,
+  .no-ui-button .ui-selectmenu-button:active .ui-selectmenu-icon,
+  .no-ui-button .ui-selectmenu-button:focus .ui-selectmenu-icon {
+    opacity: 1;
   }
   /* Slider
    ========================================================================== */

@@ -143,7 +143,7 @@ class Core
 
     public function getPrefsDefault()
     {
-        global $permlink_mode, $siteurl, $blog_uid, $theme_name, $pref, $language;
+        global $permlink_mode, $siteurl, $theme_name, $pref, $language;
 
         $out = @json_decode(file_get_contents($this->data_dir.DS.'core.prefs'), true);
         if (empty($out)) {
@@ -159,13 +159,15 @@ class Core
 
         $pf = array();
         $pf['file_base_path'] = dirname(txpath).DS.'files';
+        $pf['skin_base_path'] = dirname(txpath).DS.'themes';
         $pf['path_to_site']   = dirname(txpath);
         $pf['tempdir']        = find_temp_dir();
         $pf['siteurl']        = $siteurl;
         $pf['theme_name']     = empty($theme_name) ? 'hive' : $theme_name;
         $pf['blog_mail_uid']  = empty($_SESSION['email']) ? md5(rand()).'blog@gmail.com' : $_SESSION['email'];
-        $pf['blog_uid']       = empty($blog_uid) ? md5(uniqid(rand(), true)) : $blog_uid;
+        $pf['blog_uid']       = empty($pref['blog_uid']) ? md5(uniqid(rand(), true)) : $pref['blog_uid'];
         $pf['language']       = $language;
+        $pf['language_ui']    = $language;
         $pf['locale']         = getlocale($language);
         $pf['sitename']       = gTxt('my_site');
         $pf['site_slogan']    = gTxt('my_slogan');

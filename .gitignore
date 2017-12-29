@@ -15,6 +15,9 @@ Thumbs.db
 /images/!.gitignore
 /files/*
 /files/!.htaccess-dist
+/themes/*
+/themes/!.htaccess-dist
+!/themes/default/
 *~
 
 # Development files  #
@@ -24,3 +27,4 @@ Thumbs.db
 /npm-debug.log
 /yarn.lock
 /yarn-error.log
+.github/index

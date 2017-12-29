@@ -150,7 +150,7 @@ function image_list($message = '')
             ),
             'category' => array(
                 'column' => array('txp_image.category', 'txp_category.title'),
-                'label'  => gTxt('image_category'),
+                'label'  => gTxt('category'),
             ),
             'ext' => array(
                 'column' => 'txp_image.ext',
@@ -191,12 +191,6 @@ function image_list($message = '')
         $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
 
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_image'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-4col-alt')
-        );
-
     $searchBlock =
         n.tag(
             $search->renderForm('image_list', $search_render_options),
@@ -219,28 +213,21 @@ function image_list($message = '')
         $categories = event_category_popup('image', '', 'image_category');
         $createBlock[] =
             n.tag(
-                n.upload_form('upload_image', 'upload_image', 'image_insert[]', 'image', '', $file_max_upload_size, '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('image_category'), 'label', array('for' => 'image_category')).$categories : ''))),
+                n.upload_form('upload_image', 'upload_image', 'image_insert[]', 'image', '', $file_max_upload_size, '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('category'), 'label', array('for' => 'image_category')).$categories : ''))),
                 'div', array('class' => 'txp-control-panel')
             );
     }
 
-    $contentBlockStart = n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        ));
-
     $createBlock = implode(n, $createBlock);
+    $contentBlock = '';
 
     $paginator = new \Textpattern\Admin\Paginator();
     $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $searchBlock.$contentBlockStart.$createBlock.n
-        .tag_start('div', array('id' => 'txp-list-container'));
-
     if ($total < 1) {
-        echo graf(
+        $contentBlock .= graf(
                     span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                     gTxt($criteria != 1 ? 'no_results_found' : 'no_images_recorded'),
                     array('class' => 'alert-block information')
@@ -266,12 +253,12 @@ function image_list($message = '')
             FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
         );
 
-        echo pluggable_ui('image_ui', 'extend_controls', '', $rs);
+        $contentBlock .= pluggable_ui('image_ui', 'extend_controls', '', $rs);
 
         if ($rs && numRows($rs)) {
             $show_authors = !has_single_author('txp_image');
 
-            echo n.tag_start('form', array(
+            $contentBlock .= n.tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'images_form',
                     'name'   => 'longform',
@@ -306,7 +293,7 @@ function image_list($message = '')
                         gTxt('tags'), '', ' class="txp-list-col-tag-build" scope="col"'
                     ).
                     column_head(
-                        'image_category', 'category', 'image', true, $switch_dir, $crit, $search_method,
+                        'category', 'category', 'image', true, $switch_dir, $crit, $search_method,
                             (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                     ).
                     (
@@ -383,7 +370,7 @@ function image_list($message = '')
                 $can_view = has_privs('image.edit.own');
                 $can_edit = has_privs('image.edit') || ($author === $txp_user && $can_view);
 
-                echo tr(
+                $contentBlock .= tr(
                     td(
                         $can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;', '', 'txp-list-col-multi-edit'
                     ).
@@ -395,7 +382,7 @@ function image_list($message = '')
                         )
                     ).
                     td(
-                        ($can_view ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name'
+                        ($can_view ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name txp-contain'
                     ).
                     td(
                         gTime($uDate), '', 'txp-list-col-created date'
@@ -417,26 +404,20 @@ function image_list($message = '')
                 );
             }
 
-            echo
-                n.tag_end('tbody').
+            $contentBlock .= n.tag_end('tbody').
                 n.tag_end('table').
                 n.tag_end('div'). // End of .txp-listtables.
                 image_multiedit_form($page, $sort, $dir, $crit, $search_method).
                 tInput().
                 n.tag_end('form');
-            }
+        }
     }
 
-    echo n.tag_start('div', array(
-        'class' => 'txp-navigation',
-        'id'    => $event.'_navigation',
-        'style' => $total < 1 ? 'display: none' : false
-    )).
-    $paginator->render().
-    nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-    n.tag_end('div');
+    $pageBlock = $paginator->render().
+        nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
-    echo n.'</div>'.n.tag_end('div'). // End of .txp-layout-1col.
+    $table = new \Textpattern\Admin\Table($event);
+    echo $table->render(compact('total', 'criteria'), $searchBlock, $createBlock, $contentBlock, $pageBlock).
         n.tag(
         null,
         'div', array(
@@ -444,8 +425,7 @@ function image_list($message = '')
             'id'         => 'tagbuild_links',
             'aria-label' => gTxt('tagbuilder'),
             'title'      => gTxt('tagbuilder'),
-        )).
-        n.'</div>'; // End of .txp-layout.
+        ));
 }
 
 /**
@@ -729,7 +709,7 @@ function image_edit($message = '', $id = '')
                                     n.eLink('category', 'list', '', '', gTxt('edit'), '', '', '', 'txp-option-link')
                                 : (($category !== '') ? fetch_category_title($category, 'image') : gTxt('none'))
                             ),
-                            'image_category', '', array('class' => 'txp-form-field edit-image-category')
+                            'category', '', array('class' => 'txp-form-field edit-image-category')
                         ).
                         inputLabel(
                             'image_alt_text',
@@ -749,6 +729,21 @@ function image_edit($message = '', $id = '')
                             'caption', '', array('class' => 'txp-form-field txp-form-field-textarea edit-image-caption')
                         ).
                         pluggable_ui('image_ui', 'extend_detail_form', '', $rs).
+                        graf(
+                            href(gTxt('go_back'), array(
+                                'event'         => 'image',
+                                'sort'          => $sort,
+                                'dir'           => $dir,
+                                'page'          => $page,
+                                'search_method' => $search_method,
+                                'crit'          => $crit,
+                            ), array('class' => 'txp-button')).
+                            ($can_edit
+                                ? fInput('submit', '', gTxt('save'), 'publish')
+                                : ''
+                            ),
+                            array('class' => 'txp-edit-actions')
+                        ).
                         hInput('id', $id).
                         eInput('image').
                         sInput('image_save').
@@ -758,21 +753,6 @@ function image_edit($message = '', $id = '')
                         hInput('search_method', $search_method).
                         hInput('crit', $crit),
                         'image_details'
-                    ).
-                    graf(
-                        href(gTxt('go_back'), array(
-                            'event'         => 'image',
-                            'sort'          => $sort,
-                            'dir'           => $dir,
-                            'page'          => $page,
-                            'search_method' => $search_method,
-                            'crit'          => $crit,
-                        ), array('class' => 'txp-button')).
-                        ($can_edit
-                            ? fInput('submit', '', gTxt('save'), 'publish')
-                            : ''
-                        ),
-                        array('class' => 'txp-edit-actions')
                     ),
                     '', '', 'post', '', '', 'image_details_form'),
                 'div', array('class' => 'txp-layout-4col-alt')
@@ -803,7 +783,7 @@ function image_insert()
 
     global $app_mode;
     $messages = $ids = array();
-    $fileshandler = Txp::get('Textpattern\Server\Files');
+    $fileshandler = Txp::get('\Textpattern\Server\Files');
     $files = $fileshandler->refactor($_FILES['thefile']);
     $meta = gpsa(array('caption', 'alt', 'category'));
 
@@ -825,7 +805,7 @@ function image_insert()
         $response = !empty($ids) ? 'textpattern.Relay.data.fileid = ["'.implode('","', $ids).'"].concat(textpattern.Relay.data.fileid || []);'.n : '';
 
         foreach ($messages as $message) {
-            $response .= 'textpattern.Console.addMessage('.json_encode((array) $message).', "uploadEnd");'.n;
+            $response .= 'textpattern.Console.addMessage('.json_encode((array) $message, TEXTPATTERN_JSON).', "uploadEnd");'.n;
         }
 
         send_script_response($response);
