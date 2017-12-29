@@ -20,6 +20,13 @@
         "html": "text_input",
         "position": "60"
     },
+    "skin_base_path": {
+        "val": "",
+        "type": "0",
+        "event": "admin",
+        "html": "text_input",
+        "position": "70"
+    },
     "tempdir": {
         "val": "",
         "type": "0",
@@ -369,6 +376,13 @@
         "event": "publish",
         "html": "yesnoradio",
         "position": "220"
+    },
+    "enable_short_tags": {
+        "val": "1",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "230"
     },
     "use_plugins": {
         "val": "1",
