@@ -2269,7 +2269,16 @@ function sanitizeForPage($text)
 
 function sanitizeForTheme($text)
 {
-    return mb_substr(sanitizeForFile(sanitizeForPage($text)), 0, 63);
+    $maxLength = 63;
+    $out = sanitizeForFile(sanitizeForPage($text));
+
+    if (function_exists('mb_substr')) {
+        $out = mb_substr($out, 0, $maxLength);
+    } else {
+        $out = substr($out, 0, $maxLength);
+    }
+
+    return $out;
 }
 
 /**
