@@ -2269,16 +2269,9 @@ function sanitizeForPage($text)
 
 function sanitizeForTheme($text)
 {
-    $maxLength = 63;
     $out = sanitizeForFile(sanitizeForPage($text));
 
-    if (function_exists('mb_substr')) {
-        $out = mb_substr($out, 0, $maxLength);
-    } else {
-        $out = substr($out, 0, $maxLength);
-    }
-
-    return $out;
+    return Txp::get('\Textpattern\Type\StringType', $out)->substring(0, 63)->getString();
 }
 
 /**
