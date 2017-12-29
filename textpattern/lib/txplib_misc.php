@@ -5063,7 +5063,7 @@ function getCustomFields()
         foreach ($cfs as $name) {
             preg_match('/(\d+)/', $name, $match);
 
-            if (!empty($prefs[$name])) {
+            if ($prefs[$name] !== '') {
                 $out[$match[1]] = strtolower($prefs[$name]);
             }
         }
