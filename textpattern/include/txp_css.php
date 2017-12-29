@@ -28,6 +28,8 @@
  * @package Admin\CSS
  */
 
+use Textpattern\Skin\Main as Skin;
+
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
@@ -36,10 +38,11 @@ if ($event == 'css') {
     require_privs('css');
 
     bouncer($step, array(
-        'pour'       => false,
-        'css_save'   => true,
-        'css_delete' => true,
-        'css_edit'   => false,
+        'pour'            => false,
+        'css_save'        => true,
+        'css_delete'      => true,
+        'css_edit'        => false,
+        'css_skin_change' => true,
     ));
 
     switch (strtolower($step)) {
@@ -58,6 +61,10 @@ if ($event == 'css') {
         case 'css_edit':
             css_edit();
             break;
+        case "css_skin_change":
+            css_skin_change();
+            css_edit();
+            break;
     }
 }
 
@@ -73,7 +80,7 @@ function css_list($current)
     $out = array();
     $protected = safe_column("DISTINCT css", 'txp_section', "1 = 1");
 
-    $criteria = 1;
+    $criteria = "skin = '" . doSlash($current['skin']) . "'";
     $criteria .= callback_event('admin_criteria', 'css_list', 0, $criteria);
 
     $rs = safe_rows_start("name", 'txp_css', $criteria . ' ORDER BY name');
@@ -153,13 +160,17 @@ function css_edit($message = '', $refresh_partials = false)
         'copy',
         'save_error',
         'savenew',
+        'skin',
     ))));
 
     $default_name = safe_field("css", 'txp_section', "name = 'default'");
 
-    $name = sanitizeForPage(assert_string(gps('name')));
-    $newname = sanitizeForPage(assert_string(gps('newname')));
+    $name = sanitizeForTheme(assert_string(gps('name')));
+    $newname = sanitizeForTheme(assert_string(gps('newname')));
+    $skin = ($skin !== '') ? $skin : Skin::getCurrent();
     $class = 'async';
+
+    Skin::setCurrent($skin);
 
     if ($step == 'css_delete' || empty($name) && $step != 'pour' && !$savenew) {
         $name = get_pref('last_css_saved', $default_name);
@@ -172,10 +183,10 @@ function css_edit($message = '', $refresh_partials = false)
         $class = '';
     }
 
-    $thecss = gps('css');
-
     if (!$save_error) {
-        $thecss = fetch('css', 'txp_css', 'name', $name);
+        $thecss = safe_field('css', 'txp_css', "name='".doSlash($name)."' AND skin='" . doSlash($skin) . "'");
+    } else {
+        $thecss = gps('css');
     }
 
     $actionsExtras = '';
@@ -193,6 +204,8 @@ function css_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
+    $skinBlock = n.Skin::renderSwitchForm('css', 'css_skin_change', $skin);
+
     $buttons = graf(
         tag_void('input', array(
             'class'  => 'publish',
@@ -206,6 +219,7 @@ function css_edit($message = '', $refresh_partials = false)
         'name'    => $name,
         'newname' => $newname,
         'default' => $default_name,
+        'skin'    => $skin,
         'css'     => $thecss,
         );
 
@@ -234,7 +248,7 @@ function css_edit($message = '', $refresh_partials = false)
 
     // Styles create/switcher column.
     echo n.tag(
-        $partials['list']['html'].n,
+        $skinBlock.$partials['list']['html'].n,
         'div', array(
             'class' => 'txp-layout-4col-alt',
             'id'    => 'content_switcher',
@@ -271,10 +285,13 @@ function css_save()
         'savenew',
         'copy',
         'css',
+        'skin',
     )))));
 
-    $name = sanitizeForPage(assert_string(ps('name')));
-    $newname = sanitizeForPage(assert_string(ps('newname')));
+    $name = sanitizeForTheme(assert_string(ps('name')));
+    $newname = sanitizeForTheme(assert_string(ps('newname')));
+
+    Skin::setCurrent($skin);
 
     $save_error = false;
     $message = '';
@@ -288,7 +305,11 @@ function css_save()
             $_POST['newname'] = $newname;
         }
 
-        $exists = safe_field("name", 'txp_css', "name = '".doSlash($newname)."'");
+        $safe_skin = doSlash($skin);
+        $safe_name = doSlash($name);
+        $safe_newname = doSlash($newname);
+
+        $exists = safe_field('name', 'txp_css', "name = '$safe_newname' AND skin = '$safe_skin'");
 
         if (($newname !== $name) && $exists) {
             $message = array(gTxt('css_already_exists', array('{name}' => $newname)), E_ERROR);
@@ -301,7 +322,7 @@ function css_save()
         } else {
             if ($savenew or $copy) {
                 if ($newname) {
-                    if (safe_insert('txp_css', "name = '".doSlash($newname)."', css = '$css'")) {
+                    if (safe_insert('txp_css', "name = '$safe_newname', css = '$css', skin = '$safe_skin'")) {
                         set_pref('last_css_saved', $newname, 'css', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                         update_lastmod('css_created', compact('newname', 'name', 'css'));
 
@@ -317,9 +338,11 @@ function css_save()
                     $save_error = true;
                 }
             } else {
-                if (safe_update('txp_css', "css = '$css', name = '".doSlash($newname)."'", "name = '".doSlash($name)."'")) {
+                if (safe_update('txp_css',
+                        "css = '$css', name = '$safe_newname', skin = '$safe_skin'",
+                        "name = '$safe_name' AND skin = '$safe_skin'")) {
+                    safe_update('txp_section', "css = '$safe_newname'", "css='$safe_name'");
                     set_pref('last_css_saved', $newname, 'css', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
-                    safe_update('txp_section', "css = '".doSlash($newname)."'", "css='".doSlash($name)."'");
                     update_lastmod('css_saved', compact('newname', 'name', 'css'));
 
                     $message = gTxt('css_updated', array('{name}' => $newname));
@@ -351,14 +374,15 @@ function css_delete()
     global $prefs;
 
     $name = ps('name');
+    $skin = get_pref('skin_editing', 'default');
     $count = safe_count('txp_section', "css = '".doSlash($name)."'");
     $message = '';
 
     if ($count) {
         $message = array(gTxt('css_used_by_section', array('{name}' => $name, '{count}' => $count)), E_ERROR);
     } else {
-        if (safe_delete('txp_css', "name = '".doSlash($name)."'")) {
-            callback_event('css_deleted', '', 0, $name);
+        if (safe_delete('txp_css', "name = '".doSlash($name)."' AND skin='".doSlash($skin)."'")) {
+            callback_event('css_deleted', '', 0, compact('name', 'skin'));
             $message = gTxt('css_deleted', array('{name}' => $name));
             if ($name === get_pref('last_css_saved')) {
                 unset($prefs['last_css_saved']);
@@ -367,6 +391,27 @@ function css_delete()
         }
     }
     css_edit($message);
+}
+
+/**
+ * Changes the skin in which styles are being edited.
+ *
+ * Keeps track of which skin is being edited from panel to panel.
+ *
+ * @param  string $skin Optional skin name. Read from GET/POST otherwise
+ */
+
+function css_skin_change($skin = null)
+{
+    if ($skin === null) {
+        $skin = gps('skin');
+    }
+
+    if ($skin) {
+        Skin::setCurrent($skin);
+    }
+
+    return true;
 }
 
 /**
@@ -379,7 +424,7 @@ function css_delete()
 function css_partial_name($rs)
 {
     $name = $rs['name'];
-    $newname = $rs['newname'];
+    $skin = $rs['skin'];
 
     $titleblock = inputLabel(
         'new_style',
@@ -395,13 +440,14 @@ function css_partial_name($rs)
         $titleblock .= hInput('name', $name);
     }
 
-    $titleblock .= eInput('css').sInput('css_save');
+    $titleblock .= hInput('skin', $skin).
+        eInput('css').sInput('css_save');
 
     return $titleblock;
 }
 
 /**
- * Renders css name field.
+ * Renders css name value.
  *
  * @param  array  $rs Record set
  * @return string HTML

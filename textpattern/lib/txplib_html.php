@@ -916,7 +916,7 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
 
     $inlineHelp = (isset($help[1])) ? $help[1] : '';
 
-    if ($label) {
+    if ($label !== '') {
         $labelContent = tag(gTxt($label).popHelp($help[0]), 'label', array('for' => $name)).$tools;
     } else {
         $labelContent = gTxt($name).popHelp($help[0]).$tools;
@@ -1212,7 +1212,7 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline
         $url = '#';
         if (! empty($inline)) {
             $atts['data-item'] = $inline;
-        }elseif (empty($txp_user)) {
+        } elseif (empty($txp_user)) {
             // Use inline pophelp, if unauthorized user or setup stage
             $atts['data-item'] = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp($help_var);
         } else {
@@ -1629,7 +1629,8 @@ function script_js($js, $flags = '', $route = array())
             }
         }
 
-        $out = n.tag(n.trim($js).n, 'script');
+        $js = trim($js);
+        $out = $js ? n.tag(n.$js.n, 'script') : '';
 
         if ($flags && $flags !== true) {
             $out .= n.tag(n.trim($flags).n, 'noscript');
@@ -1682,7 +1683,7 @@ function cookie_box($classname, $form = true)
         });
 EOF;
 
-    $out .= script_js($js, false);
+    $out .= script_js($js);
 
     if ($form) {
         if (serverSet('QUERY_STRING')) {
@@ -1817,7 +1818,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
                 break;
             case 1:
                 if ($breakby[0] > 0) {
-                    $breakby[0] == 1 or $list = array();
+                    $breakby[0] == 1 or $newlist = array_chunk($list, $breakby[0]);
                     break;
                 }
             default:
@@ -1827,8 +1828,9 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
                     $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
                 }
 
-                $list = array_map('implode', $newlist);
         }
+
+        empty($newlist) or $list = array_map('implode', $newlist);
     }
 
     // Non-enclosing breaks.

@@ -67,9 +67,11 @@ class HelpAdmin
     private static function pophelp_load($lang)
     {
         $file = txpath."/lang/{$lang}_pophelp.xml";
+
         if (!file_exists($file)) {
             return false;
         }
+
         if (empty(self::$pophelp_xml)) {
             self::$pophelp_xml = simplexml_load_file($file, "SimpleXMLElement", LIBXML_NOCDATA);
         }
@@ -86,10 +88,11 @@ class HelpAdmin
     public static function pophelp_keys($group)
     {
         $xml = self::pophelp_load(TEXTPATTERN_DEFAULT_LANG);
-        $array = $xml->xpath("//group[@id='{$group}']/item");
+        $help = $xml ? $xml->xpath("//group[@id='{$group}']/item") : array();
 
         $keys = array();
-        foreach ($array as $item) {
+
+        foreach ($help as $item) {
             if ($item->attributes()->id) {
                 $keys[] = (string)$item->attributes()->id;
             }
