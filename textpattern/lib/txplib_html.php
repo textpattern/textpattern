@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -916,7 +916,7 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
 
     $inlineHelp = (isset($help[1])) ? $help[1] : '';
 
-    if ($label) {
+    if ($label !== '') {
         $labelContent = tag(gTxt($label).popHelp($help[0]), 'label', array('for' => $name)).$tools;
     } else {
         $labelContent = gTxt($name).popHelp($help[0]).$tools;
@@ -1606,7 +1606,8 @@ function script_js($js, $flags = '', $route = array())
             }
         }
 
-        $out = n.tag(n.trim($js).n, 'script');
+        $js = trim($js);
+        $out = $js ? n.tag(n.$js.n, 'script') : '';
 
         if ($flags && $flags !== true) {
             $out .= n.tag(n.trim($flags).n, 'noscript');
@@ -1659,7 +1660,7 @@ function cookie_box($classname, $form = true)
         });
 EOF;
 
-    $out .= script_js($js, false);
+    $out .= script_js($js);
 
     if ($form) {
         if (serverSet('QUERY_STRING')) {
@@ -1794,7 +1795,7 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
                 break;
             case 1:
                 if ($breakby[0] > 0) {
-                    $breakby[0] == 1 or $list = array();
+                    $breakby[0] == 1 or $newlist = array_chunk($list, $breakby[0]);
                     break;
                 }
             default:
@@ -1804,8 +1805,9 @@ function doWrap($list, $wraptag, $break, $class = null, $breakclass = null, $att
                     $newlist[] = $breakby[$i] > 0 ? array_splice($list, 0, $breakby[$i]) :  array_splice($list, $breakby[$i]);
                 }
 
-                $list = array_map('implode', $newlist);
         }
+
+        empty($newlist) or $list = array_map('implode', $newlist);
     }
 
     // Non-enclosing breaks.

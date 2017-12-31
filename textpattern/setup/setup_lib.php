@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -73,7 +73,7 @@ function setup_db($cfg = '')
     }
 
     //FIXME: We are doing nothing, waiting for the further development of branch `themes`.
-    if (class_exists('\Textpattern\Skin\Main')) {
+    if (class_exists('\Textpattern\Skin\Skin')) {
         $datadir = '';
     }
 
@@ -146,10 +146,13 @@ function setup_db($cfg = '')
 
     //FIXME: We are doing nothing, waiting for the further development of branch `themes`.
     //$public_theme = preg_replace('/\-.*/', '', $public_theme);
-    if (class_exists('\Textpattern\Skin\Main') /*&& !preg_match('%/setup/themes/%', $themedir) */) {
-        //    Txp::get('\Textpattern\Skin\Main', array($public_theme => array()))->import();
+    if (class_exists('\Textpattern\Skin\Skin') /*&& !preg_match('%/setup/themes/%', $themedir) */) {
+        // $Skin = Txp::get('\Textpattern\Skin\Skin', $public_theme);
+        // $Skin->import();
+        // $Skin->updateSkinInUse();
     } else {
         msg(gTxt('public_theme').": '{$public_theme}'");
+
         foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
             safe_insert("txp_css", "name='".doSlash($key)."', css='".doSlash($data)."'");
             msg("CSS: '{$key}'");

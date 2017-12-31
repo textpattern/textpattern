@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -38,7 +38,7 @@ class TxpXML
      * @var array
      */
 
-    protected $importAllow = array('articles', 'category', 'section', 'link', 'css', 'form', 'page');
+    protected $importAllow = array('articles', 'category', 'section', 'link', 'skin', 'css', 'form', 'page');
 
     /**
      * articleOptionalFields

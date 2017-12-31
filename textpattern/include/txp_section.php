@@ -4,8 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -29,6 +28,7 @@
  */
 
 use Textpattern\Search\Filter;
+use Textpattern\Skin\Main as Skins;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -37,9 +37,10 @@ if (!defined('txpinterface')) {
 if ($event == 'section') {
     require_privs('section');
 
-    global $all_pages, $all_styles;
-    $all_pages = safe_column("name", 'txp_page', "1 = 1 ORDER BY name");
-    $all_styles = safe_column("name", 'txp_css', "1 = 1 ORDER BY name");
+    global $all_skins, $all_pages, $all_styles;
+    $all_skins = Skins::getInstalled();
+    $all_pages = safe_rows('name, skin', 'txp_page', "1=1 ORDER BY name");
+    $all_styles = safe_rows('name, skin', 'txp_css', "1=1 ORDER BY name");
 
     $available_steps = array(
         'section_change_pageby' => true,
@@ -84,7 +85,7 @@ function sec_section_list($message = '')
     if ($sort === '') {
         $sort = get_pref('section_sort_column', 'name');
     } else {
-        if (!in_array($sort, array('title', 'page', 'css', 'in_rss', 'on_frontpage', 'searchable', 'article_count'))) {
+        if (!in_array($sort, array('title', 'skin', 'page', 'css', 'in_rss', 'on_frontpage', 'searchable', 'article_count'))) {
             $sort = 'name';
         }
 
@@ -101,6 +102,9 @@ function sec_section_list($message = '')
     switch ($sort) {
         case 'title':
             $sort_sql = "title $dir";
+            break;
+        case 'skin':
+            $sort_sql = 'skin '.$dir;
             break;
         case 'page':
             $sort_sql = "page $dir";
@@ -137,9 +141,17 @@ function sec_section_list($message = '')
                 'column' => 'txp_section.title',
                 'label'  => gTxt('title'),
             ),
+            'skin' => array(
+                'column' => 'txp_section.skin',
+                'label'  => gTxt('skin'),
+            ),
             'page' => array(
                 'column' => 'txp_section.page',
                 'label'  => gTxt('page'),
+            ),
+            'description' => array(
+                'column' => 'txp_section.description',
+                'label'  => gTxt('description'),
             ),
             'css' => array(
                 'column' => 'txp_section.css',
@@ -281,6 +293,10 @@ function sec_section_list($message = '')
                         (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
                 ).
                 column_head(
+                    'skin', 'skin', 'section', true, $switch_dir, $crit, $search_method,
+                        (('skin' == $sort) ? "$dir " : '').'txp-list-col-skin'
+                ).
+                column_head(
                     'page', 'page', 'section', true, $switch_dir, $crit, $search_method,
                         (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
                 ).
@@ -359,11 +375,13 @@ function sec_section_list($message = '')
             $sec_page = href(txpspecialchars($sec_page), array(
                 'event' => 'page',
                 'name'  => $sec_page,
+                'skin'  => $sec_skin,
             ), array('title' => gTxt('edit')));
 
             $sec_css = href(txpspecialchars($sec_css), array(
                 'event' => 'css',
                 'name'  => $sec_css,
+                'skin'  => $sec_skin,
             ), array('title' => gTxt('edit')));
 
             echo tr(
@@ -385,6 +403,9 @@ function sec_section_list($message = '')
                 ).
                 td(
                     txpspecialchars($sec_title), '', 'txp-list-col-title'
+                ).
+                td(
+                    $sec_skin, '', 'txp-list-col-skin'
                 ).
                 td(
                     $sec_page, '', 'txp-list-col-page'
@@ -433,7 +454,7 @@ function sec_section_list($message = '')
 
 function section_edit()
 {
-    global $event, $step, $all_pages, $all_styles;
+    global $event, $step, $all_skins, $all_pages, $all_styles;
 
     require_privs('section.edit');
 
@@ -466,7 +487,7 @@ function section_edit()
     } else {
         // Pulls defaults for the new section from the 'default'.
         $rs = safe_row(
-            "page, css, on_frontpage, in_rss, searchable",
+            "skin, page, css, on_frontpage, in_rss, searchable",
             'txp_section',
             "name = 'default'"
         );
@@ -504,15 +525,38 @@ function section_edit()
             );
     }
 
-    $out[] = inputLabel(
+    $pageSelect = selectInput('section_page', array(), '', '', '', 'section_page');
+    $styleSelect = selectInput('css', array(), '', '', '', 'section_css');
+    $json_page = json_encode($all_pages, TEXTPATTERN_JSON);
+    $json_style = json_encode($all_styles, TEXTPATTERN_JSON);
+
+    $out[] =
+        inputLabel(
+            'section_skin',
+            selectInput('skin', $all_skins, $sec_skin, '', '', 'section_skin'),
+            'uses_skin',
+            'section_uses_skin',
+            array('class' => 'txp-form-field edit-section-uses-skin')
+        ).
+        inputLabel(
             'section_page',
-            selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'),
-            'uses_page', 'section_uses_page', array('class' => 'txp-form-field edit-section-uses-page')
+            $pageSelect,
+            'uses_page',
+            'section_uses_page',
+            array('class' => 'txp-form-field edit-section-uses-page')
         ).
         inputLabel(
             'section_css',
-            selectInput('css', $all_styles, $sec_css, '', '', 'section_css'),
-            'uses_style', 'section_uses_css', array('class' => 'txp-form-field edit-section-uses-css')
+            $styleSelect,
+            'uses_style',
+            'section_uses_css',
+            array('class' => 'txp-form-field edit-section-uses-css')
+        ).script_js(<<<EOJS
+var skin_page = {$json_page};
+var skin_style = {$json_style};
+var page_sel = '{$sec_page}';
+var style_sel = '{$sec_css}';
+EOJS
         );
 
     if (!$is_default_section) {
@@ -566,6 +610,7 @@ function section_save()
     $in = array_map('assert_string', psa(array(
         'name',
         'title',
+        'skin',
         'description',
         'old_name',
         'section_page',
@@ -597,8 +642,9 @@ function section_save()
     }
 
     $ok = false;
+
     if ($name == 'default') {
-        $ok = safe_update('txp_section', "page = '$safe_section_page', css = '$safe_css', description = '$safe_description'", "name = 'default'");
+        $ok = safe_update('txp_section', "skin = '$safe_skin', page = '$safe_section_page', css = '$safe_css', description = '$safe_description'", "name = 'default'");
     } elseif ($name) {
         extract(array_map('assert_int', psa(array('on_frontpage', 'in_rss', 'searchable'))));
 
@@ -606,6 +652,7 @@ function section_save()
             $ok = safe_update('txp_section', "
                 name         = '$safe_name',
                 title        = '$safe_title',
+                skin         = '$safe_skin',
                 page         = '$safe_section_page',
                 css          = '$safe_css',
                 description  = '$safe_description',
@@ -622,6 +669,7 @@ function section_save()
             $ok = safe_insert('txp_section', "
                 name         = '$safe_name',
                 title        = '$safe_title',
+                skin         = '$safe_skin',
                 page         = '$safe_section_page',
                 css          = '$safe_css',
                 description  = '$safe_description',
@@ -770,16 +818,39 @@ function section_delete()
 
 function section_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
-    global $all_pages, $all_styles;
+    global $all_skins, $all_pages, $all_styles;
+
+    $json_page = json_encode($all_pages, TEXTPATTERN_JSON);
+    $json_style = json_encode($all_styles, TEXTPATTERN_JSON);
+
+    $themeSelect = inputLabel(
+        'multiedit_skin',
+        selectInput('skin', $all_skins, '', false, '', 'multiedit_skin'),
+        'skin', '', array('class' => 'multi-option multi-step'), ''
+    ).script_js(<<<EOJS
+var skin_page = {$json_page};
+var skin_style = {$json_style};
+var page_sel = '';
+var style_sel = '';
+EOJS
+    );
+
+    $pageSelect = inputLabel(
+        'multiedit_page',
+        selectInput('section_page', array(), '', '', '', 'multiedit_page'),
+        'page', '', array('class' => 'multi-option multi-step'), ''
+    );
+
+    $styleSelect = inputLabel(
+        'multiedit_css',
+        selectInput('css', array(), '', '', '', 'multiedit_css'),
+        'css', '', array('class' => 'multi-option multi-step'), ''
+    );
 
     $methods = array(
-        'changepage' => array(
-            'label' => gTxt('uses_page'),
-            'html'  => selectInput('uses_page', $all_pages, '', false),
-        ),
-        'changecss' => array(
-            'label' => gTxt('uses_style'),
-            'html'  => selectInput('css', $all_styles, '', false),
+        'changepagestyle' => array(
+            'label' => gTxt('change_page_style'),
+            'html'  => $themeSelect . $pageSelect . $styleSelect,
         ),
         'changeonfrontpage' => array(
             'label' => gTxt('on_front_page'),
@@ -805,7 +876,7 @@ function section_multiedit_form($page, $sort, $dir, $crit, $search_method)
 
 function section_multi_edit()
 {
-    global $txp_user, $all_pages, $all_styles;
+    global $txp_user;
 
     extract(psa(array(
         'edit_method',
@@ -816,35 +887,27 @@ function section_multi_edit()
         return sec_section_list();
     }
 
-    $key = $val = '';
+    $nameVal = array();
 
     switch ($edit_method) {
         case 'delete':
             return section_delete();
             break;
-        case 'changepage':
-            $val = ps('uses_page');
-            if (in_array($val, $all_pages, true)) {
-                $key = 'page';
-            }
-            break;
-        case 'changecss':
-            $val = ps('css');
-            if (in_array($val, $all_styles, true)) {
-                $key = 'css';
-            }
+        case 'changepagestyle':
+            $nameVal = array(
+                'skin' => ps('skin'),
+                'page' => ps('section_page'),
+                'css'  => ps('css'),
+            );
             break;
         case 'changeonfrontpage':
-            $key = 'on_frontpage';
-            $val = (int) ps('on_frontpage');
+            $nameVal['on_frontpage'] = (int) ps('on_frontpage');
             break;
         case 'changesyndicate':
-            $key = 'in_rss';
-            $val = (int) ps('in_rss');
+            $nameVal['in_rss'] = (int) ps('in_rss');
             break;
         case 'changesearchable':
-            $key = 'searchable';
-            $val = (int) ps('searchable');
+            $nameVal['searchable'] = (int) ps('searchable');
             break;
     }
 
@@ -854,11 +917,17 @@ function section_multi_edit()
         "name IN (".join(',', quote_list($selected)).")"
     );
 
-    if ($key && $sections) {
+    if ($nameVal && $sections) {
+        $in = array();
+
+        foreach ($nameVal as $key => $val) {
+            $in[] = "{$key} = '".doSlash($val)."'";
+        }
+
         if (
             safe_update(
                 'txp_section',
-                "$key = '".doSlash($val)."'",
+                implode(',', $in),
                 "name IN (".join(',', quote_list($sections)).")"
             )
         ) {
