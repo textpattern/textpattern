@@ -4,12 +4,9 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2004 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * "Mod File Upload" by Michael Manfre
- * http://manfre.net
- *
  * Copyright (C) 2004 Michael Manfre
  *
  * This file is part of Textpattern.
@@ -457,7 +454,7 @@ function file_list($message = '', $ids = array())
                 );
             }
 
-            $contentBlock .= 
+            $contentBlock .=
                 n.tag_end('tbody').
                 n.tag_end('table').
                 n.tag_end('div'). // End of .txp-listtables.
