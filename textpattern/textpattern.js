@@ -2,7 +2,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -2047,7 +2047,7 @@ textpattern.Route.add('article, file', function () {
 
 // 'Clone' button on Pages, Forms, Styles panels.
 
-textpattern.Route.add('css, page, form', function () {
+textpattern.Route.add('skin, css, page, form', function () {
     $('.txp-clone').click(function (e) {
         e.preventDefault();
         var target = $(this).data('form');
@@ -2195,6 +2195,51 @@ textpattern.Route.add('image', function () {
         var height = $h.val();
         $w.val(height);
         $h.val(width);
+    });
+});
+
+// Sections panel. Used for edit panel and multiedit change of page+style.
+// This can probably be cleaned up / optimised.
+
+textpattern.Route.add('section', function ()
+{
+    /**
+     * Display assets based on the selected theme.
+     *
+     * @param  string skin The theme name from which to show assets
+     */
+    function section_theme_show(skin) {
+        $('#section_page, #section_css, #multiedit_page, #multiedit_css').empty();
+        $pageSelect = $('[name=section_page]');
+        $styleSelect = $('[name=css]');
+
+        $.each(skin_page, function(key, items) {
+            if (items.skin == skin) {
+                var isSelected = (items.name == page_sel) ? ' selected' : '';
+                $pageSelect.append('<option'+isSelected+'>'+items.name+'</option>');
+            }
+        });
+
+        $.each(skin_style, function(key, items) {
+            if (items.skin == skin) {
+                var isSelected = (items.name == style_sel) ? ' selected' : '';
+                $styleSelect.append('<option'+isSelected+'>'+items.name+'</option>');
+            }
+        });
+    }
+
+    $('#section_details, .multi_edit_form').on('change', '#section_skin, #multiedit_skin', function() {
+        section_theme_show($(this).val());
+    });
+
+    // Invoke the handler now to set things on initial page load.
+    $('#section_skin').change();
+
+    $('select[name=edit_method]').change(function() {
+        if ($(this).val() === 'changepagestyle') {
+            var theSkin = $('#multiedit_skin').val();
+            section_theme_show(theSkin);
+        }
     });
 });
 

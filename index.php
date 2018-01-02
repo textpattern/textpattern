@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -109,7 +109,8 @@ include txpath.'/publish.php';
 switch (txpinterface) {
     case 'css':
         $n = gps('n');
-        output_css($s, $n);
+        $t = gps('t');
+        output_css($s, $n, $t);
         break;
     default:
         textpattern();

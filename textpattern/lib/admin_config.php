@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -90,6 +90,8 @@ $txp_permissions = array(
     'prefs.comments'              => '1,2',
     'section'                     => '1,2,      6',
     'section.edit'                => '1,2,      6',
+    'skin'                        => '1,2,      6',
+    'skin.edit'                   => '1,2,      6',
     'tab.admin'                   => '1,2,3,4,5,6',
     'tab.content'                 => '1,2,3,4,5,6',
     'tab.extensions'              => '1,2',

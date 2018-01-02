@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -159,6 +159,7 @@ class Core
 
         $pf = array();
         $pf['file_base_path'] = dirname(txpath).DS.'files';
+        $pf['skin_base_path'] = dirname(txpath).DS.'themes';
         $pf['path_to_site']   = dirname(txpath);
         $pf['tempdir']        = find_temp_dir();
         $pf['siteurl']        = $siteurl;
