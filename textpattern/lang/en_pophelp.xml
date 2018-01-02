@@ -792,6 +792,10 @@
 <p>This is the address of your Textpattern site, for example <code>www.example.com</code>.</p>
 <p><strong>Note:</strong> No <code>http://</code>, <code>https://</code> or trailing slash <code>/</code> is required.</p>
         ]]></item>
+        <item id="skin_base_path" title="Theme base path"><![CDATA[
+<h2>Theme base path</h2>
+<p>This sets the <strong>absolute path</strong> to the directory where front-side themes flat files will be permanently saved. PHP needs to have write access to this directory.</p>
+        ]]></item>
         <item id="smtp_from" title="SMTP envelope sender address"><![CDATA[
 <h2>SMTP envelope sender address</h2>
 <p>This preference should be left blank unless you experience problems with sending email in Textpattern (if no email is sent at all). Should that problem arise, you can enter any valid email address here, although preferably one that has the same domain name as the website where you’ve installed Textpattern (i.e. if your website is <code>http://example.com</code>, you might use <code>you@example.com</code>).</p>
