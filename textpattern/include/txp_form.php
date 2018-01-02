@@ -4,8 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -200,7 +199,7 @@ function form_multi_edit()
     $forms = ps('selected_forms');
     $skin = ps('skin');
     $affected = array();
-    $message = null;
+    $message = '';
 
     Skin::setCurrent($skin);
 

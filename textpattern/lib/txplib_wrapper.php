@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -34,7 +34,7 @@
  *
  * @link      http://web.archive.org/web/20141201035729/http://txp.kusor.com/wrapper
  * @author    Pedro Palazón
- * @copyright 2005-2008 The Textpattern Development Team - https://textpattern.io
+ * @copyright 2005-2008 The Textpattern Development Team
  */
 
 if (!defined('txpath')) {

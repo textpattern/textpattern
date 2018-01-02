@@ -4,8 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -481,7 +480,7 @@ function discuss_list($message = '')
         nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
     $table = new \Textpattern\Admin\Table($event);
-    echo $table->render(compact('total', 'criteria') + array('heading' => 'tab_comments'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
+    echo $table->render(compact('total', 'criteria') + array('heading' => 'tab_comments'), $searchBlock, '', $contentBlock, $pageBlock);
 }
 
 /**
