@@ -4,8 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -332,7 +331,7 @@ function skin_list($message = '')
  * The editor for skins.
  */
 
-function skin_edit($message = null)
+function skin_edit($message = '')
 {
     global $step;
 
