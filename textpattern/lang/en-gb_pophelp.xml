@@ -637,7 +637,6 @@
 <ol>
     <li>Remove the <code>txp:</code> prefix.</li>
     <li>Swap the first occurrence of the underscore for <code>::</code>.</li>
-    <li>Profit</li>
 </ol>
 <p>Note that setting this preference in no way affects the ability to use <code>&lt;txp:output_form /&gt;</code> short codes to render form snippets. You can still use <code>&lt;txp::shortcode /&gt;</code>, which will be interpreted as <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
         ]]></item>
