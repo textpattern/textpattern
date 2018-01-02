@@ -325,7 +325,7 @@ function css_save()
                         set_pref('last_css_saved', $newname, 'css', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                         update_lastmod('css_created', compact('newname', 'name', 'css'));
 
-                        $message = gTxt('css_created', array('{name}' => $newname));
+                        $message = gTxt('css_created', array('{list}' => $newname));
 
                         callback_event($copy ? 'css_duplicated' : 'css_created', '', 0, $name, $newname);
                     } else {
@@ -344,7 +344,7 @@ function css_save()
                     set_pref('last_css_saved', $newname, 'css', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                     update_lastmod('css_saved', compact('newname', 'name', 'css'));
 
-                    $message = gTxt('css_updated', array('{name}' => $newname));
+                    $message = gTxt('css_updated', array('{list}' => $newname));
 
                     callback_event('css_updated', '', 0, $name, $newname);
                 } else {
@@ -382,7 +382,7 @@ function css_delete()
     } else {
         if (safe_delete('txp_css', "name = '".doSlash($name)."' AND skin='".doSlash($skin)."'")) {
             callback_event('css_deleted', '', 0, compact('name', 'skin'));
-            $message = gTxt('css_deleted', array('{name}' => $name));
+            $message = gTxt('css_deleted', array('{list}' => $name));
             if ($name === get_pref('last_css_saved')) {
                 unset($prefs['last_css_saved']);
                 remove_pref('last_css_saved', 'css');

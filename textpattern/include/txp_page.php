@@ -307,7 +307,7 @@ function page_delete()
     } else {
         if (safe_delete('txp_page', "name = '".doSlash($name)."' AND skin='".doSlash($skin)."'")) {
             callback_event('page_deleted', '', 0, compact('name', 'skin'));
-            $message = gTxt('page_deleted', array('{name}' => $name));
+            $message = gTxt('page_deleted', array('{list}' => $name));
             if ($name === get_pref('last_page_saved')) {
                 unset($prefs['last_page_saved']);
                 remove_pref('last_page_saved', 'page');
@@ -372,7 +372,7 @@ function page_save()
                         set_pref('last_page_saved', $newname, 'page', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                         update_lastmod('page_created', compact('newname', 'name', 'html'));
 
-                        $message = gTxt('page_created', array('{name}' => $newname));
+                        $message = gTxt('page_created', array('{list}' => $newname));
 
                         callback_event($copy ? 'page_duplicated' : 'page_created', '', 0, $name, $newname);
                     } else {
@@ -391,7 +391,7 @@ function page_save()
                     set_pref('last_page_saved', $newname, 'page', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                     update_lastmod('page_saved', compact('newname', 'name', 'html'));
 
-                    $message = gTxt('page_updated', array('{name}' => $newname));
+                    $message = gTxt('page_updated', array('{list}' => $newname));
 
                     callback_event('page_updated', '', 0, $name, $newname);
                 } else {

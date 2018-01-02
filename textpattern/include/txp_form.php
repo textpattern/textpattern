@@ -512,7 +512,7 @@ function form_save()
                         )) {
                             update_lastmod('form_created', compact('newname', 'name', 'type', 'Form'));
 
-                            $message = gTxt('form_created', array('{name}' => $newname));
+                            $message = gTxt('form_created', array('{list}' => $newname));
 
                             callback_event($copy ? 'form_duplicated' : 'form_created', '', 0, $name, $newname);
                         } else {
@@ -534,7 +534,7 @@ function form_save()
                     )) {
                         update_lastmod('form_saved', compact('newname', 'name', 'type', 'Form'));
 
-                        $message = gTxt('form_updated', array('{name}' => $newname));
+                        $message = gTxt('form_updated', array('{list}' => $newname));
 
                         callback_event('form_updated', '', 0, $name, $newname);
                     } else {
