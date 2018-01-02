@@ -1847,7 +1847,7 @@ class BuilderTags
 
         $out = $this->tagbuildForm(
             $this->startblock.
-            $this->widget('name', $this->tbSectionPop('name', $this->tagname)).
+            $this->widget('name', $this->tbSectionPop('name', $name)).
             $this->endform
         ).
         $this->build($atts, gTxt('...'));
@@ -2852,11 +2852,12 @@ class BuilderTags
         $out = $this->tagbuildForm(
             $this->startblock.
             $this->widgets(array(
-                'name'                 => $this->tbSectionPop('name', $this->tagname),
+                'name'                 => $this->tbSectionPop('name', $name),
                 'link_to_this_section' => $this->tbYesNoPop('link', $link),
-                'url_only'             => $this->tbYesNoPop('url', $url),
+                'url'                  => $this->tbYesNoPop('url', $url),
                 'wraptag'              => $this->tbInput('wraptag', $wraptag),
                 'class'                => $this->tbInput('class', $class, INPUT_REGULAR),
+                'title'                => $this->tbYesNoPop('title', $title),
             )).
             $this->endform
         ).
