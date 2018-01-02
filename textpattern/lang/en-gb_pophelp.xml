@@ -637,7 +637,6 @@
 <ol>
     <li>Remove the <code>txp:</code> prefix.</li>
     <li>Swap the first occurrence of the underscore for <code>::</code>.</li>
-    <li>Profit</li>
 </ol>
 <p>Note that setting this preference in no way affects the ability to use <code>&lt;txp:output_form /&gt;</code> short codes to render form snippets. You can still use <code>&lt;txp::shortcode /&gt;</code>, which will be interpreted as <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
         ]]></item>
@@ -792,6 +791,10 @@
 <h2>Site URL</h2>
 <p>This is the address of your Textpattern site, for example <code>www.example.com</code>.</p>
 <p><strong>Note:</strong> No <code>http://</code>, <code>https://</code> or trailing slash <code>/</code> is required.</p>
+        ]]></item>
+        <item id="skin_base_path" title="Theme base path"><![CDATA[
+<h2>Theme base path</h2>
+<p>This sets the <strong>absolute path</strong> to the directory where front-side themes flat files will be permanently saved. PHP needs to have write access to this directory.</p>
         ]]></item>
         <item id="smtp_from" title="SMTP envelope sender address"><![CDATA[
 <h2>SMTP envelope sender address</h2>
