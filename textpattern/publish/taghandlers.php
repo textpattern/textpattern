@@ -3167,8 +3167,6 @@ function search_result_excerpt($atts)
 
     $concat = join($break.n, $r);
     $concat = preg_replace('/^[^>]+>/U', '', $concat);
-// TODO:
-
     $concat = preg_replace($regex_hilite, "<$hilight>$1</$hilight>", $concat);
 
     return ($concat) ? trim($break.$concat.$break) : '';
