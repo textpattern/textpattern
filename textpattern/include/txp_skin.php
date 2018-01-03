@@ -331,7 +331,7 @@ function skin_list($message = '')
  * The editor for skins.
  */
 
-function skin_edit($message = null)
+function skin_edit($message = '')
 {
     global $step;
 

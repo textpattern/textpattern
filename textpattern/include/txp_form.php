@@ -199,7 +199,7 @@ function form_multi_edit()
     $forms = ps('selected_forms');
     $skin = ps('skin');
     $affected = array();
-    $message = null;
+    $message = '';
 
     Skin::setCurrent($skin);
 

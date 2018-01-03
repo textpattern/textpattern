@@ -1032,6 +1032,8 @@ class BuilderTags
                 'class'         => $this->tbInput('class', $class, INPUT_REGULAR),
                 'inline_style'  => $this->tbInput('style', $style, INPUT_REGULAR, 'inline_style'),
                 'wraptag'       => $this->tbInput('wraptag', $wraptag),
+                'width'         => $this->tbInput('width', $width, INPUT_SMALL),
+                'height'        => $this->tbInput('height', $height, INPUT_SMALL),
             )).
             $this->endform
         ).
@@ -1090,12 +1092,17 @@ class BuilderTags
     function tag_breadcrumb()
     {
         $atts = gpsa(array(
+            'category',
             'class',
             'label',
+            'limit',
             'link',
             'linkclass',
+            'offset',
+            'section',
             'separator',
             'title',
+            'type',
             'wraptag',
         ));
 
@@ -1109,6 +1116,11 @@ class BuilderTags
                 'linkclass'            => $this->tbInput('linkclass', $linkclass, INPUT_REGULAR),
                 'label'                => $this->tbInput('label', $label, INPUT_REGULAR),
                 'title'                => $this->tbInput('title', $title, INPUT_REGULAR),
+                'type'                 => $this->tbTypePop($type),
+                'category'             => $this->tbInput('category', $category),
+                'section'              => $this->tbSectionPop('section', $section),
+                'limit'                => $this->tbInput('limit', $limit, INPUT_TINY),
+                'offset'               => $this->tbInput('offset', $offset, INPUT_TINY),
                 'wraptag'              => $this->tbInput('wraptag', $wraptag),
                 'class'                => $this->tbInput('class', $class, INPUT_REGULAR),
             )).
@@ -1129,6 +1141,7 @@ class BuilderTags
             'class',
             'link',
             'name',
+            'section',
             'this_section',
             'title',
             'type',
@@ -1166,10 +1179,15 @@ class BuilderTags
             'active_class',
             'break',
             'categories',
+            'children',
             'class',
             'exclude',
+            'form',
+            'html_id',
             'label',
             'labeltag',
+            'limit',
+            'offset',
             'parent',
             'section',
             'sort',
@@ -1193,12 +1211,17 @@ class BuilderTags
                 'exclude'               => $this->tbInput('exclude', $exclude, INPUT_REGULAR),
                 'this_section'          => $this->tbYesNoPop('this_section', $this_section),
                 'category_list_section' => $this->tbSectionPop('section', $section),
+                'depth'                 => $this->tbInput('children', $children, INPUT_TINY),
+                'form'                  => $this->tbFormPop('form', '', $form),
                 'sort'                  => $this->tbListSortPop($sort),
+                'limit'                 => $this->tbInput('limit', $limit, INPUT_TINY),
+                'offset'                => $this->tbInput('offset', $offset, INPUT_TINY),
                 'label'                 => $this->tbInput('label', $label, INPUT_REGULAR),
                 'labeltag'              => $this->tbInput('labeltag', $labeltag),
                 'wraptag'               => $this->tbInput('wraptag', $wraptag),
                 'class'                 => $this->tbInput('class', $class, INPUT_REGULAR),
                 'active_class'          => $this->tbInput('active_class', $active_class, INPUT_REGULAR),
+                'html_id'               => $this->tbInput('html_id', $html_id, INPUT_REGULAR),
                 'break'                 => $this->tbInput('break', $break),
             )).
             $this->endform
@@ -1530,7 +1553,7 @@ class BuilderTags
     function tag_comments_form()
     {
         $atts = gpsa(array(
-            'id',
+            'class',
             'form',
             'wraptag',
         ));
@@ -1540,7 +1563,7 @@ class BuilderTags
         $out = $this->tagbuildForm(
             $this->startblock.
             $this->widgets(array(
-                'id'      => $this->tbInput('id', $id),
+                'class'   => $this->tbInput('class', $class),
                 'form'    => $this->tbFormPop('form', 'comment', $form),
                 'wraptag' => $this->tbInput('wraptag', $wraptag),
             )).
@@ -1589,7 +1612,6 @@ class BuilderTags
     {
         $atts = gpsa(array(
             'class',
-            'id',
             'form',
             'wraptag',
         ));
@@ -1599,7 +1621,6 @@ class BuilderTags
         $out = $this->tagbuildForm(
             $this->startblock.
             $this->widgets(array(
-                'id'      => $this->tbInput('id', $id),
                 'form'    => $this->tbFormPop('form', 'comment', $form),
                 'wraptag' => $this->tbInput('wraptag', $wraptag),
                 'class'   => $this->tbInput('class', $class, INPUT_REGULAR),
@@ -1708,7 +1729,7 @@ class BuilderTags
                 'flavor'   => $this->tbFeedFlavorPop($flavor),
                 'format'   => $this->tbFeedFormatPop($format),
                 'section'  => $this->tbSectionPop('section', $section),
-                'category' => $this->tbCategoryPop($section),
+                'category' => $this->tbCategoryPop($category),
                 'limit'    => $this->tbInput('limit', $limit, INPUT_TINY),
                 'label'    => $this->tbInput('label', $label, INPUT_REGULAR),
                 'title'    => $this->tbInput('title', $title, INPUT_REGULAR),
@@ -2066,7 +2087,7 @@ class BuilderTags
 
         $out = $this->tagbuildForm(
             $this->startblock.
-            $this->widget('name', $this->tbSectionPop('name', $this->tagname)).
+            $this->widget('name', $this->tbSectionPop('name', $name)).
             $this->endform
         ).
         $this->build($atts, gTxt('...'));
@@ -3014,6 +3035,7 @@ class BuilderTags
     function tag_search_result_excerpt()
     {
         $atts = gpsa(array(
+            'separator',
             'hilight',
             'limit',
         ));
@@ -3025,6 +3047,7 @@ class BuilderTags
             $this->widgets(array(
                 'hilight'       => $this->tbInput('hilight', $hilight),
                 'hilight_limit' => $this->tbInput('limit', $limit, INPUT_TINY, 'hilight_limit'),
+                'separator'     => $this->tbInput('separator', $separator),
             )).
             $this->endform
         ).
@@ -3071,11 +3094,12 @@ class BuilderTags
         $out = $this->tagbuildForm(
             $this->startblock.
             $this->widgets(array(
-                'name'                 => $this->tbSectionPop('name', $this->tagname),
+                'name'                 => $this->tbSectionPop('name', $name),
                 'link_to_this_section' => $this->tbYesNoPop('link', $link),
-                'url_only'             => $this->tbYesNoPop('url', $url),
+                'url'                  => $this->tbYesNoPop('url', $url),
                 'wraptag'              => $this->tbInput('wraptag', $wraptag),
                 'class'                => $this->tbInput('class', $class, INPUT_REGULAR),
+                'title'                => $this->tbYesNoPop('title', $title),
             )).
             $this->endform
         ).
