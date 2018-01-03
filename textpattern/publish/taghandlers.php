@@ -3666,7 +3666,7 @@ function meta_keywords($atts)
     extract(lAtts(array(
         'escape'    => null,
         'format'    => 'meta', // or empty for raw value
-        'separator' => '',
+        'separator' => null,
     ), $atts));
 
     $out = '';
@@ -3674,7 +3674,7 @@ function meta_keywords($atts)
     if ($id_keywords) {
         $content = ($escape === null) ? txpspecialchars($id_keywords) : $id_keywords;
 
-        if ($separator !== '') {
+        if ($separator !== null) {
             $content = implode($separator, do_list($content));
         }
 
