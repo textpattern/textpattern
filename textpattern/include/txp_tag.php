@@ -2816,7 +2816,7 @@ class BuilderTags
     function tag_search_result_excerpt()
     {
         $atts = gpsa(array(
-            'break',
+            'separator',
             'hilight',
             'limit',
         ));
@@ -2828,7 +2828,7 @@ class BuilderTags
             $this->widgets(array(
                 'hilight'       => $this->tbInput('hilight', $hilight),
                 'hilight_limit' => $this->tbInput('limit', $limit, INPUT_TINY, 'hilight_limit'),
-                'separator'     => $this->tbInput('break', $break),
+                'separator'     => $this->tbInput('separator', $separator),
             )).
             $this->endform
         ).
