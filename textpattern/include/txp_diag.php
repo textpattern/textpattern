@@ -240,6 +240,10 @@ function doDiagnostics()
         $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('file_base_path'), gTxt('dir_not_writable')).": {$file_base_path}", 'warning');
     }
 
+    if (!@is_writable($skin_base_path)) {
+        $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('skin_base_path'), gTxt('dir_not_writable')).": {$skin_base_path}", 'warning');
+    }
+
     if (!@is_writable($tempdir)) {
         $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('tempdir'), gTxt('dir_not_writable')).": {$tempdir}", 'warning');
     }
