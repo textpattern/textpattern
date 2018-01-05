@@ -294,10 +294,11 @@ class BuilderTags
      * Renders a HTML &lt;select&gt; list of article status options.
      *
      * @param  string $value Currently selected value
+     * @param  string $type  The flavor of status to return. article=full set, file=limited set
      * @return string HTML
      */
 
-    private function tbStatusPop($value)
+    private function tbStatusPop($value, $type = 'article')
     {
         $vals = array(
             STATUS_LIVE    => gTxt('live'),
@@ -306,6 +307,10 @@ class BuilderTags
             STATUS_DRAFT   => gTxt('draft'),
             STATUS_HIDDEN  => gTxt('hidden'),
         );
+
+        if ($type !== 'article') {
+            unset($vals[STATUS_DRAFT], $vals[STATUS_STICKY]);
+        }
 
         return ' '.selectInput('status', $vals, $value, true, '', 'status');
     }
@@ -509,6 +514,32 @@ class BuilderTags
     }
 
     /**
+     * Renders a HTML &lt;select&gt; list of Themes.
+     *
+     * @param  string $value Currently selected value
+     * @return string | bool HTML | false on error
+     */
+
+    private function tbThemePop($value)
+    {
+        $vals = array();
+
+        $rs = safe_rows_start("name, title", 'txp_skin', "1 = 1 ORDER BY name, title");
+
+        if ($rs) {
+            while ($a = nextRow($rs)) {
+                extract($a);
+
+                $vals[$name] = $title;
+            }
+
+            return ' '.selectInput('theme', $vals, $value, true, '', 'theme');
+        }
+
+        return false;
+    }
+
+    /**
      * Renders a HTML &lt;select&gt; list of forms.
      *
      * @param  string $select_name Input name/ID
@@ -672,17 +703,25 @@ class BuilderTags
     {
         $atts = gpsa(array(
             'allowoverride',
+            'break',
+            'class',
             'form',
+            'frontpage',
+            'keywords',
+            'label',
+            'labeltag',
             'limit',
             'listform',
             'offset',
             'pageby',
             'pgonly',
             'searchall',
+            'searchform',
             'searchsticky',
             'sort',
             'status',
             'time',
+            'wraptag',
         ));
 
         extract($atts);
@@ -694,14 +733,22 @@ class BuilderTags
                 'time'          => $this->tbTimePop($time),
                 'searchall'     => $this->tbYesNoPop('searchall', $searchall),
                 'searchsticky'  => $this->tbYesNoPop('searchsticky', $searchsticky),
+                'frontpage'     => $this->tbYesNoPop('frontpage', $frontpage),
+                'keywords'      => '<textarea name="keywords" id="keywords">'.$keywords.'</textarea>',
                 'limit'         => $this->tbInput('limit', $limit, INPUT_TINY),
                 'offset'        => $this->tbInput('offset', $offset, INPUT_TINY),
                 'pageby'        => $this->tbInput('pageby', $pageby, INPUT_TINY),
                 'sort'          => $this->tbSortPop($sort),
                 'pgonly'        => $this->tbYesNoPop('pgonly', $pgonly),
                 'allowoverride' => $this->tbYesNoPop('allowoverride', $allowoverride),
+                'label'         => $this->tbInput('label', $label),
+                'labeltag'      => $this->tbInput('labeltag', $labeltag),
+                'wraptag'       => $this->tbInput('wraptag', $wraptag),
+                'class'         => $this->tbInput('class', $class, INPUT_REGULAR),
+                'break'         => $this->tbInput('break', $break),
                 'form'          => $this->tbFormPop('form', 'article', $form),
                 'listform'      => $this->tbFormPop('listform', 'article', $listform),
+                'searchform'    => $this->tbFormPop('searchform', 'article', $searchform),
             )).
             $this->endform
         ).
@@ -723,17 +770,18 @@ class BuilderTags
             'category',
             'class',
             'excerpted',
+            'exclude',
             'expired',
             'form',
+            'frontpage',
             'id',
             'keywords',
             'label',
             'labeltag',
             'limit',
+            'match',
             'month',
             'offset',
-            'pageby',
-            'pgonly',
             'section',
             'sort',
             'status',
@@ -750,6 +798,8 @@ class BuilderTags
                 'status'        => $this->tbStatusPop($status),
                 'section'       => $this->tbSectionPop('section', $section),
                 'category'      => $this->tbCategoryPop($category),
+                'match_type'    => $this->tbMatchCatPop($match),
+                'exclude'       => $this->tbInput('exclude', $exclude, INPUT_REGULAR),
                 'time'          => $this->tbTimePop($time),
                 'month'         => fInput(
                     'text',
@@ -764,12 +814,12 @@ class BuilderTags
                 ).' ('.gTxt('yyyy-mm').')',
                 'keywords'      => '<textarea name="keywords" id="keywords">'.$keywords.'</textarea>',
                 'has_excerpt'   => $this->tbYesNoPop('excerpted', $excerpted),
+                'frontpage'     => $this->tbYesNoPop('frontpage', $frontpage),
                 'expired'       => $this->tbYesNoPop('expired', $expired),
                 'author'        => $this->tbAuthorPop($author),
                 'sort'          => $this->tbSortPop($sort),
                 'limit'         => $this->tbInput('limit', $limit, INPUT_TINY),
                 'offset'        => $this->tbInput('offset', $offset, INPUT_TINY),
-                'pgonly'        => $this->tbYesNoPop('pgonly', $pgonly),
                 'allowoverride' => $this->tbYesNoPop('allowoverride', $allowoverride),
                 'label'         => $this->tbInput('label', $label, INPUT_REGULAR),
                 'labeltag'      => $this->tbInput('labeltag', $labeltag),
@@ -937,6 +987,8 @@ class BuilderTags
             $this->widgets(array(
                 'name'                  => $this->tbInput('name', $name, INPUT_REGULAR),
                 'link_to_this_category' => $this->tbYesNoPop('link', $link),
+                'section'               => $this->tbSectionPop('section', $section),
+                'this_section'          => $this->tbYesNoPop('this_section', $this_section),
                 'title'                 => $this->tbYesNoPop('title', $title),
                 'type'                  => $this->tbTypePop($type),
                 'url'                   => $this->tbYesNoPop('url', $url),
@@ -1424,6 +1476,7 @@ class BuilderTags
             'media',
             'name',
             'rel',
+            'theme',
             'title',
         ));
 
@@ -1433,6 +1486,7 @@ class BuilderTags
             $this->startblock.
             $this->widgets(array(
                 'name'   => $this->tbCssPop($name),
+                'theme'  => $this->tbThemePop($theme),
                 'format' => $this->tbCssFormatPop($format),
                 'media'  => $this->tbInput('media', $media, INPUT_REGULAR),
                 'rel'    => $this->tbInput('rel', $rel, INPUT_REGULAR),
@@ -1531,6 +1585,7 @@ class BuilderTags
     function tag_file_download()
     {
         $atts = gpsa(array(
+            'filename',
             'form',
             'id',
         ));
@@ -1540,8 +1595,9 @@ class BuilderTags
         $out = $this->tagbuildForm(
             $this->startblock.
             $this->widgets(array(
-                'id'   => $this->tbInput('id', $id),
-                'form' => $this->tbFormPop('form', 'file', $form),
+                'id'       => $this->tbInput('id', $id),
+                'filename' => $this->tbInput('filename', $filename, INPUT_REGULAR),
+                'form'     => $this->tbFormPop('form', 'file', $form),
             )).
             $this->endform
         ).
@@ -1559,6 +1615,7 @@ class BuilderTags
         $atts = gpsa(array(
             'class',
             'escape',
+            'title',
             'wraptag',
         ));
 
@@ -1567,6 +1624,7 @@ class BuilderTags
         $out = $this->tagbuildForm(
             $this->startblock.
             $this->widgets(array(
+                'title'   => $this->tbYesNoPop('title', $title),
                 'escape'  => $this->tbEscapePop($escape),
                 'wraptag' => $this->tbInput('wraptag', $wraptag),
                 'class'   => $this->tbInput('class', $class, INPUT_REGULAR),
@@ -1709,18 +1767,26 @@ class BuilderTags
 
     /**
      * Tag builder &lt;txp:file_download_list&gt; tag.
+     *
+     * Not adding realname attribute as it's pretty much the same as author.
      */
 
     function tag_file_download_list()
     {
         $atts = gpsa(array(
+            'author',
+            'auto_detect',
             'break',
             'category',
             'form',
+            'id',
             'label',
             'labeltag',
             'limit',
+            'offset',
+            'pageby',
             'sort',
+            'status',
             'wraptag',
         ));
 
@@ -1740,14 +1806,20 @@ class BuilderTags
         $out = $this->tagbuildForm(
             $this->startblock.
             $this->widgets(array(
-                'category' => $this->tbCategoryPop($category, 'file'),
-                'sort'     => ' '.selectInput('sort', $sorts, $sort, true),
-                'limit'    => $this->tbInput('limit', $limit, INPUT_TINY),
-                'label'    => $this->tbInput('label', $label, INPUT_REGULAR),
-                'labeltag' => $this->tbInput('labeltag', $labeltag),
-                'wraptag'  => $this->tbInput('wraptag', $wraptag),
-                'break'    => $this->tbInput('break', $break),
-                'form'     => $this->tbFormPop('form', 'file', $form),
+                'author'     => $this->tbAuthorPop($author),
+                'category'   => $this->tbCategoryPop($category, 'file'),
+                'id'         => $this->tbInput('id', $id),
+                'status'     => $this->tbStatusPop($status, 'file'),
+                'sort'       => ' '.selectInput('sort', $sorts, $sort, true),
+                'limit'      => $this->tbInput('limit', $limit, INPUT_TINY),
+                'offset'     => $this->tbInput('offset', $offset, INPUT_TINY),
+                'pageby'     => $this->tbInput('pageby', $pageby, INPUT_TINY),
+                'label'      => $this->tbInput('label', $label, INPUT_REGULAR),
+                'labeltag'   => $this->tbInput('labeltag', $labeltag),
+                'wraptag'    => $this->tbInput('wraptag', $wraptag),
+                'break'      => $this->tbInput('break', $break),
+                'form'       => $this->tbFormPop('form', 'file', $form),
+                'match_type' => $this->tbInput('auto_detect', $auto_detect, INPUT_REGULAR),
             )).
             $this->endform
         ).
@@ -2722,15 +2794,15 @@ class BuilderTags
         $out = $this->tagbuildForm(
             $this->startblock.
             $this->widgets(array(
-                'section'  => $this->tbSectionPop('section', $section),
-                'match'    => $this->tbMatchCatPop($match),
-                'sort'     => $this->tbSortPop($sort),
-                'limit'    => $this->tbInput('limit', $limit, INPUT_TINY),
-                'label'    => $this->tbInput('label', $label, INPUT_REGULAR),
-                'labeltag' => $this->tbInput('labeltag', $labeltag),
-                'wraptag'  => $this->tbInput('wraptag', $wraptag),
-                'class'    => $this->tbInput('class', $class, INPUT_REGULAR),
-                'break'    => $this->tbInput('break', $break),
+                'section'    => $this->tbSectionPop('section', $section),
+                'match_type' => $this->tbMatchCatPop($match),
+                'sort'       => $this->tbSortPop($sort),
+                'limit'      => $this->tbInput('limit', $limit, INPUT_TINY),
+                'label'      => $this->tbInput('label', $label, INPUT_REGULAR),
+                'labeltag'   => $this->tbInput('labeltag', $labeltag),
+                'wraptag'    => $this->tbInput('wraptag', $wraptag),
+                'class'      => $this->tbInput('class', $class, INPUT_REGULAR),
+                'break'      => $this->tbInput('break', $break),
             )).
             $this->endform
         ).
