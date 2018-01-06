@@ -159,9 +159,12 @@ class BuilderTags
      * @return string HTML
      */
 
-    private function widgets($widgets)
+    private function widgets($widgets = array())
     {
         $out = '';
+        $widgets += array(
+            'escape' => $this->tbInput('escape', gps('escape'), INPUT_REGULAR)
+        );
 
         // TODO: Link to attribute help?
         foreach ($widgets as $label => $thing) {
@@ -179,7 +182,7 @@ class BuilderTags
 
     private function tbNoAtts()
     {
-        return $this->tagbuildForm($this->startblock).$this->tdb($this->tb($this->tagname));
+        return $this->tagbuildForm($this->startblock.$this->widgets().$this->endform).$this->tdb($this->tb($this->tagname));
     }
 
     /**
@@ -194,6 +197,7 @@ class BuilderTags
     private function tb($tag, $atts_list = array(), $thing = '')
     {
         $atts = array();
+        $atts_list += gpsa(array('escape'));
 
         foreach ($atts_list as $att => $val) {
             if ($val or $val === '0' or $val === '{att_empty}') {
