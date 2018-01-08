@@ -22,41 +22,52 @@
  */
 
 /**
- * RecRegexIterator
+ * Pages
+ *
+ * Manages skins related pages.
  *
  * @since   4.7.0
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin\Asset {
 
-    class RecRegexIterator extends \RecursiveRegexIterator
+    abstract class View
     {
         /**
          * {@inheritdoc}
          */
 
-        public function accept()
+        public function __construct()
         {
-            return $this->isDir() || $this->isValidTemplate();
         }
 
         /**
-         * Validates a template file name.
+         * Gets an array of the installed skins.
          *
-         * @return bool
+         * @return array Associative array of skin names and their related title.
          */
 
-        public function isValidTemplate()
+        public static function skinSwitchForm($event, $step, $current)
         {
-            $isValid = false;
+            $installed = Textpattern\Skin\Asset\Page\Model::getInstalled();
 
-            if (!$this->isDot() && $this->isReadable() && ($this->isFile() || $this->isLink())) {
-                $isValid = (bool) preg_match(static::getRegex(), $this->getFilename());
-
+            if ($installed) {
+                return form(
+                    inputLabel(
+                        'skin',
+                        selectInput('skin', $installed, $current, false, 1, 'skin'),
+                        'skin'
+                    )
+                    .eInput($event)
+                    .sInput($step),
+                    '',
+                    '',
+                    'post'
+                );
             }
 
-            return $isValid;
+            return;
         }
     }
 }

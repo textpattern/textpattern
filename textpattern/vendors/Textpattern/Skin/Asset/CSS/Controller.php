@@ -22,41 +22,17 @@
  */
 
 /**
- * RecRegexIterator
+ * Pages
+ *
+ * Manages skins related pages.
  *
  * @since   4.7.0
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin\Asset\CSS {
 
-    class RecRegexIterator extends \RecursiveRegexIterator
+    class Controller extends \Textpattern\Skin\Asset\Controller
     {
-        /**
-         * {@inheritdoc}
-         */
-
-        public function accept()
-        {
-            return $this->isDir() || $this->isValidTemplate();
-        }
-
-        /**
-         * Validates a template file name.
-         *
-         * @return bool
-         */
-
-        public function isValidTemplate()
-        {
-            $isValid = false;
-
-            if (!$this->isDot() && $this->isReadable() && ($this->isFile() || $this->isLink())) {
-                $isValid = (bool) preg_match(static::getRegex(), $this->getFilename());
-
-            }
-
-            return $isValid;
-        }
     }
 }

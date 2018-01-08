@@ -53,7 +53,7 @@ namespace Textpattern\Skin {
          * @throws \Exception
          */
 
-        public function getTemplateContents()
+        public function getContents()
         {
             $contents = file_get_contents($this->getPathname());
 
@@ -61,7 +61,7 @@ namespace Textpattern\Skin {
                 return preg_replace('/[\r|\n]+$/', '', $contents);
             }
 
-            throw new \Exception('Unable to read: '.$this->getTemplateName());
+            throw new \Exception('Unable to read: '.$this->getName());
         }
 
         /**
@@ -71,9 +71,9 @@ namespace Textpattern\Skin {
          * @throws Exception
          */
 
-        public function getTemplateJSONContents()
+        public function getJSONContents()
         {
-            return @json_decode($this->getTemplateContents(), true);
+            return @json_decode($this->getContents(), true);
         }
 
         /**
@@ -82,7 +82,7 @@ namespace Textpattern\Skin {
          * @return string
          */
 
-        public function getTemplateName()
+        public function getName()
         {
             return pathinfo($this->getFilename(), PATHINFO_FILENAME);
         }
@@ -93,34 +93,9 @@ namespace Textpattern\Skin {
          * @return string
          */
 
-        public function getTemplateDir()
+        public function getDir()
         {
-            $types = array_keys(get_form_types());
-            $type = basename($this->getPath());
-
-            if (in_array($type, $types)) {
-                return $type;
-            }
-
-            return 'misc';
-        }
-
-        public function getTemplateInfo($type)
-        {
-            switch ($type) {
-                case 'name':
-                    return $this->getTemplateName();
-                    break;
-                case 'content':
-                    return $this->getTemplateContents();
-                    break;
-                case 'dir':
-                    return $this->getTemplateDir();
-                    break;
-                default:
-                    return $this->getTemplateName();
-                    break;
-            }
+            return basename($this->getPath());
         }
     }
 }

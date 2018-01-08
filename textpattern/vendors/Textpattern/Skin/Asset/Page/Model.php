@@ -22,24 +22,23 @@
  */
 
 /**
- * Styles
+ * SharedBase
  *
- * Manages skins related styles.
+ * Extended by Main and AssetBase.
  *
  * @since   4.7.0
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin\Asset\Page {
 
-    class Styles extends AssetBase
+    class Model extends \Textpattern\Skin\Asset\Model
     {
-        protected static $asset = 'css';
-        protected static $dir = 'styles';
-        protected static $extension = 'css';
-        protected static $table = 'txp_css';
+        protected static $table = 'txp_page';
         protected static $tableCols;
-        protected static $contentsCol = 'css';
-        protected static $essential = array(array('default'));
+        protected static $contentsCol = 'user_html';
+        protected static $dir = 'pages';
+        protected static $asset = 'page';
+        protected static $essential = array('default', 'error_default');
     }
 }

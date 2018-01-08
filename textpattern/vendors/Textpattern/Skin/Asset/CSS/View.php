@@ -30,15 +30,9 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin\Asset\CSS {
 
-    class Pages extends AssetBase
+    class View extends \Textpattern\Skin\Asset\View
     {
-        protected static $asset = 'page';
-        protected static $dir = 'pages';
-        protected static $table = 'txp_page';
-        protected static $tableCols;
-        protected static $contentsCol = 'user_html';
-        protected static $essential = array(array('default', 'error_default'));
     }
 }

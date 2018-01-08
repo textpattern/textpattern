@@ -22,41 +22,23 @@
  */
 
 /**
- * RecRegexIterator
+ * SharedBase
+ *
+ * Extended by Main and AssetBase.
  *
  * @since   4.7.0
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin\Asset\CSS {
 
-    class RecRegexIterator extends \RecursiveRegexIterator
+    class Model extends \Textpattern\Skin\Asset\Model
     {
-        /**
-         * {@inheritdoc}
-         */
-
-        public function accept()
-        {
-            return $this->isDir() || $this->isValidTemplate();
-        }
-
-        /**
-         * Validates a template file name.
-         *
-         * @return bool
-         */
-
-        public function isValidTemplate()
-        {
-            $isValid = false;
-
-            if (!$this->isDot() && $this->isReadable() && ($this->isFile() || $this->isLink())) {
-                $isValid = (bool) preg_match(static::getRegex(), $this->getFilename());
-
-            }
-
-            return $isValid;
-        }
+        protected static $table = 'txp_css';
+        protected static $tableCols;
+        protected static $contentsCol = 'css';
+        protected static $dir = 'styles';
+        protected static $asset = 'css';
+        protected static $essential = array('default');
     }
 }
