@@ -283,7 +283,7 @@
 <h2>path_to_site does not match</h2>
 <p>Two variables set by your web server which should match, but do not.</p>
         ]]></item>
-        <item id="path_to_site_inacc" title="Site directory unreadable"><![CDATA[
+        <item id="path_to_site_inaccessible" title="Site directory unreadable"><![CDATA[
 <h2>Site directory unreadable</h2>
 <p>The directory containing the <code>index.php</code> file specified as the index for your site is unreadable by the server. Please check permissions.</p>
         ]]></item>
