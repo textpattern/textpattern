@@ -1,4 +1,4 @@
 # Inhibit directory listing
 Options -Indexes
 # Inhibit direct file downloads
-RedirectMatch 403 .*
+RedirectMatch 403 .txp
