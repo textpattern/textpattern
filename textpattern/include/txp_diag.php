@@ -232,7 +232,7 @@ function doDiagnostics()
 
     $not_readable = array();
 
-    if (!@is_writable($path_to_site.'/'.$img_dir)) {
+    if (!@is_writable($path_to_site.DS.$img_dir)) {
         $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('img_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$img_dir}", 'warning');
     }
 
@@ -240,8 +240,8 @@ function doDiagnostics()
         $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('file_base_path'), gTxt('dir_not_writable')).": {$file_base_path}", 'warning');
     }
 
-    if (!@is_writable($skin_base_path)) {
-        $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('skin_base_path'), gTxt('dir_not_writable')).": {$skin_base_path}", 'warning');
+    if (!@is_writable($path_to_site.DS.$skin_dir)) {
+        $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('skin_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$skin_dir}", 'warning');
     }
 
     if (!@is_writable($tempdir)) {
