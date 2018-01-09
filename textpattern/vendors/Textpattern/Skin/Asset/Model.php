@@ -452,12 +452,14 @@ namespace Textpattern\Skin\Asset {
          * @param string $name A skin newname.
          */
 
-        public function updateSkin($name)
+        public function updateSkin()
         {
+            $skin = $this->getSkin();
+
             return safe_update(
                 static::getTable(),
-                "skin = '".doSlash($name)."'",
-                "skin = '".doSlash($this->getSkin()->getName())."'"
+                "skin = '".doSlash($skin->getName())."'",
+                "skin = '".doSlash($skin->getBase())."'"
             );
         }
 

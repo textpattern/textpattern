@@ -91,7 +91,7 @@ namespace Textpattern\Skin {
          * @see        getNamePattern().
          */
 
-        protected static $namePattern = '[a-z][a-z0-9_\-\.]{0,63}';
+        protected static $namePattern = '[a-zA-Z0-9_\-\.]{0,63}';
 
         /**
          * $table property getter.

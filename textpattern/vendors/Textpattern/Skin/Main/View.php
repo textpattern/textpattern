@@ -58,7 +58,7 @@ namespace Textpattern\Skin\Main {
          * @param mixed $message The activity message
          */
 
-        public function output()
+        public function render()
         {
             $var = $this->model->getMessage();
 
@@ -410,7 +410,7 @@ namespace Textpattern\Skin\Main {
             $fields = array('name', 'title', 'version', 'description', 'author', 'author_uri');
 
             if ($name) {
-                $rs = $this->model->setName($name)->getRow();
+                $rs = $this->model->setInfos($name)->getRow();
 
                 if (!$rs) {
                     return $this->main();

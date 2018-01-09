@@ -85,15 +85,17 @@ namespace Textpattern\Skin\Main {
 
         protected static $installed;
 
+        protected $infos;
+        protected $base;
+
         /**
          * Constructor.
          *
          * @param string $names Skin name.
          */
 
-        public function __construct($names = null)
+        public function __construct()
         {
-            $this->setNames($names);
         }
 
         /**
@@ -123,6 +125,30 @@ namespace Textpattern\Skin\Main {
         }
 
         /**
+         * $names property getter.
+         *
+         * @return array Skin names.
+         */
+
+        public function getBase()
+        {
+            return $this->base;
+        }
+
+        /**
+         * $names property getter.
+         *
+         * @return array Skin names.
+         */
+
+        public function setBase($name)
+        {
+            $this->base = $name;
+
+            return $this;
+        }
+
+        /**
          * $name property setter.
          *
          * @param object $this.
@@ -135,6 +161,30 @@ namespace Textpattern\Skin\Main {
             return $this;
         }
 
+        public function setInfos(
+            $name,
+            $title = null,
+            $version = null,
+            $description = null,
+            $author = null,
+            $author_uri = null
+        ) {
+            $this->infos = compact('name', 'title', 'version', 'description', 'author', 'author_uri');
+
+            return $this;
+        }
+
+        public function getInfos()
+        {
+            $infoQuery = array();
+
+            foreach ($this->infos as $col => $value) {
+                $infoQuery[] = $col." = '".doSlash($value)."'";
+            }
+
+            return implode(', ', $infoQuery);
+        }
+
         /**
          * $name property getter.
          *
@@ -143,7 +193,7 @@ namespace Textpattern\Skin\Main {
 
         public function getName()
         {
-            return $this->name;
+            return $this->infos['name'];
         }
 
         /**
@@ -152,16 +202,18 @@ namespace Textpattern\Skin\Main {
          * @param bool
          */
 
-        public function isInstalled()
+        public function isInstalled($name = null)
         {
+            $name === null ? $name = $this->getName() : '';
+
             if ($this->installed === null) {
                 $isInstalled = (bool) safe_field(
                     'name',
                     static::getTable(),
-                    "name = '".doSlash($this->getName())."'"
+                    "name = '".doSlash($name)."'"
                 );
             } else {
-                $isInstalled = in_array($this->getName(), array_values(static::getInstalled()));
+                $isInstalled = in_array($name, array_values(static::getInstalled()));
             }
 
             return $isInstalled;
@@ -184,9 +236,11 @@ namespace Textpattern\Skin\Main {
          * @param string path.
          */
 
-        public function getDirPath()
+        public function getDirPath($name = null)
         {
-            return static::getBasePath().'/'.$this->getName();
+            $name === null ? $name = $this->getName() : '';
+
+            return static::getBasePath().'/'.$name;
         }
 
         /**
@@ -206,9 +260,11 @@ namespace Textpattern\Skin\Main {
          * @param bool false on error.
          */
 
-        public function dirExists()
+        public function dirExists($name = null)
         {
-            return file_exists($this->getDirPath());
+            $name === null ? $name = $this->getName() : '';
+
+            return file_exists($this->getDirPath($name));
         }
 
         /**
@@ -272,9 +328,12 @@ namespace Textpattern\Skin\Main {
          * @param bool false on error.
          */
 
-        public function renameDir($to)
+        public function renameDir($from = null, $to = null)
         {
-            return @rename($this->getDirPath(), static::getBasePath().'/'.$to);
+            $from === null ? $from = $this->getBase() : '';
+            $to === null ? $to = $this->getName() : '';
+
+            return @rename($this->getDirPath($from), $this->getDirPath($to));
         }
 
         /**
@@ -298,8 +357,10 @@ namespace Textpattern\Skin\Main {
          * @param array Section names.
          */
 
-        public function getSections()
+        public function getSections($skin = null)
         {
+            $skin === null ? $skin = $this->getBase() : '';
+
             $this->sections === null ? $this->setSections() : '';
 
             return $this->sections;
@@ -311,12 +372,12 @@ namespace Textpattern\Skin\Main {
          * @param string $to   A skin newname.
          */
 
-        public function updateSections($to)
+        public function updateSections()
         {
             return safe_update(
                 'txp_section',
-                "skin = '".doSlash($to)."'",
-                "skin = '".doSlash($this->getName())."'"
+                "skin = '".doSlash($this->getName())."'",
+                "skin = '".doSlash($this->getBase())."'"
             );
         }
 
@@ -337,11 +398,11 @@ namespace Textpattern\Skin\Main {
          * @return bool false on error.
          */
 
-        public static function setEditing()
+        public function setEditing($name = null)
         {
             global $prefs;
 
-            $name = $this->getName();
+            $name === null ? $name = $this->getName() : '';
             $prefs['skin_editing'] = $name;
 
             return set_pref('skin_editing', $name, 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
@@ -382,14 +443,16 @@ namespace Textpattern\Skin\Main {
          * @return bool false on error.
          */
 
-        public function lock()
+        public function lock($name = null)
         {
+            $name === null ? $name = $this->getName() : '';
+
             $timeStart = microtime(true);
             $locked = false;
             $time = 0;
 
             while (!$locked && $time < 2) {
-                $locked = @mkdir($this->getDirPath().'/lock');
+                $locked = @mkdir($this->getDirPath($name).'/lock');
                 sleep(0.25);
                 $time = microtime(true) - $timeStart;
             }
@@ -404,9 +467,11 @@ namespace Textpattern\Skin\Main {
          * @return bool false on error.
          */
 
-        public function unlock()
+        public function unlock($name = null)
         {
-            if (@rmdir($this->getDirPath().'/lock')) {
+            $name === null ? $name = $this->getName() : '';
+
+            if (@rmdir($this->getDirPath($name).'/lock')) {
                 $this->locked = false;
             }
 
@@ -437,21 +502,11 @@ namespace Textpattern\Skin\Main {
          * @return bool                false on error.
          */
 
-        public function createRow(
-            $title,
-            $version,
-            $description,
-            $author,
-            $author_uri
-        ) {
+        public function createRow()
+        {
             return safe_insert(
                 static::getTable(),
-                "name = '".doSlash($this->getName())."', "
-                ."title = '".doSlash($title)."', "
-                ."version = '".doSlash($version)."', "
-                ."description = '".doSlash($description)."', "
-                ."author = '".doSlash($author)."', "
-                ."author_uri = '".doSlash($author_uri)."'"
+                $this->getInfos()
             );
         }
 
@@ -467,23 +522,11 @@ namespace Textpattern\Skin\Main {
          * @return bool                false on error.
          */
 
-        public function updateRow(
-            $name,
-            $title,
-            $version,
-            $description,
-            $author,
-            $author_uri
-        ) {
+        public function updateRow() {
             return safe_update(
                 static::getTable(),
-                "name = '".doSlash($name)."', "
-                ."title = '".doSlash($title)."', "
-                ."version = '".doSlash($version)."', "
-                ."description = '".doSlash($description)."', "
-                ."author = '".doSlash($author)."', "
-                ."author_uri = '".doSlash($author_uri)."'",
-                "name = '".doSlash($this->getName())."'"
+                $this->getInfos(),
+                "name = '".doSlash($this->getBase())."'"
             );
         }
 

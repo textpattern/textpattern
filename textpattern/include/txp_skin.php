@@ -36,7 +36,7 @@ if ($event === 'skin') {
     require_privs($event);
 
     $model = Txp::get('Textpattern\Skin\Main\Model');
-    $controller = Txp::get('Textpattern\Skin\Main\Controller', $model);
+    $controller = $step === 'save' ? Txp::get('Textpattern\Skin\Main\Single', $model) : Txp::get('Textpattern\Skin\Main\Multiple', $model);
     $view = Txp::get('Textpattern\Skin\Main\View', $model);
 
     $availableSteps = array(
@@ -51,14 +51,14 @@ if ($event === 'skin') {
     if ($step && bouncer($step, $availableSteps)) {
         if (is_callable([$controller, $step])) {
             $controller->$step();
-            $view->output();
+            $view->render();
         } elseif (is_callable([$view, $step])) {
             $view->$step();
         } else {
-            $view->output();
+            $view->render();
         }
     } else {
-        $view->output();
+        $view->render();
     }
 }
 
