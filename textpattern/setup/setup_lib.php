@@ -262,9 +262,13 @@ function get_public_themes_list()
 {
     global $public_themes;
 
-    $public_themes = $out = array();
+    $public_themes = $out = $files = array();
 
-    if ($files = glob(txpath.DS.'{setup,..}'.DS.'themes'.DS.'*'.DS.'manifest.json', GLOB_BRACE)) {
+    foreach (array('setup', '..') as $root) {
+        $files = array_merge($files, (array) glob(txpath.DS.$root.DS.'themes'.DS.'*'.DS.'manifest.json'));
+    }
+
+    if ($files = array_filter($files)) {
         foreach ($files as $file) {
             $file = realpath($file);
             $DS = preg_quote(DS);
