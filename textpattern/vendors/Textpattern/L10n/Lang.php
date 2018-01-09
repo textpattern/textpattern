@@ -130,8 +130,8 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
     /**
      * Return all language files in the lang directory.
-     * @param array $extensions Language files extensions
      *
+     * @param array $extensions Language files extensions
      * @return array Available language filenames
      */
 
@@ -398,7 +398,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
     }
 
     /**
-     * Installs localisation strings from a Textpack.
+     * Install localisation strings from a Textpack.
      *
      * @param   string $textpack    The Textpack to install
      * @param   bool   $addNewLangs If TRUE, installs strings for any included language
@@ -486,7 +486,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
     }
 
     /**
-     * Fetches the given language's strings from the database as an array.
+     * Fetch the given language's strings from the database as an array.
      *
      * If no $events is specified, only appropriate strings for the current context
      * are returned. If 'txpinterface' constant equals 'admin' all strings are
@@ -494,7 +494,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      *
      * If $events is FALSE, returns all strings.
      *
-     * Note the returned array inlcudes the language if the fallback has been used.
+     * Note the returned array includes the language if the fallback has been used.
      * This ensures (as far as possible) a full complement of strings, regardless of
      * the degree of translation that's taken place in the desired $lang code.
      * Any holes can be mopped up by the default language.
@@ -561,7 +561,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
     }
 
     /**
-     * Returns a localisation string.
+     * Return a localisation string.
      *
      * @param   string $var    String name
      * @param   array  $atts   Replacement pairs

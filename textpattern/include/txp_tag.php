@@ -956,7 +956,7 @@ class BuilderTags
                 'time'          => $this->tbTimePop($time),
                 'searchall'     => $this->tbYesNoPop('searchall', $searchall),
                 'searchsticky'  => $this->tbYesNoPop('searchsticky', $searchsticky),
-                'frontpage'     => $this->tbYesNoPop('frontpage', $frontpage),
+                'on_front_page' => $this->tbYesNoPop('frontpage', $frontpage),
                 'keywords'      => '<textarea name="keywords" id="keywords">'.$keywords.'</textarea>',
                 'limit'         => $this->tbInput('limit', $limit, INPUT_TINY),
                 'offset'        => $this->tbInput('offset', $offset, INPUT_TINY),
@@ -1709,7 +1709,7 @@ class BuilderTags
             $this->startblock.
             $this->widgets(array(
                 'name'   => $this->tbCssPop($name),
-                'theme'  => $this->tbThemePop($theme),
+                'skin'   => $this->tbThemePop($theme),
                 'format' => $this->tbCssFormatPop($format),
                 'media'  => $this->tbInput('media', $media, INPUT_REGULAR),
                 'rel'    => $this->tbInput('rel', $rel, INPUT_REGULAR),
