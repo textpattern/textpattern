@@ -34,21 +34,6 @@ namespace Textpattern\Skin\Asset\Form {
 
     class Controller extends \Textpattern\Skin\Asset\Controller
     {
-        protected function duplicateRows($rows)
-        {
-            $skinModel = $this->model->getSkin();
-            $skin = $skinModel->getName();
-            $this->model->getSkin()->setName($skin.'_copy');
-var_dump($skin);
-            if (!$this->model->setNames(array_keys($rows))->createRows(array_keys(array_values($rows)))) {
-                $this->model->setResults($asset.'_duplication_failed', array($skin => $notImported));
-
-                return false;
-            }
-
-            return true;
-        }
-
         protected function importFiles($files)
         {
             foreach ($files as $type => $templates) {

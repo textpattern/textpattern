@@ -96,9 +96,17 @@ namespace Textpattern\Skin\Main {
          * $assets property getter.
          */
 
-        public function setNames()
+        public function setNames($names)
         {
-            return $this->names;
+            $parsed = array();
+
+            foreach ($names as $name) {
+                $parsed[] = sanitizeForTheme($name);
+            }
+
+            $this->model->setNames($parsed);
+
+            return $this;
         }
 
         /**
@@ -157,9 +165,9 @@ namespace Textpattern\Skin\Main {
 
                 if (!$this->model->isInstalled()) {
                     $this->model->setResults('skin_unknown', $name);
-                } elseif ($this->model->setName($copy)->isInstalled()) {
+                } elseif ($this->model->isInstalled($copy)) {
                     $this->model->setResults('skin_already_exists', $copy);
-                } elseif (!$this->model->setName($name)->isDirWritable() && !$this->model->createDir()) {
+                } elseif (!$this->model->isDirWritable() && !$this->model->createDir()) {
                     $this->model->setResults('path_not_writable', $this->model->getDirPath());
                 } elseif (!$this->model->lock()) {
                     $this->model->setResults('skin_dir_locking_failed', $name);
@@ -167,7 +175,8 @@ namespace Textpattern\Skin\Main {
                     $passed[] = $name;
                 }
 
-                $rows = $this->model->setNames($passed)->getRows();
+                $this->setNames($passed);
+                $rows = $this->model->getRows();
 
                 if (!$rows) {
                     $this->model->setResults('skin_unknown', $passed);
@@ -180,11 +189,19 @@ namespace Textpattern\Skin\Main {
                             $this->model->setResults('skin_duplication_failed', $name);
                         } else {
                             $this->model::setInstalled(array($copy => $title.' copy'));
-                            $this->model->setName($name);
+                            $this->model->setInfos($name);
 
                             foreach ($this->getAssets() as $asset) {
-                                $asset->duplicate();
-                                array_merge_recursive($this->model->getResults(), $asset->getModel()->getResults());
+                                $assetModel = $asset->getModel();
+                                $assetRows = $assetModel->getRows();
+
+                                if (!$assetRows) {
+                                    $this->model->setResults('no_found', array($skin => $this->model->getDirPath()));
+                                } else {
+                                    if ($assetModel->duplicateRowsTo($copy, $assetRows)) {
+                                        $this->model->setResults($asset.'_duplication_failed', array($skin => $notImported));
+                                    }
+                                }
                             }
                         }
                     }
@@ -328,7 +345,7 @@ namespace Textpattern\Skin\Main {
         public function delete()
         {
             $names = $this->model->getNames();
-
+var_dump($names);
             callback_event('skin.delete', '', 1, array('names' => $names));
 
             $passed = $failed = array();
@@ -359,7 +376,7 @@ namespace Textpattern\Skin\Main {
             }
 
             if ($passed) {
-                if ($this->model->setNames($passed)->deleteRows()) {
+                if ($this->setNames($passed) && $this->model->deleteRows()) {
                     $this->model::unsetInstalled($passed);
 
                     if (in_array(Model::getEditing(), $passed)) {

@@ -419,7 +419,6 @@ namespace Textpattern\Skin\Asset {
         {
             $thisNames = $this->getNames();
             $skin = $this->getSkin()->getName();
-            var_dump($skin);
             $names = $thisNames ? $thisNames : static::getEssential();
             $values = array();
 
@@ -442,7 +441,7 @@ namespace Textpattern\Skin\Asset {
             return safe_query(
                 "INSERT INTO ".static::getTable()." (skin, name, ".$contentsCol.") "
                 ."VALUES ".implode(', ', $values)
-                ."ON DUPLICATE KEY UPDATE skin=VALUES(skin), name=VALUES(name), ".$contentsCol."=VALUES(".$contentsCol.")"
+                ."ON DUPLICATE KEY UPDATE skin=VALUES(skin), name=VALUES(name), ".$contentsCol."=VALUES(".$contentsCol.")", true
             );
         }
 
@@ -530,19 +529,19 @@ namespace Textpattern\Skin\Asset {
          * {@inheritdoc}
          */
 
-        public function getRows()
+        public function getRows($names = null)
         {
-            $thisNames = $this->getNames();
+            $names === null ? $names = $this->getNames() : '';
             $nameIn = '';
 
-            if ($thisNames) {
-                $nameIn = " AND name IN ('".implode("', '", array_map('doSlash', $thisNames))."')";
+            if ($names) {
+                $nameIn = " AND name IN ('".implode("', '", array_map('doSlash', $names))."')";
             }
 
             $rows = safe_rows_start(
                 implode(', ', static::getTableCols()),
                 static::getTable(),
-                "skin = '".doSlash($this->getSkin()->getName())."'".$nameIn
+                "skin = '".doSlash($this->getSkin()->getName())."'".$nameIn, true
             );
 
             if ($rows) {
@@ -560,6 +559,15 @@ namespace Textpattern\Skin\Asset {
             }
 
             return $skinRows;
+        }
+
+        public function duplicateRowsTo($rows)
+        {
+            if (!$this->setNames(array_keys($rows))->createRows(array_values($rows))) {
+                return false;
+            }
+
+            return true;
         }
 
         /**

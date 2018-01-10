@@ -714,8 +714,10 @@ namespace Textpattern\Skin\Main {
          * @return bool         false on error.
          */
 
-        public function deleteRows($names)
+        public function deleteRows($names = null)
         {
+            $names === null ? $names = $this->getNames() : '';
+
             return safe_delete(
                 static::getTable(),
                 "name IN ('".implode("', '", array_map('doSlash', $names))."')"

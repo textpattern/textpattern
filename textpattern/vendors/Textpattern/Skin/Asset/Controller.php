@@ -44,65 +44,6 @@ namespace Textpattern\Skin\Asset {
         }
 
         /**
-         * Duplicates templates.
-         *
-         * @return object $this.
-         */
-
-        public function duplicate()
-        {
-            $skinModel = $this->model->getSkin();
-            $skin = $skinModel->getName();
-            $asset = $this->model::getAsset();
-            $skinWasLocked = $skinModel->isLocked();
-
-            // Works the skin if not already done.
-            if (!$skinWasLocked) {
-                if (!$skinModel->isInstalled()) {
-                    $this->model->setResults('skin_unknown', $skin);
-                } elseif (!$skinModel->isDirWritable() && !$skinModel->createDir()) {
-                    $this->model->setResults('path_not_writable', $skinModel->getDirPath());
-                } elseif ($skinModel->lock()) {
-                    $this->model->setResults('skin_locking_failed', $skinModel->getDirPath());
-                }
-            }
-
-            // Works with asset related templates once the skin locked.
-            if ($skinModel->isLocked()) {
-                $rows = $this->model->getRows();
-                $copies = array();
-
-                if (!$rows) {
-                    $this->model->setResults('no_'.$asset.'_found', array($skin => $this->model->getDirPath()));
-                } else {
-                    $this->duplicateRows($rows);
-                }
-
-                // Unlocks the skin if needed.
-                if (!$skinWasLocked && !$skinModel->unlock()) {
-                    $this->model->setResults('skin_unlocking_failed', array($skin => $skinModel->getDirPath()));
-                }
-            }
-
-            return $this;
-        }
-
-        protected function duplicateRows($rows)
-        {
-            $skinModel = $this->model->getSkin();
-            $skin = $skinModel->getName();
-            $this->model->getSkin()->setName($skin.'_copy');
-
-            if (!$this->model->setNames(array_keys($rows))->createRows(array_values($rows))) {
-                $this->model->setResults($asset.'_duplication_failed', array($skin => $notImported));
-
-                return false;
-            }
-
-            return true;
-        }
-
-        /**
          * Imports templates.
          *
          * @param  bool   $clean    Whether to removes extra skin template rows or not;

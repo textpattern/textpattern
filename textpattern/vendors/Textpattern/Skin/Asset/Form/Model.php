@@ -220,5 +220,14 @@ namespace Textpattern\Skin\Asset\Form {
 
             return $skinRows;
         }
+
+        public function duplicateRowsTo($skin, $rows)
+        {
+            if (!$this->setNames(array_keys($rows))->createRows(array_keys(array_values($rows)))) {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
