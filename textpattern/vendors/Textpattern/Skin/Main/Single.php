@@ -194,7 +194,7 @@ namespace Textpattern\Skin\Main {
          * @return object $this.
          */
 
-        public function create($assetsFrom = null) {
+        public function create() {
             $name = $this->model->getName();
 
             callback_event('skin.create', '', 1, array('name' => $name));
