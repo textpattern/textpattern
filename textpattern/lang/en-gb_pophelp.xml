@@ -208,10 +208,6 @@
 </ul>
 <p>The clean URL test attempts to fetch a page from the web address specified in the ‘Site URL’ preference in order to check that all clean URL parameters are working correctly. If that URL is a different site, or has been replaced with a static page or similar, the test will fail. Until the issue is resolved you will have to use messy URLs on your site instead (<code>http://example.com?s=section&amp;id=4</code>). Ensure the ‘Permanent link mode’ in Admin Preferences is set accordingly.</p>
         ]]></item>
-        <item id="cleanurl_only_apache" title="Clean URL support"><![CDATA[
-<h2>Clean URL support</h2>
-<p>Clean URLs are only supported on Apache. If you are using another server platform, use short URLs at your own risk.</p>
-        ]]></item>
         <item id="diag_clear_private" title="Hide private information"><![CDATA[
 <h2>Hide private information</h2>
 <p>Hide private information for extra security. Recommended for if you want to copy and paste diagnostic information into a publicly viewable document, where exposing server details can potentially pose a security risk.</p>
@@ -271,17 +267,9 @@
 <h2>No temporary directory defined</h2>
 <p>While Textpattern will run without a temporary directory, some functionality may not work as expected if this preference is not set. Please visit Admin Preferences and set up the ‘Temporary directory path’.</p>
         ]]></item>
-        <item id="old_files" title="Old files"><![CDATA[
-<h2>Old files</h2>
-<p>Some Textpattern files are out-of-date and should be replaced with the latest versions from the relevant stable release.</p>
-        ]]></item>
         <item id="old_placeholder_exists" title="Section directory exists"><![CDATA[
 <h2>Section directory exists</h2>
 <p>Existing section directory files will conflict with the the <code>.htaccess</code> scheme. If the reported files are placeholders, please delete them.</p>
-        ]]></item>
-        <item id="path_not_doc_root" title="path_to_site does not match"><![CDATA[
-<h2>path_to_site does not match</h2>
-<p>Two variables set by your web server which should match, but do not.</p>
         ]]></item>
         <item id="path_to_site_inaccessible" title="Site directory unreadable"><![CDATA[
 <h2>Site directory unreadable</h2>
@@ -361,10 +349,6 @@
 <h2>Temporary and Plugin cache directory paths should not match</h2>
 <p>Plugins should have their own directory and not share the temporary directory. This is a potential security risk and may adversely affect your site if the temporary directory is flushed. Please ensure that the temporary directory path is different to the plugin cache path.</p>
         ]]></item>
-        <item id="update_still_exists" title="Update directory still exists"><![CDATA[
-<h2>Update directory still exists</h2>
-<p>When Textpattern has been upgraded, the <code>textpattern/update</code> directory and its contents are no longer needed and recommended for deletion. You will continue to receive this warning until it has been removed.</p>
-        ]]></item>
         <item id="warn_mail_unavailable" title="Your PHP installation is missing the mail() function"><![CDATA[
 <h2>Your PHP installation is missing the mail() function</h2>
 <p>PHP’s <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> function is disabled. Therefore, Textpattern cannot send emails and some functionality will not be available. For example, email notifications for new comments will not be sent, and new users will not receive a welcome email. Users can still be added, however.</p>
@@ -435,11 +419,6 @@
 <p>Paste additional language strings for your site into this box and select ‘Upload’ to install them.</p>
 <p>The strings will often come in the form of a downloadable Textpack, distributed with a plugin to permit the plugin’s language strings to be used natively within Textpattern.</p>
 <p>International authors may then translate these packs as necessary and redistribute the localised content to the community.</p>
-        ]]></item>
-        <item id="remove_lang" title="Remove language"><![CDATA[
-<h2>Remove language</h2>
-<p>You can remove this language completely and thus free the database resources that are associated with it.</p>
-<p>If you inadvertently remove a language you can re-install it.</p>
         ]]></item>
     </group>
 
@@ -936,7 +915,10 @@
     </group>
 
     <group id="skin" title="Themes panel">
-
+        <item id="remove_extra_templates" title="Delete all previous templates?"><![CDATA[
+<h2>Delete all previous templates?</h2>
+<p>TODO</p>
+        ]]></item>
     </group>
 </help>
 </resources>
