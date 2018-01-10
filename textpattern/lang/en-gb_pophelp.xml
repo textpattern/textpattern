@@ -792,9 +792,10 @@
 <p>This is the address of your Textpattern site, for example <code>www.example.com</code>.</p>
 <p><strong>Note:</strong> No <code>http://</code>, <code>https://</code> or trailing slash <code>/</code> is required.</p>
         ]]></item>
-        <item id="skin_base_path" title="Theme base path"><![CDATA[
-<h2>Theme base path</h2>
-<p>This sets the <strong>absolute path</strong> to the directory where front-side themes flat files will be permanently saved. PHP needs to have write access to this directory.</p>
+        <item id="skin_base_path" title="Theme directory"><![CDATA[
+<h2>Theme directory</h2>
+<p>If you’d like to customise the name of the directory where front-side themes flat files will be permanently saved, you can do so here. You must first create the directory in the root of your Textpattern installation, you should also make sure that PHP is able to write to that directory.</p>
+<p>This path is always a <strong>relative path</strong> (to the directory of your root Textpattern installation).</p>
         ]]></item>
         <item id="smtp_from" title="SMTP envelope sender address"><![CDATA[
 <h2>SMTP envelope sender address</h2>
