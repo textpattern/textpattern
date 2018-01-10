@@ -310,7 +310,7 @@ function get_language()
         $txpLang->available(TEXTPATTERN_LANG_AVAILABLE, TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE);
         Txp::get('\Textpattern\Plugin\Plugin')->installTextpacks();
 
-        return list_languages(gTxt('language_updated', array('{name}' => $langName)));
+        return list_languages(gTxt('language_installed', array('{name}' => $langName)));
     }
 
     return list_languages(array(gTxt('language_not_installed', array('{name}' => $langName)), E_ERROR));
