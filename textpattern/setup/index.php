@@ -483,9 +483,9 @@ function step_fbCreate()
                 'index.php' => $login_url,
             ))
         ).
-        graf(
-            gTxt('setup_autoinstall_text').popHelp('#', 0, 0, 'pophelp', $setup_autoinstall_body)
-        ).
+        // graf(
+            // gTxt('setup_autoinstall_text').popHelp('#', 0, 0, 'pophelp', $setup_autoinstall_body)
+        // ).
         graf(
             gTxt('installation_postamble')
         ).
