@@ -2,8 +2,8 @@
 <resources>
     <skin>
         <item>
-            <name>txp_47</name>
-            <title>Default theme 4.7</title>
+            <name>four-point-seven</name>
+            <title>Four Point Seven</title>
             <version>4.7.0</version>
             <description>The default theme shipped with Textpattern CMS 4.7.</description>
             <author>Team Textpattern</author>
