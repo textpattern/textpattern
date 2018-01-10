@@ -604,13 +604,13 @@
         ]]></item>
         <item id="enable_short_tags" title="Enable short tags"><![CDATA[
 <h2>Enable short tags</h2>
-<p>Textpattern tags take the form <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. It is possible to reduce the amount of typing involved by enabling a shorthand notation whereby the 'txp:' may be omitted by following a few simple guidelines. Here are some examples to demonstrate the concept:</p>
+<p>Textpattern tags take the form <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. It is possible to reduce the amount of typing involved by enabling a shorthand notation whereby the <code>txp:</code> may be omitted by following a few simple guidelines. Here are some examples to demonstrate the concept:</p>
 <ul>
     <li><code>&lt;txp:article_id /&gt;</code> becomes <code>&lt;article::id /&gt;</code></li>
     <li><code>&lt;txp:recent_articles/&gt;</code> becomes <code>&lt;recent::articles /&gt;</code></li>
     <li><code>&lt;txp:file_download_list /&gt;</code> becomes <code>&lt;file::download_list /&gt;</code></li>
     <li><code>&lt;txp:smd_if /&gt;</code> becomes <code>&lt;smd::if /&gt;</code></li>
-    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> becomes <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (note that the plugin prefix can be used for the 'else' tag).</li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> becomes <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (note that the plugin prefix can be used for the <code>else</code> tag).</li>
 </ul>
 <p>If a tag contains an underscore and you enable short tags, the basic concept is:</p>
 <ol>
@@ -696,7 +696,7 @@
 <p>This defines the method by which individual articles are reached via the URL displayed using the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
 <p>‘?=messy’ mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimisation (SEO). In this mode URLs for articles on your site would look like this:</p>
 <pre><code>http://example.com/index.php?id=123</code></pre>
-<p>All other modes require the web server's URL rewrite functionality (e.g. Apache <code>mod_rewrite</code> or NGINX rewrite directives in the <code>server</code> block). If your server does not support URL rewrite functionality either contact your web host or use the ‘?=messy’ mode outlined above.</p>
+<p>All other modes require the web server’s URL rewrite functionality (e.g. Apache <code>mod_rewrite</code> or NGINX rewrite directives in the <code>server</code> block). If your server does not support URL rewrite functionality either contact your web host or use the ‘?=messy’ mode outlined above.</p>
         ]]></item>
         <item id="plugin_cache_dir" title="Plugin cache directory path"><![CDATA[
 <h2>Plugin cache directory path</h2>
