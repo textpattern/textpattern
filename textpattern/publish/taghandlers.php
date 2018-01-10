@@ -4353,8 +4353,8 @@ function page_url($atts)
     global $pretext;
 
     $specials = array(
-        'image_path' => ihu.get_pref('img_dir'),
-        'theme_path' => hu.get_pref('skin_dir'),
+        'images_path' => ihu.get_pref('img_dir'),
+        'themes_path' => hu.get_pref('skin_dir'),
         'skin_path'  => hu.get_pref('skin_dir').'/'.$pretext['skin'],
     );
 
