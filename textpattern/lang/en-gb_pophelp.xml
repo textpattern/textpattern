@@ -696,7 +696,7 @@
 <p>This defines the method by which individual articles are reached via the URL displayed using the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
 <p>‘?=messy’ mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimisation (SEO). In this mode URLs for articles on your site would look like this:</p>
 <pre><code>http://example.com/index.php?id=123</code></pre>
-<p>All other modes require the Apache <code>mod_rewrite</code> module to be installed and enabled on your server. If your server does not support <code>mod_rewrite</code> either contact your web host or use the ‘?=messy’ mode outlined above.</p>
+<p>All other modes require the web server's URL rewrite functionality (e.g. Apache <code>mod_rewrite</code> or NGINX rewrite directives in the <code>server</code> block). If your server does not support URL rewrite functionality either contact your web host or use the ‘?=messy’ mode outlined above.</p>
         ]]></item>
         <item id="plugin_cache_dir" title="Plugin cache directory path"><![CDATA[
 <h2>Plugin cache directory path</h2>
@@ -915,9 +915,10 @@
     </group>
 
     <group id="skin" title="Themes panel">
-        <item id="remove_extra_templates" title="Delete all previous templates?"><![CDATA[
-<h2>Delete all previous templates?</h2>
-<p>TODO</p>
+        <item id="remove_extra_templates" title="Delete all destination templates first?"><![CDATA[
+<h2>Delete all destination templates first?</h2>
+<p>Check this box to delete all Page, Form or Style theme assets in the destination before the import or export operation takes place. If you clear the checkbox, the templates in the destination area will be merged with whatever you are copying; any assets of the same name will be overwritten, but any other assets with different names that are already there will remain.</p>
+<p>During export to the file system, this does not affect files other than Pages templates, Forms templates and Stylesheets. Any additional assets you may have (JavaScript, images, etc.) in other directories inside your theme will remain, regardless of the setting of this checkbox.</p>
         ]]></item>
     </group>
 </help>
