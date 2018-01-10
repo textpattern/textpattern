@@ -2113,6 +2113,21 @@ textpattern.Route.add('', function () {
     });
 
     $('body').on('click','.pophelp', function (ev) {
+        var $pophelp = $('#pophelp_dialog');
+
+        if ($pophelp.length == 0) {
+            $pophelp = $('<div id="pophelp_dialog"></div>');
+            $('body').append($pophelp);
+            $pophelp.dialog({
+                dialogClass: 'txp-tagbuilder-container',    // FIXME: UI, need pophelp-class
+                autoOpen: false,
+                title: textpattern.gTxt('help'),
+                focus: function (ev, ui) {
+                    $(ev.target).closest('.ui-dialog').focus();
+                }
+            });
+        }
+
         var item = $(ev.target).parent().attr('data-item');
         if (item === undefined ) {
             item = $(ev.target).attr('data-item');
@@ -2120,19 +2135,9 @@ textpattern.Route.add('', function () {
         if (item === undefined ) {
             txpAsyncLink(ev, 'pophelp');
         } else {
-            $('#pophelp_dialog').dialog('close').html(decodeURIComponent(item)).dialog('open').restorePanes();
+            $pophelp.dialog('close').html(decodeURIComponent(item)).dialog('open').restorePanes();
         }
         return false;
-    });
-
-    $('body').append('<div id="pophelp_dialog"></div>');
-    $('#pophelp_dialog').dialog({
-        dialogClass: 'txp-tagbuilder-container',    // FIXME: UI, need pophelp-class
-        autoOpen: false,
-        title: textpattern.gTxt('help'),
-        focus: function (ev, ui) {
-            $(ev.target).closest('.ui-dialog').focus();
-        }
     });
 });
 
