@@ -4351,8 +4351,9 @@ function if_status($atts, $thing = null)
 function page_url($atts)
 {
     global $pretext;
+    static $specials = null;
 
-    $specials = array(
+    $specials !== null or $specials = array(
         'images_root' => ihu.get_pref('img_dir'),
         'themes_root' => hu.get_pref('skin_dir'),
         'theme_path'  => hu.get_pref('skin_dir').'/'.$pretext['skin'],
