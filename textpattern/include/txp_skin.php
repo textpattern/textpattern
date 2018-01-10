@@ -486,7 +486,7 @@ function skin_skin_change_pageby()
 
 function skin_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
-    $clean = checkbox('clean', 1, true, 0, 'clean')
+    $clean = checkbox2('clean', get_pref('remove_extra_templates', true), 0, 'clean')
             .tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean'))
             .popHelp('remove_extra_templates');
 
@@ -506,11 +506,17 @@ function skin_multiedit_form($page, $sort, $dir, $crit, $search_method)
 
 function skin_multi_edit()
 {
+    global $prefs;
+
     extract(psa(array(
         'edit_method',
         'selected',
         'clean',
     )));
+
+    if ($clean != get_pref('remove_extra_templates', true)) {
+        set_pref('remove_extra_templates', $prefs['remove_extra_templates'] = !empty($clean), 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+    }
 
     if (!$selected || !is_array($selected)) {
         return skin_list();
