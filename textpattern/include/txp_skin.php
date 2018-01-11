@@ -487,7 +487,7 @@ function skin_skin_change_pageby()
 function skin_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
     $clean = checkbox2('clean', get_pref('remove_extra_templates', true), 0, 'clean')
-            .tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean'))
+            .n.tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean'))
             .popHelp('remove_extra_templates');
 
     $methods = array(
