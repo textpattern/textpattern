@@ -486,8 +486,8 @@
 <p>This setting will attach a automatically-generated version of the article title to the URL. It is either generated automatically or can be manually overridden in ‘URL-only title’ when editing an article.</p>
 <p>The setting will only have an effect when you are using clean URLs. For certain languages this may result in long and ugly URLs, in which case you probably want to set this to ‘Off’.</p>
         ]]></item>
-        <item id="auto_dst" title="Automatically adjust Daylight Saving Time (DST) setting?"><![CDATA[
-<h2>Automatically adjust Daylight Saving Time (DST) setting?</h2>
+        <item id="auto_dst" title="Automatically adjust Daylight Saving Time setting?"><![CDATA[
+<h2>Automatically adjust Daylight Saving Time setting?</h2>
 <p>This setting allows Textpattern to alter when DST (Daylight Savings Time) occurs in your locale. If this is set to ‘No’, you will be able to change the ‘DST enabled’ preference manually.</p>
         ]]></item>
         <item id="comment_means_site_updated" title="New comment means site updated?"><![CDATA[
@@ -535,8 +535,8 @@
         ]]></item>
         <item id="comments_mode" title="Comments mode"><![CDATA[
 <h2>Comments mode</h2>
-<p>If ‘current window’ is selected (recommended) the current window will be refreshed to display only the current article, with comments beneath.</p>
-<p>If ‘popup window’ is selected, a new browser window will open when the comments link is clicked (this uses the <code>popup_comments</code> form).</p>
+<p>If ‘nopopup’ is selected (recommended) the current window will be refreshed to display only the current article, with comments beneath.</p>
+<p>If ‘popup’ is selected, a new browser window will open when the comments link is clicked (this uses the <code>popup_comments</code> form).</p>
         ]]></item>
         <item id="comments_moderate" title="Moderate comments?"><![CDATA[
 <h2>Moderate comments?</h2>
@@ -650,8 +650,8 @@
 <h2>Include email in Atom feeds?</h2>
 <p>This allows you to include the email address of the author (as set in their user account) of an article in the <em>author</em> part of your Atom feeds.</p>
         ]]></item>
-        <item id="is_dst" title="Daylight Saving Time (DST) enabled?"><![CDATA[
-<h2>Daylight Saving Time (DST) enabled?</h2>
+        <item id="is_dst" title="Daylight Saving Time enabled?"><![CDATA[
+<h2>Daylight Saving Time enabled?</h2>
 <p>Whether DST (Daylight Saving Time) is currently enabled for your time zone.</p>
         ]]></item>
         <item id="logging" title="Logging"><![CDATA[
