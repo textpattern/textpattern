@@ -337,7 +337,7 @@ function step_getTxpLogin()
     echo preamble();
     check_config_txp(2);
 
-    // Default theme selector.
+    // Default admin-theme selector.
     $core_themes = array('classic', 'hive', 'hiveneutral');
 
     $vals = \Textpattern\Admin\Theme::names(1);
@@ -353,7 +353,19 @@ function step_getTxpLogin()
         '', '', 'setup_admin_theme');
 
     $vals = get_public_themes_list();
-    $public_theme_chooser = selectInput('public_theme', $vals, @$cfg['site']['public_theme'], '', '', 'setup_public_theme');
+    $public_theme_name = (empty($cfg['site']['public_theme']) ? 'four-point-seven' : $cfg['site']['public_theme']);
+
+    // The array keys contain the full path to the theme so to find
+    // which one it is selected requires searching the keys for a
+    // partial match.
+    foreach ($vals as $dir => $name) {
+        if (preg_match('%^.*'.$public_theme_name.'$%', $dir, $match)) {
+            $public_theme_name = $match[0];
+            break;
+        }
+    }
+
+    $public_theme_chooser = selectInput('public_theme', $vals, $public_theme_name, '', '', 'setup_public_theme');
 
     echo txp_setup_progress_meter(3).
         n.'<div class="txp-setup">'.
