@@ -2993,7 +2993,7 @@ function keywords($atts)
 
     extract(lAtts(array(
         'class'   => '',
-        'break'     => ',',
+        'break'   => ',',
         'wraptag' => ''
     ), $atts));
 
@@ -3137,10 +3137,19 @@ function search_result_excerpt($atts)
     assert_article();
 
     extract(lAtts(array(
-        'break'   => ' &#8230;',
-        'hilight' => 'strong',
-        'limit'   => 5,
+        'break'     => ' &#8230;', // Deprecated in 4.7.0.
+        'hilight'   => 'strong',
+        'limit'     => 5,
+        'separator' => ' &#8230;',
     ), $atts));
+
+    if (isset($atts['break'])) {
+        trigger_error(gTxt('deprecated_attribute_with', array('{name}' => 'break', '{with}' => 'separator')), E_USER_NOTICE);
+
+        if (!isset($atts['separator'])) {
+            $separator = $break;
+        }
+    }
 
     $m = $pretext['m'];
     $q = $pretext['q'];
@@ -3165,13 +3174,11 @@ function search_result_excerpt($atts)
         $r[] = trim($concat[$i]);
     }
 
-    $concat = join($break.n, $r);
+    $concat = join($separator.n, $r);
     $concat = preg_replace('/^[^>]+>/U', '', $concat);
-// TODO:
-
     $concat = preg_replace($regex_hilite, "<$hilight>$1</$hilight>", $concat);
 
-    return ($concat) ? trim($break.$concat.$break) : '';
+    return ($concat) ? trim($separator.$concat.$separator) : '';
 }
 
 // -------------------------------------------------------------
@@ -3668,7 +3675,7 @@ function meta_keywords($atts)
     extract(lAtts(array(
         'escape'    => null,
         'format'    => 'meta', // or empty for raw value
-        'separator' => '',
+        'separator' => null,
     ), $atts));
 
     $out = '';
@@ -3676,7 +3683,7 @@ function meta_keywords($atts)
     if ($id_keywords) {
         $content = ($escape === null) ? txpspecialchars($id_keywords) : $id_keywords;
 
-        if ($separator !== '') {
+        if ($separator !== null) {
             $content = implode($separator, do_list($content));
         }
 
@@ -4344,6 +4351,14 @@ function if_status($atts, $thing = null)
 function page_url($atts)
 {
     global $pretext;
+    static $specials = null;
+
+    $specials !== null or $specials = array(
+        'images_root' => ihu.get_pref('img_dir'),
+        'themes_root' => hu.get_pref('skin_dir'),
+        'theme_path'  => hu.get_pref('skin_dir').'/'.$pretext['skin'],
+        'theme'       => $pretext['skin'],
+    );
 
     extract(lAtts(array(
         'type'    => 'request_uri',
@@ -4353,6 +4368,10 @@ function page_url($atts)
 
     if ($type == 'pg' && $pretext['pg'] == '') {
         return '1';
+    }
+
+    if (isset($specials[$type])) {
+        return $specials[$type];
     }
 
     if (isset($pretext[$type])) {

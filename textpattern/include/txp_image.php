@@ -640,10 +640,10 @@ function image_edit($message = '', $id = '')
                     'thumbnail_create',
                     form(
                         graf(
-                            n.'<label for="width">'.gTxt('thumb_width').'</label>'.
+                            n.'<label for="width">'.gTxt('width').'</label>'.
                             fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width').
                             n.'<a class="thumbnail-swap-size">'.gTxt('swap_values').'</a>'.
-                            n.'<label for="height">'.gTxt('thumb_height').'</label>'.
+                            n.'<label for="height">'.gTxt('height').'</label>'.
                             fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').
                             n.'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.
                             checkbox('crop', 1, get_pref('thumb_crop'), '', 'crop').
@@ -891,7 +891,7 @@ function thumbnail_insert()
         $newpath = IMPATH.$id.'t'.$ext;
 
         if (shift_uploaded_file($file, $newpath) == false) {
-            image_edit(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR), $id);
+            image_edit(array(gTxt('directory_permissions', array('{path}' => $newpath)), E_ERROR), $id);
         } else {
             chmod($newpath, 0644);
             safe_update('txp_image', "thumbnail = 1, thumb_w = $w, thumb_h = $h, date = NOW()", "id = $id");

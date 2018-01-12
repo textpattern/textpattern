@@ -208,10 +208,6 @@
 </ul>
 <p>The clean URL test attempts to fetch a page from the web address specified in the ‘Site URL’ preference in order to check that all clean URL parameters are working correctly. If that URL is a different site, or has been replaced with a static page or similar, the test will fail. Until the issue is resolved you will have to use messy URLs on your site instead (<code>http://example.com?s=section&amp;id=4</code>). Ensure the ‘Permanent link mode’ in Admin Preferences is set accordingly.</p>
         ]]></item>
-        <item id="cleanurl_only_apache" title="Clean URL support"><![CDATA[
-<h2>Clean URL support</h2>
-<p>Clean URLs are only supported on Apache. If you are using another server platform, use short URLs at your own risk.</p>
-        ]]></item>
         <item id="diag_clear_private" title="Hide private information"><![CDATA[
 <h2>Hide private information</h2>
 <p>Hide private information for extra security. Recommended for if you want to copy and paste diagnostic information into a publicly viewable document, where exposing server details can potentially pose a security risk.</p>
@@ -271,19 +267,11 @@
 <h2>No temporary directory defined</h2>
 <p>While Textpattern will run without a temporary directory, some functionality may not work as expected if this preference is not set. Please visit Admin Preferences and set up the ‘Temporary directory path’.</p>
         ]]></item>
-        <item id="old_files" title="Old files"><![CDATA[
-<h2>Old files</h2>
-<p>Some Textpattern files are out-of-date and should be replaced with the latest versions from the relevant stable release.</p>
-        ]]></item>
         <item id="old_placeholder_exists" title="Section directory exists"><![CDATA[
 <h2>Section directory exists</h2>
 <p>Existing section directory files will conflict with the the <code>.htaccess</code> scheme. If the reported files are placeholders, please delete them.</p>
         ]]></item>
-        <item id="path_not_doc_root" title="path_to_site does not match"><![CDATA[
-<h2>path_to_site does not match</h2>
-<p>Two variables set by your web server which should match, but do not.</p>
-        ]]></item>
-        <item id="path_to_site_inacc" title="Site directory unreadable"><![CDATA[
+        <item id="path_to_site_inaccessible" title="Site directory unreadable"><![CDATA[
 <h2>Site directory unreadable</h2>
 <p>The directory containing the <code>index.php</code> file specified as the index for your site is unreadable by the server. Please check permissions.</p>
         ]]></item>
@@ -361,10 +349,6 @@
 <h2>Temporary and Plugin cache directory paths should not match</h2>
 <p>Plugins should have their own directory and not share the temporary directory. This is a potential security risk and may adversely affect your site if the temporary directory is flushed. Please ensure that the temporary directory path is different to the plugin cache path.</p>
         ]]></item>
-        <item id="update_still_exists" title="Update directory still exists"><![CDATA[
-<h2>Update directory still exists</h2>
-<p>When Textpattern has been upgraded, the <code>textpattern/update</code> directory and its contents are no longer needed and recommended for deletion. You will continue to receive this warning until it has been removed.</p>
-        ]]></item>
         <item id="warn_mail_unavailable" title="Your PHP installation is missing the mail() function"><![CDATA[
 <h2>Your PHP installation is missing the mail() function</h2>
 <p>PHP’s <a rel="external" target="_blank" href="https://secure.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> function is disabled. Therefore, Textpattern cannot send emails and some functionality will not be available. For example, email notifications for new comments will not be sent, and new users will not receive a welcome email. Users can still be added, however.</p>
@@ -436,11 +420,6 @@
 <p>The strings will often come in the form of a downloadable Textpack, distributed with a plugin to permit the plugin’s language strings to be used natively within Textpattern.</p>
 <p>International authors may then translate these packs as necessary and redistribute the localised content to the community.</p>
         ]]></item>
-        <item id="remove_lang" title="Remove language"><![CDATA[
-<h2>Remove language</h2>
-<p>You can remove this language completely and thus free the database resources that are associated with it.</p>
-<p>If you inadvertently remove a language you can re-install it.</p>
-        ]]></item>
     </group>
 
     <group id="link" title="Links panel">
@@ -507,8 +486,8 @@
 <p>This setting will attach a automatically-generated version of the article title to the URL. It is either generated automatically or can be manually overridden in ‘URL-only title’ when editing an article.</p>
 <p>The setting will only have an effect when you are using clean URLs. For certain languages this may result in long and ugly URLs, in which case you probably want to set this to ‘Off’.</p>
         ]]></item>
-        <item id="auto_dst" title="Automatically adjust Daylight Saving Time (DST) setting?"><![CDATA[
-<h2>Automatically adjust Daylight Saving Time (DST) setting?</h2>
+        <item id="auto_dst" title="Automatically adjust Daylight Saving Time setting?"><![CDATA[
+<h2>Automatically adjust Daylight Saving Time setting?</h2>
 <p>This setting allows Textpattern to alter when DST (Daylight Savings Time) occurs in your locale. If this is set to ‘No’, you will be able to change the ‘DST enabled’ preference manually.</p>
         ]]></item>
         <item id="comment_means_site_updated" title="New comment means site updated?"><![CDATA[
@@ -556,8 +535,8 @@
         ]]></item>
         <item id="comments_mode" title="Comments mode"><![CDATA[
 <h2>Comments mode</h2>
-<p>If ‘current window’ is selected (recommended) the current window will be refreshed to display only the current article, with comments beneath.</p>
-<p>If ‘popup window’ is selected, a new browser window will open when the comments link is clicked (this uses the <code>popup_comments</code> form).</p>
+<p>If ‘nopopup’ is selected (recommended) the current window will be refreshed to display only the current article, with comments beneath.</p>
+<p>If ‘popup’ is selected, a new browser window will open when the comments link is clicked (this uses the <code>popup_comments</code> form).</p>
         ]]></item>
         <item id="comments_moderate" title="Moderate comments?"><![CDATA[
 <h2>Moderate comments?</h2>
@@ -625,13 +604,13 @@
         ]]></item>
         <item id="enable_short_tags" title="Enable short tags"><![CDATA[
 <h2>Enable short tags</h2>
-<p>Textpattern tags take the form <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. It is possible to reduce the amount of typing involved by enabling a shorthand notation whereby the 'txp:' may be omitted by following a few simple guidelines. Here are some examples to demonstrate the concept:</p>
+<p>Textpattern tags take the form <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. It is possible to reduce the amount of typing involved by enabling a shorthand notation whereby the <code>txp:</code> may be omitted by following a few simple guidelines. Here are some examples to demonstrate the concept:</p>
 <ul>
     <li><code>&lt;txp:article_id /&gt;</code> becomes <code>&lt;article::id /&gt;</code></li>
     <li><code>&lt;txp:recent_articles/&gt;</code> becomes <code>&lt;recent::articles /&gt;</code></li>
     <li><code>&lt;txp:file_download_list /&gt;</code> becomes <code>&lt;file::download_list /&gt;</code></li>
     <li><code>&lt;txp:smd_if /&gt;</code> becomes <code>&lt;smd::if /&gt;</code></li>
-    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> becomes <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (note that the plugin prefix can be used for the 'else' tag).</li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> becomes <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (note that the plugin prefix can be used for the <code>else</code> tag).</li>
 </ul>
 <p>If a tag contains an underscore and you enable short tags, the basic concept is:</p>
 <ol>
@@ -671,8 +650,8 @@
 <h2>Include email in Atom feeds?</h2>
 <p>This allows you to include the email address of the author (as set in their user account) of an article in the <em>author</em> part of your Atom feeds.</p>
         ]]></item>
-        <item id="is_dst" title="Daylight Saving Time (DST) enabled?"><![CDATA[
-<h2>Daylight Saving Time (DST) enabled?</h2>
+        <item id="is_dst" title="Daylight Saving Time enabled?"><![CDATA[
+<h2>Daylight Saving Time enabled?</h2>
 <p>Whether DST (Daylight Saving Time) is currently enabled for your time zone.</p>
         ]]></item>
         <item id="logging" title="Logging"><![CDATA[
@@ -717,7 +696,7 @@
 <p>This defines the method by which individual articles are reached via the URL displayed using the <a rel="external" target="_blank" href="http://docs.textpattern.io/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
 <p>‘?=messy’ mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimisation (SEO). In this mode URLs for articles on your site would look like this:</p>
 <pre><code>http://example.com/index.php?id=123</code></pre>
-<p>All other modes require the Apache <code>mod_rewrite</code> module to be installed and enabled on your server. If your server does not support <code>mod_rewrite</code> either contact your web host or use the ‘?=messy’ mode outlined above.</p>
+<p>All other modes require the web server’s URL rewrite functionality (e.g. Apache <code>mod_rewrite</code> or NGINX rewrite directives in the <code>server</code> block). If your server does not support URL rewrite functionality either contact your web host or use the ‘?=messy’ mode outlined above.</p>
         ]]></item>
         <item id="plugin_cache_dir" title="Plugin cache directory path"><![CDATA[
 <h2>Plugin cache directory path</h2>
@@ -792,9 +771,10 @@
 <p>This is the address of your Textpattern site, for example <code>www.example.com</code>.</p>
 <p><strong>Note:</strong> No <code>http://</code>, <code>https://</code> or trailing slash <code>/</code> is required.</p>
         ]]></item>
-        <item id="skin_base_path" title="Theme base path"><![CDATA[
-<h2>Theme base path</h2>
-<p>This sets the <strong>absolute path</strong> to the directory where front-side themes flat files will be permanently saved. PHP needs to have write access to this directory.</p>
+        <item id="skin_dir" title="Theme directory"><![CDATA[
+<h2>Theme directory</h2>
+<p>If you’d like to customise the name of the directory where front-side themes flat files will be permanently saved, you can do so here. You must first create the directory in the root of your Textpattern installation, you should also make sure that PHP is able to write to that directory.</p>
+<p>This path is always a <strong>relative path</strong> (to the directory of your root Textpattern installation).</p>
         ]]></item>
         <item id="smtp_from" title="SMTP envelope sender address"><![CDATA[
 <h2>SMTP envelope sender address</h2>
@@ -902,6 +882,10 @@
 <h2>Uses page</h2>
 <p>In Textpattern, sections are married to page templates. It’s kind of sweet, really…</p>
         ]]></item>
+        <item id="section_uses_skin" title="Uses theme"><![CDATA[
+<h2>Uses theme</h2>
+<p>If you wish to change the theme used for a particular section, this can be set here from the list of currently installed themes.</p>
+        ]]></item>
     </group>
 
     <group id="setup" title="Setup panel">
@@ -935,7 +919,11 @@
     </group>
 
     <group id="skin" title="Themes panel">
-
+        <item id="remove_extra_templates" title="Delete all destination templates first?"><![CDATA[
+<h2>Delete all destination templates first?</h2>
+<p>Check this box to delete all Page, Form or Style theme assets in the destination before the import or export operation takes place. If you clear the checkbox, the templates in the destination area will be merged with whatever you are copying; any assets of the same name will be overwritten, but any other assets with different names that are already there will remain.</p>
+<p>During export to the file system, this does not affect files other than Pages templates, Forms templates and Stylesheets. Any additional assets you may have (JavaScript, images, etc.) in other directories inside your theme will remain, regardless of the setting of this checkbox.</p>
+        ]]></item>
     </group>
 </help>
 </resources>

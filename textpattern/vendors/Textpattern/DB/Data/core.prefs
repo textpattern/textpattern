@@ -6,6 +6,13 @@
         "html": "text_input",
         "position": "20"
     },
+    "skin_dir": {
+        "val": "themes",
+        "type": "0",
+        "event": "admin",
+        "html": "text_input",
+        "position": "30"
+    },
     "file_base_path": {
         "val": "",
         "type": "0",
@@ -19,13 +26,6 @@
         "event": "admin",
         "html": "text_input",
         "position": "60"
-    },
-    "skin_base_path": {
-        "val": "",
-        "type": "0",
-        "event": "admin",
-        "html": "text_input",
-        "position": "70"
     },
     "tempdir": {
         "val": "",

@@ -884,7 +884,7 @@ function file_insert()
                 if (!shift_uploaded_file($tmp_name, $newpath)) {
                     safe_delete('txp_file', "id = $id");
                     safe_alter('txp_file', "auto_increment = $id");
-                    $messages[] = array($newpath.' '.gTxt('upload_dir_perms'), E_ERROR);
+                    $messages[] = array(gTxt('directory_permissions', array('{path}' => $newpath)), E_ERROR);
                 } else {
                     file_set_perm($newpath);
                     $ids[] = $GLOBALS['ID'] = $id;
@@ -938,7 +938,7 @@ function file_replace()
     $rs = safe_row("filename, author", 'txp_file', "id = $id");
 
     if (!$rs) {
-        file_list(array(messenger(gTxt('invalid_id'), $id), E_ERROR));
+        file_list(array(gTxt('invalid_id', array('{id}' => $id)), E_ERROR));
 
         return;
     }
@@ -970,7 +970,7 @@ function file_replace()
         }
 
         if (!shift_uploaded_file($file, $newpath)) {
-            file_list(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR));
+            file_list(array(gTxt('directory_permissions', array('{path}' => $newpath)), E_ERROR));
 
             // Rename tmp back.
             rename($newpath.'.tmp', $newpath);
@@ -1147,7 +1147,7 @@ function file_delete($ids = array())
                 }
             }
             if ($fail) {
-                file_list(array(messenger(gTxt('file_delete_failed'), join(', ', $fail)), E_ERROR));
+                file_list(array(gTxt('file_delete_failed', array('{list}' => join(', ', $fail))), E_ERROR));
 
                 return;
             } else {
@@ -1158,7 +1158,7 @@ function file_delete($ids = array())
                 return;
             }
         } else {
-            file_list(array(messenger(gTxt('file_not_found'), join(', ', $ids), ''), E_ERROR));
+            file_list(array(gTxt('file_not_found', array('{list}' => join(', ', $ids))), E_ERROR));
 
             return;
         }

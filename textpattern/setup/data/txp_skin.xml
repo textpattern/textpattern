@@ -2,12 +2,12 @@
 <resources>
     <skin>
         <item>
-            <name>default</name>
-            <title>Default</title>
+            <name>four-point-seven</name>
+            <title>Four Point Seven</title>
             <version>4.7.0</version>
-            <description>Textpattern default theme.</description>
+            <description>The default theme shipped with Textpattern CMS 4.7.</description>
             <author>Team Textpattern</author>
-            <author_uri>https://textpattern.com/</author_uri>
+            <author_uri>https://github.com/textpattern/textpattern-default-theme</author_uri>
         </item>
     </skin>
 </resources>

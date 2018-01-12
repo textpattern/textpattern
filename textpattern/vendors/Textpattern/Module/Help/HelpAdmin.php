@@ -143,7 +143,10 @@ class HelpAdmin
             $out = gTxt('pophelp_missing', array('{item}' => $item));
         }
 
-        $out = tag($out, 'div', array('id' => 'pophelp-event'));
+        $out = tag($out, 'div', array(
+            'id'  => 'pophelp-event',
+            'dir' => 'auto',
+        ));
 
         if ($app_mode == 'async') {
             pagetop('');
