@@ -265,7 +265,7 @@ function doDiagnostics()
     }
 
     if (@is_dir(txpath.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup'))) {
-        $fail['setup_still_exists'] = diag_msg_wrap(txpath.DS."setup".DS.' '.gTxt('still_exists'), 'warning');
+        $fail['setup_still_exists'] = diag_msg_wrap(gTxt('still_exists', array('{path}' => txpath.DS."setup".DS)), 'warning');
     }
 
     if (empty($tempdir)) {
