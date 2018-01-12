@@ -303,6 +303,8 @@ function get_language()
     $lang_code = gps('lang_code');
     $langName = fetchLangName($lang_code);
     $txpLang = Txp::get('\Textpattern\L10n\Lang');
+    $installed = $txpLang->installed();
+    $installString = in_array($lang_code, $installed) ? 'language_updated' : 'language_installed';
 
     if ($txpLang->installFile($lang_code)) {
         callback_event('lang_installed', 'file', false, $lang_code);
@@ -310,7 +312,7 @@ function get_language()
         $txpLang->available(TEXTPATTERN_LANG_AVAILABLE, TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE);
         Txp::get('\Textpattern\Plugin\Plugin')->installTextpacks();
 
-        return list_languages(gTxt('language_installed', array('{name}' => $langName)));
+        return list_languages(gTxt($installString, array('{name}' => $langName)));
     }
 
     return list_languages(array(gTxt('language_not_installed', array('{name}' => $langName)), E_ERROR));
