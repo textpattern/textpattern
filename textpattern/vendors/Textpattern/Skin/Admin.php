@@ -30,9 +30,9 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin\Main {
+namespace Textpattern\Skin {
 
-    class View
+    class Admin
     {
 
         /**
@@ -47,7 +47,7 @@ namespace Textpattern\Skin\Main {
          * @param object $model Model instance.
          */
 
-        public function __construct(\Textpattern\Skin\Main\Model $model)
+        public function __construct(Skin $model)
         {
             $this->model = $model;
         }
@@ -137,7 +137,7 @@ namespace Textpattern\Skin\Main {
             list($criteria, $crit, $search_method) = $search->getFilter();
 
             $searchRenderOpts = array('placeholder' => 'search_skins');
-            $total = Model::getSearchCount($criteria);
+            $total = Skin::getSearchCount($criteria);
 
             echo n.'<div class="txp-layout">'
                 .n.tag(
@@ -195,7 +195,7 @@ namespace Textpattern\Skin\Main {
 
             list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-            $rs = Model::getAllData($criteria, $sortSQL, $offset, $limit);
+            $rs = Skin::getAllData($criteria, $sortSQL, $offset, $limit);
 
             if ($rs) {
                 echo n.tag_start('form', array(
@@ -336,7 +336,7 @@ namespace Textpattern\Skin\Main {
 
         public static function importForm()
         {
-            $new = Model::getNewDirectories();
+            $new = Skin::getNewDirectories();
 
             if ($new) {
                 return n
@@ -495,7 +495,7 @@ namespace Textpattern\Skin\Main {
                 'delete'    => gTxt('delete'),
             );
 
-            return multi_edit($methods, 'skin', 'multiEdit', $page, $sort, $dir, $crit, $search_method);
+            return multi_edit($methods, 'skin', 'multi_edit', $page, $sort, $dir, $crit, $search_method);
         }
     }
 }

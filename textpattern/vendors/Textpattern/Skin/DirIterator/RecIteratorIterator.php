@@ -22,41 +22,26 @@
  */
 
 /**
- * RecRegexIterator
+ * RecIteratorIterator
  *
  * @since   4.7.0
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin\DirIterator {
 
-    class RecRegexIterator extends \RecursiveRegexIterator
+    class RecIteratorIterator extends \RecursiveIteratorIterator
     {
         /**
          * {@inheritdoc}
-         */
-
-        public function accept()
-        {
-            return $this->isDir() || $this->isValidTemplate();
-        }
-
-        /**
-         * Validates a template file name.
          *
-         * @return bool
+         * @param int $depth Sets the MaxDepth property.
          */
 
-        public function isValidTemplate()
+        public function __construct(RecRegexIterator $iterator, $depth)
         {
-            $isValid = false;
-
-            if (!$this->isDot() && $this->isReadable() && ($this->isFile() || $this->isLink())) {
-                $isValid = (bool) preg_match(static::getRegex(), $this->getFilename());
-
-            }
-
-            return $isValid;
+            parent::__construct($iterator);
+            parent::setMaxDepth($depth);
         }
     }
 }

@@ -35,9 +35,8 @@ if (!defined('txpinterface')) {
 if ($event === 'skin') {
     require_privs($event);
 
-    $model = Txp::get('Textpattern\Skin\Main\Model');
-    $controller = $step === 'save' ? Txp::get('Textpattern\Skin\Main\Single', $model) : Txp::get('Textpattern\Skin\Main\Multiple', $model);
-    $view = Txp::get('Textpattern\Skin\Main\View', $model);
+    $skin = Txp::get('Textpattern\Skin\Skin');
+    $view = Txp::get('Textpattern\Skin\Admin', $skin);
 
     $availableSteps = array(
         'skin_change_pageby' => true, // Prefixed to make it work with the paginator…
@@ -45,12 +44,12 @@ if ($event === 'skin') {
         'edit'          => false,
         'save'          => true,
         'import'        => false,
-        'multiEdit'    => true,
+        'multi_edit'    => true,
     );
 
     if ($step && bouncer($step, $availableSteps)) {
-        if (is_callable([$controller, $step])) {
-            $controller->$step();
+        if (function_exists('skin_'.$step)) {
+            call_user_func('skin_'.$step);
             $view->render();
         } elseif (is_callable([$view, $step])) {
             $view->$step();
@@ -60,6 +59,111 @@ if ($event === 'skin') {
     } else {
         $view->render();
     }
+}
+
+/**
+ * Imports skins.
+ *
+ * @param  bool   $clean    Whether to removes extra skin template rows or not;
+ * @param  bool   $override Whether to insert or update the skins.
+ * @return object $this.
+ */
+
+function skin_import()
+{
+    global $skin;
+
+    $skin->setNames(array(ps('skins')))->import(false);
+
+    return $skin;
+}
+
+/**
+ * Saves a skin.
+ */
+
+function skin_save()
+{
+    global $skin;
+
+    $infos = array_map('assert_string', psa(array(
+        'name',
+        'title',
+        'old_name',
+        'old_title',
+        'version',
+        'description',
+        'author',
+        'author_uri',
+        'copy',
+    )));
+
+    extract($infos);
+
+    if (empty($name)) {
+        $skin->setResults('skin_name_invalid', $name);
+    } elseif ($old_name) {
+        if ($copy) {
+            $name === $old_name ? $name .= '_copy' : '';
+            $title === $old_title ? $title .= ' (copy)' : '';
+
+            $skin->setInfos($name, $title, $version, $description, $author, $author_uri)
+                 ->setBase($old_name)
+                 ->create();
+
+        } else {
+            $skin->setInfos($name, $title, $version, $description, $author, $author_uri)
+                 ->setBase($old_name)
+                 ->update();
+        }
+    } else {
+        $title === '' ? $title = ucfirst($name) : '';
+        $author === '' ? $author = substr(cs('txp_login_public'), 10) : '';
+        $version === '' ? $version = '0.0.1' : '';
+
+        $skin->setInfos($name, $title, $version, $description, $author, $author_uri)
+             ->create();
+    }
+
+    return $skin;
+}
+
+/**
+ * Processes multi-edit actions.
+ */
+
+function skin_multi_edit()
+{
+    global $skin;
+
+    extract(psa(array(
+        'edit_method',
+        'selected',
+        'clean',
+    )));
+
+    if (!$selected || !is_array($selected)) {
+        return skin_list();
+    }
+
+    $skin->setNames(ps('selected'));
+
+    switch ($edit_method) {
+        case 'export':
+            $skin->export($clean);
+            break;
+        case 'duplicate':
+            $skin->duplicate();
+            break;
+        case 'import':
+            $skin->import($clean, true);
+            break;
+        default: // delete.
+            $skin->$edit_method();
+            break;
+    }
+
+    return $skin;
 }
 
 /**

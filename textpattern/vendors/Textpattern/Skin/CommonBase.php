@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin {
 
-    abstract class Model
+    abstract class CommonBase
     {
         /**
          * Class related table.
@@ -42,15 +42,6 @@ namespace Textpattern\Skin {
          */
 
         protected static $table;
-
-        /**
-         * Class related table columns.
-         *
-         * @var array Column names.
-         * @see       getTableCols().
-         */
-
-        protected static $tableCols;
 
         /**
          * Class related asset names to work with.
@@ -112,38 +103,6 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * $tableCols property getter
-         */
-
-        public static function getTableCols()
-        {
-            static::$tableCols === null ? static::setTableCols() : '';
-
-            return static::$tableCols;
-        }
-
-        /**
-         * $tableCols property unsetter
-         *
-         * @param array $exclude Column names to exculde.
-         */
-
-        public static function setTableCols($exclude = array('lastmod'))
-        {
-            $query = safe_query('SHOW COLUMNS FROM '.safe_pfx(static::getTable()));
-
-            static::$tableCols = array();
-
-            while ($row = $query->fetch_assoc()) {
-                if (!in_array($row['Field'], $exclude)) {
-                    static::$tableCols[] = $row['Field'];
-                }
-            }
-
-            return static::getTableCols();
-        }
-
-        /**
          * Gets the skin_base_path pref related value.
          *
          * @return string Path.
@@ -173,6 +132,21 @@ namespace Textpattern\Skin {
             );
 
             return $this;
+        }
+
+        public function getInfos($safe = false)
+        {
+            if ($safe) {
+                $infoQuery = array();
+
+                foreach ($this->infos as $col => $value) {
+                    $infoQuery[] = $col." = '".doSlash($value)."'";
+                }
+
+                return implode(', ', $infoQuery);
+            }
+
+            return $this->infos;
         }
 
         /**

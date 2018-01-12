@@ -30,9 +30,31 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin\Asset\CSS {
+namespace Textpattern\Skin {
 
-    class View extends \Textpattern\Skin\Asset\View
+    class CSS extends AssetBase
     {
+        protected static $table = 'txp_css';
+        protected static $fileContentsFields = 'css';
+        protected static $defaultDir = 'styles';
+        protected static $string = 'css';
+        protected static $essential = array(
+            array(
+                'name' => 'default',
+                'css' => ''
+            ),
+        );
+
+        public function setInfos(
+            $name,
+            $css = null
+        ) {
+            $name = sanitizeForTheme($name);
+
+            $this->infos = compact('name', 'css');
+            $this->setName($name);
+
+            return $this;
+        }
     }
 }

@@ -28,7 +28,7 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Skin\DirIterator {
 
     class RecDirIterator extends \RecursiveDirectoryIterator
     {

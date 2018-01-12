@@ -30,15 +30,35 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin\Asset\Page {
+namespace Textpattern\Skin {
 
-    class Model extends \Textpattern\Skin\Asset\Model
+    class Page extends AssetBase
     {
         protected static $table = 'txp_page';
-        protected static $tableCols;
-        protected static $contentsCol = 'user_html';
-        protected static $dir = 'pages';
-        protected static $asset = 'page';
-        protected static $essential = array('default', 'error_default');
+        protected static $fileContentsFields = 'user_html';
+        protected static $defaultDir = 'pages';
+        protected static $string = 'page';
+        protected static $essential = array(
+            array(
+                'name'      => 'default',
+                'user_html' => '',
+            ),
+            array(
+                'name'      => 'error_default',
+                'user_html' => '',
+            ),
+        );
+
+        public function setInfos(
+            $name,
+            $user_html = null
+        ) {
+            $name = sanitizeForTheme($name);
+
+            $this->infos = compact('name', 'user_html');
+            $this->setName($name);
+
+            return $this;
+        }
     }
 }

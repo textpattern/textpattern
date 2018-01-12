@@ -30,10 +30,18 @@
  * @package Skin
  */
 
-namespace Textpattern\Skin\Main {
+namespace Textpattern\Skin {
 
-    class Model extends \Textpattern\Skin\Model
+    class Skin extends CommonBase
     {
+        /**
+         * Assets related controllers.
+         *
+         * @see setAssets()
+         */
+
+        private $assets;
+
         /**
          * {@inheritdoc}
          */
@@ -96,6 +104,7 @@ namespace Textpattern\Skin\Main {
 
         public function __construct()
         {
+            $this->setAssets();
         }
 
         /**
@@ -107,8 +116,19 @@ namespace Textpattern\Skin\Main {
 
         public function setNames($names = null)
         {
-            $this->names = $names === null ? $names = array() : $names;
-            $this->setName($names ? $names[0] : null);
+            if ($names === null) {
+                $this->names = array();
+                $this->setName();
+            } else {
+                $parsed = array();
+
+                foreach ($names as $name) {
+                    $parsed[] = sanitizeForTheme($name);
+                }
+
+                $this->names = $parsed;
+                $this->setName($parsed ? $parsed[0] : null);
+            }
 
             return $this;
         }
@@ -125,30 +145,6 @@ namespace Textpattern\Skin\Main {
         }
 
         /**
-         * $names property getter.
-         *
-         * @return array Skin names.
-         */
-
-        public function getBase()
-        {
-            return $this->base;
-        }
-
-        /**
-         * $names property getter.
-         *
-         * @return array Skin names.
-         */
-
-        public function setBase($name)
-        {
-            $this->base = $name;
-
-            return $this;
-        }
-
-        /**
          * $name property setter.
          *
          * @param object $this.
@@ -161,30 +157,6 @@ namespace Textpattern\Skin\Main {
             return $this;
         }
 
-        public function setInfos(
-            $name,
-            $title = null,
-            $version = null,
-            $description = null,
-            $author = null,
-            $author_uri = null
-        ) {
-            $this->infos = compact('name', 'title', 'version', 'description', 'author', 'author_uri');
-
-            return $this;
-        }
-
-        public function getInfos()
-        {
-            $infoQuery = array();
-
-            foreach ($this->infos as $col => $value) {
-                $infoQuery[] = $col." = '".doSlash($value)."'";
-            }
-
-            return implode(', ', $infoQuery);
-        }
-
         /**
          * $name property getter.
          *
@@ -194,6 +166,45 @@ namespace Textpattern\Skin\Main {
         public function getName()
         {
             return $this->infos['name'];
+        }
+
+        public function setInfos(
+            $name,
+            $title = null,
+            $version = null,
+            $description = null,
+            $author = null,
+            $author_uri = null
+        ) {
+            $name = sanitizeForTheme($name);
+
+            $this->infos = compact('name', 'title', 'version', 'description', 'author', 'author_uri');
+
+            return $this;
+        }
+
+        /**
+         * $names property getter.
+         *
+         * @return array Skin names.
+         */
+
+        public function setBase($name)
+        {
+            $this->base = sanitizeForTheme($name);
+
+            return $this;
+        }
+
+        /**
+         * $names property getter.
+         *
+         * @return array Skin names.
+         */
+
+        public function getBase()
+        {
+            return $this->base;
         }
 
         /**
@@ -217,17 +228,6 @@ namespace Textpattern\Skin\Main {
             }
 
             return $isInstalled;
-        }
-
-        /**
-         * Gets the skin_base_path pref related value.
-         *
-         * @param string path.
-         */
-
-        public static function getBasePath()
-        {
-            return get_pref('skin_base_path');
         }
 
         /**
@@ -506,7 +506,7 @@ namespace Textpattern\Skin\Main {
         {
             return safe_insert(
                 static::getTable(),
-                $this->getInfos()
+                $this->getInfos(true), true
             );
         }
 
@@ -525,8 +525,8 @@ namespace Textpattern\Skin\Main {
         public function updateRow() {
             return safe_update(
                 static::getTable(),
-                $this->getInfos(),
-                "name = '".doSlash($this->getBase())."'"
+                $this->getInfos(true),
+                "name = '".doSlash($this->getBase())."'", true
             );
         }
 
@@ -556,21 +556,8 @@ namespace Textpattern\Skin\Main {
          * @return bool                false on error.
          */
 
-        public function createFile(
-            $title,
-            $version,
-            $description,
-            $author,
-            $author_uri
-        ) {
-            $contents = array(
-                'title'       => $title,
-                'version'     => $version,
-                'description' => $description,
-                'author'      => $author,
-                'author_uri'  => $author_uri,
-                'txp-type'    => 'textpattern-theme',
-            );
+        public function createFile() {
+            $contents = array_merge($this->getInfos(), array('txp-type' => 'textpattern-theme'));
 
             return (bool) file_put_contents(
                 $this->getFilePath(),
@@ -607,9 +594,9 @@ namespace Textpattern\Skin\Main {
 
         public static function getFiles()
         {
-            return new \Textpattern\Skin\RecIteratorIterator(
-                new \Textpattern\Skin\RecRegexIterator(
-                    new \Textpattern\Skin\RecDirIterator(static::getBasePath()),
+            return new DirIterator\RecIteratorIterator(
+                new DirIterator\RecRegexIterator(
+                    new DirIterator\RecDirIterator(static::getBasePath()),
                     '/^manifest\.json/i'
                 ),
                 1
@@ -689,7 +676,7 @@ namespace Textpattern\Skin\Main {
             $names === null ? $names = $this->getNames() : '';
 
             $rows = safe_rows_start(
-                implode(', ', static::getTableCols()),
+                'name, title, version, description, author, author_uri',
                 static::getTable(),
                 "name IN ('".implode("', '", array_map('doSlash', $names))."')"
             );
@@ -760,6 +747,401 @@ namespace Textpattern\Skin\Main {
                 'txp_skin',
                 $criteria.' order by '.$sortSQL.' limit '.$offset.', '.$limit
             );
+        }
+
+        /**
+         * $assets property setter.
+         *
+         * @param array $pages  Page names to work with;
+         * @param array $forms  Page names to work with;
+         * @param array $styles Page names to work with.
+         */
+
+        public function setAssets($pages = null, $forms = null, $styles = null)
+        {
+            $assets = array(
+                'Page' => $pages,
+                'Form' => $forms,
+                'CSS'  => $styles,
+            );
+
+            foreach ($assets as $class => $assets) {
+                $this->assets[] = \Txp::get('Textpattern\Skin\\'.$class, $this)->setNames($assets);
+            }
+
+            return $this;
+        }
+
+        /**
+         * $assets property getter.
+         */
+
+        public function getAssets()
+        {
+            return $this->assets;
+        }
+
+        /**
+         * Creates a skin and its essential asset templates.
+         *
+         * @param  string $assetsFrom
+         * @return object $this.
+         */
+
+        public function create() {
+            $name = $this->getName();
+
+            callback_event('skin.create', '', 1, array('name' => $name));
+
+            if (empty($name)) {
+                $this->setResults('skin_name_invalid', $name);
+            } elseif ($this->isInstalled()) {
+                $this->setResults('skin_already_exists', $name);
+            } elseif ($this->DirExists()) {
+                $this->setResults('skin_already_exists', $this->getDirPath());
+            } elseif (!$this->CreateDir()) {
+                $this->setResults('path_not_writable', $this->getDirPath());
+            } elseif (!$this->lock()) {
+                $this->setResults('skin_locking_failed', $this->getDirPath());
+            } elseif (!$this->createRow()) {
+                $this->setResults('skin_creation_failed', $name);
+            } else {
+                $failed = false;
+
+                foreach ($this->getAssets() as $assetModel) {
+                    if ($from && !$assetModel->duplicateRows($from) || !$from && !$assetModel->createRows()) {
+                        $failed = true;
+
+                        $this->setResults($assetModel->getString().'_creation_failed', $name);
+                    }
+                }
+
+                if (!$this->unlock()) {
+                    $this->setResults('skin_unlocking_failed', $name);
+                } elseif (!$failed) {
+                    $this->setResults('skin_created', $name, 'success');
+                }
+            }
+
+            callback_event('skin.create', '', 0, array('name' => $name));
+
+            return $this;
+        }
+
+        /**
+         * Updates a skin.
+         *
+         * @param  string $base
+         * @return object $this.
+         */
+
+        public function update() {
+            $name = $this->getName();
+            $base = $this->getBase();
+
+            callback_event('skin.update', '', 1, array('name' => $base));
+
+            $updated = false;
+
+            if (!$this->isInstalled($base)) {
+                $this->setResults('skin_unknown', $base);
+            } elseif ($base !== $name && $this->isInstalled()) {
+                $this->setResults('skin_already_exists', $name);
+            } elseif ($base !== $name && $this->dirExists()) {
+                $this->setResults('skin_already_exists', $this->getDirPath());
+            } elseif ($this->dirExists($base) && !$this->lock($base)) {
+                $this->setResults('skin_dir_locking_failed', $base);
+            } elseif (!$this->updateRow()) {
+                $this->setResults('skin_update_failed', $base);
+                $toUnlock = $base;
+            } else {
+                $updated = true;
+
+                if ($this->dirExists($base) && !$this->renameDir($base)) {
+                    $this->setResults('path_renaming_failed', $base, 'warning');
+                } else {
+                    $toUnlock = $name;
+                }
+            }
+
+            if (isset($toUnlock) && !$this->unlock($toUnlock)) {
+                $this->setResults('skin_unlocking_failed', $toUnlock);
+            }
+
+            if ($updated) {
+                $this->getSections() ? $this->updateSections() : '';
+
+                if ($this->getEditing() === $name) {
+                    $this->setEditing();
+                }
+
+                foreach ($this->getAssets() as $assetModel) {
+                    if (!$assetModel->updateSkin()) {
+                        $this->setResults($assetModel->getString().'_update_failed', $base);
+                    }
+                }
+
+                $this->setResults('skin_updated', $name, 'success');
+
+                update_lastmod('skin.edit', $suceeded);
+                callback_event('skin.edit', 'success', 0, $suceeded);
+            }
+
+            callback_event('skin.update', '', 0, array('name' => $base));
+
+            return $this;
+        }
+
+        /**
+         * Duplicates skins.
+         *
+         * @return object $this.
+         */
+
+        public function duplicate()
+        {
+            $names = $this->getNames();
+
+            callback_event('skin.duplicate', '', 1, array('names' => $names));
+
+            $passed = array();
+
+            foreach ($names as $name) {
+                $this->setInfos($name);
+                $copy = $name.'_copy';
+
+                if (!$this->isInstalled()) {
+                    $this->setResults('skin_unknown', $name);
+                } elseif ($this->isInstalled($copy)) {
+                    $this->setResults('skin_already_exists', $copy);
+                } elseif (!$this->isDirWritable() && !$this->createDir()) {
+                    $this->setResults('path_not_writable', $this->getDirPath());
+                } elseif (!$this->lock()) {
+                    $this->setResults('skin_dir_locking_failed', $name);
+                } else {
+                    $passed[] = $name;
+                }
+
+                $this->setNames($passed);
+                $rows = $this->getRows();
+
+                if (!$rows) {
+                    $this->setResults('skin_unknown', $passed);
+                } else {
+                    foreach ($rows as $name => $infos) {
+                        extract($infos);
+
+                        $copy = $name.'_copy';
+                        $copyTitle = $title.'_copy';
+
+                        $this->setInfos($copy, $copyTitle, $version, $description, $author, $author_uri);
+
+                        if (!$this->createRow()) {
+                            $this->setResults('skin_duplication_failed', $name);
+                        } else {
+                            static::setInstalled(array($copy => $copyTitle));
+                            $this->setInfos($name);
+
+                            foreach ($this->getAssets() as $assetModel) {
+                                $assetRows = $assetModel->getRows();
+
+                                if (!$assetRows) {
+                                    $this->setResults('no_found', array($skin => $this->getDirPath()));
+                                } else {
+                                    if ($assetModel->duplicateRowsTo($copy, $assetRows)) {
+                                        $this->setResults($asset.'_duplication_failed', array($skin => $notImported));
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if ($this->islocked() && !$this->unlock()) {
+                        $this->setResults('skin_unlocking_failed', $this->getDirPath());
+                    }
+                }
+            }
+
+            callback_event('skin.duplicate', '', 0, array('names' => $names));
+
+            return $this;
+        }
+
+        /**
+         * Imports skins.
+         *
+         * @param  bool   $clean    Whether to removes extra skin template rows or not;
+         * @param  bool   $override Whether to insert or update the skins.
+         * @return object $this.
+         */
+
+        public function import($clean = true, $override = false)
+        {
+            $names = $this->getNames();
+
+            callback_event('skin.import', '', 1, array('names' => $names));
+
+            foreach ($names as $name) {
+                $this->setInfos($name);
+
+                if (!$override && $this->isInstalled()) {
+                    $this->setResults('skin_unknown', $name);
+                } elseif ($override && !$this->isInstalled()) {
+                    $this->setResults('skin_already_exists', $name);
+                } elseif (!$this->isDirWritable()) {
+                    $this->setResults('path_not_writable', $this->getDirPath());
+                } elseif (!$this->isFileReadable()) {
+                    $this->setResults('path_not_readable', $this->getFilePath());
+                } elseif (!$this->lock()) {
+                    $this->setResults('skin_dir_locking_failed', $name);
+                } else {
+                    $skinInfos = $this->getFileContents();
+
+                    if (!$skinInfos) {
+                        $this->setResults('invalid_json', $this->getFilePath);
+                    } else {
+                        extract($skinInfos);
+
+                        $this->setInfos($name, $title, $version, $description, $author, $author_uri);
+
+                        if (!$override && !$this->createRow()) {
+                            $this->setResults('skin_import_failed', $name);
+                        } elseif ($override && !$this->setBase($name)->updateRow()) {
+                            $this->setResults('skin_import_failed', $name);
+                        } else {
+                            static::setInstalled(array($name => $title));
+
+                            foreach ($this->getAssets() as $asset) {
+                                $asset->import($clean);
+                            }
+                        }
+                    }
+                }
+
+                if ($this->islocked() && !$this->unlock()) {
+                    $this->setResults('skin_unlocking_failed', $this->getDirPath());
+                }
+            }
+
+            callback_event('skin.import', '', 0, array('names' => $names));
+
+            return $this;
+        }
+
+        /**
+         * Exports skins.
+         *
+         * @param  bool   $clean Whether to removes extra skin template files or not.
+         * @return object $this.
+         */
+
+        public function export($clean = true)
+        {
+            $names = $this->getNames();
+
+            callback_event('skin.export', '', 1, array('names' => $names));
+
+            foreach ($names as $name) {
+                $this->setInfos($name);
+
+                if (!static::isValidDirName($name)) {
+                    $this->setResults('skin_unsafe_name', $name);
+                } elseif (!$this->isDirWritable() && !$this->createDir()) {
+                    $this->setResults('path_not_writable', $this->getDirPath());
+                } elseif (!$this->lock()) {
+                    $this->setResults('skin_locking_failed', $name);
+                } else {
+                    $passed[] = $name;
+                }
+            }
+
+            $rows = $this->setNames($passed)->getRows();
+
+            if (!$rows) {
+                $this->setResults('skin_unknown', $names);
+            } else {
+                foreach ($passed as $name) {
+                    $this->setName($name);
+
+                    extract($rows[$name]);
+
+                    if (!$rows[$name]) {
+                        $this->setResults('skin_unknown', $name);
+                    } elseif (!$this->setInfos($name, $title, $version, $description, $author, $author_uri)->createFile()) {
+                        $this->setResults('skin_export_failed', $name);
+                    } else {
+                        foreach ($this->getAssets() as $asset) {
+                            $asset->export($clean);
+                        }
+                    }
+
+                    if ($this->islocked() && !$this->unlock()) {
+                        $this->setResults('skin_unlocking_failed', $name);
+                    }
+                }
+            }
+
+            callback_event('skin.export', '', 0, array('names' => $names));
+
+            return $this;
+        }
+
+        /**
+         * Deletes skins.
+         *
+         * @return object $this.
+         */
+
+        public function delete()
+        {
+            $names = $this->getNames();
+
+            callback_event('skin.delete', '', 1, array('names' => $names));
+
+            $passed = $failed = array();
+
+            foreach ($names as $name) {
+                $this->setInfos($name);
+
+                if (!$this->isInstalled()) {
+                    $failed[] = $name;
+                    $this->setResults('skin_unknown', $name);
+                } elseif ($this->getSections()) {
+                    $failed[] = $name;
+                    $this->setResults('skin_in_use', $name);
+                } else {
+                    $assetFailure = false;
+
+                    foreach ($this->getAssets() as $assetModel) {
+                        if (!$assetModel->deleteRows()) {
+                            $failed[] = $name;
+                            $this->setResults($assetModel->getString().'_deletion_failed', $name);
+                        }
+                    }
+
+                    $assetFailure ? $failed[] = $name : $passed[] = $name;
+                }
+            }
+
+            if ($passed) {
+                if ($this->setNames($passed) && $this->deleteRows()) {
+                    static::unsetInstalled($passed);
+
+                    if (in_array(static::getEditing(), $passed)) {
+                        static::resetEditing();
+                    }
+
+                    $this->setResults('skin_deleted', $passed, 'success');
+
+                    update_lastmod('skin.delete', $passed);
+                } else {
+                    $this->setResults('skin_deletion_failed', $passed);
+                }
+            }
+
+            callback_event('skin.delete', '', 0, array('names' => $names));
+
+            return $this;
         }
     }
 }
