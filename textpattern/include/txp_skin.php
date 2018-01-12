@@ -114,6 +114,10 @@ function skin_list($message = '')
                 'column' => 'txp_skin.title',
                 'label'  => gTxt('title'),
             ),
+            'description' => array(
+                'column' => 'txp_skin.description',
+                'label'  => gTxt('description'),
+            ),
             'author' => array(
                 'column' => 'txp_skin.author',
                 'label'  => gTxt('author'),
