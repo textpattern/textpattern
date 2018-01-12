@@ -882,6 +882,10 @@
 <h2>Uses page</h2>
 <p>In Textpattern, sections are married to page templates. It’s kind of sweet, really…</p>
         ]]></item>
+        <item id="section_uses_skin" title="Uses theme"><![CDATA[
+<h2>Uses theme</h2>
+<p>If you wish to change the theme used for a particular section, this can be set here from the list of currently installed themes.</p>
+        ]]></item>
     </group>
 
     <group id="setup" title="Setup panel">
