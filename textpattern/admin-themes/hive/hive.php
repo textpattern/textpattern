@@ -30,10 +30,10 @@ class hive_theme extends \Textpattern\Admin\Theme
     function html_head()
     {
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">';
-        $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.min.css">';
+        $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.css">';
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
-        $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
+        $out[] = '<script src="'.$this->url.'assets/js/main.js"></script>'.n;
 
         return join(n, $out);
     }

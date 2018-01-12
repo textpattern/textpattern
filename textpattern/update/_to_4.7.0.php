@@ -161,6 +161,6 @@ if (!$exists) {
 }
 
 // Add theme path pref.
-if (!get_pref('skin_base_path')) {
-    set_pref('skin_base_path', dirname(txpath).DS.'themes', 'admin', PREF_CORE, 'text_input', 70);
+if (!get_pref('skin_dir')) {
+    set_pref('skin_dir', 'themes', 'admin', PREF_CORE, 'text_input', 70);
 }

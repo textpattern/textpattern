@@ -4351,6 +4351,14 @@ function if_status($atts, $thing = null)
 function page_url($atts)
 {
     global $pretext;
+    static $specials = null;
+
+    $specials !== null or $specials = array(
+        'images_root' => ihu.get_pref('img_dir'),
+        'themes_root' => hu.get_pref('skin_dir'),
+        'theme_path'  => hu.get_pref('skin_dir').'/'.$pretext['skin'],
+        'theme'       => $pretext['skin'],
+    );
 
     extract(lAtts(array(
         'type'    => 'request_uri',
@@ -4360,6 +4368,10 @@ function page_url($atts)
 
     if ($type == 'pg' && $pretext['pg'] == '') {
         return '1';
+    }
+
+    if (isset($specials[$type])) {
+        return $specials[$type];
     }
 
     if (isset($pretext[$type])) {

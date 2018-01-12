@@ -14,7 +14,8 @@
         "ping_weblogsdotcom",
         "lastmod_keepalive",
         "show_article_category_count",
-        "prefs_id"
+        "prefs_id",
+        "skin_base_path"
     ],
     "private": []
 }

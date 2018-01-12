@@ -585,7 +585,7 @@ function list_multi_edit()
                 now('posted', true);
                 now('expires', true);
 
-                return list_list(messenger('article', join(', ', $selected), 'deleted'));
+                return list_list(gTxt('articles_deleted', array('{list}' => join(', ', $selected))));
             }
 
             return list_list();
@@ -657,7 +657,7 @@ function list_multi_edit()
     $selected = $allowed;
 
     if ($selected) {
-        $message = messenger('article', join(', ', $selected), 'modified');
+        $message = gTxt('articles_modified', array('{list}' => join(', ', $selected)));
 
         if ($edit_method === 'duplicate') {
             $rs = safe_rows_start("*", 'textpattern', "ID IN (".join(',', $selected).")");

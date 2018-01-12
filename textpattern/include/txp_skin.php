@@ -142,6 +142,10 @@ function skin_multi_edit()
         'clean',
     )));
 
+    if ($clean != get_pref('remove_extra_templates', true)) {
+        set_pref('remove_extra_templates', $prefs['remove_extra_templates'] = !empty($clean), 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+    }
+
     if (!$selected || !is_array($selected)) {
         return skin_list();
     }
