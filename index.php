@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -63,7 +63,9 @@ if (@ini_get('register_globals')) {
     }
 }
 
-define("txpinterface", "public");
+if (!defined('txpinterface')) {
+    define('txpinterface', 'public');
+}
 
 if (!defined('txpath')) {
     define("txpath", dirname(__FILE__).'/textpattern');
@@ -103,12 +105,21 @@ if (!empty($txpcfg['pre_publish_script'])) {
 }
 
 include txpath.'/publish.php';
-textpattern();
 
-if ($production_status !== 'live') {
-    echo $trace->summary();
+switch (txpinterface) {
+    case 'css':
+        $n = gps('n');
+        $t = gps('t');
+        output_css($s, $n, $t);
+        break;
+    default:
+        textpattern();
 
-    if ($production_status === 'debug') {
-        echo $trace->result();
-    }
+        if ($production_status !== 'live') {
+            echo $trace->summary();
+        }
+}
+
+if ($production_status === 'debug') {
+    echo txpinterface === 'css' ? n.'/*'.$trace->result().n.'*/'.n : $trace->result();
 }

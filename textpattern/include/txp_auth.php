@@ -2,10 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -122,8 +121,7 @@ function doLoginForm($message)
         $out[] = hed($pageTitle, 1, array('id' => 'txp-'.$class.'-heading')).
             inputLabel(
                 $label,
-                fInput('password', 'p_password', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', $label, false, true).
-                n.tag(null, 'div', array('class' => 'strength-meter')).
+                fInput('password', 'p_password', '', 'txp-maskable', '', '', INPUT_REGULAR, '', $label, false, true).
                 n.tag(
                     checkbox('unmask', 1, false, 0, 'show_password').
                     n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
@@ -170,20 +168,9 @@ function doLoginForm($message)
 
     pagetop($pageTitle, $message);
 
-    gTxtScript(array(
-        'password_strength_0',
-        'password_strength_1',
-        'password_strength_2',
-        'password_strength_3',
-        'password_strength_4',
-        )
-    );
-
     echo form(
         join('', $out), '', '', 'post', 'txp-login', '', 'login_form').
-
-    script_js('vendors/dropbox/zxcvbn/zxcvbn.js', TEXTPATTERN_SCRIPT_URL).
-    script_js('textpattern.textarray = '.json_encode($textarray_script)).
+    script_js('textpattern.textarray = '.json_encode($textarray_script, TEXTPATTERN_JSON)).
     n.'</main><!-- /txp-body -->'.n.'</body>'.n.'</html>';
 
     exit(0);

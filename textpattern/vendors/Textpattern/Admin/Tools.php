@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -25,7 +25,7 @@
  * Remove files and directories.
  *
  * <code>
- * Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
+ * Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
  * </code>
  *
  * @since   4.6.0
@@ -78,7 +78,7 @@ class Tools
 
             if (is_file($file)) {
                 $result &= unlink($file);
-            } elseif ($result &= Tools::removeFiles($file)) {
+            } elseif ($result &= self::removeFiles($file)) {
                 $result &= rmdir($file);
             }
         }

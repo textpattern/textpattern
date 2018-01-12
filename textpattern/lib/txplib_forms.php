@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -150,7 +150,7 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
             $sel = '';
         }
 
-        $out[] = '<option value="'.txpspecialchars($avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
+        $out[] = '<option value="'.txpspecialchars($avalue).'"'.$sel.' dir="auto">'.txpspecialchars($alabel).'</option>';
     }
 
     if ($blank_first) {
@@ -188,7 +188,7 @@ function selectInput($name = '', $array = array(), $value = '', $blank_first = f
  * @see    getTree()
  */
 
-function treeSelectInput($select_name = '', $array = array(), $value = '', $select_id = '', $truncate = 0)
+function treeSelectInput($select_name = '', $array = array(), $value = '', $select_id = '', $truncate = 0, $atts = array())
 {
     $out = array();
 
@@ -222,7 +222,7 @@ function treeSelectInput($select_name = '', $array = array(), $value = '', $sele
             $data_level = ' data-level="'.$a['level'].'"';
         }
 
-        $out[] = '<option value="'.txpspecialchars($a['name']).'"'.$htmltitle.$sel.$data_level.'>'.$sp.txpspecialchars($a['title']).$hellip.'</option>';
+        $out[] = '<option value="'.txpspecialchars($a['name']).'"'.$htmltitle.$sel.$data_level.' dir="auto">'.$sp.txpspecialchars($a['title']).$hellip.'</option>';
     }
 
     array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'>&#160;</option>');
@@ -230,7 +230,7 @@ function treeSelectInput($select_name = '', $array = array(), $value = '', $sele
     return n.tag(n.join(n, $out).n, 'select', array(
         'id'   => $select_id,
         'name' => $select_name,
-    ));
+    ) + $atts);
 }
 
 /**
@@ -272,7 +272,7 @@ function timezoneSelectInput($name = '', $value = '', $blank_first = '', $onchan
                 .(!empty($subcity) ? '/'.gTxt(str_replace('_', ' ', $subcity)) : '').t
                 /*."($abbr)"*/;
 
-            $out[] = n.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').'>'.$where.' ('.$offset.')'.'</option>';
+            $out[] = n.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').' dir="auto">'.$where.'</option>';
         }
 
         $out[] = n.'</optgroup>';
@@ -334,16 +334,22 @@ function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $
 /**
  * Hidden form input.
  *
- * @param  string $name  The name
- * @param  string $value The value
- * @return string HTML input
+ * @param  string/array $name  The name
+ * @param  string       $value The value
+ * @return string       HTML input
  * @example
  * echo hInput('myInput', 'hidden value');
  */
 
-function hInput($name, $value)
+function hInput($name, $value = null, $glue = ',')
 {
-    return fInput('hidden', $name, $value);
+    if (!is_array($name)) {
+        return fInput('hidden', $name, $value);
+    }
+
+    return array_walk($name, function (&$v, $n, $glue) {
+        $v = fInput('hidden', $n, is_array($v) ? implode($glue, $v) : $v);
+    }, $glue) ? implode($name) : false;
 }
 
 /**
@@ -695,31 +701,39 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
 
     if ($datevar == '%Y' || $name == 'year' || $name == 'exp_year') {
         $class = 'input-year';
-        $size = INPUT_XSMALL;
         $pattern = '[0-9]{4}';
+        $size = INPUT_XSMALL;
+        $title = 'input_year';
     }
 
     if ($datevar == '%m' || $name == 'month' || $name == 'exp_month') {
         $class = 'input-month';
         $pattern = '(0[1-9]|1[012])';
+        $title = 'input_month';
     }
 
     if ($datevar == '%d' || $name == 'day' || $name == 'exp_day') {
         $class = 'input-day';
-        $pattern = '(0[1-9]|1[0-9]|2[0-9]|3[01])';
+        $pattern = '(0[1-9]|[12][0-9]|3[01])';
+        $title = 'input_day';
     }
 
     if ($datevar == '%H' || $name == 'hour' || $name == 'exp_hour') {
         $class = 'input-hour';
-        $pattern = '(0[0-9]|1[0-9]|2[0-3])';
+        $pattern = '([0-1][0-9]|2[0-3])';
+        $title = 'input_hour';
     }
 
     if ($datevar == '%M' || $name == 'minute' || $name == 'exp_minute') {
         $class = 'input-minute';
+        $pattern = '([0-5][0-9])';
+        $title = 'input_minute';
     }
 
     if ($datevar == '%S' || $name == 'second' || $name == 'exp_second') {
         $class = 'input-second';
+        $pattern = '([0-5][0-9])';
+        $title = 'input_second';
     }
 
     return n.tag_void('input', array(
@@ -731,8 +745,8 @@ function tsi($name, $datevar, $time, $tab = 0, $id = '')
         'pattern'     => $pattern,
         'size'        => (int) $size,
         'maxlength'   => $size,
-        'title'       => gTxt('article_'.$name),
-        'aria-label'  => gTxt('article_'.$name),
+        'title'       => gTxt($title),
+        'aria-label'  => gTxt($title),
         'placeholder' => $placeholder,
         'tabindex'    => (int) $tab,
         'value'       => $value,

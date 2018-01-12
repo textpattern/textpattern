@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -252,7 +252,7 @@ class Timezone
      *     (
      *         [ts] => 1396141200
      *         [time] => 2014-03-30T01:00:00+0000
-     *        [offset] => 10800
+     *         [offset] => 10800
      *         [isdst] => 1
      *         [abbr] => EEST
      *     )

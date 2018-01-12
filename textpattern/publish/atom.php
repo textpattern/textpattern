@@ -2,10 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -136,7 +135,7 @@ function atom()
     $mail_or_domain = ($use_mail_on_feeds_id) ? eE($blog_mail_uid) : $dn[0];
     $out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section) ? '/'.join(',', $section) : '').(($category) ? '/'.join(',', $category) : ''), 'id');
 
-    $out[] = tag('Textpattern', 'generator', ' uri="http://textpattern.com/" version="'.$version.'"');
+    $out[] = tag('Textpattern', 'generator', ' uri="https://textpattern.com/" version="'.$version.'"');
     $out[] = tag(safe_strftime("w3cdtf", strtotime($lastmod)), 'updated');
 
     $auth[] = tag($pub['RealName'], 'name');

@@ -2,10 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -219,8 +218,7 @@ function new_pass_form($message = '')
         ).
         inputLabel(
             'new_pass',
-            fInput('password', 'new_pass', '', 'txp-maskable txp-strength-hint', '', '', INPUT_REGULAR, '', 'new_pass', false, true).
-            n.tag(null, 'div', array('class' => 'strength-meter')).
+            fInput('password', 'new_pass', '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'new_pass', false, true).
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
                 n.tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
@@ -313,7 +311,9 @@ function author_list($message = '')
 
         $search->setAliases('privs', $levels);
 
-        list($criteria, $crit, $search_method) = $search->getFilter();
+        list($criteria, $crit, $search_method) = $search->getFilter(array(
+            'login' => array('can_list' => true),
+            ));
 
         $search_render_options = array(
             'placeholder' => 'search_users',
@@ -465,14 +465,14 @@ function author_list($message = '')
                     'id'    => 'users_navigation',
                 )).
                 $paginator->render().
-                nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
+                nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
                 n.tag_end('div');
         }
 
         echo n.tag_end('div'). // End of .txp-layout-1col.
             n.'</div>'; // End of .txp-layout.
     } elseif (has_privs('admin.edit.own')) {
-        echo author_edit('', true);
+        echo author_edit($message, true);
     } else {
         require_privs('admin.edit');
     }

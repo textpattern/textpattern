@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -34,7 +34,7 @@
  *
  * @link      http://web.archive.org/web/20141201035729/http://txp.kusor.com/wrapper
  * @author    Pedro Palazón
- * @copyright 2005-2008 The Textpattern Development Team - https://textpattern.io
+ * @copyright 2005-2008 The Textpattern Development Team
  */
 
 if (!defined('txpath')) {
@@ -802,7 +802,6 @@ class TXP_Wrapper
 
             if (($incoming['Status'] >= 4 && !$article_id) || ($oldstatus != 4 && $article_id)) {
                 safe_update('txp_prefs', "val = NOW()", "name = 'lastmod'");
-                //@$this->_sendPings();
             }
 
             return $article_id;
@@ -837,27 +836,6 @@ class TXP_Wrapper
         }
 
         return false;
-    }
-
-    /**
-     * Pings Ping-O-Matic when an article is published.
-     *
-     * This is duplicated code from txp_article.php.
-     *
-     * @access private
-     */
-
-    public function _sendPings()
-    {
-        global $prefs, $txpcfg;
-        extract($prefs);
-
-        include_once txpath.'/lib/IXRClass.php';
-
-        if ($ping_weblogsdotcom == 1) {
-            $wl_client = new IXR_Client('http://rpc.pingomatic.com/');
-            $wl_client->query('weblogUpdates.ping', $sitename, hu);
-        }
     }
 
     /**

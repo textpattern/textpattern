@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -48,7 +48,7 @@
 
 function pagetop($pagetitle = '', $message = '')
 {
-    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme;
+    global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $textarray_script, $file_max_upload_size;
 
     header('Content-Security-Policy: '.CONTENT_SECURITY_POLICY);
     header('X-Frame-Options: '.X_FRAME_OPTIONS);
@@ -81,6 +81,21 @@ function pagetop($pagetitle = '', $message = '')
         $body_id = 'page-'.txpspecialchars($event);
     }
 
+    gTxtScript(array(
+        'are_you_sure',
+        'cookies_must_be_enabled',
+        'form_submission_error',
+        'list_options',
+        'ok',
+        'publish',
+        'save',
+        'toggle_all_selected',
+        'select',
+        'close',
+        'help',
+        'upload_err_form_size'
+    ));
+
     $lang_direction = gTxt('lang_dir');
     $lang_ui = get_pref('language_ui', LANG);
 
@@ -95,6 +110,7 @@ function pagetop($pagetitle = '', $message = '')
 <title><?php echo admin_title($pagetitle)?></title><?php echo
     script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
     script_js('vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
+    script_js('vendors/blueimp/fileupload/jquery.fileupload.js', TEXTPATTERN_SCRIPT_URL).
     script_js(
         'var textpattern = '.json_encode(
             array(
@@ -103,29 +119,36 @@ function pagetop($pagetitle = '', $message = '')
                 'step' => $step,
                 '_txp_token' => form_token(),
                 'ajax_timeout' => (int) AJAX_TIMEOUT,
-                'textarray' => (object) null,
-                'do_spellcheck' => get_pref(
-                    'do_spellcheck',
-                    '#page-article #body, #page-article #title,'.
-                    '#page-image #alt-text, #page-image #caption,'.
-                    '#page-file #description,'.
-                    '#page-link #link-title, #page-link #link-description'
+                'prefs' => array(
+                    'max_file_size' => $file_max_upload_size,
+                    'max_upload_size' => real_max_upload_size(0),
+                    'production_status' => get_pref('production_status'),
+                    'do_spellcheck' => get_pref(
+                        'do_spellcheck',
+                        '#page-article #body, #page-article #title,'.
+                        '#page-image #image_alt_text, #page-image #caption,'.
+                        '#page-file #description,'.
+                        '#page-link #link-title, #page-link #link-description'
+                    ),
+                    'message' => '<span class="ui-icon ui-icon-{status}"></span> {message}',
+                    'messagePane' => '<span class="messageflash {status}" role="alert" aria-live="assertive">
+    {message}<a class="close" role="button" title="{close}" href="#close"><span class="ui-icon ui-icon-close">{close}</span></a>
+</span>'
                 ),
-                'production_status' => get_pref('production_status'),
-            )
+                'textarray' => (object) null,
+            ),
+            TEXTPATTERN_JSON
         ).';'
     ).
     script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
-    gTxtScript(array(
-        'are_you_sure',
-        'cookies_must_be_enabled',
-        'form_submission_error',
-        'list_options',
-        'ok',
-        'publish',
-        'save',
-        'toggle_all_selected',
-    ));
+
+echo script_js("
+    $(function() {
+        if (!textpattern.version || !'".txp_version."'.match(textpattern.version)) {
+            alert('Please shift-reload the page from the server to refresh the cache.')
+        }
+    })", false);
+
     // Mandatory un-themable Textpattern core styles ?>
 <style>
 .not-ready main {
@@ -134,6 +157,7 @@ function pagetop($pagetitle = '', $message = '')
 </style>
 <?php
 echo $theme->html_head();
+echo $theme->html_head_custom();
     callback_event('admin_side', 'head_end'); ?>
 </head>
 <body class="not-ready <?php echo $area; ?>" id="<?php echo $body_id; ?>">
@@ -260,7 +284,7 @@ function areas()
 {
     global $plugin_areas;
 
-    $adminString = gTxt(has_privs('admin.list') ? 'tab_site_admin' : 'tab_site_account');
+    $adminString = has_privs('admin.list') ? gTxt('tab_site_admin') : gTxt('tab_site_account');
 
     $areas['start'] = array(
     );
@@ -275,6 +299,7 @@ function areas()
     );
 
     $areas['presentation'] = array(
+        gTxt('tab_skins')    => 'skin',
         gTxt('tab_sections') => 'section',
         gTxt('tab_pages')    => 'page',
         gTxt('tab_forms')    => 'form',

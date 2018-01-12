@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -490,9 +490,9 @@ if (!defined('X_FRAME_OPTIONS')) {
 if (!defined('CONTENT_SECURITY_POLICY')) {
     /**
      * Sets Content-Security-Policy HTTP header's value.
-     * 
+     *
      * This constant can be overridden from the config.php.
-     * 
+     *
      * @since   4.7.0
      * @package CSRF
      */
@@ -857,7 +857,7 @@ if (!defined('TEXTPATTERN_DEFAULT_LANG')) {
      * @package L10n
      */
 
-    define('TEXTPATTERN_DEFAULT_LANG', 'en-gb');
+    define('TEXTPATTERN_DEFAULT_LANG', 'en');
 }
 
 /**
@@ -927,3 +927,15 @@ define('TEXTPATTERN_ANNOUNCE_ASYNC', 0x4);
  */
 
 define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
+
+/**
+ * Define the default JSON option for json_encode()
+ *
+ * @since   4.7.0
+ */
+
+if (defined('JSON_UNESCAPED_UNICODE')) {
+    define('TEXTPATTERN_JSON', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+} else {
+    define('TEXTPATTERN_JSON', 0);
+}

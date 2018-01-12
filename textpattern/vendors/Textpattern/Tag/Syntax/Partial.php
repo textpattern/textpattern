@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -44,18 +44,19 @@ class Partial
         global $yield;
 
         extract(lAtts(array(
-            'name' => '',
-            'reset' => false,
-            'value' => $thing ? parse($thing) : $thing
+            'name'    => '',
+            'default' => null
         ), $atts));
 
-        $inner = !empty($yield[$name]) ? end($yield[$name]) : $value;
-
-        if ($reset) {
-            unset($yield[$name]);
+        if (isset($yield[$name])) {
+            $inner = end($yield[$name]);
         }
 
-        return isset($inner) ? $inner : '';
+        if (!isset($inner)) {
+            $inner = isset($default) ? $default : ($thing ? parse($thing) : $thing);
+        }
+
+        return $inner;
     }
 
     /**

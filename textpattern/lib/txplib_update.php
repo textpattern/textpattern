@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -45,5 +45,5 @@
 
 function install_language_from_file($lang)
 {
-    return Txp::get('\Textpattern\L10n\Lang')->install_file($lang);
+    return Txp::get('\Textpattern\L10n\Lang')->installFile($lang);
 }

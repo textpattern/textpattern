@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -78,26 +78,21 @@ class Registry implements \Textpattern\Container\ReusableInterface
      *
      * @param  callback    $callback The attribute callback
      * @param  string|null $tag      The attribute name
-     * @param  bool        $prepend  The order
      * @return \Textpattern\Tag\Registry
      */
 
-    public function registerAttr($callback, $tag = null, $prepend = false)
+    public function registerAttr($callback, $tag = null)
     {
         // is_callable only checks syntax here to avoid autoloading
         if (is_bool($callback)) {
             foreach (do_list_unique($tag) as $tag) {
                 $this->atts[$tag] = $callback;
             }
-        } elseif (is_callable($callback, true)) {
+        } elseif ($callback && is_callable($callback, true)) {
             if ($tag === null && is_string($callback)) {
-                $tag = $callback;
-            }
-
-            if ($tag) {
-                if ($prepend) {
-                    $this->atts = array($tag => $callback) + $this->atts;
-                } else {
+                $this->atts[$callback] = $callback;
+            } else {
+                foreach (do_list_unique($tag) as $tag) {
                     $this->atts[$tag] = $callback;
                 }
             }
@@ -163,7 +158,7 @@ class Registry implements \Textpattern\Container\ReusableInterface
 
     public function isRegisteredAttr($tag)
     {
-        return !empty($this->atts[$tag]) && is_callable($this->atts[$tag]);
+        return isset($this->atts[$tag]) && is_callable($this->atts[$tag]);
     }
 
     /**

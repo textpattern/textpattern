@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -25,7 +25,7 @@
  * Access server configuration variables.
  *
  * <code>
- * Txp::get('Textpattern\Server\Config')->getVariable('REQUEST_URI');
+ * Txp::get('\Textpattern\Server\Config')->getVariable('REQUEST_URI');
  * </code>
  *
  * @since   4.6.0

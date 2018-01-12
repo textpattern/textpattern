@@ -6,6 +6,13 @@
         "html": "text_input",
         "position": "20"
     },
+    "skin_dir": {
+        "val": "themes",
+        "type": "0",
+        "event": "admin",
+        "html": "text_input",
+        "position": "30"
+    },
     "file_base_path": {
         "val": "",
         "type": "0",
@@ -76,12 +83,12 @@
         "html": "themename",
         "position": "160"
     },
-    "show_article_category_count": {
+    "module_pophelp": {
         "val": "1",
-        "type": "2",
-        "event": "category",
-        "html": "yesnoradio",
-        "position": "0"
+        "type": "0",
+        "event": "admin",
+        "html": "module_pophelp",
+        "position": "170"
     },
     "comments_on_default": {
         "val": "0",
@@ -356,13 +363,6 @@
         "html": "yesnoradio",
         "position": "130"
     },
-    "ping_weblogsdotcom": {
-        "val": "0",
-        "type": "0",
-        "event": "publish",
-        "html": "yesnoradio",
-        "position": "160"
-    },
     "use_textile": {
         "val": "1",
         "type": "0",
@@ -376,6 +376,13 @@
         "event": "publish",
         "html": "yesnoradio",
         "position": "220"
+    },
+    "enable_short_tags": {
+        "val": "1",
+        "type": "0",
+        "event": "publish",
+        "html": "yesnoradio",
+        "position": "230"
     },
     "use_plugins": {
         "val": "1",
@@ -444,7 +451,7 @@
         "val": "",
         "type": "2",
         "event": "publish",
-        "html": "languages",
+        "html": "text_input",
         "position": "0"
     },
     "lastmod": {
@@ -656,6 +663,14 @@
         "event": "site",
         "html": "yesnoradio",
         "position": "240"
+    },
+    "language_ui": {
+        "val": "",
+        "type": "2",
+        "event": "admin",
+        "html": "text_input",
+        "position": "0",
+        "private": "1"
     },
     "default_publish_status": {
         "val": "4",

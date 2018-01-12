@@ -2,10 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -147,7 +146,12 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         setlocale(LC_ALL, $locale);
     }
 
-    $textarray = load_lang(LANG);
+    // For backwards-compatibility (sort of) with plugins that expect the
+    // $textarray global to be present.
+    // Will remove in future.
+    $textarray = array();
+
+    load_lang(LANG, 'admin');
 
     // Initialise global theme.
     $theme = \Textpattern\Admin\Theme::init();
@@ -161,14 +165,13 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
 
     $dbversion = $version;
 
+    $event = (gps('event') ? trim(gps('event')) : (!empty($default_event) && has_privs($default_event) ? $default_event : 'article'));
+    $step = trim(gps('step'));
+    $app_mode = trim(gps('app_mode'));
+
     // Reload string pack using per-user language.
     $lang_ui = (empty($language_ui)) ? $language : $language_ui;
-
-    // Loading langs twice is expensive, so only do it when necessary.
-    // @todo Optimisations to language loader will help here.
-    if ($lang_ui !== $language) {
-        $textarray = load_lang($lang_ui);
-    }
+    load_lang($lang_ui, $event);
 
     /**
      * @ignore
@@ -186,7 +189,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     $step = trim(gps('step'));
     $app_mode = trim(gps('app_mode'));
 
-    if (!$dbversion or ($dbversion != $thisversion) or $txp_is_dev) {
+    if (!$dbversion || ($dbversion != $thisversion) || $txp_is_dev) {
         define('TXP_UPDATE', 1);
         include txpath.'/update/_update.php';
     }
@@ -199,6 +202,9 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
         textpattern();
         exit;
     }
+
+    // Register modules
+    register_callback(array('\Textpattern\Module\Help\HelpAdmin', 'init'), 'help');
 
     if (!empty($admin_side_plugins) and gps('event') != 'plugin') {
         load_plugins(1);

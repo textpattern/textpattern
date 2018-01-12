@@ -31,7 +31,6 @@
 /lib/class.trace.php: 0ee318488a6f48da87f0c0cf6fe323f9
 /lib/classTextile.php: bc332cd871af9aea59d1f0a20e6e47cb
 /lib/constants.php: be11b7315b4a9505e2d2ab0ab04c2ab7
-/lib/taglib.php: f1b871e7ff90028d3cd12a944b4c2153
 /lib/txplib_admin.php: fb66c1420b71d18416181df1f09dfcb3
 /lib/txplib_db.php: ffdb7520a8da7d45f244dd6052b22df6
 /lib/txplib_forms.php: c61b2af91351854c8df777d2b8097e9f
@@ -63,7 +62,6 @@
 /update/_to_4.5.7.php: 12f67c98bc6479b54dc7f02cade86638
 /update/_to_4.6.0.php: 993a0ce529653a6cc4de3a4c454514a8
 /update/_update.php: a797c3f31953d468747755b1f30a687f
-/vendors/dropbox/zxcvbn/zxcvbn.js: 0592f04743d1d2b81b21b6c57c2e9dc7
 /vendors/jquery/jquery/jquery.js: 4f252523d4af0b478c810c2547a63e19
 /vendors/jquery/jquery-ui/jquery-ui.js: 0a497d4661df7b82feee14332ce0bdaf
 /vendors/PrismJS/prism/prism.js: 9987be40687dad6b26f400b8ce7d4a54

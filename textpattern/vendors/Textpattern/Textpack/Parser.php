@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -33,7 +33,7 @@ namespace Textpattern\Textpack;
 class Parser
 {
     /**
-     * Stores the default language.
+     * The default language.
      *
      * @var string
      */
@@ -41,12 +41,20 @@ class Parser
     protected $language;
 
     /**
-     * Stores the default owner.
+     * The default owner.
      *
      * @var string
      */
 
     protected $owner;
+
+    /**
+     * The list of strings in the pack, separated by language.
+     *
+     * @var array
+     */
+
+    protected $packs = array();
 
     /**
      * Constructor.
@@ -59,7 +67,7 @@ class Parser
     }
 
     /**
-     * Sets the default language.
+     * Set the default language.
      *
      * @param string $language The language code
      */
@@ -70,7 +78,7 @@ class Parser
     }
 
     /**
-     * Sets the default owner.
+     * Set the default owner.
      *
      * @param string $owner The default owner
      */
@@ -81,7 +89,7 @@ class Parser
     }
 
     /**
-     * Converts a Textpack to an array.
+     * Convert a Textpack to an array.
      *
      * <code>
      * $textpack = \Textpattern\Textpack\Parser();
@@ -90,19 +98,73 @@ class Parser
      * );
      * </code>
      *
-     * @param  string $textpack The Textpack
+     * @param  string       $textpack The Textpack
+     * @param  string|array $group    Only return strings with the given event(s)
      * @return array An array of translations
      */
 
-    public function parse($textpack)
+    public function parse($textpack, $group = null)
     {
-        $lines = explode(n, (string)$textpack);
+        static $replacements = array(
+            "\nnull" => "\n@null",
+            "\nyes" => "\n@yes",
+            "\nno" => "\n@no",
+            "\ntrue" => "\n@true",
+            "\nfalse" => "\n@false",
+            "\non" => "\n@on",
+            "\noff" => "\n@off",
+            "\nnone" => "\n@none"
+        );
+
+        if ($group && !is_array($group)) {
+            $group = do_list($group);
+        } else {
+            $group = (array)$group;
+        }
+
         $out = array();
         $version = false;
         $lastmod = false;
         $event = false;
         $language = $this->language;
         $owner = $this->owner;
+
+        // Are we dealing with the .ini file format?
+        if (strpos($textpack, '=>') === false
+            && $sections = parse_ini_string('[common]'.n.strtr($textpack, $replacements), true)) {
+            if (!empty($sections['@common'])
+                && !empty($sections['@common']['lang_code'])
+                && $sections['@common']['lang_code'] !== TEXTPATTERN_DEFAULT_LANG
+            ) {
+                $language = \Txp::get('\Textpattern\L10n\Locale')->validLocale($sections['@common']['lang_code']);
+            }
+
+            foreach ($sections as $event => $strings) {
+                $event = trim($event, ' @');
+
+                if (!empty($group) && !in_array($event, $group)) {
+                    continue;
+                } else {
+                    foreach (array_filter($strings) as $name => $data) {
+                        $out[] = array(
+                            'name'    => ltrim($name, ' @'),
+                            'lang'    => $language,
+                            'data'    => $data,
+                            'event'   => $event,
+                            'owner'   => $owner,
+                            'version' => $version,
+                            'lastmod' => $lastmod,
+                        );
+                    }
+                }
+            }
+
+            $this->packs[$language] = $out;
+            return;
+        }
+
+        // Not .ini, must be dealing with a regular .txt/.textpack file format.
+        $lines = explode(n, (string)$textpack);
 
         foreach ($lines as $line) {
             $line = trim($line);
@@ -112,26 +174,26 @@ class Parser
                 continue;
             }
 
-            // Sets version and lastmod timestamp.
+            // Set version. The lastmod timestamp after the ';' in the regex
+            // remains for reading legacy files, but is no longer used.
             if (preg_match('/^#@version\s+([^;\n]+);?([0-9]*)$/', $line, $m)) {
                 $version = $m[1];
-                $lastmod = $m[2] !== false ? $m[2] : $lastmod;
                 continue;
             }
 
-            // Sets language.
+            // Set language.
             if (preg_match('/^#@language\s+(.+)$/', $line, $m)) {
-                $language = $m[1];
+                $language = \Txp::get('\Textpattern\L10n\Locale')->validLocale($m[1]);
                 continue;
             }
 
-            // Sets owner.
+            // Set owner.
             if (preg_match('/^#@owner\s+(.+)$/', $line, $m)) {
                 $owner = $m[1];
                 continue;
             }
 
-            // Sets event.
+            // Set event.
             if (preg_match('/^#@([a-zA-Z0-9_-]+)$/', $line, $m)) {
                 $event = $m[1];
                 continue;
@@ -139,10 +201,11 @@ class Parser
 
             // Translation.
             if (preg_match('/^([\w\-]+)\s*=>\s*(.+)$/', $line, $m)) {
-                if (!empty($m[1]) && !empty($m[2])) {
-                    $out[] = array(
+                if (!empty($m[1]) && !empty($m[2]) && (empty($group) || in_array($event, $group))) {
+                    $langToStore = $language ? $language : $this->language;
+                    $this->packs[$langToStore][] = array(
                         'name'    => $m[1],
-                        'lang'    => $language,
+                        'lang'    => $langToStore,
                         'data'    => $m[2],
                         'event'   => $event,
                         'owner'   => $owner,
@@ -153,6 +216,34 @@ class Parser
             }
         }
 
+        return;
+    }
+
+    /**
+     * Fetch the language strings extracted by the last-parsed Textpack.
+     *
+     * @return array
+     */
+
+    public function getStrings($lang_code)
+    {
+        $out = array();
+
+        if (isset($this->packs[$lang_code])) {
+            $out = $this->packs[$lang_code];
+        }
+
         return $out;
+    }
+
+    /**
+     * Fetch the list of languages used in the last-parsed Textpack.
+     *
+     * @return array
+     */
+
+    public function getLanguages()
+    {
+        return array_keys($this->packs);
     }
 }

@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -113,7 +113,7 @@ class Registry implements \ArrayAccess, \IteratorAggregate, \Textpattern\Contain
         if (isset($this[$key])) {
             $thing = $this[$key]->filter($thing, $context['options']);
         } else {
-            throw new Exception(gTxt('invalid_argument', array('{name}' => 'key')));
+            throw new \Exception(gTxt('invalid_argument', array('{name}' => 'key')));
         }
 
         // Postprocessing, anyone?

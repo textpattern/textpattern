@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -68,7 +68,7 @@ class Core
         if (!empty($table)) {
             return @$this->tables_structure[$table];
         }
-        
+
         return $this->tables_structure;
     }
 
@@ -143,7 +143,7 @@ class Core
 
     public function getPrefsDefault()
     {
-        global $permlink_mode, $siteurl, $blog_uid, $theme_name, $pref, $language;
+        global $permlink_mode, $siteurl, $theme_name, $pref, $language;
 
         $out = @json_decode(file_get_contents($this->data_dir.DS.'core.prefs'), true);
         if (empty($out)) {
@@ -164,8 +164,9 @@ class Core
         $pf['siteurl']        = $siteurl;
         $pf['theme_name']     = empty($theme_name) ? 'hive' : $theme_name;
         $pf['blog_mail_uid']  = empty($_SESSION['email']) ? md5(rand()).'blog@gmail.com' : $_SESSION['email'];
-        $pf['blog_uid']       = empty($blog_uid) ? md5(uniqid(rand(), true)) : $blog_uid;
+        $pf['blog_uid']       = empty($pref['blog_uid']) ? md5(uniqid(rand(), true)) : $pref['blog_uid'];
         $pf['language']       = $language;
+        $pf['language_ui']    = $language;
         $pf['locale']         = getlocale($language);
         $pf['sitename']       = gTxt('my_site');
         $pf['site_slogan']    = gTxt('my_slogan');

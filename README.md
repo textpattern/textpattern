@@ -1,6 +1,9 @@
 # Textpattern CMS
 
-[![Textpattern Logo](https://textpattern.io/assets/img/branding/carver/carver-128px.svg)](http://textpattern.com/)
+[![Dependencies Status](https://david-dm.org/textpattern/textpattern/status.svg)](https://david-dm.org/textpattern/textpattern)
+[![devDependencies Status](https://david-dm.org/textpattern/textpattern/dev-status.svg)](https://david-dm.org/textpattern/textpattern?type=dev)
+
+[![Textpattern Logo](https://textpattern.io/assets/img/branding/carver/carver-128px.svg)](https://textpattern.com/)
 
 **A flexible, elegant and easy-to-use content management system.**
 
@@ -19,7 +22,7 @@ Textpattern is [free and open source](#legal) software.
 Textpattern is installed to a web server with PHP and MySQL.
 
 Ensure the server meets or exceeds the
-[system requirements](http://textpattern.com/about/119/system-requirements)
+[system requirements](https://textpattern.com/about/119/system-requirements)
 before you continue.
 
 ## Download Textpattern
@@ -28,8 +31,8 @@ before you continue.
 
 The current production release is version 4.6.2. It can be downloaded from the
 Textpattern website as a
-[.zip](http://textpattern.com/latest.zip) or
-[.tar.gz](http://textpattern.com/latest.tar.gz) archive.
+[.zip](https://textpattern.com/latest.zip) or
+[.tar.gz](https://textpattern.com/latest.tar.gz) archive.
 
 ### Development version
 
@@ -55,12 +58,12 @@ for details on upgrading Textpattern.
 The [Textpattern support forum](https://forum.textpattern.io) is home to
 a friendly and helpful community of Textpattern users and experts.
 Textpattern also has social network presences on
-[Google+](http://textpattern.com/+) and [Twitter](http://textpattern.com/@textpattern).
+[Google+](https://textpattern.com/+) and [Twitter](https://textpattern.com/@textpattern).
 
 ## Contributing
 
 Want to help out with the development of Textpattern CMS? Please refer to the
-[Contributing documentation](https://github.com/textpattern/textpattern/blob/dev/CONTRIBUTING.md)
+[Contributing documentation](https://github.com/textpattern/textpattern/blob/dev/.github/CONTRIBUTING.md)
 for full details.
 
 ## GitHub topic tags
@@ -75,6 +78,60 @@ discoverable resources:
 * `textpattern-theme`
 * `textpattern-website` (for websites built with Textpattern)
 * `textpattern-development` (for development resources)
+
+## Additional development tools
+
+Various components used within Textpattern CMS (such as the bundled themes and
+language translations) are maintained in standalone repositories. We have a
+simple development toolset built on [Node.js](https://nodejs.org/) to pull the
+distribution files of those repositories into the core as required.
+
+You can install Node.js using the [installer](https://nodejs.org/en/download/)
+or [package manager](https://nodejs.org/en/download/package-manager/).
+
+Install required dev tools:
+
+```ShellSession
+npm install
+```
+
+You can then pull the following components from the CLI, like so:
+
+```ShellSession
+npm run get-default-theme
+npm run get-classic-admin-theme
+npm run get-hive-admin-theme
+npm run get-pophelp
+npm run get-textpacks
+npm run get-dependencies
+```
+
+To request a specific tag or branch:
+
+```ShellSession
+npm run get-default-theme 4.7.0
+npm run get-classic-admin-theme 4.6.1
+npm run get-classic-admin-theme 4.6.x
+npm run get-hive-admin-theme 4.6.x
+npm run get-textpacks 4.6.x
+```
+
+You can verify PHP code via a PHP linter from the CLI, like so:
+
+```ShellSession
+npm run phplint
+```
+
+Release tools:
+
+Usage: `npm run txp-gitdist <version> [dest-dir]` (`dest-dir` defaults to a
+temporary location).
+
+```ShellSession
+npm run txp-index
+npm run txp-checksums
+npm run txp-gitdist 1.2.3 ../my-dest-dir
+```
 
 ## Legal
 

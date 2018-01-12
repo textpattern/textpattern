@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -25,7 +25,7 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-global $thisversion, $dbversion, $txp_is_dev, $dbupdatetime;
+global $thisversion, $dbversion, $txp_is_dev, $dbupdatetime, $app_mode;
 
 $dbupdates = array(
     '1.0.0',
@@ -106,12 +106,35 @@ try {
     // Error message already communicated via updateErrorHandler
 }
 
+// Update any out-of-date installed languages.
+// Have to refresh the cache first by reloading everything.
+$time = time();
+$txpLang = Txp::get('\Textpattern\L10n\Lang');
+$installed_langs = $txpLang->available(
+    TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_ACTIVE,
+    TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_ACTIVE | TEXTPATTERN_LANG_AVAILABLE
+);
+
+foreach ($installed_langs as $lang_code => $info) {
+    $db_lastmod = isset($info['db_lastmod']) ? $info['db_lastmod'] : 0;
+    $file_lastmod = isset($info['file_lastmod']) ? $info['file_lastmod'] : $time;
+
+    // Reinstall any out-of-date languages and update the DB stamps in the
+    // cache, just in case we're on the Languages panel so it doesn't report
+    // the languages as being stale.
+    if (($file_lastmod > $db_lastmod)) {
+        $txpLang->installFile($lang_code);
+        $txpLang->available(TEXTPATTERN_LANG_AVAILABLE, TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE);
+    }
+}
+
 restore_error_handler();
 
 // Update version if not dev.
 if (!$txp_is_dev) {
     remove_pref('version', 'publish');
     create_pref('version', $dbversion, 'publish', PREF_HIDDEN);
+    Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
 }
 
 // Invite optional third parties to the update experience
@@ -126,11 +149,22 @@ if (is_array($files)) {
     }
 }
 
+$js = <<<EOS
+    textpattern.Console.addMessage(["A new Textpattern version ($thisversion) has been installed.", 0])
+EOS;
+
+if ($app_mode == 'async') {
+    send_script_response($js);
+} else {
+    script_js($js, false);
+}
+
 // Updated, baby. So let's get the fresh prefs and send them to Diagnostics.
 define('TXP_UPDATE_DONE', 1);
-$event = 'diag';
-$step = 'update';
 
 $prefs = get_prefs();
-
 extract($prefs);
+/*
+$event = 'diag';
+$step = 'update';
+*/

@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -29,37 +29,11 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
 {
     function html_head()
     {
-        $cssPath = 'assets'.DS.'css';
-        $jsPath = 'assets'.DS.'js';
-
         $out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">';
-        $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.min.css">';
-
-        // Custom CSS (see theme README for usage instructions).
-        if (defined('admin_custom_css')) {
-            $custom_css = admin_custom_css;
-        } else {
-            $custom_css = 'custom.css';
-        }
-
-        if (file_exists(txpath.DS.THEME.$this->name.DS.$cssPath.DS.$custom_css)) {
-            $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/'.$custom_css.'">';
-        }
-
+        $out[] = '<link rel="stylesheet" href="'.$this->url.'assets/css/textpattern.css">';
         $out[] = '<link rel="icon" href="'.$this->url.'assets/img/favicon.ico">';
         $out[] = '<meta name="generator" content="Textpattern CMS">';
-        $out[] = '<script src="'.$this->url.'assets/js/main.min.js"></script>'.n;
-
-        // Custom JavaScript (see theme README for usage instructions).
-        if (defined('admin_custom_js')) {
-            $custom_js = admin_custom_js;
-        } else {
-            $custom_js = 'custom.js';
-        }
-
-        if (file_exists(txpath.DS.THEME.$this->name.DS.$jsPath.DS.$custom_js)) {
-            $out[] = '<script src="'.$this->url.'assets/js/'.$custom_js.'"></script>'.n;
-        }
+        $out[] = '<script src="'.$this->url.'assets/js/main.js"></script>'.n;
 
         return join(n, $out);
     }
@@ -110,7 +84,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
             $out[] = '</ul>';
             $out[] = '</nav>';
             $out[] = graf(
-                href(span(htmlspecialchars($GLOBALS['prefs']['sitename']), array('class' => 'txp-view-site-name')), hu, array(
+                href(span(htmlspecialchars(get_pref('sitename')), array('class' => 'txp-view-site-name')), hu, array(
                     'target' => '_blank',
                     'title'  => gTxt('tab_view_site'),
                 )), array('class' => 'txp-view-site'));
@@ -124,7 +98,7 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
     function footer()
     {
         $out[] = graf(
-            href('Textpattern CMS'.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), 'https://textpattern.io/', array(
+            href('Textpattern CMS'.sp.span(gTxt('opens_external_link'), array('class' => 'ui-icon ui-icon-extlink')), 'https://textpattern.com/', array(
                 'rel'    => 'external',
                 'target' => '_blank',
             )).
@@ -133,88 +107,5 @@ class hiveNeutral_theme extends \Textpattern\Admin\Theme
         $out[] = graf(href(gTxt('back_to_top'), '#'), array('class' => 'pagejump'));
 
         return join(n, $out);
-    }
-
-    function announce($thing = array('', 0), $modal = false)
-    {
-        return $this->_announce($thing, false, $modal);
-    }
-
-    function announce_async($thing = array('', 0), $modal = false)
-    {
-        return $this->_announce($thing, true, $modal);
-    }
-
-    private function _announce($thing, $async, $modal)
-    {
-        // $thing[0]: message text.
-        // $thing[1]: message type, defaults to "success" unless empty or a different flag is set.
-
-        if ($thing === '') {
-            return '';
-        }
-
-        if (!is_array($thing) || !isset($thing[1])) {
-            $thing = array($thing, 0);
-        }
-
-        switch ($thing[1]) {
-            case E_ERROR:
-                $class = 'error';
-                $icon = 'ui-icon-alert';
-                break;
-            case E_WARNING:
-                $class = 'warning';
-                $icon = 'ui-icon-alert';
-                break;
-            default:
-                $class = 'success';
-                $icon = 'ui-icon-check';
-                break;
-        }
-
-        if ($modal) {
-            $html = ''; // TODO: Say what?
-            $js = 'window.alert("'.escape_js(strip_tags($thing[0])).'")';
-        } else {
-            $html = span(
-                span(null, array('class' => 'ui-icon '.$icon)).' '.gTxt($thing[0]).
-                sp.href('&#215;', '#close', ' class="close" role="button" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"'),
-                array(
-                    'class'     => 'messageflash '.$class,
-                    'role'      => 'alert',
-                    'aria-live' => 'assertive',
-                )
-            );
-
-            // Try to inject $html into the message pane no matter when _announce()'s output is printed.
-            $js = escape_js($html);
-            $js = <<< EOS
-                $(document).ready(function ()
-                {
-                    $("#messagepane").html("{$js}");
-                });
-EOS;
-        }
-
-        if ($async) {
-            return $js;
-        } else {
-            return script_js(str_replace('</', '<\/', $js), $html);
-        }
-    }
-
-    function manifest()
-    {
-        global $prefs;
-
-        return array(
-            'title'       => 'Hive (Flat Neutral)',
-            'description' => 'Textpattern Hive (Flat Neutral) admin theme',
-            'version'     => '4.7.0-dev',
-            'author'      => 'Phil Wareham',
-            'author_uri'  => 'https://github.com/philwareham',
-            'help'        => 'https://github.com/philwareham/textpattern-hive-admin-theme',
-        );
     }
 }

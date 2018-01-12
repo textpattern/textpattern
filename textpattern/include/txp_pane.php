@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -84,7 +84,7 @@ class Textpattern_Admin_Pane
             return;
         }
 
-        trigger_error('invalid_pane', E_USER_WARNING);
+        trigger_error(gTxt('invalid_pane'), E_USER_WARNING);
     }
 
     /**
@@ -106,7 +106,7 @@ class Textpattern_Admin_Pane
             return;
         }
 
-        trigger_error('invalid_pane', E_USER_WARNING);
+        trigger_error(gTxt('invalid_pane'), E_USER_WARNING);
     }
 }
 

@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -59,7 +59,7 @@ class StringFilter extends \Textpattern\Type\StringType
      * <code>
      * try
      * {
-     *     echo (string) Txp::get('Textpattern\Filter\StringFilter', 'Hello World!')->match('/^[^0-9]$/');
+     *     echo (string) Txp::get('\Textpattern\Filter\StringFilter', 'Hello World!')->match('/^[^0-9]$/');
      * } catch (\Textpattern\Filter\Exception $e) {
      *     echo $e->getMessage();
      * }
@@ -87,7 +87,7 @@ class StringFilter extends \Textpattern\Type\StringType
      *
      * <code>
      * try {
-     *     echo (string) Txp::get('Textpattern\Filter\StringFilter', 'Hello World!')->length(64);
+     *     echo (string) Txp::get('\Textpattern\Filter\StringFilter', 'Hello World!')->length(64);
      * } catch (\Textpattern\Filter\Exception $e) {
      *     echo $e->getMessage();
      * }

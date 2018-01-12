@@ -15,4 +15,15 @@ Thumbs.db
 /images/!.gitignore
 /files/*
 /files/!.htaccess-dist
+/themes/*
+/themes/!.htaccess-dist
 *~
+
+# Development files  #
+######################
+/node_modules
+/package-lock.json
+/npm-debug.log
+/yarn.lock
+/yarn-error.log
+.github/index

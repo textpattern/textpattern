@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -18,7 +18,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
@@ -38,7 +38,7 @@ class TxpXML
      * @var array
      */
 
-    protected $importAllow = array('articles', 'category', 'section', 'link', 'css', 'form', 'page');
+    protected $importAllow = array('articles', 'category', 'section', 'link', 'skin', 'css', 'form', 'page');
 
     /**
      * articleOptionalFields

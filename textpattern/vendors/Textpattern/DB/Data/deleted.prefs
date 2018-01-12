@@ -11,8 +11,11 @@
         "link_list_pageby",
         "log_list_pageby",
         "ping_textpattern_com",
+        "ping_weblogsdotcom",
         "lastmod_keepalive",
-        "prefs_id"
+        "show_article_category_count",
+        "prefs_id",
+        "skin_base_path"
     ],
     "private": []
 }

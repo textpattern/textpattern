@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -385,14 +385,14 @@ function parse($thing, $condition = true)
     }
 
     if (!isset($short_tags)) {
-        $short_tags = get_pref('enable_short_tags', true);
-        $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp';
+        $short_tags = get_pref('enable_short_tags', false);
+        $pattern = $short_tags ? 'txp|[a-z]+:' : 'txp:?';
     }
 
     if ($thing === null) {
         return $condition ? '1' : '';
     } elseif (!$short_tags) {
-        if (false === strpos($thing, "<{$pattern}:")) {
+        if (false === strpos($thing, '<txp:')) {
             return $condition ? $thing : ($thing ? '' : '1');
         }
     } elseif (!preg_match("@<(?:{$pattern}):@", $thing)) {
@@ -423,20 +423,19 @@ function parse($thing, $condition = true)
 
             if ($tag[$level][2] === 'else') {
                 $else[$level] = $count[$level];
+            } elseif ($tag[$level][1] === 'txp:') {
+                // Handle <txp::shortcode />.
+                $tag[$level][3] = "yield form='".$tag[$level][2]."'".$tag[$level][3];
+                $tag[$level][2] = 'output_form';
             } elseif ($short_tags && $tag[$level][1] !== 'txp') {
                 // Handle <short::tags />.
-                if ($tag[$level][1] == 'txp:') {
-                    $tag[$level][3] = "form='".$tag[$level][2]."'".$tag[$level][3];
-                    $tag[$level][2] = 'output_form';
-                } else {
-                    $tag[$level][2] = rtrim($tag[$level][1], ':').'_'.$tag[$level][2];
-                }
+                $tag[$level][2] = rtrim($tag[$level][1], ':').'_'.$tag[$level][2];
             }
 
             if ($chunk[strlen($chunk) - 2] === '/') {
                 // Self closed tag.
                 if ($chunk[1] === '/') {
-                    $trace->log("Ambiguous tag $chunk");
+                    trigger_error(gTxt('ambiguous_tag_format', array('{chunk}' => $chunk)), E_USER_WARNING);
                 }
 
                 $tags[$level][] = array($chunk, $tag[$level][2], trim($tag[$level][3]), null, null);
@@ -452,14 +451,14 @@ function parse($thing, $condition = true)
             } else {
                 // Closing tag.
                 if ($level < 1) {
-                    $trace->log("Lone closing tag $chunk");
+                    trigger_error(gTxt('missing_open_tag', array('{chunk}' => $chunk)), E_USER_WARNING);
                     $tags[$level][] = array($chunk, null, '', null, null);
                     $inside[$level] .= $chunk;
                 } else {
                     if ($i >= $last) {
-                        $trace->log('Unclosed tag'.n.$outside[$level].$inside[$level].n);
+                        trigger_error(gTxt('missing_close_tag', array('{chunk}' => $outside[$level])), E_USER_WARNING);
                     } elseif ($tag[$level-1][2] != $tag[$level][2]) {
-                        $trace->log('Tags mismatch '.$outside[$level].$inside[$level].$chunk);
+                        trigger_error(gTxt('mismatch_open_close_tag', array('{from}' => $outside[$level], '{to}' => $chunk)), E_USER_WARNING);
                     }
 
                     $sha = sha1($inside[$level]);
@@ -539,8 +538,8 @@ function maybe_tag($tag)
 
 function processTags($tag, $atts = '', $thing = null)
 {
-    global $pretext, $production_status, $txp_current_tag, $txp_current_form, $txp_atts, $txp_tag, $trace;
-    static $registry = null, $global_atts = null, $max_pass = null;
+    global $pretext, $production_status, $txp_current_tag, $txp_atts, $txp_tag, $trace;
+    static $registry = null, $max_pass, $globals;
 
     if (empty($tag)) {
         return;
@@ -551,13 +550,18 @@ function processTags($tag, $atts = '', $thing = null)
 
     if ($production_status !== 'live') {
         $tag_stop = $txp_tag[4];
-        $trace->start($txp_current_tag);
+        $trace->start($txp_tag[0]);
     }
 
     if ($registry === null) {
-        $registry = Txp::get('\Textpattern\Tag\Registry');
-        $global_atts = array_keys(array_filter($registry->getRegistered(true)));
         $max_pass = get_pref('secondpass', 1);
+        $registry = Txp::get('\Textpattern\Tag\Registry');
+        $globals = array_filter(
+            $registry->getRegistered(true),
+             function ($v) {
+                 return !is_bool($v);
+             }
+         );
     }
 
     $old_atts = $txp_atts;
@@ -569,11 +573,18 @@ function processTags($tag, $atts = '', $thing = null)
         $split = array();
     }
 
-    if (!isset($txp_atts['process'])) {
+    if (!isset($txp_atts['txp-process'])) {
         $out = $registry->process($tag, $split, $thing);
     } else {
-        $out = empty($txp_atts['process']) ? '' : (intval($txp_atts['process']) <= $pretext['secondpass'] + 1 ? $registry->process($tag, $split, $thing) : null);
-        unset($txp_atts['process']);
+        $process = empty($txp_atts['txp-process']) || is_numeric($txp_atts['txp-process']) ? (int) $txp_atts['txp-process'] : 1;
+
+        if ($process <= $pretext['secondpass'] + 1) {
+            unset($txp_atts['txp-process']);
+            $out = $process > 0 ? $registry->process($tag, $split, $thing) : '';
+        } else {
+            $txp_atts['txp-process'] = $process;
+            $out = '';
+        }
     }
 
     if ($out === false) {
@@ -586,21 +597,25 @@ function processTags($tag, $atts = '', $thing = null)
         }
     }
 
-    if ($out === null || isset($txp_atts['process']) && intval($txp_atts['process']) > $pretext['secondpass'] + 1) {
+    if (isset($txp_atts['txp-process']) && (int) $txp_atts['txp-process'] > $pretext['secondpass'] + 1) {
         $out = $pretext['secondpass'] < $max_pass ? $txp_current_tag : '';
-        unset($txp_atts['process']);
     } else {
         if ($thing === null && !empty($txp_atts['not'])) {
             $out = $out ? '' : '1';
-            unset($txp_atts['not']);
         }
 
-        if ($txp_atts && (string)$out > '') {
-            foreach ($global_atts as $attr) {
-                if (!empty($txp_atts[$attr])) {
-                    $out = $registry->processAttr($attr, $txp_atts, $out);
+        unset($txp_atts['txp-process'], $txp_atts['not']);
+
+        if ($txp_atts) {
+            $pretext['_txp_atts'] = true;
+
+            foreach ($txp_atts as $attr => &$val) {
+                if (isset($val) && isset($globals[$attr])) {
+                    $out = $registry->processAttr($attr, $split, $out);
                 }
             }
+
+            $pretext['_txp_atts'] = false;
         }
     }
 
@@ -837,7 +852,7 @@ function filterAtts($atts = null)
             ), $atts, 0);
             $trace->log('[filterAtts accepted]');
         } else {
-            // TODO: deal w/ nested txp:article[_custom] tags.
+            // TODO: deal w/ nested txp:article[_custom] tags. See https://github.com/textpattern/textpattern/issues/1009
             $trace->log('[filterAtts ignored]');
         }
     }
@@ -862,5 +877,5 @@ function postpone_process($pass = null)
 {
     global $pretext, $txp_atts;
 
-    $txp_atts['process'] = intval($pass === null ? $pretext['secondpass'] + 2 : $pass);
+    $txp_atts['txp-process'] = intval($pass === null ? $pretext['secondpass'] + 2 : $pass);
 }

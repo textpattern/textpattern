@@ -2,10 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -43,6 +42,12 @@ define("cs", ': ');
  */
 
 define("ln", str_repeat('-', 24).n);
+
+/**
+ * @ignore
+ */
+
+define("priv", '=== ');
 
 global $files;
 
@@ -175,7 +180,7 @@ function doDiagnostics()
 
     $urlparts = parse_url(hu);
     $mydomain = $urlparts['host'];
-
+    $path_to_index = $path_to_site."/index.php";
     $is_apache = stristr(serverSet('SERVER_SOFTWARE'), 'Apache') || is_callable('apache_get_version');
     $real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 
@@ -186,41 +191,22 @@ function doDiagnostics()
     $fail = array();
     $now = time();
     $heading = gTxt('tab_diagnostics');
-    $isUpdate = false;
+    $isUpdate = defined('TXP_UPDATE_DONE');
 
     if (!$txp_is_dev) {
-        if ($step === 'update' && defined('TXP_UPDATE')) {
-            // @todo Gather messages from the ugrade/install scripts (perhaps via
-            // a FlashMessage structure) and present them above pre-flight check.
-            $heading = gTxt('welcome_to_txp', array('{version}' => txp_version));
-            $isUpdate = true;
-            Txp::get('Textpattern\Admin\Tools')->removeFiles(txpath, 'setup');
-        }
-
         // Check for Textpattern updates, at most once every 24 hours.
-        // For legacy reasons, attempt an unserialize() first and if it fails,
-        // try the more recent json_decode().
-        // @todo Entirely remove unserialize() in some future version.
-        $lastCheck = get_pref('last_update_check', '');
-        $updateInfo = json_decode($lastCheck);
+        $lastCheck = json_decode(get_pref('last_update_check', ''), true);
 
-        if ($updateInfo === null && $lastCheck) {
-            $updateInfo = (object) unserialize($lastCheck);
+        if ($now > (@(int)$lastCheck['when'] + (60 * 60 * 24))) {
+            $lastCheck = checkUpdates();
         }
 
-        if (!$updateInfo || ($now > ($updateInfo->when + (60 * 60 * 24)))) {
-            if (!$updateInfo) {
-                $updateInfo = new \StdClass();
-            }
-
-            $updates = checkUpdates();
-            $updateInfo->msg = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
-            $updateInfo->when = $now;
-            set_pref('last_update_check', json_encode($updateInfo), 'publish', PREF_HIDDEN, 'text_input');
+        if (!empty($lastCheck['msg'])) {
+            $fail['textpattern_version_update'] = diag_msg_wrap($lastCheck['msg'], 'information');
         }
 
-        if (!empty($updateInfo->msg)) {
-            $fail['textpattern_version_update'] = diag_msg_wrap($updateInfo->msg, 'information');
+        if (!empty($lastCheck['msg2'])) {
+            $fail['textpattern_version_update_beta'] = diag_msg_wrap($lastCheck['msg2'], 'information');
         }
     }
 
@@ -233,25 +219,29 @@ function doDiagnostics()
     }
 
     if (!@is_dir($path_to_site)) {
-        $fail['path_to_site_inacc'] = diag_msg_wrap(gTxt('path_to_site_inacc').cs.$path_to_site);
+        $fail['path_to_site_inaccessible'] = diag_msg_wrap(gTxt('path_inaccessible', array('{path}' => $path_to_site)));
     }
 
     if (rtrim($siteurl, '/') != $siteurl) {
         $fail['site_trailing_slash'] = diag_msg_wrap(gTxt('site_trailing_slash').cs.$path_to_site, 'warning');
     }
 
-    if (!@is_file($path_to_site."/index.php") || !@is_readable($path_to_site."/index.php")) {
-        $fail['index_inaccessible'] = diag_msg_wrap("{$path_to_site}/index.php ".gTxt('is_inaccessible'));
+    if (!@is_file($path_to_index) || !@is_readable($path_to_index)) {
+        $fail['index_inaccessible'] = diag_msg_wrap(gTxt('path_inaccessible', array('{path}' => $path_to_index)));
     }
 
     $not_readable = array();
 
-    if (!@is_writable($path_to_site.'/'.$img_dir)) {
+    if (!@is_writable($path_to_site.DS.$img_dir)) {
         $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('img_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$img_dir}", 'warning');
     }
 
     if (!@is_writable($file_base_path)) {
         $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('file_base_path'), gTxt('dir_not_writable')).": {$file_base_path}", 'warning');
+    }
+
+    if (!@is_writable($path_to_site.DS.$skin_dir)) {
+        $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('skin_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$skin_dir}", 'warning');
     }
 
     if (!@is_writable($tempdir)) {
@@ -274,8 +264,8 @@ function doDiagnostics()
         $fail['file_uploads_disabled'] = diag_msg_wrap(gTxt('file_uploads_disabled'), 'information');
     }
 
-    if (@is_dir(txpath.DS.'setup')) {
-        $fail['setup_still_exists'] = diag_msg_wrap(txpath.DS."setup".DS.' '.gTxt('still_exists'), 'warning');
+    if (@is_dir(txpath.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup'))) {
+        $fail['setup_still_exists'] = diag_msg_wrap(gTxt('still_exists', array('{path}' => txpath.DS."setup".DS)), 'warning');
     }
 
     if (empty($tempdir)) {
@@ -386,6 +376,7 @@ function doDiagnostics()
     }
 
     $active_plugins = array();
+
     if ($rows = safe_rows("name, version, code_md5, MD5(code) AS md5", 'txp_plugin', "status > 0 ORDER BY name")) {
         foreach ($rows as $row) {
             $n = $row['name'].'-'.$row['version'];
@@ -410,8 +401,8 @@ function doDiagnostics()
             $gd_support[] = 'GIF';
         }
 
-         // Aside: In PHP 5.3, they chose to add a previously unemployed capital
-         // "E" to the array key.
+        // Aside: In PHP 5.3, they chose to add a previously unemployed capital
+        // "E" to the array key.
         if (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support'])) {
             $gd_support[] = 'JPG';
         }
@@ -431,7 +422,7 @@ function doDiagnostics()
             '{supported}' => $gd_support,
         ));
     } else {
-        $gd = gTxt('gd_unavailable');
+        $gd = gTxt('unavailable');
     }
 
     if (realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir'])) {
@@ -469,178 +460,191 @@ function doDiagnostics()
 
     $out = array();
 
-    if (!$isUpdate) {
-        echo n.tag_start('div', array('id' => 'diagnostics')).
-            hed(gTxt('diagnostic_info'), 2);
+    echo n.tag_start('div', array('id' => 'diagnostics')).
+        hed(gTxt('diagnostic_info'), 2);
 
-        $fmt_date = '%Y-%m-%d %H:%M:%S';
+    $fmt_date = '%Y-%m-%d %H:%M:%S';
 
-        $dets = array(
-            'low'  => gTxt('low'),
-            'high' => gTxt('high'),
-        );
+    $dets = array(
+        'low'  => gTxt('low'),
+        'high' => gTxt('high'),
+    );
 
-        $out = array(
-            form(
-                eInput('diag').
-                inputLabel(
-                    'diag_detail_level',
-                    selectInput('step', $dets, $step, 0, 1, 'diag_detail_level'),
-                    'detail',
-                    '',
-                    array('class' => 'txp-form-field diagnostic-details-level'),
-                    ''
-                )
-            ),
+    $out = array(
+        form(
+            eInput('diag').
+            inputLabel(
+                'diag_detail_level',
+                selectInput('step', $dets, $step, 0, 1, 'diag_detail_level'),
+                'detail',
+                '',
+                array('class' => 'txp-form-field diagnostic-details-level'),
+                ''
+            ).
+            inputLabel(
+                'diag_clear_private',
+                checkbox('diag_clear_private', 1, false, 0, 'diag_clear_private'),
+                'diag_clear_private', 'diag_clear_private', array('class' => 'txp-form-field'),
+                ''
+            )
+        ),
 
-            '<textarea class="code" id="diagnostics-detail" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr" readonly>',
+        '<textarea class="code" id="diagnostics-detail" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr" readonly>',
+        '</textarea>',
 
-            gTxt('txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
+        '<textarea style="display:none;" id="diagnostics-data" data-txproot="'.dirname(txpath).'">',
 
-            gTxt('last_update').cs.gmstrftime($fmt_date, $dbupdatetime).'/'.gmstrftime($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
+        gTxt('txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
 
-            gTxt('document_root').cs.@$_SERVER['DOCUMENT_ROOT'].(($real_doc_root != @$_SERVER['DOCUMENT_ROOT']) ? ' ('.$real_doc_root.')' : '').n,
+        gTxt('last_update').cs.gmstrftime($fmt_date, $dbupdatetime).'/'.gmstrftime($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
 
-            '$path_to_site'.cs.$path_to_site.n,
+        priv.gTxt('web_domain').cs.$siteurl.n,
 
-            gTxt('txp_path').cs.txpath.n,
+        priv.gTxt('document_root').cs.@$_SERVER['DOCUMENT_ROOT'].(($real_doc_root != @$_SERVER['DOCUMENT_ROOT']) ? ' ('.$real_doc_root.')' : '').n,
 
-            gTxt('permlink_mode').cs.$permlink_mode.n,
+        priv.'$path_to_site'.cs.$path_to_site.n,
 
-            (ini_get('open_basedir')) ? 'open_basedir: '.ini_get('open_basedir').n : '',
+        priv.gTxt('txp_path').cs.txpath.n,
 
-            (ini_get('upload_tmp_dir')) ? 'upload_tmp_dir: '.ini_get('upload_tmp_dir').n : '',
+        gTxt('permlink_mode').cs.$permlink_mode.n,
 
-            gTxt('tempdir').cs.$tempdir.n,
+        (ini_get('open_basedir')) ? 'open_basedir: '.ini_get('open_basedir').n : '',
 
-            gTxt('web_domain').cs.$siteurl.n,
+        (ini_get('upload_tmp_dir')) ? 'upload_tmp_dir: '.ini_get('upload_tmp_dir').n : '',
 
-            gTxt('php_version').cs.phpversion().n,
+        gTxt('tempdir').cs.$tempdir.n,
 
-            ($is_register_globals) ? gTxt('register_globals').cs.$is_register_globals.n : '',
+        gTxt('php_version').cs.phpversion().n,
 
-            gTxt('gd_library').cs.$gd.n,
+        ($is_register_globals) ? gTxt('register_globals').cs.$is_register_globals.n : '',
 
-            gTxt('server').' TZ: '.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
-            gTxt('server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
-            strip_tags(gTxt('is_dst')).cs.$is_dst.n,
-            strip_tags(gTxt('auto_dst')).cs.$auto_dst.n,
-            strip_tags(gTxt('gmtoffset')).cs.$timezone_key.sp."($gmtoffset)".n,
+        gTxt('gd_library').cs.$gd.n,
 
-            'MySQL'.cs.mysqli_get_server_info($DB->link).n,
-            gTxt('db_server_time').cs.$db_server_time.n,
-            gTxt('db_server_timeoffset').cs.$db_server_timeoffset.' s'.n,
-            gTxt('db_global_timezone').cs.$db_global_timezone.n,
-            gTxt('db_session_timezone').cs.$db_session_timezone.n,
+        gTxt('server').' TZ: '.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
+        gTxt('server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
+        strip_tags(gTxt('is_dst')).cs.$is_dst.n,
+        strip_tags(gTxt('auto_dst')).cs.$auto_dst.n,
+        strip_tags(gTxt('gmtoffset')).cs.$timezone_key.sp."($gmtoffset)".n,
 
-            gTxt('locale').cs.$locale.n,
+        'MySQL'.cs.$DB->version.' ('.getThing('SELECT @@GLOBAL.version_comment').') '.n,
+        gTxt('db_server_time').cs.$db_server_time.n,
+        gTxt('db_server_timeoffset').cs.$db_server_timeoffset.' s'.n,
+        gTxt('db_global_timezone').cs.$db_global_timezone.n,
+        gTxt('db_session_timezone').cs.$db_session_timezone.n,
 
-            (isset($_SERVER['SERVER_SOFTWARE'])) ? gTxt('server').cs.$_SERVER['SERVER_SOFTWARE'].n : '',
+        gTxt('locale').cs.$locale.n,
 
-            (is_callable('apache_get_version')) ? gTxt('apache_version').cs.@apache_get_version().n : '',
+        (isset($_SERVER['SERVER_SOFTWARE'])) ? gTxt('server').cs.$_SERVER['SERVER_SOFTWARE'].n : '',
 
-            gTxt('php_sapi_mode').cs.PHP_SAPI.n,
+        (is_callable('apache_get_version')) ? gTxt('apache_version').cs.@apache_get_version().n : '',
 
-            gTxt('rfc2616_headers').cs.ini_get('cgi.rfc2616_headers').n,
+        gTxt('php_sapi_mode').cs.PHP_SAPI.n,
 
-            gTxt('os_version').cs.php_uname('s').' '.php_uname('r').n,
+        gTxt('rfc2616_headers').cs.ini_get('cgi.rfc2616_headers').n,
 
-            gTxt('theme_name').cs.$theme_name.sp.$theme_manifest['version'].n,
+        gTxt('os_version').cs.php_uname('s').' '.php_uname('r').n,
 
-            ($active_plugins ? gTxt('active_plugins').cs.n.t.join(n.t, $active_plugins).n : ''),
+        gTxt('theme_name').cs.$theme_name.sp.@$theme_manifest['version'].n,
 
-            $fail
-            ? n.gTxt('preflight_check').cs.n.ln.join("\n", doStripTags($fail)).n.ln
-            : '',
+        ($active_plugins ? gTxt('active_plugins').cs.n.t.join(n.t, $active_plugins).n : ''),
 
-            ($is_apache && is_readable($path_to_site.'/.htaccess'))
-            ?    n.gTxt('htaccess_contents').cs.n.ln.txpspecialchars(join('', file($path_to_site.'/.htaccess'))).n.ln
-            :    '',
-        );
+        $fail
+        ? n.gTxt('preflight_check').cs.n.ln.join("\n", doStripTags($fail)).n.ln
+        : '',
 
-        if ($step == 'high') {
-            $out[] = n.'Charset (default/config)'.cs.$DB->default_charset.'/'.$DB->charset.n;
+        ($is_apache && is_readable($path_to_site.'/.htaccess'))
+        ?    n.gTxt('htaccess_contents').cs.n.ln.txpspecialchars(join('', file($path_to_site.'/.htaccess'))).n.ln
+        :    '',
+    );
 
-            $result = safe_query("SHOW variables LIKE 'character_se%'");
-
-            while ($row = mysqli_fetch_row($result)) {
-                $out[] = $row[0].cs.$row[1].n;
-
-                if ($row[0] == 'character_set_connection') {
-                    $conn_char = $row[1];
-                }
-            }
-
-            $table_names = array(PFX.'textpattern');
-            $result = safe_query("SHOW TABLES LIKE '".PFX."txp\_%'");
-
-            while ($row = mysqli_fetch_row($result)) {
-                $table_names[] = $row[0];
-            }
-
-            $table_msg = array();
-
-            foreach ($table_names as $table) {
-                $ctr = safe_query("SHOW CREATE TABLE $table");
-                if (!$ctr) {
-                    unset($table_names[$table]);
-                    continue;
-                }
-
-                $row = mysqli_fetch_assoc($ctr);
-                $ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is', '\\1', $row['Create Table']);
-                if (isset($conn_char) && !stristr($ctcharset, 'CREATE') && ($conn_char != $ctcharset)) {
-                    $table_msg[] = "$table is $ctcharset";
-                }
-
-                $ctr = safe_query("CHECK TABLE $table");
-                $row = mysqli_fetch_assoc($ctr);
-                if (in_array($row['Msg_type'], array('error', 'warning'))) {
-                    $table_msg[] = $table.cs.$row['Msg_Text'];
-                }
-            }
-
-            if ($table_msg == array()) {
-                $table_msg = (count($table_names) < 17) ?  array('-') : array('OK');
-            }
-
-            $out[] = count($table_names).' Tables'.cs.implode(', ', $table_msg).n;
-
-            $cf = preg_grep('/^custom_\d+/', getThings("DESCRIBE `".PFX."textpattern`"));
-            $out[] = n.get_pref('max_custom_fields', 10).sp.gTxt('custom').cs.
-                        implode(', ', $cf).sp.'('.count($cf).')'.n;
-
-            $extns = get_loaded_extensions();
-            $extv = array();
-
-            foreach ($extns as $e) {
-                $extv[] = $e.(phpversion($e) ? '/'.phpversion($e) : '');
-            }
-
-            $out[] = n.gTxt('php_extensions').cs.join(', ', $extv).n;
-
-            if (is_callable('apache_get_modules')) {
-                $out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n;
-            }
-
-            if (@is_array($pretext_data) and count($pretext_data) > 1) {
-                $out[] = n.gTxt('pretext_data').cs.txpspecialchars(join('', array_slice($pretext_data, 1, 20))).n;
-            }
-
-            $out[] = n;
-
-            if ($md5s = check_file_integrity(INTEGRITY_MD5)) {
-                foreach ($md5s as $f => $checksum) {
-                    $out[] = $f.cs.n.t.(!$checksum ? gTxt('unknown') : $checksum).n;
-                }
-            }
-
-            $out[] = n.ln;
+    if ($step == 'high') {
+        $lastCheck = json_decode(get_pref('last_update_check', ''), true);
+        if (!empty($lastCheck['msg']) || !empty($lastCheck['msg2'])) {
+            $out[] = 'Last update check: '.strftime('%Y-%m-%d %H:%M:%S', $lastCheck['when']).', '.strip_tags($lastCheck['msg']).' '.strip_tags($lastCheck['msg2']).n;
         }
 
-        $out[] = callback_event('diag_results', $step).n;
-        $out[] = '</textarea>';
+        $out[] = n.'Charset (default/config)'.cs.$DB->default_charset.'/'.$DB->charset.n;
+
+        $result = safe_query("SHOW variables LIKE 'character_se%'");
+
+        while ($row = mysqli_fetch_row($result)) {
+            $out[] = $row[0].cs.$row[1].n;
+
+            if ($row[0] == 'character_set_connection') {
+                $conn_char = $row[1];
+            }
+        }
+
+        $table_names = array(PFX.'textpattern');
+        $result = safe_query("SHOW TABLES LIKE '".PFX."txp\_%'");
+
+        while ($row = mysqli_fetch_row($result)) {
+            $table_names[] = $row[0];
+        }
+
+        $table_msg = array();
+
+        foreach ($table_names as $table) {
+            $ctr = safe_query("SHOW CREATE TABLE $table");
+
+            if (!$ctr) {
+                unset($table_names[$table]);
+                continue;
+            }
+
+            $row = mysqli_fetch_assoc($ctr);
+            $ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is', '\\1', $row['Create Table']);
+
+            if (isset($conn_char) && !stristr($ctcharset, 'CREATE') && ($conn_char != $ctcharset)) {
+                $table_msg[] = "$table is $ctcharset";
+            }
+
+            $ctr = safe_query("CHECK TABLE $table");
+            $row = mysqli_fetch_assoc($ctr);
+
+            if (in_array($row['Msg_type'], array('error', 'warning'))) {
+                $table_msg[] = $table.cs.$row['Msg_Text'];
+            }
+        }
+
+        if ($table_msg == array()) {
+            $table_msg = (count($table_names) < 17) ?  array('-') : array('OK');
+        }
+
+        $out[] = count($table_names).' Tables'.cs.implode(', ', $table_msg).n;
+
+        $cf = preg_grep('/^custom_\d+/', getThings("DESCRIBE `".PFX."textpattern`"));
+        $out[] = n.get_pref('max_custom_fields', 10).sp.gTxt('custom').cs.
+                    implode(', ', $cf).sp.'('.count($cf).')'.n;
+
+        $extns = get_loaded_extensions();
+        $extv = array();
+
+        foreach ($extns as $e) {
+            $extv[] = $e.(phpversion($e) ? '/'.phpversion($e) : '');
+        }
+
+        if (is_callable('apache_get_modules')) {
+            $out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n;
+        }
+
+        if (@is_array($pretext_data) and count($pretext_data) > 1) {
+            $out[] = n.gTxt('pretext_data').cs.txpspecialchars(join('', array_slice($pretext_data, 1, 20))).n;
+        }
+
+        $out[] = n;
+
+        if ($md5s = check_file_integrity(INTEGRITY_MD5)) {
+            foreach ($md5s as $f => $checksum) {
+                $out[] = $f.cs.n.t.(!$checksum ? gTxt('unknown') : $checksum).n;
+            }
+        }
+
+        $out[] = n.ln;
     }
+
+    $out[] = callback_event('diag_results', $step).n;
+    $out[] = '</textarea>';
 
     echo join('', $out),
         n.tag_end('div'). // End of #diagnostics.
@@ -650,13 +654,6 @@ function doDiagnostics()
 
 /**
  * Checks for Textpattern updates.
- *
- * This function uses XML-RPC to do an active remote connection to
- * rpc.textpattern.com. Created connections are not cached, scheduled or
- * delayed, and each subsequent call to the function creates a new connection.
- *
- * These connections do not transmit any identifiable information. Just an
- * anonymous UID assigned for the installation on the first run.
  *
  * @return  array|null When updates are found returns an array consisting keys 'version', 'msg'
  * @example
@@ -668,28 +665,29 @@ function doDiagnostics()
 
 function checkUpdates()
 {
-    require_once txpath.'/lib/IXRClass.php';
-    $client = new IXR_Client('http://rpc.textpattern.com');
+    $response = @json_decode(file_get_contents('https://textpattern.io/version.json'), true);
+    $release = @$response['textpattern-version']['release'];
+    $prerelease = @$response['textpattern-version']['prerelease'];
+    $version = get_pref('version');
 
-    if (!$client->query('tups.getTXPVersion', get_pref('blog_uid'))) {
-        return array('version' => 0, 'msg' => 'problem_connecting_rpc_server');
-    } else {
-        $out = array();
-        $response = $client->getResponse();
+    $lastCheck = array(
+        'when'  => time(),
+        'msg'   => '',
+        'msg2'  => '',
+    );
 
-        if (is_array($response)) {
-            ksort($response);
-            $version = get_pref('version');
-
-            // Go through each available branch (x.y), but only return the
-            // _highest_ version.
-            foreach ($response as $key => $val) {
-                if (version_compare($version, $val) < 0) {
-                    $out = array('version' => $val, 'msg' => 'textpattern_update_available');
-                }
-            }
-
-            return $out;
+    if (!empty($release)) {
+        if (version_compare($version, $release) < 0) {
+            $lastCheck['msg'] = gTxt('textpattern_update_available', array('{version}' => $release));
         }
+
+        if (version_compare($version, $prerelease) < 0) {
+            $lastCheck['msg2'] = gTxt('textpattern_update_available_beta', array('{version}' => $prerelease));
+        }
+    } else {
+        $lastCheck['msg'] = gTxt('problem_connecting_update_server');
     }
+    set_pref('last_update_check', json_encode($lastCheck, TEXTPATTERN_JSON), 'publish', PREF_HIDDEN, 'text_input');
+
+    return $lastCheck;
 }

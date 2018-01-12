@@ -2,9 +2,9 @@
 
 /*
  * Textpattern Content Management System
- * https://textpattern.io/
+ * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -191,7 +191,7 @@ class DB
         if (isset($txpcfg['client_flags'])) {
             $this->client_flags = $txpcfg['client_flags'];
         } else {
-            $this->client_flags = 0;
+            $this->client_flags = MYSQLI_CLIENT_FOUND_ROWS;
         }
 
         if (isset($txpcfg['dbcharset'])) {
@@ -381,6 +381,7 @@ function safe_escape_like($in = '')
 function safe_query($q = '', $debug = false, $unbuf = false)
 {
     global $DB, $trace, $production_status;
+
     $method = ($unbuf) ? MYSQLI_USE_RESULT : MYSQLI_STORE_RESULT;
 
     if (!$q) {
@@ -518,7 +519,7 @@ function safe_upsert($table, $set, $where, $debug = false)
     // FIXME: lock the table so this is atomic?
     $r = safe_update($table, $set, $where, $debug);
 
-    if ($r and (mysqli_affected_rows($DB->link) or safe_count($table, $where, $debug))) {
+    if ($r && (mysqli_affected_rows($DB->link) || safe_count($table, $where, $debug))) {
         return $r;
     } else {
         return safe_insert($table, join(', ', array(implode(', ', $whereset), $set)), $debug);
@@ -1480,7 +1481,7 @@ function now($type, $update = false)
     static $nows = array();
     static $time = null;
 
-    if (!in_array($type, array('posted', 'expires', 'created'))) {
+    if (!in_array($type = strtolower($type), array('posted', 'expires', 'created'))) {
         return false;
     }
 
