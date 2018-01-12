@@ -114,6 +114,10 @@ function skin_list($message = '')
                 'column' => 'txp_skin.title',
                 'label'  => gTxt('title'),
             ),
+            'description' => array(
+                'column' => 'txp_skin.description',
+                'label'  => gTxt('description'),
+            ),
             'author' => array(
                 'column' => 'txp_skin.author',
                 'label'  => gTxt('author'),
@@ -255,7 +259,7 @@ function skin_list($message = '')
 
             $tdAuthor = txpspecialchars($skin_author);
 
-            $skin_author_uri ? $tdAuthor = href($tdAuthor, $skin_author_uri) : '';
+            empty($skin_author_uri) or $tdAuthor = href($tdAuthor, $skin_author_uri);
 
             $tds = td(fInput('checkbox', 'selected[]', $skin_name), '', 'txp-list-col-multi-edit')
                 .hCell(
@@ -486,8 +490,8 @@ function skin_skin_change_pageby()
 
 function skin_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
-    $clean = checkbox('clean', 1, true, 0, 'clean')
-            .tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean'))
+    $clean = checkbox2('clean', get_pref('remove_extra_templates', true), 0, 'clean')
+            .n.tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean'))
             .popHelp('remove_extra_templates');
 
     $methods = array(
@@ -506,11 +510,17 @@ function skin_multiedit_form($page, $sort, $dir, $crit, $search_method)
 
 function skin_multi_edit()
 {
+    global $prefs;
+
     extract(psa(array(
         'edit_method',
         'selected',
         'clean',
     )));
+
+    if ($clean != get_pref('remove_extra_templates', true)) {
+        set_pref('remove_extra_templates', $prefs['remove_extra_templates'] = !empty($clean), 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+    }
 
     if (!$selected || !is_array($selected)) {
         return skin_list();

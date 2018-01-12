@@ -159,7 +159,6 @@ class Core
 
         $pf = array();
         $pf['file_base_path'] = dirname(txpath).DS.'files';
-        $pf['skin_base_path'] = dirname(txpath).DS.'themes';
         $pf['path_to_site']   = dirname(txpath);
         $pf['tempdir']        = find_temp_dir();
         $pf['siteurl']        = $siteurl;

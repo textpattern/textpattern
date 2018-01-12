@@ -262,14 +262,18 @@ function get_public_themes_list()
 {
     global $public_themes;
 
-    $public_themes = $out = array();
+    $public_themes = $out = $files = array();
 
-    if ($files = glob(txpath.DS.'{setup,..}'.DS.'themes'.DS.'*'.DS.'manifest.json', GLOB_BRACE)) {
+    foreach (array('setup', '..') as $root) {
+        $files = array_merge($files, (array) glob(txpath.DS.$root.DS.'themes'.DS.'*'.DS.'manifest.json'));
+    }
+
+    if ($files = array_filter($files)) {
         foreach ($files as $file) {
             $file = realpath($file);
             $DS = preg_quote(DS);
 
-            if (preg_match('%^(.*'.$DS.'(\w+))'.$DS.'manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
+            if (preg_match('%^(.*'.$DS.'([\w\-\.]+))'.$DS.'manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
                 if (@$manifest['txp-type'] == 'textpattern-theme') {
                     $key = str_replace(txpath, '', $mm[1]);
                     $key = str_replace(dirname(txpath), '', $key);
