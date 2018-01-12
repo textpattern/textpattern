@@ -1068,7 +1068,7 @@ namespace Textpattern\Skin {
         {
             return new RecIteratorIterator(
                 new RecRegexIterator(
-                    new RecDirIterator(get_pref('skin_base_path')),
+                    new RecDirIterator(get_pref('path_to_site').DS.get_pref('skin_dir')),
                     '/^manifest\.json/i'
                 ),
                 1

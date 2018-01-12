@@ -214,7 +214,7 @@ function form_multi_edit()
             callback_event('forms_deleted', '', 0, compact('affected', 'skin'));
             update_lastmod('form_deleted', $affected);
 
-            $message = gTxt('forms_deleted', array('{list}' => join(', ', $affected)));
+            $message = gTxt('form_deleted', array('{list}' => join(', ', $affected)));
         }
 
         if ($method == 'changetype') {
@@ -432,9 +432,9 @@ function form_edit($message = '', $refresh_partials = false)
         )
     );
 
-    // Tag builder dialog.
+    // Tag builder dialog placeholder.
     echo n.tag(
-        form_tagbuild(),
+        '&nbsp;',
         'div', array(
             'class'      => 'txp-tagbuilder-content',
             'id'         => 'tagbuild_links',
@@ -512,7 +512,7 @@ function form_save()
                         )) {
                             update_lastmod('form_created', compact('newname', 'name', 'type', 'Form'));
 
-                            $message = gTxt('form_created', array('{name}' => $newname));
+                            $message = gTxt('form_created', array('{list}' => $newname));
 
                             callback_event($copy ? 'form_duplicated' : 'form_created', '', 0, $name, $newname);
                         } else {
@@ -534,7 +534,7 @@ function form_save()
                     )) {
                         update_lastmod('form_saved', compact('newname', 'name', 'type', 'Form'));
 
-                        $message = gTxt('form_updated', array('{name}' => $newname));
+                        $message = gTxt('form_updated', array('{list}' => $newname));
 
                         callback_event('form_updated', '', 0, $name, $newname);
                     } else {
@@ -644,48 +644,6 @@ function formTypes($type, $blank_first = true, $id = 'type', $disabled = false)
 }
 
 /**
- * Return a list of tag builder tags.
- *
- * @return HTML
- */
-
-function form_tagbuild()
-{
-    $listActions = graf(
-        href('<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> '.gTxt('expand_all'), '#', array(
-            'class'         => 'txp-expand-all',
-            'aria-controls' => 'tagbuild_links',
-        )).
-        href('<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> '.gTxt('collapse_all'), '#', array(
-            'class'         => 'txp-collapse-all',
-            'aria-controls' => 'tagbuild_links',
-        )), array('class' => 'txp-actions')
-    );
-
-    // Generate the tagbuilder links.
-    // Format of each entry is popTagLink -> array ( gTxt string, class/ID ).
-    $tagbuild_items = array(
-        'article'         => array('articles', 'article-tags'),
-        'link'            => array('links', 'link-tags'),
-        'comment'         => array('comments', 'comment-tags'),
-        'comment_details' => array('comment_details', 'comment-detail-tags'),
-        'comment_form'    => array('comment_form', 'comment-form-tags'),
-        'search_result'   => array('search_results_form', 'search-result-tags'),
-        'file_download'   => array('file_download_tags', 'file-tags'),
-        'category'        => array('category_tags', 'category-tags'),
-        'section'         => array('section_tags', 'section-tags'),
-    );
-
-    $tagbuild_links = '';
-
-    foreach ($tagbuild_items as $tb => $item) {
-        $tagbuild_links .= wrapRegion($item[1].'_group', popTagLinks($tb), $item[1], $item[0], $item[1]);
-    }
-
-    return $listActions.$tagbuild_links;
-}
-
-/**
  * Renders form name field.
  *
  * @param  array  $rs Record set
@@ -791,13 +749,19 @@ function form_partial_type_value($rs)
 
 function form_partial_template($rs)
 {
+    global $event;
+
     $out = inputLabel(
         'form',
         '<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($rs['form']).'</textarea>',
         array(
             'form_code',
             n.span(
-                href(span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.gTxt('tagbuilder'), '#', array('class' => 'txp-tagbuilder-dialog')),
+                href(
+                    span(null, array('class' => 'ui-icon ui-extra-icon-code')).' '.gTxt('tagbuilder'),
+                    array('event' => 'tag', 'panel' => $event),
+                    array('class' => 'txp-tagbuilder-dialog')
+                ),
                 array('class' => 'txp-textarea-options')
             )
         ),

@@ -886,7 +886,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
             unset($GLOBALS['ID']);
         }
 
-        return $newpath.sp.gTxt('upload_dir_perms');
+        return gTxt('directory_permissions', array('{path}' => $newpath));
     } elseif (empty($rs)) {
         $rs = safe_update('txp_image', $q, "id = $id");
 
@@ -2997,7 +2997,7 @@ function since($stamp)
         $since = ($days <= 1) ? "1 ".gTxt('day') : "$days ".gTxt('days');
     }
 
-    return $since.' '.gTxt('ago'); // sorry, this needs to be hacked until a truly multilingual version is done
+    return gTxt('ago', array('{since}' => $since));
 }
 
 /**

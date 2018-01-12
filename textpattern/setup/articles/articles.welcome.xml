@@ -31,7 +31,7 @@ This is a Textpattern article excerpt. Article excerpts are optional but can be 
     <comment>
         <name>Donald Swain</name>
         <email>donald-swain@example.com</email>
-        <web>https://forum.textpattern.io/</web>
+        <web>https://docs.textpattern.io/brand/donald-swain</web>
         <message><![CDATA[<p>I enjoy your site very much.</p>]]></message>
     </comment>
 </article>

@@ -355,7 +355,7 @@ namespace Textpattern\Skin {
 
         public static function getBasePath()
         {
-            return get_pref('skin_base_path');
+            return get_pref('path_to_site').DS.get_pref('skin_dir');
         }
 
         /**

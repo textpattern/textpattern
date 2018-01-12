@@ -133,7 +133,7 @@ function link_list($message = '')
             ),
             'name' => array(
                 'column' => 'txp_link.linkname',
-                'label'  => gTxt('name'),
+                'label'  => gTxt('title'),
             ),
             'url' => array(
                 'column' => 'txp_link.url',

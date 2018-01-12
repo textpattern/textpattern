@@ -95,7 +95,7 @@ function list_languages($message = '')
 
     $grid = '';
     $done = array();
-    $in_use_by = safe_rows('val, user_name', 'txp_prefs', "name = 'language_ui' AND val in (".join(',', quote_list(array_keys($represented_lang))).") AND user_name != '".doSlash($txp_user)."'");
+    $in_use_by = safe_rows('val, user_name', 'txp_prefs', "name = 'language_ui' AND val in ('".join("','", doSlash(array_keys($represented_lang)))."') AND user_name != '".doSlash($txp_user)."'");
 
     $langUse = array();
 
@@ -303,6 +303,8 @@ function get_language()
     $lang_code = gps('lang_code');
     $langName = fetchLangName($lang_code);
     $txpLang = Txp::get('\Textpattern\L10n\Lang');
+    $installed = $txpLang->installed();
+    $installString = in_array($lang_code, $installed) ? 'language_updated' : 'language_installed';
 
     if ($txpLang->installFile($lang_code)) {
         callback_event('lang_installed', 'file', false, $lang_code);
@@ -310,7 +312,7 @@ function get_language()
         $txpLang->available(TEXTPATTERN_LANG_AVAILABLE, TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE);
         Txp::get('\Textpattern\Plugin\Plugin')->installTextpacks();
 
-        return list_languages(gTxt('language_updated', array('{name}' => $langName)));
+        return list_languages(gTxt($installString, array('{name}' => $langName)));
     }
 
     return list_languages(array(gTxt('language_not_installed', array('{name}' => $langName)), E_ERROR));
@@ -385,6 +387,8 @@ function get_textpack()
 
 function remove_language()
 {
+    global $event;
+
     require_privs('lang.edit');
 
     $lang_code = gps('lang_code');
@@ -401,7 +405,7 @@ function remove_language()
         $ui_lang = get_pref('language_ui', $site_lang, true);
         $ui_lang = (array_key_exists($ui_lang, $represented_lang)) ? $ui_lang : $site_lang;
         set_pref('language_ui', $ui_lang, 'admin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
-        load_lang($ui_lang);
+        load_lang($ui_lang, $event);
     } else {
         $msg = gTxt('cannot_delete', array('{thing}' => $langName));
     }
