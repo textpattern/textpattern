@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -33,7 +33,7 @@ namespace Textpattern\Textpack;
 class Parser
 {
     /**
-     * Stores the default language.
+     * The default language.
      *
      * @var string
      */
@@ -41,12 +41,20 @@ class Parser
     protected $language;
 
     /**
-     * Stores the default owner.
+     * The default owner.
      *
      * @var string
      */
 
     protected $owner;
+
+    /**
+     * The list of strings in the pack, separated by language.
+     *
+     * @var array
+     */
+
+    protected $packs = array();
 
     /**
      * Constructor.
@@ -59,7 +67,7 @@ class Parser
     }
 
     /**
-     * Sets the default language.
+     * Set the default language.
      *
      * @param string $language The language code
      */
@@ -70,7 +78,7 @@ class Parser
     }
 
     /**
-     * Sets the default owner.
+     * Set the default owner.
      *
      * @param string $owner The default owner
      */
@@ -81,7 +89,7 @@ class Parser
     }
 
     /**
-     * Converts a Textpack to an array.
+     * Convert a Textpack to an array.
      *
      * <code>
      * $textpack = \Textpattern\Textpack\Parser();
@@ -121,6 +129,7 @@ class Parser
         $language = $this->language;
         $owner = $this->owner;
 
+        // Are we dealing with the .ini file format?
         if (strpos($textpack, '=>') === false
             && $sections = parse_ini_string('[common]'.n.strtr($textpack, $replacements), true)) {
             if (!empty($sections['@common'])
@@ -150,9 +159,11 @@ class Parser
                 }
             }
 
-            return $out;
+            $this->packs[$language] = $out;
+            return;
         }
 
+        // Not .ini, must be dealing with a regular .txt/.textpack file format.
         $lines = explode(n, (string)$textpack);
 
         foreach ($lines as $line) {
@@ -167,7 +178,6 @@ class Parser
             // remains for reading legacy files, but is no longer used.
             if (preg_match('/^#@version\s+([^;\n]+);?([0-9]*)$/', $line, $m)) {
                 $version = $m[1];
-//                $lastmod = $m[2] !== false ? $m[2] : $lastmod;
                 continue;
             }
 
@@ -189,16 +199,13 @@ class Parser
                 continue;
             }
 
-            // Translation. Note that the array is numerically indexed.
-            // Indexing by name seems attractive because it means merging default
-            // strings is simpler. But doing so means that installing combined
-            // textpacks (such as those from plugins with multiple languages
-            // in one file) results in only the last pack being available.
+            // Translation.
             if (preg_match('/^([\w\-]+)\s*=>\s*(.+)$/', $line, $m)) {
                 if (!empty($m[1]) && !empty($m[2]) && (empty($group) || in_array($event, $group))) {
-                    $out[] = array(
+                    $langToStore = $language ? $language : $this->language;
+                    $this->packs[$langToStore][] = array(
                         'name'    => $m[1],
-                        'lang'    => $language,
+                        'lang'    => $langToStore,
                         'data'    => $m[2],
                         'event'   => $event,
                         'owner'   => $owner,
@@ -209,6 +216,34 @@ class Parser
             }
         }
 
+        return;
+    }
+
+    /**
+     * Fetch the language strings extracted by the last-parsed Textpack.
+     *
+     * @return array
+     */
+
+    public function getStrings($lang_code)
+    {
+        $out = array();
+
+        if (isset($this->packs[$lang_code])) {
+            $out = $this->packs[$lang_code];
+        }
+
         return $out;
+    }
+
+    /**
+     * Fetch the list of languages used in the last-parsed Textpack.
+     *
+     * @return array
+     */
+
+    public function getLanguages()
+    {
+        return array_keys($this->packs);
     }
 }

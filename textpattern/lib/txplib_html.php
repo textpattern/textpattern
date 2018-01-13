@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -916,7 +916,7 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
 
     $inlineHelp = (isset($help[1])) ? $help[1] : '';
 
-    if ($label) {
+    if ($label !== '') {
         $labelContent = tag(gTxt($label).popHelp($help[0]), 'label', array('for' => $name)).$tools;
     } else {
         $labelContent = gTxt($name).popHelp($help[0]).$tools;
@@ -1297,36 +1297,13 @@ function popTag($var, $text, $atts = array())
 }
 
 /**
- * Renders a list of tag builder links.
- *
- * @param  string $type Tag type
- * @return string HTML
- */
-
-function popTagLinks($type)
-{
-    global $event;
-
-    include txpath.'/lib/taglib.php';
-
-    $arname = $type.'_tags';
-
-    $out = array();
-
-    foreach ($$arname as $a) {
-        $out[] = tag(popTag($a, gTxt('tag_'.$a), array('panel' => $event, 'step' => 'build')), 'li');
-    }
-
-    return n.tag(n.join(n, $out).n, 'ul', array('class' => 'plain-list'));
-}
-
-/**
  * Renders an admin-side message text.
  *
  * @param  string $thing    Subject
  * @param  string $thething Predicate (strong)
  * @param  string $action   Object
  * @return string HTML
+ * @deprecated in 4.7.0
  */
 
 function messenger($thing, $thething = '', $action = '')
@@ -1683,7 +1660,7 @@ function cookie_box($classname, $form = true)
         });
 EOF;
 
-    $out .= script_js($js, false);
+    $out .= script_js($js);
 
     if ($form) {
         if (serverSet('QUERY_STRING')) {

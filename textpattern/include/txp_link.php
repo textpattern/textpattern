@@ -4,8 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -134,7 +133,7 @@ function link_list($message = '')
             ),
             'name' => array(
                 'column' => 'txp_link.linkname',
-                'label'  => gTxt('name'),
+                'label'  => gTxt('title'),
             ),
             'url' => array(
                 'column' => 'txp_link.url',
@@ -178,12 +177,6 @@ function link_list($message = '')
         $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
 
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_link'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-4col-alt')
-        );
-
     $searchBlock =
         n.tag(
             $search->renderForm('link_list', $search_render_options),
@@ -203,186 +196,157 @@ function link_list($message = '')
             );
     }
 
-    $contentBlockStart = n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        ));
-
     $createBlock = implode(n, $createBlock);
-
-    if ($total < 1) {
-        if ($criteria != 1) {
-            echo $searchBlock.
-                $contentBlockStart.
-                $createBlock.
-                graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_results_found'),
-                    array('class' => 'alert-block information')
-                );
-        } else {
-            echo $contentBlockStart.
-                $createBlock.
-                graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_links_recorded'),
-                    array('class' => 'alert-block information')
-                );
-        }
-
-        echo n.tag_end('div'). // End of .txp-layout-1col.
-            n.'</div>'; // End of .txp-layout.;
-
-        return;
-    }
+    $contentBlock = '';
 
     $paginator = new \Textpattern\Admin\Paginator();
     $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $searchBlock.$contentBlockStart.$createBlock;
+    if ($total < 1) {
+        $contentBlock .= graf(
+            span(null, array('class' => 'ui-icon ui-icon-info')).' '.
+            gTxt($criteria == 1 ? 'no_links_recorded' : 'no_results_found'),
+            array('class' => 'alert-block information')
+        );
+    } else {
+        $rs = safe_query(
+            "SELECT
+                txp_link.id,
+                UNIX_TIMESTAMP(txp_link.date) AS uDate,
+                txp_link.category,
+                txp_link.url,
+                txp_link.linkname,
+                txp_link.description,
+                txp_link.author,
+                txp_users.RealName AS realname,
+                txp_category.Title AS category_title
+            FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
+        );
 
-    $rs = safe_query(
-        "SELECT
-            txp_link.id,
-            UNIX_TIMESTAMP(txp_link.date) AS uDate,
-            txp_link.category,
-            txp_link.url,
-            txp_link.linkname,
-            txp_link.description,
-            txp_link.author,
-            txp_users.RealName AS realname,
-            txp_category.Title AS category_title
-        FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
-    );
+        if ($rs && numRows($rs)) {
+            $show_authors = !has_single_author('txp_link');
 
-    if ($rs && numRows($rs)) {
-        $show_authors = !has_single_author('txp_link');
-
-        echo n.tag_start('form', array(
-                'class'  => 'multi_edit_form',
-                'id'     => 'links_form',
-                'name'   => 'longform',
-                'method' => 'post',
-                'action' => 'index.php',
-            )).
-            n.tag_start('div', array('class' => 'txp-listtables')).
-            n.tag_start('table', array('class' => 'txp-list')).
-            n.tag_start('thead').
-            tr(
-                hCell(
-                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+            $contentBlock .= n.tag_start('form', array(
+                    'class'  => 'multi_edit_form',
+                    'id'     => 'links_form',
+                    'name'   => 'longform',
+                    'method' => 'post',
+                    'action' => 'index.php',
+                )).
+                n.tag_start('div', array('class' => 'txp-listtables')).
+                n.tag_start('table', array('class' => 'txp-list')).
+                n.tag_start('thead').
+                tr(
+                    hCell(
+                        fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                            '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                    ).
+                    column_head(
+                        'ID', 'id', 'link', true, $switch_dir, $crit, $search_method,
+                            (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
+                    ).
+                    column_head(
+                        'name', 'name', 'link', true, $switch_dir, $crit, $search_method,
+                            (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
+                    ).
+                    column_head(
+                        'description', 'description', 'link', true, $switch_dir, $crit, $search_method,
+                            (('description' == $sort) ? "$dir " : '').'txp-list-col-description'
+                    ).
+                    column_head(
+                        'date', 'date', 'link', true, $switch_dir, $crit, $search_method,
+                            (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
+                    ).
+                    column_head(
+                        'category', 'category', 'link', true, $switch_dir, $crit, $search_method,
+                            (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
+                    ).
+                    column_head(
+                        'url', 'url', 'link', true, $switch_dir, $crit, $search_method,
+                            (('url' == $sort) ? "$dir " : '').'txp-list-col-url'
+                    ).
+                    (
+                        $show_authors
+                        ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method,
+                            (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
+                        : ''
+                    )
                 ).
-                column_head(
-                    'ID', 'id', 'link', true, $switch_dir, $crit, $search_method,
-                        (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
-                ).
-                column_head(
-                    'name', 'name', 'link', true, $switch_dir, $crit, $search_method,
-                        (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
-                ).
-                column_head(
-                    'description', 'description', 'link', true, $switch_dir, $crit, $search_method,
-                        (('description' == $sort) ? "$dir " : '').'txp-list-col-description'
-                ).
-                column_head(
-                    'date', 'date', 'link', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
-                ).
-                column_head(
-                    'category', 'category', 'link', true, $switch_dir, $crit, $search_method,
-                        (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
-                ).
-                column_head(
-                    'url', 'url', 'link', true, $switch_dir, $crit, $search_method,
-                        (('url' == $sort) ? "$dir " : '').'txp-list-col-url'
-                ).
-                (
-                    $show_authors
-                    ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method,
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
-                    : ''
-                )
-            ).
-            n.tag_end('thead').
-            n.tag_start('tbody');
+                n.tag_end('thead').
+                n.tag_start('tbody');
 
-        $validator = new Validator();
+            $validator = new Validator();
 
-        while ($a = nextRow($rs)) {
-            extract($a, EXTR_PREFIX_ALL, 'link');
+            while ($a = nextRow($rs)) {
+                extract($a, EXTR_PREFIX_ALL, 'link');
 
-            $edit_url = array(
-                'event'         => 'link',
-                'step'          => 'link_edit',
-                'id'            => $link_id,
-                'sort'          => $sort,
-                'dir'           => $dir,
-                'page'          => $page,
-                'search_method' => $search_method,
-                'crit'          => $crit,
-            );
+                $edit_url = array(
+                    'event'         => 'link',
+                    'step'          => 'link_edit',
+                    'id'            => $link_id,
+                    'sort'          => $sort,
+                    'dir'           => $dir,
+                    'page'          => $page,
+                    'search_method' => $search_method,
+                    'crit'          => $crit,
+                );
 
-            $validator->setConstraints(array(new CategoryConstraint($link_category, array('type' => 'link'))));
-            $vc = $validator->validate() ? '' : ' error';
+                $validator->setConstraints(array(new CategoryConstraint($link_category, array('type' => 'link'))));
+                $vc = $validator->validate() ? '' : ' error';
 
-            if ($link_category) {
-                $link_category = span(txpspecialchars($link_category_title), array('title' => $link_category));
+                if ($link_category) {
+                    $link_category = span(txpspecialchars($link_category_title), array('title' => $link_category));
+                }
+
+                $can_edit = has_privs('link.edit') || ($link_author === $txp_user && has_privs('link.edit.own'));
+                $view_url = txpspecialchars($link_url);
+
+                $contentBlock .= tr(
+                    td(
+                        fInput('checkbox', 'selected[]', $link_id), '', 'txp-list-col-multi-edit'
+                    ).
+                    hCell(
+                        ($can_edit ? href($link_id, $edit_url, ' title="'.gTxt('edit').'"') : $link_id), '', ' class="txp-list-col-id" scope="row"'
+                    ).
+                    td(
+                        ($can_edit ? href(txpspecialchars($link_linkname), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($link_linkname)), '', 'txp-list-col-name'
+                    ).
+                    td(
+                        txpspecialchars($link_description), '', 'txp-list-col-description'
+                    ).
+                    td(
+                        gTime($link_uDate), '', 'txp-list-col-created date'
+                    ).
+                    td(
+                        $link_category, '', 'txp-list-col-category category'.$vc
+                    ).
+                    td(
+                        href($view_url, $view_url, ' rel="external" target="_blank"'), '', 'txp-list-col-url txp-contain'
+                    ).
+                    (
+                        $show_authors
+                        ? td(span(txpspecialchars($link_realname), array('title' => $link_author)), '', 'txp-list-col-author name')
+                        : ''
+                    )
+                );
             }
 
-            $can_edit = has_privs('link.edit') || ($link_author === $txp_user && has_privs('link.edit.own'));
-            $view_url = txpspecialchars($link_url);
-
-            echo tr(
-                td(
-                    fInput('checkbox', 'selected[]', $link_id), '', 'txp-list-col-multi-edit'
-                ).
-                hCell(
-                    ($can_edit ? href($link_id, $edit_url, ' title="'.gTxt('edit').'"') : $link_id), '', ' class="txp-list-col-id" scope="row"'
-                ).
-                td(
-                    ($can_edit ? href(txpspecialchars($link_linkname), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($link_linkname)), '', 'txp-list-col-name'
-                ).
-                td(
-                    txpspecialchars($link_description), '', 'txp-list-col-description'
-                ).
-                td(
-                    gTime($link_uDate), '', 'txp-list-col-created date'
-                ).
-                td(
-                    $link_category, '', 'txp-list-col-category category'.$vc
-                ).
-                td(
-                    href($view_url, $view_url, ' rel="external" target="_blank"'), '', 'txp-list-col-url txp-contain'
-                ).
-                (
-                    $show_authors
-                    ? td(span(txpspecialchars($link_realname), array('title' => $link_author)), '', 'txp-list-col-author name')
-                    : ''
-                )
-            );
+            $contentBlock .= n.tag_end('tbody').
+                n.tag_end('table').
+                n.tag_end('div').
+                link_multiedit_form($page, $sort, $dir, $crit, $search_method).
+                tInput().
+                n.tag_end('form');
         }
-
-        echo n.tag_end('tbody').
-            n.tag_end('table').
-            n.tag_end('div').
-            link_multiedit_form($page, $sort, $dir, $crit, $search_method).
-            tInput().
-            n.tag_end('form').
-
-            n.tag_start('div', array(
-                'class' => 'txp-navigation',
-                'id'    => $event.'_navigation',
-            )).
-            $paginator->render().
-            nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div');
     }
 
-    echo n.tag_end('div'). // End of .txp-layout-1col.
-        n.'</div>'; // End of .txp-layout.
+    $pageBlock = $paginator->render().
+        nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
+
+    $table = new \Textpattern\Admin\Table($event);
+    echo $table->render(compact('total', 'criteria'), $searchBlock, $createBlock, $contentBlock, $pageBlock);
 }
 
 /**

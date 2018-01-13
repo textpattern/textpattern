@@ -4,8 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -181,7 +180,7 @@ function doDiagnostics()
 
     $urlparts = parse_url(hu);
     $mydomain = $urlparts['host'];
-
+    $path_to_index = $path_to_site."/index.php";
     $is_apache = stristr(serverSet('SERVER_SOFTWARE'), 'Apache') || is_callable('apache_get_version');
     $real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 
@@ -220,25 +219,29 @@ function doDiagnostics()
     }
 
     if (!@is_dir($path_to_site)) {
-        $fail['path_to_site_inacc'] = diag_msg_wrap(gTxt('path_to_site_inacc').cs.$path_to_site);
+        $fail['path_to_site_inaccessible'] = diag_msg_wrap(gTxt('path_inaccessible', array('{path}' => $path_to_site)));
     }
 
     if (rtrim($siteurl, '/') != $siteurl) {
         $fail['site_trailing_slash'] = diag_msg_wrap(gTxt('site_trailing_slash').cs.$path_to_site, 'warning');
     }
 
-    if (!@is_file($path_to_site."/index.php") || !@is_readable($path_to_site."/index.php")) {
-        $fail['index_inaccessible'] = diag_msg_wrap("{$path_to_site}/index.php ".gTxt('is_inaccessible'));
+    if (!@is_file($path_to_index) || !@is_readable($path_to_index)) {
+        $fail['index_inaccessible'] = diag_msg_wrap(gTxt('path_inaccessible', array('{path}' => $path_to_index)));
     }
 
     $not_readable = array();
 
-    if (!@is_writable($path_to_site.'/'.$img_dir)) {
+    if (!@is_writable($path_to_site.DS.$img_dir)) {
         $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('img_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$img_dir}", 'warning');
     }
 
     if (!@is_writable($file_base_path)) {
         $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('file_base_path'), gTxt('dir_not_writable')).": {$file_base_path}", 'warning');
+    }
+
+    if (!@is_writable($path_to_site.DS.$skin_dir)) {
+        $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('skin_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$skin_dir}", 'warning');
     }
 
     if (!@is_writable($tempdir)) {
@@ -263,13 +266,11 @@ function doDiagnostics()
 
     if (isset($txpcfg['multisite_root_path'])) {
         if (@is_dir($txpcfg['multisite_root_path'].DS.'admin'.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles($txpcfg['multisite_root_path'].DS.'admin', 'setup'))) {
-            $multisite_setup_msg['admin'] =$txpcfg['multisite_root_path'].DS.'admin'.DS."setup".DS.' '.gTxt('still_exists');
+            $fail['setup_still_exists'] = diag_msg_wrap(gTxt('still_exists', array('{path}' => $txpcfg['multisite_root_path'].DS.'admin'.DS."setup".DS)), 'warning');
         }
-        if(isset($multisite_setup_msg))
-            $fail['setup_still_exists'] = diag_msg_wrap(join('<br/>', $multisite_setup_msg), 'warning');
     } else {
         if (@is_dir(txpath.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup'))) {
-            $fail['setup_still_exists'] = diag_msg_wrap(txpath.DS."setup".DS.' '.gTxt('still_exists'), 'warning');
+            $fail['setup_still_exists'] = diag_msg_wrap(gTxt('still_exists', array('{path}' => txpath.DS."setup".DS)), 'warning');
         }
     }
 
@@ -384,6 +385,7 @@ function doDiagnostics()
     }
 
     $active_plugins = array();
+
     if ($rows = safe_rows("name, version, code_md5, MD5(code) AS md5", 'txp_plugin', "status > 0 ORDER BY name")) {
         foreach ($rows as $row) {
             $n = $row['name'].'-'.$row['version'];
@@ -638,8 +640,6 @@ function doDiagnostics()
         foreach ($extns as $e) {
             $extv[] = $e.(phpversion($e) ? '/'.phpversion($e) : '');
         }
-
-        $out[] = n.gTxt('php_extensions').cs.join(', ', $extv).n;
 
         if (is_callable('apache_get_modules')) {
             $out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n;

@@ -4,8 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -236,13 +235,14 @@ function page_title($atts)
 
 function css($atts)
 {
-    global $css, $doctype;
+    global $css, $doctype, $pretext;
 
     extract(lAtts(array(
         'format' => 'url',
         'media'  => 'screen',
         'name'   => $css,
         'rel'    => 'stylesheet',
+        'theme'  => $pretext['skin'],
         'title'  => '',
     ), $atts));
 
@@ -251,9 +251,9 @@ function css($atts)
     }
 
     if (has_handler('css.url')) {
-        $url = callback_event('css.url', '', false, compact('name'));
+        $url = callback_event('css.url', '', false, compact('name', 'theme'));
     } else {
-        $url = hu.'css.php?n='.urlencode($name);
+        $url = hu.'css.php?n='.urlencode($name).'&t='.urlencode($theme);
     }
 
     if ($format == 'link') {
@@ -2993,7 +2993,7 @@ function keywords($atts)
 
     extract(lAtts(array(
         'class'   => '',
-        'break'     => ',',
+        'break'   => ',',
         'wraptag' => ''
     ), $atts));
 
@@ -3137,10 +3137,19 @@ function search_result_excerpt($atts)
     assert_article();
 
     extract(lAtts(array(
-        'break'   => ' &#8230;',
-        'hilight' => 'strong',
-        'limit'   => 5,
+        'break'     => ' &#8230;', // Deprecated in 4.7.0.
+        'hilight'   => 'strong',
+        'limit'     => 5,
+        'separator' => ' &#8230;',
     ), $atts));
+
+    if (isset($atts['break'])) {
+        trigger_error(gTxt('deprecated_attribute_with', array('{name}' => 'break', '{with}' => 'separator')), E_USER_NOTICE);
+
+        if (!isset($atts['separator'])) {
+            $separator = $break;
+        }
+    }
 
     $m = $pretext['m'];
     $q = $pretext['q'];
@@ -3165,13 +3174,11 @@ function search_result_excerpt($atts)
         $r[] = trim($concat[$i]);
     }
 
-    $concat = join($break.n, $r);
+    $concat = join($separator.n, $r);
     $concat = preg_replace('/^[^>]+>/U', '', $concat);
-// TODO:
-
     $concat = preg_replace($regex_hilite, "<$hilight>$1</$hilight>", $concat);
 
-    return ($concat) ? trim($break.$concat.$break) : '';
+    return ($concat) ? trim($separator.$concat.$separator) : '';
 }
 
 // -------------------------------------------------------------
@@ -3668,7 +3675,7 @@ function meta_keywords($atts)
     extract(lAtts(array(
         'escape'    => null,
         'format'    => 'meta', // or empty for raw value
-        'separator' => '',
+        'separator' => null,
     ), $atts));
 
     $out = '';
@@ -3676,7 +3683,7 @@ function meta_keywords($atts)
     if ($id_keywords) {
         $content = ($escape === null) ? txpspecialchars($id_keywords) : $id_keywords;
 
-        if ($separator !== '') {
+        if ($separator !== null) {
             $content = implode($separator, do_list($content));
         }
 
@@ -4344,6 +4351,14 @@ function if_status($atts, $thing = null)
 function page_url($atts)
 {
     global $pretext;
+    static $specials = null;
+
+    $specials !== null or $specials = array(
+        'images_root' => ihu.get_pref('img_dir'),
+        'themes_root' => hu.get_pref('skin_dir'),
+        'theme_path'  => hu.get_pref('skin_dir').'/'.$pretext['skin'],
+        'theme'       => $pretext['skin'],
+    );
 
     extract(lAtts(array(
         'type'    => 'request_uri',
@@ -4353,6 +4368,10 @@ function page_url($atts)
 
     if ($type == 'pg' && $pretext['pg'] == '') {
         return '1';
+    }
+
+    if (isset($specials[$type])) {
+        return $specials[$type];
     }
 
     if (isset($pretext[$type])) {
@@ -5029,7 +5048,8 @@ function txp_eval($atts, $thing = null)
 
 function txp_escape($atts, $thing = '')
 {
-    static $textile = null, $tr = array("'" => "',\"'\",'");
+    global $locale;
+    static $textile = null, $format = null, $tr = array("'" => "',\"'\",'");
     $tidy = false;
 
     extract(lAtts(array(
@@ -5046,11 +5066,21 @@ function txp_escape($atts, $thing = '')
             case 'json':
                 $thing = substr(json_encode($thing, TEXTPATTERN_JSON), 1, -1);
                 break;
-            case 'number':
+            case 'number': case 'float':
                 $thing = floatval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, 	FILTER_FLAG_ALLOW_FRACTION) : $thing);
+
+                if ($attr === 'number') {
+                    $format !== null
+                        or !($format = class_exists('NumberFormatter'))
+                        or $format = new NumberFormatter($locale, NumberFormatter::DECIMAL);
+                    !$format or $thing = $format->format($thing);
+                } else {
+                    $thing = str_replace(',', '.', $thing);
+                }
+
                 break;
             case 'integer':
-                $thing = intval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_INT) : $thing);
+                $thing = intval($tidy ? preg_replace('/[^\d\+\-\.]/', '', $thing) : $thing);
                 break;
             case 'tags':
                 $thing = strip_tags($thing);

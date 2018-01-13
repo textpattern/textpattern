@@ -19,8 +19,8 @@
     "url": "https://github.com/textpattern/textpattern/issues"
   },
   "devDependencies": {
-    "phplint": "1.7.4",
-    "uglify-js": "3.2.2"
+    "phplint": "2.0.0",
+    "uglify-js": "3.3.5"
   },
   "dependencies": {
     "blueimp-file-upload": "9.19.2",

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -886,7 +886,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
             unset($GLOBALS['ID']);
         }
 
-        return $newpath.sp.gTxt('upload_dir_perms');
+        return gTxt('directory_permissions', array('{path}' => $newpath));
     } elseif (empty($rs)) {
         $rs = safe_update('txp_image', $q, "id = $id");
 
@@ -2256,6 +2256,25 @@ function sanitizeForPage($text)
 }
 
 /**
+ * Sanitises a string for use in a theme template's name.
+ *
+ * Just runs sanitizeForPage() followed by sanitizeForFile(), then limits
+ * the number of characters to 63.
+ *
+ * @param   string $text The string
+ * @return  string
+ * @package Filter
+ * @access  private
+ */
+
+function sanitizeForTheme($text)
+{
+    $out = sanitizeForFile(sanitizeForPage($text));
+
+    return Txp::get('\Textpattern\Type\StringType', $out)->substring(0, 63)->getString();
+}
+
+/**
  * Transliterates a string to ASCII.
  *
  * Used to generate RFC 3986 compliant and pretty ASCII-only URLs.
@@ -2871,7 +2890,8 @@ function get_form_types()
 /**
  * Gets a list of essential form templates.
  *
- * These forms can not be deleted or renamed.
+ * These forms can not be deleted or renamed. The array keys hold
+ * the form names, the array values their group.
  *
  * The list forms can be extended with a 'form.essential > forms'
  * callback event. Callback functions get passed three arguments: '$event',
@@ -2889,12 +2909,12 @@ function get_essential_forms()
 
     if ($essential === null) {
         $essential = array(
-            'comments',
-            'comments_display',
-            'comment_form',
-            'default',
-            'plainlinks',
-            'files',
+            'comments'         => 'comment',
+            'comments_display' => 'comment',
+            'comment_form'     => 'comment',
+            'default'          => 'article',
+            'plainlinks'       => 'link',
+            'files'            => 'file',
         );
 
         callback_event_ref('form.essential', 'forms', 0, $essential);
@@ -2977,7 +2997,7 @@ function since($stamp)
         $since = ($days <= 1) ? "1 ".gTxt('day') : "$days ".gTxt('days');
     }
 
-    return $since.' '.gTxt('ago'); // sorry, this needs to be hacked until a truly multilingual version is done
+    return gTxt('ago', array('{since}' => $since));
 }
 
 /**
@@ -4246,14 +4266,16 @@ function fetch_form($name)
     global $production_status, $trace;
 
     static $forms = array();
+    global $pretext;
 
     $name = (string) $name;
+    $skin = $pretext['skin'];
 
     if (!isset($forms[$name])) {
         if (has_handler('form.fetch')) {
-            $form = callback_event('form.fetch', '', false, compact('name'));
+            $form = callback_event('form.fetch', '', false, compact('name', 'skin'));
         } else {
-            $form = safe_field('Form', 'txp_form', "name = '".doSlash($name)."'");
+            $form = safe_field('Form', 'txp_form', "name = '".doSlash($name)."' AND skin = '".doSlash($skin)."'");
         }
 
         if ($form === false) {
@@ -4266,7 +4288,7 @@ function fetch_form($name)
     }
 
     if ($production_status === 'debug') {
-        $trace->log("[Form: '$name']");
+        $trace->log("[Form: '$skin.$name']");
     }
 
     return $forms[$name];
@@ -4327,7 +4349,8 @@ function parse_form($name)
  * to a 'page.fetch' callback event. Any value returned by the callback function
  * will be used as the template markup.
  *
- * @param   string $name The template
+ * @param   string      $name The template
+ * @param   string      $theme The public theme
  * @return  string|bool The page template, or FALSE on error
  * @package TagParser
  * @since   4.6.0
@@ -4335,21 +4358,21 @@ function parse_form($name)
  * echo fetch_page('default');
  */
 
-function fetch_page($name)
+function fetch_page($name, $theme)
 {
     global $trace;
 
     if (has_handler('page.fetch')) {
-        $page = callback_event('page.fetch', '', false, compact('name'));
+        $page = callback_event('page.fetch', '', false, compact('name', 'theme'));
     } else {
-        $page = safe_field("user_html", 'txp_page', "name = '".doSlash($name)."'");
+        $page = safe_field('user_html', 'txp_page', "name = '".doSlash($name)."' AND skin = '".doSlash($theme)."'");
     }
 
     if ($page === false) {
         return false;
     }
 
-    $trace->log("[Page: '$name']");
+    $trace->log("[Page: '$theme.$name']");
 
     return $page;
 }
@@ -4357,8 +4380,9 @@ function fetch_page($name)
 /**
  * Parses a page template.
  *
- * @param   string $name The template name
- * @param   string $page or default content
+ * @param   string      $name  The template to parse
+ * @param   string      $theme The public theme
+ * @param   string      $page  Default content to parse
  * @return  string|bool The parsed page template, or FALSE on error
  * @since   4.6.0
  * @package TagParser
@@ -4366,12 +4390,12 @@ function fetch_page($name)
  * echo parse_page('default');
  */
 
-function parse_page($name, $page = false)
+function parse_page($name, $theme, $page = '')
 {
     global $pretext, $trace;
 
-    if ($name) {
-        $page = fetch_page($name);
+    if (!$page) {
+        $page = fetch_page($name, $theme);
     }
 
     if ($page !== false) {
@@ -5039,7 +5063,7 @@ function getCustomFields()
         foreach ($cfs as $name) {
             preg_match('/(\d+)/', $name, $match);
 
-            if (!empty($prefs[$name])) {
+            if ($prefs[$name] !== '') {
                 $out[$match[1]] = strtolower($prefs[$name]);
             }
         }
@@ -5165,7 +5189,7 @@ function txp_status_header($status = '200 OK')
 
 function txp_die($msg, $status = '503', $url = '')
 {
-    global $connected, $txp_error_message, $txp_error_status, $txp_error_code;
+    global $connected, $txp_error_message, $txp_error_status, $txp_error_code, $pretext;
 
     // Make it possible to call this function as a tag, e.g. in an article
     // <txp:txp_die status="410" />.
@@ -5216,8 +5240,19 @@ function txp_die($msg, $status = '503', $url = '')
     }
 
     $out = false;
+
     if ($connected && @txpinterface == 'public') {
-        $out = safe_field('user_html', 'txp_page', "name IN('error_{$code}', 'error_default') ORDER BY name LIMIT 1");
+        if ($pretext['skin']) {
+            $skin = $pretext['skin'];
+        } else {
+            $skin = safe_field('skin', 'txp_section', "name = 'default'");
+        }
+
+        $out = safe_field(
+            'user_html',
+            'txp_page',
+            "name IN('error_{$code}', 'error_default') AND skin='".doSlash($skin)."' ORDER BY name LIMIT 1"
+        );
     }
 
     if ($out === false) {
@@ -5250,6 +5285,7 @@ eod;
             array($status, $msg),
             $out
         );
+
         die($out);
     }
 }
@@ -6857,9 +6893,6 @@ function get_files_content($dir, $ext)
 
 function get_prefs_theme()
 {
-    //FIXME: After merge 'themes' branch
-
-    return array();
     $out = @json_decode(file_get_contents(txpath.'/setup/data/theme.prefs'), true);
     if (empty($out)) {
         return array();
@@ -6911,4 +6944,76 @@ function real_max_upload_size($user_max, $php = true)
 
     // 2^53 - 1 is max safe Javascript integer, let 8192Tb
     return number_format(min($real_max, pow(2, 53) - 1), 0, '.', '');
+}
+
+/**
+ * Replaces the JSON_PRETTY_PRINT flag in json_encode for PHP versions under 5.4.
+ *
+ * From https://stackoverflow.com/a/9776726
+ *
+ * @param  string $json The JSON contents to prettify;
+ * @return string Prettified JSON contents.
+ */
+
+function JSONPrettyPrint($json)
+{
+    $result = '';
+    $level = 0;
+    $in_quotes = false;
+    $in_escape = false;
+    $ends_line_level = null;
+    $json_length = strlen($json);
+
+    for ($i = 0; $i < $json_length; $i++) {
+        $char = $json[$i];
+        $new_line_level = null;
+        $post = "";
+
+        if ($ends_line_level !== null) {
+            $new_line_level = $ends_line_level;
+            $ends_line_level = null;
+        }
+
+        if ($in_escape) {
+            $in_escape = false;
+        } elseif ($char === '"') {
+            $in_quotes = !$in_quotes;
+        } elseif (! $in_quotes) {
+            switch ($char) {
+                case '}':
+                case ']':
+                    $level--;
+                    $ends_line_level = null;
+                    $new_line_level = $level;
+                    break;
+                case '{':
+                case '[':
+                    $level++;
+                case ',':
+                    $ends_line_level = $level;
+                    break;
+                case ':':
+                    $post = " ";
+                    break;
+                case " ":
+                case "    ":
+                case "\n":
+                case "\r":
+                    $char = "";
+                    $ends_line_level = $new_line_level;
+                    $new_line_level = null;
+                    break;
+            }
+        } elseif ($char === '\\') {
+            $in_escape = true;
+        }
+
+        if ($new_line_level !== null) {
+            $result .= "\n".str_repeat("    ", $new_line_level);
+        }
+
+        $result .= $char.$post;
+    }
+
+    return $result;
 }
