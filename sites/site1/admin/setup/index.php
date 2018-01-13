@@ -26,23 +26,39 @@ ob_start(null, 2048);
 @include '../../private/config.php';
 ob_end_clean();
 
-$multisite_admin_path = dirname(dirname(__FILE__));
+/**
+ * System is Windows if TRUE.
+ *
+ * @package System
+ */
+
+define('IS_WIN', strpos(strtoupper(PHP_OS), 'WIN') === 0);
+
+/**
+ * Directory separator character.
+ *
+ * @package File
+ */
+
+define('DS', defined('DIRECTORY_SEPARATOR') ? DIRECTORY_SEPARATOR : (IS_WIN ? '\\' : '/'));
+
+$multisite_admin_path = dirname(__FILE__, 2);
 
 // Does 'vendors' symlink resolve to correct location?
-if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
+if (!is_dir(realpath($multisite_admin_path.DS.'vendors'))) {
 
     // NO: 'vendor' symlink does not exist or does not resolve correctly.
     if (!isset($_POST['txp-root-path'])) {
 
         // No Textpattern root path specified: request path from user.
         echo '<h3>Textpattern root directory not found.</h3>'.
-            '<p>Your symlinks may be missing, or your <code>/sites</code> folder is in a non-standard location.</p>'.
-            '<p>Your <code>sites</code> directory is: <code>'.dirname(dirname($multisite_admin_path)).'</code></p>'.
+            '<p>Your symlinks may be missing, or your <code>sites</code> folder is in a non-standard location.</p>'.
+            '<p>Your <code>sites</code> directory is: <code>'.dirname($multisite_admin_path, 2).'</code></p>'.
             '<p>Please enter the full path to the root directory of your textpattern installation.</p>'.
             '<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'">'.
             '<label for="txp-root-path">Path to your base textpattern directory: </label><br>'.
             '<input type="text" id="txp-root-path" name="txp-root-path" size="35"'.
-            'placeholder="'.dirname(dirname(dirname($multisite_admin_path))).'/textpattern">'.
+            'placeholder="'.dirname($multisite_admin_path, 3).DS.'textpattern">'.
             '<button>Submit</button></form>';
         exit;
     } else {
@@ -50,7 +66,7 @@ if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
         // User has specified Textpattern root path.
         $multisite_txp_root_path = rtrim(htmlspecialchars($_POST['txp-root-path']), '/');
 
-        if (!is_dir(realpath($multisite_txp_root_path.'/textpattern'))) {
+        if (!is_dir(realpath($multisite_txp_root_path.DS.'textpattern'))) {
 
             // Root path incorrect, please retry -> back to beginning.
             echo '<h3>Textpattern root directory details incorrect</h3>'.
@@ -62,7 +78,7 @@ if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
 
             // Root path is correct. Proceed to create symlinks.
             echo '<h3>Textpattern root directory found. Thank you!</h3>'.
-                '<p>Path to sites directory: <code>'.dirname(dirname($multisite_admin_path)).'</code></p>'.
+                '<p>Path to sites directory: <code>'.dirname($multisite_admin_path, 2).'</code></p>'.
                 '<p>Path to Textpattern directory: <code>'.$multisite_txp_root_path.'</code></p>'.
                 '<h3>Creating symlinks</h3>';
 
@@ -77,12 +93,12 @@ if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
             );
             // Create symlinks.
             foreach ($symlinks as $symlink) {
-                unlink('../'.$symlink);
-                symlink($relative_path.'/textpattern/'.$symlink, '../'.$symlink);
+                unlink('..'.DS.$symlink);
+                symlink($relative_path.DS.'textpattern'.DS.$symlink, '..'.DS.$symlink);
 
                 // symlink resolves successfully?
-                if (realpath('../'.$symlink)) {
-                    echo '<p>Symlink created: <code>/admin/'.$symlink.'  »»»  '.readlink('../'.$symlink).'</code></p>';
+                if (realpath('..'.DS.$symlink)) {
+                    echo '<p>Symlink created: <code>'.DS.'admin'.DS.$symlink.'  »»»  '.readlink('..'.DS.$symlink).'</code></p>';
                 } else {
                     // If not successful, provide copy-and-paste symlink code to manually create symlinks.
                     if (!isset($title_shown)) {
@@ -90,7 +106,7 @@ if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
                             "<textarea cols=\"80\" rows=\"5\">cd ".$multisite_admin_path."/\n";
                         $title_shown = true;
                     }
-                    echo "ln -sf ".$relative_path."/textpattern/".$symlink."  ".$symlink."\n";
+                    echo "ln -sf ".$relative_path.DS."textpattern".DS.$symlink."  ".$symlink."\n";
                     if ($symlink === end($symlinks)) {
                       echo "</textarea><p> </p>";
                     }
@@ -106,18 +122,18 @@ if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
 
     // YES: vendor symlink resolves correctly. Proceed with regular multisite installation.
     if (!defined('txpath')) {
-        define("txpath", dirname(realpath(dirname(__FILE__).'/../vendors')));
+        define("txpath", dirname(realpath(dirname(__FILE__).DS.'..'.DS.'vendors')));
     }
 
     define("is_multisite", true);
-    define("multisite_root_path", dirname(dirname(dirname(__FILE__))));
+    define("multisite_root_path", dirname(__FILE__, 3));
 
-    include txpath.'/setup/index.php';
+    include txpath.DS.'setup'.DS.'index.php';
 }
 
 /**
  * Finds relative file system path between two file system paths.
- * From: https://gist.github.com/ohaal/2936041
+ * Based on: https://gist.github.com/ohaal/2936041
  *
  * @param  string  $frompath  Path to start from
  * @param  string  $topath    Path we want to end up in
@@ -126,8 +142,8 @@ if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
 
 function find_relative_path($frompath, $topath)
 {
-    $from = explode(DIRECTORY_SEPARATOR, $frompath); // Folders/File
-    $to = explode(DIRECTORY_SEPARATOR, $topath); // Folders/File
+    $from = explode(DS, $frompath); // Folders/File
+    $to = explode(DS, $topath); // Folders/File
     $relpath = '';
 
     $i = 0;
@@ -142,14 +158,14 @@ function find_relative_path($frompath, $topath)
     // Add '..' until the path is the same
     while ($i <= $j) {
         if (!empty($from[$j])) {
-            $relpath .= '..'.DIRECTORY_SEPARATOR;
+            $relpath .= '..'.DS;
         }
         $j--;
     }
     // Go to folder from where it starts differing
     while (isset($to[$i])) {
         if (!empty($to[$i])) {
-            $relpath .= $to[$i].DIRECTORY_SEPARATOR;
+            $relpath .= $to[$i].DS;
         }
         $i++;
     }
