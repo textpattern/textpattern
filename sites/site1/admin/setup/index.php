@@ -47,7 +47,7 @@ if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
             '<p>Please enter the full path to the root directory of your textpattern installation.</p>'.
             '<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'">'.
             '<label for="txp-root-path">Path to your base textpattern directory: </label><br>'.
-            '<input type="text" id="txp-root-path" name="txp-root-path" size="35"'.
+            '<input type="text" id="txp-root-path" name="txp-root-path" size="50"'.
             'placeholder="'.dirname($multisite_admin_path, 3).DS.'textpattern">'.
             '<button>Submit</button></form>';
         exit;
@@ -90,10 +90,10 @@ if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
                 if (realpath('..'.DS.$symlink)) {
                     echo '<p>Symlink created: <code>'.DS.'admin'.DS.$symlink.'  »»»  '.readlink('..'.DS.$symlink).'</code></p>';
                 } else {
-                    // If not successful, provide copy-and-paste symlink code to manually create symlinks.
+                    // If unsuccessful, provide copy-and-paste symlink code to manually create symlinks.
                     if (!isset($title_shown)) {
-                        echo "<p><strong style=\"color:red;\">Symlink(s) could not be created.</strong> Please create symlink manually:</p>".
-                            "<textarea cols=\"80\" rows=\"5\">cd ".$multisite_admin_path."/\n";
+                        echo "<p><strong style=\"color:red;\">Symlink(s) could not be created.</strong> Please create symlink(s) manually:</p>".
+                            "<textarea cols=\"80\" rows=\"8\" style=\"font-family: monospace;\">cd ".dirname($multisite_admin_path)."/\n";
                         $title_shown = true;
                     }
                     echo "ln -sf ".$relative_path.DS."textpattern".DS.$symlink."  ".$symlink."\n";
@@ -127,7 +127,7 @@ if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
  *
  * @param  string  $frompath  Path to start from
  * @param  string  $topath    Path we want to end up in
- * @return string             Path leading from $frompath to $topath
+ * @return string             Relative path from $frompath to $topath
  */
 
 function find_relative_path($frompath, $topath)
