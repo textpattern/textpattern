@@ -1,0 +1,4 @@
+# Inhibit directory listing
+Options -Indexes
+# Inhibit direct file downloads
+RewriteRule .*\.txp$ - [R=403,L]
