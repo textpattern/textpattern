@@ -75,20 +75,41 @@ if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
             // Calculate relative path.
             $relative_path = find_relative_path($multisite_admin_path, $multisite_txp_root_path);
 
-            // Required symlinks in /admin directory.
+            // Required symlinks in /sites subdirectories.
             $symlinks = array(
-                'admin-themes',
-                'textpattern.js',
-                'vendors'
+                'admin-themes' => array(
+                    'path'   => 'admin',
+                    'is_dir' => true
+                    ),
+                'textpattern.js' => array(
+                    'path'   => 'admin',
+                    'is_dir' => false
+                    ),
+                'vendors' => array(
+                    'path'   => 'admin',
+                    'is_dir' => true
+                    ),
+                'themes' => array(
+                    'path'   => 'public',
+                    'is_dir' => true
+                    )
             );
+            $lastkey = array_pop(array_keys($symlinks));
+
+            // Relative path from current /admin/setup directory to multisite base directory
+            $symlink_relpath = '..'.DS.'..'.DS;
+
             // Create symlinks.
-            foreach ($symlinks as $symlink) {
-                unlink('..'.DS.$symlink);
-                symlink($relative_path.DS.'textpattern'.DS.$symlink, '..'.DS.$symlink);
+            foreach ($symlinks as $symlink => $atts) {
+                $symlink_local = $atts['path'].DS.$symlink;
+                $symlink_target = $relative_path.DS. ($atts["path"] === "admin" ? 'textpattern'.DS : '') .$symlink;
+
+                unlink($symlink_relpath.$symlink_local);
+                symlink($symlink_target, $symlink_relpath.$symlink_local);
 
                 // symlink resolves successfully?
-                if (realpath('..'.DS.$symlink)) {
-                    echo '<p>Symlink created: <code>'.DS.'admin'.DS.$symlink.'  »»»  '.readlink('..'.DS.$symlink).'</code></p>';
+                if (realpath($symlink_relpath.$symlink_local)) {
+                    echo '<p>Symlink created: <code>'.$symlink_local.'  »»»  '.readlink($symlink_relpath.$symlink_local).'</code></p>';
                 } else {
                     // If unsuccessful, provide copy-and-paste symlink code to manually create symlinks.
                     if (!isset($title_shown)) {
@@ -96,8 +117,14 @@ if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
                             "<textarea cols=\"80\" rows=\"8\" style=\"font-family: monospace;\">cd ".dirname($multisite_admin_path)."/\n";
                         $title_shown = true;
                     }
-                    echo "ln -sf ".$relative_path.DS."textpattern".DS.$symlink."  ".$symlink."\n";
-                    if ($symlink === end($symlinks)) {
+                    if (IS_WIN) {
+                        // "mklink [/D] link target" on windows with /D flag for directory symlink
+                        echo "mklink ".($atts['is_dir'] === true ? "/D " : "").$atts['path'].DS.$symlink."  ".$symlink_target."\n";
+                    } else {
+                        // "ln -sf target link" on linux
+                        echo "ln -sf ".$symlink_target."  ".$atts['path'].DS.$symlink."\n";
+                    }
+                    if ($symlink === $lastkey) {
                       echo "</textarea><p> </p>";
                     }
                 }
