@@ -26,26 +26,16 @@ ob_start(null, 2048);
 @include '../../private/config.php';
 ob_end_clean();
 
-/**
- * System is Windows if TRUE.
- *
- * @package System
- */
-
-define('IS_WIN', strpos(strtoupper(PHP_OS), 'WIN') === 0);
-
-/**
- * Directory separator character.
- *
- * @package File
- */
-
-define('DS', defined('DIRECTORY_SEPARATOR') ? DIRECTORY_SEPARATOR : (IS_WIN ? '\\' : '/'));
-
 $multisite_admin_path = dirname(__FILE__, 2);
 
 // Does 'vendors' symlink resolve to correct location?
-if (!is_dir(realpath($multisite_admin_path.DS.'vendors'))) {
+if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
+
+    // System is Windows if TRUE.
+    define('IS_WIN', strpos(strtoupper(PHP_OS), 'WIN') === 0);
+
+    // Directory separator character.
+    define('DS', defined('DIRECTORY_SEPARATOR') ? DIRECTORY_SEPARATOR : (IS_WIN ? '\\' : '/'));
 
     // NO: 'vendor' symlink does not exist or does not resolve correctly.
     if (!isset($_POST['txp-root-path'])) {
@@ -122,13 +112,13 @@ if (!is_dir(realpath($multisite_admin_path.DS.'vendors'))) {
 
     // YES: vendor symlink resolves correctly. Proceed with regular multisite installation.
     if (!defined('txpath')) {
-        define("txpath", dirname(realpath(dirname(__FILE__).DS.'..'.DS.'vendors')));
+        define("txpath", dirname(realpath(dirname(__FILE__).'/../vendors')));
     }
 
     define("is_multisite", true);
     define("multisite_root_path", dirname(__FILE__, 3));
 
-    include txpath.DS.'setup'.DS.'index.php';
+    include txpath.'/setup/index.php';
 }
 
 /**
