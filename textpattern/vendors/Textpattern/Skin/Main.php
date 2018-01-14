@@ -98,8 +98,12 @@ namespace Textpattern\Skin {
          * @see                 getSkinsAssets(), getDefaultAssets().
          */
 
-        public function __construct($skins = null, $assets = null)
+        public function __construct($skins = null, $assets = null, $path = null)
         {
+            if ($path !== null) {
+                self::setBasePath($path);
+            }
+
             $skins ? $this->setSkinsAssets($skins, $assets) : '';
         }
 
@@ -454,7 +458,7 @@ namespace Textpattern\Skin {
          * @param string $from A skin oldname.
          */
 
-        protected function updateSkinInUse($to, $from = null)
+        public function updateSkinInUse($to, $from = null)
         {
             $updated = safe_update(
                 'txp_section',
@@ -912,7 +916,7 @@ namespace Textpattern\Skin {
 
         public static function getCurrent()
         {
-            return get_pref('skin_editing', 'default', true);
+            return get_pref('skin_editing', '', true);
         }
 
         /**
@@ -923,7 +927,8 @@ namespace Textpattern\Skin {
         {
             $skin ?: $skin = safe_field('skin', 'txp_section', 'name = "default"');
 
-            return set_pref('skin_editing', $skin, 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+            set_pref('skin_editing', $skin, 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+            return self::getCurrent();
         }
 
         /**
@@ -1113,7 +1118,7 @@ namespace Textpattern\Skin {
         {
             $installed = self::getInstalled();
 
-            if ($installed) {
+            if (count($installed) > 1) {
                 return form(
                     inputLabel(
                         'skin',

@@ -21,7 +21,7 @@
  * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
-function setup_db($cfg = '')
+function setup_db($cfg = array())
 {
     global $txpcfg, $DB, $prefs, $txp_user, $txp_groups;
     global $permlink_mode, $siteurl, $theme_name, $public_themes, $step;
@@ -29,29 +29,31 @@ function setup_db($cfg = '')
     include_once txpath.'/lib/admin_config.php';
 
     $siteurl = rtrim(@$cfg['site']['siteurl'], '/');
-    if (! preg_match('%^https?://%', $siteurl)) {
+
+    if (!preg_match('%^https?://%', $siteurl)) {
         $siteurl = 'http://'.$siteurl;
     }
 
-    // Determining the mode of permanent links
+    // Determine the mode of permanent links.
     ini_set('default_socket_timeout', 10);
     $s = md5(uniqid(rand(), true));
     $pretext_data = @file("{$siteurl}/{$s}/?txpcleantest=1");
+
     if (trim(@$pretext_data[0]) == md5("/{$s}/?txpcleantest=1")) {
         $permlink_mode = 'section_title';
     } else {
         $permlink_mode = 'messy';
     }
 
-    // Variable set
+    // Variable set.
     @define('hu', $siteurl.'/');
     $siteurl = preg_replace('%^https?://%', '', $siteurl);
     $siteurl = str_replace(' ', '%20', $siteurl);
     $theme_name = empty($cfg['site']['theme']) ? 'hive' : $cfg['site']['theme'];
 
     get_public_themes_list();
-    $public_theme = empty($public_themes[$cfg['site']['public_theme']]['themedir']) ? current(array_keys($public_themes)) : $cfg['site']['public_theme'];
 
+    $public_theme = empty($public_themes[$cfg['site']['public_theme']]['themedir']) ? current(array_keys($public_themes)) : $cfg['site']['public_theme'];
     $themedir = $public_themes[$public_theme]['themedir'];
 
     if (empty($cfg['site']['datadir'])) {
@@ -72,16 +74,12 @@ function setup_db($cfg = '')
         $datadir = $cfg['site']['datadir'];
     }
 
-    //FIXME: We are doing nothing, waiting for the further development of branch `themes`.
-    if (class_exists('\Textpattern\Skin\Skin')) {
-        $datadir = '';
-    }
-
     if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
         if (! empty($step)) {
             $step = 'step_printConfig';
             echo txp_setup_progress_meter(4).n.'<div class="txp-setup">';
         }
+
         msg(gTxt('tables_exist', array('{dbname}' => @$txpcfg['db'])), MSG_ERROR, true);
     }
 
@@ -111,9 +109,10 @@ function setup_db($cfg = '')
                                         global  - Used in setup and for AutoCreate missing prefs.
                                         private - Will be created after user login
         */
-        foreach (get_files_content($datadir.'/data', 'prefs') as $key=>$data) {
+        foreach (get_files_content($datadir.'/data', 'prefs') as $key => $data) {
             if ($out = @json_decode($data, true)) {
                 msg("Prefs: 'data/{$key}'");
+
                 foreach ($out as $name => $p) {
                     if (empty($p['private'])) {
                         @set_pref($name, $p['val'], $p['event'], $p['type'], $p['html'], $p['position']);
@@ -121,39 +120,40 @@ function setup_db($cfg = '')
                 }
             }
         }
-        $prefs = get_prefs();
 
+        $prefs = get_prefs();
         $plugin = new \Textpattern\Plugin\Plugin();
-        foreach (get_files_content($datadir.'/plugin', 'txt') as $key=>$data) {
+
+        foreach (get_files_content($datadir.'/plugin', 'txt') as $key => $data) {
             $result = $plugin->install($data, 1);
             msg("Plugin: '{$key}' - ".(is_array($result) ? $result[0] : $result));
         }
 
         $import = new \Textpattern\Import\TxpXML();
-        foreach (get_files_content($datadir.'/data', 'xml') as $key=>$data) {
+
+        foreach (get_files_content($datadir.'/data', 'xml') as $key => $data) {
             $import->importXml($data);
             msg("Import: 'data/{$key}'");
         }
 
-        foreach (get_files_content($datadir.'/articles', 'xml') as $key=>$data) {
+        foreach (get_files_content($datadir.'/articles', 'xml') as $key => $data) {
             $import->importXml($data);
             msg("Import: 'articles/{$key}'");
         }
     }
 
     // --- Theme setup.
-    // Load theme /styles, /forms, /pages
+    // Import theme assets.
+    msg(gTxt('public_theme').": '{$public_theme}'");
+    $public_theme_name = basename($public_theme);
 
-    //FIXME: We are doing nothing, waiting for the further development of branch `themes`.
-    //$public_theme = preg_replace('/\-.*/', '', $public_theme);
-    if (class_exists('\Textpattern\Skin\Skin') /*&& !preg_match('%/setup/themes/%', $themedir) */) {
-        // $Skin = Txp::get('\Textpattern\Skin\Skin', $public_theme);
-        // $Skin->import();
-        // $Skin->updateSkinInUse();
+    if (class_exists('\Textpattern\Skin\Main')) {
+        $Skin = Txp::get('\Textpattern\Skin\Main', $public_theme_name, null, txpath.dirname($public_theme));
+        $Skin->import();
+        $Skin->updateSkinInUse($public_theme_name);
     } else {
-        msg(gTxt('public_theme').": '{$public_theme}'");
-
-        foreach (get_files_content($themedir.'/styles', 'css') as $key=>$data) {
+        // @todo Do we need the else part at all now?
+        foreach (get_files_content($themedir.'/styles', 'css') as $key => $data) {
             safe_insert("txp_css", "name='".doSlash($key)."', css='".doSlash($data)."'");
             msg("CSS: '{$key}'");
         }
@@ -168,7 +168,7 @@ function setup_db($cfg = '')
             }
         }
 
-        foreach (get_files_content($themedir.'/pages', 'txp') as $key=>$data) {
+        foreach (get_files_content($themedir.'/pages', 'txp') as $key => $data) {
             safe_insert("txp_page", "name='".doSlash($key)."', user_html='".doSlash($data)."'");
             msg("Page: '{$key}'");
         }
@@ -203,6 +203,7 @@ function setup_txp_lang($langs)
         Txp::get('\Textpattern\L10n\Lang')->installFile($language);
         unset($langs[$language]);
     }
+
     msg("Lang: '{$language}'");
 
     foreach (array_flip($langs) as $lang) {

@@ -131,7 +131,7 @@ function page_edit($message = '', $refresh_partials = false)
     $skin = ($skin !== '') ? $skin : Skin::getCurrent();
     $class = 'async';
 
-    Skin::setCurrent($skin);
+    $skin = Skin::setCurrent($skin);
 
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
         $name = get_pref('last_page_saved', $default_name);
@@ -336,7 +336,7 @@ function page_save()
     $name = sanitizeForTheme(assert_string(ps('name')));
     $newname = sanitizeForTheme(assert_string(ps('newname')));
 
-    Skin::setCurrent($skin);
+    $skin = Skin::setCurrent($skin);
 
     $save_error = false;
     $message = '';

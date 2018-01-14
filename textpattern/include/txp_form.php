@@ -201,7 +201,7 @@ function form_multi_edit()
     $affected = array();
     $message = '';
 
-    Skin::setCurrent($skin);
+    $skin = Skin::setCurrent($skin);
 
     if ($forms && is_array($forms)) {
         if ($method == 'delete') {
@@ -317,7 +317,7 @@ function form_edit($message = '', $refresh_partials = false)
     $skin = ($skin !== '') ? $skin : Skin::getCurrent();
     $class = 'async';
 
-    Skin::setCurrent($skin);
+    $skin = Skin::setCurrent($skin);
 
     if ($step == 'form_delete' || empty($name) && $step != 'form_create' && !$savenew) {
         $name = get_pref('last_form_saved', 'default');
@@ -464,7 +464,7 @@ function form_save()
     $name = sanitizeForTheme(assert_string(ps('name')));
     $newname = sanitizeForTheme(assert_string(ps('newname')));
 
-    Skin::setCurrent($skin);
+    $skin = Skin::setCurrent($skin);
 
     $save_error = false;
     $message = '';
