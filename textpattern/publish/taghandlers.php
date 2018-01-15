@@ -1694,13 +1694,14 @@ function newer($atts, $thing = null)
         'showalways' => 0,
         'title'      => '',
         'escape'     => 'html',
+        'shift'      => null
     ), $atts));
 
     $numPages = $thispage['numPages'];
     $pg = $thispage['pg'];
+    $nextpg = $pg - (isset($shift) ? intval($shift) : 1);
 
-    if ($numPages > 1 && $pg > 1 && $pg <= $numPages) {
-        $nextpg = ($pg - 1 == 1) ? '' : ($pg - 1);
+    if ($nextpg > 0 && $nextpg <= $numPages) {
 
         // Author URLs should use RealName, rather than username.
         if (!empty($pretext['author'])) {
@@ -1711,7 +1712,7 @@ function newer($atts, $thing = null)
 
         $url = pagelinkurl(array(
             'month'   => @$pretext['month'],
-            'pg'      => $nextpg,
+            'pg'      => $nextpg == 1 && !isset($shift) ? '' : $nextpg,
             's'       => @$pretext['s'],
             'c'       => @$pretext['c'],
             'context' => @$pretext['context'],
@@ -1754,13 +1755,14 @@ function older($atts, $thing = null)
         'showalways' => 0,
         'title'      => '',
         'escape'     => 'html',
+        'shift'      => null
     ), $atts));
 
     $numPages = $thispage['numPages'];
     $pg = $thispage['pg'];
+    $nextpg = $pg + (isset($shift) ? intval($shift) : 1);
 
-    if ($numPages > 1 && $pg > 0 && $pg < $numPages) {
-        $nextpg = $pg + 1;
+    if ($nextpg > 0 && $nextpg <= $numPages) {
 
         // Author URLs should use RealName, rather than username.
         if (!empty($pretext['author'])) {
@@ -3655,9 +3657,28 @@ function if_individual_article($atts, $thing = null)
 
 function if_article_list($atts, $thing = null)
 {
-    global $is_article_list;
+    global $is_article_list, $pretext;
 
     $x = ($is_article_list == true);
+
+    if ($x && !empty($atts)) {
+        extract(lAtts(array(
+            'type' => ''
+        ), $atts));
+
+        foreach (do_list_unique($type) as $q) {
+            switch ($q) {
+                case 's':
+                    $x = !empty($pretext['s']) && $pretext['s'] != 'default';
+                    break;
+                default:
+                    $x = !empty($pretext[$q]) || !isset($pretext[$q]) && gps($q);
+            }
+
+            if ($x) break;
+        }
+    }
+
     return isset($thing) ? parse($thing, $x) : $x;
 }
 
