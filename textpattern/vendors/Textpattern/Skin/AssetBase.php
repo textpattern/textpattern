@@ -950,7 +950,7 @@ namespace Textpattern\Skin {
         {
             $installed = Skin::getInstalled();
 
-            if ($installed) {
+            if (count($installed) > 1) {
                 return form(
                     inputLabel(
                         'skin',

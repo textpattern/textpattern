@@ -416,7 +416,9 @@ namespace Textpattern\Skin {
             $name === null ? $name = $this->getName() : '';
             $prefs['skin_editing'] = $name;
 
-            return set_pref('skin_editing', $name, 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+            set_pref('skin_editing', $name, 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+
+            return static::getEditing();
         }
 
         /**

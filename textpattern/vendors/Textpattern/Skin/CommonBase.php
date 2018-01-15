@@ -50,6 +50,15 @@ namespace Textpattern\Skin {
          * @see       setNames(), getNames().
          */
 
+        protected static $basePath;
+
+        /**
+         * Class related asset names to work with.
+         *
+         * @var array Names.
+         * @see       setNames(), getNames().
+         */
+
         protected static $names;
 
         /**
@@ -108,9 +117,26 @@ namespace Textpattern\Skin {
          * @return string Path.
          */
 
-        public static function getBasePath()
+        public static function setBasePath($path)
         {
-            return get_pref('path_to_site').DS.get_pref('skin_dir');
+            self::$basePath = rtrim($path, DS);
+
+            return static::getBasePath();
+        }
+
+        /**
+         * Gets the skin directory path.
+         *
+         * @return string Path.
+         */
+
+        public static function getBasePath($path = null)
+        {
+            if (static::$basePath === null) {
+                 static::setBasePath(get_pref('path_to_site').DS.get_pref('skin_dir'));
+            }
+
+            return static::$basePath;
         }
 
         /**
