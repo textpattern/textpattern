@@ -653,7 +653,7 @@ namespace Textpattern\Skin {
                     new DirIterator\RecDirIterator($this->getDirPath()),
                     '#^'.$templates.'\.'.$extension.'$#i'
                 ),
-                0
+                static::getSubdirField() ? 1 : 0
             );
 
             return $this->parseFiles($Files);
