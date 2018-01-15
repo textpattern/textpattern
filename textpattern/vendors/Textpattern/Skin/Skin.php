@@ -255,6 +255,17 @@ namespace Textpattern\Skin {
         }
 
         /**
+         * Makes the skin related directory.
+         *
+         * @param bool false on error.
+         */
+
+        public function removeDir()
+        {
+            return @rmdir($this->getDirPath());
+        }
+
+        /**
          * Whether the skin related directory exists or not.
          *
          * @param bool false on error.
@@ -1114,6 +1125,8 @@ namespace Textpattern\Skin {
                 } elseif ($this->getSections()) {
                     $failed[] = $name;
                     $this->setResults('skin_in_use', $name);
+                } elseif ($this->dirExists() && !$this->lock()){
+                    $this->setResults('skin_locking_failed', $name);
                 } else {
                     $assetFailure = false;
 
@@ -1141,6 +1154,14 @@ namespace Textpattern\Skin {
                     update_lastmod('skin.delete', $passed);
                 } else {
                     $this->setResults('skin_deletion_failed', $passed);
+                }
+            }
+
+            foreach ($names as $name) {
+                if ($this->setInfos($name)->islocked() && !$this->unlock()) {
+                    $this->setResults('skin_unlocking_failed', $name);
+                } else {
+                    $this->removeDir();
                 }
             }
 
