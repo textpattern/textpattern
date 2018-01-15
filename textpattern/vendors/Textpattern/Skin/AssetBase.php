@@ -607,7 +607,7 @@ namespace Textpattern\Skin {
             return safe_query(
                 "INSERT INTO ".static::getTable()." (".implode(', ', $fields).") "
                 ."VALUES ".implode(', ', $values)
-                ." ON DUPLICATE KEY UPDATE ".$update, true
+                ." ON DUPLICATE KEY UPDATE ".$update
             );
         }
 
@@ -731,7 +731,7 @@ namespace Textpattern\Skin {
         }
 
         public function duplicateRowsTo($rows)
-        {var_dump($rows);
+        {
             if (!$this->createRows($rows)) {
                 return false;
             }
