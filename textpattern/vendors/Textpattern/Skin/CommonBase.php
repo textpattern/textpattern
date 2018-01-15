@@ -103,14 +103,14 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Gets the skin_base_path pref related value.
+         * Gets the skin directory path.
          *
          * @return string Path.
          */
 
         public static function getBasePath()
         {
-            return get_pref('skin_base_path');
+            return get_pref('path_to_site').DS.get_pref('skin_dir');
         }
 
         /**
