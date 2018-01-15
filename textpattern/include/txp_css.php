@@ -169,7 +169,7 @@ function css_edit($message = '', $refresh_partials = false)
     $skin = ($skin !== '') ? $skin : Skin::getCurrent();
     $class = 'async';
 
-    Skin::setCurrent($skin);
+    $skin = Skin::setCurrent($skin);
 
     if ($step == 'css_delete' || empty($name) && $step != 'pour' && !$savenew) {
         $name = get_pref('last_css_saved', $default_name);
@@ -290,7 +290,7 @@ function css_save()
     $name = sanitizeForTheme(assert_string(ps('name')));
     $newname = sanitizeForTheme(assert_string(ps('newname')));
 
-    Skin::setCurrent($skin);
+    $skin = Skin::setCurrent($skin);
 
     $save_error = false;
     $message = '';

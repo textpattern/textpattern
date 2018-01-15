@@ -35,7 +35,7 @@ namespace Textpattern\Skin {
     abstract class SharedBase implements SharedInterface
     {
         /**
-         * Class related DB table.
+         * Class-related DB table column names.
          *
          * @var array
          */
@@ -45,18 +45,19 @@ namespace Textpattern\Skin {
         /**
          * Class related DB table columns.
          *
-         * @var array Column names.
-         * @see       getTableCols().
+         * @var array
+         * @see getTableCols()
          */
 
         protected static $tableCols;
 
         /**
-         * Whether the skin is locked or not.
+         * List of locked skins.
+         *
          * Locking is used to avoid conflicts during import/export.
          *
-         * @var array Locked skin names
-         * @see       lock(), unlock().
+         * @var array
+         * @see lock(), unlock()
          */
 
         protected $locked = array();
@@ -64,17 +65,19 @@ namespace Textpattern\Skin {
         /**
          * Caches installed skins.
          *
-         * @var array Associative array of skin names and their related title.
-         * @see       setInstalled(), getInstalled().
+         * Associative array of skin names and their related title.
+         *
+         * @var array
+         * @see setInstalled(), getInstalled()
          */
 
         protected static $installed = array();
 
         /**
-         * Validates names on import/export.
+         * Regex to validate names on import/export.
          *
-         * @var string Regular expression
-         * @see        getValidNamePattern(), isValidName().
+         * @var string
+         * @see getValidNamePattern(), isValidName()
          */
 
         protected static $validNamePattern = '[a-zA-Z0-9_\-\.]{1,63}';
@@ -82,17 +85,33 @@ namespace Textpattern\Skin {
         /**
          * Caches uploaded skin directories.
          *
-         * @var array Associative array of skin names and their related title.
-         * @see       getDirectories().
+         * Associative array of skin names and their related title.
+         *
+         * @var array
+         * @see getDirectories()
          */
 
         protected static $directories = null;
 
         /**
+         * Place where themes can be found.
+         *
+         * Usually this is the /themes directory but setup or plugins
+         * might have other ideas.
+         *
+         * @var string
+         * @see getPath()
+         */
+
+        protected static $basePath = null;
+
+        /**
          * Collected results.
          *
-         * @var array Associative array of 'success', 'warning' and 'error' related messages;
-         * @see       setResults(), getResults().
+         * Associative array of 'success', 'warning' and 'error' related messages.
+         *
+         * @var array
+         * @see setResults(), getResults()
          */
 
         protected $results = array(
@@ -353,9 +372,22 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
+        public static function setBasePath($path)
+        {
+            self::$basePath = rtrim($path, DS);
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+
         public static function getBasePath()
         {
-            return get_pref('path_to_site').DS.get_pref('skin_dir');
+            if (self::$basePath === null) {
+                self::setBasePath(get_pref('path_to_site').DS.get_pref('skin_dir'));
+            }
+
+            return self::$basePath;
         }
 
         /**
@@ -364,7 +396,7 @@ namespace Textpattern\Skin {
 
         public static function getPath($path = null)
         {
-            return self::getBasePath().'/'.$path;
+            return self::getBasePath().DS.$path;
         }
 
         /**
