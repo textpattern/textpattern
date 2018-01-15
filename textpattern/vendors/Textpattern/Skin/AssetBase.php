@@ -948,5 +948,33 @@ namespace Textpattern\Skin {
 
             return $this;
         }
+
+        /**
+         * Gets an array of the installed skins.
+         *
+         * @return array Associative array of skin names and their related title.
+         */
+
+        public static function renderSkinSwitchForm($event, $step, $current)
+        {
+            $installed = Skin::getInstalled();
+
+            if ($installed) {
+                return form(
+                    inputLabel(
+                        'skin',
+                        selectInput('skin', $installed, $current, false, 1, 'skin'),
+                        'skin'
+                    )
+                    .eInput($event)
+                    .sInput($step),
+                    '',
+                    '',
+                    'post'
+                );
+            }
+
+            return;
+        }
     }
 }
