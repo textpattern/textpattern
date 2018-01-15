@@ -78,7 +78,7 @@ namespace Textpattern\Skin {
         public function isInUse($skin);
 
         /**
-         * Gets the skin set as the one selected in the admin tabs.
+         * Get the most recently used skin from the prefs.
          *
          * @return string The skin name
          */
@@ -86,7 +86,10 @@ namespace Textpattern\Skin {
         public static function getCurrent();
 
         /**
-         * Sets the skin as the one selected in the admin tabs.
+         * Set the skin to the given theme.
+         *
+         * If $skin is empty, it looks up the theme as used by the default Section.
+         * It also forces a refresh of the on-page prefs array.
          *
          * @param  string $skin A skin name.
          * @return bool   false on error.
@@ -95,7 +98,7 @@ namespace Textpattern\Skin {
         public static function setCurrent($skin = null);
 
         /**
-         * Gets a skin row from the DB.
+         * Get a skin row from the DB.
          *
          * @return array Associative array of skins and their templates rows
          *               as usual associative arrays.
@@ -104,7 +107,7 @@ namespace Textpattern\Skin {
         public function getRows($skins = null);
 
         /**
-         * Creates skins and their defined related assets.
+         * Create skins and their defined related assets.
          *
          * @param  array $rows Associative array of the following txp_skin table related fields:
          *                    'title', 'version', 'description', 'author', 'author_uri';
@@ -116,7 +119,7 @@ namespace Textpattern\Skin {
         public function create($rows, $from = null);
 
         /**
-         * Edits skins and their defined related assets.
+         * Edit skins and their defined related assets.
          *
          * @param  array $row Associative array of the txp_skin table related fields:
          *                    'name', 'title', 'version', 'description', 'author', 'author_uri';
@@ -126,7 +129,7 @@ namespace Textpattern\Skin {
         public function edit($row);
 
         /**
-         * Duplicates skins and their defined related assets.
+         * Duplicate skins and their defined related assets.
          *
          * @return array Duplicated skins.
          */
@@ -134,7 +137,7 @@ namespace Textpattern\Skin {
         public function duplicate();
 
         /**
-         * Imports skins and their defined related assets.
+         * Import skins and their defined related assets.
          *
          * @param  bool  $clean    Whether to remove extra templates or not;
          * @param  bool  $override Whether to update/override a duplicated skin or not;
@@ -144,7 +147,7 @@ namespace Textpattern\Skin {
         public function import($clean = true, $override = false);
 
         /**
-         * Exports skins and their defined related assets.
+         * Export skins and their defined related assets.
          *
          * @param  bool  $clean Whether to remove extra templates or not;
          * @return array        Exported skins.
@@ -153,7 +156,7 @@ namespace Textpattern\Skin {
         public function export($clean = true);
 
         /**
-         * Deletes skins and their defined related assets.
+         * Delete skins and their defined related assets.
          *
          * @return array Deleted skins.
          */
