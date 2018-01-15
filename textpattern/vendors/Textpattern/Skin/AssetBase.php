@@ -77,7 +77,7 @@ namespace Textpattern\Skin {
          * @see        getDefaultSubdir().
          */
 
-        protected static $DefaultSubdir;
+        protected static $defaultSubdir;
 
         /**
          * File related asset subdirectory.
