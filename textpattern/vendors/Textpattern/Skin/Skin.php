@@ -943,13 +943,14 @@ namespace Textpattern\Skin {
 
                             foreach ($this->getAssets() as $assetModel) {
                                 $this->setInfos($name);
+                                $assetString = $assetModel::getString();
                                 $assetRows = $assetModel->getRows();
 
                                 if (!$assetRows) {
-                                    $this->setResults('no_found', array($skin => $this->getDirPath()));
+                                    $this->setResults($assetString.'_not_found', array($skin => $this->getDirPath()));
                                 } else {
-                                    if ($this->setInfos($copy) && $assetModel->createRows($assetRows)) {
-                                        $this->setResults($asset.'_duplication_failed', array($skin => $notImported));
+                                    if ($this->setInfos($copy) && !$assetModel->createRows($assetRows)) {
+                                        $this->setResults($assetString.'_duplication_failed', array($skin => $notImported));
                                     }
                                 }
                             }
@@ -960,6 +961,8 @@ namespace Textpattern\Skin {
 
                     if ($this->islocked() && !$this->unlock()) {
                         $this->setResults('skin_unlocking_failed', $this->getDirPath());
+                    } else {
+                        $this->setResults('skin_duplicated', $name, 'success');
                     }
                 }
             }
