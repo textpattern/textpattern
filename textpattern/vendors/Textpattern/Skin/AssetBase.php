@@ -338,7 +338,6 @@ namespace Textpattern\Skin {
         public function setNames($names = null)
         {
             $this->names = $names === null ? $names = array() : $names;
-            $this->setName($names ? $names[0] : null);
 
             return $this;
         }
@@ -946,7 +945,7 @@ namespace Textpattern\Skin {
          * @return array Associative array of skin names and their related title.
          */
 
-        public static function renderSkinSwitchForm($event, $step, $current)
+        public static function renderSelectEdit($event, $step, $current)
         {
             $installed = Skin::getInstalled();
 

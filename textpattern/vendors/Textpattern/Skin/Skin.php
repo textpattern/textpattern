@@ -35,9 +35,10 @@ namespace Textpattern\Skin {
     class Skin extends CommonBase
     {
         /**
-         * Assets related controllers.
+         * Assets related objects.
          *
-         * @see setAssets()
+         * @var array
+         * @see       setAssets().
          */
 
         private $assets;
@@ -58,7 +59,7 @@ namespace Textpattern\Skin {
         protected static $file = 'manifest.json';
 
         /**
-         * Sections used by the skin.
+         * Sections used by the skin defined.
          *
          * @var array Section names.
          * @see       setSections(), getSections().
@@ -94,7 +95,17 @@ namespace Textpattern\Skin {
         protected static $installed;
 
         protected $infos;
+
         protected $base;
+
+        /**
+         * Class related asset names to work with.
+         *
+         * @var array Names.
+         * @see       setNames(), getNames().
+         */
+
+        protected static $basePath;
 
         /**
          * Constructor.
@@ -104,7 +115,38 @@ namespace Textpattern\Skin {
 
         public function __construct()
         {
+            static::setBasePath();
             $this->setAssets();
+        }
+
+        /**
+         * Gets the skin directory path.
+         *
+         * @return string Path.
+         */
+
+        public static function setBasePath($path = null)
+        {
+            $path === null ? $path = get_pref('path_to_site').DS.get_pref('skin_dir') : '';
+
+            self::$basePath = rtrim($path, DS);
+
+            return static::getBasePath();
+        }
+
+        /**
+         * Gets the skin directory path.
+         *
+         * @return string Path.
+         */
+
+        public static function getBasePath()
+        {
+            if (static::$basePath === null) {
+                 static::setBasePath();
+            }
+
+            return static::$basePath;
         }
 
         /**
@@ -118,7 +160,6 @@ namespace Textpattern\Skin {
         {
             if ($names === null) {
                 $this->names = array();
-                $this->setName();
             } else {
                 $parsed = array();
 
@@ -127,7 +168,6 @@ namespace Textpattern\Skin {
                 }
 
                 $this->names = $parsed;
-                $this->setName($parsed ? $parsed[0] : null);
             }
 
             return $this;
@@ -177,6 +217,7 @@ namespace Textpattern\Skin {
             $author_uri = null
         ) {
             $name = sanitizeForTheme($name);
+            // TODO check $author_uri against a URL related REGEX?
 
             $this->infos = compact('name', 'title', 'version', 'description', 'author', 'author_uri');
 
@@ -640,7 +681,7 @@ namespace Textpattern\Skin {
             if ($name) {
                 // TODO
             } else {
-                $rows = safe_field('name, title', static::getTable(), '1 = 1');
+                $rows = safe_rows('name, title', static::getTable(), '1 = 1');
 
                 static::$installed = array();
 
@@ -648,6 +689,8 @@ namespace Textpattern\Skin {
                     static::$installed[$row['name']] = $row['title'];
                 }
             }
+
+            return static::getInstalled();
         }
 
         /**
@@ -669,11 +712,11 @@ namespace Textpattern\Skin {
          * @return object $this.
          */
 
-        public static function unsetInstalled($skins)
+        public static function unsetInstalled($names)
         {
             static::$installed = array_diff_key(
                 static::getInstalled(),
-                array_fill_keys($skins, '')
+                array_fill_keys($names, '')
             );
         }
 
@@ -1245,6 +1288,10 @@ namespace Textpattern\Skin {
                         'column' => 'txp_skin.title',
                         'label'  => gTxt('title'),
                     ),
+                    'description' => array(
+                        'column' => 'txp_skin.description',
+                        'label'  => gTxt('description'),
+                    ),
                     'author' => array(
                         'column' => 'txp_skin.author',
                         'label'  => gTxt('author'),
@@ -1372,7 +1419,7 @@ namespace Textpattern\Skin {
 
                     $tdAuthor = txpspecialchars($skin_author);
 
-                    $skin_author_uri ? $tdAuthor = href($tdAuthor, $skin_author_uri) : '';
+                    empty($skin_author_uri) or $tdAuthor = href($tdAuthor, $skin_author_uri);
 
                     $tds = td(fInput('checkbox', 'selected[]', $skin_name), '', 'txp-list-col-multi-edit')
                         .hCell(
@@ -1602,8 +1649,8 @@ namespace Textpattern\Skin {
 
         public function renderMultiEditForm($page, $sort, $dir, $crit, $search_method)
         {
-            $clean = checkbox('clean', 1, true, 0, 'clean')
-                    .tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean'))
+            $clean = checkbox2('clean', get_pref('remove_extra_templates', true), 0, 'clean')
+                    .n.tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean'))
                     .popHelp('remove_extra_templates');
 
             $methods = array(

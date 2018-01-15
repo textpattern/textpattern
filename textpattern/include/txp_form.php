@@ -27,7 +27,8 @@
  * @package Admin\Form
  */
 
-use Textpattern\Skin\Main as Skin;
+use Textpattern\Skin\Skin;
+use Textpattern\Skin\Form;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -201,7 +202,7 @@ function form_multi_edit()
     $affected = array();
     $message = '';
 
-    Skin::setCurrent($skin);
+    $skin = Skin::setEditing($skin);
 
     if ($forms && is_array($forms)) {
         if ($method == 'delete') {
@@ -314,10 +315,10 @@ function form_edit($message = '', $refresh_partials = false)
     $name = sanitizeForTheme(assert_string(gps('name')));
     $type = assert_string(gps('type'));
     $newname = sanitizeForTheme(assert_string(gps('newname')));
-    $skin = ($skin !== '') ? $skin : Skin::getCurrent();
+    $skin = ($skin !== '') ? $skin : Skin::getEditing();
     $class = 'async';
 
-    Skin::setCurrent($skin);
+    $skin = Skin::setEditing($skin);
 
     if ($step == 'form_delete' || empty($name) && $step != 'form_create' && !$savenew) {
         $name = get_pref('last_form_saved', 'default');
@@ -353,7 +354,7 @@ function form_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = n.Skin::renderSwitchForm('form', 'form_skin_change', $skin);
+    $skinBlock = n.Form::renderSelectEdit('form', 'form_skin_change', $skin);
 
     $buttons = graf(
         tag_void('input', array(
@@ -464,7 +465,7 @@ function form_save()
     $name = sanitizeForTheme(assert_string(ps('name')));
     $newname = sanitizeForTheme(assert_string(ps('newname')));
 
-    Skin::setCurrent($skin);
+    $skin = Skin::setEditing($skin);
 
     $save_error = false;
     $message = '';
@@ -619,7 +620,7 @@ function form_skin_change($skin = null)
     }
 
     if ($skin) {
-        Skin::setCurrent($skin);
+        $skin = Skin::setEditing($skin);
     }
 
     return true;

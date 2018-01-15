@@ -27,7 +27,8 @@
  * @package Admin\Page
  */
 
-use Textpattern\Skin\Main as Skin;
+use Textpattern\Skin\Skin;
+use Textpattern\Skin\Page;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -128,10 +129,10 @@ function page_edit($message = '', $refresh_partials = false)
 
     $name = sanitizeForTheme(assert_string(gps('name')));
     $newname = sanitizeForTheme(assert_string(gps('newname')));
-    $skin = ($skin !== '') ? $skin : Skin::getCurrent();
+    $skin = ($skin !== '') ? $skin : Skin::getEditing();
     $class = 'async';
 
-    Skin::setCurrent($skin);
+    $skin = Skin::setEditing($skin);
 
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
         $name = get_pref('last_page_saved', $default_name);
@@ -165,7 +166,7 @@ function page_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = n.Skin::renderSwitchForm('page', 'page_skin_change', $skin);
+    $skinBlock = n.Page::renderSelectEdit('page', 'page_skin_change', $skin);
 
     $buttons = graf(
         tag_void('input', array(
@@ -336,7 +337,7 @@ function page_save()
     $name = sanitizeForTheme(assert_string(ps('name')));
     $newname = sanitizeForTheme(assert_string(ps('newname')));
 
-    Skin::setCurrent($skin);
+    $skin = Skin::setEditing($skin);
 
     $save_error = false;
     $message = '';
@@ -437,7 +438,7 @@ function page_skin_change($skin = null)
     }
 
     if ($skin) {
-        Skin::setCurrent($skin);
+        $skin = Skin::setEditing($skin);
     }
 
     return true;

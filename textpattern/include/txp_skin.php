@@ -125,6 +125,8 @@ function skin_save()
 
 function skin_multi_edit()
 {
+    global $prefs;
+
     $skin = Txp::get('Textpattern\Skin\Skin');
 
     extract(psa(array(
