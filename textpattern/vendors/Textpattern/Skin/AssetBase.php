@@ -168,26 +168,34 @@ namespace Textpattern\Skin {
          * $essential property getter.
          */
 
-        public static function getEssential($field = null, $whereField = null, $whereValue = null)
+        public static function getEssential($field = null, $whereField = null, $valueIn = null)
         {
             if ($field === null) {
                 return static::$essential;
+            } elseif ($field === '*' && $whereField) {
+                $fieldValues = array();
+
+                foreach (static::$essential as $row) {
+                    if (in_array($row[$whereField], $valueIn)) {
+                        $fieldValues[] = $row;
+                    }
+                }
             } else {
                 $field === null ? $field = 'name' : '';
                 $fieldValues = array();
 
                 foreach (static::$essential as $row) {
                     if ($whereField) {
-                        if ($row[$whereField] === $whereValue) {
+                        if (in_array($row[$whereField], $valueIn)) {
                             $fieldValues[] = $row[$field];
                         }
                     } else {
                         $fieldValues[] = $row[$field];
                     }
                 }
-
-                return $fieldValues;
             }
+
+            return $fieldValues;
         }
 
 
@@ -571,8 +579,6 @@ namespace Textpattern\Skin {
 
         public function createRows($rows = null)
         {
-            var_dump($rows);
-
             $rows === null ? $rows = static::getEssential() : '';
 
             $skin = $this->getSkin()->getName();
@@ -664,13 +670,28 @@ namespace Textpattern\Skin {
             $row = array();
             $subdirField = static::getSubdirField();
 
-            foreach ($Files as $File) {
-                $row['name'] = $File->getName();
-                $subdirField ? $row[$subdirField] = $File->getDir() : '';
-                $row[static::getFileContentsFields()] = $File->getContents();
+            $parsed = array();
 
-                $rows[] = $row;
+            foreach ($Files as $File) {
+                $name = $File->getName();
+
+                if (in_array($name, $parsed)) {
+                    $this->setResults('duplicated', $name);
+                } elseif ($subdirField && implode('', $this->getEssential($subdirField, 'name', array($name))) !== $File->getDir()) {
+                    $this->setResults('wrong_type', $name);
+                } else {
+                    $parsed[] = $row['name'] = $name;
+                    $subdirField ? $row[$subdirField] = $File->getDir() : '';
+                    $row[static::getFileContentsFields()] = $File->getContents();
+
+                    $rows[] = $row;
+                }
             }
+
+            $missingNames = array_diff(static::getEssential('name'), $parsed);
+            $missingRows = static::getEssential('*', 'name', $missingNames);
+
+            array_merge($rows, $missingRows);
 
             return $rows;
         }
