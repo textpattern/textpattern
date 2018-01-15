@@ -751,15 +751,6 @@ namespace Textpattern\Skin {
             return $skinRows;
         }
 
-        public function duplicateRowsTo($rows)
-        {
-            if (!$this->createRows($rows)) {
-                return false;
-            }
-
-            return true;
-        }
-
         /**
          * Drops obsolete template rows.
          *

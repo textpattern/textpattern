@@ -940,19 +940,21 @@ namespace Textpattern\Skin {
                             $this->setResults('skin_duplication_failed', $name);
                         } else {
                             static::setInstalled(array($copy => $copyTitle));
-                            $this->setInfos($name);
 
                             foreach ($this->getAssets() as $assetModel) {
+                                $this->setInfos($name);
                                 $assetRows = $assetModel->getRows();
 
                                 if (!$assetRows) {
                                     $this->setResults('no_found', array($skin => $this->getDirPath()));
                                 } else {
-                                    if ($assetModel->duplicateRowsTo($assetRows)) {
+                                    if ($this->setInfos($copy) && $assetModel->createRows($assetRows)) {
                                         $this->setResults($asset.'_duplication_failed', array($skin => $notImported));
                                     }
                                 }
                             }
+
+                            $this->setInfos($name);
                         }
                     }
 
