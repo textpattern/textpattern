@@ -895,7 +895,7 @@ namespace Textpattern\Skin {
                                 $this->setInfos($name, $$subdirField, $$contentsField);
 
                                 if (!$this->subdirExists() && !$this->createSubdir()) {
-                                    $this->setResults($string.'_not_wrtiable', array($skin => $name));
+                                    $this->setResults($string.'_not_writable', array($skin => $name));
                                     $ready = false;
                                 }
                             } else {
