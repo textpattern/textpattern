@@ -145,10 +145,14 @@ function setup_db($cfg = array())
     // --- Theme setup.
     // Import theme assets.
     msg(gTxt('public_theme').": '{$public_theme}'");
-    $public_theme_name = basename($public_theme);
+    $public_theme_parts = pathinfo($public_theme);
+    $public_theme_name = $public_theme_parts['basename'];
+    $public_theme_dir = $public_theme_parts['dirname'];
+    $public_theme_dir_parts = explode(DS, $public_theme_dir);
+    $is_from_setup = isset($public_theme_dir_parts[1]) && $public_theme_dir_parts[1] === 'setup';
 
     if (class_exists('\Textpattern\Skin\Main')) {
-        $Skin = Txp::get('\Textpattern\Skin\Main', $public_theme_name, null, txpath.dirname($public_theme));
+        $Skin = Txp::get('\Textpattern\Skin\Main', $public_theme_name, null, ($is_from_setup ? txpath.$public_theme_dir : null));
         $Skin->import();
         $Skin->updateSkinInUse($public_theme_name);
     } else {
