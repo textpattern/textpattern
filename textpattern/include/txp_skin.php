@@ -35,9 +35,6 @@ if (!defined('txpinterface')) {
 if ($event === 'skin') {
     require_privs($event);
 
-    $skin = Txp::get('Textpattern\Skin\Skin');
-    $view = Txp::get('Textpattern\Skin\Admin', $skin);
-
     $availableSteps = array(
         'skin_change_pageby' => true, // Prefixed to make it work with the paginator…
         'list'          => false,
@@ -48,16 +45,9 @@ if ($event === 'skin') {
     );
 
     if ($step && bouncer($step, $availableSteps)) {
-        if (function_exists('skin_'.$step)) {
-            call_user_func('skin_'.$step);
-            $view->render();
-        } elseif (is_callable([$view, $step])) {
-            $view->$step();
-        } else {
-            $view->render();
-        }
+        call_user_func($event.'_'.$step);
     } else {
-        $view->render();
+        Txp::get('Textpattern\Skin\Skin')->render();
     }
 }
 
@@ -71,11 +61,12 @@ if ($event === 'skin') {
 
 function skin_import()
 {
-    global $skin;
+    Txp::get('Textpattern\Skin\Skin')->setNames(array(ps('skins')))->import(false)->render();
+}
 
-    $skin->setNames(array(ps('skins')))->import(false);
-
-    return $skin;
+function skin_edit()
+{
+    Txp::get('Textpattern\Skin\Skin')->renderEditForm();
 }
 
 /**
@@ -84,7 +75,7 @@ function skin_import()
 
 function skin_save()
 {
-    global $skin;
+    $skin = Txp::get('Textpattern\Skin\Skin');
 
     $infos = array_map('assert_string', psa(array(
         'name',
@@ -125,7 +116,7 @@ function skin_save()
              ->create();
     }
 
-    return $skin;
+    $skin->render();
 }
 
 /**
@@ -134,7 +125,7 @@ function skin_save()
 
 function skin_multi_edit()
 {
-    global $skin;
+    $skin = Txp::get('Textpattern\Skin\Skin');
 
     extract(psa(array(
         'edit_method',
@@ -167,7 +158,7 @@ function skin_multi_edit()
             break;
     }
 
-    return $skin;
+    $skin->render();
 }
 
 /**
@@ -177,5 +168,6 @@ function skin_multi_edit()
 function skin_skin_change_pageby()
 {
     Txp::get('\Textpattern\Admin\Paginator')->change();
-    skin_list();
+
+    Txp::get('Textpattern\Skin\Skin')->render();
 }
