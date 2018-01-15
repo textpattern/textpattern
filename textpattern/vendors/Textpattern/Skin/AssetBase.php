@@ -239,7 +239,7 @@ namespace Textpattern\Skin {
 
         public function getDirPath()
         {
-            return $this->getSkin()->getDirPath().'/'.$this->getDir();
+            return $this->getSkin()->getDirPath().DS.$this->getDir();
         }
 
         /**
@@ -293,7 +293,7 @@ namespace Textpattern\Skin {
         {
             $name ?: $name = $this->getInfos()[static::getSubdirField()];
 
-            return $this->getDirPath().'/'.$name;
+            return $this->getDirPath().DS.$name;
         }
 
         /**
@@ -412,7 +412,7 @@ namespace Textpattern\Skin {
         {
             $dirPath = static::getSubdirField() ? $this->getSubdirPath() : $this->getDirPath();
 
-            return $dirPath.'/'.$this->getName().'.'.static::getExtension();
+            return $dirPath.DS.$this->getName().'.'.static::getExtension();
         }
 
         /**
@@ -731,7 +731,7 @@ namespace Textpattern\Skin {
         }
 
         public function duplicateRowsTo($rows)
-        {
+        {var_dump($rows);
             if (!$this->createRows($rows)) {
                 return false;
             }

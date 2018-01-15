@@ -240,7 +240,7 @@ namespace Textpattern\Skin {
         {
             $name === null ? $name = $this->getName() : '';
 
-            return static::getBasePath().'/'.$name;
+            return static::getBasePath().DS.$name;
         }
 
         /**
@@ -297,7 +297,7 @@ namespace Textpattern\Skin {
 
         public function getFilePath()
         {
-            return $this->getDirPath().'/'.static::$file;
+            return $this->getDirPath().DS.static::$file;
         }
 
         /**
@@ -948,7 +948,7 @@ namespace Textpattern\Skin {
                                 if (!$assetRows) {
                                     $this->setResults('no_found', array($skin => $this->getDirPath()));
                                 } else {
-                                    if ($assetModel->duplicateRowsTo($copy, $assetRows)) {
+                                    if ($assetModel->duplicateRowsTo($assetRows)) {
                                         $this->setResults($asset.'_duplication_failed', array($skin => $notImported));
                                     }
                                 }
