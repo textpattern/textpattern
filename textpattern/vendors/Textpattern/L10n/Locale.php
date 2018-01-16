@@ -48,6 +48,7 @@ class Locale
         'bs' => array('bs_BA.UTF-8', 'bs_BA.ISO_8859-2', 'Bosnian_Bosnia and Herzegovina.1250', 'bs_BA', 'bs', 'bos', 'bosnian'),
         'ca' => array('ca_ES.UTF-8', 'ca_ES.ISO_8859-1', 'Catalan_Spain.1252', 'ca_ES', 'cat', 'ca', 'catalan'),
         'cs' => array('cs_CZ.UTF-8', 'cs_CZ.ISO_8859-2', 'Czech_Czech Republic.1250', 'cs_CZ', 'ces', 'cze', 'cs', 'csy', 'czech'),
+        'cy' => array('cy_GB.UTF-8', 'cy_GB.ISO_8859-14', 'Welsh_United Kingdom.1252', 'cy_GB', 'cy', 'cym', 'wel', 'welsh'),
         'da' => array('da_DK.UTF-8', 'da_DK.ISO_8859-1', 'Danish_Denmark.1252', 'da_DK', 'da', 'dan', 'danish'),
         'de' => array('de_DE.UTF-8', 'de_DE.ISO_8859-1', 'de_DE.ISO_8859-16', 'German_Germany.1252', 'de_DE', 'de', 'deu', 'german'),
         'el' => array('el_GR.UTF-8', 'el_GR.ISO_8859-7', 'Greek_Greece.1253', 'el_GR', 'el', 'gre', 'greek'),
