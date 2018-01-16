@@ -93,8 +93,8 @@ if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
                 'themes' => array(
                     'path'   => 'public',
                     'is_dir' => true
-                */
                     )
+                */
             );
             $lastkey = array_pop(array_keys($symlinks));
 
