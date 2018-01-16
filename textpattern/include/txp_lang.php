@@ -88,9 +88,7 @@ function list_languages($message = '')
             $langList.
             eInput('lang').
             sInput('save_language_ui')
-        ), 'div', array(
-            'class' => 'txp-control-panel',
-        )
+        ), 'div', array('class' => 'txp-control-panel')
     );
 
     $grid = '';
@@ -132,9 +130,7 @@ function list_languages($message = '')
                 'step'       => 'remove_language',
                 'lang_code'  => $langname,
                 '_txp_token' => form_token(),
-            ), array(
-                'class' => 'txp-button'
-            ));
+            ), array('class' => 'txp-button'));
 
             $btnRemove = (
                 array_key_exists($langname, $active_lang)
@@ -150,17 +146,13 @@ function list_languages($message = '')
         }
 
         $installLink = ($disabled
-            ? span($btnText, array(
-                'class'    => 'txp-button disabled',
-            ))
+            ? span($btnText, array('class' => 'txp-button disabled'))
             : href($btnText, array(
                 'event'      => 'lang',
                 'step'       => 'get_language',
                 'lang_code'  => $langname,
                 '_txp_token' => form_token(),
-            ), array(
-                'class' => 'txp-button',
-            )));
+            ), array('class' => 'txp-button')));
 
         $grid .= tag(
             graf(

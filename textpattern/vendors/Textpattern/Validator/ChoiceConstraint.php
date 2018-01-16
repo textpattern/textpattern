@@ -41,7 +41,11 @@ class ChoiceConstraint extends Constraint
 
     public function __construct($value, $options = array())
     {
-        $options = lAtts(array('choices' => array(), 'allow_blank' => false, 'message' => 'unknown_choice'), $options, false);
+        $options = lAtts(array(
+            'choices'     => array(),
+            'allow_blank' => false,
+            'message'     => 'unknown_choice',
+        ), $options, false);
         parent::__construct($value, $options);
     }
 

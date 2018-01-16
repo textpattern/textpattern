@@ -369,17 +369,17 @@ class comment_evaluation
         extract(getComment());
 
         $this->status = array(
-            SPAM => array(),
+            SPAM     => array(),
             MODERATE => array(),
-            VISIBLE => array(),
-            RELOAD => array(),
+            VISIBLE  => array(),
+            RELOAD   => array(),
         );
 
         $this->status_text = array(
-            SPAM => gTxt('spam'),
+            SPAM     => gTxt('spam'),
             MODERATE => gTxt('unmoderated'),
             VISIBLE  => gTxt('visible'),
-            RELOAD => gTxt('reload'),
+            RELOAD   => gTxt('reload'),
         );
 
         $this->message = $this->status;
@@ -644,7 +644,10 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
     $out .= gTxt('comment_web').": $cweb".n;
     $out .= gTxt('comment_comment').": $message";
 
-    $subject = strtr(gTxt('comment_received'), array('{site}' => $sitename, '{title}' => $Title));
+    $subject = strtr(gTxt('comment_received'), array(
+        '{site}'  => $sitename,
+        '{title}' => $Title,
+    ));
 
     if (!is_valid_email($cemail)) {
         $cemail = null;
@@ -672,7 +675,11 @@ function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
 
 function input($type, $name, $val, $size = '', $class = '', $tab = '', $chkd = '')
 {
-    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'fInput')), E_USER_NOTICE);
+    trigger_error(gTxt('deprecated_function_with', array(
+        '{name}' => __FUNCTION__,
+        '{with}' => 'fInput',
+    )), E_USER_NOTICE);
+
     $o = array(
         '<input type="'.$type.'" name="'.$name.'" id="'.$name.'" value="'.$val.'"',
         ($size)  ? ' size="'.$size.'"'    : '',

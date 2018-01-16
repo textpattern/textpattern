@@ -84,10 +84,7 @@ function atom()
     ob_clean();
     extract($prefs);
 
-    extract(doSlash(gpsa(array(
-        'limit',
-        'area',
-    ))));
+    extract(doSlash(gpsa(array('limit', 'area'))));
 
     // Build filter criteria from a comma-separated list of sections
     // and categories.

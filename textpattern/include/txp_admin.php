@@ -311,13 +311,9 @@ function author_list($message = '')
 
         $search->setAliases('privs', $levels);
 
-        list($criteria, $crit, $search_method) = $search->getFilter(array(
-            'login' => array('can_list' => true),
-            ));
+        list($criteria, $crit, $search_method) = $search->getFilter(array('login' => array('can_list' => true)));
 
-        $search_render_options = array(
-            'placeholder' => 'search_users',
-        );
+        $search_render_options = array('placeholder' => 'search_users');
 
         $total = getCount('txp_users', $criteria);
 
@@ -641,7 +637,10 @@ function author_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $users = safe_column("name", 'txp_users', "1 = 1");
 
     $methods = array(
-        'changeprivilege'  => array('label' => gTxt('changeprivilege'), 'html' => $privileges),
+        'changeprivilege'  => array(
+            'label' => gTxt('changeprivilege'),
+            'html'  => $privileges,
+        ),
         'resetpassword'    => gTxt('resetpassword'),
         'resendactivation' => gTxt('resend_activation'),
     );
