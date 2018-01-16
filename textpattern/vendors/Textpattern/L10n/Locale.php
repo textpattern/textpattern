@@ -67,6 +67,7 @@ class Locale
         'is' => array('is_IS.UTF-8', 'is_IS.ISO_8859-1', 'Icelandic_Iceland.1252', 'is_IS', 'is', 'ice', 'isl', 'icelandic'),
         'it' => array('it_IT.UTF-8', 'it_IT.ISO_8859-1', 'it_IT.ISO_8859-16', 'Italian_Italy.1252', 'it_IT', 'it', 'ita', 'italian'),
         'ja' => array('ja_JP.UTF-8', 'Japanese_Japan.932', 'ja_JP', 'ja', 'jpn', 'japanese'),
+        'km' => array('km_KH.UTF-8', 'Khmer.65001', 'km_KH', 'km', 'khm', 'kxm', 'khmer'),
         'ko' => array('ko_KR.UTF-8', 'Korean_Korea.949', 'ko_KR', 'ko', 'kor', 'korean'),
         'lt' => array('lt_LT.UTF-8', 'lt_LT.ISO_8859-4', 'Lithuanian_Lithuania.1257', 'lt_LT', 'lt', 'lit', 'lithuanian'),
         'lv' => array('lv_LV.UTF-8', 'lv_LV.ISO_8859-4', 'Latvian_Latvia.1257', 'lv_LV', 'lv', 'lav', 'latvian'),
