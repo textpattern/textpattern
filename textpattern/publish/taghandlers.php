@@ -1700,7 +1700,7 @@ function newer($atts, $thing = null)
 
     $numPages = $thispage['numPages'];
     $pg = $thispage['pg'];
-    $nextpg = $pg - (isset($shift) ? intval($shift) : 1);
+    $nextpg = $shift === '*' ? min(1, $pg - 1) : ($pg - (isset($shift) ? intval($shift) : 1));
 
     if ($nextpg > 0 && $nextpg <= $numPages) {
 
@@ -1761,7 +1761,7 @@ function older($atts, $thing = null)
 
     $numPages = $thispage['numPages'];
     $pg = $thispage['pg'];
-    $nextpg = $pg + (isset($shift) ? intval($shift) : 1);
+    $nextpg = $shift === '*' ? max($numPages, $pg + 1) : ($pg + (isset($shift) ? intval($shift) : 1));
 
     if ($nextpg > 0 && $nextpg <= $numPages) {
 
