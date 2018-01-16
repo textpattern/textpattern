@@ -39,11 +39,11 @@ if ($event === 'skin') {
 
     $availableSteps = array(
         'skin_change_pageby' => true, // Prefixed to make it work with the paginator…
-        'list'          => false,
-        'edit'          => false,
-        'save'          => true,
-        'import'        => false,
-        'multi_edit'    => true,
+        'list'               => false,
+        'edit'               => false,
+        'save'               => true,
+        'import'             => false,
+        'multi_edit'         => true,
     );
 
     if ($step && bouncer($step, $availableSteps)) {
@@ -495,9 +495,15 @@ function skin_multiedit_form($page, $sort, $dir, $crit, $search_method)
             .popHelp('remove_extra_templates');
 
     $methods = array(
-        'import'    => array('label' => gTxt('import'), 'html' => $clean),
+        'import'    => array(
+            'label' => gTxt('import'),
+            'html'  => $clean,
+        ),
         'duplicate' => gTxt('duplicate'),
-        'export'    => array('label' => gTxt('export'), 'html' => $clean),
+        'export'    => array(
+            'label' => gTxt('export'),
+            'html'  => $clean,
+        ),
         'delete'    => gTxt('delete'),
     );
 

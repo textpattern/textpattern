@@ -621,8 +621,8 @@ function dateformats($name, $val)
 function permlink_format($name, $val)
 {
     $vals = array(
-        '0'   => gTxt('permlink_intercapped'),
-        '1'   => gTxt('permlink_hyphenated'),
+        '0' => gTxt('permlink_intercapped'),
+        '1' => gTxt('permlink_hyphenated'),
     );
 
     return selectInput($name, $vals, $val, '', '', $name);
@@ -779,8 +779,8 @@ function defaultPublishStatus($name, $val)
 function module_pophelp($name, $val)
 {
     $vals = array(
-        '0'  => gTxt('none'),
-        '1'  => gTxt('pophelp'),
+        '0' => gTxt('none'),
+        '1' => gTxt('pophelp'),
     );
 
     return selectInput($name, $vals, $val, '', '', $name);

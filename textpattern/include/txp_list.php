@@ -199,9 +199,7 @@ function list_list($message = '', $post = '')
             'title_body_excerpt' => array('always_like' => true),
         ));
 
-    $search_render_options = array(
-        'placeholder' => 'search_articles',
-    );
+    $search_render_options = array('placeholder' => 'search_articles');
 
     $sql_from =
         safe_pfx('textpattern')." textpattern
@@ -252,14 +250,14 @@ function list_list($message = '', $post = '')
         $show_authors = !has_single_author('textpattern', 'AuthorID');
 
         $headers = array(
-            'title' => 'title',
-            'posted' => 'posted',
-            'lastmod' => 'modified',
-            'expires' => 'expires',
-            'section' => 'section',
+            'title'     => 'title',
+            'posted'    => 'posted',
+            'lastmod'   => 'modified',
+            'expires'   => 'expires',
+            'section'   => 'section',
             'category1' => 'category1',
             'category2' => 'category2',
-            'status' => 'status'
+            'status'    => 'status',
         );
 
         if ($show_authors) {
@@ -293,7 +291,7 @@ function list_list($message = '', $post = '')
                 'is_link' => true,
                 'dir'   => $switch_dir,
                 'crit'  => $crit,
-                'method'=> $search_method
+                'method'=> $search_method,
             );
 
             $dates = array('posted', 'lastmod', 'expires');

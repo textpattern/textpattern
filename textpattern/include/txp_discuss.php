@@ -231,15 +231,11 @@ function discuss_list($message = '')
         VISIBLE => $alias_yes,
         MODERATE => $alias_no,
         SPAM => $alias_spam,
-        ));
+    ));
 
-    list($criteria, $crit, $search_method) = $search->getFilter(array(
-            'id' => array('can_list' => true),
-        ));
+    list($criteria, $crit, $search_method) = $search->getFilter(array('id' => array('can_list' => true)));
 
-    $search_render_options = array(
-        'placeholder' => 'search_comments',
-    );
+    $search_render_options = array('placeholder' => 'search_comments');
 
     $sql_from =
         safe_pfx_j('txp_discuss')."
