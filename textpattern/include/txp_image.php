@@ -171,13 +171,9 @@ function image_list($message = '')
     $alias_no = '0, No';
     $search->setAliases('thumbnail', array($alias_no, $alias_yes));
 
-    list($criteria, $crit, $search_method) = $search->getFilter(array(
-            'id' => array('can_list' => true),
-        ));
+    list($criteria, $crit, $search_method) = $search->getFilter(array('id' => array('can_list' => true)));
 
-    $search_render_options = array(
-        'placeholder' => 'search_images',
-    );
+    $search_render_options = array('placeholder' => 'search_images');
 
     $sql_from =
         safe_pfx_j('txp_image')."
@@ -446,8 +442,14 @@ function image_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $authors = $all_image_authors ? selectInput('author', $all_image_authors, '', true) : '';
 
     $methods = array(
-        'changecategory' => array('label' => gTxt('changecategory'), 'html' => $categories),
-        'changeauthor'   => array('label' => gTxt('changeauthor'), 'html' => $authors),
+        'changecategory' => array(
+            'label' => gTxt('changecategory'),
+            'html'  => $categories,
+        ),
+        'changeauthor'   => array(
+            'label' => gTxt('changeauthor'),
+            'html'  => $authors,
+        ),
         'delete'         => gTxt('delete'),
     );
 
@@ -573,7 +575,7 @@ function image_edit($message = '', $id = '')
             'sort',
             'dir',
             'crit',
-            'search_method'
+            'search_method',
         )));
 
         if ($ext != '.swf') {
@@ -841,7 +843,11 @@ function image_replace()
     }
 
     if ($rs) {
-        $meta = array('category' => $rs['category'], 'caption' => $rs['caption'], 'alt' => $rs['alt']);
+        $meta = array(
+            'category' => $rs['category'],
+            'caption'  => $rs['caption'],
+            'alt'      => $rs['alt'],
+        );
     } else {
         $meta = '';
     }
@@ -929,9 +935,7 @@ function image_save()
         return;
     }
 
-    $constraints = array(
-        'category' => new CategoryConstraint(gps('category'), array('type' => 'image')),
-    );
+    $constraints = array('category' => new CategoryConstraint(gps('category'), array('type' => 'image')));
     callback_event_ref('image_ui', 'validate_save', 0, $varray, $constraints);
     $validator = new Validator($constraints);
 

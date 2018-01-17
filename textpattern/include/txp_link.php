@@ -158,13 +158,9 @@ function link_list($message = '')
         )
     );
 
-    list($criteria, $crit, $search_method) = $search->getFilter(array(
-            'id' => array('can_list' => true),
-        ));
+    list($criteria, $crit, $search_method) = $search->getFilter(array('id' => array('can_list' => true)));
 
-    $search_render_options = array(
-        'placeholder' => 'search_links',
-    );
+    $search_render_options = array('placeholder' => 'search_links');
 
     $sql_from =
         safe_pfx_j('txp_link')."

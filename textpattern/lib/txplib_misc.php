@@ -48,7 +48,10 @@ function deNull($in)
 
 function deCRLF($in)
 {
-    return is_array($in) ? doArray($in, 'deCRLF') : strtr($in, array("\n" => '', "\r" => ''));
+    return is_array($in) ? doArray($in, 'deCRLF') : strtr($in, array(
+        "\n" => '',
+        "\r" => '',
+    ));
 }
 
 /**
@@ -848,8 +851,8 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
     $safename = doSlash($name);
     $meta = lAtts(array(
         'category' => '',
-        'caption' => '',
-        'alt' => '',
+        'caption'  => '',
+        'alt'      => '',
     ), (array) $meta, false);
 
     extract(doSlash($meta));
@@ -1716,17 +1719,17 @@ function publicErrorHandler($errno, $errstr, $errfile, $errline)
 
     if ($production_status == 'testing') {
         $error = array(
-            E_WARNING           => 'Warning',
-            E_USER_ERROR        => 'Textpattern Error',
-            E_USER_WARNING      => 'Textpattern Warning',
+            E_WARNING      => 'Warning',
+            E_USER_ERROR   => 'Textpattern Error',
+            E_USER_WARNING => 'Textpattern Warning',
         );
     } elseif ($production_status == 'debug') {
         $error = array(
-            E_WARNING           => 'Warning',
-            E_NOTICE            => 'Notice',
-            E_USER_ERROR        => 'Textpattern Error',
-            E_USER_WARNING      => 'Textpattern Warning',
-            E_USER_NOTICE       => 'Textpattern Notice',
+            E_WARNING      => 'Warning',
+            E_NOTICE       => 'Notice',
+            E_USER_ERROR   => 'Textpattern Error',
+            E_USER_WARNING => 'Textpattern Warning',
+            E_USER_NOTICE  => 'Textpattern Notice',
         );
 
         if (!isset($error[$errno])) {
@@ -1913,7 +1916,11 @@ function callback_event($event, $step = '', $pre = 0)
                     $trace->start("\t[Call function: '".callback_tostring($c['function'])."'".(empty($argv) ? '' : ", argv='".serialize($argv)."'")."]");
                 }
 
-                $return_value = call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
+                $return_value = call_user_func_array($c['function'], array(
+                    'event' => $event,
+                    'step'  => $step,
+                ) + $argv);
+
                 if (isset($renew)) {
                     $argv[$renew] = $return_value;
                 }
@@ -2108,7 +2115,11 @@ function pluggable_ui($event, $element, $default = '')
     // Custom user interface, anyone?
     // Signature for called functions:
     // string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
-    $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => (string) $default === '' ? 0 : array(0, 0)) + $argv);
+    $ui = call_user_func_array('callback_event', array(
+        'event' => $event,
+        'step'  => $element,
+        'pre'   => (string) $default === '' ? 0 : array(0, 0),
+    ) + $argv);
 
     // Either plugins provided a user interface, or we render our own.
     return ($ui === '') ? $default : $ui;
@@ -5531,7 +5542,7 @@ function permlinkurl($article_array)
         'section'   => null,
         'posted'    => null,
         'expires'   => null,
-        'uexpires'   => null,
+        'uexpires'  => null,
     ), array_change_key_case($article_array, CASE_LOWER), false));
 
     if (empty($thisid)) {
@@ -6261,9 +6272,7 @@ function send_xml_response($response = array())
         $headers_sent = true;
     }
 
-    $default_response = array(
-        'http-status' => '200 OK',
-    );
+    $default_response = array('http-status' => '200 OK');
 
     // Backfill default response properties.
     $response = $response + $default_response;
@@ -6651,7 +6660,10 @@ function bouncer($step, $steps)
         return true;
     }
 
-    die(gTxt('get_off_my_lawn', array('{event}' => $event, '{step}' => $step)));
+    die(gTxt('get_off_my_lawn', array(
+        '{event}' => $event,
+        '{step}'  => $step,
+    )));
 }
 
 /**
