@@ -202,7 +202,9 @@ function page_title($atts)
 {
     global $parentid, $thisarticle, $q, $c, $author, $context, $s, $pg, $sitename;
 
-    extract(lAtts(array('separator' => ' | '), $atts));
+    extract(lAtts(array(
+        'separator' => ' | ',
+    ), $atts));
 
     $appending = txpspecialchars($separator.$sitename);
     $parent_id = (int) $parentid;
@@ -446,8 +448,8 @@ function output_form($atts, $thing = null)
         }
     } else {
         lAtts(array(
-            'form'  => '',
-            'yield' => '',
+            'form' => '',
+            'yield' => ''
         ), $atts);
         $atts = array();
     }
@@ -484,7 +486,7 @@ function feed_link($atts, $thing = null)
         'label'    => '',
         'limit'    => '',
         'section'  => ($s == 'default' ? '' : $s),
-        'title'    => gTxt('rss_feed_title'),
+        'title'    => gTxt('rss_feed_title')
     ), $atts));
 
     $url = pagelinkurl(array(
@@ -529,7 +531,7 @@ function link_feed_link($atts)
         'label'    => '',
         'title'    => gTxt('rss_feed_title'),
         'wraptag'  => '',
-        'class'    => __FUNCTION__,
+        'class'    => __FUNCTION__
     ), $atts));
 
     $url = pagelinkurl(array(
@@ -746,7 +748,9 @@ function linkdesctitle($atts)
 
     assert_link();
 
-    extract(lAtts(array('rel' => ''), $atts));
+    extract(lAtts(array(
+        'rel' => '',
+    ), $atts));
 
     $description = ($thislink['description'])
         ? ' title="'.txpspecialchars($thislink['description']).'"'
@@ -767,7 +771,9 @@ function link_name($atts)
 
     assert_link();
 
-    extract(lAtts(array('escape' => null), $atts));
+    extract(lAtts(array(
+        'escape' => null,
+    ), $atts));
 
     return ($escape === null)
         ? txpspecialchars($thislink['linkname'])
@@ -797,7 +803,7 @@ function link_author($atts)
         'link'         => 0,
         'title'        => 1,
         'section'      => '',
-        'this_section' => '',
+        'this_section' => ''
     ), $atts));
 
     if ($thislink['author']) {
@@ -807,11 +813,7 @@ function link_author($atts)
         $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
         $author = ($link)
-            ? href($display_name, pagelinkurl(array(
-                's'       => $section,
-                'author'  => $author_name,
-                'context' => 'link',
-            )))
+            ? href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'link')))
             : $display_name;
 
         return $author;
@@ -826,7 +828,9 @@ function link_description($atts)
 
     assert_link();
 
-    extract(lAtts(array('escape' => null), $atts));
+    extract(lAtts(array(
+        'escape'   => null
+    ), $atts));
 
     if ($thislink['description']) {
         return ($escape === null) ?
@@ -860,7 +864,9 @@ function link_category($atts)
 
     assert_link();
 
-    extract(lAtts(array('title' => 0), $atts));
+    extract(lAtts(array(
+        'title'    => 0
+    ), $atts));
 
     if ($thislink['category']) {
         $category = ($title)
@@ -1308,19 +1314,10 @@ function category_list($atts, $thing = null)
                 extract($thiscategory);
                 $out[] = tag(txpspecialchars($title), 'a',
                     (($active_class && (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
-                    ' href="'.pagelinkurl(array(
-                        's'       => $section,
-                        'c'       => $name,
-                        'context' => $type,
-                    )).'"'
+                    ' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'context' => $type)).'"'
                 ).(
                     isset($cache[$hash][$name]) && $children > $level && count($cache[$hash][$name]) > 1
-                    ? category_list(array(
-                        'parent'  => $name,
-                        'exclude' => implode(',', array_merge($exclude, array($name))),
-                        'label'   => '',
-                        'html_id' => '',
-                    ) + $atts)
+                    ? category_list(array('parent' => $name, 'exclude' => implode(',', array_merge($exclude, array($name))), 'label' => '', 'html_id' => '') + $atts)
                     : ''
                 );
             } else {
@@ -1549,8 +1546,8 @@ function link_to($atts, $thing = null, $target = null)
     }
 
     extract(lAtts(array(
-        'form'       => '',
-        'link'       => 1,
+        'form' => '',
+        'link' => 1,
         'showalways' => 0,
     ), $atts));
 
@@ -1665,7 +1662,9 @@ function site_slogan()
 
 function link_to_home($atts, $thing = null)
 {
-    extract(lAtts(array('class' => false), $atts));
+    extract(lAtts(array(
+        'class' => false,
+    ), $atts));
 
     if ($thing) {
         $class = ($class) ? ' class="'.txpspecialchars($class).'"' : '';
@@ -1695,7 +1694,7 @@ function newer($atts, $thing = null)
         'showalways' => 0,
         'title'      => '',
         'escape'     => 'html',
-        'shift'      => null,
+        'shift'      => null
     ), $atts));
 
     $numPages = $thispage['numPages'];
@@ -1756,7 +1755,7 @@ function older($atts, $thing = null)
         'showalways' => 0,
         'title'      => '',
         'escape'     => 'html',
-        'shift'      => null,
+        'shift'      => null
     ), $atts));
 
     $numPages = $thispage['numPages'];
@@ -1860,7 +1859,9 @@ function if_article_id($atts, $thing = null)
 
     assert_article();
 
-    extract(lAtts(array('id' => $pretext['id']), $atts));
+    extract(lAtts(array(
+        'id' => $pretext['id'],
+    ), $atts));
 
     $x = $id && in_list($thisarticle['thisid'], $id);
     return isset($thing) ? parse($thing, $x) : $x;
@@ -1904,7 +1905,7 @@ function modified($atts)
     extract(lAtts(array(
         'format'  => '',
         'gmt'     => '',
-        'lang'    => '',
+        'lang'    => ''
     ), $atts));
 
     if ($format) {
@@ -1935,7 +1936,7 @@ function expires($atts)
     extract(lAtts(array(
         'format'  => '',
         'gmt'     => '',
-        'lang'    => '',
+        'lang'    => ''
     ), $atts));
 
     if ($format) {
@@ -2037,7 +2038,9 @@ function comments_invite($atts)
 
 function popup_comments($atts, $thing = null)
 {
-    extract(lAtts(array('form' => 'comments_display'), $atts));
+    extract(lAtts(array(
+        'form' => 'comments_display'
+    ), $atts));
 
     $rs = safe_row(
         "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(LastMod) AS uLastMod, UNIX_TIMESTAMP(Expires) AS uExpires",
@@ -2118,7 +2121,10 @@ function comments_form($atts, $thing = null)
             $out = comments_preview(array());
         }
 
-        extract(doDeEnt(psa(array('parentid', 'backpage'))));
+        extract(doDeEnt(psa(array(
+            'parentid',
+            'backpage',
+        ))));
 
         // If the form fields are filled (anything other than blank), pages really
         // should not be saved by a public cache (rfc2616/14.9.1).
@@ -2152,7 +2158,9 @@ function comment_name_input($atts)
 {
     global $prefs, $thiscommentsform;
 
-    extract(lAtts(array('size' => $thiscommentsform['isize']), $atts));
+    extract(lAtts(array(
+        'size' => $thiscommentsform['isize']
+    ), $atts));
 
     $namewarn = false;
     $name = pcs('name');
@@ -2173,7 +2181,9 @@ function comment_email_input($atts)
 {
     global $prefs, $thiscommentsform;
 
-    extract(lAtts(array('size' => $thiscommentsform['isize']), $atts));
+    extract(lAtts(array(
+        'size' => $thiscommentsform['isize']
+    ), $atts));
 
     $emailwarn = false;
     $email = clean_url(pcs('email'));
@@ -2194,7 +2204,9 @@ function comment_web_input($atts)
 {
     global $prefs, $thiscommentsform;
 
-    extract(lAtts(array('size' => $thiscommentsform['isize']), $atts));
+    extract(lAtts(array(
+        'size' => $thiscommentsform['isize']
+    ), $atts));
 
     $web = clean_url(pcs('web'));
     $h5 = ($prefs['doctype'] == 'html5');
@@ -2215,7 +2227,7 @@ function comment_message_input($atts)
 
     extract(lAtts(array(
         'rows'  => $thiscommentsform['msgrows'],
-        'cols'  => $thiscommentsform['msgcols'],
+        'cols'  => $thiscommentsform['msgcols']
     ), $atts));
 
     $style = $thiscommentsform['msgstyle'];
@@ -2259,7 +2271,11 @@ function comment_remember($atts)
         'forgetlabel'   => $thiscommentsform['forgetlabel']
     ), $atts));
 
-    extract(doDeEnt(psa(array('checkbox_type', 'remember', 'forget'))));
+    extract(doDeEnt(psa(array(
+        'checkbox_type',
+        'remember',
+        'forget'
+    ))));
 
     if (!ps('preview')) {
         $rememberCookie = cs('txp_remember');
@@ -2301,7 +2317,9 @@ function comment_preview($atts)
 {
     global $thiscommentsform;
 
-    extract(lAtts(array('label' => $thiscommentsform['previewlabel']), $atts));
+    extract(lAtts(array(
+        'label'  => $thiscommentsform['previewlabel']
+    ), $atts));
 
     return fInput('submit', 'preview', $label, 'button', '', '', '', '', 'txpCommentPreview', false);
 }
@@ -2312,7 +2330,9 @@ function comment_submit($atts)
 {
     global $thiscommentsform;
 
-    extract(lAtts(array('label' => $thiscommentsform['submitlabel']), $atts));
+    extract(lAtts(array(
+        'label'  => $thiscommentsform['submitlabel']
+    ), $atts));
 
     // If all fields check out, the submit button is active/clickable.
     if (ps('preview')) {
@@ -2464,7 +2484,9 @@ function comment_permlink($atts, $thing)
     assert_comment();
 
     extract($thiscomment);
-    extract(lAtts(array('anchor' => empty($thiscomment['has_anchor_tag'])), $atts));
+    extract(lAtts(array(
+        'anchor' => empty($thiscomment['has_anchor_tag']),
+    ), $atts));
 
     $dlink = permlinkurl($thisarticle).'#c'.$discussid;
 
@@ -2497,7 +2519,9 @@ function comment_name($atts)
     extract($prefs);
     extract($thiscomment);
 
-    extract(lAtts(array('link' => 1), $atts));
+    extract(lAtts(array(
+        'link' => 1,
+    ), $atts));
 
     $name = txpspecialchars($name);
 
@@ -2719,7 +2743,9 @@ function if_article_author($atts, $thing = null)
 
     assert_article();
 
-    extract(lAtts(array('name' => ''), $atts));
+    extract(lAtts(array(
+        'name' => '',
+    ), $atts));
 
     $author = $thisarticle['authorid'];
 
@@ -2752,8 +2778,8 @@ function title($atts)
     assert_article();
 
     extract(lAtts(array(
-        'escape'   => null,
-        'no_widow' => @$prefs['title_no_widow'],
+        'escape' => null,
+        'no_widow' => @$prefs['title_no_widow']
     ), $atts));
 
     $t = $escape === null ? escape_title($thisarticle['title']) : $thisarticle['title'];
@@ -2824,10 +2850,7 @@ function article_category($atts, $thing = null)
         if ($thing) {
             $out = href(
                 parse($thing),
-                pagelinkurl(array(
-                    's' => $section,
-                    'c' => $category,
-                )),
+                pagelinkurl(array('s' => $section, 'c' => $category)),
                 (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
                 ($title ? ' title="'.$label.'"' : '').
                 ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
@@ -2835,10 +2858,7 @@ function article_category($atts, $thing = null)
         } elseif ($link) {
             $out = href(
                 $label,
-                pagelinkurl(array(
-                    's' => $section,
-                    'c' => $category,
-                )),
+                pagelinkurl(array('s' => $section, 'c' => $category)),
                 ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
             );
         } else {
@@ -2887,11 +2907,7 @@ function category($atts, $thing = null)
 
         $label = txpspecialchars(($title) ? fetch_category_title($category, $type) : $category);
 
-        $href = pagelinkurl(array(
-            's'       => $section,
-            'c'       => $category,
-            'context' => $type,
-        ));
+        $href = pagelinkurl(array('s' => $section, 'c' => $category, 'context' => $type));
 
         if ($thing) {
             $out = href(
@@ -2980,7 +2996,7 @@ function keywords($atts)
     extract(lAtts(array(
         'class'   => '',
         'break'   => ',',
-        'wraptag' => '',
+        'wraptag' => ''
     ), $atts));
 
     $out = do_list_unique(txpspecialchars($thisarticle['keywords']));
@@ -2996,7 +3012,9 @@ function if_keywords($atts, $thing = null)
 
     assert_article();
 
-    extract(lAtts(array('keywords' => ''), $atts));
+    extract(lAtts(array(
+        'keywords' => '',
+    ), $atts));
 
     $condition = empty($keywords)
         ? $thisarticle['keywords']
@@ -3128,10 +3146,7 @@ function search_result_excerpt($atts)
     ), $atts));
 
     if (isset($atts['break'])) {
-        trigger_error(gTxt('deprecated_attribute_with', array(
-            '{name}' => 'break',
-            '{with}' => 'separator',
-        )), E_USER_NOTICE);
+        trigger_error(gTxt('deprecated_attribute_with', array('{name}' => 'break', '{with}' => 'separator')), E_USER_NOTICE);
 
         if (!isset($atts['separator'])) {
             $separator = $break;
@@ -3201,8 +3216,8 @@ function search_result_count($atts)
     }
 
     extract(lAtts(array(
-        'text'   => null,
-        'pageby' => 1,
+        'text' => null,
+        'pageby' => 1
     ), $atts));
 
     $by = (int)$pageby or $by = 1;
@@ -3542,7 +3557,7 @@ function image_author($atts)
         'link'         => 0,
         'title'        => 1,
         'section'      => '',
-        'this_section' => '',
+        'this_section' => ''
     ), $atts));
 
     if ($imageData = imageFetchInfo($id, $name)) {
@@ -3552,11 +3567,7 @@ function image_author($atts)
         $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
         $author = ($link)
-            ? href($display_name, pagelinkurl(array(
-                's'       => $section,
-                'author'  => $author_name,
-                'context' => 'image',
-            )))
+            ? href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'image')))
             : $display_name;
 
         return $author;
@@ -3651,7 +3662,9 @@ function if_article_list($atts, $thing = null)
     $x = ($is_article_list == true);
 
     if ($x && !empty($atts)) {
-        extract(lAtts(array('type' => ''), $atts));
+        extract(lAtts(array(
+            'type' => ''
+        ), $atts));
 
         foreach (do_list_unique($type) as $q) {
             switch ($q) {
@@ -3747,7 +3760,9 @@ function meta_description($atts)
 
 function if_description($atts, $thing = null)
 {
-    extract(lAtts(array('type' => null), $atts));
+    extract(lAtts(array(
+        'type' => null,
+    ), $atts));
 
     $content = getMetaDescription($type);
     $x = !empty($content);
@@ -3810,12 +3825,13 @@ function permlink($atts, $thing = null)
         }
 
         return tag(parse($thing), 'a', array(
-            'rel'   => 'bookmark',
-            'href'  => $url,
+            'rel' => 'bookmark',
+            'href' => $url,
             'title' => $title,
             'style' => $style,
-            'class' => $class,
-        ));
+            'class' => $class
+            )
+        );
     }
 }
 
@@ -3891,10 +3907,7 @@ function breadcrumb($atts, $thing = null)
     foreach ($catpath as $thiscategory) {
         $category_title_html = isset($thing) ? parse($thing) : ($title ? escape_title($thiscategory['title']) : $thiscategory['name']);
         $content[] = ($linked)
-            ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array(
-                'c'       => $thiscategory['name'],
-                'context' => $type,
-            )).'"')
+            ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('c' => $thiscategory['name'], 'context' => $type)).'"')
             : $category_title_html;
     }
 
@@ -3962,7 +3975,7 @@ function if_category($atts, $thing = null)
         'category' => false,
         'type'     => false,
         'name'     => false,
-        'parent'   => 0,
+        'parent'   => 0
     ), $atts));
 
     if ($category === false) {
@@ -3977,20 +3990,25 @@ function if_category($atts, $thing = null)
         $category = trim($category);
     }
 
-    if ($type && $theType !== $type) {
+    if ($type && $type !== true && $theType !== $type) {
         $x = false;
     } else {
-        $x = $name === false ? !empty($category) : in_list($category, $name);
+        $parentname = $parent && is_numeric((string)$parent);
+        $x = $name === false ? !empty($category) : $parentname || in_list($category, $name);
     }
 
     if ($x && $parent && $category) {
         if (!isset($cache[$theType.$category])) {
-            $cache[$theType.$category] = array_reverse(array_slice(array_column(getTreePath($category, $theType), 'name'), 1));
+            $names = array();
+            foreach(getTreePath($category, $theType) as $i => $cat) {
+                $i and $names[] = $cat['name'];
+            }
+            $cache[$theType.$category] = array_reverse($names);
         }
 
         $path = $cache[$theType.$category];
 
-        if (!is_numeric((string)$parent)) {
+        if (!$parentname) {
             $name = $parent;
             $parent = true;
         }
@@ -4078,7 +4096,9 @@ function if_section($atts, $thing = null)
 {
     global $s;
 
-    extract(lAtts(array('name' => false), $atts));
+    extract(lAtts(array(
+        'name' => false,
+    ), $atts));
 
     $section = ($s == 'default' ? '' : $s);
 
@@ -4099,7 +4119,9 @@ function if_article_section($atts, $thing = null)
 
     assert_article();
 
-    extract(lAtts(array('name' => ''), $atts));
+    extract(lAtts(array(
+        'name' => '',
+    ), $atts));
 
     $section = $thisarticle['section'];
 
@@ -4179,7 +4201,7 @@ function txp_header($atts)
     extract(lAtts(array(
         'name'    => 'Content-Type',
         'replace' => true,
-        'value'   => 'text/html; charset=utf-8',
+        'value'   => 'text/html; charset=utf-8'
     ), $atts));
 
     if ($name) {
@@ -4338,7 +4360,9 @@ function if_status($atts, $thing = null)
 {
     global $pretext, $txp_error_code;
 
-    extract(lAtts(array('status' => '200'), $atts));
+    extract(lAtts(array(
+        'status' => '200',
+    ), $atts));
 
     $page_status = $txp_error_code
         ? $txp_error_code
@@ -4365,7 +4389,7 @@ function page_url($atts)
     extract(lAtts(array(
         'type'    => 'request_uri',
         'default' => '',
-        'escape'  => null,
+        'escape'  => null
     ), $atts));
 
     if ($type == 'pg' && $pretext['pg'] == '') {
@@ -4707,7 +4731,9 @@ function file_download_created($atts)
 
     assert_file();
 
-    extract(lAtts(array('format' => ''), $atts));
+    extract(lAtts(array(
+        'format' => '',
+    ), $atts));
 
     if ($thisfile['created']) {
         return fileDownloadFormatTime(array(
@@ -4725,7 +4751,9 @@ function file_download_modified($atts)
 
     assert_file();
 
-    extract(lAtts(array('format' => ''), $atts));
+    extract(lAtts(array(
+        'format' => '',
+    ), $atts));
 
     if ($thisfile['modified']) {
         return fileDownloadFormatTime(array(
@@ -4754,7 +4782,9 @@ function file_download_name($atts)
 
     assert_file();
 
-    extract(lAtts(array('title' => 0), $atts));
+    extract(lAtts(array(
+        'title' => 0,
+    ), $atts));
 
     return ($title) ? $thisfile['title'] : $thisfile['filename'];
 }
@@ -4767,7 +4797,9 @@ function file_download_category($atts)
 
     assert_file();
 
-    extract(lAtts(array('title' => 0), $atts));
+    extract(lAtts(array(
+        'title'   => 0
+    ), $atts));
 
     if ($thisfile['category']) {
         $category = ($title)
@@ -4790,7 +4822,7 @@ function file_download_author($atts)
         'link'         => 0,
         'title'        => 1,
         'section'      => '',
-        'this_section' => '',
+        'this_section' => ''
     ), $atts));
 
     if ($thisfile['author']) {
@@ -4800,11 +4832,7 @@ function file_download_author($atts)
         $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
         $author = ($link)
-            ? href($display_name, pagelinkurl(array(
-                's'       => $section,
-                'author'  => $author_name,
-                'context' => 'file',
-            )))
+            ? href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'file')))
             : $display_name;
 
         return $author;
@@ -4830,7 +4858,9 @@ function file_download_description($atts)
 
     assert_file();
 
-    extract(lAtts(array('escape' => null), $atts));
+    extract(lAtts(array(
+        'escape'  => null
+    ), $atts));
 
     if ($thisfile['description']) {
         return ($escape === null)
@@ -4943,7 +4973,7 @@ function txp_eval($atts, $thing = null)
 
     extract(lAtts(array(
         'query' => null,
-        'test'  => !isset($atts['query']),
+        'test'  => !isset($atts['query'])
     ), $atts));
 
     if (!isset($query)) {
@@ -4956,11 +4986,11 @@ function txp_eval($atts, $thing = null)
             $functions = do_list_unique(get_pref('txp_evaluate_functions'));
             $_functions = array();
 
-            foreach ($functions as $function) {
+            foreach ($functions as $function) { 
                 list($key, $val) = explode(':', $function, 2) + array(null, $function);
                 $_functions[trim($key)] = trim($val);
             }
-
+            
             if ($_functions) {
                 $functions = implode('|', array_keys($_functions));
                 $xpath->registerNamespace('php', 'http://php.net/xpath');
@@ -5048,7 +5078,9 @@ function txp_escape($atts, $thing = '')
     static $textile = null, $format = null, $tr = array("'" => "',\"'\",'");
     $tidy = false;
 
-    extract(lAtts(array('escape' => true), $atts, false));
+    extract(lAtts(array(
+        'escape' => true
+    ), $atts, false));
 
     $escape = $escape === true ? array('html') : do_list($escape);
 
@@ -5118,9 +5150,9 @@ function txp_wraptag($atts, $thing = '')
     extract(lAtts(array(
         'label'    => '',
         'labeltag' => '',
-        'wraptag'  => '',
-        'class'    => '',
-        'html_id'  => '',
+        'wraptag' => '',
+        'class'   => '',
+        'html_id' => ''
     ), $atts, false));
 
     $thing = $wraptag && trim($thing) !== '' ? doTag($thing, $wraptag, $class, '', '', $html_id) : $thing;
