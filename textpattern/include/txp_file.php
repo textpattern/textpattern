@@ -926,13 +926,7 @@ function file_insert()
     }
 
     $status = $ids ? (count($ids) < count($messages) ? E_WARNING : 0) : E_ERROR;
-    $message = array();
-
-    foreach ($messages as $row) {
-        $message[] = $row[0];
-    }
-
-    $messages = implode(br, $message);
+    $messages = implode(br, array_column($messages, 0));
 
     if ($ids && count($files) == 1) {
         file_edit(array($messages, $status), $ids[0]);
