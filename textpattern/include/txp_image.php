@@ -4,8 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -172,13 +171,9 @@ function image_list($message = '')
     $alias_no = '0, No';
     $search->setAliases('thumbnail', array($alias_no, $alias_yes));
 
-    list($criteria, $crit, $search_method) = $search->getFilter(array(
-            'id' => array('can_list' => true),
-        ));
+    list($criteria, $crit, $search_method) = $search->getFilter(array('id' => array('can_list' => true)));
 
-    $search_render_options = array(
-        'placeholder' => 'search_images',
-    );
+    $search_render_options = array('placeholder' => 'search_images');
 
     $sql_from =
         safe_pfx_j('txp_image')."
@@ -190,12 +185,6 @@ function image_list($message = '')
     } else {
         $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
-
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_image'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-4col-alt')
-        );
 
     $searchBlock =
         n.tag(
@@ -224,23 +213,16 @@ function image_list($message = '')
             );
     }
 
-    $contentBlockStart = n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        ));
-
     $createBlock = implode(n, $createBlock);
+    $contentBlock = '';
 
     $paginator = new \Textpattern\Admin\Paginator();
     $limit = $paginator->getLimit();
 
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-    echo $searchBlock.$contentBlockStart.$createBlock.n
-        .tag_start('div', array('id' => 'txp-list-container'));
-
     if ($total < 1) {
-        echo graf(
+        $contentBlock .= graf(
                     span(null, array('class' => 'ui-icon ui-icon-info')).' '.
                     gTxt($criteria != 1 ? 'no_results_found' : 'no_images_recorded'),
                     array('class' => 'alert-block information')
@@ -266,12 +248,12 @@ function image_list($message = '')
             FROM $sql_from WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
         );
 
-        echo pluggable_ui('image_ui', 'extend_controls', '', $rs);
+        $contentBlock .= pluggable_ui('image_ui', 'extend_controls', '', $rs);
 
         if ($rs && numRows($rs)) {
             $show_authors = !has_single_author('txp_image');
 
-            echo n.tag_start('form', array(
+            $contentBlock .= n.tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'images_form',
                     'name'   => 'longform',
@@ -383,7 +365,7 @@ function image_list($message = '')
                 $can_view = has_privs('image.edit.own');
                 $can_edit = has_privs('image.edit') || ($author === $txp_user && $can_view);
 
-                echo tr(
+                $contentBlock .= tr(
                     td(
                         $can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;', '', 'txp-list-col-multi-edit'
                     ).
@@ -395,7 +377,7 @@ function image_list($message = '')
                         )
                     ).
                     td(
-                        ($can_view ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name'
+                        ($can_view ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name txp-contain'
                     ).
                     td(
                         gTime($uDate), '', 'txp-list-col-created date'
@@ -417,7 +399,7 @@ function image_list($message = '')
                 );
             }
 
-            echo n.tag_end('tbody').
+            $contentBlock .= n.tag_end('tbody').
                 n.tag_end('table').
                 n.tag_end('div'). // End of .txp-listtables.
                 image_multiedit_form($page, $sort, $dir, $crit, $search_method).
@@ -426,16 +408,11 @@ function image_list($message = '')
         }
     }
 
-    echo n.tag_start('div', array(
-        'class' => 'txp-navigation',
-        'id'    => $event.'_navigation',
-        'style' => $total < 1 ? 'display: none' : false
-    )).
-    $paginator->render().
-    nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-    n.tag_end('div');
+    $pageBlock = $paginator->render().
+        nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
-    echo n.'</div>'.n.tag_end('div'). // End of .txp-layout-1col.
+    $table = new \Textpattern\Admin\Table($event);
+    echo $table->render(compact('total', 'criteria'), $searchBlock, $createBlock, $contentBlock, $pageBlock).
         n.tag(
         null,
         'div', array(
@@ -443,8 +420,7 @@ function image_list($message = '')
             'id'         => 'tagbuild_links',
             'aria-label' => gTxt('tagbuilder'),
             'title'      => gTxt('tagbuilder'),
-        )).
-        n.'</div>'; // End of .txp-layout.
+        ));
 }
 
 /**
@@ -466,8 +442,14 @@ function image_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $authors = $all_image_authors ? selectInput('author', $all_image_authors, '', true) : '';
 
     $methods = array(
-        'changecategory' => array('label' => gTxt('changecategory'), 'html' => $categories),
-        'changeauthor'   => array('label' => gTxt('changeauthor'), 'html' => $authors),
+        'changecategory' => array(
+            'label' => gTxt('changecategory'),
+            'html'  => $categories,
+        ),
+        'changeauthor'   => array(
+            'label' => gTxt('changeauthor'),
+            'html'  => $authors,
+        ),
         'delete'         => gTxt('delete'),
     );
 
@@ -593,7 +575,7 @@ function image_edit($message = '', $id = '')
             'sort',
             'dir',
             'crit',
-            'search_method'
+            'search_method',
         )));
 
         if ($ext != '.swf') {
@@ -660,10 +642,10 @@ function image_edit($message = '', $id = '')
                     'thumbnail_create',
                     form(
                         graf(
-                            n.'<label for="width">'.gTxt('thumb_width').'</label>'.
+                            n.'<label for="width">'.gTxt('width').'</label>'.
                             fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width').
                             n.'<a class="thumbnail-swap-size">'.gTxt('swap_values').'</a>'.
-                            n.'<label for="height">'.gTxt('thumb_height').'</label>'.
+                            n.'<label for="height">'.gTxt('height').'</label>'.
                             fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').
                             n.'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.
                             checkbox('crop', 1, get_pref('thumb_crop'), '', 'crop').
@@ -802,7 +784,7 @@ function image_insert()
 
     global $app_mode;
     $messages = $ids = array();
-    $fileshandler = Txp::get('Textpattern\Server\Files');
+    $fileshandler = Txp::get('\Textpattern\Server\Files');
     $files = $fileshandler->refactor($_FILES['thefile']);
     $meta = gpsa(array('caption', 'alt', 'category'));
 
@@ -861,7 +843,11 @@ function image_replace()
     }
 
     if ($rs) {
-        $meta = array('category' => $rs['category'], 'caption' => $rs['caption'], 'alt' => $rs['alt']);
+        $meta = array(
+            'category' => $rs['category'],
+            'caption'  => $rs['caption'],
+            'alt'      => $rs['alt'],
+        );
     } else {
         $meta = '';
     }
@@ -911,7 +897,7 @@ function thumbnail_insert()
         $newpath = IMPATH.$id.'t'.$ext;
 
         if (shift_uploaded_file($file, $newpath) == false) {
-            image_edit(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR), $id);
+            image_edit(array(gTxt('directory_permissions', array('{path}' => $newpath)), E_ERROR), $id);
         } else {
             chmod($newpath, 0644);
             safe_update('txp_image', "thumbnail = 1, thumb_w = $w, thumb_h = $h, date = NOW()", "id = $id");
@@ -949,9 +935,7 @@ function image_save()
         return;
     }
 
-    $constraints = array(
-        'category' => new CategoryConstraint(gps('category'), array('type' => 'image')),
-    );
+    $constraints = array('category' => new CategoryConstraint(gps('category'), array('type' => 'image')));
     callback_event_ref('image_ui', 'validate_save', 0, $varray, $constraints);
     $validator = new Validator($constraints);
 

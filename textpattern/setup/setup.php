@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -26,6 +26,7 @@ if (@php_sapi_name() != 'cli') {
 }
 
 $params = getopt('', array('config:', 'debug::', 'force::'));
+
 if (! $file = @$params['config']) {
     exit(<<<EOF
 Usage: php setup.php --config="my-setup-config.json"
@@ -38,19 +39,20 @@ EOF
 }
 
 $cfg = @json_decode(file_get_contents($file), true);
+
 if (empty($cfg)) {
     msg("Error json config file", MSG_ERROR);
 }
 
-
 define("txpinterface", "admin");
+
 if (!defined('txpath')) {
     define("txpath", dirname(dirname(__FILE__)));
 }
+
 define('MSG_OK', '[OK]');
 define('MSG_ALERT', '[WARNING]');
 define('MSG_ERROR', '[ERROR]');
-
 
 error_reporting(E_ALL | E_STRICT);
 @ini_set("display_errors", "1");
@@ -75,12 +77,13 @@ include_once txpath.'/setup/setup_lib.php';
 assert_system_requirements();
 setup_load_lang(@$cfg['site']['lang']);
 
-if (! isset($params['force']) && file_exists(txpath.'/config.php')) {
+if (!isset($params['force']) && file_exists(txpath.'/config.php')) {
     msg(gTxt('already_installed'), MSG_ERROR);
 }
 
 setup_try_mysql();
 $cfg_php = setup_makeConfig($cfg);
+
 if (@file_put_contents(txpath.'/config.php', $cfg_php) === false) {
     msg(gTxt('config_php_write_error'), MSG_ERROR);
 }

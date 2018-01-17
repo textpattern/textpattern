@@ -4,8 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -376,7 +375,10 @@ function status_link($status, $name, $linktext)
 {
     return asyncHref(
         $linktext,
-        array('step' => 'switch_status', 'thing' => $name)
+        array(
+            'step'  => 'switch_status',
+            'thing' => $name,
+        )
     );
 }
 
@@ -485,8 +487,14 @@ function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
     ), 5, false);
 
     $methods = array(
-        'changestatus' => array('label' => gTxt('changestatus'), 'html' => onoffRadio('setStatus', 1)),
-        'changeorder'  => array('label' => gTxt('changeorder'), 'html' => $orders),
+        'changestatus' => array(
+            'label' => gTxt('changestatus'),
+            'html'  => onoffRadio('setStatus', 1),
+        ),
+        'changeorder'  => array(
+            'label' => gTxt('changeorder'),
+            'html'  => $orders,
+        ),
         'delete'       => gTxt('delete'),
     );
 

@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -266,7 +266,11 @@ class Filter
             (
                 span(
                     href(gTxt('search_clear'), array('event' => $event)),
-                    array('class' => 'txp-search-clear', 'style' => $this->crit ? '' : 'display:none'))
+                    array(
+                        'class' => 'txp-search-clear',
+                        'style' => $this->crit ? '' : 'display:none',
+                    )
+                )
             ).
             fInput('search', 'crit', $this->crit, 'txp-search-input', '', '', 24, 0, '', false, false, gTxt($placeholder)).
             eInput($event).

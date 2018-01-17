@@ -4,8 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -232,15 +231,11 @@ function discuss_list($message = '')
         VISIBLE => $alias_yes,
         MODERATE => $alias_no,
         SPAM => $alias_spam,
-        ));
+    ));
 
-    list($criteria, $crit, $search_method) = $search->getFilter(array(
-            'id' => array('can_list' => true),
-        ));
+    list($criteria, $crit, $search_method) = $search->getFilter(array('id' => array('can_list' => true)));
 
-    $search_render_options = array(
-        'placeholder' => 'search_comments',
-    );
+    $search_render_options = array('placeholder' => 'search_comments');
 
     $sql_from =
         safe_pfx_j('txp_discuss')."
@@ -264,12 +259,9 @@ function discuss_list($message = '')
 
     // Grand total comment count.
     $total = $count[SPAM] + $count[MODERATE] + $count[VISIBLE];
-
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_comments'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-4col-alt')
-        );
+    $paginator = new \Textpattern\Admin\Paginator($event, 'comment');
+    $limit = $paginator->getLimit();
+    list($page, $offset, $numPages) = pager($total, $limit, $page);
 
     $searchBlock =
         n.tag(
@@ -280,241 +272,211 @@ function discuss_list($message = '')
             )
         );
 
-    $contentBlockStart = n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        ));
+    $contentBlock = '';
 
     if ($total < 1) {
-        if ($criteria != 1) {
-            echo $searchBlock.
-                $contentBlockStart.
-                graf(
+        $contentBlock .= graf(
                     span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_results_found'),
+                    gTxt($criteria == 1 ? 'no_comments_recorded' : 'no_results_found'),
                     array('class' => 'alert-block information')
                 );
-        } else {
-            echo $contentBlockStart.
-                graf(
-                    span(null, array('class' => 'ui-icon ui-icon-info')).' '.
-                    gTxt('no_comments_recorded'),
-                    array('class' => 'alert-block information')
-                );
+    } else {
+        if (!cs('toggle_show_spam')) {
+            $total = $count[MODERATE] + $count[VISIBLE];
+            $criteria = 'visible != '.intval(SPAM).' and '.$criteria;
         }
 
-        echo n.tag_end('div'). // End of .txp-layout-1col.
-            n.'</div>'; // End of .txp-layout.
+        $rs = safe_query(
+            "SELECT
+                txp_discuss.discussid,
+                txp_discuss.parentid,
+                txp_discuss.name,
+                txp_discuss.email,
+                txp_discuss.web,
+                txp_discuss.ip,
+                txp_discuss.message,
+                txp_discuss.visible,
+                UNIX_TIMESTAMP(txp_discuss.posted) AS uPosted,
+                textpattern.ID AS thisid,
+                textpattern.Section AS section,
+                textpattern.url_title,
+                textpattern.Title AS title,
+                textpattern.Status,
+                UNIX_TIMESTAMP(textpattern.Posted) AS posted
+            FROM ".safe_pfx_j('txp_discuss')."
+                LEFT JOIN ".safe_pfx_j('textpattern')." ON txp_discuss.parentid = textpattern.ID
+            WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
+        );
 
-        return;
-    }
-
-    if (!cs('toggle_show_spam')) {
-        $total = $count[MODERATE] + $count[VISIBLE];
-        $criteria = 'visible != '.intval(SPAM).' and '.$criteria;
-    }
-
-    $paginator = new \Textpattern\Admin\Paginator($event, 'comment');
-    $limit = $paginator->getLimit();
-
-    list($page, $offset, $numPages) = pager($total, $limit, $page);
-
-    echo $searchBlock.$contentBlockStart;
-
-    $rs = safe_query(
-        "SELECT
-            txp_discuss.discussid,
-            txp_discuss.parentid,
-            txp_discuss.name,
-            txp_discuss.email,
-            txp_discuss.web,
-            txp_discuss.ip,
-            txp_discuss.message,
-            txp_discuss.visible,
-            UNIX_TIMESTAMP(txp_discuss.posted) AS uPosted,
-            textpattern.ID AS thisid,
-            textpattern.Section AS section,
-            textpattern.url_title,
-            textpattern.Title AS title,
-            textpattern.Status,
-            UNIX_TIMESTAMP(textpattern.Posted) AS posted
-        FROM ".safe_pfx_j('txp_discuss')."
-            LEFT JOIN ".safe_pfx_j('textpattern')." ON txp_discuss.parentid = textpattern.ID
-        WHERE $criteria ORDER BY $sort_sql LIMIT $offset, $limit"
-    );
-
-    if ($rs) {
-        echo n.tag(
-                cookie_box('show_spam'),
-                'div', array('class' => 'txp-list-options')).
-            n.tag_start('form', array(
-                'class'  => 'multi_edit_form',
-                'id'     => 'discuss_form',
-                'name'   => 'longform',
-                'method' => 'post',
-                'action' => 'index.php',
-            )).
-            n.tag_start('div', array('class' => 'txp-listtables')).
-            n.tag_start('table', array('class' => 'txp-list')).
-            n.tag_start('thead').
-            tr(
-                hCell(
-                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+        if ($rs) {
+            $contentBlock .= n.tag(
+                    cookie_box('show_spam'),
+                    'div', array('class' => 'txp-list-options')).
+                n.tag_start('form', array(
+                    'class'  => 'multi_edit_form',
+                    'id'     => 'discuss_form',
+                    'name'   => 'longform',
+                    'method' => 'post',
+                    'action' => 'index.php',
+                )).
+                n.tag_start('div', array('class' => 'txp-listtables')).
+                n.tag_start('table', array('class' => 'txp-list')).
+                n.tag_start('thead').
+                tr(
+                    hCell(
+                        fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                            '', ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
+                    ).
+                    column_head(
+                        'ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method,
+                            (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
+                    ).
+                    column_head(
+                        'name', 'name', 'discuss', true, $switch_dir, $crit, $search_method,
+                            (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
+                    ).
+                    column_head(
+                        'message', 'message', 'discuss', true, $switch_dir, $crit, $search_method,
+                            (('message' == $sort) ? "$dir " : 'txp-list-col-message')
+                    ).
+                    column_head(
+                        'date', 'date', 'discuss', true, $switch_dir, $crit, $search_method,
+                            (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
+                    ).
+                    column_head(
+                        'email', 'email', 'discuss', true, $switch_dir, $crit, $search_method,
+                            (('email' == $sort) ? "$dir " : '').'txp-list-col-email'
+                    ).
+                    column_head(
+                        'website', 'website', 'discuss', true, $switch_dir, $crit, $search_method,
+                            (('website' == $sort) ? "$dir " : '').'txp-list-col-website'
+                    ).
+                    column_head(
+                        'IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method,
+                            (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip'
+                    ).
+                    column_head(
+                        'status', 'status', 'discuss', true, $switch_dir, $crit, $search_method,
+                            (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
+                    ).
+                    column_head(
+                        'parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method,
+                            (('parent' == $sort) ? "$dir " : '').'txp-list-col-parent'
+                    )
                 ).
-                column_head(
-                    'ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
-                ).
-                column_head(
-                    'name', 'name', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
-                ).
-                column_head(
-                    'message', 'message', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('message' == $sort) ? "$dir " : 'txp-list-col-message')
-                ).
-                column_head(
-                    'date', 'date', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
-                ).
-                column_head(
-                    'email', 'email', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('email' == $sort) ? "$dir " : '').'txp-list-col-email'
-                ).
-                column_head(
-                    'website', 'website', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('website' == $sort) ? "$dir " : '').'txp-list-col-website'
-                ).
-                column_head(
-                    'IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip'
-                ).
-                column_head(
-                    'status', 'status', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
-                ).
-                column_head(
-                    'parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('parent' == $sort) ? "$dir " : '').'txp-list-col-parent'
-                )
-            ).
-            n.tag_end('thead');
+                n.tag_end('thead');
 
-        include_once txpath.'/publish/taghandlers.php';
+            include_once txpath.'/publish/taghandlers.php';
 
-        echo n.tag_start('tbody');
+            $contentBlock .= n.tag_start('tbody');
 
-        while ($a = nextRow($rs)) {
-            extract($a);
-            $parentid = assert_int($parentid);
+            while ($a = nextRow($rs)) {
+                extract($a);
+                $parentid = assert_int($parentid);
 
-            $edit_url = array(
-                'event'         => 'discuss',
-                'step'          => 'discuss_edit',
-                'discussid'     => $discussid,
-                'sort'          => $sort,
-                'dir'           => $dir,
-                'page'          => $page,
-                'search_method' => $search_method,
-                'crit'          => $crit,
-            );
+                $edit_url = array(
+                    'event'         => 'discuss',
+                    'step'          => 'discuss_edit',
+                    'discussid'     => $discussid,
+                    'sort'          => $sort,
+                    'dir'           => $dir,
+                    'page'          => $page,
+                    'search_method' => $search_method,
+                    'crit'          => $crit,
+                );
 
-            $dmessage = ($visible == SPAM) ? short_preview($message) : $message;
+                $dmessage = ($visible == SPAM) ? short_preview($message) : $message;
 
-            switch ($visible) {
-                case VISIBLE:
-                    $comment_status = gTxt('visible');
-                    $row_class = 'visible';
-                    break;
-                case SPAM:
-                    $comment_status = gTxt('spam');
-                    $row_class = 'spam';
-                    break;
-                case MODERATE:
-                    $comment_status = gTxt('unmoderated');
-                    $row_class = 'moderate';
-                    break;
-                default:
-                    break;
-            }
-
-            if (empty($thisid)) {
-                $parent = gTxt('article_deleted').' ('.$parentid.')';
-                $view = '';
-            } else {
-                $parent_title = empty($title) ? '<em>'.gTxt('untitled').'</em>' : escape_title($title);
-
-                $parent = href(
-                    span(gTxt('search'), array('class' => 'ui-icon ui-icon-search')),
-                    '?event=discuss'.a.'step=discuss_list'.a.'search_method=parent'.a.'crit='.$parentid).sp.
-                    href($parent_title, '?event=article'.a.'step=edit'.a.'ID='.$parentid);
-
-                $view = $comment_status;
-
-                if ($visible == VISIBLE and in_array($Status, array(4, 5))) {
-                    $view = href($comment_status, permlinkurl($a).'#c'.$discussid, ' title="'.gTxt('view').'"');
+                switch ($visible) {
+                    case VISIBLE:
+                        $comment_status = gTxt('visible');
+                        $row_class = 'visible';
+                        break;
+                    case SPAM:
+                        $comment_status = gTxt('spam');
+                        $row_class = 'spam';
+                        break;
+                    case MODERATE:
+                        $comment_status = gTxt('unmoderated');
+                        $row_class = 'moderate';
+                        break;
+                    default:
+                        break;
                 }
+
+                if (empty($thisid)) {
+                    $parent = gTxt('article_deleted').' ('.$parentid.')';
+                    $view = '';
+                } else {
+                    $parent_title = empty($title) ? '<em>'.gTxt('untitled').'</em>' : escape_title($title);
+
+                    $parent = href(
+                        span(gTxt('search'), array('class' => 'ui-icon ui-icon-search')),
+                        '?event=discuss'.a.'step=discuss_list'.a.'search_method=parent'.a.'crit='.$parentid).sp.
+                        href($parent_title, '?event=article'.a.'step=edit'.a.'ID='.$parentid);
+
+                    $view = $comment_status;
+
+                    if ($visible == VISIBLE and in_array($Status, array(4, 5))) {
+                        $view = href($comment_status, permlinkurl($a).'#c'.$discussid, ' title="'.gTxt('view').'"');
+                    }
+                }
+
+                $contentBlock .= tr(
+                    td(
+                        fInput('checkbox', 'selected[]', $discussid), '', 'txp-list-col-multi-edit'
+                    ).
+                    hCell(
+                        href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' class="txp-list-col-id" scope="row"'
+                    ).
+                    td(
+                        txpspecialchars(soft_wrap($name, 15)), '', 'txp-list-col-name'
+                    ).
+                    td(
+                        short_preview($dmessage), '', 'txp-list-col-message'
+                    ).
+                    td(
+                        gTime($uPosted), '', 'txp-list-col-created date'
+                    ).
+                    td(
+                        txpspecialchars(soft_wrap($email, 15)), '', 'txp-list-col-email'
+                    ).
+                    td(
+                        txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website'
+                    ).
+                    td(
+                        href(txpspecialchars($ip), 'https://whois.domaintools.com/'.rawurlencode($ip), array(
+                            'rel'    => 'external',
+                            'target' => '_blank',
+                        )), '', 'txp-list-col-ip'
+                    ).
+                    td(
+                        $view, '', 'txp-list-col-status'
+                    ).
+                    td(
+                        $parent, '', 'txp-list-col-parent'
+                    ), ' class="'.$row_class.'"'
+                );
             }
 
-            echo tr(
-                td(
-                    fInput('checkbox', 'selected[]', $discussid), '', 'txp-list-col-multi-edit'
-                ).
-                hCell(
-                    href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' class="txp-list-col-id" scope="row"'
-                ).
-                td(
-                    txpspecialchars(soft_wrap($name, 15)), '', 'txp-list-col-name'
-                ).
-                td(
-                    short_preview($dmessage), '', 'txp-list-col-message'
-                ).
-                td(
-                    gTime($uPosted), '', 'txp-list-col-created date'
-                ).
-                td(
-                    txpspecialchars(soft_wrap($email, 15)), '', 'txp-list-col-email'
-                ).
-                td(
-                    txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website'
-                ).
-                td(
-                    href(txpspecialchars($ip), 'https://whois.domaintools.com/'.rawurlencode($ip), array(
-                        'rel'    => 'external',
-                        'target' => '_blank',
-                    )), '', 'txp-list-col-ip'
-                ).
-                td(
-                    $view, '', 'txp-list-col-status'
-                ).
-                td(
-                    $parent, '', 'txp-list-col-parent'
-                ), ' class="'.$row_class.'"'
-            );
-        }
+            if (empty($message)) {
+                $contentBlock .= n.tr(tda(gTxt('just_spam_results_found'), ' colspan="10"'));
+            }
 
-        if (empty($message)) {
-            echo n.tr(tda(gTxt('just_spam_results_found'), ' colspan="10"'));
+            $contentBlock .= n.tag_end('tbody').
+                n.tag_end('table').
+                n.tag_end('div'). // End of .txp-listtables.
+                discuss_multiedit_form($page, $sort, $dir, $crit, $search_method).
+                tInput().
+                n.tag_end('form');
         }
-
-        echo n.tag_end('tbody').
-            n.tag_end('table').
-            n.tag_end('div'). // End of .txp-listtables.
-            discuss_multiedit_form($page, $sort, $dir, $crit, $search_method).
-            tInput().
-            n.tag_end('form').
-            n.tag_start('div', array(
-                'class' => 'txp-navigation',
-                'id'    => $event.'_navigation',
-            )).
-            $paginator->render().
-            nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.tag_end('div');
     }
 
-    echo n.tag_end('div'). // End of .txp-layout-1col.
-        n.'</div>'; // End of .txp-layout.
+    $pageBlock = $paginator->render().
+        nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
+
+    $table = new \Textpattern\Admin\Table($event);
+    echo $table->render(compact('total', 'criteria') + array('heading' => 'tab_comments'), $searchBlock, '', $contentBlock, $pageBlock);
 }
 
 /**

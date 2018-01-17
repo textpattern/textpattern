@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -25,7 +25,7 @@
  * Handles locales.
  *
  * <code>
- * echo Txp::get('Textpattern\L10n\Locale')->setLocale(LC_ALL, 'da-dk')->getLocale();
+ * echo Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_ALL, 'da-dk')->getLocale();
  * </code>
  *
  * @since   4.6.0
@@ -48,6 +48,7 @@ class Locale
         'bs' => array('bs_BA.UTF-8', 'bs_BA.ISO_8859-2', 'Bosnian_Bosnia and Herzegovina.1250', 'bs_BA', 'bs', 'bos', 'bosnian'),
         'ca' => array('ca_ES.UTF-8', 'ca_ES.ISO_8859-1', 'Catalan_Spain.1252', 'ca_ES', 'cat', 'ca', 'catalan'),
         'cs' => array('cs_CZ.UTF-8', 'cs_CZ.ISO_8859-2', 'Czech_Czech Republic.1250', 'cs_CZ', 'ces', 'cze', 'cs', 'csy', 'czech'),
+        'cy' => array('cy_GB.UTF-8', 'cy_GB.ISO_8859-14', 'Welsh_United Kingdom.1252', 'cy_GB', 'cy', 'cym', 'wel', 'welsh'),
         'da' => array('da_DK.UTF-8', 'da_DK.ISO_8859-1', 'Danish_Denmark.1252', 'da_DK', 'da', 'dan', 'danish'),
         'de' => array('de_DE.UTF-8', 'de_DE.ISO_8859-1', 'de_DE.ISO_8859-16', 'German_Germany.1252', 'de_DE', 'de', 'deu', 'german'),
         'el' => array('el_GR.UTF-8', 'el_GR.ISO_8859-7', 'Greek_Greece.1253', 'el_GR', 'el', 'gre', 'greek'),
@@ -67,6 +68,7 @@ class Locale
         'is' => array('is_IS.UTF-8', 'is_IS.ISO_8859-1', 'Icelandic_Iceland.1252', 'is_IS', 'is', 'ice', 'isl', 'icelandic'),
         'it' => array('it_IT.UTF-8', 'it_IT.ISO_8859-1', 'it_IT.ISO_8859-16', 'Italian_Italy.1252', 'it_IT', 'it', 'ita', 'italian'),
         'ja' => array('ja_JP.UTF-8', 'Japanese_Japan.932', 'ja_JP', 'ja', 'jpn', 'japanese'),
+        'km' => array('km_KH.UTF-8', 'Khmer.65001', 'km_KH', 'km', 'khm', 'kxm', 'khmer'),
         'ko' => array('ko_KR.UTF-8', 'Korean_Korea.949', 'ko_KR', 'ko', 'kor', 'korean'),
         'lt' => array('lt_LT.UTF-8', 'lt_LT.ISO_8859-4', 'Lithuanian_Lithuania.1257', 'lt_LT', 'lt', 'lit', 'lithuanian'),
         'lv' => array('lv_LV.UTF-8', 'lv_LV.ISO_8859-4', 'Latvian_Latvia.1257', 'lv_LV', 'lv', 'lav', 'latvian'),
@@ -151,13 +153,13 @@ class Locale
      * The following would set the locale to English:
      *
      * <code>
-     * Txp::get('Textpattern\L10n\Locale')->setLocale(LC_ALL, 'en-GB');
+     * Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_ALL, 'en-GB');
      * </code>
      *
      * This would format currencies according to the French localisation:
      *
      * <code>
-     * Txp::get('Textpattern\L10n\Locale')->setLocale(LC_MONETARY, 'fr-FR');
+     * Txp::get('\Textpattern\L10n\Locale')->setLocale(LC_MONETARY, 'fr-FR');
      * echo money_format('%i', 51.99);
      * </code>
      *
@@ -191,7 +193,7 @@ class Locale
      * Gets the current locale.
      *
      * <code>
-     * echo Txp::get('Textpattern\L10n\Locale')->getLocale(LC_ALL);
+     * echo Txp::get('\Textpattern\L10n\Locale')->getLocale(LC_ALL);
      * </code>
      *
      * @param  int $category The localisation category
@@ -212,7 +214,7 @@ class Locale
      * The following returns 'en_GB.UTF-8':
      *
      * <code>
-     * echo Txp::get('Textpattern\L10n\Locale')->getLanguageLocale('en-GB');
+     * echo Txp::get('\Textpattern\L10n\Locale')->getLanguageLocale('en-GB');
      * </code>
      *
      * Returns the current locale name if the system doesn't have anything
@@ -249,11 +251,11 @@ class Locale
      * All these will return 'en-GB':
      *
      * <code>
-     * echo Txp::get('Textpattern\L10n\Locale')->getLocaleLanguage('en_GB.UTF-8');
-     * echo Txp::get('Textpattern\L10n\Locale')->getLocaleLanguage('en-gb');
-     * echo Txp::get('Textpattern\L10n\Locale')->getLocaleLanguage('english');
-     * echo Txp::get('Textpattern\L10n\Locale')->getLocaleLanguage('c');
-     * echo Txp::get('Textpattern\L10n\Locale')->getLocaleLanguage('English_UK.1252');
+     * echo Txp::get('\Textpattern\L10n\Locale')->getLocaleLanguage('en_GB.UTF-8');
+     * echo Txp::get('\Textpattern\L10n\Locale')->getLocaleLanguage('en-gb');
+     * echo Txp::get('\Textpattern\L10n\Locale')->getLocaleLanguage('english');
+     * echo Txp::get('\Textpattern\L10n\Locale')->getLocaleLanguage('c');
+     * echo Txp::get('\Textpattern\L10n\Locale')->getLocaleLanguage('English_UK.1252');
      * </code>
      *
      * If the specified locale isn't supported, FALSE will be returned.
@@ -286,7 +288,7 @@ class Locale
      * returned by the OS.
      *
      * <code>
-     * echo Txp::get('Textpattern\L10n\Locale')->getCharset();
+     * echo Txp::get('\Textpattern\L10n\Locale')->getCharset();
      * </code>
      *
      * @param  int $category The localisation category
@@ -317,7 +319,7 @@ class Locale
      * Gets the language from the current locale.
      *
      * <code>
-     * echo Txp::get('Textpattern\L10n\Locale')->getLanguage();
+     * echo Txp::get('\Textpattern\L10n\Locale')->getLanguage();
      * </code>
      *
      * @param  int $category The localisation category
@@ -343,9 +345,9 @@ class Locale
      * locale identifiers.
      *
      * <code>
-     * print_r(Txp::get('Textpattern\L10n\Locale')->getLocaleIdentifiers('english'));
-     * print_r(Txp::get('Textpattern\L10n\Locale')->getLocaleIdentifiers('en'));
-     * print_r(Txp::get('Textpattern\L10n\Locale')->getLocaleIdentifiers('en-gb'));
+     * print_r(Txp::get('\Textpattern\L10n\Locale')->getLocaleIdentifiers('english'));
+     * print_r(Txp::get('\Textpattern\L10n\Locale')->getLocaleIdentifiers('en'));
+     * print_r(Txp::get('\Textpattern\L10n\Locale')->getLocaleIdentifiers('en-gb'));
      * </code>
      *
      * @param  string $locale The locale or language code

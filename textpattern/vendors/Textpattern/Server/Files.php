@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -25,7 +25,7 @@
  * Treat file uploads.
  *
  * <code>
- * Txp::get('Textpattern\Server\Files')->refactor($_FILES['thefile']);
+ * Txp::get('\Textpattern\Server\Files')->refactor($_FILES['thefile']);
  * </code>
  *
  * @since   4.7.0
@@ -104,7 +104,7 @@ class Files
 
             // Get the range of the file uploaded from the client
             list($range, $begin, $end, $filesize) = $match;
-            
+
             if (is_file($tmpfile) && filesize($tmpfile) == $begin) {
                 file_put_contents($tmpfile, fopen($tmp_name, 'r'), FILE_APPEND);
                 @unlink($tmp_name);

@@ -4,8 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -152,13 +151,9 @@ function log_list($message = '')
         )
     );
 
-    list($criteria, $crit, $search_method) = $search->getFilter(array(
-            'status' => array('can_list' => true),
-        ));
+    list($criteria, $crit, $search_method) = $search->getFilter(array('status' => array('can_list' => true)));
 
-    $search_render_options = array(
-        'placeholder' => 'search_logs',
-    );
+    $search_render_options = array('placeholder' => 'search_logs');
 
     $total = safe_count('txp_log', "$criteria");
 
@@ -359,9 +354,7 @@ function log_change_pageby()
 
 function log_multiedit_form($page, $sort, $dir, $crit, $search_method)
 {
-    $methods = array(
-        'delete' => gTxt('delete'),
-    );
+    $methods = array('delete' => gTxt('delete'));
 
     return multi_edit($methods, 'log', 'log_multi_edit', $page, $sort, $dir, $crit, $search_method);
 }

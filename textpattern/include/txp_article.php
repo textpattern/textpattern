@@ -4,8 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -183,14 +182,14 @@ function article_save()
         }
     } else {
         $oldArticle = array('Status' => STATUS_PENDING,
-            'url_title' => '',
-            'Title' => '',
-            'textile_body' => $use_textile,
+            'url_title'       => '',
+            'Title'           => '',
+            'textile_body'    => $use_textile,
             'textile_excerpt' => $use_textile,
-            'sLastMod' => null,
-            'LastModID' => $txp_user,
-            'sPosted' => time(),
-            'sExpires' => null
+            'sLastMod'        => null,
+            'LastModID'       => $txp_user,
+            'sPosted'         => time(),
+            'sExpires'        => null,
         );
     }
 
@@ -1418,7 +1417,10 @@ function article_partial_actions($rs)
         .article_partial_article_clone($rs)
         .article_partial_article_view($rs)
         : gTxt('add_new_article'),
-        array('class' => 'txp-actions', 'id' => 'txp-article-actions'));
+        array(
+            'class' => 'txp-actions',
+            'id'    => 'txp-article-actions',
+        ));
 }
 
 /**

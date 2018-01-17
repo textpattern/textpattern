@@ -4,12 +4,9 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2004 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * "Mod File Upload" by Michael Manfre
- * http://manfre.net
- *
  * Copyright (C) 2004 Michael Manfre
  *
  * This file is part of Textpattern.
@@ -179,13 +176,9 @@ function file_list($message = '', $ids = array())
 
     $search->setAliases('status', $file_statuses);
 
-    list($criteria, $crit, $search_method) = $search->getFilter(array(
-            'id' => array('can_list' => true),
-        ));
+    list($criteria, $crit, $search_method) = $search->getFilter(array('id' => array('can_list' => true)));
 
-    $search_render_options = array(
-        'placeholder' => 'search_files',
-    );
+    $search_render_options = array('placeholder' => 'search_files');
 
     $sql_from =
         safe_pfx_j('txp_file')."
@@ -198,19 +191,13 @@ function file_list($message = '', $ids = array())
         $total = getThing("SELECT COUNT(*) FROM $sql_from WHERE $criteria");
     }
 
-    echo n.'<div class="txp-layout">'.
-        n.tag(
-            hed(gTxt('tab_file'), 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-4col-alt')
-        );
-
     $searchBlock =
         n.tag(
             $search->renderForm('file_list', $search_render_options),
             'div', array(
                 'class' => 'txp-layout-4col-3span',
                 'id'    => $event.'_control',
-                'style' => $total || $criteria == 1 ? false : 'display:none'
+                'style' => $total || $criteria == 1 ? false : 'display:none',
             )
         );
 
@@ -229,15 +216,14 @@ function file_list($message = '', $ids = array())
             n.tag_start('div', array('class' => 'txp-control-panel')).
             n.file_upload_form('upload_file', 'upload', 'file_insert[]', '', '', 'async', '', array('postinput' => ($categories ? '&nbsp;'.tag(gTxt('category'), 'label', array('for' => 'file_category')).$categories : '')));
 
-        $existing_files = get_filenames();
-
-        if ($existing_files) {
+        if ($existing_files = get_filenames()) {
+            $selected = count($existing_files) >= 5 ? array() : null;
             $createBlock[] =
                 form(
                     eInput('file').
                     sInput('file_create').
                     tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
-                    selectInput('filename', $existing_files, array(), false, '', 'file-existing').
+                    selectInput('filename', $existing_files, $selected, false, '', 'file-existing').
                     fInput('submit', '', gTxt('create')),
                 '', '', 'post', 'assign-existing-form', '', 'assign_file');
         }
@@ -245,15 +231,8 @@ function file_list($message = '', $ids = array())
         $createBlock[] = tag_end('div');
     }
 
-    $contentBlockStart = n.tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event.'_container',
-        ));
-
     $createBlock = implode(n, $createBlock);
-
-    echo $searchBlock.$contentBlockStart.$createBlock.
-        n.tag_start('div', array('id' => 'txp-list-container'));
+    $contentBlock = '';
 
     $paginator = new \Textpattern\Admin\Paginator();
     $limit = $paginator->getLimit();
@@ -261,7 +240,7 @@ function file_list($message = '', $ids = array())
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
     if ($total < 1) {
-        echo graf(
+        $contentBlock .= graf(
             span(null, array('class' => 'ui-icon ui-icon-info')).' '.
             gTxt($criteria != 1 ? 'no_results_found' : 'no_files_recorded'),
             array('class' => 'alert-block information')
@@ -287,7 +266,7 @@ function file_list($message = '', $ids = array())
         if ($rs && numRows($rs)) {
             $show_authors = !has_single_author('txp_file');
 
-            echo n.tag_start('form', array(
+            $contentBlock .= n.tag_start('form', array(
                     'class'  => 'multi_edit_form',
                     'id'     => 'files_form',
                     'name'   => 'longform',
@@ -423,7 +402,7 @@ function file_list($message = '', $ids = array())
                     $status = span(gTxt('none'), array('class' => 'error'));
                 }
 
-                echo tr(
+                $contentBlock .= tr(
                     td(
                         $multi_edit, '', 'txp-list-col-multi-edit'
                     ).
@@ -434,7 +413,7 @@ function file_list($message = '', $ids = array())
                         )
                     ).
                     td(
-                        $name, '', 'txp-list-col-filename'
+                        $name, '', 'txp-list-col-filename txp-contain'
                     ).
                     td(
                         txpspecialchars($title), '', 'txp-list-col-title'
@@ -471,7 +450,7 @@ function file_list($message = '', $ids = array())
                 );
             }
 
-            echo
+            $contentBlock .=
                 n.tag_end('tbody').
                 n.tag_end('table').
                 n.tag_end('div'). // End of .txp-listtables.
@@ -481,17 +460,11 @@ function file_list($message = '', $ids = array())
         }
     }
 
-    echo n.tag_start('div', array(
-        'class' => 'txp-navigation',
-        'id'    => $event.'_navigation',
-        'style' => $total < 1 ? 'display:none' : false
-    )).
-    $paginator->render().
-    nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-    n.tag_end('div');
+    $pageBlock = $paginator->render().
+        nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
 
-    echo n.'</div>'. //End of #txp-list-container
-        n.'</div>'.  // End of .txp-layout-1col.
+    $table = new \Textpattern\Admin\Table($event);
+    echo $table->render(compact('total', 'criteria'), $searchBlock, $createBlock, $contentBlock, $pageBlock).
         n.tag(
         null,
         'div', array(
@@ -499,8 +472,7 @@ function file_list($message = '', $ids = array())
             'id'         => 'tagbuild_links',
             'aria-label' => gTxt('tagbuilder'),
             'title'      => gTxt('tagbuilder'),
-        )).
-        n.'</div>'; // End of .txp-layout.
+        ));
 }
 
 // -------------------------------------------------------------
@@ -514,9 +486,18 @@ function file_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $status = selectInput('status', $file_statuses, '', true);
 
     $methods = array(
-        'changecategory' => array('label' => gTxt('changecategory'), 'html' => $categories),
-        'changeauthor'   => array('label' => gTxt('changeauthor'), 'html' => $authors),
-        'changestatus'   => array('label' => gTxt('changestatus'), 'html' => $status),
+        'changecategory' => array(
+            'label' => gTxt('changecategory'),
+            'html'  => $categories,
+        ),
+        'changeauthor'   => array(
+            'label' => gTxt('changeauthor'),
+            'html'  => $authors,
+        ),
+        'changestatus'   => array(
+            'label' => gTxt('changestatus'),
+            'html'  => $status,
+        ),
         'changecount'    => array('label' => gTxt('reset_download_count')),
         'delete'         => gTxt('delete'),
     );
@@ -805,7 +786,10 @@ function file_db_add($filename, $category, $permissions, $description, $size, $t
 
     $qs = quote_list(
         array('author' => $txp_user) + compact('filename', 'title', 'category', 'permissions', 'description', 'size')
-    ) + array('created' => 'NOW()', 'modified' => 'NOW()');
+    ) + array(
+        'created'  => 'NOW()',
+        'modified' => 'NOW()',
+    );
 
     $rs = safe_insert('txp_file', join_qs($qs, ','));
 
@@ -877,7 +861,7 @@ function file_insert()
 
     require_privs('file.edit.own');
     $messages = $ids = array();
-    $fileshandler = Txp::get('Textpattern\Server\Files');
+    $fileshandler = Txp::get('\Textpattern\Server\Files');
     $files = $fileshandler->refactor($_FILES['thefile']);
     $titles = gps('title');
 
@@ -908,7 +892,7 @@ function file_insert()
                 if (!shift_uploaded_file($tmp_name, $newpath)) {
                     safe_delete('txp_file', "id = $id");
                     safe_alter('txp_file', "auto_increment = $id");
-                    $messages[] = array($newpath.' '.gTxt('upload_dir_perms'), E_ERROR);
+                    $messages[] = array(gTxt('directory_permissions', array('{path}' => $newpath)), E_ERROR);
                 } else {
                     file_set_perm($newpath);
                     $ids[] = $GLOBALS['ID'] = $id;
@@ -962,7 +946,7 @@ function file_replace()
     $rs = safe_row("filename, author", 'txp_file', "id = $id");
 
     if (!$rs) {
-        file_list(array(messenger(gTxt('invalid_id'), $id), E_ERROR));
+        file_list(array(gTxt('invalid_id', array('{id}' => $id)), E_ERROR));
 
         return;
     }
@@ -994,7 +978,7 @@ function file_replace()
         }
 
         if (!shift_uploaded_file($file, $newpath)) {
-            file_list(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR));
+            file_list(array(gTxt('directory_permissions', array('{path}' => $newpath)), E_ERROR));
 
             // Rename tmp back.
             rename($newpath.'.tmp', $newpath);
@@ -1095,7 +1079,10 @@ function file_save()
 
     $constraints = array(
         'category' => new CategoryConstraint(gps('category'), array('type' => 'file')),
-        'status'   => new ChoiceConstraint(gps('status'), array('choices' => array_keys($file_statuses), 'message' => 'invalid_status')),
+        'status'   => new ChoiceConstraint(gps('status'), array(
+            'choices' => array_keys($file_statuses),
+            'message' => 'invalid_status',
+        )),
     );
     callback_event_ref('file_ui', 'validate_save', 0, $varray, $constraints);
     $validator = new Validator($constraints);
@@ -1171,7 +1158,7 @@ function file_delete($ids = array())
                 }
             }
             if ($fail) {
-                file_list(array(messenger(gTxt('file_delete_failed'), join(', ', $fail)), E_ERROR));
+                file_list(array(gTxt('file_delete_failed', array('{list}' => join(', ', $fail))), E_ERROR));
 
                 return;
             } else {
@@ -1182,7 +1169,7 @@ function file_delete($ids = array())
                 return;
             }
         } else {
-            file_list(array(messenger(gTxt('file_not_found'), join(', ', $ids), ''), E_ERROR));
+            file_list(array(gTxt('file_not_found', array('{list}' => join(', ', $ids))), E_ERROR));
 
             return;
         }

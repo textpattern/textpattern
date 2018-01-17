@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -381,6 +381,7 @@ function safe_escape_like($in = '')
 function safe_query($q = '', $debug = false, $unbuf = false)
 {
     global $DB, $trace, $production_status;
+
     $method = ($unbuf) ? MYSQLI_USE_RESULT : MYSQLI_STORE_RESULT;
 
     if (!$q) {
@@ -1294,12 +1295,12 @@ function getTree($root, $type, $where = "1 = 1", $tbl = 'txp_category')
         }
 
         $out[] = array(
-            'id' => $id,
-            'name' => $name,
-            'title' => $title,
-            'level' => count($right),
+            'id'       => $id,
+            'name'     => $name,
+            'title'    => $title,
+            'level'    => count($right),
             'children' => ($rgt - $lft - 1) / 2,
-            'parent' => $parent,
+            'parent'   => $parent,
         );
 
         $right[] = $rgt;

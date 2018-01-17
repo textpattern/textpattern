@@ -2,7 +2,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -23,7 +23,7 @@
  * Collection of client-side tools.
  */
 
-textpattern.version = '4.7.0-dev'
+textpattern.version = '4.7.0'
 
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.
@@ -708,7 +708,7 @@ textpattern.storage =
      * Textpattern localStorage data.
      */
 
-    data: (typeof(Storage) === 'undefined' ? null : JSON.parse(window.localStorage.getItem("textpattern." + textpattern._txp_uid))) || {},
+    data: (!window.localStorage ? null : JSON.parse(window.localStorage.getItem("textpattern." + textpattern._txp_uid))) || {},
 
     /**
      * Updates data.
@@ -722,7 +722,7 @@ textpattern.storage =
         $.extend(true, textpattern.storage.data, data);
         textpattern.storage.clean(textpattern.storage.data);
 
-        if (typeof(Storage) !== 'undefined') {
+        if (window.localStorage) {
             window.localStorage.setItem("textpattern." + textpattern._txp_uid, JSON.stringify(textpattern.storage.data));
         }
     },
@@ -874,11 +874,11 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data) {
         console.log(data.message);
     }
 }).register('uploadProgress', function (event, data) {
-    $('progress.upload-progress').val(data.loaded / data.total)
+    $('progress.txp-upload-progress').val(data.loaded / data.total)
 }).register('uploadStart', function (event, data) {
-    $('progress.upload-progress').val(0).show()
+    $('progress.txp-upload-progress').val(0).show()
 }).register('uploadEnd', function (event, data) {
-    $('progress.upload-progress').hide()
+    $('progress.txp-upload-progress').hide()
 }).register('updateList', function (event, data) {
     var list = data.list || '#messagepane, #txp-list-container',
         url = data.url || 'index.php',
@@ -2047,7 +2047,7 @@ textpattern.Route.add('article, file', function () {
 
 // 'Clone' button on Pages, Forms, Styles panels.
 
-textpattern.Route.add('css, page, form', function () {
+textpattern.Route.add('skin, css, page, form', function () {
     $('.txp-clone').click(function (e) {
         e.preventDefault();
         var target = $(this).data('form');
@@ -2072,20 +2072,20 @@ textpattern.Route.add('page, form, file, image', function () {
         txpAsyncLink(ev, 'tag');
     });
 
+    // Set up asynchronous tag builder launcher.
+    textpattern.Relay.register('txpAsyncLink.tagbuilder.success', function (event, data) {
+        $('#tagbuild_links').dialog('close').html($(data['data'])).dialog('open').restorePanes();
+    });
+
+    $(document).on('click', '.txp-tagbuilder-dialog', function (ev) {
+        txpAsyncLink(ev, 'tagbuilder');
+    });
+
     $('#tagbuild_links').dialog({
         dialogClass: 'txp-tagbuilder-container',
         autoOpen: false,
         focus: function (ev, ui) {
             $(ev.target).closest('.ui-dialog').focus();
-        }
-    });
-
-    $('.txp-tagbuilder-dialog').on('click', function (ev) {
-        ev.preventDefault();
-        if ($("#tagbuild_links").dialog('isOpen')) {
-            $("#tagbuild_links").dialog('close');
-        } else {
-            $("#tagbuild_links").dialog('open');
         }
     });
 
@@ -2107,35 +2107,38 @@ textpattern.Route.add('page, form, file, image', function () {
 // popHelp.
 
 textpattern.Route.add('', function () {
-    if ( $('.pophelp' ).length ) {
-        textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
-            $(data.event.target).parent().attr("data-item", encodeURIComponent(data.data) );
-            $('#pophelp_dialog').dialog('close').html(data.data).dialog('open').restorePanes();
-        });
+    textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
+        $(data.event.target).parent().attr("data-item", encodeURIComponent(data.data) );
+        $('#pophelp_dialog').dialog('close').html(data.data).dialog('open').restorePanes();
+    });
 
-        $('.pophelp').on('click', function (ev) {
-            var item = $(ev.target).parent().attr('data-item');
-            if (item === undefined ) {
-                item = $(ev.target).attr('data-item');
-            }
-            if (item === undefined ) {
-                txpAsyncLink(ev, 'pophelp');
-            } else {
-                $('#pophelp_dialog').dialog('close').html(decodeURIComponent(item)).dialog('open').restorePanes();
-            }
-            return false;
-        });
+    $('body').on('click','.pophelp', function (ev) {
+        var $pophelp = $('#pophelp_dialog');
 
-        $('body').append('<div id="pophelp_dialog"></div>');
-        $('#pophelp_dialog').dialog({
-            dialogClass: 'txp-tagbuilder-container',    // FIXME: UI, need pophelp-class
-            autoOpen: false,
-            title: textpattern.gTxt('help'),
-            focus: function (ev, ui) {
-                $(ev.target).closest('.ui-dialog').focus();
-            }
-        });
-    }
+        if ($pophelp.length == 0) {
+            $pophelp = $('<div id="pophelp_dialog"></div>');
+            $('body').append($pophelp);
+            $pophelp.dialog({
+                dialogClass: 'txp-tagbuilder-container',    // FIXME: UI, need pophelp-class
+                autoOpen: false,
+                title: textpattern.gTxt('help'),
+                focus: function (ev, ui) {
+                    $(ev.target).closest('.ui-dialog').focus();
+                }
+            });
+        }
+
+        var item = $(ev.target).parent().attr('data-item');
+        if (item === undefined ) {
+            item = $(ev.target).attr('data-item');
+        }
+        if (item === undefined ) {
+            txpAsyncLink(ev, 'pophelp');
+        } else {
+            $pophelp.dialog('close').html(decodeURIComponent(item)).dialog('open').restorePanes();
+        }
+        return false;
+    });
 });
 
 // Forms panel.
@@ -2195,6 +2198,51 @@ textpattern.Route.add('image', function () {
         var height = $h.val();
         $w.val(height);
         $h.val(width);
+    });
+});
+
+// Sections panel. Used for edit panel and multiedit change of page+style.
+// This can probably be cleaned up / optimised.
+
+textpattern.Route.add('section', function ()
+{
+    /**
+     * Display assets based on the selected theme.
+     *
+     * @param  string skin The theme name from which to show assets
+     */
+    function section_theme_show(skin) {
+        $('#section_page, #section_css, #multiedit_page, #multiedit_css').empty();
+        $pageSelect = $('[name=section_page]');
+        $styleSelect = $('[name=css]');
+
+        $.each(skin_page, function(key, items) {
+            if (items.skin == skin) {
+                var isSelected = (items.name == page_sel) ? ' selected' : '';
+                $pageSelect.append('<option'+isSelected+'>'+items.name+'</option>');
+            }
+        });
+
+        $.each(skin_style, function(key, items) {
+            if (items.skin == skin) {
+                var isSelected = (items.name == style_sel) ? ' selected' : '';
+                $styleSelect.append('<option'+isSelected+'>'+items.name+'</option>');
+            }
+        });
+    }
+
+    $('#section_details, .multi_edit_form').on('change', '#section_skin, #multiedit_skin', function() {
+        section_theme_show($(this).val());
+    });
+
+    // Invoke the handler now to set things on initial page load.
+    $('#section_skin').change();
+
+    $('select[name=edit_method]').change(function() {
+        if ($(this).val() === 'changepagestyle') {
+            var theSkin = $('#multiedit_skin').val();
+            section_theme_show(theSkin);
+        }
     });
 });
 

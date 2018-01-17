@@ -4,8 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2005 Dean Allen
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -40,10 +39,10 @@ include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_misc.php';
 include_once txpath.'/vendors/Textpattern/Loader.php';
 
-$loader = new \Textpattern\Loader(txpath.'/vendors');
+$loader = new \Textpattern\Loader(txpath.DS.'vendors');
 $loader->register();
 
-$loader = new \Textpattern\Loader(txpath.'/lib');
+$loader = new \Textpattern\Loader(txpath.DS.'lib');
 $loader->register();
 
 if (!isset($_SESSION)) {
@@ -71,21 +70,21 @@ $txpdir = explode('/', $_SERVER['PHP_SELF']);
 
 if (count($txpdir) > 3) {
     // We live in the regular directory structure.
-    $txpdir = '/'.$txpdir[count($txpdir) - 3];
+    $txpdir = DS.$txpdir[count($txpdir) - 3];
 } else {
     // We probably came here from a clever assortment of symlinks and DocumentRoot.
-    $txpdir = '/';
+    $txpdir = DS;
 }
 
 $prefs = array();
 $prefs['module_pophelp'] = 1;
 $step = ps('step');
 $rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i", '$1', $_SERVER['PHP_SELF']);
-$rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
+$rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), DS);
 
 
 if (empty($_SESSION['cfg'])) {
-    $cfg = @json_decode(file_get_contents(dirname(__FILE__).'/.default.json'), true);
+    $cfg = @json_decode(file_get_contents(dirname(__FILE__).DS.'.default.json'), true);
 } else {
     $cfg = $_SESSION['cfg'];
 }
@@ -99,7 +98,7 @@ if (empty($cfg['site']['lang'])) {
 setup_load_lang($cfg['site']['lang']);
 
 if (defined('is_multisite')) {
-    $config_path = multisite_root_path.'/private';
+    $config_path = multisite_root_path.DS.'private';
 } else {
     $config_path = txpath;
 }
@@ -192,7 +191,7 @@ eod;
         script_js('../textpattern.js', TEXTPATTERN_SCRIPT_URL);
 
     $out[] = <<<eod
-    <link rel="stylesheet" href="../admin-themes/hive/assets/css/textpattern.min.css">
+    <link rel="stylesheet" href="../admin-themes/hive/assets/css/textpattern.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     </head>
     <body class="setup{$bodyclass}" id="page-setup">
@@ -379,7 +378,7 @@ function step_getTxpLogin()
     echo preamble();
     check_config_txp(2);
 
-    // Default theme selector.
+    // Default admin-theme selector.
     $core_themes = array('classic', 'hive', 'hiveneutral');
 
     $vals = \Textpattern\Admin\Theme::names(1);
@@ -395,7 +394,19 @@ function step_getTxpLogin()
         '', '', 'setup_admin_theme');
 
     $vals = get_public_themes_list();
-    $public_theme_chooser = selectInput('public_theme', $vals, @$cfg['site']['public_theme'], '', '', 'setup_public_theme');
+    $public_theme_name = (empty($cfg['site']['public_theme']) ? 'four-point-seven' : $cfg['site']['public_theme']);
+
+    // The array keys contain the full path to the theme so to find
+    // which one it is selected requires searching the keys for a
+    // partial match.
+    foreach ($vals as $dir => $name) {
+        if (preg_match('%^.*'.$public_theme_name.'$%', $dir, $match)) {
+            $public_theme_name = $match[0];
+            break;
+        }
+    }
+
+    $public_theme_chooser = selectInput('public_theme', $vals, $public_theme_name, '', '', 'setup_public_theme');
 
     echo txp_setup_progress_meter(3).
         n.'<div class="txp-setup">'.
@@ -517,11 +528,11 @@ function step_fbCreate()
     $_SESSION = $cfg = array();
     $warnings = @find_temp_dir() ? '' : msg(gTxt('set_temp_dir_prefs'), MSG_ALERT);
     if (defined('is_multisite')) {
-        $login_url  = $multisite_admin_login_url.'/index.php';
-        $setup_path = multisite_root_path.'/admin/';
+        $login_url  = $multisite_admin_login_url.DS.'index.php';
+        $setup_path = multisite_root_path.DS.'admin'.DS;
     } else {
-        $login_url  = $GLOBALS['rel_txpurl'].'/index.php';
-        $setup_path = '/'.basename(txpath).'/';
+        $login_url  = $GLOBALS['rel_txpurl'].DS.'index.php';
+        $setup_path = DS.basename(txpath).DS;
     }
 
     echo txp_setup_progress_meter(4).
@@ -529,13 +540,11 @@ function step_fbCreate()
         hed(gTxt('that_went_well'), 1).
         $warnings.
         graf(
-            gTxt('you_can_access', array(
-                'index.php' => $login_url,
-            ))
+            gTxt('you_can_access', array('index.php' => $login_url))
         ).
-        graf(
-            gTxt('setup_autoinstall_text').popHelp('#', 0, 0, 'pophelp', $setup_autoinstall_body)
-        ).
+        // graf(
+            // gTxt('setup_autoinstall_text').popHelp('#', 0, 0, 'pophelp', $setup_autoinstall_body)
+        // ).
         graf(
             gTxt('installation_postamble', array(
                 '{setuppath}' => $setup_path,
@@ -562,7 +571,7 @@ function setup_config_contents()
     return hed(gTxt('creating_config'), 2).
         graf(
             strong(gTxt('before_you_proceed')).' '.
-            gTxt('create_config', array('{configpath}' => $config_path.'/'))
+            gTxt('create_config', array('{configpath}' => $config_path.DS))
         ).
         n.'<textarea class="code" name="config" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'" dir="ltr" readonly>'.
             setup_makeConfig($cfg, true).
@@ -647,12 +656,12 @@ function check_config_txp($meter)
 {
     global $txpcfg, $cfg, $config_path;
     if (!isset($txpcfg['db'])) {
-        if (!is_readable($config_path.'/config.php')) {
+        if (!is_readable($config_path.DS.'config.php')) {
             $problems[] = msg(gTxt('config_php_not_found', array(
-                    '{file}' => txpspecialchars($config_path.'/config.php')
+                    '{file}' => txpspecialchars($config_path.DS.'config.php')
                 ), 'raw'), MSG_ERROR);
         } else {
-            @include $config_path.'/config.php';
+            @include $config_path.DS.'config.php';
         }
     }
 
@@ -677,11 +686,11 @@ function check_config_exists()
     global $txpcfg, $config_path;
 
     if (!isset($txpcfg['db'])) {
-        @include $config_path.'/config.php';
+        @include $config_path.DS.'config.php';
     }
 
     if (!empty($txpcfg['db'])) {
-        echo msg(gTxt('already_installed', array('{configpath}' => $config_path.'/')), MSG_ALERT, true);
+        echo msg(gTxt('already_installed', array('{configpath}' => $config_path.DS)), MSG_ALERT, true);
     }
 }
 

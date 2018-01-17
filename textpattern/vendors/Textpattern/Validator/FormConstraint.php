@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2017 The Textpattern Development Team
+ * Copyright (C) 2018 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -42,7 +42,11 @@ class FormConstraint extends ChoiceConstraint
     public function __construct($value, $options = array())
     {
         static $choices = null;
-        $options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_form'), $options, false);
+        $options = lAtts(array(
+            'allow_blank' => true,
+            'type'        => '',
+            'message'     => 'unknown_form',
+        ), $options, false);
 
         if (null === $choices) {
             $choices = safe_column('name', 'txp_form', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
