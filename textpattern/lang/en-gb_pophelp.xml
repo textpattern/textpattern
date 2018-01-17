@@ -164,7 +164,7 @@
 </ul>
         ]]></item>
         <item id="category_description" title="Description"><![CDATA[
-<h2>Description</h2>
+<h2>Category description</h2>
 <p>The category description is an optional component that can help search engines and website crawlers better identify and sort content.</p>
 <p>The category description is limited to a maximum of 255 characters. Note that some search engines place character limits on the length of a page’s <code>meta description</code> for practicality of display in search engine results pages (SERPs) and this may be less than the 255 character limit in Textpattern.</p>
         ]]></item>

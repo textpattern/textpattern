@@ -170,7 +170,11 @@ abstract class Theme
 
         if (!$instance) {
             set_pref('theme_name', 'hive');
-            die(gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => Theme::path($name))));
+            die(gTxt('cannot_instantiate_theme', array(
+                '{name}'  => $name,
+                '{class}' => "{$name}_theme",
+                '{path}'  => Theme::path($name),
+            )));
         }
 
         return $instance;
@@ -230,7 +234,11 @@ abstract class Theme
             set_pref('theme_name', 'hive');
 
             if ($production_status === 'debug') {
-                echo gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => Theme::path($name)));
+                echo gTxt('cannot_instantiate_theme', array(
+                    '{name}'  => $name,
+                    '{class}' => "{$name}_theme",
+                    '{path}'  => Theme::path($name),
+                ));
             }
 
             return false;
@@ -297,7 +305,11 @@ abstract class Theme
                             $this->menu[$ar]['event'] = $dflt_tab;
                         }
 
-                        $i_[] = array('label' => $a, 'event' => $b, 'active' => ($b == $event));
+                        $i_[] = array(
+                            'label'  => $a,
+                            'event'  => $b,
+                            'active' => ($b == $event),
+                        );
                     }
                 }
 

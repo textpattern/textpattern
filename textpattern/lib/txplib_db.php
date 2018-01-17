@@ -1295,12 +1295,12 @@ function getTree($root, $type, $where = "1 = 1", $tbl = 'txp_category')
         }
 
         $out[] = array(
-            'id' => $id,
-            'name' => $name,
-            'title' => $title,
-            'level' => count($right),
+            'id'       => $id,
+            'name'     => $name,
+            'title'    => $title,
+            'level'    => count($right),
             'children' => ($rgt - $lft - 1) / 2,
-            'parent' => $parent,
+            'parent'   => $parent,
         );
 
         $right[] = $rgt;

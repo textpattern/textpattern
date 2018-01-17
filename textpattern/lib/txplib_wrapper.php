@@ -754,12 +754,12 @@ class TXP_Wrapper
             }
 
             $incoming = $this->_check_keys($incoming, array(
-                'AuthorID' => $this->txp_user,
-                'Annotate' => $comments_on_default,
-                'AnnotateInvite' => $comments_default_invite,
-                'textile_body' => $use_textile,
+                'AuthorID'        => $this->txp_user,
+                'Annotate'        => $comments_on_default,
+                'AnnotateInvite'  => $comments_default_invite,
+                'textile_body'    => $use_textile,
                 'textile_excerpt' => $use_textile,
-                'url_title' => stripSpace($incoming['Title']),
+                'url_title'       => stripSpace($incoming['Title']),
             ));
 
             // Build the SQL query.

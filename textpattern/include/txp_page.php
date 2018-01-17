@@ -272,14 +272,10 @@ function page_list($current)
                 $edit .= dLink('page', 'page_delete', 'name', $name);
             }
 
-            $out[] = tag(n.$edit.n, 'li', array(
-                'class' => $active ? 'active' : '',
-            ));
+            $out[] = tag(n.$edit.n, 'li', array('class' => $active ? 'active' : ''));
         }
 
-        $out = tag(join(n, $out), 'ul', array(
-            'class' => 'switcher-list',
-        ));
+        $out = tag(join(n, $out), 'ul', array('class' => 'switcher-list'));
 
         return wrapGroup('all_pages', $out, 'all_pages');
     }
@@ -303,7 +299,10 @@ function page_delete()
     }
 
     if ($count) {
-        $message = array(gTxt('page_used_by_section', array('{name}' => $name, '{count}' => $count)), E_WARNING);
+        $message = array(gTxt('page_used_by_section', array(
+            '{name}'  => $name,
+            '{count}' => $count,
+        )), E_WARNING);
     } else {
         if (safe_delete('txp_page', "name = '".doSlash($name)."' AND skin='".doSlash($skin)."'")) {
             callback_event('page_deleted', '', 0, compact('name', 'skin'));

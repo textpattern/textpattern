@@ -253,7 +253,10 @@ function cat_article_multiedit_form($area, $array)
     $categories = $rs ? treeSelectInput('new_parent', $rs, '') : '';
 
     $methods = array(
-        'changeparent' => array('label' => gTxt('changeparent'), 'html' => $categories),
+        'changeparent' => array(
+            'label' => gTxt('changeparent'),
+            'html'  => $categories,
+        ),
         'deleteforce'  => gTxt('deleteforce'),
         'delete'       => gTxt('delete'),
     );
@@ -346,7 +349,11 @@ function cat_category_multiedit()
                 if ($ret) {
                     rebuild_tree_full($type);
 
-                    $message = gTxt('categories_set_parent', array('{type}' => gTxt($type), '{parent}' => $parent, '{list}' => join(', ', $affected)));
+                    $message = gTxt('categories_set_parent', array(
+                        '{type}'   => gTxt($type),
+                        '{parent}' => $parent,
+                        '{list}'   => join(', ', $affected),
+                    ));
 
                     return cat_category_list($message);
                 }

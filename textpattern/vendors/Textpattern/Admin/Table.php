@@ -81,9 +81,7 @@ class Table
         $out .= $search.n.tag_start('div', array(
                 'class' => 'txp-layout-1col',
                 'id'    => $event.'_container',
-            )).$create.n.tag_start('div', array(
-                'id'    => 'txp-list-container',
-            ));
+            )).$create.n.tag_start('div', array('id' => 'txp-list-container'));
 
         if ($total >= 1) {
             $out .= script_js('$(".txp-search").show()');
@@ -95,7 +93,7 @@ class Table
         $out .= n.tag_start('div', array(
                 'class' => 'txp-navigation',
                 'id'    => $event.'_navigation',
-                'style' => $total < 1 ? 'display:none' : false
+                'style' => $total < 1 ? 'display:none' : false,
             )).
             $footer.
             n.tag_end('div').
