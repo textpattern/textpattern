@@ -113,7 +113,10 @@ function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', 
         extract($value);
     }
 
-    $options = (isset($options) ? (array) $options : array()) + array('class' => $class, 'data-col' => $sort);
+    $options = (isset($options) ? (array) $options : array()) + array(
+        'class'    => $class,
+        'data-col' => $sort,
+    );
 
     $head_items = array(
         'value'   => $value,
@@ -177,9 +180,7 @@ function column_multi_head($head_items, $class = '')
 
     $extra_atts = is_array($class) ? $class : array('class' => $class);
 
-    return hCell($o, '', $extra_atts + array(
-        'scope' => 'col'
-    ));
+    return hCell($o, '', $extra_atts + array('scope' => 'col'));
 }
 
 /**
@@ -337,11 +338,11 @@ function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing
         }
 
         return href(gTxt('delete'), array(
-            'event'         => $event,
-            'step'          => $step,
-            $thing          => $value,
-            $thing2         => $thing2val,
-            '_txp_token'    => form_token(),
+            'event'      => $event,
+            'step'       => $step,
+            $thing       => $value,
+            $thing2      => $thing2val,
+            '_txp_token' => form_token(),
         ), array(
             'class'       => 'destroy ui-icon ui-icon-close',
             'title'       => gTxt('delete'),
@@ -509,9 +510,7 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
         $nav[] = n.PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step);
     } else {
         $nav[] = n.span(
-            span(gTxt('prev'), array(
-                'class' => 'ui-icon ui-icon-arrowthick-1-w',
-            )),
+            span(gTxt('prev'), array('class' => 'ui-icon ui-icon-arrowthick-1-w')),
             array(
                 'class'         => 'disabled',
                 'aria-disabled' => 'true',
@@ -522,10 +521,7 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
 
 
     $nav[] = form(
-        n.tag(gTxt('page'), 'label', array(
-                'for' => 'current-page',
-            )
-        ).
+        n.tag(gTxt('page'), 'label', array('for' => 'current-page')).
         n.tag_void('input', array(
             'class'     => 'current-page',
             'id'        => 'current-page',
@@ -550,9 +546,7 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
         $nav[] = n.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step);
     } else {
         $nav[] = n.span(
-            span(gTxt('next'), array(
-                'class' => 'ui-icon ui-icon-arrowthick-1-e',
-            )),
+            span(gTxt('next'), array('class' => 'ui-icon ui-icon-arrowthick-1-e')),
             array(
                 'class'         => 'disabled',
                 'aria-disabled' => 'true',
@@ -561,7 +555,10 @@ function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $
         );
     }
 
-    $out[] = n.tag(join($nav).n, 'nav', array('class' => 'prev-next', 'style' => ($numPages > 1 ? false : 'display:none')));
+    $out[] = n.tag(join($nav).n, 'nav', array(
+        'class' => 'prev-next',
+        'style' => ($numPages > 1 ? false : 'display:none'),
+    ));
 
     return join('', $out);
 }
@@ -910,7 +907,7 @@ function inputLabel($name, $input, $label = '', $help = array(), $atts = array()
     if (empty($help)) {
         $help = array(
             0 => '',
-            1 => ''
+            1 => '',
         );
     }
 
@@ -1201,10 +1198,10 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline
     $url = filter_var($help_var, FILTER_VALIDATE_URL);
 
     $atts = array(
-        'rel'        => 'help',
-        'target'     => '_blank',
-        'title'      => gTxt('help'),
-        'role'       => 'button',
+        'rel'    => 'help',
+        'target' => '_blank',
+        'title'  => gTxt('help'),
+        'role'   => 'button',
     );
 
     if ($url === false) {
@@ -1291,9 +1288,7 @@ function popTag($var, $text, $atts = array())
         'tag_name' => $var,
     ) + $atts;
 
-    return href($text, $opts, array(
-        'class'  => 'txp-tagbuilder-link',
-    ));
+    return href($text, $opts, array('class' => 'txp-tagbuilder-link'));
 }
 
 /**
@@ -1454,7 +1449,13 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
             tInput().n.
             inputLabel(
                 $label_id,
-                tag_void('input', array('name' => $name, 'type' => 'file', 'required' => true, 'id' => $label_id, 'multiple' => $multiple)).
+                tag_void('input', array(
+                    'name'     => $name,
+                    'type'     => 'file',
+                    'required' => true,
+                    'id'       => $label_id,
+                    'multiple' => $multiple,
+                )).
                 (isset($extra['postinput']) ? $extra['postinput'] : '').
                 fInput('reset', '', gTxt('reset')).
                 fInput('submit', '', gTxt('upload')),
@@ -1465,14 +1466,14 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
             ).
             tag(null, 'progress', array(
                 'class' => 'txp-upload-progress',
-                'style' =>  'display:none;'
+                'style' =>  'display:none;',
             )),
             'form', array(
                 'class'   => 'upload-form'.($class ? ' '.trim($class) : ''),
                 'method'  => 'post',
                 'enctype' => 'multipart/form-data',
                 'action'  => "index.php?event=$event&step=$step",
-                'style'   => 'position: relative'
+                'style'   => 'position: relative',
             )
         ),
         $argv

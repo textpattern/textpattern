@@ -491,9 +491,7 @@ function step_fbCreate()
         hed(gTxt('that_went_well'), 1).
         $warnings.
         graf(
-            gTxt('you_can_access', array(
-                'index.php' => $login_url,
-            ))
+            gTxt('you_can_access', array('index.php' => $login_url))
         ).
         // graf(
             // gTxt('setup_autoinstall_text').popHelp('#', 0, 0, 'pophelp', $setup_autoinstall_body)

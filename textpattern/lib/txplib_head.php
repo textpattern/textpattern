@@ -93,7 +93,7 @@ function pagetop($pagetitle = '', $message = '')
         'select',
         'close',
         'help',
-        'upload_err_form_size'
+        'upload_err_form_size',
     ));
 
     $lang_direction = gTxt('lang_dir');

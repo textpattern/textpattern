@@ -176,13 +176,9 @@ function file_list($message = '', $ids = array())
 
     $search->setAliases('status', $file_statuses);
 
-    list($criteria, $crit, $search_method) = $search->getFilter(array(
-            'id' => array('can_list' => true),
-        ));
+    list($criteria, $crit, $search_method) = $search->getFilter(array('id' => array('can_list' => true)));
 
-    $search_render_options = array(
-        'placeholder' => 'search_files',
-    );
+    $search_render_options = array('placeholder' => 'search_files');
 
     $sql_from =
         safe_pfx_j('txp_file')."
@@ -201,7 +197,7 @@ function file_list($message = '', $ids = array())
             'div', array(
                 'class' => 'txp-layout-4col-3span',
                 'id'    => $event.'_control',
-                'style' => $total || $criteria == 1 ? false : 'display:none'
+                'style' => $total || $criteria == 1 ? false : 'display:none',
             )
         );
 
@@ -490,9 +486,18 @@ function file_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $status = selectInput('status', $file_statuses, '', true);
 
     $methods = array(
-        'changecategory' => array('label' => gTxt('changecategory'), 'html' => $categories),
-        'changeauthor'   => array('label' => gTxt('changeauthor'), 'html' => $authors),
-        'changestatus'   => array('label' => gTxt('changestatus'), 'html' => $status),
+        'changecategory' => array(
+            'label' => gTxt('changecategory'),
+            'html'  => $categories,
+        ),
+        'changeauthor'   => array(
+            'label' => gTxt('changeauthor'),
+            'html'  => $authors,
+        ),
+        'changestatus'   => array(
+            'label' => gTxt('changestatus'),
+            'html'  => $status,
+        ),
         'changecount'    => array('label' => gTxt('reset_download_count')),
         'delete'         => gTxt('delete'),
     );
@@ -781,7 +786,10 @@ function file_db_add($filename, $category, $permissions, $description, $size, $t
 
     $qs = quote_list(
         array('author' => $txp_user) + compact('filename', 'title', 'category', 'permissions', 'description', 'size')
-    ) + array('created' => 'NOW()', 'modified' => 'NOW()');
+    ) + array(
+        'created'  => 'NOW()',
+        'modified' => 'NOW()',
+    );
 
     $rs = safe_insert('txp_file', join_qs($qs, ','));
 
@@ -1071,7 +1079,10 @@ function file_save()
 
     $constraints = array(
         'category' => new CategoryConstraint(gps('category'), array('type' => 'file')),
-        'status'   => new ChoiceConstraint(gps('status'), array('choices' => array_keys($file_statuses), 'message' => 'invalid_status')),
+        'status'   => new ChoiceConstraint(gps('status'), array(
+            'choices' => array_keys($file_statuses),
+            'message' => 'invalid_status',
+        )),
     );
     callback_event_ref('file_ui', 'validate_save', 0, $varray, $constraints);
     $validator = new Validator($constraints);
