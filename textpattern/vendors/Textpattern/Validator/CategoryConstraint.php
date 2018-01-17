@@ -42,7 +42,11 @@ class CategoryConstraint extends ChoiceConstraint
     public function __construct($value, $options = array())
     {
         static $choices = null;
-        $options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_category'), $options, false);
+        $options = lAtts(array(
+            'allow_blank' => true,
+            'type'        => '',
+            'message'     => 'unknown_category',
+        ), $options, false);
 
         if (null === $choices) {
             $choices = safe_column('name', 'txp_category', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
