@@ -568,7 +568,7 @@ namespace Textpattern\Skin {
         {
             return safe_insert(
                 static::getTable(),
-                $this->getInfos(true), true
+                $this->getInfos(true)
             );
         }
 
@@ -584,11 +584,12 @@ namespace Textpattern\Skin {
          * @return bool                false on error.
          */
 
-        public function updateRow() {
+        public function updateRow()
+        {
             return safe_update(
                 static::getTable(),
                 $this->getInfos(true),
-                "name = '".doSlash($this->getBase())."'", true
+                "name = '".doSlash($this->getBase())."'"
             );
         }
 
