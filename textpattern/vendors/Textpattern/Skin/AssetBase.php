@@ -833,12 +833,6 @@ namespace Textpattern\Skin {
                             $imported = $this->names;
                         }
                     }
-
-                    $missing = array_diff(static::getEssential('name'), $imported);
-
-                    if ($missing && !$this->setNames($missing)->createRows()) {
-
-                    }
                 }
 
                 // Drops extra rows…
