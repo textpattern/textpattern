@@ -338,7 +338,15 @@ namespace Textpattern\Skin {
 
         public function getFileContents()
         {
-            return json_decode(file_get_contents($this->getFilePath()), true);
+            $contents = json_decode(file_get_contents($this->getFilePath()), true);
+
+            empty($contents['title']) ? $contents['title'] = ucfirst($this->getName()) : '';
+            empty($contents['version']) ? $contents['version'] = gTxt('unknown') : '';
+            empty($contents['description']) ? $contents['description'] = '' : '';
+            empty($contents['author']) ? $contents['author'] = gTxt('unknown') : '';
+            empty($contents['author_uri']) ? $contents['author_uri'] = '' : '';
+
+            return $contents;
         }
 
         /**
