@@ -822,7 +822,7 @@ function file_create()
     foreach ($filename as $file) {
         $safe_filename = sanitizeForFile($file);
         if ($safe_filename != $file) {
-            $errors[] = gTxt('invalid_filename').txpspecialchars($file);
+            $errors[] = array(gTxt('invalid_filename').txpspecialchars($file), E_ERROR);
             continue;
         }
 
@@ -830,7 +830,7 @@ function file_create()
         $id = file_db_add($safe_filename, $category, $permissions, $description, $size, $title);
 
         if ($id === false) {
-            $errors[] = gTxt('file_upload_failed').$safe_filename.' (db_add)';
+            $errors[] = array(gTxt('file_upload_failed').$safe_filename.' (db_add)', E_ERROR);
         } else {
             $newpath = build_file_path($file_base_path, $safe_filename);
 
@@ -838,9 +838,9 @@ function file_create()
                 file_set_perm($newpath);
                 $ids[] = $id;
                 $filenames[] = $safe_filename;
-                $success[] = gTxt('linked_to_file').' '.$safe_filename;
+                $success[] = array(gTxt('linked_to_file').' '.$safe_filename, 0);
             } else {
-                $errors[] = gTxt('file_not_found').' '.$safe_filename;
+                $errors[] = array(gTxt('file_not_found').' '.$safe_filename, E_ERROR);
             }
         }
     }
@@ -850,7 +850,14 @@ function file_create()
         update_lastmod('file_created', compact('ids', 'filenames', 'title', 'category', 'description'));
     }
 
-    file_list(array(implode(br, array_merge($success, $errors)), $success ? ($errors ? E_WARNING : 0) : E_ERROR));
+    $response = '';
+
+    foreach (array_merge($success, $errors) as $message) {
+        $response .= 'textpattern.Console.addMessage('.json_encode($message, TEXTPATTERN_JSON).');'.n;
+    }
+
+    script_js($response, false);
+    file_list();
 }
 
 // -------------------------------------------------------------
