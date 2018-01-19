@@ -1,5 +1,6 @@
 Changes in 4.7.0 (upcoming)
 
+* In memory of Dean Allen, creator of Textpattern CMS.
 * Added: Support for installation on NGINX servers.
 * Added: Support for automated installation.
 * Added: User-selectable column list options in tables replaces 'Show more
