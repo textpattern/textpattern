@@ -44,32 +44,32 @@ namespace Textpattern\Skin {
             array(
                 'name' => 'comments',
                 'type' => 'comment',
-                'Form' => '',
-            ),
-            array(
-                'name' => 'comments_display',
-                'type' => 'comment',
-                'Form' => '',
+                'Form' => '<!-- Here goes the default rendering contents of the comments tag. '
+                         .'See https://docs.textpattern.io/tags/comments. -->',
             ),
             array(
                 'name' => 'comment_form',
                 'type' => 'comment',
-                'Form' => '',
+                'Form' => '<!-- Here goes the default rendering contents of the comments_form tag. '
+                         .'See https://docs.textpattern.io/tags/comments_form. -->',
             ),
             array(
                 'name' => 'default',
                 'type' => 'article',
-                'Form' => '',
+                'Form' => '<!-- Here goes the default rendering contents of the article tag. '
+                         .'See https://docs.textpattern.io/tags/article. -->',
             ),
             array(
                 'name' => 'plainlinks',
                 'type' => 'link',
-                'Form' => '',
+                'Form' => '<!-- Here goes the default rendering contents of the linklist tag. '
+                         .'See https://docs.textpattern.io/tags/linklist. -->',
             ),
             array(
                 'name' => 'files',
                 'type' => 'file',
-                'Form' => '',
+                'Form' => '<!-- Here goes the default rendering contents of the file_download tag. '
+                         .'See https://docs.textpattern.io/tags/file_download. -->',
             ),
         );
 

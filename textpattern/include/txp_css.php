@@ -170,7 +170,8 @@ function css_edit($message = '', $refresh_partials = false)
     $skin = ($skin !== '') ? $skin : Skin::getEditing();
     $class = 'async';
 
-    $skin = Skin::setEditing($skin);
+    $thisSkin = Txp::get('Textpattern\Skin\Skin');
+    $skin = $thisSkin->setName($skin)->setEditing();
 
     if ($step == 'css_delete' || empty($name) && $step != 'pour' && !$savenew) {
         $name = get_pref('last_css_saved', $default_name);
@@ -204,7 +205,7 @@ function css_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = n.CSS::renderSelectEdit('css', 'css_skin_change', $skin);
+    $skinBlock = n.Txp::get('Textpattern\Skin\CSS', $thisSkin)->renderSelectEdit();
 
     $buttons = graf(
         tag_void('input', array(
@@ -291,7 +292,7 @@ function css_save()
     $name = sanitizeForTheme(assert_string(ps('name')));
     $newname = sanitizeForTheme(assert_string(ps('newname')));
 
-    $skin = Skin::setEditing($skin);
+    $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
 
     $save_error = false;
     $message = '';
@@ -408,7 +409,7 @@ function css_skin_change($skin = null)
     }
 
     if ($skin) {
-        $skin = Skin::setEditing($skin);
+        $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
     }
 
     return true;

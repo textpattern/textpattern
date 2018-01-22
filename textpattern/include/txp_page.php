@@ -132,7 +132,8 @@ function page_edit($message = '', $refresh_partials = false)
     $skin = ($skin !== '') ? $skin : Skin::getEditing();
     $class = 'async';
 
-    $skin = Skin::setEditing($skin);
+    $thisSkin = Txp::get('Textpattern\Skin\Skin');
+    $skin = $thisSkin->setName($skin)->setEditing();
 
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
         $name = get_pref('last_page_saved', $default_name);
@@ -166,7 +167,7 @@ function page_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = n.Page::renderSelectEdit('page', 'page_skin_change', $skin);
+    $skinBlock = n.Txp::get('Textpattern\Skin\Page', $thisSkin)->renderSelectEdit();
 
     $buttons = graf(
         tag_void('input', array(
@@ -337,7 +338,7 @@ function page_save()
     $name = sanitizeForTheme(assert_string(ps('name')));
     $newname = sanitizeForTheme(assert_string(ps('newname')));
 
-    $skin = Skin::setEditing($skin);
+    $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
 
     $save_error = false;
     $message = '';
@@ -438,7 +439,7 @@ function page_skin_change($skin = null)
     }
 
     if ($skin) {
-        $skin = Skin::setEditing($skin);
+        $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
     }
 
     return true;

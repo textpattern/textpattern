@@ -41,11 +41,11 @@ namespace Textpattern\Skin {
         protected static $essential = array(
             array(
                 'name'      => 'default',
-                'user_html' => '',
+                'user_html' => '<!-- Here goes the default page contents. -->',
             ),
             array(
                 'name'      => 'error_default',
-                'user_html' => '',
+                'user_html' => '<!-- Here goes the default error page contents. -->',
             ),
         );
 

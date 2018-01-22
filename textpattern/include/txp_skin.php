@@ -91,9 +91,7 @@ function skin_save()
 
     extract($infos);
 
-    if (empty($name)) {
-        $skin->setResults('skin_name_invalid', $name);
-    } elseif ($old_name) {
+    if ($old_name) {
         if ($copy) {
             $name === $old_name ? $name .= '_copy' : '';
             $title === $old_title ? $title .= ' (copy)' : '';
@@ -135,12 +133,8 @@ function skin_multi_edit()
         'clean',
     )));
 
-    if ($clean != get_pref('remove_extra_templates', true)) {
-        set_pref('remove_extra_templates', $prefs['remove_extra_templates'] = !empty($clean), 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
-    }
-
     if (!$selected || !is_array($selected)) {
-        return skin_list();
+        return $skin->render();
     }
 
     $skin->setNames(ps('selected'));
