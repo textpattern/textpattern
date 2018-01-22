@@ -143,26 +143,26 @@ function article_column_map()
     }
 
     return array(
-        'thisid' => 'ID',
-        'posted' => 'uPosted',    // Calculated value!
-        'expires' => 'uExpires',  // Calculated value!
-        'modified' => 'uLastMod', // Calculated value!
-        'annotate' => 'Annotate',
+        'thisid'          => 'ID',
+        'posted'          => 'uPosted', // Calculated value!
+        'expires'         => 'uExpires', // Calculated value!
+        'modified'        => 'uLastMod', // Calculated value!
+        'annotate'        => 'Annotate',
         'comments_invite' => 'AnnotateInvite',
-        'authorid' => 'AuthorID',
-        'title' => 'Title',
-        'url_title' => 'url_title',
-        'description' => 'description',
-        'category1' => 'Category1',
-        'category2' => 'Category2',
-        'section' => 'Section',
-        'keywords' => 'Keywords',
-        'article_image' => 'Image',
-        'comments_count' => 'comments_count',
-        'body' => 'Body_html',
-        'excerpt' => 'Excerpt_html',
-        'override_form' => 'override_form',
-        'status' => 'Status',
+        'authorid'        => 'AuthorID',
+        'title'           => 'Title',
+        'url_title'       => 'url_title',
+        'description'     => 'description',
+        'category1'       => 'Category1',
+        'category2'       => 'Category2',
+        'section'         => 'Section',
+        'keywords'        => 'Keywords',
+        'article_image'   => 'Image',
+        'comments_count'  => 'comments_count',
+        'body'            => 'Body_html',
+        'excerpt'         => 'Excerpt_html',
+        'override_form'   => 'override_form',
+        'status'          => 'Status',
     ) + $custom_map;
 }
 
@@ -188,7 +188,10 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
         return $cache[$key];
     }
 
-    $atts += array('expired' => true, 'sortdir' => 'desc');
+    $atts += array(
+        'expired' => true,
+        'sortdir' => 'desc',
+    );
     $id = $time = $keywords = $custom = '';
 
     extract($atts);
@@ -240,8 +243,14 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     // Invert $type for ascending sortdir.
     $types = array(
-        '>' => array('desc' => '>', 'asc' => '<'),
-        '<' => array('desc' => '<', 'asc' => '>'),
+        '>' => array(
+            'desc' => '>',
+            'asc'  => '<',
+        ),
+        '<' => array(
+            'desc' => '<',
+            'asc'  => '>',
+        ),
     );
 
     $type = ($type == '>') ? $types['>'][$sortdir] : $types['<'][$sortdir];
@@ -288,7 +297,11 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
     if ($id !== 0) {
         // Pivot is specific article by ID: In lack of further information,
         // revert to default sort order 'Posted desc'.
-        $atts = filterAtts() + array('sortby' => 'Posted', 'sortdir' => 'DESC', 'thisid' => $id);
+        $atts = filterAtts() + array(
+            'sortby'  => 'Posted',
+            'sortdir' => 'DESC',
+            'thisid'  => $id,
+        );
     } else {
         // Pivot is $thisarticle: Use article attributes to find its neighbours.
         assert_article();
@@ -298,7 +311,10 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         }
 
         $s = $thisarticle['section'];
-        $atts = filterAtts() + array('thisid' => $thisarticle['thisid'], 'sort' => 'Posted DESC');
+        $atts = filterAtts() + array(
+            'thisid' => $thisarticle['thisid'],
+            'sort'   => 'Posted DESC',
+        );
         $m = preg_split('/\s+/', $atts['sort']);
 
         // If in doubt, fall back to chronologically descending order.
@@ -458,7 +474,10 @@ function parse($thing, $condition = true)
                     if ($i >= $last) {
                         trigger_error(gTxt('missing_close_tag', array('{chunk}' => $outside[$level])), E_USER_WARNING);
                     } elseif ($tag[$level-1][2] != $tag[$level][2]) {
-                        trigger_error(gTxt('mismatch_open_close_tag', array('{from}' => $outside[$level], '{to}' => $chunk)), E_USER_WARNING);
+                        trigger_error(gTxt('mismatch_open_close_tag', array(
+                            '{from}' => $outside[$level],
+                            '{to}'   => $chunk,
+                        )), E_USER_WARNING);
                     }
 
                     $sha = sha1($inside[$level]);

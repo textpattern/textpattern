@@ -187,9 +187,7 @@ function sec_section_list($message = '')
 
     list($criteria, $crit, $search_method) = $search->getFilter();
 
-    $search_render_options = array(
-        'placeholder' => 'search_sections',
-    );
+    $search_render_options = array('placeholder' => 'search_sections');
 
     $total = safe_count('txp_section', $criteria);
 
@@ -739,9 +737,7 @@ function section_toggle_option()
 
 function section_set_default()
 {
-    extract(psa(array(
-        'default_section',
-    )));
+    extract(psa(array('default_section')));
 
     $exists = safe_row("name", 'txp_section', "name = '".doSlash($default_section)."'");
 

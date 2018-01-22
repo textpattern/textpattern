@@ -96,14 +96,10 @@ function css_list($current)
                 $edit .= dLink('css', 'css_delete', 'name', $name);
             }
 
-            $out[] = tag(n.$edit.n, 'li', array(
-                'class' => $active ? 'active' : '',
-            ));
+            $out[] = tag(n.$edit.n, 'li', array('class' => $active ? 'active' : ''));
         }
 
-        $out = tag(join(n, $out), 'ul', array(
-            'class' => 'switcher-list',
-        ));
+        $out = tag(join(n, $out), 'ul', array('class' => 'switcher-list'));
 
         return wrapGroup('all_styles', $out, 'all_stylesheets');
     }

@@ -45,7 +45,7 @@ class Partial
 
         extract(lAtts(array(
             'name'    => '',
-            'default' => null
+            'default' => null,
         ), $atts));
 
         if (isset($yield[$name])) {
@@ -73,7 +73,7 @@ class Partial
 
         extract(lAtts(array(
             'name'  => '',
-            'value' => null
+            'value' => null,
         ), $atts));
 
         $inner = isset($yield[$name]) ? end($yield[$name]) : null;

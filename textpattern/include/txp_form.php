@@ -144,9 +144,7 @@ function form_list($current)
 
             if ($prev_type !== $type) {
                 if ($prev_type !== null) {
-                    $group_out = tag(n.join(n, $group_out).n, 'ul', array(
-                        'class' => 'switcher-list',
-                    ));
+                    $group_out = tag(n.join(n, $group_out).n, 'ul', array('class' => 'switcher-list'));
 
                     $out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
                 }
@@ -164,24 +162,23 @@ function form_list($current)
                 $modbox = '';
             }
 
-            $group_out[] = tag(n.$modbox.$editlink.n, 'li', array(
-                'class' => $active ? 'active' : '',
-            ));
+            $group_out[] = tag(n.$modbox.$editlink.n, 'li', array('class' => $active ? 'active' : ''));
         }
 
         if ($prev_type !== null) {
-            $group_out = tag(n.join(n, $group_out).n, 'ul', array(
-                'class' => 'switcher-list',
-            ));
+            $group_out = tag(n.join(n, $group_out).n, 'ul', array('class' => 'switcher-list'));
 
             $out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
         }
 
-        $out = tag(implode('', $out), 'div', array('id' => 'allforms_form_sections', 'role' => 'region'));
+        $out = tag(implode('', $out), 'div', array(
+            'id'   => 'allforms_form_sections',
+            'role' => 'region',
+        ));
 
         $methods = array(
             'changetype' => array('label' => gTxt('changetype'), 'html' => formTypes('', false, 'changetype')),
-            'delete'     => gTxt('delete')
+            'delete'     => gTxt('delete'),
         );
 
         $out .= multi_edit($methods, 'form', 'form_multi_edit');

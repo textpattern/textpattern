@@ -37,11 +37,11 @@ if ($event === 'skin') {
 
     $availableSteps = array(
         'skin_change_pageby' => true, // Prefixed to make it work with the paginator…
-        'list'          => false,
-        'edit'          => false,
-        'save'          => true,
-        'import'        => false,
-        'multi_edit'    => true,
+        'list'               => false,
+        'edit'               => false,
+        'save'               => true,
+        'import'             => false,
+        'multi_edit'         => true,
     );
 
     if ($step && bouncer($step, $availableSteps)) {

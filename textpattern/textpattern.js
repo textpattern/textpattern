@@ -708,7 +708,7 @@ textpattern.storage =
      * Textpattern localStorage data.
      */
 
-    data: (typeof(Storage) === 'undefined' ? null : JSON.parse(window.localStorage.getItem("textpattern." + textpattern._txp_uid))) || {},
+    data: (!window.localStorage ? null : JSON.parse(window.localStorage.getItem("textpattern." + textpattern._txp_uid))) || {},
 
     /**
      * Updates data.
@@ -722,7 +722,7 @@ textpattern.storage =
         $.extend(true, textpattern.storage.data, data);
         textpattern.storage.clean(textpattern.storage.data);
 
-        if (typeof(Storage) !== 'undefined') {
+        if (window.localStorage) {
             window.localStorage.setItem("textpattern." + textpattern._txp_uid, JSON.stringify(textpattern.storage.data));
         }
     },
