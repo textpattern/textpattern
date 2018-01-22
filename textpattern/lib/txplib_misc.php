@@ -502,12 +502,11 @@ function dmp()
 
 function load_lang($lang, $events = null)
 {
-    global $production_status;
+    global $production_status, $event;
 
     $textarray = Txp::get('\Textpattern\L10n\Lang')->load($lang, $events);
 
-    if ($lang == LANG
-        && $production_status !== 'live'
+    if (($production_status !== 'live' || $event === 'diag')
         && @$debug = parse_ini_file(txpath.DS.'mode.ini')
     ) {
         $textarray += (array)$debug;

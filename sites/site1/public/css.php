@@ -21,5 +21,13 @@
  * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
-include '../private/config.php';
-include txpath.'/../css.php';
+/**
+ * Outputs CSS files.
+ *
+ * @since 4.2.0
+ */
+
+$nolog = 1;
+
+define('txpinterface', 'css');
+include 'index.php';
