@@ -1,5 +1,6 @@
 Changes in 4.7.0 (upcoming)
 
+* In memory of Dean Allen, creator of Textpattern CMS.
 * Added: Support for installation on NGINX servers.
 * Added: Support for automated installation.
 * Added: User-selectable column list options in tables replaces 'Show more
@@ -83,10 +84,10 @@ Changes in 4.7.0 (upcoming)
 * Fixed: Support for other MySQL client versions (thanks, CeBe).
 * Removed: zxcvbn password strength meter.
 * Textile v3.6.
-* jQuery 3.2.1.
-* PrismJS 1.9.0.
+* jQuery 3.3.1.
+* PrismJS 1.10.0.
 * PHPass 0.5.
-* jQuery File Upload 9.19.2.
+* jQuery File Upload 9.19.3.
 
 Changes in 4.6.2
 
