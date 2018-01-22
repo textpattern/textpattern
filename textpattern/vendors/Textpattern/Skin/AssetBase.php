@@ -271,51 +271,7 @@ namespace Textpattern\Skin {
 
         protected function getDirPath()
         {
-            return $this->getSkin()->getDirPath().DS.$this->getDir();
-        }
-
-        /**
-         * Whether the skin related directory exists or not.
-         *
-         * @param bool false on error.
-         */
-
-        protected function dirExists()
-        {
-            return file_exists($this->getDirPath());
-        }
-
-        /**
-         * Whether the skin directory is writable or not.
-         *
-         * @param bool false on error.
-         */
-
-        protected function isReadableDir()
-        {
-            return is_readable($this->getDirPath());
-        }
-
-        /**
-         * Whether the skin directory is writable or not.
-         *
-         * @param bool false on error.
-         */
-
-        protected function isWritableDir()
-        {
-            return is_writable($this->getDirPath());
-        }
-
-        /**
-         * Creates the skin related directory.
-         *
-         * @param bool false on error.
-         */
-
-        protected function createDir()
-        {
-            return @mkdir($this->getDirPath());
+            return $this->getSkin()->getSubdirPath().DS.$this->getDir();
         }
 
         /**
@@ -348,30 +304,6 @@ namespace Textpattern\Skin {
             $name ?: $name = $this->getInfos()[self::getSubdirField()];
 
             return $this->getDirPath().DS.$name;
-        }
-
-        /**
-         * Whether an asset related subdirectory exists or not.
-         *
-         * @param  string $name Subdirectory name.
-         * @return bool
-         */
-
-        protected function subdirExists($name = null)
-        {
-            return file_exists($this->getSubdirPath($name));
-        }
-
-        /**
-         * Creates an asset related subdirectory.
-         *
-         * @param  string $name Subdirectory name.
-         * @return bool         false on error.
-         */
-
-        protected function createSubdir($name = null)
-        {
-            return @mkdir($this->getSubdirPath($name));
         }
 
         /**
@@ -794,12 +726,13 @@ namespace Textpattern\Skin {
 
             if ($thisSkin->isLocked()) {
                 $string = self::getString();
+                $dirPath = $this->getDirPath();
 
-                if (!$this->isReadableDir()) {
-                    $this->mergeResult('path_not_readable', array($skin => $this->getDirPath()));
+                if (!is_readable($dirPath)) {
+                    $this->mergeResult('path_not_readable', array($skin => $dirPath));
                 } else {
                     if (!$this->getFiles()) {
-                        $this->mergeResult('no_'.$string.'_found', array($skin => $this->getDirPath()));
+                        $this->mergeResult('no_'.$string.'_found', array($skin => $dirPath));
                     }
 
                     if (!$this->createRows()) {
@@ -859,14 +792,15 @@ namespace Textpattern\Skin {
 
             if ($thisSkin->isLocked()) {
                 $string = self::getString();
+                $dirPath = $this->getDirPath();
 
-                if (!$this->isWritableDir() && !$this->createDir()) {
-                    $this->mergeResult('path_not_writable', array($skin => $this->getDirPath()));
+                if (!is_writable($dirPath) && !@mkdir($dirPath)) {
+                    $this->mergeResult('path_not_writable', array($skin => $dirPath));
                 } else {
                     $rows = $this->getRows();
 
                     if (!$rows) {
-                        $failed[$skin] = $empty[$skin] = $this->getDirPath();
+                        $failed[$skin] = $empty[$skin] = $dirPath;
                     } else {
                         foreach ($rows as $row) {
                             extract($row);
@@ -877,9 +811,9 @@ namespace Textpattern\Skin {
                             $contentsField = self::getFileContentsFields();
 
                             if ($subdirField) {
-                                $this->setInfos($name, $$subdirField, $$contentsField);
+                                $subdirPath = $this->setInfos($name, $$subdirField, $$contentsField)->getSubdirPath();
 
-                                if (!$this->subdirExists() && !$this->createSubdir()) {
+                                if (!file_exists($subdirPath) && !@mkdir($subdirPath)) {
                                     $this->mergeResult($string.'_not_writable', array($skin => $name));
                                     $ready = false;
                                 }

@@ -116,7 +116,7 @@ namespace Textpattern\Skin {
          * @see       setNames(), getNames().
          */
 
-        protected static $basePath;
+        protected static $dirPath;
 
         /**
          * {@inheritdoc}
@@ -128,46 +128,42 @@ namespace Textpattern\Skin {
 
         protected function mergeResults($asset) {
             $thisResults = $this->getResults();
-var_dump($thisResults);
-$assetResults = $asset->getResults();
-var_dump($assetResults);
-
             $this->results = array_merge($thisResults, $asset->getResults());
 
             return array_diff($this->getResults(), $thisResults);
         }
 
         /**
-         * $basePath property setter.
+         * $dirPath property setter.
          *
          * Set the skin related directory path from the parameter value
          * or from the path_to_site and the skin_dir pref values.
          *
          * @param  string $path             Path.
-         * @return string self::$basePath Path.
+         * @return string self::$dirPath Path.
          */
 
-        public static function setBasePath($path = null)
+        public static function setDirPath($path = null)
         {
             $path === null ? $path = get_pref('path_to_site').DS.get_pref('skin_dir') : '';
 
-            self::$basePath = rtrim($path, DS);
+            self::$dirPath = rtrim($path, DS);
 
-            return self::getBasePath();
+            return self::GetDirPath();
         }
 
         /**
-         * $basePath property getter
+         * $dirPath property getter
          *
-         * @return string self::$basePath Path.
-         * @see                             setBasePath().
+         * @return string self::$dirPath Path.
+         * @see                             setDirPath().
          */
 
-        protected static function getBasePath()
+        protected static function GetDirPath()
         {
-            self::$basePath === null ? self::setBasePath() : '';
+            self::$dirPath === null ? self::setDirPath() : '';
 
-            return self::$basePath;
+            return self::$dirPath;
         }
 
         /**
@@ -273,80 +269,14 @@ var_dump($assetResults);
          * Get a skin directory path.
          *
          * @param string $name Skin name (uses the $name property value if null)
-         * @see          getName(), getBasePath().
+         * @see          getName(), GetDirPath().
          */
 
-        public function getDirPath($name = null)
+        public function getSubdirPath($name = null)
         {
             $name === null ? $name = $this->getName() : '';
 
-            return self::getBasePath().DS.$name;
-        }
-
-        /**
-         * Whether a skin related directory exists or not.
-         *
-         * @param string $name Skin name (uses the $name property value if null)
-         * @param bool         false if it does not exists.
-         * @see                getName(), getDirPath().
-         */
-
-        protected function dirExists($name = null)
-        {
-            $name === null ? $name = $this->getName() : '';
-
-            return file_exists($this->getDirPath($name));
-        }
-
-        /**
-         * Whether the $name property value related skin directory is writable or not.
-         *
-         * @return bool false if it is not writable.
-         * @see         getDirPath().
-         */
-
-        public function isWritableDir()
-        {
-            return is_writable($this->getDirPath());
-        }
-
-        /**
-         * Make the $name property value related skin directory.
-         *
-         * @return bool false on error.
-         * @see         getDirPath().
-         */
-
-        protected function createDir()
-        {
-            return @mkdir($this->getDirPath());
-        }
-
-        /**
-         * Rename the $base property value related skin directory
-         * to the $name property value.
-         *
-         * @param bool false on error.
-         */
-
-        protected function renameDir()
-        {
-            return @rename(
-                $this->getDirPath($this->getBase()),
-                $this->getDirPath()
-            );
-        }
-
-        /**
-         * Remove the $name property value related skin directory.
-         *
-         * @return bool false on error.
-         * @see         getDirPath().
-         */
-
-        protected function removeDir()
-        {
-            return @rmdir($this->getDirPath());
+            return self::GetDirPath().DS.$name;
         }
 
         /**
@@ -364,36 +294,12 @@ var_dump($assetResults);
          * Get a skin directory path.
          *
          * @param string $name Skin name (uses the $name property value if null)
-         * @see          getDirPath().
+         * @see          getSubdirPath().
          */
 
         protected function getFilePath()
         {
-            return $this->getDirPath().DS.self::getFile();
-        }
-
-        /**
-         * Whether the $name property value related skin JSON file exists or not.
-         *
-         * @return bool false if it does not exists.
-         * @see        getFilePath().
-         */
-
-        protected function fileExists()
-        {
-            return file_exists($this->getFilePath());
-        }
-
-        /**
-         * Whether the $name property value related skin JSON file is readable or not.
-         *
-         * @return bool false if it is not readable.
-         * @see         getFilePath().
-         */
-
-        protected function isReadableFile()
-        {
-            return is_readable($this->getFilePath());
+            return $this->getSubdirPath().DS.self::getFile();
         }
 
         /**
@@ -523,7 +429,7 @@ var_dump($assetResults);
          *
          * @param  string $name Skin name (uses the $name property value if null)
          * @return bool   false on error.
-         * @see           getName(), getDirPath().
+         * @see           getName(), getSubdirPath().
          */
 
         public function lock($name = null)
@@ -535,7 +441,7 @@ var_dump($assetResults);
             $time = 0;
 
             while (!$locked && $time < 2) {
-                $locked = @mkdir($this->getDirPath($name).'/lock');
+                $locked = @mkdir($this->getSubdirPath($name).'/lock');
                 sleep(0.25);
                 $time = microtime(true) - $timeStart;
             }
@@ -550,14 +456,14 @@ var_dump($assetResults);
          *
          * @param  string $name Skin name (uses the $name property value if null).
          * @return bool   false on error.
-         * @see           getName(), getDirPath().
+         * @see           getName(), getSubdirPath().
          */
 
         public function unlock($name = null)
         {
             $name === null ? $name = $this->getName() : '';
 
-            if (@rmdir($this->getDirPath($name).'/lock')) {
+            if (@rmdir($this->getSubdirPath($name).'/lock')) {
                 $this->locked = false;
             }
 
@@ -687,7 +593,7 @@ var_dump($assetResults);
         {
             return new DirIterator\RecIteratorIterator(
                 new DirIterator\RecRegexIterator(
-                    new DirIterator\RecDirIterator(self::getBasePath()),
+                    new DirIterator\RecDirIterator(self::GetDirPath()),
                     '/^manifest\.json/i'
                 ),
                 1
@@ -808,7 +714,7 @@ var_dump($assetResults);
 
         public function create() {
             $name = $this->getName();
-            $dirPath = $this->getDirPath();
+            $subdirPath = $this->getSubdirPath();
 
             callback_event('skin.create', '', 1, array('name' => $name));
 
@@ -816,12 +722,12 @@ var_dump($assetResults);
                 $this->mergeResult('skin_name_invalid', $name);
             } elseif ($this->isInstalled()) {
                 $this->mergeResult('skin_already_exists', $name);
-            } elseif ($this->DirExists()) {
-                $this->mergeResult('skin_already_exists', $dirPath);
-            } elseif (!$this->CreateDir()) {
-                $this->mergeResult('path_not_writable', $dirPath);
+            } elseif (file_exists($subdirPath)) {
+                $this->mergeResult('skin_already_exists', $subdirPath);
+            } elseif (!@mkdir($subdirPath)) {
+                $this->mergeResult('path_not_writable', $subdirPath);
             } elseif (!$this->lock()) {
-                $this->mergeResult('skin_locking_failed', $dirPath);
+                $this->mergeResult('skin_locking_failed', $subdirPath);
             } elseif (!$this->createRow()) {
                 $this->mergeResult('skin_creation_failed', $name);
             } else {
@@ -854,6 +760,7 @@ var_dump($assetResults);
         public function update() {
             $name = $this->getName();
             $base = $this->getBase();
+            $subdirPath = $this->getSubdirPath();
 
             callback_event('skin.update', '', 1, array('name' => $base));
 
@@ -863,17 +770,17 @@ var_dump($assetResults);
                 $this->mergeResult('skin_unknown', $base);
             } elseif ($base !== $name && $this->isInstalled()) {
                 $this->mergeResult('skin_already_exists', $name);
-            } elseif ($base !== $name && $this->dirExists()) {
-                $this->mergeResult('skin_already_exists', $this->getDirPath());
-            } elseif ($this->dirExists($base) && !$this->lock($base)) {
-                $this->mergeResult('skin_dir_locking_failed', $this->getDirPath($base));
+            } elseif ($base !== $name && file_exists($subdirPath)) {
+                $this->mergeResult('skin_already_exists', $subdirPath);
+            } elseif (file_exists($this->getSubdirPath($base)) && !$this->lock($base)) {
+                $this->mergeResult('skin_dir_locking_failed', $this->getSubdirPath($base));
             } elseif (!$this->updateRow()) {
                 $this->mergeResult('skin_update_failed', $base);
                 $toUnlock = $base;
             } else {
                 $updated = true;
 
-                if ($this->dirExists($base) && !$this->renameDir()) {
+                if (file_exists($this->getSubdirPath($base)) && !@rename($this->getSubdirPath($base), $subdirPath)) {
                     $this->mergeResult('path_renaming_failed', $base, 'warning');
                 } else {
                     $toUnlock = $name;
@@ -895,7 +802,7 @@ var_dump($assetResults);
             }
 
             if (isset($toUnlock) && !$this->unlock($toUnlock)) {
-                $this->mergeResult('skin_unlocking_failed', $this->getDirPath($toUnlock));
+                $this->mergeResult('skin_unlocking_failed', $this->getSubdirPath($toUnlock));
             }
 
             callback_event('skin.update', '', 0, array('name' => $base));
@@ -916,18 +823,17 @@ var_dump($assetResults);
             $passed = array();
 
             foreach ($names as $name) {
-                $this->setName($name);
-                $dirPath = $this->getDirPath();
+                $subdirPath = $this->setName($name)->getSubdirPath();
                 $copy = $name.'_copy';
 
                 if (!$this->isInstalled()) {
                     $this->mergeResult('skin_unknown', $name);
                 } elseif ($this->isInstalled($copy)) {
                     $this->mergeResult('skin_already_exists', $copy);
-                } elseif (!$this->isWritableDir() && !$this->createDir()) {
-                    $this->mergeResult('path_not_writable', $dirPath);
+                } elseif (!is_writable($subdirPath) && !@mkdir($subdirPath)) {
+                    $this->mergeResult('path_not_writable', $subdirPath);
                 } elseif (!$this->lock()) {
-                    $this->mergeResult('skin_dir_locking_failed', $dirPath);
+                    $this->mergeResult('skin_dir_locking_failed', $subdirPath);
                 } else {
                     $passed[] = $name;
                 }
@@ -954,7 +860,7 @@ var_dump($assetResults);
                                 $assetRows = $assetModel->getRows();
 
                                 if (!$assetRows) {
-                                    $this->mergeResult($assetString.'_not_found', array($skin => $this->getDirPath()));
+                                    $this->mergeResult($assetString.'_not_found', array($skin => $subdirPath));
                                 } else {
                                     if ($this->setName($copy) && !$assetModel->createRows($assetRows)) {
                                         $this->mergeResult($assetString.'_duplication_failed', array($skin => $notImported));
@@ -967,7 +873,7 @@ var_dump($assetResults);
                     }
 
                     if ($this->islocked() && !$this->unlock()) {
-                        $this->mergeResult('skin_unlocking_failed', $this->getDirPath());
+                        $this->mergeResult('skin_unlocking_failed', $subdirPath);
                     } else {
                         $this->mergeResult('skin_duplicated', $name, 'success');
                     }
@@ -992,15 +898,15 @@ var_dump($assetResults);
             callback_event('skin.import', '', 1, array('names' => $names));
 
             foreach ($names as $name) {
-                $this->setName($name);
+                $subdirPath = $this->setName($name)->getSubdirPath();
 
                 if (!$override && $this->isInstalled()) {
                     $this->mergeResult('skin_unknown', $name);
                 } elseif ($override && !$this->isInstalled()) {
                     $this->mergeResult('skin_already_exists', $name);
-                } elseif (!$this->isWritableDir()) {
-                    $this->mergeResult('path_not_writable', $this->getDirPath());
-                } elseif (!$this->isReadableFile()) {
+                } elseif (!is_writable($subdirPath)) {
+                    $this->mergeResult('path_not_writable', $subdirPath);
+                } elseif (!is_readable($this->getFilePath())) {
                     $this->mergeResult('path_not_readable', $this->getFilePath());
                 } elseif (!$this->lock()) {
                     $this->mergeResult('skin_dir_locking_failed', $name);
@@ -1033,7 +939,7 @@ var_dump($assetResults);
                 }
 
                 if ($this->islocked() && !$this->unlock()) {
-                    $this->mergeResult('skin_unlocking_failed', $this->getDirPath());
+                    $this->mergeResult('skin_unlocking_failed', $subdirPath);
                 }
             }
 
@@ -1055,12 +961,12 @@ var_dump($assetResults);
             callback_event('skin.export', '', 1, array('names' => $names));
 
             foreach ($names as $name) {
-                $this->setName($name);
+                $subdirPath = $this->setName($name)->getSubdirPath();
 
                 if (!self::isValidDirName($name)) {
                     $this->mergeResult('skin_unsafe_name', $name);
-                } elseif (!$this->isWritableDir() && !$this->createDir()) {
-                    $this->mergeResult('path_not_writable', $this->getDirPath());
+                } elseif (!is_writable($subdirPath) && !@mkdir($subdirPath)) {
+                    $this->mergeResult('path_not_writable', $subdirPath);
                 } elseif (!$this->lock()) {
                     $this->mergeResult('skin_locking_failed', $name);
                 } else {
@@ -1123,7 +1029,7 @@ var_dump($assetResults);
                 } elseif ($this->getSections()) {
                     $failed[] = $name;
                     $this->mergeResult('skin_in_use', $name);
-                } elseif ($this->dirExists() && !$this->lock()){
+                } elseif (file_exists($this->getSubdirPath()) && !$this->lock()){
                     $this->mergeResult('skin_locking_failed', $name);
                 } else {
                     $assetFailure = false;
@@ -1159,7 +1065,7 @@ var_dump($assetResults);
                 if ($this->setName($name)->islocked() && !$this->unlock()) {
                     $this->mergeResult('skin_unlocking_failed', $name);
                 } else {
-                    $this->removeDir();
+                    @rmdir($this->getSubdirPath());
                 }
             }
 
