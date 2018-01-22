@@ -39,10 +39,10 @@ include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_misc.php';
 include_once txpath.'/vendors/Textpattern/Loader.php';
 
-$loader = new \Textpattern\Loader(txpath.'/vendors');
+$loader = new \Textpattern\Loader(txpath.DS.'vendors');
 $loader->register();
 
-$loader = new \Textpattern\Loader(txpath.'/lib');
+$loader = new \Textpattern\Loader(txpath.DS.'lib');
 $loader->register();
 
 if (!isset($_SESSION)) {
@@ -70,21 +70,21 @@ $txpdir = explode('/', $_SERVER['PHP_SELF']);
 
 if (count($txpdir) > 3) {
     // We live in the regular directory structure.
-    $txpdir = '/'.$txpdir[count($txpdir) - 3];
+    $txpdir = DS.$txpdir[count($txpdir) - 3];
 } else {
     // We probably came here from a clever assortment of symlinks and DocumentRoot.
-    $txpdir = '/';
+    $txpdir = DS;
 }
 
 $prefs = array();
 $prefs['module_pophelp'] = 1;
 $step = ps('step');
 $rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i", '$1', $_SERVER['PHP_SELF']);
-$rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
+$rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), DS);
 
 
 if (empty($_SESSION['cfg'])) {
-    $cfg = @json_decode(file_get_contents('.default.json'), true);
+    $cfg = @json_decode(file_get_contents(dirname(__FILE__).DS.'.default.json'), true);
 } else {
     $cfg = $_SESSION['cfg'];
 }
@@ -97,8 +97,27 @@ if (empty($cfg['site']['lang'])) {
 }
 setup_load_lang($cfg['site']['lang']);
 
+if (defined('is_multisite')) {
+    $config_path = multisite_root_path.DS.'private';
+} else {
+    $config_path = txpath;
+}
+
+
+$protocol = (empty($_SERVER['HTTPS']) || @$_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
+if (defined('is_multisite')) {
+    if (empty($cfg['site']['adminurl'])) {
+        $cfg['site']['adminurl'] = $protocol.
+        (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+    }
+    if (empty($cfg['site']['cookiedomain'])) {
+        $cfg['site']['cookiedomain'] = substr($cfg['site']['adminurl'], strpos($cfg['site']['adminurl'], '.') + 1);
+    }
+    if (empty($cfg['site']['siteurl'])) {
+        $cfg['site']['siteurl'] = $protocol.'www.'.$cfg['site']['cookiedomain'];
+    }
+}
 if (empty($cfg['site']['siteurl'])) {
-    $protocol = (empty($_SERVER['HTTPS']) || @$_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
     if (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST'])) {
         $cfg['site']['siteurl'] = $protocol.
         ((@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']).$rel_siteurl;
@@ -282,6 +301,23 @@ function step_getDbInfo()
             'table_prefix', 'table_prefix', array('class' => 'txp-form-field')
         );
 
+    if (defined('is_multisite')) {
+        echo hed(
+                gTxt('multisite_config'), 2
+            ).
+            graf(gTxt('please_enter_multisite_details')).
+            inputLabel(
+                'setup_admin_url',
+                fInput('text', 'adminurl', @$cfg['site']['adminurl'], '', '', '', INPUT_REGULAR, '', 'setup_admin_url', '', true),
+                'admin_domain_multisite', 'setup_admin_url', array('class' => 'txp-form-field')
+            ).
+            inputLabel(
+                'setup_cookie_domain',
+                fInput('text', 'cookiedomain', @$cfg['site']['cookiedomain'], '', '', '', INPUT_REGULAR, '', 'setup_cookie_domain', '', true),
+                'cookie_domain_multisite', 'setup_cookie_domain', array('class' => 'txp-form-field')
+            );
+    }
+
     if (is_disabled('mail')) {
         echo msg(gTxt('warn_mail_unavailable'), MSG_ALERT);
     }
@@ -309,6 +345,11 @@ function step_printConfig()
     $cfg['mysql']['host'] = ps('dhost');
     $cfg['mysql']['db'] = ps('ddb');
     $cfg['mysql']['table_prefix'] = ps('dprefix');
+
+    if (defined('is_multisite')) {
+        $cfg['site']['adminurl'] = ps('adminurl');
+        $cfg['site']['cookiedomain'] = ps('cookiedomain');
+    }
 
     echo preamble();
     echo txp_setup_progress_meter(2).
@@ -480,11 +521,19 @@ function step_fbCreate()
     $setup_autoinstall_body = gTxt('setup_autoinstall_body')."<pre>".
         json_encode($cfg, defined('JSON_PRETTY_PRINT') ? TEXTPATTERN_JSON | JSON_PRETTY_PRINT : TEXTPATTERN_JSON).
         "</pre>";
-
+    if (defined('is_multisite')) {
+        $multisite_admin_login_url = $GLOBALS['protocol'].$cfg['site']['adminurl'];
+    }
     // Clear the session so no data is leaked.
     $_SESSION = $cfg = array();
     $warnings = @find_temp_dir() ? '' : msg(gTxt('set_temp_dir_prefs'), MSG_ALERT);
-    $login_url = $GLOBALS['rel_txpurl'].'/index.php';
+    if (defined('is_multisite')) {
+        $login_url  = $multisite_admin_login_url.DS.'index.php';
+        $setup_path = multisite_root_path.DS.'admin'.DS;
+    } else {
+        $login_url  = $GLOBALS['rel_txpurl'].DS.'index.php';
+        $setup_path = DS.basename(txpath).DS;
+    }
 
     echo txp_setup_progress_meter(4).
         n.'<div class="txp-setup">'.
@@ -497,7 +546,9 @@ function step_fbCreate()
             // gTxt('setup_autoinstall_text').popHelp('#', 0, 0, 'pophelp', $setup_autoinstall_body)
         // ).
         graf(
-            gTxt('installation_postamble')
+            gTxt('installation_postamble', array(
+                '{setuppath}' => $setup_path,
+            ))
         ).
         hed(gTxt('thanks_for_interest'), 3).
         graf(
@@ -515,11 +566,12 @@ function step_fbCreate()
 
 function setup_config_contents()
 {
-    global $cfg;
+    global $cfg, $config_path;
+
     return hed(gTxt('creating_config'), 2).
         graf(
             strong(gTxt('before_you_proceed')).' '.
-            gTxt('create_config', array('{txpath}' => basename(txpath)))
+            gTxt('create_config', array('{configpath}' => $config_path.DS))
         ).
         n.'<textarea class="code" name="config" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'" dir="ltr" readonly>'.
             setup_makeConfig($cfg, true).
@@ -602,14 +654,14 @@ function langs()
 
 function check_config_txp($meter)
 {
-    global $txpcfg, $cfg;
+    global $txpcfg, $cfg, $config_path;
     if (!isset($txpcfg['db'])) {
-        if (!is_readable(txpath.'/config.php')) {
+        if (!is_readable($config_path.DS.'config.php')) {
             $problems[] = msg(gTxt('config_php_not_found', array(
-                    '{file}' => txpspecialchars(txpath.'/config.php')
+                    '{file}' => txpspecialchars($config_path.DS.'config.php')
                 ), 'raw'), MSG_ERROR);
         } else {
-            @include txpath.'/config.php';
+            @include $config_path.DS.'config.php';
         }
     }
 
@@ -631,14 +683,14 @@ function check_config_txp($meter)
 
 function check_config_exists()
 {
-    global $txpcfg;
+    global $txpcfg, $config_path;
 
     if (!isset($txpcfg['db'])) {
-        @include txpath.'/config.php';
+        @include $config_path.DS.'config.php';
     }
 
     if (!empty($txpcfg['db'])) {
-        echo msg(gTxt('already_installed', array('{txpath}' => basename(txpath))), MSG_ALERT, true);
+        echo msg(gTxt('already_installed', array('{configpath}' => $config_path.DS)), MSG_ALERT, true);
     }
 }
 
