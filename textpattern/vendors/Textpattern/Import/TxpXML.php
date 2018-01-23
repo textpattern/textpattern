@@ -151,7 +151,7 @@ class TxpXML
             $article['Category1'] = @$a->category[0];
             $article['Category2'] = @$a->category[1];
 
-            $article['Body'] = @trim($this->replaceSiteurl($a->body));
+            $article['Body'] = @trim($this->replaceUrls($a->body));
             $format = $a->body->attributes()->format;
             if ($format == 'textile') {
                 $article['Body_html']       = $textile->textileThis($article['Body']);
@@ -161,7 +161,7 @@ class TxpXML
                 $article['textile_body']    = 0;
             }
 
-            $article['Excerpt'] = @trim($this->replaceSiteurl($a->excerpt));
+            $article['Excerpt'] = @trim($this->replaceUrls($a->excerpt));
             $format = $a->excerpt->attributes()->format;
             if ($format == 'textile') {
                 $article['Excerpt_html']    = $textile->textileThis($article['Excerpt']);
@@ -198,17 +198,22 @@ class TxpXML
     }
 
     /**
-     * replaceSiteurl
+     * replaceUrls
      * Used in importXmlArticles()
      *
      */
 
-    private function replaceSiteurl($txt)
+    private function replaceUrls($txt)
     {
-        global $siteurl;
-        $urlpath = preg_replace('#^[^/]+#', '', $siteurl);
+        global $adminurl, $siteurl;
 
-        return str_replace('siteurl', $urlpath, $txt);
+        $adminpath = preg_replace('#^[^/]+#', '', $adminurl);
+        $sitepath = preg_replace('#^[^/]+#', '', $siteurl);
+
+        $txt = str_replace('adminurl', $adminpath, $txt);
+        $txt = str_replace('siteurl', $sitepath, $txt);
+
+        return $txt;
     }
 
     /**
