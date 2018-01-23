@@ -14,6 +14,8 @@ Changes in 4.7.0 (upcoming)
   output.
 * Added: <txp:article_custom /> tag can count pages. Enhanced 'month', 'expired'
   and time' attributes.
+* Added: 'ahu' constant as multi-site-compatible URL to admin side.
+  Plugin authors please use 'ahu' in place of 'hu.'textpattern'.
 * Added: XML and JSON file support. Completely overhauled setup procedure to
   centralise and verify/delete preferences on upgrade. Table structure and
   preferences defined in files for easier maintenance (thanks, makss).
@@ -28,6 +30,7 @@ Changes in 4.7.0 (upcoming)
 * Added: One-click comment searches by parent article (thanks, makss).
 * Added: Diagnostics can remove sensitive path data.
 * Added: 'Expire now' checkbox on Write panel.
+* Changed: Multi-site setups: Revised installation routine and symlinking.
 * Changed: Pages, Forms and Styles panels save some changes without page
   refreshes (Ajax). Last used Page/Form/Stylesheet remembered.
 * Changed: Articles panel performs searches/pagination without refresh (Ajax).
@@ -79,6 +82,10 @@ Changes in 4.7.0 (upcoming)
   will be removed entirely at Textpattern 4.8.0).
 * Changed: Extensive admin theme image optimizations.
 * Changed: Admin theme accessibility improvements.
+* Fixed: Multi-site setups: Correct setup and install messages.
+* Fixed: Multi-site setups: Correct diagnostics information.
+* Fixed: Multi-site setups: Correct login url in user-invite email.
+* Fixed: Multi-site setups: Login cookie accessible to public and admin URLs.
 * Fixed: Keyboard navigation on select list popups.
 * Fixed: Only update database version string if using release version.
 * Fixed: Support for other MySQL client versions (thanks, CeBe).
