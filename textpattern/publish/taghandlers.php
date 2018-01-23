@@ -4353,9 +4353,13 @@ function if_custom_field($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function site_url()
+function site_url($atts)
 {
-    return hu;
+    extract(lAtts(array(
+        'type' => '',
+    ), $atts));
+
+    return $type === 'admin' ? ahu : hu;
 }
 
 // -------------------------------------------------------------
