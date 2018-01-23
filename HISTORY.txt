@@ -1,7 +1,7 @@
 Changes in 4.7.0 (upcoming)
 
 * In memory of Dean Allen, creator of Textpattern CMS.
-* Added: Support for installation on NGINX servers.
+* Added: Support for installation on Nginx web servers.
 * Added: Support for automated installation.
 * Added: User-selectable column list options in tables replaces 'Show more
   detail' checkboxes. Settings remembered per device.
@@ -14,9 +14,7 @@ Changes in 4.7.0 (upcoming)
   output.
 * Added: <txp:if_logged_in /> tag.
 * Added: <txp:article_custom /> tag can count pages. Enhanced 'month', 'expired'
-  and time' attributes.
-* Added: 'ahu' constant as multi-site-compatible URL to admin side. Plugin
-  authors please use ahu in place of hu.'textpattern'.
+  and 'time' attributes.
 * Added: XML and JSON file support. Completely overhauled setup procedure to
   centralise and verify/delete preferences on upgrade. Table structure and
   preferences defined in files for easier maintenance (thanks, makss).
@@ -31,7 +29,7 @@ Changes in 4.7.0 (upcoming)
 * Added: One-click comment searches by parent article (thanks, makss).
 * Added: Diagnostics can optionally suppress sensitive path data.
 * Added: 'Expire now' checkbox on Write panel.
-* Changed: Multi-site setups: Revised installation routine and symlinking.
+* Changed: Revised multi-site installation routine and symbolic linking.
 * Changed: Pages, Forms and Styles panels save some changes without page
   refreshes (Ajax). Last used Page/Form/Stylesheet remembered.
 * Changed: Articles panel performs searches/pagination without refresh (Ajax).
@@ -55,15 +53,15 @@ Changes in 4.7.0 (upcoming)
 * Changed: <txp:image_author /> tag now accepts 'id' and 'name' attributes.
 * Changed: Deprecated <txp:image_display /> and <txp:image_index /> tags, use
   <txp:image /> and <txp:images />, respectively, instead.
-* Changed: Image Edit panel for all users - readonly to some (thanks, phiw13).
+* Changed: Image Edit panel for all users - read-only to some (thanks, phiw13).
 * Changed: Textfilter options and help topics moved inline with their textareas.
   Write panel 'sidehelp' twisty and article>sidehelp callback removed.
 * Changed: Categories moved from Sort & Display subpanel to their own twisty.
   Override Form (if used) moved to 'Sort and display' subpanel. 'Advanced'
   twisty and its callback removed.
-* Changed: Seamless upgrades: languages also updated automatically.
+* Changed: Languages also updated automatically on upgrade.
 * Changed: Further improvements to RTL language support.
-* Changed: Language Textpacks bundled in core instead of using legacy RPC
+* Changed: Language Textpacks included in core instead of using legacy RPC
   server.
 * Changed: Diagnostics and tag trace reports always rendered in English (for
   easier international support enquiries). Text strings moved to 'mode.ini'.
@@ -80,16 +78,17 @@ Changes in 4.7.0 (upcoming)
   Philippe).
 * Changed: Panel states stored only client-side (localStorage).
 * Changed: pluggable_ui() behaves more intelligently when chaining.
-* Changed: Pagination steps are more grid friendly: 12/24/48/96.
+* Changed: Pagination steps are more grid friendly: 12/24/48/96 items.
 * Changed: More locale-aware date handling in safe_strftime().
 * Changed: Deprecated support for uploading .swf files via Images panel (support
   will be removed entirely at Textpattern 4.8.0).
 * Changed: Extensive admin theme image optimizations.
 * Changed: Admin theme accessibility improvements.
-* Fixed: Multi-site setups: Correct setup and install messages.
-* Fixed: Multi-site setups: Correct diagnostics information.
-* Fixed: Multi-site setups: Correct login URL in user-invite email.
-* Fixed: Multi-site setups: Login cookie accessible to public and admin URLs.
+* Developer: 'ahu' constant as multi-site-compatible URL to admin side. Plugin
+  authors please use ahu in place of hu.'textpattern'.
+* Fixed: Multi-site setup overhauled: Correct setup and install messages,
+  diagnostics information, login URL in user-invite email, login cookie
+  accessible to public and admin URLs (thanks jools-r).
 * Fixed: Keyboard navigation on select list popups.
 * Fixed: Only update database version string if using release version.
 * Fixed: Support for other MySQL client versions (thanks, CeBe).
