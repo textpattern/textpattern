@@ -12,6 +12,7 @@ Changes in 4.7.0 (upcoming)
 * Added: <txp:evaluate /> tag.
 * Added: <txp:header /> tag allows optional setting of HTML headers on page
   output.
+* Added: <txp:if_logged_in /> tag.
 * Added: <txp:article_custom /> tag can count pages. Enhanced 'month', 'expired'
   and time' attributes.
 * Added: 'ahu' constant as multi-site-compatible URL to admin side. Plugin
@@ -28,7 +29,7 @@ Changes in 4.7.0 (upcoming)
 * Added: Section searches by description.
 * Added: Visual indicator that a subset of search fields are in use.
 * Added: One-click comment searches by parent article (thanks, makss).
-* Added: Diagnostics can remove sensitive path data.
+* Added: Diagnostics can optionally suppress sensitive path data.
 * Added: 'Expire now' checkbox on Write panel.
 * Changed: Multi-site setups: Revised installation routine and symlinking.
 * Changed: Pages, Forms and Styles panels save some changes without page
@@ -48,6 +49,7 @@ Changes in 4.7.0 (upcoming)
 * Changed: <txp:if_category /> accepts 'parent' attribute.
 * Changed: Pagination tags (like <txp:newer /> and <txp:older />) can be placed
   before <txp:article /> tag.
+* Changed: <txp:site_url /> tag accepts 'type' attribute.
 * Changed: Reinstate <txp:keywords> tag and add wraptag/class/break attributes.
 * Changed: Deprecated the 'poplink' attribute on <txp:thumbnail /> tag.
 * Changed: <txp:image_author /> tag now accepts 'id' and 'name' attributes.
