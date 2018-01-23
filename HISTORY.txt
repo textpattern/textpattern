@@ -14,8 +14,8 @@ Changes in 4.7.0 (upcoming)
   output.
 * Added: <txp:article_custom /> tag can count pages. Enhanced 'month', 'expired'
   and time' attributes.
-* Added: 'ahu' constant as multi-site-compatible URL to admin side.
-  Plugin authors please use 'ahu' in place of 'hu.'textpattern'.
+* Added: 'ahu' constant as multi-site-compatible URL to admin side. Plugin
+  authors please use ahu in place of hu.'textpattern'.
 * Added: XML and JSON file support. Completely overhauled setup procedure to
   centralise and verify/delete preferences on upgrade. Table structure and
   preferences defined in files for easier maintenance (thanks, makss).
@@ -57,12 +57,14 @@ Changes in 4.7.0 (upcoming)
 * Changed: Textfilter options and help topics moved inline with their textareas.
   Write panel 'sidehelp' twisty and article>sidehelp callback removed.
 * Changed: Categories moved from Sort & Display subpanel to their own twisty.
-  Override Form (if used) moved to Sort & Display subpanel. 'Advanced' twisty
-  and its callback removed.
+  Override Form (if used) moved to 'Sort and display' subpanel. 'Advanced'
+  twisty and its callback removed.
 * Changed: Seamless upgrades: languages also updated automatically.
 * Changed: Further improvements to RTL language support.
 * Changed: Language Textpacks bundled in core instead of using legacy RPC
   server.
+* Changed: Diagnostics and tag trace reports always rendered in English (for
+  easier international support enquiries). Text strings moved to 'mode.ini'.
 * Changed: Use local inline help files instead of legacy RPC server. Help topics
   rendered in dialogs instead of new window (thanks, makss).
 * Changed: Use JSON file to check for new releases/pre-releases instead of
@@ -84,7 +86,7 @@ Changes in 4.7.0 (upcoming)
 * Changed: Admin theme accessibility improvements.
 * Fixed: Multi-site setups: Correct setup and install messages.
 * Fixed: Multi-site setups: Correct diagnostics information.
-* Fixed: Multi-site setups: Correct login url in user-invite email.
+* Fixed: Multi-site setups: Correct login URL in user-invite email.
 * Fixed: Multi-site setups: Login cookie accessible to public and admin URLs.
 * Fixed: Keyboard navigation on select list popups.
 * Fixed: Only update database version string if using release version.
