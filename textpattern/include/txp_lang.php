@@ -124,8 +124,8 @@ function list_languages($message = '')
                 $disabled = 'disabled';
             }
 
-            $btnText = escape_title(gTxt('update'));
-            $removeLink = href(escape_title(gTxt('remove')), array(
+            $btnText = '<span class="ui-icon ui-icon-refresh"></span>'.sp.escape_title(gTxt('update'));
+            $removeLink = href('<span class="ui-icon ui-icon-minus"></span>'.sp.escape_title(gTxt('remove')), array(
                 'event'      => 'lang',
                 'step'       => 'remove_language',
                 'lang_code'  => $langname,
@@ -141,7 +141,7 @@ function list_languages($message = '')
             );
         } else {
             $cellclass = $icon = '';
-            $btnText = escape_title(gTxt('install'));
+            $btnText = '<span class="ui-icon ui-icon-plus"></span>'.sp.escape_title(gTxt('install'));
             $disabled = $btnRemove = '';
         }
 
