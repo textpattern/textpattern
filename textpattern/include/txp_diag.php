@@ -264,8 +264,14 @@ function doDiagnostics()
         $fail['file_uploads_disabled'] = diag_msg_wrap(gTxt('file_uploads_disabled'), 'information');
     }
 
-    if (@is_dir(txpath.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup'))) {
-        $fail['setup_still_exists'] = diag_msg_wrap(gTxt('still_exists', array('{path}' => txpath.DS."setup".DS)), 'warning');
+    if (isset($txpcfg['multisite_root_path'])) {
+        if (@is_dir($txpcfg['multisite_root_path'].DS.'admin'.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles($txpcfg['multisite_root_path'].DS.'admin', 'setup'))) {
+            $fail['setup_still_exists'] = diag_msg_wrap(gTxt('still_exists', array('{path}' => $txpcfg['multisite_root_path'].DS.'admin'.DS."setup".DS)), 'warning');
+        }
+    } else {
+        if (@is_dir(txpath.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup'))) {
+            $fail['setup_still_exists'] = diag_msg_wrap(gTxt('still_exists', array('{path}' => txpath.DS."setup".DS)), 'warning');
+        }
     }
 
     if (empty($tempdir)) {
@@ -345,7 +351,10 @@ function doDiagnostics()
     $guess_site_url = $_SERVER['HTTP_HOST'].preg_replace('#[/\\\\]$#', '', dirname(dirname($_SERVER['SCRIPT_NAME'])));
 
     if ($siteurl and strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.')) {
-        $fail['site_url_mismatch'] = diag_msg_wrap(gTxt('site_url_mismatch').cs.$guess_site_url, 'warning');
+        // skip warning if multi-site setup as $guess_site_url and $siteurl will mismatch
+        if(!isset($txpcfg['multisite_root_path'])) {
+            $fail['site_url_mismatch'] = diag_msg_wrap(gTxt('site_url_mismatch').cs.$guess_site_url, 'warning');
+        }
     }
 
     // Test clean URL server vars.
@@ -422,7 +431,7 @@ function doDiagnostics()
             '{supported}' => $gd_support,
         ));
     } else {
-        $gd = gTxt('unavailable');
+        $gd = gTxt('diag_unavailable');
     }
 
     if (realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir'])) {
@@ -492,78 +501,95 @@ function doDiagnostics()
         '<textarea class="code" id="diagnostics-detail" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr" readonly>',
         '</textarea>',
 
-        '<textarea style="display:none;" id="diagnostics-data" data-txproot="'.dirname(txpath).'">',
+        (isset($txpcfg['multisite_root_path']))
+        ? '<textarea style="display:none;" class="code" id="diagnostics-data" cols="'.INPUT_LARGE.'" data-txproot="'.dirname(dirname($txpcfg['multisite_root_path'])).'" dir="ltr" readonly>'
+        : '<textarea style="display:none;" class="code" id="diagnostics-data" cols="'.INPUT_LARGE.'" data-txproot="'.dirname(txpath).'" dir="ltr" readonly>',
 
-        gTxt('txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
+        gTxt('diag_txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
 
-        gTxt('last_update').cs.gmstrftime($fmt_date, $dbupdatetime).'/'.gmstrftime($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
+        gTxt('diag_last_update').cs.gmstrftime($fmt_date, $dbupdatetime).'/'.gmstrftime($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
 
-        priv.gTxt('web_domain').cs.$siteurl.n,
+        priv.gTxt('diag_web_domain').cs.$siteurl.n,
 
-        priv.gTxt('document_root').cs.@$_SERVER['DOCUMENT_ROOT'].(($real_doc_root != @$_SERVER['DOCUMENT_ROOT']) ? ' ('.$real_doc_root.')' : '').n,
+        (defined('ahu')) ? priv.gTxt('diag_admin_url').cs.rtrim(preg_replace('|^https?://|', '', ahu), '/').n : '',
+
+        (!empty($txpcfg['cookie_domain'])) ? priv.gTxt('diag_cookie_domain').cs.cookie_domain.n : '',
+
+        priv.gTxt('diag_document_root').cs.@$_SERVER['DOCUMENT_ROOT'].(($real_doc_root != @$_SERVER['DOCUMENT_ROOT']) ? ' ('.$real_doc_root.')' : '').n,
+
+        (isset($txpcfg['multisite_root_path'])) ? gTxt('diag_multisite_root_path').cs.$txpcfg['multisite_root_path'].n : '',
 
         priv.'$path_to_site'.cs.$path_to_site.n,
 
-        priv.gTxt('txp_path').cs.txpath.n,
+        gTxt('diag_txp_path').cs.txpath.n,
 
-        gTxt('permlink_mode').cs.$permlink_mode.n,
+        gTxt('diag_permlink_mode').cs.$permlink_mode.n,
 
-        (ini_get('open_basedir')) ? 'open_basedir: '.ini_get('open_basedir').n : '',
+        (ini_get('open_basedir')) ? 'open_basedir'.cs.ini_get('open_basedir').n : '',
 
-        (ini_get('upload_tmp_dir')) ? 'upload_tmp_dir: '.ini_get('upload_tmp_dir').n : '',
+        (ini_get('upload_tmp_dir')) ? 'upload_tmp_dir'.cs.ini_get('upload_tmp_dir').n : '',
 
-        gTxt('tempdir').cs.$tempdir.n,
+        gTxt('diag_tempdir').cs.$tempdir.n,
 
-        gTxt('php_version').cs.phpversion().n,
+        gTxt('diag_php_version').cs.phpversion().n,
 
-        ($is_register_globals) ? gTxt('register_globals').cs.$is_register_globals.n : '',
+        ($is_register_globals) ? 'register_globals'.cs.$is_register_globals.n : '',
 
-        gTxt('gd_library').cs.$gd.n,
+        gTxt('diag_gd_library').cs.$gd.n,
 
-        gTxt('server').' TZ: '.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
-        gTxt('server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
-        strip_tags(gTxt('is_dst')).cs.$is_dst.n,
-        strip_tags(gTxt('auto_dst')).cs.$auto_dst.n,
-        strip_tags(gTxt('gmtoffset')).cs.$timezone_key.sp."($gmtoffset)".n,
+        gTxt('diag_server_timezone').cs.Txp::get('\Textpattern\Date\Timezone')->getTimeZone().n,
+
+        gTxt('diag_server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
+
+        strip_tags(gTxt('diag_is_dst')).cs.$is_dst.n,
+
+        strip_tags(gTxt('diag_auto_dst')).cs.$auto_dst.n,
+
+        strip_tags(gTxt('diag_gmtoffset')).cs.$timezone_key.sp."($gmtoffset)".n,
 
         'MySQL'.cs.$DB->version.' ('.getThing('SELECT @@GLOBAL.version_comment').') '.n,
-        gTxt('db_server_time').cs.$db_server_time.n,
-        gTxt('db_server_timeoffset').cs.$db_server_timeoffset.' s'.n,
-        gTxt('db_global_timezone').cs.$db_global_timezone.n,
-        gTxt('db_session_timezone').cs.$db_session_timezone.n,
 
-        gTxt('locale').cs.$locale.n,
+        gTxt('diag_db_server_time').cs.$db_server_time.n,
 
-        (isset($_SERVER['SERVER_SOFTWARE'])) ? gTxt('server').cs.$_SERVER['SERVER_SOFTWARE'].n : '',
+        gTxt('diag_db_server_timeoffset').cs.$db_server_timeoffset.' s'.n,
 
-        (is_callable('apache_get_version')) ? gTxt('apache_version').cs.@apache_get_version().n : '',
+        gTxt('diag_db_global_timezone').cs.$db_global_timezone.n,
 
-        gTxt('php_sapi_mode').cs.PHP_SAPI.n,
+        gTxt('diag_db_session_timezone').cs.$db_session_timezone.n,
 
-        gTxt('rfc2616_headers').cs.ini_get('cgi.rfc2616_headers').n,
+        gTxt('diag_locale').cs.$locale.n,
 
-        gTxt('os_version').cs.php_uname('s').' '.php_uname('r').n,
+        (isset($_SERVER['SERVER_SOFTWARE'])) ? gTxt('diag_web_server').cs.$_SERVER['SERVER_SOFTWARE'].n : '',
 
-        gTxt('theme_name').cs.$theme_name.sp.@$theme_manifest['version'].n,
+        (is_callable('apache_get_version')) ? gTxt('diag_apache_version').cs.@apache_get_version().n : '',
 
-        ($active_plugins ? gTxt('active_plugins').cs.n.t.join(n.t, $active_plugins).n : ''),
+        gTxt('diag_php_sapi_mode').cs.PHP_SAPI.n,
+
+        gTxt('diag_rfc2616_headers').cs.ini_get('cgi.rfc2616_headers').n,
+
+        gTxt('diag_server_os_version').cs.php_uname('s').' '.php_uname('r').n,
+
+        gTxt('diag_theme_name').cs.$theme_name.sp.@$theme_manifest['version'].n,
+
+        ($active_plugins ? gTxt('diag_active_plugins').cs.n.t.join(n.t, $active_plugins).n : ''),
 
         $fail
-        ? n.gTxt('preflight_check').cs.n.ln.join("\n", doStripTags($fail)).n.ln
+        ? n.gTxt('diag_preflight_check').cs.n.ln.join("\n", doStripTags($fail)).n.ln
         : '',
 
         ($is_apache && is_readable($path_to_site.'/.htaccess'))
-        ?    n.gTxt('htaccess_contents').cs.n.ln.txpspecialchars(join('', file($path_to_site.'/.htaccess'))).n.ln
-        :    '',
+        ? n.gTxt('diag_htaccess_contents').cs.n.ln.txpspecialchars(join('', file($path_to_site.'/.htaccess'))).n.ln
+        : '',
     );
 
     if ($step == 'high') {
         $lastCheck = json_decode(get_pref('last_update_check', ''), true);
+
         if (!empty($lastCheck['msg']) || !empty($lastCheck['msg2'])) {
-            $out[] = 'Last update check: '.strftime('%Y-%m-%d %H:%M:%S', $lastCheck['when']).', '.strip_tags($lastCheck['msg']).' '.strip_tags($lastCheck['msg2']).n;
+            $out[] = n.gTxt('diag_last_update_check').cs.strftime('%Y-%m-%d %H:%M:%S', $lastCheck['when']).', '.strip_tags($lastCheck['msg']).' '.strip_tags($lastCheck['msg2']).n;
         }
 
-        $out[] = n.'Charset (default/config)'.cs.$DB->default_charset.'/'.$DB->charset.n;
+        $out[] = n.gTxt('diag_db_charset').cs.$DB->default_charset.'/'.$DB->charset.n;
 
         $result = safe_query("SHOW variables LIKE 'character_se%'");
 
@@ -611,10 +637,10 @@ function doDiagnostics()
             $table_msg = (count($table_names) < 17) ?  array('-') : array('OK');
         }
 
-        $out[] = count($table_names).' Tables'.cs.implode(', ', $table_msg).n;
+        $out[] = count($table_names).sp.gTxt('diag_db_tables').cs.implode(', ', $table_msg).n;
 
         $cf = preg_grep('/^custom_\d+/', getThings("DESCRIBE `".PFX."textpattern`"));
-        $out[] = n.get_pref('max_custom_fields', 10).sp.gTxt('custom').cs.
+        $out[] = n.get_pref('max_custom_fields', 10).sp.gTxt('diag_custom').cs.
                     implode(', ', $cf).sp.'('.count($cf).')'.n;
 
         $extns = get_loaded_extensions();
@@ -625,18 +651,18 @@ function doDiagnostics()
         }
 
         if (is_callable('apache_get_modules')) {
-            $out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n;
+            $out[] = n.gTxt('diag_apache_modules').cs.join(', ', apache_get_modules()).n;
         }
 
         if (@is_array($pretext_data) and count($pretext_data) > 1) {
-            $out[] = n.gTxt('pretext_data').cs.txpspecialchars(join('', array_slice($pretext_data, 1, 20))).n;
+            $out[] = n.gTxt('diag_pretext_data').cs.txpspecialchars(join('', array_slice($pretext_data, 1, 20))).n;
         }
 
         $out[] = n;
 
         if ($md5s = check_file_integrity(INTEGRITY_MD5)) {
             foreach ($md5s as $f => $checksum) {
-                $out[] = $f.cs.n.t.(!$checksum ? gTxt('unknown') : $checksum).n;
+                $out[] = $f.cs.n.t.(!$checksum ? gTxt('diag_unknown') : $checksum).n;
             }
         }
 

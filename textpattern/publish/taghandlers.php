@@ -3977,20 +3977,25 @@ function if_category($atts, $thing = null)
         $category = trim($category);
     }
 
-    if ($type && $theType !== $type) {
+    if ($type && $type !== true && $theType !== $type) {
         $x = false;
     } else {
-        $x = $name === false ? !empty($category) : in_list($category, $name);
+        $parentname = $parent && is_numeric((string)$parent);
+        $x = $name === false ? !empty($category) : $parentname || in_list($category, $name);
     }
 
     if ($x && $parent && $category) {
         if (!isset($cache[$theType.$category])) {
-            $cache[$theType.$category] = array_reverse(array_slice(array_column(getTreePath($category, $theType), 'name'), 1));
+            $names = array();
+            foreach(getTreePath($category, $theType) as $i => $cat) {
+                $i and $names[] = $cat['name'];
+            }
+            $cache[$theType.$category] = array_reverse($names);
         }
 
         $path = $cache[$theType.$category];
 
-        if (!is_numeric((string)$parent)) {
+        if (!$parentname) {
             $name = $parent;
             $parent = true;
         }
