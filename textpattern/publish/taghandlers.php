@@ -147,6 +147,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('if_article_section')
     ->register('if_first_section')
     ->register('if_last_section')
+    ->register('if_logged_in')
     ->register('php')
     ->register('txp_header', 'header')
     ->register('custom_field')
@@ -2729,6 +2730,45 @@ function if_article_author($atts, $thing = null)
 
 // -------------------------------------------------------------
 
+function if_logged_in($atts, $thing = null)
+{
+    global $txp_groups;
+    static $cache = array();
+
+    extract(lAtts(array(
+        'group' => '',
+        'name'  => '',
+    ), $atts));
+
+    $user = isset($cache[$name]) ? $cache[$name] : ($cache[$name] = is_logged_in($name));
+    $x = false;
+
+    if ($user && $group !== '') {
+        $privs = do_list($group);
+        $groups = array_flip($txp_groups);
+
+        foreach ($privs as &$priv) {
+            if (!is_numeric($priv) && isset($groups[$priv])) {
+                $priv = $groups[$priv];
+            } else {
+                $priv = intval($priv);
+            }
+        }
+
+        $privs = array_unique($privs);
+
+        if (in_array($user['privs'], $privs)) {
+            $x = true;
+        }
+    } else {
+        $x = (bool) $user;
+    }
+
+    return isset($thing) ? parse($thing, $x) : $x;
+}
+
+// -------------------------------------------------------------
+
 function body()
 {
     global $thisarticle, $is_article_body;
@@ -4314,9 +4354,13 @@ function if_custom_field($atts, $thing = null)
 
 // -------------------------------------------------------------
 
-function site_url()
+function site_url($atts)
 {
-    return hu;
+    extract(lAtts(array(
+        'type' => '',
+    ), $atts));
+
+    return $type === 'admin' ? ahu : hu;
 }
 
 // -------------------------------------------------------------
@@ -4361,6 +4405,7 @@ function page_url($atts)
     static $specials = null;
 
     $specials !== null or $specials = array(
+        'admin_root'  => ahu,
         'images_root' => ihu.get_pref('img_dir'),
         'themes_root' => hu.get_pref('skin_dir'),
         'theme_path'  => hu.get_pref('skin_dir').'/'.$pretext['skin'],
