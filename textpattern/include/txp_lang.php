@@ -158,7 +158,7 @@ function list_languages($message = '')
             graf(
                 ($icon ? '<span class="ui-icon '.$icon.'"></span>' : '').n.
                 tag(gTxt($langdata['name']), 'strong', array('dir' => 'auto')).br.
-                tag(gTxt($langname), 'code', array('dir' => 'ltr')).
+                tag($langname, 'code', array('dir' => 'ltr')).
                 ($btnRemove && array_key_exists($langname, $langUse) ? n.$langUse[$langname] : '')
             ).
             graf(
