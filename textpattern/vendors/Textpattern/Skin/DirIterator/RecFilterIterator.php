@@ -30,8 +30,21 @@
 
 namespace Textpattern\Skin\DirIterator {
 
-    class RecRegexIterator extends \RecursiveRegexIterator
+    class RecFilterIterator extends \RecursiveFilterIterator
     {
+        protected $nameIn;
+
+        /**
+         * {@inheritdoc}
+         */
+
+         public function __construct(RecDirIterator $iterator, $nameIn = null)
+         {
+             $this->setNameIn($nameIn);
+
+             parent::__construct($iterator);
+         }
+
         /**
          * {@inheritdoc}
          */
@@ -39,6 +52,26 @@ namespace Textpattern\Skin\DirIterator {
         public function accept()
         {
             return $this->isDir() || $this->isValidTemplate();
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+
+        protected function setNameIn($names)
+        {
+            $this->nameIn = $names;
+
+            return $this;
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+
+        protected function getNameIn()
+        {
+            return $this->nameIn;
         }
 
         /**
@@ -52,8 +85,11 @@ namespace Textpattern\Skin\DirIterator {
             $isValid = false;
 
             if (!$this->isDot() && $this->isReadable() && ($this->isFile() || $this->isLink())) {
-                $isValid = (bool) preg_match(static::getRegex(), $this->getFilename());
-
+                if ($this->getNameIn()) {
+                    $isValid = (bool) in_array($this->getFilename(), $this->getNameIn());
+                } else {
+                    $isValid = true;
+                }
             }
 
             return $isValid;

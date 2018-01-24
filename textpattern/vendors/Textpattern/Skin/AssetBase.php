@@ -532,15 +532,17 @@ namespace Textpattern\Skin {
 
         protected function setFiles()
         {
-            $names = $this->getNames();
-            $templates = $names ? '('.implode('|', $names).')' : self::getNamePattern();
+            $templates = array();
             $extension = self::getExtension();
-            $extension === 'txp' ? $extension = '(txp|html)' : '';
+
+            foreach ($this->getNames() as $name) {
+                $templates = $name.$extension;
+            }
 
             $this->files = new DirIterator\RecIteratorIterator(
-                new DirIterator\RecRegexIterator(
+                new DirIterator\RecFilterIterator(
                     new DirIterator\RecDirIterator($this->getDirPath()),
-                    '#^'.$templates.'\.'.$extension.'$#i'
+                    $templates
                 ),
                 self::getSubdirField() ? 1 : 0
             );

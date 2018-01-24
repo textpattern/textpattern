@@ -277,9 +277,21 @@ namespace Textpattern\Skin {
          * @see          getSubdirPath().
          */
 
+        protected static function getFile()
+        {
+            return self::$file;
+        }
+
+        /**
+         * Get a skin directory path.
+         *
+         * @param string $name Skin name (uses the $name property value if null)
+         * @see          getSubdirPath().
+         */
+
         protected function getFilePath()
         {
-            return $this->getSubdirPath().DS.self::$file;
+            return $this->getSubdirPath().DS.self::getFile();
         }
 
         /**
@@ -541,9 +553,9 @@ namespace Textpattern\Skin {
         protected static function getFiles()
         {
             return new DirIterator\RecIteratorIterator(
-                new DirIterator\RecRegexIterator(
+                new DirIterator\RecFilterIterator(
                     new DirIterator\RecDirIterator(self::getDirPath()),
-                    '/^manifest\.json/i'
+                    array(self::getFile())
                 ),
                 1
             );

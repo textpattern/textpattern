@@ -38,7 +38,7 @@ namespace Textpattern\Skin\DirIterator {
          * @param int $depth Sets the MaxDepth property.
          */
 
-        public function __construct(RecRegexIterator $iterator, $depth)
+        public function __construct(RecFilterIterator $iterator, $depth)
         {
             parent::__construct($iterator);
             parent::setMaxDepth($depth);
