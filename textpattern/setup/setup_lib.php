@@ -24,7 +24,7 @@
 function setup_db($cfg = array())
 {
     global $txpcfg, $DB, $prefs, $txp_user, $txp_groups;
-    global $permlink_mode, $siteurl, $theme_name, $public_themes, $step;
+    global $permlink_mode, $siteurl, $adminurl, $theme_name, $public_themes, $step;
     include_once txpath.'/lib/txplib_db.php';
     include_once txpath.'/lib/admin_config.php';
 
@@ -32,6 +32,15 @@ function setup_db($cfg = array())
 
     if (!preg_match('%^https?://%', $siteurl)) {
         $siteurl = 'http://'.$siteurl;
+    }
+
+    if (!isset($cfg['site']['adminurl'])) {
+        $adminurl = $siteurl.'/textpattern';
+    } else {
+        $adminurl = rtrim(@$cfg['site']['adminurl'], '/');
+        if (!preg_match('%^https?://%', $adminurl)) {
+            $adminurl = 'http://'.$adminurl;
+        }
     }
 
     // Determine the mode of permanent links.
