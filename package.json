@@ -23,7 +23,7 @@
     "uglify-js": "3.3.8"
   },
   "dependencies": {
-    "blueimp-file-upload": "9.19.3",
+    "blueimp-file-upload": "9.20.0",
     "blueimp-md5": "2.10.0",
     "jquery": "3.3.1",
     "prismjs": "1.10.0"
