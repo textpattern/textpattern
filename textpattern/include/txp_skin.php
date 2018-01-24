@@ -35,19 +35,21 @@ if (!defined('txpinterface')) {
 if ($event === 'skin') {
     require_privs($event);
 
+    $skin = Txp::get('Textpattern\Skin\Skin');
+
     $availableSteps = array(
-        'skin_change_pageby' => true, // Prefixed to make it work with the paginator…
-        'list'               => false,
-        'edit'               => false,
-        'save'               => true,
-        'import'             => false,
-        'multi_edit'         => true,
+        'change_pageby' => true, // Prefixed to make it work with the paginator…
+        'list'          => false,
+        'edit'          => false,
+        'save'          => true,
+        'import'        => false,
+        'multi_edit'    => true,
     );
 
     if ($step && bouncer($step, $availableSteps)) {
         call_user_func($event.'_'.$step);
     } else {
-        Txp::get('Textpattern\Skin\Skin')->render();
+        $skin->render();
     }
 }
 
@@ -61,12 +63,16 @@ if ($event === 'skin') {
 
 function skin_import()
 {
-    Txp::get('Textpattern\Skin\Skin')->setNames(array(ps('skins')))->import(false)->render();
+    global $skin;
+
+    $skin->setNames(array(ps('skins')))->import(false)->render();
 }
 
 function skin_edit()
 {
-    Txp::get('Textpattern\Skin\Skin')->renderEditForm();
+    global $skin;
+
+    $skin->renderEditForm();
 }
 
 /**
@@ -75,7 +81,7 @@ function skin_edit()
 
 function skin_save()
 {
-    $skin = Txp::get('Textpattern\Skin\Skin');
+    global $skin;
 
     $infos = array_map('assert_string', psa(array(
         'name',
@@ -123,9 +129,7 @@ function skin_save()
 
 function skin_multi_edit()
 {
-    global $prefs;
-
-    $skin = Txp::get('Textpattern\Skin\Skin');
+    global $skin, $prefs;
 
     extract(psa(array(
         'edit_method',
@@ -141,7 +145,7 @@ function skin_multi_edit()
 
     switch ($edit_method) {
         case 'export':
-            $skin->export($clean);
+            $skin->export($clean, true);
             break;
         case 'duplicate':
             $skin->duplicate();
@@ -161,9 +165,11 @@ function skin_multi_edit()
  * Changes and saves the 'pageby' value.
  */
 
-function skin_skin_change_pageby()
+function skin_change_pageby()
 {
+    global $skin;
+
     Txp::get('\Textpattern\Admin\Paginator')->change();
 
-    Txp::get('Textpattern\Skin\Skin')->render();
+    $skin->render();
 }

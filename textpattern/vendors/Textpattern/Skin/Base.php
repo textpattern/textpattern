@@ -232,6 +232,15 @@ namespace Textpattern\Skin {
         }
 
         /**
+         * Get the.
+         *
+         * @param string $name Skin name (uses the $name property value if null)
+         * @see          getName(), getDirPath().
+         */
+
+        abstract protected function getSubdirPath($name = null);
+
+        /**
          * Get the current  pref value.
          *
          * @return string Skin name.
@@ -268,9 +277,15 @@ namespace Textpattern\Skin {
         {
             global $prefs;
 
-            $prefs['remove_extra_templates'] = !$prefs['remove_extra_templates'];
-
-            return set_pref('remove_extra_templates', $prefs['remove_extra_templates'], 'skin', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+            return set_pref(
+                'remove_extra_templates',
+                $prefs['remove_extra_templates'] = !$prefs['remove_extra_templates'],
+                'skin',
+                PREF_HIDDEN,
+                'text_input',
+                0,
+                PREF_PRIVATE
+            );
         }
 
         /**
@@ -323,16 +338,16 @@ namespace Textpattern\Skin {
                 foreach ($results as $txtItem => $listGroup) {
                     $list = array();
 
-                    if (count($listGroup) > 1) {
-                        if (isset($listGroup[0])) {
-                            $list = $listGroup;
-                        } else {
-                            foreach ($listGroup as $group => $names) {
-                                $list[] = '('.$group.') '.implode(', ', $names).'; ';
+                    if (isset($listGroup[0])) {
+                        $list = $listGroup;
+                    } else {
+                        foreach ($listGroup as $group => $names) {
+                            if (count($listGroup) > 1) {
+                                $list[] = '('.$group.') '.implode(', ', $names);
+                            } else {
+                                $list[] = implode(', ', $names);
                             }
                         }
-                    } else {
-                        $list = $listGroup;
                     }
 
                     $message[] = gTxt($txtItem, array('{list}' => implode(', ', $list)));
@@ -417,7 +432,7 @@ namespace Textpattern\Skin {
          * @return object $this     The current object (chainable).
          */
 
-        abstract public function import($clean = true, $override = false);
+        abstract public function import($clean = false, $override = false);
 
         /**
          * Export (and clean) multiple skins (and their related $assets)
@@ -428,7 +443,7 @@ namespace Textpattern\Skin {
          * @return object $this  The current object (chainable).
          */
 
-        abstract public function export($clean = true);
+        abstract public function export($clean = false, $override = false);
 
         /**
          * Delete multiple skins (and their related $assets + directories if empty)
@@ -475,8 +490,7 @@ namespace Textpattern\Skin {
          abstract protected function getRow();
 
         /**
-         * Get the $names property value(s) related rows.
-         * Proceed with the $skin property related skin name for assets.
+         * Get the $names (+ $skin) property value(s) related rows.
          *
          * @return array Associative array of skin names and their related infos.
          */
@@ -484,8 +498,7 @@ namespace Textpattern\Skin {
         abstract protected function getRows();
 
         /**
-         * Delete the $names property value(s) related rows.
-         * Proceed with the $skin property related skin name for assets related classes.
+         * Delete the $names (+ $skin) property value(s) related rows.
          *
          * @return bool false on error.
          */

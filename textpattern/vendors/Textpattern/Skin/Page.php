@@ -34,10 +34,10 @@ namespace Textpattern\Skin {
 
     class Page extends AssetBase
     {
-        protected static $table = 'txp_page';
-        protected static $fileContentsFields = 'user_html';
-        protected static $defaultDir = 'pages';
         protected static $string = 'page';
+        protected static $table = 'txp_page';
+        protected static $dir = 'pages';
+        protected static $fileContentsField = 'user_html';
         protected static $essential = array(
             array(
                 'name'      => 'default',

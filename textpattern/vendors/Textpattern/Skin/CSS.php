@@ -34,10 +34,10 @@ namespace Textpattern\Skin {
 
     class CSS extends AssetBase
     {
-        protected static $table = 'txp_css';
-        protected static $fileContentsFields = 'css';
-        protected static $defaultDir = 'styles';
         protected static $string = 'css';
+        protected static $table = 'txp_css';
+        protected static $dir = 'styles';
+        protected static $fileContentsField = 'css';
         protected static $essential = array(
             array(
                 'name' => 'default',

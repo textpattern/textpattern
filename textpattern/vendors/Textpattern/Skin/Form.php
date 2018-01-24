@@ -34,12 +34,12 @@ namespace Textpattern\Skin {
 
     class Form extends AssetBase
     {
+        protected static $string = 'form';
         protected static $table = 'txp_form';
-        protected static $fileContentsFields = 'Form';
+        protected static $dir = 'forms';
         protected static $subdirField = 'type';
         protected static $defaultSubdir = 'misc';
-        protected static $defaultDir = 'forms';
-        protected static $string = 'form';
+        protected static $fileContentsField = 'Form';
         protected static $essential = array(
             array(
                 'name' => 'comments',
