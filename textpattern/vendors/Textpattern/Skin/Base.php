@@ -453,7 +453,7 @@ namespace Textpattern\Skin {
          * @return object $this The current object (chainable).
          */
 
-        abstract public function delete();
+        abstract public function delete($clean = false);
 
         /**
          * Create/override a skin/asset file from the $infos property values.

@@ -815,7 +815,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function delete()
+        public function delete($clean = false)
         {
             // TODO
         }
