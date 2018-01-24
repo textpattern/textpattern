@@ -848,44 +848,46 @@ namespace Textpattern\Skin {
                 }
             }
 
-            $rows = $this->setNames($ready)->getRows();
+            if ($ready) {
+                $rows = $this->setNames($ready)->getRows();
 
-            if (!$rows) {
-                $this->mergeResult('skin_unknown', $ready);
-            } else {
-                foreach ($rows as $name => $infos) {
-                    extract($infos);
+                if (!$rows) {
+                    $this->mergeResult('skin_unknown', $ready);
+                } else {
+                    foreach ($rows as $name => $infos) {
+                        extract($infos);
 
-                    $copy = $name.'_copy';
-                    $copyTitle = $title.'_copy';
+                        $copy = $name.'_copy';
+                        $copyTitle = $title.'_copy';
 
-                    if (!$this->setInfos($copy, $copyTitle, $version, $description, $author, $author_uri)->createRow()) {
-                        $this->mergeResult('skin_duplication_failed', $name);
-                    } else {
-                        self::setInstalled(array($copy => $copyTitle));
+                        if (!$this->setInfos($copy, $copyTitle, $version, $description, $author, $author_uri)->createRow()) {
+                            $this->mergeResult('skin_duplication_failed', $name);
+                        } else {
+                            self::setInstalled(array($copy => $copyTitle));
 
-                        foreach ($this->getAssets() as $assetModel) {
-                            $this->setName($name);
-                            $assetString = $assetModel::getString();
-                            $assetRows = $assetModel->getRows();
+                            foreach ($this->getAssets() as $assetModel) {
+                                $this->setName($name);
+                                $assetString = $assetModel::getString();
+                                $assetRows = $assetModel->getRows();
 
-                            if (!$assetRows) {
-                                $assetFailure = true;
+                                if (!$assetRows) {
+                                    $assetFailure = true;
 
-                                $this->mergeResult($assetString.'_not_found', array($skin => $subdirPath));
-                            } elseif ($this->setName($copy) && !$assetModel->createRows($assetRows)) {
-                                $assetFailure = true;
+                                    $this->mergeResult($assetString.'_not_found', array($skin => $subdirPath));
+                                } elseif ($this->setName($copy) && !$assetModel->createRows($assetRows)) {
+                                    $assetFailure = true;
 
-                                $this->mergeResult($assetString.'_duplication_failed', array($skin => $notImported));
+                                    $this->mergeResult($assetString.'_duplication_failed', array($skin => $notImported));
+                                }
                             }
-                        }
 
-                        $this->setName($name);
+                            $this->setName($name);
 
-                        if (!isset($assetFailure)) {
-                            $done[] = $name;
+                            if (!isset($assetFailure)) {
+                                $done[] = $name;
 
-                            $this->mergeResult('skin_duplicated', $name, 'success');
+                                $this->mergeResult('skin_duplicated', $name, 'success');
+                            }
                         }
                     }
                 }
