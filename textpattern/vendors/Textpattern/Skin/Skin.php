@@ -754,6 +754,7 @@ namespace Textpattern\Skin {
             $infos = $this->getInfos();
             $name = $infos['name'];
             $base = $this->getBase();
+            $done = false;
 
             callback_event('skin.update', '', 1, array(
                 'infos' => $infos,
@@ -813,7 +814,7 @@ namespace Textpattern\Skin {
             callback_event('skin.update', '', 0, array(
                 'infos' => $infos,
                 'base'  => $base,
-                'done'  => isset($done),
+                'done'  => $done,
             ));
 
             return $this;
@@ -826,10 +827,9 @@ namespace Textpattern\Skin {
         public function duplicate()
         {
             $names = $this->getNames();
+            $done = $ready = array();
 
             callback_event('skin.duplicate', '', 1, array('names' => $names));
-
-            $passed = array();
 
             foreach ($names as $name) {
                 $subdirPath = $this->setName($name)->getSubdirPath();
@@ -844,17 +844,15 @@ namespace Textpattern\Skin {
                 } elseif (!$this->lock()) {
                     $this->mergeResult('skin_dir_locking_failed', $subdirPath);
                 } else {
-                    $passed[] = $name;
+                    $ready[] = $name;
                 }
             }
 
-            $rows = $this->setNames($passed)->getRows();
+            $rows = $this->setNames($ready)->getRows();
 
             if (!$rows) {
-                $this->mergeResult('skin_unknown', $passed);
+                $this->mergeResult('skin_unknown', $ready);
             } else {
-                $done = array();
-
                 foreach ($rows as $name => $infos) {
                     extract($infos);
 
@@ -913,13 +911,12 @@ namespace Textpattern\Skin {
 
         public function import($clean = false, $override = false)
         {
-            $names = $this->getNames();
-
             $clean == $this->getCleaningPref() ?: $this->switchCleaningPref();
 
-            callback_event('skin.import', '', 1, array('names' => $names));
-
+            $names = $this->getNames();
             $done = array();
+
+            callback_event('skin.import', '', 1, array('names' => $names));
 
             foreach ($names as $name) {
                 $this->setName($name);
@@ -990,9 +987,10 @@ namespace Textpattern\Skin {
 
         public function export($clean = false, $override = false)
         {
-            $names = $this->getNames();
-
             $clean == $this->getCleaningPref() ?: $this->switchCleaningPref();
+
+            $names = $this->getNames();
+            $done = array();
 
             callback_event('skin.export', '', 1, array('names' => $names));
 
@@ -1017,19 +1015,17 @@ namespace Textpattern\Skin {
                 } elseif (!$this->lock()) {
                     $this->mergeResult('skin_locking_failed', $name);
                 } else {
-                    $passed[] = $name;
+                    $ready[] = $name;
                 }
             }
 
-            if ($passed) {
-                $rows = $this->setNames($passed)->getRows();
+            if ($ready) {
+                $rows = $this->setNames($ready)->getRows();
 
                 if (!$rows) {
                     $this->mergeResult('skin_unknown', $names);
                 } else {
-                    $done = array();
-
-                    foreach ($passed as $name) {
+                    foreach ($ready as $name) {
                         $this->setName($name);
 
                         extract($rows[$name]);
@@ -1073,19 +1069,16 @@ namespace Textpattern\Skin {
         public function delete($clean = false)
         {
             $names = $this->getNames();
+            $done = $ready = array();
 
             callback_event('skin.delete', '', 1, array('names' => $names));
-
-            $passed = $failed = array();
 
             foreach ($names as $name) {
                 $this->setName($name);
 
                 if (!$this->isInstalled()) {
-                    $failed[] = $name;
                     $this->mergeResult('skin_unknown', $name);
                 } elseif ($sections = $this->getSections()) {
-                    $failed[] = $name;
                     $this->mergeResult('skin_in_use', array($name => $sections));
                 } elseif (is_dir($this->getSubdirPath()) && !$this->lock()){
                     $this->mergeResult('skin_locking_failed', $name);
@@ -1094,30 +1087,31 @@ namespace Textpattern\Skin {
 
                     foreach ($this->getAssets() as $assetModel) {
                         if (!$assetModel->deleteRows()) {
-                            $failed[] = $name;
                             $this->mergeResult($assetModel->getString().'_deletion_failed', $name);
                         }
                     }
 
-                    $assetFailure ? $failed[] = $name : $passed[] = $name;
+                    $assetFailure ?: $ready[] = $name;
                 }
             }
 
-            if ($passed) {
-                if ($this->setNames($passed) && $this->deleteRows()) {
-                    self::unsetInstalled($passed);
+            if ($ready) {
+                if ($this->setNames($ready) && $this->deleteRows()) {
+                    $done = $ready;
 
-                    if (in_array(self::getEditing(), $passed)) {
+                    self::unsetInstalled($ready);
+
+                    if (in_array(self::getEditing(), $ready)) {
                         $default = self::getDefault();
 
                         $default ? self::setEditing($default) : '';
                     }
 
-                    $this->mergeResult('skin_deleted', $passed, 'success');
+                    $this->mergeResult('skin_deleted', $ready, 'success');
 
-                    update_lastmod('skin.delete', $passed);
+                    update_lastmod('skin.delete', $ready);
                 } else {
-                    $this->mergeResult('skin_deletion_failed', $passed);
+                    $this->mergeResult('skin_deletion_failed', $ready);
                 }
             }
 
@@ -1126,14 +1120,17 @@ namespace Textpattern\Skin {
 
                 if (!$clean && $this->isLocked() && !$this->unlock()) {
                     $this->mergeResult('skin_unlocking_failed', $name);
-                } elseif ($clean && is_dir($this->getSubdirPath()) && !\Txp::get('Textpattern\Admin\Tools')::removeFiles($this->getDirPath(), $name)) {
+                } elseif ($clean &&
+                          is_dir($this->getSubdirPath()) &&
+                          !\Txp::get('Textpattern\Admin\Tools')::removeFiles($this->getDirPath(), $name)
+                ) {
                     $this->mergeResult('skin_files_deletion_failed', $name);
                 }
             }
 
             callback_event('skin.delete', '', 0, array(
                 'names' => $names,
-                'done'  => $passed,
+                'done'  => $done,
             ));
 
             return $this;
