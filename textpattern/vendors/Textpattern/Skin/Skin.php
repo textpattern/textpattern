@@ -1114,7 +1114,7 @@ namespace Textpattern\Skin {
 
                 if (!$clean && $this->isLocked() && !$this->unlock()) {
                     $this->mergeResult('skin_unlocking_failed', $name);
-                } elseif ($clean && file_exists($this->getSubdirPath()) && !\Txp::get('Textpattern\Admin\Tools')::removeFiles($this->getdirPath(), $name)) {
+                } elseif ($clean && file_exists($this->getSubdirPath()) && !\Txp::get('Textpattern\Admin\Tools')::removeFiles($this->getDirPath(), $name)) {
                     $this->mergeResult('skin_files_deletion_failed', $name);
                 }
             }
