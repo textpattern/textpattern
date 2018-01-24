@@ -891,7 +891,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            foreach($passed as $name) {
+            foreach($ready as $name) {
                 if ($this->isLocked() && !$this->unlock()) {
                     $this->mergeResult('skin_unlocking_failed', $subdirPath);
                 }
