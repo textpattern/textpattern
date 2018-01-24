@@ -444,7 +444,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
             VALUES $value
             ON DUPLICATE KEY UPDATE
             data=VALUES(data), event=VALUES(event), owner=VALUES(owner), lastmod=VALUES(lastmod)");
-        
+
         return count($values);
     }
 
