@@ -2733,13 +2733,14 @@ function if_article_author($atts, $thing = null)
 function if_logged_in($atts, $thing = null)
 {
     global $txp_groups;
+    static $cache = array();
 
     extract(lAtts(array(
         'group' => '',
         'name'  => '',
     ), $atts));
 
-    $user = is_logged_in($name);
+    $user = isset($cache[$name]) ? $cache[$name] : ($cache[$name] = is_logged_in($name));
     $x = false;
 
     if ($user && $group !== '') {
