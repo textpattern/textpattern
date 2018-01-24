@@ -401,7 +401,7 @@ namespace Textpattern\Skin {
             $name === null ? $name = $this->getName() : '';
 
             $path = $this->getSubdirPath($name);
-            $pathReady = file_exists($path);
+            $pathReady = is_dir($path);
             $timeStart = microtime(true);
             $this->locked = false;
 
@@ -433,7 +433,7 @@ namespace Textpattern\Skin {
             $name === null ? $name = $this->getName() : '';
 
             $path = $this->getSubdirPath($name);
-            $pathReady = file_exists($path);
+            $pathReady = is_dir($path);
 
             if (!$pathReady || @rmdir($path.'/lock')) {
                 $this->locked = false;
@@ -687,7 +687,7 @@ namespace Textpattern\Skin {
                 $this->mergeResult('skin_unknown', $base);
             } elseif ($this->isInstalled()) {
                 $this->mergeResult('skin_already_exists', $name);
-            } elseif (file_exists($subdirPath = $this->getSubdirPath())) {
+            } elseif (is_dir($subdirPath = $this->getSubdirPath())) {
                 $this->mergeResult('skin_already_exists', $subdirPath);
             } elseif (!@mkdir($subdirPath)) {
                 $this->mergeResult('path_not_writable', $subdirPath);
@@ -754,9 +754,9 @@ namespace Textpattern\Skin {
                 $this->mergeResult('skin_unknown', $base);
             } elseif ($base !== $name && $this->isInstalled()) {
                 $this->mergeResult('skin_already_exists', $name);
-            } elseif (file_exists($subdirPath = $this->getSubdirPath()) && $base !== $name) {
+            } elseif (is_dir($subdirPath = $this->getSubdirPath()) && $base !== $name) {
                 $this->mergeResult('skin_already_exists', $subdirPath);
-            } elseif (file_exists($this->getSubdirPath($base)) && !$this->lock($base)) {
+            } elseif (is_dir($this->getSubdirPath($base)) && !$this->lock($base)) {
                 $this->mergeResult('skin_dir_locking_failed', $this->getSubdirPath($base));
             } elseif (!$this->updateRow()) {
                 $this->mergeResult('skin_update_failed', $base);
@@ -764,7 +764,7 @@ namespace Textpattern\Skin {
             } else {
                 $updated = true;
 
-                if (file_exists($this->getSubdirPath($base)) && !@rename($this->getSubdirPath($base), $subdirPath)) {
+                if (is_dir($this->getSubdirPath($base)) && !@rename($this->getSubdirPath($base), $subdirPath)) {
                     $this->mergeResult('path_renaming_failed', $base, 'warning');
                 } else {
                     $toUnlock = $name;
@@ -988,7 +988,7 @@ namespace Textpattern\Skin {
                 $this->setName($name);
 
                 $subdirPath = $this->getSubdirPath();
-                $subdirExists = file_exists($subdirPath);
+                $subdirExists = is_dir($subdirPath);
                 $isWritableSubdir = is_writable($subdirPath);
 
                 if (!$isWritableSubdir) {
@@ -1075,7 +1075,7 @@ namespace Textpattern\Skin {
                 } elseif ($sections = $this->getSections()) {
                     $failed[] = $name;
                     $this->mergeResult('skin_in_use', array($name => $sections));
-                } elseif (file_exists($this->getSubdirPath()) && !$this->lock()){
+                } elseif (is_dir($this->getSubdirPath()) && !$this->lock()){
                     $this->mergeResult('skin_locking_failed', $name);
                 } else {
                     $assetFailure = false;
@@ -1114,7 +1114,7 @@ namespace Textpattern\Skin {
 
                 if (!$clean && $this->isLocked() && !$this->unlock()) {
                     $this->mergeResult('skin_unlocking_failed', $name);
-                } elseif ($clean && file_exists($this->getSubdirPath()) && !\Txp::get('Textpattern\Admin\Tools')::removeFiles($this->getDirPath(), $name)) {
+                } elseif ($clean && is_dir($this->getSubdirPath()) && !\Txp::get('Textpattern\Admin\Tools')::removeFiles($this->getDirPath(), $name)) {
                     $this->mergeResult('skin_files_deletion_failed', $name);
                 }
             }

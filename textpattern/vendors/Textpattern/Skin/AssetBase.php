@@ -766,7 +766,7 @@ namespace Textpattern\Skin {
                             if ($subdirField) {
                                 $subdirPath = $this->setInfos($name, $$subdirField, $$contentsField)->getSubdirPath();
 
-                                if (!file_exists($subdirPath) && !@mkdir($subdirPath)) {
+                                if (!is_dir($subdirPath) && !@mkdir($subdirPath)) {
                                     $this->mergeResult($string.'_not_writable', array($skin => $name));
                                     $ready = false;
                                 }
