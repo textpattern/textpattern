@@ -63,11 +63,11 @@ eod;
 
         $out[] = <<<eod
             <form class="prefs-form" method="post" action="{$self_url}">
-            <h3 class="alert-block warning"><span class="ui-icon ui-icon-alert"></span>Textpattern root directory not found!</h3>
+            <h3 class="alert-block warning"><span class="ui-icon ui-icon-alert"></span> Textpattern root directory not found!</h3>
             <p>Your symlinks may be missing, or your <code>sites</code> folder is in a non-standard location.</p>
             <p>Your <code>sites</code> directory is: <code>{$sites_dir}</code></p>
             <p>Please enter the full path to the root directory of your textpattern installation.</p>
-            <label for="txp-root-path">Path to your base textpattern directory: </label><br>
+            <label for="txp-root-path">Path to your base textpattern directory:</label><br>
             <input type="text" id="txp-root-path" name="txp-root-path" size="50" placeholder="{$txp_root_suggestion}">
             <button>Submit</button>
             </form>
@@ -85,7 +85,7 @@ eod;
             // Root path incorrect, please retry -> back to beginning.
         $out[] = <<<eod
             <form class="prefs-form" method="post" action="{$self_url}">
-            <h3 class="alert-block warning"><span class="ui-icon ui-icon-alert"></span>Textpattern root directory details incorrect!</h3>
+            <h3 class="alert-block warning"><span class="ui-icon ui-icon-alert"></span> Textpattern root directory details incorrect!</h3>
             <p>The location <code>{$multisite_txp_root_path}</code> you specified does not appear to be the correct textpattern root path.</p>
             <p>Please check your path and try again.</p>
             <button>Go back</button>
@@ -100,7 +100,7 @@ eod;
             // Root path is correct. Proceed to create symlinks.
         $out[] = <<<eod
             <form class="prefs-form" method="post" action="{$self_url}">
-            <h3 class="alert-block success"><span class="ui-icon ui-icon-check"></span>Textpattern root directory found. Thank you!</h3>
+            <h3 class="alert-block success"><span class="ui-icon ui-icon-check"></span> Textpattern root directory found. Thank you!</h3>
             <p>Path to sites directory: <code>{$sites_dir}</code></p>
             <p>Path to Textpattern directory: <code>{$multisite_txp_root_path}</code></p>
             <h3>Creating symlinks</h3>
@@ -144,13 +144,13 @@ eod;
 
                 // symlink resolves successfully?
                 if (realpath($symlink_relpath.$symlink_local)) {
-                    $out[] = '<p>Symlink created: <code>'.$symlink_local.'  »»»  '.readlink($symlink_relpath.$symlink_local).'</code></p>';
+                    $out[] = '<p>Symlink created: <code>'.$symlink_local.' &#8594; '.readlink($symlink_relpath.$symlink_local).'</code></p>';
                 } else {
                     // If unsuccessful, provide copy-and-paste symlink code to manually create symlinks.
                     if (!isset($title_shown)) {
                         $site_root = dirname($multisite_admin_path);
                         $out[] = <<<eod
-                        <p class="alert-block error"><span class="ui-icon ui-icon-alert"></span>Symlink(s) could not be created.</p>
+                        <p class="alert-block error"><span class="ui-icon ui-icon-alert"></span> Symlink(s) could not be created.</p>
                         <p>Please create symlink(s) manually:</p>
                         <pre dir="ltr"><code>cd {$site_root}
 eod;
