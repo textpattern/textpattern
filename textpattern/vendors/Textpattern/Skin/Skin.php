@@ -1058,7 +1058,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function delete()
+        public function delete($clean = false)
         {
             $names = $this->getNames();
 
@@ -1110,20 +1110,18 @@ namespace Textpattern\Skin {
             }
 
             foreach ($names as $name) {
-                $done = array();
+                $this->setName($name);
 
-                if ($this->setName($name)->isLocked() && !$this->unlock()) {
+                if (!$clean && $this->isLocked() && !$this->unlock()) {
                     $this->mergeResult('skin_unlocking_failed', $name);
-                } else {
-                    $done[] = $name;
-
-                    @rmdir($this->getSubdirPath());
+                } elseif ($clean && file_exists($this->getSubdirPath()) && !\Txp::get('Textpattern\Admin\Tools')::removeFiles($this->getdirPath(), $name)) {
+                    $this->mergeResult('skin_files_deletion_failed', $name);
                 }
             }
 
             callback_event('skin.delete', '', 0, array(
                 'names' => $names,
-                'done'  => $done,
+                'done'  => $passed,
             ));
 
             return $this;
@@ -1475,15 +1473,19 @@ namespace Textpattern\Skin {
 
         public function renderMultiEditForm($page, $sort, $dir, $crit, $search_method)
         {
-            $clean = checkbox2('clean', get_pref('remove_extra_templates', true), 0, 'clean')
-                    .n.tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean'))
-                    .popHelp('remove_extra_templates');
+            $removeExtra = checkbox2('clean', get_pref('remove_extra_templates', true), 0, 'clean')
+                           .n.tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean'))
+                           .popHelp('remove_extra_templates');
+
+            $removeAll = checkbox2('clean', get_pref('remove_extra_templates', true), 0, 'clean')
+                         .n.tag(gtxt('remove_skin_files'), 'label', array('for' => 'clean'))
+                         .popHelp('remove_skin_files');
 
             $methods = array(
-                'import'    => array('label' => gTxt('import'), 'html' => $clean),
+                'import'    => array('label' => gTxt('import'), 'html' => $removeExtra),
                 'duplicate' => gTxt('duplicate'),
-                'export'    => array('label' => gTxt('export'), 'html' => $clean),
-                'delete'    => gTxt('delete'),
+                'export'    => array('label' => gTxt('export'), 'html' => $removeExtra),
+                'delete'    => array('label' => gTxt('delete'), 'html' => $removeAll),
             );
 
             return multi_edit($methods, 'skin', 'multi_edit', $page, $sort, $dir, $crit, $search_method);

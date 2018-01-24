@@ -153,8 +153,8 @@ function skin_multi_edit()
         case 'import':
             $skin->import($clean, true);
             break;
-        default: // delete.
-            $skin->$edit_method();
+        case 'delete':
+            $skin->delete($clean);
             break;
     }
 
