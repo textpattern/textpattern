@@ -400,17 +400,22 @@ namespace Textpattern\Skin {
         {
             $name === null ? $name = $this->getName() : '';
 
+            $path = $this->getSubdirPath($name);
+            $pathReady = file_exists($path);
             $timeStart = microtime(true);
-            $locked = false;
-            $time = 0;
+            $this->locked = false;
 
-            while (!$locked && $time < 2) {
-                $locked = @mkdir($this->getSubdirPath($name).'/lock');
-                sleep(0.25);
-                $time = microtime(true) - $timeStart;
+            if ($pathReady || !$pathReady && @mkdir($path)) {
+                $time = 0;
+
+                while (!$this->islocked() && $time < 2) {
+                    $this->locked = @mkdir($path.'/lock');
+                    sleep(0.25);
+                    $time = microtime(true) - $timeStart;
+                }
             }
 
-            return $this->locked = $locked;
+            return $this->islocked();
         }
 
         /**
@@ -427,11 +432,16 @@ namespace Textpattern\Skin {
         {
             $name === null ? $name = $this->getName() : '';
 
-            if (@rmdir($this->getSubdirPath($name).'/lock')) {
+            $path = $this->getSubdirPath($name);
+            $pathReady = file_exists($path);
+
+            if (!$pathReady || @rmdir($path.'/lock')) {
                 $this->locked = false;
             }
 
-            return !$this->locked;
+            $pathReady && !$this->islocked() ? @rmdir($path) : '';
+
+            return !$this->islocked();
         }
 
         /**
