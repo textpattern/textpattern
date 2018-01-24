@@ -238,7 +238,7 @@ namespace Textpattern\Skin {
          * @see          getName(), getDirPath().
          */
 
-        abstract protected function getSubdirPath($name = null);
+        abstract protected function getSubdirPath();
 
         /**
          * Get the current  pref value.

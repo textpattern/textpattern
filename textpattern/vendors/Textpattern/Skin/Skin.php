@@ -235,13 +235,12 @@ namespace Textpattern\Skin {
         /**
          * Whether a skin is installed or not.
          *
-         * @param string $name Skin name (uses the $name property value if null)
          * @see          getName(), getInstalled().
          */
 
-        public function isInstalled($name = null)
+        public function isInstalled()
         {
-            $name === null ? $name = $this->getName() : '';
+            $name = $this->getName();
 
             if ($this->installed === null) {
                 $isInstalled = (bool) safe_field(
@@ -263,11 +262,9 @@ namespace Textpattern\Skin {
          * @see          getName(), getDirPath().
          */
 
-        public function getSubdirPath($name = null)
+        public function getSubdirPath()
         {
-            $name === null ? $name = $this->getName() : '';
-
-            return self::getDirPath().DS.$name;
+            return self::getDirPath().DS.$this->getName();
         }
 
         /**
@@ -408,11 +405,9 @@ namespace Textpattern\Skin {
          * @see           getName(), getSubdirPath().
          */
 
-        public function lock($name = null)
+        public function lock()
         {
-            $name === null ? $name = $this->getName() : '';
-
-            $path = $this->getSubdirPath($name);
+            $path = $this->getSubdirPath();
             $pathReady = is_dir($path);
             $timeStart = microtime(true);
             $this->locked = false;
@@ -440,11 +435,9 @@ namespace Textpattern\Skin {
          * @see           getName(), getSubdirPath().
          */
 
-        public function unlock($name = null)
+        public function unlock()
         {
-            $name === null ? $name = $this->getName() : '';
-
-            $path = $this->getSubdirPath($name);
+            $path = $this->getSubdirPath();
             $pathReady = is_dir($path);
 
             if (!$pathReady || @rmdir($path.'/lock')) {
@@ -695,9 +688,9 @@ namespace Textpattern\Skin {
 
             if (empty($name)) {
                 $this->mergeResult('skin_name_invalid', $name);
-            } elseif ($base && !$this->isInstalled($base)) {
+            } elseif ($base && !$this->setName($base)->isInstalled()) {
                 $this->mergeResult('skin_unknown', $base);
-            } elseif ($this->isInstalled()) {
+            } elseif ($this->setName($name)->isInstalled()) {
                 $this->mergeResult('skin_already_exists', $name);
             } elseif (is_dir($subdirPath = $this->getSubdirPath())) {
                 $this->mergeResult('skin_already_exists', $subdirPath);
@@ -763,21 +756,21 @@ namespace Textpattern\Skin {
 
             if (empty($name)) {
                 $this->mergeResult('skin_name_invalid', $name);
-            } elseif (!$this->isInstalled($base)) {
+            } elseif (!$this->setName($base)->isInstalled()) {
                 $this->mergeResult('skin_unknown', $base);
-            } elseif ($base !== $name && $this->isInstalled()) {
+            } elseif ($base !== $name && $this->setName($name)->isInstalled()) {
                 $this->mergeResult('skin_already_exists', $name);
             } elseif (is_dir($subdirPath = $this->getSubdirPath()) && $base !== $name) {
                 $this->mergeResult('skin_already_exists', $subdirPath);
-            } elseif (is_dir($this->getSubdirPath($base)) && !$this->lock($base)) {
-                $this->mergeResult('skin_dir_locking_failed', $this->getSubdirPath($base));
-            } elseif (!$this->updateRow()) {
+            } elseif (is_dir($this->setName($base)->getSubdirPath()) && !$this->lock()) {
+                $this->mergeResult('skin_dir_locking_failed', $this->getSubdirPath());
+            } elseif (!$this->setName($name)->updateRow()) {
                 $this->mergeResult('skin_update_failed', $base);
                 $toUnlock = $base;
             } else {
                 $updated = true;
 
-                if (is_dir($this->getSubdirPath($base)) && !@rename($this->getSubdirPath($base), $subdirPath)) {
+                if (is_dir($this->setName($base)->getSubdirPath()) && !@rename($this->getSubdirPath(), $subdirPath)) {
                     $this->mergeResult('path_renaming_failed', $base, 'warning');
                 } else {
                     $toUnlock = $name;
@@ -785,9 +778,9 @@ namespace Textpattern\Skin {
             }
 
             if (isset($updated)) {
-                $sections = $this->getSections($base);
+                $sections = $this->getSections();
 
-                if ($sections && !$this->updateSections()) {
+                if ($sections && !$this->setName($name)->updateSections()) {
                     $this->mergeResult('skin_related_sections_update_failed', array($base => $sections));
                 }
 
@@ -807,7 +800,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            if (isset($toUnlock) && !$this->unlock($toUnlock)) {
+            if (isset($toUnlock) && !$this->setName($toUnlock)->unlock()) {
                 $this->mergeResult('skin_unlocking_failed', $this->getSubdirPath($toUnlock));
             }
 
@@ -837,11 +830,11 @@ namespace Textpattern\Skin {
 
                 if (!$this->isInstalled()) {
                     $this->mergeResult('skin_unknown', $name);
-                } elseif ($this->isInstalled($copy)) {
+                } elseif ($this->setName($copy)->isInstalled()) {
                     $this->mergeResult('skin_already_exists', $copy);
                 } elseif (!is_writable($subdirPath) && !@mkdir($subdirPath)) {
                     $this->mergeResult('path_not_writable', $subdirPath);
-                } elseif (!$this->lock()) {
+                } elseif (!$this->setName($name)->lock()) {
                     $this->mergeResult('skin_dir_locking_failed', $subdirPath);
                 } else {
                     $ready[] = $name;
