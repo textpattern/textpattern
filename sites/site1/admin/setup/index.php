@@ -40,18 +40,18 @@ if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
     $self_url = htmlspecialchars($_SERVER["PHP_SELF"]);
 
     $out[] = <<<eod
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-        <meta charset="utf-8">
-        <meta name="robots" content="noindex, nofollow">
-        <title>Setup &#124; Textpattern CMS</title>
-        <link rel="stylesheet" href="textpattern.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-        </head>
-        <body class="setup" id="page-setup">
-        <main class="txp-body">
-        <div class="txp-setup">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<title>Setup &#124; Textpattern CMS</title>
+<link rel="stylesheet" href="setup-multisite.css">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+</head>
+<body class="setup" id="page-setup">
+<main class="txp-body">
+<div class="txp-setup">
 eod;
 
     // NO: 'vendor' symlink does not exist or does not resolve correctly.
@@ -62,15 +62,15 @@ eod;
         $txp_root_suggestion = dirname($multisite_admin_path, 3).DS.'textpattern';
 
         $out[] = <<<eod
-            <form class="prefs-form" method="post" action="{$self_url}">
-            <h3 class="alert-block warning"><span class="ui-icon ui-icon-alert"></span>Textpattern root directory not found!</h3>
-            <p>Your symlinks may be missing, or your <code>sites</code> folder is in a non-standard location.</p>
-            <p>Your <code>sites</code> directory is: <code>{$sites_dir}</code></p>
-            <p>Please enter the full path to the root directory of your textpattern installation.</p>
-            <label for="txp-root-path">Path to your base textpattern directory: </label><br>
-            <input type="text" id="txp-root-path" name="txp-root-path" size="50" placeholder="{$txp_root_suggestion}">
-            <button>Submit</button>
-            </form>
+<form class="prefs-form" method="post" action="{$self_url}">
+<p class="alert-block error"><span class="ui-icon ui-icon-alert"></span> Textpattern root directory not found!</p>
+<p>Your symbolic links (symlinks) may be missing, or your <code>sites</code> folder is in a non-standard location.</p>
+<p>Your <code>sites</code> directory is: <code>{$sites_dir}</code></p>
+<p>Please enter the full path to the root directory of your Textpattern installation.</p>
+<p><label for="txp-root-path">Path to Textpattern root directory</label><br>
+<input class="input-large" id="txp-root-path" name="txp-root-path" type="text" size="48" placeholder="{$txp_root_suggestion}" required="required"></p>
+<p><input class="publish" name="Submit" type="submit" value="Submit"></p>
+</form>
 eod;
         echo join("\n", $out);
         exit("</div></main></body></html>");
@@ -83,13 +83,11 @@ eod;
         if (!is_dir(realpath($multisite_txp_root_path.DS.'textpattern'))) {
 
             // Root path incorrect, please retry -> back to beginning.
-        $out[] = <<<eod
-            <form class="prefs-form" method="post" action="{$self_url}">
-            <h3 class="alert-block warning"><span class="ui-icon ui-icon-alert"></span>Textpattern root directory details incorrect!</h3>
-            <p>The location <code>{$multisite_txp_root_path}</code> you specified does not appear to be the correct textpattern root path.</p>
-            <p>Please check your path and try again.</p>
-            <button>Go back</button>
-            </form>
+            $out[] = <<<eod
+<p class="alert-block error"><span class="ui-icon ui-icon-alert"></span> Textpattern root directory details incorrect!</p>
+<p>The location <code>{$multisite_txp_root_path}</code> you specified does not appear to be the correct Textpattern root path.</p>
+<p>Please go back, check your path and try again.</p>
+<p><a class="navlink publish" href="{$self_url}">Go back</a></p>
 eod;
             echo join("\n", $out);
             exit("</div></main></body></html>");
@@ -99,11 +97,11 @@ eod;
 
             // Root path is correct. Proceed to create symlinks.
         $out[] = <<<eod
-            <form class="prefs-form" method="post" action="{$self_url}">
-            <h3 class="alert-block success"><span class="ui-icon ui-icon-check"></span>Textpattern root directory found. Thank you!</h3>
-            <p>Path to sites directory: <code>{$sites_dir}</code></p>
-            <p>Path to Textpattern directory: <code>{$multisite_txp_root_path}</code></p>
-            <h3>Creating symlinks</h3>
+<form class="prefs-form" method="post" action="{$self_url}">
+<p class="alert-block success"><span class="ui-icon ui-icon-check"></span> Textpattern root directory found. Thank you!</p>
+<p>Path to sites directory: <code>{$sites_dir}</code></p>
+<p>Path to Textpattern directory: <code>{$multisite_txp_root_path}</code></p>
+<h3>Creating symlinks</h3>
 eod;
             // Calculate relative path.
             $relative_path = find_relative_path($multisite_admin_path, $multisite_txp_root_path);
@@ -137,32 +135,47 @@ eod;
             // Create symlinks.
             foreach ($symlinks as $symlink => $atts) {
                 $symlink_local = $atts['path'].DS.$symlink;
-                $symlink_target = $relative_path.DS. ($atts["path"] === "admin" ? 'textpattern'.DS : '') .$symlink;
+                $symlink_target = $relative_path.DS.($atts["path"] === "admin" ? 'textpattern'.DS : '').$symlink;
 
                 unlink($symlink_relpath.$symlink_local);
                 symlink($symlink_target, $symlink_relpath.$symlink_local);
 
                 // symlink resolves successfully?
                 if (realpath($symlink_relpath.$symlink_local)) {
-                    $out[] = '<p>Symlink created: <code>'.$symlink_local.'  »»»  '.readlink($symlink_relpath.$symlink_local).'</code></p>';
+                    if (!isset($title_shown)) {
+                        $out[] = <<<eod
+<p>Symlinks created:</p>
+<pre dir="ltr"><code>
+eod;
+                        $title_shown = true;
+                    }
+
+                    $out[] = $symlink_local.' <span class="success">&#8594;</span> '.readlink($symlink_relpath.$symlink_local);
+
+                    if ($symlink === $lastkey) {
+                        $out[] = "</code></pre>";
+                    }
+
                 } else {
                     // If unsuccessful, provide copy-and-paste symlink code to manually create symlinks.
                     if (!isset($title_shown)) {
                         $site_root = dirname($multisite_admin_path);
                         $out[] = <<<eod
-                        <p class="alert-block error"><span class="ui-icon ui-icon-alert"></span>Symlink(s) could not be created.</p>
-                        <p>Please create symlink(s) manually:</p>
+                        <p class="alert-block error"><span class="ui-icon ui-icon-alert"></span> Symlinks could not be created.</p>
+                        <p>Please create symlinks manually:</p>
                         <pre dir="ltr"><code>cd {$site_root}
 eod;
                         $title_shown = true;
                     }
+
                     if (IS_WIN) {
                         // "mklink [/D] link target" on windows with /D flag for directory symlink
-                        $out[] = "mklink ".($atts['is_dir'] === true ? "/D " : "").$atts['path'].DS.$symlink."  ".$symlink_target;
+                        $out[] = "mklink ".($atts['is_dir'] === true ? "/D " : "").$atts['path'].DS.$symlink." ".$symlink_target;
                     } else {
                         // "ln -sf target link" on linux
-                        $out[] = "ln -sf ".$symlink_target."  ".$atts['path'].DS.$symlink;
+                        $out[] = "ln -sf ".$symlink_target." ".$atts['path'].DS.$symlink;
                     }
+
                     if ($symlink === $lastkey) {
                         $out[] = "</code></pre>";
                     }
@@ -170,7 +183,7 @@ eod;
             }
 
             // Proceed to regular multisite installation.
-            $out[] = '<button class="publish">Proceed</button></form>';
+            $out[] = '<p><input class="publish" name="Submit" type="submit" value="Proceed"></p></form>';
             echo join("\n", $out);
             exit('</div></main></body></html>');
         }
@@ -192,9 +205,9 @@ eod;
  * Finds relative file system path between two file system paths.
  * Based on: https://gist.github.com/ohaal/2936041
  *
- * @param  string  $frompath  Path to start from
- * @param  string  $topath    Path we want to end up in
- * @return string             Relative path from $frompath to $topath
+ * @param  string $frompath Path to start from
+ * @param  string $topath   Path we want to end up in
+ * @return string           Relative path from $frompath to $topath
  */
 
 function find_relative_path($frompath, $topath)
@@ -209,6 +222,7 @@ function find_relative_path($frompath, $topath)
         if ($from[$i] != $to[$i]) {
             break;
         }
+
         $i++;
     }
     $j = count($from) - 1;
@@ -217,6 +231,7 @@ function find_relative_path($frompath, $topath)
         if (!empty($from[$j])) {
             $relpath .= '..'.DS;
         }
+
         $j--;
     }
     // Go to folder from where it starts differing
@@ -224,6 +239,7 @@ function find_relative_path($frompath, $topath)
         if (!empty($to[$i])) {
             $relpath .= $to[$i].DS;
         }
+
         $i++;
     }
 
