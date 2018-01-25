@@ -46,7 +46,7 @@ if (!is_dir(realpath($multisite_admin_path.'/vendors'))) {
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <title>Setup &#124; Textpattern CMS</title>
-<link rel="stylesheet" href="textpattern.css">
+<link rel="stylesheet" href="setup-multisite.css">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 </head>
 <body class="setup" id="page-setup">
