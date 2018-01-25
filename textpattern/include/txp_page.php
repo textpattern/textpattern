@@ -129,7 +129,7 @@ function page_edit($message = '', $refresh_partials = false)
 
     $name = sanitizeForTheme(assert_string(gps('name')));
     $newname = sanitizeForTheme(assert_string(gps('newname')));
-    $skin = ($skin !== '') ? $skin : Skin::getEditing();
+    $skin = ($skin !== '') ? $skin : null;
     $class = 'async';
 
     $thisSkin = Txp::get('Textpattern\Skin\Skin');

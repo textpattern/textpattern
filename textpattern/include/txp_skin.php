@@ -65,7 +65,7 @@ function skin_import()
 {
     global $skin;
 
-    $skin->setNames(array(ps('skins')))->import(false)->render();
+    $skin->setNames(array(ps('skins')))->import()->render();
 }
 
 function skin_edit()

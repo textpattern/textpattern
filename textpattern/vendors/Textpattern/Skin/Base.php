@@ -193,7 +193,7 @@ namespace Textpattern\Skin {
 
         public function setName($name = null)
         {
-            $this->name = $name === null ? self::getEditing() : static::sanitizeName($name);
+            $this->name = $name === null ? static::getEditing() : static::sanitizeName($name);
 
             return $this;
         }

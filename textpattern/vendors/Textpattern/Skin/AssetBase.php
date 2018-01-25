@@ -833,7 +833,7 @@ namespace Textpattern\Skin {
             $thisSkin = $this->getSkin();
             $skins = $thisSkin::getInstalled();
 
-            if (count($installed) > 1) {
+            if (count($skins) > 1) {
                 $select = selectInput('skin', $skins, $thisSkin::getEditing(), false, 1, 'skin');
 
                 return form(

@@ -115,6 +115,7 @@ namespace Textpattern\Skin {
 
         public function __construct()
         {
+            $this->setName();
         }
 
         protected function mergeResults($asset) {
@@ -203,7 +204,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * $infos property setter.
+         * $infos+$name properties setter.
          *
          * @param  string $name        Skin name;
          * @param  string $title       Skin title;
@@ -223,10 +224,12 @@ namespace Textpattern\Skin {
             $author = null,
             $author_uri = null
         ) {
-            $name = sanitizeForTheme($name);
-            // TODO check $author_uri against a URL related RegEx?
+            $this->setName($name);
 
-            $this->name = $name;
+            $name = $this->getName();
+
+            $title ?: $title = ucfirst($name);
+
             $this->infos = compact('name', 'title', 'version', 'description', 'author', 'author_uri');
 
             return $this;
@@ -240,16 +243,14 @@ namespace Textpattern\Skin {
 
         public function isInstalled()
         {
-            $name = $this->getName();
-
             if ($this->installed === null) {
                 $isInstalled = (bool) safe_field(
                     'name',
                     self::getTable(),
-                    "name = '".doSlash($name)."'"
+                    "name = '".doSlash($this->getName())."'"
                 );
             } else {
-                $isInstalled = in_array($name, array_values(self::getInstalled()));
+                $isInstalled = in_array($this->getName(), array_values(self::getInstalled()));
             }
 
             return $isInstalled;
@@ -303,11 +304,15 @@ namespace Textpattern\Skin {
             $contents = json_decode(file_get_contents($this->getFilePath()), true);
 
             if ($contents !== null) {
-                empty($contents['title']) ? $contents['title'] = ucfirst($this->getName()) : '';
-                empty($contents['version']) ? $contents['version'] = gTxt('unknown') : '';
-                empty($contents['description']) ? $contents['description'] = '' : '';
-                empty($contents['author']) ? $contents['author'] = gTxt('unknown') : '';
-                empty($contents['author_uri']) ? $contents['author_uri'] = '' : '';
+                extract($contents);
+
+                empty($title) ? $title = ucfirst($this->getName()) : '';
+                empty($version) ? $version = gTxt('unknown') : '';
+                empty($description) ? $description = '' : '';
+                empty($author) ? $author = gTxt('unknown') : '';
+                empty($author_uri) ? $author_uri = '' : '';
+
+                $contents = compact('title', 'version', 'description', 'author', 'author_uri');
             }
 
             return $contents;
@@ -319,15 +324,13 @@ namespace Textpattern\Skin {
          * @param array Section names.
          */
 
-        protected function getSections($whereSkin = null)
+        protected function getSections()
         {
-            $whereSkin === null ? $whereSkin = $this->getName() : '';
-
             return array_values(
                 safe_column(
-                    'title',
+                    'name',
                     'txp_section',
-                    "skin ='".doSlash($whereSkin)."'"
+                    "skin ='".doSlash($this->getName())."'"
                 )
             );
         }
@@ -568,7 +571,7 @@ namespace Textpattern\Skin {
             foreach (self::getFiles() as $file) {
                 $name = basename($file->getPath());
 
-                if (self::isValidDirName($name)) {
+                if ($name === self::sanitizeName($name)) {
                     $infos = $file->getJSONContents();
                     $infos ? self::$uploaded[$name] = $infos['title'] : '';
                 }
@@ -595,7 +598,7 @@ namespace Textpattern\Skin {
          * @param object $this The current object (chainable).
          */
 
-        protected static function setInstalled($name = null)
+        protected static function mergeInstalled($name)
         {
             if ($name) {
                 // TODO
@@ -607,6 +610,25 @@ namespace Textpattern\Skin {
                 foreach ($rows as $row) {
                     self::$installed[$row['name']] = $row['title'];
                 }
+            }
+
+            return self::getInstalled();
+        }
+
+        /**
+         * $installed property setter.
+         *
+         * @param object $this The current object (chainable).
+         */
+
+        protected static function setInstalled()
+        {
+            $rows = safe_rows_start('name, title', self::getTable(), '1 = 1');
+
+            self::$installed = array();
+
+            while ($row = nextRow($rows)) {
+                self::$installed[$row['name']] = $row['title'];
             }
 
             return self::getInstalled();
@@ -630,7 +652,7 @@ namespace Textpattern\Skin {
          * @return object $this.
          */
 
-        protected static function unsetInstalled($names)
+        protected static function removeInstalled($names)
         {
             self::$installed = array_diff_key(
                 self::getInstalled(),
@@ -856,7 +878,7 @@ namespace Textpattern\Skin {
                         if (!$this->setInfos($copy, $copyTitle, $version, $description, $author, $author_uri)->createRow()) {
                             $this->mergeResult('skin_duplication_failed', $name);
                         } else {
-                            self::setInstalled(array($copy => $copyTitle));
+                            self::mergeInstalled(array($copy => $copyTitle));
 
                             foreach ($this->getAssets() as $assetModel) {
                                 $this->setName($name);
@@ -907,8 +929,8 @@ namespace Textpattern\Skin {
         public function import($clean = false, $override = false)
         {
             $clean == $this->getCleaningPref() ?: $this->switchCleaningPref();
-
             $names = $this->getNames();
+
             $done = array();
 
             callback_event('skin.import', '', 1, array('names' => $names));
@@ -932,7 +954,7 @@ namespace Textpattern\Skin {
                 } elseif (!$this->lock()) {
                     $this->mergeResult('skin_dir_locking_failed', $name);
                 } else {
-                    $skinInfos = $this->getFileContents();
+                    $skinInfos = array_merge(array('name' => $name), $this->getFileContents());
 
                     if (!$skinInfos) {
                         $this->mergeResult('invalid_json', $filePath);
@@ -946,7 +968,7 @@ namespace Textpattern\Skin {
                         } elseif ($override && !$this->setBase($name)->updateRow()) {
                             $this->mergeResult('skin_import_failed', $name);
                         } else {
-                            self::setInstalled(array($name => $title));
+                            self::mergeInstalled(array($name => $title));
 
                             foreach ($this->getAssets() as $asset) {
                                 $asset->import($clean, $override);
@@ -1094,7 +1116,7 @@ namespace Textpattern\Skin {
                 if ($this->setNames($ready) && $this->deleteRows()) {
                     $done = $ready;
 
-                    self::unsetInstalled($ready);
+                    self::removeInstalled($ready);
 
                     if (in_array(self::getEditing(), $ready)) {
                         $default = self::getDefault();
