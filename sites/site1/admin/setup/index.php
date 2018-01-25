@@ -67,8 +67,8 @@ eod;
 <p>Your symbolic links (symlinks) may be missing, or your <code>sites</code> folder is in a non-standard location.</p>
 <p>Your <code>sites</code> directory is: <code>{$sites_dir}</code></p>
 <p>Please enter the full path to the root directory of your Textpattern installation.</p>
-<label for="txp-root-path">Path to your base Textpattern directory:</label><br>
-<input type="text" id="txp-root-path" name="txp-root-path" size="50" placeholder="{$txp_root_suggestion}">
+<p><label for="txp-root-path">Path to Textpattern root directory</label><br>
+<input class="input-large" id="txp-root-path" name="txp-root-path" type="text" size="48" placeholder="{$txp_root_suggestion}" required="required"></p>
 <p><input class="publish" name="Submit" type="submit" value="Submit"></p>
 </form>
 eod;
@@ -135,14 +135,27 @@ eod;
             // Create symlinks.
             foreach ($symlinks as $symlink => $atts) {
                 $symlink_local = $atts['path'].DS.$symlink;
-                $symlink_target = $relative_path.DS. ($atts["path"] === "admin" ? 'textpattern'.DS : '') .$symlink;
+                $symlink_target = $relative_path.DS.($atts["path"] === "admin" ? 'textpattern'.DS : '').$symlink;
 
                 unlink($symlink_relpath.$symlink_local);
                 symlink($symlink_target, $symlink_relpath.$symlink_local);
 
                 // symlink resolves successfully?
                 if (realpath($symlink_relpath.$symlink_local)) {
-                    $out[] = '<p>Symlinks created: <code>'.$symlink_local.' <span class="success">&#8594;</span> '.readlink($symlink_relpath.$symlink_local).'</code></p>';
+                    if (!isset($title_shown)) {
+                        $out[] = <<<eod
+<p>Symlinks created:</p>
+<pre dir="ltr"><code>
+eod;
+                        $title_shown = true;
+                    }
+
+                    $out[] = $symlink_local.' <span class="success">&#8594;</span> '.readlink($symlink_relpath.$symlink_local);
+
+                    if ($symlink === $lastkey) {
+                        $out[] = "</code></pre>";
+                    }
+
                 } else {
                     // If unsuccessful, provide copy-and-paste symlink code to manually create symlinks.
                     if (!isset($title_shown)) {
