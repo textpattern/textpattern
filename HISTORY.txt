@@ -23,7 +23,7 @@ Changes in 4.7.0 (upcoming)
 * Added: All users can administer their own key biographical info.
 * Added: Button to swap width and height values on image edit thumbnail
   generator.
-* Added: ctrl+s/cmd+s admin panel edit and publish 'Save' shortcuts.
+* Added: ctrl+s/cmd+s admin side shortcuts for submit buttons on any tab.
 * Added: Multiple files upload with progress meter.
 * Added: Section searches by description.
 * Added: Visual indicator that a subset of search fields are in use.
