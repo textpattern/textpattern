@@ -411,11 +411,11 @@ namespace Textpattern\Skin {
         public function lock()
         {
             $path = $this->getSubdirPath();
-            $pathReady = is_dir($path) || @mkdir($path);
+            $pathExists = is_dir($path) || @mkdir($path);
             $timeStart = microtime(true);
             $this->locked = false;
 
-            if ($pathReady) {
+            if ($pathExists) {
                 $time = 0;
 
                 while (!$this->islocked() && $time < 2) {
@@ -441,13 +441,14 @@ namespace Textpattern\Skin {
         public function unlock()
         {
             $path = $this->getSubdirPath();
-            $pathReady = is_dir($path);
+            $pathExists = is_dir($path);
 
-            if (!$pathReady || @rmdir($path.'/lock')) {
+            if (!$pathExists|| @rmdir($path.'/lock')) {
                 $this->locked = false;
             }
 
-            $pathReady && !$this->islocked() ? @rmdir($path) : '';
+            // Silently try to remove the unlocked directory (will fail if not empty).
+            $pathExists && !$this->islocked() ? @rmdir($path) : '';
 
             return !$this->islocked();
         }
@@ -708,7 +709,7 @@ namespace Textpattern\Skin {
                 'base'  => $base,
             ));
 
-            $status = 'error';
+            $done = false;
 
             if (empty($name)) {
                 $this->mergeResult('skin_name_invalid', $name);
@@ -717,12 +718,14 @@ namespace Textpattern\Skin {
             } elseif ($this->setName($name)->isInstalled()) {
                 $this->mergeResult('skin_already_exists', $name);
             } elseif (is_dir($subdirPath = $this->getSubdirPath())) {
+                // Create a skin which would already have a related directory could cause conflicts.
                 $this->mergeResult('skin_already_exists', $subdirPath);
             } elseif (!$this->lock()) {
                 $this->mergeResult('skin_locking_failed', $subdirPath);
             } elseif (!$this->createRow()) {
                 $this->mergeResult('skin_creation_failed', $name);
             } else {
+                // Start working with the skin related assets.
                 foreach ($this->getAssets() as $assetModel) {
                     if ($base) {
                         $this->setName($base);
@@ -733,32 +736,32 @@ namespace Textpattern\Skin {
                     }
 
                     if (!$assetModel->createRows($rows)) {
-                        $failure = true;
+                        $assetsfailed = true;
 
                         $this->mergeResult($assetModel->getString().'_creation_failed', $name);
                     }
                 }
 
-                if (!isset($failure)) {
-                    $status = 'success';
+                // If the assets related process did not failed; that is a success…
+                if (!isset($assetsfailed)) {
+                    $done = $name;
 
                     $this->mergeResult('skin_created', $name, 'success');
                 }
             }
 
+            // Unlock the skin if needed.
             if ($this->isLocked() && !$this->unlock()) {
-                $status === 'error' ?: $status =  'warning';
-
                 $this->mergeResult('skin_unlocking_failed', $name);
             }
 
             callback_event('skin.create', '', 0, array(
-                'infos'  => $infos,
-                'base'   => $base,
-                'status' => $status
+                'infos' => $infos,
+                'base'  => $base,
+                'done'  => $done, // the created skin name, or null on error.
             ));
 
-            return $this;
+            return $this; // Chainable.
         }
 
         /**
@@ -769,12 +772,14 @@ namespace Textpattern\Skin {
             $infos = $this->getInfos();
             $name = $infos['name'];
             $base = $this->getBase();
-            $done = false;
 
             callback_event('skin.update', '', 1, array(
                 'infos' => $infos,
                 'base'  => $base,
             ));
+
+            $done = null; // See the final callback event.
+            $ready = false;
 
             if (empty($name)) {
                 $this->mergeResult('skin_name_invalid', $name);
@@ -783,45 +788,52 @@ namespace Textpattern\Skin {
             } elseif ($base !== $name && $this->setName($name)->isInstalled()) {
                 $this->mergeResult('skin_already_exists', $name);
             } elseif (is_dir($subdirPath = $this->getSubdirPath()) && $base !== $name) {
+                // Rename the skin with a name which would already have a related directory could cause conflicts.
                 $this->mergeResult('skin_already_exists', $subdirPath);
             } elseif (is_dir($this->setName($base)->getSubdirPath()) && !$this->lock()) {
                 $this->mergeResult('skin_dir_locking_failed', $this->getSubdirPath());
             } elseif (!$this->setName($name)->updateRow()) {
                 $this->mergeResult('skin_update_failed', $base);
-                $toUnlock = $base;
+                $locked = $base;
             } else {
-                $updated = true;
+                $ready = true;
 
+                // Rename the skin related directory to allow new updates from files.
                 if (is_dir($this->setName($base)->getSubdirPath()) && !@rename($this->getSubdirPath(), $subdirPath)) {
                     $this->mergeResult('path_renaming_failed', $base, 'warning');
                 } else {
-                    $toUnlock = $name;
+                    $locked = $name;
                 }
             }
 
-            if (isset($updated)) {
+            if ($ready) {
+                // Update skin related sections.
                 $sections = $this->getSections();
 
                 if ($sections && !$this->setName($name)->updateSections()) {
                     $this->mergeResult('skin_related_sections_update_failed', array($base => $sections));
                 }
 
+                // update the skin_editing pref if needed.
                 self::getEditing() === $base ? $this->setEditing() : '';
 
+                // Start working with the skin related assets.
                 foreach ($this->getAssets() as $assetModel) {
                     if (!$assetModel->updateSkin()) {
-                        $assetFailure = true;
+                        $assetsFailed = true;
                         $this->mergeResult($assetModel->getString().'_update_failed', $base);
                     }
                 }
 
-                if (!isset($assetFailure)) {
-                    $done = true;
+                // If the assets related process did not failed; that is a success…
+                if (!isset($assetsFailed)) {
+                    $done = $name;
 
                     $this->mergeResult('skin_updated', $name, 'success');
                 }
             }
 
+            // Unlock the skin if needed. ($name or $base depending on the update result)
             if (isset($toUnlock) && !$this->setName($toUnlock)->unlock()) {
                 $this->mergeResult('skin_unlocking_failed', $this->getSubdirPath($toUnlock));
             }
@@ -829,10 +841,10 @@ namespace Textpattern\Skin {
             callback_event('skin.update', '', 0, array(
                 'infos' => $infos,
                 'base'  => $base,
-                'done'  => $done,
+                'done'  => $done, // the updated skin name, or null on error.
             ));
 
-            return $this;
+            return $this; // Chainable
         }
 
         /**
@@ -842,9 +854,10 @@ namespace Textpattern\Skin {
         public function duplicate()
         {
             $names = $this->getNames();
-            $done = $ready = array();
 
             callback_event('skin.duplicate', '', 1, array('names' => $names));
+
+            $ready = $locked = $done = array(); // See the final callback event.
 
             foreach ($names as $name) {
                 $subdirPath = $this->setName($name)->getSubdirPath();
@@ -854,20 +867,18 @@ namespace Textpattern\Skin {
                     $this->mergeResult('skin_unknown', $name);
                 } elseif ($this->setName($copy)->isInstalled()) {
                     $this->mergeResult('skin_already_exists', $copy);
-                } elseif (!is_writable($subdirPath) && !@mkdir($subdirPath)) {
-                    $this->mergeResult('path_not_writable', $subdirPath);
                 } elseif (!$this->setName($name)->lock()) {
                     $this->mergeResult('skin_dir_locking_failed', $subdirPath);
                 } else {
-                    $ready[] = $name;
+                    $ready[] = $locked[] = $name;
                 }
             }
 
             if ($ready) {
-                $rows = $this->setNames($ready)->getRows();
+                $rows = $this->setNames($ready)->getRows(); // Get all skin rows at once.
 
                 if (!$rows) {
-                    $this->mergeResult('skin_unknown', $ready);
+                    $this->mergeResult('skin_duplication_failed', $name);
                 } else {
                     foreach ($rows as $name => $infos) {
                         extract($infos);
@@ -880,25 +891,27 @@ namespace Textpattern\Skin {
                         } else {
                             self::mergeInstalled(array($copy => $copyTitle));
 
+                            // Start working with the skin related assets.
                             foreach ($this->getAssets() as $assetModel) {
                                 $this->setName($name);
                                 $assetString = $assetModel::getString();
                                 $assetRows = $assetModel->getRows();
 
                                 if (!$assetRows) {
-                                    $assetFailure = true;
+                                    $deleteExtraFiles = true;
 
                                     $this->mergeResult($assetString.'_not_found', array($skin => $subdirPath));
                                 } elseif ($this->setName($copy) && !$assetModel->createRows($assetRows)) {
-                                    $assetFailure = true;
+                                    $deleteExtraFiles = true;
 
                                     $this->mergeResult($assetString.'_duplication_failed', array($skin => $notImported));
                                 }
                             }
 
-                            $this->setName($name);
+                            $this->setName($name); // Be sure to restore the right $name.
 
-                            if (!isset($assetFailure)) {
+                            // If the assets related process did not failed; that is a success…
+                            if (!isset($deleteExtraFiles)) {
                                 $done[] = $name;
 
                                 $this->mergeResult('skin_duplicated', $name, 'success');
@@ -908,18 +921,17 @@ namespace Textpattern\Skin {
                 }
             }
 
-            foreach($ready as $name) {
-                if ($this->isLocked() && !$this->unlock()) {
-                    $this->mergeResult('skin_unlocking_failed', $subdirPath);
-                }
+            // Unlock skins if needed.
+            foreach($locked as $name) {
+                $this->unlock() ?: $this->mergeResult('skin_unlocking_failed', $subdirPath);
             }
 
             callback_event('skin.duplicate', '', 0, array(
                 'names' => $names,
-                'done'  => $done,
+                'done'  => $done, // Array of the duplicated skin names.
             ));
 
-            return $this;
+            return $this; // Chainable
         }
 
         /**
@@ -931,24 +943,18 @@ namespace Textpattern\Skin {
             $clean == $this->getCleaningPref() ?: $this->switchCleaningPref();
             $names = $this->getNames();
 
-            $done = array();
-
             callback_event('skin.import', '', 1, array('names' => $names));
+
+            $done = array(); // See the final callback event.
 
             foreach ($names as $name) {
                 $this->setName($name);
 
                 $isInstalled = $this->isInstalled();
-
-                if (!$isInstalled) {
-                    $clean = false;
-                    $override = false;
-                }
+                $isInstalled ?: $clean = $override = false; // Avoid useless work.
 
                 if (!$override && $isInstalled) {
                     $this->mergeResult('skin_already_exists', $name);
-                } elseif (!is_writable($subdirPath = $this->getSubdirPath())) {
-                    $this->mergeResult('path_not_writable', $subdirPath);
                 } elseif (!is_readable($filePath = $this->getFilePath())) {
                     $this->mergeResult('path_not_readable', $filePath);
                 } elseif (!$this->lock()) {
@@ -970,29 +976,30 @@ namespace Textpattern\Skin {
                         } else {
                             self::mergeInstalled(array($name => $title));
 
+                            // Start working with the skin related assets.
                             foreach ($this->getAssets() as $asset) {
                                 $asset->import($clean, $override);
                                 $this->mergeResults($asset);
-                                is_array($asset->getMessage()) ? $assetFailure = true : '';
+                                is_array($asset->getMessage()) ? $assetFailed = true : '';
                             }
                         }
 
-                        if (!isset($assetFailure)) {
+                        // If the assets related process did not failed; that is a success…
+                        if (!isset($assetFailed)) {
                             $done[] = $name;
 
                             $this->mergeResult('skin_imported', $name, 'success');
                         }
                     }
 
-                    if (!$this->unlock()) {
-                        $this->mergeResult('skin_unlocking_failed', $subdirPath);
-                    }
+                    // Unlock the skin.
+                    $this->unlock() ?: $this->mergeResult('skin_unlocking_failed', $subdirPath);
                 }
             }
 
             callback_event('skin.import', '', 0, array(
                 'names' => $names,
-                'done'  => $done,
+                'done'  => $done, // Array of the imported skin names.
             ));
 
             return $this;
@@ -1007,28 +1014,25 @@ namespace Textpattern\Skin {
             $clean == $this->getCleaningPref() ?: $this->switchCleaningPref();
 
             $names = $this->getNames();
-            $done = array();
 
             callback_event('skin.export', '', 1, array('names' => $names));
+
+            $ready = $done = array();
 
             foreach ($names as $name) {
                 $this->setName($name);
 
                 $subdirPath = $this->getSubdirPath();
-                $subdirExists = is_dir($subdirPath);
-                $isWritableSubdir = is_writable($subdirPath);
 
-                if (!$isWritableSubdir) {
+                if (!is_writable($subdirPath)) {
                     $clean = false;
                     $override = false;
                 }
 
                 if (!self::isValidDirName($name)) {
                     $this->mergeResult('skin_unsafe_name', $name);
-                } elseif (!$override && $subdirExists) {
+                } elseif (!$override && is_dir($subdirPath)) {
                     $this->mergeResult('skin_already_exists', $name);
-                } elseif ($override && !$isWritableSubdir && !@mkdir($subdirPath)) {
-                    $this->mergeResult('path_not_writable', $subdirPath);
                 } elseif (!$this->lock()) {
                     $this->mergeResult('skin_locking_failed', $name);
                 } else {
@@ -1054,26 +1058,24 @@ namespace Textpattern\Skin {
                         } else {
                             foreach ($this->getAssets() as $asset) {
                                 $asset->export($clean, $override);
-                                $assetFailure = $this->mergeResults($asset);
+                                $assetFailed = $this->mergeResults($asset);
                             }
 
-                            if (!$assetFailure) {
+                            if (!$assetFailed) {
                                 $done[] = $name;
 
                                 $this->mergeResult('skin_exported', $name, 'success');
                             }
                         }
 
-                        if ($this->isLocked() && !$this->unlock()) {
-                            $this->mergeResult('skin_unlocking_failed', $name);
-                        }
+                        $this->unlock() ?: $this->mergeResult('skin_unlocking_failed', $name);
                     }
                 }
             }
 
             callback_event('skin.export', '', 0, array(
                 'names' => $names,
-                'done'  => $done,
+                'done'  => $done, // Array of the exported skin names.
             ));
 
             return $this;
@@ -1086,21 +1088,26 @@ namespace Textpattern\Skin {
         public function delete($clean = false)
         {
             $names = $this->getNames();
-            $done = $ready = array();
 
             callback_event('skin.delete', '', 1, array('names' => $names));
 
-            foreach ($names as $name) {
-                $this->setName($name);
+            $ready = $locked = $done = array();
 
-                if (!$this->isInstalled()) {
+            foreach ($names as $name) {
+                if (!$this->setName($name)->isInstalled()) {
                     $this->mergeResult('skin_unknown', $name);
                 } elseif ($sections = $this->getSections()) {
                     $this->mergeResult('skin_in_use', array($name => $sections));
                 } elseif (is_dir($this->getSubdirPath()) && !$this->lock()){
                     $this->mergeResult('skin_locking_failed', $name);
+                    $locked = $name;
                 } else {
-                    $assetFailure = false;
+                    /**
+                     * Start working with the skin related assets.
+                     * Done first as assets won't be accessible
+                     * once their parent skin will be deleted.
+                     */
+                    $assetFailed = false;
 
                     foreach ($this->getAssets() as $assetModel) {
                         if (!$assetModel->deleteRows()) {
@@ -1108,7 +1115,7 @@ namespace Textpattern\Skin {
                         }
                     }
 
-                    $assetFailure ?: $ready[] = $name;
+                    $assetFailed ?: $ready[] = $name;
                 }
             }
 
@@ -1126,28 +1133,24 @@ namespace Textpattern\Skin {
 
                     $this->mergeResult('skin_deleted', $ready, 'success');
 
+                    // Remove all skins files and directories if needed.
+                    if ($clean && !\Txp::get('Textpattern\Admin\Tools')::removeFiles($this->getDirPath(), $locked)) {
+                        $this->mergeResult('skin_files_deletion_failed', $name);
+                    }
+
                     update_lastmod('skin.delete', $ready);
                 } else {
                     $this->mergeResult('skin_deletion_failed', $ready);
                 }
             }
 
-            foreach ($names as $name) {
-                $this->setName($name);
-
-                if (!$clean && $this->isLocked() && !$this->unlock()) {
-                    $this->mergeResult('skin_unlocking_failed', $name);
-                } elseif ($clean &&
-                          is_dir($this->getSubdirPath()) &&
-                          !\Txp::get('Textpattern\Admin\Tools')::removeFiles($this->getDirPath(), $name)
-                ) {
-                    $this->mergeResult('skin_files_deletion_failed', $name);
-                }
+            foreach ($locked as $name) {
+                $this->setName($name)->unlock() ?: $this->mergeResult('skin_unlocking_failed', $name);
             }
 
             callback_event('skin.delete', '', 0, array(
                 'names' => $names,
-                'done'  => $done,
+                'done'  => $done, // Array of the deleted skins name.
             ));
 
             return $this;
