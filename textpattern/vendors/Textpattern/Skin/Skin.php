@@ -791,12 +791,13 @@ namespace Textpattern\Skin {
                 // Rename the skin with a name which would already have a related directory could cause conflicts.
                 $this->mergeResult('skin_already_exists', $subdirPath);
             } elseif (is_dir($this->setName($base)->getSubdirPath()) && !$this->lock()) {
-                $this->mergeResult('skin_dir_locking_failed', $this->getSubdirPath());
+                $this->mergeResult('skin_locking_failed', $this->getSubdirPath());
             } elseif (!$this->setName($name)->updateRow()) {
                 $this->mergeResult('skin_update_failed', $base);
                 $locked = $base;
             } else {
                 $ready = true;
+                $locked = $base;
 
                 // Rename the skin related directory to allow new updates from files.
                 if (is_dir($this->setName($base)->getSubdirPath()) && !@rename($this->getSubdirPath(), $subdirPath)) {
@@ -868,7 +869,7 @@ namespace Textpattern\Skin {
                 } elseif ($this->setName($copy)->isInstalled()) {
                     $this->mergeResult('skin_already_exists', $copy);
                 } elseif (!$this->setName($name)->lock()) {
-                    $this->mergeResult('skin_dir_locking_failed', $subdirPath);
+                    $this->mergeResult('skin_locking_failed', $subdirPath);
                 } else {
                     $ready[] = $locked[] = $name;
                 }
@@ -958,7 +959,7 @@ namespace Textpattern\Skin {
                 } elseif (!is_readable($filePath = $this->getFilePath())) {
                     $this->mergeResult('path_not_readable', $filePath);
                 } elseif (!$this->lock()) {
-                    $this->mergeResult('skin_dir_locking_failed', $name);
+                    $this->mergeResult('skin_locking_failed', $name);
                 } else {
                     $skinInfos = array_merge(array('name' => $name), $this->getFileContents());
 
@@ -1100,7 +1101,6 @@ namespace Textpattern\Skin {
                     $this->mergeResult('skin_in_use', array($name => $sections));
                 } elseif (is_dir($this->getSubdirPath()) && !$this->lock()){
                     $this->mergeResult('skin_locking_failed', $name);
-                    $locked = $name;
                 } else {
                     /**
                      * Start working with the skin related assets.
@@ -1115,7 +1115,7 @@ namespace Textpattern\Skin {
                         }
                     }
 
-                    $assetFailed ?: $ready[] = $name;
+                    $assetFailed ?: $ready[] = $locked[] = $name;
                 }
             }
 
