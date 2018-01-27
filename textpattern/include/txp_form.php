@@ -352,7 +352,7 @@ function form_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = n.Txp::get('Textpattern\Skin\Page', $thisSkin)->renderSelectEdit();
+    $skinBlock = n.Txp::get('Textpattern\Skin\Form', $thisSkin)->renderSelectEdit();
 
     $buttons = graf(
         tag_void('input', array(
