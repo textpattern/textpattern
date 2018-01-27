@@ -817,12 +817,12 @@ function file_create()
 
     $filename = array_filter((array) gps('filename'));
 
-    $success = $errors = $ids = $filenames = array();
+    $success = $failed = $notFound = $invalid = $ids = array();
 
     foreach ($filename as $file) {
         $safe_filename = sanitizeForFile($file);
         if ($safe_filename != $file) {
-            $errors[] = array(gTxt('invalid_filename').txpspecialchars($file), E_ERROR);
+            $invalid[] = $file;
             continue;
         }
 
@@ -830,19 +830,36 @@ function file_create()
         $id = file_db_add($safe_filename, $category, $permissions, $description, $size, $title);
 
         if ($id === false) {
-            $errors[] = array(gTxt('file_upload_failed').$safe_filename.' (db_add)', E_ERROR);
+            $failed[] = $safe_filename;
         } else {
             $newpath = build_file_path($file_base_path, $safe_filename);
 
             if (is_file($newpath)) {
                 file_set_perm($newpath);
                 $ids[] = $id;
-                $filenames[] = $safe_filename;
-                $success[] = array(gTxt('linked_to_file').' '.$safe_filename, 0);
+                $success[] = $safe_filename;
             } else {
-                $errors[] = array(gTxt('file_not_found').' '.$safe_filename, E_ERROR);
+                $notFound[] = $safe_filename;
             }
         }
+    }
+
+    $messages = array();
+
+    if ($success) {
+        $messages[] = array(gTxt('linked_to_file', array('{list}' => join(', ', $success))), 0);
+    }
+
+    if ($failed) {
+        $messages[] = array(gTxt('file_upload_failed', array('{list}' => join(', ', $failed))), E_ERROR);
+    }
+
+    if ($notFound) {
+        $messages[] = array(gTxt('file_not_found', array('{list}' => join(', ', $notFound))), E_ERROR);
+    }
+
+    if ($invalid) {
+        $messages[] = array(gTxt('invalid_filename', array('{list}' => join(', ', $invalid))), E_ERROR);
     }
 
     if ($ids) {
@@ -852,7 +869,7 @@ function file_create()
 
     $response = '';
 
-    foreach (array_merge($success, $errors) as $message) {
+    foreach ($messages as $message) {
         $response .= 'textpattern.Console.addMessage('.json_encode($message, TEXTPATTERN_JSON).');'.n;
     }
 
