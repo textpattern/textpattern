@@ -32,7 +32,7 @@ namespace Textpattern\Skin\DirIterator {
 
     class RecFilterIterator extends \RecursiveFilterIterator
     {
-        protected $nameIn;
+        protected static $nameIn;
 
         /**
          * {@inheritdoc}
@@ -40,7 +40,7 @@ namespace Textpattern\Skin\DirIterator {
 
          public function __construct(RecDirIterator $iterator, $nameIn = null)
          {
-             $this->setNameIn($nameIn);
+             $nameIn === null ?: self::setNameIn($nameIn);
 
              parent::__construct($iterator);
          }
@@ -55,27 +55,27 @@ namespace Textpattern\Skin\DirIterator {
         }
 
         /**
-         * {@inheritdoc}
+         * $nameIn property setter
          */
 
-        protected function setNameIn($names)
+        protected static function setNameIn($names)
         {
-            $this->nameIn = $names;
+            self::$nameIn = $names;
 
-            return $this;
+            return self::getNameIn();
         }
 
         /**
-         * {@inheritdoc}
+         * $nameIn property getter
          */
 
-        protected function getNameIn()
+        protected static function getNameIn()
         {
-            return $this->nameIn;
+            return self::$nameIn;
         }
 
         /**
-         * Validates a template file name.
+         * Validate the current file name.
          *
          * @return bool
          */
@@ -83,16 +83,17 @@ namespace Textpattern\Skin\DirIterator {
         public function isValidTemplate()
         {
             $isValid = false;
+            $nameIn = self::getNameIn();
 
-            if (!$this->isDot() && $this->isReadable() && ($this->isFile() || $this->isLink())) {
-                if ($this->getNameIn()) {
-                    $isValid = (bool) in_array($this->getFilename(), $this->getNameIn());
-                } else {
-                    $isValid = true;
-                }
+            if (!$this->isDot() &&
+                $this->isReadable() &&
+                ($this->isFile() || $this->isLink()) &&
+                (($nameIn && in_array($this->getFilename(), $nameIn)) || !$nameIn)
+            ) {
+                return true;
             }
 
-            return $isValid;
+            return false;
         }
     }
 }

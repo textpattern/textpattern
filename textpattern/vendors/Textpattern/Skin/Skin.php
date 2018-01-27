@@ -411,11 +411,11 @@ namespace Textpattern\Skin {
         public function lock()
         {
             $path = $this->getSubdirPath();
-            $pathReady = is_dir($path);
+            $pathReady = is_dir($path) || @mkdir($path);
             $timeStart = microtime(true);
             $this->locked = false;
 
-            if ($pathReady || !$pathReady && @mkdir($path)) {
+            if ($pathReady) {
                 $time = 0;
 
                 while (!$this->islocked() && $time < 2) {
@@ -533,6 +533,8 @@ namespace Textpattern\Skin {
                 $this->getInfos(),
                 array('txp-type' => 'textpattern-theme')
             );
+
+            unset($contents['name']);
 
             return (bool) file_put_contents(
                 $this->getFilePath(),
@@ -716,8 +718,6 @@ namespace Textpattern\Skin {
                 $this->mergeResult('skin_already_exists', $name);
             } elseif (is_dir($subdirPath = $this->getSubdirPath())) {
                 $this->mergeResult('skin_already_exists', $subdirPath);
-            } elseif (!@mkdir($subdirPath)) {
-                $this->mergeResult('path_not_writable', $subdirPath);
             } elseif (!$this->lock()) {
                 $this->mergeResult('skin_locking_failed', $subdirPath);
             } elseif (!$this->createRow()) {

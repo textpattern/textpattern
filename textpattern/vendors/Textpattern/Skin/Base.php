@@ -328,7 +328,7 @@ namespace Textpattern\Skin {
          * @return mixed Message or array containing the message and the related user notice constant.
          */
 
-        protected function getMessage()
+        public function getMessage()
         {
             $message = array();
 
