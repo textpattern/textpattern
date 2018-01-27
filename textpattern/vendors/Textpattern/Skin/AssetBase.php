@@ -740,6 +740,8 @@ namespace Textpattern\Skin {
                 'base'  => $base,
             ));
 
+            $done = false;
+
             if (!$skinWasLocked) {
                 if (!$thisSkin->isInstalled()) {
                     $this->mergeResult('skin_unknown', $skin);
@@ -753,8 +755,6 @@ namespace Textpattern\Skin {
                 $name = $infos['name'];
                 $base = $this->getBase();
 
-                $status = 'error';
-
                 if (empty($name)) {
                     $this->mergeResult($string.'_name_invalid', $name);
                 } elseif ($base && !$this->setName($base)->isInstalled()) {
@@ -766,7 +766,7 @@ namespace Textpattern\Skin {
                 } elseif (!$this->createRow()) {
                     $this->mergeResult($string.'_creation_failed', $name);
                 } else {
-                    $status = 'success';
+                    $done = true;
 
                     set_pref('last_'.$string.'_saved', $name, $string, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                     update_lastmod($string.'_created', array(
@@ -778,15 +778,13 @@ namespace Textpattern\Skin {
             }
 
             if (!$skinWasLocked && !$thisSkin->unlock()) {
-                $status === 'error' ?: $status =  'warning';
-
                 $this->mergeResult('skin_unlocking_failed', $thisSkin->getSubdirPath());
             }
 
             callback_event($string.'.create', '', 0, array(
-                'infos'  => $infos,
-                'base'   => $base,
-                'status' => $status
+                'infos' => $infos,
+                'base'  => $base,
+                'done'  => $done,
             ));
 
             return $this;
@@ -950,8 +948,6 @@ namespace Textpattern\Skin {
             if (!$skinWasLocked) {
                 if (!$thisSkin->isInstalled()) {
                     $this->mergeResult('skin_unknown', $skin);
-                } elseif (!is_writable($skinPath = $thisSkin->getSubdirPath())) {
-                    $this->mergeResult('path_not_writable', $skinPath);
                 } elseif (!$thisSkin->lock()) {
                     $this->mergeResult('skin_locking_failed', $skinPath);
                 }
@@ -1017,8 +1013,6 @@ namespace Textpattern\Skin {
             if (!$skinWasLocked) {
                 if (!$thisSkin->isInstalled()) {
                     $this->mergeResult('skin_unknown', $skin);
-                } elseif (!is_writable($skinPath = $thisSkin->getSubdirPath()) && !@mkdir($skinPath)) {
-                    $this->mergeResult('path_not_Writable', $skinPath);
                 } elseif (!$thisSkin->lock()) {
                     $this->mergeResult('skin_locking_failed', $skinPath);
                 }
