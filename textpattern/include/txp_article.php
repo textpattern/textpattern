@@ -1123,7 +1123,7 @@ function status_display($status)
         'status',
         selectInput('Status', $statuses, $status, false, '', 'status'),
         'status',
-        array('', 'instructions_status'),
+        array('status', 'instructions_status'),
         array('class' => 'txp-form-field status')
     );
 }

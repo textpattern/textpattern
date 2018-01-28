@@ -687,7 +687,7 @@ function list_multi_edit()
                 }
             }
 
-            $message = gTxt('articles_duplicated', array('{id}' => join(', ', $selected)));
+            $message = gTxt('articles_duplicated', array('{list}' => join(', ', $selected)));
         } elseif (!$field || safe_update('textpattern', "$field = '".doSlash($value)."'", "ID IN (".join(',', $selected).")") === false) {
             return list_list();
         }
