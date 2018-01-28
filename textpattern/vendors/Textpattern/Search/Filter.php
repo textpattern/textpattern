@@ -247,7 +247,7 @@ class Filter
             $name = ($key === 'all') ? 'select_all' : 'search_method[]';
             $method_list[] = tag(
                 n.tag(n.tag(
-                    checkbox($name, $key, ($set_all || in_array($key, $selected)), -1).'&nbsp;'.$value
+                    checkbox($name, $key, ($set_all || in_array($key, $selected)), -1).' '.$value
                     , 'label').n,
                     'div').n,
                 'li', $key === 'all' ? ' class="txp-dropdown-toggle-all"' : ''

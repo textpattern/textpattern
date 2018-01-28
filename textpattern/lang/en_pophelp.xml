@@ -137,6 +137,23 @@
 </ul>
 <p>An item with a timestamp greater than the current time (i.e. in the future) will not appear on the front end and the RSS/Atom feeds until that time arrives.</p>
         ]]></item>
+        <item id="status" title="Status"><![CDATA[
+<h2>Status</h2>
+<p>Defines the publishing visibility status of this Textpattern article.</p>
+<p>The publishing status is one of the following:</p>
+<ul>
+    <li>Draft</li>
+    <li>Hidden</li>
+    <li>Pending</li>
+    <li>Live</li>
+    <li>Sticky</li>
+</ul>
+<p>A <strong>draft</strong> article is considered a work-in-progress and is not viewable outside of the Textpattern administration area (i.e. not visible on the Textpattern front side and not syndicated in feeds).</p>
+<p>A <strong>hidden</strong> article is not viewable outside of the Textpattern administration area.</p>
+<p>A <strong>pending</strong> article is considered ready for publication and awaiting approval, but is not viewable outside of the Textpattern administration area.</p>
+<p>A <strong>live</strong> article is typically viewable outside the Textpattern administration area (i.e. visible on the Textpattern front side, syndicated in feeds if the preference permits). If an article is live and has an expiration date, the status will remain as live after that date has been reached, but the article only appears outside the administration area if expired articles are permitted to be published.</p>
+<p>A <strong>sticky</strong> article is similar to a <strong>live</strong> article insofar as it can be viewed outside the Textpattern administration area but will <strong>not</strong> appear in article lists unless the respective <code>article</code> or <code>article_custom</code> tag includes a <code>status</code> attribute with a <code>sticky</code> value.</p>
+        ]]></item>
         <item id="title" title="Title"><![CDATA[
 <h2>Title</h2>
 <p>Add an appropriate title for this article.</p>
