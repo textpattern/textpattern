@@ -256,12 +256,17 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
 
     end_page();
 
-    if ($app_mode != 'async') {
-        echo $trace->summary();
-        echo $trace->result();
-    } else {
-        foreach ($trace->summary(true) as $key => $value) {
-            header('X-Textpattern-'.preg_replace('/[^\w]+/', '', $key).': '.$value);
+    if ($production_status !== 'live') {
+        if ($app_mode != 'async') {
+            echo $trace->summary();
+
+            if ($production_status === 'debug') {
+                echo $trace->result();
+            }
+        } else {
+            foreach ($trace->summary(true) as $key => $value) {
+                header('X-Textpattern-'.preg_replace('/[^\w]+/', '', $key).': '.$value);
+            }
         }
     }
 } else {

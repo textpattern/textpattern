@@ -1670,7 +1670,7 @@ jQuery.fn.txpColumnize = function ()
 
         var disabled = $this.hasClass('asc') || $this.hasClass('desc') ? ' disabled="disabled"' : '';
         var $li = $('<li '+(disabled ? 'class="ui-state-disabled" ' : '')+'/>')
-        $li.html('<div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="list_options" checked="checked" value="' + $id + '" data-index="' + index + '" type="checkbox"' + disabled + ' />&nbsp;' + $title + '</label></div>');
+        $li.html('<div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="list_options" checked="checked" value="' + $id + '" data-index="' + index + '" type="checkbox"' + disabled + ' /> ' + $title + '</label></div>');
         var $target = $table.find('tr>*:nth-child(' + (index + 1) + ')');
         var me = $li.find('input').on('change', function (ev) {
             toggleColumn($id, $target, $(this).prop('checked'));
@@ -1698,7 +1698,7 @@ jQuery.fn.txpColumnize = function ()
     var $ui = $('<div class="txp-list-options"><a class="txp-list-options-button" href="#"><span class="ui-icon ui-icon-gear"></span> ' + textpattern.gTxt('list_options') + '</a></div>');
     var $menu = $('<ul class="txp-dropdown" role="menu" />').hide()
 
-    $menu.html($('<li class="txp-dropdown-toggle-all"><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + ' />&nbsp;' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
+    $menu.html($('<li class="txp-dropdown-toggle-all"><div role="menuitem"><label><input tabindex="-1" class="checkbox active" data-name="select_all" type="checkbox"' + (selectAll ? 'checked="checked"' : '') + ' /> ' + textpattern.gTxt('toggle_all_selected') + '</label></div></li>')).append(items);
 
     $ui.append($menu)
     $menu.txpMenu($ui.find('.txp-list-options-button'))
