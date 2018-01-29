@@ -418,9 +418,9 @@ namespace Textpattern\Skin {
             if ($pathExists) {
                 $time = 0;
 
-                while (!$this->islocked() && $time < 2) {
+                while (!$this->islocked() && $time < 1) {
                     $this->locked = @mkdir($path.'/lock');
-                    sleep(0.25);
+                    sleep(0.125);
                     $time = microtime(true) - $timeStart;
                 }
             }
