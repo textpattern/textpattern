@@ -637,7 +637,10 @@ namespace Textpattern\Skin {
 
             foreach ($this->getFiles() as $File) {
                 $name = $File->getName();
-                $essentialSubdir = implode('', $this->getEssential($subdirField, 'name', array($name)));
+
+                if ($subdirField) {
+                    $essentialSubdir = implode('', $this->getEssential($subdirField, 'name', array($name)));
+                }
 
                 if (in_array($name, $parsed)) {
                     $this->mergeResult('duplicated', $name);
@@ -937,13 +940,16 @@ namespace Textpattern\Skin {
         {
             $thisSkin = $this->getSkin();
             $skin = $thisSkin->getName();
+            $names = $this->getNames();
             $skinWasLocked = $thisSkin->isLocked();
             $string = self::getString();
 
             callback_event($string.'.import', '', 1, array(
-                'infos' => $infos,
-                'base'  => $base,
+                'skin'  => $skin,
+                'names' => $names,
             ));
+
+            $done = array();
 
             if (!$skinWasLocked) {
                 if (!$thisSkin->isInstalled()) {
@@ -966,7 +972,11 @@ namespace Textpattern\Skin {
                     if (!$this->createRows($this->parseFiles())) {
                         $this->mergeResult($string.'_import_failed', array($skin => $notImported));
                     } elseif (!$skinWasLocked) {
-                        $this->mergeResult($string.'_imported', array($skin => $notImported), 'success');
+                        $done[] = $names;
+
+                        if (!$skinWasLocked) {
+                            $this->mergeResult($string.'_imported', array($skin => $notImported), 'success');
+                        }
                     }
 
                     // Drops extra rows…
@@ -983,8 +993,9 @@ namespace Textpattern\Skin {
             }
 
             callback_event($string.'.import', '', 0, array(
-                'infos' => $infos,
-                'base'  => $base,
+                'skin'  => $skin,
+                'names' => $names,
+                'done'  => $done,
             ));
 
             return $this;
@@ -1010,6 +1021,8 @@ namespace Textpattern\Skin {
                 'skin'  => $skin,
                 'names' => $names,
             ));
+
+            $done = array();
 
             if (!$skinWasLocked) {
                 if (!$thisSkin->isInstalled()) {
