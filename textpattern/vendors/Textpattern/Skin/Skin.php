@@ -243,7 +243,7 @@ namespace Textpattern\Skin {
 
         public function isInstalled()
         {
-            if ($this->installed === null) {
+            if (self::$installed === null) {
                 $isInstalled = (bool) safe_field(
                     'name',
                     self::getTable(),
