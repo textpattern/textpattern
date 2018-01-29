@@ -454,7 +454,9 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Insert a new row from the $infos property values.
+         *
+         * @return bool false on error.
          */
 
         protected function createRow()
@@ -463,7 +465,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Update the $base property value(s) related row
+         * with the $infos property related values.
+         *
+         * @return bool false on error.
          */
 
         protected function updateRow()
@@ -696,7 +701,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Create/CreateFrom a single skin (and its related assets)
+         * Merges results in the related property.
+         *
+         * @return object $this The current object (chainable).
          */
 
         public function create() {
@@ -765,7 +773,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Update a single skin (and its related dependencies)
+         * Merges results in the related property.
+         *
+         * @return object $this The current object (chainable).
          */
 
         public function update() {
@@ -849,7 +860,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Duplicate multiple skins (and their related $assets)
+         * Merges results in the related property.
+         *
+         * @return object $this The current object (chainable).
          */
 
         public function duplicate()

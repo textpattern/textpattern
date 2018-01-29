@@ -393,36 +393,6 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Create/CreateFrom a single skin (and its related assets)
-         * or a single template from the $name (+ $skin) and $base property value(s).
-         * Merges results in the related property.
-         *
-         * @return object $this The current object (chainable).
-         */
-
-        abstract public function create();
-
-        /**
-         * Update a single skin (and its related dependencies)
-         * or a single template from the $name (+ $skin) and $base property value(s).
-         * Merges results in the related property.
-         *
-         * @return object $this The current object (chainable).
-         */
-
-        abstract public function update();
-
-        /**
-         * Duplicate multiple skins (and their related $assets)
-         * or multiple templates from the $names (+ $skin) property value(s).
-         * Merges results in the related property.
-         *
-         * @return object $this The current object (chainable).
-         */
-
-        abstract public function duplicate();
-
-        /**
          * Import/Override (and clean) multiple skins (and their related $assets)
          * or multiple templates from the $names (+ $skin) property value(s).
          * Merges results in the related property.
@@ -462,23 +432,6 @@ namespace Textpattern\Skin {
          */
 
          abstract protected function createFile();
-
-         /**
-          * Insert a new row from the $infos (+ $skin) property values.
-          *
-          * @return bool false on error.
-          */
-
-         abstract protected function createRow();
-
-         /**
-          * Update the $base (+ $skin) property value(s) related row
-          * with the $infos property related values.
-          *
-          * @return bool false on error.
-          */
-
-         abstract protected function updateRow();
 
          /**
           * Get a $name (+ $skin) property related row.
