@@ -963,10 +963,10 @@ namespace Textpattern\Skin {
                 $dirPath = $this->getDirPath();
 
                 if (!is_readable($dirPath)) {
-                    $this->mergeResult('path_not_readable', array($skin => $dirPath));
+                    $this->mergeResult('path_not_readable', array($skin => array($dirPath)));
                 } else {
                     if (!$this->getFiles()) {
-                        $this->mergeResult('no_'.$string.'_found', array($skin => $dirPath));
+                        $this->mergeResult('no_'.$string.'_found', array($skin => array($dirPath)));
                     }
 
                     if (!$this->createRows($this->parseFiles())) {
@@ -1037,7 +1037,7 @@ namespace Textpattern\Skin {
                 $dirPath = $this->getDirPath();
 
                 if (!is_writable($dirPath) && !@mkdir($dirPath)) {
-                    $this->mergeResult('path_not_writable', array($skin => $dirPath));
+                    $this->mergeResult('path_not_writable', array($skin => array($dirPath)));
                 } else {
                     $rows = $this->getRows();
 
@@ -1056,7 +1056,7 @@ namespace Textpattern\Skin {
                                 $subdirPath = $this->setInfos($name, $$subdirField, $$contentsField)->getSubdirPath();
 
                                 if (!is_dir($subdirPath) && !@mkdir($subdirPath)) {
-                                    $this->mergeResult($string.'_not_writable', array($skin => $name));
+                                    $this->mergeResult($string.'_not_writable', array($skin => array($name)));
                                     $ready = false;
                                 }
                             } else {
@@ -1065,10 +1065,10 @@ namespace Textpattern\Skin {
 
                             if ($ready) {
                                 if ($this->createFile() === false) {
-                                    $this->mergeResult($string.'_export_failed', array($skin => $name));
+                                    $this->mergeResult($string.'_export_failed', array($skin => array($name)));
                                 } else {
                                     if (!$skinWasLocked) {
-                                        $this->mergeResult($string.'_exported', array($skin => $name), 'success');
+                                        $this->mergeResult($string.'_exported', array($skin => array($name)), 'success');
                                     }
 
                                     $done[] = $name;
