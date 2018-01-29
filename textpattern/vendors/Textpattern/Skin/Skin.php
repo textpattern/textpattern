@@ -1073,10 +1073,11 @@ namespace Textpattern\Skin {
                         } else {
                             foreach ($this->getAssets() as $asset) {
                                 $asset->export($clean, $override);
-                                $assetFailed = $this->mergeResults($asset);
+                                $this->mergeResults($asset);
+                                is_array($asset->getMessage()) ? $assetFailed = true : '';
                             }
 
-                            if (!$assetFailed) {
+                            if (!isset($assetFailed)) {
                                 $done[] = $name;
 
                                 $this->mergeResult('skin_exported', $name, 'success');
