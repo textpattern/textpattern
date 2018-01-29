@@ -122,7 +122,7 @@ namespace Textpattern\Skin {
             $thisResults = $this->getResults();
             $this->results = array_merge($thisResults, $asset->getResults());
 
-            return array_diff($this->getResults(), $thisResults);
+            return $this;
         }
 
         /**

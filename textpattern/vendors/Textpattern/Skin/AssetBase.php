@@ -1001,13 +1001,14 @@ namespace Textpattern\Skin {
         {
             $thisSkin = $this->getSkin();
             $skin = $thisSkin->getName();
+            $names = $this->getNames();
             $skinWasLocked = $thisSkin->isLocked();
 
             $string = self::getString();
 
             callback_event($string.'.export', '', 1, array(
-                'infos' => $infos,
-                'base'  => $base,
+                'skin'  => $skin,
+                'names' => $names,
             ));
 
             if (!$skinWasLocked) {
@@ -1057,15 +1058,15 @@ namespace Textpattern\Skin {
                                         $this->mergeResult($string.'_exported', array($skin => $name), 'success');
                                     }
 
-                                    $exported[] = $name;
+                                    $done[] = $name;
                                 }
                             }
                         }
                     }
 
                     // Drops extra files…
-                    if ($clean && isset($exported)) {
-                        $notUnlinked = $this->deleteExtraFiles($exported);
+                    if ($clean && isset($done)) {
+                        $notUnlinked = $this->deleteExtraFiles($done);
 
                         if ($notUnlinked) {
                             $this->mergeResult($string.'_cleaning_failed', array($skin => $notUnlinked));
@@ -1079,8 +1080,9 @@ namespace Textpattern\Skin {
             }
 
             callback_event($string.'.export', '', 1, array(
-                'infos' => $infos,
-                'base'  => $base,
+                'skin'  => $skin,
+                'names' => $names,
+                'done'  => $done,
             ));
 
             return $this;
