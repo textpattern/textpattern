@@ -142,20 +142,7 @@ eod;
 
                 // symlink resolves successfully?
                 if (realpath($symlink_relpath.$symlink_local)) {
-                    if (!isset($title_shown)) {
-                        $out[] = <<<eod
-<p>Symlinks created:</p>
-<pre dir="ltr"><code>
-eod;
-                        $title_shown = true;
-                    }
-
-                    $out[] = $symlink_local.' <span class="success">&#8594;</span> '.readlink($symlink_relpath.$symlink_local);
-
-                    if ($symlink === $lastkey) {
-                        $out[] = "</code></pre>";
-                    }
-
+                    $out[] = '<p>Symlink created: <code>'.$symlink_local.' <span class="success">&#8594;</span> '.readlink($symlink_relpath.$symlink_local).'</code></p>';
                 } else {
                     // If unsuccessful, provide copy-and-paste symlink code to manually create symlinks.
                     if (!isset($title_shown)) {
