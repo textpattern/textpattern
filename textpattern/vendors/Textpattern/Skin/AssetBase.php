@@ -305,15 +305,6 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        protected function setInstalled()
-        {
-            // TODO
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
         protected function isInstalled()
         {
             if ($this->installed === null) {
