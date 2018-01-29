@@ -44,7 +44,7 @@ namespace Textpattern\Skin {
         protected static $table;
 
         /**
-         * Class related textpack string.
+         * Class related textpack string (usually the event name).
          *
          * @var string 'skin', 'page', 'form', 'css', etc.
          * @see        getString().
@@ -317,9 +317,19 @@ namespace Textpattern\Skin {
          *                        textpack related items and their related '{list}' parameters.
          */
 
-        protected function getResults()
+        protected function getResults($status = null)
         {
-            return $this->results;
+            if ($status === null) {
+                return $this->results;
+            } else {
+                $results = array();
+
+                foreach ($status as $severity) {
+                    $results[$severity] = $this->results[$severity];
+                }
+
+                return $results;
+            }
         }
 
         /**

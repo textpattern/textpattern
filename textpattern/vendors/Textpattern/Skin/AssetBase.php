@@ -705,7 +705,6 @@ namespace Textpattern\Skin {
             $thisSkin = $this->getSkin();
             $skin = $thisSkin->getName();
             $names = $this->getNames();
-            $skinWasLocked = $thisSkin->isLocked();
             $string = self::getString();
 
             callback_event($string.'.import', '', 1, array(
@@ -714,45 +713,28 @@ namespace Textpattern\Skin {
             ));
 
             $done = array();
+            $dirPath = $this->getDirPath();
 
-            if (!$skinWasLocked) {
-                if (!$thisSkin->isInstalled()) {
-                    $this->mergeResult('skin_unknown', $skin);
-                } elseif (!$thisSkin->lock()) {
-                    $this->mergeResult('skin_locking_failed', $skinPath);
+            if (!is_readable($dirPath)) {
+                $this->mergeResult('path_not_readable', array($skin => array($dirPath)));
+            } else {
+                if (!$this->getFiles()) {
+                    $this->mergeResult('no_'.$string.'_found', array($skin => array($dirPath)));
                 }
-            }
 
-            if ($thisSkin->isLocked()) {
-                $dirPath = $this->getDirPath();
-
-                if (!is_readable($dirPath)) {
-                    $this->mergeResult('path_not_readable', array($skin => array($dirPath)));
+                if (!$this->createRows($this->parseFiles())) {
+                    $this->mergeResult($string.'_import_failed', array($skin => $names));
                 } else {
-                    if (!$this->getFiles()) {
-                        $this->mergeResult('no_'.$string.'_found', array($skin => array($dirPath)));
-                    }
+                    $done[] = $names;
 
-                    if (!$this->createRows($this->parseFiles())) {
-                        $this->mergeResult($string.'_import_failed', array($skin => $notImported));
-                    } elseif (!$skinWasLocked) {
-                        $done[] = $names;
-
-                        if (!$skinWasLocked) {
-                            $this->mergeResult($string.'_imported', array($skin => $notImported), 'success');
-                        }
-                    }
-
-                    // Drops extra rows…
-                    if ($clean) {
-                        if (!$this->deleteExtraRows()) {
-                            $this->mergeResult($string.'_cleaning_failed', array($skin => $notCleaned));
-                        }
-                    }
+                    $this->mergeResult($string.'_imported', array($skin => $names), 'success');
                 }
 
-                if (!$skinWasLocked && !$thisSkin->unlock()) {
-                    $this->mergeResult('skin_unlocking_failed', $thisSkin->getSubdirPath());
+                // Drops extra rows…
+                if ($clean) {
+                    if (!$this->deleteExtraRows()) {
+                        $this->mergeResult($string.'_cleaning_failed', array($skin => $notCleaned));
+                    }
                 }
             }
 
@@ -777,7 +759,6 @@ namespace Textpattern\Skin {
             $thisSkin = $this->getSkin();
             $skin = $thisSkin->getName();
             $names = $this->getNames();
-            $skinWasLocked = $thisSkin->isLocked();
 
             $string = self::getString();
 
@@ -787,72 +768,55 @@ namespace Textpattern\Skin {
             ));
 
             $done = array();
+            $string = self::getString();
+            $dirPath = $this->getDirPath();
 
-            if (!$skinWasLocked) {
-                if (!$thisSkin->isInstalled()) {
-                    $this->mergeResult('skin_unknown', $skin);
-                } elseif (!$thisSkin->lock()) {
-                    $this->mergeResult('skin_locking_failed', $skinPath);
-                }
-            }
+            if (!is_writable($dirPath) && !@mkdir($dirPath)) {
+                $this->mergeResult('path_not_writable', array($skin => array($dirPath)));
+            } else {
+                $rows = $this->getRows();
 
-            if ($thisSkin->isLocked()) {
-                $string = self::getString();
-                $dirPath = $this->getDirPath();
-
-                if (!is_writable($dirPath) && !@mkdir($dirPath)) {
-                    $this->mergeResult('path_not_writable', array($skin => array($dirPath)));
+                if (!$rows) {
+                    $failed[$skin] = $empty[$skin] = $dirPath;
                 } else {
-                    $rows = $this->getRows();
+                    foreach ($rows as $row) {
+                        extract($row);
 
-                    if (!$rows) {
-                        $failed[$skin] = $empty[$skin] = $dirPath;
-                    } else {
-                        foreach ($rows as $row) {
-                            extract($row);
+                        $ready = true;
 
-                            $ready = true;
+                        $subdirField = self::getSubdirField();
+                        $contentsField = self::getFileContentsField();
 
-                            $subdirField = self::getSubdirField();
-                            $contentsField = self::getFileContentsField();
+                        if ($subdirField) {
+                            $subdirPath = $this->setInfos($name, $$subdirField, $$contentsField)->getSubdirPath();
 
-                            if ($subdirField) {
-                                $subdirPath = $this->setInfos($name, $$subdirField, $$contentsField)->getSubdirPath();
-
-                                if (!is_dir($subdirPath) && !@mkdir($subdirPath)) {
-                                    $this->mergeResult($string.'_not_writable', array($skin => array($name)));
-                                    $ready = false;
-                                }
-                            } else {
-                                $this->setInfos($name, $$contentsField);
+                            if (!is_dir($subdirPath) && !@mkdir($subdirPath)) {
+                                $this->mergeResult($string.'_not_writable', array($skin => array($name)));
+                                $ready = false;
                             }
-
-                            if ($ready) {
-                                if ($this->createFile() === false) {
-                                    $this->mergeResult($string.'_export_failed', array($skin => array($name)));
-                                } else {
-                                    if (!$skinWasLocked) {
-                                        $this->mergeResult($string.'_exported', array($skin => array($name)), 'success');
-                                    }
-
-                                    $done[] = $name;
-                                }
-                            }
+                        } else {
+                            $this->setInfos($name, $$contentsField);
                         }
-                    }
 
-                    // Drops extra files…
-                    if ($clean && isset($done)) {
-                        $notUnlinked = $this->deleteExtraFiles($done);
+                        if ($ready) {
+                            if ($this->createFile() === false) {
+                                $this->mergeResult($string.'_export_failed', array($skin => array($name)));
+                            } else {
+                                $this->mergeResult($string.'_exported', array($skin => array($name)), 'success');
 
-                        if ($notUnlinked) {
-                            $this->mergeResult($string.'_cleaning_failed', array($skin => $notUnlinked));
+                                $done[] = $name;
+                            }
                         }
                     }
                 }
 
-                if (!$skinWasLocked && !$thisSkin->unlock()) {
-                    $this->mergeResult('skin_unlocking_failed', $thisSkin->getSubdirPath());
+                // Drops extra files…
+                if ($clean && isset($done)) {
+                    $notUnlinked = $this->deleteExtraFiles($done);
+
+                    if ($notUnlinked) {
+                        $this->mergeResult($string.'_cleaning_failed', array($skin => $notUnlinked));
+                    }
                 }
             }
 
@@ -873,56 +837,41 @@ namespace Textpattern\Skin {
         {
             $thisSkin = $this->getSkin();
             $skin = $thisSkin->getName();
-            $skinWasLocked = $thisSkin->isLocked();
             $string = self::getString();
 
             callback_event($string.'.delete', '', 1, array('names' => $names));
 
-            if (!$skinWasLocked) {
-                if (!$thisSkin->isInstalled()) {
-                    $this->mergeResult('skin_unknown', $skin);
-                } elseif (!$thisSkin->lock()) {
-                    $this->mergeResult('skin_locking_failed', $thisSkin->getSubdirPath());
+            $names = $this->getNames();
+            $done = $ready = array();
+
+            foreach ($names as $name) {
+                $this->setName($name);
+
+                if (!$this->isInstalled()) {
+                    $this->mergeResult($string.'_unknown', $name);
+                } else {
+                    $ready[] = $name;
                 }
             }
 
-            if ($thisSkin->isLocked()) {
-                $names = $this->getNames();
-                $done = $ready = array();
+            if ($ready) {
+                if ($this->setNames($ready) && $this->deleteRows()) {
+                    $done = $ready;
 
-                foreach ($names as $name) {
-                    $this->setName($name);
+                    $remove = array();
 
-                    if (!$this->isInstalled()) {
-                        $this->mergeResult($string.'_unknown', $name);
-                    } else {
-                        $ready[] = $name;
+                    if ($clean && $this->deleteFiles()) {
+
                     }
+
+                    $this->mergeResult($string.'_deleted', $ready, 'success');
+
+                    update_lastmod($string.'.delete', $ready);
+
+                    $this->removeEditing();
+                } else {
+                    $this->mergeResult($string.'_deletion_failed', $ready);
                 }
-
-                if ($ready) {
-                    if ($this->setNames($ready) && $this->deleteRows()) {
-                        $done = $ready;
-
-                        $remove = array();
-
-                        if ($clean && $this->deleteFiles()) {
-
-                        }
-
-                        $this->mergeResult($string.'_deleted', $ready, 'success');
-
-                        update_lastmod($string.'.delete', $ready);
-
-                        $this->removeEditing();
-                    } else {
-                        $this->mergeResult($string.'_deletion_failed', $ready);
-                    }
-                }
-            }
-
-            if (!$skinWasLocked && !$thisSkin->unlock()) {
-                $this->mergeResult('skin_unlocking_failed', $thisSkin->getSubdirPath());
             }
 
             callback_event($string.'.delete', '', 0, array('names' => $names));
