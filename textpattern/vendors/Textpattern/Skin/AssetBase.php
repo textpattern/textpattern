@@ -597,9 +597,9 @@ namespace Textpattern\Skin {
             $parsed = $parsedFiles = $names = array();
 
             if ($files) {
-                foreach ($files as $File) {
-                    $name = $File->getName();
-                    $filename = $File->getFilename();
+                foreach ($files as $file) {
+                    $name = pathinfo($file->getFilename(), PATHINFO_FILENAME);;
+                    $filename = $file->getFilename();
 
                     if ($subdirField) {
                         $essentialSubdir = implode('', $this->getEssential($subdirField, 'name', array($name)));
@@ -607,14 +607,14 @@ namespace Textpattern\Skin {
 
                     if (in_array($filename, $parsedFiles)) {
                         $this->mergeResult($string.'_duplicate', $filename);
-                    } elseif ($subdirField && $essentialSubdir && $essentialSubdir !== $File->getDir()) {
+                    } elseif ($subdirField && $essentialSubdir && $essentialSubdir !== basename($file->getPath())) {
                         $this->mergeResult($string.'_wrong_type', $name);
                     } else {
                         $names[] = $name;
                         $parsed[] = $row['name'] = $name;
                         $parsedFiles[] = $filename;
-                        $subdirField ? $row[$subdirField] = $File->getDir() : '';
-                        $row[self::getFileContentsField()] = $File->getContents();
+                        $subdirField ? $row[$subdirField] = basename($file->getPath()) : '';
+                        $row[self::getFileContentsField()] = $file->getContents();
 
                         $rows[] = $row;
                     }
@@ -644,11 +644,11 @@ namespace Textpattern\Skin {
 
             if ($files) {
                 foreach ($files as $file) {
-                    $name = $file->getName();
+                    $name = pathinfo($file->getFilename(), PATHINFO_FILENAME);
                     $this->setName($name);
 
                     if (!$nameNotIn || ($nameNotIn && !in_array($name, $nameNotIn))) {
-                        unlink($this->getFilePath($file->getDir())) ?: $notRemoved[] = $name;
+                        unlink($this->getFilePath(basename($file->getPath()))) ?: $notRemoved[] = $name;
                     }
                 }
             }

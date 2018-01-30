@@ -63,13 +63,14 @@ namespace Textpattern\Iterator {
 
         public function getContents()
         {
-            $contents = file_get_contents($this->getPathname());
+            $pathname = $this->getPathname();
+            $contents = file_get_contents($pathname);
 
             if ($contents !== false) {
                 return preg_replace('/[\r|\n]+$/', '', $contents);
             }
 
-            throw new \Exception('Unable to read: '.$this->getName());
+            throw new \Exception('Unable to read: '.$pathname);
         }
 
         /**
@@ -81,28 +82,6 @@ namespace Textpattern\Iterator {
         public function getJSONContents()
         {
             return @json_decode($this->getContents(), true);
-        }
-
-        /**
-         * Gets the template name.
-         *
-         * @return string
-         */
-
-        public function getName()
-        {
-            return pathinfo($this->getFilename(), PATHINFO_FILENAME);
-        }
-
-        /**
-         * Gets the form Type from its path.
-         *
-         * @return string
-         */
-
-        public function getDir()
-        {
-            return basename($this->getPath());
         }
     }
 }
