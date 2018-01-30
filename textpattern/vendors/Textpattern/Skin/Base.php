@@ -80,6 +80,15 @@ namespace Textpattern\Skin {
         protected $name;
 
         /**
+         * Skin/template related infos.
+         *
+         * @var array Associative array of class related table main fields and their values.
+         * @see       setInfos(), getInfos().
+         */
+
+        protected $infos;
+
+        /**
          * Skin/template name used as the base for update or duplication.
          *
          * @var string Name.
@@ -115,6 +124,8 @@ namespace Textpattern\Skin {
 
         /**
          * $string property getter.
+         *
+         * @return string static::$table Class related textpack string (usually the event name).
          */
 
         public static function getString()
@@ -134,26 +145,28 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Whether a skin directory name is valid or not.
+         * Whether a $name property related value is a valid directory name or not.
          *
-         * @param  string $name Skin name (uses the $name property value if null).
          * @return bool         false on error.
-         * @see                 getName(), getNamePattern().
          */
 
-        protected static function isValidDirName($name = null)
+        protected function isValidDirName($name = null)
         {
-            $name === null ? $name = $this->getName() : '';
-
-            return preg_match('#^'.self::getNamePattern().'$#', $name);
+            return preg_match('#^'.self::getNamePattern().'$#', $this->getName());
         }
 
-        abstract protected static function sanitizeName($name);
+        /**
+         * Sanitize a string.
+         *
+         * @return string Sanitized string.
+         */
+
+        abstract protected static function sanitize($name);
 
         /**
-         * $names property setter.
+         * $names property setter/sanitizer.
          *
-         * @param  array  $names Multiple skins or template names to work with related methods.
+         * @param  array  $names Multiple skin or template names to work with related methods.
          * @return object $this  The current object (chainable).
          */
 
@@ -165,7 +178,7 @@ namespace Textpattern\Skin {
                  $parsed = array();
 
                  foreach ($names as $name) {
-                     $parsed[] = static::sanitizeName($name);
+                     $parsed[] = static::sanitize($name);
                  }
 
                  $this->names = $parsed;
@@ -176,6 +189,8 @@ namespace Textpattern\Skin {
 
         /**
          * $names property getter.
+         *
+         * @return array Skin or template sanitized names.
          */
 
         protected function getNames()
@@ -187,24 +202,49 @@ namespace Textpattern\Skin {
          * $name property setter.
          *
          * @param  array  $name Single skin or template name to work with related methods.
-         *                      Takes the 'last saved' or 'editing' related preference value if null.
+         *                      Takes the '_last_saved' or '_editing' related preference value if null.
          * @return object $this The current object (chainable).
          */
 
         public function setName($name = null)
         {
-            $this->name = $name === null ? static::getEditing() : static::sanitizeName($name);
+            $this->name = $name === null ? static::getEditing() : static::sanitize($name);
 
             return $this;
         }
 
         /**
          * $name property getter.
+         *
+         * @return string Sanitized skin or template name.
          */
 
         protected function getName()
         {
             return $this->name;
+        }
+
+        /**
+         * $infos property getter/parser.
+         *
+         * @param  bool  $safe Whether to get the property value
+         *                     as an SQL query related string or not.
+         * @return mixed TODO
+         */
+
+        protected function getInfos($safe = false)
+        {
+            if ($safe) {
+                $infoQuery = array();
+
+                foreach ($this->infos as $col => $value) {
+                    $infoQuery[] = $col." = '".doSlash($value)."'";
+                }
+
+                return implode(', ', $infoQuery);
+            }
+
+            return $this->infos;
         }
 
         /**
@@ -215,7 +255,7 @@ namespace Textpattern\Skin {
 
          public function setBase($name)
          {
-             $this->base = static::sanitizeName($name);
+             $this->base = static::sanitize($name);
 
              return $this;
          }
@@ -223,7 +263,7 @@ namespace Textpattern\Skin {
         /**
          * $base property getter.
          *
-         * @return string Sanitized base name.
+         * @return string Sanitized skin or template base name.
          */
 
         public function getBase()
@@ -232,24 +272,25 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Get the.
+         * Get the $name property value related directory path
+         * (subdirectory of the $dir property value related directory).
          *
-         * @param string $name Skin name (uses the $name property value if null)
-         * @see          getName(), getDirPath().
+         * @param string Path
          */
 
         abstract protected function getSubdirPath();
 
         /**
-         * Get the current  pref value.
+         * Get the current 'skin_editing' or '{asset}_last_saved' pref value.
          *
-         * @return string Skin name.
+         * @return mixed Skin/template name | false on error.
          */
 
         abstract public static function getEditing();
 
         /**
-         * Set the skin_editing pref value to $name property value.
+         * Set the 'skin_editing' or '{asset}_last_saved' pref value
+         * to the $name property value.
          *
          * @return bool false on error.
          */
@@ -259,7 +300,7 @@ namespace Textpattern\Skin {
         /**
          * Get the 'remove_extra_templates' preference value.
          *
-         * @return bool The current pref value.
+         * @return bool
          */
 
         protected function getCleaningPref() {
@@ -294,6 +335,8 @@ namespace Textpattern\Skin {
          * @param string $txtItem A textpack item related to the what happened.
          * @param mixed  $list    A name or an array of names associated with the result
          *                        to build the txtItem related '{list}'.
+         *                        List values can be grouped like so:
+         *                        array($skin => $templates)
          * @param string $status  'success'|'warning'|'error'.
          */
 
@@ -313,8 +356,9 @@ namespace Textpattern\Skin {
         /**
          * $results property getter.
          *
-         * @return $this->results Associative array of 'success', 'warning' and 'error'
-         *                        textpack related items and their related '{list}' parameters.
+         * @param  $status Array of results related status ('success', 'warning', 'error') to filter the outpout.
+         * @return array   Associative array of status textpack related items
+         *                 and their related '{list}' parameters.
          */
 
         protected function getResults($status = null)
@@ -333,9 +377,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Gets the $results property value as a message to pass to admin view.
+         * Get the $results property value as a message to display in the admin tabs.
          *
-         * @return mixed Message or array containing the message and the related user notice constant.
+         * @return mixed Message or array containing the message
+         *               and its related user notice constant.
          */
 
         public function getMessage()
@@ -377,29 +422,6 @@ namespace Textpattern\Skin {
             }
 
             return $severity ? array($message, constant($severity)) : $message;
-        }
-
-        /**
-         * $infos property getter/parser.
-         *
-         * @param  bool  $safe Whether to get the property value
-         *                     as an SQL query related string or not.
-         * @return mixed TODO
-         */
-
-        protected function getInfos($safe = false)
-        {
-            if ($safe) {
-                $infoQuery = array();
-
-                foreach ($this->infos as $col => $value) {
-                    $infoQuery[] = $col." = '".doSlash($value)."'";
-                }
-
-                return implode(', ', $infoQuery);
-            }
-
-            return $this->infos;
         }
 
         /**

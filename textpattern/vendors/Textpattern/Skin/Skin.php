@@ -83,15 +83,6 @@ namespace Textpattern\Skin {
         protected static $installed;
 
         /**
-         * Installed skins.
-         *
-         * @var array Associative array of skin names and their titles
-         * @see       setUploaded(), getUploaded().
-         */
-
-        protected $infos;
-
-        /**
          * Class related asset names to work with.
          *
          * @var array Names.
@@ -190,7 +181,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        protected static function sanitizeName($name)
+        protected static function sanitize($name)
         {
             return sanitizeForTheme($name);
         }
@@ -505,7 +496,7 @@ namespace Textpattern\Skin {
             foreach (self::getFiles() as $file) {
                 $name = basename($file->getPath());
 
-                if ($name === self::sanitizeName($name)) {
+                if ($name === self::sanitize($name)) {
                     $infos = $file->getJSONContents();
                     $infos ? self::$uploaded[$name] = $infos['title'] : '';
                 }

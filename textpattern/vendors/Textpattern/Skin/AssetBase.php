@@ -142,7 +142,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        protected static function sanitizeName($name) {
+        protected static function sanitize($name) {
             return sanitizeForPage($name);
         }
 

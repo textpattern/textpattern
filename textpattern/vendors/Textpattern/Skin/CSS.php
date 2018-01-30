@@ -46,6 +46,14 @@ namespace Textpattern\Skin {
             ),
         );
 
+        /**
+         * $infos+$name properties setter.
+         *
+         * @param  string $name CSS name;
+         * @param  string $css  CSS contents;
+         * @return object $this The current class object (chainable).
+         */
+
         public function setInfos(
             $name,
             $css = null
