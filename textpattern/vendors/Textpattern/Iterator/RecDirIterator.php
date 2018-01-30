@@ -22,13 +22,21 @@
  */
 
 /**
- * RecDirIterator
+ * Recursive directory iterator
+ *
+ * <code>
+ * $files = new \Textpattern\Iterator\RecDirIterator($dirPath);
+ *
+ * foreach ($files as $file) {
+ *     echo $file->getName();
+ * }
+ * </code>
  *
  * @since   4.7.0
- * @package Skin
+ * @package Iterator
  */
 
-namespace Textpattern\Skin\DirIterator {
+namespace Textpattern\Iterator {
 
     class RecDirIterator extends \RecursiveDirectoryIterator
     {
@@ -68,7 +76,6 @@ namespace Textpattern\Skin\DirIterator {
          * Gets JSON file contents as an object.
          *
          * @return array
-         * @throws Exception
          */
 
         public function getJSONContents()

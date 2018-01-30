@@ -448,31 +448,12 @@ namespace Textpattern\Skin {
         abstract public function export($clean = false, $override = false);
 
         /**
-         * Delete multiple skins (and their related $assets + directories if empty)
-         * or multiple templates from the $names (+ $skin) property value(s).
-         * Merges results in the related property.
-         *
-         * @return object $this The current object (chainable).
-         */
-
-        abstract public function delete($clean = false);
-
-        /**
          * Create/override a skin/asset file from the $infos property values.
          *
          * @return bool false on error.
          */
 
          abstract protected function createFile();
-
-         /**
-          * Get a $name (+ $skin) property related row.
-          *
-          * @return array Associative array of the skin row fields and their values.
-          * @see          getName().
-          */
-
-         abstract protected function getRow();
 
         /**
          * Get the $names (+ $skin) property value(s) related rows.

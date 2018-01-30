@@ -22,26 +22,36 @@
  */
 
 /**
- * RecIteratorIterator
+ * Recursive iterator iterator
+ *
+ * <code>
+ * $files = \Txp::get('Textpattern\Iterator\RecDirIterator', $root);
+ * $filter = \Txp::get('Textpattern\Iterator\RecFilterIterator', $files)->setNameIn($nameIn);
+ * $filteredFiles = \Txp::get('Textpattern\Iterator\RecIteratorIterator', $filter);
+ * $filteredFiles->setMaxDepth($maxDepth);
+ *
+ * foreach ($filteredFiles as $file) {
+ *     echo $file->getName();
+ * }
+ * </code>
  *
  * @since   4.7.0
- * @package Skin
+ * @package Iterator
  */
 
-namespace Textpattern\Skin\DirIterator {
+namespace Textpattern\Iterator {
 
     class RecIteratorIterator extends \RecursiveIteratorIterator
     {
         /**
          * {@inheritdoc}
          *
-         * @param int $depth Sets the MaxDepth property.
+         * @param int $depth Set the MaxDepth property.
          */
 
-        public function __construct(RecFilterIterator $iterator, $depth)
+        public function __construct(RecFilterIterator $iterator)
         {
             parent::__construct($iterator);
-            parent::setMaxDepth($depth);
         }
     }
 }

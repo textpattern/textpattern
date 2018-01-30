@@ -124,7 +124,7 @@ namespace Textpattern\Skin {
 
         protected function setSkin(Skin $skin = null)
         {
-            $this->skin = $skin === null ? \txp::get('Textpattern\Skin\Skin')->setName() : $skin;
+            $this->skin = $skin === null ? \Txp::get('Textpattern\Skin\Skin')->setName() : $skin;
 
             return $this;
         }
@@ -333,11 +333,11 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function setEditing()
+        public function setEditing($name = null)
         {
             global $prefs;
 
-            $name = $this->getName();
+            $name !== null ?: $name = $this->getName();
             $prefs['last_'.self::getString().'_saved'] = $name;
 
             return set_pref(
@@ -394,33 +394,29 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        protected function createFile()
+        protected function createFile($path = null, $contents = null)
         {
-            $infos = $this->getInfos();
-            $contents = $infos[self::getFileContentsField()];
-            $subdirField = $this->getSubdirField();
-
-            if ($subdirField) {
-                $subdir = $infos[$subdirField];
-                $path = $this->getFilePath($subdir);
-            } else {
-                $path = $this->getFilePath();
+            if ($path === null || $contents === null) {
+                $infos = $this->getInfos();
             }
 
-            return file_put_contents($path, $contents);
-        }
+            if ($path === null) {
+                $subdirField = $this->getSubdirField();
+                $file = $this->getName().'.'.self::getExtension();
 
-        /**
-         * {@inheritdoc}
-         */
+                if ($subdirField) {
+                    $path = $infos[$subdirField].DS.$file;
+                } else {
+                    $path = $file;
+                }
+            }
 
-        protected function getRow()
-        {
-            return safe_row(
-                'name, title, version, description, author, author_uri',
-                self::getTable(),
-                "name = '".doSlash($this->getName())."' AND skin = '".doSlash($this->getSkin()->getName())."'"
-            );
+            if ($contents === null) {
+                $infos = $this->getInfos();
+                $contents = $infos[self::getFileContentsField()];
+            }
+
+            return file_put_contents($this->getDirPath().DS.$path, $contents);
         }
 
         /**
@@ -471,52 +467,54 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function getRows()
+        public function getRows($things = null, $where = null)
         {
-            $names = $this->getNames();
-            $nameIn = '';
-
-            if ($names) {
-                $nameIn = " AND name IN ('".implode("', '", array_map('doSlash', $names))."')";
+            if ($things === null) {
+                $things = 'name, ';
+                $subdirField = self::getSubdirField();
+                !$subdirField ?: $things .= $subdirField.', ';
+                $things .= self::getFileContentsField();
             }
 
-            $fields = array('name');
-            $subdirField = self::getSubdirField();
-            $subdirField ? $fields[] = $subdirField : '';
-            $fields[] = self::getFileContentsField();
+            if ($where === null) {
+                $names = $this->getNames();
+                $nameIn = '';
 
-            $rows = safe_rows_start(
-                implode(', ', $fields),
-                self::getTable(),
-                "skin = '".doSlash($this->getSkin()->getName())."'".$nameIn
-            );
+                if ($names) {
+                    $nameIn = " AND name IN ('".implode("', '", array_map('doSlash', $names))."')";
+                }
 
-            $skinRows = array();
-
-            while ($row = nextRow($rows)) {
-                $skinRows[] = $row;
+                $where = "skin = '".doSlash($this->getSkin()->getName())."'".$nameIn;
             }
 
-            return $skinRows;
+            $rs = safe_rows_start($things, self::getTable(), $where);
+            $rows = array();
+
+            while ($row = nextRow($rs)) {
+                $rows[] = $row;
+            }
+
+            return $rows;
         }
 
         /**
          * {@inheritdoc}
          */
 
-        public function deleteRows()
+        public function deleteRows($where = null)
         {
-            $names = $this->getNames();
-            $nameIn = '';
+            if ($where === null) {
+                $names = $this->getNames();
+                $nameIn = '';
 
-            if ($names) {
-                $nameIn = " AND name IN ('".implode("', '", array_map('doSlash', $names))."')";
+                if ($names) {
+                    $nameIn = " AND name IN ('".implode("', '", array_map('doSlash', $names))."')";
+                }
+
+                $where = "skin = '".doSlash($this->getSkin()->getName())."'".$nameIn;
             }
 
-            return safe_delete(
-                self::getTable(),
-                "skin = '".doSlash($this->getSkin()->getName())."'".$nameIn
-            );
+            return safe_delete(self::getTable(), $where);
         }
 
         /**
@@ -528,8 +526,7 @@ namespace Textpattern\Skin {
 
         protected function deleteExtraRows()
         {
-            return safe_delete(
-                self::getTable(),
+            return $this->deleteRows(
                 "skin = '".doSlash($this->getSkin()->getName())."' AND "
                 ."name NOT IN ('".implode("', '", array_map('doSlash', $this->getNames()))."')"
             );
@@ -541,16 +538,13 @@ namespace Textpattern\Skin {
          * @param string $name A skin newname.
          */
 
-        public function updateSkin()
-        {
-            $thisSkin = $this->getSkin();
+         public function updateRow($set = null, $where = null)
+         {
+             $set !== null ?: $set = $this->getInfos(true);
+             $where !== null ?: $where = "skin = '".doSlash($this->getSkin()->getName())."' name = '".doSlash($this->getBase())."'";
 
-            return safe_update(
-                self::getTable(),
-                "skin = '".doSlash($thisSkin->getName())."'",
-                "skin = '".doSlash($thisSkin->getBase())."'"
-            );
-        }
+             return safe_update(self::getTable(), $set, $where);
+         }
 
         /**
          * Gets files from a defined directory.
@@ -568,13 +562,12 @@ namespace Textpattern\Skin {
                 $templates[] = $name.'.'.$extension;
             }
 
-            $this->files = new DirIterator\RecIteratorIterator(
-                new DirIterator\RecFilterIterator(
-                    new DirIterator\RecDirIterator($this->getDirPath()),
-                    $templates
-                ),
-                self::getSubdirField() ? 1 : 0
-            );
+            $files = \Txp::get('Textpattern\Iterator\RecDirIterator', $this->getDirPath());
+            $filter = \Txp::get('Textpattern\Iterator\RecFilterIterator', $files)->setNames($templates);
+            $filteredFiles = \Txp::get('Textpattern\Iterator\RecIteratorIterator', $filter);
+            $filteredFiles->setMaxDepth(self::getSubdirField() ? 1 : 0);
+
+            $this->files = $filteredFiles;
 
             return $this;
         }
@@ -583,7 +576,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        protected function getFiles($asRows = false)
+        protected function getFiles()
         {
             $this->files === null ? $this->setFiles() : '';
 
@@ -598,27 +591,33 @@ namespace Textpattern\Skin {
             $rows = array();
             $row = array();
             $subdirField = self::getSubdirField();
+            $string = self::getString();
 
-            $parsed = $names = array();
+            $files = $this->getFiles();
+            $parsed = $parsedFiles = $names = array();
 
-            foreach ($this->getFiles() as $File) {
-                $name = $File->getName();
+            if ($files) {
+                foreach ($files as $File) {
+                    $name = $File->getName();
+                    $filename = $File->getFilename();
 
-                if ($subdirField) {
-                    $essentialSubdir = implode('', $this->getEssential($subdirField, 'name', array($name)));
-                }
+                    if ($subdirField) {
+                        $essentialSubdir = implode('', $this->getEssential($subdirField, 'name', array($name)));
+                    }
 
-                if (in_array($name, $parsed)) {
-                    $this->mergeResult('duplicated', $name);
-                } elseif ($subdirField && $essentialSubdir && $essentialSubdir !== $File->getDir()) {
-                    $this->mergeResult('wrong_type', $name);
-                } else {
-                    $names[] = $name;
-                    $parsed[] = $row['name'] = $name;
-                    $subdirField ? $row[$subdirField] = $File->getDir() : '';
-                    $row[self::getFileContentsField()] = $File->getContents();
+                    if (in_array($filename, $parsedFiles)) {
+                        $this->mergeResult($string.'_duplicate', $filename);
+                    } elseif ($subdirField && $essentialSubdir && $essentialSubdir !== $File->getDir()) {
+                        $this->mergeResult($string.'_wrong_type', $name);
+                    } else {
+                        $names[] = $name;
+                        $parsed[] = $row['name'] = $name;
+                        $parsedFiles[] = $filename;
+                        $subdirField ? $row[$subdirField] = $File->getDir() : '';
+                        $row[self::getFileContentsField()] = $File->getContents();
 
-                    $rows[] = $row;
+                        $rows[] = $row;
+                    }
                 }
             }
 
@@ -643,48 +642,13 @@ namespace Textpattern\Skin {
             $files = $this->getFiles();
             $notRemoved = array();
 
-            foreach ($files as $file) {
-                $name = $file->getName();
-                $this->setName($name);
+            if ($files) {
+                foreach ($files as $file) {
+                    $name = $file->getName();
+                    $this->setName($name);
 
-                if (!$nameNotIn || ($nameNotIn && !in_array($name, $nameNotIn))) {
-                    unlink($this->getFilePath($file->getDir())) ?: $notRemoved[] = $name;
-                }
-            }
-
-            return $notRemoved;
-        }
-
-        /**
-         * Unlinks obsolete template files.
-         *
-         * @param  array $not An array of template names to NOT unlink;
-         * @return array      !Templates for which the unlink process FAILED!;
-         */
-
-        protected function deleteFiles()
-        {
-            $files = $this->getFiles();
-            $notRemoved = array();
-            $dirs = array();
-
-            foreach ($files as $file) {
-                $name = $file->getName();
-                $dirs[] = $dir = $file->getDir();
-                $this->setName($name);
-
-                if (!$nameIn || ($nameIn && in_array($name, $nameIn))) {
-                    unlink($this->getFilePath($dir)) ?: $notRemoved[] = $name;
-                }
-            }
-
-            // Silently try to remove parent directories — works only if dirs are emprty.
-            foreach ($dirs as $dir) {
-                $path = $this->getDirPath();
-
-                if (@rmdir($path.DS.$dir)) {
-                    if (@rmdir($path)) {
-                        @rmdir($this->getSkin()->getSubdirPath());
+                    if (!$nameNotIn || ($nameNotIn && !in_array($name, $nameNotIn))) {
+                        unlink($this->getFilePath($file->getDir())) ?: $notRemoved[] = $name;
                     }
                 }
             }
@@ -718,7 +682,7 @@ namespace Textpattern\Skin {
             if (!is_readable($dirPath)) {
                 $this->mergeResult('path_not_readable', array($skin => array($dirPath)));
             } else {
-                if (!$this->getFiles()) {
+                if (!$this->getFiles()) {var_dump($this->files);
                     $this->mergeResult('no_'.$string.'_found', array($skin => array($dirPath)));
                 }
 
@@ -830,56 +794,6 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
-         */
-
-        public function delete($clean = false)
-        {
-            $thisSkin = $this->getSkin();
-            $skin = $thisSkin->getName();
-            $string = self::getString();
-
-            callback_event($string.'.delete', '', 1, array('names' => $names));
-
-            $names = $this->getNames();
-            $done = $ready = array();
-
-            foreach ($names as $name) {
-                $this->setName($name);
-
-                if (!$this->isInstalled()) {
-                    $this->mergeResult($string.'_unknown', $name);
-                } else {
-                    $ready[] = $name;
-                }
-            }
-
-            if ($ready) {
-                if ($this->setNames($ready) && $this->deleteRows()) {
-                    $done = $ready;
-
-                    $remove = array();
-
-                    if ($clean && $this->deleteFiles()) {
-
-                    }
-
-                    $this->mergeResult($string.'_deleted', $ready, 'success');
-
-                    update_lastmod($string.'.delete', $ready);
-
-                    $this->removeEditing();
-                } else {
-                    $this->mergeResult($string.'_deletion_failed', $ready);
-                }
-            }
-
-            callback_event($string.'.delete', '', 0, array('names' => $names));
-
-            return $this;
-        }
-
-        /**
          * Render the Skin switch form.
          *
          * @return HTML
@@ -923,7 +837,7 @@ namespace Textpattern\Skin {
             }
 
             if ($skin) {
-                $skin = $this->getSkin()->setName($skin)->setEditing();
+                $skin = $this->getSkin()->setEditing($skin);
             }
 
             return $this;
