@@ -613,8 +613,7 @@ namespace Textpattern\Skin {
          */
 
         protected function parseFiles() {
-            $rows = array();
-            $row = array();
+            $rows = $row = array();
             $subdirField = self::getSubdirField();
             $string = self::getString();
 
@@ -622,6 +621,9 @@ namespace Textpattern\Skin {
             $parsed = $parsedFiles = $names = array();
 
             if ($files) {
+                $thisSkin = $this->getSkin();
+                $skin = $thisSkin->getName();
+
                 foreach ($files as $file) {
                     $filename = $file->getFilename();
                     $name = pathinfo($filename, PATHINFO_FILENAME);;
@@ -631,9 +633,9 @@ namespace Textpattern\Skin {
                     }
 
                     if (in_array($filename, $parsedFiles)) {
-                        $this->mergeResult($string.'_duplicate', $filename);
+                        $this->mergeResult($string.'_duplicate', array($skin => array($filename)));
                     } elseif ($subdirField && $essentialSubdir && $essentialSubdir !== basename($file->getPath())) {
-                        $this->mergeResult($string.'_wrong_type', $name);
+                        $this->mergeResult($string.'_wrong_subdir', array($skin => array($name.' → '.basename($file->getPath()))));
                     } else {
                         $names[] = $name;
                         $parsed[] = $row['name'] = $name;
