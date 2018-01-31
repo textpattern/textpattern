@@ -38,6 +38,7 @@ namespace Textpattern\Skin {
         protected static $table = 'txp_form';
         protected static $dir = 'forms';
         protected static $subdirField = 'type';
+        protected static $subdirValues = array('article', 'category', 'comment', 'file', 'link', 'section', 'misc');
         protected static $defaultSubdir = 'misc';
         protected static $fileContentsField = 'Form';
         protected static $essential = array(

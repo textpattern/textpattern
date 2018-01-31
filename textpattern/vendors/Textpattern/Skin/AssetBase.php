@@ -278,6 +278,31 @@ namespace Textpattern\Skin {
         }
 
         /**
+         * $defaultSubdir property getter.
+         */
+
+        protected static function getSubdirValues()
+        {
+            return static::$subdirValues;
+        }
+
+        /**
+         * $dir property value related subdirectory parser.
+         *
+         * @param  string $name Subdirectory name.
+         * @return string       The subdirectory name if valid or the default subdirectory.
+         */
+
+        protected static function parseSubdir($name)
+        {
+            if (in_array($name, self::getSubdirValues())) {
+                return $name;
+            } else {
+                return self::getDefaultSubdir();
+            }
+        }
+
+        /**
          * {@inheritdoc}
          */
 
@@ -610,10 +635,11 @@ namespace Textpattern\Skin {
                     } elseif ($subdirField && $essentialSubdir && $essentialSubdir !== basename($file->getPath())) {
                         $this->mergeResult($string.'_wrong_type', $name);
                     } else {
+                        var_dump($filename);
                         $names[] = $name;
                         $parsed[] = $row['name'] = $name;
                         $parsedFiles[] = $filename;
-                        $subdirField ? $row[$subdirField] = basename($file->getPath()) : '';
+                        $subdirField ? $row[$subdirField] = self::parseSubdir(basename($file->getPath())) : '';
                         $row[self::getFileContentsField()] = $file->getContents();
 
                         $rows[] = $row;
