@@ -98,8 +98,6 @@ namespace Textpattern\Skin {
 
          protected $installed;
 
-         private $files;
-
          /**
           * Parent skin object.
           *
@@ -578,7 +576,7 @@ namespace Textpattern\Skin {
          * @return object            RecursiveIteratorIterator
          */
 
-        protected function setFiles()
+        protected function getFiles()
         {
             $templates = array();
             $extension = self::getExtension();
@@ -594,18 +592,7 @@ namespace Textpattern\Skin {
 
             $this->files = $filteredFiles;
 
-            return $this;
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        protected function getFiles()
-        {
-            $this->files === null ? $this->setFiles() : '';
-
-            return $this->files;
+            return $filteredFiles;
         }
 
         /**
