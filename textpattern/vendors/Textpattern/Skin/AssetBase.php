@@ -635,7 +635,6 @@ namespace Textpattern\Skin {
                     } elseif ($subdirField && $essentialSubdir && $essentialSubdir !== basename($file->getPath())) {
                         $this->mergeResult($string.'_wrong_type', $name);
                     } else {
-                        var_dump($filename);
                         $names[] = $name;
                         $parsed[] = $row['name'] = $name;
                         $parsedFiles[] = $filename;
@@ -708,7 +707,7 @@ namespace Textpattern\Skin {
             if (!is_readable($dirPath)) {
                 $this->mergeResult('path_not_readable', array($skin => array($dirPath)));
             } else {
-                if (!$this->getFiles()) {var_dump($this->files);
+                if (!$this->getFiles()) {
                     $this->mergeResult('no_'.$string.'_found', array($skin => array($dirPath)));
                 }
 
