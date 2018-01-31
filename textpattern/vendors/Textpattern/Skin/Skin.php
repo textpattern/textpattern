@@ -89,7 +89,7 @@ namespace Textpattern\Skin {
          * @see        setDirPath(), getDirPath().
          */
 
-        protected static $dirPath;
+        protected $dirPath;
 
         /**
          * {@inheritdoc}
@@ -111,29 +111,29 @@ namespace Textpattern\Skin {
          * $dirPath property setter.
          *
          * @param  string $path          Path (default: get_pref('path_to_site').DS.get_pref('skin_dir')).
-         * @return string self::$dirPath
+         * @return string $this->dirPath
          */
 
-        public static function setDirPath($path = null)
+        public function setDirPath($path = null)
         {
             $path !== null ?: $path = get_pref('path_to_site').DS.get_pref('skin_dir');
 
-            self::$dirPath = rtrim($path, DS);
+            $this->dirPath = rtrim($path, DS);
 
-            return self::getDirPath();
+            return $this->getDirPath();
         }
 
         /**
          * $dirPath property getter
          *
-         * @return string self::$dirPath
+         * @return string $this->dirPath
          */
 
-        protected static function getDirPath()
+        protected function getDirPath()
         {
-            self::$dirPath === null ? self::setDirPath() : '';
+            $this->dirPath === null ? $this->setDirPath() : '';
 
-            return self::$dirPath;
+            return $this->dirPath;
         }
 
         /**
@@ -244,7 +244,7 @@ namespace Textpattern\Skin {
         {
             $name !== null ?: $name = $this->getName();
 
-            return self::getDirPath().DS.$name;
+            return $this->getDirPath().DS.$name;
         }
 
         /**
@@ -364,52 +364,6 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Insert a row into the $table property value related table.
-         *
-         * @param  string $set The SET clause (default: $this->getInfos(true))
-         * @return bool        FALSE on error.
-         */
-
-        protected function createRow($set = null)
-        {
-            $set !== null ?: $set = $this->getInfos(true);
-
-            return safe_insert(self::getTable(), $set);
-        }
-
-        /**
-         * Update the $table property value related table.
-         *
-         * @param  string $set   The SET clause (default: $this->getInfos(true))
-         * @param  string $where The WHERE clause (default: "name = '".doSlash($this->getBase())."'")
-         * @return bool          FALSE on error.
-         */
-
-        protected function updateRow($set = null, $where = null)
-        {
-            $set !== null ?: $set = $this->getInfos(true);
-            $where !== null ?: $where = "name = '".doSlash($this->getBase())."'";
-
-            return safe_update(self::getTable(), $set, $where);
-        }
-
-        /**
-         * Get a row field from the $table property value related table.
-         *
-         * @param  string $things The SELECT clause (default: 'name')
-         * @param  string $where  The WHERE clause (default: "name = '".doSlash($this->getName())."'")
-         * @return mixed          The Field or FALSE on error.
-         */
-
-        protected function getField($thing = null, $where = null)
-        {
-            $thing !== null ?: $thing = 'name';
-            $where !== null ?: $where = "name = '".doSlash($this->getName())."'";
-
-            return safe_field($thing, self::getTable(), $where);
-        }
-
-        /**
          * Get a row from the $table property value related table as an associative array.
          *
          * @param  string $things The SELECT clause (default: 'name, title, version, description, author, author_uri')
@@ -423,45 +377,6 @@ namespace Textpattern\Skin {
             $where !== null ?: $where = "name = '".doSlash($this->getName())."'";
 
             return safe_row($things, self::getTable(), $where);
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        protected function getRows($things = null, $where = null)
-        {
-            $things !== null ?: $things = 'name, title, version, description, author, author_uri';
-            $where !== null ?: $where = "name IN ('".implode("', '", array_map('doSlash', $this->getNames()))."')";
-
-            $rows = safe_rows_start($things, self::getTable(), $where);
-
-            if ($rows) {
-                $skinRows = array();
-
-                while ($row = nextRow($rows)) {
-                    $name = $row['name'];
-                    unset($row['name']);
-                    $skinRows[$name] = $row;
-                }
-            }
-
-            return $skinRows;
-        }
-
-        /**
-         * Delete rows from the $table property value related table.
-         *
-         * @param  string $where The WHERE clause
-         *                       (default: "name IN ('".implode("', '", array_map('doSlash', $this->getNames()))."')")
-         * @return bool          false on error.
-         */
-
-        protected function deleteRows($where = null)
-        {
-            $where !== null ?: $where = "name IN ('".implode("', '", array_map('doSlash', $this->getNames()))."')";
-
-            return safe_delete(self::getTable(), $where);
         }
 
         /**
@@ -494,39 +409,18 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Get files from the $dir property value related directory.
-         *
-         * @param  array  $names    Filenames
-         * @param  int    $maxDepth RecursiveIteratorIterator related property value.
-         * @return object
-         */
-
-        protected static function getFiles($names = null, $maxDepth = null)
-        {
-            $names !== null ?: $names = array(self::getFile());
-            $maxDepth !== null ?: $maxDepth = 1;
-
-            $files = \Txp::get('Textpattern\Iterator\RecDirIterator', self::getDirPath());
-            $filter = \Txp::get('Textpattern\Iterator\RecFilterIterator', $files)->setNames($names);
-            $filteredFiles = \Txp::get('Textpattern\Iterator\RecIteratorIterator', $filter);
-            $filteredFiles->setMaxDepth($maxDepth);
-
-            return $filteredFiles;
-        }
-
-        /**
          * $uploaded property setter.
          *
          * @return object $this.
          */
 
-        protected static function setUploaded()
+        protected function setUploaded()
         {
             self::$uploaded = array();
-            $files = self::getFiles();
+            $files = $this->getFiles(array(self::getFile()), 1);
 
             if ($files) {
-                foreach (self::getFiles() as $file) {
+                foreach ($files as $file) {
                     $filePath = $file->getPath();
                     $name = basename($file->getPath());
 
@@ -537,7 +431,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            return self::getUploaded();
+            return $this->getUploaded();
         }
 
         /**
@@ -546,9 +440,9 @@ namespace Textpattern\Skin {
          * @return array self::$uploaded.
          */
 
-        protected static function getUploaded()
+        protected function getUploaded()
         {
-            return self::$uploaded === null ? self::setUploaded() : self::$uploaded;
+            return self::$uploaded === null ? $this->setUploaded() : self::$uploaded;
         }
 
         /**
@@ -616,7 +510,7 @@ namespace Textpattern\Skin {
 
         protected static function getSearchCount($criteria)
         {
-            return safe_count('txp_skin', $criteria);
+            return safe_count(self::getTable(), $criteria);
         }
 
         /**
@@ -810,6 +704,8 @@ namespace Textpattern\Skin {
                     $this->mergeResult('skin_unknown', $name);
                 } elseif ($this->isInstalled($copy)) {
                     $this->mergeResult('skin_already_exists', $copy);
+                } elseif (is_dir($copyPath = $this->getSubdirPath($copy))) {
+                    $this->mergeResult('skin_already_exists', $copyPath);
                 } else {
                     $ready[] = $name;
                 }
@@ -821,11 +717,11 @@ namespace Textpattern\Skin {
                 if (!$rows) {
                     $this->mergeResult('skin_duplication_failed', $name);
                 } else {
-                    foreach ($rows as $name => $infos) {
-                        extract($infos);
+                    foreach ($rows as $row) {
+                        extract($row);
 
                         $copy = $name.'_copy';
-                        $copyTitle = $title.'_copy';
+                        $copyTitle = $title.' (copy)';
 
                         if (!$this->setInfos($copy, $copyTitle, $version, $description, $author, $author_uri)->createRow()) {
                             $this->mergeResult('skin_duplication_failed', $name);
@@ -981,14 +877,12 @@ namespace Textpattern\Skin {
                 if (!$rows) {
                     $this->mergeResult('skin_unknown', $names);
                 } else {
-                    foreach ($ready as $name) {
+                    foreach ($rows as $row) {
+                        extract($row);
+
                         $this->setName($name);
 
-                        extract($rows[$name]);
-
-                        if (!$rows[$name]) {
-                            $this->mergeResult('skin_unknown', $name);
-                        } elseif ($this->setInfos($name, $title, $version, $description, $author, $author_uri)->createFile() === false) {
+                        if ($this->setInfos($name, $title, $version, $description, $author, $author_uri)->createFile() === false) {
                             $this->mergeResult('skin_export_failed', $name);
                         } else {
                             foreach ($this->getAssets() as $asset) {
@@ -1058,7 +952,7 @@ namespace Textpattern\Skin {
             }
 
             if ($ready) {
-                if ($this->setNames($ready) && $this->deleteRows()) {
+                if ($this->deleteRows("name IN ('".implode("', '", array_map('doSlash', $ready))."')")) {
                     $done = $ready;
 
                     self::removeInstalled($ready);
@@ -1210,7 +1104,7 @@ namespace Textpattern\Skin {
                 )
             );
 
-            $createBlock = has_privs('skin.edit') ? self::renderCreateBlock() : '';
+            $createBlock = has_privs('skin.edit') ? $this->renderCreateBlock() : '';
 
             $contentBlockStart = n.tag_start(
                 'div',
@@ -1390,10 +1284,10 @@ namespace Textpattern\Skin {
          * @see        renderImportForm(), renderCreateButton().
          */
 
-        protected static function renderCreateBlock()
+        protected function renderCreateBlock()
         {
             return tag(
-                self::renderCreateButton().self::renderImportForm(),
+                self::renderCreateButton().$this->renderImportForm(),
                 'div',
                 array('class' => 'txp-control-panel')
             );
@@ -1416,9 +1310,9 @@ namespace Textpattern\Skin {
          * @return HTML The form or a message if no new skin directory is found.
          */
 
-        protected static function renderImportForm()
+        protected function renderImportForm()
         {
-            $new = array_diff_key(self::getUploaded(), self::getInstalled());
+            $new = array_diff_key($this->getUploaded(), self::getInstalled());
 
             if ($new) {
                 return n

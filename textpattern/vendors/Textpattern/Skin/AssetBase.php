@@ -487,60 +487,6 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
-         */
-
-        public function getRows($things = null, $where = null)
-        {
-            if ($things === null) {
-                $things = 'name, ';
-                $subdirField = self::getSubdirField();
-                !$subdirField ?: $things .= $subdirField.', ';
-                $things .= self::getFileContentsField();
-            }
-
-            if ($where === null) {
-                $names = $this->getNames();
-                $nameIn = '';
-
-                if ($names) {
-                    $nameIn = " AND name IN ('".implode("', '", array_map('doSlash', $names))."')";
-                }
-
-                $where = "skin = '".doSlash($this->getSkin()->getName())."'".$nameIn;
-            }
-
-            $rs = safe_rows_start($things, self::getTable(), $where);
-            $rows = array();
-
-            while ($row = nextRow($rs)) {
-                $rows[] = $row;
-            }
-
-            return $rows;
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function deleteRows($where = null)
-        {
-            if ($where === null) {
-                $names = $this->getNames();
-                $nameIn = '';
-
-                if ($names) {
-                    $nameIn = " AND name IN ('".implode("', '", array_map('doSlash', $names))."')";
-                }
-
-                $where = "skin = '".doSlash($this->getSkin()->getName())."'".$nameIn;
-            }
-
-            return safe_delete(self::getTable(), $where);
-        }
-
-        /**
          * Drops obsolete template rows.
          *
          * @param  array $not An array of template names to NOT drop;
@@ -556,55 +502,14 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Updates a skin name in use.
-         *
-         * @param string $name A skin newname.
-         */
-
-         public function updateRow($set = null, $where = null)
-         {
-             $set !== null ?: $set = $this->getInfos(true);
-             $where !== null ?: $where = "skin = '".doSlash($this->getSkin()->getName())."' name = '".doSlash($this->getBase())."'";
-
-             return safe_update(self::getTable(), $set, $where);
-         }
-
-        /**
-         * Gets files from a defined directory.
-         *
-         * @param  array  $templates Template names to filter results;
-         * @return object            RecursiveIteratorIterator
-         */
-
-        protected function getFiles()
-        {
-            $templates = array();
-            $extension = self::getExtension();
-
-            foreach ($this->getNames() as $name) {
-                $templates[] = $name.'.'.$extension;
-            }
-
-            $files = \Txp::get('Textpattern\Iterator\RecDirIterator', $this->getDirPath());
-            $filter = \Txp::get('Textpattern\Iterator\RecFilterIterator', $files)->setNames($templates);
-            $filteredFiles = \Txp::get('Textpattern\Iterator\RecIteratorIterator', $filter);
-            $filteredFiles->setMaxDepth(self::getSubdirField() ? 1 : 0);
-
-            $this->files = $filteredFiles;
-
-            return $filteredFiles;
-        }
-
-        /**
          * {@inheritdoc}
          */
 
-        protected function parseFiles() {
+        protected function parseFiles($files) {
             $rows = $row = array();
             $subdirField = self::getSubdirField();
             $string = self::getString();
 
-            $files = $this->getFiles();
             $parsed = $parsedFiles = $names = array();
 
             if ($files) {
@@ -627,7 +532,17 @@ namespace Textpattern\Skin {
                         $names[] = $name;
                         $parsed[] = $row['name'] = $name;
                         $parsedFiles[] = $filename;
-                        $subdirField ? $row[$subdirField] = self::parseSubdir(basename($file->getPath())) : '';
+                        if ($subdirField) {
+                            $subdir = basename($file->getPath());
+                            $subdirValid = self::parseSubdir($subdir);
+
+                            if ($subdir !== $subdirValid) {
+                                $this->mergeResult($string.'_subdir_change', array($skin => array($name)));
+                            }
+
+                            $row[$subdirField] = $subdirValid;
+                        }
+
                         $row[self::getFileContentsField()] = $file->getContents();
 
                         $rows[] = $row;
@@ -653,7 +568,14 @@ namespace Textpattern\Skin {
 
         protected function deleteExtraFiles($nameNotIn)
         {
-            $files = $this->getFiles();
+            $filenames = array();
+            $extension = self::getExtension();
+
+            foreach ($this->getNames() as $name) {
+                $filenames[] = $name.'.'.$extension;
+            }
+
+            $files = $this->getFiles($filenames, self::getSubdirField() ? 1 : 0);
             $notRemoved = array();
 
             if ($files) {
@@ -696,11 +618,20 @@ namespace Textpattern\Skin {
             if (!is_readable($dirPath)) {
                 $this->mergeResult('path_not_readable', array($skin => array($dirPath)));
             } else {
-                if (!$this->getFiles()) {
+                $filenames = array();
+                $extension = self::getExtension();
+
+                foreach ($this->getNames() as $name) {
+                    $filenames[] = $name.'.'.$extension;
+                }
+
+                $files = $this->getFiles($filenames, self::getSubdirField() ? 1 : 0);
+
+                if (!$files) {
                     $this->mergeResult('no_'.$string.'_found', array($skin => array($dirPath)));
                 }
 
-                if (!$this->createRows($this->parseFiles())) {
+                if (!$this->createRows($this->parseFiles($files))) {
                     $this->mergeResult($string.'_import_failed', array($skin => $names));
                 } else {
                     $done[] = $names;

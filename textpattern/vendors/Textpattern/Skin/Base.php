@@ -455,20 +455,148 @@ namespace Textpattern\Skin {
 
          abstract protected function createFile();
 
+         /**
+          * {@inheritdoc}
+          */
+
+         protected function getRows($things = null, $where = null)
+         {
+             $things !== null ?: $things = '*';
+
+             if ($where === null) {
+                 $names = $this->getNames();
+                 $where = '';
+
+                 if ($names) {
+                     $where = "name IN ('".implode("', '", array_map('doSlash', $names))."')";
+                 }
+
+                 if (property_exists($this, 'skin')) {
+                     !$where ?: $where.= ' AND ';
+                     $where .= "skin = '".doSlash($this->getSkin()->getName())."'";
+                 } elseif (!$where) {
+                     $where = '1=1';
+                 }
+             }
+
+             $rs = safe_rows_start($things, self::getTable(), $where);
+
+             if ($rs) {
+                 $rows = array();
+
+                 while ($row = nextRow($rs)) {
+                     $rows[] = $row;
+                 }
+
+                 return $rows;
+             }
+
+             return array();
+         }
+
         /**
-         * Get the $names (+ $skin) property value(s) related rows.
+         * Get files from the $dir property value related directory.
          *
-         * @return array Associative array of skin names and their related infos.
+         * @param  array  $names    Filenames
+         * @param  int    $maxDepth RecursiveIteratorIterator related property value.
+         * @return object
          */
 
-        abstract protected function getRows();
+        protected function getFiles($names = null, $maxDepth = 0)
+        {
+            $files = \Txp::get('Textpattern\Iterator\RecDirIterator', $this->getDirPath());
+            $filter = \Txp::get('Textpattern\Iterator\RecFilterIterator', $files)->setNames($names);
+            $filteredFiles = \Txp::get('Textpattern\Iterator\RecIteratorIterator', $filter);
+            $filteredFiles->setMaxDepth($maxDepth);
+
+            return $filteredFiles;
+        }
 
         /**
-         * Delete the $names (+ $skin) property value(s) related rows.
+         * Insert a row into the $table property value related table.
          *
-         * @return bool false on error.
+         * @param  string $set The SET clause (default: $this->getInfos(true))
+         * @return bool        FALSE on error.
          */
 
-        abstract protected function deleteRows();
+        public function createRow($set = null)
+        {
+            $set !== null ?: $set = $this->getInfos(true);
+
+            if (property_exists($this, 'skin')) {
+                $set .= " skin = '".doSlash($this->getSkin()->getName())."'";
+            }
+
+            return safe_insert(self::getTable(), $set);
+        }
+
+        /**
+         * Update the $table property value related table.
+         *
+         * @param  string $set   The SET clause (default: $this->getInfos(true))
+         * @param  string $where The WHERE clause (default: "name = '".doSlash($this->getBase())."'")
+         * @return bool          FALSE on error.
+         */
+
+        public function updateRow($set = null, $where = null)
+        {
+            $set !== null ?: $set = $this->getInfos(true);
+            $where !== null ?: $where = "name = '".doSlash($this->getBase())."'";
+
+            if (property_exists($this, 'skin')) {
+                $where .= " AND skin = '".doSlash($this->getSkin()->getName())."'";
+            }
+
+            return safe_update(self::getTable(), $set, $where);
+        }
+
+        /**
+         * Get a row field from the $table property value related table.
+         *
+         * @param  string $things The SELECT clause (default: 'name')
+         * @param  string $where  The WHERE clause (default: "name = '".doSlash($this->getName())."'")
+         * @return mixed          The Field or FALSE on error.
+         */
+
+        public function getField($thing = null, $where = null)
+        {
+            $thing !== null ?: $thing = 'name';
+            $where !== null ?: $where = "name = '".doSlash($this->getName())."'";
+
+            if (property_exists($this, 'skin')) {
+                $where .= " AND skin = '".doSlash($this->getSkin()->getName())."'";
+            }
+
+            return safe_field($thing, self::getTable(), $where);
+        }
+
+        /**
+         * Delete rows from the $table property value related table.
+         *
+         * @param  string $where The WHERE clause
+         *                       (default: "name IN ('".implode("', '", array_map('doSlash', $this->getNames()))."')")
+         * @return bool          false on error.
+         */
+
+        public function deleteRows($where = null)
+        {
+            if ($where === null) {
+                $names = $this->getNames();
+                $where = '';
+
+                if ($names) {
+                    $where = "name IN ('".implode("', '", array_map('doSlash', $names))."')";
+                }
+
+                if (property_exists($this, 'skin')) {
+                    !$where ?: $where.= ' AND ';
+                    $where .= "skin = '".doSlash($this->getSkin()->getName())."'";
+                } elseif (!$where) {
+                    $where = '1=1';
+                }
+            }
+
+            return safe_delete(self::getTable(), $where);
+        }
     }
 }
