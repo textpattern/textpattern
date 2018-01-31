@@ -913,8 +913,12 @@ namespace Textpattern\Skin {
                             // Start working with the skin related assets.
                             foreach ($this->getAssets() as $asset) {
                                 $asset->import($clean, $override);
-                                $this->mergeResults($asset, array('warning', 'error'));
-                                is_array($asset->getMessage()) ? $assetFailed = true : '';
+
+                                if (is_array($asset->getMessage())) {
+                                    $assetFailed = true;
+
+                                    $this->mergeResults($asset, array('warning', 'error'));
+                                }
                             }
                         }
 
@@ -989,8 +993,12 @@ namespace Textpattern\Skin {
                         } else {
                             foreach ($this->getAssets() as $asset) {
                                 $asset->export($clean, $override);
-                                $this->mergeResults($asset, array('warning', 'error'));
-                                is_array($asset->getMessage()) ? $assetFailed = true : '';
+
+                                if (is_array($asset->getMessage())) {
+                                    $assetFailed = true;
+
+                                    $this->mergeResults($asset, array('warning', 'error'));
+                                }
                             }
 
                             if (!isset($assetFailed)) {
@@ -1065,7 +1073,11 @@ namespace Textpattern\Skin {
 
                     // Remove all skins files and directories if needed.
                     if ($clean && !$this->deleteFiles(null, $ready)) {
-                        $this->mergeResult('skin_files_deletion_failed', $name);
+                        foreach ($ready as $name) {
+                            if (is_dir($this->getSubdirPath($name)) && !$this->deleteFiles($name)) {
+                                $this->mergeResult('skin_files_deletion_failed', $name);
+                            }
+                        }
                     }
 
                     update_lastmod('skin.delete', $ready);
@@ -1092,7 +1104,8 @@ namespace Textpattern\Skin {
 
         protected function deleteFiles($root = null, $files = null)
         {
-            $root !== null ?: $root = $this->getDirPath();
+            $dirPath = $this->getDirPath();
+            $root = $root === null ? $dirPath : $dirPath.DS.$root;
 
             return \Txp::get('Textpattern\Admin\Tools')::removeFiles($root, $files);
         }
