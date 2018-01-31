@@ -227,7 +227,7 @@ namespace Textpattern\Skin {
             if (self::$installed === null) {
                 $isInstalled = (bool) $this->getField('name', "name = '".$name."'");
             } else {
-                $isInstalled = in_array($name, array_values(self::getInstalled()));
+                $isInstalled = in_array($name, array_keys(self::getInstalled()));
             }
 
             return $isInstalled;
@@ -905,7 +905,7 @@ namespace Textpattern\Skin {
 
                         if (!$override && !$this->createRow()) {
                             $this->mergeResult('skin_import_failed', $name);
-                        } elseif ($override && !$this->setBase($name)->updateRow()) {
+                        } elseif ($override && !$this->updateRow(null, "name = '".doSlash($this->getBase())."'")) {
                             $this->mergeResult('skin_import_failed', $name);
                         } else {
                             self::mergeInstalled(array($name => $title));
