@@ -35,9 +35,9 @@ namespace Textpattern\Skin {
     class Skin extends Base
     {
         /**
-         * Skin(s) assets related objects.
+         * Skin assets related objects.
          *
-         * @var array
+         * @var array Page, Form and CSS class objects.
          * @see       setAssets().
          */
 
@@ -56,7 +56,7 @@ namespace Textpattern\Skin {
         protected static $string = 'skin';
 
         /**
-         * The skin related main JSON file.
+         * Class related main file.
          *
          * @var string Filename.
          * @see        getFile().
@@ -83,10 +83,10 @@ namespace Textpattern\Skin {
         protected static $installed;
 
         /**
-         * Class related asset names to work with.
+         * Class related directory path.
          *
-         * @var array Names.
-         * @see       setNames(), getNames().
+         * @var string Path.
+         * @see        setDirPath(), getDirPath().
          */
 
         protected static $dirPath;
@@ -110,16 +110,13 @@ namespace Textpattern\Skin {
         /**
          * $dirPath property setter.
          *
-         * Set the skin related directory path from the parameter value
-         * or from the path_to_site and the skin_dir pref values.
-         *
-         * @param  string $path             Path.
-         * @return string self::$dirPath Path.
+         * @param  string $path          Path (default: get_pref('path_to_site').DS.get_pref('skin_dir')).
+         * @return string self::$dirPath
          */
 
         public static function setDirPath($path = null)
         {
-            $path === null ? $path = get_pref('path_to_site').DS.get_pref('skin_dir') : '';
+            $path !== null ?: $path = get_pref('path_to_site').DS.get_pref('skin_dir');
 
             self::$dirPath = rtrim($path, DS);
 
@@ -129,8 +126,7 @@ namespace Textpattern\Skin {
         /**
          * $dirPath property getter
          *
-         * @return string self::$dirPath Path.
-         * @see                             setDirPath().
+         * @return string self::$dirPath
          */
 
         protected static function getDirPath()
@@ -143,9 +139,10 @@ namespace Textpattern\Skin {
         /**
          * $assets property setter.
          *
-         * @param array $pages  Page names to work with;
-         * @param array $forms  Form names to work with;
-         * @param array $styles CSS names to work with.
+         * @param array   $pages  Page names to work with;
+         * @param array   $forms  Form names to work with;
+         * @param array   $styles CSS names to work with.
+         * @return object $this
          */
 
         public function setAssets($pages = null, $forms = null, $styles = null)
@@ -166,8 +163,7 @@ namespace Textpattern\Skin {
         /**
          * $assets property getter.
          *
-         * @return $this->$assets
-         * @see                   setAssets().
+         * @return array $this->$assets
          */
 
         protected function getAssets()
@@ -187,7 +183,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * $infos+$name properties setter.
+         * $infos and $name properties setter.
          *
          * @param  string $name        Skin name;
          * @param  string $title       Skin title;
@@ -195,8 +191,7 @@ namespace Textpattern\Skin {
          * @param  string $description Skin description;
          * @param  string $author      Skin author;
          * @param  string $author_uri  Skin author URL;
-         * @return object $this->name  The current object (chainable).
-         * @see                        \sanitizeForTheme().
+         * @return object $this
          */
 
         public function setInfos(
@@ -221,7 +216,8 @@ namespace Textpattern\Skin {
         /**
          * Whether a skin is installed or not.
          *
-         * @see          getName(), getInstalled().
+         * @param  string $name Skin name (default: $this->getName()).
+         * @return bool
          */
 
         public function isInstalled($name = null)
@@ -242,10 +238,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Get a skin directory path.
+         * Get a $dir property value related subdirectory path.
          *
-         * @param string $name Skin name (uses the $name property value if null)
-         * @see          getName(), getDirPath().
+         * @param string  $name Directory(/skin) name (default: $this->getName()).
+         * @return string       The Path
          */
 
         public function getSubdirPath($name = null)
@@ -256,10 +252,9 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Get a skin directory path.
+         * $file property getter.
          *
-         * @param string $name Skin name (uses the $name property value if null)
-         * @see          getSubdirPath().
+         * @return string self::$file.
          */
 
         protected static function getFile()
@@ -268,10 +263,9 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Get a skin directory path.
+         * Get the $file property value related path.
          *
-         * @param string $name Skin name (uses the $name property value if null)
-         * @see          getSubdirPath().
+         * @return string Path.
          */
 
         protected function getFilePath()
@@ -280,10 +274,9 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Get and complete the skin related JSON file contents.
+         * Get and complete the skin related file contents.
          *
-         * @param array Associative array of JSON fields and their related values / fallback values.
-         * @see         getName(), getFilePath().
+         * @return array Associative array of JSON fields and their related values / fallback values.
          */
 
         protected function getFileContents()
@@ -323,10 +316,11 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Update the $base property value related skin sections
-         * to the $name property value.
+         * Update the txp_section table.
          *
-         * @return bool false on error.
+         * @param  string $set   The SET clause (default: "skin = '".doSlash($this->getName())."'")
+         * @param  string $where The WHERE clause (default: "skin = '".doSlash($this->getBase())."'")
+         * @return bool          FALSE on error.
          */
 
         protected function updateSections($set = null, $where = null)
@@ -363,9 +357,9 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Set the skin_editing pref value to the skin name used by the default section.
+         * Get the skin name used by the default section.
          *
-         * @return bool false on error.
+         * @return mixed Skin name or FALSE on error.
          */
 
         public static function getDefault()
@@ -374,9 +368,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Insert a new row from the $infos property values.
+         * Insert a row into the $table property value related table.
          *
-         * @return bool false on error.
+         * @param  string $set The SET clause (default: $this->getInfos(true))
+         * @return bool        FALSE on error.
          */
 
         protected function createRow($set = null)
@@ -387,10 +382,11 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Update the $base property value(s) related row
-         * with the $infos property related values.
+         * Update the $table property value related table.
          *
-         * @return bool false on error.
+         * @param  string $set   The SET clause (default: $this->getInfos(true))
+         * @param  string $where The WHERE clause (default: "name = '".doSlash($this->getBase())."'")
+         * @return bool          FALSE on error.
          */
 
         protected function updateRow($set = null, $where = null)
@@ -402,7 +398,11 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Get a row from the $table property value related table as an associative array.
+         *
+         * @param  string $set   The SELECT clause (default: 'name, title, version, description, author, author_uri')
+         * @param  string $where The WHERE clause (default: "name = '".doSlash($this->getName())."'")
+         * @return bool          Array.
          */
 
         protected function getRow($things = null, $where = null)
@@ -438,7 +438,11 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Delete rows from the $table property value related table.
+         *
+         * @param  string $where The WHERE clause
+         *                       (default: "name IN ('".implode("', '", array_map('doSlash', $this->getNames()))."')")
+         * @return bool          false on error.
          */
 
         protected function deleteRows($where = null)
@@ -449,11 +453,17 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Create a file in the $dir property value related directory.
+         *
+         * @param  string $pathname The file related path (default: $this->getName().DS.self::getFile()).
+         * @param  mixed  $contents The file related contents as as a string or
+         *                          as an associative array for a .json file
+         *                          (uses the $infos property related array).
+         * @return bool             Written octets number or FALSE on error.
          */
 
-        protected function createFile($path = null, $contents = null) {
-            $path !== null ?: $path = $this->getName().DS.self::getFile();
+        protected function createFile($pathname = null, $contents = null) {
+            $pathname !== null ?: $pathname = $this->getName().DS.self::getFile();
 
             if ($contents === null) {
                 $contents = array_merge(
@@ -464,26 +474,27 @@ namespace Textpattern\Skin {
                 unset($contents['name']);
             }
 
-            if (pathinfo($path, PATHINFO_EXTENSION) === 'json') {
+            if (pathinfo($pathname, PATHINFO_EXTENSION) === 'json') {
                 $contents = JSONPrettyPrint(json_encode($contents, TEXTPATTERN_JSON));
             }
 
-            return (bool) file_put_contents($this->getDirPath().DS.$path, $contents);
+            return file_put_contents($this->getDirPath().DS.$pathname, $contents);
         }
 
         /**
-         * Gets Skins related files.
+         * Get files from the $dir property value related directory.
          *
+         * @param  array  $names    Filenames
+         * @param  int    $maxDepth RecursiveIteratorIterator related property value.
          * @return object
          */
 
-        protected static function getFiles($root = null, $names = null, $maxDepth = null)
+        protected static function getFiles($names = null, $maxDepth = null)
         {
-            $root !== null ?: $root = self::getDirPath();
             $names !== null ?: $names = array(self::getFile());
             $maxDepth !== null ?: $maxDepth = 1;
 
-            $files = \Txp::get('Textpattern\Iterator\RecDirIterator', $root);
+            $files = \Txp::get('Textpattern\Iterator\RecDirIterator', self::getDirPath());
             $filter = \Txp::get('Textpattern\Iterator\RecFilterIterator', $files)->setNames($names);
             $filteredFiles = \Txp::get('Textpattern\Iterator\RecIteratorIterator', $filter);
             $filteredFiles->setMaxDepth($maxDepth);
@@ -494,8 +505,7 @@ namespace Textpattern\Skin {
         /**
          * $uploaded property setter.
          *
-         * @return object $this The current object (chainable).
-         * @see                 getFiles(), getJSONContents().
+         * @return object $this.
          */
 
         protected static function setUploaded()
@@ -521,8 +531,7 @@ namespace Textpattern\Skin {
         /**
          * $uploaded property getter.
          *
-         * @return array self::directories Associative array of importable skin names and titles.
-         * @see                              setUploaded().
+         * @return array self::$uploaded.
          */
 
         protected static function getUploaded()
@@ -531,9 +540,9 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * $installed property setter.
+         * $installed property merger.
          *
-         * @param object $this The current object (chainable).
+         * @param array self::$installed.
          */
 
         protected static function mergeInstalled($skins)
@@ -546,7 +555,7 @@ namespace Textpattern\Skin {
         /**
          * $installed property setter.
          *
-         * @param object $this The current object (chainable).
+         * @param array self::$installed.
          */
 
         protected static function setInstalled()
@@ -565,8 +574,7 @@ namespace Textpattern\Skin {
         /**
          * $installed property getter.
          *
-         * @return array Associative array of installed skin names and titles.
-         * @see          setInstalled().
+         * @return array self::$installed.
          */
 
         public static function getInstalled()
@@ -575,9 +583,9 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * $installed property unsetter.
+         * $installed property remover.
          *
-         * @return object $this.
+         * @return array self::$installed.
          */
 
         protected static function removeInstalled($names)
@@ -586,6 +594,8 @@ namespace Textpattern\Skin {
                 self::getInstalled(),
                 array_fill_keys($names, '')
             );
+
+            return self::getInstalled();
         }
 
         /**
@@ -962,7 +972,7 @@ namespace Textpattern\Skin {
 
                         if (!$rows[$name]) {
                             $this->mergeResult('skin_unknown', $name);
-                        } elseif (!$this->setInfos($name, $title, $version, $description, $author, $author_uri)->createFile()) {
+                        } elseif ($this->setInfos($name, $title, $version, $description, $author, $author_uri)->createFile() === false) {
                             $this->mergeResult('skin_export_failed', $name);
                         } else {
                             foreach ($this->getAssets() as $asset) {
@@ -1042,7 +1052,7 @@ namespace Textpattern\Skin {
                     $this->mergeResult('skin_deleted', $ready, 'success');
 
                     // Remove all skins files and directories if needed.
-                    if ($clean && !$this->deleteFiles($this->getDirPath(), $ready)) {
+                    if ($clean && !$this->deleteFiles(null, $ready)) {
                         $this->mergeResult('skin_files_deletion_failed', $name);
                     }
 
@@ -1061,11 +1071,17 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Delete Files from the $dir property value related dirstory.
+         *
+         * @param  string $root  File related root.
+         * @param  string $files File names.
+         * @return bool   0 on error.
          */
 
         protected function deleteFiles($root = null, $files = null)
         {
+            $root !== null ?: $root = $this->getDirPath();
+
             return \Txp::get('Textpattern\Admin\Tools')::removeFiles($root, $files);
         }
 
