@@ -225,11 +225,7 @@ namespace Textpattern\Skin {
             $name !== null ?: $name = $this->getName();
 
             if (self::$installed === null) {
-                $isInstalled = (bool) safe_field(
-                    'name',
-                    self::getTable(),
-                    "name = '".doSlash($name)."'"
-                );
+                $isInstalled = (bool) $this->getField('name', "name = '".$name."'");
             } else {
                 $isInstalled = in_array($name, array_values(self::getInstalled()));
             }
@@ -398,11 +394,27 @@ namespace Textpattern\Skin {
         }
 
         /**
+         * Get a row field from the $table property value related table.
+         *
+         * @param  string $things The SELECT clause (default: 'name')
+         * @param  string $where  The WHERE clause (default: "name = '".doSlash($this->getName())."'")
+         * @return mixed          The Field or FALSE on error.
+         */
+
+        protected function getField($thing = null, $where = null)
+        {
+            $thing !== null ?: $thing = 'name';
+            $where !== null ?: $where = "name = '".doSlash($this->getName())."'";
+
+            return safe_field($thing, self::getTable(), $where);
+        }
+
+        /**
          * Get a row from the $table property value related table as an associative array.
          *
-         * @param  string $set   The SELECT clause (default: 'name, title, version, description, author, author_uri')
-         * @param  string $where The WHERE clause (default: "name = '".doSlash($this->getName())."'")
-         * @return bool          Array.
+         * @param  string $things The SELECT clause (default: 'name, title, version, description, author, author_uri')
+         * @param  string $where  The WHERE clause (default: "name = '".doSlash($this->getName())."'")
+         * @return bool           Array.
          */
 
         protected function getRow($things = null, $where = null)
