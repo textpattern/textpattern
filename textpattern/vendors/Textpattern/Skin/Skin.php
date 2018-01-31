@@ -1072,9 +1072,9 @@ namespace Textpattern\Skin {
                     $this->mergeResult('skin_deleted', $ready, 'success');
 
                     // Remove all skins files and directories if needed.
-                    if ($clean && !$this->deleteFiles(null, $ready)) {
+                    if ($clean) {
                         foreach ($ready as $name) {
-                            if (is_dir($this->getSubdirPath($name)) && !$this->deleteFiles($name)) {
+                            if (is_dir($this->getSubdirPath($name)) && !$this->deleteFiles(array($name))) {
                                 $this->mergeResult('skin_files_deletion_failed', $name);
                             }
                         }
@@ -1097,17 +1097,13 @@ namespace Textpattern\Skin {
         /**
          * Delete Files from the $dir property value related dirstory.
          *
-         * @param  string $root  File related root.
-         * @param  string $files File names.
+         * @param  string $names directory/file names.
          * @return bool   0 on error.
          */
 
-        protected function deleteFiles($root = null, $files = null)
+        protected function deleteFiles($names = null)
         {
-            $dirPath = $this->getDirPath();
-            $root = $root === null ? $dirPath : $dirPath.DS.$root;
-
-            return \Txp::get('Textpattern\Admin\Tools')::removeFiles($root, $files);
+            return \Txp::get('Textpattern\Admin\Tools')::removeFiles($this->getDirPath(), $names);
         }
 
         /**
