@@ -65,11 +65,12 @@ namespace Textpattern\Iterator {
             } else {
                 $isValid = false;
                 $names = $this->getNames();
+                $filename = $this->getFilename();
 
-                if (!$this->isDot() &&
+                if ('.' !== substr($filename, 0, 1) &&
                     $this->isReadable() &&
                     ($this->isFile() || $this->isLink()) &&
-                    (($names && in_array($this->getFilename(), $names)) || !$names)
+                    (($names && in_array($filename, $names)) || !$names)
                 ) {
                     return true;
                 }
