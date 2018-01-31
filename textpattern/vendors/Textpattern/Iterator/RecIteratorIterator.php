@@ -43,15 +43,5 @@ namespace Textpattern\Iterator {
 
     class RecIteratorIterator extends \RecursiveIteratorIterator
     {
-        /**
-         * {@inheritdoc}
-         *
-         * @param int $depth Set the MaxDepth property.
-         */
-
-        public function __construct(RecFilterIterator $iterator)
-        {
-            parent::__construct($iterator);
-        }
     }
 }
