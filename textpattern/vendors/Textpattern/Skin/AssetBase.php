@@ -598,8 +598,8 @@ namespace Textpattern\Skin {
 
             if ($files) {
                 foreach ($files as $file) {
-                    $name = pathinfo($file->getFilename(), PATHINFO_FILENAME);;
                     $filename = $file->getFilename();
+                    $name = pathinfo($filename, PATHINFO_FILENAME);;
 
                     if ($subdirField) {
                         $essentialSubdir = implode('', $this->getEssential($subdirField, 'name', array($name)));
