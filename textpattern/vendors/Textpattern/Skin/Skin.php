@@ -1312,24 +1312,35 @@ namespace Textpattern\Skin {
 
         protected function renderImportForm()
         {
-            $new = array_diff_key($this->getUploaded(), self::getInstalled());
+            $dirPath = $this->getDirPath();
 
-            if ($new) {
+            if (is_dir($dirPath) && is_writable($dirPath)) {
+                $new = array_diff_key($this->getUploaded(), $this->getInstalled());
+
+                if ($new) {
+                    return n
+                        .tag_start('form', array(
+                            'id'     => 'skin_import_form',
+                            'name'   => 'skin_import_form',
+                            'method' => 'post',
+                            'action' => 'index.php',
+                        ))
+                        .tag(gTxt('import_skin'), 'label', array('for' => 'skin_import'))
+                        .popHelp('skin_import')
+                        .selectInput('skins', $new, '', true, false, 'skins')
+                        .eInput('skin')
+                        .sInput('import')
+                        .fInput('submit', '', gTxt('upload'))
+                        .n
+                        .tag_end('form');
+                }
+            } else {
                 return n
-                    .tag_start('form', array(
-                        'id'     => 'skin_import_form',
-                        'name'   => 'skin_import_form',
-                        'method' => 'post',
-                        'action' => 'index.php',
-                    ))
-                    .tag(gTxt('import_skin'), 'label', array('for' => 'skin_import'))
-                    .popHelp('skin_import')
-                    .selectInput('skins', $new, '', true, false, 'skins')
-                    .eInput('skin')
-                    .sInput('import')
-                    .fInput('submit', '', gTxt('upload'))
-                    .n
-                    .tag_end('form');
+                    .graf(
+                        span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+                        gTxt('img_dir_not_writeable', array('{imgdir}' => $dirPath)),
+                        array('class' => 'alert-block warning')
+                    );
             }
         }
 
