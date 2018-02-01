@@ -303,8 +303,17 @@ namespace Textpattern\Skin {
          * @return bool
          */
 
-        protected function getCleaningPref() {
-            return get_pref('remove_extra_templates', true);
+        protected function getCleaningPref()
+        {
+            global $prefs;
+
+            $value = get_pref('remove_extra_templates', true);
+
+            if (!isset($prefs['remove_extra_templates'])) {
+                $prefs['remove_extra_templates'] = $value;
+            }
+
+            return $value;
         }
 
         /**
