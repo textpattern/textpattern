@@ -89,15 +89,6 @@ namespace Textpattern\Skin {
 
         protected static $essential = array();
 
-        /**
-         * Whether the skin is installed or not.
-         *
-         * @var array Installed skins.
-         * @see       getInstalled(), isInstalled().
-         */
-
-         protected $installed;
-
          /**
           * Parent skin object.
           *
@@ -200,7 +191,7 @@ namespace Textpattern\Skin {
                     }
                 }
             } else {
-                $key === null ? $key = 'name' : '';
+                $key !== null ?: $key = 'name';
                 $keyValues = array();
 
                 foreach (static::$essential as $row) {
@@ -331,9 +322,8 @@ namespace Textpattern\Skin {
         protected function isInstalled()
         {
             if ($this->installed === null) {
-                $isInstalled = (bool) safe_field(
+                $isInstalled = (bool) $this->getField(
                     'name',
-                    self::getTable(),
                     "name = '".doSlash($this->getName())."' AND skin = '".doSlash($this->getSkin()->getName())."'"
                 );
             } else {
@@ -349,7 +339,7 @@ namespace Textpattern\Skin {
 
         public static function getEditing()
         {
-            return get_pref('last_'.self::getString().'_saved', 'default', true);
+            return get_pref('last_'.self::getEvent().'_saved', 'default', true);
         }
 
         /**
@@ -361,10 +351,10 @@ namespace Textpattern\Skin {
             global $prefs;
 
             $name !== null ?: $name = $this->getName();
-            $prefs['last_'.self::getString().'_saved'] = $name;
+            $prefs['last_'.self::getEvent().'_saved'] = $name;
 
             return set_pref(
-                'last_'.self::getString().'_saved',
+                'last_'.self::getEvent().'_saved',
                 $name,
                 'skin',
                 PREF_HIDDEN,
@@ -382,10 +372,10 @@ namespace Textpattern\Skin {
         {
             global $prefs;
 
-            $string = $this->getString();
+            $event = $this->getEvent();
 
-            unset($prefs['last_'.$string.'_saved']);
-            return remove_pref('last_'.$string.'_saved', $string);
+            unset($prefs['last_'.$event.'_saved']);
+            return remove_pref('last_'.$event.'_saved', $event);
         }
 
 
@@ -400,10 +390,10 @@ namespace Textpattern\Skin {
             global $prefs;
 
             $name = safe_field('page', 'txp_section', 'name = "default"');
-            $prefs['last_'.self::getString().'_saved'] = $name;
+            $prefs['last_'.self::getEvent().'_saved'] = $name;
 
             return set_pref(
-                'last_'.self::getString().'_saved',
+                'last_'.self::getEvent().'_saved',
                 $name,
                 'skin',
                 PREF_HIDDEN,
@@ -448,7 +438,7 @@ namespace Textpattern\Skin {
 
         public function createRows($rows = null)
         {
-            $rows === null ? $rows = self::getEssential() : '';
+            $rows !== null ?: $rows = self::getEssential();
 
             $skin = $this->getSkin()->getName();
             $fields = array('skin', 'name');
@@ -508,7 +498,7 @@ namespace Textpattern\Skin {
         protected function parseFiles($files) {
             $rows = $row = array();
             $subdirField = self::getSubdirField();
-            $string = self::getString();
+            $event = self::getEvent();
 
             $parsed = $parsedFiles = $names = array();
 
@@ -525,9 +515,9 @@ namespace Textpattern\Skin {
                     }
 
                     if (in_array($filename, $parsedFiles)) {
-                        $this->mergeResult($string.'_duplicate', array($skin => array($filename)));
+                        $this->mergeResult($event.'_duplicate', array($skin => array($filename)));
                     } elseif ($subdirField && $essentialSubdir && $essentialSubdir !== basename($file->getPath())) {
-                        $this->mergeResult($string.'_wrong_subdir', array($skin => array($name.' → '.basename($file->getPath()))));
+                        $this->mergeResult($event.'_wrong_subdir', array($skin => array($name.' → '.basename($file->getPath()))));
                     } else {
                         $names[] = $name;
                         $parsed[] = $row['name'] = $name;
@@ -537,7 +527,7 @@ namespace Textpattern\Skin {
                             $subdirValid = self::parseSubdir($subdir);
 
                             if ($subdir !== $subdirValid) {
-                                $this->mergeResult($string.'_subdir_change', array($skin => array($name)));
+                                $this->mergeResult($event.'_subdir_change', array($skin => array($name)));
                             }
 
                             $row[$subdirField] = $subdirValid;
@@ -605,9 +595,9 @@ namespace Textpattern\Skin {
             $thisSkin = $this->getSkin();
             $skin = $thisSkin->getName();
             $names = $this->getNames();
-            $string = self::getString();
+            $event = self::getEvent();
 
-            callback_event($string.'.import', '', 1, array(
+            callback_event($event.'.import', '', 1, array(
                 'skin'  => $skin,
                 'names' => $names,
             ));
@@ -628,26 +618,26 @@ namespace Textpattern\Skin {
                 $files = $this->getFiles($filenames, self::getSubdirField() ? 1 : 0);
 
                 if (!$files) {
-                    $this->mergeResult('no_'.$string.'_found', array($skin => array($dirPath)));
+                    $this->mergeResult('no_'.$event.'_found', array($skin => array($dirPath)));
                 }
 
                 if (!$this->createRows($this->parseFiles($files))) {
-                    $this->mergeResult($string.'_import_failed', array($skin => $names));
+                    $this->mergeResult($event.'_import_failed', array($skin => $names));
                 } else {
                     $done[] = $names;
 
-                    $this->mergeResult($string.'_imported', array($skin => $names), 'success');
+                    $this->mergeResult($event.'_imported', array($skin => $names), 'success');
                 }
 
                 // Drops extra rows…
                 if ($clean) {
                     if (!$this->deleteExtraRows()) {
-                        $this->mergeResult($string.'_cleaning_failed', array($skin => $notCleaned));
+                        $this->mergeResult($event.'_cleaning_failed', array($skin => $notCleaned));
                     }
                 }
             }
 
-            callback_event($string.'.import', '', 0, array(
+            callback_event($event.'.import', '', 0, array(
                 'skin'  => $skin,
                 'names' => $names,
                 'done'  => $done,
@@ -669,21 +659,31 @@ namespace Textpattern\Skin {
             $skin = $thisSkin->getName();
             $names = $this->getNames();
 
-            $string = self::getString();
+            $event = self::getEvent();
 
-            callback_event($string.'.export', '', 1, array(
+            callback_event($event.'.export', '', 1, array(
                 'skin'  => $skin,
                 'names' => $names,
             ));
 
             $done = array();
-            $string = self::getString();
+            $event = self::getEvent();
             $dirPath = $this->getDirPath();
 
             if (!is_writable($dirPath) && !@mkdir($dirPath)) {
                 $this->mergeResult('path_not_writable', array($skin => array($dirPath)));
             } else {
-                $rows = $this->getRows();
+                $ready = array();
+
+                foreach ($names as $name) {
+                    if (!$this->isInstalled()) {
+                        $this->mergeResult($event.'_unknown', array($skin => array($name)));
+                    } else {
+                        $ready[] = $name;
+                    }
+                }
+
+                $rows = $this->setNames($ready)->getRows();
 
                 if (!$rows) {
                     $failed[$skin] = $empty[$skin] = $dirPath;
@@ -700,7 +700,7 @@ namespace Textpattern\Skin {
                             $subdirPath = $this->setInfos($name, $$subdirField, $$contentsField)->getSubdirPath();
 
                             if (!is_dir($subdirPath) && !@mkdir($subdirPath)) {
-                                $this->mergeResult($string.'_not_writable', array($skin => array($name)));
+                                $this->mergeResult($event.'_not_writable', array($skin => array($name)));
                                 $ready = false;
                             }
                         } else {
@@ -709,9 +709,9 @@ namespace Textpattern\Skin {
 
                         if ($ready) {
                             if ($this->createFile() === false) {
-                                $this->mergeResult($string.'_export_failed', array($skin => array($name)));
+                                $this->mergeResult($event.'_export_failed', array($skin => array($name)));
                             } else {
-                                $this->mergeResult($string.'_exported', array($skin => array($name)), 'success');
+                                $this->mergeResult($event.'_exported', array($skin => array($name)), 'success');
 
                                 $done[] = $name;
                             }
@@ -724,12 +724,12 @@ namespace Textpattern\Skin {
                     $notUnlinked = $this->deleteExtraFiles($done);
 
                     if ($notUnlinked) {
-                        $this->mergeResult($string.'_cleaning_failed', array($skin => $notUnlinked));
+                        $this->mergeResult($event.'_cleaning_failed', array($skin => $notUnlinked));
                     }
                 }
             }
 
-            callback_event($string.'.export', '', 1, array(
+            callback_event($event.'.export', '', 1, array(
                 'skin'  => $skin,
                 'names' => $names,
                 'done'  => $done,
@@ -747,7 +747,7 @@ namespace Textpattern\Skin {
         public function renderSelectEdit()
         {
             $thisSkin = $this->getSkin();
-            $skins = $thisSkin::getInstalled();
+            $skins = $thisSkin->getInstalled();
 
             if (count($skins) > 1) {
                 return form(
@@ -756,8 +756,8 @@ namespace Textpattern\Skin {
                         selectInput('skin', $skins, $thisSkin::getEditing(), false, 1, 'skin'),
                         'skin'
                     )
-                    .eInput(self::getString())
-                    .sInput(self::getString().'_skin_change'),
+                    .eInput(self::getEvent())
+                    .sInput(self::getEvent().'_skin_change'),
                     '',
                     '',
                     'post'

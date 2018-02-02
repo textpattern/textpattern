@@ -47,10 +47,10 @@ namespace Textpattern\Skin {
          * Class related textpack string (usually the event name).
          *
          * @var string 'skin', 'page', 'form', 'css', etc.
-         * @see        getString().
+         * @see        getEvent().
          */
 
-        protected static $string;
+        protected static $event;
 
         /**
          * Skin/templates directory/files name(s) pattern.
@@ -60,6 +60,15 @@ namespace Textpattern\Skin {
          */
 
         protected static $namePattern = '[a-zA-Z0-9_\-\.]{0,63}';
+
+        /**
+         * Installed.
+         *
+         * @var array Associative array of skin names and their titles.
+         * @see       setUploaded(), getUploaded().
+         */
+
+        protected static $installed;
 
         /**
          * Class related skin/template names to work with.
@@ -123,14 +132,14 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * $string property getter.
+         * $event property getter.
          *
          * @return string static::$table Class related textpack string (usually the event name).
          */
 
-        public static function getString()
+        public static function getEvent()
         {
-            return static::$string;
+            return static::$event;
         }
 
         /**
@@ -351,7 +360,7 @@ namespace Textpattern\Skin {
 
         protected function mergeResult($txtItem, $list, $status = null)
         {
-            is_string($list) ? $list = array($list) : '';
+            !is_string($list) ?: $list = array($list);
             $status = in_array($status, array('success', 'warning', 'error')) ? $status : 'error';
 
             $this->results = array_merge_recursive(
@@ -464,59 +473,20 @@ namespace Textpattern\Skin {
 
          abstract protected function createFile();
 
-         /**
-          * {@inheritdoc}
-          */
-
-         protected function getRows($things = null, $where = null)
-         {
-             $things !== null ?: $things = '*';
-
-             if ($where === null) {
-                 $names = $this->getNames();
-                 $where = '';
-
-                 if ($names) {
-                     $where = "name IN ('".implode("', '", array_map('doSlash', $names))."')";
-                 }
-
-                 if (property_exists($this, 'skin')) {
-                     !$where ?: $where.= ' AND ';
-                     $where .= "skin = '".doSlash($this->getSkin()->getName())."'";
-                 } elseif (!$where) {
-                     $where = '1=1';
-                 }
-             }
-
-             $rs = safe_rows_start($things, self::getTable(), $where);
-
-             if ($rs) {
-                 $rows = array();
-
-                 while ($row = nextRow($rs)) {
-                     $rows[] = $row;
-                 }
-
-                 return $rows;
-             }
-
-             return array();
-         }
-
         /**
          * Get files from the $dir property value related directory.
          *
-         * @param  array  $names    Filenames
-         * @param  int    $maxDepth RecursiveIteratorIterator related property value.
+         * @param  array  $names    Optional filenames to filter the result.
+         * @param  int    $maxDepth Optional RecursiveIteratorIterator related property value (default = -1 infinite).
          * @return object
          */
 
-        protected function getFiles($names = null, $maxDepth = 0)
+        protected function getFiles($names = null, $maxDepth = null)
         {
             $files = \Txp::get('Textpattern\Iterator\RecDirIterator', $this->getDirPath());
             $filter = \Txp::get('Textpattern\Iterator\RecFilterIterator', $files)->setNames($names);
             $filteredFiles = \Txp::get('Textpattern\Iterator\RecIteratorIterator', $filter);
-            $filteredFiles->setMaxDepth($maxDepth);
+            $maxDepth !== null ?: $filteredFiles->setMaxDepth($maxDepth);
 
             return $filteredFiles;
         }
@@ -524,16 +494,19 @@ namespace Textpattern\Skin {
         /**
          * Insert a row into the $table property value related table.
          *
-         * @param  string $set The SET clause (default: $this->getInfos(true))
+         * @param  string $set Optional SET clause.
+         *                     Builds the clause from the $infos (+ $skin) property value(s) if null.
          * @return bool        FALSE on error.
          */
 
         public function createRow($set = null)
         {
-            $set !== null ?: $set = $this->getInfos(true);
+            if ($set === null) {
+                $set = $this->getInfos(true);
 
-            if (property_exists($this, 'skin')) {
-                $set .= " skin = '".doSlash($this->getSkin()->getName())."'";
+                if (property_exists($this, 'skin')) {
+                    $set .= " skin = '".doSlash($this->getSkin()->getName())."'";
+                }
             }
 
             return safe_insert(self::getTable(), $set);
@@ -542,18 +515,28 @@ namespace Textpattern\Skin {
         /**
          * Update the $table property value related table.
          *
-         * @param  string $set   The SET clause (default: $this->getInfos(true))
-         * @param  string $where The WHERE clause (default: "name = '".doSlash($this->getBase())."'")
+         * @param  string $set   Optional SET clause.
+         *                       Builds the clause from the $infos property value if null.
+         * @param  string $where Optional WHERE clause.
+         *                       Builds the clause from the $name (+ $skin) property value(s) if null.
          * @return bool          FALSE on error.
          */
 
         public function updateRow($set = null, $where = null)
         {
             $set !== null ?: $set = $this->getInfos(true);
-            $where !== null ?: $where = "name = '".doSlash($this->getBase())."'";
 
-            if (property_exists($this, 'skin')) {
-                $where .= " AND skin = '".doSlash($this->getSkin()->getName())."'";
+            if ($where === null) {
+                $where = '';
+                $base = $this->getBase();
+
+                if ($base) {
+                    $where = "name = '".doSlash($base)."'";
+                }
+
+                if (property_exists($this, 'skin')) {
+                    $where .= " AND skin = '".doSlash($this->getSkin()->getName())."'";
+                }
             }
 
             return safe_update(self::getTable(), $set, $where);
@@ -562,18 +545,28 @@ namespace Textpattern\Skin {
         /**
          * Get a row field from the $table property value related table.
          *
-         * @param  string $things The SELECT clause (default: 'name')
-         * @param  string $where  The WHERE clause (default: "name = '".doSlash($this->getName())."'")
-         * @return mixed          The Field or FALSE on error.
+         * @param  string $thing Optional SELECT clause.
+         *                       Uses 'name' if null.
+         * @param  string $where Optional WHERE clause.
+         *                       Builds the clause from the $name (+ $skin) property value(s) if null.
+         * @return mixed         The Field or FALSE on error.
          */
 
         public function getField($thing = null, $where = null)
         {
             $thing !== null ?: $thing = 'name';
-            $where !== null ?: $where = "name = '".doSlash($this->getName())."'";
 
-            if (property_exists($this, 'skin')) {
-                $where .= " AND skin = '".doSlash($this->getSkin()->getName())."'";
+            if ($where === null) {
+                $where = '';
+                $name = $this->getName();
+
+                if ($name) {
+                    $where = "name = '".doSlash($name)."'";
+                }
+
+                if (property_exists($this, 'skin')) {
+                    $where .= " AND skin = '".doSlash($this->getSkin()->getName())."'";
+                }
             }
 
             return safe_field($thing, self::getTable(), $where);
@@ -582,16 +575,92 @@ namespace Textpattern\Skin {
         /**
          * Delete rows from the $table property value related table.
          *
-         * @param  string $where The WHERE clause
-         *                       (default: "name IN ('".implode("', '", array_map('doSlash', $this->getNames()))."')")
+         * @param  string $where Optional WHERE clause.
+         *                       Builds the clause from the $names (+ $skin) property value(s) if null.
          * @return bool          false on error.
          */
 
         public function deleteRows($where = null)
         {
             if ($where === null) {
-                $names = $this->getNames();
                 $where = '';
+                $names = $this->getNames();
+
+                if ($names) {
+                    $where = "name IN ('".implode("', '", array_map('doSlash', $names))."')";
+                }
+
+                if (property_exists($this, 'skin')) {
+                    !$where ?: $where.= ' AND ';
+                    $where .= "skin = '".doSlash($this->getSkin()->getName())."'";
+                }
+            }
+
+            return safe_delete(self::getTable(), $where);
+        }
+
+        /**
+         * Count rows in the $table property value related table.
+         *
+         * @param  string $where The where clause.
+         * @return mixed         Number of rows or FALSE on error
+         */
+
+        protected static function countRows($where)
+        {
+            return safe_count(self::getTable(), $where);
+        }
+
+        /**
+         * Get a row from the $table property value related table as an associative array.
+         *
+         * @param  string $things Optional SELECT clause.
+         *                        Uses '*' (all) if null.
+         * @param  string $where  Optional WHERE clause.
+         *                        Builds the clause from the $name (+ $skin) property value(s) if null.
+         * @return bool           Array.
+         */
+
+        protected function getRow($things = null, $where = null)
+        {
+            $things !== null ?: $things = '*';
+
+            if ($where === null) {
+                $where = '';
+                $name = $this->getName();
+
+                if ($name) {
+                    $where = "name = '".doSlash($name)."'";
+                }
+
+                if (property_exists($this, 'skin')) {
+                    !$where ?: $where.= ' AND ';
+                    $where .= "skin = '".doSlash($this->getSkin()->getName())."'";
+                } elseif (!$where) {
+                    $where = '1=1';
+                }
+            }
+
+            return safe_row($things, self::getTable(), $where);
+        }
+
+        /**
+         * Get rows from the $table property value related table as an associative array.
+         *
+         * @param  string $thing Optional SELECT clause.
+         *                       Uses '*' (all) if null.
+         * @param  string $where Optional WHERE clause (default: "name = '".doSlash($this->getName())."'")
+         *                       Builds the clause from the $names (+ $skin) property value(s) if null.
+         * @return array         (Empty on error)
+         */
+
+        public function getRows($things = null, $where = null)
+        {
+            $things !== null ?: $things = '*';
+
+            if ($where === null) {
+                $where = '';
+                $names = $this->getNames();
 
                 if ($names) {
                     $where = "name IN ('".implode("', '", array_map('doSlash', $names))."')";
@@ -605,7 +674,58 @@ namespace Textpattern\Skin {
                 }
             }
 
-            return safe_delete(self::getTable(), $where);
+            $rs = safe_rows_start($things, self::getTable(), $where);
+
+            if ($rs) {
+                $rows = array();
+
+                while ($row = nextRow($rs)) {
+                    $rows[] = $row;
+                }
+
+                return $rows;
+            }
+
+            return array();
+        }
+
+        /**
+         * $installed property setter.
+         *
+         * @param array self::$installed.
+         */
+
+        protected function setInstalled()
+        {
+            $isAsset = property_exists($this, 'skin');
+            $things = 'name';
+            $thing = $isAsset ? 'skin' : 'title';
+            $things .= ', '.$thing;
+
+            $rows = $this->getRows($things, '1=1 ORDER BY name');
+
+            self::$installed = array();
+
+            foreach ($rows as $row) {
+                if ($isAsset) {
+                    self::$installed[$row[$thing]] = $row['name'];
+                } else {
+                    self::$installed[$row['name']] = $row[$thing];
+                }
+            }
+
+            return $this->getInstalled();
+        }
+
+        /**
+         * $installed property getter.
+         *
+         * @return array self::$installed.
+         */
+
+        public function getInstalled()
+        {
+            return self::$installed === null ? $this->setInstalled() : self::$installed;
         }
     }
 }

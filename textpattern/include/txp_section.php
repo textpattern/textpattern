@@ -38,9 +38,9 @@ if ($event == 'section') {
     require_privs('section');
 
     global $all_skins, $all_pages, $all_styles;
-    $all_skins = Skin::getInstalled();
-    $all_pages = safe_rows('name, skin', 'txp_page', "1=1 ORDER BY name");
-    $all_styles = safe_rows('name, skin', 'txp_css', "1=1 ORDER BY name");
+    $all_skins = \Txp::get('Textpattern\Skin\Skin')->getInstalled();
+    $all_pages = \Txp::get('Textpattern\Skin\Page')->getRows('name, skin', "1=1 ORDER BY name");
+    $all_styles = \Txp::get('Textpattern\Skin\CSS')->getRows('name, skin', "1=1 ORDER BY name");
 
     $available_steps = array(
         'section_change_pageby' => true,

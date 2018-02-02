@@ -31,7 +31,7 @@
  * $filteredFiles->setMaxDepth($maxDepth);
  *
  * foreach ($filteredFiles as $file) {
- *     echo $file->getName();
+ *     echo $file->getPathname();
  * }
  * </code>
  *

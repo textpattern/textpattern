@@ -28,7 +28,7 @@
  * $files = new \Textpattern\Iterator\RecDirIterator($dirPath);
  *
  * foreach ($files as $file) {
- *     echo $file->getName();
+ *     echo $file->getPathname();
  * }
  * </code>
  *

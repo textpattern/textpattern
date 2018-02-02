@@ -34,7 +34,7 @@ namespace Textpattern\Skin {
 
     class Form extends AssetBase
     {
-        protected static $string = 'form';
+        protected static $event = 'form';
         protected static $table = 'txp_form';
         protected static $dir = 'forms';
         protected static $subdirField = 'type';
