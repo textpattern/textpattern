@@ -1195,7 +1195,7 @@ namespace Textpattern\Skin {
                 return n
                     .graf(
                         span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
-                        gTxt('img_dir_not_writeable', array('{imgdir}' => $dirPath)),
+                        gTxt('path_not_writable', array('list' => $this->getDirPath())),
                         array('class' => 'alert-block warning')
                     );
             }
