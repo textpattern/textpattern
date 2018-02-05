@@ -1155,6 +1155,7 @@ namespace Textpattern\Skin {
 
         protected function getImportForm()
         {
+            $event = self::getEvent();
             $dirPath = $this->getDirPath();
 
             if (is_dir($dirPath) && is_writable($dirPath)) {
@@ -1374,6 +1375,8 @@ namespace Textpattern\Skin {
 
         public function getMultiEditForm($page, $sort, $dir, $crit, $search_method)
         {
+            $event = self::getEvent();
+
             $removeExtra = checkbox2('clean', get_pref('remove_extra_templates', true), 0, 'clean')
                            .n.tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean'))
                            .popHelp('remove_extra_templates');
