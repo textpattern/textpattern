@@ -487,10 +487,7 @@ namespace Textpattern\Skin {
             $base = $this->getBase();
             $event = self::getEvent();
 
-            callback_event($event.'.create', '', 1, array(
-                'infos' => $infos,
-                'base'  => $base,
-            ));
+            callback_event($event.'.create', '', 1, compact('infos', 'base'));
 
             $done = false;
 
@@ -529,11 +526,7 @@ namespace Textpattern\Skin {
                 isset($assetsfailed) ?: $done = $name;
             }
 
-            callback_event($event.'.create', '', 0, array(
-                'infos' => $infos,
-                'base'  => $base,
-                'done'  => $done, // the created skin name, or null on error.
-            ));
+            callback_event($event.'.create', '', 0, compact('infos', 'base', 'done'));
 
             return $this; // Chainable.
         }
@@ -551,10 +544,7 @@ namespace Textpattern\Skin {
             $base = $this->getBase();
             $event = self::getEvent();
 
-            callback_event($event.'.update', '', 1, array(
-                'infos' => $infos,
-                'base'  => $base,
-            ));
+            callback_event($event.'.update', '', 1, compact('infos', 'base'));
 
             $done = null; // See the final callback event.
             $ready = false;
@@ -607,11 +597,7 @@ namespace Textpattern\Skin {
                 isset($assetsFailed) ?: $done = $name;
             }
 
-            callback_event($event.'.update', '', 0, array(
-                'infos' => $infos,
-                'base'  => $base,
-                'done'  => $done, // the updated skin name, or null on error.
-            ));
+            callback_event($event.'.update', '', 0, compact('infos', 'base', 'done'));
 
             return $this; // Chainable
         }
@@ -628,7 +614,7 @@ namespace Textpattern\Skin {
             $names = $this->getNames();
             $event = self::getEvent();
 
-            callback_event($event.'.duplicate', '', 1, array('names' => $names));
+            callback_event($event.'.duplicate', '', 1, compact('names'));
 
             $ready = $done = array(); // See the final callback event.
 
@@ -691,10 +677,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.duplicate', '', 0, array(
-                'names' => $names,
-                'done'  => $done, // Array of the duplicated skin names.
-            ));
+            callback_event($event.'.duplicate', '', 0, compact('names', 'done'));
 
             return $this; // Chainable
         }
@@ -709,7 +692,7 @@ namespace Textpattern\Skin {
             $names = $this->getNames();
             $event = self::getEvent();
 
-            callback_event($event.'.import', '', 1, array('names' => $names));
+            callback_event($event.'.import', '', 1, compact('names'));
 
             $done = array(); // See the final callback event.
 
@@ -759,10 +742,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.import', '', 0, array(
-                'names' => $names,
-                'done'  => $done, // Array of the imported skin names.
-            ));
+            callback_event($event.'.import', '', 0, compact('names', 'done'));
 
             return $this;
         }
@@ -778,7 +758,7 @@ namespace Textpattern\Skin {
             $names = $this->getNames();
             $event = self::getEvent();
 
-            callback_event($event.'.export', '', 1, array('names' => $names));
+            callback_event($event.'.export', '', 1, compact('names'));
 
             $ready = $done = array();
 
@@ -835,10 +815,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.export', '', 0, array(
-                'names' => $names,
-                'done'  => $done, // Array of the exported skin names.
-            ));
+            callback_event($event.'.export', '', 0, compact('names', 'done'));
 
             return $this;
         }
@@ -855,7 +832,7 @@ namespace Textpattern\Skin {
             $names = $this->getNames();
             $event = self::getEvent();
 
-            callback_event($event.'.delete', '', 1, array('names' => $names));
+            callback_event($event.'.delete', '', 1, compact('names'));
 
             $ready = $done = array();
 
@@ -911,10 +888,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.delete', '', 0, array(
-                'names' => $names,
-                'done'  => $done, // Array of the deleted skins name.
-            ));
+            callback_event($event.'.delete', '', 0, compact('names', 'done'));
 
             return $this;
         }
