@@ -1020,7 +1020,7 @@ namespace Textpattern\Skin {
                         $this->setNames(array(ps('skins')))->import();
                         break;
                     case 'skin_change_pageby':
-                        \Txp::get('\Textpattern\Admin\Paginator', $event, '')->change();
+                        $this->getPaginator()->change();
                         break;
                 }
 
@@ -1050,7 +1050,7 @@ namespace Textpattern\Skin {
         public function getList($message = '')
         {
             $message .= $this->getMessage();
-            $event = $this->getEvent();
+            $event = self::getEvent();
 
             pagetop(gTxt('tab_'.$event), $message);
 
@@ -1089,7 +1089,7 @@ namespace Textpattern\Skin {
                 set_pref('skin_sort_dir', $dir, 'skin', 2, '', 0, PREF_PRIVATE);
             }
 
-            $search = \Txp::get('Textpattern\Search\Filter', $event, array(
+            $search = $this->getSearchFilter(array(
                     'name' => array(
                         'column' => 'txp_skin.name',
                         'label'  => gTxt('name'),
@@ -1111,7 +1111,10 @@ namespace Textpattern\Skin {
 
             list($criteria, $crit, $search_method) = $search->getFilter();
 
-            $total = $this->countRows($criteria);;
+            $total = $this->countRows($criteria);
+            $limit = $this->getPaginator()->getLimit();
+
+            list($page, $offset, $numPages) = pager($total, $limit, $page);
 
             $table = \Txp::get('Textpattern\Admin\Table');
 
@@ -1119,8 +1122,8 @@ namespace Textpattern\Skin {
                 compact('total', 'criteria'),
                 $this->getSearchBlock($search),
                 $this->getCreateBlock(),
-                $this->getContentBlock($total, $criteria, $sort, $dir),
-                $this->getFootBlock()
+                $this->getContentBlock(compact('offset', 'limit', 'total', 'criteria', 'crit', 'search_method', 'page', 'sort', 'dir')),
+                $this->getFootBlock(compact('offset', 'limit', 'numPages', 'total', 'criteria', 'crit', 'search_method', 'page', 'sort', 'dir'))
             );
         }
 
@@ -1138,7 +1141,7 @@ namespace Textpattern\Skin {
                 'div',
                 array(
                     'class' => 'txp-layout-4col-3span',
-                    'id'    => $event.'_control',
+                    'id'    => self::getEvent().'_control',
                 )
             );
         }
@@ -1201,6 +1204,14 @@ namespace Textpattern\Skin {
             }
         }
 
+        protected function getPaginator() {
+            return \Txp::get('\Textpattern\Admin\Paginator', self::getEvent(), '');
+        }
+
+        protected function getSearchFilter($methods) {
+            return \Txp::get('Textpattern\Search\Filter', self::getEvent(), $methods);
+        }
+
         /**
          * Render the button to create a new skin.
          *
@@ -1212,8 +1223,10 @@ namespace Textpattern\Skin {
             return sLink('skin', 'edit', gTxt('create_skin'), 'txp-button');
         }
 
-        public function getContentBlock($total, $criteria, $sort, $dir)
+        public function getContentBlock($data)
         {
+            extract($data);
+
             $sortSQL = $sort.' '.$dir;
             $switchDir = ($dir == 'desc') ? 'asc' : 'desc';
 
@@ -1236,11 +1249,6 @@ namespace Textpattern\Skin {
                        .n.tag_end('div') // End of .txp-layout-1col.
                        .n.'</div>';      // End of .txp-layout.
             }
-
-            $paginator = \Txp::get('\Textpattern\Admin\Paginator', $event, '');
-            $limit = $paginator->getLimit();
-
-            list($page, $offset, $numPages) = pager($total, $limit, $page);
 
             $rs = $this->getTableData($criteria, $sortSQL, $offset, $limit);
 
@@ -1360,11 +1368,13 @@ namespace Textpattern\Skin {
             }
         }
 
-        public function getFootBlock()
+        public function getFootBlock($data)
         {
-            return self::getMultiEditForm($page, $sort, $dir, $crit, $search_method).
-            \Txp::get('\Textpattern\Admin\Paginator', $event, '')->render()
-                .nav_form('skin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
+            extract($data);
+
+            return self::getMultiEditForm($page, $sort, $dir, $crit, $search_method)
+                   .$this->getPaginator()->render()
+                   .nav_form('skin', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
         }
 
         /**
