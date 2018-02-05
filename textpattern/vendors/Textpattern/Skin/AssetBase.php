@@ -319,24 +319,6 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        protected function isInstalled()
-        {
-            if ($this->installed === null) {
-                $isInstalled = (bool) $this->getField(
-                    'name',
-                    "name = '".doSlash($this->getName())."' AND skin = '".doSlash($this->getSkin()->getName())."'"
-                );
-            } else {
-                $isInstalled = in_array($this->getName(), array_values(self::getInstalled()));
-            }
-
-            return $isInstalled;
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
         public static function getEditing()
         {
             return get_pref('last_'.self::getEvent().'_saved', 'default', true);
@@ -593,7 +575,7 @@ namespace Textpattern\Skin {
         public function import($clean = false, $override = false)
         {
             $thisSkin = $this->getSkin();
-            $skin = $thisSkin->getName();
+            $skin = $thisSkin !== null ? $thisSkin->getName() : Skin::getEditing();
             $names = $this->getNames();
             $event = self::getEvent();
 
@@ -656,7 +638,7 @@ namespace Textpattern\Skin {
         public function export($clean = false, $override = false)
         {
             $thisSkin = $this->getSkin();
-            $skin = $thisSkin->getName();
+            $skin = $thisSkin !== null ? $thisSkin->getName() : Skin::getEditing();
             $names = $this->getNames();
 
             $event = self::getEvent();

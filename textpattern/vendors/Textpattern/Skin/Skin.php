@@ -205,26 +205,6 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Whether a skin is installed or not.
-         *
-         * @param  string $name Skin name (default: $this->getName()).
-         * @return bool
-         */
-
-        public function isInstalled($name = null)
-        {
-            $name !== null ?: $name = $this->getName();
-
-            if (self::$installed === null) {
-                $isInstalled = (bool) $this->getField('name', "name = '".$name."'");
-            } else {
-                $isInstalled = in_array($name, array_keys($this->getInstalled()));
-            }
-
-            return $isInstalled;
-        }
-
-        /**
          * Get a $dir property value related subdirectory path.
          *
          * @param string  $name Directory(/skin) name (default: $this->getName()).
@@ -425,12 +405,12 @@ namespace Textpattern\Skin {
         /**
          * $installed property merger.
          *
-         * @param array self::$installed.
+         * @param array $this->installed.
          */
 
         protected function mergeInstalled($skins)
         {
-            self::$installed = array_merge($this->getInstalled(), $skins);
+            $this->installed = array_merge($this->getInstalled(), $skins);
 
             return $this->getInstalled();
         }
@@ -438,12 +418,12 @@ namespace Textpattern\Skin {
         /**
          * $installed property remover.
          *
-         * @return array self::$installed.
+         * @return array $this->installed.
          */
 
         protected function removeInstalled($names)
         {
-            self::$installed = array_diff_key(
+            $this->installed = array_diff_key(
                 $this->getInstalled(),
                 array_fill_keys($names, '')
             );

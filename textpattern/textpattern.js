@@ -2216,19 +2216,19 @@ textpattern.Route.add('section', function ()
         $pageSelect = $('[name=section_page]');
         $styleSelect = $('[name=css]');
 
-        $.each(skin_page, function(key, items) {
-            if (items.skin == skin) {
-                var isSelected = (items.name == page_sel) ? ' selected' : '';
-                $pageSelect.append('<option'+isSelected+'>'+items.name+'</option>');
-            }
-        });
+        if (skin in skin_page) {
+            $.each(skin_page[skin], function(key, item) {
+                var isSelected = (item == page_sel) ? ' selected' : '';
+                $pageSelect.append('<option'+isSelected+'>'+item+'</option>');
+            });
+        }
 
-        $.each(skin_style, function(key, items) {
-            if (items.skin == skin) {
-                var isSelected = (items.name == style_sel) ? ' selected' : '';
-                $styleSelect.append('<option'+isSelected+'>'+items.name+'</option>');
-            }
-        });
+        if (skin in skin_style) {
+            $.each(skin_style[skin], function(key, item) {
+                var isSelected = (item == style_sel) ? ' selected' : '';
+                $styleSelect.append('<option'+isSelected+'>'+item+'</option>');
+            });
+        }
     }
 
     $('#section_details, .multi_edit_form').on('change', '#section_skin, #multiedit_skin', function() {

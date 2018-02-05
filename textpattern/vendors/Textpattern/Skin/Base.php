@@ -68,7 +68,7 @@ namespace Textpattern\Skin {
          * @see       setUploaded(), getUploaded().
          */
 
-        protected static $installed;
+        protected $installed;
 
         /**
          * Class related skin/template names to work with.
@@ -504,7 +504,7 @@ namespace Textpattern\Skin {
             if ($set === null) {
                 $set = $this->getInfos(true);
 
-                if (property_exists($this, 'skin')) {
+                if (isset($this->skin)) {
                     $set .= " skin = '".doSlash($this->getSkin()->getName())."'";
                 }
             }
@@ -534,7 +534,7 @@ namespace Textpattern\Skin {
                     $where = "name = '".doSlash($base)."'";
                 }
 
-                if (property_exists($this, 'skin')) {
+                if (isset($this->skin)) {
                     $where .= " AND skin = '".doSlash($this->getSkin()->getName())."'";
                 }
             }
@@ -564,7 +564,7 @@ namespace Textpattern\Skin {
                     $where = "name = '".doSlash($name)."'";
                 }
 
-                if (property_exists($this, 'skin')) {
+                if (isset($this->skin)) {
                     $where .= " AND skin = '".doSlash($this->getSkin()->getName())."'";
                 }
             }
@@ -590,7 +590,7 @@ namespace Textpattern\Skin {
                     $where = "name IN ('".implode("', '", array_map('doSlash', $names))."')";
                 }
 
-                if (property_exists($this, 'skin')) {
+                if (isset($this->skin)) {
                     !$where ?: $where.= ' AND ';
                     $where .= "skin = '".doSlash($this->getSkin()->getName())."'";
                 }
@@ -633,7 +633,7 @@ namespace Textpattern\Skin {
                     $where = "name = '".doSlash($name)."'";
                 }
 
-                if (property_exists($this, 'skin')) {
+                if (isset($this->skin)) {
                     !$where ?: $where.= ' AND ';
                     $where .= "skin = '".doSlash($this->getSkin()->getName())."'";
                 } elseif (!$where) {
@@ -666,7 +666,7 @@ namespace Textpattern\Skin {
                     $where = "name IN ('".implode("', '", array_map('doSlash', $names))."')";
                 }
 
-                if (property_exists($this, 'skin')) {
+                if (isset($this->skin)) {
                     !$where ?: $where.= ' AND ';
                     $where .= "skin = '".doSlash($this->getSkin()->getName())."'";
                 } elseif (!$where) {
@@ -692,25 +692,25 @@ namespace Textpattern\Skin {
         /**
          * $installed property setter.
          *
-         * @param array self::$installed.
+         * @param array $this->installed.
          */
 
         protected function setInstalled()
         {
-            $isAsset = property_exists($this, 'skin');
             $things = 'name';
+            $isAsset = property_exists($this, 'skin');
             $thing = $isAsset ? 'skin' : 'title';
             $things .= ', '.$thing;
 
             $rows = $this->getRows($things, '1=1 ORDER BY name');
 
-            self::$installed = array();
+            $this->installed = array();
 
             foreach ($rows as $row) {
                 if ($isAsset) {
-                    self::$installed[$row[$thing]] = $row['name'];
+                    $this->installed[$row[$thing]][] = $row['name'];
                 } else {
-                    self::$installed[$row['name']] = $row[$thing];
+                    $this->installed[$row['name']] = $row[$thing];
                 }
             }
 
@@ -720,12 +720,44 @@ namespace Textpattern\Skin {
         /**
          * $installed property getter.
          *
-         * @return array self::$installed.
+         * @return array $this->installed.
          */
 
         public function getInstalled()
         {
-            return self::$installed === null ? $this->setInstalled() : self::$installed;
+            return $this->installed === null ? $this->setInstalled() : $this->installed;
+        }
+
+        /**
+         * Whether a skin is installed or not.
+         *
+         * @param  string $name Skin name (default: $this->getName()).
+         * @return bool
+         */
+
+        public function isInstalled($name = null)
+        {
+            $isAsset = property_exists($this, 'skin');
+            $name !== null ?: $name = $this->getName();
+
+            if ($this->$installed === null) {
+                $isInstalled = (bool) $this->getField('name', "name = '".$name."'");
+            } else {
+                if ($isAsset) {
+                    $isInstalled = false;
+                    $installed = $this->getInstalled();
+
+                    foreach ($installed as $skin) {
+                        if (in_array($name, array_keys($installed))) {
+                            $isInstalled = $skin;
+                        }
+                    }
+                } else {
+                    $isInstalled = in_array($name, array_keys($this->getInstalled()));
+                }
+            }
+
+            return $isInstalled;
         }
     }
 }
