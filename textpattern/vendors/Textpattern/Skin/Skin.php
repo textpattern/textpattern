@@ -1036,10 +1036,12 @@ namespace Textpattern\Skin {
 
         public function render($step)
         {
+            $message = $this->getMessage();
+
             if ($step === 'edit') {
-                echo $this->getEditForm();
+                echo $this->getEditForm($message);
             } else {
-                echo $this->getList();
+                echo $this->getList($message);
             }
         }
 
@@ -1049,7 +1051,6 @@ namespace Textpattern\Skin {
 
         public function getList($message = '')
         {
-            $message .= $this->getMessage();
             $event = self::getEvent();
 
             pagetop(gTxt('tab_'.$event), $message);
