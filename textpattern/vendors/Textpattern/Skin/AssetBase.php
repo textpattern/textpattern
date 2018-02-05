@@ -372,7 +372,7 @@ namespace Textpattern\Skin {
         {
             global $prefs;
 
-            $event = $this->getEvent();
+            $event = self::getEvent();
 
             unset($prefs['last_'.$event.'_saved']);
             return remove_pref('last_'.$event.'_saved', $event);
