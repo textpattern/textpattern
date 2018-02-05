@@ -1011,7 +1011,7 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function getList($message = '')
+        protected function getList($message = '')
         {
             $event = self::getEvent();
 
@@ -1097,7 +1097,7 @@ namespace Textpattern\Skin {
          * @return HTML
          */
 
-        public function getSearchBlock($search)
+        protected function getSearchBlock($search)
         {
             return n.tag(
                 $search->renderForm(self::getEvent(), array('placeholder' => 'search_skins')),
@@ -1187,7 +1187,7 @@ namespace Textpattern\Skin {
             return sLink(self::getEvent(), 'edit', gTxt('create_skin'), 'txp-button');
         }
 
-        public function getContentBlock($data)
+        protected function getContentBlock($data)
         {
             extract($data);
 
@@ -1333,7 +1333,7 @@ namespace Textpattern\Skin {
             }
         }
 
-        public function getFootBlock($data)
+        protected function getFootBlock($data)
         {
             extract($data);
 
@@ -1353,7 +1353,7 @@ namespace Textpattern\Skin {
          * @return HTML
          */
 
-        public function getMultiEditForm($page, $sort, $dir, $crit, $search_method)
+        protected function getMultiEditForm($page, $sort, $dir, $crit, $search_method)
         {
             $event = self::getEvent();
 
@@ -1382,7 +1382,7 @@ namespace Textpattern\Skin {
          * @return HTML
          */
 
-        public function getEditForm($message = '')
+        protected function getEditForm($message = '')
         {
             global $step;
 
