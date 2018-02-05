@@ -740,7 +740,7 @@ namespace Textpattern\Skin {
             $isAsset = property_exists($this, 'skin');
             $name !== null ?: $name = $this->getName();
 
-            if ($this->$installed === null) {
+            if ($this->installed === null) {
                 $isInstalled = (bool) $this->getField('name', "name = '".$name."'");
             } else {
                 if ($isAsset) {
