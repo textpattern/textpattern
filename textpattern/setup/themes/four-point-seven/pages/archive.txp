@@ -66,7 +66,7 @@
                 </li>
             </txp:section_list>
 
-            <!-- links by default to form: 'search_input.misc.txp' unless you specify a different form -->
+            <!-- links by default to form: 'search_input.txp' unless you specify a different form -->
             <txp:search_input />
         </div>
     </nav>
@@ -144,7 +144,7 @@
                             <txp:text item="links" />
                         </h4>
 
-                        <!-- links by default to form: 'plainlinks.link.txp' unless you specify a different form -->
+                        <!-- links by default to form: 'plainlinks.txp' unless you specify a different form -->
                         <txp:linklist wraptag="ul" break="li" />
                     </section>
                 </txp:evaluate>
