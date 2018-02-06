@@ -49,6 +49,12 @@ namespace Textpattern\Skin {
                          .'See https://docs.textpattern.io/tags/comments. -->',
             ),
             array(
+                'name' => 'comments_display',
+                'type' => 'comment',
+                'Form' => '<!-- Here goes the default rendering contents of the popup_comments tag. '
+                         .'See https://docs.textpattern.io/tags/popup_comments. -->',
+            ),
+            array(
                 'name' => 'comment_form',
                 'type' => 'comment',
                 'Form' => '<!-- Here goes the default rendering contents of the comments_form tag. '
