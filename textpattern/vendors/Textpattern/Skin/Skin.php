@@ -106,7 +106,7 @@ namespace Textpattern\Skin {
 
         public function setDirPath($path = null)
         {
-            $path !== null ?: $path = get_pref('path_to_site').DS.get_pref(self::getEvent().'_dir');
+            $path !== null or $path = get_pref('path_to_site').DS.get_pref(self::getEvent().'_dir');
 
             $this->dirPath = rtrim($path, DS);
             $this->uploaded = null;
@@ -122,7 +122,7 @@ namespace Textpattern\Skin {
 
         protected function getDirPath()
         {
-            $this->dirPath !== null ?: $this->setDirPath();
+            $this->dirPath !== null or $this->setDirPath();
 
             return $this->dirPath;
         }
@@ -159,7 +159,7 @@ namespace Textpattern\Skin {
 
         protected function getAssets()
         {
-            $this->assets !== null ?: $this->setAssets();
+            $this->assets !== null or $this->setAssets();
 
             return $this->assets;
         }
@@ -197,7 +197,7 @@ namespace Textpattern\Skin {
 
             $name = $this->getName();
 
-            $title ?: $title = ucfirst($name);
+            $title or $title = ucfirst($name);
 
             $this->infos = compact('name', 'title', 'version', 'description', 'author', 'author_uri');
 
@@ -213,7 +213,7 @@ namespace Textpattern\Skin {
 
         public function getSubdirPath($name = null)
         {
-            $name !== null ?: $name = $this->getName();
+            $name !== null or $name = $this->getName();
 
             return $this->getDirPath().DS.$name;
         }
@@ -253,11 +253,11 @@ namespace Textpattern\Skin {
             if ($contents !== null) {
                 extract($contents);
 
-                !empty($title) ?: $title = ucfirst($this->getName());
-                !empty($version) ?: $version = gTxt('unknown');
-                !empty($description) ?: $description = '';
-                !empty($author) ?: $author = gTxt('unknown');
-                !empty($author_uri) ?: $author_uri = '';
+                !empty($title) or $title = ucfirst($this->getName());
+                !empty($version) or $version = gTxt('unknown');
+                !empty($description) or $description = '';
+                !empty($author) or $author = gTxt('unknown');
+                !empty($author_uri) or $author_uri = '';
 
                 $contents = array_merge(
                     $contents,
@@ -295,7 +295,7 @@ namespace Textpattern\Skin {
 
         public function updateSections($set = null, $where = null)
         {
-            $set !== null ?: $set = "skin = '".doSlash($this->getName())."'";
+            $set !== null or $set = "skin = '".doSlash($this->getName())."'";
 
             if ($where === null) {
                 $base = $this->getBase();
@@ -325,7 +325,7 @@ namespace Textpattern\Skin {
 
             $event = self::getEvent();
 
-            $name !== null ?: $name = $this->getName();
+            $name !== null or $name = $this->getName();
             $prefs[$event.'_editing'] = $name;
 
             set_pref($event.'_editing', $name, $event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
@@ -355,7 +355,7 @@ namespace Textpattern\Skin {
          */
 
         protected function createFile($pathname = null, $contents = null) {
-            $pathname !== null ?: $pathname = $this->getName().DS.self::getFilename();
+            $pathname !== null or $pathname = $this->getName().DS.self::getFilename();
 
             if ($contents === null) {
                 $contents = array_merge(
@@ -543,7 +543,7 @@ namespace Textpattern\Skin {
                 }
 
                 // If the assets related process did not failed; that is a success…
-                isset($assetsfailed) ?: $done = $name;
+                isset($assetsfailed) or $done = $name;
             }
 
             callback_event($event.'.create', '', 0, compact('infos', 'base', 'done'));
@@ -603,7 +603,7 @@ namespace Textpattern\Skin {
                 }
 
                 // update the skin_editing pref if needed.
-                self::getEditing() !== $base ?: $this->setEditing();
+                self::getEditing() !== $base or $this->setEditing();
 
                 // Start working with the skin related assets.
                 foreach ($this->getAssets() as $assetModel) {
@@ -614,7 +614,7 @@ namespace Textpattern\Skin {
                 }
 
                 // If the assets related process did not failed; that is a success…
-                isset($assetsFailed) ?: $done = $name;
+                isset($assetsFailed) or $done = $name;
             }
 
             callback_event($event.'.update', '', 0, compact('infos', 'base', 'done'));
@@ -654,7 +654,10 @@ namespace Textpattern\Skin {
             }
 
             if ($ready) {
-                $rows = $this->getRows(null, "name IN ('".implode("', '", array_map('doSlash', $ready))."')"); // Get all skin rows at once.
+                $rows = $this->getRows(
+                    "*",
+                    "name IN ('".implode("', '", array_map('doSlash', $ready))."')"
+                );
 
                 if (!$rows) {
                     $this->mergeResult($event.'_duplication_failed', $name);
@@ -665,7 +668,9 @@ namespace Textpattern\Skin {
                         $copy = $name.'_copy';
                         $copyTitle = $title.' (copy)';
 
-                        if (!$this->setInfos($copy, $copyTitle, $version, $description, $author, $author_uri)->createRow()) {
+                        $this->setInfos($copy, $copyTitle, $version, $description, $author, $author_uri);
+
+                        if (!$this->createRow()) {
                             $this->mergeResult($event.'_duplication_failed', $name);
                         } else {
                             $this->mergeResult($event.'_duplicated', $name, 'success');
@@ -691,7 +696,7 @@ namespace Textpattern\Skin {
                             $this->setName($name); // Be sure to restore the right $name.
 
                             // If the assets related process did not failed; that is a success…
-                            isset($deleteExtraFiles) ?: $done[] = $name;
+                            isset($deleteExtraFiles) or $done[] = $name;
                         }
                     }
                 }
@@ -708,7 +713,7 @@ namespace Textpattern\Skin {
 
         public function import($clean = false, $override = false)
         {
-            $clean == $this->getCleaningPref() ?: $this->switchCleaningPref();
+            $clean == $this->getCleaningPref() or $this->switchCleaningPref();
             $names = $this->getNames();
             $event = self::getEvent();
 
@@ -718,9 +723,10 @@ namespace Textpattern\Skin {
 
             foreach ($names as $name) {
                 $this->setName($name);
+                $this->setBase($name);
 
                 $isInstalled = $this->isInstalled();
-                $isInstalled ?: $clean = $override = false; // Avoid useless work.
+                $isInstalled or $clean = $override = false; // Avoid useless work.
 
                 if (!$override && $isInstalled) {
                     $this->mergeResult($event.'_already_exists', $name);
@@ -738,7 +744,7 @@ namespace Textpattern\Skin {
 
                         if (!$override && !$this->createRow()) {
                             $this->mergeResult($event.'_import_failed', $name);
-                        } elseif ($override && !$this->updateRow(null, "name = '".doSlash($this->getBase())."'")) {
+                        } elseif ($override && !$this->updateRow()) {
                             $this->mergeResult($event.'_import_failed', $name);
                         } else {
                             $this->mergeResult($event.'_imported', $name, 'success');
@@ -757,7 +763,7 @@ namespace Textpattern\Skin {
                         }
 
                         // If the assets related process did not failed; that is a success…
-                        isset($assetFailed) ?: $done[] = $name;
+                        isset($assetFailed) or $done[] = $name;
                     }
                 }
             }
@@ -773,7 +779,7 @@ namespace Textpattern\Skin {
 
         public function export($clean = false, $override = false)
         {
-            $clean == $this->getCleaningPref() ?: $this->switchCleaningPref();
+            $clean == $this->getCleaningPref() or $this->switchCleaningPref();
 
             $names = $this->getNames();
             $event = self::getEvent();
@@ -804,7 +810,10 @@ namespace Textpattern\Skin {
             }
 
             if ($ready) {
-                $rows = $this->getRows(null, "name IN ('".implode("', '", array_map('doSlash', $ready))."')");
+                $rows = $this->getRows(
+                    "*",
+                    "name IN ('".implode("', '", array_map('doSlash', $ready))."')"
+                );
 
                 if (!$rows) {
                     $this->mergeResult($event.'_unknown', $names);
@@ -812,9 +821,9 @@ namespace Textpattern\Skin {
                     foreach ($rows as $row) {
                         extract($row);
 
-                        $this->setName($name);
+                        $this->setInfos($name, $title, $version, $description, $author, $author_uri);
 
-                        if ($this->setInfos($name, $title, $version, $description, $author, $author_uri)->createFile() === false) {
+                        if ($this->createFile() === false) {
                             $this->mergeResult($event.'_export_failed', $name);
                         } else {
                             $this->mergeResult($event.'_exported', $name, 'success');
@@ -829,7 +838,7 @@ namespace Textpattern\Skin {
                                 }
                             }
 
-                            isset($assetFailed) ?: $done[] = $name;
+                            isset($assetFailed) or $done[] = $name;
                         }
                     }
                 }
@@ -875,7 +884,7 @@ namespace Textpattern\Skin {
                         }
                     }
 
-                    $assetFailed ?: $ready[] = $name;
+                    $assetFailed or $ready[] = $name;
                 }
             }
 
@@ -888,7 +897,7 @@ namespace Textpattern\Skin {
                     if (in_array(self::getEditing(), $ready)) {
                         $default = self::getDefault();
 
-                        !$default ?: $this->setEditing($default);
+                        !$default or $this->setEditing($default);
                     }
 
                     $this->mergeResult($event.'_deleted', $ready, 'success');
@@ -942,11 +951,11 @@ namespace Textpattern\Skin {
 
                 bouncer($step, array(
                     $event.'_change_pageby' => true, // Prefixed to make it work with the paginator…
-                    'list'          => false,
-                    'edit'          => false,
-                    'save'          => true,
-                    'import'        => false,
-                    'multi_edit'    => true,
+                    'list'                  => false,
+                    'edit'                  => false,
+                    'save'                  => true,
+                    'import'                => false,
+                    'multi_edit'            => true,
                 ));
 
                 switch ($step) {
@@ -967,8 +976,8 @@ namespace Textpattern\Skin {
 
                         if ($old_name) {
                             if ($copy) {
-                                $name === $old_name ? $name .= '_copy' : '';
-                                $title === $old_title ? $title .= ' (copy)' : '';
+                                $name !== $old_name or $name .= '_copy';
+                                $title !== $old_title or $title .= ' (copy)';
 
                                 $this->setInfos($name, $title, $version, $description, $author, $author_uri)
                                      ->setBase($old_name)
@@ -980,9 +989,9 @@ namespace Textpattern\Skin {
                                      ->update();
                             }
                         } else {
-                            $title === '' ? $title = ucfirst($name) : '';
-                            $author === '' ? $author = substr(cs('txp_login_public'), 10) : '';
-                            $version === '' ? $version = '0.0.1' : '';
+                            $title !== '' or $title = ucfirst($name);
+                            $author !== '' or $author = substr(cs('txp_login_public'), 10);
+                            $version !== '' or $version = '0.0.1';
 
                             $this->setInfos($name, $title, $version, $description, $author, $author_uri)
                                  ->create();
@@ -1430,7 +1439,7 @@ namespace Textpattern\Skin {
 
             require_privs($event.'.edit');
 
-            !$message ?: pagetop(gTxt('tab_skins'), $message);
+            !$message or pagetop(gTxt('tab_skins'), $message);
 
             extract(gpsa(array(
                 'page',

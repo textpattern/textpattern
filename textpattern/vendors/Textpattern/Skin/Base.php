@@ -360,7 +360,7 @@ namespace Textpattern\Skin {
 
         protected function mergeResult($txtItem, $list, $status = null)
         {
-            !is_string($list) ?: $list = array($list);
+            !is_string($list) or $list = array($list);
             $status = in_array($status, array('success', 'warning', 'error')) ? $status : 'error';
 
             $this->results = array_merge_recursive(
@@ -486,7 +486,7 @@ namespace Textpattern\Skin {
             $files = \Txp::get('Textpattern\Iterator\RecDirIterator', $this->getDirPath());
             $filter = \Txp::get('Textpattern\Iterator\RecFilterIterator', $files)->setNames($names);
             $filteredFiles = \Txp::get('Textpattern\Iterator\RecIteratorIterator', $filter);
-            $maxDepth !== null ?: $filteredFiles->setMaxDepth($maxDepth);
+            $maxDepth !== null or $filteredFiles->setMaxDepth($maxDepth);
 
             return $filteredFiles;
         }
@@ -518,13 +518,13 @@ namespace Textpattern\Skin {
          * @param  string $set   Optional SET clause.
          *                       Builds the clause from the $infos property value if null.
          * @param  string $where Optional WHERE clause.
-         *                       Builds the clause from the $name (+ $skin) property value(s) if null.
+         *                       Builds the clause from the $base (+ $skin) property value(s) if null.
          * @return bool          FALSE on error.
          */
 
         public function updateRow($set = null, $where = null)
         {
-            $set !== null ?: $set = $this->getInfos(true);
+            $set !== null or $set = $this->getInfos(true);
 
             if ($where === null) {
                 $where = '';
@@ -539,12 +539,12 @@ namespace Textpattern\Skin {
                     $skinName = $skin ? $skin->getName() : '';
 
                     if ($skinName) {
-                        !$where ?: $where.= ' AND ';
+                        !$where or $where.= ' AND ';
                         $where .= " AND skin = '".doSlash($skinName)."'";
                     }
                 }
 
-                $where ?: $where = '1 = 1';
+                $where or $where = '1 = 1';
             }
 
             return safe_update(self::getTable(), $set, $where);
@@ -562,7 +562,7 @@ namespace Textpattern\Skin {
 
         public function getField($thing = null, $where = null)
         {
-            $thing !== null ?: $thing = 'name';
+            $thing !== null or $thing = 'name';
 
             if ($where === null) {
                 $where = '';
@@ -577,12 +577,12 @@ namespace Textpattern\Skin {
                     $skinName = $skin ? $skin->getName() : '';
 
                     if ($skinName) {
-                        !$where ?: $where.= ' AND ';
+                        !$where or $where.= ' AND ';
                         $where .= " AND skin = '".doSlash($skinName)."'";
                     }
                 }
 
-                $where ?: $where = '1 = 1';
+                $where or $where = '1 = 1';
             }
 
             return safe_field($thing, self::getTable(), $where);
@@ -611,12 +611,12 @@ namespace Textpattern\Skin {
                     $skinName = $skin ? $skin->getName() : '';
 
                     if ($skinName) {
-                        !$where ?: $where.= ' AND ';
+                        !$where or $where.= ' AND ';
                         $where .= "skin = '".doSlash($skinName)."'";
                     }
                 }
 
-                $where ?: $where = '1 = 1';
+                $where or $where = '1 = 1';
             }
 
             return safe_delete(self::getTable(), $where);
@@ -646,7 +646,7 @@ namespace Textpattern\Skin {
 
         protected function getRow($things = null, $where = null)
         {
-            $things !== null ?: $things = '*';
+            $things !== null or $things = '*';
 
             if ($where === null) {
                 $where = '';
@@ -661,12 +661,12 @@ namespace Textpattern\Skin {
                     $skinName = $skin ? $skin->getName() : '';
 
                     if ($skinName) {
-                        !$where ?: $where .= ' AND ';
+                        !$where or $where .= ' AND ';
                         $where .= "skin = '".doSlash($skinName)."'";
                     }
                 }
 
-                $where ?: $where = '1=1';
+                $where or $where = '1=1';
             }
 
             return safe_row($things, self::getTable(), $where);
@@ -684,7 +684,7 @@ namespace Textpattern\Skin {
 
         public function getRows($things = null, $where = null)
         {
-            $things !== null ?: $things = '*';
+            $things !== null or $things = '*';
 
             if ($where === null) {
                 $where = '';
@@ -699,12 +699,12 @@ namespace Textpattern\Skin {
                     $skinName = $skin ? $skin->getName() : '';
 
                     if ($skinName) {
-                        !$where ?: $where.= ' AND ';
+                        !$where or $where.= ' AND ';
                         $where .= "skin = '".doSlash($skinName)."'";
                     }
                 }
 
-                $where ?: $where = '1=1';
+                $where or $where = '1=1';
             }
 
             $rs = safe_rows_start($things, self::getTable(), $where);
@@ -771,7 +771,7 @@ namespace Textpattern\Skin {
         public function isInstalled($name = null)
         {
             $isAsset = property_exists($this, 'skin');
-            $name !== null ?: $name = $this->getName();
+            $name !== null or $name = $this->getName();
 
             if ($this->installed === null) {
                 $isInstalled = (bool) $this->getField('name', "name = '".$name."'");

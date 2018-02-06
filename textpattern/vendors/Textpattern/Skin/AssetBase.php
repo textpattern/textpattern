@@ -191,7 +191,7 @@ namespace Textpattern\Skin {
                     }
                 }
             } else {
-                $key !== null ?: $key = 'name';
+                $key !== null or $key = 'name';
                 $keyValues = array();
 
                 foreach (static::$essential as $row) {
@@ -297,7 +297,7 @@ namespace Textpattern\Skin {
 
         protected function getSubdirPath($name = null)
         {
-            $name ?: $name = $this->getInfos()[self::getSubdirField()];
+            $name or $name = $this->getInfos()[self::getSubdirField()];
 
             return $this->getDirPath().DS.$name;
         }
@@ -332,7 +332,7 @@ namespace Textpattern\Skin {
         {
             global $prefs;
 
-            $name !== null ?: $name = $this->getName();
+            $name !== null or $name = $this->getName();
             $prefs['last_'.self::getEvent().'_saved'] = $name;
 
             return set_pref(
@@ -420,7 +420,7 @@ namespace Textpattern\Skin {
 
         public function createRows($rows = null)
         {
-            $rows !== null ?: $rows = self::getEssential();
+            $rows !== null or $rows = self::getEssential();
 
             $skin = $this->getSkin()->getName();
             $fields = array('skin', 'name');
@@ -556,7 +556,7 @@ namespace Textpattern\Skin {
                     $this->setName($name);
 
                     if (!$nameNotIn || ($nameNotIn && !in_array($name, $nameNotIn))) {
-                        unlink($this->getFilePath(basename($file->getPath()))) ?: $notRemoved[] = $name;
+                        unlink($this->getFilePath(basename($file->getPath()))) or $notRemoved[] = $name;
                     }
                 }
             }
