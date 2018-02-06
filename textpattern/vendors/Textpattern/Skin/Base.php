@@ -504,7 +504,7 @@ namespace Textpattern\Skin {
             if ($set === null) {
                 $set = $this->getInfos(true);
 
-                if (isset($this->skin)) {
+                if (property_exists($this, 'skin')) {
                     $set .= " skin = '".doSlash($this->getSkin()->getName())."'";
                 }
             }
@@ -534,9 +534,17 @@ namespace Textpattern\Skin {
                     $where = "name = '".doSlash($base)."'";
                 }
 
-                if (isset($this->skin)) {
-                    $where .= " AND skin = '".doSlash($this->getSkin()->getName())."'";
+                if (property_exists($this, 'skin')) {
+                    $skin = $this->getSkin();
+                    $skinName = $skin ? $skin->getName() : '';
+
+                    if ($skinName) {
+                        !$where ?: $where.= ' AND ';
+                        $where .= " AND skin = '".doSlash($skinName)."'";
+                    }
                 }
+
+                $where ?: $where = '1 = 1';
             }
 
             return safe_update(self::getTable(), $set, $where);
@@ -561,12 +569,20 @@ namespace Textpattern\Skin {
                 $name = $this->getName();
 
                 if ($name) {
-                    $where = "name = '".doSlash($name)."'";
+                    $where .= "name = '".doSlash($name)."'";
                 }
 
-                if (isset($this->skin)) {
-                    $where .= " AND skin = '".doSlash($this->getSkin()->getName())."'";
+                if (property_exists($this, 'skin')) {
+                    $skin = $this->getSkin();
+                    $skinName = $skin ? $skin->getName() : '';
+
+                    if ($skinName) {
+                        !$where ?: $where.= ' AND ';
+                        $where .= " AND skin = '".doSlash($skinName)."'";
+                    }
                 }
+
+                $where ?: $where = '1 = 1';
             }
 
             return safe_field($thing, self::getTable(), $where);
@@ -587,13 +603,20 @@ namespace Textpattern\Skin {
                 $names = $this->getNames();
 
                 if ($names) {
-                    $where = "name IN ('".implode("', '", array_map('doSlash', $names))."')";
+                    $where .= "name IN ('".implode("', '", array_map('doSlash', $names))."')";
                 }
 
-                if (isset($this->skin)) {
-                    !$where ?: $where.= ' AND ';
-                    $where .= "skin = '".doSlash($this->getSkin()->getName())."'";
+                if (property_exists($this, 'skin')) {
+                    $skin = $this->getSkin();
+                    $skinName = $skin ? $skin->getName() : '';
+
+                    if ($skinName) {
+                        !$where ?: $where.= ' AND ';
+                        $where .= "skin = '".doSlash($skinName)."'";
+                    }
                 }
+
+                $where ?: $where = '1 = 1';
             }
 
             return safe_delete(self::getTable(), $where);
@@ -606,9 +629,9 @@ namespace Textpattern\Skin {
          * @return mixed         Number of rows or FALSE on error
          */
 
-        protected static function countRows($where)
+        protected static function countRows($where = null)
         {
-            return safe_count(self::getTable(), $where);
+            return safe_count(self::getTable(), ($where === null ? '1 = 1' : $where));
         }
 
         /**
@@ -630,15 +653,20 @@ namespace Textpattern\Skin {
                 $name = $this->getName();
 
                 if ($name) {
-                    $where = "name = '".doSlash($name)."'";
+                    $where .= "name = '".doSlash($name)."'";
                 }
 
-                if (isset($this->skin)) {
-                    !$where ?: $where.= ' AND ';
-                    $where .= "skin = '".doSlash($this->getSkin()->getName())."'";
-                } elseif (!$where) {
-                    $where = '1=1';
+                if (property_exists($this, 'skin')) {
+                    $skin = $this->getSkin();
+                    $skinName = $skin ? $skin->getName() : '';
+
+                    if ($skinName) {
+                        !$where ?: $where .= ' AND ';
+                        $where .= "skin = '".doSlash($skinName)."'";
+                    }
                 }
+
+                $where ?: $where = '1=1';
             }
 
             return safe_row($things, self::getTable(), $where);
@@ -663,15 +691,20 @@ namespace Textpattern\Skin {
                 $names = $this->getNames();
 
                 if ($names) {
-                    $where = "name IN ('".implode("', '", array_map('doSlash', $names))."')";
+                    $where .= "name IN ('".implode("', '", array_map('doSlash', $names))."')";
                 }
 
-                if (isset($this->skin)) {
-                    !$where ?: $where.= ' AND ';
-                    $where .= "skin = '".doSlash($this->getSkin()->getName())."'";
-                } elseif (!$where) {
-                    $where = '1=1';
+                if (property_exists($this, 'skin')) {
+                    $skin = $this->getSkin();
+                    $skinName = $skin ? $skin->getName() : '';
+
+                    if ($skinName) {
+                        !$where ?: $where.= ' AND ';
+                        $where .= "skin = '".doSlash($skinName)."'";
+                    }
                 }
+
+                $where ?: $where = '1=1';
             }
 
             $rs = safe_rows_start($things, self::getTable(), $where);
