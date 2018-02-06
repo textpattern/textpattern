@@ -71,7 +71,7 @@ namespace Textpattern\Skin {
          * @see       setUploaded(), getUploaded().
          */
 
-        protected static $uploaded;
+        protected $uploaded;
 
         /**
          * Class related directory path.
@@ -88,7 +88,6 @@ namespace Textpattern\Skin {
 
         public function __construct()
         {
-            $this->setName();
         }
 
         protected function mergeResults($asset, $status) {
@@ -110,6 +109,7 @@ namespace Textpattern\Skin {
             $path !== null ?: $path = get_pref('path_to_site').DS.get_pref(self::getEvent().'_dir');
 
             $this->dirPath = rtrim($path, DS);
+            $this->uploaded = null;
 
             return $this->getDirPath();
         }
@@ -259,7 +259,10 @@ namespace Textpattern\Skin {
                 !empty($author) ?: $author = gTxt('unknown');
                 !empty($author_uri) ?: $author_uri = '';
 
-                $contents = compact('title', 'version', 'description', 'author', 'author_uri');
+                $contents = array_merge(
+                    $contents,
+                    compact('title', 'version', 'description', 'author', 'author_uri')
+                );
             }
 
             return $contents;
@@ -290,10 +293,15 @@ namespace Textpattern\Skin {
          * @return bool          FALSE on error.
          */
 
-        protected function updateSections($set = null, $where = null)
+        public function updateSections($set = null, $where = null)
         {
             $set !== null ?: $set = "skin = '".doSlash($this->getName())."'";
-            $where !== null ?: $where = "skin = '".doSlash($this->getBase())."'";
+
+            if ($where === null) {
+                $base = $this->getBase();
+
+                $where = $base ? "skin = '".doSlash($this->getBase())."'" : '1 = 1';
+            }
 
             return safe_update('txp_section', $set, $where);
         }
@@ -373,7 +381,7 @@ namespace Textpattern\Skin {
 
         protected function setUploaded()
         {
-            self::$uploaded = array();
+            $this->uploaded = array();
             $files = $this->getFiles(array(self::getFilename()), 1);
 
             if ($files) {
@@ -383,7 +391,7 @@ namespace Textpattern\Skin {
 
                     if ($name === self::sanitize($name)) {
                         $infos = $file->getJSONContents();
-                        !$infos ?: self::$uploaded[$name] = $infos['title'];
+                        !$infos ?: $this->uploaded[$name] = $infos['title'];
                     }
                 }
             }
@@ -392,14 +400,40 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * $uploaded property getter.
+         * $uploaded property setter.
          *
-         * @return array self::$uploaded.
+         * @return object $this.
          */
 
-        protected function getUploaded()
+        public function getInstallable()
         {
-            return self::$uploaded === null ? $this->setUploaded() : self::$uploaded;
+            $installable = array();
+            $files = $this->getFiles(array(self::getFilename()), 1);
+
+            if ($files) {
+                foreach ($files as $file) {
+                    $filePath = $file->getPath();
+                    $name = basename($file->getPath());
+
+                    if ($name === self::sanitize($name)) {
+                        $infos = $file->getJSONContents();
+                        !$infos ?: $installable[$name] = $infos;
+                    }
+                }
+            }
+
+            return $installable;
+        }
+
+        /**
+         * $uploaded property getter.
+         *
+         * @return array $this->uploaded.
+         */
+
+        public function getUploaded()
+        {
+            return $this->uploaded === null ? $this->setUploaded() : $this->uploaded;
         }
 
         /**
