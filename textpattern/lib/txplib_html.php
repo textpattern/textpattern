@@ -588,7 +588,7 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
             'class' => 'toggle',
             'id'    => $anchor_id,
             'role'  => 'group',
-            'style' => $visible ? '' : 'display: none',
+            'style' => $visible ? '' : 'display:none',
         );
 
         $label = href($label, '#'.$anchor_id, array(
