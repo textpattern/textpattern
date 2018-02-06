@@ -1473,7 +1473,7 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
                 'method'  => 'post',
                 'enctype' => 'multipart/form-data',
                 'action'  => "index.php?event=$event&step=$step",
-                'style'   => 'position: relative',
+                'style'   => 'position:relative',
             )
         ),
         $argv
