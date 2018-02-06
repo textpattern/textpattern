@@ -422,7 +422,7 @@ namespace Textpattern\Skin {
                         $infos = $file->getJSONContents();
 
                         if ($infos && $infos['txp-type'] === 'textpattern-theme') {
-                            $this->uploaded[$name] = $infos['title'];
+                            $installable[$name] = $infos;
                         }
                     }
                 }
