@@ -391,7 +391,10 @@ namespace Textpattern\Skin {
 
                     if ($name === self::sanitize($name)) {
                         $infos = $file->getJSONContents();
-                        !$infos ?: $this->uploaded[$name] = $infos['title'];
+
+                        if ($infos && $infos['txp-type'] === 'textpattern-theme') {
+                            $this->uploaded[$name] = $infos['title'];
+                        }
                     }
                 }
             }
@@ -417,7 +420,10 @@ namespace Textpattern\Skin {
 
                     if ($name === self::sanitize($name)) {
                         $infos = $file->getJSONContents();
-                        !$infos ?: $installable[$name] = $infos;
+
+                        if ($infos && $infos['txp-type'] === 'textpattern-theme') {
+                            $this->uploaded[$name] = $infos['title'];
+                        }
                     }
                 }
             }
