@@ -1466,7 +1466,7 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
             ).
             tag(null, 'progress', array(
                 'class' => 'txp-upload-progress',
-                'style' =>  'display:none;',
+                'style' =>  'display:none',
             )),
             'form', array(
                 'class'   => 'upload-form'.($class ? ' '.trim($class) : ''),
