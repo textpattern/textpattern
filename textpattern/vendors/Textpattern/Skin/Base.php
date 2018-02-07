@@ -494,12 +494,13 @@ namespace Textpattern\Skin {
         /**
          * Insert a row into the $table property value related table.
          *
-         * @param  string $set Optional SET clause.
-         *                     Builds the clause from the $infos (+ $skin) property value(s) if null.
-         * @return bool        FALSE on error.
+         * @param  string $set   Optional SET clause.
+         *                       Builds the clause from the $infos (+ $skin) property value(s) if null.
+         * @param  bool   $debug Dump query
+         * @return bool          FALSE on error.
          */
 
-        public function createRow($set = null)
+        public function createRow($set = null, $debug = false)
         {
             if ($set === null) {
                 $set = $this->getInfos(true);
@@ -509,7 +510,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            return safe_insert(self::getTable(), $set);
+            return safe_insert(self::getTable(), $set, $debug);
         }
 
         /**
@@ -519,10 +520,11 @@ namespace Textpattern\Skin {
          *                       Builds the clause from the $infos property value if null.
          * @param  string $where Optional WHERE clause.
          *                       Builds the clause from the $base (+ $skin) property value(s) if null.
+         * @param  bool   $debug Dump query
          * @return bool          FALSE on error.
          */
 
-        public function updateRow($set = null, $where = null)
+        public function updateRow($set = null, $where = null, $debug = false)
         {
             $set !== null or $set = $this->getInfos(true);
 
@@ -547,7 +549,7 @@ namespace Textpattern\Skin {
                 $where or $where = '1 = 1';
             }
 
-            return safe_update(self::getTable(), $set, $where);
+            return safe_update(self::getTable(), $set, $where, $debug);
         }
 
         /**
@@ -557,10 +559,11 @@ namespace Textpattern\Skin {
          *                       Uses 'name' if null.
          * @param  string $where Optional WHERE clause.
          *                       Builds the clause from the $name (+ $skin) property value(s) if null.
+         * @param  bool   $debug Dump query
          * @return mixed         The Field or FALSE on error.
          */
 
-        public function getField($thing = null, $where = null)
+        public function getField($thing = null, $where = null, $debug = false)
         {
             $thing !== null or $thing = 'name';
 
@@ -585,7 +588,7 @@ namespace Textpattern\Skin {
                 $where or $where = '1 = 1';
             }
 
-            return safe_field($thing, self::getTable(), $where);
+            return safe_field($thing, self::getTable(), $where, $debug);
         }
 
         /**
@@ -593,10 +596,11 @@ namespace Textpattern\Skin {
          *
          * @param  string $where Optional WHERE clause.
          *                       Builds the clause from the $names (+ $skin) property value(s) if null.
+         * @param  bool   $debug Dump query
          * @return bool          false on error.
          */
 
-        public function deleteRows($where = null)
+        public function deleteRows($where = null, $debug = false)
         {
             if ($where === null) {
                 $where = '';
@@ -619,19 +623,20 @@ namespace Textpattern\Skin {
                 $where or $where = '1 = 1';
             }
 
-            return safe_delete(self::getTable(), $where);
+            return safe_delete(self::getTable(), $where, $debug);
         }
 
         /**
          * Count rows in the $table property value related table.
          *
          * @param  string $where The where clause.
+         * @param  bool   $debug Dump query
          * @return mixed         Number of rows or FALSE on error
          */
 
-        protected static function countRows($where = null)
+        protected static function countRows($where = null, $debug = false)
         {
-            return safe_count(self::getTable(), ($where === null ? '1 = 1' : $where));
+            return safe_count(self::getTable(), ($where === null ? '1 = 1' : $where), $debug);
         }
 
         /**
@@ -641,10 +646,11 @@ namespace Textpattern\Skin {
          *                        Uses '*' (all) if null.
          * @param  string $where  Optional WHERE clause.
          *                        Builds the clause from the $name (+ $skin) property value(s) if null.
+         * @param  bool   $debug  Dump query
          * @return bool           Array.
          */
 
-        protected function getRow($things = null, $where = null)
+        protected function getRow($things = null, $where = null, $debug = false)
         {
             $things !== null or $things = '*';
 
@@ -669,7 +675,7 @@ namespace Textpattern\Skin {
                 $where or $where = '1=1';
             }
 
-            return safe_row($things, self::getTable(), $where);
+            return safe_row($things, self::getTable(), $where, $debug);
         }
 
         /**
@@ -679,10 +685,11 @@ namespace Textpattern\Skin {
          *                       Uses '*' (all) if null.
          * @param  string $where Optional WHERE clause (default: "name = '".doSlash($this->getName())."'")
          *                       Builds the clause from the $names (+ $skin) property value(s) if null.
+         * @param  bool   $debug Dump query
          * @return array         (Empty on error)
          */
 
-        public function getRows($things = null, $where = null)
+        public function getRows($things = null, $where = null, $debug = false)
         {
             $things !== null or $things = '*';
 
@@ -707,7 +714,7 @@ namespace Textpattern\Skin {
                 $where or $where = '1=1';
             }
 
-            $rs = safe_rows_start($things, self::getTable(), $where);
+            $rs = safe_rows_start($things, self::getTable(), $where, $debug);
 
             if ($rs) {
                 $rows = array();
