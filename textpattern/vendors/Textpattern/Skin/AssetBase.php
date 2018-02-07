@@ -22,9 +22,9 @@
  */
 
 /**
- * SharedBase
+ * Asset Base
  *
- * Extended by Main and AssetBase.
+ * Extended by CSS, Form and Page.
  *
  * @since   4.7.0
  * @package Skin
@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin {
 
-    abstract class AssetBase extends Base
+    abstract class AssetBase extends CommonBase implements AssetInterface
     {
         /**
          * Asset related directory.
@@ -122,7 +122,7 @@ namespace Textpattern\Skin {
          * $skin property getter.
          */
 
-        public function getSkin()
+        protected function getSkin()
         {
             return $this->skin;
         }
@@ -348,9 +348,11 @@ namespace Textpattern\Skin {
             global $prefs;
 
             $event = self::getEvent();
+            $pref = 'last_'.$event.'_saved';
 
-            unset($prefs['last_'.$event.'_saved']);
-            return remove_pref('last_'.$event.'_saved', $event);
+            unset($prefs[$pref]);
+
+            return remove_pref($pref, $event);
         }
 
 
@@ -737,7 +739,7 @@ namespace Textpattern\Skin {
          * @param  string $skin Optional skin name. Read from GET/POST otherwise
          */
 
-        public function selectEdit($skin = null)
+        protected function selectEdit($skin = null)
         {
             if ($skin === null) {
                 $skin = gps('skin');

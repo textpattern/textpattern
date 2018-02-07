@@ -22,9 +22,9 @@
  */
 
 /**
- * SharedBase
+ * Common Base
  *
- * Extended by Main and AssetBase.
+ * Extended by Skin and AssetBase.
  *
  * @since   4.7.0
  * @package Skin
@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin {
 
-    abstract class Base
+    abstract class CommonBase implements CommonInterface
     {
         /**
          * Class related database table.
@@ -165,14 +165,6 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Sanitize a string.
-         *
-         * @return string Sanitized string.
-         */
-
-        abstract protected static function sanitize($name);
-
-        /**
          * $names property setter/sanitizer.
          *
          * @param  array  $names Multiple skin or template names to work with related methods.
@@ -275,36 +267,10 @@ namespace Textpattern\Skin {
          * @return string Sanitized skin or template base name.
          */
 
-        public function getBase()
+        protected function getBase()
         {
             return $this->base;
         }
-
-        /**
-         * Get the $name property value related directory path
-         * (subdirectory of the $dir property value related directory).
-         *
-         * @param string Path
-         */
-
-        abstract protected function getSubdirPath();
-
-        /**
-         * Get the current 'skin_editing' or '{asset}_last_saved' pref value.
-         *
-         * @return mixed Skin/template name | false on error.
-         */
-
-        abstract public static function getEditing();
-
-        /**
-         * Set the 'skin_editing' or '{asset}_last_saved' pref value
-         * to the $name property value.
-         *
-         * @return bool false on error.
-         */
-
-        abstract public function setEditing();
 
         /**
          * Get the 'remove_extra_templates' preference value.
@@ -443,37 +409,6 @@ namespace Textpattern\Skin {
 
             return $severity ? array($message, constant($severity)) : $message;
         }
-
-        /**
-         * Import/Override (and clean) multiple skins (and their related $assets)
-         * or multiple templates from the $names (+ $skin) property value(s).
-         * Merges results in the related property.
-         *
-         * @param  bool   $clean    Whether to removes extra skin template rows or not;
-         * @param  bool   $override Whether to insert or update the skins.
-         * @return object $this     The current object (chainable).
-         */
-
-        abstract public function import($clean = false, $override = false);
-
-        /**
-         * Export (and clean) multiple skins (and their related $assets)
-         * or multiple templates from the $names (+ $skin) property value(s).
-         * Merges results in the related property.
-         *
-         * @param  bool   $clean Whether to removes extra skin template files or not;
-         * @return object $this  The current object (chainable).
-         */
-
-        abstract public function export($clean = false, $override = false);
-
-        /**
-         * Create/override a skin/asset file from the $infos property values.
-         *
-         * @return bool false on error.
-         */
-
-         abstract protected function createFile();
 
         /**
          * Get files from the $dir property value related directory.
@@ -636,7 +571,7 @@ namespace Textpattern\Skin {
          * @return mixed         Number of rows or FALSE on error
          */
 
-        protected static function countRows($where = null, $debug = false)
+        public static function countRows($where = null, $debug = false)
         {
             return safe_count(self::getTable(), ($where === null ? '1 = 1' : $where), $debug);
         }
@@ -652,7 +587,7 @@ namespace Textpattern\Skin {
          * @return bool           Array.
          */
 
-        protected function getRow($things = null, $where = null, $debug = false)
+        public function getRow($things = null, $where = null, $debug = false)
         {
             $things !== null or $things = '*';
 
@@ -782,13 +717,13 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Whether a skin is installed or not.
+         * Whether a skin/template is installed or not.
          *
          * @param  string $name Skin name (default: $this->getName()).
          * @return bool
          */
 
-        public function isInstalled($name = null)
+        protected function isInstalled($name = null)
         {
             $isAsset = property_exists($this, 'skin');
             $name !== null or $name = $this->getName();

@@ -22,9 +22,9 @@
  */
 
 /**
- * SharedBase
+ * Skin
  *
- * Extended by Main and AssetBase.
+ * Manage Skins and their dependencies
  *
  * @since   4.7.0
  * @package Skin
@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin {
 
-    class Skin extends Base
+    class Skin extends CommonBase implements SkinInterface
     {
         /**
          * Skin assets related objects.
@@ -919,7 +919,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Delete Files from the $dir property value related dirstory.
+         * Delete Files from the $dir property value related directory.
          *
          * @param  string $names directory/file names.
          * @return bool   0 on error.
@@ -1098,25 +1098,16 @@ namespace Textpattern\Skin {
                 set_pref($event.'_sort_dir', $dir, $event, 2, '', 0, PREF_PRIVATE);
             }
 
-            $search = $this->getSearchFilter(array(
-                    'name' => array(
-                        'column' => $table.'.name',
-                        'label'  => gTxt('name'),
-                    ),
-                    'title' => array(
-                        'column' => $table.'.title',
-                        'label'  => gTxt('title'),
-                    ),
-                    'description' => array(
-                        'column' => $table.'.description',
-                        'label'  => gTxt('description'),
-                    ),
-                    'author' => array(
-                        'column' => $table.'.author',
-                        'label'  => gTxt('author'),
-                    ),
-                )
-            );
+            $searchOpts = array();
+
+            foreach (array('name', 'title', 'description', 'author') as $option) {
+                $searchOpts[$option] = array(
+                    'column' => $table.'.'.$option,
+                    'label'  => gTxt($option),
+                );
+            }
+
+            $search = $this->getSearchFilter($searchOpts);
 
             list($criteria, $crit, $search_method) = $search->getFilter();
 
@@ -1377,7 +1368,7 @@ namespace Textpattern\Skin {
                 }
 
                 return $out
-                        .n.tag_end('tbody')
+                       .n.tag_end('tbody')
                        .n.tag_end('table')
                        .n.tag_end('div');
             }
