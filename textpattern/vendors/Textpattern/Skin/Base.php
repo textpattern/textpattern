@@ -336,9 +336,11 @@ namespace Textpattern\Skin {
         {
             global $prefs;
 
+            $name = 'remove_extra_templates';
+
             return set_pref(
-                'remove_extra_templates',
-                $prefs['remove_extra_templates'] = !$prefs['remove_extra_templates'],
+                $name,
+                $prefs[$name] = !$prefs[$name],
                 'skin',
                 PREF_HIDDEN,
                 'text_input',
@@ -727,6 +729,17 @@ namespace Textpattern\Skin {
             }
 
             return array();
+        }
+
+        /**
+         * Get the skin name used by the default section.
+         *
+         * @return mixed Skin name or FALSE on error.
+         */
+
+        protected static function getDefault()
+        {
+            return safe_field(self::getEvent(), 'txp_section', 'name = "default"');
         }
 
         /**

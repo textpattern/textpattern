@@ -332,18 +332,11 @@ namespace Textpattern\Skin {
         {
             global $prefs;
 
+            $event = self::getEvent();
+            $pref = 'last_'.$event.'_saved';
             $name !== null or $name = $this->getName();
-            $prefs['last_'.self::getEvent().'_saved'] = $name;
 
-            return set_pref(
-                'last_'.self::getEvent().'_saved',
-                $name,
-                'skin',
-                PREF_HIDDEN,
-                'text_input',
-                0,
-                PREF_PRIVATE
-            );
+            return set_pref($pref, $prefs[$pref] = $name, $event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
         }
 
         /**
@@ -369,20 +362,7 @@ namespace Textpattern\Skin {
 
         protected static function resetEditing()
         {
-            global $prefs;
-
-            $name = safe_field('page', 'txp_section', 'name = "default"');
-            $prefs['last_'.self::getEvent().'_saved'] = $name;
-
-            return set_pref(
-                'last_'.self::getEvent().'_saved',
-                $name,
-                'skin',
-                PREF_HIDDEN,
-                'text_input',
-                0,
-                PREF_PRIVATE
-            );
+            return $this->setEditing(self::getDefault());
         }
 
         /**
@@ -649,7 +629,6 @@ namespace Textpattern\Skin {
             ));
 
             $done = array();
-            $event = self::getEvent();
             $dirPath = $this->getDirPath();
 
             if (!is_writable($dirPath) && !@mkdir($dirPath)) {
@@ -726,10 +705,11 @@ namespace Textpattern\Skin {
          * @return HTML
          */
 
-        public function renderSelectEdit()
+        public function getSelectEdit()
         {
             $thisSkin = $this->getSkin();
             $skins = $thisSkin->getInstalled();
+            $event = self::getEvent();
 
             if (count($skins) > 1) {
                 return form(
@@ -738,8 +718,8 @@ namespace Textpattern\Skin {
                         selectInput('skin', $skins, $thisSkin::getEditing(), false, 1, 'skin'),
                         'skin'
                     )
-                    .eInput(self::getEvent())
-                    .sInput(self::getEvent().'_skin_change'),
+                    .eInput($event)
+                    .sInput($event.'_skin_change'),
                     '',
                     '',
                     'post'

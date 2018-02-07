@@ -280,7 +280,7 @@ namespace Textpattern\Skin {
                 safe_column(
                     'name',
                     'txp_section',
-                    "skin ='".doSlash($this->getName())."'"
+                    self::getEvent()." ='".doSlash($this->getName())."'"
                 )
             );
         }
@@ -295,12 +295,14 @@ namespace Textpattern\Skin {
 
         public function updateSections($set = null, $where = null)
         {
-            $set !== null or $set = "skin = '".doSlash($this->getName())."'";
+            $event = self::getEvent();
+
+            $set !== null or $set = $event." = '".doSlash($this->getName())."'";
 
             if ($where === null) {
                 $base = $this->getBase();
 
-                $where = $base ? "skin = '".doSlash($this->getBase())."'" : '1 = 1';
+                $where = $base ? $event." = '".doSlash($this->getBase())."'" : '1 = 1';
             }
 
             return safe_update('txp_section', $set, $where);
@@ -331,17 +333,6 @@ namespace Textpattern\Skin {
             set_pref($event.'_editing', $name, $event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
 
             return self::getEditing();
-        }
-
-        /**
-         * Get the skin name used by the default section.
-         *
-         * @return mixed Skin name or FALSE on error.
-         */
-
-        public static function getDefault()
-        {
-            return safe_field(self::getEvent(), 'txp_section', 'name = "default"');
         }
 
         /**
@@ -479,17 +470,18 @@ namespace Textpattern\Skin {
         {
             $assets = array('section', 'page', 'form', 'css');
             $things = array('*');
+            $table = self::getTable();
 
             foreach ($assets as $asset) {
                 $things[] = '(SELECT COUNT(*) '
                             .'FROM '.safe_pfx_j('txp_'.$asset).' '
-                            .'WHERE txp_'.$asset.'.skin = txp_skin.name) '
+                            .'WHERE txp_'.$asset.'.'.self::getEvent().' = '.$table.'.name) '
                             .$asset.'_count';
             }
 
             return safe_rows_start(
                 implode(', ', $things),
-                'txp_skin',
+                $table,
                 $criteria.' order by '.$sortSQL.' limit '.$offset.', '.$limit
             );
         }
@@ -517,9 +509,9 @@ namespace Textpattern\Skin {
                 $this->mergeResult($event.'_unknown', $base);
             } elseif ($this->isInstalled()) {
                 $this->mergeResult($event.'_already_exists', $name);
-            } elseif (is_dir($subdirPath = $this->getSubdirPath())) {
+            } elseif (is_dir($nameDirPath = $this->getSubdirPath())) {
                 // Create a skin which would already have a related directory could cause conflicts.
-                $this->mergeResult($event.'_already_exists', $subdirPath);
+                $this->mergeResult($event.'_already_exists', $nameDirPath);
             } elseif (!$this->createRow()) {
                 $this->mergeResult($event.'_creation_failed', $name);
             } else {
@@ -575,9 +567,9 @@ namespace Textpattern\Skin {
                 $this->mergeResult($event.'_unknown', $base);
             } elseif ($base !== $name && $this->isInstalled()) {
                 $this->mergeResult($event.'_already_exists', $name);
-            } elseif (is_dir($subdirPath = $this->getSubdirPath()) && $base !== $name) {
+            } elseif (is_dir($nameDirPath = $this->getSubdirPath()) && $base !== $name) {
                 // Rename the skin with a name which would already have a related directory could cause conflicts.
-                $this->mergeResult($event.'_already_exists', $subdirPath);
+                $this->mergeResult($event.'_already_exists', $nameDirPath);
             } elseif (!$this->updateRow()) {
                 $this->mergeResult($event.'_update_failed', $base);
                 $locked = $base;
@@ -585,9 +577,10 @@ namespace Textpattern\Skin {
                 $this->mergeResult($event.'_updated', $name, 'success');
                 $ready = true;
                 $locked = $base;
+                $baseDirPath = $this->getSubdirPath($base);
 
                 // Rename the skin related directory to allow new updates from files.
-                if (is_dir($this->getSubdirPath($base)) && !@rename($this->getSubdirPath($base), $subdirPath)) {
+                if (is_dir($baseDirPath) && !@rename($baseDirPath, $nameDirPath)) {
                     $this->mergeResult('path_renaming_failed', $base, 'warning');
                 } else {
                     $locked = $name;
@@ -606,8 +599,11 @@ namespace Textpattern\Skin {
                 self::getEditing() !== $base or $this->setEditing();
 
                 // Start working with the skin related assets.
+                $assetUpdateSet = $event." = '".doSlash($this->getName())."'";
+                $assetUpdateWhere = $event." = '".doSlash($this->getBase())."'";
+
                 foreach ($this->getAssets() as $assetModel) {
-                    if (!$assetModel->updateRow($event." = '".doSlash($this->getName())."'", $event." = '".doSlash($this->getBase())."'")) {
+                    if (!$assetModel->updateRow($assetUpdateSet, $assetUpdateWhere)) {
                         $assetsFailed = true;
                         $this->mergeResult($assetModel->getEvent().'_update_failed', $base);
                     }
@@ -639,7 +635,7 @@ namespace Textpattern\Skin {
             $ready = $done = array(); // See the final callback event.
 
             foreach ($names as $name) {
-                $subdirPath = $this->setName($name)->getSubdirPath();
+                $nameDirPath = $this->setName($name)->getSubdirPath();
                 $copy = $name.'_copy';
 
                 if (!$this->isInstalled()) {
@@ -685,7 +681,7 @@ namespace Textpattern\Skin {
                                 if (!$assetRows) {
                                     $deleteExtraFiles = true;
 
-                                    $this->mergeResult($assetString.'_not_found', array($skin => $subdirPath));
+                                    $this->mergeResult($assetString.'_not_found', array($skin => $nameDirPath));
                                 } elseif ($this->setName($copy) && !$assetModel->createRows($assetRows)) {
                                     $deleteExtraFiles = true;
 
@@ -791,19 +787,19 @@ namespace Textpattern\Skin {
             foreach ($names as $name) {
                 $this->setName($name);
 
-                $subdirPath = $this->getSubdirPath();
+                $nameDirPath = $this->getSubdirPath();
 
-                if (!is_writable($subdirPath)) {
+                if (!is_writable($nameDirPath)) {
                     $clean = false;
                     $override = false;
                 }
 
                 if (!self::isValidDirName($name)) {
                     $this->mergeResult($event.'_unsafe_name', $name);
-                } elseif (!$override && is_dir($subdirPath)) {
-                    $this->mergeResult($event.'_already_exists', $subdirPath);
-                } elseif (!is_dir($subdirPath) && !@mkdir($subdirPath)) {
-                    $this->mergeResult('path_not_writable', $subdirPath);
+                } elseif (!$override && is_dir($nameDirPath)) {
+                    $this->mergeResult($event.'_already_exists', $nameDirPath);
+                } elseif (!is_dir($nameDirPath) && !@mkdir($nameDirPath)) {
+                    $this->mergeResult('path_not_writable', $nameDirPath);
                 } else {
                     $ready[] = $name;
                 }
@@ -1063,6 +1059,7 @@ namespace Textpattern\Skin {
         protected function getList($message = '')
         {
             $event = self::getEvent();
+            $table = self::getTable();
 
             pagetop(gTxt('tab_'.$event), $message);
 
@@ -1103,19 +1100,19 @@ namespace Textpattern\Skin {
 
             $search = $this->getSearchFilter(array(
                     'name' => array(
-                        'column' => 'txp_skin.name',
+                        'column' => $table.'.name',
                         'label'  => gTxt('name'),
                     ),
                     'title' => array(
-                        'column' => 'txp_skin.title',
+                        'column' => $table.'.title',
                         'label'  => gTxt('title'),
                     ),
                     'description' => array(
-                        'column' => 'txp_skin.description',
+                        'column' => $table.'.description',
                         'label'  => gTxt('description'),
                     ),
                     'author' => array(
-                        'column' => 'txp_skin.author',
+                        'column' => $table.'.author',
                         'label'  => gTxt('author'),
                     ),
                 )
@@ -1148,12 +1145,14 @@ namespace Textpattern\Skin {
 
         protected function getSearchBlock($search)
         {
+            $event = self::getEvent();
+
             return n.tag(
-                $search->renderForm(self::getEvent(), array('placeholder' => 'search_skins')),
+                $search->renderForm($event, array('placeholder' => 'search_'.$event)),
                 'div',
                 array(
                     'class' => 'txp-layout-4col-3span',
-                    'id'    => self::getEvent().'_control',
+                    'id'    => $event.'_control',
                 )
             );
         }
@@ -1198,7 +1197,7 @@ namespace Textpattern\Skin {
                             'method' => 'post',
                             'action' => 'index.php',
                         ))
-                        .tag(gTxt('import_skin'), 'label', array('for' => $event.'_import'))
+                        .tag(gTxt('import_'.$event), 'label', array('for' => $event.'_import'))
                         .popHelp($event.'_import')
                         .selectInput('skins', $new, '', true, false, 'skins')
                         .eInput(self::getEvent())
@@ -1233,7 +1232,9 @@ namespace Textpattern\Skin {
 
         protected static function getCreateButton()
         {
-            return sLink(self::getEvent(), 'edit', gTxt('create_skin'), 'txp-button');
+            $event = self::getEvent();
+
+            return sLink($event, 'edit', gTxt('create_'.$event), 'txp-button');
         }
 
         protected function getContentBlock($data)
@@ -1372,7 +1373,7 @@ namespace Textpattern\Skin {
                         $tds .= td($tdVal, '', 'txp-list-col-'.$name.'_count');
                     }
 
-                    $out .= tr($tds, array('id' => 'txp_skin_'.$skin_name));
+                    $out .= tr($tds, array('id' => self::getTable().'_'.$skin_name));
                 }
 
                 return $out
@@ -1405,12 +1406,13 @@ namespace Textpattern\Skin {
         protected function getMultiEditForm($page, $sort, $dir, $crit, $search_method)
         {
             $event = self::getEvent();
+            $pref = 'remove_extra_templates';
 
-            $removeExtra = checkbox2('clean', get_pref('remove_extra_templates', true), 0, 'clean')
-                           .n.tag(gtxt('remove_extra_templates'), 'label', array('for' => 'clean'))
-                           .popHelp('remove_extra_templates');
+            $removeExtra = checkbox2('clean', get_pref($pref, true), 0, 'clean')
+                           .n.tag(gtxt($pref), 'label', array('for' => 'clean'))
+                           .popHelp($pref);
 
-            $removeAll = checkbox2('clean', get_pref('remove_extra_templates', true), 0, 'clean')
+            $removeAll = checkbox2('clean', get_pref($pref, true), 0, 'clean')
                          .n.tag(gtxt('remove_'.$event.'_files'), 'label', array('for' => 'clean'))
                          .popHelp('remove_'.$event.'_files');
 
@@ -1439,7 +1441,7 @@ namespace Textpattern\Skin {
 
             require_privs($event.'.edit');
 
-            !$message or pagetop(gTxt('tab_skins'), $message);
+            !$message or pagetop(gTxt('tab_'.$event), $message);
 
             extract(gpsa(array(
                 'page',
@@ -1459,7 +1461,7 @@ namespace Textpattern\Skin {
                     return $this->main();
                 }
 
-                $caption = gTxt('edit_skin');
+                $caption = gTxt('edit_'.$event);
                 $extraAction = href(
                     '<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'),
                     '#',
@@ -1470,12 +1472,12 @@ namespace Textpattern\Skin {
                 );
             } else {
                 $rs = array_fill_keys($fields, '');
-                $caption = gTxt('create_skin');
+                $caption = gTxt('create_'.$event);
                 $extraAction = '';
             }
 
             extract($rs, EXTR_PREFIX_ALL, $event);
-            pagetop(gTxt('tab_skins'));
+            pagetop(gTxt('tab_'.$event));
 
             $content = hed($caption, 2);
 

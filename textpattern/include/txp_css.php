@@ -201,7 +201,7 @@ function css_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = n.Txp::get('Textpattern\Skin\CSS', $thisSkin)->renderSelectEdit();
+    $skinBlock = n.Txp::get('Textpattern\Skin\CSS', $thisSkin)->getSelectEdit();
 
     $buttons = graf(
         tag_void('input', array(
