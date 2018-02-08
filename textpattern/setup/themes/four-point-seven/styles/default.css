@@ -313,7 +313,7 @@ nav ol::after,
  * Sans-serif font for main navigation menu.
  */
   .site-navigation {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-weight: bold;
   }
   /**
@@ -326,21 +326,24 @@ nav ol::after,
   h5,
   h6 {
     clear: both;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   }
   h1 {
     margin: 0.6315789em 0;
     font-size: 2.375em;
+    letter-spacing: -0.25px;
     line-height: 1.1842105em;
   }
   h2 {
     margin: 0.8em 0;
     font-size: 1.875em;
+    letter-spacing: -0.25px;
     line-height: 1.2666667em;
   }
   h3 {
     margin: 1em 0;
     font-size: 1.5em;
+    letter-spacing: -0.25px;
     line-height: 1.3333333em;
   }
   h4 {
@@ -831,7 +834,7 @@ nav ol::after,
     /* 2 */
     margin: 0;
     color: #000000;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     /* 3 */
     font-size: 1em;
     line-height: 1.375em;
