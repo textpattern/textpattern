@@ -164,10 +164,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * $essential property getter.
+         * {@inheritdoc}
          */
 
-        protected static function getEssential(
+        public static function getEssential(
             $key = null,
             $whereKey = null,
             $valueIn = null

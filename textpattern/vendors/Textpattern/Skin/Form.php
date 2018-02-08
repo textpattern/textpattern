@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin {
 
-    class Form extends AssetBase
+    class Form extends AssetBase implements FormInterface
     {
         protected static $event = 'form';
         protected static $table = 'txp_form';
@@ -100,6 +100,15 @@ namespace Textpattern\Skin {
             $this->setName($name);
 
             return $this;
+        }
+
+        /**
+         * $defaultSubdir property getter.
+         */
+
+        public static function getTypes()
+        {
+            return static::$subdirValues;
         }
     }
 }

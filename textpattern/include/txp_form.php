@@ -34,40 +34,30 @@ if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
-/**
- * List of essential forms.
- *
- * @global array $essential_forms
- */
-
-$essential_forms = array(
-    'comments',
-    'comments_display',
-    'comment_form',
-    'default',
-    'plainlinks',
-    'files',
-);
-    $instance = Txp::get('Textpattern\Skin\Form');
-
-/**
- * List of form types.
- *
- * @global array $form_types
- */
-
-$form_types = array(
-    'article'  => gTxt('article'),
-    'misc'     => gTxt('misc'),
-    'comment'  => gTxt('comment'),
-    'category' => gTxt('category'),
-    'file'     => gTxt('file'),
-    'link'     => gTxt('link'),
-    'section'  => gTxt('section'),
-);
-
 if ($event == 'form') {
     require_privs('form');
+
+    $instance = Txp::get('Textpattern\Skin\Form');
+
+    /**
+     * List of essential forms.
+     *
+     * @global array $essential_forms
+     */
+
+    $essential_forms = $instance->getEssential('name');
+
+    /**
+     * List of form types.
+     *
+     * @global array $form_types
+     */
+
+    $form_types = array();
+
+    foreach ($instance->getTypes() as $type) {
+        $form_types[$type] = gTxt($type);
+    }
 
     bouncer($step, array(
         'form_edit'        => false,

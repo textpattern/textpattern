@@ -22,9 +22,9 @@
  */
 
 /**
- * Asset Interface
+ * SharedBase
  *
- * Implemented by AssetBase.
+ * Extended by Main and AssetBase.
  *
  * @since   4.7.0
  * @package Skin
@@ -32,30 +32,12 @@
 
 namespace Textpattern\Skin {
 
-    interface AssetInterface
+    interface FormInterface
     {
         /**
-         * $skin property setter.
+         *  $subdirValues getter.
          */
 
-        public function setSkin(Skin $skin = null);
-
-        /**
-         * $essential property getter.
-         */
-
-        public static function getEssential(
-            $key = null,
-            $whereKey = null,
-            $valueIn = null
-        );
-
-        /**
-         * Render the Skin switch form.
-         *
-         * @return HTML
-         */
-
-        public function getSelectEdit();
+        public static function getTypes();
     }
 }
