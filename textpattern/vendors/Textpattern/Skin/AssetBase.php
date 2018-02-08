@@ -555,26 +555,35 @@ namespace Textpattern\Skin {
             $names = $this->getNames();
             $callbackExtra = compact('skin', 'names');
             $done = array();
+            $dirIsReadable = is_readable($dirPath);
 
             callback_event($event.'.import', '', 1, $callbackExtra);
 
-            if (!is_readable($dirPath)) {
+            if (!$dirIsReadable) {
                 $this->mergeResult('path_not_readable', array($skin => array($dirPath)));
-            } else {
-                $filenames = array();
-                $extension = self::getExtension();
+            }
 
-                foreach ($this->getNames() as $name) {
-                    $filenames[] = $name.'.'.$extension;
+            if ($dirIsReadable || !$override) {
+                if ($dirIsReadable) {
+                    $filenames = array();
+                    $extension = self::getExtension();
+
+                    foreach ($this->getNames() as $name) {
+                        $filenames[] = $name.'.'.$extension;
+                    }
+
+                    $files = $this->getFiles($filenames, self::getSubdirField() ? 1 : 0);
+
+                    if (!$files) {
+                        $this->mergeResult('no_'.$event.'_found', array($skin => array($dirPath)));
+                    }
+
+                    $rows = $this->parseFiles($files);
+                } else {
+                    $rows = self::getEssential();
                 }
 
-                $files = $this->getFiles($filenames, self::getSubdirField() ? 1 : 0);
-
-                if (!$files) {
-                    $this->mergeResult('no_'.$event.'_found', array($skin => array($dirPath)));
-                }
-
-                if (!$this->createRows($this->parseFiles($files))) {
+                if (!$this->createRows($rows)) {
                     $this->mergeResult($event.'_import_failed', array($skin => $names));
                 } else {
                     $done[] = $names;
