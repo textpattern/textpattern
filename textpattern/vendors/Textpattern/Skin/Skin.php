@@ -141,7 +141,7 @@ namespace Textpattern\Skin {
             $assets = array(
                 'Page' => $pages,
                 'Form' => $forms,
-                'CSS'  => $styles,
+                'Css'  => $styles,
             );
 
             foreach ($assets as $class => $assets) {

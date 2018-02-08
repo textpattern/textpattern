@@ -28,7 +28,7 @@
  */
 
 use Textpattern\Skin\Skin;
-use Textpattern\Skin\CSS;
+use Textpattern\Skin\Css;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');

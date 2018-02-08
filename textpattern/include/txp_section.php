@@ -40,7 +40,7 @@ if ($event == 'section') {
 
     $all_skins = \Txp::get('Textpattern\Skin\Skin')->getInstalled();
     $all_pages = \Txp::get('Textpattern\Skin\Page')->getInstalled();
-    $all_styles = \Txp::get('Textpattern\Skin\CSS')->getInstalled();
+    $all_styles = \Txp::get('Textpattern\Skin\Css')->getInstalled();
 
     $available_steps = array(
         'section_change_pageby' => true,
