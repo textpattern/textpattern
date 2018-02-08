@@ -2400,8 +2400,8 @@ $(document).ready(function () {
         textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
     }).on('submit', 'form.txp-search', function(e) {
         e.preventDefault()
-        if ($(this).find('input[name="crit"]').val()) $(this).find('.txp-search-clear').show()
-        else $(this).find('.txp-search-clear').hide()
+        if ($(this).find('input[name="crit"]').val()) $(this).find('.txp-search-clear').removeClass('ui-helper-hidden')
+        else $(this).find('.txp-search-clear').addClass('ui-helper-hidden')
         textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
     }).on('updateList', '#txp-list-container', function() {
         $(this).find('.multi_edit_form').txpMultiEditForm('select', {value: textpattern.Relay.data.selected}).find('table.txp-list').txpColumnize()
