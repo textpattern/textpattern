@@ -61,7 +61,7 @@ namespace Textpattern\Skin {
             $name,
             $user_html = null
         ) {
-            $name = sanitizeForTheme($name);
+            $name = self::sanitize($name);
 
             $this->infos = compact('name', 'user_html');
             $this->setName($name);

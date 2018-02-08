@@ -310,9 +310,9 @@ function form_edit($message = '', $refresh_partials = false)
         'skin',
     ))));
 
-    $name = sanitizeForTheme(assert_string(gps('name')));
+    $name = Form::sanitize(assert_string(gps('name')));
     $type = assert_string(gps('type'));
-    $newname = sanitizeForTheme(assert_string(gps('newname')));
+    $newname = Form::sanitize(assert_string(gps('newname')));
     $skin = ($skin !== '') ? $skin : null;
     $class = 'async';
 

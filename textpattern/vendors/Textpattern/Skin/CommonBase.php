@@ -165,6 +165,25 @@ namespace Textpattern\Skin {
         }
 
         /**
+         * Sanitises a string for use in a theme template's name.
+         *
+         * Just runs sanitizeForPage() followed by sanitizeForFile(), then limits
+         * the number of characters to 63.
+         *
+         * @param   string $text The string
+         * @return  string
+         * @package Filter
+         * @access  private
+         */
+
+        public static function sanitize($text)
+        {
+            $out = sanitizeForFile(sanitizeForPage($text));
+
+            return \Txp::get('\Textpattern\Type\StringType', $out)->substring(0, 63)->getString();
+        }
+
+        /**
          * $names property setter/sanitizer.
          *
          * @param  array  $names Multiple skin or template names to work with related methods.

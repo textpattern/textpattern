@@ -165,15 +165,6 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
-         */
-
-        protected static function sanitize($name)
-        {
-            return sanitizeForTheme($name);
-        }
-
-        /**
          * $infos and $name properties setter.
          *
          * @param  string $name        Skin name;

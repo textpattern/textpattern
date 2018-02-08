@@ -128,14 +128,6 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
-         */
-
-        protected static function sanitize($name) {
-            return sanitizeForPage($name);
-        }
-
-        /**
          * $infos property getter/parser.
          *
          * @param  bool  $safe Whether to get the property value

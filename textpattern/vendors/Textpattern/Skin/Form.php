@@ -94,7 +94,7 @@ namespace Textpattern\Skin {
             $type = null,
             $Form = null
         ) {
-            $name = sanitizeForTheme($name);
+            $name = self::sanitize($name);
 
             $this->infos = compact('name', 'type', 'Form');
             $this->setName($name);

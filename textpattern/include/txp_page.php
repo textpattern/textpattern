@@ -129,8 +129,8 @@ function page_edit($message = '', $refresh_partials = false)
 
     $default_name = safe_field("page", 'txp_section', "name = 'default'");
 
-    $name = sanitizeForTheme(assert_string(gps('name')));
-    $newname = sanitizeForTheme(assert_string(gps('newname')));
+    $name = Page::sanitize(assert_string(gps('name')));
+    $newname = Page::sanitize(assert_string(gps('newname')));
     $skin = ($skin !== '') ? $skin : null;
     $class = 'async';
 
