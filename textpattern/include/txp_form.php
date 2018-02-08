@@ -48,6 +48,7 @@ $essential_forms = array(
     'plainlinks',
     'files',
 );
+    $instance = Txp::get('Textpattern\Skin\Form');
 
 /**
  * List of form types.
@@ -252,7 +253,7 @@ function form_create()
 
 function form_edit($message = '', $refresh_partials = false)
 {
-    global $event, $step;
+    global $instance, $event, $step;
 
     /*
     $partials is an array of:
@@ -352,7 +353,7 @@ function form_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = n.Txp::get('Textpattern\Skin\Form', $thisSkin)->getSelectEdit();
+    $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
         tag_void('input', array(

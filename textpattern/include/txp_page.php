@@ -37,6 +37,8 @@ if (!defined('txpinterface')) {
 if ($event == 'page') {
     require_privs('page');
 
+    $instance = Txp::get('Textpattern\Skin\Page');
+
     bouncer($step, array(
         'page_edit'        => false,
         'page_save'        => true,
@@ -80,7 +82,7 @@ if ($event == 'page') {
 
 function page_edit($message = '', $refresh_partials = false)
 {
-    global $event, $step;
+    global $instance, $event, $step;
 
     /*
     $partials is an array of:
@@ -167,7 +169,7 @@ function page_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = n.Txp::get('Textpattern\Skin\Page', $thisSkin)->getSelectEdit();
+    $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
         tag_void('input', array(

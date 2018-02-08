@@ -37,6 +37,8 @@ if (!defined('txpinterface')) {
 if ($event == 'css') {
     require_privs('css');
 
+    $instance = Txp::get('Textpattern\Skin\Css');
+
     bouncer($step, array(
         'pour'            => false,
         'css_save'        => true,
@@ -114,7 +116,7 @@ function css_list($current)
 
 function css_edit($message = '', $refresh_partials = false)
 {
-    global $event, $step;
+    global $instance, $event, $step;
 
     /*
     $partials is an array of:
@@ -201,7 +203,7 @@ function css_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = n.Txp::get('Textpattern\Skin\CSS', $thisSkin)->getSelectEdit();
+    $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
         tag_void('input', array(
