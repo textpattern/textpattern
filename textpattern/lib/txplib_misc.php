@@ -5199,7 +5199,7 @@ function txp_status_header($status = '200 OK')
 
 function txp_die($msg, $status = '503', $url = '')
 {
-    global $connected, $txp_error_message, $txp_error_status, $txp_error_code, $pretext;
+    global $connected, $txp_error_message, $txp_error_status, $txp_error_code, $pretext, $production_status, $trace;
 
     // Make it possible to call this function as a tag, e.g. in an article
     // <txp:txp_die status="410" />.
@@ -5282,13 +5282,16 @@ eod;
     }
 
     header("Content-Type: text/html; charset=utf-8");
+    $debug = $production_status === 'live' ?
+        '' :
+        $trace->summary().($production_status === 'debug' ? $trace->result() : '');
 
     if (is_callable('parse')) {
         $txp_error_message = $msg;
         $txp_error_status = $status;
         $txp_error_code = $code;
         set_error_handler("tagErrorHandler");
-        die(parse($out));
+        die(parse($out).$debug);
     } else {
         $out = preg_replace(
             array('@<txp:error_status[^>]*/>@', '@<txp:error_message[^>]*/>@'),
@@ -5296,7 +5299,7 @@ eod;
             $out
         );
 
-        die($out);
+        die($out.$debug);
     }
 }
 
