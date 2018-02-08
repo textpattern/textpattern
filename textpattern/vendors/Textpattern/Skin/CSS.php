@@ -59,10 +59,9 @@ namespace Textpattern\Skin {
             $name,
             $css = null
         ) {
-            $name = self::sanitize($name);
+            $name = $this->setName($name)->getName();
 
             $this->infos = compact('name', 'css');
-            $this->setName($name);
 
             return $this;
         }

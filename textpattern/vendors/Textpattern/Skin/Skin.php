@@ -189,9 +189,7 @@ namespace Textpattern\Skin {
             $author = null,
             $author_uri = null
         ) {
-            $this->setName($name);
-
-            $name = $this->getName();
+            $name = $this->setName($name)->getName();
 
             $title or $title = ucfirst($name);
 
