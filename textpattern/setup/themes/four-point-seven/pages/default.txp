@@ -86,7 +86,7 @@
                 </li>
             </txp:section_list>
 
-            <!-- links by default to form: 'search_input.misc.txp' unless you specify a different form -->
+            <!-- links by default to form: 'search_input.txp' unless you specify a different form -->
             <txp:search_input />
         </div>
     </nav>
@@ -97,7 +97,7 @@
             <!-- Main content -->
             <main aria-label="<txp:text item="main_content" />" itemscope itemtype="https://schema.org/Blog">
 
-                <!-- is this the search result page? also omits the pagination links below (uses pagination format within search_results.article.txp instead) -->
+                <!-- is this the search result page? also omits the pagination links below (uses pagination format within search_results.txp instead) -->
                 <txp:if_search>
 
                     <h1 itemprop="name">
@@ -130,7 +130,7 @@
                         <!-- else display articles normally -->
                         <txp:else />
 
-                            <!-- links by default to form: 'default.article.txp' unless you specify a different form -->
+                            <!-- links by default to form: 'default.txp' unless you specify a different form -->
                             <txp:article limit="5" />
 
                         </txp:if_author>
@@ -174,7 +174,7 @@
                             <txp:text item="links" />
                         </h4>
 
-                        <!-- links by default to form: 'plainlinks.link.txp' unless you specify a different form -->
+                        <!-- links by default to form: 'plainlinks.txp' unless you specify a different form -->
                         <txp:linklist wraptag="ul" break="li" />
                     </section>
                 </txp:evaluate>

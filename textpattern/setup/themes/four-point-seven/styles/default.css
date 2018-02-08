@@ -313,7 +313,7 @@ nav ol::after,
  * Sans-serif font for main navigation menu.
  */
   .site-navigation {
-    font-family: sans-serif;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     font-weight: bold;
   }
   /**
@@ -326,7 +326,7 @@ nav ol::after,
   h5,
   h6 {
     clear: both;
-    font-family: sans-serif;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
   h1 {
     margin: 0.6315789em 0;
@@ -831,7 +831,7 @@ nav ol::after,
     /* 2 */
     margin: 0;
     color: #000000;
-    font-family: sans-serif;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     /* 3 */
     font-size: 1em;
     line-height: 1.375em;
