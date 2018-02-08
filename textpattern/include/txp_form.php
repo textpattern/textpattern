@@ -99,7 +99,7 @@ if ($event == 'form') {
             form_save();
             break;
         case "form_skin_change":
-            form_skin_change();
+            $instance->selectEdit($skin);
             form_edit();
             break;
         case 'tagbuild':
@@ -602,27 +602,6 @@ function form_set_type($name, $type)
     $skin = doSlash(get_pref('skin_editing', 'default'));
 
     return safe_update('txp_form', "type = '$type'", "name = '$name' AND skin = '$skin'");
-}
-
-/**
- * Changes the skin in which forms are being edited.
- *
- * Keeps track of which skin is being edited from panel to panel.
- *
- * @param  string $skin Optional skin name. Read from GET/POST otherwise
- */
-
-function form_skin_change($skin = null)
-{
-    if ($skin === null) {
-        $skin = gps('skin');
-    }
-
-    if ($skin) {
-        $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
-    }
-
-    return true;
 }
 
 /**

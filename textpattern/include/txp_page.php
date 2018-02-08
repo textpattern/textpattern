@@ -64,7 +64,7 @@ if ($event == 'page') {
             page_new();
             break;
         case "page_skin_change":
-            page_skin_change();
+            $instance->selectEdit($skin);
             page_edit();
             break;
         case 'tagbuild':
@@ -423,27 +423,6 @@ function page_save()
 function page_new()
 {
     page_edit();
-}
-
-/**
- * Changes the skin in which pages are being edited.
- *
- * Keeps track of which skin is being edited from panel to panel.
- *
- * @param  string $skin Optional skin name. Read from GET/POST otherwise
- */
-
-function page_skin_change($skin = null)
-{
-    if ($skin === null) {
-        $skin = gps('skin');
-    }
-
-    if ($skin) {
-        $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
-    }
-
-    return true;
 }
 
 /**

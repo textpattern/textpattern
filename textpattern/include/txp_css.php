@@ -64,7 +64,7 @@ if ($event == 'css') {
             css_edit();
             break;
         case "css_skin_change":
-            css_skin_change();
+            Txp::get('Textpattern\Skin\Css')->selectEdit($skin);
             css_edit();
             break;
     }
@@ -390,27 +390,6 @@ function css_delete()
         }
     }
     css_edit($message);
-}
-
-/**
- * Changes the skin in which styles are being edited.
- *
- * Keeps track of which skin is being edited from panel to panel.
- *
- * @param  string $skin Optional skin name. Read from GET/POST otherwise
- */
-
-function css_skin_change($skin = null)
-{
-    if ($skin === null) {
-        $skin = gps('skin');
-    }
-
-    if ($skin) {
-        $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
-    }
-
-    return true;
 }
 
 /**
