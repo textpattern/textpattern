@@ -90,6 +90,11 @@ namespace Textpattern\Skin {
         {
         }
 
+        public function __toString()
+        {
+            return $this->getName();
+        }
+
         protected function mergeResults($asset, $status) {
             $thisResults = $this->getResults();
             $this->results = array_merge($thisResults, $asset->getResults($status));
@@ -485,14 +490,14 @@ namespace Textpattern\Skin {
          */
 
         public function create() {
+            $event = self::getEvent();
             $infos = $this->getInfos();
             $name = $infos['name'];
             $base = $this->getBase();
-            $event = self::getEvent();
-
-            callback_event($event.'.create', '', 1, compact('infos', 'base'));
-
+            $callbackExtra = compact('infos', 'base');
             $done = false;
+
+            callback_event($event.'.create', '', 1, $callbackExtra);
 
             if (empty($name)) {
                 $this->mergeResult($event.'_name_invalid', $name);
@@ -529,7 +534,7 @@ namespace Textpattern\Skin {
                 isset($assetsfailed) or $done = $name;
             }
 
-            callback_event($event.'.create', '', 0, compact('infos', 'base', 'done'));
+            callback_event($event.'.create', '', 0, $callbackExtra + compact('done'));
 
             return $this; // Chainable.
         }
@@ -542,15 +547,15 @@ namespace Textpattern\Skin {
          */
 
         public function update() {
+            $event = self::getEvent();
             $infos = $this->getInfos();
             $name = $infos['name'];
             $base = $this->getBase();
-            $event = self::getEvent();
-
-            callback_event($event.'.update', '', 1, compact('infos', 'base'));
-
-            $done = null; // See the final callback event.
+            $callbackExtra = compact('infos', 'base');
+            $done = null;
             $ready = false;
+
+            callback_event($event.'.update', '', 1, $callbackExtra);
 
             if (empty($name)) {
                 $this->mergeResult($event.'_name_invalid', $name);
@@ -604,7 +609,7 @@ namespace Textpattern\Skin {
                 isset($assetsFailed) or $done = $name;
             }
 
-            callback_event($event.'.update', '', 0, compact('infos', 'base', 'done'));
+            callback_event($event.'.update', '', 0, $callbackExtra + compact('done'));
 
             return $this; // Chainable
         }
@@ -618,12 +623,12 @@ namespace Textpattern\Skin {
 
         public function duplicate()
         {
-            $names = $this->getNames();
             $event = self::getEvent();
+            $names = $this->getNames();
+            $callbackExtra = compact('names');
+            $ready = $done = array();
 
-            callback_event($event.'.duplicate', '', 1, compact('names'));
-
-            $ready = $done = array(); // See the final callback event.
+            callback_event($event.'.duplicate', '', 1, $callbackExtra);
 
             foreach ($names as $name) {
                 $nameDirPath = $this->setName($name)->getSubdirPath();
@@ -689,7 +694,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.duplicate', '', 0, compact('names', 'done'));
+            callback_event($event.'.duplicate', '', 0, $callbackExtra + compact('done'));
 
             return $this; // Chainable
         }
@@ -700,13 +705,13 @@ namespace Textpattern\Skin {
 
         public function import($clean = false, $override = false)
         {
+            $event = self::getEvent();
             $clean == $this->getCleaningPref() or $this->switchCleaningPref();
             $names = $this->getNames();
-            $event = self::getEvent();
+            $callbackExtra = compact('names');
+            $done = array();
 
-            callback_event($event.'.import', '', 1, compact('names'));
-
-            $done = array(); // See the final callback event.
+            callback_event($event.'.import', '', 1, $callbackExtra);
 
             foreach ($names as $name) {
                 $this->setName($name);
@@ -755,7 +760,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.import', '', 0, compact('names', 'done'));
+            callback_event($event.'.import', '', 0, $callbackExtra + compact('done'));
 
             return $this;
         }
@@ -768,12 +773,12 @@ namespace Textpattern\Skin {
         {
             $clean == $this->getCleaningPref() or $this->switchCleaningPref();
 
-            $names = $this->getNames();
             $event = self::getEvent();
-
-            callback_event($event.'.export', '', 1, compact('names'));
-
+            $names = $this->getNames();
+            $callbackExtra = compact('names');
             $ready = $done = array();
+
+            callback_event($event.'.export', '', 1, $callbackExtra);
 
             foreach ($names as $name) {
                 $this->setName($name);
@@ -831,7 +836,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.export', '', 0, compact('names', 'done'));
+            callback_event($event.'.export', '', 0, $callbackExtra + compact('done'));
 
             return $this;
         }
@@ -845,12 +850,12 @@ namespace Textpattern\Skin {
 
         public function delete($clean = false)
         {
-            $names = $this->getNames();
             $event = self::getEvent();
-
-            callback_event($event.'.delete', '', 1, compact('names'));
-
+            $names = $this->getNames();
+            $callbackExtra = compact('names');
             $ready = $done = array();
+
+            callback_event($event.'.delete', '', 1, $callbackExtra);
 
             foreach ($names as $name) {
                 if (!$this->setName($name)->isInstalled()) {
@@ -904,7 +909,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.delete', '', 0, compact('names', 'done'));
+            callback_event($event.'.delete', '', 0, $callbackExtra + compact('done'));
 
             return $this;
         }
@@ -1387,7 +1392,6 @@ namespace Textpattern\Skin {
 
         protected function getMultiEditForm($page, $sort, $dir, $crit, $search_method)
         {
-            $event = self::getEvent();
             $pref = 'remove_extra_templates';
 
             $removeExtra = checkbox2('clean', get_pref($pref, true), 0, 'clean')
@@ -1395,8 +1399,8 @@ namespace Textpattern\Skin {
                            .popHelp($pref);
 
             $removeAll = checkbox2('clean', get_pref($pref, true), 0, 'clean')
-                         .n.tag(gtxt('remove_'.$event.'_files'), 'label', array('for' => 'clean'))
-                         .popHelp('remove_'.$event.'_files');
+                         .n.tag(gtxt('remove_files'), 'label', array('for' => 'clean'))
+                         .popHelp('remove_files');
 
             $methods = array(
                 'import'    => array('label' => gTxt('import'), 'html' => $removeExtra),

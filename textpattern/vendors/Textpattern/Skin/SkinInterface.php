@@ -37,7 +37,8 @@ namespace Textpattern\Skin {
         /**
          * $dirPath property setter.
          *
-         * @param  string $path          Path (default: get_pref('path_to_site').DS.get_pref('skin_dir')).
+         * @param  string $path          Custom skin directory path.
+         *                               Builds the path from the 'path_to_site' + 'skin_dir' if null.
          * @return string $this->dirPath
          */
 

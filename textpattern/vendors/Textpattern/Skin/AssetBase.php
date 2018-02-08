@@ -108,10 +108,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * $skin property setter.
+         * {@inheritdoc}
          */
 
-        protected function setSkin(Skin $skin = null)
+        public function setSkin(Skin $skin = null)
         {
             $this->skin = $skin === null ? \Txp::get('Textpattern\Skin\Skin')->setName() : $skin;
 
@@ -459,8 +459,8 @@ namespace Textpattern\Skin {
             $parsed = $parsedFiles = $names = array();
 
             if ($files) {
-                $thisSkin = $this->getSkin();
-                $skin = $thisSkin->getName();
+                $Skin = $this->getSkin();
+                $skin = $Skin->getName();
 
                 foreach ($files as $file) {
                     $filename = $file->getFilename();
@@ -548,18 +548,15 @@ namespace Textpattern\Skin {
 
         public function import($clean = false, $override = false)
         {
-            $thisSkin = $this->getSkin();
-            $skin = $thisSkin !== null ? $thisSkin->getName() : Skin::getEditing();
-            $names = $this->getNames();
             $event = self::getEvent();
-
-            callback_event($event.'.import', '', 1, array(
-                'skin'  => $skin,
-                'names' => $names,
-            ));
-
-            $done = array();
             $dirPath = $this->getDirPath();
+            $Skin = $this->getSkin();
+            $skin = $Skin !== null ? $Skin->getName() : Skin::getEditing();
+            $names = $this->getNames();
+            $callbackExtra = compact('skin', 'names');
+            $done = array();
+
+            callback_event($event.'.import', '', 1, $callbackExtra);
 
             if (!is_readable($dirPath)) {
                 $this->mergeResult('path_not_readable', array($skin => array($dirPath)));
@@ -593,11 +590,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.import', '', 0, array(
-                'skin'  => $skin,
-                'names' => $names,
-                'done'  => $done,
-            ));
+            callback_event($event.'.import', '', 0, $callbackExtra + compact('done'));
 
             return $this;
         }
@@ -611,19 +604,15 @@ namespace Textpattern\Skin {
 
         public function export($clean = false, $override = false)
         {
-            $thisSkin = $this->getSkin();
-            $skin = $thisSkin !== null ? $thisSkin->getName() : Skin::getEditing();
-            $names = $this->getNames();
-
             $event = self::getEvent();
-
-            callback_event($event.'.export', '', 1, array(
-                'skin'  => $skin,
-                'names' => $names,
-            ));
-
-            $done = array();
             $dirPath = $this->getDirPath();
+            $Skin = $this->getSkin();
+            $skin = $Skin !== null ? $Skin->getName() : Skin::getEditing();
+            $names = $this->getNames();
+            $callbackExtra = compact('skin', 'names');
+            $done = array();
+
+            callback_event($event.'.export', '', 1, $callbackExtra);
 
             if (!is_writable($dirPath) && !@mkdir($dirPath)) {
                 $this->mergeResult('path_not_writable', array($skin => array($dirPath)));
@@ -684,11 +673,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.export', '', 1, array(
-                'skin'  => $skin,
-                'names' => $names,
-                'done'  => $done,
-            ));
+            callback_event($event.'.export', '', 1, $callbackExtra + compact('done'));
 
             return $this;
         }
@@ -701,15 +686,15 @@ namespace Textpattern\Skin {
 
         public function getSelectEdit()
         {
-            $thisSkin = $this->getSkin();
-            $skins = $thisSkin->getInstalled();
             $event = self::getEvent();
+            $Skin = $this->getSkin();
+            $skins = $Skin->getInstalled();
 
             if (count($skins) > 1) {
                 return form(
                     inputLabel(
                         'skin',
-                        selectInput('skin', $skins, $thisSkin::getEditing(), false, 1, 'skin'),
+                        selectInput('skin', $skins, Skin::getEditing(), false, 1, 'skin'),
                         'skin'
                     )
                     .eInput($event)
@@ -724,14 +709,13 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Changes the skin in which styles are being edited.
-         *
-         * Keeps track of which skin is being edited from panel to panel.
+         * Select the asset related skin to edit.
+         * Keeps track from panel to panel.
          *
          * @param  string $skin Optional skin name. Read from GET/POST otherwise
          */
 
-        protected function selectEdit($skin = null)
+        public function selectEdit($skin = null)
         {
             if ($skin === null) {
                 $skin = gps('skin');
