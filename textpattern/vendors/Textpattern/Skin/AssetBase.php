@@ -638,7 +638,7 @@ namespace Textpattern\Skin {
                             $this->mergeResult($event.'_unknown', array($skin => array($name)));
                         } elseif (!self::isExportable()) {
                             $this->mergeResult($event.'_name_unsafe', array($skin => array($name)));
-                            } else {
+                        } else {
                             $ready = true;
                             $subdirField = self::getSubdirField();
                             $contentsField = self::getFileContentsField();
