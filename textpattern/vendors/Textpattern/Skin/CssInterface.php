@@ -32,27 +32,19 @@
 
 namespace Textpattern\Skin {
 
-    interface FormInterface
+    interface CssInterface
     {
         /**
          * $infos+$name properties setter.
          *
-         * @param  string $name Form name;
-         * @param  string $type Form type;
-         * @param  string $Form Form contents;
+         * @param  string $name CSS name;
+         * @param  string $css  CSS contents;
          * @return object $this The current class object (chainable).
          */
 
         public function setInfos(
             $name,
-            $type = null,
-            $Form = null
+            $css = null
         );
-
-        /**
-         *  $subdirValues getter.
-         */
-
-        public static function getTypes();
     }
 }

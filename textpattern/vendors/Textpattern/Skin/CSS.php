@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin {
 
-    class Css extends AssetBase
+    class Css extends AssetBase implements CssInterface
     {
         protected static $event = 'css';
         protected static $extension = 'css';

@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin {
 
-    class Page extends AssetBase
+    class Page extends AssetBase implements PageInterface
     {
         protected static $event = 'page';
         protected static $table = 'txp_page';
