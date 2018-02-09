@@ -426,7 +426,7 @@ namespace Textpattern\Skin {
             $update .= $fileContentsField."=VALUES(".$fileContentsField.")";
 
             return safe_query(
-                "INSERT INTO ".self::getTable()." (".implode(', ', $fields).") "
+                "INSERT INTO ".safe_pfx(self::getTable())." (".implode(', ', $fields).") "
                 ."VALUES ".implode(', ', $values)
                 ." ON DUPLICATE KEY UPDATE ".$update
             );

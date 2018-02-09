@@ -1389,21 +1389,17 @@ namespace Textpattern\Skin {
 
         protected function getMultiEditForm($page, $sort, $dir, $crit, $search_method)
         {
-            $pref = 'remove_extra_templates';
+            $pref = 'synchronize';
 
-            $removeExtra = checkbox2('clean', get_pref($pref, true), 0, 'clean')
+            $sync = checkbox2('clean', get_pref($pref, true), 0, 'clean')
                            .n.tag(gtxt($pref), 'label', array('for' => 'clean'))
                            .popHelp($pref);
 
-            $removeAll = checkbox2('clean', get_pref($pref, true), 0, 'clean')
-                         .n.tag(gtxt('remove_files'), 'label', array('for' => 'clean'))
-                         .popHelp('remove_files');
-
             $methods = array(
-                'import'    => array('label' => gTxt('import'), 'html' => $removeExtra),
+                'import'    => array('label' => gTxt('override'), 'html' => $sync),
                 'duplicate' => gTxt('duplicate'),
-                'export'    => array('label' => gTxt('export'), 'html' => $removeExtra),
-                'delete'    => array('label' => gTxt('delete'), 'html' => $removeAll),
+                'export'    => array('label' => gTxt('export'), 'html' => $sync),
+                'delete'    => array('label' => gTxt('delete'), 'html' => $sync),
             );
 
             return multi_edit($methods, self::getEvent(), 'multi_edit', $page, $sort, $dir, $crit, $search_method);

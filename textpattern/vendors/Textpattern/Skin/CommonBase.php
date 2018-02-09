@@ -292,7 +292,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Get the 'remove_extra_templates' preference value.
+         * Get the 'synchronize' preference value.
          *
          * @return bool
          */
@@ -301,17 +301,18 @@ namespace Textpattern\Skin {
         {
             global $prefs;
 
-            $value = get_pref('remove_extra_templates', true);
+            $pref = 'synchronize';
+            $value = get_pref($pref, true);
 
-            if (!isset($prefs['remove_extra_templates'])) {
-                $prefs['remove_extra_templates'] = $value;
+            if (!isset($prefs[$pref])) {
+                $prefs[$pref] = $value;
             }
 
             return $value;
         }
 
         /**
-         * Switch the 'remove_extra_templates' preference value
+         * Switch the 'synchronize' preference value
          * and its related global variable.
          *
          * @return bool false on error.
@@ -321,7 +322,7 @@ namespace Textpattern\Skin {
         {
             global $prefs;
 
-            $name = 'remove_extra_templates';
+            $name = 'synchronize';
 
             return set_pref(
                 $name,
