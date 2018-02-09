@@ -1,27 +1,27 @@
 /* ==========================================================================
    Styling and layout for all media
    ========================================================================== */
-/* HTML5 display definitions
+/* Reset
    ========================================================================== */
 /**
- * Add the correct display in various browsers.
+ * Add the correct display in Edge, IE 11, and Firefox.
  */
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-main,
-menu,
-nav,
-section {
+details {
   display: block;
 }
 
+/**
+ * Add the correct display in all browsers.
+ */
 summary {
   display: list-item;
+}
+
+/**
+ * Add the correct display in IE 11.
+ */
+template {
+  display: none;
 }
 
 /**
@@ -385,7 +385,7 @@ nav ol::after,
     text-align: center;
   }
   /**
- * 1. Remove the bottom border in Chrome 57- and Firefox 39-.
+ * 1. Remove the bottom border in Chrome 57+.
  * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
  */
   abbr[title] {
@@ -459,7 +459,7 @@ nav ol::after,
             hyphens: none;
   }
   /**
- * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ * Prevent `sub` and `sup` elements from affecting the line height in all browsers.
  */
   sub,
   sup.footnote,
@@ -679,12 +679,6 @@ nav ol::after,
   figure {
     margin: 0;
   }
-  /**
- * Correct overflow not hidden in IE 11.
- */
-  svg:not(:root) {
-    overflow: hidden;
-  }
   /* Tables
    ========================================================================== */
   /**
@@ -820,6 +814,12 @@ nav ol::after,
             box-sizing: border-box;
   }
   /**
+ * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+  progress {
+    vertical-align: baseline;
+  }
+  /**
  * 1. Prevent elements from spilling out of their parent.
  * 2. Address margins set differently in Firefox 4+, Safari, and Chrome.
  * 3. Correct font properties not being inherited.
@@ -853,9 +853,7 @@ nav ol::after,
     border-style: none;
   }
   /**
- * Remove inner padding in Safari and Chrome on OS X. Safari (but not Chrome)
- * clips the cancel button when the search input has padding (and `textfield`
- * appearance).
+ * Remove the inner padding in Chrome and Safari on macOS.
  */
   [type="search"]::-webkit-search-decoration {
     -webkit-appearance: none;
@@ -1482,14 +1480,6 @@ nav ol::after,
   samp,
   var {
     font-family: "Courier New", Courier, monospace;
-  }
-  /**
- * Italic definitons, quotes and definition terms.
- */
-  dfn,
-  q,
-  dt {
-    font-style: italic;
   }
   /**
  * Images.
