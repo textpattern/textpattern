@@ -1392,8 +1392,8 @@ namespace Textpattern\Skin {
             $event = self::getEvent();
             $pref = 'synchronize';
 
-            $sync = checkbox2('sync', get_pref($pref, true), 0, 'sync')
-                           .n.tag(gtxt($event.'_'.$pref), 'label', array('for' => 'sync'))
+            $sync = checkbox2($pref, get_pref($pref, true), 0, $pref)
+                           .n.tag(gtxt($event.'_'.$pref), 'label', array('for' => $pref))
                            .popHelp($event.'_'.$pref);
 
             $methods = array(
