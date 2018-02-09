@@ -92,23 +92,23 @@ namespace Textpattern\Skin {
          * or multiple templates from the $names (+ $skin) property value(s).
          * Merges results in the related property.
          *
-         * @param  bool   $clean    Whether to removes extra skin template rows or not;
+         * @param  bool   $sync     Whether to removes extra skin template rows or not;
          * @param  bool   $override Whether to insert or update the skins.
          * @return object $this     The current object (chainable).
          */
 
-        public function import($clean = false, $override = false);
+        public function import($sync = false, $override = false);
 
         /**
          * Export (and clean) multiple skins (and their related $assets)
          * or multiple templates from the $names (+ $skin) property value(s).
          * Merges results in the related property.
          *
-         * @param  bool   $clean Whether to removes extra skin template files or not;
-         * @return object $this  The current object (chainable).
+         * @param  bool   $sync Whether to removes extra skin template files or not;
+         * @return object $this The current object (chainable).
          */
 
-        public function export($clean = false, $override = false);
+        public function export($sync = false, $override = false);
 
         /**
          * Insert a row into the $table property value related table.

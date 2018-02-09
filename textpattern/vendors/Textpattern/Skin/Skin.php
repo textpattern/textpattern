@@ -700,10 +700,10 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function import($clean = false, $override = false)
+        public function import($sync = false, $override = false)
         {
             $event = self::getEvent();
-            $clean == $this->getCleaningPref() or $this->switchCleaningPref();
+            $sync == $this->getSyncPref() or $this->switchSyncPref();
             $names = $this->getNames();
             $callbackExtra = compact('names');
             $done = array();
@@ -715,7 +715,7 @@ namespace Textpattern\Skin {
                 $this->setBase($name);
 
                 $isInstalled = $this->isInstalled();
-                $isInstalled or $clean = $override = false; // Avoid useless work.
+                $isInstalled or $sync = $override = false; // Avoid useless work.
 
                 if (!$override && $isInstalled) {
                     $this->mergeResult($event.'_already_exists', $name);
@@ -741,7 +741,7 @@ namespace Textpattern\Skin {
 
                             // Start working with the skin related assets.
                             foreach ($this->getAssets() as $asset) {
-                                $asset->import($clean, $override);
+                                $asset->import($sync, $override);
 
                                 if (is_array($asset->getMessage())) {
                                     $assetFailed = true;
@@ -766,9 +766,9 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function export($clean = false, $override = false)
+        public function export($sync = false, $override = false)
         {
-            $clean == $this->getCleaningPref() or $this->switchCleaningPref();
+            $sync == $this->getSyncPref() or $this->switchSyncPref();
 
             $event = self::getEvent();
             $names = $this->getNames();
@@ -783,7 +783,7 @@ namespace Textpattern\Skin {
                 $nameDirPath = $this->getSubdirPath();
 
                 if (!is_writable($nameDirPath)) {
-                    $clean = false;
+                    $sync = false;
                     $override = false;
                 }
 
@@ -818,7 +818,7 @@ namespace Textpattern\Skin {
                             $this->mergeResult($event.'_exported', $name, 'success');
 
                             foreach ($this->getAssets() as $asset) {
-                                $asset->export($clean, $override);
+                                $asset->export($sync, $override);
 
                                 if (is_array($asset->getMessage())) {
                                     $assetFailed = true;
@@ -845,7 +845,7 @@ namespace Textpattern\Skin {
          * @return object $this The current object (chainable).
          */
 
-        public function delete($clean = false)
+        public function delete($sync = false)
         {
             $event = self::getEvent();
             $names = $this->getNames();
@@ -892,7 +892,7 @@ namespace Textpattern\Skin {
                     $this->mergeResult($event.'_deleted', $ready, 'success');
 
                     // Remove all skins files and directories if needed.
-                    if ($clean) {
+                    if ($sync) {
                         foreach ($ready as $name) {
                             if (is_dir($this->getSubdirPath($name)) && !$this->deleteFiles(array($name))) {
                                 $this->mergeResult($event.'_files_deletion_failed', $name);
@@ -990,7 +990,7 @@ namespace Textpattern\Skin {
                         extract(psa(array(
                             'edit_method',
                             'selected',
-                            'clean',
+                            'sync',
                         )));
 
                         if (!$selected || !is_array($selected)) {
@@ -1001,16 +1001,16 @@ namespace Textpattern\Skin {
 
                         switch ($edit_method) {
                             case 'export':
-                                $this->export($clean, true);
+                                $this->export($sync, true);
                                 break;
                             case 'duplicate':
                                 $this->duplicate();
                                 break;
                             case 'import':
-                                $this->import($clean, true);
+                                $this->import($sync, true);
                                 break;
                             case 'delete':
-                                $this->delete($clean);
+                                $this->delete($sync);
                                 break;
                         }
                         break;
@@ -1392,8 +1392,8 @@ namespace Textpattern\Skin {
             $event = self::getEvent();
             $pref = 'synchronize';
 
-            $sync = checkbox2('clean', get_pref($pref, true), 0, 'clean')
-                           .n.tag(gtxt($event.'_'.$pref), 'label', array('for' => 'clean'))
+            $sync = checkbox2('sync', get_pref($pref, true), 0, 'sync')
+                           .n.tag(gtxt($event.'_'.$pref), 'label', array('for' => 'sync'))
                            .popHelp($event.'_'.$pref);
 
             $methods = array(

@@ -145,7 +145,7 @@ namespace Textpattern\Skin {
          * @return object $this The current object (chainable).
          */
 
-        public function delete($clean = false);
+        public function delete($sync = false);
 
         /**
          * Control the admin tab.

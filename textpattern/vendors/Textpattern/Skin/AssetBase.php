@@ -539,14 +539,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Import the $names property value related templates.
-         *
-         * @param  bool   $clean    Whether to removes extra asset related template rows or not;
-         * @param  bool   $override Whether to insert or update the skins.
-         * @return object $this     The current object (chainable).
+         * {@inheritdoc}
          */
 
-        public function import($clean = false, $override = false)
+        public function import($sync = false, $override = false)
         {
             $event = self::getEvent();
             $dirPath = $this->getDirPath();
@@ -592,9 +588,9 @@ namespace Textpattern\Skin {
                 }
 
                 // Drops extra rows…
-                if ($clean) {
+                if ($sync) {
                     if (!$this->deleteExtraRows()) {
-                        $this->mergeResult($event.'_cleaning_failed', array($skin => $notCleaned));
+                        $this->mergeResult($event.'_synchronizing_failed', array($skin => $notCleaned));
                     }
                 }
             }
@@ -605,13 +601,10 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Export the $names property value related templates.
-         *
-         * @param  bool   $clean Whether to removes extra asset related files or not.
-         * @return object $this The current object (chainable).
+         * {@inheritdoc}
          */
 
-        public function export($clean = false, $override = false)
+        public function export($sync = false, $override = false)
         {
             $event = self::getEvent();
             $dirPath = $this->getDirPath();
@@ -665,11 +658,11 @@ namespace Textpattern\Skin {
                             }
 
                             // Drops extra files…
-                            if ($clean && isset($done)) {
+                            if ($sync && isset($done)) {
                                 $notUnlinked = $this->deleteExtraFiles($done);
 
                                 if ($notUnlinked) {
-                                    $this->mergeResult($event.'_cleaning_failed', array($skin => $notUnlinked));
+                                    $this->mergeResult($event.'_synchronizing_failed', array($skin => $notUnlinked));
                                 }
                             }
                         }

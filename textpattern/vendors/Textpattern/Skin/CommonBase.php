@@ -297,7 +297,7 @@ namespace Textpattern\Skin {
          * @return bool
          */
 
-        protected function getCleaningPref()
+        protected function getSyncPref()
         {
             global $prefs;
 
@@ -318,7 +318,7 @@ namespace Textpattern\Skin {
          * @return bool false on error.
          */
 
-        protected function switchCleaningPref()
+        protected function switchSyncPref()
         {
             global $prefs;
 
