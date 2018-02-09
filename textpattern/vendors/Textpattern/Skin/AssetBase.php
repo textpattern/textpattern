@@ -626,58 +626,53 @@ namespace Textpattern\Skin {
             if (!is_writable($dirPath) && !@mkdir($dirPath)) {
                 $this->mergeResult('path_not_writable', array($skin => array($dirPath)));
             } else {
-                $ready = array();
-
-                foreach ($names as $name) {
-                    if (!$this->isInstalled()) {
-                        $this->mergeResult($event.'_unknown', array($skin => array($name)));
-                    } else {
-                        $ready[] = $name;
-                    }
-                }
-
-                $rows = $this->setNames($ready)->getRows();
+                $rows = $this->getRows();
 
                 if (!$rows) {
-                    $failed[$skin] = $empty[$skin] = $dirPath;
+                    $this->mergeResult($event.'_export_failed', array($skin => $this->getName()));
                 } else {
                     foreach ($rows as $row) {
                         extract($row);
 
-                        $ready = true;
-
-                        $subdirField = self::getSubdirField();
-                        $contentsField = self::getFileContentsField();
-
-                        if ($subdirField) {
-                            $subdirPath = $this->setInfos($name, $$subdirField, $$contentsField)->getSubdirPath();
-
-                            if (!is_dir($subdirPath) && !@mkdir($subdirPath)) {
-                                $this->mergeResult($event.'_not_writable', array($skin => array($name)));
-                                $ready = false;
-                            }
-                        } else {
-                            $this->setInfos($name, $$contentsField);
-                        }
-
-                        if ($ready) {
-                            if ($this->createFile() === false) {
-                                $this->mergeResult($event.'_export_failed', array($skin => array($name)));
+                        if (!$this->setName($name)->isInstalled()) {
+                            $this->mergeResult($event.'_unknown', array($skin => array($name)));
+                        } elseif (!self::isExportable()) {
+                            $this->mergeResult($event.'_name_unsafe', array($skin => array($name)));
                             } else {
-                                $this->mergeResult($event.'_exported', array($skin => array($name)), 'success');
+                            $ready = true;
+                            $subdirField = self::getSubdirField();
+                            $contentsField = self::getFileContentsField();
 
-                                $done[] = $name;
+                            if ($subdirField) {
+                                $subdirPath = $this->setInfos($name, $$subdirField, $$contentsField)->getSubdirPath();
+
+                                if (!is_dir($subdirPath) && !@mkdir($subdirPath)) {
+                                    $this->mergeResult($event.'_not_writable', array($skin => array($name)));
+                                    $ready = false;
+                                }
+                            } else {
+                                $this->setInfos($name, $$contentsField);
+                            }
+
+                            if ($ready) {
+                                if ($this->createFile() === false) {
+                                    $this->mergeResult($event.'_export_failed', array($skin => array($name)));
+                                } else {
+                                    $this->mergeResult($event.'_exported', array($skin => array($name)), 'success');
+
+                                    $done[] = $name;
+                                }
+                            }
+
+                            // Drops extra files…
+                            if ($clean && isset($done)) {
+                                $notUnlinked = $this->deleteExtraFiles($done);
+
+                                if ($notUnlinked) {
+                                    $this->mergeResult($event.'_cleaning_failed', array($skin => $notUnlinked));
+                                }
                             }
                         }
-                    }
-                }
-
-                // Drops extra files…
-                if ($clean && isset($done)) {
-                    $notUnlinked = $this->deleteExtraFiles($done);
-
-                    if ($notUnlinked) {
-                        $this->mergeResult($event.'_cleaning_failed', array($skin => $notUnlinked));
                     }
                 }
             }

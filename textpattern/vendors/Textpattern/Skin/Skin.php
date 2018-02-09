@@ -787,7 +787,7 @@ namespace Textpattern\Skin {
                     $override = false;
                 }
 
-                if (!self::isValidDirName($name)) {
+                if (!self::isExportable($name)) {
                     $this->mergeResult($event.'_unsafe_name', $name);
                 } elseif (!$override && is_dir($nameDirPath)) {
                     $this->mergeResult($event.'_already_exists', $nameDirPath);

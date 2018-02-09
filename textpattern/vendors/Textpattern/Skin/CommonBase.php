@@ -159,7 +159,7 @@ namespace Textpattern\Skin {
          * @return bool         false on error.
          */
 
-        protected function isValidDirName($name = null)
+        protected function isExportable($name = null)
         {
             return preg_match('#^'.self::getNamePattern().'$#', $this->getName());
         }
