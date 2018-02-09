@@ -95,8 +95,8 @@ namespace Textpattern\Skin {
             return $this->getName();
         }
 
-        protected function mergeResults($asset) {
-            $this->results = array_merge_recursive($this->getResults(), $asset->getResults());
+        protected function mergeResults($asset, $status) {
+            $this->results = array_merge_recursive($this->getResults(), $asset->getResults($status));
 
             return $this;
         }
@@ -746,7 +746,7 @@ namespace Textpattern\Skin {
                                 if (is_array($asset->getMessage())) {
                                     $assetFailed = true;
 
-                                    $this->mergeResults($asset);
+                                    $this->mergeResults($asset, array('warning', 'error'));
                                 }
                             }
                         }
@@ -823,7 +823,7 @@ namespace Textpattern\Skin {
                                 if (is_array($asset->getMessage())) {
                                     $assetFailed = true;
 
-                                    $this->mergeResults($asset);
+                                    $this->mergeResults($asset, array('warning', 'error'));
                                 }
                             }
 
