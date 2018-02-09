@@ -98,6 +98,8 @@ class TxpXML
     {
         $importAllow = empty($importAllow) ? $this->importAllow : do_list($importAllow);
 
+        $oldLoader = libxml_disable_entity_loader(true);
+
         if ($xml = simplexml_load_string($data, "SimpleXMLElement", LIBXML_NOCDATA)) {
             $articles = array();
             foreach ((array)$xml->children() as $key => $children) {
@@ -120,6 +122,8 @@ class TxpXML
         } else {
             // error XML
         }
+
+        libxml_disable_entity_loader($oldLoader);
     }
 
     /**
