@@ -22,7 +22,9 @@
  */
 
 /**
- * RecRegexIterator
+ * Css Interface
+ *
+ * Implemented by Css
  *
  * @since   4.7.0
  * @package Skin
@@ -30,32 +32,19 @@
 
 namespace Textpattern\Skin {
 
-    class RecRegexIterator extends \RecursiveRegexIterator
+    interface CssInterface
     {
         /**
-         * {@inheritdoc}
-         */
-
-        public function accept()
-        {
-            return $this->isDir() || $this->isValidTemplate();
-        }
-
-        /**
-         * Validates a template file name.
+         * $infos+$name properties setter.
          *
-         * @return bool
+         * @param  string $name CSS name;
+         * @param  string $css  CSS contents;
+         * @return object $this The current class object (chainable).
          */
 
-        public function isValidTemplate()
-        {
-            $isValid = false;
-
-            if (!$this->isDot() && $this->isReadable() && ($this->isFile() || $this->isLink())) {
-                $isValid = (bool) preg_match(self::getRegex(), $this->getFilename());
-            }
-
-            return $isValid;
-        }
+        public function setInfos(
+            $name,
+            $css = null
+        );
     }
 }

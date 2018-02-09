@@ -22,7 +22,9 @@
  */
 
 /**
- * RecIteratorIterator
+ * Page Interface
+ *
+ * Implemented by Page
  *
  * @since   4.7.0
  * @package Skin
@@ -30,18 +32,19 @@
 
 namespace Textpattern\Skin {
 
-    class RecIteratorIterator extends \RecursiveIteratorIterator
+    interface PageInterface
     {
         /**
-         * {@inheritdoc}
+         * $infos+$name properties setter.
          *
-         * @param int $depth Sets the MaxDepth property.
+         * @param  string $name      Page name;
+         * @param  string $user_html Page contents;
+         * @return object $this The current class object (chainable).
          */
 
-        public function __construct(RecRegexIterator $iterator, $depth)
-        {
-            parent::__construct($iterator);
-            parent::setMaxDepth($depth);
-        }
+        public function setInfos(
+            $name,
+            $user_html = null
+        );
     }
 }

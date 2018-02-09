@@ -22,24 +22,26 @@
  */
 
 /**
- * Styles
+ * Recursive iterator iterator
  *
- * Manages skins related styles.
+ * <code>
+ * $files = \Txp::get('Textpattern\Iterator\RecDirIterator', $root);
+ * $filter = \Txp::get('Textpattern\Iterator\RecFilterIterator', $files)->setNameIn($nameIn);
+ * $filteredFiles = \Txp::get('Textpattern\Iterator\RecIteratorIterator', $filter);
+ * $filteredFiles->setMaxDepth($maxDepth);
+ *
+ * foreach ($filteredFiles as $file) {
+ *     echo $file->getPathname();
+ * }
+ * </code>
  *
  * @since   4.7.0
- * @package Skin
+ * @package Iterator
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Iterator {
 
-    class Styles extends AssetBase
+    class RecIteratorIterator extends \RecursiveIteratorIterator
     {
-        protected static $asset = 'css';
-        protected static $dir = 'styles';
-        protected static $extension = 'css';
-        protected static $table = 'txp_css';
-        protected static $tableCols;
-        protected static $contentsCol = 'css';
-        protected static $essential = array(array('default'));
     }
 }

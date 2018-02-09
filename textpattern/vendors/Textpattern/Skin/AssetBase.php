@@ -22,618 +22,414 @@
  */
 
 /**
- * AssetBase
+ * Asset Base
  *
- * Extended by Pages, Forms, Styles…
+ * Extended by CSS, Form and Page.
  *
  * @since   4.7.0
  * @package Skin
- * @see     SkinBase, SkinInterface
  */
 
 namespace Textpattern\Skin {
 
-    abstract class AssetBase extends SharedBase implements AssetInterface
+    abstract class AssetBase extends CommonBase implements AssetInterface
     {
         /**
-         * The asset related directory name.
+         * Asset related directory.
          *
-         * @var string
-         * @see        getDir().
+         * @var string Directory name.
+         * @see        setDir(), getDir().
          */
 
         protected static $dir;
 
         /**
-         * The asset related textpack string.
+         * Asset related default subdirectory to store exported files.
          *
-         * @var string
-         * @see        getAsset().
+         * @var string Asset subdirectory name.
+         * @see        getDefaultSubdir().
          */
 
-        protected static $asset;
+        protected static $defaultSubdir;
 
         /**
-         * The asset table column related to the asset
-         * directory subfolder names when applied.
+         * Asset related table field used as subdirectories.
          *
          * @var string
-         * @see        getSubdirCol().
+         * @see        getSubdirField().
          */
 
-        protected static $subdirCol;
+        protected static $subdirField;
 
         /**
-         * The asset table column used to store the templates main contents.
+         * Asset related table field(s) used as asset file contents.
          *
-         * @var string
+         * @var string Field name (could accept an array in the future for JSON contents)
+         * @see        getFileContentsField().
          */
 
-        protected static $contentsCol;
+        protected static $fileContentsField;
 
         /**
-         * The asset related default templates grouped by types/subfolders.
-         * If no defined type apply, just nest the templates array
-         * into another one which simulates a abstract group.
+         * The skin related main file.
          *
-         * @var array
-         * @see       getContentsCol().
-         */
-
-        protected static $essential;
-
-        /**
-         * The asset related files extension used for import/export.
-         * If set to 'txp', 'html' is also valid on import for now.
-         *
-         * @var string
-         * @see        getExtension().
+         * @see getFilePath().
          */
 
         protected static $extension = 'txp';
 
         /**
-         * Associative array of skins and their templates grouped by types/subfolders.
-         * If no defined type apply, the templates array is just nested
-         * into another one which simulates a abstract group.
+         * Asset related essential rows as an associative array of the following
+         * fields and their value: 'name', ($subdirField, ) $fileContentsField.
          *
-         * @var array
-         * @see       setSkinsTemplates(), getSkinsTemplates().
+         * @var array Associative array of the following fields and their value:
+         *            'name', ($subdirField, ) $fileContentsField.
+         * @see       getEssential().
          */
 
-        protected $skinsTemplates;
+        protected static $essential = array();
+
+         /**
+          * Parent skin object.
+          *
+          * @var object skin
+          * @see        __construct().
+          */
+
+         protected $skin;
 
         /**
-         * {@inheritdoc}
+         * Constructor.
          */
 
-        public function __construct($skins = null, $templates = null)
+        public function __construct(Skin $skin = null)
         {
-            $skins ? $this->setSkinsTemplates($skins, $templates) : '';
+            $this->setSkin($skin);
         }
 
         /**
          * {@inheritdoc}
          */
 
-        public function setSkinsTemplates($skins, $templates = null)
+        public function setSkin(Skin $skin = null)
         {
-            is_array($skins) ?: $skins = array($skins);
-
-            $skins = array_map(array($this, 'sanitize'), $skins);
-
-            $this->skinsTemplates = array();
-
-            if ($templates) {
-                if (is_string($templates)) {
-                    // $templates = 'default';
-                    $globalTemplates = array($templates);
-                } elseif (is_array($templates)) {
-                    if (isset($templates[0])) {
-                        if (is_string($templates[0])) {
-                            // $templates = array('default', 'error_default');
-                            $globalTemplates = $templates;
-                        }
-                    } else {
-                        // $templates = array('misc' => 'a_form');
-                        $globalTemplates = $templates;
-                    }
-                }
-            } else {
-                $globalTemplates = array(array());
-            }
-
-            if (isset($globalTemplates)) {
-                $this->skinsTemplates[$skin] = array_fill_keys($skins, $globalTemplates);
-            } else {
-                $this->skinsTemplates = array_combine($skins, $templates);
-            }
+            $this->skin = $skin === null ? \Txp::get('Textpattern\Skin\Skin')->setName() : $skin;
 
             return $this;
         }
 
         /**
-         * {@inheritdoc}
+         * $skin property getter.
          */
 
-        public function getSkinsTemplates()
+        protected function getSkin()
         {
-            return $this->skinsTemplates;
+            return $this->skin;
+        }
+
+        /**
+         * $infos property getter/parser.
+         *
+         * @param  bool  $safe Whether to get the property value
+         *                     as an SQL query related string or not.
+         * @return mixed TODO
+         */
+
+        protected function getInfos($safe = false)
+        {
+            if ($safe) {
+                $infoQuery = array();
+
+                foreach ($this->infos as $col => $value) {
+                    if ($col === self::getFileContentsField()) {
+                        $infoQuery[] = $col." = '".$value."'";
+                    } else {
+                        $infoQuery[] = $col." = '".doSlash($value)."'";
+                    }
+                }
+
+                return implode(', ', $infoQuery);
+            }
+
+            return $this->infos;
+        }
+
+        /**
+         * $fileContentsField property getter.
+         */
+
+        protected static function getFileContentsField()
+        {
+            return static::$fileContentsField;
         }
 
         /**
          * {@inheritdoc}
          */
 
-        public function getTemplateNames($skin)
-        {
-            $names = array();
+        public static function getEssential(
+            $key = null,
+            $whereKey = null,
+            $valueIn = null
+        ) {
+            if ($key === null) {
+                return static::$essential;
+            } elseif ($key === '*' && $whereKey) {
+                $keyValues = array();
 
-            foreach (self::getSkinsTemplates()[$skin] as $type => $templates) {
-                $names = array_merge($names, $templates);
-            };
-
-            return $names;
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public static function getEssentialNames()
-        {
-            return static::$essential[0];
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public static function getEssentialTypes($name = null)
-        {
-            if ($name) {
-                foreach (static::$essential as $type => $templates) {
-                    if (in_array($name, $templates)) {
-                        return $type;
+                foreach (static::$essential as $row) {
+                    if (in_array($row[$whereKey], $valueIn)) {
+                        $keyValues[] = $row;
                     }
                 }
             } else {
-                return array_keys(static::$essential);
+                $key !== null or $key = 'name';
+                $keyValues = array();
+
+                foreach (static::$essential as $row) {
+                    if ($whereKey) {
+                        if (in_array($row[$whereKey], $valueIn)) {
+                            $keyValues[] = $row[$key];
+                        }
+                    } else {
+                        $keyValues[] = $row[$key];
+                    }
+                }
             }
 
-            return false;
+            return $keyValues;
         }
 
         /**
-         * {@inheritdoc}
+         * $extension property getter.
          */
 
-        public static function getDir()
-        {
-            return static::$dir;
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public static function getSubdirCol()
-        {
-            return static::$subdirCol;
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public static function getAsset()
-        {
-            return static::$asset;
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public static function getExtension()
+        protected static function getExtension()
         {
             return static::$extension;
         }
 
         /**
-         * {@inheritdoc}
+         * $skin property setter.
          */
 
-        public static function getContentsCol()
+        protected static function setDir($name)
         {
-            return static::$contentsCol;
+            static::$dir = $name;
+
+            return $this;
         }
 
         /**
-         * {@inheritdoc}
+         * $dir property getter.
          */
 
-        public function create()
+        protected static function getDir()
         {
-            callback_event('skin.'.self::getDir().'.create', '', 1, $this->getSkinsTemplates());
-
-            $failed = $unknown = $notCreated = $passed = $sqlValues = array();
-
-            foreach ($this->getSkinsTemplates() as $skin => $typesTemplates) {
-                if (!self::isInstalled($skin)) {
-                    $failed[$skin] = $unknown[$skin] = '';
-                } else {
-                    $types = array_keys($typesTemplates);
-                    $essentialTypes = self::getEssentialTypes();
-
-                    if ($essentialTypes) {
-                        $types = array_unique(
-                            array_merge(array_keys($typesTemplates), self::getEssentialTypes())
-                        );
-                    }
-
-                    foreach ($types as $type) {
-                        if (array_key_exists($type, $typesTemplates)) {
-                            $templates[$type] = $typesTemplates[$type];
-                        } else {
-                            $templates[$type] = array();
-                        }
-
-                        $essential = static::getEssentialNames(array($type));
-
-                        if ($essential) {
-                            $templates[$type] = array_unique(
-                                array_merge($essential, $templates[$type])
-                            );
-                        }
-
-                        if ($templates[$type]) {
-                            $passed[$skin] = $templates[$type];
-                        } else {
-                            $templates[$type];
-                            unset($templates[$type]);
-                        }
-                    }
-
-                    $sqlValues = array_merge(
-                        $sqlValues,
-                        $this->getCreationSQLValues($skin, $templates)
-                    );
-                }
-            }
-
-            if ($passed) {
-                if ($this->insert(self::getTableCols(), $sqlValues)) {
-                    $this->setResults(self::getAsset().'_created', $passed, 'success');
-
-                    callback_event('skin.'.self::getDir().'.create', 'success', 0, $passed);
-                } else {
-                    $failed = array_merge($failed, $passed);
-                    $notCreated = $passed;
-                    $passed = array();
-                }
-            }
-
-            if ($failed) {
-                if ($unknown) {
-                    $this->setResults('skin_unknown', $unknown);
-                }
-
-                if ($notCreated) {
-                    $this->setResults(self::getAsset().'_creation_failed', $notCreated);
-                }
-
-                callback_event('skin.'.self::getDir().'.create', 'failure', 0, $failed);
-            }
-
-            callback_event('skin.'.self::getDir().'.create', '', 0, $this->getSkinsTemplates());
-
-            return $this->getSkins($passed);
+            return static::$dir;
         }
 
         /**
-         * Gets an array of SQL VALUES sorted as the $tableCols property.
+         * Gets the skin directory path.
          *
-         * @param  array $skin      A skin name.
-         * @param  array $templates The skin related template names.
-         * @return array            SQL VALUES
+         * @return string path.
          */
 
-        protected static function getCreationSQLValues($skin, $templates)
+        protected function getDirPath()
         {
-            $sqlValues = array();
-
-            foreach ($templates as $type => $names) {
-                foreach ($names as $name) {
-                    $sqlValue = array();
-
-                    foreach (self::getTableCols() as $col) {
-                        $sqlValue[] = isset($$col) ? $$col : '';
-                    }
-
-                    $sqlValues[] = "('".implode("', '", array_map('doSlash', $sqlValue))."')";
-                }
-            }
-
-            return $sqlValues;
+            return $this->getSkin()->getSubdirPath().DS.static::getDir();
         }
 
         /**
-         * Changes the templates related skin.
-         * Fires after a skin update to keep templates associated with the right skin.
-         *
-         * @param  array $from The skin (old)names from which templates are adopted.
-         *                     The array must be parallel to the $skins array
-         *                     passed to the constructor or the setSkinsAssets() method.
-         * @return array       Adopted skins.
+         * $subdirField property getter.
          */
 
-        public function adopt($from)
+        protected static function getSubdirField()
         {
-            $callbackExtra = array(
-                'skins' => $this->getSkinsTemplates(),
-                'from'  => $from,
-            );
+            return static::$subdirField;
+        }
 
-            callback_event('skin.'.self::getDir().'.adopt', '', 1, $callbackExtra);
+        /**
+         * $defaultSubdir property getter.
+         */
 
-            if ($this->adoptTemplates($from)) {
-                $this->setResults(self::getDir().'_updated', array($from), 'success');
+        protected static function getDefaultSubdir()
+        {
+            return static::$defaultSubdir;
+        }
 
-                callback_event('skin.'.self::getDir().'.adopt', 'success', 0, $callbackExtra);
+        /**
+         * $defaultSubdir property getter.
+         */
 
-                $passed = $this->getSkinsTemplates();
+        protected static function getSubdirValues()
+        {
+            return static::$subdirValues;
+        }
+
+        /**
+         * $dir property value related subdirectory parser.
+         *
+         * @param  string $name Subdirectory name.
+         * @return string       The subdirectory name if valid or the default subdirectory.
+         */
+
+        protected static function parseSubdir($name)
+        {
+            if (in_array($name, self::getSubdirValues())) {
+                return $name;
             } else {
-                $this->setResults(self::getDir().'_update_failed', array($from));
-
-                callback_event('skin.'.self::getDir().'.adopt', 'failure', 0, $callbackExtra);
-
-                $passed = array();
+                return self::getDefaultSubdir();
             }
-
-            callback_event('skin.'.self::getDir().'.adopt', '', 0, $callbackExtra);
-
-            return $this->getSkins($passed);
-        }
-
-        /**
-         * Updates the skins templates related 'skin' field in the DB.
-         *
-         * @param array $from Skins from which you want to adopt the templates.
-         *                    The array must be parallel to the $skins array
-         *                    passed to the constructor or the setSkinsTemplates() method.
-         */
-
-        protected function adoptTemplates($from)
-        {
-            $cases = '';
-
-            foreach ($this->getSkinsTemplates() as $skin => $templates) {
-                $cases .= "WHEN skin = '".doSlash($from[$this->getSkinIndex($skin)])."'";
-                $cases .= "THEN '".doSlash($skin)."'";
-            }
-
-            return (bool) safe_query(
-                'UPDATE '.self::getTable().' '
-                .'SET skin = CASE '.$cases.' ELSE skin END '
-                ."WHERE skin IN ('".implode("', '", array_map('doSlash', $from))."')"
-            );
         }
 
         /**
          * {@inheritdoc}
          */
 
-        public function import($clean = true, $override = false)
+        protected function getSubdirPath($name = null)
         {
-            callback_event('skin.'.self::getDir().'.import', '', 1, $this->getSkinsTemplates());
+            $name or $name = $this->getInfos()[self::getSubdirField()];
 
-            $wasLocked = $this->locked;
-
-              $failed
-            = $unknown
-            = $unreadable
-            = $unlockable
-            = $duplicated
-            = $wrongType
-            = $empty
-            = $notCleaned
-            = $notImported
-            = $passed
-            = $sqlValues
-            = array();
-
-            foreach ($this->getSkinsTemplates() as $skin => $typesTemplates) {
-                if (!self::isInstalled($skin)) {
-                    $failed[$skin] = $unknown[$skin] = '';
-                } elseif (!$wasLocked && !$this->lock($skin)) {
-                    $failed[$skin] = $unlockable[$skin] = '';
-                } else {
-                    if (!self::isReadable($skin.'/'.self::getDir())) {
-                        $failed[$skin] = $unreadable[self::getPath($skin.'/'.self::getDir())] = '';
-                    }
-
-                    $types = array_keys($typesTemplates);
-                    $essentialTypes = array_filter(self::getEssentialTypes());
-
-                    if ($essentialTypes) {
-                        if (!array_filter($types)) {
-                            $subdirs = array_map('basename', glob(self::getPath($skin.'/'.self::getDir()).'/*'));
-                            $types = array_unique(array_merge(array_filter($types), $subdirs));
-                        }
-
-                        $types = array_unique(
-                            array_merge($types, $essentialTypes)
-                        );
-                    }
-
-                    foreach ($types as $type) {
-                        $passedInType = array();
-                        $essential = static::getEssentialNames(array($type));
-                        $otherEssential = static::getEssentialNames(
-                            array_diff($essentialTypes, array($type))
-                        );
-
-                        if (!$unreadable && self::isReadable($skin.'/'.self::getDir().($type ? '/'.$type : ''))) {
-                            $files = self::getRecDirIterator(
-                                $skin.'/'.self::getDir().($type ? '/'.$type : ''),
-                                $this->getTemplateNames($skin)
-                            );
-
-                            foreach ($files as $file) {
-                                $name = $file->getTemplateName();
-                                if (!array_key_exists($skin, $passed) || !in_array($name, $passed[$skin])) {
-                                    if (!$type || !in_array($name, $otherEssential)) {
-                                        $passed[$skin][] = $passedInType[] = $name;
-                                        $sqlValues[] = self::getImportSQLValue($skin, $file);
-                                    } else {
-                                        $failed[$skin][] = $wrongType[$skin][] = $name;
-                                    }
-                                } else {
-                                    $failed[$skin][] = $duplicated[$skin][] = $name;
-                                }
-                            }
-                        }
-
-                        $missingTemplates = array_diff($essential, $passedInType);
-
-                        if ($missingTemplates) {
-                            $missing = array();
-
-                            foreach ($missingTemplates as $name) {
-                                $missing[self::getEssentialTypes($name)][] = $name;
-                                $passed[$skin][] = $name;
-                            }
-
-                            $sqlValues = array_merge(
-                                $sqlValues,
-                                $this->getCreationSQLValues($skin, $missing)
-                            );
-                        }
-                    }
-
-                    if (!$passed) {
-                        $failed[$skin] = $empty[$skin] = '';
-                    }
-                }
-            }
-
-            if ($sqlValues) {
-                if ($this->insert(self::getTableCols(), $sqlValues, $override)) {
-                    if ($clean && !self::cleanExtraRows($passed)) {
-                        $failed = array_merge($failed, $passed);
-                        $notCleaned = $passed;
-
-                        unset($passed[$skin]);
-                    } else {
-                        callback_event('skin.'.self::getDir().'.import', 'success', 0, $passed);
-
-                        $this->setResults(self::getAsset().'_imported', $passed, 'success');
-                    }
-                } else {
-                    $failed = array_merge($failed, $passed);
-                    $notImported = $passed;
-                    $passed = array();
-                }
-            }
-
-            if ($failed) {
-                if ($unknown) {
-                    $this->setResults('skin_unknown', $unknown);
-                }
-
-                if ($unreadable) {
-                    $this->setResults('path_not_readable', $unreadable);
-                }
-
-                if ($unlockable) {
-                    $this->setResults('skin_locking_failed', $unlockable);
-                }
-
-                if ($wrongType) {
-                    $this->setResults(self::getAsset().'_type_error', $wrongType);
-                }
-
-                if ($duplicated) {
-                    $this->setResults(self::getAsset().'_duplicate_failed', $duplicated);
-                }
-
-                if ($empty) {
-                    $this->setResults('no_'.self::getAsset().'_found', $empty);
-                }
-
-                if ($notImported) {
-                    $this->setResults(self::getAsset().'_import_failed', $notImported);
-                }
-
-                if ($notCleaned) {
-                    $this->setResults(self::getAsset().'_cleaning_failed', $notCleaned);
-                }
-
-                callback_event('skin.'.self::getDir().'.import', 'failure', 0, $failed);
-            }
-
-            callback_event('skin.'.self::getDir().'.import', '', 0, $this->getSkinsTemplates());
-
-            return $this->getSkins($passed);
+            return $this->getDirPath().DS.$name;
         }
 
         /**
-         * Gets files from a defined directory.
+         * Gets the template related file path.
          *
-         * @param  array  $path      A directory path.
-         * @param  array  $templates Template names to filter results;
-         * @return object            RecursiveIteratorIterator
+         * @param string path.
          */
 
-        protected static function getRecDirIterator($path, $templates = null)
+        protected function getFilePath($name = null)
         {
-            if ($templates) {
-                $templates = '('.implode('|', $templates).')';
+            $dirPath = self::getSubdirField() ? $this->getSubdirPath($name) : $this->getDirPath();
+
+            return $dirPath.DS.$this->getName().'.'.self::getExtension();
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+
+        public static function getEditing()
+        {
+            return get_pref('last_'.self::getEvent().'_saved', 'default', true);
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+
+        public function setEditing($name = null)
+        {
+            global $prefs;
+
+            $event = self::getEvent();
+            $pref = 'last_'.$event.'_saved';
+            $name !== null or $name = $this->getName();
+
+            return set_pref($pref, $prefs[$pref] = $name, $event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+
+        public function removeEditing()
+        {
+            global $prefs;
+
+            $event = self::getEvent();
+            $pref = 'last_'.$event.'_saved';
+
+            unset($prefs[$pref]);
+
+            return remove_pref($pref, $event);
+        }
+
+
+        /**
+         * Sets the skin_editing pref to the skin used by the default section.
+         *
+         * @return bool false on error.
+         */
+
+        protected static function resetEditing()
+        {
+            return $this->setEditing(self::getDefault());
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+
+        protected function createFile($path = null, $contents = null)
+        {
+            if ($path === null || $contents === null) {
+                $infos = $this->getInfos();
+            }
+
+            if ($path === null) {
+                $subdirField = $this->getSubdirField();
+                $file = $this->getName().'.'.self::getExtension();
+
+                if ($subdirField) {
+                    $path = $infos[$subdirField].DS.$file;
+                } else {
+                    $path = $file;
+                }
+            }
+
+            if ($contents === null) {
+                $infos = $this->getInfos();
+                $contents = $infos[self::getFileContentsField()];
+            }
+
+            return file_put_contents($this->getDirPath().DS.$path, $contents);
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+
+        public function createRows($rows = null)
+        {
+            $rows !== null or $rows = self::getEssential();
+
+            $skin = $this->getSkin()->getName();
+            $fields = array('skin', 'name');
+            $fileContentsField = self::getFileContentsField();
+            $subdirField = self::getSubdirField();
+            $values = array();
+            $update = "skin=VALUES(skin), name=VALUES(name), ";
+
+            if ($subdirField) {
+                $fields[] = $subdirField;
+
+                foreach ($rows as $row) {
+                    $values[] = "('".doSlash($skin)."', "
+                                ."'".doSlash($row['name'])."', "
+                                ."'".doSlash($row[$subdirField])."', "
+                                ."'".doSlash($row[$fileContentsField])."')";
+                }
+
+                $update .= $subdirField."=VALUES(".$subdirField."), ";
             } else {
-                $templates = self::getValidNamePattern();
-            }
-
-            $extension = self::getExtension();
-            $extension === 'txp' ? $extension = '(txp|html)' : '';
-
-            return new RecIteratorIterator(
-                new RecRegexIterator(
-                    new RecDirIterator(self::getPath($path)),
-                    '#^'.$templates.'\.'.$extension.'$#i'
-                ),
-                self::getSubdirCol() ? 1 : 0
-            );
-        }
-
-        /**
-         * Gets an SQL VALUES value sorted as the asset $tableCols property.
-         *
-         * @param  object $file See RecDirIterator.
-         * @return string
-         */
-
-        protected static function getImportSQLValue($skin, RecDirIterator $file)
-        {
-            $sqlValue = array();
-
-            foreach (self::getTableCols() as $col) {
-                if ($col === 'skin') {
-                    $sqlValue[] = $skin;
-                } else {
-                    if ($col === self::getContentsCol()) {
-                        $info = 'content';
-                    } elseif ($col === self::getSubdirCol()) {
-                        $info = 'dir';
-                    } else {
-                        $info = $col;
-                    }
-
-                    $sqlValue[] = $file->getTemplateInfo($info);
+                foreach ($rows as $row) {
+                    $values[] = "('".doSlash($skin)."', "
+                                ."'".doSlash($row['name'])."', "
+                                ."'".doSlash($row[$fileContentsField])."')";
                 }
             }
 
-            return "('".implode("', '", array_map('doSlash', $sqlValue))."')";
+            $fields[] = $fileContentsField;
+            $update .= $fileContentsField."=VALUES(".$fileContentsField.")";
+
+            return safe_query(
+                "INSERT INTO ".safe_pfx(self::getTable())." (".implode(', ', $fields).") "
+                ."VALUES ".implode(', ', $values)
+                ." ON DUPLICATE KEY UPDATE ".$update
+            );
         }
 
         /**
@@ -643,276 +439,70 @@ namespace Textpattern\Skin {
          * @return bool  false on error.
          */
 
-        public static function cleanExtraRows($not)
+        protected function deleteExtraRows()
         {
-            $where = '';
-
-            foreach ($not as $skin => $templates) {
-                $where .= "(skin = '".doSlash($skin)."' AND";
-                $where .= " name NOT IN ('".implode("', '", array_map('doSlash', $templates))."'))";
-            }
-
-            return safe_delete(self::getTable(), $where);
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function duplicate($to)
-        {
-            callback_event('skin.'.self::getDir().'.duplicate', '', 1, $this->getSkinsTemplates());
-
-            $rows = $this->getRows();
-
-            $passed = $passedTemplates = $sqlValues = $failed = array();
-
-            foreach ($this->getSkinsTemplates() as $skin => $templates) {
-                $new = $to[$this->getSkinIndex($skin)];
-
-                if (!self::isInstalled($new)) {
-                    $failed[$new] = $unknown[$new] = '';
-                } else {
-                    $passed[$skin] = array();
-                    $passedRows = $rows[$skin];
-
-                    foreach ($passedRows as $row) {
-                        $passed[$skin][] = $row['name'];
-                        $row['skin'] = self::sanitize($new);
-                        $sqlValues[] = "('".implode("', '", array_map('doSlash', $row))."')";
-                    }
-                }
-
-                $missing = array_diff(static::getEssentialNames(), $passed[$skin]);
-
-                if ($missing) {
-                    $sqlValues = array_merge_recursive(
-                        $sqlValues,
-                        $this->getCreationSQLValues($new, $missing)
-                    );
-                }
-            }
-
-            if ($sqlValues) {
-                if ($this->insert(self::getTableCols(), $sqlValues)) {
-                    $this->setResults(self::getAsset().'_created', $passed, 'success');
-
-                    callback_event('skin.'.self::getDir().'.duplicate', 'success', 0, $passed);
-                }
-            } else {
-                $failed = array_merge($failed, $passed);
-                $dbFailure = $passed;
-                $passed = array();
-            }
-
-            if ($failed) {
-                if ($unknown) {
-                    $this->setResults('skin_unknown', $unknown);
-                }
-
-                if ($dbFailure) {
-                    $this->setResults(self::getAsset().'_creation_failed', $dbFailure);
-                }
-
-                callback_event('skin.'.self::getDir().'.duplicate', 'failure', 0, $failed);
-            }
-
-            callback_event('skin.'.self::getDir().'.duplicate', '', 0, $this->getSkinsTemplates());
-
-            return $this->getSkins($passed);
-        }
-
-        /**
-         * Gets skins asset related templates rows.
-         *
-         * @return array Associative array of skins and their template rows.
-         */
-
-        protected function getRows($skins = null)
-        {
-            $skins === null ? $skins = $this->getSkins() : '';
-
-            $where = $skinIn = array();
-
-            foreach ($skins as $skin) {
-                $templates = $this->getTemplateNames($skin);
-
-                if ($templates) {
-                    $where[] = "(skin = '".doSlash($skin)."' AND "
-                               ."name IN ('".implode("', '", array_map('doSlash', $templates))."'))";
-                } else {
-                    $skinIn[] = $skin;
-                }
-            }
-
-            if ($skinIn) {
-                $where[] = "(skin IN ('".implode("', '", array_map('doSlash', $skinIn))."'))";
-            }
-
-            $rs = safe_rows_start(
-                implode(', ', self::getTableCols()),
-                self::getTable(),
-                implode(' OR ', $where)
+            return $this->deleteRows(
+                "skin = '".doSlash($this->getSkin()->getName())."' AND "
+                ."name NOT IN ('".implode("', '", array_map('doSlash', $this->getNames()))."')"
             );
-
-            $rows = array();
-
-            if ($rs) {
-                while ($row = nextRow($rs)) {
-                    $rows[$row['skin']][] = $row;
-                }
-            }
-
-            return $rows;
         }
 
         /**
          * {@inheritdoc}
          */
 
-        public function export($clean = true)
-        {
-            callback_event('skin.'.self::getDir().'.export', '', 1, $this->getSkinsTemplates());
+        protected function parseFiles($files) {
+            $rows = $row = array();
+            $subdirField = self::getSubdirField();
+            $event = self::getEvent();
 
-              $failed
-            = $notWritable
-            = $unlockable
-            = $unknown
-            = $invalid
-            = $notUnlinked
-            = $notExported
-            = $passed
-            = array();
+            $parsed = $parsedFiles = $names = array();
 
-            foreach ($this->getSkinsTemplates() as $skin => $templates) {
-                $writable = self::isWritable($skin.'/'.self::getDir());
-                $new = !$writable && self::mkDir($skin.'/'.self::getDir());
+            if ($files) {
+                $Skin = $this->getSkin();
+                $skin = $Skin->getName();
 
-                if (!$new && !$writable) {
-                    $failed[$skin] = $notWritable[self::getPath($skin)] = '';
-                } elseif (!$this->locked && !$this->lock($skin)) {
-                    $failed[$skin] = $unlockable[$skin] = '';
-                } else {
-                    $passed[$skin] = '';
-                }
-            }
+                foreach ($files as $file) {
+                    $filename = $file->getFilename();
+                    $name = pathinfo($filename, PATHINFO_FILENAME);;
 
-            $rows = $this->getRows($this->getSkins($passed));
+                    if ($subdirField) {
+                        $essentialSubdir = implode('', $this->getEssential($subdirField, 'name', array($name)));
+                    }
 
-            if ($rows) {
-                $skins = $this->getSkins($passed);
-                $passed = array();
-
-                foreach ($skins as $skin) {
-                    if (!array_key_exists($skin, $rows)) {
-                        $failed[$skin] = $unknown[$skin] = '';
-                        unset($passed[$skin]);
+                    if (in_array($filename, $parsedFiles)) {
+                        $this->mergeResult($event.'_duplicate', array($skin => array($filename)));
+                    } elseif ($subdirField && $essentialSubdir && $essentialSubdir !== basename($file->getPath())) {
+                        $this->mergeResult($event.'_wrong_subdir', array($skin => array($name.' → '.basename($file->getPath()))));
                     } else {
-                        $passedRows = $rows[$skin];
-                        $passedTemplates = array();
+                        $names[] = $name;
+                        $parsed[] = $row['name'] = $name;
+                        $parsedFiles[] = $filename;
+                        if ($subdirField) {
+                            $subdir = basename($file->getPath());
+                            $subdirValid = self::parseSubdir($subdir);
 
-                        foreach ($passedRows as $row) {
-                            if (!preg_match('#^'.self::getValidNamePattern().'$#', $row['name'])) {
-                                $failed[$skin][] = $invalid[$skin][] = $row['name'];
-                                unset($passed[$skin]);
-                            } elseif (!self::exportTemplate($row)) {
-                                $failed[$skin][] = $notExported[$skin][] = $row['name'];
-                                unset($passed[$skin]);
-                            } else {
-                                $passed[$skin][] = $row['name'];
-
-                                if (self::getSubdirCol()) {
-                                    $passedTemplates[$row[self::getSubdirCol()]][] = $row['name'];
-                                } else {
-                                    $passedTemplates[] = $row['name'];
-                                }
+                            if ($subdir !== $subdirValid) {
+                                $this->mergeResult($event.'_subdir_change', array($skin => array($name)));
                             }
+
+                            $row[$subdirField] = $subdirValid;
                         }
 
-                        if (!$new && $clean) {
-                            $notUnlinked = $this->cleanExtraFiles($skin, $passedTemplates);
+                        $row[self::getFileContentsField()] = $file->getContents();
 
-                            if ($notUnlinked) {
-                                $failed[$skin] = $notUnlinked[$skin] = $notUnlinked;
-                                unset($passed[$skin]);
-                            }
-                        }
+                        $rows[] = $row;
                     }
                 }
-
-                if ($passed) {
-                    $this->setResults(self::getAsset().'_exported', $passed, 'success');
-
-                    callback_event('skin.'.self::getDir().'.export', 'success', 0, $passed);
-                }
-
-                if ($failed) {
-                    if ($notWritable) {
-                        $this->setResults('path_not_writable', $notWritable);
-                    }
-
-                    if ($unlockable) {
-                        $this->setResults('skin_locking_failed', $unlockable);
-                    }
-
-                    if ($unknown) {
-                        $this->setResults(self::getDir().'_not_found', $unknown);
-                    }
-
-                    if ($invalid) {
-                        $this->setResults(self::getAsset().'_name_unsafe', $invalid);
-                    }
-
-                    if ($notUnlinked) {
-                        $this->setResults(self::getAsset().'_cleaning_failed', $notUnlinked);
-                    }
-
-                    if ($notExported) {
-                        $this->setResults(self::getAsset().'_export_failed', $notExported);
-                    }
-
-                    callback_event('skin.'.self::getDir().'.export', 'failure', 0, $failed);
-                }
             }
 
-            callback_event('skin.'.self::getDir().'.export', '', 0, $this->getSkinsTemplates());
+            $missingNames = array_diff(self::getEssential('name'), $parsed);
 
-            return $this->getSkins($passed);
-        }
+            $this->setNames(array_merge($names, $missingNames));
 
-        /**
-         * Exports a skin template.
-         *
-         * @param  array $name A template name;
-         * @param  array $row  Template row as an associative array.
-         * @return bool        false on error.
-         */
+            $missingRows = self::getEssential('*', 'name', $missingNames);
 
-        protected static function exportTemplate($row)
-        {
-            extract($row);
-
-            $dirPath = $skin.'/'.self::getDir();
-
-            if (self::getSubdirCol()) {
-                $dirPath .= '/'.${self::getSubdirCol()};
-                $writable = self::isWritable($dirPath) || self::mkDir($dirPath);
-            } else {
-                $writable = true;
-            }
-
-            if (${self::getContentsCol()}) {
-                $content = ${self::getContentsCol()};
-            } else {
-                $content = '<!-- This template was empty on export. -->';
-            }
-
-            if ($writable) {
-                return (bool) file_put_contents(
-                    self::getPath($dirPath.'/'.$name.'.'.self::getExtension()),
-                    $content
-                );
-            }
+            return array_merge($rows, $missingRows);
         }
 
         /**
@@ -922,16 +512,26 @@ namespace Textpattern\Skin {
          * @return array      !Templates for which the unlink process FAILED!;
          */
 
-        protected function cleanExtraFiles($skin, $not)
+        protected function deleteExtraFiles($nameNotIn)
         {
-            $files = self::getRecDirIterator($skin.'/'.self::getDir());
+            $filenames = array();
+            $extension = self::getExtension();
+
+            foreach ($this->getNames() as $name) {
+                $filenames[] = $name.'.'.$extension;
+            }
+
+            $files = $this->getFiles($filenames, self::getSubdirField() ? 1 : 0);
             $notRemoved = array();
 
-            foreach ($files as $file) {
-                $filenames[] = $name = $file->getTemplateName();
+            if ($files) {
+                foreach ($files as $file) {
+                    $name = pathinfo($file->getFilename(), PATHINFO_FILENAME);
+                    $this->setName($name);
 
-                if (!$not || ($not && !in_array($name, $not))) {
-                    unlink($file->getPathname()) ?: $notRemoved[] = $name;
+                    if (!$nameNotIn || ($nameNotIn && !in_array($name, $nameNotIn))) {
+                        unlink($this->getFilePath(basename($file->getPath()))) or $notRemoved[] = $name;
+                    }
                 }
             }
 
@@ -942,59 +542,187 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public function delete()
+        public function import($sync = false, $override = false)
         {
-            callback_event('skin.'.self::getDir().'.delete', '', 1, $this->getSkinsTemplates());
+            $event = self::getEvent();
+            $dirPath = $this->getDirPath();
+            $Skin = $this->getSkin();
+            $skin = $Skin !== null ? $Skin->getName() : Skin::getEditing();
+            $names = $this->getNames();
+            $callbackExtra = compact('skin', 'names');
+            $done = array();
+            $dirIsReadable = is_readable($dirPath);
 
-            $rows = $this->getRows();
+            callback_event($event.'.import', '', 1, $callbackExtra);
 
-            if ($rows) {
-                $passed = array_fill_keys(array_keys($rows), '');
-
-                if ($this->deleteTemplates()) {
-                    $this->setResults(self::getAsset().'_deleted', $passed, 'success');
-
-                    callback_event('skin.'.self::getDir().'.delete', 'success', 0, $passed);
-                } else {
-                    $this->setResults(self::getAsset().'_deletion_failed', $passed);
-
-                    callback_event('skin.'.self::getDir().'.delete', 'failure', 0, $passed);
-                }
-            } else {
-                $passed = array($this->getSkinsTemplates());
+            if (!$dirIsReadable) {
+                $this->mergeResult('path_not_readable', array($skin => array($dirPath)));
             }
 
-            callback_event('skin.'.self::getDir().'.delete', '', 0, $this->getSkinsTemplates());
+            if ($dirIsReadable || !$override) {
+                if ($dirIsReadable) {
+                    $filenames = array();
+                    $extension = self::getExtension();
 
-            return $this->getSkins($passed);
+                    foreach ($this->getNames() as $name) {
+                        $filenames[] = $name.'.'.$extension;
+                    }
+
+                    $files = $this->getFiles($filenames, self::getSubdirField() ? 1 : 0);
+
+                    if (!$files) {
+                        $this->mergeResult('no_'.$event.'_found', array($skin => array($dirPath)));
+                    }
+
+                    $rows = $this->parseFiles($files);
+                } else {
+                    $rows = self::getEssential();
+                }
+
+                if (!$this->createRows($rows)) {
+                    $this->mergeResult($event.'_import_failed', array($skin => $names));
+                } else {
+                    $done[] = $names;
+
+                    $this->mergeResult($event.'_imported', array($skin => $names), 'success');
+                }
+
+                // Drops extra rows…
+                if ($sync) {
+                    if (!$this->deleteExtraRows()) {
+                        $this->mergeResult($event.'_synchronizing_failed', array($skin => $notCleaned));
+                    }
+                }
+            }
+
+            callback_event($event.'.import', '', 0, $callbackExtra + compact('done'));
+
+            return $this;
         }
 
         /**
-         * Deletes skin template rows from the DB.
-         *
-         * @return bool false on error.
+         * {@inheritdoc}
          */
 
-        protected function deleteTemplates()
+        public function export($sync = false, $override = false)
         {
-            $where = $skinIn = array();
+            $event = self::getEvent();
+            $dirPath = $this->getDirPath();
+            $Skin = $this->getSkin();
+            $skin = $Skin !== null ? $Skin->getName() : Skin::getEditing();
+            $names = $this->getNames();
+            $callbackExtra = compact('skin', 'names');
+            $done = array();
 
-            foreach ($this->getSkinsTemplates() as $skin => $types) {
-                $templates = self::getTemplateNames($skin);
+            callback_event($event.'.export', '', 1, $callbackExtra);
 
-                if ($templates) {
-                    $where[] = "(skin = '".doSlash($skin)."' AND "
-                               ."name IN ('".implode("', '", array_map('doSlash', $templates))."'))";
+            if (!is_writable($dirPath) && !@mkdir($dirPath)) {
+                $this->mergeResult('path_not_writable', array($skin => array($dirPath)));
+            } else {
+                $rows = $this->getRows();
+
+                if (!$rows) {
+                    $this->mergeResult($event.'_export_failed', array($skin => $this->getName()));
                 } else {
-                    $skinIn[] = $skin;
+                    foreach ($rows as $row) {
+                        extract($row);
+
+                        if (!$this->setName($name)->isInstalled()) {
+                            $this->mergeResult($event.'_unknown', array($skin => array($name)));
+                        } elseif (!self::isExportable()) {
+                            $this->mergeResult($event.'_name_unsafe', array($skin => array($name)));
+                        } else {
+                            $ready = true;
+                            $subdirField = self::getSubdirField();
+                            $contentsField = self::getFileContentsField();
+
+                            if ($subdirField) {
+                                $subdirPath = $this->setInfos($name, $$subdirField, $$contentsField)->getSubdirPath();
+
+                                if (!is_dir($subdirPath) && !@mkdir($subdirPath)) {
+                                    $this->mergeResult($event.'_not_writable', array($skin => array($name)));
+                                    $ready = false;
+                                }
+                            } else {
+                                $this->setInfos($name, $$contentsField);
+                            }
+
+                            if ($ready) {
+                                if ($this->createFile() === false) {
+                                    $this->mergeResult($event.'_export_failed', array($skin => array($name)));
+                                } else {
+                                    $this->mergeResult($event.'_exported', array($skin => array($name)), 'success');
+
+                                    $done[] = $name;
+                                }
+                            }
+
+                            // Drops extra files…
+                            if ($sync && isset($done)) {
+                                $notUnlinked = $this->deleteExtraFiles($done);
+
+                                if ($notUnlinked) {
+                                    $this->mergeResult($event.'_synchronizing_failed', array($skin => $notUnlinked));
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
-            if ($skinIn) {
-                $where[] = "(skin IN ('".implode("', '", array_map('doSlash', $skinIn))."'))";
+            callback_event($event.'.export', '', 1, $callbackExtra + compact('done'));
+
+            return $this;
+        }
+
+        /**
+         * Render the Skin switch form.
+         *
+         * @return HTML
+         */
+
+        public function getSelectEdit()
+        {
+            $event = self::getEvent();
+            $Skin = $this->getSkin();
+            $skins = $Skin->getInstalled();
+
+            if (count($skins) > 1) {
+                return form(
+                    inputLabel(
+                        'skin',
+                        selectInput('skin', $skins, Skin::getEditing(), false, 1, 'skin'),
+                        'skin'
+                    )
+                    .eInput($event)
+                    .sInput($event.'_skin_change'),
+                    '',
+                    '',
+                    'post'
+                );
             }
 
-            return safe_delete(doSlash(self::getTable()), implode(' OR ', $where));
+            return;
+        }
+
+        /**
+         * Select the asset related skin to edit.
+         * Keeps track from panel to panel.
+         *
+         * @param  string $skin Optional skin name. Read from GET/POST otherwise
+         */
+
+        public function selectEdit($skin = null)
+        {
+            if ($skin === null) {
+                $skin = gps('skin');
+            }
+
+            if ($skin) {
+                $skin = $this->getSkin()->setEditing($skin);
+            }
+
+            return $this;
         }
     }
 }

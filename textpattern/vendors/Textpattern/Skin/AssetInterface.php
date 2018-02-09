@@ -22,13 +22,12 @@
  */
 
 /**
- * AssetInterface
+ * Asset Interface
  *
- * Implemented by AssetBase
+ * Implemented by AssetBase.
  *
  * @since   4.7.0
  * @package Skin
- * @see     SkinsInterface
  */
 
 namespace Textpattern\Skin {
@@ -36,150 +35,27 @@ namespace Textpattern\Skin {
     interface AssetInterface
     {
         /**
-         * Constructor
-         *
-         * @param array $skins     A skin name or an array of names.
-         * @param array $templates A templates array or a $skins parallel
-         *                         array of templates grouped by types/subfolders.
-         *                         If no type apply, just nest the templates array
-         *                         into another one which simulates a abstract type.
+         * $skin property setter.
          */
 
-        public function __construct($skins = null, $templates = null);
+        public function setSkin(Skin $skin = null);
 
         /**
-         * $skinsTemplates property setter.
-         *
-         * @param  array  $skins     See __construct().
-         * @param  array  $templates See __construct().
-         * @return object $this
-         * @see           __construct()
+         * $essential property getter.
          */
 
-        public function setSkinsTemplates($skins, $templates = null);
+        public static function getEssential(
+            $key = null,
+            $whereKey = null,
+            $valueIn = null
+        );
 
         /**
-         * $skinsTemplates property getter.
+         * Render the Skin switch form.
          *
-         * @return array Associative array of skins and their templates
-         *               grouped by types/subfolders.
-         * @see          setSkinsTemplates()
+         * @return HTML
          */
 
-        public function getSkinsTemplates();
-
-        /**
-         * Gets the template names defined for the provided
-         * skin in the $skinsTemplates property.
-         *
-         * @param string A skin name.
-         * @return array Template names.
-         */
-
-        public function getTemplateNames($skin);
-
-        /**
-         * Gets the asset essential template names from the $essential property.
-         *
-         * @return array Template names.
-         */
-
-        public static function getEssentialNames();
-
-        /**
-         * Gets the asset related essential template type(s)
-         * from the $essential property.
-         *
-         * @param  array $name A template name.
-         * @return mixed The $name related type if the arg is set
-         *               or an array of all types.
-         */
-
-        public static function getEssentialTypes($name);
-
-        /**
-         * $dir property getter.
-         *
-         * @return string the asset related directory name.
-         */
-
-        public static function getDir();
-
-        /**
-         * $subdirCol property getter.
-         *
-         * @return string The DB column associated to subdirectories when applied.
-         */
-
-        public static function getSubdirCol();
-
-        /**
-         * $contentsCol property getter.
-         *
-         * @return string The DB column name used to store the main contents.
-         */
-
-        public static function getContentsCol();
-
-        /**
-         * $asset property getter.
-         *
-         * @return string The textpack related string used for the current asset.
-         */
-
-        public static function getAsset();
-
-        /**
-         * $Extension property getter.
-         *
-         * @return string The current asset files related extension.
-         */
-
-        public static function getExtension();
-
-        /**
-         * Creates skins templates.
-         *
-         * @return array Created skins.
-         */
-
-        public function create();
-
-        /**
-         * Imports skins templates.
-         *
-         * @param  string $clean Whether to remove extra template rows or not.
-         * @return array         Imported skins.
-         */
-
-        public function import($clean = true);
-
-        /**
-         * Duplicates skins templates.
-         *
-         * @param  array $to The skin (new)names to which templates need to be duplicated.
-         *                   The array must be parallel to the $skins array
-         *                   passed to the constructor or the setSkinsAssets() method.
-         * @return array     Duplicated skins.
-         */
-
-        public function duplicate($to);
-
-        /**
-         * Exports skins templates.
-         *
-         * @param  string $clean Whether to remove extra template files or not.
-         * @return array         Exported skins.
-         */
-
-        public function export($clean = true);
-
-        /**
-         * Deletes skins templates.
-         *
-         * @return array Deleted skins.
-         */
-
-        public function delete();
+        public function getSelectEdit();
     }
 }

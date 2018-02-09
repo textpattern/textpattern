@@ -22,9 +22,9 @@
  */
 
 /**
- * Pages
+ * Form Interface
  *
- * Manages skins related pages.
+ * Implemented by Form
  *
  * @since   4.7.0
  * @package Skin
@@ -32,13 +32,27 @@
 
 namespace Textpattern\Skin {
 
-    class Pages extends AssetBase
+    interface FormInterface
     {
-        protected static $asset = 'page';
-        protected static $dir = 'pages';
-        protected static $table = 'txp_page';
-        protected static $tableCols;
-        protected static $contentsCol = 'user_html';
-        protected static $essential = array(array('default', 'error_default'));
+        /**
+         * $infos+$name properties setter.
+         *
+         * @param  string $name Form name;
+         * @param  string $type Form type;
+         * @param  string $Form Form contents;
+         * @return object $this The current class object (chainable).
+         */
+
+        public function setInfos(
+            $name,
+            $type = null,
+            $Form = null
+        );
+
+        /**
+         *  $subdirValues getter.
+         */
+
+        public static function getTypes();
     }
 }
