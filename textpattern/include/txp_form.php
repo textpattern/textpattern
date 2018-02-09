@@ -89,7 +89,7 @@ if ($event == 'form') {
             form_save();
             break;
         case "form_skin_change":
-            $instance->selectEdit($skin);
+            $instance->selectEdit();
             form_edit();
             break;
         case 'tagbuild':
@@ -569,6 +569,22 @@ function form_delete($name, $skin)
     $skin = doSlash($skin);
 
     return safe_delete("txp_form", "name = '$name' AND skin = '$skin'");
+}
+
+/**
+ * Changes the skin in which styles are being edited.
+ *
+ * Keeps track of which skin is being edited from panel to panel.
+ *
+ * @param      string $skin Optional skin name. Read from GET/POST otherwise
+ * @deprecated in 4.7.0
+ */
+
+function form_skin_change($skin = null)
+{
+    Txp::get('Textpattern\Skin\Form')->selectEdit($skin);
+
+    return true;
 }
 
 /**

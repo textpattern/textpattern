@@ -64,7 +64,7 @@ if ($event == 'page') {
             page_new();
             break;
         case "page_skin_change":
-            $instance->selectEdit($skin);
+            $instance->selectEdit();
             page_edit();
             break;
         case 'tagbuild':
@@ -319,6 +319,22 @@ function page_delete()
     }
 
     page_edit($message);
+}
+
+/**
+ * Changes the skin in which styles are being edited.
+ *
+ * Keeps track of which skin is being edited from panel to panel.
+ *
+ * @param      string $skin Optional skin name. Read from GET/POST otherwise
+ * @deprecated in 4.7.0
+ */
+
+function page_skin_change($skin = null)
+{
+    Txp::get('Textpattern\Skin\Page')->selectEdit($skin);
+
+    return true;
 }
 
 /**
