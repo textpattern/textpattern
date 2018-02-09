@@ -22,9 +22,9 @@
  */
 
 /**
- * SharedBase
+ * Page
  *
- * Extended by Main and AssetBase.
+ * Manages Pages.
  *
  * @since   4.7.0
  * @package Skin

@@ -24,7 +24,7 @@
 /**
  * Skin
  *
- * Manage Skins and their dependencies
+ * Manage Skins and their dependencies.
  *
  * @since   4.7.0
  * @package Skin

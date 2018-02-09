@@ -22,9 +22,9 @@
  */
 
 /**
- * Pages
+ * Css
  *
- * Manages skins related pages.
+ * Manages stylesheets.
  *
  * @since   4.7.0
  * @package Skin

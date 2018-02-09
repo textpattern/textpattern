@@ -22,9 +22,9 @@
  */
 
 /**
- * SharedBase
+ * Page Interface
  *
- * Extended by Main and AssetBase.
+ * Implemented by Page
  *
  * @since   4.7.0
  * @package Skin

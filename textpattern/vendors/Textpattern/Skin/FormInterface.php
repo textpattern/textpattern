@@ -22,9 +22,9 @@
  */
 
 /**
- * SharedBase
+ * Form Interface
  *
- * Extended by Main and AssetBase.
+ * Implemented by Form
  *
  * @since   4.7.0
  * @package Skin

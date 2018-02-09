@@ -22,9 +22,9 @@
  */
 
 /**
- * SharedBase
+ * Css Interface
  *
- * Extended by Main and AssetBase.
+ * Implemented by Css
  *
  * @since   4.7.0
  * @package Skin

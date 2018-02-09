@@ -22,9 +22,9 @@
  */
 
 /**
- * SharedBase
+ * Form
  *
- * Extended by Main and AssetBase.
+ * Manages Form.
  *
  * @since   4.7.0
  * @package Skin
