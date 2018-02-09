@@ -1389,11 +1389,12 @@ namespace Textpattern\Skin {
 
         protected function getMultiEditForm($page, $sort, $dir, $crit, $search_method)
         {
+            $event = self::getEvent();
             $pref = 'synchronize';
 
             $sync = checkbox2('clean', get_pref($pref, true), 0, 'clean')
-                           .n.tag(gtxt($pref), 'label', array('for' => 'clean'))
-                           .popHelp($pref);
+                           .n.tag(gtxt($event.'_'.$pref), 'label', array('for' => 'clean'))
+                           .popHelp($event.'_'.$pref);
 
             $methods = array(
                 'import'    => array('label' => gTxt('override'), 'html' => $sync),
