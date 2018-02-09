@@ -588,7 +588,7 @@ function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = ''
             'class' => 'toggle',
             'id'    => $anchor_id,
             'role'  => 'group',
-            'style' => $visible ? '' : 'display: none',
+            'style' => $visible ? '' : 'display:none',
         );
 
         $label = href($label, '#'.$anchor_id, array(
@@ -1466,14 +1466,14 @@ function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_s
             ).
             tag(null, 'progress', array(
                 'class' => 'txp-upload-progress',
-                'style' =>  'display:none;',
+                'style' =>  'display:none',
             )),
             'form', array(
                 'class'   => 'upload-form'.($class ? ' '.trim($class) : ''),
                 'method'  => 'post',
                 'enctype' => 'multipart/form-data',
                 'action'  => "index.php?event=$event&step=$step",
-                'style'   => 'position: relative',
+                'style'   => 'position:relative',
             )
         ),
         $argv
