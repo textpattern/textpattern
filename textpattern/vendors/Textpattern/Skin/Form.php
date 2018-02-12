@@ -81,12 +81,7 @@ namespace Textpattern\Skin {
         );
 
         /**
-         * $infos+$name properties setter.
-         *
-         * @param  string $name Form name;
-         * @param  string $type Form type;
-         * @param  string $Form Form contents;
-         * @return object $this The current class object (chainable).
+         * {@inheritdoc}
          */
 
         public function setInfos(

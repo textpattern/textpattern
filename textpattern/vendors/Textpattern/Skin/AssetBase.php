@@ -120,6 +120,8 @@ namespace Textpattern\Skin {
 
         /**
          * $skin property getter.
+         *
+         * @return $this->skin The asset related skin object.
          */
 
         protected function getSkin()
@@ -128,11 +130,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * $infos property getter/parser.
-         *
-         * @param  bool  $safe Whether to get the property value
-         *                     as an SQL query related string or not.
-         * @return mixed TODO
+         * {@inheritdoc}
          */
 
         protected function getInfos($safe = false)
@@ -156,6 +154,8 @@ namespace Textpattern\Skin {
 
         /**
          * $fileContentsField property getter.
+         *
+         * @return string static::$fileContentsField.
          */
 
         protected static function getFileContentsField()
@@ -202,6 +202,8 @@ namespace Textpattern\Skin {
 
         /**
          * $extension property getter.
+         *
+         * @return string static::$extension.
          */
 
         protected static function getExtension()
@@ -211,6 +213,8 @@ namespace Textpattern\Skin {
 
         /**
          * $skin property setter.
+         *
+         * @return object $this The current class object (chainable).
          */
 
         protected static function setDir($name)
@@ -222,6 +226,8 @@ namespace Textpattern\Skin {
 
         /**
          * $dir property getter.
+         *
+         * @return string static::$dir.
          */
 
         protected static function getDir()
@@ -268,7 +274,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * $dir property value related subdirectory parser.
+         * Whether a subdirectory name is valid or not.
          *
          * @param  string $name Subdirectory name.
          * @return string       The subdirectory name if valid or the default subdirectory.
@@ -295,7 +301,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Gets the template related file path.
+         * Get the template related file path.
          *
          * @param string path.
          */
@@ -349,9 +355,9 @@ namespace Textpattern\Skin {
 
 
         /**
-         * Sets the skin_editing pref to the skin used by the default section.
+         * Set the skin_editing pref to the skin used by the default section.
          *
-         * @return bool false on error.
+         * @return bool FALSE on error.
          */
 
         protected static function resetEditing()
@@ -433,10 +439,9 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Drops obsolete template rows.
+         * Delete obsolete template rows.
          *
-         * @param  array $not An array of template names to NOT drop;
-         * @return bool  false on error.
+         * @return bool FALSE on error.
          */
 
         protected function deleteExtraRows()
@@ -506,7 +511,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Unlinks obsolete template files.
+         * Unlink obsolete template files.
          *
          * @param  array $not An array of template names to NOT unlink;
          * @return array      !Templates for which the unlink process FAILED!;
@@ -676,9 +681,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Render the Skin switch form.
-         *
-         * @return HTML
+         * {@inheritdoc}
          */
 
         public function getSelectEdit()
@@ -710,6 +713,7 @@ namespace Textpattern\Skin {
          * Keeps track from panel to panel.
          *
          * @param  string $skin Optional skin name. Read from GET/POST otherwise
+         * @return object $this The current class object (chainable).
          */
 
         public function selectEdit($skin = null)

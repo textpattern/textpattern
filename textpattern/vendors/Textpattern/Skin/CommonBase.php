@@ -156,7 +156,7 @@ namespace Textpattern\Skin {
         /**
          * Whether a $name property related value is a valid directory name or not.
          *
-         * @return bool         false on error.
+         * @return bool FALSE on error.
          */
 
         protected function isExportable($name = null)
@@ -167,13 +167,11 @@ namespace Textpattern\Skin {
         /**
          * Sanitises a string for use in a theme template's name.
          *
-         * Just runs sanitizeForPage() followed by sanitizeForFile(), then limits
-         * the number of characters to 63.
+         * Just runs sanitizeForPage() followed by sanitizeForFile(),
+         * then limits the number of characters to 63.
          *
-         * @param   string $text The string
-         * @return  string
-         * @package Filter
-         * @access  private
+         * @param  string $text The string
+         * @return string
          */
 
         public static function sanitize($text)
@@ -187,7 +185,7 @@ namespace Textpattern\Skin {
          * $names property setter/sanitizer.
          *
          * @param  array  $names Multiple skin or template names to work with related methods.
-         * @return object $this  The current object (chainable).
+         * @return object $this  The current class object (chainable).
          */
 
          public function setNames($names = null)
@@ -223,7 +221,7 @@ namespace Textpattern\Skin {
          *
          * @param  array  $name Single skin or template name to work with related methods.
          *                      Takes the '_last_saved' or '_editing' related preference value if null.
-         * @return object $this The current object (chainable).
+         * @return object $this The current class object (chainable).
          */
 
         public function setName($name = null)
@@ -248,8 +246,8 @@ namespace Textpattern\Skin {
          * $infos property getter/parser.
          *
          * @param  bool  $safe Whether to get the property value
-         *                     as an SQL query related string or not.
-         * @return mixed TODO
+         *                     as a safe SET query clause.
+         * @return mixed       The $infos property value or the related SET clause.
          */
 
         protected function getInfos($safe = false)
@@ -315,7 +313,7 @@ namespace Textpattern\Skin {
          * Switch the 'synchronize' preference value
          * and its related global variable.
          *
-         * @return bool false on error.
+         * @return bool FALSE on error.
          */
 
         protected function switchSyncPref()
@@ -338,12 +336,12 @@ namespace Textpattern\Skin {
         /**
          * Merge a result into the $results property array.
          *
-         * @param string $txtItem A textpack item related to the what happened.
-         * @param mixed  $list    A name or an array of names associated with the result
-         *                        to build the txtItem related '{list}'.
-         *                        List values can be grouped like so:
-         *                        array($skin => $templates)
-         * @param string $status  'success'|'warning'|'error'.
+         * @param  string $txtItem Textpack related item.
+         * @param  mixed  $list    A name or an array of names associated with the result
+         *                         to build the txtItem related '{list}'.
+         *                         List values can be grouped like so: array($skin => $templates)
+         * @param  string $status  'success'|'warning'|'error'.
+         * @return object $this    The current class object (chainable).
          */
 
         protected function mergeResult($txtItem, $list, $status = null)
@@ -362,9 +360,9 @@ namespace Textpattern\Skin {
         /**
          * $results property getter.
          *
-         * @param  $status Array of results related status ('success', 'warning', 'error') to filter the outpout.
-         * @return array   Associative array of status textpack related items
-         *                 and their related '{list}' parameters.
+         * @param  array $status Array of results related status ('success', 'warning', 'error') to filter the outpout.
+         * @return array         Associative array of status textpack related items
+         *                       and their related '{list}' parameters.
          */
 
         protected function getResults($status = null)
@@ -435,7 +433,7 @@ namespace Textpattern\Skin {
          *
          * @param  array  $names    Optional filenames to filter the result.
          * @param  int    $maxDepth Optional RecursiveIteratorIterator related property value (default = -1 infinite).
-         * @return object
+         * @return object           Collection of file objects.
          */
 
         protected function getFiles($names = null, $maxDepth = null)
@@ -554,7 +552,7 @@ namespace Textpattern\Skin {
          * @param  string $where Optional WHERE clause.
          *                       Builds the clause from the $names (+ $skin) property value(s) if null.
          * @param  bool   $debug Dump query
-         * @return bool          false on error.
+         * @return bool          FALSE on error.
          */
 
         public function deleteRows($where = null, $debug = false)

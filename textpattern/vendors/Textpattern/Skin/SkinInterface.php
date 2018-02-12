@@ -50,7 +50,7 @@ namespace Textpattern\Skin {
          * @param array   $pages  Page names to work with;
          * @param array   $forms  Form names to work with;
          * @param array   $styles CSS names to work with.
-         * @return object $this
+         * @return object $this   The current class object (chainable).
          */
 
         public function setAssets($pages = null, $forms = null, $styles = null);
@@ -64,7 +64,7 @@ namespace Textpattern\Skin {
          * @param  string $description Skin description;
          * @param  string $author      Skin author;
          * @param  string $author_uri  Skin author URL;
-         * @return object $this
+         * @return object $this        The current class object (chainable).
          */
 
         public function setInfos(
@@ -98,7 +98,7 @@ namespace Textpattern\Skin {
         /**
          * $uploaded property setter.
          *
-         * @return object $this.
+         * @return object $this The current class object (chainable).
          */
 
         public function getInstallable();

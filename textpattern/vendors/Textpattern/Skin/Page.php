@@ -50,11 +50,7 @@ namespace Textpattern\Skin {
         );
 
         /**
-         * $infos+$name properties setter.
-         *
-         * @param  string $name      Page name;
-         * @param  string $user_html Page contents;
-         * @return object $this The current class object (chainable).
+         * {@inheritdoc}
          */
 
         public function setInfos(
