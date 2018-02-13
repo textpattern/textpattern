@@ -35,7 +35,6 @@ namespace Textpattern\Skin {
     class Form extends AssetBase implements FormInterface
     {
         protected static $event = 'form';
-        protected static $table = 'txp_form';
         protected static $dir = 'forms';
         protected static $subdirField = 'type';
         protected static $subdirValues = array('article', 'category', 'comment', 'file', 'link', 'section', 'misc');
@@ -81,12 +80,7 @@ namespace Textpattern\Skin {
         );
 
         /**
-         * $infos+$name properties setter.
-         *
-         * @param  string $name Form name;
-         * @param  string $type Form type;
-         * @param  string $Form Form contents;
-         * @return object $this The current class object (chainable).
+         * {@inheritdoc}
          */
 
         public function setInfos(

@@ -36,7 +36,6 @@ namespace Textpattern\Skin {
     {
         protected static $event = 'css';
         protected static $extension = 'css';
-        protected static $table = 'txp_css';
         protected static $dir = 'styles';
         protected static $fileContentsField = 'css';
         protected static $essential = array(
@@ -48,11 +47,7 @@ namespace Textpattern\Skin {
         );
 
         /**
-         * $infos+$name properties setter.
-         *
-         * @param  string $name CSS name;
-         * @param  string $css  CSS contents;
-         * @return object $this The current class object (chainable).
+         * {@inheritdoc}
          */
 
         public function setInfos(

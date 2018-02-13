@@ -39,7 +39,7 @@ namespace Textpattern\Skin {
          *
          * @param  string $name      Page name;
          * @param  string $user_html Page contents;
-         * @return object $this The current class object (chainable).
+         * @return object $this      The current class object (chainable).
          */
 
         public function setInfos(

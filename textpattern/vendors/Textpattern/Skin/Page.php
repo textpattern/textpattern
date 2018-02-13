@@ -35,7 +35,6 @@ namespace Textpattern\Skin {
     class Page extends AssetBase implements PageInterface
     {
         protected static $event = 'page';
-        protected static $table = 'txp_page';
         protected static $dir = 'pages';
         protected static $fileContentsField = 'user_html';
         protected static $essential = array(
@@ -50,11 +49,7 @@ namespace Textpattern\Skin {
         );
 
         /**
-         * $infos+$name properties setter.
-         *
-         * @param  string $name      Page name;
-         * @param  string $user_html Page contents;
-         * @return object $this The current class object (chainable).
+         * {@inheritdoc}
          */
 
         public function setInfos(
