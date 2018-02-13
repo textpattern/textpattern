@@ -1114,7 +1114,8 @@ namespace Textpattern\Skin {
             return $table->render(
                 compact('total', 'criteria'),
                 $this->getSearchBlock($search),
-                $this->getCreateBlock(),
+                '',
+                $this->getCreateBlock().
                 $this->getContentBlock(compact('offset', 'limit', 'total', 'criteria', 'crit', 'search_method', 'page', 'sort', 'dir')),
                 $this->getFootBlock(compact('limit', 'numPages', 'total', 'crit', 'search_method', 'page', 'sort', 'dir'))
             );
