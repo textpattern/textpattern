@@ -343,7 +343,7 @@ function page_skin_change($skin = null)
 
 function page_save()
 {
-    global $app_mode;
+    global $instance, $app_mode;
 
     extract(doSlash(array_map('assert_string', psa(array(
         'savenew',
@@ -352,8 +352,8 @@ function page_save()
         'skin',
     )))));
 
-    $name = sanitizeForTheme(assert_string(ps('name')));
-    $newname = sanitizeForTheme(assert_string(ps('newname')));
+    $name = Page::sanitize(assert_string(ps('name')));
+    $newname = Page::sanitize(assert_string(ps('newname')));
 
     $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
 

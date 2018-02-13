@@ -278,7 +278,7 @@ function css_edit($message = '', $refresh_partials = false)
 
 function css_save()
 {
-    global $app_mode;
+    global $instance, $app_mode;
 
     extract(doSlash(array_map('assert_string', psa(array(
         'savenew',
@@ -287,8 +287,8 @@ function css_save()
         'skin',
     )))));
 
-    $name = sanitizeForTheme(assert_string(ps('name')));
-    $newname = sanitizeForTheme(assert_string(ps('newname')));
+    $name = Form::sanitize(assert_string(ps('name')));
+    $newname = Form::sanitize(assert_string(ps('newname')));
 
     $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
 
