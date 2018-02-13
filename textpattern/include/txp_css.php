@@ -287,8 +287,8 @@ function css_save()
         'skin',
     )))));
 
-    $name = Form::sanitize(assert_string(ps('name')));
-    $newname = Form::sanitize(assert_string(ps('newname')));
+    $name = Css::sanitize(assert_string(ps('name')));
+    $newname = Css::sanitize(assert_string(ps('newname')));
 
     $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
 
