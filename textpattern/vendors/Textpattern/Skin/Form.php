@@ -35,7 +35,6 @@ namespace Textpattern\Skin {
     class Form extends AssetBase implements FormInterface
     {
         protected static $event = 'form';
-        protected static $table = 'txp_form';
         protected static $dir = 'forms';
         protected static $subdirField = 'type';
         protected static $subdirValues = array('article', 'category', 'comment', 'file', 'link', 'section', 'misc');

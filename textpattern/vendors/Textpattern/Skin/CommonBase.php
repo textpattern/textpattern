@@ -35,15 +35,6 @@ namespace Textpattern\Skin {
     abstract class CommonBase implements CommonInterface
     {
         /**
-         * Class related database table.
-         *
-         * @var string Table name.
-         * @see        getTable().
-         */
-
-        protected static $table;
-
-        /**
          * Class related textpack string (usually the event name).
          *
          * @var string 'skin', 'page', 'form', 'css', etc.
@@ -121,14 +112,14 @@ namespace Textpattern\Skin {
         );
 
         /**
-         * $table property getter.
+         * Get the class related Database table name
          *
-         * @return string static::$table Class related database table.
+         * @return string Table name.
          */
 
         protected static function getTable()
         {
-            return static::$table;
+            return 'txp_'.self::getEvent();
         }
 
         /**

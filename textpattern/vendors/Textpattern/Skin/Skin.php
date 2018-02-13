@@ -47,12 +47,6 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        protected static $table = 'txp_skin';
-
-        /**
-         * {@inheritdoc}
-         */
-
         protected static $event = 'skin';
 
         /**
