@@ -627,7 +627,7 @@ namespace Textpattern\Skin {
                 $rows = $this->getRows();
 
                 if (!$rows) {
-                    $this->mergeResult($event.'_export_failed', array($skin => $this->getName()));
+                    $this->mergeResult($event.'_not_found', $skin);
                 } else {
                     foreach ($rows as $row) {
                         extract($row);
