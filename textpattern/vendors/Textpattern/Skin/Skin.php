@@ -1127,7 +1127,7 @@ namespace Textpattern\Skin {
             $event = self::getEvent();
 
             return n.tag(
-                $search->renderForm($event, array('placeholder' => 'search_'.$event)),
+                $search->renderForm($event, array('placeholder' => 'search_skins')),
                 'div',
                 array(
                     'class' => 'txp-layout-4col-3span',
