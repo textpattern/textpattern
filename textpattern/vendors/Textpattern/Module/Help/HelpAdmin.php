@@ -73,7 +73,9 @@ class HelpAdmin
         }
 
         if (empty(self::$pophelp_xml)) {
+            $oldLoader = libxml_disable_entity_loader(true);
             self::$pophelp_xml = simplexml_load_file($file, "SimpleXMLElement", LIBXML_NOCDATA);
+            libxml_disable_entity_loader($oldLoader);
         }
 
         return self::$pophelp_xml;
