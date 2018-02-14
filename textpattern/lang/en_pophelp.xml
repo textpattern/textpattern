@@ -936,10 +936,12 @@
     </group>
 
     <group id="skin" title="Themes panel">
-        <item id="remove_extra_templates" title="Delete all destination templates first?"><![CDATA[
-<h2>Delete all destination templates first?</h2>
-<p>Check this box to delete all Page, Form or Style theme assets in the destination before the import or export operation takes place. If you clear the checkbox, the templates in the destination area will be merged with whatever you are copying; any assets of the same name will be overwritten, but any other assets with different names that are already there will remain.</p>
-<p>During export to the file system, this does not affect files other than Pages templates, Forms templates and Stylesheets. Any additional assets you may have (JavaScript, images, etc.) in other directories inside your theme will remain, regardless of the setting of this checkbox.</p>
+        <item id="skin_synchronize" title="Synchronize template/file lists"><![CDATA[
+<h2>Synchronize template/file lists</h2>
+<p>If checked, this option allows you to synchronize the template-related database and files.</p>
+<p>When this option is selected, on override/re-import each template which is not part of the processed import will be deleted from the database, while on export, template files will be deleted if they are not part of the processed export.</p>
+<p>If, for any reason, import or export fails for a defined template it would not be considered as part of the current process and will be deleted from the database or the theme directory.</p>
+<p><strong>Note:</strong> This process is destructive and permanent; please use with caution. Upon deletion <em>all</em> themes-related files will be deleted, including files which would not be part of the theme core structure and would not appear in the database (i.e. JavaScript, images, etc.).</p>
         ]]></item>
     </group>
 </help>
