@@ -211,41 +211,41 @@ function doDiagnostics()
     }
 
     if (!is_callable('version_compare') || version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<')) {
-        $fail['php_version_required'] = diag_msg_wrap(gTxt('php_version_required', array('{version}' => REQUIRED_PHP_VERSION)));
+        $fail['php_version_required'] = diag_msg_wrap(gTxt('diag_php_version_required', array('{version}' => REQUIRED_PHP_VERSION)));
     }
 
     if (@gethostbyname($mydomain) === $mydomain) {
-        $fail['dns_lookup_fails'] = diag_msg_wrap(gTxt('dns_lookup_fails').cs.$mydomain, 'warning');
+        $fail['dns_lookup_fails'] = diag_msg_wrap(gTxt('diag_dns_lookup_fail').cs.$mydomain, 'warning');
     }
 
     if (!@is_dir($path_to_site)) {
-        $fail['path_to_site_inaccessible'] = diag_msg_wrap(gTxt('path_inaccessible', array('{path}' => $path_to_site)));
+        $fail['path_to_site_inaccessible'] = diag_msg_wrap(gTxt('diag_path_inaccessible', array('{path}' => $path_to_site)));
     }
 
     if (rtrim($siteurl, '/') != $siteurl) {
-        $fail['site_trailing_slash'] = diag_msg_wrap(gTxt('site_trailing_slash').cs.$path_to_site, 'warning');
+        $fail['site_trailing_slash'] = diag_msg_wrap(gTxt('diag_site_trailing_slash', array('{path}' => $path_to_site)), 'warning');
     }
 
     if (!@is_file($path_to_index) || !@is_readable($path_to_index)) {
-        $fail['index_inaccessible'] = diag_msg_wrap(gTxt('path_inaccessible', array('{path}' => $path_to_index)));
+        $fail['index_inaccessible'] = diag_msg_wrap(gTxt('diag_path_inaccessible', array('{path}' => $path_to_index)));
     }
 
     $not_readable = array();
 
     if (!@is_writable($path_to_site.DS.$img_dir)) {
-        $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('img_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$img_dir}", 'warning');
+        $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('img_dir'), gTxt('diag_dir_not_writable')).": {$path_to_site}/{$img_dir}", 'warning');
     }
 
     if (!@is_writable($file_base_path)) {
-        $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('file_base_path'), gTxt('dir_not_writable')).": {$file_base_path}", 'warning');
+        $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('file_base_path'), gTxt('diag_dir_not_writable')).": {$file_base_path}", 'warning');
     }
 
     if (!@is_writable($path_to_site.DS.$skin_dir)) {
-        $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('skin_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$skin_dir}", 'warning');
+        $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('skin_dir'), gTxt('diag_dir_not_writable')).": {$path_to_site}/{$skin_dir}", 'warning');
     }
 
     if (!@is_writable($tempdir)) {
-        $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('tempdir'), gTxt('dir_not_writable')).": {$tempdir}", 'warning');
+        $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('tempdir'), gTxt('diag_dir_not_writable')).": {$tempdir}", 'warning');
     }
 
     if ($not_readable) {
@@ -257,28 +257,29 @@ function doDiagnostics()
     }
 
     if ($permlink_mode != 'messy' and is_callable('apache_get_modules') and !apache_module('mod_rewrite')) {
-        $fail['mod_rewrite_missing'] = diag_msg_wrap(gTxt('mod_rewrite_missing'));
+        $fail['mod_rewrite_missing'] = diag_msg_wrap(gTxt('diag_mod_rewrite_missing'));
     }
 
     if (!ini_get('file_uploads')) {
-        $fail['file_uploads_disabled'] = diag_msg_wrap(gTxt('file_uploads_disabled'), 'information');
+        $fail['file_uploads_disabled'] = diag_msg_wrap(gTxt('diag_file_uploads_disabled'), 'information');
     }
 
     if (isset($txpcfg['multisite_root_path'])) {
         if (@is_dir($txpcfg['multisite_root_path'].DS.'admin'.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles($txpcfg['multisite_root_path'].DS.'admin', 'setup'))) {
-            $fail['setup_still_exists'] = diag_msg_wrap(gTxt('still_exists', array('{path}' => $txpcfg['multisite_root_path'].DS.'admin'.DS."setup".DS)), 'warning');
+            $fail['setup_still_exists'] = diag_msg_wrap(gTxt('diag_still_exists', array('{path}' => $txpcfg['multisite_root_path'].DS.'admin'.DS."setup".DS)), 'warning');
         }
     } else {
         if (@is_dir(txpath.DS.'setup') && ($txp_is_dev || !Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath, 'setup'))) {
-            $fail['setup_still_exists'] = diag_msg_wrap(gTxt('still_exists', array('{path}' => txpath.DS."setup".DS)), 'warning');
+            $fail['setup_still_exists'] = diag_msg_wrap(gTxt('diag_still_exists', array('{path}' => txpath.DS."setup".DS)), 'warning');
         }
     }
 
     if (empty($tempdir)) {
-        $fail['no_temp_dir'] = diag_msg_wrap(gTxt('no_temp_dir'), 'warning');
+        $fail['no_temp_dir'] = diag_msg_wrap(gTxt('diag_no_temp_dir'), 'warning');
     }
 
     if (is_disabled('mail')) {
+        // Can't use diag-only string here since this is used elsewhere.
         $fail['warn_mail_unavailable'] = diag_msg_wrap(gTxt('warn_mail_unavailable'), 'warning');
     }
 
@@ -287,7 +288,7 @@ function doDiagnostics()
 
         foreach ($rs as $name) {
             if ($name and @file_exists($path_to_site.'/'.$name)) {
-                $fail['old_placeholder_exists'] = diag_msg_wrap(gTxt('old_placeholder').": {$path_to_site}/{$name}");
+                $fail['old_placeholder_exists'] = diag_msg_wrap(gTxt('diag_old_placeholder', array('{path}' => $path_to_site.DS.$name)));
             }
         }
     }
@@ -300,12 +301,12 @@ function doDiagnostics()
 
     // Files that don't match their checksums.
     if (!$txp_is_dev and $modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
-        $fail['modified_files'] = diag_msg_wrap(gTxt('modified_files').cs.n.t.join(', '.n.t, $modified_files), 'warning');
+        $fail['modified_files'] = diag_msg_wrap(gTxt('diag_modified_files').cs.n.t.join(', '.n.t, $modified_files), 'warning');
     }
 
     // Running development code in live mode is not recommended.
     if (preg_match('/-dev$/', txp_version) and $production_status == 'live') {
-        $fail['dev_version_live'] = diag_msg_wrap(gTxt('dev_version_live'), 'warning');
+        $fail['dev_version_live'] = diag_msg_wrap(gTxt('diag_dev_version_live'), 'warning');
     }
 
     // Missing files.
@@ -314,7 +315,7 @@ function doDiagnostics()
         array_keys($cs, INTEGRITY_NOT_FILE),
         array_keys($cs, INTEGRITY_NOT_READABLE)
     )) {
-        $fail['missing_files'] = diag_msg_wrap(gTxt('missing_files').cs.n.t.join(', '.n.t, $missing));
+        $fail['missing_files'] = diag_msg_wrap(gTxt('diag_missing_files').cs.n.t.join(', '.n.t, $missing));
     }
 
     // Anything might break if arbitrary functions are disabled.
@@ -340,7 +341,7 @@ function doDiagnostics()
         ));
 
         if ($disabled_funcs) {
-            $fail['some_php_functions_disabled'] = diag_msg_wrap(gTxt('some_php_functions_disabled').cs.join(', ', $disabled_funcs), 'warning');
+            $fail['some_php_functions_disabled'] = diag_msg_wrap(gTxt('diag_some_php_functions_disabled').cs.join(', ', $disabled_funcs), 'warning');
         }
     }
 
@@ -353,7 +354,7 @@ function doDiagnostics()
     if ($siteurl and strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.')) {
         // skip warning if multi-site setup as $guess_site_url and $siteurl will mismatch
         if(!isset($txpcfg['multisite_root_path'])) {
-            $fail['site_url_mismatch'] = diag_msg_wrap(gTxt('site_url_mismatch').cs.$guess_site_url, 'warning');
+            $fail['site_url_mismatch'] = diag_msg_wrap(gTxt('diag_site_url_mismatch').cs.$guess_site_url, 'warning');
         }
     }
 
@@ -369,10 +370,10 @@ function doDiagnostics()
                 $pretext_req = trim(@$pretext_data[0]);
 
                 if ($pretext_req != md5('/'.$s.'/?txpcleantest=1')) {
-                    $fail['clean_url_data_failed'] = diag_msg_wrap(gTxt('clean_url_data_failed').cs.txpspecialchars($pretext_req), 'warning');
+                    $fail['clean_url_data_failed'] = diag_msg_wrap(gTxt('diag_clean_url_data_failed').cs.txpspecialchars($pretext_req), 'warning');
                 }
             } else {
-                $fail['clean_url_test_failed'] = diag_msg_wrap(gTxt('clean_url_test_failed'), 'warning');
+                $fail['clean_url_test_failed'] = diag_msg_wrap(gTxt('diag_clean_url_test_failed'), 'warning');
             }
         }
     }
@@ -380,7 +381,7 @@ function doDiagnostics()
     if ($tables = list_txp_tables()) {
         $table_errors = check_tables($tables);
         if ($table_errors) {
-            $fail['mysql_table_errors'] = diag_msg_wrap(gTxt('mysql_table_errors').cs.n.t.join(', '.n.t, $table_errors));
+            $fail['mysql_table_errors'] = diag_msg_wrap(gTxt('diag_mysql_table_errors').cs.n.t.join(', '.n.t, $table_errors));
         }
     }
 
@@ -391,7 +392,7 @@ function doDiagnostics()
             $n = $row['name'].'-'.$row['version'];
 
             if (strtolower($row['md5']) != strtolower($row['code_md5'])) {
-                $n .= ' ('.gTxt('modified').')';
+                $n .= ' ('.gTxt('diag_modified').')';
             }
 
             $active_plugins[] = $n;
@@ -426,7 +427,7 @@ function doDiagnostics()
             $gd_support = gTxt('none');
         }
 
-        $gd = gTxt('gd_info', array(
+        $gd = gTxt('diag_gd_info', array(
             '{version}'   => $gd_info['GD Version'],
             '{supported}' => $gd_support,
         ));
@@ -435,7 +436,7 @@ function doDiagnostics()
     }
 
     if (realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir'])) {
-        $fail['tmp_plugin_paths_match'] = diag_msg_wrap(gTxt('tmp_plugin_paths_match'));
+        $fail['tmp_plugin_paths_match'] = diag_msg_wrap(gTxt('diag_tmp_plugin_paths_match'));
     }
 
     // Database server time.
