@@ -391,7 +391,7 @@ function doDiagnostics()
             $n = $row['name'].'-'.$row['version'];
 
             if (strtolower($row['md5']) != strtolower($row['code_md5'])) {
-                $n .= ' ('.gTxt('modified').')';
+                $n .= ' ('.gTxt('diag_modified').')';
             }
 
             $active_plugins[] = $n;
@@ -423,10 +423,10 @@ function doDiagnostics()
         if ($gd_support) {
             $gd_support = join(', ', $gd_support);
         } else {
-            $gd_support = gTxt('none');
+            $gd_support = gTxt('diag_none');
         }
 
-        $gd = gTxt('gd_info', array(
+        $gd = gTxt('diag_gd_info', array(
             '{version}'   => $gd_info['GD Version'],
             '{supported}' => $gd_support,
         ));
