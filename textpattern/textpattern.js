@@ -2390,6 +2390,7 @@ $(document).ready(function () {
         e.preventDefault();
         textpattern.Relay.callback('updateList', {data: $(this).serializeArray()})
     }).on('click', '.txp-navigation a', function(e) {
+        if ($(this).hasClass('pophelp')) return;
         e.preventDefault();
         textpattern.Relay.callback('updateList', {url: $(this).attr('href'), data: $('nav.prev-next form').serializeArray()})
     }).on('click', '.txp-list thead th a', function(e) {
