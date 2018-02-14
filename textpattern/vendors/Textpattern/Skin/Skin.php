@@ -1109,7 +1109,7 @@ namespace Textpattern\Skin {
                 compact('total', 'criteria'),
                 $this->getSearchBlock($search),
                 '',
-                $this->getCreateBlock().
+                $this->getCreateBlock(). // Create block is here to be loaded async.
                 $this->getContentBlock(compact('offset', 'limit', 'total', 'criteria', 'crit', 'search_method', 'page', 'sort', 'dir')),
                 $this->getFootBlock(compact('limit', 'numPages', 'total', 'crit', 'search_method', 'page', 'sort', 'dir'))
             );
@@ -1137,7 +1137,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Render the .txp-control-panel div.
+         * Get the .txp-control-panel div.
          *
          * @return HTML div containing the 'Create' button and the import form.
          * @see        getImportForm(), getCreateButton().
@@ -1155,7 +1155,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Render the skin import form.
+         * Get the skin import form.
          *
          * @return HTML The form or a message if no new skin directory is found.
          */
@@ -1195,16 +1195,29 @@ namespace Textpattern\Skin {
             }
         }
 
+        /**
+         * Get the class related Admin\Paginator instance.
+         *
+         * @return object Admin\Paginator instance.
+         */
+
         protected function getPaginator() {
             return \Txp::get('\Textpattern\Admin\Paginator', self::getEvent(), '');
         }
+
+        /**
+         * Get the class related Search\Filter instance.
+         *
+         * @param  array  $methods Available search methods.
+         * @return object          Search\Filter instance.
+         */
 
         protected function getSearchFilter($methods) {
             return \Txp::get('Textpattern\Search\Filter', self::getEvent(), $methods);
         }
 
         /**
-         * Render the button to create a new skin.
+         * Get the button to create a new skin.
          *
          * @return HTML Link.
          */
@@ -1215,6 +1228,13 @@ namespace Textpattern\Skin {
 
             return sLink($event, 'edit', gTxt('create_'.$event), 'txp-button');
         }
+
+        /**
+         * Get the Admin\Table $content block.
+         *
+         * @param  array $data compact('offset', 'limit', 'total', 'criteria', 'crit', 'search_method', 'page', 'sort', 'dir')
+         * @return HTML        Skin list.
+         */
 
         protected function getContentBlock($data)
         {
@@ -1362,6 +1382,13 @@ namespace Textpattern\Skin {
             }
         }
 
+        /**
+         * Get the Admin\Table $foot block.
+         *
+         * @param  array $data compact('limit', 'numPages', 'total', 'crit', 'search_method', 'page', 'sort', 'dir')
+         * @return HTML        Multi-edit form, pagination and navigation form.
+         */
+
         protected function getFootBlock($data)
         {
             extract($data);
@@ -1402,7 +1429,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Render the edit form.
+         * Get the edit form.
          *
          * @param  mixed $message
          * @return HTML
