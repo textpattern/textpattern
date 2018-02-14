@@ -654,9 +654,9 @@ namespace Textpattern\Skin {
                         $this->setInfos($copy, $copyTitle, $version, $description, $author, $author_uri);
 
                         if (!$this->createRow()) {
-                            $this->mergeResult($event.'_duplication_failed', $name);
+                            $this->mergeResult($event.'_creation_failed', $copy);
                         } else {
-                            $this->mergeResult($event.'_duplicated', $name, 'success');
+                            $this->mergeResult($event.'_created', $copy, 'success');
                             $this->mergeInstalled(array($copy => $copyTitle));
 
                             // Start working with the skin related assets.
