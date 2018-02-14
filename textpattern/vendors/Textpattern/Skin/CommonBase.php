@@ -41,7 +41,7 @@ namespace Textpattern\Skin {
          * @see        getEvent().
          */
 
-        protected static $event;
+        protected $event;
 
         /**
          * Skin/templates directory/files name(s) pattern.
@@ -112,25 +112,47 @@ namespace Textpattern\Skin {
         );
 
         /**
+         * Constructor
+         */
+
+        public function __construct()
+        {
+            $this->setEvent();
+        }
+
+        /**
          * Get the class related Database table name
          *
          * @return string Table name.
          */
 
-        protected static function getTable()
+        protected function getTable()
         {
-            return 'txp_'.self::getEvent();
+            return 'txp_'.$this->getEvent();
+        }
+
+        /**
+         * $event property setter.
+         *
+         * @return $this The current object (chainable).
+         */
+
+        protected function setEvent()
+        {
+            $this->event = strtolower((new \ReflectionClass($this))->getShortName());
+
+            return $this;
         }
 
         /**
          * $event property getter.
          *
-         * @return string static::$table Class related textpack string (usually the event name).
+         * @return string $this->event Class related textpack string (usually the event name).
          */
 
-        public static function getEvent()
+        public function getEvent()
         {
-            return static::$event;
+            return $this->event;
         }
 
         /**
@@ -217,7 +239,7 @@ namespace Textpattern\Skin {
 
         public function setName($name = null)
         {
-            $this->name = $name === null ? static::getEditing() : static::sanitize($name);
+            $this->name = $name === null ? $this->getEditing() : static::sanitize($name);
 
             return $this;
         }
@@ -456,7 +478,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            return safe_insert(self::getTable(), $set, $debug);
+            return safe_insert($this->getTable(), $set, $debug);
         }
 
         /**
@@ -495,7 +517,7 @@ namespace Textpattern\Skin {
                 $where or $where = '1 = 1';
             }
 
-            return safe_update(self::getTable(), $set, $where, $debug);
+            return safe_update($this->getTable(), $set, $where, $debug);
         }
 
         /**
@@ -534,7 +556,7 @@ namespace Textpattern\Skin {
                 $where or $where = '1 = 1';
             }
 
-            return safe_field($thing, self::getTable(), $where, $debug);
+            return safe_field($thing, $this->getTable(), $where, $debug);
         }
 
         /**
@@ -569,7 +591,7 @@ namespace Textpattern\Skin {
                 $where or $where = '1 = 1';
             }
 
-            return safe_delete(self::getTable(), $where, $debug);
+            return safe_delete($this->getTable(), $where, $debug);
         }
 
         /**
@@ -580,9 +602,9 @@ namespace Textpattern\Skin {
          * @return mixed         Number of rows or FALSE on error
          */
 
-        public static function countRows($where = null, $debug = false)
+        public function countRows($where = null, $debug = false)
         {
-            return safe_count(self::getTable(), ($where === null ? '1 = 1' : $where), $debug);
+            return safe_count($this->getTable(), ($where === null ? '1 = 1' : $where), $debug);
         }
 
         /**
@@ -621,7 +643,7 @@ namespace Textpattern\Skin {
                 $where or $where = '1=1';
             }
 
-            return safe_row($things, self::getTable(), $where, $debug);
+            return safe_row($things, $this->getTable(), $where, $debug);
         }
 
         /**
@@ -660,7 +682,7 @@ namespace Textpattern\Skin {
                 $where or $where = '1=1';
             }
 
-            $rs = safe_rows_start($things, self::getTable(), $where, $debug);
+            $rs = safe_rows_start($things, $this->getTable(), $where, $debug);
 
             if ($rs) {
                 $rows = array();
@@ -681,9 +703,9 @@ namespace Textpattern\Skin {
          * @return mixed Skin name or FALSE on error.
          */
 
-        protected static function getDefault()
+        protected function getDefault()
         {
-            return safe_field(self::getEvent(), 'txp_section', 'name = "default"');
+            return safe_field($this->getEvent(), 'txp_section', 'name = "default"');
         }
 
         /**
