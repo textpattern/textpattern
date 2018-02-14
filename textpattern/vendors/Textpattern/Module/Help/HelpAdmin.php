@@ -123,10 +123,11 @@ class HelpAdmin
             $xml = self::pophelp_load($lang_ui);
         }
 
-        $x = $xml->xpath("//item[@id='{$item}']");
+        $x = $xml ? $xml->xpath("//item[@id='{$item}']") : array();
+
         if (!$x && $lang_ui != TEXTPATTERN_DEFAULT_LANG) {
             $xml = self::pophelp_load(TEXTPATTERN_DEFAULT_LANG);
-            $x = $xml->xpath("//item[@id='{$item}']");
+            $x = $xml ? $xml->xpath("//item[@id='{$item}']") : array();
         }
 
         $title = '';
