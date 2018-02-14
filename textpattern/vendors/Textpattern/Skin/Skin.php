@@ -1169,6 +1169,8 @@ namespace Textpattern\Skin {
                 $new = array_diff_key($this->getUploaded(), $this->getInstalled());
 
                 if ($new) {
+                    asort($new);
+
                     return n
                         .tag_start('form', array(
                             'id'     => $event.'_import_form',
