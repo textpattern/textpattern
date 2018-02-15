@@ -322,13 +322,13 @@ namespace Textpattern\Skin {
         public function getEditing()
         {
             $editing = get_pref('last_'.$this->getEvent().'_saved', '', true);
+            $installed = $this->getInstalled()[$this->getSkin()->getName()];
 
-            if (!$editing) {
-                $installed = $this->getInstalled();
+            if (!$editing || !in_array($editing, $installed)) {
 
                 reset($installed);
 
-                $editing = $this->setEditing(key($installed));
+                $editing = $this->setEditing(array_shift(array_slice($installed, 0, 1)));
             }
 
             return $editing;
@@ -735,7 +735,9 @@ namespace Textpattern\Skin {
             }
 
             if ($skin) {
-                $skin = $this->getSkin()->setEditing($skin);
+                $Skin = $this->getSkin();
+
+                $Skin->setEditing($skin);
             }
 
             return $this;
