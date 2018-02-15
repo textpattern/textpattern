@@ -735,7 +735,9 @@ namespace Textpattern\Skin {
             }
 
             if ($skin) {
-                $Skin = $this->getSkin()->setEditing($skin);
+                $Skin = $this->getSkin();
+                $Skin->setEditing($skin);
+                $Skin->setName($skin);
             }
 
             $this->getEditing();
