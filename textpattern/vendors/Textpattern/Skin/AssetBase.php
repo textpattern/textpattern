@@ -322,6 +322,7 @@ namespace Textpattern\Skin {
         public function getEditing()
         {
             return get_pref('last_'.$this->getEvent().'_saved', 'default', true);
+            $editing = get_pref('last_'.$this->getEvent().'_saved', '', true);
         }
 
         /**

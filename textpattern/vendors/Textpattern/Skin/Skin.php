@@ -301,13 +301,9 @@ namespace Textpattern\Skin {
             if (!$editing) {
                 $installed = $this->getInstalled();
 
-                if (count($installed === 1)) {
-                    $default = implode('', array_keys($installed));
-                } else {
-                    $default = 'default';
-                }
+                reset($installed);
 
-                $editing = $this->setEditing($default);
+                $editing = $this->setEditing(key($installed));
             }
 
             return $editing;
