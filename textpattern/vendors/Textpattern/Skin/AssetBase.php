@@ -706,7 +706,7 @@ namespace Textpattern\Skin {
                 return form(
                     inputLabel(
                         'skin',
-                        selectInput('skin', $skins, $this->getSkin()->getEditing(), false, 1, 'skin'),
+                        selectInput('skin', $skins, $Skin->getEditing(), false, 1, 'skin'),
                         'skin'
                     )
                     .eInput($event)
