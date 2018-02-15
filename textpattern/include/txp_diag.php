@@ -410,10 +410,8 @@ function doDiagnostics()
             $gd_support[] = 'GIF';
         }
 
-        // Aside: In PHP 5.3, they chose to add a previously unemployed capital
-        // "E" to the array key.
-        if (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support'])) {
-            $gd_support[] = 'JPG';
+        if ($gd_info['JPEG Support']) {
+            $gd_support[] = 'JPEG';
         }
 
         if ($gd_info['PNG Support']) {
