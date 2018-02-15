@@ -325,10 +325,10 @@ namespace Textpattern\Skin {
             $installed = $this->getInstalled()[$this->getSkin()->getName()];
 
             if (!$editing || !in_array($editing, $installed)) {
-
                 reset($installed);
+                $editing = array_shift(array_slice($installed, 0, 1));
 
-                $editing = $this->setEditing(array_shift(array_slice($installed, 0, 1)));
+                $this->setEditing($editing);
             }
 
             return $editing;
@@ -735,10 +735,10 @@ namespace Textpattern\Skin {
             }
 
             if ($skin) {
-                $Skin = $this->getSkin();
-
-                $Skin->setEditing($skin);
+                $Skin = $this->getSkin()->setEditing($skin);
             }
+
+            $this->getEditing();
 
             return $this;
         }
