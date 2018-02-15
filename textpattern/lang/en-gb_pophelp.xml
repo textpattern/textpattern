@@ -936,6 +936,13 @@
     </group>
 
     <group id="skin" title="Themes panel">
+        <item id="skin_import" title="Import theme"><![CDATA[
+<h2>Import theme</h2>
+<p>This form allows you to import a theme into the Textpattern database from your themes directory.</p>
+<p>An importable theme must be composed of a readable parent folder using the theme name as the folder name, and within the folder a readable <code>manifest.json</code> file in the expected format. The theme folder should also contain pages, forms and styles into eponym subfolders.</p>
+<p>While pages and forms should use the <code>.txp</code> extension, stylesheets are expected to be <code>.css</code> files. Forms should also be grouped by type into dedicated directories. Textpattern will create any missing essential templates on import.</p>
+<p>See the <a rel="external" target="_blank" href="https://docs.textpattern.io/themes/">themes documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information on creating, installing and using themes within Textpattern CMS.</p>
+        ]]></item>
         <item id="skin_synchronize" title="Synchronise template/file lists"><![CDATA[
 <h2>Synchronise template/file lists</h2>
 <p>If checked, this option allows you to synchronise the template-related database and files.</p>
