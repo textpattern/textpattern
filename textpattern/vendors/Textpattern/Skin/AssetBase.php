@@ -326,7 +326,8 @@ namespace Textpattern\Skin {
 
             if (!$editing || !in_array($editing, $installed)) {
                 reset($installed);
-                $editing = array_shift(array_slice($installed, 0, 1));
+                $sliced = array_slice($installed, 0, 1);
+                $editing = array_shift($sliced);
 
                 $this->setEditing($editing);
             }
