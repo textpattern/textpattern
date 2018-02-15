@@ -296,7 +296,21 @@ namespace Textpattern\Skin {
 
         public function getEditing()
         {
-            return get_pref($this->getEvent().'_editing', 'default', true);
+            $editing = get_pref($this->getEvent().'_editing', '', true);
+
+            if (!$editing) {
+                $installed = $this->getInstalled();
+
+                if (count($installed === 1)) {
+                    $default = implode('', array_keys($installed));
+                } else {
+                    $default = 'default';
+                }
+
+                $editing = $this->setEditing($default);
+            }
+
+            return $editing;
         }
 
         /**
