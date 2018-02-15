@@ -411,7 +411,7 @@ function doDiagnostics()
         }
 
         if ($gd_info['JPEG Support']) {
-            $gd_support[] = 'JPG';
+            $gd_support[] = 'JPEG';
         }
 
         if ($gd_info['PNG Support']) {
