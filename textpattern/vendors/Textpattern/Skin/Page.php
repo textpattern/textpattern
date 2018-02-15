@@ -34,7 +34,6 @@ namespace Textpattern\Skin {
 
     class Page extends AssetBase implements PageInterface
     {
-        protected static $event = 'page';
         protected static $dir = 'pages';
         protected static $fileContentsField = 'user_html';
         protected static $essential = array(

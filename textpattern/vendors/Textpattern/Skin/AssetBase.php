@@ -104,6 +104,8 @@ namespace Textpattern\Skin {
 
         public function __construct(Skin $skin = null)
         {
+            parent::__construct();
+
             $this->setSkin($skin);
         }
 
@@ -317,9 +319,19 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public static function getEditing()
+        public function getEditing()
         {
-            return get_pref('last_'.self::getEvent().'_saved', 'default', true);
+            $editing = get_pref('last_'.$this->getEvent().'_saved', '', true);
+            $installed = $this->getInstalled()[$this->getSkin()->getName()];
+
+            if (!$editing || !in_array($editing, $installed)) {
+                reset($installed);
+                $editing = array_shift(array_slice($installed, 0, 1));
+
+                $this->setEditing($editing);
+            }
+
+            return $editing;
         }
 
         /**
@@ -330,7 +342,7 @@ namespace Textpattern\Skin {
         {
             global $prefs;
 
-            $event = self::getEvent();
+            $event = $this->getEvent();
             $pref = 'last_'.$event.'_saved';
             $name !== null or $name = $this->getName();
 
@@ -345,7 +357,7 @@ namespace Textpattern\Skin {
         {
             global $prefs;
 
-            $event = self::getEvent();
+            $event = $this->getEvent();
             $pref = 'last_'.$event.'_saved';
 
             unset($prefs[$pref]);
@@ -432,7 +444,7 @@ namespace Textpattern\Skin {
             $update .= $fileContentsField."=VALUES(".$fileContentsField.")";
 
             return safe_query(
-                "INSERT INTO ".safe_pfx(self::getTable())." (".implode(', ', $fields).") "
+                "INSERT INTO ".safe_pfx($this->getTable())." (".implode(', ', $fields).") "
                 ."VALUES ".implode(', ', $values)
                 ." ON DUPLICATE KEY UPDATE ".$update
             );
@@ -459,7 +471,7 @@ namespace Textpattern\Skin {
         protected function parseFiles($files) {
             $rows = $row = array();
             $subdirField = self::getSubdirField();
-            $event = self::getEvent();
+            $event = $this->getEvent();
 
             $parsed = $parsedFiles = $names = array();
 
@@ -549,10 +561,10 @@ namespace Textpattern\Skin {
 
         public function import($sync = false, $override = false)
         {
-            $event = self::getEvent();
+            $event = $this->getEvent();
             $dirPath = $this->getDirPath();
             $Skin = $this->getSkin();
-            $skin = $Skin !== null ? $Skin->getName() : Skin::getEditing();
+            $skin = $Skin !== null ? $Skin->getName() : $this->getSkin()->getEditing();
             $names = $this->getNames();
             $callbackExtra = compact('skin', 'names');
             $done = array();
@@ -611,10 +623,10 @@ namespace Textpattern\Skin {
 
         public function export($sync = false, $override = false)
         {
-            $event = self::getEvent();
+            $event = $this->getEvent();
             $dirPath = $this->getDirPath();
             $Skin = $this->getSkin();
-            $skin = $Skin !== null ? $Skin->getName() : Skin::getEditing();
+            $skin = $Skin !== null ? $Skin->getName() : $this->getSkin()->getEditing();
             $names = $this->getNames();
             $callbackExtra = compact('skin', 'names');
             $done = array();
@@ -686,7 +698,7 @@ namespace Textpattern\Skin {
 
         public function getSelectEdit()
         {
-            $event = self::getEvent();
+            $event = $this->getEvent();
             $Skin = $this->getSkin();
             $skins = $Skin->getInstalled();
 
@@ -694,7 +706,7 @@ namespace Textpattern\Skin {
                 return form(
                     inputLabel(
                         'skin',
-                        selectInput('skin', $skins, Skin::getEditing(), false, 1, 'skin'),
+                        selectInput('skin', $skins, $Skin->getEditing(), false, 1, 'skin'),
                         'skin'
                     )
                     .eInput($event)
@@ -723,8 +735,10 @@ namespace Textpattern\Skin {
             }
 
             if ($skin) {
-                $skin = $this->getSkin()->setEditing($skin);
+                $Skin = $this->getSkin()->setEditing($skin);
             }
+
+            $this->getEditing();
 
             return $this;
         }

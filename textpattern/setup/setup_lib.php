@@ -167,8 +167,9 @@ function setup_db($cfg = array())
     msg(gTxt('public_theme').": '{$public_theme}'");
     $is_from_setup ? $Skin->setDirPath($setup_themes_path) : '';
     $Skin->setNames(array($public_theme))
-                        ->import()
-                        ->updateSections();
+         ->import()
+         ->setBase('default')
+         ->updateSections();
 
     // --- Theme setup end
 

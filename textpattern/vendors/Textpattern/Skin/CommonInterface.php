@@ -67,7 +67,7 @@ namespace Textpattern\Skin {
          * @return mixed Skin/template name | false on error.
          */
 
-        public static function getEditing();
+        public function getEditing();
 
         /**
          * Set the 'skin_editing' or '{asset}_last_saved' pref value
@@ -166,7 +166,7 @@ namespace Textpattern\Skin {
          * @return mixed         Number of rows or FALSE on error
          */
 
-        public static function countRows($where = null, $debug = false);
+        public function countRows($where = null, $debug = false);
 
         /**
          * Get a row from the $table property value related table as an associative array.

@@ -44,12 +44,6 @@ namespace Textpattern\Skin {
         private $assets;
 
         /**
-         * {@inheritdoc}
-         */
-
-        protected static $event = 'skin';
-
-        /**
          * Class related main file.
          *
          * @var string Filename.
@@ -82,6 +76,7 @@ namespace Textpattern\Skin {
 
         public function __construct()
         {
+            parent::__construct();
         }
 
         public function __toString()
@@ -104,7 +99,7 @@ namespace Textpattern\Skin {
 
         public function setDirPath($path = null)
         {
-            $path !== null or $path = get_pref('path_to_site').DS.get_pref(self::getEvent().'_dir');
+            $path !== null or $path = get_pref('path_to_site').DS.get_pref($this->getEvent().'_dir');
 
             $this->dirPath = rtrim($path, DS);
             $this->uploaded = null;
@@ -267,7 +262,7 @@ namespace Textpattern\Skin {
                 safe_column(
                     'name',
                     'txp_section',
-                    self::getEvent()." ='".doSlash($this->getName())."'"
+                    $this->getEvent()." ='".doSlash($this->getName())."'"
                 )
             );
         }
@@ -282,7 +277,7 @@ namespace Textpattern\Skin {
 
         public function updateSections($set = null, $where = null)
         {
-            $event = self::getEvent();
+            $event = $this->getEvent();
 
             $set !== null or $set = $event." = '".doSlash($this->getName())."'";
 
@@ -299,9 +294,19 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        public static function getEditing()
+        public function getEditing()
         {
-            return get_pref(self::getEvent().'_editing', 'default', true);
+            $editing = get_pref($this->getEvent().'_editing', '', true);
+
+            if (!$editing) {
+                $installed = $this->getInstalled();
+
+                reset($installed);
+
+                $editing = $this->setEditing(key($installed));
+            }
+
+            return $editing;
         }
 
         /**
@@ -312,14 +317,14 @@ namespace Textpattern\Skin {
         {
             global $prefs;
 
-            $event = self::getEvent();
+            $event = $this->getEvent();
 
             $name !== null or $name = $this->getName();
             $prefs[$event.'_editing'] = $name;
 
             set_pref($event.'_editing', $name, $event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
 
-            return self::getEditing();
+            return $this->getEditing();
         }
 
         /**
@@ -457,12 +462,12 @@ namespace Textpattern\Skin {
         {
             $assets = array('section', 'page', 'form', 'css');
             $things = array('*');
-            $table = self::getTable();
+            $table = $this->getTable();
 
             foreach ($assets as $asset) {
                 $things[] = '(SELECT COUNT(*) '
                             .'FROM '.safe_pfx_j('txp_'.$asset).' '
-                            .'WHERE txp_'.$asset.'.'.self::getEvent().' = '.$table.'.name) '
+                            .'WHERE txp_'.$asset.'.'.$this->getEvent().' = '.$table.'.name) '
                             .$asset.'_count';
             }
 
@@ -481,7 +486,7 @@ namespace Textpattern\Skin {
          */
 
         public function create() {
-            $event = self::getEvent();
+            $event = $this->getEvent();
             $infos = $this->getInfos();
             $name = $infos['name'];
             $base = $this->getBase();
@@ -538,7 +543,7 @@ namespace Textpattern\Skin {
          */
 
         public function update() {
-            $event = self::getEvent();
+            $event = $this->getEvent();
             $infos = $this->getInfos();
             $name = $infos['name'];
             $base = $this->getBase();
@@ -583,7 +588,7 @@ namespace Textpattern\Skin {
                 }
 
                 // update the skin_editing pref if needed.
-                self::getEditing() !== $base or $this->setEditing();
+                $this->getEditing() !== $base or $this->setEditing();
 
                 // Start working with the skin related assets.
                 $assetUpdateSet = $event." = '".doSlash($this->getName())."'";
@@ -614,7 +619,7 @@ namespace Textpattern\Skin {
 
         public function duplicate()
         {
-            $event = self::getEvent();
+            $event = $this->getEvent();
             $names = $this->getNames();
             $callbackExtra = compact('names');
             $ready = $done = array();
@@ -662,7 +667,7 @@ namespace Textpattern\Skin {
                             // Start working with the skin related assets.
                             foreach ($this->getAssets() as $assetModel) {
                                 $this->setName($name);
-                                $assetString = $assetModel::getEvent();
+                                $assetString = $assetModel->getEvent();
                                 $assetRows = $assetModel->getRows();
 
                                 if (!$assetRows) {
@@ -696,7 +701,7 @@ namespace Textpattern\Skin {
 
         public function import($sync = false, $override = false)
         {
-            $event = self::getEvent();
+            $event = $this->getEvent();
             $sync == $this->getSyncPref() or $this->switchSyncPref();
             $names = $this->getNames();
             $callbackExtra = compact('names');
@@ -764,7 +769,7 @@ namespace Textpattern\Skin {
         {
             $sync == $this->getSyncPref() or $this->switchSyncPref();
 
-            $event = self::getEvent();
+            $event = $this->getEvent();
             $names = $this->getNames();
             $callbackExtra = compact('names');
             $ready = $done = array();
@@ -841,7 +846,7 @@ namespace Textpattern\Skin {
 
         public function delete($sync = false)
         {
-            $event = self::getEvent();
+            $event = $this->getEvent();
             $names = $this->getNames();
             $callbackExtra = compact('names');
             $ready = $done = array();
@@ -877,8 +882,8 @@ namespace Textpattern\Skin {
 
                     $this->removeInstalled($ready);
 
-                    if (in_array(self::getEditing(), $ready)) {
-                        $default = self::getDefault();
+                    if (in_array($this->getEditing(), $ready)) {
+                        $default = $this->getDefault();
 
                         !$default or $this->setEditing($default);
                     }
@@ -929,7 +934,7 @@ namespace Textpattern\Skin {
 
             global $event, $step;
 
-            if ($event === self::getEvent()) {
+            if ($event === $this->getEvent()) {
                 require_privs($event);
 
                 bouncer($step, array(
@@ -1045,8 +1050,8 @@ namespace Textpattern\Skin {
 
         protected function getList($message = '')
         {
-            $event = self::getEvent();
-            $table = self::getTable();
+            $event = $this->getEvent();
+            $table = $this->getTable();
 
             pagetop(gTxt('tab_'.$event), $message);
 
@@ -1124,7 +1129,7 @@ namespace Textpattern\Skin {
 
         protected function getSearchBlock($search)
         {
-            $event = self::getEvent();
+            $event = $this->getEvent();
 
             return n.tag(
                 $search->renderForm($event, array('placeholder' => 'search_skins')),
@@ -1145,9 +1150,9 @@ namespace Textpattern\Skin {
 
         protected function getCreateBlock()
         {
-            if (has_privs(self::getEvent().'.edit')) {
+            if (has_privs($this->getEvent().'.edit')) {
                 return tag(
-                    self::getCreateButton().$this->getImportForm(),
+                    $this->getCreateButton().$this->getImportForm(),
                     'div',
                     array('class' => 'txp-control-panel')
                 );
@@ -1162,7 +1167,7 @@ namespace Textpattern\Skin {
 
         protected function getImportForm()
         {
-            $event = self::getEvent();
+            $event = $this->getEvent();
             $dirPath = $this->getDirPath();
 
             if (is_dir($dirPath) && is_writable($dirPath)) {
@@ -1181,7 +1186,7 @@ namespace Textpattern\Skin {
                         .tag(gTxt('import_'.$event), 'label', array('for' => $event.'_import'))
                         .popHelp($event.'_import')
                         .selectInput('skins', $new, '', true, false, 'skins')
-                        .eInput(self::getEvent())
+                        .eInput($this->getEvent())
                         .sInput('import')
                         .fInput('submit', '', gTxt('upload'))
                         .n
@@ -1204,7 +1209,7 @@ namespace Textpattern\Skin {
          */
 
         protected function getPaginator() {
-            return \Txp::get('\Textpattern\Admin\Paginator', self::getEvent(), '');
+            return \Txp::get('\Textpattern\Admin\Paginator', $this->getEvent(), '');
         }
 
         /**
@@ -1215,7 +1220,7 @@ namespace Textpattern\Skin {
          */
 
         protected function getSearchFilter($methods) {
-            return \Txp::get('Textpattern\Search\Filter', self::getEvent(), $methods);
+            return \Txp::get('Textpattern\Search\Filter', $this->getEvent(), $methods);
         }
 
         /**
@@ -1224,9 +1229,9 @@ namespace Textpattern\Skin {
          * @return HTML Link.
          */
 
-        protected static function getCreateButton()
+        protected function getCreateButton()
         {
-            $event = self::getEvent();
+            $event = $this->getEvent();
 
             return sLink($event, 'edit', gTxt('create_'.$event), 'txp-button');
         }
@@ -1242,7 +1247,7 @@ namespace Textpattern\Skin {
         {
             extract($data);
 
-            $event = self::getEvent();
+            $event = $this->getEvent();
             $sortSQL = $sort.' '.$dir;
             $switchDir = ($dir == 'desc') ? 'asc' : 'desc';
 
@@ -1374,7 +1379,7 @@ namespace Textpattern\Skin {
                         $tds .= td($tdVal, '', 'txp-list-col-'.$name.'_count');
                     }
 
-                    $out .= tr($tds, array('id' => self::getTable().'_'.$skin_name));
+                    $out .= tr($tds, array('id' => $this->getTable().'_'.$skin_name));
                 }
 
                 return $out
@@ -1397,7 +1402,7 @@ namespace Textpattern\Skin {
 
             return self::getMultiEditForm($page, $sort, $dir, $crit, $search_method)
                    .$this->getPaginator()->render()
-                   .nav_form(self::getEvent(), $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
+                   .nav_form($this->getEvent(), $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit);
         }
 
         /**
@@ -1413,7 +1418,7 @@ namespace Textpattern\Skin {
 
         protected function getMultiEditForm($page, $sort, $dir, $crit, $search_method)
         {
-            $event = self::getEvent();
+            $event = $this->getEvent();
             $pref = 'synchronize';
 
             $sync = checkbox2('sync', get_pref($pref, true), 0, 'sync')
@@ -1427,7 +1432,7 @@ namespace Textpattern\Skin {
                 'delete'    => array('label' => gTxt('delete'), 'html' => $sync),
             );
 
-            return multi_edit($methods, self::getEvent(), 'multi_edit', $page, $sort, $dir, $crit, $search_method);
+            return multi_edit($methods, $this->getEvent(), 'multi_edit', $page, $sort, $dir, $crit, $search_method);
         }
 
         /**
@@ -1441,7 +1446,7 @@ namespace Textpattern\Skin {
         {
             global $step;
 
-            $event = self::getEvent();
+            $event = $this->getEvent();
 
             require_privs($event.'.edit');
 
