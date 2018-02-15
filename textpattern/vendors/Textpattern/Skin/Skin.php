@@ -648,7 +648,7 @@ namespace Textpattern\Skin {
                 );
 
                 if (!$rows) {
-                    $this->mergeResult($event.'_duplication_failed', $name);
+                    $this->mergeResult($event.'_not_found', $ready);
                 } else {
                     foreach ($rows as $row) {
                         extract($row);
@@ -677,7 +677,7 @@ namespace Textpattern\Skin {
                                 } elseif ($this->setName($copy) && !$assetModel->createRows($assetRows)) {
                                     $deleteExtraFiles = true;
 
-                                    $this->mergeResult($assetString.'_duplication_failed', array($skin => $notImported));
+                                    $this->mergeResult($assetString.'_creation_failed', $copy);
                                 }
                             }
 
