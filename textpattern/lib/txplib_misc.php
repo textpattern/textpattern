@@ -759,7 +759,7 @@ function get_safe_image_types($type = null)
 /**
  * Checks if GD supports the given image type.
  *
- * @param   string $image_type Either '.gif', '.png', '.jpg'
+ * @param   string $image_type Either '.gif', '.jpg', '.png'
  * @return  bool TRUE if the type is supported
  * @package Image
  */
@@ -776,11 +776,11 @@ function check_gd($image_type)
         case '.gif':
             return ($gd_info['GIF Create Support'] == true);
             break;
+        case '.jpg':
+            return ($gd_info['JPEG Support'] == true);
+            break;
         case '.png':
             return ($gd_info['PNG Support'] == true);
-            break;
-        case '.jpg':
-            return (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support']));
             break;
     }
 

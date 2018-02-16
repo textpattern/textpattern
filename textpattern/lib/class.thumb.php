@@ -222,7 +222,7 @@ class wet_thumb
         $this->_SRC['file']       = $infile;
         $this->_SRC['width']      = $temp[0];
         $this->_SRC['height']     = $temp[1];
-        $this->_SRC['type']       = $temp[2]; // 1=GIF, 2=JPG, 3=PNG.
+        $this->_SRC['type']       = $temp[2]; // 1=GIF, 2=JPEG, 3=PNG.
         $this->_SRC['string']     = $temp[3];
         $this->_SRC['filename']   = basename($infile);
         //$this->_SRC['modified'] = filemtime($infile);
