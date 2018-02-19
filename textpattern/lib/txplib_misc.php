@@ -1356,6 +1356,26 @@ function load_plugin($name, $force = false)
             include $dir.$name.'.php';
             $txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
             $plugins_ver[$name] = @$plugin['version'];
+
+            if (isset($plugin['textpack'])) {
+                $strings = array();
+                $pack = Txp::get('\Textpattern\Textpack\Parser');
+                $pack->parse($plugin['textpack']);
+                $useLang = txpinterface === 'admin' ? get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG) : get_pref('language', TEXTPATTERN_DEFAULT_LANG);
+                $wholePack = $pack->getStrings($useLang);
+
+                if (!$wholePack) {
+                    $wholePack = $pack->getStrings(TEXTPATTERN_DEFAULT_LANG);
+                }
+
+                foreach ($wholePack as $entry) {
+                    $strings[$entry['name']] = $entry['data'];
+                }
+
+                // Append lang strings on-the-fly.
+                Txp::get('\Textpattern\L10n\Lang')->setPack($strings, true);
+            }
+
             restore_error_handler();
 
             return true;
@@ -1765,6 +1785,7 @@ function load_plugins($type = false)
     if (!is_array($plugins)) {
         $plugins = array();
     }
+
     $trace->start('[Loading plugins]');
 
     if (!empty($prefs['plugin_cache_dir'])) {
@@ -1812,8 +1833,10 @@ function load_plugins($type = false)
                 unset($GLOBALS['txp_current_plugin']);
             }
         }
+
         restore_error_handler();
     }
+
     $trace->stop();
 }
 
@@ -1836,6 +1859,7 @@ function load_plugins($type = false)
 function register_callback($func, $event, $step = '', $pre = 0)
 {
     global $plugin_callback;
+
     $plugin_callback[] = array(
         'function' => $func,
         'event'    => $event,
