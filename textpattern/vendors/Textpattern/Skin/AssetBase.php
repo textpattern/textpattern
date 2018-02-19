@@ -71,14 +71,6 @@ namespace Textpattern\Skin {
         protected static $fileContentsField;
 
         /**
-         * The skin related main file.
-         *
-         * @see getFilePath().
-         */
-
-        protected static $extension = 'txp';
-
-        /**
          * Asset related essential rows as an associative array of the following
          * fields and their value: 'name', ($subdirField, ) $fileContentsField.
          *
@@ -200,17 +192,6 @@ namespace Textpattern\Skin {
             }
 
             return $keyValues;
-        }
-
-        /**
-         * $extension property getter.
-         *
-         * @return string static::$extension.
-         */
-
-        protected static function getExtension()
-        {
-            return static::$extension;
         }
 
         /**
