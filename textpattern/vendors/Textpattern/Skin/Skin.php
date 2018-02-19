@@ -499,7 +499,7 @@ namespace Textpattern\Skin {
             $callbackExtra = compact('infos', 'base');
             $done = false;
 
-            callback_event($event.'.create', '', 1, $callbackExtra);
+            callback_event('txp.'.$event, 'create', 1, $callbackExtra);
 
             if (empty($name)) {
                 $this->mergeResult($event.'_name_invalid', $name);
@@ -536,7 +536,7 @@ namespace Textpattern\Skin {
                 isset($assetsfailed) or $done = $name;
             }
 
-            callback_event($event.'.create', '', 0, $callbackExtra + compact('done'));
+            callback_event('txp.'.$event, 'create', 0, $callbackExtra + compact('done'));
 
             return $this; // Chainable.
         }
@@ -557,7 +557,7 @@ namespace Textpattern\Skin {
             $done = null;
             $ready = false;
 
-            callback_event($event.'.update', '', 1, $callbackExtra);
+            callback_event('txp.'.$event, 'update', 1, $callbackExtra);
 
             if (empty($name)) {
                 $this->mergeResult($event.'_name_invalid', $name);
@@ -611,7 +611,7 @@ namespace Textpattern\Skin {
                 isset($assetsFailed) or $done = $name;
             }
 
-            callback_event($event.'.update', '', 0, $callbackExtra + compact('done'));
+            callback_event('txp.'.$event, 'update', 0, $callbackExtra + compact('done'));
 
             return $this; // Chainable
         }
@@ -630,7 +630,7 @@ namespace Textpattern\Skin {
             $callbackExtra = compact('names');
             $ready = $done = array();
 
-            callback_event($event.'.duplicate', '', 1, $callbackExtra);
+            callback_event('txp.'.$event, 'duplicate', 1, $callbackExtra);
 
             foreach ($names as $name) {
                 $nameDirPath = $this->setName($name)->getSubdirPath();
@@ -696,7 +696,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.duplicate', '', 0, $callbackExtra + compact('done'));
+            callback_event('txp.'.$event, 'duplicate', 0, $callbackExtra + compact('done'));
 
             return $this; // Chainable
         }
@@ -713,7 +713,7 @@ namespace Textpattern\Skin {
             $callbackExtra = compact('names');
             $done = array();
 
-            callback_event($event.'.import', '', 1, $callbackExtra);
+            callback_event('txp.'.$event, 'import', 1, $callbackExtra);
 
             foreach ($names as $name) {
                 $this->setName($name);
@@ -762,7 +762,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.import', '', 0, $callbackExtra + compact('done'));
+            callback_event('txp.'.$event, 'import', 0, $callbackExtra + compact('done'));
 
             return $this;
         }
@@ -780,7 +780,7 @@ namespace Textpattern\Skin {
             $callbackExtra = compact('names');
             $ready = $done = array();
 
-            callback_event($event.'.export', '', 1, $callbackExtra);
+            callback_event('txp.'.$event, 'export', 1, $callbackExtra);
 
             foreach ($names as $name) {
                 $this->setName($name);
@@ -838,7 +838,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.export', '', 0, $callbackExtra + compact('done'));
+            callback_event('txp.'.$event, 'export', 0, $callbackExtra + compact('done'));
 
             return $this;
         }
@@ -857,7 +857,7 @@ namespace Textpattern\Skin {
             $callbackExtra = compact('names');
             $ready = $done = array();
 
-            callback_event($event.'.delete', '', 1, $callbackExtra);
+            callback_event('txp.'.$event, 'delete', 1, $callbackExtra);
 
             foreach ($names as $name) {
                 $isDir = is_dir($this->getSubdirPath($name));
@@ -918,7 +918,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.delete', '', 0, $callbackExtra + compact('done'));
+            callback_event('txp.'.$event, 'delete', 0, $callbackExtra + compact('done'));
 
             return $this;
         }
