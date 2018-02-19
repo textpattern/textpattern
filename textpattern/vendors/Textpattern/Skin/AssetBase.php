@@ -510,25 +510,46 @@ namespace Textpattern\Skin {
          * @return array      !Templates for which the unlink process FAILED!;
          */
 
-        protected function deleteExtraFiles($nameNotIn)
+        public function deleteExtraFiles($nameNotIn = null)
         {
             $filenames = array();
             $extension = self::getExtension();
+            $hasSubdir = self::getSubdirField();
 
             foreach ($this->getNames() as $name) {
                 $filenames[] = $name.'.'.$extension;
             }
 
-            $files = $this->getFiles($filenames, self::getSubdirField() ? 1 : 0);
-            $notRemoved = array();
+            $files = $this->getFiles($filenames, $hasSubdir ? 1 : 0);
 
             if ($files) {
+                $notRemoved = $subdirPaths = array();
+
                 foreach ($files as $file) {
                     $name = pathinfo($file->getFilename(), PATHINFO_FILENAME);
+
                     $this->setName($name);
 
                     if (!$nameNotIn || ($nameNotIn && !in_array($name, $nameNotIn))) {
-                        unlink($this->getFilePath(basename($file->getPath()))) or $notRemoved[] = $name;
+                        unlink($file->getPathname()) or $notRemoved[] = $name;
+
+                        !$hasSubdir or $subdirPaths[] = $file->getPath();
+                    }
+                }
+
+                if (!$notRemoved) {
+                    if ($hasSubdir) {
+                        foreach ($subdirPaths as $subdirPath) {
+                            if ($this->isDirEmpty($subdirPath) && !@rmdir($subdirPath)) {
+                                $notRemoved[] = $subdirPath;
+                            }
+                        }
+                    }
+
+                    $dirPath = $this->getDirPath();
+
+                    if ($this->isDirEmpty($dirPath) && !@rmdir($dirPath)) {
+                        $notRemoved[] = $dirPath;
                     }
                 }
             }

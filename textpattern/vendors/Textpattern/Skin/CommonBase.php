@@ -202,6 +202,17 @@ namespace Textpattern\Skin {
             return \Txp::get('\Textpattern\Type\StringType', $out)->substring(0, 63)->getString();
         }
 
+        function isDirEmpty($dir) {
+          if (!is_readable($dir)) return NULL;
+          $handle = opendir($dir);
+          while (false !== ($entry = readdir($handle))) {
+            if ($entry != "." && $entry != "..") {
+              return FALSE;
+            }
+          }
+          return TRUE;
+        }
+
         /**
          * $names property setter/sanitizer.
          *
