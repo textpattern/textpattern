@@ -571,7 +571,7 @@ namespace Textpattern\Skin {
             $done = array();
             $dirIsReadable = is_readable($dirPath);
 
-            callback_event($event.'.import', '', 1, $callbackExtra);
+            callback_event('txp.'.$event, 'import', 1, $callbackExtra);
 
             if (!$dirIsReadable) {
                 $this->mergeResult('path_not_readable', array($skin => array($dirPath)));
@@ -613,7 +613,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.import', '', 0, $callbackExtra + compact('done'));
+            callback_event('txp.'.$event, 'import', 0, $callbackExtra + compact('done'));
 
             return $this;
         }
@@ -632,7 +632,7 @@ namespace Textpattern\Skin {
             $callbackExtra = compact('skin', 'names');
             $done = array();
 
-            callback_event($event.'.export', '', 1, $callbackExtra);
+            callback_event('txp.'.$event, 'export', 1, $callbackExtra);
 
             if (!is_writable($dirPath) && !@mkdir($dirPath)) {
                 $this->mergeResult('path_not_writable', array($skin => array($dirPath)));
@@ -688,7 +688,7 @@ namespace Textpattern\Skin {
                 }
             }
 
-            callback_event($event.'.export', '', 1, $callbackExtra + compact('done'));
+            callback_event('txp.'.$event, 'export', 0, $callbackExtra + compact('done'));
 
             return $this;
         }
