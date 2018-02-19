@@ -71,6 +71,14 @@ namespace Textpattern\Skin {
         protected $names;
 
         /**
+         * Class related file extension.
+         *
+         * @see getExtension().
+         */
+
+        protected static $extension = 'txp';
+
+        /**
          * Skin/template name to work with.
          *
          * @var string Name.
@@ -442,6 +450,17 @@ namespace Textpattern\Skin {
         }
 
         /**
+         * $extension property getter.
+         *
+         * @return string static::$extension.
+         */
+
+        protected static function getExtension()
+        {
+            return static::$extension;
+        }
+
+        /**
          * Get files from the $dir property value related directory.
          *
          * @param  array  $names    Optional filenames to filter the result.
@@ -451,8 +470,9 @@ namespace Textpattern\Skin {
 
         protected function getFiles($names = null, $maxDepth = null)
         {
+            $filter = $names ? $names : '#^'.self::getNamePattern().'.'.self::getExtension().'$#';
             $files = \Txp::get('Textpattern\Iterator\RecDirIterator', $this->getDirPath());
-            $filter = \Txp::get('Textpattern\Iterator\RecFilterIterator', $files)->setNames($names);
+            $filter = \Txp::get('Textpattern\Iterator\RecFilterIterator', $files, $filter);
             $filteredFiles = \Txp::get('Textpattern\Iterator\RecIteratorIterator', $filter);
             $maxDepth !== null or $filteredFiles->setMaxDepth($maxDepth);
 

@@ -53,6 +53,12 @@ namespace Textpattern\Skin {
         protected static $filename = 'manifest.json';
 
         /**
+         * {@inheritdoc}
+         */
+
+        protected static $extension = 'json';
+
+        /**
          * Importable skins.
          *
          * @var array Associative array of skin names and their titles

@@ -43,16 +43,31 @@ namespace Textpattern\Iterator {
 
     class RecFilterIterator extends \RecursiveFilterIterator
     {
-        protected $names;
+        protected $filter;
 
         /**
-         * {@inheritdoc}
+         * Constructor
+         *
+         * @param object RecDirIterator $iterator Instance of RecDirIterator.
+         * @param mixed  $filter                  Array of filenames or regEx as a string.
          */
 
-         public function __construct(RecDirIterator $iterator)
+         public function __construct(RecDirIterator $iterator, $filter)
          {
              parent::__construct($iterator);
+
+             $this->setFilter($filter);
          }
+
+         /**
+          * {@inheritdoc}
+          *
+          * Get Children and pass the filter to them.
+          */
+
+         public function getChildren() {
+            return new self($this->getInnerIterator()->getChildren(), $this->getFilter());
+        }
 
         /**
          * {@inheritdoc}
@@ -60,43 +75,48 @@ namespace Textpattern\Iterator {
 
         public function accept()
         {
-            if ($this->isDir()) {
-                return true;
-            } else {
-                $isValid = false;
-                $names = $this->getNames();
-                $filename = $this->getFilename();
-
-                if ('.' !== substr($filename, 0, 1) &&
-                    $this->isReadable() &&
-                    ($this->isFile() || $this->isLink()) &&
-                    (($names && in_array($filename, $names)) || !$names)
-                ) {
-                    return true;
-                }
-            }
-
-            return false;
+            return $this->isDir() ||
+                   $this->isReadable() && ($this->isFile() || $this->isLink()) && $this->isValid();
         }
 
         /**
-         * $names property setter
+         * Whether the filename is valid according to the provided $filter property value.
+         *
+         * @return bool FALSE on error
          */
 
-        public function setNames($names)
+        public function isValid()
         {
-            $this->names = $names;
+            $filter = $this->getFilter();
+            $filename = $this->getFilename();
+
+            return is_array($filter) && in_array($filename, $filter) ||
+                   !is_array($filter) && preg_match($filter, $filename);
+        }
+
+        /**
+         * $filter property setter
+         *
+         * @param  mixed  $filter Array of filenames or regEx as a string.
+         * @return object $this.
+         */
+
+        public function setFilter($info)
+        {
+            $this->filter = $info;
 
             return $this;
         }
 
         /**
          * $names property getter
+         *
+         * @return mixed $filter Array of filenames or regEx as a string.
          */
 
-        public function getNames()
+        public function getFilter()
         {
-            return $this->names;
+            return $this->filter;
         }
     }
 }
