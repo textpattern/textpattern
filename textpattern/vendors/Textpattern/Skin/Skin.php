@@ -53,6 +53,12 @@ namespace Textpattern\Skin {
         protected static $filename = 'manifest.json';
 
         /**
+         * {@inheritdoc}
+         */
+
+        protected static $extension = 'json';
+
+        /**
          * Importable skins.
          *
          * @var array Associative array of skin names and their titles
@@ -854,6 +860,8 @@ namespace Textpattern\Skin {
             callback_event('txp.'.$event, 'delete', 1, $callbackExtra);
 
             foreach ($names as $name) {
+                $isDir = is_dir($this->getSubdirPath($name));
+
                 if (!$this->setName($name)->isInstalled()) {
                     $this->mergeResult($event.'_unknown', $name);
                 } elseif ($sections = $this->getSections()) {
@@ -868,7 +876,14 @@ namespace Textpattern\Skin {
 
                     foreach ($this->getAssets() as $assetModel) {
                         if (!$assetModel->deleteRows()) {
+                            $assetFailed = true;
                             $this->mergeResult($assetModel->getEvent().'_deletion_failed', $name);
+                        } elseif ($sync && $isDir) {
+                            $notDeleted = $assetModel->deleteExtraFiles();
+
+                            if ($notDeleted) {
+                                $this->mergeResult($assetModel->getEvent().'_files_deletion_failed', array($name => $notDeleted));
+                            }
                         }
                     }
 
@@ -892,11 +907,9 @@ namespace Textpattern\Skin {
 
                     // Remove all skins files and directories if needed.
                     if ($sync) {
-                        foreach ($ready as $name) {
-                            if (is_dir($this->getSubdirPath($name)) && !$this->deleteFiles(array($name))) {
-                                $this->mergeResult($event.'_files_deletion_failed', $name);
-                            }
-                        }
+                        $notDeleted = $this->deleteFiles($ready);
+
+                        !$notDeleted or $this->mergeResult($event.'_files_deletion_failed', $notDeleted);
                     }
 
                     update_lastmod($event.'.delete', $ready);
@@ -919,7 +932,26 @@ namespace Textpattern\Skin {
 
         protected function deleteFiles($names = null)
         {
-            return \Txp::get('Textpattern\Admin\Tools')::removeFiles($this->getDirPath(), $names);
+            $notRemoved = array();
+
+            foreach ($names as $name) {
+                if (is_dir($this->getSubdirPath($name))) {
+                    $filePath = $this->getFilePath();
+
+                    if (file_exists($filePath) && !unlink($filePath)) {
+                        $notRemoved[$name][] = $filePath;
+                    }
+
+                    $subdirPath = $this->getSubdirPath();
+                    $isDirEmpty = $this->isDirEmpty($subdirPath);
+
+                    if (!isset($notRemoved[$name]) && ($isDirEmpty && !@rmdir($subdirPath) || !$isDirEmpty)) {
+                        $notRemoved[$name][] = $subdirPath;
+                    }
+                }
+            }
+
+            return $notRemoved;
         }
 
         /**
