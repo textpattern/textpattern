@@ -156,11 +156,11 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     // Shared admin and public cookie_domain when using multisite admin URL (use main domain if not set).
     if (!defined('cookie_domain')) {
         if (!isset($txpcfg['cookie_domain'])) {
-          if (empty($txpcfg['admin_url'])) {
-            $txpcfg['cookie_domain'] = '';
-          } else {
-            $txpcfg['cookie_domain'] = rtrim(substr($txpcfg['admin_url'], strpos($txpcfg['admin_url'], '.') + 1), '/');
-          }
+            if (empty($txpcfg['admin_url'])) {
+                $txpcfg['cookie_domain'] = '';
+            } else {
+                $txpcfg['cookie_domain'] = rtrim(substr($txpcfg['admin_url'], strpos($txpcfg['admin_url'], '.') + 1), '/');
+            }
         }
 
         define('cookie_domain', $txpcfg['cookie_domain']);

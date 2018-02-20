@@ -2290,25 +2290,6 @@ function sanitizeForPage($text)
 }
 
 /**
- * Sanitises a string for use in a theme template's name.
- *
- * Just runs sanitizeForPage() followed by sanitizeForFile(), then limits
- * the number of characters to 63.
- *
- * @param   string $text The string
- * @return  string
- * @package Filter
- * @access  private
- */
-
-function sanitizeForTheme($text)
-{
-    $out = sanitizeForFile(sanitizeForPage($text));
-
-    return Txp::get('\Textpattern\Type\StringType', $out)->substring(0, 63)->getString();
-}
-
-/**
  * Transliterates a string to ASCII.
  *
  * Used to generate RFC 3986 compliant and pretty ASCII-only URLs.
