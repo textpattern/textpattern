@@ -90,7 +90,8 @@ namespace Textpattern\Skin {
             return $this->getName();
         }
 
-        protected function mergeResults($asset, $status) {
+        protected function mergeResults($asset, $status)
+        {
             $this->results = array_merge_recursive($this->getResults(), $asset->getResults($status));
 
             return $this;
@@ -343,7 +344,8 @@ namespace Textpattern\Skin {
          * @return bool             Written octets number or FALSE on error.
          */
 
-        protected function createFile($pathname = null, $contents = null) {
+        protected function createFile($pathname = null, $contents = null)
+        {
             $pathname !== null or $pathname = $this->getName().DS.self::getFilename();
 
             if ($contents === null) {
@@ -491,7 +493,8 @@ namespace Textpattern\Skin {
          * @return object $this The current object (chainable).
          */
 
-        public function create() {
+        public function create()
+        {
             $event = $this->getEvent();
             $infos = $this->getInfos();
             $name = $infos['name'];
@@ -548,7 +551,8 @@ namespace Textpattern\Skin {
          * @return object $this The current object (chainable).
          */
 
-        public function update() {
+        public function update()
+        {
             $event = $this->getEvent();
             $infos = $this->getInfos();
             $name = $infos['name'];
@@ -1002,7 +1006,6 @@ namespace Textpattern\Skin {
                                 $this->setInfos($name, $title, $version, $description, $author, $author_uri)
                                      ->setBase($old_name)
                                      ->create();
-
                             } else {
                                 $this->setInfos($name, $title, $version, $description, $author, $author_uri)
                                      ->setBase($old_name)
@@ -1240,7 +1243,8 @@ namespace Textpattern\Skin {
          * @return object Admin\Paginator instance.
          */
 
-        protected function getPaginator() {
+        protected function getPaginator()
+        {
             return \Txp::get('\Textpattern\Admin\Paginator', $this->getEvent(), '');
         }
 
@@ -1251,7 +1255,8 @@ namespace Textpattern\Skin {
          * @return object          Search\Filter instance.
          */
 
-        protected function getSearchFilter($methods) {
+        protected function getSearchFilter($methods)
+        {
             return \Txp::get('Textpattern\Search\Filter', $this->getEvent(), $methods);
         }
 

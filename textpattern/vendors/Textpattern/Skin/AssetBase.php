@@ -81,14 +81,14 @@ namespace Textpattern\Skin {
 
         protected static $essential = array();
 
-         /**
-          * Parent skin object.
-          *
-          * @var object skin
-          * @see        __construct().
-          */
+        /**
+         * Parent skin object.
+         *
+         * @var object skin
+         * @see        __construct().
+         */
 
-         protected $skin;
+        protected $skin;
 
         /**
          * Constructor.
@@ -450,7 +450,8 @@ namespace Textpattern\Skin {
          * {@inheritdoc}
          */
 
-        protected function parseFiles($files) {
+        protected function parseFiles($files)
+        {
             $rows = $row = array();
             $subdirField = self::getSubdirField();
             $event = $this->getEvent();
@@ -463,7 +464,7 @@ namespace Textpattern\Skin {
 
                 foreach ($files as $file) {
                     $filename = $file->getFilename();
-                    $name = pathinfo($filename, PATHINFO_FILENAME);;
+                    $name = pathinfo($filename, PATHINFO_FILENAME);
 
                     if ($subdirField) {
                         $essentialSubdir = implode('', $this->getEssential($subdirField, 'name', array($name)));

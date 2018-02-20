@@ -352,7 +352,7 @@ function doDiagnostics()
 
     if ($siteurl and strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.')) {
         // skip warning if multi-site setup as $guess_site_url and $siteurl will mismatch
-        if(!isset($txpcfg['multisite_root_path'])) {
+        if (!isset($txpcfg['multisite_root_path'])) {
             $fail['site_url_mismatch'] = diag_msg_wrap(gTxt('site_url_mismatch').cs.$guess_site_url, 'warning');
         }
     }

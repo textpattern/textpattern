@@ -52,20 +52,21 @@ namespace Textpattern\Iterator {
          * @param mixed  $filter                  Array of filenames or regEx as a string.
          */
 
-         public function __construct(RecDirIterator $iterator, $filter)
-         {
-             parent::__construct($iterator);
+        public function __construct(RecDirIterator $iterator, $filter)
+        {
+            parent::__construct($iterator);
 
-             $this->setFilter($filter);
-         }
+            $this->setFilter($filter);
+        }
 
-         /**
-          * {@inheritdoc}
-          *
-          * Get Children and pass the filter to them.
-          */
+        /**
+         * {@inheritdoc}
+         *
+         * Get Children and pass the filter to them.
+         */
 
-         public function getChildren() {
+        public function getChildren()
+        {
             return new self($this->getInnerIterator()->getChildren(), $this->getFilter());
         }
 

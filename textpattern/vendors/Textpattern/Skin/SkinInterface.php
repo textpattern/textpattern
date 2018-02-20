@@ -32,7 +32,7 @@
 
 namespace Textpattern\Skin {
 
-    Interface SkinInterface
+    interface SkinInterface
     {
         /**
          * $dirPath property setter.

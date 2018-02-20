@@ -386,7 +386,6 @@ function page_save()
         } else {
             if ($savenew or $copy) {
                 if ($newname) {
-
                     if (safe_insert('txp_page', "name = '$safe_newname', user_html = '$html', skin = '$safe_skin'")) {
                         set_pref('last_page_saved', $newname, 'page', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                         update_lastmod('page_created', compact('newname', 'name', 'html'));

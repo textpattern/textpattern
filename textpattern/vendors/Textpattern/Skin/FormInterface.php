@@ -24,7 +24,7 @@
 /**
  * Form Interface
  *
- * Implemented by Form
+ * Implemented by Form.
  *
  * @since   4.7.0
  * @package Skin

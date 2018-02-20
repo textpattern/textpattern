@@ -24,7 +24,7 @@
 /**
  * Css Interface
  *
- * Implemented by Css
+ * Implemented by Css.
  *
  * @since   4.7.0
  * @package Skin

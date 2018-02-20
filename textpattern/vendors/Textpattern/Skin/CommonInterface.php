@@ -41,7 +41,7 @@ namespace Textpattern\Skin {
          * @return object $this  The current object (chainable).
          */
 
-         public function setNames($names = null);
+        public function setNames($names = null);
 
         /**
          * $name property setter.

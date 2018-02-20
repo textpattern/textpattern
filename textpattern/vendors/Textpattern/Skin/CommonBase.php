@@ -186,7 +186,7 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * Sanitises a string for use in a theme template's name.
+         * Sanitizes a string for use in a theme template's name.
          *
          * Just runs sanitizeForPage() followed by sanitizeForFile(),
          * then limits the number of characters to 63.
@@ -203,14 +203,19 @@ namespace Textpattern\Skin {
         }
 
         function isDirEmpty($dir) {
-          if (!is_readable($dir)) return NULL;
-          $handle = opendir($dir);
-          while (false !== ($entry = readdir($handle))) {
-            if ($entry != "." && $entry != "..") {
-              return FALSE;
+            if (!is_readable($dir)) {
+                return NULL;
             }
-          }
-          return TRUE;
+
+            $handle = opendir($dir);
+
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != "." && $entry != "..") {
+                    return FALSE;
+                }
+            }
+
+            return TRUE;
         }
 
         /**
@@ -220,22 +225,22 @@ namespace Textpattern\Skin {
          * @return object $this  The current class object (chainable).
          */
 
-         public function setNames($names = null)
-         {
-             if ($names === null) {
-                 $this->names = array();
-             } else {
-                 $parsed = array();
+        public function setNames($names = null)
+        {
+            if ($names === null) {
+                $this->names = array();
+            } else {
+                $parsed = array();
 
-                 foreach ($names as $name) {
-                     $parsed[] = static::sanitize($name);
-                 }
+                foreach ($names as $name) {
+                    $parsed[] = static::sanitize($name);
+                }
 
-                 $this->names = $parsed;
-             }
+                $this->names = $parsed;
+            }
 
-             return $this;
-         }
+            return $this;
+        }
 
         /**
          * $names property getter.
