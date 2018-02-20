@@ -27,7 +27,8 @@
  * @package Admin\CSS
  */
 
-use Textpattern\Skin\Main as Skin;
+use Textpattern\Skin\Skin;
+use Textpattern\Skin\Css;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -35,6 +36,8 @@ if (!defined('txpinterface')) {
 
 if ($event == 'css') {
     require_privs('css');
+
+    $instance = Txp::get('Textpattern\Skin\Css');
 
     bouncer($step, array(
         'pour'            => false,
@@ -61,7 +64,7 @@ if ($event == 'css') {
             css_edit();
             break;
         case "css_skin_change":
-            css_skin_change();
+            Txp::get('Textpattern\Skin\Css')->selectEdit();
             css_edit();
             break;
     }
@@ -113,7 +116,7 @@ function css_list($current)
 
 function css_edit($message = '', $refresh_partials = false)
 {
-    global $event, $step;
+    global $instance, $event, $step;
 
     /*
     $partials is an array of:
@@ -160,12 +163,13 @@ function css_edit($message = '', $refresh_partials = false)
 
     $default_name = safe_field("css", 'txp_section', "name = 'default'");
 
-    $name = sanitizeForTheme(assert_string(gps('name')));
-    $newname = sanitizeForTheme(assert_string(gps('newname')));
-    $skin = ($skin !== '') ? $skin : Skin::getCurrent();
+    $name = Css::sanitize(assert_string(gps('name')));
+    $newname = Css::sanitize(assert_string(gps('newname')));
+    $skin = ($skin !== '') ? $skin : null;
     $class = 'async';
 
-    $skin = Skin::setCurrent($skin);
+    $thisSkin = Txp::get('Textpattern\Skin\Skin');
+    $skin = $thisSkin->setName($skin)->setEditing();
 
     if ($step == 'css_delete' || empty($name) && $step != 'pour' && !$savenew) {
         $name = get_pref('last_css_saved', $default_name);
@@ -199,7 +203,7 @@ function css_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = n.Skin::renderSwitchForm('css', 'css_skin_change', $skin);
+    $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
         tag_void('input', array(
@@ -274,7 +278,7 @@ function css_edit($message = '', $refresh_partials = false)
 
 function css_save()
 {
-    global $app_mode;
+    global $instance, $app_mode;
 
     extract(doSlash(array_map('assert_string', psa(array(
         'savenew',
@@ -283,10 +287,10 @@ function css_save()
         'skin',
     )))));
 
-    $name = sanitizeForTheme(assert_string(ps('name')));
-    $newname = sanitizeForTheme(assert_string(ps('newname')));
+    $name = Css::sanitize(assert_string(ps('name')));
+    $newname = Css::sanitize(assert_string(ps('newname')));
 
-    $skin = Skin::setCurrent($skin);
+    $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
 
     $save_error = false;
     $message = '';
@@ -393,18 +397,13 @@ function css_delete()
  *
  * Keeps track of which skin is being edited from panel to panel.
  *
- * @param  string $skin Optional skin name. Read from GET/POST otherwise
+ * @param      string $skin Optional skin name. Read from GET/POST otherwise
+ * @deprecated in 4.7.0
  */
 
 function css_skin_change($skin = null)
 {
-    if ($skin === null) {
-        $skin = gps('skin');
-    }
-
-    if ($skin) {
-        Skin::setCurrent($skin);
-    }
+    Txp::get('Textpattern\Skin\Css')->selectEdit($skin);
 
     return true;
 }

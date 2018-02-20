@@ -352,7 +352,7 @@ function doDiagnostics()
 
     if ($siteurl and strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.')) {
         // skip warning if multi-site setup as $guess_site_url and $siteurl will mismatch
-        if(!isset($txpcfg['multisite_root_path'])) {
+        if (!isset($txpcfg['multisite_root_path'])) {
             $fail['site_url_mismatch'] = diag_msg_wrap(gTxt('site_url_mismatch').cs.$guess_site_url, 'warning');
         }
     }
@@ -391,7 +391,7 @@ function doDiagnostics()
             $n = $row['name'].'-'.$row['version'];
 
             if (strtolower($row['md5']) != strtolower($row['code_md5'])) {
-                $n .= ' ('.gTxt('modified').')';
+                $n .= ' ('.gTxt('diag_modified').')';
             }
 
             $active_plugins[] = $n;
@@ -421,10 +421,10 @@ function doDiagnostics()
         if ($gd_support) {
             $gd_support = join(', ', $gd_support);
         } else {
-            $gd_support = gTxt('none');
+            $gd_support = gTxt('diag_none');
         }
 
-        $gd = gTxt('gd_info', array(
+        $gd = gTxt('diag_gd_info', array(
             '{version}'   => $gd_info['GD Version'],
             '{supported}' => $gd_support,
         ));

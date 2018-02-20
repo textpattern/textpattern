@@ -22,13 +22,21 @@
  */
 
 /**
- * RecDirIterator
+ * Recursive directory iterator
+ *
+ * <code>
+ * $files = new \Textpattern\Iterator\RecDirIterator($dirPath);
+ *
+ * foreach ($files as $file) {
+ *     echo $file->getPathname();
+ * }
+ * </code>
  *
  * @since   4.7.0
- * @package Skin
+ * @package Iterator
  */
 
-namespace Textpattern\Skin {
+namespace Textpattern\Iterator {
 
     class RecDirIterator extends \RecursiveDirectoryIterator
     {
@@ -53,74 +61,27 @@ namespace Textpattern\Skin {
          * @throws \Exception
          */
 
-        public function getTemplateContents()
+        public function getContents()
         {
-            $contents = file_get_contents($this->getPathname());
+            $pathname = $this->getPathname();
+            $contents = file_get_contents($pathname);
 
             if ($contents !== false) {
                 return preg_replace('/[\r|\n]+$/', '', $contents);
             }
 
-            throw new \Exception('Unable to read: '.$this->getTemplateName());
+            throw new \Exception('Unable to read: '.$pathname);
         }
 
         /**
          * Gets JSON file contents as an object.
          *
          * @return array
-         * @throws Exception
          */
 
-        public function getTemplateJSONContents()
+        public function getJSONContents()
         {
-            return @json_decode($this->getTemplateContents(), true);
-        }
-
-        /**
-         * Gets the template name.
-         *
-         * @return string
-         */
-
-        public function getTemplateName()
-        {
-            return pathinfo($this->getFilename(), PATHINFO_FILENAME);
-        }
-
-        /**
-         * Gets the form Type from its path.
-         *
-         * @return string
-         */
-
-        public function getTemplateDir()
-        {
-            $types = array_keys(get_form_types());
-            $type = basename($this->getPath());
-
-            if (in_array($type, $types)) {
-                return $type;
-            }
-
-            return 'misc';
-        }
-
-        public function getTemplateInfo($type)
-        {
-            switch ($type) {
-                case 'name':
-                    return $this->getTemplateName();
-                    break;
-                case 'content':
-                    return $this->getTemplateContents();
-                    break;
-                case 'dir':
-                    return $this->getTemplateDir();
-                    break;
-                default:
-                    return $this->getTemplateName();
-                    break;
-            }
+            return @json_decode($this->getContents(), true);
         }
     }
 }
