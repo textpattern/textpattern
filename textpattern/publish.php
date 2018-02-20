@@ -128,7 +128,7 @@ if (!defined('ahu')) {
 // Shared admin and public cookie_domain when using multisite admin URL.
 if (!defined('cookie_domain')) {
     if (!isset($txpcfg['cookie_domain'])) {
-      $txpcfg['cookie_domain'] = '';
+        $txpcfg['cookie_domain'] = '';
     }
 
     define('cookie_domain', $txpcfg['cookie_domain']);

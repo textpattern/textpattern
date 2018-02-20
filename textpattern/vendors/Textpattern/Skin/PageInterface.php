@@ -22,9 +22,9 @@
  */
 
 /**
- * Styles
+ * Page Interface
  *
- * Manages skins related styles.
+ * Implemented by Page.
  *
  * @since   4.7.0
  * @package Skin
@@ -32,14 +32,19 @@
 
 namespace Textpattern\Skin {
 
-    class Styles extends AssetBase
+    interface PageInterface
     {
-        protected static $asset = 'css';
-        protected static $dir = 'styles';
-        protected static $extension = 'css';
-        protected static $table = 'txp_css';
-        protected static $tableCols;
-        protected static $contentsCol = 'css';
-        protected static $essential = array(array('default'));
+        /**
+         * $infos+$name properties setter.
+         *
+         * @param  string $name      Page name;
+         * @param  string $user_html Page contents;
+         * @return object $this      The current class object (chainable).
+         */
+
+        public function setInfos(
+            $name,
+            $user_html = null
+        );
     }
 }

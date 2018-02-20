@@ -102,7 +102,7 @@ function list_languages($message = '')
     }
 
     foreach ($langUse as $key => $row) {
-        $langUse[$key] = tag(eLink('admin', 'author_list', 'search_method', 'login', '('.count($row).')' , 'crit', join(',', doSlash($row))), 'span', array('class' => 'txp-lang-user-count'));
+        $langUse[$key] = tag(eLink('admin', 'author_list', 'search_method', 'login', '('.count($row).')', 'crit', join(',', doSlash($row))), 'span', array('class' => 'txp-lang-user-count'));
     }
 
     // Create the widget components.

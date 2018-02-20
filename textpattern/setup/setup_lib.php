@@ -60,10 +60,21 @@ function setup_db($cfg = array())
     $siteurl = str_replace(' ', '%20', $siteurl);
     $theme_name = empty($cfg['site']['theme']) ? 'hive' : $cfg['site']['theme'];
 
-    get_public_themes_list();
+    $Skin = Txp::get('Textpattern\Skin\Skin');
 
-    $public_theme = empty($public_themes[$cfg['site']['public_theme']]['themedir']) ? current(array_keys($public_themes)) : $cfg['site']['public_theme'];
-    $themedir = $public_themes[$public_theme]['themedir'];
+    $setup_path = txpath.DS.'setup';
+    $setup_themes_path = $setup_path.DS.'themes';
+    $Skin->setDirPath($setup_themes_path);
+    $setup_public_themes = $Skin->getInstallable();
+
+    $root_themes_path = txpath.DS.'..'.DS.'themes';
+    $Skin->setDirPath($root_themes_path);
+    $root_public_themes = $Skin->getInstallable();
+
+    $public_themes = array_merge($root_public_themes, $setup_public_themes);
+    $public_theme = empty($cfg['site']['public_theme']) ? current(array_keys($public_themes)) : $cfg['site']['public_theme'];
+
+    $is_from_setup = in_array($public_theme, array_keys($setup_public_themes));
 
     if (empty($cfg['site']['datadir'])) {
         /*  Option 'txp-data' in manifest.json:
@@ -73,11 +84,11 @@ function setup_db($cfg = array())
         */
 
         if (@$public_themes[$public_theme]['txp-data'] == 'theme') {
-            $datadir = $themedir;
+            $datadir = $is_from_setup ? $setup_themes_path.DS.$public_theme : $root_public_themes.DS.$public_theme;
         } elseif (@$public_themes[$public_theme]['txp-data'] == 'none') {
             $datadir = '';
         } else {
-            $datadir = txpath.DS.'setup';
+            $datadir = $setup_path;
         }
     } else {
         $datadir = $cfg['site']['datadir'];
@@ -154,38 +165,12 @@ function setup_db($cfg = array())
     // --- Theme setup.
     // Import theme assets.
     msg(gTxt('public_theme').": '{$public_theme}'");
-    $public_theme_parts = pathinfo($public_theme);
-    $public_theme_name = $public_theme_parts['basename'];
-    $public_theme_dir = $public_theme_parts['dirname'];
-    $public_theme_dir_parts = explode(DS, $public_theme_dir);
-    $is_from_setup = isset($public_theme_dir_parts[1]) && $public_theme_dir_parts[1] === 'setup';
+    $is_from_setup ? $Skin->setDirPath($setup_themes_path) : '';
+    $Skin->setNames(array($public_theme))
+         ->import()
+         ->setBase('default')
+         ->updateSections();
 
-    if (class_exists('\Textpattern\Skin\Main')) {
-        $Skin = Txp::get('\Textpattern\Skin\Main', $public_theme_name, null, ($is_from_setup ? txpath.$public_theme_dir : null));
-        $Skin->import();
-        $Skin->updateSkinInUse($public_theme_name);
-    } else {
-        // @todo Do we need the else part at all now?
-        foreach (get_files_content($themedir.'/styles', 'css') as $key => $data) {
-            safe_insert("txp_css", "name='".doSlash($key)."', css='".doSlash($data)."'");
-            msg("CSS: '{$key}'");
-        }
-
-        if ($files = glob("{$themedir}/forms/*/*\.txp")) {
-            foreach ($files as $file) {
-                if (preg_match('%/forms/(\w+)/(\w+)\.txp$%', $file, $mm)) {
-                    $data = @file_get_contents($file);
-                    safe_insert("txp_form", "type='".doSlash($mm[1])."', name='".doSlash($mm[2])."', Form='".doSlash($data)."'");
-                    msg("Form: '{$mm[1]}/{$mm[2]}'");
-                }
-            }
-        }
-
-        foreach (get_files_content($themedir.'/pages', 'txp') as $key => $data) {
-            safe_insert("txp_page", "name='".doSlash($key)."', user_html='".doSlash($data)."'");
-            msg("Page: '{$key}'");
-        }
-    }
     // --- Theme setup end
 
     // Final rebuild category trees
@@ -264,42 +249,6 @@ function setup_load_lang($langs)
     Txp::get('\Textpattern\L10n\Lang')->setPack($strings);
 
     return $strings;
-}
-
-/**
- * Fetch the list of available public themes.
- *
- * @return array
- */
-
-function get_public_themes_list()
-{
-    global $public_themes;
-
-    $public_themes = $out = $files = array();
-
-    foreach (array('setup', '..') as $root) {
-        $files = array_merge($files, (array) glob(txpath.DS.$root.DS.'themes'.DS.'*'.DS.'manifest.json'));
-    }
-
-    if ($files = array_filter($files)) {
-        foreach ($files as $file) {
-            $file = realpath($file);
-            $DS = preg_quote(DS);
-
-            if (preg_match('%^(.*'.$DS.'([\w\-\.]+))'.$DS.'manifest\.json$%', $file, $mm) && $manifest = @json_decode(file_get_contents($file), true)) {
-                if (@$manifest['txp-type'] == 'textpattern-theme') {
-                    $key = str_replace(txpath, '', $mm[1]);
-                    $key = str_replace(dirname(txpath), '', $key);
-                    $public_themes[$key] = $manifest;
-                    $public_themes[$key]['themedir'] = $mm[1];
-                    $out[$key] = empty($manifest['title']) ? $mm[2] : $manifest['title']." (".$manifest['version'] .') '.$key;
-                }
-            }
-        }
-    }
-
-    return $out;
 }
 
 /**
