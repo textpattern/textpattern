@@ -53,7 +53,7 @@ foreach ($installed_keys as $key) {
 
 // New fields in the plugin table.
 $colInfo = getRows("DESCRIBE `".PFX."txp_plugin`");
-$cols = array_map(function($el) {
+$cols = array_map(function ($el) {
     return $el['Field'];
 }, $colInfo);
 

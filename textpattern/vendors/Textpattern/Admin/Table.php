@@ -69,7 +69,10 @@ class Table
         $event = $this->event;
         $out = '';
         extract($data + array(
-            'heading' => 'tab_'.$event, 'total' => 0, 'criteria' => 1
+            'heading' => 'tab_'.$event,
+            'total' => 0,
+            'criteria' => 1,
+            'html_id' => 'txp-list-container'
         ));
 
         $out .= n.'<div class="txp-layout">'.
@@ -81,7 +84,7 @@ class Table
         $out .= $search.n.tag_start('div', array(
                 'class' => 'txp-layout-1col',
                 'id'    => $event.'_container',
-            )).$create.n.tag_start('div', array('id' => 'txp-list-container'));
+            )).$create.n.tag_start('div', array('id' => $html_id));
 
         if ($total >= 1) {
             $out .= script_js('$(".txp-search").show()');

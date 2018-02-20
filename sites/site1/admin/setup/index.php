@@ -74,7 +74,6 @@ eod;
 eod;
         echo join("\n", $out);
         exit("</div></main></body></html>");
-
     } else {
 
         // User has specified Textpattern root path.
@@ -92,11 +91,10 @@ eod;
             echo join("\n", $out);
             exit("</div></main></body></html>");
         } else {
-
             $sites_dir = dirname($multisite_admin_path, 2);
 
             // Root path is correct. Proceed to create symlinks.
-        $out[] = <<<eod
+            $out[] = <<<eod
 <form class="prefs-form" method="post" action="{$self_url}">
 <p class="alert-block success"><span class="ui-icon ui-icon-check"></span> Textpattern root directory found. Thank you!</p>
 <p>Path to sites directory: <code>{$sites_dir}</code></p>

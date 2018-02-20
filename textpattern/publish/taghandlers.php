@@ -4027,7 +4027,7 @@ function if_category($atts, $thing = null)
     if ($x && $parent && $category) {
         if (!isset($cache[$theType.$category])) {
             $names = array();
-            foreach(getTreePath($category, $theType) as $i => $cat) {
+            foreach (getTreePath($category, $theType) as $i => $cat) {
                 $i and $names[] = $cat['name'];
             }
             $cache[$theType.$category] = array_reverse($names);
@@ -5111,7 +5111,7 @@ function txp_escape($atts, $thing = '')
                 $thing = substr(json_encode($thing, TEXTPATTERN_JSON), 1, -1);
                 break;
             case 'number': case 'float':
-                $thing = floatval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, 	FILTER_FLAG_ALLOW_FRACTION) : $thing);
+                $thing = floatval($tidy ? filter_var($thing, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : $thing);
 
                 if ($attr === 'number') {
                     $format !== null

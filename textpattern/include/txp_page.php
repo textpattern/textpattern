@@ -27,7 +27,8 @@
  * @package Admin\Page
  */
 
-use Textpattern\Skin\Main as Skin;
+use Textpattern\Skin\Skin;
+use Textpattern\Skin\Page;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -35,6 +36,8 @@ if (!defined('txpinterface')) {
 
 if ($event == 'page') {
     require_privs('page');
+
+    $instance = Txp::get('Textpattern\Skin\Page');
 
     bouncer($step, array(
         'page_edit'        => false,
@@ -61,7 +64,7 @@ if ($event == 'page') {
             page_new();
             break;
         case "page_skin_change":
-            page_skin_change();
+            $instance->selectEdit();
             page_edit();
             break;
         case 'tagbuild':
@@ -79,7 +82,7 @@ if ($event == 'page') {
 
 function page_edit($message = '', $refresh_partials = false)
 {
-    global $event, $step;
+    global $instance, $event, $step;
 
     /*
     $partials is an array of:
@@ -126,12 +129,13 @@ function page_edit($message = '', $refresh_partials = false)
 
     $default_name = safe_field("page", 'txp_section', "name = 'default'");
 
-    $name = sanitizeForTheme(assert_string(gps('name')));
-    $newname = sanitizeForTheme(assert_string(gps('newname')));
-    $skin = ($skin !== '') ? $skin : Skin::getCurrent();
+    $name = Page::sanitize(assert_string(gps('name')));
+    $newname = Page::sanitize(assert_string(gps('newname')));
+    $skin = ($skin !== '') ? $skin : null;
     $class = 'async';
 
-    $skin = Skin::setCurrent($skin);
+    $thisSkin = Txp::get('Textpattern\Skin\Skin');
+    $skin = $thisSkin->setName($skin)->setEditing();
 
     if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
         $name = get_pref('last_page_saved', $default_name);
@@ -165,7 +169,7 @@ function page_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = n.Skin::renderSwitchForm('page', 'page_skin_change', $skin);
+    $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
         tag_void('input', array(
@@ -318,12 +322,28 @@ function page_delete()
 }
 
 /**
+ * Changes the skin in which styles are being edited.
+ *
+ * Keeps track of which skin is being edited from panel to panel.
+ *
+ * @param      string $skin Optional skin name. Read from GET/POST otherwise
+ * @deprecated in 4.7.0
+ */
+
+function page_skin_change($skin = null)
+{
+    Txp::get('Textpattern\Skin\Page')->selectEdit($skin);
+
+    return true;
+}
+
+/**
  * Saves or clones a page template.
  */
 
 function page_save()
 {
-    global $app_mode;
+    global $instance, $app_mode;
 
     extract(doSlash(array_map('assert_string', psa(array(
         'savenew',
@@ -332,10 +352,10 @@ function page_save()
         'skin',
     )))));
 
-    $name = sanitizeForTheme(assert_string(ps('name')));
-    $newname = sanitizeForTheme(assert_string(ps('newname')));
+    $name = Page::sanitize(assert_string(ps('name')));
+    $newname = Page::sanitize(assert_string(ps('newname')));
 
-    $skin = Skin::setCurrent($skin);
+    $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
 
     $save_error = false;
     $message = '';
@@ -366,7 +386,6 @@ function page_save()
         } else {
             if ($savenew or $copy) {
                 if ($newname) {
-
                     if (safe_insert('txp_page', "name = '$safe_newname', user_html = '$html', skin = '$safe_skin'")) {
                         set_pref('last_page_saved', $newname, 'page', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                         update_lastmod('page_created', compact('newname', 'name', 'html'));
@@ -419,27 +438,6 @@ function page_save()
 function page_new()
 {
     page_edit();
-}
-
-/**
- * Changes the skin in which pages are being edited.
- *
- * Keeps track of which skin is being edited from panel to panel.
- *
- * @param  string $skin Optional skin name. Read from GET/POST otherwise
- */
-
-function page_skin_change($skin = null)
-{
-    if ($skin === null) {
-        $skin = gps('skin');
-    }
-
-    if ($skin) {
-        Skin::setCurrent($skin);
-    }
-
-    return true;
 }
 
 /**

@@ -393,18 +393,15 @@ function step_getTxpLogin()
         (empty($cfg['site']['theme']) ? 'hive' : $cfg['site']['theme']),
         '', '', 'setup_admin_theme');
 
-    $vals = get_public_themes_list();
-    $public_theme_name = (empty($cfg['site']['public_theme']) ? 'four-point-seven' : $cfg['site']['public_theme']);
+    $public_themes_class = Txp::get('Textpattern\Skin\Skin');
 
-    // The array keys contain the full path to the theme so to find
-    // which one it is selected requires searching the keys for a
-    // partial match.
-    foreach ($vals as $dir => $name) {
-        if (preg_match('%^.*'.$public_theme_name.'$%', $dir, $match)) {
-            $public_theme_name = $match[0];
-            break;
-        }
-    }
+    $public_themes_class->setDirPath(txpath.DS.'..'.DS.'themes');
+    $vals = $public_themes_class->getUploaded();
+
+    $public_themes_class->setDirPath(txpath.DS.'setup'.DS.'themes');
+    $vals = array_merge($public_themes_class->getUploaded(), $vals);
+
+    $public_theme_name = (empty($cfg['site']['public_theme']) ? 'four-point-seven' : $cfg['site']['public_theme']);
 
     $public_theme_chooser = selectInput('public_theme', $vals, $public_theme_name, '', '', 'setup_public_theme');
 
