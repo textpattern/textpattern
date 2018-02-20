@@ -909,7 +909,7 @@ namespace Textpattern\Skin {
                     if ($sync) {
                         $notDeleted = $this->deleteFiles($ready);
 
-                        !$notDeleted or $this->mergeResult($event.'_synchronizing_failed', array($skin => $notDeleted));
+                        !$notDeleted or $this->mergeResult($event.'_files_deletion_failed', $notDeleted);
                     }
 
                     update_lastmod($event.'.delete', $ready);
@@ -939,13 +939,14 @@ namespace Textpattern\Skin {
                     $filePath = $this->getFilePath();
 
                     if (file_exists($filePath) && !unlink($filePath)) {
-                        $notRemoved = $filePath;
+                        $notRemoved[$name][] = $filePath;
                     }
 
                     $subdirPath = $this->getSubdirPath();
+                    $isDirEmpty = $this->isDirEmpty($subdirPath);
 
-                    if ($this->isDirEmpty($subdirPath) && !@rmdir($subdirPath)) {
-                        $notRemoved = $subdirPath;
+                    if (!isset($notRemoved[$name]) && ($isDirEmpty && !@rmdir($subdirPath) || !$isDirEmpty)) {
+                        $notRemoved[$name][] = $subdirPath;
                     }
                 }
             }
