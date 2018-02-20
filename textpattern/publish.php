@@ -474,12 +474,11 @@ function preText($s, $prefs)
     $out['status'] = ($is_404 ? '404' : '200');
     $out['pg'] = is_numeric($out['pg']) ? intval($out['pg']) : '';
     $out['id'] = is_numeric($out['id']) ? intval($out['id']) : '';
+    $id = $out['id'];
 
     if (!$is_404) {
-        $out['s'] = (empty($out['s'])) ? 'default' : $out['s'];
+        $out['s'] = empty($out['s']) ? 'default' : $out['s'];
     }
-    $s = $out['s'];
-    $id = $out['id'];
 
     // Hackish.
     global $is_article_list;
@@ -511,6 +510,7 @@ function preText($s, $prefs)
     // By this point we should know the section, so grab its page and CSS.
     // Logged-in users with enough privs use the skin they're currently editing.
     if (txpinterface != 'css') {
+        $s = empty($out['s']) ? 'default' : $out['s'];
         $rs = safe_row("skin, page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
 
         $userInfo = is_logged_in();
