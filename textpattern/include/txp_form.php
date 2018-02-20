@@ -27,45 +27,37 @@
  * @package Admin\Form
  */
 
-use Textpattern\Skin\Main as Skin;
+use Textpattern\Skin\Skin;
+use Textpattern\Skin\Form;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
-/**
- * List of essential forms.
- *
- * @global array $essential_forms
- */
-
-$essential_forms = array(
-    'comments',
-    'comments_display',
-    'comment_form',
-    'default',
-    'plainlinks',
-    'files',
-);
-
-/**
- * List of form types.
- *
- * @global array $form_types
- */
-
-$form_types = array(
-    'article'  => gTxt('article'),
-    'misc'     => gTxt('misc'),
-    'comment'  => gTxt('comment'),
-    'category' => gTxt('category'),
-    'file'     => gTxt('file'),
-    'link'     => gTxt('link'),
-    'section'  => gTxt('section'),
-);
-
 if ($event == 'form') {
     require_privs('form');
+
+    $instance = Txp::get('Textpattern\Skin\Form');
+
+    /**
+     * List of essential forms.
+     *
+     * @global array $essential_forms
+     */
+
+    $essential_forms = $instance->getEssential('name');
+
+    /**
+     * List of form types.
+     *
+     * @global array $form_types
+     */
+
+    $form_types = array();
+
+    foreach ($instance->getTypes() as $type) {
+        $form_types[$type] = gTxt($type);
+    }
 
     bouncer($step, array(
         'form_edit'        => false,
@@ -97,7 +89,7 @@ if ($event == 'form') {
             form_save();
             break;
         case "form_skin_change":
-            form_skin_change();
+            $instance->selectEdit();
             form_edit();
             break;
         case 'tagbuild':
@@ -198,7 +190,7 @@ function form_multi_edit()
     $affected = array();
     $message = '';
 
-    $skin = Skin::setCurrent($skin);
+    $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
 
     if ($forms && is_array($forms)) {
         if ($method == 'delete') {
@@ -251,7 +243,7 @@ function form_create()
 
 function form_edit($message = '', $refresh_partials = false)
 {
-    global $event, $step;
+    global $instance, $event, $step;
 
     /*
     $partials is an array of:
@@ -308,13 +300,14 @@ function form_edit($message = '', $refresh_partials = false)
         'skin',
     ))));
 
-    $name = sanitizeForTheme(assert_string(gps('name')));
+    $name = Form::sanitize(assert_string(gps('name')));
     $type = assert_string(gps('type'));
-    $newname = sanitizeForTheme(assert_string(gps('newname')));
-    $skin = ($skin !== '') ? $skin : Skin::getCurrent();
+    $newname = Form::sanitize(assert_string(gps('newname')));
+    $skin = ($skin !== '') ? $skin : null;
     $class = 'async';
 
-    $skin = Skin::setCurrent($skin);
+    $thisSkin = Txp::get('Textpattern\Skin\Skin');
+    $skin = $thisSkin->setName($skin)->setEditing();
 
     if ($step == 'form_delete' || empty($name) && $step != 'form_create' && !$savenew) {
         $name = get_pref('last_form_saved', 'default');
@@ -350,7 +343,7 @@ function form_edit($message = '', $refresh_partials = false)
         array('class' => 'txp-actions txp-actions-inline')
     );
 
-    $skinBlock = n.Skin::renderSwitchForm('form', 'form_skin_change', $skin);
+    $skinBlock = n.$instance->setSkin($thisSkin)->getSelectEdit();
 
     $buttons = graf(
         tag_void('input', array(
@@ -458,10 +451,10 @@ function form_save()
         'skin',
     )))));
 
-    $name = sanitizeForTheme(assert_string(ps('name')));
-    $newname = sanitizeForTheme(assert_string(ps('newname')));
+    $name = Form::sanitize(assert_string(ps('name')));
+    $newname = Form::sanitize(assert_string(ps('newname')));
 
-    $skin = Skin::setCurrent($skin);
+    $skin = Txp::get('Textpattern\Skin\Skin')->setName($skin)->setEditing();
 
     $save_error = false;
     $message = '';
@@ -579,6 +572,22 @@ function form_delete($name, $skin)
 }
 
 /**
+ * Changes the skin in which styles are being edited.
+ *
+ * Keeps track of which skin is being edited from panel to panel.
+ *
+ * @param      string $skin Optional skin name. Read from GET/POST otherwise
+ * @deprecated in 4.7.0
+ */
+
+function form_skin_change($skin = null)
+{
+    Txp::get('Textpattern\Skin\Form')->selectEdit($skin);
+
+    return true;
+}
+
+/**
  * Changes a form template's type.
  *
  * @param  string $name The form template
@@ -599,27 +608,6 @@ function form_set_type($name, $type)
     $skin = doSlash(get_pref('skin_editing', 'default'));
 
     return safe_update('txp_form', "type = '$type'", "name = '$name' AND skin = '$skin'");
-}
-
-/**
- * Changes the skin in which forms are being edited.
- *
- * Keeps track of which skin is being edited from panel to panel.
- *
- * @param  string $skin Optional skin name. Read from GET/POST otherwise
- */
-
-function form_skin_change($skin = null)
-{
-    if ($skin === null) {
-        $skin = gps('skin');
-    }
-
-    if ($skin) {
-        Skin::setCurrent($skin);
-    }
-
-    return true;
 }
 
 /**

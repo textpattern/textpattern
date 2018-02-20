@@ -22,7 +22,9 @@
  */
 
 /**
- * RecRegexIterator
+ * Page
+ *
+ * Manages Pages.
  *
  * @since   4.7.0
  * @package Skin
@@ -30,32 +32,34 @@
 
 namespace Textpattern\Skin {
 
-    class RecRegexIterator extends \RecursiveRegexIterator
+    class Page extends AssetBase implements PageInterface
     {
+        protected static $dir = 'pages';
+        protected static $fileContentsField = 'user_html';
+        protected static $essential = array(
+            array(
+                'name'      => 'default',
+                'user_html' => '<!-- Here goes the default page contents. -->',
+            ),
+            array(
+                'name'      => 'error_default',
+                'user_html' => '<!-- Here goes the default error page contents. -->',
+            ),
+        );
+
         /**
          * {@inheritdoc}
          */
 
-        public function accept()
-        {
-            return $this->isDir() || $this->isValidTemplate();
-        }
+        public function setInfos(
+            $name,
+            $user_html = null
+        ) {
+            $name = $this->setName($name)->getName();
 
-        /**
-         * Validates a template file name.
-         *
-         * @return bool
-         */
+            $this->infos = compact('name', 'user_html');
 
-        public function isValidTemplate()
-        {
-            $isValid = false;
-
-            if (!$this->isDot() && $this->isReadable() && ($this->isFile() || $this->isLink())) {
-                $isValid = (bool) preg_match(self::getRegex(), $this->getFilename());
-            }
-
-            return $isValid;
+            return $this;
         }
     }
 }
