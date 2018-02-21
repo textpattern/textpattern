@@ -28,16 +28,17 @@ function setup_db($cfg = array())
     include_once txpath.'/lib/txplib_db.php';
     include_once txpath.'/lib/admin_config.php';
 
-    $siteurl = rtrim(@$cfg['site']['siteurl'], '/');
+    $siteurl = rtrim(@$cfg['site']['public_url'], '/');
 
     if (!preg_match('%^https?://%', $siteurl)) {
         $siteurl = 'http://'.$siteurl;
     }
 
-    if (!isset($cfg['site']['adminurl'])) {
+    if (!isset($cfg['site']['admin_url'])) {
         $adminurl = $siteurl.'/textpattern';
     } else {
-        $adminurl = rtrim(@$cfg['site']['adminurl'], '/');
+        $adminurl = rtrim(@$cfg['site']['admin_url'], '/');
+
         if (!preg_match('%^https?://%', $adminurl)) {
             $adminurl = 'http://'.$adminurl;
         }
@@ -58,7 +59,7 @@ function setup_db($cfg = array())
     @define('hu', $siteurl.'/');
     $siteurl = preg_replace('%^https?://%', '', $siteurl);
     $siteurl = str_replace(' ', '%20', $siteurl);
-    $theme_name = empty($cfg['site']['theme']) ? 'hive' : $cfg['site']['theme'];
+    $theme_name = empty($cfg['site']['admin_theme']) ? 'hive' : $cfg['site']['admin_theme'];
 
     $Skin = Txp::get('Textpattern\Skin\Skin');
 
@@ -76,7 +77,7 @@ function setup_db($cfg = array())
 
     $is_from_setup = in_array($public_theme, array_keys($setup_public_themes));
 
-    if (empty($cfg['site']['datadir'])) {
+    if (empty($cfg['site']['content_directory'])) {
         /*  Option 'txp-data' in manifest.json:
             <default>           - Import /articles and /data from setup dir
             txp-data == 'theme' - Import /articles and /data from theme dir
@@ -91,7 +92,7 @@ function setup_db($cfg = array())
             $datadir = $setup_path;
         }
     } else {
-        $datadir = $cfg['site']['datadir'];
+        $datadir = $cfg['site']['content_directory'];
     }
 
     if (numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) {
@@ -112,15 +113,15 @@ function setup_db($cfg = array())
     $setup->initData();
     msg(gTxt('creating_db_tables'));
 
-    setup_txp_lang($cfg['site']['lang']);
+    setup_txp_lang($cfg['site']['language_code']);
 
     // Create core prefs
     $setup->initPrefs();
 
     $prefs = get_prefs();
-    $txp_user = $cfg['user']['name'];
+    $txp_user = $cfg['user']['login_name'];
 
-    create_user($txp_user, $cfg['user']['email'], $cfg['user']['pass'], $cfg['user']['realname'], 1);
+    create_user($txp_user, $cfg['user']['email'], $cfg['user']['password'], $cfg['user']['full_name'], 1);
 
     if ($datadir) {
         /*  Load theme prefs:
@@ -262,30 +263,30 @@ function setup_makeConfig($cfg, $doSpecial = false)
     define("m", "'] = '");
 
     // Escape single quotes and backslashes in literal PHP strings.
-    foreach ($cfg['mysql'] as $k => $v) {
-        $cfg['mysql'][$k] = addcslashes($cfg['mysql'][$k], "'\\");
+    foreach ($cfg['database'] as $k => $v) {
+        $cfg['database'][$k] = addcslashes($cfg['database'][$k], "'\\");
     }
 
     if ($doSpecial) {
-        $cfg['mysql'] = doSpecial($cfg['mysql']);
+        $cfg['database'] = doSpecial($cfg['database']);
     }
 
     $config_details =
     "<"."?php\n"
-    .o.'db'.m.$cfg['mysql']['db'].nl
-    .o.'user'.m.$cfg['mysql']['user'].nl
-    .o.'pass'.m.$cfg['mysql']['pass'].nl
-    .o.'host'.m.$cfg['mysql']['host'].nl
-    .(empty($cfg['mysql']['dclient_flags']) ? '' : o.'client_flags'."'] = ".$cfg['mysql']['dclient_flags'].";\n")
-    .o.'table_prefix'.m.$cfg['mysql']['table_prefix'].nl
+    .o.'db'.m.$cfg['database']['db_name'].nl
+    .o.'user'.m.$cfg['database']['user'].nl
+    .o.'pass'.m.$cfg['database']['password'].nl
+    .o.'host'.m.$cfg['database']['host'].nl
+    .(empty($cfg['database']['client_flags']) ? '' : o.'client_flags'."'] = ".$cfg['database']['client_flags'].";\n")
+    .o.'table_prefix'.m.$cfg['database']['table_prefix'].nl
     .o.'txpath'.m.txpath.nl
-    .o.'dbcharset'.m.$cfg['mysql']['dbcharset'].nl;
+    .o.'dbcharset'.m.$cfg['database']['charset'].nl;
 
     if (defined('is_multisite')) {
         $config_details .=
              o.'multisite_root_path'.m.multisite_root_path.nl
-            .o.'admin_url'.m.$cfg['site']['adminurl'].nl
-            .o.'cookie_domain'.m.$cfg['site']['cookiedomain'].nl
+            .o.'admin_url'.m.$cfg['site']['admin_url'].nl
+            .o.'cookie_domain'.m.$cfg['site']['cookie_domain'].nl
             .'if (!defined(\'txpath\')) { define(\'txpath\', $txpcfg[\'txpath\']); }'."\n";
     }
 
@@ -296,18 +297,20 @@ function setup_makeConfig($cfg, $doSpecial = false)
 }
 
 /**
- * Try to connect to MySQL, check the database and the prefix of the tables.
+ * Try to connect to the database.
+ *
+ * Check the database and the table prefix.
  */
 
-function setup_try_mysql()
+function setup_connect()
 {
     global $cfg;
 
-    if (strpos($cfg['mysql']['host'], ':') === false) {
-        $dhost = $cfg['mysql']['host'];
+    if (strpos($cfg['database']['host'], ':') === false) {
+        $dhost = $cfg['database']['host'];
         $dport = ini_get("mysqli.default_port");
     } else {
-        list($dhost, $dport) = explode(':', $cfg['mysql']['host'], 2);
+        list($dhost, $dport) = explode(':', $cfg['database']['host'], 2);
         $dport = intval($dport);
     }
 
@@ -315,59 +318,60 @@ function setup_try_mysql()
 
     $mylink = mysqli_init();
 
-    if (@mysqli_real_connect($mylink, $dhost, $cfg['mysql']['user'], $cfg['mysql']['pass'], '', $dport, $dsocket)) {
-        $cfg['mysql']['dclient_flags'] = 0;
-    } elseif (@mysqli_real_connect($mylink, $dhost, $cfg['mysql']['user'], $cfg['mysql']['pass'], '', $dport, $dsocket, MYSQLI_CLIENT_SSL)) {
-        $cfg['mysql']['dclient_flags'] = 'MYSQLI_CLIENT_SSL';
+    if (@mysqli_real_connect($mylink, $dhost, $cfg['database']['user'], $cfg['database']['password'], '', $dport, $dsocket)) {
+        $cfg['database']['client_flags'] = 0;
+    } elseif (@mysqli_real_connect($mylink, $dhost, $cfg['database']['user'], $cfg['database']['password'], '', $dport, $dsocket, MYSQLI_CLIENT_SSL)) {
+        $cfg['database']['client_flags'] = 'MYSQLI_CLIENT_SSL';
     } else {
         msg(gTxt('db_cant_connect'), MSG_ERROR, true);
     }
 
     echo msg(gTxt('db_connected'));
 
-    if (!($cfg['mysql']['table_prefix'] == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $cfg['mysql']['table_prefix']))) {
+    if (!($cfg['database']['table_prefix'] == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $cfg['database']['table_prefix']))) {
         msg(gTxt('prefix_bad_characters',
-            array('{dbprefix}' => strong(txpspecialchars($cfg['mysql']['table_prefix']))), 'raw'),
+            array('{dbprefix}' => strong(txpspecialchars($cfg['database']['table_prefix']))), 'raw'),
             MSG_ERROR, true
         );
     }
 
-    if (!$mydb = mysqli_select_db($mylink, $cfg['mysql']['db'])) {
+    if (!$mydb = mysqli_select_db($mylink, $cfg['database']['db_name'])) {
         msg(gTxt('db_doesnt_exist',
-            array('{dbname}' => strong(txpspecialchars($cfg['mysql']['db']))), 'raw'),
+            array('{dbname}' => strong(txpspecialchars($cfg['database']['db_name']))), 'raw'),
             MSG_ERROR, true
         );
     }
 
-    $tables_exist = mysqli_query($mylink, "DESCRIBE `".$cfg['mysql']['table_prefix']."textpattern`");
+    $tables_exist = mysqli_query($mylink, "DESCRIBE `".$cfg['database']['table_prefix']."textpattern`");
     if ($tables_exist) {
         msg(gTxt('tables_exist',
-            array('{dbname}' => strong(txpspecialchars($cfg['mysql']['db']))), 'raw'),
+            array('{dbname}' => strong(txpspecialchars($cfg['database']['db_name']))), 'raw'),
             MSG_ERROR, true
         );
     }
 
     // On MySQL 5.5.3+ use real UTF-8 tables, if the client supports it.
-    $cfg['mysql']['dbcharset'] = "utf8mb4";
+    $cfg['database']['charset'] = "utf8mb4";
+
     // Lower versions only support UTF-8 limited to 3 bytes per character
     if (mysqli_get_server_version($mylink) < 50503) {
-        $cfg['mysql']['dbcharset'] = "utf8";
+        $cfg['database']['charset'] = "utf8";
     } else {
         if (false !== strpos(mysqli_get_client_info($mylink), 'mysqlnd')) {
             // mysqlnd 5.0.9+ required
             if (mysqli_get_client_version($mylink) < 50009) {
-                $cfg['mysql']['dbcharset'] = "utf8";
+                $cfg['database']['charset'] = "utf8";
             }
         } else {
             // libmysqlclient 5.5.3+ required
             if (mysqli_get_client_version($mylink) < 50503) {
-                $cfg['mysql']['dbcharset'] = "utf8";
+                $cfg['database']['charset'] = "utf8";
             }
         }
     }
     @mysqli_close($mylink);
     echo msg(gTxt('using_db', array(
-        '{dbname}' => strong(txpspecialchars($cfg['mysql']['db'])), ), 'raw').' ('.$cfg['mysql']['dbcharset'].')');
+        '{dbname}' => strong(txpspecialchars($cfg['database']['db_name'])), ), 'raw').' ('.$cfg['database']['charset'].')');
 
     return true;
 }

@@ -90,12 +90,12 @@ if (empty($_SESSION['cfg'])) {
 }
 
 if (ps('lang')) {
-    $cfg['site']['lang'] = ps('lang');
+    $cfg['site']['language_code'] = ps('lang');
 }
-if (empty($cfg['site']['lang'])) {
-    $cfg['site']['lang'] = TEXTPATTERN_DEFAULT_LANG;
+if (empty($cfg['site']['language_code'])) {
+    $cfg['site']['language_code'] = TEXTPATTERN_DEFAULT_LANG;
 }
-setup_load_lang($cfg['site']['lang']);
+setup_load_lang($cfg['site']['language_code']);
 
 if (defined('is_multisite')) {
     $config_path = multisite_root_path.DS.'private';
@@ -106,23 +106,23 @@ if (defined('is_multisite')) {
 
 $protocol = (empty($_SERVER['HTTPS']) || @$_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
 if (defined('is_multisite')) {
-    if (empty($cfg['site']['adminurl'])) {
-        $cfg['site']['adminurl'] = $protocol.
+    if (empty($cfg['site']['admin_url'])) {
+        $cfg['site']['admin_url'] = $protocol.
         (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
     }
-    if (empty($cfg['site']['cookiedomain'])) {
-        $cfg['site']['cookiedomain'] = substr($cfg['site']['adminurl'], strpos($cfg['site']['adminurl'], '.') + 1);
+    if (empty($cfg['site']['cookie_domain'])) {
+        $cfg['site']['cookie_domain'] = substr($cfg['site']['admin_url'], strpos($cfg['site']['admin_url'], '.') + 1);
     }
-    if (empty($cfg['site']['siteurl'])) {
-        $cfg['site']['siteurl'] = $protocol.'www.'.$cfg['site']['cookiedomain'];
+    if (empty($cfg['site']['public_url'])) {
+        $cfg['site']['public_url'] = $protocol.'www.'.$cfg['site']['cookie_domain'];
     }
 }
-if (empty($cfg['site']['siteurl'])) {
+if (empty($cfg['site']['public_url'])) {
     if (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST'])) {
-        $cfg['site']['siteurl'] = $protocol.
+        $cfg['site']['public_url'] = $protocol.
         ((@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']).$rel_siteurl;
     } else {
-        $cfg['site']['siteurl'] = $protocol.'mysite.com';
+        $cfg['site']['public_url'] = $protocol.'mysite.com';
     }
 }
 
@@ -162,8 +162,8 @@ function preamble()
     $bodyclass = ($step == '') ? ' welcome' : '';
     gTxtScript(array('help'));
 
-    if (isset($cfg['site']['lang']) && !isset($_SESSION['direction'])) {
-        $file = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->findFilename($cfg['site']['lang']);
+    if (isset($cfg['site']['language_code']) && !isset($_SESSION['direction'])) {
+        $file = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->findFilename($cfg['site']['language_code']);
         $meta = Txp::get('\Textpattern\L10n\Lang', txpath.DS.'setup'.DS.'lang'.DS)->fetchMeta($file);
         $_SESSION['direction'] = isset($meta['direction']) ? $meta['direction'] : 'ltr';
     }
@@ -273,12 +273,12 @@ function step_getDbInfo()
         graf(gTxt('db_must_exist')).
         inputLabel(
             'setup_mysql_login',
-            fInput('text', 'duser', @$cfg['mysql']['user'], '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'),
+            fInput('text', 'duser', @$cfg['database']['user'], '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'),
             'mysql_login', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_mysql_pass',
-            fInput('password', 'dpass', @$cfg['mysql']['pass'], 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_mysql_pass').
+            fInput('password', 'dpass', @$cfg['database']['password'], 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_mysql_pass').
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
                 n.tag(gTxt('setup_show_password'), 'label', array('for' => 'show_password')),
@@ -287,17 +287,17 @@ function step_getDbInfo()
         ).
         inputLabel(
             'setup_mysql_server',
-            fInput('text', 'dhost', (empty($cfg['mysql']['host']) ? 'localhost' : $cfg['mysql']['host']), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true),
+            fInput('text', 'dhost', (empty($cfg['database']['host']) ? 'localhost' : $cfg['database']['host']), '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true),
             'mysql_server', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_mysql_db',
-            fInput('text', 'ddb', @$cfg['mysql']['db'], '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true),
+            fInput('text', 'ddb', @$cfg['database']['db_name'], '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true),
             'mysql_database', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_table_prefix',
-            fInput('text', 'dprefix', @$cfg['mysql']['table_prefix'], 'input-medium', '', '', INPUT_MEDIUM, '', 'setup_table_prefix'),
+            fInput('text', 'dprefix', @$cfg['database']['table_prefix'], 'input-medium', '', '', INPUT_MEDIUM, '', 'setup_table_prefix'),
             'table_prefix', 'table_prefix', array('class' => 'txp-form-field')
         );
 
@@ -308,12 +308,12 @@ function step_getDbInfo()
             graf(gTxt('please_enter_multisite_details')).
             inputLabel(
                 'setup_admin_url',
-                fInput('text', 'adminurl', @$cfg['site']['adminurl'], '', '', '', INPUT_REGULAR, '', 'setup_admin_url', '', true),
+                fInput('text', 'adminurl', @$cfg['site']['admin_url'], '', '', '', INPUT_REGULAR, '', 'setup_admin_url', '', true),
                 'admin_domain_multisite', 'setup_admin_url', array('class' => 'txp-form-field')
             ).
             inputLabel(
                 'setup_cookie_domain',
-                fInput('text', 'cookiedomain', @$cfg['site']['cookiedomain'], '', '', '', INPUT_REGULAR, '', 'setup_cookie_domain', '', true),
+                fInput('text', 'cookiedomain', @$cfg['site']['cookie_domain'], '', '', '', INPUT_REGULAR, '', 'setup_cookie_domain', '', true),
                 'cookie_domain_multisite', 'setup_cookie_domain', array('class' => 'txp-form-field')
             );
     }
@@ -340,15 +340,15 @@ function step_printConfig()
 {
     global $cfg;
 
-    $cfg['mysql']['user'] = ps('duser');
-    $cfg['mysql']['pass'] = ps('dpass');
-    $cfg['mysql']['host'] = ps('dhost');
-    $cfg['mysql']['db'] = ps('ddb');
-    $cfg['mysql']['table_prefix'] = ps('dprefix');
+    $cfg['database']['user'] = ps('duser');
+    $cfg['database']['password'] = ps('dpass');
+    $cfg['database']['host'] = ps('dhost');
+    $cfg['database']['db_name'] = ps('ddb');
+    $cfg['database']['table_prefix'] = ps('dprefix');
 
     if (defined('is_multisite')) {
-        $cfg['site']['adminurl'] = ps('adminurl');
-        $cfg['site']['cookiedomain'] = ps('cookiedomain');
+        $cfg['site']['admin_url'] = ps('adminurl');
+        $cfg['site']['cookie_domain'] = ps('cookiedomain');
     }
 
     echo preamble();
@@ -358,7 +358,7 @@ function step_printConfig()
     check_config_exists();
 
     echo hed(gTxt('checking_database'), 2);
-    setup_try_mysql();
+    setup_connect();
 
     echo setup_config_contents().
         n.'</div>';
@@ -390,7 +390,7 @@ function step_getTxpLogin()
     asort($vals, SORT_STRING);
 
     $theme_chooser = selectInput('theme', $vals,
-        (empty($cfg['site']['theme']) ? 'hive' : $cfg['site']['theme']),
+        (empty($cfg['site']['admin_theme']) ? 'hive' : $cfg['site']['admin_theme']),
         '', '', 'setup_admin_theme');
 
     $public_themes_class = Txp::get('Textpattern\Skin\Skin');
@@ -416,7 +416,7 @@ function step_getTxpLogin()
         ).
         inputLabel(
             'setup_user_realname',
-            fInput('text', 'RealName', @$cfg['user']['realname'], '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true),
+            fInput('text', 'RealName', @$cfg['user']['full_name'], '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true),
             'your_full_name', '', array('class' => 'txp-form-field')
         ).
         inputLabel(
@@ -426,12 +426,12 @@ function step_getTxpLogin()
         ).
         inputLabel(
             'setup_user_login',
-            fInput('text', 'name', @$cfg['user']['name'], '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true),
+            fInput('text', 'name', @$cfg['user']['login_name'], '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true),
             'setup_login', 'setup_user_login', array('class' => 'txp-form-field')
         ).
         inputLabel(
             'setup_user_pass',
-            fInput('password', 'pass', @$cfg['user']['pass'], 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).
+            fInput('password', 'pass', @$cfg['user']['password'], 'txp-maskable', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).
             n.tag(
                 checkbox('unmask', 1, false, 0, 'show_password').
                 n.tag(gTxt('setup_show_password'), 'label', array('for' => 'show_password')),
@@ -443,7 +443,7 @@ function step_getTxpLogin()
         ).
         inputLabel(
             'setup_site_url',
-            fInput('text', 'siteurl', @$cfg['site']['siteurl'], '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
+            fInput('text', 'siteurl', @$cfg['site']['public_url'], '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true),
             'please_enter_url', 'setup_site_url', array('class' => 'txp-form-field')
         ).
         inputLabel(
@@ -472,24 +472,24 @@ function step_createTxp()
 {
     global $cfg;
 
-    $cfg['user']['realname'] = ps('RealName');
+    $cfg['user']['full_name'] = ps('RealName');
     $cfg['user']['email'] = ps('email');
-    $cfg['user']['name'] = ps('name');
-    $cfg['user']['pass'] = ps('pass');
+    $cfg['user']['login_name'] = ps('name');
+    $cfg['user']['password'] = ps('pass');
 
-    $cfg['site']['siteurl'] = ps('siteurl');
-    $cfg['site']['theme'] = ps('theme');
+    $cfg['site']['public_url'] = ps('siteurl');
+    $cfg['site']['admin_theme'] = ps('theme');
     $cfg['site']['public_theme'] = ps('public_theme');
-    $cfg['site']['datadir'] = '';
+    $cfg['site']['content_directory'] = '';
 
     echo preamble();
 
-    if (empty($cfg['user']['name'])) {
+    if (empty($cfg['user']['login_name'])) {
         echo txp_setup_progress_meter(3).n.'<div class="txp-setup">';
         msg(gTxt('name_required'), MSG_ERROR, true);
     }
 
-    if (empty($cfg['user']['pass'])) {
+    if (empty($cfg['user']['password'])) {
         echo txp_setup_progress_meter(3).n.'<div class="txp-setup">';
         msg(gTxt('pass_required'), MSG_ERROR, true);
     }
@@ -513,13 +513,13 @@ function step_fbCreate()
 {
     global $cfg;
 
-    unset($cfg['mysql']['dclient_flags']);
-    unset($cfg['mysql']['dbcharset']);
+    unset($cfg['database']['client_flags']);
+    unset($cfg['database']['charset']);
     $setup_autoinstall_body = gTxt('setup_autoinstall_body')."<pre>".
         json_encode($cfg, defined('JSON_PRETTY_PRINT') ? TEXTPATTERN_JSON | JSON_PRETTY_PRINT : TEXTPATTERN_JSON).
         "</pre>";
     if (defined('is_multisite')) {
-        $multisite_admin_login_url = $GLOBALS['protocol'].$cfg['site']['adminurl'];
+        $multisite_admin_login_url = $GLOBALS['protocol'].$cfg['site']['admin_url'];
     }
     // Clear the session so no data is leaked.
     $_SESSION = $cfg = array();
@@ -635,7 +635,7 @@ function langs()
 
             if (! empty($meta['code'])) {
                 $out .= n.'<option value="'.txpspecialchars($meta['code']).'"'.
-                    (($meta['code'] == $cfg['site']['lang']) ? ' selected="selected"' : '').
+                    (($meta['code'] == $cfg['site']['language_code']) ? ' selected="selected"' : '').
                     '>'.txpspecialchars($meta['name']).'</option>';
             }
         }
@@ -663,8 +663,8 @@ function check_config_txp($meter)
     }
 
     if (!isset($txpcfg)
-        || ($txpcfg['db'] != $cfg['mysql']['db'])
-        || ($txpcfg['table_prefix'] != $cfg['mysql']['table_prefix'])
+        || ($txpcfg['db'] != $cfg['database']['db_name'])
+        || ($txpcfg['table_prefix'] != $cfg['database']['table_prefix'])
     ) {
         $problems[] = msg(gTxt('config_php_does_not_match_input', '', 'raw'), MSG_ERROR);
 

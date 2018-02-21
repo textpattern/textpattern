@@ -1,22 +1,22 @@
 {
     "site": {
-        "lang": "en",
-        "siteurl": "",
-        "theme": "",
+        "language_code": "en",
+        "public_url": "",
+        "admin_theme": "",
         "public_theme": "",
-        "datadir": ""
+        "content_directory": ""
     },
-    "mysql": {
+    "database": {
         "user": "",
-        "pass": "",
+        "password": "",
         "host": "localhost",
-        "db": "",
+        "db_name": "",
         "table_prefix": ""
     },
     "user": {
-        "realname": "",
+        "full_name": "",
         "email": "",
-        "name": "",
-        "pass": ""
+        "login_name": "",
+        "password": ""
     }
 }
