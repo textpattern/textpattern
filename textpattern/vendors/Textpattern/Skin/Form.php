@@ -43,37 +43,37 @@ namespace Textpattern\Skin {
             array(
                 'name' => 'comments',
                 'type' => 'comment',
-                'Form' => '<!-- Here goes the default rendering contents of the comments tag. '
+                'Form' => '<!-- Default contents of the comments tag goes here. '
                          .'See https://docs.textpattern.io/tags/comments. -->',
             ),
             array(
                 'name' => 'comments_display',
                 'type' => 'comment',
-                'Form' => '<!-- Here goes the default rendering contents of the popup_comments tag. '
+                'Form' => '<!-- Default contents of the popup_comments tag goes here. '
                          .'See https://docs.textpattern.io/tags/popup_comments. -->',
             ),
             array(
                 'name' => 'comment_form',
                 'type' => 'comment',
-                'Form' => '<!-- Here goes the default rendering contents of the comments_form tag. '
+                'Form' => '<!-- Default contents of the comments_form tag goes here. '
                          .'See https://docs.textpattern.io/tags/comments_form. -->',
             ),
             array(
                 'name' => 'default',
                 'type' => 'article',
-                'Form' => '<!-- Here goes the default rendering contents of the article tag. '
+                'Form' => '<!-- Default contents of the article tag goes here. '
                          .'See https://docs.textpattern.io/tags/article. -->',
             ),
             array(
                 'name' => 'plainlinks',
                 'type' => 'link',
-                'Form' => '<!-- Here goes the default rendering contents of the linklist tag. '
+                'Form' => '<!-- Default contents of the linklist tag goes here. '
                          .'See https://docs.textpattern.io/tags/linklist. -->',
             ),
             array(
                 'name' => 'files',
                 'type' => 'file',
-                'Form' => '<!-- Here goes the default rendering contents of the file_download tag. '
+                'Form' => '<!-- Default contents of the file_download tag goes here. '
                          .'See https://docs.textpattern.io/tags/file_download. -->',
             ),
         );
