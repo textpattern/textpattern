@@ -484,7 +484,7 @@ namespace Textpattern\Skin {
                             $subdirValid = self::parseSubdir($subdir);
 
                             if ($subdir !== $subdirValid) {
-                                $this->mergeResult($event.'_subdir_unknown', array($skin => array($subdir.'/'.$name)));
+                                $this->mergeResult($event.'_subdir_invalid', array($skin => array($subdir.'/'.$name)));
                             }
 
                             $row[$subdirField] = $subdirValid;
