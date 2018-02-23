@@ -1,7 +1,7 @@
 Changes in 4.7.0 (upcoming)
 
 * In memory of Dean Allen, creator of Textpattern CMS.
-* Added: Support for website themes, stored within the database (available via
+* Added: Support for website themes, stored within the database (accessed via
   the Themes panel) and available as physical flat file templates for easier
   versioning, portability and installation (many many thanks, NicolasGraph).
 * Added: Support for installation on Nginx web servers.
