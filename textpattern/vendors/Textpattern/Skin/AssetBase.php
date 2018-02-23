@@ -473,7 +473,7 @@ namespace Textpattern\Skin {
                     if (in_array($filename, $parsedFiles)) {
                         $this->mergeResult($event.'_duplicate', array($skin => array($filename)));
                     } elseif ($subdirField && $essentialSubdir && $essentialSubdir !== basename($file->getPath())) {
-                        $this->mergeResult($event.'_wrong_subdir', array($skin => array($name.' → '.basename($file->getPath()))));
+                        $this->mergeResult($event.'_subdir_error', array($skin => array(basename($file->getPath()).'/'.$name)));
                     } else {
                         $names[] = $name;
                         $parsed[] = $row['name'] = $name;
