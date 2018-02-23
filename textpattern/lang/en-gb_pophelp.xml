@@ -946,9 +946,10 @@
         <item id="skin_synchronize" title="Synchronise template/file lists"><![CDATA[
 <h2>Synchronise template/file lists</h2>
 <p>If checked, this option allows you to synchronise the template-related database and files.</p>
-<p>When this option is selected, on override/re-import each template which is not part of the processed import will be deleted from the database, while on export, template files will be deleted if they are not part of the processed export.</p>
+<p><strong>Note:</strong> Synchronization is mainly related to the obsolete template rows or files deletion which is, in most cases, a destructive and permanent process. Please use with caution.</p>
+<p>When this option is selected, on override/re-import each template which is not part of the processed import will be deleted from the database while on export, template files will be deleted if they are not part of the processed export.</p>
 <p>If, for any reason, import or export fails for a defined template it would not be considered as part of the current process and will be deleted from the database or the theme directory.</p>
-<p><strong>Note:</strong> This process is destructive and permanent; please use this feature with caution. Upon deletion <em>all</em> themes-related files will be deleted, including files which would not be part of the theme core structure and would not appear in the database (i.e. JavaScript, images, etc.).</p>
+<p>On deletion each dropped template-related file should be deleted. However, themes-related directories and their subdirectories will not be deleted if any other files exist within them.</p>
         ]]></item>
     </group>
 </help>
