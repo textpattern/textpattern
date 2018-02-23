@@ -592,7 +592,7 @@ namespace Textpattern\Skin {
                     $files = $this->getFiles($filenames, self::getSubdirField() ? 1 : 0);
 
                     if (!$files) {
-                        $this->mergeResult($event.'not_found', array($skin => array($dirPath)));
+                        $this->mergeResult($event.'_not_found', array($skin => array($dirPath)));
                     }
 
                     $rows = $this->parseFiles($files);
