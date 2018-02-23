@@ -798,5 +798,26 @@ namespace Textpattern\Skin {
 
             return $isInstalled;
         }
+
+        /**
+         * Wether a directory is empty or not.
+         *
+         * @param  string $path The directory path
+         * @return mixed        NULL if the directory is not readable (or does not exist),
+         *                      TRUE if empty, otherwise, FALSE.
+         */
+        protected static function isDirEmpty($path)
+        {
+            if (!is_readable($path)) {
+                return null;
+            }
+            $handle = opendir($path);
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != "." && $entry != "..") {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
