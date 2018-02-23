@@ -5,7 +5,7 @@ Changes in 4.7.0 (upcoming)
   the Themes panel) and available as physical flat file templates for easier
   versioning, portability and installation (many many thanks, NicolasGraph).
 * Added: Support for installation on Nginx web servers.
-* Added: Support for automated installation.
+* Added: Support for automated installation from CLI.
 * Added: User-selectable column list options in tables replaces 'Show more
   detail' checkboxes. Settings remembered per device.
 * Added: Valueless attributes.
@@ -97,7 +97,7 @@ Changes in 4.7.0 (upcoming)
 * Fixed: Only update database version string if using release version.
 * Fixed: Support for other MySQL client versions (thanks, CeBe).
 * Removed: zxcvbn password strength meter.
-* Textile v3.6.
+* Textile 3.6.
 * jQuery 3.3.1.
 * PrismJS 1.11.0.
 * PHPass 0.5.
