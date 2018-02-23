@@ -542,7 +542,7 @@ namespace Textpattern\Skin {
                 if (!$notRemoved) {
                     if ($hasSubdir) {
                         foreach ($subdirPaths as $subdirPath) {
-                            if (is_dir_empty($subdirPath) && !@rmdir($subdirPath)) {
+                            if (self::isDirEmpty($subdirPath) && !@rmdir($subdirPath)) {
                                 $notRemoved[] = $subdirPath;
                             }
                         }
@@ -550,7 +550,7 @@ namespace Textpattern\Skin {
 
                     $dirPath = $this->getDirPath();
 
-                    if (is_dir_empty($dirPath) && !@rmdir($dirPath)) {
+                    if (self::isDirEmpty($dirPath) && !@rmdir($dirPath)) {
                         $notRemoved[] = $dirPath;
                     }
                 }
