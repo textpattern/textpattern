@@ -337,23 +337,6 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
-         */
-
-        public function removeEditing()
-        {
-            global $prefs;
-
-            $event = $this->getEvent();
-            $pref = 'last_'.$event.'_saved';
-
-            unset($prefs[$pref]);
-
-            return remove_pref($pref, $event);
-        }
-
-
-        /**
          * Set the skin_editing pref to the skin used by the default section.
          *
          * @return bool FALSE on error.
