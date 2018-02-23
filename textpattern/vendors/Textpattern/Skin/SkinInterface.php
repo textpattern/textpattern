@@ -96,20 +96,14 @@ namespace Textpattern\Skin {
         public function updateSections($set = null, $where = null);
 
         /**
-         * $uploaded property setter.
-         *
-         * @return object $this The current class object (chainable).
-         */
-
-        public function getInstallable();
-
-        /**
          * $uploaded property getter.
          *
-         * @return array $this->uploaded.
+         * @param  bool  $expanded Set it to false to get a simple associative
+         *                         array of skin names and their titles.
+         * @return array
          */
 
-        public function getUploaded();
+        public function getUploaded($expanded = true);
 
         /**
          * Create/CreateFrom a single skin (and its related assets)

@@ -66,11 +66,11 @@ function setup_db($cfg = array())
     $setup_path = txpath.DS.'setup';
     $setup_themes_path = $setup_path.DS.'themes';
     $Skin->setDirPath($setup_themes_path);
-    $setup_public_themes = $Skin->getInstallable();
+    $setup_public_themes = $Skin->getUploaded();
 
     $root_themes_path = txpath.DS.'..'.DS.'themes';
     $Skin->setDirPath($root_themes_path);
-    $root_public_themes = $Skin->getInstallable();
+    $root_public_themes = $Skin->getUploaded();
 
     $public_themes = array_merge($root_public_themes, $setup_public_themes);
 

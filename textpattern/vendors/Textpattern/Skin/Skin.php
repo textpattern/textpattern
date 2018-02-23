@@ -61,7 +61,7 @@ namespace Textpattern\Skin {
         /**
          * Importable skins.
          *
-         * @var array Associative array of skin names and their titles
+         * @var array Associative array of skin names and their infos from JSON files
          * @see       setUploaded(), getUploaded().
          */
 
@@ -458,53 +458,34 @@ namespace Textpattern\Skin {
                         $infos = $file->getJSONContents();
 
                         if ($infos && $infos['txp-type'] === 'textpattern-theme') {
-                            $this->uploaded[$name] = $infos['title'];
+                            $this->uploaded[$name] = $infos;
                         }
                     }
                 }
             }
 
-            return $this->getUploaded();
+            return $this;
         }
 
         /**
-         * $uploaded property setter.
-         *
-         * @return object $this The current class object (chainable).
+         * {@inheritdoc}
          */
 
-        public function getInstallable()
+        public function getUploaded($expanded = true)
         {
-            $installable = array();
-            $files = $this->getFiles(array(self::getFilename()), 1);
+            $this->uploaded !== null or $this->setUploaded();
 
-            if ($files) {
-                foreach ($files as $file) {
-                    $filePath = $file->getPath();
-                    $name = basename($file->getPath());
+            if (!$expanded) {
+                $contracted = array();
 
-                    if ($name === self::sanitize($name)) {
-                        $infos = $file->getJSONContents();
-
-                        if ($infos && $infos['txp-type'] === 'textpattern-theme') {
-                            $installable[$name] = $infos;
-                        }
-                    }
+                foreach ($this->uploaded as $name => $infos) {
+                    $contracted[$name] = $infos['title'];
                 }
+
+                return $contracted;
             }
 
-            return $installable;
-        }
-
-        /**
-         * $uploaded property getter.
-         *
-         * @return array $this->uploaded.
-         */
-
-        public function getUploaded()
-        {
-            return $this->uploaded === null ? $this->setUploaded() : $this->uploaded;
+            return $this->uploaded;
         }
 
         /**
@@ -1280,7 +1261,7 @@ namespace Textpattern\Skin {
             $dirPath = $this->getDirPath();
 
             if (is_dir($dirPath) && is_writable($dirPath)) {
-                $new = array_diff_key($this->getUploaded(), $this->getInstalled());
+                $new = array_diff_key($this->getUploaded(false), $this->getInstalled());
 
                 if ($new) {
                     asort($new);
