@@ -73,7 +73,12 @@ function setup_db($cfg = array())
     $root_public_themes = $Skin->getInstallable();
 
     $public_themes = array_merge($root_public_themes, $setup_public_themes);
-    $public_theme = empty($cfg['site']['public_theme']) ? current(array_keys($public_themes)) : $cfg['site']['public_theme'];
+
+    if (empty($cfg['site']['public_theme']) || !array_key_exists($cfg['site']['public_theme'], $public_themes)) {
+        $public_theme = current(array_keys($public_themes));
+    } else {
+        $public_theme = $cfg['site']['public_theme'];
+    }
 
     $is_from_setup = in_array($public_theme, array_keys($setup_public_themes));
 

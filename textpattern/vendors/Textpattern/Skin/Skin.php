@@ -947,7 +947,7 @@ namespace Textpattern\Skin {
                     }
 
                     $subdirPath = $this->getSubdirPath();
-                    $isDirEmpty = $this->isDirEmpty($subdirPath);
+                    $isDirEmpty = is_dir_empty($subdirPath);
 
                     if (!isset($notRemoved[$name]) && ($isDirEmpty && !@rmdir($subdirPath) || !$isDirEmpty)) {
                         $notRemoved[$name][] = $subdirPath;

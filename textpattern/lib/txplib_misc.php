@@ -7036,3 +7036,24 @@ function JSONPrettyPrint($json)
 
     return $result;
 }
+
+/**
+ * Wether a directory is empty or not.
+ *
+ * @param  string $path The directory path
+ * @return mixed        NULL if the directory is not readable (or does not exist),
+ *                      TRUE if empty, otherwise, FALSE.
+ */
+function is_dir_empty($path)
+{
+    if (!is_readable($path)) {
+        return null;
+    }
+    $handle = opendir($path);
+    while (false !== ($entry = readdir($handle))) {
+        if ($entry != "." && $entry != "..") {
+            return false;
+        }
+    }
+    return true;
+}
