@@ -478,12 +478,13 @@ namespace Textpattern\Skin {
                         $names[] = $name;
                         $parsed[] = $row['name'] = $name;
                         $parsedFiles[] = $filename;
+
                         if ($subdirField) {
                             $subdir = basename($file->getPath());
                             $subdirValid = self::parseSubdir($subdir);
 
                             if ($subdir !== $subdirValid) {
-                                $this->mergeResult($event.'_subdir_change', array($skin => array($name)));
+                                $this->mergeResult($event.'_subdir_unknown', array($skin => array($subdir.'/'.$name)));
                             }
 
                             $row[$subdirField] = $subdirValid;
