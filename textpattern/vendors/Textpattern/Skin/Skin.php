@@ -263,16 +263,18 @@ namespace Textpattern\Skin {
          * @param array Section names.
          */
 
-        protected function getSections()
-        {
-            return array_values(
-                safe_column(
-                    'name',
-                    'txp_section',
-                    $this->getEvent()." ='".doSlash($this->getName())."'"
-                )
-            );
-        }
+         protected function getSections($skin = null)
+         {
+             $skin !== null or $skin = $this->getName();
+
+             return array_values(
+                 safe_column(
+                     'name',
+                     'txp_section',
+                     $this->getEvent()." ='".doSlash($skin)."'"
+                 )
+             );
+         }
 
         /**
          * Update the txp_section table.
@@ -591,7 +593,7 @@ namespace Textpattern\Skin {
 
             if ($ready) {
                 // Update skin related sections.
-                $sections = $this->getSections();
+                $sections = $this->getSections($base);
 
                 if ($sections && !$this->updateSections()) {
                     $this->mergeResult($event.'_related_sections_update_failed', array($base => $sections));
