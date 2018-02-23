@@ -611,7 +611,7 @@ namespace Textpattern\Skin {
                 // Drops extra rows…
                 if ($sync) {
                     if (!$this->deleteExtraRows()) {
-                        $this->mergeResult($event.'_synchronizing_failed', array($skin => $notCleaned));
+                        $this->mergeResult($event.'_files_deletion_failed', array($skin => $notCleaned));
                     }
                 }
             }
@@ -683,7 +683,7 @@ namespace Textpattern\Skin {
                                 $notUnlinked = $this->deleteExtraFiles($done);
 
                                 if ($notUnlinked) {
-                                    $this->mergeResult($event.'_synchronizing_failed', array($skin => $notUnlinked));
+                                    $this->mergeResult($event.'_files_deletion_failed', array($skin => $notUnlinked));
                                 }
                             }
                         }
