@@ -478,17 +478,18 @@ namespace Textpattern\Skin {
                     if (in_array($filename, $parsedFiles)) {
                         $this->mergeResult($event.'_duplicate', array($skin => array($filename)));
                     } elseif ($subdirField && $essentialSubdir && $essentialSubdir !== basename($file->getPath())) {
-                        $this->mergeResult($event.'_wrong_subdir', array($skin => array($name.' → '.basename($file->getPath()))));
+                        $this->mergeResult($event.'_subdir_error', array($skin => array(basename($file->getPath()).'/'.$name)));
                     } else {
                         $names[] = $name;
                         $parsed[] = $row['name'] = $name;
                         $parsedFiles[] = $filename;
+
                         if ($subdirField) {
                             $subdir = basename($file->getPath());
                             $subdirValid = self::parseSubdir($subdir);
 
                             if ($subdir !== $subdirValid) {
-                                $this->mergeResult($event.'_subdir_change', array($skin => array($name)));
+                                $this->mergeResult($event.'_subdir_invalid', array($skin => array($subdir.'/'.$name)));
                             }
 
                             $row[$subdirField] = $subdirValid;
@@ -597,7 +598,7 @@ namespace Textpattern\Skin {
                     $files = $this->getFiles($filenames, self::getSubdirField() ? 1 : 0);
 
                     if (!$files) {
-                        $this->mergeResult($event.'not_found', array($skin => array($dirPath)));
+                        $this->mergeResult($event.'_not_found', array($skin => array($dirPath)));
                     }
 
                     $rows = $this->parseFiles($files);
@@ -616,7 +617,7 @@ namespace Textpattern\Skin {
                 // Drops extra rows…
                 if ($sync) {
                     if (!$this->deleteExtraRows()) {
-                        $this->mergeResult($event.'_synchronizing_failed', array($skin => $notCleaned));
+                        $this->mergeResult($event.'_files_deletion_failed', array($skin => $notCleaned));
                     }
                 }
             }
@@ -688,7 +689,7 @@ namespace Textpattern\Skin {
                                 $notUnlinked = $this->deleteExtraFiles($done);
 
                                 if ($notUnlinked) {
-                                    $this->mergeResult($event.'_synchronizing_failed', array($skin => $notUnlinked));
+                                    $this->mergeResult($event.'_files_deletion_failed', array($skin => $notUnlinked));
                                 }
                             }
                         }
