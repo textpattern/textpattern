@@ -158,7 +158,12 @@ namespace Textpattern\Skin {
         }
 
         /**
-         * {@inheritdoc}
+         * Get essential templates infos form the $essential property value.
+         *
+         * @param  string $key      $essential property key for whhich you want to get the value.
+         * @param  string $whereKey $essential property key to check against the $valueIn value.
+         * @param  array  $valueIn  Values to check against the $whereKey values.
+         * @return array            $essential property value if $key is null, filtered infos otherwise.
          */
 
         public static function getEssential(
@@ -330,23 +335,6 @@ namespace Textpattern\Skin {
 
             return set_pref($pref, $prefs[$pref] = $name, $event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
         }
-
-        /**
-         * {@inheritdoc}
-         */
-
-        public function removeEditing()
-        {
-            global $prefs;
-
-            $event = $this->getEvent();
-            $pref = 'last_'.$event.'_saved';
-
-            unset($prefs[$pref]);
-
-            return remove_pref($pref, $event);
-        }
-
 
         /**
          * Set the skin_editing pref to the skin used by the default section.
