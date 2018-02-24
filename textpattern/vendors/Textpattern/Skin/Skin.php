@@ -1594,7 +1594,7 @@ namespace Textpattern\Skin {
                     $input = fInput($type, $field, $current, '', '', '', INPUT_REGULAR, '', $event.'_'.$field);
                 }
 
-                $content .= inputLabel($event.'_'.$field, $input, $event.'_'.$field);
+                $content .= inputLabel($event.'_'.$field, $input, $event.'_'.$field, $event.'_'.$field);
             }
 
             $content .= pluggable_ui($event.'_ui', 'extend_detail_form', '', $rs)

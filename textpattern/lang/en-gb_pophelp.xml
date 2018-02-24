@@ -936,6 +936,19 @@
     </group>
 
     <group id="skin" title="Themes panel">
+        <item id="skin_author" title="Theme author"><![CDATA[
+<h2>Theme author</h2>
+<p>The author(s) of the theme (optional).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Theme website"><![CDATA[
+<h2>Theme website</h2>
+<p>The URL from where the latest version of this theme can be found (optional).</p>
+        ]]></item>
+        <item id="skin_description" title="Theme description"><![CDATA[
+<h2>Theme description</h2>
+<p>A brief summary of the theme design/layout can be provided (optional).</p>
+<p>The theme description is limited to a maximum of 255 characters.</p>
+        ]]></item>
         <item id="skin_import" title="Import theme"><![CDATA[
 <h2>Import theme</h2>
 <p>This form allows you to import a theme into the Textpattern database from your themes directory.</p>
@@ -943,13 +956,27 @@
 <p>While pages and forms should use the <code>.txp</code> extension, stylesheets are expected to be <code>.css</code> files. Forms should also be grouped by type into dedicated directories. Textpattern will create any missing essential templates on import.</p>
 <p>See the <a rel="external" target="_blank" href="https://docs.textpattern.io/themes/">themes documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for further information on creating, installing and using themes within Textpattern CMS.</p>
         ]]></item>
-        <item id="skin_synchronize" title="Synchronise template/file lists"><![CDATA[
+        <item id="skin_name" title="Theme name"><![CDATA[
+<h2>Theme name</h2>
+<p>A theme’s name is used for the directory name of the theme and other technical purposes (required).</p>
+<p>The name shouldn’t contain any special characters or spaces.</p>
+        ]]></item>
+        <item id="skin_synchronize" title="Synchronize template/file lists"><![CDATA[
 <h2>Synchronise template/file lists</h2>
 <p>If checked, this option allows you to synchronise the template-related database and files.</p>
 <p><strong>Note:</strong> Synchronization is mainly related to the obsolete template rows or files deletion which is, in most cases, a destructive and permanent process. Please use with caution.</p>
 <p>When this option is selected, on override/re-import each template which is not part of the processed import will be deleted from the database while on export, template files will be deleted if they are not part of the processed export.</p>
 <p>If, for any reason, import or export fails for a defined template it would not be considered as part of the current process and will be deleted from the database or the theme directory.</p>
 <p>On deletion each dropped template-related file should be deleted. However, themes-related directories and their subdirectories will not be deleted if any other files exist within them.</p>
+        ]]></item>
+        <item id="skin_title" title="Theme title"><![CDATA[
+<h2>Theme title</h2>
+<p>A theme’s descriptive title, used to identify the theme within Textpattern’s panels (required).</p<
+<p>The title can contain special characters and spaces.</p>
+        ]]></item>
+        <item id="skin_version" title="Theme version"><![CDATA[
+<h2>Theme version</h2>
+<p>The version number of the installed version of the theme (optional).</p>
         ]]></item>
     </group>
 </help>
