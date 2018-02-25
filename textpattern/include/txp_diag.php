@@ -162,9 +162,15 @@ function check_tables($tables, $type = 'FAST', $warnings = 0)
  * @access private
  */
 
-function diag_msg_wrap($msg, $type = 'error')
+function diag_msg_wrap($msg, $type = 'e')
 {
-    return span($msg, array('class' => $type));
+    $classMap = array(
+        'i' => 'information',
+        'e' => 'error',
+        'w' => 'warning',
+    );
+
+    return span($msg, array('class' => $classMap[$type]));
 }
 
 /**
