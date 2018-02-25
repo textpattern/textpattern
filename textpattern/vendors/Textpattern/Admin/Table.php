@@ -69,15 +69,16 @@ class Table
         $event = $this->event;
         $out = '';
         extract($data + array(
-            'heading' => 'tab_'.$event,
-            'total' => 0,
+            'heading'  => 'tab_'.$event,
+            'total'    => 0,
             'criteria' => 1,
-            'html_id' => 'txp-list-container'
+            'html_id'  => 'txp-list-container',
+            'help'     => null,
         ));
 
         $out .= n.'<div class="txp-layout">'.
             n.tag(
-                hed(gTxt($heading), 1, array('class' => 'txp-heading')),
+                hed(gTxt($heading).($help ? popHelp($help) : ''), 1, array('class' => 'txp-heading')),
                 'div', array('class' => 'txp-layout-4col-alt')
             ).n;
 

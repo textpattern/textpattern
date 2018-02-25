@@ -1201,7 +1201,7 @@ namespace Textpattern\Skin {
             $table = \Txp::get('Textpattern\Admin\Table');
 
             return $table->render(
-                compact('total', 'criteria') + array('html_id' => false),
+                compact('total', 'criteria') + array('html_id' => false, 'help' => 'skin_overview'),
                 $this->getSearchBlock($search),
                 '',
                 $this->getCreateBlock(). // Create block is here to be loaded async.
