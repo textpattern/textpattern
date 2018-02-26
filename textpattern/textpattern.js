@@ -1205,20 +1205,19 @@ function txpAsyncLink(event, txpEvent)
 jQuery.fn.txpDialog = function (options) {
     options = $.extend({
         autoOpen: false,
-        buttons : [
-            {
-                text : textpattern.gTxt('ok'),
-                click: function () {
-                    // callbacks?
+        buttons: [{
+            text: textpattern.gTxt('ok'),
+            click: function () {
+                // callbacks?
 
-                    if ($(this).is('form')) {
-                        $(this).submit();
-                    }
-
-                    $(this).dialog('close');
+                if ($(this).is('form')) {
+                    $(this).submit();
                 }
-        }
-        ]
+
+                $(this).dialog('close');
+            }
+        }],
+        width: 350
     }, options);
 
     this.dialog(options);
@@ -2119,8 +2118,9 @@ textpattern.Route.add('', function () {
             $pophelp = $('<div id="pophelp_dialog"></div>');
             $('body').append($pophelp);
             $pophelp.dialog({
-                dialogClass: 'txp-tagbuilder-container',    // FIXME: UI, need pophelp-class
+                dialogClass: 'txp-dialog-container',
                 autoOpen: false,
+                width: 350,
                 title: textpattern.gTxt('help'),
                 focus: function (ev, ui) {
                     $(ev.target).closest('.ui-dialog').focus();
