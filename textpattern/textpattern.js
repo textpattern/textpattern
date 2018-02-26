@@ -1217,7 +1217,7 @@ jQuery.fn.txpDialog = function (options) {
                 $(this).dialog('close');
             }
         }],
-        width: 350
+        width: 440
     }, options);
 
     this.dialog(options);
@@ -2120,7 +2120,7 @@ textpattern.Route.add('', function () {
             $pophelp.dialog({
                 dialogClass: 'txp-dialog-container',
                 autoOpen: false,
-                width: 350,
+                width: 440,
                 title: textpattern.gTxt('help'),
                 focus: function (ev, ui) {
                     $(ev.target).closest('.ui-dialog').focus();
