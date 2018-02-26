@@ -2246,47 +2246,102 @@ textpattern.Route.add('section', function ()
     });
 });
 
+// Plugin help panel.
+
+textpattern.Route.add('plugin.plugin_help', function ()
+{
+    var $helpWrap = $(document.body).children('main');
+    var $helpTxt = $helpWrap.children('.txp-layout-textbox');
+    var $head = $helpTxt.children(':first');
+    var $sectHeads = $helpTxt.children('h2');
+    var $intro = $head.nextUntil($sectHeads) || '';
+
+    if (   $head.prop("tagName") != 'H1'
+        || $sectHeads.length < 2
+        || $intro.length > 1
+        || ($intro.length == 1 && $intro.first().prop("tagName") != 'P')
+        || $helpTxt.find('script', 'style', '[style]').length
+    ) {
+        return;
+    }
+
+    $helpTxt.detach();
+
+    var $sects = $();
+    var tabs = '';
+
+    $sectHeads.each(function(i, elm) {
+        var $elm = $(elm);
+        var sectTitle = $elm.html();
+        var sectName = sectTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
+        var sectId = 'plugin_help_section_' + sectName;
+
+        var $sect = $elm.nextUntil(elm).addBack().wrapAll('<section class="txp-prefs-group" id="' + sectId + '" aria-labelledby="' + sectId + '-label" />').parent();
+
+        $sects = $sects.add($sect);
+
+        tabs += '<li><a data-txp-pane="' + sectName + '" href="#' + sectId + '" >' + sectTitle + '</a></li>';
+    });
+
+    $sects = $sects.wrapAll('<div class="txp-layout-4col-2span" />').parent();
+    tabs = '<div class="txp-layout-4col-alt"><section class="txp-details" id="all_sections" aria-labelledby="all_sections-label"><h3 id="all_sections-label">Table of contents</h3><div role="group"><ul class="switcher-list">' + tabs + '</ul></div></section></div>';
+
+    $head.addClass('txp-heading').wrap('<div class="txp-layout-4col-3span" style="margin-right: 25%" />').after($intro);
+    $sects.before(tabs);
+    $helpTxt.wrap('<div class="txp-layout" />').contents().unwrap().parent().appendTo($helpWrap);
+    $helpWrap.find('pre, code').not('pre code').addClass('language-markup');
+});
+
 // All panels?
 
 textpattern.Route.add('', function () {
     // Pane states
-    var prefsGroup = $('form:has(.switcher-list li a[data-txp-pane])');
+    var hasTabs = $('.txp-layout:has(.switcher-list li a[data-txp-pane])');
 
-    if (prefsGroup.length == 0) {
+    if (hasTabs.length == 0) {
         return;
     }
 
-    var prefTabs = prefsGroup.find('.switcher-list li');
-    var $switchers = prefTabs.children('a[data-txp-pane]');
-    var $section = window.location.hash ? prefsGroup.find($(window.location.hash).closest('section')) : [];
+    var tabs = hasTabs.find('.switcher-list li');
+    var $switchers = tabs.children('a[data-txp-pane]');
+    var $section = window.location.hash ? hasTabs.find($(window.location.hash).closest('section')) : [];
 
-    prefTabs.on('click focus', function (ev) {
+    if (textpattern.event === 'plugin') {
+        var nameParam = new RegExp('[\?&]name=([^&#]*)').exec(window.location.href);
+        var dataItem = nameParam[1];
+    } else {
+        dataItem = textpattern.event;
+    }
+
+    tabs.on('click focus', function (ev) {
         var me = $(this).children('a[data-txp-pane]');
         var data = new Object;
 
-        data[textpattern.event] = {'tab':me.data('txp-pane')};
+        data[dataItem] = {'tab':me.data('txp-pane')};
         textpattern.storage.update(data);
     });
 
     if ($section.length) {
         selectedTab = $section.index();
         $switchers.eq(selectedTab).click();
-    } else if (textpattern.storage.data[textpattern.event] !== undefined && textpattern.storage.data[textpattern.event]['tab'] !== undefined) {
+    } else if (textpattern.storage.data[dataItem] !== undefined && textpattern.storage.data[dataItem]['tab'] !== undefined) {
         $switchers.each(function (i, elm) {
-            if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]['tab']) {
+            if ($(elm).data('txp-pane') == textpattern.storage.data[dataItem]['tab']) {
                 selectedTab = i;
             }
         });
+    } else {
+        selectedTab = 0;
     }
 
     if (typeof selectedTab === 'undefined') {
         selectedTab = 0;
     }
 
-    prefsGroup.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
-    prefsGroup.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
-    prefTabs.removeClass('ui-state-default ui-corner-top');
-    prefsGroup.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
+    hasTabs.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
+    hasTabs.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
+    tabs.removeClass('ui-state-default ui-corner-top');
+    hasTabs.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
 });
 
 // Initialize JavaScript.
