@@ -200,7 +200,7 @@ function prefs_list($message = '')
             $mainEvent = $eventParts[0];
             $subEvent = isset($eventParts[1]) ? $eventParts[1] : '';
 
-            if (!has_privs('prefs.'.$mainEvent)) {
+            if (!has_privs('prefs.'.$a['event'])) {
                 continue;
             }
 
