@@ -461,13 +461,20 @@ function doDiagnostics()
     $langs = array_unique(array('en', $thisLang));
     $pfcStrings = array();
     $langCounter = 0;
+    $txpLang = Txp::get('\Textpattern\L10n\Lang');
 
     foreach ($langs as $lang) {
         // Overwrite the lang strings to English, then revert on second pass.
         // This allows the pre-flight check to be displayed in the local
         // language above the fold, and in English in the textarea.
-        load_lang($lang, $event);
+        $diagPack = $txpLang->getPack($lang, $event);
+        $diagStrings = array();
 
+        foreach ($diagPack as $key => $packBlock) {
+            $diagStrings[$key] = $packBlock['data'];
+        }
+
+        $txpLang->setPack($diagStrings, true);
         $not_readable = array();
 
         foreach ($notReadable as $strings) {
