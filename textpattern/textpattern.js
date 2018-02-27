@@ -2276,13 +2276,21 @@ textpattern.Route.add('plugin.plugin_help', function ()
         tabs += '<li><a data-txp-pane="intro" href="#intro" >' + textpattern.gTxt('tab_presentation') + '</a></li>';
     }
 
-    $sectHeads.each(function(i, elm) {
-        var $elm = $(elm);
-        var sectTitle = $elm.html();
+    $sectHeads.each(function(i, sectHead) {
+        var $sectHead = $(sectHead);
+        var $sectTitle = $sectHead.clone();
+        var $secTitleAnchors = $sectTitle.find('a');
+
+        $secTitleAnchors.each(function(i, anchor) {
+            $anchor = $(anchor);
+            $anchor.replaceWith($anchor.text()).html();
+        });
+
+        var sectTitle = $sectTitle.html();
         var sectName = sectTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
         var sectId = 'plugin_help_section_' + sectName;
 
-        var $sect = $elm.nextUntil(elm).addBack().wrapAll('<section class="txp-prefs-group" id="' + sectId + '" aria-labelledby="' + sectId + '-label" />').parent();
+        var $sect = $sectHead.nextUntil(sectHead).addBack().wrapAll('<section class="txp-prefs-group" id="' + sectId + '" aria-labelledby="' + sectId + '-label" />').parent();
 
         $sects = $sects.add($sect);
 
