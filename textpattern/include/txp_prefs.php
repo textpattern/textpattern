@@ -259,7 +259,7 @@ function prefs_list($message = '')
                 $a['name'],
                 pref_func($a['html'], $a['name'], $a['val'], $size),
                 $label,
-                array($help, 'instructions_'.$help),
+                array($help, 'instructions_'.$a['name']),
                 array(
                     'class' => 'txp-form-field',
                     'id'    => 'prefs-'.$a['name'],
