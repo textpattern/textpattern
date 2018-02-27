@@ -2254,12 +2254,11 @@ textpattern.Route.add('plugin.plugin_help', function ()
     var $helpTxt = $helpWrap.children('.txp-layout-textbox');
     var $head = $helpTxt.children(':first');
     var $sectHeads = $helpTxt.children('h2');
-    var $intro = $head.nextUntil($sectHeads) || '';
+    var $intro = $head.nextUntil($sectHeads);
 
     if (   $head.prop("tagName") != 'H1'
-        || $sectHeads.length < 2
-        || $intro.length > 1
-        || ($intro.length == 1 && $intro.first().prop("tagName") != 'P')
+        ||  $intro.length && !$sectHeads.length
+        || !$intro.length && $sectHeads.length < 2
         || $helpTxt.find('h1').length > 1
         || $helpTxt.find('script, style, [style]').length
     ) {
@@ -2270,6 +2269,12 @@ textpattern.Route.add('plugin.plugin_help', function ()
 
     var $sects = $();
     var tabs = '';
+
+    if ($intro) {
+        $intro = $intro.wrapAll('<section class="txp-prefs-group" id="intro" aria-labelledby="intro-label" />').parent()
+        $sects = $sects.add($intro);
+        tabs += '<li><a data-txp-pane="intro" href="#intro" >' + textpattern.gTxt('tab_presentation') + '</a></li>';
+    }
 
     $sectHeads.each(function(i, elm) {
         var $elm = $(elm);
@@ -2285,9 +2290,9 @@ textpattern.Route.add('plugin.plugin_help', function ()
     });
 
     $sects = $sects.wrapAll('<div class="txp-layout-4col-2span" />').parent();
-    tabs = '<div class="txp-layout-4col-alt"><section class="txp-details" id="all_sections" aria-labelledby="all_sections-label"><h3 id="all_sections-label">Table of contents</h3><div role="group"><ul class="switcher-list">' + tabs + '</ul></div></section></div>';
+    tabs = '<div class="txp-layout-4col-alt"><section class="txp-details" id="all_sections" aria-labelledby="all_sections-label"><h3 id="all_sections-label">' + textpattern.gTxt('all_preferences') + '</h3><div role="group"><ul class="switcher-list">' + tabs + '</ul></div></section></div>';
 
-    $head.addClass('txp-heading').wrap('<div class="txp-layout-4col-3span" style="margin-right: 25%" />').after($intro);
+    $head.addClass('txp-heading txp-heading-tight').wrap('<div class="txp-layout-1col"></div>');
     $sects.before(tabs);
     $helpTxt.wrap('<div class="txp-layout" />').contents().unwrap().parent().appendTo($helpWrap);
     $helpWrap.find('pre, code').not('pre code').addClass('language-markup');
