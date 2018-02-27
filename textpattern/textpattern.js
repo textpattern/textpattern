@@ -2260,6 +2260,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
         || $sectHeads.length < 2
         || $intro.length > 1
         || ($intro.length == 1 && $intro.first().prop("tagName") != 'P')
+        || $helpTxt.find('h1').length > 1
         || $helpTxt.find('script, style, [style]').length
     ) {
         return;
