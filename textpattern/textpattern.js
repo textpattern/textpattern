@@ -2270,7 +2270,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
     var $sects = $();
     var tabs = '';
 
-    if ($intro) {
+    if ($intro.length) {
         $intro = $intro.wrapAll('<section class="txp-prefs-group" id="intro" aria-labelledby="intro-label" />').parent()
         $sects = $sects.add($intro);
         tabs += '<li><a data-txp-pane="intro" href="#intro" >' + textpattern.gTxt('tab_presentation') + '</a></li>';
