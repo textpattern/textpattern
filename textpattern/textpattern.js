@@ -2290,7 +2290,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
     });
 
     $sects = $sects.wrapAll('<div class="txp-layout-4col-2span" />').parent();
-    tabs = '<div class="txp-layout-4col-alt"><section class="txp-details" id="all_sections" aria-labelledby="all_sections-label"><h3 id="all_sections-label">' + textpattern.gTxt('all_preferences') + '</h3><div role="group"><ul class="switcher-list">' + tabs + '</ul></div></section></div>';
+    tabs = '<div class="txp-layout-4col-alt"><section class="txp-details" id="all_sections" aria-labelledby="all_sections-label"><h3 id="all_sections-label">' + textpattern.gTxt('plugin_help') + '</h3><div role="group"><ul class="switcher-list">' + tabs + '</ul></div></section></div>';
 
     $head.addClass('txp-heading txp-heading-tight').wrap('<div class="txp-layout-1col"></div>');
     $sects.before(tabs);
