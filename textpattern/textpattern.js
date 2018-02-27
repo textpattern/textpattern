@@ -2278,30 +2278,23 @@ textpattern.Route.add('plugin.plugin_help', function ()
 
     $sectHeads.each(function(i, sectHead) {
         var $sectHead = $(sectHead);
-        var $sectTitle = $sectHead.clone();
-        var $secTitleAnchors = $sectTitle.find('a');
+        var $tabHead = $sectHead.clone();
 
-        $secTitleAnchors.each(function(i, anchor) {
-            $anchor = $(anchor);
-            $anchor.replaceWith($anchor.text()).html();
+        $tabHead.find('a').each(function(i, anchor) {
+            $(anchor).contents().unwrap();
         });
 
-        var sectTitle = $sectTitle.html();
-        var sectName = sectTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
-        var sectId = 'plugin_help_section_' + sectName;
+        var tabTitle = $tabHead.html();
+        var tabName = tabTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
+        var sectId = 'plugin_help_section_' + tabName;
 
-        var $sect = $sectHead.nextUntil(sectHead).addBack().wrapAll('<section class="txp-prefs-group" id="' + sectId + '" aria-labelledby="' + sectId + '-label" />').parent();
-
-        $sects = $sects.add($sect);
-
-        tabs += '<li><a data-txp-pane="' + sectName + '" href="#' + sectId + '" >' + sectTitle + '</a></li>';
+        $sects = $sects.add($sectHead.nextUntil(sectHead).addBack().wrapAll('<section class="txp-prefs-group" id="' + sectId + '" aria-labelledby="' + sectId + '-label" />').parent());
+        tabs += '<li><a data-txp-pane="' + tabName + '" href="#' + sectId + '" >' + tabTitle + '</a></li>';
     });
 
-    $sects = $sects.wrapAll('<div class="txp-layout-4col-2span" />').parent();
-    tabs = '<div class="txp-layout-4col-alt"><section class="txp-details" id="all_sections" aria-labelledby="all_sections-label"><h3 id="all_sections-label">' + textpattern.gTxt('plugin_help') + '</h3><div role="group"><ul class="switcher-list">' + tabs + '</ul></div></section></div>';
-
     $head.addClass('txp-heading txp-heading-tight').wrap('<div class="txp-layout-1col"></div>');
-    $sects.before(tabs);
+    $sects.wrapAll('<div class="txp-layout-4col-2span" />');
+    $sects.parent().before('<div class="txp-layout-4col-alt"><section class="txp-details" id="all_sections" aria-labelledby="all_sections-label"><h3 id="all_sections-label">' + textpattern.gTxt('plugin_help') + '</h3><div role="group"><ul class="switcher-list">' + tabs + '</ul></div></section></div>');
     $helpTxt.wrap('<div class="txp-layout" />').contents().unwrap().parent().appendTo($helpWrap);
     $helpWrap.find('pre, code').not('pre code').addClass('language-markup');
 });
