@@ -396,10 +396,10 @@ function step_getTxpLogin()
     $public_themes_class = Txp::get('Textpattern\Skin\Skin');
 
     $public_themes_class->setDirPath(txpath.DS.'..'.DS.'themes');
-    $vals = $public_themes_class->getUploaded();
+    $vals = $public_themes_class->getUploaded(false);
 
     $public_themes_class->setDirPath(txpath.DS.'setup'.DS.'themes');
-    $vals = array_merge($public_themes_class->getUploaded(), $vals);
+    $vals = array_merge($public_themes_class->getUploaded(false), $vals);
 
     $public_theme_name = (empty($cfg['site']['public_theme']) ? 'four-point-seven' : $cfg['site']['public_theme']);
 

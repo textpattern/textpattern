@@ -66,14 +66,19 @@ function setup_db($cfg = array())
     $setup_path = txpath.DS.'setup';
     $setup_themes_path = $setup_path.DS.'themes';
     $Skin->setDirPath($setup_themes_path);
-    $setup_public_themes = $Skin->getInstallable();
+    $setup_public_themes = $Skin->getUploaded();
 
     $root_themes_path = txpath.DS.'..'.DS.'themes';
     $Skin->setDirPath($root_themes_path);
-    $root_public_themes = $Skin->getInstallable();
+    $root_public_themes = $Skin->getUploaded();
 
     $public_themes = array_merge($root_public_themes, $setup_public_themes);
-    $public_theme = empty($cfg['site']['public_theme']) ? current(array_keys($public_themes)) : $cfg['site']['public_theme'];
+
+    if (empty($cfg['site']['public_theme']) || !array_key_exists($cfg['site']['public_theme'], $public_themes)) {
+        $public_theme = current(array_keys($public_themes));
+    } else {
+        $public_theme = $cfg['site']['public_theme'];
+    }
 
     $is_from_setup = in_array($public_theme, array_keys($setup_public_themes));
 

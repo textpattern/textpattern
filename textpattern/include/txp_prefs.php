@@ -187,7 +187,7 @@ function prefs_list($message = '')
         join(" AND ", $sql)." ORDER BY sort_value = 0, sort_value, event, position"
     );
 
-    $last_event = null;
+    $last_event = $last_sub_event = null;
     $out = array();
     $build = array();
     $groupOut = array();
@@ -196,11 +196,15 @@ function prefs_list($message = '')
         $pophelp_keys = \Txp::get('\Textpattern\Module\Help\HelpAdmin')->pophelp_keys('prefs');
 
         while ($a = nextRow($rs)) {
-            if (!has_privs('prefs.'.$a['event'])) {
+            $eventParts = explode('.', $a['event']);
+            $mainEvent = $eventParts[0];
+            $subEvent = isset($eventParts[1]) ? $eventParts[1] : '';
+
+            if (!has_privs('prefs.'.$mainEvent)) {
                 continue;
             }
 
-            if ($a['event'] !== $last_event) {
+            if ($mainEvent !== $last_event) {
                 if ($last_event !== null) {
                     $build[] = tag(
                         hed(gTxt($last_event), 2, array('id' => 'prefs_group_'.$last_event.'-label')).
@@ -221,7 +225,7 @@ function prefs_list($message = '')
                         'li');
                 }
 
-                $last_event = $a['event'];
+                $last_event = $mainEvent;
                 $out = array();
             }
 
@@ -246,11 +250,16 @@ function prefs_list($message = '')
                 $size = '';
             }
 
+            if ($subEvent !== '' && $last_sub_event !== $subEvent) {
+                $out[] = hed(gTxt($subEvent), 3);
+                $last_sub_event = $subEvent;
+            }
+
             $out[] = inputLabel(
                 $a['name'],
                 pref_func($a['html'], $a['name'], $a['val'], $size),
                 $label,
-                $help,
+                array($help, 'instructions_'.$help),
                 array(
                     'class' => 'txp-form-field',
                     'id'    => 'prefs-'.$a['name'],
