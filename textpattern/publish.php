@@ -433,11 +433,12 @@ function preText($s, $prefs)
             $rs = safe_row('*', 'txp_file', "id = ".intval($out['id'])." AND status = ".STATUS_LIVE." AND created <= ".now('created').$fn);
         }
 
-        return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404, 'status' => 404);
+        $is_404 = $is_404 || empty($rs);
+        $out = array_merge($out, $is_404 ? array('id' => '', 'file_error' => 404, 'status' => 404) : $rs);
     }
 
     // Allow article preview.
-    if (gps('txpreview')) {
+    elseif (gps('txpreview')) {
         doAuth();
 
         if (!has_privs('article.preview')) {
@@ -488,7 +489,7 @@ function preText($s, $prefs)
         $is_article_list = true;
     }
 
-    if (!$is_404 && $id) {
+    if (!$is_404 && $id && $out['s'] !== 'file_download') {
         $a = safe_row(
             "*, UNIX_TIMESTAMP(Posted) AS uPosted, UNIX_TIMESTAMP(Expires) AS uExpires, UNIX_TIMESTAMP(LastMod) AS uLastMod",
             'textpattern',
@@ -510,8 +511,8 @@ function preText($s, $prefs)
 
     // By this point we should know the section, so grab its page and CSS.
     // Logged-in users with enough privs use the skin they're currently editing.
-    if (txpinterface != 'css') {
-        $s = empty($out['s']) ? 'default' : $out['s'];
+    if (txpinterface != 'css' || $parse_css) {
+        $s = empty($out['s']) || $is_404 ? 'default' : $out['s'];
         $rs = safe_row("skin, page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
 
         $userInfo = is_logged_in();
