@@ -239,24 +239,21 @@ namespace Textpattern\Skin {
         {
             $contents = json_decode(file_get_contents($this->getFilePath()), true);
 
-            extract($contents);
+            $contents === null or $contents = $this->parseInfos($contents);
 
-            return $this->parseInfos($title, $version, $description, $author, $author_uri);
+            return $contents;
         }
 
         /**
          * Parse a skin related infos.
          *
-         * @return array Associative array of fields and their related values / fallback values.
+         * @return array $infos Associative array of fields and their related values / fallback values.
          */
 
-        protected function parseInfos(
-            $title = null,
-            $version = null,
-            $description = null,
-            $author = null,
-            $author_uri = null
-        ) {
+        protected function parseInfos($infos)
+        {
+            extract($infos);
+
             !empty($title) or $title = ucfirst($this->getName());
             !empty($version) or $version = gTxt('unknown');
             !empty($description) or $description = '';
@@ -467,9 +464,7 @@ namespace Textpattern\Skin {
                         $infos = $file->getJSONContents();
 
                         if ($infos && $infos['txp-type'] === 'textpattern-theme') {
-                            extract($infos);
-
-                            $this->uploaded[$name] = $this->setName($name)->parseInfos($title, $version, $description, $author, $author_uri);
+                            $this->uploaded[$name] = $this->setName($name)->parseInfos($infos);
                         }
                     }
                 }

@@ -336,6 +336,7 @@ function preText($s, $prefs)
                     // AuthorID gets resolved from Name further down.
 
                 case urldecode(strtolower(urlencode(gTxt('file_download')))):
+                case 'file_download':
                     $out['s'] = 'file_download';
                     $out['id'] = (!empty($u2)) ? $u2 : '';
                     $out['filename'] = (!empty($u3)) ? $u3 : '';
