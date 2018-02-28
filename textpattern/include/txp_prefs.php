@@ -200,7 +200,7 @@ function prefs_list($message = '')
             $mainEvent = $eventParts[0];
             $subEvent = isset($eventParts[1]) ? $eventParts[1] : '';
 
-            if (!has_privs('prefs.'.$mainEvent)) {
+            if (!has_privs('prefs.'.$a['event'])) {
                 continue;
             }
 
@@ -259,7 +259,7 @@ function prefs_list($message = '')
                 $a['name'],
                 pref_func($a['html'], $a['name'], $a['val'], $size),
                 $label,
-                array($help, 'instructions_'.$help),
+                array($help, 'instructions_'.$a['name']),
                 array(
                     'class' => 'txp-form-field',
                     'id'    => 'prefs-'.$a['name'],

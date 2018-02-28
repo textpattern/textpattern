@@ -239,22 +239,31 @@ namespace Textpattern\Skin {
         {
             $contents = json_decode(file_get_contents($this->getFilePath()), true);
 
-            if ($contents !== null) {
-                extract($contents);
+            extract($contents);
 
-                !empty($title) or $title = ucfirst($this->getName());
-                !empty($version) or $version = gTxt('unknown');
-                !empty($description) or $description = '';
-                !empty($author) or $author = gTxt('unknown');
-                !empty($author_uri) or $author_uri = '';
+            return $this->parseInfos($title, $version, $description, $author, $author_uri);
+        }
 
-                $contents = array_merge(
-                    $contents,
-                    compact('title', 'version', 'description', 'author', 'author_uri')
-                );
-            }
+        /**
+         * Parse a skin related infos.
+         *
+         * @return array Associative array of fields and their related values / fallback values.
+         */
 
-            return $contents;
+        protected function parseInfos(
+            $title = null,
+            $version = null,
+            $description = null,
+            $author = null,
+            $author_uri = null
+        ) {
+            !empty($title) or $title = ucfirst($this->getName());
+            !empty($version) or $version = gTxt('unknown');
+            !empty($description) or $description = '';
+            !empty($author) or $author = gTxt('unknown');
+            !empty($author_uri) or $author_uri = '';
+
+            return compact('title', 'version', 'description', 'author', 'author_uri');
         }
 
         /**
@@ -458,7 +467,9 @@ namespace Textpattern\Skin {
                         $infos = $file->getJSONContents();
 
                         if ($infos && $infos['txp-type'] === 'textpattern-theme') {
-                            $this->uploaded[$name] = $infos;
+                            extract($infos);
+
+                            $this->uploaded[$name] = $this->setName($name)->parseInfos($title, $version, $description, $author, $author_uri);
                         }
                     }
                 }
