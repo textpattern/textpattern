@@ -2260,7 +2260,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
         ||  $intro.length && !$sectHeads.length
         || !$intro.length && $sectHeads.length < 2
         || $helpTxt.find('h1').length > 1
-        || $helpTxt.find('script, style, [class]:not(.caps), [style]').length
+        || $helpTxt.find('script, style, [style], [class^="txp-layout"], [class*=" txp-layout"], [class^="txp-grid"], [class*=" txp-grid"]').length
     ) {
         return;
     }
