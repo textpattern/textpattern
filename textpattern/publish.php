@@ -511,7 +511,7 @@ function preText($s, $prefs)
 
     // By this point we should know the section, so grab its page and CSS.
     // Logged-in users with enough privs use the skin they're currently editing.
-    if (txpinterface != 'css' || $parse_css) {
+    if (txpinterface != 'css' || get_pref('parse_css')) {
         $s = empty($out['s']) || $is_404 ? 'default' : $out['s'];
         $rs = safe_row("skin, page, css", "txp_section", "name = '".doSlash($s)."' LIMIT 1");
 
