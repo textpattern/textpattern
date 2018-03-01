@@ -1,7 +1,7 @@
 {
     "site": {
         "language_code": "en",
-        "public_url": "",
+        "public_url": "www.example.com",
         "admin_theme": "",
         "public_theme": "",
         "content_directory": ""
