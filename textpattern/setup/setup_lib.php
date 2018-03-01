@@ -34,7 +34,7 @@ function setup_db($cfg = array())
         $siteurl = 'http://'.$siteurl;
     }
 
-    if (!isset($cfg['site']['admin_url'])) {
+    if (empty($cfg['site']['admin_url'])) {
         $adminurl = $siteurl.'/textpattern';
     } else {
         $adminurl = rtrim(@$cfg['site']['admin_url'], '/');
