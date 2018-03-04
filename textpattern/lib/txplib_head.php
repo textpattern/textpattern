@@ -82,6 +82,8 @@ function pagetop($pagetitle = '', $message = '')
     }
 
     gTxtScript(array(
+        'plugin_help',
+        'tab_presentation',
         'are_you_sure',
         'cookies_must_be_enabled',
         'form_submission_error',

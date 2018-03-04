@@ -2246,47 +2246,109 @@ textpattern.Route.add('section', function ()
     });
 });
 
+// Plugin help panel.
+
+textpattern.Route.add('plugin.plugin_help', function ()
+{
+    var $helpWrap = $(document.body).children('main');
+    var $helpTxt = $helpWrap.children('.txp-layout-textbox');
+    var $head = $helpTxt.children(':first');
+    var $sectHeads = $helpTxt.children('h2');
+    var $intro = $head.nextUntil($sectHeads);
+
+    if (   $head.prop("tagName") != 'H1'
+        ||  $intro.length && !$sectHeads.length
+        || !$intro.length && $sectHeads.length < 2
+        || $helpTxt.find('h1').length > 1
+        || $helpTxt.find('script, style, [style], [class^="txp-layout"], [class*=" txp-layout"], [class^="txp-grid"], [class*=" txp-grid"]').length
+    ) {
+        return;
+    }
+
+    $helpTxt.detach();
+
+    var $sects = $();
+    var tabs = '';
+
+    if ($intro.length) {
+        $intro = $intro.wrapAll('<section class="txp-prefs-group" id="intro" aria-labelledby="intro-label" />').parent()
+        $sects = $sects.add($intro);
+        tabs += '<li><a data-txp-pane="intro" href="#intro" >' + textpattern.gTxt('tab_presentation') + '</a></li>';
+    }
+
+    $sectHeads.each(function(i, sectHead) {
+        var $sectHead = $(sectHead);
+        var $tabHead = $sectHead.clone();
+
+        $tabHead.find('a').each(function(i, anchor) {
+            $(anchor).contents().unwrap();
+        });
+
+        var tabTitle = $tabHead.html();
+        var tabName = tabTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
+        var sectId = 'plugin_help_section_' + tabName;
+
+        $sects = $sects.add($sectHead.nextUntil(sectHead).addBack().wrapAll('<section class="txp-prefs-group" id="' + sectId + '" aria-labelledby="' + sectId + '-label" />').parent());
+        tabs += '<li><a data-txp-pane="' + tabName + '" href="#' + sectId + '" >' + tabTitle + '</a></li>';
+    });
+
+    $head.addClass('txp-heading txp-heading-tight').wrap('<div class="txp-layout-1col"></div>');
+    $sects.wrapAll('<div class="txp-layout-4col-2span" />');
+    $sects.parent().before('<div class="txp-layout-4col-alt"><section class="txp-details" id="all_sections" aria-labelledby="all_sections-label"><h3 id="all_sections-label">' + textpattern.gTxt('plugin_help') + '</h3><div role="group"><ul class="switcher-list">' + tabs + '</ul></div></section></div>');
+    $helpTxt.wrap('<div class="txp-layout" />').contents().unwrap().parent().appendTo($helpWrap);
+    $helpWrap.find('pre, code').not('pre code').addClass('language-markup');
+});
+
 // All panels?
 
 textpattern.Route.add('', function () {
     // Pane states
-    var prefsGroup = $('form:has(.switcher-list li a[data-txp-pane])');
+    var hasTabs = $('.txp-layout:has(.switcher-list li a[data-txp-pane])');
 
-    if (prefsGroup.length == 0) {
+    if (hasTabs.length == 0) {
         return;
     }
 
-    var prefTabs = prefsGroup.find('.switcher-list li');
-    var $switchers = prefTabs.children('a[data-txp-pane]');
-    var $section = window.location.hash ? prefsGroup.find($(window.location.hash).closest('section')) : [];
+    var tabs = hasTabs.find('.switcher-list li');
+    var $switchers = tabs.children('a[data-txp-pane]');
+    var $section = window.location.hash ? hasTabs.find($(window.location.hash).closest('section')) : [];
 
-    prefTabs.on('click focus', function (ev) {
+    if (textpattern.event === 'plugin') {
+        var nameParam = new RegExp('[\?&]name=([^&#]*)').exec(window.location.href);
+        var dataItem = nameParam[1];
+    } else {
+        dataItem = textpattern.event;
+    }
+
+    tabs.on('click focus', function (ev) {
         var me = $(this).children('a[data-txp-pane]');
         var data = new Object;
 
-        data[textpattern.event] = {'tab':me.data('txp-pane')};
+        data[dataItem] = {'tab':me.data('txp-pane')};
         textpattern.storage.update(data);
     });
 
     if ($section.length) {
         selectedTab = $section.index();
         $switchers.eq(selectedTab).click();
-    } else if (textpattern.storage.data[textpattern.event] !== undefined && textpattern.storage.data[textpattern.event]['tab'] !== undefined) {
+    } else if (textpattern.storage.data[dataItem] !== undefined && textpattern.storage.data[dataItem]['tab'] !== undefined) {
         $switchers.each(function (i, elm) {
-            if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]['tab']) {
+            if ($(elm).data('txp-pane') == textpattern.storage.data[dataItem]['tab']) {
                 selectedTab = i;
             }
         });
+    } else {
+        selectedTab = 0;
     }
 
     if (typeof selectedTab === 'undefined') {
         selectedTab = 0;
     }
 
-    prefsGroup.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
-    prefsGroup.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
-    prefTabs.removeClass('ui-state-default ui-corner-top');
-    prefsGroup.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
+    hasTabs.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
+    hasTabs.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
+    tabs.removeClass('ui-state-default ui-corner-top');
+    hasTabs.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
 });
 
 // Initialize JavaScript.
