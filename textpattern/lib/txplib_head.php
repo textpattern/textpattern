@@ -82,19 +82,19 @@ function pagetop($pagetitle = '', $message = '')
     }
 
     gTxtScript(array(
-        'plugin_help',
-        'tab_presentation',
         'are_you_sure',
+        'close',
         'cookies_must_be_enabled',
+        'documentation',
         'form_submission_error',
+        'help',
         'list_options',
         'ok',
+        'plugin_help',
         'publish',
         'save',
-        'toggle_all_selected',
         'select',
-        'close',
-        'help',
+        'toggle_all_selected',
         'upload_err_form_size',
     ));
 

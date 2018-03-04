@@ -2256,7 +2256,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
     var $sectHeads = $helpTxt.children('h2');
     var $intro = $head.nextUntil($sectHeads);
 
-    if (   $head.prop("tagName") != 'H1'
+    if ($head.prop("tagName") != 'H1'
         ||  $intro.length && !$sectHeads.length
         || !$intro.length && $sectHeads.length < 2
         || $helpTxt.find('h1').length > 1
@@ -2273,7 +2273,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
     if ($intro.length) {
         $intro = $intro.wrapAll('<section class="txp-prefs-group" id="intro" aria-labelledby="intro-label" />').parent()
         $sects = $sects.add($intro);
-        tabs += '<li><a data-txp-pane="intro" href="#intro" >' + textpattern.gTxt('tab_presentation') + '</a></li>';
+        tabs += '<li><a data-txp-pane="intro" href="#intro" >' + textpattern.gTxt('documentation') + '</a></li>';
     }
 
     $sectHeads.each(function(i, sectHead) {
