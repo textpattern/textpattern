@@ -7,6 +7,7 @@ Changes in 4.7.0 (upcoming)
 * Added: Support for installation on Nginx web servers.
 * Added: Support for automated installation from CLI.
 * Added: Filipino language translation (thanks Joseph Buarao).
+* Added: Tagalog language translation (thanks Kurt Lem Zamora).
 * Added: User-selectable column list options in tables replaces 'Show more
   detail' checkboxes. Settings remembered per device.
 * Added: Valueless attributes.
