@@ -75,13 +75,13 @@ include_once txpath.'/include/txp_auth.php';
 include_once txpath.'/setup/setup_lib.php';
 
 assert_system_requirements();
-setup_load_lang(@$cfg['site']['lang']);
+setup_load_lang(@$cfg['site']['language_code']);
 
 if (!isset($params['force']) && file_exists(txpath.'/config.php')) {
     msg(gTxt('already_installed'), MSG_ERROR);
 }
 
-setup_try_mysql();
+setup_connect();
 $cfg_php = setup_makeConfig($cfg);
 
 if (@file_put_contents(txpath.'/config.php', $cfg_php) === false) {
@@ -90,11 +90,11 @@ if (@file_put_contents(txpath.'/config.php', $cfg_php) === false) {
 
 @include txpath.'/config.php';
 
-if (empty($cfg['user']['name'])) {
+if (empty($cfg['user']['login_name'])) {
     msg(gTxt('name_required'), MSG_ERROR);
 }
 
-if (empty($cfg['user']['pass'])) {
+if (empty($cfg['user']['password'])) {
     msg(gTxt('pass_required'), MSG_ERROR);
 }
 

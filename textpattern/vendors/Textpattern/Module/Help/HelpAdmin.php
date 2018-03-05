@@ -49,6 +49,7 @@ class HelpAdmin
     public static function init()
     {
         global $step;
+
         require_privs('help');
 
         if ($step && bouncer($step, self::$available_steps)) {
@@ -111,6 +112,7 @@ class HelpAdmin
         global $app_mode;
 
         $item = empty($string) ? gps('item') : $string;
+
         if (empty($item) || preg_match('/[^\w]/i', $item)) {
             exit;
         }
@@ -130,10 +132,12 @@ class HelpAdmin
         }
 
         $title = '';
+
         if ($x) {
             $pophelp = trim($x[0]);
             $title = txpspecialchars($x[0]->attributes()->title);
             $format = $x[0]->attributes()->format;
+
             if ($format == 'textile') {
                 $textile = new \Netcarver\Textile\Parser();
                 $out = $textile->textileThis($pophelp).n;

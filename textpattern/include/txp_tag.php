@@ -957,7 +957,7 @@ class BuilderTags
                 'searchall'     => $this->tbYesNoPop('searchall', $searchall),
                 'searchsticky'  => $this->tbYesNoPop('searchsticky', $searchsticky),
                 'on_front_page' => $this->tbYesNoPop('frontpage', $frontpage),
-                'keywords'      => '<textarea name="keywords" id="keywords">'.$keywords.'</textarea>',
+                'keywords'      => '<textarea name="keywords" id="keywords">'.txpspecialchars($keywords).'</textarea>',
                 'limit'         => $this->tbInput('limit', $limit, INPUT_TINY),
                 'offset'        => $this->tbInput('offset', $offset, INPUT_TINY),
                 'pageby'        => $this->tbInput('pageby', $pageby, INPUT_TINY),
@@ -1035,7 +1035,7 @@ class BuilderTags
                     '',
                     'month'
                 ).' ('.gTxt('yyyy-mm').')',
-                'keywords'      => '<textarea name="keywords" id="keywords">'.$keywords.'</textarea>',
+                'keywords'      => '<textarea name="keywords" id="keywords">'.txpspecialchars($keywords).'</textarea>',
                 'has_excerpt'   => $this->tbYesNoPop('excerpted', $excerpted),
                 'frontpage'     => $this->tbYesNoPop('frontpage', $frontpage),
                 'expired'       => $this->tbYesNoPop('expired', $expired),
@@ -1953,7 +1953,7 @@ class BuilderTags
                 'id'          => $this->tbInput('id', $id),
                 'filename'    => $this->tbInput('filename', $filename, INPUT_REGULAR),
                 'link_text'   => $this->tbInput('linktext', ($linktext ? $linktext : ''), INPUT_REGULAR, 'link_text'),
-                'description' => '<textarea id="description" name="description" cols="'.INPUT_REGULAR.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>',
+                'description' => '<textarea id="description" name="description" cols="'.INPUT_REGULAR.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars($description).'</textarea>',
             )).
             $this->endform
         );

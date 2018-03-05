@@ -611,10 +611,10 @@ function sendAsyncEvent(data, fn, format)
         data = data + '&app_mode=async&_txp_token=' + textpattern._txp_token;
     } else if (data instanceof FormData) {
         formdata = true;
-        data.append("app_mode", "async");
-        data.append("_txp_token", textpattern._txp_token);
+        data.append('app_mode', 'async');
+        data.append('_txp_token', textpattern._txp_token);
     } else {
-        data.app_mode = "async";
+        data.app_mode = 'async';
         data._txp_token = textpattern._txp_token;
     }
 
@@ -622,7 +622,7 @@ function sendAsyncEvent(data, fn, format)
 
     return formdata ?
         $.ajax({
-            type: "POST",
+            type: 'POST',
             url: 'index.php',
             data: data,
             success: fn,
@@ -708,14 +708,14 @@ textpattern.storage =
      * Textpattern localStorage data.
      */
 
-    data: (!window.localStorage ? null : JSON.parse(window.localStorage.getItem("textpattern." + textpattern._txp_uid))) || {},
+    data: (!window.localStorage ? null : JSON.parse(window.localStorage.getItem('textpattern.' + textpattern._txp_uid))) || {},
 
     /**
      * Updates data.
      *
      * @param   data The message
      * @example
-     * textpattern.update({prefs: "site"});
+     * textpattern.update({prefs: 'site'});
      */
 
     update: function (data) {
@@ -723,7 +723,7 @@ textpattern.storage =
         textpattern.storage.clean(textpattern.storage.data);
 
         if (window.localStorage) {
-            window.localStorage.setItem("textpattern." + textpattern._txp_uid, JSON.stringify(textpattern.storage.data));
+            window.localStorage.setItem('textpattern.' + textpattern._txp_uid, JSON.stringify(textpattern.storage.data));
         }
     },
 
@@ -1205,20 +1205,19 @@ function txpAsyncLink(event, txpEvent)
 jQuery.fn.txpDialog = function (options) {
     options = $.extend({
         autoOpen: false,
-        buttons : [
-            {
-                text : textpattern.gTxt('ok'),
-                click: function () {
-                    // callbacks?
+        buttons: [{
+            text: textpattern.gTxt('ok'),
+            click: function () {
+                // callbacks?
 
-                    if ($(this).is('form')) {
-                        $(this).submit();
-                    }
-
-                    $(this).dialog('close');
+                if ($(this).is('form')) {
+                    $(this).submit();
                 }
-        }
-        ]
+
+                $(this).dialog('close');
+            }
+        }],
+        width: 440
     }, options);
 
     this.dialog(options);
@@ -1235,7 +1234,7 @@ jQuery.fn.txpDialog = function (options) {
  */
 
 jQuery.fn.txpDatepicker = function (options) {
-    // TODO $.datepicker.regional[ "en" ];
+    // TODO $.datepicker.regional[ 'en' ];
     // TODO support from RTL languages
     this.datepicker(options);
 
@@ -1368,14 +1367,14 @@ textpattern.changeType = function (elem, type) {
     } catch (e) {
         // Create the element by hand.
         // Clone it via a div (jQuery has no html() method for an element).
-        var html = $("<div>").append(elem.clone()).html();
+        var html = $('<div>').append(elem.clone()).html();
 
         // Match existing attributes of type=text or type="text".
         var regex = /type=(\")?([^\"\s]+)(\")?/;
 
         // If no match, add the type attribute to the end; otherwise, replace it.
         var tmp = $(html.match(regex) == null ?
-            html.replace(">", ' type="' + type + '">') :
+            html.replace('>', ' type="' + type + '">') :
             html.replace(regex, 'type="' + type + '"'));
 
         // Copy data from old element.
@@ -1563,7 +1562,7 @@ jQuery.fn.txpMenu = function(button) {
         e.stopPropagation()
     }).menu({
         select: function(e, ui) {
-            menu.menu("focus", null, ui.item)
+            menu.menu('focus', null, ui.item)
             if (e.originalEvent.type !== 'click') {
                 ui.item.find('input[type="checkbox"]').click()
             }
@@ -1575,10 +1574,10 @@ jQuery.fn.txpMenu = function(button) {
     !button || button.on('click', function (e) {
         menu.toggle().position(
         {
-            my: dir+" top",
-            at: dir+" bottom",
+            my: dir+' top',
+            at: dir+' bottom',
             of: this
-        }).focus().menu("focus", null, menu.find(".ui-menu-item:first"))
+        }).focus().menu('focus', null, menu.find('.ui-menu-item:first'))
 
         $(document).one('blur click focusin', function (e) {
             menu.hide();
@@ -1737,11 +1736,11 @@ function txp_expand_collapse_all(ev)
         var $elm = $(elm);
 
         if (direction === 'collapse') {
-            if ($elm.parent(".txp-summary").hasClass("expanded")) {
+            if ($elm.parent('.txp-summary').hasClass('expanded')) {
                 $elm.click();
             }
         } else {
-            if (!$elm.parent(".txp-summary").hasClass("expanded")) {
+            if (!$elm.parent('.txp-summary').hasClass('expanded')) {
                 $elm.click();
             }
         }
@@ -1765,7 +1764,7 @@ jQuery.fn.restorePanes = function () {
             var $region = $this.find(region);
             region = region.substr(1);
 
-            var pane = $elm.data("txp-pane");
+            var pane = $elm.data('txp-pane');
 
             if (pane === undefined) {
                 pane = region;
@@ -1774,7 +1773,7 @@ jQuery.fn.restorePanes = function () {
             if (stored) {
                 try {
                     if (textpattern.storage.data[textpattern.event]['panes'][pane] == true) {
-                        $elm.parent(".txp-summary").addClass("expanded");
+                        $elm.parent('.txp-summary').addClass('expanded');
                         $region.show();
                     }
                 } catch (e) {
@@ -1994,7 +1993,7 @@ textpattern.Route.add('article', function () {
     var $listoptions = $('.txp-textfilter-options .jquery-ui-selectmenu');
 
     $listoptions.on('selectmenuchange', function (e) {
-        var me = $("option:selected", this)
+        var me = $('option:selected', this)
 
         var wrapper = me.closest('.txp-textfilter-options');
         var thisHelp = me.data('help');
@@ -2034,7 +2033,7 @@ textpattern.Route.add('file, image', function () {
     })
 
     $('form.upload-form.async').txpUploadPreview()
-        .txpFileupload({formData: [{name: "app_mode", value: "async"}]})
+        .txpFileupload({formData: [{name: 'app_mode', value: 'async'}]})
 })
 
 // Uncheck reset on timestamp change.
@@ -2108,7 +2107,7 @@ textpattern.Route.add('page, form, file, image', function () {
 
 textpattern.Route.add('', function () {
     textpattern.Relay.register('txpAsyncLink.pophelp.success', function (event, data) {
-        $(data.event.target).parent().attr("data-item", encodeURIComponent(data.data) );
+        $(data.event.target).parent().attr('data-item', encodeURIComponent(data.data) );
         $('#pophelp_dialog').dialog('close').html(data.data).dialog('open').restorePanes();
     });
 
@@ -2119,8 +2118,9 @@ textpattern.Route.add('', function () {
             $pophelp = $('<div id="pophelp_dialog"></div>');
             $('body').append($pophelp);
             $pophelp.dialog({
-                dialogClass: 'txp-tagbuilder-container',    // FIXME: UI, need pophelp-class
+                dialogClass: 'txp-dialog-container',
                 autoOpen: false,
+                width: 440,
                 title: textpattern.gTxt('help'),
                 focus: function (ev, ui) {
                     $(ev.target).closest('.ui-dialog').focus();
@@ -2174,8 +2174,8 @@ textpattern.Route.add('plugin', function () {
 textpattern.Route.add('diag', function () {
     $('#diag_clear_private').change(function () {
         var diag_data = $('#diagnostics-data').val();
-        if ($('#diag_clear_private').is(":checked")) {
-            var regex = new RegExp($('#diagnostics-data').attr("data-txproot"), "g");
+        if ($('#diag_clear_private').is(':checked')) {
+            var regex = new RegExp($('#diagnostics-data').attr('data-txproot'), 'g');
             diag_data = diag_data.replace(/^===.*\s/gm, '').replace(regex, '__TXP-ROOT');
         } else {
             diag_data = diag_data.replace(/^=== +/gm, '');
@@ -2246,47 +2246,120 @@ textpattern.Route.add('section', function ()
     });
 });
 
+// Plugin help panel.
+
+textpattern.Route.add('plugin.plugin_help', function ()
+{
+    var $helpWrap = $(document.body).children('main');
+    var $helpTxt = $helpWrap.children('.txp-layout-textbox');
+    var $head = $helpTxt.children(':first');
+    var $sectHeads = $helpTxt.children('h2');
+    var $intro = $head.nextUntil($sectHeads);
+
+    if ($head.prop('tagName') != 'H1'
+        || $intro.length && !$sectHeads.length
+        || !$intro.length && $sectHeads.length < 2
+        || $helpTxt.find('h1').length > 1
+        || $helpTxt.find('script, style, [style], [class^="txp-layout"], [class*=" txp-layout"], [class^="txp-grid"], [class*=" txp-grid"]').length
+    ) {
+        return;
+    }
+
+    $helpTxt.detach();
+
+    var $sects = $();
+    var tabs = '';
+
+    if ($intro.length) {
+        $intro = $intro.wrapAll('<section class="txp-tabs-vertical-group" id="intro" aria-labelledby="intro-label" />').parent()
+        $sects = $sects.add($intro);
+        tabs += '<li><a data-txp-pane="intro" href="#intro">' + textpattern.gTxt('documentation') + '</a></li>';
+    }
+
+    $sectHeads.each(function(i, sectHead) {
+        var $sectHead = $(sectHead);
+        var $tabHead = $sectHead.clone();
+
+        $tabHead.find('a').each(function(i, anchor) {
+            $(anchor).contents().unwrap();
+        });
+
+        var tabTitle = $tabHead.html();
+        var tabName = tabTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
+        var sectId = 'plugin_help_section_' + tabName;
+
+        $sects = $sects.add($sectHead.nextUntil(sectHead).addBack().wrapAll('<section class="txp-tabs-vertical-group" id="' + sectId + '" aria-labelledby="' + sectId + '-label" />').parent());
+        tabs += '<li><a data-txp-pane="' + tabName + '" href="#' + sectId + '">' + tabTitle + '</a></li>';
+    });
+
+    $head.addClass('txp-heading txp-heading-tight').wrap('<div class="txp-layout-1col"></div>');
+    $sects.wrapAll('<div class="txp-layout-4col-3span" />');
+    $sects.parent().before('<div class="txp-layout-4col-alt"><section class="txp-details" id="all_sections" aria-labelledby="all_sections-label"><h3 id="all_sections-label">' + textpattern.gTxt('plugin_help') + '</h3><div role="group"><ul class="switcher-list">' + tabs + '</ul></div></section></div>');
+    $helpTxt.wrap('<div class="txp-layout" />').contents().unwrap().parent().appendTo($helpWrap);
+    $helpWrap.find('pre, code').not('pre code').addClass('language-markup');
+});
+
 // All panels?
 
 textpattern.Route.add('', function () {
     // Pane states
-    var prefsGroup = $('form:has(.switcher-list li a[data-txp-pane])');
+    var hasTabs = $('.txp-layout:has(.switcher-list li a[data-txp-pane])');
 
-    if (prefsGroup.length == 0) {
+    if (hasTabs.length == 0) {
         return;
     }
 
-    var prefTabs = prefsGroup.find('.switcher-list li');
-    var $switchers = prefTabs.children('a[data-txp-pane]');
-    var $section = window.location.hash ? prefsGroup.find($(window.location.hash).closest('section')) : [];
+    var tabs = hasTabs.find('.switcher-list li');
+    var $switchers = tabs.children('a[data-txp-pane]');
+    var $section = window.location.hash ? hasTabs.find($(window.location.hash).closest('section')) : [];
+    var parser = document.createElement('a');
 
-    prefTabs.on('click focus', function (ev) {
+    if (textpattern.event === 'plugin') {
+        var nameParam = new RegExp('[\?&]name=([^&#]*)').exec(window.location.href);
+        var dataItem = nameParam[1];
+    } else {
+        dataItem = textpattern.event;
+    }
+
+    tabs.on('click focus', function (ev) {
         var me = $(this).children('a[data-txp-pane]');
         var data = new Object;
 
-        data[textpattern.event] = {'tab':me.data('txp-pane')};
+        data[dataItem] = {'tab':me.data('txp-pane')};
         textpattern.storage.update(data);
     });
+
+    hasTabs.find('a:not([data-txp-pane])').click(function() {
+        parser.href = $(this).attr('href');
+        $section = hasTabs.find($(parser.hash).closest('section'));
+
+        if ($section.length) {
+            selectedTab = $section.index();
+            $switchers.eq(selectedTab).click();
+        }
+    })
 
     if ($section.length) {
         selectedTab = $section.index();
         $switchers.eq(selectedTab).click();
-    } else if (textpattern.storage.data[textpattern.event] !== undefined && textpattern.storage.data[textpattern.event]['tab'] !== undefined) {
+    } else if (textpattern.storage.data[dataItem] !== undefined && textpattern.storage.data[dataItem]['tab'] !== undefined) {
         $switchers.each(function (i, elm) {
-            if ($(elm).data('txp-pane') == textpattern.storage.data[textpattern.event]['tab']) {
+            if ($(elm).data('txp-pane') == textpattern.storage.data[dataItem]['tab']) {
                 selectedTab = i;
             }
         });
+    } else {
+        selectedTab = 0;
     }
 
     if (typeof selectedTab === 'undefined') {
         selectedTab = 0;
     }
 
-    prefsGroup.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
-    prefsGroup.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
-    prefTabs.removeClass('ui-state-default ui-corner-top');
-    prefsGroup.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
+    hasTabs.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
+    hasTabs.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
+    tabs.removeClass('ui-state-default ui-corner-top');
+    hasTabs.find('.txp-tabs-vertical-group').removeClass('ui-widget-content ui-corner-bottom');
 });
 
 // Initialize JavaScript.
@@ -2306,17 +2379,17 @@ $(document).ready(function () {
         return verify($(this).data('verify'));
     });
 
-    // Disable spellchecking on all elements of class "code" in capable browsers.
-    var c = $(".code")[0];
+    // Disable spellchecking on all elements of class 'code' in capable browsers.
+    var c = $('.code')[0];
 
-    if (c && "spellcheck" in c) {
-        $(".code").prop("spellcheck", false);
+    if (c && 'spellcheck' in c) {
+        $('.code').prop('spellcheck', false);
     }
 
     // Enable spellcheck for all elements mentioned in textpattern.prefs.do_spellcheck.
     $(textpattern.prefs.do_spellcheck).each(function(i, c) {
-    if ("spellcheck" in c) {
-        $(c).prop("spellcheck", true);
+    if ('spellcheck' in c) {
+        $(c).prop('spellcheck', true);
     }})
 
     // Attach toggle behaviours.
