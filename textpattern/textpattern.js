@@ -2271,7 +2271,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
     var tabs = '';
 
     if ($intro.length) {
-        $intro = $intro.wrapAll('<section class="txp-prefs-group" id="intro" aria-labelledby="intro-label" />').parent()
+        $intro = $intro.wrapAll('<section class="txp-tabs-vertical-group" id="intro" aria-labelledby="intro-label" />').parent()
         $sects = $sects.add($intro);
         tabs += '<li><a data-txp-pane="intro" href="#intro" >' + textpattern.gTxt('documentation') + '</a></li>';
     }
@@ -2288,7 +2288,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
         var tabName = tabTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
         var sectId = 'plugin_help_section_' + tabName;
 
-        $sects = $sects.add($sectHead.nextUntil(sectHead).addBack().wrapAll('<section class="txp-prefs-group" id="' + sectId + '" aria-labelledby="' + sectId + '-label" />').parent());
+        $sects = $sects.add($sectHead.nextUntil(sectHead).addBack().wrapAll('<section class="txp-tabs-vertical-group" id="' + sectId + '" aria-labelledby="' + sectId + '-label" />').parent());
         tabs += '<li><a data-txp-pane="' + tabName + '" href="#' + sectId + '" >' + tabTitle + '</a></li>';
     });
 
@@ -2348,7 +2348,7 @@ textpattern.Route.add('', function () {
     hasTabs.tabs({active: selectedTab}).removeClass('ui-widget ui-widget-content ui-corner-all').addClass('ui-tabs-vertical');
     hasTabs.find('.switcher-list').removeClass('ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
     tabs.removeClass('ui-state-default ui-corner-top');
-    hasTabs.find('.txp-prefs-group').removeClass('ui-widget-content ui-corner-bottom');
+    hasTabs.find('.txp-tabs-vertical-group').removeClass('ui-widget-content ui-corner-bottom');
 });
 
 // Initialize JavaScript.
