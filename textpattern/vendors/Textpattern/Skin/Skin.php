@@ -61,7 +61,7 @@ namespace Textpattern\Skin {
         /**
          * Importable skins.
          *
-         * @var array Associative array of skin names and their titles
+         * @var array Associative array of skin names and their infos from JSON files
          * @see       setUploaded(), getUploaded().
          */
 
@@ -239,22 +239,28 @@ namespace Textpattern\Skin {
         {
             $contents = json_decode(file_get_contents($this->getFilePath()), true);
 
-            if ($contents !== null) {
-                extract($contents);
-
-                !empty($title) or $title = ucfirst($this->getName());
-                !empty($version) or $version = gTxt('unknown');
-                !empty($description) or $description = '';
-                !empty($author) or $author = gTxt('unknown');
-                !empty($author_uri) or $author_uri = '';
-
-                $contents = array_merge(
-                    $contents,
-                    compact('title', 'version', 'description', 'author', 'author_uri')
-                );
-            }
+            $contents === null or $contents = $this->parseInfos($contents);
 
             return $contents;
+        }
+
+        /**
+         * Parse a skin related infos.
+         *
+         * @return array $infos Associative array of fields and their related values / fallback values.
+         */
+
+        protected function parseInfos($infos)
+        {
+            extract($infos);
+
+            !empty($title) or $title = ucfirst($this->getName());
+            !empty($version) or $version = gTxt('unknown');
+            !empty($description) or $description = '';
+            !empty($author) or $author = gTxt('unknown');
+            !empty($author_uri) or $author_uri = '';
+
+            return compact('title', 'version', 'description', 'author', 'author_uri');
         }
 
         /**
@@ -263,16 +269,18 @@ namespace Textpattern\Skin {
          * @param array Section names.
          */
 
-        protected function getSections()
-        {
-            return array_values(
-                safe_column(
-                    'name',
-                    'txp_section',
-                    $this->getEvent()." ='".doSlash($this->getName())."'"
-                )
-            );
-        }
+         protected function getSections($skin = null)
+         {
+             $skin !== null or $skin = $this->getName();
+
+             return array_values(
+                 safe_column(
+                     'name',
+                     'txp_section',
+                     $this->getEvent()." ='".doSlash($skin)."'"
+                 )
+             );
+         }
 
         /**
          * Update the txp_section table.
@@ -358,10 +366,82 @@ namespace Textpattern\Skin {
             }
 
             if (pathinfo($pathname, PATHINFO_EXTENSION) === 'json') {
-                $contents = JSONPrettyPrint(json_encode($contents, TEXTPATTERN_JSON));
+                $contents = self::JSONPrettyPrint(json_encode($contents, TEXTPATTERN_JSON));
             }
 
             return file_put_contents($this->getDirPath().DS.$pathname, $contents);
+        }
+
+        /**
+         * Replaces the JSON_PRETTY_PRINT flag in json_encode for PHP versions under 5.4.
+         *
+         * From https://stackoverflow.com/a/9776726
+         *
+         * @param  string $json The JSON contents to prettify;
+         * @return string Prettified JSON contents.
+         */
+
+        protected static function JSONPrettyPrint($json)
+        {
+            $result = '';
+            $level = 0;
+            $in_quotes = false;
+            $in_escape = false;
+            $ends_line_level = null;
+            $json_length = strlen($json);
+
+            for ($i = 0; $i < $json_length; $i++) {
+                $char = $json[$i];
+                $new_line_level = null;
+                $post = "";
+
+                if ($ends_line_level !== null) {
+                    $new_line_level = $ends_line_level;
+                    $ends_line_level = null;
+                }
+
+                if ($in_escape) {
+                    $in_escape = false;
+                } elseif ($char === '"') {
+                    $in_quotes = !$in_quotes;
+                } elseif (! $in_quotes) {
+                    switch ($char) {
+                        case '}':
+                        case ']':
+                            $level--;
+                            $ends_line_level = null;
+                            $new_line_level = $level;
+                            break;
+                        case '{':
+                        case '[':
+                            $level++;
+                        case ',':
+                            $ends_line_level = $level;
+                            break;
+                        case ':':
+                            $post = " ";
+                            break;
+                        case " ":
+                        case "    ":
+                        case "\n":
+                        case "\r":
+                            $char = "";
+                            $ends_line_level = $new_line_level;
+                            $new_line_level = null;
+                            break;
+                    }
+                } elseif ($char === '\\') {
+                    $in_escape = true;
+                }
+
+                if ($new_line_level !== null) {
+                    $result .= "\n".str_repeat("    ", $new_line_level);
+                }
+
+                $result .= $char.$post;
+            }
+
+            return $result;
         }
 
         /**
@@ -384,53 +464,34 @@ namespace Textpattern\Skin {
                         $infos = $file->getJSONContents();
 
                         if ($infos && $infos['txp-type'] === 'textpattern-theme') {
-                            $this->uploaded[$name] = $infos['title'];
+                            $this->uploaded[$name] = $this->setName($name)->parseInfos($infos);
                         }
                     }
                 }
             }
 
-            return $this->getUploaded();
+            return $this;
         }
 
         /**
-         * $uploaded property setter.
-         *
-         * @return object $this The current class object (chainable).
+         * {@inheritdoc}
          */
 
-        public function getInstallable()
+        public function getUploaded($expanded = true)
         {
-            $installable = array();
-            $files = $this->getFiles(array(self::getFilename()), 1);
+            $this->uploaded !== null or $this->setUploaded();
 
-            if ($files) {
-                foreach ($files as $file) {
-                    $filePath = $file->getPath();
-                    $name = basename($file->getPath());
+            if (!$expanded) {
+                $contracted = array();
 
-                    if ($name === self::sanitize($name)) {
-                        $infos = $file->getJSONContents();
-
-                        if ($infos && $infos['txp-type'] === 'textpattern-theme') {
-                            $installable[$name] = $infos;
-                        }
-                    }
+                foreach ($this->uploaded as $name => $infos) {
+                    $contracted[$name] = $infos['title'];
                 }
+
+                return $contracted;
             }
 
-            return $installable;
-        }
-
-        /**
-         * $uploaded property getter.
-         *
-         * @return array $this->uploaded.
-         */
-
-        public function getUploaded()
-        {
-            return $this->uploaded === null ? $this->setUploaded() : $this->uploaded;
+            return $this->uploaded;
         }
 
         /**
@@ -591,7 +652,7 @@ namespace Textpattern\Skin {
 
             if ($ready) {
                 // Update skin related sections.
-                $sections = $this->getSections();
+                $sections = $this->getSections($base);
 
                 if ($sections && !$this->updateSections()) {
                     $this->mergeResult($event.'_related_sections_update_failed', array($base => $sections));
@@ -947,7 +1008,7 @@ namespace Textpattern\Skin {
                     }
 
                     $subdirPath = $this->getSubdirPath();
-                    $isDirEmpty = $this->isDirEmpty($subdirPath);
+                    $isDirEmpty = self::isDirEmpty($subdirPath);
 
                     if (!isset($notRemoved[$name]) && ($isDirEmpty && !@rmdir($subdirPath) || !$isDirEmpty)) {
                         $notRemoved[$name][] = $subdirPath;
@@ -1146,7 +1207,7 @@ namespace Textpattern\Skin {
             $table = \Txp::get('Textpattern\Admin\Table');
 
             return $table->render(
-                compact('total', 'criteria') + array('html_id' => false),
+                compact('total', 'criteria') + array('html_id' => false, 'help' => 'skin_overview'),
                 $this->getSearchBlock($search),
                 '',
                 $this->getCreateBlock(). // Create block is here to be loaded async.
@@ -1206,7 +1267,7 @@ namespace Textpattern\Skin {
             $dirPath = $this->getDirPath();
 
             if (is_dir($dirPath) && is_writable($dirPath)) {
-                $new = array_diff_key($this->getUploaded(), $this->getInstalled());
+                $new = array_diff_key($this->getUploaded(false), $this->getInstalled());
 
                 if ($new) {
                     asort($new);
@@ -1539,7 +1600,7 @@ namespace Textpattern\Skin {
                     $input = fInput($type, $field, $current, '', '', '', INPUT_REGULAR, '', $event.'_'.$field);
                 }
 
-                $content .= inputLabel($event.'_'.$field, $input, $event.'_'.$field);
+                $content .= inputLabel($event.'_'.$field, $input, $event.'_'.$field, $event.'_'.$field);
             }
 
             $content .= pluggable_ui($event.'_ui', 'extend_detail_form', '', $rs)

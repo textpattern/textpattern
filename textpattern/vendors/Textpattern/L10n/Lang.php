@@ -149,7 +149,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         $files = array();
 
-        foreach ($extensions as $ext) {
+        foreach ((array)$extensions as $ext) {
             $files = array_merge($files, (array) glob($this->langDirectory.'*.'.$ext));
         }
 
@@ -371,8 +371,10 @@ class Lang implements \Textpattern\Container\ReusableInterface
         // Reindex the pack so it can be merged.
         $langpack = array();
 
-        foreach ($textpack as $translation) {
-            $langpack[$translation['name']] = $translation;
+        if (is_array($textpack)) {
+            foreach ($textpack as $translation) {
+                $langpack[$translation['name']] = $translation;
+            }
         }
 
         return $langpack;
