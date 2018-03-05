@@ -1,4 +1,4 @@
-Changes in 4.7.0 (upcoming)
+Changes in 4.7.0
 
 * In memory of Dean Allen, creator of Textpattern CMS.
 * Added: Support for website themes, stored within the database (accessed via
@@ -34,6 +34,7 @@ Changes in 4.7.0 (upcoming)
 * Added: One-click comment searches by parent article (thanks, makss).
 * Added: Diagnostics can optionally suppress sensitive path data.
 * Added: 'Expire now' checkbox on Write panel.
+* Added: Automatic TOC generation for well-structured plugin help text.
 * Changed: Revised multi-site installation routine and symbolic linking.
 * Changed: Pages, Forms and Styles panels save some changes without page
   refreshes (Ajax). Last used Page/Form/Stylesheet remembered.
