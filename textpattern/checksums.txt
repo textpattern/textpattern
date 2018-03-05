@@ -52,7 +52,7 @@
 /publish/search.php: 93270cd66dff1aad9b489c206a6f1896
 /publish/taghandlers.php: 944d5ec27ca2a6b1a34ef33c92928ded
 /publish.php: 3c027e8ce8cc144e5b7b7e9cd293e72b
-/textpattern.js: fec3c1f5e225fe35039b62d35058b89d
+/textpattern.js: 0e754583d15548553fe9f8b3f6990d0d
 /update/_to_4.0.3.php: fb35e8e3dce16aad32b3d3af1a2b60c7
 /update/_to_4.0.4.php: 7982d5063df84b7a2b1bb07660b8886b
 /update/_to_4.0.5.php: 376bafd8685724e7c9e91b1a3ffe172f
@@ -76,7 +76,6 @@
 /vendors/Textpattern/Adaptable/AdapterInterface.php: 2ca155f9022bee03d9883c92f5e7d0c8
 /vendors/Textpattern/Adaptable/Providable.php: 5e4dafa7ef6ce91d1413f5d035cc32ff
 /vendors/Textpattern/Adaptable/ProvidableInterface.php: 4fad6fb0ae3b9943659b6a75f506b836
-/vendors/Textpattern/Admin/FlashMessage.php: d15effc7537cf0d076c89d4211737498
 /vendors/Textpattern/Admin/Paginator.php: 9df5fd3302898465741217034b9bc734
 /vendors/Textpattern/Admin/Table.php: 37902bb2f0870b2744cdbbcb2e9592a9
 /vendors/Textpattern/Admin/Theme.php: a78a1d2c5955c67d8b65caf612e5ef2c
