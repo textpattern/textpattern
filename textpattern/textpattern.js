@@ -2312,6 +2312,7 @@ textpattern.Route.add('', function () {
     var tabs = hasTabs.find('.switcher-list li');
     var $switchers = tabs.children('a[data-txp-pane]');
     var $section = window.location.hash ? hasTabs.find($(window.location.hash).closest('section')) : [];
+    var parser = document.createElement('a');
 
     if (textpattern.event === 'plugin') {
         var nameParam = new RegExp('[\?&]name=([^&#]*)').exec(window.location.href);
@@ -2327,6 +2328,16 @@ textpattern.Route.add('', function () {
         data[dataItem] = {'tab':me.data('txp-pane')};
         textpattern.storage.update(data);
     });
+
+    hasTabs.find('a:not([data-txp-pane])').click(function() {
+        parser.href = $(this).attr('href');
+        $section = hasTabs.find($(parser.hash).closest('section'));
+
+        if ($section.length) {
+            selectedTab = $section.index();
+            $switchers.eq(selectedTab).click();
+        }
+    })
 
     if ($section.length) {
         selectedTab = $section.index();
