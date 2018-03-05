@@ -24,7 +24,7 @@
 /include/txp_prefs.php: bb35506d1a3f8ca2ef6f7d840d4bb44e
 /include/txp_section.php: 2af102ba3a784aa67328f74cc80fbcbb
 /include/txp_skin.php: 8cdd3c3a8a6532db7eaadf4a10b788db
-/include/txp_tag.php: ad095e1719b3a9dcab0ea9de1bca8394
+/include/txp_tag.php: 774138e27b71cabdb721a5b53948c9e0
 /index.php: 3b909d09ca1d5454015562eb94299c07
 /lib/admin_config.php: a1940279c08e12df355a7a07f3fbfa2d
 /lib/class.thumb.php: 0063ddd70b98549750ac0eb8d639377c
