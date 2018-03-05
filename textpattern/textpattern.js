@@ -2293,7 +2293,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
     });
 
     $head.addClass('txp-heading txp-heading-tight').wrap('<div class="txp-layout-1col"></div>');
-    $sects.wrapAll('<div class="txp-layout-4col-2span" />');
+    $sects.wrapAll('<div class="txp-layout-4col-3span" />');
     $sects.parent().before('<div class="txp-layout-4col-alt"><section class="txp-details" id="all_sections" aria-labelledby="all_sections-label"><h3 id="all_sections-label">' + textpattern.gTxt('plugin_help') + '</h3><div role="group"><ul class="switcher-list">' + tabs + '</ul></div></section></div>');
     $helpTxt.wrap('<div class="txp-layout" />').contents().unwrap().parent().appendTo($helpWrap);
     $helpWrap.find('pre, code').not('pre code').addClass('language-markup');
