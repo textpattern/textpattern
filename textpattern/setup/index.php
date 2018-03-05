@@ -269,7 +269,7 @@ function step_getDbInfo()
 
     echo '<form class="prefs-form" method="post" action="'.txpspecialchars($_SERVER['PHP_SELF']).'">'.
         hed(gTxt('need_details'), 1).
-        hed('MySQL', 2).
+        hed(tag('MySQL', 'bdi', array('dir' => 'ltr')), 2).
         graf(gTxt('db_must_exist')).
         inputLabel(
             'setup_mysql_login',

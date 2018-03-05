@@ -376,7 +376,7 @@ function setup_connect()
     }
     @mysqli_close($mylink);
     echo msg(gTxt('using_db', array(
-        '{dbname}' => strong(txpspecialchars($cfg['database']['db_name'])), ), 'raw').' ('.$cfg['database']['charset'].')');
+        '{dbname}' => strong(txpspecialchars($cfg['database']['db_name'])), ), 'raw').' <bdi dir="ltr">('.$cfg['database']['charset'].')</bdi>');
 
     return true;
 }
