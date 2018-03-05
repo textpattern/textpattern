@@ -149,7 +149,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
 
         $files = array();
 
-        foreach ($extensions as $ext) {
+        foreach ((array)$extensions as $ext) {
             $files = array_merge($files, (array) glob($this->langDirectory.'*.'.$ext));
         }
 
