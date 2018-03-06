@@ -124,7 +124,13 @@ function list_languages($message = '')
                 $disabled = 'disabled';
             }
 
-            $btnText = '<span class="ui-icon ui-icon-refresh"></span>'.sp.escape_title(gTxt('update'));
+            if (isset($available_lang[$langname])) {
+                $btnText = '<span class="ui-icon ui-icon-refresh"></span>'.sp.escape_title(gTxt('update'));
+            } else {
+                $btnText = '';
+                $cellclass = 'warning';
+            }
+
             $removeLink = href('<span class="ui-icon ui-icon-minus"></span>'.sp.escape_title(gTxt('remove')), array(
                 'event'      => 'lang',
                 'step'       => 'remove_language',
