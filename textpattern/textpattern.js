@@ -2269,11 +2269,12 @@ textpattern.Route.add('plugin.plugin_help', function ()
 
     var $sects = $();
     var tabs = '';
+    var sectIdPrefix = 'plugin_help_section_';
 
     if ($intro.length) {
-        $intro = $intro.wrapAll('<section class="txp-tabs-vertical-group" id="intro" aria-labelledby="intro-label" />').parent()
+        $intro = $intro.wrapAll('<section class="txp-tabs-vertical-group" id="' + sectIdPrefix + 'intro" aria-labelledby="intro-label" />').parent()
         $sects = $sects.add($intro);
-        tabs += '<li><a data-txp-pane="intro" href="#intro">' + textpattern.gTxt('documentation') + '</a></li>';
+        tabs += '<li><a data-txp-pane="intro" href="#' + sectIdPrefix + 'intro">' + textpattern.gTxt('documentation') + '</a></li>';
     }
 
     $sectHeads.each(function(i, sectHead) {
@@ -2286,7 +2287,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
 
         var tabTitle = $tabHead.html();
         var tabName = tabTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
-        var sectId = 'plugin_help_section_' + tabName;
+        var sectId = sectIdPrefix + tabName;
 
         $sects = $sects.add($sectHead.nextUntil(sectHead).addBack().wrapAll('<section class="txp-tabs-vertical-group" id="' + sectId + '" aria-labelledby="' + sectId + '-label" />').parent());
         tabs += '<li><a data-txp-pane="' + tabName + '" href="#' + sectId + '">' + tabTitle + '</a></li>';
