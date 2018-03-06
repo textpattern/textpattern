@@ -2255,12 +2255,13 @@ textpattern.Route.add('plugin.plugin_help', function ()
     var $head = $helpTxt.children(':first');
     var $sectHeads = $helpTxt.children('h2');
     var $intro = $head.nextUntil($sectHeads);
+    var sectIdPrefix = 'plugin_help_section_';
 
     if ($head.prop('tagName') != 'H1'
         || $intro.length && !$sectHeads.length
         || !$intro.length && $sectHeads.length < 2
         || $helpTxt.find('h1').length > 1
-        || $helpTxt.find('script, style, [style], [class^="txp-layout"], [class*=" txp-layout"], [class^="txp-grid"], [class*=" txp-grid"]').length
+        || $helpTxt.find('script, style, [style], [id^="' + sectIdPrefix + '"], [id*=" ' + sectIdPrefix + '"], [class^="txp-layout"], [class*=" txp-layout"], [class^="txp-grid"], [class*=" txp-grid"]').length
     ) {
         return;
     }
@@ -2271,9 +2272,9 @@ textpattern.Route.add('plugin.plugin_help', function ()
     var tabs = '';
 
     if ($intro.length) {
-        $intro = $intro.wrapAll('<section class="txp-tabs-vertical-group" id="intro" aria-labelledby="intro-label" />').parent()
+        $intro = $intro.wrapAll('<section class="txp-tabs-vertical-group" id="' + sectIdPrefix + 'intro" aria-labelledby="intro-label" />').parent()
         $sects = $sects.add($intro);
-        tabs += '<li><a data-txp-pane="intro" href="#intro">' + textpattern.gTxt('documentation') + '</a></li>';
+        tabs += '<li><a data-txp-pane="intro" href="#' + sectIdPrefix + 'intro">' + textpattern.gTxt('documentation') + '</a></li>';
     }
 
     $sectHeads.each(function(i, sectHead) {
@@ -2286,7 +2287,7 @@ textpattern.Route.add('plugin.plugin_help', function ()
 
         var tabTitle = $tabHead.html();
         var tabName = tabTitle.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '_').toLowerCase();
-        var sectId = 'plugin_help_section_' + tabName;
+        var sectId = sectIdPrefix + tabName;
 
         $sects = $sects.add($sectHead.nextUntil(sectHead).addBack().wrapAll('<section class="txp-tabs-vertical-group" id="' + sectId + '" aria-labelledby="' + sectId + '-label" />').parent());
         tabs += '<li><a data-txp-pane="' + tabName + '" href="#' + sectId + '">' + tabTitle + '</a></li>';
@@ -2312,7 +2313,6 @@ textpattern.Route.add('', function () {
     var tabs = hasTabs.find('.switcher-list li');
     var $switchers = tabs.children('a[data-txp-pane]');
     var $section = window.location.hash ? hasTabs.find($(window.location.hash).closest('section')) : [];
-    var parser = document.createElement('a');
 
     if (textpattern.event === 'plugin') {
         var nameParam = new RegExp('[\?&]name=([^&#]*)').exec(window.location.href);
@@ -2330,8 +2330,7 @@ textpattern.Route.add('', function () {
     });
 
     hasTabs.find('a:not([data-txp-pane])').click(function() {
-        parser.href = $(this).attr('href');
-        $section = hasTabs.find($(parser.hash).closest('section'));
+        $section = hasTabs.find($(this.hash).closest('section'));
 
         if ($section.length) {
             selectedTab = $section.index();
