@@ -2313,7 +2313,6 @@ textpattern.Route.add('', function () {
     var tabs = hasTabs.find('.switcher-list li');
     var $switchers = tabs.children('a[data-txp-pane]');
     var $section = window.location.hash ? hasTabs.find($(window.location.hash).closest('section')) : [];
-    var parser = document.createElement('a');
 
     if (textpattern.event === 'plugin') {
         var nameParam = new RegExp('[\?&]name=([^&#]*)').exec(window.location.href);
@@ -2331,8 +2330,7 @@ textpattern.Route.add('', function () {
     });
 
     hasTabs.find('a:not([data-txp-pane])').click(function() {
-        parser.href = $(this).attr('href');
-        $section = hasTabs.find($(parser.hash).closest('section'));
+        $section = hasTabs.find($(this.hash).closest('section'));
 
         if ($section.length) {
             selectedTab = $section.index();
