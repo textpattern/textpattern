@@ -43,7 +43,7 @@ class Locale
      */
 
     protected $locales = array(
-        'ar-dz' => array('ar_DZ.UTF-8', 'ar_DZ.ISO_8859-6', 'Arabic_Saudi Arabia.1256', 'ar_DZ', 'ara', 'ar', 'arabic'),
+        'ar' => array('ar_SA.UTF-8', 'ar_SA.ISO_8859-6', 'Arabic_Saudi Arabia.1256', 'ar_SA', 'ara', 'ar', 'arabic'),
         'bg' => array('bg_BG.UTF-8', 'bg_BG.ISO_8859-5', 'Bulgarian_Bulgaria.1251', 'bg_BG', 'bg', 'bul', 'bulgarian'),
         'bs' => array('bs_BA.UTF-8', 'bs_BA.ISO_8859-2', 'Bosnian_Bosnia and Herzegovina.1250', 'bs_BA', 'bs', 'bos', 'bosnian'),
         'ca' => array('ca_ES.UTF-8', 'ca_ES.ISO_8859-1', 'Catalan_Spain.1252', 'ca_ES', 'cat', 'ca', 'catalan'),
