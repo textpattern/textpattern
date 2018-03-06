@@ -45,6 +45,7 @@ class Locale
     protected $locales = array(
         'ar'    => array('ar_SA.UTF-8', 'ar_SA.ISO_8859-6', 'Arabic_Saudi Arabia.1256', 'ar_SA', 'ara', 'ar', 'arabic'),
         'bg'    => array('bg_BG.UTF-8', 'bg_BG.ISO_8859-5', 'Bulgarian_Bulgaria.1251', 'bg_BG', 'bg', 'bul', 'bulgarian'),
+        'bn'    => array('bn_BD.UTF-8', 'bn_BD', 'bn', 'ben', 'bengali', 'bangla'),
         'bs'    => array('bs_BA.UTF-8', 'bs_BA.ISO_8859-2', 'Bosnian_Bosnia and Herzegovina.1250', 'bs_BA', 'bs', 'bos', 'bosnian'),
         'ca'    => array('ca_ES.UTF-8', 'ca_ES.ISO_8859-1', 'Catalan_Spain.1252', 'ca_ES', 'cat', 'ca', 'catalan'),
         'ceb'   => array('ceb.UTF-8', 'ceb', 'cebuano'),
@@ -81,6 +82,7 @@ class Locale
         'ro'    => array('ro_RO.UTF-8', 'ro_RO.ISO_8859-2', 'ro_RO.ISO_8859-16', 'Romanian_Romania.1250', 'ro_RO', 'ron', 'rum', 'ro', 'romanian'),
         'ru'    => array('ru_RU.UTF-8', 'ru_RU.ISO_8859-5', 'Russian_Russia.1251', 'ru_RU', 'ru', 'rus', 'russian'),
         'sk'    => array('sk_SK.UTF-8', 'sk_SK.ISO_8859-1', 'Slovak_Slovakia.1250', 'sk_SK', 'sk', 'slo', 'slk', 'slovak'),
+        'sl'    => array('sl_SI.UTF-8', 'sl_SI.ISO-8859-2', 'Slovenian_Slovenia.1250', 'sl_SI', 'sl', 'slv', 'slovenian'),
         'sr-rs' => array('sr_RS.UTF-8', 'sr_RS.ISO_8859-5', 'Serbian (Cyrillic)_Serbia and Montenegro (Former).1251', 'sr_RS', 'sr', 'rs', 'srb', 'serbian'),
         'sr'    => array('sr_SP.UTF-8', 'sr_SP.ISO_8859-2', 'Serbian (Latin)_Serbia and Montenegro (Former).1250', 'sr_SP', 'sr', 'sp', 'srb', 'serbian'),
         'sv'    => array('sv_SE.UTF-8', 'sv_SE.ISO_8859-1', 'Swedish_Sweden.1252', 'sv_SE', 'sv', 'swe', 'sve', 'swedish'),
