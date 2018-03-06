@@ -2255,12 +2255,13 @@ textpattern.Route.add('plugin.plugin_help', function ()
     var $head = $helpTxt.children(':first');
     var $sectHeads = $helpTxt.children('h2');
     var $intro = $head.nextUntil($sectHeads);
+    var sectIdPrefix = 'plugin_help_section_';
 
     if ($head.prop('tagName') != 'H1'
         || $intro.length && !$sectHeads.length
         || !$intro.length && $sectHeads.length < 2
         || $helpTxt.find('h1').length > 1
-        || $helpTxt.find('script, style, [style], [class^="txp-layout"], [class*=" txp-layout"], [class^="txp-grid"], [class*=" txp-grid"]').length
+        || $helpTxt.find('script, style, [style], [id^="' + sectIdPrefix + '"], [id*=" ' + sectIdPrefix + '"], [class^="txp-layout"], [class*=" txp-layout"], [class^="txp-grid"], [class*=" txp-grid"]').length
     ) {
         return;
     }
@@ -2269,7 +2270,6 @@ textpattern.Route.add('plugin.plugin_help', function ()
 
     var $sects = $();
     var tabs = '';
-    var sectIdPrefix = 'plugin_help_section_';
 
     if ($intro.length) {
         $intro = $intro.wrapAll('<section class="txp-tabs-vertical-group" id="' + sectIdPrefix + 'intro" aria-labelledby="intro-label" />').parent()
