@@ -48,6 +48,10 @@ foreach ($installed_keys as $key) {
     if (!in_array($key, $available_keys)) {
         $newKey = Txp::get('\Textpattern\L10n\Locale')->validLocale($key);
         safe_update('txp_lang', "lang='".doSlash($newKey)."'", "lang='".doSlash($key)."'");
+
+        if (get_pref('language') === $key) {
+            update_pref('language', $newKey);
+        }
     }
 }
 
