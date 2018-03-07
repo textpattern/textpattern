@@ -2856,7 +2856,7 @@ function article_category($atts, $thing = null)
 
     $cat = 'category'.intval($number);
 
-    if ($thisarticle[$cat]) {
+    if (!empty($thisarticle[$cat])) {
         $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
         $category = $thisarticle[$cat];
 
@@ -2871,7 +2871,7 @@ function article_category($atts, $thing = null)
                 )),
                 (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
                 ($title ? ' title="'.txpspecialchars($label).'"' : '').
-                ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
+                ($permlink_mode != 'messy' ? ' rel="tag"' : '')
             );
         } else {
             if ($escape) {
@@ -2885,7 +2885,7 @@ function article_category($atts, $thing = null)
                         's' => $section,
                         'c' => $category,
                     )),
-                    ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
+                    ($permlink_mode != 'messy' ? ' rel="tag"' : '')
                 );
             } else {
                 $out = $label;
