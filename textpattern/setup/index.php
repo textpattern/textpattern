@@ -305,16 +305,16 @@ function step_getDbInfo()
         echo hed(
                 gTxt('multisite_config'), 2
             ).
-            graf(gTxt('please_enter_multisite_details')).
+            graf(gTxt('multisite_please_enter_details')).
             inputLabel(
                 'setup_admin_url',
                 fInput('text', 'adminurl', @$cfg['site']['admin_url'], '', '', '', INPUT_REGULAR, '', 'setup_admin_url', '', true),
-                'admin_domain_multisite', 'setup_admin_url', array('class' => 'txp-form-field')
+                'multisite_admin_domain', 'setup_admin_url', array('class' => 'txp-form-field')
             ).
             inputLabel(
                 'setup_cookie_domain',
                 fInput('text', 'cookiedomain', @$cfg['site']['cookie_domain'], '', '', '', INPUT_REGULAR, '', 'setup_cookie_domain', '', true),
-                'cookie_domain_multisite', 'setup_cookie_domain', array('class' => 'txp-form-field')
+                'multisite_cookie_domain', 'setup_cookie_domain', array('class' => 'txp-form-field')
             );
     }
 
