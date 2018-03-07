@@ -553,7 +553,7 @@
         "position": "0"
     },
     "version": {
-        "val": "4.6.2",
+        "val": "4.7.0-beta",
         "type": "2",
         "event": "publish",
         "html": "text_input",
