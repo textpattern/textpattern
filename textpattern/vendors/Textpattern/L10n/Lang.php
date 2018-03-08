@@ -259,16 +259,22 @@ class Lang implements \Textpattern\Container\ReusableInterface
             $installed_lang = array();
             $available_lang = array();
 
+            // Set up the current and installed array. Define their names as
+            // 'unknown' for now in case the file is missing or mangled. The
+            // name will be overwritten when reading from the filesystem if
+            // it's intact.
             foreach ($this->dbLangs as $language) {
                 if ($language['lang'] === $this->activeLang) {
                     $currently_lang[$language['lang']] = array(
                         'db_lastmod' => $language['lastmod'],
                         'type'       => 'active',
+                        'name'       => gTxt('unknown'),
                     );
                 } else {
                     $installed_lang[$language['lang']] = array(
                         'db_lastmod' => $language['lastmod'],
                         'type'       => 'installed',
+                        'name'       => gTxt('unknown'),
                     );
                 }
             }

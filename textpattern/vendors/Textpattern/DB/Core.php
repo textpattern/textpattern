@@ -65,6 +65,7 @@ class Core
         if (empty($this->tables_structure)) {
             $this->tables_structure = get_files_content($this->tables_dir, 'table');
         }
+
         if (!empty($table)) {
             return @$this->tables_structure[$table];
         }
@@ -105,6 +106,7 @@ class Core
     public function initData()
     {
         $import = new \Textpattern\Import\TxpXML();
+
         foreach (get_files_content($this->data_dir, 'xml') as $key=>$data) {
             $import->importXml($data);
         }
@@ -146,16 +148,20 @@ class Core
         global $permlink_mode, $siteurl, $theme_name, $pref, $language;
 
         $out = @json_decode(file_get_contents($this->data_dir.DS.'core.prefs'), true);
+
         if (empty($out)) {
             return array();
         }
 
         if (empty($language)) {
             $language = safe_field('lang', 'txp_lang', '1=1 GROUP BY lang ORDER BY COUNT(*) DESC');
+
             if (empty($language)) {
                 $language = TEXTPATTERN_DEFAULT_LANG;
             }
         }
+
+        $language = \Txp::get('\Textpattern\L10n\Locale')->validLocale($language);
 
         $path_to_public_site = (isset($txpcfg['multisite_root_path'])) ? $txpcfg['multisite_root_path'].DS.'public' : dirname(txpath);
 
@@ -200,9 +206,11 @@ class Core
 
         // Delete old Global/Private prefs
         $deleted = @json_decode(file_get_contents($this->data_dir.DS.'deleted.prefs'), true);
+
         if (!empty($deleted['global'])) {
             safe_delete('txp_prefs', "name in ('".join("','", doSlash($deleted['global']))."') AND user_name = ''");
         }
+
         if (!empty($deleted['private'])) {
             safe_delete('txp_prefs', "name in ('".join("','", doSlash($deleted['private']))."') AND user_name != ''");
         }
@@ -215,9 +223,11 @@ class Core
         if ($rs = safe_rows_start('name, type, event, html, position', 'txp_prefs', "user_name = '' OR user_name = '".doSlash($txp_user)."'")) {
             while ($row = nextRow($rs)) {
                 $name = array_shift($row);
+
                 if ($def = @$prefs_check[$name]) {
                     $private = empty($def['private']) ? PREF_GLOBAL : PREF_PRIVATE;
                     unset($def['val'], $def['private']);
+
                     if ($def['event'] != 'custom' && $def != $row) {
                         @update_pref($name, null, $def['event'], $def['type'], $def['html'], $def['position'], $private);
                     }

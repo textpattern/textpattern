@@ -2848,6 +2848,7 @@ function article_category($atts, $thing = null)
         'class'        => '',
         'link'         => 0,
         'title'        => 0,
+        'escape'       => true,
         'section'      => '',
         'this_section' => 0,
         'wraptag'      => '',
@@ -2855,11 +2856,11 @@ function article_category($atts, $thing = null)
 
     $cat = 'category'.intval($number);
 
-    if ($thisarticle[$cat]) {
+    if (!empty($thisarticle[$cat])) {
         $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
         $category = $thisarticle[$cat];
 
-        $label = txpspecialchars(($title) ? fetch_category_title($category) : $category);
+        $label = $title ? fetch_category_title($category) : $category;
 
         if ($thing) {
             $out = href(
@@ -2869,20 +2870,26 @@ function article_category($atts, $thing = null)
                     'c' => $category,
                 )),
                 (($class && !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-                ($title ? ' title="'.$label.'"' : '').
-                ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
-            );
-        } elseif ($link) {
-            $out = href(
-                $label,
-                pagelinkurl(array(
-                    's' => $section,
-                    'c' => $category,
-                )),
-                ($permlink_mode != 'messy' ? ' rel="category tag"' : '')
+                ($title ? ' title="'.txpspecialchars($label).'"' : '').
+                ($permlink_mode != 'messy' ? ' rel="tag"' : '')
             );
         } else {
-            $out = $label;
+            if ($escape) {
+                $label = txp_escape(array('escape' => $escape), $label);
+            }
+
+            if ($link) {
+                $out = href(
+                    $label,
+                    pagelinkurl(array(
+                        's' => $section,
+                        'c' => $category,
+                    )),
+                    ($permlink_mode != 'messy' ? ' rel="tag"' : '')
+                );
+            } else {
+                $out = $label;
+            }
         }
 
         return doTag($out, $wraptag, $class);
