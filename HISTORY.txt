@@ -6,8 +6,8 @@ Changes in 4.7.0
   versioning, portability and installation (many many thanks, NicolasGraph).
 * Added: Support for installation on Nginx web servers.
 * Added: Support for automated installation from CLI.
-* Added: Filipino language translation (thanks Joseph Buarao).
-* Added: Tagalog language translation (thanks Kurt Lem Zamora).
+* Added: Filipino language translation (thanks, Joseph Buarao).
+* Added: Tagalog language translation (thanks, Kurt Lem Zamora).
 * Added: User-selectable column list options in tables replaces 'Show more
   detail' checkboxes. Settings remembered per device.
 * Added: Valueless attributes.
@@ -82,7 +82,7 @@ Changes in 4.7.0
 * Changed: Article posted/modified info and ID moved below Title field.
 * Changed: Enable HTTP 226 responses (thanks, da2x).
 * Changed: Make Preference panel and subpanels fully printable (thanks,
-  Philippe).
+  phiw13).
 * Changed: Panel states stored only client-side (localStorage).
 * Changed: pluggable_ui() behaves more intelligently when chaining.
 * Changed: Pagination steps are more grid friendly: 12/24/48/96 items.
@@ -95,7 +95,7 @@ Changes in 4.7.0
   authors please use ahu in place of hu.'textpattern'.
 * Fixed: Multi-site setup overhauled: Correct setup and install messages,
   diagnostics information, login URL in user-invite email, login cookie
-  accessible to public and admin URLs (thanks jools-r).
+  accessible to public and admin URLs (thanks, jools-r).
 * Fixed: Keyboard navigation on select list popups.
 * Fixed: Only update database version string if using release version.
 * Fixed: Support for other MySQL client versions (thanks, CeBe).

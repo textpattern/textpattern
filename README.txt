@@ -1,4 +1,4 @@
-Textpattern CMS 4.6.2
+Textpattern CMS 4.7.0-beta
 
 Released under the GNU General Public License.
 See textpattern/lib/LICENSE.txt for terms and conditions.
@@ -32,7 +32,7 @@ system. Textpattern is both free and open source.
 
 * Extract the Textpattern files to your site (in the web root, subdomain or
   subdirectory). The top-level index.php file should reside in this directory,
-  as should the /textpattern/ and /rpc/ directories.
+  as should the /textpattern/, /rpc/ and /themes directories.
 * Ensure the top-level .htaccess file is transferred to your site. The file is
   hidden by default on some operating systems, including OS X/macOS. Most FTP
   clients and IDEs have an option to show these hidden files. Otherwise, you can
@@ -62,7 +62,8 @@ system. Textpattern is both free and open source.
 * Check back regularly at https://textpattern.com/ to see if an update is
   available. Updates are as painless as possible, often fixing important bugs
   and/or security-related issues as well as offering additional features and
-  functionality.
+  functionality. Your Admin -> Diagnostics panel will also display a message
+  if a new version is available.
 
 
 == Upgrading ==
@@ -76,7 +77,8 @@ system. Textpattern is both free and open source.
 * Replace the top-level index.php, css.php and .htaccess files, everything in
   the /rpc/ directory and everything in the /textpattern/ directory (except
   /textpattern/config.php and the /textpattern/setup directory) with the
-  corresponding files in this distribution.
+  corresponding files in this distribution. In addition, ensure the /themes
+  directory exists if it is not already there, and is writable.
   When uploading the /textpattern/ directory, ensure you merge its contents with
   your existing site to preserve any custom files in your existing installation.
   Note: css.php and /rpc/ may not exist if the installed version of

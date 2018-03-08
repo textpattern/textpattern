@@ -14,7 +14,7 @@
 /include/txp_file.php: a9c2a217930ac6f1f1bc0d3622122e7b
 /include/txp_form.php: 0ed10e85e1fc9a72728d201c63fc7abb
 /include/txp_image.php: f02f8c90841bb16e9df2105b8e78fb26
-/include/txp_lang.php: a061ab07122f16ff29d0292578c7a3a6
+/include/txp_lang.php: ee2a4a55ff9e77342753412d9397941b
 /include/txp_link.php: 2e8bd4b0bd9345fdaf05309f4f99ba77
 /include/txp_list.php: 8c7bfcb48abbd83086ce88b7a344113c
 /include/txp_log.php: 4cb97da2d3d4f489c7c7c2d1f063e015
@@ -25,7 +25,7 @@
 /include/txp_section.php: 2af102ba3a784aa67328f74cc80fbcbb
 /include/txp_skin.php: 8cdd3c3a8a6532db7eaadf4a10b788db
 /include/txp_tag.php: 774138e27b71cabdb721a5b53948c9e0
-/index.php: 3b909d09ca1d5454015562eb94299c07
+/index.php: e1f101c7b843d7862d5b703565800790
 /lib/admin_config.php: a1940279c08e12df355a7a07f3fbfa2d
 /lib/class.thumb.php: 0063ddd70b98549750ac0eb8d639377c
 /lib/class.trace.php: 055e3bc1f8d3217aec152fa7e6216b1d
@@ -50,9 +50,9 @@
 /publish/log.php: 69831c9163aeb79e4a7b65683e0eac45
 /publish/rss.php: e623973ce45c62d16ede7645e66d225a
 /publish/search.php: 93270cd66dff1aad9b489c206a6f1896
-/publish/taghandlers.php: 944d5ec27ca2a6b1a34ef33c92928ded
+/publish/taghandlers.php: 6e32584ca374943ebf47159aa0cb14ef
 /publish.php: 3c027e8ce8cc144e5b7b7e9cd293e72b
-/textpattern.js: 0e754583d15548553fe9f8b3f6990d0d
+/textpattern.js: bb657bb6cd01c432a9f40f65d93e363b
 /update/_to_4.0.3.php: fb35e8e3dce16aad32b3d3af1a2b60c7
 /update/_to_4.0.4.php: 7982d5063df84b7a2b1bb07660b8886b
 /update/_to_4.0.5.php: 376bafd8685724e7c9e91b1a3ffe172f
@@ -64,8 +64,8 @@
 /update/_to_4.5.0.php: d5fe48683eb7ce2244829cb6cf3a36b2
 /update/_to_4.5.7.php: d2a0a8eaf49fb8b21292938d6bc81238
 /update/_to_4.6.0.php: 3c005af67b09a9f5be9ccefab7b554c5
-/update/_to_4.7.0.php: 6fdf50009180a6c139c9219faafb12e5
-/update/_update.php: 3de1cc998c975ccd16b4e00c0e170f1b
+/update/_to_4.7.0.php: 46f23abac287a2e09bcfd3abf103c88a
+/update/_update.php: 5b0cf6653c06307f625de74c83c705d8
 /vendors/blueimp/fileupload/jquery.fileupload.js: cbf3e62ed9e9051e13cc708ee056c0bc
 /vendors/jquery/jquery/jquery.js: a09e13ee94d51c524b7e2a728c7d4039
 /vendors/jquery/jquery-ui/jquery-ui.js: 0a497d4661df7b82feee14332ce0bdaf
@@ -86,7 +86,7 @@
 /vendors/Textpattern/Container/FactoryInterface.php: eee6a60f5d451535194c3b5c0583e64a
 /vendors/Textpattern/Container/ReusableInterface.php: bd8353eee806eec630307fe66fb54d84
 /vendors/Textpattern/Date/Timezone.php: e6cb18891da6b037bc84e96dba68e105
-/vendors/Textpattern/DB/Core.php: 1382c4662d4080e5d190dbd2a5ea92b4
+/vendors/Textpattern/DB/Core.php: 521611e6d38948f04700a7e29b37bcbb
 /vendors/Textpattern/Filter/Exception.php: 20fbdefe757e2ffa10510ba79be15189
 /vendors/Textpattern/Filter/FilterCallable.php: acb6078b24a05165c39382952730854b
 /vendors/Textpattern/Filter/StringFilter.php: 3da0ebbec1107a1b02284eb5ac61f579
@@ -96,8 +96,8 @@
 /vendors/Textpattern/Iterator/RecDirIterator.php: c3cf59afe374c285fc6a64ca7bf6770f
 /vendors/Textpattern/Iterator/RecFilterIterator.php: 5cb9d60bbfac498254e926fb64b03d58
 /vendors/Textpattern/Iterator/RecIteratorIterator.php: 340ae698929f267f057570a34df42c8f
-/vendors/Textpattern/L10n/Lang.php: babe170028a1934396e414b339c4d600
-/vendors/Textpattern/L10n/Locale.php: 80d74923b1bfc8829be20769226cdf1e
+/vendors/Textpattern/L10n/Lang.php: e0a3c51fb4db02df498d1b6bb4965d1d
+/vendors/Textpattern/L10n/Locale.php: d2b933aff0ee023b5c9d8def3682dd23
 /vendors/Textpattern/Loader.php: fe4190fbfea4f13bf6a664d9db6bd551
 /vendors/Textpattern/Mail/Adapter/Mail.php: 36b0821f9d9888bb37442baa3db91989
 /vendors/Textpattern/Mail/AdapterInterface.php: be075beed5cadde10f47440efe0ca03c

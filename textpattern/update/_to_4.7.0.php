@@ -32,6 +32,7 @@ Txp::get('\Textpattern\Admin\Tools')->removeFiles(txpath.DS.'lang', 'en-gb.txt')
 
 // Drop the prefs_id column in txp_prefs
 $cols = getThings("DESCRIBE `".PFX."txp_prefs`");
+
 if (in_array('prefs_id', $cols)) {
     safe_drop_index('txp_prefs', 'prefs_idx');
     safe_alter('txp_prefs', "ADD UNIQUE prefs_idx (name(185), user_name)");
@@ -48,6 +49,10 @@ foreach ($installed_keys as $key) {
     if (!in_array($key, $available_keys)) {
         $newKey = Txp::get('\Textpattern\L10n\Locale')->validLocale($key);
         safe_update('txp_lang', "lang='".doSlash($newKey)."'", "lang='".doSlash($key)."'");
+
+        if (get_pref('language') === $key) {
+            update_pref('language', $newKey);
+        }
     }
 }
 
