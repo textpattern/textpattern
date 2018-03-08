@@ -25,7 +25,7 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
-global $thisversion, $dbversion, $txp_is_dev, $dbupdatetime, $app_mode;
+global $thisversion, $dbversion, $txp_is_dev, $dbupdatetime, $app_mode, $event;
 
 $dbupdates = array(
     '1.0.0',
@@ -108,7 +108,6 @@ try {
 
 // Update any out-of-date installed languages.
 // Have to refresh the cache first by reloading everything.
-$time = time();
 $txpLang = Txp::get('\Textpattern\L10n\Lang');
 $installed_langs = $txpLang->available(
     TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_ACTIVE,
@@ -116,15 +115,14 @@ $installed_langs = $txpLang->available(
 );
 
 foreach ($installed_langs as $lang_code => $info) {
-    $db_lastmod = isset($info['db_lastmod']) ? $info['db_lastmod'] : 0;
-    $file_lastmod = isset($info['file_lastmod']) ? $info['file_lastmod'] : $time;
-
-    // Reinstall any out-of-date languages and update the DB stamps in the
-    // cache, just in case we're on the Languages panel so it doesn't report
+    // Reinstall all languages and update the DB stamps in the cache,
+    // just in case we're on the Languages panel so it doesn't report
     // the languages as being stale.
-    if (($file_lastmod > $db_lastmod)) {
-        $txpLang->installFile($lang_code);
-        $txpLang->available(TEXTPATTERN_LANG_AVAILABLE, TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE);
+    $txpLang->installFile($lang_code);
+    $txpLang->available(TEXTPATTERN_LANG_AVAILABLE, TEXTPATTERN_LANG_INSTALLED | TEXTPATTERN_LANG_AVAILABLE);
+
+    if (get_pref('language_ui') === $lang_code) {
+        load_lang($lang_code, $event);
     }
 }
 
@@ -134,6 +132,7 @@ restore_error_handler();
 if (!$txp_is_dev) {
     remove_pref('version', 'publish');
     create_pref('version', $dbversion, 'publish', PREF_HIDDEN);
+
     if (isset($txpcfg['multisite_root_path'])) {
         Txp::get('\Textpattern\Admin\Tools')->removeFiles($txpcfg['multisite_root_path'].DS.'admin', 'setup');
     } else {
