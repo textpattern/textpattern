@@ -1697,6 +1697,7 @@ function newer($atts, $thing = null)
         'showalways' => 0,
         'title'      => '',
         'escape'     => 'html',
+        'rel'        => '',
         'shift'      => null,
     ), $atts));
 
@@ -1734,7 +1735,8 @@ function newer($atts, $thing = null)
             return href(
                 parse($thing),
                 $url,
-                (empty($title) ? '' : ' title="'.$title.'"')
+                (empty($title) ? '' : ' title="'.$title.'"').
+                (empty($rel) ? '' : ' rel="'.txpspecialchars($rel).'"')
             );
         }
 
@@ -1758,6 +1760,7 @@ function older($atts, $thing = null)
         'showalways' => 0,
         'title'      => '',
         'escape'     => 'html',
+        'rel'        => '',
         'shift'      => null,
     ), $atts));
 
@@ -1795,7 +1798,8 @@ function older($atts, $thing = null)
             return href(
                 parse($thing),
                 $url,
-                (empty($title) ? '' : ' title="'.$title.'"')
+                (empty($title) ? '' : ' title="'.$title.'"').
+                (empty($rel) ? '' : ' rel="'.txpspecialchars($rel).'"')
             );
         }
 
