@@ -139,17 +139,13 @@
                     <!-- add pagination links to foot of article listings/category listings/author listings if there are more articles available -->
                     <txp:evaluate test>
                         <p class="paginator">
-                            <txp:evaluate test="newer">
-                                <a rel="prev" href="<txp:newer />">
-                                    <txp:text item="newer" />
-                                </a>
-                            </txp:evaluate>
+                            <txp:newer rel="prev">
+                                <txp:text item="newer" />
+                            </txp:newer>
 
-                            <txp:evaluate test="older">
-                                <a rel="next" href="<txp:older />">
-                                    <txp:text item="older" />
-                                </a>
-                            </txp:evaluate>
+                            <txp:older rel="next">
+                                <txp:text item="next" />
+                            </txp:older>
                         </p>
                     </txp:evaluate>
 

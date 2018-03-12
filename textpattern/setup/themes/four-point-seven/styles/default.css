@@ -30,7 +30,7 @@ template {
 a,
 input,
 button {
-  touch-action: none;
+  touch-action: manipulation;
 }
 
 /* Clearfix
@@ -592,8 +592,8 @@ nav ol::after,
  * Swap menu/list padding positions in RTL languages.
  */
   [dir="rtl"] menu,
-  [dir="rtl"] ol:not(.site-navigation ul),
-  [dir="rtl"] ul:not(.site-navigation ul) {
+  [dir="rtl"] ol,
+  [dir="rtl"] ul {
     padding: 0 1.75em 0 0;
   }
   /**
