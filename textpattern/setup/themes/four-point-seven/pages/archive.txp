@@ -92,7 +92,7 @@
                         </txp:newer>
 
                         <txp:older rel="next">
-                            <txp:text item="next" />
+                            <txp:text item="older" />
                         </txp:older>
                     </txp:evaluate>
 
@@ -103,11 +103,11 @@
                     <!-- add pagination links to foot of article if there are more articles available -->
                     <txp:evaluate wraptag="p" class="paginator">
                         <txp:link_to_prev>
-                            <txp:text item="older" />
+                            <txp:text item="prev" />
                         </txp:link_to_prev>
 
                         <txp:link_to_next>
-                            <txp:text item="newer" />
+                            <txp:text item="next" />
                         </txp:link_to_next>
                     </txp:evaluate>
 

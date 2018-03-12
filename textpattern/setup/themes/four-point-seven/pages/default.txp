@@ -143,7 +143,7 @@
                         </txp:newer>
 
                         <txp:older rel="next">
-                            <txp:text item="next" />
+                            <txp:text item="older" />
                         </txp:older>
                     </txp:evaluate>
 
