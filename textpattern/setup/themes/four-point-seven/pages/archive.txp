@@ -86,16 +86,14 @@
                     <!-- ...or if you want to list all articles from all sections instead, then replace txp:article with txp:article_custom -->
 
                     <!-- add pagination links to foot of article listings if there are more articles available -->
-                    <txp:evaluate test>
-                        <p class="paginator">
-                            <txp:newer rel="prev">
-                                <txp:text item="newer" />
-                            </txp:newer>
+                    <txp:evaluate wraptag="p" class="paginator">
+                        <txp:newer rel="prev">
+                            <txp:text item="newer" />
+                        </txp:newer>
 
-                            <txp:older rel="next">
-                                <txp:text item="next" />
-                            </txp:older>
-                        </p>
+                        <txp:older rel="next">
+                            <txp:text item="next" />
+                        </txp:older>
                     </txp:evaluate>
 
                 <txp:else />
@@ -103,20 +101,14 @@
                     <txp:article />
 
                     <!-- add pagination links to foot of article if there are more articles available -->
-                    <txp:evaluate test>
-                        <p class="paginator">
-                            <txp:evaluate test="link_to_prev">
-                                <a rel="prev" href="<txp:link_to_prev />" title="<txp:prev_title />">
-                                    <txp:text item="older" />
-                                </a>
-                            </txp:evaluate>
+                    <txp:evaluate wraptag="p" class="paginator">
+                        <txp:link_to_prev>
+                            <txp:text item="older" />
+                        </txp:link_to_prev>
 
-                            <txp:evaluate test="link_to_next">
-                                <a rel="next" href="<txp:link_to_next />" title="<txp:next_title />">
-                                    <txp:text item="newer" />
-                                </a>
-                            </txp:evaluate>
-                        </p>
+                        <txp:link_to_next>
+                            <txp:text item="newer" />
+                        </txp:link_to_next>
                     </txp:evaluate>
 
                 </txp:if_article_list>

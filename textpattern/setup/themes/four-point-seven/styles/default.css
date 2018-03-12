@@ -596,6 +596,10 @@ nav ol::after,
   [dir="rtl"] ul {
     padding: 0 1.75em 0 0;
   }
+  [dir="rtl"] .site-navigation ul,
+  [dir="rtl"] .article-list {
+    padding: 0;
+  }
   /**
  * Swap definition description margin positions in RTL languages.
  */

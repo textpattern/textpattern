@@ -63,15 +63,13 @@
 
 <!-- check if there are further results and provide pagination links depending on the result -->
 <txp:if_search_results min="11">
-    <txp:evaluate test>
-        <p class="paginator">
-            <txp:newer rel="prev">
-                <txp:text item="newer" />
-            </txp:newer>
+    <txp:evaluate wraptag="p" class="paginator">
+        <txp:newer rel="prev">
+            <txp:text item="newer" />
+        </txp:newer>
 
-            <txp:older rel="next">
-                <txp:text item="next" />
-            </txp:older>
-        </p>
+        <txp:older rel="next">
+            <txp:text item="next" />
+        </txp:older>
     </txp:evaluate>
 </txp:if_search_results>

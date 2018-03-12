@@ -137,16 +137,14 @@
                     </txp:if_category>
 
                     <!-- add pagination links to foot of article listings/category listings/author listings if there are more articles available -->
-                    <txp:evaluate test>
-                        <p class="paginator">
-                            <txp:newer rel="prev">
-                                <txp:text item="newer" />
-                            </txp:newer>
+                    <txp:evaluate wraptag="p" class="paginator">
+                        <txp:newer rel="prev">
+                            <txp:text item="newer" />
+                        </txp:newer>
 
-                            <txp:older rel="next">
-                                <txp:text item="next" />
-                            </txp:older>
-                        </p>
+                        <txp:older rel="next">
+                            <txp:text item="next" />
+                        </txp:older>
                     </txp:evaluate>
 
                 </txp:if_search>
