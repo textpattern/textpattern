@@ -198,7 +198,7 @@ function list_languages($message = '')
     }
 
     echo $lang_form.
-        '<ul class="txp-grid">'.
+        '<ul class="txp-grid txp-grid-lang">'.
         $grid.
         '</ul>'.
 
