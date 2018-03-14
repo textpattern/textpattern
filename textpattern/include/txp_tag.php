@@ -385,12 +385,12 @@ class BuilderTags
         // Common global attributes
         /*
         $widgets += array(
-            'escape' => $this->tbInput('escape', gps('escape'), INPUT_REGULAR),
-            'wraptag'       => $this->tbInput('wraptag', gps('wraptag')),
-            'class'         => $this->tbInput('class', gps('class'), INPUT_REGULAR),
-            'html_id'       => $this->tbInput('html_id', gps('html_id'), INPUT_REGULAR),
-            'label'         => $this->tbInput('label', gps('label')),
-            'labeltag'      => $this->tbInput('labeltag', gps('labeltag'))
+            'escape'   => $this->tbInput('escape', gps('escape'), INPUT_REGULAR),
+            'wraptag'  => $this->tbInput('wraptag', gps('wraptag')),
+            'class'    => $this->tbInput('class', gps('class'), INPUT_REGULAR),
+            'html_id'  => $this->tbInput('html_id', gps('html_id'), INPUT_REGULAR),
+            'label'    => $this->tbInput('label', gps('label')),
+            'labeltag' => $this->tbInput('labeltag', gps('labeltag'))
         );
         */
 
