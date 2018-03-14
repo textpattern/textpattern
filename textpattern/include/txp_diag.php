@@ -170,6 +170,8 @@ function diag_msg_wrap($msg, $type = 'e')
         'w' => 'warning',
     );
 
+    $type = isset($classMap[$type]) ? $type : 'e';
+
     return span($msg, array('class' => $classMap[$type]));
 }
 
@@ -496,7 +498,7 @@ function doDiagnostics()
                 $pfcStrings[$lang][] = graf(nl2br(join(n, $not_readable).($langCounter > 0 ? popHelp('dir_not_writable') : '')));
             }
         } else {
-            $pfcStrings[$lang][] = graf(diag_msg_wrap(gTxt('all_checks_passed'), 'success'));
+            $pfcStrings[$lang][] = graf(diag_msg_wrap(gTxt('all_checks_passed'), 'i'));
         }
 
         $langCounter++;

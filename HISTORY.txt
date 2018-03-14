@@ -102,7 +102,7 @@ Changes in 4.7.0
 * Removed: zxcvbn password strength meter.
 * Textile 3.6.
 * jQuery 3.3.1.
-* PrismJS 1.12.0.
+* PrismJS 1.12.2.
 * PHPass 0.5.
 * jQuery File Upload 9.21.0.
 
