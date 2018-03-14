@@ -177,7 +177,7 @@ echo
 echo script_js("
     $(function() {
         if (!textpattern.version || !'".txp_version."'.match(textpattern.version)) {
-            alert('Please shift-reload the page from the server to refresh the cache.')
+            alert('Please force-reload the page or clear your browser caches.')
         }
     })", false);
 
