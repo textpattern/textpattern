@@ -3,7 +3,6 @@
 /admin-themes/hive/hive.php: 02a13be558ca8abc2d8bb3d5edaf98a7
 /admin-themes/hiveneutral/assets/js/main.js: c2f35c1dbc4b24bf9808a14304ad1471
 /admin-themes/hiveneutral/hiveneutral.php: 2bcb8f4a793f38035d66cb7e611801ae
-/config-dist.php: 543ea261997e07c9f475f9ddec711cc0
 /include/txp_admin.php: c68486c854ea7c090aff4d3b118e026c
 /include/txp_article.php: cb8954c5c08225fc0412e13dcb0b9eee
 /include/txp_auth.php: 8a3aa77a5350f6c557314ebb284a67c5

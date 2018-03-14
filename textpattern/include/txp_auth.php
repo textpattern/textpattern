@@ -51,10 +51,8 @@ function doAuth()
 
     if (!$txp_user) {
         if (trim(ps('app_mode')) == 'async') {
-            echo script_js(
-                'alert("'.escape_js(gTxt('login_to_textpattern')).'");
-                window.location.assign("index.php")'
-            );
+            echo 'if (confirm("'.escape_js(gTxt('login_to_textpattern')).'"))'.n.
+                '{window.location.assign("index.php")}';
             exit();
         } else {
             doLoginForm($message);
