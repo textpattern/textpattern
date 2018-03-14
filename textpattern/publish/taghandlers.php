@@ -708,9 +708,10 @@ function tpt_link($atts)
     global $thislink;
 
     extract(lAtts(array(
-        'rel'  => '',
-        'id'   => '',
-        'name' => '',
+        'rel'    => '',
+        'id'     => '',
+        'name'   => '',
+        'escape' => true,
     ), $atts));
 
     $rs = $thislink;
@@ -733,7 +734,7 @@ function tpt_link($atts)
     }
 
     return tag(
-        txpspecialchars($rs['linkname']), 'a',
+        $escape ? txp_escape(array('escape' => $escape), $rs['linkname']) : $rs['linkname'], 'a',
         ($rel ? ' rel="'.txpspecialchars($rel).'"' : '').
         ' href="'.txpspecialchars($rs['url']).'"'
     );
@@ -747,14 +748,14 @@ function linkdesctitle($atts)
 
     assert_link();
 
-    extract(lAtts(array('rel' => ''), $atts));
+    extract(lAtts(array('rel' => '', 'escape' => true), $atts));
 
     $description = ($thislink['description'])
         ? ' title="'.txpspecialchars($thislink['description']).'"'
         : '';
 
     return tag(
-        txpspecialchars($thislink['linkname']), 'a',
+        $escape ? txp_escape(array('escape' => $escape), $thislink['linkname']) : $thislink['linkname'], 'a',
         ($rel ? ' rel="'.txpspecialchars($rel).'"' : '').
         ' href="'.doSpecial($thislink['url']).'"'.$description
     );
@@ -1696,6 +1697,7 @@ function newer($atts, $thing = null)
         'showalways' => 0,
         'title'      => '',
         'escape'     => 'html',
+        'rel'        => '',
         'shift'      => null,
     ), $atts));
 
@@ -1733,7 +1735,8 @@ function newer($atts, $thing = null)
             return href(
                 parse($thing),
                 $url,
-                (empty($title) ? '' : ' title="'.$title.'"')
+                (empty($title) ? '' : ' title="'.$title.'"').
+                (empty($rel) ? '' : ' rel="'.txpspecialchars($rel).'"')
             );
         }
 
@@ -1757,6 +1760,7 @@ function older($atts, $thing = null)
         'showalways' => 0,
         'title'      => '',
         'escape'     => 'html',
+        'rel'        => '',
         'shift'      => null,
     ), $atts));
 
@@ -1794,7 +1798,8 @@ function older($atts, $thing = null)
             return href(
                 parse($thing),
                 $url,
-                (empty($title) ? '' : ' title="'.$title.'"')
+                (empty($title) ? '' : ' title="'.$title.'"').
+                (empty($rel) ? '' : ' rel="'.txpspecialchars($rel).'"')
             );
         }
 
@@ -5155,7 +5160,7 @@ function txp_escape($atts, $thing = '')
                     $textile = Txp::get('\Textpattern\Textile\Parser');
                 }
 
-                $thing = $textile->TextileThis($tidy ? ' '.$thing : $thing);
+                $thing = $textile->textileThis($tidy ? ' '.$thing : $thing);
                 break;
             case 'quote':
                 $thing = strpos($thing, "'") === false ? "'$thing'" : "concat('".strtr($thing, $tr)."')";

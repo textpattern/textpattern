@@ -174,7 +174,7 @@ function list_languages($message = '')
                 .n. $btnRemove
             ),
             'li',
-            array('class' => 'txp-grid-cell'.($cellclass ? ' '.$cellclass : ''))
+            array('class' => 'txp-grid-cell txp-grid-cell-lang'.($cellclass ? ' '.$cellclass : ''))
         ).n;
 
         $done[] = $langname;

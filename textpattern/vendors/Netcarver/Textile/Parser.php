@@ -1520,9 +1520,7 @@ class Parser
 
     public function textileEncode($text)
     {
-        $text = preg_replace("/&(?![#a-z0-9]+;)/i", "x%x%", $text);
-        $text = str_replace("x%x%", "&amp;", $text);
-        return $text;
+        return preg_replace('/&(?!(?:[a-z][a-z\d]*|#(?:\d+|x[a-f\d]+));)/i', '&amp;', $text);
     }
 
     /**
